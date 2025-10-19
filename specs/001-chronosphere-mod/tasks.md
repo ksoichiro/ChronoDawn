@@ -54,38 +54,38 @@
 
 ### Registry Infrastructure
 
-- [ ] T015 Implement Architectury Registry wrapper in common/src/main/java/com/chronosphere/registry/ModBlocks.java
-- [ ] T016 [P] Implement Architectury Registry wrapper in common/src/main/java/com/chronosphere/registry/ModItems.java
-- [ ] T017 [P] Implement Architectury Registry wrapper in common/src/main/java/com/chronosphere/registry/ModEntities.java
-- [ ] T018 [P] Implement Architectury Registry wrapper in common/src/main/java/com/chronosphere/registry/ModDimensions.java
+- [X] T015 Implement Architectury Registry wrapper in common/src/main/java/com/chronosphere/registry/ModBlocks.java
+- [X] T016 [P] Implement Architectury Registry wrapper in common/src/main/java/com/chronosphere/registry/ModItems.java
+- [X] T017 [P] Implement Architectury Registry wrapper in common/src/main/java/com/chronosphere/registry/ModEntities.java
+- [X] T018 [P] Implement Architectury Registry wrapper in common/src/main/java/com/chronosphere/registry/ModDimensions.java
 
 ### Platform Abstraction Layer (@ExpectPlatform)
 
-- [ ] T019 Create @ExpectPlatform interface in common/src/main/java/com/chronosphere/platform/ChronospherePlatform.java
-- [ ] T020 [P] Implement ChronospherePlatform for Fabric in fabric/src/main/java/com/chronosphere/fabric/platform/ChronospherePlatformImpl.java
-- [ ] T021 [P] Implement ChronospherePlatform for NeoForge in neoforge/src/main/java/com/chronosphere/neoforge/platform/ChronospherePlatformImpl.java
+- [X] T019 Create @ExpectPlatform interface in common/src/main/java/com/chronosphere/platform/ChronospherePlatform.java
+- [X] T020 [P] Implement ChronospherePlatform for Fabric in fabric/src/main/java/com/chronosphere/fabric/platform/ChronospherePlatformImpl.java
+- [X] T021 [P] Implement ChronospherePlatform for NeoForge in neoforge/src/main/java/com/chronosphere/neoforge/platform/ChronospherePlatformImpl.java
 
 ### Event System (Architectury Events)
 
-- [ ] T022 Create base event handler structure in common/src/main/java/com/chronosphere/events/ChronosphereEvents.java
-- [ ] T023 [P] Implement entity event handler in common/src/main/java/com/chronosphere/events/EntityEventHandler.java
-- [ ] T024 [P] Implement block event handler in common/src/main/java/com/chronosphere/events/BlockEventHandler.java
-- [ ] T025 [P] Implement player event handler in common/src/main/java/com/chronosphere/events/PlayerEventHandler.java
+- [X] T022 Create base event handler structure in common/src/main/java/com/chronosphere/events/ChronosphereEvents.java
+- [X] T023 [P] Implement entity event handler in common/src/main/java/com/chronosphere/events/EntityEventHandler.java
+- [X] T024 [P] Implement block event handler in common/src/main/java/com/chronosphere/events/BlockEventHandler.java
+- [X] T025 [P] Implement player event handler in common/src/main/java/com/chronosphere/events/PlayerEventHandler.java
 
 ### Data Persistence Framework
 
-- [ ] T026 Implement world saved data base class in common/src/main/java/com/chronosphere/data/ChronosphereWorldData.java
-- [ ] T027 Implement portal registry data handler in common/src/main/java/com/chronosphere/data/PortalRegistryData.java
-- [ ] T028 Implement player progress data handler in common/src/main/java/com/chronosphere/data/PlayerProgressData.java
-- [ ] T029 Implement dimension state data handler in common/src/main/java/com/chronosphere/data/DimensionStateData.java
+- [X] T026 Implement world saved data base class in common/src/main/java/com/chronosphere/data/ChronosphereWorldData.java
+- [X] T027 Implement portal registry data handler in common/src/main/java/com/chronosphere/data/PortalRegistryData.java
+- [X] T028 Implement player progress data handler in common/src/main/java/com/chronosphere/data/PlayerProgressData.java
+- [X] T029 Implement dimension state data handler in common/src/main/java/com/chronosphere/data/DimensionStateData.java
 
 ### Testing Infrastructure (JUnit + GameTest)
 
-- [ ] T030 Setup mcjunitlib integration in common/build.gradle
-- [ ] T031 Create base test class in common/src/test/java/com/chronosphere/ChronosphereTestBase.java
-- [ ] T032 [P] Create unit test structure in common/src/test/java/com/chronosphere/unit/
-- [ ] T033 [P] Create integration test structure in common/src/test/java/com/chronosphere/integration/
-- [ ] T034 Configure GameTest framework for both loaders
+- [X] T030 Setup mcjunitlib integration in common/build.gradle
+- [X] T031 Create base test class in common/src/test/java/com/chronosphere/ChronosphereTestBase.java
+- [X] T032 [P] Create unit test structure in common/src/test/java/com/chronosphere/unit/
+- [X] T033 [P] Create integration test structure in common/src/test/java/com/chronosphere/integration/
+- [X] T034 Configure GameTest framework for both loaders
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 

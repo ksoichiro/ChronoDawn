@@ -3,6 +3,15 @@
 dependencies {
     // Architectury API (common)
     modImplementation "dev.architectury:architectury:${architectury_version}"
+
+    // Testing dependencies (Phase 2 - T030)
+    testImplementation "org.junit.jupiter:junit-jupiter-api:5.10.0"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:5.10.0"
+    // Note: mcjunitlib will be added in future if specific Minecraft test environment is needed
+}
+
+test {
+    useJUnitPlatform()
 }
 
 architectury {

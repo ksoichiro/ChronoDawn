@@ -1,5 +1,10 @@
 package com.chronosphere;
 
+import com.chronosphere.events.ChronosphereEvents;
+import com.chronosphere.registry.ModBlocks;
+import com.chronosphere.registry.ModDimensions;
+import com.chronosphere.registry.ModEntities;
+import com.chronosphere.registry.ModItems;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,12 +15,15 @@ public class Chronosphere {
     public static void init() {
         LOGGER.info("Chronosphere Mod (common) initialized");
 
-        // TODO: Initialize registries in Phase 2
-        // ModBlocks.register();
-        // ModItems.register();
-        // ModEntities.register();
+        // Initialize registries (Phase 2 - Foundational)
+        ModBlocks.register();
+        ModItems.register();
+        ModEntities.register();
+        ModDimensions.register();
 
-        // TODO: Register event handlers in Phase 2
-        // ChronosphereEvents.register();
+        // Register event handlers (Phase 2 - Foundational)
+        ChronosphereEvents.register();
     }
 }
+
+
