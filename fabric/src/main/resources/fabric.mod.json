@@ -22,6 +22,11 @@
   "mixins": [
     "chronosphere.mixins.json"
   ],
+  "custom": {
+    "modmenu": {
+      "badges": [ "library" ]
+    }
+  },
   "depends": {
     "fabricloader": ">=0.17.2",
     "minecraft": "~1.21.1",
