@@ -29,20 +29,20 @@
 
 **Purpose**: Architecturyマルチローダープロジェクトの初期化と基本構造の構築
 
-- [ ] T001 Create Architectury multi-module project structure per plan.md
-- [ ] T002 Initialize Gradle configuration in build.gradle with Architectury dependencies
-- [ ] T003 [P] Configure gradle.properties with Minecraft 1.21.1, NeoForge 21.1.x, Fabric, Architectury API 13.0.8
-- [ ] T004 [P] Configure settings.gradle for multi-module project (common, fabric, neoforge)
-- [ ] T005 Create common module build configuration in common/build.gradle
-- [ ] T006 [P] Create fabric module build configuration in fabric/build.gradle
-- [ ] T007 [P] Create neoforge module build configuration in neoforge/build.gradle
-- [ ] T008 Create common mod entry point in common/src/main/java/com/chronosphere/Chronosphere.java
-- [ ] T009 [P] Create Fabric mod entry point in fabric/src/main/java/com/chronosphere/fabric/ChronosphereFabric.java
-- [ ] T010 [P] Create NeoForge mod entry point in neoforge/src/main/java/com/chronosphere/neoforge/ChronosphereNeoForge.java
-- [ ] T011 [P] Create Fabric mod metadata in fabric/src/main/resources/fabric.mod.json
-- [ ] T012 [P] Create NeoForge mod metadata in neoforge/src/main/resources/META-INF/neoforge.mods.toml
-- [ ] T013 Configure logging with log4j2 in common/src/main/resources/log4j2.xml
-- [ ] T014 Verify build succeeds for both loaders using ./gradlew build
+- [X] T001 Create Architectury multi-module project structure per plan.md
+- [X] T002 Initialize Gradle configuration in build.gradle with Architectury dependencies
+- [X] T003 [P] Configure gradle.properties with Minecraft 1.21.1, NeoForge 21.1.74, Fabric API 0.116.6, Architectury API 13.0.8
+- [X] T004 [P] Configure settings.gradle for multi-module project (common, fabric, neoforge)
+- [X] T005 Create common module build configuration in common/build.gradle
+- [X] T006 [P] Create fabric module build configuration in fabric/build.gradle
+- [X] T007 [P] Create neoforge module build configuration in neoforge/build.gradle (with loom.platform=neoforge)
+- [X] T008 Create common mod entry point in common/src/main/java/com/chronosphere/Chronosphere.java
+- [X] T009 [P] Create Fabric mod entry point in fabric/src/main/java/com/chronosphere/fabric/ChronosphereFabric.java
+- [X] T010 [P] Create NeoForge mod entry point in neoforge/src/main/java/com/chronosphere/neoforge/ChronosphereNeoForge.java
+- [X] T011 [P] Create Fabric mod metadata in fabric/src/main/resources/fabric.mod.json
+- [X] T012 [P] Create NeoForge mod metadata in neoforge/src/main/resources/META-INF/neoforge.mods.toml
+- [X] T013 Configure logging with log4j2 in common/src/main/resources/log4j2.xml
+- [X] T014 Verify build succeeds for both loaders using ./gradlew build
 
 ---
 
