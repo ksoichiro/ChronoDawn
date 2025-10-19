@@ -1,0 +1,27 @@
+// common/build.gradle
+
+dependencies {
+    // Architectury API (common)
+    modImplementation "dev.architectury:architectury:${architectury_version}"
+}
+
+architectury {
+    common("neoforge", "fabric")
+}
+
+loom {
+    accessWidenerPath = file("src/main/resources/chronosphere.accesswidener")
+}
+
+publishing {
+    publications {
+        mavenCommon(MavenPublication) {
+            artifactId = archives_base_name
+            from components.java
+        }
+    }
+
+    repositories {
+        // Add publishing repositories here
+    }
+}

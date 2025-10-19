@@ -1,0 +1,49 @@
+// fabric/build.gradle
+
+dependencies {
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    modApi "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
+    modApi "dev.architectury:architectury-fabric:${architectury_version}"
+
+    implementation project(path: ":common", configuration: "namedElements")
+}
+
+loom {
+    accessWidenerPath = project(":common").loom.accessWidenerPath
+
+    runs {
+        client {
+            client()
+            setConfigName("Fabric Client")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+        server {
+            server()
+            setConfigName("Fabric Server")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+    }
+}
+
+tasks.named("processResources", ProcessResources).configure {
+    inputs.property "version", project.version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+}
+
+publishing {
+    publications {
+        mavenFabric(MavenPublication) {
+            artifactId = "${archives_base_name}-fabric"
+            from components.java
+        }
+    }
+
+    repositories {
+        // Add publishing repositories here
+    }
+}

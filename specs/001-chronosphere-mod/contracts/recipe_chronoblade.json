@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " F ",
+    " F ",
+    "CSC"
+  ],
+  "key": {
+    "F": {
+      "item": "chronosphere:fragment_of_stasis_core"
+    },
+    "C": {
+      "item": "chronosphere:enhanced_clockstone"
+    },
+    "S": {
+      "item": "minecraft:diamond_sword"
+    }
+  },
+  "result": {
+    "item": "chronosphere:chronoblade",
+    "count": 1
+  }
+}
