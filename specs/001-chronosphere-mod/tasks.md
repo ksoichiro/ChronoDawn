@@ -101,11 +101,11 @@
 
 **NOTE: これらのテストを最初に記述し、実装前にFAILすることを確認すること**
 
-- [ ] T035 [P] [US1] Write unit test for dimension registration in common/src/test/java/com/chronosphere/unit/DimensionTest.java
-- [ ] T036 [P] [US1] Write unit test for portal state transitions in common/src/test/java/com/chronosphere/unit/PortalStateTest.java
-- [ ] T037 [P] [US1] Write GameTest for portal activation in common/src/test/java/com/chronosphere/integration/PortalActivationTest.java
-- [ ] T038 [P] [US1] Write GameTest for dimension travel in common/src/test/java/com/chronosphere/integration/DimensionTravelTest.java
-- [ ] T039 [P] [US1] Write GameTest for portal stabilization in common/src/test/java/com/chronosphere/integration/PortalStabilizationTest.java
+- [X] T035 [P] [US1] Write unit test for dimension registration in common/src/test/java/com/chronosphere/unit/DimensionTest.java
+- [X] T036 [P] [US1] Write unit test for portal state transitions in common/src/test/java/com/chronosphere/unit/PortalStateTest.java
+- [X] T037 [P] [US1] Write GameTest for portal activation in common/src/test/java/com/chronosphere/integration/PortalActivationTest.java
+- [X] T038 [P] [US1] Write GameTest for dimension travel in common/src/test/java/com/chronosphere/integration/DimensionTravelTest.java
+- [X] T039 [P] [US1] Write GameTest for portal stabilization in common/src/test/java/com/chronosphere/integration/PortalStabilizationTest.java
 
 ### Core Dimension System
 
