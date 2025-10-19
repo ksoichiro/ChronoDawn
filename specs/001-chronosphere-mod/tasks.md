@@ -109,11 +109,11 @@
 
 ### Core Dimension System
 
-- [ ] T040 [US1] Create custom dimension type definition in common/src/main/resources/data/chronosphere/dimension_type/chronosphere.json
-- [ ] T041 [US1] Create dimension JSON in common/src/main/resources/data/chronosphere/dimension/chronosphere_dimension.json
-- [ ] T042 [US1] Implement dimension registry logic in common/src/main/java/com/chronosphere/core/dimension/ChronosphereDimension.java
-- [ ] T043 [US1] Implement custom biome provider in common/src/main/java/com/chronosphere/core/dimension/ChronosphereBiomeProvider.java
-- [ ] T044 [US1] Create custom biome definition in common/src/main/resources/data/chronosphere/worldgen/biome/chronosphere_plains.json
+- [X] T040 [US1] Create custom dimension type definition in common/src/main/resources/data/chronosphere/dimension_type/chronosphere.json
+- [X] T041 [US1] Create dimension JSON in common/src/main/resources/data/chronosphere/dimension/chronosphere_dimension.json
+- [X] T042 [US1] Implement dimension registry logic in common/src/main/java/com/chronosphere/core/dimension/ChronosphereDimension.java
+- [X] T043 [US1] Implement custom biome provider in common/src/main/java/com/chronosphere/core/dimension/ChronosphereBiomeProvider.java
+- [X] T044 [US1] Create custom biome definition in common/src/main/resources/data/chronosphere/worldgen/biome/chronosphere_plains.json
 
 ### Portal System (Custom Portal API Integration)
 

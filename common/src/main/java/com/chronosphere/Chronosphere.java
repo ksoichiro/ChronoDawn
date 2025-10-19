@@ -1,5 +1,7 @@
 package com.chronosphere;
 
+import com.chronosphere.core.dimension.ChronosphereBiomeProvider;
+import com.chronosphere.core.dimension.ChronosphereDimension;
 import com.chronosphere.events.ChronosphereEvents;
 import com.chronosphere.registry.ModBlocks;
 import com.chronosphere.registry.ModDimensions;
@@ -23,6 +25,10 @@ public class Chronosphere {
 
         // Register event handlers (Phase 2 - Foundational)
         ChronosphereEvents.register();
+
+        // Initialize dimension systems (Phase 3 - User Story 1)
+        ChronosphereDimension.init();
+        ChronosphereBiomeProvider.init();
     }
 }
 
