@@ -37,6 +37,9 @@ tasks.named("processResources", ProcessResources).configure {
     // Include common resources (data, assets, pack.mcmeta)
     from(project(":common").sourceSets.main.resources) {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        // Exclude loader-specific files
+        exclude "META-INF/neoforge.mods.toml"
+        exclude "architectury.common.json"
     }
 }
 
