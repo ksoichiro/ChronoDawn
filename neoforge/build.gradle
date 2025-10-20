@@ -45,6 +45,11 @@ tasks.named("processResources", ProcessResources).configure {
     filesMatching("META-INF/neoforge.mods.toml") {
         expand "version": project.version
     }
+
+    // Include common resources (data, assets, pack.mcmeta)
+    from(project(":common").sourceSets.main.resources) {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
 }
 
 tasks.named("shadowJar", com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar).configure {

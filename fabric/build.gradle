@@ -33,6 +33,11 @@ tasks.named("processResources", ProcessResources).configure {
     filesMatching("fabric.mod.json") {
         expand "version": project.version
     }
+
+    // Include common resources (data, assets, pack.mcmeta)
+    from(project(":common").sourceSets.main.resources) {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
 }
 
 publishing {
