@@ -1,6 +1,7 @@
 package com.chronosphere.registry;
 
 import com.chronosphere.Chronosphere;
+import com.chronosphere.blocks.ClockstoneOre;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
@@ -15,14 +16,14 @@ import net.minecraft.world.level.block.Block;
 public class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(Chronosphere.MOD_ID, Registries.BLOCK);
 
-    // TODO: Register custom blocks here in future phases
-    // Example:
-    // public static final RegistrySupplier<Block> CLOCKSTONE_ORE = BLOCKS.register(
-    //     "clockstone_ore",
-    //     () -> new ClockstoneOre(BlockBehaviour.Properties.of()
-    //         .strength(3.0f)
-    //         .requiresCorrectToolForDrops())
-    // );
+    /**
+     * Clockstone Ore - Found in Overworld (Ancient Ruins) and Chronosphere dimension.
+     * Drops Clockstone item when mined with appropriate tool.
+     */
+    public static final RegistrySupplier<Block> CLOCKSTONE_ORE = BLOCKS.register(
+        "clockstone_ore",
+        () -> new ClockstoneOre(ClockstoneOre.createProperties())
+    );
 
     /**
      * Initialize block registry.

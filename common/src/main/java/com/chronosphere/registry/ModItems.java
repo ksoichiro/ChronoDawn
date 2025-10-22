@@ -1,8 +1,13 @@
 package com.chronosphere.registry;
 
 import com.chronosphere.Chronosphere;
+import com.chronosphere.items.PortalStabilizerItem;
+import com.chronosphere.items.TimeHourglassItem;
+import com.chronosphere.items.base.ClockstoneItem;
 import dev.architectury.registry.registries.DeferredRegister;
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 
 /**
@@ -14,12 +19,46 @@ import net.minecraft.world.item.Item;
 public class ModItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(Chronosphere.MOD_ID, Registries.ITEM);
 
-    // TODO: Register custom items here in future phases
-    // Example:
-    // public static final RegistrySupplier<Item> CLOCKSTONE = ITEMS.register(
-    //     "clockstone",
-    //     () -> new Item(new Item.Properties())
-    // );
+    // === Block Items ===
+
+    /**
+     * Clockstone Ore - BlockItem for placing Clockstone Ore block.
+     */
+    public static final RegistrySupplier<Item> CLOCKSTONE_ORE = ITEMS.register(
+        "clockstone_ore",
+        () -> new BlockItem(ModBlocks.CLOCKSTONE_ORE.get(), new Item.Properties())
+    );
+
+    // === Material Items ===
+
+    /**
+     * Clockstone - Base material obtained from Clockstone Ore.
+     * Used for crafting Time Hourglass and other time-related items.
+     */
+    public static final RegistrySupplier<Item> CLOCKSTONE = ITEMS.register(
+        "clockstone",
+        () -> new ClockstoneItem(ClockstoneItem.createProperties())
+    );
+
+    // === Portal Items ===
+
+    /**
+     * Time Hourglass - Portal ignition item.
+     * Single-use item for activating Chronosphere portals.
+     */
+    public static final RegistrySupplier<Item> TIME_HOURGLASS = ITEMS.register(
+        "time_hourglass",
+        () -> new TimeHourglassItem(TimeHourglassItem.createProperties())
+    );
+
+    /**
+     * Portal Stabilizer - Portal utility item.
+     * Single-use item for stabilizing deactivated portals.
+     */
+    public static final RegistrySupplier<Item> PORTAL_STABILIZER = ITEMS.register(
+        "portal_stabilizer",
+        () -> new PortalStabilizerItem(PortalStabilizerItem.createProperties())
+    );
 
     /**
      * Initialize item registry.
