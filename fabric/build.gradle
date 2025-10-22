@@ -1,52 +1,72 @@
-// fabric/build.gradle
+plugins {
+    id 'dev.architectury.loom'
+    id 'com.gradleup.shadow'
+}
+
+architectury {
+    platformSetupLoomIde()
+    fabric()
+}
+
+configurations {
+    common {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentFabric.extendsFrom common
+
+    shadowBundle {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+}
 
 dependencies {
-    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
-    modApi "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
-    modApi "dev.architectury:architectury-fabric:${architectury_version}"
+    modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+    modApi "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
+    modApi "dev.architectury:architectury-fabric:$rootProject.architectury_api_version"
 
-    implementation project(path: ":common", configuration: "namedElements")
+    common(project(path: ':common', configuration: 'namedElements')) { transitive false }
+    shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
 }
 
 loom {
-    accessWidenerPath = project(":common").loom.accessWidenerPath
-
-    runs {
-        client {
-            client()
-            setConfigName("Fabric Client")
-            ideConfigGenerated(true)
-            runDir("run")
-        }
-        server {
-            server()
-            setConfigName("Fabric Server")
-            ideConfigGenerated(true)
-            runDir("run")
-        }
+    if (project(':common').loom.accessWidenerPath != null) {
+        accessWidenerPath = project(':common').loom.accessWidenerPath
     }
 }
 
-tasks.named("processResources", ProcessResources).configure {
-    inputs.property "version", project.version
+processResources {
+    from project(':common').sourceSets.main.resources
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
-    filesMatching("fabric.mod.json") {
-        expand "version": project.version
-    }
+    inputs.property 'version', project.version
 
-    // Include common resources (data, assets, pack.mcmeta)
-    from(project(":common").sourceSets.main.resources) {
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        // Exclude loader-specific files
-        exclude "META-INF/neoforge.mods.toml"
-        exclude "architectury.common.json"
+    filesMatching('fabric.mod.json') {
+        expand 'version': project.version
     }
+}
+
+shadowJar {
+    configurations = [project.configurations.shadowBundle]
+    archiveClassifier = 'dev-shadow'
+}
+
+remapJar {
+    inputFile.set shadowJar.archiveFile
+    dependsOn shadowJar
+}
+
+java {
+    withSourcesJar()
 }
 
 publishing {
     publications {
-        mavenFabric(MavenPublication) {
-            artifactId = "${archives_base_name}-fabric"
+        maven(MavenPublication) {
+            artifactId = "${rootProject.archives_name}-${project.name}"
             from components.java
         }
     }

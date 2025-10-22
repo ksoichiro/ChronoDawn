@@ -1,6 +1,7 @@
 package com.chronosphere.integration;
 
 import com.chronosphere.ChronosphereTestBase;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -14,7 +15,10 @@ import org.junit.jupiter.api.Test;
  * - testDimensionStateSaveLoad() - verify dimension state data persistence
  *
  * Note: These tests will require a mock ServerLevel or GameTest environment.
+ *
+ * NOTE: Data structures not yet implemented. These tests will be enabled when data persistence is needed.
  */
+@Disabled("Data structures not yet implemented - will be enabled when needed")
 public class DataPersistenceTest extends ChronosphereTestBase {
     /**
      * Placeholder test to verify test structure is working.

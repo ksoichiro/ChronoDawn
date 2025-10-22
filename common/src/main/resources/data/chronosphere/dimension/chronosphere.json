@@ -1,0 +1,11 @@
+{
+  "type": "chronosphere:chronosphere",
+  "generator": {
+    "type": "minecraft:noise",
+    "biome_source": {
+      "type": "minecraft:fixed",
+      "biome": "chronosphere:chronosphere_plains"
+    },
+    "settings": "minecraft:overworld"
+  }
+}

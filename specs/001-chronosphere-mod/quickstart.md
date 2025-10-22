@@ -68,40 +68,47 @@ cd MultiLoader-Template
 
 2. Configure `gradle.properties`:
 ```properties
-# Minecraft & Loaders
-minecraft_version=1.21.1
-neoforge_version=21.1.208
-fabric_loader_version=0.17.2
-fabric_api_version=0.115.6+1.21.1
-
-# Architectury
-architectury_version=13.0.8
-
-# Mod Info
-mod_id=chronosphere
-mod_name=Chronosphere
+# Mod properties
 mod_version=1.0.0
 maven_group=com.chronosphere
-archives_base_name=chronosphere
+archives_name=chronosphere
+enabled_platforms=fabric
+
+# Minecraft properties
+minecraft_version=1.21.1
+
+# Dependencies
+architectury_api_version=13.0.8
+fabric_loader_version=0.17.3
+fabric_api_version=0.116.7+1.21.1
+
+# Mappings
+# Note: This project uses Mojang mappings (not Yarn)
+# Mojang mappings use official Minecraft class names (e.g., net.minecraft.core.Registry)
 ```
 
-3. Update `settings.gradle`:
-```gradle
+**Important**: このプロジェクトではMojang mappingsを使用しています。Yarn mappingsではありません。コードは`net.minecraft.core`などの公式パッケージ名を使用します。
+
+3. Update `settings.gradle` (Groovy DSL):
+```groovy
 pluginManagement {
     repositories {
-        maven { url = "https://maven.neoforged.net/releases" }
-        maven { url = "https://maven.fabricmc.net/" }
-        maven { url = "https://maven.architectury.dev/" }
+        maven { url 'https://maven.fabricmc.net/' }
+        maven { url 'https://maven.architectury.dev/' }
+        maven { url 'https://maven.neoforged.net/releases/' }
+        maven { url 'https://maven.minecraftforge.net/' }
+        maven { url 'https://maven.parchmentmc.org/' }
         gradlePluginPortal()
     }
 }
 
-rootProject.name = "chronosphere"
+rootProject.name = 'chronosphere'
 
-include("common")
-include("fabric")
-include("neoforge")
+include 'common'
+include 'fabric'
 ```
+
+**Note**: このプロジェクトではGroovy DSLを使用しています（Kotlin DSLではありません）。これはArchitectury Loom 1.11-SNAPSHOTとの互換性のためです。
 
 4. Run setup:
 ```bash
@@ -142,19 +149,7 @@ gradlew.bat :fabric:runClient
 
 Minecraftが起動し、Modリストに "Chronosphere" が表示されることを確認（Fabricローダー）
 
-#### Test NeoForge Loader
-
-```bash
-# Windows
-gradlew.bat :neoforge:runClient
-
-# macOS/Linux
-./gradlew :neoforge:runClient
-```
-
-Minecraftが起動し、Modリストに "Chronosphere" が表示されることを確認（NeoForgeローダー）
-
-#### Build Both Loaders
+#### Build Mod
 
 ```bash
 # Windows
@@ -165,8 +160,8 @@ gradlew.bat build
 ```
 
 ビルド成功後、以下のJARファイルが生成されることを確認:
-- `fabric/build/libs/chronosphere-fabric-1.0.0.jar`
-- `neoforge/build/libs/chronosphere-neoforge-1.0.0.jar`
+- `fabric/build/libs/fabric-1.0.0.jar` (リマップ済みFabric用JAR)
+- `common/build/libs/common-1.0.0.jar` (共通モジュール)
 
 ## Project Structure Overview (Architectury Multi-Loader)
 
@@ -193,21 +188,10 @@ Chronosphere/
 ├── fabric/                             # Fabric固有実装
 │   ├── src/main/java/com/chronosphere/fabric/
 │   │   ├── ChronosphereFabric.java     # Fabric entry point
-│   │   ├── client/                     # Client initialization
-│   │   ├── platform/                   # @ExpectPlatform implementations
-│   │   └── compat/                     # Fabric API integrations
+│   │   ├── client/                     # Client initialization (if needed)
+│   │   └── platform/                   # Platform-specific implementations
 │   └── src/main/resources/
 │       ├── fabric.mod.json             # Fabric mod metadata
-│       └── chronosphere.mixins.json
-├── neoforge/                           # NeoForge固有実装
-│   ├── src/main/java/com/chronosphere/neoforge/
-│   │   ├── ChronosphereNeoForge.java   # NeoForge entry point
-│   │   ├── client/                     # Client initialization
-│   │   ├── platform/                   # @ExpectPlatform implementations
-│   │   ├── event/                      # NeoForge event handlers
-│   │   └── compat/                     # NeoForge API integrations
-│   └── src/main/resources/
-│       ├── META-INF/neoforge.mods.toml # NeoForge mod metadata
 │       └── pack.mcmeta
 ├── specs/001-chronosphere-mod/         # Design documents
 │   ├── spec.md                         # Feature specification
@@ -253,24 +237,11 @@ public class Chronosphere {
 **Fabric Entry Point** (`fabric/src/main/java/com/chronosphere/fabric/ChronosphereFabric.java`):
 
 ```java
-@Mod(Chronosphere.MOD_ID)
 public class ChronosphereFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         Chronosphere.init();
         // Fabric-specific initialization
-    }
-}
-```
-
-**NeoForge Entry Point** (`neoforge/src/main/java/com/chronosphere/neoforge/ChronosphereNeoForge.java`):
-
-```java
-@Mod(Chronosphere.MOD_ID)
-public class ChronosphereNeoForge {
-    public ChronosphereNeoForge() {
-        Chronosphere.init();
-        // NeoForge-specific initialization
     }
 }
 ```
@@ -478,14 +449,16 @@ public static void testPortalTravel(GameTestHelper helper) {
 ./gradlew build
 ```
 
-**Output**: `build/libs/chronosphere-1.0.0.jar`
+**Output**:
+- `fabric/build/libs/fabric-1.0.0.jar` (配布用JAR)
+- `common/build/libs/common-1.0.0.jar` (共通モジュール - 単体では使用不可)
 
 ### Test JAR in Production Environment
 
 1. Install Minecraft 1.21.1
-2. Install NeoForge 21.1.x
-3. Copy JAR to `mods/` folder
-4. Launch Minecraft
+2. Install Fabric Loader (0.17.3以降推奨)
+3. Copy `fabric/build/libs/fabric-1.0.0.jar` to `mods/` folder
+4. Launch Minecraft with Fabric profile
 
 ## Resources
 
@@ -498,14 +471,16 @@ public static void testPortalTravel(GameTestHelper helper) {
 
 ### External Resources
 
-- **NeoForge Docs**: https://docs.neoforged.net
+- **Fabric Docs**: https://docs.fabricmc.net/
+- **Architectury Docs**: https://docs.architectury.dev/
 - **Minecraft Wiki**: https://minecraft.wiki
-- **Custom Portal API**: https://moddedmc.wiki/cs/project/cpapireforged
+- **Custom Portal API Reforged**: https://www.curseforge.com/minecraft/mc-mods/custom-portal-api-reforged
 - **mcjunitlib**: https://github.com/alcatrazEscapee/mcjunitlib
 
 ### Community
 
-- **NeoForge Discord**: https://discord.neoforged.net/
+- **Fabric Discord**: https://discord.gg/v6v4pMv
+- **Architectury Discord**: https://discord.gg/architectury
 - **Minecraft Modding Wiki**: https://moddedmc.wiki
 
 ## Next Steps

@@ -19,21 +19,11 @@
       "com.chronosphere.fabric.ChronosphereFabric"
     ]
   },
-  "mixins": [
-    "chronosphere.mixins.json"
-  ],
-  "custom": {
-    "modmenu": {
-      "badges": [ "library" ]
-    }
-  },
+  "mixins": [],
   "depends": {
-    "fabricloader": ">=0.17.2",
+    "fabricloader": ">=0.15.11",
+    "fabric-api": "*",
     "minecraft": "~1.21.1",
-    "java": ">=21",
-    "fabric-api": "*"
-  },
-  "recommends": {
-    "architectury": ">=13.0.8"
+    "java": ">=21"
   }
 }

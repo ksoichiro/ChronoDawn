@@ -22,7 +22,7 @@ public class ModDimensions {
      */
     public static final ResourceKey<Level> CHRONOSPHERE_DIMENSION = ResourceKey.create(
         Registries.DIMENSION,
-        ResourceLocation.fromNamespaceAndPath(Chronosphere.MOD_ID, "chronosphere_dimension")
+        ResourceLocation.fromNamespaceAndPath(Chronosphere.MOD_ID, "chronosphere")
     );
 
     /**
