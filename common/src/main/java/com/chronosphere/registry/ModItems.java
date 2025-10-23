@@ -29,6 +29,14 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.CLOCKSTONE_ORE.get(), new Item.Properties())
     );
 
+    /**
+     * Clockstone Block - BlockItem for placing Clockstone Block (portal frame material).
+     */
+    public static final RegistrySupplier<Item> CLOCKSTONE_BLOCK = ITEMS.register(
+        "clockstone_block",
+        () -> new BlockItem(ModBlocks.CLOCKSTONE_BLOCK.get(), new Item.Properties())
+    );
+
     // === Material Items ===
 
     /**

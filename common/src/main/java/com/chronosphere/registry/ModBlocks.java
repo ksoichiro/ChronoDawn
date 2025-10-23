@@ -1,6 +1,7 @@
 package com.chronosphere.registry;
 
 import com.chronosphere.Chronosphere;
+import com.chronosphere.blocks.ClockstoneBlock;
 import com.chronosphere.blocks.ClockstoneOre;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -23,6 +24,15 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> CLOCKSTONE_ORE = BLOCKS.register(
         "clockstone_ore",
         () -> new ClockstoneOre(ClockstoneOre.createProperties())
+    );
+
+    /**
+     * Clockstone Block - Portal frame building material.
+     * Crafted from 9x Clockstone items, used to construct portal frames.
+     */
+    public static final RegistrySupplier<Block> CLOCKSTONE_BLOCK = BLOCKS.register(
+        "clockstone_block",
+        () -> new ClockstoneBlock(ClockstoneBlock.createProperties())
     );
 
     /**

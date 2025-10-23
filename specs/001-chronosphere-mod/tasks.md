@@ -117,7 +117,7 @@
 
 ### Portal System (Custom Portal API Integration)
 
-- [ ] T045 [US1] Create portal frame validation logic in common/src/main/java/com/chronosphere/core/portal/PortalFrameValidator.java
+- [X] T045 [US1] Create portal frame validation logic in common/src/main/java/com/chronosphere/core/portal/PortalFrameValidator.java
 - [ ] T046 [US1] Implement portal state machine in common/src/main/java/com/chronosphere/core/portal/PortalStateMachine.java
 - [ ] T047 [US1] Implement portal registry in common/src/main/java/com/chronosphere/core/portal/PortalRegistry.java
 - [ ] T048 [US1] Integrate Custom Portal API (Fabric) in fabric/src/main/java/com/chronosphere/fabric/compat/CustomPortalFabric.java
