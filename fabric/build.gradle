@@ -23,10 +23,18 @@ configurations {
     }
 }
 
+repositories {
+    maven { url 'https://maven.kyrptonaught.dev' }
+}
+
 dependencies {
     modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
     modApi "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
     modApi "dev.architectury:architectury-fabric:$rootProject.architectury_api_version"
+
+    // Custom Portal API for Fabric
+    modImplementation 'net.kyrptonaught:customportalapi:0.0.1-beta66-1.21'
+    include 'net.kyrptonaught:customportalapi:0.0.1-beta66-1.21'
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')

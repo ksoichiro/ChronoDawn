@@ -160,8 +160,8 @@
 
 ### Time Distortion Effect (US1)
 
-- [ ] T073 [US1] Implement time distortion effect logic in common/src/main/java/com/chronosphere/core/time/TimeDistortionEffect.java
-- [ ] T074 [US1] Add entity tick event handler for Slowness IV application in EntityEventHandler.java
+- [X] T073 [US1] Implement time distortion effect logic in common/src/main/java/com/chronosphere/core/time/TimeDistortionEffect.java
+- [X] T074 [US1] Add entity tick event handler for Slowness IV application in EntityEventHandler.java
 - [ ] T075 [US1] Write unit test for time distortion effect in common/src/test/java/com/chronosphere/unit/TimeDistortionTest.java
 
 ### Consumables - Fruit of Time (US1)

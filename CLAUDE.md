@@ -3,7 +3,8 @@
 Auto-generated from all feature plans. Last updated: 2025-10-19
 
 ## Active Technologies
-- Java 21 (Minecraft Java Edition 1.21.1) + NeoForge 21.1.x, Custom Portal API Reforged, mcjunitlib (001-chronosphere-mod)
+- Java 21 (Minecraft Java Edition 1.21.1) + NeoForge 21.1.x, Fabric Loader, mcjunitlib (001-chronosphere-mod)
+- Custom Portal API 0.0.1-beta66-1.21 (Fabric) - for custom portal implementation
 
 ## Project Structure
 ```
@@ -18,8 +19,10 @@ tests/
 Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 
 ## Recent Changes
-- 001-chronosphere-mod: Added Java 21 (Minecraft Java Edition 1.21.1) + NeoForge 21.1.x, Custom Portal API Reforged, mcjunitlib
+- 001-chronosphere-mod: Added Java 21 (Minecraft Java Edition 1.21.1) + NeoForge 21.1.x, mcjunitlib
 - 2025-10-23: Migrated to Groovy DSL and Mojang mappings for Minecraft 1.21.1 compatibility
+- 2025-10-24: Implemented Time Distortion Effect (Slowness IV for hostile mobs in Chronosphere)
+- 2025-10-24: Added Custom Portal API 0.0.1-beta66-1.21 dependency for future portal implementation
 
 ## Build Configuration
 - **Build DSL**: Groovy DSL (not Kotlin DSL) - for compatibility with Architectury Loom 1.11-SNAPSHOT
