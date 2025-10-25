@@ -4,6 +4,7 @@ import com.chronosphere.Chronosphere;
 import com.chronosphere.items.PortalStabilizerItem;
 import com.chronosphere.items.TimeHourglassItem;
 import com.chronosphere.items.base.ClockstoneItem;
+import com.chronosphere.items.consumables.FruitOfTimeItem;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
@@ -66,6 +67,17 @@ public class ModItems {
     public static final RegistrySupplier<Item> PORTAL_STABILIZER = ITEMS.register(
         "portal_stabilizer",
         () -> new PortalStabilizerItem(PortalStabilizerItem.createProperties())
+    );
+
+    // === Consumables ===
+
+    /**
+     * Fruit of Time - Special food item found in the Chronosphere dimension.
+     * Restores hunger and provides Haste I effect for 30 seconds.
+     */
+    public static final RegistrySupplier<Item> FRUIT_OF_TIME = ITEMS.register(
+        "fruit_of_time",
+        () -> new FruitOfTimeItem(FruitOfTimeItem.createProperties())
     );
 
     /**

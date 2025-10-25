@@ -166,9 +166,9 @@
 
 ### Consumables - Fruit of Time (US1)
 
-- [ ] T076 [P] [US1] Create Fruit of Time item in common/src/main/java/com/chronosphere/items/consumables/FruitOfTimeItem.java
-- [ ] T077 [P] [US1] Register Fruit of Time in ModItems registry
-- [ ] T078 [P] [US1] Create Fruit of Time texture in common/src/main/resources/assets/chronosphere/textures/item/fruit_of_time.png
+- [X] T076 [P] [US1] Create Fruit of Time item in common/src/main/java/com/chronosphere/items/consumables/FruitOfTimeItem.java
+- [X] T077 [P] [US1] Register Fruit of Time in ModItems registry
+- [X] T078 [P] [US1] Create Fruit of Time texture and model in common/src/main/resources/assets/chronosphere/ (from glow_berries.png)
 - [ ] T079 [P] [US1] Create Fruit of Time block feature in common/src/main/java/com/chronosphere/worldgen/features/FruitOfTimeTreeFeature.java
 - [ ] T080 [P] [US1] Configure Fruit of Time tree placement in common/src/main/resources/data/chronosphere/worldgen/placed_feature/fruit_of_time_tree.json
 
