@@ -87,6 +87,12 @@
 - [X] T033 [P] Create integration test structure in common/src/test/java/com/chronosphere/integration/
 - [X] T034 Configure GameTest framework for both loaders
 
+### Creative Tab Infrastructure
+
+- [ ] T034a Create ModCreativeTabs registry in common/src/main/java/com/chronosphere/registry/ModCreativeTabs.java
+- [ ] T034b Register Chronosphere creative tab with icon
+- [ ] T034c Implement item group population for both loaders
+
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
 ---
@@ -186,6 +192,12 @@
 - [ ] T087 [US1] Implement respawn handler in PlayerEventHandler.java
 - [ ] T088 [US1] Write GameTest for respawn behavior in common/src/test/java/com/chronosphere/integration/RespawnTest.java
 
+### Localization & Creative Tab (US1)
+
+- [ ] T088a [US1] Create English localization file with all US1 items/blocks in common/src/main/resources/assets/chronosphere/lang/en_us.json
+- [ ] T088b [US1] Create Japanese localization file with all US1 items/blocks in common/src/main/resources/assets/chronosphere/lang/ja_jp.json
+- [ ] T088c [US1] Add all US1 items/blocks to creative tab in ModCreativeTabs
+
 **Checkpoint**: User Story 1が完全に機能し、独立してテスト可能であること
 
 ---
@@ -250,6 +262,12 @@
 - [ ] T120 [P] [US2] Register Unstable Hourglass in ModItems registry
 - [ ] T121 [P] [US2] Create Unstable Hourglass recipe in common/src/main/resources/data/chronosphere/recipes/unstable_hourglass.json
 - [ ] T122 [P] [US2] Implement reversed resonance trigger on crafting in common/src/main/java/com/chronosphere/events/CraftEventHandler.java
+
+### Localization & Creative Tab (US2)
+
+- [ ] T122a [US2] Update English localization file with all US2 items/entities in en_us.json
+- [ ] T122b [US2] Update Japanese localization file with all US2 items/entities in ja_jp.json
+- [ ] T122c [US2] Add all US2 items to creative tab in ModCreativeTabs
 
 **Checkpoint**: User Story 1とUser Story 2が両方とも独立して動作すること
 
@@ -337,6 +355,12 @@
 - [ ] T170 [P] [US3] Create Unstable Pocket Watch recipe in common/src/main/resources/data/chronosphere/recipes/unstable_pocket_watch.json
 - [ ] T171 [US3] Implement speed effect swapping logic (30s cooldown) in common/src/main/java/com/chronosphere/items/artifacts/UnstablePocketWatchSwapHandler.java
 
+### Localization & Creative Tab (US3)
+
+- [ ] T171a [US3] Update English localization file with all US3 items/entities in en_us.json
+- [ ] T171b [US3] Update Japanese localization file with all US3 items/entities in ja_jp.json
+- [ ] T171c [US3] Add all US3 items to creative tab in ModCreativeTabs
+
 **Checkpoint**: 全User Storyが独立して機能すること
 
 ---
@@ -362,10 +386,12 @@
 - [ ] T181 Profile server performance with Spark profiler
 - [ ] T182 Ensure server load increase stays within +10% threshold per success criteria SC-008
 
-### Localization
+### Localization (Final Review)
 
-- [ ] T183 [P] Create English localization file in common/src/main/resources/assets/chronosphere/lang/en_us.json
-- [ ] T184 [P] Create Japanese localization file in common/src/main/resources/assets/chronosphere/lang/ja_jp.json
+**NOTE**: Basic localization is completed in each User Story (T088a-c, T122a-c, T171a-c). This phase is for final review and completeness check.
+
+- [ ] T183 [P] Review English localization file for completeness and consistency
+- [ ] T184 [P] Review Japanese localization file for completeness and consistency
 
 ### Documentation
 
