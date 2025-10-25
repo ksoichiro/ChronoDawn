@@ -29,5 +29,19 @@
   "carvers": {
     "air": []
   },
-  "features": []
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "chronosphere:fruit_of_time_tree"
+    ],
+    []
+  ]
 }
