@@ -35,4 +35,28 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 - Common module code is bundled into Fabric JAR using Shadow plugin
 
 <!-- MANUAL ADDITIONS START -->
+
+## Workflow Guidelines
+
+### Research and Investigation
+- **Document Research Results**: When conducting research or investigation for future tasks, always save findings to appropriate files (e.g., `specs/001-chronosphere-mod/research.md`) rather than keeping them only in session conversation
+- **Add Related Tasks**: After completing research, add corresponding tasks to `tasks.md` with clear implementation steps
+- **Cross-Reference**: Link research decisions to related task IDs for traceability
+
+### Pre-Commit Verification
+- **Verification Check**: Before committing changes, determine if the changes are testable/verifiable
+- **Present Verification Steps**: When changes are verifiable, present to the user:
+  1. Verification method (build, run, test command, etc.)
+  2. Step-by-step instructions
+  3. Expected results/success criteria
+- **Example**:
+  ```
+  Verification is possible:
+  1. Run ./gradlew :fabric:build
+  2. Confirm that the build succeeds
+  3. Confirm that JAR files are generated in fabric/build/libs/
+  Expected result: Build completes without errors and JAR files are generated
+  ```
+- **Wait for User Decision**: Allow user to decide whether to proceed with verification before committing
+
 <!-- MANUAL ADDITIONS END -->
