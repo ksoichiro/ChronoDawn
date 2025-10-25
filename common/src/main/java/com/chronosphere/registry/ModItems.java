@@ -88,4 +88,27 @@ public class ModItems {
         ITEMS.register();
         Chronosphere.LOGGER.info("Registered ModItems");
     }
+
+    /**
+     * Populate Chronosphere creative tab with items.
+     * Task: T034c [Phase 2] Implement item group population
+     * Task: T088c [US1] Add all US1 items/blocks to creative tab
+     */
+    public static void populateCreativeTab(
+            net.minecraft.world.item.CreativeModeTab.ItemDisplayParameters params,
+            net.minecraft.world.item.CreativeModeTab.Output output) {
+        // === Blocks ===
+        output.accept(CLOCKSTONE_ORE.get());
+        output.accept(CLOCKSTONE_BLOCK.get());
+
+        // === Base Materials ===
+        output.accept(CLOCKSTONE.get());
+
+        // === Portal Items ===
+        output.accept(TIME_HOURGLASS.get());
+        output.accept(PORTAL_STABILIZER.get());
+
+        // === Consumables ===
+        output.accept(FRUIT_OF_TIME.get());
+    }
 }

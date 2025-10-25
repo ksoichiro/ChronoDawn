@@ -1,0 +1,11 @@
+{
+  "itemGroup.chronosphere.chronosphere": "Chronosphere",
+
+  "block.chronosphere.clockstone_ore": "Clockstone Ore",
+  "block.chronosphere.clockstone_block": "Clockstone Block",
+
+  "item.chronosphere.clockstone": "Clockstone",
+  "item.chronosphere.time_hourglass": "Time Hourglass",
+  "item.chronosphere.portal_stabilizer": "Portal Stabilizer",
+  "item.chronosphere.fruit_of_time": "Fruit of Time"
+}

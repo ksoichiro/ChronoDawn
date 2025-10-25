@@ -1,0 +1,11 @@
+{
+  "itemGroup.chronosphere.chronosphere": "クロノスフィア",
+
+  "block.chronosphere.clockstone_ore": "クロックストーン鉱石",
+  "block.chronosphere.clockstone_block": "クロックストーンブロック",
+
+  "item.chronosphere.clockstone": "クロックストーン",
+  "item.chronosphere.time_hourglass": "時の砂時計",
+  "item.chronosphere.portal_stabilizer": "ポータル安定化装置",
+  "item.chronosphere.fruit_of_time": "時間の果実"
+}

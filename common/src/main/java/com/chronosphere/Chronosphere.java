@@ -4,6 +4,7 @@ import com.chronosphere.core.dimension.ChronosphereBiomeProvider;
 import com.chronosphere.core.dimension.ChronosphereDimension;
 import com.chronosphere.events.ChronosphereEvents;
 import com.chronosphere.registry.ModBlocks;
+import com.chronosphere.registry.ModCreativeTabs;
 import com.chronosphere.registry.ModDimensions;
 import com.chronosphere.registry.ModEntities;
 import com.chronosphere.registry.ModItems;
@@ -22,6 +23,7 @@ public class Chronosphere {
         ModItems.register();
         ModEntities.register();
         ModDimensions.register();
+        ModCreativeTabs.register();
 
         // Register event handlers (Phase 2 - Foundational)
         ChronosphereEvents.register();

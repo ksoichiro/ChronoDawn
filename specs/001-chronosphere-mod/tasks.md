@@ -89,9 +89,9 @@
 
 ### Creative Tab Infrastructure
 
-- [ ] T034a Create ModCreativeTabs registry in common/src/main/java/com/chronosphere/registry/ModCreativeTabs.java
-- [ ] T034b Register Chronosphere creative tab with icon
-- [ ] T034c Implement item group population for both loaders
+- [X] T034a Create ModCreativeTabs registry in common/src/main/java/com/chronosphere/registry/ModCreativeTabs.java
+- [X] T034b Register Chronosphere creative tab with icon
+- [X] T034c Implement item group population for both loaders
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -194,9 +194,9 @@
 
 ### Localization & Creative Tab (US1)
 
-- [ ] T088a [US1] Create English localization file with all US1 items/blocks in common/src/main/resources/assets/chronosphere/lang/en_us.json
-- [ ] T088b [US1] Create Japanese localization file with all US1 items/blocks in common/src/main/resources/assets/chronosphere/lang/ja_jp.json
-- [ ] T088c [US1] Add all US1 items/blocks to creative tab in ModCreativeTabs
+- [X] T088a [US1] Create English localization file with all US1 items/blocks in common/src/main/resources/assets/chronosphere/lang/en_us.json
+- [X] T088b [US1] Create Japanese localization file with all US1 items/blocks in common/src/main/resources/assets/chronosphere/lang/ja_jp.json
+- [X] T088c [US1] Add all US1 items/blocks to creative tab in ModCreativeTabs
 
 **Checkpoint**: User Story 1が完全に機能し、独立してテスト可能であること
 
