@@ -23,6 +23,7 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 - 2025-10-23: Migrated to Groovy DSL and Mojang mappings for Minecraft 1.21.1 compatibility
 - 2025-10-24: Implemented Time Distortion Effect (Slowness IV for hostile mobs in Chronosphere)
 - 2025-10-24: Added Custom Portal API 0.0.1-beta66-1.21 dependency for future portal implementation
+- 2025-10-26: **CRITICAL DESIGN DECISION**: Respawn mechanics follow Minecraft standard (End-like), not custom logic (see spec.md "Game Design Philosophy")
 
 ## Build Configuration
 - **Build DSL**: Groovy DSL (not Kotlin DSL) - for compatibility with Architectury Loom 1.11-SNAPSHOT
@@ -58,5 +59,18 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
   Expected result: Build completes without errors and JAR files are generated
   ```
 - **Wait for User Decision**: Allow user to decide whether to proceed with verification before committing
+
+## Critical Game Design Decisions
+
+### Respawn Mechanics (2025-10-26)
+**Decision**: Chronosphere follows Minecraft's standard respawn behavior (like End dimension)
+- Players respawn at bed/respawn anchor, or world spawn if none set
+- Portal Stabilizer does NOT affect respawn location
+- Portal Stabilizer only makes portal bidirectional (one-way → two-way)
+- Players can always escape by breaking bed and dying
+
+**Rationale**: Maintains tension (one-way portal) without excessive difficulty (can always escape)
+
+**See**: `specs/001-chronosphere-mod/spec.md` → "Game Design Philosophy" section for full details
 
 <!-- MANUAL ADDITIONS END -->

@@ -5,6 +5,80 @@
 **Status**: Draft
 **Input**: User description: "Minecraftのmodを開発してください。ベースとなるアイデアは @DRAFT.md に記述されています。"
 
+## Game Design Philosophy *(critical design decisions)*
+
+This section documents critical design decisions that define the core gameplay experience of Chronosphere Mod. These decisions fundamentally impact implementation and player experience quality.
+
+### Design Decision 1: Respawn Mechanics - End Dimension Approach (2025-10-26)
+
+**Background**:
+Initial designs considered complex custom respawn logic where "Portal Stabilizer possession determines respawn location." However, implementation verification revealed this approach had issues with both game balance and implementation complexity.
+
+**Decision**:
+Chronosphere dimension respawn behavior **follows Minecraft's standard mechanics completely (same as End dimension)**.
+
+**Core Principle - "End-like Balance"**:
+```
+Entry:    One-way portal (Time Hourglass required) → Creates tension
+Return:   Portal Stabilizer makes it bidirectional → Player achievement
+Death:    Normal Minecraft respawn (bed/anchor or world spawn) → Fair difficulty
+Escape:   Break bed and die to return to Overworld → Always possible
+```
+
+**Rationale**:
+
+1. **Balanced Difficulty**
+   - ❌ Bad design: Player trapped in Chronosphere on death → Can be stuck without resources
+   - ✅ Good design: Respawn at bed/world spawn on death → Always escapable
+
+2. **Maintains Tension**
+   - One-way portal itself creates sufficient tension
+   - Players carefully prepare before entering
+   - Even if death allows escape, Portal Stabilizer is still needed for convenient travel
+
+3. **Player Agency**
+   - Set bed in Chronosphere → Establish base and continue exploration
+   - Break bed and die → Emergency escape mechanism
+   - Craft Portal Stabilizer → Enable convenient round trips
+
+4. **Implementation Simplicity**
+   - No custom respawn logic required
+   - Leverages existing Minecraft systems
+   - Reduces risk of bugs and unexpected behaviors
+
+**Comparison with End Dimension**:
+
+| Feature | End | Chronosphere |
+|---------|-----|--------------|
+| Entry Portal | End Portal (one-way) | Time Hourglass Portal (one-way) |
+| Return Mechanism | Defeat Ender Dragon → Return Portal | Use Portal Stabilizer → Bidirectional |
+| Death Respawn | Bed/World Spawn (standard) | Bed/World Spawn (standard) |
+| Escape Method | Break bed + die | Break bed + die |
+| Tension Source | Portal is one-way ✅ | Portal is one-way ✅ |
+| Difficulty Level | Moderate (can escape) | Moderate (can escape) |
+
+**Portal Stabilizer Role** (Clarification):
+- ✅ **Affects**: Portal travel (one-way → bidirectional)
+- ❌ **Does NOT affect**: Respawn location (always follows Minecraft standard)
+
+**Edge Case - "Getting Trapped"**:
+- **Scenario**: Player enters Chronosphere, portal deactivates, no bed set
+- **Old Design**: Trapped in Chronosphere unless Portal Stabilizer is crafted
+- **New Design**: Can die and respawn in Overworld (bed/world spawn)
+  - Maintains tension: Portal is still one-way, can't easily return to retrieve items
+  - Prevents frustration: Always has an escape route
+  - Preserves motivation: Must craft Portal Stabilizer for convenient travel
+
+**Implementation Note**:
+- No custom respawn handler (PlayerEventHandler remains placeholder)
+- Chronosphere dimension_type.json has `"bed_works": true`
+- Players respawn following vanilla Minecraft mechanics
+
+**Design Philosophy Summary**:
+> "Like the End, Chronosphere creates tension through one-way travel, not through punishing death. Players feel challenged but never trapped. The Portal Stabilizer is an achievement that enables convenience, not survival necessity."
+
+---
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - ディメンションへの初回突入と帰還路の確保 (Priority: P1)

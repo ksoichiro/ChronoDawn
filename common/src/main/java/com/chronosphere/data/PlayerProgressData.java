@@ -117,9 +117,61 @@ public class PlayerProgressData extends ChronosphereWorldData {
         return tag;
     }
 
-    // TODO: Add player progress management methods in future phases:
-    // - getProgress(UUID playerId)
-    // - setChronosEye(UUID playerId, boolean hasEye)
-    // - addStabilizedPortal(UUID playerId, UUID portalId)
-    // - addDefeatedBoss(UUID playerId, String bossName)
+    /**
+     * Get player progress for the given player ID.
+     * Creates a new progress entry if it doesn't exist.
+     *
+     * @param playerId Player UUID
+     * @return Player progress data
+     */
+    public PlayerProgress getProgress(UUID playerId) {
+        return playerData.computeIfAbsent(playerId, k -> new PlayerProgress());
+    }
+
+    /**
+     * Check if the player has any stabilized portals.
+     *
+     * @param playerId Player UUID
+     * @return True if the player has stabilized at least one portal
+     */
+    public boolean hasStabilizedPortals(UUID playerId) {
+        PlayerProgress progress = playerData.get(playerId);
+        return progress != null && !progress.stabilizedPortals.isEmpty();
+    }
+
+    /**
+     * Set whether the player has obtained the Eye of Chronos.
+     *
+     * @param playerId Player UUID
+     * @param hasEye Whether the player has the Eye of Chronos
+     */
+    public void setChronosEye(UUID playerId, boolean hasEye) {
+        PlayerProgress progress = getProgress(playerId);
+        progress.hasChronosEye = hasEye;
+        setDirty();
+    }
+
+    /**
+     * Add a stabilized portal to the player's progress.
+     *
+     * @param playerId Player UUID
+     * @param portalId Portal UUID
+     */
+    public void addStabilizedPortal(UUID playerId, UUID portalId) {
+        PlayerProgress progress = getProgress(playerId);
+        progress.stabilizedPortals.add(portalId);
+        setDirty();
+    }
+
+    /**
+     * Add a defeated boss to the player's progress.
+     *
+     * @param playerId Player UUID
+     * @param bossName Boss name
+     */
+    public void addDefeatedBoss(UUID playerId, String bossName) {
+        PlayerProgress progress = getProgress(playerId);
+        progress.defeatedBosses.add(bossName);
+        setDirty();
+    }
 }
