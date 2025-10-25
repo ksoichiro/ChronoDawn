@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "chronosphere:forgotten_library",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 8735421890,
+    "spacing": 24,
+    "separation": 8
+  }
+}

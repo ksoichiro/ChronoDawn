@@ -151,12 +151,12 @@
 
 ### World Generation - Structures (US1)
 
-- [ ] T067 [P] [US1] Create Ancient Ruins structure NBT in common/src/main/resources/data/chronosphere/structures/ancient_ruins.nbt
-- [ ] T068 [P] [US1] Implement Ancient Ruins structure feature in common/src/main/java/com/chronosphere/worldgen/structures/AncientRuinsStructure.java
-- [ ] T069 [P] [US1] Create Ancient Ruins structure set in common/src/main/resources/data/chronosphere/worldgen/structure_set/ancient_ruins.json
-- [ ] T070 [P] [US1] Create Forgotten Library structure NBT in common/src/main/resources/data/chronosphere/structures/forgotten_library.nbt
-- [ ] T071 [P] [US1] Implement Forgotten Library structure feature in common/src/main/java/com/chronosphere/worldgen/structures/ForgottenLibraryStructure.java
-- [ ] T072 [P] [US1] Create Forgotten Library structure set in common/src/main/resources/data/chronosphere/worldgen/structure_set/forgotten_library.json
+- [ ] T067 [P] [US1] Create Ancient Ruins structure NBT in common/src/main/resources/data/chronosphere/structures/ancient_ruins.nbt (placeholder README created)
+- [X] T068 [P] [US1] Implement Ancient Ruins structure framework (template_pool, structure, structure_set JSONs created)
+- [X] T069 [P] [US1] Create Ancient Ruins structure set in common/src/main/resources/data/chronosphere/worldgen/structure_set/ancient_ruins.json
+- [ ] T070 [P] [US1] Create Forgotten Library structure NBT in common/src/main/resources/data/chronosphere/structures/forgotten_library.nbt (placeholder README created)
+- [X] T071 [P] [US1] Implement Forgotten Library structure framework (template_pool, structure, structure_set JSONs created)
+- [X] T072 [P] [US1] Create Forgotten Library structure set in common/src/main/resources/data/chronosphere/worldgen/structure_set/forgotten_library.json
 
 ### Time Distortion Effect (US1)
 
