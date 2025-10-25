@@ -175,8 +175,44 @@
 - [X] T076 [P] [US1] Create Fruit of Time item in common/src/main/java/com/chronosphere/items/consumables/FruitOfTimeItem.java
 - [X] T077 [P] [US1] Register Fruit of Time in ModItems registry
 - [X] T078 [P] [US1] Create Fruit of Time texture and model in common/src/main/resources/assets/chronosphere/ (from glow_berries.png)
-- [ ] T079 [P] [US1] Create Fruit of Time block feature in common/src/main/java/com/chronosphere/worldgen/features/FruitOfTimeTreeFeature.java
-- [ ] T080 [P] [US1] Configure Fruit of Time tree placement in common/src/main/resources/data/chronosphere/worldgen/placed_feature/fruit_of_time_tree.json
+- [X] T079 [P] [US1] Create Fruit of Time block feature in common/src/main/java/com/chronosphere/worldgen/features/FruitOfTimeTreeFeature.java
+- [X] T080 [P] [US1] Configure Fruit of Time tree placement in common/src/main/resources/data/chronosphere/worldgen/placed_feature/fruit_of_time_tree.json
+
+### Enhanced Tree Blocks & Fruit System (US1 - Fruit of Time Enhancement)
+
+**Purpose**: Replace temporary Oak blocks with custom Time Wood blocks and implement fruit-bearing system
+
+**Note**: T079-T080 implemented basic tree generation with Oak blocks. This section enhances it with custom blocks and fruit mechanics.
+
+#### Custom Wood Blocks
+
+- [ ] T080a [P] [US1] Create Time Wood Log block in common/src/main/java/com/chronosphere/blocks/TimeWoodLog.java
+- [ ] T080b [P] [US1] Register Time Wood Log in ModBlocks registry
+- [ ] T080c [P] [US1] Create Time Wood Log textures in common/src/main/resources/assets/chronosphere/textures/block/ (time_wood_log.png, time_wood_log_top.png)
+- [ ] T080d [P] [US1] Create Time Wood Log blockstate and models (block, item) in common/src/main/resources/assets/chronosphere/
+- [ ] T080e [P] [US1] Create Time Wood Log loot table in common/src/main/resources/data/chronosphere/loot_tables/blocks/time_wood_log.json
+- [ ] T080f [P] [US1] Create Time Wood Leaves block in common/src/main/java/com/chronosphere/blocks/TimeWoodLeaves.java
+- [ ] T080g [P] [US1] Register Time Wood Leaves in ModBlocks registry
+- [ ] T080h [P] [US1] Create Time Wood Leaves texture in common/src/main/resources/assets/chronosphere/textures/block/time_wood_leaves.png
+- [ ] T080i [P] [US1] Create Time Wood Leaves blockstate and models (block, item)
+- [ ] T080j [P] [US1] Create Time Wood Leaves loot table in common/src/main/resources/data/chronosphere/loot_tables/blocks/time_wood_leaves.json
+
+#### Fruit Block System
+
+- [ ] T080k [P] [US1] Create Fruit of Time block in common/src/main/java/com/chronosphere/blocks/FruitOfTimeBlock.java (with growth stages 0-2, similar to Cocoa)
+- [ ] T080l [P] [US1] Register Fruit of Time block in ModBlocks registry
+- [ ] T080m [P] [US1] Create Fruit of Time block textures for each growth stage in common/src/main/resources/assets/chronosphere/textures/block/ (fruit_of_time_stage_0.png, stage_1.png, stage_2.png)
+- [ ] T080n [P] [US1] Create Fruit of Time block blockstate in common/src/main/resources/assets/chronosphere/blockstates/fruit_of_time.json
+- [ ] T080o [P] [US1] Create Fruit of Time block loot table in common/src/main/resources/data/chronosphere/loot_tables/blocks/fruit_of_time.json (drops 1-3 items when mature)
+- [ ] T080p [US1] Implement fruit growth logic with random tick in FruitOfTimeBlock.java
+
+#### Tree Decorator & Generation Update
+
+- [ ] T080q [US1] Implement FruitDecorator class in common/src/main/java/com/chronosphere/worldgen/decorators/FruitDecorator.java
+- [ ] T080r [US1] Update FruitOfTimeTreeFeature.java to use Time Wood Log/Leaves instead of Oak blocks
+- [ ] T080s [US1] Update configured_feature/fruit_of_time_tree.json with custom blocks and fruit decorator in decorators array
+- [ ] T080t [P] [US1] Update localization files (en_us.json, ja_jp.json) with Time Wood Log, Time Wood Leaves, and Fruit of Time block
+- [ ] T080u [US1] Test custom tree generation and fruit growth in-game (verify custom textures, fruit placement, growth, harvesting)
 
 ### Special Blocks (US1)
 
@@ -511,33 +547,33 @@ Task: "Create Clockstone item model in common/src/main/resources/assets/chronosp
 
 ## Total Task Count
 
-**Total Tasks**: 194
+**Total Tasks**: 215 (updated with T080a-T080u enhancement subtasks)
 
 **Breakdown by Phase**:
 - Phase 1 (Setup): 14 tasks
 - Phase 2 (Foundational): 20 tasks
-- Phase 3 (User Story 1 - P1): 54 tasks
+- Phase 3 (User Story 1 - P1): 75 tasks (includes T080a-T080u fruit enhancement)
 - Phase 4 (User Story 2 - P2): 34 tasks
 - Phase 5 (User Story 3 - P3): 49 tasks
 - Phase 6 (Polish): 23 tasks
 
 **Breakdown by User Story**:
-- User Story 1 (P1): 54 tasks (28% of total)
-- User Story 2 (P2): 34 tasks (18% of total)
-- User Story 3 (P3): 49 tasks (25% of total)
-- Infrastructure (Setup + Foundational + Polish): 57 tasks (29% of total)
+- User Story 1 (P1): 75 tasks (35% of total)
+- User Story 2 (P2): 34 tasks (16% of total)
+- User Story 3 (P3): 49 tasks (23% of total)
+- Infrastructure (Setup + Foundational + Polish): 57 tasks (26% of total)
 
 **Parallel Opportunities**:
 - Phase 1: 7 parallel groups
 - Phase 2: 8 parallel groups
-- Phase 3 (US1): 22 parallel groups
+- Phase 3 (US1): 26 parallel groups (includes 4 new groups from T080a-T080u)
 - Phase 4 (US2): 17 parallel groups
 - Phase 5 (US3): 24 parallel groups
 - Phase 6: 10 parallel groups
 
 **Independent Test Criteria**:
-- User Story 1: Portal creation, dimension travel, portal stabilization, free travel between dimensions
+- User Story 1: Portal creation, dimension travel, portal stabilization, free travel between dimensions, custom tree generation with harvestable fruits
 - User Story 2: Desert Clock Tower exploration, time manipulation items, Time Guardian defeat, key acquisition
 - User Story 3: Master Clock access, Time Tyrant defeat, ultimate artifacts creation, artifact effects validation
 
-**Suggested MVP Scope**: User Story 1 (Phase 1 + Phase 2 + Phase 3) = 88 tasks
+**Suggested MVP Scope**: User Story 1 (Phase 1 + Phase 2 + Phase 3) = 109 tasks (includes fruit enhancement subtasks)
