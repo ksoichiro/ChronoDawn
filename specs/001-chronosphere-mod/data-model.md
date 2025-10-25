@@ -440,12 +440,25 @@
 
 ### Respawn Logic (リスポーン処理)
 
-**Type**: Player Death Event
-**Implementation**: PlayerRespawnEvent
+**Type**: Minecraft Standard Behavior (no custom implementation)
+**Implementation**: None (uses vanilla Minecraft respawn mechanics)
+
+**Design Philosophy**: Similar to End dimension behavior
+- Chronosphere respawn follows Minecraft's standard respawn mechanics
+- Players respawn at their set bed/respawn anchor, or world spawn if none set
+- Portal Stabilizer does NOT affect respawn location
+- Portal Stabilizer only makes portal bidirectional (like End return portal)
+- Players can escape Chronosphere by breaking bed and dying (same as End)
 
 **Rules**:
-1. ポータル安定化装置を使用済みの場合: オーバーワールドのリスポーン地点
-2. ポータル安定化装置未使用の場合: クロノスフィアの初期スポーン地点（忘れられた図書館近く）
+1. ベッド/リスポーンアンカーを設置済み: その場所にリスポーン（通常のMinecraft動作）
+2. ベッド/リスポーンアンカー未設置: オーバーワールドのワールドスポーン地点にリスポーン（通常のMinecraft動作）
+3. ポータル安定化装置の有無: リスポーン位置には**影響しない**
+
+**Escape Mechanic**:
+- プレイヤーはクロノスフィアでベッドを設置して破壊し、死亡することでオーバーワールドに脱出可能
+- この仕様により、ポータルが一方通行でも過度に難しくならない
+- エンドディメンションと同じバランス設計
 
 ## Data Persistence
 

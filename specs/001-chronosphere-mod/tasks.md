@@ -189,8 +189,14 @@
 
 ### Respawn Logic (US1)
 
-- [ ] T087 [US1] Implement respawn handler in PlayerEventHandler.java
-- [ ] T088 [US1] Write GameTest for respawn behavior in common/src/test/java/com/chronosphere/integration/RespawnTest.java
+- [X] T087 [US1] ~~Implement respawn handler in PlayerEventHandler.java~~ - REVERTED: Uses Minecraft standard behavior (like End dimension)
+- [X] T088 [US1] ~~Write GameTest for respawn behavior in common/src/test/java/com/chronosphere/integration/RespawnTest.java~~ - REMOVED: No custom respawn logic needed
+
+**Design Decision**: Chronosphere respawn follows Minecraft's standard behavior (similar to End dimension):
+- Players respawn at their set bed/respawn anchor, or world spawn if none set
+- Portal Stabilizer does NOT affect respawn location (only makes portal bidirectional)
+- Players can escape Chronosphere by breaking bed and dying (same as End)
+- This maintains tension (one-way portal initially) without excessive difficulty
 
 ### Localization & Creative Tab (US1)
 
