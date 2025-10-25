@@ -127,26 +127,26 @@
 
 - [X] T050 [P] [US1] Create Clockstone Ore block in common/src/main/java/com/chronosphere/blocks/ClockstoneOre.java
 - [X] T051 [P] [US1] Register Clockstone Ore in ModBlocks registry
-- [ ] T052 [P] [US1] Create Clockstone Ore texture in common/src/main/resources/assets/chronosphere/textures/block/clockstone_ore.png
-- [ ] T053 [P] [US1] Create Clockstone Ore block model in common/src/main/resources/assets/chronosphere/models/block/clockstone_ore.json
+- [X] T052 [P] [US1] Create Clockstone Ore texture in common/src/main/resources/assets/chronosphere/textures/block/clockstone_ore.png (from diamond_ore.png)
+- [X] T053 [P] [US1] Create Clockstone Ore block model in common/src/main/resources/assets/chronosphere/models/block/clockstone_ore.json
 
 ### Items - Base Materials (US1)
 
 - [X] T054 [P] [US1] Create Clockstone item in common/src/main/java/com/chronosphere/items/base/ClockstoneItem.java
 - [X] T055 [P] [US1] Register Clockstone item in ModItems registry
-- [ ] T056 [P] [US1] Create Clockstone texture in common/src/main/resources/assets/chronosphere/textures/item/clockstone.png
-- [ ] T057 [P] [US1] Create Clockstone item model in common/src/main/resources/assets/chronosphere/models/item/clockstone.json
+- [X] T056 [P] [US1] Create Clockstone texture in common/src/main/resources/assets/chronosphere/textures/item/clockstone.png (from amethyst_shard.png)
+- [X] T057 [P] [US1] Create Clockstone item model in common/src/main/resources/assets/chronosphere/models/item/clockstone.json
 - [X] T058 [P] [US1] Create Clockstone Ore loot table in common/src/main/resources/data/chronosphere/loot_tables/blocks/clockstone_ore.json
 
 ### Items - Portal Items (US1)
 
 - [X] T059 [P] [US1] Create Time Hourglass item in common/src/main/java/com/chronosphere/items/TimeHourglassItem.java
 - [X] T060 [P] [US1] Register Time Hourglass in ModItems registry
-- [ ] T061 [P] [US1] Create Time Hourglass texture in common/src/main/resources/assets/chronosphere/textures/item/time_hourglass.png
+- [X] T061 [P] [US1] Create Time Hourglass texture in common/src/main/resources/assets/chronosphere/textures/item/time_hourglass.png (from glowstone_dust.png)
 - [X] T062 [P] [US1] Create Time Hourglass recipe in common/src/main/resources/data/chronosphere/recipes/time_hourglass.json
 - [X] T063 [P] [US1] Create Portal Stabilizer item in common/src/main/java/com/chronosphere/items/PortalStabilizerItem.java
 - [X] T064 [P] [US1] Register Portal Stabilizer in ModItems registry
-- [ ] T065 [P] [US1] Create Portal Stabilizer texture in common/src/main/resources/assets/chronosphere/textures/item/portal_stabilizer.png
+- [X] T065 [P] [US1] Create Portal Stabilizer texture in common/src/main/resources/assets/chronosphere/textures/item/portal_stabilizer.png (from nether_star.png)
 - [X] T066 [P] [US1] Create Portal Stabilizer recipe in common/src/main/resources/data/chronosphere/recipes/portal_stabilizer.json
 
 ### World Generation - Structures (US1)
