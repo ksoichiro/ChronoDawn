@@ -312,3 +312,70 @@ Testing Library: mcjunitlib for JUnit integration
 - mcjunitlib: https://github.com/alcatrazEscapee/mcjunitlib
 - GameTest Framework: https://minecraft.wiki/w/GameTest
 - McJty Dimension Tutorial: https://www.mcjty.eu/docs/1.18/ep5
+
+## Decision 5: Portal Color Customization
+
+**Decision**: Blue-themed portal color (#4e7bec / RGB: 78, 123, 236)
+
+**Rationale**:
+
+### Design Goal
+- **Visual Differentiation**: Distinguish Chronosphere portal from Nether portal (purple theme)
+- **Thematic Consistency**: Blue color aligns with time/clock imagery commonly associated with blue tones
+- **Single Color Application**: One RGB value controls all portal visual elements (simplifies customization)
+
+### Implementation Details
+
+**Custom Portal API Integration**:
+- Both Fabric and NeoForge versions use Custom Portal API's `.tintColor(r, g, b)` method
+- Located in loader-specific modules:
+  - Fabric: `fabric/src/main/java/com/chronosphere/fabric/compat/CustomPortalFabric.java`
+  - NeoForge: `neoforge/src/main/java/com/chronosphere/neoforge/compat/CustomPortalNeoForge.java`
+
+**Current Implementation** (CustomPortalFabric.java:36-38):
+```java
+private static final int PORTAL_COLOR_R = 138;
+private static final int PORTAL_COLOR_G = 43;
+private static final int PORTAL_COLOR_B = 226;
+```
+**Current Color**: RGB(138, 43, 226) - Blue-violet / Purple
+
+**Target Implementation**:
+```java
+private static final int PORTAL_COLOR_R = 78;
+private static final int PORTAL_COLOR_G = 123;
+private static final int PORTAL_COLOR_B = 236;
+```
+**Target Color**: #4e7bec / RGB(78, 123, 236) - Blue
+
+**Affected Visual Elements**:
+1. **Portal Block**: The visible portal surface between frame blocks
+2. **Teleport Overlay**: Screen overlay effect during teleportation
+3. **Particles**: Particle effects around portal frame
+
+All three elements use the same RGB color values, ensuring consistent theming.
+
+**Implementation Scope**:
+- Simple constant update (3 integer values per loader)
+- No API changes or complex logic required
+- Requires in-game testing to verify visual appearance
+- NeoForge implementation depends on T049 (Custom Portal API integration for NeoForge)
+
+**Alternatives Considered**:
+
+- **Keep Purple Theme (Default)**:
+  - **Pros**: Matches existing Nether portal aesthetic, familiar to players
+  - **Cons**: Visual confusion with Nether portals, lacks unique identity
+  - **Why Rejected**: Mod requires distinct visual identity to avoid player confusion
+
+- **Multi-Color Gradients**:
+  - **Pros**: More visually striking, could create unique animated effects
+  - **Cons**: Custom Portal API only supports single RGB value, would require custom rendering logic
+  - **Why Rejected**: Implementation complexity outweighs benefit; single color provides sufficient differentiation
+
+- **Green or Red Themes**:
+  - **Pros**: Alternative color differentiation
+  - **Cons**: Green associated with End portal, red may imply danger/nether themes
+  - **Why Rejected**: Blue has stronger association with time/temporal themes in gaming culture
+
+**Related Tasks**: T034d-i (Portal Color Customization)

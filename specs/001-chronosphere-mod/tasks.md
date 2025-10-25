@@ -93,6 +93,17 @@
 - [X] T034b Register Chronosphere creative tab with icon
 - [X] T034c Implement item group population for both loaders
 
+### Portal Color Customization (Phase 2.5)
+
+**Purpose**: ネザーポータルと差別化するため、ポータルの色を紫から青 (#4e7bec) に変更
+
+- [X] T034d [P] Research and decide final portal tint color (non-purple theme)
+- [ ] T034e [P] Update PORTAL_COLOR_* constants in CustomPortalFabric.java to RGB(78, 123, 236)
+- [ ] T034f [P] Update PORTAL_COLOR_* constants in CustomPortalNeoForge.java to RGB(78, 123, 236) (depends on T049)
+- [ ] T034g [P] Add color constant documentation explaining theme choice (#4e7bec - blue theme)
+- [ ] T034h [P] Test portal visual appearance in-game (portal block, overlay, particles)
+- [ ] T034i [P] Update spec.md with finalized portal color documentation
+
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
 ---
