@@ -187,6 +187,21 @@
 - [X] T085 [P] [US1] Register Unstable Fungus in ModBlocks registry
 - [X] T086 [P] [US1] Implement collision event handler in EntityEventHandler.java for random speed effects
 
+### Special Blocks - World Generation & Advanced Features (US1)
+
+**Note**: Current implementation allows special blocks (Reversing Time Sandstone, Unstable Fungus) to be obtained only via creative mode or commands. This section defines future tasks for natural generation and gameplay integration.
+
+**Considerations for Reversing Time Sandstone**:
+- **Natural Generation**: Should spawn in appropriate terrain (deserts, beaches, structures) rather than plains, as it's sandstone-based
+- **Block Variants**: Consider adding stone-based variants (e.g., Reversing Time Stone) for different biomes
+- **Special Tool**: Design a special tool (e.g., "Temporal Pickaxe") that can permanently break and collect these blocks before restoration
+- **Integration**: Tie into existing structures (Ancient Ruins, Forgotten Library) or new generation features
+
+- [ ] T086a [US1] Design natural generation strategy for special blocks (biome selection, frequency, placement rules)
+- [ ] T086b [US1] Consider and design block variants for different terrain types (sandstone for deserts/beaches, stone for caves/mountains)
+- [ ] T086c [US1] Design special tool specification for breaking restoration blocks (crafting recipe, mechanics, additional features)
+- [ ] T086d [US1] Implement worldgen features and/or structure integration for special block placement
+
 ### Respawn Logic (US1)
 
 - [ ] T087 [US1] Implement respawn handler in PlayerEventHandler.java
