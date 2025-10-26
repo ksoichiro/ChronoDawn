@@ -17,7 +17,7 @@ import net.minecraft.resources.ResourceLocation;
  * - Frame Block: Clockstone Block (crafted from 9 Clockstone items)
  * - Ignition Item: Time Hourglass (right-click frame to activate)
  * - Destination: Chronosphere dimension (chronosphere:chronosphere)
- * - Portal Color: Blue-violet (RGB 138, 43, 226) - represents time/temporal theme
+ * - Portal Color: Orange (#db8813 / RGB 219, 136, 19) - represents time/temporal theme
  * - Size: 4x5 to 23x23 (validated by PortalFrameValidator)
  *
  * Portal Behavior:
@@ -30,12 +30,25 @@ import net.minecraft.resources.ResourceLocation;
  */
 public class CustomPortalFabric {
     /**
-     * Portal tint color - Blue-violet (represents time/temporal theme).
-     * RGB(138, 43, 226) - A mystical purple-blue color.
+     * Portal tint color - Orange (represents time/temporal theme).
+     *
+     * Color: #db8813 / RGB(219, 136, 19)
+     *
+     * Design Decision: Orange/gold color theme provides clear visual differentiation
+     * from other portal types (Nether: purple, End: green, Aether: blue), while
+     * evoking imagery of clock hands, brass gears, and ancient timepieces.
+     * The warm metallic tone suggests both aged mechanisms and temporal energy.
+     *
+     * This color is applied to:
+     * - Portal block (the visible portal surface)
+     * - Teleport overlay (screen effect during teleportation)
+     * - Particles (effects around portal frame)
+     *
+     * Reference: specs/001-chronosphere-mod/spec.md (Design Decision 2)
      */
-    private static final int PORTAL_COLOR_R = 138;
-    private static final int PORTAL_COLOR_G = 43;
-    private static final int PORTAL_COLOR_B = 226;
+    private static final int PORTAL_COLOR_R = 219;
+    private static final int PORTAL_COLOR_G = 136;
+    private static final int PORTAL_COLOR_B = 19;
 
     /**
      * Initialize Custom Portal API integration.
@@ -57,7 +70,7 @@ public class CustomPortalFabric {
             .lightWithItem(ModItems.TIME_HOURGLASS.get())
             // Set destination dimension (Chronosphere)
             .destDimID(dimensionId)
-            // Set portal tint color (blue-violet for time theme)
+            // Set portal tint color (orange #db8813 for time theme)
             .tintColor(PORTAL_COLOR_R, PORTAL_COLOR_G, PORTAL_COLOR_B)
             // Register the portal
             .registerPortal();
