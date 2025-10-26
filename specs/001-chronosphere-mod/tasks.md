@@ -191,12 +191,27 @@
 
 ### Special Blocks (US1)
 
-- [ ] T081 [P] [US1] Create Reversing Time Sandstone block in common/src/main/java/com/chronosphere/blocks/ReversingTimeSandstone.java
-- [ ] T082 [P] [US1] Register Reversing Time Sandstone in ModBlocks registry
-- [ ] T083 [P] [US1] Implement block restoration logic in BlockEventHandler.java
-- [ ] T084 [P] [US1] Create Unstable Fungus block in common/src/main/java/com/chronosphere/blocks/UnstableFungus.java
-- [ ] T085 [P] [US1] Register Unstable Fungus in ModBlocks registry
-- [ ] T086 [P] [US1] Implement collision event handler in EntityEventHandler.java for random speed effects
+- [X] T081 [P] [US1] Create Reversing Time Sandstone block in common/src/main/java/com/chronosphere/blocks/ReversingTimeSandstone.java
+- [X] T082 [P] [US1] Register Reversing Time Sandstone in ModBlocks registry
+- [X] T083 [P] [US1] Implement block restoration logic in BlockEventHandler.java
+- [X] T084 [P] [US1] Create Unstable Fungus block in common/src/main/java/com/chronosphere/blocks/UnstableFungus.java
+- [X] T085 [P] [US1] Register Unstable Fungus in ModBlocks registry
+- [X] T086 [P] [US1] Implement collision event handler in EntityEventHandler.java for random speed effects
+
+### Special Blocks - World Generation & Advanced Features (US1)
+
+**Note**: Current implementation allows special blocks (Reversing Time Sandstone, Unstable Fungus) to be obtained only via creative mode or commands. This section defines future tasks for natural generation and gameplay integration.
+
+**Considerations for Reversing Time Sandstone**:
+- **Natural Generation**: Should spawn in appropriate terrain (deserts, beaches, structures) rather than plains, as it's sandstone-based
+- **Block Variants**: Consider adding stone-based variants (e.g., Reversing Time Stone) for different biomes
+- **Special Tool**: Design a special tool (e.g., "Temporal Pickaxe") that can permanently break and collect these blocks before restoration
+- **Integration**: Tie into existing structures (Ancient Ruins, Forgotten Library) or new generation features
+
+- [ ] T086a [US1] Design natural generation strategy for special blocks (biome selection, frequency, placement rules)
+- [ ] T086b [US1] Consider and design block variants for different terrain types (sandstone for deserts/beaches, stone for caves/mountains)
+- [ ] T086c [US1] Design special tool specification for breaking restoration blocks (crafting recipe, mechanics, additional features)
+- [ ] T086d [US1] Implement worldgen features and/or structure integration for special block placement
 
 ### Respawn Logic (US1)
 

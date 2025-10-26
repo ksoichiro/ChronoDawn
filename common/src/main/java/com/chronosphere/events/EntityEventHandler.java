@@ -17,18 +17,21 @@ import net.minecraft.world.entity.LivingEntity;
  *
  * Implemented features:
  * - Time distortion effect application (Slowness IV in Chronosphere dimension)
+ * - Unstable Fungus collision handling (implemented in UnstableFungus.entityInside)
  *
  * Implementation Strategy:
  * - Uses SERVER_LEVEL_POST tick event to process entities in Chronosphere dimension
  * - Only processes entities in the Chronosphere dimension to minimize performance impact
  * - Applies time distortion effect to hostile mobs every tick
+ * - Unstable Fungus collision effects are handled directly in the block class (UnstableFungus.java)
+ *   using the entityInside method, which is the standard Minecraft approach for block collisions
  *
  * TODO: Implement in future phases:
- * - Unstable Fungus collision (random Speed/Slowness effects)
  * - Boss defeat triggers (reversed resonance, dimension stabilization)
  *
  * Reference: data-model.md (Time Distortion Effects, Entities)
  * Task: T074 [US1] Add entity tick event handler for Slowness IV application
+ * Task: T086 [US1] Unstable Fungus collision handler (implemented in UnstableFungus.java)
  */
 public class EntityEventHandler {
     /**

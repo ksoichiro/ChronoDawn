@@ -38,6 +38,22 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.CLOCKSTONE_BLOCK.get(), new Item.Properties())
     );
 
+    /**
+     * Reversing Time Sandstone - BlockItem for special block that auto-restores after 3 seconds.
+     */
+    public static final RegistrySupplier<Item> REVERSING_TIME_SANDSTONE = ITEMS.register(
+        "reversing_time_sandstone",
+        () -> new BlockItem(ModBlocks.REVERSING_TIME_SANDSTONE.get(), new Item.Properties())
+    );
+
+    /**
+     * Unstable Fungus - BlockItem for special block that applies random speed effects.
+     */
+    public static final RegistrySupplier<Item> UNSTABLE_FUNGUS = ITEMS.register(
+        "unstable_fungus",
+        () -> new BlockItem(ModBlocks.UNSTABLE_FUNGUS.get(), new Item.Properties())
+    );
+
     // === Material Items ===
 
     /**
@@ -100,6 +116,8 @@ public class ModItems {
         // === Blocks ===
         output.accept(CLOCKSTONE_ORE.get());
         output.accept(CLOCKSTONE_BLOCK.get());
+        output.accept(REVERSING_TIME_SANDSTONE.get());
+        output.accept(UNSTABLE_FUNGUS.get());
 
         // === Base Materials ===
         output.accept(CLOCKSTONE.get());

@@ -3,6 +3,8 @@
 
   "block.chronosphere.clockstone_ore": "クロックストーン鉱石",
   "block.chronosphere.clockstone_block": "クロックストーンブロック",
+  "block.chronosphere.reversing_time_sandstone": "逆流の砂岩",
+  "block.chronosphere.unstable_fungus": "不安定な菌糸",
 
   "item.chronosphere.clockstone": "クロックストーン",
   "item.chronosphere.time_hourglass": "時の砂時計",
