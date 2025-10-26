@@ -53,6 +53,7 @@ public class UnstableFungus extends Block {
     /**
      * Called when an entity collides with this block.
      * Applies a random speed effect (Speed I or Slowness I) to living entities.
+     * Only applies if the entity doesn't already have either effect.
      *
      * @param state The block state
      * @param level The level
@@ -66,6 +67,13 @@ public class UnstableFungus extends Block {
 
         // Only process on server side and for living entities
         if (level.isClientSide() || !(entity instanceof LivingEntity livingEntity)) {
+            return;
+        }
+
+        // Check if entity already has Speed or Slowness effect
+        // If so, don't apply a new effect (prevents both effects from being active)
+        if (livingEntity.hasEffect(MobEffects.MOVEMENT_SPEED) ||
+            livingEntity.hasEffect(MobEffects.MOVEMENT_SLOWDOWN)) {
             return;
         }
 
