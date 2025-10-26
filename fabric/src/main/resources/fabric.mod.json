@@ -17,6 +17,9 @@
   "entrypoints": {
     "main": [
       "com.chronosphere.fabric.ChronosphereFabric"
+    ],
+    "client": [
+      "com.chronosphere.fabric.ChronosphereFabricClient"
     ]
   },
   "mixins": [],

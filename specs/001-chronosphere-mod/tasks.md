@@ -180,12 +180,12 @@
 
 ### Special Blocks (US1)
 
-- [ ] T081 [P] [US1] Create Reversing Time Sandstone block in common/src/main/java/com/chronosphere/blocks/ReversingTimeSandstone.java
-- [ ] T082 [P] [US1] Register Reversing Time Sandstone in ModBlocks registry
-- [ ] T083 [P] [US1] Implement block restoration logic in BlockEventHandler.java
-- [ ] T084 [P] [US1] Create Unstable Fungus block in common/src/main/java/com/chronosphere/blocks/UnstableFungus.java
-- [ ] T085 [P] [US1] Register Unstable Fungus in ModBlocks registry
-- [ ] T086 [P] [US1] Implement collision event handler in EntityEventHandler.java for random speed effects
+- [X] T081 [P] [US1] Create Reversing Time Sandstone block in common/src/main/java/com/chronosphere/blocks/ReversingTimeSandstone.java
+- [X] T082 [P] [US1] Register Reversing Time Sandstone in ModBlocks registry
+- [X] T083 [P] [US1] Implement block restoration logic in BlockEventHandler.java
+- [X] T084 [P] [US1] Create Unstable Fungus block in common/src/main/java/com/chronosphere/blocks/UnstableFungus.java
+- [X] T085 [P] [US1] Register Unstable Fungus in ModBlocks registry
+- [X] T086 [P] [US1] Implement collision event handler in EntityEventHandler.java for random speed effects
 
 ### Respawn Logic (US1)
 

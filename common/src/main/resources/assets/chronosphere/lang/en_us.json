@@ -3,6 +3,8 @@
 
   "block.chronosphere.clockstone_ore": "Clockstone Ore",
   "block.chronosphere.clockstone_block": "Clockstone Block",
+  "block.chronosphere.reversing_time_sandstone": "Reversing Time Sandstone",
+  "block.chronosphere.unstable_fungus": "Unstable Fungus",
 
   "item.chronosphere.clockstone": "Clockstone",
   "item.chronosphere.time_hourglass": "Time Hourglass",

@@ -3,6 +3,8 @@ package com.chronosphere.registry;
 import com.chronosphere.Chronosphere;
 import com.chronosphere.blocks.ClockstoneBlock;
 import com.chronosphere.blocks.ClockstoneOre;
+import com.chronosphere.blocks.ReversingTimeSandstone;
+import com.chronosphere.blocks.UnstableFungus;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
@@ -33,6 +35,26 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> CLOCKSTONE_BLOCK = BLOCKS.register(
         "clockstone_block",
         () -> new ClockstoneBlock(ClockstoneBlock.createProperties())
+    );
+
+    /**
+     * Reversing Time Sandstone - Special block found in Chronosphere dimension.
+     * Automatically restores itself 3 seconds after being destroyed.
+     * Cannot be moved by pistons, does not drop items.
+     */
+    public static final RegistrySupplier<Block> REVERSING_TIME_SANDSTONE = BLOCKS.register(
+        "reversing_time_sandstone",
+        () -> new ReversingTimeSandstone(ReversingTimeSandstone.createProperties())
+    );
+
+    /**
+     * Unstable Fungus - Special block found in Chronosphere dimension.
+     * Applies random speed effects (Speed I or Slowness I) to entities that collide with it.
+     * Effect duration: 0.5 seconds.
+     */
+    public static final RegistrySupplier<Block> UNSTABLE_FUNGUS = BLOCKS.register(
+        "unstable_fungus",
+        () -> new UnstableFungus(UnstableFungus.createProperties())
     );
 
     /**
