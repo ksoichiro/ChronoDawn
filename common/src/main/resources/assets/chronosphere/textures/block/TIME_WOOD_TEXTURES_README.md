@@ -1,14 +1,44 @@
-# Time Wood Textures - Placeholder Notice
+# Time Wood Textures
 
 ## Current Status
-The following textures are currently **placeholders** copied from `clockstone_block.png`:
 
-- `time_wood_log.png` - Side texture for Time Wood Log
-- `time_wood_log_top.png` - Top/bottom texture for Time Wood Log
+### Log Textures (Ready for editing)
+- `time_wood_log.png` - Side texture for Time Wood Log (copied from `clockstone_block.png`)
+- `time_wood_log_top.png` - Top/bottom texture for Time Wood Log (copied from `clockstone_block.png`)
 
-## TODO: Create Custom Textures
+These are ready for you to edit with custom time-themed designs.
 
-### Design Requirements
+### Leaves Texture (Requires manual copy)
+- `time_wood_leaves.png` - **NEEDS TO BE REPLACED** with vanilla Oak leaves texture
+
+## How to Get Vanilla Oak Leaves Texture
+
+### Step 1: Extract from Minecraft JAR
+
+1. Locate your Minecraft client jar:
+   - macOS: `~/Library/Application Support/minecraft/versions/1.21.1/1.21.1.jar`
+   - Windows: `%APPDATA%\.minecraft\versions\1.21.1\1.21.1.jar`
+   - Linux: `~/.minecraft/versions/1.21.1/1.21.1.jar`
+
+2. Open the jar file with an archive tool (7-Zip, WinRAR, or unzip)
+
+3. Navigate to: `assets/minecraft/textures/block/oak_leaves.png`
+
+4. Copy `oak_leaves.png` to:
+   `common/src/main/resources/assets/chronosphere/textures/block/time_wood_leaves.png`
+
+### Step 2: Verify
+
+The oak leaves texture should be:
+- **Grayscale** (or tinted with a neutral color)
+- 16x16 pixels
+- PNG format with transparency
+
+The color will be applied dynamically based on biome using the `BlockColorProvider` we've added.
+
+---
+
+## Design Requirements (For custom textures)
 
 **Time Wood Log Side (`time_wood_log.png`)**:
 - Base: Similar to oak log bark texture
