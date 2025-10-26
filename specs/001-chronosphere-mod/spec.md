@@ -79,6 +79,81 @@ Escape:   Break bed and die to return to Overworld → Always possible
 
 ---
 
+### Design Decision 2: Portal Visual Design - Color Theme (2025-10-26)
+
+**Background**:
+Chronosphere Mod introduces a custom dimensional portal using the Custom Portal API. Visual differentiation from Minecraft's existing portal types (Nether's purple, End's green) and popular mod portals (Aether's blue) is critical for player recognition and mod identity.
+
+**Decision**:
+Chronosphere portal uses an **orange/gold color theme** with hex color **#db8813** (RGB: 219, 136, 19).
+
+**Core Principle - "Visual Identity Through Color"**:
+```
+Portal Block:      Orange (#db8813) → Clear differentiation from all other portals
+Teleport Overlay:  Orange (#db8813) → Consistent thematic experience
+Particles:         Orange (#db8813) → Unified visual feedback
+```
+
+**Rationale**:
+
+1. **Clear Differentiation**
+   - ❌ Bad design: Purple portal → Confusion with Nether portals
+   - ❌ Bad design: Blue portal → Confusion with Aether mod portals
+   - ✅ Good design: Orange portal → Instantly recognizable as Chronosphere
+
+2. **Thematic Consistency**
+   - Orange/gold evokes imagery of clock hands and watch mechanisms
+   - Warm metallic tone suggests brass gears and ancient timepieces
+   - Represents both aged mechanical devices and temporal energy
+   - Creates cohesive mod identity across visual elements
+
+3. **Implementation Simplicity**
+   - Single RGB value controls all portal visual elements (block, overlay, particles)
+   - Custom Portal API's `.tintColor(r, g, b)` method provides straightforward implementation
+   - No complex rendering logic or gradient systems required
+
+**Color Specification**:
+
+| Property | Value |
+|----------|-------|
+| Hex Color | #db8813 |
+| RGB | 219, 136, 19 |
+| Theme | Orange/Gold (Time/Clockwork) |
+
+**Implementation**:
+```java
+// Constants in CustomPortalFabric.java and CustomPortalNeoForge.java
+private static final int PORTAL_COLOR_R = 219;
+private static final int PORTAL_COLOR_G = 136;
+private static final int PORTAL_COLOR_B = 19;
+```
+
+**Affected Visual Elements**:
+- Portal Block: The visible portal surface between frame blocks
+- Teleport Overlay: Screen overlay effect during dimensional teleportation
+- Particles: Particle effects around portal frame edges
+
+**Comparison with Other Portals**:
+
+| Portal Type | Color | Theme |
+|-------------|-------|-------|
+| Nether | Purple (RGB: ~138, 43, 226) | Fire/Hell |
+| End | Green (particle-based) | Void/Ender |
+| Aether (Mod) | Blue | Sky/Heaven |
+| Chronosphere | Orange (#db8813) | Time/Clockwork |
+
+**Alternative Colors Considered**:
+- **Purple (Initial)**: Rejected due to confusion with Nether portals
+- **Blue (#4e7bec)**: Rejected due to conflict with Aether mod portals (discovered during testing)
+- **Green**: Rejected due to association with End portal
+- **Red**: Rejected as it implies danger/nether themes
+- **Multi-Color Gradients**: Rejected due to API limitations and implementation complexity
+
+**Design Philosophy Summary**:
+> "Chronosphere portal's orange/gold color theme creates instant visual recognition, evokes clockwork and temporal machinery, and ensures players never confuse it with vanilla or popular mod portals. Simplicity in implementation maintains performance while delivering clear differentiation."
+
+---
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - ディメンションへの初回突入と帰還路の確保 (Priority: P1)

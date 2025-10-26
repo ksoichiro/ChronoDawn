@@ -315,13 +315,13 @@ Testing Library: mcjunitlib for JUnit integration
 
 ## Decision 5: Portal Color Customization
 
-**Decision**: Blue-themed portal color (#4e7bec / RGB: 78, 123, 236)
+**Decision**: Orange/gold-themed portal color (#db8813 / RGB: 219, 136, 19)
 
 **Rationale**:
 
 ### Design Goal
-- **Visual Differentiation**: Distinguish Chronosphere portal from Nether portal (purple theme)
-- **Thematic Consistency**: Blue color aligns with time/clock imagery commonly associated with blue tones
+- **Visual Differentiation**: Distinguish Chronosphere portal from all other portals (Nether: purple, End: green, Aether mod: blue)
+- **Thematic Consistency**: Orange/gold color evokes clock hands, brass gears, and ancient timepieces
 - **Single Color Application**: One RGB value controls all portal visual elements (simplifies customization)
 
 ### Implementation Details
@@ -332,21 +332,30 @@ Testing Library: mcjunitlib for JUnit integration
   - Fabric: `fabric/src/main/java/com/chronosphere/fabric/compat/CustomPortalFabric.java`
   - NeoForge: `neoforge/src/main/java/com/chronosphere/neoforge/compat/CustomPortalNeoForge.java`
 
-**Current Implementation** (CustomPortalFabric.java:36-38):
+**Initial Implementation** (CustomPortalFabric.java - Original):
 ```java
 private static final int PORTAL_COLOR_R = 138;
 private static final int PORTAL_COLOR_G = 43;
 private static final int PORTAL_COLOR_B = 226;
 ```
-**Current Color**: RGB(138, 43, 226) - Blue-violet / Purple
+**Initial Color**: RGB(138, 43, 226) - Blue-violet / Purple
 
-**Target Implementation**:
+**Attempted Implementation** (Blue theme - Rejected):
 ```java
 private static final int PORTAL_COLOR_R = 78;
 private static final int PORTAL_COLOR_G = 123;
 private static final int PORTAL_COLOR_B = 236;
 ```
-**Target Color**: #4e7bec / RGB(78, 123, 236) - Blue
+**Attempted Color**: #4e7bec / RGB(78, 123, 236) - Blue
+**Why Rejected**: Discovered conflict with Aether mod's blue portal during in-game testing
+
+**Final Implementation**:
+```java
+private static final int PORTAL_COLOR_R = 219;
+private static final int PORTAL_COLOR_G = 136;
+private static final int PORTAL_COLOR_B = 19;
+```
+**Final Color**: #db8813 / RGB(219, 136, 19) - Orange/Gold
 
 **Affected Visual Elements**:
 1. **Portal Block**: The visible portal surface between frame blocks
@@ -358,7 +367,7 @@ All three elements use the same RGB color values, ensuring consistent theming.
 **Implementation Scope**:
 - Simple constant update (3 integer values per loader)
 - No API changes or complex logic required
-- Requires in-game testing to verify visual appearance
+- Verified through in-game testing for visual appearance
 - NeoForge implementation depends on T049 (Custom Portal API integration for NeoForge)
 
 **Alternatives Considered**:
@@ -368,14 +377,24 @@ All three elements use the same RGB color values, ensuring consistent theming.
   - **Cons**: Visual confusion with Nether portals, lacks unique identity
   - **Why Rejected**: Mod requires distinct visual identity to avoid player confusion
 
+- **Blue Theme (#4e7bec)**:
+  - **Pros**: Strong association with time/temporal themes in gaming culture
+  - **Cons**: Conflicts with popular Aether mod's blue portal (discovered during testing)
+  - **Why Rejected**: Must avoid confusion with widely-used dimension mods
+
 - **Multi-Color Gradients**:
   - **Pros**: More visually striking, could create unique animated effects
   - **Cons**: Custom Portal API only supports single RGB value, would require custom rendering logic
   - **Why Rejected**: Implementation complexity outweighs benefit; single color provides sufficient differentiation
 
-- **Green or Red Themes**:
+- **Green Theme**:
   - **Pros**: Alternative color differentiation
-  - **Cons**: Green associated with End portal, red may imply danger/nether themes
-  - **Why Rejected**: Blue has stronger association with time/temporal themes in gaming culture
+  - **Cons**: Associated with End portal, may confuse players
+  - **Why Rejected**: End portal association too strong
+
+- **Red Theme**:
+  - **Pros**: Alternative color differentiation
+  - **Cons**: Implies danger/nether themes, doesn't fit temporal concept
+  - **Why Rejected**: Red lacks thematic connection to time/clockwork
 
 **Related Tasks**: T034d-i (Portal Color Customization)
