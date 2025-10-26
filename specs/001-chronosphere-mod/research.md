@@ -398,3 +398,132 @@ All three elements use the same RGB color values, ensuring consistent theming.
   - **Why Rejected**: Red lacks thematic connection to time/clockwork
 
 **Related Tasks**: T034d-i (Portal Color Customization)
+
+## Decision 6: Structure NBT Creation Process
+
+**Decision**: Use Structure Blocks in-game to create NBT files for Ancient Ruins and Forgotten Library
+
+**Rationale**:
+
+### Design Goals
+- **Authentic Minecraft Aesthetics**: Structures should feel like natural part of the game world
+- **Gameplay Integration**: Structures must contain specific loot (blueprints, Clockstone ore, chests)
+- **Size Constraints**: Java Edition limit of 48×48×48 blocks requires modular design approach
+
+### Structure Block Workflow
+
+**Step 1: In-Game Construction**
+1. Build structure in creative mode in appropriate biome/dimension
+2. Place Structure Block at corner position (lower corner recommended)
+3. Set block to **Save mode** (click [D] button until [S] appears)
+4. Enter structure name using namespace format: `chronosphere:structure_name`
+
+**Step 2: Configuration**
+- **Relative Position**: Offset from Structure Block to opposite corner (auto-detect with Corner mode)
+- **Structure Size**: Bounding box dimensions (max 48×48×48)
+- **Include entities**: Enable if structure contains mobs/items in chests
+- **Remove blocks**: Disable to preserve full structure
+
+**Step 3: Save Location**
+- Saved to: `.minecraft/saves/(WorldName)/generated/chronosphere/structures/`
+- File format: `structure_name.nbt` (binary NBT format)
+- Copy file to mod resources: `common/src/main/resources/data/chronosphere/structures/`
+
+**Step 4: Worldgen Integration**
+Structures require 3 JSON files in `common/src/main/resources/data/chronosphere/worldgen/`:
+
+1. **template_pool/[name].json**: Defines which NBT to place
+   - `elements[].location`: Path to NBT file
+   - `elements[].projection`: `rigid` (exact) or `terrain_matching` (adapts to ground)
+   - `elements[].processors`: Optional modifications (replace blocks, add decay)
+
+2. **structure/[name].json**: Configured structure feature
+   - `type`: Structure type (`village` for surface, `bastion_remnant` for fixed Y)
+   - `start_pool`: References template pool
+   - `biomes`: Which biomes allow generation
+   - `adapt_noise`: Add terrain beneath structure
+
+3. **structure_set/[name].json**: Worldwide placement
+   - `spacing`: Average chunks between structures
+   - `separation`: Minimum chunk distance (must be < spacing)
+   - `salt`: Unique random seed
+
+### Design Concepts
+
+**Ancient Ruins** (T067):
+- **Location**: Overworld surface, any biome (plains/forest preferred)
+- **Size**: ~30×20×30 blocks (within 48³ limit)
+- **Theme**: Crumbling stone structure with moss, vines, weathering
+- **Required Elements**:
+  - Clockstone Ore blocks (10-20 embedded in structure)
+  - Chest with Time Hourglass blueprint (Written Book item)
+  - Chest with random loot (iron, gold, emeralds)
+  - Decorative elements: Cracked stone bricks, cobwebs, vines
+- **Generation**: Overworld, 0.1% per chunk (rare but discoverable)
+
+**Forgotten Library** (T070):
+- **Location**: Chronosphere surface, any biome
+- **Size**: ~35×25×35 blocks (larger than Ancient Ruins)
+- **Theme**: Ancient library with bookshelves, reading areas, decay
+- **Required Elements**:
+  - Portal Stabilizer blueprint (Written Book in lectern or chest)
+  - Multiple bookshelves (decoration, ~20-30)
+  - Chests with random loot
+  - Decorative elements: Crafting tables, enchanting table, candles
+- **Generation**: Chronosphere, 0.5% per chunk (higher than Ancient Ruins)
+
+### Implementation Strategy
+
+**Phase 1: Placeholder NBTs** (Current - T067, T070):
+- Create simple test structures (5×5×5) to verify worldgen integration
+- Focus: Confirm structure_set placement, biome filtering, JSON configuration
+
+**Phase 2: Final Design**:
+- Build full structures in creative world
+- Test loot table generation and blueprint placement
+- Verify visual quality in different biomes
+
+**Phase 3: Iteration**:
+- Adjust generation frequency based on playtesting
+- Add structure variants (ruined/intact versions)
+- Balance loot tables
+
+### Technical Considerations
+
+**Loot Tables**:
+- Blueprints are Written Books with custom text (recipe instructions)
+- Loot tables defined in `data/chronosphere/loot_tables/chests/`
+- Reference: `ancient_ruins.json`, `forgotten_library.json`
+
+**Worldgen Performance**:
+- Structure generation is chunk-based (no performance impact after generation)
+- Lower generation frequency (0.1-0.5% per chunk) prevents world clutter
+- Salt values prevent overlap with vanilla/mod structures
+
+**Multi-Loader Compatibility**:
+- NBT files are platform-agnostic (work on Fabric and NeoForge)
+- JSON files in `common/src/main/resources/` shared across loaders
+- No loader-specific code needed for structure generation
+
+**Size Limitations Workaround**:
+- For structures >48³: Use Jigsaw blocks to combine multiple NBTs
+- Not needed for Ancient Ruins or Forgotten Library (both fit in limit)
+
+### Alternative Approaches Considered
+
+- **External Tools (WorldEdit, MCEdit)**:
+  - **Pros**: More powerful editing, copy/paste from existing worlds
+  - **Cons**: Requires external tool installation, less accessible
+  - **Why Rejected**: Structure Blocks are built-in and sufficient for our needs
+
+- **Procedural Generation (Code-based)**:
+  - **Pros**: Infinite variations, no NBT files needed
+  - **Cons**: Complex implementation, harder to iterate on design
+  - **Why Rejected**: Fixed designs are easier to balance and provide consistent experience
+
+- **Jigsaw Structures (Multi-part)**:
+  - **Pros**: Allows structures >48³, adds variation with piece randomization
+  - **Cons**: More complex JSON setup, requires multiple NBT files
+  - **Why Rejected**: Our structures fit within 48³ limit; complexity not justified
+
+**Related Tasks**: T067 (Ancient Ruins NBT), T070 (Forgotten Library NBT)
