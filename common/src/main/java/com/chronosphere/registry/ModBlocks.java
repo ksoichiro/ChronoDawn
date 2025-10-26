@@ -3,6 +3,8 @@ package com.chronosphere.registry;
 import com.chronosphere.Chronosphere;
 import com.chronosphere.blocks.ClockstoneBlock;
 import com.chronosphere.blocks.ClockstoneOre;
+import com.chronosphere.blocks.TimeWoodLog;
+import com.chronosphere.blocks.TimeWoodLeaves;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
@@ -33,6 +35,24 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> CLOCKSTONE_BLOCK = BLOCKS.register(
         "clockstone_block",
         () -> new ClockstoneBlock(ClockstoneBlock.createProperties())
+    );
+
+    /**
+     * Time Wood Log - Custom log block for Fruit of Time trees.
+     * Forms the trunk of trees found in the Chronosphere dimension.
+     */
+    public static final RegistrySupplier<Block> TIME_WOOD_LOG = BLOCKS.register(
+        "time_wood_log",
+        () -> new TimeWoodLog(TimeWoodLog.createProperties())
+    );
+
+    /**
+     * Time Wood Leaves - Custom leaves block for Fruit of Time trees.
+     * Forms the canopy of trees found in the Chronosphere dimension.
+     */
+    public static final RegistrySupplier<Block> TIME_WOOD_LEAVES = BLOCKS.register(
+        "time_wood_leaves",
+        () -> new TimeWoodLeaves(TimeWoodLeaves.createProperties())
     );
 
     /**

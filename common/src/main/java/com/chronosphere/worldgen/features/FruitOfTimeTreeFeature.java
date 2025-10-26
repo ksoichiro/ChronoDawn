@@ -23,9 +23,9 @@ import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlac
  *
  * Tree Characteristics:
  * - Trunk: 4-6 blocks tall (birch-like)
- * - Trunk Material: Oak log (temporary, can be customized)
+ * - Trunk Material: Time Wood Log (custom block)
  * - Foliage: Blob-shaped canopy (2-3 block radius)
- * - Foliage Material: Oak leaves (temporary, can be customized)
+ * - Foliage Material: Time Wood Leaves (custom block)
  * - Special Feature: Will later be decorated with Fruit of Time blocks/items
  *
  * Generation:
@@ -33,12 +33,11 @@ import net.minecraft.world.level.levelgen.feature.trunkplacers.StraightTrunkPlac
  * - Placement: Defined in placed_feature/fruit_of_time_tree.json
  *
  * Future Enhancements:
- * - Custom log block for time-themed bark
- * - Custom leaves block with glowing effect
- * - Tree decorator to place Fruit of Time items on leaves
+ * - Tree decorator to place Fruit of Time blocks on leaves
+ * - Custom particle effects for time-themed atmosphere
  *
  * Reference: spec.md (User Story 1, FR-007)
- * Tasks: T079 [US1] Create Fruit of Time block feature
+ * Tasks: T079 [US1] Create Fruit of Time block feature, T080r [US1] Update to use Time Wood blocks
  */
 public class FruitOfTimeTreeFeature {
 
@@ -81,8 +80,8 @@ public class FruitOfTimeTreeFeature {
      */
     private static TreeConfiguration createTreeConfiguration() {
         return new TreeConfiguration.TreeConfigurationBuilder(
-            // Trunk block provider (oak log for now, can be customized later)
-            BlockStateProvider.simple(Blocks.OAK_LOG),
+            // Trunk block provider: Time Wood Log (custom block)
+            BlockStateProvider.simple(ModBlocks.TIME_WOOD_LOG.get()),
 
             // Trunk placer: straight trunk, 4 blocks base height, 0-2 random height
             new StraightTrunkPlacer(
@@ -91,8 +90,8 @@ public class FruitOfTimeTreeFeature {
                 0   // height rand B (second random addition)
             ),
 
-            // Foliage block provider (oak leaves for now, can be customized later)
-            BlockStateProvider.simple(Blocks.OAK_LEAVES),
+            // Foliage block provider: Time Wood Leaves (custom block)
+            BlockStateProvider.simple(ModBlocks.TIME_WOOD_LEAVES.get()),
 
             // Foliage placer: blob-shaped canopy
             new BlobFoliagePlacer(

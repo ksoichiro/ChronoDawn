@@ -4,7 +4,7 @@
     "trunk_provider": {
       "type": "minecraft:simple_state_provider",
       "state": {
-        "Name": "minecraft:oak_log",
+        "Name": "chronosphere:time_wood_log",
         "Properties": {
           "axis": "y"
         }
@@ -19,10 +19,10 @@
     "foliage_provider": {
       "type": "minecraft:simple_state_provider",
       "state": {
-        "Name": "minecraft:oak_leaves",
+        "Name": "chronosphere:time_wood_leaves",
         "Properties": {
           "distance": "7",
-          "persistent": "false",
+          "persistent": "true",
           "waterlogged": "false"
         }
       }
