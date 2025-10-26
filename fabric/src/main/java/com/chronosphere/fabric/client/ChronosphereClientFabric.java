@@ -26,24 +26,21 @@ public class ChronosphereClientFabric implements ClientModInitializer {
     /**
      * Register block color providers for blocks that need tinting.
      *
-     * Time Wood Leaves use biome-based foliage coloring, similar to vanilla oak leaves.
-     * The texture should be grayscale, and the color is applied based on the biome.
+     * Time Wood Leaves use a fixed blue color (#78A6DA) regardless of biome.
+     * The texture should be grayscale, and the blue color is applied uniformly.
      */
     private void registerBlockColors() {
-        // Register Time Wood Leaves to use biome foliage color (like oak leaves)
+        // Register Time Wood Leaves to use fixed blue color (not biome-dependent)
+        // This ensures leaves remain blue even when placed in other biomes
         ColorProviderRegistry.BLOCK.register(
-            (state, world, pos, tintIndex) -> {
-                if (world != null && pos != null) {
-                    return BiomeColors.getAverageFoliageColor(world, pos);
-                }
-                return FoliageColor.getDefaultColor();
-            },
+            (state, world, pos, tintIndex) -> 0x78A6DA,
             ModBlocks.TIME_WOOD_LEAVES.get()
         );
 
         // Register the item color as well (for inventory/hand rendering)
+        // Use the same blue color (0x78A6DA)
         ColorProviderRegistry.ITEM.register(
-            (stack, tintIndex) -> FoliageColor.getDefaultColor(),
+            (stack, tintIndex) -> 0x78A6DA,
             ModBlocks.TIME_WOOD_LEAVES.get()
         );
     }
