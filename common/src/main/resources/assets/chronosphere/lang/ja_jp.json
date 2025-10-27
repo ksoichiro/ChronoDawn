@@ -3,6 +3,10 @@
 
   "block.chronosphere.clockstone_ore": "クロックストーン鉱石",
   "block.chronosphere.clockstone_block": "クロックストーンブロック",
+  "block.chronosphere.time_wood_log": "時の木の原木",
+  "block.chronosphere.time_wood_leaves": "時の木の葉",
+  "block.chronosphere.time_wood_planks": "時の木の板材",
+  "block.chronosphere.time_wood_sapling": "時の木の苗木",
 
   "item.chronosphere.clockstone": "クロックストーン",
   "item.chronosphere.time_hourglass": "時の砂時計",

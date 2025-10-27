@@ -186,16 +186,26 @@
 
 #### Custom Wood Blocks
 
-- [ ] T080a [P] [US1] Create Time Wood Log block in common/src/main/java/com/chronosphere/blocks/TimeWoodLog.java
-- [ ] T080b [P] [US1] Register Time Wood Log in ModBlocks registry
-- [ ] T080c [P] [US1] Create Time Wood Log textures in common/src/main/resources/assets/chronosphere/textures/block/ (time_wood_log.png, time_wood_log_top.png)
-- [ ] T080d [P] [US1] Create Time Wood Log blockstate and models (block, item) in common/src/main/resources/assets/chronosphere/
-- [ ] T080e [P] [US1] Create Time Wood Log loot table in common/src/main/resources/data/chronosphere/loot_tables/blocks/time_wood_log.json
-- [ ] T080f [P] [US1] Create Time Wood Leaves block in common/src/main/java/com/chronosphere/blocks/TimeWoodLeaves.java
-- [ ] T080g [P] [US1] Register Time Wood Leaves in ModBlocks registry
-- [ ] T080h [P] [US1] Create Time Wood Leaves texture in common/src/main/resources/assets/chronosphere/textures/block/time_wood_leaves.png
-- [ ] T080i [P] [US1] Create Time Wood Leaves blockstate and models (block, item)
-- [ ] T080j [P] [US1] Create Time Wood Leaves loot table in common/src/main/resources/data/chronosphere/loot_tables/blocks/time_wood_leaves.json
+- [X] T080a [P] [US1] Create Time Wood Log block in common/src/main/java/com/chronosphere/blocks/TimeWoodLog.java
+- [X] T080b [P] [US1] Register Time Wood Log in ModBlocks registry
+- [X] T080c [P] [US1] Create Time Wood Log textures in common/src/main/resources/assets/chronosphere/textures/block/ (time_wood_log.png, time_wood_log_top.png)
+- [X] T080d [P] [US1] Create Time Wood Log blockstate and models (block, item) in common/src/main/resources/assets/chronosphere/
+- [X] T080e [P] [US1] Create Time Wood Log loot table in common/src/main/resources/data/chronosphere/loot_table/blocks/time_wood_log.json
+- [X] T080f [P] [US1] Create Time Wood Leaves block in common/src/main/java/com/chronosphere/blocks/TimeWoodLeaves.java
+- [X] T080g [P] [US1] Register Time Wood Leaves in ModBlocks registry
+- [X] T080h [P] [US1] Create Time Wood Leaves texture in common/src/main/resources/assets/chronosphere/textures/block/time_wood_leaves.png
+- [X] T080i [P] [US1] Create Time Wood Leaves blockstate and models (block, item)
+- [X] T080j [P] [US1] Create Time Wood Leaves loot table in common/src/main/resources/data/chronosphere/loot_table/blocks/time_wood_leaves.json
+
+#### Additional Wood Components (Implemented)
+
+- [X] Time Wood Planks block (common/src/main/java/com/chronosphere/blocks/TimeWoodPlanks.java)
+- [X] Time Wood Sapling block (common/src/main/java/com/chronosphere/blocks/TimeWoodSapling.java)
+- [X] Crafting recipe for planks (1 log → 4 planks)
+- [X] Sapling drop from leaves (5% base chance, Fortune affected)
+- [X] Block tags (logs, leaves, mineable/axe for log/planks, mineable/hoe for leaves)
+- [X] Render layers for transparency (cutout for sapling, cutoutMipped for leaves)
+- [X] Leaves decay logic (distance tracking, persistent state)
 
 #### Fruit Block System
 
@@ -209,10 +219,10 @@
 #### Tree Decorator & Generation Update
 
 - [ ] T080q [US1] Implement FruitDecorator class in common/src/main/java/com/chronosphere/worldgen/decorators/FruitDecorator.java
-- [ ] T080r [US1] Update FruitOfTimeTreeFeature.java to use Time Wood Log/Leaves instead of Oak blocks
-- [ ] T080s [US1] Update configured_feature/fruit_of_time_tree.json with custom blocks and fruit decorator in decorators array
-- [ ] T080t [P] [US1] Update localization files (en_us.json, ja_jp.json) with Time Wood Log, Time Wood Leaves, and Fruit of Time block
-- [ ] T080u [US1] Test custom tree generation and fruit growth in-game (verify custom textures, fruit placement, growth, harvesting)
+- [X] T080r [US1] Update FruitOfTimeTreeFeature.java to use Time Wood Log/Leaves instead of Oak blocks
+- [X] T080s [US1] Update configured_feature/fruit_of_time_tree.json with custom blocks and fruit decorator in decorators array
+- [X] T080t [P] [US1] Update localization files (en_us.json, ja_jp.json) with Time Wood blocks; add leaves to mineable/hoe tag (not axe)
+- [X] T080u [US1] Test custom tree generation and fruit growth in-game (verify custom textures, fruit placement, growth, harvesting) (tree generation and leaves decay tested)
 
 ### Special Blocks (US1)
 

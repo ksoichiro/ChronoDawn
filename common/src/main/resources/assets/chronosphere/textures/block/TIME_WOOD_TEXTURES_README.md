@@ -8,33 +8,19 @@
 
 These are ready for you to edit with custom time-themed designs.
 
-### Leaves Texture (Requires manual copy)
-- `time_wood_leaves.png` - **NEEDS TO BE REPLACED** with vanilla Oak leaves texture
+### Leaves Texture (✓ Completed)
+- `time_wood_leaves.png` - **COMPLETED** - Using vanilla Oak leaves texture
+- Color: Fixed blue (#78A6DA) via BlockColorProvider (independent of biome)
+- Render: cutoutMipped for proper transparency
 
-## How to Get Vanilla Oak Leaves Texture
+### Planks Texture (Ready for editing)
+- `time_wood_planks.png` - Planks texture (copied from `clockstone_block.png`)
 
-### Step 1: Extract from Minecraft JAR
+Ready for you to edit with custom time-themed wood plank design.
 
-1. Locate your Minecraft client jar:
-   - macOS: `~/Library/Application Support/minecraft/versions/1.21.1/1.21.1.jar`
-   - Windows: `%APPDATA%\.minecraft\versions\1.21.1\1.21.1.jar`
-   - Linux: `~/.minecraft/versions/1.21.1/1.21.1.jar`
-
-2. Open the jar file with an archive tool (7-Zip, WinRAR, or unzip)
-
-3. Navigate to: `assets/minecraft/textures/block/oak_leaves.png`
-
-4. Copy `oak_leaves.png` to:
-   `common/src/main/resources/assets/chronosphere/textures/block/time_wood_leaves.png`
-
-### Step 2: Verify
-
-The oak leaves texture should be:
-- **Grayscale** (or tinted with a neutral color)
-- 16x16 pixels
-- PNG format with transparency
-
-The color will be applied dynamically based on biome using the `BlockColorProvider` we've added.
+### Sapling Texture (✓ Completed)
+- `time_wood_sapling.png` - **COMPLETED** - Using vanilla Oak sapling texture
+- Render: cutout for proper transparency
 
 ---
 
@@ -56,6 +42,14 @@ The color will be applied dynamically based on biome using the `BlockColorProvid
   - Optional: Roman numerals around the edge
   - Center point resembling clock center
   - Faint glow effect
+
+**Time Wood Planks (`time_wood_planks.png`)**:
+- Base: Similar to oak planks texture
+- Theme: Time-related visual elements
+- Suggestions:
+  - Subtle clock gear patterns embedded in the wood grain
+  - Faint blue/purple tint to match the time theme
+  - Clean, uniform plank texture suitable for building
 
 ### Technical Specifications
 - Format: PNG with transparency support
