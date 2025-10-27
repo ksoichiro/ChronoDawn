@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    {
+      "item": "chronosphere:time_wood_log"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "id": "chronosphere:time_wood_planks"
+  }
+}

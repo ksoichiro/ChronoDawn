@@ -2,8 +2,10 @@ package com.chronosphere.fabric.client;
 
 import com.chronosphere.registry.ModBlocks;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.FoliageColor;
 
 /**
@@ -11,6 +13,7 @@ import net.minecraft.world.level.FoliageColor;
  *
  * Handles client-only registrations such as:
  * - Block color providers (for tinted blocks like leaves)
+ * - Block render layers (for transparent/cutout blocks)
  * - Entity renderers
  * - Particle effects
  *
@@ -21,6 +24,7 @@ public class ChronosphereClientFabric implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         registerBlockColors();
+        registerRenderLayers();
     }
 
     /**
@@ -42,6 +46,26 @@ public class ChronosphereClientFabric implements ClientModInitializer {
         ColorProviderRegistry.ITEM.register(
             (stack, tintIndex) -> 0x78A6DA,
             ModBlocks.TIME_WOOD_LEAVES.get()
+        );
+    }
+
+    /**
+     * Register render layers for blocks that need special rendering.
+     *
+     * - Cutout: For blocks with transparent textures (saplings, leaves with transparency)
+     * - Translucent: For blocks with semi-transparent textures
+     */
+    private void registerRenderLayers() {
+        // Register Time Wood Sapling to use cutout rendering (for transparency)
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.TIME_WOOD_SAPLING.get(),
+            RenderType.cutout()
+        );
+
+        // Register Time Wood Leaves to use cutout_mipped rendering (for leaf transparency)
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.TIME_WOOD_LEAVES.get(),
+            RenderType.cutoutMipped()
         );
     }
 }

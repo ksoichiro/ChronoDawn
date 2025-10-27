@@ -54,6 +54,22 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TIME_WOOD_LEAVES.get(), new Item.Properties())
     );
 
+    /**
+     * Time Wood Planks - BlockItem for placing Time Wood Planks block.
+     */
+    public static final RegistrySupplier<Item> TIME_WOOD_PLANKS = ITEMS.register(
+        "time_wood_planks",
+        () -> new BlockItem(ModBlocks.TIME_WOOD_PLANKS.get(), new Item.Properties())
+    );
+
+    /**
+     * Time Wood Sapling - BlockItem for placing Time Wood Sapling block.
+     */
+    public static final RegistrySupplier<Item> TIME_WOOD_SAPLING = ITEMS.register(
+        "time_wood_sapling",
+        () -> new BlockItem(ModBlocks.TIME_WOOD_SAPLING.get(), new Item.Properties())
+    );
+
     // === Material Items ===
 
     /**
@@ -118,6 +134,8 @@ public class ModItems {
         output.accept(CLOCKSTONE_BLOCK.get());
         output.accept(TIME_WOOD_LOG.get());
         output.accept(TIME_WOOD_LEAVES.get());
+        output.accept(TIME_WOOD_PLANKS.get());
+        output.accept(TIME_WOOD_SAPLING.get());
 
         // === Base Materials ===
         output.accept(CLOCKSTONE.get());

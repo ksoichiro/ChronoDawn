@@ -5,6 +5,8 @@
   "block.chronosphere.clockstone_block": "Clockstone Block",
   "block.chronosphere.time_wood_log": "Time Wood Log",
   "block.chronosphere.time_wood_leaves": "Time Wood Leaves",
+  "block.chronosphere.time_wood_planks": "Time Wood Planks",
+  "block.chronosphere.time_wood_sapling": "Time Wood Sapling",
 
   "item.chronosphere.clockstone": "Clockstone",
   "item.chronosphere.time_hourglass": "Time Hourglass",

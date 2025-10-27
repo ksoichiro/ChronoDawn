@@ -5,6 +5,8 @@ import com.chronosphere.blocks.ClockstoneBlock;
 import com.chronosphere.blocks.ClockstoneOre;
 import com.chronosphere.blocks.TimeWoodLog;
 import com.chronosphere.blocks.TimeWoodLeaves;
+import com.chronosphere.blocks.TimeWoodPlanks;
+import com.chronosphere.blocks.TimeWoodSapling;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
@@ -53,6 +55,24 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> TIME_WOOD_LEAVES = BLOCKS.register(
         "time_wood_leaves",
         () -> new TimeWoodLeaves(TimeWoodLeaves.createProperties())
+    );
+
+    /**
+     * Time Wood Planks - Crafted building material from Time Wood Logs.
+     * Standard planks block with time-themed appearance.
+     */
+    public static final RegistrySupplier<Block> TIME_WOOD_PLANKS = BLOCKS.register(
+        "time_wood_planks",
+        () -> new TimeWoodPlanks(TimeWoodPlanks.createProperties())
+    );
+
+    /**
+     * Time Wood Sapling - Grows into Fruit of Time trees.
+     * Obtained from Time Wood Leaves.
+     */
+    public static final RegistrySupplier<Block> TIME_WOOD_SAPLING = BLOCKS.register(
+        "time_wood_sapling",
+        () -> new TimeWoodSapling(TimeWoodSapling.createProperties())
     );
 
     /**

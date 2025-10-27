@@ -19,6 +19,11 @@ import net.minecraft.world.level.material.PushReaction;
  * - Decay: Yes (decays when not connected to logs)
  * - Distance: Tracks distance from log blocks (1-7)
  *
+ * Behavior:
+ * - LeavesBlock provides distance tracking and decay logic
+ * - Leaves with distance=7 and persistent=false will decay
+ * - Leaves connected to logs (distance<7) won't decay
+ *
  * Visual:
  * - Texture: time_wood_leaves.png (time-themed leaves, possibly with glow effect)
  * - Optional: Emissive glow overlay for magical appearance
@@ -33,6 +38,12 @@ import net.minecraft.world.level.material.PushReaction;
 public class TimeWoodLeaves extends LeavesBlock {
     public TimeWoodLeaves(BlockBehaviour.Properties properties) {
         super(properties);
+        // Register default state with DISTANCE=7, PERSISTENT=false, WATERLOGGED=false
+        // This is inherited from LeavesBlock and set automatically
+        registerDefaultState(this.stateDefinition.any()
+            .setValue(DISTANCE, 7)
+            .setValue(PERSISTENT, false)
+            .setValue(WATERLOGGED, false));
     }
 
     /**
