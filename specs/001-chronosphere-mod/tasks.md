@@ -104,6 +104,21 @@
 - [ ] T034h [P] Test portal visual appearance in-game (portal block, overlay, particles)
 - [ ] T034i [P] Update spec.md with finalized portal color documentation
 
+### Time Cycle Configuration (Phase 2.5)
+
+**Purpose**: 固定時刻を設定し、他のディメンションmodと同様の独特な雰囲気を作り出す
+
+- [X] T034j [P] Research day-night cycle vs fixed time design (Decision 7)
+- [X] T034k [P] Implement fixed time (6000 ticks = noon) and End sky effects in dimension_type/chronosphere.json
+- [ ] T034l [P] Test dimension visual appearance with fixed time and grey sky in-game
+- [ ] T034m [P] Evaluate time/sky settings and document adjustments needed (fixed_time: 4000-8000, effects: overworld/end/custom)
+- [ ] T034n [P] (Future) Research custom DimensionSpecialEffects for precise sky color control
+- [ ] T034o [P] (Future) Design sky color unlock mechanic tied to boss defeat (Option D element)
+
+**Current Settings**: `fixed_time: 6000` (noon), `effects: minecraft:the_end` (grey sky)
+
+**Note**: 固定時刻の値（4000-8000=明るい時間帯）と空の色はプレイテスト後に調整可能
+
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
 ---

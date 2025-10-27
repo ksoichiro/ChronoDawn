@@ -527,3 +527,184 @@ Structures require 3 JSON files in `common/src/main/resources/data/chronosphere/
   - **Why Rejected**: Our structures fit within 48³ limit; complexity not justified
 
 **Related Tasks**: T067 (Ancient Ruins NBT), T070 (Forgotten Library NBT)
+
+## Decision 7: Day-Night Cycle vs Fixed Time
+
+**Current Status**: Chronosphere dimension has day-night cycle (`"fixed_time": false` in dimension_type.json)
+
+**Background**:
+During gameplay testing, user observed that Chronosphere has a day-night cycle, unlike major dimension mods (Twilight Forest, Aether, Blue Skies) which use fixed time. This raises design questions about how time mechanics impact gameplay and thematic consistency.
+
+### Analysis: Major Dimension Mods' Time Design
+
+**Twilight Forest**:
+- **Setting**: Perpetual twilight (fixed time)
+- **Rationale**: Atmospheric ambiance - the dimension is defined by its eternal twilight
+- **Impact**: Creates unique visual identity, no day-night cycle means no time-based survival pressure
+
+**The Aether**:
+- **Setting**: Eternal daylight (fixed time) until boss defeat
+- **Rationale**: Progression mechanic - Sun Spirit boss controls the eternal day
+- **Impact**: Defeating Sun Spirit unlocks day-night cycle control via Sun Altar
+- **Design Philosophy**: Fixed time as gameplay obstacle, not just aesthetic choice
+
+**Blue Skies**:
+- **Everbright**: Eternal day and frigid cold
+- **Everdawn**: Perpetual sunrise/dusk with warmth
+- **Rationale**: Contrasting paired dimensions with distinct atmospheric identities
+- **Impact**: Each dimension has unique visual/temperature characteristics
+
+### Gameplay Impact Analysis
+
+**Fixed Time Advantages**:
+1. **Atmospheric Identity**: Creates memorable, distinct visual signature
+2. **Reduced Survival Pressure**: No monster spawn cycles, more exploration-focused
+3. **No Bed Spam**: Players can't skip nights, encouraging structure interaction
+4. **Visual Consistency**: Screenshots/videos always show dimension's intended look
+5. **Thematic Reinforcement**: Time "standing still" or "frozen" can match lore
+
+**Day-Night Cycle Advantages**:
+1. **Time Flow Representation**: Shows time is "moving" - relevant for time-themed mod
+2. **Vanilla Familiarity**: Players understand existing Minecraft survival mechanics
+3. **Monster Spawn Variation**: Nighttime danger adds survival challenge
+4. **Bed Utility**: Beds serve their normal function (skip night)
+5. **Dynamic Atmosphere**: Sunrises/sunsets add visual variety
+
+### Thematic Considerations for Chronosphere
+
+**Mod Theme**: Time manipulation and temporal mechanics
+
+**Options**:
+
+**Option A: Fixed Time (Eternal Twilight/Dusk)**
+- **Pros**:
+  - Aligns with "frozen in time" or "time distortion" narrative
+  - Matches player expectations from other dimension mods
+  - Reduces survival difficulty (no night spawns)
+  - Creates unique visual identity distinct from Overworld
+- **Cons**:
+  - Contradicts "time manipulation" theme (time appears stopped, not manipulated)
+  - Less dynamic gameplay
+- **Time Value**: 6000 ticks (noon), 13000 ticks (sunset/dusk), or 18000 ticks (midnight)
+
+**Option B: Normal Day-Night Cycle (Current)**
+- **Pros**:
+  - Shows time is flowing (consistent with time theme)
+  - Familiar survival mechanics
+  - Time Distortion Effect (Slowness IV) applies consistently regardless of time
+- **Cons**:
+  - Less distinct from Overworld
+  - Higher survival difficulty (nighttime mobs + Slowness IV debuff)
+  - No unique visual signature
+
+**Option C: Modified Time Cycle (Special)**
+- **Pros**:
+  - Unique time manipulation mechanic (faster/slower/reversed cycle)
+  - Reinforces time theme through actual time behavior
+  - Creates memorable gameplay quirk
+- **Cons**:
+  - Complex implementation (requires custom time progression logic)
+  - May confuse players expecting normal cycle
+  - Could interfere with crop growth/mechanics
+- **Implementation**: Use time speed multiplier or reversed cycle (sunset → sunrise)
+
+**Option D: Progressive Time Unlock (Aether-style)**
+- **Pros**:
+  - Ties time control to mod progression
+  - Creates motivation to craft time-manipulation items
+  - Could unlock time control via Portal Stabilizer or new item
+- **Cons**:
+  - Most complex implementation
+  - Requires additional items/mechanics beyond current design
+  - May frustrate players if initial fixed time is inconvenient
+
+### Recommended Decision
+
+**Decision: Option A - Fixed Time (Bright Mysterious Atmosphere)**
+
+**Selected Values**:
+- `fixed_time`: 6000 ticks (noon) - bright but frozen time
+- `effects`: `minecraft:overworld` - standard dimension behavior
+- Biome `sky_color`: 9474192 (0x909090) - desaturated grey sky
+- Biome `fog_color`: 12632256 (0xC0C0C0) - light grey fog
+
+**Rationale**:
+- **Bright Time**: 6000 ticks provides good visibility for exploration (not too dark)
+- **Mysterious Sky**: Grey sky color (via biome definition) creates mysterious atmosphere without End dimension's dark purple tint
+- **Biome-Based Color Control**: Sky/fog colors defined in biome JSON allow precise color control while keeping standard overworld effects (sun, moon, stars)
+- **Frozen Time**: No day-night cycle reinforces temporal anomaly narrative
+- **Future Enhancement**: Can implement sky color progression tied to mod completion (Option D element)
+
+**Playtesting Feedback** (2025-10-27):
+- Initial implementation: 13000 ticks (dusk) was too dark
+- Second iteration: `effects: the_end` felt too much like End dimension
+- User preference: Bright but mysterious atmosphere with custom grey sky color
+- Desired aesthetics: Desaturated colors (grey sky) suggesting temporal distortion, but not End-like
+
+**Sky Color Implementation Methods**:
+1. **Dimension effects** (`effects` field in dimension_type.json):
+   - `minecraft:overworld` - Normal behavior with custom biome colors (selected)
+   - `minecraft:the_nether` - Red/brown atmospheric haze
+   - `minecraft:the_end` - Dark grey/purple with special rendering (too distinctive)
+
+2. **Biome colors** (in worldgen/biome/*.json):
+   - `sky_color`: Direct RGB as decimal (9474192 = 0x909090 grey)
+   - `fog_color`: Fog/horizon color (12632256 = 0xC0C0C0 light grey)
+   - Vanilla Overworld default: sky_color 7907327 (0x78A5FF bright blue)
+
+3. **Custom DimensionSpecialEffects** (client-side code):
+   - Requires Fabric/NeoForge client module implementation
+   - More control but significantly more complex
+   - Not needed for simple color changes
+
+**Color Value Reference**:
+- Grey sky: 0x909090 = 9474192 (current)
+- Alternative greys: 0x808080 (8421504), 0xA0A0A0 (10526880)
+- Blue-grey: 0x8090A0 (8425632) - subtle cold tone
+- Original blue: 0x78A5FF (7907327) - vanilla overworld
+
+**Note**: This decision can be revisited after playtesting to evaluate:
+1. Visual appeal of grey sky (may need custom sky color for better effect)
+2. Optimal fixed_time value (6000 = noon, can adjust 4000-8000 for lighting preference)
+3. Future implementation of sky color unlock mechanic tied to boss defeat
+
+**Design Questions to Consider**:
+1. Should Chronosphere feel **safe** (eternal day) or **challenging** (night spawns)?
+2. Does "time manipulation" mean time is **active** (flowing) or **controlled** (frozen)?
+3. Should time mechanics be **atmospheric** (fixed time for mood) or **mechanical** (cycle affects gameplay)?
+4. Is the Time Distortion Effect (Slowness IV) sufficient challenge, or do we want nighttime danger too?
+
+### Implementation Impact
+
+**To Change to Fixed Time**:
+```json
+// chronosphere.json
+"fixed_time": 6000,  // Eternal noon
+// OR
+"fixed_time": 13000, // Eternal sunset/dusk (recommended for "time frozen at twilight" feel)
+// OR
+"fixed_time": 18000  // Eternal midnight (more dangerous/mysterious)
+```
+
+**Current State** (Day-Night Cycle):
+```json
+"fixed_time": false,  // Normal cycle
+"has_skylight": true
+```
+
+**Compatibility Notes**:
+- Both Fabric and NeoForge support `fixed_time` via vanilla dimension_type.json
+- No loader-specific code needed
+- Change requires world regeneration or `/reload` command
+
+### Cross-Mod Examples Summary
+
+| Mod | Time Setting | Design Reason |
+|-----|--------------|---------------|
+| Twilight Forest | Fixed twilight | Atmospheric identity |
+| Aether | Fixed day → Unlockable | Progression mechanic (boss reward) |
+| Blue Skies (Everbright) | Fixed day | Contrasting paired dimensions |
+| Blue Skies (Everdawn) | Fixed dusk | Temperature/visual theming |
+| **Chronosphere (current)** | **Day-night cycle** | **Undecided** |
+
+**Related Configuration**: `common/src/main/resources/data/chronosphere/dimension_type/chronosphere.json`
