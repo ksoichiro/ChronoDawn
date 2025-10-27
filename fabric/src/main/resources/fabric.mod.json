@@ -19,7 +19,7 @@
       "com.chronosphere.fabric.ChronosphereFabric"
     ],
     "client": [
-      "com.chronosphere.fabric.ChronosphereFabricClient"
+      "com.chronosphere.fabric.client.ChronosphereClientFabric"
     ]
   },
   "mixins": [],

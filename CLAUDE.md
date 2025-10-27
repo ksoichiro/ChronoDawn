@@ -24,6 +24,8 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 - 2025-10-24: Implemented Time Distortion Effect (Slowness IV for hostile mobs in Chronosphere)
 - 2025-10-24: Added Custom Portal API 0.0.1-beta66-1.21 dependency for future portal implementation
 - 2025-10-26: **CRITICAL DESIGN DECISION**: Respawn mechanics follow Minecraft standard (End-like), not custom logic (see spec.md "Game Design Philosophy")
+- 2025-10-27: Implemented Time Wood tree worldgen with custom blocks (Log, Leaves, Planks, Sapling)
+- 2025-10-27: Fixed leaves decay logic using minecraft:logs tag and distance tracking (T079-T080)
 
 ## Build Configuration
 - **Build DSL**: Groovy DSL (not Kotlin DSL) - for compatibility with Architectury Loom 1.11-SNAPSHOT

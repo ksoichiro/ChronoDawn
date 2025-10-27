@@ -54,6 +54,38 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.UNSTABLE_FUNGUS.get(), new Item.Properties())
     );
 
+    /**
+     * Time Wood Log - BlockItem for placing Time Wood Log block.
+     */
+    public static final RegistrySupplier<Item> TIME_WOOD_LOG = ITEMS.register(
+        "time_wood_log",
+        () -> new BlockItem(ModBlocks.TIME_WOOD_LOG.get(), new Item.Properties())
+    );
+
+    /**
+     * Time Wood Leaves - BlockItem for placing Time Wood Leaves block.
+     */
+    public static final RegistrySupplier<Item> TIME_WOOD_LEAVES = ITEMS.register(
+        "time_wood_leaves",
+        () -> new BlockItem(ModBlocks.TIME_WOOD_LEAVES.get(), new Item.Properties())
+    );
+
+    /**
+     * Time Wood Planks - BlockItem for placing Time Wood Planks block.
+     */
+    public static final RegistrySupplier<Item> TIME_WOOD_PLANKS = ITEMS.register(
+        "time_wood_planks",
+        () -> new BlockItem(ModBlocks.TIME_WOOD_PLANKS.get(), new Item.Properties())
+    );
+
+    /**
+     * Time Wood Sapling - BlockItem for placing Time Wood Sapling block.
+     */
+    public static final RegistrySupplier<Item> TIME_WOOD_SAPLING = ITEMS.register(
+        "time_wood_sapling",
+        () -> new BlockItem(ModBlocks.TIME_WOOD_SAPLING.get(), new Item.Properties())
+    );
+
     // === Material Items ===
 
     /**
@@ -88,8 +120,8 @@ public class ModItems {
     // === Consumables ===
 
     /**
-     * Fruit of Time - Special food item found in the Chronosphere dimension.
-     * Restores hunger and provides Haste I effect for 30 seconds.
+     * Fruit of Time - Food item found in Chronosphere dimension.
+     * Restores hunger and grants Haste I effect for 30 seconds.
      */
     public static final RegistrySupplier<Item> FRUIT_OF_TIME = ITEMS.register(
         "fruit_of_time",
@@ -106,9 +138,8 @@ public class ModItems {
     }
 
     /**
-     * Populate Chronosphere creative tab with items.
-     * Task: T034c [Phase 2] Implement item group population
-     * Task: T088c [US1] Add all US1 items/blocks to creative tab
+     * Populate creative mode tab with all items.
+     * Called by ModCreativeTabs to add items to the Chronosphere creative tab.
      */
     public static void populateCreativeTab(
             net.minecraft.world.item.CreativeModeTab.ItemDisplayParameters params,
@@ -118,6 +149,10 @@ public class ModItems {
         output.accept(CLOCKSTONE_BLOCK.get());
         output.accept(REVERSING_TIME_SANDSTONE.get());
         output.accept(UNSTABLE_FUNGUS.get());
+        output.accept(TIME_WOOD_LOG.get());
+        output.accept(TIME_WOOD_LEAVES.get());
+        output.accept(TIME_WOOD_PLANKS.get());
+        output.accept(TIME_WOOD_SAPLING.get());
 
         // === Base Materials ===
         output.accept(CLOCKSTONE.get());
