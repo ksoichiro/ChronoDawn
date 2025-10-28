@@ -183,7 +183,7 @@
 
 ### World Generation - Structures (US1)
 
-- [ ] T067 [P] [US1] Create Ancient Ruins structure NBT in common/src/main/resources/data/chronosphere/structures/ancient_ruins.nbt (placeholder README created)
+- [X] T067 [P] [US1] Create Ancient Ruins structure NBT in common/src/main/resources/data/chronosphere/structures/ancient_ruins.nbt (structure created, loot chest blueprint pending)
 - [X] T068 [P] [US1] Implement Ancient Ruins structure framework (template_pool, structure, structure_set JSONs created)
 - [X] T069 [P] [US1] Create Ancient Ruins structure set in common/src/main/resources/data/chronosphere/worldgen/structure_set/ancient_ruins.json
 - [ ] T070 [P] [US1] Create Forgotten Library structure NBT in common/src/main/resources/data/chronosphere/structures/forgotten_library.nbt (placeholder README created)
