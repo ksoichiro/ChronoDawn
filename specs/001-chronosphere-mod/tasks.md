@@ -95,14 +95,14 @@
 
 ### Portal Color Customization (Phase 2.5)
 
-**Purpose**: ネザーポータルと差別化するため、ポータルの色を紫から青 (#4e7bec) に変更
+**Purpose**: ネザーポータルと差別化するため、ポータルの色をオレンジ (#db8813) に設定
 
 - [X] T034d [P] Research and decide final portal tint color (non-purple theme)
-- [ ] T034e [P] Update PORTAL_COLOR_* constants in CustomPortalFabric.java to RGB(78, 123, 236)
-- [ ] T034f [P] Update PORTAL_COLOR_* constants in CustomPortalNeoForge.java to RGB(78, 123, 236) (depends on T049)
-- [ ] T034g [P] Add color constant documentation explaining theme choice (#4e7bec - blue theme)
-- [ ] T034h [P] Test portal visual appearance in-game (portal block, overlay, particles)
-- [ ] T034i [P] Update spec.md with finalized portal color documentation
+- [X] T034e [P] Update PORTAL_COLOR_* constants in CustomPortalFabric.java to RGB(219, 136, 19)
+- [ ] T034f [P] Update PORTAL_COLOR_* constants in CustomPortalNeoForge.java to RGB(219, 136, 19) (depends on T049)
+- [X] T034g [P] Add color constant documentation explaining theme choice (#db8813 - orange/gold time theme)
+- [X] T034h [P] Test portal visual appearance in-game (portal block, overlay, particles)
+- [X] T034i [P] Update spec.md with finalized portal color documentation
 
 ### Time Cycle Configuration (Phase 2.5)
 
@@ -110,12 +110,12 @@
 
 - [X] T034j [P] Research day-night cycle vs fixed time design (Decision 7)
 - [X] T034k [P] Implement fixed time (6000 ticks = noon) and End sky effects in dimension_type/chronosphere.json
-- [ ] T034l [P] Test dimension visual appearance with fixed time and grey sky in-game
-- [ ] T034m [P] Evaluate time/sky settings and document adjustments needed (fixed_time: 4000-8000, effects: overworld/end/custom)
+- [X] T034l [P] Test dimension visual appearance with fixed time and grey sky in-game
+- [X] T034m [P] Evaluate time/sky settings and document adjustments needed (fixed_time: 4000-8000, effects: overworld/end/custom)
 - [ ] T034n [P] (Future) Research custom DimensionSpecialEffects for precise sky color control
 - [ ] T034o [P] (Future) Design sky color unlock mechanic tied to boss defeat (Option D element)
 
-**Current Settings**: `fixed_time: 6000` (noon), `effects: minecraft:the_end` (grey sky)
+**Current Settings**: `fixed_time: 6000` (noon), `effects: minecraft:overworld`, biome `sky_color: 9474192` (grey)
 
 **Note**: 固定時刻の値（4000-8000=明るい時間帯）と空の色はプレイテスト後に調整可能
 
