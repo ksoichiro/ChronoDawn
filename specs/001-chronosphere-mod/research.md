@@ -708,3 +708,155 @@ During gameplay testing, user observed that Chronosphere has a day-night cycle, 
 | **Chronosphere (current)** | **Day-night cycle** | **Undecided** |
 
 **Related Configuration**: `common/src/main/resources/data/chronosphere/dimension_type/chronosphere.json`
+
+## Decision 8: Multi-Noise Biome Generation for Multiple Biomes
+
+**Current Status**: Chronosphere uses fixed biome source (`"type": "minecraft:fixed"`) with single `chronosphere_plains` biome, causing poor ocean/land visibility
+
+**Background**:
+Players cannot distinguish between ocean and land because both use the same biome. The dimension needs multiple biomes (ocean, plains, forest) with distinct characteristics.
+
+### Multi-Noise Parameter System
+
+**6 Climate Parameters** (Minecraft 1.21.1):
+
+1. **temperature**: -1.0〜1.0 (5 levels)
+   - Level 0-4 ranges: -1.0~-0.45, -0.45~-0.15, -0.15~0.2, 0.2~0.55, 0.55~1.0
+   - Affects biome selection only (not terrain generation)
+
+2. **humidity (vegetation)**: -1.0〜1.0 (5 levels)
+   - Level 0-4 ranges: -1.0~-0.35, -0.35~-0.1, -0.1~0.1, 0.1~0.3, 0.3~1.0
+   - Affects biome selection only
+
+3. **continentalness**: -1.0〜1.0
+   - Determines ocean/beach/land biomes
+   - Negative values → ocean
+   - Zero/low positive → beaches/coasts
+   - High positive → inland biomes
+
+4. **erosion**: -1.0〜1.0 (7 levels)
+   - Level 0-6 ranges: -1.0~-0.78, -0.78~-0.375, -0.375~-0.2225, -0.2225~0.05, 0.05~0.45, 0.45~0.55, 0.55~1.0
+   - High erosion → flat terrain
+   - Low erosion → mountainous terrain
+
+5. **weirdness**: -1.0〜1.0
+   - Controls terrain irregularities and ridges
+
+6. **depth**: Vertical parameter (typically 0 for surface biomes)
+
+7. **offset**: Fine-tuning parameter for biome priority (typically 0.0)
+
+### JSON Structure
+
+**File Location**: `data/<namespace>/worldgen/multi_noise_biome_source_parameter_list/<name>.json`
+
+**Format**:
+```json
+{
+  "preset": "minecraft:overworld",
+  "biomes": [
+    {
+      "biome": "namespace:biome_id",
+      "parameters": {
+        "temperature": [min, max],
+        "humidity": [min, max],
+        "continentalness": [min, max],
+        "erosion": [min, max],
+        "depth": 0,
+        "weirdness": [min, max],
+        "offset": 0.0
+      }
+    }
+  ]
+}
+```
+
+### Biome Design for Chronosphere
+
+**Planned Biomes**:
+
+1. **chronosphere_ocean**:
+   - **Purpose**: Ocean biome with clear water visibility
+   - **Parameters**:
+     - `continentalness`: [-1.0, -0.4] (deep ocean/ocean range)
+     - `erosion`: [0.0, 1.0] (flat ocean floor)
+     - `temperature`: [0.0, 0.5] (neutral)
+     - `humidity`: [0.0, 0.5] (neutral)
+   - **Visual**: Custom water_color for visibility, no tree features
+   - **Spawns**: Water creatures (fish, squid)
+
+2. **chronosphere_plains** (existing, will update):
+   - **Purpose**: Flat land with sparse Time Wood trees
+   - **Parameters**:
+     - `continentalness`: [-0.1, 0.3] (coast to low inland)
+     - `erosion`: [0.3, 1.0] (flat to moderately flat)
+     - `temperature`: [0.0, 0.5] (neutral)
+     - `humidity`: [0.0, 0.3] (low to neutral)
+   - **Visual**: Existing grey sky, existing tree density
+   - **Spawns**: Basic hostile/neutral mobs
+
+3. **chronosphere_forest**:
+   - **Purpose**: Dense forest with high Time Wood tree concentration
+   - **Parameters**:
+     - `continentalness`: [-0.1, 0.3] (same as plains for smooth transition)
+     - `erosion`: [0.3, 1.0] (flat to moderately flat)
+     - `temperature`: [0.0, 0.5] (neutral)
+     - `humidity**: [0.4, 1.0] (high humidity for forest)
+   - **Visual**: Same sky color, increased tree density
+   - **Spawns**: Forest-appropriate mobs
+
+### Implementation Strategy
+
+**Phase 1: Biome JSON Creation** (T088e-f):
+- Create `chronosphere_ocean.json` with appropriate water_color and empty tree features
+- Create `chronosphere_forest.json` with increased tree placement frequency
+
+**Phase 2: Multi-Noise Configuration** (T088g):
+- Create `multi_noise_biome_source_parameter_list/chronosphere.json`
+- Configure climate parameters for ocean/plains/forest distribution
+
+**Phase 3: Dimension Update** (T088h):
+- Update `dimension/chronosphere.json` to use:
+  ```json
+  "biome_source": {
+    "type": "minecraft:multi_noise",
+    "preset": "chronosphere:chronosphere"
+  }
+  ```
+
+**Phase 4: Testing** (T088i):
+- Verify ocean/land distinction in-game
+- Check biome transitions (smooth vs abrupt)
+- Validate tree distribution differences
+
+### Expected Results
+
+- **Ocean Visibility**: Players can clearly see where water bodies are due to distinct water_color
+- **Biome Variety**: Three distinct biomes provide exploration diversity
+- **Smooth Transitions**: Adjacent continentalness values prevent abrupt biome borders
+- **Tree Distribution**: Plains have sparse trees, forests are dense with Time Wood
+
+### Alternative Approaches Considered
+
+- **Single Biome with Modified Colors**:
+  - **Pros**: Simpler implementation
+  - **Cons**: Cannot solve ocean visibility issue (water in plains biome still has same color)
+  - **Why Rejected**: Doesn't address core problem
+
+- **More Biomes (Desert, Mountain, etc.)**:
+  - **Pros**: Greater variety
+  - **Cons**: Increased complexity, requires more texture/feature work
+  - **Why Rejected**: Three biomes sufficient for MVP (US1)
+
+- **Custom BiomeSource Code**:
+  - **Pros**: Full control over generation
+  - **Cons**: Complex implementation, loader-specific code
+  - **Why Rejected**: Multi-noise system is data-driven and sufficient
+
+**Related Tasks**: T088d-i (Multiple Biomes Enhancement)
+
+**Related Files**:
+- `data/chronosphere/worldgen/biome/chronosphere_ocean.json`
+- `data/chronosphere/worldgen/biome/chronosphere_forest.json`
+- `data/chronosphere/worldgen/multi_noise_biome_source_parameter_list/chronosphere.json`
+- `data/chronosphere/dimension/chronosphere.json`

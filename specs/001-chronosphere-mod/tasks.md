@@ -297,12 +297,12 @@
 
 **Current Issue**: dimension/chronosphere.json が `biome_source: { type: "minecraft:fixed" }` を使用しているため、ディメンション全体が単一バイオーム（plains）として生成され、海もplainsバイオームになっている
 
-- [ ] T088d [US1] Research multi_noise biome generation parameters (temperature, humidity, continentalness, erosion, depth, weirdness)
-- [ ] T088e [P] [US1] Create chronosphere_ocean biome JSON with appropriate water_color for visibility and empty tree features
-- [ ] T088f [P] [US1] Create chronosphere_forest biome JSON with increased Time Wood tree density
-- [ ] T088g [US1] Create multi_noise biome source configuration in common/src/main/resources/data/chronosphere/worldgen/multi_noise_biome_source_parameter_list/chronosphere.json
-- [ ] T088h [US1] Update dimension/chronosphere.json to use multi_noise biome source instead of fixed
-- [ ] T088i [US1] Test biome generation in-game and verify ocean/plains/forest distribution
+- [X] T088d [US1] Research multi_noise biome generation parameters (temperature, humidity, continentalness, erosion, depth, weirdness)
+- [X] T088e [P] [US1] Create chronosphere_ocean biome JSON with appropriate water_color for visibility and empty tree features
+- [X] T088f [P] [US1] Create chronosphere_forest biome JSON with increased Time Wood tree density
+- [X] T088g [US1] Create multi_noise biome source configuration in common/src/main/resources/data/chronosphere/worldgen/multi_noise_biome_source_parameter_list/chronosphere.json
+- [X] T088h [US1] Update dimension/chronosphere.json to use multi_noise biome source instead of fixed
+- [X] T088i [US1] Test biome generation in-game and verify ocean/plains/forest distribution
 
 ### Basic Mob Spawning (US1 Enhancement)
 
@@ -337,6 +337,58 @@
 - [ ] T088t [P] [US1] (Optional) Design Time Wood color variants (e.g., Dark Time Wood, Ancient Time Wood)
 - [ ] T088u [P] [US1] (Optional) Create variant textures and block definitions
 - [ ] T088v [P] [US1] (Optional) Create variant tree features and configure placement in different biomes
+
+### Vegetation System (US1 Enhancement)
+
+**Purpose**: 植生を追加して探索に生命感と視覚的多様性を提供
+
+**Note**: 基本的な生命感を与えるため、MVP完了前の実装を推奨。モブスポーン（T088j-o）と並行実装可能
+
+- [ ] T088w [US1] Research vanilla vegetation generation patterns (tall grass, flowers, ferns, seagrass, kelp)
+- [ ] T088x [P] [US1] Create tall grass configured_feature for chronosphere_plains.json (random patches)
+- [ ] T088y [P] [US1] Create flower configured_feature for chronosphere_plains.json (custom color theme: orange/gold/grey)
+- [ ] T088z [P] [US1] Create fern/mushroom configured_feature for chronosphere_forest.json (forest undergrowth)
+- [ ] T088aa [P] [US1] Create seagrass configured_feature for chronosphere_ocean.json (ocean floor vegetation)
+- [ ] T088ab [P] [US1] Create kelp configured_feature for chronosphere_ocean.json (vertical underwater vegetation)
+- [ ] T088ac [US1] Test vegetation generation in-game and adjust density/distribution
+
+### Decorative Terrain Features (US1 Enhancement)
+
+**Purpose**: 装飾的な地形要素を追加して探索の視覚的多様性を向上
+
+**Note**: MVP後の改善として実装。植生とモブスポーンの後に実装推奨
+
+- [ ] T088ad [US1] Research vanilla decorative features (boulders, fallen logs, disk features for gravel/sand)
+- [ ] T088ae [P] [US1] Create boulder configured_feature (cobblestone/mossy cobblestone clusters)
+- [ ] T088af [P] [US1] Create fallen log configured_feature (Time Wood Log horizontal placement)
+- [ ] T088ag [P] [US1] Create gravel disk configured_feature for varied terrain texture
+- [ ] T088ah [P] [US1] Add decorative features to biome feature lists (vegetation decoration step)
+- [ ] T088ai [US1] Test decorative features in-game and adjust frequency/placement
+
+### Biome-Specific Landmarks (US1 Enhancement - Optional)
+
+**Purpose**: バイオームに固有の小規模構造物を追加して識別性を向上
+
+**Note**: 優先度は低い。Phase 6（Polish）段階での実装を検討
+
+- [ ] T088aj [P] [US1] (Optional) Design small rock circle feature for chronosphere_plains (Stonehenge-like miniature)
+- [ ] T088ak [P] [US1] (Optional) Design mushroom circle feature for chronosphere_forest (fairy ring theme)
+- [ ] T088al [P] [US1] (Optional) Design coral-like time structure for chronosphere_ocean (temporal reef theme)
+- [ ] T088am [P] [US1] (Optional) Implement landmark features and configure rare placement
+- [ ] T088an [US1] (Optional) Test landmark generation and ensure they don't interfere with main structures
+
+### Ambient Sounds & Particles (US1 Enhancement - Optional)
+
+**Purpose**: 環境音とパーティクルで没入感を向上
+
+**Note**: 優先度は最も低い。Phase 6（Polish）段階での実装を検討
+
+- [ ] T088ao [P] [US1] (Optional) Research custom biome ambient sounds (wind, waves, cave echoes)
+- [ ] T088ap [P] [US1] (Optional) Create custom sound files or select vanilla sounds for each biome
+- [ ] T088aq [P] [US1] (Optional) Configure ambient sounds in biome JSONs (mood_sound, additions_sound)
+- [ ] T088ar [P] [US1] (Optional) Design time distortion particle effects (subtle sparkles, clock hands)
+- [ ] T088as [P] [US1] (Optional) Implement particle spawning logic for biomes (client-side)
+- [ ] T088at [US1] (Optional) Test ambient sounds and particles in-game for immersion quality
 
 **Checkpoint**: User Story 1が完全に機能し、独立してテスト可能であること
 
@@ -651,21 +703,21 @@ Task: "Create Clockstone item model in common/src/main/resources/assets/chronosp
 
 ## Total Task Count
 
-**Total Tasks**: 234 (updated with T080a-T080u fruit enhancement + T088d-T088v biome/mob enhancements)
+**Total Tasks**: 258 (updated with T080a-T080u fruit enhancement + T088d-T088at exploration diversity enhancements)
 
 **Breakdown by Phase**:
 - Phase 1 (Setup): 14 tasks
 - Phase 2 (Foundational): 20 tasks
-- Phase 3 (User Story 1 - P1): 94 tasks (includes T080a-T080u fruit enhancement + T088d-T088v biome/mob enhancements)
+- Phase 3 (User Story 1 - P1): 118 tasks (includes T080a-T080u fruit enhancement + T088d-T088at exploration diversity enhancements)
 - Phase 4 (User Story 2 - P2): 34 tasks
 - Phase 5 (User Story 3 - P3): 49 tasks
 - Phase 6 (Polish): 23 tasks
 
 **Breakdown by User Story**:
-- User Story 1 (P1): 94 tasks (40% of total)
-- User Story 2 (P2): 34 tasks (15% of total)
-- User Story 3 (P3): 49 tasks (21% of total)
-- Infrastructure (Setup + Foundational + Polish): 57 tasks (24% of total)
+- User Story 1 (P1): 118 tasks (46% of total)
+- User Story 2 (P2): 34 tasks (13% of total)
+- User Story 3 (P3): 49 tasks (19% of total)
+- Infrastructure (Setup + Foundational + Polish): 57 tasks (22% of total)
 
 **Phase 3 Enhancement Breakdown**:
 - Core US1 features: 75 tasks (T001-T088c)
@@ -673,18 +725,22 @@ Task: "Create Clockstone item model in common/src/main/resources/assets/chronosp
 - Basic Mob Spawning: 6 tasks (T088j-T088o)
 - Biome Color Adjustment: 4 tasks (T088p-T088s)
 - Additional Tree Variants (Optional): 3 tasks (T088t-T088v)
+- Vegetation System: 7 tasks (T088w-T088ac)
+- Decorative Terrain Features: 6 tasks (T088ad-T088ai)
+- Biome-Specific Landmarks (Optional): 5 tasks (T088aj-T088an)
+- Ambient Sounds & Particles (Optional): 6 tasks (T088ao-T088at)
 
 **Parallel Opportunities**:
 - Phase 1: 7 parallel groups
 - Phase 2: 8 parallel groups
-- Phase 3 (US1): 31 parallel groups (includes 5 new groups from biome/mob enhancements)
+- Phase 3 (US1): 43 parallel groups (includes 12 new groups from exploration diversity enhancements)
 - Phase 4 (US2): 17 parallel groups
 - Phase 5 (US3): 24 parallel groups
 - Phase 6: 10 parallel groups
 
 **Independent Test Criteria**:
-- User Story 1: Portal creation, dimension travel, portal stabilization, free travel between dimensions, custom tree generation with harvestable fruits, multiple biomes (plains/ocean/forest), mob spawning with time distortion effects
+- User Story 1: Portal creation, dimension travel, portal stabilization, free travel between dimensions, custom tree generation with harvestable fruits, multiple biomes (plains/ocean/forest) with vegetation, mob spawning with time distortion effects, decorative terrain features
 - User Story 2: Desert Clock Tower exploration, time manipulation items, Time Guardian defeat, key acquisition
 - User Story 3: Master Clock access, Time Tyrant defeat, ultimate artifacts creation, artifact effects validation
 
-**Suggested MVP Scope**: User Story 1 (Phase 1 + Phase 2 + Phase 3) = 128 tasks (includes all enhancements)
+**Suggested MVP Scope**: User Story 1 (Phase 1 + Phase 2 + Phase 3 Core + Multiple Biomes + Basic Mob Spawning + Vegetation System) = 142 tasks (recommended for initial release, excludes optional enhancements)
