@@ -3,8 +3,45 @@
   "generator": {
     "type": "minecraft:noise",
     "biome_source": {
-      "type": "minecraft:fixed",
-      "biome": "chronosphere:chronosphere_plains"
+      "type": "minecraft:multi_noise",
+      "biomes": [
+        {
+          "biome": "chronosphere:chronosphere_ocean",
+          "parameters": {
+            "temperature": [-1.0, 1.0],
+            "humidity": [-1.0, 1.0],
+            "continentalness": [-1.0, -0.4],
+            "erosion": [-1.0, 1.0],
+            "depth": 0,
+            "weirdness": [-1.0, 1.0],
+            "offset": 0.0
+          }
+        },
+        {
+          "biome": "chronosphere:chronosphere_plains",
+          "parameters": {
+            "temperature": [-1.0, 1.0],
+            "humidity": [-1.0, 0.3],
+            "continentalness": [-0.1, 1.0],
+            "erosion": [-1.0, 1.0],
+            "depth": 0,
+            "weirdness": [-1.0, 1.0],
+            "offset": 0.0
+          }
+        },
+        {
+          "biome": "chronosphere:chronosphere_forest",
+          "parameters": {
+            "temperature": [-1.0, 1.0],
+            "humidity": [0.4, 1.0],
+            "continentalness": [-0.1, 1.0],
+            "erosion": [-1.0, 1.0],
+            "depth": 0,
+            "weirdness": [-1.0, 1.0],
+            "offset": 0.0
+          }
+        }
+      ]
     },
     "settings": "minecraft:overworld"
   }

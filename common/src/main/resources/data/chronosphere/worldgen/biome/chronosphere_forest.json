@@ -2,7 +2,7 @@
   "has_precipitation": true,
   "temperature": 0.5,
   "temperature_modifier": "none",
-  "downfall": 0.6,
+  "downfall": 0.7,
   "effects": {
     "sky_color": 9474192,
     "fog_color": 12632256,
@@ -97,7 +97,7 @@
     [],
     [],
     [
-      "chronosphere:fruit_of_time_tree"
+      "chronosphere:fruit_of_time_tree_dense"
     ],
     []
   ]
