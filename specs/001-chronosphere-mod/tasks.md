@@ -310,12 +310,12 @@
 
 **Note**: カスタムモブは後のフェーズで実装。まずはバニラモブで世界に生命を与える
 
-- [ ] T088j [US1] Research appropriate vanilla mob selection and spawn rates for time-distorted dimension
-- [ ] T088k [P] [US1] Add monster spawners to chronosphere_plains.json (Zombie, Skeleton with low spawn rates)
-- [ ] T088l [P] [US1] Add creature/ambient spawners to chronosphere_plains.json (passive mobs for ambiance)
-- [ ] T088m [P] [US1] Add monster spawners to chronosphere_forest.json (forest-appropriate hostile mobs)
-- [ ] T088n [P] [US1] Add water_creature/water_ambient spawners to chronosphere_ocean.json (fish, squid, etc.)
-- [ ] T088o [US1] Test mob spawning in-game and verify Time Distortion Effect (Slowness IV) applies correctly to hostile mobs
+- [X] T088j [US1] Research appropriate vanilla mob selection and spawn rates for time-distorted dimension
+- [X] T088k [P] [US1] Add monster spawners to chronosphere_plains.json (Zombie, Skeleton with low spawn rates)
+- [X] T088l [P] [US1] Add creature/ambient spawners to chronosphere_plains.json (passive mobs for ambiance)
+- [X] T088m [P] [US1] Add monster spawners to chronosphere_forest.json (forest-appropriate hostile mobs)
+- [X] T088n [P] [US1] Add water_creature/water_ambient spawners to chronosphere_ocean.json (fish, squid, etc.)
+- [X] T088o [US1] Test mob spawning in-game and verify Time Distortion Effect (Slowness IV) applies correctly to hostile mobs
 
 ### Biome Color Adjustment (US1 Enhancement)
 
