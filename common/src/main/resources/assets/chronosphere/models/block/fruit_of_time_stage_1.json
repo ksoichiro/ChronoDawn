@@ -1,0 +1,46 @@
+{
+	"format_version": "1.21.6",
+	"ambientocclusion": false,
+	"textures": {
+		"particle": "chronosphere:block/fruit_of_time_stage_1",
+		"all": "chronosphere:block/fruit_of_time_stage_1"
+	},
+	"elements": [
+		{
+			"from": [5, 9, 5],
+			"to": [10, 16, 10],
+			"faces": {
+				"north": {"uv": [1, 0, 6, 7], "texture": "#all"},
+				"east": {"uv": [1, 0, 6, 7], "texture": "#all"},
+				"south": {"uv": [1, 0, 6, 7], "texture": "#all"},
+				"west": {"uv": [1, 0, 6, 7], "texture": "#all"},
+				"up": {"uv": [1, 1, 6, 6], "texture": "#all"},
+				"down": {"uv": [1, 1, 6, 6], "texture": "#all"}
+			}
+		},
+		{
+			"from": [4, 10, 6],
+			"to": [11, 15, 9],
+			"faces": {
+				"north": {"uv": [0, 1, 7, 6], "texture": "#all"},
+				"east": {"uv": [2, 1, 5, 6], "texture": "#all"},
+				"south": {"uv": [0, 1, 7, 6], "texture": "#all"},
+				"west": {"uv": [2, 1, 5, 6], "texture": "#all"},
+				"up": {"uv": [0, 2, 7, 5], "texture": "#all"},
+				"down": {"uv": [0, 2, 7, 5], "texture": "#all"}
+			}
+		},
+		{
+			"from": [6, 10, 4],
+			"to": [9, 15, 11],
+			"faces": {
+				"north": {"uv": [2, 1, 5, 6], "texture": "#all"},
+				"east": {"uv": [0, 1, 7, 6], "texture": "#all"},
+				"south": {"uv": [2, 1, 5, 6], "texture": "#all"},
+				"west": {"uv": [0, 1, 7, 6], "texture": "#all"},
+				"up": {"uv": [2, 0, 5, 7], "texture": "#all"},
+				"down": {"uv": [2, 0, 5, 7], "texture": "#all"}
+			}
+		}
+	]
+}

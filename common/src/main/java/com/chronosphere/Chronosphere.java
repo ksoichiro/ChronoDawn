@@ -8,6 +8,7 @@ import com.chronosphere.registry.ModCreativeTabs;
 import com.chronosphere.registry.ModDimensions;
 import com.chronosphere.registry.ModEntities;
 import com.chronosphere.registry.ModItems;
+import com.chronosphere.registry.ModTreeDecoratorTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +25,7 @@ public class Chronosphere {
         ModEntities.register();
         ModDimensions.register();
         ModCreativeTabs.register();
+        ModTreeDecoratorTypes.register();
 
         // Register event handlers (Phase 2 - Foundational)
         ChronosphereEvents.register();
