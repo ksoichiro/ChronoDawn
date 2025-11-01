@@ -246,9 +246,9 @@ public class PortalStabilizerItem extends Item {
     private void broadcastStabilizationMessage(ServerLevel serverLevel) {
         Component message = Component.translatable("item.chronosphere.portal_stabilizer.success_reignite_required");
 
-        // Send message to all players
+        // Send message to all players (displayed on screen and logged in chat)
         for (net.minecraft.server.level.ServerPlayer player : serverLevel.getServer().getPlayerList().getPlayers()) {
-            player.displayClientMessage(message, true);
+            player.displayClientMessage(message, false);
         }
     }
 }
