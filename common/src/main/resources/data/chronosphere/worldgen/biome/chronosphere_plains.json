@@ -87,7 +87,9 @@
     [
       "chronosphere:fruit_of_time_tree",
       "chronosphere:patch_grass",
-      "chronosphere:patch_flowers"
+      "chronosphere:patch_flowers",
+      "chronosphere:boulder_placed",
+      "chronosphere:gravel_disk_placed"
     ],
     []
   ]

@@ -860,3 +860,193 @@ Players cannot distinguish between ocean and land because both use the same biom
 - `data/chronosphere/worldgen/biome/chronosphere_forest.json`
 - `data/chronosphere/worldgen/multi_noise_biome_source_parameter_list/chronosphere.json`
 - `data/chronosphere/dimension/chronosphere.json`
+
+## Decision 9: Decorative Terrain Features
+
+**Purpose**: Add decorative terrain elements (boulders, fallen logs, disk features) to enhance visual diversity during exploration
+
+**Background**:
+After implementing multiple biomes, vegetation, and mob spawning, the terrain still lacks small-scale decorative elements that add visual interest and make the world feel more natural and lived-in.
+
+### Vanilla Decorative Features Analysis
+
+**1. Forest Rock (Boulders)**:
+- **Feature Type**: `minecraft:forest_rock`
+- **Blocks Used**: Cobblestone, Mossy Cobblestone
+- **Generation**: Random clusters of 1-4 blocks, occasionally larger formations
+- **Vanilla Usage**: Taiga, Old Growth Taiga biomes
+- **Implementation**:
+  ```json
+  {
+    "type": "minecraft:forest_rock",
+    "config": {
+      "state": {
+        "Name": "minecraft:cobblestone"
+      }
+    }
+  }
+  ```
+
+**2. Disk Features (Ground Patches)**:
+- **Feature Type**: `minecraft:disk`
+- **Blocks Used**: Sand, Gravel, Clay, Dirt
+- **Generation**: Circular patches on ground surface, 2-8 block radius
+- **Vanilla Usage**: Swamps (clay), Rivers (gravel), Beaches (sand)
+- **Implementation**:
+  ```json
+  {
+    "type": "minecraft:disk",
+    "config": {
+      "state_provider": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:gravel"
+        }
+      },
+      "target": {
+        "type": "minecraft:matching_blocks",
+        "blocks": ["minecraft:grass_block", "minecraft:dirt"]
+      },
+      "radius": {
+        "type": "minecraft:uniform",
+        "value": {
+          "min_inclusive": 2,
+          "max_inclusive": 5
+        }
+      },
+      "half_height": 2
+    }
+  }
+  ```
+
+**3. Fallen Logs**:
+- **Feature Type**: No dedicated vanilla feature, but can be implemented using:
+  - `minecraft:simple_block` for single horizontal logs
+  - `minecraft:block_column` for vertical variations
+  - Custom configuration needed
+- **Blocks Used**: Any log block (horizontally oriented)
+- **Generation**: 1-3 logs placed horizontally on ground
+- **Vanilla Usage**: Not directly present in vanilla, but common in modded dimensions
+- **Implementation Strategy**:
+  ```json
+  {
+    "type": "minecraft:simple_block",
+    "config": {
+      "to_place": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "chronosphere:time_wood_log",
+          "Properties": {
+            "axis": "x"
+          }
+        }
+      }
+    }
+  }
+  ```
+
+### Feature Placement in Biomes
+
+**Decoration Step**: `vegetation` (GenerationStep.Decoration.VEGETAL_DECORATION)
+- Placed after terrain features but before structures
+- Same step as flowers, grass, and other decorative vegetation
+- Ensures features appear on final terrain surface
+
+**Frequency Guidelines**:
+- **Boulders**: 0-2 per chunk (rare, make them feel special)
+- **Fallen Logs**: 0-1 per chunk (rare, adds occasional surprise)
+- **Gravel Disks**: 1-3 per chunk (more common, adds texture variety)
+
+### Design for Chronosphere
+
+**Boulder Variant**:
+- **Block**: Mossy Cobblestone (suggests age/abandonment)
+- **Biomes**: chronosphere_plains, chronosphere_forest
+- **Placement**: 0.05 probability per chunk (5% chance = 1 every 20 chunks)
+
+**Fallen Log Variant**:
+- **Block**: Time Wood Log (horizontal orientation)
+- **Biomes**: chronosphere_forest only
+- **Placement**: 0.03 probability per chunk (3% chance = 1 every 33 chunks)
+
+**Gravel Disk Variant**:
+- **Block**: Gravel
+- **Biomes**: chronosphere_plains (creates visual breaks in grass)
+- **Placement**: 0.1 probability per chunk (10% chance = 2 every 20 chunks)
+
+### Implementation Files Required
+
+1. **Configured Features** (`data/chronosphere/worldgen/configured_feature/`):
+   - `boulder.json` - Forest rock feature with mossy cobblestone
+   - `fallen_log.json` - Simple block feature with horizontal Time Wood Log
+   - `gravel_disk.json` - Disk feature for gravel patches
+
+2. **Placed Features** (`data/chronosphere/worldgen/placed_feature/`):
+   - `boulder_placed.json` - Rare placement with count and probability
+   - `fallen_log_placed.json` - Rare placement in forests
+   - `gravel_disk_placed.json` - Common placement in plains
+
+3. **Biome Updates**:
+   - Add placed features to `features` array in biome JSONs
+   - Use `vegetation` generation step
+
+### Expected Visual Impact
+
+- **Terrain Texture Variety**: Gravel disks break up uniform grass surfaces
+- **Exploration Landmarks**: Boulders create minor navigation points
+- **Natural Decay Theme**: Fallen logs and mossy boulders suggest abandoned/timeless environment
+- **Biome Distinctiveness**: Forest has fallen logs, plains has gravel disks
+
+### Alternatives Considered
+
+- **Custom Stone Formations**:
+  - **Pros**: More unique visual identity
+  - **Cons**: Requires custom NBT structures or complex feature code
+  - **Why Rejected**: Vanilla features sufficient for MVP enhancement
+
+- **More Feature Types** (mushroom patches, dead bushes, etc.):
+  - **Pros**: Greater variety
+  - **Cons**: May clutter terrain, diminishing returns
+  - **Why Rejected**: Three feature types provide sufficient diversity without overcrowding
+
+- **Higher Placement Frequency**:
+  - **Pros**: More visible impact
+  - **Cons**: Risk of terrain feeling cluttered or repetitive
+  - **Why Rejected**: Rare features feel more special and don't overwhelm landscape
+
+### Performance Considerations
+
+- **Generation Cost**: Minimal - simple block placement features
+- **Runtime Cost**: None - decorative features are static blocks
+- **Chunk Generation**: No noticeable performance impact expected
+- **Comparison**: Similar to vanilla flower/grass generation
+
+### Implementation Notes (2025-11-01)
+
+**Completed Implementation**:
+- **Boulder**: Uses `minecraft:forest_rock` with mossy cobblestone, 2 per chunk
+- **Fallen Log**: Uses `minecraft:random_patch` with 3 tries, xz_spread=2, creates 2-3 scattered logs
+- **Gravel Disk**: Uses `minecraft:disk` with radius 2-5 blocks, 3 per chunk
+
+**Placement Adjustments**:
+- Initial `rarity_filter` approach failed; switched to `count` (matching vanilla implementation)
+- Added `block_predicate_filter` to prevent fallen logs from spawning on leaves or water
+- Used `OCEAN_FLOOR_WG` heightmap for fallen logs to ensure ground placement
+- Fixed multi_noise `continentalness` ranges to prevent forest biome in ocean (0.0+ for land biomes)
+
+**Known Limitations**:
+- Fallen logs use `random_patch`, creating scattered logs rather than straight fallen trees
+- For straight fallen logs, NBT structures would be required (future improvement: T088ai-a)
+
+**Related Tasks**: T088ad-ai (Decorative Terrain Features - Completed), T088ai-a (Future: Straight fallen logs)
+
+**Related Files**:
+- `data/chronosphere/worldgen/configured_feature/boulder.json`
+- `data/chronosphere/worldgen/configured_feature/fallen_log.json`
+- `data/chronosphere/worldgen/configured_feature/gravel_disk.json`
+- `data/chronosphere/worldgen/placed_feature/boulder_placed.json`
+- `data/chronosphere/worldgen/placed_feature/fallen_log_placed.json`
+- `data/chronosphere/worldgen/placed_feature/gravel_disk_placed.json`
+- `data/chronosphere/worldgen/biome/chronosphere_plains.json` (added boulder, gravel_disk)
+- `data/chronosphere/worldgen/biome/chronosphere_forest.json` (added boulder, fallen_log)
+- `data/chronosphere/worldgen/multi_noise_biome_source_parameter_list/chronosphere.json` (fixed continentalness ranges)
