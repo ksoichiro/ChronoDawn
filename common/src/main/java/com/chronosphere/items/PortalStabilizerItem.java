@@ -4,9 +4,11 @@ import com.chronosphere.Chronosphere;
 import com.chronosphere.core.portal.PortalRegistry;
 import com.chronosphere.core.portal.PortalState;
 import com.chronosphere.core.portal.PortalStateMachine;
+import com.chronosphere.data.ChronosphereGlobalState;
 import com.chronosphere.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -109,11 +111,18 @@ public class PortalStabilizerItem extends Item {
 
         // Stabilize the portal
         if (portal.stabilize()) {
-            // Relight the portal
-            relightPortal(level, portal.getPosition());
+            // Mark global state: Portal has been stabilized
+            if (level instanceof ServerLevel serverLevel) {
+                ChronosphereGlobalState globalState = ChronosphereGlobalState.get(serverLevel.getServer());
+                globalState.markPortalStabilized();
+            }
 
-            if (player != null) {
-                player.displayClientMessage(Component.translatable("item.chronosphere.portal_stabilizer.success"), true);
+            // Play stabilization effect (visual + audio feedback)
+            playStabilizationEffect(level, portal.getPosition());
+
+            // Broadcast message to all players in the server
+            if (level instanceof ServerLevel serverLevel) {
+                broadcastStabilizationMessage(serverLevel);
             }
 
             // Consume the item
@@ -153,23 +162,97 @@ public class PortalStabilizerItem extends Item {
     }
 
     /**
-     * Relight the portal by placing portal blocks.
+     * Play visual and audio effects for portal stabilization.
+     *
+     * Creates a dramatic effect when Portal Stabilizer is used:
+     * - Particles emanate from portal frame blocks
+     * - Sound effects play to indicate successful stabilization
+     * - Gives player feedback that something important happened
      *
      * @param level Level
      * @param portalPos Portal position (bottom-left corner)
      */
-    private void relightPortal(Level level, BlockPos portalPos) {
-        // Find the portal frame and fill with portal blocks
-        // This is a simplified implementation - assumes 4x5 portal
-        for (int x = 1; x <= 2; x++) {
-            for (int y = 1; y <= 3; y++) {
-                BlockPos portalBlockPos = portalPos.offset(x, y, 0);
-                if (level.getBlockState(portalBlockPos).isAir()) {
-                    level.setBlock(portalBlockPos, Blocks.NETHER_PORTAL.defaultBlockState(), 3);
+    private void playStabilizationEffect(Level level, BlockPos portalPos) {
+        if (!(level instanceof ServerLevel serverLevel)) {
+            return;
+        }
+
+        // Find portal frame blocks (4x5 portal assumption)
+        // Frame: outer rectangle of Clockstone blocks
+        for (int x = 0; x <= 3; x++) {
+            for (int y = 0; y <= 4; y++) {
+                // Only process frame blocks (outer edge)
+                if ((x == 0 || x == 3) || (y == 0 || y == 4)) {
+                    BlockPos framePos = portalPos.offset(x, y, 0);
+
+                    // Check if this is actually a Clockstone Block
+                    if (!level.getBlockState(framePos).is(ModBlocks.CLOCKSTONE_BLOCK.get())) {
+                        continue;
+                    }
+
+                    // Spawn particles at this frame block
+                    // END_ROD: White particles rising upward (like clock hands)
+                    serverLevel.sendParticles(
+                        net.minecraft.core.particles.ParticleTypes.END_ROD,
+                        framePos.getX() + 0.5,
+                        framePos.getY() + 0.5,
+                        framePos.getZ() + 0.5,
+                        10, // count
+                        0.3, 0.3, 0.3, // spread (x, y, z)
+                        0.05 // speed
+                    );
+
+                    // FLAME: Orange particles matching portal theme
+                    serverLevel.sendParticles(
+                        net.minecraft.core.particles.ParticleTypes.FLAME,
+                        framePos.getX() + 0.5,
+                        framePos.getY() + 0.5,
+                        framePos.getZ() + 0.5,
+                        5, // count
+                        0.2, 0.2, 0.2, // spread
+                        0.02 // speed
+                    );
                 }
             }
         }
 
-        Chronosphere.LOGGER.info("Relit portal at {}", portalPos);
+        // Play sound effect at portal center
+        BlockPos centerPos = portalPos.offset(1, 2, 0);
+        level.playSound(
+            null, // null = all nearby players can hear
+            centerPos,
+            net.minecraft.sounds.SoundEvents.END_PORTAL_SPAWN, // Dramatic portal spawn sound
+            net.minecraft.sounds.SoundSource.BLOCKS,
+            1.0F, // volume
+            1.0F  // pitch
+        );
+
+        // Additional sound for "time stabilization" feel
+        level.playSound(
+            null,
+            centerPos,
+            net.minecraft.sounds.SoundEvents.BEACON_ACTIVATE,
+            net.minecraft.sounds.SoundSource.BLOCKS,
+            0.5F, // quieter than main sound
+            1.2F  // slightly higher pitch
+        );
+
+        Chronosphere.LOGGER.info("Played stabilization effect at {}", portalPos);
+    }
+
+    /**
+     * Broadcast stabilization message to all players in the server.
+     *
+     * @param serverLevel Server level
+     */
+    private void broadcastStabilizationMessage(ServerLevel serverLevel) {
+        Component message = Component.translatable("item.chronosphere.portal_stabilizer.success_reignite_required");
+
+        // Send message to all players
+        for (net.minecraft.server.level.ServerPlayer player : serverLevel.getServer().getPlayerList().getPlayers()) {
+            player.displayClientMessage(message, true);
+        }
+
+        Chronosphere.LOGGER.info("Broadcasted stabilization message to all players");
     }
 }

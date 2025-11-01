@@ -6,11 +6,12 @@ import net.minecraft.world.item.Item;
  * Time Hourglass - Portal ignition item.
  *
  * Used to activate Chronosphere portals by right-clicking on a valid portal frame.
- * Single-use item that is consumed upon successful portal activation.
+ * Ignition is handled by Custom Portal API. Restrictions on DEACTIVATED portals
+ * are enforced by BlockEventHandler.
  *
  * Properties:
  * - Max Stack Size: 1
- * - Durability: 1 (consumed after use)
+ * - Durability: 1 (consumed after use by Custom Portal API)
  *
  * Crafting:
  * - Requires Clockstone and other materials (recipe defined in data/chronosphere/recipes/)
@@ -18,12 +19,16 @@ import net.minecraft.world.item.Item;
  * Usage:
  * 1. Build valid portal frame (4x5 to 23x23 rectangle of Clockstone blocks)
  * 2. Right-click frame with Time Hourglass
- * 3. Portal activates and Time Hourglass is consumed
+ * 3. Portal activates (INACTIVE → ACTIVATED) - handled by Custom Portal API
+ * 4. Time Hourglass is consumed by Custom Portal API
+ *
+ * Portal State Logic (enforced by BlockEventHandler):
+ * - INACTIVE: Can be ignited with Time Hourglass → ACTIVATED
+ * - DEACTIVATED (in Chronosphere only): Cannot be ignited with Time Hourglass
+ * - STABILIZED: Already active, no action needed
  *
  * Reference: data-model.md (Items → Tools & Utilities → Time Hourglass)
  * Task: T059 [US1] Create Time Hourglass item
- *
- * TODO: Implement portal activation logic when Portal System is ready (T045-T049)
  */
 public class TimeHourglassItem extends Item {
     public TimeHourglassItem(Properties properties) {
@@ -38,9 +43,9 @@ public class TimeHourglassItem extends Item {
     public static Properties createProperties() {
         return new Properties()
                 .stacksTo(1)
-                .durability(1); // Single-use item
+                .durability(1); // Consumed by Custom Portal API after use
     }
 
-    // TODO: Override useOn() method to implement portal activation logic
-    // This will be implemented in Portal System phase (T045-T049)
+    // Portal ignition is handled by Custom Portal API
+    // Restrictions on DEACTIVATED portals are enforced by BlockEventHandler
 }

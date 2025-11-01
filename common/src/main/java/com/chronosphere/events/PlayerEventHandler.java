@@ -4,17 +4,24 @@ import com.chronosphere.Chronosphere;
 import com.chronosphere.core.portal.PortalRegistry;
 import com.chronosphere.core.portal.PortalState;
 import com.chronosphere.core.portal.PortalStateMachine;
+import com.chronosphere.data.ChronosphereGlobalState;
 import com.chronosphere.registry.ModBlocks;
 import com.chronosphere.registry.ModDimensions;
-import dev.architectury.event.events.common.EntityEvent;
+import com.chronosphere.registry.ModItems;
+import dev.architectury.event.events.common.TickEvent;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -49,23 +56,31 @@ import java.util.UUID;
  * Task: T087 [US1] Implement respawn handler - REVERTED to Minecraft standard behavior
  */
 public class PlayerEventHandler {
+    // Track player dimensions to detect changes
+    private static final Map<UUID, ResourceKey<Level>> playerDimensions = new HashMap<>();
+
     /**
      * Register player event listeners.
      */
     public static void register() {
-        // Register entity add event to detect dimension change
-        // This event fires when entity is added to a level (including dimension change)
-        EntityEvent.ADD.register((entity, level) -> {
-            if (entity instanceof ServerPlayer player && level instanceof ServerLevel serverLevel) {
-                // Check if player just entered Chronosphere
-                // We use a small delay to ensure player position is set
-                serverLevel.getServer().execute(() -> {
-                    if (player.serverLevel().dimension().equals(ModDimensions.CHRONOSPHERE_DIMENSION)) {
+        // Register server tick event to monitor player dimension changes
+        TickEvent.SERVER_POST.register(server -> {
+            for (ServerPlayer player : server.getPlayerList().getPlayers()) {
+                ResourceKey<Level> currentDimension = player.level().dimension();
+                ResourceKey<Level> previousDimension = playerDimensions.get(player.getUUID());
+
+                // Check if dimension changed
+                if (previousDimension != null && !previousDimension.equals(currentDimension)) {
+                    // Player changed dimension
+                    if (currentDimension.equals(ModDimensions.CHRONOSPHERE_DIMENSION)) {
+                        // Player entered Chronosphere
                         onPlayerChangeDimension(player);
                     }
-                });
+                }
+
+                // Update tracked dimension
+                playerDimensions.put(player.getUUID(), currentDimension);
             }
-            return dev.architectury.event.EventResult.pass();
         });
 
         Chronosphere.LOGGER.info("Registered PlayerEventHandler");
@@ -87,6 +102,18 @@ public class PlayerEventHandler {
         }
 
         Chronosphere.LOGGER.info("Player {} entered Chronosphere", player.getName().getString());
+
+        // Mark global state: Chronosphere has been entered
+        ChronosphereGlobalState globalState = ChronosphereGlobalState.get(player.server);
+        globalState.markChronosphereEntered();
+
+        // If portals are stable, do not deactivate portal
+        // This allows free bidirectional travel after stabilization
+        if (!globalState.arePortalsUnstable()) {
+            Chronosphere.LOGGER.info("Portals are stable, skipping deactivation for player {}",
+                player.getName().getString());
+            return;  // Early return - portal remains active
+        }
 
         // Find portal near player
         BlockPos playerPos = player.blockPosition();
@@ -151,19 +178,111 @@ public class PlayerEventHandler {
      * @param centerPos Center position
      */
     private static void extinguishPortal(ServerLevel level, BlockPos centerPos) {
-        // Search for portal blocks in a 10x10x10 area and remove them
-        for (int x = -5; x <= 5; x++) {
-            for (int y = -5; y <= 5; y++) {
-                for (int z = -5; z <= 5; z++) {
+        int removedBlocks = 0;
+        boolean foundPortalBlock = false;
+        Map<String, Integer> blockCounts = new HashMap<>();
+
+        // Search for portal blocks in a larger 30x30x30 area
+        for (int x = -15; x <= 15; x++) {
+            for (int y = -15; y <= 15; y++) {
+                for (int z = -15; z <= 15; z++) {
                     BlockPos searchPos = centerPos.offset(x, y, z);
-                    if (level.getBlockState(searchPos).is(Blocks.NETHER_PORTAL)) {
+                    var blockState = level.getBlockState(searchPos);
+
+                    // Count all non-air blocks for debugging
+                    if (!blockState.isAir()) {
+                        String blockName = blockState.getBlock().getDescriptionId();
+                        blockCounts.put(blockName, blockCounts.getOrDefault(blockName, 0) + 1);
+                    }
+
+                    // Check for Custom Portal API's custom portal block
+                    Block block = blockState.getBlock();
+                    ResourceLocation blockId = BuiltInRegistries.BLOCK.getKey(block);
+
+                    if (blockId.getNamespace().equals("customportalapi") && blockId.getPath().equals("customportalblock")) {
+                        foundPortalBlock = true;
                         level.removeBlock(searchPos, false);
+                        removedBlocks++;
+                        Chronosphere.LOGGER.info("Removed custom portal block at {}", searchPos);
+                    }
+
+                    // Also check for nether portal blocks (fallback)
+                    if (blockState.is(Blocks.NETHER_PORTAL)) {
+                        foundPortalBlock = true;
+                        level.removeBlock(searchPos, false);
+                        removedBlocks++;
+                        Chronosphere.LOGGER.info("Removed nether portal block at {}", searchPos);
                     }
                 }
             }
         }
 
-        Chronosphere.LOGGER.info("Extinguished portal blocks near {}", centerPos);
+        // Log all block types found in the area for debugging
+        Chronosphere.LOGGER.info("Blocks found near player position:");
+        blockCounts.forEach((blockName, count) -> {
+            Chronosphere.LOGGER.info("  {} x {}", blockName, count);
+        });
+
+        if (!foundPortalBlock) {
+            Chronosphere.LOGGER.warn("No portal blocks found near {}. Player might have teleported far from portal.", centerPos);
+            Chronosphere.LOGGER.warn("Attempting to find portal blocks in entire dimension...");
+
+            // Last resort: search in a very large area
+            for (int x = -50; x <= 50; x++) {
+                for (int y = -50; y <= 50; y++) {
+                    for (int z = -50; z <= 50; z++) {
+                        BlockPos searchPos = centerPos.offset(x, y, z);
+                        var blockState = level.getBlockState(searchPos);
+                        Block block = blockState.getBlock();
+                        ResourceLocation blockId = BuiltInRegistries.BLOCK.getKey(block);
+
+                        // Check for Custom Portal API's custom portal block
+                        if (blockId.getNamespace().equals("customportalapi") && blockId.getPath().equals("customportalblock")) {
+                            level.removeBlock(searchPos, false);
+                            removedBlocks++;
+                            Chronosphere.LOGGER.info("Found and removed distant custom portal block at {} (distance from player: {})",
+                                searchPos, searchPos.distManhattan(centerPos));
+                        }
+
+                        // Also check for nether portal blocks (fallback)
+                        if (blockState.is(Blocks.NETHER_PORTAL)) {
+                            level.removeBlock(searchPos, false);
+                            removedBlocks++;
+                            Chronosphere.LOGGER.info("Found and removed distant nether portal block at {} (distance from player: {})",
+                                searchPos, searchPos.distManhattan(centerPos));
+                        }
+                    }
+                }
+            }
+        }
+
+        Chronosphere.LOGGER.info("Extinguished {} portal blocks near {}", removedBlocks, centerPos);
+    }
+
+    /**
+     * Remove Time Hourglass from player inventory.
+     * Time Hourglass is a single-use item that should be consumed when entering Chronosphere.
+     *
+     * @param player Player who entered Chronosphere
+     */
+    private static void removeTimeHourglassFromInventory(ServerPlayer player) {
+        int removedCount = 0;
+
+        // Search all inventory slots for Time Hourglass
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            ItemStack stack = player.getInventory().getItem(i);
+            if (stack.is(ModItems.TIME_HOURGLASS.get())) {
+                int count = stack.getCount();
+                player.getInventory().removeItem(i, count);
+                removedCount += count;
+                Chronosphere.LOGGER.info("Removed {} Time Hourglass from slot {}", count, i);
+            }
+        }
+
+        if (removedCount > 0) {
+            Chronosphere.LOGGER.info("Removed total {} Time Hourglass items from player {}'s inventory",
+                removedCount, player.getName().getString());
+        }
     }
 }
 

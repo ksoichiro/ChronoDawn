@@ -1,11 +1,19 @@
 package com.chronosphere.events;
 
 import com.chronosphere.Chronosphere;
+import com.chronosphere.core.portal.PortalRegistry;
+import com.chronosphere.core.portal.PortalState;
+import com.chronosphere.core.portal.PortalStateMachine;
+import com.chronosphere.data.ChronosphereGlobalState;
 import com.chronosphere.registry.ModBlocks;
+import com.chronosphere.registry.ModDimensions;
+import com.chronosphere.registry.ModItems;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.BlockEvent;
+import dev.architectury.event.events.common.InteractionEvent;
 import dev.architectury.event.events.common.TickEvent;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -64,12 +72,99 @@ public class BlockEventHandler {
             return EventResult.pass();
         });
 
+        // Register right-click block event for Time Hourglass warning
+        InteractionEvent.RIGHT_CLICK_BLOCK.register((player, hand, pos, face) -> {
+            // Only process on server side
+            if (player.level().isClientSide()) {
+                return EventResult.pass();
+            }
+
+            // Check if player is using Time Hourglass
+            if (!player.getItemInHand(hand).is(ModItems.TIME_HOURGLASS.get())) {
+                return EventResult.pass();
+            }
+
+            // Only restrict in Chronosphere dimension
+            if (!player.level().dimension().equals(ModDimensions.CHRONOSPHERE_DIMENSION)) {
+                return EventResult.pass();
+            }
+
+            // Check if clicked block is Clockstone Block (portal frame)
+            BlockState clickedBlock = player.level().getBlockState(pos);
+            if (!clickedBlock.is(ModBlocks.CLOCKSTONE_BLOCK.get())) {
+                return EventResult.pass();
+            }
+
+            // Check global state: are portals unstable?
+            if (player.level() instanceof ServerLevel serverLevel) {
+                ChronosphereGlobalState globalState = ChronosphereGlobalState.get(serverLevel.getServer());
+                if (globalState.arePortalsUnstable()) {
+                    // Portals are unstable - Time Hourglass cannot be used
+                    player.displayClientMessage(
+                        Component.translatable("item.chronosphere.time_hourglass.portal_deactivated"),
+                        true
+                    );
+                    Chronosphere.LOGGER.info("Player {} attempted to ignite portal with Time Hourglass while portals are unstable",
+                        player.getName().getString());
+                }
+            }
+
+            // Let Custom Portal API process normally, but portal blocks will be removed by tick event
+            return EventResult.pass();
+        });
+
+        // Register server tick event to remove portal blocks when portals are unstable
+        TickEvent.SERVER_POST.register(server -> {
+            // Check global state
+            ChronosphereGlobalState globalState = ChronosphereGlobalState.get(server);
+            if (!globalState.arePortalsUnstable()) {
+                return; // Portals are stable, allow normal operation
+            }
+
+            // Portals are unstable - remove any portal blocks in Chronosphere
+            ServerLevel chronosphereLevel = server.getLevel(ModDimensions.CHRONOSPHERE_DIMENSION);
+            if (chronosphereLevel == null) {
+                return;
+            }
+
+            // Check all loaded chunks for custom portal blocks
+            // Note: This only checks near registered portals to avoid scanning entire dimension
+            for (PortalStateMachine portal : PortalRegistry.getInstance().getAllPortals()) {
+                if (!portal.getSourceDimension().equals(ModDimensions.CHRONOSPHERE_DIMENSION)) {
+                    continue;
+                }
+
+                BlockPos portalPos = portal.getPosition();
+                boolean foundAndRemovedBlocks = false;
+
+                for (int x = -10; x <= 10; x++) {
+                    for (int y = -10; y <= 10; y++) {
+                        for (int z = -10; z <= 10; z++) {
+                            BlockPos checkPos = portalPos.offset(x, y, z);
+                            BlockState state = chronosphereLevel.getBlockState(checkPos);
+                            var block = state.getBlock();
+                            var blockId = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(block);
+
+                            if (blockId.getNamespace().equals("customportalapi") && blockId.getPath().equals("customportalblock")) {
+                                chronosphereLevel.removeBlock(checkPos, false);
+                                foundAndRemovedBlocks = true;
+                            }
+                        }
+                    }
+                }
+
+                if (foundAndRemovedBlocks) {
+                    Chronosphere.LOGGER.debug("Removed unstable portal blocks near {}", portalPos);
+                }
+            }
+        });
+
         // Register server tick event to process restoration timers
         TickEvent.SERVER_LEVEL_POST.register(level -> {
             processRestorationTimers(level);
         });
 
-        Chronosphere.LOGGER.info("Registered BlockEventHandler with Reversing Time Sandstone restoration");
+        Chronosphere.LOGGER.info("Registered BlockEventHandler with Reversing Time Sandstone restoration and Time Hourglass control");
     }
 
     /**
@@ -151,5 +246,31 @@ public class BlockEventHandler {
         level.setBlock(pos, originalState, 3); // 3 = update clients + neighbors
 
         Chronosphere.LOGGER.info("Restored Reversing Time Sandstone at {}", pos);
+    }
+
+    /**
+     * Find a portal near the clicked position.
+     *
+     * @param level Level
+     * @param pos Clicked position
+     * @return Portal state machine, or null if not found
+     */
+    private static PortalStateMachine findNearbyPortal(net.minecraft.world.level.Level level, BlockPos pos) {
+        PortalRegistry registry = PortalRegistry.getInstance();
+
+        // Search in a 10x10x10 area around the clicked position
+        for (int x = -5; x <= 5; x++) {
+            for (int y = -5; y <= 5; y++) {
+                for (int z = -5; z <= 5; z++) {
+                    BlockPos searchPos = pos.offset(x, y, z);
+                    PortalStateMachine portal = registry.getPortalAt(searchPos);
+                    if (portal != null) {
+                        return portal;
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 }

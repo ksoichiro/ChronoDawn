@@ -176,7 +176,7 @@
 - [X] T060 [P] [US1] Register Time Hourglass in ModItems registry
 - [X] T061 [P] [US1] Create Time Hourglass texture in common/src/main/resources/assets/chronosphere/textures/item/time_hourglass.png (from glowstone_dust.png)
 - [X] T062 [P] [US1] Create Time Hourglass recipe in common/src/main/resources/data/chronosphere/recipes/time_hourglass.json
-- [X] T063 [P] [US1] Create Portal Stabilizer item in common/src/main/java/com/chronosphere/items/PortalStabilizerItem.java
+- [X] T063 [P] [US1] Create Portal Stabilizer item in common/src/main/java/com/chronosphere/items/PortalStabilizerItem.java (dimension stabilization only, no portal ignition; includes particle+sound effects and server-wide message broadcast)
 - [X] T064 [P] [US1] Register Portal Stabilizer in ModItems registry
 - [X] T065 [P] [US1] Create Portal Stabilizer texture in common/src/main/resources/assets/chronosphere/textures/item/portal_stabilizer.png (from nether_star.png)
 - [X] T066 [P] [US1] Create Portal Stabilizer recipe in common/src/main/resources/data/chronosphere/recipes/portal_stabilizer.json
@@ -281,14 +281,20 @@
 
 **Design Decision**: Chronosphere respawn follows Minecraft's standard behavior (similar to End dimension):
 - Players respawn at their set bed/respawn anchor, or world spawn if none set
-- Portal Stabilizer does NOT affect respawn location (only makes portal bidirectional)
+- Portal Stabilizer does NOT affect respawn location (only stabilizes dimension)
 - Players can escape Chronosphere by breaking bed and dying (same as End)
 - This maintains tension (one-way portal initially) without excessive difficulty
 
+**Portal Deactivation Logic** (PlayerEventHandler.java):
+- When player enters Chronosphere, check global state (ChronosphereGlobalState.arePortalsUnstable())
+- If portals are unstable (hasEnteredChronosphere && !isPortalStabilized), deactivate portal
+- If portals are stable (isPortalStabilized), skip deactivation (portal remains active)
+- This allows free bidirectional travel after Portal Stabilizer is used once
+
 ### Localization & Creative Tab (US1)
 
-- [X] T088a [US1] Create English localization file with all US1 items/blocks in common/src/main/resources/assets/chronosphere/lang/en_us.json
-- [X] T088b [US1] Create Japanese localization file with all US1 items/blocks in common/src/main/resources/assets/chronosphere/lang/ja_jp.json
+- [X] T088a [US1] Create English localization file with all US1 items/blocks in common/src/main/resources/assets/chronosphere/lang/en_us.json (includes portal_stabilizer.success_reignite_required message)
+- [X] T088b [US1] Create Japanese localization file with all US1 items/blocks in common/src/main/resources/assets/chronosphere/lang/ja_jp.json (includes portal_stabilizer.success_reignite_required message)
 - [X] T088c [US1] Add all US1 items/blocks to creative tab in ModCreativeTabs
 
 ### Multiple Biomes (US1 Enhancement)
