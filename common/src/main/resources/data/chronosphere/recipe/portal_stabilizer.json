@@ -21,7 +21,7 @@
     }
   },
   "result": {
-    "item": "chronosphere:portal_stabilizer",
-    "count": 1
+    "count": 1,
+    "id": "chronosphere:portal_stabilizer"
   }
 }

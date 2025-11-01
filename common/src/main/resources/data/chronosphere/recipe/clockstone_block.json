@@ -12,7 +12,7 @@
     }
   },
   "result": {
-    "item": "chronosphere:clockstone_block",
-    "count": 1
+    "count": 1,
+    "id": "chronosphere:clockstone_block"
   }
 }

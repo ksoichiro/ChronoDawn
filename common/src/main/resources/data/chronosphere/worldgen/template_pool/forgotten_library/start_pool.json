@@ -5,7 +5,7 @@
       "weight": 1,
       "element": {
         "location": "chronosphere:forgotten_library",
-        "processors": "minecraft:empty",
+        "processors": "chronosphere:forgotten_library_loot",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
