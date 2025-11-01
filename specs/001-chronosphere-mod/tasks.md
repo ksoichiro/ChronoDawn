@@ -323,10 +323,10 @@
 
 **Current Issue**: water_color (4159204 = 0x3F76C4 blue) と foliage_color (7909594 = 0x78A85A green) が近い色調で海の視認性が低い
 
-- [ ] T088p [US1] Research optimal color values for ocean visibility (water vs foliage/grass contrast)
-- [ ] T088q [P] [US1] Adjust water_color in chronosphere_ocean.json for better contrast and visibility
-- [ ] T088r [P] [US1] Consider adjusting foliage_color/grass_color in plains/forest for visual distinction
-- [ ] T088s [US1] Test color adjustments in-game and iterate until visibility is acceptable
+- [X] T088p [US1] Research optimal color values for ocean visibility (water vs foliage/grass contrast)
+- [X] T088q [P] [US1] Adjust water_color in chronosphere_ocean.json for better contrast and visibility
+- [X] T088r [P] [US1] Consider adjusting foliage_color/grass_color in plains/forest for visual distinction
+- [X] T088s [US1] Test color adjustments in-game and iterate until visibility is acceptable
 
 ### Additional Tree Variants (US1 Enhancement - Optional, Low Priority)
 
