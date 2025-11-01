@@ -1,6 +1,7 @@
 package com.chronosphere.worldgen.features;
 
 import com.chronosphere.registry.ModBlocks;
+import com.chronosphere.worldgen.decorators.FruitDecorator;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.data.worldgen.features.FeatureUtils;
@@ -75,6 +76,7 @@ public class FruitOfTimeTreeFeature {
      * - Trunk: Straight trunk placer
      * - Foliage: Blob-shaped, radius 2, offset 0, height 3
      * - Foliage height: 2 layers (base + 1)
+     * - Decorators: Fruit decorator (places Fruit of Time blocks on logs)
      *
      * @return Tree configuration for Fruit of Time trees
      */
@@ -108,6 +110,7 @@ public class FruitOfTimeTreeFeature {
             )
         )
         .ignoreVines()  // Don't generate vines
+        .decorators(java.util.List.of(new FruitDecorator()))  // Add fruit decorator
         .build();
     }
 

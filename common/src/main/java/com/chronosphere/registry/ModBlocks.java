@@ -3,6 +3,7 @@ package com.chronosphere.registry;
 import com.chronosphere.Chronosphere;
 import com.chronosphere.blocks.ClockstoneBlock;
 import com.chronosphere.blocks.ClockstoneOre;
+import com.chronosphere.blocks.FruitOfTimeBlock;
 import com.chronosphere.blocks.ReversingTimeSandstone;
 import com.chronosphere.blocks.UnstableFungus;
 import com.chronosphere.blocks.TimeWoodLog;
@@ -95,6 +96,16 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> TIME_WOOD_SAPLING = BLOCKS.register(
         "time_wood_sapling",
         () -> new TimeWoodSapling(TimeWoodSapling.createProperties())
+    );
+
+    /**
+     * Fruit of Time Block - Growing fruit attached to Time Wood Logs.
+     * Has 3 growth stages (0-2) and drops Fruit of Time items when mature.
+     * Similar to Cocoa blocks in vanilla Minecraft.
+     */
+    public static final RegistrySupplier<Block> FRUIT_OF_TIME_BLOCK = BLOCKS.register(
+        "fruit_of_time",
+        () -> new FruitOfTimeBlock(FruitOfTimeBlock.createProperties())
     );
 
     /**

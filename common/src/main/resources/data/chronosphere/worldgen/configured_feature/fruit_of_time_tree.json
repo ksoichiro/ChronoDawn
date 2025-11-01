@@ -42,6 +42,10 @@
         "Name": "minecraft:dirt"
       }
     },
-    "decorators": []
+    "decorators": [
+      {
+        "type": "chronosphere:fruit_decorator"
+      }
+    ]
   }
 }

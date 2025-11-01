@@ -19,8 +19,14 @@ import net.minecraft.world.item.Item;
  * - Eating Speed: Normal
  *
  * Acquisition:
- * - Grows on special trees in the Chronosphere dimension
- * - Can be found naturally generated in Forgotten Library chests
+ * - Grows naturally on Time Wood trees in the Chronosphere dimension
+ * - Drops from breaking Fruit of Time blocks (attached to logs)
+ * - Can be found in Forgotten Library chests
+ *
+ * Note:
+ * - This item is purely consumable (food)
+ * - Fruit of Time blocks are placed automatically by FruitDecorator during tree generation
+ * - Players cannot manually place Fruit of Time blocks
  *
  * Reference: spec.md (User Story 1, FR-007)
  * Task: T076 [US1] Create Fruit of Time item
