@@ -4,6 +4,7 @@ import com.chronosphere.Chronosphere;
 import com.chronosphere.items.PortalStabilizerItem;
 import com.chronosphere.items.TimeHourglassItem;
 import com.chronosphere.items.base.ClockstoneItem;
+import com.chronosphere.items.base.EnhancedClockstoneItem;
 import com.chronosphere.items.consumables.FruitOfTimeItem;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -97,6 +98,15 @@ public class ModItems {
         () -> new ClockstoneItem(ClockstoneItem.createProperties())
     );
 
+    /**
+     * Enhanced Clockstone - Advanced material obtained from Desert Clock Tower.
+     * Used for crafting time manipulation items (Time Clock, Spatially Linked Pickaxe, Unstable Hourglass).
+     */
+    public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE = ITEMS.register(
+        "enhanced_clockstone",
+        () -> new EnhancedClockstoneItem(EnhancedClockstoneItem.createProperties())
+    );
+
     // === Portal Items ===
 
     /**
@@ -156,6 +166,7 @@ public class ModItems {
 
         // === Base Materials ===
         output.accept(CLOCKSTONE.get());
+        output.accept(ENHANCED_CLOCKSTONE.get());
 
         // === Portal Items ===
         output.accept(TIME_HOURGLASS.get());
