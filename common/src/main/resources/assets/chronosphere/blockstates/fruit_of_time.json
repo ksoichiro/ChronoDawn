@@ -1,49 +1,13 @@
 {
   "variants": {
-    "age=0,facing=north": {
+    "age=0": {
       "model": "chronosphere:block/fruit_of_time_stage_0"
     },
-    "age=0,facing=south": {
-      "model": "chronosphere:block/fruit_of_time_stage_0",
-      "y": 180
-    },
-    "age=0,facing=west": {
-      "model": "chronosphere:block/fruit_of_time_stage_0",
-      "y": 270
-    },
-    "age=0,facing=east": {
-      "model": "chronosphere:block/fruit_of_time_stage_0",
-      "y": 90
-    },
-    "age=1,facing=north": {
+    "age=1": {
       "model": "chronosphere:block/fruit_of_time_stage_1"
     },
-    "age=1,facing=south": {
-      "model": "chronosphere:block/fruit_of_time_stage_1",
-      "y": 180
-    },
-    "age=1,facing=west": {
-      "model": "chronosphere:block/fruit_of_time_stage_1",
-      "y": 270
-    },
-    "age=1,facing=east": {
-      "model": "chronosphere:block/fruit_of_time_stage_1",
-      "y": 90
-    },
-    "age=2,facing=north": {
+    "age=2": {
       "model": "chronosphere:block/fruit_of_time_stage_2"
-    },
-    "age=2,facing=south": {
-      "model": "chronosphere:block/fruit_of_time_stage_2",
-      "y": 180
-    },
-    "age=2,facing=west": {
-      "model": "chronosphere:block/fruit_of_time_stage_2",
-      "y": 270
-    },
-    "age=2,facing=east": {
-      "model": "chronosphere:block/fruit_of_time_stage_2",
-      "y": 90
     }
   }
 }

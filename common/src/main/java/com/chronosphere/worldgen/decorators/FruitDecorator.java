@@ -10,19 +10,19 @@ import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecorator;
 import net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType;
 
 /**
- * Fruit Decorator - Places Fruit of Time blocks on Time Wood Logs during tree generation.
+ * Fruit Decorator - Places Fruit of Time blocks hanging from Time Wood Leaves during tree generation.
  *
- * Similar to Minecraft's CocoaDecorator, this decorator:
- * - Randomly places Fruit of Time blocks on the sides of Time Wood Log blocks
+ * Similar to natural fruit generation, this decorator:
+ * - Randomly places Fruit of Time blocks below Time Wood Leaves blocks
  * - Sets initial age randomly (0-2) for variety
- * - Places fruit with a certain probability (not every log gets fruit)
- * - Ensures fruit is attached to valid log blocks with proper facing direction
+ * - Places fruit with a certain probability (not every leaf gets fruit)
+ * - Ensures fruit hangs from valid leaves blocks
  *
  * Behavior:
- * - Probability: 20% chance per log block
- * - Placement: On horizontal sides (NORTH, SOUTH, EAST, WEST) only
+ * - Probability: 5% chance per leaves block
+ * - Placement: Below leaves (hanging downward)
  * - Age: Random initial age (0-2) for natural variation
- * - Requirement: Target block must be air and adjacent block must be Time Wood Log
+ * - Requirement: Target block must be air and block above must be Time Wood Leaves
  *
  * Reference: T080q [US1] Implement FruitDecorator class
  * Related: FruitOfTimeBlock (the block being placed)
@@ -35,50 +35,36 @@ public class FruitDecorator extends TreeDecorator {
     public static final MapCodec<FruitDecorator> CODEC = MapCodec.unit(FruitDecorator::new);
 
     /**
-     * Probability of placing fruit on each log block (0.0 - 1.0).
-     * 0.2 = 20% chance per log.
+     * Probability of placing fruit on each leaves block (0.0 - 1.0).
+     * 0.05 = 5% chance per leaves block.
      */
-    private static final float FRUIT_PROBABILITY = 0.2f;
-
-    /**
-     * All horizontal directions for fruit placement.
-     */
-    private static final Direction[] HORIZONTAL_DIRECTIONS = new Direction[]{
-        Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST
-    };
+    private static final float FRUIT_PROBABILITY = 0.05f;
 
     @Override
     public void place(TreeDecorator.Context context) {
         RandomSource random = context.random();
 
-        // Iterate through all log positions in the tree
-        for (BlockPos logPos : context.logs()) {
+        // Iterate through all leaves positions in the tree
+        for (BlockPos leavesPos : context.leaves()) {
             // Check probability: should we place fruit here?
             if (random.nextFloat() >= FRUIT_PROBABILITY) {
-                continue;  // Skip this log
+                continue;  // Skip this leaves block
             }
 
-            // Try all horizontal directions
-            for (Direction direction : HORIZONTAL_DIRECTIONS) {
-                // Calculate position for fruit placement (offset from log)
-                BlockPos fruitPos = logPos.relative(direction);
+            // Calculate position for fruit placement (below the leaves)
+            BlockPos fruitPos = leavesPos.below();
 
-                // Check if target position is air (suitable for fruit placement)
-                if (context.isAir(fruitPos)) {
-                    // Random initial age (0-2) for variety
-                    int age = random.nextInt(FruitOfTimeBlock.MAX_AGE + 1);
+            // Check if target position is air (suitable for fruit placement)
+            if (context.isAir(fruitPos)) {
+                // Random initial age (0-2) for variety
+                int age = random.nextInt(FruitOfTimeBlock.MAX_AGE + 1);
 
-                    // Place Fruit of Time block with facing direction and age
-                    context.setBlock(
-                        fruitPos,
-                        ModBlocks.FRUIT_OF_TIME_BLOCK.get().defaultBlockState()
-                            .setValue(FruitOfTimeBlock.FACING, direction)
-                            .setValue(FruitOfTimeBlock.AGE, age)
-                    );
-
-                    // Only place one fruit per log (don't try other directions)
-                    break;
-                }
+                // Place Fruit of Time block hanging from leaves
+                context.setBlock(
+                    fruitPos,
+                    ModBlocks.FRUIT_OF_TIME_BLOCK.get().defaultBlockState()
+                        .setValue(FruitOfTimeBlock.AGE, age)
+                );
             }
         }
     }

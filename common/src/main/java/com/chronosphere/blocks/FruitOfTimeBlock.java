@@ -25,20 +25,19 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
- * Fruit of Time Block - A growing fruit block attached to Time Wood logs.
+ * Fruit of Time Block - A growing fruit block hanging from Time Wood leaves.
  *
- * Similar to Cocoa blocks in vanilla Minecraft, this block:
- * - Attaches to the side of Time Wood Log blocks
+ * Similar to Apple-like fruits, this block:
+ * - Hangs from the bottom of Time Wood Leaves blocks
  * - Has 3 growth stages (0-2), where 2 is mature
  * - Grows over time using random ticks
  * - Can be harvested when mature for Fruit of Time items
- * - Has directional facing (NORTH, SOUTH, EAST, WEST)
+ * - Always faces downward (no directional property needed)
  *
  * Properties:
  * - AGE: 0-2 (growth stages)
- * - FACING: Horizontal direction (which side of log it's attached to)
  * - Growth: Random tick based, similar to crops
- * - Drop: 1-3 Fruit of Time items when mature (age=2)
+ * - Drop: 2-3 Fruit of Time items when mature (age=2), 1 when immature
  *
  * Visual:
  * - Stage 0: Small fruit bud (fruit_of_time_stage_0.png)
@@ -46,9 +45,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * - Stage 2: Large mature fruit (fruit_of_time_stage_2.png)
  *
  * Mechanics:
- * - Must be placed on Time Wood Log blocks
+ * - Must hang from Time Wood Leaves blocks
  * - Can be bone-mealed to accelerate growth
- * - Breaking the supporting log will break the fruit
+ * - Breaking the supporting leaves will break the fruit
  *
  * Reference: T080k [US1] Create Fruit of Time block
  * Related: FruitDecorator places these during tree generation
@@ -65,42 +64,19 @@ public class FruitOfTimeBlock extends Block implements BonemealableBlock {
     public static final IntegerProperty AGE = BlockStateProperties.AGE_2;
 
     /**
-     * Facing property for directional placement (horizontal directions only).
-     */
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-
-    /**
-     * VoxelShapes for each growth stage and direction.
+     * VoxelShapes for each growth stage (hanging downward).
      * Shape dimensions increase as the fruit grows.
+     * Fruits hang from the top (y=16) and grow downward.
      */
-    private static final VoxelShape[] EAST_SHAPES = new VoxelShape[]{
-            Block.box(11.0, 7.0, 6.0, 15.0, 12.0, 10.0),  // Stage 0: Small
-            Block.box(9.0, 5.0, 5.0, 15.0, 12.0, 11.0),   // Stage 1: Medium
-            Block.box(7.0, 3.0, 4.0, 15.0, 12.0, 12.0)    // Stage 2: Large (mature)
-    };
-
-    private static final VoxelShape[] WEST_SHAPES = new VoxelShape[]{
-            Block.box(1.0, 7.0, 6.0, 5.0, 12.0, 10.0),    // Stage 0: Small
-            Block.box(1.0, 5.0, 5.0, 7.0, 12.0, 11.0),    // Stage 1: Medium
-            Block.box(1.0, 3.0, 4.0, 9.0, 12.0, 12.0)     // Stage 2: Large (mature)
-    };
-
-    private static final VoxelShape[] NORTH_SHAPES = new VoxelShape[]{
-            Block.box(6.0, 7.0, 1.0, 10.0, 12.0, 5.0),    // Stage 0: Small
-            Block.box(5.0, 5.0, 1.0, 11.0, 12.0, 7.0),    // Stage 1: Medium
-            Block.box(4.0, 3.0, 1.0, 12.0, 12.0, 9.0)     // Stage 2: Large (mature)
-    };
-
-    private static final VoxelShape[] SOUTH_SHAPES = new VoxelShape[]{
-            Block.box(6.0, 7.0, 11.0, 10.0, 12.0, 15.0),  // Stage 0: Small
-            Block.box(5.0, 5.0, 9.0, 11.0, 12.0, 15.0),   // Stage 1: Medium
-            Block.box(4.0, 3.0, 7.0, 12.0, 12.0, 15.0)    // Stage 2: Large (mature)
+    private static final VoxelShape[] SHAPES = new VoxelShape[]{
+            Block.box(6.0, 12.0, 6.0, 10.0, 16.0, 10.0),  // Stage 0: Small (4x4x4)
+            Block.box(4.0, 9.0, 4.0, 11.0, 16.0, 11.0),   // Stage 1: Medium (7x7x7)
+            Block.box(4.0, 6.0, 4.0, 12.0, 16.0, 12.0)    // Stage 2: Large (8x10x8)
     };
 
     public FruitOfTimeBlock(BlockBehaviour.Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any()
-                .setValue(FACING, Direction.NORTH)
                 .setValue(AGE, 0));
     }
 
@@ -137,43 +113,28 @@ public class FruitOfTimeBlock extends Block implements BonemealableBlock {
 
     @Override
     public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
-        BlockPos attachedPos = pos.relative(state.getValue(FACING).getOpposite());
-        BlockState attachedState = level.getBlockState(attachedPos);
+        BlockPos abovePos = pos.above();
+        BlockState aboveState = level.getBlockState(abovePos);
 
-        // Can only survive if attached to Time Wood Log
-        return attachedState.is(ModBlocks.TIME_WOOD_LOG.get());
+        // Can only survive if hanging from Time Wood Leaves
+        return aboveState.is(ModBlocks.TIME_WOOD_LEAVES.get());
     }
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         int age = state.getValue(AGE);
-        return switch (state.getValue(FACING)) {
-            case SOUTH -> SOUTH_SHAPES[age];
-            case NORTH -> NORTH_SHAPES[age];
-            case WEST -> WEST_SHAPES[age];
-            default -> EAST_SHAPES[age];  // EAST
-        };
+        return SHAPES[age];
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         LevelReader level = context.getLevel();
         BlockPos pos = context.getClickedPos();
-        Direction clickedFace = context.getClickedFace();
+        BlockState state = this.defaultBlockState();
 
-        // When player clicks a face of the log, the new block is placed on that face
-        // The fruit's FACING should point back toward the log (opposite of clicked face)
-        // Example: Player clicks NORTH face of log → Fruit placed on north side → Fruit faces SOUTH (toward log)
-        Direction fruitFacing = clickedFace.getOpposite();
-
-        // Only allow horizontal placement
-        if (fruitFacing.getAxis().isHorizontal()) {
-            BlockState state = this.defaultBlockState().setValue(FACING, fruitFacing);
-
-            // Check if the fruit can survive at this position (log must be behind it)
-            if (state.canSurvive(level, pos)) {
-                return state;
-            }
+        // Check if the fruit can survive at this position (leaves must be above)
+        if (state.canSurvive(level, pos)) {
+            return state;
         }
 
         return null;  // Cannot be placed
@@ -182,8 +143,8 @@ public class FruitOfTimeBlock extends Block implements BonemealableBlock {
     @Override
     public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
                                    LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
-        // Break if the supporting log is removed
-        if (direction == state.getValue(FACING).getOpposite() && !state.canSurvive(level, pos)) {
+        // Break if the supporting leaves above are removed
+        if (direction == Direction.UP && !state.canSurvive(level, pos)) {
             return Blocks.AIR.defaultBlockState();
         }
         return state;
@@ -191,7 +152,7 @@ public class FruitOfTimeBlock extends Block implements BonemealableBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, AGE);
+        builder.add(AGE);
     }
 
     // ==================== Bonemealable Interface ====================
