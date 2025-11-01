@@ -235,16 +235,16 @@
 
 #### Fruit Block System
 
-- [ ] T080k [P] [US1] Create Fruit of Time block in common/src/main/java/com/chronosphere/blocks/FruitOfTimeBlock.java (with growth stages 0-2, similar to Cocoa)
-- [ ] T080l [P] [US1] Register Fruit of Time block in ModBlocks registry
-- [ ] T080m [P] [US1] Create Fruit of Time block textures for each growth stage in common/src/main/resources/assets/chronosphere/textures/block/ (fruit_of_time_stage_0.png, stage_1.png, stage_2.png)
-- [ ] T080n [P] [US1] Create Fruit of Time block blockstate in common/src/main/resources/assets/chronosphere/blockstates/fruit_of_time.json
-- [ ] T080o [P] [US1] Create Fruit of Time block loot table in common/src/main/resources/data/chronosphere/loot_tables/blocks/fruit_of_time.json (drops 1-3 items when mature)
-- [ ] T080p [US1] Implement fruit growth logic with random tick in FruitOfTimeBlock.java
+- [X] T080k [P] [US1] Create Fruit of Time block in common/src/main/java/com/chronosphere/blocks/FruitOfTimeBlock.java (with growth stages 0-2, similar to Cocoa)
+- [X] T080l [P] [US1] Register Fruit of Time block in ModBlocks registry
+- [X] T080m [P] [US1] Create Fruit of Time block textures for each growth stage in common/src/main/resources/assets/chronosphere/textures/block/ (fruit_of_time_stage_0.png, stage_1.png, stage_2.png)
+- [X] T080n [P] [US1] Create Fruit of Time block blockstate in common/src/main/resources/assets/chronosphere/blockstates/fruit_of_time.json
+- [X] T080o [P] [US1] Create Fruit of Time block loot table in common/src/main/resources/data/chronosphere/loot_tables/blocks/fruit_of_time.json (drops 1-3 items when mature)
+- [X] T080p [US1] Implement fruit growth logic with random tick in FruitOfTimeBlock.java
 
 #### Tree Decorator & Generation Update
 
-- [ ] T080q [US1] Implement FruitDecorator class in common/src/main/java/com/chronosphere/worldgen/decorators/FruitDecorator.java
+- [X] T080q [US1] Implement FruitDecorator class in common/src/main/java/com/chronosphere/worldgen/decorators/FruitDecorator.java
 - [X] T080r [US1] Update FruitOfTimeTreeFeature.java to use Time Wood Log/Leaves instead of Oak blocks
 - [X] T080s [US1] Update configured_feature/fruit_of_time_tree.json with custom blocks and fruit decorator in decorators array
 - [X] T080t [P] [US1] Update localization files (en_us.json, ja_jp.json) with Time Wood blocks; add leaves to mineable/hoe tag (not axe)
