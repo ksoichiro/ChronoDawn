@@ -85,7 +85,9 @@
     [],
     [],
     [
-      "chronosphere:fruit_of_time_tree"
+      "chronosphere:fruit_of_time_tree",
+      "chronosphere:patch_grass",
+      "chronosphere:patch_flowers"
     ],
     []
   ]

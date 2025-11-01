@@ -84,7 +84,10 @@
     [],
     [],
     [],
-    [],
+    [
+      "chronosphere:seagrass",
+      "chronosphere:kelp"
+    ],
     []
   ]
 }

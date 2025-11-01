@@ -344,13 +344,13 @@
 
 **Note**: 基本的な生命感を与えるため、MVP完了前の実装を推奨。モブスポーン（T088j-o）と並行実装可能
 
-- [ ] T088w [US1] Research vanilla vegetation generation patterns (tall grass, flowers, ferns, seagrass, kelp)
-- [ ] T088x [P] [US1] Create tall grass configured_feature for chronosphere_plains.json (random patches)
-- [ ] T088y [P] [US1] Create flower configured_feature for chronosphere_plains.json (custom color theme: orange/gold/grey)
-- [ ] T088z [P] [US1] Create fern/mushroom configured_feature for chronosphere_forest.json (forest undergrowth)
-- [ ] T088aa [P] [US1] Create seagrass configured_feature for chronosphere_ocean.json (ocean floor vegetation)
-- [ ] T088ab [P] [US1] Create kelp configured_feature for chronosphere_ocean.json (vertical underwater vegetation)
-- [ ] T088ac [US1] Test vegetation generation in-game and adjust density/distribution
+- [X] T088w [US1] Research vanilla vegetation generation patterns (tall grass, flowers, ferns, seagrass, kelp)
+- [X] T088x [P] [US1] Create tall grass configured_feature for chronosphere_plains.json (random patches)
+- [X] T088y [P] [US1] Create flower configured_feature for chronosphere_plains.json (custom color theme: orange/gold/grey)
+- [X] T088z [P] [US1] Create fern/mushroom configured_feature for chronosphere_forest.json (forest undergrowth)
+- [X] T088aa [P] [US1] Create seagrass configured_feature for chronosphere_ocean.json (ocean floor vegetation)
+- [X] T088ab [P] [US1] Create kelp configured_feature for chronosphere_ocean.json (vertical underwater vegetation)
+- [X] T088ac [US1] Test vegetation generation in-game and adjust density/distribution
 
 ### Decorative Terrain Features (US1 Enhancement)
 
