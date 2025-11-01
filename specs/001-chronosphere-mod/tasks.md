@@ -358,12 +358,17 @@
 
 **Note**: MVP後の改善として実装。植生とモブスポーンの後に実装推奨
 
-- [ ] T088ad [US1] Research vanilla decorative features (boulders, fallen logs, disk features for gravel/sand)
-- [ ] T088ae [P] [US1] Create boulder configured_feature (cobblestone/mossy cobblestone clusters)
-- [ ] T088af [P] [US1] Create fallen log configured_feature (Time Wood Log horizontal placement)
-- [ ] T088ag [P] [US1] Create gravel disk configured_feature for varied terrain texture
-- [ ] T088ah [P] [US1] Add decorative features to biome feature lists (vegetation decoration step)
-- [ ] T088ai [US1] Test decorative features in-game and adjust frequency/placement
+- [X] T088ad [US1] Research vanilla decorative features (boulders, fallen logs, disk features for gravel/sand)
+- [X] T088ae [P] [US1] Create boulder configured_feature (cobblestone/mossy cobblestone clusters)
+- [X] T088af [P] [US1] Create fallen log configured_feature (Time Wood Log horizontal placement)
+- [X] T088ag [P] [US1] Create gravel disk configured_feature for varied terrain texture
+- [X] T088ah [P] [US1] Add decorative features to biome feature lists (vegetation decoration step)
+- [X] T088ai [US1] Test decorative features in-game and adjust frequency/placement
+
+**Current Implementation**: Boulders (mossy cobblestone), fallen logs (random_patch, 2-3 blocks scattered), gravel disks (radius 2-5 blocks)
+
+**Future Improvements**:
+- [ ] T088ai-a [US1] (Future) Implement straight fallen logs using NBT structures for more natural appearance (current: random_patch creates scattered logs)
 
 ### Biome-Specific Landmarks (US1 Enhancement - Optional)
 
