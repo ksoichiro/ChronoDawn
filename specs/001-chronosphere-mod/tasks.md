@@ -461,6 +461,13 @@
 - [ ] T122b [US2] Update Japanese localization file with all US2 items/entities in ja_jp.json
 - [ ] T122c [US2] Add all US2 items to creative tab in ModCreativeTabs
 
+### Recipe Material Review (US2)
+
+**Purpose**: Ensure all US2 recipes use only Chronosphere-obtainable materials (no Overworld-exclusive items like diamonds, ender pearls, nether stars)
+
+- [ ] T122d [P] [US2] Review all US2 recipes (Time Clock, Spatially Linked Pickaxe, Unstable Hourglass) for Overworld-exclusive materials
+- [ ] T122e [P] [US2] Update recipes if needed to use Chronosphere materials (Enhanced Clockstone, Clockstone Block, Fruit of Time, etc.)
+
 **Checkpoint**: User Story 1とUser Story 2が両方とも独立して動作すること
 
 ---
@@ -552,6 +559,13 @@
 - [ ] T171a [US3] Update English localization file with all US3 items/entities in en_us.json
 - [ ] T171b [US3] Update Japanese localization file with all US3 items/entities in ja_jp.json
 - [ ] T171c [US3] Add all US3 items to creative tab in ModCreativeTabs
+
+### Recipe Material Review (US3)
+
+**Purpose**: Ensure all US3 recipes use only Chronosphere-obtainable materials (no Overworld-exclusive items like diamonds, ender pearls, nether stars)
+
+- [ ] T171d [P] [US3] Review all US3 recipes (Chronoblade, Time Guardian's Mail, Echoing Time Boots, Ultimate Spatially Linked Pickaxe, Unstable Pocket Watch) for Overworld-exclusive materials
+- [ ] T171e [P] [US3] Update recipes if needed to use Chronosphere materials (Fragment of Stasis Core, Enhanced Clockstone, Clockstone Block, etc.)
 
 **Checkpoint**: 全User Storyが独立して機能すること
 
