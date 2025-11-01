@@ -14,5 +14,11 @@
   "item.chronosphere.clockstone": "クロックストーン",
   "item.chronosphere.time_hourglass": "時の砂時計",
   "item.chronosphere.portal_stabilizer": "ポータル安定化装置",
-  "item.chronosphere.fruit_of_time": "時間の果実"
+  "item.chronosphere.fruit_of_time": "時間の果実",
+
+  "item.chronosphere.portal_stabilizer.invalid_block": "ポータル安定化装置はクロックストーンブロックのフレームに使用してください",
+  "item.chronosphere.portal_stabilizer.no_portal": "近くに機能停止したポータルが見つかりません",
+  "item.chronosphere.portal_stabilizer.already_stabilized": "このポータルはすでに安定化されています",
+  "item.chronosphere.portal_stabilizer.cannot_stabilize": "このポータルはまだ安定化できません",
+  "item.chronosphere.portal_stabilizer.success": "ポータルを安定化しました！ディメンション間を自由に行き来できます"
 }

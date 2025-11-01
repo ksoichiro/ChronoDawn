@@ -14,5 +14,11 @@
   "item.chronosphere.clockstone": "Clockstone",
   "item.chronosphere.time_hourglass": "Time Hourglass",
   "item.chronosphere.portal_stabilizer": "Portal Stabilizer",
-  "item.chronosphere.fruit_of_time": "Fruit of Time"
+  "item.chronosphere.fruit_of_time": "Fruit of Time",
+
+  "item.chronosphere.portal_stabilizer.invalid_block": "You must use the Portal Stabilizer on a Clockstone Block frame",
+  "item.chronosphere.portal_stabilizer.no_portal": "No deactivated portal found nearby",
+  "item.chronosphere.portal_stabilizer.already_stabilized": "This portal is already stabilized",
+  "item.chronosphere.portal_stabilizer.cannot_stabilize": "This portal cannot be stabilized yet",
+  "item.chronosphere.portal_stabilizer.success": "Portal stabilized! You can now travel freely between dimensions"
 }
