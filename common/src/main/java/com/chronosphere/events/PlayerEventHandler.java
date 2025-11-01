@@ -180,7 +180,6 @@ public class PlayerEventHandler {
     private static void extinguishPortal(ServerLevel level, BlockPos centerPos) {
         int removedBlocks = 0;
         boolean foundPortalBlock = false;
-        Map<String, Integer> blockCounts = new HashMap<>();
 
         // Search for portal blocks in a larger 30x30x30 area
         for (int x = -15; x <= 15; x++) {
@@ -188,12 +187,6 @@ public class PlayerEventHandler {
                 for (int z = -15; z <= 15; z++) {
                     BlockPos searchPos = centerPos.offset(x, y, z);
                     var blockState = level.getBlockState(searchPos);
-
-                    // Count all non-air blocks for debugging
-                    if (!blockState.isAir()) {
-                        String blockName = blockState.getBlock().getDescriptionId();
-                        blockCounts.put(blockName, blockCounts.getOrDefault(blockName, 0) + 1);
-                    }
 
                     // Check for Custom Portal API's custom portal block
                     Block block = blockState.getBlock();
@@ -203,7 +196,6 @@ public class PlayerEventHandler {
                         foundPortalBlock = true;
                         level.removeBlock(searchPos, false);
                         removedBlocks++;
-                        Chronosphere.LOGGER.info("Removed custom portal block at {}", searchPos);
                     }
 
                     // Also check for nether portal blocks (fallback)
@@ -211,22 +203,12 @@ public class PlayerEventHandler {
                         foundPortalBlock = true;
                         level.removeBlock(searchPos, false);
                         removedBlocks++;
-                        Chronosphere.LOGGER.info("Removed nether portal block at {}", searchPos);
                     }
                 }
             }
         }
 
-        // Log all block types found in the area for debugging
-        Chronosphere.LOGGER.info("Blocks found near player position:");
-        blockCounts.forEach((blockName, count) -> {
-            Chronosphere.LOGGER.info("  {} x {}", blockName, count);
-        });
-
         if (!foundPortalBlock) {
-            Chronosphere.LOGGER.warn("No portal blocks found near {}. Player might have teleported far from portal.", centerPos);
-            Chronosphere.LOGGER.warn("Attempting to find portal blocks in entire dimension...");
-
             // Last resort: search in a very large area
             for (int x = -50; x <= 50; x++) {
                 for (int y = -50; y <= 50; y++) {
@@ -240,16 +222,12 @@ public class PlayerEventHandler {
                         if (blockId.getNamespace().equals("customportalapi") && blockId.getPath().equals("customportalblock")) {
                             level.removeBlock(searchPos, false);
                             removedBlocks++;
-                            Chronosphere.LOGGER.info("Found and removed distant custom portal block at {} (distance from player: {})",
-                                searchPos, searchPos.distManhattan(centerPos));
                         }
 
                         // Also check for nether portal blocks (fallback)
                         if (blockState.is(Blocks.NETHER_PORTAL)) {
                             level.removeBlock(searchPos, false);
                             removedBlocks++;
-                            Chronosphere.LOGGER.info("Found and removed distant nether portal block at {} (distance from player: {})",
-                                searchPos, searchPos.distManhattan(centerPos));
                         }
                     }
                 }

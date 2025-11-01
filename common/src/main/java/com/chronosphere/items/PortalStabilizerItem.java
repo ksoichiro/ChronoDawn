@@ -236,8 +236,6 @@ public class PortalStabilizerItem extends Item {
             0.5F, // quieter than main sound
             1.2F  // slightly higher pitch
         );
-
-        Chronosphere.LOGGER.info("Played stabilization effect at {}", portalPos);
     }
 
     /**
@@ -252,7 +250,5 @@ public class PortalStabilizerItem extends Item {
         for (net.minecraft.server.level.ServerPlayer player : serverLevel.getServer().getPlayerList().getPlayers()) {
             player.displayClientMessage(message, true);
         }
-
-        Chronosphere.LOGGER.info("Broadcasted stabilization message to all players");
     }
 }
