@@ -426,9 +426,9 @@
 
 ### Items - Enhanced Materials (US2)
 
-- [ ] T096 [P] [US2] Create Enhanced Clockstone item in common/src/main/java/com/chronosphere/items/base/EnhancedClockstoneItem.java
-- [ ] T097 [P] [US2] Register Enhanced Clockstone in ModItems registry
-- [ ] T098 [P] [US2] Create Enhanced Clockstone texture in common/src/main/resources/assets/chronosphere/textures/item/enhanced_clockstone.png
+- [X] T096 [P] [US2] Create Enhanced Clockstone item in common/src/main/java/com/chronosphere/items/base/EnhancedClockstoneItem.java
+- [X] T097 [P] [US2] Register Enhanced Clockstone in ModItems registry
+- [X] T098 [P] [US2] Create Enhanced Clockstone texture in common/src/main/resources/assets/chronosphere/textures/item/enhanced_clockstone.png
 - [ ] T099 [P] [US2] Configure Enhanced Clockstone loot in Desert Clock Tower chest
 
 ### Items - Time Manipulation Tools (US2)
