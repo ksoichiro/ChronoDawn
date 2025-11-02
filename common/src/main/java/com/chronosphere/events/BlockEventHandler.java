@@ -5,6 +5,7 @@ import com.chronosphere.core.portal.PortalRegistry;
 import com.chronosphere.core.portal.PortalState;
 import com.chronosphere.core.portal.PortalStateMachine;
 import com.chronosphere.data.ChronosphereGlobalState;
+import com.chronosphere.items.tools.SpatiallyLinkedPickaxeItem;
 import com.chronosphere.registry.ModBlocks;
 import com.chronosphere.registry.ModDimensions;
 import com.chronosphere.registry.ModItems;
@@ -15,9 +16,17 @@ import dev.architectury.event.events.common.TickEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -63,12 +72,18 @@ public class BlockEventHandler {
      * Register block event listeners.
      */
     public static void register() {
-        // Register block break event for Reversing Time Sandstone
+        // Register block break event for Reversing Time Sandstone and Spatially Linked Pickaxe
         BlockEvent.BREAK.register((level, pos, state, player, xp) -> {
             // Check if the broken block is Reversing Time Sandstone
             if (state.is(ModBlocks.REVERSING_TIME_SANDSTONE.get())) {
                 handleReversingTimeSandstoneBreak(level, pos, state);
             }
+
+            // Check if player is using Spatially Linked Pickaxe for drop doubling
+            if (player != null && !level.isClientSide()) {
+                handleSpatiallyLinkedPickaxeDropDoubling(level, pos, state, player);
+            }
+
             return EventResult.pass();
         });
 
@@ -246,6 +261,78 @@ public class BlockEventHandler {
         level.setBlock(pos, originalState, 3); // 3 = update clients + neighbors
 
         Chronosphere.LOGGER.info("Restored Reversing Time Sandstone at {}", pos);
+    }
+
+    /**
+     * Handle Spatially Linked Pickaxe drop doubling logic.
+     * When player breaks a block with Spatially Linked Pickaxe, has 33% chance to double drops.
+     *
+     * Implementation:
+     * - Check if player's main hand item is Spatially Linked Pickaxe
+     * - Roll 33% random chance
+     * - If successful, generate additional drops from block's loot table
+     * - Spawn additional items at block position
+     *
+     * @param level The level where the block was broken
+     * @param pos The position of the broken block
+     * @param state The state of the broken block
+     * @param player The player who broke the block
+     */
+    private static void handleSpatiallyLinkedPickaxeDropDoubling(
+            net.minecraft.world.level.Level level, BlockPos pos, BlockState state, net.minecraft.world.entity.player.Player player) {
+        // Only process on server side
+        if (level.isClientSide()) {
+            return;
+        }
+
+        // Check if player is holding Spatially Linked Pickaxe in main hand
+        ItemStack mainHandItem = player.getMainHandItem();
+        if (!SpatiallyLinkedPickaxeItem.isSpatiallyLinkedPickaxe(mainHandItem.getItem())) {
+            return;
+        }
+
+        // Roll 33% chance for drop doubling
+        if (level.random.nextDouble() >= SpatiallyLinkedPickaxeItem.getDropDoublingChance()) {
+            return; // No doubling this time
+        }
+
+        // Generate additional drops using block's loot table
+        ServerLevel serverLevel = (ServerLevel) level;
+
+        // Get block entity if present (for chests, etc.)
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+
+        // Build loot context
+        LootParams.Builder lootParamsBuilder = new LootParams.Builder(serverLevel)
+                .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
+                .withParameter(LootContextParams.TOOL, mainHandItem)
+                .withOptionalParameter(LootContextParams.BLOCK_ENTITY, blockEntity);
+
+        // Add player parameter if player is ServerPlayer
+        if (player instanceof ServerPlayer serverPlayer) {
+            lootParamsBuilder.withParameter(LootContextParams.THIS_ENTITY, serverPlayer);
+        }
+
+        // Get drops from loot table
+        List<ItemStack> drops = state.getDrops(lootParamsBuilder);
+
+        // Spawn additional drops
+        for (ItemStack drop : drops) {
+            if (!drop.isEmpty()) {
+                ItemEntity itemEntity = new ItemEntity(
+                        serverLevel,
+                        pos.getX() + 0.5,
+                        pos.getY() + 0.5,
+                        pos.getZ() + 0.5,
+                        drop.copy()
+                );
+                itemEntity.setDefaultPickUpDelay();
+                serverLevel.addFreshEntity(itemEntity);
+            }
+        }
+
+        Chronosphere.LOGGER.debug("Spatially Linked Pickaxe doubled drops for block at {} (player: {})",
+                pos, player.getName().getString());
     }
 
     /**

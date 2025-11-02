@@ -16,6 +16,7 @@
   "item.chronosphere.time_hourglass": "時の砂時計",
   "item.chronosphere.portal_stabilizer": "ポータル安定化装置",
   "item.chronosphere.fruit_of_time": "時間の果実",
+  "item.chronosphere.spatially_linked_pickaxe": "空間連結ツルハシ",
 
   "item.chronosphere.portal_stabilizer.invalid_block": "ポータル安定化装置はクロックストーンブロックのフレームに使用してください",
   "item.chronosphere.portal_stabilizer.no_portal": "近くに機能停止したポータルが見つかりません",

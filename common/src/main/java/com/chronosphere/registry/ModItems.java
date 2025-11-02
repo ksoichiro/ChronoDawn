@@ -6,6 +6,7 @@ import com.chronosphere.items.TimeHourglassItem;
 import com.chronosphere.items.base.ClockstoneItem;
 import com.chronosphere.items.base.EnhancedClockstoneItem;
 import com.chronosphere.items.consumables.FruitOfTimeItem;
+import com.chronosphere.items.tools.SpatiallyLinkedPickaxeItem;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
@@ -138,6 +139,17 @@ public class ModItems {
         () -> new FruitOfTimeItem(FruitOfTimeItem.createProperties())
     );
 
+    // === Tools ===
+
+    /**
+     * Spatially Linked Pickaxe - Time manipulation mining tool.
+     * Diamond-equivalent pickaxe with 33% chance to double drops on block break.
+     */
+    public static final RegistrySupplier<Item> SPATIALLY_LINKED_PICKAXE = ITEMS.register(
+        "spatially_linked_pickaxe",
+        () -> new SpatiallyLinkedPickaxeItem(SpatiallyLinkedPickaxeItem.createProperties())
+    );
+
     /**
      * Initialize item registry.
      * This method must be called during mod initialization.
@@ -174,5 +186,8 @@ public class ModItems {
 
         // === Consumables ===
         output.accept(FRUIT_OF_TIME.get());
+
+        // === Tools ===
+        output.accept(SPATIALLY_LINKED_PICKAXE.get());
     }
 }

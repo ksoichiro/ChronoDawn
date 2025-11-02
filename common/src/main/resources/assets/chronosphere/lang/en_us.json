@@ -16,6 +16,7 @@
   "item.chronosphere.time_hourglass": "Time Hourglass",
   "item.chronosphere.portal_stabilizer": "Portal Stabilizer",
   "item.chronosphere.fruit_of_time": "Fruit of Time",
+  "item.chronosphere.spatially_linked_pickaxe": "Spatially Linked Pickaxe",
 
   "item.chronosphere.portal_stabilizer.invalid_block": "You must use the Portal Stabilizer on a Clockstone Block frame",
   "item.chronosphere.portal_stabilizer.no_portal": "No deactivated portal found nearby",
