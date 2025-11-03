@@ -420,16 +420,17 @@
 
 ### World Generation - Desert Clock Tower (US2)
 
-- [ ] T093 [P] [US2] Create Desert Clock Tower structure NBT in common/src/main/resources/data/chronosphere/structures/desert_clock_tower.nbt
-- [ ] T094 [P] [US2] Implement Desert Clock Tower structure feature in common/src/main/java/com/chronosphere/worldgen/structures/DesertClockTowerStructure.java
-- [ ] T095 [P] [US2] Create Desert Clock Tower structure set in common/src/main/resources/data/chronosphere/worldgen/structure_set/desert_clock_tower.json
+- [X] T093 [P] [US2] Create Desert Clock Tower structure NBT in common/src/main/resources/data/chronosphere/structures/desert_clock_tower.nbt (JSON complete, NBT placeholder - needs proper tower structure in-game)
+- [X] T094 [P] [US2] Implement Desert Clock Tower structure feature in common/src/main/java/com/chronosphere/worldgen/structures/DesertClockTowerStructure.java (JSON-based implementation complete)
+- [X] T095 [P] [US2] Create Desert Clock Tower structure set in common/src/main/resources/data/chronosphere/worldgen/structure_set/desert_clock_tower.json
+- [ ] T095a [US2] (TODO) Create actual Desert Clock Tower NBT structure using structure blocks in-game (21x50x21 sandstone tower with chest and Time Guardian spawn point on top floor)
 
 ### Items - Enhanced Materials (US2)
 
 - [X] T096 [P] [US2] Create Enhanced Clockstone item in common/src/main/java/com/chronosphere/items/base/EnhancedClockstoneItem.java
 - [X] T097 [P] [US2] Register Enhanced Clockstone in ModItems registry
 - [X] T098 [P] [US2] Create Enhanced Clockstone texture in common/src/main/resources/assets/chronosphere/textures/item/enhanced_clockstone.png
-- [ ] T099 [P] [US2] Configure Enhanced Clockstone loot in Desert Clock Tower chest
+- [X] T099 [P] [US2] Configure Enhanced Clockstone loot in Desert Clock Tower chest
 
 ### Items - Time Manipulation Tools (US2)
 
@@ -450,7 +451,7 @@
 - [ ] T111 [US2] Register Time Guardian in ModEntities registry
 - [ ] T112 [US2] Implement Time Guardian AI (Phase 1: melee, Phase 2: teleport + AoE) in common/src/main/java/com/chronosphere/entities/bosses/TimeGuardianAI.java
 - [ ] T113 [US2] Create Time Guardian loot table in common/src/main/resources/data/chronosphere/loot_tables/entities/time_guardian.json
-- [ ] T114 [US2] Create Time Guardian spawn logic in common/src/main/java/com/chronosphere/worldgen/spawning/TimeGuardianSpawner.java
+- [ ] T114 [US2] Create Time Guardian spawn logic in common/src/main/java/com/chronosphere/worldgen/spawning/TimeGuardianSpawner.java (spawns on Desert Clock Tower top floor)
 - [ ] T115 [US2] Implement reversed resonance trigger on defeat in EntityEventHandler.java
 
 ### Items - Key Items (US2)
