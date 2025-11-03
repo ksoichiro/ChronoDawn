@@ -313,8 +313,8 @@
 - [X] T088g [US1] Create multi_noise biome source configuration in common/src/main/resources/data/chronosphere/worldgen/multi_noise_biome_source_parameter_list/chronosphere.json
 - [X] T088h [US1] Update dimension/chronosphere.json to use multi_noise biome source instead of fixed
 - [X] T088i [US1] Test biome generation in-game and verify ocean/plains/forest distribution
-- [ ] T088iu [P] [US1] Create chronosphere_desert biome JSON with appropriate temperature/downfall and sand terrain (for Desert Clock Tower structure in US2)
-- [ ] T088iv [US1] Update multi_noise biome source configuration to include desert biome with appropriate noise parameters (high temperature, low humidity)
+- [X] T088iu [P] [US1] Create chronosphere_desert biome JSON with appropriate temperature/downfall and sand terrain (for Desert Clock Tower structure in US2)
+- [X] T088iv [US1] Update multi_noise biome source configuration to include desert biome with appropriate noise parameters (high temperature, low humidity)
 
 ### Basic Mob Spawning (US1 Enhancement)
 
@@ -430,7 +430,7 @@
 - [X] T094 [P] [US2] Implement Desert Clock Tower structure feature in common/src/main/java/com/chronosphere/worldgen/structures/DesertClockTowerStructure.java (JSON-based implementation complete)
 - [X] T095 [P] [US2] Create Desert Clock Tower structure set in common/src/main/resources/data/chronosphere/worldgen/structure_set/desert_clock_tower.json
 - [X] T095a [US2] Create actual Desert Clock Tower NBT structure using structure blocks in-game (21x50x21 sandstone tower with chest and Time Guardian spawn point on top floor)
-- [ ] T095b [US2] Update Desert Clock Tower structure to spawn only in chronosphere:chronosphere_desert biome (modify structure JSON biomes field)
+- [X] T095b [US2] Update Desert Clock Tower structure to spawn only in chronosphere:chronosphere_desert biome (modify structure JSON biomes field)
 - [X] T095c [US2] Fix monster spawner in Desert Clock Tower - ensure spawners are configured correctly to spawn monsters (RESOLVED: Spawners removed due to light level constraints and design trade-offs; natural mob spawning used instead)
 
 ### Items - Enhanced Materials (US2)
