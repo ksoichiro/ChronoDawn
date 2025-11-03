@@ -431,7 +431,7 @@
 - [X] T095 [P] [US2] Create Desert Clock Tower structure set in common/src/main/resources/data/chronosphere/worldgen/structure_set/desert_clock_tower.json
 - [X] T095a [US2] Create actual Desert Clock Tower NBT structure using structure blocks in-game (21x50x21 sandstone tower with chest and Time Guardian spawn point on top floor)
 - [ ] T095b [US2] Update Desert Clock Tower structure to spawn only in chronosphere:chronosphere_desert biome (modify structure JSON biomes field)
-- [ ] T095c [US2] Fix monster spawner in Desert Clock Tower - ensure spawners are configured correctly to spawn monsters (verify spawner NBT data)
+- [X] T095c [US2] Fix monster spawner in Desert Clock Tower - ensure spawners are configured correctly to spawn monsters (RESOLVED: Spawners removed due to light level constraints and design trade-offs; natural mob spawning used instead)
 
 ### Items - Enhanced Materials (US2)
 
