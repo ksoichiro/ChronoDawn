@@ -72,6 +72,10 @@ public class CustomPortalFabric {
             .destDimID(dimensionId)
             // Set portal tint color (orange #db8813 for time theme)
             .tintColor(PORTAL_COLOR_R, PORTAL_COLOR_G, PORTAL_COLOR_B)
+            // Set portal placement Y range (Y=60-120) to avoid spawning on top of trees
+            // Lower bound Y=60: Slightly below standard ground level (Y=64), allows valley placements
+            // Upper bound Y=120: Well above tree canopy height (Time Wood trees ~10-15 blocks tall)
+            .setPortalSearchYRange(60, 120)
             // Register the portal
             .registerPortal();
 

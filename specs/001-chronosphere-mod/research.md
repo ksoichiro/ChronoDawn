@@ -1050,3 +1050,126 @@ After implementing multiple biomes, vegetation, and mob spawning, the terrain st
 - `data/chronosphere/worldgen/biome/chronosphere_plains.json` (added boulder, gravel_disk)
 - `data/chronosphere/worldgen/biome/chronosphere_forest.json` (added boulder, fallen_log)
 - `data/chronosphere/worldgen/multi_noise_biome_source_parameter_list/chronosphere.json` (fixed continentalness ranges)
+
+## Decision 10: Custom Portal API - Portal Placement Control
+
+**Current Issue**: Portals spawning on Chronosphere side sometimes appear on top of trees instead of ground level
+
+**Background**:
+When players travel from Overworld to Chronosphere via portal, Custom Portal API searches for suitable return portal location. The default behavior can place portals on top of trees or other tall structures, making them inaccessible.
+
+### Custom Portal API Methods Available (Version 0.0.1-beta66-1.21)
+
+**Portal Placement Y-Range Control**:
+
+1. **`setPortalSearchYRange(int bottomY, int topY)`**
+   - Sets Y-level range for searching valid location to create **destination portal** (Chronosphere-side portal when traveling FROM Overworld)
+   - Default: Uses world's bottom and top bounds
+   - Returns: `CustomPortalBuilder` (for method chaining)
+
+2. **`setReturnPortalSearchYRange(int bottomY, int topY)`**
+   - Sets Y-level range for searching valid location to create **return portal** (Overworld-side portal when traveling FROM Chronosphere)
+   - Default: Uses world's bottom and top bounds
+   - Returns: `CustomPortalBuilder` (for method chaining)
+
+**Return Dimension Configuration**:
+
+3. **`returnDim(Identifier returnDimID, boolean onlyIgnitableInReturnDim)`**
+   - Specifies dimension players return to when exiting destination portal
+   - Parameters:
+     - `returnDimID`: Identifier of return dimension (e.g., `minecraft:overworld`)
+     - `onlyIgnitableInReturnDim`: Restricts portal ignition to return dimension only
+   - Returns: `CustomPortalBuilder`
+
+4. **`onlyLightInOverworld()`**
+   - Convenience method setting portal to be ignitable exclusively in Overworld
+   - Internally sets `onlyIgnitableInReturnDim` to true
+   - Returns: `CustomPortalBuilder`
+
+### Recommended Solution for Tree-Top Portal Issue
+
+**Option A: Restrict Destination Portal Y-Range** (Recommended)
+
+Update `CustomPortalFabric.java` to limit portal search range:
+
+```java
+CustomPortalBuilder.beginPortal()
+    .frameBlock(ModBlocks.CLOCKSTONE_BLOCK.get())
+    .lightWithItem(ModItems.TIME_HOURGLASS.get())
+    .destDimID(dimensionId)
+    .tintColor(PORTAL_COLOR_R, PORTAL_COLOR_G, PORTAL_COLOR_B)
+    .setPortalSearchYRange(60, 120)  // Limit portal placement to Y=60-120
+    .registerPortal();
+```
+
+**Rationale**:
+- Chronosphere has fixed time at noon (Y=6000 ticks), making visibility less of an issue
+- Restricting Y-range to 60-120 ensures portals spawn on ground level, not tree canopy
+- Range accounts for terrain variation (plains Y=64-80, hills Y=80-120)
+- Players can still build portals at any Y-level; this only affects **automatic portal creation** when traveling without existing portal
+
+**Option B: Use Custom Portal Search Logic**
+
+Implement custom portal placement logic using Architectury Events:
+- Listen for player teleportation events
+- Override default portal search behavior
+- Implement ground-level detection (check for solid blocks below, air above)
+- More complex but allows precise control
+
+**Why Option A is Preferred**:
+- Simple one-line configuration change
+- No custom event handling required
+- Sufficient for MVP (can refine later if needed)
+- Compatible with both Fabric and NeoForge (when NeoForge portal integration is implemented)
+
+### Alternative Considerations
+
+**Custom Portal Search Algorithm**:
+- Custom Portal API does **not** provide methods for custom search algorithms
+- Default search algorithm: Scans Y-range from bottom to top, finds first valid air space
+- "Valid" means: Air blocks for portal frame + solid blocks for frame placement
+- Trees with leaves create valid spaces, hence the issue
+
+**Biome-Specific Y-Ranges**:
+- Could set different Y-ranges per biome (e.g., ocean Y=50-70, plains Y=60-80, forest Y=70-90)
+- Not supported by Custom Portal API directly
+- Would require custom implementation via event handlers
+
+**Ground-Level Detection Enhancement** (Future Improvement):
+- Implement custom event handler to override portal placement
+- Check for solid ground blocks below portal location
+- Reject locations on tree canopy or floating structures
+- Ensure minimum 3-block clearance above ground
+- More robust but requires significant custom code
+
+### Implementation Impact
+
+**Immediate Change (Option A)**:
+- File: `fabric/src/main/java/com/chronosphere/fabric/compat/CustomPortalFabric.java`
+- Change: Add `.setPortalSearchYRange(60, 120)` to builder chain
+- Testing: Enter Chronosphere multiple times in forest biome, verify portal spawns on ground
+- NeoForge: Same change needed in `neoforge/src/main/java/com/chronosphere/neoforge/compat/CustomPortalNeoForge.java` (T049)
+
+**Y-Range Selection Rationale**:
+- Bottom Y=60: Slightly below typical ground level (Y=64), allows for valley spawns
+- Top Y=120: Well above tree canopy height (Time Wood trees ~10-15 blocks tall)
+- Range width: 60 blocks provides sufficient search space for varied terrain
+
+**Testing Plan**:
+1. Create portal in Overworld near Time Wood forest
+2. Enter Chronosphere
+3. Verify return portal spawns on ground level, not on tree canopy
+4. Test in multiple biomes (plains, forest, ocean shore)
+5. Confirm portal remains accessible and functional
+
+**Known Limitations**:
+- Does not prevent manual portal construction at any Y-level
+- Only affects automatic portal creation during initial travel
+- May need adjustment if custom mountains/valleys added in future biomes
+
+**Related Tasks**: T049a (Fix Chronosphere-side portal placement)
+
+**References**:
+- Custom Portal API GitHub: https://github.com/kyrptonaught/customportalapi
+- CustomPortalBuilder source: https://github.com/kyrptonaught/customportalapi/blob/1.19.4/src/main/java/net/kyrptonaught/customportalapi/api/CustomPortalBuilder.java
+- Documentation: https://moddedmc.wiki/en/project/cpapireforged/latest/docs/basicportal

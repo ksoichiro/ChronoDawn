@@ -156,7 +156,7 @@
 - [X] T047 [US1] Implement portal registry in common/src/main/java/com/chronosphere/core/portal/PortalRegistry.java
 - [X] T048 [US1] Integrate Custom Portal API (Fabric) in fabric/src/main/java/com/chronosphere/fabric/compat/CustomPortalFabric.java
 - [ ] T049 [US1] Integrate Custom Portal API (NeoForge) in neoforge/src/main/java/com/chronosphere/neoforge/compat/CustomPortalNeoForge.java
-- [ ] T049a [US1] Fix Chronosphere-side portal placement to avoid spawning on top of trees (modify portal placement logic to find suitable ground level)
+- [X] T049a [US1] Fix Chronosphere-side portal placement to avoid spawning on top of trees (modify portal placement logic to find suitable ground level)
 
 ### Blocks - Base Materials (US1)
 
