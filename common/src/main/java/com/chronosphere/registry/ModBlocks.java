@@ -14,6 +14,8 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FlowerPotBlock;
 
 /**
  * Architectury Registry wrapper for custom blocks.
@@ -60,6 +62,15 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> UNSTABLE_FUNGUS = BLOCKS.register(
         "unstable_fungus",
         () -> new UnstableFungus(UnstableFungus.createProperties())
+    );
+
+    /**
+     * Potted Unstable Fungus - Decorative potted version of Unstable Fungus.
+     * Can be created by using Unstable Fungus on a flower pot.
+     */
+    public static final RegistrySupplier<Block> POTTED_UNSTABLE_FUNGUS = BLOCKS.register(
+        "potted_unstable_fungus",
+        () -> new FlowerPotBlock(UNSTABLE_FUNGUS.get(), Block.Properties.ofFullCopy(Blocks.FLOWER_POT))
     );
 
     /**

@@ -61,6 +61,12 @@ public class ChronosphereClientNeoForge {
             ModBlocks.UNSTABLE_FUNGUS.get(),
             RenderType.cutout()
         );
+
+        // Register Potted Unstable Fungus to use cutout rendering (for transparency)
+        ItemBlockRenderTypes.setRenderLayer(
+            ModBlocks.POTTED_UNSTABLE_FUNGUS.get(),
+            RenderType.cutout()
+        );
     }
 
     /**
