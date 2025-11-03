@@ -41,8 +41,8 @@
 - [X] T010 [P] Create NeoForge mod entry point in neoforge/src/main/java/com/chronosphere/neoforge/ChronosphereNeoForge.java
 - [X] T011 [P] Create Fabric mod metadata in fabric/src/main/resources/fabric.mod.json
 - [X] T012 [P] Create NeoForge mod metadata in neoforge/src/main/resources/META-INF/neoforge.mods.toml
-- [ ] T012a [P] Add Fabric API and Architectury dependencies to fabric.mod.json for automatic installation in launchers like Prism Launcher
-- [ ] T012b [P] Add Architectury dependency to neoforge.mods.toml for automatic installation in launchers
+- [X] T012a [P] Add Fabric API and Architectury dependencies to fabric.mod.json for automatic installation in launchers like Prism Launcher
+- [X] T012b [P] Add Architectury dependency to neoforge.mods.toml for automatic installation in launchers
 - [X] T013 Configure logging with log4j2 in common/src/main/resources/log4j2.xml
 - [X] T014 Verify build succeeds for both loaders using ./gradlew build
 
