@@ -6,6 +6,9 @@ import com.chronosphere.items.TimeHourglassItem;
 import com.chronosphere.items.base.ClockstoneItem;
 import com.chronosphere.items.base.EnhancedClockstoneItem;
 import com.chronosphere.items.consumables.FruitOfTimeItem;
+import com.chronosphere.items.tools.TimeClockItem;
+import com.chronosphere.items.KeyToMasterClockItem;
+import com.chronosphere.items.UnstableHourglassItem;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
@@ -107,6 +110,16 @@ public class ModItems {
         () -> new EnhancedClockstoneItem(EnhancedClockstoneItem.createProperties())
     );
 
+    /**
+     * Unstable Hourglass - Material item with crafting risk.
+     * WARNING: Crafting triggers Reversed Resonance (Slowness IV on player, Speed II on mobs).
+     * Used as crafting material for ultimate artifacts.
+     */
+    public static final RegistrySupplier<Item> UNSTABLE_HOURGLASS = ITEMS.register(
+        "unstable_hourglass",
+        () -> new UnstableHourglassItem(UnstableHourglassItem.createProperties())
+    );
+
     // === Portal Items ===
 
     /**
@@ -138,6 +151,30 @@ public class ModItems {
         () -> new FruitOfTimeItem(FruitOfTimeItem.createProperties())
     );
 
+    // === Tools ===
+
+    /**
+     * Time Clock - Utility item for cancelling mob attack AI.
+     * When used, forcibly cancels the next attack AI routine of all mobs within 8 blocks.
+     * Cooldown: 10 seconds.
+     */
+    public static final RegistrySupplier<Item> TIME_CLOCK = ITEMS.register(
+        "time_clock",
+        () -> new TimeClockItem(TimeClockItem.createProperties())
+    );
+
+    // === Key Items ===
+
+    /**
+     * Key to Master Clock - Key item for accessing Master Clock depths.
+     * Obtained from defeating Time Guardian (mini-boss).
+     * Used to open the door at Master Clock entrance.
+     */
+    public static final RegistrySupplier<Item> KEY_TO_MASTER_CLOCK = ITEMS.register(
+        "key_to_master_clock",
+        () -> new KeyToMasterClockItem(KeyToMasterClockItem.createProperties())
+    );
+
     /**
      * Initialize item registry.
      * This method must be called during mod initialization.
@@ -167,6 +204,7 @@ public class ModItems {
         // === Base Materials ===
         output.accept(CLOCKSTONE.get());
         output.accept(ENHANCED_CLOCKSTONE.get());
+        output.accept(UNSTABLE_HOURGLASS.get());
 
         // === Portal Items ===
         output.accept(TIME_HOURGLASS.get());
@@ -174,5 +212,11 @@ public class ModItems {
 
         // === Consumables ===
         output.accept(FRUIT_OF_TIME.get());
+
+        // === Tools ===
+        output.accept(TIME_CLOCK.get());
+
+        // === Key Items ===
+        output.accept(KEY_TO_MASTER_CLOCK.get());
     }
 }
