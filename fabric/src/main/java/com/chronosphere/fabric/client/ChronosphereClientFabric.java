@@ -79,5 +79,11 @@ public class ChronosphereClientFabric implements ClientModInitializer {
             ModBlocks.POTTED_UNSTABLE_FUNGUS.get(),
             RenderType.cutout()
         );
+
+        // Register Potted Time Wood Sapling to use cutout rendering (for transparency)
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.POTTED_TIME_WOOD_SAPLING.get(),
+            RenderType.cutout()
+        );
     }
 }

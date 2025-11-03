@@ -67,6 +67,12 @@ public class ChronosphereClientNeoForge {
             ModBlocks.POTTED_UNSTABLE_FUNGUS.get(),
             RenderType.cutout()
         );
+
+        // Register Potted Time Wood Sapling to use cutout rendering (for transparency)
+        ItemBlockRenderTypes.setRenderLayer(
+            ModBlocks.POTTED_TIME_WOOD_SAPLING.get(),
+            RenderType.cutout()
+        );
     }
 
     /**

@@ -110,6 +110,15 @@ public class ModBlocks {
     );
 
     /**
+     * Potted Time Wood Sapling - Decorative potted version of Time Wood Sapling.
+     * Can be created by using Time Wood Sapling on a flower pot.
+     */
+    public static final RegistrySupplier<Block> POTTED_TIME_WOOD_SAPLING = BLOCKS.register(
+        "potted_time_wood_sapling",
+        () -> new FlowerPotBlock(TIME_WOOD_SAPLING.get(), Block.Properties.ofFullCopy(Blocks.FLOWER_POT))
+    );
+
+    /**
      * Fruit of Time Block - Growing fruit attached to Time Wood Logs.
      * Has 3 growth stages (0-2) and drops Fruit of Time items when mature.
      * Similar to Cocoa blocks in vanilla Minecraft.
