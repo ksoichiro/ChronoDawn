@@ -2392,3 +2392,295 @@ CustomPortalBuilder.beginPortal()
 - Custom Portal API GitHub: https://github.com/kyrptonaught/customportalapi
 - CustomPortalsMod.java (block registration): https://github.com/kyrptonaught/customportalapi/blob/1.19.4/src/main/java/net/kyrptonaught/customportalapi/CustomPortalsMod.java
 - CustomPortalBuilder.java (events): https://github.com/kyrptonaught/customportalapi/blob/1.19.4/src/main/java/net/kyrptonaught/customportalapi/api/CustomPortalBuilder.java
+
+## Decision 14: Multi-Noise Biome Parameters and Structure Generation (T088iu-iv)
+
+**Context**: Implementing desert biome in Chronosphere dimension with appropriate terrain generation and Desert Clock Tower structure spawning.
+
+**Date**: 2025-11-04
+
+**Task**: T088iu-iv - Add desert biome to Chronosphere dimension
+
+---
+
+### Multi-Noise Biome Parameters
+
+Multi-noise biome generation uses 6 climate parameters to determine biome placement:
+
+#### 1. Temperature
+- **Range**: -1.0 to 1.0
+- **Purpose**: Controls hot/cold biomes
+- **Desert Setting**: [0.5, 1.0] (high temperature)
+
+#### 2. Humidity (Vegetation)
+- **Range**: -1.0 to 1.0  
+- **Purpose**: Controls wet/dry biomes
+- **Desert Setting**: [-1.0, -0.1] (very dry)
+- **Levels**: 
+  - Level 0: -1.0 ~ -0.35 (driest)
+  - Level 1: -0.35 ~ -0.1
+  - Level 2: -0.1 ~ 0.1
+  - Level 3: 0.1 ~ 0.3
+  - Level 4: 0.3 ~ 1.0 (wettest)
+
+#### 3. Continentalness
+- **Range**: -1.0 to 1.0
+- **Purpose**: **Primary control for terrain ALTITUDE/HEIGHT**
+- **Key zones**:
+  - Mushroom Fields: -1.2 ~ -1.05
+  - Deep Ocean: -1.05 ~ -0.455
+  - Ocean: -0.455 ~ -0.19
+  - **Coast: -0.19 ~ -0.11** (low altitude)
+  - **Near-inland: -0.11 ~ 0.03** (low-medium altitude)
+  - **Mid-inland: 0.03 ~ 0.3** (medium altitude, ~Y=130)
+  - **Far-inland: 0.3 ~ 1.0** (high altitude, mountains)
+- **Desert Setting**: [-0.19, 0.3] (coast to mid-inland, allows Y=120 for variety)
+- **Rule**: Higher continentalness = higher terrain elevation
+
+#### 4. Erosion
+- **Range**: -1.0 to 1.0
+- **Purpose**: Controls terrain FLATNESS vs MOUNTAINOUS (not height!)
+- **Levels**:
+  - Level 0: -1.0 ~ -0.78 (mountain peaks)
+  - Level 1: -0.78 ~ -0.375 (high slopes)
+  - Level 2: -0.375 ~ -0.2225 (low slopes)
+  - Level 3: -0.2225 ~ 0.05 (hills)
+  - Level 4: 0.05 ~ 0.45 (plains)
+  - Level 5: 0.45 ~ 0.55 (flat)
+  - Level 6: 0.55 ~ 1.0 (flattest)
+- **Desert Setting**: [-0.2, 1.0] (levels 3-6, mostly flat with some hills)
+- **Rule**: Higher erosion = flatter terrain (counter-intuitive naming!)
+
+#### 5. Weirdness (Ridges)
+- **Range**: -1.0 to 1.0
+- **Purpose**: Creates terrain variation and rare biome variants
+- **Desert Setting**: [-1.0, 1.0] (full range for variety)
+
+#### 6. Depth
+- **Range**: 0 or 1
+- **Purpose**: Surface vs underground biomes (1.18+ caves)
+- **Desert Setting**: 0 (surface biome)
+
+---
+
+### Parameter Space Volume and Generation Frequency
+
+**Biome generation frequency is proportional to parameter space volume**:
+
+```
+Volume = (temp_range) × (humidity_range) × (continentalness_range) × (erosion_range)
+```
+
+**Chronosphere Biomes Comparison** (depth and weirdness excluded as they're full range):
+
+| Biome | Temperature | Humidity | Continentalness | Erosion | Volume | Relative |
+|-------|-------------|----------|-----------------|---------|--------|----------|
+| Ocean | 2.0 | 2.0 | 0.6 | 2.0 | 4.8 | 18x |
+| Desert | 0.5 | 0.9 | 0.49 | 1.2 | **0.26** | 1x |
+| Plains | 1.5 | 1.3 | 1.1 | 2.0 | 4.29 | 16x |
+| Forest | 1.5 | 0.6 | 1.1 | 2.0 | 1.98 | 7x |
+
+**Lesson Learned**: Desert was initially too rare (volume 0.12) resulting in structures spawning 9000+ blocks away. Expanding parameters to volume 0.26 made it discoverable within 1000-2000 blocks.
+
+---
+
+### Surface Rules for Desert Terrain
+
+Surface rules control which blocks are placed at the surface and subsurface. They are defined in `noise_settings` JSON files.
+
+#### Implementation Method
+
+**Approach**: Override vanilla `minecraft:overworld` noise_settings via datapack
+
+**File**: `data/minecraft/worldgen/noise_settings/overworld.json`
+
+**Why**: Complete reimplementation is complex (2500+ lines). Vanilla overriding allows targeted changes while preserving all vanilla mechanics.
+
+#### Desert Surface Structure (Vanilla Reference)
+
+```
+Y+3: Air
+Y+2: Sand
+Y+1: Sand  
+Y+0: Sand        <- Surface (stone_depth offset=0, secondary_depth_range=0)
+Y-1: Sandstone   <- Subsurface (stone_depth offset=0, secondary_depth_range=30)
+Y-2: Sandstone
+...
+Y-30: Sandstone
+Y-31: Stone      <- Base layer
+```
+
+**Key Parameters**:
+- `secondary_depth_range: 30` for desert sandstone (vs 6 for beaches)
+- Surface type: `floor` for ground blocks
+- Condition: `minecraft:above_preliminary_surface`
+
+#### JSON Structure (Simplified)
+
+```json
+{
+  "type": "minecraft:condition",
+  "if_true": {
+    "type": "minecraft:biome",
+    "biome_is": ["minecraft:desert", "chronosphere:chronosphere_desert"]
+  },
+  "then_run": {
+    "type": "minecraft:sequence",
+    "sequence": [
+      {
+        "if_true": {"type": "minecraft:stone_depth", "secondary_depth_range": 0},
+        "then_run": {"type": "minecraft:block", "result_state": {"Name": "minecraft:sand"}}
+      },
+      {
+        "if_true": {"type": "minecraft:stone_depth", "secondary_depth_range": 30},
+        "then_run": {"type": "minecraft:block", "result_state": {"Name": "minecraft:sandstone"}}
+      }
+    ]
+  }
+}
+```
+
+**Implementation**: Added `chronosphere:chronosphere_desert` to existing vanilla desert surface rules (3 locations in overworld.json).
+
+---
+
+### Structure Generation Settings
+
+Structure placement uses `structure_set` JSON files with two key parameters:
+
+#### Spacing and Separation
+
+**spacing**: How frequently the game attempts to place the structure (in chunks)
+- Defines a grid where each cell tries to place the structure
+- Formula: `distance ≈ spacing × 16 blocks`
+- Higher spacing = rarer structure
+
+**separation**: Minimum distance between structures (in chunks)
+- Prevents structures from spawning too close together
+- Must be less than spacing
+- Formula: `min_distance = separation × 16 blocks`
+
+#### Vanilla Structure Reference
+
+| Structure | spacing | separation | Approx Distance | Frequency |
+|-----------|---------|------------|-----------------|-----------|
+| Ancient City | 24 | 8 | 384 blocks | Common (but limited to deep dark) |
+| Ocean Monument | 32 | 5 | 512 blocks | Moderate |
+| Desert Pyramid | 32 | 8 | 512 blocks | Moderate |
+| Village | 34 | 8 | 544 blocks | Moderate |
+| Woodland Mansion | 80 | 20 | 1280 blocks | Very Rare |
+
+**Note**: Ancient City appears common due to low spacing, but biome restrictions (deep dark only) make it effectively rare.
+
+#### Desert Clock Tower Final Settings
+
+```json
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 32,
+    "separation": 8
+  }
+}
+```
+
+**Rationale**:
+- **spacing: 32** = ~512 blocks between attempts (matches Desert Pyramid/Ocean Monument)
+- **separation: 8** = minimum 128 blocks between structures
+- **Combined with biome rarity**: Desert biome volume is ~6% of Plains, making overall structure discovery difficulty equivalent to 1000-2000 block exploration
+- **Boss dungeon appropriate**: Rare enough to be special, common enough to be discoverable without auxiliary items
+
+**Evolution**:
+1. Initial: spacing 20, separation 8 → Too common (every few hundred blocks in desert)
+2. Attempt: spacing 80, separation 30 → Too rare (9000+ blocks away, virtually undiscoverable)
+3. Attempt: spacing 40, separation 10 → Still rare with narrow biome parameters
+4. **Final**: spacing 32, separation 8 → Balanced with expanded biome parameters
+
+---
+
+### Key Lessons Learned
+
+#### 1. Terrain Height Control
+- **Continentalness controls HEIGHT** (altitude above sea level)
+- **Erosion controls FLATNESS** (plains vs mountains)
+- For flat, low-elevation desert: Use low-to-mid continentalness + high erosion
+
+#### 2. Biome Frequency Matters
+- Structure frequency alone is insufficient if biome is too rare
+- **Total discovery difficulty = (biome rarity) × (structure rarity)**
+- Parameter space volume directly correlates to biome generation frequency
+
+#### 3. Surface Rules Implementation
+- Don't recreate vanilla noise_settings from scratch (2500+ lines, complex spline functions)
+- Override vanilla settings via datapack for surgical changes
+- Extract vanilla files from `minecraft-merged.jar` in Gradle cache
+
+#### 4. Testing Strategy
+- Use `/locatebiome` to verify biome generates within reasonable distance
+- Use creative mode `/locate structure` to check structure placement
+- Monitor absolute coordinates - structures beyond ~2000 blocks are effectively undiscoverable in survival
+
+#### 5. Parameter Tuning Process
+1. Start with narrow, focused parameters (matches intended terrain)
+2. If structure is undiscoverable, expand biome parameters first
+3. Adjust structure spacing as secondary measure
+4. Accept some terrain variety (e.g., Y=120 hills) for improved discoverability
+
+---
+
+### Final Desert Biome Configuration
+
+```json
+{
+  "biome": "chronosphere:chronosphere_desert",
+  "parameters": {
+    "temperature": [0.5, 1.0],           // High temp (0.5 range)
+    "humidity": [-1.0, -0.1],            // Very dry (0.9 range) 
+    "continentalness": [-0.19, 0.3],     // Coast to mid-inland (0.49 range, allows Y=120)
+    "erosion": [-0.2, 1.0],              // Mostly flat terrain (1.2 range)
+    "depth": 0,
+    "weirdness": [-1.0, 1.0],
+    "offset": 0.0
+  }
+}
+```
+
+**Parameter Space Volume**: 0.5 × 0.9 × 0.49 × 1.2 = **0.26**
+- 6% of Plains frequency (acceptable for "rare but findable" biome)
+- ~2x more common than initial narrow parameters (0.12)
+
+---
+
+### Related Files
+
+**Biome Definition**:
+- `common/src/main/resources/data/chronosphere/worldgen/biome/chronosphere_desert.json`
+
+**Dimension Configuration**:
+- `common/src/main/resources/data/chronosphere/dimension/chronosphere.json`
+
+**Surface Rules** (overrides vanilla):
+- `common/src/main/resources/data/minecraft/worldgen/noise_settings/overworld.json`
+
+**Structure Configuration**:
+- `common/src/main/resources/data/chronosphere/worldgen/structure/desert_clock_tower.json`
+- `common/src/main/resources/data/chronosphere/worldgen/structure_set/desert_clock_tower.json`
+
+---
+
+### References
+
+**Multi-Noise Parameters**:
+- World Generation – Minecraft Wiki: https://minecraft.wiki/w/World_generation
+- Erosion – Minecraft Wiki: https://minecraft.wiki/w/Erosion
+- The World Generation of Minecraft (Alan Zucconi): https://www.alanzucconi.com/2022/06/05/minecraft-world-generation/
+
+**Vanilla Data Files**:
+- Extract from `minecraft-merged-*.jar` in `~/.gradle/caches/fabric-loom/minecraftMaven/net/minecraft/`
+- Path: `data/minecraft/worldgen/noise_settings/overworld.json`
+- Path: `data/minecraft/worldgen/structure_set/*.json`
+
+**Surface Rules**:
+- Surface Rules Guide (GitHub): https://github.com/TheForsakenFurby/Surface-Rules-Guide-Minecraft-JE-1.18
+- Tutorial:Custom world generation – Minecraft Wiki: https://minecraft.wiki/w/Tutorial:Custom_world_generation
+
