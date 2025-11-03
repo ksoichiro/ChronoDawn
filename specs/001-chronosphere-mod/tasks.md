@@ -41,6 +41,8 @@
 - [X] T010 [P] Create NeoForge mod entry point in neoforge/src/main/java/com/chronosphere/neoforge/ChronosphereNeoForge.java
 - [X] T011 [P] Create Fabric mod metadata in fabric/src/main/resources/fabric.mod.json
 - [X] T012 [P] Create NeoForge mod metadata in neoforge/src/main/resources/META-INF/neoforge.mods.toml
+- [ ] T012a [P] Add Fabric API and Architectury dependencies to fabric.mod.json for automatic installation in launchers like Prism Launcher
+- [ ] T012b [P] Add Architectury dependency to neoforge.mods.toml for automatic installation in launchers
 - [X] T013 Configure logging with log4j2 in common/src/main/resources/log4j2.xml
 - [X] T014 Verify build succeeds for both loaders using ./gradlew build
 
@@ -154,6 +156,7 @@
 - [X] T047 [US1] Implement portal registry in common/src/main/java/com/chronosphere/core/portal/PortalRegistry.java
 - [X] T048 [US1] Integrate Custom Portal API (Fabric) in fabric/src/main/java/com/chronosphere/fabric/compat/CustomPortalFabric.java
 - [ ] T049 [US1] Integrate Custom Portal API (NeoForge) in neoforge/src/main/java/com/chronosphere/neoforge/compat/CustomPortalNeoForge.java
+- [ ] T049a [US1] Fix Chronosphere-side portal placement to avoid spawning on top of trees (modify portal placement logic to find suitable ground level)
 
 ### Blocks - Base Materials (US1)
 
@@ -176,6 +179,7 @@
 - [X] T060 [P] [US1] Register Time Hourglass in ModItems registry
 - [X] T061 [P] [US1] Create Time Hourglass texture in common/src/main/resources/assets/chronosphere/textures/item/time_hourglass.png (from glowstone_dust.png)
 - [X] T062 [P] [US1] Create Time Hourglass recipe in common/src/main/resources/data/chronosphere/recipes/time_hourglass.json
+- [ ] T062a [US1] Update Time Hourglass to be consumable (shrink stack on portal ignition in TimeHourglassItem.java)
 - [X] T063 [P] [US1] Create Portal Stabilizer item in common/src/main/java/com/chronosphere/items/PortalStabilizerItem.java (dimension stabilization only, no portal ignition; includes particle+sound effects and server-wide message broadcast)
 - [X] T064 [P] [US1] Register Portal Stabilizer in ModItems registry
 - [X] T065 [P] [US1] Create Portal Stabilizer texture in common/src/main/resources/assets/chronosphere/textures/item/portal_stabilizer.png (from nether_star.png)
@@ -309,6 +313,8 @@
 - [X] T088g [US1] Create multi_noise biome source configuration in common/src/main/resources/data/chronosphere/worldgen/multi_noise_biome_source_parameter_list/chronosphere.json
 - [X] T088h [US1] Update dimension/chronosphere.json to use multi_noise biome source instead of fixed
 - [X] T088i [US1] Test biome generation in-game and verify ocean/plains/forest distribution
+- [ ] T088iu [P] [US1] Create chronosphere_desert biome JSON with appropriate temperature/downfall and sand terrain (for Desert Clock Tower structure in US2)
+- [ ] T088iv [US1] Update multi_noise biome source configuration to include desert biome with appropriate noise parameters (high temperature, low humidity)
 
 ### Basic Mob Spawning (US1 Enhancement)
 
@@ -424,6 +430,8 @@
 - [X] T094 [P] [US2] Implement Desert Clock Tower structure feature in common/src/main/java/com/chronosphere/worldgen/structures/DesertClockTowerStructure.java (JSON-based implementation complete)
 - [X] T095 [P] [US2] Create Desert Clock Tower structure set in common/src/main/resources/data/chronosphere/worldgen/structure_set/desert_clock_tower.json
 - [X] T095a [US2] Create actual Desert Clock Tower NBT structure using structure blocks in-game (21x50x21 sandstone tower with chest and Time Guardian spawn point on top floor)
+- [ ] T095b [US2] Update Desert Clock Tower structure to spawn only in chronosphere:chronosphere_desert biome (modify structure JSON biomes field)
+- [ ] T095c [US2] Fix monster spawner in Desert Clock Tower - ensure spawners are configured correctly to spawn monsters (verify spawner NBT data)
 
 ### Items - Enhanced Materials (US2)
 
@@ -611,6 +619,18 @@
 - [ ] T183 [P] Review English localization file for completeness and consistency
 - [ ] T184 [P] Review Japanese localization file for completeness and consistency
 
+### Advancements (Achievements)
+
+**Purpose**: クロノスフィアの進捗システムを定義し、プレイヤーの達成度を追跡
+
+- [ ] T184a [P] Design advancement tree structure and milestone achievements (e.g., "Enter Chronosphere", "Defeat Time Guardian", "Stabilize Portal", "Defeat Time Tyrant")
+- [ ] T184b [P] Create root advancement for Chronosphere in common/src/main/resources/data/chronosphere/advancements/root.json
+- [ ] T184c [P] Create US1 advancements (portal creation, dimension entry, portal stabilization) in common/src/main/resources/data/chronosphere/advancements/
+- [ ] T184d [P] Create US2 advancements (Desert Clock Tower discovery, time manipulation tools, Time Guardian defeat) in common/src/main/resources/data/chronosphere/advancements/
+- [ ] T184e [P] Create US3 advancements (Master Clock access, Time Tyrant defeat, ultimate artifacts) in common/src/main/resources/data/chronosphere/advancements/
+- [ ] T184f [P] Add advancement localization to en_us.json and ja_jp.json
+- [ ] T184g Test advancement triggers in-game and verify progression flow
+
 ### Documentation
 
 - [ ] T185 [P] Update README.md with build instructions for both loaders
@@ -729,21 +749,21 @@ Task: "Create Clockstone item model in common/src/main/resources/assets/chronosp
 
 ## Total Task Count
 
-**Total Tasks**: 258 (updated with T080a-T080u fruit enhancement + T088d-T088at exploration diversity enhancements)
+**Total Tasks**: 273 (updated with T080a-T080u fruit enhancement + T088d-T088at exploration diversity enhancements + new feature requests)
 
 **Breakdown by Phase**:
-- Phase 1 (Setup): 14 tasks
+- Phase 1 (Setup): 16 tasks (added T012a-b for dependency metadata)
 - Phase 2 (Foundational): 20 tasks
-- Phase 3 (User Story 1 - P1): 118 tasks (includes T080a-T080u fruit enhancement + T088d-T088at exploration diversity enhancements)
-- Phase 4 (User Story 2 - P2): 34 tasks
+- Phase 3 (User Story 1 - P1): 122 tasks (includes T080a-T080u fruit enhancement + T088d-T088iv exploration diversity + portal placement fix + consumable hourglass)
+- Phase 4 (User Story 2 - P2): 36 tasks (added desert biome spawning + spawner fix)
 - Phase 5 (User Story 3 - P3): 49 tasks
-- Phase 6 (Polish): 23 tasks
+- Phase 6 (Polish): 30 tasks (added advancement system)
 
 **Breakdown by User Story**:
-- User Story 1 (P1): 118 tasks (46% of total)
-- User Story 2 (P2): 34 tasks (13% of total)
-- User Story 3 (P3): 49 tasks (19% of total)
-- Infrastructure (Setup + Foundational + Polish): 57 tasks (22% of total)
+- User Story 1 (P1): 122 tasks (45% of total)
+- User Story 2 (P2): 36 tasks (13% of total)
+- User Story 3 (P3): 49 tasks (18% of total)
+- Infrastructure (Setup + Foundational + Polish): 66 tasks (24% of total)
 
 **Phase 3 Enhancement Breakdown**:
 - Core US1 features: 75 tasks (T001-T088c)
@@ -769,4 +789,4 @@ Task: "Create Clockstone item model in common/src/main/resources/assets/chronosp
 - User Story 2: Desert Clock Tower exploration, time manipulation items, Time Guardian defeat, key acquisition
 - User Story 3: Master Clock access, Time Tyrant defeat, ultimate artifacts creation, artifact effects validation
 
-**Suggested MVP Scope**: User Story 1 (Phase 1 + Phase 2 + Phase 3 Core + Multiple Biomes + Basic Mob Spawning + Vegetation System) = 142 tasks (recommended for initial release, excludes optional enhancements)
+**Suggested MVP Scope**: User Story 1 (Phase 1 + Phase 2 + Phase 3 Core + Multiple Biomes including Desert + Basic Mob Spawning + Vegetation System + Portal/Hourglass fixes) = 148 tasks (recommended for initial release, excludes optional enhancements)
