@@ -67,5 +67,11 @@ public class ChronosphereClientFabric implements ClientModInitializer {
             ModBlocks.TIME_WOOD_LEAVES.get(),
             RenderType.cutoutMipped()
         );
+
+        // Register Unstable Fungus to use cutout rendering (for transparency)
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.UNSTABLE_FUNGUS.get(),
+            RenderType.cutout()
+        );
     }
 }
