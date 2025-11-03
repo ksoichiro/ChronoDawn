@@ -438,11 +438,11 @@
 - [ ] T102 [P] [US2] Create Time Clock texture in common/src/main/resources/assets/chronosphere/textures/item/time_clock.png
 - [ ] T103 [P] [US2] Create Time Clock recipe in common/src/main/resources/data/chronosphere/recipes/time_clock.json
 - [ ] T104 [P] [US2] Implement Time Clock AI cancellation logic in common/src/main/java/com/chronosphere/core/time/MobAICanceller.java
-- [ ] T105 [P] [US2] Create Spatially Linked Pickaxe in common/src/main/java/com/chronosphere/items/tools/SpatiallyLinkedPickaxeItem.java
-- [ ] T106 [P] [US2] Register Spatially Linked Pickaxe in ModItems registry
-- [ ] T107 [P] [US2] Create Spatially Linked Pickaxe texture in common/src/main/resources/assets/chronosphere/textures/item/spatially_linked_pickaxe.png
-- [ ] T108 [P] [US2] Create Spatially Linked Pickaxe recipe in common/src/main/resources/data/chronosphere/recipes/spatially_linked_pickaxe.json
-- [ ] T109 [P] [US2] Implement drop doubling logic in BlockEventHandler.java
+- [X] T105 [P] [US2] Create Spatially Linked Pickaxe in common/src/main/java/com/chronosphere/items/tools/SpatiallyLinkedPickaxeItem.java
+- [X] T106 [P] [US2] Register Spatially Linked Pickaxe in ModItems registry
+- [X] T107 [P] [US2] Create Spatially Linked Pickaxe texture in common/src/main/resources/assets/chronosphere/textures/item/spatially_linked_pickaxe.png
+- [X] T108 [P] [US2] Create Spatially Linked Pickaxe recipe in common/src/main/resources/data/chronosphere/recipes/spatially_linked_pickaxe.json
+- [X] T109 [P] [US2] Implement drop doubling logic in BlockEventHandler.java
 
 ### Entities - Time Guardian (Mini-Boss) (US2)
 
