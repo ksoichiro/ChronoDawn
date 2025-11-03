@@ -1,11 +1,17 @@
 package com.chronosphere.fabric.compat;
 
 import com.chronosphere.Chronosphere;
+import com.chronosphere.data.ChronosphereGlobalState;
 import com.chronosphere.registry.ModBlocks;
 import com.chronosphere.registry.ModDimensions;
 import com.chronosphere.registry.ModItems;
 import net.kyrptonaught.customportalapi.api.CustomPortalBuilder;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
 /**
  * Custom Portal API integration for Fabric.
@@ -76,6 +82,45 @@ public class CustomPortalFabric {
             // Lower bound Y=60: Slightly below standard ground level (Y=64), allows valley placements
             // Upper bound Y=120: Well above tree canopy height (Time Wood trees ~10-15 blocks tall)
             .setPortalSearchYRange(60, 120)
+            // Register pre-ignition event - prevent ignition of unstable portals in Chronosphere
+            .registerPreIgniteEvent((player, world, portalPos, framePos, ignitionSource) -> {
+                // Check if in Chronosphere dimension with unstable portals
+                if (world instanceof ServerLevel serverLevel) {
+                    if (serverLevel.dimension().equals(ModDimensions.CHRONOSPHERE_DIMENSION)) {
+                        ChronosphereGlobalState globalState = ChronosphereGlobalState.get(serverLevel.getServer());
+                        if (globalState.arePortalsUnstable()) {
+                            // Portals are unstable - prevent ignition and show warning
+                            if (player != null) {
+                                player.displayClientMessage(
+                                    Component.translatable("item.chronosphere.time_hourglass.portal_deactivated"),
+                                    true
+                                );
+                                Chronosphere.LOGGER.info("Player {} attempted to ignite portal with Time Hourglass while portals are unstable",
+                                    player.getName().getString());
+                            }
+                            return false; // Prevent ignition
+                        }
+                    }
+                }
+                return true; // Allow ignition
+            })
+            // Register portal ignition event - consume Time Hourglass when portal is successfully ignited
+            .registerIgniteEvent((player, world, portalPos, framePos, ignitionSource) -> {
+                // Only consume item in survival/adventure mode
+                if (player != null && !player.isCreative()) {
+                    // Check both hands for Time Hourglass
+                    for (InteractionHand hand : InteractionHand.values()) {
+                        ItemStack stack = player.getItemInHand(hand);
+                        if (stack.is(ModItems.TIME_HOURGLASS.get())) {
+                            // Consume one Time Hourglass
+                            stack.shrink(1);
+                            Chronosphere.LOGGER.debug("Consumed Time Hourglass for player {} after successful portal ignition (remaining: {})",
+                                player.getName().getString(), stack.getCount());
+                            break; // Only consume from one hand
+                        }
+                    }
+                }
+            })
             // Register the portal
             .registerPortal();
 

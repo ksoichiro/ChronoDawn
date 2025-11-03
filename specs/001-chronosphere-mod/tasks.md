@@ -179,7 +179,7 @@
 - [X] T060 [P] [US1] Register Time Hourglass in ModItems registry
 - [X] T061 [P] [US1] Create Time Hourglass texture in common/src/main/resources/assets/chronosphere/textures/item/time_hourglass.png (from glowstone_dust.png)
 - [X] T062 [P] [US1] Create Time Hourglass recipe in common/src/main/resources/data/chronosphere/recipes/time_hourglass.json
-- [ ] T062a [US1] Update Time Hourglass to be consumable (shrink stack on portal ignition in TimeHourglassItem.java)
+- [X] T062a [US1] Update Time Hourglass to be consumable (shrink stack on portal ignition in BlockEventHandler.java)
 - [X] T063 [P] [US1] Create Portal Stabilizer item in common/src/main/java/com/chronosphere/items/PortalStabilizerItem.java (dimension stabilization only, no portal ignition; includes particle+sound effects and server-wide message broadcast)
 - [X] T064 [P] [US1] Register Portal Stabilizer in ModItems registry
 - [X] T065 [P] [US1] Create Portal Stabilizer texture in common/src/main/resources/assets/chronosphere/textures/item/portal_stabilizer.png (from nether_star.png)

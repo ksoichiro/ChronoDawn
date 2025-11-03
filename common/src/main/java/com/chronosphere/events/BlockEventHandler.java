@@ -87,46 +87,8 @@ public class BlockEventHandler {
             return EventResult.pass();
         });
 
-        // Register right-click block event for Time Hourglass warning
-        InteractionEvent.RIGHT_CLICK_BLOCK.register((player, hand, pos, face) -> {
-            // Only process on server side
-            if (player.level().isClientSide()) {
-                return EventResult.pass();
-            }
-
-            // Check if player is using Time Hourglass
-            if (!player.getItemInHand(hand).is(ModItems.TIME_HOURGLASS.get())) {
-                return EventResult.pass();
-            }
-
-            // Only restrict in Chronosphere dimension
-            if (!player.level().dimension().equals(ModDimensions.CHRONOSPHERE_DIMENSION)) {
-                return EventResult.pass();
-            }
-
-            // Check if clicked block is Clockstone Block (portal frame)
-            BlockState clickedBlock = player.level().getBlockState(pos);
-            if (!clickedBlock.is(ModBlocks.CLOCKSTONE_BLOCK.get())) {
-                return EventResult.pass();
-            }
-
-            // Check global state: are portals unstable?
-            if (player.level() instanceof ServerLevel serverLevel) {
-                ChronosphereGlobalState globalState = ChronosphereGlobalState.get(serverLevel.getServer());
-                if (globalState.arePortalsUnstable()) {
-                    // Portals are unstable - Time Hourglass cannot be used
-                    player.displayClientMessage(
-                        Component.translatable("item.chronosphere.time_hourglass.portal_deactivated"),
-                        true
-                    );
-                    Chronosphere.LOGGER.info("Player {} attempted to ignite portal with Time Hourglass while portals are unstable",
-                        player.getName().getString());
-                }
-            }
-
-            // Let Custom Portal API process normally, but portal blocks will be removed by tick event
-            return EventResult.pass();
-        });
+        // Time Hourglass portal ignition handling (including unstable portal checks and item consumption)
+        // is now handled entirely by CustomPortalFabric.registerPreIgniteEvent() and registerIgniteEvent()
 
         // Register server tick event to remove portal blocks when portals are unstable
         TickEvent.SERVER_POST.register(server -> {

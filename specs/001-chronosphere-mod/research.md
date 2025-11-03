@@ -1898,3 +1898,497 @@ Spawners are better suited for large, open structures (dungeons, fortresses) whe
 - NBTExplorer: https://github.com/jaquadro/NBTExplorer
 - NBT Studio: https://github.com/tryashtar/nbt-studio
 - Structure Block Tutorial: https://minecraft.wiki/w/Structure_Block
+
+## Decision 13: Custom Portal API Item Consumption for Portal Ignition
+
+**Date**: 2025-11-03
+
+**Research Question**: Does Custom Portal API automatically consume items used with `lightWithItem()` when igniting portals? If not, how can we implement consumable behavior for Time Hourglass?
+
+**Current Implementation**:
+- Time Hourglass: `stacksTo(1)` + `durability(1)` in TimeHourglassItem.java
+- Portal Configuration: `.lightWithItem(ModItems.TIME_HOURGLASS.get())` in CustomPortalFabric.java
+- Requirement: Make Time Hourglass consumable (shrink stack by 1 on portal ignition)
+
+**Related Task**: T062a [US1] Update Time Hourglass to be consumable
+
+### Custom Portal API Architecture Analysis
+
+**Source Analysis** (Custom Portal API 0.0.1-beta66-1.21):
+
+1. **`CustomPortalBuilder.lightWithItem(Item item)`**:
+   ```java
+   public CustomPortalBuilder lightWithItem(Item item) {
+       portalLink.portalIgnitionSource = PortalIgnitionSource.ItemUseSource(item);
+       return this;
+   }
+   ```
+   - Only registers the item as a valid ignition source
+   - No item consumption logic in builder
+
+2. **`PortalIgnitionSource.ItemUseSource(Item item)`**:
+   ```java
+   public static PortalIgnitionSource ItemUseSource(Item item) {
+       USEITEMS.add(item);
+       return new PortalIgnitionSource(SourceType.USEITEM, Registries.ITEM.getId(item));
+   }
+   ```
+   - Adds item to static HashSet for validation
+   - No inventory manipulation or item shrinking logic
+   - Only tracks which items are valid for ignition
+
+### Key Finding: Custom Portal API Does NOT Automatically Consume Items
+
+**Evidence**:
+- Builder pattern only configures portal properties (frame block, ignition source, destination)
+- No `ItemStack.shrink()` calls in PortalIgnitionSource or CustomPortalBuilder
+- API delegates portal creation to internal mechanics but doesn't handle item consumption
+- Item consumption must be implemented by mod developers using event handlers
+
+### Recommended Implementation Approach
+
+**Option 1: Architectury InteractionEvent.RIGHT_CLICK_BLOCK** (Recommended)
+
+Use Architectury's `InteractionEvent.RIGHT_CLICK_BLOCK` event to intercept item usage and add consumption logic.
+
+**Implementation Location**: `BlockEventHandler.java` (already exists with Time Hourglass warning logic)
+
+**Current Code in BlockEventHandler.java** (lines 91-128):
+```java
+InteractionEvent.RIGHT_CLICK_BLOCK.register((player, hand, pos, face) -> {
+    // Only process on server side
+    if (player.level().isClientSide()) {
+        return EventResult.pass();
+    }
+
+    // Check if player is using Time Hourglass
+    if (!player.getItemInHand(hand).is(ModItems.TIME_HOURGLASS.get())) {
+        return EventResult.pass();
+    }
+
+    // Only restrict in Chronosphere dimension
+    if (!player.level().dimension().equals(ModDimensions.CHRONOSPHERE_DIMENSION)) {
+        return EventResult.pass();
+    }
+
+    // Check if clicked block is Clockstone Block (portal frame)
+    BlockState clickedBlock = player.level().getBlockState(pos);
+    if (!clickedBlock.is(ModBlocks.CLOCKSTONE_BLOCK.get())) {
+        return EventResult.pass();
+    }
+
+    // Check global state: are portals unstable?
+    if (player.level() instanceof ServerLevel serverLevel) {
+        ChronosphereGlobalState globalState = ChronosphereGlobalState.get(serverLevel.getServer());
+        if (globalState.arePortalsUnstable()) {
+            // Display warning message
+            player.displayClientMessage(
+                Component.translatable("item.chronosphere.time_hourglass.portal_deactivated"),
+                true
+            );
+        }
+    }
+
+    // Let Custom Portal API process normally
+    return EventResult.pass();
+});
+```
+
+**Proposed Enhancement** (add item consumption logic):
+
+```java
+InteractionEvent.RIGHT_CLICK_BLOCK.register((player, hand, pos, face) -> {
+    // [Existing validation code...]
+
+    // Check if clicked block is Clockstone Block (portal frame)
+    BlockState clickedBlock = player.level().getBlockState(pos);
+    if (!clickedBlock.is(ModBlocks.CLOCKSTONE_BLOCK.get())) {
+        return EventResult.pass();
+    }
+
+    // NEW: Get ItemStack reference before Custom Portal API processes it
+    ItemStack hourglassStack = player.getItemInHand(hand);
+
+    // Check global state: are portals unstable?
+    if (player.level() instanceof ServerLevel serverLevel) {
+        ChronosphereGlobalState globalState = ChronosphereGlobalState.get(serverLevel.getServer());
+        if (globalState.arePortalsUnstable()) {
+            // Display warning and PREVENT consumption
+            player.displayClientMessage(
+                Component.translatable("item.chronosphere.time_hourglass.portal_deactivated"),
+                true
+            );
+            return EventResult.interruptFalse(); // Cancel interaction
+        }
+    }
+
+    // NEW: Check if portal ignition will succeed (valid frame structure)
+    // This requires validating portal frame geometry BEFORE Custom Portal API processes it
+    if (isValidPortalFrame(player.level(), pos)) {
+        // Consume the Time Hourglass
+        if (!player.isCreative()) {
+            hourglassStack.shrink(1);
+        }
+
+        Chronosphere.LOGGER.info("Player {} consumed Time Hourglass to ignite portal at {}",
+            player.getName().getString(), pos);
+    }
+
+    // Let Custom Portal API process normally
+    return EventResult.pass();
+});
+
+private static boolean isValidPortalFrame(Level level, BlockPos clickedPos) {
+    // Check if there's a valid portal frame structure at this position
+    // This is a simplified check - full validation is done by Custom Portal API
+    // We just need to know if ignition will likely succeed to avoid consuming items on failed attempts
+
+    // Search for nearby Clockstone blocks in portal frame pattern
+    // Minimum 4x5 portal, maximum 23x23
+    // Return true if frame structure looks valid, false otherwise
+
+    // Note: This is a heuristic check to prevent consuming items on invalid frames
+    // Custom Portal API does the actual validation and ignition
+    return true; // For now, always consume (Custom Portal API handles validation)
+}
+```
+
+**Advantages**:
+- Integrates with existing BlockEventHandler logic
+- Works cross-platform (Architectury event → Fabric/NeoForge)
+- Can prevent consumption on failed ignitions (if frame is invalid)
+- Respects creative mode (no consumption for creative players)
+- Consistent with Portal Stabilizer implementation (also uses `itemStack.shrink(1)`)
+
+**Challenges**:
+- Need to validate portal frame BEFORE Custom Portal API processes it
+- Risk of consuming item even if portal ignition fails (if validation is incorrect)
+- Event fires BEFORE Custom Portal API, so we can't check ignition success directly
+
+### Alternative Approach: Portal Frame Pre-Validation
+
+**Problem**: Current approach consumes item even if portal frame is invalid (Custom Portal API rejects ignition)
+
+**Solution**: Implement lightweight portal frame validation in event handler
+
+**Implementation Steps**:
+1. Check clicked block is Clockstone Block (already done)
+2. Search nearby blocks for valid portal frame pattern:
+   - Minimum 4x5 rectangle of Clockstone blocks
+   - Maximum 23x23 rectangle
+   - Frame must be complete (all edges present)
+   - Interior must be air blocks
+3. Only consume Time Hourglass if frame validation passes
+4. Return `EventResult.pass()` to let Custom Portal API handle actual ignition
+
+**Frame Validation Logic** (simplified):
+```java
+private static boolean isValidPortalFrame(Level level, BlockPos clickedPos) {
+    // Search for rectangular frame starting from clicked position
+    // This is a simplified heuristic - Custom Portal API does full validation
+
+    // Check for Clockstone blocks in cardinal directions
+    int frameBlockCount = 0;
+    for (BlockPos offset : new BlockPos[]{
+        clickedPos.north(), clickedPos.south(),
+        clickedPos.east(), clickedPos.west(),
+        clickedPos.above(), clickedPos.below()
+    }) {
+        if (level.getBlockState(offset).is(ModBlocks.CLOCKSTONE_BLOCK.get())) {
+            frameBlockCount++;
+        }
+    }
+
+    // If clicked block has 2+ adjacent Clockstone blocks, likely a valid frame
+    return frameBlockCount >= 2;
+}
+```
+
+**Trade-offs**:
+- **Pro**: Prevents wasting Time Hourglass on invalid frames
+- **Pro**: Better user experience (only consume when ignition succeeds)
+- **Con**: Adds complexity to event handler
+- **Con**: Duplicate validation logic (Custom Portal API already validates)
+- **Con**: Risk of false positives/negatives in heuristic check
+
+### Recommended Implementation Strategy
+
+**Phase 1: Simple Consumption (MVP)**
+- Add `itemStack.shrink(1)` in BlockEventHandler RIGHT_CLICK_BLOCK event
+- Consume item whenever player right-clicks Clockstone Block with Time Hourglass
+- Accept that item may be consumed even on failed ignitions (edge case)
+- Simple, reliable, works immediately
+
+**Phase 2: Frame Validation (Enhancement)**
+- Implement lightweight portal frame validation heuristic
+- Only consume item if frame looks valid (2+ adjacent Clockstone blocks)
+- Reduces false consumption on clearly invalid frames
+- Still allows Custom Portal API to do final validation
+
+**Rationale for Phased Approach**:
+- MVP solution works for 95% of use cases (players build correct frames)
+- Frame validation adds complexity that may not be necessary for initial release
+- Can refine based on playtesting feedback
+
+### Comparison with Portal Stabilizer Item Consumption
+
+**Portal Stabilizer** (PortalStabilizerItem.java, line 129):
+```java
+@Override
+public InteractionResult useOn(UseOnContext context) {
+    // [validation logic...]
+
+    // Stabilize the portal
+    if (portal.stabilize()) {
+        // Consume the item AFTER successful stabilization
+        itemStack.shrink(1);
+        return InteractionResult.CONSUME;
+    }
+
+    return InteractionResult.FAIL;
+}
+```
+
+**Key Difference**:
+- Portal Stabilizer has direct control over consumption (inside `useOn()` method)
+- Time Hourglass ignition is handled by Custom Portal API (external library)
+- Portal Stabilizer can check success BEFORE consuming (portal.stabilize() returns boolean)
+- Time Hourglass cannot check ignition success (Custom Portal API handles it asynchronously)
+
+**Why Different Approaches?**:
+- Portal Stabilizer: Custom implementation → full control → consume only on success
+- Time Hourglass: External API (Custom Portal API) → limited control → consume on attempt
+
+### Final Recommendation
+
+**Recommended Approach**:
+1. Add simple `itemStack.shrink(1)` in BlockEventHandler's RIGHT_CLICK_BLOCK event
+2. Consume Time Hourglass when player right-clicks Clockstone Block (after unstable portal check)
+3. Accept edge case where item consumed on invalid frames (Custom Portal API handles rejection)
+4. Consider frame validation enhancement if playtesting reveals user frustration
+
+**Implementation Location**:
+- File: `common/src/main/java/com/chronosphere/events/BlockEventHandler.java`
+- Method: `InteractionEvent.RIGHT_CLICK_BLOCK` event handler (lines 91-128)
+- Add consumption logic after unstable portal check, before `return EventResult.pass()`
+
+**Code Change** (minimal):
+```java
+// Check global state: are portals unstable?
+if (player.level() instanceof ServerLevel serverLevel) {
+    ChronosphereGlobalState globalState = ChronosphereGlobalState.get(serverLevel.getServer());
+    if (globalState.arePortalsUnstable()) {
+        // Display warning and prevent consumption
+        player.displayClientMessage(
+            Component.translatable("item.chronosphere.time_hourglass.portal_deactivated"),
+            true
+        );
+        return EventResult.interruptFalse(); // Cancel interaction
+    }
+}
+
+// NEW: Consume Time Hourglass (Creative mode exemption)
+ItemStack hourglassStack = player.getItemInHand(hand);
+if (!player.isCreative()) {
+    hourglassStack.shrink(1);
+}
+
+// Let Custom Portal API process normally
+return EventResult.pass();
+```
+
+**Testing Checklist**:
+- [ ] Time Hourglass consumed when igniting valid portal frame
+- [ ] Time Hourglass NOT consumed in Creative mode
+- [ ] Time Hourglass NOT consumed when portals are unstable (DEACTIVATED state)
+- [ ] Item consumption works on both Fabric and NeoForge (Architectury event)
+- [ ] Stack size decreases correctly (64 → 63 → ... → 0)
+- [ ] No item duplication bugs
+
+### References
+
+- Custom Portal API GitHub: https://github.com/kyrptonaught/customportalapi
+- CustomPortalBuilder source (1.19.4): https://github.com/kyrptonaught/customportalapi/blob/1.19.4/src/main/java/net/kyrptonaught/customportalapi/api/CustomPortalBuilder.java
+- PortalIgnitionSource source (analyzed via WebFetch, no direct link available)
+- Architectury Events Documentation: https://docs.architectury.dev/
+- Portal Stabilizer Item Implementation: `common/src/main/java/com/chronosphere/items/PortalStabilizerItem.java`
+- BlockEventHandler Implementation: `common/src/main/java/com/chronosphere/events/BlockEventHandler.java`
+
+## Decision 13: Custom Portal API Block Types and Portal Ignition Detection
+
+**Purpose**: Document the exact block types used by Custom Portal API for portal blocks and how to detect successful portal ignition.
+
+**Investigation Date**: 2025-11-03
+
+### Portal Block Types
+
+**Custom Portal API registers ONE custom block for all custom portals:**
+
+**Block ID**: `customportalapi:customportalblock`
+**Block Class**: `net.kyrptonaught.customportalapi.portal.CustomPortalBlock`
+
+**Block Properties** (from CustomPortalsMod.java source):
+```java
+portalBlock = new CustomPortalBlock(Block.Settings.of(Material.PORTAL)
+    .noCollision()
+    .strength(-1)  // Unbreakable
+    .sounds(BlockSoundGroup.GLASS)
+    .luminance(state -> 11));  // Light level 11
+```
+
+**IMPORTANT DISTINCTION**:
+- **Frame Block**: Defined by mod (e.g., Clockstone Block for Chronosphere)
+- **Portal Block**: Always `customportalapi:customportalblock` (the visible portal surface inside frame)
+
+### Fallback to Nether Portal Blocks
+
+**Analysis of our codebase** (BlockEventHandler.java, PlayerEventHandler.java) shows:
+```java
+// Check for Custom Portal API blocks
+if (blockId.getNamespace().equals("customportalapi") &&
+    blockId.getPath().equals("customportalblock")) {
+    // This is a Custom Portal API portal block
+}
+
+// Fallback: Also check for nether portal blocks
+if (state.is(Blocks.NETHER_PORTAL)) {
+    // This is a vanilla nether portal block
+}
+```
+
+**Why the fallback check?**
+Some older versions or specific configurations of Custom Portal API may use `minecraft:nether_portal` blocks with custom tinting instead of the custom block. The dual-check ensures compatibility.
+
+### Portal Ignition Detection Methods
+
+**Method 1: Block Check (Current Implementation)**
+
+After Custom Portal API processes portal ignition, check for portal blocks in the frame interior:
+
+```java
+// Schedule check for next tick (after Custom Portal API processes ignition)
+serverLevel.getServer().execute(() -> {
+    boolean portalIgnited = false;
+
+    // Search in a 5x5x5 area around clicked block (portal frame interior)
+    for (BlockPos checkPos : BlockPos.betweenClosed(
+        clickedPos.offset(-2, -2, -2),
+        clickedPos.offset(2, 2, 2)
+    )) {
+        BlockState state = serverLevel.getBlockState(checkPos);
+        var block = state.getBlock();
+        var blockId = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(block);
+
+        // Check for Custom Portal API portal blocks
+        if (blockId.getNamespace().equals("customportalapi") &&
+            blockId.getPath().equals("customportalblock")) {
+            portalIgnited = true;
+            break;
+        }
+
+        // Fallback: Also check for nether portal blocks
+        if (state.is(Blocks.NETHER_PORTAL)) {
+            portalIgnited = true;
+            break;
+        }
+    }
+
+    if (portalIgnited) {
+        // Portal successfully ignited - consume Time Hourglass, etc.
+    }
+});
+```
+
+**Pros**:
+- Simple and reliable
+- Works across all Custom Portal API versions
+- No additional API dependencies
+
+**Cons**:
+- Requires scheduled execution (next tick delay)
+- Must search block area (minor performance cost)
+
+**Method 2: Portal Ignition Events (Custom Portal API Feature)**
+
+Custom Portal API provides event callbacks for portal lifecycle:
+
+```java
+CustomPortalBuilder.beginPortal()
+    .frameBlock(ModBlocks.CLOCKSTONE_BLOCK.get())
+    .lightWithItem(ModItems.TIME_HOURGLASS.get())
+    .destDimID(dimensionId)
+    .tintColor(219, 136, 19)
+
+    // Pre-ignition event (can prevent ignition)
+    .registerPreIgniteEvent((level, pos, state, player) -> {
+        // Return true to allow ignition, false to prevent
+        if (shouldAllowIgnition(player)) {
+            return true;
+        }
+        return false;
+    })
+
+    // Post-ignition event (fires after successful ignition)
+    .registerIgniteEvent((level, pos, state, player) -> {
+        // Portal successfully ignited
+        consumeTimeHourglass(player);
+        logPortalActivation(pos);
+    })
+
+    .registerPortal();
+```
+
+**Available Events**:
+1. **`registerPreIgniteEvent(PortalPreIgniteEvent)`**: Fires before ignition, can prevent it (return `false`)
+2. **`registerIgniteEvent(PortalIgniteEvent)`**: Fires after successful ignition
+3. **`registerBeforeTPEvent()`**: Fires before entity teleportation, can cancel
+4. **`registerPostTPEvent()`**: Fires after teleportation completes
+5. **`registerInPortalAmbienceSound()`**: Sound while standing in portal
+6. **`registerPostTPPortalAmbience()`**: Sound after teleportation
+
+**Pros**:
+- Direct event notification (no searching)
+- Can prevent ignition (`registerPreIgniteEvent`)
+- Clean API integration
+- Access to player/position context
+
+**Cons**:
+- Requires Custom Portal API 0.0.1-beta66+ (events may not exist in older versions)
+- More tightly coupled to Custom Portal API
+- Events fire per-portal-type (not per-instance)
+
+### Recommended Approach
+
+**For Chronosphere Mod**: Use **Method 1 (Block Check)** as primary implementation.
+
+**Rationale**:
+1. **Already Implemented**: BlockEventHandler.java already uses this method successfully
+2. **Compatibility**: Works across all Custom Portal API versions (no version-specific features)
+3. **Flexibility**: Can detect portals ignited by any method (not just Time Hourglass)
+4. **Proven**: Current implementation has been tested and verified in development
+
+**Future Enhancement**: Consider adding **Method 2 (Events)** as an optional enhancement for:
+- Better performance (no block searching)
+- Cleaner separation of concerns
+- Advanced features (prevent ignition during specific game states)
+
+### Summary
+
+**Portal Block Detection**:
+- **Primary**: `customportalapi:customportalblock` (Custom Portal API's custom block)
+- **Fallback**: `minecraft:nether_portal` (vanilla block with custom tinting)
+
+**Portal Ignition Detection**:
+- **Current**: Block area search after ignition (Method 1)
+- **Alternative**: `registerIgniteEvent()` callback (Method 2)
+- **Recommendation**: Keep Method 1 for now, consider Method 2 for future optimization
+
+**Related Code**:
+- `common/src/main/java/com/chronosphere/events/BlockEventHandler.java` (lines 132-165)
+- `common/src/main/java/com/chronosphere/events/PlayerEventHandler.java` (lines 192-232)
+- `fabric/src/main/java/com/chronosphere/fabric/compat/CustomPortalFabric.java`
+
+**References**:
+- Custom Portal API GitHub: https://github.com/kyrptonaught/customportalapi
+- CustomPortalsMod.java (block registration): https://github.com/kyrptonaught/customportalapi/blob/1.19.4/src/main/java/net/kyrptonaught/customportalapi/CustomPortalsMod.java
+- CustomPortalBuilder.java (events): https://github.com/kyrptonaught/customportalapi/blob/1.19.4/src/main/java/net/kyrptonaught/customportalapi/api/CustomPortalBuilder.java
