@@ -93,7 +93,10 @@
     [],
     [],
     [],
-    [],
+    [
+      "chronosphere:ore_gold",
+      "chronosphere:ore_redstone"
+    ],
     [],
     [],
     [
@@ -101,7 +104,8 @@
       "chronosphere:patch_ferns",
       "chronosphere:patch_brown_mushrooms",
       "chronosphere:boulder_placed",
-      "chronosphere:fallen_log_placed"
+      "chronosphere:fallen_log_placed",
+      "chronosphere:sand_disk_placed"
     ],
     []
   ]
