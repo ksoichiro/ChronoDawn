@@ -21,6 +21,7 @@
   "item.chronosphere.time_clock": "Time Clock",
   "item.chronosphere.key_to_master_clock": "Key to Master Clock",
   "item.chronosphere.unstable_hourglass": "Unstable Hourglass",
+  "item.chronosphere.spatially_linked_pickaxe": "Spatially Linked Pickaxe",
 
   "item.chronosphere.portal_stabilizer.invalid_block": "You must use the Portal Stabilizer on a Clockstone Block frame",
   "item.chronosphere.portal_stabilizer.no_portal": "No deactivated portal found nearby",

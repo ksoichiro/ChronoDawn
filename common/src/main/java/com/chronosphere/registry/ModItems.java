@@ -9,6 +9,7 @@ import com.chronosphere.items.consumables.FruitOfTimeItem;
 import com.chronosphere.items.tools.TimeClockItem;
 import com.chronosphere.items.KeyToMasterClockItem;
 import com.chronosphere.items.UnstableHourglassItem;
+import com.chronosphere.items.tools.SpatiallyLinkedPickaxeItem;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
@@ -163,6 +164,15 @@ public class ModItems {
         () -> new TimeClockItem(TimeClockItem.createProperties())
     );
 
+    /**
+     * Spatially Linked Pickaxe - Time manipulation mining tool.
+     * Diamond-equivalent pickaxe with 33% chance to double drops on block break.
+     */
+    public static final RegistrySupplier<Item> SPATIALLY_LINKED_PICKAXE = ITEMS.register(
+        "spatially_linked_pickaxe",
+        () -> new SpatiallyLinkedPickaxeItem(SpatiallyLinkedPickaxeItem.createProperties())
+    );
+
     // === Key Items ===
 
     /**
@@ -215,6 +225,7 @@ public class ModItems {
 
         // === Tools ===
         output.accept(TIME_CLOCK.get());
+        output.accept(SPATIALLY_LINKED_PICKAXE.get());
 
         // === Key Items ===
         output.accept(KEY_TO_MASTER_CLOCK.get());
