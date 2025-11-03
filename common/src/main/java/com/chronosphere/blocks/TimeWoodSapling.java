@@ -48,6 +48,7 @@ public class TimeWoodSapling extends SaplingBlock {
     public static BlockBehaviour.Properties createProperties() {
         return BlockBehaviour.Properties.of()
                 .mapColor(MapColor.PLANT)
+                .noCollission()
                 .noOcclusion()
                 .randomTicks()
                 .instabreak()
