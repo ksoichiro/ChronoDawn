@@ -423,7 +423,7 @@
 - [X] T093 [P] [US2] Create Desert Clock Tower structure NBT in common/src/main/resources/data/chronosphere/structures/desert_clock_tower.nbt (JSON complete, NBT placeholder - needs proper tower structure in-game)
 - [X] T094 [P] [US2] Implement Desert Clock Tower structure feature in common/src/main/java/com/chronosphere/worldgen/structures/DesertClockTowerStructure.java (JSON-based implementation complete)
 - [X] T095 [P] [US2] Create Desert Clock Tower structure set in common/src/main/resources/data/chronosphere/worldgen/structure_set/desert_clock_tower.json
-- [ ] T095a [US2] (TODO) Create actual Desert Clock Tower NBT structure using structure blocks in-game (21x50x21 sandstone tower with chest and Time Guardian spawn point on top floor)
+- [X] T095a [US2] Create actual Desert Clock Tower NBT structure using structure blocks in-game (21x50x21 sandstone tower with chest and Time Guardian spawn point on top floor)
 
 ### Items - Enhanced Materials (US2)
 
