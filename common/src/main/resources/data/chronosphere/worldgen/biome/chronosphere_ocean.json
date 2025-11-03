@@ -81,12 +81,16 @@
     [],
     [],
     [],
-    [],
+    [
+      "chronosphere:ore_gold",
+      "chronosphere:ore_redstone"
+    ],
     [],
     [],
     [
       "chronosphere:seagrass",
-      "chronosphere:kelp"
+      "chronosphere:kelp",
+      "chronosphere:sand_disk_placed"
     ],
     []
   ]

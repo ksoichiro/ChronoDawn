@@ -434,11 +434,11 @@
 
 ### Items - Time Manipulation Tools (US2)
 
-- [ ] T100 [P] [US2] Create Time Clock item in common/src/main/java/com/chronosphere/items/tools/TimeClockItem.java
-- [ ] T101 [P] [US2] Register Time Clock in ModItems registry
-- [ ] T102 [P] [US2] Create Time Clock texture in common/src/main/resources/assets/chronosphere/textures/item/time_clock.png
-- [ ] T103 [P] [US2] Create Time Clock recipe in common/src/main/resources/data/chronosphere/recipes/time_clock.json
-- [ ] T104 [P] [US2] Implement Time Clock AI cancellation logic in common/src/main/java/com/chronosphere/core/time/MobAICanceller.java
+- [X] T100 [P] [US2] Create Time Clock item in common/src/main/java/com/chronosphere/items/tools/TimeClockItem.java
+- [X] T101 [P] [US2] Register Time Clock in ModItems registry
+- [X] T102 [P] [US2] Create Time Clock texture in common/src/main/resources/assets/chronosphere/textures/item/time_clock.png
+- [X] T103 [P] [US2] Create Time Clock recipe in common/src/main/resources/data/chronosphere/recipes/time_clock.json
+- [X] T104 [P] [US2] Implement Time Clock AI cancellation logic in common/src/main/java/com/chronosphere/core/time/MobAICanceller.java
 - [X] T105 [P] [US2] Create Spatially Linked Pickaxe in common/src/main/java/com/chronosphere/items/tools/SpatiallyLinkedPickaxeItem.java
 - [X] T106 [P] [US2] Register Spatially Linked Pickaxe in ModItems registry
 - [X] T107 [P] [US2] Create Spatially Linked Pickaxe texture in common/src/main/resources/assets/chronosphere/textures/item/spatially_linked_pickaxe.png
@@ -456,29 +456,29 @@
 
 ### Items - Key Items (US2)
 
-- [ ] T116 [P] [US2] Create Key to Master Clock item in common/src/main/java/com/chronosphere/items/KeyToMasterClockItem.java
-- [ ] T117 [P] [US2] Register Key to Master Clock in ModItems registry
-- [ ] T118 [P] [US2] Create Key to Master Clock texture in common/src/main/resources/assets/chronosphere/textures/item/key_to_master_clock.png
+- [X] T116 [P] [US2] Create Key to Master Clock item in common/src/main/java/com/chronosphere/items/KeyToMasterClockItem.java
+- [X] T117 [P] [US2] Register Key to Master Clock in ModItems registry
+- [X] T118 [P] [US2] Create Key to Master Clock texture in common/src/main/resources/assets/chronosphere/textures/item/key_to_master_clock.png
 
 ### Items - Unstable Hourglass (US2)
 
-- [ ] T119 [P] [US2] Create Unstable Hourglass item in common/src/main/java/com/chronosphere/items/UnstableHourglassItem.java
-- [ ] T120 [P] [US2] Register Unstable Hourglass in ModItems registry
-- [ ] T121 [P] [US2] Create Unstable Hourglass recipe in common/src/main/resources/data/chronosphere/recipes/unstable_hourglass.json
-- [ ] T122 [P] [US2] Implement reversed resonance trigger on crafting in common/src/main/java/com/chronosphere/events/CraftEventHandler.java
+- [X] T119 [P] [US2] Create Unstable Hourglass item in common/src/main/java/com/chronosphere/items/UnstableHourglassItem.java
+- [X] T120 [P] [US2] Register Unstable Hourglass in ModItems registry
+- [X] T121 [P] [US2] Create Unstable Hourglass recipe in common/src/main/resources/data/chronosphere/recipes/unstable_hourglass.json
+- [X] T122 [P] [US2] Implement reversed resonance trigger on crafting in common/src/main/java/com/chronosphere/events/CraftEventHandler.java
 
 ### Localization & Creative Tab (US2)
 
-- [ ] T122a [US2] Update English localization file with all US2 items/entities in en_us.json
-- [ ] T122b [US2] Update Japanese localization file with all US2 items/entities in ja_jp.json
-- [ ] T122c [US2] Add all US2 items to creative tab in ModCreativeTabs
+- [X] T122a [US2] Update English localization file with all US2 items/entities in en_us.json
+- [X] T122b [US2] Update Japanese localization file with all US2 items/entities in ja_jp.json
+- [X] T122c [US2] Add all US2 items to creative tab in ModCreativeTabs
 
 ### Recipe Material Review (US2)
 
 **Purpose**: Ensure all US2 recipes use only Chronosphere-obtainable materials (no Overworld-exclusive items like diamonds, ender pearls, nether stars)
 
-- [ ] T122d [P] [US2] Review all US2 recipes (Time Clock, Spatially Linked Pickaxe, Unstable Hourglass) for Overworld-exclusive materials
-- [ ] T122e [P] [US2] Update recipes if needed to use Chronosphere materials (Enhanced Clockstone, Clockstone Block, Fruit of Time, etc.)
+- [X] T122d [P] [US2] Review all US2 recipes (Time Clock, Spatially Linked Pickaxe, Unstable Hourglass) for Overworld-exclusive materials
+- [X] T122e [P] [US2] Update recipes if needed to use Chronosphere materials - Added gold ore, redstone ore, and sand generation to Chronosphere biomes instead
 
 **Checkpoint**: User Story 1とUser Story 2が両方とも独立して動作すること
 

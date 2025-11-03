@@ -81,7 +81,10 @@
     [],
     [],
     [],
-    [],
+    [
+      "chronosphere:ore_gold",
+      "chronosphere:ore_redstone"
+    ],
     [],
     [],
     [
@@ -89,7 +92,8 @@
       "chronosphere:patch_grass",
       "chronosphere:patch_flowers",
       "chronosphere:boulder_placed",
-      "chronosphere:gravel_disk_placed"
+      "chronosphere:gravel_disk_placed",
+      "chronosphere:sand_disk_placed"
     ],
     []
   ]
