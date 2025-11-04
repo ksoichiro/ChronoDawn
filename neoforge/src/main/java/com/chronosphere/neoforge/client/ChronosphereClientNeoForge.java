@@ -1,6 +1,7 @@
 package com.chronosphere.neoforge.client;
 
 import com.chronosphere.Chronosphere;
+import com.chronosphere.client.model.TimeGuardianModel;
 import com.chronosphere.client.renderer.TimeGuardianRenderer;
 import com.chronosphere.registry.ModBlocks;
 import com.chronosphere.registry.ModEntities;
@@ -41,6 +42,23 @@ public class ChronosphereClientNeoForge {
     }
 
     /**
+     * Register entity model layers for custom entity models.
+     * Called during entity model layer registration phase.
+     *
+     * @param event The layer definitions registration event
+     */
+    @SubscribeEvent
+    public static void onRegisterLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        // Register Time Guardian model layer
+        event.registerLayerDefinition(
+            TimeGuardianRenderer.LAYER_LOCATION,
+            TimeGuardianModel::createBodyLayer
+        );
+
+        Chronosphere.LOGGER.info("Registered entity model layers for NeoForge");
+    }
+
+    /**
      * Register entity renderers for custom entities.
      * Called during entity renderer registration phase.
      *
@@ -48,8 +66,7 @@ public class ChronosphereClientNeoForge {
      */
     @SubscribeEvent
     public static void onRegisterEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
-        // Register Time Guardian with custom renderer (currently uses zombie model as placeholder)
-        // TODO: Create custom model and texture for Time Guardian in future phases
+        // Register Time Guardian with custom renderer
         event.registerEntityRenderer(
             ModEntities.TIME_GUARDIAN.get(),
             TimeGuardianRenderer::new

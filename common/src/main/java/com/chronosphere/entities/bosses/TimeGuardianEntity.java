@@ -9,6 +9,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerBossEvent;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -73,9 +74,11 @@ public class TimeGuardianEntity extends Monster {
     // Combat timing
     private int teleportCooldown = 0;
     private int aoeCooldown = 0;
+    private int postTeleportDelay = 0; // Delay after teleport before attacking
 
     // Teleport timing (Phase 2)
     private static final int TELEPORT_COOLDOWN_TICKS = 100; // 5 seconds
+    private static final int POST_TELEPORT_DELAY_TICKS = 15; // 0.75 seconds delay after teleport
 
     // AoE timing (Phase 2)
     private static final int AOE_COOLDOWN_TICKS = 80; // 4 seconds
@@ -102,6 +105,7 @@ public class TimeGuardianEntity extends Monster {
             .add(Attributes.MAX_HEALTH, 200.0) // 100 hearts
             .add(Attributes.ARMOR, 10.0)
             .add(Attributes.ATTACK_DAMAGE, 12.0)
+            .add(Attributes.ATTACK_KNOCKBACK, 1.0) // Knockback when attacking
             .add(Attributes.MOVEMENT_SPEED, 0.2)
             .add(Attributes.FOLLOW_RANGE, 32.0)
             .add(Attributes.KNOCKBACK_RESISTANCE, 0.8);
@@ -112,8 +116,9 @@ public class TimeGuardianEntity extends Monster {
         // Priority 1: Float in water
         this.goalSelector.addGoal(0, new FloatGoal(this));
 
-        // Priority 2: Melee attack
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0, false));
+        // Priority 2: Melee attack with extended range (3.0 blocks)
+        // Balanced for 21x21 boss room with Phase 2 teleport mechanics
+        this.goalSelector.addGoal(1, new ExtendedMeleeAttackGoal(this, 1.0, false, 3.0));
 
         // Priority 3: Move towards target
         this.goalSelector.addGoal(2, new MoveTowardsTargetGoal(this, 0.9, 32.0f));
@@ -171,19 +176,23 @@ public class TimeGuardianEntity extends Monster {
                     1.5f
                 );
 
-                // Spawn particles
-                for (int i = 0; i < 30; i++) {
-                    double offsetX = (this.random.nextDouble() - 0.5) * 2.0;
-                    double offsetY = this.random.nextDouble() * 2.0;
-                    double offsetZ = (this.random.nextDouble() - 0.5) * 2.0;
+                // Spawn particles (server-side)
+                if (this.level() instanceof ServerLevel serverLevel) {
+                    for (int i = 0; i < 30; i++) {
+                        double offsetX = (this.random.nextDouble() - 0.5) * 2.0;
+                        double offsetY = this.random.nextDouble() * 2.0;
+                        double offsetZ = (this.random.nextDouble() - 0.5) * 2.0;
 
-                    this.level().addParticle(
-                        ParticleTypes.PORTAL,
-                        this.getX() + offsetX,
-                        this.getY() + offsetY,
-                        this.getZ() + offsetZ,
-                        0, 0, 0
-                    );
+                        serverLevel.sendParticles(
+                            ParticleTypes.PORTAL,
+                            this.getX() + offsetX,
+                            this.getY() + offsetY,
+                            this.getZ() + offsetZ,
+                            3, // particle count
+                            0, 0, 0, // delta
+                            0.0 // speed
+                        );
+                    }
                 }
             }
         }
@@ -200,15 +209,18 @@ public class TimeGuardianEntity extends Monster {
         if (aoeCooldown > 0) {
             aoeCooldown--;
         }
+        if (postTeleportDelay > 0) {
+            postTeleportDelay--;
+        }
 
         // Teleport ability
-        if (teleportCooldown <= 0 && this.getTarget() != null) {
+        if (teleportCooldown <= 0 && this.getTarget() != null && postTeleportDelay <= 0) {
             performTeleport();
             teleportCooldown = TELEPORT_COOLDOWN_TICKS;
         }
 
-        // AoE ability
-        if (aoeCooldown <= 0 && this.getTarget() != null) {
+        // AoE ability (only when not in post-teleport delay)
+        if (aoeCooldown <= 0 && this.getTarget() != null && postTeleportDelay <= 0) {
             performAoEAttack();
             aoeCooldown = AOE_COOLDOWN_TICKS;
         }
@@ -249,20 +261,30 @@ public class TimeGuardianEntity extends Monster {
             return;
         }
 
-        // Teleport with particles
-        this.level().addParticle(
-            ParticleTypes.PORTAL,
-            this.getX(), this.getY() + 1.0, this.getZ(),
-            0, 0, 0
-        );
+        // Teleport with particles (server-side)
+        if (this.level() instanceof ServerLevel serverLevel) {
+            // Particles at departure point
+            serverLevel.sendParticles(
+                ParticleTypes.PORTAL,
+                this.getX(), this.getY() + 1.0, this.getZ(),
+                20, // particle count
+                0.5, 0.5, 0.5, // delta X, Y, Z
+                0.1 // speed
+            );
 
-        this.teleportTo(validTeleportPos.x, validTeleportPos.y, validTeleportPos.z);
+            this.teleportTo(validTeleportPos.x, validTeleportPos.y, validTeleportPos.z);
 
-        this.level().addParticle(
-            ParticleTypes.PORTAL,
-            validTeleportPos.x, validTeleportPos.y + 1.0, validTeleportPos.z,
-            0, 0, 0
-        );
+            // Particles at arrival point
+            serverLevel.sendParticles(
+                ParticleTypes.PORTAL,
+                validTeleportPos.x, validTeleportPos.y + 1.0, validTeleportPos.z,
+                20, // particle count
+                0.5, 0.5, 0.5, // delta X, Y, Z
+                0.1 // speed
+            );
+        } else {
+            this.teleportTo(validTeleportPos.x, validTeleportPos.y, validTeleportPos.z);
+        }
 
         this.level().playSound(
             null,
@@ -271,6 +293,10 @@ public class TimeGuardianEntity extends Monster {
             SoundSource.HOSTILE,
             1.0f, 1.0f
         );
+
+        // Reset navigation and set post-teleport delay
+        this.getNavigation().stop();
+        this.postTeleportDelay = POST_TELEPORT_DELAY_TICKS;
     }
 
     /**
@@ -320,25 +346,47 @@ public class TimeGuardianEntity extends Monster {
      * Perform Area of Effect attack, damaging nearby players.
      */
     private void performAoEAttack() {
+        // Trigger attack animation (raise arms)
+        this.swing(net.minecraft.world.InteractionHand.MAIN_HAND);
+
         AABB aoeBox = this.getBoundingBox().inflate(AOE_RANGE);
 
         this.level().getEntitiesOfClass(Player.class, aoeBox).forEach(player -> {
             player.hurt(this.damageSources().mobAttack(this), AOE_DAMAGE);
         });
 
-        // Visual feedback
-        for (int i = 0; i < 50; i++) {
-            double angle = (Math.PI * 2.0 * i) / 50;
-            double offsetX = Math.cos(angle) * AOE_RANGE;
-            double offsetZ = Math.sin(angle) * AOE_RANGE;
+        // Visual feedback - purple circle on ground (time-themed)
+        // Must use ServerLevel.sendParticles() when running on server side
+        if (this.level() instanceof ServerLevel serverLevel) {
+            for (int i = 0; i < 100; i++) {
+                double angle = (Math.PI * 2.0 * i) / 100;
+                double offsetX = Math.cos(angle) * AOE_RANGE;
+                double offsetZ = Math.sin(angle) * AOE_RANGE;
 
-            this.level().addParticle(
-                ParticleTypes.SWEEP_ATTACK,
-                this.getX() + offsetX,
-                this.getY() + 0.5,
-                this.getZ() + offsetZ,
-                0, 0, 0
-            );
+                // Ground-level purple particles (DRAGON_BREATH for visibility)
+                serverLevel.sendParticles(
+                    ParticleTypes.DRAGON_BREATH,
+                    this.getX() + offsetX,
+                    this.getY() + 0.1,
+                    this.getZ() + offsetZ,
+                    1, // particle count per position
+                    0, 0.05, 0, // delta X, Y, Z
+                    0.0 // speed
+                );
+
+                // Additional PORTAL particles for time effect
+                if (i % 5 == 0) {
+                    serverLevel.sendParticles(
+                        ParticleTypes.PORTAL,
+                        this.getX() + offsetX,
+                        this.getY() + 0.5,
+                        this.getZ() + offsetZ,
+                        2, // particle count
+                        0, 0, 0, // delta X, Y, Z
+                        0.0 // speed
+                    );
+                }
+            }
         }
 
         this.level().playSound(
@@ -356,6 +404,17 @@ public class TimeGuardianEntity extends Monster {
 
     public void setPhase(int phase) {
         this.entityData.set(PHASE, phase);
+    }
+
+    /**
+     * Check if entity is in post-teleport delay.
+     * During this delay, the entity should not attack to prevent
+     * unfair hits right after teleporting to the player.
+     *
+     * @return true if currently in post-teleport delay
+     */
+    public boolean isInPostTeleportDelay() {
+        return this.postTeleportDelay > 0;
     }
 
     @Override
@@ -385,6 +444,7 @@ public class TimeGuardianEntity extends Monster {
         this.entityData.set(PHASE, tag.getInt("Phase"));
         this.teleportCooldown = tag.getInt("TeleportCooldown");
         this.aoeCooldown = tag.getInt("AoeCooldown");
+        this.postTeleportDelay = tag.getInt("PostTeleportDelay");
     }
 
     @Override
@@ -393,6 +453,7 @@ public class TimeGuardianEntity extends Monster {
         tag.putInt("Phase", getPhase());
         tag.putInt("TeleportCooldown", this.teleportCooldown);
         tag.putInt("AoeCooldown", this.aoeCooldown);
+        tag.putInt("PostTeleportDelay", this.postTeleportDelay);
     }
 
     @Override
