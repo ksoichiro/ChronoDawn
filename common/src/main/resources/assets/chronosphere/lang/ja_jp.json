@@ -30,5 +30,7 @@
   "item.chronosphere.portal_stabilizer.success_reignite_required": "クロノスフィア次元が安定化されました！時の砂時計でポータルを再点火してください",
 
   "item.chronosphere.time_hourglass.portal_deactivated": "このポータルは機能停止しています。再起動するにはポータル安定化装置が必要です",
-  "item.chronosphere.time_hourglass.already_active": "このポータルはすでに起動しています"
+  "item.chronosphere.time_hourglass.already_active": "このポータルはすでに起動しています",
+
+  "entity.chronosphere.time_guardian": "時の番人"
 }

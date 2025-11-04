@@ -1,9 +1,12 @@
 package com.chronosphere.fabric.client;
 
+import com.chronosphere.client.renderer.TimeGuardianRenderer;
 import com.chronosphere.registry.ModBlocks;
+import com.chronosphere.registry.ModEntities;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.FoliageColor;
@@ -25,6 +28,7 @@ public class ChronosphereClientFabric implements ClientModInitializer {
     public void onInitializeClient() {
         registerBlockColors();
         registerRenderLayers();
+        registerEntityRenderers();
     }
 
     /**
@@ -84,6 +88,20 @@ public class ChronosphereClientFabric implements ClientModInitializer {
         BlockRenderLayerMap.INSTANCE.putBlock(
             ModBlocks.POTTED_TIME_WOOD_SAPLING.get(),
             RenderType.cutout()
+        );
+    }
+
+    /**
+     * Register entity renderers for custom entities.
+     *
+     * Time Guardian uses a temporary zombie-based renderer for now.
+     * TODO: Create custom model and texture for Time Guardian in future phases.
+     */
+    private void registerEntityRenderers() {
+        // Register Time Guardian with custom renderer (currently uses zombie model as placeholder)
+        EntityRendererRegistry.register(
+            ModEntities.TIME_GUARDIAN.get(),
+            TimeGuardianRenderer::new
         );
     }
 }

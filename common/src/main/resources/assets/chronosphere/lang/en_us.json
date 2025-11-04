@@ -30,5 +30,7 @@
   "item.chronosphere.portal_stabilizer.success_reignite_required": "Chronosphere dimension stabilized! Use Time Hourglass to reignite the portal",
 
   "item.chronosphere.time_hourglass.portal_deactivated": "This portal is deactivated. You need a Portal Stabilizer to reactivate it",
-  "item.chronosphere.time_hourglass.already_active": "This portal is already active"
+  "item.chronosphere.time_hourglass.already_active": "This portal is already active",
+
+  "entity.chronosphere.time_guardian": "Time Guardian"
 }

@@ -9,6 +9,7 @@ import com.chronosphere.registry.ModDimensions;
 import com.chronosphere.registry.ModEntities;
 import com.chronosphere.registry.ModItems;
 import com.chronosphere.registry.ModTreeDecoratorTypes;
+import com.chronosphere.worldgen.spawning.TimeGuardianSpawner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +34,9 @@ public class Chronosphere {
         // Initialize dimension systems (Phase 3 - User Story 1)
         ChronosphereDimension.init();
         ChronosphereBiomeProvider.init();
+
+        // Initialize spawn systems (Phase 4 - User Story 2)
+        TimeGuardianSpawner.register();
     }
 }
 

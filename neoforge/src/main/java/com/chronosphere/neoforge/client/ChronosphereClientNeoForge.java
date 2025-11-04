@@ -1,13 +1,16 @@
 package com.chronosphere.neoforge.client;
 
 import com.chronosphere.Chronosphere;
+import com.chronosphere.client.renderer.TimeGuardianRenderer;
 import com.chronosphere.registry.ModBlocks;
+import com.chronosphere.registry.ModEntities;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 
 /**
  * NeoForge client-side initialization for Chronosphere mod.
@@ -35,6 +38,24 @@ public class ChronosphereClientNeoForge {
             registerRenderLayers();
             registerBlockColors();
         });
+    }
+
+    /**
+     * Register entity renderers for custom entities.
+     * Called during entity renderer registration phase.
+     *
+     * @param event The entity renderers registration event
+     */
+    @SubscribeEvent
+    public static void onRegisterEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        // Register Time Guardian with custom renderer (currently uses zombie model as placeholder)
+        // TODO: Create custom model and texture for Time Guardian in future phases
+        event.registerEntityRenderer(
+            ModEntities.TIME_GUARDIAN.get(),
+            TimeGuardianRenderer::new
+        );
+
+        Chronosphere.LOGGER.info("Registered entity renderers for NeoForge");
     }
 
     /**
