@@ -455,12 +455,40 @@
 
 ### Entities - Time Guardian (Mini-Boss) (US2)
 
-- [ ] T110 [US2] Create Time Guardian entity in common/src/main/java/com/chronosphere/entities/bosses/TimeGuardianEntity.java
-- [ ] T111 [US2] Register Time Guardian in ModEntities registry
-- [ ] T112 [US2] Implement Time Guardian AI (Phase 1: melee, Phase 2: teleport + AoE) in common/src/main/java/com/chronosphere/entities/bosses/TimeGuardianAI.java
-- [ ] T113 [US2] Create Time Guardian loot table in common/src/main/resources/data/chronosphere/loot_tables/entities/time_guardian.json
-- [ ] T114 [US2] Create Time Guardian spawn logic in common/src/main/java/com/chronosphere/worldgen/spawning/TimeGuardianSpawner.java (spawns on Desert Clock Tower top floor)
-- [ ] T115 [US2] Implement reversed resonance trigger on defeat in EntityEventHandler.java
+- [X] T110 [US2] Create Time Guardian entity in common/src/main/java/com/chronosphere/entities/bosses/TimeGuardianEntity.java
+- [X] T111 [US2] Register Time Guardian in ModEntities registry
+- [X] T112 [US2] Implement Time Guardian AI (Phase 1: melee, Phase 2: teleport + AoE) in common/src/main/java/com/chronosphere/entities/bosses/TimeGuardianAI.java
+- [X] T113 [US2] Create Time Guardian loot table in common/src/main/resources/data/chronosphere/loot_tables/entities/time_guardian.json
+- [X] T114 [US2] Create Time Guardian spawn logic in common/src/main/java/com/chronosphere/worldgen/spawning/TimeGuardianSpawner.java (spawns on Desert Clock Tower top floor)
+- [X] T115 [US2] Implement reversed resonance trigger on defeat in EntityEventHandler.java
+
+#### Time Guardian Enhancements (Post-MVP)
+
+**Purpose**: Time Guardianの見た目・バランス・ゲームプレイ体験を改善
+
+**Note**: 基本機能は実装済み。以下はポリッシュと体験向上のための追加タスク
+
+- [ ] T115a [US2] Create custom model and texture for Time Guardian (currently using zombie placeholder)
+- [ ] T115b [US2] Adjust Time Guardian parameters (HP, attack damage, armor) based on playtesting feedback
+- [ ] T115c [US2] Implement boss floor access mechanism (stairs, elevator, or teleporter to top floor)
+- [ ] T115d [US2] Add boss arena entrance lockdown (prevent escape/re-entry during combat)
+- [ ] T115e [US2] Add reversed resonance explanation (book item, advancement description, or in-game message)
+
+### Player Guidance & Discovery System (US2 Enhancement)
+
+**Purpose**: プレイヤーが構造物やアイテムを発見し、ゲームを進行できるようガイダンスを提供
+
+**Current Issue**: Ancient Ruins、Desert Clock Tower、Master Clock Towerなどの構造物の場所や、アイテムの入手方法について説明がなく、プレイヤーが作者の想定通りに進行するのは困難
+
+**Guidance Methods**: 書物アイテム、村人との取引（地図）、進捗ヒント、構造物の出現頻度調整、ロケーターアイテムなど
+
+- [ ] T115f [US2] Research appropriate player guidance methods (book items, advancement hints, villager trades, structure frequency)
+- [ ] T115g [P] [US2] Create Chronicle of Chronosphere book item (guide book explaining dimension mechanics, structures, and progression)
+- [ ] T115h [P] [US2] Add villager trades for structure maps (Ancient Ruins Map, Desert Clock Tower Map, Master Clock Tower Map)
+- [ ] T115i [US2] Add advancement system with descriptive hints for key progression milestones (first portal, Ancient Ruins discovery, Time Guardian defeat)
+- [ ] T115j [US2] Adjust structure spawn rates to make discovery easier (increase frequency or reduce spacing)
+- [ ] T115k [P] [US2] Create Time Compass item (points to nearest key structure, similar to lodestone compass)
+- [ ] T115l [US2] Add initial guidance on first dimension entry (chat message, advancement, or book given to player)
 
 ### Items - Key Items (US2)
 
