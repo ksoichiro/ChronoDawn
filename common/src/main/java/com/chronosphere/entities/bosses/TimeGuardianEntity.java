@@ -15,6 +15,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -82,8 +84,8 @@ public class TimeGuardianEntity extends Monster {
 
     // AoE timing (Phase 2)
     private static final int AOE_COOLDOWN_TICKS = 80; // 4 seconds
-    private static final double AOE_RANGE = 5.0;
-    private static final float AOE_DAMAGE = 6.0f;
+    private static final double AOE_RANGE = 4.0; // Reduced from 5.0 for balance
+    private static final float AOE_DAMAGE = 4.0f; // Reduced from 6.0 for balance
 
     public TimeGuardianEntity(EntityType<? extends TimeGuardianEntity> entityType, Level level) {
         super(entityType, level);
@@ -150,6 +152,22 @@ public class TimeGuardianEntity extends Monster {
                 handlePhase2Abilities();
             }
         }
+    }
+
+    @Override
+    public boolean doHurtTarget(net.minecraft.world.entity.Entity target) {
+        boolean success = super.doHurtTarget(target);
+
+        if (success && target instanceof LivingEntity livingTarget) {
+            // Time Guardian's melee attack inflicts temporal slowdown (Slowness I)
+            livingTarget.addEffect(new MobEffectInstance(
+                MobEffects.MOVEMENT_SLOWDOWN,
+                100, // 5 seconds (100 ticks)
+                0    // Slowness I (amplifier 0)
+            ));
+        }
+
+        return success;
     }
 
     /**
@@ -344,6 +362,7 @@ public class TimeGuardianEntity extends Monster {
 
     /**
      * Perform Area of Effect attack, damaging nearby players.
+     * Time-themed AoE: Inflicts temporal distortion effects (Slowness II + Mining Fatigue)
      */
     private void performAoEAttack() {
         // Trigger attack animation (raise arms)
@@ -352,7 +371,20 @@ public class TimeGuardianEntity extends Monster {
         AABB aoeBox = this.getBoundingBox().inflate(AOE_RANGE);
 
         this.level().getEntitiesOfClass(Player.class, aoeBox).forEach(player -> {
+            // Physical damage (reduced from 6.0 to 4.0 for balance)
             player.hurt(this.damageSources().mobAttack(this), AOE_DAMAGE);
+
+            // Time distortion effects: Slowness II (severe slowdown) + Mining Fatigue (cannot break blocks quickly)
+            player.addEffect(new MobEffectInstance(
+                MobEffects.MOVEMENT_SLOWDOWN,
+                80, // 4 seconds (80 ticks) - shorter duration to avoid overlapping with teleport + AoE combo
+                1   // Slowness II (amplifier 1)
+            ));
+            player.addEffect(new MobEffectInstance(
+                MobEffects.DIG_SLOWDOWN,
+                80, // 4 seconds (80 ticks) - shorter duration to avoid overlapping with teleport + AoE combo
+                0   // Mining Fatigue I (amplifier 0)
+            ));
         });
 
         // Visual feedback - purple circle on ground (time-themed)
