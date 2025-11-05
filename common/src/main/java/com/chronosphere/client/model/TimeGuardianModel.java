@@ -34,6 +34,8 @@ public class TimeGuardianModel extends EntityModel<TimeGuardianEntity> {
     private final ModelPart head;
     private final ModelPart leftArm;
     private final ModelPart rightArm;
+    private final ModelPart leftForearm;   // Forearm for elbow bending animation
+    private final ModelPart rightForearm;  // Forearm for elbow bending animation
     private final ModelPart leftLeg;
     private final ModelPart rightLeg;
 
@@ -43,6 +45,11 @@ public class TimeGuardianModel extends EntityModel<TimeGuardianEntity> {
         this.head = this.body.getChild("head");
         this.leftArm = this.body.getChild("left_arm");
         this.rightArm = this.body.getChild("right_arm");
+
+        // Get forearm parts for independent animation (elbow bending)
+        this.leftForearm = this.leftArm.getChild("arm_left2_r1");
+        this.rightForearm = this.rightArm.getChild("arm_right2_r1");
+
         this.leftLeg = this.root.getChild("left_leg");
         this.rightLeg = this.root.getChild("right_leg");
     }
@@ -69,23 +76,39 @@ public class TimeGuardianModel extends EntityModel<TimeGuardianEntity> {
                 .texOffs(42, 43).addBox(-4.0F, -16.0F, -2.0F, 8.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)),
             PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        // Head (child of body) - pivot at neck (top of body)
-        PartDefinition head = body.addOrReplaceChild("head",
-            CubeListBuilder.create()
-                .texOffs(0, 23).addBox(-4.0F, -8.0F, -5.0F, 8.0F, 8.0F, 7.0F, new CubeDeformation(0.0F)),
-            PartPose.offset(0.0F, -32.0F, 0.0F));
-
         // Left arm (child of body) - pivot at left shoulder
+        // Upper arm segment
         PartDefinition leftArm = body.addOrReplaceChild("left_arm",
             CubeListBuilder.create()
                 .texOffs(0, 38).addBox(0.0F, -2.0F, -3.0F, 5.0F, 14.0F, 6.0F, new CubeDeformation(0.0F)),
             PartPose.offset(6.0F, -29.0F, 0.0F));
 
+        // Left forearm (child of left_arm) - pivot at elbow (Y=12)
+        // Can be animated independently for elbow bending
+        PartDefinition armLeft2 = leftArm.addOrReplaceChild("arm_left2_r1",
+            CubeListBuilder.create()
+                .texOffs(0, 38).addBox(0.0F, -1.0F, -3.0F, 5.0F, 12.0F, 6.0F, new CubeDeformation(-0.2F)),
+            PartPose.offsetAndRotation(0.0F, 12.0F, 0.0F, -0.1745F, 0.0F, 0.0F));
+
         // Right arm (child of body) - pivot at right shoulder
+        // Upper arm segment
         PartDefinition rightArm = body.addOrReplaceChild("right_arm",
             CubeListBuilder.create()
                 .texOffs(30, 23).addBox(-5.0F, -2.0F, -3.0F, 5.0F, 14.0F, 6.0F, new CubeDeformation(0.0F)),
             PartPose.offset(-6.0F, -29.0F, 0.0F));
+
+        // Right forearm (child of right_arm) - pivot at elbow (Y=12)
+        // Can be animated independently for elbow bending
+        PartDefinition armRight2 = rightArm.addOrReplaceChild("arm_right2_r1",
+            CubeListBuilder.create()
+                .texOffs(30, 23).addBox(-5.0F, -1.0F, -3.0F, 5.0F, 12.0F, 6.0F, new CubeDeformation(-0.2F)),
+            PartPose.offsetAndRotation(0.0F, 12.0F, 0.0F, -0.1745F, 0.0F, 0.0F));
+
+        // Head (child of body) - pivot at neck (top of body)
+        PartDefinition head = body.addOrReplaceChild("head",
+            CubeListBuilder.create()
+                .texOffs(0, 23).addBox(-4.0F, -8.0F, -5.0F, 8.0F, 8.0F, 7.0F, new CubeDeformation(0.0F)),
+            PartPose.offset(0.0F, -32.0F, 0.0F));
 
         // Left leg (child of root) - pivot at left hip
         PartDefinition leftLeg = root.addOrReplaceChild("left_leg",
@@ -113,6 +136,8 @@ public class TimeGuardianModel extends EntityModel<TimeGuardianEntity> {
         this.leftArm.zRot = 0.0F;
         this.rightArm.xRot = 0.0F;
         this.rightArm.zRot = 0.0F;
+        this.leftForearm.xRot = 0.0F;   // Reset forearm rotation
+        this.rightForearm.xRot = 0.0F;  // Reset forearm rotation
         this.leftLeg.xRot = 0.0F;
         this.rightLeg.xRot = 0.0F;
 
@@ -152,6 +177,11 @@ public class TimeGuardianModel extends EntityModel<TimeGuardianEntity> {
             // Slightly spread arms outward during attack
             this.rightArm.zRot = 0.3F * armRaise;
             this.leftArm.zRot = -0.3F * armRaise;
+
+            // Bend elbows during attack for more dynamic motion
+            // Negative value bends forearm inward (toward body)
+            this.leftForearm.xRot = -0.5F * armRaise;
+            this.rightForearm.xRot = -0.5F * armRaise;
         }
     }
 
