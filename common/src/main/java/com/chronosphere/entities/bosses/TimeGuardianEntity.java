@@ -320,9 +320,12 @@ public class TimeGuardianEntity extends Monster {
     /**
      * Check if a position is safe for teleporting.
      * A safe position has:
-     * - Air blocks for entity body (3 blocks high)
-     * - Solid ground beneath
+     * - Air blocks for entity body (3 blocks high, 2x2 horizontal area)
+     * - Solid ground beneath (2x2 area)
+     * - Not surrounded by walls (check adjacent blocks)
      * - Within reasonable range of spawn position (to stay in structure)
+     *
+     * Enhanced safety check to prevent teleporting into walls or tight spaces.
      *
      * @param pos The position to check
      * @return true if the position is safe for teleporting
@@ -340,21 +343,50 @@ public class TimeGuardianEntity extends Monster {
             return false;
         }
 
-        // Check ground beneath (must be solid)
-        BlockPos groundPos = blockPos.below();
-        if (!this.level().getBlockState(groundPos).isSolid()) {
-            return false;
+        // Time Guardian has a 2x2 horizontal footprint (approximate)
+        // Check 2x2 area for ground and body space
+        for (int xOffset = 0; xOffset <= 1; xOffset++) {
+            for (int zOffset = 0; zOffset <= 1; zOffset++) {
+                BlockPos basePos = blockPos.offset(xOffset, 0, zOffset);
+
+                // Check ground beneath (must be solid)
+                BlockPos groundPos = basePos.below();
+                if (!this.level().getBlockState(groundPos).isSolid()) {
+                    return false;
+                }
+
+                // Check entity body space (3 blocks high)
+                for (int yOffset = 0; yOffset < 3; yOffset++) {
+                    BlockPos checkPos = basePos.above(yOffset);
+                    var blockState = this.level().getBlockState(checkPos);
+
+                    // Position must be air or passable (not solid blocks)
+                    if (blockState.isSolid()) {
+                        return false;
+                    }
+                }
+            }
         }
 
-        // Check entity body space (3 blocks high for safety)
-        for (int i = 0; i < 3; i++) {
-            BlockPos checkPos = blockPos.above(i);
-            var blockState = this.level().getBlockState(checkPos);
+        // Additional check: Ensure not completely surrounded by walls
+        // Check 4 cardinal directions at body level (y+1)
+        int wallCount = 0;
+        BlockPos[] adjacentPositions = {
+            blockPos.north(),
+            blockPos.south(),
+            blockPos.east(),
+            blockPos.west()
+        };
 
-            // Position must be air or passable (not solid blocks)
-            if (blockState.isSolid()) {
-                return false;
+        for (BlockPos adjacentPos : adjacentPositions) {
+            if (this.level().getBlockState(adjacentPos.above()).isSolid()) {
+                wallCount++;
             }
+        }
+
+        // If surrounded by 3 or 4 walls, position is not safe
+        if (wallCount >= 3) {
+            return false;
         }
 
         return true;
@@ -421,12 +453,13 @@ public class TimeGuardianEntity extends Monster {
             }
         }
 
+        // Sound feedback - time magic AoE (using evoker spell sound for magical feel)
         this.level().playSound(
             null,
             this.getX(), this.getY(), this.getZ(),
-            SoundEvents.PLAYER_ATTACK_SWEEP,
+            SoundEvents.EVOKER_CAST_SPELL,
             SoundSource.HOSTILE,
-            1.0f, 0.8f
+            1.0f, 1.0f
         );
     }
 

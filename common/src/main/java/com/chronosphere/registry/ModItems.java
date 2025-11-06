@@ -91,6 +91,17 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TIME_WOOD_SAPLING.get(), new Item.Properties())
     );
 
+    /**
+     * Clock Tower Teleporter - BlockItem for Desert Clock Tower teleporter.
+     * Requires 3 seconds of charging (holding right-click) before teleporting.
+     * UP direction: 4th floor → 5th floor (boss room).
+     * DOWN direction: 5th floor → 4th floor (appears after defeating Time Guardian).
+     */
+    public static final RegistrySupplier<Item> CLOCK_TOWER_TELEPORTER = ITEMS.register(
+        "clock_tower_teleporter",
+        () -> new BlockItem(ModBlocks.CLOCK_TOWER_TELEPORTER.get(), new Item.Properties())
+    );
+
     // === Material Items ===
 
     /**
@@ -210,6 +221,7 @@ public class ModItems {
         output.accept(TIME_WOOD_LEAVES.get());
         output.accept(TIME_WOOD_PLANKS.get());
         output.accept(TIME_WOOD_SAPLING.get());
+        output.accept(CLOCK_TOWER_TELEPORTER.get());
 
         // === Base Materials ===
         output.accept(CLOCKSTONE.get());

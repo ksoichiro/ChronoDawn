@@ -1,0 +1,35 @@
+package com.chronosphere.registry;
+
+import com.chronosphere.Chronosphere;
+import com.chronosphere.blocks.ClockTowerTeleporterBlockEntity;
+import dev.architectury.registry.registries.DeferredRegister;
+import dev.architectury.registry.registries.RegistrySupplier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+
+/**
+ * Architectury Registry wrapper for custom block entities.
+ */
+public class ModBlockEntities {
+    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
+        DeferredRegister.create(Chronosphere.MOD_ID, Registries.BLOCK_ENTITY_TYPE);
+
+    /**
+     * Clock Tower Teleporter BlockEntity - Stores target teleportation position.
+     */
+    public static final RegistrySupplier<BlockEntityType<ClockTowerTeleporterBlockEntity>> CLOCK_TOWER_TELEPORTER =
+        BLOCK_ENTITIES.register("clock_tower_teleporter", () ->
+            BlockEntityType.Builder.of(
+                ClockTowerTeleporterBlockEntity::new,
+                ModBlocks.CLOCK_TOWER_TELEPORTER.get()
+            ).build(null)
+        );
+
+    /**
+     * Initialize block entity registry.
+     */
+    public static void register() {
+        BLOCK_ENTITIES.register();
+        Chronosphere.LOGGER.info("Registered ModBlockEntities");
+    }
+}

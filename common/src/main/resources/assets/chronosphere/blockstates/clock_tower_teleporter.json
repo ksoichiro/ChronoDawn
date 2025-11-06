@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "direction=up": {
+      "model": "chronosphere:block/clock_tower_teleporter"
+    },
+    "direction=down": {
+      "model": "chronosphere:block/clock_tower_teleporter"
+    }
+  }
+}

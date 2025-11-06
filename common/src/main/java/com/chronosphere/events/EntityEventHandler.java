@@ -1,6 +1,7 @@
 package com.chronosphere.events;
 
 import com.chronosphere.Chronosphere;
+import com.chronosphere.core.teleport.TeleporterChargingHandler;
 import com.chronosphere.core.time.ReversedResonance;
 import com.chronosphere.core.time.TimeDistortionEffect;
 import com.chronosphere.entities.bosses.TimeGuardianEntity;
@@ -10,6 +11,7 @@ import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.EntityEvent;
 import dev.architectury.event.events.common.TickEvent;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
 
 /**
@@ -74,7 +76,14 @@ public class EntityEventHandler {
             return EventResult.pass();
         });
 
-        Chronosphere.LOGGER.info("Registered EntityEventHandler with time distortion effect, Time Guardian spawning, and boss defeat triggers");
+        // Register player tick event for teleporter charging
+        TickEvent.PLAYER_POST.register(player -> {
+            if (player instanceof ServerPlayer serverPlayer) {
+                TeleporterChargingHandler.tick(serverPlayer);
+            }
+        });
+
+        Chronosphere.LOGGER.info("Registered EntityEventHandler with time distortion effect, Time Guardian spawning, boss defeat triggers, and teleporter charging");
     }
 
     /**
@@ -94,6 +103,7 @@ public class EntityEventHandler {
 
     /**
      * Handle Time Guardian defeat and trigger reversed resonance.
+     * Also spawns a down teleporter on the boss floor.
      *
      * @param level The ServerLevel where the defeat occurred
      * @param guardian The defeated Time Guardian entity
@@ -104,11 +114,72 @@ public class EntityEventHandler {
             guardian.getX(), guardian.getY(), guardian.getZ()
         );
 
-        // Trigger reversed resonance (30 seconds)
-        ReversedResonance.triggerOnTimeGuardianDefeat(
-            level,
-            guardian.position()
+        // Spawn down teleporter on the boss floor
+        // Place it 5 blocks away from the guardian's position
+        net.minecraft.core.BlockPos teleporterPos = guardian.blockPosition().offset(5, 0, 0);
+        level.setBlock(
+            teleporterPos,
+            com.chronosphere.registry.ModBlocks.CLOCK_TOWER_TELEPORTER.get()
+                .defaultBlockState()
+                .setValue(com.chronosphere.blocks.ClockTowerTeleporterBlock.DIRECTION,
+                         com.chronosphere.blocks.ClockTowerTeleporterBlock.TeleportDirection.DOWN),
+            3 // UPDATE_CLIENTS
         );
+
+        // Find UP teleporter below (4th floor) to set as target
+        net.minecraft.core.BlockPos searchPos = teleporterPos.below(8); // Assume 8 blocks down
+        net.minecraft.core.BlockPos targetPos = findNearbyUpTeleporter(level, searchPos);
+
+        if (targetPos == null) {
+            // If no UP teleporter found, use safe position below
+            targetPos = searchPos.offset(0, 1, 0);
+            Chronosphere.LOGGER.warn("No UP teleporter found, using default position at [{}, {}, {}]",
+                targetPos.getX(), targetPos.getY(), targetPos.getZ()
+            );
+        }
+
+        // Set target position in BlockEntity
+        if (level.getBlockEntity(teleporterPos) instanceof com.chronosphere.blocks.ClockTowerTeleporterBlockEntity be) {
+            be.setTargetPos(targetPos);
+            Chronosphere.LOGGER.info("Set DOWN teleporter target to [{}, {}, {}]",
+                targetPos.getX(), targetPos.getY(), targetPos.getZ()
+            );
+        }
+
+        Chronosphere.LOGGER.info("Spawned down teleporter at [{}, {}, {}]",
+            teleporterPos.getX(), teleporterPos.getY(), teleporterPos.getZ()
+        );
+    }
+
+    /**
+     * Find nearby UP teleporter within a radius.
+     * Searches horizontally and slightly vertically around the given position.
+     *
+     * @param level The level to search in
+     * @param center The center position to search around
+     * @return The position of the UP teleporter, or null if not found
+     */
+    private static net.minecraft.core.BlockPos findNearbyUpTeleporter(ServerLevel level, net.minecraft.core.BlockPos center) {
+        int searchRadius = 10;
+
+        // Search in horizontal plane around the center position
+        for (int x = -searchRadius; x <= searchRadius; x++) {
+            for (int z = -searchRadius; z <= searchRadius; z++) {
+                for (int y = -2; y <= 2; y++) {
+                    net.minecraft.core.BlockPos checkPos = center.offset(x, y, z);
+                    net.minecraft.world.level.block.state.BlockState state = level.getBlockState(checkPos);
+
+                    if (state.getBlock() instanceof com.chronosphere.blocks.ClockTowerTeleporterBlock) {
+                        if (state.getValue(com.chronosphere.blocks.ClockTowerTeleporterBlock.DIRECTION) ==
+                            com.chronosphere.blocks.ClockTowerTeleporterBlock.TeleportDirection.UP) {
+                            return checkPos;
+                        }
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 }
 

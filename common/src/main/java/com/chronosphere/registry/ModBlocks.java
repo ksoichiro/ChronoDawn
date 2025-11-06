@@ -3,6 +3,7 @@ package com.chronosphere.registry;
 import com.chronosphere.Chronosphere;
 import com.chronosphere.blocks.ClockstoneBlock;
 import com.chronosphere.blocks.ClockstoneOre;
+import com.chronosphere.blocks.ClockTowerTeleporterBlock;
 import com.chronosphere.blocks.FruitOfTimeBlock;
 import com.chronosphere.blocks.ReversingTimeSandstone;
 import com.chronosphere.blocks.UnstableFungus;
@@ -126,6 +127,21 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> FRUIT_OF_TIME_BLOCK = BLOCKS.register(
         "fruit_of_time",
         () -> new FruitOfTimeBlock(FruitOfTimeBlock.createProperties())
+    );
+
+    /**
+     * Clock Tower Teleporter - Time-themed teleporter for Desert Clock Tower.
+     * Requires 3 seconds of charging (holding right-click) before teleporting.
+     * UP direction: 4th floor → 5th floor (boss room).
+     * DOWN direction: 5th floor → 4th floor (appears after defeating Time Guardian).
+     */
+    public static final RegistrySupplier<Block> CLOCK_TOWER_TELEPORTER = BLOCKS.register(
+        "clock_tower_teleporter",
+        () -> new ClockTowerTeleporterBlock(
+            Block.Properties.ofFullCopy(Blocks.GLOWSTONE)
+                .lightLevel(state -> 15)
+                .noOcclusion()
+        )
     );
 
     /**
