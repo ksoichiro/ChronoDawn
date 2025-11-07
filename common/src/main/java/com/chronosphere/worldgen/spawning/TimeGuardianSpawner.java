@@ -301,10 +301,11 @@ public class TimeGuardianSpawner {
         }
 
         if (bestPosition != null && maxBlockCount > 10) {
-            // Spawn 10 blocks below the highest structure point, offset from center
+            // Spawn 5 blocks below the highest structure point, offset from center
+            // Adjusted from -10 to -5 to spawn on 5th floor instead of 4th floor
             BlockPos spawnPos = new BlockPos(
                 bestPosition.getX() + 2,
-                highestY - 10,
+                highestY - 5,
                 bestPosition.getZ() + 2
             );
             Chronosphere.LOGGER.info("Found tower top floor at {} (block count: {})", spawnPos, maxBlockCount);

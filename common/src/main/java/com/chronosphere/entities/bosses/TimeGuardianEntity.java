@@ -482,10 +482,54 @@ public class TimeGuardianEntity extends Monster {
         return this.postTeleportDelay > 0;
     }
 
+    /**
+     * Check if player has reached the boss floor (top floor of Desert Clock Tower).
+     * Boss bar should only appear when player is on the top floor.
+     *
+     * Conditions:
+     * - Player Y coordinate must be at or above Time Guardian's Y coordinate (not below)
+     * - Player Y coordinate must be within 5 blocks above Time Guardian
+     * - Player is within horizontal range (20 blocks) of the tower
+     *
+     * This ensures boss bar only appears when player is on the same floor as Time Guardian,
+     * not on lower floors.
+     *
+     * @param player The player to check
+     * @return true if player is on the boss floor
+     */
+    private boolean isPlayerOnBossFloor(ServerPlayer player) {
+        // Y coordinate check: Player must NOT be below Time Guardian (lower floors excluded)
+        double yDifference = player.getY() - this.getY();
+
+        // Player is below Time Guardian (on a lower floor) - exclude
+        if (yDifference < -2.0) {
+            return false;
+        }
+
+        // Player is too far above Time Guardian - exclude
+        if (yDifference > 5.0) {
+            return false;
+        }
+
+        // Horizontal distance check: Player must be within tower range (21x21 tower = ~20 block radius)
+        double horizontalDistance = Math.sqrt(
+            Math.pow(player.getX() - this.getX(), 2) +
+            Math.pow(player.getZ() - this.getZ(), 2)
+        );
+        if (horizontalDistance > 20.0) {
+            return false;
+        }
+
+        return true;
+    }
+
     @Override
     public void startSeenByPlayer(ServerPlayer player) {
         super.startSeenByPlayer(player);
-        this.bossEvent.addPlayer(player);
+        // Only add player to boss bar if they've reached the boss floor
+        if (isPlayerOnBossFloor(player)) {
+            this.bossEvent.addPlayer(player);
+        }
     }
 
     @Override
@@ -498,6 +542,23 @@ public class TimeGuardianEntity extends Monster {
     protected void customServerAiStep() {
         super.customServerAiStep();
         this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
+
+        // Dynamically manage boss bar visibility based on player position
+        // Add players who reached boss floor, remove players who left
+        if (this.level() instanceof ServerLevel serverLevel) {
+            for (ServerPlayer player : serverLevel.players()) {
+                boolean isOnBossFloor = isPlayerOnBossFloor(player);
+                boolean hasPlayerInBossEvent = this.bossEvent.getPlayers().contains(player);
+
+                if (isOnBossFloor && !hasPlayerInBossEvent) {
+                    // Player reached boss floor - add to boss bar
+                    this.bossEvent.addPlayer(player);
+                } else if (!isOnBossFloor && hasPlayerInBossEvent) {
+                    // Player left boss floor - remove from boss bar
+                    this.bossEvent.removePlayer(player);
+                }
+            }
+        }
     }
 
     @Override

@@ -475,6 +475,7 @@
 - [ ] T115c [US2] Implement boss floor access mechanism (stairs, elevator, or teleporter to top floor)
 - [ ] T115d [US2] Add boss arena entrance lockdown (prevent escape/re-entry during combat)
 - [ ] T115e [US2] Add reversed resonance explanation (book item, advancement description, or in-game message)
+- [X] T115m [US2] Fix boss bar display timing (should appear when player reaches top floor, not before)
 
 ### Player Guidance & Discovery System (US2 Enhancement)
 
