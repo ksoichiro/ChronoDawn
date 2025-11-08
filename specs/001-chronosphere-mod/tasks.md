@@ -469,8 +469,8 @@
 **Note**: 基本機能は実装済み。以下はポリッシュと体験向上のための追加タスク
 
 - [X] T115a [US2] Create custom model and texture for Time Guardian (currently using zombie placeholder)
-  - [ ] T115a-1 [US2] Improve Time Guardian texture (currently using placeholder image with minimal modifications)
-  - [ ] T115a-2 [US2] Improve Time Guardian model geometry (more imposing design, arm shape that conveys extended reach)
+  - [X] T115a-1 [US2] Improve Time Guardian texture (currently using placeholder image with minimal modifications)
+  - [X] T115a-2 [US2] Improve Time Guardian model geometry (more imposing design, arm shape that conveys extended reach)
 - [ ] T115b [US2] Adjust Time Guardian parameters (HP, attack damage, armor) based on playtesting feedback
 - [ ] T115c [US2] Implement boss floor access mechanism (stairs, elevator, or teleporter to top floor)
 - [ ] T115d [US2] Add boss arena entrance lockdown (prevent escape/re-entry during combat)
