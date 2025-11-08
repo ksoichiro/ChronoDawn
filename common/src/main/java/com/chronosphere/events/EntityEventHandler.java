@@ -114,64 +114,65 @@ public class EntityEventHandler {
             guardian.getX(), guardian.getY(), guardian.getZ()
         );
 
-        // Spawn down teleporter on the boss floor
-        // Place it 5 blocks away from the guardian's position
-        net.minecraft.core.BlockPos teleporterPos = guardian.blockPosition().offset(5, 0, 0);
+        // Find UP teleporter on 4th floor (should be about 8 blocks below guardian)
+        net.minecraft.core.BlockPos searchPos = guardian.blockPosition().below(8);
+        net.minecraft.core.BlockPos upTeleporterPos = findNearbyUpTeleporter(level, searchPos);
+
+        if (upTeleporterPos == null) {
+            Chronosphere.LOGGER.error("Could not find UP teleporter on 4th floor! Cannot place DOWN teleporter.");
+            return;
+        }
+
+        // Calculate DOWN teleporter position:
+        // - Same X/Z as UP teleporter (centered)
+        // - 6 blocks above UP teleporter (places at floor+2 on 5th floor)
+        net.minecraft.core.BlockPos teleporterPos = upTeleporterPos.above(6);
+
+        // Replace any existing block at this position
         level.setBlock(
             teleporterPos,
             com.chronosphere.registry.ModBlocks.CLOCK_TOWER_TELEPORTER.get()
                 .defaultBlockState()
                 .setValue(com.chronosphere.blocks.ClockTowerTeleporterBlock.DIRECTION,
                          com.chronosphere.blocks.ClockTowerTeleporterBlock.TeleportDirection.DOWN),
-            3 // UPDATE_CLIENTS
+            3 // UPDATE_CLIENTS | UPDATE_NEIGHBORS
         );
 
-        // Find UP teleporter below (4th floor) to set as target
-        net.minecraft.core.BlockPos searchPos = teleporterPos.below(8); // Assume 8 blocks down
-        net.minecraft.core.BlockPos targetPos = findNearbyUpTeleporter(level, searchPos);
-
-        if (targetPos == null) {
-            // If no UP teleporter found, use safe position below
-            targetPos = searchPos.offset(0, 1, 0);
-            Chronosphere.LOGGER.warn("No UP teleporter found, using default position at [{}, {}, {}]",
-                targetPos.getX(), targetPos.getY(), targetPos.getZ()
-            );
-        }
-
-        // Set target position in BlockEntity
+        // Set target position in BlockEntity (points to UP teleporter position)
         if (level.getBlockEntity(teleporterPos) instanceof com.chronosphere.blocks.ClockTowerTeleporterBlockEntity be) {
-            be.setTargetPos(targetPos);
-            Chronosphere.LOGGER.info("Set DOWN teleporter target to [{}, {}, {}]",
-                targetPos.getX(), targetPos.getY(), targetPos.getZ()
-            );
+            be.setTargetPos(upTeleporterPos);
         }
 
-        Chronosphere.LOGGER.info("Spawned down teleporter at [{}, {}, {}]",
-            teleporterPos.getX(), teleporterPos.getY(), teleporterPos.getZ()
+        Chronosphere.LOGGER.info("Spawned DOWN teleporter at [{}, {}, {}] targeting UP teleporter at [{}, {}, {}]",
+            teleporterPos.getX(), teleporterPos.getY(), teleporterPos.getZ(),
+            upTeleporterPos.getX(), upTeleporterPos.getY(), upTeleporterPos.getZ()
         );
     }
 
     /**
      * Find nearby UP teleporter within a radius.
-     * Searches horizontally and slightly vertically around the given position.
+     * Searches horizontally and vertically around the given position.
      *
      * @param level The level to search in
      * @param center The center position to search around
      * @return The position of the UP teleporter, or null if not found
      */
     private static net.minecraft.core.BlockPos findNearbyUpTeleporter(ServerLevel level, net.minecraft.core.BlockPos center) {
-        int searchRadius = 10;
+        int searchRadius = 20;
+        int verticalSearchRange = 10;
 
         // Search in horizontal plane around the center position
         for (int x = -searchRadius; x <= searchRadius; x++) {
             for (int z = -searchRadius; z <= searchRadius; z++) {
-                for (int y = -2; y <= 2; y++) {
+                for (int y = -verticalSearchRange; y <= verticalSearchRange; y++) {
                     net.minecraft.core.BlockPos checkPos = center.offset(x, y, z);
                     net.minecraft.world.level.block.state.BlockState state = level.getBlockState(checkPos);
 
                     if (state.getBlock() instanceof com.chronosphere.blocks.ClockTowerTeleporterBlock) {
-                        if (state.getValue(com.chronosphere.blocks.ClockTowerTeleporterBlock.DIRECTION) ==
-                            com.chronosphere.blocks.ClockTowerTeleporterBlock.TeleportDirection.UP) {
+                        com.chronosphere.blocks.ClockTowerTeleporterBlock.TeleportDirection direction =
+                            state.getValue(com.chronosphere.blocks.ClockTowerTeleporterBlock.DIRECTION);
+
+                        if (direction == com.chronosphere.blocks.ClockTowerTeleporterBlock.TeleportDirection.UP) {
                             return checkPos;
                         }
                     }

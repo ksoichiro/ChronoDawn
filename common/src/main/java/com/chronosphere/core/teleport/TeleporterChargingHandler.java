@@ -220,7 +220,7 @@ public class TeleporterChargingHandler {
         }
 
         // Find safe landing position near target (offset from teleporter block)
-        Vec3 safeLandingPos = findSafeLandingPosition(level, targetPos);
+        Vec3 safeLandingPos = findSafeLandingPosition(level, targetPos, direction.equals("DOWN"));
 
         // Teleport sound and particles at departure
         level.playSound(null, player.blockPosition(), SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0f, 1.0f);
@@ -273,12 +273,13 @@ public class TeleporterChargingHandler {
      *
      * @param level The server level
      * @param targetPos The target teleporter block position
+     * @param isDownTeleport true if teleporting DOWN (4th floor), false if UP (5th floor)
      * @return Safe landing position (Vec3 with coordinates)
      */
-    private static Vec3 findSafeLandingPosition(ServerLevel level, BlockPos targetPos) {
-        // Try positions around the teleporter at floor level (3 blocks below teleporter)
-        // Desert Clock Tower: teleporter at Y=98, floor at Y=95 (difference = 3)
-        int floorOffset = -3;
+    private static Vec3 findSafeLandingPosition(ServerLevel level, BlockPos targetPos, boolean isDownTeleport) {
+        // For DOWN teleport: land 1 block below UP teleporter (on the floor, since UP teleporter is floor+2)
+        // For UP teleport: land 3 blocks below DOWN teleporter (on the floor)
+        int floorOffset = isDownTeleport ? -1 : -3;
 
         BlockPos[] candidateOffsets = {
             targetPos.offset(2, floorOffset, 0),   // 2 blocks east at floor level
@@ -304,7 +305,8 @@ public class TeleporterChargingHandler {
         }
 
         // Fallback: teleporter position + offset (even if not ideal)
-        return new Vec3(targetPos.getX() + 2.5, targetPos.getY() - 3.0, targetPos.getZ() + 0.5);
+        double fallbackY = isDownTeleport ? targetPos.getY() - 1.0 : targetPos.getY() - 3.0;
+        return new Vec3(targetPos.getX() + 2.5, fallbackY, targetPos.getZ() + 0.5);
     }
 
     /**
