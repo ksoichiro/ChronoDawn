@@ -460,7 +460,7 @@
 - [X] T112 [US2] Implement Time Guardian AI (Phase 1: melee, Phase 2: teleport + AoE) in common/src/main/java/com/chronosphere/entities/bosses/TimeGuardianAI.java
 - [X] T113 [US2] Create Time Guardian loot table in common/src/main/resources/data/chronosphere/loot_tables/entities/time_guardian.json
 - [X] T114 [US2] Create Time Guardian spawn logic in common/src/main/java/com/chronosphere/worldgen/spawning/TimeGuardianSpawner.java (spawns on Desert Clock Tower top floor)
-- [X] T115 [US2] Implement reversed resonance trigger on defeat in EntityEventHandler.java
+- [X] T115 [US2] Implement reversed resonance trigger on defeat in EntityEventHandler.java (Note: 一度実装したが、ゲームバランスの観点から廃止。reversed resonance機能自体は他のトリガー（Unstable Hourglassクラフト、Time Tyrant撃破）で使用予定のため保持)
 
 #### Time Guardian Enhancements (Post-MVP)
 
@@ -474,7 +474,7 @@
 - [ ] T115b [US2] Adjust Time Guardian parameters (HP, attack damage, armor) based on playtesting feedback
 - [X] T115c [US2] Implement boss floor access mechanism (stairs, elevator, or teleporter to top floor)
 - [X] T115d [US2] Add boss arena entrance lockdown (prevent escape/re-entry during combat)
-- [ ] T115e [US2] Add reversed resonance explanation (book item, advancement description, or in-game message)
+- [ ] T115e [US2] Add reversed resonance explanation (book item, advancement description, or in-game message) (Note: Time Guardian撃破トリガーは廃止。Unstable Hourglassクラフト、Time Tyrant撃破用の説明が必要)
 - [X] T115m [US2] Fix boss bar display timing (should appear when player reaches top floor, not before)
 
 ### Player Guidance & Discovery System (US2 Enhancement)
