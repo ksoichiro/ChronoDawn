@@ -46,3 +46,6 @@ Thumbs.db
 common/build/
 fabric/build/
 neoforge/build/
+
+# Blockbench
+assets/*.java
