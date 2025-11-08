@@ -472,8 +472,8 @@
   - [X] T115a-1 [US2] Improve Time Guardian texture (currently using placeholder image with minimal modifications)
   - [X] T115a-2 [US2] Improve Time Guardian model geometry (more imposing design, arm shape that conveys extended reach)
 - [ ] T115b [US2] Adjust Time Guardian parameters (HP, attack damage, armor) based on playtesting feedback
-- [ ] T115c [US2] Implement boss floor access mechanism (stairs, elevator, or teleporter to top floor)
-- [ ] T115d [US2] Add boss arena entrance lockdown (prevent escape/re-entry during combat)
+- [X] T115c [US2] Implement boss floor access mechanism (stairs, elevator, or teleporter to top floor)
+- [X] T115d [US2] Add boss arena entrance lockdown (prevent escape/re-entry during combat)
 - [ ] T115e [US2] Add reversed resonance explanation (book item, advancement description, or in-game message)
 - [X] T115m [US2] Fix boss bar display timing (should appear when player reaches top floor, not before)
 
