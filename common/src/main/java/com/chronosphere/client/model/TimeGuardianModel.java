@@ -58,69 +58,49 @@ public class TimeGuardianModel extends EntityModel<TimeGuardianEntity> {
      * Create the model layer definition.
      * This defines the geometry and texture mapping of the Time Guardian model.
      *
+     * Updated with Blockbench model - includes articulated limbs for better animation.
+     *
      * @return LayerDefinition with mesh and texture size
      */
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        // Root part (pivot at Y=24, represents ground level)
-        PartDefinition root = partdefinition.addOrReplaceChild("root",
-            CubeListBuilder.create(),
-            PartPose.offset(0.0F, 24.0F, 0.0F));
+        PartDefinition root = partdefinition.addOrReplaceChild("root", CubeListBuilder.create(), PartPose.offset(0.0F, 24.0F, 0.0F));
 
-        // Body (main torso)
-        PartDefinition body = root.addOrReplaceChild("body",
-            CubeListBuilder.create()
-                .texOffs(0, 0).addBox(-6.0F, -32.0F, -4.0F, 12.0F, 16.0F, 7.0F, new CubeDeformation(0.0F))
-                .texOffs(42, 43).addBox(-4.0F, -16.0F, -2.0F, 8.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)),
-            PartPose.offset(0.0F, 0.0F, 0.0F));
+        PartDefinition body = root.addOrReplaceChild("body", CubeListBuilder.create().texOffs(72, 50).addBox(-4.0F, -18.0F, -2.0F, 8.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        // Left arm (child of body) - pivot at left shoulder
-        // Upper arm segment
-        PartDefinition leftArm = body.addOrReplaceChild("left_arm",
-            CubeListBuilder.create()
-                .texOffs(0, 38).addBox(0.0F, -2.0F, -3.0F, 5.0F, 14.0F, 6.0F, new CubeDeformation(0.0F)),
-            PartPose.offset(6.0F, -29.0F, 0.0F));
+        PartDefinition body_r1 = body.addOrReplaceChild("body_r1", CubeListBuilder.create().texOffs(0, 0).addBox(-8.0F, -24.0F, -5.0F, 16.0F, 16.0F, 10.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -10.0F, 0.0F, 0.0873F, 0.0F, 0.0F));
 
-        // Left forearm (child of left_arm) - pivot at elbow (Y=12)
-        // Can be animated independently for elbow bending
-        PartDefinition armLeft2 = leftArm.addOrReplaceChild("arm_left2_r1",
-            CubeListBuilder.create()
-                .texOffs(0, 38).addBox(0.0F, -1.0F, -3.0F, 5.0F, 12.0F, 6.0F, new CubeDeformation(-0.2F)),
-            PartPose.offsetAndRotation(0.0F, 12.0F, 0.0F, -0.1745F, 0.0F, 0.0F));
+        PartDefinition left_arm = body.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(30, 40).addBox(0.0F, -5.0F, -4.0F, 7.0F, 6.0F, 8.0F, new CubeDeformation(0.0F))
+        .texOffs(50, 54).addBox(0.0F, -4.0F, -3.0F, 5.0F, 14.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(8.0F, -29.0F, 0.0F));
 
-        // Right arm (child of body) - pivot at right shoulder
-        // Upper arm segment
-        PartDefinition rightArm = body.addOrReplaceChild("right_arm",
-            CubeListBuilder.create()
-                .texOffs(30, 23).addBox(-5.0F, -2.0F, -3.0F, 5.0F, 14.0F, 6.0F, new CubeDeformation(0.0F)),
-            PartPose.offset(-6.0F, -29.0F, 0.0F));
+        PartDefinition arm_left3_r1 = left_arm.addOrReplaceChild("arm_left3_r1", CubeListBuilder.create().texOffs(52, 0).addBox(2.0F, -4.0F, -4.0F, 6.0F, 6.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-2.0F, 20.0F, -1.0F, -0.1745F, 0.0F, 0.0F));
 
-        // Right forearm (child of right_arm) - pivot at elbow (Y=12)
-        // Can be animated independently for elbow bending
-        PartDefinition armRight2 = rightArm.addOrReplaceChild("arm_right2_r1",
-            CubeListBuilder.create()
-                .texOffs(30, 23).addBox(-5.0F, -1.0F, -3.0F, 5.0F, 12.0F, 6.0F, new CubeDeformation(-0.2F)),
-            PartPose.offsetAndRotation(0.0F, 12.0F, 0.0F, -0.1745F, 0.0F, 0.0F));
+        PartDefinition arm_left2_r1 = left_arm.addOrReplaceChild("arm_left2_r1", CubeListBuilder.create().texOffs(60, 14).addBox(2.0F, -3.0F, -3.0F, 5.0F, 12.0F, 6.0F, new CubeDeformation(-0.2F)), PartPose.offsetAndRotation(-2.0F, 12.0F, 0.0F, -0.1745F, 0.0F, 0.0F));
 
-        // Head (child of body) - pivot at neck (top of body)
-        PartDefinition head = body.addOrReplaceChild("head",
-            CubeListBuilder.create()
-                .texOffs(0, 23).addBox(-4.0F, -8.0F, -5.0F, 8.0F, 8.0F, 7.0F, new CubeDeformation(0.0F)),
-            PartPose.offset(0.0F, -32.0F, 0.0F));
+        PartDefinition right_arm = body.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(30, 26).addBox(-7.0F, -5.0F, -4.0F, 7.0F, 6.0F, 8.0F, new CubeDeformation(0.0F))
+        .texOffs(28, 54).addBox(-5.0F, -4.0F, -3.0F, 5.0F, 14.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(-8.0F, -29.0F, 0.0F));
 
-        // Left leg (child of root) - pivot at left hip
-        PartDefinition leftLeg = root.addOrReplaceChild("left_leg",
-            CubeListBuilder.create()
-                .texOffs(22, 43).addBox(1.0F, 3.0F, -3.0F, 5.0F, 13.0F, 5.0F, new CubeDeformation(0.0F)),
-            PartPose.offset(0.0F, -16.0F, 0.0F));
+        PartDefinition arm_right3_r1 = right_arm.addOrReplaceChild("arm_right3_r1", CubeListBuilder.create().texOffs(0, 41).addBox(-8.0F, -4.0F, -4.0F, 6.0F, 6.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(2.0F, 20.0F, -1.0F, -0.1745F, 0.0F, 0.0F));
 
-        // Right leg (child of root) - pivot at right hip
-        PartDefinition rightLeg = root.addOrReplaceChild("right_leg",
-            CubeListBuilder.create()
-                .texOffs(38, 0).addBox(-6.0F, 3.0F, -3.0F, 5.0F, 13.0F, 5.0F, new CubeDeformation(0.0F)),
-            PartPose.offset(0.0F, -16.0F, 0.0F));
+        PartDefinition arm_right2_r1 = right_arm.addOrReplaceChild("arm_right2_r1", CubeListBuilder.create().texOffs(0, 55).addBox(-7.0F, -3.0F, -3.0F, 5.0F, 12.0F, 6.0F, new CubeDeformation(-0.2F)), PartPose.offsetAndRotation(2.0F, 12.0F, 0.0F, -0.1745F, 0.0F, 0.0F));
+
+        PartDefinition head = body.addOrReplaceChild("head", CubeListBuilder.create(), PartPose.offset(0.0F, -32.0F, 0.0F));
+
+        PartDefinition head_r1 = head.addOrReplaceChild("head_r1", CubeListBuilder.create().texOffs(0, 26).addBox(-4.0F, -19.0F, -5.0F, 8.0F, 8.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 9.0F, 0.0F, 0.0873F, 0.0F, 0.0F));
+
+        PartDefinition left_leg = root.addOrReplaceChild("left_leg", CubeListBuilder.create().texOffs(60, 41).addBox(1.0F, 14.0F, -5.0F, 5.0F, 2.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -16.0F, 0.0F));
+
+        PartDefinition leg_left_r1 = left_leg.addOrReplaceChild("leg_left_r1", CubeListBuilder.create().texOffs(72, 72).addBox(2.0F, -1.0F, -4.0F, 5.0F, 7.0F, 5.0F, new CubeDeformation(-0.1F)), PartPose.offsetAndRotation(-1.0F, 9.0F, 0.0F, 0.0873F, 0.0F, 0.0F));
+
+        PartDefinition leg_left_r2 = left_leg.addOrReplaceChild("leg_left_r2", CubeListBuilder.create().texOffs(20, 74).addBox(2.0F, -6.0F, -4.0F, 5.0F, 6.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.0F, 9.0F, 0.0F, -0.0873F, 0.0F, 0.0F));
+
+        PartDefinition right_leg = root.addOrReplaceChild("right_leg", CubeListBuilder.create().texOffs(60, 32).addBox(-6.0F, 14.0F, -5.0F, 5.0F, 2.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -16.0F, 0.0F));
+
+        PartDefinition leg_right_r1 = right_leg.addOrReplaceChild("leg_right_r1", CubeListBuilder.create().texOffs(72, 60).addBox(-5.0F, -1.0F, -4.0F, 5.0F, 7.0F, 5.0F, new CubeDeformation(-0.1F)), PartPose.offsetAndRotation(-1.0F, 9.0F, 0.0F, 0.0873F, 0.0F, 0.0F));
+
+        PartDefinition leg_right_r2 = right_leg.addOrReplaceChild("leg_right_r2", CubeListBuilder.create().texOffs(0, 73).addBox(-5.0F, -6.0F, -4.0F, 5.0F, 6.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.0F, 9.0F, 0.0F, -0.0873F, 0.0F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 128, 128);
     }
