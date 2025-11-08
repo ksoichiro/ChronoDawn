@@ -3,6 +3,7 @@ package com.chronosphere.core.teleport;
 import com.chronosphere.blocks.ClockTowerTeleporterBlock;
 import com.chronosphere.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -10,6 +11,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 import java.util.Map;
 import java.util.UUID;
@@ -24,6 +26,13 @@ import java.util.concurrent.ConcurrentHashMap;
 public class TeleporterChargingHandler {
     private static final int CHARGE_DURATION_TICKS = 60; // 3 seconds
     private static final double MAX_DISTANCE = 3.0; // Maximum distance from teleporter while charging
+
+    // Orange color for particles (Chronosphere theme color #db8813)
+    // RGB(219, 136, 19) normalized to 0-1 range
+    private static final DustParticleOptions ORANGE_PARTICLE = new DustParticleOptions(
+        new Vector3f(0.859f, 0.533f, 0.075f),
+        1.0f // particle size
+    );
 
     // Server-side charging state storage
     private static final Map<UUID, ChargingData> CHARGING_PLAYERS = new ConcurrentHashMap<>();
@@ -53,6 +62,29 @@ public class TeleporterChargingHandler {
      */
     public static void startCharging(ServerPlayer player, BlockPos teleporterPos, String direction, long startTime) {
         CHARGING_PLAYERS.put(player.getUUID(), new ChargingData(startTime, teleporterPos, direction));
+
+        // Immediately show initial charging effects
+        ServerLevel level = (ServerLevel) player.level();
+
+        // Initial sound (more pleasant than lever click)
+        level.playSound(null, teleporterPos, SoundEvents.BEACON_ACTIVATE, SoundSource.BLOCKS, 0.8f, 1.5f);
+
+        // Initial particle burst (orange dust particles)
+        for (int i = 0; i < 20; i++) {
+            double offsetX = (level.random.nextDouble() - 0.5) * 1.5;
+            double offsetY = level.random.nextDouble() * 1.5;
+            double offsetZ = (level.random.nextDouble() - 0.5) * 1.5;
+
+            level.sendParticles(
+                ORANGE_PARTICLE,
+                teleporterPos.getX() + 0.5 + offsetX,
+                teleporterPos.getY() + 0.5 + offsetY,
+                teleporterPos.getZ() + 0.5 + offsetZ,
+                1,
+                0, 0, 0,
+                0.05
+            );
+        }
     }
 
     /**
@@ -109,36 +141,46 @@ public class TeleporterChargingHandler {
     private static void spawnChargingParticles(ServerLevel level, BlockPos teleporterPos, Vec3 playerPos, long elapsedTicks) {
         double progress = Math.min(1.0, elapsedTicks / (double) CHARGE_DURATION_TICKS);
 
-        // Particle count increases with progress
-        int particleCount = (int) (5 + progress * 25);
+        // Particle count increases with progress (2-3 particles per tick)
+        int particleCount = (int) (2 + progress * 3);
 
-        for (int i = 0; i < particleCount / 10; i++) {
-            double offsetX = (level.random.nextDouble() - 0.5) * 2.0;
-            double offsetY = level.random.nextDouble() * 2.0;
-            double offsetZ = (level.random.nextDouble() - 0.5) * 2.0;
+        // Orange dust particles spiraling around the teleporter
+        for (int i = 0; i < particleCount; i++) {
+            double angle = (elapsedTicks + i) * 0.2;
+            double radius = 1.0 + progress * 0.5;
+
+            double offsetX = Math.cos(angle) * radius;
+            double offsetY = progress * 2.0;
+            double offsetZ = Math.sin(angle) * radius;
 
             level.sendParticles(
-                ParticleTypes.PORTAL,
+                ORANGE_PARTICLE,
                 teleporterPos.getX() + 0.5 + offsetX,
                 teleporterPos.getY() + 0.5 + offsetY,
                 teleporterPos.getZ() + 0.5 + offsetZ,
                 1,
                 0, 0, 0,
-                0.1
+                0.05
             );
         }
 
-        // Add dragon breath particles in final second
+        // Add flame particles in final second for more intensity
         if (progress > 0.66) {
-            level.sendParticles(
-                ParticleTypes.DRAGON_BREATH,
-                teleporterPos.getX() + 0.5,
-                teleporterPos.getY() + 0.5,
-                teleporterPos.getZ() + 0.5,
-                2,
-                0.3, 0.3, 0.3,
-                0.05
-            );
+            for (int i = 0; i < 2; i++) {
+                double offsetX = (level.random.nextDouble() - 0.5) * 0.8;
+                double offsetY = level.random.nextDouble() * 1.5;
+                double offsetZ = (level.random.nextDouble() - 0.5) * 0.8;
+
+                level.sendParticles(
+                    ParticleTypes.FLAME,
+                    teleporterPos.getX() + 0.5 + offsetX,
+                    teleporterPos.getY() + 0.5 + offsetY,
+                    teleporterPos.getZ() + 0.5 + offsetZ,
+                    1,
+                    0, 0.1, 0,
+                    0.02
+                );
+            }
         }
     }
 

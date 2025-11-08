@@ -70,15 +70,13 @@ public class ClockTowerTeleporterBlock extends BaseEntityBlock {
         if (!level.isClientSide && player instanceof ServerPlayer serverPlayer) {
             // Server-side: Start charging the teleporter
             // This will be handled by TeleporterChargingHandler.tick()
+            // Initial sound and particles are played by TeleporterChargingHandler.startCharging()
             TeleporterChargingHandler.startCharging(
                 serverPlayer,
                 pos,
                 state.getValue(DIRECTION).name(),
                 level.getGameTime()
             );
-
-            // Initial sound
-            level.playSound(null, pos, SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 1.0f, 1.0f);
         }
 
         return InteractionResult.SUCCESS;
