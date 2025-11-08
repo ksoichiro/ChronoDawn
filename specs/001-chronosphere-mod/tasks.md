@@ -539,12 +539,49 @@
 
 ### World Generation - Master Clock (US3)
 
-- [ ] T128 [P] [US3] Create Master Clock structure NBT (entrance) in common/src/main/resources/data/chronosphere/structures/master_clock_entrance.nbt
-- [ ] T129 [P] [US3] Create Master Clock structure NBT (mid-layer) in common/src/main/resources/data/chronosphere/structures/master_clock_mid.nbt
-- [ ] T130 [P] [US3] Create Master Clock structure NBT (boss room) in common/src/main/resources/data/chronosphere/structures/master_clock_boss_room.nbt
-- [ ] T131 [P] [US3] Implement Master Clock structure feature in common/src/main/java/com/chronosphere/worldgen/structures/MasterClockStructure.java
-- [ ] T132 [P] [US3] Create Master Clock structure set in common/src/main/resources/data/chronosphere/worldgen/structure_set/master_clock.json
-- [ ] T133 [US3] Implement key-based door opening logic in BlockEventHandler.java
+**Design**: Underground palace structure with Jigsaw random room generation (see master-clock-design.md)
+**Location**: Near world spawn using concentric_rings placement (80-100 chunk radius, 1 per dimension)
+**Size**: Entrance 15x10x15, Dungeon 41x50x41, Boss Room 35x20x35
+
+#### NBT Structures - Entrance & Boss Room
+
+- [ ] T128 [P] [US3] Create Master Clock entrance NBT (15x10x15) in common/src/main/resources/data/chronosphere/structure/master_clock_entrance.nbt (small surface temple, key-locked door, stairs to underground)
+- [ ] T129 [P] [US3] Create Master Clock boss room NBT (35x20x35) in common/src/main/resources/data/chronosphere/structure/master_clock_boss_room.nbt (large hall, Time Tyrant spawn point, pillars, reward chest)
+
+#### NBT Structures - Jigsaw Rooms (8 variants)
+
+- [ ] T130a [P] [US3] Create room_trap_arrows NBT (15x8x15) in common/src/main/resources/data/chronosphere/structure/master_clock_room_trap_arrows.nbt (pressure plates, dispensers, Reversing Time Sandstone floor)
+- [ ] T130b [P] [US3] Create room_spawner NBT (17x8x17) in common/src/main/resources/data/chronosphere/structure/master_clock_room_spawner.nbt (mob spawners for Skeleton/Zombie, multiple exits)
+- [ ] T130c [P] [US3] Create room_maze NBT (21x8x21) in common/src/main/resources/data/chronosphere/structure/master_clock_room_maze.nbt (maze layout, Reversing Time Sandstone walls, chest at dead-ends)
+- [ ] T130d [P] [US3] Create room_puzzle_redstone NBT (15x10x15) in common/src/main/resources/data/chronosphere/structure/master_clock_room_puzzle_redstone.nbt (redstone puzzle, lever sequence, door unlock)
+- [ ] T130e [P] [US3] Create room_lava NBT (17x12x17) in common/src/main/resources/data/chronosphere/structure/master_clock_room_lava.nbt (lava trap, parkour, Reversing Time Sandstone platforms)
+- [ ] T130f [P] [US3] Create room_time_puzzle NBT (15x8x15) in common/src/main/resources/data/chronosphere/structure/master_clock_room_time_puzzle.nbt (lever→door opens→auto-closes, timing challenge)
+- [ ] T130g [P] [US3] Create room_guardian_arena NBT (19x10x19) in common/src/main/resources/data/chronosphere/structure/master_clock_room_guardian_arena.nbt (elite enemies, combat arena, reward chest)
+- [ ] T130h [P] [US3] Create room_rest NBT (13x8x13) in common/src/main/resources/data/chronosphere/structure/master_clock_room_rest.nbt (safe room, bed placement area, food/potion chest)
+
+#### Ancient Gears Item (Progressive Unlock)
+
+- [ ] T131a [P] [US3] Create Ancient Gear item in common/src/main/java/com/chronosphere/items/quest/AncientGearItem.java
+- [ ] T131b [P] [US3] Register Ancient Gear in ModItems registry
+- [ ] T131c [P] [US3] Create Ancient Gear texture in common/src/main/resources/assets/chronosphere/textures/item/ancient_gear.png (clockwork gear theme)
+- [ ] T131d [US3] Implement Ancient Gears detection logic in BlockEventHandler.java (check 3 gears in inventory, open boss room door)
+
+#### Jigsaw Template Pools
+
+- [ ] T132a [P] [US3] Create entrance pool JSON in common/src/main/resources/data/chronosphere/worldgen/template_pool/master_clock/entrance_pool.json (single entrance NBT)
+- [ ] T132b [P] [US3] Create room pool JSON in common/src/main/resources/data/chronosphere/worldgen/template_pool/master_clock/room_pool.json (8 room variants, equal weights)
+- [ ] T132c [P] [US3] Create boss room pool JSON in common/src/main/resources/data/chronosphere/worldgen/template_pool/master_clock/boss_room_pool.json (single boss room NBT)
+
+#### Structure Configuration
+
+- [ ] T132d [P] [US3] Create loot processor JSON in common/src/main/resources/data/chronosphere/worldgen/processor_list/master_clock_loot.json (chest loot with Ancient Gears)
+- [ ] T132e [P] [US3] Create structure JSON in common/src/main/resources/data/chronosphere/worldgen/structure/master_clock.json (references entrance pool, Jigsaw configuration)
+- [ ] T132f [P] [US3] Create structure set JSON in common/src/main/resources/data/chronosphere/worldgen/structure_set/master_clock.json (concentric_rings placement, distance: 80, spread: 20, count: 1)
+- [ ] T132g [P] [US3] Create biome tag has_master_clock in common/src/main/resources/data/chronosphere/tags/worldgen/biome/has_master_clock.json (all Chronosphere biomes)
+
+#### Door Opening Logic
+
+- [ ] T133 [US3] Implement Key to Master Clock door opening logic in BlockEventHandler.java (entrance door unlock when key used)
 
 ### Entities - Time Tyrant (Boss) (US3)
 
@@ -780,21 +817,21 @@ Task: "Create Clockstone item model in common/src/main/resources/assets/chronosp
 
 ## Total Task Count
 
-**Total Tasks**: 273 (updated with T080a-T080u fruit enhancement + T088d-T088at exploration diversity enhancements + new feature requests)
+**Total Tasks**: 289 (updated with T080a-T080u fruit enhancement + T088d-T088at exploration diversity enhancements + Master Clock Jigsaw system)
 
 **Breakdown by Phase**:
 - Phase 1 (Setup): 16 tasks (added T012a-b for dependency metadata)
 - Phase 2 (Foundational): 20 tasks
 - Phase 3 (User Story 1 - P1): 122 tasks (includes T080a-T080u fruit enhancement + T088d-T088iv exploration diversity + portal placement fix + consumable hourglass)
 - Phase 4 (User Story 2 - P2): 36 tasks (added desert biome spawning + spawner fix)
-- Phase 5 (User Story 3 - P3): 49 tasks
+- Phase 5 (User Story 3 - P3): 65 tasks (added Master Clock Jigsaw system: 8 room NBTs + Ancient Gears + template pools)
 - Phase 6 (Polish): 30 tasks (added advancement system)
 
 **Breakdown by User Story**:
-- User Story 1 (P1): 122 tasks (45% of total)
-- User Story 2 (P2): 36 tasks (13% of total)
-- User Story 3 (P3): 49 tasks (18% of total)
-- Infrastructure (Setup + Foundational + Polish): 66 tasks (24% of total)
+- User Story 1 (P1): 122 tasks (42% of total)
+- User Story 2 (P2): 36 tasks (12% of total)
+- User Story 3 (P3): 65 tasks (23% of total)
+- Infrastructure (Setup + Foundational + Polish): 66 tasks (23% of total)
 
 **Phase 3 Enhancement Breakdown**:
 - Core US1 features: 75 tasks (T001-T088c)

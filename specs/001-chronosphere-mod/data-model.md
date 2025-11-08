@@ -302,6 +302,21 @@
 **Use**:
 - マスタークロック入口の扉を開く
 
+#### Ancient Gear (古代の歯車)
+
+**Type**: Quest Item / Progressive Unlock Item
+**Max Stack Size**: 3
+**Obtained From**: マスタークロック中層の部屋（チェスト/アイテムフレーム）
+
+**Use**:
+- 3つ収集するとマスタークロックのボス部屋扉が開く
+- 段階的解放システムの一部
+
+**Mechanics**:
+- プレイヤーのインベントリ内で3つ所持を検出
+- BlockEventHandler.javaでAncient Gearsカウント
+- 条件達成時、ボス部屋前の扉を開放
+
 ## Entities
 
 ### Custom Mobs
@@ -398,18 +413,59 @@
 
 ### Master Clock (マスタークロック)
 
-**Type**: World Generation Structure
-**Location**: クロノスフィア（中心部、固定座標）
-**Generation Frequency**: 1つのみ
+**Type**: World Generation Structure (Underground Palace with Jigsaw System)
+**Location**: クロノスフィア（ワールドスポーン近く、concentric_rings placement）
+**Generation Frequency**: 1つのみ（ディメンション全体）
+**Design Document**: `specs/001-chronosphere-mod/master-clock-design.md`
 
-**Structure**:
-- 入口（鍵が必要）
-- 中層（謎解き/トラップ）
-- 最深部（時間の暴君の部屋）
+**Placement Configuration**:
+- `type`: `minecraft:concentric_rings`
+- `distance`: 80 chunks（ワールドスポーンから80-100チャンク範囲）
+- `spread`: 20 chunks
+- `count`: 1
+- `preferred_biomes`: `#chronosphere:has_master_clock`
+
+**Structure Composition**:
+
+1. **地上部分（Entrance）** - 15x10x15
+   - 小規模な古代神殿風の入口
+   - Key to Master Clock使用で扉開放
+   - 地下への階段
+
+2. **地下迷宮（Main Dungeon）** - 41x50x41
+   - Jigsawシステムによるランダム部屋配置
+   - 8種類の部屋バリアント（各15x8x15～21x8x21）:
+     - room_trap_arrows: 矢トラップ + Reversing Time Sandstone
+     - room_spawner: モブスポーナー（Skeleton/Zombie）
+     - room_maze: 迷路 + Reversing Time Sandstone walls
+     - room_puzzle_redstone: レッドストーンパズル
+     - room_lava: 溶岩トラップ + パルクール
+     - room_time_puzzle: 時間逆行パズル（扉が自動で閉じる）
+     - room_guardian_arena: エリート敵戦闘
+     - room_rest: 休憩部屋（ベッド配置可能）
+   - 各部屋にAncient Gears配置（3つ収集でボス部屋開放）
+
+3. **ボス部屋（Boss Room）** - 35x20x35
+   - Time Tyrant spawn位置
+   - 戦闘用の広いホール
+   - 報酬チェスト（撃破後出現）
+
+**Progressive Unlock System**:
+- **Phase 1**: Key to Master Clock → 入口扉開放
+- **Phase 2**: Ancient Gears x3収集 → ボス部屋扉開放
+- **Phase 3**: Time Tyrant撃破 → 報酬獲得
 
 **Contents**:
-- 時間の暴君（ボス）
+- Ancient Gears x3（中層の部屋に配置、チェスト/アイテムフレーム）
+- 時間の暴君（ボス、ボス部屋中央）
 - 静止のコア（破壊可能なブロック、撃破時に自動破壊）
+- ランダムルートチェスト（各部屋）
+- 報酬チェスト（Eye of Chronos, Fragment of Stasis Core）
+
+**Special Features**:
+- Reversing Time Sandstone使用（トラップ、迷路、パズル）
+- Jigsawによる毎回異なるレイアウト
+- 段階的解放（探索→収集→ボス戦）
 
 ## Game Mechanics
 
