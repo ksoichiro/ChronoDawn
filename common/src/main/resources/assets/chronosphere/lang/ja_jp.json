@@ -12,6 +12,7 @@
   "block.chronosphere.time_wood_sapling": "時の木の苗木",
   "block.chronosphere.potted_time_wood_sapling": "植木鉢に植えられた時の木の苗木",
   "block.chronosphere.fruit_of_time": "時間の果実",
+  "block.chronosphere.clock_tower_teleporter": "時計塔転送装置",
 
   "item.chronosphere.clockstone": "クロックストーン",
   "item.chronosphere.enhanced_clockstone": "強化クロックストーン",
