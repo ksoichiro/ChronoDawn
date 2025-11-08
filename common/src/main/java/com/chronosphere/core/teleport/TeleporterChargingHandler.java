@@ -234,31 +234,35 @@ public class TeleporterChargingHandler {
      * @return Safe landing position (Vec3 with coordinates)
      */
     private static Vec3 findSafeLandingPosition(ServerLevel level, BlockPos targetPos) {
-        // Try positions around the teleporter (prioritize horizontal offsets)
+        // Try positions around the teleporter at floor level (3 blocks below teleporter)
+        // Desert Clock Tower: teleporter at Y=98, floor at Y=95 (difference = 3)
+        int floorOffset = -3;
+
         BlockPos[] candidateOffsets = {
-            targetPos.offset(2, 0, 0),   // 2 blocks east
-            targetPos.offset(-2, 0, 0),  // 2 blocks west
-            targetPos.offset(0, 0, 2),   // 2 blocks south
-            targetPos.offset(0, 0, -2),  // 2 blocks north
-            targetPos.offset(1, 0, 1),   // 1 block southeast
-            targetPos.offset(-1, 0, -1), // 1 block northwest
-            targetPos.offset(1, 0, -1),  // 1 block northeast
-            targetPos.offset(-1, 0, 1),  // 1 block southwest
-            targetPos.offset(1, 0, 0),   // 1 block east (closer)
-            targetPos.offset(-1, 0, 0),  // 1 block west (closer)
-            targetPos.offset(0, 0, 1),   // 1 block south (closer)
-            targetPos.offset(0, 0, -1),  // 1 block north (closer)
+            targetPos.offset(2, floorOffset, 0),   // 2 blocks east at floor level
+            targetPos.offset(-2, floorOffset, 0),  // 2 blocks west at floor level
+            targetPos.offset(0, floorOffset, 2),   // 2 blocks south at floor level
+            targetPos.offset(0, floorOffset, -2),  // 2 blocks north at floor level
+            targetPos.offset(1, floorOffset, 1),   // 1 block southeast at floor level
+            targetPos.offset(-1, floorOffset, -1), // 1 block northwest at floor level
+            targetPos.offset(1, floorOffset, -1),  // 1 block northeast at floor level
+            targetPos.offset(-1, floorOffset, 1),  // 1 block southwest at floor level
+            targetPos.offset(1, floorOffset, 0),   // 1 block east (closer) at floor level
+            targetPos.offset(-1, floorOffset, 0),  // 1 block west (closer) at floor level
+            targetPos.offset(0, floorOffset, 1),   // 1 block south (closer) at floor level
+            targetPos.offset(0, floorOffset, -1),  // 1 block north (closer) at floor level
         };
 
         for (BlockPos candidate : candidateOffsets) {
             if (isSafeLandingPosition(level, candidate)) {
-                // Return center of block + 1 block up (player feet position)
-                return new Vec3(candidate.getX() + 0.5, candidate.getY() + 1.0, candidate.getZ() + 0.5);
+                // Return center of block at ground level (player feet position)
+                // candidate is already at floor level, so use it directly
+                return new Vec3(candidate.getX() + 0.5, candidate.getY(), candidate.getZ() + 0.5);
             }
         }
 
         // Fallback: teleporter position + offset (even if not ideal)
-        return new Vec3(targetPos.getX() + 2.5, targetPos.getY() + 1.0, targetPos.getZ() + 0.5);
+        return new Vec3(targetPos.getX() + 2.5, targetPos.getY() - 3.0, targetPos.getZ() + 0.5);
     }
 
     /**
