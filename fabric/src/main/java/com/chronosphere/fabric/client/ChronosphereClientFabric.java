@@ -104,6 +104,12 @@ public class ChronosphereClientFabric implements ClientModInitializer {
             ModBlocks.FROZEN_TIME_ICE.get(),
             RenderType.translucent()
         );
+
+        // Register Time Wheat to use cutout rendering (for transparency)
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.TIME_WHEAT.get(),
+            RenderType.cutout()
+        );
     }
 
     /**

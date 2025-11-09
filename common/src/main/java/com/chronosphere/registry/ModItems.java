@@ -6,6 +6,11 @@ import com.chronosphere.items.TimeHourglassItem;
 import com.chronosphere.items.base.ClockstoneItem;
 import com.chronosphere.items.base.EnhancedClockstoneItem;
 import com.chronosphere.items.consumables.FruitOfTimeItem;
+import com.chronosphere.items.consumables.TimeFruitPieItem;
+import com.chronosphere.items.consumables.TimeJamItem;
+import com.chronosphere.items.consumables.TimeWheatSeedsItem;
+import com.chronosphere.items.consumables.TimeWheatItem;
+import com.chronosphere.items.consumables.TimeBreadItem;
 import com.chronosphere.items.tools.TimeClockItem;
 import com.chronosphere.items.KeyToMasterClockItem;
 import com.chronosphere.items.UnstableHourglassItem;
@@ -89,6 +94,14 @@ public class ModItems {
     public static final RegistrySupplier<Item> TIME_WOOD_SAPLING = ITEMS.register(
         "time_wood_sapling",
         () -> new BlockItem(ModBlocks.TIME_WOOD_SAPLING.get(), new Item.Properties())
+    );
+
+    /**
+     * Time Wheat Bale - BlockItem for placing Time Wheat Bale block.
+     */
+    public static final RegistrySupplier<Item> TIME_WHEAT_BALE = ITEMS.register(
+        "time_wheat_bale",
+        () -> new BlockItem(ModBlocks.TIME_WHEAT_BALE.get(), new Item.Properties())
     );
 
     /**
@@ -251,6 +264,51 @@ public class ModItems {
         () -> new FruitOfTimeItem(FruitOfTimeItem.createProperties())
     );
 
+    /**
+     * Time Fruit Pie - Crafted food item from Time Fruits and wheat.
+     * Restores 8 hunger and grants Haste II effect for 30 seconds.
+     */
+    public static final RegistrySupplier<Item> TIME_FRUIT_PIE = ITEMS.register(
+        "time_fruit_pie",
+        () -> new TimeFruitPieItem(TimeFruitPieItem.createProperties())
+    );
+
+    /**
+     * Time Jam - Crafted food item from Time Fruits and sugar.
+     * Restores 4 hunger and grants Speed I effect for 60 seconds.
+     */
+    public static final RegistrySupplier<Item> TIME_JAM = ITEMS.register(
+        "time_jam",
+        () -> new TimeJamItem(TimeJamItem.createProperties())
+    );
+
+    /**
+     * Time Wheat Seeds - Seeds for planting Time Wheat crops.
+     * Can be planted on farmland to grow Time Wheat.
+     */
+    public static final RegistrySupplier<Item> TIME_WHEAT_SEEDS = ITEMS.register(
+        "time_wheat_seeds",
+        () -> new TimeWheatSeedsItem(TimeWheatSeedsItem.createProperties())
+    );
+
+    /**
+     * Time Wheat - Harvested crop item from mature Time Wheat.
+     * Used for crafting Time Bread.
+     */
+    public static final RegistrySupplier<Item> TIME_WHEAT = ITEMS.register(
+        "time_wheat",
+        () -> new TimeWheatItem(TimeWheatItem.createProperties())
+    );
+
+    /**
+     * Time Bread - Basic crafted food item from Time Wheat.
+     * Restores 5 hunger points.
+     */
+    public static final RegistrySupplier<Item> TIME_BREAD = ITEMS.register(
+        "time_bread",
+        () -> new TimeBreadItem(TimeBreadItem.createProperties())
+    );
+
     // === Tools ===
 
     /**
@@ -312,6 +370,7 @@ public class ModItems {
         output.accept(TIME_WOOD_SLAB.get());
         output.accept(TIME_WOOD_FENCE.get());
         output.accept(TIME_WOOD_SAPLING.get());
+        output.accept(TIME_WHEAT_BALE.get());
         output.accept(CLOCK_TOWER_TELEPORTER.get());
         output.accept(CLOCKWORK_BLOCK.get());
         output.accept(TIME_CRYSTAL_BLOCK.get());
@@ -333,6 +392,11 @@ public class ModItems {
 
         // === Consumables ===
         output.accept(FRUIT_OF_TIME.get());
+        output.accept(TIME_FRUIT_PIE.get());
+        output.accept(TIME_JAM.get());
+        output.accept(TIME_WHEAT_SEEDS.get());
+        output.accept(TIME_WHEAT.get());
+        output.accept(TIME_BREAD.get());
 
         // === Tools ===
         output.accept(TIME_CLOCK.get());

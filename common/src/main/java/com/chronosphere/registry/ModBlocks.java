@@ -22,6 +22,8 @@ import com.chronosphere.blocks.TimeWoodSapling;
 import com.chronosphere.blocks.TimeWoodSlab;
 import com.chronosphere.blocks.TimeWoodStairs;
 import com.chronosphere.blocks.UnstableFungus;
+import com.chronosphere.blocks.TimeWheatBlock;
+import com.chronosphere.blocks.TimeWheatBaleBlock;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
@@ -246,6 +248,31 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> FROZEN_TIME_ICE = BLOCKS.register(
         "frozen_time_ice",
         () -> new FrozenTimeIceBlock(FrozenTimeIceBlock.createProperties())
+    );
+
+    /**
+     * Time Wheat - Custom crop that grows in the Chronosphere dimension.
+     * Has 8 growth stages (0-7) like vanilla wheat.
+     * Drops Time Wheat Seeds and Time Wheat (when mature).
+     */
+    public static final RegistrySupplier<Block> TIME_WHEAT = BLOCKS.register(
+        "time_wheat",
+        () -> new TimeWheatBlock(
+            Block.Properties.ofFullCopy(Blocks.WHEAT)
+        )
+    );
+
+    /**
+     * Time Wheat Bale - Decorative storage block for Time Wheat.
+     * Crafted from 9 Time Wheat items.
+     * Can be rotated in 3 axes (like logs).
+     * Reduces fall damage by 80% (same as vanilla hay bale).
+     */
+    public static final RegistrySupplier<Block> TIME_WHEAT_BALE = BLOCKS.register(
+        "time_wheat_bale",
+        () -> new TimeWheatBaleBlock(
+            Block.Properties.ofFullCopy(Blocks.HAY_BLOCK)
+        )
     );
 
     /**
