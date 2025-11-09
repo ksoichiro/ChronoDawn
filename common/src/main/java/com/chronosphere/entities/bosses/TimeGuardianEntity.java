@@ -38,7 +38,7 @@ import net.minecraft.world.phys.Vec3;
  * Attributes (from data-model.md):
  * - Health: 200 (100 hearts)
  * - Armor: 10
- * - Attack Damage: 12
+ * - Attack Damage: 10
  * - Attack Speed: 0.5秒間隔
  * - Movement Speed: 0.2
  *
@@ -85,7 +85,7 @@ public class TimeGuardianEntity extends Monster {
     // AoE timing (Phase 2)
     private static final int AOE_COOLDOWN_TICKS = 80; // 4 seconds
     private static final double AOE_RANGE = 4.0; // Reduced from 5.0 for balance
-    private static final float AOE_DAMAGE = 4.0f; // Reduced from 6.0 for balance
+    private static final float AOE_DAMAGE = 6.0f; // 3 hearts - balanced for iron armor gameplay
 
     public TimeGuardianEntity(EntityType<? extends TimeGuardianEntity> entityType, Level level) {
         super(entityType, level);
@@ -106,7 +106,7 @@ public class TimeGuardianEntity extends Monster {
         return Monster.createMonsterAttributes()
             .add(Attributes.MAX_HEALTH, 200.0) // 100 hearts
             .add(Attributes.ARMOR, 10.0)
-            .add(Attributes.ATTACK_DAMAGE, 12.0)
+            .add(Attributes.ATTACK_DAMAGE, 10.0) // 5 hearts - balanced for iron armor gameplay
             .add(Attributes.ATTACK_KNOCKBACK, 1.0) // Knockback when attacking
             .add(Attributes.MOVEMENT_SPEED, 0.2)
             .add(Attributes.FOLLOW_RANGE, 32.0)
@@ -403,7 +403,7 @@ public class TimeGuardianEntity extends Monster {
         AABB aoeBox = this.getBoundingBox().inflate(AOE_RANGE);
 
         this.level().getEntitiesOfClass(Player.class, aoeBox).forEach(player -> {
-            // Physical damage (reduced from 6.0 to 4.0 for balance)
+            // Physical damage (6.0 = 3 hearts, balanced for iron armor gameplay)
             player.hurt(this.damageSources().mobAttack(this), AOE_DAMAGE);
 
             // Time distortion effects: Slowness II (severe slowdown) + Mining Fatigue (cannot break blocks quickly)

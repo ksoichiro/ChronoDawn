@@ -326,7 +326,8 @@
 **Type**: Mini-Boss Entity
 **Health**: 200 (ハート100個)
 **Armor**: 10
-**Attack Damage**: 12
+**Attack Damage**: 10 (5ハート - 通常攻撃)
+**AoE Attack Damage**: 6 (3ハート - Phase 2範囲攻撃)
 **Attack Speed**: 0.5秒間隔
 **Movement Speed**: 0.2（Slowness IV適用前の基本速度）
 

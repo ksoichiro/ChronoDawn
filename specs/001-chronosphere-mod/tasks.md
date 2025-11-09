@@ -471,7 +471,7 @@
 - [X] T115a [US2] Create custom model and texture for Time Guardian (currently using zombie placeholder)
   - [X] T115a-1 [US2] Improve Time Guardian texture (currently using placeholder image with minimal modifications)
   - [X] T115a-2 [US2] Improve Time Guardian model geometry (more imposing design, arm shape that conveys extended reach)
-- [ ] T115b [US2] Adjust Time Guardian parameters (HP, attack damage, armor) based on playtesting feedback
+- [X] T115b [US2] Adjust Time Guardian parameters (HP, attack damage, armor) based on playtesting feedback
 - [X] T115c [US2] Implement boss floor access mechanism (stairs, elevator, or teleporter to top floor)
 - [X] T115d [US2] Add boss arena entrance lockdown (prevent escape/re-entry during combat)
 - [ ] T115e [US2] Add reversed resonance explanation (book item, advancement description, or in-game message) (Note: Time Guardian撃破トリガーは廃止。Unstable Hourglassクラフト、Time Tyrant撃破用の説明が必要)
