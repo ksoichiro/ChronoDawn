@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "chronosphere:time_crystal_block"
+    }
+  ],
+  "result": {
+    "item": "chronosphere:time_crystal",
+    "count": 9
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building_blocks",
+  "pattern": [
+    "BBB"
+  ],
+  "key": {
+    "B": {
+      "item": "chronosphere:temporal_bricks"
+    }
+  },
+  "result": {
+    "item": "chronosphere:temporal_bricks_slab",
+    "count": 6
+  }
+}

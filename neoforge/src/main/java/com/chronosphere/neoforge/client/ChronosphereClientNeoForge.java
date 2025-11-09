@@ -111,6 +111,18 @@ public class ChronosphereClientNeoForge {
             ModBlocks.POTTED_TIME_WOOD_SAPLING.get(),
             RenderType.cutout()
         );
+
+        // Register Time Crystal Block to use translucent rendering (for glass-like transparency)
+        ItemBlockRenderTypes.setRenderLayer(
+            ModBlocks.TIME_CRYSTAL_BLOCK.get(),
+            RenderType.translucent()
+        );
+
+        // Register Frozen Time Ice to use translucent rendering (for ice-like transparency)
+        ItemBlockRenderTypes.setRenderLayer(
+            ModBlocks.FROZEN_TIME_ICE.get(),
+            RenderType.translucent()
+        );
     }
 
     /**

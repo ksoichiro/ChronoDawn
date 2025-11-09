@@ -92,6 +92,18 @@ public class ChronosphereClientFabric implements ClientModInitializer {
             ModBlocks.POTTED_TIME_WOOD_SAPLING.get(),
             RenderType.cutout()
         );
+
+        // Register Time Crystal Block to use translucent rendering (for glass-like transparency)
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.TIME_CRYSTAL_BLOCK.get(),
+            RenderType.translucent()
+        );
+
+        // Register Frozen Time Ice to use translucent rendering (for ice-like transparency)
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.FROZEN_TIME_ICE.get(),
+            RenderType.translucent()
+        );
     }
 
     /**

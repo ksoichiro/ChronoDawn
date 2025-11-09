@@ -255,3 +255,362 @@ Emphasizing Enhanced Clockstone material:
 
 **Placeholder**: Currently using enhanced_clockstone.png as placeholder texture
 **TODO**: Create custom texture based on the design above
+
+---
+
+## Block Textures (T240-249)
+
+### Overview
+
+T240-249で追加された装飾・建築用ブロックのテクスチャデザインガイド。
+すべてのブロックはChronosphere次元のテーマカラー（紫/青）を基調とする。
+
+**Recommended Texture Size**: 16x16 pixels (Minecraft standard)
+
+**Color Palette for Chronosphere**:
+- **Primary**: Purple (`#9B59B6`), Blue (`#3498DB`)
+- **Secondary**: Light Blue (`#5DADE2`), Teal
+- **Metallic**: Copper, Bronze, Antique Gold
+- **Ice**: Ice blue with purple tint
+- **Organic**: Green with purple/blue highlights
+
+---
+
+## 6. Clockwork Block（歯車ブロック）
+
+**ファイル**: `common/src/main/resources/assets/chronosphere/textures/block/clockwork_block.png`
+
+**Concept**: Steampunk/Mechanical clock themed decorative block
+
+**Design**:
+- **Theme**: Multiple gears visible on metal surface
+- **Color**: Metallic gray, bronze, copper tones (MapColor.METAL)
+- **Texture**: Hard, metallic surface with visible mechanical components
+- **Animation**: Rotating gears (can be implemented with .mcmeta file)
+- **Details**:
+  - 3-4 gears of different sizes
+  - Clock hands or mechanism parts visible
+  - Rivets or bolts on the edges
+
+**Sound**: METAL (metallic sound)
+
+**Reference**:
+- Vanilla `observer.png` (mechanical feel)
+- Vanilla `lodestone_top.png` (decorative metal)
+
+**Properties**:
+- Hardness: 3.5
+- Requires: Pickaxe
+- Light: None
+
+**Current Status**: ⚠️ Placeholder (copy of clockstone_block.png)
+
+---
+
+## 7. Time Crystal Block（時間水晶ブロック）
+
+**ファイル（2層構造）**:
+- `common/src/main/resources/assets/chronosphere/textures/block/time_crystal_block_outer.png` - 外側のガラス層
+- `common/src/main/resources/assets/chronosphere/textures/block/time_crystal_block_core.png` - 内側の発光コア
+
+**Concept**: Multi-layer glowing crystal block - beacon-like appearance with inner core
+
+**Design Architecture**:
+- **2-Layer Structure**:
+  - **Outer Layer**: Transparent glass shell (16x16x16 full cube)
+  - **Inner Layer**: Glowing core (10x10x10 cube centered inside)
+- **Color**: Light blue (MapColor.COLOR_LIGHT_BLUE)
+- **Glow**: Emits light level 10 (bright ambient light)
+
+**Layer 1: Outer Glass Shell** (`time_crystal_block_outer.png`):
+- **Purpose**: Transparent protective layer like beacon glass
+- **Texture**: Glass-like with subtle crystalline patterns
+- **Transparency**: High alpha (very transparent, ~70-80% transparent)
+- **Color**: Light blue tint with slight opacity
+- **Details**:
+  - Thin frame or edges visible
+  - Crystal facets on surface
+  - Subtle sparkles or reflections
+  - Similar to stained glass but more refined
+
+**Layer 2: Inner Core** (`time_crystal_block_core.png`):
+- **Purpose**: Bright glowing center (light source)
+- **Texture**: Solid, bright, energy-like
+- **Transparency**: None (fully opaque)
+- **Color**: Bright cyan/light blue, very luminous
+- **Details**:
+  - Concentrated energy or crystal in center
+  - Radial glow pattern from center
+  - Can have geometric patterns (hexagons, circles)
+  - Similar to Sea Lantern core but more crystalline
+
+**Sound**: GLASS (glass/crystal sound)
+
+**Reference**:
+- Vanilla `beacon.png` (beacon glass structure)
+- Vanilla `sea_lantern.png` (glowing effect)
+- Vanilla `light_blue_stained_glass.png` (transparent glass)
+- Vanilla `amethyst_block.png` (crystalline texture)
+
+**Properties**:
+- Hardness: 3.0
+- Requires: Pickaxe
+- Light: Level 10
+- **Transparency**: Translucent rendering (like stained glass)
+
+**Rendering**:
+- Uses `RenderType.translucent()` for glass-like transparency
+- **Multi-layer JSON model**: Inner core (6x6x6) + Outer shell (16x16x16)
+- Outer texture must have alpha channel for transparency
+- Inner texture is opaque and bright
+
+**Crafting**: 9x Time Crystal → 1x Time Crystal Block
+
+**Texture Creation Tips**:
+
+**For Outer Layer** (`time_crystal_block_outer.png`):
+1. Create 16x16 RGBA image
+2. Base: Light blue color (#5DADE2)
+3. Alpha: 70-80% transparent overall
+4. Edges: Slightly more opaque (frame effect)
+5. Add subtle crystalline facets or geometric patterns
+6. Keep it minimal - this is the glass shell
+
+**For Inner Core** (`time_crystal_block_core.png`):
+1. Create 16x16 RGB or RGBA image (no transparency needed)
+2. Base: Very bright cyan/light blue (#00FFFF or #5DADE2 at max brightness)
+3. Center: Brightest point
+4. Edges: Gradually darker (radial gradient)
+5. Add geometric patterns (optional):
+   - Hexagonal crystal structure
+   - Concentric circles
+   - Energy burst pattern
+6. Should look like compressed glowing energy
+
+**Visual Result**:
+When both layers combine, it should look like a glass cube with a glowing crystal/energy core floating in the center - similar to a beacon or containment field.
+
+**Current Status**: ⚠️ Placeholder (both layers use copy of clockstone_block.png)
+
+---
+
+## 8. Temporal Bricks（時のレンガ）
+
+**ファイル**: `common/src/main/resources/assets/chronosphere/textures/block/temporal_bricks.png`
+
+**Concept**: Time-themed brick building block
+
+**Design**:
+- **Theme**: Brick pattern with clock/time decorations
+- **Color**: Purple/Blue base (MapColor.COLOR_PURPLE) - Chronosphere theme color
+- **Texture**: Stone brick pattern with time motifs
+- **Details**:
+  - Standard brick layout (similar to Stone Bricks)
+  - Each brick has subtle clock face or hands decoration
+  - Purple-blue gradient
+  - Slightly weathered/ancient appearance
+
+**Sound**: STONE (stone sound)
+
+**Reference**:
+- Vanilla `stone_bricks.png` (brick pattern) + purple/blue color scheme
+
+**Properties**:
+- Hardness: 2.5
+- Requires: Pickaxe
+- Light: None
+
+**Crafting**: 4x Clockstone → 1x Temporal Bricks (2x2)
+
+**Variants**:
+- Temporal Bricks Stairs
+- Temporal Bricks Slab
+- Temporal Bricks Wall
+
+**Current Status**: ⚠️ Placeholder (copy of clockstone_block.png)
+
+---
+
+## 9. Temporal Moss（時の苔）
+
+**ファイル**: `common/src/main/resources/assets/chronosphere/textures/block/temporal_moss.png`
+
+**Concept**: Time-affected moss block exclusive to swamp biome
+
+**Design**:
+- **Theme**: Organic moss with temporal influence
+- **Color**: Green base (MapColor.COLOR_GREEN) with purple/blue highlights
+- **Texture**: Moss-like organic texture with mysterious feel
+- **Details**:
+  - Similar to vanilla moss but with magical twist
+  - Purple/blue tinted areas
+  - Slightly glowing spots (optional)
+  - More mystical than vanilla moss
+
+**Sound**: MOSS_CARPET (moss sound, same as vanilla moss)
+
+**Reference**:
+- Vanilla `moss_block.png` as base + time theme color overlay
+
+**Properties**:
+- Hardness: 0.1 (very soft)
+- Tool: Any tool or hand (hoe is fastest)
+- Light: None
+- Special: Spreads to adjacent blocks, bonemeal-able
+
+**Biome**: chronosphere_swamp exclusive
+
+**Current Status**: ⚠️ Placeholder (copy of unstable_fungus.png)
+
+---
+
+## 10. Frozen Time Ice（凍結時間の氷）
+
+**ファイル（2層構造）**:
+- `common/src/main/resources/assets/chronosphere/textures/block/frozen_time_ice_outer.png` - 外側の透明な氷層
+- `common/src/main/resources/assets/chronosphere/textures/block/frozen_time_ice_core.png` - 内側の凍結結晶コア
+
+**Concept**: Multi-layer frozen ice block - transparent ice with frozen crystal inside
+
+**Design Architecture**:
+- **2-Layer Structure**:
+  - **Outer Layer**: Transparent ice shell (16x16x16 full cube)
+  - **Inner Layer**: Frozen crystal core (cross model - X-shaped intersecting planes)
+- **Core Shape**: Cross pattern (like flowers/mushrooms) - two intersecting vertical planes
+- **Color**: Ice blue (MapColor.ICE) with purple/blue tint
+- **Special**: Never melts, slippery surface
+
+**Layer 1: Outer Ice Shell** (`frozen_time_ice_outer.png`):
+- **Purpose**: Transparent ice layer like vanilla ice
+- **Texture**: Ice-like with high transparency
+- **Transparency**: High alpha (very transparent, ~70-80% transparent)
+- **Color**: Ice blue with purple/blue tint (#9B59B6 or #3498DB)
+- **Details**:
+  - Similar to vanilla ice texture
+  - Purple/blue color filter applied
+  - Slight frost patterns on surface
+  - More mystical than vanilla ice
+
+**Layer 2: Inner Crystal Core** (`frozen_time_ice_core.png`):
+- **Purpose**: Frozen-in-time crystal suspended in ice - displayed as cross pattern
+- **Texture**: Vertical plane texture (will be shown on X-shaped intersecting planes)
+- **Model**: Cross pattern (like mushrooms/flowers) - two perpendicular vertical planes
+- **Transparency**: Semi-transparent (40-50% transparent)
+- **Color**: Deeper purple/blue, crystalline
+- **Details**:
+  - Design a vertical frozen crystal/ice formation pattern
+  - Fractal ice formations or crystalline structures
+  - Can include clock motifs or time symbols frozen inside
+  - Snowflake-like patterns, hexagonal crystals
+  - Top-to-bottom ice crystal formation
+  - The texture will be visible from all 4 directions due to cross pattern
+
+**Sound**: GLASS (glass/ice sound)
+
+**Reference**:
+- Vanilla `ice.png` (ice transparency)
+- Vanilla `packed_ice.png` (ice structure)
+- Vanilla `amethyst_block.png` (crystalline patterns)
+
+**Properties**:
+- Hardness: 0.5
+- Tool: Pickaxe (silk touch to get block)
+- Light: None
+- Special: Slippery (friction 0.98), never melts, semi-transparent
+- **Transparency**: Translucent rendering (like ice)
+
+**Rendering**:
+- Uses `RenderType.translucent()` for ice-like transparency
+- **Multi-layer JSON model**: Inner crystal (10x10x10) + Outer ice (16x16x16)
+- Both textures should have alpha channel for transparency
+- Outer layer more transparent than inner layer
+
+**Biome**: chronosphere_snowy exclusive
+
+**Texture Creation Tips**:
+
+**For Outer Layer** (`frozen_time_ice_outer.png`):
+1. Create 16x16 RGBA image
+2. Base on vanilla ice.png structure
+3. Color: Ice blue with purple tint (#9B59B6 or #3498DB)
+4. Alpha: 70-80% transparent (very transparent ice)
+5. Add subtle frost patterns
+6. Keep it light and airy - this is the ice shell
+
+**For Inner Core** (`frozen_time_ice_core.png`):
+1. Create 16x16 RGBA image
+2. Color: Deeper purple/blue (#9B59B6 or #5D6D9E)
+3. Alpha: 40-50% transparent (less transparent than outer)
+4. Add geometric crystal patterns:
+   - Snowflake structure
+   - Hexagonal crystals
+   - Fractal ice formations
+   - Optional: Small clock hands or time symbols frozen inside
+5. Should look like frozen-in-time crystal structure
+
+**Visual Result**:
+When both layers combine, it should look like a transparent ice block with frozen crystals or time fragments suspended inside - like something frozen in time within ice.
+
+**Current Status**: ⚠️ Placeholder (both layers use copy of time_wood_leaves.png)
+
+---
+
+## 11. Time Wood Fence（時の木フェンス）
+
+**ファイル**: `common/src/main/resources/assets/chronosphere/textures/block/time_wood_fence_***.png`
+
+**Concept**: Fence variant using Time Wood Planks texture
+
+**Design**:
+- **Theme**: Uses existing Time Wood Planks texture
+- **Structure**: Standard fence shape (post + side bars)
+- **Color**: Same as Time Wood Planks
+
+**Reference**:
+- Vanilla `oak_fence.png` structure + Time Wood Planks texture
+
+**Models Required**:
+- `time_wood_fence_post.json`
+- `time_wood_fence_side.json`
+- `time_wood_fence_inventory.json`
+
+**Current Status**: ✅ Models created, uses Time Wood Planks texture
+
+---
+
+## Design Principles - Blocks
+
+1. **Thematic Consistency**: All blocks use purple/blue as Chronosphere dimension theme
+2. **Vanilla Compatibility**: Follow Minecraft's 16x16 pixel art style
+3. **Functional Clarity**: Visual design indicates block function (light, decoration, building)
+4. **Biome Exclusivity**: Moss (swamp) and Ice (snowy) have appropriate natural appearance
+5. **Animation Support**: Clockwork Block can use .mcmeta for gear animation
+
+---
+
+## Implementation Checklist - Blocks
+
+- ⚠️ Clockwork Block - TODO: Create mechanical/gear texture
+- ⚠️ Time Crystal Block - TODO: Create glowing crystal texture
+- ⚠️ Temporal Bricks - TODO: Create purple brick pattern with clock motifs
+- ⚠️ Temporal Moss - TODO: Create green moss with purple highlights
+- ⚠️ Frozen Time Ice - TODO: Create purple-tinted ice texture
+- ✅ Time Wood Fence - Uses existing Time Wood Planks texture
+- ✅ Temporal Bricks Variants - Will reuse Temporal Bricks texture
+
+---
+
+## Optional: Animation File for Clockwork Block
+
+**ファイル**: `common/src/main/resources/assets/chronosphere/textures/block/clockwork_block.png.mcmeta`
+
+```json
+{
+  "animation": {
+    "frametime": 4,
+    "interpolate": true
+  }
+}
+```
+
+This creates smooth rotating gear animation. The PNG should contain multiple frames vertically stacked.

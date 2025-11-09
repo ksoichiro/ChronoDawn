@@ -4,13 +4,24 @@ import com.chronosphere.Chronosphere;
 import com.chronosphere.blocks.ClockstoneBlock;
 import com.chronosphere.blocks.ClockstoneOre;
 import com.chronosphere.blocks.ClockTowerTeleporterBlock;
+import com.chronosphere.blocks.ClockworkBlock;
 import com.chronosphere.blocks.FruitOfTimeBlock;
+import com.chronosphere.blocks.FrozenTimeIceBlock;
 import com.chronosphere.blocks.ReversingTimeSandstone;
-import com.chronosphere.blocks.UnstableFungus;
-import com.chronosphere.blocks.TimeWoodLog;
+import com.chronosphere.blocks.TemporalBricksBlock;
+import com.chronosphere.blocks.TemporalBricksSlab;
+import com.chronosphere.blocks.TemporalBricksStairs;
+import com.chronosphere.blocks.TemporalBricksWall;
+import com.chronosphere.blocks.TemporalMossBlock;
+import com.chronosphere.blocks.TimeCrystalBlock;
+import com.chronosphere.blocks.TimeWoodFence;
 import com.chronosphere.blocks.TimeWoodLeaves;
+import com.chronosphere.blocks.TimeWoodLog;
 import com.chronosphere.blocks.TimeWoodPlanks;
 import com.chronosphere.blocks.TimeWoodSapling;
+import com.chronosphere.blocks.TimeWoodSlab;
+import com.chronosphere.blocks.TimeWoodStairs;
+import com.chronosphere.blocks.UnstableFungus;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
@@ -142,6 +153,99 @@ public class ModBlocks {
                 .lightLevel(state -> 15)
                 .noOcclusion()
         )
+    );
+
+    /**
+     * Clockwork Block - Decorative block with animated rotating gears theme.
+     * Crafted from Clockstone and iron, used for steampunk/mechanical builds.
+     */
+    public static final RegistrySupplier<Block> CLOCKWORK_BLOCK = BLOCKS.register(
+        "clockwork_block",
+        () -> new ClockworkBlock(ClockworkBlock.createProperties())
+    );
+
+    /**
+     * Time Crystal Block - Decorative block that emits light.
+     * Crafted from 9 Time Crystals, emits light level 10.
+     */
+    public static final RegistrySupplier<Block> TIME_CRYSTAL_BLOCK = BLOCKS.register(
+        "time_crystal_block",
+        () -> new TimeCrystalBlock(TimeCrystalBlock.createProperties())
+    );
+
+    /**
+     * Temporal Bricks - Building block crafted from Clockstone.
+     * Used for construction and has stairs/slabs/walls variants.
+     */
+    public static final RegistrySupplier<Block> TEMPORAL_BRICKS = BLOCKS.register(
+        "temporal_bricks",
+        () -> new TemporalBricksBlock(TemporalBricksBlock.createProperties())
+    );
+
+    /**
+     * Temporal Bricks Stairs - Stair variant of Temporal Bricks.
+     */
+    public static final RegistrySupplier<Block> TEMPORAL_BRICKS_STAIRS = BLOCKS.register(
+        "temporal_bricks_stairs",
+        () -> new TemporalBricksStairs(TemporalBricksStairs.createProperties())
+    );
+
+    /**
+     * Temporal Bricks Slab - Slab variant of Temporal Bricks.
+     */
+    public static final RegistrySupplier<Block> TEMPORAL_BRICKS_SLAB = BLOCKS.register(
+        "temporal_bricks_slab",
+        () -> new TemporalBricksSlab(TemporalBricksSlab.createProperties())
+    );
+
+    /**
+     * Temporal Bricks Wall - Wall variant of Temporal Bricks.
+     */
+    public static final RegistrySupplier<Block> TEMPORAL_BRICKS_WALL = BLOCKS.register(
+        "temporal_bricks_wall",
+        () -> new TemporalBricksWall(TemporalBricksWall.createProperties())
+    );
+
+    /**
+     * Time Wood Stairs - Stair variant of Time Wood Planks.
+     */
+    public static final RegistrySupplier<Block> TIME_WOOD_STAIRS = BLOCKS.register(
+        "time_wood_stairs",
+        () -> new TimeWoodStairs(TimeWoodStairs.createProperties())
+    );
+
+    /**
+     * Time Wood Slab - Slab variant of Time Wood Planks.
+     */
+    public static final RegistrySupplier<Block> TIME_WOOD_SLAB = BLOCKS.register(
+        "time_wood_slab",
+        () -> new TimeWoodSlab(TimeWoodSlab.createProperties())
+    );
+
+    /**
+     * Time Wood Fence - Fence variant of Time Wood Planks.
+     */
+    public static final RegistrySupplier<Block> TIME_WOOD_FENCE = BLOCKS.register(
+        "time_wood_fence",
+        () -> new TimeWoodFence(TimeWoodFence.createProperties())
+    );
+
+    /**
+     * Temporal Moss - Decorative moss block exclusive to swamp biome.
+     * Spreads to adjacent blocks similar to vanilla moss.
+     */
+    public static final RegistrySupplier<Block> TEMPORAL_MOSS = BLOCKS.register(
+        "temporal_moss",
+        () -> new TemporalMossBlock(TemporalMossBlock.createProperties())
+    );
+
+    /**
+     * Frozen Time Ice - Special ice block exclusive to snowy biome.
+     * Does not melt when exposed to light sources, slippery like ice.
+     */
+    public static final RegistrySupplier<Block> FROZEN_TIME_ICE = BLOCKS.register(
+        "frozen_time_ice",
+        () -> new FrozenTimeIceBlock(FrozenTimeIceBlock.createProperties())
     );
 
     /**
