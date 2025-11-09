@@ -407,6 +407,83 @@
 - [ ] T088as [P] [US1] (Optional) Implement particle spawning logic for biomes (client-side)
 - [ ] T088at [US1] (Optional) Test ambient sounds and particles in-game for immersion quality
 
+### Custom Mobs (US1 Enhancement - High Priority)
+
+**Purpose**: 時間をテーマにした独自モブを追加し、ディメンションの独自性とゲームプレイの多様性を向上
+
+**Note**: ボス以外の通常モブがないという問題を解決。敵対・中立・友好モブを追加して探索体験を豊かにする
+
+- [ ] T200 [US1] Design custom mob concepts (hostile, neutral, friendly with time theme, behavior patterns, drops, spawn conditions)
+- [ ] T201 [P] [US1] Create Temporal Wraith entity in common/src/main/java/com/chronosphere/entities/mobs/TemporalWraithEntity.java (hostile, phases through blocks when hit, inflicts Slowness II on attack)
+- [ ] T202 [P] [US1] Create Clockwork Sentinel entity in common/src/main/java/com/chronosphere/entities/mobs/ClockworkSentinelEntity.java (hostile, immune to time distortion effects, drops Ancient Gears)
+- [ ] T203 [P] [US1] Create Time Keeper entity in common/src/main/java/com/chronosphere/entities/mobs/TimeKeeperEntity.java (neutral, villager-like trading for time-related items)
+- [ ] T204 [P] [US1] Register custom mobs in ModEntities registry and configure spawning in biomes (Temporal Wraith in forest/plains, Clockwork Sentinel in desert/structures, Time Keeper in libraries)
+- [ ] T205 [P] [US1] Create custom mob textures and models in common/src/main/resources/assets/chronosphere/textures/entity/
+- [ ] T206 [P] [US1] Create custom mob loot tables in common/src/main/resources/data/chronosphere/loot_tables/entities/
+- [ ] T207 [US1] Test custom mob spawning, AI behavior, and loot drops in-game
+
+### Basic Equipment Set (US1 Enhancement - High Priority)
+
+**Purpose**: 基本的な装備セットを追加し、収集とクラフトの楽しみを提供
+
+**Note**: 現在はClockstone Oreしかなく、装備も限定的。基本装備セット（武器・防具・ツール）を追加してゲームプレイの深みを増す
+
+- [ ] T210 [P] [US1] Create Time Crystal Ore block in common/src/main/java/com/chronosphere/blocks/TimeCrystalOre.java (new ore type, rarer than Clockstone)
+- [ ] T211 [P] [US1] Create Time Crystal item in common/src/main/java/com/chronosphere/items/base/TimeCrystalItem.java
+- [ ] T212 [P] [US1] Configure Time Crystal Ore worldgen in common/src/main/resources/data/chronosphere/worldgen/placed_feature/time_crystal_ore.json (Y: 0-48, vein size 3-5)
+- [ ] T213 [P] [US1] Create Clockstone Sword item in common/src/main/java/com/chronosphere/items/equipment/ClockstoneSwordItem.java (basic tier weapon, slightly better than iron)
+- [ ] T214 [P] [US1] Create Clockstone Axe/Shovel/Hoe items in common/src/main/java/com/chronosphere/items/equipment/ (basic tier tools)
+- [ ] T215 [P] [US1] Create Clockstone Armor Set (Helmet, Chestplate, Leggings, Boots) in common/src/main/java/com/chronosphere/items/equipment/
+- [ ] T216 [P] [US1] Create crafting recipes for Clockstone equipment in common/src/main/resources/data/chronosphere/recipes/ (uses Clockstone + Time Crystal for enhanced durability)
+- [ ] T217 [P] [US1] Create textures for Clockstone equipment in common/src/main/resources/assets/chronosphere/textures/item/
+- [ ] T218 [US1] Add equipment to creative tab and localization files (en_us.json, ja_jp.json)
+
+### Food System Expansion (US1 Enhancement - High Priority)
+
+**Purpose**: 食料システムを拡張し、クラフトと収集の楽しみを追加
+
+**Note**: 現在はFruit of Timeのみで、クラフトできない。加工食料と独自作物を追加して食料システムに深みを持たせる
+
+- [ ] T220 [P] [US1] Create Time Fruit Pie item in common/src/main/java/com/chronosphere/items/consumables/TimeFruitPieItem.java (crafted from 3x Fruit of Time + wheat, restores 8 hunger + 30s Haste II)
+- [ ] T221 [P] [US1] Create Time Jam item in common/src/main/java/com/chronosphere/items/consumables/TimeJamItem.java (crafted from 4x Fruit of Time + sugar, restores 4 hunger + 60s Speed I)
+- [ ] T222 [P] [US1] Create Time Wheat crop block in common/src/main/java/com/chronosphere/blocks/TimeWheatBlock.java (grows in Chronosphere, 8 growth stages like vanilla wheat)
+- [ ] T223 [P] [US1] Create Time Wheat Seeds and Time Wheat items in common/src/main/java/com/chronosphere/items/consumables/
+- [ ] T224 [P] [US1] Create Time Bread item in common/src/main/java/com/chronosphere/items/consumables/TimeBreadItem.java (crafted from 3x Time Wheat, restores 5 hunger)
+- [ ] T225 [P] [US1] Configure Time Wheat worldgen in plains/forest biomes (random patches like vanilla wheat in villages)
+- [ ] T226 [P] [US1] Create crafting recipes for food items in common/src/main/resources/data/chronosphere/recipes/
+- [ ] T227 [P] [US1] Create textures for food items and crop stages in common/src/main/resources/assets/chronosphere/textures/
+- [ ] T228 [US1] Add food items to creative tab and localization files
+
+### Additional Biomes (US1 Enhancement - Medium Priority)
+
+**Purpose**: バイオームの種類を増やし、探索の多様性と飽きにくさを向上
+
+**Note**: 現在は4種類（plains, ocean, forest, desert）のみ。山岳・湿地・雪原・洞窟を追加してバリエーションを増やす
+
+- [ ] T230 [P] [US1] Create chronosphere_mountain biome JSON in common/src/main/resources/data/chronosphere/worldgen/biome/chronosphere_mountain.json (stone terrain, high elevation, sparse vegetation)
+- [ ] T231 [P] [US1] Create chronosphere_swamp biome JSON in common/src/main/resources/data/chronosphere/worldgen/biome/chronosphere_swamp.json (water, clay, Temporal Moss, unique vegetation)
+- [ ] T232 [P] [US1] Create chronosphere_snowy biome JSON in common/src/main/resources/data/chronosphere/worldgen/biome/chronosphere_snowy.json (snow, ice, Frozen Time Ice, frozen time theme)
+- [ ] T233 [P] [US1] Create chronosphere_cave biome JSON in common/src/main/resources/data/chronosphere/worldgen/biome/chronosphere_cave.json (underground biome, time crystals exposed in walls)
+- [ ] T234 [US1] Update multi_noise parameters in multi_noise_biome_source_parameter_list/chronosphere.json to include new biomes with distinct noise values (mountain: high erosion, swamp: low continentalness, snowy: low temperature, cave: depth offset)
+- [ ] T235 [US1] Test new biomes in-game and verify distribution balance (ensure each biome is discoverable without excessive travel)
+
+### Block Variety Expansion (US1 Enhancement - Medium Priority)
+
+**Purpose**: ブロックの種類を増やし、建築と装飾の選択肢を拡充
+
+**Note**: 現在はカスタムブロックが少なく、バイオームの見た目が単調。装飾ブロック・建築用バリエーション・バイオーム固有ブロックを追加
+
+- [ ] T240 [P] [US1] Create Clockwork Block in common/src/main/java/com/chronosphere/blocks/ClockworkBlock.java (decorative block, animated texture with rotating gears)
+- [ ] T241 [P] [US1] Create Time Crystal Block in common/src/main/java/com/chronosphere/blocks/TimeCrystalBlock.java (decorative, emits light level 10, crafted from 9 Time Crystals)
+- [ ] T242 [P] [US1] Create Temporal Bricks block in common/src/main/java/com/chronosphere/blocks/TemporalBricksBlock.java (building block, crafted from 4 Clockstone)
+- [ ] T243 [P] [US1] Create stairs/slabs/walls/fences variants for Time Wood Planks and Temporal Bricks in common/src/main/java/com/chronosphere/blocks/
+- [ ] T244 [P] [US1] Create Temporal Moss block in common/src/main/java/com/chronosphere/blocks/TemporalMossBlock.java (decorative, swamp biome exclusive, spreads like vanilla moss)
+- [ ] T245 [P] [US1] Create Frozen Time Ice block in common/src/main/java/com/chronosphere/blocks/FrozenTimeIceBlock.java (snowy biome exclusive, doesn't melt, slippery like ice)
+- [ ] T246 [P] [US1] Register new blocks in ModBlocks and create blockstates/models/textures in common/src/main/resources/
+- [ ] T247 [P] [US1] Create crafting recipes for decorative blocks (Clockwork Block, Time Crystal Block, Temporal Bricks, stairs/slabs/walls/fences)
+- [ ] T248 [P] [US1] Configure Temporal Moss and Frozen Time Ice worldgen in respective biomes
+- [ ] T249 [US1] Add new blocks to creative tab and localization files
+
 **Checkpoint**: User Story 1が完全に機能し、独立してテスト可能であること
 
 ---
@@ -518,6 +595,20 @@
 
 - [X] T122d [P] [US2] Review all US2 recipes (Time Clock, Spatially Linked Pickaxe, Unstable Hourglass) for Overworld-exclusive materials
 - [X] T122e [P] [US2] Update recipes if needed to use Chronosphere materials - Added gold ore, redstone ore, and sand generation to Chronosphere biomes instead
+
+### Equipment Tier System (US2 Enhancement - High Priority)
+
+**Purpose**: 装備にティア制を導入し、プログレッション感と戦略性を向上
+
+**Note**: 現在は基本装備（Tier 1）と究極装備（Tier 3）のみ。Tier 2（Enhanced Clockstone装備）を追加して段階的な成長を実現
+
+- [ ] T250 [P] [US2] Create Enhanced Clockstone Sword item in common/src/main/java/com/chronosphere/items/equipment/EnhancedClockstoneSwordItem.java (Tier 2 weapon, better than Tier 1, chance to freeze enemy on hit for 2s)
+- [ ] T251 [P] [US2] Create Enhanced Clockstone Axe/Shovel/Hoe items in common/src/main/java/com/chronosphere/items/equipment/ (Tier 2 tools, faster mining speed)
+- [ ] T252 [P] [US2] Create Enhanced Clockstone Armor Set (Helmet, Chestplate, Leggings, Boots) in common/src/main/java/com/chronosphere/items/equipment/ (Tier 2 armor, higher protection + set bonus: immunity to time distortion effects)
+- [ ] T253 [P] [US2] Create crafting recipes for Tier 2 equipment in common/src/main/resources/data/chronosphere/recipes/ (uses Enhanced Clockstone + Time Crystal)
+- [ ] T254 [P] [US2] Implement time-manipulation effects for Tier 2 equipment (freeze on hit for sword, set bonus for armor)
+- [ ] T255 [P] [US2] Create textures for Tier 2 equipment in common/src/main/resources/assets/chronosphere/textures/item/
+- [ ] T256 [US2] Add Tier 2 equipment to creative tab and localization files
 
 **Checkpoint**: User Story 1とUser Story 2が両方とも独立して動作すること
 
@@ -654,6 +745,19 @@
 
 - [ ] T171d [P] [US3] Review all US3 recipes (Chronoblade, Time Guardian's Mail, Echoing Time Boots, Ultimate Spatially Linked Pickaxe, Unstable Pocket Watch) for Overworld-exclusive materials
 - [ ] T171e [P] [US3] Update recipes if needed to use Chronosphere materials (Fragment of Stasis Core, Enhanced Clockstone, Clockstone Block, etc.)
+
+### Custom Terrain Features (US3 Enhancement - Medium Priority)
+
+**Purpose**: 時間をテーマにした独自地形を追加し、地形生成の独自性を向上
+
+**Note**: 現在はオーバーワールドと同じ地形生成アルゴリズムを使用。時間のテーマに沿った特殊地形を追加して探索の面白さを増す
+
+- [ ] T260 [US3] Design Temporal Rift Canyon structure concept (distorted terrain, floating blocks, time crystal veins exposed in walls, visual effects)
+- [ ] T261 [P] [US3] Create Temporal Rift Canyon structure NBT in common/src/main/resources/data/chronosphere/structures/temporal_rift_canyon.nbt (canyon with irregular terrain, time crystal ores)
+- [ ] T262 [P] [US3] Create Floating Clockwork Ruins structure NBT in common/src/main/resources/data/chronosphere/structures/floating_clockwork_ruins.nbt (floating islands with broken clockwork mechanisms, loot chests)
+- [ ] T263 [P] [US3] Create Time Crystal Caverns feature in common/src/main/java/com/chronosphere/worldgen/features/TimeCrystalCavernsFeature.java (underground crystal formations, glowing effects)
+- [ ] T264 [P] [US3] Configure custom terrain feature placement in common/src/main/resources/data/chronosphere/worldgen/structure_set/ and placed_feature/ (rare placement, biome-specific)
+- [ ] T265 [US3] Test custom terrain features in-game and verify they generate correctly without breaking existing structures
 
 **Checkpoint**: 全User Storyが独立して機能すること
 
@@ -817,21 +921,21 @@ Task: "Create Clockstone item model in common/src/main/resources/assets/chronosp
 
 ## Total Task Count
 
-**Total Tasks**: 289 (updated with T080a-T080u fruit enhancement + T088d-T088at exploration diversity enhancements + Master Clock Jigsaw system)
+**Total Tasks**: 344 (updated with gameplay enhancement tasks: custom mobs, equipment tiers, food system, biomes, blocks, terrain features)
 
 **Breakdown by Phase**:
 - Phase 1 (Setup): 16 tasks (added T012a-b for dependency metadata)
 - Phase 2 (Foundational): 20 tasks
-- Phase 3 (User Story 1 - P1): 122 tasks (includes T080a-T080u fruit enhancement + T088d-T088iv exploration diversity + portal placement fix + consumable hourglass)
-- Phase 4 (User Story 2 - P2): 36 tasks (added desert biome spawning + spawner fix)
-- Phase 5 (User Story 3 - P3): 65 tasks (added Master Clock Jigsaw system: 8 room NBTs + Ancient Gears + template pools)
+- Phase 3 (User Story 1 - P1): 164 tasks (includes fruit enhancement + exploration diversity + gameplay enhancements: T200-249)
+- Phase 4 (User Story 2 - P2): 43 tasks (added desert biome spawning + equipment tier system: T250-256)
+- Phase 5 (User Story 3 - P3): 71 tasks (added Master Clock Jigsaw system + custom terrain features: T260-265)
 - Phase 6 (Polish): 30 tasks (added advancement system)
 
 **Breakdown by User Story**:
-- User Story 1 (P1): 122 tasks (42% of total)
-- User Story 2 (P2): 36 tasks (12% of total)
-- User Story 3 (P3): 65 tasks (23% of total)
-- Infrastructure (Setup + Foundational + Polish): 66 tasks (23% of total)
+- User Story 1 (P1): 164 tasks (48% of total) - includes gameplay enhancements
+- User Story 2 (P2): 43 tasks (13% of total) - includes equipment tier system
+- User Story 3 (P3): 71 tasks (21% of total) - includes custom terrain features
+- Infrastructure (Setup + Foundational + Polish): 66 tasks (19% of total)
 
 **Phase 3 Enhancement Breakdown**:
 - Core US1 features: 75 tasks (T001-T088c)
@@ -843,18 +947,31 @@ Task: "Create Clockstone item model in common/src/main/resources/assets/chronosp
 - Decorative Terrain Features: 6 tasks (T088ad-T088ai)
 - Biome-Specific Landmarks (Optional): 5 tasks (T088aj-T088an)
 - Ambient Sounds & Particles (Optional): 6 tasks (T088ao-T088at)
+- **Custom Mobs (High Priority)**: 8 tasks (T200-T207)
+- **Basic Equipment Set (High Priority)**: 9 tasks (T210-T218)
+- **Food System Expansion (High Priority)**: 9 tasks (T220-T228)
+- **Additional Biomes (Medium Priority)**: 6 tasks (T230-T235)
+- **Block Variety Expansion (Medium Priority)**: 10 tasks (T240-T249)
+
+**Phase 4 Enhancement Breakdown**:
+- Core US2 features: 36 tasks (T089-T122e)
+- **Equipment Tier System (High Priority)**: 7 tasks (T250-T256)
+
+**Phase 5 Enhancement Breakdown**:
+- Core US3 features: 65 tasks (T123-T171e)
+- **Custom Terrain Features (Medium Priority)**: 6 tasks (T260-T265)
 
 **Parallel Opportunities**:
 - Phase 1: 7 parallel groups
 - Phase 2: 8 parallel groups
-- Phase 3 (US1): 43 parallel groups (includes 12 new groups from exploration diversity enhancements)
-- Phase 4 (US2): 17 parallel groups
-- Phase 5 (US3): 24 parallel groups
+- Phase 3 (US1): 55 parallel groups (includes gameplay enhancement tasks)
+- Phase 4 (US2): 20 parallel groups (includes equipment tier system)
+- Phase 5 (US3): 26 parallel groups (includes custom terrain features)
 - Phase 6: 10 parallel groups
 
 **Independent Test Criteria**:
-- User Story 1: Portal creation, dimension travel, portal stabilization, free travel between dimensions, custom tree generation with harvestable fruits, multiple biomes (plains/ocean/forest) with vegetation, mob spawning with time distortion effects, decorative terrain features
-- User Story 2: Desert Clock Tower exploration, time manipulation items, Time Guardian defeat, key acquisition
-- User Story 3: Master Clock access, Time Tyrant defeat, ultimate artifacts creation, artifact effects validation
+- User Story 1: Portal creation, dimension travel, portal stabilization, free travel between dimensions, custom tree generation with harvestable fruits, multiple biomes (plains/ocean/forest/desert/mountain/swamp/snowy/cave) with vegetation, custom mob spawning with time distortion effects, decorative terrain features, basic equipment set, food system with crafting
+- User Story 2: Desert Clock Tower exploration, time manipulation items, Time Guardian defeat, key acquisition, Enhanced Clockstone equipment tier
+- User Story 3: Master Clock access, Time Tyrant defeat, ultimate artifacts creation, artifact effects validation, custom terrain features
 
-**Suggested MVP Scope**: User Story 1 (Phase 1 + Phase 2 + Phase 3 Core + Multiple Biomes including Desert + Basic Mob Spawning + Vegetation System + Portal/Hourglass fixes) = 148 tasks (recommended for initial release, excludes optional enhancements)
+**Suggested MVP Scope**: User Story 1 (Phase 1 + Phase 2 + Phase 3 Core + Multiple Biomes + Basic Mob Spawning + Vegetation System + Custom Mobs + Basic Equipment Set + Food System) = 203 tasks (recommended for initial release with gameplay enhancements, excludes optional enhancements and custom terrain features)
