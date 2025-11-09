@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "chronosphere:block/time_wood_planks",
+    "top": "chronosphere:block/time_wood_planks",
+    "side": "chronosphere:block/time_wood_planks"
+  }
+}

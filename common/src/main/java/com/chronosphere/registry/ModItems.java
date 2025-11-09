@@ -102,6 +102,94 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.CLOCK_TOWER_TELEPORTER.get(), new Item.Properties())
     );
 
+    /**
+     * Clockwork Block - Decorative block with animated rotating gears theme.
+     */
+    public static final RegistrySupplier<Item> CLOCKWORK_BLOCK = ITEMS.register(
+        "clockwork_block",
+        () -> new BlockItem(ModBlocks.CLOCKWORK_BLOCK.get(), new Item.Properties())
+    );
+
+    /**
+     * Time Crystal Block - Decorative block that emits light level 10.
+     */
+    public static final RegistrySupplier<Item> TIME_CRYSTAL_BLOCK = ITEMS.register(
+        "time_crystal_block",
+        () -> new BlockItem(ModBlocks.TIME_CRYSTAL_BLOCK.get(), new Item.Properties())
+    );
+
+    /**
+     * Temporal Bricks - Building block crafted from Clockstone.
+     */
+    public static final RegistrySupplier<Item> TEMPORAL_BRICKS = ITEMS.register(
+        "temporal_bricks",
+        () -> new BlockItem(ModBlocks.TEMPORAL_BRICKS.get(), new Item.Properties())
+    );
+
+    /**
+     * Temporal Bricks Stairs - Stair variant of Temporal Bricks.
+     */
+    public static final RegistrySupplier<Item> TEMPORAL_BRICKS_STAIRS = ITEMS.register(
+        "temporal_bricks_stairs",
+        () -> new BlockItem(ModBlocks.TEMPORAL_BRICKS_STAIRS.get(), new Item.Properties())
+    );
+
+    /**
+     * Temporal Bricks Slab - Slab variant of Temporal Bricks.
+     */
+    public static final RegistrySupplier<Item> TEMPORAL_BRICKS_SLAB = ITEMS.register(
+        "temporal_bricks_slab",
+        () -> new BlockItem(ModBlocks.TEMPORAL_BRICKS_SLAB.get(), new Item.Properties())
+    );
+
+    /**
+     * Temporal Bricks Wall - Wall variant of Temporal Bricks.
+     */
+    public static final RegistrySupplier<Item> TEMPORAL_BRICKS_WALL = ITEMS.register(
+        "temporal_bricks_wall",
+        () -> new BlockItem(ModBlocks.TEMPORAL_BRICKS_WALL.get(), new Item.Properties())
+    );
+
+    /**
+     * Time Wood Stairs - Stair variant of Time Wood Planks.
+     */
+    public static final RegistrySupplier<Item> TIME_WOOD_STAIRS = ITEMS.register(
+        "time_wood_stairs",
+        () -> new BlockItem(ModBlocks.TIME_WOOD_STAIRS.get(), new Item.Properties())
+    );
+
+    /**
+     * Time Wood Slab - Slab variant of Time Wood Planks.
+     */
+    public static final RegistrySupplier<Item> TIME_WOOD_SLAB = ITEMS.register(
+        "time_wood_slab",
+        () -> new BlockItem(ModBlocks.TIME_WOOD_SLAB.get(), new Item.Properties())
+    );
+
+    /**
+     * Time Wood Fence - Fence variant of Time Wood Planks.
+     */
+    public static final RegistrySupplier<Item> TIME_WOOD_FENCE = ITEMS.register(
+        "time_wood_fence",
+        () -> new BlockItem(ModBlocks.TIME_WOOD_FENCE.get(), new Item.Properties())
+    );
+
+    /**
+     * Temporal Moss - Decorative moss block exclusive to swamp biome.
+     */
+    public static final RegistrySupplier<Item> TEMPORAL_MOSS = ITEMS.register(
+        "temporal_moss",
+        () -> new BlockItem(ModBlocks.TEMPORAL_MOSS.get(), new Item.Properties())
+    );
+
+    /**
+     * Frozen Time Ice - Special ice block exclusive to snowy biome.
+     */
+    public static final RegistrySupplier<Item> FROZEN_TIME_ICE = ITEMS.register(
+        "frozen_time_ice",
+        () -> new BlockItem(ModBlocks.FROZEN_TIME_ICE.get(), new Item.Properties())
+    );
+
     // === Material Items ===
 
     /**
@@ -220,8 +308,19 @@ public class ModItems {
         output.accept(TIME_WOOD_LOG.get());
         output.accept(TIME_WOOD_LEAVES.get());
         output.accept(TIME_WOOD_PLANKS.get());
+        output.accept(TIME_WOOD_STAIRS.get());
+        output.accept(TIME_WOOD_SLAB.get());
+        output.accept(TIME_WOOD_FENCE.get());
         output.accept(TIME_WOOD_SAPLING.get());
         output.accept(CLOCK_TOWER_TELEPORTER.get());
+        output.accept(CLOCKWORK_BLOCK.get());
+        output.accept(TIME_CRYSTAL_BLOCK.get());
+        output.accept(TEMPORAL_BRICKS.get());
+        output.accept(TEMPORAL_BRICKS_STAIRS.get());
+        output.accept(TEMPORAL_BRICKS_SLAB.get());
+        output.accept(TEMPORAL_BRICKS_WALL.get());
+        output.accept(TEMPORAL_MOSS.get());
+        output.accept(FROZEN_TIME_ICE.get());
 
         // === Base Materials ===
         output.accept(CLOCKSTONE.get());

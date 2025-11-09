@@ -1,7 +1,10 @@
 {
   "replace": false,
   "values": [
+    "chronosphere:time_wood_fence",
     "chronosphere:time_wood_log",
-    "chronosphere:time_wood_planks"
+    "chronosphere:time_wood_planks",
+    "chronosphere:time_wood_stairs",
+    "chronosphere:time_wood_slab"
   ]
 }

@@ -1,7 +1,15 @@
 {
+  "replace": false,
   "values": [
     "chronosphere:clockstone_ore",
     "chronosphere:clockstone_block",
-    "chronosphere:reversing_time_sandstone"
+    "chronosphere:reversing_time_sandstone",
+    "chronosphere:clockwork_block",
+    "chronosphere:time_crystal_block",
+    "chronosphere:temporal_bricks",
+    "chronosphere:temporal_bricks_stairs",
+    "chronosphere:temporal_bricks_slab",
+    "chronosphere:temporal_bricks_wall",
+    "chronosphere:frozen_time_ice"
   ]
 }
