@@ -1,0 +1,8 @@
+{
+  "feature": "chronosphere:freeze_top_layer",
+  "placement": [
+    {
+      "type": "minecraft:biome"
+    }
+  ]
+}

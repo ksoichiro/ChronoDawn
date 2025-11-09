@@ -44,5 +44,14 @@
   "item.chronosphere.time_hourglass.portal_deactivated": "This portal is deactivated. You need a Portal Stabilizer to reactivate it",
   "item.chronosphere.time_hourglass.already_active": "This portal is already active",
 
-  "entity.chronosphere.time_guardian": "Time Guardian"
+  "entity.chronosphere.time_guardian": "Time Guardian",
+
+  "biome.chronosphere.chronosphere_plains": "Chronosphere Plains",
+  "biome.chronosphere.chronosphere_ocean": "Chronosphere Ocean",
+  "biome.chronosphere.chronosphere_forest": "Chronosphere Forest",
+  "biome.chronosphere.chronosphere_desert": "Chronosphere Desert",
+  "biome.chronosphere.chronosphere_mountain": "Chronosphere Mountains",
+  "biome.chronosphere.chronosphere_swamp": "Chronosphere Swamp",
+  "biome.chronosphere.chronosphere_snowy": "Chronosphere Snowy Plains",
+  "biome.chronosphere.chronosphere_cave": "Chronosphere Caves"
 }
