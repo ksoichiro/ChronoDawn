@@ -33,5 +33,14 @@
   "item.chronosphere.time_hourglass.portal_deactivated": "このポータルは機能停止しています。再起動するにはポータル安定化装置が必要です",
   "item.chronosphere.time_hourglass.already_active": "このポータルはすでに起動しています",
 
-  "entity.chronosphere.time_guardian": "時の番人"
+  "entity.chronosphere.time_guardian": "時の番人",
+
+  "biome.chronosphere.chronosphere_plains": "クロノスフィア平原",
+  "biome.chronosphere.chronosphere_ocean": "クロノスフィア海洋",
+  "biome.chronosphere.chronosphere_forest": "クロノスフィア森林",
+  "biome.chronosphere.chronosphere_desert": "クロノスフィア砂漠",
+  "biome.chronosphere.chronosphere_mountain": "クロノスフィア山岳",
+  "biome.chronosphere.chronosphere_swamp": "クロノスフィア湿地",
+  "biome.chronosphere.chronosphere_snowy": "クロノスフィア雪原",
+  "biome.chronosphere.chronosphere_cave": "クロノスフィア洞窟"
 }

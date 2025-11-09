@@ -1,13 +1,13 @@
 {
   "has_precipitation": true,
-  "temperature": 0.5,
+  "temperature": 0.2,
   "temperature_modifier": "none",
-  "downfall": 0.7,
+  "downfall": 0.3,
   "effects": {
     "sky_color": 9474192,
     "fog_color": 12632256,
-    "water_color": 6983845,
-    "water_fog_color": 3482025,
+    "water_color": 4159204,
+    "water_fog_color": 329011,
     "grass_color": 5999300,
     "foliage_color": 7909594,
     "mood_sound": {
@@ -21,51 +21,27 @@
     "monster": [
       {
         "type": "minecraft:zombie",
-        "weight": 30,
-        "minCount": 2,
-        "maxCount": 3
+        "weight": 20,
+        "minCount": 1,
+        "maxCount": 2
       },
       {
         "type": "minecraft:skeleton",
-        "weight": 30,
-        "minCount": 2,
-        "maxCount": 3
+        "weight": 20,
+        "minCount": 1,
+        "maxCount": 2
       },
       {
         "type": "minecraft:spider",
-        "weight": 40,
-        "minCount": 2,
-        "maxCount": 4
+        "weight": 15,
+        "minCount": 1,
+        "maxCount": 1
       }
     ],
     "creature": [
       {
-        "type": "minecraft:cow",
-        "weight": 4,
-        "minCount": 1,
-        "maxCount": 2
-      },
-      {
-        "type": "minecraft:sheep",
-        "weight": 4,
-        "minCount": 1,
-        "maxCount": 2
-      },
-      {
-        "type": "minecraft:pig",
-        "weight": 4,
-        "minCount": 1,
-        "maxCount": 2
-      },
-      {
-        "type": "minecraft:chicken",
-        "weight": 4,
-        "minCount": 1,
-        "maxCount": 2
-      },
-      {
-        "type": "minecraft:wolf",
-        "weight": 6,
+        "type": "minecraft:goat",
+        "weight": 5,
         "minCount": 1,
         "maxCount": 3
       }
@@ -100,11 +76,9 @@
     [],
     [],
     [
-      "chronosphere:fruit_of_time_tree_dense",
-      "chronosphere:patch_ferns",
-      "chronosphere:patch_brown_mushrooms",
+      "chronosphere:fruit_of_time_tree",
       "chronosphere:boulder_placed",
-      "chronosphere:fallen_log_placed"
+      "chronosphere:gravel_disk_placed"
     ],
     []
   ]
