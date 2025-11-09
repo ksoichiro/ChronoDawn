@@ -92,6 +92,12 @@ public class ChronosphereClientFabric implements ClientModInitializer {
             ModBlocks.POTTED_TIME_WOOD_SAPLING.get(),
             RenderType.cutout()
         );
+
+        // Register Time Wheat to use cutout rendering (for transparency)
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.TIME_WHEAT.get(),
+            RenderType.cutout()
+        );
     }
 
     /**
