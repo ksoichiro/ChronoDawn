@@ -473,16 +473,16 @@
 
 **Note**: 現在はカスタムブロックが少なく、バイオームの見た目が単調。装飾ブロック・建築用バリエーション・バイオーム固有ブロックを追加
 
-- [ ] T240 [P] [US1] Create Clockwork Block in common/src/main/java/com/chronosphere/blocks/ClockworkBlock.java (decorative block, animated texture with rotating gears)
-- [ ] T241 [P] [US1] Create Time Crystal Block in common/src/main/java/com/chronosphere/blocks/TimeCrystalBlock.java (decorative, emits light level 10, crafted from 9 Time Crystals)
-- [ ] T242 [P] [US1] Create Temporal Bricks block in common/src/main/java/com/chronosphere/blocks/TemporalBricksBlock.java (building block, crafted from 4 Clockstone)
-- [ ] T243 [P] [US1] Create stairs/slabs/walls/fences variants for Time Wood Planks and Temporal Bricks in common/src/main/java/com/chronosphere/blocks/
-- [ ] T244 [P] [US1] Create Temporal Moss block in common/src/main/java/com/chronosphere/blocks/TemporalMossBlock.java (decorative, swamp biome exclusive, spreads like vanilla moss)
-- [ ] T245 [P] [US1] Create Frozen Time Ice block in common/src/main/java/com/chronosphere/blocks/FrozenTimeIceBlock.java (snowy biome exclusive, doesn't melt, slippery like ice)
-- [ ] T246 [P] [US1] Register new blocks in ModBlocks and create blockstates/models/textures in common/src/main/resources/
-- [ ] T247 [P] [US1] Create crafting recipes for decorative blocks (Clockwork Block, Time Crystal Block, Temporal Bricks, stairs/slabs/walls/fences)
-- [ ] T248 [P] [US1] Configure Temporal Moss and Frozen Time Ice worldgen in respective biomes
-- [ ] T249 [US1] Add new blocks to creative tab and localization files
+- [x] T240 [P] [US1] Create Clockwork Block in common/src/main/java/com/chronosphere/blocks/ClockworkBlock.java (decorative block, animated texture with rotating gears)
+- [x] T241 [P] [US1] Create Time Crystal Block in common/src/main/java/com/chronosphere/blocks/TimeCrystalBlock.java (decorative, emits light level 10, crafted from 9 Time Crystals)
+- [x] T242 [P] [US1] Create Temporal Bricks block in common/src/main/java/com/chronosphere/blocks/TemporalBricksBlock.java (building block, crafted from 4 Clockstone)
+- [x] T243 [P] [US1] Create stairs/slabs/walls/fences variants for Time Wood Planks and Temporal Bricks in common/src/main/java/com/chronosphere/blocks/
+- [x] T244 [P] [US1] Create Temporal Moss block in common/src/main/java/com/chronosphere/blocks/TemporalMossBlock.java (decorative, swamp biome exclusive, spreads like vanilla moss)
+- [x] T245 [P] [US1] Create Frozen Time Ice block in common/src/main/java/com/chronosphere/blocks/FrozenTimeIceBlock.java (snowy biome exclusive, doesn't melt, slippery like ice)
+- [x] T246 [P] [US1] Register new blocks in ModBlocks and create blockstates/models/textures in common/src/main/resources/
+- [x] T247 [P] [US1] Create crafting recipes for decorative blocks (Clockwork Block, Time Crystal Block, Temporal Bricks, stairs/slabs/walls/fences)
+- [ ] T248 [P] [US1] Configure Temporal Moss and Frozen Time Ice worldgen in respective biomes (Deferred: requires T230-235 swamp/snowy biomes)
+- [x] T249 [US1] Add new blocks to creative tab and localization files
 
 **Checkpoint**: User Story 1が完全に機能し、独立してテスト可能であること
 
