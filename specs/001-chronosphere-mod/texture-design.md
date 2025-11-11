@@ -255,3 +255,47 @@ Emphasizing Enhanced Clockstone material:
 
 **Placeholder**: Currently using enhanced_clockstone.png as placeholder texture
 **TODO**: Create custom texture based on the design above
+
+---
+
+## 8. Ancient Gear（古代の歯車）
+
+**ファイル**: `common/src/main/resources/assets/chronosphere/textures/item/ancient_gear.png`
+
+**コンセプト**:
+- Master Clockダンジョンで収集するクエストアイテム
+- 3個集めるとボス部屋への扉を開く鍵となる
+- 古代の時計仕掛けメカニズムの部品
+- Clockwork Sentinel（時計仕掛けの番兵）がドロップ
+
+**デザイン方向性**:
+- **ベース**: 歯車（ギア）の形状
+- **カラー**: 
+  - 金属的なブロンズ/真鍮色
+  - オレンジ/ゴールド（#db8813）のアクセント
+  - 酸化・経年劣化の表現（緑青、錆び）
+- **特徴**:
+  - はっきりとした歯車の歯（8-12個程度）
+  - 中央に穴または軸受け部分
+  - 古代の刻印や時計の文字盤模様
+  - 金属の質感（光沢とシャドウ）
+  - わずかな破損や摩耗（古代の遺物感）
+- **雰囲気**: 
+  - 古代文明の精密機械部品
+  - 重厚で歴史を感じさせる
+  - 機能的だが装飾性もある
+
+**参考イメージ**:
+- スチームパンク的な歯車
+- 時計の内部メカニズム
+- 古代ギリシャ・ローマの青銅製歯車（アンティキティラ島の機械）
+
+**差別化ポイント**:
+- Clockstone系: 結晶・鉱石
+- Enhanced Clockstone: 精錬された結晶
+- **Ancient Gear**: 機械部品・歯車
+
+**Status**: ⚠️ TODO - 現在はclockstone.pngのコピー、要編集
+
+**優先度**: 中（US3実装で必要）
+
