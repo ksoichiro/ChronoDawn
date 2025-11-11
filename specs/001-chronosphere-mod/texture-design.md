@@ -258,6 +258,49 @@ Emphasizing Enhanced Clockstone material:
 
 ---
 
+## 6. Ancient Gear（古代の歯車）
+
+**ファイル**: `common/src/main/resources/assets/chronosphere/textures/item/ancient_gear.png`
+
+**コンセプト**:
+- Master Clockダンジョンで収集するクエストアイテム
+- 3個集めるとボス部屋への扉を開く鍵となる
+- 古代の時計仕掛けメカニズムの部品
+- Clockwork Sentinel（時計仕掛けの番兵）がドロップ
+
+**デザイン方向性**:
+- **ベース**: 歯車（ギア）の形状
+- **カラー**:
+  - 金属的なブロンズ/真鍮色
+  - オレンジ/ゴールド（#db8813）のアクセント
+  - 酸化・経年劣化の表現（緑青、錆び）
+- **特徴**:
+  - はっきりとした歯車の歯（8-12個程度）
+  - 中央に穴または軸受け部分
+  - 古代の刻印や時計の文字盤模様
+  - 金属の質感（光沢とシャドウ）
+  - わずかな破損や摩耗（古代の遺物感）
+- **雰囲気**:
+  - 古代文明の精密機械部品
+  - 重厚で歴史を感じさせる
+  - 機能的だが装飾性もある
+
+**参考イメージ**:
+- スチームパンク的な歯車
+- 時計の内部メカニズム
+- 古代ギリシャ・ローマの青銅製歯車（アンティキティラ島の機械）
+
+**差別化ポイント**:
+- Clockstone系: 結晶・鉱石
+- Enhanced Clockstone: 精錬された結晶
+- **Ancient Gear**: 機械部品・歯車
+
+**Status**: ⚠️ TODO - 現在はclockstone.pngのコピー、要編集
+
+**優先度**: 中（US3実装で必要）
+
+---
+
 ## Block Textures (T240-249)
 
 ### Overview
@@ -276,7 +319,7 @@ T240-249で追加された装飾・建築用ブロックのテクスチャデザ
 
 ---
 
-## 6. Clockwork Block（歯車ブロック）
+## 7. Clockwork Block（歯車ブロック）
 
 **ファイル**: `common/src/main/resources/assets/chronosphere/textures/block/clockwork_block.png`
 
@@ -307,7 +350,7 @@ T240-249で追加された装飾・建築用ブロックのテクスチャデザ
 
 ---
 
-## 7. Time Crystal Block（時間水晶ブロック）
+## 8. Time Crystal Block（時間水晶ブロック）
 
 **ファイル（2層構造）**:
 - `common/src/main/resources/assets/chronosphere/textures/block/time_crystal_block_outer.png` - 外側のガラス層
@@ -394,7 +437,7 @@ When both layers combine, it should look like a glass cube with a glowing crysta
 
 ---
 
-## 8. Temporal Bricks（時のレンガ）
+## 9. Temporal Bricks（時のレンガ）
 
 **ファイル**: `common/src/main/resources/assets/chronosphere/textures/block/temporal_bricks.png`
 
@@ -431,7 +474,7 @@ When both layers combine, it should look like a glass cube with a glowing crysta
 
 ---
 
-## 9. Temporal Moss（時の苔）
+## 10. Temporal Moss（時の苔）
 
 **ファイル**: `common/src/main/resources/assets/chronosphere/textures/block/temporal_moss.png`
 
@@ -464,7 +507,7 @@ When both layers combine, it should look like a glass cube with a glowing crysta
 
 ---
 
-## 10. Frozen Time Ice（凍結時間の氷）
+## 11. Frozen Time Ice（凍結時間の氷）
 
 **ファイル（2層構造）**:
 - `common/src/main/resources/assets/chronosphere/textures/block/frozen_time_ice_outer.png` - 外側の透明な氷層
@@ -555,7 +598,7 @@ When both layers combine, it should look like a transparent ice block with froze
 
 ---
 
-## 11. Time Wood Fence（時の木フェンス）
+## 12. Time Wood Fence（時の木フェンス）
 
 **ファイル**: `common/src/main/resources/assets/chronosphere/textures/block/time_wood_fence_***.png`
 
