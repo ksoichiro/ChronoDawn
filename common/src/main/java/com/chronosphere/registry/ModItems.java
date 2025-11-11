@@ -9,6 +9,7 @@ import com.chronosphere.items.consumables.FruitOfTimeItem;
 import com.chronosphere.items.tools.TimeClockItem;
 import com.chronosphere.items.KeyToMasterClockItem;
 import com.chronosphere.items.UnstableHourglassItem;
+import com.chronosphere.items.quest.AncientGearItem;
 import com.chronosphere.items.tools.SpatiallyLinkedPickaxeItem;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -197,6 +198,16 @@ public class ModItems {
     );
 
     /**
+     * Ancient Gear - Quest item for progressive unlock in Master Clock dungeon.
+     * Obtained from chests in Master Clock dungeon rooms.
+     * Players must collect 3 Ancient Gears to unlock the boss room.
+     */
+    public static final RegistrySupplier<Item> ANCIENT_GEAR = ITEMS.register(
+        "ancient_gear",
+        () -> new AncientGearItem(AncientGearItem.createProperties())
+    );
+
+    /**
      * Initialize item registry.
      * This method must be called during mod initialization.
      */
@@ -241,5 +252,6 @@ public class ModItems {
 
         // === Key Items ===
         output.accept(KEY_TO_MASTER_CLOCK.get());
+        output.accept(ANCIENT_GEAR.get());
     }
 }

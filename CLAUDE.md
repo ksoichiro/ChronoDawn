@@ -75,4 +75,50 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 
 **See**: `specs/001-chronosphere-mod/spec.md` → "Game Design Philosophy" section for full details
 
+## Structure Worldgen Guidelines
+
+### Underground Structure Waterlogging (2025-11-11)
+
+**Problem**: In Minecraft 1.18+, underground structures face waterlogging issues due to the Aquifer system:
+- Aquifers generate water sources throughout underground areas
+- When structures generate where water exists, waterloggable blocks (stairs, lanterns, slabs, fences, etc.) automatically become `waterlogged=true`
+- Water flows out from these blocks inside the structure
+
+**Standard Solution**: **Avoid waterloggable blocks in underground structures**
+- Use full blocks instead of stairs for elevation changes
+- Use torches, glowstone, or sea lanterns instead of hanging lanterns
+- Avoid slabs, fences, and other non-full blocks in deep underground structures
+
+**Alternative Approaches** (less reliable):
+- Processor to remove water (`remove_water.json`) - only removes water blocks, not waterlogged state
+- Generate at shallower depths (Y > 40) - reduces aquifer exposure
+- 2-block thick walls - does NOT solve waterlogging issue
+
+**Vanilla Examples**:
+- Ancient City: Uses waterloggable blocks but generates at Y < -30 (below most aquifers)
+- Mineshaft: Allows water flooding (intentional design)
+- Stronghold: Generates at Y 40-60 (minimal aquifer exposure)
+
+**Best Practice**: For structures with significant underground portions (Y < 40), use only full blocks for decoration and avoid waterloggable blocks entirely.
+
+**Reference**: See `specs/001-chronosphere-mod/research.md` → "Structure Waterlogging Research" for detailed analysis
+
+### Structure Generation Priority (2025-11-11)
+
+**Generation Order**: Structures generate in phases determined by the `step` parameter:
+1. `raw_generation` - Immediately after terrain generation
+2. `lakes` - Lake generation
+3. `local_modifications` - Local terrain modifications
+4. `underground_structures` - Underground structures (early)
+5. `surface_structures` - Surface structures (late)
+6. `strongholds` - Strongholds
+7. `underground_ores` - Ore generation
+8. ... (vegetation, decoration, etc.)
+
+**Priority Rule**: Earlier steps have priority over later steps. Later structures avoid overwriting earlier structures.
+
+**Use Case**: For unique/important structures (like Master Clock), use `underground_structures` step even if they have surface components. This prevents common structures (using `surface_structures`) from overwriting them.
+
+**Limitation**: Structures in different `structure_set` definitions have weak collision detection. Overlaps can still occur but are less likely when using earlier generation steps.
+
 <!-- MANUAL ADDITIONS END -->

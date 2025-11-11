@@ -322,4 +322,32 @@ public class BlockEventHandler {
 
         return null;
     }
+
+    /**
+     * Check if a player has the required number of Ancient Gears in their inventory.
+     * This method is used to determine if a player can unlock the Master Clock boss room.
+     *
+     * Implementation:
+     * - Count Ancient Gear items in player's inventory
+     * - Return true if count >= AncientGearItem.REQUIRED_COUNT (3)
+     *
+     * @param player The player to check
+     * @return true if player has 3 or more Ancient Gears, false otherwise
+     */
+    public static boolean hasRequiredAncientGears(net.minecraft.world.entity.player.Player player) {
+        if (player == null) {
+            return false;
+        }
+
+        int gearCount = 0;
+
+        // Count Ancient Gears in player's inventory
+        for (ItemStack stack : player.getInventory().items) {
+            if (stack.is(ModItems.ANCIENT_GEAR.get())) {
+                gearCount += stack.getCount();
+            }
+        }
+
+        return gearCount >= com.chronosphere.items.quest.AncientGearItem.REQUIRED_COUNT;
+    }
 }
