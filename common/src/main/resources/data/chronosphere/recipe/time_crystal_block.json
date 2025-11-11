@@ -12,7 +12,7 @@
     }
   },
   "result": {
-    "item": "chronosphere:time_crystal_block",
+    "id": "chronosphere:time_crystal_block",
     "count": 1
   }
 }

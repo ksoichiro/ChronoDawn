@@ -11,7 +11,7 @@
     }
   },
   "result": {
-    "item": "chronosphere:temporal_bricks_wall",
+    "id": "chronosphere:temporal_bricks_wall",
     "count": 6
   }
 }

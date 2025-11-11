@@ -18,7 +18,7 @@
     }
   },
   "result": {
-    "item": "chronosphere:clockwork_block",
+    "id": "chronosphere:clockwork_block",
     "count": 1
   }
 }
