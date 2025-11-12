@@ -1,7 +1,13 @@
 package com.chronosphere.fabric.client;
 
+import com.chronosphere.client.model.ClockworkSentinelModel;
+import com.chronosphere.client.model.TemporalWraithModel;
 import com.chronosphere.client.model.TimeGuardianModel;
+import com.chronosphere.client.model.TimeKeeperModel;
 import com.chronosphere.client.renderer.TimeGuardianRenderer;
+import com.chronosphere.client.renderer.mobs.ClockworkSentinelRenderer;
+import com.chronosphere.client.renderer.mobs.TemporalWraithRenderer;
+import com.chronosphere.client.renderer.mobs.TimeKeeperRenderer;
 import com.chronosphere.registry.ModBlocks;
 import com.chronosphere.registry.ModEntities;
 import net.fabricmc.api.ClientModInitializer;
@@ -103,6 +109,24 @@ public class ChronosphereClientFabric implements ClientModInitializer {
             TimeGuardianRenderer.LAYER_LOCATION,
             TimeGuardianModel::createBodyLayer
         );
+
+        // Register Clockwork Sentinel model layer
+        EntityModelLayerRegistry.registerModelLayer(
+            ClockworkSentinelModel.LAYER_LOCATION,
+            ClockworkSentinelModel::createBodyLayer
+        );
+
+        // Register Time Keeper model layer
+        EntityModelLayerRegistry.registerModelLayer(
+            TimeKeeperModel.LAYER_LOCATION,
+            TimeKeeperModel::createBodyLayer
+        );
+
+        // Register Temporal Wraith model layer
+        EntityModelLayerRegistry.registerModelLayer(
+            TemporalWraithModel.LAYER_LOCATION,
+            TemporalWraithModel::createBodyLayer
+        );
     }
 
     /**
@@ -113,6 +137,22 @@ public class ChronosphereClientFabric implements ClientModInitializer {
         EntityRendererRegistry.register(
             ModEntities.TIME_GUARDIAN.get(),
             TimeGuardianRenderer::new
+        );
+
+        // Register custom mobs with custom renderers
+        EntityRendererRegistry.register(
+            ModEntities.TEMPORAL_WRAITH.get(),
+            TemporalWraithRenderer::new
+        );
+
+        EntityRendererRegistry.register(
+            ModEntities.CLOCKWORK_SENTINEL.get(),
+            ClockworkSentinelRenderer::new
+        );
+
+        EntityRendererRegistry.register(
+            ModEntities.TIME_KEEPER.get(),
+            TimeKeeperRenderer::new
         );
     }
 }

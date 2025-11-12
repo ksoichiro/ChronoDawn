@@ -33,5 +33,8 @@
   "item.chronosphere.time_hourglass.portal_deactivated": "このポータルは機能停止しています。再起動するにはポータル安定化装置が必要です",
   "item.chronosphere.time_hourglass.already_active": "このポータルはすでに起動しています",
 
-  "entity.chronosphere.time_guardian": "時の番人"
+  "entity.chronosphere.time_guardian": "時の番人",
+  "entity.chronosphere.temporal_wraith": "時の亡霊",
+  "entity.chronosphere.clockwork_sentinel": "時計仕掛けの番兵",
+  "entity.chronosphere.time_keeper": "時間の管理者"
 }

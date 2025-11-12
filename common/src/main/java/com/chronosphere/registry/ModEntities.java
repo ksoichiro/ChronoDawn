@@ -2,6 +2,9 @@ package com.chronosphere.registry;
 
 import com.chronosphere.Chronosphere;
 import com.chronosphere.entities.bosses.TimeGuardianEntity;
+import com.chronosphere.entities.mobs.ClockworkSentinelEntity;
+import com.chronosphere.entities.mobs.TemporalWraithEntity;
+import com.chronosphere.entities.mobs.TimeKeeperEntity;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
@@ -30,6 +33,51 @@ public class ModEntities {
             .clientTrackingRange(10) // Tracking range for clients
             .updateInterval(3) // Update interval in ticks
             .build("time_guardian")
+    );
+
+    /**
+     * Temporal Wraith (時の亡霊) - Hostile Mob
+     *
+     * Reference: spec.md (FR-026, FR-028)
+     * Task: T204 [P] [US1] Register custom mobs in ModEntities registry
+     */
+    public static final RegistrySupplier<EntityType<TemporalWraithEntity>> TEMPORAL_WRAITH = ENTITIES.register(
+        "temporal_wraith",
+        () -> EntityType.Builder.of(TemporalWraithEntity::new, MobCategory.MONSTER)
+            .sized(0.6f, 1.8f) // Smaller than player (spectral appearance)
+            .clientTrackingRange(8)
+            .updateInterval(3)
+            .build("temporal_wraith")
+    );
+
+    /**
+     * Clockwork Sentinel (時計仕掛けの番兵) - Hostile Mob
+     *
+     * Reference: spec.md (FR-026, FR-027)
+     * Task: T204 [P] [US1] Register custom mobs in ModEntities registry
+     */
+    public static final RegistrySupplier<EntityType<ClockworkSentinelEntity>> CLOCKWORK_SENTINEL = ENTITIES.register(
+        "clockwork_sentinel",
+        () -> EntityType.Builder.of(ClockworkSentinelEntity::new, MobCategory.MONSTER)
+            .sized(0.9f, 2.0f) // Slightly larger than player (mechanical guardian)
+            .clientTrackingRange(10)
+            .updateInterval(3)
+            .build("clockwork_sentinel")
+    );
+
+    /**
+     * Time Keeper (時間の管理者) - Neutral Mob with Trading
+     *
+     * Reference: spec.md (FR-026, FR-029)
+     * Task: T204 [P] [US1] Register custom mobs in ModEntities registry
+     */
+    public static final RegistrySupplier<EntityType<TimeKeeperEntity>> TIME_KEEPER = ENTITIES.register(
+        "time_keeper",
+        () -> EntityType.Builder.of(TimeKeeperEntity::new, MobCategory.CREATURE)
+            .sized(0.6f, 1.95f) // Similar to villager
+            .clientTrackingRange(10)
+            .updateInterval(3)
+            .build("time_keeper")
     );
 
     /**

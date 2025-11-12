@@ -33,5 +33,8 @@
   "item.chronosphere.time_hourglass.portal_deactivated": "This portal is deactivated. You need a Portal Stabilizer to reactivate it",
   "item.chronosphere.time_hourglass.already_active": "This portal is already active",
 
-  "entity.chronosphere.time_guardian": "Time Guardian"
+  "entity.chronosphere.time_guardian": "Time Guardian",
+  "entity.chronosphere.temporal_wraith": "Temporal Wraith",
+  "entity.chronosphere.clockwork_sentinel": "Clockwork Sentinel",
+  "entity.chronosphere.time_keeper": "Time Keeper"
 }
