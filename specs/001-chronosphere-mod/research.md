@@ -2684,3 +2684,288 @@ Structure placement uses `structure_set` JSON files with two key parameters:
 - Surface Rules Guide (GitHub): https://github.com/TheForsakenFurby/Surface-Rules-Guide-Minecraft-JE-1.18
 - Tutorial:Custom world generation – Minecraft Wiki: https://minecraft.wiki/w/Tutorial:Custom_world_generation
 
+
+## Decision 14: Hostile Mob Spawning in Bright Dimensions (Daylight Spawning)
+
+**Date**: 2025-11-13
+
+**Research Question**: How do other dimension mods (e.g., Blue Skies) enable hostile mob spawning in always-bright dimensions? Can we implement similar mechanics for Chronosphere?
+
+**Background**:
+Chronosphere dimension has `fixed_time: 6000` (eternal noon), making it always bright. However, Minecraft's natural spawning system only attempts to spawn `monster` category mobs in dark areas (light level < 8). This causes hostile mobs to spawn only in caves, not on the surface.
+
+**Related Tasks**: T200-207 (Custom Mob Implementation), T200 (Hostile mob spawning issues)
+
+### Minecraft Spawning System Constraints
+
+**Monster Category Spawn Behavior** (Minecraft 1.18+):
+- **Light Level Requirement**: Hostile mobs spawn only at light level 0 (changed from ≤7 in pre-1.18)
+- **Spawn Attempt Logic**: Minecraft doesn't even *attempt* to spawn `monster` category mobs in bright areas
+- **Custom Spawn Rules Limitation**: Even with custom `checkMobSpawnRules()`, spawn attempts are never triggered on bright surfaces
+
+**Key Insight**: The issue is not spawn *rules* (which we can customize), but spawn *attempts* (which are hard-coded to only occur in dark areas for `monster` category).
+
+### Blue Skies Mod Analysis
+
+**Mod Overview**:
+- Two dimensions: Everbright (eternal daylight, snowy) and Everdawn (eternal dusk, warm)
+- Both dimensions have hostile mob spawning despite bright conditions
+- Everbright is stuck in eternal daylight but still has hostile creatures
+
+**Key Finding**: According to documentation:
+> "Light sources don't prevent hostile creatures from spawning in Everbright and Everdawn, unlike in the three dimensions present in vanilla Minecraft."
+
+**Implication**: Blue Skies implements custom logic to bypass Minecraft's light-based spawn restrictions.
+
+**Repository**: GitLab at `https://gitlab.com/modding-legacy/blue-skies` (source code not directly accessible via search)
+
+**Possible Implementation Methods** (not confirmed):
+1. Mixin into `NaturalSpawner` class to bypass light level checks for custom dimensions
+2. Custom spawn event handlers that override vanilla spawning logic
+3. Using different MobCategory that allows daylight spawning (e.g., CREATURE) with custom hostile AI
+
+### Investigation Results: Attempted Solutions
+
+**Attempt 1: Custom Spawn Rules** ❌
+- Added `checkTemporalWraithSpawnRules()` with `Mob.checkMobSpawnRules()` (skips light check)
+- Registered with `SpawnPlacements.register()`
+- **Result**: Still only cave spawning (spawn attempts not triggered on surface)
+- **Conclusion**: Spawn rules are called, but spawn attempts never occur in bright areas
+
+**Attempt 2: Move to `misc` Category** ❌
+- Moved mobs from `monster` to `misc` category in biome JSONs
+- **Result**: Time Keeper spawned (1 mob), but Temporal Wraith and Clockwork Sentinel did not spawn
+- **Analysis**: `misc` category has extremely low spawn attempt frequency
+
+**Attempt 3: Increase Spawn Weights** ❌
+- Increased weights from 20/15 to 100
+- **Result**: Time Keeper spawned more, but other mobs still absent
+- **Conclusion**: `misc` category fundamentally incompatible for hostile mobs
+
+**Attempt 4: Change to CREATURE Category** ❌
+- Changed `MobCategory.MONSTER` to `MobCategory.CREATURE` in entity registration
+- Moved spawners from `misc` to `creature` in biome JSONs
+- **Result**: ALL mobs stopped spawning (including Time Keeper which was working)
+- **Conclusion**: `Monster` class inheritance incompatible with `CREATURE` category
+
+**Attempt 5: Revert to MONSTER Category** ✅
+- Reverted `MobCategory` to `MONSTER` for hostile mobs
+- Moved spawners back to `monster` category in biome JSONs
+- **Result**: Cave spawning restored (洞窟でのスポーン復活)
+- **Status**: Current implementation (partial functionality)
+
+### Technical Approaches for Daylight Spawning
+
+**Option A: Mixin into NaturalSpawner** (Complex)
+- Target: `net.minecraft.world.level.NaturalSpawner.spawnCategoryForPosition()`
+- Use `@Inject` or `@Redirect` to bypass light level validation
+- **Pros**: Direct control over spawn attempts
+- **Cons**: 
+  - Version-dependent (breaks across Minecraft updates)
+  - Requires MixinExtras (Fabric Loader 0.15+)
+  - Complex debugging
+  - Invasive code modification
+
+**Option B: Accept Cave-Only Spawning** (Current)
+- Keep hostile mobs in `monster` category (spawns only in caves)
+- Keep neutral mobs in `creature` category (spawns on surface)
+- **Pros**:
+  - Simple, no complex hacks
+  - Makes game design sense:
+    - Surface: Safe exploration, Time Keeper trading
+    - Caves: Dangerous exploration, hostile encounters
+  - Eternal daylight makes surface a safe "base area"
+- **Cons**:
+  - Different from Blue Skies behavior
+  - Less variety on surface
+
+**Option C: Fabric BiomeModifications API** (Moderate)
+- Use `BiomeModifications.addSpawn()` with custom conditions
+- **Limitation**: API only controls *where* mobs spawn (biome selection), not *when* (light conditions)
+- Light level restrictions are enforced at lower level (NaturalSpawner)
+- **Conclusion**: Insufficient for solving daylight spawning issue
+
+### Design Decision: Cave-Only Spawning is Acceptable
+
+**Rationale**:
+1. **Intentional Game Design**:
+   - Surface (bright): Time Keeper (neutral/trading) + friendly animals
+   - Caves (dark): Temporal Wraith, Clockwork Sentinel + vanilla hostiles
+   - Creates safe/dangerous zones without complex hacks
+
+2. **Thematic Consistency**:
+   - Eternal daylight provides safe haven for exploration
+   - Cave exploration remains challenging
+   - Time Distortion Effect (Slowness IV) applies everywhere regardless
+
+3. **Development Pragmatism**:
+   - Mixin approach is fragile and version-dependent
+   - CREATURE category workaround breaks `Monster` class inheritance
+   - Current implementation is stable and predictable
+
+4. **Comparison with Blue Skies**:
+   - Blue Skies likely uses Mixin or custom spawn system
+   - Implementation complexity not justified for our use case
+   - Different mod design philosophies are valid
+
+### Current Implementation (Working State)
+
+**Entity Registration** (ModEntities.java):
+```java
+// Hostile mobs: MobCategory.MONSTER
+public static final RegistrySupplier<EntityType<TemporalWraithEntity>> TEMPORAL_WRAITH = 
+    ENTITIES.register("temporal_wraith",
+        () -> EntityType.Builder.of(TemporalWraithEntity::new, MobCategory.MONSTER)
+            .sized(0.6f, 1.8f)
+            .clientTrackingRange(8)
+            .updateInterval(3)
+            .build("temporal_wraith")
+    );
+
+// Neutral mobs: MobCategory.CREATURE
+public static final RegistrySupplier<EntityType<TimeKeeperEntity>> TIME_KEEPER = 
+    ENTITIES.register("time_keeper",
+        () -> EntityType.Builder.of(TimeKeeperEntity::new, MobCategory.CREATURE)
+            .sized(0.6f, 1.95f)
+            .clientTrackingRange(10)
+            .updateInterval(3)
+            .build("time_keeper")
+    );
+```
+
+**Biome Configuration** (chronosphere_plains.json):
+```json
+{
+  "spawners": {
+    "monster": [
+      {"type": "minecraft:zombie", "weight": 30, "minCount": 2, "maxCount": 3},
+      {"type": "minecraft:skeleton", "weight": 30, "minCount": 2, "maxCount": 3},
+      {"type": "chronosphere:temporal_wraith", "weight": 40, "minCount": 2, "maxCount": 4}
+    ],
+    "creature": [
+      {"type": "minecraft:cow", "weight": 6, "minCount": 2, "maxCount": 3},
+      {"type": "chronosphere:time_keeper", "weight": 8, "minCount": 1, "maxCount": 2}
+    ]
+  }
+}
+```
+
+**Spawn Rules** (TemporalWraithEntity.java):
+```java
+public static boolean checkTemporalWraithSpawnRules(
+    EntityType<TemporalWraithEntity> entityType,
+    ServerLevelAccessor level,
+    MobSpawnType spawnType,
+    BlockPos pos,
+    RandomSource random
+) {
+    // Check difficulty (not Peaceful)
+    if (level.getDifficulty() == Difficulty.PEACEFUL) {
+        return false;
+    }
+    // Check basic spawn position rules (solid block below, etc.)
+    return Mob.checkMobSpawnRules(entityType, level, spawnType, pos, random);
+}
+```
+
+**Spawn Placement Registration** (ChronosphereFabric.java):
+```java
+private void registerSpawnPlacements() {
+    SpawnPlacements.register(
+        ModEntities.TEMPORAL_WRAITH.get(),
+        SpawnPlacementTypes.ON_GROUND,
+        Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+        TemporalWraithEntity::checkTemporalWraithSpawnRules
+    );
+}
+```
+
+### Future Improvement Paths (Optional)
+
+**If Daylight Spawning Becomes Required**:
+
+1. **Mixin Implementation** (Most Direct):
+   ```java
+   @Mixin(NaturalSpawner.class)
+   public class NaturalSpawnerMixin {
+       @Redirect(
+           method = "spawnCategoryForPosition",
+           at = @At(value = "INVOKE", 
+                    target = "Lnet/minecraft/world/level/Level;getRawBrightness(Lnet/minecraft/core/BlockPos;I)I")
+       )
+       private static int redirectLightCheck(Level level, BlockPos pos, int amount) {
+           // Allow spawning in Chronosphere regardless of light
+           if (level.dimension().equals(ModDimensions.CHRONOSPHERE_DIMENSION)) {
+               return 0; // Pretend it's dark
+           }
+           return level.getRawBrightness(pos, amount);
+       }
+   }
+   ```
+
+2. **Custom Spawn Event System**:
+   - Implement periodic spawn attempts via server tick event
+   - Manually spawn mobs based on custom conditions
+   - Bypass vanilla spawning system entirely
+   - More predictable but requires more code
+
+3. **Contact Blue Skies Developers**:
+   - Ask for implementation details
+   - Understand their approach to daylight spawning
+   - Adopt proven solution if simpler than expected
+
+### Conclusion
+
+**Decision**: Accept cave-only spawning for hostile mobs (current implementation)
+
+**Reasoning**:
+- Creates intentional safe/dangerous zone separation
+- Avoids fragile Mixin implementations
+- Maintains code stability across Minecraft versions
+- Provides good gameplay balance without complexity
+
+**Alternative**: If future playtesting reveals need for surface hostile spawns, implement Mixin-based solution targeting NaturalSpawner light checks.
+
+---
+
+### Related Files
+
+**Entity Registration**:
+- `common/src/main/java/com/chronosphere/registry/ModEntities.java`
+
+**Entity Classes**:
+- `common/src/main/java/com/chronosphere/entities/mobs/TemporalWraithEntity.java`
+- `common/src/main/java/com/chronosphere/entities/mobs/ClockworkSentinelEntity.java`
+- `common/src/main/java/com/chronosphere/entities/mobs/TimeKeeperEntity.java`
+
+**Spawn Placement**:
+- `fabric/src/main/java/com/chronosphere/fabric/ChronosphereFabric.java`
+
+**Biome Configuration**:
+- `common/src/main/resources/data/chronosphere/worldgen/biome/chronosphere_plains.json`
+- `common/src/main/resources/data/chronosphere/worldgen/biome/chronosphere_forest.json`
+- `common/src/main/resources/data/chronosphere/worldgen/biome/chronosphere_desert.json`
+
+**Dimension Configuration**:
+- `common/src/main/resources/data/chronosphere/dimension_type/chronosphere.json` (`fixed_time: 6000`)
+
+---
+
+### References
+
+**Blue Skies Mod**:
+- CurseForge: https://www.curseforge.com/minecraft/mc-mods/blue-skies
+- GitLab Repository: https://gitlab.com/modding-legacy/blue-skies
+- Wiki: https://blue-skies.fandom.com/wiki/Blue_Skies_Wiki
+
+**Minecraft Spawning Mechanics**:
+- Mob spawning – Minecraft Wiki: https://minecraft.wiki/w/Mob_spawning
+- NaturalSpawner Source (Fabric): Decompile from `minecraft-merged-*.jar`
+
+**Mixin Examples**:
+- fabric-carpet NaturalSpawnerMixin: https://github.com/gnembon/fabric-carpet/blob/master/src/main/java/carpet/mixins/NaturalSpawnerMixin.java
+- Curtain NaturalSpawnerMixin (1.21): https://github.com/Gu-ZT/Curtain/blob/1.21/src/main/java/dev/dubhe/curtain/mixins/NaturalSpawnerMixin.java
+
+**Spawn Light Levels**:
+- Mob Spawning Light Level (Mod): https://www.curseforge.com/minecraft/mc-mods/mob-spawning-light-level
+- How does mob spawning work in Minecraft 1.19?: https://www.sportskeeda.com/minecraft/how-mob-spawning-work-minecraft-1-19

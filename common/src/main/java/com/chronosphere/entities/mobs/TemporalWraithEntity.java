@@ -1,11 +1,14 @@
 package com.chronosphere.entities.mobs;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
@@ -14,6 +17,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 
 /**
  * Temporal Wraith (時の亡霊) - Hostile Mob
@@ -31,7 +35,7 @@ import net.minecraft.world.level.Level;
  *
  * Spawn Conditions:
  * - Biomes: chronosphere_plains, chronosphere_forest
- * - Light level: 7 or below (like vanilla hostile mobs)
+ * - Light level: Any (Chronosphere is always daytime, so spawns regardless of light)
  *
  * Drops:
  * - Clockstone (0-2)
@@ -99,6 +103,26 @@ public class TemporalWraithEntity extends Monster {
         }
 
         return result;
+    }
+
+    /**
+     * Override spawn rules to allow spawning in daylight
+     * Chronosphere is always daytime, so we only check difficulty and spawn position validity
+     */
+    public static boolean checkTemporalWraithSpawnRules(
+        EntityType<TemporalWraithEntity> entityType,
+        ServerLevelAccessor level,
+        MobSpawnType spawnType,
+        net.minecraft.core.BlockPos pos,
+        RandomSource random
+    ) {
+        // Check difficulty (not Peaceful) and basic spawn position rules
+        // Skip light level check entirely for Chronosphere
+        if (level.getDifficulty() == net.minecraft.world.Difficulty.PEACEFUL) {
+            return false;
+        }
+        // Check if spawn position is valid (solid block below, etc.)
+        return Mob.checkMobSpawnRules(entityType, level, spawnType, pos, random);
     }
 
 }

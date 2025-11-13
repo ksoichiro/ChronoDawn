@@ -7,16 +7,19 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -25,6 +28,7 @@ import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.Nullable;
 import com.chronosphere.registry.ModItems;
 import java.util.Optional;
@@ -223,5 +227,21 @@ public class TimeKeeperEntity extends AbstractVillager {
     @Override
     public net.minecraft.world.entity.AgeableMob getBreedOffspring(net.minecraft.server.level.ServerLevel level, net.minecraft.world.entity.AgeableMob mate) {
         return null; // Time Keeper cannot breed
+    }
+
+    /**
+     * Spawn rules for Time Keeper
+     * Spawns in bright areas (light level >= 9) like peaceful mobs
+     */
+    public static boolean checkTimeKeeperSpawnRules(
+        EntityType<TimeKeeperEntity> entityType,
+        ServerLevelAccessor level,
+        MobSpawnType spawnType,
+        net.minecraft.core.BlockPos pos,
+        RandomSource random
+    ) {
+        // Check basic mob spawn rules and require bright area (like animals)
+        return Mob.checkMobSpawnRules(entityType, level, spawnType, pos, random)
+            && level.getRawBrightness(pos, 0) >= 9;
     }
 }

@@ -19,6 +19,7 @@ public class ChronosphereEvents {
         EntityEventHandler.register();
         BlockEventHandler.register();
         PlayerEventHandler.register();
+        TimeDistortionEventHandler.register();
 
         Chronosphere.LOGGER.info("Registered ChronosphereEvents");
     }

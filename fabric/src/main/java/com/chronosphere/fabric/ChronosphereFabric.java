@@ -9,6 +9,9 @@ import com.chronosphere.fabric.compat.CustomPortalFabric;
 import com.chronosphere.registry.ModEntities;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
+import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.level.levelgen.Heightmap;
 
 public class ChronosphereFabric implements ModInitializer {
     @Override
@@ -17,6 +20,9 @@ public class ChronosphereFabric implements ModInitializer {
 
         // Register entity attributes (Fabric-specific)
         registerEntityAttributes();
+
+        // Register spawn placements (Fabric-specific)
+        registerSpawnPlacements();
 
         // Initialize Custom Portal API integration
         CustomPortalFabric.init();
@@ -52,5 +58,37 @@ public class ChronosphereFabric implements ModInitializer {
         );
 
         Chronosphere.LOGGER.info("Registered entity attributes for Fabric");
+    }
+
+    /**
+     * Register spawn placements for custom mobs.
+     * This allows mobs to spawn in Chronosphere even in daylight (always daytime dimension).
+     */
+    private void registerSpawnPlacements() {
+        // Temporal Wraith - spawns on ground in daylight (Monster with any light)
+        SpawnPlacements.register(
+            ModEntities.TEMPORAL_WRAITH.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            TemporalWraithEntity::checkTemporalWraithSpawnRules
+        );
+
+        // Clockwork Sentinel - spawns on ground in daylight (Monster with any light)
+        SpawnPlacements.register(
+            ModEntities.CLOCKWORK_SENTINEL.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            ClockworkSentinelEntity::checkClockworkSentinelSpawnRules
+        );
+
+        // Time Keeper - spawns on ground in bright areas (Creature/Animal spawn rules)
+        SpawnPlacements.register(
+            ModEntities.TIME_KEEPER.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            TimeKeeperEntity::checkTimeKeeperSpawnRules
+        );
+
+        Chronosphere.LOGGER.info("Registered spawn placements for custom mobs");
     }
 }

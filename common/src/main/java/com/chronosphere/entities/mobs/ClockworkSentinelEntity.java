@@ -1,6 +1,9 @@
 package com.chronosphere.entities.mobs;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
@@ -9,6 +12,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 
 /**
  * Clockwork Sentinel (時計仕掛けの番兵) - Hostile Mob
@@ -26,9 +30,9 @@ import net.minecraft.world.level.Level;
  * - Drops Ancient Gear (used for Master Clock progression)
  *
  * Spawn Conditions:
- * - Biomes: chronosphere_desert
+ * - Biomes: chronosphere_plains, chronosphere_forest, chronosphere_desert (all land biomes)
  * - Structures: Desert Clock Tower, Master Clock
- * - Light level: 7 or below (like vanilla hostile mobs)
+ * - Light level: Any (spawns during night in day/night cycle)
  *
  * Drops:
  * - Ancient Gear (1-2, required for Master Clock access)
@@ -97,5 +101,25 @@ public class ClockworkSentinelEntity extends Monster {
         }
 
         return super.canBeAffected(effect);
+    }
+
+    /**
+     * Override spawn rules to allow spawning in daylight
+     * Chronosphere is always daytime, so we only check difficulty and spawn position validity
+     */
+    public static boolean checkClockworkSentinelSpawnRules(
+        EntityType<ClockworkSentinelEntity> entityType,
+        ServerLevelAccessor level,
+        MobSpawnType spawnType,
+        net.minecraft.core.BlockPos pos,
+        RandomSource random
+    ) {
+        // Check difficulty (not Peaceful) and basic spawn position rules
+        // Skip light level check entirely for Chronosphere
+        if (level.getDifficulty() == net.minecraft.world.Difficulty.PEACEFUL) {
+            return false;
+        }
+        // Check if spawn position is valid (solid block below, etc.)
+        return Mob.checkMobSpawnRules(entityType, level, spawnType, pos, random);
     }
 }
