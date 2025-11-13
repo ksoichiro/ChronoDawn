@@ -6,6 +6,7 @@ import com.chronosphere.blocks.ClockstoneOre;
 import com.chronosphere.blocks.ClockTowerTeleporterBlock;
 import com.chronosphere.blocks.FruitOfTimeBlock;
 import com.chronosphere.blocks.ReversingTimeSandstone;
+import com.chronosphere.blocks.TimeCrystalOre;
 import com.chronosphere.blocks.UnstableFungus;
 import com.chronosphere.blocks.TimeWoodLog;
 import com.chronosphere.blocks.TimeWoodLeaves;
@@ -34,6 +35,16 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> CLOCKSTONE_ORE = BLOCKS.register(
         "clockstone_ore",
         () -> new ClockstoneOre(ClockstoneOre.createProperties())
+    );
+
+    /**
+     * Time Crystal Ore - Rare ore found in Chronosphere dimension.
+     * Drops Time Crystal item when mined with appropriate tool.
+     * Spawns at Y: 0-48, vein size 3-5.
+     */
+    public static final RegistrySupplier<Block> TIME_CRYSTAL_ORE = BLOCKS.register(
+        "time_crystal_ore",
+        () -> new TimeCrystalOre(TimeCrystalOre.createProperties())
     );
 
     /**

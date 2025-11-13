@@ -77,7 +77,8 @@
     [],
     [
       "chronosphere:ore_gold",
-      "chronosphere:ore_redstone"
+      "chronosphere:ore_redstone",
+      "chronosphere:ore_time_crystal"
     ],
     [],
     [],

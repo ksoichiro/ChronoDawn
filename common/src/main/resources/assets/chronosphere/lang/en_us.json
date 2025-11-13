@@ -2,6 +2,7 @@
   "itemGroup.chronosphere.chronosphere": "Chronosphere",
 
   "block.chronosphere.clockstone_ore": "Clockstone Ore",
+  "block.chronosphere.time_crystal_ore": "Time Crystal Ore",
   "block.chronosphere.clockstone_block": "Clockstone Block",
   "block.chronosphere.reversing_time_sandstone": "Reversing Time Sandstone",
   "block.chronosphere.unstable_fungus": "Unstable Fungus",
@@ -15,6 +16,7 @@
   "block.chronosphere.clock_tower_teleporter": "Clock Tower Teleporter",
 
   "item.chronosphere.clockstone": "Clockstone",
+  "item.chronosphere.time_crystal": "Time Crystal",
   "item.chronosphere.enhanced_clockstone": "Enhanced Clockstone",
   "item.chronosphere.time_hourglass": "Time Hourglass",
   "item.chronosphere.portal_stabilizer": "Portal Stabilizer",
@@ -23,6 +25,16 @@
   "item.chronosphere.key_to_master_clock": "Key to Master Clock",
   "item.chronosphere.unstable_hourglass": "Unstable Hourglass",
   "item.chronosphere.spatially_linked_pickaxe": "Spatially Linked Pickaxe",
+
+  "item.chronosphere.clockstone_sword": "Clockstone Sword",
+  "item.chronosphere.clockstone_pickaxe": "Clockstone Pickaxe",
+  "item.chronosphere.clockstone_axe": "Clockstone Axe",
+  "item.chronosphere.clockstone_shovel": "Clockstone Shovel",
+  "item.chronosphere.clockstone_hoe": "Clockstone Hoe",
+  "item.chronosphere.clockstone_helmet": "Clockstone Helmet",
+  "item.chronosphere.clockstone_chestplate": "Clockstone Chestplate",
+  "item.chronosphere.clockstone_leggings": "Clockstone Leggings",
+  "item.chronosphere.clockstone_boots": "Clockstone Boots",
 
   "item.chronosphere.portal_stabilizer.invalid_block": "You must use the Portal Stabilizer on a Clockstone Block frame",
   "item.chronosphere.portal_stabilizer.no_portal": "No deactivated portal found nearby",

@@ -5,8 +5,16 @@ import com.chronosphere.items.PortalStabilizerItem;
 import com.chronosphere.items.TimeHourglassItem;
 import com.chronosphere.items.base.ClockstoneItem;
 import com.chronosphere.items.base.EnhancedClockstoneItem;
+import com.chronosphere.items.base.TimeCrystalItem;
 import com.chronosphere.items.consumables.FruitOfTimeItem;
+import com.chronosphere.items.equipment.ClockstoneArmorItem;
+import com.chronosphere.items.equipment.ClockstoneAxeItem;
+import com.chronosphere.items.equipment.ClockstoneHoeItem;
+import com.chronosphere.items.equipment.ClockstonePickaxeItem;
+import com.chronosphere.items.equipment.ClockstoneShovelItem;
+import com.chronosphere.items.equipment.ClockstoneSwordItem;
 import com.chronosphere.items.tools.TimeClockItem;
+import net.minecraft.world.item.ArmorItem;
 import com.chronosphere.items.KeyToMasterClockItem;
 import com.chronosphere.items.UnstableHourglassItem;
 import com.chronosphere.items.tools.SpatiallyLinkedPickaxeItem;
@@ -33,6 +41,14 @@ public class ModItems {
     public static final RegistrySupplier<Item> CLOCKSTONE_ORE = ITEMS.register(
         "clockstone_ore",
         () -> new BlockItem(ModBlocks.CLOCKSTONE_ORE.get(), new Item.Properties())
+    );
+
+    /**
+     * Time Crystal Ore - BlockItem for placing Time Crystal Ore block.
+     */
+    public static final RegistrySupplier<Item> TIME_CRYSTAL_ORE = ITEMS.register(
+        "time_crystal_ore",
+        () -> new BlockItem(ModBlocks.TIME_CRYSTAL_ORE.get(), new Item.Properties())
     );
 
     /**
@@ -114,6 +130,16 @@ public class ModItems {
     );
 
     /**
+     * Time Crystal - Advanced material obtained from Time Crystal Ore.
+     * Used for crafting Clockstone equipment (swords, tools, armor).
+     * Rarer than Clockstone (spawns at Y: 0-48, vein size 3-5).
+     */
+    public static final RegistrySupplier<Item> TIME_CRYSTAL = ITEMS.register(
+        "time_crystal",
+        () -> new TimeCrystalItem(TimeCrystalItem.createProperties())
+    );
+
+    /**
      * Enhanced Clockstone - Advanced material obtained from Desert Clock Tower.
      * Used for crafting time manipulation items (Time Clock, Spatially Linked Pickaxe, Unstable Hourglass).
      */
@@ -161,6 +187,93 @@ public class ModItems {
     public static final RegistrySupplier<Item> FRUIT_OF_TIME = ITEMS.register(
         "fruit_of_time",
         () -> new FruitOfTimeItem(FruitOfTimeItem.createProperties())
+    );
+
+    // === Equipment - Weapons ===
+
+    /**
+     * Clockstone Sword - Tier 1 time-themed weapon.
+     * Basic tier weapon, slightly better than iron but below diamond.
+     */
+    public static final RegistrySupplier<Item> CLOCKSTONE_SWORD = ITEMS.register(
+        "clockstone_sword",
+        () -> new ClockstoneSwordItem(ClockstoneSwordItem.createProperties())
+    );
+
+    // === Equipment - Tools ===
+
+    /**
+     * Clockstone Pickaxe - Tier 1 time-themed mining tool.
+     * Basic tier tool, slightly better than iron but below diamond.
+     */
+    public static final RegistrySupplier<Item> CLOCKSTONE_PICKAXE = ITEMS.register(
+        "clockstone_pickaxe",
+        () -> new ClockstonePickaxeItem(ClockstonePickaxeItem.createProperties())
+    );
+
+    /**
+     * Clockstone Axe - Tier 1 time-themed woodcutting tool.
+     * Basic tier tool, slightly better than iron but below diamond.
+     */
+    public static final RegistrySupplier<Item> CLOCKSTONE_AXE = ITEMS.register(
+        "clockstone_axe",
+        () -> new ClockstoneAxeItem(ClockstoneAxeItem.createProperties())
+    );
+
+    /**
+     * Clockstone Shovel - Tier 1 time-themed digging tool.
+     * Basic tier tool, slightly better than iron but below diamond.
+     */
+    public static final RegistrySupplier<Item> CLOCKSTONE_SHOVEL = ITEMS.register(
+        "clockstone_shovel",
+        () -> new ClockstoneShovelItem(ClockstoneShovelItem.createProperties())
+    );
+
+    /**
+     * Clockstone Hoe - Tier 1 time-themed farming tool.
+     * Basic tier tool, slightly better than iron but below diamond.
+     */
+    public static final RegistrySupplier<Item> CLOCKSTONE_HOE = ITEMS.register(
+        "clockstone_hoe",
+        () -> new ClockstoneHoeItem(ClockstoneHoeItem.createProperties())
+    );
+
+    // === Equipment - Armor ===
+
+    /**
+     * Clockstone Helmet - Tier 1 time-themed helmet.
+     * Defense: 2, Durability: 165
+     */
+    public static final RegistrySupplier<Item> CLOCKSTONE_HELMET = ITEMS.register(
+        "clockstone_helmet",
+        () -> new ClockstoneArmorItem(ArmorItem.Type.HELMET, ClockstoneArmorItem.createProperties(ArmorItem.Type.HELMET))
+    );
+
+    /**
+     * Clockstone Chestplate - Tier 1 time-themed chestplate.
+     * Defense: 6, Durability: 240
+     */
+    public static final RegistrySupplier<Item> CLOCKSTONE_CHESTPLATE = ITEMS.register(
+        "clockstone_chestplate",
+        () -> new ClockstoneArmorItem(ArmorItem.Type.CHESTPLATE, ClockstoneArmorItem.createProperties(ArmorItem.Type.CHESTPLATE))
+    );
+
+    /**
+     * Clockstone Leggings - Tier 1 time-themed leggings.
+     * Defense: 5, Durability: 225
+     */
+    public static final RegistrySupplier<Item> CLOCKSTONE_LEGGINGS = ITEMS.register(
+        "clockstone_leggings",
+        () -> new ClockstoneArmorItem(ArmorItem.Type.LEGGINGS, ClockstoneArmorItem.createProperties(ArmorItem.Type.LEGGINGS))
+    );
+
+    /**
+     * Clockstone Boots - Tier 1 time-themed boots.
+     * Defense: 2, Durability: 195
+     */
+    public static final RegistrySupplier<Item> CLOCKSTONE_BOOTS = ITEMS.register(
+        "clockstone_boots",
+        () -> new ClockstoneArmorItem(ArmorItem.Type.BOOTS, ClockstoneArmorItem.createProperties(ArmorItem.Type.BOOTS))
     );
 
     // === Tools ===
@@ -214,6 +327,7 @@ public class ModItems {
             net.minecraft.world.item.CreativeModeTab.Output output) {
         // === Blocks ===
         output.accept(CLOCKSTONE_ORE.get());
+        output.accept(TIME_CRYSTAL_ORE.get());
         output.accept(CLOCKSTONE_BLOCK.get());
         output.accept(REVERSING_TIME_SANDSTONE.get());
         output.accept(UNSTABLE_FUNGUS.get());
@@ -225,6 +339,7 @@ public class ModItems {
 
         // === Base Materials ===
         output.accept(CLOCKSTONE.get());
+        output.accept(TIME_CRYSTAL.get());
         output.accept(ENHANCED_CLOCKSTONE.get());
         output.accept(UNSTABLE_HOURGLASS.get());
 
@@ -234,6 +349,21 @@ public class ModItems {
 
         // === Consumables ===
         output.accept(FRUIT_OF_TIME.get());
+
+        // === Equipment - Weapons ===
+        output.accept(CLOCKSTONE_SWORD.get());
+
+        // === Equipment - Tools ===
+        output.accept(CLOCKSTONE_PICKAXE.get());
+        output.accept(CLOCKSTONE_AXE.get());
+        output.accept(CLOCKSTONE_SHOVEL.get());
+        output.accept(CLOCKSTONE_HOE.get());
+
+        // === Equipment - Armor ===
+        output.accept(CLOCKSTONE_HELMET.get());
+        output.accept(CLOCKSTONE_CHESTPLATE.get());
+        output.accept(CLOCKSTONE_LEGGINGS.get());
+        output.accept(CLOCKSTONE_BOOTS.get());
 
         // === Tools ===
         output.accept(TIME_CLOCK.get());

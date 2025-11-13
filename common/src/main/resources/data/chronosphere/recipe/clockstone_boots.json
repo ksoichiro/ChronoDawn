@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "combat",
+  "pattern": [
+    "C C",
+    "C C"
+  ],
+  "key": {
+    "C": {
+      "item": "chronosphere:clockstone"
+    }
+  },
+  "result": {
+    "count": 1,
+    "id": "chronosphere:clockstone_boots"
+  }
+}
