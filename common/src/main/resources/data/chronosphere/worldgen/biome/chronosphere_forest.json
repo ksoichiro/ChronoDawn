@@ -36,6 +36,18 @@
         "weight": 40,
         "minCount": 2,
         "maxCount": 4
+      },
+      {
+        "type": "chronosphere:temporal_wraith",
+        "weight": 50,
+        "minCount": 2,
+        "maxCount": 4
+      },
+      {
+        "type": "chronosphere:clockwork_sentinel",
+        "weight": 25,
+        "minCount": 1,
+        "maxCount": 2
       }
     ],
     "creature": [
@@ -68,6 +80,12 @@
         "weight": 6,
         "minCount": 1,
         "maxCount": 3
+      },
+      {
+        "type": "chronosphere:time_keeper",
+        "weight": 8,
+        "minCount": 1,
+        "maxCount": 2
       }
     ],
     "ambient": [

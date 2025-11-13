@@ -53,6 +53,9 @@
   "item.chronosphere.time_hourglass.already_active": "This portal is already active",
 
   "entity.chronosphere.time_guardian": "Time Guardian",
+  "entity.chronosphere.temporal_wraith": "Temporal Wraith",
+  "entity.chronosphere.clockwork_sentinel": "Clockwork Sentinel",
+  "entity.chronosphere.time_keeper": "Time Keeper",
 
   "biome.chronosphere.chronosphere_plains": "Chronosphere Plains",
   "biome.chronosphere.chronosphere_ocean": "Chronosphere Ocean",

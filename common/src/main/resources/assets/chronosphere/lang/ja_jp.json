@@ -53,6 +53,9 @@
   "item.chronosphere.time_hourglass.already_active": "このポータルはすでに起動しています",
 
   "entity.chronosphere.time_guardian": "時の番人",
+  "entity.chronosphere.temporal_wraith": "時の亡霊",
+  "entity.chronosphere.clockwork_sentinel": "時計仕掛けの番兵",
+  "entity.chronosphere.time_keeper": "時間の管理者",
 
   "biome.chronosphere.chronosphere_plains": "クロノスフィア平原",
   "biome.chronosphere.chronosphere_ocean": "クロノスフィア海洋",

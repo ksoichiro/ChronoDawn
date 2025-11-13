@@ -1,6 +1,7 @@
 package com.chronosphere.core.time;
 
 import com.chronosphere.entities.bosses.TimeGuardianEntity;
+import com.chronosphere.entities.mobs.TimeKeeperEntity;
 import com.chronosphere.registry.ModDimensions;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -77,7 +78,7 @@ public class TimeDistortionEffect {
     }
 
     /**
-     * Check if entity is a hostile mob (not a player or boss).
+     * Check if entity is a hostile mob (not a player, boss, or friendly NPC).
      *
      * @param entity The entity to check
      * @return true if entity is a hostile mob
@@ -90,6 +91,11 @@ public class TimeDistortionEffect {
 
         // Exclude Time Guardian (boss should move at normal speed)
         if (entity instanceof TimeGuardianEntity) {
+            return false;
+        }
+
+        // Exclude Time Keeper (friendly trader NPC)
+        if (entity instanceof TimeKeeperEntity) {
             return false;
         }
 

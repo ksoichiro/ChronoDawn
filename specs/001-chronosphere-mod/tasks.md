@@ -421,6 +421,7 @@
 - [ ] T205 [P] [US1] Create custom mob textures and models in common/src/main/resources/assets/chronosphere/textures/entity/
 - [ ] T206 [P] [US1] Create custom mob loot tables in common/src/main/resources/data/chronosphere/loot_tables/entities/
 - [ ] T207 [US1] Test custom mob spawning, AI behavior, and loot drops in-game
+- [ ] T208 [P] [US1] (Optional, Low Priority) Create spawn eggs for custom mobs in ModItems for creative mode and debugging (temporal_wraith_spawn_egg, clockwork_sentinel_spawn_egg, time_keeper_spawn_egg)
 
 ### Basic Equipment Set (US1 Enhancement - High Priority)
 
@@ -921,12 +922,12 @@ Task: "Create Clockstone item model in common/src/main/resources/assets/chronosp
 
 ## Total Task Count
 
-**Total Tasks**: 344 (updated with gameplay enhancement tasks: custom mobs, equipment tiers, food system, biomes, blocks, terrain features)
+**Total Tasks**: 345 (updated with gameplay enhancement tasks: custom mobs, equipment tiers, food system, biomes, blocks, terrain features, spawn eggs)
 
 **Breakdown by Phase**:
 - Phase 1 (Setup): 16 tasks (added T012a-b for dependency metadata)
 - Phase 2 (Foundational): 20 tasks
-- Phase 3 (User Story 1 - P1): 164 tasks (includes fruit enhancement + exploration diversity + gameplay enhancements: T200-249)
+- Phase 3 (User Story 1 - P1): 165 tasks (includes fruit enhancement + exploration diversity + gameplay enhancements: T200-249)
 - Phase 4 (User Story 2 - P2): 43 tasks (added desert biome spawning + equipment tier system: T250-256)
 - Phase 5 (User Story 3 - P3): 71 tasks (added Master Clock Jigsaw system + custom terrain features: T260-265)
 - Phase 6 (Polish): 30 tasks (added advancement system)
@@ -947,7 +948,7 @@ Task: "Create Clockstone item model in common/src/main/resources/assets/chronosp
 - Decorative Terrain Features: 6 tasks (T088ad-T088ai)
 - Biome-Specific Landmarks (Optional): 5 tasks (T088aj-T088an)
 - Ambient Sounds & Particles (Optional): 6 tasks (T088ao-T088at)
-- **Custom Mobs (High Priority)**: 8 tasks (T200-T207)
+- **Custom Mobs (High Priority)**: 9 tasks (T200-T208, includes optional spawn eggs)
 - **Basic Equipment Set (High Priority)**: 9 tasks (T210-T218)
 - **Food System Expansion (High Priority)**: 9 tasks (T220-T228)
 - **Additional Biomes (Medium Priority)**: 6 tasks (T230-T235)
