@@ -254,6 +254,31 @@
 - [X] T080t [P] [US1] Update localization files (en_us.json, ja_jp.json) with Time Wood blocks; add leaves to mineable/hoe tag (not axe)
 - [X] T080u [US1] Test custom tree generation and fruit growth in-game (verify custom textures, fruit placement, growth, harvesting) (tree generation and leaves decay tested)
 
+### Time Wood Functional Blocks (US1 Enhancement)
+
+**Purpose**: Time Wood木材の基礎的な機能ブロックを追加し、バニラ木材と同等の使い勝手を提供
+
+**Note**: 現在はLog, Planks, Stairs, Slab, Fenceのみ実装済み。作業台、ドア、ボタン等の基礎アイテムを追加してTime Wood木材セットを完成させる
+
+- [ ] T080v [P] [US1] Create Time Wood Crafting Table block in common/src/main/java/com/chronosphere/blocks/TimeWoodCraftingTable.java
+- [ ] T080w [P] [US1] Create Time Wood Door block in common/src/main/java/com/chronosphere/blocks/TimeWoodDoor.java
+- [ ] T080x [P] [US1] Create Time Wood Trapdoor block in common/src/main/java/com/chronosphere/blocks/TimeWoodTrapdoor.java
+- [ ] T080y [P] [US1] Create Time Wood Fence Gate block in common/src/main/java/com/chronosphere/blocks/TimeWoodFenceGate.java
+- [ ] T080z [P] [US1] Create Time Wood Button block in common/src/main/java/com/chronosphere/blocks/TimeWoodButton.java
+- [ ] T080aa [P] [US1] Create Time Wood Pressure Plate block in common/src/main/java/com/chronosphere/blocks/TimeWoodPressurePlate.java
+- [ ] T080ab [P] [US1] Create Time Wood Sign blocks in common/src/main/java/com/chronosphere/blocks/ (TimeWoodStandingSign.java, TimeWoodWallSign.java, TimeWoodHangingSign.java, TimeWoodWallHangingSign.java)
+- [ ] T080ac [P] [US1] Create Time Wood Boat entities in common/src/main/java/com/chronosphere/entities/vehicle/ (TimeWoodBoat.java, TimeWoodChestBoat.java)
+- [ ] T080ad [P] [US1] Register all Time Wood functional blocks in ModBlocks registry
+- [ ] T080ae [P] [US1] Register Time Wood Boat entities in ModEntities registry
+- [ ] T080af [P] [US1] Create crafting recipes for all Time Wood functional blocks in common/src/main/resources/data/chronosphere/recipe/ (crafting_table, door, trapdoor, fence_gate, button, pressure_plate, sign, hanging_sign, boat, chest_boat)
+- [ ] T080ag [P] [US1] Create blockstates/models for all Time Wood functional blocks in common/src/main/resources/assets/chronosphere/blockstates/ and models/
+- [ ] T080ah [P] [US1] Create textures for all Time Wood functional blocks in common/src/main/resources/assets/chronosphere/textures/block/ and item/
+- [ ] T080ai [P] [US1] Create Sign item in common/src/main/java/com/chronosphere/items/TimeWoodSignItem.java and HangingSignItem for inventory representation
+- [ ] T080aj [P] [US1] Create Boat items in common/src/main/java/com/chronosphere/items/TimeWoodBoatItem.java and TimeWoodChestBoatItem.java
+- [ ] T080ak [P] [US1] Update localization files (en_us.json, ja_jp.json) with all Time Wood functional blocks
+- [ ] T080al [US1] Add all Time Wood functional blocks to creative tab in ModCreativeTabs
+- [ ] T080am [US1] Test all Time Wood functional blocks in-game (verify crafting, placement, interaction, boat movement)
+
 ### Special Blocks (US1)
 
 - [X] T081 [P] [US1] Create Reversing Time Sandstone block in common/src/main/java/com/chronosphere/blocks/ReversingTimeSandstone.java
@@ -922,21 +947,21 @@ Task: "Create Clockstone item model in common/src/main/resources/assets/chronosp
 
 ## Total Task Count
 
-**Total Tasks**: 345 (updated with gameplay enhancement tasks: custom mobs, equipment tiers, food system, biomes, blocks, terrain features, spawn eggs)
+**Total Tasks**: 363 (updated with gameplay enhancement tasks: custom mobs, equipment tiers, food system, biomes, blocks, terrain features, spawn eggs, Time Wood functional blocks)
 
 **Breakdown by Phase**:
 - Phase 1 (Setup): 16 tasks (added T012a-b for dependency metadata)
 - Phase 2 (Foundational): 20 tasks
-- Phase 3 (User Story 1 - P1): 165 tasks (includes fruit enhancement + exploration diversity + gameplay enhancements: T200-249)
+- Phase 3 (User Story 1 - P1): 183 tasks (includes fruit enhancement + exploration diversity + gameplay enhancements: T200-249 + Time Wood functional blocks: T080v-T080am)
 - Phase 4 (User Story 2 - P2): 43 tasks (added desert biome spawning + equipment tier system: T250-256)
 - Phase 5 (User Story 3 - P3): 71 tasks (added Master Clock Jigsaw system + custom terrain features: T260-265)
 - Phase 6 (Polish): 30 tasks (added advancement system)
 
 **Breakdown by User Story**:
-- User Story 1 (P1): 164 tasks (48% of total) - includes gameplay enhancements
-- User Story 2 (P2): 43 tasks (13% of total) - includes equipment tier system
-- User Story 3 (P3): 71 tasks (21% of total) - includes custom terrain features
-- Infrastructure (Setup + Foundational + Polish): 66 tasks (19% of total)
+- User Story 1 (P1): 182 tasks (50% of total) - includes gameplay enhancements + Time Wood functional blocks
+- User Story 2 (P2): 43 tasks (12% of total) - includes equipment tier system
+- User Story 3 (P3): 71 tasks (20% of total) - includes custom terrain features
+- Infrastructure (Setup + Foundational + Polish): 66 tasks (18% of total)
 
 **Phase 3 Enhancement Breakdown**:
 - Core US1 features: 75 tasks (T001-T088c)
@@ -948,6 +973,7 @@ Task: "Create Clockstone item model in common/src/main/resources/assets/chronosp
 - Decorative Terrain Features: 6 tasks (T088ad-T088ai)
 - Biome-Specific Landmarks (Optional): 5 tasks (T088aj-T088an)
 - Ambient Sounds & Particles (Optional): 6 tasks (T088ao-T088at)
+- **Time Wood Functional Blocks**: 18 tasks (T080v-T080am, crafting table, door, trapdoor, fence gate, button, pressure plate, sign, hanging sign, boat, chest boat)
 - **Custom Mobs (High Priority)**: 9 tasks (T200-T208, includes optional spawn eggs)
 - **Basic Equipment Set (High Priority)**: 9 tasks (T210-T218)
 - **Food System Expansion (High Priority)**: 9 tasks (T220-T228)
@@ -971,8 +997,8 @@ Task: "Create Clockstone item model in common/src/main/resources/assets/chronosp
 - Phase 6: 10 parallel groups
 
 **Independent Test Criteria**:
-- User Story 1: Portal creation, dimension travel, portal stabilization, free travel between dimensions, custom tree generation with harvestable fruits, multiple biomes (plains/ocean/forest/desert/mountain/swamp/snowy/cave) with vegetation, custom mob spawning with time distortion effects, decorative terrain features, basic equipment set, food system with crafting
+- User Story 1: Portal creation, dimension travel, portal stabilization, free travel between dimensions, custom tree generation with harvestable fruits, multiple biomes (plains/ocean/forest/desert/mountain/swamp/snowy/cave) with vegetation, custom mob spawning with time distortion effects, decorative terrain features, basic equipment set, food system with crafting, Time Wood functional blocks (crafting table, door, trapdoor, fence gate, button, pressure plate, sign, boat)
 - User Story 2: Desert Clock Tower exploration, time manipulation items, Time Guardian defeat, key acquisition, Enhanced Clockstone equipment tier
 - User Story 3: Master Clock access, Time Tyrant defeat, ultimate artifacts creation, artifact effects validation, custom terrain features
 
-**Suggested MVP Scope**: User Story 1 (Phase 1 + Phase 2 + Phase 3 Core + Multiple Biomes + Basic Mob Spawning + Vegetation System + Custom Mobs + Basic Equipment Set + Food System) = 203 tasks (recommended for initial release with gameplay enhancements, excludes optional enhancements and custom terrain features)
+**Suggested MVP Scope**: User Story 1 (Phase 1 + Phase 2 + Phase 3 Core + Multiple Biomes + Basic Mob Spawning + Vegetation System + Custom Mobs + Basic Equipment Set + Food System + Time Wood Functional Blocks) = 221 tasks (recommended for initial release with gameplay enhancements, excludes optional enhancements and custom terrain features)
