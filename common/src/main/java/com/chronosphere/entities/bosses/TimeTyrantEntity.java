@@ -95,6 +95,18 @@ public class TimeTyrantEntity extends Monster {
     // One-time abilities
     private boolean hasUsedTimeReversal = false;
 
+    // Time Clock weakening state (T171f - Boss Balance Enhancement)
+    private int timeClockWeakeningTicks = 0; // Remaining ticks of weakening effect
+    private int timeClockUsesInPhase1 = 0;   // Number of uses in Phase 1
+    private int timeClockUsesInPhase2 = 0;   // Number of uses in Phase 2
+    private int timeClockUsesInPhase3 = 0;   // Number of uses in Phase 3
+    private int previousPhase = PHASE_1;      // Track phase changes
+
+    // Time Clock weakening constants
+    private static final int TIME_CLOCK_WEAKENING_DURATION = 200; // 10 seconds
+    private static final double WEAKENING_ARMOR_REDUCTION = 10.0; // 15 → 5
+    private static final double WEAKENING_SPEED_MULTIPLIER = 0.5; // 50% speed reduction
+
     // Ability timing constants (in ticks)
     private static final int TIME_STOP_COOLDOWN_TICKS = 100; // 5 seconds
     private static final int TELEPORT_COOLDOWN_TICKS = 100; // 5 seconds
@@ -173,8 +185,18 @@ public class TimeTyrantEntity extends Monster {
         super.tick();
 
         if (!this.level().isClientSide) {
+            // Track phase changes to reset Time Clock usage counters
+            int currentPhase = this.entityData.get(PHASE);
+            if (currentPhase != previousPhase) {
+                previousPhase = currentPhase;
+                // Phase changed - usage counter for new phase already at 0
+            }
+
             // Update phase based on health
             updatePhase();
+
+            // Handle Time Clock weakening effect
+            handleTimeClockWeakening();
 
             // Handle phase-specific abilities
             handlePhaseAbilities();
@@ -603,6 +625,151 @@ public class TimeTyrantEntity extends Monster {
         if (postTeleportDelay > 0) postTeleportDelay--;
     }
 
+    // Time Clock Weakening Mechanic (T171f)
+
+    /**
+     * Apply Time Clock weakening effect to the boss.
+     *
+     * This method is called by TimeClockItem when a player uses it while targeting this boss.
+     * The effect can only be applied once per phase (3 times total per fight).
+     *
+     * Effect Duration: 10 seconds (200 ticks)
+     * Effect: Armor 15→5, Speed reduced by 50%
+     *
+     * @return true if effect was applied, false if already used in current phase
+     */
+    public boolean applyTimeClockWeakening() {
+        int currentPhase = this.entityData.get(PHASE);
+
+        // Check if already used in current phase
+        int usesInCurrentPhase = switch (currentPhase) {
+            case PHASE_1 -> timeClockUsesInPhase1;
+            case PHASE_2 -> timeClockUsesInPhase2;
+            case PHASE_3 -> timeClockUsesInPhase3;
+            default -> 1; // Shouldn't happen, but treat as "already used"
+        };
+
+        if (usesInCurrentPhase > 0) {
+            return false; // Already used in this phase
+        }
+
+        // Increment usage counter for current phase
+        switch (currentPhase) {
+            case PHASE_1 -> timeClockUsesInPhase1++;
+            case PHASE_2 -> timeClockUsesInPhase2++;
+            case PHASE_3 -> timeClockUsesInPhase3++;
+        }
+
+        // Apply weakening effect
+        timeClockWeakeningTicks = TIME_CLOCK_WEAKENING_DURATION;
+
+        // Visual feedback: spawn particles
+        if (this.level() instanceof ServerLevel serverLevel) {
+            serverLevel.sendParticles(
+                ParticleTypes.WITCH,
+                this.getX(),
+                this.getY() + 1.5,
+                this.getZ(),
+                50,
+                0.5,
+                1.0,
+                0.5,
+                0.1
+            );
+        }
+
+        // Audio feedback
+        this.level().playSound(
+            null,
+            this.blockPosition(),
+            SoundEvents.BELL_BLOCK,
+            SoundSource.HOSTILE,
+            1.0f,
+            0.5f // Lower pitch for debuff effect
+        );
+
+        return true;
+    }
+
+    /**
+     * Handle Time Clock weakening effect each tick.
+     *
+     * Applies attribute modifiers for armor and speed reduction while active.
+     * Decrements the weakening timer.
+     */
+    private void handleTimeClockWeakening() {
+        if (timeClockWeakeningTicks > 0) {
+            // Apply weakening effects via attribute modifiers
+            // Note: We use temporary modifiers that are reapplied each tick
+            // This is simpler than managing UUIDs and ensures clean removal
+
+            // Reduce armor (15 → 5, reduction of 10)
+            var armorAttribute = this.getAttribute(Attributes.ARMOR);
+            if (armorAttribute != null) {
+                double baseArmor = 15.0;
+                double targetArmor = 5.0;
+                double currentArmor = armorAttribute.getBaseValue();
+
+                // Temporarily override armor value
+                if (currentArmor > targetArmor) {
+                    armorAttribute.setBaseValue(targetArmor);
+                }
+            }
+
+            // Reduce speed (50% reduction)
+            var speedAttribute = this.getAttribute(Attributes.MOVEMENT_SPEED);
+            if (speedAttribute != null) {
+                double baseSpeed = 0.25;
+                double targetSpeed = baseSpeed * WEAKENING_SPEED_MULTIPLIER;
+
+                // Temporarily override speed value
+                speedAttribute.setBaseValue(targetSpeed);
+            }
+
+            // Decrement timer
+            timeClockWeakeningTicks--;
+
+            // When effect ends, restore attributes
+            if (timeClockWeakeningTicks == 0) {
+                armorAttribute = this.getAttribute(Attributes.ARMOR);
+                if (armorAttribute != null) {
+                    armorAttribute.setBaseValue(15.0);
+                }
+
+                speedAttribute = this.getAttribute(Attributes.MOVEMENT_SPEED);
+                if (speedAttribute != null) {
+                    speedAttribute.setBaseValue(0.25);
+                }
+
+                // Visual feedback: effect ended
+                if (this.level() instanceof ServerLevel serverLevel) {
+                    serverLevel.sendParticles(
+                        ParticleTypes.POOF,
+                        this.getX(),
+                        this.getY() + 1.5,
+                        this.getZ(),
+                        20,
+                        0.5,
+                        1.0,
+                        0.5,
+                        0.05
+                    );
+                }
+            }
+        } else {
+            // No weakening active - ensure attributes are at base values
+            var armorAttribute = this.getAttribute(Attributes.ARMOR);
+            if (armorAttribute != null && armorAttribute.getBaseValue() < 15.0) {
+                armorAttribute.setBaseValue(15.0);
+            }
+
+            var speedAttribute = this.getAttribute(Attributes.MOVEMENT_SPEED);
+            if (speedAttribute != null && speedAttribute.getBaseValue() < 0.25) {
+                speedAttribute.setBaseValue(0.25);
+            }
+        }
+    }
+
     // Boss bar management
 
     @Override
@@ -633,6 +800,13 @@ public class TimeTyrantEntity extends Monster {
         }
         this.entityData.set(PHASE, tag.getInt("Phase"));
         this.hasUsedTimeReversal = tag.getBoolean("HasUsedTimeReversal");
+
+        // Load Time Clock weakening state (T171f)
+        this.timeClockWeakeningTicks = tag.getInt("TimeClockWeakeningTicks");
+        this.timeClockUsesInPhase1 = tag.getInt("TimeClockUsesInPhase1");
+        this.timeClockUsesInPhase2 = tag.getInt("TimeClockUsesInPhase2");
+        this.timeClockUsesInPhase3 = tag.getInt("TimeClockUsesInPhase3");
+        this.previousPhase = tag.getInt("PreviousPhase");
     }
 
     @Override
@@ -640,6 +814,13 @@ public class TimeTyrantEntity extends Monster {
         super.addAdditionalSaveData(tag);
         tag.putInt("Phase", this.entityData.get(PHASE));
         tag.putBoolean("HasUsedTimeReversal", this.hasUsedTimeReversal);
+
+        // Save Time Clock weakening state (T171f)
+        tag.putInt("TimeClockWeakeningTicks", this.timeClockWeakeningTicks);
+        tag.putInt("TimeClockUsesInPhase1", this.timeClockUsesInPhase1);
+        tag.putInt("TimeClockUsesInPhase2", this.timeClockUsesInPhase2);
+        tag.putInt("TimeClockUsesInPhase3", this.timeClockUsesInPhase3);
+        tag.putInt("PreviousPhase", this.previousPhase);
     }
 
     @Override

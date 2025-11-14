@@ -39,6 +39,8 @@
   "message.chronosphere.master_clock_locked": "ドアは施錠されている。マスタークロックへの鍵が必要だ",
   "message.chronosphere.boss_room_unlocked": "古代の歯車が噛み合った... ドアが開く",
   "message.chronosphere.boss_room_locked": "ドアの機構には古代の歯車が3つ必要だ",
+  "message.chronosphere.time_clock_boss_success": "タイムクロックが共鳴した！時間の暴君が弱体化した！",
+  "message.chronosphere.time_clock_boss_limit": "タイムクロックは効果がない - このフェーズで既に使用済みだ",
 
   "entity.chronosphere.time_guardian": "時の番人",
   "entity.chronosphere.time_tyrant": "時間の暴君"
