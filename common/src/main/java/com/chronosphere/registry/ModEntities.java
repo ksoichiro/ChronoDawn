@@ -2,6 +2,7 @@ package com.chronosphere.registry;
 
 import com.chronosphere.Chronosphere;
 import com.chronosphere.entities.bosses.TimeGuardianEntity;
+import com.chronosphere.entities.bosses.TimeTyrantEntity;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
@@ -30,6 +31,21 @@ public class ModEntities {
             .clientTrackingRange(10) // Tracking range for clients
             .updateInterval(3) // Update interval in ticks
             .build("time_guardian")
+    );
+
+    /**
+     * Time Tyrant (時間の暴君) - Final Boss Entity
+     *
+     * Reference: data-model.md (Entities - Time Tyrant)
+     * Tasks: T134-T135 [US3] Create and register Time Tyrant entity
+     */
+    public static final RegistrySupplier<EntityType<TimeTyrantEntity>> TIME_TYRANT = ENTITIES.register(
+        "time_tyrant",
+        () -> EntityType.Builder.of(TimeTyrantEntity::new, MobCategory.MONSTER)
+            .sized(1.5f, 3.0f) // Width 1.5, Height 3.0 (larger than Time Guardian)
+            .clientTrackingRange(10) // Tracking range for clients
+            .updateInterval(3) // Update interval in ticks
+            .build("time_tyrant")
     );
 
     /**

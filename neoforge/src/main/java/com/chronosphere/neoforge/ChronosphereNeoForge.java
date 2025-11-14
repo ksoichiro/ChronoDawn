@@ -2,6 +2,7 @@ package com.chronosphere.neoforge;
 
 import com.chronosphere.Chronosphere;
 import com.chronosphere.entities.bosses.TimeGuardianEntity;
+import com.chronosphere.entities.bosses.TimeTyrantEntity;
 import com.chronosphere.registry.ModEntities;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
@@ -26,6 +27,11 @@ public class ChronosphereNeoForge {
         event.put(
             ModEntities.TIME_GUARDIAN.get(),
             TimeGuardianEntity.createAttributes().build()
+        );
+
+        event.put(
+            ModEntities.TIME_TYRANT.get(),
+            TimeTyrantEntity.createAttributes().build()
         );
 
         Chronosphere.LOGGER.info("Registered entity attributes for NeoForge");

@@ -40,5 +40,6 @@
   "message.chronosphere.boss_room_unlocked": "古代の歯車が噛み合った... ドアが開く",
   "message.chronosphere.boss_room_locked": "ドアの機構には古代の歯車が3つ必要だ",
 
-  "entity.chronosphere.time_guardian": "時の番人"
+  "entity.chronosphere.time_guardian": "時の番人",
+  "entity.chronosphere.time_tyrant": "時間の暴君"
 }

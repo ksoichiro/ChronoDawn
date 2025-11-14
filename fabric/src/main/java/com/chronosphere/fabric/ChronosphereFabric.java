@@ -2,6 +2,7 @@ package com.chronosphere.fabric;
 
 import com.chronosphere.Chronosphere;
 import com.chronosphere.entities.bosses.TimeGuardianEntity;
+import com.chronosphere.entities.bosses.TimeTyrantEntity;
 import com.chronosphere.fabric.compat.CustomPortalFabric;
 import com.chronosphere.registry.ModEntities;
 import net.fabricmc.api.ModInitializer;
@@ -29,6 +30,11 @@ public class ChronosphereFabric implements ModInitializer {
         FabricDefaultAttributeRegistry.register(
             ModEntities.TIME_GUARDIAN.get(),
             TimeGuardianEntity.createAttributes()
+        );
+
+        FabricDefaultAttributeRegistry.register(
+            ModEntities.TIME_TYRANT.get(),
+            TimeTyrantEntity.createAttributes()
         );
 
         Chronosphere.LOGGER.info("Registered entity attributes for Fabric");

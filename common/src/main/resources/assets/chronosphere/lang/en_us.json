@@ -40,5 +40,6 @@
   "message.chronosphere.boss_room_unlocked": "The ancient gears align... The door opens",
   "message.chronosphere.boss_room_locked": "The door mechanism requires 3 Ancient Gears",
 
-  "entity.chronosphere.time_guardian": "Time Guardian"
+  "entity.chronosphere.time_guardian": "Time Guardian",
+  "entity.chronosphere.time_tyrant": "Time Tyrant"
 }

@@ -1,7 +1,9 @@
 package com.chronosphere.fabric.client;
 
 import com.chronosphere.client.model.TimeGuardianModel;
+import com.chronosphere.client.model.TimeTyrantModel;
 import com.chronosphere.client.renderer.TimeGuardianRenderer;
+import com.chronosphere.client.renderer.TimeTyrantRenderer;
 import com.chronosphere.registry.ModBlocks;
 import com.chronosphere.registry.ModEntities;
 import net.fabricmc.api.ClientModInitializer;
@@ -109,6 +111,12 @@ public class ChronosphereClientFabric implements ClientModInitializer {
             TimeGuardianRenderer.LAYER_LOCATION,
             TimeGuardianModel::createBodyLayer
         );
+
+        // Register Time Tyrant model layer
+        EntityModelLayerRegistry.registerModelLayer(
+            TimeTyrantRenderer.LAYER_LOCATION,
+            TimeTyrantModel::createBodyLayer
+        );
     }
 
     /**
@@ -119,6 +127,12 @@ public class ChronosphereClientFabric implements ClientModInitializer {
         EntityRendererRegistry.register(
             ModEntities.TIME_GUARDIAN.get(),
             TimeGuardianRenderer::new
+        );
+
+        // Register Time Tyrant with custom renderer
+        EntityRendererRegistry.register(
+            ModEntities.TIME_TYRANT.get(),
+            TimeTyrantRenderer::new
         );
     }
 }
