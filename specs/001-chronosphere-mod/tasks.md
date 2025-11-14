@@ -413,14 +413,14 @@
 
 **Note**: ボス以外の通常モブがないという問題を解決。敵対・中立・友好モブを追加して探索体験を豊かにする
 
-- [ ] T200 [US1] Design custom mob concepts (hostile, neutral, friendly with time theme, behavior patterns, drops, spawn conditions)
-- [ ] T201 [P] [US1] Create Temporal Wraith entity in common/src/main/java/com/chronosphere/entities/mobs/TemporalWraithEntity.java (hostile, phases through blocks when hit, inflicts Slowness II on attack)
-- [ ] T202 [P] [US1] Create Clockwork Sentinel entity in common/src/main/java/com/chronosphere/entities/mobs/ClockworkSentinelEntity.java (hostile, immune to time distortion effects, drops Ancient Gears)
-- [ ] T203 [P] [US1] Create Time Keeper entity in common/src/main/java/com/chronosphere/entities/mobs/TimeKeeperEntity.java (neutral, villager-like trading for time-related items)
-- [ ] T204 [P] [US1] Register custom mobs in ModEntities registry and configure spawning in biomes (Temporal Wraith in forest/plains, Clockwork Sentinel in desert/structures, Time Keeper in libraries)
-- [ ] T205 [P] [US1] Create custom mob textures and models in common/src/main/resources/assets/chronosphere/textures/entity/
-- [ ] T206 [P] [US1] Create custom mob loot tables in common/src/main/resources/data/chronosphere/loot_tables/entities/
-- [ ] T207 [US1] Test custom mob spawning, AI behavior, and loot drops in-game
+- [X] T200 [US1] Design custom mob concepts (hostile, neutral, friendly with time theme, behavior patterns, drops, spawn conditions)
+- [X] T201 [P] [US1] Create Temporal Wraith entity in common/src/main/java/com/chronosphere/entities/mobs/TemporalWraithEntity.java (hostile, phases through blocks when hit, inflicts Slowness II on attack)
+- [X] T202 [P] [US1] Create Clockwork Sentinel entity in common/src/main/java/com/chronosphere/entities/mobs/ClockworkSentinelEntity.java (hostile, immune to time distortion effects, drops Ancient Gears)
+- [X] T203 [P] [US1] Create Time Keeper entity in common/src/main/java/com/chronosphere/entities/mobs/TimeKeeperEntity.java (neutral, villager-like trading for time-related items)
+- [X] T204 [P] [US1] Register custom mobs in ModEntities registry and configure spawning in biomes (Temporal Wraith in forest/plains, Clockwork Sentinel in desert/structures, Time Keeper in libraries)
+- [X] T205 [P] [US1] Create custom mob textures and models in common/src/main/resources/assets/chronosphere/textures/entity/
+- [X] T206 [P] [US1] Create custom mob loot tables in common/src/main/resources/data/chronosphere/loot_tables/entities/
+- [X] T207 [US1] Test custom mob spawning, AI behavior, and loot drops in-game
 - [ ] T208 [P] [US1] (Optional, Low Priority) Create spawn eggs for custom mobs in ModItems for creative mode and debugging (temporal_wraith_spawn_egg, clockwork_sentinel_spawn_egg, time_keeper_spawn_egg)
 
 ### Basic Equipment Set (US1 Enhancement - High Priority)
@@ -445,15 +445,15 @@
 
 **Note**: 現在はFruit of Timeのみで、クラフトできない。加工食料と独自作物を追加して食料システムに深みを持たせる
 
-- [ ] T220 [P] [US1] Create Time Fruit Pie item in common/src/main/java/com/chronosphere/items/consumables/TimeFruitPieItem.java (crafted from 3x Fruit of Time + wheat, restores 8 hunger + 30s Haste II)
-- [ ] T221 [P] [US1] Create Time Jam item in common/src/main/java/com/chronosphere/items/consumables/TimeJamItem.java (crafted from 4x Fruit of Time + sugar, restores 4 hunger + 60s Speed I)
-- [ ] T222 [P] [US1] Create Time Wheat crop block in common/src/main/java/com/chronosphere/blocks/TimeWheatBlock.java (grows in Chronosphere, 8 growth stages like vanilla wheat)
-- [ ] T223 [P] [US1] Create Time Wheat Seeds and Time Wheat items in common/src/main/java/com/chronosphere/items/consumables/
-- [ ] T224 [P] [US1] Create Time Bread item in common/src/main/java/com/chronosphere/items/consumables/TimeBreadItem.java (crafted from 3x Time Wheat, restores 5 hunger)
-- [ ] T225 [P] [US1] Configure Time Wheat worldgen in plains/forest biomes (random patches like vanilla wheat in villages)
-- [ ] T226 [P] [US1] Create crafting recipes for food items in common/src/main/resources/data/chronosphere/recipes/
-- [ ] T227 [P] [US1] Create textures for food items and crop stages in common/src/main/resources/assets/chronosphere/textures/
-- [ ] T228 [US1] Add food items to creative tab and localization files
+- [X] T220 [P] [US1] Create Time Fruit Pie item in common/src/main/java/com/chronosphere/items/consumables/TimeFruitPieItem.java (crafted from 3x Fruit of Time + wheat, restores 8 hunger + 30s Haste II)
+- [X] T221 [P] [US1] Create Time Jam item in common/src/main/java/com/chronosphere/items/consumables/TimeJamItem.java (crafted from 4x Fruit of Time + sugar, restores 4 hunger + 60s Speed I)
+- [X] T222 [P] [US1] Create Time Wheat crop block in common/src/main/java/com/chronosphere/blocks/TimeWheatBlock.java (grows in Chronosphere, 8 growth stages like vanilla wheat)
+- [X] T223 [P] [US1] Create Time Wheat Seeds and Time Wheat items in common/src/main/java/com/chronosphere/items/consumables/
+- [X] T224 [P] [US1] Create Time Bread item in common/src/main/java/com/chronosphere/items/consumables/TimeBreadItem.java (crafted from 3x Time Wheat, restores 5 hunger)
+- [X] T225 [P] [US1] Configure Time Wheat worldgen in plains/forest biomes (random patches like vanilla wheat in villages)
+- [X] T226 [P] [US1] Create crafting recipes for food items in common/src/main/resources/data/chronosphere/recipes/
+- [X] T227 [P] [US1] Create textures for food items and crop stages in common/src/main/resources/assets/chronosphere/textures/
+- [X] T228 [US1] Add food items to creative tab and localization files
 
 ### Additional Biomes (US1 Enhancement - Medium Priority)
 
@@ -461,12 +461,12 @@
 
 **Note**: 現在は4種類（plains, ocean, forest, desert）のみ。山岳・湿地・雪原・洞窟を追加してバリエーションを増やす
 
-- [ ] T230 [P] [US1] Create chronosphere_mountain biome JSON in common/src/main/resources/data/chronosphere/worldgen/biome/chronosphere_mountain.json (stone terrain, high elevation, sparse vegetation)
-- [ ] T231 [P] [US1] Create chronosphere_swamp biome JSON in common/src/main/resources/data/chronosphere/worldgen/biome/chronosphere_swamp.json (water, clay, Temporal Moss, unique vegetation)
-- [ ] T232 [P] [US1] Create chronosphere_snowy biome JSON in common/src/main/resources/data/chronosphere/worldgen/biome/chronosphere_snowy.json (snow, ice, Frozen Time Ice, frozen time theme)
+- [X] T230 [P] [US1] Create chronosphere_mountain biome JSON in common/src/main/resources/data/chronosphere/worldgen/biome/chronosphere_mountain.json (stone terrain, high elevation, sparse vegetation)
+- [X] T231 [P] [US1] Create chronosphere_swamp biome JSON in common/src/main/resources/data/chronosphere/worldgen/biome/chronosphere_swamp.json (water, clay, Temporal Moss, unique vegetation)
+- [X] T232 [P] [US1] Create chronosphere_snowy biome JSON in common/src/main/resources/data/chronosphere/worldgen/biome/chronosphere_snowy.json (snow, ice, Frozen Time Ice, frozen time theme)
 - [ ] T233 [P] [US1] Create chronosphere_cave biome JSON in common/src/main/resources/data/chronosphere/worldgen/biome/chronosphere_cave.json (underground biome, time crystals exposed in walls)
-- [ ] T234 [US1] Update multi_noise parameters in multi_noise_biome_source_parameter_list/chronosphere.json to include new biomes with distinct noise values (mountain: high erosion, swamp: low continentalness, snowy: low temperature, cave: depth offset)
-- [ ] T235 [US1] Test new biomes in-game and verify distribution balance (ensure each biome is discoverable without excessive travel)
+- [X] T234 [US1] Update multi_noise parameters in multi_noise_biome_source_parameter_list/chronosphere.json to include new biomes with distinct noise values (mountain: high erosion, swamp: low continentalness, snowy: low temperature, cave: depth offset)
+- [X] T235 [US1] Test new biomes in-game and verify distribution balance (ensure each biome is discoverable without excessive travel)
 
 ### Block Variety Expansion (US1 Enhancement - Medium Priority)
 
