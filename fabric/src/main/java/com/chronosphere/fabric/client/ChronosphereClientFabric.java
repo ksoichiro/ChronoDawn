@@ -92,6 +92,12 @@ public class ChronosphereClientFabric implements ClientModInitializer {
             ModBlocks.POTTED_TIME_WOOD_SAPLING.get(),
             RenderType.cutout()
         );
+
+        // Register Boss Room Door to use cutout rendering (for window transparency)
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.BOSS_ROOM_DOOR.get(),
+            RenderType.cutout()
+        );
     }
 
     /**

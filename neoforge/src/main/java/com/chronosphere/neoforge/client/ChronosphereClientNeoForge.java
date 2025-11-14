@@ -111,6 +111,12 @@ public class ChronosphereClientNeoForge {
             ModBlocks.POTTED_TIME_WOOD_SAPLING.get(),
             RenderType.cutout()
         );
+
+        // Register Boss Room Door to use cutout rendering (for window transparency)
+        ItemBlockRenderTypes.setRenderLayer(
+            ModBlocks.BOSS_ROOM_DOOR.get(),
+            RenderType.cutout()
+        );
     }
 
     /**

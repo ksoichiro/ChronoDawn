@@ -13,6 +13,7 @@
   "block.chronosphere.potted_time_wood_sapling": "Potted Time Wood Sapling",
   "block.chronosphere.fruit_of_time": "Fruit of Time",
   "block.chronosphere.clock_tower_teleporter": "Clock Tower Teleporter",
+  "block.chronosphere.boss_room_door": "Boss Room Door",
 
   "item.chronosphere.clockstone": "Clockstone",
   "item.chronosphere.enhanced_clockstone": "Enhanced Clockstone",
@@ -33,6 +34,11 @@
 
   "item.chronosphere.time_hourglass.portal_deactivated": "This portal is deactivated. You need a Portal Stabilizer to reactivate it",
   "item.chronosphere.time_hourglass.already_active": "This portal is already active",
+
+  "message.chronosphere.master_clock_unlocked": "The door unlocks with the ancient key...",
+  "message.chronosphere.master_clock_locked": "The door is locked. You need the Key to Master Clock",
+  "message.chronosphere.boss_room_unlocked": "The ancient gears align... The door opens",
+  "message.chronosphere.boss_room_locked": "The door mechanism requires 3 Ancient Gears",
 
   "entity.chronosphere.time_guardian": "Time Guardian"
 }

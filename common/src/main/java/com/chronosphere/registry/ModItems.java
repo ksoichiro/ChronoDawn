@@ -103,6 +103,15 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.CLOCK_TOWER_TELEPORTER.get(), new Item.Properties())
     );
 
+    /**
+     * Boss Room Door - Custom iron door item with BlockEntity for NBT data storage.
+     * Identical appearance to vanilla iron door but can differentiate between entrance and boss room doors.
+     */
+    public static final RegistrySupplier<Item> BOSS_ROOM_DOOR = ITEMS.register(
+        "boss_room_door",
+        () -> new BlockItem(ModBlocks.BOSS_ROOM_DOOR.get(), new Item.Properties())
+    );
+
     // === Material Items ===
 
     /**

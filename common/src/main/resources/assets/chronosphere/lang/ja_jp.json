@@ -13,6 +13,7 @@
   "block.chronosphere.potted_time_wood_sapling": "植木鉢に植えられた時の木の苗木",
   "block.chronosphere.fruit_of_time": "時間の果実",
   "block.chronosphere.clock_tower_teleporter": "時計塔転送装置",
+  "block.chronosphere.boss_room_door": "ボス部屋のドア",
 
   "item.chronosphere.clockstone": "クロックストーン",
   "item.chronosphere.enhanced_clockstone": "強化クロックストーン",
@@ -33,6 +34,11 @@
 
   "item.chronosphere.time_hourglass.portal_deactivated": "このポータルは機能停止しています。再起動するにはポータル安定化装置が必要です",
   "item.chronosphere.time_hourglass.already_active": "このポータルはすでに起動しています",
+
+  "message.chronosphere.master_clock_unlocked": "古代の鍵でドアの錠が開いた...",
+  "message.chronosphere.master_clock_locked": "ドアは施錠されている。マスタークロックへの鍵が必要だ",
+  "message.chronosphere.boss_room_unlocked": "古代の歯車が噛み合った... ドアが開く",
+  "message.chronosphere.boss_room_locked": "ドアの機構には古代の歯車が3つ必要だ",
 
   "entity.chronosphere.time_guardian": "時の番人"
 }

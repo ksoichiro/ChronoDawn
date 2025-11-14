@@ -1,6 +1,7 @@
 package com.chronosphere.registry;
 
 import com.chronosphere.Chronosphere;
+import com.chronosphere.blocks.BossRoomDoorBlock;
 import com.chronosphere.blocks.ClockstoneBlock;
 import com.chronosphere.blocks.ClockstoneOre;
 import com.chronosphere.blocks.ClockTowerTeleporterBlock;
@@ -140,6 +141,21 @@ public class ModBlocks {
         () -> new ClockTowerTeleporterBlock(
             Block.Properties.ofFullCopy(Blocks.GLOWSTONE)
                 .lightLevel(state -> 15)
+                .noOcclusion()
+        )
+    );
+
+    /**
+     * Boss Room Door - Custom iron door with BlockEntity for NBT data storage.
+     * Identical appearance to vanilla iron door but can differentiate between:
+     * - Entrance door (requires Key to Master Clock)
+     * - Boss room door (requires 3x Ancient Gears)
+     * Door type is stored in BlockEntity NBT and set in structure files.
+     */
+    public static final RegistrySupplier<Block> BOSS_ROOM_DOOR = BLOCKS.register(
+        "boss_room_door",
+        () -> new BossRoomDoorBlock(
+            Block.Properties.ofFullCopy(Blocks.IRON_DOOR)
                 .noOcclusion()
         )
     );
