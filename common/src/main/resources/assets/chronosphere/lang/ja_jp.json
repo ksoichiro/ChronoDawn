@@ -2,6 +2,7 @@
   "itemGroup.chronosphere.chronosphere": "クロノスフィア",
 
   "block.chronosphere.clockstone_ore": "クロックストーン鉱石",
+  "block.chronosphere.time_crystal_ore": "時間の結晶鉱石",
   "block.chronosphere.clockstone_block": "クロックストーンブロック",
   "block.chronosphere.reversing_time_sandstone": "逆流の砂岩",
   "block.chronosphere.unstable_fungus": "不安定な菌糸",
@@ -28,6 +29,7 @@
   "block.chronosphere.time_wheat_bale": "時の小麦の俵",
 
   "item.chronosphere.clockstone": "クロックストーン",
+  "item.chronosphere.time_crystal": "時間の結晶",
   "item.chronosphere.enhanced_clockstone": "強化クロックストーン",
   "item.chronosphere.time_hourglass": "時の砂時計",
   "item.chronosphere.portal_stabilizer": "ポータル安定化装置",
@@ -42,6 +44,16 @@
   "item.chronosphere.ancient_gear": "古代の歯車",
   "item.chronosphere.unstable_hourglass": "不安定な砂時計",
   "item.chronosphere.spatially_linked_pickaxe": "空間連結ツルハシ",
+
+  "item.chronosphere.clockstone_sword": "クロックストーンの剣",
+  "item.chronosphere.clockstone_pickaxe": "クロックストーンのツルハシ",
+  "item.chronosphere.clockstone_axe": "クロックストーンの斧",
+  "item.chronosphere.clockstone_shovel": "クロックストーンのシャベル",
+  "item.chronosphere.clockstone_hoe": "クロックストーンのクワ",
+  "item.chronosphere.clockstone_helmet": "クロックストーンのヘルメット",
+  "item.chronosphere.clockstone_chestplate": "クロックストーンのチェストプレート",
+  "item.chronosphere.clockstone_leggings": "クロックストーンのレギンス",
+  "item.chronosphere.clockstone_boots": "クロックストーンのブーツ",
 
   "item.chronosphere.portal_stabilizer.invalid_block": "ポータル安定化装置はクロックストーンブロックのフレームに使用してください",
   "item.chronosphere.portal_stabilizer.no_portal": "近くに機能停止したポータルが見つかりません",

@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "chronosphere:clockstone_ore",
+    "chronosphere:time_crystal_ore",
     "chronosphere:clockstone_block",
     "chronosphere:reversing_time_sandstone",
     "chronosphere:clockwork_block",

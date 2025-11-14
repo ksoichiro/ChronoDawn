@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "combat",
+  "pattern": [
+    "C",
+    "C",
+    "S"
+  ],
+  "key": {
+    "C": {
+      "item": "chronosphere:clockstone"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "count": 1,
+    "id": "chronosphere:clockstone_sword"
+  }
+}

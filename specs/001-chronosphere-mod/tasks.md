@@ -429,15 +429,15 @@
 
 **Note**: 現在はClockstone Oreしかなく、装備も限定的。基本装備セット（武器・防具・ツール）を追加してゲームプレイの深みを増す
 
-- [ ] T210 [P] [US1] Create Time Crystal Ore block in common/src/main/java/com/chronosphere/blocks/TimeCrystalOre.java (new ore type, rarer than Clockstone)
-- [ ] T211 [P] [US1] Create Time Crystal item in common/src/main/java/com/chronosphere/items/base/TimeCrystalItem.java
-- [ ] T212 [P] [US1] Configure Time Crystal Ore worldgen in common/src/main/resources/data/chronosphere/worldgen/placed_feature/time_crystal_ore.json (Y: 0-48, vein size 3-5)
-- [ ] T213 [P] [US1] Create Clockstone Sword item in common/src/main/java/com/chronosphere/items/equipment/ClockstoneSwordItem.java (basic tier weapon, slightly better than iron)
-- [ ] T214 [P] [US1] Create Clockstone Axe/Shovel/Hoe items in common/src/main/java/com/chronosphere/items/equipment/ (basic tier tools)
-- [ ] T215 [P] [US1] Create Clockstone Armor Set (Helmet, Chestplate, Leggings, Boots) in common/src/main/java/com/chronosphere/items/equipment/
-- [ ] T216 [P] [US1] Create crafting recipes for Clockstone equipment in common/src/main/resources/data/chronosphere/recipes/ (uses Clockstone + Time Crystal for enhanced durability)
-- [ ] T217 [P] [US1] Create textures for Clockstone equipment in common/src/main/resources/assets/chronosphere/textures/item/
-- [ ] T218 [US1] Add equipment to creative tab and localization files (en_us.json, ja_jp.json)
+- [X] T210 [P] [US1] Create Time Crystal Ore block in common/src/main/java/com/chronosphere/blocks/TimeCrystalOre.java (new ore type, rarer than Clockstone)
+- [X] T211 [P] [US1] Create Time Crystal item in common/src/main/java/com/chronosphere/items/base/TimeCrystalItem.java
+- [X] T212 [P] [US1] Configure Time Crystal Ore worldgen in common/src/main/resources/data/chronosphere/worldgen/placed_feature/time_crystal_ore.json (Y: 0-48, vein size 3-5)
+- [X] T213 [P] [US1] Create Clockstone Sword item in common/src/main/java/com/chronosphere/items/equipment/ClockstoneSwordItem.java (basic tier weapon, slightly better than iron)
+- [X] T214 [P] [US1] Create Clockstone Axe/Shovel/Hoe items in common/src/main/java/com/chronosphere/items/equipment/ (basic tier tools)
+- [X] T215 [P] [US1] Create Clockstone Armor Set (Helmet, Chestplate, Leggings, Boots) in common/src/main/java/com/chronosphere/items/equipment/
+- [X] T216 [P] [US1] Create crafting recipes for Clockstone equipment in common/src/main/resources/data/chronosphere/recipes/ (uses Clockstone + Time Crystal for enhanced durability)
+- [X] T217 [P] [US1] Create textures for Clockstone equipment in common/src/main/resources/assets/chronosphere/textures/item/
+- [X] T218 [US1] Add equipment to creative tab and localization files (en_us.json, ja_jp.json)
 
 ### Food System Expansion (US1 Enhancement - High Priority)
 
