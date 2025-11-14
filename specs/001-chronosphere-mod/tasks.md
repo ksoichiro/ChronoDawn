@@ -464,7 +464,7 @@
 - [X] T230 [P] [US1] Create chronosphere_mountain biome JSON in common/src/main/resources/data/chronosphere/worldgen/biome/chronosphere_mountain.json (stone terrain, high elevation, sparse vegetation)
 - [X] T231 [P] [US1] Create chronosphere_swamp biome JSON in common/src/main/resources/data/chronosphere/worldgen/biome/chronosphere_swamp.json (water, clay, Temporal Moss, unique vegetation)
 - [X] T232 [P] [US1] Create chronosphere_snowy biome JSON in common/src/main/resources/data/chronosphere/worldgen/biome/chronosphere_snowy.json (snow, ice, Frozen Time Ice, frozen time theme)
-- [ ] T233 [P] [US1] Create chronosphere_cave biome JSON in common/src/main/resources/data/chronosphere/worldgen/biome/chronosphere_cave.json (underground biome, time crystals exposed in walls)
+- [X] T233 [P] [US1] ~~Create chronosphere_cave biome JSON~~ - SKIPPED: Vanilla cave generation is sufficient; underground decoration can be added via existing biomes' `underground_decoration` feature lists. US3's Time Crystal Caverns (T263) will provide special cave features.
 - [X] T234 [US1] Update multi_noise parameters in multi_noise_biome_source_parameter_list/chronosphere.json to include new biomes with distinct noise values (mountain: high erosion, swamp: low continentalness, snowy: low temperature, cave: depth offset)
 - [X] T235 [US1] Test new biomes in-game and verify distribution balance (ensure each biome is discoverable without excessive travel)
 
