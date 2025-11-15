@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "PPP",
+    "PPP"
+  ],
+  "key": {
+    "P": {
+      "item": "chronosphere:time_wood_planks"
+    }
+  },
+  "result": {
+    "id": "chronosphere:time_wood_trapdoor",
+    "count": 2
+  }
+}

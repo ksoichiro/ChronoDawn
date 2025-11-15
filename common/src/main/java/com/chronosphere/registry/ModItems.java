@@ -205,6 +205,46 @@ public class ModItems {
     );
 
     /**
+     * Time Wood Door - Wooden door that can be opened/closed.
+     */
+    public static final RegistrySupplier<Item> TIME_WOOD_DOOR = ITEMS.register(
+        "time_wood_door",
+        () -> new BlockItem(ModBlocks.TIME_WOOD_DOOR.get(), new Item.Properties())
+    );
+
+    /**
+     * Time Wood Trapdoor - Wooden trapdoor that can be opened/closed.
+     */
+    public static final RegistrySupplier<Item> TIME_WOOD_TRAPDOOR = ITEMS.register(
+        "time_wood_trapdoor",
+        () -> new BlockItem(ModBlocks.TIME_WOOD_TRAPDOOR.get(), new Item.Properties())
+    );
+
+    /**
+     * Time Wood Fence Gate - Fence gate that connects to fences.
+     */
+    public static final RegistrySupplier<Item> TIME_WOOD_FENCE_GATE = ITEMS.register(
+        "time_wood_fence_gate",
+        () -> new BlockItem(ModBlocks.TIME_WOOD_FENCE_GATE.get(), new Item.Properties())
+    );
+
+    /**
+     * Time Wood Button - Wooden button that emits redstone signal.
+     */
+    public static final RegistrySupplier<Item> TIME_WOOD_BUTTON = ITEMS.register(
+        "time_wood_button",
+        () -> new BlockItem(ModBlocks.TIME_WOOD_BUTTON.get(), new Item.Properties())
+    );
+
+    /**
+     * Time Wood Pressure Plate - Wooden pressure plate that emits redstone signal.
+     */
+    public static final RegistrySupplier<Item> TIME_WOOD_PRESSURE_PLATE = ITEMS.register(
+        "time_wood_pressure_plate",
+        () -> new BlockItem(ModBlocks.TIME_WOOD_PRESSURE_PLATE.get(), new Item.Properties())
+    );
+
+    /**
      * Temporal Moss - Decorative moss block exclusive to swamp biome.
      */
     public static final RegistrySupplier<Item> TEMPORAL_MOSS = ITEMS.register(
@@ -494,6 +534,11 @@ public class ModItems {
         output.accept(TIME_WOOD_STAIRS.get());
         output.accept(TIME_WOOD_SLAB.get());
         output.accept(TIME_WOOD_FENCE.get());
+        output.accept(TIME_WOOD_DOOR.get());
+        output.accept(TIME_WOOD_TRAPDOOR.get());
+        output.accept(TIME_WOOD_FENCE_GATE.get());
+        output.accept(TIME_WOOD_BUTTON.get());
+        output.accept(TIME_WOOD_PRESSURE_PLATE.get());
         output.accept(TIME_WOOD_SAPLING.get());
         output.accept(TIME_WHEAT_BALE.get());
         output.accept(CLOCK_TOWER_TELEPORTER.get());

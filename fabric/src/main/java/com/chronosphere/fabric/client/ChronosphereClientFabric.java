@@ -116,6 +116,18 @@ public class ChronosphereClientFabric implements ClientModInitializer {
             ModBlocks.TIME_WHEAT.get(),
             RenderType.cutout()
         );
+
+        // Register Time Wood Door to use cutout rendering (for transparency)
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.TIME_WOOD_DOOR.get(),
+            RenderType.cutout()
+        );
+
+        // Register Time Wood Trapdoor to use cutout rendering (for transparency)
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.TIME_WOOD_TRAPDOOR.get(),
+            RenderType.cutout()
+        );
     }
 
     /**
