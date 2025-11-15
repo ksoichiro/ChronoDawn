@@ -15,13 +15,18 @@ import com.chronosphere.blocks.TemporalBricksWall;
 import com.chronosphere.blocks.TemporalMossBlock;
 import com.chronosphere.blocks.TimeCrystalBlock;
 import com.chronosphere.blocks.TimeCrystalOre;
+import com.chronosphere.blocks.TimeWoodButton;
+import com.chronosphere.blocks.TimeWoodDoor;
 import com.chronosphere.blocks.TimeWoodFence;
+import com.chronosphere.blocks.TimeWoodFenceGate;
 import com.chronosphere.blocks.TimeWoodLeaves;
 import com.chronosphere.blocks.TimeWoodLog;
 import com.chronosphere.blocks.TimeWoodPlanks;
+import com.chronosphere.blocks.TimeWoodPressurePlate;
 import com.chronosphere.blocks.TimeWoodSapling;
 import com.chronosphere.blocks.TimeWoodSlab;
 import com.chronosphere.blocks.TimeWoodStairs;
+import com.chronosphere.blocks.TimeWoodTrapdoor;
 import com.chronosphere.blocks.UnstableFungus;
 import com.chronosphere.blocks.TimeWheatBlock;
 import com.chronosphere.blocks.TimeWheatBaleBlock;
@@ -241,6 +246,51 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> TIME_WOOD_FENCE = BLOCKS.register(
         "time_wood_fence",
         () -> new TimeWoodFence(TimeWoodFence.createProperties())
+    );
+
+    /**
+     * Time Wood Door - Wooden door that can be opened/closed.
+     * Can be opened manually or with redstone signal.
+     */
+    public static final RegistrySupplier<Block> TIME_WOOD_DOOR = BLOCKS.register(
+        "time_wood_door",
+        () -> new TimeWoodDoor(TimeWoodDoor.createProperties())
+    );
+
+    /**
+     * Time Wood Trapdoor - Wooden trapdoor that can be opened/closed.
+     * Can be placed horizontally or vertically.
+     */
+    public static final RegistrySupplier<Block> TIME_WOOD_TRAPDOOR = BLOCKS.register(
+        "time_wood_trapdoor",
+        () -> new TimeWoodTrapdoor(TimeWoodTrapdoor.createProperties())
+    );
+
+    /**
+     * Time Wood Fence Gate - Fence gate that connects to fences.
+     * Can be opened manually or with redstone signal.
+     */
+    public static final RegistrySupplier<Block> TIME_WOOD_FENCE_GATE = BLOCKS.register(
+        "time_wood_fence_gate",
+        () -> new TimeWoodFenceGate(TimeWoodFenceGate.createProperties())
+    );
+
+    /**
+     * Time Wood Button - Wooden button that emits redstone signal when pressed.
+     * Stays active for 1.5 seconds (30 ticks).
+     */
+    public static final RegistrySupplier<Block> TIME_WOOD_BUTTON = BLOCKS.register(
+        "time_wood_button",
+        () -> new TimeWoodButton(TimeWoodButton.createProperties())
+    );
+
+    /**
+     * Time Wood Pressure Plate - Wooden pressure plate that emits redstone signal.
+     * Activated by players, mobs, items, and other entities.
+     */
+    public static final RegistrySupplier<Block> TIME_WOOD_PRESSURE_PLATE = BLOCKS.register(
+        "time_wood_pressure_plate",
+        () -> new TimeWoodPressurePlate(TimeWoodPressurePlate.createProperties())
     );
 
     /**

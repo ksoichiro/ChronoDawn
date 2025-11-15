@@ -123,6 +123,18 @@ public class ChronosphereClientNeoForge {
             ModBlocks.FROZEN_TIME_ICE.get(),
             RenderType.translucent()
         );
+
+        // Register Time Wood Door to use cutout rendering (for transparency)
+        ItemBlockRenderTypes.setRenderLayer(
+            ModBlocks.TIME_WOOD_DOOR.get(),
+            RenderType.cutout()
+        );
+
+        // Register Time Wood Trapdoor to use cutout rendering (for transparency)
+        ItemBlockRenderTypes.setRenderLayer(
+            ModBlocks.TIME_WOOD_TRAPDOOR.get(),
+            RenderType.cutout()
+        );
     }
 
     /**

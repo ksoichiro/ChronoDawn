@@ -258,26 +258,28 @@
 
 **Purpose**: Time Wood木材の基礎的な機能ブロックを追加し、バニラ木材と同等の使い勝手を提供
 
-**Note**: 現在はLog, Planks, Stairs, Slab, Fenceのみ実装済み。作業台、ドア、ボタン等の基礎アイテムを追加してTime Wood木材セットを完成させる
+**Note**: Door, Trapdoor, Fence Gate, Button, Pressure Plate実装済み。Sign/Boatは複雑なため後回し。
 
-- [ ] T080v [P] [US1] Create Time Wood Crafting Table block in common/src/main/java/com/chronosphere/blocks/TimeWoodCraftingTable.java
-- [ ] T080w [P] [US1] Create Time Wood Door block in common/src/main/java/com/chronosphere/blocks/TimeWoodDoor.java
-- [ ] T080x [P] [US1] Create Time Wood Trapdoor block in common/src/main/java/com/chronosphere/blocks/TimeWoodTrapdoor.java
-- [ ] T080y [P] [US1] Create Time Wood Fence Gate block in common/src/main/java/com/chronosphere/blocks/TimeWoodFenceGate.java
-- [ ] T080z [P] [US1] Create Time Wood Button block in common/src/main/java/com/chronosphere/blocks/TimeWoodButton.java
-- [ ] T080aa [P] [US1] Create Time Wood Pressure Plate block in common/src/main/java/com/chronosphere/blocks/TimeWoodPressurePlate.java
-- [ ] T080ab [P] [US1] Create Time Wood Sign blocks in common/src/main/java/com/chronosphere/blocks/ (TimeWoodStandingSign.java, TimeWoodWallSign.java, TimeWoodHangingSign.java, TimeWoodWallHangingSign.java)
-- [ ] T080ac [P] [US1] Create Time Wood Boat entities in common/src/main/java/com/chronosphere/entities/vehicle/ (TimeWoodBoat.java, TimeWoodChestBoat.java)
-- [ ] T080ad [P] [US1] Register all Time Wood functional blocks in ModBlocks registry
-- [ ] T080ae [P] [US1] Register Time Wood Boat entities in ModEntities registry
-- [ ] T080af [P] [US1] Create crafting recipes for all Time Wood functional blocks in common/src/main/resources/data/chronosphere/recipe/ (crafting_table, door, trapdoor, fence_gate, button, pressure_plate, sign, hanging_sign, boat, chest_boat)
-- [ ] T080ag [P] [US1] Create blockstates/models for all Time Wood functional blocks in common/src/main/resources/assets/chronosphere/blockstates/ and models/
-- [ ] T080ah [P] [US1] Create textures for all Time Wood functional blocks in common/src/main/resources/assets/chronosphere/textures/block/ and item/
-- [ ] T080ai [P] [US1] Create Sign item in common/src/main/java/com/chronosphere/items/TimeWoodSignItem.java and HangingSignItem for inventory representation
-- [ ] T080aj [P] [US1] Create Boat items in common/src/main/java/com/chronosphere/items/TimeWoodBoatItem.java and TimeWoodChestBoatItem.java
-- [ ] T080ak [P] [US1] Update localization files (en_us.json, ja_jp.json) with all Time Wood functional blocks
-- [ ] T080al [US1] Add all Time Wood functional blocks to creative tab in ModCreativeTabs
-- [ ] T080am [US1] Test all Time Wood functional blocks in-game (verify crafting, placement, interaction, boat movement)
+**Implementation Note**: 作業台はTime Wood専用ブロックを作らず、Time Wood Planksを`#minecraft:planks`タグに追加することでバニラ作業台をクラフト可能にした。
+
+- [X] T080v [P] [US1] ~~Create Time Wood Crafting Table block~~ → CHANGED: Add Time Wood Planks to #minecraft:planks tag (data/minecraft/tags/item/planks.json, data/minecraft/tags/block/planks.json) to allow crafting vanilla crafting table
+- [X] T080w [P] [US1] Create Time Wood Door block in common/src/main/java/com/chronosphere/blocks/TimeWoodDoor.java
+- [X] T080x [P] [US1] Create Time Wood Trapdoor block in common/src/main/java/com/chronosphere/blocks/TimeWoodTrapdoor.java
+- [X] T080y [P] [US1] Create Time Wood Fence Gate block in common/src/main/java/com/chronosphere/blocks/TimeWoodFenceGate.java
+- [X] T080z [P] [US1] Create Time Wood Button block in common/src/main/java/com/chronosphere/blocks/TimeWoodButton.java
+- [X] T080aa [P] [US1] Create Time Wood Pressure Plate block in common/src/main/java/com/chronosphere/blocks/TimeWoodPressurePlate.java
+- [ ] T080ab [P] [US1] Create Time Wood Sign blocks in common/src/main/java/com/chronosphere/blocks/ (TimeWoodStandingSign.java, TimeWoodWallSign.java, TimeWoodHangingSign.java, TimeWoodWallHangingSign.java) - DEFERRED: Complex implementation requiring BlockEntity and custom renderer
+- [ ] T080ac [P] [US1] Create Time Wood Boat entities in common/src/main/java/com/chronosphere/entities/vehicle/ (TimeWoodBoat.java, TimeWoodChestBoat.java) - DEFERRED: Complex implementation requiring custom entity and physics
+- [X] T080ad [P] [US1] Register all Time Wood functional blocks in ModBlocks registry (Door, Trapdoor, Fence Gate, Button, Pressure Plate)
+- [ ] T080ae [P] [US1] Register Time Wood Boat entities in ModEntities registry - DEFERRED: Depends on T080ac
+- [X] T080af [P] [US1] Create crafting recipes for all Time Wood functional blocks in common/src/main/resources/data/chronosphere/recipe/ (door, trapdoor, fence_gate, button, pressure_plate)
+- [X] T080ag [P] [US1] Create blockstates/models for all Time Wood functional blocks in common/src/main/resources/assets/chronosphere/blockstates/ and models/ (Door, Trapdoor, Fence Gate, Button, Pressure Plate)
+- [X] T080ah [P] [US1] Create textures for all Time Wood functional blocks in common/src/main/resources/assets/chronosphere/textures/block/ and item/ (converted from Jungle textures using RGB channel adjustments: R*0.95, G*1.17, B*0.85)
+- [ ] T080ai [P] [US1] Create Sign item in common/src/main/java/com/chronosphere/items/TimeWoodSignItem.java and HangingSignItem for inventory representation - DEFERRED: Depends on T080ab
+- [ ] T080aj [P] [US1] Create Boat items in common/src/main/java/com/chronosphere/items/TimeWoodBoatItem.java and TimeWoodChestBoatItem.java - DEFERRED: Depends on T080ac
+- [X] T080ak [P] [US1] Update localization files (en_us.json, ja_jp.json) with all Time Wood functional blocks (Door, Trapdoor, Fence Gate, Button, Pressure Plate)
+- [X] T080al [US1] Add all Time Wood functional blocks to creative tab in ModCreativeTabs (Door, Trapdoor, Fence Gate, Button, Pressure Plate)
+- [X] T080am [US1] Test all Time Wood functional blocks in-game (verified: crafting vanilla crafting table with Time Wood Planks, Door/Trapdoor transparency, all blocks placement and interaction) - PARTIAL: Sign/Boat not tested (not implemented)
 
 ### Special Blocks (US1)
 
