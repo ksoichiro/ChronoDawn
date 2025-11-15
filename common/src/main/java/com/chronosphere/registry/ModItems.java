@@ -77,6 +77,30 @@ public class ModItems {
     );
 
     /**
+     * Clockstone Stairs - BlockItem for decorative stair variant.
+     */
+    public static final RegistrySupplier<Item> CLOCKSTONE_STAIRS = ITEMS.register(
+        "clockstone_stairs",
+        () -> new BlockItem(ModBlocks.CLOCKSTONE_STAIRS.get(), new Item.Properties())
+    );
+
+    /**
+     * Clockstone Slab - BlockItem for decorative slab variant.
+     */
+    public static final RegistrySupplier<Item> CLOCKSTONE_SLAB = ITEMS.register(
+        "clockstone_slab",
+        () -> new BlockItem(ModBlocks.CLOCKSTONE_SLAB.get(), new Item.Properties())
+    );
+
+    /**
+     * Clockstone Wall - BlockItem for decorative wall variant.
+     */
+    public static final RegistrySupplier<Item> CLOCKSTONE_WALL = ITEMS.register(
+        "clockstone_wall",
+        () -> new BlockItem(ModBlocks.CLOCKSTONE_WALL.get(), new Item.Properties())
+    );
+
+    /**
      * Reversing Time Sandstone - BlockItem for special block that auto-restores after 3 seconds.
      */
     public static final RegistrySupplier<Item> REVERSING_TIME_SANDSTONE = ITEMS.register(
@@ -716,6 +740,9 @@ public class ModItems {
         output.accept(CLOCKSTONE_ORE.get());
         output.accept(TIME_CRYSTAL_ORE.get());
         output.accept(CLOCKSTONE_BLOCK.get());
+        output.accept(CLOCKSTONE_STAIRS.get());
+        output.accept(CLOCKSTONE_SLAB.get());
+        output.accept(CLOCKSTONE_WALL.get());
         output.accept(REVERSING_TIME_SANDSTONE.get());
         output.accept(UNSTABLE_FUNGUS.get());
         output.accept(TIME_WOOD_LOG.get());
