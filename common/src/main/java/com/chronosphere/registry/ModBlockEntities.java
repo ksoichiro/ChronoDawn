@@ -1,6 +1,7 @@
 package com.chronosphere.registry;
 
 import com.chronosphere.Chronosphere;
+import com.chronosphere.blocks.BossRoomDoorBlockEntity;
 import com.chronosphere.blocks.ClockTowerTeleporterBlockEntity;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -22,6 +23,17 @@ public class ModBlockEntities {
             BlockEntityType.Builder.of(
                 ClockTowerTeleporterBlockEntity::new,
                 ModBlocks.CLOCK_TOWER_TELEPORTER.get()
+            ).build(null)
+        );
+
+    /**
+     * Boss Room Door BlockEntity - Stores door type ("entrance" or "boss_room").
+     */
+    public static final RegistrySupplier<BlockEntityType<BossRoomDoorBlockEntity>> BOSS_ROOM_DOOR =
+        BLOCK_ENTITIES.register("boss_room_door", () ->
+            BlockEntityType.Builder.of(
+                BossRoomDoorBlockEntity::new,
+                ModBlocks.BOSS_ROOM_DOOR.get()
             ).build(null)
         );
 

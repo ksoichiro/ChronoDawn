@@ -32,6 +32,7 @@
   "block.chronosphere.frozen_time_ice": "凍結した時間の氷",
   "block.chronosphere.time_wheat": "時の小麦",
   "block.chronosphere.time_wheat_bale": "時の小麦の俵",
+  "block.chronosphere.boss_room_door": "ボス部屋のドア",
 
   "item.chronosphere.clockstone": "クロックストーン",
   "item.chronosphere.time_crystal": "時間の結晶",
@@ -49,6 +50,9 @@
   "item.chronosphere.ancient_gear": "古代の歯車",
   "item.chronosphere.unstable_hourglass": "不安定な砂時計",
   "item.chronosphere.spatially_linked_pickaxe": "空間連結ツルハシ",
+  "item.chronosphere.time_arrow": "タイムアロー",
+  "item.chronosphere.fragment_of_stasis_core": "静止のコアの破片",
+  "item.chronosphere.eye_of_chronos": "クロノスの瞳",
 
   "item.chronosphere.clockstone_sword": "クロックストーンの剣",
   "item.chronosphere.clockstone_pickaxe": "クロックストーンのツルハシ",
@@ -69,10 +73,18 @@
   "item.chronosphere.time_hourglass.portal_deactivated": "このポータルは機能停止しています。再起動するにはポータル安定化装置が必要です",
   "item.chronosphere.time_hourglass.already_active": "このポータルはすでに起動しています",
 
+  "message.chronosphere.master_clock_unlocked": "古代の鍵でドアの錠が開いた...",
+  "message.chronosphere.master_clock_locked": "ドアは施錠されている。マスタークロックへの鍵が必要だ",
+  "message.chronosphere.boss_room_unlocked": "古代の歯車が噛み合った... ドアが開く",
+  "message.chronosphere.boss_room_locked": "ドアの機構には古代の歯車が3つ必要だ",
+  "message.chronosphere.time_clock_boss_success": "タイムクロックが共鳴した！時間の暴君が弱体化した！",
+  "message.chronosphere.time_clock_boss_limit": "タイムクロックは効果がない - このフェーズで既に使用済みだ",
+
   "entity.chronosphere.time_guardian": "時の番人",
   "entity.chronosphere.temporal_wraith": "時の亡霊",
   "entity.chronosphere.clockwork_sentinel": "時計仕掛けの番兵",
   "entity.chronosphere.time_keeper": "時間の管理者",
+  "entity.chronosphere.time_tyrant": "時間の暴君",
 
   "biome.chronosphere.chronosphere_plains": "クロノスフィア平原",
   "biome.chronosphere.chronosphere_ocean": "クロノスフィア海洋",

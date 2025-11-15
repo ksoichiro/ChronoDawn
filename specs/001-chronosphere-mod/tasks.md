@@ -774,6 +774,31 @@
 - [ ] T171d [P] [US3] Review all US3 recipes (Chronoblade, Time Guardian's Mail, Echoing Time Boots, Ultimate Spatially Linked Pickaxe, Unstable Pocket Watch) for Overworld-exclusive materials
 - [ ] T171e [P] [US3] Update recipes if needed to use Chronosphere materials (Fragment of Stasis Core, Enhanced Clockstone, Clockstone Block, etc.)
 
+### Boss Battle Balance & Strategy (US3 Enhancement - High Priority)
+
+**Purpose**: Time Tyrant戦に戦略的なギミックを追加し、難易度バランスを改善
+
+**Context**: テストプレイの結果、Time Tyrantが強すぎてネザライトフル装備でも倒せない。単純な数値調整ではなく、戦略的なアイテムやギミックを追加して攻略の幅を広げる。
+
+- [ ] T171f [US3] Implement Time Clock weakening mechanic in common/src/main/java/com/chronosphere/items/artifacts/TimeClockBossHandler.java (right-click on Time Tyrant: 10s defense 15→5, speed 50% reduction, 1x per phase, 30s cooldown)
+- [ ] T171g [US3] Create Time Arrow item in common/src/main/java/com/chronosphere/items/combat/TimeArrowItem.java (extends ArrowItem, applies Slowness III 10s, Weakness II 10s, Glowing 15s to Time Tyrant)
+- [ ] T171h [P] [US3] Add Time Arrow crafting recipe in common/src/main/resources/data/chronosphere/recipe/time_arrow.json (Fruit of Time center + Arrow bottom + Clockstone top → 4x Time Arrow)
+- [ ] T171i [P] [US3] Add Time Arrow localization in en_us.json and ja_jp.json
+
+### Future Boss Battle Enhancements (US3 - Phase 7+)
+
+**Purpose**: Master Clock大規模化とテストプレイ後のバランス調整
+
+**Dependencies**:
+- T171j-k: Master Clockダンジョンを現在の4部屋から大規模化
+- T171l-n: テストプレイによるゲームバランス確認後に実装
+
+- [ ] T171j [US3] Design large-scale Master Clock dungeon layout (20+ rooms, multi-floor, complex maze structure, environmental hazards)
+- [ ] T171k [US3] Implement large-scale Master Clock dungeon generation system in common/src/main/java/com/chronosphere/worldgen/structures/MasterClockLargeGenerator.java
+- [ ] T171l [US3] Implement Temporal Anchor environmental mechanic in common/src/main/java/com/chronosphere/blocks/TemporalAnchorBlock.java (3 anchors in dungeon, destroy to weaken Time Tyrant: teleport frequency, Time Acceleration, AoE range)
+- [ ] T171m [US3] Adjust Time Tyrant base stats based on playtesting (HP 500→400, Attack 18→15, Defense 15→12) if needed
+- [ ] T171n [US3] Implement Grave Marker death recovery system in common/src/main/java/com/chronosphere/mechanics/GraveMarkerHandler.java (death marker at boss room entrance, safe item recovery from outside)
+
 ### Custom Terrain Features (US3 Enhancement - Medium Priority)
 
 **Purpose**: 時間をテーマにした独自地形を追加し、地形生成の独自性を向上

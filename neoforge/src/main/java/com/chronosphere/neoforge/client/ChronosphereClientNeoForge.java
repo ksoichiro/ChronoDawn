@@ -2,7 +2,10 @@ package com.chronosphere.neoforge.client;
 
 import com.chronosphere.Chronosphere;
 import com.chronosphere.client.model.TimeGuardianModel;
+import com.chronosphere.client.model.TimeTyrantModel;
+import com.chronosphere.client.renderer.TimeArrowRenderer;
 import com.chronosphere.client.renderer.TimeGuardianRenderer;
+import com.chronosphere.client.renderer.TimeTyrantRenderer;
 import com.chronosphere.registry.ModBlocks;
 import com.chronosphere.registry.ModEntities;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -55,6 +58,12 @@ public class ChronosphereClientNeoForge {
             TimeGuardianModel::createBodyLayer
         );
 
+        // Register Time Tyrant model layer
+        event.registerLayerDefinition(
+            TimeTyrantRenderer.LAYER_LOCATION,
+            TimeTyrantModel::createBodyLayer
+        );
+
         Chronosphere.LOGGER.info("Registered entity model layers for NeoForge");
     }
 
@@ -70,6 +79,18 @@ public class ChronosphereClientNeoForge {
         event.registerEntityRenderer(
             ModEntities.TIME_GUARDIAN.get(),
             TimeGuardianRenderer::new
+        );
+
+        // Register Time Tyrant with custom renderer
+        event.registerEntityRenderer(
+            ModEntities.TIME_TYRANT.get(),
+            TimeTyrantRenderer::new
+        );
+
+        // Register Time Arrow with custom renderer
+        event.registerEntityRenderer(
+            ModEntities.TIME_ARROW.get(),
+            TimeArrowRenderer::new
         );
 
         Chronosphere.LOGGER.info("Registered entity renderers for NeoForge");
@@ -133,6 +154,12 @@ public class ChronosphereClientNeoForge {
         // Register Time Wood Trapdoor to use cutout rendering (for transparency)
         ItemBlockRenderTypes.setRenderLayer(
             ModBlocks.TIME_WOOD_TRAPDOOR.get(),
+            RenderType.cutout()
+        );
+
+        // Register Boss Room Door to use cutout rendering (for window transparency)
+        ItemBlockRenderTypes.setRenderLayer(
+            ModBlocks.BOSS_ROOM_DOOR.get(),
             RenderType.cutout()
         );
     }

@@ -6,6 +6,7 @@ import com.chronosphere.items.TimeHourglassItem;
 import com.chronosphere.items.base.ClockstoneItem;
 import com.chronosphere.items.base.EnhancedClockstoneItem;
 import com.chronosphere.items.base.TimeCrystalItem;
+import com.chronosphere.items.combat.TimeArrowItem;
 import com.chronosphere.items.consumables.FruitOfTimeItem;
 import com.chronosphere.items.consumables.TimeFruitPieItem;
 import com.chronosphere.items.consumables.TimeJamItem;
@@ -260,6 +261,15 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.FROZEN_TIME_ICE.get(), new Item.Properties())
     );
 
+    /**
+     * Boss Room Door - Custom iron door item with BlockEntity for NBT data storage.
+     * Identical appearance to vanilla iron door but can differentiate between entrance and boss room doors.
+     */
+    public static final RegistrySupplier<Item> BOSS_ROOM_DOOR = ITEMS.register(
+        "boss_room_door",
+        () -> new BlockItem(ModBlocks.BOSS_ROOM_DOOR.get(), new Item.Properties())
+    );
+
     // === Material Items ===
 
     /**
@@ -298,6 +308,30 @@ public class ModItems {
     public static final RegistrySupplier<Item> UNSTABLE_HOURGLASS = ITEMS.register(
         "unstable_hourglass",
         () -> new UnstableHourglassItem(UnstableHourglassItem.createProperties())
+    );
+
+    /**
+     * Fragment of Stasis Core - Boss material item.
+     * Dropped by Time Tyrant (3-5 per kill, affected by Looting).
+     * Used for crafting ultimate artifacts (Chronoblade, Time Guardian's Mail, etc.).
+     */
+    public static final RegistrySupplier<Item> FRAGMENT_OF_STASIS_CORE = ITEMS.register(
+        "fragment_of_stasis_core",
+        () -> new com.chronosphere.items.base.FragmentOfStasisCoreItem(
+            com.chronosphere.items.base.FragmentOfStasisCoreItem.createProperties()
+        )
+    );
+
+    /**
+     * Eye of Chronos - Ultimate artifact item.
+     * Dropped by Time Tyrant (1 per kill, guaranteed).
+     * Effect: Enhanced Time Distortion (Slowness V on hostile mobs in Chronosphere when in inventory).
+     */
+    public static final RegistrySupplier<Item> EYE_OF_CHRONOS = ITEMS.register(
+        "eye_of_chronos",
+        () -> new com.chronosphere.items.artifacts.EyeOfChronosItem(
+            com.chronosphere.items.artifacts.EyeOfChronosItem.createProperties()
+        )
     );
 
     // === Portal Items ===
@@ -484,6 +518,18 @@ public class ModItems {
         () -> new SpatiallyLinkedPickaxeItem(SpatiallyLinkedPickaxeItem.createProperties())
     );
 
+    // === Combat Items ===
+
+    /**
+     * Time Arrow - Special arrow for fighting Time Tyrant.
+     * When hitting Time Tyrant, applies Slowness III, Weakness II, and Glowing effects.
+     * Crafted from: Clockstone (top) + Fruit of Time (center) + Arrow (bottom) → 4x Time Arrow
+     */
+    public static final RegistrySupplier<Item> TIME_ARROW = ITEMS.register(
+        "time_arrow",
+        () -> new TimeArrowItem(TimeArrowItem.createProperties())
+    );
+
     // === Key Items ===
 
     /**
@@ -556,6 +602,8 @@ public class ModItems {
         output.accept(TIME_CRYSTAL.get());
         output.accept(ENHANCED_CLOCKSTONE.get());
         output.accept(UNSTABLE_HOURGLASS.get());
+        output.accept(FRAGMENT_OF_STASIS_CORE.get());
+        output.accept(EYE_OF_CHRONOS.get());
 
         // === Portal Items ===
         output.accept(TIME_HOURGLASS.get());
@@ -587,6 +635,9 @@ public class ModItems {
         // === Tools ===
         output.accept(TIME_CLOCK.get());
         output.accept(SPATIALLY_LINKED_PICKAXE.get());
+
+        // === Combat Items ===
+        output.accept(TIME_ARROW.get());
 
         // === Key Items ===
         output.accept(KEY_TO_MASTER_CLOCK.get());

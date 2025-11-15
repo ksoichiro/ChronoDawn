@@ -4,7 +4,10 @@ import com.chronosphere.client.model.ClockworkSentinelModel;
 import com.chronosphere.client.model.TemporalWraithModel;
 import com.chronosphere.client.model.TimeGuardianModel;
 import com.chronosphere.client.model.TimeKeeperModel;
+import com.chronosphere.client.model.TimeTyrantModel;
+import com.chronosphere.client.renderer.TimeArrowRenderer;
 import com.chronosphere.client.renderer.TimeGuardianRenderer;
+import com.chronosphere.client.renderer.TimeTyrantRenderer;
 import com.chronosphere.client.renderer.mobs.ClockworkSentinelRenderer;
 import com.chronosphere.client.renderer.mobs.TemporalWraithRenderer;
 import com.chronosphere.client.renderer.mobs.TimeKeeperRenderer;
@@ -128,6 +131,12 @@ public class ChronosphereClientFabric implements ClientModInitializer {
             ModBlocks.TIME_WOOD_TRAPDOOR.get(),
             RenderType.cutout()
         );
+
+        // Register Boss Room Door to use cutout rendering (for window transparency)
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.BOSS_ROOM_DOOR.get(),
+            RenderType.cutout()
+        );
     }
 
     /**
@@ -138,6 +147,12 @@ public class ChronosphereClientFabric implements ClientModInitializer {
         EntityModelLayerRegistry.registerModelLayer(
             TimeGuardianRenderer.LAYER_LOCATION,
             TimeGuardianModel::createBodyLayer
+        );
+
+        // Register Time Tyrant model layer
+        EntityModelLayerRegistry.registerModelLayer(
+            TimeTyrantRenderer.LAYER_LOCATION,
+            TimeTyrantModel::createBodyLayer
         );
 
         // Register Clockwork Sentinel model layer
@@ -167,6 +182,18 @@ public class ChronosphereClientFabric implements ClientModInitializer {
         EntityRendererRegistry.register(
             ModEntities.TIME_GUARDIAN.get(),
             TimeGuardianRenderer::new
+        );
+
+        // Register Time Tyrant with custom renderer
+        EntityRendererRegistry.register(
+            ModEntities.TIME_TYRANT.get(),
+            TimeTyrantRenderer::new
+        );
+
+        // Register Time Arrow with custom renderer
+        EntityRendererRegistry.register(
+            ModEntities.TIME_ARROW.get(),
+            TimeArrowRenderer::new
         );
 
         // Register custom mobs with custom renderers

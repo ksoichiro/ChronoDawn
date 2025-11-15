@@ -141,6 +141,84 @@ public class BlockEventHandler {
             processRestorationTimers(level);
         });
 
+        // Register block interaction event for Master Clock door unlocking
+        InteractionEvent.RIGHT_CLICK_BLOCK.register((player, hand, pos, face) -> {
+            // Only process main hand interactions on server side
+            if (player.level().isClientSide() || hand != net.minecraft.world.InteractionHand.MAIN_HAND) {
+                return EventResult.pass();
+            }
+
+            BlockState state = player.level().getBlockState(pos);
+
+            // Check if the clicked block is a boss room door (custom door with BlockEntity)
+            if (state.is(ModBlocks.BOSS_ROOM_DOOR.get())) {
+                // Determine door type by reading BlockEntity NBT
+                boolean isBossRoomDoor = isBossRoomDoor(player.level(), pos);
+
+                // Check appropriate key requirement
+                boolean canUnlock;
+                Component message;
+
+                if (isBossRoomDoor) {
+                    // Boss room door - requires 3 Ancient Gears
+                    canUnlock = hasRequiredAncientGears(player);
+                    message = canUnlock
+                        ? Component.translatable("message.chronosphere.boss_room_unlocked")
+                        : Component.translatable("message.chronosphere.boss_room_locked");
+                } else {
+                    // Entrance door - requires Key to Master Clock
+                    canUnlock = hasKeyToMasterClock(player);
+                    message = canUnlock
+                        ? Component.translatable("message.chronosphere.master_clock_unlocked")
+                        : Component.translatable("message.chronosphere.master_clock_locked");
+                }
+
+                if (canUnlock) {
+                    // Toggle door state
+                    boolean isOpen = state.getValue(net.minecraft.world.level.block.DoorBlock.OPEN);
+                    BlockState newState = state.setValue(net.minecraft.world.level.block.DoorBlock.OPEN, !isOpen);
+
+                    // Update both halves of the door
+                    net.minecraft.world.level.block.state.properties.DoubleBlockHalf half =
+                        state.getValue(net.minecraft.world.level.block.DoorBlock.HALF);
+
+                    if (half == net.minecraft.world.level.block.state.properties.DoubleBlockHalf.LOWER) {
+                        // Clicked lower half - update both
+                        player.level().setBlock(pos, newState, 3);
+                        BlockPos upperPos = pos.above();
+                        BlockState upperState = player.level().getBlockState(upperPos);
+                        if (upperState.getBlock() == net.minecraft.world.level.block.Blocks.IRON_DOOR) {
+                            player.level().setBlock(upperPos, upperState.setValue(net.minecraft.world.level.block.DoorBlock.OPEN, !isOpen), 3);
+                        }
+                    } else {
+                        // Clicked upper half - update both
+                        player.level().setBlock(pos, newState, 3);
+                        BlockPos lowerPos = pos.below();
+                        BlockState lowerState = player.level().getBlockState(lowerPos);
+                        if (lowerState.getBlock() == net.minecraft.world.level.block.Blocks.IRON_DOOR) {
+                            player.level().setBlock(lowerPos, lowerState.setValue(net.minecraft.world.level.block.DoorBlock.OPEN, !isOpen), 3);
+                        }
+                    }
+
+                    // Play door sound
+                    player.level().levelEvent(player, isOpen ? 1011 : 1005, pos, 0);
+
+                    // Send message to player (only when opening)
+                    if (!isOpen) {
+                        player.displayClientMessage(message, true);
+                    }
+
+                    return EventResult.interruptTrue();
+                } else {
+                    // Player doesn't have the required key/items
+                    player.displayClientMessage(message, true);
+                    return EventResult.interruptFalse();
+                }
+            }
+
+            return EventResult.pass();
+        });
+
         Chronosphere.LOGGER.info("Registered BlockEventHandler with Reversing Time Sandstone restoration and Time Hourglass control");
     }
 
@@ -349,5 +427,53 @@ public class BlockEventHandler {
         }
 
         return gearCount >= com.chronosphere.items.quest.AncientGearItem.REQUIRED_COUNT;
+    }
+
+    /**
+     * Check if a door is a boss room door by reading its BlockEntity NBT data.
+     *
+     * Door types are stored in BlockEntity NBT and set in structure files:
+     * - Boss room door: {DoorType: "boss_room"} - requires 3x Ancient Gears
+     * - Entrance door: {DoorType: "entrance"} - requires Key to Master Clock
+     *
+     * @param level The level
+     * @param pos The position of the door
+     * @return true if this is a boss room door, false otherwise
+     */
+    private static boolean isBossRoomDoor(net.minecraft.world.level.Level level, BlockPos pos) {
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+
+        if (blockEntity instanceof com.chronosphere.blocks.BossRoomDoorBlockEntity doorEntity) {
+            return doorEntity.isBossRoomDoor();
+        }
+
+        // Default to entrance door if BlockEntity not found
+        return false;
+    }
+
+    /**
+     * Check if a player has the Key to Master Clock in their inventory.
+     * This method is used to determine if a player can unlock the Master Clock entrance door.
+     *
+     * Implementation:
+     * - Search for Key to Master Clock item in player's inventory
+     * - Return true if found (stack size is always 1)
+     *
+     * @param player The player to check
+     * @return true if player has Key to Master Clock, false otherwise
+     */
+    public static boolean hasKeyToMasterClock(net.minecraft.world.entity.player.Player player) {
+        if (player == null) {
+            return false;
+        }
+
+        // Search for Key to Master Clock in player's inventory
+        for (ItemStack stack : player.getInventory().items) {
+            if (stack.is(ModItems.KEY_TO_MASTER_CLOCK.get())) {
+                return true; // Found the key
+            }
+        }
+
+        return false; // Key not found
     }
 }

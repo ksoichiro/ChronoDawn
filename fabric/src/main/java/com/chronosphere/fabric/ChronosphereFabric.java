@@ -2,6 +2,7 @@ package com.chronosphere.fabric;
 
 import com.chronosphere.Chronosphere;
 import com.chronosphere.entities.bosses.TimeGuardianEntity;
+import com.chronosphere.entities.bosses.TimeTyrantEntity;
 import com.chronosphere.entities.mobs.ClockworkSentinelEntity;
 import com.chronosphere.entities.mobs.TemporalWraithEntity;
 import com.chronosphere.entities.mobs.TimeKeeperEntity;
@@ -39,6 +40,11 @@ public class ChronosphereFabric implements ModInitializer {
         FabricDefaultAttributeRegistry.register(
             ModEntities.TIME_GUARDIAN.get(),
             TimeGuardianEntity.createAttributes()
+        );
+
+        FabricDefaultAttributeRegistry.register(
+            ModEntities.TIME_TYRANT.get(),
+            TimeTyrantEntity.createAttributes()
         );
 
         // Custom mobs

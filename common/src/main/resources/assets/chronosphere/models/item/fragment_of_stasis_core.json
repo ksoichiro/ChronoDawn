@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "chronosphere:item/fragment_of_stasis_core"
+  }
+}

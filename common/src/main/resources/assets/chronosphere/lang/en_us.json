@@ -32,6 +32,7 @@
   "block.chronosphere.frozen_time_ice": "Frozen Time Ice",
   "block.chronosphere.time_wheat": "Time Wheat",
   "block.chronosphere.time_wheat_bale": "Time Wheat Bale",
+  "block.chronosphere.boss_room_door": "Boss Room Door",
 
   "item.chronosphere.clockstone": "Clockstone",
   "item.chronosphere.time_crystal": "Time Crystal",
@@ -49,6 +50,9 @@
   "item.chronosphere.ancient_gear": "Ancient Gear",
   "item.chronosphere.unstable_hourglass": "Unstable Hourglass",
   "item.chronosphere.spatially_linked_pickaxe": "Spatially Linked Pickaxe",
+  "item.chronosphere.time_arrow": "Time Arrow",
+  "item.chronosphere.fragment_of_stasis_core": "Fragment of Stasis Core",
+  "item.chronosphere.eye_of_chronos": "Eye of Chronos",
 
   "item.chronosphere.clockstone_sword": "Clockstone Sword",
   "item.chronosphere.clockstone_pickaxe": "Clockstone Pickaxe",
@@ -69,10 +73,18 @@
   "item.chronosphere.time_hourglass.portal_deactivated": "This portal is deactivated. You need a Portal Stabilizer to reactivate it",
   "item.chronosphere.time_hourglass.already_active": "This portal is already active",
 
+  "message.chronosphere.master_clock_unlocked": "The door unlocks with the ancient key...",
+  "message.chronosphere.master_clock_locked": "The door is locked. You need the Key to Master Clock",
+  "message.chronosphere.boss_room_unlocked": "The ancient gears align... The door opens",
+  "message.chronosphere.boss_room_locked": "The door mechanism requires 3 Ancient Gears",
+  "message.chronosphere.time_clock_boss_success": "The Time Clock resonates! Time Tyrant weakened!",
+  "message.chronosphere.time_clock_boss_limit": "The Time Clock has no effect - already used in this phase",
+
   "entity.chronosphere.time_guardian": "Time Guardian",
   "entity.chronosphere.temporal_wraith": "Temporal Wraith",
   "entity.chronosphere.clockwork_sentinel": "Clockwork Sentinel",
   "entity.chronosphere.time_keeper": "Time Keeper",
+  "entity.chronosphere.time_tyrant": "Time Tyrant",
 
   "biome.chronosphere.chronosphere_plains": "Chronosphere Plains",
   "biome.chronosphere.chronosphere_ocean": "Chronosphere Ocean",
