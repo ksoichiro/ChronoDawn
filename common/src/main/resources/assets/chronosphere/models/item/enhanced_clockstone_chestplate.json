@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "chronosphere:item/enhanced_clockstone_chestplate"
+  }
+}

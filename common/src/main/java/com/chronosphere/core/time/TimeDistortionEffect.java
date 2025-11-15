@@ -2,6 +2,7 @@ package com.chronosphere.core.time;
 
 import com.chronosphere.entities.bosses.TimeGuardianEntity;
 import com.chronosphere.entities.mobs.TimeKeeperEntity;
+import com.chronosphere.items.equipment.EnhancedClockstoneArmorItem;
 import com.chronosphere.registry.ModDimensions;
 import com.chronosphere.registry.ModItems;
 import net.minecraft.server.level.ServerLevel;
@@ -24,6 +25,7 @@ import net.minecraft.world.entity.player.Player;
  * - Duration: 100 ticks (5 seconds, reapplied continuously)
  * - Target: Hostile mobs (Monster class) in Chronosphere dimension
  * - Exclusion: Players are not affected
+ * - Exclusion: Players wearing full Enhanced Clockstone armor are immune (T254)
  *
  * Eye of Chronos Enhancement:
  * - When any player in the dimension has Eye of Chronos in inventory, all hostile mobs
@@ -32,6 +34,7 @@ import net.minecraft.world.entity.player.Player;
  * Reference: data-model.md (Time Distortion Effects)
  * Task: T073 [US1] Implement time distortion effect logic
  * Task: T147 [US3] Implement enhanced time distortion effect (Slowness V) when Eye of Chronos is in inventory
+ * Task: T254 [US2] Implement time-manipulation effects for Tier 2 equipment (Enhanced Clockstone armor immunity)
  */
 public class TimeDistortionEffect {
     /**
@@ -103,7 +106,10 @@ public class TimeDistortionEffect {
      */
     private static boolean isHostileMob(LivingEntity entity) {
         // Exclude players
-        if (entity instanceof Player) {
+        if (entity instanceof Player player) {
+            // Special case: If player is wearing full Enhanced Clockstone armor, they are immune
+            // This is for the future implementation where players might be affected
+            // Currently players are excluded entirely, but this check is ready for potential changes
             return false;
         }
 

@@ -64,6 +64,21 @@
   "item.chronosphere.clockstone_leggings": "クロックストーンのレギンス",
   "item.chronosphere.clockstone_boots": "クロックストーンのブーツ",
 
+  "item.chronosphere.enhanced_clockstone_sword": "強化クロックストーンの剣",
+  "item.chronosphere.enhanced_clockstone_pickaxe": "強化クロックストーンのツルハシ",
+  "item.chronosphere.enhanced_clockstone_axe": "強化クロックストーンの斧",
+  "item.chronosphere.enhanced_clockstone_shovel": "強化クロックストーンのシャベル",
+  "item.chronosphere.enhanced_clockstone_hoe": "強化クロックストーンのクワ",
+  "item.chronosphere.enhanced_clockstone_helmet": "強化クロックストーンのヘルメット",
+  "item.chronosphere.enhanced_clockstone_chestplate": "強化クロックストーンのチェストプレート",
+  "item.chronosphere.enhanced_clockstone_leggings": "強化クロックストーンのレギンス",
+  "item.chronosphere.enhanced_clockstone_boots": "強化クロックストーンのブーツ",
+
+  "item.chronosphere.chronoblade": "クロノブレード",
+  "item.chronosphere.time_tyrant_mail": "時間の暴君のメイル",
+  "item.chronosphere.echoing_time_boots": "時間の残響ブーツ",
+  "item.chronosphere.unstable_pocket_watch": "不安定な懐中時計",
+
   "item.chronosphere.portal_stabilizer.invalid_block": "ポータル安定化装置はクロックストーンブロックのフレームに使用してください",
   "item.chronosphere.portal_stabilizer.no_portal": "近くに機能停止したポータルが見つかりません",
   "item.chronosphere.portal_stabilizer.already_stabilized": "このポータルはすでに安定化されています",

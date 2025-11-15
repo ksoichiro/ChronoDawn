@@ -19,6 +19,16 @@ import com.chronosphere.items.equipment.ClockstoneHoeItem;
 import com.chronosphere.items.equipment.ClockstonePickaxeItem;
 import com.chronosphere.items.equipment.ClockstoneShovelItem;
 import com.chronosphere.items.equipment.ClockstoneSwordItem;
+import com.chronosphere.items.equipment.EnhancedClockstoneArmorItem;
+import com.chronosphere.items.equipment.EnhancedClockstoneAxeItem;
+import com.chronosphere.items.equipment.EnhancedClockstoneHoeItem;
+import com.chronosphere.items.equipment.EnhancedClockstonePickaxeItem;
+import com.chronosphere.items.equipment.EnhancedClockstoneShovelItem;
+import com.chronosphere.items.equipment.EnhancedClockstoneSwordItem;
+import com.chronosphere.items.artifacts.ChronobladeItem;
+import com.chronosphere.items.artifacts.TimeTyrantMailItem;
+import com.chronosphere.items.artifacts.EchoingTimeBootsItem;
+import com.chronosphere.items.artifacts.UnstablePocketWatchItem;
 import com.chronosphere.items.tools.TimeClockItem;
 import net.minecraft.world.item.ArmorItem;
 import com.chronosphere.items.KeyToMasterClockItem;
@@ -497,6 +507,140 @@ public class ModItems {
         () -> new ClockstoneArmorItem(ArmorItem.Type.BOOTS, ClockstoneArmorItem.createProperties(ArmorItem.Type.BOOTS))
     );
 
+    // === Tier 2 Equipment - Weapons ===
+
+    /**
+     * Enhanced Clockstone Sword - Tier 2 time-themed weapon with freeze effect.
+     * Advanced tier weapon comparable to diamond, with 25% chance to freeze enemy on hit.
+     */
+    public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_SWORD = ITEMS.register(
+        "enhanced_clockstone_sword",
+        () -> new EnhancedClockstoneSwordItem(EnhancedClockstoneSwordItem.createProperties())
+    );
+
+    // === Tier 2 Equipment - Tools ===
+
+    /**
+     * Enhanced Clockstone Pickaxe - Tier 2 time-themed mining tool.
+     * Advanced tier tool comparable to diamond, with faster mining speed.
+     */
+    public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_PICKAXE = ITEMS.register(
+        "enhanced_clockstone_pickaxe",
+        () -> new EnhancedClockstonePickaxeItem(EnhancedClockstonePickaxeItem.createProperties())
+    );
+
+    /**
+     * Enhanced Clockstone Axe - Tier 2 time-themed woodcutting tool.
+     * Advanced tier tool comparable to diamond, with faster mining speed.
+     */
+    public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_AXE = ITEMS.register(
+        "enhanced_clockstone_axe",
+        () -> new EnhancedClockstoneAxeItem(EnhancedClockstoneAxeItem.createProperties())
+    );
+
+    /**
+     * Enhanced Clockstone Shovel - Tier 2 time-themed digging tool.
+     * Advanced tier tool comparable to diamond, with faster mining speed.
+     */
+    public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_SHOVEL = ITEMS.register(
+        "enhanced_clockstone_shovel",
+        () -> new EnhancedClockstoneShovelItem(EnhancedClockstoneShovelItem.createProperties())
+    );
+
+    /**
+     * Enhanced Clockstone Hoe - Tier 2 time-themed farming tool.
+     * Advanced tier tool comparable to diamond, with faster tilling speed.
+     */
+    public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_HOE = ITEMS.register(
+        "enhanced_clockstone_hoe",
+        () -> new EnhancedClockstoneHoeItem(EnhancedClockstoneHoeItem.createProperties())
+    );
+
+    // === Ultimate Weapons ===
+
+    /**
+     * Chronoblade - Ultimate time-manipulating weapon.
+     * Crafted from fragments of defeated Time Tyrant.
+     * 25% chance to skip enemy's next attack AI on hit.
+     */
+    public static final RegistrySupplier<Item> CHRONOBLADE = ITEMS.register(
+        "chronoblade",
+        () -> new ChronobladeItem(ChronobladeItem.createProperties())
+    );
+
+    // === Ultimate Armor ===
+
+    /**
+     * Time Tyrant's Mail - Ultimate chestplate with rollback effect.
+     * 20% chance to rollback to previous state when receiving lethal damage.
+     */
+    public static final RegistrySupplier<Item> TIME_TYRANT_MAIL = ITEMS.register(
+        "time_tyrant_mail",
+        () -> new TimeTyrantMailItem(TimeTyrantMailItem.createProperties())
+    );
+
+    /**
+     * Echoing Time Boots - Ultimate boots with decoy summoning.
+     * Summons decoy entity when sprinting (15s cooldown).
+     */
+    public static final RegistrySupplier<Item> ECHOING_TIME_BOOTS = ITEMS.register(
+        "echoing_time_boots",
+        () -> new EchoingTimeBootsItem(EchoingTimeBootsItem.createProperties())
+    );
+
+    // === Ultimate Utilities ===
+
+    /**
+     * Unstable Pocket Watch - Speed effect swapping utility.
+     * Swaps speed effects between player and nearby mobs (30s cooldown).
+     */
+    public static final RegistrySupplier<Item> UNSTABLE_POCKET_WATCH = ITEMS.register(
+        "unstable_pocket_watch",
+        () -> new UnstablePocketWatchItem(UnstablePocketWatchItem.createProperties())
+    );
+
+    // === Tier 2 Equipment - Armor ===
+
+    /**
+     * Enhanced Clockstone Helmet - Tier 2 time-themed helmet.
+     * Defense: 3, Durability: 308
+     * Full set grants immunity to time distortion effects.
+     */
+    public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_HELMET = ITEMS.register(
+        "enhanced_clockstone_helmet",
+        () -> new EnhancedClockstoneArmorItem(ArmorItem.Type.HELMET, EnhancedClockstoneArmorItem.createProperties(ArmorItem.Type.HELMET))
+    );
+
+    /**
+     * Enhanced Clockstone Chestplate - Tier 2 time-themed chestplate.
+     * Defense: 7, Durability: 448
+     * Full set grants immunity to time distortion effects.
+     */
+    public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_CHESTPLATE = ITEMS.register(
+        "enhanced_clockstone_chestplate",
+        () -> new EnhancedClockstoneArmorItem(ArmorItem.Type.CHESTPLATE, EnhancedClockstoneArmorItem.createProperties(ArmorItem.Type.CHESTPLATE))
+    );
+
+    /**
+     * Enhanced Clockstone Leggings - Tier 2 time-themed leggings.
+     * Defense: 6, Durability: 420
+     * Full set grants immunity to time distortion effects.
+     */
+    public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_LEGGINGS = ITEMS.register(
+        "enhanced_clockstone_leggings",
+        () -> new EnhancedClockstoneArmorItem(ArmorItem.Type.LEGGINGS, EnhancedClockstoneArmorItem.createProperties(ArmorItem.Type.LEGGINGS))
+    );
+
+    /**
+     * Enhanced Clockstone Boots - Tier 2 time-themed boots.
+     * Defense: 3, Durability: 364
+     * Full set grants immunity to time distortion effects.
+     */
+    public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_BOOTS = ITEMS.register(
+        "enhanced_clockstone_boots",
+        () -> new EnhancedClockstoneArmorItem(ArmorItem.Type.BOOTS, EnhancedClockstoneArmorItem.createProperties(ArmorItem.Type.BOOTS))
+    );
+
     // === Tools ===
 
     /**
@@ -631,6 +775,31 @@ public class ModItems {
         output.accept(CLOCKSTONE_CHESTPLATE.get());
         output.accept(CLOCKSTONE_LEGGINGS.get());
         output.accept(CLOCKSTONE_BOOTS.get());
+
+        // === Tier 2 Equipment - Weapons ===
+        output.accept(ENHANCED_CLOCKSTONE_SWORD.get());
+
+        // === Tier 2 Equipment - Tools ===
+        output.accept(ENHANCED_CLOCKSTONE_PICKAXE.get());
+        output.accept(ENHANCED_CLOCKSTONE_AXE.get());
+        output.accept(ENHANCED_CLOCKSTONE_SHOVEL.get());
+        output.accept(ENHANCED_CLOCKSTONE_HOE.get());
+
+        // === Tier 2 Equipment - Armor ===
+        output.accept(ENHANCED_CLOCKSTONE_HELMET.get());
+        output.accept(ENHANCED_CLOCKSTONE_CHESTPLATE.get());
+        output.accept(ENHANCED_CLOCKSTONE_LEGGINGS.get());
+        output.accept(ENHANCED_CLOCKSTONE_BOOTS.get());
+
+        // === Ultimate Weapons ===
+        output.accept(CHRONOBLADE.get());
+
+        // === Ultimate Armor ===
+        output.accept(TIME_TYRANT_MAIL.get());
+        output.accept(ECHOING_TIME_BOOTS.get());
+
+        // === Ultimate Utilities ===
+        output.accept(UNSTABLE_POCKET_WATCH.get());
 
         // === Tools ===
         output.accept(TIME_CLOCK.get());

@@ -11,6 +11,14 @@
 - **メインカラー**: `#db8813` (RGB: 219, 136, 19) - オレンジ/ゴールド
 - ポータルの色と統一し、時計や時間のテーマに合致
 
+**配色統一の設計方針** (2025-11-16 決定):
+- **素材と装備の配色統一**: 装備は素材の色を反映する
+  - Fragment of Stasis Core（紫系）→ Time Tyrant's Mail、Echoing Time Boots（紫系）
+  - Chronoblade も Fragment から作成されるため紫系に統一予定
+  - **理由**: 素材から装備を鍛造する際、素材の力（色）が装備に宿るという一貫した世界観
+  - **参考色範囲**: `#2C1F1F` (濃い紫黒) → `#6B52BF` (明るい紫)
+  - **RGB変換パラメータ**: R×0.42, G×0.32, B×0.75 (Clockstone ベースから紫系への変換)
+
 ---
 
 ## 1. Clockstone（クロックストーン）
@@ -664,7 +672,7 @@ This creates smooth rotating gear animation. The PNG should contain multiple fra
 **コンセプト**:
 - Time Tyrant（ラスボス）を倒して入手するボス素材
 - 3-5個ドロップ（Looting効果で増加）
-- 究極のアーティファクト（Chronoblade, Time Guardian's Mail等）のクラフト素材
+- 究極のアーティファクト（Chronoblade, Time Tyrant's Mail等）のクラフト素材
 - Time Tyrantのコア（Stasis Core）が破壊された際の破片
 - 時間を静止させる強大な力の残滓を秘めている
 
@@ -782,6 +790,171 @@ This creates smooth rotating gear animation. The PNG should contain multiple fra
 
 ---
 
+---
+
+## 11. Chronoblade（クロノブレード）
+
+**ファイル**: `common/src/main/resources/assets/chronosphere/textures/item/chronoblade.png`
+
+**コンセプト**:
+- Time Tyrant撃破後に作成できる究極の武器
+- Fragment of Stasis Core、Eye of Chronos、Enhanced Clockstone、Unstable Hourglassから鍛造
+- 25%の確率で敵の次の攻撃AIを完全にスキップする時間操作能力
+- 攻撃力8.0、耐久2000（ネザライト以上の性能）
+- Epic rarity（薄紫テキスト）
+
+**デザイン方向性**:
+- **ベース**: 剣の形状（ダイヤモンド剣やネザライト剣より華麗）
+- **カラー**:
+  - **刀身**: シアン/ライトブルー（時間操作のエネルギー）+ 紫/インディゴのアクセント
+  - **柄**: オレンジ/ゴールド（#db8813、modのテーマカラー）
+  - **装飾**: 青白い発光エフェクト
+- **特徴**:
+  - 刀身に時計の針のようなデザイン
+  - 刀身中央にエネルギーラインやコアの輝き
+  - 柄に歯車や時計の文字盤モチーフ
+  - 刀身から時間のオーラが放射（発光エフェクト）
+  - 鋭利でエレガントな形状
+  - ネザライト剣より洗練された高級感
+- **雰囲気**:
+  - 究極の時間操作武器
+  - 時間を切り裂く神々しい力
+  - Epic rarityにふさわしい圧倒的な存在感
+  - 敵の時間軸そのものを断ち切る能力を視覚化
+
+**参考イメージ**:
+- ネザライト剣の形状にエネルギー武器の要素を追加
+- 光る刀身（エンチャント時のグローをベースに）
+- 時計の針を剣にしたようなデザイン
+
+**Status**: ⚠️ Placeholder - enhanced_clockstone_sword.pngのコピー、要編集
+
+**優先度**: 中（US3究極武器）
+
+---
+
+## 12. Time Tyrant's Mail（時間の暴君のメイル）
+
+**ファイル**: `common/src/main/resources/assets/chronosphere/textures/item/time_tyrant_mail.png`
+
+**コンセプト**:
+- Time Tyrant撃破後に作成できる究極のチェストプレート
+- Fragment of Stasis Core、Enhanced Clockstone、Unstable Hourglassから鍛造
+- 20%の確率で致命的ダメージを受ける前の状態にロールバック（60秒クールダウン）
+- Defense 8（ネザライトチェストプレート同等）、耐久600
+- Epic rarity（薄紫テキスト）
+
+**デザイン方向性**:
+- **ベース**: チェストプレートの形状
+- **カラー**: Fragment of Stasis Core の紫系配色に基づくカラーパレット
+  - **ベースカラー**: #2C1F1F (濃い紫黒) - プレート本体の暗部
+  - **セカンダリ**: #48353B (ミディアム紫グレー) - シャドウと深み
+  - **アクセント1**: #563F50 (暗い紫) - 装飾とエネルギーライン
+  - **アクセント2**: #664C6B (ミディアム紫) - 時間操作の痕跡
+  - **ハイライト**: #6B52BF (明るい紫) - 発光部分と時間のエネルギー
+- **特徴**:
+  - 胸部中央に時計の文字盤や砂時計のエンブレム（Time Tyrant のシンボル）
+  - 肩部分に暴君の支配を象徴する威圧的な装飾
+  - プレート表面に時間が歪む紫の静止エネルギーパターン
+  - ロールバック能力を表現する逆回転矢印や時計回りマーク
+  - Fragment of Stasis Core の紫の輝きを纏う重厚な鎧
+- **雰囲気**:
+  - Fragment of Stasis Core から鍛え上げた静止の力を宿す鎧
+  - 時間を巻き戻して死を回避する究極の防御
+  - 破壊された Time Tyrant のコア破片の紫の光を放つ
+
+**参考イメージ**:
+- ネザライトチェストプレートに Fragment of Stasis Core の紫の輝きを融合
+- 重厚な板金鎧に静止のエネルギーを纏わせたデザイン
+
+**Status**: ⚠️ Placeholder - enhanced_clockstone_chestplate.pngのコピー、要編集
+
+**優先度**: 中（US3究極防具）
+
+---
+
+## 13. Echoing Time Boots（時間の残響ブーツ）
+
+**ファイル**: `common/src/main/resources/assets/chronosphere/textures/item/echoing_time_boots.png`
+
+**コンセプト**:
+- Time Tyrant撃破後に作成できる究極のブーツ
+- Fragment of Stasis CoreとEnhanced Clockstoneから鍛造
+- スプリント時に残像（デコイエンティティ）を召喚し敵の注意を引く（15秒クールダウン）
+- Defense 3（ネザライトブーツ同等）、耐久500
+- Epic rarity（薄紫テキスト）
+
+**デザイン方向性**:
+- **ベース**: ブーツの形状
+- **カラー**: Fragment of Stasis Core の紫系配色に基づく（Time Tyrant's Mail と統一）
+  - **ベースカラー**: #2C1F1F (濃い紫黒) - ブーツ本体の暗部
+  - **セカンダリ**: #48353B (ミディアム紫グレー) - シャドウと深み
+  - **アクセント1**: #563F50 (暗い紫) - 装飾とエネルギーライン
+  - **アクセント2**: #664C6B (ミディアム紫) - 時間操作の痕跡
+  - **ハイライト**: #6B52BF (明るい紫) - 残像エフェクトと時間のエネルギー
+- **特徴**:
+  - 足首部分に小さな時計や歯車の装飾
+  - かかと部分に時間の流れを表現する波紋模様
+  - Fragment of Stasis Core の紫の輝きが残像として表現される
+  - スピード感と機動性を感じさせるデザイン
+  - 軽快さと動的な印象
+- **雰囲気**:
+  - 時間の残響（紫の残像）を残して駆け抜ける
+  - 高速移動と欺瞞戦術の象徴
+  - Fragment of Stasis Core の力で過去の残像を召喚する
+
+**参考イメージ**:
+- ネザライトブーツに Fragment of Stasis Core の紫の輝きを融合
+- 静止のエネルギーが残像として視覚化されるデザイン
+
+**Status**: ⚠️ Placeholder - enhanced_clockstone_boots.pngのコピー、要編集
+
+**優先度**: 中（US3究極防具）
+
+---
+
+## 14. Unstable Pocket Watch（不安定な懐中時計）
+
+**ファイル**: `common/src/main/resources/assets/chronosphere/textures/item/unstable_pocket_watch.png`
+
+**コンセプト**:
+- Time Tyrant撃破後に作成できる究極のユーティリティアイテム
+- Fragment of Stasis Core、Unstable Hourglass、Enhanced Clockstoneから鍛造
+- 使用時に周囲のMobとプレイヤーの速度効果を入れ替える（30秒クールダウン）
+- スタック数1、Epic rarity（薄紫テキスト）
+- 極めて強力だが制御が難しい不安定な時間操作デバイス
+
+**デザイン方向性**:
+- **ベース**: 懐中時計の形状（Time Clockより大型で装飾的）
+- **カラー**:
+  - **本体**: オレンジ/ゴールド（#db8813）をベースに
+  - **不安定さの表現**: 紫/赤のエネルギーが漏れ出している
+  - **文字盤**: 時計の針が逆回転または不規則に動いているイメージ
+- **特徴**:
+  - Time Clockより大きく豪華な懐中時計
+  - 文字盤の針が複数方向を指している（混沌）
+  - ケース部分に亀裂や歪み（不安定さ）
+  - エネルギーが制御不能に漏れ出しているエフェクト
+  - 紫/赤の不吉な光のオーラ
+  - 歯車が一部露出し不規則に回転
+  - Unstable Hourglassとの視覚的な関連性
+- **雰囲気**:
+  - 強力だが危険な時間操作デバイス
+  - 制御が難しく予測不能
+  - 使用者と敵の立場を瞬時に入れ替える混沌の力
+  - Epic rarityにふさわしい禁忌の道具
+
+**参考イメージ**:
+- バニラの時計（clock.png）を豪華にしたデザイン
+- 壊れかけの古時計、狂った時計
+- Unstable Hourglassと同系統の「不安定」な視覚表現
+
+**Status**: ⚠️ Placeholder - time_clock.pngのコピー、要編集
+
+**優先度**: 中（US3究極ユーティリティ）
+
+---
+
 ## Implementation Status（更新版）
 
 - ✅ Clockstone - 完成済み
@@ -793,4 +966,8 @@ This creates smooth rotating gear animation. The PNG should contain multiple fra
 - ⚠️ Unstable Hourglass - コピーのまま、要編集
 - ⚠️ **Fragment of Stasis Core** - enhanced_clockstone.pngのコピー、要編集（優先度：高）
 - ⚠️ **Eye of Chronos** - clockstone.pngのコピー、要編集（優先度：高）
+- ⚠️ **Chronoblade** - enhanced_clockstone_sword.pngのコピー、要編集（優先度：中）
+- ⚠️ **Time Tyrant's Mail** - enhanced_clockstone_chestplate.pngのコピー、要編集（優先度：中）
+- ⚠️ **Echoing Time Boots** - enhanced_clockstone_boots.pngのコピー、要編集（優先度：中）
+- ⚠️ **Unstable Pocket Watch** - time_clock.pngのコピー、要編集（優先度：中）
 

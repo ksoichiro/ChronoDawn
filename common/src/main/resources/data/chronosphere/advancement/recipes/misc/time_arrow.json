@@ -1,37 +1,13 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_clockstone": {
+    "has_item": {
       "trigger": "minecraft:inventory_changed",
       "conditions": {
         "items": [
           {
             "items": [
               "chronosphere:clockstone"
-            ]
-          }
-        ]
-      }
-    },
-    "has_fruit_of_time": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "chronosphere:fruit_of_time"
-            ]
-          }
-        ]
-      }
-    },
-    "has_arrow": {
-      "trigger": "minecraft:inventory_changed",
-      "conditions": {
-        "items": [
-          {
-            "items": [
-              "minecraft:arrow"
             ]
           }
         ]
@@ -46,9 +22,7 @@
   },
   "requirements": [
     [
-      "has_clockstone",
-      "has_fruit_of_time",
-      "has_arrow",
+      "has_item",
       "has_the_recipe"
     ]
   ],
