@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building_blocks",
+  "pattern": [
+    "CCC"
+  ],
+  "key": {
+    "C": {
+      "item": "chronosphere:clockstone_block"
+    }
+  },
+  "result": {
+    "id": "chronosphere:clockstone_slab",
+    "count": 6
+  }
+}

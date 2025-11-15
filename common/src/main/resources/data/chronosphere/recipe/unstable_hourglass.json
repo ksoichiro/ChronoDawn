@@ -18,7 +18,7 @@
     }
   },
   "result": {
-    "count": 1,
-    "id": "chronosphere:unstable_hourglass"
+    "id": "chronosphere:unstable_hourglass",
+    "count": 1
   }
 }

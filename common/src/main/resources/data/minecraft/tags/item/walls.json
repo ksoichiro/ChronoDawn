@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "chronosphere:temporal_bricks_wall"
+    "chronosphere:temporal_bricks_wall",
+    "chronosphere:clockstone_wall"
   ]
 }

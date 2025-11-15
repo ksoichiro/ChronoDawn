@@ -4,6 +4,9 @@ import com.chronosphere.Chronosphere;
 import com.chronosphere.blocks.BossRoomDoorBlock;
 import com.chronosphere.blocks.ClockstoneBlock;
 import com.chronosphere.blocks.ClockstoneOre;
+import com.chronosphere.blocks.ClockstoneSlab;
+import com.chronosphere.blocks.ClockstoneStairs;
+import com.chronosphere.blocks.ClockstoneWall;
 import com.chronosphere.blocks.ClockTowerTeleporterBlock;
 import com.chronosphere.blocks.ClockworkBlock;
 import com.chronosphere.blocks.FruitOfTimeBlock;
@@ -73,6 +76,33 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> CLOCKSTONE_BLOCK = BLOCKS.register(
         "clockstone_block",
         () -> new ClockstoneBlock(ClockstoneBlock.createProperties())
+    );
+
+    /**
+     * Clockstone Stairs - Decorative stair variant of Clockstone Block.
+     * Crafted from 6x Clockstone Block in stair pattern.
+     */
+    public static final RegistrySupplier<Block> CLOCKSTONE_STAIRS = BLOCKS.register(
+        "clockstone_stairs",
+        () -> new ClockstoneStairs(ClockstoneStairs.createProperties())
+    );
+
+    /**
+     * Clockstone Slab - Decorative slab variant of Clockstone Block.
+     * Crafted from 3x Clockstone Block in horizontal row.
+     */
+    public static final RegistrySupplier<Block> CLOCKSTONE_SLAB = BLOCKS.register(
+        "clockstone_slab",
+        () -> new ClockstoneSlab(ClockstoneSlab.createProperties())
+    );
+
+    /**
+     * Clockstone Wall - Decorative wall variant of Clockstone Block.
+     * Crafted from 6x Clockstone Block in 2 rows of 3.
+     */
+    public static final RegistrySupplier<Block> CLOCKSTONE_WALL = BLOCKS.register(
+        "clockstone_wall",
+        () -> new ClockstoneWall(ClockstoneWall.createProperties())
     );
 
     /**
