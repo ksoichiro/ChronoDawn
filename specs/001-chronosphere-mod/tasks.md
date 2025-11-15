@@ -771,8 +771,8 @@
 
 **Purpose**: Ensure all US3 recipes use only Chronosphere-obtainable materials (no Overworld-exclusive items like diamonds, ender pearls, nether stars)
 
-- [ ] T171d [P] [US3] Review all US3 recipes (Chronoblade, Time Guardian's Mail, Echoing Time Boots, Ultimate Spatially Linked Pickaxe, Unstable Pocket Watch) for Overworld-exclusive materials
-- [ ] T171e [P] [US3] Update recipes if needed to use Chronosphere materials (Fragment of Stasis Core, Enhanced Clockstone, Clockstone Block, etc.)
+- [x] T171d [P] [US3] Review all US3 recipes (Chronoblade, Time Tyrant's Mail, Echoing Time Boots, Ultimate Spatially Linked Pickaxe, Unstable Pocket Watch) for Overworld-exclusive materials
+- [x] T171e [P] [US3] Update recipes if needed to use Chronosphere materials (Fragment of Stasis Core, Enhanced Clockstone, Clockstone Block, etc.) - No changes needed, all recipes use appropriate Chronosphere materials
 
 ### Boss Battle Balance & Strategy (US3 Enhancement - High Priority)
 
@@ -780,10 +780,10 @@
 
 **Context**: テストプレイの結果、Time Tyrantが強すぎてネザライトフル装備でも倒せない。単純な数値調整ではなく、戦略的なアイテムやギミックを追加して攻略の幅を広げる。
 
-- [ ] T171f [US3] Implement Time Clock weakening mechanic in common/src/main/java/com/chronosphere/items/artifacts/TimeClockBossHandler.java (right-click on Time Tyrant: 10s defense 15→5, speed 50% reduction, 1x per phase, 30s cooldown)
-- [ ] T171g [US3] Create Time Arrow item in common/src/main/java/com/chronosphere/items/combat/TimeArrowItem.java (extends ArrowItem, applies Slowness III 10s, Weakness II 10s, Glowing 15s to Time Tyrant)
-- [ ] T171h [P] [US3] Add Time Arrow crafting recipe in common/src/main/resources/data/chronosphere/recipe/time_arrow.json (Fruit of Time center + Arrow bottom + Clockstone top → 4x Time Arrow)
-- [ ] T171i [P] [US3] Add Time Arrow localization in en_us.json and ja_jp.json
+- [x] T171f [US3] Implement Time Clock weakening mechanic in common/src/main/java/com/chronosphere/items/tools/TimeClockItem.java (right-click on Time Tyrant: 10s defense 15→5, speed 50% reduction, 1x per phase, 30s cooldown)
+- [x] T171g [US3] Create Time Arrow item in common/src/main/java/com/chronosphere/items/combat/TimeArrowItem.java (extends ArrowItem, applies Slowness III 10s, Weakness II 10s, Glowing 15s to Time Tyrant)
+- [x] T171h [P] [US3] Add Time Arrow crafting recipe in common/src/main/resources/data/chronosphere/recipe/time_arrow.json (Fruit of Time center + Arrow bottom + Clockstone top → 4x Time Arrow)
+- [x] T171i [P] [US3] Add Time Arrow localization in en_us.json and ja_jp.json
 
 ### Future Boss Battle Enhancements (US3 - Phase 7+)
 
