@@ -143,6 +143,30 @@ public class ModItems {
         () -> new UnstableHourglassItem(UnstableHourglassItem.createProperties())
     );
 
+    /**
+     * Fragment of Stasis Core - Boss material item.
+     * Dropped by Time Tyrant (3-5 per kill, affected by Looting).
+     * Used for crafting ultimate artifacts (Chronoblade, Time Guardian's Mail, etc.).
+     */
+    public static final RegistrySupplier<Item> FRAGMENT_OF_STASIS_CORE = ITEMS.register(
+        "fragment_of_stasis_core",
+        () -> new com.chronosphere.items.base.FragmentOfStasisCoreItem(
+            com.chronosphere.items.base.FragmentOfStasisCoreItem.createProperties()
+        )
+    );
+
+    /**
+     * Eye of Chronos - Ultimate artifact item.
+     * Dropped by Time Tyrant (1 per kill, guaranteed).
+     * Effect: Enhanced Time Distortion (Slowness V on hostile mobs in Chronosphere when in inventory).
+     */
+    public static final RegistrySupplier<Item> EYE_OF_CHRONOS = ITEMS.register(
+        "eye_of_chronos",
+        () -> new com.chronosphere.items.artifacts.EyeOfChronosItem(
+            com.chronosphere.items.artifacts.EyeOfChronosItem.createProperties()
+        )
+    );
+
     // === Portal Items ===
 
     /**
@@ -260,6 +284,8 @@ public class ModItems {
         output.accept(CLOCKSTONE.get());
         output.accept(ENHANCED_CLOCKSTONE.get());
         output.accept(UNSTABLE_HOURGLASS.get());
+        output.accept(FRAGMENT_OF_STASIS_CORE.get());
+        output.accept(EYE_OF_CHRONOS.get());
 
         // === Portal Items ===
         output.accept(TIME_HOURGLASS.get());
