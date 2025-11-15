@@ -176,26 +176,31 @@ public class BlockEventHandler {
                 if (canUnlock) {
                     // Toggle door state
                     boolean isOpen = state.getValue(net.minecraft.world.level.block.DoorBlock.OPEN);
+                    boolean wasOpen = isOpen; // Store old state for spawning logic
                     BlockState newState = state.setValue(net.minecraft.world.level.block.DoorBlock.OPEN, !isOpen);
 
                     // Update both halves of the door
                     net.minecraft.world.level.block.state.properties.DoubleBlockHalf half =
                         state.getValue(net.minecraft.world.level.block.DoorBlock.HALF);
 
+                    BlockPos doorPosToUse = pos; // Track which position we'll use for spawning
+
                     if (half == net.minecraft.world.level.block.state.properties.DoubleBlockHalf.LOWER) {
                         // Clicked lower half - update both
                         player.level().setBlock(pos, newState, 3);
+                        doorPosToUse = pos;
                         BlockPos upperPos = pos.above();
                         BlockState upperState = player.level().getBlockState(upperPos);
-                        if (upperState.getBlock() == net.minecraft.world.level.block.Blocks.IRON_DOOR) {
+                        if (upperState.getBlock() == ModBlocks.BOSS_ROOM_DOOR.get()) {
                             player.level().setBlock(upperPos, upperState.setValue(net.minecraft.world.level.block.DoorBlock.OPEN, !isOpen), 3);
                         }
                     } else {
                         // Clicked upper half - update both
                         player.level().setBlock(pos, newState, 3);
                         BlockPos lowerPos = pos.below();
+                        doorPosToUse = lowerPos; // Use lower position for spawning
                         BlockState lowerState = player.level().getBlockState(lowerPos);
-                        if (lowerState.getBlock() == net.minecraft.world.level.block.Blocks.IRON_DOOR) {
+                        if (lowerState.getBlock() == ModBlocks.BOSS_ROOM_DOOR.get()) {
                             player.level().setBlock(lowerPos, lowerState.setValue(net.minecraft.world.level.block.DoorBlock.OPEN, !isOpen), 3);
                         }
                     }
@@ -206,6 +211,14 @@ public class BlockEventHandler {
                     // Send message to player (only when opening)
                     if (!isOpen) {
                         player.displayClientMessage(message, true);
+                    }
+
+                    // Spawn Time Tyrant when boss room door is opened (not closed)
+                    if (isBossRoomDoor && !wasOpen && player.level() instanceof ServerLevel serverLevel) {
+                        Chronosphere.LOGGER.info("Boss room door opened at {} - spawning Time Tyrant", doorPosToUse);
+                        // Get the updated state after opening
+                        BlockState openedState = player.level().getBlockState(doorPosToUse);
+                        com.chronosphere.worldgen.spawning.TimeTyrantSpawner.spawnOnDoorOpen(serverLevel, doorPosToUse, openedState);
                     }
 
                     return EventResult.interruptTrue();

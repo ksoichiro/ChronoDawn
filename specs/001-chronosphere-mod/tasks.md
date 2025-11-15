@@ -707,20 +707,20 @@
 - [ ] T134 [US3] Create Time Tyrant entity in common/src/main/java/com/chronosphere/entities/bosses/TimeTyrantEntity.java
 - [ ] T135 [US3] Register Time Tyrant in ModEntities registry
 - [ ] T136 [US3] Implement Time Tyrant AI (Phase 1: time stop, Phase 2: teleport + speed, Phase 3: AoE + HP recovery) in common/src/main/java/com/chronosphere/entities/bosses/TimeTyrantAI.java
-- [ ] T137 [US3] Create Time Tyrant loot table in common/src/main/resources/data/chronosphere/loot_tables/entities/time_tyrant.json
-- [ ] T138 [US3] Implement Stasis Core destruction on defeat in EntityEventHandler.java
-- [ ] T139 [US3] Implement reversed resonance trigger (60 seconds) on defeat in EntityEventHandler.java
-- [ ] T140 [US3] Implement dimension stabilization on defeat in common/src/main/java/com/chronosphere/core/dimension/DimensionStabilizer.java
+- [X] T137 [US3] Create Time Tyrant loot table in common/src/main/resources/data/chronosphere/loot_tables/entities/time_tyrant.json
+- [X] T138 [US3] Implement Stasis Core destruction on defeat in EntityEventHandler.java
+- [X] T139 [US3] Implement reversed resonance trigger (60 seconds) on defeat in EntityEventHandler.java
+- [X] T140 [US3] Implement dimension stabilization on defeat in common/src/main/java/com/chronosphere/core/dimension/DimensionStabilizer.java
 
 ### Items - Boss Materials (US3)
 
-- [ ] T141 [P] [US3] Create Fragment of Stasis Core item in common/src/main/java/com/chronosphere/items/base/FragmentOfStasisCoreItem.java
-- [ ] T142 [P] [US3] Register Fragment of Stasis Core in ModItems registry
-- [ ] T143 [P] [US3] Create Fragment of Stasis Core texture in common/src/main/resources/assets/chronosphere/textures/item/fragment_of_stasis_core.png
-- [ ] T144 [P] [US3] Create Eye of Chronos item in common/src/main/java/com/chronosphere/items/artifacts/EyeOfChronosItem.java
-- [ ] T145 [P] [US3] Register Eye of Chronos in ModItems registry
-- [ ] T146 [P] [US3] Create Eye of Chronos texture in common/src/main/resources/assets/chronosphere/textures/item/eye_of_chronos.png
-- [ ] T147 [US3] Implement enhanced time distortion effect (Slowness V) when Eye of Chronos is in inventory in EntityEventHandler.java
+- [X] T141 [P] [US3] Create Fragment of Stasis Core item in common/src/main/java/com/chronosphere/items/base/FragmentOfStasisCoreItem.java
+- [X] T142 [P] [US3] Register Fragment of Stasis Core in ModItems registry
+- [X] T143 [P] [US3] Create Fragment of Stasis Core texture in common/src/main/resources/assets/chronosphere/textures/item/fragment_of_stasis_core.png
+- [X] T144 [P] [US3] Create Eye of Chronos item in common/src/main/java/com/chronosphere/items/artifacts/EyeOfChronosItem.java
+- [X] T145 [P] [US3] Register Eye of Chronos in ModItems registry
+- [X] T146 [P] [US3] Create Eye of Chronos texture in common/src/main/resources/assets/chronosphere/textures/item/eye_of_chronos.png
+- [X] T147 [US3] Implement enhanced time distortion effect (Slowness V) when Eye of Chronos is in inventory in EntityEventHandler.java
 
 ### Weapons - Chronoblade (US3)
 
