@@ -381,8 +381,9 @@ public class TimeTyrantSpawner {
         // Get door's facing direction
         var facing = doorState.getValue(DoorBlock.FACING);
 
-        // Calculate spawn position (10 blocks inside the door, 1 block above ground)
-        BlockPos spawnPos = doorPos.relative(facing, 10).above(1);
+        // Calculate spawn position (15 blocks inside the door, 4 blocks above ground)
+        // Boss room has elevated central platform
+        BlockPos spawnPos = doorPos.relative(facing, 15).above(4);
 
         // Find valid spawn position (air with solid ground)
         spawnPos = findValidSpawnPosition(level, spawnPos);
