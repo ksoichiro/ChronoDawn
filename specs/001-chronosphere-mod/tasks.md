@@ -630,13 +630,13 @@
 
 **Note**: 現在は基本装備（Tier 1）と究極装備（Tier 3）のみ。Tier 2（Enhanced Clockstone装備）を追加して段階的な成長を実現
 
-- [ ] T250 [P] [US2] Create Enhanced Clockstone Sword item in common/src/main/java/com/chronosphere/items/equipment/EnhancedClockstoneSwordItem.java (Tier 2 weapon, better than Tier 1, chance to freeze enemy on hit for 2s)
-- [ ] T251 [P] [US2] Create Enhanced Clockstone Axe/Shovel/Hoe items in common/src/main/java/com/chronosphere/items/equipment/ (Tier 2 tools, faster mining speed)
-- [ ] T252 [P] [US2] Create Enhanced Clockstone Armor Set (Helmet, Chestplate, Leggings, Boots) in common/src/main/java/com/chronosphere/items/equipment/ (Tier 2 armor, higher protection + set bonus: immunity to time distortion effects)
-- [ ] T253 [P] [US2] Create crafting recipes for Tier 2 equipment in common/src/main/resources/data/chronosphere/recipes/ (uses Enhanced Clockstone + Time Crystal)
-- [ ] T254 [P] [US2] Implement time-manipulation effects for Tier 2 equipment (freeze on hit for sword, set bonus for armor)
-- [ ] T255 [P] [US2] Create textures for Tier 2 equipment in common/src/main/resources/assets/chronosphere/textures/item/
-- [ ] T256 [US2] Add Tier 2 equipment to creative tab and localization files
+- [x] T250 [P] [US2] Create Enhanced Clockstone Sword item in common/src/main/java/com/chronosphere/items/equipment/EnhancedClockstoneSwordItem.java (Tier 2 weapon, better than Tier 1, chance to freeze enemy on hit for 2s)
+- [x] T251 [P] [US2] Create Enhanced Clockstone Axe/Shovel/Hoe items in common/src/main/java/com/chronosphere/items/equipment/ (Tier 2 tools, faster mining speed)
+- [x] T252 [P] [US2] Create Enhanced Clockstone Armor Set (Helmet, Chestplate, Leggings, Boots) in common/src/main/java/com/chronosphere/items/equipment/ (Tier 2 armor, higher protection + set bonus: immunity to time distortion effects)
+- [x] T253 [P] [US2] Create crafting recipes for Tier 2 equipment in common/src/main/resources/data/chronosphere/recipes/ (uses Enhanced Clockstone + Time Crystal)
+- [x] T254 [P] [US2] Implement time-manipulation effects for Tier 2 equipment (freeze on hit for sword, set bonus for armor)
+- [x] T255 [P] [US2] Create textures for Tier 2 equipment in common/src/main/resources/assets/chronosphere/textures/item/
+- [x] T256 [US2] Add Tier 2 equipment to creative tab and localization files
 
 **Checkpoint**: User Story 1とUser Story 2が両方とも独立して動作すること
 
@@ -714,58 +714,58 @@
 
 ### Items - Boss Materials (US3)
 
-- [ ] T141 [P] [US3] Create Fragment of Stasis Core item in common/src/main/java/com/chronosphere/items/base/FragmentOfStasisCoreItem.java
-- [ ] T142 [P] [US3] Register Fragment of Stasis Core in ModItems registry
-- [ ] T143 [P] [US3] Create Fragment of Stasis Core texture in common/src/main/resources/assets/chronosphere/textures/item/fragment_of_stasis_core.png
-- [ ] T144 [P] [US3] Create Eye of Chronos item in common/src/main/java/com/chronosphere/items/artifacts/EyeOfChronosItem.java
-- [ ] T145 [P] [US3] Register Eye of Chronos in ModItems registry
-- [ ] T146 [P] [US3] Create Eye of Chronos texture in common/src/main/resources/assets/chronosphere/textures/item/eye_of_chronos.png
-- [ ] T147 [US3] Implement enhanced time distortion effect (Slowness V) when Eye of Chronos is in inventory in EntityEventHandler.java
+- [x] T141 [P] [US3] Create Fragment of Stasis Core item in common/src/main/java/com/chronosphere/items/base/FragmentOfStasisCoreItem.java
+- [x] T142 [P] [US3] Register Fragment of Stasis Core in ModItems registry
+- [x] T143 [P] [US3] Create Fragment of Stasis Core texture in common/src/main/resources/assets/chronosphere/textures/item/fragment_of_stasis_core.png
+- [x] T144 [P] [US3] Create Eye of Chronos item in common/src/main/java/com/chronosphere/items/artifacts/EyeOfChronosItem.java
+- [x] T145 [P] [US3] Register Eye of Chronos in ModItems registry
+- [x] T146 [P] [US3] Create Eye of Chronos texture in common/src/main/resources/assets/chronosphere/textures/item/eye_of_chronos.png
+- [x] T147 [US3] Implement enhanced time distortion effect (Slowness V) when Eye of Chronos is in inventory in EntityEventHandler.java
 
 ### Weapons - Chronoblade (US3)
 
-- [ ] T148 [P] [US3] Create Chronoblade item in common/src/main/java/com/chronosphere/items/artifacts/ChronobladeItem.java
-- [ ] T149 [P] [US3] Register Chronoblade in ModItems registry
-- [ ] T150 [P] [US3] Create Chronoblade texture in common/src/main/resources/assets/chronosphere/textures/item/chronoblade.png
-- [ ] T151 [P] [US3] Create Chronoblade recipe in common/src/main/resources/data/chronosphere/recipes/chronoblade.json
-- [ ] T152 [US3] Implement AI skip on hit (25% chance) in common/src/main/java/com/chronosphere/items/artifacts/ChronobladeAISkipHandler.java
+- [x] T148 [P] [US3] Create Chronoblade item in common/src/main/java/com/chronosphere/items/artifacts/ChronobladeItem.java
+- [x] T149 [P] [US3] Register Chronoblade in ModItems registry
+- [x] T150 [P] [US3] Create Chronoblade texture in common/src/main/resources/assets/chronosphere/textures/item/chronoblade.png
+- [x] T151 [P] [US3] Create Chronoblade recipe in common/src/main/resources/data/chronosphere/recipes/chronoblade.json
+- [x] T152 [US3] Implement AI skip on hit (25% chance) in common/src/main/java/com/chronosphere/items/artifacts/ChronobladeAISkipHandler.java
 
 ### Armor - Time Guardian's Mail (US3)
 
-- [ ] T153 [P] [US3] Create Time Guardian's Mail item in common/src/main/java/com/chronosphere/items/artifacts/TimeGuardianMailItem.java
-- [ ] T154 [P] [US3] Register Time Guardian's Mail in ModItems registry
-- [ ] T155 [P] [US3] Create Time Guardian's Mail texture in common/src/main/resources/assets/chronosphere/textures/item/time_guardian_mail.png
-- [ ] T156 [P] [US3] Create Time Guardian's Mail recipe in common/src/main/resources/data/chronosphere/recipes/time_guardian_mail.json
-- [ ] T157 [US3] Implement rollback on lethal damage (20% chance, 60s cooldown) in common/src/main/java/com/chronosphere/items/artifacts/TimeGuardianMailRollbackHandler.java
+- [x] T153 [P] [US3] Create Time Guardian's Mail item in common/src/main/java/com/chronosphere/items/artifacts/TimeGuardianMailItem.java
+- [x] T154 [P] [US3] Register Time Guardian's Mail in ModItems registry
+- [x] T155 [P] [US3] Create Time Guardian's Mail texture in common/src/main/resources/assets/chronosphere/textures/item/time_guardian_mail.png
+- [x] T156 [P] [US3] Create Time Guardian's Mail recipe in common/src/main/resources/data/chronosphere/recipes/time_guardian_mail.json
+- [x] T157 [US3] Implement rollback on lethal damage (20% chance, 60s cooldown) in common/src/main/java/com/chronosphere/items/artifacts/TimeGuardianMailRollbackHandler.java
 
 ### Armor - Echoing Time Boots (US3)
 
-- [ ] T158 [P] [US3] Create Echoing Time Boots item in common/src/main/java/com/chronosphere/items/artifacts/EchoingTimeBootsItem.java
-- [ ] T159 [P] [US3] Register Echoing Time Boots in ModItems registry
-- [ ] T160 [P] [US3] Create Echoing Time Boots texture in common/src/main/resources/assets/chronosphere/textures/item/echoing_time_boots.png
-- [ ] T161 [P] [US3] Create Echoing Time Boots recipe in common/src/main/resources/data/chronosphere/recipes/echoing_time_boots.json
-- [ ] T162 [US3] Create Decoy Entity in common/src/main/java/com/chronosphere/entities/DecoyEntity.java
-- [ ] T163 [US3] Register Decoy Entity in ModEntities registry
-- [ ] T164 [US3] Implement decoy summoning on sprint (15s cooldown) in common/src/main/java/com/chronosphere/items/artifacts/EchoingTimeBootsDecoyHandler.java
+- [x] T158 [P] [US3] Create Echoing Time Boots item in common/src/main/java/com/chronosphere/items/artifacts/EchoingTimeBootsItem.java
+- [x] T159 [P] [US3] Register Echoing Time Boots in ModItems registry
+- [x] T160 [P] [US3] Create Echoing Time Boots texture in common/src/main/resources/assets/chronosphere/textures/item/echoing_time_boots.png
+- [x] T161 [P] [US3] Create Echoing Time Boots recipe in common/src/main/resources/data/chronosphere/recipes/echoing_time_boots.json
+- [x] T162 [US3] Create Decoy Entity in common/src/main/java/com/chronosphere/entities/DecoyEntity.java
+- [x] T163 [US3] Register Decoy Entity in ModEntities registry
+- [x] T164 [US3] Implement decoy summoning on sprint (15s cooldown) in common/src/main/java/com/chronosphere/items/artifacts/EchoingTimeBootsDecoyHandler.java
 
 ### Tools - Ultimate Spatially Linked Pickaxe (US3)
 
-- [ ] T165 [P] [US3] Create ultimate version recipe in common/src/main/resources/data/chronosphere/recipes/spatially_linked_pickaxe_ultimate.json
-- [ ] T166 [US3] Update Spatially Linked Pickaxe with enhanced drop multiplier for ultimate version
+- [x] T165 [P] [US3] Create ultimate version recipe in common/src/main/resources/data/chronosphere/recipes/spatially_linked_pickaxe_ultimate.json
+- [x] T166 [US3] Update Spatially Linked Pickaxe with enhanced drop multiplier for ultimate version
 
 ### Utility - Unstable Pocket Watch (US3)
 
-- [ ] T167 [P] [US3] Create Unstable Pocket Watch item in common/src/main/java/com/chronosphere/items/artifacts/UnstablePocketWatchItem.java
-- [ ] T168 [P] [US3] Register Unstable Pocket Watch in ModItems registry
-- [ ] T169 [P] [US3] Create Unstable Pocket Watch texture in common/src/main/resources/assets/chronosphere/textures/item/unstable_pocket_watch.png
-- [ ] T170 [P] [US3] Create Unstable Pocket Watch recipe in common/src/main/resources/data/chronosphere/recipes/unstable_pocket_watch.json
-- [ ] T171 [US3] Implement speed effect swapping logic (30s cooldown) in common/src/main/java/com/chronosphere/items/artifacts/UnstablePocketWatchSwapHandler.java
+- [x] T167 [P] [US3] Create Unstable Pocket Watch item in common/src/main/java/com/chronosphere/items/artifacts/UnstablePocketWatchItem.java
+- [x] T168 [P] [US3] Register Unstable Pocket Watch in ModItems registry
+- [x] T169 [P] [US3] Create Unstable Pocket Watch texture in common/src/main/resources/assets/chronosphere/textures/item/unstable_pocket_watch.png
+- [x] T170 [P] [US3] Create Unstable Pocket Watch recipe in common/src/main/resources/data/chronosphere/recipes/unstable_pocket_watch.json
+- [x] T171 [US3] Implement speed effect swapping logic (30s cooldown) in common/src/main/java/com/chronosphere/items/artifacts/UnstablePocketWatchSwapHandler.java
 
 ### Localization & Creative Tab (US3)
 
-- [ ] T171a [US3] Update English localization file with all US3 items/entities in en_us.json
-- [ ] T171b [US3] Update Japanese localization file with all US3 items/entities in ja_jp.json
-- [ ] T171c [US3] Add all US3 items to creative tab in ModCreativeTabs
+- [x] T171a [US3] Update English localization file with all US3 items/entities in en_us.json
+- [x] T171b [US3] Update Japanese localization file with all US3 items/entities in ja_jp.json
+- [x] T171c [US3] Add all US3 items to creative tab in ModCreativeTabs
 
 ### Recipe Material Review (US3)
 
