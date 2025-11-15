@@ -664,8 +664,8 @@
 
 #### NBT Structures - Entrance & Boss Room
 
-- [ ] T128 [P] [US3] Create Master Clock entrance NBT (15x10x15) in common/src/main/resources/data/chronosphere/structure/master_clock_entrance.nbt (small surface temple, key-locked door, stairs to underground)
-- [ ] T129 [P] [US3] Create Master Clock boss room NBT (35x20x35) in common/src/main/resources/data/chronosphere/structure/master_clock_boss_room.nbt (large hall, Time Tyrant spawn point, pillars, reward chest)
+- [x] T128 [P] [US3] Create Master Clock entrance NBT (15x10x15) in common/src/main/resources/data/chronosphere/structure/master_clock_entrance.nbt (small surface temple, key-locked door, stairs to underground)
+- [x] T129 [P] [US3] Create Master Clock boss room NBT (35x20x35) in common/src/main/resources/data/chronosphere/structure/master_clock_boss_room.nbt (large hall, Time Tyrant spawn point, pillars, reward chest)
 
 #### NBT Structures - Jigsaw Rooms (8 variants)
 
@@ -680,37 +680,37 @@
 
 #### Ancient Gears Item (Progressive Unlock)
 
-- [ ] T131a [P] [US3] Create Ancient Gear item in common/src/main/java/com/chronosphere/items/quest/AncientGearItem.java
-- [ ] T131b [P] [US3] Register Ancient Gear in ModItems registry
-- [ ] T131c [P] [US3] Create Ancient Gear texture in common/src/main/resources/assets/chronosphere/textures/item/ancient_gear.png (clockwork gear theme)
-- [ ] T131d [US3] Implement Ancient Gears detection logic in BlockEventHandler.java (check 3 gears in inventory, open boss room door)
+- [x] T131a [P] [US3] Create Ancient Gear item in common/src/main/java/com/chronosphere/items/quest/AncientGearItem.java
+- [x] T131b [P] [US3] Register Ancient Gear in ModItems registry
+- [x] T131c [P] [US3] Create Ancient Gear texture in common/src/main/resources/assets/chronosphere/textures/item/ancient_gear.png (clockwork gear theme)
+- [x] T131d [US3] Implement Ancient Gears detection logic in BlockEventHandler.java (check 3 gears in inventory, open boss room door)
 
 #### Jigsaw Template Pools
 
-- [ ] T132a [P] [US3] Create entrance pool JSON in common/src/main/resources/data/chronosphere/worldgen/template_pool/master_clock/entrance_pool.json (single entrance NBT)
+- [x] T132a [P] [US3] Create entrance pool JSON in common/src/main/resources/data/chronosphere/worldgen/template_pool/master_clock/entrance_pool.json (single entrance NBT)
 - [ ] T132b [P] [US3] Create room pool JSON in common/src/main/resources/data/chronosphere/worldgen/template_pool/master_clock/room_pool.json (8 room variants, equal weights)
-- [ ] T132c [P] [US3] Create boss room pool JSON in common/src/main/resources/data/chronosphere/worldgen/template_pool/master_clock/boss_room_pool.json (single boss room NBT)
+- [x] T132c [P] [US3] Create boss room pool JSON in common/src/main/resources/data/chronosphere/worldgen/template_pool/master_clock/boss_room_pool.json (single boss room NBT)
 
 #### Structure Configuration
 
 - [ ] T132d [P] [US3] Create loot processor JSON in common/src/main/resources/data/chronosphere/worldgen/processor_list/master_clock_loot.json (chest loot with Ancient Gears)
-- [ ] T132e [P] [US3] Create structure JSON in common/src/main/resources/data/chronosphere/worldgen/structure/master_clock.json (references entrance pool, Jigsaw configuration)
-- [ ] T132f [P] [US3] Create structure set JSON in common/src/main/resources/data/chronosphere/worldgen/structure_set/master_clock.json (concentric_rings placement, distance: 80, spread: 20, count: 1)
-- [ ] T132g [P] [US3] Create biome tag has_master_clock in common/src/main/resources/data/chronosphere/tags/worldgen/biome/has_master_clock.json (all Chronosphere biomes)
+- [x] T132e [P] [US3] Create structure JSON in common/src/main/resources/data/chronosphere/worldgen/structure/master_clock.json (references entrance pool, Jigsaw configuration)
+- [x] T132f [P] [US3] Create structure set JSON in common/src/main/resources/data/chronosphere/worldgen/structure_set/master_clock.json (concentric_rings placement, distance: 80, spread: 20, count: 1)
+- [x] T132g [P] [US3] Create biome tag has_master_clock in common/src/main/resources/data/chronosphere/tags/worldgen/biome/has_master_clock.json (all Chronosphere biomes)
 
 #### Door Opening Logic
 
-- [ ] T133 [US3] Implement Key to Master Clock door opening logic in BlockEventHandler.java (entrance door unlock when key used)
+- [x] T133 [US3] Implement Key to Master Clock door opening logic in BlockEventHandler.java (entrance door unlock when key used)
 
 ### Entities - Time Tyrant (Boss) (US3)
 
-- [ ] T134 [US3] Create Time Tyrant entity in common/src/main/java/com/chronosphere/entities/bosses/TimeTyrantEntity.java
-- [ ] T135 [US3] Register Time Tyrant in ModEntities registry
-- [ ] T136 [US3] Implement Time Tyrant AI (Phase 1: time stop, Phase 2: teleport + speed, Phase 3: AoE + HP recovery) in common/src/main/java/com/chronosphere/entities/bosses/TimeTyrantAI.java
-- [ ] T137 [US3] Create Time Tyrant loot table in common/src/main/resources/data/chronosphere/loot_tables/entities/time_tyrant.json
-- [ ] T138 [US3] Implement Stasis Core destruction on defeat in EntityEventHandler.java
-- [ ] T139 [US3] Implement reversed resonance trigger (60 seconds) on defeat in EntityEventHandler.java
-- [ ] T140 [US3] Implement dimension stabilization on defeat in common/src/main/java/com/chronosphere/core/dimension/DimensionStabilizer.java
+- [x] T134 [US3] Create Time Tyrant entity in common/src/main/java/com/chronosphere/entities/bosses/TimeTyrantEntity.java
+- [x] T135 [US3] Register Time Tyrant in ModEntities registry
+- [x] T136 [US3] Implement Time Tyrant AI (Phase 1: time stop, Phase 2: teleport + speed, Phase 3: AoE + HP recovery) in common/src/main/java/com/chronosphere/entities/bosses/TimeTyrantAI.java
+- [x] T137 [US3] Create Time Tyrant loot table in common/src/main/resources/data/chronosphere/loot_tables/entities/time_tyrant.json
+- [x] T138 [US3] Implement Stasis Core destruction on defeat in EntityEventHandler.java
+- [x] T139 [US3] Implement reversed resonance trigger (60 seconds) on defeat in EntityEventHandler.java
+- [x] T140 [US3] Implement dimension stabilization on defeat in common/src/main/java/com/chronosphere/core/dimension/DimensionStabilizer.java
 
 ### Items - Boss Materials (US3)
 
