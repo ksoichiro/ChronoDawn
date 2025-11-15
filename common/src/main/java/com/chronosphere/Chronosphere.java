@@ -11,6 +11,7 @@ import com.chronosphere.registry.ModEntities;
 import com.chronosphere.registry.ModItems;
 import com.chronosphere.registry.ModTreeDecoratorTypes;
 import com.chronosphere.worldgen.spawning.TimeGuardianSpawner;
+import com.chronosphere.worldgen.spawning.TimeTyrantSpawner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +40,9 @@ public class Chronosphere {
 
         // Initialize spawn systems (Phase 4 - User Story 2)
         TimeGuardianSpawner.register();
+
+        // Initialize spawn systems (Phase 5 - User Story 3)
+        TimeTyrantSpawner.register();
     }
 }
 

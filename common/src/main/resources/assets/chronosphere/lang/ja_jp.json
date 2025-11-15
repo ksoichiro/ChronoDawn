@@ -46,5 +46,10 @@
   "message.chronosphere.time_clock_boss_limit": "タイムクロックは効果がない - このフェーズで既に使用済みだ",
 
   "entity.chronosphere.time_guardian": "時の番人",
-  "entity.chronosphere.time_tyrant": "時間の暴君"
+  "entity.chronosphere.time_tyrant": "時間の暴君",
+
+  "message.chronosphere.stasis_core_destroyed": "静止のコアが砕け散った！",
+  "message.chronosphere.tyrant_defeated": "クロノスフィアが揺れる... 時間の暴君が倒された！",
+  "message.chronosphere.tyrant_defeated_title": "時間の暴君撃破",
+  "message.chronosphere.tyrant_defeated_subtitle": "クロノスフィアが安定化された"
 }

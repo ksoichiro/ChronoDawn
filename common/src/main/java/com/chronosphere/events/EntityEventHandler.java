@@ -7,6 +7,7 @@ import com.chronosphere.core.time.TimeDistortionEffect;
 import com.chronosphere.entities.bosses.TimeGuardianEntity;
 import com.chronosphere.registry.ModDimensions;
 import com.chronosphere.worldgen.spawning.TimeGuardianSpawner;
+import com.chronosphere.worldgen.spawning.TimeTyrantSpawner;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.EntityEvent;
 import dev.architectury.event.events.common.TickEvent;
@@ -62,6 +63,9 @@ public class EntityEventHandler {
 
                 // Check for Desert Clock Tower structures and spawn Time Guardians
                 TimeGuardianSpawner.checkAndSpawnGuardians(level);
+
+                // Note: Time Tyrant spawns when Boss Room Door is opened, not on tick
+                // See BossRoomDoorBlock.use() for spawn logic
             }
         });
 
@@ -70,6 +74,11 @@ public class EntityEventHandler {
             // Check if the entity is a Time Guardian
             if (entity instanceof TimeGuardianEntity && entity.level() instanceof ServerLevel serverLevel) {
                 handleTimeGuardianDefeat(serverLevel, (TimeGuardianEntity) entity);
+            }
+
+            // Check if the entity is a Time Tyrant (T138-T140)
+            if (entity instanceof com.chronosphere.entities.bosses.TimeTyrantEntity && entity.level() instanceof ServerLevel serverLevel) {
+                handleTimeTyrantDefeat(serverLevel, (com.chronosphere.entities.bosses.TimeTyrantEntity) entity);
             }
 
             // Return PASS to allow normal death processing
@@ -83,7 +92,7 @@ public class EntityEventHandler {
             }
         });
 
-        Chronosphere.LOGGER.info("Registered EntityEventHandler with time distortion effect, Time Guardian spawning, boss defeat triggers, and teleporter charging");
+        Chronosphere.LOGGER.info("Registered EntityEventHandler with time distortion effect, Time Guardian spawning, Time Tyrant spawning, boss defeat triggers, and teleporter charging");
     }
 
     /**
@@ -181,6 +190,42 @@ public class EntityEventHandler {
         }
 
         return null;
+    }
+
+    /**
+     * Handle Time Tyrant defeat and trigger final boss mechanics.
+     * Executes T138-T140 tasks:
+     * - T138: Stasis Core destruction
+     * - T139: Reversed Resonance (60 seconds)
+     * - T140: Dimension stabilization
+     *
+     * @param level The ServerLevel where the defeat occurred
+     * @param tyrant The defeated Time Tyrant entity
+     */
+    private static void handleTimeTyrantDefeat(ServerLevel level, com.chronosphere.entities.bosses.TimeTyrantEntity tyrant) {
+        Chronosphere.LOGGER.info(
+            "Time Tyrant defeated at [{}, {}, {}]",
+            tyrant.getX(), tyrant.getY(), tyrant.getZ()
+        );
+
+        // T138: Stasis Core destruction
+        // Broadcast message about Stasis Core destruction
+        net.minecraft.network.chat.Component coreMessage = net.minecraft.network.chat.Component.translatable(
+            "message.chronosphere.stasis_core_destroyed"
+        ).withStyle(net.minecraft.ChatFormatting.DARK_PURPLE, net.minecraft.ChatFormatting.BOLD);
+
+        for (net.minecraft.server.level.ServerPlayer player : level.getServer().getPlayerList().getPlayers()) {
+            player.displayClientMessage(coreMessage, false);
+        }
+
+        // T139: Reversed Resonance (60 seconds duration)
+        com.chronosphere.core.time.ReversedResonance.triggerOnTimeTyrantDefeat(
+            level,
+            tyrant.position()
+        );
+
+        // T140: Dimension stabilization
+        com.chronosphere.core.dimension.DimensionStabilizer.stabilizeDimension(level);
     }
 }
 

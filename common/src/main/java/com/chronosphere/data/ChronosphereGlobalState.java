@@ -31,6 +31,7 @@ public class ChronosphereGlobalState extends SavedData {
 
     private boolean hasEnteredChronosphere = false;
     private boolean isPortalStabilized = false;
+    private boolean isTyrantDefeated = false; // Time Tyrant defeat status (T140)
 
     public ChronosphereGlobalState() {
         super();
@@ -70,8 +71,9 @@ public class ChronosphereGlobalState extends SavedData {
         ChronosphereGlobalState state = new ChronosphereGlobalState();
         state.hasEnteredChronosphere = tag.getBoolean("HasEnteredChronosphere");
         state.isPortalStabilized = tag.getBoolean("IsPortalStabilized");
-        Chronosphere.LOGGER.info("Loaded ChronosphereGlobalState: hasEntered={}, isStabilized={}",
-            state.hasEnteredChronosphere, state.isPortalStabilized);
+        state.isTyrantDefeated = tag.getBoolean("IsTyrantDefeated");
+        Chronosphere.LOGGER.info("Loaded ChronosphereGlobalState: hasEntered={}, isStabilized={}, tyrantDefeated={}",
+            state.hasEnteredChronosphere, state.isPortalStabilized, state.isTyrantDefeated);
         return state;
     }
 
@@ -79,6 +81,7 @@ public class ChronosphereGlobalState extends SavedData {
     public CompoundTag save(CompoundTag tag, HolderLookup.Provider provider) {
         tag.putBoolean("HasEnteredChronosphere", hasEnteredChronosphere);
         tag.putBoolean("IsPortalStabilized", isPortalStabilized);
+        tag.putBoolean("IsTyrantDefeated", isTyrantDefeated);
         return tag;
     }
 
@@ -131,5 +134,26 @@ public class ChronosphereGlobalState extends SavedData {
      */
     public boolean isPortalStabilized() {
         return isPortalStabilized;
+    }
+
+    /**
+     * Mark that Time Tyrant has been defeated.
+     * This permanently stabilizes the Chronosphere dimension.
+     *
+     * Task: T140 [US3] Implement dimension stabilization on defeat
+     */
+    public void markTyrantDefeated() {
+        isTyrantDefeated = true;
+        setDirty();
+        Chronosphere.LOGGER.info("Time Tyrant defeated - dimension permanently stabilized");
+    }
+
+    /**
+     * Get whether Time Tyrant has been defeated.
+     *
+     * @return true if Time Tyrant has been defeated
+     */
+    public boolean isTyrantDefeated() {
+        return isTyrantDefeated;
     }
 }

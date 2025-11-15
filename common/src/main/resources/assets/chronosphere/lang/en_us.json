@@ -46,5 +46,10 @@
   "message.chronosphere.time_clock_boss_limit": "The Time Clock has no effect - already used in this phase",
 
   "entity.chronosphere.time_guardian": "Time Guardian",
-  "entity.chronosphere.time_tyrant": "Time Tyrant"
+  "entity.chronosphere.time_tyrant": "Time Tyrant",
+
+  "message.chronosphere.stasis_core_destroyed": "The Stasis Core shatters into fragments!",
+  "message.chronosphere.tyrant_defeated": "The Chronosphere trembles... Time Tyrant has been vanquished!",
+  "message.chronosphere.tyrant_defeated_title": "Time Tyrant Defeated",
+  "message.chronosphere.tyrant_defeated_subtitle": "The Chronosphere is stabilized"
 }
