@@ -3,6 +3,7 @@ package com.chronosphere.neoforge.client;
 import com.chronosphere.Chronosphere;
 import com.chronosphere.client.model.TimeGuardianModel;
 import com.chronosphere.client.model.TimeTyrantModel;
+import com.chronosphere.client.renderer.TimeArrowRenderer;
 import com.chronosphere.client.renderer.TimeGuardianRenderer;
 import com.chronosphere.client.renderer.TimeTyrantRenderer;
 import com.chronosphere.registry.ModBlocks;
@@ -84,6 +85,12 @@ public class ChronosphereClientNeoForge {
         event.registerEntityRenderer(
             ModEntities.TIME_TYRANT.get(),
             TimeTyrantRenderer::new
+        );
+
+        // Register Time Arrow with custom renderer
+        event.registerEntityRenderer(
+            ModEntities.TIME_ARROW.get(),
+            TimeArrowRenderer::new
         );
 
         Chronosphere.LOGGER.info("Registered entity renderers for NeoForge");

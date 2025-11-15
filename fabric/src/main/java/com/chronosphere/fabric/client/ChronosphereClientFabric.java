@@ -2,6 +2,7 @@ package com.chronosphere.fabric.client;
 
 import com.chronosphere.client.model.TimeGuardianModel;
 import com.chronosphere.client.model.TimeTyrantModel;
+import com.chronosphere.client.renderer.TimeArrowRenderer;
 import com.chronosphere.client.renderer.TimeGuardianRenderer;
 import com.chronosphere.client.renderer.TimeTyrantRenderer;
 import com.chronosphere.registry.ModBlocks;
@@ -133,6 +134,12 @@ public class ChronosphereClientFabric implements ClientModInitializer {
         EntityRendererRegistry.register(
             ModEntities.TIME_TYRANT.get(),
             TimeTyrantRenderer::new
+        );
+
+        // Register Time Arrow with custom renderer
+        EntityRendererRegistry.register(
+            ModEntities.TIME_ARROW.get(),
+            TimeArrowRenderer::new
         );
     }
 }

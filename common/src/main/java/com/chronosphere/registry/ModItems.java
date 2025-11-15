@@ -5,6 +5,7 @@ import com.chronosphere.items.PortalStabilizerItem;
 import com.chronosphere.items.TimeHourglassItem;
 import com.chronosphere.items.base.ClockstoneItem;
 import com.chronosphere.items.base.EnhancedClockstoneItem;
+import com.chronosphere.items.combat.TimeArrowItem;
 import com.chronosphere.items.consumables.FruitOfTimeItem;
 import com.chronosphere.items.tools.TimeClockItem;
 import com.chronosphere.items.KeyToMasterClockItem;
@@ -194,6 +195,18 @@ public class ModItems {
         () -> new SpatiallyLinkedPickaxeItem(SpatiallyLinkedPickaxeItem.createProperties())
     );
 
+    // === Combat Items ===
+
+    /**
+     * Time Arrow - Special arrow for fighting Time Tyrant.
+     * When hitting Time Tyrant, applies Slowness III, Weakness II, and Glowing effects.
+     * Crafted from: Clockstone (top) + Fruit of Time (center) + Arrow (bottom) → 4x Time Arrow
+     */
+    public static final RegistrySupplier<Item> TIME_ARROW = ITEMS.register(
+        "time_arrow",
+        () -> new TimeArrowItem(TimeArrowItem.createProperties())
+    );
+
     // === Key Items ===
 
     /**
@@ -258,6 +271,9 @@ public class ModItems {
         // === Tools ===
         output.accept(TIME_CLOCK.get());
         output.accept(SPATIALLY_LINKED_PICKAXE.get());
+
+        // === Combat Items ===
+        output.accept(TIME_ARROW.get());
 
         // === Key Items ===
         output.accept(KEY_TO_MASTER_CLOCK.get());

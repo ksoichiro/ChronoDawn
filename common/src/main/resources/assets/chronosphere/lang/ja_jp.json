@@ -25,6 +25,7 @@
   "item.chronosphere.ancient_gear": "古代の歯車",
   "item.chronosphere.unstable_hourglass": "不安定な砂時計",
   "item.chronosphere.spatially_linked_pickaxe": "空間連結ツルハシ",
+  "item.chronosphere.time_arrow": "タイムアロー",
 
   "item.chronosphere.portal_stabilizer.invalid_block": "ポータル安定化装置はクロックストーンブロックのフレームに使用してください",
   "item.chronosphere.portal_stabilizer.no_portal": "近くに機能停止したポータルが見つかりません",

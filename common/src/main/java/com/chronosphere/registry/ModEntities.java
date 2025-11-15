@@ -3,6 +3,7 @@ package com.chronosphere.registry;
 import com.chronosphere.Chronosphere;
 import com.chronosphere.entities.bosses.TimeGuardianEntity;
 import com.chronosphere.entities.bosses.TimeTyrantEntity;
+import com.chronosphere.entities.projectiles.TimeArrowEntity;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
@@ -46,6 +47,21 @@ public class ModEntities {
             .clientTrackingRange(10) // Tracking range for clients
             .updateInterval(3) // Update interval in ticks
             .build("time_tyrant")
+    );
+
+    /**
+     * Time Arrow - Special projectile for fighting Time Tyrant
+     *
+     * Applies Slowness III, Weakness II, and Glowing effects when hitting Time Tyrant.
+     * Task: T171g [US3] Create Time Arrow item and entity
+     */
+    public static final RegistrySupplier<EntityType<TimeArrowEntity>> TIME_ARROW = ENTITIES.register(
+        "time_arrow",
+        () -> EntityType.Builder.<TimeArrowEntity>of(TimeArrowEntity::new, MobCategory.MISC)
+            .sized(0.5f, 0.5f) // Standard arrow size
+            .clientTrackingRange(4) // Standard arrow tracking range
+            .updateInterval(20) // Standard arrow update interval
+            .build("time_arrow")
     );
 
     /**
