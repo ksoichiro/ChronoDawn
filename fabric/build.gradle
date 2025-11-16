@@ -65,10 +65,23 @@ shadowJar {
 remapJar {
     inputFile.set shadowJar.archiveFile
     dependsOn shadowJar
+    archiveBaseName = "${rootProject.archives_name}-${rootProject.minecraft_version}-fabric"
+    archiveVersion = rootProject.mod_version
+    archiveClassifier = null
 }
 
 java {
     withSourcesJar()
+}
+
+tasks.named('sourcesJar').configure {
+    archiveBaseName = "${rootProject.archives_name}-${rootProject.minecraft_version}-fabric"
+    archiveVersion = rootProject.mod_version
+}
+
+tasks.named('remapSourcesJar').configure {
+    archiveBaseName = "${rootProject.archives_name}-${rootProject.minecraft_version}-fabric"
+    archiveVersion = rootProject.mod_version
 }
 
 publishing {
