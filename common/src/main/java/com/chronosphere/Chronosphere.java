@@ -31,6 +31,9 @@ public class Chronosphere {
         ModCreativeTabs.register();
         ModTreeDecoratorTypes.register();
 
+        // Initialize spawn eggs after entities are registered
+        ModItems.initializeSpawnEggs();
+
         // Register event handlers (Phase 2 - Foundational)
         ChronosphereEvents.register();
 

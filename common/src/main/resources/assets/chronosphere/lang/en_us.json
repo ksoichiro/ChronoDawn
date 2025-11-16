@@ -166,5 +166,9 @@
   "advancements.chronosphere.clockwork_sentinel_defeated.title": "Mechanism Breaker",
   "advancements.chronosphere.clockwork_sentinel_defeated.description": "Defeat your first Clockwork Sentinel",
   "advancements.chronosphere.time_keeper_trade.title": "Temporal Merchant",
-  "advancements.chronosphere.time_keeper_trade.description": "Trade with a Time Keeper for the first time"
+  "advancements.chronosphere.time_keeper_trade.description": "Trade with a Time Keeper for the first time",
+
+  "item.chronosphere.temporal_wraith_spawn_egg": "Temporal Wraith Spawn Egg",
+  "item.chronosphere.clockwork_sentinel_spawn_egg": "Clockwork Sentinel Spawn Egg",
+  "item.chronosphere.time_keeper_spawn_egg": "Time Keeper Spawn Egg"
 }

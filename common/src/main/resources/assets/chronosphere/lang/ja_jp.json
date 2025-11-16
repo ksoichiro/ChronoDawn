@@ -166,5 +166,9 @@
   "advancements.chronosphere.clockwork_sentinel_defeated.title": "機構破壊者",
   "advancements.chronosphere.clockwork_sentinel_defeated.description": "初めて時計仕掛けの番兵を倒す",
   "advancements.chronosphere.time_keeper_trade.title": "時の商人",
-  "advancements.chronosphere.time_keeper_trade.description": "初めて時間の管理者と取引する"
+  "advancements.chronosphere.time_keeper_trade.description": "初めて時間の管理者と取引する",
+
+  "item.chronosphere.temporal_wraith_spawn_egg": "時の亡霊のスポーンエッグ",
+  "item.chronosphere.clockwork_sentinel_spawn_egg": "時計仕掛けの番兵のスポーンエッグ",
+  "item.chronosphere.time_keeper_spawn_egg": "時間の管理者のスポーンエッグ"
 }

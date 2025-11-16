@@ -720,6 +720,53 @@ public class ModItems {
         () -> new AncientGearItem(AncientGearItem.createProperties())
     );
 
+    // === Spawn Eggs ===
+
+    /**
+     * Temporal Wraith Spawn Egg - For creative mode and debugging.
+     * Primary color: Dark purple (0x4B0082) - Indigo (background)
+     * Secondary color: Light cyan (0xADD8E6) - Light blue (spots)
+     */
+    public static final RegistrySupplier<Item> TEMPORAL_WRAITH_SPAWN_EGG = ITEMS.register(
+        "temporal_wraith_spawn_egg",
+        () -> new com.chronosphere.items.DeferredSpawnEggItem(
+            ModEntities.TEMPORAL_WRAITH,
+            0x4B0082, // Background: Dark purple (indigo)
+            0xADD8E6, // Spots: Light cyan
+            new Item.Properties()
+        )
+    );
+
+    /**
+     * Clockwork Sentinel Spawn Egg - For creative mode and debugging.
+     * Primary color: Royal blue (0x4169E1) - Background
+     * Secondary color: Gold (0xFFD700) - Spots
+     */
+    public static final RegistrySupplier<Item> CLOCKWORK_SENTINEL_SPAWN_EGG = ITEMS.register(
+        "clockwork_sentinel_spawn_egg",
+        () -> new com.chronosphere.items.DeferredSpawnEggItem(
+            ModEntities.CLOCKWORK_SENTINEL,
+            0x4169E1, // Background: Royal blue
+            0xFFD700, // Spots: Gold
+            new Item.Properties()
+        )
+    );
+
+    /**
+     * Time Keeper Spawn Egg - For creative mode and debugging.
+     * Primary color: Dark slate blue (0x483D8B) - Background
+     * Secondary color: White (0xF5F5F5) - Spots
+     */
+    public static final RegistrySupplier<Item> TIME_KEEPER_SPAWN_EGG = ITEMS.register(
+        "time_keeper_spawn_egg",
+        () -> new com.chronosphere.items.DeferredSpawnEggItem(
+            ModEntities.TIME_KEEPER,
+            0x483D8B, // Background: Dark slate blue
+            0xF5F5F5, // Spots: Off-white
+            new Item.Properties()
+        )
+    );
+
     /**
      * Initialize item registry.
      * This method must be called during mod initialization.
@@ -727,6 +774,28 @@ public class ModItems {
     public static void register() {
         ITEMS.register();
         Chronosphere.LOGGER.info("Registered ModItems");
+    }
+
+    /**
+     * Initialize spawn eggs after all entities are registered.
+     * This method must be called after entity registration is complete.
+     */
+    public static void initializeSpawnEggs() {
+        Chronosphere.LOGGER.info("Initializing spawn eggs...");
+
+        if (TEMPORAL_WRAITH_SPAWN_EGG.get() instanceof com.chronosphere.items.DeferredSpawnEggItem) {
+            ((com.chronosphere.items.DeferredSpawnEggItem) TEMPORAL_WRAITH_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (CLOCKWORK_SENTINEL_SPAWN_EGG.get() instanceof com.chronosphere.items.DeferredSpawnEggItem) {
+            ((com.chronosphere.items.DeferredSpawnEggItem) CLOCKWORK_SENTINEL_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (TIME_KEEPER_SPAWN_EGG.get() instanceof com.chronosphere.items.DeferredSpawnEggItem) {
+            ((com.chronosphere.items.DeferredSpawnEggItem) TIME_KEEPER_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        Chronosphere.LOGGER.info("Spawn eggs initialized");
     }
 
     /**
@@ -838,5 +907,10 @@ public class ModItems {
         // === Key Items ===
         output.accept(KEY_TO_MASTER_CLOCK.get());
         output.accept(ANCIENT_GEAR.get());
+
+        // === Spawn Eggs ===
+        output.accept(TEMPORAL_WRAITH_SPAWN_EGG.get());
+        output.accept(CLOCKWORK_SENTINEL_SPAWN_EGG.get());
+        output.accept(TIME_KEEPER_SPAWN_EGG.get());
     }
 }
