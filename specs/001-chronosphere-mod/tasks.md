@@ -112,7 +112,40 @@
 - [X] T205 [P] [US1] Create custom mob textures and models in common/src/main/resources/assets/chronosphere/textures/entity/
 - [X] T206 [P] [US1] Create custom mob loot tables in common/src/main/resources/data/chronosphere/loot_tables/entities/
 - [X] T207 [US1] Test custom mob spawning, AI behavior, and loot drops in-game
-- [ ] T208 [P] [US1] (Optional, Low Priority) Create spawn eggs for custom mobs in ModItems for creative mode and debugging (temporal_wraith_spawn_egg, clockwork_sentinel_spawn_egg, time_keeper_spawn_egg)
+- [ ] T208 [P] [US1] Create spawn eggs for custom mobs in ModItems for creative mode and debugging (temporal_wraith_spawn_egg, clockwork_sentinel_spawn_egg, time_keeper_spawn_egg)
+- [ ] T209 [US1] Investigate and fix mob spawn rate issues (hostile mobs too few, friendly/neutral animals too few compared to vanilla Overworld)
+- [ ] T210 [P] [US1] Add ranged attack capability to Time Keeper (design projectile, implement attack pattern, configure AI goals)
+
+### Food & Crops (US1 Enhancement - Medium Priority)
+
+**Purpose**: ディメンション内での食料調達手段を追加し、長期滞在やサバイバルプレイを可能にする
+
+**Note**: 現在は時のパン(Time Bread)のみで食料が不足。作物や食料アイテムを追加して多様性を向上
+
+- [ ] T211 [US1] Design time-themed crop concepts (plant types, growth stages, harvest items, growth conditions)
+- [ ] T212 [P] [US1] Implement time-themed crop block and item (Temporal Wheat, Time Berry Bush, or similar)
+- [ ] T213 [P] [US1] Create crop textures for all growth stages in common/src/main/resources/assets/chronosphere/textures/block/
+- [ ] T214 [P] [US1] Add crop worldgen placement (natural generation in specific biomes)
+- [ ] T215 [P] [US1] Implement additional food items (cooked variants, crafted recipes, nutritional values)
+- [ ] T216 [P] [US1] Add eating effect to Time Bread (e.g., Speed I for 30 seconds, or Regeneration I for 10 seconds)
+- [ ] T217 [US1] Test crop growth mechanics and food item effects in-game
+
+### Forgotten Library Enhancements (US2 Enhancement - Medium Priority)
+
+**Purpose**: 図書館構造物の魅力を向上し、探索報酬を追加
+
+- [ ] T218 [P] [US2] Add hidden chest under carpet blocks in Forgotten Library structure NBT (1-2 chests with valuable loot tables)
+- [ ] T219 [US2] Test hidden chest placement and ensure carpet blocks can be broken to reveal chests
+
+### Time Arrow Item Fix (US2 Bug Fix - High Priority)
+
+**Purpose**: 時の矢(Time Arrow)が効果を持たない問題を修正
+
+**Issue**: 射撃しても何も効果が発生しない
+
+- [ ] T220 [US2] Investigate Time Arrow implementation and identify missing effect logic
+- [ ] T221 [P] [US2] Implement Time Arrow hit effect (e.g., inflict Slowness on mobs, or teleport entities back to previous position)
+- [ ] T222 [US2] Test Time Arrow projectile mechanics and effects in-game
 
 ### Tests for User Story 2
 
@@ -136,6 +169,42 @@
 - [ ] T115j [US2] Adjust structure spawn rates to make discovery easier (increase frequency or reduce spacing)
 - [ ] T115k [P] [US2] Create Time Compass item (points to nearest key structure, similar to lodestone compass)
 - [ ] T115l [US2] Add initial guidance on first dimension entry (chat message, advancement, or book given to player)
+
+### Master Clock Tower & Boss Battle Improvements (US3 Bug Fixes & Enhancements - High Priority)
+
+**Purpose**: Master Clock Towerとボス戦の問題修正と体験向上
+
+- [ ] T223 [P] [US3] Rename "boss_room_door" to time-themed name in localization files (e.g., "Time Tyrant's Chamber Door", "Temporal Sanctum Door")
+- [ ] T224 [P] [US3] Fix Clock Tower teleporter block durability issue (make unbreakable or add protection mechanism to prevent breaking)
+- [ ] T225 [P] [US3] Fix Clock Tower teleporter destination corruption when re-placed (validate teleport coordinates on placement, warn player if invalid)
+- [ ] T226 [P] [US3] Add boss room access control - require Ancient Gears before allowing entry (check inventory on button press, display message if missing)
+- [ ] T227 [P] [US3] Fix water disappearing from Master Clock structure NBT (investigate waterlogging state preservation, ensure water blocks save correctly)
+- [ ] T228 [P] [US3] Add glowing effect to Time Tyrant entity for visibility (apply Glowing status effect or custom shader/outline rendering)
+- [ ] T229 [P] [US3] Fix Time Tyrant teleport suffocation bug (validate teleport destination has 2+ air blocks above, revert position if invalid)
+- [ ] T229a [US3] Investigate Time Tyrant buff/debuff behavior (verify if Slowness is incorrectly applied instead of intended buff, check status effect logic)
+- [ ] T230 [US3] Test all Master Clock Tower and boss battle fixes in-game
+
+### Ancient Gears Acquisition (US3 Bug Fix - Critical Priority)
+
+**Purpose**: 古代の歯車(Ancient Gears)の入手手段が不明瞭な問題を修正
+
+**Issue**: プレイヤーが入手場所や方法を把握できない
+
+- [ ] T231 [US3] Investigate current Ancient Gears acquisition methods (check loot tables, mob drops, crafting recipes, structure loot)
+- [ ] T232 [P] [US3] Add or improve Ancient Gears acquisition methods (add to Clockwork Sentinel drops, structure loot chests, or crafting recipe)
+- [ ] T233 [US3] Test Ancient Gears acquisition and verify clear acquisition path exists
+
+### Additional Boss Enemies (US3 Enhancement - Medium Priority)
+
+**Purpose**: ボスの数を増やし、戦闘の多様性を向上
+
+**Note**: 現在Time GuardianとTime Tyrantのみ。隠しボスを含めたバリエーションを追加
+
+- [ ] T234 [US3] Design additional boss concepts (hidden boss mechanics, lore, unique abilities, drops, spawn conditions)
+- [ ] T235 [P] [US3] Implement hidden boss entity (e.g., Temporal Devourer, Master of Lost Time)
+- [ ] T236 [P] [US3] Create boss textures and models in common/src/main/resources/assets/chronosphere/textures/entity/
+- [ ] T237 [P] [US3] Design hidden boss arena structure or spawn conditions (rare structure, summoning item, secret room)
+- [ ] T238 [US3] Test additional boss spawning, mechanics, and loot drops in-game
 
 ### Tests for User Story 3
 
