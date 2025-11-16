@@ -116,5 +116,55 @@
   "message.chronosphere.stasis_core_destroyed": "The Stasis Core shatters into fragments!",
   "message.chronosphere.tyrant_defeated": "The Chronosphere trembles... Time Tyrant has been vanquished!",
   "message.chronosphere.tyrant_defeated_title": "Time Tyrant Defeated",
-  "message.chronosphere.tyrant_defeated_subtitle": "The Chronosphere is stabilized"
+  "message.chronosphere.tyrant_defeated_subtitle": "The Chronosphere is stabilized",
+
+  "advancements.chronosphere.root.title": "Chronosphere",
+  "advancements.chronosphere.root.description": "Welcome to the world of time manipulation",
+
+  "advancements.chronosphere.portal_creation.title": "A Gateway Through Time",
+  "advancements.chronosphere.portal_creation.description": "Craft a Time Hourglass to create a portal to the Chronosphere",
+  "advancements.chronosphere.dimension_entry.title": "Entering the Frozen World",
+  "advancements.chronosphere.dimension_entry.description": "Enter the Chronosphere dimension for the first time",
+  "advancements.chronosphere.portal_stabilization.title": "Anchoring Time",
+  "advancements.chronosphere.portal_stabilization.description": "Obtain the Portal Stabilizer to enable two-way portal travel",
+
+  "advancements.chronosphere.desert_clock_tower.title": "The Clockwork Spire",
+  "advancements.chronosphere.desert_clock_tower.description": "Obtain Enhanced Clockstone from the Desert Clock Tower",
+  "advancements.chronosphere.time_manipulation_tools.title": "Tools of Temporal Control",
+  "advancements.chronosphere.time_manipulation_tools.description": "Obtain a time manipulation tool",
+  "advancements.chronosphere.time_guardian_defeat.title": "Vanquisher of the Guardian",
+  "advancements.chronosphere.time_guardian_defeat.description": "Defeat the Time Guardian and claim the Master Clock Key",
+
+  "advancements.chronosphere.master_clock_access.title": "The Heart of Time",
+  "advancements.chronosphere.master_clock_access.description": "Obtain the Master Clock Key from the Time Guardian",
+  "advancements.chronosphere.time_tyrant_defeat.title": "Liberator of Chronosphere",
+  "advancements.chronosphere.time_tyrant_defeat.description": "Defeat the Time Tyrant and shatter the Stasis Core",
+  "advancements.chronosphere.ultimate_artifacts.title": "Master of Time",
+  "advancements.chronosphere.ultimate_artifacts.description": "Craft an ultimate artifact from Stasis Core Shards",
+
+  "advancements.chronosphere.first_time_fruit.title": "Taste of Time",
+  "advancements.chronosphere.first_time_fruit.description": "Consume a Time Fruit for the first time",
+  "advancements.chronosphere.time_fruit_pie.title": "Temporal Pastry Chef",
+  "advancements.chronosphere.time_fruit_pie.description": "Eat a Time Fruit Pie",
+  "advancements.chronosphere.time_jam.title": "Sweet Temporal Spread",
+  "advancements.chronosphere.time_jam.description": "Eat Time Jam",
+  "advancements.chronosphere.time_bread.title": "Bread from a Frozen Age",
+  "advancements.chronosphere.time_bread.description": "Eat Time Bread",
+  "advancements.chronosphere.all_foods_consumed.title": "Gourmet of Time",
+  "advancements.chronosphere.all_foods_consumed.description": "Eat all custom Chronosphere foods (Time Fruit, Time Fruit Pie, Time Jam, Time Bread)",
+
+  "advancements.chronosphere.tier1_full_set.title": "Clockwork Warrior",
+  "advancements.chronosphere.tier1_full_set.description": "Obtain a full set of Tier 1 Clockstone armor",
+  "advancements.chronosphere.tier2_full_set.title": "Enhanced Temporal Armor",
+  "advancements.chronosphere.tier2_full_set.description": "Obtain a full set of Tier 2 Enhanced Clockstone armor",
+
+  "advancements.chronosphere.first_time_crystal_ore.title": "Crystallized Time",
+  "advancements.chronosphere.first_time_crystal_ore.description": "Mine your first Time Crystal Ore",
+
+  "advancements.chronosphere.temporal_wraith_defeated.title": "Wraith Hunter",
+  "advancements.chronosphere.temporal_wraith_defeated.description": "Defeat your first Temporal Wraith",
+  "advancements.chronosphere.clockwork_sentinel_defeated.title": "Mechanism Breaker",
+  "advancements.chronosphere.clockwork_sentinel_defeated.description": "Defeat your first Clockwork Sentinel",
+  "advancements.chronosphere.time_keeper_trade.title": "Temporal Merchant",
+  "advancements.chronosphere.time_keeper_trade.description": "Trade with a Time Keeper for the first time"
 }

@@ -1,0 +1,31 @@
+{
+  "parent": "chronosphere:story/us2/time_manipulation_tools",
+  "criteria": {
+    "killed_time_guardian": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "chronosphere:time_guardian"
+        }
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "chronosphere:key_to_master_clock"
+    },
+    "title": {
+      "translate": "advancements.chronosphere.time_guardian_defeat.title"
+    },
+    "description": {
+      "translate": "advancements.chronosphere.time_guardian_defeat.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "rewards": {
+    "experience": 100
+  }
+}
