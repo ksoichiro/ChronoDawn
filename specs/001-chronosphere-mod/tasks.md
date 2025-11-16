@@ -112,7 +112,15 @@
 - [X] T205 [P] [US1] Create custom mob textures and models in common/src/main/resources/assets/chronosphere/textures/entity/
 - [X] T206 [P] [US1] Create custom mob loot tables in common/src/main/resources/data/chronosphere/loot_tables/entities/
 - [X] T207 [US1] Test custom mob spawning, AI behavior, and loot drops in-game
-- [ ] T208 [P] [US1] Create spawn eggs for custom mobs in ModItems for creative mode and debugging (temporal_wraith_spawn_egg, clockwork_sentinel_spawn_egg, time_keeper_spawn_egg)
+- [X] T208 [P] [US1] Create spawn eggs for custom mobs in ModItems for creative mode and debugging (temporal_wraith_spawn_egg, clockwork_sentinel_spawn_egg, time_keeper_spawn_egg)
+  - **Completed**: Implemented spawn eggs for regular mobs only (Temporal Wraith, Clockwork Sentinel, Time Keeper)
+  - **Note**: Boss mobs (Time Guardian, Time Tyrant) intentionally excluded following vanilla conventions
+    - Vanilla pattern: Ender Dragon and Wither (bosses with boss bars) have no spawn eggs
+    - Warden and Elder Guardian (strong mobs without boss bars) have spawn eggs
+    - Time Guardian (mini-boss) and Time Tyrant (final boss) follow boss pattern → no spawn eggs
+  - **Implementation**: Created DeferredSpawnEggItem with reflection-based registration for Architectury compatibility
+  - **Colors**: Match entity texture schemes (dark purple/cyan, royal blue/gold, dark slate blue/white)
+  - **Files**: DeferredSpawnEggItem.java, ModItems.java updates, model JSONs, localizations
 - [ ] T209 [US1] Investigate and fix mob spawn rate issues (hostile mobs too few, friendly/neutral animals too few compared to vanilla Overworld)
 - [ ] T210 [P] [US1] Add ranged attack capability to Time Keeper (design projectile, implement attack pattern, configure AI goals)
 
