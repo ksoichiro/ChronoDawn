@@ -853,8 +853,12 @@
 - [ ] T184c [P] Create US1 advancements (portal creation, dimension entry, portal stabilization) in common/src/main/resources/data/chronosphere/advancements/
 - [ ] T184d [P] Create US2 advancements (Desert Clock Tower discovery, time manipulation tools, Time Guardian defeat) in common/src/main/resources/data/chronosphere/advancements/
 - [ ] T184e [P] Create US3 advancements (Master Clock access, Time Tyrant defeat, ultimate artifacts) in common/src/main/resources/data/chronosphere/advancements/
-- [ ] T184f [P] Add advancement localization to en_us.json and ja_jp.json
-- [ ] T184g Test advancement triggers in-game and verify progression flow
+- [ ] T184f [P] Create food-related advancements (first Time Fruit consumption, Time Fruit Pie, Time Jam, Time Bread, all custom foods consumed) in common/src/main/resources/data/chronosphere/advancements/
+- [ ] T184g [P] Create equipment-related advancements (Tier 1 full set, Tier 2 full set, time distortion immunity obtained) in common/src/main/resources/data/chronosphere/advancements/
+- [ ] T184h [P] Create exploration-related advancements (Forgotten Library discovery, all biomes explored, first Time Crystal Ore mined) in common/src/main/resources/data/chronosphere/advancements/
+- [ ] T184i [P] Create mob-related advancements (first Temporal Wraith defeated, first Clockwork Sentinel defeated, first trade with Time Keeper) in common/src/main/resources/data/chronosphere/advancements/
+- [ ] T184j [P] Add advancement localization to en_us.json and ja_jp.json
+- [ ] T184k Test advancement triggers in-game and verify progression flow
 
 ### Documentation
 
