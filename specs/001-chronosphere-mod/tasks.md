@@ -208,9 +208,17 @@
 
 **Issue**: プレイヤーが入手場所や方法を把握できない
 
-- [ ] T231 [US3] Investigate current Ancient Gears acquisition methods (check loot tables, mob drops, crafting recipes, structure loot)
-- [ ] T232 [P] [US3] Add or improve Ancient Gears acquisition methods (add to Clockwork Sentinel drops, structure loot chests, or crafting recipe)
-- [ ] T233 [US3] Test Ancient Gears acquisition and verify clear acquisition path exists
+- [X] T231 [US3] Investigate current Ancient Gears acquisition methods (check loot tables, mob drops, crafting recipes, structure loot)
+  - **Completed**: Fixed loot table directory structure (loot_tables/ → loot_table/)
+  - **Root Cause**: Clockwork Sentinel loot table had iron_ingot placeholder instead of ancient_gear
+  - **Commit**: 4c45069
+- [X] T232 [P] [US3] Add or improve Ancient Gears acquisition methods (add to Clockwork Sentinel drops, structure loot chests, or crafting recipe)
+  - **Completed**: Updated clockwork_sentinel.json with guaranteed ancient_gear drop
+  - **Added**: Crafting recipe (Enhanced Clockstone + 4x Time Crystal + 4x Iron Ingot → Ancient Gear)
+  - **Commit**: 4c45069
+- [X] T233 [US3] Test Ancient Gears acquisition and verify clear acquisition path exists
+  - **Completed**: Tested and verified Ancient Gear drops from Clockwork Sentinel
+  - **Commit**: 4c45069
 
 ### Additional Boss Enemies (US3 Enhancement - Medium Priority)
 
