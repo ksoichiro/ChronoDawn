@@ -122,7 +122,8 @@
   - **Colors**: Match entity texture schemes (dark purple/cyan, royal blue/gold, dark slate blue/white)
   - **Files**: DeferredSpawnEggItem.java, ModItems.java updates, model JSONs, localizations
 - [ ] T209 [US1] Investigate and fix mob spawn rate issues (hostile mobs too few, friendly/neutral animals too few compared to vanilla Overworld)
-- [ ] T210 [P] [US1] Add ranged attack capability to Time Keeper (design projectile, implement attack pattern, configure AI goals)
+- [ ] T210 [P] [US2] Add ranged attack capability to Time Guardian (design projectile, implement attack pattern, configure AI goals)
+  - **Note**: Time Guardian (時の番人) is the mini-boss, not Time Keeper (時間の管理者/trading mob)
 
 ### Food & Crops (US1 Enhancement - Medium Priority)
 
