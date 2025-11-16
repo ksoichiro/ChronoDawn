@@ -143,9 +143,19 @@
 
 **Issue**: 射撃しても何も効果が発生しない
 
-- [ ] T220 [US2] Investigate Time Arrow implementation and identify missing effect logic
-- [ ] T221 [P] [US2] Implement Time Arrow hit effect (e.g., inflict Slowness on mobs, or teleport entities back to previous position)
-- [ ] T222 [US2] Test Time Arrow projectile mechanics and effects in-game
+- [X] T220 [US2] Investigate Time Arrow implementation and identify missing effect logic
+- [X] T221 [P] [US2] Implement Time Arrow hit effect (e.g., inflict Slowness on mobs, or teleport entities back to previous position)
+- [X] T222 [US2] Test Time Arrow projectile mechanics and effects in-game
+
+**Root Cause**: Minecraft 1.21でArrowItem.createArrow()のシグネチャが変更され、4つ目のパラメータ(ItemStack weapon)が追加されたが、実装が旧シグネチャのままだったためオーバーライドされず、通常のArrowエンティティが発射されていた。
+
+**Solution**:
+- createArrow()メソッドに4つ目のパラメータを追加
+- minecraft:arrowsアイテムタグにTime Arrowを追加
+- 全てのLivingEntityにSlowness IIエフェクト(3秒)を付与するよう実装
+- Time Tyrant専用の強化エフェクト(Slowness III + Weakness II + Glowing)は維持
+
+**Known Limitation**: Time Arrowでは「Take Aim」進捗が達成されない(バニラ進捗は特定の矢タイプのみ認識)。通常の矢で進捗達成可能なため、バニラ進捗オーバーライド(他modとの競合リスク)は行わない。
 
 ### Tests for User Story 2
 

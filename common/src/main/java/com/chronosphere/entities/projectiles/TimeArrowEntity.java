@@ -1,5 +1,6 @@
 package com.chronosphere.entities.projectiles;
 
+import com.chronosphere.Chronosphere;
 import com.chronosphere.entities.bosses.TimeTyrantEntity;
 import com.chronosphere.registry.ModItems;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -12,17 +13,20 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 
 /**
- * Time Arrow Entity - Special arrow that applies debuffs to Time Tyrant.
+ * Time Arrow Entity - Special arrow that applies time-based debuffs.
  *
- * When this arrow hits Time Tyrant, it applies:
+ * When this arrow hits any living entity, it applies:
+ * - Slowness II (3 seconds) - For normal mobs
+ *
+ * When hitting Time Tyrant specifically, it applies stronger effects:
  * - Slowness III (5 seconds)
  * - Weakness II (5 seconds)
  * - Glowing (10 seconds)
  *
- * These effects make the boss battle more manageable by reducing boss movement
- * speed, attack damage, and making the boss easier to track.
+ * These effects make combat more manageable by reducing movement speed
+ * and attack damage, especially useful for boss battles.
  *
- * Reference: T171g - Boss Battle Balance Enhancement
+ * Reference: T171g - Boss Battle Balance Enhancement, T220-T222 - General mob support
  */
 public class TimeArrowEntity extends AbstractArrow {
     /**
@@ -33,6 +37,7 @@ public class TimeArrowEntity extends AbstractArrow {
      */
     public TimeArrowEntity(EntityType<? extends TimeArrowEntity> entityType, Level level) {
         super(entityType, level);
+        Chronosphere.LOGGER.info("TimeArrowEntity constructed (no shooter)");
     }
 
     /**
@@ -45,6 +50,7 @@ public class TimeArrowEntity extends AbstractArrow {
      */
     public TimeArrowEntity(EntityType<? extends TimeArrowEntity> entityType, LivingEntity shooter, Level level, ItemStack pickupItemStack) {
         super(entityType, shooter, level, pickupItemStack, null);
+        Chronosphere.LOGGER.info("TimeArrowEntity constructed with shooter: {}", shooter.getName().getString());
     }
 
     @Override
@@ -56,28 +62,53 @@ public class TimeArrowEntity extends AbstractArrow {
     protected void onHitEntity(EntityHitResult result) {
         super.onHitEntity(result);
 
-        // Check if the hit entity is Time Tyrant
-        if (result.getEntity() instanceof TimeTyrantEntity timeTyrant) {
-            // Apply Slowness III for 5 seconds
-            timeTyrant.addEffect(new MobEffectInstance(
-                MobEffects.MOVEMENT_SLOWDOWN,
-                100, // 5 seconds
-                2    // Slowness III
-            ));
+        // Only apply effects on server side
+        if (this.level().isClientSide()) {
+            return;
+        }
 
-            // Apply Weakness II for 5 seconds
-            timeTyrant.addEffect(new MobEffectInstance(
-                MobEffects.WEAKNESS,
-                100, // 5 seconds
-                1    // Weakness II
-            ));
+        Chronosphere.LOGGER.info("Time Arrow hit entity: {}", result.getEntity().getType());
 
-            // Apply Glowing for 10 seconds
-            timeTyrant.addEffect(new MobEffectInstance(
-                MobEffects.GLOWING,
-                200, // 10 seconds
-                0    // Glowing I
-            ));
+        // Apply effects to any living entity
+        if (result.getEntity() instanceof LivingEntity target) {
+            Chronosphere.LOGGER.info("Time Arrow applying effects to LivingEntity: {}", target.getName().getString());
+
+            // Check if the hit entity is Time Tyrant for stronger effects
+            if (target instanceof TimeTyrantEntity) {
+                Chronosphere.LOGGER.info("Time Arrow hit Time Tyrant - applying strong effects");
+
+                // Apply Slowness III for 5 seconds
+                target.addEffect(new MobEffectInstance(
+                    MobEffects.MOVEMENT_SLOWDOWN,
+                    100, // 5 seconds
+                    2    // Slowness III
+                ));
+
+                // Apply Weakness II for 5 seconds
+                target.addEffect(new MobEffectInstance(
+                    MobEffects.WEAKNESS,
+                    100, // 5 seconds
+                    1    // Weakness II
+                ));
+
+                // Apply Glowing for 10 seconds
+                target.addEffect(new MobEffectInstance(
+                    MobEffects.GLOWING,
+                    200, // 10 seconds
+                    0    // Glowing I
+                ));
+            } else {
+                Chronosphere.LOGGER.info("Time Arrow hit normal mob - applying Slowness II");
+
+                // Apply Slowness II for 3 seconds to normal mobs
+                target.addEffect(new MobEffectInstance(
+                    MobEffects.MOVEMENT_SLOWDOWN,
+                    60,  // 3 seconds
+                    1    // Slowness II
+                ));
+            }
+        } else {
+            Chronosphere.LOGGER.warn("Time Arrow hit non-living entity: {}", result.getEntity().getType());
         }
     }
 }

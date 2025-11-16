@@ -1,5 +1,6 @@
 package com.chronosphere.items.combat;
 
+import com.chronosphere.Chronosphere;
 import com.chronosphere.entities.projectiles.TimeArrowEntity;
 import com.chronosphere.registry.ModEntities;
 import net.minecraft.world.entity.LivingEntity;
@@ -42,7 +43,11 @@ public class TimeArrowItem extends ArrowItem {
         return new Properties();
     }
 
-    public AbstractArrow createArrow(Level level, ItemStack stack, LivingEntity shooter) {
-        return new TimeArrowEntity(ModEntities.TIME_ARROW.get(), shooter, level, stack.copyWithCount(1));
+    @Override
+    public AbstractArrow createArrow(Level level, ItemStack stack, LivingEntity shooter, ItemStack weapon) {
+        Chronosphere.LOGGER.info("TimeArrowItem.createArrow called - creating TimeArrowEntity (weapon: {})", weapon.getItem());
+        TimeArrowEntity arrow = new TimeArrowEntity(ModEntities.TIME_ARROW.get(), shooter, level, stack.copyWithCount(1));
+        Chronosphere.LOGGER.info("Created TimeArrowEntity: {}", arrow.getClass().getName());
+        return arrow;
     }
 }
