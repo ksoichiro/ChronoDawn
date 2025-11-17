@@ -143,8 +143,13 @@
 
 **Purpose**: 図書館構造物の魅力を向上し、探索報酬を追加
 
-- [ ] T218 [P] [US2] Add hidden chest under carpet blocks in Forgotten Library structure NBT (1-2 chests with valuable loot tables)
-- [ ] T219 [US2] Test hidden chest placement and ensure carpet blocks can be broken to reveal chests
+- [X] T218 [P] [US2] Add hidden chest under carpet blocks in Forgotten Library structure NBT (1-2 chests with valuable loot tables)
+  - **Completed**: Added 4 hidden chests in strategic locations throughout Forgotten Library
+  - **Implementation**: Placed chests under carpet blocks using Structure Block in-game editing
+  - **File**: common/src/main/resources/data/chronosphere/structure/forgotten_library.nbt
+- [X] T219 [US2] Test hidden chest placement and ensure carpet blocks can be broken to reveal chests
+  - **Completed**: Verified in-game that carpet blocks can be broken to reveal hidden chests
+  - **Note**: 4 chests provide additional exploration rewards and discovery mechanics
 
 ### Time Arrow Item Fix (US2 Bug Fix - High Priority)
 
