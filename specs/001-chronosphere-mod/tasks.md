@@ -136,7 +136,10 @@
 - [ ] T213 [P] [US1] Create crop textures for all growth stages in common/src/main/resources/assets/chronosphere/textures/block/
 - [ ] T214 [P] [US1] Add crop worldgen placement (natural generation in specific biomes)
 - [ ] T215 [P] [US1] Implement additional food items (cooked variants, crafted recipes, nutritional values)
-- [ ] T216 [P] [US1] Add eating effect to Time Bread (e.g., Speed I for 30 seconds, or Regeneration I for 10 seconds)
+- [x] T216 [P] [US1] Add eating effect to Time Bread (e.g., Speed I for 30 seconds, or Regeneration I for 10 seconds)
+  - **Implemented**: Regeneration I for 5 seconds
+  - **Rationale**: Shorter duration (5s instead of 10s) to prevent overpowered healing considering ease of farming Time Wheat
+  - **Theme**: "Time reversal" concept - healing through rewinding damage
 - [ ] T217 [US1] Test crop growth mechanics and food item effects in-game
 
 ### Forgotten Library Enhancements (US2 Enhancement - Medium Priority)
