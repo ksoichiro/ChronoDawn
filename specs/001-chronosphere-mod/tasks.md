@@ -221,7 +221,13 @@
 - [ ] T227 [P] [US3] Fix water disappearing from Master Clock structure NBT (investigate waterlogging state preservation, ensure water blocks save correctly)
 - [ ] T228 [P] [US3] Add glowing effect to Time Tyrant entity for visibility (apply Glowing status effect or custom shader/outline rendering)
 - [ ] T229 [P] [US3] Fix Time Tyrant teleport suffocation bug (validate teleport destination has 2+ air blocks above, revert position if invalid)
-- [ ] T229a [US3] Investigate Time Tyrant buff/debuff behavior (verify if Slowness is incorrectly applied instead of intended buff, check status effect logic)
+- [X] T229a [US3] Investigate Time Tyrant buff/debuff behavior (verify if Slowness is incorrectly applied instead of intended buff, check status effect logic)
+  - **Completed**: Identified and fixed issue where Time Tyrant was receiving unintended Slowness IV/V from Time Distortion Effect
+  - **Root Cause**: Time Tyrant extends Monster class but was not excluded from TimeDistortionEffect.isHostileMob()
+  - **Impact**: Phase 2 Time Acceleration (Speed II buff) was being overridden by Slowness IV/V, making the ability non-functional
+  - **Fix**: Added Time Tyrant exclusion to TimeDistortionEffect.java (similar to existing Time Guardian exclusion)
+  - **Verification**: Tested in-game (Survival mode) - Time Acceleration now works correctly with visible particle effects and increased speed
+  - **Documentation**: Detailed investigation results recorded in research.md (lines 3401-3549)
 - [ ] T230 [US3] Test all Master Clock Tower and boss battle fixes in-game
 
 ### Ancient Gears Acquisition (US3 Bug Fix - Critical Priority)
