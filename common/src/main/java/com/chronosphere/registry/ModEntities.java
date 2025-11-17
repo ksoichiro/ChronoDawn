@@ -7,6 +7,7 @@ import com.chronosphere.entities.mobs.ClockworkSentinelEntity;
 import com.chronosphere.entities.mobs.TemporalWraithEntity;
 import com.chronosphere.entities.mobs.TimeKeeperEntity;
 import com.chronosphere.entities.projectiles.TimeArrowEntity;
+import com.chronosphere.entities.projectiles.TimeBlastEntity;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
@@ -110,6 +111,21 @@ public class ModEntities {
             .clientTrackingRange(4) // Standard arrow tracking range
             .updateInterval(20) // Standard arrow update interval
             .build("time_arrow")
+    );
+
+    /**
+     * Time Blast - Time Guardian's ranged attack projectile
+     *
+     * A time-themed magical projectile that applies Slowness II and Mining Fatigue I.
+     * Task: T210 [P] [US2] Add ranged attack capability to Time Guardian
+     */
+    public static final RegistrySupplier<EntityType<TimeBlastEntity>> TIME_BLAST = ENTITIES.register(
+        "time_blast",
+        () -> EntityType.Builder.<TimeBlastEntity>of(TimeBlastEntity::new, MobCategory.MISC)
+            .sized(0.5f, 0.5f) // Small projectile size
+            .clientTrackingRange(4) // Standard projectile tracking range
+            .updateInterval(10) // Update interval in ticks
+            .build("time_blast")
     );
 
     /**

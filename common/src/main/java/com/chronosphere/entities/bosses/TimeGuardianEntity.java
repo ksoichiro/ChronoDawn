@@ -1,7 +1,10 @@
 package com.chronosphere.entities.bosses;
 
 import com.chronosphere.core.time.MobAICanceller;
+import com.chronosphere.entities.ai.TimeGuardianRangedAttackGoal;
+import com.chronosphere.entities.projectiles.TimeBlastEntity;
 import com.chronosphere.registry.ModItems;
+import com.chronosphere.entities.bosses.ExtendedMeleeAttackGoal;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -13,6 +16,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -21,10 +25,15 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.*;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
+import net.minecraft.world.entity.ai.goal.MoveTowardsTargetGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -43,12 +52,13 @@ import net.minecraft.world.phys.Vec3;
  * - Movement Speed: 0.2
  *
  * AI Phases:
- * - Phase 1 (HP 100%-50%): Melee-focused attacks
+ * - Phase 1 (HP 100%-50%): Melee + Ranged attacks
  * - Phase 2 (HP 50%-0%): Teleport attacks + Area of Effect
  *
  * Special Mechanics:
  * - Affected by Slowness IV (dimension-wide effect)
  * - Triggers reversed resonance on defeat (30 seconds)
+ * - Fires Time Blast projectiles at distant targets (T210)
  *
  * Drops:
  * - Key to Master Clock (100%)
@@ -56,8 +66,9 @@ import net.minecraft.world.phys.Vec3;
  *
  * Reference: data-model.md (Entities - Time Guardian)
  * Task: T110 [US2] Create Time Guardian entity
+ * Task: T210 [P] [US2] Add ranged attack capability to Time Guardian
  */
-public class TimeGuardianEntity extends Monster {
+public class TimeGuardianEntity extends Monster implements RangedAttackMob {
     // Boss bar for tracking health
     private final ServerBossEvent bossEvent = new ServerBossEvent(
         this.getDisplayName(),
@@ -77,6 +88,7 @@ public class TimeGuardianEntity extends Monster {
     private int teleportCooldown = 0;
     private int aoeCooldown = 0;
     private int postTeleportDelay = 0; // Delay after teleport before attacking
+    private int rangedAttackCooldown = 0; // Cooldown for ranged attacks (T210)
 
     // Teleport timing (Phase 2)
     private static final int TELEPORT_COOLDOWN_TICKS = 100; // 5 seconds
@@ -115,24 +127,40 @@ public class TimeGuardianEntity extends Monster {
 
     @Override
     protected void registerGoals() {
-        // Priority 1: Float in water
+        // Priority 0: Float in water
         this.goalSelector.addGoal(0, new FloatGoal(this));
 
+        // Priority 1: Ranged attack goal (T210)
+        // Higher priority than melee - will use ranged attack when conditions are met
+        // Attack interval: 100 ticks (5 seconds)
+        // Attack range: 15 blocks (max), 7 blocks (min)
+        // Cooldown: 200 ticks (10 seconds) between ranged attacks
+        // Speed modifier: 0.9 (slightly slower when preparing ranged attack)
+        this.goalSelector.addGoal(1, new TimeGuardianRangedAttackGoal(
+            this,       // entity
+            0.9,        // speed modifier
+            100,        // attack interval (5 seconds)
+            15.0f,      // max attack range
+            7.0f,       // min attack range (won't use ranged attack if closer than 7 blocks)
+            200         // cooldown (10 seconds)
+        ));
+
         // Priority 2: Melee attack with extended range (3.0 blocks)
+        // Falls back to melee when target is too close for ranged attack
         // Balanced for 21x21 boss room with Phase 2 teleport mechanics
-        this.goalSelector.addGoal(1, new ExtendedMeleeAttackGoal(this, 1.0, false, 3.0));
+        this.goalSelector.addGoal(2, new ExtendedMeleeAttackGoal(this, 1.0, false, 3.0));
 
         // Priority 3: Move towards target
-        this.goalSelector.addGoal(2, new MoveTowardsTargetGoal(this, 0.9, 32.0f));
+        this.goalSelector.addGoal(3, new MoveTowardsTargetGoal(this, 0.9, 32.0f));
 
         // Priority 4: Wander around
-        this.goalSelector.addGoal(3, new WaterAvoidingRandomStrollGoal(this, 0.8));
+        this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 0.8));
 
         // Priority 5: Look at players
-        this.goalSelector.addGoal(4, new LookAtPlayerGoal(this, Player.class, 8.0f));
+        this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 8.0f));
 
         // Priority 6: Random look around
-        this.goalSelector.addGoal(5, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
 
         // Target selection
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
@@ -146,6 +174,11 @@ public class TimeGuardianEntity extends Monster {
         if (!this.level().isClientSide) {
             // Update phase based on health
             updatePhase();
+
+            // Decrement ranged attack cooldown (T210)
+            if (rangedAttackCooldown > 0) {
+                rangedAttackCooldown--;
+            }
 
             // Phase 2 special abilities
             if (getPhase() == PHASE_2) {
@@ -571,6 +604,7 @@ public class TimeGuardianEntity extends Monster {
         this.teleportCooldown = tag.getInt("TeleportCooldown");
         this.aoeCooldown = tag.getInt("AoeCooldown");
         this.postTeleportDelay = tag.getInt("PostTeleportDelay");
+        this.rangedAttackCooldown = tag.getInt("RangedAttackCooldown");
     }
 
     @Override
@@ -580,6 +614,7 @@ public class TimeGuardianEntity extends Monster {
         tag.putInt("TeleportCooldown", this.teleportCooldown);
         tag.putInt("AoeCooldown", this.aoeCooldown);
         tag.putInt("PostTeleportDelay", this.postTeleportDelay);
+        tag.putInt("RangedAttackCooldown", this.rangedAttackCooldown);
     }
 
     @Override
@@ -614,5 +649,61 @@ public class TimeGuardianEntity extends Monster {
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
         // Boss should never despawn
         return false;
+    }
+
+    /**
+     * Get ranged attack cooldown timer.
+     *
+     * @return Remaining cooldown ticks (0 = ready to attack)
+     */
+    public int getRangedAttackCooldown() {
+        return this.rangedAttackCooldown;
+    }
+
+    /**
+     * Set ranged attack cooldown.
+     *
+     * @param ticks Cooldown duration in ticks
+     */
+    public void setRangedAttackCooldown(int ticks) {
+        this.rangedAttackCooldown = ticks;
+    }
+
+    /**
+     * Perform ranged attack by firing a Time Blast projectile.
+     * Called by TimeGuardianRangedAttackGoal when the target is within range.
+     *
+     * @param target The target entity to attack
+     * @param velocity The velocity multiplier for the projectile (0.0-1.0)
+     */
+    @Override
+    public void performRangedAttack(LivingEntity target, float velocity) {
+        // Create Time Blast projectile
+        TimeBlastEntity timeBlast = new TimeBlastEntity(this.level(), this);
+
+        // Calculate aim direction
+        double deltaX = target.getX() - this.getX();
+        double deltaY = target.getY(0.3333333333333333) - timeBlast.getY();
+        double deltaZ = target.getZ() - this.getZ();
+        double horizontalDistance = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
+
+        // Set projectile velocity with arc compensation
+        // The 0.2 factor adds a slight upward arc to the projectile
+        timeBlast.shoot(deltaX, deltaY + horizontalDistance * 0.2, deltaZ, 1.6f, 1.0f);
+
+        // Play attack sound
+        this.level().playSound(
+            null,
+            this.getX(), this.getY(), this.getZ(),
+            SoundEvents.EVOKER_CAST_SPELL,
+            SoundSource.HOSTILE,
+            1.0f, 1.0f + (this.random.nextFloat() - this.random.nextFloat()) * 0.2f
+        );
+
+        // Spawn the projectile
+        this.level().addFreshEntity(timeBlast);
+
+        // Trigger attack animation (raise arms)
+        this.swing(net.minecraft.world.InteractionHand.MAIN_HAND);
     }
 }

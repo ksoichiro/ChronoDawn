@@ -6,6 +6,7 @@ import com.chronosphere.client.model.TimeGuardianModel;
 import com.chronosphere.client.model.TimeKeeperModel;
 import com.chronosphere.client.model.TimeTyrantModel;
 import com.chronosphere.client.renderer.TimeArrowRenderer;
+import com.chronosphere.client.renderer.TimeBlastRenderer;
 import com.chronosphere.client.renderer.TimeGuardianRenderer;
 import com.chronosphere.client.renderer.TimeTyrantRenderer;
 import com.chronosphere.client.renderer.mobs.ClockworkSentinelRenderer;
@@ -194,6 +195,12 @@ public class ChronosphereClientFabric implements ClientModInitializer {
         EntityRendererRegistry.register(
             ModEntities.TIME_ARROW.get(),
             TimeArrowRenderer::new
+        );
+
+        // Register Time Blast with custom renderer
+        EntityRendererRegistry.register(
+            ModEntities.TIME_BLAST.get(),
+            TimeBlastRenderer::new
         );
 
         // Register custom mobs with custom renderers

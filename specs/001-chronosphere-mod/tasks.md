@@ -130,8 +130,13 @@
     - Increased creature weights and counts in Plains/Forest (cow: 8, sheep: 12, pig: 10, chicken: 10)
     - Added biome-specific variants (husk in Desert, stray in Snowy)
   - **Files**: All 7 biome JSON files (chronosphere_plains.json, chronosphere_forest.json, chronosphere_desert.json, chronosphere_mountain.json, chronosphere_ocean.json, chronosphere_snowy.json, chronosphere_swamp.json)
-- [ ] T210 [P] [US2] Add ranged attack capability to Time Guardian (design projectile, implement attack pattern, configure AI goals)
+- [X] T210 [P] [US2] Add ranged attack capability to Time Guardian (design projectile, implement attack pattern, configure AI goals)
   - **Note**: Time Guardian (時の番人) is the mini-boss, not Time Keeper (時間の管理者/trading mob)
+  - **Completed**: Implemented Time Blast projectile with custom ranged attack AI
+  - **Projectile**: TimeBlastEntity - magical projectile that applies Slowness II + Mining Fatigue I (5 seconds)
+  - **AI**: TimeGuardianRangedAttackGoal with cooldown (10s) and distance requirements (7-15 blocks)
+  - **Balance**: Attack interval 5s, minimum range 7 blocks prevents spam, melee fallback for close combat
+  - **Files**: TimeBlastEntity.java, TimeGuardianRangedAttackGoal.java, TimeBlastRenderer.java, texture, localizations
 
 ### Food & Crops (US1 Enhancement - Medium Priority)
 
