@@ -121,7 +121,15 @@
   - **Implementation**: Created DeferredSpawnEggItem with reflection-based registration for Architectury compatibility
   - **Colors**: Match entity texture schemes (dark purple/cyan, royal blue/gold, dark slate blue/white)
   - **Files**: DeferredSpawnEggItem.java, ModItems.java updates, model JSONs, localizations
-- [ ] T209 [US1] Investigate and fix mob spawn rate issues (hostile mobs too few, friendly/neutral animals too few compared to vanilla Overworld)
+- [X] T209 [US1] Investigate and fix mob spawn rate issues (hostile mobs too few, friendly/neutral animals too few compared to vanilla Overworld)
+  - **Root Cause**: Monster spawn weights were 1/3 to 1/10 of vanilla Overworld (120-175 vs ~515), creature weights were also low
+  - **Solution**: Increased monster weights to match vanilla (~500-600 total per biome), standardized minCount/maxCount to 4/4
+  - **Changes**:
+    - Added creeper, enderman, witch to most biomes
+    - Increased custom mob weights (temporal_wraith, clockwork_sentinel) to 100
+    - Increased creature weights and counts in Plains/Forest (cow: 8, sheep: 12, pig: 10, chicken: 10)
+    - Added biome-specific variants (husk in Desert, stray in Snowy)
+  - **Files**: All 7 biome JSON files (chronosphere_plains.json, chronosphere_forest.json, chronosphere_desert.json, chronosphere_mountain.json, chronosphere_ocean.json, chronosphere_snowy.json, chronosphere_swamp.json)
 - [ ] T210 [P] [US2] Add ranged attack capability to Time Guardian (design projectile, implement attack pattern, configure AI goals)
   - **Note**: Time Guardian (時の番人) is the mini-boss, not Time Keeper (時間の管理者/trading mob)
 
