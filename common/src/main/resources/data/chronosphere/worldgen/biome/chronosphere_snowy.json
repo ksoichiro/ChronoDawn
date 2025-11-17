@@ -20,21 +20,45 @@
     "monster": [
       {
         "type": "minecraft:zombie",
-        "weight": 30,
-        "minCount": 2,
-        "maxCount": 3
+        "weight": 95,
+        "minCount": 4,
+        "maxCount": 4
       },
       {
         "type": "minecraft:spider",
-        "weight": 25,
-        "minCount": 1,
-        "maxCount": 2
+        "weight": 100,
+        "minCount": 4,
+        "maxCount": 4
       },
       {
         "type": "minecraft:creeper",
-        "weight": 20,
+        "weight": 100,
+        "minCount": 4,
+        "maxCount": 4
+      },
+      {
+        "type": "minecraft:skeleton",
+        "weight": 100,
+        "minCount": 4,
+        "maxCount": 4
+      },
+      {
+        "type": "minecraft:stray",
+        "weight": 80,
+        "minCount": 4,
+        "maxCount": 4
+      },
+      {
+        "type": "minecraft:enderman",
+        "weight": 10,
         "minCount": 1,
-        "maxCount": 2
+        "maxCount": 4
+      },
+      {
+        "type": "minecraft:witch",
+        "weight": 5,
+        "minCount": 1,
+        "maxCount": 1
       }
     ],
     "creature": [

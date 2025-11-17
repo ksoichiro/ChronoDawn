@@ -21,9 +21,9 @@
     "monster": [
       {
         "type": "minecraft:drowned",
-        "weight": 40,
+        "weight": 100,
         "minCount": 1,
-        "maxCount": 3
+        "maxCount": 4
       }
     ],
     "creature": [],
