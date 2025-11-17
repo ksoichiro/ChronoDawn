@@ -26,6 +26,8 @@ import net.minecraft.world.entity.player.Player;
  * - Target: Hostile mobs (Monster class) in Chronosphere dimension
  * - Exclusion: Players are not affected
  * - Exclusion: Players wearing full Enhanced Clockstone armor are immune (T254)
+ * - Exclusion: Time Guardian and Time Tyrant (bosses should move at normal speed)
+ * - Exclusion: Time Keeper (friendly trader NPC)
  *
  * Eye of Chronos Enhancement:
  * - When any player in the dimension has Eye of Chronos in inventory, all hostile mobs
@@ -34,6 +36,7 @@ import net.minecraft.world.entity.player.Player;
  * Reference: data-model.md (Time Distortion Effects)
  * Task: T073 [US1] Implement time distortion effect logic
  * Task: T147 [US3] Implement enhanced time distortion effect (Slowness V) when Eye of Chronos is in inventory
+ * Task: T229a [US3] Exclude Time Tyrant from time distortion effect to allow boss abilities to function
  * Task: T254 [US2] Implement time-manipulation effects for Tier 2 equipment (Enhanced Clockstone armor immunity)
  */
 public class TimeDistortionEffect {
@@ -115,6 +118,11 @@ public class TimeDistortionEffect {
 
         // Exclude Time Guardian (boss should move at normal speed)
         if (entity instanceof TimeGuardianEntity) {
+            return false;
+        }
+
+        // Exclude Time Tyrant (boss should move at normal speed)
+        if (entity instanceof com.chronosphere.entities.bosses.TimeTyrantEntity) {
             return false;
         }
 
