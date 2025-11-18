@@ -388,6 +388,18 @@ public class ModItems {
         () -> new PortalStabilizerItem(PortalStabilizerItem.createProperties())
     );
 
+    /**
+     * Chronicle of Chronosphere - Player guide book.
+     * Contains information about dimension mechanics, structures, items, and progression.
+     * Given to players automatically on first entry to Chronosphere dimension.
+     */
+    public static final RegistrySupplier<Item> CHRONICLE_OF_CHRONOSPHERE = ITEMS.register(
+        "chronicle_of_chronosphere",
+        () -> new com.chronosphere.items.ChronicleOfChronosphereItem(
+            com.chronosphere.items.ChronicleOfChronosphereItem.createProperties()
+        )
+    );
+
     // === Consumables ===
 
     /**
@@ -848,6 +860,8 @@ public class ModItems {
         // === Portal Items ===
         output.accept(TIME_HOURGLASS.get());
         output.accept(PORTAL_STABILIZER.get());
+        // Add actual readable book instead of placeholder item
+        output.accept(com.chronosphere.items.ChronicleOfChronosphereItem.createBook());
 
         // === Consumables ===
         output.accept(FRUIT_OF_TIME.get());

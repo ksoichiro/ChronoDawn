@@ -42,6 +42,8 @@
   "item.chronosphere.enhanced_clockstone": "強化クロックストーン",
   "item.chronosphere.time_hourglass": "時の砂時計",
   "item.chronosphere.portal_stabilizer": "ポータル安定化装置",
+  "item.chronosphere.chronicle_of_chronosphere": "クロノスフィア年代記",
+  "item.chronosphere.chronicle_of_chronosphere.tooltip": "凍結世界を生き延びるためのガイド",
   "item.chronosphere.fruit_of_time": "時間の果実",
   "item.chronosphere.time_fruit_pie": "時の果実パイ",
   "item.chronosphere.time_jam": "時のジャム",
@@ -123,11 +125,12 @@
   "advancements.chronosphere.root.description": "時間操作の世界へようこそ",
 
   "advancements.chronosphere.portal_creation.title": "時を超える門",
-  "advancements.chronosphere.portal_creation.description": "時の砂時計を作成し、クロノスフィアへの扉を開く",
+  "advancements.chronosphere.portal_creation.description": "時の砂時計を入手。クロックストーンブロックでポータルを作り、点火して凍結世界へ突入しよう",
   "advancements.chronosphere.dimension_entry.title": "凍結した世界へ",
-  "advancements.chronosphere.dimension_entry.description": "初めてクロノスフィア次元に突入する",
+  "advancements.chronosphere.dimension_entry.description": "クロノスフィア次元に初突入。忘れられた図書館を探して帰還方法を見つけよう",
+
   "advancements.chronosphere.portal_stabilization.title": "時間の固定",
-  "advancements.chronosphere.portal_stabilization.description": "ポータル安定化装置を入手し、双方向移動を可能にする",
+  "advancements.chronosphere.portal_stabilization.description": "ポータル安定化装置を入手。ポータルフレームに使用して次元間の双方向移動を可能にしよう",
 
   "advancements.chronosphere.desert_clock_tower.title": "時計仕掛けの尖塔",
   "advancements.chronosphere.desert_clock_tower.description": "砂漠の時計塔から強化クロックストーンを入手する",

@@ -103,6 +103,9 @@ public class PlayerEventHandler {
 
         Chronosphere.LOGGER.info("Player {} entered Chronosphere", player.getName().getString());
 
+        // Give Chronicle of Chronosphere book to player if they don't have it
+        giveChronicleIfNeeded(player);
+
         // Mark global state: Chronosphere has been entered
         ChronosphereGlobalState globalState = ChronosphereGlobalState.get(player.server);
         globalState.markChronosphereEntered();
@@ -235,6 +238,47 @@ public class PlayerEventHandler {
         }
 
         Chronosphere.LOGGER.info("Extinguished {} portal blocks near {}", removedBlocks, centerPos);
+    }
+
+    /**
+     * Give Chronicle of Chronosphere book to player if they don't have it.
+     * This book provides essential information for surviving the Chronosphere dimension.
+     * Only English version is given automatically.
+     *
+     * @param player Player who entered Chronosphere
+     */
+    private static void giveChronicleIfNeeded(ServerPlayer player) {
+        // Check if player already has the book (check for written_book with specific title)
+        boolean hasBook = false;
+
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            ItemStack stack = player.getInventory().getItem(i);
+            // Check if it's a written book with our title
+            if (stack.getItem() instanceof net.minecraft.world.item.WrittenBookItem) {
+                var bookContent = stack.get(net.minecraft.core.component.DataComponents.WRITTEN_BOOK_CONTENT);
+                if (bookContent != null) {
+                    String title = bookContent.title().raw();
+                    if (title.equals("Chronicle of Chronosphere")) {
+                        hasBook = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Give book if player doesn't have it
+        if (!hasBook) {
+            ItemStack book = com.chronosphere.items.ChronicleOfChronosphereItem.createBook();
+            boolean added = player.getInventory().add(book);
+            if (added) {
+                Chronosphere.LOGGER.info("Gave Chronicle of Chronosphere to player {}", player.getName().getString());
+            } else {
+                // If inventory is full, drop the book at player's feet
+                player.drop(book, false);
+                Chronosphere.LOGGER.info("Dropped Chronicle of Chronosphere for player {} (inventory full)",
+                    player.getName().getString());
+            }
+        }
     }
 
     /**
