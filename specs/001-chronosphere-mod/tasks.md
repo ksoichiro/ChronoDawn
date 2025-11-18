@@ -221,6 +221,11 @@
 - [X] T115l [US2] Add initial guidance on first dimension entry (chat message, advancement, or book given to player)
   - Chronicle of Chronosphere auto-given to player on first Chronosphere entry
   - Book dropped at player's feet if inventory is full
+- [ ] T115m [US2] Implement time distortion particle effects for Ancient Ruins (Temporal Seal failure visualization)
+  - Design clock-face particle type (or reuse existing particles)
+  - Implement particle spawning logic in Ancient Ruins structure
+  - Particles float upward from floor blocks continuously
+  - Visual indicator of Temporal Seal degradation (referenced in lore.md)
 
 ### Master Clock Tower & Boss Battle Improvements (US3 Bug Fixes & Enhancements - High Priority)
 
