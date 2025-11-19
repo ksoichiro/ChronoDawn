@@ -36,12 +36,15 @@
   "block.chronosphere.time_wheat": "Time Wheat",
   "block.chronosphere.time_wheat_bale": "Time Wheat Bale",
   "block.chronosphere.boss_room_door": "Boss Room Door",
+  "block.chronosphere.temporal_particle_emitter": "Temporal Particle Emitter",
 
   "item.chronosphere.clockstone": "Clockstone",
   "item.chronosphere.time_crystal": "Time Crystal",
   "item.chronosphere.enhanced_clockstone": "Enhanced Clockstone",
   "item.chronosphere.time_hourglass": "Time Hourglass",
   "item.chronosphere.portal_stabilizer": "Portal Stabilizer",
+  "item.chronosphere.chronicle_of_chronosphere": "Chronicle of Chronosphere",
+  "item.chronosphere.chronicle_of_chronosphere.tooltip": "A guide to surviving the frozen world",
   "item.chronosphere.fruit_of_time": "Fruit of Time",
   "item.chronosphere.time_fruit_pie": "Time Fruit Pie",
   "item.chronosphere.time_jam": "Time Jam",
@@ -123,11 +126,12 @@
   "advancements.chronosphere.root.description": "Welcome to the world of time manipulation",
 
   "advancements.chronosphere.portal_creation.title": "A Gateway Through Time",
-  "advancements.chronosphere.portal_creation.description": "Craft a Time Hourglass to create a portal to the Chronosphere",
+  "advancements.chronosphere.portal_creation.description": "Obtain Time Hourglass. Build a portal frame with Clockstone Blocks and ignite it to enter the frozen world",
   "advancements.chronosphere.dimension_entry.title": "Entering the Frozen World",
-  "advancements.chronosphere.dimension_entry.description": "Enter the Chronosphere dimension for the first time",
+  "advancements.chronosphere.dimension_entry.description": "Enter Chronosphere for the first time. Find the Forgotten Library to discover how to return home",
+
   "advancements.chronosphere.portal_stabilization.title": "Anchoring Time",
-  "advancements.chronosphere.portal_stabilization.description": "Obtain the Portal Stabilizer to enable two-way portal travel",
+  "advancements.chronosphere.portal_stabilization.description": "Obtain Portal Stabilizer. Use it on the portal frame to enable two-way travel between dimensions",
 
   "advancements.chronosphere.desert_clock_tower.title": "The Clockwork Spire",
   "advancements.chronosphere.desert_clock_tower.description": "Obtain Enhanced Clockstone from the Desert Clock Tower",

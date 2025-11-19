@@ -202,13 +202,31 @@
 
 **Guidance Methods**: 書物アイテム、村人との取引（地図）、進捗ヒント、構造物の出現頻度調整、ロケーターアイテムなど
 
-- [ ] T115f [US2] Research appropriate player guidance methods (book items, advancement hints, villager trades, structure frequency)
-- [ ] T115g [P] [US2] Create Chronicle of Chronosphere book item (guide book explaining dimension mechanics, structures, and progression)
+- [X] T115f [US2] Research appropriate player guidance methods (book items, advancement hints, villager trades, structure frequency)
+- [X] T115g [P] [US2] Create Chronicle of Chronosphere book item (guide book explaining dimension mechanics, structures, and progression)
+  - Created ChronicleOfChronosphereItem.java with English version only
+  - Book auto-given on first Chronosphere entry
+  - Added to creative tab as readable vanilla written_book
+  - Documented complete worldbuilding in specs/001-chronosphere-mod/lore.md
 - [ ] T115h [P] [US2] Add villager trades for structure maps (Ancient Ruins Map, Desert Clock Tower Map, Master Clock Tower Map)
-- [ ] T115i [US2] Add advancement system with descriptive hints for key progression milestones (first portal, Ancient Ruins discovery, Time Guardian defeat)
-- [ ] T115j [US2] Adjust structure spawn rates to make discovery easier (increase frequency or reduce spacing)
+- [X] T115i [US2] Add advancement system with descriptive hints for key progression milestones (first portal, Ancient Ruins discovery, Time Guardian defeat)
+  - Improved existing advancement descriptions (portal_creation, dimension_entry, portal_stabilization)
+  - Added explicit next-step guidance in advancement text
+- [X] T115j [US2] Adjust structure spawn rates to make discovery easier (increase frequency or reduce spacing)
+  - Ancient Ruins: spacing 16→12, separation 4→3 (25% more frequent)
+  - Forgotten Library: spacing 50→30, separation 25→15 (40% more frequent)
+  - Desert Clock Tower: spacing 32→20, separation 8→5 (37.5% more frequent)
+  - Master Clock Tower: spacing 100→70, separation 50→35 (30% more frequent)
 - [ ] T115k [P] [US2] Create Time Compass item (points to nearest key structure, similar to lodestone compass)
-- [ ] T115l [US2] Add initial guidance on first dimension entry (chat message, advancement, or book given to player)
+- [X] T115l [US2] Add initial guidance on first dimension entry (chat message, advancement, or book given to player)
+  - Chronicle of Chronosphere auto-given to player on first Chronosphere entry
+  - Book dropped at player's feet if inventory is full
+- [X] T115m [US2] Implement time distortion particle effects for Ancient Ruins (Temporal Seal failure visualization)
+  - Created TemporalParticleEmitterBlock (invisible, indestructible, no collision)
+  - Uses SOUL_FIRE_FLAME particles (cyan-blue color)
+  - Particles float upward (0.15-0.25 speed) with 70% spawn frequency
+  - Placed multiple emitters in Ancient Ruins structure NBT
+  - Visual indicator of Temporal Seal degradation (referenced in lore.md)
 
 ### Master Clock Tower & Boss Battle Improvements (US3 Bug Fixes & Enhancements - High Priority)
 

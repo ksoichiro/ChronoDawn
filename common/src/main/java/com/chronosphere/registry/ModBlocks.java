@@ -17,6 +17,7 @@ import com.chronosphere.blocks.TemporalBricksSlab;
 import com.chronosphere.blocks.TemporalBricksStairs;
 import com.chronosphere.blocks.TemporalBricksWall;
 import com.chronosphere.blocks.TemporalMossBlock;
+import com.chronosphere.blocks.TemporalParticleEmitterBlock;
 import com.chronosphere.blocks.TimeCrystalBlock;
 import com.chronosphere.blocks.TimeCrystalOre;
 import com.chronosphere.blocks.TimeWoodButton;
@@ -380,6 +381,21 @@ public class ModBlocks {
             Block.Properties.ofFullCopy(Blocks.IRON_DOOR)
                 .noOcclusion()
         )
+    );
+
+    /**
+     * Temporal Particle Emitter - Invisible block that emits time distortion particles.
+     *
+     * Used in Ancient Ruins to visualize Temporal Seal failure.
+     * Emits purple portal particles that float upward, indicating temporal energy leakage.
+     * Invisible, indestructible, no collision - intended for structure placement only.
+     *
+     * Task: T115m [US2]
+     * Reference: specs/001-chronosphere-mod/lore.md
+     */
+    public static final RegistrySupplier<Block> TEMPORAL_PARTICLE_EMITTER = BLOCKS.register(
+        "temporal_particle_emitter",
+        () -> new TemporalParticleEmitterBlock(TemporalParticleEmitterBlock.createProperties())
     );
 
     /**

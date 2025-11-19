@@ -304,6 +304,16 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.BOSS_ROOM_DOOR.get(), new Item.Properties())
     );
 
+    /**
+     * Temporal Particle Emitter - Invisible block that emits time distortion particles.
+     * Structure-only block, not added to creative tab.
+     * Can be placed with commands for testing: /give @s chronosphere:temporal_particle_emitter
+     */
+    public static final RegistrySupplier<Item> TEMPORAL_PARTICLE_EMITTER = ITEMS.register(
+        "temporal_particle_emitter",
+        () -> new BlockItem(ModBlocks.TEMPORAL_PARTICLE_EMITTER.get(), new Item.Properties())
+    );
+
     // === Material Items ===
 
     /**
@@ -386,6 +396,18 @@ public class ModItems {
     public static final RegistrySupplier<Item> PORTAL_STABILIZER = ITEMS.register(
         "portal_stabilizer",
         () -> new PortalStabilizerItem(PortalStabilizerItem.createProperties())
+    );
+
+    /**
+     * Chronicle of Chronosphere - Player guide book.
+     * Contains information about dimension mechanics, structures, items, and progression.
+     * Given to players automatically on first entry to Chronosphere dimension.
+     */
+    public static final RegistrySupplier<Item> CHRONICLE_OF_CHRONOSPHERE = ITEMS.register(
+        "chronicle_of_chronosphere",
+        () -> new com.chronosphere.items.ChronicleOfChronosphereItem(
+            com.chronosphere.items.ChronicleOfChronosphereItem.createProperties()
+        )
     );
 
     // === Consumables ===
@@ -836,6 +858,7 @@ public class ModItems {
         output.accept(TEMPORAL_BRICKS_WALL.get());
         output.accept(TEMPORAL_MOSS.get());
         output.accept(FROZEN_TIME_ICE.get());
+        // Note: TEMPORAL_PARTICLE_EMITTER is not added to creative tab (structure-only block)
 
         // === Base Materials ===
         output.accept(CLOCKSTONE.get());
@@ -848,6 +871,8 @@ public class ModItems {
         // === Portal Items ===
         output.accept(TIME_HOURGLASS.get());
         output.accept(PORTAL_STABILIZER.get());
+        // Add actual readable book instead of placeholder item
+        output.accept(com.chronosphere.items.ChronicleOfChronosphereItem.createBook());
 
         // === Consumables ===
         output.accept(FRUIT_OF_TIME.get());
