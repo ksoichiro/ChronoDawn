@@ -3,6 +3,7 @@ package com.chronosphere.neoforge;
 import com.chronosphere.Chronosphere;
 import com.chronosphere.entities.bosses.ChronosWardenEntity;
 import com.chronosphere.entities.bosses.ClockworkColossusEntity;
+import com.chronosphere.entities.bosses.EntropyKeeperEntity;
 import com.chronosphere.entities.bosses.TemporalPhantomEntity;
 import com.chronosphere.entities.bosses.TimeGuardianEntity;
 import com.chronosphere.entities.bosses.TimeTyrantEntity;
@@ -48,8 +49,13 @@ public class ChronosphereNeoForge {
         );
 
         event.put(
-            ModEntities.TEMPORAL_PHANTOM_BOSS.get(),
+            ModEntities.TEMPORAL_PHANTOM.get(),
             TemporalPhantomEntity.createAttributes().build()
+        );
+
+        event.put(
+            ModEntities.ENTROPY_KEEPER.get(),
+            EntropyKeeperEntity.createAttributes().build()
         );
 
         Chronosphere.LOGGER.info("Registered entity attributes for NeoForge");

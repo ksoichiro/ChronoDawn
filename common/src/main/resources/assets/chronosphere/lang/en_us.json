@@ -59,6 +59,7 @@
   "item.chronosphere.guardian_stone": "Guardian Stone",
   "item.chronosphere.colossus_gear": "Colossus Gear",
   "item.chronosphere.phantom_essence": "Phantom Essence",
+  "item.chronosphere.entropy_core": "Entropy Core",
 
   "item.chronosphere.clockstone_sword": "Clockstone Sword",
   "item.chronosphere.clockstone_pickaxe": "Clockstone Pickaxe",
@@ -109,7 +110,8 @@
   "entity.chronosphere.time_tyrant": "Time Tyrant",
   "entity.chronosphere.time_blast": "Time Blast",
   "entity.chronosphere.clockwork_colossus": "Clockwork Colossus",
-  "entity.chronosphere.temporal_phantom_boss": "Temporal Phantom",
+  "entity.chronosphere.temporal_phantom": "Temporal Phantom",
+  "entity.chronosphere.entropy_keeper": "Entropy Keeper",
 
   "biome.chronosphere.chronosphere_plains": "Chronosphere Plains",
   "biome.chronosphere.chronosphere_ocean": "Chronosphere Ocean",

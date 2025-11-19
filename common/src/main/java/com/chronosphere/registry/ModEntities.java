@@ -2,6 +2,7 @@ package com.chronosphere.registry;
 
 import com.chronosphere.Chronosphere;
 import com.chronosphere.entities.bosses.ChronosWardenEntity;
+import com.chronosphere.entities.bosses.EntropyKeeperEntity;
 import com.chronosphere.entities.bosses.TemporalPhantomEntity;
 import com.chronosphere.entities.bosses.TimeGuardianEntity;
 import com.chronosphere.entities.bosses.TimeTyrantEntity;
@@ -195,13 +196,34 @@ public class ModEntities {
      * Reference: research.md (Boss 3: Temporal Phantom)
      * Task: T236 [Phase 2] Implement Temporal Phantom
      */
-    public static final RegistrySupplier<EntityType<TemporalPhantomEntity>> TEMPORAL_PHANTOM_BOSS = ENTITIES.register(
-        "temporal_phantom_boss",
+    public static final RegistrySupplier<EntityType<TemporalPhantomEntity>> TEMPORAL_PHANTOM = ENTITIES.register(
+        "temporal_phantom",
         () -> EntityType.Builder.of(TemporalPhantomEntity::new, MobCategory.MONSTER)
             .sized(0.8f, 2.0f)
             .clientTrackingRange(10)
             .updateInterval(3)
-            .build("temporal_phantom_boss")
+            .build("temporal_phantom")
+    );
+
+    /**
+     * Entropy Keeper - Phase 2 Mini-Boss
+     *
+     * Aberrant entity that governs temporal decay and corruption.
+     * HP: 160, Attack: 10, Armor: 6, Speed: 0.20
+     *
+     * Phase 1: Decay Aura (Wither I), Corrosion Touch (durability damage), Temporal Rot (corruption patches)
+     * Phase 2: Degradation (+2 attack/60s, max 3 stacks), Entropy Burst (one-time explosion at 30% HP)
+     *
+     * Reference: research.md (Boss 4: Entropy Keeper)
+     * Task: T237 [Phase 2] Implement Entropy Keeper
+     */
+    public static final RegistrySupplier<EntityType<EntropyKeeperEntity>> ENTROPY_KEEPER = ENTITIES.register(
+        "entropy_keeper",
+        () -> EntityType.Builder.of(EntropyKeeperEntity::new, MobCategory.MONSTER)
+            .sized(0.9f, 2.2f)
+            .clientTrackingRange(10)
+            .updateInterval(3)
+            .build("entropy_keeper")
     );
 
     /**

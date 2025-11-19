@@ -7,6 +7,7 @@ import com.chronosphere.client.model.TimeKeeperModel;
 import com.chronosphere.client.model.TimeTyrantModel;
 import com.chronosphere.client.renderer.ChronosWardenRenderer;
 import com.chronosphere.client.renderer.ClockworkColossusRenderer;
+import com.chronosphere.client.renderer.EntropyKeeperRenderer;
 import com.chronosphere.client.renderer.TemporalPhantomRenderer;
 import com.chronosphere.client.renderer.TimeArrowRenderer;
 import com.chronosphere.client.renderer.TimeBlastRenderer;
@@ -236,8 +237,14 @@ public class ChronosphereClientFabric implements ClientModInitializer {
 
         // Register Temporal Phantom with custom renderer
         EntityRendererRegistry.register(
-            ModEntities.TEMPORAL_PHANTOM_BOSS.get(),
+            ModEntities.TEMPORAL_PHANTOM.get(),
             TemporalPhantomRenderer::new
+        );
+
+        // Register Entropy Keeper with custom renderer
+        EntityRendererRegistry.register(
+            ModEntities.ENTROPY_KEEPER.get(),
+            EntropyKeeperRenderer::new
         );
     }
 }

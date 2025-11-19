@@ -409,6 +409,23 @@ public class ModItems {
         )
     );
 
+    /**
+     * Entropy Core - Boss drop from Entropy Keeper
+     *
+     * A corrupted core dropped by Entropy Keeper (Phase 2 mini-boss).
+     * Dropped by Entropy Keeper (1-2 per kill).
+     * Used for crafting Chrono Aegis (Time Tyrant preparation item).
+     *
+     * Reference: research.md (Boss 4: Entropy Keeper)
+     * Task: T237 [Phase 2] Implement Entropy Keeper
+     */
+    public static final RegistrySupplier<Item> ENTROPY_CORE = ITEMS.register(
+        "entropy_core",
+        () -> new com.chronosphere.items.EntropyCoreItem(
+            com.chronosphere.items.EntropyCoreItem.createProperties()
+        )
+    );
+
     // === Portal Items ===
 
     /**

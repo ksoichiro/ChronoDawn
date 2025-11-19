@@ -59,6 +59,7 @@
   "item.chronosphere.guardian_stone": "守護者の石",
   "item.chronosphere.colossus_gear": "巨像の歯車",
   "item.chronosphere.phantom_essence": "幻影のエッセンス",
+  "item.chronosphere.entropy_core": "エントロピーのコア",
 
   "item.chronosphere.clockstone_sword": "クロックストーンの剣",
   "item.chronosphere.clockstone_pickaxe": "クロックストーンのツルハシ",
@@ -109,7 +110,8 @@
   "entity.chronosphere.time_tyrant": "時間の暴君",
   "entity.chronosphere.time_blast": "時間の衝撃波",
   "entity.chronosphere.clockwork_colossus": "時計仕掛けの巨像",
-  "entity.chronosphere.temporal_phantom_boss": "時間の幻影",
+  "entity.chronosphere.temporal_phantom": "時間の幻影",
+  "entity.chronosphere.entropy_keeper": "エントロピーの管理者",
 
   "biome.chronosphere.chronosphere_plains": "クロノスフィア平原",
   "biome.chronosphere.chronosphere_ocean": "クロノスフィア海洋",
