@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "chronosphere:chrono_melon_slice"
+    },
+    {
+      "item": "chronosphere:chrono_melon_slice"
+    },
+    {
+      "item": "chronosphere:chrono_melon_slice"
+    },
+    {
+      "item": "chronosphere:chrono_melon_slice"
+    },
+    {
+      "item": "minecraft:glass_bottle"
+    }
+  ],
+  "result": {
+    "id": "chronosphere:chrono_melon_juice",
+    "count": 1
+  }
+}

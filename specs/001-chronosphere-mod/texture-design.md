@@ -955,6 +955,91 @@ This creates smooth rotating gear animation. The PNG should contain multiple fra
 
 ---
 
+---
+
+## Crop Textures (T211-T215 Implementation)
+
+### Temporal Root (時の根菜)
+
+**Block Textures**: `temporal_root_stage_0.png` ~ `temporal_root_stage_7.png` (8 stages)
+**Item Textures**: `temporal_root.png`, `baked_temporal_root.png`
+
+**コンセプト**:
+- 根菜類の作物（ニンジン/ポテトのような）
+- 時間をテーマにした地下作物
+- 生で食べるか焼いて食べる
+
+**デザイン方向性**:
+- **ベース**: バニラのニンジン（carrots）を参考
+- **カラー**: 淡いオレンジ/ゴールド系（時間のテーマカラー #db8813）
+- **成長段階**:
+  - Stage 0-3: 小さな葉のみ（地上部分）
+  - Stage 4-6: 葉が成長し、根の一部が見える
+  - Stage 7: 完全に成熟、根が大きく見える
+- **アイテム**:
+  - `temporal_root.png`: ニンジンのような形状、オレンジ/ゴールド色
+  - `baked_temporal_root.png`: 焼き色がついた根菜、より濃いオレンジ色
+
+**プレースホルダー**: バニラのcarrots_stage_*.png と carrot.png を使用
+
+---
+
+### Chrono Melon (時のメロン)
+
+**Block Textures**:
+- `chrono_melon_stem_stage_0.png` ~ `chrono_melon_stem_stage_7.png` (8 stages)
+- `chrono_melon_side.png`, `chrono_melon_top.png`, `chrono_melon_bottom.png`
+
+**Item Textures**: `chrono_melon_slice.png`, `chrono_melon_seeds.png`
+
+**コンセプト**:
+- メロン/カボチャのような茎作物
+- 時間の結晶化したエッセンスを含むメロン
+- スライスして食べる
+
+**デザイン方向性**:
+- **ベース**: バニラのメロン（melon）を参考
+- **カラー**: ゴールデン/アンバー色（時間のテーマカラー）
+- **茎の成長段階**:
+  - Stage 0-3: 小さく細い茎
+  - Stage 4-6: 茎が太く成長
+  - Stage 7: 完全に成熟、隣にメロンを生成可能
+- **メロンブロック**:
+  - Side: ゴールデンイエローの皮、縦縞模様
+  - Top/Bottom: 茎の跡、放射状の模様
+- **アイテム**:
+  - `chrono_melon_slice.png`: 黄金色のメロンスライス、時計の針のような模様
+  - `chrono_melon_seeds.png`: 小さな金色の種
+
+**プレースホルダー**: バニラのmelon_stem_*.png, melon_*.png, melon_slice.png, melon_seeds.png を使用
+
+---
+
+### Timeless Mushroom (時知らずのキノコ)
+
+**Block/Item Texture**: `timeless_mushroom.png`
+
+**コンセプト**:
+- 暗所で育つ食用キノコ
+- 時間の流れから外れた存在
+- 銀/白色で、Unstable Fungus（紫色）と区別
+
+**デザイン方向性**:
+- **ベース**: バニラのキノコ（brown_mushroom または red_mushroom）を参考
+- **カラー**: 銀/白色、淡く光る（#C0C0C0 ~ #E8E8E8）
+- **特徴**:
+  - 傘は丸く、淡い銀白色
+  - 柄は白っぽく、半透明感
+  - 微かに光る（時間の外にある存在感）
+  - Unstable Fungusとは明確に異なる色（紫 vs 銀白）
+- **雰囲気**:
+  - 幽霊のような、時間を超越した存在
+  - 「Timeless（時知らず）」= 時間の流れに影響されない
+
+**プレースホルダー**: バニラのbrown_mushroom.png を使用（色は後で調整）
+
+---
+
 ## Implementation Status（更新版）
 
 - ✅ Clockstone - 完成済み
@@ -970,4 +1055,7 @@ This creates smooth rotating gear animation. The PNG should contain multiple fra
 - ⚠️ **Time Tyrant's Mail** - enhanced_clockstone_chestplate.pngのコピー、要編集（優先度：中）
 - ⚠️ **Echoing Time Boots** - enhanced_clockstone_boots.pngのコピー、要編集（優先度：中）
 - ⚠️ **Unstable Pocket Watch** - time_clock.pngのコピー、要編集（優先度：中）
+- ⚠️ **Temporal Root** (8 stages + 2 items) - プレースホルダー: carrots/carrot（T213）
+- ⚠️ **Chrono Melon** (8 stem stages + 3 block faces + 2 items) - プレースホルダー: melon系（T213）
+- ⚠️ **Timeless Mushroom** (1 texture) - プレースホルダー: brown_mushroom（T213）
 

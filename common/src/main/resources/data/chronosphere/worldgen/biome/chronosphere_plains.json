@@ -111,6 +111,8 @@
       "chronosphere:patch_grass",
       "chronosphere:patch_flowers",
       "chronosphere:patch_time_wheat",
+      "chronosphere:patch_temporal_root",
+      "chronosphere:patch_chrono_melon",
       "chronosphere:boulder_placed",
       "chronosphere:gravel_disk_placed",
       "chronosphere:sand_disk_placed"

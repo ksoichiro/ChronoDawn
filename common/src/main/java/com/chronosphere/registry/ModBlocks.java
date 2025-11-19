@@ -34,6 +34,10 @@ import com.chronosphere.blocks.TimeWoodTrapdoor;
 import com.chronosphere.blocks.UnstableFungus;
 import com.chronosphere.blocks.TimeWheatBlock;
 import com.chronosphere.blocks.TimeWheatBaleBlock;
+import com.chronosphere.blocks.TemporalRootBlock;
+import com.chronosphere.blocks.ChronoMelonStemBlock;
+import com.chronosphere.blocks.ChronoMelonBlock;
+import com.chronosphere.blocks.TimelessMushroomBlock;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
@@ -364,6 +368,55 @@ public class ModBlocks {
         "time_wheat_bale",
         () -> new TimeWheatBaleBlock(
             Block.Properties.ofFullCopy(Blocks.HAY_BLOCK)
+        )
+    );
+
+    /**
+     * Temporal Root - Root vegetable crop that grows on farmland.
+     * Has 8 growth stages (0-7) like vanilla carrots/potatoes.
+     * Drops Temporal Root items (food + seed).
+     */
+    public static final RegistrySupplier<Block> TEMPORAL_ROOT = BLOCKS.register(
+        "temporal_root",
+        () -> new TemporalRootBlock(
+            Block.Properties.ofFullCopy(Blocks.CARROTS)
+        )
+    );
+
+    /**
+     * Chrono Melon Stem - Stem block that grows Chrono Melons.
+     * Has 8 growth stages (0-7) like vanilla melon/pumpkin stems.
+     * Produces melons on adjacent blocks when mature.
+     */
+    public static final RegistrySupplier<Block> CHRONO_MELON_STEM = BLOCKS.register(
+        "chrono_melon_stem",
+        () -> new ChronoMelonStemBlock(
+            Block.Properties.ofFullCopy(Blocks.MELON_STEM)
+        )
+    );
+
+    /**
+     * Chrono Melon - Full melon block that drops slices.
+     * Drops 3-7 Chrono Melon Slices when broken (without Silk Touch).
+     * Fortune enchantment increases drop count.
+     */
+    public static final RegistrySupplier<Block> CHRONO_MELON = BLOCKS.register(
+        "chrono_melon",
+        () -> new ChronoMelonBlock(
+            Block.Properties.ofFullCopy(Blocks.MELON)
+        )
+    );
+
+    /**
+     * Timeless Mushroom - Edible mushroom that grows in darkness.
+     * Grows in low light (light level 12 or less).
+     * Can spread to nearby blocks in darkness.
+     * Distinct from Unstable Fungus (silver/white vs purple/blue).
+     */
+    public static final RegistrySupplier<Block> TIMELESS_MUSHROOM = BLOCKS.register(
+        "timeless_mushroom",
+        () -> new TimelessMushroomBlock(
+            Block.Properties.ofFullCopy(Blocks.BROWN_MUSHROOM)
         )
     );
 

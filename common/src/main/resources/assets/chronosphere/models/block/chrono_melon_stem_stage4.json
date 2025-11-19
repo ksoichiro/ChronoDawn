@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/stem_growth4",
+  "textures": {
+    "stem": "chronosphere:block/chrono_melon_stem_stage_4"
+  }
+}

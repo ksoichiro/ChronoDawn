@@ -123,6 +123,8 @@
       "chronosphere:patch_ferns",
       "chronosphere:patch_brown_mushrooms",
       "chronosphere:patch_time_wheat",
+      "chronosphere:patch_chrono_melon",
+      "chronosphere:patch_timeless_mushroom",
       "chronosphere:boulder_placed",
       "chronosphere:fallen_log_placed"
     ],

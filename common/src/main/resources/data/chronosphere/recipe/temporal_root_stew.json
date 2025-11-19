@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "chronosphere:baked_temporal_root"
+    },
+    {
+      "item": "chronosphere:timeless_mushroom"
+    },
+    {
+      "item": "minecraft:bowl"
+    }
+  ],
+  "result": {
+    "id": "chronosphere:temporal_root_stew",
+    "count": 1
+  }
+}

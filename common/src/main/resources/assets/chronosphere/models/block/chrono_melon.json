@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "chronosphere:block/chrono_melon_top",
+    "side": "chronosphere:block/chrono_melon_side"
+  }
+}
