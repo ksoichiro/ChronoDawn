@@ -304,6 +304,16 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.BOSS_ROOM_DOOR.get(), new Item.Properties())
     );
 
+    /**
+     * Temporal Particle Emitter - Invisible block that emits time distortion particles.
+     * Structure-only block, not added to creative tab.
+     * Can be placed with commands for testing: /give @s chronosphere:temporal_particle_emitter
+     */
+    public static final RegistrySupplier<Item> TEMPORAL_PARTICLE_EMITTER = ITEMS.register(
+        "temporal_particle_emitter",
+        () -> new BlockItem(ModBlocks.TEMPORAL_PARTICLE_EMITTER.get(), new Item.Properties())
+    );
+
     // === Material Items ===
 
     /**
@@ -848,6 +858,7 @@ public class ModItems {
         output.accept(TEMPORAL_BRICKS_WALL.get());
         output.accept(TEMPORAL_MOSS.get());
         output.accept(FROZEN_TIME_ICE.get());
+        // Note: TEMPORAL_PARTICLE_EMITTER is not added to creative tab (structure-only block)
 
         // === Base Materials ===
         output.accept(CLOCKSTONE.get());

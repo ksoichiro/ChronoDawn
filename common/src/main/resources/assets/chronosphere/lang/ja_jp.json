@@ -36,6 +36,7 @@
   "block.chronosphere.time_wheat": "時の小麦",
   "block.chronosphere.time_wheat_bale": "時の小麦の俵",
   "block.chronosphere.boss_room_door": "ボス部屋のドア",
+  "block.chronosphere.temporal_particle_emitter": "時間パーティクル発生装置",
 
   "item.chronosphere.clockstone": "クロックストーン",
   "item.chronosphere.time_crystal": "時間の結晶",
