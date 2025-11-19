@@ -60,6 +60,14 @@
   "item.chronosphere.colossus_gear": "巨像の歯車",
   "item.chronosphere.phantom_essence": "幻影のエッセンス",
   "item.chronosphere.entropy_core": "エントロピーのコア",
+  "item.chronosphere.chrono_aegis": "クロノスの盾",
+
+  "item.chronosphere.chrono_aegis.already_active": "クロノスの盾の効果はすでに有効です！",
+  "item.chronosphere.chrono_aegis.activated": "クロノスの盾が発動！時間の暴君に対する防護が10分間有効になります。",
+  "item.chronosphere.chrono_aegis.tooltip": "時間の守護者たちのエッセンスから鍛造された強力なアーティファクト。",
+  "item.chronosphere.chrono_aegis.tooltip.duration": "右クリックで発動（10分間持続）",
+
+  "effect.chronosphere.chrono_aegis_buff": "クロノスの盾",
 
   "item.chronosphere.clockstone_sword": "クロックストーンの剣",
   "item.chronosphere.clockstone_pickaxe": "クロックストーンのツルハシ",

@@ -7,6 +7,7 @@ import com.chronosphere.registry.ModBlocks;
 import com.chronosphere.registry.ModBlockEntities;
 import com.chronosphere.registry.ModCreativeTabs;
 import com.chronosphere.registry.ModDimensions;
+import com.chronosphere.registry.ModEffects;
 import com.chronosphere.registry.ModEntities;
 import com.chronosphere.registry.ModItems;
 import com.chronosphere.registry.ModTreeDecoratorTypes;
@@ -26,6 +27,7 @@ public class Chronosphere {
         ModBlocks.register();
         ModBlockEntities.register();
         ModItems.register();
+        ModEffects.register();
         ModEntities.register();
         ModDimensions.register();
         ModCreativeTabs.register();

@@ -60,6 +60,14 @@
   "item.chronosphere.colossus_gear": "Colossus Gear",
   "item.chronosphere.phantom_essence": "Phantom Essence",
   "item.chronosphere.entropy_core": "Entropy Core",
+  "item.chronosphere.chrono_aegis": "Chrono Aegis",
+
+  "item.chronosphere.chrono_aegis.already_active": "Chrono Aegis buff is already active!",
+  "item.chronosphere.chrono_aegis.activated": "Chrono Aegis activated! Protection against Time Tyrant for 10 minutes.",
+  "item.chronosphere.chrono_aegis.tooltip": "A powerful artifact forged from the essence of defeated temporal guardians.",
+  "item.chronosphere.chrono_aegis.tooltip.duration": "Right-click to activate (10 minutes duration)",
+
+  "effect.chronosphere.chrono_aegis_buff": "Chrono Aegis",
 
   "item.chronosphere.clockstone_sword": "Clockstone Sword",
   "item.chronosphere.clockstone_pickaxe": "Clockstone Pickaxe",

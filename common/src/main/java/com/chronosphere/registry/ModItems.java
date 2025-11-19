@@ -426,6 +426,29 @@ public class ModItems {
         )
     );
 
+    // === Ultimate Crafted Items ===
+
+    /**
+     * Chrono Aegis - Ultimate preparation item for Time Tyrant boss fight
+     *
+     * Crafted from 4 boss drop materials:
+     * - Guardian Stone (Chronos Warden drop)
+     * - Phantom Essence (Temporal Phantom drop)
+     * - Colossus Gear (Clockwork Colossus drop)
+     * - Entropy Core (Entropy Keeper drop)
+     *
+     * Provides 10-minute buff with Time Tyrant protection effects.
+     *
+     * Reference: research.md (Chrono Aegis System)
+     * Task: T238 [US3] Implement Chrono Aegis system
+     */
+    public static final RegistrySupplier<Item> CHRONO_AEGIS = ITEMS.register(
+        "chrono_aegis",
+        () -> new com.chronosphere.items.ChronoAegisItem(
+            new Item.Properties()
+        )
+    );
+
     // === Portal Items ===
 
     /**
@@ -971,6 +994,9 @@ public class ModItems {
         output.accept(COLOSSUS_GEAR.get());
         output.accept(PHANTOM_ESSENCE.get());
         output.accept(ENTROPY_CORE.get());
+
+        // === Ultimate Crafted Items ===
+        output.accept(CHRONO_AEGIS.get());
 
         // === Spawn Eggs ===
         output.accept(TEMPORAL_WRAITH_SPAWN_EGG.get());
