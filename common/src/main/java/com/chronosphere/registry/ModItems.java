@@ -966,6 +966,12 @@ public class ModItems {
         output.accept(KEY_TO_MASTER_CLOCK.get());
         output.accept(ANCIENT_GEAR.get());
 
+        // === Boss Drops ===
+        output.accept(GUARDIAN_STONE.get());
+        output.accept(COLOSSUS_GEAR.get());
+        output.accept(PHANTOM_ESSENCE.get());
+        output.accept(ENTROPY_CORE.get());
+
         // === Spawn Eggs ===
         output.accept(TEMPORAL_WRAITH_SPAWN_EGG.get());
         output.accept(CLOCKWORK_SENTINEL_SPAWN_EGG.get());
