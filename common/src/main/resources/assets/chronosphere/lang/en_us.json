@@ -56,6 +56,9 @@
   "item.chronosphere.time_arrow": "Time Arrow",
   "item.chronosphere.fragment_of_stasis_core": "Fragment of Stasis Core",
   "item.chronosphere.eye_of_chronos": "Eye of Chronos",
+  "item.chronosphere.guardian_stone": "Guardian Stone",
+  "item.chronosphere.colossus_gear": "Colossus Gear",
+  "item.chronosphere.phantom_essence": "Phantom Essence",
 
   "item.chronosphere.clockstone_sword": "Clockstone Sword",
   "item.chronosphere.clockstone_pickaxe": "Clockstone Pickaxe",
@@ -99,11 +102,14 @@
   "message.chronosphere.time_clock_boss_limit": "The Time Clock has no effect - already used in this phase",
 
   "entity.chronosphere.time_guardian": "Time Guardian",
+  "entity.chronosphere.chronos_warden": "Chronos Warden",
   "entity.chronosphere.temporal_wraith": "Temporal Wraith",
   "entity.chronosphere.clockwork_sentinel": "Clockwork Sentinel",
   "entity.chronosphere.time_keeper": "Time Keeper",
   "entity.chronosphere.time_tyrant": "Time Tyrant",
   "entity.chronosphere.time_blast": "Time Blast",
+  "entity.chronosphere.clockwork_colossus": "Clockwork Colossus",
+  "entity.chronosphere.temporal_phantom_boss": "Temporal Phantom",
 
   "biome.chronosphere.chronosphere_plains": "Chronosphere Plains",
   "biome.chronosphere.chronosphere_ocean": "Chronosphere Ocean",

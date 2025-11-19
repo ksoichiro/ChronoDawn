@@ -3395,3 +3395,1181 @@ private void registerSpawnPlacements() {
 **Spawn Light Levels**:
 - Mob Spawning Light Level (Mod): https://www.curseforge.com/minecraft/mc-mods/mob-spawning-light-level
 - How does mob spawning work in Minecraft 1.19?: https://www.sportskeeda.com/minecraft/how-mob-spawning-work-minecraft-1-19
+
+---
+
+## Additional Bosses Implementation Plan (T234-T238)
+
+**Created**: 2025-11-18
+**Status**: Planning Complete - Ready for Phase 1 Implementation
+**Purpose**: Add 4 mini-bosses as preparation for Time Tyrant final battle
+
+### Overview
+
+This plan implements 4 additional mini-bosses at Time Guardian difficulty level (HP ~200). Players defeat all 4 bosses to collect materials for crafting **Chrono Aegis**, a powerful item that provides significant advantages against Time Tyrant.
+
+**Design Philosophy**:
+- Time Tyrant is the final story boss
+- These 4 mini-bosses serve as preparation/prerequisite content
+- Chrono Aegis makes Time Tyrant fight significantly easier (but still completable without it)
+- Each boss has unique mechanics and combat style
+- All bosses spawn in new underground structures (Ancient Ruins/Forgotten Library remain safe zones)
+
+### Boss Summary
+
+| Boss | HP | Attack | Armor | Speed | Primary Mechanic |
+|------|-----|--------|-------|-------|------------------|
+| Chronos Warden | 180 | 9 | 12 | 0.15 | Stone Stance (damage reduction) |
+| Clockwork Colossus | 200 | 12 | 8 | 0.18 | Overcharge + Repair Protocol |
+| Temporal Phantom | 150 | 8 | 5 | 0.25 | Phase Shift + Phantom Clones |
+| Entropy Keeper | 160 | 10 | 6 | 0.20 | Decay Aura + Entropy Burst |
+
+### Chrono Aegis System
+
+**Crafting Recipe**:
+```
+Guardian Stone + Phantom Essence + Colossus Gear + Entropy Core
+  ↓
+Chrono Aegis (1)
+```
+
+**Effects (10 minutes duration, or permanent if held in offhand)**:
+1. **Time Stop Resistance**: Reduces Time Tyrant's Time Stop effect (Slowness V → Slowness II)
+2. **Dimensional Anchor**: After Time Tyrant teleports, prevents next teleport for 3 seconds
+3. **Temporal Shield**: Reduces Time Tyrant's AoE damage by 50%
+4. **Time Reversal Disruption**: Reduces Time Tyrant's HP recovery (10% → 5%)
+5. **Clarity**: Auto-cleanses Slowness/Weakness/Mining Fatigue periodically
+
+**Multiplayer Considerations**:
+- Multiple players can craft Chrono Aegis from their own boss drops
+- Effects are **player-specific buffs** (applied to the wielder only)
+- Time Tyrant debuffs use **entity data flags** to prevent stacking:
+  - `chronoAegisAnchorActive` (boolean): Prevents teleport stacking
+  - `chronoAegisDisruptionActive` (boolean): Prevents HP recovery reduction stacking
+- Each player gets full benefits, but debuffs on Time Tyrant don't multiply
+
+**Implementation Note**:
+```java
+// In TimeTyrantEntity.java
+private boolean chronoAegisAnchorActive = false;
+private boolean chronoAegisDisruptionActive = false;
+
+// When checking for Chrono Aegis effects:
+List<Player> playersWithAegis = getNearbyPlayersWithChronoAegis();
+if (!playersWithAegis.isEmpty()) {
+    // Apply debuffs ONCE, regardless of player count
+    if (!chronoAegisAnchorActive) {
+        chronoAegisAnchorActive = true;
+        // Prevent teleport logic
+    }
+}
+```
+
+---
+
+## Phase 1: Chronos Warden + Clockwork Colossus
+
+### Boss 1: Chronos Warden (クロノスの監視者)
+
+**Lore**: Ancient guardian statue that protects underground vaults. Awakens when intruders approach.
+
+#### Stats
+- HP: 180 (90 hearts)
+- Attack Damage: 9
+- Armor: 12 (high defense)
+- Movement Speed: 0.15 (slow but tanky)
+- Knockback Resistance: 0.8
+- XP Reward: 80
+
+#### Combat Mechanics
+
+**Phase 1 (100%-60% HP)**: Basic Combat
+- Standard melee attacks
+- **Guardian's Burden**: Applies Mining Fatigue II (5 seconds) on hit
+- **Ground Slam**: Every 10 seconds, slams ground causing knockback in 4-block radius (2 damage)
+
+**Phase 2 (60%-0% HP)**: Defensive Stance
+- **Stone Stance**: Every 20 seconds, freezes in place for 5 seconds
+  - Takes 80% reduced damage
+  - Glowing weak spot appears on back (takes normal damage if hit from behind)
+  - Cannot move or attack during stance
+- Ground Slam frequency increases to every 7 seconds
+
+**AI Goals** (priority order):
+1. FloatGoal
+2. StoneStanceGoal (custom, Phase 2 only)
+3. GroundSlamGoal (custom)
+4. MeleeAttackGoal (attack interval: 40 ticks / 2 seconds)
+5. MoveTowardsTargetGoal
+6. NearestAttackableTargetGoal<Player>
+7. HurtByTargetGoal
+8. WaterAvoidingRandomStrollGoal
+9. RandomLookAroundGoal
+
+#### Structure: Guardian Vault
+
+**Type**: Fully underground structure
+
+**Location**:
+- Biomes: `chronosphere:chronosphere_plains`, `chronosphere:chronosphere_forest`
+- Y-level: 10-40
+- Spacing: 48 chunks (medium rarity)
+- Separation: 24 chunks
+
+**Dimensions**: 25x25x15 blocks
+
+**Layout**:
+```
+[Entrance Hall] (10x10x8)
+   ↓ (stairs down)
+[Central Hall] (25x25x15)
+   - 4x stone pillars (3x3) supporting ceiling
+   - Central pedestal with Chronos Warden statue
+   - Open combat space around pedestal
+   - Mossy stone brick + polished granite
+   ↓ (doors unlock after boss defeat)
+[Treasure Rooms] (2 small rooms, 5x5x5 each)
+   - Chests with time-themed loot
+```
+
+**NBT Files**:
+- `guardian_vault.nbt` (full structure)
+
+**Blocks**:
+- Stone Bricks, Mossy Stone Bricks
+- Polished Granite, Chiseled Stone Bricks
+- Stone Brick Stairs/Slabs
+- Torches for lighting
+
+**Loot Chests** (2x in treasure rooms):
+- Enhanced Clockstone (2-4)
+- Time Crystal (3-6)
+- Iron Ingot (4-8)
+- Golden Apple (1-2)
+
+#### Drops
+
+**Guaranteed**:
+- Guardian Stone: 1 (100%)
+- Enhanced Clockstone: 2-4
+
+**Optional**:
+- Stone Bricks: 2-6 (50%)
+
+#### Items
+
+**Guardian Stone** (新アイテム):
+```java
+// Item properties
+rarity: RARE
+max_stack_size: 16
+fireproof: true
+```
+
+**Tooltip**: "A fragment of an ancient guardian's essence. Radiates temporal stability."
+
+**Localization**:
+- EN: `Guardian Stone`
+- JA: `守護者の石`
+
+#### Files to Create/Modify
+
+**Entity**:
+- `common/src/main/java/com/chronosphere/entities/bosses/ChronosWardenEntity.java`
+- `common/src/main/java/com/chronosphere/entities/ai/StoneStanceGoal.java`
+- `common/src/main/java/com/chronosphere/entities/ai/GroundSlamGoal.java`
+
+**Registry**:
+- `common/src/main/java/com/chronosphere/registry/ModEntities.java` (add CHRONOS_WARDEN)
+- `common/src/main/java/com/chronosphere/registry/ModItems.java` (add GUARDIAN_STONE)
+
+**Client Rendering**:
+- `fabric/src/main/java/com/chronosphere/fabric/client/ChronosphereClientFabric.java`
+- `neoforge/src/main/java/com/chronosphere/neoforge/event/EntityRendererHandler.java`
+- `common/src/main/java/com/chronosphere/client/renderer/entity/ChronosWardenRenderer.java`
+- `common/src/main/java/com/chronosphere/client/model/ChronosWardenModel.java`
+
+**Resources**:
+- `common/src/main/resources/assets/chronosphere/textures/entity/chronos_warden.png`
+- `common/src/main/resources/assets/chronosphere/textures/item/guardian_stone.png`
+- `common/src/main/resources/assets/chronosphere/models/item/guardian_stone.json`
+- `common/src/main/resources/assets/chronosphere/lang/en_us.json` (add translations)
+- `common/src/main/resources/assets/chronosphere/lang/ja_jp.json` (add translations)
+
+**Loot Tables**:
+- `common/src/main/resources/data/chronosphere/loot_table/entities/chronos_warden.json`
+- `common/src/main/resources/data/chronosphere/loot_table/chests/guardian_vault_treasure.json`
+
+**Structure**:
+- `common/src/main/resources/data/chronosphere/structure/guardian_vault.nbt`
+- `common/src/main/resources/data/chronosphere/worldgen/structure/guardian_vault.json`
+- `common/src/main/resources/data/chronosphere/worldgen/structure_set/guardian_vault.json`
+- `common/src/main/resources/data/chronosphere/worldgen/template_pool/guardian_vault_pool.json`
+
+**Tags**:
+- `common/src/main/resources/data/chronosphere/tags/entity_types/bosses.json` (add chronos_warden)
+
+---
+
+### Boss 2: Clockwork Colossus (機械仕掛けの巨人)
+
+**Lore**: Massive mechanical guardian built by ancient clockworkers. Powered by temporal gears and relentless in protecting its factory.
+
+#### Stats
+- HP: 200 (100 hearts)
+- Attack Damage: 12
+- Armor: 8
+- Movement Speed: 0.18
+- Knockback Resistance: 1.0 (immune)
+- XP Reward: 100
+
+#### Combat Mechanics
+
+**Phase 1 (100%-50% HP)**: Normal Mode
+- Standard melee attacks
+- **Gear Shot**: Every 5 seconds, fires spinning gear projectile
+  - Range: 16 blocks
+  - Damage: 8
+  - Projectile speed: 1.5
+  - Knockback: medium
+
+**Phase 2 (50%-0% HP)**: Overcharge Mode
+- **Overcharge**: Self-buffs with Speed II + Strength I (permanent until defeated)
+- **Repair Protocol**: ONE-TIME ONLY at 40% HP
+  - Recovers 15% HP (30 HP)
+  - 180-second internal cooldown (won't trigger again)
+  - Plays mechanical sound + particle effects
+- **Ground Slam**: New attack - slams ground creating linear shockwave
+  - Direction: Towards target
+  - Range: 10 blocks in straight line
+  - Width: 3 blocks
+  - Damage: 6
+  - Cooldown: 10 seconds
+
+**AI Goals**:
+1. FloatGoal
+2. RangedAttackGoal (Gear Shot, Phase 1+2)
+3. GroundSlamGoal (custom, Phase 2 only)
+4. MeleeAttackGoal (attack interval: 35 ticks)
+5. MoveTowardsTargetGoal
+6. NearestAttackableTargetGoal<Player>
+7. HurtByTargetGoal
+8. RandomLookAroundGoal
+
+**Special Trait**:
+- **Immunity to Time Effects**: Unaffected by Time Clock, Time Arrow slowness, and Time Distortion dimension effect
+
+#### Structure: Clockwork Depths
+
+**Type**: Surface + Underground composite (Master Clock style)
+
+**Location**:
+- Biomes: `chronosphere:chronosphere_desert`, `chronosphere:chronosphere_mountain`
+- Y-level: Surface (64-80) + Underground shaft to Y=30
+- Spacing: 56 chunks (rare)
+- Separation: 28 chunks
+
+**Dimensions**:
+- Surface: 10x10x15 blocks
+- Underground: 30x30x20 blocks
+
+**Layout**:
+```
+[Surface Tower] (10x10x15)
+   - Mechanical tower entrance
+   - Iron blocks, copper blocks, redstone lamps
+   - Gear decorations (iron trapdoors)
+   - Central staircase downward
+   ↓ (stairs/shaft down 30-40 blocks)
+[Main Workshop] (30x30x20)
+   - Massive mechanical factory floor
+   - Giant gear decorations on walls/floor
+   - Hanging chains from ceiling
+   - Central open combat arena (20x20)
+   - 4 corner work areas with anvils/crafting tables
+   - Clockwork Colossus at center
+   ↓ (door unlocks after boss defeat)
+[Vault] (8x8x6)
+   - Treasure chests
+   - Iron/copper ingots, Ancient Gears
+```
+
+**NBT Files**:
+- `clockwork_depths_surface.nbt` (tower entrance)
+- `clockwork_depths_underground.nbt` (main factory)
+
+**Blocks**:
+- Iron Blocks, Copper Blocks
+- Stone Bricks, Polished Andesite
+- Redstone Lamps, Chains
+- Iron Trapdoors (gear decorations)
+- Iron Bars, Anvils
+
+**Loot Chests** (3x in vault):
+- Ancient Gear (3-5)
+- Iron Ingot (8-16)
+- Copper Ingot (8-16)
+- Redstone (4-8)
+- Iron Block (2-4)
+
+#### Drops
+
+**Guaranteed**:
+- Colossus Gear: 1 (100%)
+- Ancient Gear: 3-5
+
+**Common**:
+- Iron Block: 2-4 (75%)
+
+#### Items
+
+**Colossus Gear** (新アイテム):
+```java
+// Item properties
+rarity: RARE
+max_stack_size: 16
+fireproof: true
+```
+
+**Tooltip**: "A massive gear from an ancient mechanical colossus. Still warm with residual temporal energy."
+
+**Localization**:
+- EN: `Colossus Gear`
+- JA: `巨人の歯車`
+
+#### Projectile
+
+**Gear Projectile** (GearProjectileEntity):
+- Similar to Trident/Arrow entity
+- Model: Rotating gear texture (iron trapdoor style)
+- Rotation animation: Spins while flying
+- Impact: Deals damage + small knockback
+- Particles: Iron particles on trail
+
+#### Files to Create/Modify
+
+**Entity**:
+- `common/src/main/java/com/chronosphere/entities/bosses/ClockworkColossusEntity.java`
+- `common/src/main/java/com/chronosphere/entities/projectiles/GearProjectileEntity.java`
+- `common/src/main/java/com/chronosphere/entities/ai/ColossusGroundSlamGoal.java`
+
+**Registry**:
+- `common/src/main/java/com/chronosphere/registry/ModEntities.java` (add CLOCKWORK_COLOSSUS, GEAR_PROJECTILE)
+- `common/src/main/java/com/chronosphere/registry/ModItems.java` (add COLOSSUS_GEAR)
+
+**Client Rendering**:
+- `common/src/main/java/com/chronosphere/client/renderer/entity/ClockworkColossusRenderer.java`
+- `common/src/main/java/com/chronosphere/client/model/ClockworkColossusModel.java`
+- `common/src/main/java/com/chronosphere/client/renderer/entity/GearProjectileRenderer.java`
+
+**Resources**:
+- `common/src/main/resources/assets/chronosphere/textures/entity/clockwork_colossus.png`
+- `common/src/main/resources/assets/chronosphere/textures/entity/gear_projectile.png`
+- `common/src/main/resources/assets/chronosphere/textures/item/colossus_gear.png`
+- `common/src/main/resources/assets/chronosphere/models/item/colossus_gear.json`
+- `common/src/main/resources/assets/chronosphere/lang/en_us.json`
+- `common/src/main/resources/assets/chronosphere/lang/ja_jp.json`
+
+**Loot Tables**:
+- `common/src/main/resources/data/chronosphere/loot_table/entities/clockwork_colossus.json`
+- `common/src/main/resources/data/chronosphere/loot_table/chests/clockwork_depths_vault.json`
+
+**Structure**:
+- `common/src/main/resources/data/chronosphere/structure/clockwork_depths_surface.nbt`
+- `common/src/main/resources/data/chronosphere/structure/clockwork_depths_underground.nbt`
+- `common/src/main/resources/data/chronosphere/worldgen/structure/clockwork_depths.json`
+- `common/src/main/resources/data/chronosphere/worldgen/structure_set/clockwork_depths.json`
+- `common/src/main/resources/data/chronosphere/worldgen/template_pool/clockwork_depths_pool.json`
+
+**Tags**:
+- `common/src/main/resources/data/chronosphere/tags/entity_types/bosses.json` (add clockwork_colossus)
+- `common/src/main/resources/data/chronosphere/tags/entity_types/time_immune.json` (NEW TAG for time immunity)
+
+---
+
+## Phase 2: Temporal Phantom + Entropy Keeper
+
+### Boss 3: Temporal Phantom (時間の幻影)
+
+**Lore**: Residual consciousness of an ancient mage trapped between time. Creates phantom illusions to confuse enemies.
+
+#### Stats
+- HP: 150 (75 hearts)
+- Attack Damage: 8
+- Armor: 5 (low - compensated by Phase Shift)
+- Movement Speed: 0.25 (fast)
+- Knockback Resistance: 0.3
+- XP Reward: 80
+
+#### Combat Mechanics
+
+**Phase 1 (100%-50% HP)**: Phantom Magic
+- **Phase Shift (Passive)**: 30% chance to ignore physical attacks
+  - Becomes semi-transparent when active
+  - Duration: 2 seconds after trigger
+  - Cooldown: 5 seconds
+- **Warp Bolt**: Ranged magic attack every 3 seconds
+  - Range: 20 blocks
+  - Damage: 4
+  - Effect: Slowness II (5 seconds)
+  - Projectile: Purple magic bolt
+
+**Phase 2 (50%-0% HP)**: Phantom Army
+- **Phantom Clone**: Summons 2 phantom clones every 20 seconds
+  - Clone HP: 20 (10 hearts)
+  - Clone Damage: 4
+  - Clone Speed: 0.25 (same as original)
+  - Clones disappear after 15 seconds or when killed
+  - Visual: Identical to original (players must identify real one)
+- **Blink Strike**: Teleports behind target and attacks
+  - Cooldown: 12 seconds
+  - Teleport range: 5-8 blocks behind player
+  - Immediate melee attack after teleport
+
+**AI Goals**:
+1. FloatGoal
+2. PhantomCloneSummonGoal (custom, Phase 2 only)
+3. BlinkStrikeGoal (custom, Phase 2 only)
+4. RangedAttackGoal (Warp Bolt, both phases)
+5. MeleeAttackGoal (fallback)
+6. MoveTowardsTargetGoal
+7. NearestAttackableTargetGoal<Player>
+8. HurtByTargetGoal
+9. RandomLookAroundGoal
+
+#### Structure: Phantom Catacombs
+
+**Type**: Fully underground maze structure
+
+**Location**:
+- Biomes: `chronosphere:chronosphere_mountain`, `chronosphere:chronosphere_ocean`
+- Y-level: 20-50
+- Spacing: 52 chunks
+- Separation: 26 chunks
+
+**Dimensions**: 30x30x12 blocks (multi-room maze)
+
+**Layout**:
+```
+[Entrance Corridor] (5x5x20, descending stairs)
+   ↓
+[Maze Section] (30x30x8)
+   - 5-7 interconnected rooms
+   - Some dead-end corridors
+   - Trap: False floors (2-block drop)
+   - Purple carpet markers for paths
+   ↓ (central chamber)
+[Boss Chamber] (20x20x10, circular)
+   - End stone bricks, purple blocks
+   - Central magic circle (purple carpet pattern)
+   - Temporal Phantom floating above circle
+   - High ceiling for combat
+   ↓ (hidden door behind wall)
+[Secret Vault] (6x6x5)
+   - Hidden chest behind carpet/wall
+   - Enchanted books, phantom essence loot
+```
+
+**NBT Files**:
+- `phantom_catacombs.nbt`
+
+**Blocks**:
+- End Stone Bricks, Purpur Blocks
+- Purple Carpet, Purple Concrete
+- Amethyst Blocks (decorative)
+- Soul Lanterns for lighting
+
+**Loot Chests** (2x in secret vault):
+- Enchanted Book (time-themed enchants)
+- Experience Bottle (5-10)
+- Amethyst Shard (4-8)
+- Ender Pearl (2-4)
+
+#### Drops
+
+**Guaranteed**:
+- Phantom Essence: 1 (100%)
+- Experience Bottle: 3-5
+
+**Optional**:
+- Enchanted Book: 1 (40% chance, random enchant)
+
+#### Items
+
+**Phantom Essence** (新アイテム):
+```java
+// Item properties
+rarity: RARE
+max_stack_size: 16
+fireproof: true
+// Glowing effect
+has_foil: true (enchant glint)
+```
+
+**Tooltip**: "The crystallized essence of a temporal phantom. Shimmers with otherworldly energy."
+
+**Localization**:
+- EN: `Phantom Essence`
+- JA: `幻影のエッセンス`
+
+#### Files to Create/Modify
+
+**Entity**:
+- `common/src/main/java/com/chronosphere/entities/bosses/TemporalPhantomEntity.java`
+- `common/src/main/java/com/chronosphere/entities/summons/PhantomCloneEntity.java`
+- `common/src/main/java/com/chronosphere/entities/projectiles/WarpBoltEntity.java`
+- `common/src/main/java/com/chronosphere/entities/ai/PhantomCloneSummonGoal.java`
+- `common/src/main/java/com/chronosphere/entities/ai/BlinkStrikeGoal.java`
+
+**Registry**:
+- `common/src/main/java/com/chronosphere/registry/ModEntities.java` (add TEMPORAL_PHANTOM, PHANTOM_CLONE, WARP_BOLT)
+- `common/src/main/java/com/chronosphere/registry/ModItems.java` (add PHANTOM_ESSENCE)
+
+**Client Rendering**:
+- `common/src/main/java/com/chronosphere/client/renderer/entity/TemporalPhantomRenderer.java`
+- `common/src/main/java/com/chronosphere/client/model/TemporalPhantomModel.java`
+- `common/src/main/java/com/chronosphere/client/renderer/entity/PhantomCloneRenderer.java`
+- `common/src/main/java/com/chronosphere/client/renderer/entity/WarpBoltRenderer.java`
+
+**Resources**:
+- `common/src/main/resources/assets/chronosphere/textures/entity/temporal_phantom.png`
+- `common/src/main/resources/assets/chronosphere/textures/entity/phantom_clone.png` (same as phantom but translucent)
+- `common/src/main/resources/assets/chronosphere/textures/entity/warp_bolt.png`
+- `common/src/main/resources/assets/chronosphere/textures/item/phantom_essence.png`
+- `common/src/main/resources/assets/chronosphere/models/item/phantom_essence.json`
+
+**Loot Tables**:
+- `common/src/main/resources/data/chronosphere/loot_table/entities/temporal_phantom.json`
+- `common/src/main/resources/data/chronosphere/loot_table/chests/phantom_catacombs_vault.json`
+
+**Structure**:
+- `common/src/main/resources/data/chronosphere/structure/phantom_catacombs.nbt`
+- `common/src/main/resources/data/chronosphere/worldgen/structure/phantom_catacombs.json`
+- `common/src/main/resources/data/chronosphere/worldgen/structure_set/phantom_catacombs.json`
+- `common/src/main/resources/data/chronosphere/worldgen/template_pool/phantom_catacombs_pool.json`
+
+---
+
+### Boss 4: Entropy Keeper (エントロピーの管理者)
+
+**Lore**: Aberrant entity that governs temporal decay and corruption. Spreads entropy and withering to all it touches.
+
+#### Stats
+- HP: 160 (80 hearts)
+- Attack Damage: 10
+- Armor: 6
+- Movement Speed: 0.20
+- Knockback Resistance: 0.5
+- XP Reward: 90
+
+#### Combat Mechanics
+
+**Phase 1 (100%-50% HP)**: Decay Attacks
+- **Decay Aura (Passive)**: Constant 4-block radius aura
+  - Effect: Wither I (applied every 2 seconds)
+  - Duration: 3 seconds
+  - Players must keep distance or take continuous damage
+- **Corrosion Touch**: Melee attacks deal extra durability damage
+  - Armor/tool durability: -5 per hit (in addition to normal damage)
+  - Does not break items (stops at 1 durability)
+- **Temporal Rot**: Places corruption patches on ground every 8 seconds
+  - Creates 3x3 area of corrupted blocks
+  - Standing on patch: Slowness II + Poison I (3 seconds)
+  - Patches last 30 seconds then disappear
+
+**Phase 2 (50%-0% HP)**: Entropy Acceleration
+- **Degradation (Passive)**: Boss gets stronger over time
+  - Every 60 seconds (1 minute): Attack Damage +2
+  - Max stacks: 3 (total +6 damage)
+  - Visual: Boss glows brighter with each stack
+- **Entropy Burst**: Triggered at 30% HP (ONE-TIME ONLY)
+  - 6-block radius explosion
+  - Damage: 10 (5 hearts)
+  - Effect: Wither II (10 seconds)
+  - Knockback: High
+  - Visual: Large green particle explosion
+
+**AI Goals**:
+1. FloatGoal
+2. EntropyBurstGoal (custom, triggers once at 30% HP)
+3. TemporalRotGoal (custom, places corruption patches)
+4. MeleeAttackGoal (with corrosion effect)
+5. MoveTowardsTargetGoal
+6. NearestAttackableTargetGoal<Player>
+7. HurtByTargetGoal
+8. WaterAvoidingRandomStrollGoal
+9. RandomLookAroundGoal
+
+**Passive Aura**:
+- Implemented via tick() method, not AI goal
+- Checks nearby players every 40 ticks (2 seconds)
+- Applies Wither I if within 4-block radius
+
+#### Structure: Entropy Crypt
+
+**Type**: Fully underground structure
+
+**Location**:
+- Biomes: `chronosphere:chronosphere_swamp`, `chronosphere:chronosphere_forest`
+- Y-level: 15-35
+- Spacing: 50 chunks
+- Separation: 25 chunks
+
+**Dimensions**: 25x25x12 blocks
+
+**Layout**:
+```
+[Entrance Corridor] (5x5x10)
+   - Soul sand path
+   - Ominous atmosphere
+   ↓
+[Antechamber] (10x10x8)
+   - 2 side rooms with fake empty chests
+   - Moss blocks, sculk decorations
+   ↓
+[Boss Chamber] (25x25x12)
+   - Large central altar area
+   - Entropy Keeper on central altar platform
+   - Pre-existing corruption patches on floor (decorative)
+   - Soul sand, moss blocks, blackstone
+   - Green slime particles ambient effect
+   - Wide open combat space
+   ↓ (hidden trapdoor under altar, opens after boss defeat)
+[Vault] (8x8x5)
+   - Underground treasure room
+   - Chests with corrupted loot
+```
+
+**NBT Files**:
+- `entropy_crypt.nbt`
+
+**Blocks**:
+- Soul Sand, Soul Soil
+- Moss Blocks, Moss Carpet
+- Blackstone, Chiseled Blackstone
+- Soul Lanterns, Sculk
+- Crying Obsidian (decorative)
+
+**Loot Chests** (2x in vault):
+- Corrupted Clockstone (2-3)
+- Soul Sand (4-8)
+- Moss Block (6-12)
+- Enchanted Book (Curse enchants)
+
+#### Drops
+
+**Guaranteed**:
+- Entropy Core: 1 (100%)
+- Corrupted Clockstone: 2-3
+
+**Common**:
+- Soul Sand: 4-8 (60%)
+
+#### Items
+
+**Entropy Core** (新アイテム):
+```java
+// Item properties
+rarity: RARE
+max_stack_size: 16
+fireproof: true
+```
+
+**Tooltip**: "The corrupted core of an entropy being. Radiates decay and temporal degradation."
+
+**Localization**:
+- EN: `Entropy Core`
+- JA: `エントロピーコア`
+
+**Corrupted Clockstone** (既存アイテム変種):
+- Visual: Enhanced Clockstone texture with green/dark overlay
+- Same crafting uses as Enhanced Clockstone
+- Thematic drop from corruption-themed boss
+
+#### Files to Create/Modify
+
+**Entity**:
+- `common/src/main/java/com/chronosphere/entities/bosses/EntropyKeeperEntity.java`
+- `common/src/main/java/com/chronosphere/entities/ai/EntropyBurstGoal.java`
+- `common/src/main/java/com/chronosphere/entities/ai/TemporalRotGoal.java`
+
+**Registry**:
+- `common/src/main/java/com/chronosphere/registry/ModEntities.java` (add ENTROPY_KEEPER)
+- `common/src/main/java/com/chronosphere/registry/ModItems.java` (add ENTROPY_CORE, CORRUPTED_CLOCKSTONE)
+
+**Client Rendering**:
+- `common/src/main/java/com/chronosphere/client/renderer/entity/EntropyKeeperRenderer.java`
+- `common/src/main/java/com/chronosphere/client/model/EntropyKeeperModel.java`
+
+**Resources**:
+- `common/src/main/resources/assets/chronosphere/textures/entity/entropy_keeper.png`
+- `common/src/main/resources/assets/chronosphere/textures/item/entropy_core.png`
+- `common/src/main/resources/assets/chronosphere/textures/item/corrupted_clockstone.png`
+- `common/src/main/resources/assets/chronosphere/models/item/entropy_core.json`
+- `common/src/main/resources/assets/chronosphere/models/item/corrupted_clockstone.json`
+
+**Loot Tables**:
+- `common/src/main/resources/data/chronosphere/loot_table/entities/entropy_keeper.json`
+- `common/src/main/resources/data/chronosphere/loot_table/chests/entropy_crypt_vault.json`
+
+**Structure**:
+- `common/src/main/resources/data/chronosphere/structure/entropy_crypt.nbt`
+- `common/src/main/resources/data/chronosphere/worldgen/structure/entropy_crypt.json`
+- `common/src/main/resources/data/chronosphere/worldgen/structure_set/entropy_crypt.json`
+- `common/src/main/resources/data/chronosphere/worldgen/template_pool/entropy_crypt_pool.json`
+
+---
+
+## Chrono Aegis Implementation
+
+**Item**: Chrono Aegis (Time Tyrant preparation item)
+
+### Item Properties
+```java
+public class ChronoAegisItem extends Item {
+    public ChronoAegisItem(Properties properties) {
+        super(properties
+            .stacksTo(1)
+            .rarity(Rarity.EPIC)
+            .fireResistant()
+        );
+    }
+}
+```
+
+### Usage Modes
+
+**Option 1: Consumable (Recommended)**
+- Right-click to activate
+- Applies 10-minute buff to player
+- Single-use item (consumed on use)
+- Players can craft multiple for repeated attempts
+
+**Option 2: Permanent Offhand Item**
+- Place in offhand slot
+- Provides effects while held
+- Not consumed
+- Reusable across multiple fights
+
+**Implementation**: Use Option 1 (consumable) for better game balance
+
+### Effect Implementation
+
+**Player Effects** (applied to wielder):
+```java
+// In ChronoAegisItem.use()
+player.addEffect(new MobEffectInstance(
+    ModEffects.CHRONO_AEGIS_BUFF, // Custom effect
+    12000, // 10 minutes (600 seconds * 20 ticks)
+    0, // Level 0
+    false, // Not ambient
+    true, // Show particles
+    true // Show icon
+));
+```
+
+**Time Tyrant Debuffs** (boss entity checks):
+```java
+// In TimeTyrantEntity.java
+private boolean hasNearbyChronoAegisPlayer() {
+    return level().getEntitiesOfClass(Player.class,
+        new AABB(blockPosition()).inflate(32.0))
+        .stream()
+        .anyMatch(player -> player.hasEffect(ModEffects.CHRONO_AEGIS_BUFF));
+}
+
+// Time Stop attack modification
+if (hasNearbyChronoAegisPlayer()) {
+    target.addEffect(new MobEffectInstance(
+        MobEffects.MOVEMENT_SLOWDOWN, 60, 1)); // Slowness II instead of V
+}
+
+// Teleport prevention (Dimensional Anchor)
+if (!chronoAegisAnchorActive && hasNearbyChronoAegisPlayer()) {
+    chronoAegisAnchorActive = true;
+    chronoAegisTeleportBlockTicks = 60; // 3 seconds
+}
+
+// AoE damage reduction (Temporal Shield)
+float damage = 12.0f;
+if (target instanceof Player player &&
+    player.hasEffect(ModEffects.CHRONO_AEGIS_BUFF)) {
+    damage *= 0.5f; // 50% reduction
+}
+
+// HP recovery reduction (Time Reversal Disruption)
+float recovery = getMaxHealth() * 0.10f;
+if (!chronoAegisDisruptionActive && hasNearbyChronoAegisPlayer()) {
+    chronoAegisDisruptionActive = true;
+    recovery *= 0.5f; // 10% → 5%
+}
+```
+
+**Multiplayer Safeguards**:
+```java
+// Boss entity NBT data
+private boolean chronoAegisAnchorActive = false;
+private boolean chronoAegisDisruptionActive = false;
+private int chronoAegisTeleportBlockTicks = 0;
+
+// Flags reset when effects expire or boss resets phase
+public void tick() {
+    super.tick();
+
+    // Countdown teleport block timer
+    if (chronoAegisTeleportBlockTicks > 0) {
+        chronoAegisTeleportBlockTicks--;
+        if (chronoAegisTeleportBlockTicks == 0) {
+            chronoAegisAnchorActive = false;
+        }
+    }
+
+    // Reset disruption flag if no Chrono Aegis players nearby
+    if (!hasNearbyChronoAegisPlayer()) {
+        chronoAegisDisruptionActive = false;
+    }
+}
+```
+
+### Crafting Recipe
+
+**Type**: Shaped crafting
+
+**Pattern**:
+```
+GPE
+PCP
+ECG
+```
+
+**Ingredients**:
+- G: Guardian Stone (Chronos Warden drop)
+- P: Phantom Essence (Temporal Phantom drop)
+- C: Colossus Gear (Clockwork Colossus drop)
+- E: Entropy Core (Entropy Keeper drop)
+
+**Result**: Chrono Aegis x1
+
+### Files to Create/Modify
+
+**Item**:
+- `common/src/main/java/com/chronosphere/items/ChronoAegisItem.java`
+
+**Effect**:
+- `common/src/main/java/com/chronosphere/effects/ChronoAegisEffect.java`
+
+**Registry**:
+- `common/src/main/java/com/chronosphere/registry/ModItems.java` (add CHRONO_AEGIS)
+- `common/src/main/java/com/chronosphere/registry/ModEffects.java` (add CHRONO_AEGIS_BUFF)
+
+**Time Tyrant Modifications**:
+- `common/src/main/java/com/chronosphere/entities/bosses/TimeTyrantEntity.java` (modify all attack methods)
+
+**Resources**:
+- `common/src/main/resources/assets/chronosphere/textures/item/chrono_aegis.png`
+- `common/src/main/resources/assets/chronosphere/models/item/chrono_aegis.json`
+- `common/src/main/resources/data/chronosphere/recipe/chrono_aegis.json`
+- `common/src/main/resources/assets/chronosphere/lang/en_us.json` (add translations)
+- `common/src/main/resources/assets/chronosphere/lang/ja_jp.json` (add translations)
+
+**Localization**:
+- EN: `Chrono Aegis`
+- JA: `クロノスの盾`
+- Tooltip EN: "A powerful artifact forged from the essence of defeated temporal guardians. Provides protection against Time Tyrant's abilities."
+- Tooltip JA: `時間の守護者たちのエッセンスから鍛造された強力なアーティファクト。時間の暴君の能力に対する防護を提供する。`
+
+---
+
+## Implementation Checklist
+
+### Phase 1: Chronos Warden + Clockwork Colossus
+
+#### Chronos Warden
+- [ ] T234a: Create ChronosWardenEntity.java with base stats and phase system
+- [ ] T234b: Implement StoneStanceGoal.java (5-second damage reduction stance)
+- [ ] T234c: Implement GroundSlamGoal.java (knockback AoE attack)
+- [ ] T234d: Create Guardian Stone item with texture and model
+- [ ] T234e: Create ChronosWardenRenderer and ChronosWardenModel
+- [ ] T234f: Create chronos_warden.png texture (stone golem theme)
+- [ ] T234g: Register entity in ModEntities for both Fabric and NeoForge
+- [ ] T234h: Create loot table for Chronos Warden drops
+- [ ] T234i: Add entity translations (EN/JA)
+- [ ] T234j: Build Guardian Vault structure in-game using Structure Blocks
+- [ ] T234k: Export guardian_vault.nbt and place in data/structure/
+- [ ] T234l: Create structure JSON, structure_set JSON, template_pool JSON
+- [ ] T234m: Create guardian_vault_treasure.json loot table for chests
+- [ ] T234n: Test Chronos Warden spawning, combat, and drops in-game
+- [ ] T234o: Test Guardian Vault generation and accessibility
+
+#### Clockwork Colossus
+- [ ] T235a: Create ClockworkColossusEntity.java with base stats and phase system
+- [ ] T235b: Create GearProjectileEntity.java (spinning gear ranged attack)
+- [ ] T235c: Implement ColossusGroundSlamGoal.java (linear shockwave attack)
+- [ ] T235d: Implement Repair Protocol logic (one-time 15% HP recovery)
+- [ ] T235e: Implement time immunity trait (immune to Time Clock, Time Arrow, etc.)
+- [ ] T235f: Create Colossus Gear item with texture and model
+- [ ] T235g: Create ClockworkColossusRenderer, ClockworkColossusModel
+- [ ] T235h: Create GearProjectileRenderer with rotating animation
+- [ ] T235i: Create clockwork_colossus.png and gear_projectile.png textures
+- [ ] T235j: Register entities (CLOCKWORK_COLOSSUS, GEAR_PROJECTILE) in ModEntities
+- [ ] T235k: Create loot table for Clockwork Colossus drops
+- [ ] T235l: Add entity translations (EN/JA)
+- [ ] T235m: Build Clockwork Depths surface tower structure
+- [ ] T235n: Build Clockwork Depths underground factory structure
+- [ ] T235o: Export both NBT files and create structure JSONs
+- [ ] T235p: Create clockwork_depths_vault.json loot table
+- [ ] T235q: Test Clockwork Colossus spawning, combat, gear shots, and drops
+- [ ] T235r: Test Clockwork Depths generation (surface + underground connection)
+
+#### Phase 1 Integration
+- [ ] T235s: Add both bosses to entity_types/bosses.json tag
+- [ ] T235t: Create entity_types/time_immune.json tag for Clockwork Colossus
+- [ ] T235u: Verify both structures generate in correct biomes
+- [ ] T235v: Balance testing: Verify difficulty comparable to Time Guardian
+- [ ] T235w: Multiplayer testing: Verify boss mechanics work correctly with multiple players
+
+---
+
+### Phase 2: Temporal Phantom + Entropy Keeper
+
+#### Temporal Phantom
+- [ ] T236a: Create TemporalPhantomEntity.java with base stats and phase system
+- [ ] T236b: Implement Phase Shift passive (30% physical attack evasion)
+- [ ] T236c: Create WarpBoltEntity.java (magic projectile with Slowness II)
+- [ ] T236d: Create PhantomCloneEntity.java (summonable illusions, HP 20)
+- [ ] T236e: Implement PhantomCloneSummonGoal.java (summon 2 clones every 20s)
+- [ ] T236f: Implement BlinkStrikeGoal.java (teleport behind target + attack)
+- [ ] T236g: Create Phantom Essence item with texture and model
+- [ ] T236h: Create TemporalPhantomRenderer, TemporalPhantomModel
+- [ ] T236i: Create PhantomCloneRenderer (translucent version of phantom)
+- [ ] T236j: Create WarpBoltRenderer with purple magic effects
+- [ ] T236k: Create temporal_phantom.png, warp_bolt.png textures
+- [ ] T236l: Register entities (TEMPORAL_PHANTOM, PHANTOM_CLONE, WARP_BOLT)
+- [ ] T236m: Create loot table for Temporal Phantom drops
+- [ ] T236n: Add entity translations (EN/JA)
+- [ ] T236o: Build Phantom Catacombs maze structure with boss chamber
+- [ ] T236p: Export phantom_catacombs.nbt and create structure JSONs
+- [ ] T236q: Create phantom_catacombs_vault.json loot table
+- [ ] T236r: Test Temporal Phantom spawning, Phase Shift, clones, and Blink Strike
+- [ ] T236s: Test Phantom Catacombs generation and maze navigation
+
+#### Entropy Keeper
+- [ ] T237a: Create EntropyKeeperEntity.java with base stats and phase system
+- [ ] T237b: Implement Decay Aura passive (4-block Wither I aura)
+- [ ] T237c: Implement Corrosion Touch (durability damage on melee hits)
+- [ ] T237d: Implement TemporalRotGoal.java (place corruption patches)
+- [ ] T237e: Implement Degradation passive (+2 damage every 60s, max 3 stacks)
+- [ ] T237f: Implement EntropyBurstGoal.java (one-time explosion at 30% HP)
+- [ ] T237g: Create Entropy Core item with texture and model
+- [ ] T237h: Create Corrupted Clockstone item variant
+- [ ] T237i: Create EntropyKeeperRenderer, EntropyKeeperModel
+- [ ] T237j: Create entropy_keeper.png texture (corrupted/decay theme)
+- [ ] T237k: Register ENTROPY_KEEPER entity in ModEntities
+- [ ] T237l: Create loot table for Entropy Keeper drops
+- [ ] T237m: Add entity translations (EN/JA)
+- [ ] T237n: Build Entropy Crypt structure with altar chamber
+- [ ] T237o: Export entropy_crypt.nbt and create structure JSONs
+- [ ] T237p: Create entropy_crypt_vault.json loot table
+- [ ] T237q: Test Entropy Keeper spawning, aura, corruption patches, and Entropy Burst
+- [ ] T237r: Test Entropy Crypt generation in Swamp/Forest biomes
+
+#### Phase 2 Integration
+- [ ] T237s: Add both bosses to entity_types/bosses.json tag
+- [ ] T237t: Verify both structures generate in correct biomes
+- [ ] T237u: Balance testing for all 4 bosses
+- [ ] T237v: Collect all 4 boss drops and verify drop rates
+
+---
+
+### Chrono Aegis System
+
+- [ ] T238a: Create ChronoAegisItem.java (consumable buff item)
+- [ ] T238b: Create ChronoAegisEffect.java (custom 10-minute buff effect)
+- [ ] T238c: Register CHRONO_AEGIS item and CHRONO_AEGIS_BUFF effect
+- [ ] T238d: Create chrono_aegis.png texture and item model
+- [ ] T238e: Create shaped crafting recipe (4 boss drops → Chrono Aegis)
+- [ ] T238f: Add Chrono Aegis translations and tooltip (EN/JA)
+- [ ] T238g: Modify TimeTyrantEntity - Time Stop resistance (Slowness V → II)
+- [ ] T238h: Modify TimeTyrantEntity - Dimensional Anchor (3s teleport block)
+- [ ] T238i: Modify TimeTyrantEntity - Temporal Shield (50% AoE damage reduction)
+- [ ] T238j: Modify TimeTyrantEntity - Time Reversal Disruption (10% → 5% recovery)
+- [ ] T238k: Modify TimeTyrantEntity - Clarity (auto-cleanse debuffs)
+- [ ] T238l: Implement multiplayer safeguards (debuff flags, no stacking)
+- [ ] T238m: Test Chrono Aegis crafting from 4 boss drops
+- [ ] T238n: Test Chrono Aegis effects against Time Tyrant
+- [ ] T238o: Test multiplayer scenario (2+ players with Chrono Aegis)
+- [ ] T238p: Balance testing: Time Tyrant fight with vs without Chrono Aegis
+
+---
+
+### Final Testing & Documentation
+
+- [ ] T238q: Full playthrough test: Defeat all 4 bosses → craft Chrono Aegis → defeat Time Tyrant
+- [ ] T238r: Verify all structures generate at correct frequencies
+- [ ] T238s: Verify all loot tables and drop rates are balanced
+- [ ] T238t: Multiplayer stress test (4 players fighting each boss)
+- [ ] T238u: Update tasks.md with completed task status
+- [ ] T238v: Update spec.md with new boss mechanics and Chrono Aegis system
+- [ ] T238w: Update data-model.md with new entities and items
+- [ ] T238x: Create player guide entry for boss locations and Chrono Aegis crafting
+
+---
+
+## Testing Strategy
+
+### Unit Testing
+- Boss entity attribute values (HP, damage, armor, speed)
+- AI goal priority and execution
+- Phase transition triggers (HP thresholds)
+- Drop rates and loot table verification
+
+### Integration Testing
+- Boss spawning in structures
+- Structure generation in correct biomes and Y-levels
+- Projectile entities (Gear Shot, Warp Bolt) damage and effects
+- Chrono Aegis crafting and effect application
+- Time Tyrant modifications with Chrono Aegis active
+
+### Multiplayer Testing
+- Multiple players fighting same boss (aggro, targeting)
+- Chrono Aegis debuff stacking prevention
+- Boss difficulty scaling (if any)
+- Loot distribution
+
+### Balance Testing
+- Time to kill each boss (solo, average gear)
+- Damage taken per fight
+- Resource cost to reach each boss
+- Time Tyrant difficulty with vs without Chrono Aegis
+
+---
+
+## Known Limitations & Future Improvements
+
+### Phase 1 Limitations
+1. **Texture Placeholders**: Initial textures may be simple/placeholder quality
+   - Can be improved with custom models later
+2. **Structure Complexity**: Initial structures prioritize functionality over aesthetics
+   - Can add more decorative details in polish phase
+
+### Phase 2 Considerations
+1. **Phantom Clone AI**: Clones have simplified AI (attack nearest player)
+   - Could add more sophisticated mimicry in future
+2. **Corruption Patches**: Static decoration, not spreading/growing
+   - Could implement dynamic spreading mechanic later
+
+### Future Enhancements
+1. **Custom Boss Music**: Add unique music tracks for each boss fight
+2. **Achievement System**: Add advancements for defeating each boss
+3. **Boss Summoning Items**: Allow players to re-summon bosses for farming
+4. **Hard Mode**: Variant bosses with increased difficulty and better drops
+5. **Chrono Aegis Variants**: Different combinations of 2-3 boss drops for specialized buffs
+
+---
+
+## Dependencies & Compatibility
+
+### Required Existing Systems
+- ModEntities registry (working)
+- ModItems registry (working)
+- Entity renderer registration (Fabric + NeoForge) (working)
+- Structure generation system (working)
+- Loot table system (working)
+- Boss bar system (already used by Time Guardian/Tyrant)
+
+### New Systems to Implement
+- Custom mob effects registry (for Chrono Aegis buff)
+- Time immunity tag system (for Clockwork Colossus)
+- Multiplayer boss debuff flag system (for Chrono Aegis)
+
+### Mod Compatibility
+- Should not conflict with other dimension/boss mods
+- Structure generation respects vanilla spacing rules
+- Entity IDs namespaced under `chronosphere:`
+
+---
+
+## Estimated Implementation Time
+
+### Phase 1 (Chronos Warden + Clockwork Colossus)
+- Entity implementation: 3-4 hours
+- AI goals: 2-3 hours
+- Rendering/models: 2-3 hours
+- Textures: 1-2 hours (placeholder)
+- Structure building: 2-3 hours
+- Testing/balancing: 2-3 hours
+- **Total**: 12-18 hours
+
+### Phase 2 (Temporal Phantom + Entropy Keeper)
+- Entity implementation: 3-4 hours
+- AI goals: 3-4 hours (more complex)
+- Rendering/models: 2-3 hours
+- Textures: 1-2 hours
+- Structure building: 3-4 hours (maze complexity)
+- Testing/balancing: 2-3 hours
+- **Total**: 14-20 hours
+
+### Chrono Aegis System
+- Item + effect implementation: 1-2 hours
+- Time Tyrant modifications: 2-3 hours
+- Multiplayer safeguards: 1-2 hours
+- Testing: 2-3 hours
+- **Total**: 6-10 hours
+
+### Grand Total: 32-48 hours
+
+*Note: Times are estimates and may vary based on debugging needs and iteration on balance*
+
+---
+
+## Success Criteria
+
+### Phase 1 Complete When:
+- [ ] Chronos Warden spawns in Guardian Vault and is defeatable
+- [ ] Clockwork Colossus spawns in Clockwork Depths and is defeatable
+- [ ] Both bosses drop their unique materials
+- [ ] Both structures generate reliably in correct biomes
+- [ ] Boss difficulty is comparable to Time Guardian
+- [ ] No game-breaking bugs in multiplayer
+
+### Phase 2 Complete When:
+- [ ] All 4 bosses are fully implemented and tested
+- [ ] Chrono Aegis can be crafted from 4 boss drops
+- [ ] Chrono Aegis provides all 5 effects against Time Tyrant
+- [ ] Multiplayer safeguards prevent debuff stacking
+- [ ] Time Tyrant fight is noticeably easier with Chrono Aegis
+- [ ] All structures generate without conflicts
+
+### Project Complete When:
+- [ ] Full playthrough tested (defeat 4 bosses → craft Chrono Aegis → defeat Time Tyrant)
+- [ ] All documentation updated (tasks.md, spec.md, data-model.md)
+- [ ] Player guide created explaining boss locations and progression
+- [ ] No critical bugs reported in single or multiplayer
+- [ ] Performance impact is acceptable (< 5% TPS drop with all bosses active)
+
+---
+
+## Rollback Plan
+
+If critical issues are discovered:
+
+1. **Phase 1 Issues**: Disable structure generation via structure_set removal
+2. **Phase 2 Issues**: Disable specific boss entities via registry comments
+3. **Chrono Aegis Issues**: Disable crafting recipe and effect registration
+4. **Full Rollback**: Revert entire T234-T238 branch and return to main
+
+---
+
+## Notes
+
+- This plan prioritizes **functional implementation over visual polish**
+- Textures can start as recolored vanilla mobs and be improved later
+- Structure complexity should balance **combat space needs vs build time**
+- Boss difficulty should be **challenging but fair** (similar to Time Guardian)
+- Chrono Aegis should feel **rewarding but not mandatory** for Time Tyrant
+- Multiplayer support is **critical** - test with 2+ players frequently
+
+---
+
+**Last Updated**: 2025-11-18
+**Status**: Planning complete, ready to begin Phase 1 implementation

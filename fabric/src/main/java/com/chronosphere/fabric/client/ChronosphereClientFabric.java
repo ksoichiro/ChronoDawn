@@ -5,6 +5,9 @@ import com.chronosphere.client.model.TemporalWraithModel;
 import com.chronosphere.client.model.TimeGuardianModel;
 import com.chronosphere.client.model.TimeKeeperModel;
 import com.chronosphere.client.model.TimeTyrantModel;
+import com.chronosphere.client.renderer.ChronosWardenRenderer;
+import com.chronosphere.client.renderer.ClockworkColossusRenderer;
+import com.chronosphere.client.renderer.TemporalPhantomRenderer;
 import com.chronosphere.client.renderer.TimeArrowRenderer;
 import com.chronosphere.client.renderer.TimeBlastRenderer;
 import com.chronosphere.client.renderer.TimeGuardianRenderer;
@@ -185,6 +188,12 @@ public class ChronosphereClientFabric implements ClientModInitializer {
             TimeGuardianRenderer::new
         );
 
+        // Register Chronos Warden with custom renderer
+        EntityRendererRegistry.register(
+            ModEntities.CHRONOS_WARDEN.get(),
+            ChronosWardenRenderer::new
+        );
+
         // Register Time Tyrant with custom renderer
         EntityRendererRegistry.register(
             ModEntities.TIME_TYRANT.get(),
@@ -217,6 +226,18 @@ public class ChronosphereClientFabric implements ClientModInitializer {
         EntityRendererRegistry.register(
             ModEntities.TIME_KEEPER.get(),
             TimeKeeperRenderer::new
+        );
+
+        // Register Clockwork Colossus with custom renderer
+        EntityRendererRegistry.register(
+            ModEntities.CLOCKWORK_COLOSSUS.get(),
+            ClockworkColossusRenderer::new
+        );
+
+        // Register Temporal Phantom with custom renderer
+        EntityRendererRegistry.register(
+            ModEntities.TEMPORAL_PHANTOM_BOSS.get(),
+            TemporalPhantomRenderer::new
         );
     }
 }

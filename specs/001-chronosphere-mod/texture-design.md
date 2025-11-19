@@ -971,3 +971,387 @@ This creates smooth rotating gear animation. The PNG should contain multiple fra
 - ⚠️ **Echoing Time Boots** - enhanced_clockstone_boots.pngのコピー、要編集（優先度：中）
 - ⚠️ **Unstable Pocket Watch** - time_clock.pngのコピー、要編集（優先度：中）
 
+---
+
+# Entity Textures（エンティティテクスチャ）
+
+## E1. Chronos Warden（クロノスの監視者）
+
+**ファイル**: `common/src/main/resources/assets/chronosphere/textures/entity/chronos_warden.png`
+
+**コンセプト**:
+- Phase 1の追加ボス（4体のうちの1体目）
+- Guardian Vaultを守護する古代の石像ゴーレム
+- 侵入者が近づくと目覚めて攻撃する番人
+- Stone Stance（石化して80%ダメージ軽減）とGround Slam（地面を叩き範囲攻撃）が特徴
+- Time Guardian相当の難易度（HP 180、防御12、攻撃力9）
+
+**デザイン方向性**:
+- **ベース**: Time Guardian（`time_guardian.png`）をベースとした人型モデル
+- **カラー**:
+  - **主色**: 石の灰色～茶色（Stone Brick、Polished Granite系の色）
+  - **基調色**: #7A7A7A（ライトグレー）～ #8B6F47（ブラウングレー）
+  - **苔・経年劣化**: 緑系の斑点（#3D6B3D）を部分的に追加
+  - **時間のアクセント**: わずかにオレンジ/ゴールド（#db8813）の痕跡（時計の装飾部分）
+- **特徴**:
+  - **質感**: 粗い石の質感、ひび割れ、摩耗
+  - **装飾**:
+    - 胸部や肩に時計の歯車や文字盤の浮き彫り（古代遺跡風）
+    - 関節部分に金属の装飾（動く石像のメカニズム）
+  - **経年劣化**:
+    - 苔の付着（肩、腕、脚部に緑の斑点）
+    - 表面のひび割れ（戦いの痕跡）
+    - 風化した古代の碑文や模様
+  - **目**:
+    - Time Guardianのような発光する目
+    - 色は青ではなくオレンジ/ゴールド（#db8813）で統一
+    - 目覚めると輝く
+  - **弱点の表現（背中）**:
+    - 背中部分に露出したコアや結晶（オレンジ色の輝き）
+    - Stone Stance時に狙うべき弱点として視覚的に分かりやすく
+- **雰囲気**:
+  - 重厚で動きが鈍い石のゴーレム
+  - 古代遺跡の番人としての威厳
+  - 長い年月を経た遺物の雰囲気
+  - Time Guardianの青い魔法的な雰囲気とは対照的な、物理的・機械的な印象
+
+**参考イメージ**:
+- バニラの Iron Golem（石版）
+- Time Guardian の体型とポーズ
+- 石像や古代遺跡のゴーレム
+- スチームパンク的な石造りのオートマトン
+
+**カラーパレット**:
+```
+主色:
+- Base Stone: #7A7A7A (Light Gray)
+- Dark Stone: #5A5A5A (Dark Gray)
+- Warm Stone: #8B6F47 (Brown Gray - Polished Granite tone)
+
+装飾・アクセント:
+- Gear/Clock Gold: #db8813 (Orange/Gold - mod theme)
+- Moss Green: #3D6B3D (Aged moss)
+- Core Glow: #db8813 (Orange glow for eyes and weak spot)
+
+質感:
+- Cracks: #3A3A3A (Dark gray for cracks)
+- Highlights: #A0A0A0 (Light gray for stone highlights)
+```
+
+**変換方法（Time GuardianからChronos Wardenへ）**:
+1. **色相変更**: 青系 → グレー/茶色系
+   - Time Guardianの青い部分 → 石の灰色/茶色
+   - 発光部分の青 → オレンジ/ゴールド
+2. **質感追加**:
+   - ノイズテクスチャで石の粗さを追加
+   - ひび割れのラインを描き込み
+   - 緑の苔の斑点をランダムに配置
+3. **装飾の調整**:
+   - 時計・歯車のモチーフは維持（色をゴールドに）
+   - より古代遺跡風のディテールに変更
+
+**モデル**:
+- Time Guardianと同じHumanoidModel（2.5ブロック高）
+- 同じアニメーションを使用（歩行、攻撃）
+- Ground Slam時は腕を振り下ろすアニメーション
+
+**Status**: ⚠️ Placeholder - time_guardian.pngのコピー、要編集
+
+**優先度**: 中（T234実装）
+
+**実装タイミング**: Phase 1（Chronos Warden + Clockwork Colossus）
+
+---
+
+## Entity Texture Design Principles
+
+1. **Base Consistency**: Time Guardianをベースとして、各ボスに独自の個性を付与
+2. **Color Coding**: 各ボスを色で区別（Chronos Warden = 石の灰色/茶色、他のボスは別の色）
+3. **Thematic Unity**: すべてのボスが時計・時間のモチーフを持つ
+4. **Visual Clarity**: プレイヤーが一目でどのボスか判別できるデザイン
+5. **Rarity Expression**: ボスの難易度や重要度を視覚的に表現
+
+---
+
+---
+
+## E2. Clockwork Colossus（機械仕掛けの巨人）
+
+**ファイル**: `common/src/main/resources/assets/chronosphere/textures/entity/clockwork_colossus.png`
+
+**コンセプト**:
+- Phase 1の追加ボス（4体のうちの2体目）
+- Clockwork Depthsを守護する巨大な機械ゴーレム
+- 古代の時計職人が作り上げた機械の守護者
+- Overcharge（自己強化）とRepair Protocol（一度だけ回復）が特徴
+- HP 200、攻撃力12、高い攻撃性能
+
+**デザイン方向性**:
+- **ベース**: Time Guardian（`time_guardian.png`）をベースとした人型モデル
+- **カラー**:
+  - **主色**: 鉄・銅の金属色（Iron Block、Copper Block系）
+  - **基調色**: #7F7F7F（鉄グレー）、#B87333（銅ブラウン）
+  - **歯車・メカ**: 暗い金属色（#4A4A4A）と明るい金属（#C0C0C0）のコントラスト
+  - **エネルギー**: オレンジ/ゴールド（#db8813）の発光（稼働中のエネルギー）
+  - **Overcharge時**: 赤みがかった光（#FF4500）が追加
+- **特徴**:
+  - **質感**: 金属の硬質な質感、リベット、ボルト
+  - **装飾**:
+    - 胸部に大きな歯車が露出（回転しているイメージ）
+    - 肩・腕・脚に複数の小さな歯車
+    - 関節部分に機械的なジョイント
+    - 配管やケーブルが体表を走る
+  - **機械的ディテール**:
+    - 鉄と銅の異素材の組み合わせ（パネル状）
+    - 歯車が複数箇所で露出
+    - リベット・ボルトで固定された外装
+    - 内部からオレンジ色の光が漏れる（エネルギーコア）
+  - **目**:
+    - Redstone Lampのような赤い発光（#FF3333）
+    - Overcharge時はより強く輝く
+  - **サイズ感**:
+    - Time Guardianより大型に見えるディテール
+    - 重厚な装甲プレート
+- **雰囲気**:
+  - 重厚な金属の塊
+  - スチームパンク的な機械美
+  - Iron Golemのような無機質さ + 古代の高度技術
+  - 動くたびにギア音が聞こえそうな機械感
+
+**参考イメージ**:
+- バニラの Iron Golem（機械版）
+- 時計の内部機構（大量の歯車）
+- スチームパンクのロボット
+- 銅と鉄を組み合わせた機械装甲
+
+**カラーパレット**:
+```
+主色:
+- Iron Gray: #7F7F7F (鉄の本体)
+- Copper Brown: #B87333 (銅のパネル)
+- Dark Metal: #4A4A4A (暗い金属パーツ)
+- Light Metal: #C0C0C0 (明るい金属・ハイライト)
+
+装飾・エネルギー:
+- Gear Gold: #db8813 (歯車・エネルギーコア)
+- Overcharge Red: #FF4500 (Phase 2の赤い発光)
+- Eye Red: #FF3333 (Redstone Lamp風の目)
+
+質感:
+- Rivet Dark: #3A3A3A (リベット・ボルト)
+- Panel Edge: #A0A0A0 (パネルの縁)
+```
+
+**変換方法（Time GuardianからClockwork Colossusへ）**:
+1. **色相変更**: 青系 → 金属グレー/銅色
+   - Time Guardianの青い鎧部分 → 鉄グレー
+   - 装飾部分 → 銅ブラウン
+   - 発光部分 → オレンジ/赤
+2. **質感追加**:
+   - 金属のパネル分割（鉄と銅）
+   - リベット・ボルトをパネル接続部に配置
+   - 歯車のディテールを胸部・関節に追加
+3. **装飾の調整**:
+   - より機械的なデザイン
+   - 歯車を強調
+   - 配管・ケーブルを追加
+
+**モデル**:
+- Time Guardianと同じHumanoidModel（2.5ブロック高）
+- より大型に見える視覚効果
+
+**Status**: ⏳ 未実装
+
+**優先度**: 中（T235実装）
+
+**実装タイミング**: Phase 1（Chronos Warden + Clockwork Colossus）
+
+---
+
+## E3. Temporal Phantom（時の亡霊）
+
+**ファイル**: `common/src/main/resources/assets/chronosphere/textures/entity/temporal_phantom.png`
+
+**コンセプト**:
+- Phase 2の追加ボス（4体のうちの3体目）
+- Phantom Catacombsに現れる幽霊のような存在
+- Phase Shift（物理攻撃無効化）とPhantom Clone（分身召喚）が特徴
+- HP 150、高速移動（0.25）、魔法的な攻撃
+
+**デザイン方向性**:
+- **ベース**: Time Guardian（`time_guardian.png`）をベースとした人型モデル
+- **カラー**:
+  - **主色**: 紫・青の半透明な霊体（幽霊的）
+  - **基調色**: #9B59B6（紫）、#5DADE2（ライトブルー）
+  - **半透明**: 全体的に半透明（Alpha 70-80%）
+  - **発光**: 紫の強い発光エフェクト（#C471ED）
+  - **Phase Shift時**: さらに透明化（Alpha 40-50%）
+- **特徴**:
+  - **質感**: 幽霊的な半透明、エーテル的な存在
+  - **装飾**:
+    - 体全体が霧や煙のように揺らめくイメージ
+    - 時計の針や文字盤がぼんやりと浮かび上がる
+    - エンドポータルのようなパーティクル模様
+  - **霊体ディテール**:
+    - 輪郭が少しぼやけている
+    - 内部から紫の光が透けて見える
+    - 下半身が霧状に薄れていく（幽霊的表現）
+    - Phantomモブのような浮遊感
+  - **目**:
+    - 紫色に強く発光（#C471ED）
+    - 虚ろで不気味な印象
+  - **魔法エフェクト**:
+    - 体の周囲に魔法陣やルーン文字が浮遊
+    - 時間の歪みを表現する紫の波紋
+- **雰囲気**:
+  - 実体のない幽霊
+  - 魔法的で神秘的
+  - Enderman + Phantomを融合したような不気味さ
+  - 時間に囚われた亡霊の悲哀
+
+**参考イメージ**:
+- バニラの Phantom（幽霊的浮遊感）
+- バニラの Enderman（紫のパーティクル）
+- 幽霊や霊体の半透明表現
+- エンドポータルの渦巻き模様
+
+**カラーパレット**:
+```
+主色:
+- Phantom Purple: #9B59B6 (霊体の基本色)
+- Light Blue: #5DADE2 (半透明部分の青)
+- Dark Purple: #6A4C93 (濃い紫の影)
+
+発光:
+- Glow Purple: #C471ED (強い紫の発光)
+- Magic Purple: #9D84B7 (魔法エフェクト)
+- Eye Purple: #DA70D6 (目の発光)
+
+半透明:
+- Overall Alpha: 70-80% (通常時)
+- Phase Shift Alpha: 40-50% (物理攻撃無効時)
+```
+
+**変換方法（Time GuardianからTemporal Phantomへ）**:
+1. **色相変更**: 青系 → 紫系（より神秘的に）
+   - Time Guardianの青 → 紫/ライトブルー
+   - 発光部分 → 強い紫
+2. **質感変更**:
+   - 固体 → 半透明の霊体
+   - Alpha値を下げる（透明化）
+   - エッジをぼかす（幽霊感）
+3. **エフェクト追加**:
+   - 半透明レイヤー
+   - 内部発光
+   - 魔法陣・ルーンの浮遊
+
+**モデル**:
+- Time Guardianと同じHumanoidModel（2.5ブロック高）
+- レンダリング時に半透明処理を適用
+
+**Status**: ⏳ 未実装
+
+**優先度**: 低（T236実装）
+
+**実装タイミング**: Phase 2（Temporal Phantom + Entropy Keeper）
+
+---
+
+## E4. Entropy Keeper（エントロピーの管理者）
+
+**ファイル**: `common/src/main/resources/assets/chronosphere/textures/entity/entropy_keeper.png`
+
+**コンセプト**:
+- Phase 2の追加ボス（4体のうちの4体目）
+- Entropy Cryptを支配する腐敗と崩壊の化身
+- Decay Aura（Wither効果）とEntropy Burst（爆発攻撃）が特徴
+- HP 160、時間経過で強化されるDegradation能力
+
+**デザイン方向性**:
+- **ベース**: Time Guardian（`time_guardian.png`）をベースとした人型モデル
+- **カラー**:
+  - **主色**: 緑黒・枯れた茶色（腐敗・崩壊のテーマ）
+  - **基調色**: #2F4F2F（ダークグリーン）、#3A2A1A（枯れた茶色）
+  - **腐敗の緑**: #7CFC00（Slime緑）、#228B22（深緑）
+  - **Wither効果**: 黒（#1A1A1A）と緑（#39FF14）のコントラスト
+  - **Degradation発光**: 時間経過で緑の光が強くなる（#00FF00）
+- **特徴**:
+  - **質感**: 枯れた、腐食した、崩壊しつつある存在
+  - **装飾**:
+    - 苔やスカルク（Sculk）のような腐敗が体を覆う
+    - 時計の歯車が錆び、ひび割れている
+    - 体の一部が崩壊・欠損しているように見える
+  - **腐敗ディテール**:
+    - Soul SandやMoss Blockのテクスチャ要素
+    - 緑色の粘液が滴るイメージ
+    - ひび割れから緑の光が漏れる（エントロピーのエネルギー）
+    - 骨のような露出した内部構造
+  - **目**:
+    - Witherのような空洞化した黒い目
+    - 周囲に緑の発光（#39FF14）
+  - **時間経過の変化**:
+    - Degradationが進むにつれて緑の発光が強くなる
+    - 腐敗が進行しているように見える
+- **雰囲気**:
+  - 不気味で不吉
+  - Witherのような死と崩壊のテーマ
+  - Soul Sand Valley（ソウルサンドの谷）の雰囲気
+  - 時間の腐敗と劣化の具現化
+
+**参考イメージ**:
+- バニラの Wither（死と崩壊）
+- Soul Sand, Moss Block（腐敗素材）
+- Sculk（不気味な有機的テクスチャ）
+- Slime（緑の粘液）
+
+**カラーパレット**:
+```
+主色:
+- Dark Green: #2F4F2F (腐敗の暗緑)
+- Decay Brown: #3A2A1A (枯れた茶色)
+- Black: #1A1A1A (Wither的な黒)
+- Moss Green: #228B22 (苔の深緑)
+
+腐敗エフェクト:
+- Slime Green: #7CFC00 (粘液の緑)
+- Glow Green: #39FF14 (腐敗の発光)
+- Degradation Glow: #00FF00 (時間経過で強化)
+
+質感:
+- Rust: #8B4513 (錆びた金属)
+- Decay: #556B2F (腐敗部分)
+- Crack: #2A2A2A (ひび割れ)
+```
+
+**変換方法（Time GuardianからEntropy Keeperへ）**:
+1. **色相変更**: 青系 → 緑黒系
+   - Time Guardianの青い部分 → 暗緑/茶色
+   - 発光部分 → 緑の発光
+2. **質感変更**:
+   - 綺麗な装甲 → 腐食・崩壊した外観
+   - 苔・スカルクのテクスチャを追加
+   - ひび割れ、欠損を強調
+3. **エフェクト追加**:
+   - 緑の粘液
+   - 腐敗の緑発光
+   - 骨や内部構造の露出
+
+**モデル**:
+- Time Guardianと同じHumanoidModel（2.5ブロック高）
+- 一部が欠損しているような視覚効果
+
+**Status**: ⏳ 未実装
+
+**優先度**: 低（T237実装）
+
+**実装タイミング**: Phase 2（Temporal Phantom + Entropy Keeper）
+
+---
+
+## Entity Implementation Checklist
+
+- ⚠️ **Chronos Warden** - time_guardian.pngのコピー、要編集（優先度：中、Phase 1）
+- ⏳ **Clockwork Colossus** - 未実装（優先度：中、Phase 1）
+- ⏳ **Temporal Phantom** - 未実装（優先度：低、Phase 2）
+- ⏳ **Entropy Keeper** - 未実装（優先度：低、Phase 2）
+

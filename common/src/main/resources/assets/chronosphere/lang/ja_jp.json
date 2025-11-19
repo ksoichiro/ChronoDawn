@@ -56,6 +56,9 @@
   "item.chronosphere.time_arrow": "タイムアロー",
   "item.chronosphere.fragment_of_stasis_core": "静止のコアの破片",
   "item.chronosphere.eye_of_chronos": "クロノスの瞳",
+  "item.chronosphere.guardian_stone": "守護者の石",
+  "item.chronosphere.colossus_gear": "巨像の歯車",
+  "item.chronosphere.phantom_essence": "幻影のエッセンス",
 
   "item.chronosphere.clockstone_sword": "クロックストーンの剣",
   "item.chronosphere.clockstone_pickaxe": "クロックストーンのツルハシ",
@@ -99,11 +102,14 @@
   "message.chronosphere.time_clock_boss_limit": "タイムクロックは効果がない - このフェーズで既に使用済みだ",
 
   "entity.chronosphere.time_guardian": "時の番人",
+  "entity.chronosphere.chronos_warden": "クロノスの監視者",
   "entity.chronosphere.temporal_wraith": "時の亡霊",
   "entity.chronosphere.clockwork_sentinel": "時計仕掛けの番兵",
   "entity.chronosphere.time_keeper": "時間の管理者",
   "entity.chronosphere.time_tyrant": "時間の暴君",
   "entity.chronosphere.time_blast": "時間の衝撃波",
+  "entity.chronosphere.clockwork_colossus": "時計仕掛けの巨像",
+  "entity.chronosphere.temporal_phantom_boss": "時間の幻影",
 
   "biome.chronosphere.chronosphere_plains": "クロノスフィア平原",
   "biome.chronosphere.chronosphere_ocean": "クロノスフィア海洋",

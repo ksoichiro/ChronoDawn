@@ -368,6 +368,47 @@ public class ModItems {
         )
     );
 
+    /**
+     * Guardian Stone - Additional Boss material item (T234-T238).
+     * Dropped by Chronos Warden (1 per kill, guaranteed).
+     * Used for crafting Chrono Aegis (Time Tyrant preparation item).
+     */
+    public static final RegistrySupplier<Item> GUARDIAN_STONE = ITEMS.register(
+        "guardian_stone",
+        () -> new com.chronosphere.items.boss.GuardianStoneItem(
+            com.chronosphere.items.boss.GuardianStoneItem.createProperties()
+        )
+    );
+
+    /**
+     * Colossus Gear - Additional Boss material item (T234-T238).
+     * Dropped by Clockwork Colossus (1 per kill, guaranteed).
+     * Used for crafting Chrono Aegis (Time Tyrant preparation item).
+     */
+    public static final RegistrySupplier<Item> COLOSSUS_GEAR = ITEMS.register(
+        "colossus_gear",
+        () -> new com.chronosphere.items.boss.ColossusGearItem(
+            com.chronosphere.items.boss.ColossusGearItem.createProperties()
+        )
+    );
+
+    /**
+     * Phantom Essence - Boss drop from Temporal Phantom
+     *
+     * A spectral essence dropped by Temporal Phantom (Phase 2 mini-boss).
+     * Dropped by Temporal Phantom (1-2 per kill).
+     * Used for crafting Chrono Aegis (Time Tyrant preparation item).
+     *
+     * Reference: research.md (Boss 3: Temporal Phantom)
+     * Task: T236 [Phase 2] Implement Temporal Phantom
+     */
+    public static final RegistrySupplier<Item> PHANTOM_ESSENCE = ITEMS.register(
+        "phantom_essence",
+        () -> new com.chronosphere.items.PhantomEssenceItem(
+            com.chronosphere.items.PhantomEssenceItem.createProperties()
+        )
+    );
+
     // === Portal Items ===
 
     /**
