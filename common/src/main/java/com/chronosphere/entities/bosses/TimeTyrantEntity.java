@@ -2,8 +2,11 @@ package com.chronosphere.entities.bosses;
 
 import com.chronosphere.core.time.MobAICanceller;
 import com.chronosphere.entities.bosses.ExtendedMeleeAttackGoal;
+import com.chronosphere.registry.ModEffects;
 import com.chronosphere.registry.ModItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -94,6 +97,11 @@ public class TimeTyrantEntity extends Monster {
 
     // One-time abilities
     private boolean hasUsedTimeReversal = false;
+
+    // Chrono Aegis debuff flags (T238 - Chrono Aegis Integration)
+    private boolean chronoAegisAnchorActive = false;     // Prevents teleport for 3s after teleport
+    private boolean chronoAegisDisruptionActive = false; // HP recovery reduction active
+    private int chronoAegisTeleportBlockTicks = 0;       // Remaining ticks of teleport block
 
     // Time Clock weakening state (T171f - Boss Balance Enhancement)
     private int timeClockWeakeningTicks = 0; // Remaining ticks of weakening effect
@@ -303,10 +311,19 @@ public class TimeTyrantEntity extends Monster {
         }
 
         // Apply Time Stop effect
+        // Chrono Aegis: Time Stop Resistance (Slowness V → Slowness II)
+        boolean hasChronoAegis = false;
+        if (target instanceof Player player) {
+            Holder<net.minecraft.world.effect.MobEffect> aegisEffect =
+                BuiltInRegistries.MOB_EFFECT.wrapAsHolder(ModEffects.CHRONO_AEGIS_BUFF.get());
+            hasChronoAegis = player.hasEffect(aegisEffect);
+        }
+        int slownessLevel = hasChronoAegis ? 1 : 4; // Slowness II vs V
+
         target.addEffect(new MobEffectInstance(
             MobEffects.MOVEMENT_SLOWDOWN,
             60, // 3 seconds
-            4   // Slowness V
+            slownessLevel
         ));
 
         // Visual and audio feedback
@@ -339,9 +356,15 @@ public class TimeTyrantEntity extends Monster {
     /**
      * Phase 2 Ability: Teleport
      * Teleports behind or near the target player.
+     * Chrono Aegis: Dimensional Anchor prevents teleport for 3s after last teleport
      */
     private void handleTeleportAbility(LivingEntity target) {
         if (teleportCooldown > 0 || postTeleportDelay > 0) {
+            return;
+        }
+
+        // Chrono Aegis: Dimensional Anchor - block teleport if active
+        if (chronoAegisTeleportBlockTicks > 0) {
             return;
         }
 
@@ -353,6 +376,12 @@ public class TimeTyrantEntity extends Monster {
             // Successful teleport
             teleportCooldown = TELEPORT_COOLDOWN_TICKS;
             postTeleportDelay = POST_TELEPORT_DELAY_TICKS;
+
+            // Chrono Aegis: Dimensional Anchor - activate teleport block
+            if (!chronoAegisAnchorActive && hasNearbyChronoAegisPlayer()) {
+                chronoAegisAnchorActive = true;
+                chronoAegisTeleportBlockTicks = 60; // 3 seconds
+            }
         }
     }
 
@@ -495,8 +524,14 @@ public class TimeTyrantEntity extends Monster {
         boolean hitAnyEntity = false;
         for (Player player : this.level().getEntitiesOfClass(Player.class, aoeBox)) {
             if (player.isAlive()) {
-                // Damage
-                player.hurt(this.damageSources().mobAttack(this), AOE_DAMAGE);
+                // Damage (Chrono Aegis: Temporal Shield - 50% reduction)
+                float damage = AOE_DAMAGE;
+                Holder<net.minecraft.world.effect.MobEffect> aegisEffect =
+                    BuiltInRegistries.MOB_EFFECT.wrapAsHolder(ModEffects.CHRONO_AEGIS_BUFF.get());
+                if (player.hasEffect(aegisEffect)) {
+                    damage *= 0.5f; // 50% damage reduction
+                }
+                player.hurt(this.damageSources().mobAttack(this), damage);
 
                 // Apply debuffs
                 player.addEffect(new MobEffectInstance(
@@ -552,6 +587,7 @@ public class TimeTyrantEntity extends Monster {
     /**
      * Phase 3 Ability: Time Reversal (HP Recovery)
      * Recovers 10% of max HP once per fight when HP drops below 20%.
+     * Chrono Aegis: Time Reversal Disruption reduces recovery to 5%
      */
     private void handleTimeReversalAbility() {
         if (hasUsedTimeReversal) {
@@ -563,8 +599,13 @@ public class TimeTyrantEntity extends Monster {
             return;
         }
 
-        // Heal
-        float healAmount = this.getMaxHealth() * TIME_REVERSAL_HP_PERCENT;
+        // Heal (Chrono Aegis: Time Reversal Disruption - 10% → 5%)
+        float healPercent = TIME_REVERSAL_HP_PERCENT;
+        if (!chronoAegisDisruptionActive && hasNearbyChronoAegisPlayer()) {
+            chronoAegisDisruptionActive = true;
+            healPercent *= 0.5f; // 10% → 5%
+        }
+        float healAmount = this.getMaxHealth() * healPercent;
         this.heal(healAmount);
         hasUsedTimeReversal = true;
 
@@ -623,6 +664,19 @@ public class TimeTyrantEntity extends Monster {
         if (timeAccelerationCooldown > 0) timeAccelerationCooldown--;
         if (aoeCooldown > 0) aoeCooldown--;
         if (postTeleportDelay > 0) postTeleportDelay--;
+
+        // Chrono Aegis: Dimensional Anchor timer
+        if (chronoAegisTeleportBlockTicks > 0) {
+            chronoAegisTeleportBlockTicks--;
+            if (chronoAegisTeleportBlockTicks == 0) {
+                chronoAegisAnchorActive = false;
+            }
+        }
+
+        // Chrono Aegis: Reset disruption flag if no Chrono Aegis players nearby
+        if (!hasNearbyChronoAegisPlayer()) {
+            chronoAegisDisruptionActive = false;
+        }
     }
 
     // Time Clock Weakening Mechanic (T171f)
@@ -801,6 +855,11 @@ public class TimeTyrantEntity extends Monster {
         this.entityData.set(PHASE, tag.getInt("Phase"));
         this.hasUsedTimeReversal = tag.getBoolean("HasUsedTimeReversal");
 
+        // Load Chrono Aegis state (T238)
+        this.chronoAegisAnchorActive = tag.getBoolean("ChronoAegisAnchorActive");
+        this.chronoAegisDisruptionActive = tag.getBoolean("ChronoAegisDisruptionActive");
+        this.chronoAegisTeleportBlockTicks = tag.getInt("ChronoAegisTeleportBlockTicks");
+
         // Load Time Clock weakening state (T171f)
         this.timeClockWeakeningTicks = tag.getInt("TimeClockWeakeningTicks");
         this.timeClockUsesInPhase1 = tag.getInt("TimeClockUsesInPhase1");
@@ -815,12 +874,32 @@ public class TimeTyrantEntity extends Monster {
         tag.putInt("Phase", this.entityData.get(PHASE));
         tag.putBoolean("HasUsedTimeReversal", this.hasUsedTimeReversal);
 
+        // Save Chrono Aegis state (T238)
+        tag.putBoolean("ChronoAegisAnchorActive", this.chronoAegisAnchorActive);
+        tag.putBoolean("ChronoAegisDisruptionActive", this.chronoAegisDisruptionActive);
+        tag.putInt("ChronoAegisTeleportBlockTicks", this.chronoAegisTeleportBlockTicks);
+
         // Save Time Clock weakening state (T171f)
         tag.putInt("TimeClockWeakeningTicks", this.timeClockWeakeningTicks);
         tag.putInt("TimeClockUsesInPhase1", this.timeClockUsesInPhase1);
         tag.putInt("TimeClockUsesInPhase2", this.timeClockUsesInPhase2);
         tag.putInt("TimeClockUsesInPhase3", this.timeClockUsesInPhase3);
         tag.putInt("PreviousPhase", this.previousPhase);
+    }
+
+    /**
+     * Check if any nearby players have Chrono Aegis buff active.
+     * Used to determine Time Tyrant debuff effects.
+     *
+     * Task: T238 [US3] Integrate Chrono Aegis effects into Time Tyrant
+     */
+    private boolean hasNearbyChronoAegisPlayer() {
+        AABB searchBox = new AABB(this.blockPosition()).inflate(32.0);
+        Holder<net.minecraft.world.effect.MobEffect> aegisEffect =
+            BuiltInRegistries.MOB_EFFECT.wrapAsHolder(ModEffects.CHRONO_AEGIS_BUFF.get());
+        return this.level().getEntitiesOfClass(Player.class, searchBox)
+            .stream()
+            .anyMatch(player -> player.hasEffect(aegisEffect));
     }
 
     @Override
