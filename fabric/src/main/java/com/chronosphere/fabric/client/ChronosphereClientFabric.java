@@ -12,16 +12,30 @@ import com.chronosphere.client.renderer.TimeTyrantRenderer;
 import com.chronosphere.client.renderer.mobs.ClockworkSentinelRenderer;
 import com.chronosphere.client.renderer.mobs.TemporalWraithRenderer;
 import com.chronosphere.client.renderer.mobs.TimeKeeperRenderer;
+import com.chronosphere.items.TimeCompassItem;
 import com.chronosphere.registry.ModBlocks;
 import com.chronosphere.registry.ModEntities;
+import com.chronosphere.registry.ModItems;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.FoliageColor;
+import net.minecraft.world.phys.Vec3;
+
+import java.util.Optional;
 
 /**
  * Fabric client-side initialization for Chronosphere mod.
@@ -42,6 +56,7 @@ public class ChronosphereClientFabric implements ClientModInitializer {
         registerRenderLayers();
         registerEntityModelLayers();
         registerEntityRenderers();
+        registerItemProperties();
     }
 
     /**
@@ -218,5 +233,74 @@ public class ChronosphereClientFabric implements ClientModInitializer {
             ModEntities.TIME_KEEPER.get(),
             TimeKeeperRenderer::new
         );
+    }
+
+    /**
+     * Register item properties for dynamic item rendering.
+     *
+     * Time Compass uses the "angle" property to rotate the needle
+     * based on the target structure's position.
+     */
+    private void registerItemProperties() {
+        // Register Time Compass angle property
+        // This makes the compass needle point towards the target structure
+        net.minecraft.client.renderer.item.ItemProperties.register(
+            ModItems.TIME_COMPASS.get(),
+            ResourceLocation.fromNamespaceAndPath("minecraft", "angle"),
+            (stack, level, entity, seed) -> {
+                // Get target position from compass NBT
+                Optional<GlobalPos> targetPos = TimeCompassItem.getTargetPosition(stack);
+                if (targetPos.isEmpty() || level == null) {
+                    // No target or no level - return random angle
+                    return (float) Math.random();
+                }
+
+                GlobalPos target = targetPos.get();
+
+                // Check if we're in the correct dimension
+                if (!level.dimension().equals(target.dimension())) {
+                    // Wrong dimension - spin randomly
+                    return (float) Math.random();
+                }
+
+                // Calculate angle to target
+                Entity holder = entity != null ? entity : null;
+                if (holder == null) {
+                    return 0.0f;
+                }
+
+                return calculateCompassAngle(holder, target.pos());
+            }
+        );
+    }
+
+    /**
+     * Calculate the compass needle angle towards a target position.
+     * Returns a value between 0.0 and 1.0, where 0.0 is north.
+     *
+     * @param entity Entity holding the compass
+     * @param targetPos Target block position
+     * @return Compass angle (0.0 to 1.0)
+     */
+    private static float calculateCompassAngle(Entity entity, BlockPos targetPos) {
+        // Get entity position
+        Vec3 entityPos = entity.position();
+
+        // Calculate direction vector to target
+        double dx = targetPos.getX() + 0.5 - entityPos.x;
+        double dz = targetPos.getZ() + 0.5 - entityPos.z;
+
+        // Calculate angle in radians
+        double angleRadians = Math.atan2(dz, dx);
+
+        // Get entity's yaw (body rotation)
+        float yaw = entity.getYRot();
+
+        // Convert to compass angle (0.0 = north, clockwise)
+        // atan2 returns angle from east axis, so we need to adjust
+        double compassAngle = (angleRadians - Math.toRadians(yaw) + Math.PI) / (Math.PI * 2.0);
+
+        // Normalize to 0.0-1.0 range
+        return (float) Mth.positiveModulo(compassAngle, 1.0);
     }
 }

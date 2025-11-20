@@ -399,6 +399,18 @@ public class ModItems {
     );
 
     /**
+     * Time Compass - Structure locator compass.
+     * Points to nearest key structure (Ancient Ruins, Desert Clock Tower, or Master Clock Tower).
+     * Target structure stored in NBT. Obtained through Time Keeper trades.
+     */
+    public static final RegistrySupplier<Item> TIME_COMPASS = ITEMS.register(
+        "time_compass",
+        () -> new com.chronosphere.items.TimeCompassItem(
+            com.chronosphere.items.TimeCompassItem.createProperties()
+        )
+    );
+
+    /**
      * Chronicle of Chronosphere - Player guide book.
      * Contains information about dimension mechanics, structures, items, and progression.
      * Given to players automatically on first entry to Chronosphere dimension.
@@ -873,6 +885,9 @@ public class ModItems {
         output.accept(PORTAL_STABILIZER.get());
         // Add actual readable book instead of placeholder item
         output.accept(com.chronosphere.items.ChronicleOfChronosphereItem.createBook());
+        // Add example Time Compass (targets Desert Clock Tower by default)
+        output.accept(com.chronosphere.items.TimeCompassItem.createCompass(
+            com.chronosphere.items.TimeCompassItem.STRUCTURE_DESERT_CLOCK_TOWER));
 
         // === Consumables ===
         output.accept(FRUIT_OF_TIME.get());
