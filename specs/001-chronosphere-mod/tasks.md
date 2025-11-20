@@ -208,7 +208,12 @@
   - Book auto-given on first Chronosphere entry
   - Added to creative tab as readable vanilla written_book
   - Documented complete worldbuilding in specs/001-chronosphere-mod/lore.md
-- [ ] T115h [P] [US2] Add villager trades for structure maps (Ancient Ruins Map, Desert Clock Tower Map, Master Clock Tower Map)
+- [X] T115h [P] [US2] Add Time Keeper trades for Time Compass items (Desert Clock Tower Compass, Master Clock Compass)
+  - Trade 1: 16 Clockstone → Time Compass (Desert Clock Tower) - 3 max uses
+  - Trade 2: 8 Enhanced Clockstone → Time Compass (Master Clock) - 1 max use
+  - Compasses point to structures within 100 chunk radius
+  - Right-click compass to locate structure and show distance/direction
+  - Displays X/Z coordinates, distance in blocks, and 8-direction heading (N/NE/E/SE/S/SW/W/NW)
 - [X] T115i [US2] Add advancement system with descriptive hints for key progression milestones (first portal, Ancient Ruins discovery, Time Guardian defeat)
   - Improved existing advancement descriptions (portal_creation, dimension_entry, portal_stabilization)
   - Added explicit next-step guidance in advancement text
@@ -217,7 +222,13 @@
   - Forgotten Library: spacing 50→30, separation 25→15 (40% more frequent)
   - Desert Clock Tower: spacing 32→20, separation 8→5 (37.5% more frequent)
   - Master Clock Tower: spacing 100→70, separation 50→35 (30% more frequent)
-- [ ] T115k [P] [US2] Create Time Compass item (points to nearest key structure, similar to lodestone compass)
+- [X] T115k [P] [US2] Create Time Compass item (points to nearest key structure, similar to lodestone compass)
+  - Created TimeCompassItem.java with NBT-based structure targeting
+  - Stores target structure type (desert_clock_tower, master_clock) and GlobalPos coordinates in CustomData
+  - Client-side item property ("angle") for compass needle animation
+  - Right-click to locate structure via findNearestMapStructure API
+  - Shows localized messages with coordinates, distance, and 8-direction heading
+  - Inherits vanilla compass model/textures for seamless integration
 - [X] T115l [US2] Add initial guidance on first dimension entry (chat message, advancement, or book given to player)
   - Chronicle of Chronosphere auto-given to player on first Chronosphere entry
   - Book dropped at player's feet if inventory is full
@@ -227,6 +238,14 @@
   - Particles float upward (0.15-0.25 speed) with 70% spawn frequency
   - Placed multiple emitters in Ancient Ruins structure NBT
   - Visual indicator of Temporal Seal degradation (referenced in lore.md)
+- [ ] T115n [P] [US2] Implement Strange Forest biome for Ancient Ruins discoverability
+  - Purpose: Make Ancient Ruins discoverable through distinctive biome without explicit guidance items
+  - Biome name: "Strange Forest" (奇妙な森) - subtle name suggesting mystery without revealing lore
+  - Visual design: Blue-purple tinted leaves (#6B8CDA) indicating Chronosphere influence
+  - Generation: Ancient Ruins always generate underneath Strange Forest biome
+  - Lore integration: Temporal Seal weakening causes Chronosphere energy to leak into Overworld
+  - Player experience: Natural discovery through exploration without relying on Time Compass
+  - See specs/001-chronosphere-mod/research.md for detailed design documentation
 
 ### Master Clock Tower & Boss Battle Improvements (US3 Bug Fixes & Enhancements - High Priority)
 

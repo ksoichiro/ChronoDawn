@@ -216,32 +216,26 @@ public class TimeKeeperEntity extends AbstractVillager {
     }
 
     /**
-     * Create a Time Compass with the structure position already set.
-     * Called when creating trades, uses the Time Keeper's current position to search.
+     * Create a Time Compass without coordinates pre-set.
+     * Player must right-click the compass to search for the structure.
+     *
+     * Design Decision: Structure search is NOT performed during trade creation
+     * because it would block world loading and cause performance issues.
+     * Instead, players manually trigger the search by right-clicking the compass.
      *
      * @param structureType Structure type to locate
-     * @return Time Compass with position set, or empty compass if structure not found
+     * @return Time Compass with target structure type set, but no coordinates yet
      */
     private ItemStack createCompassWithPosition(String structureType) {
         ItemStack compass = TimeCompassItem.createCompass(structureType);
-
-        // TEMPORARY: Disable structure search to diagnose issue
-        // TODO: Re-enable after fixing the problem
-        /*
-        if (this.level() instanceof ServerLevel serverLevel) {
-            locateAndSetStructurePosition(serverLevel, compass, structureType);
-        }
-        */
-        com.chronosphere.Chronosphere.LOGGER.warn("Time Keeper: Structure search temporarily disabled for compass creation");
-
+        // Coordinates will be set when player right-clicks the compass (see TimeCompassItem.use())
         return compass;
     }
 
     @Override
     public void notifyTrade(MerchantOffer offer) {
         super.notifyTrade(offer);
-        // Compass position is set when creating the trade offer in updateTrades()
-        // No additional processing needed here
+        // No post-processing needed - compass coordinates are set when player uses the item
     }
 
     /**
