@@ -25,6 +25,7 @@ configurations {
 
 repositories {
     maven { url 'https://maven.kyrptonaught.dev' }
+    maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
 }
 
 dependencies {
@@ -35,6 +36,9 @@ dependencies {
     // Custom Portal API for Fabric
     modImplementation 'net.kyrptonaught:customportalapi:0.0.1-beta66-1.21'
     include 'net.kyrptonaught:customportalapi:0.0.1-beta66-1.21'
+
+    // TerraBlender for biome injection
+    modImplementation 'com.github.glitchfiend:TerraBlender-fabric:1.21.1-4.1.0.8'
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
