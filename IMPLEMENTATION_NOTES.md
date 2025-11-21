@@ -84,6 +84,16 @@
 - `hasNearbyChronoAegisPlayer()` checks 32-block radius
 - State persisted in NBT for save/load
 
+#### Clarity Auto-Cleanse (T240)
+
+**Implementation**: Event-based system in EntityEventHandler
+- Uses `PLAYER_POST` tick event instead of `MobEffect.applyEffectTick()`
+- Cleanses every 40 ticks (2 seconds)
+- Removes: Slowness, Weakness, Mining Fatigue
+- Avoids ConcurrentModificationException during NBT save
+
+**Files**: EntityEventHandler.handleChronoAegisClarity()
+
 ---
 
 ## ❌ Not Implemented (Pending Work)
@@ -96,22 +106,14 @@
 
 **Why**: Focused on entity mechanics first; structures require worldgen testing
 
-### 2. Clarity Auto-Cleanse Feature (Medium Priority - T240)
-- **Issue**: Causes ConcurrentModificationException during entity NBT save
-- **Current Status**: Disabled in ChronoAegisEffect.java
-- **Solution Options**:
-  1. Use Fabric/NeoForge events for effect removal
-  2. Implement tick-based flag system
-  3. Use mixin to LivingEntity.tick()
-
-### 3. Testing Tasks (Medium Priority - T238m-p, T241)
+### 2. Testing Tasks (Medium Priority - T238m-p, T241)
 - Chrono Aegis crafting verification
 - Time Tyrant fight with Chrono Aegis
 - Multiplayer scenarios
 - Balance testing
 - Full playthrough test
 
-### 4. Documentation Updates (Low Priority - T238u-x)
+### 3. Documentation Updates (Low Priority - T238u-x)
 - Update spec.md with boss mechanics
 - Update data-model.md with new entities
 - Create player guide for boss locations
@@ -178,9 +180,8 @@
 3. Verify Chrono Aegis crafting works
 
 ### Short-term (Medium Priority)
-1. Fix Clarity auto-cleanse feature (T240)
-2. Comprehensive testing (T241)
-3. Balance adjustments based on testing
+1. Comprehensive testing (T241)
+2. Balance adjustments based on testing
 
 ### Long-term (Low Priority)
 1. Custom boss models (T242)
@@ -192,17 +193,12 @@
 
 ## 📝 Known Issues
 
-1. **Clarity Feature Disabled**
-   - Cause: ConcurrentModificationException during NBT save
-   - Impact: Players must manually cleanse debuffs
-   - Fix: Requires event-based implementation
-
-2. **Boss Visual Similarity**
+1. **Boss Visual Similarity**
    - Cause: All bosses use TimeGuardianModel
    - Impact: Less visual variety
    - Fix: Create custom models (future work)
 
-3. **No Boss Spawn Structures**
+2. **No Boss Spawn Structures**
    - Cause: Not yet implemented
    - Impact: Bosses cannot spawn naturally
    - Fix: Implement in T239
@@ -233,6 +229,9 @@
 ### Effect Classes
 - `common/src/main/java/com/chronosphere/effects/ChronoAegisEffect.java` (new)
 
+### Event Handlers
+- `common/src/main/java/com/chronosphere/events/EntityEventHandler.java` (modified for Clarity feature)
+
 ---
 
 ## 📖 References
@@ -243,4 +242,4 @@
 
 ---
 
-*Last Updated: 2025-11-21*
+*Last Updated: 2025-11-22*

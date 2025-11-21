@@ -269,7 +269,7 @@
 #### T238: Chrono Aegis System - PARTIALLY COMPLETED
 - [x] T238a-f: Chrono Aegis item, effect, recipe, translations implemented
 - [x] T238g-j: Time Tyrant integration (Time Stop Resistance, Dimensional Anchor, Temporal Shield, Time Reversal Disruption)
-- [ ] T238k: Implement safe Clarity effect (currently disabled due to NBT save crash)
+- [x] T238k: Implement safe Clarity effect (implemented using PLAYER_POST event in EntityEventHandler)
 - [x] T238l: Multiplayer safeguards implemented
 - [ ] T238m-p: Testing tasks (crafting, effects, multiplayer, balance)
 - [ ] T238q: Full playthrough test
@@ -277,7 +277,7 @@
 
 #### Remaining High-Priority Tasks
 - [ ] T239: Implement boss spawn structures (Guardian Vault, Clockwork Depths, Phantom Tower, Entropy Crypt)
-- [ ] T240: Fix Clarity auto-cleanse feature (use events or tick-based system instead of removeEffect in applyEffectTick)
+- [x] T240: Fix Clarity auto-cleanse feature (implemented using event system in EntityEventHandler.handleChronoAegisClarity)
 - [ ] T241: Comprehensive testing (boss spawning, Chrono Aegis crafting, Time Tyrant fight)
 
 #### Future Improvements (Low Priority)

@@ -2,8 +2,6 @@ package com.chronosphere.effects;
 
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 
 /**
@@ -11,14 +9,24 @@ import net.minecraft.world.entity.LivingEntity;
  *
  * Provides protection against Time Tyrant's abilities:
  * 1. Time Stop Resistance: Reduces Time Tyrant's Time Stop (Slowness V → Slowness II)
+ *    - Implemented in: TimeTyrantEntity.handleTimeStopAbility()
  * 2. Dimensional Anchor: Prevents Time Tyrant teleportation for 3s after teleport
+ *    - Implemented in: TimeTyrantEntity.handleTeleportAbility()
  * 3. Temporal Shield: Reduces Time Tyrant's AoE damage by 50%
+ *    - Implemented in: TimeTyrantEntity.handleAoEAbility()
  * 4. Time Reversal Disruption: Reduces Time Tyrant's HP recovery (10% → 5%)
- * 5. Clarity: Auto-cleanses Slowness/Weakness/Mining Fatigue periodically
+ *    - Implemented in: TimeTyrantEntity.handleTimeReversalAbility()
+ * 5. Clarity: Auto-cleanses Slowness/Weakness/Mining Fatigue every 2 seconds
+ *    - Implemented in: EntityEventHandler.handleChronoAegisClarity()
  *
  * Duration: 10 minutes (12000 ticks)
  *
+ * Note: This effect class does not use applyEffectTick() to avoid
+ * ConcurrentModificationException during entity NBT save. All functionality
+ * is implemented in other classes that check for this effect's presence.
+ *
  * Task: T238 [US3] Implement Chrono Aegis buff effect
+ * Task: T240 [US3] Fix Clarity auto-cleanse feature (using event system)
  */
 public class ChronoAegisEffect extends MobEffect {
     public ChronoAegisEffect() {
@@ -30,22 +38,20 @@ public class ChronoAegisEffect extends MobEffect {
 
     @Override
     public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
-        // Temporarily disabled: Clarity cleansing causes NBT save crash
-        // TODO: Implement safe Clarity cleansing mechanism
+        // This effect does not use tick-based application
+        // All functionality is implemented externally (see class javadoc)
         return false;
     }
 
     @Override
     public boolean applyEffectTick(LivingEntity entity, int amplifier) {
-        // Clarity feature temporarily disabled to prevent crash
-        // The crash occurs when removing effects during applyEffectTick
-        // while the game is saving entity NBT data
-
-        // TODO: Implement Clarity in a safe way:
-        // Option 1: Use LivingEntity.tick() override in a mixin
-        // Option 2: Use forge/fabric events for effect removal
-        // Option 3: Schedule removal for next tick using entity flags
-
+        // This method is not used - all functionality is implemented in:
+        // - TimeTyrantEntity (effects 1-4)
+        // - EntityEventHandler.handleChronoAegisClarity() (effect 5: Clarity)
+        //
+        // This design avoids ConcurrentModificationException that occurs when
+        // calling removeEffect() during applyEffectTick() while the game is
+        // saving entity NBT data.
         return true;
     }
 }
