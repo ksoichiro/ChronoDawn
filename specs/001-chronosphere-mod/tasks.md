@@ -238,14 +238,16 @@
   - Particles float upward (0.15-0.25 speed) with 70% spawn frequency
   - Placed multiple emitters in Ancient Ruins structure NBT
   - Visual indicator of Temporal Seal degradation (referenced in lore.md)
-- [ ] T115n [P] [US2] Implement Strange Forest biome for Ancient Ruins discoverability
-  - Purpose: Make Ancient Ruins discoverable through distinctive biome without explicit guidance items
-  - Biome name: "Strange Forest" (奇妙な森) - subtle name suggesting mystery without revealing lore
-  - Visual design: Blue-purple tinted leaves (#6B8CDA) indicating Chronosphere influence
-  - Generation: Ancient Ruins always generate underneath Strange Forest biome
-  - Lore integration: Temporal Seal weakening causes Chronosphere energy to leak into Overworld
-  - Player experience: Natural discovery through exploration without relying on Time Compass
-  - See specs/001-chronosphere-mod/research.md for detailed design documentation
+- [X] T115n [P] [US2] Implement Strange Forest biome for Ancient Ruins discoverability
+  - Created strange_forest.json biome with blue-purple foliage (#6B8CDA)
+  - Restricted Ancient Ruins generation to Strange Forest only (has_ancient_ruins.json)
+  - Added TerraBlender 4.1.0.8 dependency (Fabric/NeoForge/Common modules)
+  - Implemented ChronosphereOverworldRegion for biome injection via TerraBlender
+  - Registered biome in Fabric/NeoForge entry points
+  - Added English/Japanese localization ("Strange Forest" / "奇妙な森")
+  - Region weight: 2 (rare but discoverable within reasonable exploration range)
+  - Climate parameters: Temperature 0.0-0.5, Humidity 0.3-0.7, moderate terrain variation
+  - Files: ChronosphereOverworldRegion.java, strange_forest.json, updated build.gradle files
 
 ### Master Clock Tower & Boss Battle Improvements (US3 Bug Fixes & Enhancements - High Priority)
 
