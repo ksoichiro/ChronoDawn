@@ -238,16 +238,22 @@
   - Particles float upward (0.15-0.25 speed) with 70% spawn frequency
   - Placed multiple emitters in Ancient Ruins structure NBT
   - Visual indicator of Temporal Seal degradation (referenced in lore.md)
-- [X] T115n [P] [US2] Implement Strange Forest biome for Ancient Ruins discoverability
-  - Created strange_forest.json biome with blue-purple foliage (#6B8CDA)
-  - Restricted Ancient Ruins generation to Strange Forest only (has_ancient_ruins.json)
-  - Added TerraBlender 4.1.0.8 dependency (Fabric/NeoForge/Common modules)
-  - Implemented ChronosphereOverworldRegion for biome injection via TerraBlender
-  - Registered biome in Fabric/NeoForge entry points
-  - Added English/Japanese localization ("Strange Forest" / "奇妙な森")
-  - Region weight: 2 (rare but discoverable within reasonable exploration range)
-  - Climate parameters: Temperature 0.0-0.5, Humidity 0.3-0.7, moderate terrain variation
-  - Files: ChronosphereOverworldRegion.java, strange_forest.json, updated build.gradle files
+- [X] T115n [P] [US2] Implement stable Ancient Ruins placement with random_spread
+  - **Final Implementation**: Changed from concentric_rings to random_spread for distance stability
+  - **Placement**: spacing=48 chunks (768 blocks), separation=24 chunks (384 blocks minimum)
+  - **Distance**: Minimum 384 blocks, average 500-1000 blocks from spawn
+  - **Biomes**: Restricted to forests and taiga only (#minecraft:is_forest, #minecraft:is_taiga)
+  - **Terrain Adaptation**: beard_thin for smooth ground integration on slopes
+  - **Removed**: TerraBlender dependency, Strange Forest biome (chunk access limitations)
+  - **Removed**: StrangeLeavesProcessor, AncientRuinsSignalBlock (experimental code)
+  - **Documentation**: IMPLEMENTATION_LOG.md with 6 attempted approaches
+  - **Files**: ancient_ruins.json, has_ancient_ruins.json, build.gradle files, removed TerraBlender code
+- [X] T115o [P] [US2] Add tall tower to Ancient Ruins structure for long-range visibility
+  - **Purpose**: Physical structure (20-30 blocks tall) for reliable long-range discovery
+  - **Design**: Stone/brick tower with glowstone/sea lantern at top for nighttime visibility
+  - **Implementation**: Edit Ancient Ruins NBT structure file with Structure Block
+  - **Expected Range**: Visible from 100-200 blocks away due to height
+  - **Result**: Added tall tower to Ancient Ruins structure for improved discoverability from distance
 
 ### Master Clock Tower & Boss Battle Improvements (US3 Bug Fixes & Enhancements - High Priority)
 
