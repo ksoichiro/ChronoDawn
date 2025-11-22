@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "W": {
+      "item": "chronosphere:time_wheat"
+    },
+    "R": {
+      "item": "chronosphere:temporal_root"
+    }
+  },
+  "pattern": [
+    "WWW",
+    " R "
+  ],
+  "result": {
+    "id": "chronosphere:enhanced_time_bread",
+    "count": 1
+  }
+}
