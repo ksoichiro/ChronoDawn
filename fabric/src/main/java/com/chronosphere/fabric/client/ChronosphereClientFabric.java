@@ -125,6 +125,24 @@ public class ChronosphereClientFabric implements ClientModInitializer {
             RenderType.cutout()
         );
 
+        // Register Temporal Root to use cutout rendering (for transparency)
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.TEMPORAL_ROOT.get(),
+            RenderType.cutout()
+        );
+
+        // Register Chrono Melon Stem to use cutout rendering (for transparency)
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.CHRONO_MELON_STEM.get(),
+            RenderType.cutout()
+        );
+
+        // Register Timeless Mushroom to use cutout rendering (for transparency)
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.TIMELESS_MUSHROOM.get(),
+            RenderType.cutout()
+        );
+
         // Register Time Wood Door to use cutout rendering (for transparency)
         BlockRenderLayerMap.INSTANCE.putBlock(
             ModBlocks.TIME_WOOD_DOOR.get(),

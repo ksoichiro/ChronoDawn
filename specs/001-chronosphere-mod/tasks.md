@@ -144,16 +144,35 @@
 
 **Note**: 現在は時のパン(Time Bread)のみで食料が不足。作物や食料アイテムを追加して多様性を向上
 
-- [ ] T211 [US1] Design time-themed crop concepts (plant types, growth stages, harvest items, growth conditions)
-- [ ] T212 [P] [US1] Implement time-themed crop block and item (Temporal Wheat, Time Berry Bush, or similar)
-- [ ] T213 [P] [US1] Create crop textures for all growth stages in common/src/main/resources/assets/chronosphere/textures/block/
-- [ ] T214 [P] [US1] Add crop worldgen placement (natural generation in specific biomes)
-- [ ] T215 [P] [US1] Implement additional food items (cooked variants, crafted recipes, nutritional values)
-- [x] T216 [P] [US1] Add eating effect to Time Bread (e.g., Speed I for 30 seconds, or Regeneration I for 10 seconds)
+- [X] T211 [US1] Design time-themed crop concepts (plant types, growth stages, harvest items, growth conditions)
+- [X] T212 [P] [US1] Implement time-themed crop block and item (Temporal Wheat, Time Berry Bush, or similar)
+- [X] T213 [P] [US1] Create crop textures for all growth stages in common/src/main/resources/assets/chronosphere/textures/block/
+- [X] T214 [P] [US1] Add crop worldgen placement (natural generation in specific biomes)
+- [X] T215 [P] [US1] Implement additional food items (cooked variants, crafted recipes, nutritional values)
+- [X] T216 [P] [US1] Add eating effect to Time Bread (e.g., Speed I for 30 seconds, or Regeneration I for 10 seconds)
   - **Implemented**: Regeneration I for 5 seconds
   - **Rationale**: Shorter duration (5s instead of 10s) to prevent overpowered healing considering ease of farming Time Wheat
   - **Theme**: "Time reversal" concept - healing through rewinding damage
 - [ ] T217 [US1] Test crop growth mechanics and food item effects in-game
+
+**Implementation (T211-T215 completed 2025-11-22)**:
+- **T211 Design**: 3 crop types designed - Temporal Root (root vegetable), Chrono Melon (stem crop), Timeless Mushroom (fungus)
+- **T212 Implementation**:
+  - 4 block classes: TemporalRootBlock, ChronoMelonStemBlock, ChronoMelonBlock, TimelessMushroomBlock
+  - 12 item classes: 5 base foods + 7 crafted foods
+  - All registered in ModBlocks, ModItems, and creative tab
+- **T213 Textures**:
+  - 31 placeholder textures created (block: 20, item: 11)
+  - Texture design specifications documented in texture-design.md
+  - Note: Using temporary placeholders with basic modifications, will be replaced with custom designs later
+- **T214 Worldgen**:
+  - Configured features and placed features for all 3 crops
+  - Added to chronosphere_plains and chronosphere_forest biomes
+- **T215 Food Items**:
+  - 11 recipes created (1 smelting + 10 crafting)
+  - All food effects implemented (Regeneration, Speed, Night Vision, Absorption, Saturation)
+  - Loot tables for all crop blocks
+- **Commits**: 51b954b (implementation), fe6d3bd (texture designs), 670993c (placeholder textures)
 
 ### Forgotten Library Enhancements (US2 Enhancement - Medium Priority)
 
@@ -202,13 +221,31 @@
 
 **Guidance Methods**: 書物アイテム、村人との取引（地図）、進捗ヒント、構造物の出現頻度調整、ロケーターアイテムなど
 
-- [ ] T115f [US2] Research appropriate player guidance methods (book items, advancement hints, villager trades, structure frequency)
-- [ ] T115g [P] [US2] Create Chronicle of Chronosphere book item (guide book explaining dimension mechanics, structures, and progression)
+- [X] T115f [US2] Research appropriate player guidance methods (book items, advancement hints, villager trades, structure frequency)
+- [X] T115g [P] [US2] Create Chronicle of Chronosphere book item (guide book explaining dimension mechanics, structures, and progression)
+  - Created ChronicleOfChronosphereItem.java with English version only
+  - Book auto-given on first Chronosphere entry
+  - Added to creative tab as readable vanilla written_book
+  - Documented complete worldbuilding in specs/001-chronosphere-mod/lore.md
 - [ ] T115h [P] [US2] Add villager trades for structure maps (Ancient Ruins Map, Desert Clock Tower Map, Master Clock Tower Map)
-- [ ] T115i [US2] Add advancement system with descriptive hints for key progression milestones (first portal, Ancient Ruins discovery, Time Guardian defeat)
-- [ ] T115j [US2] Adjust structure spawn rates to make discovery easier (increase frequency or reduce spacing)
+- [X] T115i [US2] Add advancement system with descriptive hints for key progression milestones (first portal, Ancient Ruins discovery, Time Guardian defeat)
+  - Improved existing advancement descriptions (portal_creation, dimension_entry, portal_stabilization)
+  - Added explicit next-step guidance in advancement text
+- [X] T115j [US2] Adjust structure spawn rates to make discovery easier (increase frequency or reduce spacing)
+  - Ancient Ruins: spacing 16→12, separation 4→3 (25% more frequent)
+  - Forgotten Library: spacing 50→30, separation 25→15 (40% more frequent)
+  - Desert Clock Tower: spacing 32→20, separation 8→5 (37.5% more frequent)
+  - Master Clock Tower: spacing 100→70, separation 50→35 (30% more frequent)
 - [ ] T115k [P] [US2] Create Time Compass item (points to nearest key structure, similar to lodestone compass)
-- [ ] T115l [US2] Add initial guidance on first dimension entry (chat message, advancement, or book given to player)
+- [X] T115l [US2] Add initial guidance on first dimension entry (chat message, advancement, or book given to player)
+  - Chronicle of Chronosphere auto-given to player on first Chronosphere entry
+  - Book dropped at player's feet if inventory is full
+- [X] T115m [US2] Implement time distortion particle effects for Ancient Ruins (Temporal Seal failure visualization)
+  - Created TemporalParticleEmitterBlock (invisible, indestructible, no collision)
+  - Uses SOUL_FIRE_FLAME particles (cyan-blue color)
+  - Particles float upward (0.15-0.25 speed) with 70% spawn frequency
+  - Placed multiple emitters in Ancient Ruins structure NBT
+  - Visual indicator of Temporal Seal degradation (referenced in lore.md)
 
 ### Master Clock Tower & Boss Battle Improvements (US3 Bug Fixes & Enhancements - High Priority)
 
@@ -221,7 +258,13 @@
 - [ ] T227 [P] [US3] Fix water disappearing from Master Clock structure NBT (investigate waterlogging state preservation, ensure water blocks save correctly)
 - [ ] T228 [P] [US3] Add glowing effect to Time Tyrant entity for visibility (apply Glowing status effect or custom shader/outline rendering)
 - [ ] T229 [P] [US3] Fix Time Tyrant teleport suffocation bug (validate teleport destination has 2+ air blocks above, revert position if invalid)
-- [ ] T229a [US3] Investigate Time Tyrant buff/debuff behavior (verify if Slowness is incorrectly applied instead of intended buff, check status effect logic)
+- [X] T229a [US3] Investigate Time Tyrant buff/debuff behavior (verify if Slowness is incorrectly applied instead of intended buff, check status effect logic)
+  - **Completed**: Identified and fixed issue where Time Tyrant was receiving unintended Slowness IV/V from Time Distortion Effect
+  - **Root Cause**: Time Tyrant extends Monster class but was not excluded from TimeDistortionEffect.isHostileMob()
+  - **Impact**: Phase 2 Time Acceleration (Speed II buff) was being overridden by Slowness IV/V, making the ability non-functional
+  - **Fix**: Added Time Tyrant exclusion to TimeDistortionEffect.java (similar to existing Time Guardian exclusion)
+  - **Verification**: Tested in-game (Survival mode) - Time Acceleration now works correctly with visible particle effects and increased speed
+  - **Documentation**: Detailed investigation results recorded in research.md (lines 3401-3549)
 - [ ] T230 [US3] Test all Master Clock Tower and boss battle fixes in-game
 
 ### Ancient Gears Acquisition (US3 Bug Fix - Critical Priority)

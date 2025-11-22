@@ -13,6 +13,18 @@ import com.chronosphere.items.consumables.TimeJamItem;
 import com.chronosphere.items.consumables.TimeWheatSeedsItem;
 import com.chronosphere.items.consumables.TimeWheatItem;
 import com.chronosphere.items.consumables.TimeBreadItem;
+import com.chronosphere.items.consumables.TemporalRootItem;
+import com.chronosphere.items.consumables.BakedTemporalRootItem;
+import com.chronosphere.items.consumables.ChronoMelonSliceItem;
+import com.chronosphere.items.consumables.ChronoMelonSeedsItem;
+import com.chronosphere.items.consumables.TimelessMushroomItem;
+import com.chronosphere.items.consumables.TemporalRootStewItem;
+import com.chronosphere.items.consumables.GlisteningChronoMelonItem;
+import com.chronosphere.items.consumables.ChronoMelonJuiceItem;
+import com.chronosphere.items.consumables.TimelessMushroomSoupItem;
+import com.chronosphere.items.consumables.EnhancedTimeBreadItem;
+import com.chronosphere.items.consumables.TimeWheatCookieItem;
+import com.chronosphere.items.consumables.GoldenTimeWheatItem;
 import com.chronosphere.items.equipment.ClockstoneArmorItem;
 import com.chronosphere.items.equipment.ClockstoneAxeItem;
 import com.chronosphere.items.equipment.ClockstoneHoeItem;
@@ -304,6 +316,16 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.BOSS_ROOM_DOOR.get(), new Item.Properties())
     );
 
+    /**
+     * Temporal Particle Emitter - Invisible block that emits time distortion particles.
+     * Structure-only block, not added to creative tab.
+     * Can be placed with commands for testing: /give @s chronosphere:temporal_particle_emitter
+     */
+    public static final RegistrySupplier<Item> TEMPORAL_PARTICLE_EMITTER = ITEMS.register(
+        "temporal_particle_emitter",
+        () -> new BlockItem(ModBlocks.TEMPORAL_PARTICLE_EMITTER.get(), new Item.Properties())
+    );
+
     // === Material Items ===
 
     /**
@@ -469,6 +491,18 @@ public class ModItems {
         () -> new PortalStabilizerItem(PortalStabilizerItem.createProperties())
     );
 
+    /**
+     * Chronicle of Chronosphere - Player guide book.
+     * Contains information about dimension mechanics, structures, items, and progression.
+     * Given to players automatically on first entry to Chronosphere dimension.
+     */
+    public static final RegistrySupplier<Item> CHRONICLE_OF_CHRONOSPHERE = ITEMS.register(
+        "chronicle_of_chronosphere",
+        () -> new com.chronosphere.items.ChronicleOfChronosphereItem(
+            com.chronosphere.items.ChronicleOfChronosphereItem.createProperties()
+        )
+    );
+
     // === Consumables ===
 
     /**
@@ -523,6 +557,134 @@ public class ModItems {
     public static final RegistrySupplier<Item> TIME_BREAD = ITEMS.register(
         "time_bread",
         () -> new TimeBreadItem(TimeBreadItem.createProperties())
+    );
+
+    /**
+     * Temporal Root - Root vegetable that can be planted or eaten.
+     * Restores 3 hunger points (raw).
+     * Can be planted on farmland like carrots.
+     */
+    public static final RegistrySupplier<Item> TEMPORAL_ROOT = ITEMS.register(
+        "temporal_root",
+        () -> new TemporalRootItem(TemporalRootItem.createProperties())
+    );
+
+    /**
+     * Baked Temporal Root - Cooked root vegetable with healing properties.
+     * Restores 6 hunger points + Regeneration I for 5 seconds.
+     * Crafted by smelting Temporal Root.
+     */
+    public static final RegistrySupplier<Item> BAKED_TEMPORAL_ROOT = ITEMS.register(
+        "baked_temporal_root",
+        () -> new BakedTemporalRootItem(BakedTemporalRootItem.createProperties())
+    );
+
+    /**
+     * Chrono Melon Slice - Basic food item from Chrono Melon.
+     * Restores 2 hunger points.
+     * Fast eating speed (1.6 seconds).
+     */
+    public static final RegistrySupplier<Item> CHRONO_MELON_SLICE = ITEMS.register(
+        "chrono_melon_slice",
+        () -> new ChronoMelonSliceItem(ChronoMelonSliceItem.createProperties())
+    );
+
+    /**
+     * Chrono Melon Seeds - Seeds for planting Chrono Melon Stems.
+     * Can be planted on farmland to grow Chrono Melon.
+     */
+    public static final RegistrySupplier<Item> CHRONO_MELON_SEEDS = ITEMS.register(
+        "chrono_melon_seeds",
+        () -> new ChronoMelonSeedsItem(ChronoMelonSeedsItem.createProperties())
+    );
+
+    /**
+     * Chrono Melon Block Item - Full melon block item.
+     * Can be placed as decoration or broken for 9 slices.
+     */
+    public static final RegistrySupplier<Item> CHRONO_MELON = ITEMS.register(
+        "chrono_melon",
+        () -> new BlockItem(ModBlocks.CHRONO_MELON.get(), new Item.Properties())
+    );
+
+    /**
+     * Timeless Mushroom - Edible mushroom that can be planted or eaten.
+     * Restores 2 hunger points.
+     * Can be planted in dark areas (light level 12 or less).
+     */
+    public static final RegistrySupplier<Item> TIMELESS_MUSHROOM = ITEMS.register(
+        "timeless_mushroom",
+        () -> new TimelessMushroomItem(TimelessMushroomItem.createProperties())
+    );
+
+    /**
+     * Temporal Root Stew - Hearty stew combining Baked Temporal Root and Timeless Mushroom.
+     * Restores 8 hunger points with Regeneration II for 10 seconds.
+     * Recipe: 1x Baked Temporal Root + 1x Timeless Mushroom + 1x Bowl
+     */
+    public static final RegistrySupplier<Item> TEMPORAL_ROOT_STEW = ITEMS.register(
+        "temporal_root_stew",
+        () -> new TemporalRootStewItem(TemporalRootStewItem.createProperties())
+    );
+
+    /**
+     * Glistening Chrono Melon - Premium melon slice infused with gold.
+     * Restores 2 hunger points with high saturation and Absorption I for 30 seconds.
+     * Recipe: 1x Chrono Melon Slice + 8x Gold Nuggets
+     */
+    public static final RegistrySupplier<Item> GLISTENING_CHRONO_MELON = ITEMS.register(
+        "glistening_chrono_melon",
+        () -> new GlisteningChronoMelonItem(GlisteningChronoMelonItem.createProperties())
+    );
+
+    /**
+     * Chrono Melon Juice - Drinkable beverage providing Speed effect.
+     * Restores 4 hunger points with Speed I for 60 seconds.
+     * Recipe: 4x Chrono Melon Slices + 1x Glass Bottle
+     */
+    public static final RegistrySupplier<Item> CHRONO_MELON_JUICE = ITEMS.register(
+        "chrono_melon_juice",
+        () -> new ChronoMelonJuiceItem(ChronoMelonJuiceItem.createProperties())
+    );
+
+    /**
+     * Timeless Mushroom Soup - Simple mushroom soup with Night Vision effect.
+     * Restores 6 hunger points with Night Vision for 60 seconds.
+     * Recipe: 2x Timeless Mushrooms + 1x Bowl
+     */
+    public static final RegistrySupplier<Item> TIMELESS_MUSHROOM_SOUP = ITEMS.register(
+        "timeless_mushroom_soup",
+        () -> new TimelessMushroomSoupItem(TimelessMushroomSoupItem.createProperties())
+    );
+
+    /**
+     * Enhanced Time Bread - Improved Time Bread fortified with Temporal Root.
+     * Restores 7 hunger points with Saturation I for 5 seconds.
+     * Recipe: 3x Time Wheat + 1x Temporal Root
+     */
+    public static final RegistrySupplier<Item> ENHANCED_TIME_BREAD = ITEMS.register(
+        "enhanced_time_bread",
+        () -> new EnhancedTimeBreadItem(EnhancedTimeBreadItem.createProperties())
+    );
+
+    /**
+     * Time Wheat Cookie - Simple cookie made from Time Wheat and cocoa beans.
+     * Restores 2 hunger points. Fast-eating snack.
+     * Recipe: 2x Time Wheat + 1x Cocoa Beans
+     */
+    public static final RegistrySupplier<Item> TIME_WHEAT_COOKIE = ITEMS.register(
+        "time_wheat_cookie",
+        () -> new TimeWheatCookieItem(TimeWheatCookieItem.createProperties())
+    );
+
+    /**
+     * Golden Time Wheat - Time Wheat infused with gold, providing powerful effects.
+     * Restores 4 hunger points with Regeneration II (10s) and Absorption II (2min).
+     * Recipe: 1x Time Wheat + 8x Gold Ingots
+     */
+    public static final RegistrySupplier<Item> GOLDEN_TIME_WHEAT = ITEMS.register(
+        "golden_time_wheat",
+        () -> new GoldenTimeWheatItem(GoldenTimeWheatItem.createProperties())
     );
 
     // === Equipment - Weapons ===
@@ -917,6 +1079,7 @@ public class ModItems {
         output.accept(TEMPORAL_BRICKS_WALL.get());
         output.accept(TEMPORAL_MOSS.get());
         output.accept(FROZEN_TIME_ICE.get());
+        // Note: TEMPORAL_PARTICLE_EMITTER is not added to creative tab (structure-only block)
 
         // === Base Materials ===
         output.accept(CLOCKSTONE.get());
@@ -929,6 +1092,8 @@ public class ModItems {
         // === Portal Items ===
         output.accept(TIME_HOURGLASS.get());
         output.accept(PORTAL_STABILIZER.get());
+        // Add actual readable book instead of placeholder item
+        output.accept(com.chronosphere.items.ChronicleOfChronosphereItem.createBook());
 
         // === Consumables ===
         output.accept(FRUIT_OF_TIME.get());
@@ -937,6 +1102,23 @@ public class ModItems {
         output.accept(TIME_WHEAT_SEEDS.get());
         output.accept(TIME_WHEAT.get());
         output.accept(TIME_BREAD.get());
+
+        // === Crop System (T211-T215) ===
+        output.accept(TEMPORAL_ROOT.get());
+        output.accept(BAKED_TEMPORAL_ROOT.get());
+        output.accept(CHRONO_MELON_SEEDS.get());
+        output.accept(CHRONO_MELON_SLICE.get());
+        output.accept(CHRONO_MELON.get());
+        output.accept(TIMELESS_MUSHROOM.get());
+
+        // === Crafted Foods (T215) ===
+        output.accept(TEMPORAL_ROOT_STEW.get());
+        output.accept(TIMELESS_MUSHROOM_SOUP.get());
+        output.accept(GLISTENING_CHRONO_MELON.get());
+        output.accept(CHRONO_MELON_JUICE.get());
+        output.accept(ENHANCED_TIME_BREAD.get());
+        output.accept(TIME_WHEAT_COOKIE.get());
+        output.accept(GOLDEN_TIME_WHEAT.get());
 
         // === Equipment - Weapons ===
         output.accept(CLOCKSTONE_SWORD.get());

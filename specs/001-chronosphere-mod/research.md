@@ -4573,3 +4573,152 @@ If critical issues are discovered:
 
 **Last Updated**: 2025-11-18
 **Status**: Planning complete, ready to begin Phase 1 implementation
+## Time Tyrant Buff/Debuff Behavior Investigation (T229a)
+
+**Date**: 2025-11-18
+**Task**: T229a [US3] Investigate Time Tyrant buff/debuff behavior
+**Issue**: Time Tyrant's Speed II buff is not working as intended
+
+### Problem Identified
+
+**Root Cause**: Time Tyrant is receiving unintended Slowness IV/V effect from Time Distortion Effect
+
+Time Tyrant (最終ボス) is incorrectly receiving the Time Distortion Effect that is meant only for regular hostile mobs. This causes the following issues:
+
+1. **Intended Behavior** (`TimeTyrantEntity.java:454-482`):
+   - Phase 2 ability: Time Acceleration
+   - Should apply Speed II to self (100 ticks = 5 seconds)
+   - Purpose: Increase boss mobility during Phase 2
+
+2. **Actual Behavior**:
+   - Time Distortion Effect applies Slowness IV every tick to all Monster entities
+   - Time Tyrant extends Monster class, so receives Slowness IV/V
+   - Slowness IV/V overrides or conflicts with Speed II buff
+   - Result: Time Acceleration ability appears ineffective
+
+### Technical Analysis
+
+**File**: `common/src/main/java/com/chronosphere/core/time/TimeDistortionEffect.java`
+**Method**: `isHostileMob()` (lines 107-128)
+
+```java
+private static boolean isHostileMob(LivingEntity entity) {
+    // Exclude players
+    if (entity instanceof Player player) {
+        return false;
+    }
+
+    // Exclude Time Guardian (boss should move at normal speed)
+    if (entity instanceof TimeGuardianEntity) {
+        return false;  // ← Time Guardian is explicitly excluded
+    }
+
+    // Exclude Time Keeper (friendly trader NPC)
+    if (entity instanceof TimeKeeperEntity) {
+        return false;
+    }
+
+    // Include hostile mobs (Monster class and subclasses)
+    return entity instanceof Monster;  // ← Time Tyrant is NOT excluded!
+}
+```
+
+**Problem**:
+- Time Guardian (mini-boss) is explicitly excluded from Time Distortion Effect (line 117-119)
+- Time Tyrant (final boss) is NOT excluded
+- Since Time Tyrant extends Monster class (`TimeTyrantEntity.java:71`), it receives Slowness IV/V
+
+### Effect Interaction
+
+**Time Distortion Effect**:
+- Applied every tick to all Monster entities in Chronosphere dimension
+- Slowness IV (amplifier 3): 60% movement speed reduction
+- Slowness V (amplifier 4, with Eye of Chronos): 75% movement speed reduction
+- Duration: 100 ticks (5 seconds), continuously reapplied
+
+**Time Acceleration Buff**:
+- Applied by Time Tyrant to self during Phase 2
+- Speed II (amplifier 1): 40% movement speed increase
+- Duration: 100 ticks (5 seconds)
+- Cooldown: 160 ticks (8 seconds)
+
+**Result**: Slowness IV/V (higher amplifier) likely overrides or conflicts with Speed II, making Time Acceleration ineffective
+
+### Impact
+
+1. **Gameplay Impact**:
+   - Time Tyrant Phase 2 is easier than intended
+   - Boss mobility is severely reduced when it should be increased
+   - Time Acceleration ability is non-functional
+
+2. **Design Intent Violation**:
+   - Boss battles should showcase unique mechanics
+   - Phase 2 Time Acceleration is a key difficulty escalation
+   - Current behavior contradicts design specification
+
+### Solution
+
+Add Time Tyrant exclusion to `TimeDistortionEffect.isHostileMob()`:
+
+```java
+// Exclude Time Guardian (boss should move at normal speed)
+if (entity instanceof TimeGuardianEntity) {
+    return false;
+}
+
+// Exclude Time Tyrant (boss should move at normal speed)
+if (entity instanceof com.chronosphere.entities.bosses.TimeTyrantEntity) {
+    return false;
+}
+```
+
+### Related Files
+
+**Time Tyrant Entity**:
+- `common/src/main/java/com/chronosphere/entities/bosses/TimeTyrantEntity.java`
+  - Line 71: `extends Monster`
+  - Lines 454-482: `handleTimeAccelerationAbility()` (Speed II buff)
+
+**Time Distortion Effect**:
+- `common/src/main/java/com/chronosphere/core/time/TimeDistortionEffect.java`
+  - Lines 65-88: `applyTimeDistortion()` (main logic)
+  - Lines 107-128: `isHostileMob()` (exclusion logic)
+
+**Entity Event Handler**:
+- `common/src/main/java/com/chronosphere/events/EntityEventHandler.java`
+  - Lines 104-111: `processChronosphereEntities()` (calls `applyTimeDistortion()`)
+
+### Testing Recommendations
+
+After implementing the fix:
+
+1. **Verify Time Acceleration works**:
+   - Spawn Time Tyrant with `/summon chronosphere:time_tyrant`
+   - Reduce HP to Phase 2 (66%-33% HP)
+   - Observe speed increase when Time Acceleration triggers
+   - Expected: Boss moves noticeably faster with Speed II particles
+
+2. **Verify no Slowness effect**:
+   - Use `/effect give @e[type=chronosphere:time_tyrant] minecraft:glowing 999999 0 true` to track boss
+   - Check active effects with F3 debug screen or effect particles
+   - Expected: No Slowness particles, only Speed particles during Time Acceleration
+
+3. **Verify exclusion consistency**:
+   - Test Time Guardian for comparison (should also not have Slowness)
+   - Test regular mobs (should have Slowness IV/V)
+   - Expected: Both bosses move at normal/buffed speed, regular mobs are slowed
+
+### Design Consistency Note
+
+**Boss Design Philosophy**:
+- Bosses should be immune to environmental debuffs that affect regular mobs
+- Time Distortion Effect is a dimension-wide mechanic to help players
+- Applying it to bosses contradicts the "challenging boss battle" design intent
+- Both Time Guardian and Time Tyrant should be excluded for consistency
+
+**Precedent**:
+- Time Guardian already excluded (`TimeDistortionEffect.java:117-119`)
+- Clockwork Sentinel has explicit Time Distortion immunity as a mob trait
+- Pattern: Boss-tier entities should be immune to time distortion
+
+---

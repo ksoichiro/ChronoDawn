@@ -25,6 +25,7 @@ import net.minecraft.world.item.Item;
  * - This is a basic food item (similar to vanilla bread)
  * - Provides moderate nutrition with time-themed regeneration effect
  * - Easy to craft for early-game sustenance and healing
+ * - Enhanced Time Bread provides much longer Regeneration effect (10 seconds)
  *
  * Reference: spec.md (User Story 1 Enhancement, FR-035)
  * Task: T216 [US1] Add eating effect to Time Bread

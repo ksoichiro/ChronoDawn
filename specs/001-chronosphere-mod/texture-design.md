@@ -955,6 +955,178 @@ This creates smooth rotating gear animation. The PNG should contain multiple fra
 
 ---
 
+---
+
+## Crop Textures (T211-T215 Implementation)
+
+### Temporal Root (時の根菜)
+
+**Block Textures**: `temporal_root_stage_0.png` ~ `temporal_root_stage_7.png` (8 stages)
+**Item Textures**: `temporal_root.png`, `baked_temporal_root.png`
+
+**コンセプト**:
+- 根菜類の作物（ニンジン/ポテトのような）
+- 時間をテーマにした地下作物
+- 生で食べるか焼いて食べる
+
+**デザイン方向性**:
+- **ベース**: バニラのニンジン（carrots）を参考
+- **カラー**: 淡いオレンジ/ゴールド系（時間のテーマカラー #db8813）
+- **成長段階**:
+  - Stage 0-3: 小さな葉のみ（地上部分）
+  - Stage 4-6: 葉が成長し、根の一部が見える
+  - Stage 7: 完全に成熟、根が大きく見える
+- **アイテム**:
+  - `temporal_root.png`: ニンジンのような形状、オレンジ/ゴールド色
+  - `baked_temporal_root.png`: 焼き色がついた根菜、より濃いオレンジ色
+
+**プレースホルダー**: バニラのcarrots_stage_*.png と carrot.png を使用
+
+---
+
+### Chrono Melon (時のメロン)
+
+**Block Textures**:
+- `chrono_melon_stem_stage_0.png` ~ `chrono_melon_stem_stage_7.png` (8 stages)
+- `chrono_melon_side.png`, `chrono_melon_top.png`, `chrono_melon_bottom.png`
+
+**Item Textures**: `chrono_melon_slice.png`, `chrono_melon_seeds.png`
+
+**コンセプト**:
+- メロン/カボチャのような茎作物
+- 時間の結晶化したエッセンスを含むメロン
+- スライスして食べる
+
+**デザイン方向性**:
+- **ベース**: バニラのメロン（melon）を参考
+- **カラー**: ゴールデン/アンバー色（時間のテーマカラー）
+- **茎の成長段階**:
+  - Stage 0-3: 小さく細い茎
+  - Stage 4-6: 茎が太く成長
+  - Stage 7: 完全に成熟、隣にメロンを生成可能
+- **メロンブロック**:
+  - Side: ゴールデンイエローの皮、縦縞模様
+  - Top/Bottom: 茎の跡、放射状の模様
+- **アイテム**:
+  - `chrono_melon_slice.png`: 黄金色のメロンスライス、時計の針のような模様
+  - `chrono_melon_seeds.png`: 小さな金色の種
+
+**プレースホルダー**: バニラのmelon_stem_*.png, melon_*.png, melon_slice.png, melon_seeds.png を使用
+
+---
+
+### Timeless Mushroom (時知らずのキノコ)
+
+**Block/Item Texture**: `timeless_mushroom.png`
+
+**コンセプト**:
+- 暗所で育つ食用キノコ
+- 時間の流れから外れた存在
+- 銀/白色で、Unstable Fungus（紫色）と区別
+
+**デザイン方向性**:
+- **ベース**: バニラのキノコ（brown_mushroom または red_mushroom）を参考
+- **カラー**: 銀/白色、淡く光る（#C0C0C0 ~ #E8E8E8）
+- **特徴**:
+  - 傘は丸く、淡い銀白色
+  - 柄は白っぽく、半透明感
+  - 微かに光る（時間の外にある存在感）
+  - Unstable Fungusとは明確に異なる色（紫 vs 銀白）
+- **雰囲気**:
+  - 幽霊のような、時間を超越した存在
+  - 「Timeless（時知らず）」= 時間の流れに影響されない
+
+**プレースホルダー**: バニラのbrown_mushroom.png を使用（色は後で調整）
+
+---
+
+### Enhanced Time Bread (強化された時のパン)
+
+**Item Texture**: `enhanced_time_bread.png`
+
+**コンセプト**:
+- Time Breadの強化版、Temporal Rootを加えて栄養価を高めた
+- レシピ: 3 Time Wheat + 1 Temporal Root
+- 効果: Saturation I (5秒)
+
+**デザイン方向性**:
+- **ベース**: バニラのbread.pngを参考、Time Breadの上位版
+- **カラー**:
+  - メインカラー: やや濃いめの茶色/ゴールド（パンの焼き色）
+  - アクセントカラー: オレンジ色の筋や斑点（Temporal Rootの混入）
+- **特徴**:
+  - 通常のパンより大きめ、または2つ重ねた印象
+  - Temporal Rootの色（オレンジ #db8813）が生地に混ざっている感じ
+  - 表面に金色の光沢、わずかに発光感
+  - 切り口や断面にオレンジ色の野菜片が見える
+- **雰囲気**:
+  - 栄養豊富な高級パン
+  - 通常のTime Breadより豪華で健康的
+  - 「強化」されていることが一目で分かる
+
+**プレースホルダー**: バニラのbread.png を使用
+
+---
+
+### Time Wheat Cookie (時の小麦クッキー)
+
+**Item Texture**: `time_wheat_cookie.png`
+
+**コンセプト**:
+- Time WheatとChrono Melon Sliceで作る軽食
+- レシピ: 2 Time Wheat + 1 Chrono Melon Slice → 8個
+- 効果: なし（高速食べ可能）
+
+**デザイン方向性**:
+- **ベース**: バニラのcookie.pngを参考
+- **カラー**:
+  - メインカラー: 黄金色の焼き色（時間のテーマカラー #db8813）
+  - アクセントカラー: 明るいゴールド（Chrono Melonの影響）
+- **特徴**:
+  - 円形または四角形のクッキー
+  - 表面に金色の粒や結晶（Chrono Melonの果肉片）
+  - わずかにキラキラした質感
+  - 焼き目がしっかりついている
+  - バニラのクッキーより明るく、黄金色が強い
+- **雰囲気**:
+  - 手軽なおやつ、エネルギー補給
+  - 「時間のエッセンス」が詰まったクッキー
+  - 通常のクッキーより高級感
+
+**プレースホルダー**: バニラのcookie.png を使用
+
+---
+
+### Golden Time Wheat (黄金の時の小麦)
+
+**Item Texture**: `golden_time_wheat.png`
+
+**コンセプト**:
+- 金インゴットで囲んで作る最上級の時間素材
+- レシピ: 1 Time Wheat + 8 Gold Ingots
+- 効果: Regeneration II (10秒) + Absorption II (2分)、常に食べられる
+
+**デザイン方向性**:
+- **ベース**: バニラのwheat.pngとgolden_apple.pngを融合
+- **カラー**:
+  - メインカラー: 明るい黄金色、メタリックゴールド
+  - ハイライト: 純金のような輝き
+- **特徴**:
+  - Time Wheatの形状を保ちつつ、完全に黄金化
+  - Golden Appleのような豪華な光沢、グロー効果
+  - 麦穂全体が金色に輝いている
+  - エンチャントグリント風の効果（オプション）
+  - 魔法的なオーラや輝きを放っている
+- **雰囲気**:
+  - 最上級の時間アイテム
+  - Golden Carrot、Golden Appleに匹敵する貴重さ
+  - 「伝説の食材」感
+  - 時間と富の融合
+
+**プレースホルダー**: バニラのwheat.png を使用
+
+---
+
 ## Implementation Status（更新版）
 
 - ✅ Clockstone - 完成済み
@@ -970,6 +1142,12 @@ This creates smooth rotating gear animation. The PNG should contain multiple fra
 - ⚠️ **Time Tyrant's Mail** - enhanced_clockstone_chestplate.pngのコピー、要編集（優先度：中）
 - ⚠️ **Echoing Time Boots** - enhanced_clockstone_boots.pngのコピー、要編集（優先度：中）
 - ⚠️ **Unstable Pocket Watch** - time_clock.pngのコピー、要編集（優先度：中）
+- ⚠️ **Temporal Root** (8 stages + 2 items) - プレースホルダー: carrots/carrot（T213）
+- ⚠️ **Chrono Melon** (8 stem stages + 3 block faces + 2 items) - プレースホルダー: melon系（T213）
+- ⚠️ **Timeless Mushroom** (1 texture) - プレースホルダー: brown_mushroom（T213）
+- ⚠️ **Enhanced Time Bread** - プレースホルダー: bread.png、デザイン定義済み（T215）
+- ⚠️ **Time Wheat Cookie** - プレースホルダー: cookie.png、デザイン定義済み（T215）
+- ⚠️ **Golden Time Wheat** - プレースホルダー: wheat.png、デザイン定義済み（T215）
 
 ---
 
