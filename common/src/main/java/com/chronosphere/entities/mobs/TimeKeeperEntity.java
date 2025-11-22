@@ -1,9 +1,17 @@
 package com.chronosphere.entities.mobs;
 
+import com.chronosphere.items.TimeCompassItem;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
@@ -29,8 +37,10 @@ import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.levelgen.structure.Structure;
 import org.jetbrains.annotations.Nullable;
 import com.chronosphere.registry.ModItems;
+
 import java.util.Optional;
 
 /**
@@ -178,6 +188,134 @@ public class TimeKeeperEntity extends AbstractVillager {
                 5, // XP reward
                 0.05f
             ));
+
+            // Trade 5: 16 Clockstone → Time Compass (Desert Clock Tower)
+            // Points to nearest Desert Clock Tower in Chronosphere
+            // Early-game guidance item (accessible right after entering Chronosphere)
+            ItemStack desertTowerCompass = createCompassWithPosition(TimeCompassItem.STRUCTURE_DESERT_CLOCK_TOWER);
+            offers.add(new MerchantOffer(
+                new ItemCost(ModItems.CLOCKSTONE.get(), 16),
+                desertTowerCompass,
+                3, // Max uses (can buy multiple for party members)
+                10, // XP reward
+                0.05f
+            ));
+
+            // Trade 6: 8 Enhanced Clockstone → Time Compass (Master Clock)
+            // Points to nearest Master Clock Tower in Chronosphere
+            // Mid-game guidance item (after Desert Clock Tower)
+            ItemStack masterClockCompass = createCompassWithPosition(TimeCompassItem.STRUCTURE_MASTER_CLOCK);
+            offers.add(new MerchantOffer(
+                new ItemCost(ModItems.ENHANCED_CLOCKSTONE.get(), 8),
+                masterClockCompass,
+                1, // Max uses (rare, powerful item)
+                15, // Higher XP reward
+                0.05f
+            ));
+        }
+    }
+
+    /**
+     * Create a Time Compass without coordinates pre-set.
+     * Player must right-click the compass to search for the structure.
+     *
+     * Design Decision: Structure search is NOT performed during trade creation
+     * because it would block world loading and cause performance issues.
+     * Instead, players manually trigger the search by right-clicking the compass.
+     *
+     * @param structureType Structure type to locate
+     * @return Time Compass with target structure type set, but no coordinates yet
+     */
+    private ItemStack createCompassWithPosition(String structureType) {
+        ItemStack compass = TimeCompassItem.createCompass(structureType);
+        // Coordinates will be set when player right-clicks the compass (see TimeCompassItem.use())
+        return compass;
+    }
+
+    @Override
+    public void notifyTrade(MerchantOffer offer) {
+        super.notifyTrade(offer);
+        // No post-processing needed - compass coordinates are set when player uses the item
+    }
+
+    /**
+     * Locate a structure and set its position in the Time Compass.
+     *
+     * @param serverLevel Server level to search in
+     * @param compassStack Time Compass ItemStack
+     * @param structureType Structure type to locate
+     */
+    private void locateAndSetStructurePosition(ServerLevel serverLevel, ItemStack compassStack, String structureType) {
+        com.chronosphere.Chronosphere.LOGGER.info("Time Keeper: Locating structure for compass - type: {}", structureType);
+
+        // Determine which dimension to search in
+        ServerLevel searchLevel = serverLevel;
+        ResourceLocation structureId;
+
+        switch (structureType) {
+            case TimeCompassItem.STRUCTURE_ANCIENT_RUINS:
+                // Ancient Ruins are in the Overworld
+                searchLevel = serverLevel.getServer().getLevel(Level.OVERWORLD);
+                structureId = ResourceLocation.fromNamespaceAndPath("chronosphere", "ancient_ruins");
+                break;
+            case TimeCompassItem.STRUCTURE_DESERT_CLOCK_TOWER:
+                // Desert Clock Tower is in Chronosphere dimension
+                searchLevel = serverLevel.getServer().getLevel(
+                    ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath("chronosphere", "chronosphere"))
+                );
+                structureId = ResourceLocation.fromNamespaceAndPath("chronosphere", "desert_clock_tower");
+                break;
+            case TimeCompassItem.STRUCTURE_MASTER_CLOCK:
+                // Master Clock is in Chronosphere dimension
+                searchLevel = serverLevel.getServer().getLevel(
+                    ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath("chronosphere", "chronosphere"))
+                );
+                structureId = ResourceLocation.fromNamespaceAndPath("chronosphere", "master_clock");
+                break;
+            default:
+                com.chronosphere.Chronosphere.LOGGER.warn("Time Keeper: Unknown structure type: {}", structureType);
+                return;
+        }
+
+        if (searchLevel == null) {
+            com.chronosphere.Chronosphere.LOGGER.warn("Time Keeper: Search level is null for structure: {}", structureType);
+            return;
+        }
+
+        // Get trading player's position as search origin
+        Player tradingPlayer = this.getTradingPlayer();
+        BlockPos searchOrigin = tradingPlayer != null ? tradingPlayer.blockPosition() : this.blockPosition();
+        com.chronosphere.Chronosphere.LOGGER.info("Time Keeper: Searching from position: {}", searchOrigin);
+
+        // Get structure registry
+        var structureRegistry = searchLevel.registryAccess().registryOrThrow(Registries.STRUCTURE);
+        var structureHolder = structureRegistry.get(structureId);
+
+        if (structureHolder != null) {
+            com.chronosphere.Chronosphere.LOGGER.info("Time Keeper: Structure found in registry: {}", structureId);
+
+            // Create HolderSet for the single structure
+            HolderSet<Structure> structureSet = HolderSet.direct(structureRegistry.wrapAsHolder(structureHolder));
+
+            // Locate nearest structure
+            var structurePair = searchLevel.getChunkSource().getGenerator().findNearestMapStructure(
+                searchLevel,
+                structureSet,
+                searchOrigin,
+                100, // Search radius in chunks
+                false // Skip known structures
+            );
+
+            if (structurePair != null) {
+                BlockPos structurePos = structurePair.getFirst();
+                GlobalPos globalPos = GlobalPos.of(searchLevel.dimension(), structurePos);
+                TimeCompassItem.setTargetPosition(compassStack, globalPos);
+                com.chronosphere.Chronosphere.LOGGER.info("Time Keeper: Successfully set compass target to: {}", structurePos);
+            } else {
+                com.chronosphere.Chronosphere.LOGGER.warn("Time Keeper: No structure found within 100 chunks of {}", searchOrigin);
+            }
+        } else {
+            com.chronosphere.Chronosphere.LOGGER.warn("Time Keeper: Structure not found in registry: {}", structureId);
         }
     }
 

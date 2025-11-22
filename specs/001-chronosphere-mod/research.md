@@ -3547,3 +3547,118 @@ After implementing the fix:
 - Pattern: Boss-tier entities should be immune to time distortion
 
 ---
+
+## Future Task: Strange Forest Biome (Ancient Ruins Discoverability)
+
+**Date**: 2025-11-21
+**Related Tasks**: T115 (Player Guidance & Discovery System)
+**Status**: Planned
+
+### Problem
+
+Ancient Ruins are underground structures and difficult to discover without guidance items (compass/map). Time Compass cannot help because it's obtained after entering Chronosphere.
+
+### Solution
+
+Create a distinctive overworld biome that signals the presence of Ancient Ruins underneath. The biome itself represents the Temporal Seal weakening, causing Chronosphere influence to leak into the Overworld.
+
+### Design
+
+**Biome Name**:
+- English: **Strange Forest**
+- Japanese: **奇妙な森** (Kimyō na Mori)
+
+**Visual Characteristics**:
+- Leaves: Blue-purple tint (#6B8CDA - similar to Time Wood but more purple)
+- Trees: Modified vanilla trees with custom leaf color
+- Grass: Slightly blue-tinted
+- Atmosphere: Subtle temporal particle effects at night (cyan particles like Temporal Particle Emitter)
+- Overall feel: Mysterious and unusual, but not overtly threatening
+
+**Lore Integration**:
+- The Temporal Seal weakening causes Chronosphere energy to seep into Overworld
+- Creates visible anomalies in nature (blue-purple vegetation)
+- Ancient Ruins always located underneath these anomalous forests
+- Players discover this connection through exploration, not explicit instruction
+- Chronicle of Chronosphere confirms this after entering Chronosphere (post-discovery knowledge)
+
+**Generation Requirements**:
+- Ancient Ruins ALWAYS generate at/near the center of this biome
+- Biome spawns within guaranteed radius from world spawn (ensures discoverability)
+- Moderate frequency: Rare enough to feel special, common enough to be findable
+- Size: Large enough to be noticeable from distance
+
+**Technical Implementation Steps**:
+
+1. **Biome Creation**
+   - Create biome JSON with appropriate terrain generation
+   - Configure vegetation, grass color, foliage color
+   - Add ambient particle spawning (optional, subtle)
+
+2. **Custom Leaf Blocks or Color Provider**
+   - Option A: Create new leaf block variant (more control, more assets)
+   - Option B: Use color provider on vanilla leaves (simpler, less assets)
+   - Recommended: Option B for faster implementation
+
+3. **Structure Generation Integration**
+   - Modify Ancient Ruins structure placement to ONLY spawn in Strange Forest
+   - Ensure structure generates near biome center
+   - Adjust structure frequency to match biome frequency
+
+4. **Biome Placement**
+   - Add to worldgen with appropriate weight
+   - Configure spawn range from world origin
+   - Test to ensure 1-2 Strange Forests within reasonable exploration range
+
+5. **Localization**
+   - Add biome name to en_us.json and ja_jp.json
+   - Update Chronicle of Chronosphere to reference "strange forests" or "異常な森"
+
+6. **Testing**
+   - Verify biome visibility from distance
+   - Confirm Ancient Ruins always present
+   - Check spawn frequency and discoverability
+   - Test in multiple world seeds
+
+**Player Experience Flow**:
+
+1. Player spawns in Overworld
+2. Explores naturally, looking for resources
+3. Notices unusual blue-purple forest in distance
+4. Investigates out of curiosity → "What is this strange forest?"
+5. Finds Ancient Ruins underground through exploration or mining
+6. Enters Chronosphere
+7. Receives Chronicle of Chronosphere
+8. Reads about Temporal Seal weakening and connects the dots
+9. Realizes the strange forest was a symptom of the larger problem
+
+**Design Philosophy**:
+
+- **Show, don't tell**: Biome is visually distinctive but doesn't explicitly say "dig here"
+- **Natural discovery**: Players find it through exploration, not quest markers
+- **Lore consistency**: Explains itself after the fact, maintains mystery during discovery
+- **Avoids guidance items**: No compass, map, or signs needed
+- **Preserves ancient civilization's special feeling**: Biome feels like a natural phenomenon, not a manufactured clue
+
+### Future Considerations
+
+- Could add subtle audio cues (ambient sounds) in Strange Forest
+- Particle effects could intensify closer to Ancient Ruins location
+- Biome could have unique mob spawns (peaceful only, representing time distortion)
+- Could extend concept: Multiple "leakage" biomes with different structures
+
+### Related Files (When Implemented)
+
+**Biome Configuration**:
+- `common/src/main/resources/data/chronosphere/worldgen/biome/strange_forest.json`
+
+**Structure Placement**:
+- `common/src/main/resources/data/chronosphere/worldgen/structure/ancient_ruins.json` (modify biome filter)
+
+**Localization**:
+- `common/src/main/resources/assets/chronosphere/lang/en_us.json`
+- `common/src/main/resources/assets/chronosphere/lang/ja_jp.json`
+
+**Color Providers** (if using Option B):
+- `fabric/src/main/java/com/chronosphere/fabric/client/ChronosphereClientFabric.java`
+- `neoforge/src/main/java/com/chronosphere/neoforge/client/ChronosphereClientNeoForge.java`
