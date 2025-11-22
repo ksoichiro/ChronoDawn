@@ -62,6 +62,7 @@ public class ChronoMelonStemBlock extends CropBlock {
 
     public ChronoMelonStemBlock(Properties properties) {
         super(properties);
+        this.registerDefaultState(this.stateDefinition.any().setValue(this.getAgeProperty(), 0));
     }
 
     @Override
@@ -90,27 +91,45 @@ public class ChronoMelonStemBlock extends CropBlock {
     }
 
     @Override
-    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        // Check light level for growth
-        if (level.getRawBrightness(pos, 0) >= 9) {
-            int currentAge = this.getAge(state);
+    protected boolean isRandomlyTicking(BlockState state) {
+        return true;
+    }
 
-            if (currentAge < this.getMaxAge()) {
-                // Stem growth
+    @Override
+    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        int currentAge = this.getAge(state);
+
+        if (currentAge < this.getMaxAge()) {
+            // Stem growth (with light check)
+            if (level.getRawBrightness(pos, 0) >= 9) {
                 float growthSpeed = getGrowthSpeed(this, level, pos);
                 if (random.nextInt((int) (25.0F / growthSpeed) + 1) == 0) {
                     level.setBlock(pos, this.getStateForAge(currentAge + 1), 2);
                 }
-            } else {
-                // Try to place melon on adjacent block when mature
-                Direction direction = Direction.Plane.HORIZONTAL.getRandomDirection(random);
+            }
+        } else if (currentAge >= this.getMaxAge()) {
+            // Check if melon already exists in any adjacent direction
+            boolean hasAdjacentMelon = false;
+            for (Direction direction : Direction.Plane.HORIZONTAL) {
                 BlockPos melonPos = pos.relative(direction);
-                BlockState belowState = level.getBlockState(melonPos.below());
+                if (level.getBlockState(melonPos).is(ModBlocks.CHRONO_MELON.get())) {
+                    hasAdjacentMelon = true;
+                    break;
+                }
+            }
 
-                // Check if melon can be placed (grass, dirt, or farmland below)
-                if (level.getBlockState(melonPos).isAir() &&
-                    (belowState.is(Blocks.FARMLAND) || belowState.is(Blocks.DIRT) || belowState.is(Blocks.GRASS_BLOCK))) {
-                    level.setBlockAndUpdate(melonPos, ModBlocks.CHRONO_MELON.get().defaultBlockState());
+            // Only try to place melon if none exists adjacent
+            if (!hasAdjacentMelon) {
+                // Try to place melon on the first available adjacent space
+                for (Direction direction : Direction.Plane.HORIZONTAL) {
+                    BlockPos melonPos = pos.relative(direction);
+                    BlockState blockAtPos = level.getBlockState(melonPos);
+
+                    // Only place melon if block is air or replaceable
+                    if (blockAtPos.isAir() || blockAtPos.canBeReplaced()) {
+                        level.setBlockAndUpdate(melonPos, ModBlocks.CHRONO_MELON.get().defaultBlockState());
+                        break; // Only place one melon
+                    }
                 }
             }
         }

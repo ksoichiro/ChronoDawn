@@ -1,5 +1,7 @@
 package com.chronosphere.items.consumables;
 
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 
@@ -8,12 +10,12 @@ import net.minecraft.world.item.Item;
  *
  * Provides:
  * - Nutrition: Restores 5 hunger points (2.5 drumsticks)
- * - No special effects
+ * - Effect: Regeneration I for 2 seconds (minor healing)
  *
  * Properties:
  * - Nutrition: 5 hunger points (2.5 drumsticks)
  * - Saturation: 0.6 (total 3.0)
- * - Effect: None
+ * - Effect: Regeneration I for 2 seconds (100% chance)
  * - Eating Speed: Normal
  *
  * Crafting:
@@ -21,11 +23,12 @@ import net.minecraft.world.item.Item;
  *
  * Note:
  * - This is a basic food item (similar to vanilla bread)
- * - Provides moderate nutrition without special effects
+ * - Provides moderate nutrition with a very brief healing effect
  * - Easy to craft for early-game sustenance
+ * - Enhanced Time Bread provides much longer Regeneration effect (10 seconds)
  *
  * Reference: spec.md (User Story 1 Enhancement, FR-035)
- * Task: T224 [US1] Create Time Bread item
+ * Task: T216 [US1] Add eating effect to Time Bread
  */
 public class TimeBreadItem extends Item {
     public TimeBreadItem(Properties properties) {
@@ -41,6 +44,7 @@ public class TimeBreadItem extends Item {
         FoodProperties foodProperties = new FoodProperties.Builder()
                 .nutrition(5)        // 5 hunger points (2.5 drumsticks)
                 .saturationModifier(0.6f)  // Saturation modifier (total: 5 * 0.6 = 3.0)
+                .effect(new MobEffectInstance(MobEffects.REGENERATION, 2 * 20, 0), 1.0f)  // Regeneration I for 2 seconds (100% chance)
                 .build();
 
         return new Properties()

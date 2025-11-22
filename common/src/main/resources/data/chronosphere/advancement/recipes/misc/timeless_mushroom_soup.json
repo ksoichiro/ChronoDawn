@@ -1,0 +1,30 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_timeless_mushroom": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": ["chronosphere:timeless_mushroom"]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "chronosphere:timeless_mushroom_soup"
+      }
+    }
+  },
+  "rewards": {
+    "recipes": ["chronosphere:timeless_mushroom_soup"]
+  },
+  "requirements": [
+    [
+      "has_timeless_mushroom",
+      "has_the_recipe"
+    ]
+  ]
+}
