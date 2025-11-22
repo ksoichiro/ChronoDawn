@@ -131,13 +131,32 @@
 
 **Note**: 現在は時のパン(Time Bread)のみで食料が不足。作物や食料アイテムを追加して多様性を向上
 
-- [ ] T211 [US1] Design time-themed crop concepts (plant types, growth stages, harvest items, growth conditions)
-- [ ] T212 [P] [US1] Implement time-themed crop block and item (Temporal Wheat, Time Berry Bush, or similar)
-- [ ] T213 [P] [US1] Create crop textures for all growth stages in common/src/main/resources/assets/chronosphere/textures/block/
-- [ ] T214 [P] [US1] Add crop worldgen placement (natural generation in specific biomes)
-- [ ] T215 [P] [US1] Implement additional food items (cooked variants, crafted recipes, nutritional values)
+- [X] T211 [US1] Design time-themed crop concepts (plant types, growth stages, harvest items, growth conditions)
+- [X] T212 [P] [US1] Implement time-themed crop block and item (Temporal Wheat, Time Berry Bush, or similar)
+- [X] T213 [P] [US1] Create crop textures for all growth stages in common/src/main/resources/assets/chronosphere/textures/block/
+- [X] T214 [P] [US1] Add crop worldgen placement (natural generation in specific biomes)
+- [X] T215 [P] [US1] Implement additional food items (cooked variants, crafted recipes, nutritional values)
 - [ ] T216 [P] [US1] Add eating effect to Time Bread (e.g., Speed I for 30 seconds, or Regeneration I for 10 seconds)
 - [ ] T217 [US1] Test crop growth mechanics and food item effects in-game
+
+**Implementation (T211-T215 completed 2025-11-22)**:
+- **T211 Design**: 3 crop types designed - Temporal Root (root vegetable), Chrono Melon (stem crop), Timeless Mushroom (fungus)
+- **T212 Implementation**:
+  - 4 block classes: TemporalRootBlock, ChronoMelonStemBlock, ChronoMelonBlock, TimelessMushroomBlock
+  - 12 item classes: 5 base foods + 7 crafted foods
+  - All registered in ModBlocks, ModItems, and creative tab
+- **T213 Textures**:
+  - 31 placeholder textures created (block: 20, item: 11)
+  - Texture design specifications documented in texture-design.md
+  - Note: Using temporary placeholders with basic modifications, will be replaced with custom designs later
+- **T214 Worldgen**:
+  - Configured features and placed features for all 3 crops
+  - Added to chronosphere_plains and chronosphere_forest biomes
+- **T215 Food Items**:
+  - 11 recipes created (1 smelting + 10 crafting)
+  - All food effects implemented (Regeneration, Speed, Night Vision, Absorption, Saturation)
+  - Loot tables for all crop blocks
+- **Commits**: 51b954b (implementation), fe6d3bd (texture designs), 670993c (placeholder textures)
 
 ### Forgotten Library Enhancements (US2 Enhancement - Medium Priority)
 
