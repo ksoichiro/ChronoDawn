@@ -319,7 +319,7 @@
 - [ ] T238u-x: Documentation updates
 
 #### Remaining High-Priority Tasks
-- [ ] T239: Implement boss spawn structures (Guardian Vault, Clockwork Depths, Phantom Tower, Entropy Crypt)
+- [x] T239: Implement boss spawn structures (Guardian Vault with Jigsaw system and waterlogging prevention Mixin)
 - [x] T240: Fix Clarity auto-cleanse feature (implemented using event system in EntityEventHandler.handleChronoAegisClarity)
 - [ ] T241: Comprehensive testing (boss spawning, Chrono Aegis crafting, Time Tyrant fight)
 

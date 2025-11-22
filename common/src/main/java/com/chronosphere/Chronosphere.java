@@ -11,6 +11,7 @@ import com.chronosphere.registry.ModEffects;
 import com.chronosphere.registry.ModEntities;
 import com.chronosphere.registry.ModItems;
 import com.chronosphere.registry.ModTreeDecoratorTypes;
+import com.chronosphere.worldgen.processor.ModStructureProcessorTypes;
 import com.chronosphere.worldgen.spawning.TimeGuardianSpawner;
 import com.chronosphere.worldgen.spawning.TimeTyrantSpawner;
 import org.slf4j.Logger;
@@ -32,6 +33,7 @@ public class Chronosphere {
         ModDimensions.register();
         ModCreativeTabs.register();
         ModTreeDecoratorTypes.register();
+        ModStructureProcessorTypes.register();
 
         // Initialize spawn eggs after entities are registered
         ModItems.initializeSpawnEggs();

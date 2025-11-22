@@ -103,6 +103,59 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 
 **Reference**: See `specs/001-chronosphere-mod/research.md` → "Structure Waterlogging Research" for detailed analysis
 
+### Advanced Solution: Mixin for Waterlogging Prevention (2025-11-23)
+
+**Use Case**: When you need to use waterloggable blocks in underground structures (stairs, lanterns, slabs, etc.)
+
+**Approach**: Use a Mixin to remove Aquifer water before structure placement, preventing `waterlogged=true` from being set.
+
+**Implementation** (Guardian Vault example - `StructureStartMixin.java`):
+
+```java
+@Mixin(StructureStart.class)
+public abstract class StructureStartMixin {
+    // 1. Before placement (@At("HEAD")):
+    //    - Record all water positions in structure piece bounding boxes
+    //    - Temporarily remove water (prevents waterlogging)
+    //    - Exclude top 5 blocks (preserve surface water)
+
+    // 2. After placement (@At("RETURN")):
+    //    - Do NOT restore water
+    //    - Waterloggable blocks are placed with waterlogged=false
+    //    - Decorative water from NBT is already placed
+}
+```
+
+**Key Points**:
+- ✅ **Timing**: Remove water BEFORE structure placement (not after)
+- ✅ **StructurePiece Bounding Boxes**: Use individual piece boxes, not entire structure box (prevents affecting water between Jigsaw pieces)
+- ✅ **Surface Water**: Exclude top 5 blocks to preserve lakes/oceans
+- ✅ **Decorative Water**: NBT-placed water blocks work normally (placed after water removal)
+
+**Limitations**:
+- ⚠️ **structure_void + water**: Water in structure_void areas will become air (unavoidable)
+  - **Workaround**: For structure_void areas with solid blocks (stone, dirt), terrain is preserved correctly
+  - If water must be preserved in structure_void areas, save it as explicit water blocks in NBT instead
+
+**Why This Works**:
+```
+Without Mixin:
+1. Aquifer water exists at position (X, Y, Z)
+2. Structure places stairs at (X, Y, Z)
+3. Minecraft detects water → sets stairs[waterlogged=true] ❌
+
+With Mixin:
+1. Aquifer water exists at position (X, Y, Z)
+2. Mixin removes water → air at (X, Y, Z)
+3. Structure places stairs at (X, Y, Z)
+4. No water detected → stairs[waterlogged=false] ✅
+```
+
+**When to Use**:
+- Underground structures (Y < 40) that require decorative waterloggable blocks
+- Structures where avoiding waterloggable blocks would compromise design
+- Guardian Vault (T239) - uses stairs, lanterns, chains, iron bars, slabs, ladders
+
 ### Structure Generation Priority (2025-11-11)
 
 **Generation Order**: Structures generate in phases determined by the `step` parameter:
