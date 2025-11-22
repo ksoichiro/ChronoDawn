@@ -8,14 +8,11 @@ import com.chronosphere.entities.mobs.TemporalWraithEntity;
 import com.chronosphere.entities.mobs.TimeKeeperEntity;
 import com.chronosphere.fabric.compat.CustomPortalFabric;
 import com.chronosphere.registry.ModEntities;
-import com.chronosphere.worldgen.biomes.ChronosphereOverworldRegion;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.levelgen.Heightmap;
-import terrablender.api.Regions;
 
 public class ChronosphereFabric implements ModInitializer {
     @Override
@@ -30,9 +27,6 @@ public class ChronosphereFabric implements ModInitializer {
 
         // Initialize Custom Portal API integration
         CustomPortalFabric.init();
-
-        // Register TerraBlender regions for Strange Forest biome
-        registerTerraBlenderRegions();
 
         Chronosphere.LOGGER.info("Chronosphere Mod (Fabric) initialized");
     }
@@ -102,19 +96,5 @@ public class ChronosphereFabric implements ModInitializer {
         );
 
         Chronosphere.LOGGER.info("Registered spawn placements for custom mobs");
-    }
-
-    /**
-     * Register TerraBlender regions for biome injection.
-     * This adds Strange Forest biome to the Overworld.
-     */
-    private void registerTerraBlenderRegions() {
-        // Register Strange Forest biome region with weight 2 (rare but discoverable)
-        Regions.register(new ChronosphereOverworldRegion(
-            ResourceLocation.fromNamespaceAndPath("chronosphere", "overworld"),
-            2
-        ));
-
-        Chronosphere.LOGGER.info("Registered TerraBlender regions for Strange Forest biome");
     }
 }

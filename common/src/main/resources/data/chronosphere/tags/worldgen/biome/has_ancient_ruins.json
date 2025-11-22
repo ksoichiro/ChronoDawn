@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "chronosphere:strange_forest"
+    "#minecraft:is_forest",
+    "#minecraft:is_taiga"
   ]
 }

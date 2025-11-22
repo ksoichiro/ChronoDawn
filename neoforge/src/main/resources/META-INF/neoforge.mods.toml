@@ -36,10 +36,3 @@ type="required"
 versionRange="[13.0.8,)"
 ordering="AFTER"
 side="BOTH"
-
-[[dependencies.chronosphere]]
-modId="terrablender"
-type="required"
-versionRange="[4.1.0.8,)"
-ordering="AFTER"
-side="BOTH"

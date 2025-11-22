@@ -39,9 +39,6 @@ dependencies {
     neoForge "net.neoforged:neoforge:${neoforge_version}"
     modApi "dev.architectury:architectury-neoforge:${architectury_version}"
 
-    // TerraBlender for biome injection
-    implementation 'com.github.glitchfiend:TerraBlender-neoforge:1.21.1-4.1.0.8'
-
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive false }
 }
