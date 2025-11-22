@@ -1129,6 +1129,7 @@ This creates smooth rotating gear animation. The PNG should contain multiple fra
 
 ## Implementation Status（更新版）
 
+### Base Items（基本アイテム）
 - ✅ Clockstone - 完成済み
 - ⚠️ Enhanced Clockstone - コピーのまま、要編集
 - ⚠️ Time Clock - コピーのまま、要編集
@@ -1136,18 +1137,330 @@ This creates smooth rotating gear animation. The PNG should contain multiple fra
 - ⚠️ Ancient Gear - コピーのまま、要編集
 - ⚠️ Key to Master Clock - コピーのまま、要編集
 - ⚠️ Unstable Hourglass - コピーのまま、要編集
+
+### Boss Drop Items（ボスドロップアイテム）
+- ⚠️ **Guardian Stone** - clockstone.pngのコピー、要編集（優先度：高、T234）
+- ⚠️ **Colossus Gear** - 確認必要、要編集（優先度：高、T235）
+- ⚠️ **Phantom Essence** - clockstone.pngのコピー、要編集（優先度：高、T236）
+- ⚠️ **Entropy Core** - clockstone.pngのコピー、要編集（優先度：高、T237）
+- ⚠️ **Chrono Aegis** - 確認必要、要編集（優先度：最高、T238）
+
+### Time Tyrant Items（最終ボス素材・装備）
 - ⚠️ **Fragment of Stasis Core** - enhanced_clockstone.pngのコピー、要編集（優先度：高）
 - ⚠️ **Eye of Chronos** - clockstone.pngのコピー、要編集（優先度：高）
 - ⚠️ **Chronoblade** - enhanced_clockstone_sword.pngのコピー、要編集（優先度：中）
 - ⚠️ **Time Tyrant's Mail** - enhanced_clockstone_chestplate.pngのコピー、要編集（優先度：中）
 - ⚠️ **Echoing Time Boots** - enhanced_clockstone_boots.pngのコピー、要編集（優先度：中）
 - ⚠️ **Unstable Pocket Watch** - time_clock.pngのコピー、要編集（優先度：中）
+
+### Crop Items（作物アイテム）
 - ⚠️ **Temporal Root** (8 stages + 2 items) - プレースホルダー: carrots/carrot（T213）
 - ⚠️ **Chrono Melon** (8 stem stages + 3 block faces + 2 items) - プレースホルダー: melon系（T213）
 - ⚠️ **Timeless Mushroom** (1 texture) - プレースホルダー: brown_mushroom（T213）
 - ⚠️ **Enhanced Time Bread** - プレースホルダー: bread.png、デザイン定義済み（T215）
 - ⚠️ **Time Wheat Cookie** - プレースホルダー: cookie.png、デザイン定義済み（T215）
 - ⚠️ **Golden Time Wheat** - プレースホルダー: wheat.png、デザイン定義済み（T215）
+
+---
+
+# Additional Boss Drop Items（追加ボスドロップアイテム）
+
+## 15. Guardian Stone（守護者の石）
+
+**ファイル**: `common/src/main/resources/assets/chronosphere/textures/item/guardian_stone.png`
+
+**コンセプト**:
+- Chronos Warden（クロノスの監視者）を倒して入手するボス素材
+- 確定ドロップ1個、Guardian Vaultに生成される石のゴーレム型ボス
+- Chrono Aegisのクラフト素材（4種類のボス素材の1つ）
+- 古代の守護者のコアから取り出された石の結晶
+- 防御と保護の力を秘めている
+
+**デザイン方向性**:
+- **ベース**: Time Crystalの形状を参考に、より角ばった石のような結晶
+- **カラー**:
+  - **ベース**: #8B8B8B（ダークグレー）- 石の基本色
+  - **ハイライト**: #C0C0C0（シルバー）- 石の反射
+  - **シャドウ**: #4A4A4A（チャコールグレー）- 暗部
+  - **アクセント**: #5DADE2（ライトブルー）- 中心部の微かな青い輝き（防護エネルギー）
+- **特徴**:
+  - 正方形に近い、頑丈な印象の結晶形状
+  - 表面に細かいヒビ模様（石のテクスチャ）
+  - 中心部に微かな青い輝き（防護エネルギーを表現）
+  - エッジは鋭く、角が立っている
+  - Time Crystalより重厚で硬質な印象
+- **雰囲気**:
+  - 強固で不動の防御力
+  - 古代遺跡の守護者の力の結晶
+  - Chronos Wardenの石のテーマを反映
+  - Rare rarityにふさわしい存在感
+
+**参考イメージ**:
+- Time Crystal（形状ベース）
+- 石のブロック（質感）
+- 盾や防護のイメージ
+
+**制作方法**:
+```bash
+# Time Crystalをベースに、色調を石調に変更し、形状を角ばらせる
+# ImageMagickでグレースケール化 + 青いコアを手動追加
+magick time_crystal.png -colorspace Gray -modulate 100,0 guardian_stone_base.png
+# その後、中心部に青いグローを手動で描画
+```
+
+**Status**: ⚠️ TODO - 現在はclockstone.pngのコピー、要編集
+
+**優先度**: 高（T234実装、Chrono Aegis素材）
+
+---
+
+## 16. Colossus Gear（巨人の歯車）
+
+**ファイル**: `common/src/main/resources/assets/chronosphere/textures/item/colossus_gear.png`
+
+**コンセプト**:
+- Clockwork Colossus（機械仕掛けの巨人）を倒して入手するボス素材
+- 確定ドロップ1個、Clockwork Depthsに生成される機械型ボス
+- Chrono Aegisのクラフト素材（4種類のボス素材の1つ）
+- 古代の機械ゴーレムから取り出された巨大な歯車
+- 時間のエネルギーで稼働していた機械部品
+
+**デザイン方向性**:
+- **ベース**: 歯車（ギア）の形状、Ancient Gearより大型で精密
+- **カラー**:
+  - **ベース**: #7F7F7F（鉄グレー）- 金属の本体
+  - **アクセント**: #B87333（銅ブラウン）- 歯車の装飾部分
+  - **ハイライト**: #C0C0C0（明るい金属）- 反射
+  - **シャドウ**: #4A4A4A（暗い金属）- 深み
+  - **エネルギー**: #db8813（オレンジ/ゴールド）- 残留する時間エネルギー
+- **特徴**:
+  - はっきりとした歯車の歯（8-12個程度）
+  - 中央に大きな軸受け穴
+  - 鉄と銅の2色で構成された機械美
+  - 歯車の縁にオレンジ色の微かな輝き（時間エネルギーの残滓）
+  - リベットやボルトの装飾
+  - Ancient Gearより大型で洗練されたデザイン
+  - わずかに発光するエネルギーライン
+- **雰囲気**:
+  - 精密機械の核心部品
+  - スチームパンク的な機械美
+  - Clockwork Colossusの機械テーマを反映
+  - 古代の高度技術の結晶
+  - Rare rarityにふさわしい重厚感
+
+**参考イメージ**:
+- Ancient Gear（サイズと装飾性を強化）
+- 時計の内部機構の大型歯車
+- Iron BlockとCopper Blockの組み合わせ
+
+**制作方法**:
+```bash
+# Ancient Gearをベースに大型化・精密化
+# 鉄と銅の2色構成、オレンジのエネルギー発光を追加
+```
+
+**Status**: ⚠️ 確認必要 - ancient_gear.pngのコピーの可能性、要確認・編集
+
+**優先度**: 高（T235実装、Chrono Aegis素材）
+
+---
+
+## 17. Phantom Essence（幻影のエッセンス）
+
+**ファイル**: `common/src/main/resources/assets/chronosphere/textures/item/phantom_essence.png`
+
+**コンセプト**:
+- Temporal Phantom（時間の幻影）を倒して入手するボス素材
+- 確定ドロップ1個、Phantom Catacombsに生成される幽霊型ボス
+- Chrono Aegisのクラフト素材（4種類のボス素材の1つ）
+- 幽霊のような存在の結晶化されたエッセンス
+- 物理法則を超越する力を秘めている
+
+**デザイン方向性**:
+- **ベース**: Time Crystalの形状、より細長く神秘的
+- **カラー**:
+  - **ベース**: #9B59B6（パープル）- 幽霊のテーマ色
+  - **ハイライト**: #E8DAEF（淡い紫）- 半透明感
+  - **アクセント**: #D946EF（マゼンタ）- 魔法的な輝き
+  - **発光**: #F3E5F5（ほぼ白に近い紫）- 強い発光部分
+  - **グラデーション**: 紫→マゼンタ→白のグラデーション
+- **特徴**:
+  - 細長い結晶形状（縦長、幽霊の浮遊感を表現）
+  - 半透明な印象を出すため、グラデーションを多用
+  - 外側がぼやけた感じ（霧のような）
+  - 内部に魔法陣のような模様（円や線）
+  - エンチャント輝き効果（has_foil: true in item properties）
+  - 時間の幻影らしい神秘的で不確定な外観
+- **雰囲気**:
+  - 実体のない幽霊の結晶化
+  - 魔法的で神秘的
+  - Phase Shift（物理攻撃無効化）の力を象徴
+  - Rare rarityにふさわしい神秘性
+
+**参考イメージ**:
+- Time Crystal（形状ベース）
+- Amethyst Shard（透明感）
+- エンドポータルの紫色
+- 幻影や霧のイメージ
+
+**制作方法**:
+```bash
+# Time Crystalをベースに紫系に変更
+# ImageMagickで色相を紫に変換し、グラデーション処理
+magick time_crystal.png \
+  -channel R -evaluate multiply 0.60 +channel \
+  -channel G -evaluate multiply 0.35 +channel \
+  -channel B -evaluate multiply 0.70 +channel \
+  phantom_essence_base.png
+# その後、半透明効果とグラデーションを手動で調整
+```
+
+**Status**: ⚠️ TODO - 現在はclockstone.pngのコピー、要編集
+
+**優先度**: 高（T236実装、Chrono Aegis素材）
+
+---
+
+## 18. Entropy Core（エントロピーコア）
+
+**ファイル**: `common/src/main/resources/assets/chronosphere/textures/item/entropy_core.png`
+
+**コンセプト**:
+- Entropy Keeper（エントロピーの管理者）を倒して入手するボス素材
+- 確定ドロップ1個、Entropy Cryptに生成される腐敗型ボス
+- Chrono Aegisのクラフト素材（4種類のボス素材の1つ）
+- 崩壊と腐敗を司る存在のコア
+- 時間の劣化とエントロピー増大の力を秘めている
+
+**デザイン方向性**:
+- **ベース**: Ancient Gearの球形を参考に、より不規則で歪んだ形状
+- **カラー**:
+  - **ベース**: #2C3E2C（ダークグリーン）- 腐敗の暗緑
+  - **アクセント**: #4CAF50（毒々しい緑）- 腐敗エネルギー
+  - **ハイライト**: #8BC34A（明るい緑）- 発光部分
+  - **シャドウ**: #1C1C1C（ほぼ黒）- 深淵
+  - **腐敗効果**: #7B1FA2（ダークパープル）- Wither効果を連想させる紫
+- **特徴**:
+  - 不規則で歪んだ球形（完璧な形ではない、崩壊している）
+  - 表面にヒビや腐食模様
+  - 緑色の粒子が漏れ出しているような効果（エッジに緑のにじみ）
+  - 中心部に暗い核（ブラックホールのような空虚感）
+  - 全体的に不気味で不安定な印象
+  - Soul SandやMoss Blockのような有機的な質感
+- **雰囲気**:
+  - 腐敗と崩壊の具現化
+  - Decay Aura（Wither効果）の源
+  - 不吉で危険な存在
+  - Entropy Keeperの腐敗テーマを反映
+  - Rare rarityにふさわしい禍々しさ
+
+**参考イメージ**:
+- Wither Skeleton Skull（死と崩壊）
+- Slime Ball（緑の粘液）
+- Soul Sand（腐敗素材）
+- Moss Block（有機的腐敗）
+
+**制作方法**:
+```bash
+# Clockstoneをベースに暗く、緑系に変更
+# ImageMagickで暗緑化し、ヒビや腐食エフェクトを追加
+magick clockstone.png \
+  -channel R -evaluate multiply 0.20 +channel \
+  -channel G -evaluate multiply 0.40 +channel \
+  -channel B -evaluate multiply 0.20 +channel \
+  entropy_core_base.png
+# その後、腐食エフェクト（ヒビ、にじみ、中心の暗い核）を手動で描画
+```
+
+**Status**: ⚠️ TODO - 現在はclockstone.pngのコピー、要編集
+
+**優先度**: 高（T237実装、Chrono Aegis素材）
+
+---
+
+## 19. Chrono Aegis（クロノスの盾）
+
+**ファイル**: `common/src/main/resources/assets/chronosphere/textures/item/chrono_aegis.png`
+
+**コンセプト**:
+- 4つの追加ボス素材（Guardian Stone, Colossus Gear, Phantom Essence, Entropy Core）をクラフトして作成
+- Time Tyrant（最終ボス）戦専用の防護アイテム
+- 使用時に10分間の強力なバフを付与（消費型アイテム）
+- Time Tyrantの強力な攻撃を軽減する究極のアーティファクト
+- Epic rarity（薄紫テキスト）
+
+**デザイン方向性**:
+- **ベース**: 盾（シールド）または護符（アミュレット）の形状
+- **カラー**:
+  - **中央**: #db8813（オレンジ/ゴールド）- modのテーマカラー
+  - **外縁**: #9B59B6（紫）+ #5DADE2（青）- 4つのボス素材の力の融合
+  - **発光**: 強い金色/白の輝き - 防護のオーラ
+  - **グラデーション**: 中央（金）→ 外側（紫/青/緑/グレー）の4色グラデーション
+- **特徴**:
+  - 中央に大きな時計の文字盤または砂時計のシンボル
+  - 4つの象限に4つのボス素材を表現する装飾:
+    - 上部: 石の結晶（Guardian Stone）
+    - 右部: 歯車（Colossus Gear）
+    - 下部: 幻影の紫結晶（Phantom Essence）
+    - 左部: 緑の腐敗コア（Entropy Core）
+  - 全体を囲む金色のオーラ/輝き
+  - 強力な防護エネルギーを放射している印象
+  - Epic rarityにふさわしい神々しい外観
+- **雰囲気**:
+  - 4つの異なる力を統合した究極の防護
+  - 時間の暴君に対抗できる唯一の手段
+  - 神聖で荘厳
+  - 全てのボス素材の力を集約した最終アイテム
+
+**参考イメージ**:
+- バニラのShield（盾の形状）
+- Totem of Undying（神聖な護符のイメージ）
+- 4つのボス素材を統合したデザイン
+- 時計の文字盤 + 防護のシンボル
+
+**制作方法**:
+```bash
+# 新規作成
+# 中央に時計の文字盤、4つの象限に各ボス素材のモチーフ
+# 金色のオーラと強い発光エフェクト
+```
+
+**Status**: ⚠️ 確認必要 - 既存テクスチャがあるが、デザインの完成度を確認して必要に応じて編集
+
+**優先度**: 最高（T238実装、Time Tyrant戦の鍵となるアイテム）
+
+---
+
+## Boss Drop Items Summary（ボスドロップアイテムまとめ）
+
+### 4つのボス素材の視覚的差別化
+
+| アイテム | ボス | 形状 | 主色 | テーマ |
+|---------|------|------|------|--------|
+| **Guardian Stone** | Chronos Warden | 角ばった結晶 | グレー/シルバー | 石、防御 |
+| **Colossus Gear** | Clockwork Colossus | 歯車 | 鉄グレー/銅 | 機械、精密 |
+| **Phantom Essence** | Temporal Phantom | 細長い結晶 | 紫/マゼンタ | 幽霊、魔法 |
+| **Entropy Core** | Entropy Keeper | 歪んだ球形 | 暗緑/黒 | 腐敗、崩壊 |
+
+### Chrono Aegisの統合デザイン
+
+- **中央**: 時計の文字盤（オレンジ/ゴールド #db8813）
+- **4つの象限**: 各ボス素材のシンボル
+  - 上: 石の結晶（グレー）
+  - 右: 歯車（鉄/銅）
+  - 下: 幽霊結晶（紫）
+  - 左: 腐敗コア（緑）
+- **外縁**: 金色のオーラ（防護の力）
+
+---
+
+## Implementation Checklist - Boss Drop Items
+
+- ⚠️ **Guardian Stone** - clockstone.pngのコピー、要編集（優先度：高、T234）
+- ⚠️ **Colossus Gear** - 確認必要、要編集（優先度：高、T235）
+- ⚠️ **Phantom Essence** - clockstone.pngのコピー、要編集（優先度：高、T236）
+- ⚠️ **Entropy Core** - clockstone.pngのコピー、要編集（優先度：高、T237）
+- ⚠️ **Chrono Aegis** - 確認必要、要編集（優先度：最高、T238）
 
 ---
 
