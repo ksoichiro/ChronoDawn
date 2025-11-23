@@ -289,13 +289,13 @@
 
 **Purpose**: 4つの追加ミニボスとChrono Aegisシステムの実装
 
-**Implementation Status**: Boss entities and Chrono Aegis complete, structures pending
+**Implementation Status**: Boss entities, Chrono Aegis, and Guardian Vault complete. Other boss structures pending
 
 **Reference**: See research.md "Additional Bosses Implementation Plan (T234-T238)"
 
 #### T234: Chronos Warden (クロノスの監視者) - COMPLETED
 - [x] T234a-i: Entity, item, renderer, texture, translations implemented
-- [ ] T234j-o: Guardian Vault structure generation (NOT IMPLEMENTED)
+- [x] T234j-o: Guardian Vault structure generation (COMPLETED - see T239)
 
 #### T235: Clockwork Colossus (機械仕掛けの巨像) - COMPLETED
 - [x] T235a-l: Entity, Gear Projectile, item, renderer, translations implemented
@@ -319,7 +319,12 @@
 - [ ] T238u-x: Documentation updates
 
 #### Remaining High-Priority Tasks
-- [x] T239: Implement boss spawn structures (Guardian Vault with Jigsaw system and waterlogging prevention Mixin)
+- [x] T239: Guardian Vault structure generation (COMPLETED)
+  - Jigsaw structure with entrance (surface) + main hall (underground)
+  - StructureStartMixin for waterlogging prevention (removes Aquifer water before placement)
+  - ChronosWardenSpawner for boss spawning (Boss Room Door with DoorType: "guardian_vault")
+  - Loot table for treasure chests
+  - Spawns in chronosphere_plains and chronosphere_forest biomes
 - [x] T240: Fix Clarity auto-cleanse feature (implemented using event system in EntityEventHandler.handleChronoAegisClarity)
 - [ ] T241: Comprehensive testing (boss spawning, Chrono Aegis crafting, Time Tyrant fight)
 
