@@ -18,17 +18,20 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Set;
+
 /**
- * Mixin to prevent waterlogging in Guardian Vault structure generation.
+ * Mixin to prevent waterlogging in underground structure generation.
  *
  * This addresses the Minecraft 1.18+ Aquifer system issue where water exists
  * in the generation area and causes waterloggable blocks to become waterlogged.
  *
  * Strategy:
  * 1. Before structure placement (@At("HEAD")):
- *    - Record all water positions in structure piece bounding boxes
- *    - Temporarily remove all water (prevents waterlogging during placement)
- *    - Exclude top 5 blocks to preserve surface water
+ *    - Process each chunk separately (within chunkBox only)
+ *    - Remove ONLY minecraft:water (Aquifer water)
+ *    - Preserve chronosphere:decorative_water (custom fluid)
+ *    - Decorative water is converted to minecraft:water by processor after placement
  *
  * 2. After structure placement (@At("RETURN")):
  *    - Log completion (no water restoration)
@@ -42,15 +45,25 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  * - ✅ Decorative water from NBT is preserved (placed after water removal)
  * - ✅ Structure_void areas with solid blocks are preserved (stone, dirt, etc. remain)
  * - ⚠️ Structure_void areas with water become air (unavoidable limitation)
- * - ✅ Surface water is preserved (top 5 blocks excluded from processing)
  *
  * Important: Uses individual StructurePiece bounding boxes, not the entire structure
  * bounding box. This prevents affecting water in empty space between Jigsaw pieces.
+ *
+ * Applied to structures: master_clock, guardian_vault, clockwork_depths, phantom_tower, entropy_crypt
  *
  * Task: T239 [US3] Guardian Vault structure generation
  */
 @Mixin(StructureStart.class)
 public abstract class StructureStartMixin {
+    // Structures that require waterlogging prevention
+    private static final Set<String> WATERLOGGING_PREVENTION_STRUCTURES = Set.of(
+        "master_clock",
+        "guardian_vault",
+        "clockwork_depths",
+        "phantom_tower",
+        "entropy_crypt"
+    );
+
     @Shadow
     public abstract BoundingBox getBoundingBox();
 
@@ -67,7 +80,8 @@ public abstract class StructureStartMixin {
      * Inject before structure placement to record and remove existing water.
      *
      * This prevents waterloggable blocks from becoming waterlogged during placement.
-     * We'll restore water in structure_void areas after placement.
+     * Processes each chunk separately, removing only Aquifer water (minecraft:water).
+     * Decorative water (chronosphere:decorative_water) is preserved.
      */
     @Inject(
         method = "placeInChunk",
@@ -82,16 +96,16 @@ public abstract class StructureStartMixin {
         ChunkPos chunkPos,
         CallbackInfo ci
     ) {
-        // Get structure registry key to check if this is Guardian Vault
+        // Get structure registry key to check if waterlogging prevention is needed
         net.minecraft.resources.ResourceLocation structureLocation =
             level.registryAccess()
                 .registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
                 .getKey(structure);
 
-        // Only apply to Guardian Vault structures
+        // Only apply to structures that need waterlogging prevention
         if (structureLocation == null ||
             !structureLocation.getNamespace().equals(Chronosphere.MOD_ID) ||
-            !structureLocation.getPath().equals("guardian_vault")) {
+            !WATERLOGGING_PREVENTION_STRUCTURES.contains(structureLocation.getPath())) {
             return;
         }
 
@@ -99,53 +113,78 @@ public abstract class StructureStartMixin {
 
         java.util.List<net.minecraft.world.level.levelgen.structure.StructurePiece> pieces = this.getPieces();
 
+        int totalWaterRemoved = 0;
+
         // Iterate through each individual structure piece (Jigsaw parts)
-        // This ensures we only process actual structure areas, not empty space
-        // between disconnected pieces (e.g., between entrance and underground hall)
+        // Process only the intersection between piece and current chunk
+        // This ensures we only process loaded chunks
         for (net.minecraft.world.level.levelgen.structure.StructurePiece piece : pieces) {
             BoundingBox pieceBox = piece.getBoundingBox();
 
-            // Record and remove water source blocks before structure placement
-            // Exclude top 5 blocks of each piece to preserve surface water (lakes, oceans)
-            int maxYToRecord = pieceBox.maxY() - 5;
+            // Only process the intersection between piece and current chunk
+            if (!pieceBox.intersects(chunkBox)) {
+                continue;
+            }
 
-            for (BlockPos pos : BlockPos.betweenClosed(
-                pieceBox.minX(), pieceBox.minY(), pieceBox.minZ(),
-                pieceBox.maxX(), maxYToRecord, pieceBox.maxZ()
-            )) {
+            // Calculate intersection area
+            int minX = Math.max(pieceBox.minX(), chunkBox.minX());
+            int minY = Math.max(pieceBox.minY(), chunkBox.minY());
+            int minZ = Math.max(pieceBox.minZ(), chunkBox.minZ());
+            int maxX = Math.min(pieceBox.maxX(), chunkBox.maxX());
+            int maxY = Math.min(pieceBox.maxY(), chunkBox.maxY());
+            int maxZ = Math.min(pieceBox.maxZ(), chunkBox.maxZ());
+
+            // Record and remove ONLY vanilla water (Aquifer water) within current chunk
+            // Preserve chronosphere:decorative_water (will be converted to water by processor)
+            for (BlockPos pos : BlockPos.betweenClosed(minX, minY, minZ, maxX, maxY, maxZ)) {
                 BlockState state = level.getBlockState(pos);
-                if (state.getFluidState().isSource() && state.getBlock() == Blocks.WATER) {
+                // Only remove minecraft:water (Aquifer water), not chronosphere:decorative_water
+                if (state.getFluidState().isSource() &&
+                    state.getBlock() == Blocks.WATER &&
+                    !state.is(com.chronosphere.registry.ModBlocks.DECORATIVE_WATER.get())) {
                     waterPositionsBeforePlacement.add(pos.immutable());
                     // Remove water temporarily to prevent waterlogging
                     level.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
+                    totalWaterRemoved++;
                 }
             }
         }
 
-        if (!waterPositionsBeforePlacement.isEmpty()) {
+        if (totalWaterRemoved > 0) {
             Chronosphere.LOGGER.info(
-                "Temporarily removed {} water blocks before Guardian Vault placement (across {} pieces)",
-                waterPositionsBeforePlacement.size(),
-                pieces.size()
+                "Removed {} Aquifer water blocks in chunk {} for {}",
+                totalWaterRemoved,
+                chunkPos,
+                structureLocation.getPath()
             );
         }
     }
 
     /**
-     * Inject after structure placement to log completion.
+     * Inject after structure placement to finalize waterlogging and convert decorative water.
      *
-     * Strategy:
-     * - Do NOT restore water in any positions
-     * - Water was removed before placement to prevent waterlogging
-     * - Decorative water from NBT is already placed by the structure
-     * - structure_void areas with solid blocks (stone, dirt, etc.) are preserved
-     * - structure_void areas with water will become air (unavoidable limitation)
+     * This runs after blocks in the current chunk have been placed and processed.
+     *
+     * IMPORTANT: For multi-chunk structures, this method is called separately for each chunk.
+     * To prevent waterlogging from later chunks affecting earlier chunks, we process blocks
+     * in the current chunk PLUS a 1-block border into adjacent chunks.
+     *
+     * At this point:
+     * 1. CopyFluidLevelProcessor has recorded positions with intentional waterlogging
+     * 2. CopyFluidLevelProcessor has removed all waterlogged states to prevent water spread
+     * 3. Some blocks may have been re-waterlogged by water placement in this or adjacent chunks
+     *
+     * This method:
+     * 1. Restores intentional waterlogging (from NBT)
+     * 2. Removes unintentional waterlogging (from Aquifer water or water spread)
+     * 3. Converts any remaining decorative water to vanilla water
+     * 4. Re-processes adjacent chunk borders to fix waterlogging from this chunk's water
      */
     @Inject(
         method = "placeInChunk",
         at = @At("RETURN")
     )
-    private void logWaterloggingPrevention(
+    private void convertDecorativeWaterAfterPlacement(
         WorldGenLevel level,
         StructureManager structureManager,
         ChunkGenerator chunkGenerator,
@@ -154,16 +193,141 @@ public abstract class StructureStartMixin {
         ChunkPos chunkPos,
         CallbackInfo ci
     ) {
-        // Skip if we didn't record any water positions (not a Guardian Vault)
-        if (waterPositionsBeforePlacement.isEmpty()) {
+        // Get structure registry key to check if waterlogging prevention is needed
+        net.minecraft.resources.ResourceLocation structureLocation =
+            level.registryAccess()
+                .registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
+                .getKey(structure);
+
+        // Only apply to structures that need waterlogging prevention
+        if (structureLocation == null ||
+            !structureLocation.getNamespace().equals(Chronosphere.MOD_ID) ||
+            !WATERLOGGING_PREVENTION_STRUCTURES.contains(structureLocation.getPath())) {
+            waterPositionsBeforePlacement.clear();
             return;
         }
 
-        int totalWaterRemoved = waterPositionsBeforePlacement.size();
-        Chronosphere.LOGGER.info(
-            "Prevented waterlogging for {} positions in Guardian Vault (water removed before placement)",
-            totalWaterRemoved
-        );
+        java.util.List<net.minecraft.world.level.levelgen.structure.StructurePiece> pieces = this.getPieces();
+
+        int totalDecorativeWaterConverted = 0;
+        int totalWaterloggedRestored = 0;
+        int totalWaterloggedRemoved = 0;
+
+        // Process each structure piece within current chunk
+        for (net.minecraft.world.level.levelgen.structure.StructurePiece piece : pieces) {
+            BoundingBox pieceBox = piece.getBoundingBox();
+
+            // Only process the intersection between piece and current chunk
+            if (!pieceBox.intersects(chunkBox)) {
+                continue;
+            }
+
+            // Calculate intersection area
+            // Expand by 1 block in X/Z directions to catch blocks in adjacent chunks
+            // that may have been waterlogged by this chunk's water placement
+            // This fixes the issue where earlier chunks are waterlogged by later chunks
+            int minX = Math.max(pieceBox.minX(), chunkBox.minX() - 1);
+            int minY = Math.max(pieceBox.minY(), chunkBox.minY());
+            int minZ = Math.max(pieceBox.minZ(), chunkBox.minZ() - 1);
+            int maxX = Math.min(pieceBox.maxX(), chunkBox.maxX() + 1);
+            int maxY = Math.min(pieceBox.maxY(), chunkBox.maxY());
+            int maxZ = Math.min(pieceBox.maxZ(), chunkBox.maxZ() + 1);
+
+            // Finalize waterlogging and convert decorative water within current chunk
+            // (and 1-block border into adjacent chunks)
+            for (BlockPos pos : BlockPos.betweenClosed(minX, minY, minZ, maxX, maxY, maxZ)) {
+                BlockState state = level.getBlockState(pos);
+
+                // 1. Convert decorative water to vanilla water (preserving flow state)
+                if (state.is(com.chronosphere.registry.ModBlocks.DECORATIVE_WATER.get())) {
+                    BlockState newState = Blocks.WATER.defaultBlockState();
+
+                    // Preserve fluid level if present
+                    if (state.hasProperty(net.minecraft.world.level.block.state.properties.BlockStateProperties.LEVEL)) {
+                        int fluidLevel = state.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.LEVEL);
+                        newState = newState.setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.LEVEL, fluidLevel);
+                    }
+
+                    level.setBlock(pos, newState, 2);
+                    totalDecorativeWaterConverted++;
+                }
+                // 2. Finalize waterlogging state
+                else if (state.hasProperty(net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED)) {
+                    boolean currentWaterlogged = state.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED);
+                    // Use immutable() to match the Set (which stores immutable positions)
+                    BlockPos immutablePos = pos.immutable();
+                    boolean shouldBeWaterlogged = com.chronosphere.worldgen.processors.CopyFluidLevelProcessor.INTENTIONAL_WATERLOGGING.contains(immutablePos);
+
+                    if (currentWaterlogged != shouldBeWaterlogged) {
+                        BlockState newState = state.setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED, shouldBeWaterlogged);
+                        level.setBlock(pos, newState, 2);
+
+                        if (shouldBeWaterlogged) {
+                            totalWaterloggedRestored++;
+                            // Remove from set after restoring (cleanup)
+                            com.chronosphere.worldgen.processors.CopyFluidLevelProcessor.INTENTIONAL_WATERLOGGING.remove(immutablePos);
+                        } else {
+                            totalWaterloggedRemoved++;
+                        }
+                    } else if (shouldBeWaterlogged) {
+                        // Already correctly waterlogged, remove from set (cleanup)
+                        com.chronosphere.worldgen.processors.CopyFluidLevelProcessor.INTENTIONAL_WATERLOGGING.remove(immutablePos);
+                    }
+                }
+            }
+        }
+
+        // Note: We don't clear INTENTIONAL_WATERLOGGING here because:
+        // 1. Multi-chunk structures need to share the set across chunks
+        // 2. Used positions are removed after restoration (above)
+        // 3. Unused positions will be cleaned up by the next structure
+
+        // Log set size for debugging (should be small or zero after processing)
+        int remainingPositions = com.chronosphere.worldgen.processors.CopyFluidLevelProcessor.INTENTIONAL_WATERLOGGING.size();
+        if (remainingPositions > 0) {
+            Chronosphere.LOGGER.debug(
+                "INTENTIONAL_WATERLOGGING set still contains {} positions after chunk {} for {}",
+                remainingPositions,
+                chunkPos,
+                structureLocation.getPath()
+            );
+        }
+
+        // Safety cleanup: if set is too large, clear it to prevent memory leak
+        if (remainingPositions > 10000) {
+            Chronosphere.LOGGER.warn(
+                "INTENTIONAL_WATERLOGGING set is too large ({}), clearing to prevent memory leak",
+                remainingPositions
+            );
+            com.chronosphere.worldgen.processors.CopyFluidLevelProcessor.INTENTIONAL_WATERLOGGING.clear();
+        }
+
+        if (totalDecorativeWaterConverted > 0) {
+            Chronosphere.LOGGER.info(
+                "Converted {} decorative water blocks in chunk {} for {}",
+                totalDecorativeWaterConverted,
+                chunkPos,
+                structureLocation.getPath()
+            );
+        }
+
+        if (totalWaterloggedRestored > 0) {
+            Chronosphere.LOGGER.info(
+                "Restored {} intentional waterlogged blocks in chunk {} for {}",
+                totalWaterloggedRestored,
+                chunkPos,
+                structureLocation.getPath()
+            );
+        }
+
+        if (totalWaterloggedRemoved > 0) {
+            Chronosphere.LOGGER.info(
+                "Removed {} unintentional waterlogged blocks in chunk {} for {}",
+                totalWaterloggedRemoved,
+                chunkPos,
+                structureLocation.getPath()
+            );
+        }
 
         // Clear the set to free memory
         waterPositionsBeforePlacement.clear();

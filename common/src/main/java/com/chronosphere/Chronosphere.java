@@ -9,7 +9,9 @@ import com.chronosphere.registry.ModCreativeTabs;
 import com.chronosphere.registry.ModDimensions;
 import com.chronosphere.registry.ModEffects;
 import com.chronosphere.registry.ModEntities;
+import com.chronosphere.registry.ModFluids;
 import com.chronosphere.registry.ModItems;
+import com.chronosphere.registry.ModStructureProcessorTypes;
 import com.chronosphere.registry.ModTreeDecoratorTypes;
 import com.chronosphere.worldgen.spawning.ChronosWardenSpawner;
 import com.chronosphere.worldgen.spawning.TimeGuardianSpawner;
@@ -25,6 +27,7 @@ public class Chronosphere {
         LOGGER.info("Chronosphere Mod (common) initialized");
 
         // Initialize registries (Phase 2 - Foundational)
+        ModFluids.register();
         ModBlocks.register();
         ModBlockEntities.register();
         ModItems.register();
@@ -33,6 +36,7 @@ public class Chronosphere {
         ModDimensions.register();
         ModCreativeTabs.register();
         ModTreeDecoratorTypes.register();
+        ModStructureProcessorTypes.register();
 
         // Initialize spawn eggs after entities are registered
         ModItems.initializeSpawnEggs();

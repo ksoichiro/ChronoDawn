@@ -1,6 +1,7 @@
 package com.chronosphere.registry;
 
 import com.chronosphere.Chronosphere;
+import com.chronosphere.items.DecorativeWaterBucketItem;
 import com.chronosphere.items.PortalStabilizerItem;
 import com.chronosphere.items.TimeHourglassItem;
 import com.chronosphere.items.base.ClockstoneItem;
@@ -47,6 +48,7 @@ import com.chronosphere.items.KeyToMasterClockItem;
 import com.chronosphere.items.UnstableHourglassItem;
 import com.chronosphere.items.quest.AncientGearItem;
 import com.chronosphere.items.tools.SpatiallyLinkedPickaxeItem;
+import com.chronosphere.registry.ModFluids;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
@@ -489,6 +491,17 @@ public class ModItems {
     public static final RegistrySupplier<Item> PORTAL_STABILIZER = ITEMS.register(
         "portal_stabilizer",
         () -> new PortalStabilizerItem(PortalStabilizerItem.createProperties())
+    );
+
+    /**
+     * Decorative Water Bucket - Structure building tool.
+     * Places chronosphere:decorative_water instead of minecraft:water.
+     * Used in NBT structure files to distinguish decorative water from Aquifer water.
+     * Creative mode only - not obtainable in survival.
+     */
+    public static final RegistrySupplier<Item> DECORATIVE_WATER_BUCKET = ITEMS.register(
+        "decorative_water_bucket",
+        () -> new DecorativeWaterBucketItem(ModFluids.DECORATIVE_WATER.get(), new Item.Properties().stacksTo(1))
     );
 
     /**
@@ -1092,6 +1105,7 @@ public class ModItems {
         // === Portal Items ===
         output.accept(TIME_HOURGLASS.get());
         output.accept(PORTAL_STABILIZER.get());
+        output.accept(DECORATIVE_WATER_BUCKET.get());
         // Add actual readable book instead of placeholder item
         output.accept(com.chronosphere.items.ChronicleOfChronosphereItem.createBook());
 
