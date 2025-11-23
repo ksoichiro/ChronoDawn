@@ -103,6 +103,154 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 
 **Reference**: See `specs/001-chronosphere-mod/research.md` → "Structure Waterlogging Research" for detailed analysis
 
+### Advanced Solution: Complete Waterlogging Prevention System (2025-11-24)
+
+**Use Case**: When you need to:
+1. Use waterloggable blocks in underground structures (stairs, lanterns, slabs, etc.)
+2. Include decorative water features (waterfalls, pools) in the same structures
+3. Support intentional waterlogging (waterlogged slabs for decorative pools)
+
+**Problem**: Simple Mixin-based water removal cannot distinguish between:
+- Aquifer water (unwanted) vs Decorative water (wanted)
+- Aquifer-induced waterlogging (unwanted) vs Intentional waterlogging (wanted)
+
+**Complete Solution: Three-Component System**
+
+**1. Custom Decorative Water Fluid** (`DecorativeWaterFluid.java`, `ModFluids.java`):
+- Create `chronosphere:decorative_water` fluid that looks identical to vanilla water
+- Use in NBT structures for decorative water features (waterfalls, pools)
+- Distinguishable from Aquifer water (`minecraft:water`) during generation
+- Preserves flow state (level=0-15) for waterfalls
+
+**2. Structure Processor** (`CopyFluidLevelProcessor.java`):
+```java
+@Override
+public StructureBlockInfo processBlock(...) {
+    // Phase 1: During structure placement (per-block processing)
+
+    // A. Convert decorative water → vanilla water (preserve flow)
+    if (state.is(ModBlocks.DECORATIVE_WATER.get())) {
+        int level = state.getValue(BlockStateProperties.LEVEL);
+        return new StructureBlockInfo(pos, Blocks.WATER.defaultBlockState()
+            .setValue(BlockStateProperties.LEVEL, level), nbt);
+    }
+
+    // B. Record intentional waterlogging positions
+    BlockPos worldPos = currentBlockInfo.pos();  // IMPORTANT: use currentBlockInfo.pos()!
+    if (originalBlockInfo.state().getValue(WATERLOGGED) == true) {
+        INTENTIONAL_WATERLOGGING.add(worldPos.immutable());
+    }
+
+    // C. Remove ALL waterlogging temporarily (prevents water spread)
+    if (currentBlockInfo.state().getValue(WATERLOGGED) == true) {
+        return new StructureBlockInfo(pos, state.setValue(WATERLOGGED, false), nbt);
+    }
+}
+```
+
+**3. Mixin** (`StructureStartMixin.java`):
+```java
+@Inject(method = "placeInChunk", at = @At("HEAD"))
+private void removeWaterBeforePlacement(...) {
+    // Phase 2a: Before structure placement
+    // Remove ONLY minecraft:water (Aquifer), preserve chronosphere:decorative_water
+    for (BlockPos pos : structurePieceBoundingBox) {
+        if (state.is(Blocks.WATER) && !state.is(ModBlocks.DECORATIVE_WATER)) {
+            level.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
+        }
+    }
+}
+
+@Inject(method = "placeInChunk", at = @At("RETURN"))
+private void finalizeWaterlogging(...) {
+    // Phase 2b: After structure placement
+    // Process current chunk + 1-block border (fixes multi-chunk timing issues)
+    for (BlockPos pos : chunkBox.expanded(1, 0, 1)) {
+        BlockPos immutablePos = pos.immutable();
+
+        if (state.hasProperty(WATERLOGGED)) {
+            boolean shouldBeWaterlogged = INTENTIONAL_WATERLOGGING.contains(immutablePos);
+
+            // Restore intentional, remove unintentional
+            if (state.getValue(WATERLOGGED) != shouldBeWaterlogged) {
+                level.setBlock(pos, state.setValue(WATERLOGGED, shouldBeWaterlogged), 2);
+            }
+
+            // Cleanup: remove from set after processing
+            if (shouldBeWaterlogged) {
+                INTENTIONAL_WATERLOGGING.remove(immutablePos);
+            }
+        }
+    }
+}
+```
+
+**Processing Flow**:
+```
+1. Mixin HEAD: Remove Aquifer water (minecraft:water only)
+2. Structure Placement:
+   - NBT blocks placed
+   - Processor runs for each block:
+     * Records intentional waterlogging positions
+     * Removes all waterlogging (prevents spread during placement)
+     * Converts decorative_water → minecraft:water
+3. Mixin RETURN:
+   - Restores intentional waterlogging (from recorded positions)
+   - Removes unintentional waterlogging (Aquifer or water spread)
+   - Processes chunk + 1-block border (fixes multi-chunk structures)
+```
+
+**Critical Implementation Details**:
+
+1. **Correct World Position** (Most Common Bug):
+   ```java
+   // WRONG: blockPos parameter is structure origin (same for all blocks!)
+   BlockPos worldPos = blockPos;
+
+   // CORRECT: Get actual position from currentBlockInfo
+   BlockPos worldPos = currentBlockInfo.pos();
+   ```
+
+2. **Immutable BlockPos for Set Storage**:
+   ```java
+   INTENTIONAL_WATERLOGGING.add(worldPos.immutable());  // Store immutable
+   INTENTIONAL_WATERLOGGING.contains(pos.immutable());   // Check immutable
+   ```
+
+3. **Multi-Chunk Structures** (Timing Issue):
+   - Each chunk processes separately via `placeInChunk()`
+   - Later chunks can waterlog blocks in earlier (already processed) chunks
+   - Solution: Expand processing area by 1 block: `chunkBox.expanded(1, 0, 1)`
+   - Don't clear `INTENTIONAL_WATERLOGGING` set until all chunks processed
+
+4. **Set Cleanup**:
+   ```java
+   // WRONG: Clear entire set after each chunk
+   INTENTIONAL_WATERLOGGING.clear();
+
+   // CORRECT: Remove individual positions after restoration
+   if (shouldBeWaterlogged) {
+       INTENTIONAL_WATERLOGGING.remove(immutablePos);
+   }
+   ```
+
+**Capabilities**:
+- ✅ Prevents Aquifer water from waterlogging stairs, lanterns, slabs, etc.
+- ✅ Supports decorative water features (waterfalls with flow)
+- ✅ Supports intentional waterlogging (waterlogged slabs for pools)
+- ✅ Works with multi-chunk structures
+- ✅ Compatible with Jigsaw structures
+
+**Files**:
+- `DecorativeWaterFluid.java` - Custom fluid (Source + Flowing)
+- `ModFluids.java` - Fluid registration
+- `CopyFluidLevelProcessor.java` - Structure processor
+- `ModStructureProcessorTypes.java` - Processor type registration
+- `StructureStartMixin.java` - Mixin for water removal and waterlogging finalization
+- `convert_decorative_water.json` - Processor list (applied to template pools)
+
+**Reference**: Master Clock (T234-238) - uses stairs, decorative water, intentional waterlogging
+
 ### Structure Generation Priority (2025-11-11)
 
 **Generation Order**: Structures generate in phases determined by the `step` parameter:

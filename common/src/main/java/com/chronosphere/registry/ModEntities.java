@@ -1,6 +1,9 @@
 package com.chronosphere.registry;
 
 import com.chronosphere.Chronosphere;
+import com.chronosphere.entities.bosses.ChronosWardenEntity;
+import com.chronosphere.entities.bosses.EntropyKeeperEntity;
+import com.chronosphere.entities.bosses.TemporalPhantomEntity;
 import com.chronosphere.entities.bosses.TimeGuardianEntity;
 import com.chronosphere.entities.bosses.TimeTyrantEntity;
 import com.chronosphere.entities.mobs.ClockworkSentinelEntity;
@@ -36,6 +39,59 @@ public class ModEntities {
             .clientTrackingRange(10) // Tracking range for clients
             .updateInterval(3) // Update interval in ticks
             .build("time_guardian")
+    );
+
+    /**
+     * Chronos Warden (クロノスの監視者) - Additional Mini-Boss Entity (Phase 1)
+     *
+     * Ancient guardian statue that protects underground vaults.
+     * Drops Guardian Stone for crafting Chrono Aegis.
+     *
+     * Reference: research.md (Additional Bosses Implementation Plan - Phase 1)
+     * Task: T234g [Phase 1] Register Chronos Warden in ModEntities registry
+     */
+    public static final RegistrySupplier<EntityType<ChronosWardenEntity>> CHRONOS_WARDEN = ENTITIES.register(
+        "chronos_warden",
+        () -> EntityType.Builder.of(ChronosWardenEntity::new, MobCategory.MONSTER)
+            .sized(1.0f, 2.5f) // Width 1.0, Height 2.5 (stone guardian size)
+            .clientTrackingRange(10) // Tracking range for clients
+            .updateInterval(3) // Update interval in ticks
+            .build("chronos_warden")
+    );
+
+    /**
+     * Clockwork Colossus (機械仕掛けの巨人) - Additional Mini-Boss Entity (Phase 1)
+     *
+     * Massive mechanical guardian built by ancient clockworkers.
+     * Drops Colossus Gear for crafting Chrono Aegis.
+     *
+     * Reference: research.md (Additional Bosses Implementation Plan - Phase 1)
+     * Task: T235f [Phase 1] Register Clockwork Colossus in ModEntities registry
+     */
+    public static final RegistrySupplier<EntityType<com.chronosphere.entities.bosses.ClockworkColossusEntity>> CLOCKWORK_COLOSSUS = ENTITIES.register(
+        "clockwork_colossus",
+        () -> EntityType.Builder.of(com.chronosphere.entities.bosses.ClockworkColossusEntity::new, MobCategory.MONSTER)
+            .sized(1.0f, 2.5f) // Width 1.0, Height 2.5 (mechanical colossus size)
+            .clientTrackingRange(10) // Tracking range for clients
+            .updateInterval(3) // Update interval in ticks
+            .build("clockwork_colossus")
+    );
+
+    /**
+     * Gear Projectile - Spinning gear fired by Clockwork Colossus
+     *
+     * Mechanical spinning gear projectile that deals damage and knockback.
+     *
+     * Reference: research.md (Additional Bosses Implementation Plan - Phase 1)
+     * Task: T235f [Phase 1] Register Gear Projectile in ModEntities registry
+     */
+    public static final RegistrySupplier<EntityType<com.chronosphere.entities.projectiles.GearProjectileEntity>> GEAR_PROJECTILE = ENTITIES.register(
+        "gear_projectile",
+        () -> EntityType.Builder.<com.chronosphere.entities.projectiles.GearProjectileEntity>of(com.chronosphere.entities.projectiles.GearProjectileEntity::new, MobCategory.MISC)
+            .sized(0.5f, 0.5f) // Small projectile size
+            .clientTrackingRange(4) // Short tracking range
+            .updateInterval(10) // Update interval in ticks
+            .build("gear_projectile")
     );
 
     /**
@@ -126,6 +182,48 @@ public class ModEntities {
             .clientTrackingRange(4) // Standard projectile tracking range
             .updateInterval(10) // Update interval in ticks
             .build("time_blast")
+    );
+
+    /**
+     * Temporal Phantom - Phase 2 Mini-Boss
+     *
+     * A spectral mage trapped between time, uses teleportation and phantom clones.
+     * HP: 150, Attack: 8, Armor: 5, Speed: 0.25 (fast)
+     *
+     * Phase 1: Phase Shift (30% dodge), Warp Bolt (ranged magic)
+     * Phase 2: Phantom Clone summons, Blink Strike teleportation
+     *
+     * Reference: research.md (Boss 3: Temporal Phantom)
+     * Task: T236 [Phase 2] Implement Temporal Phantom
+     */
+    public static final RegistrySupplier<EntityType<TemporalPhantomEntity>> TEMPORAL_PHANTOM = ENTITIES.register(
+        "temporal_phantom",
+        () -> EntityType.Builder.of(TemporalPhantomEntity::new, MobCategory.MONSTER)
+            .sized(0.8f, 2.0f)
+            .clientTrackingRange(10)
+            .updateInterval(3)
+            .build("temporal_phantom")
+    );
+
+    /**
+     * Entropy Keeper - Phase 2 Mini-Boss
+     *
+     * Aberrant entity that governs temporal decay and corruption.
+     * HP: 160, Attack: 10, Armor: 6, Speed: 0.20
+     *
+     * Phase 1: Decay Aura (Wither I), Corrosion Touch (durability damage), Temporal Rot (corruption patches)
+     * Phase 2: Degradation (+2 attack/60s, max 3 stacks), Entropy Burst (one-time explosion at 30% HP)
+     *
+     * Reference: research.md (Boss 4: Entropy Keeper)
+     * Task: T237 [Phase 2] Implement Entropy Keeper
+     */
+    public static final RegistrySupplier<EntityType<EntropyKeeperEntity>> ENTROPY_KEEPER = ENTITIES.register(
+        "entropy_keeper",
+        () -> EntityType.Builder.of(EntropyKeeperEntity::new, MobCategory.MONSTER)
+            .sized(0.9f, 2.2f)
+            .clientTrackingRange(10)
+            .updateInterval(3)
+            .build("entropy_keeper")
     );
 
     /**

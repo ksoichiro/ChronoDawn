@@ -85,10 +85,11 @@ public class EntityEventHandler {
             return EventResult.pass();
         });
 
-        // Register player tick event for teleporter charging
+        // Register player tick event for teleporter charging and Chrono Aegis Clarity
         TickEvent.PLAYER_POST.register(player -> {
             if (player instanceof ServerPlayer serverPlayer) {
                 TeleporterChargingHandler.tick(serverPlayer);
+                handleChronoAegisClarity(serverPlayer);
             }
         });
 
@@ -226,6 +227,39 @@ public class EntityEventHandler {
 
         // T140: Dimension stabilization
         com.chronosphere.core.dimension.DimensionStabilizer.stabilizeDimension(level);
+    }
+
+    /**
+     * Handle Chrono Aegis Clarity effect.
+     * Auto-cleanses negative effects (Slowness, Weakness, Mining Fatigue) every 2 seconds.
+     *
+     * This implementation uses PLAYER_POST tick event instead of MobEffect.applyEffectTick()
+     * to avoid ConcurrentModificationException when the game saves entity NBT data.
+     *
+     * @param player The player to process
+     * Task: T240 [US3] Fix Clarity auto-cleanse feature
+     */
+    private static void handleChronoAegisClarity(ServerPlayer player) {
+        // Check if player has Chrono Aegis buff
+        net.minecraft.core.Holder<net.minecraft.world.effect.MobEffect> aegisEffect =
+            net.minecraft.core.registries.BuiltInRegistries.MOB_EFFECT.wrapAsHolder(
+                com.chronosphere.registry.ModEffects.CHRONO_AEGIS_BUFF.get()
+            );
+
+        if (!player.hasEffect(aegisEffect)) {
+            return;
+        }
+
+        // Apply Clarity every 40 ticks (2 seconds)
+        if (player.tickCount % 40 != 0) {
+            return;
+        }
+
+        // Remove negative effects that Time Tyrant and bosses apply
+        // MobEffects constants already return Holder<MobEffect> in Minecraft 1.21.1
+        player.removeEffect(net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN);
+        player.removeEffect(net.minecraft.world.effect.MobEffects.WEAKNESS);
+        player.removeEffect(net.minecraft.world.effect.MobEffects.DIG_SLOWDOWN);
     }
 }
 

@@ -1,6 +1,7 @@
 package com.chronosphere.registry;
 
 import com.chronosphere.Chronosphere;
+import com.chronosphere.items.DecorativeWaterBucketItem;
 import com.chronosphere.items.PortalStabilizerItem;
 import com.chronosphere.items.TimeHourglassItem;
 import com.chronosphere.items.base.ClockstoneItem;
@@ -47,6 +48,7 @@ import com.chronosphere.items.KeyToMasterClockItem;
 import com.chronosphere.items.UnstableHourglassItem;
 import com.chronosphere.items.quest.AncientGearItem;
 import com.chronosphere.items.tools.SpatiallyLinkedPickaxeItem;
+import com.chronosphere.registry.ModFluids;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
@@ -390,6 +392,87 @@ public class ModItems {
         )
     );
 
+    /**
+     * Guardian Stone - Additional Boss material item (T234-T238).
+     * Dropped by Chronos Warden (1 per kill, guaranteed).
+     * Used for crafting Chrono Aegis (Time Tyrant preparation item).
+     */
+    public static final RegistrySupplier<Item> GUARDIAN_STONE = ITEMS.register(
+        "guardian_stone",
+        () -> new com.chronosphere.items.boss.GuardianStoneItem(
+            com.chronosphere.items.boss.GuardianStoneItem.createProperties()
+        )
+    );
+
+    /**
+     * Colossus Gear - Additional Boss material item (T234-T238).
+     * Dropped by Clockwork Colossus (1 per kill, guaranteed).
+     * Used for crafting Chrono Aegis (Time Tyrant preparation item).
+     */
+    public static final RegistrySupplier<Item> COLOSSUS_GEAR = ITEMS.register(
+        "colossus_gear",
+        () -> new com.chronosphere.items.boss.ColossusGearItem(
+            com.chronosphere.items.boss.ColossusGearItem.createProperties()
+        )
+    );
+
+    /**
+     * Phantom Essence - Boss drop from Temporal Phantom
+     *
+     * A spectral essence dropped by Temporal Phantom (Phase 2 mini-boss).
+     * Dropped by Temporal Phantom (1-2 per kill).
+     * Used for crafting Chrono Aegis (Time Tyrant preparation item).
+     *
+     * Reference: research.md (Boss 3: Temporal Phantom)
+     * Task: T236 [Phase 2] Implement Temporal Phantom
+     */
+    public static final RegistrySupplier<Item> PHANTOM_ESSENCE = ITEMS.register(
+        "phantom_essence",
+        () -> new com.chronosphere.items.PhantomEssenceItem(
+            com.chronosphere.items.PhantomEssenceItem.createProperties()
+        )
+    );
+
+    /**
+     * Entropy Core - Boss drop from Entropy Keeper
+     *
+     * A corrupted core dropped by Entropy Keeper (Phase 2 mini-boss).
+     * Dropped by Entropy Keeper (1-2 per kill).
+     * Used for crafting Chrono Aegis (Time Tyrant preparation item).
+     *
+     * Reference: research.md (Boss 4: Entropy Keeper)
+     * Task: T237 [Phase 2] Implement Entropy Keeper
+     */
+    public static final RegistrySupplier<Item> ENTROPY_CORE = ITEMS.register(
+        "entropy_core",
+        () -> new com.chronosphere.items.EntropyCoreItem(
+            com.chronosphere.items.EntropyCoreItem.createProperties()
+        )
+    );
+
+    // === Ultimate Crafted Items ===
+
+    /**
+     * Chrono Aegis - Ultimate preparation item for Time Tyrant boss fight
+     *
+     * Crafted from 4 boss drop materials:
+     * - Guardian Stone (Chronos Warden drop)
+     * - Phantom Essence (Temporal Phantom drop)
+     * - Colossus Gear (Clockwork Colossus drop)
+     * - Entropy Core (Entropy Keeper drop)
+     *
+     * Provides 10-minute buff with Time Tyrant protection effects.
+     *
+     * Reference: research.md (Chrono Aegis System)
+     * Task: T238 [US3] Implement Chrono Aegis system
+     */
+    public static final RegistrySupplier<Item> CHRONO_AEGIS = ITEMS.register(
+        "chrono_aegis",
+        () -> new com.chronosphere.items.ChronoAegisItem(
+            new Item.Properties()
+        )
+    );
+
     // === Portal Items ===
 
     /**
@@ -420,6 +503,17 @@ public class ModItems {
         () -> new com.chronosphere.items.TimeCompassItem(
             com.chronosphere.items.TimeCompassItem.createProperties()
         )
+    );
+
+    /**
+     * Decorative Water Bucket - Structure building tool.
+     * Places chronosphere:decorative_water instead of minecraft:water.
+     * Used in NBT structure files to distinguish decorative water from Aquifer water.
+     * Creative mode only - not obtainable in survival.
+     */
+    public static final RegistrySupplier<Item> DECORATIVE_WATER_BUCKET = ITEMS.register(
+        "decorative_water_bucket",
+        () -> new DecorativeWaterBucketItem(ModFluids.DECORATIVE_WATER.get(), new Item.Properties().stacksTo(1))
     );
 
     /**
@@ -1023,6 +1117,7 @@ public class ModItems {
         // === Portal Items ===
         output.accept(TIME_HOURGLASS.get());
         output.accept(PORTAL_STABILIZER.get());
+        output.accept(DECORATIVE_WATER_BUCKET.get());
         // Add actual readable book instead of placeholder item
         output.accept(com.chronosphere.items.ChronicleOfChronosphereItem.createBook());
         // Add example Time Compass (targets Desert Clock Tower by default)
@@ -1104,6 +1199,15 @@ public class ModItems {
         // === Key Items ===
         output.accept(KEY_TO_MASTER_CLOCK.get());
         output.accept(ANCIENT_GEAR.get());
+
+        // === Boss Drops ===
+        output.accept(GUARDIAN_STONE.get());
+        output.accept(COLOSSUS_GEAR.get());
+        output.accept(PHANTOM_ESSENCE.get());
+        output.accept(ENTROPY_CORE.get());
+
+        // === Ultimate Crafted Items ===
+        output.accept(CHRONO_AEGIS.get());
 
         // === Spawn Eggs ===
         output.accept(TEMPORAL_WRAITH_SPAWN_EGG.get());

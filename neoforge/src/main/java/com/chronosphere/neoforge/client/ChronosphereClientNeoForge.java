@@ -3,6 +3,10 @@ package com.chronosphere.neoforge.client;
 import com.chronosphere.Chronosphere;
 import com.chronosphere.client.model.TimeGuardianModel;
 import com.chronosphere.client.model.TimeTyrantModel;
+import com.chronosphere.client.renderer.ChronosWardenRenderer;
+import com.chronosphere.client.renderer.ClockworkColossusRenderer;
+import com.chronosphere.client.renderer.EntropyKeeperRenderer;
+import com.chronosphere.client.renderer.TemporalPhantomRenderer;
 import com.chronosphere.client.renderer.TimeArrowRenderer;
 import com.chronosphere.client.renderer.TimeBlastRenderer;
 import com.chronosphere.client.renderer.TimeGuardianRenderer;
@@ -93,6 +97,12 @@ public class ChronosphereClientNeoForge {
             TimeGuardianRenderer::new
         );
 
+        // Register Chronos Warden with custom renderer
+        event.registerEntityRenderer(
+            ModEntities.CHRONOS_WARDEN.get(),
+            ChronosWardenRenderer::new
+        );
+
         // Register Time Tyrant with custom renderer
         event.registerEntityRenderer(
             ModEntities.TIME_TYRANT.get(),
@@ -109,6 +119,24 @@ public class ChronosphereClientNeoForge {
         event.registerEntityRenderer(
             ModEntities.TIME_BLAST.get(),
             TimeBlastRenderer::new
+        );
+
+        // Register Clockwork Colossus with custom renderer
+        event.registerEntityRenderer(
+            ModEntities.CLOCKWORK_COLOSSUS.get(),
+            ClockworkColossusRenderer::new
+        );
+
+        // Register Temporal Phantom with custom renderer
+        event.registerEntityRenderer(
+            ModEntities.TEMPORAL_PHANTOM.get(),
+            TemporalPhantomRenderer::new
+        );
+
+        // Register Entropy Keeper with custom renderer
+        event.registerEntityRenderer(
+            ModEntities.ENTROPY_KEEPER.get(),
+            EntropyKeeperRenderer::new
         );
 
         Chronosphere.LOGGER.info("Registered entity renderers for NeoForge");

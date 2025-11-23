@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GPE",
+    "PCP",
+    "ECG"
+  ],
+  "key": {
+    "G": {
+      "item": "chronosphere:guardian_stone"
+    },
+    "P": {
+      "item": "chronosphere:phantom_essence"
+    },
+    "C": {
+      "item": "chronosphere:colossus_gear"
+    },
+    "E": {
+      "item": "chronosphere:entropy_core"
+    }
+  },
+  "result": {
+    "id": "chronosphere:chrono_aegis",
+    "count": 1
+  }
+}

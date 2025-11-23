@@ -22,7 +22,9 @@
       "com.chronosphere.fabric.client.ChronosphereClientFabric"
     ]
   },
-  "mixins": [],
+  "mixins": [
+    "chronosphere.mixins.json"
+  ],
   "depends": {
     "fabricloader": ">=0.15.11",
     "fabric-api": "*",

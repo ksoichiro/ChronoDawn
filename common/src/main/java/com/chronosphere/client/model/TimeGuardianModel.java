@@ -1,6 +1,5 @@
 package com.chronosphere.client.model;
 
-import com.chronosphere.entities.bosses.TimeGuardianEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
@@ -12,12 +11,15 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Mob;
 
 /**
  * Time Guardian Model
  *
  * Created with Blockbench 5.0.3
  * Converted from Yarn mappings to Mojang mappings for Architectury
+ *
+ * Generic model that can be used for multiple boss entities (Time Guardian, Chronos Warden, Clockwork Colossus, etc.)
  *
  * Model Structure:
  * - root
@@ -28,7 +30,7 @@ import net.minecraft.util.Mth;
  *   - left_leg
  *   - right_leg
  */
-public class TimeGuardianModel extends EntityModel<TimeGuardianEntity> {
+public class TimeGuardianModel<T extends Mob> extends EntityModel<T> {
     private final ModelPart root;
     private final ModelPart body;
     private final ModelPart head;
@@ -106,7 +108,7 @@ public class TimeGuardianModel extends EntityModel<TimeGuardianEntity> {
     }
 
     @Override
-    public void setupAnim(TimeGuardianEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         // Reset all rotations to default
         this.head.xRot = 0.0F;
         this.head.yRot = 0.0F;

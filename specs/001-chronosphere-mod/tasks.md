@@ -314,15 +314,51 @@
 
 ### Additional Boss Enemies (US3 Enhancement - Medium Priority)
 
-**Purpose**: ボスの数を増やし、戦闘の多様性を向上
+**Purpose**: 4つの追加ミニボスとChrono Aegisシステムの実装
 
-**Note**: 現在Time GuardianとTime Tyrantのみ。隠しボスを含めたバリエーションを追加
+**Implementation Status**: Boss entities, Chrono Aegis, and Guardian Vault complete. Other boss structures pending
 
-- [ ] T234 [US3] Design additional boss concepts (hidden boss mechanics, lore, unique abilities, drops, spawn conditions)
-- [ ] T235 [P] [US3] Implement hidden boss entity (e.g., Temporal Devourer, Master of Lost Time)
-- [ ] T236 [P] [US3] Create boss textures and models in common/src/main/resources/assets/chronosphere/textures/entity/
-- [ ] T237 [P] [US3] Design hidden boss arena structure or spawn conditions (rare structure, summoning item, secret room)
-- [ ] T238 [US3] Test additional boss spawning, mechanics, and loot drops in-game
+**Reference**: See research.md "Additional Bosses Implementation Plan (T234-T238)"
+
+#### T234: Chronos Warden (クロノスの監視者) - COMPLETED
+- [x] T234a-i: Entity, item, renderer, texture, translations implemented
+- [x] T234j-o: Guardian Vault structure generation (COMPLETED - see T239)
+
+#### T235: Clockwork Colossus (機械仕掛けの巨像) - COMPLETED
+- [x] T235a-l: Entity, Gear Projectile, item, renderer, translations implemented
+- [ ] T235m-r: Clockwork Depths structure generation (NOT IMPLEMENTED)
+
+#### T236: Temporal Phantom (時間の幻影) - COMPLETED
+- [x] T236a-l: Entity, item, renderer, texture, translations implemented
+- [ ] T236m-r: Phantom Tower structure generation (NOT IMPLEMENTED)
+
+#### T237: Entropy Keeper (エントロピーの管理者) - COMPLETED
+- [x] T237a-m: Entity, item, renderer, texture, translations implemented
+- [ ] T237n-r: Entropy Crypt structure generation (NOT IMPLEMENTED)
+
+#### T238: Chrono Aegis System - PARTIALLY COMPLETED
+- [x] T238a-f: Chrono Aegis item, effect, recipe, translations implemented
+- [x] T238g-j: Time Tyrant integration (Time Stop Resistance, Dimensional Anchor, Temporal Shield, Time Reversal Disruption)
+- [x] T238k: Implement safe Clarity effect (implemented using PLAYER_POST event in EntityEventHandler)
+- [x] T238l: Multiplayer safeguards implemented
+- [ ] T238m-p: Testing tasks (crafting, effects, multiplayer, balance)
+- [ ] T238q: Full playthrough test
+- [ ] T238u-x: Documentation updates
+
+#### Remaining High-Priority Tasks
+- [x] T239: Guardian Vault structure generation (COMPLETED)
+  - Jigsaw structure with entrance (surface) + main hall (underground)
+  - StructureStartMixin for waterlogging prevention (removes Aquifer water before placement)
+  - ChronosWardenSpawner for boss spawning (Boss Room Door with DoorType: "guardian_vault")
+  - Loot table for treasure chests
+  - Spawns in chronosphere_plains and chronosphere_forest biomes
+- [x] T240: Fix Clarity auto-cleanse feature (implemented using event system in EntityEventHandler.handleChronoAegisClarity)
+- [ ] T241: Comprehensive testing (boss spawning, Chrono Aegis crafting, Time Tyrant fight)
+
+#### Future Improvements (Low Priority)
+- [ ] T242: Improve boss visual diversity (custom models instead of reusing TimeGuardianModel)
+- [ ] T243: Add boss-specific sound effects
+- [ ] T244: Create advancement system for defeating all 4 bosses
 
 ### Tests for User Story 3
 

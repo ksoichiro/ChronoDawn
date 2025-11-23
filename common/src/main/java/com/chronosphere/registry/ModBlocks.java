@@ -9,6 +9,7 @@ import com.chronosphere.blocks.ClockstoneStairs;
 import com.chronosphere.blocks.ClockstoneWall;
 import com.chronosphere.blocks.ClockTowerTeleporterBlock;
 import com.chronosphere.blocks.ClockworkBlock;
+import com.chronosphere.blocks.DecorativeWaterBlock;
 import com.chronosphere.blocks.FruitOfTimeBlock;
 import com.chronosphere.blocks.FrozenTimeIceBlock;
 import com.chronosphere.blocks.ReversingTimeSandstone;
@@ -39,6 +40,7 @@ import com.chronosphere.blocks.TemporalRootBlock;
 import com.chronosphere.blocks.ChronoMelonStemBlock;
 import com.chronosphere.blocks.ChronoMelonBlock;
 import com.chronosphere.blocks.TimelessMushroomBlock;
+import com.chronosphere.registry.ModFluids;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
@@ -449,6 +451,24 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> TEMPORAL_PARTICLE_EMITTER = BLOCKS.register(
         "temporal_particle_emitter",
         () -> new TemporalParticleEmitterBlock(TemporalParticleEmitterBlock.createProperties())
+    );
+
+    /**
+     * Decorative Water - Water block that looks like vanilla water but has a different ID.
+     *
+     * Used in NBT structure files to distinguish decorative water from Aquifer water.
+     * During structure generation:
+     * - Aquifer water (minecraft:water) is removed to prevent waterlogging
+     * - Decorative water (chronosphere:decorative_water) is preserved
+     * - A processor converts decorative water to minecraft:water after placement
+     *
+     * Creative mode only - place with Decorative Water Bucket.
+     *
+     * Task: T239 [US3] Guardian Vault & Master Clock waterlogging prevention
+     */
+    public static final RegistrySupplier<Block> DECORATIVE_WATER = BLOCKS.register(
+        "decorative_water",
+        () -> new DecorativeWaterBlock(ModFluids.DECORATIVE_WATER.get(), Block.Properties.ofFullCopy(Blocks.WATER))
     );
 
     /**

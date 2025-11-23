@@ -5,7 +5,7 @@
       "weight": 1,
       "element": {
         "location": "chronosphere:master_clock_boss_room",
-        "processors": "chronosphere:remove_water",
+        "processors": "chronosphere:convert_decorative_water",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
