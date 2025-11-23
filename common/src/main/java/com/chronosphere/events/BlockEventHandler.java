@@ -153,7 +153,9 @@ public class BlockEventHandler {
             // Check if the clicked block is a boss room door (custom door with BlockEntity)
             if (state.is(ModBlocks.BOSS_ROOM_DOOR.get())) {
                 // Determine door type by reading BlockEntity NBT
-                boolean isBossRoomDoor = isBossRoomDoor(player.level(), pos);
+                String doorType = getDoorType(player.level(), pos);
+                boolean isBossRoomDoor = "boss_room".equals(doorType);
+                boolean isGuardianVaultDoor = "guardian_vault".equals(doorType);
 
                 // Check appropriate key requirement
                 boolean canUnlock;
@@ -165,6 +167,10 @@ public class BlockEventHandler {
                     message = canUnlock
                         ? Component.translatable("message.chronosphere.boss_room_unlocked")
                         : Component.translatable("message.chronosphere.boss_room_locked");
+                } else if (isGuardianVaultDoor) {
+                    // Guardian Vault door - no key required (always unlocked)
+                    canUnlock = true;
+                    message = Component.translatable("message.chronosphere.guardian_vault_opened");
                 } else {
                     // Entrance door - requires Key to Master Clock
                     canUnlock = hasKeyToMasterClock(player);
@@ -219,6 +225,14 @@ public class BlockEventHandler {
                         // Get the updated state after opening
                         BlockState openedState = player.level().getBlockState(doorPosToUse);
                         com.chronosphere.worldgen.spawning.TimeTyrantSpawner.spawnOnDoorOpen(serverLevel, doorPosToUse, openedState);
+                    }
+
+                    // Spawn Chronos Warden when Guardian Vault door is opened (not closed)
+                    if (isGuardianVaultDoor && !wasOpen && player.level() instanceof ServerLevel serverLevel) {
+                        Chronosphere.LOGGER.info("Guardian Vault door opened at {} - spawning Chronos Warden", doorPosToUse);
+                        // Get the updated state after opening
+                        BlockState openedState = player.level().getBlockState(doorPosToUse);
+                        com.chronosphere.worldgen.spawning.ChronosWardenSpawner.spawnOnDoorOpen(serverLevel, doorPosToUse, openedState);
                     }
 
                     return EventResult.interruptTrue();
@@ -462,6 +476,25 @@ public class BlockEventHandler {
 
         // Default to entrance door if BlockEntity not found
         return false;
+    }
+
+    /**
+     * Get the door type from a Boss Room Door block.
+     * Returns the door type string ("entrance", "boss_room", "guardian_vault", etc.)
+     *
+     * @param level The level containing the door
+     * @param pos The position of the door block
+     * @return The door type string, or "entrance" if not found
+     */
+    private static String getDoorType(net.minecraft.world.level.Level level, BlockPos pos) {
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+
+        if (blockEntity instanceof com.chronosphere.blocks.BossRoomDoorBlockEntity doorEntity) {
+            return doorEntity.getDoorType();
+        }
+
+        // Default to entrance door if BlockEntity not found
+        return "entrance";
     }
 
     /**

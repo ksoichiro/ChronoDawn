@@ -130,6 +130,7 @@
   "message.chronosphere.master_clock_locked": "The door is locked. You need the Key to Master Clock",
   "message.chronosphere.boss_room_unlocked": "The ancient gears align... The door opens",
   "message.chronosphere.boss_room_locked": "The door mechanism requires 3 Ancient Gears",
+  "message.chronosphere.guardian_vault_opened": "The ancient vault opens...",
   "message.chronosphere.time_clock_boss_success": "The Time Clock resonates! Time Tyrant weakened!",
   "message.chronosphere.time_clock_boss_limit": "The Time Clock has no effect - already used in this phase",
 
