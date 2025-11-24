@@ -235,5 +235,17 @@
 
   "item.chronosphere.temporal_wraith_spawn_egg": "時の亡霊のスポーンエッグ",
   "item.chronosphere.clockwork_sentinel_spawn_egg": "時計仕掛けの番兵のスポーンエッグ",
-  "item.chronosphere.time_keeper_spawn_egg": "時間の管理者のスポーンエッグ"
+  "item.chronosphere.time_keeper_spawn_egg": "時間の管理者のスポーンエッグ",
+
+  "advancements.chronosphere.grant_chronicle_book.title": "クロノスフィアの記録",
+  "advancements.chronosphere.grant_chronicle_book.description": "クロノスフィアの記録ガイドブックを受け取った",
+
+  "patchouli.book.chronosphere.chronicle.name": "クロノスフィアの記録",
+  "patchouli.book.chronosphere.chronicle.landing_text": "ようこそ、旅人よ。あなたは時間そのものが凍結した次元に入りました。この記録があなたのクロノスフィアでの旅を導きます。",
+
+  "patchouli.gui.lexicon.edition_str": "%s版",
+  "patchouli.gui.lexicon.categories": "カテゴリー",
+  "patchouli.gui.lexicon.index": "エントリー索引",
+  "patchouli.gui.lexicon.chapters": "章",
+  "patchouli.gui.lexicon.index.info": "この本で利用可能なすべての章の索引です。$(br2)索引または他のカテゴリーで検索するには、クエリを入力するだけです。検索バーが表示されてサポートします。"
 }

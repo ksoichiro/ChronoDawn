@@ -1,0 +1,12 @@
+{
+  "name": "Your First Goal",
+  "icon": "minecraft:book",
+  "category": "chronosphere:basics",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Seek the $(l:chronosphere:structures/forgotten_library)Forgotten Library$(/l), a structure of knowledge lost to time.$(br2)Within its walls, you will find the recipe for the $(l:chronosphere:progression/portal_stabilizer)Portal Stabilizer$(/l) - your key to returning home.$(br2)Without it, your portal remains one-way only."
+    }
+  ]
+}

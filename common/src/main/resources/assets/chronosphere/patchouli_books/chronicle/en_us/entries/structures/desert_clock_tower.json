@@ -1,0 +1,12 @@
+{
+  "name": "Desert Clock Tower",
+  "icon": "chronosphere:enhanced_clockstone",
+  "category": "chronosphere:structures",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "In the desert biome stands a tower of gears and clockwork.$(br2)Inside, you'll find $(item)Enhanced Clockstone$() - a material for advanced tools and weapons.$(br2)The tower is guarded by the $(l:chronosphere:bosses/time_guardian)Time Guardian$(/l), a mini-boss that must be defeated to progress further."
+    }
+  ]
+}

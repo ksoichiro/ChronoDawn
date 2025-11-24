@@ -1,0 +1,10 @@
+{
+  "name": "patchouli.book.chronosphere.chronicle.name",
+  "landing_text": "patchouli.book.chronosphere.chronicle.landing_text",
+  "version": 1,
+  "creative_tab": "chronosphere:chronosphere_tab",
+  "model": "patchouli:book_purple",
+  "use_resource_pack": true,
+  "show_progress": false,
+  "index_icon": "chronosphere:time_crystal"
+}

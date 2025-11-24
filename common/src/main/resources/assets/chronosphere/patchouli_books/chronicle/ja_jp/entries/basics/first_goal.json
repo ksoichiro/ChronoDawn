@@ -1,0 +1,12 @@
+{
+  "name": "最初の目標",
+  "icon": "minecraft:book",
+  "category": "chronosphere:basics",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "$(l:chronosphere:structures/forgotten_library)忘れられた図書館$()を探しましょう。時の中に失われた知識の構造物です。$(br2)その壁の中に、$(l:chronosphere:progression/portal_stabilizer)ポータル安定装置$()のレシピがあります - これがあなたが帰るための鍵です。$(br2)これがなければ、ポータルは一方通行のままです。"
+    }
+  ]
+}

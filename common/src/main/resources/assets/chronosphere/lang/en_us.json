@@ -235,5 +235,11 @@
 
   "item.chronosphere.temporal_wraith_spawn_egg": "Temporal Wraith Spawn Egg",
   "item.chronosphere.clockwork_sentinel_spawn_egg": "Clockwork Sentinel Spawn Egg",
-  "item.chronosphere.time_keeper_spawn_egg": "Time Keeper Spawn Egg"
+  "item.chronosphere.time_keeper_spawn_egg": "Time Keeper Spawn Egg",
+
+  "advancements.chronosphere.grant_chronicle_book.title": "Chronicle of Chronosphere",
+  "advancements.chronosphere.grant_chronicle_book.description": "Received the Chronicle of Chronosphere guide book",
+
+  "patchouli.book.chronosphere.chronicle.name": "Chronicle of Chronosphere",
+  "patchouli.book.chronosphere.chronicle.landing_text": "Welcome, traveler. You have entered a dimension where time itself has frozen. This chronicle will guide you through your journey in the Chronosphere."
 }

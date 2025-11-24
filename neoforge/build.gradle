@@ -39,6 +39,10 @@ dependencies {
     neoForge "net.neoforged:neoforge:${neoforge_version}"
     modApi "dev.architectury:architectury-neoforge:${architectury_version}"
 
+    // Patchouli for guide book
+    modCompileOnly "vazkii.patchouli:Patchouli:1.21.1-92-NEOFORGE:api"
+    modRuntimeOnly "vazkii.patchouli:Patchouli:1.21.1-92-NEOFORGE"
+
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive false }
 }

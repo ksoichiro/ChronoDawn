@@ -17,6 +17,9 @@ import java.util.stream.Collectors;
 /**
  * Chronicle of Chronosphere - A guide book for players entering the Chronosphere dimension.
  *
+ * @deprecated Replaced by Patchouli guide book system (chronosphere:chronicle).
+ * This class is kept for fallback purposes only in case Patchouli is not available.
+ *
  * This book contains essential information about:
  * - Dimension mechanics and time distortion effects
  * - Structure locations and their purposes
@@ -28,6 +31,7 @@ import java.util.stream.Collectors;
  * Note: This is a placeholder item. The actual book given to players is a vanilla written_book
  * with custom content. This item appears in creative menu but should not be used directly.
  */
+@Deprecated
 public class ChronicleOfChronosphereItem extends Item {
 
     public ChronicleOfChronosphereItem(Properties properties) {

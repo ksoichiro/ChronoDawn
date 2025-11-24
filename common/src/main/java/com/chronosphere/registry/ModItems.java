@@ -518,15 +518,18 @@ public class ModItems {
 
     /**
      * Chronicle of Chronosphere - Player guide book.
+     * DEPRECATED: Replaced by Patchouli guide book system (chronosphere:chronicle).
+     * This item is kept for fallback purposes only.
      * Contains information about dimension mechanics, structures, items, and progression.
      * Given to players automatically on first entry to Chronosphere dimension.
      */
-    public static final RegistrySupplier<Item> CHRONICLE_OF_CHRONOSPHERE = ITEMS.register(
-        "chronicle_of_chronosphere",
-        () -> new com.chronosphere.items.ChronicleOfChronosphereItem(
-            com.chronosphere.items.ChronicleOfChronosphereItem.createProperties()
-        )
-    );
+    // Commented out - replaced by Patchouli guide book
+    // public static final RegistrySupplier<Item> CHRONICLE_OF_CHRONOSPHERE = ITEMS.register(
+    //     "chronicle_of_chronosphere",
+    //     () -> new com.chronosphere.items.ChronicleOfChronosphereItem(
+    //         com.chronosphere.items.ChronicleOfChronosphereItem.createProperties()
+    //     )
+    // );
 
     // === Consumables ===
 

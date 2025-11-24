@@ -1,0 +1,17 @@
+{
+  "name": "Portal Stabilizer",
+  "icon": "chronosphere:portal_stabilizer",
+  "category": "chronosphere:progression",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "Once crafted, use it on your portal's Clockstone frame.$(br2)The portal will become bidirectional, allowing free travel between worlds.$(br2)Use $(item)Time Hourglass$() to reignite the portal after stabilization."
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "chronosphere:portal_stabilizer",
+      "text": "Portal Stabilizer Recipe"
+    }
+  ]
+}

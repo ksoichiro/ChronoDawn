@@ -1,0 +1,12 @@
+{
+  "name": "Time Distortion",
+  "icon": "minecraft:potion",
+  "category": "chronosphere:basics",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "In this realm, hostile creatures move at a fraction of their normal speed.$(br2)You, however, maintain your temporal flow. Use this advantage wisely.$(br2)The Time Distortion effect applies Slowness IV to all hostile mobs in the dimension, giving you a significant tactical advantage in combat."
+    }
+  ]
+}

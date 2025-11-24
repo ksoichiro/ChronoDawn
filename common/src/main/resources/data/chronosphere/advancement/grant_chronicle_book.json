@@ -1,0 +1,30 @@
+{
+  "display": {
+    "icon": {
+      "id": "chronosphere:time_crystal"
+    },
+    "title": {
+      "translate": "advancements.chronosphere.grant_chronicle_book.title"
+    },
+    "description": {
+      "translate": "advancements.chronosphere.grant_chronicle_book.description"
+    },
+    "frame": "task",
+    "show_toast": false,
+    "announce_to_chat": false,
+    "hidden": true
+  },
+  "criteria": {
+    "entered_chronosphere": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "chronosphere:chronosphere"
+      }
+    }
+  },
+  "rewards": {
+    "loot": [
+      "chronosphere:grant_chronicle_book"
+    ]
+  }
+}
