@@ -289,7 +289,7 @@
 
 **Purpose**: 4つの追加ミニボスとChrono Aegisシステムの実装
 
-**Implementation Status**: Boss entities, Chrono Aegis, and Guardian Vault complete. Other boss structures pending
+**Implementation Status**: Boss entities, Chrono Aegis, Guardian Vault, and Clockwork Depths complete. Temporal Phantom and Entropy Keeper structures pending
 
 **Reference**: See research.md "Additional Bosses Implementation Plan (T234-T238)"
 
@@ -299,7 +299,12 @@
 
 #### T235: Clockwork Colossus (機械仕掛けの巨像) - COMPLETED
 - [x] T235a-l: Entity, Gear Projectile, item, renderer, translations implemented
-- [ ] T235m-r: Clockwork Depths structure generation (NOT IMPLEMENTED)
+- [x] T235m-r: Clockwork Depths structure generation (COMPLETED)
+  - Multi-level Jigsaw structure: tower (surface) → gearshaft → engine_room → archive_vault
+  - ClockworkColossusSpawner for proximity-based boss spawning (Clockwork Block markers)
+  - Template pools: tower_pool, gearshaft_pool, engine_room_pool, archive_vault_pool
+  - Spawns in chronosphere_desert and chronosphere_mountain biomes
+  - Boss spawns when player approaches within 20 blocks of Clockwork Block markers
 
 #### T236: Temporal Phantom (時間の幻影) - COMPLETED
 - [x] T236a-l: Entity, item, renderer, texture, translations implemented
