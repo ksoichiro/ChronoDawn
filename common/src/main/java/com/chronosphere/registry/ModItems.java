@@ -516,20 +516,7 @@ public class ModItems {
         () -> new DecorativeWaterBucketItem(ModFluids.DECORATIVE_WATER.get(), new Item.Properties().stacksTo(1))
     );
 
-    /**
-     * Chronicle of Chronosphere - Player guide book.
-     * DEPRECATED: Replaced by Patchouli guide book system (chronosphere:chronicle).
-     * This item is kept for fallback purposes only.
-     * Contains information about dimension mechanics, structures, items, and progression.
-     * Given to players automatically on first entry to Chronosphere dimension.
-     */
-    // Commented out - replaced by Patchouli guide book
-    // public static final RegistrySupplier<Item> CHRONICLE_OF_CHRONOSPHERE = ITEMS.register(
-    //     "chronicle_of_chronosphere",
-    //     () -> new com.chronosphere.items.ChronicleOfChronosphereItem(
-    //         com.chronosphere.items.ChronicleOfChronosphereItem.createProperties()
-    //     )
-    // );
+    // Chronicle of Chronosphere item removed - replaced by Patchouli guide book system (chronosphere:chronicle)
 
     // === Consumables ===
 
@@ -1120,9 +1107,8 @@ public class ModItems {
         // === Portal Items ===
         output.accept(TIME_HOURGLASS.get());
         output.accept(PORTAL_STABILIZER.get());
-        output.accept(DECORATIVE_WATER_BUCKET.get());
-        // Add actual readable book instead of placeholder item
-        output.accept(com.chronosphere.items.ChronicleOfChronosphereItem.createBook());
+        // Decorative Water Bucket is intentionally excluded from creative tab (admin/command only)
+        // Chronicle of Chronosphere is now distributed via Patchouli advancement system
         // Add example Time Compass (targets Desert Clock Tower by default)
         output.accept(com.chronosphere.items.TimeCompassItem.createCompass(
             com.chronosphere.items.TimeCompassItem.STRUCTURE_DESERT_CLOCK_TOWER));
