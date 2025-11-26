@@ -1115,6 +1115,23 @@ public class PhantomCatacombsBossRoomPlacer {
                     Chronosphere.LOGGER.error("Failed to place boss_room even as hidden chamber");
                 }
 
+                // Clean up: Remove all Crying Obsidian markers from dead_ends
+                int markersRemoved = 0;
+                for (BlockPos markerPos : deadEndPositions) {
+                    BlockState state = level.getBlockState(markerPos);
+                    if (state.is(Blocks.CRYING_OBSIDIAN)) {
+                        level.setBlock(markerPos, Blocks.AIR.defaultBlockState(), 3);
+                        markersRemoved++;
+                    }
+                }
+
+                if (markersRemoved > 0) {
+                    Chronosphere.LOGGER.info(
+                        "Removed {} Crying Obsidian markers from dead_ends (hidden chamber fallback)",
+                        markersRemoved
+                    );
+                }
+
                 dimensionProcessed.add(structureOrigin);
                 return;
             }
@@ -1134,6 +1151,24 @@ public class PhantomCatacombsBossRoomPlacer {
                 selected.deadEndPos,
                 selected.room7Rotation
             );
+
+            // Clean up: Remove all Crying Obsidian markers from dead_ends
+            int markersRemoved = 0;
+            for (BlockPos markerPos : deadEndPositions) {
+                BlockState state = level.getBlockState(markerPos);
+                if (state.is(Blocks.CRYING_OBSIDIAN)) {
+                    level.setBlock(markerPos, Blocks.AIR.defaultBlockState(), 3);
+                    markersRemoved++;
+                }
+            }
+
+            if (markersRemoved > 0) {
+                Chronosphere.LOGGER.info(
+                    "Removed {} Crying Obsidian markers from dead_ends (room_7 placement failed)",
+                    markersRemoved
+                );
+            }
+
             dimensionProcessed.add(structureOrigin);
             return;
         }
@@ -1153,6 +1188,23 @@ public class PhantomCatacombsBossRoomPlacer {
             Chronosphere.LOGGER.error(
                 "Failed to place boss_room (room_7 connector at {})",
                 room7ConnectorPos
+            );
+        }
+
+        // Clean up: Remove all remaining Crying Obsidian markers from dead_ends
+        int markersRemoved = 0;
+        for (BlockPos markerPos : deadEndPositions) {
+            BlockState state = level.getBlockState(markerPos);
+            if (state.is(Blocks.CRYING_OBSIDIAN)) {
+                level.setBlock(markerPos, Blocks.AIR.defaultBlockState(), 3);
+                markersRemoved++;
+            }
+        }
+
+        if (markersRemoved > 0) {
+            Chronosphere.LOGGER.info(
+                "Removed {} Crying Obsidian markers from remaining dead_ends",
+                markersRemoved
             );
         }
 
