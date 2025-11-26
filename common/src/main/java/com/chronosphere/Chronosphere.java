@@ -16,6 +16,7 @@ import com.chronosphere.registry.ModTreeDecoratorTypes;
 import com.chronosphere.worldgen.spawning.ChronosWardenSpawner;
 import com.chronosphere.worldgen.spawning.ClockworkColossusSpawner;
 import com.chronosphere.worldgen.spawning.PhantomCatacombsBossRoomPlacer;
+import com.chronosphere.worldgen.spawning.TemporalPhantomSpawner;
 import com.chronosphere.worldgen.spawning.TimeGuardianSpawner;
 import com.chronosphere.worldgen.spawning.TimeTyrantSpawner;
 import org.slf4j.Logger;
@@ -58,6 +59,7 @@ public class Chronosphere {
         ChronosWardenSpawner.register();
         ClockworkColossusSpawner.register();
         PhantomCatacombsBossRoomPlacer.register();
+        TemporalPhantomSpawner.register();
     }
 }
 

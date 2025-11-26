@@ -854,6 +854,28 @@ public class PhantomCatacombsBossRoomPlacer {
             level.dimension().location()
         );
 
+        // Register boss_room for Temporal Phantom spawning
+        // Calculate boss_room center from connector position (entrance)
+        // boss_room is 21x21x9, center is ~10 blocks from entrance in exit direction
+        // exitDir indicates where boss_room extends from connector
+        BlockPos centerOffset = switch (exitDir) {
+            case EAST -> new BlockPos(10, 4, 0);   // Room extends east
+            case WEST -> new BlockPos(-10, 4, 0);  // Room extends west
+            case NORTH -> new BlockPos(0, 4, -10); // Room extends north
+            case SOUTH -> new BlockPos(0, 4, 10);  // Room extends south
+            default -> new BlockPos(0, 4, 0);
+        };
+        BlockPos bossRoomCenter = connectorPos.offset(centerOffset);
+
+        Chronosphere.LOGGER.info(
+            "Registering boss_room for Temporal Phantom spawning: connector at {}, exit direction {}, center at {}",
+            connectorPos,
+            exitDir,
+            bossRoomCenter
+        );
+
+        TemporalPhantomSpawner.registerBossRoom(level, bossRoomCenter);
+
         return true;
     }
 
@@ -1609,6 +1631,19 @@ public class PhantomCatacombsBossRoomPlacer {
             "Successfully placed boss_room as hidden chamber at {}",
             hiddenPos
         );
+
+        // Register boss_room for Temporal Phantom spawning
+        // Hidden chamber uses ROTATION.NONE, so center is straightforward
+        // boss_room is 21x21x9, center is at (10, 4, 10) relative to placement position
+        BlockPos bossRoomCenter = hiddenPos.offset(10, 4, 10);
+
+        Chronosphere.LOGGER.info(
+            "Registering hidden chamber for Temporal Phantom spawning: placement at {}, center at {}",
+            hiddenPos,
+            bossRoomCenter
+        );
+
+        TemporalPhantomSpawner.registerBossRoom(level, bossRoomCenter);
 
         return true;
     }
