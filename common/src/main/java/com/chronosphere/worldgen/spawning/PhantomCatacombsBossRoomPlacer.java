@@ -808,6 +808,24 @@ public class PhantomCatacombsBossRoomPlacer {
         // Place structure
         template.placeInWorld(level, placementPos, placementPos, settings, level.random, 2);
 
+        // Remove water blocks after placement (in case water flowed in from surroundings)
+        int waterRemovedAfter = 0;
+        for (BlockPos pos : BlockPos.betweenClosed(
+            placementPos.offset(-1, -1, -1),  // Expand by 1 block in all directions
+            placementPos.offset(sizeX + 1, sizeY + 1, sizeZ + 1)
+        )) {
+            BlockState state = level.getBlockState(pos);
+            // Remove water blocks that may have flowed in
+            if (state.getFluidState().isSource() && state.is(Blocks.WATER)) {
+                level.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
+                waterRemovedAfter++;
+            }
+        }
+
+        if (waterRemovedAfter > 0) {
+            Chronosphere.LOGGER.info("Removed {} water blocks after boss_room placement (flowed in from surroundings)", waterRemovedAfter);
+        }
+
         // Remove waterlogging after placement
         int waterloggedRemoved = 0;
         for (BlockPos pos : BlockPos.betweenClosed(
@@ -1492,6 +1510,48 @@ public class PhantomCatacombsBossRoomPlacer {
         }
 
         template.placeInWorld(level, hiddenPos, hiddenPos, settings, level.random, 2);
+
+        // Remove water blocks after placement (in case water flowed in from surroundings)
+        net.minecraft.core.Vec3i templateSize = template.getSize();
+        int sizeX = templateSize.getX();
+        int sizeY = templateSize.getY();
+        int sizeZ = templateSize.getZ();
+
+        int waterRemovedAfter = 0;
+        for (BlockPos pos : BlockPos.betweenClosed(
+            hiddenPos.offset(-1, -1, -1),
+            hiddenPos.offset(sizeX + 1, sizeY + 1, sizeZ + 1)
+        )) {
+            BlockState state = level.getBlockState(pos);
+            if (state.getFluidState().isSource() && state.is(Blocks.WATER)) {
+                level.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
+                waterRemovedAfter++;
+            }
+        }
+
+        if (waterRemovedAfter > 0) {
+            Chronosphere.LOGGER.info("Removed {} water blocks after hidden chamber placement", waterRemovedAfter);
+        }
+
+        // Remove waterlogging after placement
+        int waterloggedRemoved = 0;
+        for (BlockPos pos : BlockPos.betweenClosed(
+            hiddenPos,
+            hiddenPos.offset(sizeX, sizeY, sizeZ)
+        )) {
+            BlockState state = level.getBlockState(pos);
+            if (state.hasProperty(net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED)) {
+                boolean waterlogged = state.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED);
+                if (waterlogged) {
+                    level.setBlock(pos, state.setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED, false), 2);
+                    waterloggedRemoved++;
+                }
+            }
+        }
+
+        if (waterloggedRemoved > 0) {
+            Chronosphere.LOGGER.info("Removed {} waterlogged blocks after hidden chamber placement", waterloggedRemoved);
+        }
 
         Chronosphere.LOGGER.info(
             "Successfully placed boss_room as hidden chamber at {}",
