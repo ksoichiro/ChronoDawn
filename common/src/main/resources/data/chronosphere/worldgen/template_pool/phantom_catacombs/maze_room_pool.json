@@ -1,0 +1,59 @@
+{
+  "fallback": "chronosphere:phantom_catacombs/terminator_pool",
+  "elements": [
+    {
+      "weight": 2,
+      "element": {
+        "location": "chronosphere:phantom_catacombs_room_1",
+        "processors": "chronosphere:phantom_catacombs_loot",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "location": "chronosphere:phantom_catacombs_room_2",
+        "processors": "chronosphere:phantom_catacombs_loot",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "location": "chronosphere:phantom_catacombs_room_3",
+        "processors": "chronosphere:phantom_catacombs_loot",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "location": "chronosphere:phantom_catacombs_room_4",
+        "processors": "chronosphere:phantom_catacombs_loot",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "location": "chronosphere:phantom_catacombs_room_5",
+        "processors": "chronosphere:phantom_catacombs_loot",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "location": "chronosphere:phantom_catacombs_room_6",
+        "processors": "chronosphere:phantom_catacombs_loot",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

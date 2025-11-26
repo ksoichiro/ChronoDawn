@@ -49,7 +49,7 @@ import java.util.Set;
  * Important: Uses individual StructurePiece bounding boxes, not the entire structure
  * bounding box. This prevents affecting water in empty space between Jigsaw pieces.
  *
- * Applied to structures: master_clock, guardian_vault, clockwork_depths, phantom_tower, entropy_crypt
+ * Applied to structures: master_clock, guardian_vault, clockwork_depths, phantom_catacombs, phantom_tower, entropy_crypt
  *
  * Task: T239 [US3] Guardian Vault structure generation
  */
@@ -60,6 +60,7 @@ public abstract class StructureStartMixin {
         "master_clock",
         "guardian_vault",
         "clockwork_depths",
+        "phantom_catacombs",
         "phantom_tower",
         "entropy_crypt"
     );
