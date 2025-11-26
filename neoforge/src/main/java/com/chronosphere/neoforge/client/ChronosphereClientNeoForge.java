@@ -1,7 +1,10 @@
 package com.chronosphere.neoforge.client;
 
 import com.chronosphere.Chronosphere;
+import com.chronosphere.client.model.ClockworkSentinelModel;
+import com.chronosphere.client.model.TemporalWraithModel;
 import com.chronosphere.client.model.TimeGuardianModel;
+import com.chronosphere.client.model.TimeKeeperModel;
 import com.chronosphere.client.model.TimeTyrantModel;
 import com.chronosphere.client.renderer.ChronosWardenRenderer;
 import com.chronosphere.client.renderer.ClockworkColossusRenderer;
@@ -11,6 +14,9 @@ import com.chronosphere.client.renderer.TimeArrowRenderer;
 import com.chronosphere.client.renderer.TimeBlastRenderer;
 import com.chronosphere.client.renderer.TimeGuardianRenderer;
 import com.chronosphere.client.renderer.TimeTyrantRenderer;
+import com.chronosphere.client.renderer.mobs.ClockworkSentinelRenderer;
+import com.chronosphere.client.renderer.mobs.TemporalWraithRenderer;
+import com.chronosphere.client.renderer.mobs.TimeKeeperRenderer;
 import com.chronosphere.items.TimeCompassItem;
 import com.chronosphere.registry.ModBlocks;
 import com.chronosphere.registry.ModEntities;
@@ -28,6 +34,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 
 import java.util.Optional;
 
@@ -42,7 +49,7 @@ import java.util.Optional;
  *
  * This class is only loaded on the client side (Dist.CLIENT).
  */
-@EventBusSubscriber(modid = Chronosphere.MOD_ID, bus = EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Chronosphere.MOD_ID, value = Dist.CLIENT)
 public class ChronosphereClientNeoForge {
 
     /**
@@ -78,6 +85,22 @@ public class ChronosphereClientNeoForge {
         event.registerLayerDefinition(
             TimeTyrantRenderer.LAYER_LOCATION,
             TimeTyrantModel::createBodyLayer
+        );
+
+        // Register custom mob model layers
+        event.registerLayerDefinition(
+            TemporalWraithModel.LAYER_LOCATION,
+            TemporalWraithModel::createBodyLayer
+        );
+
+        event.registerLayerDefinition(
+            ClockworkSentinelModel.LAYER_LOCATION,
+            ClockworkSentinelModel::createBodyLayer
+        );
+
+        event.registerLayerDefinition(
+            TimeKeeperModel.LAYER_LOCATION,
+            TimeKeeperModel::createBodyLayer
         );
 
         Chronosphere.LOGGER.info("Registered entity model layers for NeoForge");
@@ -137,6 +160,22 @@ public class ChronosphereClientNeoForge {
         event.registerEntityRenderer(
             ModEntities.ENTROPY_KEEPER.get(),
             EntropyKeeperRenderer::new
+        );
+
+        // Register custom mobs with renderers
+        event.registerEntityRenderer(
+            ModEntities.TEMPORAL_WRAITH.get(),
+            TemporalWraithRenderer::new
+        );
+
+        event.registerEntityRenderer(
+            ModEntities.CLOCKWORK_SENTINEL.get(),
+            ClockworkSentinelRenderer::new
+        );
+
+        event.registerEntityRenderer(
+            ModEntities.TIME_KEEPER.get(),
+            TimeKeeperRenderer::new
         );
 
         Chronosphere.LOGGER.info("Registered entity renderers for NeoForge");
@@ -216,10 +255,40 @@ public class ChronosphereClientNeoForge {
      * Time Wood Leaves use a fixed blue color (#78A6DA) regardless of biome.
      * The texture should be grayscale, and the blue color is applied uniformly.
      */
+    @SubscribeEvent
+    public static void onRegisterBlockColors(RegisterColorHandlersEvent.Block event) {
+        // Register Time Wood Leaves to use fixed blue color (not biome-dependent)
+        // This ensures leaves remain blue even when placed in other biomes
+        // Color: #78A6DA (light blue)
+        event.register(
+            (state, world, pos, tintIndex) -> 0x78A6DA,
+            ModBlocks.TIME_WOOD_LEAVES.get()
+        );
+
+        Chronosphere.LOGGER.info("Registered block color handlers for NeoForge");
+    }
+
+    /**
+     * Register item color providers for items that need tinting.
+     */
+    @SubscribeEvent
+    public static void onRegisterItemColors(RegisterColorHandlersEvent.Item event) {
+        // Register the item color as well (for inventory/hand rendering)
+        // Use the same blue color (0x78A6DA)
+        event.register(
+            (stack, tintIndex) -> 0x78A6DA,
+            ModBlocks.TIME_WOOD_LEAVES.get()
+        );
+
+        Chronosphere.LOGGER.info("Registered item color handlers for NeoForge");
+    }
+
+    /**
+     * Legacy method - now replaced by event-based registration.
+     * Kept for compatibility with existing code structure.
+     */
     private static void registerBlockColors() {
-        // Note: Block color registration for NeoForge will be implemented here
-        // if needed. For now, Time Wood Leaves use a fixed color texture.
-        // If we need dynamic tinting, we'll register color providers here.
+        // Note: Block color registration is now handled by RegisterColorHandlersEvent
     }
 
     /**

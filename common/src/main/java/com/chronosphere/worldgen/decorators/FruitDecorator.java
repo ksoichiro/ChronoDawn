@@ -72,6 +72,6 @@ public class FruitDecorator extends TreeDecorator {
     @Override
     protected TreeDecoratorType<?> type() {
         // Return the registered TreeDecoratorType for JSON datapack support
-        return com.chronosphere.registry.ModTreeDecoratorTypes.FRUIT_DECORATOR;
+        return com.chronosphere.registry.ModTreeDecoratorTypes.FRUIT_DECORATOR.get();
     }
 }

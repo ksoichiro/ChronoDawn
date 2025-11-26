@@ -29,6 +29,10 @@ public class ChronosphereFabric implements ModInitializer {
         // Register spawn placements (Fabric-specific)
         registerSpawnPlacements();
 
+        // Initialize spawn eggs (Fabric-specific timing)
+        com.chronosphere.registry.ModItems.initializeSpawnEggs();
+        Chronosphere.LOGGER.info("Initialized spawn eggs for Fabric");
+
         // Initialize Custom Portal API integration
         CustomPortalFabric.init();
 

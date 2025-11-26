@@ -1199,8 +1199,15 @@ public class ModItems {
         output.accept(CHRONO_AEGIS.get());
 
         // === Spawn Eggs ===
-        output.accept(TEMPORAL_WRAITH_SPAWN_EGG.get());
-        output.accept(CLOCKWORK_SENTINEL_SPAWN_EGG.get());
-        output.accept(TIME_KEEPER_SPAWN_EGG.get());
+        // Check if spawn eggs are registered before adding (timing issue with DeferredRegister)
+        if (TEMPORAL_WRAITH_SPAWN_EGG.isPresent()) {
+            output.accept(TEMPORAL_WRAITH_SPAWN_EGG.get());
+        }
+        if (CLOCKWORK_SENTINEL_SPAWN_EGG.isPresent()) {
+            output.accept(CLOCKWORK_SENTINEL_SPAWN_EGG.get());
+        }
+        if (TIME_KEEPER_SPAWN_EGG.isPresent()) {
+            output.accept(TIME_KEEPER_SPAWN_EGG.get());
+        }
     }
 }

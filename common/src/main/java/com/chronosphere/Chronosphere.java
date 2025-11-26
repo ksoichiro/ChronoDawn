@@ -38,8 +38,9 @@ public class Chronosphere {
         ModTreeDecoratorTypes.register();
         ModStructureProcessorTypes.register();
 
-        // Initialize spawn eggs after entities are registered
-        ModItems.initializeSpawnEggs();
+        // Note: Spawn egg initialization is platform-specific
+        // - Fabric: Called immediately in ChronosphereFabric.onInitialize()
+        // - NeoForge: Called in FMLCommonSetupEvent (ChronosphereNeoForge.commonSetup())
 
         // Register event handlers (Phase 2 - Foundational)
         ChronosphereEvents.register();

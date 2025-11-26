@@ -16,6 +16,9 @@ authors="YourName"
 credits="Built with Architectury"
 displayURL="https://github.com/yourusername/chronosphere"
 
+[[mixins]]
+config="chronosphere.mixins.json"
+
 [[dependencies.chronosphere]]
 modId="neoforge"
 type="required"

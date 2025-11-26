@@ -1,7 +1,12 @@
 // neoforge/build.gradle
 
 plugins {
-    id "com.github.johnrengelman.shadow"
+    id 'com.gradleup.shadow'
+}
+
+architectury {
+    platformSetupLoomIde()
+    neoForge()
 }
 
 loom {
@@ -37,7 +42,7 @@ repositories {
 
 dependencies {
     neoForge "net.neoforged:neoforge:${neoforge_version}"
-    modApi "dev.architectury:architectury-neoforge:${architectury_version}"
+    modApi "dev.architectury:architectury-neoforge:${architectury_api_version}"
 
     // Patchouli for guide book
     modCompileOnly "vazkii.patchouli:Patchouli:1.21.1-92-NEOFORGE:api"
@@ -101,7 +106,7 @@ components.java {
 publishing {
     publications {
         mavenNeoForge(MavenPublication) {
-            artifactId = "${archives_base_name}-neoforge"
+            artifactId = "${archives_name}-neoforge"
             from components.java
         }
     }

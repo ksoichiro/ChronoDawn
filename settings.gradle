@@ -13,3 +13,4 @@ rootProject.name = 'chronosphere'
 
 include 'common'
 include 'fabric'
+include 'neoforge'
