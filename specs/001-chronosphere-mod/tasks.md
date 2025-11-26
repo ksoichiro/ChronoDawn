@@ -316,7 +316,7 @@
 
 **Purpose**: 4つの追加ミニボスとChrono Aegisシステムの実装
 
-**Implementation Status**: Boss entities, Chrono Aegis, and Guardian Vault complete. Other boss structures pending
+**Implementation Status**: Boss entities, Chrono Aegis, Guardian Vault, and Clockwork Depths complete. Temporal Phantom and Entropy Keeper structures pending
 
 **Reference**: See research.md "Additional Bosses Implementation Plan (T234-T238)"
 
@@ -326,11 +326,28 @@
 
 #### T235: Clockwork Colossus (機械仕掛けの巨像) - COMPLETED
 - [x] T235a-l: Entity, Gear Projectile, item, renderer, translations implemented
-- [ ] T235m-r: Clockwork Depths structure generation (NOT IMPLEMENTED)
+- [x] T235m-r: Clockwork Depths structure generation (COMPLETED)
+  - Multi-level Jigsaw structure: tower (surface) → gearshaft → engine_room → archive_vault
+  - ClockworkColossusSpawner for proximity-based boss spawning (Clockwork Block markers)
+  - Template pools: tower_pool, gearshaft_pool, engine_room_pool, archive_vault_pool
+  - Spawns in chronosphere_desert and chronosphere_mountain biomes
+  - Boss spawns when player approaches within 20 blocks of Clockwork Block markers
 
-#### T236: Temporal Phantom (時間の幻影) - COMPLETED
+#### T236: Temporal Phantom (時間の幻影) - PARTIALLY COMPLETED
 - [x] T236a-l: Entity, item, renderer, texture, translations implemented
-- [ ] T236m-r: Phantom Tower structure generation (NOT IMPLEMENTED)
+- [x] T236m-r: Phantom Catacombs structure generation (COMPLETED)
+  - Jigsaw-based underground maze structure with entrance, corridors, maze rooms, dead-ends
+  - Boss room programmatic placement with collision detection and 2-stage fallback system
+  - TemporalPhantomSpawner for proximity-based boss spawning (player enters boss_room)
+  - Complete waterlogging prevention system (DecorativeWaterFluid, CopyFluidLevelProcessor, StructureStartMixin)
+  - Template pools: entrance_pool, corridor_pool, maze_room_pool, room_7_pool, boss_room_pool, terminator_pool
+  - Spawns in chronosphere_forest and chronosphere_swamp biomes
+  - Boss spawns when player enters boss_room (21x21x9 area, 1-second interval check)
+  - Terrain adaptation: "none" (prevents surface terrain deletion)
+- [ ] T236s: Create custom texture for Temporal Phantom (PENDING)
+  - Current: Uses time_guardian.png texture (identical MD5 hash)
+  - Required: Spectral/ghostly appearance (purple/blue semi-transparent theme)
+  - File: common/src/main/resources/assets/chronosphere/textures/entity/temporal_phantom.png
 
 #### T237: Entropy Keeper (エントロピーの管理者) - COMPLETED
 - [x] T237a-m: Entity, item, renderer, texture, translations implemented
