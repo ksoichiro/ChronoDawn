@@ -101,7 +101,8 @@ public class PlayerEventHandler {
             return;
         }
 
-        Chronosphere.LOGGER.info("Player {} entered Chronosphere", player.getName().getString());
+        Chronosphere.LOGGER.info("Player {} entered Chronosphere at position {}",
+            player.getName().getString(), player.blockPosition());
 
         // Chronicle of Chronosphere book is given automatically via advancement system
         // See: data/chronosphere/advancement/grant_chronicle_book.json
@@ -184,6 +185,9 @@ public class PlayerEventHandler {
         int removedBlocks = 0;
         boolean foundPortalBlock = false;
 
+        Chronosphere.LOGGER.info("Searching for portal blocks near {} in dimension {}",
+            centerPos, level.dimension().location());
+
         // Search for portal blocks in a larger 30x30x30 area
         for (int x = -15; x <= 15; x++) {
             for (int y = -15; y <= 15; y++) {
@@ -192,10 +196,18 @@ public class PlayerEventHandler {
                     var blockState = level.getBlockState(searchPos);
 
                     // Check for Custom Portal API's custom portal block
+                    // Supports both Fabric (customportalapi) and NeoForge (cpapireforged) versions
                     Block block = blockState.getBlock();
                     ResourceLocation blockId = BuiltInRegistries.BLOCK.getKey(block);
 
-                    if (blockId.getNamespace().equals("customportalapi") && blockId.getPath().equals("customportalblock")) {
+                    // Debug: Log any non-air blocks that might be portal-related
+                    if (!blockState.isAir() && (blockId.getPath().contains("portal") ||
+                        blockId.getNamespace().contains("portal") ||
+                        blockId.getNamespace().contains("cpapi"))) {
+                        Chronosphere.LOGGER.info("Found potential portal block: {} at {}", blockId, searchPos);
+                    }
+
+                    if (isCustomPortalBlock(blockId)) {
                         foundPortalBlock = true;
                         level.removeBlock(searchPos, false);
                         removedBlocks++;
@@ -222,7 +234,8 @@ public class PlayerEventHandler {
                         ResourceLocation blockId = BuiltInRegistries.BLOCK.getKey(block);
 
                         // Check for Custom Portal API's custom portal block
-                        if (blockId.getNamespace().equals("customportalapi") && blockId.getPath().equals("customportalblock")) {
+                        // Supports both Fabric (customportalapi) and NeoForge (cpapireforged) versions
+                        if (isCustomPortalBlock(blockId)) {
                             level.removeBlock(searchPos, false);
                             removedBlocks++;
                         }
@@ -238,6 +251,30 @@ public class PlayerEventHandler {
         }
 
         Chronosphere.LOGGER.info("Extinguished {} portal blocks near {}", removedBlocks, centerPos);
+    }
+
+    /**
+     * Check if the given block ID is a Custom Portal API portal block.
+     * Supports both Fabric (customportalapi) and NeoForge (cpapireforged) versions.
+     *
+     * @param blockId Block resource location
+     * @return true if block is a Custom Portal API portal block
+     */
+    private static boolean isCustomPortalBlock(ResourceLocation blockId) {
+        String namespace = blockId.getNamespace();
+        String path = blockId.getPath();
+
+        // Fabric version: customportalapi:customportalblock
+        if (namespace.equals("customportalapi") && path.equals("customportalblock")) {
+            return true;
+        }
+
+        // NeoForge version (Custom Portal API Reforged): cpapireforged:custom_portal_block
+        if (namespace.equals("cpapireforged") && path.equals("custom_portal_block")) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
