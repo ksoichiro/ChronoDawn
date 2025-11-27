@@ -10,6 +10,8 @@ import com.chronosphere.entities.bosses.TimeTyrantEntity;
 import com.chronosphere.entities.mobs.ClockworkSentinelEntity;
 import com.chronosphere.entities.mobs.TemporalWraithEntity;
 import com.chronosphere.entities.mobs.TimeKeeperEntity;
+import com.chronosphere.neoforge.compat.CustomPortalNeoForge;
+import com.chronosphere.neoforge.registry.ModParticles;
 import com.chronosphere.registry.ModEntities;
 import com.chronosphere.registry.ModItems;
 import net.minecraft.world.entity.SpawnPlacementTypes;
@@ -24,6 +26,9 @@ import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 public class ChronosphereNeoForge {
     public ChronosphereNeoForge(IEventBus modEventBus) {
         Chronosphere.init();
+
+        // Register particle types (NeoForge-specific)
+        ModParticles.register(modEventBus);
 
         // Register entity attributes (NeoForge-specific)
         modEventBus.addListener(this::registerEntityAttributes);
@@ -95,12 +100,16 @@ public class ChronosphereNeoForge {
     /**
      * Common setup for NeoForge.
      * Initializes spawn eggs after all entities are registered.
+     * Registers portal with Custom Portal API Reforged.
      */
     private void commonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             // Initialize spawn eggs - must be done after entities are registered
             ModItems.initializeSpawnEggs();
             Chronosphere.LOGGER.info("Initialized spawn eggs for NeoForge");
+
+            // Initialize Custom Portal API Reforged integration
+            CustomPortalNeoForge.init();
         });
     }
 

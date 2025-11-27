@@ -18,6 +18,8 @@ import com.chronosphere.client.renderer.mobs.ClockworkSentinelRenderer;
 import com.chronosphere.client.renderer.mobs.TemporalWraithRenderer;
 import com.chronosphere.client.renderer.mobs.TimeKeeperRenderer;
 import com.chronosphere.items.TimeCompassItem;
+import com.chronosphere.neoforge.client.particle.ChronospherePortalParticle;
+import com.chronosphere.neoforge.registry.ModParticles;
 import com.chronosphere.registry.ModBlocks;
 import com.chronosphere.registry.ModEntities;
 import com.chronosphere.registry.ModItems;
@@ -35,6 +37,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 
 import java.util.Optional;
 
@@ -49,7 +52,7 @@ import java.util.Optional;
  *
  * This class is only loaded on the client side (Dist.CLIENT).
  */
-@EventBusSubscriber(modid = Chronosphere.MOD_ID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Chronosphere.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public class ChronosphereClientNeoForge {
 
     /**
@@ -281,6 +284,22 @@ public class ChronosphereClientNeoForge {
         );
 
         Chronosphere.LOGGER.info("Registered item color handlers for NeoForge");
+    }
+
+    /**
+     * Register particle providers for custom particles.
+     *
+     * @param event The particle providers registration event
+     */
+    @SubscribeEvent
+    public static void onRegisterParticleProviders(RegisterParticleProvidersEvent event) {
+        // Register Chronosphere portal particle provider
+        event.registerSpriteSet(
+            ModParticles.CHRONOSPHERE_PORTAL.get(),
+            ChronospherePortalParticle.Provider::new
+        );
+
+        Chronosphere.LOGGER.info("Registered particle providers for NeoForge");
     }
 
     /**

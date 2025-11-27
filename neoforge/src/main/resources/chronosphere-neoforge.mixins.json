@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.chronosphere.neoforge.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "refmap": "chronosphere-neoforge-refmap.json",
+  "client": [
+    "CustomPortalBlockMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -19,6 +19,9 @@ displayURL="https://github.com/yourusername/chronosphere"
 [[mixins]]
 config="chronosphere.mixins.json"
 
+[[mixins]]
+config="chronosphere-neoforge.mixins.json"
+
 [[dependencies.chronosphere]]
 modId="neoforge"
 type="required"

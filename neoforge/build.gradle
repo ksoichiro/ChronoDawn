@@ -38,11 +38,18 @@ configurations {
 
 repositories {
     maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
+    maven {
+        name = 'AzureDoom Mods'
+        url = 'https://maven.azuredoom.com/mods'
+    }
 }
 
 dependencies {
     neoForge "net.neoforged:neoforge:${neoforge_version}"
     modApi "dev.architectury:architectury-neoforge:${architectury_api_version}"
+
+    // Custom Portal API Reforged for NeoForge
+    modImplementation "net.kyrptonaught.customportalapi:cpapireforged-neo-1.21.1:1.2.2"
 
     // Patchouli for guide book
     modCompileOnly "vazkii.patchouli:Patchouli:1.21.1-92-NEOFORGE:api"
