@@ -422,7 +422,12 @@
 - [ ] T173 [P] Run all GameTests on NeoForge loader using ./gradlew :neoforge:runGameTest
 - [ ] T174 Verify entity renderer registration for Fabric (standard API) in fabric/src/main/java/com/chronosphere/fabric/client/ChronosphereClientFabric.java
 - [ ] T175 Verify entity renderer registration for NeoForge (manual event registration) in neoforge/src/main/java/com/chronosphere/neoforge/event/EntityRendererHandler.java
-- [ ] T176 Test portal mechanics on both loaders for consistency
+- [X] T176 Test portal mechanics on both loaders for consistency
+  - Implemented Custom Portal API Reforged integration for NeoForge (cpapireforged 1.2.2)
+  - Created CustomPortalNeoForge.java for portal registration
+  - Added Mixin (CustomPortalBlockMixin) to override particle effects with custom orange particles
+  - Updated PlayerEventHandler to recognize cpapireforged:custom_portal_block for portal deactivation
+  - Verified: portal creation, teleportation, deactivation on entry, stabilization with Portal Stabilizer
 - [ ] T177 Verify time distortion effect consistency across loaders
 
 ### Performance Optimization
