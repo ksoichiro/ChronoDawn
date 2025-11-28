@@ -1,0 +1,7 @@
+{
+  "processors": [
+    {
+      "processor_type": "chronosphere:copy_fluid_level"
+    }
+  ]
+}
