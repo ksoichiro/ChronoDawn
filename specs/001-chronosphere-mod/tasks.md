@@ -351,7 +351,14 @@
 
 #### T237: Entropy Keeper (エントロピーの管理者) - COMPLETED
 - [x] T237a-m: Entity, item, renderer, texture, translations implemented
-- [ ] T237n-r: Entropy Crypt structure generation (NOT IMPLEMENTED)
+- [x] T237n-r: Entropy Crypt structure generation (COMPLETED)
+  - Jigsaw structure: entrance (surface) → stairs → main (Boss Chamber + Vault)
+  - EntropyCryptTrapdoorBlock triggers boss spawn when player attempts to open
+  - Custom BlockSetType allows hand interaction with iron sounds
+  - ACTIVATED property tracks boss spawn state
+  - Template pools: entrance_pool, stairs_pool, main_pool
+  - Spawns in chronosphere_swamp and chronosphere_forest biomes
+  - Mixin refmap configuration for production JAR compatibility
 
 #### T238: Chrono Aegis System - PARTIALLY COMPLETED
 - [x] T238a-f: Chrono Aegis item, effect, recipe, translations implemented

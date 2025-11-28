@@ -250,6 +250,12 @@ public class ChronosphereClientNeoForge {
             ModBlocks.BOSS_ROOM_DOOR.get(),
             RenderType.cutout()
         );
+
+        // Register Entropy Crypt Trapdoor to use cutout rendering (for transparency)
+        ItemBlockRenderTypes.setRenderLayer(
+            ModBlocks.ENTROPY_CRYPT_TRAPDOOR.get(),
+            RenderType.cutout()
+        );
     }
 
     /**
