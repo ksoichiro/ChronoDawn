@@ -2,6 +2,7 @@ package com.chronosphere.registry;
 
 import com.chronosphere.Chronosphere;
 import com.chronosphere.blocks.BossRoomDoorBlock;
+import com.chronosphere.blocks.EntropyCryptTrapdoorBlock;
 import com.chronosphere.blocks.ClockstoneBlock;
 import com.chronosphere.blocks.ClockstoneOre;
 import com.chronosphere.blocks.ClockstoneSlab;
@@ -434,6 +435,22 @@ public class ModBlocks {
         "boss_room_door",
         () -> new BossRoomDoorBlock(
             Block.Properties.ofFullCopy(Blocks.IRON_DOOR)
+                .noOcclusion()
+        )
+    );
+
+    /**
+     * Entropy Crypt Trapdoor - Trapdoor that leads to Vault in Entropy Crypt.
+     *
+     * When a player tries to open it, Entropy Keeper spawns.
+     * After the boss is spawned (ACTIVATED=true), functions as normal trapdoor.
+     *
+     * Task: T237 - Entropy Keeper boss spawn system
+     */
+    public static final RegistrySupplier<Block> ENTROPY_CRYPT_TRAPDOOR = BLOCKS.register(
+        "entropy_crypt_trapdoor",
+        () -> new EntropyCryptTrapdoorBlock(
+            Block.Properties.ofFullCopy(Blocks.IRON_TRAPDOOR)
                 .noOcclusion()
         )
     );

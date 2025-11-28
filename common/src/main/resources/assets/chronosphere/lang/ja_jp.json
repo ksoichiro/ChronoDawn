@@ -36,6 +36,7 @@
   "block.chronosphere.time_wheat": "時の小麦",
   "block.chronosphere.time_wheat_bale": "時の小麦の俵",
   "block.chronosphere.boss_room_door": "ボス部屋のドア",
+  "block.chronosphere.entropy_crypt_trapdoor": "エントロピーの地下室のトラップドア",
   "block.chronosphere.temporal_particle_emitter": "時間パーティクル発生装置",
   "block.chronosphere.decorative_water": "装飾用の水",
 
@@ -153,6 +154,7 @@
   "message.chronosphere.boss_room_unlocked": "古代の歯車が噛み合った... ドアが開く",
   "message.chronosphere.boss_room_locked": "ドアの機構には古代の歯車が3つ必要だ",
   "message.chronosphere.guardian_vault_opened": "古代の宝物庫が開いた...",
+  "message.chronosphere.entropy_keeper_awakens": "エントロピーの管理者が目覚めた！",
   "message.chronosphere.time_clock_boss_success": "タイムクロックが共鳴した！時間の暴君が弱体化した！",
   "message.chronosphere.time_clock_boss_limit": "タイムクロックは効果がない - このフェーズで既に使用済みだ",
 

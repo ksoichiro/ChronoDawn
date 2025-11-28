@@ -319,6 +319,16 @@ public class ModItems {
     );
 
     /**
+     * Entropy Crypt Trapdoor - Triggers Entropy Keeper boss spawn when first opened.
+     * Used in Entropy Crypt structure as the entrance to Vault (treasure room).
+     * After boss spawns (ACTIVATED=true), functions as normal trapdoor.
+     */
+    public static final RegistrySupplier<Item> ENTROPY_CRYPT_TRAPDOOR = ITEMS.register(
+        "entropy_crypt_trapdoor",
+        () -> new BlockItem(ModBlocks.ENTROPY_CRYPT_TRAPDOOR.get(), new Item.Properties())
+    );
+
+    /**
      * Temporal Particle Emitter - Invisible block that emits time distortion particles.
      * Structure-only block, not added to creative tab.
      * Can be placed with commands for testing: /give @s chronosphere:temporal_particle_emitter

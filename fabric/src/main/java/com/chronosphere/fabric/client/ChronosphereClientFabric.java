@@ -175,6 +175,12 @@ public class ChronosphereClientFabric implements ClientModInitializer {
             ModBlocks.BOSS_ROOM_DOOR.get(),
             RenderType.cutout()
         );
+
+        // Register Entropy Crypt Trapdoor to use cutout rendering (for transparency)
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.ENTROPY_CRYPT_TRAPDOOR.get(),
+            RenderType.cutout()
+        );
     }
 
     /**

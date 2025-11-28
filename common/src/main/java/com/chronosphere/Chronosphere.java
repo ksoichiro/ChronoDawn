@@ -62,7 +62,8 @@ public class Chronosphere {
         ClockworkColossusSpawner.register();
         PhantomCatacombsBossRoomPlacer.register();
         TemporalPhantomSpawner.register();
-        EntropyKeeperSpawner.register();
+        // EntropyKeeperSpawner disabled - Entropy Keeper now spawns via EntropyCryptTrapdoorBlock
+        // EntropyKeeperSpawner.register();
     }
 }
 
