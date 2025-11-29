@@ -13,7 +13,9 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.MeleeAttackGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -23,18 +25,19 @@ import net.minecraft.world.phys.Vec3;
 import java.util.EnumSet;
 
 /**
- * Floq - A slime-like friendly mob with jumping movement
+ * Floq - A slime-like hostile mob with jumping movement
  *
  * A small cube-shaped creature that moves by jumping like vanilla slimes.
  *
  * Attributes:
  * - Health: 16 (8 hearts)
- * - Attack Damage: None (peaceful mob)
+ * - Attack Damage: 3 (1.5 hearts)
  * - Movement Speed: 0.3 (similar to slimes)
  *
  * Special Mechanics:
  * - Jumps to move (similar to vanilla slimes)
- * - Passive/neutral behavior
+ * - Hostile behavior, attacks players
+ * - Spawns in dark areas like other monsters
  *
  * Reference: Custom implementation based on vanilla Slime behavior
  */
@@ -47,7 +50,7 @@ public class FloqEntity extends Monster {
     public FloqEntity(EntityType<? extends FloqEntity> entityType, Level level) {
         super(entityType, level);
         this.moveControl = new FloqMoveControl(this);
-        this.xpReward = 0; // Peaceful mob, no XP
+        this.xpReward = 5; // Monster XP
     }
 
     /**
@@ -55,14 +58,20 @@ public class FloqEntity extends Monster {
      */
     @Override
     protected void registerGoals() {
-        // Priority 1: Jump randomly
-        this.goalSelector.addGoal(1, new FloqRandomDirectionGoal(this));
+        // Priority 1: Attack players
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0, false));
 
-        // Priority 2: Float in water
-        this.goalSelector.addGoal(2, new FloqFloatGoal(this));
+        // Priority 2: Jump randomly
+        this.goalSelector.addGoal(2, new FloqRandomDirectionGoal(this));
 
-        // Priority 3: Keep jumping
-        this.goalSelector.addGoal(3, new FloqKeepOnJumpingGoal(this));
+        // Priority 3: Float in water
+        this.goalSelector.addGoal(3, new FloqFloatGoal(this));
+
+        // Priority 4: Keep jumping
+        this.goalSelector.addGoal(4, new FloqKeepOnJumpingGoal(this));
+
+        // Target players
+        this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
 
     /**
@@ -71,7 +80,8 @@ public class FloqEntity extends Monster {
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
             .add(Attributes.MAX_HEALTH, 16.0) // 8 hearts
-            .add(Attributes.MOVEMENT_SPEED, 0.3); // Similar to slime
+            .add(Attributes.MOVEMENT_SPEED, 0.4) // Moderate speed with rapid jumping
+            .add(Attributes.ATTACK_DAMAGE, 3.0); // 1.5 hearts damage
     }
 
     /**
@@ -85,7 +95,8 @@ public class FloqEntity extends Monster {
     }
 
     /**
-     * Override spawn rules
+     * Override spawn rules for Floq (monster spawn rules)
+     * Spawns in dark areas like vanilla monsters
      */
     public static boolean checkFloqSpawnRules(
         EntityType<FloqEntity> entityType,
@@ -94,7 +105,8 @@ public class FloqEntity extends Monster {
         net.minecraft.core.BlockPos pos,
         RandomSource random
     ) {
-        return Mob.checkMobSpawnRules(entityType, level, spawnType, pos, random);
+        // Use standard monster spawn rules - dark areas only
+        return Monster.checkMonsterSpawnRules(entityType, level, spawnType, pos, random);
     }
 
     /**
@@ -233,7 +245,7 @@ public class FloqEntity extends Monster {
      * Get jump delay (time between jumps in ticks)
      */
     protected int getJumpDelay() {
-        return this.random.nextInt(20) + 10; // 10-30 ticks
+        return this.random.nextInt(5) + 3; // 3-8 ticks (much shorter delay for rapid jumping)
     }
 
     /**

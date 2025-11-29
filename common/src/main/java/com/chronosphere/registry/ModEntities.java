@@ -141,13 +141,14 @@ public class ModEntities {
     );
 
     /**
-     * Floq - Slime-like Friendly Mob
+     * Floq - Slime-like Hostile Mob
      *
      * A small cube-shaped creature that moves by jumping like vanilla slimes.
+     * Hostile mob that attacks players.
      */
     public static final RegistrySupplier<EntityType<FloqEntity>> FLOQ = ENTITIES.register(
         "floq",
-        () -> EntityType.Builder.of(FloqEntity::new, MobCategory.CREATURE)
+        () -> EntityType.Builder.of(FloqEntity::new, MobCategory.MONSTER)
             .sized(0.6f, 0.6f) // Small cube
             .clientTrackingRange(8)
             .updateInterval(3)

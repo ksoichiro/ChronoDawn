@@ -1,6 +1,7 @@
 package com.chronosphere.core.time;
 
 import com.chronosphere.entities.bosses.TimeGuardianEntity;
+import com.chronosphere.entities.mobs.FloqEntity;
 import com.chronosphere.entities.mobs.TimeKeeperEntity;
 import com.chronosphere.items.equipment.EnhancedClockstoneArmorItem;
 import com.chronosphere.registry.ModDimensions;
@@ -128,6 +129,11 @@ public class TimeDistortionEffect {
 
         // Exclude Time Keeper (friendly trader NPC)
         if (entity instanceof TimeKeeperEntity) {
+            return false;
+        }
+
+        // Exclude Floq (should move fast like slimes)
+        if (entity instanceof FloqEntity) {
             return false;
         }
 
