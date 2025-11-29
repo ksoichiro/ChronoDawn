@@ -165,6 +165,7 @@
   "message.chronosphere.entropy_keeper_awakens": "The Entropy Keeper awakens!",
   "message.chronosphere.time_clock_boss_success": "The Time Clock resonates! Time Tyrant weakened!",
   "message.chronosphere.time_clock_boss_limit": "The Time Clock has no effect - already used in this phase",
+  "message.chronosphere.teleporter_unbreakable": "This temporal anchor cannot be destroyed in survival mode",
 
   "entity.chronosphere.time_guardian": "Time Guardian",
   "entity.chronosphere.chronos_warden": "Chronos Warden",

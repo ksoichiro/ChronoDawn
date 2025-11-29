@@ -165,6 +165,7 @@
   "message.chronosphere.entropy_keeper_awakens": "エントロピーの管理者が目覚めた！",
   "message.chronosphere.time_clock_boss_success": "タイムクロックが共鳴した！時間の暴君が弱体化した！",
   "message.chronosphere.time_clock_boss_limit": "タイムクロックは効果がない - このフェーズで既に使用済みだ",
+  "message.chronosphere.teleporter_unbreakable": "この時間のアンカーはサバイバルモードでは破壊できない",
 
   "entity.chronosphere.time_guardian": "時の番人",
   "entity.chronosphere.chronos_warden": "クロノスの監視者",

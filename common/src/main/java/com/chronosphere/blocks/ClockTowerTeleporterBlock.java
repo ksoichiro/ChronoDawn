@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.network.chat.Component;
 
 /**
  * Clock Tower Teleporter Block
@@ -80,6 +81,38 @@ public class ClockTowerTeleporterBlock extends BaseEntityBlock {
         }
 
         return InteractionResult.SUCCESS;
+    }
+
+    @Override
+    public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+        // Only allow breaking in creative mode
+        if (!level.isClientSide && !player.isCreative()) {
+            // Prevent block from being destroyed
+            return state;
+        }
+        return super.playerWillDestroy(level, pos, state, player);
+    }
+
+    @Override
+    protected void attack(BlockState state, Level level, BlockPos pos, Player player) {
+        // Display message when player tries to break in survival mode
+        if (!level.isClientSide && !player.isCreative()) {
+            player.displayClientMessage(
+                Component.translatable("message.chronosphere.teleporter_unbreakable"),
+                true // action bar
+            );
+        }
+        super.attack(state, level, pos, player);
+    }
+
+    @Override
+    protected float getDestroyProgress(BlockState state, Player player, net.minecraft.world.level.BlockGetter level, BlockPos pos) {
+        // In survival mode, make it impossible to break (return 0 = no progress)
+        if (!player.isCreative()) {
+            return 0.0F;
+        }
+        // In creative mode, allow instant breaking
+        return super.getDestroyProgress(state, player, level, pos);
     }
 
     /**
