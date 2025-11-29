@@ -8,6 +8,7 @@ import com.chronosphere.entities.bosses.TemporalPhantomEntity;
 import com.chronosphere.entities.bosses.TimeGuardianEntity;
 import com.chronosphere.entities.bosses.TimeTyrantEntity;
 import com.chronosphere.entities.mobs.ClockworkSentinelEntity;
+import com.chronosphere.entities.mobs.FloqEntity;
 import com.chronosphere.entities.mobs.TemporalWraithEntity;
 import com.chronosphere.entities.mobs.TimeKeeperEntity;
 import com.chronosphere.fabric.compat.CustomPortalFabric;
@@ -91,6 +92,11 @@ public class ChronosphereFabric implements ModInitializer {
             TimeKeeperEntity.createAttributes()
         );
 
+        FabricDefaultAttributeRegistry.register(
+            ModEntities.FLOQ.get(),
+            FloqEntity.createAttributes()
+        );
+
         Chronosphere.LOGGER.info("Registered entity attributes for Fabric");
     }
 
@@ -121,6 +127,14 @@ public class ChronosphereFabric implements ModInitializer {
             SpawnPlacementTypes.ON_GROUND,
             Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             TimeKeeperEntity::checkTimeKeeperSpawnRules
+        );
+
+        // Floq - spawns on ground like animals
+        SpawnPlacements.register(
+            ModEntities.FLOQ.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            FloqEntity::checkFloqSpawnRules
         );
 
         Chronosphere.LOGGER.info("Registered spawn placements for custom mobs");

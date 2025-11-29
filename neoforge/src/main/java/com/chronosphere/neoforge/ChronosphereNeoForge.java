@@ -8,6 +8,7 @@ import com.chronosphere.entities.bosses.TemporalPhantomEntity;
 import com.chronosphere.entities.bosses.TimeGuardianEntity;
 import com.chronosphere.entities.bosses.TimeTyrantEntity;
 import com.chronosphere.entities.mobs.ClockworkSentinelEntity;
+import com.chronosphere.entities.mobs.FloqEntity;
 import com.chronosphere.entities.mobs.TemporalWraithEntity;
 import com.chronosphere.entities.mobs.TimeKeeperEntity;
 import com.chronosphere.neoforge.compat.CustomPortalNeoForge;
@@ -94,6 +95,11 @@ public class ChronosphereNeoForge {
             TimeKeeperEntity.createAttributes().build()
         );
 
+        event.put(
+            ModEntities.FLOQ.get(),
+            FloqEntity.createAttributes().build()
+        );
+
         Chronosphere.LOGGER.info("Registered entity attributes for NeoForge");
     }
 
@@ -144,6 +150,15 @@ public class ChronosphereNeoForge {
             SpawnPlacementTypes.ON_GROUND,
             Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             TimeKeeperEntity::checkTimeKeeperSpawnRules,
+            RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+
+        // Floq - spawns on ground like animals
+        event.register(
+            ModEntities.FLOQ.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            FloqEntity::checkFloqSpawnRules,
             RegisterSpawnPlacementsEvent.Operation.REPLACE
         );
 

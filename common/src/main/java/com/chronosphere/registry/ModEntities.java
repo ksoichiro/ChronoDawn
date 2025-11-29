@@ -7,6 +7,7 @@ import com.chronosphere.entities.bosses.TemporalPhantomEntity;
 import com.chronosphere.entities.bosses.TimeGuardianEntity;
 import com.chronosphere.entities.bosses.TimeTyrantEntity;
 import com.chronosphere.entities.mobs.ClockworkSentinelEntity;
+import com.chronosphere.entities.mobs.FloqEntity;
 import com.chronosphere.entities.mobs.TemporalWraithEntity;
 import com.chronosphere.entities.mobs.TimeKeeperEntity;
 import com.chronosphere.entities.projectiles.TimeArrowEntity;
@@ -137,6 +138,20 @@ public class ModEntities {
             .clientTrackingRange(10)
             .updateInterval(3)
             .build("time_keeper")
+    );
+
+    /**
+     * Floq - Slime-like Friendly Mob
+     *
+     * A small cube-shaped creature that moves by jumping like vanilla slimes.
+     */
+    public static final RegistrySupplier<EntityType<FloqEntity>> FLOQ = ENTITIES.register(
+        "floq",
+        () -> EntityType.Builder.of(FloqEntity::new, MobCategory.CREATURE)
+            .sized(0.6f, 0.6f) // Small cube
+            .clientTrackingRange(8)
+            .updateInterval(3)
+            .build("floq")
     );
 
     /**

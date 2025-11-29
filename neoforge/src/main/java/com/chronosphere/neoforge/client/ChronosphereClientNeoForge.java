@@ -2,6 +2,7 @@ package com.chronosphere.neoforge.client;
 
 import com.chronosphere.Chronosphere;
 import com.chronosphere.client.model.ClockworkSentinelModel;
+import com.chronosphere.client.model.FloqModel;
 import com.chronosphere.client.model.TemporalWraithModel;
 import com.chronosphere.client.model.TimeGuardianModel;
 import com.chronosphere.client.model.TimeKeeperModel;
@@ -15,6 +16,7 @@ import com.chronosphere.client.renderer.TimeBlastRenderer;
 import com.chronosphere.client.renderer.TimeGuardianRenderer;
 import com.chronosphere.client.renderer.TimeTyrantRenderer;
 import com.chronosphere.client.renderer.mobs.ClockworkSentinelRenderer;
+import com.chronosphere.client.renderer.mobs.FloqRenderer;
 import com.chronosphere.client.renderer.mobs.TemporalWraithRenderer;
 import com.chronosphere.client.renderer.mobs.TimeKeeperRenderer;
 import com.chronosphere.items.TimeCompassItem;
@@ -106,6 +108,11 @@ public class ChronosphereClientNeoForge {
             TimeKeeperModel::createBodyLayer
         );
 
+        event.registerLayerDefinition(
+            FloqModel.LAYER_LOCATION,
+            FloqModel::createBodyLayer
+        );
+
         Chronosphere.LOGGER.info("Registered entity model layers for NeoForge");
     }
 
@@ -179,6 +186,11 @@ public class ChronosphereClientNeoForge {
         event.registerEntityRenderer(
             ModEntities.TIME_KEEPER.get(),
             TimeKeeperRenderer::new
+        );
+
+        event.registerEntityRenderer(
+            ModEntities.FLOQ.get(),
+            FloqRenderer::new
         );
 
         Chronosphere.LOGGER.info("Registered entity renderers for NeoForge");
