@@ -7,6 +7,9 @@
   "mixins": [
     "StructureStartMixin"
   ],
+  "client": [
+    "client.FogRendererMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

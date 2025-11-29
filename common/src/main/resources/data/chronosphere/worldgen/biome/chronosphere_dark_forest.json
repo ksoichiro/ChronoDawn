@@ -4,10 +4,10 @@
   "temperature_modifier": "none",
   "downfall": 0.8,
   "effects": {
-    "sky_color": 7697781,
-    "fog_color": 10066329,
-    "water_color": 5533306,
-    "water_fog_color": 2763306,
+    "sky_color": 5263440,
+    "fog_color": 3355443,
+    "water_color": 4012587,
+    "water_fog_color": 1973790,
     "grass_color": 4478540,
     "foliage_color": 5531468,
     "mood_sound": {

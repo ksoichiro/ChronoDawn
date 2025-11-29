@@ -37,6 +37,15 @@ public class ChronosphereBiomeProvider {
     );
 
     /**
+     * Resource key for the Chronosphere Dark Forest biome.
+     * This biome features dense fog and reduced visibility.
+     */
+    public static final ResourceKey<Biome> CHRONOSPHERE_DARK_FOREST = ResourceKey.create(
+        Registries.BIOME,
+        ResourceLocation.fromNamespaceAndPath(Chronosphere.MOD_ID, "chronosphere_dark_forest")
+    );
+
+    /**
      * Initialize biome provider.
      * Called during mod initialization.
      *
