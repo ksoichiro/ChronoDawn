@@ -5,6 +5,10 @@
     "chronosphere:time_wood_log",
     "chronosphere:time_wood_planks",
     "chronosphere:time_wood_stairs",
-    "chronosphere:time_wood_slab"
+    "chronosphere:time_wood_slab",
+    "chronosphere:dark_time_wood_log",
+    "chronosphere:dark_time_wood_planks",
+    "chronosphere:ancient_time_wood_log",
+    "chronosphere:ancient_time_wood_planks"
   ]
 }

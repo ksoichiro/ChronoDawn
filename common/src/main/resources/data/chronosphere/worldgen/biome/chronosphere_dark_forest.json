@@ -1,15 +1,15 @@
 {
   "has_precipitation": true,
-  "temperature": 0.5,
+  "temperature": 0.4,
   "temperature_modifier": "none",
-  "downfall": 0.5,
+  "downfall": 0.8,
   "effects": {
-    "sky_color": 9474192,
-    "fog_color": 12632256,
-    "water_color": 6983845,
-    "water_fog_color": 3482025,
-    "grass_color": 5999300,
-    "foliage_color": 7909594,
+    "sky_color": 7697781,
+    "fog_color": 10066329,
+    "water_color": 5533306,
+    "water_fog_color": 2763306,
+    "grass_color": 4478540,
+    "foliage_color": 5531468,
     "mood_sound": {
       "sound": "minecraft:ambient.cave",
       "tick_delay": 6000,
@@ -32,13 +32,13 @@
         "maxCount": 4
       },
       {
-        "type": "minecraft:creeper",
+        "type": "minecraft:spider",
         "weight": 100,
         "minCount": 4,
         "maxCount": 4
       },
       {
-        "type": "minecraft:spider",
+        "type": "minecraft:creeper",
         "weight": 100,
         "minCount": 4,
         "maxCount": 4
@@ -70,26 +70,8 @@
     ],
     "creature": [
       {
-        "type": "minecraft:cow",
+        "type": "minecraft:wolf",
         "weight": 8,
-        "minCount": 4,
-        "maxCount": 4
-      },
-      {
-        "type": "minecraft:sheep",
-        "weight": 12,
-        "minCount": 4,
-        "maxCount": 4
-      },
-      {
-        "type": "minecraft:pig",
-        "weight": 10,
-        "minCount": 4,
-        "maxCount": 4
-      },
-      {
-        "type": "minecraft:chicken",
-        "weight": 10,
         "minCount": 4,
         "maxCount": 4
       },
@@ -131,16 +113,11 @@
     [],
     [],
     [
-      "chronosphere:fruit_of_time_tree",
-      "chronosphere:ancient_time_wood_tree",
-      "chronosphere:patch_grass",
-      "chronosphere:patch_flowers",
-      "chronosphere:patch_time_wheat",
-      "chronosphere:patch_temporal_root",
-      "chronosphere:patch_chrono_melon",
-      "chronosphere:boulder_placed",
-      "chronosphere:gravel_disk_placed",
-      "chronosphere:sand_disk_placed"
+      "chronosphere:dark_time_wood_tree_dense",
+      "chronosphere:patch_ferns",
+      "chronosphere:patch_brown_mushrooms",
+      "chronosphere:patch_timeless_mushroom",
+      "chronosphere:boulder_placed"
     ],
     []
   ]

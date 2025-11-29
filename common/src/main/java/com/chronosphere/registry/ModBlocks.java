@@ -35,6 +35,12 @@ import com.chronosphere.blocks.TimeWoodSlab;
 import com.chronosphere.blocks.TimeWoodStairs;
 import com.chronosphere.blocks.TimeWoodTrapdoor;
 import com.chronosphere.blocks.UnstableFungus;
+import com.chronosphere.blocks.DarkTimeWoodLog;
+import com.chronosphere.blocks.DarkTimeWoodLeaves;
+import com.chronosphere.blocks.DarkTimeWoodPlanks;
+import com.chronosphere.blocks.AncientTimeWoodLog;
+import com.chronosphere.blocks.AncientTimeWoodLeaves;
+import com.chronosphere.blocks.AncientTimeWoodPlanks;
 import com.chronosphere.blocks.TimeWheatBlock;
 import com.chronosphere.blocks.TimeWheatBaleBlock;
 import com.chronosphere.blocks.TemporalRootBlock;
@@ -499,6 +505,62 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> DECORATIVE_WATER = BLOCKS.register(
         "decorative_water",
         () -> new DecorativeWaterBlock(ModFluids.DECORATIVE_WATER.get(), Block.Properties.ofFullCopy(Blocks.WATER))
+    );
+
+    // ===== Dark Time Wood Blocks =====
+
+    /**
+     * Dark Time Wood Log - Darker variant of Time Wood Log.
+     * Found in tall trees in the Chronosphere dimension.
+     */
+    public static final RegistrySupplier<Block> DARK_TIME_WOOD_LOG = BLOCKS.register(
+        "dark_time_wood_log",
+        () -> new DarkTimeWoodLog(DarkTimeWoodLog.createProperties())
+    );
+
+    /**
+     * Dark Time Wood Leaves - Darker variant of Time Wood Leaves.
+     * Forms the canopy of tall dark trees.
+     */
+    public static final RegistrySupplier<Block> DARK_TIME_WOOD_LEAVES = BLOCKS.register(
+        "dark_time_wood_leaves",
+        () -> new DarkTimeWoodLeaves(DarkTimeWoodLeaves.createProperties())
+    );
+
+    /**
+     * Dark Time Wood Planks - Crafted from Dark Time Wood Logs.
+     */
+    public static final RegistrySupplier<Block> DARK_TIME_WOOD_PLANKS = BLOCKS.register(
+        "dark_time_wood_planks",
+        () -> new DarkTimeWoodPlanks(DarkTimeWoodPlanks.createProperties())
+    );
+
+    // ===== Ancient Time Wood Blocks =====
+
+    /**
+     * Ancient Time Wood Log - Weathered variant of Time Wood Log.
+     * Found in wide-canopy trees in the Chronosphere dimension.
+     */
+    public static final RegistrySupplier<Block> ANCIENT_TIME_WOOD_LOG = BLOCKS.register(
+        "ancient_time_wood_log",
+        () -> new AncientTimeWoodLog(AncientTimeWoodLog.createProperties())
+    );
+
+    /**
+     * Ancient Time Wood Leaves - Wider-spreading leaves for ancient trees.
+     * Forms a broad canopy on ancient trees.
+     */
+    public static final RegistrySupplier<Block> ANCIENT_TIME_WOOD_LEAVES = BLOCKS.register(
+        "ancient_time_wood_leaves",
+        () -> new AncientTimeWoodLeaves(AncientTimeWoodLeaves.createProperties())
+    );
+
+    /**
+     * Ancient Time Wood Planks - Crafted from Ancient Time Wood Logs.
+     */
+    public static final RegistrySupplier<Block> ANCIENT_TIME_WOOD_PLANKS = BLOCKS.register(
+        "ancient_time_wood_planks",
+        () -> new AncientTimeWoodPlanks(AncientTimeWoodPlanks.createProperties())
     );
 
     /**

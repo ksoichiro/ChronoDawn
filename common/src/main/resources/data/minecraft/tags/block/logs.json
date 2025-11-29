@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    "chronosphere:time_wood_log"
+    "chronosphere:time_wood_log",
+    "chronosphere:dark_time_wood_log",
+    "chronosphere:ancient_time_wood_log"
   ]
 }

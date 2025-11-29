@@ -51,9 +51,9 @@
 
 **Note**: これは優先度が低く、US1の MVP には必須ではない。他の機能が完成後に実装を検討
 
-- [ ] T088t [P] [US1] (Optional) Design Time Wood color variants (e.g., Dark Time Wood, Ancient Time Wood)
-- [ ] T088u [P] [US1] (Optional) Create variant textures and block definitions
-- [ ] T088v [P] [US1] (Optional) Create variant tree features and configure placement in different biomes
+- [X] T088t [P] [US1] (Optional) Design Time Wood color variants (e.g., Dark Time Wood, Ancient Time Wood)
+- [X] T088u [P] [US1] (Optional) Create variant textures and block definitions
+- [X] T088v [P] [US1] (Optional) Create variant tree features and configure placement in different biomes
 
 ### Decorative Terrain Features (US1 Enhancement)
 

@@ -1,15 +1,15 @@
 {
   "has_precipitation": true,
-  "temperature": 0.5,
+  "temperature": 0.6,
   "temperature_modifier": "none",
-  "downfall": 0.5,
+  "downfall": 0.6,
   "effects": {
     "sky_color": 9474192,
-    "fog_color": 12632256,
+    "fog_color": 11842740,
     "water_color": 6983845,
     "water_fog_color": 3482025,
-    "grass_color": 5999300,
-    "foliage_color": 7909594,
+    "grass_color": 7045478,
+    "foliage_color": 8361066,
     "mood_sound": {
       "sound": "minecraft:ambient.cave",
       "tick_delay": 6000,
@@ -32,13 +32,13 @@
         "maxCount": 4
       },
       {
-        "type": "minecraft:creeper",
+        "type": "minecraft:spider",
         "weight": 100,
         "minCount": 4,
         "maxCount": 4
       },
       {
-        "type": "minecraft:spider",
+        "type": "minecraft:creeper",
         "weight": 100,
         "minCount": 4,
         "maxCount": 4
@@ -131,16 +131,11 @@
     [],
     [],
     [
-      "chronosphere:fruit_of_time_tree",
-      "chronosphere:ancient_time_wood_tree",
-      "chronosphere:patch_grass",
+      "chronosphere:ancient_time_wood_tree_dense",
+      "chronosphere:patch_ferns",
       "chronosphere:patch_flowers",
       "chronosphere:patch_time_wheat",
-      "chronosphere:patch_temporal_root",
-      "chronosphere:patch_chrono_melon",
-      "chronosphere:boulder_placed",
-      "chronosphere:gravel_disk_placed",
-      "chronosphere:sand_disk_placed"
+      "chronosphere:boulder_placed"
     ],
     []
   ]

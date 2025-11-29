@@ -1,9 +1,9 @@
 {
-  "feature": "chronosphere:fruit_of_time_tree",
+  "feature": "chronosphere:ancient_time_wood_tree",
   "placement": [
     {
-      "type": "minecraft:rarity_filter",
-      "chance": 2
+      "type": "minecraft:count",
+      "count": 4
     },
     {
       "type": "minecraft:in_square"
@@ -30,7 +30,7 @@
                 {
                   "type": "minecraft:matching_blocks",
                   "offset": [0, -1, 0],
-                  "blocks": ["chronosphere:time_wood_leaves", "minecraft:oak_leaves"]
+                  "blocks": ["chronosphere:time_wood_leaves", "chronosphere:dark_time_wood_leaves", "chronosphere:ancient_time_wood_leaves"]
                 }
               ]
             }

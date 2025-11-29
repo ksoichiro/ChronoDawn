@@ -162,6 +162,58 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TIME_WOOD_SAPLING.get(), new Item.Properties())
     );
 
+    // === Dark Time Wood Block Items ===
+
+    /**
+     * Dark Time Wood Log - BlockItem for placing Dark Time Wood Log block.
+     */
+    public static final RegistrySupplier<Item> DARK_TIME_WOOD_LOG = ITEMS.register(
+        "dark_time_wood_log",
+        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_LOG.get(), new Item.Properties())
+    );
+
+    /**
+     * Dark Time Wood Leaves - BlockItem for placing Dark Time Wood Leaves block.
+     */
+    public static final RegistrySupplier<Item> DARK_TIME_WOOD_LEAVES = ITEMS.register(
+        "dark_time_wood_leaves",
+        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_LEAVES.get(), new Item.Properties())
+    );
+
+    /**
+     * Dark Time Wood Planks - BlockItem for placing Dark Time Wood Planks block.
+     */
+    public static final RegistrySupplier<Item> DARK_TIME_WOOD_PLANKS = ITEMS.register(
+        "dark_time_wood_planks",
+        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_PLANKS.get(), new Item.Properties())
+    );
+
+    // === Ancient Time Wood Block Items ===
+
+    /**
+     * Ancient Time Wood Log - BlockItem for placing Ancient Time Wood Log block.
+     */
+    public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_LOG = ITEMS.register(
+        "ancient_time_wood_log",
+        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_LOG.get(), new Item.Properties())
+    );
+
+    /**
+     * Ancient Time Wood Leaves - BlockItem for placing Ancient Time Wood Leaves block.
+     */
+    public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_LEAVES = ITEMS.register(
+        "ancient_time_wood_leaves",
+        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_LEAVES.get(), new Item.Properties())
+    );
+
+    /**
+     * Ancient Time Wood Planks - BlockItem for placing Ancient Time Wood Planks block.
+     */
+    public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_PLANKS = ITEMS.register(
+        "ancient_time_wood_planks",
+        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_PLANKS.get(), new Item.Properties())
+    );
+
     /**
      * Time Wheat Bale - BlockItem for placing Time Wheat Bale block.
      */
@@ -1094,6 +1146,14 @@ public class ModItems {
         output.accept(TIME_WOOD_BUTTON.get());
         output.accept(TIME_WOOD_PRESSURE_PLATE.get());
         output.accept(TIME_WOOD_SAPLING.get());
+        // Dark Time Wood
+        output.accept(DARK_TIME_WOOD_LOG.get());
+        output.accept(DARK_TIME_WOOD_LEAVES.get());
+        output.accept(DARK_TIME_WOOD_PLANKS.get());
+        // Ancient Time Wood
+        output.accept(ANCIENT_TIME_WOOD_LOG.get());
+        output.accept(ANCIENT_TIME_WOOD_LEAVES.get());
+        output.accept(ANCIENT_TIME_WOOD_PLANKS.get());
         output.accept(TIME_WHEAT_BALE.get());
         output.accept(CLOCK_TOWER_TELEPORTER.get());
         output.accept(CLOCKWORK_BLOCK.get());
