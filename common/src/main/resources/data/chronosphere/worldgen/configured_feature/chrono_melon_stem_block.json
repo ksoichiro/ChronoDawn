@@ -4,10 +4,7 @@
     "to_place": {
       "type": "minecraft:simple_state_provider",
       "state": {
-        "Name": "chronosphere:chrono_melon_stem",
-        "Properties": {
-          "age": "0"
-        }
+        "Name": "chronosphere:chrono_melon"
       }
     }
   }

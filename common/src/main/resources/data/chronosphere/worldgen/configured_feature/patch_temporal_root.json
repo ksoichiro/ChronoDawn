@@ -1,9 +1,9 @@
 {
   "type": "minecraft:random_patch",
   "config": {
-    "tries": 8,
-    "xz_spread": 3,
-    "y_spread": 1,
+    "tries": 16,
+    "xz_spread": 4,
+    "y_spread": 0,
     "feature": "chronosphere:temporal_root_block"
   }
 }

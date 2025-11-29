@@ -98,4 +98,35 @@ public class TemporalRootBlock extends CropBlock {
             }
         }
     }
+
+    @Override
+    protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
+        // Allow placement on farmland (for player planting) or grass/dirt (for worldgen)
+        return state.is(net.minecraft.world.level.block.Blocks.FARMLAND) ||
+               state.is(net.minecraft.tags.BlockTags.DIRT);
+    }
+
+    @Override
+    public boolean canSurvive(BlockState state, net.minecraft.world.level.LevelReader level, BlockPos pos) {
+        BlockPos belowPos = pos.below();
+        BlockState belowState = level.getBlockState(belowPos);
+
+        // Check if block below is valid (farmland or dirt)
+        if (!this.mayPlaceOn(belowState, level, belowPos)) {
+            return false;
+        }
+
+        // Check if block below is not a log block (prevents tree root replacement)
+        if (belowState.is(net.minecraft.tags.BlockTags.LOGS)) {
+            return false;
+        }
+
+        // Check if block above is not a log block (prevents placement under tree trunks)
+        BlockPos abovePos = pos.above();
+        if (level.getBlockState(abovePos).is(net.minecraft.tags.BlockTags.LOGS)) {
+            return false;
+        }
+
+        return true;
+    }
 }

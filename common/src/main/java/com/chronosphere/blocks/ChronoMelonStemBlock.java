@@ -134,4 +134,11 @@ public class ChronoMelonStemBlock extends CropBlock {
             }
         }
     }
+
+    @Override
+    protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
+        // Allow placement on farmland (for player planting) or grass/dirt (for worldgen)
+        return state.is(net.minecraft.world.level.block.Blocks.FARMLAND) ||
+               state.is(net.minecraft.tags.BlockTags.DIRT);
+    }
 }

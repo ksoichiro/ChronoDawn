@@ -2,13 +2,27 @@
   "type": "minecraft:simple_block",
   "config": {
     "to_place": {
-      "type": "minecraft:simple_state_provider",
-      "state": {
-        "Name": "chronosphere:temporal_root",
-        "Properties": {
-          "age": "0"
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "weight": 2,
+          "data": {
+            "Name": "chronosphere:temporal_root",
+            "Properties": {
+              "age": "6"
+            }
+          }
+        },
+        {
+          "weight": 3,
+          "data": {
+            "Name": "chronosphere:temporal_root",
+            "Properties": {
+              "age": "7"
+            }
+          }
         }
-      }
+      ]
     }
   }
 }

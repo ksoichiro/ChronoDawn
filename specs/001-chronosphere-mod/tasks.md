@@ -153,7 +153,18 @@
   - **Implemented**: Regeneration I for 5 seconds
   - **Rationale**: Shorter duration (5s instead of 10s) to prevent overpowered healing considering ease of farming Time Wheat
   - **Theme**: "Time reversal" concept - healing through rewinding damage
-- [ ] T217 [US1] Test crop growth mechanics and food item effects in-game
+- [X] T217 [US1] Test crop growth mechanics and food item effects in-game
+  - **Completed**: All crop worldgen, growth mechanics, and food effects tested and verified
+  - **Worldgen fixes applied** (2025-11-29):
+    - Fixed loot tables: Temporal Root (2-4 drops), Chrono Melon (9 slices)
+    - Fixed worldgen placement: All crops use `y_spread: 0` for ground-level placement
+    - Added `canSurvive()` checks: Chrono Melon, Temporal Root, Timeless Mushroom
+    - Prevented log block replacement: All crops avoid tree roots and trunks
+    - Timeless Mushroom: Reduced generation intensity to prevent terrain modification
+  - **Final settings**:
+    - Temporal Root: rarity 1/8, tries 16, ground placement only
+    - Chrono Melon: rarity 1/32, tries 6, `canSurvive()` validation
+    - Timeless Mushroom: count 4/chunk, tries 8, `canSurvive()` validation
 
 **Implementation (T211-T215 completed 2025-11-22)**:
 - **T211 Design**: 3 crop types designed - Temporal Root (root vegetable), Chrono Melon (stem crop), Timeless Mushroom (fungus)

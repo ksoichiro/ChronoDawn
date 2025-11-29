@@ -80,6 +80,22 @@ public class TimelessMushroomBlock extends BushBlock implements BonemealableBloc
             return false;
         }
 
+        // Check if placement position is not a log block
+        if (level.getBlockState(pos).is(BlockTags.LOGS)) {
+            return false;
+        }
+
+        // Check if block below is not a log block (prevents tree root replacement)
+        if (belowState.is(BlockTags.LOGS)) {
+            return false;
+        }
+
+        // Check if block above is not a log block (prevents placement under tree trunks)
+        BlockPos abovePos = pos.above();
+        if (level.getBlockState(abovePos).is(BlockTags.LOGS)) {
+            return false;
+        }
+
         // Check light level (must be 12 or less to survive)
         return level.getRawBrightness(pos, 0) <= 12;
     }
