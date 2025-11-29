@@ -20,6 +20,9 @@
           }
         }
       ]
+    },
+    {
+      "processor_type": "chronosphere:boss_room_protection"
     }
   ]
 }

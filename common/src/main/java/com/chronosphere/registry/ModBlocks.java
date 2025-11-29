@@ -1,6 +1,7 @@
 package com.chronosphere.registry;
 
 import com.chronosphere.Chronosphere;
+import com.chronosphere.blocks.BossRoomBoundaryMarkerBlock;
 import com.chronosphere.blocks.BossRoomDoorBlock;
 import com.chronosphere.blocks.EntropyCryptTrapdoorBlock;
 import com.chronosphere.blocks.ClockstoneBlock;
@@ -505,6 +506,20 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> DECORATIVE_WATER = BLOCKS.register(
         "decorative_water",
         () -> new DecorativeWaterBlock(ModFluids.DECORATIVE_WATER.get(), Block.Properties.ofFullCopy(Blocks.WATER))
+    );
+
+    /**
+     * Boss Room Boundary Marker - Special marker block for defining boss room protection areas.
+     * Visible during structure editing (Jigsaw-like appearance).
+     * Replaced with specified block during world generation.
+     * Not included in creative tab - placed via Structure Block.
+     */
+    public static final RegistrySupplier<Block> BOSS_ROOM_BOUNDARY_MARKER = BLOCKS.register(
+        "boss_room_boundary_marker",
+        () -> new BossRoomBoundaryMarkerBlock(Block.Properties.of()
+            .strength(-1.0F, 3600000.0F) // Unbreakable like bedrock
+            .noLootTable()
+            .noOcclusion())
     );
 
     // ===== Dark Time Wood Blocks =====

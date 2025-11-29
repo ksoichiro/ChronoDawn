@@ -1,6 +1,7 @@
 package com.chronosphere.registry;
 
 import com.chronosphere.Chronosphere;
+import com.chronosphere.worldgen.processors.BossRoomProtectionProcessor;
 import com.chronosphere.worldgen.processors.CopyFluidLevelProcessor;
 import com.mojang.serialization.MapCodec;
 import dev.architectury.registry.registries.DeferredRegister;
@@ -31,6 +32,21 @@ public class ModStructureProcessorTypes {
                 @Override
                 public MapCodec<CopyFluidLevelProcessor> codec() {
                     return CopyFluidLevelProcessor.CODEC;
+                }
+            }
+        );
+
+    /**
+     * Boss Room Protection Processor Type - Detects Boss Room Boundary Marker blocks,
+     * calculates bounding box, registers protection, and replaces markers with specified blocks.
+     */
+    public static final RegistrySupplier<StructureProcessorType<BossRoomProtectionProcessor>> BOSS_ROOM_PROTECTION =
+        STRUCTURE_PROCESSOR_TYPES.register(
+            "boss_room_protection",
+            () -> new StructureProcessorType<BossRoomProtectionProcessor>() {
+                @Override
+                public MapCodec<BossRoomProtectionProcessor> codec() {
+                    return BossRoomProtectionProcessor.CODEC;
                 }
             }
         );

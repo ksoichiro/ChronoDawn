@@ -2,6 +2,7 @@ package com.chronosphere.entities.bosses;
 
 import com.chronosphere.entities.ai.GroundSlamGoal;
 import com.chronosphere.registry.ModItems;
+import com.chronosphere.worldgen.protection.BlockProtectionHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -465,6 +466,17 @@ public class ChronosWardenEntity extends Monster {
         if (isInStoneStance()) {
             this.getNavigation().stop();
             this.setDeltaMovement(Vec3.ZERO);
+        }
+    }
+
+    @Override
+    public void die(DamageSource source) {
+        super.die(source);
+
+        // Unprotect Guardian Vault boss room when defeated
+        if (!this.level().isClientSide && this.level() instanceof ServerLevel serverLevel) {
+            // Use position-based detection to find and unprotect the boss room
+            BlockProtectionHandler.onBossDefeatedAt(serverLevel, this.blockPosition());
         }
     }
 }

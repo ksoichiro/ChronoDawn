@@ -358,6 +358,9 @@ public class ChronosWardenSpawner {
             return;
         }
 
+        // Note: Boss room protection is now handled by BossRoomProtectionProcessor
+        // during structure generation (marker blocks in NBT → BoundingBox calculation)
+
         // Create and spawn Chronos Warden
         ChronosWardenEntity warden = ModEntities.CHRONOS_WARDEN.get().create(level);
         if (warden != null) {
@@ -374,6 +377,9 @@ public class ChronosWardenSpawner {
                 MobSpawnType.TRIGGERED, // Use TRIGGERED instead of STRUCTURE
                 null
             );
+
+            // Note: Door position no longer needed for protection (handled by marker blocks)
+            // Boss room protection uses marker block positions as unique IDs
 
             level.addFreshEntity(warden);
 

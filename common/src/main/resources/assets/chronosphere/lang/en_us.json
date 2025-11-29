@@ -36,6 +36,7 @@
   "block.chronosphere.time_wheat": "Time Wheat",
   "block.chronosphere.time_wheat_bale": "Time Wheat Bale",
   "block.chronosphere.boss_room_door": "Boss Room Door",
+  "block.chronosphere.boss_room_boundary_marker": "Boss Room Boundary Marker",
   "block.chronosphere.entropy_crypt_trapdoor": "Entropy Crypt Trapdoor",
   "block.chronosphere.temporal_particle_emitter": "Temporal Particle Emitter",
   "block.chronosphere.decorative_water": "Decorative Water",
@@ -166,6 +167,7 @@
   "message.chronosphere.time_clock_boss_success": "The Time Clock resonates! Time Tyrant weakened!",
   "message.chronosphere.time_clock_boss_limit": "The Time Clock has no effect - already used in this phase",
   "message.chronosphere.teleporter_unbreakable": "This temporal anchor cannot be destroyed in survival mode",
+  "message.chronosphere.boss_room_protected": "The boss's power protects these walls. Defeat the boss first!",
 
   "entity.chronosphere.time_guardian": "Time Guardian",
   "entity.chronosphere.chronos_warden": "Chronos Warden",

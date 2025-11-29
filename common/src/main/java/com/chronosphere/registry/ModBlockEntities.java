@@ -1,6 +1,7 @@
 package com.chronosphere.registry;
 
 import com.chronosphere.Chronosphere;
+import com.chronosphere.blocks.BossRoomBoundaryMarkerBlockEntity;
 import com.chronosphere.blocks.BossRoomDoorBlockEntity;
 import com.chronosphere.blocks.ClockTowerTeleporterBlockEntity;
 import dev.architectury.registry.registries.DeferredRegister;
@@ -34,6 +35,17 @@ public class ModBlockEntities {
             BlockEntityType.Builder.of(
                 BossRoomDoorBlockEntity::new,
                 ModBlocks.BOSS_ROOM_DOOR.get()
+            ).build(null)
+        );
+
+    /**
+     * Boss Room Boundary Marker BlockEntity - Stores marker type and replacement block.
+     */
+    public static final RegistrySupplier<BlockEntityType<BossRoomBoundaryMarkerBlockEntity>> BOSS_ROOM_BOUNDARY_MARKER =
+        BLOCK_ENTITIES.register("boss_room_boundary_marker", () ->
+            BlockEntityType.Builder.of(
+                BossRoomBoundaryMarkerBlockEntity::new,
+                ModBlocks.BOSS_ROOM_BOUNDARY_MARKER.get()
             ).build(null)
         );
 

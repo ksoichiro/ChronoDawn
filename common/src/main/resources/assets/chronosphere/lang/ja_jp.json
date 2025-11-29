@@ -36,6 +36,7 @@
   "block.chronosphere.time_wheat": "時の小麦",
   "block.chronosphere.time_wheat_bale": "時の小麦の俵",
   "block.chronosphere.boss_room_door": "ボス部屋のドア",
+  "block.chronosphere.boss_room_boundary_marker": "ボス部屋境界マーカー",
   "block.chronosphere.entropy_crypt_trapdoor": "エントロピーの地下室のトラップドア",
   "block.chronosphere.temporal_particle_emitter": "時間パーティクル発生装置",
   "block.chronosphere.decorative_water": "装飾用の水",
@@ -166,6 +167,7 @@
   "message.chronosphere.time_clock_boss_success": "タイムクロックが共鳴した！時間の暴君が弱体化した！",
   "message.chronosphere.time_clock_boss_limit": "タイムクロックは効果がない - このフェーズで既に使用済みだ",
   "message.chronosphere.teleporter_unbreakable": "この時間のアンカーはサバイバルモードでは破壊できない",
+  "message.chronosphere.boss_room_protected": "ボスの力がこの壁を守っている。まずボスを倒せ！",
 
   "entity.chronosphere.time_guardian": "時の番人",
   "entity.chronosphere.chronos_warden": "クロノスの監視者",

@@ -391,6 +391,15 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TEMPORAL_PARTICLE_EMITTER.get(), new Item.Properties())
     );
 
+    /**
+     * Boss Room Boundary Marker - Structure editing tool for defining boss room protection areas.
+     * Not added to creative tab - used only in structure editing with Structure Block.
+     */
+    public static final RegistrySupplier<Item> BOSS_ROOM_BOUNDARY_MARKER = ITEMS.register(
+        "boss_room_boundary_marker",
+        () -> new BlockItem(ModBlocks.BOSS_ROOM_BOUNDARY_MARKER.get(), new Item.Properties())
+    );
+
     // === Material Items ===
 
     /**
