@@ -4837,3 +4837,711 @@ Create a distinctive overworld biome that signals the presence of Ancient Ruins 
 **Color Providers** (if using Option B):
 - `fabric/src/main/java/com/chronosphere/fabric/client/ChronosphereClientFabric.java`
 - `neoforge/src/main/java/com/chronosphere/neoforge/client/ChronosphereClientNeoForge.java`
+
+---
+
+## GameTest Framework Implementation Research (2025-11-29)
+
+### Overview
+
+GameTest is Minecraft's official automated end-to-end (E2E) testing framework, designed for testing in-world scenarios, boss fights, structure generation, and gameplay mechanics. This research covers how to implement executable GameTests in the Chronosphere mod's Architectury multi-loader project.
+
+### Key Findings
+
+#### 1. What is Minecraft GameTest Framework?
+
+**Definition**: GameTest is a miniature environment testing system where you:
+1. Create test structures (.nbt files) using structure blocks
+2. Write test functions (Java methods) that set up conditions and verify outcomes
+3. Run tests using `/test` commands or automated GameTestServer
+
+**Use Cases for Chronosphere Mod**:
+- Boss fight mechanics (Time Tyrant, Time Guardian, Entropy Keeper)
+- Structure generation validation (Master Clock, Phantom Catacombs, Entropy Crypt)
+- Portal activation and dimension travel
+- Item abilities (Chronoblade, Time Guardian's Mail)
+- World generation features
+
+**Core Concept**: Each test consists of:
+- **Structure template** (.nbt): Defines initial block/entity placement
+- **Test instance** (JSON or Java): Configuration (timeout, rotation, environment)
+- **Test function** (Java method): Logic to validate expected behavior
+
+#### 2. Architectury Multi-Loader Considerations
+
+**Challenge**: Architectury projects have separate `common`, `fabric`, and `neoforge` modules.
+
+**Approach**: GameTest support is **loader-specific** due to different implementations:
+
+- **NeoForge**: Native support via `RegisterGameTestsEvent` (mod event bus)
+- **Fabric**: Extended support via Fabric API's `fabric-gametest` entrypoint
+
+**Recommended Strategy for Architectury**:
+
+1. **Common module**: Write shared test structures (.nbt) and test logic classes
+2. **Loader modules**: Register tests using platform-specific mechanisms
+3. **Structure location**: `common/src/main/resources/data/chronosphere/structure/` (accessible to both loaders)
+
+#### 3. Required Dependencies and Configuration
+
+##### NeoForge (neoforge/build.gradle)
+
+**Already Available**: NeoForge 21.1.x includes GameTest framework natively.
+
+```groovy
+// No additional dependencies needed
+// GameTest framework is part of net.minecraft.gametest.framework package
+
+loom {
+    runs {
+        // Add GameTestServer run configuration
+        gameTestServer {
+            server()
+            setConfigName("NeoForge GameTest Server")
+            ideConfigGenerated(true)
+            runDir("run-gametest")
+
+            // Enable test namespaces
+            property 'neoforge.enabledGameTestNamespaces', 'chronosphere'
+        }
+    }
+}
+```
+
+##### Fabric (fabric/build.gradle)
+
+**Required**: Fabric API's GameTest module (already included in project via `fabric-api` dependency).
+
+```groovy
+dependencies {
+    // Already present:
+    modApi "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
+
+    // fabric-api includes fabric-gametest-api module automatically
+}
+
+// Add test source set configuration
+fabricApi {
+    configureTests {
+        createSourceSet = true
+        modId = "chronosphere-test-fabric"
+        enableGameTests = true
+        enableClientGameTests = true
+        eula = true
+    }
+}
+```
+
+##### Common Module (common/build.gradle)
+
+**Current Setup** (already configured):
+```groovy
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
+```
+
+**Note**: GameTest classes can be placed in `common/src/test/java/` and registered by loader-specific modules.
+
+#### 4. Writing Executable GameTests
+
+##### Structure Template Creation
+
+**Method 1: In-Game Structure Blocks** (Recommended)
+
+1. Launch Minecraft in Creative mode (`./gradlew :fabric:runClient`)
+2. Build test scenario:
+   ```
+   /give @s structure_block
+   Place structure block, set to "Save" mode
+   Set Structure Name: "chronosphere:boss_fight_arena"
+   Set Size: 35x20x35 (example for Time Tyrant arena)
+   Click "SAVE"
+   ```
+3. Result: `.nbt` file saved to `world/generated/chronosphere/structures/boss_fight_arena.nbt`
+4. Copy to `common/src/main/resources/data/chronosphere/structure/boss_fight_arena.nbt`
+
+**Method 2: Programmatic Generation** (For simple structures)
+
+Use `StructureTemplate` API to create structures via code.
+
+##### Test Instance Definition (NeoForge)
+
+**Option A: JSON-based** (Data-driven approach)
+
+`common/src/main/resources/data/chronosphere/test_instance/boss_fight_time_tyrant.json`:
+```json
+{
+  "environment": "chronosphere:boss_fight_environment",
+  "structure": "chronosphere:boss_fight_arena",
+  "max_ticks": 6000,
+  "setup_ticks": 100,
+  "required": true,
+  "rotation": "none",
+  "manual_only": false,
+  "max_attempts": 3,
+  "required_successes": 1,
+  "sky_access": true,
+  "type": "minecraft:function",
+  "function": "chronosphere:test_time_tyrant_spawns"
+}
+```
+
+**Option B: Java-based** (Programmatic approach)
+
+```java
+// common/src/test/java/com/chronosphere/gametest/TimeTyrantGameTest.java
+package com.chronosphere.gametest;
+
+import net.minecraft.gametest.framework.GameTest;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.BlockPos;
+
+public class TimeTyrantGameTest {
+
+    @GameTest(
+        template = "chronosphere:boss_fight_arena",
+        timeoutTicks = 6000,  // 5 minutes (100 ticks/sec)
+        required = true
+    )
+    public static void testTimeTyrantSpawns(GameTestHelper helper) {
+        // Setup: Verify arena structure integrity
+        BlockPos centerPos = new BlockPos(17, 1, 17);  // Center of 35x35 arena
+        helper.assertBlockPresent(Blocks.DEEPSLATE_BRICKS, centerPos.below());
+
+        // Action: Spawn Time Tyrant boss
+        var timeTyrant = helper.spawn(
+            EntityType.WITHER,  // Placeholder - replace with ModEntities.TIME_TYRANT.get()
+            centerPos.above(4)
+        );
+
+        // Assertion: Boss spawns with correct attributes
+        helper.assertTrue(timeTyrant.isAlive(), "Time Tyrant should spawn alive");
+        helper.assertTrue(
+            timeTyrant.getHealth() >= 500.0f,
+            "Time Tyrant should have >= 500 HP"
+        );
+
+        // Schedule delayed check: Boss still alive after 100 ticks
+        helper.runAtTickTime(100, () -> {
+            helper.assertTrue(timeTyrant.isAlive(), "Boss should still be alive");
+        });
+
+        // Success condition: Test completes without exceptions
+        helper.succeedWhen(() -> {
+            helper.assertEntityPresent(EntityType.WITHER, centerPos, 10.0);
+        });
+    }
+
+    @GameTest(
+        template = "chronosphere:boss_fight_arena",
+        timeoutTicks = 12000  // 10 minutes for full fight
+    )
+    public static void testTimeTyrantPhaseTransitions(GameTestHelper helper) {
+        BlockPos centerPos = new BlockPos(17, 4, 17);
+
+        // Spawn boss and simulate damage
+        var timeTyrant = helper.spawn(EntityType.WITHER, centerPos);
+        float maxHealth = timeTyrant.getMaxHealth();
+
+        // Test Phase 1 (HP > 66%)
+        helper.runAtTickTime(20, () -> {
+            float currentHp = timeTyrant.getHealth();
+            helper.assertTrue(
+                currentHp > maxHealth * 0.66f,
+                "Boss should be in Phase 1"
+            );
+            // TODO: Verify Phase 1 abilities (time stop)
+        });
+
+        // Damage to Phase 2 (33% < HP <= 66%)
+        helper.runAtTickTime(100, () -> {
+            timeTyrant.setHealth(maxHealth * 0.5f);  // 50% HP
+            // TODO: Verify Phase 2 abilities (teleport, speed boost)
+        });
+
+        // Damage to Phase 3 (HP <= 33%)
+        helper.runAtTickTime(200, () -> {
+            timeTyrant.setHealth(maxHealth * 0.2f);  // 20% HP
+            // TODO: Verify Phase 3 abilities (AoE, HP recovery)
+        });
+
+        helper.succeed();
+    }
+}
+```
+
+##### Registration (NeoForge)
+
+`neoforge/src/main/java/com/chronosphere/neoforge/ChronosphereNeoForge.java`:
+```java
+package com.chronosphere.neoforge;
+
+import com.chronosphere.gametest.TimeTyrantGameTest;
+import com.chronosphere.gametest.MasterClockStructureTest;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.RegisterGameTestsEvent;
+
+@EventBusSubscriber(modid = "chronosphere", bus = EventBusSubscriber.Bus.MOD)
+public class ChronosphereGameTestRegistrar {
+
+    @SubscribeEvent
+    public static void registerGameTests(RegisterGameTestsEvent event) {
+        event.register(TimeTyrantGameTest.class);
+        event.register(MasterClockStructureTest.class);
+        // Register other test classes
+    }
+}
+```
+
+##### Registration (Fabric)
+
+**fabric.mod.json** (`fabric/src/main/resources/fabric.mod.json`):
+```json
+{
+  "schemaVersion": 1,
+  "id": "chronosphere",
+  "entrypoints": {
+    "main": [
+      "com.chronosphere.fabric.ChronosphereFabric"
+    ],
+    "fabric-gametest": [
+      "com.chronosphere.gametest.TimeTyrantGameTest",
+      "com.chronosphere.gametest.MasterClockStructureTest"
+    ]
+  }
+}
+```
+
+**Alternative: Use CustomTestMethodInvoker** (For setup/teardown logic)
+
+```java
+// fabric/src/gametest/java/com/chronosphere/fabric/gametest/FabricTimeTyrantTest.java
+package com.chronosphere.fabric.gametest;
+
+import com.chronosphere.gametest.TimeTyrantGameTest;
+import net.fabricmc.fabric.api.gametest.v1.CustomTestMethodInvoker;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.world.level.block.Blocks;
+
+import java.lang.reflect.Method;
+
+public class FabricTimeTyrantTest extends TimeTyrantGameTest
+    implements CustomTestMethodInvoker {
+
+    @Override
+    public void invokeTestMethod(GameTestHelper helper, Method method)
+        throws ReflectiveOperationException {
+        // Setup before each test
+        helper.setBlock(0, 0, 0, Blocks.AIR);
+
+        // Invoke actual test method
+        method.invoke(this, helper);
+
+        // Cleanup after test (if needed)
+    }
+}
+```
+
+#### 5. Running GameTests
+
+##### In-Development Testing
+
+**Command-based** (In-game):
+```
+/test run chronosphere:boss_fight_time_tyrant
+/test runall  # Run all registered tests
+/test runfailed  # Re-run failed tests
+```
+
+**IDE Run Configurations**:
+
+- **NeoForge**: Use "NeoForge GameTest Server" run configuration
+- **Fabric**: Use `./gradlew runClientGameTest` task
+
+##### Automated Testing (CI/CD)
+
+**Gradle Tasks**:
+```bash
+# NeoForge: Run all GameTests via GameTestServer
+./gradlew :neoforge:runGameTestServer
+
+# Fabric: Run server game tests
+./gradlew :fabric:build  # Includes game tests
+
+# Fabric: Run client game tests
+./gradlew :fabric:runClientGameTest
+```
+
+**Exit Codes**: Number of failed required tests (0 = success, perfect for CI pipelines)
+
+##### GitHub Actions Integration
+
+`.github/workflows/gametest.yml`:
+```yaml
+name: GameTest CI
+
+on: [push, pull_request]
+
+jobs:
+  neoforge-gametest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'microsoft'
+          java-version: '21'
+      - name: Run NeoForge GameTests
+        run: ./gradlew :neoforge:runGameTestServer
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: neoforge-gametest-results
+          path: neoforge/build/gametest-results/
+
+  fabric-gametest:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'microsoft'
+          java-version: '21'
+      - name: Run Fabric Server GameTests
+        run: ./gradlew :fabric:build
+      - name: Run Fabric Client GameTests
+        run: ./gradlew :fabric:runProductionClientGameTest
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: fabric-gametest-screenshots
+          path: fabric/build/run/clientGameTest/screenshots
+```
+
+#### 6. Example Code Structure for Boss Fight Testing
+
+##### Directory Structure
+```
+Chronosphere/
+├── common/
+│   ├── src/main/resources/data/chronosphere/structure/
+│   │   ├── boss_fight_arena.nbt          # Arena structure
+│   │   ├── master_clock_test.nbt         # Master Clock test scenario
+│   │   └── phantom_catacombs_test.nbt    # Phantom Catacombs test
+│   └── src/test/java/com/chronosphere/gametest/
+│       ├── TimeTyrantGameTest.java       # Time Tyrant boss tests
+│       ├── TimeGuardianGameTest.java     # Time Guardian boss tests
+│       ├── EntropyKeeperGameTest.java    # Entropy Keeper boss tests
+│       ├── MasterClockStructureTest.java # Structure generation tests
+│       └── PortalActivationTest.java     # Portal mechanics tests
+├── neoforge/
+│   └── src/main/java/com/chronosphere/neoforge/
+│       └── ChronosphereGameTestRegistrar.java  # NeoForge test registration
+└── fabric/
+    ├── src/main/resources/fabric.mod.json       # Fabric test entrypoints
+    └── src/gametest/java/com/chronosphere/fabric/gametest/
+        └── FabricTimeTyrantTest.java            # Fabric-specific setup (optional)
+```
+
+##### Complete Example: Master Clock Structure Test
+
+```java
+// common/src/test/java/com/chronosphere/gametest/MasterClockStructureTest.java
+package com.chronosphere.gametest;
+
+import net.minecraft.gametest.framework.GameTest;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.BlockPos;
+
+public class MasterClockStructureTest {
+
+    @GameTest(
+        template = "chronosphere:master_clock_test",
+        timeoutTicks = 200,
+        required = true
+    )
+    public static void testEntranceStructureIntegrity(GameTestHelper helper) {
+        // Verify entrance dimensions (15x10x15 blocks)
+        // Check floor at Y=0
+        helper.assertBlockPresent(Blocks.DEEPSLATE_BRICKS, new BlockPos(7, 0, 7));
+
+        // Check walls exist
+        helper.assertBlockPresent(Blocks.DEEPSLATE_BRICKS, new BlockPos(0, 5, 7));
+        helper.assertBlockPresent(Blocks.DEEPSLATE_BRICKS, new BlockPos(14, 5, 7));
+
+        // Verify door is locked (custom block check)
+        BlockPos doorPos = new BlockPos(7, 1, 0);
+        helper.assertBlockPresent(Blocks.IRON_DOOR, doorPos);
+        // TODO: Check door is in "locked" state via block entity data
+
+        helper.succeed();
+    }
+
+    @GameTest(
+        template = "chronosphere:master_clock_test",
+        timeoutTicks = 400
+    )
+    public static void testBossRoomGeneration(GameTestHelper helper) {
+        // Navigate to boss room area (offset from entrance)
+        BlockPos bossRoomCenter = new BlockPos(50, 1, 50);
+
+        // Verify boss room dimensions (35x20x35 blocks)
+        helper.assertBlockPresent(Blocks.DEEPSLATE_BRICKS, bossRoomCenter.below());
+
+        // Verify ceiling height
+        helper.assertBlockPresent(Blocks.DEEPSLATE_BRICKS, bossRoomCenter.above(19));
+
+        // Verify boss spawn point exists
+        helper.assertBlockPresent(Blocks.AIR, bossRoomCenter.above());
+
+        helper.succeed();
+    }
+
+    @GameTest(
+        template = "chronosphere:master_clock_test",
+        timeoutTicks = 1000
+    )
+    public static void testAncientGearLootChests(GameTestHelper helper) {
+        // Verify 3+ loot chests exist with Ancient Gear items
+        BlockPos chest1 = new BlockPos(20, 1, 20);
+        BlockPos chest2 = new BlockPos(30, 1, 30);
+        BlockPos chest3 = new BlockPos(40, 1, 40);
+
+        helper.assertBlockPresent(Blocks.CHEST, chest1);
+        helper.assertBlockPresent(Blocks.CHEST, chest2);
+        helper.assertBlockPresent(Blocks.CHEST, chest3);
+
+        // TODO: Check chest loot tables contain Ancient Gear
+        // This requires accessing block entity data and verifying loot table reference
+
+        helper.succeed();
+    }
+}
+```
+
+##### Complete Example: Entropy Keeper Boss Test
+
+```java
+// common/src/test/java/com/chronosphere/gametest/EntropyKeeperGameTest.java
+package com.chronosphere.gametest;
+
+import net.minecraft.gametest.framework.GameTest;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.core.BlockPos;
+
+public class EntropyKeeperGameTest {
+
+    @GameTest(
+        template = "chronosphere:entropy_crypt_boss_room",
+        timeoutTicks = 6000,
+        required = true
+    )
+    public static void testEntropyKeeperSpawnsWhenPlayerEnters(GameTestHelper helper) {
+        BlockPos bossRoomCenter = new BlockPos(12, 5, 12);
+        BlockPos entrancePos = new BlockPos(5, 1, 5);
+
+        // Verify no boss initially
+        helper.assertEntityNotPresent(EntityType.WITHER, bossRoomCenter, 15.0);
+
+        // Simulate player entering boss room
+        var player = helper.makeMockPlayer();
+        helper.setBlock(entrancePos, Blocks.AIR);  // Open entrance
+        player.setPos(bossRoomCenter.getX(), bossRoomCenter.getY(), bossRoomCenter.getZ());
+
+        // Verify boss spawns after delay
+        helper.runAtTickTime(20, () -> {
+            helper.assertEntityPresent(
+                EntityType.WITHER,  // Placeholder - replace with ModEntities.ENTROPY_KEEPER
+                bossRoomCenter,
+                15.0
+            );
+        });
+
+        helper.succeed();
+    }
+
+    @GameTest(
+        template = "chronosphere:entropy_crypt_boss_room",
+        timeoutTicks = 12000
+    )
+    public static void testEntropyKeeperRewardChestOnDefeat(GameTestHelper helper) {
+        BlockPos bossRoomCenter = new BlockPos(12, 5, 12);
+        BlockPos rewardChestPos = new BlockPos(12, 1, 18);
+
+        // Spawn boss
+        var entropyKeeper = helper.spawn(EntityType.WITHER, bossRoomCenter);
+
+        // Verify reward chest doesn't exist initially
+        helper.assertBlockNotPresent(Blocks.CHEST, rewardChestPos);
+
+        // Kill boss
+        helper.runAtTickTime(100, () -> {
+            entropyKeeper.kill();
+        });
+
+        // Verify reward chest spawns after boss death
+        helper.runAtTickTime(120, () -> {
+            helper.assertBlockPresent(Blocks.CHEST, rewardChestPos);
+            // TODO: Verify chest contains Entropy Shard loot
+        });
+
+        helper.succeed();
+    }
+}
+```
+
+#### 7. Best Practices for Chronosphere Mod GameTests
+
+##### Structure Templates
+- **Size**: Keep test structures small (max 50x50x50) to reduce memory usage
+- **Relative coordinates**: Use `helper.absolutePos(relativePos)` for portability
+- **Markers**: Place structure void blocks to indicate spawn points, test zones
+- **Isolation**: Each test should be self-contained, not depend on previous tests
+
+##### Test Organization
+- **One concern per test**: Test boss spawning separately from boss abilities
+- **Descriptive names**: `testTimeTyrantPhase2TeleportAbility` better than `testPhase2`
+- **Timeout values**: Boss fight tests need 6000-12000 ticks (5-10 minutes)
+- **Required flag**: Mark critical tests as `required = true` for CI failure detection
+
+##### Assertion Strategy
+- **Early assertions**: Verify preconditions first (structure integrity, entity absence)
+- **Scheduled checks**: Use `runAtTickTime()` for time-dependent events
+- **Final success**: Use `succeedWhen()` for continuous monitoring, `succeed()` for immediate pass
+
+##### Debugging
+- **Enable GameTest logging**: Set log level to DEBUG for `net.minecraft.gametest`
+- **In-game visualization**: GameTest renders test boundaries and failure markers
+- **Screenshot tests**: Fabric's `context.takeScreenshot()` for visual regression testing
+
+#### 8. Differences from Current Test Approach
+
+**Current State** (JUnit + @Disabled tests):
+```java
+@Disabled("Requires Minecraft runtime environment - tested in-game")
+@Test
+public void testTimeTyrantSpawnsInBossRoom() {
+    fail("Time Tyrant spawning requires Minecraft runtime (tested in-game)");
+}
+```
+
+**With GameTest Framework**:
+```java
+@GameTest(template = "chronosphere:boss_fight_arena", timeoutTicks = 6000)
+public static void testTimeTyrantSpawnsInBossRoom(GameTestHelper helper) {
+    var boss = helper.spawn(ModEntities.TIME_TYRANT.get(), new BlockPos(17, 4, 17));
+    helper.assertTrue(boss.isAlive(), "Time Tyrant should spawn alive");
+    helper.succeed();
+}
+```
+
+**Advantages**:
+- **Executable**: Tests run in actual Minecraft environment, not just stubs
+- **Automated**: Can run via CI/CD without manual intervention
+- **Verifiable**: Assertions validate actual behavior, not just documentation
+- **Regression detection**: Tests fail if boss mechanics break in future changes
+
+### Implementation Roadmap
+
+#### Phase 1: Setup GameTest Infrastructure
+1. Add GameTestServer run configuration to `neoforge/build.gradle`
+2. Configure Fabric test source set in `fabric/build.gradle`
+3. Create test structure directory: `common/src/main/resources/data/chronosphere/structure/`
+
+#### Phase 2: Create Basic Test Structures
+1. Launch dev client, build small test arenas using structure blocks
+2. Save structures for boss fights (Time Tyrant, Time Guardian, Entropy Keeper)
+3. Copy .nbt files to `common/src/main/resources/data/chronosphere/structure/`
+
+#### Phase 3: Write Core GameTests
+1. Migrate `TimeTyrantFightTest` from @Disabled JUnit to executable GameTest
+2. Migrate `TimeGuardianFightTest` from @Disabled JUnit to executable GameTest
+3. Create new `EntropyKeeperGameTest` for boss fight validation
+
+#### Phase 4: Structure Generation Tests
+1. Convert `MasterClockTest` file existence checks to structural integrity tests
+2. Add Phantom Catacombs structure generation validation
+3. Add Entropy Crypt structure generation validation
+
+#### Phase 5: Integration Testing
+1. Portal activation and dimension travel tests
+2. Item ability tests (Chronoblade time-skip, Time Guardian's Mail rollback)
+3. Loot table validation tests
+
+#### Phase 6: CI/CD Integration
+1. Create GitHub Actions workflow for automated GameTest runs
+2. Configure screenshot uploads for Fabric client tests
+3. Set up test result artifact collection
+
+### References
+
+**Official Documentation**:
+- [NeoForge GameTest Docs](https://docs.neoforged.net/docs/misc/gametest/)
+- [Fabric Automated Testing](https://docs.fabricmc.net/develop/automatic-testing)
+- [Minecraft Wiki - GameTest](https://minecraft.wiki/w/GameTest)
+
+**Implementation Guides**:
+- [SizableShrimp's Forge GameTest Guide](https://gist.github.com/SizableShrimp/60ad4109e3d0a23107a546b3bc0d9752)
+- [Fabric GameTest API](https://maven.fabricmc.net/docs/fabric-api-0.125.3+1.21.5/net/fabricmc/fabric/api/client/gametest/v1/package-summary.html)
+
+**Community Examples**:
+- Forge 1.18+ GameTest examples in vanilla Minecraft codebase
+- Fabric example mods with GameTest implementations
+
+### Next Steps
+
+次のタスクとして以下を追加することを推奨します:
+
+1. **T240 [US3] Setup GameTest infrastructure for NeoForge and Fabric**
+   - Priority: P1
+   - Tasks:
+     - Add GameTestServer run configuration to neoforge/build.gradle
+     - Configure Fabric test source set in fabric/build.gradle
+     - Create test structure directory structure
+
+2. **T241 [US3] Create boss fight test structures**
+   - Priority: P2
+   - Tasks:
+     - Build Time Tyrant arena structure (35x20x35)
+     - Build Time Guardian arena structure (25x15x25)
+     - Build Entropy Keeper arena structure (25x15x25)
+     - Save structures to common/src/main/resources/data/chronosphere/structure/
+
+3. **T242 [US3] Migrate boss fight tests to executable GameTests**
+   - Priority: P2
+   - Dependencies: T240, T241
+   - Tasks:
+     - Convert TimeTyrantFightTest to use @GameTest annotations
+     - Convert TimeGuardianFightTest to use @GameTest annotations
+     - Create EntropyKeeperGameTest with executable tests
+     - Register tests in NeoForge (RegisterGameTestsEvent)
+     - Register tests in Fabric (fabric.mod.json entrypoint)
+
+4. **T243 [US3] Add structure generation GameTests**
+   - Priority: P2
+   - Dependencies: T240
+   - Tasks:
+     - Create Master Clock structural integrity tests
+     - Create Phantom Catacombs structure validation tests
+     - Create Entropy Crypt structure validation tests
+
+5. **T244 [US3] Setup GameTest CI/CD pipeline**
+   - Priority: P3
+   - Dependencies: T242, T243
+   - Tasks:
+     - Create GitHub Actions workflow for NeoForge GameTests
+     - Create GitHub Actions workflow for Fabric GameTests
+     - Configure test artifact uploads
