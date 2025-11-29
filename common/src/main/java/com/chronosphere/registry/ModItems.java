@@ -25,6 +25,7 @@ import com.chronosphere.items.consumables.ChronoMelonJuiceItem;
 import com.chronosphere.items.consumables.TimelessMushroomSoupItem;
 import com.chronosphere.items.consumables.EnhancedTimeBreadItem;
 import com.chronosphere.items.consumables.TimeWheatCookieItem;
+import com.chronosphere.items.consumables.ClockworkCookieItem;
 import com.chronosphere.items.consumables.GoldenTimeWheatItem;
 import com.chronosphere.items.equipment.ClockstoneArmorItem;
 import com.chronosphere.items.equipment.ClockstoneAxeItem;
@@ -755,6 +756,16 @@ public class ModItems {
     );
 
     /**
+     * Clockwork Cookie - Time-themed cookie with defensive effects.
+     * Restores 2 hunger points with Resistance I (30s) and Fire Resistance (30s).
+     * Recipe: 2x Time Wheat + 1x Time Jam + 2x Clockwork Block → 4x Clockwork Cookie
+     */
+    public static final RegistrySupplier<Item> CLOCKWORK_COOKIE = ITEMS.register(
+        "clockwork_cookie",
+        () -> new ClockworkCookieItem(ClockworkCookieItem.createProperties())
+    );
+
+    /**
      * Golden Time Wheat - Time Wheat infused with gold, providing powerful effects.
      * Restores 4 hunger points with Regeneration II (10s) and Absorption II (2min).
      * Recipe: 1x Time Wheat + 8x Gold Ingots
@@ -1206,6 +1217,7 @@ public class ModItems {
         output.accept(CHRONO_MELON_JUICE.get());
         output.accept(ENHANCED_TIME_BREAD.get());
         output.accept(TIME_WHEAT_COOKIE.get());
+        output.accept(CLOCKWORK_COOKIE.get());
         output.accept(GOLDEN_TIME_WHEAT.get());
 
         // === Equipment - Weapons ===

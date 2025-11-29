@@ -132,7 +132,8 @@
     [
       "chronosphere:ore_gold",
       "chronosphere:ore_redstone",
-      "chronosphere:ore_time_crystal"
+      "chronosphere:ore_time_crystal",
+      "chronosphere:clockwork_block_cluster"
     ],
     [],
     [],
