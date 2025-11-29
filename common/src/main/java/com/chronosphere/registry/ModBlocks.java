@@ -39,6 +39,7 @@ import com.chronosphere.blocks.TimeWheatBlock;
 import com.chronosphere.blocks.TimeWheatBaleBlock;
 import com.chronosphere.blocks.TemporalRootBlock;
 import com.chronosphere.blocks.ChronoMelonStemBlock;
+import com.chronosphere.blocks.AttachedChronoMelonStemBlock;
 import com.chronosphere.blocks.ChronoMelonBlock;
 import com.chronosphere.blocks.TimelessMushroomBlock;
 import com.chronosphere.registry.ModFluids;
@@ -396,6 +397,18 @@ public class ModBlocks {
         "chrono_melon_stem",
         () -> new ChronoMelonStemBlock(
             Block.Properties.ofFullCopy(Blocks.MELON_STEM)
+        )
+    );
+
+    /**
+     * Attached Chrono Melon Stem - Stem attached to a grown Chrono Melon.
+     * Appears when a mature stem successfully grows a melon on an adjacent block.
+     * Points toward the melon it's attached to.
+     */
+    public static final RegistrySupplier<Block> ATTACHED_CHRONO_MELON_STEM = BLOCKS.register(
+        "attached_chrono_melon_stem",
+        () -> new AttachedChronoMelonStemBlock(
+            Block.Properties.ofFullCopy(Blocks.ATTACHED_MELON_STEM)
         )
     );
 

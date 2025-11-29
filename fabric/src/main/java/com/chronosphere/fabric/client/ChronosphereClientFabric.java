@@ -83,6 +83,40 @@ public class ChronosphereClientFabric implements ClientModInitializer {
             (stack, tintIndex) -> 0x78A6DA,
             ModBlocks.TIME_WOOD_LEAVES.get()
         );
+
+        // Register Chrono Melon Stem color (like vanilla melon/pumpkin stems)
+        // Color transitions from green (young) to golden-amber (mature)
+        ColorProviderRegistry.BLOCK.register(
+            (state, world, pos, tintIndex) -> {
+                int age = state.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.AGE_7);
+                // Calculate color based on age (0-7)
+                // Young (0): Green (0x5DBF41)
+                // Mature (7): Golden-Amber (0xD4AF37)
+                int r = (int) (93 + (212 - 93) * age / 7.0);  // 93 -> 212
+                int g = (int) (191 + (175 - 191) * age / 7.0); // 191 -> 175
+                int b = (int) (65 + (55 - 65) * age / 7.0);   // 65 -> 55
+                return (r << 16) | (g << 8) | b;
+            },
+            ModBlocks.CHRONO_MELON_STEM.get()
+        );
+
+        // Register item color for Chrono Melon Stem (use mature color)
+        ColorProviderRegistry.ITEM.register(
+            (stack, tintIndex) -> 0xD4AF37, // Golden-amber
+            ModBlocks.CHRONO_MELON_STEM.get()
+        );
+
+        // Register Attached Chrono Melon Stem color (use mature color - golden-amber)
+        ColorProviderRegistry.BLOCK.register(
+            (state, world, pos, tintIndex) -> 0xD4AF37,
+            ModBlocks.ATTACHED_CHRONO_MELON_STEM.get()
+        );
+
+        // Register item color for Attached Chrono Melon Stem
+        ColorProviderRegistry.ITEM.register(
+            (stack, tintIndex) -> 0xD4AF37,
+            ModBlocks.ATTACHED_CHRONO_MELON_STEM.get()
+        );
     }
 
     /**
@@ -149,6 +183,12 @@ public class ChronosphereClientFabric implements ClientModInitializer {
         // Register Chrono Melon Stem to use cutout rendering (for transparency)
         BlockRenderLayerMap.INSTANCE.putBlock(
             ModBlocks.CHRONO_MELON_STEM.get(),
+            RenderType.cutout()
+        );
+
+        // Register Attached Chrono Melon Stem to use cutout rendering (for transparency)
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.ATTACHED_CHRONO_MELON_STEM.get(),
             RenderType.cutout()
         );
 

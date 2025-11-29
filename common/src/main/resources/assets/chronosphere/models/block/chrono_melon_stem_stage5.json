@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/stem_growth5",
   "textures": {
-    "stem": "chronosphere:block/chrono_melon_stem_stage_5"
+    "stem": "chronosphere:block/chrono_melon_stem"
   }
 }

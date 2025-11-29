@@ -5,7 +5,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.AttachedStemBlock;
+import net.minecraft.world.level.block.StemBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
@@ -28,14 +29,22 @@ import net.minecraft.world.level.block.state.BlockState;
  *
  * Note:
  * - Drops are handled by loot table (chrono_melon.json)
- * - No special logic needed beyond standard Block class
+ * - Extends GourdBlock to work with stem system
  *
  * Reference: WORK_NOTES.md (Crop 2: Chrono Melon)
  * Task: T212 [US1] Create Chrono Melon block
  */
-public class ChronoMelonBlock extends Block {
+public class ChronoMelonBlock extends net.minecraft.world.level.block.Block {
     public ChronoMelonBlock(Properties properties) {
         super(properties);
+    }
+
+    public StemBlock getStem() {
+        return (StemBlock) ModBlocks.CHRONO_MELON_STEM.get();
+    }
+
+    public AttachedStemBlock getAttachedStem() {
+        return (AttachedStemBlock) ModBlocks.ATTACHED_CHRONO_MELON_STEM.get();
     }
 
     @Override
