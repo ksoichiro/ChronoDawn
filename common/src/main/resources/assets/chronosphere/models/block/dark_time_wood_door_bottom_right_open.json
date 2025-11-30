@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_bottom_right_open",
+  "textures": {
+    "top": "chronosphere:block/dark_time_wood_door_top",
+    "bottom": "chronosphere:block/dark_time_wood_door_bottom"
+  }
+}

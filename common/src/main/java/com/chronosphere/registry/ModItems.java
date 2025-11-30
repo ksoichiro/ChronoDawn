@@ -189,6 +189,78 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_PLANKS.get(), new Item.Properties())
     );
 
+    /**
+     * Dark Time Wood Stairs - BlockItem for placing Dark Time Wood Stairs.
+     */
+    public static final RegistrySupplier<Item> DARK_TIME_WOOD_STAIRS = ITEMS.register(
+        "dark_time_wood_stairs",
+        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_STAIRS.get(), new Item.Properties())
+    );
+
+    /**
+     * Dark Time Wood Slab - BlockItem for placing Dark Time Wood Slab.
+     */
+    public static final RegistrySupplier<Item> DARK_TIME_WOOD_SLAB = ITEMS.register(
+        "dark_time_wood_slab",
+        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_SLAB.get(), new Item.Properties())
+    );
+
+    /**
+     * Dark Time Wood Fence - BlockItem for placing Dark Time Wood Fence.
+     */
+    public static final RegistrySupplier<Item> DARK_TIME_WOOD_FENCE = ITEMS.register(
+        "dark_time_wood_fence",
+        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_FENCE.get(), new Item.Properties())
+    );
+
+    /**
+     * Dark Time Wood Door - BlockItem for placing Dark Time Wood Door.
+     */
+    public static final RegistrySupplier<Item> DARK_TIME_WOOD_DOOR = ITEMS.register(
+        "dark_time_wood_door",
+        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_DOOR.get(), new Item.Properties())
+    );
+
+    /**
+     * Dark Time Wood Trapdoor - BlockItem for placing Dark Time Wood Trapdoor.
+     */
+    public static final RegistrySupplier<Item> DARK_TIME_WOOD_TRAPDOOR = ITEMS.register(
+        "dark_time_wood_trapdoor",
+        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_TRAPDOOR.get(), new Item.Properties())
+    );
+
+    /**
+     * Dark Time Wood Fence Gate - BlockItem for placing Dark Time Wood Fence Gate.
+     */
+    public static final RegistrySupplier<Item> DARK_TIME_WOOD_FENCE_GATE = ITEMS.register(
+        "dark_time_wood_fence_gate",
+        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_FENCE_GATE.get(), new Item.Properties())
+    );
+
+    /**
+     * Dark Time Wood Button - BlockItem for placing Dark Time Wood Button.
+     */
+    public static final RegistrySupplier<Item> DARK_TIME_WOOD_BUTTON = ITEMS.register(
+        "dark_time_wood_button",
+        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_BUTTON.get(), new Item.Properties())
+    );
+
+    /**
+     * Dark Time Wood Pressure Plate - BlockItem for placing Dark Time Wood Pressure Plate.
+     */
+    public static final RegistrySupplier<Item> DARK_TIME_WOOD_PRESSURE_PLATE = ITEMS.register(
+        "dark_time_wood_pressure_plate",
+        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_PRESSURE_PLATE.get(), new Item.Properties())
+    );
+
+    /**
+     * Dark Time Wood Sapling - BlockItem for placing Dark Time Wood Sapling.
+     */
+    public static final RegistrySupplier<Item> DARK_TIME_WOOD_SAPLING = ITEMS.register(
+        "dark_time_wood_sapling",
+        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_SAPLING.get(), new Item.Properties())
+    );
+
     // === Ancient Time Wood Block Items ===
 
     /**
@@ -213,6 +285,78 @@ public class ModItems {
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_PLANKS = ITEMS.register(
         "ancient_time_wood_planks",
         () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_PLANKS.get(), new Item.Properties())
+    );
+
+    /**
+     * Ancient Time Wood Stairs - BlockItem for placing Ancient Time Wood Stairs.
+     */
+    public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_STAIRS = ITEMS.register(
+        "ancient_time_wood_stairs",
+        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_STAIRS.get(), new Item.Properties())
+    );
+
+    /**
+     * Ancient Time Wood Slab - BlockItem for placing Ancient Time Wood Slab.
+     */
+    public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_SLAB = ITEMS.register(
+        "ancient_time_wood_slab",
+        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_SLAB.get(), new Item.Properties())
+    );
+
+    /**
+     * Ancient Time Wood Fence - BlockItem for placing Ancient Time Wood Fence.
+     */
+    public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_FENCE = ITEMS.register(
+        "ancient_time_wood_fence",
+        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_FENCE.get(), new Item.Properties())
+    );
+
+    /**
+     * Ancient Time Wood Door - BlockItem for placing Ancient Time Wood Door.
+     */
+    public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_DOOR = ITEMS.register(
+        "ancient_time_wood_door",
+        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_DOOR.get(), new Item.Properties())
+    );
+
+    /**
+     * Ancient Time Wood Trapdoor - BlockItem for placing Ancient Time Wood Trapdoor.
+     */
+    public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_TRAPDOOR = ITEMS.register(
+        "ancient_time_wood_trapdoor",
+        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_TRAPDOOR.get(), new Item.Properties())
+    );
+
+    /**
+     * Ancient Time Wood Fence Gate - BlockItem for placing Ancient Time Wood Fence Gate.
+     */
+    public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_FENCE_GATE = ITEMS.register(
+        "ancient_time_wood_fence_gate",
+        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_FENCE_GATE.get(), new Item.Properties())
+    );
+
+    /**
+     * Ancient Time Wood Button - BlockItem for placing Ancient Time Wood Button.
+     */
+    public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_BUTTON = ITEMS.register(
+        "ancient_time_wood_button",
+        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_BUTTON.get(), new Item.Properties())
+    );
+
+    /**
+     * Ancient Time Wood Pressure Plate - BlockItem for placing Ancient Time Wood Pressure Plate.
+     */
+    public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_PRESSURE_PLATE = ITEMS.register(
+        "ancient_time_wood_pressure_plate",
+        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_PRESSURE_PLATE.get(), new Item.Properties())
+    );
+
+    /**
+     * Ancient Time Wood Sapling - BlockItem for placing Ancient Time Wood Sapling.
+     */
+    public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_SAPLING = ITEMS.register(
+        "ancient_time_wood_sapling",
+        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_SAPLING.get(), new Item.Properties())
     );
 
     /**
@@ -1170,10 +1314,28 @@ public class ModItems {
         output.accept(DARK_TIME_WOOD_LOG.get());
         output.accept(DARK_TIME_WOOD_LEAVES.get());
         output.accept(DARK_TIME_WOOD_PLANKS.get());
+        output.accept(DARK_TIME_WOOD_STAIRS.get());
+        output.accept(DARK_TIME_WOOD_SLAB.get());
+        output.accept(DARK_TIME_WOOD_FENCE.get());
+        output.accept(DARK_TIME_WOOD_DOOR.get());
+        output.accept(DARK_TIME_WOOD_TRAPDOOR.get());
+        output.accept(DARK_TIME_WOOD_FENCE_GATE.get());
+        output.accept(DARK_TIME_WOOD_BUTTON.get());
+        output.accept(DARK_TIME_WOOD_PRESSURE_PLATE.get());
+        output.accept(DARK_TIME_WOOD_SAPLING.get());
         // Ancient Time Wood
         output.accept(ANCIENT_TIME_WOOD_LOG.get());
         output.accept(ANCIENT_TIME_WOOD_LEAVES.get());
         output.accept(ANCIENT_TIME_WOOD_PLANKS.get());
+        output.accept(ANCIENT_TIME_WOOD_STAIRS.get());
+        output.accept(ANCIENT_TIME_WOOD_SLAB.get());
+        output.accept(ANCIENT_TIME_WOOD_FENCE.get());
+        output.accept(ANCIENT_TIME_WOOD_DOOR.get());
+        output.accept(ANCIENT_TIME_WOOD_TRAPDOOR.get());
+        output.accept(ANCIENT_TIME_WOOD_FENCE_GATE.get());
+        output.accept(ANCIENT_TIME_WOOD_BUTTON.get());
+        output.accept(ANCIENT_TIME_WOOD_PRESSURE_PLATE.get());
+        output.accept(ANCIENT_TIME_WOOD_SAPLING.get());
         output.accept(TIME_WHEAT_BALE.get());
         output.accept(CLOCK_TOWER_TELEPORTER.get());
         output.accept(CLOCKWORK_BLOCK.get());

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "chronosphere:block/ancient_time_wood_pressure_plate"
+    },
+    "powered=true": {
+      "model": "chronosphere:block/ancient_time_wood_pressure_plate_down"
+    }
+  }
+}

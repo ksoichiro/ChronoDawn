@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    "chronosphere:time_wood_planks"
+    "chronosphere:time_wood_planks",
+    "chronosphere:dark_time_wood_planks",
+    "chronosphere:ancient_time_wood_planks"
   ]
 }

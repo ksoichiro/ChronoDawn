@@ -225,6 +225,58 @@ public class ChronosphereClientFabric implements ClientModInitializer {
             ModBlocks.ENTROPY_CRYPT_TRAPDOOR.get(),
             RenderType.cutout()
         );
+
+        // Register Dark Time Wood blocks to use cutout rendering (for transparency)
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.DARK_TIME_WOOD_SAPLING.get(),
+            RenderType.cutout()
+        );
+
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.POTTED_DARK_TIME_WOOD_SAPLING.get(),
+            RenderType.cutout()
+        );
+
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.DARK_TIME_WOOD_DOOR.get(),
+            RenderType.cutout()
+        );
+
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.DARK_TIME_WOOD_TRAPDOOR.get(),
+            RenderType.cutout()
+        );
+
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.DARK_TIME_WOOD_LEAVES.get(),
+            RenderType.cutoutMipped()
+        );
+
+        // Register Ancient Time Wood blocks to use cutout rendering (for transparency)
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.ANCIENT_TIME_WOOD_SAPLING.get(),
+            RenderType.cutout()
+        );
+
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.POTTED_ANCIENT_TIME_WOOD_SAPLING.get(),
+            RenderType.cutout()
+        );
+
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.ANCIENT_TIME_WOOD_DOOR.get(),
+            RenderType.cutout()
+        );
+
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.ANCIENT_TIME_WOOD_TRAPDOOR.get(),
+            RenderType.cutout()
+        );
+
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.ANCIENT_TIME_WOOD_LEAVES.get(),
+            RenderType.cutoutMipped()
+        );
     }
 
     /**

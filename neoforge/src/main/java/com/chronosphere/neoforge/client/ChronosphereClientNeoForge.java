@@ -311,6 +311,58 @@ public class ChronosphereClientNeoForge {
             ModBlocks.TIMELESS_MUSHROOM.get(),
             RenderType.cutout()
         );
+
+        // Register Dark Time Wood blocks to use cutout rendering (for transparency)
+        ItemBlockRenderTypes.setRenderLayer(
+            ModBlocks.DARK_TIME_WOOD_SAPLING.get(),
+            RenderType.cutout()
+        );
+
+        ItemBlockRenderTypes.setRenderLayer(
+            ModBlocks.POTTED_DARK_TIME_WOOD_SAPLING.get(),
+            RenderType.cutout()
+        );
+
+        ItemBlockRenderTypes.setRenderLayer(
+            ModBlocks.DARK_TIME_WOOD_DOOR.get(),
+            RenderType.cutout()
+        );
+
+        ItemBlockRenderTypes.setRenderLayer(
+            ModBlocks.DARK_TIME_WOOD_TRAPDOOR.get(),
+            RenderType.cutout()
+        );
+
+        ItemBlockRenderTypes.setRenderLayer(
+            ModBlocks.DARK_TIME_WOOD_LEAVES.get(),
+            RenderType.cutoutMipped()
+        );
+
+        // Register Ancient Time Wood blocks to use cutout rendering (for transparency)
+        ItemBlockRenderTypes.setRenderLayer(
+            ModBlocks.ANCIENT_TIME_WOOD_SAPLING.get(),
+            RenderType.cutout()
+        );
+
+        ItemBlockRenderTypes.setRenderLayer(
+            ModBlocks.POTTED_ANCIENT_TIME_WOOD_SAPLING.get(),
+            RenderType.cutout()
+        );
+
+        ItemBlockRenderTypes.setRenderLayer(
+            ModBlocks.ANCIENT_TIME_WOOD_DOOR.get(),
+            RenderType.cutout()
+        );
+
+        ItemBlockRenderTypes.setRenderLayer(
+            ModBlocks.ANCIENT_TIME_WOOD_TRAPDOOR.get(),
+            RenderType.cutout()
+        );
+
+        ItemBlockRenderTypes.setRenderLayer(
+            ModBlocks.ANCIENT_TIME_WOOD_LEAVES.get(),
+            RenderType.cutoutMipped()
+        );
     }
 
     /**

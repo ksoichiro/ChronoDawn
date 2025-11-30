@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "chronosphere:block/dark_time_wood_sapling"
+  }
+}

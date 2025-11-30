@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_trapdoor_top",
+  "textures": {
+    "texture": "chronosphere:block/dark_time_wood_trapdoor"
+  }
+}

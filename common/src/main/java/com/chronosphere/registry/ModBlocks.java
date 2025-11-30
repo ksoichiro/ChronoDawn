@@ -39,9 +39,27 @@ import com.chronosphere.blocks.UnstableFungus;
 import com.chronosphere.blocks.DarkTimeWoodLog;
 import com.chronosphere.blocks.DarkTimeWoodLeaves;
 import com.chronosphere.blocks.DarkTimeWoodPlanks;
+import com.chronosphere.blocks.DarkTimeWoodStairs;
+import com.chronosphere.blocks.DarkTimeWoodSlab;
+import com.chronosphere.blocks.DarkTimeWoodFence;
+import com.chronosphere.blocks.DarkTimeWoodDoor;
+import com.chronosphere.blocks.DarkTimeWoodTrapdoor;
+import com.chronosphere.blocks.DarkTimeWoodFenceGate;
+import com.chronosphere.blocks.DarkTimeWoodButton;
+import com.chronosphere.blocks.DarkTimeWoodPressurePlate;
+import com.chronosphere.blocks.DarkTimeWoodSapling;
 import com.chronosphere.blocks.AncientTimeWoodLog;
 import com.chronosphere.blocks.AncientTimeWoodLeaves;
 import com.chronosphere.blocks.AncientTimeWoodPlanks;
+import com.chronosphere.blocks.AncientTimeWoodStairs;
+import com.chronosphere.blocks.AncientTimeWoodSlab;
+import com.chronosphere.blocks.AncientTimeWoodFence;
+import com.chronosphere.blocks.AncientTimeWoodDoor;
+import com.chronosphere.blocks.AncientTimeWoodTrapdoor;
+import com.chronosphere.blocks.AncientTimeWoodFenceGate;
+import com.chronosphere.blocks.AncientTimeWoodButton;
+import com.chronosphere.blocks.AncientTimeWoodPressurePlate;
+import com.chronosphere.blocks.AncientTimeWoodSapling;
 import com.chronosphere.blocks.TimeWheatBlock;
 import com.chronosphere.blocks.TimeWheatBaleBlock;
 import com.chronosphere.blocks.TemporalRootBlock;
@@ -550,6 +568,86 @@ public class ModBlocks {
         () -> new DarkTimeWoodPlanks(DarkTimeWoodPlanks.createProperties())
     );
 
+    /**
+     * Dark Time Wood Stairs - Stair variant of Dark Time Wood Planks.
+     */
+    public static final RegistrySupplier<Block> DARK_TIME_WOOD_STAIRS = BLOCKS.register(
+        "dark_time_wood_stairs",
+        () -> new DarkTimeWoodStairs(DarkTimeWoodStairs.createProperties())
+    );
+
+    /**
+     * Dark Time Wood Slab - Slab variant of Dark Time Wood Planks.
+     */
+    public static final RegistrySupplier<Block> DARK_TIME_WOOD_SLAB = BLOCKS.register(
+        "dark_time_wood_slab",
+        () -> new DarkTimeWoodSlab(DarkTimeWoodSlab.createProperties())
+    );
+
+    /**
+     * Dark Time Wood Fence - Fence variant of Dark Time Wood Planks.
+     */
+    public static final RegistrySupplier<Block> DARK_TIME_WOOD_FENCE = BLOCKS.register(
+        "dark_time_wood_fence",
+        () -> new DarkTimeWoodFence(DarkTimeWoodFence.createProperties())
+    );
+
+    /**
+     * Dark Time Wood Door - Wooden door that can be opened/closed.
+     */
+    public static final RegistrySupplier<Block> DARK_TIME_WOOD_DOOR = BLOCKS.register(
+        "dark_time_wood_door",
+        () -> new DarkTimeWoodDoor(DarkTimeWoodDoor.createProperties())
+    );
+
+    /**
+     * Dark Time Wood Trapdoor - Wooden trapdoor that can be opened/closed.
+     */
+    public static final RegistrySupplier<Block> DARK_TIME_WOOD_TRAPDOOR = BLOCKS.register(
+        "dark_time_wood_trapdoor",
+        () -> new DarkTimeWoodTrapdoor(DarkTimeWoodTrapdoor.createProperties())
+    );
+
+    /**
+     * Dark Time Wood Fence Gate - Fence gate that connects to fences.
+     */
+    public static final RegistrySupplier<Block> DARK_TIME_WOOD_FENCE_GATE = BLOCKS.register(
+        "dark_time_wood_fence_gate",
+        () -> new DarkTimeWoodFenceGate(DarkTimeWoodFenceGate.createProperties())
+    );
+
+    /**
+     * Dark Time Wood Button - Wooden button that emits redstone signal.
+     */
+    public static final RegistrySupplier<Block> DARK_TIME_WOOD_BUTTON = BLOCKS.register(
+        "dark_time_wood_button",
+        () -> new DarkTimeWoodButton(DarkTimeWoodButton.createProperties())
+    );
+
+    /**
+     * Dark Time Wood Pressure Plate - Wooden pressure plate that emits redstone signal.
+     */
+    public static final RegistrySupplier<Block> DARK_TIME_WOOD_PRESSURE_PLATE = BLOCKS.register(
+        "dark_time_wood_pressure_plate",
+        () -> new DarkTimeWoodPressurePlate(DarkTimeWoodPressurePlate.createProperties())
+    );
+
+    /**
+     * Dark Time Wood Sapling - Grows into Dark Time Wood trees (tall variant).
+     */
+    public static final RegistrySupplier<Block> DARK_TIME_WOOD_SAPLING = BLOCKS.register(
+        "dark_time_wood_sapling",
+        () -> new DarkTimeWoodSapling(DarkTimeWoodSapling.createProperties())
+    );
+
+    /**
+     * Potted Dark Time Wood Sapling - Decorative potted version of Dark Time Wood Sapling.
+     */
+    public static final RegistrySupplier<Block> POTTED_DARK_TIME_WOOD_SAPLING = BLOCKS.register(
+        "potted_dark_time_wood_sapling",
+        () -> new FlowerPotBlock(DARK_TIME_WOOD_SAPLING.get(), Block.Properties.ofFullCopy(Blocks.FLOWER_POT))
+    );
+
     // ===== Ancient Time Wood Blocks =====
 
     /**
@@ -576,6 +674,86 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> ANCIENT_TIME_WOOD_PLANKS = BLOCKS.register(
         "ancient_time_wood_planks",
         () -> new AncientTimeWoodPlanks(AncientTimeWoodPlanks.createProperties())
+    );
+
+    /**
+     * Ancient Time Wood Stairs - Stair variant of Ancient Time Wood Planks.
+     */
+    public static final RegistrySupplier<Block> ANCIENT_TIME_WOOD_STAIRS = BLOCKS.register(
+        "ancient_time_wood_stairs",
+        () -> new AncientTimeWoodStairs(AncientTimeWoodStairs.createProperties())
+    );
+
+    /**
+     * Ancient Time Wood Slab - Slab variant of Ancient Time Wood Planks.
+     */
+    public static final RegistrySupplier<Block> ANCIENT_TIME_WOOD_SLAB = BLOCKS.register(
+        "ancient_time_wood_slab",
+        () -> new AncientTimeWoodSlab(AncientTimeWoodSlab.createProperties())
+    );
+
+    /**
+     * Ancient Time Wood Fence - Fence variant of Ancient Time Wood Planks.
+     */
+    public static final RegistrySupplier<Block> ANCIENT_TIME_WOOD_FENCE = BLOCKS.register(
+        "ancient_time_wood_fence",
+        () -> new AncientTimeWoodFence(AncientTimeWoodFence.createProperties())
+    );
+
+    /**
+     * Ancient Time Wood Door - Wooden door that can be opened/closed.
+     */
+    public static final RegistrySupplier<Block> ANCIENT_TIME_WOOD_DOOR = BLOCKS.register(
+        "ancient_time_wood_door",
+        () -> new AncientTimeWoodDoor(AncientTimeWoodDoor.createProperties())
+    );
+
+    /**
+     * Ancient Time Wood Trapdoor - Wooden trapdoor that can be opened/closed.
+     */
+    public static final RegistrySupplier<Block> ANCIENT_TIME_WOOD_TRAPDOOR = BLOCKS.register(
+        "ancient_time_wood_trapdoor",
+        () -> new AncientTimeWoodTrapdoor(AncientTimeWoodTrapdoor.createProperties())
+    );
+
+    /**
+     * Ancient Time Wood Fence Gate - Fence gate that connects to fences.
+     */
+    public static final RegistrySupplier<Block> ANCIENT_TIME_WOOD_FENCE_GATE = BLOCKS.register(
+        "ancient_time_wood_fence_gate",
+        () -> new AncientTimeWoodFenceGate(AncientTimeWoodFenceGate.createProperties())
+    );
+
+    /**
+     * Ancient Time Wood Button - Wooden button that emits redstone signal.
+     */
+    public static final RegistrySupplier<Block> ANCIENT_TIME_WOOD_BUTTON = BLOCKS.register(
+        "ancient_time_wood_button",
+        () -> new AncientTimeWoodButton(AncientTimeWoodButton.createProperties())
+    );
+
+    /**
+     * Ancient Time Wood Pressure Plate - Wooden pressure plate that emits redstone signal.
+     */
+    public static final RegistrySupplier<Block> ANCIENT_TIME_WOOD_PRESSURE_PLATE = BLOCKS.register(
+        "ancient_time_wood_pressure_plate",
+        () -> new AncientTimeWoodPressurePlate(AncientTimeWoodPressurePlate.createProperties())
+    );
+
+    /**
+     * Ancient Time Wood Sapling - Grows into Ancient Time Wood trees (wide-canopy variant).
+     */
+    public static final RegistrySupplier<Block> ANCIENT_TIME_WOOD_SAPLING = BLOCKS.register(
+        "ancient_time_wood_sapling",
+        () -> new AncientTimeWoodSapling(AncientTimeWoodSapling.createProperties())
+    );
+
+    /**
+     * Potted Ancient Time Wood Sapling - Decorative potted version of Ancient Time Wood Sapling.
+     */
+    public static final RegistrySupplier<Block> POTTED_ANCIENT_TIME_WOOD_SAPLING = BLOCKS.register(
+        "potted_ancient_time_wood_sapling",
+        () -> new FlowerPotBlock(ANCIENT_TIME_WOOD_SAPLING.get(), Block.Properties.ofFullCopy(Blocks.FLOWER_POT))
     );
 
     /**

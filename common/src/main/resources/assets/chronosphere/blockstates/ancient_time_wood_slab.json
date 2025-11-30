@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "chronosphere:block/ancient_time_wood_slab"
+    },
+    "type=top": {
+      "model": "chronosphere:block/ancient_time_wood_slab_top"
+    },
+    "type=double": {
+      "model": "chronosphere:block/ancient_time_wood_planks"
+    }
+  }
+}

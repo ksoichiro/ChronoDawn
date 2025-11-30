@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/flower_pot_cross",
+  "textures": {
+    "plant": "chronosphere:block/ancient_time_wood_sapling"
+  }
+}
