@@ -5545,3 +5545,224 @@ public static void testTimeTyrantSpawnsInBossRoom(GameTestHelper helper) {
      - Create GitHub Actions workflow for NeoForge GameTests
      - Create GitHub Actions workflow for Fabric GameTests
      - Configure test artifact uploads
+
+---
+
+## Time Wood Boats Implementation Plan (T268-T273)
+
+**Created**: 2025-12-01
+**Status**: Research & Planning
+**Purpose**: Add boats and chest boats for all 3 Time Wood variants (Time Wood, Dark Time Wood, Ancient Time Wood)
+
+### Overview
+
+Minecraft 1.21 requires registering custom boat types for modded wood variants. The implementation involves:
+- Custom boat entities (Boat and ChestBoat for each wood type)
+- Items (BoatItem and ChestBoatItem)
+- Textures and models
+- Crafting recipes
+
+### Challenges in Minecraft 1.21 + Architectury
+
+**Boat.Type Enum**: Vanilla uses a hardcoded `Boat.Type` enum for boat variants (OAK, SPRUCE, etc.). Mods cannot extend this enum directly.
+
+**Solutions**:
+1. **Mixin Approach** (not recommended for Architectury):
+   - Use Mixin to inject custom boat types into the enum
+   - Complex, fragile across versions
+   
+2. **Custom Entity Approach** (recommended):
+   - Create completely custom Boat entities extending vanilla Boat
+   - Override `getDropItem()` to return custom boat items
+   - Register as separate entity types
+   - Simpler, more maintainable
+
+### Implementation Plan
+
+#### Option 1: Custom Boat Entities (Recommended)
+
+**Pros**:
+- Clean separation from vanilla
+- Compatible with Architectury multi-loader framework
+- No Mixins required for core functionality
+- Easier to maintain across Minecraft versions
+
+**Cons**:
+- Cannot reuse vanilla Boat entity directly
+- Requires custom entity registration
+
+**Architecture**:
+```
+common/
+  entities/
+    boats/
+      TimeWoodBoat.java (extends Boat)
+      TimeWoodChestBoat.java (extends ChestBoat)
+      DarkTimeWoodBoat.java
+      DarkTimeWoodChestBoat.java
+      AncientTimeWoodBoat.java
+      AncientTimeWoodChestBoat.java
+  items/
+    boats/
+      TimeWoodBoatItem.java (extends BoatItem)
+      TimeWoodChestBoatItem.java (extends ChestBoatItem)
+      (similarly for Dark and Ancient variants)
+  registry/
+    ModEntities.java (register boat entities)
+    ModItems.java (register boat items)
+```
+
+**Entity Implementation Pattern**:
+```java
+public class TimeWoodBoat extends Boat {
+    public TimeWoodBoat(EntityType<? extends Boat> type, Level level) {
+        super(type, level);
+    }
+
+    @Override
+    public Item getDropItem() {
+        return ModItems.TIME_WOOD_BOAT.get();
+    }
+
+    // Optional: Custom behavior (speed, durability, etc.)
+}
+```
+
+**Item Implementation Pattern**:
+```java
+public class TimeWoodBoatItem extends BoatItem {
+    public TimeWoodBoatItem(boolean isChestBoat, Properties properties) {
+        super(isChestBoat, 
+              isChestBoat ? ModEntities.TIME_WOOD_CHEST_BOAT.get() 
+                          : ModEntities.TIME_WOOD_BOAT.get(), 
+              properties);
+    }
+}
+```
+
+#### Textures and Models
+
+**Required Assets**:
+- Boat textures: `assets/chronosphere/textures/entity/boat/time_wood.png`
+- Chest boat textures: `assets/chronosphere/textures/entity/chest_boat/time_wood.png`
+- Item models: Standard boat item models (can reuse vanilla structure)
+
+**Texture Creation Strategy**:
+- Extract vanilla boat textures (oak, spruce, etc.)
+- Apply wood plank color palette (similar to door/trapdoor texture creation)
+- Maintain vanilla boat texture layout
+
+**Vanilla Boat Texture Locations** (for reference):
+```
+assets/minecraft/textures/entity/boat/oak.png
+assets/minecraft/textures/entity/chest_boat/oak.png
+```
+
+#### Crafting Recipes
+
+**Boat Recipe** (shaped):
+```
+Pattern:
+P   P
+PPP
+
+P = time_wood_planks
+Result: time_wood_boat
+```
+
+**Chest Boat Recipe** (shapeless):
+```
+Ingredients:
+- time_wood_boat
+- chest
+
+Result: time_wood_chest_boat
+```
+
+### Implementation Steps (T268-T273)
+
+**T268: Time Wood Boat & Chest Boat**
+1. Create `TimeWoodBoat.java` and `TimeWoodChestBoat.java` entities
+2. Create `TimeWoodBoatItem.java` and `TimeWoodChestBoatItem.java`
+3. Register entities and items in `ModEntities` and `ModItems`
+4. Add to creative tab
+
+**T269: Dark Time Wood Boat & Chest Boat**
+1. Create `DarkTimeWoodBoat.java` and `DarkTimeWoodChestBoat.java`
+2. Create corresponding items
+3. Register entities and items
+
+**T270: Ancient Time Wood Boat & Chest Boat**
+1. Create `AncientTimeWoodBoat.java` and `AncientTimeWoodChestBoat.java`
+2. Create corresponding items
+3. Register entities and items
+
+**T271: Crafting Recipes**
+1. Create 6 shaped recipes (3 boat variants)
+2. Create 6 shapeless recipes (3 chest boat variants)
+3. Add recipe unlock advancements (on obtaining planks)
+
+**T272: Textures and Models**
+1. Extract vanilla oak boat textures as base
+2. Apply Time Wood color palettes (use plank colors as reference)
+3. Create 3 boat textures + 3 chest boat textures
+4. Create item models (can reuse vanilla structure)
+5. Test in-game rendering
+
+**T273: Testing**
+1. Test boat placement and riding in water
+2. Test chest boat storage functionality
+3. Test crafting recipes
+4. Test boat breaking and item drops
+5. Verify in Chronosphere ocean biome
+
+### Architectury-Specific Considerations
+
+**Entity Registration**:
+- Use `ArchitecturyEntityType.Builder` for cross-loader compatibility
+- Register in common module, implement renderers in fabric/neoforge client modules
+
+**Renderer Registration** (per-loader):
+- **Fabric**: Use `EntityRendererRegistry.register()` in client initializer
+- **NeoForge**: Use `EntityRenderersEvent.RegisterRenderers` event
+
+**Example Entity Registration**:
+```java
+// common/registry/ModEntities.java
+public static final RegistrySupplier<EntityType<TimeWoodBoat>> TIME_WOOD_BOAT = 
+    ENTITIES.register("time_wood_boat", () ->
+        EntityType.Builder.<TimeWoodBoat>of(TimeWoodBoat::new, MobCategory.MISC)
+            .sized(1.375F, 0.5625F)
+            .clientTrackingRange(10)
+            .build("time_wood_boat")
+    );
+```
+
+### Alternative: Boat API Libraries
+
+**Not Recommended** for this project due to:
+1. Architectury multi-loader requirement (many boat libraries are loader-specific)
+2. Desire for minimal external dependencies
+3. Custom entity approach is straightforward enough
+
+### References
+
+- Vanilla Minecraft 1.21 Boat implementation: `net.minecraft.world.entity.vehicle.Boat`
+- Vanilla ChestBoat: `net.minecraft.world.entity.vehicle.ChestBoat`
+- Architectury Entity Documentation: https://docs.architectury.dev/
+- Similar implementation: Other wood type mods (e.g., Biomes O' Plenty, Traverse)
+
+### Estimated Effort
+
+- **T268-T270 (Entities & Items)**: 2-3 hours (repetitive but straightforward)
+- **T271 (Recipes)**: 30 minutes
+- **T272 (Textures)**: 2-3 hours (texture extraction and color adjustment)
+- **T273 (Testing)**: 1 hour
+- **Total**: 5-7 hours
+
+### Notes
+
+- Boats use vanilla wooden planks for repair (not a concern, players can use vanilla planks)
+- Consider adding boat variants to loot tables if desired (fishing, shipwrecks)
+- Boat sounds use vanilla boat sounds (no custom sounds needed)
+

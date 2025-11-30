@@ -76,12 +76,37 @@
 
 **Note**: オーシャンバイオームでの移動手段として有用。3種類の木材それぞれに対応
 
+**Implementation Approach**: Custom Boat entities (extending vanilla Boat/ChestBoat) for Architectury compatibility. See research.md "Time Wood Boats Implementation Plan" for detailed architecture.
+
+**Estimated Effort**: 5-7 hours total
+
 - [ ] T268 [P] [US1] Create Time Wood Boat and Time Wood Chest Boat items and entities
+  - Create TimeWoodBoat.java and TimeWoodChestBoat.java (extend vanilla Boat/ChestBoat)
+  - Create TimeWoodBoatItem.java and TimeWoodChestBoatItem.java
+  - Register entities in ModEntities, items in ModItems
 - [ ] T269 [P] [US1] Create Dark Time Wood Boat and Dark Time Wood Chest Boat items and entities
+  - Create DarkTimeWoodBoat.java and DarkTimeWoodChestBoat.java
+  - Create corresponding items
+  - Register entities and items
 - [ ] T270 [P] [US1] Create Ancient Time Wood Boat and Ancient Time Wood Chest Boat items and entities
+  - Create AncientTimeWoodBoat.java and AncientTimeWoodChestBoat.java
+  - Create corresponding items
+  - Register entities and items
 - [ ] T271 [P] [US1] Add boat crafting recipes (planks → boat, boat + chest → chest boat)
+  - Create 6 shaped recipes (3 boat variants: 5 planks in boat shape)
+  - Create 6 shapeless recipes (3 chest boat variants: boat + chest)
+  - Add recipe unlock advancements (on obtaining planks)
 - [ ] T272 [P] [US1] Create boat textures and models for all 3 variants
+  - Extract vanilla oak boat textures as base
+  - Apply Time Wood color palettes (use plank textures as color reference)
+  - Create 3 boat textures + 3 chest boat textures (6 total)
+  - Create item models (can reuse vanilla boat item model structure)
 - [ ] T273 [US1] Test boat functionality (movement, durability, chest storage) in Chronosphere ocean biome
+  - Test boat placement and riding
+  - Test chest boat storage
+  - Test crafting recipes
+  - Test boat breaking and item drops
+  - Verify entity rendering on both Fabric and NeoForge
 
 ### Decorative Terrain Features (US1 Enhancement)
 
