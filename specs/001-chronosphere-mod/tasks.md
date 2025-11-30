@@ -414,7 +414,14 @@
 - [x] T238g-j: Time Tyrant integration (Time Stop Resistance, Dimensional Anchor, Temporal Shield, Time Reversal Disruption)
 - [x] T238k: Implement safe Clarity effect (implemented using PLAYER_POST event in EntityEventHandler)
 - [x] T238l: Multiplayer safeguards implemented
-- [ ] T238m-p: Testing tasks (crafting, effects, multiplayer, balance)
+- [x] T238m: Test Chrono Aegis crafting from 4 boss drops
+  - **Completed**: Changed recipe to shapeless (1 of each boss item instead of 2)
+  - **Completed**: Added recipe unlock advancement (triggers on any boss item obtained)
+  - **Result**: Recipe unlocks when player obtains any of the 4 boss items, providing clear guidance
+  - **Commit**: fab50ba
+- [ ] T238n: Test Chrono Aegis effects against Time Tyrant (Time Stop Resistance, Dimensional Anchor, Temporal Shield, Time Reversal Disruption, Clarity)
+- [ ] T238o: Test multiplayer scenario (2+ players with Chrono Aegis, verify debuff flags don't stack)
+- [ ] T238p: Balance testing: Time Tyrant fight with vs without Chrono Aegis
 - [ ] T238q: Full playthrough test
 - [ ] T238u-x: Documentation updates
 
