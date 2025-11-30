@@ -21,8 +21,8 @@ This guide explains how to protect boss rooms from block breaking using the Boss
 
 ```
 1. Structure Editing (Structure Block)
-   ├─ Place boss_room_min marker at SW floor corner
-   └─ Place boss_room_max marker at NE ceiling corner
+   ├─ Place boss_room_min marker at NW floor corner
+   └─ Place boss_room_max marker at SE ceiling corner
 
 2. World Generation
    ├─ Structure generation starts
@@ -57,14 +57,14 @@ This guide explains how to protect boss rooms from block breaking using the Boss
 Place **two** marker blocks to define the boss room bounding box:
 
 #### Minimum Marker (boss_room_min)
-- **Position**: Southwest floor corner
-  - Southwest = smallest X, smallest Z
+- **Position**: Northwest floor corner
+  - Northwest = smallest X (West), smallest Z (North)
   - Floor = smallest Y
 - **Example**: If boss room is (10, 60, 20) to (30, 70, 40) → place at (10, 60, 20)
 
 #### Maximum Marker (boss_room_max)
-- **Position**: Northeast ceiling corner
-  - Northeast = largest X, largest Z
+- **Position**: Southeast ceiling corner
+  - Southeast = largest X (East), largest Z (South)
   - Ceiling = largest Y
 - **Example**: If boss room is (10, 60, 20) to (30, 70, 40) → place at (30, 70, 40)
 
@@ -113,11 +113,11 @@ Y-axis (vertical)
 │       MIN (10, 60, 20)
 │
 └────────────────────────────→ X/Z-axis (horizontal)
-      SW                 NE
+      NW                 SE
 ```
 
-- **MIN marker**: Southwest + Floor (smallest X, Y, Z)
-- **MAX marker**: Northeast + Ceiling (largest X, Y, Z)
+- **MIN marker**: Northwest + Floor (smallest X, Y, Z)
+- **MAX marker**: Southeast + Ceiling (largest X, Y, Z)
 
 ## Integration with Structure Processor
 

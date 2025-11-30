@@ -15,13 +15,16 @@ import com.chronosphere.neoforge.compat.CustomPortalNeoForge;
 import com.chronosphere.neoforge.registry.ModParticles;
 import com.chronosphere.registry.ModEntities;
 import com.chronosphere.registry.ModItems;
+import com.chronosphere.worldgen.processors.BossRoomProtectionProcessor;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 @Mod(Chronosphere.MOD_ID)
 public class ChronosphereNeoForge {
@@ -40,7 +43,18 @@ public class ChronosphereNeoForge {
         // Common setup - initialize spawn eggs after entities are registered
         modEventBus.addListener(this::commonSetup);
 
+        // Register server tick event for pending boss room protections
+        NeoForge.EVENT_BUS.addListener(this::onServerTick);
+
         Chronosphere.LOGGER.info("Chronosphere Mod (NeoForge) initialized");
+    }
+
+    /**
+     * Server tick event handler for NeoForge.
+     * Registers pending boss room protections.
+     */
+    private void onServerTick(ServerTickEvent.Post event) {
+        event.getServer().getAllLevels().forEach(BossRoomProtectionProcessor::registerPendingProtections);
     }
 
     /**

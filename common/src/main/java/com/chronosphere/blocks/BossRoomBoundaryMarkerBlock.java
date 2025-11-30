@@ -22,8 +22,8 @@ import org.jetbrains.annotations.Nullable;
  * - Full block with collision (easy to place in Structure Block editor)
  *
  * Usage in structure files:
- * - Place at boss room's southwest floor corner: {MarkerType: "boss_room_min", ReplaceWith: "minecraft:stone_bricks"}
- * - Place at boss room's northeast ceiling corner: {MarkerType: "boss_room_max", ReplaceWith: "minecraft:air"}
+ * - Place at boss room's northwest floor corner: {MarkerType: "boss_room_min", ReplaceWith: "minecraft:stone_bricks"}
+ * - Place at boss room's southeast ceiling corner: {MarkerType: "boss_room_max", ReplaceWith: "minecraft:air"}
  *
  * Processing flow:
  * 1. Structure generation starts

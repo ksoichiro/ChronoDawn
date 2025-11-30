@@ -1,7 +1,6 @@
 package com.chronosphere.worldgen.processors;
 
 import com.chronosphere.Chronosphere;
-import com.chronosphere.blocks.BossRoomBoundaryMarkerBlockEntity;
 import com.chronosphere.registry.ModBlocks;
 import com.chronosphere.worldgen.protection.BlockProtectionHandler;
 import com.mojang.serialization.MapCodec;
@@ -15,26 +14,32 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProc
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Boss Room Protection Processor
  *
  * Detects Boss Room Boundary Marker blocks during structure generation and:
- * 1. Collects min/max marker positions
- * 2. Calculates BoundingBox from marker positions
- * 3. Registers protection with BlockProtectionHandler
- * 4. Replaces markers with specified blocks
+ * 1. Collects marker positions (min and max)
+ * 2. Stores positions in pending map for later registration
+ * 3. Replaces markers with specified blocks
  *
- * Processing happens in two phases:
- * - Phase 1 (processBlock): Collect marker positions and replace blocks
- * - Phase 2 (finalizeProcessing): Register protection after all blocks processed
+ * Protection registration is deferred to server tick because:
+ * - Structure generation happens in background threads
+ * - ServerLevel is not available during structure processing
+ * - Need to wait until world is ready to register protection
+ *
+ * Thread-safety:
+ * - Uses ConcurrentHashMap for thread-safe marker storage
+ * - Each marker is stored independently with world position as key
+ * - Pairing happens during registration phase (single-threaded server tick)
  *
  * Usage:
  * - Place Boss Room Boundary Marker blocks in structure NBT at boss room corners
  * - Add this processor to structure's processor_list
  * - Markers will be replaced with specified blocks during generation
+ * - Protection will be registered on next server tick
  * - Boss room will be protected until boss is defeated
  *
  * Implementation: T224 - Boss room protection with marker blocks
@@ -43,10 +48,22 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
     public static final MapCodec<BossRoomProtectionProcessor> CODEC =
         MapCodec.unit(BossRoomProtectionProcessor::new);
 
-    // Collected marker positions during processing
-    private BlockPos minMarkerPos = null;
-    private BlockPos maxMarkerPos = null;
-    private boolean protectionRegistered = false;
+    /**
+     * Marker data stored during structure generation.
+     */
+    private static class MarkerData {
+        final BlockPos pos;
+        final boolean isMin;
+
+        MarkerData(BlockPos pos, boolean isMin) {
+            this.pos = pos.immutable();
+            this.isMin = isMin;
+        }
+    }
+
+    // Pending markers to process during server tick
+    // Key: marker world position (unique), Value: marker data
+    private static final Map<BlockPos, MarkerData> PENDING_MARKERS = new ConcurrentHashMap<>();
 
     @Override
     protected StructureProcessorType<?> getType() {
@@ -57,8 +74,8 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
     @Override
     public StructureTemplate.StructureBlockInfo processBlock(
         LevelReader level,
-        BlockPos jigsawPos,
-        BlockPos relativePos,
+        BlockPos structurePos,
+        BlockPos piecePos,
         StructureTemplate.StructureBlockInfo originalBlockInfo,
         StructureTemplate.StructureBlockInfo currentBlockInfo,
         StructurePlaceSettings settings
@@ -68,32 +85,41 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
             return currentBlockInfo;
         }
 
-        // Get the BlockEntity to read marker type and replacement block
+        // Read marker type and replacement block from NBT
         BlockPos worldPos = currentBlockInfo.pos();
-        var blockEntity = level.getBlockEntity(worldPos);
+        var nbt = currentBlockInfo.nbt();
 
-        if (!(blockEntity instanceof BossRoomBoundaryMarkerBlockEntity markerEntity)) {
-            Chronosphere.LOGGER.warn("Boss Room Boundary Marker at {} has no BlockEntity", worldPos);
+        if (nbt == null) {
+            Chronosphere.LOGGER.warn("Boss Room Boundary Marker at {} has no NBT data", worldPos);
             return currentBlockInfo;
         }
 
-        // Collect marker positions
-        if (markerEntity.isMinMarker()) {
-            minMarkerPos = worldPos.immutable();
-            Chronosphere.LOGGER.info("Found boss room min marker at {}", minMarkerPos);
-        } else if (markerEntity.isMaxMarker()) {
-            maxMarkerPos = worldPos.immutable();
-            Chronosphere.LOGGER.info("Found boss room max marker at {}", maxMarkerPos);
+        String markerType = nbt.getString("MarkerType");
+        String replaceWith = nbt.getString("ReplaceWith");
+
+        if (markerType.isEmpty() || replaceWith.isEmpty()) {
+            Chronosphere.LOGGER.warn("Boss Room Boundary Marker at {} has incomplete NBT (MarkerType={}, ReplaceWith={})",
+                worldPos, markerType, replaceWith);
+            return currentBlockInfo;
         }
 
-        // Register protection if we have both markers (only once per structure)
-        if (minMarkerPos != null && maxMarkerPos != null && !protectionRegistered && level instanceof ServerLevel serverLevel) {
-            registerProtection(serverLevel);
+        // Store marker data for later pairing
+        boolean isMin = "boss_room_min".equals(markerType);
+        boolean isMax = "boss_room_max".equals(markerType);
+
+        if (isMin || isMax) {
+            PENDING_MARKERS.put(worldPos.immutable(), new MarkerData(worldPos, isMin));
+            Chronosphere.LOGGER.debug("Stored {} marker at {} for later registration",
+                isMin ? "min" : "max", worldPos);
         }
 
         // Replace marker with specified block
-        var replacementState = markerEntity.getReplacementState();
-        Chronosphere.LOGGER.info("Replacing boss room marker at {} with {}", worldPos, replacementState);
+        var replacementBlock = net.minecraft.core.registries.BuiltInRegistries.BLOCK.get(
+            net.minecraft.resources.ResourceLocation.parse(replaceWith)
+        );
+        var replacementState = replacementBlock.defaultBlockState();
+
+        Chronosphere.LOGGER.debug("Replacing boss room marker at {} with {}", worldPos, replacementState);
 
         return new StructureTemplate.StructureBlockInfo(
             worldPos,
@@ -103,32 +129,95 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
     }
 
     /**
-     * Register boss room protection with BlockProtectionHandler.
+     * Register all pending boss room protections.
+     * Should be called from server tick event (single-threaded, safe to do pairing).
+     *
+     * Algorithm:
+     * 1. Find all min markers
+     * 2. For each min marker, find closest max marker
+     * 3. Register protection if pair found and distance is reasonable
+     * 4. Remove processed markers
      */
-    private void registerProtection(ServerLevel level) {
-        if (minMarkerPos == null || maxMarkerPos == null) {
-            Chronosphere.LOGGER.error("Cannot register boss room protection: missing marker positions");
+    public static void registerPendingProtections(ServerLevel level) {
+        if (PENDING_MARKERS.isEmpty()) {
             return;
         }
 
-        // Create BoundingBox from marker positions
-        BoundingBox bossRoomArea = new BoundingBox(
-            Math.min(minMarkerPos.getX(), maxMarkerPos.getX()),
-            Math.min(minMarkerPos.getY(), maxMarkerPos.getY()),
-            Math.min(minMarkerPos.getZ(), maxMarkerPos.getZ()),
-            Math.max(minMarkerPos.getX(), maxMarkerPos.getX()),
-            Math.max(minMarkerPos.getY(), maxMarkerPos.getY()),
-            Math.max(minMarkerPos.getZ(), maxMarkerPos.getZ())
-        );
+        // Separate min and max markers
+        List<MarkerData> minMarkers = new ArrayList<>();
+        List<MarkerData> maxMarkers = new ArrayList<>();
 
-        // Use the min marker position as the unique ID for this boss room
-        BlockProtectionHandler.registerProtectedArea(level, bossRoomArea, minMarkerPos);
+        for (MarkerData marker : PENDING_MARKERS.values()) {
+            // Check if marker is in this dimension (chunk must be loaded)
+            if (!level.hasChunkAt(marker.pos)) {
+                continue;
+            }
 
-        Chronosphere.LOGGER.info(
-            "Registered boss room protection: min={}, max={}, bounds={}",
-            minMarkerPos, maxMarkerPos, bossRoomArea
-        );
+            if (marker.isMin) {
+                minMarkers.add(marker);
+            } else {
+                maxMarkers.add(marker);
+            }
+        }
 
-        protectionRegistered = true;
+        // Pair min and max markers
+        List<BlockPos> processedMarkers = new ArrayList<>();
+
+        for (MarkerData minMarker : minMarkers) {
+            // Find closest max marker (should be in same structure)
+            MarkerData closestMax = null;
+            double closestDistance = Double.MAX_VALUE;
+
+            for (MarkerData maxMarker : maxMarkers) {
+                double distance = minMarker.pos.distSqr(maxMarker.pos);
+
+                // Reasonable distance check: boss rooms are typically < 100 blocks across
+                // Distance squared < 100^2 = 10000 (in any dimension)
+                if (distance < 10000 && distance < closestDistance) {
+                    closestMax = maxMarker;
+                    closestDistance = distance;
+                }
+            }
+
+            if (closestMax != null) {
+                // Register protection
+                BlockPos minPos = minMarker.pos;
+                BlockPos maxPos = closestMax.pos;
+
+                BoundingBox bossRoomArea = new BoundingBox(
+                    Math.min(minPos.getX(), maxPos.getX()),
+                    Math.min(minPos.getY(), maxPos.getY()),
+                    Math.min(minPos.getZ(), maxPos.getZ()),
+                    Math.max(minPos.getX(), maxPos.getX()),
+                    Math.max(minPos.getY(), maxPos.getY()),
+                    Math.max(minPos.getZ(), maxPos.getZ())
+                );
+
+                BlockProtectionHandler.registerProtectedArea(level, bossRoomArea, minPos);
+
+                Chronosphere.LOGGER.info(
+                    "Registered boss room protection in dimension {}: min={}, max={}, bounds={}",
+                    level.dimension().location(), minPos, maxPos, bossRoomArea
+                );
+
+                // Mark for removal
+                processedMarkers.add(minPos);
+                processedMarkers.add(maxPos);
+
+                // Remove max marker from list to prevent re-pairing
+                maxMarkers.remove(closestMax);
+            } else {
+                Chronosphere.LOGGER.warn("Found min marker at {} but no matching max marker within 100 blocks",
+                    minMarker.pos);
+            }
+        }
+
+        // Remove processed markers
+        processedMarkers.forEach(PENDING_MARKERS::remove);
+
+        // Log remaining unpaired markers (for debugging)
+        if (!PENDING_MARKERS.isEmpty() && !minMarkers.isEmpty()) {
+            Chronosphere.LOGGER.warn("Still have {} unpaired markers after registration", PENDING_MARKERS.size());
+        }
     }
 }

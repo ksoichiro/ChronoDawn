@@ -14,7 +14,9 @@ import com.chronosphere.entities.mobs.TimeKeeperEntity;
 import com.chronosphere.fabric.compat.CustomPortalFabric;
 import com.chronosphere.fabric.event.BlockProtectionEventHandler;
 import com.chronosphere.registry.ModEntities;
+import com.chronosphere.worldgen.processors.BossRoomProtectionProcessor;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.SpawnPlacements;
@@ -40,6 +42,11 @@ public class ChronosphereFabric implements ModInitializer {
 
         // Register block protection event handler
         BlockProtectionEventHandler.register();
+
+        // Register server tick event for pending boss room protections
+        ServerTickEvents.END_SERVER_TICK.register(server -> {
+            server.getAllLevels().forEach(BossRoomProtectionProcessor::registerPendingProtections);
+        });
 
         Chronosphere.LOGGER.info("Chronosphere Mod (Fabric) initialized");
     }
