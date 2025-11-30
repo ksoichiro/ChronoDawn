@@ -45,6 +45,16 @@
 - [ ] T086c [US1] Design special tool specification for breaking restoration blocks (crafting recipe, mechanics, additional features)
 - [ ] T086d [US1] Implement worldgen features and/or structure integration for special block placement
 
+### Basic Resources (US1 Enhancement - High Priority)
+
+**Purpose**: Chronosphere内でサバイバルプレイに必要な基本リソースを入手可能にする
+
+**Note**: 石炭は松明や燃料として必須。長期滞在を可能にするため優先度は高い
+
+- [ ] T265 [P] [US1] Add coal ore generation in Chronosphere (frequency, Y-level distribution, biome placement)
+- [ ] T266 [P] [US1] Configure coal ore worldgen feature (vein size, rarity comparable to Overworld)
+- [ ] T267 [US1] Test coal ore generation and verify mining/smelting works correctly
+
 ### Additional Tree Variants (US1 Enhancement - Optional, Low Priority)
 
 **Purpose**: 木のバリエーションを増やして視覚的多様性を向上
@@ -54,6 +64,19 @@
 - [X] T088t [P] [US1] (Optional) Design Time Wood color variants (e.g., Dark Time Wood, Ancient Time Wood)
 - [X] T088u [P] [US1] (Optional) Create variant textures and block definitions
 - [X] T088v [P] [US1] (Optional) Create variant tree features and configure placement in different biomes
+
+### Time Wood Boats & Chest Boats (US1 Enhancement - Medium Priority)
+
+**Purpose**: Time Wood系の木材から舟とチェスト付き舟を作成可能にする
+
+**Note**: オーシャンバイオームでの移動手段として有用。3種類の木材それぞれに対応
+
+- [ ] T268 [P] [US1] Create Time Wood Boat and Time Wood Chest Boat items and entities
+- [ ] T269 [P] [US1] Create Dark Time Wood Boat and Dark Time Wood Chest Boat items and entities
+- [ ] T270 [P] [US1] Create Ancient Time Wood Boat and Ancient Time Wood Chest Boat items and entities
+- [ ] T271 [P] [US1] Add boat crafting recipes (planks → boat, boat + chest → chest boat)
+- [ ] T272 [P] [US1] Create boat textures and models for all 3 variants
+- [ ] T273 [US1] Test boat functionality (movement, durability, chest storage) in Chronosphere ocean biome
 
 ### Decorative Terrain Features (US1 Enhancement)
 
