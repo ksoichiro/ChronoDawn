@@ -289,7 +289,14 @@
 
 **Purpose**: Master Clock Towerとボス戦の問題修正と体験向上
 
-- [ ] T223 [P] [US3] Rename "boss_room_door" to time-themed name in localization files (e.g., "Time Tyrant's Chamber Door", "Temporal Sanctum Door")
+- [X] T223 [P] [US3] Rename "boss_room_door" to time-themed name in localization files (e.g., "Time Tyrant's Chamber Door", "Temporal Sanctum Door")
+  - **Decision**: No changes needed - keeping generic "Boss Room Door" name
+  - **Rationale**:
+    1. "boss_room_door" is used across 5+ boss structures (Master Clock, Guardian Vault, Clockwork Depths, Phantom Catacombs, Entropy Crypt)
+    2. Generic name is appropriate for multi-purpose use across all bosses
+    3. "boss room" terminology is already consistent project-wide (boss_room_protected, boss_room_locked, BossRoomDoorBlock, etc.)
+    4. Large impact scope (NBT structures, Java classes, message keys, translations) with minimal benefit
+  - **Current Translation**: EN: "Boss Room Door", JP: "ボス部屋のドア"
 - [X] T224 [P] [US3] Fix Clock Tower teleporter block durability issue (make unbreakable or add protection mechanism to prevent breaking)
   - **Completed**: Implemented survival mode protection in ClockTowerTeleporterBlock.java
   - **Implementation**: playerWillDestroy() cancels destruction, getDestroyProgress() returns 0, attack() shows message
@@ -309,7 +316,10 @@
   - **Implementation**: All 4 pools (surface, stairs, corridor, boss_room) use `convert_decorative_water` processor
   - **System**: StructureStartMixin removes Aquifer water, CopyFluidLevelProcessor preserves decorative water
   - **Result**: Water features preserved correctly, unwanted waterlogging prevented
-- [ ] T228 [P] [US3] Add glowing effect to Time Tyrant entity for visibility (apply Glowing status effect or custom shader/outline rendering)
+- [X] T228 [P] [US3] Add glowing effect to Time Tyrant entity for visibility (apply Glowing status effect or custom shader/outline rendering)
+  - **Decision**: No changes needed - glowing effect not necessary
+  - **Rationale**: In-game testing shows Time Tyrant actively pursues players and stays visible regardless of dungeon layout
+  - **AI Behavior**: Entity's aggressive proximity-seeking AI ensures visibility without additional visual effects
 - [X] T229 [P] [US3] Fix Time Tyrant teleport suffocation bug (validate teleport destination has 2+ air blocks above, revert position if invalid)
   - **Completed**: Implemented comprehensive safe teleport validation in TimeTyrantEntity.java
   - **Changes**:
@@ -329,7 +339,9 @@
   - **Fix**: Added Time Tyrant exclusion to TimeDistortionEffect.java (similar to existing Time Guardian exclusion)
   - **Verification**: Tested in-game (Survival mode) - Time Acceleration now works correctly with visible particle effects and increased speed
   - **Documentation**: Detailed investigation results recorded in research.md (lines 3401-3549)
-- [ ] T230 [US3] Test all Master Clock Tower and boss battle fixes in-game
+- [X] T230 [US3] Test all Master Clock Tower and boss battle fixes in-game
+  - **Completed**: Tested T224-T229 fixes in-game
+  - **Verified**: Clock Tower teleporter protection, boss room access control, Time Tyrant teleport safety, buff/debuff behavior all working correctly
 
 ### Ancient Gears Acquisition (US3 Bug Fix - Critical Priority)
 
