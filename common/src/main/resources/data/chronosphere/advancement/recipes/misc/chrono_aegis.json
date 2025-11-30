@@ -1,0 +1,73 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_guardian_stone": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "chronosphere:guardian_stone"
+            ]
+          }
+        ]
+      }
+    },
+    "has_phantom_essence": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "chronosphere:phantom_essence"
+            ]
+          }
+        ]
+      }
+    },
+    "has_colossus_gear": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "chronosphere:colossus_gear"
+            ]
+          }
+        ]
+      }
+    },
+    "has_entropy_core": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "chronosphere:entropy_core"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "chronosphere:chrono_aegis"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_guardian_stone",
+      "has_phantom_essence",
+      "has_colossus_gear",
+      "has_entropy_core",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "chronosphere:chrono_aegis"
+    ]
+  }
+}
