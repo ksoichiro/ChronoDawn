@@ -4,6 +4,7 @@ import com.chronosphere.core.time.MobAICanceller;
 import com.chronosphere.entities.bosses.ExtendedMeleeAttackGoal;
 import com.chronosphere.registry.ModEffects;
 import com.chronosphere.registry.ModItems;
+import com.chronosphere.worldgen.protection.BlockProtectionHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -905,5 +906,15 @@ public class TimeTyrantEntity extends Monster {
     @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
         return false; // Boss never despawns
+    }
+
+    @Override
+    public void die(DamageSource cause) {
+        super.die(cause);
+
+        // Unprotect Master Clock boss room when defeated
+        if (!this.level().isClientSide && this.level() instanceof ServerLevel serverLevel) {
+            BlockProtectionHandler.onBossDefeatedAt(serverLevel, this.blockPosition());
+        }
     }
 }

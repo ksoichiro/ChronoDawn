@@ -5,6 +5,7 @@ import com.chronosphere.entities.ai.TimeGuardianRangedAttackGoal;
 import com.chronosphere.entities.projectiles.TimeBlastEntity;
 import com.chronosphere.registry.ModItems;
 import com.chronosphere.entities.bosses.ExtendedMeleeAttackGoal;
+import com.chronosphere.worldgen.protection.BlockProtectionHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -636,6 +637,11 @@ public class TimeGuardianEntity extends Monster implements RangedAttackMob {
         if (!this.level().isClientSide) {
             // Reversed resonance trigger will be implemented in EntityEventHandler (T115)
             // This is handled separately to maintain clean separation of concerns
+
+            // Unprotect Desert Clock Tower boss room when defeated
+            if (this.level() instanceof ServerLevel serverLevel) {
+                BlockProtectionHandler.onBossDefeatedAt(serverLevel, this.blockPosition());
+            }
         }
     }
 

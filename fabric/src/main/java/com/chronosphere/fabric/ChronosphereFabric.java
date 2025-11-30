@@ -44,8 +44,14 @@ public class ChronosphereFabric implements ModInitializer {
         BlockProtectionEventHandler.register();
 
         // Register server tick event for pending boss room protections
+        // Check every 100 ticks (5 seconds) instead of every tick to reduce load
+        final int[] tickCounter = {0};
         ServerTickEvents.END_SERVER_TICK.register(server -> {
-            server.getAllLevels().forEach(BossRoomProtectionProcessor::registerPendingProtections);
+            tickCounter[0]++;
+            if (tickCounter[0] >= 100) {
+                tickCounter[0] = 0;
+                server.getAllLevels().forEach(BossRoomProtectionProcessor::registerPendingProtections);
+            }
         });
 
         Chronosphere.LOGGER.info("Chronosphere Mod (Fabric) initialized");

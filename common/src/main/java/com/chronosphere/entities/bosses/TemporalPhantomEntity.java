@@ -1,5 +1,6 @@
 package com.chronosphere.entities.bosses;
 
+import com.chronosphere.worldgen.protection.BlockProtectionHandler;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -357,5 +358,15 @@ public class TemporalPhantomEntity extends Monster implements RangedAttackMob {
 
     public boolean isPhaseShiftActive() {
         return this.entityData.get(PHASE_SHIFT_ACTIVE);
+    }
+
+    @Override
+    public void die(net.minecraft.world.damagesource.DamageSource cause) {
+        super.die(cause);
+
+        // Unprotect Phantom Catacombs boss room when defeated
+        if (!this.level().isClientSide && this.level() instanceof net.minecraft.server.level.ServerLevel serverLevel) {
+            BlockProtectionHandler.onBossDefeatedAt(serverLevel, this.blockPosition());
+        }
     }
 }

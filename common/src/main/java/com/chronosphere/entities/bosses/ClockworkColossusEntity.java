@@ -1,5 +1,7 @@
 package com.chronosphere.entities.bosses;
 
+import com.chronosphere.Chronosphere;
+import com.chronosphere.worldgen.protection.BlockProtectionHandler;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -516,5 +518,15 @@ public class ClockworkColossusEntity extends Monster implements RangedAttackMob 
     @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
         return false;
+    }
+
+    @Override
+    public void die(DamageSource cause) {
+        super.die(cause);
+
+        // Unprotect Clockwork Depths boss room when defeated
+        if (!this.level().isClientSide && this.level() instanceof ServerLevel serverLevel) {
+            BlockProtectionHandler.onBossDefeatedAt(serverLevel, this.blockPosition());
+        }
     }
 }

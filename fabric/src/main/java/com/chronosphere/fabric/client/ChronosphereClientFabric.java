@@ -1,5 +1,6 @@
 package com.chronosphere.fabric.client;
 
+import com.chronosphere.client.model.ClockworkColossusModel;
 import com.chronosphere.client.model.ClockworkSentinelModel;
 import com.chronosphere.client.model.FloqModel;
 import com.chronosphere.client.model.TemporalWraithModel;
@@ -9,6 +10,7 @@ import com.chronosphere.client.model.TimeTyrantModel;
 import com.chronosphere.client.renderer.ChronosWardenRenderer;
 import com.chronosphere.client.renderer.ClockworkColossusRenderer;
 import com.chronosphere.client.renderer.EntropyKeeperRenderer;
+import com.chronosphere.client.renderer.GearProjectileRenderer;
 import com.chronosphere.client.renderer.TemporalPhantomRenderer;
 import com.chronosphere.client.renderer.TimeArrowRenderer;
 import com.chronosphere.client.renderer.TimeBlastRenderer;
@@ -264,6 +266,12 @@ public class ChronosphereClientFabric implements ClientModInitializer {
             FloqModel.LAYER_LOCATION,
             FloqModel::createBodyLayer
         );
+
+        // Register Clockwork Colossus model layer
+        EntityModelLayerRegistry.registerModelLayer(
+            ClockworkColossusRenderer.LAYER_LOCATION,
+            ClockworkColossusModel::createBodyLayer
+        );
     }
 
     /**
@@ -298,6 +306,12 @@ public class ChronosphereClientFabric implements ClientModInitializer {
         EntityRendererRegistry.register(
             ModEntities.TIME_BLAST.get(),
             TimeBlastRenderer::new
+        );
+
+        // Register Gear Projectile with custom renderer
+        EntityRendererRegistry.register(
+            ModEntities.GEAR_PROJECTILE.get(),
+            GearProjectileRenderer::new
         );
 
         // Register custom mobs with custom renderers

@@ -3,6 +3,7 @@ package com.chronosphere.worldgen.processors;
 import com.chronosphere.Chronosphere;
 import com.chronosphere.registry.ModBlocks;
 import com.chronosphere.worldgen.protection.BlockProtectionHandler;
+import com.chronosphere.worldgen.spawning.ClockworkColossusSpawner;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -54,16 +55,24 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
     private static class MarkerData {
         final BlockPos pos;
         final boolean isMin;
+        final long addedTime; // Track when marker was added (for cleanup)
 
         MarkerData(BlockPos pos, boolean isMin) {
             this.pos = pos.immutable();
             this.isMin = isMin;
+            this.addedTime = System.currentTimeMillis();
         }
     }
 
     // Pending markers to process during server tick
     // Key: marker world position (unique), Value: marker data
+    // Note: All dimensions share same map, but registration filters by loaded chunks
     private static final Map<BlockPos, MarkerData> PENDING_MARKERS = new ConcurrentHashMap<>();
+
+    // Track last cleanup time to prevent memory leak from orphaned markers
+    private static long lastCleanupTime = System.currentTimeMillis();
+    private static final long CLEANUP_INTERVAL_MS = 60000; // Clean up every 60 seconds
+    private static final long MARKER_EXPIRY_MS = 300000; // Expire markers after 5 minutes
 
     @Override
     protected StructureProcessorType<?> getType() {
@@ -143,15 +152,37 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
             return;
         }
 
+        // Cleanup expired markers periodically to prevent memory leak
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastCleanupTime > CLEANUP_INTERVAL_MS) {
+            cleanupExpiredMarkers(currentTime);
+            lastCleanupTime = currentTime;
+        }
+
         // Separate min and max markers
+        // ONLY process markers in loaded chunks to avoid checking unloaded dimensions
         List<MarkerData> minMarkers = new ArrayList<>();
         List<MarkerData> maxMarkers = new ArrayList<>();
 
-        for (MarkerData marker : PENDING_MARKERS.values()) {
-            // Check if marker is in this dimension (chunk must be loaded)
-            if (!level.hasChunkAt(marker.pos)) {
+        // Optimization: Batch process to limit work per tick
+        int processedCount = 0;
+        final int MAX_PROCESS_PER_CALL = 20; // Limit processing to prevent lag
+
+        for (var entry : PENDING_MARKERS.entrySet()) {
+            // Limit work per call to prevent lag spikes
+            if (processedCount >= MAX_PROCESS_PER_CALL) {
+                break;
+            }
+
+            MarkerData marker = entry.getValue();
+
+            // Quick check: Is chunk loaded in this dimension?
+            // This is faster than full hasChunkAt() as it checks the chunk map cache
+            if (!level.hasChunk(marker.pos.getX() >> 4, marker.pos.getZ() >> 4)) {
                 continue;
             }
+
+            processedCount++;
 
             if (marker.isMin) {
                 minMarkers.add(marker);
@@ -195,6 +226,17 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
 
                 BlockProtectionHandler.registerProtectedArea(level, bossRoomArea, minPos);
 
+                // Also register with Clockwork Colossus spawner if this is Clockwork Depths
+                // Check if the bounding box is within reasonable size for engine room (typically ~30x30x16)
+                int width = bossRoomArea.maxX() - bossRoomArea.minX();
+                int depth = bossRoomArea.maxZ() - bossRoomArea.minZ();
+                int height = bossRoomArea.maxY() - bossRoomArea.minY();
+
+                // Clockwork Depths engine room is roughly 30x30x16
+                if (width >= 20 && width <= 40 && depth >= 20 && depth <= 40 && height >= 10 && height <= 25) {
+                    ClockworkColossusSpawner.registerEngineRoom(level, bossRoomArea);
+                }
+
                 Chronosphere.LOGGER.info(
                     "Registered boss room protection in dimension {}: min={}, max={}, bounds={}",
                     level.dimension().location(), minPos, maxPos, bossRoomArea
@@ -218,6 +260,32 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
         // Log remaining unpaired markers (for debugging)
         if (!PENDING_MARKERS.isEmpty() && !minMarkers.isEmpty()) {
             Chronosphere.LOGGER.warn("Still have {} unpaired markers after registration", PENDING_MARKERS.size());
+        }
+    }
+
+    /**
+     * Clean up expired markers to prevent memory leak.
+     * Removes markers that have been pending for more than MARKER_EXPIRY_MS milliseconds.
+     *
+     * @param currentTime Current system time in milliseconds
+     */
+    private static void cleanupExpiredMarkers(long currentTime) {
+        int removedCount = 0;
+        Iterator<Map.Entry<BlockPos, MarkerData>> iterator = PENDING_MARKERS.entrySet().iterator();
+
+        while (iterator.hasNext()) {
+            Map.Entry<BlockPos, MarkerData> entry = iterator.next();
+            MarkerData marker = entry.getValue();
+
+            if (currentTime - marker.addedTime > MARKER_EXPIRY_MS) {
+                iterator.remove();
+                removedCount++;
+            }
+        }
+
+        if (removedCount > 0) {
+            Chronosphere.LOGGER.info("Cleaned up {} expired boss room markers (older than {} seconds)",
+                removedCount, MARKER_EXPIRY_MS / 1000);
         }
     }
 }

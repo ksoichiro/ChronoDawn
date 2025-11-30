@@ -1,9 +1,6 @@
 {
   "processors": [
     {
-      "processor_type": "chronosphere:copy_fluid_level"
-    },
-    {
       "processor_type": "chronosphere:boss_room_protection"
     }
   ]

@@ -13,6 +13,7 @@ import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -43,10 +44,10 @@ public class ChronosWardenSpawner {
     );
 
     // Track structure positions where we've already attempted to spawn Chronos Warden
-    private static final Set<BlockPos> spawnedStructures = new HashSet<>();
+    private static final Set<BlockPos> spawnedStructures = Collections.synchronizedSet(new HashSet<>());
 
     // Track boss room doors that have already spawned Chronos Warden
-    private static final Set<BlockPos> spawnedDoors = new HashSet<>();
+    private static final Set<BlockPos> spawnedDoors = Collections.synchronizedSet(new HashSet<>());
 
     // Check interval (in ticks) - check every 5 seconds
     private static final int CHECK_INTERVAL = 100;

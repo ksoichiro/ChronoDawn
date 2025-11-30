@@ -1,6 +1,7 @@
 package com.chronosphere.neoforge.client;
 
 import com.chronosphere.Chronosphere;
+import com.chronosphere.client.model.ClockworkColossusModel;
 import com.chronosphere.client.model.ClockworkSentinelModel;
 import com.chronosphere.client.model.FloqModel;
 import com.chronosphere.client.model.TemporalWraithModel;
@@ -10,6 +11,7 @@ import com.chronosphere.client.model.TimeTyrantModel;
 import com.chronosphere.client.renderer.ChronosWardenRenderer;
 import com.chronosphere.client.renderer.ClockworkColossusRenderer;
 import com.chronosphere.client.renderer.EntropyKeeperRenderer;
+import com.chronosphere.client.renderer.GearProjectileRenderer;
 import com.chronosphere.client.renderer.TemporalPhantomRenderer;
 import com.chronosphere.client.renderer.TimeArrowRenderer;
 import com.chronosphere.client.renderer.TimeBlastRenderer;
@@ -113,6 +115,11 @@ public class ChronosphereClientNeoForge {
             FloqModel::createBodyLayer
         );
 
+        event.registerLayerDefinition(
+            ClockworkColossusRenderer.LAYER_LOCATION,
+            ClockworkColossusModel::createBodyLayer
+        );
+
         Chronosphere.LOGGER.info("Registered entity model layers for NeoForge");
     }
 
@@ -152,6 +159,12 @@ public class ChronosphereClientNeoForge {
         event.registerEntityRenderer(
             ModEntities.TIME_BLAST.get(),
             TimeBlastRenderer::new
+        );
+
+        // Register Gear Projectile with custom renderer
+        event.registerEntityRenderer(
+            ModEntities.GEAR_PROJECTILE.get(),
+            GearProjectileRenderer::new
         );
 
         // Register Clockwork Colossus with custom renderer

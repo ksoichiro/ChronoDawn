@@ -1,5 +1,6 @@
 package com.chronosphere.entities.bosses;
 
+import com.chronosphere.worldgen.protection.BlockProtectionHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -394,5 +395,15 @@ public class EntropyKeeperEntity extends Monster {
     public void setCustomName(net.minecraft.network.chat.Component name) {
         super.setCustomName(name);
         this.bossEvent.setName(this.getDisplayName());
+    }
+
+    @Override
+    public void die(net.minecraft.world.damagesource.DamageSource cause) {
+        super.die(cause);
+
+        // Unprotect Entropy Crypt boss room when defeated
+        if (!this.level().isClientSide && this.level() instanceof net.minecraft.server.level.ServerLevel serverLevel) {
+            BlockProtectionHandler.onBossDefeatedAt(serverLevel, this.blockPosition());
+        }
     }
 }

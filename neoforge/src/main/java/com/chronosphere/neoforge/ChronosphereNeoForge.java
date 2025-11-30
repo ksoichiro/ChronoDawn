@@ -28,6 +28,8 @@ import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 @Mod(Chronosphere.MOD_ID)
 public class ChronosphereNeoForge {
+    private int tickCounter = 0;
+
     public ChronosphereNeoForge(IEventBus modEventBus) {
         Chronosphere.init();
 
@@ -52,9 +54,14 @@ public class ChronosphereNeoForge {
     /**
      * Server tick event handler for NeoForge.
      * Registers pending boss room protections.
+     * Check every 100 ticks (5 seconds) instead of every tick to reduce load.
      */
     private void onServerTick(ServerTickEvent.Post event) {
-        event.getServer().getAllLevels().forEach(BossRoomProtectionProcessor::registerPendingProtections);
+        tickCounter++;
+        if (tickCounter >= 100) {
+            tickCounter = 0;
+            event.getServer().getAllLevels().forEach(BossRoomProtectionProcessor::registerPendingProtections);
+        }
     }
 
     /**
