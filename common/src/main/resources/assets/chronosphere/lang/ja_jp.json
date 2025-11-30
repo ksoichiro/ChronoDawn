@@ -168,6 +168,7 @@
   "message.chronosphere.time_clock_boss_limit": "タイムクロックは効果がない - このフェーズで既に使用済みだ",
   "message.chronosphere.teleporter_unbreakable": "この時間のアンカーはサバイバルモードでは破壊できない",
   "message.chronosphere.boss_room_protected": "ボスの力がこの壁を守っている。まずボスを倒せ！",
+  "message.chronosphere.boss_room_no_placement": "ボスの力が存在する限り、ここにブロックを置くことはできない！",
 
   "entity.chronosphere.time_guardian": "時の番人",
   "entity.chronosphere.chronos_warden": "クロノスの監視者",

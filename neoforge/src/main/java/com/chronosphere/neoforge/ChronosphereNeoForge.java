@@ -16,6 +16,8 @@ import com.chronosphere.neoforge.registry.ModParticles;
 import com.chronosphere.registry.ModEntities;
 import com.chronosphere.registry.ModItems;
 import com.chronosphere.worldgen.processors.BossRoomProtectionProcessor;
+import com.chronosphere.worldgen.protection.BlockProtectionHandler;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.neoforged.bus.api.IEventBus;
@@ -24,6 +26,7 @@ import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
+import net.neoforged.neoforge.event.level.BlockEvent;
 import net.neoforged.neoforge.event.tick.ServerTickEvent;
 
 @Mod(Chronosphere.MOD_ID)
@@ -48,6 +51,10 @@ public class ChronosphereNeoForge {
         // Register server tick event for pending boss room protections
         NeoForge.EVENT_BUS.addListener(this::onServerTick);
 
+        // Register block protection events (breaking and placement)
+        NeoForge.EVENT_BUS.addListener(this::onBlockBreak);
+        NeoForge.EVENT_BUS.addListener(this::onBlockPlace);
+
         Chronosphere.LOGGER.info("Chronosphere Mod (NeoForge) initialized");
     }
 
@@ -61,6 +68,63 @@ public class ChronosphereNeoForge {
         if (tickCounter >= 100) {
             tickCounter = 0;
             event.getServer().getAllLevels().forEach(BossRoomProtectionProcessor::registerPendingProtections);
+        }
+    }
+
+    /**
+     * Block break event handler for NeoForge.
+     * Prevents players from breaking blocks in protected boss rooms.
+     */
+    private void onBlockBreak(BlockEvent.BreakEvent event) {
+        var player = event.getPlayer();
+
+        // Allow creative mode players to break anything
+        if (player.isCreative()) {
+            return;
+        }
+
+        // Check if this block is protected (need to cast LevelAccessor to Level)
+        if (event.getLevel() instanceof net.minecraft.world.level.Level level) {
+            if (BlockProtectionHandler.isProtected(level, event.getPos())) {
+                // Display warning message
+                player.displayClientMessage(
+                    Component.translatable("message.chronosphere.boss_room_protected"),
+                    true // action bar
+                );
+
+                // Cancel block break event
+                event.setCanceled(true);
+            }
+        }
+    }
+
+    /**
+     * Block place event handler for NeoForge.
+     * Prevents players from placing blocks in protected boss rooms.
+     */
+    private void onBlockPlace(BlockEvent.EntityPlaceEvent event) {
+        // Only handle player placement
+        if (!(event.getEntity() instanceof net.minecraft.world.entity.player.Player player)) {
+            return;
+        }
+
+        // Allow creative mode players to place anything
+        if (player.isCreative()) {
+            return;
+        }
+
+        // Check if the placement position is protected (need to cast LevelAccessor to Level)
+        if (event.getLevel() instanceof net.minecraft.world.level.Level level) {
+            if (BlockProtectionHandler.isProtected(level, event.getPos())) {
+                // Display warning message
+                player.displayClientMessage(
+                    Component.translatable("message.chronosphere.boss_room_no_placement"),
+                    true // action bar
+                );
+
+                // Cancel block placement event
+                event.setCanceled(true);
+            }
         }
     }
 

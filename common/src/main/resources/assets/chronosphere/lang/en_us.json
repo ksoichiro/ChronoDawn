@@ -168,6 +168,7 @@
   "message.chronosphere.time_clock_boss_limit": "The Time Clock has no effect - already used in this phase",
   "message.chronosphere.teleporter_unbreakable": "This temporal anchor cannot be destroyed in survival mode",
   "message.chronosphere.boss_room_protected": "The boss's power protects these walls. Defeat the boss first!",
+  "message.chronosphere.boss_room_no_placement": "You cannot place blocks here while the boss's power remains!",
 
   "entity.chronosphere.time_guardian": "Time Guardian",
   "entity.chronosphere.chronos_warden": "Chronos Warden",
