@@ -33,6 +33,7 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -388,20 +389,116 @@ public class TimeTyrantEntity extends Monster {
 
     /**
      * Find a safe teleport position near the target.
+     * Scans for valid ground position to prevent suffocation.
+     * Ensures teleport stays within boss room by checking path to target.
      */
     private Vec3 findTeleportPosition(Vec3 targetPos) {
-        // Try to teleport behind the target (3-5 blocks away)
-        for (int attempt = 0; attempt < 10; attempt++) {
+        // Try to teleport near the target (2-4 blocks away - reduced to stay in room)
+        for (int attempt = 0; attempt < 16; attempt++) {
             double angle = this.random.nextDouble() * Math.PI * 2;
-            double distance = 3.0 + this.random.nextDouble() * 2.0;
+            // Reduced distance to prevent escaping boss room (was 3-5, now 2-4)
+            double distance = 2.0 + this.random.nextDouble() * 2.0;
 
             double x = targetPos.x + Math.cos(angle) * distance;
             double z = targetPos.z + Math.sin(angle) * distance;
-            BlockPos testPos = BlockPos.containing(x, targetPos.y, z);
 
-            // Check if position is safe (solid ground, no obstructions)
+            BlockPos candidatePos = BlockPos.containing(x, targetPos.y, z);
+
+            // Check if there's a clear path (no walls between current pos and candidate)
+            if (hasWallBetween(this.blockPosition(), candidatePos)) {
+                continue; // Skip positions that require going through walls
+            }
+
+            // Find safe ground position by scanning vertically
+            BlockPos safePos = findSafeGroundPosition(candidatePos);
+            if (safePos != null) {
+                // Double-check the area is truly safe (3x3 horizontal check)
+                if (isAreaSafe(safePos)) {
+                    return new Vec3(safePos.getX() + 0.5, safePos.getY(), safePos.getZ() + 0.5);
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Check if there's a wall between two positions.
+     * Uses simple line-of-sight check for solid blocks.
+     * Time Tyrant height is 4.0 blocks, so check 5 blocks for safety margin.
+     */
+    private boolean hasWallBetween(BlockPos from, BlockPos to) {
+        // Simple check: sample points along the path
+        double dx = to.getX() - from.getX();
+        double dz = to.getZ() - from.getZ();
+        double distance = Math.sqrt(dx * dx + dz * dz);
+
+        if (distance < 1) return false;
+
+        int steps = (int) Math.ceil(distance);
+        for (int i = 1; i < steps; i++) {
+            double t = (double) i / steps;
+            int x = (int) (from.getX() + dx * t);
+            int z = (int) (from.getZ() + dz * t);
+
+            // Check at multiple Y levels (entity height 4.0 + margin 1.0 = 5 blocks)
+            for (int y = 0; y < 5; y++) {
+                BlockPos checkPos = new BlockPos(x, from.getY() + y, z);
+                if (this.level().getBlockState(checkPos).isSolid()) {
+                    return true; // Wall found
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if a 3x3 area around the position is safe (no solid blocks).
+     * Time Tyrant height is 4.0 blocks, so check 5 blocks for safety margin.
+     */
+    private boolean isAreaSafe(BlockPos centerPos) {
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                BlockPos checkPos = centerPos.offset(dx, 0, dz);
+                // Check 5 blocks vertically at each position (entity height 4.0 + margin 1.0)
+                for (int dy = 0; dy < 5; dy++) {
+                    BlockState state = this.level().getBlockState(checkPos.above(dy));
+                    if (state.isSolid()) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Find a safe ground position by scanning vertically.
+     * Searches up to 3 blocks up and down from the starting position.
+     *
+     * @param startPos The starting position to search from
+     * @return A safe BlockPos, or null if none found
+     */
+    private BlockPos findSafeGroundPosition(BlockPos startPos) {
+        // First try the exact position
+        if (isSafeTeleportPosition(startPos)) {
+            return startPos;
+        }
+
+        // Search upward (for when target is on lower ground) - reduced range
+        for (int offset = 1; offset <= 3; offset++) {
+            BlockPos testPos = startPos.above(offset);
             if (isSafeTeleportPosition(testPos)) {
-                return new Vec3(x, targetPos.y, z);
+                return testPos;
+            }
+        }
+
+        // Search downward (for when target is on higher ground) - reduced range
+        for (int offset = 1; offset <= 3; offset++) {
+            BlockPos testPos = startPos.below(offset);
+            if (isSafeTeleportPosition(testPos)) {
+                return testPos;
             }
         }
 
@@ -410,6 +507,8 @@ public class TimeTyrantEntity extends Monster {
 
     /**
      * Check if a position is safe for teleportation.
+     * Validates solid ground below and 5 blocks of non-solid space above for entity height.
+     * Time Tyrant height is 4.0 blocks, so check 5 blocks for safety margin.
      */
     private boolean isSafeTeleportPosition(BlockPos pos) {
         // Check ground is solid
@@ -417,9 +516,11 @@ public class TimeTyrantEntity extends Monster {
             return false;
         }
 
-        // Check space is clear (2 blocks tall for entity)
-        for (int i = 0; i < 3; i++) {
-            if (!this.level().getBlockState(pos.above(i)).isAir()) {
+        // Check space is clear (5 blocks tall - entity height 4.0 + margin 1.0)
+        // Use !isSolid() instead of isAir() to allow water, grass, etc.
+        for (int i = 0; i < 5; i++) {
+            BlockState state = this.level().getBlockState(pos.above(i));
+            if (state.isSolid()) {
                 return false;
             }
         }
@@ -429,8 +530,12 @@ public class TimeTyrantEntity extends Monster {
 
     /**
      * Teleport to the specified position.
+     * Validates position after teleport and reverts if entity is stuck in blocks.
      */
     private boolean teleportToPosition(Vec3 pos) {
+        // Store original position for potential revert
+        Vec3 originalPos = this.position();
+
         // Spawn particles at departure
         if (this.level() instanceof ServerLevel serverLevel) {
             serverLevel.sendParticles(
@@ -448,6 +553,13 @@ public class TimeTyrantEntity extends Monster {
 
         // Teleport
         this.teleportTo(pos.x, pos.y, pos.z);
+
+        // Validate position after teleport - check if entity is stuck in blocks
+        if (isStuckInBlocks()) {
+            // Revert to original position
+            this.teleportTo(originalPos.x, originalPos.y, originalPos.z);
+            return false;
+        }
 
         // Spawn particles at arrival
         if (this.level() instanceof ServerLevel serverLevel) {
@@ -475,6 +587,31 @@ public class TimeTyrantEntity extends Monster {
         );
 
         return true;
+    }
+
+    /**
+     * Check if the entity is stuck inside solid blocks (would cause suffocation).
+     * Checks a 3x3x5 area around the entity for solid blocks.
+     * Time Tyrant height is 4.0 blocks, so check 5 blocks for safety margin.
+     */
+    private boolean isStuckInBlocks() {
+        BlockPos feetPos = this.blockPosition();
+
+        // Check 3x3 horizontal area, 5 blocks vertical (entity height 4.0 + margin 1.0)
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                for (int dy = 0; dy < 5; dy++) {
+                    BlockPos checkPos = feetPos.offset(dx, dy, dz);
+                    BlockState state = this.level().getBlockState(checkPos);
+                    // Check both isSolid and isSuffocating for comprehensive coverage
+                    if (state.isSolid() || state.isSuffocating(this.level(), checkPos)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     /**

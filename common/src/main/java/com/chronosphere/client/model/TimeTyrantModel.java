@@ -32,7 +32,7 @@ import net.minecraft.util.Mth;
  *   - left_leg
  *   - right_leg
  *
- * Size: 1.5x3.0 (larger than Time Guardian)
+ * Size: 1.5x4.0 (larger than Time Guardian, includes head/horns)
  * Texture: 256x256 pixels
  */
 public class TimeTyrantModel extends EntityModel<TimeTyrantEntity> {

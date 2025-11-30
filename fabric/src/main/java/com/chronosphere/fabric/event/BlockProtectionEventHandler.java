@@ -55,6 +55,14 @@ public class BlockProtectionEventHandler {
                 return InteractionResult.PASS;
             }
 
+            // Only check block placement, not other interactions (door open, button press, etc.)
+            // Check if player is holding a block item that could be placed
+            var heldItem = player.getItemInHand(hand);
+            if (heldItem.isEmpty() || !(heldItem.getItem() instanceof net.minecraft.world.item.BlockItem)) {
+                // Not holding a block item - allow interaction (door, button, etc.)
+                return InteractionResult.PASS;
+            }
+
             // Check if the placement position is protected
             var pos = hitResult.getBlockPos().relative(hitResult.getDirection());
             if (BlockProtectionHandler.isProtected(level, pos)) {

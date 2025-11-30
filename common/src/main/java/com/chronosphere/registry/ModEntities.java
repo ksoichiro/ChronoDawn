@@ -164,7 +164,7 @@ public class ModEntities {
     public static final RegistrySupplier<EntityType<TimeTyrantEntity>> TIME_TYRANT = ENTITIES.register(
         "time_tyrant",
         () -> EntityType.Builder.of(TimeTyrantEntity::new, MobCategory.MONSTER)
-            .sized(1.5f, 3.0f) // Width 1.5, Height 3.0 (larger than Time Guardian)
+            .sized(1.5f, 4.0f) // Width 1.5, Height 4.0 (includes head/horns)
             .clientTrackingRange(10) // Tracking range for clients
             .updateInterval(3) // Update interval in ticks
             .build("time_tyrant")

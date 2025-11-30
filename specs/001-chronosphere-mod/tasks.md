@@ -310,7 +310,18 @@
   - **System**: StructureStartMixin removes Aquifer water, CopyFluidLevelProcessor preserves decorative water
   - **Result**: Water features preserved correctly, unwanted waterlogging prevented
 - [ ] T228 [P] [US3] Add glowing effect to Time Tyrant entity for visibility (apply Glowing status effect or custom shader/outline rendering)
-- [ ] T229 [P] [US3] Fix Time Tyrant teleport suffocation bug (validate teleport destination has 2+ air blocks above, revert position if invalid)
+- [X] T229 [P] [US3] Fix Time Tyrant teleport suffocation bug (validate teleport destination has 2+ air blocks above, revert position if invalid)
+  - **Completed**: Implemented comprehensive safe teleport validation in TimeTyrantEntity.java
+  - **Changes**:
+    - `findSafeGroundPosition()`: Scans ±3 blocks vertically to find valid floor with 5-block clearance
+    - `isSafeTeleportPosition()`: Validates 5 blocks of vertical clearance (4.0 height + 1.0 margin)
+    - `teleportToPosition()`: Validates after teleport, reverts if stuck in blocks
+    - `isStuckInBlocks()`: Checks 3x3x5 area for solid blocks
+    - `hasWallBetween()`: Prevents teleporting through walls (line-of-sight check)
+    - `isAreaSafe()`: Checks 3x3x5 area around position for safe landing
+  - **Bounding Box Fix**: Updated entity height from 3.0f to 4.0f in ModEntities.java (includes head/horns)
+  - **Door Interaction Fix**: Fixed BlockProtectionEventHandler (Fabric) to only block block placement, not door/button interactions
+  - **Result**: Time Tyrant now finds valid ground, cannot teleport through walls, and cannot get stuck in walls/ceilings
 - [X] T229a [US3] Investigate Time Tyrant buff/debuff behavior (verify if Slowness is incorrectly applied instead of intended buff, check status effect logic)
   - **Completed**: Identified and fixed issue where Time Tyrant was receiving unintended Slowness IV/V from Time Distortion Effect
   - **Root Cause**: Time Tyrant extends Monster class but was not excluded from TimeDistortionEffect.isHostileMob()
