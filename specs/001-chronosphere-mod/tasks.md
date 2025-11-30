@@ -51,9 +51,14 @@
 
 **Note**: 石炭は松明や燃料として必須。長期滞在を可能にするため優先度は高い
 
-- [ ] T265 [P] [US1] Add coal ore generation in Chronosphere (frequency, Y-level distribution, biome placement)
-- [ ] T266 [P] [US1] Configure coal ore worldgen feature (vein size, rarity comparable to Overworld)
-- [ ] T267 [US1] Test coal ore generation and verify mining/smelting works correctly
+- [x] T265 [P] [US1] Add coal ore generation in Chronosphere (frequency, Y-level distribution, biome placement)
+  - **Completed**: Added coal ore to all 9 Chronosphere biomes
+  - **Configuration**: 30 attempts/chunk, Y0-256 trapezoid distribution
+- [x] T266 [P] [US1] Configure coal ore worldgen feature (vein size, rarity comparable to Overworld)
+  - **Completed**: Vein size 17 (matches vanilla), uses vanilla coal_ore and deepslate_coal_ore
+  - **Files**: configured_feature/ore_coal.json, placed_feature/ore_coal.json
+- [x] T267 [US1] Test coal ore generation and verify mining/smelting works correctly
+  - **Completed**: Tested in-game, coal ore generates correctly and mining/fuel mechanics work as expected
 
 ### Additional Tree Variants (US1 Enhancement - Optional, Low Priority)
 
