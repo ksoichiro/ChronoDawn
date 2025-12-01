@@ -518,6 +518,44 @@
 - [ ] T171m [US3] Adjust Time Tyrant base stats based on playtesting (HP 500→400, Attack 18→15, Defense 15→12) if needed
 - [ ] T171n [US3] Implement Grave Marker death recovery system in common/src/main/java/com/chronosphere/mechanics/GraveMarkerHandler.java (death marker at boss room entrance, safe item recovery from outside)
 
+### Guaranteed Structure Placement System (US2/US3 Enhancement - Medium Priority)
+
+**Purpose**: 構造物が一定距離内に必ず生成されることを保証し、プレイヤーの探索体験を向上
+
+**Background**:
+- 現在の`random_spread`配置は最小距離を保証するが、最大距離は保証しない
+- プレイヤーが構造物を見つけられずゲームが退屈になる懸念
+- Time Keeperとの取引にはTime Compassが必要だが、肝心のTime Keeperに会えなければ意味がない
+
+**Reference**: See research.md "Guaranteed Structure Placement Research (2025-12-01)"
+
+#### Phase 1: Time Keeper Village (プログラム的配置)
+- [ ] T274 [P] [US2] Design Time Keeper Village structure concept (small settlement with 1-2 Time Keepers, basic shelter, trading post)
+- [ ] T275 [P] [US2] Create Time Keeper Village NBT structure file (time_keeper_village.nbt)
+- [ ] T276 [P] [US2] Implement TimeKeeperVillagePlacer.java for programmatic placement near spawn (64 blocks)
+  - Trigger on first Chronosphere entry
+  - Find suitable position on surface
+  - Use saved data to track placement status
+- [ ] T277 [US2] Test Time Keeper Village generation and Time Keeper spawning
+
+#### Phase 2: Custom StructurePlacement Type (汎用システム)
+- [ ] T278 [P] [US3] Create GuaranteedRadiusStructurePlacement.java extending StructurePlacement
+  - `radius_chunks`: 保証半径（チャンク単位）
+  - `min_distance`: 最小距離（チャンク単位）
+  - Implement isPlacementChunk() with seeded random
+- [ ] T279 [P] [US3] Create ModStructurePlacementTypes.java registry class
+  - Register GUARANTEED_RADIUS placement type
+  - Setup codec for JSON serialization
+- [ ] T280 [P] [US3] Create Architectury platform-specific registration (Fabric/NeoForge)
+- [ ] T281 [US3] Test custom placement type with test structure
+- [ ] T282 [P] [US3] Apply guaranteed_radius placement to existing structures (Ancient Ruins, Desert Clock Tower, Master Clock)
+- [ ] T283 [US3] Comprehensive testing across multiple seeds and locations
+
+**Implementation Notes**:
+- Phase 1 uses Phantom Catacombs boss room pattern (proven reliable)
+- Phase 2 integrates with standard worldgen system (locate command compatible)
+- Phase 2 can be applied to other structures after validation
+
 ### Custom Terrain Features (US3 Enhancement - Medium Priority)
 
 **Purpose**: 時間をテーマにした独自地形を追加し、地形生成の独自性を向上

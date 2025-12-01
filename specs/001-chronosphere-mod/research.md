@@ -5766,3 +5766,287 @@ public static final RegistrySupplier<EntityType<TimeWoodBoat>> TIME_WOOD_BOAT =
 - Consider adding boat variants to loot tables if desired (fishing, shipwrecks)
 - Boat sounds use vanilla boat sounds (no custom sounds needed)
 
+---
+
+## Guaranteed Structure Placement Research (2025-12-01)
+
+### 背景と問題
+
+構造物の生成において以下の課題がある：
+1. 構造物を高頻度には出したくないが、一定距離内には必ず生成されるようにしたい
+2. Time Keeperが住む村をスポーン地点周辺に必ず生成したい
+3. 現在の`random_spread`配置は最小距離は保証するが、最大距離は保証しない
+
+### 考えられる方法の比較
+
+| 方法 | 確実性 | 実装難易度 | locateコマンド対応 | 推奨用途 |
+|------|--------|-----------|------------------|----------|
+| 1. プログラム的配置 | ◎ | 中 | △（追加実装要） | スポーン地点固定構造物 |
+| 2. concentric_rings | ○ | 低 | ◎ | リング状配置（Stronghold風） |
+| 3. exclusion_zone | △ | 低 | ◎ | 構造物間距離調整のみ |
+| 4. カスタムStructurePlacement | ◎ | 高 | ◎ | 保証半径付き構造物 |
+| 5. ChunkGenerator拡張 | ○ | 高 | △ | 完全カスタムワールド生成 |
+
+### 方法1: プログラム的配置
+
+**概要**: プレイヤーがクロノスフィアに入った時、スポーン地点周辺に構造物を直接配置
+
+```java
+public class TimeKeeperVillagePlacer {
+    private static final int VILLAGE_DISTANCE = 64;  // スポーンから64ブロック以内
+
+    public static void ensureVillage(ServerLevel level) {
+        BlockPos spawn = level.getSharedSpawnPos();
+
+        // 既に配置済みかチェック（保存データで管理）
+        if (isVillageAlreadyPlaced(level)) return;
+
+        // 村の配置候補位置を計算
+        BlockPos villagePos = findSuitablePosition(level, spawn, VILLAGE_DISTANCE);
+
+        // 構造物テンプレートを配置
+        StructureTemplateManager manager = level.getServer().getStructureManager();
+        StructureTemplate template = manager.getOrCreate(
+            ResourceLocation.fromNamespaceAndPath("chronosphere", "time_keeper_village")
+        );
+        template.placeInWorld(level, villagePos, villagePos,
+            new StructurePlaceSettings(), level.random, 2);
+
+        markVillagePlaced(level);
+    }
+}
+```
+
+**メリット**:
+- 確実に配置される
+- 配置位置を完全に制御可能
+- Phantom Catacombsのボス部屋配置と同じ手法
+
+**デメリット**:
+- ワールド生成システムとは別の仕組み
+- locateコマンドで見つからない（追加実装が必要）
+- 保存データの管理が必要
+
+### 方法2: concentric_rings配置
+
+**概要**: バニラのStrongholdと同じ配置タイプを使用
+
+```json
+{
+  "structures": [{ "structure": "chronosphere:time_keeper_village", "weight": 1 }],
+  "placement": {
+    "type": "minecraft:concentric_rings",
+    "distance": 4,
+    "spread": 3,
+    "count": 128,
+    "preferred_biomes": "#chronosphere:has_time_keeper_village"
+  }
+}
+```
+
+**メリット**:
+- 標準的なワールド生成システム
+- 原点からの一定距離範囲に確実に配置
+
+**デメリット**:
+- リング状に配置されるため、スポーン地点「直近」への保証は難しい
+- バイオームに依存する
+
+### 方法3: structure_setのexclusion_zone利用
+
+**概要**: 他の構造物との距離を指定して、間接的に配置密度を制御
+
+```json
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "spacing": 32,
+    "separation": 8,
+    "salt": 12345,
+    "exclusion_zone": {
+      "other_set": "chronosphere:master_clock",
+      "chunk_count": 10
+    }
+  }
+}
+```
+
+**用途**: 構造物間の最小距離を保証（例：Master Clockから10チャンク以内には配置しない）
+
+### 方法4: カスタムStructurePlacement（推奨）
+
+**概要**: Minecraftの`StructurePlacement`を拡張して、スポーン地点周辺に必ず配置するロジックを実装
+
+#### StructurePlacementアーキテクチャ
+
+```
+StructurePlacement (abstract base class)
+  ├── RandomSpreadStructurePlacement
+  └── ConcentricRingsStructurePlacement
+  └── GuaranteedRadiusStructurePlacement (カスタム)
+```
+
+#### 基本クラスのフィールド
+
+- `locateOffset`: `Vec3i` - 構造物配置のオフセット
+- `frequencyReductionMethod`: `FrequencyReductionMethod` - 頻度削減アルゴリズム
+- `frequency`: `float` - 生成確率 (0.0-1.0)
+- `salt`: `int` - ランダム化シード
+- `exclusionZone`: `Optional<ExclusionZone>` - 他構造物との排他ゾーン
+
+#### 実装すべきメソッド
+
+```java
+public class GuaranteedRadiusStructurePlacement extends StructurePlacement {
+    private final int radiusChunks;      // 保証半径（チャンク単位）
+    private final int minDistance;       // 最小距離（チャンク単位）
+
+    // 1. コンストラクタ
+    public GuaranteedRadiusStructurePlacement(
+        Vec3i locateOffset,
+        FrequencyReductionMethod frequencyReduction,
+        float frequency,
+        int salt,
+        Optional<ExclusionZone> exclusionZone,
+        int radiusChunks,
+        int minDistance) {
+        super(locateOffset, frequencyReduction, frequency, salt, exclusionZone);
+        this.radiusChunks = radiusChunks;
+        this.minDistance = minDistance;
+    }
+
+    // 2. Codec（JSON シリアライズ用）
+    public static final MapCodec<GuaranteedRadiusStructurePlacement> CODEC =
+        RecordCodecBuilder.mapCodec(instance ->
+            instance.group(
+                // ベースクラスのフィールド
+                Vec3i.offsetCodec(16).optionalFieldOf("locate_offset", Vec3i.ZERO)
+                    .forGetter(StructurePlacement::locateOffset),
+                FrequencyReductionMethod.CODEC
+                    .optionalFieldOf("frequency_reduction_method", FrequencyReductionMethod.DEFAULT)
+                    .forGetter(StructurePlacement::frequencyReductionMethod),
+                Codec.floatRange(0.0F, 1.0F)
+                    .optionalFieldOf("frequency", 1.0F)
+                    .forGetter(StructurePlacement::frequency),
+                ExtraCodecs.NON_NEGATIVE_INT.fieldOf("salt")
+                    .forGetter(StructurePlacement::salt),
+                ExclusionZone.CODEC.optionalFieldOf("exclusion_zone")
+                    .forGetter(StructurePlacement::exclusionZone),
+                // カスタムフィールド
+                Codec.intRange(1, 1000).fieldOf("radius_chunks")
+                    .forGetter(p -> p.radiusChunks),
+                Codec.intRange(1, 256).fieldOf("min_distance")
+                    .forGetter(p -> p.minDistance)
+            ).apply(instance, GuaranteedRadiusStructurePlacement::new));
+
+    // 3. 配置判定メソッド（最重要）
+    @Override
+    protected boolean isPlacementChunk(ChunkGeneratorStructureState state, int chunkX, int chunkZ) {
+        // 半径チェック
+        int distX = Math.abs(chunkX);
+        int distZ = Math.abs(chunkZ);
+        int chunkDist = Math.max(distX, distZ);
+
+        if (chunkDist > radiusChunks) {
+            return false; // 保証半径外
+        }
+
+        // 最小距離グリッドによる配置決定
+        int gridX = Math.floorDiv(chunkX, minDistance);
+        int gridZ = Math.floorDiv(chunkZ, minDistance);
+
+        WorldgenRandom random = new WorldgenRandom(new LegacyRandomSource(0L));
+        random.setLargeFeatureWithSalt(state.getLevelSeed(), gridX, gridZ, salt());
+
+        int offsetX = random.nextInt(minDistance);
+        int offsetZ = random.nextInt(minDistance);
+
+        int potentialX = gridX * minDistance + offsetX;
+        int potentialZ = gridZ * minDistance + offsetZ;
+
+        return potentialX == chunkX && potentialZ == chunkZ;
+    }
+
+    // 4. 配置タイプ
+    @Override
+    public StructurePlacementType<?> type() {
+        return ModStructurePlacementTypes.GUARANTEED_RADIUS.get();
+    }
+}
+```
+
+#### レジストリ登録
+
+```java
+public class ModStructurePlacementTypes {
+    public static final DeferredRegister<StructurePlacementType<?>> PLACEMENT_TYPES =
+        DeferredRegister.create(Registries.STRUCTURE_PLACEMENT, "chronosphere");
+
+    public static final DeferredHolder<StructurePlacementType<?>,
+        StructurePlacementType<GuaranteedRadiusStructurePlacement>> GUARANTEED_RADIUS =
+            PLACEMENT_TYPES.register("guaranteed_radius", () ->
+                () -> GuaranteedRadiusStructurePlacement.CODEC
+            );
+}
+```
+
+#### JSON使用例
+
+```json
+{
+  "structures": [{
+    "structure": "chronosphere:time_keeper_village",
+    "weight": 1
+  }],
+  "placement": {
+    "type": "chronosphere:guaranteed_radius",
+    "salt": 12345,
+    "radius_chunks": 50,
+    "min_distance": 15,
+    "frequency": 1.0
+  }
+}
+```
+
+#### 実装時間見積もり
+
+- 基本実装: 2-3時間
+- カスタムロジック追加: 4-6時間
+- テスト・検証: 8-12時間
+- **合計: 約1-2日**
+
+#### 実装上の注意点
+
+1. **シード付きランダム性**
+   - `WorldgenRandom.setLargeFeatureWithSalt()` でワールドシードを使用
+   - ワールド再ロード時も同じ配置になることを保証
+
+2. **頻度処理**
+   - `frequency < 1.0` は `applyAdditionalChunkRestrictions()` で自動処理
+   - `isPlacementChunk()` では true/false のみ返す
+
+3. **排他ゾーン**
+   - `applyInteractionsWithOtherStructures()` で自動処理
+   - `isPlacementChunk()` での実装不要
+
+### Time Keeper村への推奨アプローチ
+
+**結論**: Time Keeper村には **方法1（プログラム的配置）** と **方法4（カスタムStructurePlacement）** の組み合わせを推奨
+
+**理由**:
+1. スポーン地点「直近」（64ブロック以内）への確実な配置が必要
+2. プログラム的配置は確実だが、locateコマンド非対応
+3. カスタムStructurePlacementは実装コストが高いが、標準的な構造物として扱える
+
+**段階的アプローチ**:
+1. まず方法1で最小限実装（Time Keeper村のみ）
+2. その後、方法4を実装して全構造物に適用
+
+### 参考資料
+
+- [TelepathicGrunt's StructureTutorialMod](https://github.com/TelepathicGrunt/StructureTutorialMod) - `DistanceBasedStructurePlacement`の例
+- [NeoForge Registry Documentation](https://docs.neoforged.net/docs/concepts/registries/)
+- [Fabric Codec Documentation](https://docs.fabricmc.net/develop/codecs)
+- [Minecraft Wiki: Custom Structures](https://minecraft.wiki/w/Custom_structure)
+- [Minecraft Wiki: Structure Sets](https://minecraft.wiki/w/Structure_set)
+
