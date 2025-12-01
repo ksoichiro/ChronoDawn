@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "chronosphere:time_wood_boat",
+    "chronosphere:dark_time_wood_boat",
+    "chronosphere:ancient_time_wood_boat"
+  ]
+}

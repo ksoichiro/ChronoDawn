@@ -80,27 +80,28 @@
 
 **Estimated Effort**: 5-7 hours total
 
-- [ ] T268 [P] [US1] Create Time Wood Boat and Time Wood Chest Boat items and entities
-  - Create TimeWoodBoat.java and TimeWoodChestBoat.java (extend vanilla Boat/ChestBoat)
-  - Create TimeWoodBoatItem.java and TimeWoodChestBoatItem.java
-  - Register entities in ModEntities, items in ModItems
-- [ ] T269 [P] [US1] Create Dark Time Wood Boat and Dark Time Wood Chest Boat items and entities
-  - Create DarkTimeWoodBoat.java and DarkTimeWoodChestBoat.java
-  - Create corresponding items
-  - Register entities and items
-- [ ] T270 [P] [US1] Create Ancient Time Wood Boat and Ancient Time Wood Chest Boat items and entities
-  - Create AncientTimeWoodBoat.java and AncientTimeWoodChestBoat.java
-  - Create corresponding items
-  - Register entities and items
-- [ ] T271 [P] [US1] Add boat crafting recipes (planks → boat, boat + chest → chest boat)
-  - Create 6 shaped recipes (3 boat variants: 5 planks in boat shape)
-  - Create 6 shapeless recipes (3 chest boat variants: boat + chest)
-  - Add recipe unlock advancements (on obtaining planks)
-- [ ] T272 [P] [US1] Create boat textures and models for all 3 variants
-  - Extract vanilla oak boat textures as base
-  - Apply Time Wood color palettes (use plank textures as color reference)
-  - Create 3 boat textures + 3 chest boat textures (6 total)
-  - Create item models (can reuse vanilla boat item model structure)
+- [x] T268 [P] [US1] Create Time Wood Boat and Time Wood Chest Boat items and entities
+  - **Completed**: Created unified ChronosphereBoat and ChronosphereChestBoat entities with ChronosphereBoatType enum
+  - ChronosphereBoatItem handles all boat types with type parameter
+  - Registered entities in ModEntities, items in ModItems
+- [x] T269 [P] [US1] Create Dark Time Wood Boat and Dark Time Wood Chest Boat items and entities
+  - **Completed**: Uses same ChronosphereBoat/ChronosphereChestBoat with DARK_TIME_WOOD type
+  - Items registered with ChronosphereBoatType.DARK_TIME_WOOD
+- [x] T270 [P] [US1] Create Ancient Time Wood Boat and Ancient Time Wood Chest Boat items and entities
+  - **Completed**: Uses same ChronosphereBoat/ChronosphereChestBoat with ANCIENT_TIME_WOOD type
+  - Items registered with ChronosphereBoatType.ANCIENT_TIME_WOOD
+- [x] T271 [P] [US1] Add boat crafting recipes (planks → boat, boat + chest → chest boat)
+  - **Completed**: Created 6 shaped recipes (3 boat variants: 5 planks in boat shape)
+  - Created 6 shapeless recipes (3 chest boat variants: boat + chest)
+  - Note: Recipe unlock advancements deferred (not blocking functionality)
+- [x] T272 [P] [US1] Create boat textures and models for all 3 variants
+  - **Completed**: Extracted vanilla oak boat textures and applied color transformations
+  - Time Wood: R×0.95, G×1.17, B×0.85 (yellowish-olive)
+  - Dark Time Wood: R×0.70, G×0.70, B×0.75 (darker tone)
+  - Ancient Time Wood: R×0.80, G×0.75, B×0.70 (aged/grayish)
+  - Created item textures, entity textures (boat/ and chest_boat/), and item models
+  - Created custom renderers (ChronosphereBoatRenderer, ChronosphereChestBoatRenderer)
+  - Registered renderers in both Fabric and NeoForge client
 - [ ] T273 [US1] Test boat functionality (movement, durability, chest storage) in Chronosphere ocean biome
   - Test boat placement and riding
   - Test chest boat storage

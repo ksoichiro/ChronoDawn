@@ -284,5 +284,14 @@
   "advancements.chronosphere.grant_chronicle_book.description": "Received the Chronicle of Chronosphere guide book",
 
   "patchouli.book.chronosphere.chronicle.name": "Chronicle of Chronosphere",
-  "patchouli.book.chronosphere.chronicle.landing_text": "Welcome, traveler. You have entered a dimension where time itself has frozen. This chronicle will guide you through your journey in the Chronosphere."
+  "patchouli.book.chronosphere.chronicle.landing_text": "Welcome, traveler. You have entered a dimension where time itself has frozen. This chronicle will guide you through your journey in the Chronosphere.",
+
+  "item.chronosphere.time_wood_boat": "Time Wood Boat",
+  "item.chronosphere.time_wood_chest_boat": "Time Wood Boat with Chest",
+  "item.chronosphere.dark_time_wood_boat": "Dark Time Wood Boat",
+  "item.chronosphere.dark_time_wood_chest_boat": "Dark Time Wood Boat with Chest",
+  "item.chronosphere.ancient_time_wood_boat": "Ancient Time Wood Boat",
+  "item.chronosphere.ancient_time_wood_chest_boat": "Ancient Time Wood Boat with Chest",
+  "entity.chronosphere.chronosphere_boat": "Boat",
+  "entity.chronosphere.chronosphere_chest_boat": "Boat with Chest"
 }

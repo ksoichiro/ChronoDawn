@@ -8,6 +8,8 @@ import com.chronosphere.client.model.TimeGuardianModel;
 import com.chronosphere.client.model.TimeKeeperModel;
 import com.chronosphere.client.model.TimeTyrantModel;
 import com.chronosphere.client.renderer.ChronosWardenRenderer;
+import com.chronosphere.client.renderer.ChronosphereBoatRenderer;
+import com.chronosphere.client.renderer.ChronosphereChestBoatRenderer;
 import com.chronosphere.client.renderer.ClockworkColossusRenderer;
 import com.chronosphere.client.renderer.EntropyKeeperRenderer;
 import com.chronosphere.client.renderer.GearProjectileRenderer;
@@ -403,6 +405,18 @@ public class ChronosphereClientFabric implements ClientModInitializer {
         EntityRendererRegistry.register(
             ModEntities.ENTROPY_KEEPER.get(),
             EntropyKeeperRenderer::new
+        );
+
+        // Register Chronosphere Boat with custom renderer
+        EntityRendererRegistry.register(
+            ModEntities.CHRONOSPHERE_BOAT.get(),
+            ChronosphereBoatRenderer::new
+        );
+
+        // Register Chronosphere Chest Boat with custom renderer
+        EntityRendererRegistry.register(
+            ModEntities.CHRONOSPHERE_CHEST_BOAT.get(),
+            ChronosphereChestBoatRenderer::new
         );
     }
 
