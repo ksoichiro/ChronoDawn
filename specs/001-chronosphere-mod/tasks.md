@@ -102,12 +102,14 @@
   - Created item textures, entity textures (boat/ and chest_boat/), and item models
   - Created custom renderers (ChronosphereBoatRenderer, ChronosphereChestBoatRenderer)
   - Registered renderers in both Fabric and NeoForge client
-- [ ] T273 [US1] Test boat functionality (movement, durability, chest storage) in Chronosphere ocean biome
-  - Test boat placement and riding
-  - Test chest boat storage
-  - Test crafting recipes
-  - Test boat breaking and item drops
-  - Verify entity rendering on both Fabric and NeoForge
+- [x] T273 [US1] Test boat functionality (movement, durability, chest storage) in Chronosphere ocean biome
+  - Test boat placement and riding ✓
+  - Test chest boat storage ✓
+  - Test crafting recipes ✓
+  - Test boat breaking and item drops ✓
+  - Verify entity rendering on both Fabric and NeoForge ✓
+  - Fixed chest boat water rendering (waterPatch)
+  - Added recipe advancement files (unlock on water entry / boat possession)
 
 ### Decorative Terrain Features (US1 Enhancement)
 
