@@ -6050,3 +6050,139 @@ public class ModStructurePlacementTypes {
 - [Minecraft Wiki: Custom Structures](https://minecraft.wiki/w/Custom_structure)
 - [Minecraft Wiki: Structure Sets](https://minecraft.wiki/w/Structure_set)
 
+## Time Keeper Village Design (T274)
+
+### 目的
+
+スポーン地点周辺（64ブロック以内）にTime Keeperを確実に配置し、プレイヤーが探索なしでTime Keeperに会えるようにする。これにより、Time CompassによるDesert Clock TowerやMaster Clockの位置確認が容易になる。
+
+### 構成要素
+
+1. **Time Keeper**: 1-2体をスポーンエッグで配置（NBT内にエンティティとして含む）
+2. **シェルター**: 開放的な構造（屋根付きカウンター/取引所スタイル）
+3. **素材**: Time Wood系ブロック（Time Wood Planks, Log, Fence）
+4. **照明**: 松明またはランタン
+5. **装飾**: ベンチ、テーブル、カーペット
+
+### サイズ
+
+- 約 **11x7x11 ブロック** (X×Y×Z)
+- 開放的な構造で視認性を確保
+- 地表配置を前提（heightmap対応）
+
+### 構造レイアウト
+
+```
+  [上から見た図 - 11x11]
+  +-----------+
+  |     E     |  E = 入口
+  |  +-----+  |
+  |  |  T  |  |  T = Time Keeper (2体)
+  |  | C C |  |  C = カウンター/チェスト
+  |  +-----+  |
+  |           |
+  +-----------+
+```
+
+**側面図 (7ブロック高)**:
+- 床: Y=0 (Stone Bricks)
+- 壁/柱: Y=1-4 (Time Wood Log/Planks)
+- 屋根: Y=5-6 (Time Wood Stairs/Slabs)
+
+### 配置ロジック
+
+1. **トリガー**: プレイヤーがChronosphereに初めて入った時
+2. **位置選定**:
+   - スポーン地点から32-64ブロックの範囲
+   - `WORLD_SURFACE_WG` heightmapを使用して地表を検出
+   - 平坦なエリア（11x11ブロックの高低差が3ブロック以内）を探す
+3. **保存**: `SavedData`で配置済みフラグとワールド座標を保存
+4. **再配置防止**: 配置済みなら何もしない
+
+### 実装パターン
+
+PhantomCatacombsBossRoomPlacerを簡略化したアプローチ:
+
+```java
+public class TimeKeeperVillagePlacer {
+    private static final int MIN_DISTANCE = 32;  // 最小距離
+    private static final int MAX_DISTANCE = 64;  // 最大距離
+
+    public static void onPlayerEnterChronosphere(ServerPlayer player) {
+        ServerLevel level = player.serverLevel();
+        TimeKeeperVillageData data = TimeKeeperVillageData.get(level);
+
+        if (data.isPlaced()) return;
+
+        BlockPos spawn = level.getSharedSpawnPos();
+        BlockPos villagePos = findSuitablePosition(level, spawn);
+
+        if (villagePos != null) {
+            placeVillage(level, villagePos);
+            data.setPlaced(villagePos);
+            data.setDirty();
+        }
+    }
+
+    private static BlockPos findSuitablePosition(ServerLevel level, BlockPos center) {
+        // 32-64ブロック範囲で、平坦な地表を探す
+        for (int attempt = 0; attempt < 100; attempt++) {
+            int dx = level.random.nextInt(MAX_DISTANCE - MIN_DISTANCE) + MIN_DISTANCE;
+            int dz = level.random.nextInt(MAX_DISTANCE - MIN_DISTANCE) + MIN_DISTANCE;
+            if (level.random.nextBoolean()) dx = -dx;
+            if (level.random.nextBoolean()) dz = -dz;
+
+            BlockPos candidate = center.offset(dx, 0, dz);
+            int y = level.getHeight(Heightmap.Types.WORLD_SURFACE_WG, candidate.getX(), candidate.getZ());
+            candidate = candidate.atY(y);
+
+            if (isFlat(level, candidate, 11, 11, 3)) {
+                return candidate;
+            }
+        }
+        return null;
+    }
+}
+```
+
+### SavedData実装
+
+```java
+public class TimeKeeperVillageData extends SavedData {
+    private boolean placed = false;
+    private BlockPos position = BlockPos.ZERO;
+
+    public static TimeKeeperVillageData get(ServerLevel level) {
+        return level.getDataStorage().computeIfAbsent(
+            TimeKeeperVillageData.factory(),
+            "chronosphere_time_keeper_village"
+        );
+    }
+
+    // ... NBT read/write メソッド
+}
+```
+
+### NBT構造ファイル
+
+`common/src/main/resources/data/chronosphere/structure/time_keeper_village.nbt`
+
+含めるエンティティ:
+- 2x `chronosphere:time_keeper` (座標指定、AI無効化フラグなし)
+
+含めるブロック:
+- Time Wood Planks (床)
+- Time Wood Log (柱)
+- Time Wood Stairs (屋根)
+- Lantern (照明)
+- Barrel または Chest (装飾/ストレージ)
+- Carpet (装飾)
+
+### テスト項目 (T277)
+
+1. 新規ワールドでChronosphereに入り、村が配置されることを確認
+2. 村の位置がスポーン地点から32-64ブロック以内であることを確認
+3. Time Keeperが正しくスポーンし、取引が機能することを確認
+4. ワールド再読み込み後も村が存続することを確認
+5. 2回目以降のディメンション入場で再配置されないことを確認
+

@@ -6,9 +6,9 @@
     }
   ],
   "placement": {
-    "type": "minecraft:random_spread",
+    "type": "chronosphere:guaranteed_radius",
     "salt": 1663542342,
-    "spacing": 20,
-    "separation": 5
+    "radius_chunks": 80,
+    "min_distance": 15
   }
 }

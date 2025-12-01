@@ -8,6 +8,7 @@ import com.chronosphere.data.ChronosphereGlobalState;
 import com.chronosphere.registry.ModBlocks;
 import com.chronosphere.registry.ModDimensions;
 import com.chronosphere.registry.ModItems;
+import com.chronosphere.worldgen.spawning.TimeKeeperVillagePlacer;
 import dev.architectury.event.events.common.TickEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -106,6 +107,10 @@ public class PlayerEventHandler {
 
         // Chronicle of Chronosphere book is given automatically via advancement system
         // See: data/chronosphere/advancement/grant_chronicle_book.json
+
+        // Place Time Keeper Village near spawn if not already placed
+        // This ensures players can find a Time Keeper for trading and Time Compass acquisition
+        TimeKeeperVillagePlacer.onPlayerEnterChronosphere(player);
 
         // Mark global state: Chronosphere has been entered
         ChronosphereGlobalState globalState = ChronosphereGlobalState.get(player.server);
