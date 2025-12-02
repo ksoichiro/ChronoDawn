@@ -110,10 +110,10 @@
   - Verify entity rendering on Fabric ✓
   - Fixed chest boat water rendering (waterPatch)
   - Added recipe advancement files (unlock on water entry / boat possession)
-- [ ] T273a [US1] Verify boat functionality on NeoForge
-  - Test boat placement, riding, chest storage
-  - Verify entity rendering
-  - Note: Blocked by other NeoForge issues - verify when resolved
+- [x] T273a [US1] Verify boat functionality on NeoForge
+  - **Completed**: Verified boat placement, riding, chest storage
+  - **Completed**: Verified entity rendering
+  - **Result**: All boat functionality works correctly on NeoForge after build issues were resolved
 
 ### Decorative Terrain Features (US1 Enhancement)
 
