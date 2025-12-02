@@ -8,6 +8,7 @@
     "chronosphere:chronosphere_desert",
     "chronosphere:chronosphere_mountain",
     "chronosphere:chronosphere_snowy",
-    "chronosphere:chronosphere_swamp"
+    "chronosphere:chronosphere_swamp",
+    "chronosphere:chronosphere_ocean"
   ]
 }

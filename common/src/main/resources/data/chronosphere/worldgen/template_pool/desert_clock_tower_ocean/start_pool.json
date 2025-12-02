@@ -4,8 +4,8 @@
     {
       "weight": 1,
       "element": {
-        "location": "chronosphere:desert_clock_tower_ocean",
-        "processors": "chronosphere:desert_clock_tower_loot",
+        "location": "chronosphere:desert_clock_tower_ocean_platform",
+        "processors": "minecraft:empty",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
       }
