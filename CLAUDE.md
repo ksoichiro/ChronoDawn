@@ -37,6 +37,66 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 - Build files use Groovy syntax (e.g., `maven { url 'https://...' }`, not `maven { url = "https://..." }`)
 - Common module code is bundled into Fabric JAR using Shadow plugin
 
+## Mixin Configuration (2025-12-02)
+
+**Critical**: Fabric and NeoForge require **different** Mixin configurations due to mapping differences.
+
+### Loader-Specific Mixin Files
+
+- **Fabric**: `fabric/src/main/resources/chronosphere-fabric.mixins.json`
+  - **Must include** `"refmap": "common-common-refmap.json"`
+  - Required for Mojang → Intermediary mapping conversion in production
+  - Referenced in `fabric.mod.json`
+
+- **NeoForge**: `neoforge/src/main/resources/chronosphere-neoforge.mixins.json`
+  - **Must NOT include** refMap property
+  - Uses Mojang mappings directly in development environment
+  - Referenced in `META-INF/neoforge.mods.toml`
+
+- **Common**: `common/src/main/resources/chronosphere.mixins.json`
+  - No refMap property
+  - **Excluded from both JARs** via build.gradle exclude rules
+  - Kept for reference only
+
+### Adding New Mixins
+
+When adding new Mixin classes:
+
+1. Create Mixin class in `common/src/main/java/com/chronosphere/mixin/`
+2. Update **both** loader-specific configs:
+   - Add to `chronosphere-fabric.mixins.json` (with refMap)
+   - Add to `chronosphere-neoforge.mixins.json` (without refMap)
+3. Do NOT modify `chronosphere.mixins.json` (excluded from builds)
+
+### Build Configuration
+
+**Fabric** (`fabric/build.gradle`):
+```groovy
+processResources {
+    from(project(':common').sourceSets.main.resources) {
+        exclude 'chronosphere.mixins.json'  // Exclude common config
+    }
+}
+shadowJar {
+    exclude 'chronosphere.mixins.json'  // Also exclude from shadow JAR
+}
+```
+
+**NeoForge** (`neoforge/build.gradle`):
+```groovy
+from(project(":common").sourceSets.main.resources) {
+    exclude "chronosphere.mixins.json"  // Already configured
+}
+```
+
+### Why This Separation is Necessary
+
+- **Fabric (Production)**: Runs with Intermediary mappings → needs refMap to translate method names
+- **NeoForge (Development)**: Runs with Mojang mappings → refMap causes InvalidInjectionException
+- **Root Cause**: Architectury Loom generates refMap using Intermediary mappings, incompatible with NeoForge's Mojang mappings
+
+**Reference**: Commit 77958c0 (fix: separate loader-specific Mixin configs)
+
 <!-- MANUAL ADDITIONS START -->
 
 ## Workflow Guidelines
