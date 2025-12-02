@@ -78,6 +78,48 @@ public class TimeKeeperEntity extends AbstractVillager {
     public TimeKeeperEntity(EntityType<? extends TimeKeeperEntity> entityType, Level level) {
         super(entityType, level);
         this.xpReward = 0; // No XP on death (neutral mob, killing discourages trading)
+        // Mark as invulnerable so hostile mobs ignore this entity
+        this.setInvulnerable(true);
+    }
+
+    /**
+     * Prevent despawning - Time Keepers are important NPCs that should persist.
+     * Similar to vanilla Villagers.
+     */
+    @Override
+    public boolean requiresCustomPersistence() {
+        return true;
+    }
+
+    /**
+     * Never despawn regardless of distance from players.
+     */
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false;
+    }
+
+    /**
+     * Override hurt to allow player attacks despite being invulnerable.
+     * The invulnerable flag makes hostile mobs ignore Time Keeper,
+     * but we still want players to be able to attack if needed.
+     */
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        // Allow damage that bypasses invulnerability (/kill, void, etc.)
+        if (source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY)) {
+            return super.hurt(source, amount);
+        }
+        // Allow damage from players
+        if (source.getEntity() instanceof Player) {
+            // Temporarily remove invulnerable flag to process damage
+            this.setInvulnerable(false);
+            boolean result = super.hurt(source, amount);
+            this.setInvulnerable(true);
+            return result;
+        }
+        // Block all other damage
+        return false;
     }
 
     @Override
