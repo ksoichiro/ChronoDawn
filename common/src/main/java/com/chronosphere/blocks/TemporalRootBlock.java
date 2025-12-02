@@ -91,7 +91,7 @@ public class TemporalRootBlock extends CropBlock {
         if (level.getRawBrightness(pos, 0) >= 9) {
             int currentAge = this.getAge(state);
             if (currentAge < this.getMaxAge()) {
-                float growthSpeed = getGrowthSpeed(this, level, pos);
+                float growthSpeed = CropBlock.getGrowthSpeed(state.getBlock(), level, pos);
                 if (random.nextInt((int) (25.0F / growthSpeed) + 1) == 0) {
                     level.setBlock(pos, this.getStateForAge(currentAge + 1), 2);
                 }
