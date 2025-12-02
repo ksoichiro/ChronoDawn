@@ -1,6 +1,7 @@
 package com.chronosphere.integration;
 
 import com.chronosphere.ChronosphereTestBase;
+import com.chronosphere.entities.bosses.TimeGuardianEntity;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -22,6 +23,128 @@ import static org.junit.jupiter.api.Assertions.*;
  * Task: T092 [US2] Write GameTest for Time Guardian boss fight
  */
 public class TimeGuardianFightTest extends ChronosphereTestBase {
+
+    // ========== Unit Tests (No Minecraft runtime required) ==========
+
+    @Test
+    public void testTimeGuardianEntityClassExists() {
+        logTest("Testing TimeGuardianEntity class existence");
+
+        assertDoesNotThrow(() -> {
+            Class<?> clazz = TimeGuardianEntity.class;
+            assertNotNull(clazz, "TimeGuardianEntity class should exist");
+        }, "TimeGuardianEntity class should be accessible");
+    }
+
+    @Test
+    public void testCreateAttributesMethodExists() {
+        logTest("Testing TimeGuardianEntity.createAttributes() method exists");
+
+        assertDoesNotThrow(() -> {
+            var method = TimeGuardianEntity.class.getMethod("createAttributes");
+            assertNotNull(method, "createAttributes() method should exist");
+        }, "createAttributes() method should be accessible");
+    }
+
+    @Test
+    public void testPhaseConstants() {
+        logTest("Testing Time Guardian phase constants");
+
+        assertEquals(1, TimeGuardianEntity.PHASE_1,
+                "PHASE_1 should be 1 (100%-50% HP: Melee-focused)");
+        assertEquals(2, TimeGuardianEntity.PHASE_2,
+                "PHASE_2 should be 2 (50%-0% HP: Teleport + AoE)");
+    }
+
+    @Test
+    public void testTeleportCooldownConstant() {
+        logTest("Testing Time Guardian teleport cooldown is 100 ticks (5 seconds)");
+
+        assertEquals(100, TimeGuardianEntity.TELEPORT_COOLDOWN_TICKS,
+                "Teleport cooldown should be 100 ticks (5 seconds)");
+    }
+
+    @Test
+    public void testPostTeleportDelayConstant() {
+        logTest("Testing Time Guardian post-teleport delay is 15 ticks (0.75 seconds)");
+
+        assertEquals(15, TimeGuardianEntity.POST_TELEPORT_DELAY_TICKS,
+                "Post-teleport delay should be 15 ticks (0.75 seconds)");
+    }
+
+    @Test
+    public void testAoECooldownConstant() {
+        logTest("Testing Time Guardian AoE cooldown is 80 ticks (4 seconds)");
+
+        assertEquals(80, TimeGuardianEntity.AOE_COOLDOWN_TICKS,
+                "AoE cooldown should be 80 ticks (4 seconds)");
+    }
+
+    @Test
+    public void testAoERangeConstant() {
+        logTest("Testing Time Guardian AoE range is 4.0 blocks");
+
+        assertEquals(4.0, TimeGuardianEntity.AOE_RANGE, 0.001,
+                "AoE range should be 4.0 blocks");
+    }
+
+    @Test
+    public void testAoEDamageConstant() {
+        logTest("Testing Time Guardian AoE damage is 6.0 (3 hearts)");
+
+        assertEquals(6.0f, TimeGuardianEntity.AOE_DAMAGE, 0.001,
+                "AoE damage should be 6.0 (3 hearts)");
+    }
+
+    @Test
+    public void testGetPhaseMethodExists() {
+        logTest("Testing TimeGuardianEntity.getPhase() method exists");
+
+        assertDoesNotThrow(() -> {
+            var method = TimeGuardianEntity.class.getMethod("getPhase");
+            assertNotNull(method, "getPhase() method should exist");
+            assertEquals(int.class, method.getReturnType(),
+                    "getPhase() should return int");
+        }, "getPhase() method should be accessible");
+    }
+
+    @Test
+    public void testSetPhaseMethodExists() {
+        logTest("Testing TimeGuardianEntity.setPhase() method exists");
+
+        assertDoesNotThrow(() -> {
+            var method = TimeGuardianEntity.class.getMethod("setPhase", int.class);
+            assertNotNull(method, "setPhase() method should exist");
+        }, "setPhase() method should be accessible");
+    }
+
+    @Test
+    public void testIsInPostTeleportDelayMethodExists() {
+        logTest("Testing TimeGuardianEntity.isInPostTeleportDelay() method exists");
+
+        assertDoesNotThrow(() -> {
+            var method = TimeGuardianEntity.class.getMethod("isInPostTeleportDelay");
+            assertNotNull(method, "isInPostTeleportDelay() method should exist");
+            assertEquals(boolean.class, method.getReturnType(),
+                    "isInPostTeleportDelay() should return boolean");
+        }, "isInPostTeleportDelay() method should be accessible");
+    }
+
+    @Test
+    public void testPerformRangedAttackMethodExists() {
+        logTest("Testing TimeGuardianEntity.performRangedAttack() method exists (RangedAttackMob interface)");
+
+        assertDoesNotThrow(() -> {
+            var method = TimeGuardianEntity.class.getMethod(
+                "performRangedAttack",
+                net.minecraft.world.entity.LivingEntity.class,
+                float.class
+            );
+            assertNotNull(method, "performRangedAttack() method should exist");
+        }, "performRangedAttack() method should be accessible");
+    }
+
+    // ========== Integration Tests (Minecraft runtime required) ==========
 
     @Disabled("Requires Minecraft runtime environment - tested in-game")
     @Test
