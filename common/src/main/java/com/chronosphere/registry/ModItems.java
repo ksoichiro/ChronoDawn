@@ -49,6 +49,8 @@ import com.chronosphere.items.KeyToMasterClockItem;
 import com.chronosphere.items.UnstableHourglassItem;
 import com.chronosphere.items.quest.AncientGearItem;
 import com.chronosphere.items.tools.SpatiallyLinkedPickaxeItem;
+import com.chronosphere.items.boats.ChronosphereBoatItem;
+import com.chronosphere.entities.boats.ChronosphereBoatType;
 import com.chronosphere.registry.ModFluids;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -1251,6 +1253,62 @@ public class ModItems {
         )
     );
 
+    // === Boats ===
+
+    /**
+     * Time Wood Boat - Boat crafted from Time Wood Planks.
+     * Task: T268 [US1] Create Time Wood Boat
+     */
+    public static final RegistrySupplier<Item> TIME_WOOD_BOAT = ITEMS.register(
+        "time_wood_boat",
+        () -> new ChronosphereBoatItem(ChronosphereBoatType.TIME_WOOD, false, ChronosphereBoatItem.createProperties())
+    );
+
+    /**
+     * Time Wood Chest Boat - Chest boat crafted from Time Wood Boat + Chest.
+     * Task: T268 [US1] Create Time Wood Chest Boat
+     */
+    public static final RegistrySupplier<Item> TIME_WOOD_CHEST_BOAT = ITEMS.register(
+        "time_wood_chest_boat",
+        () -> new ChronosphereBoatItem(ChronosphereBoatType.TIME_WOOD, true, ChronosphereBoatItem.createProperties())
+    );
+
+    /**
+     * Dark Time Wood Boat - Boat crafted from Dark Time Wood Planks.
+     * Task: T269 [US1] Create Dark Time Wood Boat
+     */
+    public static final RegistrySupplier<Item> DARK_TIME_WOOD_BOAT = ITEMS.register(
+        "dark_time_wood_boat",
+        () -> new ChronosphereBoatItem(ChronosphereBoatType.DARK_TIME_WOOD, false, ChronosphereBoatItem.createProperties())
+    );
+
+    /**
+     * Dark Time Wood Chest Boat - Chest boat crafted from Dark Time Wood Boat + Chest.
+     * Task: T269 [US1] Create Dark Time Wood Chest Boat
+     */
+    public static final RegistrySupplier<Item> DARK_TIME_WOOD_CHEST_BOAT = ITEMS.register(
+        "dark_time_wood_chest_boat",
+        () -> new ChronosphereBoatItem(ChronosphereBoatType.DARK_TIME_WOOD, true, ChronosphereBoatItem.createProperties())
+    );
+
+    /**
+     * Ancient Time Wood Boat - Boat crafted from Ancient Time Wood Planks.
+     * Task: T270 [US1] Create Ancient Time Wood Boat
+     */
+    public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_BOAT = ITEMS.register(
+        "ancient_time_wood_boat",
+        () -> new ChronosphereBoatItem(ChronosphereBoatType.ANCIENT_TIME_WOOD, false, ChronosphereBoatItem.createProperties())
+    );
+
+    /**
+     * Ancient Time Wood Chest Boat - Chest boat crafted from Ancient Time Wood Boat + Chest.
+     * Task: T270 [US1] Create Ancient Time Wood Chest Boat
+     */
+    public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_CHEST_BOAT = ITEMS.register(
+        "ancient_time_wood_chest_boat",
+        () -> new ChronosphereBoatItem(ChronosphereBoatType.ANCIENT_TIME_WOOD, true, ChronosphereBoatItem.createProperties())
+    );
+
     /**
      * Initialize item registry.
      * This method must be called during mod initialization.
@@ -1450,6 +1508,14 @@ public class ModItems {
 
         // === Ultimate Crafted Items ===
         output.accept(CHRONO_AEGIS.get());
+
+        // === Boats ===
+        output.accept(TIME_WOOD_BOAT.get());
+        output.accept(TIME_WOOD_CHEST_BOAT.get());
+        output.accept(DARK_TIME_WOOD_BOAT.get());
+        output.accept(DARK_TIME_WOOD_CHEST_BOAT.get());
+        output.accept(ANCIENT_TIME_WOOD_BOAT.get());
+        output.accept(ANCIENT_TIME_WOOD_CHEST_BOAT.get());
 
         // === Spawn Eggs ===
         // Check if spawn eggs are registered before adding (timing issue with DeferredRegister)

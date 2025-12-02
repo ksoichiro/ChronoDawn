@@ -10,6 +10,8 @@ import com.chronosphere.entities.mobs.ClockworkSentinelEntity;
 import com.chronosphere.entities.mobs.FloqEntity;
 import com.chronosphere.entities.mobs.TemporalWraithEntity;
 import com.chronosphere.entities.mobs.TimeKeeperEntity;
+import com.chronosphere.entities.boats.ChronosphereBoat;
+import com.chronosphere.entities.boats.ChronosphereChestBoat;
 import com.chronosphere.entities.projectiles.TimeArrowEntity;
 import com.chronosphere.entities.projectiles.TimeBlastEntity;
 import dev.architectury.registry.registries.DeferredRegister;
@@ -240,6 +242,42 @@ public class ModEntities {
             .clientTrackingRange(10)
             .updateInterval(3)
             .build("entropy_keeper")
+    );
+
+    // === Boat Entities ===
+
+    /**
+     * Chronosphere Boat - Custom boat entity for Time Wood variants
+     *
+     * Supports Time Wood, Dark Time Wood, and Ancient Time Wood types.
+     * Each type uses the same entity class with different stored type data.
+     *
+     * Reference: research.md (Time Wood Boats Implementation Plan)
+     * Task: T268-T270 [US1] Create Time Wood Boat variants
+     */
+    public static final RegistrySupplier<EntityType<ChronosphereBoat>> CHRONOSPHERE_BOAT = ENTITIES.register(
+        "chronosphere_boat",
+        () -> EntityType.Builder.<ChronosphereBoat>of(ChronosphereBoat::new, MobCategory.MISC)
+            .sized(1.375F, 0.5625F) // Standard boat size
+            .clientTrackingRange(10)
+            .build("chronosphere_boat")
+    );
+
+    /**
+     * Chronosphere Chest Boat - Custom chest boat entity for Time Wood variants
+     *
+     * Supports Time Wood, Dark Time Wood, and Ancient Time Wood types with storage.
+     * Each type uses the same entity class with different stored type data.
+     *
+     * Reference: research.md (Time Wood Boats Implementation Plan)
+     * Task: T268-T270 [US1] Create Time Wood Chest Boat variants
+     */
+    public static final RegistrySupplier<EntityType<ChronosphereChestBoat>> CHRONOSPHERE_CHEST_BOAT = ENTITIES.register(
+        "chronosphere_chest_boat",
+        () -> EntityType.Builder.<ChronosphereChestBoat>of(ChronosphereChestBoat::new, MobCategory.MISC)
+            .sized(1.375F, 0.5625F) // Standard boat size
+            .clientTrackingRange(10)
+            .build("chronosphere_chest_boat")
     );
 
     /**

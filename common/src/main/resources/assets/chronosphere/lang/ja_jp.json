@@ -290,5 +290,14 @@
   "patchouli.gui.lexicon.categories": "カテゴリー",
   "patchouli.gui.lexicon.index": "エントリー索引",
   "patchouli.gui.lexicon.chapters": "章",
-  "patchouli.gui.lexicon.index.info": "この本で利用可能なすべての章の索引です。$(br2)索引または他のカテゴリーで検索するには、クエリを入力するだけです。検索バーが表示されてサポートします。"
+  "patchouli.gui.lexicon.index.info": "この本で利用可能なすべての章の索引です。$(br2)索引または他のカテゴリーで検索するには、クエリを入力するだけです。検索バーが表示されてサポートします。",
+
+  "item.chronosphere.time_wood_boat": "時の木のボート",
+  "item.chronosphere.time_wood_chest_boat": "チェスト付き時の木のボート",
+  "item.chronosphere.dark_time_wood_boat": "暗い時の木のボート",
+  "item.chronosphere.dark_time_wood_chest_boat": "チェスト付き暗い時の木のボート",
+  "item.chronosphere.ancient_time_wood_boat": "古代時の木のボート",
+  "item.chronosphere.ancient_time_wood_chest_boat": "チェスト付き古代時の木のボート",
+  "entity.chronosphere.chronosphere_boat": "ボート",
+  "entity.chronosphere.chronosphere_chest_boat": "チェスト付きボート"
 }
