@@ -86,20 +86,6 @@ public class TemporalRootBlock extends CropBlock {
     }
 
     @Override
-    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        // Growth logic (same as vanilla crops)
-        if (level.getRawBrightness(pos, 0) >= 9) {
-            int currentAge = this.getAge(state);
-            if (currentAge < this.getMaxAge()) {
-                float growthSpeed = CropBlock.getGrowthSpeed(state.getBlock(), level, pos);
-                if (random.nextInt((int) (25.0F / growthSpeed) + 1) == 0) {
-                    level.setBlock(pos, this.getStateForAge(currentAge + 1), 2);
-                }
-            }
-        }
-    }
-
-    @Override
     protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
         // Allow placement on farmland (for player planting) or grass/dirt (for worldgen)
         return state.is(net.minecraft.world.level.block.Blocks.FARMLAND) ||
