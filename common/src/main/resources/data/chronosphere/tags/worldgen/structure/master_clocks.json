@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "chronosphere:master_clock",
+    "chronosphere:master_clock_ocean"
+  ]
+}

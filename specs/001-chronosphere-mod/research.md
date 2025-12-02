@@ -6050,6 +6050,417 @@ public class ModStructurePlacementTypes {
 - [Minecraft Wiki: Custom Structures](https://minecraft.wiki/w/Custom_structure)
 - [Minecraft Wiki: Structure Sets](https://minecraft.wiki/w/Structure_set)
 
+## Structure Variation Approach for Guaranteed Placement (2025-12-02)
+
+### 背景と課題
+
+GuaranteedRadiusStructurePlacementにより構造物の候補位置を制御できるようになったが、以下の理由で100%の生成保証ができない：
+
+1. **バイオーム制限**: 構造物定義の`biomes`タグで許可されたバイオームでのみ生成
+2. **地形条件**: `findValidGenerationPoint()`で地形検証（Y座標、液体、地形条件）
+3. **独立評価**: 各候補チャンクは独立して評価され、失敗しても代替候補を試さない
+
+```
+候補チャンク A → バイオーム不一致 → スキップ（終了）
+候補チャンク B → 地形条件失敗 → スキップ（終了）
+候補チャンク C → 全条件通過 → 生成成功！
+
+※ 全候補が失敗 → 構造物は半径内に存在しない（検知不可）
+```
+
+### 100%保証が必要な構造物
+
+ゲーム進行上、以下の構造物は生成されないと詰む可能性がある：
+
+| 構造物 | 重要度 | 理由 |
+|--------|-------|------|
+| Time Keeper Village | 必須 | Time Compass入手、構造物位置の手がかり |
+| Desert Clock Tower | 必須 | 進行に必要なキーアイテム提供 |
+| Master Clock | 必須 | 最終ボス前の必須アイテム提供 |
+
+4つのボス構造物（Phantom Catacombs等）は、Chrono Aegis素材提供だが、失敗しても致命的ではない。
+
+### 解決策の比較
+
+| 解決策 | 100%保証 | /locate対応 | Jigsaw対応 | 実装複雑度 |
+|--------|---------|------------|-----------|----------|
+| 確率的保証（候補数増加） | △ | ✅ | ✅ | 低 |
+| プログラム的フォールバック | ✅ | △ | △ | 高 |
+| **構造物バリエーション** | ✅ | ✅ | ✅ | 中 |
+
+### 選択: 構造物バリエーション方式
+
+**基本コンセプト**: 地形タイプごとに構造物バリエーションを用意し、どの地形でも生成可能にする
+
+```
+候補チャンク → 地形タイプ判定 → 適切なバリエーション選択 → 生成
+
+例: Desert Clock Tower
+├─ 通常版（砂漠・平原）→ 地上に生成
+├─ 海洋版（海上）→ 浮島/桟橋の上に生成
+├─ 地下版（洞窟）→ 地下空洞内に生成
+└─ 山岳版（山）→ 崖に埋め込み or 山頂に生成
+```
+
+### 地形タイプと必要なバリエーション
+
+| 地形タイプ | 発生原因 | 対応バリエーション | 優先度 |
+|-----------|---------|-------------------|-------|
+| 通常（陸地） | - | デフォルト版 | 必須 |
+| 海洋 | 水面 | 海洋版（浮島/桟橋） | 必須 |
+| 深海 | 深い水 | 海底版（水中神殿風） | 低 |
+| 山岳 | 急傾斜 | 山岳版（崖埋め込み） | 低 |
+| 洞窟 | 地下空洞 | 地下版（洞窟内） | 低 |
+
+**実用的なアプローチ**: 海洋が最大の問題源のため、まず**海洋版**を実装
+
+### 実装方法
+
+#### 方法A: 複数のstructure定義 + structure_set
+
+```
+data/chronosphere/worldgen/structure/
+├─ desert_clock_tower.json          (biomes: land biomes)
+└─ desert_clock_tower_ocean.json    (biomes: ocean)
+
+data/chronosphere/worldgen/structure_set/
+├─ desert_clock_tower.json          (land版のみ)
+└─ desert_clock_tower_ocean.json    (ocean版のみ)
+```
+
+**利点**: シンプル、標準的な方法
+**欠点**: 同じ位置に両方が候補になる可能性（exclusion_zoneで解決）
+
+#### 方法B: 単一structure + Jigsawの条件分岐
+
+```json
+// start_pool.json
+{
+  "elements": [
+    { "element": "chronosphere:desert_clock_tower/land", "weight": 1 },
+    { "element": "chronosphere:desert_clock_tower/ocean", "weight": 1 }
+  ]
+}
+```
+
+**利点**: 構造物定義が1つで済む
+**欠点**: 条件分岐の実装が複雑
+
+**推奨**: 方法A（明確で保守しやすい）
+
+### exclusion_zoneによる重複防止
+
+```json
+// desert_clock_tower_ocean.json (structure_set)
+{
+  "structures": [{ "structure": "chronosphere:desert_clock_tower_ocean", "weight": 1 }],
+  "placement": {
+    "type": "chronosphere:guaranteed_radius",
+    "salt": 1663542343,
+    "radius_chunks": 80,
+    "min_distance": 15,
+    "exclusion_zone": {
+      "other_set": "chronosphere:desert_clock_tower",
+      "chunk_count": 30
+    }
+  }
+}
+```
+
+### Chronosphere次元のバイオーム調整
+
+構造物バリエーションに加えて、海洋バイオームを縮小することで問題を軽減：
+
+```json
+// 現在の海洋バイオーム定義
+{
+  "biome": "chronosphere:chronosphere_ocean",
+  "parameters": {
+    "continentalness": [-1.0, -0.3]  // 広い範囲
+  }
+}
+
+// 調整後
+{
+  "biome": "chronosphere:chronosphere_ocean",
+  "parameters": {
+    "continentalness": [-1.0, -0.85]  // 極端に狭い範囲
+  }
+}
+```
+
+### 構造物別の対応計画
+
+#### Time Keeper Village（実装済み）
+- **方式**: プログラム的配置（TimeKeeperVillagePlacer）
+- **状態**: 完了
+- **100%保証**: ✅
+
+#### Desert Clock Tower
+- **現状**: 通常版のみ（chronosphere_desert限定）
+- **必要**: 海洋版の追加
+- **対応**: T284で詳細設計
+
+#### Master Clock
+- **現状**: 通常版のみ（plains, forest等）
+- **必要**: 海洋版の追加
+- **対応**: T285で詳細設計
+
+### 期待される効果
+
+| 対応 | 候補成功率 | 全失敗確率（200候補） |
+|------|-----------|---------------------|
+| 現状（陸地のみ） | ~70% | ~10^-24 |
+| +海洋縮小 | ~90% | ~10^-46 |
+| +海洋版追加 | ~99% | ~10^-400 |
+
+**結論**: 海洋縮小 + 海洋版追加で、実質的に100%の生成保証が可能
+
+### タスク
+
+- [x] T283: 構造物バリエーション方式の設計ドキュメント作成
+- [x] T284: Desert Clock Tower海洋版の詳細設計
+- [x] T285: Master Clock海洋版の詳細設計
+- [x] T286: バイオーム調整（海洋縮小）
+- [x] T287: Desert Clock Tower海洋版JSON定義
+- [x] T288: Master Clock海洋版JSON定義
+- [ ] T287b: Desert Clock Tower海洋版NBT作成（手動）
+- [ ] T288b: Master Clock海洋版NBT作成（手動）
+- [ ] T289: 統合テスト
+
+## Desert Clock Tower Ocean Variant Design (T284)
+
+### デザインコンセプト: 浮遊島
+
+Chronosphereの異世界感に合致した浮遊島デザインを採用。
+
+```
+[側面図]
+
+           ┌───────────┐
+           │  時計塔   │  ← 既存デザインをベース
+           │   本体    │
+      ┌────┴───────────┴────┐
+      │    浮遊島プラットフォーム    │  ← 新規追加
+      │ ═══════════════════════ │
+      └─────────────────────────┘
+              ~~~海面~~~
+```
+
+**選定理由**:
+- 異世界感に合致
+- 遠くから視認しやすい（探索性向上）
+- 水中呼吸不要（アクセシビリティ）
+- 既存デザインを活かせる
+
+### 構造仕様
+
+| 項目 | 値 |
+|------|-----|
+| **サイズ** | 15x20x15 (XYZ) |
+| **高さ** | 海面から約10-15ブロック上（Y=70-75） |
+| **素材（島部分）** | Sandstone, Cut Sandstone, Time Wood |
+| **素材（塔部分）** | 既存と同じ |
+| **アクセス** | 浮遊島端から水面へ降りる階段 or 足場 |
+
+### NBT構造
+
+```
+desert_clock_tower_ocean.nbt
+├─ 浮遊島ベース（15x3x15）
+│   ├─ 底面: Smooth Sandstone
+│   ├─ 側面: Cut Sandstone (風化した見た目)
+│   └─ 上面: Sandstone + Sand パッチ
+├─ 塔本体（既存デザインを配置）
+│   └─ 時計台、チェスト、装飾
+└─ アクセス構造
+    └─ 垂れ下がる足場 or らせん階段
+```
+
+### 必要ファイル
+
+| ファイル | 種類 | 説明 |
+|----------|------|------|
+| `structure/desert_clock_tower_ocean.nbt` | NBT | 構造物データ |
+| `worldgen/structure/desert_clock_tower_ocean.json` | JSON | 構造物定義 |
+| `worldgen/structure_set/desert_clock_tower_ocean.json` | JSON | 配置設定 |
+| `worldgen/template_pool/desert_clock_tower_ocean/start_pool.json` | JSON | Jigsawプール |
+| `tags/worldgen/structure/desert_clock_towers.json` | JSON | 構造物タグ（TimeCompass用） |
+
+### structure定義
+
+```json
+// worldgen/structure/desert_clock_tower_ocean.json
+{
+  "type": "minecraft:jigsaw",
+  "start_pool": "chronosphere:desert_clock_tower_ocean/start_pool",
+  "size": 1,
+  "max_distance_from_center": 80,
+  "biomes": "chronosphere:chronosphere_ocean",
+  "step": "surface_structures",
+  "terrain_adaptation": "none",
+  "start_height": {
+    "absolute": 70
+  },
+  "use_expansion_hack": false
+}
+```
+
+### structure_set定義
+
+```json
+// worldgen/structure_set/desert_clock_tower_ocean.json
+{
+  "structures": [
+    {
+      "structure": "chronosphere:desert_clock_tower_ocean",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "chronosphere:guaranteed_radius",
+    "salt": 1663542343,
+    "radius_chunks": 80,
+    "min_distance": 15,
+    "exclusion_zone": {
+      "other_set": "chronosphere:desert_clock_tower",
+      "chunk_count": 30
+    }
+  }
+}
+```
+
+### TimeCompass対応
+
+構造物タグで統合し、両方を検索対象にする:
+
+```json
+// tags/worldgen/structure/desert_clock_towers.json
+{
+  "values": [
+    "chronosphere:desert_clock_tower",
+    "chronosphere:desert_clock_tower_ocean"
+  ]
+}
+```
+
+TimeCompassItemの検索ロジックを構造物タグ対応に変更。
+
+## Master Clock Ocean Variant Design (T285)
+
+### デザインコンセプト: 浮遊プラットフォーム + 既存地下構造
+
+既存の地下構造（stairs, corridor, boss_room）を再利用し、地上入口のみ新規作成。
+
+```
+[側面図]
+
+      ┌─────────────────┐
+      │  浮遊プラットフォーム   │  ← 新規（海洋版専用）
+      │  (地上入口)           │
+      └────────┬────────┘
+               │ 階段
+      ~~~海面~~~│~~~
+               │
+         ┌─────┴─────┐
+         │  既存地下構造  │  ← 再利用
+         │ (corridor,  │
+         │  boss_room) │
+         └───────────┘
+```
+
+**選定理由**:
+- 既存アセットの約75%を再利用
+- 実装工数を最小化
+- Desert Clock Tower海洋版と視覚的統一感
+
+### 構造仕様
+
+| 項目 | 値 |
+|------|-----|
+| **地上部分サイズ** | 20x8x20 (XYZ) |
+| **高さ** | 海面から約8-10ブロック上（Y=70-72） |
+| **素材（プラットフォーム）** | Deepslate Bricks, Polished Deepslate, Time Wood |
+| **地下部分** | 既存と同じ（stairs, corridor, boss_room） |
+
+### Jigsaw接続
+
+```
+[海洋版]
+master_clock_surface_ocean.nbt  ← 新規作成
+    └─ Jigsaw接続 → master_clock_stairs.nbt  ← 既存再利用
+        └─ Jigsaw接続 → master_clock_corridor.nbt
+            └─ Jigsaw接続 → master_clock_boss_room.nbt
+```
+
+### 必要ファイル
+
+| ファイル | 種類 | 状態 |
+|----------|------|------|
+| `structure/master_clock_surface_ocean.nbt` | NBT | **新規作成** |
+| `worldgen/structure/master_clock_ocean.json` | JSON | **新規作成** |
+| `worldgen/structure_set/master_clock_ocean.json` | JSON | **新規作成** |
+| `worldgen/template_pool/master_clock_ocean/surface_pool.json` | JSON | **新規作成** |
+| `tags/worldgen/structure/master_clocks.json` | JSON | **新規作成** |
+
+### structure定義
+
+```json
+// worldgen/structure/master_clock_ocean.json
+{
+  "type": "minecraft:jigsaw",
+  "start_pool": "chronosphere:master_clock_ocean/surface_pool",
+  "size": 3,
+  "max_distance_from_center": 80,
+  "biomes": "chronosphere:chronosphere_ocean",
+  "step": "underground_structures",
+  "terrain_adaptation": "none",
+  "start_height": {
+    "absolute": 70
+  },
+  "use_expansion_hack": false
+}
+```
+
+### structure_set定義
+
+```json
+// worldgen/structure_set/master_clock_ocean.json
+{
+  "structures": [{ "structure": "chronosphere:master_clock_ocean", "weight": 1 }],
+  "placement": {
+    "type": "chronosphere:guaranteed_radius",
+    "salt": 1234567891,
+    "radius_chunks": 150,
+    "min_distance": 35,
+    "exclusion_zone": {
+      "other_set": "chronosphere:master_clock",
+      "chunk_count": 50
+    }
+  }
+}
+```
+
+### TimeCompass対応
+
+```json
+// tags/worldgen/structure/master_clocks.json
+{
+  "values": [
+    "chronosphere:master_clock",
+    "chronosphere:master_clock_ocean"
+  ]
+}
+```
+
+### Jigsaw接続の技術詳細
+
+新規surface_ocean.nbtに必要なJigsawブロック:
+- name: `chronosphere:master_clock_down`
+- target: `chronosphere:master_clock_up`
+- pool: `chronosphere:master_clock/stairs_pool`
+- final_state: `minecraft:deepslate_bricks`
+
 ## Time Keeper Village Design (T274)
 
 ### 目的
