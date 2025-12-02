@@ -1,6 +1,7 @@
 package com.chronosphere.integration;
 
 import com.chronosphere.ChronosphereTestBase;
+import com.chronosphere.entities.bosses.TimeTyrantEntity;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -24,6 +25,150 @@ import static org.junit.jupiter.api.Assertions.*;
  * Task: T124 [US3] Write GameTest for Time Tyrant boss fight
  */
 public class TimeTyrantFightTest extends ChronosphereTestBase {
+
+    // ========== Unit Tests (No Minecraft runtime required) ==========
+
+    @Test
+    public void testTimeTyrantEntityClassExists() {
+        logTest("Testing TimeTyrantEntity class existence");
+
+        assertDoesNotThrow(() -> {
+            Class<?> clazz = TimeTyrantEntity.class;
+            assertNotNull(clazz, "TimeTyrantEntity class should exist");
+        }, "TimeTyrantEntity class should be accessible");
+    }
+
+    @Test
+    public void testCreateAttributesMethodExists() {
+        logTest("Testing TimeTyrantEntity.createAttributes() method exists");
+
+        assertDoesNotThrow(() -> {
+            var method = TimeTyrantEntity.class.getMethod("createAttributes");
+            assertNotNull(method, "createAttributes() method should exist");
+        }, "createAttributes() method should be accessible");
+    }
+
+    @Test
+    public void testPhaseConstants() {
+        logTest("Testing Time Tyrant phase constants");
+
+        assertEquals(1, TimeTyrantEntity.PHASE_1,
+                "PHASE_1 should be 1 (100%-66% HP: Time Stop)");
+        assertEquals(2, TimeTyrantEntity.PHASE_2,
+                "PHASE_2 should be 2 (66%-33% HP: Teleport + Time Acceleration)");
+        assertEquals(3, TimeTyrantEntity.PHASE_3,
+                "PHASE_3 should be 3 (33%-0% HP: AoE + HP Recovery)");
+    }
+
+    @Test
+    public void testTimeStopCooldownConstant() {
+        logTest("Testing Time Tyrant time stop cooldown is 100 ticks (5 seconds)");
+
+        assertEquals(100, TimeTyrantEntity.TIME_STOP_COOLDOWN_TICKS,
+                "Time stop cooldown should be 100 ticks (5 seconds)");
+    }
+
+    @Test
+    public void testTeleportCooldownConstant() {
+        logTest("Testing Time Tyrant teleport cooldown is 100 ticks (5 seconds)");
+
+        assertEquals(100, TimeTyrantEntity.TELEPORT_COOLDOWN_TICKS,
+                "Teleport cooldown should be 100 ticks (5 seconds)");
+    }
+
+    @Test
+    public void testTimeAccelerationCooldownConstant() {
+        logTest("Testing Time Tyrant time acceleration cooldown is 160 ticks (8 seconds)");
+
+        assertEquals(160, TimeTyrantEntity.TIME_ACCELERATION_COOLDOWN_TICKS,
+                "Time acceleration cooldown should be 160 ticks (8 seconds)");
+    }
+
+    @Test
+    public void testAoECooldownConstant() {
+        logTest("Testing Time Tyrant AoE cooldown is 120 ticks (6 seconds)");
+
+        assertEquals(120, TimeTyrantEntity.AOE_COOLDOWN_TICKS,
+                "AoE cooldown should be 120 ticks (6 seconds)");
+    }
+
+    @Test
+    public void testPostTeleportDelayConstant() {
+        logTest("Testing Time Tyrant post-teleport delay is 15 ticks (0.75 seconds)");
+
+        assertEquals(15, TimeTyrantEntity.POST_TELEPORT_DELAY_TICKS,
+                "Post-teleport delay should be 15 ticks (0.75 seconds)");
+    }
+
+    @Test
+    public void testAoERangeConstant() {
+        logTest("Testing Time Tyrant AoE range is 5.0 blocks");
+
+        assertEquals(5.0, TimeTyrantEntity.AOE_RANGE, 0.001,
+                "AoE range should be 5.0 blocks");
+    }
+
+    @Test
+    public void testAoEDamageConstant() {
+        logTest("Testing Time Tyrant AoE damage is 12.0 (6 hearts)");
+
+        assertEquals(12.0f, TimeTyrantEntity.AOE_DAMAGE, 0.001,
+                "AoE damage should be 12.0 (6 hearts)");
+    }
+
+    @Test
+    public void testTimeReversalHPPercentConstant() {
+        logTest("Testing Time Tyrant time reversal HP recovery is 10% of max HP");
+
+        assertEquals(0.1f, TimeTyrantEntity.TIME_REVERSAL_HP_PERCENT, 0.001,
+                "Time reversal should recover 10% of max HP");
+    }
+
+    @Test
+    public void testTimeReversalTriggerThresholdConstant() {
+        logTest("Testing Time Tyrant time reversal triggers at 20% HP");
+
+        assertEquals(0.2f, TimeTyrantEntity.TIME_REVERSAL_TRIGGER_THRESHOLD, 0.001,
+                "Time reversal should trigger at 20% HP");
+    }
+
+    @Test
+    public void testTimeClockWeakeningDurationConstant() {
+        logTest("Testing Time Tyrant Time Clock weakening duration is 200 ticks (10 seconds)");
+
+        assertEquals(200, TimeTyrantEntity.TIME_CLOCK_WEAKENING_DURATION,
+                "Time Clock weakening duration should be 200 ticks (10 seconds)");
+    }
+
+    @Test
+    public void testWeakeningArmorReductionConstant() {
+        logTest("Testing Time Tyrant weakening armor reduction is 10.0");
+
+        assertEquals(10.0, TimeTyrantEntity.WEAKENING_ARMOR_REDUCTION, 0.001,
+                "Weakening armor reduction should be 10.0 (15 → 5)");
+    }
+
+    @Test
+    public void testWeakeningSpeedMultiplierConstant() {
+        logTest("Testing Time Tyrant weakening speed multiplier is 0.5");
+
+        assertEquals(0.5, TimeTyrantEntity.WEAKENING_SPEED_MULTIPLIER, 0.001,
+                "Weakening speed multiplier should be 0.5 (50% speed reduction)");
+    }
+
+    @Test
+    public void testGetPhaseMethodExists() {
+        logTest("Testing TimeTyrantEntity.getPhase() method exists");
+
+        assertDoesNotThrow(() -> {
+            var method = TimeTyrantEntity.class.getMethod("getPhase");
+            assertNotNull(method, "getPhase() method should exist");
+            assertEquals(int.class, method.getReturnType(),
+                    "getPhase() should return int");
+        }, "getPhase() method should be accessible");
+    }
+
+    // ========== Integration Tests (Minecraft runtime required) ==========
 
     @Disabled("Requires Minecraft runtime environment - tested in-game")
     @Test
