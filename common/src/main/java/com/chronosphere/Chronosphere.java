@@ -13,7 +13,6 @@ import com.chronosphere.registry.ModFluids;
 import com.chronosphere.registry.ModItems;
 import com.chronosphere.registry.ModStructureProcessorTypes;
 import com.chronosphere.registry.ModTreeDecoratorTypes;
-import com.chronosphere.worldgen.placement.ModStructurePlacementTypes;
 import com.chronosphere.worldgen.spawning.ChronosWardenSpawner;
 import com.chronosphere.worldgen.spawning.ClockworkColossusSpawner;
 import com.chronosphere.worldgen.spawning.EntropyKeeperSpawner;
@@ -42,7 +41,6 @@ public class Chronosphere {
         ModCreativeTabs.register();
         ModTreeDecoratorTypes.register();
         ModStructureProcessorTypes.register();
-        ModStructurePlacementTypes.register();
 
         // Note: Spawn egg initialization is platform-specific
         // - Fabric: Called immediately in ChronosphereFabric.onInitialize()

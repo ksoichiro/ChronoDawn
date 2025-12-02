@@ -6230,7 +6230,11 @@ data/chronosphere/worldgen/structure_set/
 
 ## Desert Clock Tower Ocean Variant Design (T284)
 
-### デザインコンセプト: 浮遊島 + Jigsaw接続
+> **⚠️ 廃止 (2025-12-03)**: このデザインは実装後に廃止されました。
+> `/locate` コマンドとの互換性問題により、`random_spread` + 全バイオーム対応のシンプルな方式に移行しました。
+> 詳細は「GuaranteedRadiusStructurePlacement 廃止と random_spread 移行」セクションを参照。
+
+### デザインコンセプト: 浮遊島 + Jigsaw接続 (廃止)
 
 Chronosphereの異世界感に合致した浮遊島デザインを採用。
 **既存塔NBTをJigsawで再利用し、重複管理を回避**。
@@ -6459,6 +6463,79 @@ TimeCompassItemの検索ロジックを構造物タグ対応に変更。
   ]
 }
 ```
+
+## GuaranteedRadiusStructurePlacement 廃止と random_spread 移行 (2025-12-03)
+
+### 背景
+
+カスタム `GuaranteedRadiusStructurePlacement` を実装したが、以下の問題が発生：
+
+1. **`/locate` コマンドが無限ループ**: `isPlacementChunk()` の `radiusChunks` 制約により、範囲外で常に `false` を返すため、locate コマンドが見つからないまま無限に検索を続ける
+2. **海洋版構造物での深刻化**: 海洋バイオームは世界の7.5%のみのため、範囲内で見つからない確率が高く、問題が顕在化
+
+### 検討した解決策
+
+| 解決策 | `/locate` 対応 | 実装コスト | 採用 |
+|--------|---------------|-----------|------|
+| カスタム実装を維持、`/locate` 非対応 | ❌ | 低 | ❌ |
+| 海洋版のみ削除 | 部分的 | 低 | ❌ |
+| `random_spread` に完全移行 | ✅ | 中 | ✅ |
+
+### 決定: `random_spread` への移行
+
+**理由**:
+1. **`/locate` の重要性**: プレイヤーが構造物を探せることはUX上重要
+2. **実質的な差がない**: 全バイオーム対応により、`random_spread` でも実質100%の生成率
+3. **安定性**: Minecraft標準機能のため、バグリスクが低い
+
+**唯一の違い**:
+- `GuaranteedRadius`: 範囲外では生成しない
+- `random_spread`: 無限に生成され続ける
+
+→ ゲームプレイ上、この違いは問題にならない
+
+### 実装内容
+
+**削除:**
+- `GuaranteedRadiusStructurePlacement.java`
+- `ModStructurePlacementTypes.java`
+- `Chronosphere.java` からの登録呼び出し
+- `desert_clock_tower_ocean` 関連ファイル一式
+
+**変更:**
+```json
+// 変更前
+{
+  "placement": {
+    "type": "chronosphere:guaranteed_radius",
+    "salt": 1663542342,
+    "radius_chunks": 80,
+    "spacing": 30,
+    "separation": 10
+  }
+}
+
+// 変更後
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 1663542342,
+    "spacing": 30,
+    "separation": 10
+  }
+}
+```
+
+**対象 structure_set:**
+- `desert_clock_tower.json`
+- `master_clock.json`
+- `ancient_ruins.json`
+
+### 学んだ教訓
+
+1. **カスタム StructurePlacement の落とし穴**: `isPlacementChunk()` をオーバーライドするだけでは `/locate` が正常に動作しない
+2. **標準機能の価値**: Minecraft の標準機能は十分にテストされており、カスタム実装より信頼性が高い
+3. **シンプルな解決策**: バイオーム対応を拡張することで、カスタム配置ロジックなしでも目的を達成できた
 
 ## Time Keeper Village Design (T274)
 
