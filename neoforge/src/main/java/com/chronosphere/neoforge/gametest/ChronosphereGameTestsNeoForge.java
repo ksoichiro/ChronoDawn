@@ -1,9 +1,7 @@
 package com.chronosphere.neoforge.gametest;
 
 import com.chronosphere.Chronosphere;
-import com.chronosphere.registry.ModBlocks;
-import com.chronosphere.registry.ModEntities;
-import net.minecraft.core.BlockPos;
+import com.chronosphere.gametest.ChronosphereGameTestLogic;
 import net.minecraft.gametest.framework.GameTestGenerator;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.gametest.framework.TestFunction;
@@ -24,6 +22,8 @@ import java.util.function.Consumer;
  * allowing for testing of entity spawning, block interactions,
  * and other gameplay mechanics that require the full game runtime.
  *
+ * Test logic is shared via ChronosphereGameTestLogic in common module.
+ *
  * Reference: T173 [P] Run all GameTests on NeoForge loader
  */
 @EventBusSubscriber(modid = Chronosphere.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
@@ -40,88 +40,41 @@ public class ChronosphereGameTestsNeoForge {
     }
 
     /**
-     * Generate test functions dynamically to work around registration issues.
+     * Generate test functions dynamically using shared test logic from common module.
      */
     @GameTestGenerator
     public static Collection<TestFunction> generateTests() {
         List<TestFunction> tests = new ArrayList<>();
 
         // Entity spawn tests
-        tests.add(createTest("testTimeGuardianCanSpawn", helper -> {
-            BlockPos spawnPos = new BlockPos(1, 2, 1);
-            helper.spawn(ModEntities.TIME_GUARDIAN.get(), spawnPos);
-            helper.succeedWhenEntityPresent(ModEntities.TIME_GUARDIAN.get(), spawnPos);
-        }));
+        tests.add(createTest("testTimeGuardianCanSpawn",
+            ChronosphereGameTestLogic.TEST_TIME_GUARDIAN_CAN_SPAWN));
 
-        tests.add(createTest("testTimeTyrantCanSpawn", helper -> {
-            BlockPos spawnPos = new BlockPos(1, 2, 1);
-            helper.spawn(ModEntities.TIME_TYRANT.get(), spawnPos);
-            helper.succeedWhenEntityPresent(ModEntities.TIME_TYRANT.get(), spawnPos);
-        }));
+        tests.add(createTest("testTimeTyrantCanSpawn",
+            ChronosphereGameTestLogic.TEST_TIME_TYRANT_CAN_SPAWN));
 
-        tests.add(createTest("testTemporalWraithCanSpawn", helper -> {
-            BlockPos spawnPos = new BlockPos(1, 2, 1);
-            helper.spawn(ModEntities.TEMPORAL_WRAITH.get(), spawnPos);
-            helper.succeedWhenEntityPresent(ModEntities.TEMPORAL_WRAITH.get(), spawnPos);
-        }));
+        tests.add(createTest("testTemporalWraithCanSpawn",
+            ChronosphereGameTestLogic.TEST_TEMPORAL_WRAITH_CAN_SPAWN));
 
-        tests.add(createTest("testClockworkSentinelCanSpawn", helper -> {
-            BlockPos spawnPos = new BlockPos(1, 2, 1);
-            helper.spawn(ModEntities.CLOCKWORK_SENTINEL.get(), spawnPos);
-            helper.succeedWhenEntityPresent(ModEntities.CLOCKWORK_SENTINEL.get(), spawnPos);
-        }));
+        tests.add(createTest("testClockworkSentinelCanSpawn",
+            ChronosphereGameTestLogic.TEST_CLOCKWORK_SENTINEL_CAN_SPAWN));
 
         // Block placement tests
-        tests.add(createTest("testTimeWoodLogCanBePlaced", helper -> {
-            BlockPos pos = new BlockPos(1, 2, 1);
-            helper.setBlock(pos, ModBlocks.TIME_WOOD_LOG.get());
-            helper.succeedWhenBlockPresent(ModBlocks.TIME_WOOD_LOG.get(), pos);
-        }));
+        tests.add(createTest("testTimeWoodLogCanBePlaced",
+            ChronosphereGameTestLogic.TEST_TIME_WOOD_LOG_CAN_BE_PLACED));
 
-        tests.add(createTest("testTimeWoodPlanksCanBePlaced", helper -> {
-            BlockPos pos = new BlockPos(1, 2, 1);
-            helper.setBlock(pos, ModBlocks.TIME_WOOD_PLANKS.get());
-            helper.succeedWhenBlockPresent(ModBlocks.TIME_WOOD_PLANKS.get(), pos);
-        }));
+        tests.add(createTest("testTimeWoodPlanksCanBePlaced",
+            ChronosphereGameTestLogic.TEST_TIME_WOOD_PLANKS_CAN_BE_PLACED));
 
-        tests.add(createTest("testClockstoneBlockCanBePlaced", helper -> {
-            BlockPos pos = new BlockPos(1, 2, 1);
-            helper.setBlock(pos, ModBlocks.CLOCKSTONE_BLOCK.get());
-            helper.succeedWhenBlockPresent(ModBlocks.CLOCKSTONE_BLOCK.get(), pos);
-        }));
+        tests.add(createTest("testClockstoneBlockCanBePlaced",
+            ChronosphereGameTestLogic.TEST_CLOCKSTONE_BLOCK_CAN_BE_PLACED));
 
         // Entity health tests
-        tests.add(createTest("testTimeGuardianInitialHealth", helper -> {
-            BlockPos spawnPos = new BlockPos(1, 2, 1);
-            var entity = helper.spawn(ModEntities.TIME_GUARDIAN.get(), spawnPos);
+        tests.add(createTest("testTimeGuardianInitialHealth",
+            ChronosphereGameTestLogic.TEST_TIME_GUARDIAN_INITIAL_HEALTH));
 
-            helper.runAfterDelay(1, () -> {
-                float expectedHealth = 200.0f;
-                float actualHealth = entity.getHealth();
-
-                if (Math.abs(actualHealth - expectedHealth) < 0.1f) {
-                    helper.succeed();
-                } else {
-                    helper.fail("Time Guardian health was " + actualHealth + ", expected " + expectedHealth);
-                }
-            });
-        }));
-
-        tests.add(createTest("testTimeTyrantInitialHealth", helper -> {
-            BlockPos spawnPos = new BlockPos(1, 2, 1);
-            var entity = helper.spawn(ModEntities.TIME_TYRANT.get(), spawnPos);
-
-            helper.runAfterDelay(1, () -> {
-                float expectedHealth = 500.0f;
-                float actualHealth = entity.getHealth();
-
-                if (Math.abs(actualHealth - expectedHealth) < 0.1f) {
-                    helper.succeed();
-                } else {
-                    helper.fail("Time Tyrant health was " + actualHealth + ", expected " + expectedHealth);
-                }
-            });
-        }));
+        tests.add(createTest("testTimeTyrantInitialHealth",
+            ChronosphereGameTestLogic.TEST_TIME_TYRANT_INITIAL_HEALTH));
 
         Chronosphere.LOGGER.info("Generated {} GameTest functions for NeoForge", tests.size());
         return tests;
