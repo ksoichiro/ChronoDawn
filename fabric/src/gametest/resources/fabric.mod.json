@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "chronosphere-test",
+  "version": "1.0.0",
+  "name": "Chronosphere Tests",
+  "description": "GameTest tests for Chronosphere mod",
+  "authors": [],
+  "contact": {},
+  "license": "All Rights Reserved",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-gametest": [
+      "com.chronosphere.gametest.ChronosphereGameTests"
+    ]
+  },
+  "depends": {
+    "chronosphere": "*",
+    "fabric-gametest-api-v1": "*"
+  }
+}

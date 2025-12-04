@@ -50,6 +50,17 @@ loom {
     }
 }
 
+// GameTest Framework configuration
+fabricApi {
+    configureTests {
+        createSourceSet = true
+        modId = "chronosphere-test"
+        enableGameTests = true
+        enableClientGameTests = false  // Server-side only for now
+        eula = true  // By setting this to true, you agree to the Minecraft EULA
+    }
+}
+
 processResources {
     from project(':common').sourceSets.main.resources
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
