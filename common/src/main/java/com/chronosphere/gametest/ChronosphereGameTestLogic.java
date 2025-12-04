@@ -51,6 +51,22 @@ public final class ChronosphereGameTestLogic {
     public static final double CLOCKWORK_SENTINEL_ATTACK_DAMAGE = 6.0;
     public static final double CLOCKWORK_SENTINEL_ARMOR = 5.0;
 
+    // Chronos Warden expected values (mini-boss)
+    public static final float CHRONOS_WARDEN_HEALTH = 180.0f;
+    public static final double CHRONOS_WARDEN_ARMOR = 12.0;
+
+    // Clockwork Colossus expected values (mini-boss)
+    public static final float CLOCKWORK_COLOSSUS_HEALTH = 200.0f;
+    public static final double CLOCKWORK_COLOSSUS_KNOCKBACK_RESISTANCE = 1.0;
+
+    // Temporal Phantom expected values (mini-boss)
+    public static final float TEMPORAL_PHANTOM_HEALTH = 150.0f;
+    public static final double TEMPORAL_PHANTOM_ATTACK_DAMAGE = 8.0;
+
+    // Entropy Keeper expected values (mini-boss)
+    public static final float ENTROPY_KEEPER_HEALTH = 160.0f;
+    public static final double ENTROPY_KEEPER_ARMOR = 6.0;
+
     // Chronoblade expected values
     public static final int CHRONOBLADE_DURABILITY = 2000;
 
@@ -354,6 +370,146 @@ public final class ChronosphereGameTestLogic {
                 helper.succeed();
             } else {
                 helper.fail("Clockwork Sentinel armor was " + actualArmor + ", expected " + CLOCKWORK_SENTINEL_ARMOR);
+            }
+        });
+    };
+
+    // ============== Mini-Boss Attribute Tests ==============
+
+    /**
+     * Test that Chronos Warden has correct initial health (180 HP = 90 hearts).
+     */
+    public static final Consumer<GameTestHelper> TEST_CHRONOS_WARDEN_INITIAL_HEALTH = helper -> {
+        var entity = helper.spawn(ModEntities.CHRONOS_WARDEN.get(), TEST_POS);
+
+        helper.runAfterDelay(1, () -> {
+            float actualHealth = entity.getHealth();
+
+            if (Math.abs(actualHealth - CHRONOS_WARDEN_HEALTH) < 0.1f) {
+                helper.succeed();
+            } else {
+                helper.fail("Chronos Warden health was " + actualHealth + ", expected " + CHRONOS_WARDEN_HEALTH);
+            }
+        });
+    };
+
+    /**
+     * Test that Chronos Warden has correct armor value (12.0).
+     */
+    public static final Consumer<GameTestHelper> TEST_CHRONOS_WARDEN_ARMOR = helper -> {
+        var entity = helper.spawn(ModEntities.CHRONOS_WARDEN.get(), TEST_POS);
+
+        helper.runAfterDelay(1, () -> {
+            double actualArmor = entity.getAttributeValue(Attributes.ARMOR);
+
+            if (Math.abs(actualArmor - CHRONOS_WARDEN_ARMOR) < 0.1) {
+                helper.succeed();
+            } else {
+                helper.fail("Chronos Warden armor was " + actualArmor + ", expected " + CHRONOS_WARDEN_ARMOR);
+            }
+        });
+    };
+
+    /**
+     * Test that Clockwork Colossus has correct initial health (200 HP = 100 hearts).
+     */
+    public static final Consumer<GameTestHelper> TEST_CLOCKWORK_COLOSSUS_INITIAL_HEALTH = helper -> {
+        var entity = helper.spawn(ModEntities.CLOCKWORK_COLOSSUS.get(), TEST_POS);
+
+        helper.runAfterDelay(1, () -> {
+            float actualHealth = entity.getHealth();
+
+            if (Math.abs(actualHealth - CLOCKWORK_COLOSSUS_HEALTH) < 0.1f) {
+                helper.succeed();
+            } else {
+                helper.fail("Clockwork Colossus health was " + actualHealth + ", expected " + CLOCKWORK_COLOSSUS_HEALTH);
+            }
+        });
+    };
+
+    /**
+     * Test that Clockwork Colossus has complete knockback immunity (1.0).
+     */
+    public static final Consumer<GameTestHelper> TEST_CLOCKWORK_COLOSSUS_KNOCKBACK_RESISTANCE = helper -> {
+        var entity = helper.spawn(ModEntities.CLOCKWORK_COLOSSUS.get(), TEST_POS);
+
+        helper.runAfterDelay(1, () -> {
+            double actualResistance = entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE);
+
+            if (Math.abs(actualResistance - CLOCKWORK_COLOSSUS_KNOCKBACK_RESISTANCE) < 0.1) {
+                helper.succeed();
+            } else {
+                helper.fail("Clockwork Colossus knockback resistance was " + actualResistance +
+                    ", expected " + CLOCKWORK_COLOSSUS_KNOCKBACK_RESISTANCE);
+            }
+        });
+    };
+
+    /**
+     * Test that Temporal Phantom has correct initial health (150 HP = 75 hearts).
+     */
+    public static final Consumer<GameTestHelper> TEST_TEMPORAL_PHANTOM_INITIAL_HEALTH = helper -> {
+        var entity = helper.spawn(ModEntities.TEMPORAL_PHANTOM.get(), TEST_POS);
+
+        helper.runAfterDelay(1, () -> {
+            float actualHealth = entity.getHealth();
+
+            if (Math.abs(actualHealth - TEMPORAL_PHANTOM_HEALTH) < 0.1f) {
+                helper.succeed();
+            } else {
+                helper.fail("Temporal Phantom health was " + actualHealth + ", expected " + TEMPORAL_PHANTOM_HEALTH);
+            }
+        });
+    };
+
+    /**
+     * Test that Temporal Phantom has correct attack damage (8.0 = 4 hearts).
+     */
+    public static final Consumer<GameTestHelper> TEST_TEMPORAL_PHANTOM_ATTACK_DAMAGE = helper -> {
+        var entity = helper.spawn(ModEntities.TEMPORAL_PHANTOM.get(), TEST_POS);
+
+        helper.runAfterDelay(1, () -> {
+            double actualDamage = entity.getAttributeValue(Attributes.ATTACK_DAMAGE);
+
+            if (Math.abs(actualDamage - TEMPORAL_PHANTOM_ATTACK_DAMAGE) < 0.1) {
+                helper.succeed();
+            } else {
+                helper.fail("Temporal Phantom attack damage was " + actualDamage +
+                    ", expected " + TEMPORAL_PHANTOM_ATTACK_DAMAGE);
+            }
+        });
+    };
+
+    /**
+     * Test that Entropy Keeper has correct initial health (160 HP = 80 hearts).
+     */
+    public static final Consumer<GameTestHelper> TEST_ENTROPY_KEEPER_INITIAL_HEALTH = helper -> {
+        var entity = helper.spawn(ModEntities.ENTROPY_KEEPER.get(), TEST_POS);
+
+        helper.runAfterDelay(1, () -> {
+            float actualHealth = entity.getHealth();
+
+            if (Math.abs(actualHealth - ENTROPY_KEEPER_HEALTH) < 0.1f) {
+                helper.succeed();
+            } else {
+                helper.fail("Entropy Keeper health was " + actualHealth + ", expected " + ENTROPY_KEEPER_HEALTH);
+            }
+        });
+    };
+
+    /**
+     * Test that Entropy Keeper has correct armor value (6.0).
+     */
+    public static final Consumer<GameTestHelper> TEST_ENTROPY_KEEPER_ARMOR = helper -> {
+        var entity = helper.spawn(ModEntities.ENTROPY_KEEPER.get(), TEST_POS);
+
+        helper.runAfterDelay(1, () -> {
+            double actualArmor = entity.getAttributeValue(Attributes.ARMOR);
+
+            if (Math.abs(actualArmor - ENTROPY_KEEPER_ARMOR) < 0.1) {
+                helper.succeed();
+            } else {
+                helper.fail("Entropy Keeper armor was " + actualArmor + ", expected " + ENTROPY_KEEPER_ARMOR);
             }
         });
     };

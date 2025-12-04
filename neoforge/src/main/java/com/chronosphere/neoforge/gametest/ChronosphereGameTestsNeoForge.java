@@ -114,6 +114,31 @@ public class ChronosphereGameTestsNeoForge {
         tests.add(createTest("testClockworkSentinelArmor",
             ChronosphereGameTestLogic.TEST_CLOCKWORK_SENTINEL_ARMOR));
 
+        // Mini-boss attribute tests
+        tests.add(createTest("testChronosWardenInitialHealth",
+            ChronosphereGameTestLogic.TEST_CHRONOS_WARDEN_INITIAL_HEALTH));
+
+        tests.add(createTest("testChronosWardenArmor",
+            ChronosphereGameTestLogic.TEST_CHRONOS_WARDEN_ARMOR));
+
+        tests.add(createTest("testClockworkColossusInitialHealth",
+            ChronosphereGameTestLogic.TEST_CLOCKWORK_COLOSSUS_INITIAL_HEALTH));
+
+        tests.add(createTest("testClockworkColossusKnockbackResistance",
+            ChronosphereGameTestLogic.TEST_CLOCKWORK_COLOSSUS_KNOCKBACK_RESISTANCE));
+
+        tests.add(createTest("testTemporalPhantomInitialHealth",
+            ChronosphereGameTestLogic.TEST_TEMPORAL_PHANTOM_INITIAL_HEALTH));
+
+        tests.add(createTest("testTemporalPhantomAttackDamage",
+            ChronosphereGameTestLogic.TEST_TEMPORAL_PHANTOM_ATTACK_DAMAGE));
+
+        tests.add(createTest("testEntropyKeeperInitialHealth",
+            ChronosphereGameTestLogic.TEST_ENTROPY_KEEPER_INITIAL_HEALTH));
+
+        tests.add(createTest("testEntropyKeeperArmor",
+            ChronosphereGameTestLogic.TEST_ENTROPY_KEEPER_ARMOR));
+
         Chronosphere.LOGGER.info("Generated {} GameTest functions for NeoForge", tests.size());
         return tests;
     }

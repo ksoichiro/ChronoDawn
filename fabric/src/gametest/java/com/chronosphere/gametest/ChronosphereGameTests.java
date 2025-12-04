@@ -132,4 +132,46 @@ public class ChronosphereGameTests implements FabricGameTest {
     public void testClockworkSentinelArmor(GameTestHelper helper) {
         ChronosphereGameTestLogic.TEST_CLOCKWORK_SENTINEL_ARMOR.accept(helper);
     }
+
+    // ============== Mini-Boss Attribute Tests ==============
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testChronosWardenInitialHealth(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_CHRONOS_WARDEN_INITIAL_HEALTH.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testChronosWardenArmor(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_CHRONOS_WARDEN_ARMOR.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testClockworkColossusInitialHealth(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_CLOCKWORK_COLOSSUS_INITIAL_HEALTH.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testClockworkColossusKnockbackResistance(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_CLOCKWORK_COLOSSUS_KNOCKBACK_RESISTANCE.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testTemporalPhantomInitialHealth(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_TEMPORAL_PHANTOM_INITIAL_HEALTH.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testTemporalPhantomAttackDamage(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_TEMPORAL_PHANTOM_ATTACK_DAMAGE.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testEntropyKeeperInitialHealth(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_ENTROPY_KEEPER_INITIAL_HEALTH.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testEntropyKeeperArmor(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_ENTROPY_KEEPER_ARMOR.accept(helper);
+    }
 }
