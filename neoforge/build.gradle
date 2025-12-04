@@ -25,6 +25,17 @@ loom {
             ideConfigGenerated(true)
             runDir("run")
         }
+        gameTestServer {
+            server()
+            setConfigName("NeoForge GameTest Server")
+            ideConfigGenerated(true)
+            runDir("run")
+            // Enable GameTest framework
+            property("neoforge.enabledGameTestNamespaces", "chronosphere")
+            // Auto-run all tests and exit
+            property("neoforge.gameTestServer", "true")
+            programArgs("--nogui")
+        }
     }
 }
 
