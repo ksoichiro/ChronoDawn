@@ -38,9 +38,9 @@ import net.minecraft.world.item.Tier;
  */
 public class ChronobladeItem extends SwordItem {
     /**
-     * AI skip chance (25% = 0.25).
+     * AI skip chance (25% = 0.25). Public for testing.
      */
-    private static final float AI_SKIP_CHANCE = 0.25f;
+    public static final float AI_SKIP_CHANCE = 0.25f;
 
     /**
      * Custom tier for Chronoblade (netherite+).

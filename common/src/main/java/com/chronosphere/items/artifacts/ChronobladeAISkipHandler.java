@@ -31,8 +31,9 @@ public class ChronobladeAISkipHandler {
     /**
      * Duration in ticks for AI skip window (1 second = 20 ticks).
      * The entity's attack AI will be skipped once within this window.
+     * Public for testing.
      */
-    private static final int AI_SKIP_DURATION = 20;
+    public static final int AI_SKIP_DURATION = 20;
 
     /**
      * Apply AI skip effect to an entity.
