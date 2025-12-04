@@ -33,9 +33,14 @@ public final class ChronosphereGameTestLogic {
 
     // Expected armor values
     public static final double TIME_GUARDIAN_ARMOR = 10.0;
+    public static final double TIME_TYRANT_ARMOR = 15.0;
 
     // Expected knockback resistance values
     public static final double TIME_GUARDIAN_KNOCKBACK_RESISTANCE = 0.8;
+    public static final double TIME_TYRANT_KNOCKBACK_RESISTANCE = 1.0; // Complete immunity
+
+    // Expected attack damage values
+    public static final double TIME_TYRANT_ATTACK_DAMAGE = 18.0;
 
     // Chronoblade expected values
     public static final int CHRONOBLADE_DURABILITY = 2000;
@@ -191,6 +196,64 @@ public final class ChronosphereGameTestLogic {
                 helper.succeed();
             } else {
                 helper.fail("Chronoblade durability was " + actualDurability + ", expected " + CHRONOBLADE_DURABILITY);
+            }
+        });
+    };
+
+    // ============== Time Tyrant Attribute Tests ==============
+
+    /**
+     * Test that Time Tyrant has correct armor value (15.0).
+     * Migrated from: TimeTyrantFightTest (implicit in health/armor tests)
+     */
+    public static final Consumer<GameTestHelper> TEST_TIME_TYRANT_ARMOR = helper -> {
+        var entity = helper.spawn(ModEntities.TIME_TYRANT.get(), TEST_POS);
+
+        helper.runAfterDelay(1, () -> {
+            double actualArmor = entity.getAttributeValue(Attributes.ARMOR);
+
+            if (Math.abs(actualArmor - TIME_TYRANT_ARMOR) < 0.1) {
+                helper.succeed();
+            } else {
+                helper.fail("Time Tyrant armor was " + actualArmor + ", expected " + TIME_TYRANT_ARMOR);
+            }
+        });
+    };
+
+    /**
+     * Test that Time Tyrant has complete knockback immunity (1.0).
+     * Migrated from: TimeTyrantFightTest.testTimeTyrantCannotBeKnockedBackOrPushed
+     */
+    public static final Consumer<GameTestHelper> TEST_TIME_TYRANT_KNOCKBACK_RESISTANCE = helper -> {
+        var entity = helper.spawn(ModEntities.TIME_TYRANT.get(), TEST_POS);
+
+        helper.runAfterDelay(1, () -> {
+            double actualResistance = entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE);
+
+            if (Math.abs(actualResistance - TIME_TYRANT_KNOCKBACK_RESISTANCE) < 0.1) {
+                helper.succeed();
+            } else {
+                helper.fail("Time Tyrant knockback resistance was " + actualResistance +
+                    ", expected " + TIME_TYRANT_KNOCKBACK_RESISTANCE);
+            }
+        });
+    };
+
+    /**
+     * Test that Time Tyrant has correct attack damage (18.0 = 9 hearts).
+     * Migrated from: TimeTyrantFightTest (implicit in combat tests)
+     */
+    public static final Consumer<GameTestHelper> TEST_TIME_TYRANT_ATTACK_DAMAGE = helper -> {
+        var entity = helper.spawn(ModEntities.TIME_TYRANT.get(), TEST_POS);
+
+        helper.runAfterDelay(1, () -> {
+            double actualDamage = entity.getAttributeValue(Attributes.ATTACK_DAMAGE);
+
+            if (Math.abs(actualDamage - TIME_TYRANT_ATTACK_DAMAGE) < 0.1) {
+                helper.succeed();
+            } else {
+                helper.fail("Time Tyrant attack damage was " + actualDamage +
+                    ", expected " + TIME_TYRANT_ATTACK_DAMAGE);
             }
         });
     };

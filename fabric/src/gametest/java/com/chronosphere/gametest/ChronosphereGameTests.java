@@ -86,4 +86,21 @@ public class ChronosphereGameTests implements FabricGameTest {
     public void testChronobladeDurability(GameTestHelper helper) {
         ChronosphereGameTestLogic.TEST_CHRONOBLADE_DURABILITY.accept(helper);
     }
+
+    // ============== Time Tyrant Attribute Tests ==============
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testTimeTyrantArmor(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_TIME_TYRANT_ARMOR.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testTimeTyrantKnockbackResistance(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_TIME_TYRANT_KNOCKBACK_RESISTANCE.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testTimeTyrantAttackDamage(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_TIME_TYRANT_ATTACK_DAMAGE.accept(helper);
+    }
 }

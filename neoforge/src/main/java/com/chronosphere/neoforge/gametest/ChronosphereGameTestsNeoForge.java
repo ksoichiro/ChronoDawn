@@ -87,6 +87,16 @@ public class ChronosphereGameTestsNeoForge {
         tests.add(createTest("testChronobladeDurability",
             ChronosphereGameTestLogic.TEST_CHRONOBLADE_DURABILITY));
 
+        // Time Tyrant attribute tests
+        tests.add(createTest("testTimeTyrantArmor",
+            ChronosphereGameTestLogic.TEST_TIME_TYRANT_ARMOR));
+
+        tests.add(createTest("testTimeTyrantKnockbackResistance",
+            ChronosphereGameTestLogic.TEST_TIME_TYRANT_KNOCKBACK_RESISTANCE));
+
+        tests.add(createTest("testTimeTyrantAttackDamage",
+            ChronosphereGameTestLogic.TEST_TIME_TYRANT_ATTACK_DAMAGE));
+
         Chronosphere.LOGGER.info("Generated {} GameTest functions for NeoForge", tests.size());
         return tests;
     }
