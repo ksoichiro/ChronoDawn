@@ -584,8 +584,15 @@
 
 - [ ] T172 [P] Run all GameTests on Fabric loader using ./gradlew :fabric:runGameTest
 - [ ] T173 [P] Run all GameTests on NeoForge loader using ./gradlew :neoforge:runGameTest
-- [ ] T174 Verify entity renderer registration for Fabric (standard API) in fabric/src/main/java/com/chronosphere/fabric/client/ChronosphereClientFabric.java
-- [ ] T175 Verify entity renderer registration for NeoForge (manual event registration) in neoforge/src/main/java/com/chronosphere/neoforge/event/EntityRendererHandler.java
+- [X] T174 Verify entity renderer registration for Fabric (standard API) in fabric/src/main/java/com/chronosphere/fabric/client/ChronosphereClientFabric.java
+  - **Verified**: 15 entities and 7 model layers registered using standard Fabric API
+  - Uses `EntityRendererRegistry.register()` and `EntityModelLayerRegistry.registerModelLayer()`
+  - All custom renderers properly implemented in common/client package
+- [X] T175 Verify entity renderer registration for NeoForge (manual event registration) in neoforge/src/main/java/com/chronosphere/neoforge/client/ChronosphereClientNeoForge.java
+  - **Verified**: 15 entities and 7 model layers registered using event-based system
+  - Uses `@SubscribeEvent` with `EntityRenderersEvent.RegisterRenderers` and `EntityRenderersEvent.RegisterLayerDefinitions`
+  - All entity types and model layers match Fabric implementation
+  - Proper event bus registration with `@EventBusSubscriber`
 - [X] T176 Test portal mechanics on both loaders for consistency
   - Implemented Custom Portal API Reforged integration for NeoForge (cpapireforged 1.2.2)
   - Created CustomPortalNeoForge.java for portal registration
