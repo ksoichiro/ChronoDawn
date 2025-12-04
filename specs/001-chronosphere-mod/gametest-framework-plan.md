@@ -208,6 +208,19 @@ public class ChronosphereGameTestsNeoForge {
   - Fabric/NeoForge両方が `Consumer<GameTestHelper>` で共通ロジックを呼び出し
 - **結果**: コード重複削減（172行追加、177行削除）
 
+### Phase 4: @Disabledテスト移行 ✅ 一部完了 (2025-12)
+- **コミット**: c910838
+- **移行したテスト**:
+  - `testTimeGuardianArmor` - Time Guardianアーマー値検証 (10.0)
+  - `testTimeGuardianKnockbackResistance` - ノックバック耐性検証 (0.8)
+  - `testChronobladeDurability` - Chronoblade耐久値検証 (2000)
+- **テスト結果**: Fabric 13件 / NeoForge 12件全てパス
+- **移行元**:
+  - TimeGuardianFightTest.testTimeGuardianHealthAndArmorValues
+  - TimeGuardianFightTest.testTimeGuardianCannotBeKnockedBack
+  - ChronobladeTest.testChronobladeHighDurability
+- **残り**: 96個の@Disabledテストのうち、複雑なテスト（ボス戦AI、構造体生成、確率的テスト等）は将来的に移行可能
+
 ### 学んだこと
 - **Fabric**: Architectury Loomで `@GameTest` アノテーションが正常に動作
 - **NeoForge**: Architectury Loomで `@GameTest` アノテーションが発見されない問題あり
