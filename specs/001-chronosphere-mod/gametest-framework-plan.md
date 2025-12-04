@@ -180,6 +180,33 @@ public class ChronosphereGameTestsNeoForge {
 3. **CI統合**: ヘッドレス環境でのGameTest実行にはXVFB等が必要（Linux）
 4. **実行時間**: GameTestはMinecraft起動が必要なため、JUnitより大幅に遅い
 
+## 完了ステータス
+
+### Phase 1: Fabric GameTest ✅ 完了 (2025-12)
+- **コミット**: 9cca9db
+- **実行コマンド**: `./gradlew :fabric:runGameTest`
+- **テスト数**: 9件全て合格
+- **実装**:
+  - `fabric/build.gradle`: `loom { runs { gameTest { ... } } }` 設定追加
+  - `fabric/src/gametest/java/.../ChronosphereGameTestsFabric.java`: @GameTest使用
+  - `FabricGameTest.EMPTY_STRUCTURE` テンプレート使用（Fabric標準）
+
+### Phase 2: NeoForge GameTest ✅ 完了 (2025-12)
+- **コミット**: 6790b80
+- **実行コマンド**: `./gradlew :neoforge:runGameTestServer`
+- **テスト数**: 9件全て合格
+- **実装**:
+  - `neoforge/build.gradle`: `gameTestServer` run configuration追加
+  - `neoforge/src/main/java/.../ChronosphereGameTestsNeoForge.java`: @GameTestGenerator使用
+  - `RegisterGameTestsEvent` でテストクラス登録
+  - 既存の `chronosphere:ancient_ruins` 構造体テンプレート使用
+
+### 学んだこと
+- **Fabric**: Architectury Loomで `@GameTest` アノテーションが正常に動作
+- **NeoForge**: Architectury Loomで `@GameTest` アノテーションが発見されない問題あり
+  - 解決策: `@GameTestGenerator` を使用して `TestFunction` を明示的に生成
+- **テンプレート**: Fabricは SNBT 形式 (`fabric-gametest-api-v1:empty`) をサポート、NeoForgeはNBT形式のみ
+
 ## 参照
 
 - [Fabric Automated Testing](https://docs.fabricmc.net/develop/automatic-testing)
