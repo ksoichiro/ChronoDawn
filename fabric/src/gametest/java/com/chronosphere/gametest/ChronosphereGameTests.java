@@ -67,4 +67,23 @@ public class ChronosphereGameTests implements FabricGameTest {
     public void testTimeTyrantInitialHealth(GameTestHelper helper) {
         ChronosphereGameTestLogic.TEST_TIME_TYRANT_INITIAL_HEALTH.accept(helper);
     }
+
+    // ============== Entity Attribute Tests (Migrated from @Disabled) ==============
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testTimeGuardianArmor(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_TIME_GUARDIAN_ARMOR.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testTimeGuardianKnockbackResistance(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_TIME_GUARDIAN_KNOCKBACK_RESISTANCE.accept(helper);
+    }
+
+    // ============== Item Attribute Tests (Migrated from @Disabled) ==============
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testChronobladeDurability(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_CHRONOBLADE_DURABILITY.accept(helper);
+    }
 }

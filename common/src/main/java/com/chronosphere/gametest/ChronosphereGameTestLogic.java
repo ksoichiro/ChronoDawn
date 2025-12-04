@@ -2,8 +2,11 @@ package com.chronosphere.gametest;
 
 import com.chronosphere.registry.ModBlocks;
 import com.chronosphere.registry.ModEntities;
+import com.chronosphere.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Consumer;
 
@@ -27,6 +30,15 @@ public final class ChronosphereGameTestLogic {
     // Expected health values
     public static final float TIME_GUARDIAN_HEALTH = 200.0f;
     public static final float TIME_TYRANT_HEALTH = 500.0f;
+
+    // Expected armor values
+    public static final double TIME_GUARDIAN_ARMOR = 10.0;
+
+    // Expected knockback resistance values
+    public static final double TIME_GUARDIAN_KNOCKBACK_RESISTANCE = 0.8;
+
+    // Chronoblade expected values
+    public static final int CHRONOBLADE_DURABILITY = 2000;
 
     // ============== Entity Spawn Tests ==============
 
@@ -120,6 +132,65 @@ public final class ChronosphereGameTestLogic {
                 helper.succeed();
             } else {
                 helper.fail("Time Tyrant health was " + actualHealth + ", expected " + TIME_TYRANT_HEALTH);
+            }
+        });
+    };
+
+    // ============== Entity Attribute Tests (Migrated from @Disabled) ==============
+
+    /**
+     * Test that Time Guardian has correct armor value (10.0).
+     * Migrated from: TimeGuardianFightTest.testTimeGuardianHealthAndArmorValues
+     */
+    public static final Consumer<GameTestHelper> TEST_TIME_GUARDIAN_ARMOR = helper -> {
+        var entity = helper.spawn(ModEntities.TIME_GUARDIAN.get(), TEST_POS);
+
+        helper.runAfterDelay(1, () -> {
+            double actualArmor = entity.getAttributeValue(Attributes.ARMOR);
+
+            if (Math.abs(actualArmor - TIME_GUARDIAN_ARMOR) < 0.1) {
+                helper.succeed();
+            } else {
+                helper.fail("Time Guardian armor was " + actualArmor + ", expected " + TIME_GUARDIAN_ARMOR);
+            }
+        });
+    };
+
+    /**
+     * Test that Time Guardian has high knockback resistance (0.8).
+     * Migrated from: TimeGuardianFightTest.testTimeGuardianCannotBeKnockedBack
+     */
+    public static final Consumer<GameTestHelper> TEST_TIME_GUARDIAN_KNOCKBACK_RESISTANCE = helper -> {
+        var entity = helper.spawn(ModEntities.TIME_GUARDIAN.get(), TEST_POS);
+
+        helper.runAfterDelay(1, () -> {
+            double actualResistance = entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE);
+
+            if (Math.abs(actualResistance - TIME_GUARDIAN_KNOCKBACK_RESISTANCE) < 0.1) {
+                helper.succeed();
+            } else {
+                helper.fail("Time Guardian knockback resistance was " + actualResistance +
+                    ", expected " + TIME_GUARDIAN_KNOCKBACK_RESISTANCE);
+            }
+        });
+    };
+
+    // ============== Item Attribute Tests (Migrated from @Disabled) ==============
+
+    /**
+     * Test that Chronoblade has correct durability (2000).
+     * Migrated from: ChronobladeTest.testChronobladeHighDurability
+     */
+    public static final Consumer<GameTestHelper> TEST_CHRONOBLADE_DURABILITY = helper -> {
+        ItemStack chronoblade = new ItemStack(ModItems.CHRONOBLADE.get());
+
+        helper.runAfterDelay(1, () -> {
+            int actualDurability = chronoblade.getMaxDamage();
+
+            if (actualDurability == CHRONOBLADE_DURABILITY) {
+                helper.succeed();
+            } else {
+                helper.fail("Chronoblade durability was " + actualDurability + ", expected " + CHRONOBLADE_DURABILITY);
             }
         });
     };
