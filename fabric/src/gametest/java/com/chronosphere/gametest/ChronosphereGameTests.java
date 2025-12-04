@@ -103,4 +103,33 @@ public class ChronosphereGameTests implements FabricGameTest {
     public void testTimeTyrantAttackDamage(GameTestHelper helper) {
         ChronosphereGameTestLogic.TEST_TIME_TYRANT_ATTACK_DAMAGE.accept(helper);
     }
+
+    // ============== Temporal Wraith Attribute Tests ==============
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testTemporalWraithInitialHealth(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_TEMPORAL_WRAITH_INITIAL_HEALTH.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testTemporalWraithAttackDamage(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_TEMPORAL_WRAITH_ATTACK_DAMAGE.accept(helper);
+    }
+
+    // ============== Clockwork Sentinel Attribute Tests ==============
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testClockworkSentinelInitialHealth(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_CLOCKWORK_SENTINEL_INITIAL_HEALTH.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testClockworkSentinelAttackDamage(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_CLOCKWORK_SENTINEL_ATTACK_DAMAGE.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testClockworkSentinelArmor(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_CLOCKWORK_SENTINEL_ARMOR.accept(helper);
+    }
 }

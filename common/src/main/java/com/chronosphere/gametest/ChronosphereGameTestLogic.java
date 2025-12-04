@@ -42,6 +42,15 @@ public final class ChronosphereGameTestLogic {
     // Expected attack damage values
     public static final double TIME_TYRANT_ATTACK_DAMAGE = 18.0;
 
+    // Temporal Wraith expected values
+    public static final float TEMPORAL_WRAITH_HEALTH = 20.0f;
+    public static final double TEMPORAL_WRAITH_ATTACK_DAMAGE = 4.0;
+
+    // Clockwork Sentinel expected values
+    public static final float CLOCKWORK_SENTINEL_HEALTH = 30.0f;
+    public static final double CLOCKWORK_SENTINEL_ATTACK_DAMAGE = 6.0;
+    public static final double CLOCKWORK_SENTINEL_ARMOR = 5.0;
+
     // Chronoblade expected values
     public static final int CHRONOBLADE_DURABILITY = 2000;
 
@@ -254,6 +263,97 @@ public final class ChronosphereGameTestLogic {
             } else {
                 helper.fail("Time Tyrant attack damage was " + actualDamage +
                     ", expected " + TIME_TYRANT_ATTACK_DAMAGE);
+            }
+        });
+    };
+
+    // ============== Temporal Wraith Attribute Tests ==============
+
+    /**
+     * Test that Temporal Wraith has correct initial health (20 HP = 10 hearts).
+     */
+    public static final Consumer<GameTestHelper> TEST_TEMPORAL_WRAITH_INITIAL_HEALTH = helper -> {
+        var entity = helper.spawn(ModEntities.TEMPORAL_WRAITH.get(), TEST_POS);
+
+        helper.runAfterDelay(1, () -> {
+            float actualHealth = entity.getHealth();
+
+            if (Math.abs(actualHealth - TEMPORAL_WRAITH_HEALTH) < 0.1f) {
+                helper.succeed();
+            } else {
+                helper.fail("Temporal Wraith health was " + actualHealth + ", expected " + TEMPORAL_WRAITH_HEALTH);
+            }
+        });
+    };
+
+    /**
+     * Test that Temporal Wraith has correct attack damage (4.0 = 2 hearts).
+     */
+    public static final Consumer<GameTestHelper> TEST_TEMPORAL_WRAITH_ATTACK_DAMAGE = helper -> {
+        var entity = helper.spawn(ModEntities.TEMPORAL_WRAITH.get(), TEST_POS);
+
+        helper.runAfterDelay(1, () -> {
+            double actualDamage = entity.getAttributeValue(Attributes.ATTACK_DAMAGE);
+
+            if (Math.abs(actualDamage - TEMPORAL_WRAITH_ATTACK_DAMAGE) < 0.1) {
+                helper.succeed();
+            } else {
+                helper.fail("Temporal Wraith attack damage was " + actualDamage +
+                    ", expected " + TEMPORAL_WRAITH_ATTACK_DAMAGE);
+            }
+        });
+    };
+
+    // ============== Clockwork Sentinel Attribute Tests ==============
+
+    /**
+     * Test that Clockwork Sentinel has correct initial health (30 HP = 15 hearts).
+     */
+    public static final Consumer<GameTestHelper> TEST_CLOCKWORK_SENTINEL_INITIAL_HEALTH = helper -> {
+        var entity = helper.spawn(ModEntities.CLOCKWORK_SENTINEL.get(), TEST_POS);
+
+        helper.runAfterDelay(1, () -> {
+            float actualHealth = entity.getHealth();
+
+            if (Math.abs(actualHealth - CLOCKWORK_SENTINEL_HEALTH) < 0.1f) {
+                helper.succeed();
+            } else {
+                helper.fail("Clockwork Sentinel health was " + actualHealth + ", expected " + CLOCKWORK_SENTINEL_HEALTH);
+            }
+        });
+    };
+
+    /**
+     * Test that Clockwork Sentinel has correct attack damage (6.0 = 3 hearts).
+     */
+    public static final Consumer<GameTestHelper> TEST_CLOCKWORK_SENTINEL_ATTACK_DAMAGE = helper -> {
+        var entity = helper.spawn(ModEntities.CLOCKWORK_SENTINEL.get(), TEST_POS);
+
+        helper.runAfterDelay(1, () -> {
+            double actualDamage = entity.getAttributeValue(Attributes.ATTACK_DAMAGE);
+
+            if (Math.abs(actualDamage - CLOCKWORK_SENTINEL_ATTACK_DAMAGE) < 0.1) {
+                helper.succeed();
+            } else {
+                helper.fail("Clockwork Sentinel attack damage was " + actualDamage +
+                    ", expected " + CLOCKWORK_SENTINEL_ATTACK_DAMAGE);
+            }
+        });
+    };
+
+    /**
+     * Test that Clockwork Sentinel has correct armor value (5.0).
+     */
+    public static final Consumer<GameTestHelper> TEST_CLOCKWORK_SENTINEL_ARMOR = helper -> {
+        var entity = helper.spawn(ModEntities.CLOCKWORK_SENTINEL.get(), TEST_POS);
+
+        helper.runAfterDelay(1, () -> {
+            double actualArmor = entity.getAttributeValue(Attributes.ARMOR);
+
+            if (Math.abs(actualArmor - CLOCKWORK_SENTINEL_ARMOR) < 0.1) {
+                helper.succeed();
+            } else {
+                helper.fail("Clockwork Sentinel armor was " + actualArmor + ", expected " + CLOCKWORK_SENTINEL_ARMOR);
             }
         });
     };

@@ -97,6 +97,23 @@ public class ChronosphereGameTestsNeoForge {
         tests.add(createTest("testTimeTyrantAttackDamage",
             ChronosphereGameTestLogic.TEST_TIME_TYRANT_ATTACK_DAMAGE));
 
+        // Temporal Wraith attribute tests
+        tests.add(createTest("testTemporalWraithInitialHealth",
+            ChronosphereGameTestLogic.TEST_TEMPORAL_WRAITH_INITIAL_HEALTH));
+
+        tests.add(createTest("testTemporalWraithAttackDamage",
+            ChronosphereGameTestLogic.TEST_TEMPORAL_WRAITH_ATTACK_DAMAGE));
+
+        // Clockwork Sentinel attribute tests
+        tests.add(createTest("testClockworkSentinelInitialHealth",
+            ChronosphereGameTestLogic.TEST_CLOCKWORK_SENTINEL_INITIAL_HEALTH));
+
+        tests.add(createTest("testClockworkSentinelAttackDamage",
+            ChronosphereGameTestLogic.TEST_CLOCKWORK_SENTINEL_ATTACK_DAMAGE));
+
+        tests.add(createTest("testClockworkSentinelArmor",
+            ChronosphereGameTestLogic.TEST_CLOCKWORK_SENTINEL_ARMOR));
+
         Chronosphere.LOGGER.info("Generated {} GameTest functions for NeoForge", tests.size());
         return tests;
     }
