@@ -536,32 +536,56 @@
 
 **Reference**: See research.md "Guaranteed Structure Placement Research (2025-12-01)"
 
-#### Phase 1: Time Keeper Village (プログラム的配置)
-- [ ] T274 [P] [US2] Design Time Keeper Village structure concept (small settlement with 1-2 Time Keepers, basic shelter, trading post)
-- [ ] T275 [P] [US2] Create Time Keeper Village NBT structure file (time_keeper_village.nbt)
-- [ ] T276 [P] [US2] Implement TimeKeeperVillagePlacer.java for programmatic placement near spawn (64 blocks)
-  - Trigger on first Chronosphere entry
-  - Find suitable position on surface
-  - Use saved data to track placement status
-- [ ] T277 [US2] Test Time Keeper Village generation and Time Keeper spawning
+#### Phase 1: Time Keeper Village (プログラム的配置) - COMPLETED
+- [X] T274 [P] [US2] Design Time Keeper Village structure concept (small settlement with 1-2 Time Keepers, basic shelter, trading post)
+  - **Completed**: Simple village structure with shelter and trading area
+- [X] T275 [P] [US2] Create Time Keeper Village NBT structure file (time_keeper_village.nbt)
+  - **File**: common/src/main/resources/data/chronosphere/structure/time_keeper_village.nbt
+- [X] T276 [P] [US2] Implement TimeKeeperVillagePlacer.java for programmatic placement near spawn (64 blocks)
+  - **Implemented**: TimeKeeperVillagePlacer with TimeKeeperVillageData (SavedData)
+  - Placement range: 32-256 blocks from player entry point
+  - Foundation filling and progressive search range expansion
+  - Spawns 2 Time Keepers programmatically after placement
+- [X] T277 [US2] Test Time Keeper Village generation and Time Keeper spawning
+  - **Verified**: Village generates near spawn, Time Keepers spawn correctly
 
-#### Phase 2: Custom StructurePlacement Type (汎用システム)
-- [ ] T278 [P] [US3] Create GuaranteedRadiusStructurePlacement.java extending StructurePlacement
-  - `radius_chunks`: 保証半径（チャンク単位）
-  - `min_distance`: 最小距離（チャンク単位）
-  - Implement isPlacementChunk() with seeded random
-- [ ] T279 [P] [US3] Create ModStructurePlacementTypes.java registry class
-  - Register GUARANTEED_RADIUS placement type
-  - Setup codec for JSON serialization
-- [ ] T280 [P] [US3] Create Architectury platform-specific registration (Fabric/NeoForge)
-- [ ] T281 [US3] Test custom placement type with test structure
-- [ ] T282 [P] [US3] Apply guaranteed_radius placement to existing structures (Ancient Ruins, Desert Clock Tower, Master Clock)
-- [ ] T283 [US3] Comprehensive testing across multiple seeds and locations
+#### Phase 2: Custom StructurePlacement Type (汎用システム) - COMPLETED BUT DEPRECATED
+- [X] T278 [P] [US3] Create GuaranteedRadiusStructurePlacement.java extending StructurePlacement
+  - **Implemented**: GuaranteedRadiusStructurePlacement with radius_chunks constraint
+  - **Status**: Deprecated and removed (commit d2c8f0a)
+  - **Reason**: Caused /locate command to hang indefinitely
+- [X] T279 [P] [US3] Create ModStructurePlacementTypes.java registry class
+  - **Implemented**: ModStructurePlacementTypes with GUARANTEED_RADIUS placement type
+  - **Status**: Deprecated and removed (commit d2c8f0a)
+- [X] T280 [P] [US3] Create Architectury platform-specific registration (Fabric/NeoForge)
+  - **Implemented**: Platform-specific registration in Chronosphere.java
+  - **Status**: Deprecated and removed (commit d2c8f0a)
+- [X] T281 [US3] Test custom placement type with test structure
+  - **Completed**: Testing performed successfully
+- [X] T282 [P] [US3] Apply guaranteed_radius placement to existing structures (Ancient Ruins, Desert Clock Tower, Master Clock)
+  - **Completed**: Applied to all 3 structures
+  - **Status**: Migrated to minecraft:random_spread (commit d2c8f0a)
+- [X] T283 [US3] Comprehensive testing across multiple seeds and locations
+  - **Completed**: Testing performed, issues identified (/locate hang)
+  - **Result**: Migrated to random_spread approach with expanded biome tags
+
+#### Phase 3: Structure Ocean Variants (新規タスク) - COMPLETED
+- [X] T287 [P] [US3] Create Desert Clock Tower ocean variant
+  - **Implemented**: Jigsaw structure with ocean platform + reused tower
+  - **Files**: desert_clock_tower_ocean_platform.nbt, structure_set/desert_clock_tower_ocean.json
+  - **Status**: Later removed during random_spread migration (commit d2c8f0a)
+  - **Reason**: No longer needed after expanding biome tags to include ocean
+- [X] T288 [P] [US3] Create Master Clock ocean variant
+  - **Implemented**: Added ocean biome to has_master_clock.json tag
+  - **Result**: Existing 7x7 entrance works naturally in ocean biome
+  - **Files**: tags/worldgen/biome/has_master_clock.json
 
 **Implementation Notes**:
-- Phase 1 uses Phantom Catacombs boss room pattern (proven reliable)
-- Phase 2 integrates with standard worldgen system (locate command compatible)
-- Phase 2 can be applied to other structures after validation
+- Phase 1 (Time Keeper Village) remains active - currently used for guaranteed Time Keeper access
+- Phase 2 (GuaranteedRadiusStructurePlacement) deprecated due to /locate compatibility issues
+- Phase 3 (Ocean variants) partially removed - Master Clock ocean support retained via biome tags
+- Current approach: minecraft:random_spread with expanded biome tags for all structures
+- Ocean biome significantly reduced (continentalness: -0.3 → -0.85) to increase land generation
 
 ### Custom Terrain Features (US3 Enhancement - Medium Priority)
 
@@ -569,12 +593,14 @@
 
 **Note**: 現在はオーバーワールドと同じ地形生成アルゴリズムを使用。時間のテーマに沿った特殊地形を追加して探索の面白さを増す
 
-- [ ] T260 [US3] Design Temporal Rift Canyon structure concept (distorted terrain, floating blocks, time crystal veins exposed in walls, visual effects)
-- [ ] T261 [P] [US3] Create Temporal Rift Canyon structure NBT in common/src/main/resources/data/chronosphere/structures/temporal_rift_canyon.nbt (canyon with irregular terrain, time crystal ores)
-- [ ] T262 [P] [US3] Create Floating Clockwork Ruins structure NBT in common/src/main/resources/data/chronosphere/structures/floating_clockwork_ruins.nbt (floating islands with broken clockwork mechanisms, loot chests)
-- [ ] T263 [P] [US3] Create Time Crystal Caverns feature in common/src/main/java/com/chronosphere/worldgen/features/TimeCrystalCavernsFeature.java (underground crystal formations, glowing effects)
-- [ ] T264 [P] [US3] Configure custom terrain feature placement in common/src/main/resources/data/chronosphere/worldgen/structure_set/ and placed_feature/ (rare placement, biome-specific)
-- [ ] T265 [US3] Test custom terrain features in-game and verify they generate correctly without breaking existing structures
+- [ ] T289 [US3] Design Temporal Rift Canyon structure concept (distorted terrain, floating blocks, time crystal veins exposed in walls, visual effects)
+- [ ] T290 [P] [US3] Create Temporal Rift Canyon structure NBT in common/src/main/resources/data/chronosphere/structures/temporal_rift_canyon.nbt (canyon with irregular terrain, time crystal ores)
+- [ ] T291 [P] [US3] Create Floating Clockwork Ruins structure NBT in common/src/main/resources/data/chronosphere/structures/floating_clockwork_ruins.nbt (floating islands with broken clockwork mechanisms, loot chests)
+- [ ] T292 [P] [US3] Create Time Crystal Caverns feature in common/src/main/java/com/chronosphere/worldgen/features/TimeCrystalCavernsFeature.java (underground crystal formations, glowing effects)
+- [ ] T293 [P] [US3] Configure custom terrain feature placement in common/src/main/resources/data/chronosphere/worldgen/structure_set/ and placed_feature/ (rare placement, biome-specific)
+- [ ] T294 [US3] Test custom terrain features in-game and verify they generate correctly without breaking existing structures
+
+**Note**: Task IDs renumbered from T260-T265 to T289-T294 to avoid conflict with T265 (coal ore) in Basic Resources section
 
 **Checkpoint**: 全User Storyが独立して機能すること
 
