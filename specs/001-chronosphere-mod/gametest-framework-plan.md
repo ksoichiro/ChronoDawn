@@ -201,6 +201,13 @@ public class ChronosphereGameTestsNeoForge {
   - `RegisterGameTestsEvent` でテストクラス登録
   - 既存の `chronosphere:ancient_ruins` 構造体テンプレート使用
 
+### Phase 3: 共通GameTestロジック ✅ 完了 (2025-12)
+- **コミット**: de34c79
+- **実装**:
+  - `common/src/main/java/com/chronosphere/gametest/ChronosphereGameTestLogic.java`: 共通テストロジック
+  - Fabric/NeoForge両方が `Consumer<GameTestHelper>` で共通ロジックを呼び出し
+- **結果**: コード重複削減（172行追加、177行削除）
+
 ### 学んだこと
 - **Fabric**: Architectury Loomで `@GameTest` アノテーションが正常に動作
 - **NeoForge**: Architectury Loomで `@GameTest` アノテーションが発見されない問題あり
