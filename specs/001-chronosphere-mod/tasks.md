@@ -625,7 +625,12 @@
   - Added Mixin (CustomPortalBlockMixin) to override particle effects with custom orange particles
   - Updated PlayerEventHandler to recognize cpapireforged:custom_portal_block for portal deactivation
   - Verified: portal creation, teleportation, deactivation on entry, stabilization with Portal Stabilizer
-- [ ] T177 Verify time distortion effect consistency across loaders
+- [X] T177 Verify time distortion effect consistency across loaders
+  - **Verified on Fabric**: Time Distortion (Slowness IV) correctly applied to hostile mobs
+  - **Verified on NeoForge**: Time Distortion effect consistent with Fabric
+  - **Verified Exclusions**: Time Keeper, Time Guardian, Time Tyrant, Floq correctly excluded
+  - **Note**: Time Keeper's slow movement is due to base movement speed (0.2), not Slowness effect
+  - **Eye of Chronos Enhancement**: Slowness V vs IV difference is subtle (15% difference), difficult to perceive visually
 
 ### Performance Optimization
 

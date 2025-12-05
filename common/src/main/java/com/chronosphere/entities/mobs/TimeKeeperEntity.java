@@ -56,7 +56,7 @@ import java.util.Optional;
  * - Neutral mob (attacks only when provoked)
  * - Villager-like trading interface
  * - Offers time-related items in exchange for Clockstone, Enhanced Clockstone, etc.
- * - Affected by dimension-wide Slowness IV effect
+ * - **NOT** affected by dimension-wide Slowness IV effect (excluded from time distortion)
  *
  * Spawn Conditions:
  * - Near Forgotten Library structure
