@@ -191,6 +191,41 @@ public class ChronosphereGameTests implements FabricGameTest {
         ChronosphereGameTestLogic.TEST_TEMPORAL_BRICKS_WALL_CAN_BE_PLACED.accept(helper);
     }
 
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testReversingTimeSandstoneCanBePlaced(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_REVERSING_TIME_SANDSTONE_CAN_BE_PLACED.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testFrozenTimeIceCanBePlaced(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_FROZEN_TIME_ICE_CAN_BE_PLACED.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testTemporalMossCanBePlaced(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_TEMPORAL_MOSS_CAN_BE_PLACED.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testTimeWheatBaleCanBePlaced(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_TIME_WHEAT_BALE_CAN_BE_PLACED.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testChronoMelonCanBePlaced(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_CHRONO_MELON_CAN_BE_PLACED.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testAncientTimeWoodPlanksCanBePlaced(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_ANCIENT_TIME_WOOD_PLANKS_CAN_BE_PLACED.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testTimeWoodLeavesCanBePlaced(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_TIME_WOOD_LEAVES_CAN_BE_PLACED.accept(helper);
+    }
+
     // ============== Entity Health Tests ==============
 
     @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)

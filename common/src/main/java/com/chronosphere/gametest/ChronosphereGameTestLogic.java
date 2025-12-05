@@ -377,6 +377,62 @@ public final class ChronosphereGameTestLogic {
         helper.succeedWhenBlockPresent(ModBlocks.TEMPORAL_BRICKS_WALL.get(), TEST_POS);
     };
 
+    /**
+     * Test that Reversing Time Sandstone block can be placed.
+     */
+    public static final Consumer<GameTestHelper> TEST_REVERSING_TIME_SANDSTONE_CAN_BE_PLACED = helper -> {
+        helper.setBlock(TEST_POS, ModBlocks.REVERSING_TIME_SANDSTONE.get());
+        helper.succeedWhenBlockPresent(ModBlocks.REVERSING_TIME_SANDSTONE.get(), TEST_POS);
+    };
+
+    /**
+     * Test that Frozen Time Ice block can be placed.
+     */
+    public static final Consumer<GameTestHelper> TEST_FROZEN_TIME_ICE_CAN_BE_PLACED = helper -> {
+        helper.setBlock(TEST_POS, ModBlocks.FROZEN_TIME_ICE.get());
+        helper.succeedWhenBlockPresent(ModBlocks.FROZEN_TIME_ICE.get(), TEST_POS);
+    };
+
+    /**
+     * Test that Temporal Moss block can be placed.
+     */
+    public static final Consumer<GameTestHelper> TEST_TEMPORAL_MOSS_CAN_BE_PLACED = helper -> {
+        helper.setBlock(TEST_POS, ModBlocks.TEMPORAL_MOSS.get());
+        helper.succeedWhenBlockPresent(ModBlocks.TEMPORAL_MOSS.get(), TEST_POS);
+    };
+
+    /**
+     * Test that Time Wheat Bale block can be placed.
+     */
+    public static final Consumer<GameTestHelper> TEST_TIME_WHEAT_BALE_CAN_BE_PLACED = helper -> {
+        helper.setBlock(TEST_POS, ModBlocks.TIME_WHEAT_BALE.get());
+        helper.succeedWhenBlockPresent(ModBlocks.TIME_WHEAT_BALE.get(), TEST_POS);
+    };
+
+    /**
+     * Test that Chrono Melon block can be placed.
+     */
+    public static final Consumer<GameTestHelper> TEST_CHRONO_MELON_CAN_BE_PLACED = helper -> {
+        helper.setBlock(TEST_POS, ModBlocks.CHRONO_MELON.get());
+        helper.succeedWhenBlockPresent(ModBlocks.CHRONO_MELON.get(), TEST_POS);
+    };
+
+    /**
+     * Test that Ancient Time Wood Planks block can be placed.
+     */
+    public static final Consumer<GameTestHelper> TEST_ANCIENT_TIME_WOOD_PLANKS_CAN_BE_PLACED = helper -> {
+        helper.setBlock(TEST_POS, ModBlocks.ANCIENT_TIME_WOOD_PLANKS.get());
+        helper.succeedWhenBlockPresent(ModBlocks.ANCIENT_TIME_WOOD_PLANKS.get(), TEST_POS);
+    };
+
+    /**
+     * Test that Time Wood Leaves block can be placed.
+     */
+    public static final Consumer<GameTestHelper> TEST_TIME_WOOD_LEAVES_CAN_BE_PLACED = helper -> {
+        helper.setBlock(TEST_POS, ModBlocks.TIME_WOOD_LEAVES.get());
+        helper.succeedWhenBlockPresent(ModBlocks.TIME_WOOD_LEAVES.get(), TEST_POS);
+    };
+
     // ============== Entity Health Tests ==============
 
     /**

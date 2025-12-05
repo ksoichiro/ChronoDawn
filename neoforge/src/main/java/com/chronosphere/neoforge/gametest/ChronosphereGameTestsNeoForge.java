@@ -150,6 +150,27 @@ public class ChronosphereGameTestsNeoForge {
         tests.add(createTest("testTemporalBricksWallCanBePlaced",
             ChronosphereGameTestLogic.TEST_TEMPORAL_BRICKS_WALL_CAN_BE_PLACED));
 
+        tests.add(createTest("testReversingTimeSandstoneCanBePlaced",
+            ChronosphereGameTestLogic.TEST_REVERSING_TIME_SANDSTONE_CAN_BE_PLACED));
+
+        tests.add(createTest("testFrozenTimeIceCanBePlaced",
+            ChronosphereGameTestLogic.TEST_FROZEN_TIME_ICE_CAN_BE_PLACED));
+
+        tests.add(createTest("testTemporalMossCanBePlaced",
+            ChronosphereGameTestLogic.TEST_TEMPORAL_MOSS_CAN_BE_PLACED));
+
+        tests.add(createTest("testTimeWheatBaleCanBePlaced",
+            ChronosphereGameTestLogic.TEST_TIME_WHEAT_BALE_CAN_BE_PLACED));
+
+        tests.add(createTest("testChronoMelonCanBePlaced",
+            ChronosphereGameTestLogic.TEST_CHRONO_MELON_CAN_BE_PLACED));
+
+        tests.add(createTest("testAncientTimeWoodPlanksCanBePlaced",
+            ChronosphereGameTestLogic.TEST_ANCIENT_TIME_WOOD_PLANKS_CAN_BE_PLACED));
+
+        tests.add(createTest("testTimeWoodLeavesCanBePlaced",
+            ChronosphereGameTestLogic.TEST_TIME_WOOD_LEAVES_CAN_BE_PLACED));
+
         // Entity health tests
         tests.add(createTest("testTimeGuardianInitialHealth",
             ChronosphereGameTestLogic.TEST_TIME_GUARDIAN_INITIAL_HEALTH));
