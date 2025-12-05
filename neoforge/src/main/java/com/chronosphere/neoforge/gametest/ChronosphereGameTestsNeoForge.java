@@ -69,6 +69,12 @@ public class ChronosphereGameTestsNeoForge {
         tests.add(createTest("testClockstoneBlockCanBePlaced",
             ChronosphereGameTestLogic.TEST_CLOCKSTONE_BLOCK_CAN_BE_PLACED));
 
+        tests.add(createTest("testTimeCrystalBlockCanBePlaced",
+            ChronosphereGameTestLogic.TEST_TIME_CRYSTAL_BLOCK_CAN_BE_PLACED));
+
+        tests.add(createTest("testTemporalBricksCanBePlaced",
+            ChronosphereGameTestLogic.TEST_TEMPORAL_BRICKS_CAN_BE_PLACED));
+
         // Entity health tests
         tests.add(createTest("testTimeGuardianInitialHealth",
             ChronosphereGameTestLogic.TEST_TIME_GUARDIAN_INITIAL_HEALTH));
@@ -155,6 +161,12 @@ public class ChronosphereGameTestsNeoForge {
 
         tests.add(createTest("testEnhancedClockstoneSwordDurability",
             ChronosphereGameTestLogic.TEST_ENHANCED_CLOCKSTONE_SWORD_DURABILITY));
+
+        tests.add(createTest("testClockstonePickaxeDurability",
+            ChronosphereGameTestLogic.TEST_CLOCKSTONE_PICKAXE_DURABILITY));
+
+        tests.add(createTest("testEnhancedClockstonePickaxeDurability",
+            ChronosphereGameTestLogic.TEST_ENHANCED_CLOCKSTONE_PICKAXE_DURABILITY));
 
         // Additional boss attribute tests
         tests.add(createTest("testTimeGuardianAttackDamage",

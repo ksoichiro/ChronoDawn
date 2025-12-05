@@ -56,6 +56,16 @@ public class ChronosphereGameTests implements FabricGameTest {
         ChronosphereGameTestLogic.TEST_CLOCKSTONE_BLOCK_CAN_BE_PLACED.accept(helper);
     }
 
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testTimeCrystalBlockCanBePlaced(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_TIME_CRYSTAL_BLOCK_CAN_BE_PLACED.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testTemporalBricksCanBePlaced(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_TEMPORAL_BRICKS_CAN_BE_PLACED.accept(helper);
+    }
+
     // ============== Entity Health Tests ==============
 
     @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
@@ -202,6 +212,16 @@ public class ChronosphereGameTests implements FabricGameTest {
     @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
     public void testEnhancedClockstoneSwordDurability(GameTestHelper helper) {
         ChronosphereGameTestLogic.TEST_ENHANCED_CLOCKSTONE_SWORD_DURABILITY.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testClockstonePickaxeDurability(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_CLOCKSTONE_PICKAXE_DURABILITY.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testEnhancedClockstonePickaxeDurability(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_ENHANCED_CLOCKSTONE_PICKAXE_DURABILITY.accept(helper);
     }
 
     // ============== Additional Boss Attribute Tests ==============

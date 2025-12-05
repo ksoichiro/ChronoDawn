@@ -152,6 +152,22 @@ public final class ChronosphereGameTestLogic {
         helper.succeedWhenBlockPresent(ModBlocks.CLOCKSTONE_BLOCK.get(), TEST_POS);
     };
 
+    /**
+     * Test that Time Crystal Block can be placed.
+     */
+    public static final Consumer<GameTestHelper> TEST_TIME_CRYSTAL_BLOCK_CAN_BE_PLACED = helper -> {
+        helper.setBlock(TEST_POS, ModBlocks.TIME_CRYSTAL_BLOCK.get());
+        helper.succeedWhenBlockPresent(ModBlocks.TIME_CRYSTAL_BLOCK.get(), TEST_POS);
+    };
+
+    /**
+     * Test that Temporal Bricks can be placed.
+     */
+    public static final Consumer<GameTestHelper> TEST_TEMPORAL_BRICKS_CAN_BE_PLACED = helper -> {
+        helper.setBlock(TEST_POS, ModBlocks.TEMPORAL_BRICKS.get());
+        helper.succeedWhenBlockPresent(ModBlocks.TEMPORAL_BRICKS.get(), TEST_POS);
+    };
+
     // ============== Entity Health Tests ==============
 
     /**
@@ -621,6 +637,40 @@ public final class ChronosphereGameTestLogic {
                 helper.succeed();
             } else {
                 helper.fail("Enhanced Clockstone Sword durability was " + actualDurability + ", expected " + ENHANCED_CLOCKSTONE_TOOL_DURABILITY);
+            }
+        });
+    };
+
+    /**
+     * Test that Clockstone Pickaxe has correct durability (450).
+     */
+    public static final Consumer<GameTestHelper> TEST_CLOCKSTONE_PICKAXE_DURABILITY = helper -> {
+        ItemStack pickaxe = new ItemStack(ModItems.CLOCKSTONE_PICKAXE.get());
+
+        helper.runAfterDelay(1, () -> {
+            int actualDurability = pickaxe.getMaxDamage();
+
+            if (actualDurability == CLOCKSTONE_TOOL_DURABILITY) {
+                helper.succeed();
+            } else {
+                helper.fail("Clockstone Pickaxe durability was " + actualDurability + ", expected " + CLOCKSTONE_TOOL_DURABILITY);
+            }
+        });
+    };
+
+    /**
+     * Test that Enhanced Clockstone Pickaxe has correct durability (1200).
+     */
+    public static final Consumer<GameTestHelper> TEST_ENHANCED_CLOCKSTONE_PICKAXE_DURABILITY = helper -> {
+        ItemStack pickaxe = new ItemStack(ModItems.ENHANCED_CLOCKSTONE_PICKAXE.get());
+
+        helper.runAfterDelay(1, () -> {
+            int actualDurability = pickaxe.getMaxDamage();
+
+            if (actualDurability == ENHANCED_CLOCKSTONE_TOOL_DURABILITY) {
+                helper.succeed();
+            } else {
+                helper.fail("Enhanced Clockstone Pickaxe durability was " + actualDurability + ", expected " + ENHANCED_CLOCKSTONE_TOOL_DURABILITY);
             }
         });
     };
