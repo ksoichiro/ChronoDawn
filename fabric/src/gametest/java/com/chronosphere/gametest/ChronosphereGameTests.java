@@ -174,4 +174,21 @@ public class ChronosphereGameTests implements FabricGameTest {
     public void testEntropyKeeperArmor(GameTestHelper helper) {
         ChronosphereGameTestLogic.TEST_ENTROPY_KEEPER_ARMOR.accept(helper);
     }
+
+    // ============== Other Mob Attribute Tests ==============
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testFloqInitialHealth(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_FLOQ_INITIAL_HEALTH.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testFloqAttackDamage(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_FLOQ_ATTACK_DAMAGE.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testTimeKeeperInitialHealth(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_TIME_KEEPER_INITIAL_HEALTH.accept(helper);
+    }
 }

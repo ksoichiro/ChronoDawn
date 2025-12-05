@@ -139,6 +139,16 @@ public class ChronosphereGameTestsNeoForge {
         tests.add(createTest("testEntropyKeeperArmor",
             ChronosphereGameTestLogic.TEST_ENTROPY_KEEPER_ARMOR));
 
+        // Other mob attribute tests
+        tests.add(createTest("testFloqInitialHealth",
+            ChronosphereGameTestLogic.TEST_FLOQ_INITIAL_HEALTH));
+
+        tests.add(createTest("testFloqAttackDamage",
+            ChronosphereGameTestLogic.TEST_FLOQ_ATTACK_DAMAGE));
+
+        tests.add(createTest("testTimeKeeperInitialHealth",
+            ChronosphereGameTestLogic.TEST_TIME_KEEPER_INITIAL_HEALTH));
+
         Chronosphere.LOGGER.info("Generated {} GameTest functions for NeoForge", tests.size());
         return tests;
     }

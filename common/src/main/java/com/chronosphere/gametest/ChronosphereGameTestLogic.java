@@ -67,6 +67,13 @@ public final class ChronosphereGameTestLogic {
     public static final float ENTROPY_KEEPER_HEALTH = 160.0f;
     public static final double ENTROPY_KEEPER_ARMOR = 6.0;
 
+    // Floq expected values (slime-like mob)
+    public static final float FLOQ_HEALTH = 16.0f;
+    public static final double FLOQ_ATTACK_DAMAGE = 3.0;
+
+    // Time Keeper expected values (neutral trader)
+    public static final float TIME_KEEPER_HEALTH = 20.0f;
+
     // Chronoblade expected values
     public static final int CHRONOBLADE_DURABILITY = 2000;
 
@@ -510,6 +517,59 @@ public final class ChronosphereGameTestLogic {
                 helper.succeed();
             } else {
                 helper.fail("Entropy Keeper armor was " + actualArmor + ", expected " + ENTROPY_KEEPER_ARMOR);
+            }
+        });
+    };
+
+    // ============== Other Mob Attribute Tests ==============
+
+    /**
+     * Test that Floq has correct initial health (16 HP = 8 hearts).
+     */
+    public static final Consumer<GameTestHelper> TEST_FLOQ_INITIAL_HEALTH = helper -> {
+        var entity = helper.spawn(ModEntities.FLOQ.get(), TEST_POS);
+
+        helper.runAfterDelay(1, () -> {
+            float actualHealth = entity.getHealth();
+
+            if (Math.abs(actualHealth - FLOQ_HEALTH) < 0.1f) {
+                helper.succeed();
+            } else {
+                helper.fail("Floq health was " + actualHealth + ", expected " + FLOQ_HEALTH);
+            }
+        });
+    };
+
+    /**
+     * Test that Floq has correct attack damage (3.0 = 1.5 hearts).
+     */
+    public static final Consumer<GameTestHelper> TEST_FLOQ_ATTACK_DAMAGE = helper -> {
+        var entity = helper.spawn(ModEntities.FLOQ.get(), TEST_POS);
+
+        helper.runAfterDelay(1, () -> {
+            double actualDamage = entity.getAttributeValue(Attributes.ATTACK_DAMAGE);
+
+            if (Math.abs(actualDamage - FLOQ_ATTACK_DAMAGE) < 0.1) {
+                helper.succeed();
+            } else {
+                helper.fail("Floq attack damage was " + actualDamage + ", expected " + FLOQ_ATTACK_DAMAGE);
+            }
+        });
+    };
+
+    /**
+     * Test that Time Keeper has correct initial health (20 HP = 10 hearts).
+     */
+    public static final Consumer<GameTestHelper> TEST_TIME_KEEPER_INITIAL_HEALTH = helper -> {
+        var entity = helper.spawn(ModEntities.TIME_KEEPER.get(), TEST_POS);
+
+        helper.runAfterDelay(1, () -> {
+            float actualHealth = entity.getHealth();
+
+            if (Math.abs(actualHealth - TIME_KEEPER_HEALTH) < 0.1f) {
+                helper.succeed();
+            } else {
+                helper.fail("Time Keeper health was " + actualHealth + ", expected " + TIME_KEEPER_HEALTH);
             }
         });
     };
