@@ -39,6 +39,16 @@ public class ChronosphereGameTests implements FabricGameTest {
         ChronosphereGameTestLogic.TEST_CLOCKWORK_SENTINEL_CAN_SPAWN.accept(helper);
     }
 
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testChronosphereBoatCanSpawn(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_CHRONOSPHERE_BOAT_CAN_SPAWN.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testChronosphereChestBoatCanSpawn(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_CHRONOSPHERE_CHEST_BOAT_CAN_SPAWN.accept(helper);
+    }
+
     // ============== Block Placement Tests ==============
 
     @GameTest(template = EMPTY_STRUCTURE)
@@ -222,6 +232,11 @@ public class ChronosphereGameTests implements FabricGameTest {
     @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
     public void testEnhancedClockstonePickaxeDurability(GameTestHelper helper) {
         ChronosphereGameTestLogic.TEST_ENHANCED_CLOCKSTONE_PICKAXE_DURABILITY.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testSpatiallyLinkedPickaxeDurability(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_SPATIALLY_LINKED_PICKAXE_DURABILITY.accept(helper);
     }
 
     // ============== Additional Boss Attribute Tests ==============

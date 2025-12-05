@@ -92,6 +92,9 @@ public final class ChronosphereGameTestLogic {
     // Enhanced Clockstone Armor expected defense values
     public static final int ENHANCED_CLOCKSTONE_CHESTPLATE_DEFENSE = 7;
 
+    // Spatially Linked Pickaxe expected values
+    public static final int SPATIALLY_LINKED_PICKAXE_DURABILITY = 1561;
+
     // ============== Entity Spawn Tests ==============
 
     /**
@@ -124,6 +127,22 @@ public final class ChronosphereGameTestLogic {
     public static final Consumer<GameTestHelper> TEST_CLOCKWORK_SENTINEL_CAN_SPAWN = helper -> {
         helper.spawn(ModEntities.CLOCKWORK_SENTINEL.get(), TEST_POS);
         helper.succeedWhenEntityPresent(ModEntities.CLOCKWORK_SENTINEL.get(), TEST_POS);
+    };
+
+    /**
+     * Test that Chronosphere Boat entity can be spawned.
+     */
+    public static final Consumer<GameTestHelper> TEST_CHRONOSPHERE_BOAT_CAN_SPAWN = helper -> {
+        helper.spawn(ModEntities.CHRONOSPHERE_BOAT.get(), TEST_POS);
+        helper.succeedWhenEntityPresent(ModEntities.CHRONOSPHERE_BOAT.get(), TEST_POS);
+    };
+
+    /**
+     * Test that Chronosphere Chest Boat entity can be spawned.
+     */
+    public static final Consumer<GameTestHelper> TEST_CHRONOSPHERE_CHEST_BOAT_CAN_SPAWN = helper -> {
+        helper.spawn(ModEntities.CHRONOSPHERE_CHEST_BOAT.get(), TEST_POS);
+        helper.succeedWhenEntityPresent(ModEntities.CHRONOSPHERE_CHEST_BOAT.get(), TEST_POS);
     };
 
     // ============== Block Placement Tests ==============
@@ -733,6 +752,24 @@ public final class ChronosphereGameTestLogic {
                 }
             } else {
                 helper.fail("Enhanced Clockstone Chestplate is not an ArmorItem");
+            }
+        });
+    };
+
+    /**
+     * Test that Spatially Linked Pickaxe has correct durability (1561 - diamond tier).
+     */
+    public static final Consumer<GameTestHelper> TEST_SPATIALLY_LINKED_PICKAXE_DURABILITY = helper -> {
+        ItemStack pickaxe = new ItemStack(ModItems.SPATIALLY_LINKED_PICKAXE.get());
+
+        helper.runAfterDelay(1, () -> {
+            int actualDurability = pickaxe.getMaxDamage();
+
+            if (actualDurability == SPATIALLY_LINKED_PICKAXE_DURABILITY) {
+                helper.succeed();
+            } else {
+                helper.fail("Spatially Linked Pickaxe durability was " + actualDurability +
+                    ", expected " + SPATIALLY_LINKED_PICKAXE_DURABILITY);
             }
         });
     };

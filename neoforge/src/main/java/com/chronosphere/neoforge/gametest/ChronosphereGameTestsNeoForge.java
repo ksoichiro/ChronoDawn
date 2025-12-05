@@ -59,6 +59,12 @@ public class ChronosphereGameTestsNeoForge {
         tests.add(createTest("testClockworkSentinelCanSpawn",
             ChronosphereGameTestLogic.TEST_CLOCKWORK_SENTINEL_CAN_SPAWN));
 
+        tests.add(createTest("testChronosphereBoatCanSpawn",
+            ChronosphereGameTestLogic.TEST_CHRONOSPHERE_BOAT_CAN_SPAWN));
+
+        tests.add(createTest("testChronosphereChestBoatCanSpawn",
+            ChronosphereGameTestLogic.TEST_CHRONOSPHERE_CHEST_BOAT_CAN_SPAWN));
+
         // Block placement tests
         tests.add(createTest("testTimeWoodLogCanBePlaced",
             ChronosphereGameTestLogic.TEST_TIME_WOOD_LOG_CAN_BE_PLACED));
@@ -167,6 +173,9 @@ public class ChronosphereGameTestsNeoForge {
 
         tests.add(createTest("testEnhancedClockstonePickaxeDurability",
             ChronosphereGameTestLogic.TEST_ENHANCED_CLOCKSTONE_PICKAXE_DURABILITY));
+
+        tests.add(createTest("testSpatiallyLinkedPickaxeDurability",
+            ChronosphereGameTestLogic.TEST_SPATIALLY_LINKED_PICKAXE_DURABILITY));
 
         // Additional boss attribute tests
         tests.add(createTest("testTimeGuardianAttackDamage",
