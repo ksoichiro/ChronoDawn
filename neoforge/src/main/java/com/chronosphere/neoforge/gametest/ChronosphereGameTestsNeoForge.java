@@ -149,6 +149,17 @@ public class ChronosphereGameTestsNeoForge {
         tests.add(createTest("testTimeKeeperInitialHealth",
             ChronosphereGameTestLogic.TEST_TIME_KEEPER_INITIAL_HEALTH));
 
+        // Tool durability tests
+        tests.add(createTest("testClockstoneSwordDurability",
+            ChronosphereGameTestLogic.TEST_CLOCKSTONE_SWORD_DURABILITY));
+
+        tests.add(createTest("testEnhancedClockstoneSwordDurability",
+            ChronosphereGameTestLogic.TEST_ENHANCED_CLOCKSTONE_SWORD_DURABILITY));
+
+        // Additional boss attribute tests
+        tests.add(createTest("testTimeGuardianAttackDamage",
+            ChronosphereGameTestLogic.TEST_TIME_GUARDIAN_ATTACK_DAMAGE));
+
         Chronosphere.LOGGER.info("Generated {} GameTest functions for NeoForge", tests.size());
         return tests;
     }

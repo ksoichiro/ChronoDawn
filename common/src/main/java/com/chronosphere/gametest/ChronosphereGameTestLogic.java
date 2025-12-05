@@ -77,6 +77,15 @@ public final class ChronosphereGameTestLogic {
     // Chronoblade expected values
     public static final int CHRONOBLADE_DURABILITY = 2000;
 
+    // Clockstone tool expected values
+    public static final int CLOCKSTONE_TOOL_DURABILITY = 450;
+
+    // Enhanced Clockstone tool expected values
+    public static final int ENHANCED_CLOCKSTONE_TOOL_DURABILITY = 1200;
+
+    // Time Guardian attack damage (missing from previous tests)
+    public static final double TIME_GUARDIAN_ATTACK_DAMAGE = 10.0;
+
     // ============== Entity Spawn Tests ==============
 
     /**
@@ -570,6 +579,60 @@ public final class ChronosphereGameTestLogic {
                 helper.succeed();
             } else {
                 helper.fail("Time Keeper health was " + actualHealth + ", expected " + TIME_KEEPER_HEALTH);
+            }
+        });
+    };
+
+    // ============== Tool Durability Tests ==============
+
+    /**
+     * Test that Clockstone Sword has correct durability (450).
+     */
+    public static final Consumer<GameTestHelper> TEST_CLOCKSTONE_SWORD_DURABILITY = helper -> {
+        ItemStack sword = new ItemStack(ModItems.CLOCKSTONE_SWORD.get());
+
+        helper.runAfterDelay(1, () -> {
+            int actualDurability = sword.getMaxDamage();
+
+            if (actualDurability == CLOCKSTONE_TOOL_DURABILITY) {
+                helper.succeed();
+            } else {
+                helper.fail("Clockstone Sword durability was " + actualDurability + ", expected " + CLOCKSTONE_TOOL_DURABILITY);
+            }
+        });
+    };
+
+    /**
+     * Test that Enhanced Clockstone Sword has correct durability (1200).
+     */
+    public static final Consumer<GameTestHelper> TEST_ENHANCED_CLOCKSTONE_SWORD_DURABILITY = helper -> {
+        ItemStack sword = new ItemStack(ModItems.ENHANCED_CLOCKSTONE_SWORD.get());
+
+        helper.runAfterDelay(1, () -> {
+            int actualDurability = sword.getMaxDamage();
+
+            if (actualDurability == ENHANCED_CLOCKSTONE_TOOL_DURABILITY) {
+                helper.succeed();
+            } else {
+                helper.fail("Enhanced Clockstone Sword durability was " + actualDurability + ", expected " + ENHANCED_CLOCKSTONE_TOOL_DURABILITY);
+            }
+        });
+    };
+
+    /**
+     * Test that Time Guardian has correct attack damage (10.0 = 5 hearts).
+     */
+    public static final Consumer<GameTestHelper> TEST_TIME_GUARDIAN_ATTACK_DAMAGE = helper -> {
+        var entity = helper.spawn(ModEntities.TIME_GUARDIAN.get(), TEST_POS);
+
+        helper.runAfterDelay(1, () -> {
+            double actualDamage = entity.getAttributeValue(Attributes.ATTACK_DAMAGE);
+
+            if (Math.abs(actualDamage - TIME_GUARDIAN_ATTACK_DAMAGE) < 0.1) {
+                helper.succeed();
+            } else {
+                helper.fail("Time Guardian attack damage was " + actualDamage +
+                    ", expected " + TIME_GUARDIAN_ATTACK_DAMAGE);
             }
         });
     };

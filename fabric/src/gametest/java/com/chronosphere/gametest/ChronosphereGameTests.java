@@ -191,4 +191,23 @@ public class ChronosphereGameTests implements FabricGameTest {
     public void testTimeKeeperInitialHealth(GameTestHelper helper) {
         ChronosphereGameTestLogic.TEST_TIME_KEEPER_INITIAL_HEALTH.accept(helper);
     }
+
+    // ============== Tool Durability Tests ==============
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testClockstoneSwordDurability(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_CLOCKSTONE_SWORD_DURABILITY.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testEnhancedClockstoneSwordDurability(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_ENHANCED_CLOCKSTONE_SWORD_DURABILITY.accept(helper);
+    }
+
+    // ============== Additional Boss Attribute Tests ==============
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testTimeGuardianAttackDamage(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_TIME_GUARDIAN_ATTACK_DAMAGE.accept(helper);
+    }
 }
