@@ -257,4 +257,68 @@ public class ChronosphereGameTests implements FabricGameTest {
     public void testEnhancedClockstoneChestplateDefense(GameTestHelper helper) {
         ChronosphereGameTestLogic.TEST_ENHANCED_CLOCKSTONE_CHESTPLATE_DEFENSE.accept(helper);
     }
+
+    // ============== Additional Armor Defense Tests ==============
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testClockstoneHelmetDefense(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_CLOCKSTONE_HELMET_DEFENSE.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testClockstoneLeggingsDefense(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_CLOCKSTONE_LEGGINGS_DEFENSE.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testClockstoneBootsDefense(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_CLOCKSTONE_BOOTS_DEFENSE.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testEnhancedClockstoneHelmetDefense(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_ENHANCED_CLOCKSTONE_HELMET_DEFENSE.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testEnhancedClockstoneLeggingsDefense(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_ENHANCED_CLOCKSTONE_LEGGINGS_DEFENSE.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testEnhancedClockstoneBootsDefense(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_ENHANCED_CLOCKSTONE_BOOTS_DEFENSE.accept(helper);
+    }
+
+    // ============== Additional Tool Durability Tests ==============
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testClockstoneAxeDurability(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_CLOCKSTONE_AXE_DURABILITY.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testClockstoneShovelDurability(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_CLOCKSTONE_SHOVEL_DURABILITY.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testClockstoneHoeDurability(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_CLOCKSTONE_HOE_DURABILITY.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testEnhancedClockstoneAxeDurability(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_ENHANCED_CLOCKSTONE_AXE_DURABILITY.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testEnhancedClockstoneShovelDurability(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_ENHANCED_CLOCKSTONE_SHOVEL_DURABILITY.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testEnhancedClockstoneHoeDurability(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_ENHANCED_CLOCKSTONE_HOE_DURABILITY.accept(helper);
+    }
 }

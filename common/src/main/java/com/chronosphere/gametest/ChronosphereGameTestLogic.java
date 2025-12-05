@@ -87,10 +87,16 @@ public final class ChronosphereGameTestLogic {
     public static final double TIME_GUARDIAN_ATTACK_DAMAGE = 10.0;
 
     // Clockstone Armor expected defense values
+    public static final int CLOCKSTONE_HELMET_DEFENSE = 2;
     public static final int CLOCKSTONE_CHESTPLATE_DEFENSE = 6;
+    public static final int CLOCKSTONE_LEGGINGS_DEFENSE = 5;
+    public static final int CLOCKSTONE_BOOTS_DEFENSE = 2;
 
     // Enhanced Clockstone Armor expected defense values
+    public static final int ENHANCED_CLOCKSTONE_HELMET_DEFENSE = 3;
     public static final int ENHANCED_CLOCKSTONE_CHESTPLATE_DEFENSE = 7;
+    public static final int ENHANCED_CLOCKSTONE_LEGGINGS_DEFENSE = 6;
+    public static final int ENHANCED_CLOCKSTONE_BOOTS_DEFENSE = 3;
 
     // Spatially Linked Pickaxe expected values
     public static final int SPATIALLY_LINKED_PICKAXE_DURABILITY = 1561;
@@ -770,6 +776,238 @@ public final class ChronosphereGameTestLogic {
             } else {
                 helper.fail("Spatially Linked Pickaxe durability was " + actualDurability +
                     ", expected " + SPATIALLY_LINKED_PICKAXE_DURABILITY);
+            }
+        });
+    };
+
+    // ============== Additional Armor Defense Tests ==============
+
+    /**
+     * Test that Clockstone Helmet has correct defense value (2).
+     */
+    public static final Consumer<GameTestHelper> TEST_CLOCKSTONE_HELMET_DEFENSE = helper -> {
+        ItemStack helmet = new ItemStack(ModItems.CLOCKSTONE_HELMET.get());
+
+        helper.runAfterDelay(1, () -> {
+            if (helmet.getItem() instanceof net.minecraft.world.item.ArmorItem armorItem) {
+                int actualDefense = armorItem.getDefense();
+                if (actualDefense == CLOCKSTONE_HELMET_DEFENSE) {
+                    helper.succeed();
+                } else {
+                    helper.fail("Clockstone Helmet defense was " + actualDefense +
+                        ", expected " + CLOCKSTONE_HELMET_DEFENSE);
+                }
+            } else {
+                helper.fail("Clockstone Helmet is not an ArmorItem");
+            }
+        });
+    };
+
+    /**
+     * Test that Clockstone Leggings has correct defense value (5).
+     */
+    public static final Consumer<GameTestHelper> TEST_CLOCKSTONE_LEGGINGS_DEFENSE = helper -> {
+        ItemStack leggings = new ItemStack(ModItems.CLOCKSTONE_LEGGINGS.get());
+
+        helper.runAfterDelay(1, () -> {
+            if (leggings.getItem() instanceof net.minecraft.world.item.ArmorItem armorItem) {
+                int actualDefense = armorItem.getDefense();
+                if (actualDefense == CLOCKSTONE_LEGGINGS_DEFENSE) {
+                    helper.succeed();
+                } else {
+                    helper.fail("Clockstone Leggings defense was " + actualDefense +
+                        ", expected " + CLOCKSTONE_LEGGINGS_DEFENSE);
+                }
+            } else {
+                helper.fail("Clockstone Leggings is not an ArmorItem");
+            }
+        });
+    };
+
+    /**
+     * Test that Clockstone Boots has correct defense value (2).
+     */
+    public static final Consumer<GameTestHelper> TEST_CLOCKSTONE_BOOTS_DEFENSE = helper -> {
+        ItemStack boots = new ItemStack(ModItems.CLOCKSTONE_BOOTS.get());
+
+        helper.runAfterDelay(1, () -> {
+            if (boots.getItem() instanceof net.minecraft.world.item.ArmorItem armorItem) {
+                int actualDefense = armorItem.getDefense();
+                if (actualDefense == CLOCKSTONE_BOOTS_DEFENSE) {
+                    helper.succeed();
+                } else {
+                    helper.fail("Clockstone Boots defense was " + actualDefense +
+                        ", expected " + CLOCKSTONE_BOOTS_DEFENSE);
+                }
+            } else {
+                helper.fail("Clockstone Boots is not an ArmorItem");
+            }
+        });
+    };
+
+    /**
+     * Test that Enhanced Clockstone Helmet has correct defense value (3).
+     */
+    public static final Consumer<GameTestHelper> TEST_ENHANCED_CLOCKSTONE_HELMET_DEFENSE = helper -> {
+        ItemStack helmet = new ItemStack(ModItems.ENHANCED_CLOCKSTONE_HELMET.get());
+
+        helper.runAfterDelay(1, () -> {
+            if (helmet.getItem() instanceof net.minecraft.world.item.ArmorItem armorItem) {
+                int actualDefense = armorItem.getDefense();
+                if (actualDefense == ENHANCED_CLOCKSTONE_HELMET_DEFENSE) {
+                    helper.succeed();
+                } else {
+                    helper.fail("Enhanced Clockstone Helmet defense was " + actualDefense +
+                        ", expected " + ENHANCED_CLOCKSTONE_HELMET_DEFENSE);
+                }
+            } else {
+                helper.fail("Enhanced Clockstone Helmet is not an ArmorItem");
+            }
+        });
+    };
+
+    /**
+     * Test that Enhanced Clockstone Leggings has correct defense value (6).
+     */
+    public static final Consumer<GameTestHelper> TEST_ENHANCED_CLOCKSTONE_LEGGINGS_DEFENSE = helper -> {
+        ItemStack leggings = new ItemStack(ModItems.ENHANCED_CLOCKSTONE_LEGGINGS.get());
+
+        helper.runAfterDelay(1, () -> {
+            if (leggings.getItem() instanceof net.minecraft.world.item.ArmorItem armorItem) {
+                int actualDefense = armorItem.getDefense();
+                if (actualDefense == ENHANCED_CLOCKSTONE_LEGGINGS_DEFENSE) {
+                    helper.succeed();
+                } else {
+                    helper.fail("Enhanced Clockstone Leggings defense was " + actualDefense +
+                        ", expected " + ENHANCED_CLOCKSTONE_LEGGINGS_DEFENSE);
+                }
+            } else {
+                helper.fail("Enhanced Clockstone Leggings is not an ArmorItem");
+            }
+        });
+    };
+
+    /**
+     * Test that Enhanced Clockstone Boots has correct defense value (3).
+     */
+    public static final Consumer<GameTestHelper> TEST_ENHANCED_CLOCKSTONE_BOOTS_DEFENSE = helper -> {
+        ItemStack boots = new ItemStack(ModItems.ENHANCED_CLOCKSTONE_BOOTS.get());
+
+        helper.runAfterDelay(1, () -> {
+            if (boots.getItem() instanceof net.minecraft.world.item.ArmorItem armorItem) {
+                int actualDefense = armorItem.getDefense();
+                if (actualDefense == ENHANCED_CLOCKSTONE_BOOTS_DEFENSE) {
+                    helper.succeed();
+                } else {
+                    helper.fail("Enhanced Clockstone Boots defense was " + actualDefense +
+                        ", expected " + ENHANCED_CLOCKSTONE_BOOTS_DEFENSE);
+                }
+            } else {
+                helper.fail("Enhanced Clockstone Boots is not an ArmorItem");
+            }
+        });
+    };
+
+    // ============== Additional Tool Durability Tests ==============
+
+    /**
+     * Test that Clockstone Axe has correct durability (450).
+     */
+    public static final Consumer<GameTestHelper> TEST_CLOCKSTONE_AXE_DURABILITY = helper -> {
+        ItemStack axe = new ItemStack(ModItems.CLOCKSTONE_AXE.get());
+
+        helper.runAfterDelay(1, () -> {
+            int actualDurability = axe.getMaxDamage();
+
+            if (actualDurability == CLOCKSTONE_TOOL_DURABILITY) {
+                helper.succeed();
+            } else {
+                helper.fail("Clockstone Axe durability was " + actualDurability + ", expected " + CLOCKSTONE_TOOL_DURABILITY);
+            }
+        });
+    };
+
+    /**
+     * Test that Clockstone Shovel has correct durability (450).
+     */
+    public static final Consumer<GameTestHelper> TEST_CLOCKSTONE_SHOVEL_DURABILITY = helper -> {
+        ItemStack shovel = new ItemStack(ModItems.CLOCKSTONE_SHOVEL.get());
+
+        helper.runAfterDelay(1, () -> {
+            int actualDurability = shovel.getMaxDamage();
+
+            if (actualDurability == CLOCKSTONE_TOOL_DURABILITY) {
+                helper.succeed();
+            } else {
+                helper.fail("Clockstone Shovel durability was " + actualDurability + ", expected " + CLOCKSTONE_TOOL_DURABILITY);
+            }
+        });
+    };
+
+    /**
+     * Test that Clockstone Hoe has correct durability (450).
+     */
+    public static final Consumer<GameTestHelper> TEST_CLOCKSTONE_HOE_DURABILITY = helper -> {
+        ItemStack hoe = new ItemStack(ModItems.CLOCKSTONE_HOE.get());
+
+        helper.runAfterDelay(1, () -> {
+            int actualDurability = hoe.getMaxDamage();
+
+            if (actualDurability == CLOCKSTONE_TOOL_DURABILITY) {
+                helper.succeed();
+            } else {
+                helper.fail("Clockstone Hoe durability was " + actualDurability + ", expected " + CLOCKSTONE_TOOL_DURABILITY);
+            }
+        });
+    };
+
+    /**
+     * Test that Enhanced Clockstone Axe has correct durability (1200).
+     */
+    public static final Consumer<GameTestHelper> TEST_ENHANCED_CLOCKSTONE_AXE_DURABILITY = helper -> {
+        ItemStack axe = new ItemStack(ModItems.ENHANCED_CLOCKSTONE_AXE.get());
+
+        helper.runAfterDelay(1, () -> {
+            int actualDurability = axe.getMaxDamage();
+
+            if (actualDurability == ENHANCED_CLOCKSTONE_TOOL_DURABILITY) {
+                helper.succeed();
+            } else {
+                helper.fail("Enhanced Clockstone Axe durability was " + actualDurability + ", expected " + ENHANCED_CLOCKSTONE_TOOL_DURABILITY);
+            }
+        });
+    };
+
+    /**
+     * Test that Enhanced Clockstone Shovel has correct durability (1200).
+     */
+    public static final Consumer<GameTestHelper> TEST_ENHANCED_CLOCKSTONE_SHOVEL_DURABILITY = helper -> {
+        ItemStack shovel = new ItemStack(ModItems.ENHANCED_CLOCKSTONE_SHOVEL.get());
+
+        helper.runAfterDelay(1, () -> {
+            int actualDurability = shovel.getMaxDamage();
+
+            if (actualDurability == ENHANCED_CLOCKSTONE_TOOL_DURABILITY) {
+                helper.succeed();
+            } else {
+                helper.fail("Enhanced Clockstone Shovel durability was " + actualDurability + ", expected " + ENHANCED_CLOCKSTONE_TOOL_DURABILITY);
+            }
+        });
+    };
+
+    /**
+     * Test that Enhanced Clockstone Hoe has correct durability (1200).
+     */
+    public static final Consumer<GameTestHelper> TEST_ENHANCED_CLOCKSTONE_HOE_DURABILITY = helper -> {
+        ItemStack hoe = new ItemStack(ModItems.ENHANCED_CLOCKSTONE_HOE.get());
+
+        helper.runAfterDelay(1, () -> {
+            int actualDurability = hoe.getMaxDamage();
+
+            if (actualDurability == ENHANCED_CLOCKSTONE_TOOL_DURABILITY) {
+                helper.succeed();
+            } else {
+                helper.fail("Enhanced Clockstone Hoe durability was " + actualDurability + ", expected " + ENHANCED_CLOCKSTONE_TOOL_DURABILITY);
             }
         });
     };

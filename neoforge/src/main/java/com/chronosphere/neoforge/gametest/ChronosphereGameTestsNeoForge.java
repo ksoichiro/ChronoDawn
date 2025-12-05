@@ -188,6 +188,44 @@ public class ChronosphereGameTestsNeoForge {
         tests.add(createTest("testEnhancedClockstoneChestplateDefense",
             ChronosphereGameTestLogic.TEST_ENHANCED_CLOCKSTONE_CHESTPLATE_DEFENSE));
 
+        // Additional armor defense tests
+        tests.add(createTest("testClockstoneHelmetDefense",
+            ChronosphereGameTestLogic.TEST_CLOCKSTONE_HELMET_DEFENSE));
+
+        tests.add(createTest("testClockstoneLeggingsDefense",
+            ChronosphereGameTestLogic.TEST_CLOCKSTONE_LEGGINGS_DEFENSE));
+
+        tests.add(createTest("testClockstoneBootsDefense",
+            ChronosphereGameTestLogic.TEST_CLOCKSTONE_BOOTS_DEFENSE));
+
+        tests.add(createTest("testEnhancedClockstoneHelmetDefense",
+            ChronosphereGameTestLogic.TEST_ENHANCED_CLOCKSTONE_HELMET_DEFENSE));
+
+        tests.add(createTest("testEnhancedClockstoneLeggingsDefense",
+            ChronosphereGameTestLogic.TEST_ENHANCED_CLOCKSTONE_LEGGINGS_DEFENSE));
+
+        tests.add(createTest("testEnhancedClockstoneBootsDefense",
+            ChronosphereGameTestLogic.TEST_ENHANCED_CLOCKSTONE_BOOTS_DEFENSE));
+
+        // Additional tool durability tests
+        tests.add(createTest("testClockstoneAxeDurability",
+            ChronosphereGameTestLogic.TEST_CLOCKSTONE_AXE_DURABILITY));
+
+        tests.add(createTest("testClockstoneShovelDurability",
+            ChronosphereGameTestLogic.TEST_CLOCKSTONE_SHOVEL_DURABILITY));
+
+        tests.add(createTest("testClockstoneHoeDurability",
+            ChronosphereGameTestLogic.TEST_CLOCKSTONE_HOE_DURABILITY));
+
+        tests.add(createTest("testEnhancedClockstoneAxeDurability",
+            ChronosphereGameTestLogic.TEST_ENHANCED_CLOCKSTONE_AXE_DURABILITY));
+
+        tests.add(createTest("testEnhancedClockstoneShovelDurability",
+            ChronosphereGameTestLogic.TEST_ENHANCED_CLOCKSTONE_SHOVEL_DURABILITY));
+
+        tests.add(createTest("testEnhancedClockstoneHoeDurability",
+            ChronosphereGameTestLogic.TEST_ENHANCED_CLOCKSTONE_HOE_DURABILITY));
+
         Chronosphere.LOGGER.info("Generated {} GameTest functions for NeoForge", tests.size());
         return tests;
     }
