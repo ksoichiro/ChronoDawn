@@ -208,18 +208,43 @@ public class ChronosphereGameTestsNeoForge {
   - Fabric/NeoForge両方が `Consumer<GameTestHelper>` で共通ロジックを呼び出し
 - **結果**: コード重複削減（172行追加、177行削除）
 
-### Phase 4: @Disabledテスト移行 ✅ 一部完了 (2025-12)
-- **コミット**: c910838
-- **移行したテスト**:
-  - `testTimeGuardianArmor` - Time Guardianアーマー値検証 (10.0)
-  - `testTimeGuardianKnockbackResistance` - ノックバック耐性検証 (0.8)
-  - `testChronobladeDurability` - Chronoblade耐久値検証 (2000)
-- **テスト結果**: Fabric 13件 / NeoForge 12件全てパス
-- **移行元**:
-  - TimeGuardianFightTest.testTimeGuardianHealthAndArmorValues
-  - TimeGuardianFightTest.testTimeGuardianCannotBeKnockedBack
-  - ChronobladeTest.testChronobladeHighDurability
-- **残り**: 96個の@Disabledテストのうち、複雑なテスト（ボス戦AI、構造体生成、確率的テスト等）は将来的に移行可能
+### Phase 4: @Disabledテスト移行 ✅ 大幅拡張完了 (2025-12)
+- **最終テスト数**: Fabric 86件 / NeoForge 85件全てパス
+- **コミット履歴**:
+  - `c910838`: 初期移行（3テスト）
+  - `f5e062a`: ボートスポーン + Spatially Linked Pickaxe（3テスト）
+  - `291d6c8`: 防具防御値 + ツール耐久値（12テスト）
+  - `d0050ce`: ミニボス/NPCエンティティスポーン（6テスト）
+  - `f7281d1`: 鉱石/木材ブロック配置（6テスト）
+  - `063a791`: ブロックバリエーション配置（11テスト）
+  - `1d8e76b`: 特殊ブロック配置（7テスト）
+
+- **移行したテストカテゴリ**:
+  1. **エンティティスポーンテスト** (12件)
+     - Time Guardian, Time Tyrant, Temporal Wraith, Clockwork Sentinel
+     - Chronos Warden, Clockwork Colossus, Time Keeper, Floq
+     - Temporal Phantom, Entropy Keeper, Boats (2種)
+
+  2. **エンティティ属性テスト** (20件)
+     - ボス: Health, Armor, Knockback Resistance, Attack Damage
+     - ミニボス/モブ: 各種属性値
+
+  3. **ブロック配置テスト** (30件)
+     - 基本ブロック: Clockstone, Time Crystal, Temporal Bricks, Clockwork
+     - 木材: Time Wood, Dark Time Wood, Ancient Time Wood（各ログ、板材）
+     - バリエーション: 階段、スラブ、壁、フェンス、ドア、トラップドア
+     - 鉱石: Clockstone Ore, Time Crystal Ore
+     - 特殊: Reversing Time Sandstone, Frozen Time Ice, Temporal Moss,
+             Time Wheat Bale, Chrono Melon, Time Wood Leaves
+
+  4. **アイテム属性テスト** (24件)
+     - ツール耐久値: Clockstone/Enhanced Clockstone 各種（Sword, Pickaxe, Axe, Shovel, Hoe）
+     - 特殊ツール: Chronoblade, Spatially Linked Pickaxe
+     - 防具防御値: Clockstone/Enhanced Clockstone 各部位（Helmet, Chestplate, Leggings, Boots）
+
+- **残りの@Disabledテスト**:
+  - 複雑なランタイムテスト（ボスAI、構造体生成、ポータルシステム等）は将来的に移行検討
+  - 未実装機能（Decoy、Portal Activation等）は機能実装後に移行
 
 ### 学んだこと
 - **Fabric**: Architectury Loomで `@GameTest` アノテーションが正常に動作
