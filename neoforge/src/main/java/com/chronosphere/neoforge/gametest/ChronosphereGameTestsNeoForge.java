@@ -117,6 +117,39 @@ public class ChronosphereGameTestsNeoForge {
         tests.add(createTest("testAncientTimeWoodLogCanBePlaced",
             ChronosphereGameTestLogic.TEST_ANCIENT_TIME_WOOD_LOG_CAN_BE_PLACED));
 
+        tests.add(createTest("testTimeWoodStairsCanBePlaced",
+            ChronosphereGameTestLogic.TEST_TIME_WOOD_STAIRS_CAN_BE_PLACED));
+
+        tests.add(createTest("testTimeWoodSlabCanBePlaced",
+            ChronosphereGameTestLogic.TEST_TIME_WOOD_SLAB_CAN_BE_PLACED));
+
+        tests.add(createTest("testTimeWoodFenceCanBePlaced",
+            ChronosphereGameTestLogic.TEST_TIME_WOOD_FENCE_CAN_BE_PLACED));
+
+        tests.add(createTest("testTimeWoodDoorCanBePlaced",
+            ChronosphereGameTestLogic.TEST_TIME_WOOD_DOOR_CAN_BE_PLACED));
+
+        tests.add(createTest("testTimeWoodTrapdoorCanBePlaced",
+            ChronosphereGameTestLogic.TEST_TIME_WOOD_TRAPDOOR_CAN_BE_PLACED));
+
+        tests.add(createTest("testClockstoneStairsCanBePlaced",
+            ChronosphereGameTestLogic.TEST_CLOCKSTONE_STAIRS_CAN_BE_PLACED));
+
+        tests.add(createTest("testClockstoneSlabCanBePlaced",
+            ChronosphereGameTestLogic.TEST_CLOCKSTONE_SLAB_CAN_BE_PLACED));
+
+        tests.add(createTest("testClockstoneWallCanBePlaced",
+            ChronosphereGameTestLogic.TEST_CLOCKSTONE_WALL_CAN_BE_PLACED));
+
+        tests.add(createTest("testTemporalBricksStairsCanBePlaced",
+            ChronosphereGameTestLogic.TEST_TEMPORAL_BRICKS_STAIRS_CAN_BE_PLACED));
+
+        tests.add(createTest("testTemporalBricksSlabCanBePlaced",
+            ChronosphereGameTestLogic.TEST_TEMPORAL_BRICKS_SLAB_CAN_BE_PLACED));
+
+        tests.add(createTest("testTemporalBricksWallCanBePlaced",
+            ChronosphereGameTestLogic.TEST_TEMPORAL_BRICKS_WALL_CAN_BE_PLACED));
+
         // Entity health tests
         tests.add(createTest("testTimeGuardianInitialHealth",
             ChronosphereGameTestLogic.TEST_TIME_GUARDIAN_INITIAL_HEALTH));

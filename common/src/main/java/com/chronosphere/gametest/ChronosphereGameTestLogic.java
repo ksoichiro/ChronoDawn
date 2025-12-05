@@ -289,6 +289,94 @@ public final class ChronosphereGameTestLogic {
         helper.succeedWhenBlockPresent(ModBlocks.ANCIENT_TIME_WOOD_LOG.get(), TEST_POS);
     };
 
+    /**
+     * Test that Time Wood Stairs block can be placed.
+     */
+    public static final Consumer<GameTestHelper> TEST_TIME_WOOD_STAIRS_CAN_BE_PLACED = helper -> {
+        helper.setBlock(TEST_POS, ModBlocks.TIME_WOOD_STAIRS.get());
+        helper.succeedWhenBlockPresent(ModBlocks.TIME_WOOD_STAIRS.get(), TEST_POS);
+    };
+
+    /**
+     * Test that Time Wood Slab block can be placed.
+     */
+    public static final Consumer<GameTestHelper> TEST_TIME_WOOD_SLAB_CAN_BE_PLACED = helper -> {
+        helper.setBlock(TEST_POS, ModBlocks.TIME_WOOD_SLAB.get());
+        helper.succeedWhenBlockPresent(ModBlocks.TIME_WOOD_SLAB.get(), TEST_POS);
+    };
+
+    /**
+     * Test that Time Wood Fence block can be placed.
+     */
+    public static final Consumer<GameTestHelper> TEST_TIME_WOOD_FENCE_CAN_BE_PLACED = helper -> {
+        helper.setBlock(TEST_POS, ModBlocks.TIME_WOOD_FENCE.get());
+        helper.succeedWhenBlockPresent(ModBlocks.TIME_WOOD_FENCE.get(), TEST_POS);
+    };
+
+    /**
+     * Test that Time Wood Door block can be placed.
+     */
+    public static final Consumer<GameTestHelper> TEST_TIME_WOOD_DOOR_CAN_BE_PLACED = helper -> {
+        helper.setBlock(TEST_POS, ModBlocks.TIME_WOOD_DOOR.get());
+        helper.succeedWhenBlockPresent(ModBlocks.TIME_WOOD_DOOR.get(), TEST_POS);
+    };
+
+    /**
+     * Test that Time Wood Trapdoor block can be placed.
+     */
+    public static final Consumer<GameTestHelper> TEST_TIME_WOOD_TRAPDOOR_CAN_BE_PLACED = helper -> {
+        helper.setBlock(TEST_POS, ModBlocks.TIME_WOOD_TRAPDOOR.get());
+        helper.succeedWhenBlockPresent(ModBlocks.TIME_WOOD_TRAPDOOR.get(), TEST_POS);
+    };
+
+    /**
+     * Test that Clockstone Stairs block can be placed.
+     */
+    public static final Consumer<GameTestHelper> TEST_CLOCKSTONE_STAIRS_CAN_BE_PLACED = helper -> {
+        helper.setBlock(TEST_POS, ModBlocks.CLOCKSTONE_STAIRS.get());
+        helper.succeedWhenBlockPresent(ModBlocks.CLOCKSTONE_STAIRS.get(), TEST_POS);
+    };
+
+    /**
+     * Test that Clockstone Slab block can be placed.
+     */
+    public static final Consumer<GameTestHelper> TEST_CLOCKSTONE_SLAB_CAN_BE_PLACED = helper -> {
+        helper.setBlock(TEST_POS, ModBlocks.CLOCKSTONE_SLAB.get());
+        helper.succeedWhenBlockPresent(ModBlocks.CLOCKSTONE_SLAB.get(), TEST_POS);
+    };
+
+    /**
+     * Test that Clockstone Wall block can be placed.
+     */
+    public static final Consumer<GameTestHelper> TEST_CLOCKSTONE_WALL_CAN_BE_PLACED = helper -> {
+        helper.setBlock(TEST_POS, ModBlocks.CLOCKSTONE_WALL.get());
+        helper.succeedWhenBlockPresent(ModBlocks.CLOCKSTONE_WALL.get(), TEST_POS);
+    };
+
+    /**
+     * Test that Temporal Bricks Stairs block can be placed.
+     */
+    public static final Consumer<GameTestHelper> TEST_TEMPORAL_BRICKS_STAIRS_CAN_BE_PLACED = helper -> {
+        helper.setBlock(TEST_POS, ModBlocks.TEMPORAL_BRICKS_STAIRS.get());
+        helper.succeedWhenBlockPresent(ModBlocks.TEMPORAL_BRICKS_STAIRS.get(), TEST_POS);
+    };
+
+    /**
+     * Test that Temporal Bricks Slab block can be placed.
+     */
+    public static final Consumer<GameTestHelper> TEST_TEMPORAL_BRICKS_SLAB_CAN_BE_PLACED = helper -> {
+        helper.setBlock(TEST_POS, ModBlocks.TEMPORAL_BRICKS_SLAB.get());
+        helper.succeedWhenBlockPresent(ModBlocks.TEMPORAL_BRICKS_SLAB.get(), TEST_POS);
+    };
+
+    /**
+     * Test that Temporal Bricks Wall block can be placed.
+     */
+    public static final Consumer<GameTestHelper> TEST_TEMPORAL_BRICKS_WALL_CAN_BE_PLACED = helper -> {
+        helper.setBlock(TEST_POS, ModBlocks.TEMPORAL_BRICKS_WALL.get());
+        helper.succeedWhenBlockPresent(ModBlocks.TEMPORAL_BRICKS_WALL.get(), TEST_POS);
+    };
+
     // ============== Entity Health Tests ==============
 
     /**

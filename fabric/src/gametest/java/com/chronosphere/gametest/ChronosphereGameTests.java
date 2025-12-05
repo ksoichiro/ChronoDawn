@@ -136,6 +136,61 @@ public class ChronosphereGameTests implements FabricGameTest {
         ChronosphereGameTestLogic.TEST_ANCIENT_TIME_WOOD_LOG_CAN_BE_PLACED.accept(helper);
     }
 
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testTimeWoodStairsCanBePlaced(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_TIME_WOOD_STAIRS_CAN_BE_PLACED.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testTimeWoodSlabCanBePlaced(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_TIME_WOOD_SLAB_CAN_BE_PLACED.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testTimeWoodFenceCanBePlaced(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_TIME_WOOD_FENCE_CAN_BE_PLACED.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testTimeWoodDoorCanBePlaced(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_TIME_WOOD_DOOR_CAN_BE_PLACED.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testTimeWoodTrapdoorCanBePlaced(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_TIME_WOOD_TRAPDOOR_CAN_BE_PLACED.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testClockstoneStairsCanBePlaced(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_CLOCKSTONE_STAIRS_CAN_BE_PLACED.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testClockstoneSlabCanBePlaced(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_CLOCKSTONE_SLAB_CAN_BE_PLACED.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testClockstoneWallCanBePlaced(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_CLOCKSTONE_WALL_CAN_BE_PLACED.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testTemporalBricksStairsCanBePlaced(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_TEMPORAL_BRICKS_STAIRS_CAN_BE_PLACED.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testTemporalBricksSlabCanBePlaced(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_TEMPORAL_BRICKS_SLAB_CAN_BE_PLACED.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testTemporalBricksWallCanBePlaced(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_TEMPORAL_BRICKS_WALL_CAN_BE_PLACED.accept(helper);
+    }
+
     // ============== Entity Health Tests ==============
 
     @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
