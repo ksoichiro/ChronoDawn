@@ -151,6 +151,54 @@ public final class ChronosphereGameTestLogic {
         helper.succeedWhenEntityPresent(ModEntities.CHRONOSPHERE_CHEST_BOAT.get(), TEST_POS);
     };
 
+    /**
+     * Test that Chronos Warden entity can be spawned.
+     */
+    public static final Consumer<GameTestHelper> TEST_CHRONOS_WARDEN_CAN_SPAWN = helper -> {
+        helper.spawn(ModEntities.CHRONOS_WARDEN.get(), TEST_POS);
+        helper.succeedWhenEntityPresent(ModEntities.CHRONOS_WARDEN.get(), TEST_POS);
+    };
+
+    /**
+     * Test that Clockwork Colossus entity can be spawned.
+     */
+    public static final Consumer<GameTestHelper> TEST_CLOCKWORK_COLOSSUS_CAN_SPAWN = helper -> {
+        helper.spawn(ModEntities.CLOCKWORK_COLOSSUS.get(), TEST_POS);
+        helper.succeedWhenEntityPresent(ModEntities.CLOCKWORK_COLOSSUS.get(), TEST_POS);
+    };
+
+    /**
+     * Test that Time Keeper entity can be spawned.
+     */
+    public static final Consumer<GameTestHelper> TEST_TIME_KEEPER_CAN_SPAWN = helper -> {
+        helper.spawn(ModEntities.TIME_KEEPER.get(), TEST_POS);
+        helper.succeedWhenEntityPresent(ModEntities.TIME_KEEPER.get(), TEST_POS);
+    };
+
+    /**
+     * Test that Floq entity can be spawned.
+     */
+    public static final Consumer<GameTestHelper> TEST_FLOQ_CAN_SPAWN = helper -> {
+        helper.spawn(ModEntities.FLOQ.get(), TEST_POS);
+        helper.succeedWhenEntityPresent(ModEntities.FLOQ.get(), TEST_POS);
+    };
+
+    /**
+     * Test that Temporal Phantom entity can be spawned.
+     */
+    public static final Consumer<GameTestHelper> TEST_TEMPORAL_PHANTOM_CAN_SPAWN = helper -> {
+        helper.spawn(ModEntities.TEMPORAL_PHANTOM.get(), TEST_POS);
+        helper.succeedWhenEntityPresent(ModEntities.TEMPORAL_PHANTOM.get(), TEST_POS);
+    };
+
+    /**
+     * Test that Entropy Keeper entity can be spawned.
+     */
+    public static final Consumer<GameTestHelper> TEST_ENTROPY_KEEPER_CAN_SPAWN = helper -> {
+        helper.spawn(ModEntities.ENTROPY_KEEPER.get(), TEST_POS);
+        helper.succeedWhenEntityPresent(ModEntities.ENTROPY_KEEPER.get(), TEST_POS);
+    };
+
     // ============== Block Placement Tests ==============
 
     /**

@@ -49,6 +49,36 @@ public class ChronosphereGameTests implements FabricGameTest {
         ChronosphereGameTestLogic.TEST_CHRONOSPHERE_CHEST_BOAT_CAN_SPAWN.accept(helper);
     }
 
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testChronosWardenCanSpawn(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_CHRONOS_WARDEN_CAN_SPAWN.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testClockworkColossusCanSpawn(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_CLOCKWORK_COLOSSUS_CAN_SPAWN.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testTimeKeeperCanSpawn(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_TIME_KEEPER_CAN_SPAWN.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testFloqCanSpawn(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_FLOQ_CAN_SPAWN.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testTemporalPhantomCanSpawn(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_TEMPORAL_PHANTOM_CAN_SPAWN.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testEntropyKeeperCanSpawn(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_ENTROPY_KEEPER_CAN_SPAWN.accept(helper);
+    }
+
     // ============== Block Placement Tests ==============
 
     @GameTest(template = EMPTY_STRUCTURE)

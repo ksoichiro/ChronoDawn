@@ -65,6 +65,24 @@ public class ChronosphereGameTestsNeoForge {
         tests.add(createTest("testChronosphereChestBoatCanSpawn",
             ChronosphereGameTestLogic.TEST_CHRONOSPHERE_CHEST_BOAT_CAN_SPAWN));
 
+        tests.add(createTest("testChronosWardenCanSpawn",
+            ChronosphereGameTestLogic.TEST_CHRONOS_WARDEN_CAN_SPAWN));
+
+        tests.add(createTest("testClockworkColossusCanSpawn",
+            ChronosphereGameTestLogic.TEST_CLOCKWORK_COLOSSUS_CAN_SPAWN));
+
+        tests.add(createTest("testTimeKeeperCanSpawn",
+            ChronosphereGameTestLogic.TEST_TIME_KEEPER_CAN_SPAWN));
+
+        tests.add(createTest("testFloqCanSpawn",
+            ChronosphereGameTestLogic.TEST_FLOQ_CAN_SPAWN));
+
+        tests.add(createTest("testTemporalPhantomCanSpawn",
+            ChronosphereGameTestLogic.TEST_TEMPORAL_PHANTOM_CAN_SPAWN));
+
+        tests.add(createTest("testEntropyKeeperCanSpawn",
+            ChronosphereGameTestLogic.TEST_ENTROPY_KEEPER_CAN_SPAWN));
+
         // Block placement tests
         tests.add(createTest("testTimeWoodLogCanBePlaced",
             ChronosphereGameTestLogic.TEST_TIME_WOOD_LOG_CAN_BE_PLACED));
