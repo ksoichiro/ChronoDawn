@@ -160,6 +160,13 @@ public class ChronosphereGameTestsNeoForge {
         tests.add(createTest("testTimeGuardianAttackDamage",
             ChronosphereGameTestLogic.TEST_TIME_GUARDIAN_ATTACK_DAMAGE));
 
+        // Armor defense tests
+        tests.add(createTest("testClockstoneChestplateDefense",
+            ChronosphereGameTestLogic.TEST_CLOCKSTONE_CHESTPLATE_DEFENSE));
+
+        tests.add(createTest("testEnhancedClockstoneChestplateDefense",
+            ChronosphereGameTestLogic.TEST_ENHANCED_CLOCKSTONE_CHESTPLATE_DEFENSE));
+
         Chronosphere.LOGGER.info("Generated {} GameTest functions for NeoForge", tests.size());
         return tests;
     }

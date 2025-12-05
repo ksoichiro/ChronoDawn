@@ -210,4 +210,16 @@ public class ChronosphereGameTests implements FabricGameTest {
     public void testTimeGuardianAttackDamage(GameTestHelper helper) {
         ChronosphereGameTestLogic.TEST_TIME_GUARDIAN_ATTACK_DAMAGE.accept(helper);
     }
+
+    // ============== Armor Defense Tests ==============
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testClockstoneChestplateDefense(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_CLOCKSTONE_CHESTPLATE_DEFENSE.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testEnhancedClockstoneChestplateDefense(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_ENHANCED_CLOCKSTONE_CHESTPLATE_DEFENSE.accept(helper);
+    }
 }

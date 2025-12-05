@@ -86,6 +86,12 @@ public final class ChronosphereGameTestLogic {
     // Time Guardian attack damage (missing from previous tests)
     public static final double TIME_GUARDIAN_ATTACK_DAMAGE = 10.0;
 
+    // Clockstone Armor expected defense values
+    public static final int CLOCKSTONE_CHESTPLATE_DEFENSE = 6;
+
+    // Enhanced Clockstone Armor expected defense values
+    public static final int ENHANCED_CLOCKSTONE_CHESTPLATE_DEFENSE = 7;
+
     // ============== Entity Spawn Tests ==============
 
     /**
@@ -633,6 +639,50 @@ public final class ChronosphereGameTestLogic {
             } else {
                 helper.fail("Time Guardian attack damage was " + actualDamage +
                     ", expected " + TIME_GUARDIAN_ATTACK_DAMAGE);
+            }
+        });
+    };
+
+    // ============== Armor Defense Tests ==============
+
+    /**
+     * Test that Clockstone Chestplate has correct defense value (6).
+     */
+    public static final Consumer<GameTestHelper> TEST_CLOCKSTONE_CHESTPLATE_DEFENSE = helper -> {
+        ItemStack chestplate = new ItemStack(ModItems.CLOCKSTONE_CHESTPLATE.get());
+
+        helper.runAfterDelay(1, () -> {
+            if (chestplate.getItem() instanceof net.minecraft.world.item.ArmorItem armorItem) {
+                int actualDefense = armorItem.getDefense();
+                if (actualDefense == CLOCKSTONE_CHESTPLATE_DEFENSE) {
+                    helper.succeed();
+                } else {
+                    helper.fail("Clockstone Chestplate defense was " + actualDefense +
+                        ", expected " + CLOCKSTONE_CHESTPLATE_DEFENSE);
+                }
+            } else {
+                helper.fail("Clockstone Chestplate is not an ArmorItem");
+            }
+        });
+    };
+
+    /**
+     * Test that Enhanced Clockstone Chestplate has correct defense value (7).
+     */
+    public static final Consumer<GameTestHelper> TEST_ENHANCED_CLOCKSTONE_CHESTPLATE_DEFENSE = helper -> {
+        ItemStack chestplate = new ItemStack(ModItems.ENHANCED_CLOCKSTONE_CHESTPLATE.get());
+
+        helper.runAfterDelay(1, () -> {
+            if (chestplate.getItem() instanceof net.minecraft.world.item.ArmorItem armorItem) {
+                int actualDefense = armorItem.getDefense();
+                if (actualDefense == ENHANCED_CLOCKSTONE_CHESTPLATE_DEFENSE) {
+                    helper.succeed();
+                } else {
+                    helper.fail("Enhanced Clockstone Chestplate defense was " + actualDefense +
+                        ", expected " + ENHANCED_CLOCKSTONE_CHESTPLATE_DEFENSE);
+                }
+            } else {
+                helper.fail("Enhanced Clockstone Chestplate is not an ArmorItem");
             }
         });
     };
