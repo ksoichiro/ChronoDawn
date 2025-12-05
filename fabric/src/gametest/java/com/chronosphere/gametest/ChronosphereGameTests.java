@@ -106,6 +106,36 @@ public class ChronosphereGameTests implements FabricGameTest {
         ChronosphereGameTestLogic.TEST_TEMPORAL_BRICKS_CAN_BE_PLACED.accept(helper);
     }
 
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testClockstoneOreCanBePlaced(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_CLOCKSTONE_ORE_CAN_BE_PLACED.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testTimeCrystalOreCanBePlaced(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_TIME_CRYSTAL_ORE_CAN_BE_PLACED.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testClockworkBlockCanBePlaced(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_CLOCKWORK_BLOCK_CAN_BE_PLACED.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testDarkTimeWoodLogCanBePlaced(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_DARK_TIME_WOOD_LOG_CAN_BE_PLACED.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testDarkTimeWoodPlanksCanBePlaced(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_DARK_TIME_WOOD_PLANKS_CAN_BE_PLACED.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE)
+    public void testAncientTimeWoodLogCanBePlaced(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_ANCIENT_TIME_WOOD_LOG_CAN_BE_PLACED.accept(helper);
+    }
+
     // ============== Entity Health Tests ==============
 
     @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)

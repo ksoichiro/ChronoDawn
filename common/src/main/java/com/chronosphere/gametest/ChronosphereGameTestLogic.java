@@ -241,6 +241,54 @@ public final class ChronosphereGameTestLogic {
         helper.succeedWhenBlockPresent(ModBlocks.TEMPORAL_BRICKS.get(), TEST_POS);
     };
 
+    /**
+     * Test that Clockstone Ore block can be placed.
+     */
+    public static final Consumer<GameTestHelper> TEST_CLOCKSTONE_ORE_CAN_BE_PLACED = helper -> {
+        helper.setBlock(TEST_POS, ModBlocks.CLOCKSTONE_ORE.get());
+        helper.succeedWhenBlockPresent(ModBlocks.CLOCKSTONE_ORE.get(), TEST_POS);
+    };
+
+    /**
+     * Test that Time Crystal Ore block can be placed.
+     */
+    public static final Consumer<GameTestHelper> TEST_TIME_CRYSTAL_ORE_CAN_BE_PLACED = helper -> {
+        helper.setBlock(TEST_POS, ModBlocks.TIME_CRYSTAL_ORE.get());
+        helper.succeedWhenBlockPresent(ModBlocks.TIME_CRYSTAL_ORE.get(), TEST_POS);
+    };
+
+    /**
+     * Test that Clockwork Block can be placed.
+     */
+    public static final Consumer<GameTestHelper> TEST_CLOCKWORK_BLOCK_CAN_BE_PLACED = helper -> {
+        helper.setBlock(TEST_POS, ModBlocks.CLOCKWORK_BLOCK.get());
+        helper.succeedWhenBlockPresent(ModBlocks.CLOCKWORK_BLOCK.get(), TEST_POS);
+    };
+
+    /**
+     * Test that Dark Time Wood Log block can be placed.
+     */
+    public static final Consumer<GameTestHelper> TEST_DARK_TIME_WOOD_LOG_CAN_BE_PLACED = helper -> {
+        helper.setBlock(TEST_POS, ModBlocks.DARK_TIME_WOOD_LOG.get());
+        helper.succeedWhenBlockPresent(ModBlocks.DARK_TIME_WOOD_LOG.get(), TEST_POS);
+    };
+
+    /**
+     * Test that Dark Time Wood Planks block can be placed.
+     */
+    public static final Consumer<GameTestHelper> TEST_DARK_TIME_WOOD_PLANKS_CAN_BE_PLACED = helper -> {
+        helper.setBlock(TEST_POS, ModBlocks.DARK_TIME_WOOD_PLANKS.get());
+        helper.succeedWhenBlockPresent(ModBlocks.DARK_TIME_WOOD_PLANKS.get(), TEST_POS);
+    };
+
+    /**
+     * Test that Ancient Time Wood Log block can be placed.
+     */
+    public static final Consumer<GameTestHelper> TEST_ANCIENT_TIME_WOOD_LOG_CAN_BE_PLACED = helper -> {
+        helper.setBlock(TEST_POS, ModBlocks.ANCIENT_TIME_WOOD_LOG.get());
+        helper.succeedWhenBlockPresent(ModBlocks.ANCIENT_TIME_WOOD_LOG.get(), TEST_POS);
+    };
+
     // ============== Entity Health Tests ==============
 
     /**
