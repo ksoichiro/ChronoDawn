@@ -663,8 +663,13 @@
 
 **NOTE**: Basic localization is completed in each User Story (T088a-c, T122a-c, T171a-c). This phase is for final review and completeness check.
 
-- [ ] T183 [P] Review English localization file for completeness and consistency
-- [ ] T184 [P] Review Japanese localization file for completeness and consistency
+- [X] T183 [P] Review English localization file for completeness and consistency
+  - **Completed**: Removed 6 duplicate keys (dark_time_wood and ancient_time_wood blocks)
+  - **Completed**: Added 5 missing Patchouli GUI translation keys
+  - **Result**: 264 keys, all valid JSON, no duplicates, complete consistency with Japanese version
+- [X] T184 [P] Review Japanese localization file for completeness and consistency
+  - **Completed**: Removed 6 duplicate keys (dark_time_wood and ancient_time_wood blocks)
+  - **Result**: 264 keys, all valid JSON, no duplicates, complete consistency with English version
 
 ### Documentation
 

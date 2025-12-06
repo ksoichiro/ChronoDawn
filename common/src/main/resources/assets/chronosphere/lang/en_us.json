@@ -66,12 +66,6 @@
   "block.chronosphere.entropy_crypt_trapdoor": "Entropy Crypt Trapdoor",
   "block.chronosphere.temporal_particle_emitter": "Temporal Particle Emitter",
   "block.chronosphere.decorative_water": "Decorative Water",
-  "block.chronosphere.dark_time_wood_log": "Dark Time Wood Log",
-  "block.chronosphere.dark_time_wood_leaves": "Dark Time Wood Leaves",
-  "block.chronosphere.dark_time_wood_planks": "Dark Time Wood Planks",
-  "block.chronosphere.ancient_time_wood_log": "Ancient Time Wood Log",
-  "block.chronosphere.ancient_time_wood_leaves": "Ancient Time Wood Leaves",
-  "block.chronosphere.ancient_time_wood_planks": "Ancient Time Wood Planks",
 
   "item.chronosphere.clockstone": "Clockstone",
   "item.chronosphere.time_crystal": "Time Crystal",
@@ -285,6 +279,12 @@
 
   "patchouli.book.chronosphere.chronicle.name": "Chronicle of Chronosphere",
   "patchouli.book.chronosphere.chronicle.landing_text": "Welcome, traveler. You have entered a dimension where time itself has frozen. This chronicle will guide you through your journey in the Chronosphere.",
+
+  "patchouli.gui.lexicon.edition_str": "%s Edition",
+  "patchouli.gui.lexicon.categories": "Categories",
+  "patchouli.gui.lexicon.index": "Entry Index",
+  "patchouli.gui.lexicon.chapters": "Chapters",
+  "patchouli.gui.lexicon.index.info": "An index of all the entries available in this book.$(br2)To search in the index or other categories, just start typing a query. A search bar will pop up to assist.",
 
   "item.chronosphere.time_wood_boat": "Time Wood Boat",
   "item.chronosphere.time_wood_chest_boat": "Time Wood Boat with Chest",
