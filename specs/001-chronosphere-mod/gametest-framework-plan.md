@@ -209,7 +209,7 @@ public class ChronosphereGameTestsNeoForge {
 - **結果**: コード重複削減（172行追加、177行削除）
 
 ### Phase 4: @Disabledテスト移行 ✅ 大幅拡張完了 (2025-12)
-- **最終テスト数**: Fabric 86件 / NeoForge 85件全てパス
+- **最終テスト数**: Fabric 92件 / NeoForge 91件全てパス
 - **コミット履歴**:
   - `c910838`: 初期移行（3テスト）
   - `f5e062a`: ボートスポーン + Spatially Linked Pickaxe（3テスト）
@@ -218,6 +218,7 @@ public class ChronosphereGameTestsNeoForge {
   - `f7281d1`: 鉱石/木材ブロック配置（6テスト）
   - `063a791`: ブロックバリエーション配置（11テスト）
   - `1d8e76b`: 特殊ブロック配置（7テスト）
+  - `51934c9`: プレイヤー入力シミュレーション（6テスト）
 
 - **移行したテストカテゴリ**:
   1. **エンティティスポーンテスト** (12件)
@@ -242,6 +243,12 @@ public class ChronosphereGameTestsNeoForge {
      - 特殊ツール: Chronoblade, Spatially Linked Pickaxe
      - 防具防御値: Clockstone/Enhanced Clockstone 各部位（Helmet, Chestplate, Leggings, Boots）
 
+  5. **プレイヤー入力シミュレーションテスト** (6件)
+     - モックプレイヤー作成: `helper.makeMockPlayer(GameType.SURVIVAL)`
+     - 防具装備: Chestplate, Time Tyrant's Mail, フルアーマーセット
+     - 武器装備: Chronoblade メインハンド
+     - インベントリ操作: アイテム追加・確認
+
 - **残りの@Disabledテスト**:
   - 複雑なランタイムテスト（ボスAI、構造体生成、ポータルシステム等）は将来的に移行検討
   - 未実装機能（Decoy、Portal Activation等）は機能実装後に移行
@@ -251,6 +258,10 @@ public class ChronosphereGameTestsNeoForge {
 - **NeoForge**: Architectury Loomで `@GameTest` アノテーションが発見されない問題あり
   - 解決策: `@GameTestGenerator` を使用して `TestFunction` を明示的に生成
 - **テンプレート**: Fabricは SNBT 形式 (`fabric-gametest-api-v1:empty`) をサポート、NeoForgeはNBT形式のみ
+- **プレイヤーシミュレーション**: `helper.makeMockPlayer(GameType)` でモックプレイヤーを作成可能
+  - `player.setItemSlot(EquipmentSlot, ItemStack)` で装備変更
+  - `player.getInventory().add(ItemStack)` でインベントリ操作
+  - 参照: [NeoForge GameTestHelper JavaDoc](https://nekoyue.github.io/ForgeJavaDocs-NG/javadoc/1.21.x-neoforge/net/minecraft/gametest/framework/GameTestHelper.html)
 
 ## 参照
 
