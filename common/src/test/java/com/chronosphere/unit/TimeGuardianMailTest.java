@@ -1,92 +1,96 @@
 package com.chronosphere.unit;
 
 import com.chronosphere.ChronosphereTestBase;
+import com.chronosphere.items.artifacts.TimeTyrantMailItem;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit tests for Time Guardian's Mail rollback logic.
+ * Unit tests for Time Tyrant's Mail rollback logic.
  *
- * Tests the Time Guardian's Mail rollback mechanics:
+ * Note: Original task (T126) referenced "Time Guardian's Mail" but the actual implementation
+ * is "TimeTyrantMailItem". This test file validates the TimeTyrantMailItem class.
+ *
+ * Tests the Time Tyrant's Mail rollback mechanics:
  * - Rollback probability (20% chance)
  * - Cooldown duration (60 seconds = 1200 ticks)
  * - HP restoration on rollback
  * - Position restoration on rollback
  * - Lethal damage detection
  *
- * Time Guardian's Mail Properties:
+ * Time Tyrant's Mail Properties:
  * - Rollback Chance: 20% (0.20 probability)
  * - Rollback Cooldown: 60 seconds (1200 ticks)
- * - Armor Protection: High (ultimate tier chestplate)
+ * - Defense: 8 (same as netherite chestplate)
+ * - Durability: 600
  * - Max Stack Size: 1
  * - Effect: 20% chance to rollback to previous HP/position when taking lethal damage
  *
  * Note: Full combat testing requires Minecraft runtime environment (player, damage sources, level).
  * Basic property and constant validation can be tested without runtime.
  *
- * Reference: spec.md (Time Guardian's Mail armor mechanics)
+ * Reference: spec.md (Time Tyrant's Mail armor mechanics)
  * Task: T126 [US3] Write unit test for Time Guardian Mail rollback logic
  */
 public class TimeGuardianMailTest extends ChronosphereTestBase {
 
-    @Disabled("TimeGuardianMailItem class not yet implemented - will be created in T153")
+    // ========== Unit Tests (No Minecraft runtime required) ==========
+
     @Test
-    public void testTimeGuardianMailItemClassExists() {
-        logTest("Testing TimeGuardianMailItem class existence");
+    public void testTimeTyrantMailItemClassExists() {
+        logTest("Testing TimeTyrantMailItem class existence");
 
         assertDoesNotThrow(() -> {
-            Class<?> clazz = Class.forName("com.chronosphere.items.artifacts.TimeGuardianMailItem");
-            assertNotNull(clazz, "TimeGuardianMailItem class should exist");
-        }, "TimeGuardianMailItem class should be accessible");
+            Class<?> clazz = TimeTyrantMailItem.class;
+            assertNotNull(clazz, "TimeTyrantMailItem class should exist");
+        }, "TimeTyrantMailItem class should be accessible");
     }
 
-    @Disabled("TimeGuardianMailItem class not yet implemented - will be created in T153")
+    @Test
+    public void testCreatePropertiesMethodExists() {
+        logTest("Testing TimeTyrantMailItem.createProperties() method exists");
+
+        assertDoesNotThrow(() -> {
+            var method = TimeTyrantMailItem.class.getMethod("createProperties");
+            assertNotNull(method, "createProperties() method should exist");
+        }, "createProperties() method should be accessible");
+    }
+
+    @Disabled("Rollback constants not yet implemented - will be added when rollback logic is implemented")
     @Test
     public void testRollbackProbabilityConstant() {
-        logTest("Testing Time Guardian's Mail rollback probability is 20% (0.20)");
+        logTest("Testing Time Tyrant's Mail rollback probability is 20% (0.20)");
 
         try {
-            Class<?> clazz = Class.forName("com.chronosphere.items.artifacts.TimeGuardianMailItem");
-            var field = clazz.getField("ROLLBACK_CHANCE");
+            var field = TimeTyrantMailItem.class.getField("ROLLBACK_CHANCE");
             double probability = field.getDouble(null);
 
             assertEquals(0.20, probability, 0.001,
-                    "Time Guardian's Mail rollback chance should be 0.20 (20%)");
+                    "Time Tyrant's Mail rollback chance should be 0.20 (20%)");
         } catch (Exception e) {
             fail("Failed to access ROLLBACK_CHANCE constant: " + e.getMessage());
         }
     }
 
-    @Disabled("TimeGuardianMailItem class not yet implemented - will be created in T153")
+    @Disabled("Rollback constants not yet implemented - will be added when rollback logic is implemented")
     @Test
     public void testRollbackCooldownConstant() {
-        logTest("Testing Time Guardian's Mail rollback cooldown is 1200 ticks (60 seconds)");
+        logTest("Testing Time Tyrant's Mail rollback cooldown is 1200 ticks (60 seconds)");
 
         try {
-            Class<?> clazz = Class.forName("com.chronosphere.items.artifacts.TimeGuardianMailItem");
-            var field = clazz.getField("ROLLBACK_COOLDOWN_TICKS");
+            var field = TimeTyrantMailItem.class.getField("ROLLBACK_COOLDOWN_TICKS");
             int cooldown = field.getInt(null);
 
             assertEquals(1200, cooldown,
-                    "Time Guardian's Mail rollback cooldown should be 1200 ticks (60 seconds)");
+                    "Time Tyrant's Mail rollback cooldown should be 1200 ticks (60 seconds)");
         } catch (Exception e) {
             fail("Failed to access ROLLBACK_COOLDOWN_TICKS constant: " + e.getMessage());
         }
     }
 
-    @Disabled("TimeGuardianMailItem class not yet implemented - will be created in T153")
-    @Test
-    public void testCreatePropertiesMethodExists() {
-        logTest("Testing Time Guardian's Mail createProperties() method exists");
-
-        assertDoesNotThrow(() -> {
-            Class<?> clazz = Class.forName("com.chronosphere.items.artifacts.TimeGuardianMailItem");
-            var method = clazz.getMethod("createProperties");
-            assertNotNull(method, "createProperties() method should exist");
-        }, "createProperties() method should be accessible");
-    }
+    // ========== Integration Tests (Minecraft runtime required) ==========
 
     @Disabled("Requires Minecraft runtime environment - tested in-game")
     @Test

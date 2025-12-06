@@ -81,9 +81,9 @@ public class TimeGuardianEntity extends Monster implements RangedAttackMob {
     private static final EntityDataAccessor<Integer> PHASE =
         SynchedEntityData.defineId(TimeGuardianEntity.class, EntityDataSerializers.INT);
 
-    // Phase constants
-    private static final int PHASE_1 = 1; // 100%-50% HP: Melee-focused
-    private static final int PHASE_2 = 2; // 50%-0% HP: Teleport + AoE
+    // Phase constants (public for testing)
+    public static final int PHASE_1 = 1; // 100%-50% HP: Melee-focused
+    public static final int PHASE_2 = 2; // 50%-0% HP: Teleport + AoE
 
     // Combat timing
     private int teleportCooldown = 0;
@@ -91,14 +91,14 @@ public class TimeGuardianEntity extends Monster implements RangedAttackMob {
     private int postTeleportDelay = 0; // Delay after teleport before attacking
     private int rangedAttackCooldown = 0; // Cooldown for ranged attacks (T210)
 
-    // Teleport timing (Phase 2)
-    private static final int TELEPORT_COOLDOWN_TICKS = 100; // 5 seconds
-    private static final int POST_TELEPORT_DELAY_TICKS = 15; // 0.75 seconds delay after teleport
+    // Teleport timing (Phase 2) - public for testing
+    public static final int TELEPORT_COOLDOWN_TICKS = 100; // 5 seconds
+    public static final int POST_TELEPORT_DELAY_TICKS = 15; // 0.75 seconds delay after teleport
 
-    // AoE timing (Phase 2)
-    private static final int AOE_COOLDOWN_TICKS = 80; // 4 seconds
-    private static final double AOE_RANGE = 4.0; // Reduced from 5.0 for balance
-    private static final float AOE_DAMAGE = 6.0f; // 3 hearts - balanced for iron armor gameplay
+    // AoE timing (Phase 2) - public for testing
+    public static final int AOE_COOLDOWN_TICKS = 80; // 4 seconds
+    public static final double AOE_RANGE = 4.0; // Reduced from 5.0 for balance
+    public static final float AOE_DAMAGE = 6.0f; // 3 hearts - balanced for iron armor gameplay
 
     public TimeGuardianEntity(EntityType<? extends TimeGuardianEntity> entityType, Level level) {
         super(entityType, level);

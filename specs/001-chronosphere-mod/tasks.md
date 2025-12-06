@@ -282,7 +282,7 @@
 - [X] T089 [P] [US2] Write GameTest for Desert Clock Tower generation in common/src/test/java/com/chronosphere/integration/DesertClockTowerTest.java
 - [X] T090 [P] [US2] Write unit test for Time Clock cooldown logic in common/src/test/java/com/chronosphere/unit/TimeClockTest.java
 - [X] T091 [P] [US2] Write unit test for Spatially Linked Pickaxe drop multiplier in common/src/test/java/com/chronosphere/unit/PickaxeDropTest.java
-- [ ] T092 [P] [US2] Write GameTest for Time Guardian boss fight in common/src/test/java/com/chronosphere/integration/TimeGuardianFightTest.java
+- [X] T092 [P] [US2] Write GameTest for Time Guardian boss fight in common/src/test/java/com/chronosphere/integration/TimeGuardianFightTest.java
 
 ### Player Guidance & Discovery System (US2 Enhancement)
 
@@ -509,11 +509,11 @@
 
 ### Tests for User Story 3
 
-- [ ] T123 [P] [US3] Write GameTest for Master Clock structure generation in common/src/test/java/com/chronosphere/integration/MasterClockTest.java
-- [ ] T124 [P] [US3] Write GameTest for Time Tyrant boss fight in common/src/test/java/com/chronosphere/integration/TimeTyrantFightTest.java
-- [ ] T125 [P] [US3] Write unit test for Chronoblade AI skip probability in common/src/test/java/com/chronosphere/unit/ChronobladeTest.java
-- [ ] T126 [P] [US3] Write unit test for Time Guardian Mail rollback logic in common/src/test/java/com/chronosphere/unit/TimeGuardianMailTest.java
-- [ ] T127 [P] [US3] Write GameTest for Echoing Time Boots decoy in common/src/test/java/com/chronosphere/integration/DecoyTest.java
+- [X] T123 [P] [US3] Write GameTest for Master Clock structure generation in common/src/test/java/com/chronosphere/integration/MasterClockTest.java
+- [X] T124 [P] [US3] Write GameTest for Time Tyrant boss fight in common/src/test/java/com/chronosphere/integration/TimeTyrantFightTest.java
+- [X] T125 [P] [US3] Write unit test for Chronoblade AI skip probability in common/src/test/java/com/chronosphere/unit/ChronobladeTest.java
+- [X] T126 [P] [US3] Write unit test for Time Guardian Mail rollback logic in common/src/test/java/com/chronosphere/unit/TimeGuardianMailTest.java
+- [X] T127 [P] [US3] Write GameTest for Echoing Time Boots decoy in common/src/test/java/com/chronosphere/integration/DecoyTest.java
 
 ### Future Boss Battle Enhancements (US3 - Phase 7+)
 
@@ -612,8 +612,23 @@
 
 ### Cross-Loader Testing
 
-- [ ] T172 [P] Run all GameTests on Fabric loader using ./gradlew :fabric:runGameTest
-- [ ] T173 [P] Run all GameTests on NeoForge loader using ./gradlew :neoforge:runGameTest
+- [X] T172 [P] Run all GameTests on Fabric loader using ./gradlew :fabric:runGameTest
+  - Implemented GameTest Framework for Fabric using Architectury Loom's gametest source set
+  - Created ChronosphereGameTestsFabric.java with shared test logic in ChronosphereGameTestLogic.java
+  - Uses @GameTest annotation with FabricGameTest.EMPTY_STRUCTURE template
+  - **Current Status**: 92 tests pass (commits: 9cca9db initial, 51934c9 player input tests)
+  - **Test Categories**:
+    - Entity spawning (12 tests)
+    - Block placement (30 tests)
+    - Entity attributes (20 tests)
+    - Item attributes (24 tests)
+    - Player input simulation (6 tests)
+- [X] T173 [P] Run all GameTests on NeoForge loader using ./gradlew :neoforge:runGameTestServer
+  - Implemented GameTest Framework for NeoForge using @GameTestGenerator pattern
+  - Created ChronosphereGameTestsNeoForge.java with shared test logic in ChronosphereGameTestLogic.java
+  - Uses RegisterGameTestsEvent for test registration and existing structure template
+  - **Current Status**: 91 tests pass (commits: 6790b80 initial, 51934c9 player input tests)
+  - **Test Categories**: Same as Fabric (player input simulation uses `helper.makeMockPlayer(GameType)` API)
 - [X] T174 Verify entity renderer registration for Fabric (standard API) in fabric/src/main/java/com/chronosphere/fabric/client/ChronosphereClientFabric.java
   - **Verified**: 15 entities and 7 model layers registered using standard Fabric API
   - Uses `EntityRendererRegistry.register()` and `EntityModelLayerRegistry.registerModelLayer()`

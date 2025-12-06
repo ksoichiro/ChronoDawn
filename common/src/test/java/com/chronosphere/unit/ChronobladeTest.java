@@ -1,6 +1,8 @@
 package com.chronosphere.unit;
 
 import com.chronosphere.ChronosphereTestBase;
+import com.chronosphere.items.artifacts.ChronobladeItem;
+import com.chronosphere.items.artifacts.ChronobladeAISkipHandler;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -18,9 +20,9 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * Chronoblade Properties:
  * - AI Skip Chance: 25% (0.25 probability)
- * - Attack Damage: [To be determined based on balance]
- * - Attack Speed: [To be determined based on balance]
- * - Durability: High (ultimate tier weapon)
+ * - Attack Damage: 8.0 (base 4.0 + tier bonus 3.5)
+ * - Attack Speed: -2.4 (standard sword speed)
+ * - Durability: 2000 (superior to diamond/netherite)
  * - Max Stack Size: 1
  * - Effect: 25% chance to skip mob's next attack AI on hit
  *
@@ -32,42 +34,57 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class ChronobladeTest extends ChronosphereTestBase {
 
-    @Disabled("ChronobladeItem class not yet implemented - will be created in T148")
+    // ========== Unit Tests (No Minecraft runtime required) ==========
+
     @Test
     public void testChronobladeItemClassExists() {
         logTest("Testing ChronobladeItem class existence");
 
         assertDoesNotThrow(() -> {
-            Class<?> clazz = Class.forName("com.chronosphere.items.artifacts.ChronobladeItem");
+            Class<?> clazz = ChronobladeItem.class;
             assertNotNull(clazz, "ChronobladeItem class should exist");
         }, "ChronobladeItem class should be accessible");
     }
 
-    @Disabled("ChronobladeItem class not yet implemented - will be created in T148")
+    @Test
+    public void testChronobladeAISkipHandlerClassExists() {
+        logTest("Testing ChronobladeAISkipHandler class existence");
+
+        assertDoesNotThrow(() -> {
+            Class<?> clazz = ChronobladeAISkipHandler.class;
+            assertNotNull(clazz, "ChronobladeAISkipHandler class should exist");
+        }, "ChronobladeAISkipHandler class should be accessible");
+    }
+
     @Test
     public void testAISkipProbabilityConstant() {
         logTest("Testing Chronoblade AI skip probability is 25% (0.25)");
 
-        try {
-            Class<?> clazz = Class.forName("com.chronosphere.items.artifacts.ChronobladeItem");
-            var field = clazz.getField("AI_SKIP_CHANCE");
-            double probability = field.getDouble(null);
-
-            assertEquals(0.25, probability, 0.001,
-                    "Chronoblade AI skip chance should be 0.25 (25%)");
-        } catch (Exception e) {
-            fail("Failed to access AI_SKIP_CHANCE constant: " + e.getMessage());
-        }
+        assertEquals(0.25f, ChronobladeItem.AI_SKIP_CHANCE, 0.001,
+                "Chronoblade AI skip chance should be 0.25 (25%)");
     }
 
-    @Disabled("ChronobladeItem class not yet implemented - will be created in T148")
+    @Test
+    public void testAISkipDurationConstant() {
+        logTest("Testing Chronoblade AI skip duration is 20 ticks (1 second)");
+
+        assertEquals(20, ChronobladeAISkipHandler.AI_SKIP_DURATION,
+                "AI skip duration should be 20 ticks (1 second)");
+    }
+
+    @Test
+    public void testChronobladeTierExists() {
+        logTest("Testing ChronobladeTier constant exists");
+
+        assertNotNull(ChronobladeItem.TIER, "ChronobladeTier should exist");
+    }
+
     @Test
     public void testHurtEnemyMethodExists() {
         logTest("Testing Chronoblade hurtEnemy() method exists");
 
         assertDoesNotThrow(() -> {
-            Class<?> clazz = Class.forName("com.chronosphere.items.artifacts.ChronobladeItem");
-            var method = clazz.getMethod(
+            var method = ChronobladeItem.class.getMethod(
                 "hurtEnemy",
                 net.minecraft.world.item.ItemStack.class,
                 net.minecraft.world.entity.LivingEntity.class,
@@ -79,17 +96,45 @@ public class ChronobladeTest extends ChronosphereTestBase {
         }, "hurtEnemy() method should be accessible with correct signature");
     }
 
-    @Disabled("ChronobladeItem class not yet implemented - will be created in T148")
     @Test
     public void testCreatePropertiesMethodExists() {
         logTest("Testing Chronoblade createProperties() method exists");
 
         assertDoesNotThrow(() -> {
-            Class<?> clazz = Class.forName("com.chronosphere.items.artifacts.ChronobladeItem");
-            var method = clazz.getMethod("createProperties");
+            var method = ChronobladeItem.class.getMethod("createProperties");
             assertNotNull(method, "createProperties() method should exist");
         }, "createProperties() method should be accessible");
     }
+
+    @Test
+    public void testApplyAISkipMethodExists() {
+        logTest("Testing ChronobladeAISkipHandler.applyAISkip() method exists");
+
+        assertDoesNotThrow(() -> {
+            var method = ChronobladeAISkipHandler.class.getMethod(
+                "applyAISkip",
+                net.minecraft.world.entity.LivingEntity.class
+            );
+            assertNotNull(method, "applyAISkip() method should exist");
+        }, "applyAISkip() method should be accessible");
+    }
+
+    @Test
+    public void testShouldSkipAIMethodExists() {
+        logTest("Testing ChronobladeAISkipHandler.shouldSkipAI() method exists");
+
+        assertDoesNotThrow(() -> {
+            var method = ChronobladeAISkipHandler.class.getMethod(
+                "shouldSkipAI",
+                net.minecraft.world.entity.LivingEntity.class
+            );
+            assertNotNull(method, "shouldSkipAI() method should exist");
+            assertEquals(boolean.class, method.getReturnType(),
+                    "shouldSkipAI() should return boolean");
+        }, "shouldSkipAI() method should be accessible");
+    }
+
+    // ========== Integration Tests (Minecraft runtime required) ==========
 
     @Disabled("Requires Minecraft runtime environment - tested in-game")
     @Test

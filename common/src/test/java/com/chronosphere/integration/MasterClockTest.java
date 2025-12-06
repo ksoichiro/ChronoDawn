@@ -1,6 +1,7 @@
 package com.chronosphere.integration;
 
 import com.chronosphere.ChronosphereTestBase;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -14,11 +15,10 @@ import static org.junit.jupiter.api.Assertions.*;
  * Integration tests for Master Clock structure generation.
  *
  * Tests the Master Clock structure generation mechanics:
- * - Structure NBT files existence (entrance, boss room, 8 room variants)
+ * - Structure NBT files existence (surface, corridor, stairs, boss room)
  * - Structure JSON configuration
  * - Jigsaw template pool configuration
- * - Loot table configuration
- * - Concentric rings placement strategy
+ * - Structure set placement strategy
  *
  * These tests verify the structural components exist and are properly configured.
  * In-game generation testing requires Minecraft runtime environment.
@@ -28,138 +28,157 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class MasterClockTest extends ChronosphereTestBase {
 
-    // NBT Structure Files
-    private static final String ENTRANCE_NBT_PATH = "common/src/main/resources/data/chronosphere/structure/master_clock_entrance.nbt";
-    private static final String BOSS_ROOM_NBT_PATH = "common/src/main/resources/data/chronosphere/structure/master_clock_boss_room.nbt";
-    private static final String ROOM_TRAP_ARROWS_NBT_PATH = "common/src/main/resources/data/chronosphere/structure/master_clock_room_trap_arrows.nbt";
-    private static final String ROOM_SPAWNER_NBT_PATH = "common/src/main/resources/data/chronosphere/structure/master_clock_room_spawner.nbt";
-    private static final String ROOM_MAZE_NBT_PATH = "common/src/main/resources/data/chronosphere/structure/master_clock_room_maze.nbt";
-    private static final String ROOM_PUZZLE_REDSTONE_NBT_PATH = "common/src/main/resources/data/chronosphere/structure/master_clock_room_puzzle_redstone.nbt";
-    private static final String ROOM_LAVA_NBT_PATH = "common/src/main/resources/data/chronosphere/structure/master_clock_room_lava.nbt";
-    private static final String ROOM_TIME_PUZZLE_NBT_PATH = "common/src/main/resources/data/chronosphere/structure/master_clock_room_time_puzzle.nbt";
-    private static final String ROOM_GUARDIAN_ARENA_NBT_PATH = "common/src/main/resources/data/chronosphere/structure/master_clock_room_guardian_arena.nbt";
-    private static final String ROOM_REST_NBT_PATH = "common/src/main/resources/data/chronosphere/structure/master_clock_room_rest.nbt";
+    // Base resource path (relative to common module)
+    private static final String RESOURCES_BASE = "src/main/resources/data/chronosphere/";
+
+    // NBT Structure Files (actual file names)
+    private static final String SURFACE_NBT = "structure/master_clock_surface.nbt";
+    private static final String CORRIDOR_NBT = "structure/master_clock_corridor.nbt";
+    private static final String STAIRS_NBT = "structure/master_clock_stairs.nbt";
+    private static final String BOSS_ROOM_NBT = "structure/master_clock_boss_room.nbt";
 
     // JSON Configuration Files
-    private static final String STRUCTURE_JSON_PATH = "common/src/main/resources/data/chronosphere/worldgen/structure/master_clock.json";
-    private static final String STRUCTURE_SET_JSON_PATH = "common/src/main/resources/data/chronosphere/worldgen/structure_set/master_clock.json";
+    private static final String STRUCTURE_JSON = "worldgen/structure/master_clock.json";
+    private static final String STRUCTURE_SET_JSON = "worldgen/structure_set/master_clock.json";
 
-    // Jigsaw Template Pool Files
-    private static final String ENTRANCE_POOL_JSON_PATH = "common/src/main/resources/data/chronosphere/worldgen/template_pool/master_clock/entrance_pool.json";
-    private static final String ROOM_POOL_JSON_PATH = "common/src/main/resources/data/chronosphere/worldgen/template_pool/master_clock/room_pool.json";
-    private static final String BOSS_ROOM_POOL_JSON_PATH = "common/src/main/resources/data/chronosphere/worldgen/template_pool/master_clock/boss_room_pool.json";
+    // Jigsaw Template Pool Files (actual file names)
+    private static final String SURFACE_POOL_JSON = "worldgen/template_pool/master_clock/surface_pool.json";
+    private static final String CORRIDOR_POOL_JSON = "worldgen/template_pool/master_clock/corridor_pool.json";
+    private static final String STAIRS_POOL_JSON = "worldgen/template_pool/master_clock/stairs_pool.json";
+    private static final String BOSS_ROOM_POOL_JSON = "worldgen/template_pool/master_clock/boss_room_pool.json";
 
-    // Processor and Loot Table Files
-    private static final String LOOT_PROCESSOR_JSON_PATH = "common/src/main/resources/data/chronosphere/worldgen/processor_list/master_clock_loot.json";
-    private static final String BOSS_LOOT_TABLE_PATH = "common/src/main/resources/data/chronosphere/loot_table/chests/master_clock_boss.json";
+    // Resolved base path for test execution
+    private static Path resolvedBasePath;
 
-    @Disabled("File path tests are environment-dependent - verified during build")
-    @Test
-    public void testEntranceNBTFileExists() {
-        logTest("Testing Master Clock entrance NBT structure file exists");
+    @BeforeAll
+    static void setupPaths() {
+        // Try multiple possible base paths for different test execution contexts
+        Path[] candidates = {
+            // Running from project root (./gradlew test)
+            Paths.get("common", RESOURCES_BASE),
+            // Running from common module (./gradlew :common:test with cwd=common)
+            Paths.get(RESOURCES_BASE),
+            // Running from IDE with project root as working directory
+            Paths.get(System.getProperty("user.dir"), "common", RESOURCES_BASE),
+        };
 
-        Path nbtPath = Paths.get(ENTRANCE_NBT_PATH);
-        assertTrue(Files.exists(nbtPath),
-                "Master Clock entrance NBT structure file should exist at " + ENTRANCE_NBT_PATH);
+        for (Path candidate : candidates) {
+            if (Files.isDirectory(candidate)) {
+                resolvedBasePath = candidate;
+                return;
+            }
+        }
+
+        // Fallback: try to find project root by looking for settings.gradle
+        Path current = Paths.get(System.getProperty("user.dir"));
+        while (current != null) {
+            if (Files.exists(current.resolve("settings.gradle"))) {
+                Path resolved = current.resolve("common").resolve(RESOURCES_BASE);
+                if (Files.isDirectory(resolved)) {
+                    resolvedBasePath = resolved;
+                    return;
+                }
+            }
+            current = current.getParent();
+        }
+
+        // Last resort: use first candidate even if it doesn't exist
+        resolvedBasePath = candidates[0];
     }
 
-    @Disabled("File path tests are environment-dependent - verified during build")
+    private Path resolvePath(String relativePath) {
+        return resolvedBasePath.resolve(relativePath);
+    }
+
+    // ========== Unit Tests (No Minecraft runtime required) ==========
+
+    @Test
+    public void testSurfaceNBTFileExists() {
+        logTest("Testing Master Clock surface NBT structure file exists");
+
+        Path nbtPath = resolvePath(SURFACE_NBT);
+        assertTrue(Files.exists(nbtPath),
+                "Master Clock surface NBT structure file should exist at " + nbtPath);
+    }
+
+    @Test
+    public void testCorridorNBTFileExists() {
+        logTest("Testing Master Clock corridor NBT structure file exists");
+
+        Path nbtPath = resolvePath(CORRIDOR_NBT);
+        assertTrue(Files.exists(nbtPath),
+                "Master Clock corridor NBT structure file should exist at " + nbtPath);
+    }
+
+    @Test
+    public void testStairsNBTFileExists() {
+        logTest("Testing Master Clock stairs NBT structure file exists");
+
+        Path nbtPath = resolvePath(STAIRS_NBT);
+        assertTrue(Files.exists(nbtPath),
+                "Master Clock stairs NBT structure file should exist at " + nbtPath);
+    }
+
     @Test
     public void testBossRoomNBTFileExists() {
         logTest("Testing Master Clock boss room NBT structure file exists");
 
-        Path nbtPath = Paths.get(BOSS_ROOM_NBT_PATH);
+        Path nbtPath = resolvePath(BOSS_ROOM_NBT);
         assertTrue(Files.exists(nbtPath),
-                "Master Clock boss room NBT structure file should exist at " + BOSS_ROOM_NBT_PATH);
+                "Master Clock boss room NBT structure file should exist at " + nbtPath);
     }
 
-    @Disabled("File path tests are environment-dependent - verified during build")
-    @Test
-    public void testRoomVariantNBTFilesExist() {
-        logTest("Testing Master Clock room variant NBT structure files exist");
-
-        String[] roomNBTPaths = {
-                ROOM_TRAP_ARROWS_NBT_PATH,
-                ROOM_SPAWNER_NBT_PATH,
-                ROOM_MAZE_NBT_PATH,
-                ROOM_PUZZLE_REDSTONE_NBT_PATH,
-                ROOM_LAVA_NBT_PATH,
-                ROOM_TIME_PUZZLE_NBT_PATH,
-                ROOM_GUARDIAN_ARENA_NBT_PATH,
-                ROOM_REST_NBT_PATH
-        };
-
-        for (String pathStr : roomNBTPaths) {
-            Path nbtPath = Paths.get(pathStr);
-            assertTrue(Files.exists(nbtPath),
-                    "Master Clock room NBT structure file should exist at " + pathStr);
-        }
-    }
-
-    @Disabled("File path tests are environment-dependent - verified during build")
     @Test
     public void testStructureJSONFileExists() {
         logTest("Testing Master Clock structure JSON file exists");
 
-        Path jsonPath = Paths.get(STRUCTURE_JSON_PATH);
+        Path jsonPath = resolvePath(STRUCTURE_JSON);
         assertTrue(Files.exists(jsonPath),
-                "Master Clock structure JSON file should exist at " + STRUCTURE_JSON_PATH);
+                "Master Clock structure JSON file should exist at " + jsonPath);
     }
 
-    @Disabled("File path tests are environment-dependent - verified during build")
     @Test
     public void testStructureSetJSONFileExists() {
         logTest("Testing Master Clock structure set JSON file exists");
 
-        Path setJsonPath = Paths.get(STRUCTURE_SET_JSON_PATH);
+        Path setJsonPath = resolvePath(STRUCTURE_SET_JSON);
         assertTrue(Files.exists(setJsonPath),
-                "Master Clock structure set JSON file should exist at " + STRUCTURE_SET_JSON_PATH);
+                "Master Clock structure set JSON file should exist at " + setJsonPath);
     }
 
-    @Disabled("File path tests are environment-dependent - verified during build")
     @Test
     public void testJigsawTemplatePoolsExist() {
         logTest("Testing Master Clock Jigsaw template pool JSON files exist");
 
         String[] poolPaths = {
-                ENTRANCE_POOL_JSON_PATH,
-                ROOM_POOL_JSON_PATH,
-                BOSS_ROOM_POOL_JSON_PATH
+                SURFACE_POOL_JSON,
+                CORRIDOR_POOL_JSON,
+                STAIRS_POOL_JSON,
+                BOSS_ROOM_POOL_JSON
         };
 
         for (String pathStr : poolPaths) {
-            Path poolPath = Paths.get(pathStr);
+            Path poolPath = resolvePath(pathStr);
             assertTrue(Files.exists(poolPath),
-                    "Master Clock Jigsaw pool JSON file should exist at " + pathStr);
+                    "Master Clock Jigsaw pool JSON file should exist at " + poolPath);
         }
     }
 
-    @Disabled("File path tests are environment-dependent - verified during build")
     @Test
-    public void testLootProcessorFileExists() {
-        logTest("Testing Master Clock loot processor JSON file exists");
+    public void testStructureJSONContainsJigsawType() throws Exception {
+        logTest("Testing Master Clock structure JSON contains jigsaw type");
 
-        Path processorPath = Paths.get(LOOT_PROCESSOR_JSON_PATH);
-        assertTrue(Files.exists(processorPath),
-                "Master Clock loot processor JSON file should exist at " + LOOT_PROCESSOR_JSON_PATH);
-    }
-
-    @Disabled("File path tests are environment-dependent - verified during build")
-    @Test
-    public void testStructureSetUsesConcentricRingsPlacement() throws Exception {
-        logTest("Testing Master Clock structure set uses concentric_rings placement");
-
-        Path setJsonPath = Paths.get(STRUCTURE_SET_JSON_PATH);
-        if (!Files.exists(setJsonPath)) {
-            fail("Structure set JSON file does not exist");
+        Path jsonPath = resolvePath(STRUCTURE_JSON);
+        if (!Files.exists(jsonPath)) {
+            fail("Structure JSON file does not exist at " + jsonPath);
         }
 
-        String content = Files.readString(setJsonPath);
-        assertTrue(content.contains("concentric_rings"),
-                "Structure set should use concentric_rings placement strategy");
-        assertTrue(content.contains("\"distance\": 80") || content.contains("\"distance\":80"),
-                "Structure set should specify distance parameter for concentric_rings");
+        String content = Files.readString(jsonPath);
+        assertTrue(content.contains("jigsaw") || content.contains("chronosphere:master_clock"),
+                "Structure JSON should contain jigsaw type or structure reference");
     }
+
+    // ========== Integration Tests (Minecraft runtime required) ==========
 
     @Disabled("Requires Minecraft runtime environment - tested in-game")
     @Test

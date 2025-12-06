@@ -85,10 +85,10 @@ public class TimeTyrantEntity extends Monster {
     private static final EntityDataAccessor<Integer> PHASE =
         SynchedEntityData.defineId(TimeTyrantEntity.class, EntityDataSerializers.INT);
 
-    // Phase constants
-    private static final int PHASE_1 = 1; // 100%-66% HP: Time Stop
-    private static final int PHASE_2 = 2; // 66%-33% HP: Teleport + Time Acceleration
-    private static final int PHASE_3 = 3; // 33%-0% HP: AoE + HP Recovery
+    // Phase constants (public for testing)
+    public static final int PHASE_1 = 1; // 100%-66% HP: Time Stop
+    public static final int PHASE_2 = 2; // 66%-33% HP: Teleport + Time Acceleration
+    public static final int PHASE_3 = 3; // 33%-0% HP: AoE + HP Recovery
 
     // Ability cooldowns (in ticks)
     private int timeStopCooldown = 0;
@@ -112,23 +112,23 @@ public class TimeTyrantEntity extends Monster {
     private int timeClockUsesInPhase3 = 0;   // Number of uses in Phase 3
     private int previousPhase = PHASE_1;      // Track phase changes
 
-    // Time Clock weakening constants
-    private static final int TIME_CLOCK_WEAKENING_DURATION = 200; // 10 seconds
-    private static final double WEAKENING_ARMOR_REDUCTION = 10.0; // 15 → 5
-    private static final double WEAKENING_SPEED_MULTIPLIER = 0.5; // 50% speed reduction
+    // Time Clock weakening constants (public for testing)
+    public static final int TIME_CLOCK_WEAKENING_DURATION = 200; // 10 seconds
+    public static final double WEAKENING_ARMOR_REDUCTION = 10.0; // 15 → 5
+    public static final double WEAKENING_SPEED_MULTIPLIER = 0.5; // 50% speed reduction
 
-    // Ability timing constants (in ticks)
-    private static final int TIME_STOP_COOLDOWN_TICKS = 100; // 5 seconds
-    private static final int TELEPORT_COOLDOWN_TICKS = 100; // 5 seconds
-    private static final int TIME_ACCELERATION_COOLDOWN_TICKS = 160; // 8 seconds
-    private static final int AOE_COOLDOWN_TICKS = 120; // 6 seconds
-    private static final int POST_TELEPORT_DELAY_TICKS = 15; // 0.75 seconds
+    // Ability timing constants (in ticks) - public for testing
+    public static final int TIME_STOP_COOLDOWN_TICKS = 100; // 5 seconds
+    public static final int TELEPORT_COOLDOWN_TICKS = 100; // 5 seconds
+    public static final int TIME_ACCELERATION_COOLDOWN_TICKS = 160; // 8 seconds
+    public static final int AOE_COOLDOWN_TICKS = 120; // 6 seconds
+    public static final int POST_TELEPORT_DELAY_TICKS = 15; // 0.75 seconds
 
-    // Ability parameters
-    private static final double AOE_RANGE = 5.0; // 5-block radius
-    private static final float AOE_DAMAGE = 12.0f; // 6 hearts
-    private static final float TIME_REVERSAL_HP_PERCENT = 0.1f; // 10% of max HP
-    private static final float TIME_REVERSAL_TRIGGER_THRESHOLD = 0.2f; // Trigger at 20% HP
+    // Ability parameters (public for testing)
+    public static final double AOE_RANGE = 5.0; // 5-block radius
+    public static final float AOE_DAMAGE = 12.0f; // 6 hearts
+    public static final float TIME_REVERSAL_HP_PERCENT = 0.1f; // 10% of max HP
+    public static final float TIME_REVERSAL_TRIGGER_THRESHOLD = 0.2f; // Trigger at 20% HP
 
     public TimeTyrantEntity(EntityType<? extends TimeTyrantEntity> entityType, Level level) {
         super(entityType, level);

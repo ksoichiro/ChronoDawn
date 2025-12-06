@@ -1,6 +1,7 @@
 package com.chronosphere.integration;
 
 import com.chronosphere.ChronosphereTestBase;
+import com.chronosphere.items.artifacts.EchoingTimeBootsItem;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -19,8 +20,9 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * Echoing Time Boots Properties:
  * - Decoy Cooldown: 15 seconds (300 ticks)
- * - Decoy Lifetime: [To be determined based on balance]
- * - Armor Protection: High (ultimate tier boots)
+ * - Decoy Lifetime: 10 seconds (200 ticks)
+ * - Defense: 3 (same as netherite boots)
+ * - Durability: 500
  * - Max Stack Size: 1
  * - Effect: Spawns decoy entity when sprinting (cooldown: 15s)
  *
@@ -32,15 +34,26 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 public class DecoyTest extends ChronosphereTestBase {
 
-    @Disabled("EchoingTimeBootsItem class not yet implemented - will be created in T158")
+    // ========== Unit Tests (No Minecraft runtime required) ==========
+
     @Test
     public void testEchoingTimeBootsItemClassExists() {
         logTest("Testing EchoingTimeBootsItem class existence");
 
         assertDoesNotThrow(() -> {
-            Class<?> clazz = Class.forName("com.chronosphere.items.artifacts.EchoingTimeBootsItem");
+            Class<?> clazz = EchoingTimeBootsItem.class;
             assertNotNull(clazz, "EchoingTimeBootsItem class should exist");
         }, "EchoingTimeBootsItem class should be accessible");
+    }
+
+    @Test
+    public void testCreatePropertiesMethodExists() {
+        logTest("Testing EchoingTimeBootsItem.createProperties() method exists");
+
+        assertDoesNotThrow(() -> {
+            var method = EchoingTimeBootsItem.class.getMethod("createProperties");
+            assertNotNull(method, "createProperties() method should exist");
+        }, "createProperties() method should be accessible");
     }
 
     @Disabled("DecoyEntity class not yet implemented - will be created in T162")
@@ -54,14 +67,13 @@ public class DecoyTest extends ChronosphereTestBase {
         }, "DecoyEntity class should be accessible");
     }
 
-    @Disabled("EchoingTimeBootsItem class not yet implemented - will be created in T158")
+    @Disabled("Decoy cooldown constant not yet implemented - will be created in T158")
     @Test
     public void testDecoyCooldownConstant() {
         logTest("Testing Echoing Time Boots decoy cooldown is 300 ticks (15 seconds)");
 
         try {
-            Class<?> clazz = Class.forName("com.chronosphere.items.artifacts.EchoingTimeBootsItem");
-            var field = clazz.getField("DECOY_COOLDOWN_TICKS");
+            var field = EchoingTimeBootsItem.class.getField("DECOY_COOLDOWN_TICKS");
             int cooldown = field.getInt(null);
 
             assertEquals(300, cooldown,
@@ -70,6 +82,8 @@ public class DecoyTest extends ChronosphereTestBase {
             fail("Failed to access DECOY_COOLDOWN_TICKS constant: " + e.getMessage());
         }
     }
+
+    // ========== Integration Tests (Minecraft runtime required) ==========
 
     @Disabled("Requires Minecraft runtime environment - tested in-game")
     @Test
