@@ -316,6 +316,25 @@ public class ChronosphereGameTestsNeoForge {
         tests.add(createTest("testEnhancedClockstoneHoeDurability",
             ChronosphereGameTestLogic.TEST_ENHANCED_CLOCKSTONE_HOE_DURABILITY));
 
+        // Player input tests
+        tests.add(createTest("testMockPlayerCanBeCreated",
+            ChronosphereGameTestLogic.TEST_MOCK_PLAYER_CAN_BE_CREATED));
+
+        tests.add(createTest("testPlayerCanEquipChestplate",
+            ChronosphereGameTestLogic.TEST_PLAYER_CAN_EQUIP_CHESTPLATE));
+
+        tests.add(createTest("testTimeTyrantMailCanBeEquipped",
+            ChronosphereGameTestLogic.TEST_TIME_TYRANT_MAIL_CAN_BE_EQUIPPED));
+
+        tests.add(createTest("testPlayerCanHoldChronoblade",
+            ChronosphereGameTestLogic.TEST_PLAYER_CAN_HOLD_CHRONOBLADE));
+
+        tests.add(createTest("testPlayerCanEquipFullArmorSet",
+            ChronosphereGameTestLogic.TEST_PLAYER_CAN_EQUIP_FULL_ARMOR_SET));
+
+        tests.add(createTest("testPlayerInventoryCanReceiveItems",
+            ChronosphereGameTestLogic.TEST_PLAYER_INVENTORY_CAN_RECEIVE_ITEMS));
+
         Chronosphere.LOGGER.info("Generated {} GameTest functions for NeoForge", tests.size());
         return tests;
     }

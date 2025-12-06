@@ -471,4 +471,36 @@ public class ChronosphereGameTests implements FabricGameTest {
     public void testEnhancedClockstoneHoeDurability(GameTestHelper helper) {
         ChronosphereGameTestLogic.TEST_ENHANCED_CLOCKSTONE_HOE_DURABILITY.accept(helper);
     }
+
+    // ============== Player Input Tests ==============
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testMockPlayerCanBeCreated(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_MOCK_PLAYER_CAN_BE_CREATED.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testPlayerCanEquipChestplate(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_PLAYER_CAN_EQUIP_CHESTPLATE.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testTimeTyrantMailCanBeEquipped(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_TIME_TYRANT_MAIL_CAN_BE_EQUIPPED.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testPlayerCanHoldChronoblade(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_PLAYER_CAN_HOLD_CHRONOBLADE.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testPlayerCanEquipFullArmorSet(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_PLAYER_CAN_EQUIP_FULL_ARMOR_SET.accept(helper);
+    }
+
+    @GameTest(template = EMPTY_STRUCTURE, timeoutTicks = 100)
+    public void testPlayerInventoryCanReceiveItems(GameTestHelper helper) {
+        ChronosphereGameTestLogic.TEST_PLAYER_INVENTORY_CAN_RECEIVE_ITEMS.accept(helper);
+    }
 }

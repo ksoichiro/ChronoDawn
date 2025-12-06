@@ -5,8 +5,11 @@ import com.chronosphere.registry.ModEntities;
 import com.chronosphere.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameType;
 
 import java.util.function.Consumer;
 
@@ -1248,6 +1251,175 @@ public final class ChronosphereGameTestLogic {
                 helper.succeed();
             } else {
                 helper.fail("Enhanced Clockstone Hoe durability was " + actualDurability + ", expected " + ENHANCED_CLOCKSTONE_TOOL_DURABILITY);
+            }
+        });
+    };
+
+    // ============== Player Input Tests ==============
+
+    /**
+     * Test that a mock player can be created in the game test environment.
+     * This verifies the basic player simulation capability.
+     */
+    public static final Consumer<GameTestHelper> TEST_MOCK_PLAYER_CAN_BE_CREATED = helper -> {
+        helper.runAfterDelay(1, () -> {
+            try {
+                Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+                if (player != null) {
+                    helper.succeed();
+                } else {
+                    helper.fail("Mock player was null");
+                }
+            } catch (Exception e) {
+                helper.fail("Failed to create mock player: " + e.getMessage());
+            }
+        });
+    };
+
+    /**
+     * Test that a mock player can be equipped with armor in the chest slot.
+     * Verifies basic armor equipment functionality.
+     */
+    public static final Consumer<GameTestHelper> TEST_PLAYER_CAN_EQUIP_CHESTPLATE = helper -> {
+        helper.runAfterDelay(1, () -> {
+            try {
+                Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+                ItemStack chestplate = new ItemStack(ModItems.CLOCKSTONE_CHESTPLATE.get());
+
+                // Equip chestplate to player
+                player.setItemSlot(EquipmentSlot.CHEST, chestplate);
+
+                // Verify armor is equipped
+                ItemStack equipped = player.getItemBySlot(EquipmentSlot.CHEST);
+                if (!equipped.isEmpty() && equipped.getItem() == ModItems.CLOCKSTONE_CHESTPLATE.get()) {
+                    helper.succeed();
+                } else {
+                    helper.fail("Chestplate was not properly equipped");
+                }
+            } catch (Exception e) {
+                helper.fail("Failed to equip chestplate: " + e.getMessage());
+            }
+        });
+    };
+
+    /**
+     * Test that Time Tyrant's Mail can be equipped in the chest slot.
+     * Migrated from: TimeGuardianMailTest.testTimeGuardianMailMustBeEquippedInChestSlot (partial)
+     */
+    public static final Consumer<GameTestHelper> TEST_TIME_TYRANT_MAIL_CAN_BE_EQUIPPED = helper -> {
+        helper.runAfterDelay(1, () -> {
+            try {
+                Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+                ItemStack mail = new ItemStack(ModItems.TIME_TYRANT_MAIL.get());
+
+                // Equip Time Tyrant's Mail to chest slot
+                player.setItemSlot(EquipmentSlot.CHEST, mail);
+
+                // Verify armor is equipped
+                ItemStack equipped = player.getItemBySlot(EquipmentSlot.CHEST);
+                if (!equipped.isEmpty() && equipped.getItem() == ModItems.TIME_TYRANT_MAIL.get()) {
+                    helper.succeed();
+                } else {
+                    helper.fail("Time Tyrant's Mail was not properly equipped in chest slot");
+                }
+            } catch (Exception e) {
+                helper.fail("Failed to equip Time Tyrant's Mail: " + e.getMessage());
+            }
+        });
+    };
+
+    /**
+     * Test that player can hold Chronoblade in main hand.
+     * Verifies weapon equipment functionality.
+     */
+    public static final Consumer<GameTestHelper> TEST_PLAYER_CAN_HOLD_CHRONOBLADE = helper -> {
+        helper.runAfterDelay(1, () -> {
+            try {
+                Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+                ItemStack chronoblade = new ItemStack(ModItems.CHRONOBLADE.get());
+
+                // Equip Chronoblade to main hand
+                player.setItemSlot(EquipmentSlot.MAINHAND, chronoblade);
+
+                // Verify weapon is equipped
+                ItemStack equipped = player.getItemBySlot(EquipmentSlot.MAINHAND);
+                if (!equipped.isEmpty() && equipped.getItem() == ModItems.CHRONOBLADE.get()) {
+                    helper.succeed();
+                } else {
+                    helper.fail("Chronoblade was not properly equipped in main hand");
+                }
+            } catch (Exception e) {
+                helper.fail("Failed to equip Chronoblade: " + e.getMessage());
+            }
+        });
+    };
+
+    /**
+     * Test that player can be equipped with full Clockstone armor set.
+     * Verifies all armor slots can be equipped simultaneously.
+     */
+    public static final Consumer<GameTestHelper> TEST_PLAYER_CAN_EQUIP_FULL_ARMOR_SET = helper -> {
+        helper.runAfterDelay(1, () -> {
+            try {
+                Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+
+                // Create full armor set
+                ItemStack helmet = new ItemStack(ModItems.CLOCKSTONE_HELMET.get());
+                ItemStack chestplate = new ItemStack(ModItems.CLOCKSTONE_CHESTPLATE.get());
+                ItemStack leggings = new ItemStack(ModItems.CLOCKSTONE_LEGGINGS.get());
+                ItemStack boots = new ItemStack(ModItems.CLOCKSTONE_BOOTS.get());
+
+                // Equip all armor pieces
+                player.setItemSlot(EquipmentSlot.HEAD, helmet);
+                player.setItemSlot(EquipmentSlot.CHEST, chestplate);
+                player.setItemSlot(EquipmentSlot.LEGS, leggings);
+                player.setItemSlot(EquipmentSlot.FEET, boots);
+
+                // Verify all armor is equipped
+                boolean helmetEquipped = player.getItemBySlot(EquipmentSlot.HEAD).getItem() == ModItems.CLOCKSTONE_HELMET.get();
+                boolean chestplateEquipped = player.getItemBySlot(EquipmentSlot.CHEST).getItem() == ModItems.CLOCKSTONE_CHESTPLATE.get();
+                boolean leggingsEquipped = player.getItemBySlot(EquipmentSlot.LEGS).getItem() == ModItems.CLOCKSTONE_LEGGINGS.get();
+                boolean bootsEquipped = player.getItemBySlot(EquipmentSlot.FEET).getItem() == ModItems.CLOCKSTONE_BOOTS.get();
+
+                if (helmetEquipped && chestplateEquipped && leggingsEquipped && bootsEquipped) {
+                    helper.succeed();
+                } else {
+                    helper.fail("Not all armor pieces were properly equipped: helmet=" + helmetEquipped +
+                        ", chestplate=" + chestplateEquipped + ", leggings=" + leggingsEquipped +
+                        ", boots=" + bootsEquipped);
+                }
+            } catch (Exception e) {
+                helper.fail("Failed to equip full armor set: " + e.getMessage());
+            }
+        });
+    };
+
+    /**
+     * Test that player inventory can receive items.
+     * Verifies basic inventory manipulation.
+     */
+    public static final Consumer<GameTestHelper> TEST_PLAYER_INVENTORY_CAN_RECEIVE_ITEMS = helper -> {
+        helper.runAfterDelay(1, () -> {
+            try {
+                Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+                ItemStack timeCrystal = new ItemStack(ModItems.TIME_CRYSTAL.get(), 10);
+
+                // Add items to player inventory
+                boolean added = player.getInventory().add(timeCrystal);
+
+                if (added) {
+                    // Verify items are in inventory
+                    boolean hasItems = player.getInventory().contains(new ItemStack(ModItems.TIME_CRYSTAL.get()));
+                    if (hasItems) {
+                        helper.succeed();
+                    } else {
+                        helper.fail("Items were added but not found in inventory");
+                    }
+                } else {
+                    helper.fail("Failed to add items to player inventory");
+                }
+            } catch (Exception e) {
+                helper.fail("Failed to manipulate player inventory: " + e.getMessage());
             }
         });
     };
