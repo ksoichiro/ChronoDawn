@@ -584,14 +584,21 @@
 
 - [X] T172 [P] Run all GameTests on Fabric loader using ./gradlew :fabric:runGameTest
   - Implemented GameTest Framework for Fabric using Architectury Loom's gametest source set
-  - Created ChronosphereGameTestsFabric.java with 9 tests (entity spawns, block placement, boss health)
+  - Created ChronosphereGameTestsFabric.java with shared test logic in ChronosphereGameTestLogic.java
   - Uses @GameTest annotation with FabricGameTest.EMPTY_STRUCTURE template
-  - All 9 tests pass (commit: 9cca9db)
+  - **Current Status**: 92 tests pass (commits: 9cca9db initial, 51934c9 player input tests)
+  - **Test Categories**:
+    - Entity spawning (12 tests)
+    - Block placement (30 tests)
+    - Entity attributes (20 tests)
+    - Item attributes (24 tests)
+    - Player input simulation (6 tests)
 - [X] T173 [P] Run all GameTests on NeoForge loader using ./gradlew :neoforge:runGameTestServer
   - Implemented GameTest Framework for NeoForge using @GameTestGenerator pattern
-  - Created ChronosphereGameTestsNeoForge.java with 9 tests matching Fabric tests
+  - Created ChronosphereGameTestsNeoForge.java with shared test logic in ChronosphereGameTestLogic.java
   - Uses RegisterGameTestsEvent for test registration and existing structure template
-  - All 9 tests pass (commit: 6790b80)
+  - **Current Status**: 91 tests pass (commits: 6790b80 initial, 51934c9 player input tests)
+  - **Test Categories**: Same as Fabric (player input simulation uses `helper.makeMockPlayer(GameType)` API)
 - [ ] T174 Verify entity renderer registration for Fabric (standard API) in fabric/src/main/java/com/chronosphere/fabric/client/ChronosphereClientFabric.java
 - [ ] T175 Verify entity renderer registration for NeoForge (manual event registration) in neoforge/src/main/java/com/chronosphere/neoforge/event/EntityRendererHandler.java
 - [X] T176 Test portal mechanics on both loaders for consistency
