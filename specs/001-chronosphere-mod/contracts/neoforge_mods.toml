@@ -14,7 +14,7 @@ Explore a frozen dimension, defeat time-controlling bosses, and master ultimate 
 logoFile="chronosphere_logo.png"
 authors="YourName"
 credits="Built with Architectury"
-displayURL="https://github.com/yourusername/chronosphere"
+displayURL="https://github.com/ksoichiro/Chronosphere"
 
 [[dependencies.chronosphere]]
 modId="neoforge"

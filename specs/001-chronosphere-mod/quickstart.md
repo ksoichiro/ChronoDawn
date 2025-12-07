@@ -30,7 +30,7 @@
 ### Step 1: Clone Repository
 
 ```bash
-git clone https://github.com/[YOUR_USERNAME]/Chronosphere.git
+git clone https://github.com/ksoichiro/Chronosphere.git
 cd Chronosphere
 git checkout 001-chronosphere-mod
 ```

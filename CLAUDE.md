@@ -2,6 +2,110 @@
 
 Auto-generated from all feature plans. Last updated: 2025-10-19
 
+---
+
+## Documentation Maintenance Checklist
+
+**CRITICAL**: When updating versions, dependencies, or content (bosses, items, structures), you MUST update ALL files listed below to maintain consistency across documentation.
+
+### Version Update Checklist
+
+When updating Minecraft version, mod loader versions, or dependency versions:
+
+- [ ] **gradle.properties** - Update version properties
+- [ ] **README.md** - "Requirements" section (lines ~37-50)
+- [ ] **docs/player_guide.md** - "Prerequisites" and "Required Dependencies" sections (lines ~25-56)
+- [ ] **docs/developer_guide.md** - "Key Technologies" section (lines ~32-45)
+- [ ] **docs/curseforge_description.md** - "Technical Details" → "Requirements" section (lines ~120-128)
+- [ ] **docs/modrinth_description.md** - "Requirements" section (lines ~24-40)
+- [ ] **fabric/src/main/resources/fabric.mod.json** - "depends" and "recommends" sections
+- [ ] **neoforge/src/main/resources/META-INF/neoforge.mods.toml** - "[[dependencies.chronosphere]]" sections
+
+**Current Versions (as of last update)**:
+- Minecraft: 1.21.1
+- Fabric Loader: 0.17.3+
+- Fabric API: 0.116.7+
+- NeoForge: 21.1.209+
+- Architectury API: 13.0.8+
+- Custom Portal API: 0.0.1-beta66-1.21+
+- Patchouli: 1.21.1-92+
+
+### Content Update Checklist
+
+When adding new bosses, structures, items, or major features:
+
+#### Adding a New Boss
+
+- [ ] **README.md** - "Boss Enemies" list (lines ~25-31)
+- [ ] **docs/player_guide.md** - "Boss Battles" section with full details (stats, abilities, strategy, drops)
+- [ ] **docs/curseforge_description.md** - "Powerful Boss Battles" section (lines ~28-35)
+- [ ] **docs/modrinth_description.md** - "Boss Battles" section (lines ~105-140)
+- [ ] **specs/001-chronosphere-mod/spec.md** - User Stories and Requirements sections
+- [ ] **specs/001-chronosphere-mod/data-model.md** - Boss entity definitions
+- [ ] **specs/001-chronosphere-mod/tasks.md** - Implementation tasks
+
+#### Adding a New Structure
+
+- [ ] **README.md** - "Major Structures" list (lines ~17-24)
+- [ ] **docs/player_guide.md** - "Exploring the Chronosphere" or relevant section
+- [ ] **docs/curseforge_description.md** - "Epic Structures" section (lines ~22-29)
+- [ ] **docs/modrinth_description.md** - "Structures" section (lines ~89-97)
+- [ ] **specs/001-chronosphere-mod/spec.md** - User Stories if structure is critical
+- [ ] **specs/001-chronosphere-mod/data-model.md** - Structure definitions
+
+#### Adding a New Ultimate Artifact
+
+- [ ] **README.md** - "Ultimate Artifacts" list (line ~32)
+- [ ] **docs/player_guide.md** - "Ultimate Artifacts" section with full details (stats, abilities, recipe)
+- [ ] **docs/curseforge_description.md** - "Ultimate Artifacts" section (lines ~37-46)
+- [ ] **docs/modrinth_description.md** - "Ultimate Artifacts" section (lines ~143-167)
+- [ ] **specs/001-chronosphere-mod/data-model.md** - Item definitions
+
+#### Adding a New Dependency
+
+- [ ] **gradle.properties** - Add version property if needed
+- [ ] **fabric/build.gradle** - Add to dependencies section
+- [ ] **neoforge/build.gradle** - Add to dependencies section
+- [ ] **fabric/src/main/resources/fabric.mod.json** - Add to "depends" or "recommends"
+- [ ] **neoforge/src/main/resources/META-INF/neoforge.mods.toml** - Add [[dependencies.chronosphere]] entry
+- [ ] **README.md** - "Requirements" → "Dependencies" (lines ~47-50)
+- [ ] **docs/player_guide.md** - "Required Dependencies" section (lines ~41-56)
+- [ ] **docs/curseforge_description.md** - "Requirements" → "Dependencies" (lines ~125-128)
+- [ ] **docs/modrinth_description.md** - "Requirements" sections (Fabric and NeoForge) (lines ~30-39)
+
+### Pre-Release Verification
+
+Before creating a release or publishing to CurseForge/Modrinth:
+
+- [ ] Run version update checklist for all changed versions
+- [ ] Verify all documentation files have consistent information
+- [ ] Check that fabric.mod.json and neoforge.mods.toml match gradle dependencies
+- [ ] Review README.md for accuracy
+- [ ] Review player_guide.md for completeness
+- [ ] Verify curseforge_description.md and modrinth_description.md are up-to-date
+- [ ] Check CHANGELOG.md exists and is current (if using)
+
+### Quick Reference: Documentation Files
+
+**User-Facing Documentation**:
+- `README.md` - Project overview, build instructions, installation
+- `docs/player_guide.md` - Detailed player guide
+- `docs/curseforge_description.md` - CurseForge mod page content
+- `docs/modrinth_description.md` - Modrinth mod page content
+
+**Developer Documentation**:
+- `docs/developer_guide.md` - Developer guide
+- `specs/001-chronosphere-mod/spec.md` - Feature specification
+- `specs/001-chronosphere-mod/data-model.md` - Data model documentation
+- `specs/001-chronosphere-mod/tasks.md` - Implementation tasks
+
+**Configuration Files**:
+- `gradle.properties` - Version definitions
+- `fabric/src/main/resources/fabric.mod.json` - Fabric metadata
+- `neoforge/src/main/resources/META-INF/neoforge.mods.toml` - NeoForge metadata
+
+---
+
 ## Active Technologies
 - Java 21 (Minecraft Java Edition 1.21.1) + NeoForge 21.1.x, Fabric Loader, mcjunitlib (001-chronosphere-mod)
 - Custom Portal API 0.0.1-beta66-1.21 (Fabric) - for custom portal implementation

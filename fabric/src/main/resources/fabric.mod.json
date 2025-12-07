@@ -8,8 +8,8 @@
     "YourName"
   ],
   "contact": {
-    "homepage": "https://github.com/yourusername/chronosphere",
-    "sources": "https://github.com/yourusername/chronosphere"
+    "homepage": "https://github.com/ksoichiro/Chronosphere",
+    "sources": "https://github.com/ksoichiro/Chronosphere"
   },
   "license": "MIT",
   "icon": "assets/chronosphere/icon.png",
@@ -31,5 +31,8 @@
     "architectury": ">=13.0.8",
     "minecraft": "~1.21.1",
     "java": ">=21"
+  },
+  "recommends": {
+    "patchouli": ">=1.21.1-92"
   }
 }
