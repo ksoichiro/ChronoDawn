@@ -1,6 +1,8 @@
 package com.chronosphere.entities.bosses;
 
+import com.chronosphere.entities.projectiles.TimeBlastEntity;
 import com.chronosphere.worldgen.protection.BlockProtectionHandler;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -31,27 +33,29 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 /**
  * Temporal Phantom Entity - Phase 2 mini-boss
  *
  * A spectral mage trapped between time, uses teleportation and phantom clones.
+ * Specializes in ranged attacks - keeps distance and bombards with magic projectiles.
  *
  * Stats:
  * - HP: 150 (75 hearts)
- * - Attack: 8
+ * - Attack: 8 (melee - emergency only)
  * - Armor: 5
- * - Speed: 0.25 (fast)
+ * - Speed: 0.3 (fast, mobile)
  * - Knockback Resistance: 0.3
  *
  * Phase 1 (100%-50% HP): Phantom Magic
  * - Phase Shift: 30% chance to dodge physical attacks (becomes semi-transparent)
- * - Warp Bolt: Purple magic projectile (range 20, damage 4, Slowness II 5s)
+ * - Warp Bolt: Purple magic projectile (range 20, interval 2s, Slowness II + Mining Fatigue I 5s)
  *
- * Phase 2 (50%-0% HP): Phantom Army
+ * Phase 2 (<50% HP): Phantom Army (requires HP below 50%)
  * - Phantom Clone: Summons 2 clones every 20 seconds (HP 20, 15s duration)
- * - Blink Strike: Teleports behind player and attacks (cooldown 12s)
+ * - Blink Strike: Teleports behind player and attacks (cooldown 12s, safe teleport validation)
  *
  * Reference: research.md (Boss 3: Temporal Phantom)
  * Task: T236a [Phase 2] Create TemporalPhantomEntity
@@ -90,7 +94,7 @@ public class TemporalPhantomEntity extends Monster implements RangedAttackMob {
             .add(Attributes.MAX_HEALTH, 150.0)
             .add(Attributes.ATTACK_DAMAGE, 8.0)
             .add(Attributes.ARMOR, 5.0)
-            .add(Attributes.MOVEMENT_SPEED, 0.25)
+            .add(Attributes.MOVEMENT_SPEED, 0.3)  // Increased from 0.25 for better mobility
             .add(Attributes.KNOCKBACK_RESISTANCE, 0.3)
             .add(Attributes.FOLLOW_RANGE, 32.0);
     }
@@ -98,8 +102,8 @@ public class TemporalPhantomEntity extends Monster implements RangedAttackMob {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0, false));
-        this.goalSelector.addGoal(2, new RangedAttackGoal(this, 1.0, 60, 20.0f)); // 3 seconds, 20 blocks
+        // Ranged attack only (removed melee to prevent AI goal conflicts)
+        this.goalSelector.addGoal(1, new RangedAttackGoal(this, 1.0, 40, 20.0f)); // 2 seconds, 20 blocks
         this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 0.8));
         this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0f));
         this.goalSelector.addGoal(7, new RandomLookAroundGoal(this));
@@ -218,18 +222,38 @@ public class TemporalPhantomEntity extends Monster implements RangedAttackMob {
 
     @Override
     public void performRangedAttack(LivingEntity target, float velocity) {
-        // Warp Bolt: Purple magic projectile with Slowness II
+        // Warp Bolt: Purple magic projectile with Slowness II (using Time Blast)
         if (this.level() instanceof ServerLevel serverLevel) {
-            Vec3 targetPos = target.position().add(0, target.getEyeHeight() * 0.5, 0);
-            Vec3 direction = targetPos.subtract(this.position().add(0, this.getEyeHeight(), 0)).normalize();
+            // Create Time Blast projectile
+            TimeBlastEntity blast = new TimeBlastEntity(this.level(), this);
 
-            // Create Warp Bolt projectile (using existing WarpBoltEntity if available, or create new)
-            // For now, use a simple implementation
-            double deltaX = direction.x;
-            double deltaY = direction.y;
-            double deltaZ = direction.z;
+            // Calculate trajectory from phantom's eye position to target's center
+            double targetX = target.getX();
+            double targetY = target.getY() + target.getEyeHeight() * 0.5;
+            double targetZ = target.getZ();
 
-            // Apply Slowness II to target on hit (handled in projectile entity)
+            double shootX = this.getX();
+            double shootY = this.getY() + this.getEyeHeight();
+            double shootZ = this.getZ();
+
+            double deltaX = targetX - shootX;
+            double deltaY = targetY - shootY;
+            double deltaZ = targetZ - shootZ;
+
+            // Normalize direction
+            double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ);
+            deltaX /= distance;
+            deltaY /= distance;
+            deltaZ /= distance;
+
+            // Set projectile velocity (1.5 is standard projectile speed)
+            blast.setDeltaMovement(deltaX * 1.5, deltaY * 1.5, deltaZ * 1.5);
+
+            // Set projectile position
+            blast.setPos(shootX, shootY, shootZ);
+
+            // Spawn projectile
+            this.level().addFreshEntity(blast);
 
             // Play cast sound
             this.level().playSound(
@@ -291,8 +315,84 @@ public class TemporalPhantomEntity extends Monster implements RangedAttackMob {
         Vec3 lookDir = target.getLookAngle();
         double distance = 5.0 + this.random.nextDouble() * 3.0; // 5-8 blocks
         Vec3 targetPos = target.position().subtract(lookDir.scale(distance));
+        BlockPos targetBlockPos = BlockPos.containing(targetPos);
 
-        // Teleport particles at old position
+        // Find safe teleport position
+        BlockPos safePos = findSafeGroundPosition(targetBlockPos);
+        if (safePos == null) {
+            // No safe position found - abort teleport
+            return;
+        }
+
+        // Teleport using safe position
+        if (!teleportToPosition(Vec3.atBottomCenterOf(safePos))) {
+            // Teleport failed (entity stuck in blocks) - abort attack
+            return;
+        }
+
+        // Immediate melee attack after successful teleport
+        this.doHurtTarget(target);
+    }
+
+    /**
+     * Find a safe ground position for teleportation.
+     * Searches vertically (±3 blocks) for valid landing spot.
+     */
+    private BlockPos findSafeGroundPosition(BlockPos startPos) {
+        // First try the exact position
+        if (isSafeTeleportPosition(startPos)) {
+            return startPos;
+        }
+
+        // Search upward (for when target is on lower ground)
+        for (int offset = 1; offset <= 3; offset++) {
+            BlockPos testPos = startPos.above(offset);
+            if (isSafeTeleportPosition(testPos)) {
+                return testPos;
+            }
+        }
+
+        // Search downward (for when target is on higher ground)
+        for (int offset = 1; offset <= 3; offset++) {
+            BlockPos testPos = startPos.below(offset);
+            if (isSafeTeleportPosition(testPos)) {
+                return testPos;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Check if a position is safe for teleportation.
+     * Validates solid ground below and 3 blocks of clearance above.
+     */
+    private boolean isSafeTeleportPosition(BlockPos pos) {
+        // Check ground is solid
+        if (!this.level().getBlockState(pos.below()).isSolid()) {
+            return false;
+        }
+
+        // Check space is clear (3 blocks tall - entity height ~2.0 + margin 1.0)
+        for (int i = 0; i < 3; i++) {
+            BlockState state = this.level().getBlockState(pos.above(i));
+            if (state.isSolid()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Teleport to the specified position with safety validation.
+     * Reverts teleport if entity gets stuck in blocks.
+     */
+    private boolean teleportToPosition(Vec3 pos) {
+        // Store original position for potential revert
+        Vec3 originalPos = this.position();
+
+        // Spawn particles at departure
         if (this.level() instanceof ServerLevel serverLevel) {
             serverLevel.sendParticles(
                 ParticleTypes.PORTAL,
@@ -304,9 +404,16 @@ public class TemporalPhantomEntity extends Monster implements RangedAttackMob {
         }
 
         // Teleport
-        this.teleportTo(targetPos.x, targetPos.y, targetPos.z);
+        this.teleportTo(pos.x, pos.y, pos.z);
 
-        // Teleport particles at new position
+        // Validate position after teleport - check if entity is stuck in blocks
+        if (isStuckInBlocks()) {
+            // Revert to original position
+            this.teleportTo(originalPos.x, originalPos.y, originalPos.z);
+            return false;
+        }
+
+        // Spawn particles at arrival
         if (this.level() instanceof ServerLevel serverLevel) {
             serverLevel.sendParticles(
                 ParticleTypes.PORTAL,
@@ -320,14 +427,36 @@ public class TemporalPhantomEntity extends Monster implements RangedAttackMob {
         // Play teleport sound
         this.level().playSound(
             null,
-            this.getX(), this.getY(), this.getZ(),
+            this.blockPosition(),
             SoundEvents.ENDERMAN_TELEPORT,
             SoundSource.HOSTILE,
             1.0f, 1.0f
         );
 
-        // Immediate melee attack
-        this.doHurtTarget(target);
+        return true;
+    }
+
+    /**
+     * Check if entity is stuck in solid blocks after teleportation.
+     */
+    private boolean isStuckInBlocks() {
+        BlockPos feetPos = this.blockPosition();
+
+        // Check 3x3 horizontal area, 3 blocks vertical (entity height ~2.0 + margin 1.0)
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                for (int dy = 0; dy < 3; dy++) {
+                    BlockPos checkPos = feetPos.offset(dx, dy, dz);
+                    BlockState state = this.level().getBlockState(checkPos);
+                    // Check both isSolid and isSuffocating for comprehensive coverage
+                    if (state.isSolid() || state.isSuffocating(this.level(), checkPos)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     @Override
