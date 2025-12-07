@@ -453,10 +453,13 @@
   - Spawns in chronosphere_forest and chronosphere_swamp biomes
   - Boss spawns when player enters boss_room (21x21x9 area, 1-second interval check)
   - Terrain adaptation: "none" (prevents surface terrain deletion)
-- [ ] T236s: Create custom texture for Temporal Phantom (PENDING)
-  - Current: Uses time_guardian.png texture (identical MD5 hash)
-  - Required: Spectral/ghostly appearance (purple/blue semi-transparent theme)
-  - File: common/src/main/resources/assets/chronosphere/textures/entity/temporal_phantom.png
+- [x] T236s: Create custom texture for Temporal Phantom (COMPLETED)
+  - **Completed**: Created custom model and texture with spectral/ghostly appearance
+  - **Model**: TemporalPhantomModel.java (converted from Blockbench export)
+  - **Texture**: temporal_phantom.png (blue/purple spectral theme)
+  - **Renderer**: Updated to use TemporalPhantomModel with custom layer location
+  - **AI improvements**: Safe teleport validation, ranged attack implementation, increased movement speed (0.25 → 0.3)
+  - **Commits**: fa1b684, fd001bb, 197cfd5
 
 #### T237: Entropy Keeper (エントロピーの管理者) - COMPLETED
 - [x] T237a-m: Entity, item, renderer, texture, translations implemented
