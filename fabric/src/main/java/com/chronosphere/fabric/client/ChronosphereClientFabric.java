@@ -3,6 +3,7 @@ package com.chronosphere.fabric.client;
 import com.chronosphere.client.model.ClockworkColossusModel;
 import com.chronosphere.client.model.ClockworkSentinelModel;
 import com.chronosphere.client.model.FloqModel;
+import com.chronosphere.client.model.TemporalPhantomModel;
 import com.chronosphere.client.model.TemporalWraithModel;
 import com.chronosphere.client.model.TimeGuardianModel;
 import com.chronosphere.client.model.TimeKeeperModel;
@@ -325,6 +326,12 @@ public class ChronosphereClientFabric implements ClientModInitializer {
         EntityModelLayerRegistry.registerModelLayer(
             ClockworkColossusRenderer.LAYER_LOCATION,
             ClockworkColossusModel::createBodyLayer
+        );
+
+        // Register Temporal Phantom model layer
+        EntityModelLayerRegistry.registerModelLayer(
+            TemporalPhantomRenderer.LAYER_LOCATION,
+            TemporalPhantomModel::createBodyLayer
         );
     }
 
