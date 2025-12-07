@@ -50,6 +50,11 @@ Simply describe what you want to do, and Claude will reference the appropriate c
    - Update `[[dependencies.chronosphere]]` entries
    - Update `versionRange` fields
 
+9. **THIRD_PARTY_LICENSES.md**
+   - Update version numbers in "Runtime Dependencies" section
+   - Update: Minecraft, Fabric Loader, Fabric API, NeoForge, Architectury API, Custom Portal API, Patchouli
+   - Update "Last updated" date at the bottom
+
 ### Current Versions (Reference)
 
 ```
@@ -254,6 +259,13 @@ Patchouli: 1.21.1-92+
    - Sections: "Requirements" (both Fabric and NeoForge)
    - Add dependency to both loader sections
 
+10. **THIRD_PARTY_LICENSES.md**
+    - Add new dependency entry to "Runtime Dependencies" or "Development Dependencies" section
+    - Include: Project name, version, developer/organization, license, URL, license URL
+    - Add license summary if it's a new license type
+    - Update "Last updated" date at the bottom
+    - Research license information from project's GitHub repository or official page
+
 ### Dependency Type Guidelines
 
 - **Required (`depends` / `required`)**: Mod cannot function without it
@@ -316,6 +328,10 @@ Patchouli: 1.21.1-92+
 - `docs/curseforge_description.md` - CurseForge mod page content
 - `docs/modrinth_description.md` - Modrinth mod page content
 
+**Legal**:
+- `LICENSE` - Project license (MIT)
+- `THIRD_PARTY_LICENSES.md` - Dependency licenses and version information
+
 **Developer**:
 - `docs/developer_guide.md` - Development setup and architecture
 - `specs/001-chronosphere-mod/spec.md` - Feature specification
@@ -349,5 +365,5 @@ Patchouli: 1.21.1-92+
 
 ---
 
-**Last Updated**: 2025-12-08
+**Last Updated**: 2025-12-08 (Added THIRD_PARTY_LICENSES.md to maintenance checklists)
 **Maintained by**: Chronosphere Development Team

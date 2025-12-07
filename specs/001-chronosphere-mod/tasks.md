@@ -698,7 +698,7 @@
 - [ ] T189 [P] Write developer guide in docs/developer_guide.md
 - [ ] T295 [P] Configure mod metadata (display name, description, author, icon) in fabric.mod.json and neoforge.mods.toml
 - [ ] T296 [P] Add mod icon/logo image (512x512 or 256x256 PNG) to resources
-- [ ] T297 [P] Add LICENSE file and document dependency licenses (Architectury, Custom Portal API, Patchouli, etc.)
+- [x] T297 [P] Add LICENSE file and document dependency licenses (Architectury, Custom Portal API, Patchouli, etc.)
 
 ### Final Validation
 
