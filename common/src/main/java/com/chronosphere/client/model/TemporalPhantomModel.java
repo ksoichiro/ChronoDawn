@@ -46,7 +46,7 @@ public class TemporalPhantomModel<T extends Mob> extends EntityModel<T> {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
 
-        PartDefinition root = partdefinition.addOrReplaceChild("root", CubeListBuilder.create(), PartPose.offset(0.0F, 21.0F, 0.0F));
+        PartDefinition root = partdefinition.addOrReplaceChild("root", CubeListBuilder.create(), PartPose.offset(0.0F, 20.0F, 0.0F));
 
         PartDefinition body = root.addOrReplaceChild("body", CubeListBuilder.create().texOffs(42, 62).addBox(-4.0F, -23.0F, -2.0F, 8.0F, 4.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
@@ -116,7 +116,7 @@ public class TemporalPhantomModel<T extends Mob> extends EntityModel<T> {
         // Idle animation - slight floating motion for ghostly effect
         if (limbSwingAmount < 0.01F && entity.attackAnim <= 0.0F) {
             float idleFloat = ageInTicks * 0.08F;
-            this.root.y = 21.0F + Mth.sin(idleFloat) * 1.0F; // Floating up and down
+            this.root.y = 20.0F + Mth.sin(idleFloat) * 1.0F; // Floating up and down
 
             // Slight arm sway
             this.rightArm.xRot += Mth.cos(idleFloat) * 0.05F;
