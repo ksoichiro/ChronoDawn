@@ -158,6 +158,14 @@
 - [ ] T088as [P] [US1] (Optional) Implement particle spawning logic for biomes (client-side)
 - [ ] T088at [US1] (Optional) Test ambient sounds and particles in-game for immersion quality
 
+### Biome Enhancements (US1 Enhancement - Medium Priority)
+
+**Purpose**: バイオームの見た目と大きさを調整し、Chronosphereの独自性を向上
+
+- [ ] T298 [P] [US1] Add distinctive features to Snowy biome (ice structures, frozen time effects, unique blocks) to differentiate from Overworld
+- [ ] T299 [P] [US1] Adjust biome size/scale in dimension_type/chronosphere.json or noise settings to reduce biome area
+- [ ] T300 [P] [US1] Change grass drop from vanilla seeds to Temporal Wheat Seeds (modify grass block loot table)
+
 ### Custom Mobs (US1 Enhancement - High Priority)
 
 **Purpose**: 時間をテーマにした独自モブを追加し、ディメンションの独自性とゲームプレイの多様性を向上
@@ -518,6 +526,13 @@
 - [X] T126 [P] [US3] Write unit test for Time Guardian Mail rollback logic in common/src/test/java/com/chronosphere/unit/TimeGuardianMailTest.java
 - [X] T127 [P] [US3] Write GameTest for Echoing Time Boots decoy in common/src/test/java/com/chronosphere/integration/DecoyTest.java
 
+### Master Clock Structure Improvements (US3 Enhancement - High Priority)
+
+**Purpose**: Master Clock構造物の安全性とゲームプレイバランスの向上
+
+- [ ] T301 [P] [US3] Increase Master Clock boss room depth to prevent surface exposure (adjust Y-level in structure NBT or placement config)
+- [ ] T302 [P] [US3] Make all Master Clock walls indestructible (not just boss room) to prevent bypassing Ancient Gears requirement (apply boss_room_protected tag to all structure blocks)
+
 ### Future Boss Battle Enhancements (US3 - Phase 7+)
 
 **Purpose**: Master Clock大規模化とテストプレイ後のバランス調整
@@ -681,6 +696,9 @@
 - [ ] T187 [P] Create Modrinth mod page description
 - [ ] T188 [P] Write player guide in docs/player_guide.md
 - [ ] T189 [P] Write developer guide in docs/developer_guide.md
+- [ ] T295 [P] Configure mod metadata (display name, description, author, icon) in fabric.mod.json and neoforge.mods.toml
+- [ ] T296 [P] Add mod icon/logo image (512x512 or 256x256 PNG) to resources
+- [ ] T297 [P] Add LICENSE file and document dependency licenses (Architectury, Custom Portal API, Patchouli, etc.)
 
 ### Final Validation
 
