@@ -682,8 +682,18 @@
 
 ### Performance Optimization
 
-- [ ] T178 [P] Optimize entity tick rate for time distortion (5-tick interval) in EntityEventHandler.java
-- [ ] T179 [P] Implement portal registry caching in PortalRegistry.java
+- [x] T178 [P] Optimize entity tick rate for time distortion (5-tick interval) in EntityEventHandler.java
+  - **Completed**: Changed time distortion processing from every tick to every 5 ticks
+  - Added timeDistortionTickCounter to EntityEventHandler
+  - Reduces entity processing load by 80% in Chronosphere dimension
+  - Slowness effect duration (100 ticks) ensures continuous coverage without gaps
+  - Tested in-game on both Fabric and NeoForge loaders
+- [x] T179 [P] Implement portal registry caching in PortalRegistry.java
+  - **Completed**: Added unmodifiableDimensionPortalCache for dimension portal lookups
+  - Caches unmodifiable Set views to avoid defensive copying overhead
+  - Cache automatically invalidates on portal register/unregister operations
+  - Maintains O(1) lookup performance while reducing allocations
+  - Tested in-game on both Fabric and NeoForge loaders
 - [ ] T180 [P] Optimize boss AI state machine in TimeGuardianAI.java and TimeTyrantAI.java
 - [ ] T181 Profile server performance with Spark profiler
 - [ ] T182 Ensure server load increase stays within +10% threshold per success criteria SC-008
