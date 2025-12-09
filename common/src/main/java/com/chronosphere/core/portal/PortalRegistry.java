@@ -30,8 +30,13 @@ import java.util.*;
  * - State persists across server restarts
  * - Portal positions and states are preserved
  *
+ * Performance Optimization (T179):
+ * - Uses unmodifiable Sets for dimension portal lookups to avoid defensive copying
+ * - HashMap lookups provide O(1) performance for portal access by ID or position
+ *
  * Reference: data-model.md (Portal System → Portal Registry)
  * Task: T047 [US1] Implement portal registry
+ * Task: T179 [Performance] Implement portal registry caching
  */
 public class PortalRegistry {
     private static final PortalRegistry INSTANCE = new PortalRegistry();
@@ -40,10 +45,14 @@ public class PortalRegistry {
     private final Map<ResourceKey<Level>, Set<UUID>> portalsByDimension;
     private final Map<BlockPos, UUID> portalsByPosition;
 
+    // T179: Cache unmodifiable views of dimension portal sets for performance
+    private final Map<ResourceKey<Level>, Set<UUID>> unmodifiableDimensionPortalCache;
+
     private PortalRegistry() {
         this.portals = new HashMap<>();
         this.portalsByDimension = new HashMap<>();
         this.portalsByPosition = new HashMap<>();
+        this.unmodifiableDimensionPortalCache = new HashMap<>();
     }
 
     /**
@@ -76,6 +85,9 @@ public class PortalRegistry {
         // Add to position index
         portalsByPosition.put(position, portalId);
 
+        // T179: Invalidate cache for this dimension
+        unmodifiableDimensionPortalCache.remove(dimension);
+
         Chronosphere.LOGGER.info("Registered portal {} at {} in dimension {}",
             portalId, position, dimension.location());
     }
@@ -91,8 +103,10 @@ public class PortalRegistry {
             return;
         }
 
+        ResourceKey<Level> dimension = portal.getSourceDimension();
+
         // Remove from dimension index
-        Set<UUID> dimensionPortals = portalsByDimension.get(portal.getSourceDimension());
+        Set<UUID> dimensionPortals = portalsByDimension.get(dimension);
         if (dimensionPortals != null) {
             dimensionPortals.remove(portalId);
         }
@@ -100,8 +114,11 @@ public class PortalRegistry {
         // Remove from position index
         portalsByPosition.remove(portal.getPosition());
 
+        // T179: Invalidate cache for this dimension
+        unmodifiableDimensionPortalCache.remove(dimension);
+
         Chronosphere.LOGGER.info("Unregistered portal {} from dimension {}",
-            portalId, portal.getSourceDimension().location());
+            portalId, dimension.location());
     }
 
     /**
@@ -127,12 +144,21 @@ public class PortalRegistry {
 
     /**
      * Get all portals in a dimension.
+     * T179: Returns cached unmodifiable Set to avoid defensive copying overhead.
      *
      * @param dimension Dimension key
-     * @return Set of portal UUIDs
+     * @return Unmodifiable set of portal UUIDs
      */
     public Set<UUID> getPortalsInDimension(ResourceKey<Level> dimension) {
-        return portalsByDimension.getOrDefault(dimension, Collections.emptySet());
+        // T179: Use cached unmodifiable view for performance
+        return unmodifiableDimensionPortalCache.computeIfAbsent(dimension, dim -> {
+            Set<UUID> dimensionPortals = portalsByDimension.get(dim);
+            if (dimensionPortals == null || dimensionPortals.isEmpty()) {
+                return Collections.emptySet();
+            }
+            // Return unmodifiable view of the set
+            return Collections.unmodifiableSet(new HashSet<>(dimensionPortals));
+        });
     }
 
     /**
@@ -151,6 +177,7 @@ public class PortalRegistry {
         portals.clear();
         portalsByDimension.clear();
         portalsByPosition.clear();
+        unmodifiableDimensionPortalCache.clear(); // T179: Clear cache
         Chronosphere.LOGGER.info("Cleared all portals from registry");
     }
 

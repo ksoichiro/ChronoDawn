@@ -33,7 +33,7 @@ import net.minecraft.world.entity.LivingEntity;
  * Implementation Strategy:
  * - Uses SERVER_LEVEL_POST tick event to process entities in Chronosphere dimension
  * - Only processes entities in the Chronosphere dimension to minimize performance impact
- * - Applies time distortion effect to hostile mobs every tick
+ * - Applies time distortion effect to hostile mobs every 5 ticks (T178 performance optimization)
  * - Checks for Desert Clock Tower structures and spawns Time Guardians periodically
  * - Hooks entity death event to trigger reversed resonance on boss defeats
  * - Unstable Fungus collision effects are handled directly in the block class (UnstableFungus.java)
@@ -47,8 +47,14 @@ import net.minecraft.world.entity.LivingEntity;
  * Task: T086 [US1] Unstable Fungus collision handler (implemented in UnstableFungus.java)
  * Task: T114 [US2] Time Guardian spawn logic integration
  * Task: T115 [US2] Implement reversed resonance trigger on Time Guardian defeat
+ * Task: T178 [Performance] Optimize entity tick rate to 5-tick intervals
  */
 public class EntityEventHandler {
+    /**
+     * Tick counter for time distortion effect processing.
+     * Processes every 5 ticks to reduce performance impact.
+     */
+    private static int timeDistortionTickCounter = 0;
     /**
      * Register entity event listeners.
      */
@@ -59,7 +65,12 @@ public class EntityEventHandler {
             // Only process entities in Chronosphere dimension
             // Use location() to compare ResourceLocation instead of ResourceKey
             if (level.dimension().location().equals(ModDimensions.CHRONOSPHERE_DIMENSION.location())) {
-                processChronosphereEntities(level);
+                // T178: Optimize time distortion processing to 5-tick intervals
+                timeDistortionTickCounter++;
+                if (timeDistortionTickCounter >= 5) {
+                    timeDistortionTickCounter = 0;
+                    processChronosphereEntities(level);
+                }
 
                 // Check for Desert Clock Tower structures and spawn Time Guardians
                 TimeGuardianSpawner.checkAndSpawnGuardians(level);
