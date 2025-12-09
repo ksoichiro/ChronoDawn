@@ -1,7 +1,7 @@
 {
   "type": "minecraft:jigsaw",
   "start_pool": "chronosphere:master_clock/surface_pool",
-  "size": 3,
+  "size": 10,
   "max_distance_from_center": 80,
   "biomes": "#chronosphere:has_master_clock",
   "step": "underground_structures",

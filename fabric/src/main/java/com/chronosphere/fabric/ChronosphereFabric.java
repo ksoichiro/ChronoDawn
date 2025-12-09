@@ -15,6 +15,7 @@ import com.chronosphere.fabric.compat.CustomPortalFabric;
 import com.chronosphere.fabric.event.BlockProtectionEventHandler;
 import com.chronosphere.registry.ModEntities;
 import com.chronosphere.worldgen.processors.BossRoomProtectionProcessor;
+import com.chronosphere.worldgen.processors.MasterClockProtectionProcessor;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
@@ -50,7 +51,10 @@ public class ChronosphereFabric implements ModInitializer {
             tickCounter[0]++;
             if (tickCounter[0] >= 100) {
                 tickCounter[0] = 0;
-                server.getAllLevels().forEach(BossRoomProtectionProcessor::registerPendingProtections);
+                server.getAllLevels().forEach(level -> {
+                    BossRoomProtectionProcessor.registerPendingProtections(level);
+                    MasterClockProtectionProcessor.registerPendingProtections(level);
+                });
             }
         });
 

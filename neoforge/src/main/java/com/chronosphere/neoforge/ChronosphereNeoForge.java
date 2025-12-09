@@ -16,6 +16,7 @@ import com.chronosphere.neoforge.registry.ModParticles;
 import com.chronosphere.registry.ModEntities;
 import com.chronosphere.registry.ModItems;
 import com.chronosphere.worldgen.processors.BossRoomProtectionProcessor;
+import com.chronosphere.worldgen.processors.MasterClockProtectionProcessor;
 import com.chronosphere.worldgen.protection.BlockProtectionHandler;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.SpawnPlacementTypes;
@@ -67,7 +68,10 @@ public class ChronosphereNeoForge {
         tickCounter++;
         if (tickCounter >= 100) {
             tickCounter = 0;
-            event.getServer().getAllLevels().forEach(BossRoomProtectionProcessor::registerPendingProtections);
+            event.getServer().getAllLevels().forEach(level -> {
+                BossRoomProtectionProcessor.registerPendingProtections(level);
+                MasterClockProtectionProcessor.registerPendingProtections(level);
+            });
         }
     }
 
