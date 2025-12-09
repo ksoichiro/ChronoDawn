@@ -530,8 +530,19 @@
 
 **Purpose**: Master Clock構造物の安全性とゲームプレイバランスの向上
 
-- [ ] T301 [P] [US3] Increase Master Clock boss room depth to prevent surface exposure (adjust Y-level in structure NBT or placement config)
-- [ ] T302 [P] [US3] Make all Master Clock walls indestructible (not just boss room) to prevent bypassing Ancient Gears requirement (apply boss_room_protected tag to all structure blocks)
+- [x] T301 [P] [US3] Increase Master Clock boss room depth to prevent surface exposure (adjust Y-level in structure NBT or placement config)
+  - **Completed**: Implemented Jigsaw stairs extension system
+  - Structure size increased from 3 to 10 to allow proper stair extension
+  - Surface remains at Y=0 with `project_start_to_heightmap: WORLD_SURFACE_WG`
+  - Created master_clock_stairs_bottom.nbt for stair termination
+  - Updated stairs_pool.json with both stairs (weight 6) and stairs_bottom (weight 4)
+  - Stairs now naturally extend downward (~6-8 segments) from surface to boss room
+- [x] T302 [P] [US3] Make all Master Clock walls indestructible (not just boss room) to prevent bypassing Ancient Gears requirement (apply boss_room_protected tag to all structure blocks)
+  - **Completed**: Created MasterClockProtectionProcessor for entire structure protection
+  - Detects Chiseled Quartz Block and Polished Andesite as structure markers
+  - Registers ±50 block XZ protection area (Y=-70 to Y=10) covering entire Master Clock
+  - Protection lifts when Time Tyrant is defeated (uses same system as boss room protection)
+  - Registered in ModStructureProcessorTypes and integrated into server tick events (Fabric/NeoForge)
 
 ### Future Boss Battle Enhancements (US3 - Phase 7+)
 
