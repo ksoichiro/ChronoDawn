@@ -239,6 +239,49 @@
 - [ ] T296 [P] Add mod icon/logo image (512x512 or 256x256 PNG) to resources
 - [x] T297 [P] Add LICENSE file and document dependency licenses (Architectury, Custom Portal API, Patchouli, etc.)
 
+### Playtest Improvements - Dimension Mechanics
+
+**Purpose**: プレイテストで発見されたディメンション機能の改善
+
+- [ ] T301 [P] Fix bed sleeping mechanic in Chronosphere (currently sleeping doesn't advance time to morning)
+  - **Issue**: Chronosphere has day-night cycle but sleeping in bed doesn't skip to morning
+  - **Investigation**: Check dimension_type/chronosphere.json fixed_time setting and bed sleep behavior
+  - **Possible solutions**: Remove fixed_time to allow natural cycle, or implement custom sleep handler
+
+### Playtest Improvements - Boss Battle
+
+**Purpose**: プレイテストで発見されたボスバトル関連の改善
+
+- [ ] T302 [P] Fix Master Clock boss room door unlock requirement
+  - **Issue**: Door opens with only Ancient Clockwork x3, should also require Key to Master Clock
+  - **Investigation**: Check BossRoomDoorBlock.java unlock condition logic
+  - **Fix**: Update unlock requirement to check for both Ancient Clockwork x3 AND Key to Master Clock
+- [ ] T303 [P] Prevent non-boss mob spawning in Desert Clock Tower boss room
+  - **Issue**: Other mobs spawn in Desert Clock Tower boss room during battle
+  - **Investigation**: Check structure configuration and spawning rules for desert_clock_tower
+  - **Possible solutions**: Add no_mob_spawning flag to boss room area, or implement custom spawning blocker
+- [ ] T304 [P] Fix Master Clock boss room ceiling height for Time Tyrant
+  - **Issue**: Time Tyrant cannot pass through some low-height areas in Master Clock boss room
+  - **Investigation**: Check Master Clock structure NBT and Time Tyrant entity height
+  - **Fix**: Increase ceiling height in problematic areas to accommodate Time Tyrant (height = 3.5 blocks)
+- [ ] T305 [P] Prevent player camping in Master Clock boss room
+  - **Issue**: Players can hide in safe spots and attack Time Tyrant without risk
+  - **Investigation**: Identify hiding spots in Master Clock structure
+  - **Possible solutions**: Add teleport mechanic to Time Tyrant AI, redesign room layout to remove camping spots, or add area denial attacks
+
+### Playtest Improvements - Exploration
+
+**Purpose**: プレイテストで発見された探索関連の改善
+
+- [ ] T306 [P] Add Ancient Ruins location assistance system
+  - **Issue**: Players cannot find Ancient Ruins in some cases
+  - **Investigation**: Check Ancient Ruins spawn frequency and distribution
+  - **Possible solutions**:
+    - Add craftable compass that points to nearest Ancient Ruins
+    - Increase structure spawn rate in chronosphere_plains/forest
+    - Add visual cues (e.g., beacon beam visible from distance)
+    - Add advancement hint system with approximate coordinates
+
 ### Final Validation
 
 - [ ] T190 Run full test suite for both loaders using ./gradlew test
