@@ -125,7 +125,8 @@
       "chronosphere:patch_ferns",
       "chronosphere:patch_brown_mushrooms",
       "chronosphere:patch_timeless_mushroom",
-      "chronosphere:boulder_placed"
+      "chronosphere:boulder_placed",
+      "chronosphere:cobweb_placed"
     ],
     []
   ]

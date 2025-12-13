@@ -254,6 +254,16 @@ public class TimeKeeperEntity extends AbstractVillager {
                 15, // Higher XP reward
                 0.05f
             ));
+
+            // Trade 7: 4 Fruit of Time → 8 String
+            // Early-game resource for bow crafting (cobwebs may be scarce)
+            offers.add(new MerchantOffer(
+                new ItemCost(ModItems.FRUIT_OF_TIME.get(), 4),
+                new ItemStack(Items.STRING, 8),
+                8, // Max uses (renewable resource)
+                2, // XP reward
+                0.05f
+            ));
         }
     }
 
