@@ -177,6 +177,26 @@
 - [ ] T243: Add boss-specific sound effects
 - [ ] T244: Create advancement system for defeating all 4 bosses
 
+#### Boss Balance Adjustments (US3 - High Priority)
+
+**Purpose**: プレイヤーフィードバックに基づくボス戦闘のバランス調整
+
+- [ ] T245: Clockwork Colossus - Shield Durability Balance
+  - **Issue**: 盾の耐久度消費が激しい（フィードバック）
+  - **Analysis**: Phase 2のStrength I効果により近接攻撃が約18ダメージ（盾消費19）+ Gear Shot 5秒ごと（盾消費9）で、336耐久度の盾が約20-30回の防御で消耗
+  - **Primary Solution**: 盾の耐久度消費軽減システムを実装
+    - ClockworkColossusEntityからの攻撃時、盾の耐久度ダメージを30-50%軽減
+    - LivingEntity.hurtCurrentlyUsedShield() または ShieldBlockEvent をフックして実装
+    - 実装難易度が高い場合は以下のFallback Solutionを採用
+  - **Fallback Solution**: Phase 2のバフとGear Shotクールダウンを調整
+    - Phase 2のStrength I効果を削除（Speed IIのみ残す、またはノックバック増加など別の効果に変更）
+    - Gear Shotクールダウンを5秒→8-10秒に延長
+  - **Files**:
+    - Primary: common/src/main/java/com/chronosphere/entities/bosses/ClockworkColossusEntity.java
+    - Primary (Optional): common/src/main/java/com/chronosphere/events/ShieldDurabilityHandler.java (new)
+    - Fallback: common/src/main/java/com/chronosphere/entities/bosses/ClockworkColossusEntity.java (lines 224-228, 90)
+  - **Testing**: 盾を持って実際にボス戦を行い、耐久度消費が適切か検証
+
 ### Future Boss Battle Enhancements (US3 - Phase 7+)
 
 **Purpose**: Master Clock大規模化とテストプレイ後のバランス調整
