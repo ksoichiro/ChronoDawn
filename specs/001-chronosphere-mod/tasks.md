@@ -166,7 +166,17 @@
   - **Completed**: Added ice pillars with varied heights (4-11 blocks) using packed_ice, blue_ice, and frozen_time_ice
   - Random thick 3x3 clusters (25% chance), reduced density for natural look at biome boundaries
   - Files: ice_pillar.json, ice_pillar_cluster.json, ice_pillar_random.json, ice_spike_placed.json
-- [ ] T299 [P] [US1] Adjust biome size/scale in dimension_type/chronosphere.json or noise settings to reduce biome area
+- [x] T299 [P] [US1] Adjust biome size/scale in dimension_type/chronosphere.json or noise settings to reduce biome area
+  - **Completed**: Implemented BiomeScalingMixin with 2.5x coordinate scaling (biomes ~40% smaller)
+  - Adjusted continentalness parameters to align with vanilla terrain generation
+  - File: BiomeScalingMixin.java, dimension/chronosphere.json
+  - **Custom Noise Settings Experiment** (attempted but not used):
+    - Created simple custom noise_settings and density_functions
+    - Result: Terrain generation failed (Y=-40 to 320 steep mountains, lava seas, flat summits)
+    - Issue: Parameter tuning extremely difficult, requires deep understanding of density functions
+    - Estimated effort for proper implementation: 10-15 hours
+    - Conclusion: Using vanilla `minecraft:overworld` settings is more practical
+    - Reference: If future terrain customization is needed, start with vanilla density functions as base
 - [x] T300 [P] [US1] Change grass drop from vanilla seeds to Temporal Wheat Seeds (modify grass block loot table)
   - **Completed**: Override vanilla short_grass loot table to drop time_wheat_seeds (12.5% chance) in Chronosphere only
   - File: minecraft/loot_table/blocks/short_grass.json

@@ -160,4 +160,25 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 - Transform: `magick input.png -channel R -evaluate multiply 0.95 +channel ...`
 - Known transformation: **Time Wood** (from Jungle) → R×0.95, G×1.17, B×0.85
 
+## Custom Noise Settings (Terrain Generation)
+
+**Custom Noise Settings Skill**: Detailed guidance for understanding and customizing Minecraft's terrain generation system is available in `.claude/skills/noise-settings.md` (future). This section documents lessons learned from attempting custom noise settings.
+
+**Difficulty Assessment** (based on T299 experiment, 2025-12-13):
+- **Simple approach** (BiomeScalingMixin): Easy, effective for biome size adjustment
+- **Custom noise settings**: Very difficult, requires 10-15 hours of trial-and-error
+
+**Lessons Learned**:
+1. **Vanilla settings are highly optimized** - `minecraft:overworld` provides balanced, natural terrain
+2. **Parameter tuning is complex** - Small changes cause drastic terrain changes (e.g., Y=-40 to 320 mountains, lava seas, flat summits)
+3. **Density functions require mathematical understanding** - How noise values translate to terrain density
+4. **BiomeScalingMixin is more practical** - Coordinate scaling achieves biome size reduction without terrain issues
+
+**Recommendation**:
+- For biome size: Use Mixin-based coordinate scaling
+- For terrain customization: Start with vanilla density functions as base, modify incrementally
+- Avoid creating noise_settings from scratch unless absolutely necessary
+
+**Reference**: See T299 in tasks.md for detailed experiment results
+
 <!-- MANUAL ADDITIONS END -->
