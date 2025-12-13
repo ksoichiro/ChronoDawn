@@ -4,6 +4,7 @@
   "package": "com.chronosphere.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "BiomeScalingMixin",
     "StructureStartMixin"
   ],
   "client": [

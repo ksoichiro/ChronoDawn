@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_21",
   "refmap": "common-common-refmap.json",
   "mixins": [
+    "BiomeScalingMixin",
     "StructureStartMixin"
   ],
   "client": [
