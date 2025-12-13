@@ -162,9 +162,14 @@
 
 **Purpose**: バイオームの見た目と大きさを調整し、Chronosphereの独自性を向上
 
-- [ ] T298 [P] [US1] Add distinctive features to Snowy biome (ice structures, frozen time effects, unique blocks) to differentiate from Overworld
+- [x] T298 [P] [US1] Add distinctive features to Snowy biome (ice structures, frozen time effects, unique blocks) to differentiate from Overworld
+  - **Completed**: Added ice pillars with varied heights (4-11 blocks) using packed_ice, blue_ice, and frozen_time_ice
+  - Random thick 3x3 clusters (25% chance), reduced density for natural look at biome boundaries
+  - Files: ice_pillar.json, ice_pillar_cluster.json, ice_pillar_random.json, ice_spike_placed.json
 - [ ] T299 [P] [US1] Adjust biome size/scale in dimension_type/chronosphere.json or noise settings to reduce biome area
-- [ ] T300 [P] [US1] Change grass drop from vanilla seeds to Temporal Wheat Seeds (modify grass block loot table)
+- [x] T300 [P] [US1] Change grass drop from vanilla seeds to Temporal Wheat Seeds (modify grass block loot table)
+  - **Completed**: Override vanilla short_grass loot table to drop time_wheat_seeds (12.5% chance) in Chronosphere only
+  - File: minecraft/loot_table/blocks/short_grass.json
 
 ### Custom Mobs (US1 Enhancement - High Priority)
 
