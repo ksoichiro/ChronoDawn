@@ -252,10 +252,12 @@
 
 **Purpose**: プレイテストで発見されたボスバトル関連の改善
 
-- [ ] T302 [P] Fix Master Clock boss room door unlock requirement
+- [x] T302 [P] Fix Master Clock boss room door unlock requirement
   - **Issue**: Door opens with only Ancient Clockwork x3, should also require Key to Master Clock
   - **Investigation**: Check BossRoomDoorBlock.java unlock condition logic
   - **Fix**: Update unlock requirement to check for both Ancient Clockwork x3 AND Key to Master Clock
+  - **Completed**: Modified BlockEventHandler.java:166 to require both hasRequiredAncientGears() AND hasKeyToMasterClock()
+  - **File**: common/src/main/java/com/chronosphere/events/BlockEventHandler.java:166
 - [ ] T303 [P] Prevent non-boss mob spawning in Desert Clock Tower boss room
   - **Issue**: Other mobs spawn in Desert Clock Tower boss room during battle
   - **Investigation**: Check structure configuration and spawning rules for desert_clock_tower
