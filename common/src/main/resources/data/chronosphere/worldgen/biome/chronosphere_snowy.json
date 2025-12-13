@@ -109,6 +109,8 @@
       "chronosphere:gravel_disk_placed",
       "chronosphere:freeze_top_layer"
     ],
-    []
+    [
+      "chronosphere:ice_spike_placed"
+    ]
   ]
 }
