@@ -49,10 +49,10 @@ import net.minecraft.world.level.Level;
  *
  * Phase 1 (100%-50% HP): Normal Mode
  * - Standard melee attacks
- * - Gear Shot: Every 5 seconds, fires spinning gear projectile (range 16 blocks, damage 8)
+ * - Gear Shot: Every 8 seconds, fires spinning gear projectile (range 16 blocks, damage 8)
  *
  * Phase 2 (50%-0% HP): Overcharge Mode
- * - Overcharge: Self-buffs with Speed II + Strength I (permanent)
+ * - Overcharge: Self-buffs with Speed II (permanent)
  * - Repair Protocol: ONE-TIME at 40% HP - recovers 15% HP (30 HP)
  * - Ground Slam: Linear shockwave attack (10 blocks, 3 blocks wide, damage 6)
  *
@@ -87,7 +87,7 @@ public class ClockworkColossusEntity extends Monster implements RangedAttackMob 
     private int repairCooldown = 0;
 
     // Gear Shot timing (both phases)
-    private static final int GEAR_SHOT_COOLDOWN_TICKS = 100; // 5 seconds
+    private static final int GEAR_SHOT_COOLDOWN_TICKS = 160; // 8 seconds
 
     // Ground Slam timing (Phase 2)
     private static final int GROUND_SLAM_COOLDOWN_TICKS = 200; // 10 seconds
@@ -210,21 +210,16 @@ public class ClockworkColossusEntity extends Monster implements RangedAttackMob 
     }
 
     /**
-     * Activate Overcharge: Speed II + Strength I (permanent).
+     * Activate Overcharge: Speed II (permanent).
      */
     private void activateOvercharge() {
         this.entityData.set(OVERCHARGED, true);
 
-        // Apply permanent buffs (duration: infinite = 999999 ticks)
+        // Apply permanent buff (duration: infinite = 999999 ticks)
         this.addEffect(new MobEffectInstance(
             MobEffects.MOVEMENT_SPEED,
             999999,
             1 // Speed II
-        ));
-        this.addEffect(new MobEffectInstance(
-            MobEffects.DAMAGE_BOOST,
-            999999,
-            0 // Strength I
         ));
 
         // Visual/sound feedback
