@@ -6,6 +6,9 @@
   "refmap": "common-common-refmap.json",
   "mixins": [
     "BiomeScalingMixin",
+    "LevelGetTimeMixin",
+    "ServerLevelSetTimeMixin",
+    "SleepMixin",
     "StructureStartMixin"
   ],
   "client": [

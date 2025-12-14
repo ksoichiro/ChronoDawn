@@ -263,10 +263,21 @@
 
 **Purpose**: プレイテストで発見されたディメンション機能の改善
 
-- [ ] T301 [P] Fix bed sleeping mechanic in Chronosphere (currently sleeping doesn't advance time to morning)
+- [x] T301 [P] Fix bed sleeping mechanic in Chronosphere (currently sleeping doesn't advance time to morning)
   - **Issue**: Chronosphere has day-night cycle but sleeping in bed doesn't skip to morning
-  - **Investigation**: Check dimension_type/chronosphere.json fixed_time setting and bed sleep behavior
-  - **Possible solutions**: Remove fixed_time to allow natural cycle, or implement custom sleep handler
+  - **Root Cause**: Custom dimensions don't naturally support time skipping when sleeping (Minecraft limitation)
+  - **Solution**: Implemented SleepMixin to manually check if all players in Chronosphere are sleeping and advance time to morning
+  - **Implementation Details**:
+    - Created SleepMixin.java that hooks into ServerLevel.tick()
+    - Checks if ALL players in Chronosphere dimension are sleeping long enough
+    - Advances time to morning (1000 ticks) when all players are sleeping
+    - Independent from Overworld sleep mechanics (dimension-specific)
+    - Respects Chronosphere's variable time cycle system
+  - **Files Modified**:
+    - common/src/main/java/com/chronosphere/mixin/SleepMixin.java (new)
+    - fabric/src/main/resources/chronosphere-fabric.mixins.json
+    - neoforge/src/main/resources/chronosphere-neoforge.mixins.json
+  - **Tested**: Build successful, all game tests passed (92/92)
 
 ### Playtest Improvements - Boss Battle
 
