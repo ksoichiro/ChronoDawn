@@ -29,7 +29,7 @@ public class TimeTyrantArmorMaterial {
             }),
             18,
             SoundEvents.ARMOR_EQUIP_NETHERITE,
-            () -> Ingredient.of(ModItems.FRAGMENT_OF_STASIS_CORE.get()),
+            () -> Ingredient.of(ModItems.TIME_CRYSTAL.get()),
             List.of(new ArmorMaterial.Layer(ResourceLocation.fromNamespaceAndPath(Chronosphere.MOD_ID, "time_tyrant"))),
             2.5f,
             0.1f
