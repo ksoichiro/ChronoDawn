@@ -3,6 +3,7 @@ package com.chronosphere.worldgen.processors;
 import com.chronosphere.Chronosphere;
 import com.chronosphere.registry.ModBlocks;
 import com.chronosphere.worldgen.protection.BlockProtectionHandler;
+import com.chronosphere.worldgen.protection.PermanentProtectionHandler;
 import com.chronosphere.worldgen.spawning.ClockworkColossusSpawner;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
@@ -26,6 +27,10 @@ import java.util.concurrent.ConcurrentHashMap;
  * 2. Stores positions in pending map for later registration
  * 3. Replaces markers with specified blocks
  *
+ * Supported marker types:
+ * - boss_room_min/max: Temporary protection (removed when boss defeated) → BlockProtectionHandler
+ * - permanent_protection_min/max: Permanent protection (never removed) → PermanentProtectionHandler
+ *
  * Protection registration is deferred to server tick because:
  * - Structure generation happens in background threads
  * - ServerLevel is not available during structure processing
@@ -37,13 +42,13 @@ import java.util.concurrent.ConcurrentHashMap;
  * - Pairing happens during registration phase (single-threaded server tick)
  *
  * Usage:
- * - Place Boss Room Boundary Marker blocks in structure NBT at boss room corners
+ * - Place Boss Room Boundary Marker blocks in structure NBT at corners
  * - Add this processor to structure's processor_list
  * - Markers will be replaced with specified blocks during generation
  * - Protection will be registered on next server tick
- * - Boss room will be protected until boss is defeated
  *
  * Implementation: T224 - Boss room protection with marker blocks
+ *                T302 - Permanent Master Clock wall protection
  */
 public class BossRoomProtectionProcessor extends StructureProcessor {
     public static final MapCodec<BossRoomProtectionProcessor> CODEC =
@@ -55,11 +60,13 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
     private static class MarkerData {
         final BlockPos pos;
         final boolean isMin;
+        final boolean isPermanent; // true = permanent protection, false = boss room protection
         final long addedTime; // Track when marker was added (for cleanup)
 
-        MarkerData(BlockPos pos, boolean isMin) {
+        MarkerData(BlockPos pos, boolean isMin, boolean isPermanent) {
             this.pos = pos.immutable();
             this.isMin = isMin;
+            this.isPermanent = isPermanent;
             this.addedTime = System.currentTimeMillis();
         }
     }
@@ -113,13 +120,21 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
         }
 
         // Store marker data for later pairing
-        boolean isMin = "boss_room_min".equals(markerType);
-        boolean isMax = "boss_room_max".equals(markerType);
+        boolean isBossRoomMin = "boss_room_min".equals(markerType);
+        boolean isBossRoomMax = "boss_room_max".equals(markerType);
+        boolean isPermanentMin = "permanent_protection_min".equals(markerType);
+        boolean isPermanentMax = "permanent_protection_max".equals(markerType);
 
-        if (isMin || isMax) {
-            PENDING_MARKERS.put(worldPos.immutable(), new MarkerData(worldPos, isMin));
-            Chronosphere.LOGGER.debug("Stored {} marker at {} for later registration",
-                isMin ? "min" : "max", worldPos);
+        if (isBossRoomMin || isBossRoomMax) {
+            // Boss room protection (temporary, removed when boss defeated)
+            PENDING_MARKERS.put(worldPos.immutable(), new MarkerData(worldPos, isBossRoomMin, false));
+            Chronosphere.LOGGER.debug("Stored boss room {} marker at {} for later registration",
+                isBossRoomMin ? "min" : "max", worldPos);
+        } else if (isPermanentMin || isPermanentMax) {
+            // Permanent protection (never removed)
+            PENDING_MARKERS.put(worldPos.immutable(), new MarkerData(worldPos, isPermanentMin, true));
+            Chronosphere.LOGGER.debug("Stored permanent protection {} marker at {} for later registration",
+                isPermanentMin ? "min" : "max", worldPos);
         }
 
         // Replace marker with specified block
@@ -159,10 +174,12 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
             lastCleanupTime = currentTime;
         }
 
-        // Separate min and max markers
+        // Separate min and max markers by type (boss room vs permanent)
         // ONLY process markers in loaded chunks to avoid checking unloaded dimensions
-        List<MarkerData> minMarkers = new ArrayList<>();
-        List<MarkerData> maxMarkers = new ArrayList<>();
+        List<MarkerData> bossRoomMinMarkers = new ArrayList<>();
+        List<MarkerData> bossRoomMaxMarkers = new ArrayList<>();
+        List<MarkerData> permanentMinMarkers = new ArrayList<>();
+        List<MarkerData> permanentMaxMarkers = new ArrayList<>();
 
         // Optimization: Batch process to limit work per tick
         int processedCount = 0;
@@ -184,22 +201,32 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
 
             processedCount++;
 
-            if (marker.isMin) {
-                minMarkers.add(marker);
+            // Separate by type and min/max
+            if (marker.isPermanent) {
+                if (marker.isMin) {
+                    permanentMinMarkers.add(marker);
+                } else {
+                    permanentMaxMarkers.add(marker);
+                }
             } else {
-                maxMarkers.add(marker);
+                if (marker.isMin) {
+                    bossRoomMinMarkers.add(marker);
+                } else {
+                    bossRoomMaxMarkers.add(marker);
+                }
             }
         }
 
         // Pair min and max markers
         List<BlockPos> processedMarkers = new ArrayList<>();
 
-        for (MarkerData minMarker : minMarkers) {
+        // Process boss room markers (temporary protection)
+        for (MarkerData minMarker : bossRoomMinMarkers) {
             // Find closest max marker (should be in same structure)
             MarkerData closestMax = null;
             double closestDistance = Double.MAX_VALUE;
 
-            for (MarkerData maxMarker : maxMarkers) {
+            for (MarkerData maxMarker : bossRoomMaxMarkers) {
                 double distance = minMarker.pos.distSqr(maxMarker.pos);
 
                 // Reasonable distance check: boss rooms are typically < 100 blocks across
@@ -211,7 +238,7 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
             }
 
             if (closestMax != null) {
-                // Register protection
+                // Register boss room protection (temporary)
                 BlockPos minPos = minMarker.pos;
                 BlockPos maxPos = closestMax.pos;
 
@@ -247,9 +274,59 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
                 processedMarkers.add(maxPos);
 
                 // Remove max marker from list to prevent re-pairing
-                maxMarkers.remove(closestMax);
+                bossRoomMaxMarkers.remove(closestMax);
             } else {
-                Chronosphere.LOGGER.warn("Found min marker at {} but no matching max marker within 100 blocks",
+                Chronosphere.LOGGER.warn("Found boss room min marker at {} but no matching max marker within 100 blocks",
+                    minMarker.pos);
+            }
+        }
+
+        // Process permanent protection markers
+        for (MarkerData minMarker : permanentMinMarkers) {
+            // Find closest max marker (should be in same structure)
+            MarkerData closestMax = null;
+            double closestDistance = Double.MAX_VALUE;
+
+            for (MarkerData maxMarker : permanentMaxMarkers) {
+                double distance = minMarker.pos.distSqr(maxMarker.pos);
+
+                // Reasonable distance check: structures are typically < 100 blocks across
+                // Distance squared < 100^2 = 10000 (in any dimension)
+                if (distance < 10000 && distance < closestDistance) {
+                    closestMax = maxMarker;
+                    closestDistance = distance;
+                }
+            }
+
+            if (closestMax != null) {
+                // Register permanent protection
+                BlockPos minPos = minMarker.pos;
+                BlockPos maxPos = closestMax.pos;
+
+                BoundingBox protectedArea = new BoundingBox(
+                    Math.min(minPos.getX(), maxPos.getX()),
+                    Math.min(minPos.getY(), maxPos.getY()),
+                    Math.min(minPos.getZ(), maxPos.getZ()),
+                    Math.max(minPos.getX(), maxPos.getX()),
+                    Math.max(minPos.getY(), maxPos.getY()),
+                    Math.max(minPos.getZ(), maxPos.getZ())
+                );
+
+                PermanentProtectionHandler.registerProtectedArea(level, protectedArea, minPos);
+
+                Chronosphere.LOGGER.info(
+                    "Registered permanent protection in dimension {}: min={}, max={}, bounds={}",
+                    level.dimension().location(), minPos, maxPos, protectedArea
+                );
+
+                // Mark for removal
+                processedMarkers.add(minPos);
+                processedMarkers.add(maxPos);
+
+                // Remove max marker from list to prevent re-pairing
+                permanentMaxMarkers.remove(closestMax);
+            } else {
+                Chronosphere.LOGGER.warn("Found permanent protection min marker at {} but no matching max marker within 100 blocks",
                     minMarker.pos);
             }
         }
@@ -258,7 +335,7 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
         processedMarkers.forEach(PENDING_MARKERS::remove);
 
         // Log remaining unpaired markers (for debugging)
-        if (!PENDING_MARKERS.isEmpty() && !minMarkers.isEmpty()) {
+        if (!PENDING_MARKERS.isEmpty() && (!bossRoomMinMarkers.isEmpty() || !permanentMinMarkers.isEmpty())) {
             Chronosphere.LOGGER.warn("Still have {} unpaired markers after registration", PENDING_MARKERS.size());
         }
     }

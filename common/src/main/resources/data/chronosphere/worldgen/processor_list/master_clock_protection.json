@@ -1,7 +1,0 @@
-{
-  "processors": [
-    {
-      "processor_type": "chronosphere:master_clock_protection"
-    }
-  ]
-}

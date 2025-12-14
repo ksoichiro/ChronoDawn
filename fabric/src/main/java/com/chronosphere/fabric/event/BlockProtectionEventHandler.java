@@ -1,6 +1,7 @@
 package com.chronosphere.fabric.event;
 
 import com.chronosphere.worldgen.protection.BlockProtectionHandler;
+import com.chronosphere.worldgen.protection.PermanentProtectionHandler;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseBlockCallback;
 import net.minecraft.network.chat.Component;
@@ -10,15 +11,17 @@ import net.minecraft.world.InteractionResult;
  * Block Protection Event Handler (Fabric)
  *
  * Prevents players from breaking or placing blocks in protected boss rooms until the boss is defeated.
+ * Also prevents breaking permanently protected blocks (e.g., Master Clock walls).
  *
  * Features:
  * - Listens to PlayerBlockBreakEvents.BEFORE event (block breaking)
  * - Listens to UseBlockCallback.EVENT (block placement)
- * - Checks if block position is protected
+ * - Checks if block position is protected (temporary or permanent)
  * - Cancels events and displays message in survival mode
  * - Allows creative mode players to bypass protection
  *
  * Implementation: T224 - Boss room protection system (Fabric)
+ *                T302 - Permanent Master Clock wall protection
  */
 public class BlockProtectionEventHandler {
     /**
@@ -32,9 +35,25 @@ public class BlockProtectionEventHandler {
                 return true;
             }
 
-            // Check if this block is protected
-            if (BlockProtectionHandler.isProtected(level, pos)) {
-                // Display warning message
+            // Check if this block is protected (boss room or permanent)
+            boolean isPermanentlyProtected = PermanentProtectionHandler.isProtected(level, pos);
+            boolean isBossRoomProtected = BlockProtectionHandler.isProtected(level, pos);
+
+            if (isPermanentlyProtected) {
+                // Display warning message for permanent protection
+                player.displayClientMessage(
+                    Component.translatable("message.chronosphere.permanent_protected"),
+                    true // action bar
+                );
+
+                com.chronosphere.Chronosphere.LOGGER.info("Blocked permanent protected block break at {} by {}", pos, player.getName().getString());
+
+                // Cancel block break event
+                return false;
+            }
+
+            if (isBossRoomProtected) {
+                // Display warning message for boss room protection
                 player.displayClientMessage(
                     Component.translatable("message.chronosphere.boss_room_protected"),
                     true // action bar
@@ -63,10 +82,24 @@ public class BlockProtectionEventHandler {
                 return InteractionResult.PASS;
             }
 
-            // Check if the placement position is protected
+            // Check if the placement position is protected (boss room or permanent)
             var pos = hitResult.getBlockPos().relative(hitResult.getDirection());
-            if (BlockProtectionHandler.isProtected(level, pos)) {
-                // Display warning message
+            boolean isPermanentlyProtected = PermanentProtectionHandler.isProtected(level, pos);
+            boolean isBossRoomProtected = BlockProtectionHandler.isProtected(level, pos);
+
+            if (isPermanentlyProtected) {
+                // Display warning message for permanent protection
+                player.displayClientMessage(
+                    Component.translatable("message.chronosphere.permanent_no_placement"),
+                    true // action bar
+                );
+
+                // Cancel block placement
+                return InteractionResult.FAIL;
+            }
+
+            if (isBossRoomProtected) {
+                // Display warning message for boss room protection
                 player.displayClientMessage(
                     Component.translatable("message.chronosphere.boss_room_no_placement"),
                     true // action bar

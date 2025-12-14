@@ -189,6 +189,8 @@
   "message.chronosphere.teleporter_unbreakable": "この時間のアンカーはサバイバルモードでは破壊できない",
   "message.chronosphere.boss_room_protected": "ボスの力がこの壁を守っている。まずボスを倒せ！",
   "message.chronosphere.boss_room_no_placement": "ボスの力が存在する限り、ここにブロックを置くことはできない！",
+  "message.chronosphere.permanent_protected": "この古代の壁は強力な魔法で保護されており、破壊できません！",
+  "message.chronosphere.permanent_no_placement": "ここにブロックを置くことはできません！このエリアは永久に保護されています！",
 
   "entity.chronosphere.time_guardian": "時の番人",
   "entity.chronosphere.chronos_warden": "クロノスの監視者",
