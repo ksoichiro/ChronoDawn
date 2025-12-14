@@ -189,6 +189,8 @@
   "message.chronosphere.teleporter_unbreakable": "This temporal anchor cannot be destroyed in survival mode",
   "message.chronosphere.boss_room_protected": "The boss's power protects these walls. Defeat the boss first!",
   "message.chronosphere.boss_room_no_placement": "You cannot place blocks here while the boss's power remains!",
+  "message.chronosphere.permanent_protected": "These ancient walls are protected by powerful magic and cannot be broken!",
+  "message.chronosphere.permanent_no_placement": "You cannot place blocks here! This area is permanently protected!",
 
   "entity.chronosphere.time_guardian": "Time Guardian",
   "entity.chronosphere.chronos_warden": "Chronos Warden",

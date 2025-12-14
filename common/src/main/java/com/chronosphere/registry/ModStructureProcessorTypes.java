@@ -3,7 +3,6 @@ package com.chronosphere.registry;
 import com.chronosphere.Chronosphere;
 import com.chronosphere.worldgen.processors.BossRoomProtectionProcessor;
 import com.chronosphere.worldgen.processors.CopyFluidLevelProcessor;
-import com.chronosphere.worldgen.processors.MasterClockProtectionProcessor;
 import com.mojang.serialization.MapCodec;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -48,21 +47,6 @@ public class ModStructureProcessorTypes {
                 @Override
                 public MapCodec<BossRoomProtectionProcessor> codec() {
                     return BossRoomProtectionProcessor.CODEC;
-                }
-            }
-        );
-
-    /**
-     * Master Clock Protection Processor Type - Detects Clock Block markers in Master Clock structure
-     * and registers large bounding box protection to prevent wall bypass.
-     */
-    public static final RegistrySupplier<StructureProcessorType<MasterClockProtectionProcessor>> MASTER_CLOCK_PROTECTION =
-        STRUCTURE_PROCESSOR_TYPES.register(
-            "master_clock_protection",
-            () -> new StructureProcessorType<MasterClockProtectionProcessor>() {
-                @Override
-                public MapCodec<MasterClockProtectionProcessor> codec() {
-                    return MasterClockProtectionProcessor.CODEC;
                 }
             }
         );

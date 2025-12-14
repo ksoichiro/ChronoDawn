@@ -5,9 +5,6 @@
     },
     {
       "processor_type": "chronosphere:boss_room_protection"
-    },
-    {
-      "processor_type": "chronosphere:master_clock_protection"
     }
   ]
 }
