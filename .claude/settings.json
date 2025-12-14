@@ -1,0 +1,41 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(rg:*)",
+      "Bash(mkdir:*)",
+      "Bash(unzip:*)",
+      "Bash(javap:*)",
+      "Bash(./gradlew :common:compileJava:*)",
+      "Bash(./gradlew :fabric:compileJava:*)",
+      "Bash(./gradlew :neoforge:compileJava:*)",
+      "Bash(./gradlew :common:test:*)",
+      "Bash(./gradlew :fabric:test:*)",
+      "Bash(./gradlew :neoforge:test:*)",
+      "Bash(./gradlew build:*)",
+      "Bash(./gradlew assemble:*)",
+      "Bash(./gradlew check:*)",
+      "Bash(./gradlew clean:*)",
+      "Bash(./gradlew tasks:*)",
+      "Bash(./gradlew dependencies:*)",
+      "Bash(./gradlew properties:*)",
+      "Bash(./gradlew help:*)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:moddedmc.wiki)",
+      "WebFetch(domain:minecraft.wiki)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:maven.fabricmc.net)",
+      "WebFetch(domain:www.curseforge.com)",
+      "WebFetch(domain:modrinth.com)",
+      "WebFetch(domain:docs.neoforged.net)",
+      "WebFetch(domain:support.modrinth.com)",
+      "WebFetch(domain:maven.architectury.dev)",
+      "WebFetch(domain:wiki.fabricmc.net)",
+      "WebFetch(domain:docs.fabricmc.net)",
+      "WebFetch(domain:mcreator.net)",
+      "WebFetch(domain:bugs.mojang.com)"
+    ]
+  }
+}
