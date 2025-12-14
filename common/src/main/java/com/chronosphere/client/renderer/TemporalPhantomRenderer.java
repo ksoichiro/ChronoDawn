@@ -5,6 +5,7 @@ import com.chronosphere.client.model.TemporalPhantomModel;
 import com.chronosphere.entities.bosses.TemporalPhantomEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -47,5 +48,15 @@ public class TemporalPhantomRenderer extends MobRenderer<TemporalPhantomEntity, 
         if (entity.isPhaseShiftActive()) {
             // Make entity semi-transparent (handled by render layer in future)
         }
+    }
+
+    /**
+     * Override to use translucent render type for transparency support.
+     * This allows the texture's alpha channel to be properly rendered.
+     */
+    @Override
+    public RenderType getRenderType(TemporalPhantomEntity entity, boolean bodyVisible, boolean translucent, boolean glowing) {
+        ResourceLocation texture = this.getTextureLocation(entity);
+        return RenderType.entityTranslucent(texture);
     }
 }
