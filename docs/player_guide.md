@@ -1,31 +1,46 @@
-# Chronosphere Mod - Player Guide
+# Chronosphere Player Guide
 
-**Welcome to the Chronosphere!**
+Welcome to the **Chronosphere**, a mysterious dimension where time stands still! This guide will help you navigate this frozen world, defeat powerful bosses, and claim legendary time-manipulating artifacts.
 
-This guide will help you navigate the mysterious time-frozen dimension and conquer its challenges.
+---
 
 ## Table of Contents
 
 1. [Introduction](#introduction)
 2. [Installation](#installation)
 3. [Getting Started](#getting-started)
-4. [Exploring the Chronosphere](#exploring-the-chronosphere)
-5. [Items and Blocks](#items-and-blocks)
-6. [Boss Battles](#boss-battles)
-7. [Ultimate Artifacts](#ultimate-artifacts)
-8. [Tips and Tricks](#tips-and-tricks)
+4. [Entering the Chronosphere](#entering-the-chronosphere)
+5. [Dimension Features](#dimension-features)
+6. [Structures and Exploration](#structures-and-exploration)
+7. [Boss Battles](#boss-battles)
+8. [Progression Path](#progression-path)
+9. [Items and Equipment](#items-and-equipment)
+10. [Crafting Recipes](#crafting-recipes)
+11. [Tips and Strategies](#tips-and-strategies)
+12. [Troubleshooting](#troubleshooting)
+13. [FAQ](#faq)
 
 ---
 
 ## Introduction
 
-Chronosphere Mod adds a new dimension centered around time manipulation. You'll discover ancient ruins, craft time-bending items, and face powerful bosses that control time itself. The dimension features:
+### What is Chronosphere?
 
-- **8 unique biomes**: Forest, Desert, Mountain, Ocean, Snowy, Swamp, Dark Forest, and Ancient Forest
-- **Time manipulation mechanics**: Slow down enemies, reverse block destruction, and more
-- **Custom wood type**: Time Wood with full block set
-- **Epic boss battles**: Face the Time Guardian, Temporal Phantom, and Time Tyrant
-- **Ultimate artifacts**: Powerful time-manipulating weapons and armor
+Chronosphere is a time-themed dimension mod that adds:
+- A new dimension with **8 unique biomes**
+- Multiple **challenging boss fights**
+- **Time-manipulating items** and equipment
+- **Custom portal mechanics**
+- Unique blocks, **three wood types**, and resources
+- **Ultimate artifacts** with powerful abilities
+
+### Key Features
+
+- **Time Distortion Effect**: Hostile mobs move in slow motion (Slowness IV) while you move at normal speed
+- **Custom Portal System**: One-way entry that can be upgraded to bidirectional travel
+- **Epic Boss Battles**: Time Guardian, 4 mid-bosses, and Time Tyrant final boss
+- **Ultimate Artifacts**: Time-manipulating weapons, armor, and tools
+- **Three Wood Types**: Time Wood, Dark Time Wood, Ancient Time Wood
 
 ---
 
@@ -35,8 +50,8 @@ Chronosphere Mod adds a new dimension centered around time manipulation. You'll 
 
 - **Minecraft**: Java Edition 1.21.1
 - **Mod Loader**: Choose ONE of the following:
-  - Fabric Loader 0.17.3+ with Fabric API 0.116.7+
-  - NeoForge 21.1.209+
+  - **Fabric** Loader 0.17.3+ with Fabric API 0.116.7+
+  - **NeoForge** 21.1.209+
 
 ### Required Dependencies
 
@@ -51,7 +66,7 @@ Download and install these mods alongside Chronosphere:
    - [Modrinth](https://modrinth.com/mod/customportalapi)
 
 3. **Patchouli** (version 1.21.1-92+)
-   - Provides in-game guide book "Chronicle of Chronosphere"
+   - Provides in-game guide book
    - [CurseForge](https://www.curseforge.com/minecraft/mc-mods/patchouli)
    - [Modrinth](https://modrinth.com/mod/patchouli)
 
@@ -59,192 +74,344 @@ Download and install these mods alongside Chronosphere:
 
 1. Install Minecraft 1.21.1
 2. Install your chosen mod loader (Fabric or NeoForge)
-3. Download required dependencies:
-   - Architectury API
-   - Custom Portal API
-   - Patchouli
-4. Download Chronosphere Mod (choose the version matching your loader):
+3. Download required dependencies (Architectury API, Custom Portal API, Patchouli)
+4. Download **Chronosphere Mod** (choose the version matching your loader):
    - `chronosphere-fabric-0.1.0.jar` for Fabric
    - `chronosphere-neoforge-0.1.0.jar` for NeoForge
 5. Place all JAR files in your `.minecraft/mods/` folder
 6. Launch Minecraft with your chosen mod loader profile
-7. Once in-game, you'll receive the "Chronicle of Chronosphere" guide book (powered by Patchouli)
+7. Verify "Chronosphere" appears in the mod list
 
 ---
 
 ## Getting Started
 
-### Phase 1: Finding the Ancient Ruins
+### Step 1: Find Ancient Ruins
 
-When you spawn in a new world, your first goal is to find **Ancient Ruins** structures in the Overworld. These ruins contain crucial items:
-
-- **Clockstone Ore**: Mine this ore to obtain Clockstone, the basic material for crafting
-- **Time Hourglass Recipe**: Found in chests within the ruins
-- **Portal Frame Blocks**: Pre-built portal frames may be present
+Ancient Ruins generate naturally in the **Overworld**. These structures contain:
+- **Loot chests** with "Time Hourglass Blueprint" and other resources
+- **Clockstone Ore** - Mine with a stone pickaxe or better
+- First clues about the Chronosphere dimension
 
 **How to find Ancient Ruins**:
-- Explore caves, underground areas, and surface structures
-- Use `/locate structure chronosphere:ancient_ruins` (creative/cheats enabled)
+- Explore the Overworld surface in various biomes
+- Look for distinctive ancient stone structures above ground
+- Use `/locate structure chronosphere:ancient_ruins` (if cheats enabled)
 
-### Phase 2: Crafting the Time Hourglass
+**Tip**: Ancient Ruins are surface structures that spawn in various biomes. Keep exploring the landscape until you find one!
 
-Once you have Clockstone, craft the **Time Hourglass**:
+### Step 2: Unlock the Time Hourglass Recipe
 
-```
-Recipe (shapeless):
-- 4x Clockstone
-- 1x Glass Bottle
-- 1x Sand
-```
+1. Open chests in Ancient Ruins
+2. Find the **"Time Hourglass Blueprint"** (Knowledge Book)
+3. Right-click the blueprint to unlock the recipe
+
+### Step 3: Gather Materials and Build
+
+1. Mine **Clockstone Ore** in Ancient Ruins
+2. Smelt Clockstone Ore in a furnace to obtain **Clockstone**
+3. Gather other materials needed (check your Recipe Book)
+4. Craft **Time Hourglass** and **Clockstone Blocks** for the portal frame
+5. Build a portal frame (minimum 4×5, same as Nether portals)
+
+**Tip**: Minimum portal needs at least 90 Clockstone (10 Clockstone Blocks × 9 Clockstone each)
 
 **Important**: The Time Hourglass is consumed on use, so craft extras for multiple portals!
 
-### Phase 3: Building the Portal
+---
 
-Build a portal frame using **Clockstone Blocks**:
+## Entering the Chronosphere
 
-- Minimum size: 4 blocks wide × 5 blocks tall (like Nether portal)
-- Maximum size: 23×23 blocks
-- Frame must be a complete rectangle
+### Building a Portal Frame
 
-**Crafting Clockstone Block**:
+Build a portal frame using **Clockstone Blocks** (crafted from 9 Clockstone each).
+
+**Portal Size**:
+- **Minimum**: 4 blocks wide × 5 blocks tall (inner space: 2×3) - requires 10 Clockstone Blocks
+- **Maximum**: 23×23 blocks
+
+**How to Build**:
+1. Create a rectangular frame (same as Nether portals - corners optional)
+2. The frame must be hollow inside
+3. Frame must be a complete rectangle (no gaps)
+
+**Example (minimum 4×5 frame)**:
 ```
-Recipe (shapeless):
-- 4x Clockstone
+ CC
+C  C
+C  C
+C  C
+ CC
 ```
+C = Clockstone Block (corners are optional, like Nether portals)
 
-### Phase 4: Entering the Chronosphere
+**Crafting Clockstone Block (Shaped 3×3)**:
+- 9x Clockstone (fill entire 3×3 crafting grid)
+
+### Activating the Portal
 
 1. Right-click the portal frame with the **Time Hourglass**
 2. The portal activates with an orange/gold glow
-3. Walk through to enter the Chronosphere dimension
+3. Walk through to enter the Chronosphere
 
-**⚠️ WARNING**: After you enter, the portal will deactivate! You cannot return until you find a way to stabilize it.
+**⚠️ CRITICAL WARNING**: The portal becomes **one-way** after you enter! You cannot return until you find the **Portal Stabilizer**!
 
----
-
-## Exploring the Chronosphere
-
-### Dimension Features
-
-#### Time Distortion Effect
-- All hostile mobs in the Chronosphere move **extremely slowly** (Slowness IV)
-- You move at normal speed, giving you a major advantage
-- Use this to your advantage when exploring dangerous areas
-
-#### Biomes
-
-The Chronosphere has 8 unique biomes with distinct characteristics:
-
-1. **Chronosphere Forest**: Dense Time Wood trees, moderate difficulty
-2. **Chronosphere Desert**: Sandy terrain with Desert Clock Tower structures
-3. **Chronosphere Mountain**: High elevation, rocky terrain
-4. **Chronosphere Ocean**: Water-filled areas with unique marine features
-5. **Chronosphere Snowy**: Frozen landscape with snow and ice
-6. **Chronosphere Swamp**: Murky waters and unusual vegetation
-7. **Chronosphere Dark Forest**: Dense, shadowy woods with higher mob spawn rates
-8. **Chronosphere Ancient Forest**: Ancient Time Wood trees, rare structures
-
-#### Time Wood Trees
-
-Harvest **Time Wood** logs and saplings to use in construction:
-
-- **Time Wood Log**: Yellow-olive wood with unique texture
-- **Time Wood Planks**: Craft from logs
-- **Time Wood Stairs, Slabs, Fences**: Full block set available
-- **Time Wood Door and Trapdoor**: Functional entry/exit points
-- **Time Wood Sapling**: Plant to grow new trees
-
-### Phase 5: Finding the Forgotten Library
-
-Your primary objective in the Chronosphere is to find the **Forgotten Library** structure. This structure contains:
-
-- **Portal Stabilizer Recipe**: Essential for returning to the Overworld
-- **Loot Chests**: Rare materials and books
-
-**How to find the Forgotten Library**:
-- Explore the Chronosphere dimension
-- Look for distinctive ancient architecture
-- Use `/locate structure chronosphere:forgotten_library` (creative/cheats enabled)
-
-### Phase 6: Crafting the Portal Stabilizer
-
-Once you have the recipe, gather materials and craft the **Portal Stabilizer**:
-
-```
-Recipe:
-- 4x Enhanced Clockstone (found in Desert Clock Tower)
-- 2x Ender Pearl
-- 1x Diamond
-- 1x Clockstone Block
-```
-
-**Note**: You'll need to explore the **Desert Clock Tower** structure to obtain Enhanced Clockstone.
-
-### Phase 7: Stabilizing the Portal
-
-1. Return to your original portal location in the Chronosphere
-2. Right-click the portal frame with the **Portal Stabilizer**
-3. The dimension stabilizes with a spectacular particle effect and message
-4. The portal is now **bidirectional** - you can freely travel between dimensions
-
-**Important**: After stabilization, you must use a **Time Hourglass** to re-ignite the portal. The Portal Stabilizer only stabilizes the dimension, it does NOT ignite portals.
+**Preparation Checklist** (before entering):
+- [ ] Full armor and weapons
+- [ ] Food and healing items
+- [ ] Building blocks (for emergencies)
+- [ ] Bed (to set respawn point in Overworld)
+- [ ] Tools (pickaxe, axe, shovel)
+- [ ] Torch or light sources
 
 ---
 
-## Items and Blocks
+## Dimension Features
 
-### Essential Items
+### Time Distortion Effect
 
-#### Time Hourglass
-- **Use**: Ignites portal frames
-- **Durability**: Single-use (consumed on activation)
-- **Recipe**: 4 Clockstone + 1 Glass Bottle + 1 Sand
+All hostile mobs in the Chronosphere receive **Slowness IV**, making them move extremely slowly. You move at normal speed, giving you a significant advantage!
 
-#### Portal Stabilizer
-- **Use**: Stabilizes the Chronosphere dimension for bidirectional portal travel
-- **Durability**: Single-use (consumed on activation)
-- **Found**: Recipe in Forgotten Library
+**Benefits**:
+- Safer exploration
+- Easier combat
+- Time to strategize during fights
 
-#### Fruit of Time
-- **Type**: Food
-- **Effects**: Restores 4 hunger points + grants Haste I for 60 seconds
-- **Source**: Grows naturally in the Chronosphere
+**Note**: Passive animals are not affected by Time Distortion.
 
-### Time Manipulation Items
+### Biomes
 
-#### Time Clock
-- **Use**: Cancels next attack AI of nearby hostile mobs (8 block radius)
-- **Cooldown**: 10 seconds
-- **Recipe**: Requires Enhanced Clockstone
+The Chronosphere contains **8 unique biomes**:
 
-#### Spacetime Pickaxe
-- **Type**: Tool
-- **Effect**: Chance to double block drops when mining
-- **Recipe**: Requires Enhanced Clockstone
+1. **Chronosphere Forest** - Dense with Time Wood trees, moderate difficulty
+2. **Chronosphere Desert** - Sandy terrain
+3. **Chronosphere Mountain** - High peaks and steep cliffs
+4. **Chronosphere Ocean** - Deep waters
+5. **Chronosphere Snowy** - Frozen landscape with **Frozen Time Ice**
+6. **Chronosphere Swamp** - Murky waters and unique vegetation
+7. **Chronosphere Dark Forest** - Dense with **Dark Time Wood** trees
+8. **Chronosphere Ancient Forest** - Contains **Ancient Time Wood** trees
 
-#### Unstable Hourglass
-- **Type**: Crafting material
-- **⚠️ Warning**: Crafting this item triggers **Resonance Reversal**:
-  - You receive Slowness IV for 30-60 seconds
-  - Nearby mobs receive Speed II for 30-60 seconds
-  - High risk - only craft when safe!
+### Sky and Atmosphere
 
-### Special Blocks
+- **Gray-purple skies** creating a mysterious atmosphere
+- **Variable day/night cycle** - time flows at randomly changing speeds (0.67x to 5x normal speed)
+- Time distortion creates unpredictable passage of time (day may last 2-15 minutes)
+- Unique ambient lighting
 
-#### Reversing Time Sandstone
-- **Effect**: Regenerates 3 seconds after being broken
-- **Drops**: None (until regeneration timer expires)
-- **Location**: Found naturally in the Chronosphere
+### Wood Types
 
-#### Unstable Fungus
-- **Effect**: Gives random speed effect when stepped on (Speed I or Slowness I for 0.5 seconds)
-- **Location**: Found naturally in the Chronosphere
+Harvest three unique wood types:
 
-#### Clockstone Ore
-- **Type**: Ore block
-- **Location**: Ancient Ruins (Overworld) and underground (Chronosphere)
-- **Drops**: Clockstone (increases with Fortune enchantment)
+#### Time Wood (Chronosphere Forest)
+- Yellow-olive wood with unique texture
+- Full block set (logs, planks, stairs, slabs, fences, doors, trapdoors, buttons, pressure plates)
+- Saplings for renewable tree farming
+- Boats and chest boats
+
+#### Dark Time Wood (Chronosphere Dark Forest)
+- Darker variant of Time Wood
+- Same full block set as Time Wood
+
+#### Ancient Time Wood (Chronosphere Ancient Forest)
+- Ancient variant of Time Wood
+- Same full block set as Time Wood
+
+---
+
+## Structures and Exploration
+
+### Forgotten Library (Chronosphere)
+
+**Purpose**: Contains the **Portal Stabilizer recipe**
+
+**Location**: Various biomes in Chronosphere
+
+**What to Find**:
+- Recipe for Portal Stabilizer (in chests or written books)
+- Loot chests with rare materials
+- Books and lore
+
+**Why It's Important**: The Portal Stabilizer allows bidirectional travel, enabling you to return to the Overworld!
+
+**How to find**:
+- Explore the Chronosphere dimension systematically
+- Look for distinctive ancient library architecture
+- Use `/locate structure chronosphere:forgotten_library` (if cheats enabled)
+
+---
+
+### Desert Clock Tower (Chronosphere)
+
+**Purpose**: Source of **Enhanced Clockstone** and **Time Guardian** mini-boss
+
+**Location**: Various biomes in Chronosphere (spawns in most biomes except Ocean)
+
+**Features**:
+- **5-floor tower** structure
+- **Clock Tower Teleporter** blocks (teleport between floors)
+- **Time Guardian** mini-boss on the 5th floor
+- Loot chests throughout the tower
+
+**How Teleporters Work**:
+- Hold right-click for **3 seconds** to charge
+- **UP direction**: 4th floor → 5th floor (boss room)
+- **DOWN direction**: 5th floor → 4th floor (appears after defeating Time Guardian)
+
+**Loot**:
+- **Enhanced Clockstone** (from boss or chests) - required for Portal Stabilizer
+- **Master Clock Key** (from Time Guardian boss) - unlocks Master Clock dungeon
+- Time Crystals
+- Other valuable items
+
+**Tips**:
+- Explore all floors for loot
+- Practice with teleporters before boss fight
+- Bring food and healing items for boss battle
+
+---
+
+### Guardian Vault (Chronosphere)
+
+**Boss**: **Chronos Warden**
+
+**Structure Type**: Underground dungeon
+
+**Location**: Various biomes in Chronosphere
+
+**Features**:
+- Stone-themed architecture
+- Boss room with pillars
+- Loot chests
+
+**Drops**:
+- **Guardian Stone** (required for Chrono Aegis)
+- Enhanced Clockstone
+- Experience and loot
+
+**Tips**:
+- Use pillars for cover during boss fight
+- Bring armor with high defense
+
+---
+
+### Clockwork Depths (Chronosphere)
+
+**Boss**: **Clockwork Colossus**
+
+**Structure Type**: Underground mechanical dungeon
+
+**Location**: Various biomes in Chronosphere
+
+**Features**:
+- Clockwork-themed design
+- Mechanical decorations
+- Boss room with gears
+
+**Drops**:
+- **Colossus Gear** (required for Chrono Aegis)
+- Clockwork-themed items
+- Experience and loot
+
+**Tips**:
+- Maintain pressure to prevent boss regeneration
+- Use ranged weapons during Overcharge phase
+
+---
+
+### Phantom Catacombs (Chronosphere)
+
+**Boss**: **Temporal Phantom**
+
+**Structure Type**: Multi-level maze dungeon
+
+**Location**: Various biomes in Chronosphere
+
+**Features**:
+- **Complex maze layout** with multiple paths
+- Boss spawns when entering the boss room
+- Spectral-themed decoration
+
+**Navigation**:
+1. Enter the catacombs
+2. Navigate the maze (use torches or blocks to mark paths)
+3. Explore to find the boss room
+4. Prepare before entering boss room (boss spawns on entry)
+
+**Drops**:
+- **Phantom Essence** (required for Chrono Aegis)
+- Spectral loot
+- Experience and items
+
+**Tips**:
+- Bring materials to mark paths (avoid getting lost)
+- Boss spawns immediately on room entry - be ready!
+- Focus on the real phantom (clones have less health)
+
+---
+
+### Entropy Crypt (Chronosphere)
+
+**Boss**: **Entropy Keeper**
+
+**Structure Type**: Underground crypt
+
+**Location**: Various biomes in Chronosphere
+
+**Features**:
+- Decay-themed design
+- Special trapdoor mechanism that triggers boss spawn
+- Dark, eerie atmosphere
+
+**Triggering the Boss**:
+- Activate a specific trapdoor in the structure
+- Boss spawns immediately
+
+**Drops**:
+- **Entropy Core** (required for Chrono Aegis)
+- Decay-themed loot
+- Experience and items
+
+**Tips**:
+- Bring milk buckets to remove Wither effect
+- Keep distance to minimize Decay Aura exposure
+- Use ranged attacks when possible
+
+---
+
+### Master Clock (Chronosphere)
+
+**Boss**: **Time Tyrant** (Final Boss)
+
+**Structure Type**: Final dungeon
+
+**Requirements**:
+- **Master Clock Key** (dropped by Time Guardian in Desert Clock Tower)
+
+**Location**: Various biomes in Chronosphere
+
+**Features**:
+- Multi-level structure
+- **Protected boss room** with special walls (cannot be broken)
+- Time Tyrant spawns at the center
+- Multiple rooms and traps
+
+**Accessing the Dungeon**:
+1. Obtain Master Clock Key from Time Guardian
+2. Locate Master Clock structure
+3. Use Master Clock Key at entrance
+4. Navigate through dungeon to boss room
+
+**Drops**:
+- **Eye of Chronos**
+- **Fragments of Stasis Core** (multiple pieces, used to craft ultimate artifacts)
+- Rare loot and experience
+
+**Tips**:
+- **HIGHLY RECOMMENDED**: Craft Chrono Aegis first (from 4 mid-boss drops)
+- Bring your best gear, food, and potions
+- Fight is very difficult without Chrono Aegis
+- Prepare for phase transitions at 66% HP and 33% HP
 
 ---
 
@@ -252,357 +419,772 @@ Recipe:
 
 ### Time Guardian (Mini-Boss)
 
-**Location**: Found in specific structures within the Chronosphere
-
-**Stats**:
-- Health: 200 HP
-- Attack: 8 damage
-- Defense: 4 armor points
+**Location**: Desert Clock Tower (5th floor)
 
 **Abilities**:
-- Temporal Slash: Quick melee attack
-- Time Warp: Teleports short distances
+- **Temporal Slash**: Quick melee attack
+- **Time Warp**: Teleports short distances around the arena
+
+**Drops**:
+- **Master Clock Key** (unlocks Master Clock dungeon) - **Essential Item**
+- **Enhanced Clockstone**
+- Experience points
 
 **Strategy**:
 - Use hit-and-run tactics
-- Exploit the Time Distortion effect (boss is slowed)
-- Bring healing potions
+- Exploit Time Distortion (boss is slowed)
+- Watch for teleportation patterns
+- Bring ranged weapons for when boss teleports away
+- Bring healing potions and food
 
-**Drops**:
-- **Master Clock Key**: Required to access the Master Clock dungeon
-- Enhanced Clockstone
-- Experience points
+**Difficulty**: ★★☆☆☆ (Moderate)
 
-### Chronos Warden (Mid-Boss)
+---
 
-**Location**: Guardian Vault structure
+### Mid-Bosses (Chrono Aegis Materials)
 
-**Stats**:
-- Health: 180 HP
-- Attack: 9 damage
-- Defense: 12 armor points
+These four bosses must be defeated to craft the **Chrono Aegis** shield, which provides significant advantages against the Time Tyrant.
+
+#### Chronos Warden
+
+**Location**: Guardian Vault
 
 **Abilities**:
-- Stone Stance: Enters defensive stance reducing incoming damage for 5 seconds
-- Ground Slam: Area-of-effect knockback attack
+- **Stone Stance**: Enters defensive stance reducing incoming damage for 5 seconds
+- **Ground Slam**: Area-of-effect knockback attack
+
+**Drops**:
+- **Guardian Stone** (1/4 Chrono Aegis material) - **Essential for Chrono Aegis**
 
 **Strategy**:
-- Avoid attacking during Stone Stance (reduced damage)
+- Don't attack during Stone Stance (reduced damage)
 - Keep distance to avoid Ground Slam knockback
-- Use the vault's pillars for cover
+- Use vault's pillars for cover
+- Sustained damage over time
 
-**Drops**:
-- **Guardian Stone**: Crafting material for Chrono Aegis
-- Experience points
+**Difficulty**: ★★★☆☆ (Moderate-Hard)
 
-### Clockwork Colossus (Mid-Boss)
+---
 
-**Location**: Clockwork Depths structure
+#### Clockwork Colossus
 
-**Stats**:
-- Health: 200 HP
-- Attack: 12 damage
-- Defense: 8 armor points
+**Location**: Clockwork Depths
 
 **Abilities**:
-- Overcharge: Temporarily increases attack speed and damage
-- Repair Protocol: Regenerates health slowly when not in combat
+- **Overcharge**: Temporarily increases attack speed and damage
+- **Repair Protocol**: Regenerates health slowly when not in combat
+- **Gear Throw**: Ranged projectile attack
+
+**Drops**:
+- **Colossus Gear** (1/4 Chrono Aegis material) - **Essential for Chrono Aegis**
 
 **Strategy**:
-- Maintain pressure to prevent Repair Protocol from activating
+- Maintain continuous pressure to prevent Repair Protocol
 - Retreat during Overcharge phase (increased danger)
-- Target weak points between gear segments
+- Dodge gear projectiles
+- Deal burst damage during vulnerable moments
 
-**Drops**:
-- **Colossus Gear**: Crafting material for Chrono Aegis
-- Experience points
+**Difficulty**: ★★★☆☆ (Moderate-Hard)
 
-### Temporal Phantom (Mid-Boss)
+---
 
-**Location**: Boss room in the Phantom Catacombs (maze structure)
+#### Temporal Phantom
 
-**Stats**:
-- Health: 150 HP
-- Attack: 8 damage
-- Defense: 5 armor points
+**Location**: Phantom Catacombs (boss room)
 
 **Abilities**:
-- Phase Shift: Becomes invulnerable to physical attacks briefly
-- Phantom Clones: Summons illusory copies that deal reduced damage
-- Spectral Strike: Ranged projectile attack
+- **Phase Shift**: Becomes invulnerable to physical attacks briefly
+- **Phantom Clones**: Summons illusory copies that deal reduced damage
+- **Spectral Strike**: Ranged projectile attack
+
+**Drops**:
+- **Phantom Essence** (1/4 Chrono Aegis material) - **Essential for Chrono Aegis**
 
 **Strategy**:
 - Navigate the maze to find the boss room
-- Crying Obsidian markers indicate dead-end chambers
-- Boss spawns when you enter the boss room (amethyst block markers)
-- Use magic/enchanted weapons during Phase Shift
-- Focus on the real phantom (clones have lower health)
+- Boss spawns when you enter the boss room - be prepared!
+- Wait out Phase Shift invulnerability (don't waste attacks)
+- Focus on the real phantom (higher opacity, more health)
 - Dodge Spectral Strike projectiles
+- Use magic/enchanted weapons during Phase Shift
 
-**Drops**:
-- **Phantom Essence**: Crafting material for Chrono Aegis
-- Experience points
+**Difficulty**: ★★★★☆ (Hard)
 
-### Entropy Keeper (Mid-Boss)
+---
 
-**Location**: Entropy Crypt structure
+#### Entropy Keeper
 
-**Stats**:
-- Health: 160 HP
-- Attack: 10 damage
-- Defense: 6 armor points
+**Location**: Entropy Crypt
 
 **Abilities**:
-- Decay Aura: Applies Wither effect to nearby players
-- Entropy Burst: Unleashes wave of decay dealing damage and debuffs
+- **Decay Aura**: Applies Wither effect to nearby players (constant damage over time)
+- **Entropy Burst**: Unleashes wave of decay dealing damage and debuffs
+
+**Drops**:
+- **Entropy Core** (1/4 Chrono Aegis material) - **Essential for Chrono Aegis**
 
 **Strategy**:
-- Bring milk buckets to remove Wither effect
+- Bring multiple milk buckets to remove Wither effect
 - Keep distance to minimize Decay Aura exposure
 - Dodge Entropy Burst waves (telegraphed attack)
 - Use ranged attacks to minimize time in aura range
+- Retreat to heal and drink milk when necessary
 
-**Drops**:
-- **Entropy Core**: Crafting material for Chrono Aegis
-- Experience points
+**Difficulty**: ★★★☆☆ (Moderate-Hard)
+
+---
 
 ### Time Tyrant (Final Boss)
 
-**Location**: Master Clock dungeon (requires Master Clock Key from Time Guardian)
+**Location**: Master Clock dungeon
 
-**Stats**:
-- Health: 500 HP
-- Attack: 18 damage
-- Defense: 15 armor points
+**Requirements**:
+- **Master Clock Key** (from Time Guardian)
+- **Recommended**: **Chrono Aegis** shield (crafted from 4 mid-boss drops)
 
 **Abilities**:
-- Temporal Barrage: Summons multiple projectiles
-- Time Freeze: Briefly freezes the player in place
-- Stasis Wave: AOE attack dealing heavy damage
-- Phase 2 (below 50% HP): All abilities become stronger
 
-**Strategy**:
-- Bring your best gear and potions
-- Master Clock dungeon has multiple rooms and traps
-- Use Time Clock to cancel boss attacks
-- Dodge Stasis Wave (deadly AOE)
-- Be prepared for phase 2 transition
+**Phase 1 (100%-66% HP)**:
+- **Temporal Barrage**: Summons multiple time-based projectiles
+- **Time Freeze**: Freezes player in place for 2 seconds
+- **Stasis Wave**: Large AOE attack dealing heavy damage
+
+**Phase 2 (66%-33% HP)**:
+- All Phase 1 abilities become **stronger**
+- **Teleportation**: Boss can teleport around the arena
+- **Faster attack speed**
+- **More aggressive AI**
+
+**Phase 3 (Below 33% HP)**:
+- **Maximum aggression** - all abilities at peak strength
+- **Increased damage output**
+- **HP Recovery**: May regenerate small amounts of health
+- Most challenging phase - requires careful play
 
 **Drops**:
-- **Eye of Chronos**: Permanent item that further enhances time distortion in Chronosphere
-- **Fragment of Stasis Core**: Multiple fragments for crafting ultimate artifacts
+- **Eye of Chronos** - Enhances time distortion
+- **Fragments of Stasis Core** (multiple pieces, used to craft ultimate artifacts)
 - Rare loot and experience points
 
----
+**Strategy**:
 
-## Ultimate Artifacts
+**Without Chrono Aegis** (Very Difficult):
+- Bring lots of healing items (Golden Apples, potions)
+- Stay mobile to avoid Time Freeze and Stasis Wave
+- Use cover when available
+- Be prepared to retreat and heal frequently
+- Phase 2 and especially Phase 3 are extremely challenging
+- **Not recommended** - fight is very hard!
 
-After defeating the Time Tyrant, craft these powerful artifacts using **Fragment of Stasis Core**:
+**With Chrono Aegis** (Recommended):
+- **Time Stop Resistance**: Reduced Time Freeze duration
+- **Dimensional Anchor**: Cannot be teleported
+- **Temporal Shield**: Reduces damage from Temporal Barrage
+- **Time Reversal Disruption**: Boss cannot heal
+- **Clarity**: Immune to negative time effects
+- **Attack Slowdown**: Attackers receive Slowness II while blocking
+- Makes fight significantly easier!
 
-### Chronoblade (Sword)
+**Phase Transitions**:
+- **At 66% HP**: Boss enters Phase 2, gains teleportation and faster attacks
+- **At 33% HP**: Boss enters Phase 3, maximum aggression with HP recovery
+- Save healing items for later phases
+- Be ready for increasingly difficult attacks
 
-**Stats**:
-- Attack Damage: 9
-- Attack Speed: 1.6
-- Durability: 2031
-
-**Special Ability**: **Temporal Strike**
-- 25% chance on hit to skip the target's next attack AI routine
-- Gives you a free attack opportunity
-- Works on all hostile mobs
-
-**Recipe**:
-```
-- 2x Fragment of Stasis Core
-- 1x Diamond Sword
-- 2x Enhanced Clockstone
-```
-
-### Time Guardian's Mail (Chestplate)
-
-**Stats**:
-- Armor: 8 points
-- Durability: 528
-
-**Special Ability**: **Temporal Rollback**
-- 20% chance when taking fatal damage to rewind time
-- Restores your HP and position to 3 seconds ago
-- Prevents instant death
-- Cooldown: 60 seconds
-
-**Recipe**:
-```
-- 5x Fragment of Stasis Core
-- 1x Diamond Chestplate
-- 2x Enhanced Clockstone
-```
-
-### Echo Boots of Time (Boots)
-
-**Stats**:
-- Armor: 3 points
-- Durability: 429
-
-**Special Ability**: **Temporal Echo**
-- When sprinting, spawns a decoy entity (afterimage)
-- Decoy attracts enemy aggro for 3 seconds
-- Allows safe escape or repositioning
-
-**Recipe**:
-```
-- 2x Fragment of Stasis Core
-- 1x Diamond Boots
-- 2x Enhanced Clockstone
-```
-
-### Chrono Aegis (Shield)
-
-**Stats**:
-- Durability: 672
-- Defense: Enhanced blocking
-
-**Special Ability**: **Time Aegis**
-- Provides significant advantages against Time Tyrant final boss:
-  - Time Stop Resistance: Reduces Time Freeze duration
-  - Dimensional Anchor: Prevents forced teleportation
-  - Temporal Shield: Reduces damage from temporal attacks
-  - Time Reversal Disruption: Weakens boss regeneration
-  - Clarity: Immunity to confusion debuffs
-- While blocking, applies "Time Lock" debuff to attackers
-- Attackers receive Slowness II for 5 seconds
-
-**Recipe**:
-```
-Shaped Crafting (2x2):
-G P
-C E
-
-G: Guardian Stone (from Chronos Warden)
-P: Phantom Essence (from Temporal Phantom)
-C: Colossus Gear (from Clockwork Colossus)
-E: Entropy Core (from Entropy Keeper)
-```
-
-**How to Obtain**:
-1. Defeat all 4 mid-bosses to collect their unique drops
-2. Craft Chrono Aegis using the 2×2 recipe above
-3. Equip before facing Time Tyrant for major advantages
-
-### Unstable Pocket Watch (Utility)
-
-**Special Ability**: **Status Reversal**
-- Swaps all speed-related status effects between you and nearby mobs
-- If you have Slowness, mobs get Slowness and you get their Speed
-- Radius: 10 blocks
-- Cooldown: 30 seconds
-
-**⚠️ Risk**: Can backfire if mobs have beneficial speed effects
-
-**Recipe**:
-```
-- 3x Fragment of Stasis Core
-- 1x Clock
-- 2x Enhanced Clockstone
-```
+**Difficulty**:
+- **Without Chrono Aegis**: ★★★★★ (Extremely Hard)
+- **With Chrono Aegis**: ★★★☆☆ (Moderate-Hard)
 
 ---
 
-## Tips and Tricks
+## Progression Path
 
-### Survival Tips
+### Early Game
 
-1. **Always Carry Extras**: Craft multiple Time Hourglasses before entering the Chronosphere
-2. **Set a Bed**: Place a bed in the Overworld before entering (death sends you to spawn)
-3. **Emergency Escape**: If stuck in the Chronosphere, break your bed and die to respawn in Overworld
-4. **Food Supply**: Harvest Fruits of Time for sustainable food source
-5. **Exploit Time Distortion**: Hostile mobs are very slow - use this to explore safely
+1. **Find Ancient Ruins** in the Overworld
+2. **Open chests** to find "Time Hourglass Blueprint" and unlock the recipe
+3. **Mine Clockstone Ore** and gather materials (check Recipe Book for requirements)
+4. **Craft Time Hourglass** and **Clockstone Blocks**
+5. **Build portal frame** (minimum 4×5)
+6. **Prepare supplies** (food, armor, weapons, bed, tools)
+7. **Activate portal** with Time Hourglass
+8. **Enter Chronosphere** (one-way!)
 
-### Combat Tips
+### Mid Game
 
-1. **Use Terrain**: Slow mobs can't chase you effectively - create distance
-2. **Time Clock Timing**: Save Time Clock cooldown for dangerous situations
-3. **Boss Preparation**: Bring full Diamond/Netherite gear for boss fights
-4. **Potions**: Strength, Regeneration, and Golden Apples are essential for bosses
-5. **Chronoblade Synergy**: Combine with hit-and-run tactics to dominate combat
+9. **Explore Chronosphere** to find Forgotten Library
+10. **Discover Portal Stabilizer recipe** in Forgotten Library
+11. **Locate Desert Clock Tower** (spawns in various biomes)
+12. **Defeat Time Guardian** to obtain Enhanced Clockstone and Master Clock Key
+13. **Craft Portal Stabilizer** using Enhanced Clockstone
+14. **Stabilize your portal** for bidirectional travel
+
+### Late Game (Mid-Bosses)
+
+15. **Defeat 4 mid-bosses** in any order:
+    - Chronos Warden (Guardian Vault) → Guardian Stone
+    - Clockwork Colossus (Clockwork Depths) → Colossus Gear
+    - Temporal Phantom (Phantom Catacombs) → Phantom Essence
+    - Entropy Keeper (Entropy Crypt) → Entropy Core
+16. **Craft Chrono Aegis** from 4 mid-boss drops
+
+### End Game
+
+17. **Enter Master Clock** using Master Clock Key
+18. **Defeat Time Tyrant** (highly recommended to have Chrono Aegis!)
+19. **Collect Fragments of Stasis Core**
+20. **Craft ultimate artifacts** (Chronoblade, Time Tyrant Mail, Echoing Time Boots, Unstable Pocket Watch)
+
+---
+
+## Items and Equipment
+
+### Portal and Utility Items
+
+#### Time Hourglass
+- **Use**: Activates Chronosphere portals
+- **Durability**: Single-use (consumed on activation)
+- **Recipe**: Unlocked by "Time Hourglass Blueprint" found in Ancient Ruins chests
+
+#### Portal Stabilizer
+- **Use**: Makes one-way portals bidirectional
+- **Durability**: Single-use (consumed on activation)
+- **Recipe**: Enhanced Clockstone + 2 Ender Pearls + 1 Diamond + 1 Clockstone Block (recipe found in Forgotten Library)
+- **How to Use**: Right-click on an active portal frame
+
+#### Unstable Hourglass
+- **Use**: Experimental variant of Time Hourglass
+- **Effect**: May trigger **Resonance Reversal** (you get Slowness IV, mobs get Speed II for 30-60 seconds)
+- **⚠️ Warning**: High risk - only craft when safe!
+
+#### Time Compass
+- **Use**: Points toward time-related structures in Chronosphere
+
+#### Master Clock Key
+- **Use**: Unlocks Master Clock dungeon entrance
+- **Obtained**: Dropped by Time Guardian mini-boss (Desert Clock Tower)
+
+### Combat Items
+
+#### Time Clock
+- **Use**: Cancel enemy attacks (cooldown-based utility)
+- **Effect**: Stops nearby enemy AI for brief period (8 block radius)
+- **Cooldown**: 10 seconds
+- **Recipe**: Requires Enhanced Clockstone
+
+#### Time Arrow
+- **Use**: Special arrows with time-based effects
+- **Recipe**: Requires Clockstone
+
+### Food and Consumables
+
+#### Fruit of Time
+- **Effect**: Restores 4 hunger points + grants Haste I for 60 seconds
+- **Source**: Grows on Fruit of Time blocks in Chronosphere
+
+#### Time Wheat
+- **Use**: Crop that grows in Chronosphere
+- **Products**: Time Bread, Time Wheat Cookies, Golden Time Wheat
+
+#### Chrono Melon
+- **Effect**: Restores hunger
+- **Products**: Chrono Melon Juice, Glistening Chrono Melon, Chrono Melon Block
+
+#### Temporal Root
+- **Effect**: Can be eaten raw or baked
+- **Products**: Baked Temporal Root, Temporal Root Stew
+
+#### Timeless Mushroom
+- **Effect**: Edible mushroom
+- **Products**: Timeless Mushroom Soup
+
+#### Other Foods
+- **Time Jam**: Sweet spread made from Fruit of Time
+- **Time Fruit Pie**: Baked dessert
+- **Enhanced Time Bread**: Improved version of Time Bread
+- **Clockwork Cookie**: Special cookie with mechanical ingredients
+- **Time Wheat Cookie**: Standard cookie made from Time Wheat
+
+### Materials and Resources
+
+#### Clockstone
+- **Source**: Smelt Clockstone Ore (found in Ancient Ruins)
+- **Use**: Basic crafting material, portal activation
+
+#### Clockstone Block
+- **Crafting (Shaped 3×3)**: 9 Clockstone
+- **Use**: Portal frame material, building block
+- **Variants**: Stairs, Slabs, Walls
+
+#### Enhanced Clockstone
+- **Source**: Desert Clock Tower loot/Time Guardian drops
+- **Use**: Portal Stabilizer crafting, advanced recipes, better equipment
+
+#### Time Crystal
+- **Source**: Time Crystal Ore (found in Chronosphere)
+- **Use**: Advanced crafting material
+
+#### Time Crystal Block
+- **Properties**: Emits light level 10
+- **Use**: Decorative lighting block
+
+### Boss Drop Materials
+
+#### Guardian Stone
+- **Source**: Chronos Warden boss
+- **Use**: Chrono Aegis crafting (1/4)
+
+#### Colossus Gear
+- **Source**: Clockwork Colossus boss
+- **Use**: Chrono Aegis crafting (1/4)
+
+#### Phantom Essence
+- **Source**: Temporal Phantom boss
+- **Use**: Chrono Aegis crafting (1/4)
+
+#### Entropy Core
+- **Source**: Entropy Keeper boss
+- **Use**: Chrono Aegis crafting (1/4)
+
+#### Eye of Chronos
+- **Source**: Time Tyrant final boss
+- **Use**: Ultimate artifact crafting
+
+#### Fragments of Stasis Core
+- **Source**: Time Tyrant final boss (drops multiple)
+- **Use**: Ultimate artifact crafting
+
+---
+
+## Crafting Recipes
+
+### Ultimate Artifacts
+
+All ultimate artifacts require **Fragments of Stasis Core** from the Time Tyrant final boss.
+
+#### Chronoblade (Sword)
+- **Attack Damage**: 9
+- **Attack Speed**: 1.6
+- **Durability**: 2031
+- **Special Ability**: **Temporal Strike** - 25% chance to skip enemy's next attack AI
+- **Recipe**: 2 Fragments of Stasis Core + 1 Diamond Sword + 2 Enhanced Clockstone
+
+#### Time Tyrant Mail (Chestplate)
+- **Armor Points**: 8
+- **Durability**: 528
+- **Special Ability**: **Temporal Rollback** - 20% chance to rewind time on fatal damage (avoid death, restores HP and position to 3 seconds ago, 60s cooldown)
+- **Recipe**: 5 Fragments of Stasis Core + 1 Diamond Chestplate + 2 Enhanced Clockstone
+
+#### Echoing Time Boots (Boots)
+- **Armor Points**: 3
+- **Durability**: 429
+- **Special Ability**: **Temporal Echo** - Spawn decoy afterimage when sprinting (attracts enemy aggro for 3 seconds)
+- **Recipe**: 2 Fragments of Stasis Core + 1 Diamond Boots + 2 Enhanced Clockstone
+
+#### Chrono Aegis (Shield)
+- **Durability**: 672
+- **Defense**: Enhanced blocking
+- **Special Abilities** (when facing Time Tyrant):
+  - **Time Stop Resistance**: Reduces Time Freeze duration
+  - **Dimensional Anchor**: Prevents forced teleportation
+  - **Temporal Shield**: Reduces damage from Temporal Barrage
+  - **Time Reversal Disruption**: Boss cannot heal
+  - **Clarity**: Immunity to confusion debuffs
+- **Attack Effect**: Apply Slowness II to attackers while blocking
+- **Crafting Materials**:
+  - Guardian Stone (from Chronos Warden)
+  - Phantom Essence (from Temporal Phantom)
+  - Colossus Gear (from Clockwork Colossus)
+  - Entropy Core (from Entropy Keeper)
+
+#### Unstable Pocket Watch (Utility)
+- **Special Ability**: **Status Reversal** - Swap speed effects between you and nearby mobs (10 block radius, 30s cooldown)
+- **⚠️ Risk**: Can backfire if mobs have beneficial speed effects
+- **Recipe**: 3 Fragments of Stasis Core + 1 Clock + 2 Enhanced Clockstone
+
+### Clockstone Equipment
+
+Basic equipment crafted from **Clockstone**:
+
+- **Clockstone Sword**: Basic combat weapon
+- **Clockstone Pickaxe**: Mining tool
+- **Clockstone Axe**: Woodcutting tool
+- **Clockstone Shovel**: Digging tool
+- **Clockstone Hoe**: Farming tool
+- **Clockstone Armor** (Helmet, Chestplate, Leggings, Boots): Basic protection
+
+### Enhanced Clockstone Equipment
+
+Upgraded equipment crafted from **Enhanced Clockstone**:
+
+- **Enhanced Clockstone Sword**: Improved combat weapon
+- **Enhanced Clockstone Pickaxe**: Faster mining
+- **Enhanced Clockstone Axe**: Faster woodcutting
+- **Enhanced Clockstone Shovel**: Faster digging
+- **Enhanced Clockstone Hoe**: Improved farming
+- **Enhanced Clockstone Armor** (Helmet, Chestplate, Leggings, Boots): Better protection
+
+### Wood Type Blocks
+
+All three wood types have the same variants:
+
+- Wood Log
+- Wood Planks
+- Wood Stairs
+- Wood Slabs
+- Wood Fences
+- Wood Fence Gates
+- Wood Doors
+- Wood Trapdoors
+- Wood Buttons
+- Wood Pressure Plates
+- Wood Saplings (for farming)
+- Boats and Chest Boats
+
+### Special Blocks
+
+#### Reversing Time Sandstone
+- **Property**: Regenerates 3 seconds after being broken
+- **Use**: Renewable resource block
+
+#### Unstable Fungus
+- **Property**: Applies random speed effect (Speed I or Slowness I) when stepped on
+- **Use**: Traps, parkour challenges
+
+#### Temporal Bricks
+- **Use**: Decorative building block
+- **Variants**: Temporal Bricks, Stairs, Slabs, Walls
+
+#### Clockwork Block
+- **Property**: Animated rotating gears texture
+- **Use**: Decorative mechanical-themed block
+
+#### Frozen Time Ice
+- **Property**: Special ice block unique to Chronosphere Snowy biome
+- **Use**: Chronosphere-themed ice
+
+---
+
+## Tips and Strategies
+
+### General Tips
+
+1. **Don't Rush the Portal**
+   - Prepare supplies before entering Chronosphere (food, armor, weapons, tools)
+   - The portal becomes one-way - plan accordingly!
+   - Set a bed in Overworld before entering (respawn point)
+
+2. **Bring Essentials**
+   - Food and healing items
+   - Building blocks (for emergencies, marking paths)
+   - Bed (to set respawn point in Chronosphere)
+   - Tools and weapons
+   - Torches for lighting
+
+3. **Exploit Time Distortion**
+   - Hostile mobs have Slowness IV
+   - Use this to safely explore and gather resources
+   - Combat becomes much easier!
+   - You can outrun any hostile mob
+
+4. **Set Up a Base**
+   - Build a safe base in Chronosphere
+   - Store items before boss fights
+   - Set respawn point with a bed
+   - Create storage for loot
+
+### Portal Tips
+
+1. **Portal Size**
+   - Larger portals don't provide benefits
+   - Minimum size (4×5) is sufficient
+   - Use extra Clockstone Blocks for decoration
+
+2. **Multiple Portals**
+   - After stabilization, you can create portal networks
+   - Link different Overworld locations to Chronosphere
+   - Each portal needs a Time Hourglass to activate
+
+3. **Emergency Escape**
+   - If stuck before finding Portal Stabilizer: break your bed and die
+   - You'll respawn in Overworld (at world spawn)
+   - You'll lose items, so only use as last resort!
 
 ### Exploration Tips
 
-1. **Mark Portals**: Place torches or blocks to mark portal locations
-2. **Map the Dimension**: Create maps to navigate the 8 biomes effectively
-3. **Structure Hunting**: Prioritize finding Forgotten Library and Desert Clock Tower early
-4. **Resource Gathering**: Mine Clockstone Ore underground for unlimited materials
-5. **Avoid Resonance Reversal**: Don't craft Unstable Hourglass near hostile mobs
+1. **Desert Clock Tower**
+   - **Priority target** for Enhanced Clockstone
+   - Practice with teleporters before boss fight
+   - Bring food and healing items for Time Guardian battle
+   - Explore all 5 floors for loot
 
-### Building Tips
+2. **Forgotten Library**
+   - **Essential** for progression (Portal Stabilizer recipe)
+   - Explore thoroughly for loot
+   - Take notes or screenshots of recipe
+   - Store recipe safely
 
-1. **Time Wood Farms**: Plant Time Wood saplings for renewable building materials
-2. **Portal Networks**: Create multiple portals for fast travel across the Overworld
-3. **Chronosphere Bases**: Build bases in the Chronosphere for safe exploration hubs
-4. **Decoration**: Use Time Wood blocks for unique time-themed builds
+3. **Structure Locations**
+   - Use the Time Compass to locate structures
+   - Mark coordinates of important locations (F3 menu)
+   - Bosses don't respawn - plan accordingly!
+   - Create a map or notes
 
-### Advanced Strategies
+4. **Navigation**
+   - Use torches or blocks to mark paths
+   - Build pillars to mark important locations
+   - Create a network of paths between structures
+   - Use F3 menu to track coordinates
 
-1. **Ultimate Gear Set**: Combine all artifacts for maximum power:
-   - Chronoblade (weapon)
-   - Time Guardian's Mail (chest)
-   - Echo Boots (feet)
-   - Chrono Aegis (offhand)
-   - Unstable Pocket Watch (inventory)
+### Boss Fight Tips
 
-2. **Boss Rush**: Challenge yourself to defeat all bosses with minimal gear
+1. **Prepare Before Each Boss**
+   - Bring full armor and weapons
+   - Stack food and healing potions
+   - Clear inventory space for loot
+   - Set respawn point nearby (bed)
 
-3. **Speedrun Route**:
-   - Find Ancient Ruins → Craft Time Hourglass → Enter Chronosphere
-   - Find Forgotten Library → Get Portal Stabilizer recipe
-   - Find Desert Clock Tower → Get Enhanced Clockstone
-   - Craft Portal Stabilizer → Stabilize dimension
-   - Defeat Time Guardian → Get Master Clock Key
-   - Defeat Time Tyrant → Get Eye of Chronos
+2. **Learn Attack Patterns**
+   - Each boss has telegraphed attacks
+   - Memorize patterns for easier fights
+   - Retreat to heal when needed
+   - Don't be greedy with attacks
 
-4. **Multiplayer Coordination**:
-   - Portal Stabilizer affects the entire dimension (all players benefit)
-   - Coordinate boss fights with teams
-   - Share resources and artifacts
+3. **Chrono Aegis Priority**
+   - **Defeat all 4 mid-bosses before Time Tyrant**
+   - Chrono Aegis makes final boss **much easier**
+   - Each mid-boss can only be fought once!
+   - Plan your route to find all 4 structures
+
+4. **Time Tyrant Strategy**
+   - **Without Chrono Aegis**: Very difficult, bring lots of healing
+   - **With Chrono Aegis**: Much more manageable
+   - Phase 2 (66%-33% HP) and Phase 3 (below 33% HP) are harder - save resources
+   - Dodge Stasis Wave (very high damage)
+
+### Resource Farming
+
+1. **Clockstone**
+   - Mine in Ancient Ruins (Overworld)
+   - Limited supply per structure
+   - Explore multiple Ancient Ruins if needed
+   - Also found underground in Chronosphere
+
+2. **Enhanced Clockstone**
+   - Desert Clock Tower loot chests
+   - Time Guardian boss drops
+   - Required for Portal Stabilizer
+   - Limited quantity - use wisely
+
+3. **Time Crystal**
+   - Mine Time Crystal Ore in Chronosphere
+   - Used for advanced recipes
+   - Renewable resource (ore respawns)
+
+4. **Wood Resources**
+   - All three wood types (Time, Dark Time, Ancient Time Wood) are abundant
+   - Saplings allow renewable tree farms
+   - Use for building and crafting
+   - Each wood type has unique appearance
+
+### Food Production
+
+1. **Fruit of Time**
+   - Harvest from Fruit of Time blocks
+   - Grants Haste (useful for building)
+   - Good food value
+
+2. **Time Wheat Farms**
+   - Plant Time Wheat Seeds
+   - Automate with water and collection system
+   - Produces Time Bread, cookies, etc.
+
+3. **Chrono Melon Farms**
+   - Plant Chrono Melon Seeds
+   - Grows like vanilla melons
+   - Provides good hunger restoration
+
+4. **Temporal Root**
+   - Found naturally in Chronosphere
+   - Bake for better food value
+   - Make stew for variety
+
+### Advanced Tips
+
+1. **Respawn Mechanics**
+   - You can set respawn point with beds or respawn anchors in Chronosphere
+   - Beds work safely (unlike Nether/End where they explode)
+   - If no respawn point is set, you respawn in Overworld
+   - Portal Stabilizer does **NOT** affect respawn location
+   - You can always escape by breaking bed and dying (last resort!)
+
+2. **Time Distortion Stacking**
+   - Mobs already have Slowness IV in Chronosphere
+   - You can apply additional slowness with Chrono Aegis (when blocking)
+   - Makes combat trivially easy!
+
+3. **Ultimate Gear Set**
+   - Combine all artifacts for maximum power:
+     - Chronoblade (weapon)
+     - Time Tyrant Mail (chest)
+     - Echoing Time Boots (feet)
+     - Chrono Aegis (offhand)
+     - Unstable Pocket Watch (inventory)
+
+4. **Decorative Building**
+   - Three wood types provide variety
+   - Clockwork Blocks for mechanical themes
+   - Time Crystal Blocks for lighting
+   - Temporal Bricks for ancient aesthetics
 
 ---
 
 ## Troubleshooting
 
-### Portal won't activate
-- Ensure frame is complete rectangle (4×5 minimum, 23×23 maximum)
-- Check all frame blocks are Clockstone Blocks
-- Verify you're using Time Hourglass (not other items)
+### Portal Issues
 
-### Can't return to Overworld
+**Portal won't activate**:
+- Check frame size (4×5 minimum, 23×23 maximum, corners optional)
+- Ensure all frame blocks are Clockstone Blocks (not other blocks)
+- Verify you're using Time Hourglass (right-click on frame)
+- Frame must be hollow inside (no blocks in center)
+
+**Can't return to Overworld**:
 - Find Forgotten Library for Portal Stabilizer recipe
 - Craft Portal Stabilizer using Enhanced Clockstone from Desert Clock Tower
 - Right-click portal frame with Portal Stabilizer
-- Re-ignite portal with Time Hourglass
+- Re-ignite portal with Time Hourglass after stabilization
 
-### Mobs not slowed
+**Portal disappeared after entry**:
+- This is normal - portal becomes one-way
+- Follow progression path to find Portal Stabilizer
+- Alternative emergency escape: break bed and die (lose items)
+
+### Combat Issues
+
+**Mobs not slowed**:
 - Time Distortion only affects hostile mobs, not passive animals
+- Some hostile mobs are immune to Slowness effects
 - Effect is applied automatically - no action needed
-- If issue persists, check mod configuration
+- If issue persists, check mod installation
 
-### Boss won't spawn
-- Temporal Phantom: Enter boss room (check for amethyst block markers)
-- Time Guardian: Explore structures thoroughly
-- Time Tyrant: Use Master Clock Key at Master Clock entrance
+**Boss won't spawn**:
+- **Temporal Phantom**: Navigate maze and enter the boss room
+- **Entropy Keeper**: Activate specific trapdoor in Entropy Crypt
+- **Time Guardian**: Reach 5th floor of Desert Clock Tower
+- **Time Tyrant**: Use Master Clock Key at Master Clock entrance
+
+**Boss too difficult**:
+- Upgrade armor and weapons
+- Bring more healing items (Golden Apples, potions)
+- For Time Tyrant: Craft Chrono Aegis first (makes fight much easier)
+
+### Exploration Issues
+
+**Can't find structures**:
+- Keep exploring different biomes
+- Use `/locate structure chronosphere:[structure_name]` (if cheats enabled)
+- Structures: `ancient_ruins`, `forgotten_library`, `desert_clock_tower`, `guardian_vault`, `clockwork_depths`, `phantom_catacombs`, `entropy_crypt`, `master_clock`
+
+**Lost in Phantom Catacombs**:
+- Use torches or blocks to mark paths (place on right wall, follow back)
+- Systematically explore the maze to find the boss room
+- Create map in F3 menu notes
+
+### Item Issues
+
+**Lost Master Clock Key**:
+- Find another Desert Clock Tower - multiple spawn per world
+- Defeat Time Guardian again to obtain another key
+- Store important items safely in chests to avoid searching again
+
+**Not enough Enhanced Clockstone**:
+- Explore all floors of Desert Clock Tower
+- Defeat Time Guardian for additional drops
+- Check all loot chests thoroughly
+
+---
+
+## FAQ
+
+### Q: Can I return to the Overworld after entering Chronosphere?
+
+**A**: Not immediately. The portal becomes one-way after entry. You must:
+1. Find the Forgotten Library
+2. Craft the Portal Stabilizer
+3. Stabilize your portal to enable bidirectional travel
+
+### Q: What happens if I die in the Chronosphere?
+
+**A**: You respawn at your bed/respawn anchor (if set), or at world spawn if none set. The portal does NOT affect respawn location. If you haven't stabilized the portal, you may need to rebuild it to return to Chronosphere.
+
+### Q: Can I fight bosses multiple times?
+
+**A**: No. Each boss spawns only once per world. Plan your fights carefully and ensure you collect all drops!
+
+### Q: Do I need to defeat all mid-bosses?
+
+**A**: Not required, but **highly recommended**. The Chrono Aegis (crafted from 4 mid-boss drops) makes the Time Tyrant fight much easier. Fighting Time Tyrant without Chrono Aegis is extremely challenging!
+
+### Q: What's the best order to fight bosses?
+
+**A**:
+1. **Time Guardian** (Desert Clock Tower) - for Master Clock Key and Enhanced Clockstone
+2. **All 4 mid-bosses** (any order) - for Chrono Aegis materials
+   - Chronos Warden
+   - Clockwork Colossus
+   - Temporal Phantom
+   - Entropy Keeper
+3. **Time Tyrant** (Master Clock) - final boss (use Chrono Aegis!)
+
+### Q: Can I bring items from the Chronosphere back to the Overworld?
+
+**A**: Yes! After stabilizing the portal with the Portal Stabilizer, you can freely travel between dimensions with items.
+
+### Q: What if I lose my Master Clock Key?
+
+**A**: You can find another Desert Clock Tower and defeat another Time Guardian to obtain a new key. Multiple Desert Clock Towers spawn in the Chronosphere, so you're not locked out permanently. Store important items safely to avoid the hassle of searching again!
+
+### Q: Are there any renewable resources?
+
+**A**: Yes!
+- **Renewable**: All three wood types (via saplings), Time Wheat, Chrono Melons, Time Crystals, Reversing Time Sandstone, mushrooms, crops
+- **Non-renewable** (limited per world): Clockstone (Ancient Ruins), Enhanced Clockstone (Desert Clock Tower + Time Guardian), boss drops
+
+### Q: Can I create multiple portals?
+
+**A**: Yes! After stabilizing the dimension, you can create multiple portals. Each portal needs:
+- Clockstone Block frame (4×5 minimum)
+- Time Hourglass to activate
+- All portals link between Overworld and Chronosphere (not to each other)
+
+### Q: What's the difference between the three wood types?
+
+**A**: Only appearance/aesthetics. All three wood types (Time Wood, Dark Time Wood, Ancient Time Wood) have the same properties and full block sets. Use them for building variety and decoration.
+
+### Q: How do I get the in-game guide book?
+
+**A**: Install the **Patchouli** mod dependency (version 1.21.1-92+). You'll receive the "Chronicle of Chronosphere" guide book automatically.
 
 ---
 
 ## Conclusion
 
-You're now ready to explore the Chronosphere! Remember:
+You're now ready to explore the Chronosphere! Remember the key steps:
 
-1. **Prepare Before Entry**: Gather resources and craft extras
-2. **Explore Carefully**: Find Forgotten Library and Desert Clock Tower
-3. **Stabilize the Portal**: Craft and use Portal Stabilizer for free travel
-4. **Defeat Bosses**: Conquer Time Guardian, Temporal Phantom, and Time Tyrant
-5. **Craft Artifacts**: Use boss drops to create ultimate time-manipulating gear
+1. **Prepare Before Entry**: Gather resources, craft extras, set respawn
+2. **Find Forgotten Library**: Get Portal Stabilizer recipe
+3. **Defeat Time Guardian**: Obtain Enhanced Clockstone and Master Clock Key
+4. **Stabilize the Portal**: Craft and use Portal Stabilizer for bidirectional travel
+5. **Defeat All 4 Mid-Bosses**: Collect materials for Chrono Aegis
+6. **Craft Chrono Aegis**: Essential for Time Tyrant fight
+7. **Conquer Time Tyrant**: Defeat final boss with Chrono Aegis
+8. **Craft Ultimate Artifacts**: Use Fragments of Stasis Core for legendary gear
 
-Good luck, time traveler!
+**Good luck, time traveler! May time be on your side!** 🕰️
 
 ---
 
-**For technical support, visit the [GitHub Issues](https://github.com/ksoichiro/Chronosphere/issues) page.**
+**For technical information, see the [Developer Guide](developer_guide.md).**
+
+**For issues or questions, visit the [GitHub Repository](https://github.com/ksoichiro/Chronosphere).**
