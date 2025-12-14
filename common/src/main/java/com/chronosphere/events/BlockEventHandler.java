@@ -162,8 +162,8 @@ public class BlockEventHandler {
                 Component message;
 
                 if (isBossRoomDoor) {
-                    // Boss room door - requires 3 Ancient Gears
-                    canUnlock = hasRequiredAncientGears(player);
+                    // Boss room door - requires 3 Ancient Gears AND Key to Master Clock
+                    canUnlock = hasRequiredAncientGears(player) && hasKeyToMasterClock(player);
                     message = canUnlock
                         ? Component.translatable("message.chronosphere.boss_room_unlocked")
                         : Component.translatable("message.chronosphere.boss_room_locked");
