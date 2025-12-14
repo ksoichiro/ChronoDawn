@@ -1,5 +1,5 @@
 {
-  "parent": "chronosphere:story/us2/time_manipulation_tools",
+  "parent": "chronosphere:story/us1/dimension_entry",
   "criteria": {
     "killed_time_guardian": {
       "trigger": "minecraft:player_killed_entity",
@@ -20,7 +20,7 @@
     "description": {
       "translate": "advancements.chronosphere.time_guardian_defeat.description"
     },
-    "frame": "goal",
+    "frame": "challenge",
     "show_toast": true,
     "announce_to_chat": true,
     "hidden": false

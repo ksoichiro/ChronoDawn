@@ -1,0 +1,28 @@
+{
+  "parent": "chronosphere:story/us2/time_guardian_defeat",
+  "criteria": {
+    "killed_entropy_keeper": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "chronosphere:entropy_keeper"
+        }
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "chronosphere:entropy_core"
+    },
+    "title": {
+      "translate": "advancements.chronosphere.entropy_keeper_defeated.title"
+    },
+    "description": {
+      "translate": "advancements.chronosphere.entropy_keeper_defeated.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  }
+}

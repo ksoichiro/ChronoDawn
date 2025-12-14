@@ -1,0 +1,28 @@
+{
+  "parent": "chronosphere:story/us2/time_guardian_defeat",
+  "criteria": {
+    "killed_clockwork_colossus": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "chronosphere:clockwork_colossus"
+        }
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "chronosphere:colossus_gear"
+    },
+    "title": {
+      "translate": "advancements.chronosphere.clockwork_colossus_defeated.title"
+    },
+    "description": {
+      "translate": "advancements.chronosphere.clockwork_colossus_defeated.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  }
+}
