@@ -1,6 +1,7 @@
 package com.chronosphere.neoforge.client;
 
 import com.chronosphere.Chronosphere;
+import com.chronosphere.client.model.ChronosWardenModel;
 import com.chronosphere.client.model.ClockworkColossusModel;
 import com.chronosphere.client.model.ClockworkSentinelModel;
 import com.chronosphere.client.model.FloqModel;
@@ -89,6 +90,12 @@ public class ChronosphereClientNeoForge {
         event.registerLayerDefinition(
             TimeGuardianRenderer.LAYER_LOCATION,
             TimeGuardianModel::createBodyLayer
+        );
+
+        // Register Chronos Warden model layer
+        event.registerLayerDefinition(
+            ChronosWardenModel.LAYER_LOCATION,
+            ChronosWardenModel::createBodyLayer
         );
 
         // Register Time Tyrant model layer
