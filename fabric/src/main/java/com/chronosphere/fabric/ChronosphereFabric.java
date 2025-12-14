@@ -41,6 +41,9 @@ public class ChronosphereFabric implements ModInitializer {
         // Initialize Custom Portal API integration
         CustomPortalFabric.init();
 
+        // Register fuel items
+        ChronosphereFuelRegistry.register();
+
         // Register block protection event handler
         BlockProtectionEventHandler.register();
 
