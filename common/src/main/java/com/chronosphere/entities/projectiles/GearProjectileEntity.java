@@ -1,5 +1,6 @@
 package com.chronosphere.entities.projectiles;
 
+import com.chronosphere.registry.ModSounds;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -140,7 +141,7 @@ public class GearProjectileEntity extends ThrowableProjectile {
                 this.getX(),
                 this.getY(),
                 this.getZ(),
-                SoundEvents.ANVIL_LAND,
+                ModSounds.GEAR_IMPACT.get(),
                 SoundSource.HOSTILE,
                 0.5f,
                 1.2f
@@ -172,7 +173,7 @@ public class GearProjectileEntity extends ThrowableProjectile {
             this.getX(),
             this.getY(),
             this.getZ(),
-            SoundEvents.STONE_HIT,
+            ModSounds.GEAR_GROUND_IMPACT.get(),
             SoundSource.HOSTILE,
             0.5f,
             1.0f

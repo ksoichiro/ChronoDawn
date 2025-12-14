@@ -1,6 +1,7 @@
 package com.chronosphere.entities.bosses;
 
 import com.chronosphere.Chronosphere;
+import com.chronosphere.registry.ModSounds;
 import com.chronosphere.worldgen.protection.BlockProtectionHandler;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -228,7 +229,7 @@ public class ClockworkColossusEntity extends Monster implements RangedAttackMob 
             this.getX(),
             this.getY(),
             this.getZ(),
-            SoundEvents.BEACON_ACTIVATE,
+            ModSounds.COLOSSUS_ACTIVATE.get(),
             SoundSource.HOSTILE,
             1.0f,
             1.2f
@@ -288,7 +289,7 @@ public class ClockworkColossusEntity extends Monster implements RangedAttackMob 
             this.getX(),
             this.getY(),
             this.getZ(),
-            SoundEvents.ANVIL_USE,
+            ModSounds.COLOSSUS_STOMP.get(),
             SoundSource.HOSTILE,
             1.0f,
             1.5f
@@ -343,7 +344,7 @@ public class ClockworkColossusEntity extends Monster implements RangedAttackMob 
             this.getX(),
             this.getY(),
             this.getZ(),
-            SoundEvents.WITHER_SPAWN,
+            ModSounds.BOSS_POWER_UP.get(),
             SoundSource.HOSTILE,
             0.8f,
             0.6f
@@ -415,7 +416,7 @@ public class ClockworkColossusEntity extends Monster implements RangedAttackMob 
             this.getX(),
             this.getY(),
             this.getZ(),
-            SoundEvents.DISPENSER_LAUNCH,
+            ModSounds.GEAR_LAUNCH.get(),
             SoundSource.HOSTILE,
             1.0f,
             1.0f

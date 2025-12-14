@@ -4,6 +4,7 @@ import com.chronosphere.core.time.MobAICanceller;
 import com.chronosphere.entities.ai.TimeGuardianRangedAttackGoal;
 import com.chronosphere.entities.projectiles.TimeBlastEntity;
 import com.chronosphere.registry.ModItems;
+import com.chronosphere.registry.ModSounds;
 import com.chronosphere.entities.bosses.ExtendedMeleeAttackGoal;
 import com.chronosphere.worldgen.protection.BlockProtectionHandler;
 import net.minecraft.core.BlockPos;
@@ -222,7 +223,7 @@ public class TimeGuardianEntity extends Monster implements RangedAttackMob {
                     this.getX(),
                     this.getY(),
                     this.getZ(),
-                    SoundEvents.WITHER_SPAWN,
+                    ModSounds.BOSS_POWER_UP.get(),
                     SoundSource.HOSTILE,
                     1.0f,
                     1.5f
@@ -341,7 +342,7 @@ public class TimeGuardianEntity extends Monster implements RangedAttackMob {
         this.level().playSound(
             null,
             validTeleportPos.x, validTeleportPos.y, validTeleportPos.z,
-            SoundEvents.ENDERMAN_TELEPORT,
+            ModSounds.BOSS_TELEPORT.get(),
             SoundSource.HOSTILE,
             1.0f, 1.0f
         );
@@ -491,7 +492,7 @@ public class TimeGuardianEntity extends Monster implements RangedAttackMob {
         this.level().playSound(
             null,
             this.getX(), this.getY(), this.getZ(),
-            SoundEvents.EVOKER_CAST_SPELL,
+            ModSounds.BOSS_CAST_SPELL.get(),
             SoundSource.HOSTILE,
             1.0f, 1.0f
         );
@@ -701,7 +702,7 @@ public class TimeGuardianEntity extends Monster implements RangedAttackMob {
         this.level().playSound(
             null,
             this.getX(), this.getY(), this.getZ(),
-            SoundEvents.EVOKER_CAST_SPELL,
+            ModSounds.BOSS_CAST_SPELL.get(),
             SoundSource.HOSTILE,
             1.0f, 1.0f + (this.random.nextFloat() - this.random.nextFloat()) * 0.2f
         );

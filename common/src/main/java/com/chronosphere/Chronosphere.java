@@ -11,6 +11,7 @@ import com.chronosphere.registry.ModEffects;
 import com.chronosphere.registry.ModEntities;
 import com.chronosphere.registry.ModFluids;
 import com.chronosphere.registry.ModItems;
+import com.chronosphere.registry.ModSounds;
 import com.chronosphere.registry.ModStructureProcessorTypes;
 import com.chronosphere.registry.ModTreeDecoratorTypes;
 import com.chronosphere.worldgen.spawning.ChronosWardenSpawner;
@@ -35,6 +36,7 @@ public class Chronosphere {
         ModBlocks.register();
         ModBlockEntities.register();
         ModItems.register();
+        ModSounds.register();
         ModEffects.register();
         ModEntities.register();
         ModDimensions.register();

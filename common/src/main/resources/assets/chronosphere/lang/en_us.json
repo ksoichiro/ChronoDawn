@@ -303,5 +303,36 @@
   "item.chronosphere.ancient_time_wood_boat": "Ancient Time Wood Boat",
   "item.chronosphere.ancient_time_wood_chest_boat": "Ancient Time Wood Boat with Chest",
   "entity.chronosphere.chronosphere_boat": "Boat",
-  "entity.chronosphere.chronosphere_chest_boat": "Boat with Chest"
+  "entity.chronosphere.chronosphere_chest_boat": "Boat with Chest",
+
+  "subtitles.chronosphere.gear_impact": "Gear impact",
+  "subtitles.chronosphere.colossus_stomp": "Colossus stomps",
+  "subtitles.chronosphere.boss_power_up": "Boss powers up",
+  "subtitles.chronosphere.boss_teleport": "Boss teleports",
+  "subtitles.chronosphere.boss_cast_spell": "Boss casts spell",
+  "subtitles.chronosphere.boss_prepare_summon": "Boss prepares summon",
+  "subtitles.chronosphere.entropy_attack": "Entropy energy surges",
+  "subtitles.chronosphere.warden_roar": "Chronos Warden roars",
+  "subtitles.chronosphere.tyrant_bell": "Time Bell chimes",
+  "subtitles.chronosphere.entropy_wither_anger": "Entropy Keeper rages",
+  "subtitles.chronosphere.teleporter_warp": "Teleporter warps",
+  "subtitles.chronosphere.teleporter_charge_start": "Teleporter charging begins",
+  "subtitles.chronosphere.teleporter_charging": "Teleporter charging",
+  "subtitles.chronosphere.colossus_activate": "Colossus activates",
+  "subtitles.chronosphere.gear_launch": "Gear launches",
+  "subtitles.chronosphere.gear_ground_impact": "Gear hits ground",
+  "subtitles.chronosphere.entropy_burst": "Entropy bursts",
+  "subtitles.chronosphere.phantom_teleport": "Phantom teleports",
+  "subtitles.chronosphere.time_needle_break": "Time needle breaks",
+  "subtitles.chronosphere.time_needle_place": "Time needle placed",
+  "subtitles.chronosphere.tyrant_phase_change": "Time Tyrant phase changes",
+  "subtitles.chronosphere.chrono_aegis_activate": "Chrono Aegis activates",
+  "subtitles.chronosphere.portal_stabilize_spawn": "Portal stabilizes",
+  "subtitles.chronosphere.portal_stabilize_activate": "Portal Stabilizer activates",
+  "subtitles.chronosphere.time_compass_chime": "Time Compass chimes",
+  "subtitles.chronosphere.time_compass_update": "Time Compass updates",
+  "subtitles.chronosphere.time_compass_break": "Time Compass breaks"
 }
+
+
+
