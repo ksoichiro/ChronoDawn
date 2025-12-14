@@ -97,7 +97,21 @@ public class TimeGuardianSpawner {
 
         // Check if we've reached the spawn limit
         if (spawnedGuardiansCount >= MAX_TIME_GUARDIANS_PER_WORLD) {
-            return;
+            // Count actual Time Guardians in the world to verify
+            int actualGuardianCount = level.getEntities(ModEntities.TIME_GUARDIAN.get(), entity -> true).size();
+
+            Chronosphere.LOGGER.info("Time Guardian spawn check skipped - counter: {}/{}, actual guardians in world: {}",
+                spawnedGuardiansCount, MAX_TIME_GUARDIANS_PER_WORLD, actualGuardianCount);
+
+            // If the counter is wrong (actual count is less), reset the counter
+            if (actualGuardianCount < spawnedGuardiansCount) {
+                Chronosphere.LOGGER.warn("Counter mismatch detected! Resetting counter from {} to {}",
+                    spawnedGuardiansCount, actualGuardianCount);
+                spawnedGuardiansCount = actualGuardianCount;
+                // Don't return - continue checking
+            } else {
+                return;
+            }
         }
 
         // Only process if there are players in the dimension
@@ -109,25 +123,35 @@ public class TimeGuardianSpawner {
         var player = level.players().get(0);
         ChunkPos playerChunkPos = new ChunkPos(player.blockPosition());
 
-        // Check chunks in a 5-chunk radius around player
-        for (int x = -5; x <= 5; x++) {
-            for (int z = -5; z <= 5; z++) {
+        // Check chunks in a 16-chunk radius around player (increased from 5 to 16 chunks = 256 blocks)
+        // This ensures Desert Clock Towers are detected even at moderate distances
+        int checkRadius = 16;
+
+        for (int x = -checkRadius; x <= checkRadius; x++) {
+            for (int z = -checkRadius; z <= checkRadius; z++) {
                 ChunkPos chunkPos = new ChunkPos(playerChunkPos.x + x, playerChunkPos.z + z);
 
                 // Check if this chunk contains a Desert Clock Tower structure
                 if (hasDesertClockTower(level, chunkPos)) {
                     BlockPos structurePos = chunkPos.getWorldPosition();
 
-                    // Skip if we've already processed this structure
+                    // Skip if we've already successfully spawned at this structure
                     if (spawnedStructures.contains(structurePos)) {
                         continue;
                     }
 
-                    // Mark this structure as processed
-                    spawnedStructures.add(structurePos);
+                    Chronosphere.LOGGER.info("Found Desert Clock Tower at chunk {} - attempting to spawn Time Guardian", chunkPos);
 
-                    // Spawn Time Guardian at the top of the structure
-                    spawnTimeGuardianAtTower(level, chunkPos);
+                    // Attempt to spawn Time Guardian at the top of the structure
+                    boolean spawnSuccess = spawnTimeGuardianAtTower(level, chunkPos);
+
+                    // Only mark as processed if spawn was successful
+                    if (spawnSuccess) {
+                        spawnedStructures.add(structurePos);
+                        Chronosphere.LOGGER.info("Successfully spawned and marked structure at {} as processed", structurePos);
+                    } else {
+                        Chronosphere.LOGGER.warn("Failed to spawn Time Guardian at {} - will retry on next check", structurePos);
+                    }
 
                     // Check if we've reached the limit
                     if (spawnedGuardiansCount >= MAX_TIME_GUARDIANS_PER_WORLD) {
@@ -148,9 +172,12 @@ public class TimeGuardianSpawner {
     private static boolean hasDesertClockTower(ServerLevel level, ChunkPos chunkPos) {
         // Get structure starts for this chunk
         var structureManager = level.structureManager();
+        BlockPos worldPos = chunkPos.getWorldPosition();
 
         // Check all structures in this chunk
-        for (var entry : structureManager.getAllStructuresAt(chunkPos.getWorldPosition()).entrySet()) {
+        var structures = structureManager.getAllStructuresAt(worldPos);
+
+        for (var entry : structures.entrySet()) {
             Structure structure = entry.getKey();
 
             // Get structure's resource location
@@ -159,6 +186,7 @@ public class TimeGuardianSpawner {
                 .getKey(structure);
 
             if (structureLocation != null && structureLocation.equals(DESERT_CLOCK_TOWER_ID)) {
+                Chronosphere.LOGGER.info("Detected Desert Clock Tower at chunk {} (world pos: {})", chunkPos, worldPos);
                 return true;
             }
         }
@@ -171,8 +199,9 @@ public class TimeGuardianSpawner {
      *
      * @param level The ServerLevel to spawn in
      * @param chunkPos The chunk position containing the structure
+     * @return true if spawn was successful, false otherwise
      */
-    private static void spawnTimeGuardianAtTower(ServerLevel level, ChunkPos chunkPos) {
+    private static boolean spawnTimeGuardianAtTower(ServerLevel level, ChunkPos chunkPos) {
         // Get the structure start
         var structureManager = level.structureManager();
         BlockPos chunkBlockPos = chunkPos.getWorldPosition();
@@ -193,7 +222,7 @@ public class TimeGuardianSpawner {
 
                 if (towerSpawnPos == null) {
                     Chronosphere.LOGGER.warn("Could not find Desert Clock Tower top floor at chunk {}", chunkPos);
-                    return;
+                    return false;
                 }
 
                 Chronosphere.LOGGER.info("Calculated spawn position: {}", towerSpawnPos);
@@ -201,11 +230,19 @@ public class TimeGuardianSpawner {
                 // Check if a Time Guardian already exists near this position
                 if (isGuardianNearby(level, towerSpawnPos)) {
                     Chronosphere.LOGGER.debug("Time Guardian already exists near {}", towerSpawnPos);
-                    return;
+                    // Return true because this structure already has a guardian (success state)
+                    return true;
                 }
 
                 // Find a valid spawn position (air block with solid ground)
                 BlockPos spawnPos = findValidSpawnPosition(level, towerSpawnPos);
+
+                if (spawnPos == null) {
+                    Chronosphere.LOGGER.warn("Could not find valid spawn position near {} - skipping Time Guardian spawn", towerSpawnPos);
+                    return false;
+                }
+
+                Chronosphere.LOGGER.info("Found valid spawn position: {}", spawnPos);
 
                 // Create and spawn Time Guardian
                 TimeGuardianEntity guardian = ModEntities.TIME_GUARDIAN.get().create(level);
@@ -226,21 +263,26 @@ public class TimeGuardianSpawner {
 
                     level.addFreshEntity(guardian);
 
-                    // Increment counter
+                    // Increment counter AFTER successfully adding entity
                     spawnedGuardiansCount++;
 
                     Chronosphere.LOGGER.info(
-                        "Time Guardian spawned at [{}, {}, {}] (Total: {}/{})",
+                        "✓ Time Guardian spawned at [{}, {}, {}] - Counter incremented to {}/{}",
                         spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(),
                         spawnedGuardiansCount, MAX_TIME_GUARDIANS_PER_WORLD
                     );
-                }
 
-                // IMPORTANT: Only spawn once per structure
-                // Exit immediately after processing this structure
-                return;
+                    // Return true to indicate successful spawn
+                    return true;
+                } else {
+                    Chronosphere.LOGGER.error("Failed to create Time Guardian entity at {}", spawnPos);
+                    return false;
+                }
             }
         }
+
+        // No Desert Clock Tower structure found in this chunk
+        return false;
     }
 
     /**
@@ -336,36 +378,95 @@ public class TimeGuardianSpawner {
 
     /**
      * Find a valid spawn position near the given position.
-     * Looks for an air block with solid ground beneath.
+     * Looks for an air block with solid ground beneath, avoiding chains and other non-solid blocks.
      *
      * @param level The ServerLevel to check
      * @param startPos The starting position to search from
-     * @return A valid spawn position
+     * @return A valid spawn position, or null if none found
      */
     private static BlockPos findValidSpawnPosition(ServerLevel level, BlockPos startPos) {
-        // Search downward up to 10 blocks
-        for (int i = 0; i < 10; i++) {
+        // Time Guardian entity dimensions (approximate bounding box)
+        // Height: 3 blocks (to account for full entity height)
+        int entityHeight = 3;
+
+        // First, search downward up to 15 blocks (increased from 10)
+        for (int i = 0; i < 15; i++) {
             BlockPos checkPos = startPos.below(i);
 
-            // Check if this is a valid spawn position (air with solid ground)
-            if (level.getBlockState(checkPos).isAir() &&
-                !level.getBlockState(checkPos.below()).isAir()) {
+            if (isValidSpawnLocation(level, checkPos, entityHeight)) {
+                Chronosphere.LOGGER.debug("Found valid spawn position {} blocks below start position", i);
                 return checkPos;
             }
         }
 
-        // If no valid position found, return original position
-        return startPos;
+        // If vertical search failed, try horizontal search in a 5x5 area
+        Chronosphere.LOGGER.debug("Vertical search failed, trying horizontal search");
+        for (int dx = -2; dx <= 2; dx++) {
+            for (int dz = -2; dz <= 2; dz++) {
+                // Skip center (already checked in vertical search)
+                if (dx == 0 && dz == 0) continue;
+
+                BlockPos horizontalPos = startPos.offset(dx, 0, dz);
+
+                // Search downward from each horizontal position
+                for (int dy = 0; dy < 15; dy++) {
+                    BlockPos checkPos = horizontalPos.below(dy);
+
+                    if (isValidSpawnLocation(level, checkPos, entityHeight)) {
+                        Chronosphere.LOGGER.debug("Found valid spawn position at horizontal offset ({}, {}) and {} blocks down", dx, dz, dy);
+                        return checkPos;
+                    }
+                }
+            }
+        }
+
+        // If no valid position found, return null
+        Chronosphere.LOGGER.warn("Could not find any valid spawn position near {} after exhaustive search", startPos);
+        return null;
+    }
+
+    /**
+     * Check if a position is valid for spawning a Time Guardian.
+     * Validates that the ground is solid and all blocks where the entity will occupy are air.
+     *
+     * @param level The ServerLevel to check
+     * @param pos The position to check
+     * @param entityHeight The height of the entity
+     * @return true if the position is valid for spawning
+     */
+    private static boolean isValidSpawnLocation(ServerLevel level, BlockPos pos, int entityHeight) {
+        // Check if the ground block is solid
+        if (!level.getBlockState(pos.below()).isSolid()) {
+            return false;
+        }
+
+        // Check if all blocks where the entity will occupy are air (no chains, no other blocks)
+        for (int y = 0; y < entityHeight; y++) {
+            BlockPos entityBlockPos = pos.above(y);
+            var blockState = level.getBlockState(entityBlockPos);
+
+            // Only accept pure air blocks - this ensures no collision with chains, lanterns, etc.
+            if (!blockState.isAir()) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
      * Reset spawn tracking (useful for testing or world reset).
      */
     public static void reset() {
+        int previousCount = spawnedGuardiansCount;
+        int previousStructures = spawnedStructures.size();
+
         spawnedStructures.clear();
         spawnedGuardiansCount = 0;
         tickCounter = 0;
         lastWorldId = null;
-        Chronosphere.LOGGER.info("Time Guardian Spawner reset");
+
+        Chronosphere.LOGGER.info("Time Guardian Spawner reset (was tracking {} guardians, {} structures)",
+            previousCount, previousStructures);
     }
 }
