@@ -247,10 +247,10 @@
 
 ### Documentation
 
-- [ ] T185 [P] Update README.md with build instructions for both loaders
+- [x] T185 [P] Update README.md with build instructions for both loaders
 - [ ] T186 [P] Create CurseForge mod page description
 - [ ] T187 [P] Create Modrinth mod page description
-- [ ] T188 [P] Write player guide in docs/player_guide.md
+- [x] T188 [P] Write player guide in docs/player_guide.md
 - [ ] T189 [P] Write developer guide in docs/developer_guide.md
 - [ ] T295 [P] Configure mod metadata (display name, description, author, icon) in fabric.mod.json and neoforge.mods.toml
 - [ ] T296 [P] Add mod icon/logo image (512x512 or 256x256 PNG) to resources
