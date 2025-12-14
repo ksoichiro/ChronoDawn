@@ -1,5 +1,6 @@
 package com.chronosphere.entities.bosses;
 
+import com.chronosphere.registry.ModSounds;
 import com.chronosphere.worldgen.protection.BlockProtectionHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -278,7 +279,7 @@ public class EntropyKeeperEntity extends Monster {
         this.level().playSound(
             null,
             targetPos,
-            SoundEvents.SCULK_BLOCK_PLACE,
+            ModSounds.ENTROPY_ATTACK.get(),
             SoundSource.HOSTILE,
             1.0f, 0.8f
         );
@@ -301,7 +302,7 @@ public class EntropyKeeperEntity extends Monster {
             this.level().playSound(
                 null,
                 this.getX(), this.getY(), this.getZ(),
-                SoundEvents.WITHER_AMBIENT,
+                ModSounds.ENTROPY_WITHER_ANGER.get(),
                 SoundSource.HOSTILE,
                 1.0f, 1.2f
             );
@@ -352,7 +353,7 @@ public class EntropyKeeperEntity extends Monster {
         this.level().playSound(
             null,
             this.getX(), this.getY(), this.getZ(),
-            SoundEvents.GENERIC_EXPLODE,
+            ModSounds.ENTROPY_BURST.get(),
             SoundSource.HOSTILE,
             2.0f, 0.8f
         );

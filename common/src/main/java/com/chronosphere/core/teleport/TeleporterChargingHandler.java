@@ -2,6 +2,7 @@ package com.chronosphere.core.teleport;
 
 import com.chronosphere.blocks.ClockTowerTeleporterBlock;
 import com.chronosphere.registry.ModBlocks;
+import com.chronosphere.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
@@ -66,8 +67,8 @@ public class TeleporterChargingHandler {
         // Immediately show initial charging effects
         ServerLevel level = (ServerLevel) player.level();
 
-        // Initial sound (more pleasant than lever click)
-        level.playSound(null, teleporterPos, SoundEvents.BEACON_ACTIVATE, SoundSource.BLOCKS, 0.8f, 1.5f);
+        // Initial sound (teleporter charging begins)
+        level.playSound(null, teleporterPos, ModSounds.TELEPORTER_CHARGE_START.get(), SoundSource.BLOCKS, 0.8f, 1.5f);
 
         // Initial particle burst (orange dust particles)
         for (int i = 0; i < 20; i++) {
@@ -122,10 +123,10 @@ public class TeleporterChargingHandler {
         // Play sounds at intervals
         if (elapsedTicks == 20) {
             // 1 second
-            level.playSound(null, data.teleporterPos, SoundEvents.PORTAL_AMBIENT, SoundSource.BLOCKS, 0.5f, 1.0f);
+            level.playSound(null, data.teleporterPos, ModSounds.TELEPORTER_CHARGING.get(), SoundSource.BLOCKS, 0.5f, 1.0f);
         } else if (elapsedTicks == 40) {
             // 2 seconds
-            level.playSound(null, data.teleporterPos, SoundEvents.PORTAL_AMBIENT, SoundSource.BLOCKS, 0.7f, 1.2f);
+            level.playSound(null, data.teleporterPos, ModSounds.TELEPORTER_CHARGING.get(), SoundSource.BLOCKS, 0.7f, 1.2f);
         }
 
         // Check if charging is complete
@@ -223,7 +224,7 @@ public class TeleporterChargingHandler {
         Vec3 safeLandingPos = findSafeLandingPosition(level, targetPos, direction.equals("DOWN"));
 
         // Teleport sound and particles at departure
-        level.playSound(null, player.blockPosition(), SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0f, 1.0f);
+        level.playSound(null, player.blockPosition(), ModSounds.TELEPORTER_WARP.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
         level.sendParticles(
             ParticleTypes.PORTAL,
             player.getX(), player.getY() + 1.0, player.getZ(),
@@ -240,7 +241,7 @@ public class TeleporterChargingHandler {
         );
 
         // Teleport sound and particles at arrival
-        level.playSound(null, targetPos, SoundEvents.ENDERMAN_TELEPORT, SoundSource.PLAYERS, 1.0f, 1.0f);
+        level.playSound(null, targetPos, ModSounds.TELEPORTER_WARP.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
         level.sendParticles(
             ParticleTypes.PORTAL,
             targetPos.getX() + 0.5, targetPos.getY() + 1.0, targetPos.getZ() + 0.5,

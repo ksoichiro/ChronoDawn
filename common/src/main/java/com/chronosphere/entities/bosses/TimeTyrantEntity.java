@@ -4,6 +4,7 @@ import com.chronosphere.core.time.MobAICanceller;
 import com.chronosphere.entities.bosses.ExtendedMeleeAttackGoal;
 import com.chronosphere.registry.ModEffects;
 import com.chronosphere.registry.ModItems;
+import com.chronosphere.registry.ModSounds;
 import com.chronosphere.worldgen.protection.BlockProtectionHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -250,7 +251,7 @@ public class TimeTyrantEntity extends Monster {
         this.level().playSound(
             null,
             this.blockPosition(),
-            SoundEvents.WITHER_SPAWN,
+            ModSounds.BOSS_POWER_UP.get(),
             SoundSource.HOSTILE,
             2.0f,
             1.0f
@@ -350,7 +351,7 @@ public class TimeTyrantEntity extends Monster {
         this.level().playSound(
             null,
             target.blockPosition(),
-            SoundEvents.WITHER_SPAWN,
+            ModSounds.BOSS_POWER_UP.get(),
             SoundSource.HOSTILE,
             1.0f,
             1.5f
@@ -584,7 +585,7 @@ public class TimeTyrantEntity extends Monster {
         this.level().playSound(
             null,
             this.blockPosition(),
-            SoundEvents.ENDERMAN_TELEPORT,
+            ModSounds.BOSS_TELEPORT.get(),
             SoundSource.HOSTILE,
             1.0f,
             1.0f
@@ -716,7 +717,7 @@ public class TimeTyrantEntity extends Monster {
             this.level().playSound(
                 null,
                 this.blockPosition(),
-                SoundEvents.EVOKER_CAST_SPELL,
+                ModSounds.BOSS_CAST_SPELL.get(),
                 SoundSource.HOSTILE,
                 2.0f,
                 0.8f
@@ -782,7 +783,7 @@ public class TimeTyrantEntity extends Monster {
         this.level().playSound(
             null,
             this.blockPosition(),
-            SoundEvents.PLAYER_LEVELUP,
+            ModSounds.TYRANT_PHASE_CHANGE.get(),
             SoundSource.HOSTILE,
             2.0f,
             1.0f
@@ -878,7 +879,7 @@ public class TimeTyrantEntity extends Monster {
         this.level().playSound(
             null,
             this.blockPosition(),
-            SoundEvents.BELL_BLOCK,
+            ModSounds.TYRANT_BELL.get(),
             SoundSource.HOSTILE,
             1.0f,
             0.5f // Lower pitch for debuff effect

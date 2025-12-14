@@ -1,5 +1,6 @@
 package com.chronosphere.items;
 
+import com.chronosphere.registry.ModSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
@@ -244,7 +245,7 @@ public class TimeCompassItem extends Item {
                         .withStyle(ChatFormatting.AQUA),
                     false
                 );
-                level.playSound(null, player.blockPosition(), SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.PLAYERS, 1.0f, 1.0f);
+                level.playSound(null, player.blockPosition(), ModSounds.TIME_COMPASS_CHIME.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
                 return InteractionResultHolder.success(stack);
             }
 
@@ -274,7 +275,7 @@ public class TimeCompassItem extends Item {
                             .withStyle(ChatFormatting.GREEN),
                         false
                     );
-                    level.playSound(null, player.blockPosition(), SoundEvents.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, SoundSource.PLAYERS, 1.0f, 1.0f);
+                    level.playSound(null, player.blockPosition(), ModSounds.TIME_COMPASS_UPDATE.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
                 }
                 return InteractionResultHolder.success(stack);
             } else {
@@ -285,7 +286,7 @@ public class TimeCompassItem extends Item {
                         .withStyle(ChatFormatting.YELLOW),
                     false
                 );
-                level.playSound(null, player.blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0f, 0.5f);
+                level.playSound(null, player.blockPosition(), ModSounds.TIME_COMPASS_BREAK.get(), SoundSource.PLAYERS, 1.0f, 0.5f);
                 return InteractionResultHolder.fail(stack);
             }
         }

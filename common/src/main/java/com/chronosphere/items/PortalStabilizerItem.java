@@ -6,6 +6,7 @@ import com.chronosphere.core.portal.PortalState;
 import com.chronosphere.core.portal.PortalStateMachine;
 import com.chronosphere.data.ChronosphereGlobalState;
 import com.chronosphere.registry.ModBlocks;
+import com.chronosphere.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -221,7 +222,7 @@ public class PortalStabilizerItem extends Item {
         level.playSound(
             null, // null = all nearby players can hear
             centerPos,
-            net.minecraft.sounds.SoundEvents.END_PORTAL_SPAWN, // Dramatic portal spawn sound
+            ModSounds.PORTAL_STABILIZE_SPAWN.get(), // Dramatic portal spawn sound
             net.minecraft.sounds.SoundSource.BLOCKS,
             1.0F, // volume
             1.0F  // pitch
@@ -231,7 +232,7 @@ public class PortalStabilizerItem extends Item {
         level.playSound(
             null,
             centerPos,
-            net.minecraft.sounds.SoundEvents.BEACON_ACTIVATE,
+            ModSounds.PORTAL_STABILIZE_ACTIVATE.get(),
             net.minecraft.sounds.SoundSource.BLOCKS,
             0.5F, // quieter than main sound
             1.2F  // slightly higher pitch

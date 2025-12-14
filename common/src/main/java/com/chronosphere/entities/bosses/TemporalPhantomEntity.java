@@ -1,6 +1,7 @@
 package com.chronosphere.entities.bosses;
 
 import com.chronosphere.entities.projectiles.TimeBlastEntity;
+import com.chronosphere.registry.ModSounds;
 import com.chronosphere.worldgen.protection.BlockProtectionHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -198,7 +199,7 @@ public class TemporalPhantomEntity extends Monster implements RangedAttackMob {
             this.level().playSound(
                 null,
                 this.getX(), this.getY(), this.getZ(),
-                SoundEvents.ENDERMAN_TELEPORT,
+                ModSounds.BOSS_TELEPORT.get(),
                 SoundSource.HOSTILE,
                 1.0f, 1.5f
             );
@@ -259,7 +260,7 @@ public class TemporalPhantomEntity extends Monster implements RangedAttackMob {
             this.level().playSound(
                 null,
                 this.getX(), this.getY(), this.getZ(),
-                SoundEvents.EVOKER_CAST_SPELL,
+                ModSounds.BOSS_CAST_SPELL.get(),
                 SoundSource.HOSTILE,
                 1.0f, 1.2f
             );
@@ -300,7 +301,7 @@ public class TemporalPhantomEntity extends Monster implements RangedAttackMob {
         this.level().playSound(
             null,
             this.getX(), this.getY(), this.getZ(),
-            SoundEvents.EVOKER_PREPARE_SUMMON,
+            ModSounds.BOSS_PREPARE_SUMMON.get(),
             SoundSource.HOSTILE,
             1.0f, 1.0f
         );
@@ -428,7 +429,7 @@ public class TemporalPhantomEntity extends Monster implements RangedAttackMob {
         this.level().playSound(
             null,
             this.blockPosition(),
-            SoundEvents.ENDERMAN_TELEPORT,
+            ModSounds.PHANTOM_TELEPORT.get(),
             SoundSource.HOSTILE,
             1.0f, 1.0f
         );

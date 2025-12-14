@@ -1,6 +1,7 @@
 package com.chronosphere.items;
 
 import com.chronosphere.registry.ModEffects;
+import com.chronosphere.registry.ModSounds;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -79,7 +80,7 @@ public class ChronoAegisItem extends Item {
             level.playSound(
                 null,
                 player.getX(), player.getY(), player.getZ(),
-                SoundEvents.END_PORTAL_FRAME_FILL,
+                ModSounds.CHRONO_AEGIS_ACTIVATE.get(),
                 SoundSource.PLAYERS,
                 1.0f, 1.0f
             );

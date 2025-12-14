@@ -1,0 +1,249 @@
+{
+  "gear_impact": {
+    "sounds": [
+      {
+        "name": "minecraft:block.anvil.land",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.chronosphere.gear_impact"
+  },
+  "colossus_stomp": {
+    "sounds": [
+      {
+        "name": "minecraft:block.anvil.use",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.chronosphere.colossus_stomp"
+  },
+  "boss_power_up": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.wither.spawn",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.chronosphere.boss_power_up"
+  },
+  "boss_teleport": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.enderman.teleport",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.chronosphere.boss_teleport"
+  },
+  "boss_cast_spell": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.evoker.cast_spell",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.chronosphere.boss_cast_spell"
+  },
+  "boss_prepare_summon": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.evoker.prepare_summon",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.chronosphere.boss_prepare_summon"
+  },
+  "entropy_attack": {
+    "sounds": [
+      {
+        "name": "minecraft:block.sculk.place",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.chronosphere.entropy_attack"
+  },
+  "warden_roar": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.warden.roar",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.chronosphere.warden_roar"
+  },
+  "tyrant_bell": {
+    "sounds": [
+      {
+        "name": "minecraft:block.bell.use",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.chronosphere.tyrant_bell"
+  },
+  "entropy_wither_anger": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.wither.ambient",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.chronosphere.entropy_wither_anger"
+  },
+  "teleporter_warp": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.enderman.teleport",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.chronosphere.teleporter_warp"
+  },
+  "teleporter_charge_start": {
+    "sounds": [
+      {
+        "name": "minecraft:block.beacon.activate",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.chronosphere.teleporter_charge_start"
+  },
+  "teleporter_charging": {
+    "sounds": [
+      {
+        "name": "minecraft:block.portal.ambient",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.chronosphere.teleporter_charging"
+  },
+  "colossus_activate": {
+    "sounds": [
+      {
+        "name": "minecraft:block.beacon.activate",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.chronosphere.colossus_activate"
+  },
+  "gear_launch": {
+    "sounds": [
+      {
+        "name": "minecraft:block.dispenser.launch",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.chronosphere.gear_launch"
+  },
+  "gear_ground_impact": {
+    "sounds": [
+      {
+        "name": "minecraft:block.stone.hit",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.chronosphere.gear_ground_impact"
+  },
+  "entropy_burst": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.generic.explode",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.chronosphere.entropy_burst"
+  },
+  "phantom_teleport": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.enderman.teleport",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.chronosphere.phantom_teleport"
+  },
+  "time_needle_break": {
+    "sounds": [
+      {
+        "name": "minecraft:block.stone.break",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.chronosphere.time_needle_break"
+  },
+  "time_needle_place": {
+    "sounds": [
+      {
+        "name": "minecraft:block.stone.place",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.chronosphere.time_needle_place"
+  },
+  "tyrant_phase_change": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.player.levelup",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.chronosphere.tyrant_phase_change"
+  },
+  "chrono_aegis_activate": {
+    "sounds": [
+      {
+        "name": "minecraft:block.end_portal_frame.fill",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.chronosphere.chrono_aegis_activate"
+  },
+  "portal_stabilize_spawn": {
+    "sounds": [
+      {
+        "name": "minecraft:block.end_portal.spawn",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.chronosphere.portal_stabilize_spawn"
+  },
+  "portal_stabilize_activate": {
+    "sounds": [
+      {
+        "name": "minecraft:block.beacon.activate",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.chronosphere.portal_stabilize_activate"
+  },
+  "time_compass_chime": {
+    "sounds": [
+      {
+        "name": "minecraft:block.amethyst_block.chime",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.chronosphere.time_compass_chime"
+  },
+  "time_compass_update": {
+    "sounds": [
+      {
+        "name": "minecraft:ui.cartography_table.take_result",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.chronosphere.time_compass_update"
+  },
+  "time_compass_break": {
+    "sounds": [
+      {
+        "name": "minecraft:entity.item.break",
+        "type": "event"
+      }
+    ],
+    "subtitle": "subtitles.chronosphere.time_compass_break"
+  }
+}
+
+
+
+

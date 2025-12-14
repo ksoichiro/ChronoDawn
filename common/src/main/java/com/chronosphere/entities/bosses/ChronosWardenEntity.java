@@ -2,6 +2,7 @@ package com.chronosphere.entities.bosses;
 
 import com.chronosphere.entities.ai.GroundSlamGoal;
 import com.chronosphere.registry.ModItems;
+import com.chronosphere.registry.ModSounds;
 import com.chronosphere.worldgen.protection.BlockProtectionHandler;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
@@ -220,7 +221,7 @@ public class ChronosWardenEntity extends Monster {
                 serverLevel.playSound(
                     null,
                     this.blockPosition(),
-                    SoundEvents.WARDEN_ROAR,
+                    ModSounds.WARDEN_ROAR.get(),
                     SoundSource.HOSTILE,
                     1.0f,
                     0.8f
@@ -251,7 +252,7 @@ public class ChronosWardenEntity extends Monster {
         this.level().playSound(
             null,
             this.blockPosition(),
-            SoundEvents.STONE_BREAK,
+            ModSounds.TIME_NEEDLE_BREAK.get(),
             SoundSource.HOSTILE,
             1.0f,
             0.5f
@@ -281,7 +282,7 @@ public class ChronosWardenEntity extends Monster {
         this.level().playSound(
             null,
             this.blockPosition(),
-            SoundEvents.STONE_PLACE,
+            ModSounds.TIME_NEEDLE_PLACE.get(),
             SoundSource.HOSTILE,
             1.0f,
             0.8f
@@ -355,7 +356,7 @@ public class ChronosWardenEntity extends Monster {
         this.level().playSound(
             null,
             this.blockPosition(),
-            SoundEvents.WITHER_SPAWN,
+            ModSounds.BOSS_POWER_UP.get(),
             SoundSource.HOSTILE,
             0.5f,
             0.8f
