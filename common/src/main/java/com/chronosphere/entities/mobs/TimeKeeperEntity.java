@@ -194,7 +194,7 @@ public class TimeKeeperEntity extends AbstractVillager {
         MerchantOffers offers = this.getOffers();
 
         if (offers.isEmpty()) {
-            // Trade 1: 16 Clockstone → 1 Glowstone Dust (Portal Stabilizer material)
+            // Trade 1: 16 Clockstone → 4 Glowstone Dust (Portal Stabilizer material)
             offers.add(new MerchantOffer(
                 new ItemCost(ModItems.CLOCKSTONE.get(), 16),
                 new ItemStack(Items.GLOWSTONE_DUST, 4),
@@ -203,7 +203,7 @@ public class TimeKeeperEntity extends AbstractVillager {
                 0.05f // Price multiplier
             ));
 
-            // Trade 2: 8 Clockstone → 1-3 Fruit of Time
+            // Trade 2: 8 Clockstone → 3 Fruit of Time
             offers.add(new MerchantOffer(
                 new ItemCost(ModItems.CLOCKSTONE.get(), 8),
                 new ItemStack(ModItems.FRUIT_OF_TIME.get(), 3),
@@ -212,7 +212,17 @@ public class TimeKeeperEntity extends AbstractVillager {
                 0.05f
             ));
 
-            // Trade 3: 1 Enhanced Clockstone + 16 Clockstone → 1 Ender Pearl (Portal Stabilizer material)
+            // Trade 3: 4 Fruit of Time → 8 String
+            // Early-game resource for bow crafting (cobwebs may be scarce)
+            offers.add(new MerchantOffer(
+                new ItemCost(ModItems.FRUIT_OF_TIME.get(), 4),
+                new ItemStack(Items.STRING, 8),
+                8, // Max uses (renewable resource)
+                2, // XP reward
+                0.05f
+            ));
+
+            // Trade 4: 1 Enhanced Clockstone + 16 Clockstone → 1 Ender Pearl (Portal Stabilizer material)
             offers.add(new MerchantOffer(
                 new ItemCost(ModItems.ENHANCED_CLOCKSTONE.get(), 1),
                 Optional.of(new ItemCost(ModItems.CLOCKSTONE.get(), 16)),
@@ -222,7 +232,7 @@ public class TimeKeeperEntity extends AbstractVillager {
                 0.05f
             ));
 
-            // Trade 4: 2 Enhanced Clockstone → 4 Time Wood Sapling
+            // Trade 5: 2 Enhanced Clockstone → 4 Time Wood Sapling
             offers.add(new MerchantOffer(
                 new ItemCost(ModItems.ENHANCED_CLOCKSTONE.get(), 2),
                 new ItemStack(com.chronosphere.registry.ModBlocks.TIME_WOOD_SAPLING.get().asItem(), 4),
@@ -231,37 +241,83 @@ public class TimeKeeperEntity extends AbstractVillager {
                 0.05f
             ));
 
-            // Trade 5: 16 Clockstone → Time Compass (Desert Clock Tower)
+            // Trade 6: 12 Clockstone + 4 Time Crystal → Time Compass (Desert Clock Tower)
             // Points to nearest Desert Clock Tower in Chronosphere
             // Early-game guidance item (accessible right after entering Chronosphere)
+            // Recommended visit order: 1st
             ItemStack desertTowerCompass = createCompassWithPosition(TimeCompassItem.STRUCTURE_DESERT_CLOCK_TOWER);
             offers.add(new MerchantOffer(
-                new ItemCost(ModItems.CLOCKSTONE.get(), 16),
+                new ItemCost(ModItems.CLOCKSTONE.get(), 12),
+                Optional.of(new ItemCost(ModItems.TIME_CRYSTAL.get(), 4)),
                 desertTowerCompass,
                 3, // Max uses (can buy multiple for party members)
                 10, // XP reward
                 0.05f
             ));
 
-            // Trade 6: 8 Enhanced Clockstone → Time Compass (Master Clock)
-            // Points to nearest Master Clock Tower in Chronosphere
-            // Mid-game guidance item (after Desert Clock Tower)
-            ItemStack masterClockCompass = createCompassWithPosition(TimeCompassItem.STRUCTURE_MASTER_CLOCK);
+            // Trade 7: 12 Clockstone + 6 Time Crystal → Time Compass (Phantom Catacombs)
+            // Points to Phantom Catacombs mid-boss dungeon
+            // Recommended visit order: 2nd (after Desert Clock Tower)
+            ItemStack phantomCatacombsCompass = createCompassWithPosition(TimeCompassItem.STRUCTURE_PHANTOM_CATACOMBS);
             offers.add(new MerchantOffer(
-                new ItemCost(ModItems.ENHANCED_CLOCKSTONE.get(), 8),
-                masterClockCompass,
-                1, // Max uses (rare, powerful item)
-                15, // Higher XP reward
+                new ItemCost(ModItems.CLOCKSTONE.get(), 12),
+                Optional.of(new ItemCost(ModItems.TIME_CRYSTAL.get(), 6)),
+                phantomCatacombsCompass,
+                2, // Max uses (mid-boss dungeon compass)
+                12, // XP reward
                 0.05f
             ));
 
-            // Trade 7: 4 Fruit of Time → 8 String
-            // Early-game resource for bow crafting (cobwebs may be scarce)
+            // Trade 8: 12 Clockstone + 6 Time Crystal → Time Compass (Guardian Vault)
+            // Points to Guardian Vault mid-boss dungeon
+            // Recommended visit order: 3rd
+            ItemStack guardianVaultCompass = createCompassWithPosition(TimeCompassItem.STRUCTURE_GUARDIAN_VAULT);
             offers.add(new MerchantOffer(
-                new ItemCost(ModItems.FRUIT_OF_TIME.get(), 4),
-                new ItemStack(Items.STRING, 8),
-                8, // Max uses (renewable resource)
-                2, // XP reward
+                new ItemCost(ModItems.CLOCKSTONE.get(), 12),
+                Optional.of(new ItemCost(ModItems.TIME_CRYSTAL.get(), 6)),
+                guardianVaultCompass,
+                2, // Max uses (mid-boss dungeon compass)
+                12, // XP reward
+                0.05f
+            ));
+
+            // Trade 9: 12 Clockstone + 6 Time Crystal → Time Compass (Clockwork Depths)
+            // Points to Clockwork Depths mid-boss dungeon
+            // Recommended visit order: 4th
+            ItemStack clockworkDepthsCompass = createCompassWithPosition(TimeCompassItem.STRUCTURE_CLOCKWORK_DEPTHS);
+            offers.add(new MerchantOffer(
+                new ItemCost(ModItems.CLOCKSTONE.get(), 12),
+                Optional.of(new ItemCost(ModItems.TIME_CRYSTAL.get(), 6)),
+                clockworkDepthsCompass,
+                2, // Max uses (mid-boss dungeon compass)
+                12, // XP reward
+                0.05f
+            ));
+
+            // Trade 10: 12 Clockstone + 6 Time Crystal → Time Compass (Entropy Crypt)
+            // Points to Entropy Crypt mid-boss dungeon
+            // Recommended visit order: 5th
+            ItemStack entropyCryptCompass = createCompassWithPosition(TimeCompassItem.STRUCTURE_ENTROPY_CRYPT);
+            offers.add(new MerchantOffer(
+                new ItemCost(ModItems.CLOCKSTONE.get(), 12),
+                Optional.of(new ItemCost(ModItems.TIME_CRYSTAL.get(), 6)),
+                entropyCryptCompass,
+                2, // Max uses (mid-boss dungeon compass)
+                12, // XP reward
+                0.05f
+            ));
+
+            // Trade 11: 16 Clockstone + 8 Time Crystal → Time Compass (Master Clock)
+            // Points to nearest Master Clock Tower in Chronosphere
+            // End-game guidance item (after 4 mid-boss dungeons)
+            // Recommended visit order: 6th (final destination)
+            ItemStack masterClockCompass = createCompassWithPosition(TimeCompassItem.STRUCTURE_MASTER_CLOCK);
+            offers.add(new MerchantOffer(
+                new ItemCost(ModItems.CLOCKSTONE.get(), 16),
+                Optional.of(new ItemCost(ModItems.TIME_CRYSTAL.get(), 8)),
+                masterClockCompass,
+                1, // Max uses (rare, powerful item)
+                15, // Higher XP reward
                 0.05f
             ));
         }
@@ -323,6 +379,34 @@ public class TimeKeeperEntity extends AbstractVillager {
                     ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath("chronosphere", "chronosphere"))
                 );
                 structureId = ResourceLocation.fromNamespaceAndPath("chronosphere", "master_clock");
+                break;
+            case TimeCompassItem.STRUCTURE_PHANTOM_CATACOMBS:
+                // Phantom Catacombs is in Chronosphere dimension
+                searchLevel = serverLevel.getServer().getLevel(
+                    ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath("chronosphere", "chronosphere"))
+                );
+                structureId = ResourceLocation.fromNamespaceAndPath("chronosphere", "phantom_catacombs");
+                break;
+            case TimeCompassItem.STRUCTURE_GUARDIAN_VAULT:
+                // Guardian Vault is in Chronosphere dimension
+                searchLevel = serverLevel.getServer().getLevel(
+                    ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath("chronosphere", "chronosphere"))
+                );
+                structureId = ResourceLocation.fromNamespaceAndPath("chronosphere", "guardian_vault");
+                break;
+            case TimeCompassItem.STRUCTURE_CLOCKWORK_DEPTHS:
+                // Clockwork Depths is in Chronosphere dimension
+                searchLevel = serverLevel.getServer().getLevel(
+                    ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath("chronosphere", "chronosphere"))
+                );
+                structureId = ResourceLocation.fromNamespaceAndPath("chronosphere", "clockwork_depths");
+                break;
+            case TimeCompassItem.STRUCTURE_ENTROPY_CRYPT:
+                // Entropy Crypt is in Chronosphere dimension
+                searchLevel = serverLevel.getServer().getLevel(
+                    ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath("chronosphere", "chronosphere"))
+                );
+                structureId = ResourceLocation.fromNamespaceAndPath("chronosphere", "entropy_crypt");
                 break;
             default:
                 com.chronosphere.Chronosphere.LOGGER.warn("Time Keeper: Unknown structure type: {}", structureType);

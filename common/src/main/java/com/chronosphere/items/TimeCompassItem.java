@@ -68,6 +68,10 @@ public class TimeCompassItem extends Item {
     public static final String STRUCTURE_ANCIENT_RUINS = "ancient_ruins";
     public static final String STRUCTURE_DESERT_CLOCK_TOWER = "desert_clock_tower";
     public static final String STRUCTURE_MASTER_CLOCK = "master_clock";
+    public static final String STRUCTURE_PHANTOM_CATACOMBS = "phantom_catacombs";
+    public static final String STRUCTURE_GUARDIAN_VAULT = "guardian_vault";
+    public static final String STRUCTURE_CLOCKWORK_DEPTHS = "clockwork_depths";
+    public static final String STRUCTURE_ENTROPY_CRYPT = "entropy_crypt";
 
     public TimeCompassItem(Properties properties) {
         super(properties);
@@ -166,6 +170,10 @@ public class TimeCompassItem extends Item {
             case STRUCTURE_ANCIENT_RUINS -> "item.chronosphere.time_compass.target.ancient_ruins";
             case STRUCTURE_DESERT_CLOCK_TOWER -> "item.chronosphere.time_compass.target.desert_clock_tower";
             case STRUCTURE_MASTER_CLOCK -> "item.chronosphere.time_compass.target.master_clock";
+            case STRUCTURE_PHANTOM_CATACOMBS -> "item.chronosphere.time_compass.target.phantom_catacombs";
+            case STRUCTURE_GUARDIAN_VAULT -> "item.chronosphere.time_compass.target.guardian_vault";
+            case STRUCTURE_CLOCKWORK_DEPTHS -> "item.chronosphere.time_compass.target.clockwork_depths";
+            case STRUCTURE_ENTROPY_CRYPT -> "item.chronosphere.time_compass.target.entropy_crypt";
             default -> "item.chronosphere.time_compass.target.unknown";
         };
     }
@@ -327,6 +335,34 @@ public class TimeCompassItem extends Item {
                     ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath("chronosphere", "chronosphere"))
                 );
                 structureId = ResourceLocation.fromNamespaceAndPath("chronosphere", "master_clock");
+                break;
+            case STRUCTURE_PHANTOM_CATACOMBS:
+                // Phantom Catacombs is in Chronosphere dimension
+                searchLevel = serverLevel.getServer().getLevel(
+                    ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath("chronosphere", "chronosphere"))
+                );
+                structureId = ResourceLocation.fromNamespaceAndPath("chronosphere", "phantom_catacombs");
+                break;
+            case STRUCTURE_GUARDIAN_VAULT:
+                // Guardian Vault is in Chronosphere dimension
+                searchLevel = serverLevel.getServer().getLevel(
+                    ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath("chronosphere", "chronosphere"))
+                );
+                structureId = ResourceLocation.fromNamespaceAndPath("chronosphere", "guardian_vault");
+                break;
+            case STRUCTURE_CLOCKWORK_DEPTHS:
+                // Clockwork Depths is in Chronosphere dimension
+                searchLevel = serverLevel.getServer().getLevel(
+                    ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath("chronosphere", "chronosphere"))
+                );
+                structureId = ResourceLocation.fromNamespaceAndPath("chronosphere", "clockwork_depths");
+                break;
+            case STRUCTURE_ENTROPY_CRYPT:
+                // Entropy Crypt is in Chronosphere dimension
+                searchLevel = serverLevel.getServer().getLevel(
+                    ResourceKey.create(Registries.DIMENSION, ResourceLocation.fromNamespaceAndPath("chronosphere", "chronosphere"))
+                );
+                structureId = ResourceLocation.fromNamespaceAndPath("chronosphere", "entropy_crypt");
                 break;
             default:
                 return false;
