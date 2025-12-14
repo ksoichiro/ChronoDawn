@@ -216,6 +216,46 @@ Patchouli: 1.21.1-92+
 
 ---
 
+## Updating Content Counts and Lists
+
+**When to use**: Adding or removing biomes, bosses, structures, wood types, or other countable content
+
+**Purpose**: Ensure numeric descriptions (e.g., "8 unique biomes", "4 mid-bosses", "three wood types") remain accurate across all documentation
+
+### Files to Check
+
+1. **README.md**
+   - Check: Biome count, boss count, structure count, wood type count
+   - Look for: "8 unique biomes", "Boss Enemies" list length, "Major Structures" list length
+
+2. **docs/player_guide.md**
+   - Check: Biome count, boss count (categorized: mini-boss, mid-bosses, final boss), structure count, wood type count
+   - Look for: "8 unique biomes", "three wood types", mid-boss descriptions ("4 mid-bosses")
+
+3. **docs/curseforge_description.md**
+   - Check: Biome count, boss count, structure count, artifact count
+   - Look for: "8 Unique Biomes", boss list lengths, structure list
+
+4. **docs/modrinth_description.md**
+   - Check: Biome count, boss count, structure count, wood type count
+   - Look for: "8 unique biomes", boss list, structure list
+
+5. **CLAUDE.md**
+   - Check: Current versions list if content affects version compatibility
+   - Look for: "8 unique biomes" in Recent Changes or Active Technologies
+
+### Verification Method
+
+When adding/removing content:
+1. Search for numeric descriptions (e.g., "8", "four", "4 mid-bosses")
+2. Verify counts match actual implementation
+3. Update Table of Contents if section counts change
+4. Check for phrases like "all X", "both", "each of the Y"
+
+**Tip**: Use `grep -r "8 unique biomes" docs/` to find all occurrences quickly
+
+---
+
 ## Adding a New Dependency
 
 **When to use**: Adding a new mod dependency (required or optional)
