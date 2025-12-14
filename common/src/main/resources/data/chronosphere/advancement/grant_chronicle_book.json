@@ -12,7 +12,8 @@
     "frame": "task",
     "show_toast": false,
     "announce_to_chat": false,
-    "hidden": true
+    "hidden": true,
+    "background": "chronosphere:textures/block/clockstone_block.png"
   },
   "criteria": {
     "entered_chronosphere": {
