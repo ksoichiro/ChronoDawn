@@ -6,15 +6,20 @@ import com.chronosphere.entities.mobs.TimeKeeperEntity;
 import com.chronosphere.registry.ModDimensions;
 import com.chronosphere.registry.ModEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+import net.minecraft.world.level.storage.loot.LootTable;
 
 /**
  * Time Keeper Village Placer
@@ -38,6 +43,11 @@ public class TimeKeeperVillagePlacer {
     private static final ResourceLocation VILLAGE_TEMPLATE = ResourceLocation.fromNamespaceAndPath(
         Chronosphere.MOD_ID,
         "time_keeper_village"
+    );
+
+    private static final ResourceKey<LootTable> VILLAGE_LOOT_TABLE = ResourceKey.create(
+        Registries.LOOT_TABLE,
+        ResourceLocation.fromNamespaceAndPath(Chronosphere.MOD_ID, "chests/time_keeper_village")
     );
 
     // Placement distance constraints (will expand if no suitable location found)
@@ -296,6 +306,9 @@ public class TimeKeeperVillagePlacer {
         // Spawn Time Keepers programmatically
         spawnTimeKeepers(level, pos);
 
+        // Set loot table for chests in the structure
+        setChestLootTables(level, placementPos, templateSize);
+
         return true;
     }
 
@@ -340,6 +353,44 @@ public class TimeKeeperVillagePlacer {
         }
 
         Chronosphere.LOGGER.info("Spawned {} Time Keepers at Time Keeper Village", spawnedCount);
+    }
+
+    /**
+     * Set loot tables for all chests in the placed structure.
+     *
+     * @param level ServerLevel
+     * @param placementPos Structure placement origin
+     * @param templateSize Structure size (from template)
+     */
+    private static void setChestLootTables(ServerLevel level, BlockPos placementPos, net.minecraft.core.Vec3i templateSize) {
+        int chestsFound = 0;
+
+        // Scan the entire structure volume for chests
+        for (int dx = 0; dx < templateSize.getX(); dx++) {
+            for (int dy = 0; dy < templateSize.getY(); dy++) {
+                for (int dz = 0; dz < templateSize.getZ(); dz++) {
+                    BlockPos checkPos = placementPos.offset(dx, dy, dz);
+                    BlockState blockState = level.getBlockState(checkPos);
+
+                    // Check if this block is a chest
+                    if (blockState.getBlock() instanceof ChestBlock) {
+                        var blockEntity = level.getBlockEntity(checkPos);
+                        if (blockEntity instanceof ChestBlockEntity chestBlockEntity) {
+                            // Set the loot table
+                            chestBlockEntity.setLootTable(VILLAGE_LOOT_TABLE, level.random.nextLong());
+                            chestsFound++;
+                            Chronosphere.LOGGER.info("Set loot table for chest at {}", checkPos);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (chestsFound > 0) {
+            Chronosphere.LOGGER.info("Set loot tables for {} chest(s) in Time Keeper Village", chestsFound);
+        } else {
+            Chronosphere.LOGGER.warn("No chests found in Time Keeper Village structure");
+        }
     }
 
     /**
