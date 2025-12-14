@@ -75,9 +75,9 @@ gradlew.bat build
 ```
 
 **Output Files**:
-- `fabric/build/libs/chronosphere-fabric-0.1.0.jar` - Fabric loader JAR
-- `neoforge/build/libs/chronosphere-neoforge-0.1.0.jar` - NeoForge loader JAR
-- `common/build/libs/chronosphere-common-0.1.0.jar` - Common module (not usable standalone)
+- `fabric/build/libs/chronosphere-0.1.0+1.21.1-fabric.jar` - Fabric loader JAR
+- `neoforge/build/libs/chronosphere-0.1.0+1.21.1-neoforge.jar` - NeoForge loader JAR
+- `common/build/libs/common-0.1.0.jar` - Common module (not usable standalone)
 
 ### Build Specific Loader
 
@@ -205,7 +205,8 @@ gradlew.bat test
 4. Download and install required dependencies:
    - Architectury API 13.0.8+
    - Custom Portal API (Fabric version)
-5. Copy `chronosphere-fabric-0.1.0.jar` to `.minecraft/mods/` folder
+   - Patchouli 1.21.1-92+
+5. Copy `chronosphere-0.1.0+1.21.1-fabric.jar` to `.minecraft/mods/` folder
 6. Launch Minecraft with Fabric profile
 
 ### For NeoForge
@@ -214,7 +215,8 @@ gradlew.bat test
 3. Download and install required dependencies:
    - Architectury API 13.0.8+
    - Custom Portal API (NeoForge version)
-4. Copy `chronosphere-neoforge-0.1.0.jar` to `.minecraft/mods/` folder
+   - Patchouli 1.21.1-92+
+4. Copy `chronosphere-0.1.0+1.21.1-neoforge.jar` to `.minecraft/mods/` folder
 5. Launch Minecraft with NeoForge profile
 
 ## Project Structure
