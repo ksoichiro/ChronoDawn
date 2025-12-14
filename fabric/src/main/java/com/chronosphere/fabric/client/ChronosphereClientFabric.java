@@ -1,5 +1,6 @@
 package com.chronosphere.fabric.client;
 
+import com.chronosphere.client.model.ChronosWardenModel;
 import com.chronosphere.client.model.ClockworkColossusModel;
 import com.chronosphere.client.model.ClockworkSentinelModel;
 import com.chronosphere.client.model.FloqModel;
@@ -290,6 +291,12 @@ public class ChronosphereClientFabric implements ClientModInitializer {
         EntityModelLayerRegistry.registerModelLayer(
             TimeGuardianRenderer.LAYER_LOCATION,
             TimeGuardianModel::createBodyLayer
+        );
+
+        // Register Chronos Warden model layer
+        EntityModelLayerRegistry.registerModelLayer(
+            ChronosWardenModel.LAYER_LOCATION,
+            ChronosWardenModel::createBodyLayer
         );
 
         // Register Time Tyrant model layer
