@@ -56,7 +56,7 @@ public class EnhancedClockstoneArmorMaterial {
         }),
         16, // Enchantability (better than iron/clockstone and diamond)
         SoundEvents.ARMOR_EQUIP_DIAMOND,
-        () -> Ingredient.of(ModItems.ENHANCED_CLOCKSTONE.get()),
+        () -> Ingredient.of(ModItems.TIME_CRYSTAL.get()),
         List.of(
             new ArmorMaterial.Layer(
                 ResourceLocation.fromNamespaceAndPath(Chronosphere.MOD_ID, "enhanced_clockstone")

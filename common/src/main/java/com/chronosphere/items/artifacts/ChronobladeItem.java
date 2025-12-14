@@ -1,5 +1,6 @@
 package com.chronosphere.items.artifacts;
 
+import com.chronosphere.registry.ModItems;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
@@ -114,8 +115,8 @@ public class ChronobladeItem extends SwordItem {
 
         @Override
         public net.minecraft.world.item.crafting.Ingredient getRepairIngredient() {
-            // Cannot be repaired with normal materials
-            return net.minecraft.world.item.crafting.Ingredient.EMPTY;
+            // Can be repaired with Time Crystal
+            return net.minecraft.world.item.crafting.Ingredient.of(ModItems.TIME_CRYSTAL.get());
         }
     }
 }

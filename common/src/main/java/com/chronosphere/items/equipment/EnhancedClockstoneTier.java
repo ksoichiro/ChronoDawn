@@ -60,7 +60,7 @@ public class EnhancedClockstoneTier implements Tier {
 
     @Override
     public Ingredient getRepairIngredient() {
-        // Can be repaired with Enhanced Clockstone
-        return Ingredient.of(ModItems.ENHANCED_CLOCKSTONE.get());
+        // Can be repaired with Time Crystal (universal repair material)
+        return Ingredient.of(ModItems.TIME_CRYSTAL.get());
     }
 }
