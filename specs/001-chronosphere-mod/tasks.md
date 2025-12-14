@@ -290,14 +290,16 @@
   - **Issue**: Other mobs spawn in Desert Clock Tower boss room during battle
   - **Investigation**: Check structure configuration and spawning rules for desert_clock_tower
   - **Possible solutions**: Add no_mob_spawning flag to boss room area, or implement custom spawning blocker
-- [ ] T304 [P] Fix Master Clock boss room ceiling height for Time Tyrant
+- [x] T304 [P] Fix Master Clock boss room ceiling height for Time Tyrant
   - **Issue**: Time Tyrant cannot pass through some low-height areas in Master Clock boss room
-  - **Investigation**: Check Master Clock structure NBT and Time Tyrant entity height
-  - **Fix**: Increase ceiling height in problematic areas to accommodate Time Tyrant (height = 3.5 blocks)
-- [ ] T305 [P] Prevent player camping in Master Clock boss room
+  - **Solution**: Increased ceiling height in problematic areas to accommodate Time Tyrant (height = 3.5 blocks)
+  - **Files Modified**: common/src/main/resources/data/chronosphere/structures/master_clock_boss_room.nbt
+  - **Commit**: 035a723 (fix: improve Master Clock boss room layout for better gameplay)
+- [x] T305 [P] Prevent player camping in Master Clock boss room
   - **Issue**: Players can hide in safe spots and attack Time Tyrant without risk
-  - **Investigation**: Identify hiding spots in Master Clock structure
-  - **Possible solutions**: Add teleport mechanic to Time Tyrant AI, redesign room layout to remove camping spots, or add area denial attacks
+  - **Solution**: Removed hiding spots from room layout to ensure boss has proper access to entire arena
+  - **Files Modified**: common/src/main/resources/data/chronosphere/structures/master_clock_boss_room.nbt
+  - **Commit**: 035a723 (fix: improve Master Clock boss room layout for better gameplay)
 
 ### Playtest Improvements - Exploration
 
