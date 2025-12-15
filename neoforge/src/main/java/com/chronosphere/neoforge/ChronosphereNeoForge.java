@@ -13,6 +13,7 @@ import com.chronosphere.entities.mobs.TemporalWraithEntity;
 import com.chronosphere.entities.mobs.TimeKeeperEntity;
 import com.chronosphere.neoforge.compat.CustomPortalNeoForge;
 import com.chronosphere.neoforge.registry.ModFluidTypes;
+import com.chronosphere.neoforge.registry.ModLootModifiers;
 import com.chronosphere.neoforge.registry.ModParticles;
 import com.chronosphere.registry.ModEntities;
 import com.chronosphere.registry.ModItems;
@@ -42,6 +43,9 @@ public class ChronosphereNeoForge {
 
         // Register particle types (NeoForge-specific)
         ModParticles.register(modEventBus);
+
+        // Register loot modifiers (NeoForge-specific)
+        ModLootModifiers.register(modEventBus);
 
         // Register entity attributes (NeoForge-specific)
         modEventBus.addListener(this::registerEntityAttributes);
