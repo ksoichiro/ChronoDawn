@@ -11,7 +11,8 @@
     {
       "type": "patchouli:crafting",
       "recipe": "chronosphere:portal_stabilizer",
-      "text": "Portal Stabilizer Recipe"
+      "text": "Portal Stabilizer Recipe",
+      "advancement": "chronosphere:obtain_portal_stabilizer_blueprint"
     }
   ]
 }
