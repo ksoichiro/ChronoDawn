@@ -32,6 +32,8 @@ import net.minecraft.world.level.material.FluidState;
  * - During structure generation, Aquifer water (minecraft:water) is removed
  *   to prevent waterlogging, but this fluid is preserved
  * - A processor converts this fluid to minecraft:water after placement
+ *
+ * Note for NeoForge: getFluidType() is implemented via anonymous classes in FluidFactoryImpl
  */
 public abstract class DecorativeWaterFluid extends FlowingFluid {
 

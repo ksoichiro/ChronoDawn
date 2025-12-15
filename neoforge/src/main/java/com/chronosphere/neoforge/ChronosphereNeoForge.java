@@ -12,6 +12,7 @@ import com.chronosphere.entities.mobs.FloqEntity;
 import com.chronosphere.entities.mobs.TemporalWraithEntity;
 import com.chronosphere.entities.mobs.TimeKeeperEntity;
 import com.chronosphere.neoforge.compat.CustomPortalNeoForge;
+import com.chronosphere.neoforge.registry.ModFluidTypes;
 import com.chronosphere.neoforge.registry.ModParticles;
 import com.chronosphere.registry.ModEntities;
 import com.chronosphere.registry.ModItems;
@@ -34,6 +35,9 @@ public class ChronosphereNeoForge {
     private int tickCounter = 0;
 
     public ChronosphereNeoForge(IEventBus modEventBus) {
+        // Register FluidTypes (NeoForge-specific, must be registered before Chronosphere.init())
+        ModFluidTypes.register(modEventBus);
+
         Chronosphere.init();
 
         // Register particle types (NeoForge-specific)

@@ -1,7 +1,7 @@
 package com.chronosphere.registry;
 
 import com.chronosphere.Chronosphere;
-import com.chronosphere.fluids.DecorativeWaterFluid;
+import com.chronosphere.fluids.FluidFactory;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
@@ -10,6 +10,7 @@ import net.minecraft.world.level.material.Fluid;
 
 /**
  * Architectury Registry wrapper for custom fluids.
+ * Uses platform-specific FluidFactory to support NeoForge's FluidType requirement.
  */
 public class ModFluids {
     public static final DeferredRegister<Fluid> FLUIDS = DeferredRegister.create(Chronosphere.MOD_ID, Registries.FLUID);
@@ -17,18 +18,20 @@ public class ModFluids {
     /**
      * Decorative Water (Source) - Water source block that looks like vanilla water.
      * Used in structure NBT files to distinguish from Aquifer water.
+     * Platform-specific: NeoForge implementation includes FluidType support.
      */
     public static final RegistrySupplier<FlowingFluid> DECORATIVE_WATER = FLUIDS.register(
         "decorative_water",
-        () -> new DecorativeWaterFluid.Source()
+        FluidFactory::createDecorativeWaterSource
     );
 
     /**
      * Decorative Water (Flowing) - Flowing water that looks like vanilla water.
+     * Platform-specific: NeoForge implementation includes FluidType support.
      */
     public static final RegistrySupplier<FlowingFluid> DECORATIVE_WATER_FLOWING = FLUIDS.register(
         "decorative_water_flowing",
-        () -> new DecorativeWaterFluid.Flowing()
+        FluidFactory::createDecorativeWaterFlowing
     );
 
     /**
