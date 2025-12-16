@@ -62,6 +62,12 @@
         "weight": 5,
         "minCount": 1,
         "maxCount": 3
+      },
+      {
+        "type": "minecraft:sheep",
+        "weight": 8,
+        "minCount": 2,
+        "maxCount": 4
       }
     ],
     "ambient": [
@@ -96,7 +102,10 @@
     [],
     [
       "chronosphere:fruit_of_time_tree",
+      "chronosphere:patch_grass",
+      "chronosphere:patch_flowers",
       "chronosphere:boulder_placed",
+      "chronosphere:fallen_log_placed",
       "chronosphere:gravel_disk_placed"
     ],
     []
