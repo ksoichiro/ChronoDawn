@@ -6673,3 +6673,252 @@ public class TimeKeeperVillageData extends SavedData {
 4. ワールド再読み込み後も村が存続することを確認
 5. 2回目以降のディメンション入場で再配置されないことを確認
 
+
+---
+
+## T034n: DimensionSpecialEffects Research
+
+**Date**: 2025-12-17  
+**Task**: Research custom DimensionSpecialEffects for precise sky color control in Chronosphere dimension  
+**Priority**: High [P]
+
+### Executive Summary
+
+Chronosphereディメンションの空の色をより精密に制御するため、DimensionSpecialEffectsのカスタム実装について調査しました。現在はバイオームJSONの`sky_color`フィールドで灰色(0x909090)の空を実現していますが、より高度な制御(ボス撃破による空の色変化など)を実現するには、クライアントサイドのMixinまたはカスタムDimensionSpecialEffectsの実装が必要です。
+
+### Current Implementation
+
+#### Dimension Type Configuration
+**File**: `common/src/main/resources/data/chronosphere/dimension_type/chronosphere.json`
+
+```json
+{
+  "effects": "minecraft:overworld",
+  "fixed_time": 6000,
+  ...
+}
+```
+
+- `effects`: バニラの`minecraft:overworld`エフェクトを使用
+- `fixed_time`: 6000(永遠の正午)で固定
+- 空の色はバイオームJSONで制御
+
+#### Biome Sky Colors
+**Files**: `common/src/main/resources/data/chronosphere/worldgen/biome/*.json`
+
+全バイオームで統一した灰色の空を定義:
+```json
+{
+  "effects": {
+    "sky_color": 9474192,  // 0x909090 (灰色)
+    "fog_color": 12632256, // 0xC0C0C0 (明るい灰色)
+    ...
+  }
+}
+```
+
+**適用バイオーム**:
+- chronosphere_plains, chronosphere_desert, chronosphere_forest
+- chronosphere_dark_forest, chronosphere_ancient_forest
+- chronosphere_mountain, chronosphere_ocean
+- chronosphere_snowy, chronosphere_swamp
+
+### Existing Client-Side Rendering Infrastructure
+
+#### 1. Fog Rendering Mixin
+**File**: `common/src/main/java/com/chronosphere/mixin/client/FogRendererMixin.java`
+
+既にFogRendererに対するMixinが実装されており、Dark ForestバイオームでHoag色の霧を制御しています:
+
+```java
+@Mixin(FogRenderer.class)
+public class FogRendererMixin {
+    @Inject(method = "setupFog", at = @At("TAIL"))
+    private static void modifyDarkForestFog(...) {
+        // Dark Forest biome detection
+        if (currentBiome.is(ChronosphereBiomeProvider.CHRONOSPHERE_DARK_FOREST)) {
+            RenderSystem.setShaderFogStart(5.0f);
+            RenderSystem.setShaderFogEnd(60.0f);
+        }
+    }
+}
+```
+
+**特徴**:
+- バイオーム位置を検出し、条件に応じてレンダリングを変更
+- `RenderSystem` APIを使用して直接レンダリングパラメータを設定
+- クライアントサイド限定(Mixinは`chronosphere.mixins.json`で定義)
+
+#### 2. Client Initialization
+**Files**:
+- `fabric/src/main/java/com/chronosphere/fabric/client/ChronosphereClientFabric.java`
+- `neoforge/src/main/java/com/chronosphere/neoforge/client/ChronosphereClientNeoForge.java`
+
+既存のクライアント初期化で実装されている機能:
+- ブロック色プロバイダー(ColorProviderRegistry)
+- レンダーレイヤー(BlockRenderLayerMap)
+- エンティティレンダラー(EntityRendererRegistry)
+- アイテムプロパティ(ItemProperties)
+
+### Research Findings
+
+#### Approach 1: Biome JSON (Current Implementation)
+**難易度**: 簡単  
+**工数**: 完了済み  
+**制限事項**:
+- バイオームごとに固定色しか設定できない
+- ゲームプレイ状態(ボス撃破など)に応じた動的変更は不可能
+- `sky_color`, `fog_color`のみ制御可能
+
+**利点**:
+- データパックのみで実装可能(コード不要)
+- FabricとNeoForgeで共通実装
+- パフォーマンスへの影響なし
+
+#### Approach 2: Client-Side Mixin for Sky Color (Recommended)
+**難易度**: 中  
+**工数**: 2-4時間  
+**実装方法**:
+
+既存のFogRendererMixinと同様のパターンで、空の色レンダリングをフックします。
+
+**推奨実装箇所**:
+- `net.minecraft.client.renderer.LevelRenderer` - 空のレンダリングを担当
+- メソッド候補: `renderSky()` または関連メソッド
+
+**実装例(概念コード)**:
+```java
+@Mixin(LevelRenderer.class)
+public class SkyColorMixin {
+    @Inject(method = "renderSky", at = @At("HEAD"))
+    private void modifyChronosphereSkyColor(CallbackInfo ci) {
+        // Chronosphereディメンションかチェック
+        if (isInChronosphere()) {
+            // ボス撃破状況に応じて空の色を動的に変更
+            int skyColor = calculateSkyColor();
+            // レンダリングパラメータを設定
+            applySkyColor(skyColor);
+        }
+    }
+}
+```
+
+**利点**:
+- バイオームJSONより柔軟な制御が可能
+- ゲームプレイ状態に応じた動的変更が可能(例: ボス撃破で空が青くなる)
+- FogRendererMixinと同じパターンで実装可能
+- DimensionSpecialEffectsの完全実装より簡単
+
+**課題**:
+- 正確なフックポイントの特定が必要
+- Minecraft内部APIの変更に影響を受ける可能性
+- Mixin設定ファイルの更新が必要(`chronosphere-fabric.mixins.json`, `chronosphere-neoforge.mixins.json`)
+
+#### Approach 3: Custom DimensionSpecialEffects (Advanced)
+**難易度**: 高  
+**工数**: 8-16時間  
+**実装方法**:
+
+MinecraftのDimensionSpecialEffects APIを使用してカスタムディメンションエフェクトを登録します。
+
+**推定実装ステップ**:
+1. カスタムDimensionSpecialEffectsクラスを作成
+2. FabricとNeoForgeで異なる登録メカニズムを実装
+3. dimension_type.jsonで`effects`フィールドをカスタムIDに変更
+4. 空の色、霧の色、雲の高さなどを完全に制御
+
+**利点**:
+- MinecraftのネイティブAPIを使用(Mixinより安全)
+- 空の色以外も制御可能(雲、天候、水平線など)
+- バージョン間の互換性が比較的高い
+
+**課題**:
+- FabricとNeoForgeで実装方法が大きく異なる
+- 公開されている実装例が少ない(Minecraft 1.21.1では見つからず)
+- デバッグが困難
+- カスタムエフェクトの登録方法が不明瞭
+
+### Implementation Feasibility Assessment
+
+#### Recommended Approach: Client-Side Mixin
+**実現可能性**: 高  
+**理由**:
+1. 既存のFogRendererMixinが成功しており、同じパターンが適用可能
+2. 必要なクライアントサイドインフラが既に存在
+3. FabricとNeoForge両方で同じMixinコードが動作
+4. デバッグとテストが容易
+
+**推奨実装計画**:
+1. Minecraft 1.21.1のLevelRendererクラスを解析し、空の色レンダリングメソッドを特定
+2. 新しいMixinクラス `SkyColorMixin` を作成(FogRendererMixinを参考に)
+3. Chronosphereディメンション検出ロジックを実装
+4. ボス撃破状況に応じた空の色計算ロジックを実装
+5. Mixin設定ファイルを更新
+6. クライアントサイドテスト
+
+**進捗状況を追跡するための仕組み**:
+- セーブデータに保存された全体的なボス撃破カウント
+- または: Advancementシステムを活用
+
+#### Alternative Approach: Custom DimensionSpecialEffects
+**実現可能性**: 中  
+**推奨度**: 低
+
+カスタムDimensionSpecialEffectsは技術的には実装可能ですが、以下の理由で推奨しません:
+- 実装例が見つからず、トライアンドエラーが必要
+- FabricとNeoForgeで二重実装が必要
+- Mixinアプローチで十分な柔軟性が得られる
+
+### Color Progression Design (Option D from tasks.md)
+
+**コンセプト**: ボスを倒すごとに空の色が徐々に青くなる
+
+**カラー進捗テーブル**:
+| ボス撃破数 | 色 (Hex) | RGB | 説明 |
+|---------|---------|-----|-----|
+| 0 (初期) | 0x909090 | (144, 144, 144) | 暗い灰色(現在の設定) |
+| 1 | 0x9098A0 | (144, 152, 160) | 微かに青みがかる |
+| 2 | 0x90A0B0 | (144, 160, 176) | 青みが増す |
+| 3 (全ボス) | 0x78A5FF | (120, 165, 255) | バニラの青空 |
+
+**実装方法**:
+1. プレイヤーのAdvancementまたはセーブデータでボス撃破数を追跡
+2. SkyColorMixinで撃破数に応じて色を補間
+3. クライアント側で動的に計算
+
+### Technical References
+
+**既存の参考実装**:
+- `FogRendererMixin.java` (lines 28-82) - バイオーム検出とレンダリング制御のパターン
+- `ChronosphereClientFabric.java` (lines 63-505) - クライアントサイド登録パターン
+- `ChronosphereBiomeProvider.java` - バイオームキー定義
+
+**Mixin設定ファイル**:
+- `common/src/main/resources/chronosphere.mixins.json` - 共通Mixin定義
+- `fabric/src/main/resources/chronosphere-fabric.mixins.json` - Fabric固有(refMap必須)
+- `neoforge/src/main/resources/chronosphere-neoforge.mixins.json` - NeoForge固有(refMapなし)
+
+**カラー値参照**:
+- 現在の灰色空: `9474192` (0x909090)
+- バニラの青空: `7907327` (0x78A5FF)
+- 代替灰色: `8421504` (0x808080), `10526880` (0xA0A0A0)
+- 青灰色: `8425632` (0x8090A0)
+
+### Next Steps
+
+T034n(このリサーチタスク)の完了により、将来の実装タスクへの明確な道筋が確立されました。
+
+**推奨される実装順序**:
+1. **T034n-impl1**: Minecraft 1.21.1のLevelRendererクラスを解析し、空の色レンダリングのフックポイントを特定
+2. **T034n-impl2**: SkyColorMixinを実装し、固定色で動作確認
+3. **T034n-impl3**: ボス撃破カウントに基づく動的な色変化を実装
+4. **T034n-impl4**: クライアント・サーバー間の同期とテスト
+
+**推定総工数**: 3-5時間(Mixinアプローチの場合)
+
+### Conclusion
+
+DimensionSpecialEffectsのカスタム実装は技術的に可能ですが、**クライアントサイドMixinアプローチ**が最も実用的であると結論付けました。既存のFogRendererMixinの成功事例があり、同じパターンを適用することで、ゲームプレイ状態に応じた動的な空の色制御を比較的簡単に実現できます。
+
+カスタムDimensionSpecialEffectsクラスの完全実装は、より高度な制御が必要になった場合の将来的なオプションとして保留します。
+
