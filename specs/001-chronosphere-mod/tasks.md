@@ -19,7 +19,8 @@
 - [X] T034k [P] Implement fixed time (6000 ticks = noon) and End sky effects in dimension_type/chronosphere.json
 - [X] T034l [P] Test dimension visual appearance with fixed time and grey sky in-game
 - [X] T034m [P] Evaluate time/sky settings and document adjustments needed (fixed_time: 4000-8000, effects: overworld/end/custom)
-- [ ] T034n [P] (Future) Research custom DimensionSpecialEffects for precise sky color control
+- [X] T034n [P] Research custom DimensionSpecialEffects for precise sky color control (Completed: 2025-12-17, see research.md)
+- [ ] T034p [P] Implement SkyColorMixin for Time Tyrant defeat sky color change (0x909090 → 0x9098A0)
 - [ ] T034o [P] (Future) Design sky color unlock mechanic tied to boss defeat (Option D element)
 
 **Current Settings**: `fixed_time: 6000` (noon), `effects: minecraft:overworld`, biome `sky_color: 9474192` (grey)
@@ -27,6 +28,57 @@
 **Note**: 固定時刻の値（4000-8000=明るい時間帯）と空の色はプレイテスト後に調整可能
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
+
+#### T034p: Sky Color Change on Time Tyrant Defeat
+
+**Purpose**: Implement dynamic sky color change when Time Tyrant is defeated, making the sky slightly brighter as the first step of sky color progression.
+
+**Implementation Approach**: Client-side Mixin (similar to FogRendererMixin)
+
+**Detailed Steps**:
+1. **Create SkyColorMixin class**
+   - File: `common/src/main/java/com/chronosphere/mixin/client/SkyColorMixin.java`
+   - Target: `net.minecraft.client.renderer.LevelRenderer`
+   - Method to hook: `renderSky()` or related sky rendering method
+   - Pattern: Similar to FogRendererMixin (biome detection + RenderSystem calls)
+
+2. **Implement boss defeat detection**
+   - Check Time Tyrant advancement: `chronosphere:time_tyrant_defeated`
+   - Use AdvancementManager on client-side to query completion status
+   - Cache result to avoid repeated checks
+
+3. **Apply sky color override**
+   - Default color: `0x909090` (144, 144, 144) - current grey
+   - After Time Tyrant defeat: `0x9098A0` (144, 152, 160) - slightly brighter with blue tint
+   - Apply color only in Chronosphere dimension
+   - Use color interpolation for smooth transition
+
+4. **Update Mixin configuration files**
+   - Add SkyColorMixin to `chronosphere.mixins.json`
+   - Update `chronosphere-fabric.mixins.json` (with refMap)
+   - Update `chronosphere-neoforge.mixins.json` (without refMap)
+
+5. **Testing**
+   - Test without Time Tyrant defeat (should show grey sky: 0x909090)
+   - Test with Time Tyrant defeat (should show brighter sky: 0x9098A0)
+   - Test dimension transition (color should reset when leaving/entering)
+   - Test multiplayer sync (all players should see same sky color)
+
+**Technical References**:
+- Similar implementation: `FogRendererMixin.java` (lines 28-82)
+- Advancement check: Use `ClientAdvancements` or player NBT data
+- Research document: See `research.md` section "T034n: DimensionSpecialEffects Research"
+
+**Success Criteria**:
+- Sky color remains grey (0x909090) by default
+- Sky color becomes slightly brighter (0x9098A0) after Time Tyrant defeat
+- Color change persists across game sessions
+- No performance impact on rendering
+- Works on both Fabric and NeoForge
+
+**Estimated Effort**: 2-3 hours
+
+**Future Enhancement**: This task is the first step towards full sky color progression (T034o) where defeating all bosses gradually restores the sky to vanilla blue (0x78A5FF).
 
 ---
 
