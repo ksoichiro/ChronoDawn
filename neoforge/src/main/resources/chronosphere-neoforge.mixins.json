@@ -6,7 +6,6 @@
   "mixins": [
     "AnvilMenuAccessor",
     "AnvilMenuMixin",
-    "BiomeScalingMixin",
     "LevelGetTimeMixin",
     "ServerLevelSetTimeMixin",
     "SleepMixin",
