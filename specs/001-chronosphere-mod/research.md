@@ -6922,3 +6922,60 @@ DimensionSpecialEffectsのカスタム実装は技術的に可能ですが、**�
 
 カスタムDimensionSpecialEffectsクラスの完全実装は、より高度な制御が必要になった場合の将来的なオプションとして保留します。
 
+
+---
+
+## Snowy Biome Boundary Smoothing (2025-12-19)
+
+### 問題
+クロノスフィアのsnowyバイオームで、雪と草ブロックの境界が完全な直線になっている。
+
+### 調査結果
+
+**現在の設定:**
+- `freeze_top_layer` feature使用（`minecraft:biome`プレースメント）
+- バイオームソース設定（`dimension/chronosphere.json`）:
+  - snowy: temperature [-1.0, -0.2]
+  - dark_forest: temperature [-0.2, 0.5]
+  - 他のバイオーム: temperature [-0.2, 0.5]
+- 温度範囲が-0.2でぴったり接しており、オーバーラップなし
+
+**試行したアプローチ:**
+
+1. **プレースメント修正** (`in_square`追加)
+   - 結果: チャンクアクセスエラー (`Requested chunk unavailable during world generation`)
+   - 理由: `freeze_top_layer`はチャンク全体を処理するため、ランダムオフセットと相性が悪い
+
+2. **バイオーム温度調整** (0.0 → 0.10)
+   - 効果: 限定的（バイオームブレンディングでは境界の改善は難しい）
+
+3. **バイオームソースoffset調整** (0.0 → 0.3)
+   - 効果: 未検証（効果が薄いと判断し、元に戻した）
+
+### 根本的な解決策（将来の実装）
+
+**Phase 1: 遷移バイオームの追加**
+- Snowy PlainsやSnowy Forestなど、中間温度の雪バイオーム追加
+- multi_noiseパラメータで遷移ゾーンを作成
+- 実装難易度: 中
+
+**Phase 2: カスタムnoise settings**
+- より複雑なバイオーム配置パターン
+- 詳細な温度・湿度グラデーション
+- 実装難易度: 高（CLAUDE.mdの「Custom Noise Settings」セクション参照）
+
+**Phase 3: カスタム雪配置Feature（最終手段）**
+- ノイズベースで雪レイヤーを配置
+- バイオーム境界に依存しない独自ロジック
+- 実装難易度: 高（Javaコード実装が必要）
+
+### 推奨アプローチ
+
+現時点では**保留**とし、将来的に以下の順で実装:
+1. まず遷移バイオームを追加（実装がシンプル）
+2. 効果が不十分ならカスタムnoise settingsを検討
+3. 最終手段としてカスタムFeature実装
+
+### 参照
+- CLAUDE.md: Custom Noise Settings セクション
+- 関連タスク: T307 (specs/001-chronosphere-mod/tasks.md)

@@ -390,3 +390,25 @@
 
 ---
 
+
+### Biome System Improvements
+
+**Purpose**: バイオーム境界の視覚的品質向上（将来の改善課題）
+
+- [ ] T307 [Research] Investigate snowy biome boundary smoothing solutions
+  - **Issue**: Snowy biome boundaries with other biomes (especially dark_forest) are too sharp/linear
+  - **Root Cause**: 
+    - Biome source temperature ranges meet exactly at -0.2 without overlap
+    - `freeze_top_layer` feature depends on biome temperature, causing linear boundaries
+  - **Attempted Solutions** (2025-12-19):
+    1. Placement modifiers (`in_square`) → Chunk access error
+    2. Biome temperature adjustment (0.0 → 0.10) → Limited effect
+    3. Offset adjustment (0.0 → 0.3) → Minimal expected effect
+  - **Recommended Solutions** (in priority order):
+    1. Add transition biomes (Snowy Plains, Snowy Forest, etc.) with intermediate temperatures
+    2. Implement custom noise settings for more complex biome distribution
+    3. Implement custom snow placement Feature with noise-based logic (last resort)
+  - **Reference**: specs/001-chronosphere-mod/research.md → "Snowy Biome Boundary Smoothing (2025-12-19)"
+  - **Dependencies**: None (future enhancement)
+  - **Priority**: Low (cosmetic improvement)
+
