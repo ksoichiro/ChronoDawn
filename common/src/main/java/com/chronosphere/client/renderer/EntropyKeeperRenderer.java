@@ -1,8 +1,9 @@
 package com.chronosphere.client.renderer;
 
 import com.chronosphere.Chronosphere;
-import com.chronosphere.client.model.TimeGuardianModel;
+import com.chronosphere.client.model.EntropyKeeperModel;
 import com.chronosphere.entities.bosses.EntropyKeeperEntity;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
@@ -10,18 +11,24 @@ import net.minecraft.resources.ResourceLocation;
 /**
  * Renderer for Entropy Keeper entity.
  *
- * Uses TimeGuardianModel (same as Time Guardian) with custom texture.
+ * Uses custom EntropyKeeperModel created with Blockbench.
  *
  * Task: T237 [Phase 2] Implement Entropy Keeper
  */
-public class EntropyKeeperRenderer extends MobRenderer<EntropyKeeperEntity, TimeGuardianModel<EntropyKeeperEntity>> {
+public class EntropyKeeperRenderer extends MobRenderer<EntropyKeeperEntity, EntropyKeeperModel<EntropyKeeperEntity>> {
     private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(
         Chronosphere.MOD_ID,
         "textures/entity/entropy_keeper.png"
     );
 
+    // Model layer location for Entropy Keeper
+    public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
+        ResourceLocation.fromNamespaceAndPath(Chronosphere.MOD_ID, "entropy_keeper"),
+        "main"
+    );
+
     public EntropyKeeperRenderer(EntityRendererProvider.Context context) {
-        super(context, new TimeGuardianModel<>(context.bakeLayer(TimeGuardianRenderer.LAYER_LOCATION)), 0.5f);
+        super(context, new EntropyKeeperModel<>(context.bakeLayer(LAYER_LOCATION)), 0.5f);
     }
 
     @Override
@@ -29,3 +36,4 @@ public class EntropyKeeperRenderer extends MobRenderer<EntropyKeeperEntity, Time
         return TEXTURE;
     }
 }
+

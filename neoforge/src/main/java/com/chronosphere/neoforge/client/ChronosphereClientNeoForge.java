@@ -4,6 +4,7 @@ import com.chronosphere.Chronosphere;
 import com.chronosphere.client.model.ChronosWardenModel;
 import com.chronosphere.client.model.ClockworkColossusModel;
 import com.chronosphere.client.model.ClockworkSentinelModel;
+import com.chronosphere.client.model.EntropyKeeperModel;
 import com.chronosphere.client.model.FloqModel;
 import com.chronosphere.client.model.TemporalPhantomModel;
 import com.chronosphere.client.model.TemporalWraithModel;
@@ -133,6 +134,11 @@ public class ChronosphereClientNeoForge {
         event.registerLayerDefinition(
             TemporalPhantomRenderer.LAYER_LOCATION,
             TemporalPhantomModel::createBodyLayer
+        );
+
+        event.registerLayerDefinition(
+            EntropyKeeperRenderer.LAYER_LOCATION,
+            EntropyKeeperModel::createBodyLayer
         );
 
         Chronosphere.LOGGER.info("Registered entity model layers for NeoForge");
