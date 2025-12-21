@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/outer_stairs",
-  "textures": {
-    "bottom": "chronosphere:block/clockstone_block",
-    "top": "chronosphere:block/clockstone_block",
-    "side": "chronosphere:block/clockstone_block"
-  }
-}

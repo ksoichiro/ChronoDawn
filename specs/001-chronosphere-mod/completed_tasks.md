@@ -2,625 +2,506 @@
 
 **Feature Branch**: `001-chronosphere-mod`
 
-このファイルには完了したタスクが記録されています。
+This file contains all completed task sections that have been moved from tasks.md for better organization.
+
+**Last Updated**: 2025-12-13
 
 ---
 
-## Phase 1: Setup (Shared Infrastructure)
-
-**Purpose**: Architecturyマルチローダープロジェクトの初期化と基本構造の構築
-
-- [X] T001 Create Architectury multi-module project structure per plan.md
-- [X] T002 Initialize Gradle configuration in build.gradle with Architectury dependencies
-- [X] T003 [P] Configure gradle.properties with Minecraft 1.21.1, NeoForge 21.1.74, Fabric API 0.116.6, Architectury API 13.0.8
-- [X] T004 [P] Configure settings.gradle for multi-module project (common, fabric, neoforge)
-- [X] T005 Create common module build configuration in common/build.gradle
-- [X] T006 [P] Create fabric module build configuration in fabric/build.gradle
-- [X] T007 [P] Create neoforge module build configuration in neoforge/build.gradle (with loom.platform=neoforge)
-- [X] T008 Create common mod entry point in common/src/main/java/com/chronosphere/Chronosphere.java
-- [X] T009 [P] Create Fabric mod entry point in fabric/src/main/java/com/chronosphere/fabric/ChronosphereFabric.java
-- [X] T010 [P] Create NeoForge mod entry point in neoforge/src/main/java/com/chronosphere/neoforge/ChronosphereNeoForge.java
-- [X] T011 [P] Create Fabric mod metadata in fabric/src/main/resources/fabric.mod.json
-- [X] T012 [P] Create NeoForge mod metadata in neoforge/src/main/resources/META-INF/neoforge.mods.toml
-- [X] T012a [P] Add Fabric API and Architectury dependencies to fabric.mod.json for automatic installation in launchers like Prism Launcher
-- [X] T012b [P] Add Architectury dependency to neoforge.mods.toml for automatic installation in launchers
-- [X] T013 Configure logging with log4j2 in common/src/main/resources/log4j2.xml
-- [X] T014 Verify build succeeds for both loaders using ./gradlew build
-
----
-
-### Registry Infrastructure
-
-- [X] T015 Implement Architectury Registry wrapper in common/src/main/java/com/chronosphere/registry/ModBlocks.java
-- [X] T016 [P] Implement Architectury Registry wrapper in common/src/main/java/com/chronosphere/registry/ModItems.java
-- [X] T017 [P] Implement Architectury Registry wrapper in common/src/main/java/com/chronosphere/registry/ModEntities.java
-- [X] T018 [P] Implement Architectury Registry wrapper in common/src/main/java/com/chronosphere/registry/ModDimensions.java
-
-### Platform Abstraction Layer (@ExpectPlatform)
-
-- [X] T019 Create @ExpectPlatform interface in common/src/main/java/com/chronosphere/platform/ChronospherePlatform.java
-- [X] T020 [P] Implement ChronospherePlatform for Fabric in fabric/src/main/java/com/chronosphere/fabric/platform/ChronospherePlatformImpl.java
-- [X] T021 [P] Implement ChronospherePlatform for NeoForge in neoforge/src/main/java/com/chronosphere/neoforge/platform/ChronospherePlatformImpl.java
-
-### Event System (Architectury Events)
-
-- [X] T022 Create base event handler structure in common/src/main/java/com/chronosphere/events/ChronosphereEvents.java
-- [X] T023 [P] Implement entity event handler in common/src/main/java/com/chronosphere/events/EntityEventHandler.java
-- [X] T024 [P] Implement block event handler in common/src/main/java/com/chronosphere/events/BlockEventHandler.java
-- [X] T025 [P] Implement player event handler in common/src/main/java/com/chronosphere/events/PlayerEventHandler.java
-
-### Data Persistence Framework
-
-- [X] T026 Implement world saved data base class in common/src/main/java/com/chronosphere/data/ChronosphereWorldData.java
-- [X] T027 Implement portal registry data handler in common/src/main/java/com/chronosphere/data/PortalRegistryData.java
-- [X] T028 Implement player progress data handler in common/src/main/java/com/chronosphere/data/PlayerProgressData.java
-- [X] T029 Implement dimension state data handler in common/src/main/java/com/chronosphere/data/DimensionStateData.java
-
-### Testing Infrastructure (JUnit + GameTest)
-
-- [X] T030 Setup mcjunitlib integration in common/build.gradle
-- [X] T031 Create base test class in common/src/test/java/com/chronosphere/ChronosphereTestBase.java
-- [X] T032 [P] Create unit test structure in common/src/test/java/com/chronosphere/unit/
-- [X] T033 [P] Create integration test structure in common/src/test/java/com/chronosphere/integration/
-- [X] T034 Configure GameTest framework for both loaders
-
-### Creative Tab Infrastructure
-
-- [X] T034a Create ModCreativeTabs registry in common/src/main/java/com/chronosphere/registry/ModCreativeTabs.java
-- [X] T034b Register Chronosphere creative tab with icon
-- [X] T034c Implement item group population for both loaders
-
-### Portal Color Customization (Phase 2.5)
-
-**Purpose**: ネザーポータルと差別化するため、ポータルの色をオレンジ (#db8813) に設定
-
-- [X] T034d [P] Research and decide final portal tint color (non-purple theme)
-- [X] T034e [P] Update PORTAL_COLOR_* constants in CustomPortalFabric.java to RGB(219, 136, 19)
-- [ ] T034f [P] Update PORTAL_COLOR_* constants in CustomPortalNeoForge.java to RGB(219, 136, 19) (depends on T049)
-- [X] T034g [P] Add color constant documentation explaining theme choice (#db8813 - orange/gold time theme)
-- [X] T034h [P] Test portal visual appearance in-game (portal block, overlay, particles)
-- [X] T034i [P] Update spec.md with finalized portal color documentation
-
-### Tests for User Story 1 (TDD approach)
-
-**NOTE: これらのテストを最初に記述し、実装前にFAILすることを確認すること**
-
-- [X] T035 [P] [US1] Write unit test for dimension registration in common/src/test/java/com/chronosphere/unit/DimensionTest.java
-- [X] T036 [P] [US1] Write unit test for portal state transitions in common/src/test/java/com/chronosphere/unit/PortalStateTest.java
-- [X] T037 [P] [US1] Write GameTest for portal activation in common/src/test/java/com/chronosphere/integration/PortalActivationTest.java
-- [X] T038 [P] [US1] Write GameTest for dimension travel in common/src/test/java/com/chronosphere/integration/DimensionTravelTest.java
-- [X] T039 [P] [US1] Write GameTest for portal stabilization in common/src/test/java/com/chronosphere/integration/PortalStabilizationTest.java
-
-### Core Dimension System
-
-- [X] T040 [US1] Create custom dimension type definition in common/src/main/resources/data/chronosphere/dimension_type/chronosphere.json
-- [X] T041 [US1] Create dimension JSON in common/src/main/resources/data/chronosphere/dimension/chronosphere_dimension.json
-- [X] T042 [US1] Implement dimension registry logic in common/src/main/java/com/chronosphere/core/dimension/ChronosphereDimension.java
-- [X] T043 [US1] Implement custom biome provider in common/src/main/java/com/chronosphere/core/dimension/ChronosphereBiomeProvider.java
-- [X] T044 [US1] Create custom biome definition in common/src/main/resources/data/chronosphere/worldgen/biome/chronosphere_plains.json
-
-### Portal System (Custom Portal API Integration)
-
-- [X] T045 [US1] Create portal frame validation logic in common/src/main/java/com/chronosphere/core/portal/PortalFrameValidator.java
-- [X] T046 [US1] Implement portal state machine in common/src/main/java/com/chronosphere/core/portal/PortalStateMachine.java
-- [X] T047 [US1] Implement portal registry in common/src/main/java/com/chronosphere/core/portal/PortalRegistry.java
-- [X] T048 [US1] Integrate Custom Portal API (Fabric) in fabric/src/main/java/com/chronosphere/fabric/compat/CustomPortalFabric.java
-- [ ] T049 [US1] Integrate Custom Portal API (NeoForge) in neoforge/src/main/java/com/chronosphere/neoforge/compat/CustomPortalNeoForge.java
-- [X] T049a [US1] Fix Chronosphere-side portal placement to avoid spawning on top of trees (modify portal placement logic to find suitable ground level)
-
-### Blocks - Base Materials (US1)
-
-- [X] T050 [P] [US1] Create Clockstone Ore block in common/src/main/java/com/chronosphere/blocks/ClockstoneOre.java
-- [X] T051 [P] [US1] Register Clockstone Ore in ModBlocks registry
-- [X] T052 [P] [US1] Create Clockstone Ore texture in common/src/main/resources/assets/chronosphere/textures/block/clockstone_ore.png (from diamond_ore.png)
-- [X] T053 [P] [US1] Create Clockstone Ore block model in common/src/main/resources/assets/chronosphere/models/block/clockstone_ore.json
-
-### Items - Base Materials (US1)
-
-- [X] T054 [P] [US1] Create Clockstone item in common/src/main/java/com/chronosphere/items/base/ClockstoneItem.java
-- [X] T055 [P] [US1] Register Clockstone item in ModItems registry
-- [X] T056 [P] [US1] Create Clockstone texture in common/src/main/resources/assets/chronosphere/textures/item/clockstone.png (from amethyst_shard.png)
-- [X] T057 [P] [US1] Create Clockstone item model in common/src/main/resources/assets/chronosphere/models/item/clockstone.json
-- [X] T058 [P] [US1] Create Clockstone Ore loot table in common/src/main/resources/data/chronosphere/loot_tables/blocks/clockstone_ore.json
-
-### Items - Portal Items (US1)
-
-- [X] T059 [P] [US1] Create Time Hourglass item in common/src/main/java/com/chronosphere/items/TimeHourglassItem.java
-- [X] T060 [P] [US1] Register Time Hourglass in ModItems registry
-- [X] T061 [P] [US1] Create Time Hourglass texture in common/src/main/resources/assets/chronosphere/textures/item/time_hourglass.png (from glowstone_dust.png)
-- [X] T062 [P] [US1] Create Time Hourglass recipe in common/src/main/resources/data/chronosphere/recipes/time_hourglass.json
-- [X] T062a [US1] Update Time Hourglass to be consumable (shrink stack on portal ignition in BlockEventHandler.java)
-- [X] T063 [P] [US1] Create Portal Stabilizer item in common/src/main/java/com/chronosphere/items/PortalStabilizerItem.java (dimension stabilization only, no portal ignition; includes particle+sound effects and server-wide message broadcast)
-- [X] T064 [P] [US1] Register Portal Stabilizer in ModItems registry
-- [X] T065 [P] [US1] Create Portal Stabilizer texture in common/src/main/resources/assets/chronosphere/textures/item/portal_stabilizer.png (from nether_star.png)
-- [X] T066 [P] [US1] Create Portal Stabilizer recipe in common/src/main/resources/data/chronosphere/recipes/portal_stabilizer.json
-
-### World Generation - Structures (US1)
-
-- [X] T067 [P] [US1] Create Ancient Ruins structure NBT in common/src/main/resources/data/chronosphere/structures/ancient_ruins.nbt (structure created, loot chest blueprint pending)
-- [X] T068 [P] [US1] Implement Ancient Ruins structure framework (template_pool, structure, structure_set JSONs created)
-- [X] T069 [P] [US1] Create Ancient Ruins structure set in common/src/main/resources/data/chronosphere/worldgen/structure_set/ancient_ruins.json
-- [X] T070 [P] [US1] Create Forgotten Library structure NBT in common/src/main/resources/data/chronosphere/structure/forgotten_library.nbt (35x10x35 library building with interior completed)
-- [X] T071 [P] [US1] Implement Forgotten Library structure framework (template_pool, structure, structure_set JSONs created)
-- [X] T072 [P] [US1] Create Forgotten Library structure set in common/src/main/resources/data/chronosphere/worldgen/structure_set/forgotten_library.json
-
-### Time Distortion Effect (US1)
-
-- [X] T073 [US1] Implement time distortion effect logic in common/src/main/java/com/chronosphere/core/time/TimeDistortionEffect.java
-- [X] T074 [US1] Add entity tick event handler for Slowness IV application in EntityEventHandler.java
-- [X] T075 [US1] Write unit test for time distortion effect in common/src/test/java/com/chronosphere/unit/TimeDistortionTest.java
-
-### Consumables - Fruit of Time (US1)
-
-- [X] T076 [P] [US1] Create Fruit of Time item in common/src/main/java/com/chronosphere/items/consumables/FruitOfTimeItem.java
-- [X] T077 [P] [US1] Register Fruit of Time in ModItems registry
-- [X] T078 [P] [US1] Create Fruit of Time texture and model in common/src/main/resources/assets/chronosphere/ (from glow_berries.png)
-- [X] T079 [P] [US1] Create Fruit of Time block feature in common/src/main/java/com/chronosphere/worldgen/features/FruitOfTimeTreeFeature.java
-- [X] T080 [P] [US1] Configure Fruit of Time tree placement in common/src/main/resources/data/chronosphere/worldgen/placed_feature/fruit_of_time_tree.json
-
-### Enhanced Tree Blocks & Fruit System (US1 - Fruit of Time Enhancement)
-
-**Purpose**: Replace temporary Oak blocks with custom Time Wood blocks and implement fruit-bearing system
-
-**Note**: T079-T080 implemented basic tree generation with Oak blocks. This section enhances it with custom blocks and fruit mechanics.
-
-#### Custom Wood Blocks
-
-- [X] T080a [P] [US1] Create Time Wood Log block in common/src/main/java/com/chronosphere/blocks/TimeWoodLog.java
-- [X] T080b [P] [US1] Register Time Wood Log in ModBlocks registry
-- [X] T080c [P] [US1] Create Time Wood Log textures in common/src/main/resources/assets/chronosphere/textures/block/ (time_wood_log.png, time_wood_log_top.png)
-- [X] T080d [P] [US1] Create Time Wood Log blockstate and models (block, item) in common/src/main/resources/assets/chronosphere/
-- [X] T080e [P] [US1] Create Time Wood Log loot table in common/src/main/resources/data/chronosphere/loot_table/blocks/time_wood_log.json
-- [X] T080f [P] [US1] Create Time Wood Leaves block in common/src/main/java/com/chronosphere/blocks/TimeWoodLeaves.java
-- [X] T080g [P] [US1] Register Time Wood Leaves in ModBlocks registry
-- [X] T080h [P] [US1] Create Time Wood Leaves texture in common/src/main/resources/assets/chronosphere/textures/block/time_wood_leaves.png
-- [X] T080i [P] [US1] Create Time Wood Leaves blockstate and models (block, item)
-- [X] T080j [P] [US1] Create Time Wood Leaves loot table in common/src/main/resources/data/chronosphere/loot_table/blocks/time_wood_leaves.json
-
-#### Additional Wood Components (Implemented)
-
-- [X] Time Wood Planks block (common/src/main/java/com/chronosphere/blocks/TimeWoodPlanks.java)
-- [X] Time Wood Sapling block (common/src/main/java/com/chronosphere/blocks/TimeWoodSapling.java)
-- [X] Crafting recipe for planks (1 log → 4 planks)
-- [X] Sapling drop from leaves (5% base chance, Fortune affected)
-- [X] Block tags (logs, leaves, mineable/axe for log/planks, mineable/hoe for leaves)
-- [X] Render layers for transparency (cutout for sapling, cutoutMipped for leaves)
-- [X] Leaves decay logic (distance tracking, persistent state)
-
-#### Fruit Block System
-
-- [X] T080k [P] [US1] Create Fruit of Time block in common/src/main/java/com/chronosphere/blocks/FruitOfTimeBlock.java (with growth stages 0-2, similar to Cocoa)
-- [X] T080l [P] [US1] Register Fruit of Time block in ModBlocks registry
-- [X] T080m [P] [US1] Create Fruit of Time block textures for each growth stage in common/src/main/resources/assets/chronosphere/textures/block/ (fruit_of_time_stage_0.png, stage_1.png, stage_2.png)
-- [X] T080n [P] [US1] Create Fruit of Time block blockstate in common/src/main/resources/assets/chronosphere/blockstates/fruit_of_time.json
-- [X] T080o [P] [US1] Create Fruit of Time block loot table in common/src/main/resources/data/chronosphere/loot_tables/blocks/fruit_of_time.json (drops 1-3 items when mature)
-- [X] T080p [US1] Implement fruit growth logic with random tick in FruitOfTimeBlock.java
-
-#### Tree Decorator & Generation Update
-
-- [X] T080q [US1] Implement FruitDecorator class in common/src/main/java/com/chronosphere/worldgen/decorators/FruitDecorator.java
-- [X] T080r [US1] Update FruitOfTimeTreeFeature.java to use Time Wood Log/Leaves instead of Oak blocks
-- [X] T080s [US1] Update configured_feature/fruit_of_time_tree.json with custom blocks and fruit decorator in decorators array
-- [X] T080t [P] [US1] Update localization files (en_us.json, ja_jp.json) with Time Wood blocks; add leaves to mineable/hoe tag (not axe)
-- [X] T080u [US1] Test custom tree generation and fruit growth in-game (verify custom textures, fruit placement, growth, harvesting) (tree generation and leaves decay tested)
-
-### Time Wood Functional Blocks (US1 Enhancement)
-
-**Purpose**: Time Wood木材の基礎的な機能ブロックを追加し、バニラ木材と同等の使い勝手を提供
-
-**Note**: Door, Trapdoor, Fence Gate, Button, Pressure Plate実装済み。Sign/Boatは複雑なため後回し。
-
-**Implementation Note**: 作業台はTime Wood専用ブロックを作らず、Time Wood Planksを`#minecraft:planks`タグに追加することでバニラ作業台をクラフト可能にした。
-
-- [X] T080v [P] [US1] ~~Create Time Wood Crafting Table block~~ → CHANGED: Add Time Wood Planks to #minecraft:planks tag (data/minecraft/tags/item/planks.json, data/minecraft/tags/block/planks.json) to allow crafting vanilla crafting table
-- [X] T080w [P] [US1] Create Time Wood Door block in common/src/main/java/com/chronosphere/blocks/TimeWoodDoor.java
-- [X] T080x [P] [US1] Create Time Wood Trapdoor block in common/src/main/java/com/chronosphere/blocks/TimeWoodTrapdoor.java
-- [X] T080y [P] [US1] Create Time Wood Fence Gate block in common/src/main/java/com/chronosphere/blocks/TimeWoodFenceGate.java
-- [X] T080z [P] [US1] Create Time Wood Button block in common/src/main/java/com/chronosphere/blocks/TimeWoodButton.java
-- [X] T080aa [P] [US1] Create Time Wood Pressure Plate block in common/src/main/java/com/chronosphere/blocks/TimeWoodPressurePlate.java
-- [ ] T080ab [P] [US1] Create Time Wood Sign blocks in common/src/main/java/com/chronosphere/blocks/ (TimeWoodStandingSign.java, TimeWoodWallSign.java, TimeWoodHangingSign.java, TimeWoodWallHangingSign.java) - DEFERRED: Complex implementation requiring BlockEntity and custom renderer
-- [ ] T080ac [P] [US1] Create Time Wood Boat entities in common/src/main/java/com/chronosphere/entities/vehicle/ (TimeWoodBoat.java, TimeWoodChestBoat.java) - DEFERRED: Complex implementation requiring custom entity and physics
-- [X] T080ad [P] [US1] Register all Time Wood functional blocks in ModBlocks registry (Door, Trapdoor, Fence Gate, Button, Pressure Plate)
-- [ ] T080ae [P] [US1] Register Time Wood Boat entities in ModEntities registry - DEFERRED: Depends on T080ac
-- [X] T080af [P] [US1] Create crafting recipes for all Time Wood functional blocks in common/src/main/resources/data/chronosphere/recipe/ (door, trapdoor, fence_gate, button, pressure_plate)
-- [X] T080ag [P] [US1] Create blockstates/models for all Time Wood functional blocks in common/src/main/resources/assets/chronosphere/blockstates/ and models/ (Door, Trapdoor, Fence Gate, Button, Pressure Plate)
-- [X] T080ah [P] [US1] Create textures for all Time Wood functional blocks in common/src/main/resources/assets/chronosphere/textures/block/ and item/ (converted from Jungle textures using RGB channel adjustments: R*0.95, G*1.17, B*0.85)
-- [ ] T080ai [P] [US1] Create Sign item in common/src/main/java/com/chronosphere/items/TimeWoodSignItem.java and HangingSignItem for inventory representation - DEFERRED: Depends on T080ab
-- [ ] T080aj [P] [US1] Create Boat items in common/src/main/java/com/chronosphere/items/TimeWoodBoatItem.java and TimeWoodChestBoatItem.java - DEFERRED: Depends on T080ac
-- [X] T080ak [P] [US1] Update localization files (en_us.json, ja_jp.json) with all Time Wood functional blocks (Door, Trapdoor, Fence Gate, Button, Pressure Plate)
-- [X] T080al [US1] Add all Time Wood functional blocks to creative tab in ModCreativeTabs (Door, Trapdoor, Fence Gate, Button, Pressure Plate)
-- [X] T080am [US1] Test all Time Wood functional blocks in-game (verified: crafting vanilla crafting table with Time Wood Planks, Door/Trapdoor transparency, all blocks placement and interaction) - PARTIAL: Sign/Boat not tested (not implemented)
-
-### Special Blocks (US1)
-
-- [X] T081 [P] [US1] Create Reversing Time Sandstone block in common/src/main/java/com/chronosphere/blocks/ReversingTimeSandstone.java
-- [X] T082 [P] [US1] Register Reversing Time Sandstone in ModBlocks registry
-- [X] T083 [P] [US1] Implement block restoration logic in BlockEventHandler.java
-- [X] T084 [P] [US1] Create Unstable Fungus block in common/src/main/java/com/chronosphere/blocks/UnstableFungus.java
-- [X] T085 [P] [US1] Register Unstable Fungus in ModBlocks registry
-- [X] T086 [P] [US1] Implement collision event handler in EntityEventHandler.java for random speed effects
-
-### Respawn Logic (US1)
-
-- [X] T087 [US1] ~~Implement respawn handler in PlayerEventHandler.java~~ - REVERTED: Uses Minecraft standard behavior (like End dimension)
-- [X] T088 [US1] ~~Write GameTest for respawn behavior in common/src/test/java/com/chronosphere/integration/RespawnTest.java~~ - REMOVED: No custom respawn logic needed
-
-**Design Decision**: Chronosphere respawn follows Minecraft's standard behavior (similar to End dimension):
-- Players respawn at their set bed/respawn anchor, or world spawn if none set
-- Portal Stabilizer does NOT affect respawn location (only stabilizes dimension)
-- Players can escape Chronosphere by breaking bed and dying (same as End)
-- This maintains tension (one-way portal initially) without excessive difficulty
-
-**Portal Deactivation Logic** (PlayerEventHandler.java):
-- When player enters Chronosphere, check global state (ChronosphereGlobalState.arePortalsUnstable())
-- If portals are unstable (hasEnteredChronosphere && !isPortalStabilized), deactivate portal
-- If portals are stable (isPortalStabilized), skip deactivation (portal remains active)
-- This allows free bidirectional travel after Portal Stabilizer is used once
-
-### Localization & Creative Tab (US1)
-
-- [X] T088a [US1] Create English localization file with all US1 items/blocks in common/src/main/resources/assets/chronosphere/lang/en_us.json (includes portal_stabilizer.success_reignite_required message)
-- [X] T088b [US1] Create Japanese localization file with all US1 items/blocks in common/src/main/resources/assets/chronosphere/lang/ja_jp.json (includes portal_stabilizer.success_reignite_required message)
-- [X] T088c [US1] Add all US1 items/blocks to creative tab in ModCreativeTabs
-
-### Multiple Biomes (US1 Enhancement)
-
-**Purpose**: クロノスフィアに複数のバイオームを追加し、探索の多様性と視認性を向上
-
-**Current Issue**: dimension/chronosphere.json が `biome_source: { type: "minecraft:fixed" }` を使用しているため、ディメンション全体が単一バイオーム（plains）として生成され、海もplainsバイオームになっている
-
-- [X] T088d [US1] Research multi_noise biome generation parameters (temperature, humidity, continentalness, erosion, depth, weirdness)
-- [X] T088e [P] [US1] Create chronosphere_ocean biome JSON with appropriate water_color for visibility and empty tree features
-- [X] T088f [P] [US1] Create chronosphere_forest biome JSON with increased Time Wood tree density
-- [X] T088g [US1] Create multi_noise biome source configuration in common/src/main/resources/data/chronosphere/worldgen/multi_noise_biome_source_parameter_list/chronosphere.json
-- [X] T088h [US1] Update dimension/chronosphere.json to use multi_noise biome source instead of fixed
-- [X] T088i [US1] Test biome generation in-game and verify ocean/plains/forest distribution
-- [X] T088iu [P] [US1] Create chronosphere_desert biome JSON with appropriate temperature/downfall and sand terrain (for Desert Clock Tower structure in US2)
-- [X] T088iv [US1] Update multi_noise biome source configuration to include desert biome with appropriate noise parameters (high temperature, low humidity)
-
-### Basic Mob Spawning (US1 Enhancement)
-
-**Purpose**: クロノスフィアに基本的な敵対モブ・友好モブを配置してディメンションを活性化
-
-**Note**: カスタムモブは後のフェーズで実装。まずはバニラモブで世界に生命を与える
-
-- [X] T088j [US1] Research appropriate vanilla mob selection and spawn rates for time-distorted dimension
-- [X] T088k [P] [US1] Add monster spawners to chronosphere_plains.json (Zombie, Skeleton with low spawn rates)
-- [X] T088l [P] [US1] Add creature/ambient spawners to chronosphere_plains.json (passive mobs for ambiance)
-- [X] T088m [P] [US1] Add monster spawners to chronosphere_forest.json (forest-appropriate hostile mobs)
-- [X] T088n [P] [US1] Add water_creature/water_ambient spawners to chronosphere_ocean.json (fish, squid, etc.)
-- [X] T088o [US1] Test mob spawning in-game and verify Time Distortion Effect (Slowness IV) applies correctly to hostile mobs
-
-### Biome Color Adjustment (US1 Enhancement)
-
-**Purpose**: 海と陸地の視認性を向上させるため色設定を調整
-
-**Current Issue**: water_color (4159204 = 0x3F76C4 blue) と foliage_color (7909594 = 0x78A85A green) が近い色調で海の視認性が低い
-
-- [X] T088p [US1] Research optimal color values for ocean visibility (water vs foliage/grass contrast)
-- [X] T088q [P] [US1] Adjust water_color in chronosphere_ocean.json for better contrast and visibility
-- [X] T088r [P] [US1] Consider adjusting foliage_color/grass_color in plains/forest for visual distinction
-- [X] T088s [US1] Test color adjustments in-game and iterate until visibility is acceptable
-
-### Vegetation System (US1 Enhancement)
-
-**Purpose**: 植生を追加して探索に生命感と視覚的多様性を提供
-
-**Note**: 基本的な生命感を与えるため、MVP完了前の実装を推奨。モブスポーン（T088j-o）と並行実装可能
-
-- [X] T088w [US1] Research vanilla vegetation generation patterns (tall grass, flowers, ferns, seagrass, kelp)
-- [X] T088x [P] [US1] Create tall grass configured_feature for chronosphere_plains.json (random patches)
-- [X] T088y [P] [US1] Create flower configured_feature for chronosphere_plains.json (custom color theme: orange/gold/grey)
-- [X] T088z [P] [US1] Create fern/mushroom configured_feature for chronosphere_forest.json (forest undergrowth)
-- [X] T088aa [P] [US1] Create seagrass configured_feature for chronosphere_ocean.json (ocean floor vegetation)
-- [X] T088ab [P] [US1] Create kelp configured_feature for chronosphere_ocean.json (vertical underwater vegetation)
-- [X] T088ac [US1] Test vegetation generation in-game and adjust density/distribution
-
-### Basic Equipment Set (US1 Enhancement - High Priority)
-
-**Purpose**: 基本的な装備セットを追加し、収集とクラフトの楽しみを提供
-
-**Note**: 現在はClockstone Oreしかなく、装備も限定的。基本装備セット（武器・防具・ツール）を追加してゲームプレイの深みを増す
-
-- [X] T210 [P] [US1] Create Time Crystal Ore block in common/src/main/java/com/chronosphere/blocks/TimeCrystalOre.java (new ore type, rarer than Clockstone)
-- [X] T211 [P] [US1] Create Time Crystal item in common/src/main/java/com/chronosphere/items/base/TimeCrystalItem.java
-- [X] T212 [P] [US1] Configure Time Crystal Ore worldgen in common/src/main/resources/data/chronosphere/worldgen/placed_feature/time_crystal_ore.json (Y: 0-48, vein size 3-5)
-- [X] T213 [P] [US1] Create Clockstone Sword item in common/src/main/java/com/chronosphere/items/equipment/ClockstoneSwordItem.java (basic tier weapon, slightly better than iron)
-- [X] T214 [P] [US1] Create Clockstone Axe/Shovel/Hoe items in common/src/main/java/com/chronosphere/items/equipment/ (basic tier tools)
-- [X] T215 [P] [US1] Create Clockstone Armor Set (Helmet, Chestplate, Leggings, Boots) in common/src/main/java/com/chronosphere/items/equipment/
-- [X] T216 [P] [US1] Create crafting recipes for Clockstone equipment in common/src/main/resources/data/chronosphere/recipes/ (uses Clockstone + Time Crystal for enhanced durability)
-- [X] T217 [P] [US1] Create textures for Clockstone equipment in common/src/main/resources/assets/chronosphere/textures/item/
-- [X] T218 [US1] Add equipment to creative tab and localization files (en_us.json, ja_jp.json)
-
-### Food System Expansion (US1 Enhancement - High Priority)
-
-**Purpose**: 食料システムを拡張し、クラフトと収集の楽しみを追加
-
-**Note**: 現在はFruit of Timeのみで、クラフトできない。加工食料と独自作物を追加して食料システムに深みを持たせる
-
-- [X] T220 [P] [US1] Create Time Fruit Pie item in common/src/main/java/com/chronosphere/items/consumables/TimeFruitPieItem.java (crafted from 3x Fruit of Time + wheat, restores 8 hunger + 30s Haste II)
-- [X] T221 [P] [US1] Create Time Jam item in common/src/main/java/com/chronosphere/items/consumables/TimeJamItem.java (crafted from 4x Fruit of Time + sugar, restores 4 hunger + 60s Speed I)
-- [X] T222 [P] [US1] Create Time Wheat crop block in common/src/main/java/com/chronosphere/blocks/TimeWheatBlock.java (grows in Chronosphere, 8 growth stages like vanilla wheat)
-- [X] T223 [P] [US1] Create Time Wheat Seeds and Time Wheat items in common/src/main/java/com/chronosphere/items/consumables/
-- [X] T224 [P] [US1] Create Time Bread item in common/src/main/java/com/chronosphere/items/consumables/TimeBreadItem.java (crafted from 3x Time Wheat, restores 5 hunger)
-- [X] T225 [P] [US1] Configure Time Wheat worldgen in plains/forest biomes (random patches like vanilla wheat in villages)
-- [X] T226 [P] [US1] Create crafting recipes for food items in common/src/main/resources/data/chronosphere/recipes/
-- [X] T227 [P] [US1] Create textures for food items and crop stages in common/src/main/resources/assets/chronosphere/textures/
-- [X] T228 [US1] Add food items to creative tab and localization files
-
-### Additional Biomes (US1 Enhancement - Medium Priority)
-
-**Purpose**: バイオームの種類を増やし、探索の多様性と飽きにくさを向上
-
-**Note**: 現在は4種類（plains, ocean, forest, desert）のみ。山岳・湿地・雪原・洞窟を追加してバリエーションを増やす
-
-- [X] T230 [P] [US1] Create chronosphere_mountain biome JSON in common/src/main/resources/data/chronosphere/worldgen/biome/chronosphere_mountain.json (stone terrain, high elevation, sparse vegetation)
-- [X] T231 [P] [US1] Create chronosphere_swamp biome JSON in common/src/main/resources/data/chronosphere/worldgen/biome/chronosphere_swamp.json (water, clay, Temporal Moss, unique vegetation)
-- [X] T232 [P] [US1] Create chronosphere_snowy biome JSON in common/src/main/resources/data/chronosphere/worldgen/biome/chronosphere_snowy.json (snow, ice, Frozen Time Ice, frozen time theme)
-- [X] T233 [P] [US1] ~~Create chronosphere_cave biome JSON~~ - SKIPPED: Vanilla cave generation is sufficient; underground decoration can be added via existing biomes' `underground_decoration` feature lists. US3's Time Crystal Caverns (T263) will provide special cave features.
-- [X] T234 [US1] Update multi_noise parameters in multi_noise_biome_source_parameter_list/chronosphere.json to include new biomes with distinct noise values (mountain: high erosion, swamp: low continentalness, snowy: low temperature, cave: depth offset)
-- [X] T235 [US1] Test new biomes in-game and verify distribution balance (ensure each biome is discoverable without excessive travel)
-
-### Block Variety Expansion (US1 Enhancement - Medium Priority)
-
-**Purpose**: ブロックの種類を増やし、建築と装飾の選択肢を拡充
-
-**Note**: 現在はカスタムブロックが少なく、バイオームの見た目が単調。装飾ブロック・建築用バリエーション・バイオーム固有ブロックを追加
-
-- [x] T240 [P] [US1] Create Clockwork Block in common/src/main/java/com/chronosphere/blocks/ClockworkBlock.java (decorative block, animated texture with rotating gears)
-- [x] T241 [P] [US1] Create Time Crystal Block in common/src/main/java/com/chronosphere/blocks/TimeCrystalBlock.java (decorative, emits light level 10, crafted from 9 Time Crystals)
-- [x] T242 [P] [US1] Create Temporal Bricks block in common/src/main/java/com/chronosphere/blocks/TemporalBricksBlock.java (building block, crafted from 4 Clockstone)
-- [x] T243 [P] [US1] Create stairs/slabs/walls/fences variants for Time Wood Planks and Temporal Bricks in common/src/main/java/com/chronosphere/blocks/
-- [x] T244 [P] [US1] Create Temporal Moss block in common/src/main/java/com/chronosphere/blocks/TemporalMossBlock.java (decorative, swamp biome exclusive, spreads like vanilla moss)
-- [x] T245 [P] [US1] Create Frozen Time Ice block in common/src/main/java/com/chronosphere/blocks/FrozenTimeIceBlock.java (snowy biome exclusive, doesn't melt, slippery like ice)
-- [x] T246 [P] [US1] Register new blocks in ModBlocks and create blockstates/models/textures in common/src/main/resources/
-- [x] T247 [P] [US1] Create crafting recipes for decorative blocks (Clockwork Block, Time Crystal Block, Temporal Bricks, stairs/slabs/walls/fences)
-- [ ] T248 [P] [US1] Configure Temporal Moss and Frozen Time Ice worldgen in respective biomes (Deferred: requires T230-235 swamp/snowy biomes)
-- [x] T249 [US1] Add new blocks to creative tab and localization files
-
-**Checkpoint**: User Story 1が完全に機能し、独立してテスト可能であること
-
----
-
-### World Generation - Desert Clock Tower (US2)
-
-- [X] T093 [P] [US2] Create Desert Clock Tower structure NBT in common/src/main/resources/data/chronosphere/structures/desert_clock_tower.nbt (JSON complete, NBT placeholder - needs proper tower structure in-game)
-- [X] T094 [P] [US2] Implement Desert Clock Tower structure feature in common/src/main/java/com/chronosphere/worldgen/structures/DesertClockTowerStructure.java (JSON-based implementation complete)
-- [X] T095 [P] [US2] Create Desert Clock Tower structure set in common/src/main/resources/data/chronosphere/worldgen/structure_set/desert_clock_tower.json
-- [X] T095a [US2] Create actual Desert Clock Tower NBT structure using structure blocks in-game (21x50x21 sandstone tower with chest and Time Guardian spawn point on top floor)
-- [X] T095b [US2] Update Desert Clock Tower structure to spawn only in chronosphere:chronosphere_desert biome (modify structure JSON biomes field)
-- [X] T095c [US2] Fix monster spawner in Desert Clock Tower - ensure spawners are configured correctly to spawn monsters (RESOLVED: Spawners removed due to light level constraints and design trade-offs; natural mob spawning used instead)
-
-### Items - Enhanced Materials (US2)
-
-- [X] T096 [P] [US2] Create Enhanced Clockstone item in common/src/main/java/com/chronosphere/items/base/EnhancedClockstoneItem.java
-- [X] T097 [P] [US2] Register Enhanced Clockstone in ModItems registry
-- [X] T098 [P] [US2] Create Enhanced Clockstone texture in common/src/main/resources/assets/chronosphere/textures/item/enhanced_clockstone.png
-- [X] T099 [P] [US2] Configure Enhanced Clockstone loot in Desert Clock Tower chest
-
-### Items - Time Manipulation Tools (US2)
-
-- [X] T100 [P] [US2] Create Time Clock item in common/src/main/java/com/chronosphere/items/tools/TimeClockItem.java
-- [X] T101 [P] [US2] Register Time Clock in ModItems registry
-- [X] T102 [P] [US2] Create Time Clock texture in common/src/main/resources/assets/chronosphere/textures/item/time_clock.png
-- [X] T103 [P] [US2] Create Time Clock recipe in common/src/main/resources/data/chronosphere/recipes/time_clock.json
-- [X] T104 [P] [US2] Implement Time Clock AI cancellation logic in common/src/main/java/com/chronosphere/core/time/MobAICanceller.java
-- [X] T105 [P] [US2] Create Spatially Linked Pickaxe in common/src/main/java/com/chronosphere/items/tools/SpatiallyLinkedPickaxeItem.java
-- [X] T106 [P] [US2] Register Spatially Linked Pickaxe in ModItems registry
-- [X] T107 [P] [US2] Create Spatially Linked Pickaxe texture in common/src/main/resources/assets/chronosphere/textures/item/spatially_linked_pickaxe.png
-- [X] T108 [P] [US2] Create Spatially Linked Pickaxe recipe in common/src/main/resources/data/chronosphere/recipes/spatially_linked_pickaxe.json
-- [X] T109 [P] [US2] Implement drop doubling logic in BlockEventHandler.java
-
-### Entities - Time Guardian (Mini-Boss) (US2)
-
-- [X] T110 [US2] Create Time Guardian entity in common/src/main/java/com/chronosphere/entities/bosses/TimeGuardianEntity.java
-- [X] T111 [US2] Register Time Guardian in ModEntities registry
-- [X] T112 [US2] Implement Time Guardian AI (Phase 1: melee, Phase 2: teleport + AoE) in common/src/main/java/com/chronosphere/entities/bosses/TimeGuardianAI.java
-- [X] T113 [US2] Create Time Guardian loot table in common/src/main/resources/data/chronosphere/loot_tables/entities/time_guardian.json
-- [X] T114 [US2] Create Time Guardian spawn logic in common/src/main/java/com/chronosphere/worldgen/spawning/TimeGuardianSpawner.java (spawns on Desert Clock Tower top floor)
-- [X] T115 [US2] Implement reversed resonance trigger on defeat in EntityEventHandler.java (Note: 一度実装したが、ゲームバランスの観点から廃止。reversed resonance機能自体は他のトリガー（Unstable Hourglassクラフト、Time Tyrant撃破）で使用予定のため保持)
-
-#### Time Guardian Enhancements (Post-MVP)
-
-**Purpose**: Time Guardianの見た目・バランス・ゲームプレイ体験を改善
-
-**Note**: 基本機能は実装済み。以下はポリッシュと体験向上のための追加タスク
-
-- [X] T115a [US2] Create custom model and texture for Time Guardian (currently using zombie placeholder)
-  - [X] T115a-1 [US2] Improve Time Guardian texture (currently using placeholder image with minimal modifications)
-  - [X] T115a-2 [US2] Improve Time Guardian model geometry (more imposing design, arm shape that conveys extended reach)
-- [X] T115b [US2] Adjust Time Guardian parameters (HP, attack damage, armor) based on playtesting feedback
-- [X] T115c [US2] Implement boss floor access mechanism (stairs, elevator, or teleporter to top floor)
-- [X] T115d [US2] Add boss arena entrance lockdown (prevent escape/re-entry during combat)
-- [ ] T115e [US2] Add reversed resonance explanation (book item, advancement description, or in-game message) (Note: Time Guardian撃破トリガーは廃止。Unstable Hourglassクラフト、Time Tyrant撃破用の説明が必要)
-- [X] T115m [US2] Fix boss bar display timing (should appear when player reaches top floor, not before)
-
-### Items - Key Items (US2)
-
-- [X] T116 [P] [US2] Create Key to Master Clock item in common/src/main/java/com/chronosphere/items/KeyToMasterClockItem.java
-- [X] T117 [P] [US2] Register Key to Master Clock in ModItems registry
-- [X] T118 [P] [US2] Create Key to Master Clock texture in common/src/main/resources/assets/chronosphere/textures/item/key_to_master_clock.png
-
-### Items - Unstable Hourglass (US2)
-
-- [X] T119 [P] [US2] Create Unstable Hourglass item in common/src/main/java/com/chronosphere/items/UnstableHourglassItem.java
-- [X] T120 [P] [US2] Register Unstable Hourglass in ModItems registry
-- [X] T121 [P] [US2] Create Unstable Hourglass recipe in common/src/main/resources/data/chronosphere/recipes/unstable_hourglass.json
-- [X] T122 [P] [US2] Implement reversed resonance trigger on crafting in common/src/main/java/com/chronosphere/events/CraftEventHandler.java
-
-### Localization & Creative Tab (US2)
-
-- [X] T122a [US2] Update English localization file with all US2 items/entities in en_us.json
-- [X] T122b [US2] Update Japanese localization file with all US2 items/entities in ja_jp.json
-- [X] T122c [US2] Add all US2 items to creative tab in ModCreativeTabs
-
-### Recipe Material Review (US2)
-
-**Purpose**: Ensure all US2 recipes use only Chronosphere-obtainable materials (no Overworld-exclusive items like diamonds, ender pearls, nether stars)
-
-- [X] T122d [P] [US2] Review all US2 recipes (Time Clock, Spatially Linked Pickaxe, Unstable Hourglass) for Overworld-exclusive materials
-- [X] T122e [P] [US2] Update recipes if needed to use Chronosphere materials - Added gold ore, redstone ore, and sand generation to Chronosphere biomes instead
-
-### Equipment Tier System (US2 Enhancement - High Priority)
-
-**Purpose**: 装備にティア制を導入し、プログレッション感と戦略性を向上
-
-**Note**: 現在は基本装備（Tier 1）と究極装備（Tier 3）のみ。Tier 2（Enhanced Clockstone装備）を追加して段階的な成長を実現
-
-- [x] T250 [P] [US2] Create Enhanced Clockstone Sword item in common/src/main/java/com/chronosphere/items/equipment/EnhancedClockstoneSwordItem.java (Tier 2 weapon, better than Tier 1, chance to freeze enemy on hit for 2s)
-- [x] T251 [P] [US2] Create Enhanced Clockstone Axe/Shovel/Hoe items in common/src/main/java/com/chronosphere/items/equipment/ (Tier 2 tools, faster mining speed)
-- [x] T252 [P] [US2] Create Enhanced Clockstone Armor Set (Helmet, Chestplate, Leggings, Boots) in common/src/main/java/com/chronosphere/items/equipment/ (Tier 2 armor, higher protection + set bonus: immunity to time distortion effects)
-- [x] T253 [P] [US2] Create crafting recipes for Tier 2 equipment in common/src/main/resources/data/chronosphere/recipes/ (uses Enhanced Clockstone + Time Crystal)
-- [x] T254 [P] [US2] Implement time-manipulation effects for Tier 2 equipment (freeze on hit for sword, set bonus for armor)
-- [x] T255 [P] [US2] Create textures for Tier 2 equipment in common/src/main/resources/assets/chronosphere/textures/item/
-- [x] T256 [US2] Add Tier 2 equipment to creative tab and localization files
-
-**Checkpoint**: User Story 1とUser Story 2が両方とも独立して動作すること
-
----
-
-### World Generation - Master Clock (US3)
-
-**Design**: Underground palace structure with Jigsaw random room generation (see master-clock-design.md)
-**Location**: Near world spawn using concentric_rings placement (80-100 chunk radius, 1 per dimension)
-**Size**: Entrance 15x10x15, Dungeon 41x50x41, Boss Room 35x20x35
-
-#### NBT Structures - Entrance & Boss Room
-
-- [x] T128 [P] [US3] Create Master Clock entrance NBT (15x10x15) in common/src/main/resources/data/chronosphere/structure/master_clock_entrance.nbt (small surface temple, key-locked door, stairs to underground)
-- [x] T129 [P] [US3] Create Master Clock boss room NBT (35x20x35) in common/src/main/resources/data/chronosphere/structure/master_clock_boss_room.nbt (large hall, Time Tyrant spawn point, pillars, reward chest)
-
-#### NBT Structures - Jigsaw Rooms (8 variants)
-
-- [ ] T130a [P] [US3] Create room_trap_arrows NBT (15x8x15) in common/src/main/resources/data/chronosphere/structure/master_clock_room_trap_arrows.nbt (pressure plates, dispensers, Reversing Time Sandstone floor)
-- [ ] T130b [P] [US3] Create room_spawner NBT (17x8x17) in common/src/main/resources/data/chronosphere/structure/master_clock_room_spawner.nbt (mob spawners for Skeleton/Zombie, multiple exits)
-- [ ] T130c [P] [US3] Create room_maze NBT (21x8x21) in common/src/main/resources/data/chronosphere/structure/master_clock_room_maze.nbt (maze layout, Reversing Time Sandstone walls, chest at dead-ends)
-- [ ] T130d [P] [US3] Create room_puzzle_redstone NBT (15x10x15) in common/src/main/resources/data/chronosphere/structure/master_clock_room_puzzle_redstone.nbt (redstone puzzle, lever sequence, door unlock)
-- [ ] T130e [P] [US3] Create room_lava NBT (17x12x17) in common/src/main/resources/data/chronosphere/structure/master_clock_room_lava.nbt (lava trap, parkour, Reversing Time Sandstone platforms)
-- [ ] T130f [P] [US3] Create room_time_puzzle NBT (15x8x15) in common/src/main/resources/data/chronosphere/structure/master_clock_room_time_puzzle.nbt (lever→door opens→auto-closes, timing challenge)
-- [ ] T130g [P] [US3] Create room_guardian_arena NBT (19x10x19) in common/src/main/resources/data/chronosphere/structure/master_clock_room_guardian_arena.nbt (elite enemies, combat arena, reward chest)
-- [ ] T130h [P] [US3] Create room_rest NBT (13x8x13) in common/src/main/resources/data/chronosphere/structure/master_clock_room_rest.nbt (safe room, bed placement area, food/potion chest)
-
-#### Ancient Gears Item (Progressive Unlock)
-
-- [x] T131a [P] [US3] Create Ancient Gear item in common/src/main/java/com/chronosphere/items/quest/AncientGearItem.java
-- [x] T131b [P] [US3] Register Ancient Gear in ModItems registry
-- [x] T131c [P] [US3] Create Ancient Gear texture in common/src/main/resources/assets/chronosphere/textures/item/ancient_gear.png (clockwork gear theme)
-- [x] T131d [US3] Implement Ancient Gears detection logic in BlockEventHandler.java (check 3 gears in inventory, open boss room door)
-
-#### Jigsaw Template Pools
-
-- [x] T132a [P] [US3] Create entrance pool JSON in common/src/main/resources/data/chronosphere/worldgen/template_pool/master_clock/entrance_pool.json (single entrance NBT)
-- [ ] T132b [P] [US3] Create room pool JSON in common/src/main/resources/data/chronosphere/worldgen/template_pool/master_clock/room_pool.json (8 room variants, equal weights)
-- [x] T132c [P] [US3] Create boss room pool JSON in common/src/main/resources/data/chronosphere/worldgen/template_pool/master_clock/boss_room_pool.json (single boss room NBT)
-
-#### Structure Configuration
-
-- [ ] T132d [P] [US3] Create loot processor JSON in common/src/main/resources/data/chronosphere/worldgen/processor_list/master_clock_loot.json (chest loot with Ancient Gears)
-- [x] T132e [P] [US3] Create structure JSON in common/src/main/resources/data/chronosphere/worldgen/structure/master_clock.json (references entrance pool, Jigsaw configuration)
-- [x] T132f [P] [US3] Create structure set JSON in common/src/main/resources/data/chronosphere/worldgen/structure_set/master_clock.json (concentric_rings placement, distance: 80, spread: 20, count: 1)
-- [x] T132g [P] [US3] Create biome tag has_master_clock in common/src/main/resources/data/chronosphere/tags/worldgen/biome/has_master_clock.json (all Chronosphere biomes)
-
-#### Door Opening Logic
-
-- [x] T133 [US3] Implement Key to Master Clock door opening logic in BlockEventHandler.java (entrance door unlock when key used)
-
-### Entities - Time Tyrant (Boss) (US3)
-
-- [x] T134 [US3] Create Time Tyrant entity in common/src/main/java/com/chronosphere/entities/bosses/TimeTyrantEntity.java
-- [x] T135 [US3] Register Time Tyrant in ModEntities registry
-- [x] T136 [US3] Implement Time Tyrant AI (Phase 1: time stop, Phase 2: teleport + speed, Phase 3: AoE + HP recovery) in common/src/main/java/com/chronosphere/entities/bosses/TimeTyrantAI.java
-- [x] T137 [US3] Create Time Tyrant loot table in common/src/main/resources/data/chronosphere/loot_tables/entities/time_tyrant.json
-- [x] T138 [US3] Implement Stasis Core destruction on defeat in EntityEventHandler.java
-- [x] T139 [US3] Implement reversed resonance trigger (60 seconds) on defeat in EntityEventHandler.java
-- [x] T140 [US3] Implement dimension stabilization on defeat in common/src/main/java/com/chronosphere/core/dimension/DimensionStabilizer.java
-
-### Items - Boss Materials (US3)
-
-- [x] T141 [P] [US3] Create Fragment of Stasis Core item in common/src/main/java/com/chronosphere/items/base/FragmentOfStasisCoreItem.java
-- [x] T142 [P] [US3] Register Fragment of Stasis Core in ModItems registry
-- [x] T143 [P] [US3] Create Fragment of Stasis Core texture in common/src/main/resources/assets/chronosphere/textures/item/fragment_of_stasis_core.png
-- [x] T144 [P] [US3] Create Eye of Chronos item in common/src/main/java/com/chronosphere/items/artifacts/EyeOfChronosItem.java
-- [x] T145 [P] [US3] Register Eye of Chronos in ModItems registry
-- [x] T146 [P] [US3] Create Eye of Chronos texture in common/src/main/resources/assets/chronosphere/textures/item/eye_of_chronos.png
-- [x] T147 [US3] Implement enhanced time distortion effect (Slowness V) when Eye of Chronos is in inventory in EntityEventHandler.java
-
-### Weapons - Chronoblade (US3)
-
-- [x] T148 [P] [US3] Create Chronoblade item in common/src/main/java/com/chronosphere/items/artifacts/ChronobladeItem.java
-- [x] T149 [P] [US3] Register Chronoblade in ModItems registry
-- [x] T150 [P] [US3] Create Chronoblade texture in common/src/main/resources/assets/chronosphere/textures/item/chronoblade.png
-- [x] T151 [P] [US3] Create Chronoblade recipe in common/src/main/resources/data/chronosphere/recipes/chronoblade.json
-- [x] T152 [US3] Implement AI skip on hit (25% chance) in common/src/main/java/com/chronosphere/items/artifacts/ChronobladeAISkipHandler.java
-
-### Armor - Time Guardian's Mail (US3)
-
-- [x] T153 [P] [US3] Create Time Guardian's Mail item in common/src/main/java/com/chronosphere/items/artifacts/TimeGuardianMailItem.java
-- [x] T154 [P] [US3] Register Time Guardian's Mail in ModItems registry
-- [x] T155 [P] [US3] Create Time Guardian's Mail texture in common/src/main/resources/assets/chronosphere/textures/item/time_guardian_mail.png
-- [x] T156 [P] [US3] Create Time Guardian's Mail recipe in common/src/main/resources/data/chronosphere/recipes/time_guardian_mail.json
-- [x] T157 [US3] Implement rollback on lethal damage (20% chance, 60s cooldown) in common/src/main/java/com/chronosphere/items/artifacts/TimeGuardianMailRollbackHandler.java
-
-### Armor - Echoing Time Boots (US3)
-
-- [x] T158 [P] [US3] Create Echoing Time Boots item in common/src/main/java/com/chronosphere/items/artifacts/EchoingTimeBootsItem.java
-- [x] T159 [P] [US3] Register Echoing Time Boots in ModItems registry
-- [x] T160 [P] [US3] Create Echoing Time Boots texture in common/src/main/resources/assets/chronosphere/textures/item/echoing_time_boots.png
-- [x] T161 [P] [US3] Create Echoing Time Boots recipe in common/src/main/resources/data/chronosphere/recipes/echoing_time_boots.json
-- [x] T162 [US3] Create Decoy Entity in common/src/main/java/com/chronosphere/entities/DecoyEntity.java
-- [x] T163 [US3] Register Decoy Entity in ModEntities registry
-- [x] T164 [US3] Implement decoy summoning on sprint (15s cooldown) in common/src/main/java/com/chronosphere/items/artifacts/EchoingTimeBootsDecoyHandler.java
-
-### Tools - Ultimate Spatially Linked Pickaxe (US3)
-
-- [x] T165 [P] [US3] Create ultimate version recipe in common/src/main/resources/data/chronosphere/recipes/spatially_linked_pickaxe_ultimate.json
-- [x] T166 [US3] Update Spatially Linked Pickaxe with enhanced drop multiplier for ultimate version
-
-### Utility - Unstable Pocket Watch (US3)
-
-- [x] T167 [P] [US3] Create Unstable Pocket Watch item in common/src/main/java/com/chronosphere/items/artifacts/UnstablePocketWatchItem.java
-- [x] T168 [P] [US3] Register Unstable Pocket Watch in ModItems registry
-- [x] T169 [P] [US3] Create Unstable Pocket Watch texture in common/src/main/resources/assets/chronosphere/textures/item/unstable_pocket_watch.png
-- [x] T170 [P] [US3] Create Unstable Pocket Watch recipe in common/src/main/resources/data/chronosphere/recipes/unstable_pocket_watch.json
-- [x] T171 [US3] Implement speed effect swapping logic (30s cooldown) in common/src/main/java/com/chronosphere/items/artifacts/UnstablePocketWatchSwapHandler.java
-
-### Localization & Creative Tab (US3)
-
-- [x] T171a [US3] Update English localization file with all US3 items/entities in en_us.json
-- [x] T171b [US3] Update Japanese localization file with all US3 items/entities in ja_jp.json
-- [x] T171c [US3] Add all US3 items to creative tab in ModCreativeTabs
-
-### Recipe Material Review (US3)
-
-**Purpose**: Ensure all US3 recipes use only Chronosphere-obtainable materials (no Overworld-exclusive items like diamonds, ender pearls, nether stars)
-
-- [x] T171d [P] [US3] Review all US3 recipes (Chronoblade, Time Tyrant's Mail, Echoing Time Boots, Ultimate Spatially Linked Pickaxe, Unstable Pocket Watch) for Overworld-exclusive materials
-- [x] T171e [P] [US3] Update recipes if needed to use Chronosphere materials (Fragment of Stasis Core, Enhanced Clockstone, Clockstone Block, etc.) - No changes needed, all recipes use appropriate Chronosphere materials
-
-### Boss Battle Balance & Strategy (US3 Enhancement - High Priority)
-
-**Purpose**: Time Tyrant戦に戦略的なギミックを追加し、難易度バランスを改善
-
-**Context**: テストプレイの結果、Time Tyrantが強すぎてネザライトフル装備でも倒せない。単純な数値調整ではなく、戦略的なアイテムやギミックを追加して攻略の幅を広げる。
-
-- [x] T171f [US3] Implement Time Clock weakening mechanic in common/src/main/java/com/chronosphere/items/tools/TimeClockItem.java (right-click on Time Tyrant: 10s defense 15→5, speed 50% reduction, 1x per phase, 30s cooldown)
-- [x] T171g [US3] Create Time Arrow item in common/src/main/java/com/chronosphere/items/combat/TimeArrowItem.java (extends ArrowItem, applies Slowness III 10s, Weakness II 10s, Glowing 15s to Time Tyrant)
-- [x] T171h [P] [US3] Add Time Arrow crafting recipe in common/src/main/resources/data/chronosphere/recipe/time_arrow.json (Fruit of Time center + Arrow bottom + Clockstone top → 4x Time Arrow)
-- [x] T171i [P] [US3] Add Time Arrow localization in en_us.json and ja_jp.json
-
-### Advancements (Achievements)
-
-**Purpose**: クロノスフィアの進捗システムを定義し、プレイヤーの達成度を追跡
-
-- [x] T184a [P] Design advancement tree structure and milestone achievements (e.g., "Enter Chronosphere", "Defeat Time Guardian", "Stabilize Portal", "Defeat Time Tyrant")
-- [x] T184b [P] Create root advancement for Chronosphere in common/src/main/resources/data/chronosphere/advancement/root.json
-- [x] T184c [P] Create US1 advancements (portal creation, dimension entry, portal stabilization) in common/src/main/resources/data/chronosphere/advancement/
-- [x] T184d [P] Create US2 advancements (Desert Clock Tower discovery, time manipulation tools, Time Guardian defeat) in common/src/main/resources/data/chronosphere/advancement/
-- [x] T184e [P] Create US3 advancements (Master Clock access, Time Tyrant defeat, ultimate artifacts) in common/src/main/resources/data/chronosphere/advancement/
-- [x] T184f [P] Create food-related advancements (first Time Fruit consumption, Time Fruit Pie, Time Jam, Time Bread, all custom foods consumed) in common/src/main/resources/data/chronosphere/advancement/
-- [x] T184g [P] Create equipment-related advancements (Tier 1 full set, Tier 2 full set) in common/src/main/resources/data/chronosphere/advancement/ (Note: time_distortion_immunity removed as duplicate)
-- [x] T184h [P] Create exploration-related advancements (first Time Crystal Ore mined) in common/src/main/resources/data/chronosphere/advancement/ (Note: Forgotten Library and all_biomes_explored removed due to minecraft:location trigger issues)
-- [x] T184i [P] Create mob-related advancements (first Temporal Wraith defeated, first Clockwork Sentinel defeated, first trade with Time Keeper) in common/src/main/resources/data/chronosphere/advancement/
-- [x] T184j [P] Add advancement localization to en_us.json and ja_jp.json
-- [x] T184k Test advancement triggers in-game and verify progression flow
+### Basic Resources (US1 Enhancement - High Priority)
+
+**Purpose**: Chronosphere内でサバイバルプレイに必要な基本リソースを入手可能にする
+
+**Note**: 石炭は松明や燃料として必須。長期滞在を可能にするため優先度は高い
+
+- [x] T265 [P] [US1] Add coal ore generation in Chronosphere (frequency, Y-level distribution, biome placement)
+  - **Completed**: Added coal ore to all 9 Chronosphere biomes
+  - **Configuration**: 30 attempts/chunk, Y0-256 trapezoid distribution
+- [x] T266 [P] [US1] Configure coal ore worldgen feature (vein size, rarity comparable to Overworld)
+  - **Completed**: Vein size 17 (matches vanilla), uses vanilla coal_ore and deepslate_coal_ore
+  - **Files**: configured_feature/ore_coal.json, placed_feature/ore_coal.json
+- [x] T267 [US1] Test coal ore generation and verify mining/smelting works correctly
+  - **Completed**: Tested in-game, coal ore generates correctly and mining/fuel mechanics work as expected
+
+### Additional Tree Variants (US1 Enhancement - Optional, Low Priority)
+
+**Purpose**: 木のバリエーションを増やして視覚的多様性を向上
+
+**Note**: これは優先度が低く、US1の MVP には必須ではない。他の機能が完成後に実装を検討
+
+- [X] T088t [P] [US1] (Optional) Design Time Wood color variants (e.g., Dark Time Wood, Ancient Time Wood)
+- [X] T088u [P] [US1] (Optional) Create variant textures and block definitions
+- [X] T088v [P] [US1] (Optional) Create variant tree features and configure placement in different biomes
+
+### Time Wood Boats & Chest Boats (US1 Enhancement - Medium Priority)
+
+**Purpose**: Time Wood系の木材から舟とチェスト付き舟を作成可能にする
+
+**Note**: オーシャンバイオームでの移動手段として有用。3種類の木材それぞれに対応
+
+**Implementation Approach**: Custom Boat entities (extending vanilla Boat/ChestBoat) for Architectury compatibility. See research.md "Time Wood Boats Implementation Plan" for detailed architecture.
+
+**Estimated Effort**: 5-7 hours total
+
+- [x] T268 [P] [US1] Create Time Wood Boat and Time Wood Chest Boat items and entities
+  - **Completed**: Created unified ChronosphereBoat and ChronosphereChestBoat entities with ChronosphereBoatType enum
+  - ChronosphereBoatItem handles all boat types with type parameter
+  - Registered entities in ModEntities, items in ModItems
+- [x] T269 [P] [US1] Create Dark Time Wood Boat and Dark Time Wood Chest Boat items and entities
+  - **Completed**: Uses same ChronosphereBoat/ChronosphereChestBoat with DARK_TIME_WOOD type
+  - Items registered with ChronosphereBoatType.DARK_TIME_WOOD
+- [x] T270 [P] [US1] Create Ancient Time Wood Boat and Ancient Time Wood Chest Boat items and entities
+  - **Completed**: Uses same ChronosphereBoat/ChronosphereChestBoat with ANCIENT_TIME_WOOD type
+  - Items registered with ChronosphereBoatType.ANCIENT_TIME_WOOD
+- [x] T271 [P] [US1] Add boat crafting recipes (planks → boat, boat + chest → chest boat)
+  - **Completed**: Created 6 shaped recipes (3 boat variants: 5 planks in boat shape)
+  - Created 6 shapeless recipes (3 chest boat variants: boat + chest)
+  - Note: Recipe unlock advancements deferred (not blocking functionality)
+- [x] T272 [P] [US1] Create boat textures and models for all 3 variants
+  - **Completed**: Extracted vanilla oak boat textures and applied color transformations
+  - Time Wood: R×0.95, G×1.17, B×0.85 (yellowish-olive)
+  - Dark Time Wood: R×0.70, G×0.70, B×0.75 (darker tone)
+  - Ancient Time Wood: R×0.80, G×0.75, B×0.70 (aged/grayish)
+  - Created item textures, entity textures (boat/ and chest_boat/), and item models
+  - Created custom renderers (ChronosphereBoatRenderer, ChronosphereChestBoatRenderer)
+  - Registered renderers in both Fabric and NeoForge client
+- [x] T273 [US1] Test boat functionality (movement, durability, chest storage) in Chronosphere ocean biome
+  - Test boat placement and riding ✓ (Fabric)
+  - Test chest boat storage ✓ (Fabric)
+  - Test crafting recipes ✓ (Fabric)
+  - Test boat breaking and item drops ✓ (Fabric)
+  - Verify entity rendering on Fabric ✓
+  - Fixed chest boat water rendering (waterPatch)
+  - Added recipe advancement files (unlock on water entry / boat possession)
+- [x] T273a [US1] Verify boat functionality on NeoForge
+  - **Completed**: Verified boat placement, riding, chest storage
+  - **Completed**: Verified entity rendering
+  - **Result**: All boat functionality works correctly on NeoForge after build issues were resolved
+
+### Biome Enhancements (US1 Enhancement - Medium Priority)
+
+**Purpose**: バイオームの見た目と大きさを調整し、Chronosphereの独自性を向上
+
+- [x] T298 [P] [US1] Add distinctive features to Snowy biome (ice structures, frozen time effects, unique blocks) to differentiate from Overworld
+  - **Completed**: Added ice pillars with varied heights (4-11 blocks) using packed_ice, blue_ice, and frozen_time_ice
+  - Random thick 3x3 clusters (25% chance), reduced density for natural look at biome boundaries
+  - Files: ice_pillar.json, ice_pillar_cluster.json, ice_pillar_random.json, ice_spike_placed.json
+- [x] T299 [P] [US1] Adjust biome size/scale in dimension_type/chronosphere.json or noise settings to reduce biome area
+  - **Completed**: Implemented BiomeScalingMixin with 2.5x coordinate scaling (biomes ~40% smaller)
+  - Adjusted continentalness parameters to align with vanilla terrain generation
+  - File: BiomeScalingMixin.java, dimension/chronosphere.json
+  - **Custom Noise Settings Experiment** (attempted but not used):
+    - Created simple custom noise_settings and density_functions
+    - Result: Terrain generation failed (Y=-40 to 320 steep mountains, lava seas, flat summits)
+    - Issue: Parameter tuning extremely difficult, requires deep understanding of density functions
+    - Estimated effort for proper implementation: 10-15 hours
+    - Conclusion: Using vanilla `minecraft:overworld` settings is more practical
+    - Reference: If future terrain customization is needed, start with vanilla density functions as base
+- [x] T300 [P] [US1] Change grass drop from vanilla seeds to Temporal Wheat Seeds (modify grass block loot table)
+  - **Completed**: Override vanilla short_grass loot table to drop time_wheat_seeds (12.5% chance) in Chronosphere only
+  - File: minecraft/loot_table/blocks/short_grass.json
+
+### Custom Mobs (US1 Enhancement - High Priority)
+
+**Purpose**: 時間をテーマにした独自モブを追加し、ディメンションの独自性とゲームプレイの多様性を向上
+
+**Note**: ボス以外の通常モブがないという問題を解決。敵対・中立・友好モブを追加して探索体験を豊かにする
+
+- [X] T200 [US1] Design custom mob concepts (hostile, neutral, friendly with time theme, behavior patterns, drops, spawn conditions)
+- [X] T201 [P] [US1] Create Temporal Wraith entity in common/src/main/java/com/chronosphere/entities/mobs/TemporalWraithEntity.java (hostile, phases through blocks when hit, inflicts Slowness II on attack)
+- [X] T202 [P] [US1] Create Clockwork Sentinel entity in common/src/main/java/com/chronosphere/entities/mobs/ClockworkSentinelEntity.java (hostile, immune to time distortion effects, drops Ancient Gears)
+- [X] T203 [P] [US1] Create Time Keeper entity in common/src/main/java/com/chronosphere/entities/mobs/TimeKeeperEntity.java (neutral, villager-like trading for time-related items)
+- [X] T204 [P] [US1] Register custom mobs in ModEntities registry and configure spawning in biomes (Temporal Wraith in forest/plains, Clockwork Sentinel in desert/structures, Time Keeper in libraries)
+- [X] T205 [P] [US1] Create custom mob textures and models in common/src/main/resources/assets/chronosphere/textures/entity/
+- [X] T206 [P] [US1] Create custom mob loot tables in common/src/main/resources/data/chronosphere/loot_tables/entities/
+- [X] T207 [US1] Test custom mob spawning, AI behavior, and loot drops in-game
+- [X] T208 [P] [US1] Create spawn eggs for custom mobs in ModItems for creative mode and debugging (temporal_wraith_spawn_egg, clockwork_sentinel_spawn_egg, time_keeper_spawn_egg)
+  - **Completed**: Implemented spawn eggs for regular mobs only (Temporal Wraith, Clockwork Sentinel, Time Keeper)
+  - **Note**: Boss mobs (Time Guardian, Time Tyrant) intentionally excluded following vanilla conventions
+    - Vanilla pattern: Ender Dragon and Wither (bosses with boss bars) have no spawn eggs
+    - Warden and Elder Guardian (strong mobs without boss bars) have spawn eggs
+    - Time Guardian (mini-boss) and Time Tyrant (final boss) follow boss pattern → no spawn eggs
+  - **Implementation**: Created DeferredSpawnEggItem with reflection-based registration for Architectury compatibility
+  - **Colors**: Match entity texture schemes (dark purple/cyan, royal blue/gold, dark slate blue/white)
+  - **Files**: DeferredSpawnEggItem.java, ModItems.java updates, model JSONs, localizations
+- [X] T209 [US1] Investigate and fix mob spawn rate issues (hostile mobs too few, friendly/neutral animals too few compared to vanilla Overworld)
+  - **Root Cause**: Monster spawn weights were 1/3 to 1/10 of vanilla Overworld (120-175 vs ~515), creature weights were also low
+  - **Solution**: Increased monster weights to match vanilla (~500-600 total per biome), standardized minCount/maxCount to 4/4
+  - **Changes**:
+    - Added creeper, enderman, witch to most biomes
+    - Increased custom mob weights (temporal_wraith, clockwork_sentinel) to 100
+    - Increased creature weights and counts in Plains/Forest (cow: 8, sheep: 12, pig: 10, chicken: 10)
+    - Added biome-specific variants (husk in Desert, stray in Snowy)
+  - **Files**: All 7 biome JSON files (chronosphere_plains.json, chronosphere_forest.json, chronosphere_desert.json, chronosphere_mountain.json, chronosphere_ocean.json, chronosphere_snowy.json, chronosphere_swamp.json)
+- [X] T210 [P] [US2] Add ranged attack capability to Time Guardian (design projectile, implement attack pattern, configure AI goals)
+  - **Note**: Time Guardian (時の番人) is the mini-boss, not Time Keeper (時間の管理者/trading mob)
+  - **Completed**: Implemented Time Blast projectile with custom ranged attack AI
+  - **Projectile**: TimeBlastEntity - magical projectile that applies Slowness II + Mining Fatigue I (5 seconds)
+  - **AI**: TimeGuardianRangedAttackGoal with cooldown (10s) and distance requirements (7-15 blocks)
+  - **Balance**: Attack interval 5s, minimum range 7 blocks prevents spam, melee fallback for close combat
+  - **Files**: TimeBlastEntity.java, TimeGuardianRangedAttackGoal.java, TimeBlastRenderer.java, texture, localizations
+
+### Food & Crops (US1 Enhancement - Medium Priority)
+
+**Purpose**: ディメンション内での食料調達手段を追加し、長期滞在やサバイバルプレイを可能にする
+
+**Note**: 現在は時のパン(Time Bread)のみで食料が不足。作物や食料アイテムを追加して多様性を向上
+
+- [X] T211 [US1] Design time-themed crop concepts (plant types, growth stages, harvest items, growth conditions)
+- [X] T212 [P] [US1] Implement time-themed crop block and item (Temporal Wheat, Time Berry Bush, or similar)
+- [X] T213 [P] [US1] Create crop textures for all growth stages in common/src/main/resources/assets/chronosphere/textures/block/
+- [X] T214 [P] [US1] Add crop worldgen placement (natural generation in specific biomes)
+- [X] T215 [P] [US1] Implement additional food items (cooked variants, crafted recipes, nutritional values)
+- [X] T216 [P] [US1] Add eating effect to Time Bread (e.g., Speed I for 30 seconds, or Regeneration I for 10 seconds)
+  - **Implemented**: Regeneration I for 5 seconds
+  - **Rationale**: Shorter duration (5s instead of 10s) to prevent overpowered healing considering ease of farming Time Wheat
+  - **Theme**: "Time reversal" concept - healing through rewinding damage
+- [X] T217 [US1] Test crop growth mechanics and food item effects in-game
+  - **Completed**: All crop worldgen, growth mechanics, and food effects tested and verified
+  - **Worldgen fixes applied** (2025-11-29):
+    - Fixed loot tables: Temporal Root (2-4 drops), Chrono Melon (9 slices)
+    - Fixed worldgen placement: All crops use `y_spread: 0` for ground-level placement
+    - Added `canSurvive()` checks: Chrono Melon, Temporal Root, Timeless Mushroom
+    - Prevented log block replacement: All crops avoid tree roots and trunks
+    - Timeless Mushroom: Reduced generation intensity to prevent terrain modification
+  - **Final settings**:
+    - Temporal Root: rarity 1/8, tries 16, ground placement only
+    - Chrono Melon: rarity 1/32, tries 6, `canSurvive()` validation
+    - Timeless Mushroom: count 4/chunk, tries 8, `canSurvive()` validation
+
+**Implementation (T211-T215 completed 2025-11-22)**:
+- **T211 Design**: 3 crop types designed - Temporal Root (root vegetable), Chrono Melon (stem crop), Timeless Mushroom (fungus)
+- **T212 Implementation**:
+  - 4 block classes: TemporalRootBlock, ChronoMelonStemBlock, ChronoMelonBlock, TimelessMushroomBlock
+  - 12 item classes: 5 base foods + 7 crafted foods
+  - All registered in ModBlocks, ModItems, and creative tab
+- **T213 Textures**:
+  - 31 placeholder textures created (block: 20, item: 11)
+  - Texture design specifications documented in texture-design.md
+  - Note: Using temporary placeholders with basic modifications, will be replaced with custom designs later
+- **T214 Worldgen**:
+  - Configured features and placed features for all 3 crops
+  - Added to chronosphere_plains and chronosphere_forest biomes
+- **T215 Food Items**:
+  - 11 recipes created (1 smelting + 10 crafting)
+  - All food effects implemented (Regeneration, Speed, Night Vision, Absorption, Saturation)
+  - Loot tables for all crop blocks
+- **Commits**: 51b954b (implementation), fe6d3bd (texture designs), 670993c (placeholder textures)
+
+### Forgotten Library Enhancements (US2 Enhancement - Medium Priority)
+
+**Purpose**: 図書館構造物の魅力を向上し、探索報酬を追加
+
+- [X] T218 [P] [US2] Add hidden chest under carpet blocks in Forgotten Library structure NBT (1-2 chests with valuable loot tables)
+  - **Completed**: Added 4 hidden chests in strategic locations throughout Forgotten Library
+  - **Implementation**: Placed chests under carpet blocks using Structure Block in-game editing
+  - **File**: common/src/main/resources/data/chronosphere/structure/forgotten_library.nbt
+- [X] T219 [US2] Test hidden chest placement and ensure carpet blocks can be broken to reveal chests
+  - **Completed**: Verified in-game that carpet blocks can be broken to reveal hidden chests
+  - **Note**: 4 chests provide additional exploration rewards and discovery mechanics
+
+### Time Arrow Item Fix (US2 Bug Fix - High Priority)
+
+**Purpose**: 時の矢(Time Arrow)が効果を持たない問題を修正
+
+**Issue**: 射撃しても何も効果が発生しない
+
+- [X] T220 [US2] Investigate Time Arrow implementation and identify missing effect logic
+- [X] T221 [P] [US2] Implement Time Arrow hit effect (e.g., inflict Slowness on mobs, or teleport entities back to previous position)
+- [X] T222 [US2] Test Time Arrow projectile mechanics and effects in-game
+
+**Root Cause**: Minecraft 1.21でArrowItem.createArrow()のシグネチャが変更され、4つ目のパラメータ(ItemStack weapon)が追加されたが、実装が旧シグネチャのままだったためオーバーライドされず、通常のArrowエンティティが発射されていた。
+
+**Solution**:
+- createArrow()メソッドに4つ目のパラメータを追加
+- minecraft:arrowsアイテムタグにTime Arrowを追加
+- 全てのLivingEntityにSlowness IIエフェクト(3秒)を付与するよう実装
+- Time Tyrant専用の強化エフェクト(Slowness III + Weakness II + Glowing)は維持
+
+**Known Limitation**: Time Arrowでは「Take Aim」進捗が達成されない(バニラ進捗は特定の矢タイプのみ認識)。通常の矢で進捗達成可能なため、バニラ進捗オーバーライド(他modとの競合リスク)は行わない。
+
+### Tests for User Story 2
+
+- [X] T089 [P] [US2] Write GameTest for Desert Clock Tower generation in common/src/test/java/com/chronosphere/integration/DesertClockTowerTest.java
+- [X] T090 [P] [US2] Write unit test for Time Clock cooldown logic in common/src/test/java/com/chronosphere/unit/TimeClockTest.java
+- [X] T091 [P] [US2] Write unit test for Spatially Linked Pickaxe drop multiplier in common/src/test/java/com/chronosphere/unit/PickaxeDropTest.java
+- [X] T092 [P] [US2] Write GameTest for Time Guardian boss fight in common/src/test/java/com/chronosphere/integration/TimeGuardianFightTest.java
+
+### Player Guidance & Discovery System (US2 Enhancement)
+
+**Purpose**: プレイヤーが構造物やアイテムを発見し、ゲームを進行できるようガイダンスを提供
+
+**Current Issue**: Ancient Ruins、Desert Clock Tower、Master Clock Towerなどの構造物の場所や、アイテムの入手方法について説明がなく、プレイヤーが作者の想定通りに進行するのは困難
+
+**Guidance Methods**: 書物アイテム、村人との取引（地図）、進捗ヒント、構造物の出現頻度調整、ロケーターアイテムなど
+
+- [X] T115f [US2] Research appropriate player guidance methods (book items, advancement hints, villager trades, structure frequency)
+- [X] T115g [P] [US2] Create Chronicle of Chronosphere book item (guide book explaining dimension mechanics, structures, and progression)
+  - Created ChronicleOfChronosphereItem.java with English version only
+  - Book auto-given on first Chronosphere entry
+  - Added to creative tab as readable vanilla written_book
+  - Documented complete worldbuilding in specs/001-chronosphere-mod/lore.md
+- [X] T115h [P] [US2] Add Time Keeper trades for Time Compass items (Desert Clock Tower Compass, Master Clock Compass)
+  - Trade 1: 16 Clockstone → Time Compass (Desert Clock Tower) - 3 max uses
+  - Trade 2: 8 Enhanced Clockstone → Time Compass (Master Clock) - 1 max use
+  - Compasses point to structures within 100 chunk radius
+  - Right-click compass to locate structure and show distance/direction
+  - Displays X/Z coordinates, distance in blocks, and 8-direction heading (N/NE/E/SE/S/SW/W/NW)
+- [X] T115i [US2] Add advancement system with descriptive hints for key progression milestones (first portal, Ancient Ruins discovery, Time Guardian defeat)
+  - Improved existing advancement descriptions (portal_creation, dimension_entry, portal_stabilization)
+  - Added explicit next-step guidance in advancement text
+- [X] T115j [US2] Adjust structure spawn rates to make discovery easier (increase frequency or reduce spacing)
+  - Ancient Ruins: spacing 16→12, separation 4→3 (25% more frequent)
+  - Forgotten Library: spacing 50→30, separation 25→15 (40% more frequent)
+  - Desert Clock Tower: spacing 32→20, separation 8→5 (37.5% more frequent)
+  - Master Clock Tower: spacing 100→70, separation 50→35 (30% more frequent)
+- [X] T115k [P] [US2] Create Time Compass item (points to nearest key structure, similar to lodestone compass)
+  - Created TimeCompassItem.java with NBT-based structure targeting
+  - Stores target structure type (desert_clock_tower, master_clock) and GlobalPos coordinates in CustomData
+  - Client-side item property ("angle") for compass needle animation
+  - Right-click to locate structure via findNearestMapStructure API
+  - Shows localized messages with coordinates, distance, and 8-direction heading
+  - Inherits vanilla compass model/textures for seamless integration
+- [X] T115l [US2] Add initial guidance on first dimension entry (chat message, advancement, or book given to player)
+  - Chronicle of Chronosphere auto-given to player on first Chronosphere entry
+  - Book dropped at player's feet if inventory is full
+- [X] T115m [US2] Implement time distortion particle effects for Ancient Ruins (Temporal Seal failure visualization)
+  - Created TemporalParticleEmitterBlock (invisible, indestructible, no collision)
+  - Uses SOUL_FIRE_FLAME particles (cyan-blue color)
+  - Particles float upward (0.15-0.25 speed) with 70% spawn frequency
+  - Placed multiple emitters in Ancient Ruins structure NBT
+  - Visual indicator of Temporal Seal degradation (referenced in lore.md)
+- [X] T115n [P] [US2] Implement stable Ancient Ruins placement with random_spread
+  - **Final Implementation**: Changed from concentric_rings to random_spread for distance stability
+  - **Placement**: spacing=48 chunks (768 blocks), separation=24 chunks (384 blocks minimum)
+  - **Distance**: Minimum 384 blocks, average 500-1000 blocks from spawn
+  - **Biomes**: Restricted to forests and taiga only (#minecraft:is_forest, #minecraft:is_taiga)
+  - **Terrain Adaptation**: beard_thin for smooth ground integration on slopes
+  - **Removed**: TerraBlender dependency, Strange Forest biome (chunk access limitations)
+  - **Removed**: StrangeLeavesProcessor, AncientRuinsSignalBlock (experimental code)
+  - **Documentation**: IMPLEMENTATION_LOG.md with 6 attempted approaches
+  - **Files**: ancient_ruins.json, has_ancient_ruins.json, build.gradle files, removed TerraBlender code
+- [X] T115o [P] [US2] Add tall tower to Ancient Ruins structure for long-range visibility
+  - **Purpose**: Physical structure (20-30 blocks tall) for reliable long-range discovery
+  - **Design**: Stone/brick tower with glowstone/sea lantern at top for nighttime visibility
+  - **Implementation**: Edit Ancient Ruins NBT structure file with Structure Block
+  - **Expected Range**: Visible from 100-200 blocks away due to height
+  - **Result**: Added tall tower to Ancient Ruins structure for improved discoverability from distance
+
+### Master Clock Tower & Boss Battle Improvements (US3 Bug Fixes & Enhancements - High Priority)
+
+**Purpose**: Master Clock Towerとボス戦の問題修正と体験向上
+
+- [X] T223 [P] [US3] Rename "boss_room_door" to time-themed name in localization files (e.g., "Time Tyrant's Chamber Door", "Temporal Sanctum Door")
+  - **Decision**: No changes needed - keeping generic "Boss Room Door" name
+  - **Rationale**:
+    1. "boss_room_door" is used across 5+ boss structures (Master Clock, Guardian Vault, Clockwork Depths, Phantom Catacombs, Entropy Crypt)
+    2. Generic name is appropriate for multi-purpose use across all bosses
+    3. "boss room" terminology is already consistent project-wide (boss_room_protected, boss_room_locked, BossRoomDoorBlock, etc.)
+    4. Large impact scope (NBT structures, Java classes, message keys, translations) with minimal benefit
+  - **Current Translation**: EN: "Boss Room Door", JP: "ボス部屋のドア"
+- [X] T224 [P] [US3] Fix Clock Tower teleporter block durability issue (make unbreakable or add protection mechanism to prevent breaking)
+  - **Completed**: Implemented survival mode protection in ClockTowerTeleporterBlock.java
+  - **Implementation**: playerWillDestroy() cancels destruction, getDestroyProgress() returns 0, attack() shows message
+  - **Result**: Block is indestructible in survival mode, breakable only in creative mode
+- [X] T225 [P] [US3] Fix Clock Tower teleporter destination corruption when re-placed (validate teleport coordinates on placement, warn player if invalid)
+  - **Completed**: Issue mitigated by T224 survival mode protection
+  - **Analysis**: Teleporter block cannot be broken/re-placed in survival mode
+  - **Fallback**: Creative mode uses relative offset (-8 blocks) when targetPos is null
+  - **Result**: No gameplay impact in survival; creative mode has acceptable fallback behavior
+- [X] T226 [P] [US3] Add boss room access control - require Ancient Gears before allowing entry (check inventory on button press, display message if missing)
+  - **Completed**: Implemented in BlockEventHandler.java
+  - **Implementation**: hasRequiredAncientGears() checks player inventory for 3+ Ancient Gears
+  - **Behavior**: Door opens only if player has required items; displays locked/unlocked message
+  - **Files**: BlockEventHandler.java (lines 164-169, 442-457)
+- [X] T227 [P] [US3] Fix water disappearing from Master Clock structure NBT (investigate waterlogging state preservation, ensure water blocks save correctly)
+  - **Completed**: Applied complete waterlogging prevention system to all Master Clock template pools
+  - **Implementation**: All 4 pools (surface, stairs, corridor, boss_room) use `convert_decorative_water` processor
+  - **System**: StructureStartMixin removes Aquifer water, CopyFluidLevelProcessor preserves decorative water
+  - **Result**: Water features preserved correctly, unwanted waterlogging prevented
+- [X] T228 [P] [US3] Add glowing effect to Time Tyrant entity for visibility (apply Glowing status effect or custom shader/outline rendering)
+  - **Decision**: No changes needed - glowing effect not necessary
+  - **Rationale**: In-game testing shows Time Tyrant actively pursues players and stays visible regardless of dungeon layout
+  - **AI Behavior**: Entity's aggressive proximity-seeking AI ensures visibility without additional visual effects
+- [X] T229 [P] [US3] Fix Time Tyrant teleport suffocation bug (validate teleport destination has 2+ air blocks above, revert position if invalid)
+  - **Completed**: Implemented comprehensive safe teleport validation in TimeTyrantEntity.java
+  - **Changes**:
+    - `findSafeGroundPosition()`: Scans ±3 blocks vertically to find valid floor with 5-block clearance
+    - `isSafeTeleportPosition()`: Validates 5 blocks of vertical clearance (4.0 height + 1.0 margin)
+    - `teleportToPosition()`: Validates after teleport, reverts if stuck in blocks
+    - `isStuckInBlocks()`: Checks 3x3x5 area for solid blocks
+    - `hasWallBetween()`: Prevents teleporting through walls (line-of-sight check)
+    - `isAreaSafe()`: Checks 3x3x5 area around position for safe landing
+  - **Bounding Box Fix**: Updated entity height from 3.0f to 4.0f in ModEntities.java (includes head/horns)
+  - **Door Interaction Fix**: Fixed BlockProtectionEventHandler (Fabric) to only block block placement, not door/button interactions
+  - **Result**: Time Tyrant now finds valid ground, cannot teleport through walls, and cannot get stuck in walls/ceilings
+- [X] T229a [US3] Investigate Time Tyrant buff/debuff behavior (verify if Slowness is incorrectly applied instead of intended buff, check status effect logic)
+  - **Completed**: Identified and fixed issue where Time Tyrant was receiving unintended Slowness IV/V from Time Distortion Effect
+  - **Root Cause**: Time Tyrant extends Monster class but was not excluded from TimeDistortionEffect.isHostileMob()
+  - **Impact**: Phase 2 Time Acceleration (Speed II buff) was being overridden by Slowness IV/V, making the ability non-functional
+  - **Fix**: Added Time Tyrant exclusion to TimeDistortionEffect.java (similar to existing Time Guardian exclusion)
+  - **Verification**: Tested in-game (Survival mode) - Time Acceleration now works correctly with visible particle effects and increased speed
+  - **Documentation**: Detailed investigation results recorded in research.md (lines 3401-3549)
+- [X] T230 [US3] Test all Master Clock Tower and boss battle fixes in-game
+  - **Completed**: Tested T224-T229 fixes in-game
+  - **Verified**: Clock Tower teleporter protection, boss room access control, Time Tyrant teleport safety, buff/debuff behavior all working correctly
+
+### Ancient Gears Acquisition (US3 Bug Fix - Critical Priority)
+
+**Purpose**: 古代の歯車(Ancient Gears)の入手手段が不明瞭な問題を修正
+
+**Issue**: プレイヤーが入手場所や方法を把握できない
+
+- [X] T231 [US3] Investigate current Ancient Gears acquisition methods (check loot tables, mob drops, crafting recipes, structure loot)
+  - **Completed**: Fixed loot table directory structure (loot_tables/ → loot_table/)
+  - **Root Cause**: Clockwork Sentinel loot table had iron_ingot placeholder instead of ancient_gear
+  - **Commit**: 4c45069
+- [X] T232 [P] [US3] Add or improve Ancient Gears acquisition methods (add to Clockwork Sentinel drops, structure loot chests, or crafting recipe)
+  - **Completed**: Updated clockwork_sentinel.json with guaranteed ancient_gear drop
+  - **Added**: Crafting recipe (Enhanced Clockstone + 4x Time Crystal + 4x Iron Ingot → Ancient Gear)
+  - **Commit**: 4c45069
+- [X] T233 [US3] Test Ancient Gears acquisition and verify clear acquisition path exists
+  - **Completed**: Tested and verified Ancient Gear drops from Clockwork Sentinel
+  - **Commit**: 4c45069
+
+### Tests for User Story 3
+
+- [X] T123 [P] [US3] Write GameTest for Master Clock structure generation in common/src/test/java/com/chronosphere/integration/MasterClockTest.java
+- [X] T124 [P] [US3] Write GameTest for Time Tyrant boss fight in common/src/test/java/com/chronosphere/integration/TimeTyrantFightTest.java
+- [X] T125 [P] [US3] Write unit test for Chronoblade AI skip probability in common/src/test/java/com/chronosphere/unit/ChronobladeTest.java
+- [X] T126 [P] [US3] Write unit test for Time Guardian Mail rollback logic in common/src/test/java/com/chronosphere/unit/TimeGuardianMailTest.java
+- [X] T127 [P] [US3] Write GameTest for Echoing Time Boots decoy in common/src/test/java/com/chronosphere/integration/DecoyTest.java
+
+### Master Clock Structure Improvements (US3 Enhancement - High Priority)
+
+**Purpose**: Master Clock構造物の安全性とゲームプレイバランスの向上
+
+- [x] T301 [P] [US3] Increase Master Clock boss room depth to prevent surface exposure (adjust Y-level in structure NBT or placement config)
+  - **Completed**: Implemented Jigsaw stairs extension system
+  - Structure size increased from 3 to 10 to allow proper stair extension
+  - Surface remains at Y=0 with `project_start_to_heightmap: WORLD_SURFACE_WG`
+  - Created master_clock_stairs_bottom.nbt for stair termination
+  - Updated stairs_pool.json with both stairs (weight 6) and stairs_bottom (weight 4)
+  - Stairs now naturally extend downward (~6-8 segments) from surface to boss room
+- [x] T302 [P] [US3] Make all Master Clock walls indestructible (not just boss room) to prevent bypassing Ancient Gears requirement (apply boss_room_protected tag to all structure blocks)
+  - **Completed**: Created MasterClockProtectionProcessor for entire structure protection
+  - Detects Chiseled Quartz Block and Polished Andesite as structure markers
+  - Registers ±50 block XZ protection area (Y=-70 to Y=10) covering entire Master Clock
+  - Protection lifts when Time Tyrant is defeated (uses same system as boss room protection)
+  - Registered in ModStructureProcessorTypes and integrated into server tick events (Fabric/NeoForge)
+
+### Guaranteed Structure Placement System (US2/US3 Enhancement - Medium Priority)
+
+**Purpose**: 構造物が一定距離内に必ず生成されることを保証し、プレイヤーの探索体験を向上
+
+**Background**:
+- 現在の`random_spread`配置は最小距離を保証するが、最大距離は保証しない
+- プレイヤーが構造物を見つけられずゲームが退屈になる懸念
+- Time Keeperとの取引にはTime Compassが必要だが、肝心のTime Keeperに会えなければ意味がない
+
+**Reference**: See research.md "Guaranteed Structure Placement Research (2025-12-01)"
+
+#### Phase 1: Time Keeper Village (プログラム的配置) - COMPLETED
+- [X] T274 [P] [US2] Design Time Keeper Village structure concept (small settlement with 1-2 Time Keepers, basic shelter, trading post)
+  - **Completed**: Simple village structure with shelter and trading area
+- [X] T275 [P] [US2] Create Time Keeper Village NBT structure file (time_keeper_village.nbt)
+  - **File**: common/src/main/resources/data/chronosphere/structure/time_keeper_village.nbt
+- [X] T276 [P] [US2] Implement TimeKeeperVillagePlacer.java for programmatic placement near spawn (64 blocks)
+  - **Implemented**: TimeKeeperVillagePlacer with TimeKeeperVillageData (SavedData)
+  - Placement range: 32-256 blocks from player entry point
+  - Foundation filling and progressive search range expansion
+  - Spawns 2 Time Keepers programmatically after placement
+- [X] T277 [US2] Test Time Keeper Village generation and Time Keeper spawning
+  - **Verified**: Village generates near spawn, Time Keepers spawn correctly
+
+#### Phase 2: Custom StructurePlacement Type (汎用システム) - COMPLETED BUT DEPRECATED
+- [X] T278 [P] [US3] Create GuaranteedRadiusStructurePlacement.java extending StructurePlacement
+  - **Implemented**: GuaranteedRadiusStructurePlacement with radius_chunks constraint
+  - **Status**: Deprecated and removed (commit d2c8f0a)
+  - **Reason**: Caused /locate command to hang indefinitely
+- [X] T279 [P] [US3] Create ModStructurePlacementTypes.java registry class
+  - **Implemented**: ModStructurePlacementTypes with GUARANTEED_RADIUS placement type
+  - **Status**: Deprecated and removed (commit d2c8f0a)
+- [X] T280 [P] [US3] Create Architectury platform-specific registration (Fabric/NeoForge)
+  - **Implemented**: Platform-specific registration in Chronosphere.java
+  - **Status**: Deprecated and removed (commit d2c8f0a)
+- [X] T281 [US3] Test custom placement type with test structure
+  - **Completed**: Testing performed successfully
+- [X] T282 [P] [US3] Apply guaranteed_radius placement to existing structures (Ancient Ruins, Desert Clock Tower, Master Clock)
+  - **Completed**: Applied to all 3 structures
+  - **Status**: Migrated to minecraft:random_spread (commit d2c8f0a)
+- [X] T283 [US3] Comprehensive testing across multiple seeds and locations
+  - **Completed**: Testing performed, issues identified (/locate hang)
+  - **Result**: Migrated to random_spread approach with expanded biome tags
+
+#### Phase 3: Structure Ocean Variants (新規タスク) - COMPLETED
+- [X] T287 [P] [US3] Create Desert Clock Tower ocean variant
+  - **Implemented**: Jigsaw structure with ocean platform + reused tower
+  - **Files**: desert_clock_tower_ocean_platform.nbt, structure_set/desert_clock_tower_ocean.json
+  - **Status**: Later removed during random_spread migration (commit d2c8f0a)
+  - **Reason**: No longer needed after expanding biome tags to include ocean
+- [X] T288 [P] [US3] Create Master Clock ocean variant
+  - **Implemented**: Added ocean biome to has_master_clock.json tag
+  - **Result**: Existing 7x7 entrance works naturally in ocean biome
+  - **Files**: tags/worldgen/biome/has_master_clock.json
+
+**Implementation Notes**:
+- Phase 1 (Time Keeper Village) remains active - currently used for guaranteed Time Keeper access
+- Phase 2 (GuaranteedRadiusStructurePlacement) deprecated due to /locate compatibility issues
+- Phase 3 (Ocean variants) partially removed - Master Clock ocean support retained via biome tags
+- Current approach: minecraft:random_spread with expanded biome tags for all structures
+- Ocean biome significantly reduced (continentalness: -0.3 → -0.85) to increase land generation
+
+### Cross-Loader Testing
+
+- [X] T172 [P] Run all GameTests on Fabric loader using ./gradlew :fabric:runGameTest
+  - Implemented GameTest Framework for Fabric using Architectury Loom's gametest source set
+  - Created ChronosphereGameTestsFabric.java with shared test logic in ChronosphereGameTestLogic.java
+  - Uses @GameTest annotation with FabricGameTest.EMPTY_STRUCTURE template
+  - **Current Status**: 92 tests pass (commits: 9cca9db initial, 51934c9 player input tests)
+  - **Test Categories**:
+    - Entity spawning (12 tests)
+    - Block placement (30 tests)
+    - Entity attributes (20 tests)
+    - Item attributes (24 tests)
+    - Player input simulation (6 tests)
+- [X] T173 [P] Run all GameTests on NeoForge loader using ./gradlew :neoforge:runGameTestServer
+  - Implemented GameTest Framework for NeoForge using @GameTestGenerator pattern
+  - Created ChronosphereGameTestsNeoForge.java with shared test logic in ChronosphereGameTestLogic.java
+  - Uses RegisterGameTestsEvent for test registration and existing structure template
+  - **Current Status**: 91 tests pass (commits: 6790b80 initial, 51934c9 player input tests)
+  - **Test Categories**: Same as Fabric (player input simulation uses `helper.makeMockPlayer(GameType)` API)
+- [X] T174 Verify entity renderer registration for Fabric (standard API) in fabric/src/main/java/com/chronosphere/fabric/client/ChronosphereClientFabric.java
+  - **Verified**: 15 entities and 7 model layers registered using standard Fabric API
+  - Uses `EntityRendererRegistry.register()` and `EntityModelLayerRegistry.registerModelLayer()`
+  - All custom renderers properly implemented in common/client package
+- [X] T175 Verify entity renderer registration for NeoForge (manual event registration) in neoforge/src/main/java/com/chronosphere/neoforge/client/ChronosphereClientNeoForge.java
+  - **Verified**: 15 entities and 7 model layers registered using event-based system
+  - Uses `@SubscribeEvent` with `EntityRenderersEvent.RegisterRenderers` and `EntityRenderersEvent.RegisterLayerDefinitions`
+  - All entity types and model layers match Fabric implementation
+  - Proper event bus registration with `@EventBusSubscriber`
+- [X] T176 Test portal mechanics on both loaders for consistency
+  - Implemented Custom Portal API Reforged integration for NeoForge (cpapireforged 1.2.2)
+  - Created CustomPortalNeoForge.java for portal registration
+  - Added Mixin (CustomPortalBlockMixin) to override particle effects with custom orange particles
+  - Updated PlayerEventHandler to recognize cpapireforged:custom_portal_block for portal deactivation
+  - Verified: portal creation, teleportation, deactivation on entry, stabilization with Portal Stabilizer
+- [X] T177 Verify time distortion effect consistency across loaders
+  - **Verified on Fabric**: Time Distortion (Slowness IV) correctly applied to hostile mobs
+  - **Verified on NeoForge**: Time Distortion effect consistent with Fabric
+  - **Verified Exclusions**: Time Keeper, Time Guardian, Time Tyrant, Floq correctly excluded
+  - **Note**: Time Keeper's slow movement is due to base movement speed (0.2), not Slowness effect
+  - **Eye of Chronos Enhancement**: Slowness V vs IV difference is subtle (15% difference), difficult to perceive visually
+
+### Localization (Final Review)
+
+**NOTE**: Basic localization is completed in each User Story (T088a-c, T122a-c, T171a-c). This phase is for final review and completeness check.
+
+- [X] T183 [P] Review English localization file for completeness and consistency
+  - **Completed**: Removed 6 duplicate keys (dark_time_wood and ancient_time_wood blocks)
+  - **Completed**: Added 5 missing Patchouli GUI translation keys
+  - **Result**: 264 keys, all valid JSON, no duplicates, complete consistency with Japanese version
+- [X] T184 [P] Review Japanese localization file for completeness and consistency
+  - **Completed**: Removed 6 duplicate keys (dark_time_wood and ancient_time_wood blocks)
+  - **Result**: 264 keys, all valid JSON, no duplicates, complete consistency with English version
 

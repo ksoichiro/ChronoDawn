@@ -8,17 +8,17 @@
   ],
   "key": {
     "F": {
-      "item": "chronosphere:fragment_of_stasis_core"
+      "item": "chronodawn:fragment_of_stasis_core"
     },
     "C": {
-      "item": "chronosphere:enhanced_clockstone"
+      "item": "chronodawn:enhanced_clockstone"
     },
     "S": {
       "item": "minecraft:diamond_sword"
     }
   },
   "result": {
-    "item": "chronosphere:chronoblade",
+    "item": "chronodawn:chronoblade",
     "count": 1
   }
 }

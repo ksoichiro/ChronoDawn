@@ -11,14 +11,14 @@
       "item": "minecraft:glass"
     },
     "C": {
-      "item": "chronosphere:clockstone"
+      "item": "chronodawn:clockstone"
     },
     "S": {
       "item": "minecraft:sand"
     }
   },
   "result": {
-    "item": "chronosphere:time_hourglass",
+    "item": "chronodawn:time_hourglass",
     "count": 1
   }
 }

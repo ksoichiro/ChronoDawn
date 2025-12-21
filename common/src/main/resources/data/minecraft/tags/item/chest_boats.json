@@ -1,8 +1,8 @@
 {
   "replace": false,
   "values": [
-    "chronosphere:time_wood_chest_boat",
-    "chronosphere:dark_time_wood_chest_boat",
-    "chronosphere:ancient_time_wood_chest_boat"
+    "chronodawn:time_wood_chest_boat",
+    "chronodawn:dark_time_wood_chest_boat",
+    "chronodawn:ancient_time_wood_chest_boat"
   ]
 }

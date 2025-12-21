@@ -1,22 +1,22 @@
-# Chronosphere Mod
+# Chrono Dawn
 
 **Time-manipulation themed dimension mod for Minecraft**
 
-A multi-loader Minecraft mod that adds a mysterious time-themed dimension called "Chronosphere" with custom portals, unique biomes, powerful bosses, and time-manipulating artifacts.
+A multi-loader Minecraft mod that adds a mysterious time-themed dimension called "Chrono Dawn" with custom portals, unique biomes, powerful bosses, and time-manipulating artifacts.
 
 ## Features
 
 ### Core Mechanics
-- **Custom Dimension**: Explore the Chronosphere, a dimension frozen in perpetual twilight
+- **Custom Dimension**: Explore Chrono Dawn, a dimension frozen in perpetual twilight
 - **Portal System**: One-way portal travel using Time Hourglass, upgradeable to bidirectional with Portal Stabilizer
-- **Time Distortion**: Hostile mobs move slower in the Chronosphere dimension
+- **Time Distortion**: Hostile mobs move slower in Chrono Dawn dimension
 - **8 Unique Biomes**: Forest, Desert, Mountain, Ocean, Snowy, Swamp, Dark Forest, and Ancient Forest
 
 ### Content
 - **Custom Wood Type**: Time Wood trees with full block set (logs, planks, stairs, slabs, doors, etc.)
 - **Major Structures**:
   - Ancient Ruins (Overworld spawn)
-  - Forgotten Library (Chronosphere)
+  - Forgotten Library (Chrono Dawn)
   - Guardian Vault (Chronos Warden boss)
   - Clockwork Depths (Clockwork Colossus boss)
   - Phantom Catacombs (Temporal Phantom boss)
@@ -75,9 +75,9 @@ gradlew.bat build
 ```
 
 **Output Files**:
-- `fabric/build/libs/chronosphere-fabric-0.1.0.jar` - Fabric loader JAR
-- `neoforge/build/libs/chronosphere-neoforge-0.1.0.jar` - NeoForge loader JAR
-- `common/build/libs/chronosphere-common-0.1.0.jar` - Common module (not usable standalone)
+- `fabric/build/libs/chronodawn-0.1.0+1.21.1-fabric.jar` - Fabric loader JAR
+- `neoforge/build/libs/chronodawn-0.1.0+1.21.1-neoforge.jar` - NeoForge loader JAR
+- `common/build/libs/common-0.1.0.jar` - Common module (not usable standalone)
 
 ### Build Specific Loader
 
@@ -148,8 +148,8 @@ gradlew.bat :neoforge:runClient
 
 Launch the development client and verify:
 - [ ] Minecraft starts successfully
-- [ ] "Chronosphere" appears in mod list
-- [ ] Creative inventory includes Chronosphere items
+- [ ] "Chrono Dawn" appears in mod list
+- [ ] Creative inventory includes Chrono Dawn items
 - [ ] World generation includes Ancient Ruins structures
 
 ## Testing
@@ -177,7 +177,7 @@ gradlew.bat test
 1. **Portal System**:
    - [ ] Find Ancient Ruins in Overworld
    - [ ] Craft Time Hourglass
-   - [ ] Activate portal and travel to Chronosphere
+   - [ ] Activate portal and travel to Chrono Dawn
    - [ ] Verify portal is one-way (stops working after entry)
 
 2. **Dimension Features**:
@@ -186,9 +186,9 @@ gradlew.bat test
    - [ ] Find Forgotten Library structure
 
 3. **Portal Stabilizer**:
-   - [ ] Craft Portal Stabilizer in Chronosphere
+   - [ ] Craft Portal Stabilizer in Chrono Dawn
    - [ ] Stabilize portal for bidirectional travel
-   - [ ] Test round-trip travel Overworld ↔ Chronosphere
+   - [ ] Test round-trip travel Overworld ↔ Chrono Dawn
 
 4. **Boss Battles**:
    - [ ] Defeat Time Guardian mini-boss
@@ -205,7 +205,8 @@ gradlew.bat test
 4. Download and install required dependencies:
    - Architectury API 13.0.8+
    - Custom Portal API (Fabric version)
-5. Copy `chronosphere-fabric-0.1.0.jar` to `.minecraft/mods/` folder
+   - Patchouli 1.21.1-92+
+5. Copy `chronodawn-0.1.0+1.21.1-fabric.jar` to `.minecraft/mods/` folder
 6. Launch Minecraft with Fabric profile
 
 ### For NeoForge
@@ -214,7 +215,8 @@ gradlew.bat test
 3. Download and install required dependencies:
    - Architectury API 13.0.8+
    - Custom Portal API (NeoForge version)
-4. Copy `chronosphere-neoforge-0.1.0.jar` to `.minecraft/mods/` folder
+   - Patchouli 1.21.1-92+
+4. Copy `chronodawn-0.1.0+1.21.1-neoforge.jar` to `.minecraft/mods/` folder
 5. Launch Minecraft with NeoForge profile
 
 ## Project Structure
@@ -222,7 +224,7 @@ gradlew.bat test
 ```
 Chronosphere/
 ├── common/                          # Loader-independent shared code (~80%)
-│   ├── src/main/java/com/chronosphere/
+│   ├── src/main/java/com/chronodawn/
 │   │   ├── Chronosphere.java        # Common entry point
 │   │   ├── blocks/                  # Custom blocks
 │   │   ├── items/                   # Custom items
@@ -230,15 +232,15 @@ Chronosphere/
 │   │   ├── worldgen/                # World generation features
 │   │   └── registry/                # Registry wrappers
 │   └── src/main/resources/
-│       ├── data/chronosphere/       # Data packs (recipes, worldgen, structures)
-│       └── assets/chronosphere/     # Assets (textures, models, sounds)
+│       ├── data/chronodawn/       # Data packs (recipes, worldgen, structures)
+│       └── assets/chronodawn/     # Assets (textures, models, sounds)
 ├── fabric/                          # Fabric-specific implementation (~10%)
-│   ├── src/main/java/com/chronosphere/fabric/
+│   ├── src/main/java/com/chronodawn/fabric/
 │   │   └── ChronosphereFabric.java  # Fabric entry point
 │   └── src/main/resources/
 │       └── fabric.mod.json          # Fabric mod metadata
 ├── neoforge/                        # NeoForge-specific implementation (~10%)
-│   ├── src/main/java/com/chronosphere/neoforge/
+│   ├── src/main/java/com/chronodawn/neoforge/
 │   │   └── ChronosphereNeoForge.java # NeoForge entry point
 │   └── src/main/resources/
 │       └── META-INF/neoforge.mods.toml # NeoForge mod metadata
@@ -265,8 +267,8 @@ Chronosphere/
 
 ### Mixin Configuration
 - Fabric and NeoForge use **separate** Mixin configuration files
-- **Fabric**: `chronosphere-fabric.mixins.json` (with refMap for Intermediary mappings)
-- **NeoForge**: `chronosphere-neoforge.mixins.json` (without refMap for Mojang mappings)
+- **Fabric**: `chronodawn-fabric.mixins.json` (with refMap for Intermediary mappings)
+- **NeoForge**: `chronodawn-neoforge.mixins.json` (without refMap for Mojang mappings)
 
 See `CLAUDE.md` → "Mixin Configuration" section for details.
 

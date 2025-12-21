@@ -47,8 +47,13 @@ Simply describe what you want to do, and Claude will reference the appropriate c
    - Update `recommends` section if applicable
 
 8. **neoforge/src/main/resources/META-INF/neoforge.mods.toml**
-   - Update `[[dependencies.chronosphere]]` entries
+   - Update `[[dependencies.chronodawn]]` entries
    - Update `versionRange` fields
+
+9. **THIRD_PARTY_LICENSES.md**
+   - Update version numbers in "Runtime Dependencies" section
+   - Update: Minecraft, Fabric Loader, Fabric API, NeoForge, Architectury API, Custom Portal API, Patchouli
+   - Update "Last updated" date at the bottom
 
 ### Current Versions (Reference)
 
@@ -211,6 +216,46 @@ Patchouli: 1.21.1-92+
 
 ---
 
+## Updating Content Counts and Lists
+
+**When to use**: Adding or removing biomes, bosses, structures, wood types, or other countable content
+
+**Purpose**: Ensure numeric descriptions (e.g., "8 unique biomes", "4 mid-bosses", "three wood types") remain accurate across all documentation
+
+### Files to Check
+
+1. **README.md**
+   - Check: Biome count, boss count, structure count, wood type count
+   - Look for: "8 unique biomes", "Boss Enemies" list length, "Major Structures" list length
+
+2. **docs/player_guide.md**
+   - Check: Biome count, boss count (categorized: mini-boss, mid-bosses, final boss), structure count, wood type count
+   - Look for: "8 unique biomes", "three wood types", mid-boss descriptions ("4 mid-bosses")
+
+3. **docs/curseforge_description.md**
+   - Check: Biome count, boss count, structure count, artifact count
+   - Look for: "8 Unique Biomes", boss list lengths, structure list
+
+4. **docs/modrinth_description.md**
+   - Check: Biome count, boss count, structure count, wood type count
+   - Look for: "8 unique biomes", boss list, structure list
+
+5. **CLAUDE.md**
+   - Check: Current versions list if content affects version compatibility
+   - Look for: "8 unique biomes" in Recent Changes or Active Technologies
+
+### Verification Method
+
+When adding/removing content:
+1. Search for numeric descriptions (e.g., "8", "four", "4 mid-bosses")
+2. Verify counts match actual implementation
+3. Update Table of Contents if section counts change
+4. Check for phrases like "all X", "both", "each of the Y"
+
+**Tip**: Use `grep -r "8 unique biomes" docs/` to find all occurrences quickly
+
+---
+
 ## Adding a New Dependency
 
 **When to use**: Adding a new mod dependency (required or optional)
@@ -234,7 +279,7 @@ Patchouli: 1.21.1-92+
    - Specify version range
 
 5. **neoforge/src/main/resources/META-INF/neoforge.mods.toml**
-   - Add `[[dependencies.chronosphere]]` entry
+   - Add `[[dependencies.chronodawn]]` entry
    - Set `type` to "required" or "optional"
    - Specify `versionRange`
 
@@ -253,6 +298,13 @@ Patchouli: 1.21.1-92+
 9. **docs/modrinth_description.md** (lines ~30-39)
    - Sections: "Requirements" (both Fabric and NeoForge)
    - Add dependency to both loader sections
+
+10. **THIRD_PARTY_LICENSES.md**
+    - Add new dependency entry to "Runtime Dependencies" or "Development Dependencies" section
+    - Include: Project name, version, developer/organization, license, URL, license URL
+    - Add license summary if it's a new license type
+    - Update "Last updated" date at the bottom
+    - Research license information from project's GitHub repository or official page
 
 ### Dependency Type Guidelines
 
@@ -316,6 +368,10 @@ Patchouli: 1.21.1-92+
 - `docs/curseforge_description.md` - CurseForge mod page content
 - `docs/modrinth_description.md` - Modrinth mod page content
 
+**Legal**:
+- `LICENSE` - Project license (MIT)
+- `THIRD_PARTY_LICENSES.md` - Dependency licenses and version information
+
 **Developer**:
 - `docs/developer_guide.md` - Development setup and architecture
 - `specs/001-chronosphere-mod/spec.md` - Feature specification
@@ -349,5 +405,5 @@ Patchouli: 1.21.1-92+
 
 ---
 
-**Last Updated**: 2025-12-08
+**Last Updated**: 2025-12-08 (Added THIRD_PARTY_LICENSES.md to maintenance checklists)
 **Maintained by**: Chronosphere Development Team

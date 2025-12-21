@@ -31,7 +31,7 @@ loom {
             ideConfigGenerated(true)
             runDir("run")
             // Enable GameTest framework
-            property("neoforge.enabledGameTestNamespaces", "chronosphere")
+            property("neoforge.enabledGameTestNamespaces", "chronodawn")
             // Auto-run all tests and exit
             property("neoforge.gameTestServer", "true")
             programArgs("--nogui")
@@ -82,7 +82,7 @@ tasks.named("processResources", ProcessResources).configure {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         // Exclude loader-specific files
         exclude "fabric.mod.json"
-        exclude "chronosphere.mixins.json"
+        exclude "chronodawn.mixins.json"
         exclude "architectury.common.json"
     }
 }

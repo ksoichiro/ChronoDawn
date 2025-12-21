@@ -18,17 +18,17 @@ Simply describe what you want to do, and Claude will reference the appropriate g
 
 ### Loader-Specific Mixin Files
 
-- **Fabric**: `fabric/src/main/resources/chronosphere-fabric.mixins.json`
+- **Fabric**: `fabric/src/main/resources/chronodawn-fabric.mixins.json`
   - **Must include** `"refmap": "common-common-refmap.json"`
   - Required for Mojang → Intermediary mapping conversion in production
   - Referenced in `fabric.mod.json`
 
-- **NeoForge**: `neoforge/src/main/resources/chronosphere-neoforge.mixins.json`
+- **NeoForge**: `neoforge/src/main/resources/chronodawn-neoforge.mixins.json`
   - **Must NOT include** refMap property
   - Uses Mojang mappings directly in development environment
   - Referenced in `META-INF/neoforge.mods.toml`
 
-- **Common**: `common/src/main/resources/chronosphere.mixins.json`
+- **Common**: `common/src/main/resources/chronodawn.mixins.json`
   - No refMap property
   - **Excluded from both JARs** via build.gradle exclude rules
   - Kept for reference only
@@ -37,11 +37,11 @@ Simply describe what you want to do, and Claude will reference the appropriate g
 
 When adding new Mixin classes:
 
-1. Create Mixin class in `common/src/main/java/com/chronosphere/mixin/`
+1. Create Mixin class in `common/src/main/java/com/chronodawn/mixin/`
 2. Update **both** loader-specific configs:
-   - Add to `chronosphere-fabric.mixins.json` (with refMap)
-   - Add to `chronosphere-neoforge.mixins.json` (without refMap)
-3. Do NOT modify `chronosphere.mixins.json` (excluded from builds)
+   - Add to `chronodawn-fabric.mixins.json` (with refMap)
+   - Add to `chronodawn-neoforge.mixins.json` (without refMap)
+3. Do NOT modify `chronodawn.mixins.json` (excluded from builds)
 
 ### Build Configuration
 
@@ -49,18 +49,18 @@ When adding new Mixin classes:
 ```groovy
 processResources {
     from(project(':common').sourceSets.main.resources) {
-        exclude 'chronosphere.mixins.json'  // Exclude common config
+        exclude 'chronodawn.mixins.json'  // Exclude common config
     }
 }
 shadowJar {
-    exclude 'chronosphere.mixins.json'  // Also exclude from shadow JAR
+    exclude 'chronodawn.mixins.json'  // Also exclude from shadow JAR
 }
 ```
 
 **NeoForge** (`neoforge/build.gradle`):
 ```groovy
 from(project(":common").sourceSets.main.resources) {
-    exclude "chronosphere.mixins.json"  // Already configured
+    exclude "chronodawn.mixins.json"  // Already configured
 }
 ```
 
@@ -82,23 +82,23 @@ from(project(":common").sourceSets.main.resources) {
 
 **Cause**: NeoForge Mixin config includes refMap property.
 
-**Solution**: Remove `"refmap"` from `chronosphere-neoforge.mixins.json`.
+**Solution**: Remove `"refmap"` from `chronodawn-neoforge.mixins.json`.
 
 ### Mixin Not Applied
 
 **Symptom**: Mixin class exists but doesn't apply at runtime.
 
 **Checklist**:
-1. Verify Mixin class is in `chronosphere-fabric.mixins.json` (for Fabric)
-2. Verify Mixin class is in `chronosphere-neoforge.mixins.json` (for NeoForge)
+1. Verify Mixin class is in `chronodawn-fabric.mixins.json` (for Fabric)
+2. Verify Mixin class is in `chronodawn-neoforge.mixins.json` (for NeoForge)
 3. Check Mixin config is referenced in `fabric.mod.json` / `neoforge.mods.toml`
-4. Verify build excludes `chronosphere.mixins.json` from JARs
+4. Verify build excludes `chronodawn.mixins.json` from JARs
 
 ### RefMap Missing in Production
 
 **Symptom**: Fabric mod works in dev but crashes in production with refMap errors.
 
-**Cause**: Missing `"refmap": "common-common-refmap.json"` in `chronosphere-fabric.mixins.json`.
+**Cause**: Missing `"refmap": "common-common-refmap.json"` in `chronodawn-fabric.mixins.json`.
 
 **Solution**: Add refMap property to Fabric Mixin config.
 

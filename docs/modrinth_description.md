@@ -1,4 +1,4 @@
-# Chronosphere
+# Chrono Dawn
 
 **A time-manipulation dimension mod for Minecraft**
 
@@ -8,11 +8,11 @@ Explore a mysterious dimension frozen in time, face powerful bosses, and wield l
 
 ## 🕰️ Overview
 
-Chronosphere adds a brand new dimension to Minecraft centered around time manipulation. Enter a world where hostile mobs move in slow motion, discover ancient structures, defeat epic bosses, and craft ultimate artifacts that bend the flow of time itself.
+Chrono Dawn adds a brand new dimension to Minecraft centered around time manipulation. Enter a world where hostile mobs move in slow motion, discover ancient structures, defeat epic bosses, and craft ultimate artifacts that bend the flow of time itself.
 
 ### Key Features
 
-- **New Dimension**: Chronosphere with 8 unique biomes
+- **New Dimension**: Chrono Dawn with 8 unique biomes
 - **Time Distortion**: Hostile mobs move extremely slowly
 - **Epic Bosses**: Time Guardian, Temporal Phantom, and Time Tyrant
 - **Ultimate Artifacts**: Time-manipulating weapons and armor
@@ -50,11 +50,11 @@ Explore the Overworld to discover Ancient Ruins structures. Mine **Clockstone Or
 ### 2. Build a Portal
 Create a portal frame using **Clockstone Blocks** (minimum 4×5, maximum 23×23). Right-click with the **Time Hourglass** to activate.
 
-### 3. Enter the Chronosphere
+### 3. Enter the Chrono Dawn
 Walk through the portal to enter the dimension. **⚠️ Warning**: The portal becomes one-way after entry!
 
 ### 4. Find the Forgotten Library
-Explore the Chronosphere to locate the **Forgotten Library**. Discover the **Portal Stabilizer** recipe inside.
+Explore the Chrono Dawn to locate the **Forgotten Library**. Discover the **Portal Stabilizer** recipe inside.
 
 ### 5. Stabilize the Portal
 Craft the **Portal Stabilizer** and use it on your portal to enable bidirectional travel between dimensions.
@@ -78,25 +78,25 @@ Use **Fragments of Stasis Core** from Time Tyrant to create legendary time-manip
 ## 🌍 Dimension Features
 
 ### Biomes
-The Chronosphere contains 8 unique biomes:
-- Chronosphere Forest
-- Chronosphere Desert
-- Chronosphere Mountain
-- Chronosphere Ocean
-- Chronosphere Snowy
-- Chronosphere Swamp
-- Chronosphere Dark Forest
-- Chronosphere Ancient Forest
+The Chrono Dawn contains 8 unique biomes:
+- Chrono Dawn Forest
+- Chrono Dawn Desert
+- Chrono Dawn Mountain
+- Chrono Dawn Ocean
+- Chrono Dawn Snowy
+- Chrono Dawn Swamp
+- Chrono Dawn Dark Forest
+- Chrono Dawn Ancient Forest
 
 ### Structures
 - **Ancient Ruins** (Overworld): Starting point for your journey
-- **Forgotten Library** (Chronosphere): Portal Stabilizer recipe location
-- **Desert Clock Tower** (Chronosphere): Source of Enhanced Clockstone
-- **Guardian Vault** (Chronosphere): Chronos Warden boss location
-- **Clockwork Depths** (Chronosphere): Clockwork Colossus boss location
-- **Phantom Catacombs** (Chronosphere): Maze structure with Temporal Phantom boss
-- **Entropy Crypt** (Chronosphere): Entropy Keeper boss location
-- **Master Clock** (Chronosphere): Final dungeon with Time Tyrant boss
+- **Forgotten Library** (Chrono Dawn): Portal Stabilizer recipe location
+- **Desert Clock Tower** (Chrono Dawn): Source of Enhanced Clockstone
+- **Guardian Vault** (Chrono Dawn): Chronos Warden boss location
+- **Clockwork Depths** (Chrono Dawn): Clockwork Colossus boss location
+- **Phantom Catacombs** (Chrono Dawn): Maze structure with Temporal Phantom boss
+- **Entropy Crypt** (Chrono Dawn): Entropy Keeper boss location
+- **Master Clock** (Chrono Dawn): Final dungeon with Time Tyrant boss
 
 ### Time Wood
 Harvest **Time Wood** trees for a unique building material with full block set:
@@ -172,7 +172,7 @@ Harvest **Time Wood** trees for a unique building material with full block set:
 ## 🎯 Gameplay Mechanics
 
 ### Time Distortion
-All hostile mobs in the Chronosphere receive **Slowness IV**, making them extremely slow while you move at normal speed. Use this advantage to explore safely and dominate combat.
+All hostile mobs in the Chrono Dawn receive **Slowness IV**, making them extremely slow while you move at normal speed. Use this advantage to explore safely and dominate combat.
 
 ### Portal System
 - **Initial Entry**: One-way portal creates survival tension
@@ -200,16 +200,16 @@ This mod is built with **Architectury** and supports **both Fabric and NeoForge*
 
 ## 📚 Documentation
 
-- **Player Guide**: [GitHub](https://github.com/ksoichiro/Chronosphere/blob/001-chronosphere-mod/docs/player_guide.md)
-- **Developer Guide**: [GitHub](https://github.com/ksoichiro/Chronosphere/blob/001-chronosphere-mod/docs/developer_guide.md)
-- **GitHub Repository**: [Link](https://github.com/ksoichiro/Chronosphere)
+- **Player Guide**: [GitHub](https://github.com/ksoichiro/Chrono Dawn/blob/001-chronosphere-mod/docs/player_guide.md)
+- **Developer Guide**: [GitHub](https://github.com/ksoichiro/Chrono Dawn/blob/001-chronosphere-mod/docs/developer_guide.md)
+- **GitHub Repository**: [Link](https://github.com/ksoichiro/Chrono Dawn)
 
 ---
 
 ## 🤝 Support
 
-- **Bug Reports**: [GitHub Issues](https://github.com/ksoichiro/Chronosphere/issues)
-- **Feature Requests**: [GitHub Issues](https://github.com/ksoichiro/Chronosphere/issues)
+- **Bug Reports**: [GitHub Issues](https://github.com/ksoichiro/Chrono Dawn/issues)
+- **Feature Requests**: [GitHub Issues](https://github.com/ksoichiro/Chrono Dawn/issues)
 - **Discord**: Coming soon
 
 ---
@@ -227,4 +227,4 @@ This mod is built with **Architectury** and supports **both Fabric and NeoForge*
 
 ---
 
-**Master time. Conquer the Chronosphere.** 🕰️
+**Master time. Conquer the Chrono Dawn.** 🕰️

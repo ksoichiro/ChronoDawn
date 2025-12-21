@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cube_column_horizontal",
-  "textures": {
-    "end": "chronosphere:block/ancient_time_wood_log_top",
-    "side": "chronosphere:block/ancient_time_wood_log"
-  }
-}
