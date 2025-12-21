@@ -123,6 +123,104 @@
 
 ---
 
+## Screenshots & Release Preparation (Priority)
+
+**Purpose**: Create high-quality screenshots for CurseForge and Modrinth galleries to ensure successful initial release approval and attract users.
+
+**Background**:
+- Both CurseForge and Modrinth require screenshots for mod listings
+- Quality screenshots are critical for first impressions and download rates
+- Screenshots should showcase key features: structures, bosses, dimension, items
+- Recommended resolution: 1920x1080 (16:9 aspect ratio)
+- CurseForge icon requirement: minimum 400x400px
+
+**Tasks**:
+
+- [ ] T511 [P] Set up screenshot infrastructure
+  - Create `docs/screenshots/` directory
+  - Configure Git LFS for large image files (optional, if needed)
+  - Add `.gitattributes` for PNG/JPG files if using Git LFS
+  - Document screenshot naming convention (NN-description.png)
+
+- [ ] T512 [P] Create project icon
+  - Design 400x400px+ project icon (1:1 aspect ratio)
+  - Use Time Hourglass or Chrono Dawn portal as base
+  - Save as `docs/screenshots/icon.png`
+  - Test on both CurseForge and Modrinth (upload preview)
+
+- [ ] T513 [P] Capture essential screenshots (Priority 1)
+  - Screenshot 1: Ancient Ruins structure in Overworld
+  - Screenshot 2: Chrono Dawn portal (orange/gold glow)
+  - Screenshot 3: Chrono Dawn dimension overview (grey sky, Time Wood trees)
+  - Screenshot 4: Forgotten Library structure
+  - Screenshot 5: Time Guardian boss battle
+  - Screenshot 6: Temporal Phantom in Phantom Catacombs
+  - Screenshot 7: Time Tyrant boss in Master Clock dungeon
+  - Screenshot 8: Ultimate artifacts showcase (Chronoblade, Time Guardian's Mail equipped)
+  - All screenshots: 1920x1080, PNG format, F1 to hide HUD
+
+- [ ] T514 [P] Capture supplementary screenshots (Priority 2)
+  - Screenshot 9: Chrono Dawn Forest biome
+  - Screenshot 10: Chrono Dawn Desert biome with Desert Clock Tower
+  - Screenshot 11: Time Wood building example (house or structure)
+  - Screenshot 12: Master Clock dungeon interior
+  - Screenshot 13: Portal Stabilizer crafting/usage
+  - Screenshot 14: Multiple boss drops display (Guardian Stone, Colossus Gear, etc.)
+  - Consider using shaders (Iris) for enhanced visuals
+
+- [ ] T515 [P] Optimize and organize screenshots
+  - Rename files with consistent naming: `01-ancient-ruins.png`, `02-portal.png`, etc.
+  - Optimize file sizes if needed (keep under 5MiB for Modrinth)
+  - Verify 1920x1080 resolution for all screenshots
+  - Remove any screenshots with artifacts or quality issues
+  - Create README.md in `docs/screenshots/` describing each image
+
+- [ ] T516 [P] Upload to CurseForge gallery
+  - Upload project icon (400x400px+)
+  - Upload 8-14 gallery screenshots in priority order
+  - Add title and description for each screenshot
+  - Verify proper display on project page
+  - Document upload process in research.md
+
+- [ ] T517 [P] Upload to Modrinth gallery
+  - Upload project icon
+  - Upload same gallery screenshots (max 5MiB each)
+  - Add title for each screenshot (required)
+  - Verify proper display on project page
+  - Ensure consistency with CurseForge
+
+- [ ] T518 [P] Update documentation with screenshots
+  - Embed key screenshots in README.md (GitHub)
+  - Update curseforge_description.md to reference uploaded images
+  - Update modrinth_description.md to reference uploaded images
+  - Consider adding screenshot section to player_guide.md
+  - Commit all screenshots to repository
+
+**Success Criteria**:
+- Project icon created (400x400px+, appealing design)
+- 10-14 high-quality screenshots captured (1920x1080, PNG)
+- All screenshots uploaded to both CurseForge and Modrinth
+- Screenshots properly organized in `docs/screenshots/`
+- Documentation updated with screenshot references
+- No quality issues or artifacts in final images
+
+**Estimated Effort**: 4-6 hours total
+- Setup & icon creation: 1 hour
+- Screenshot capture (Priority 1): 1-2 hours
+- Screenshot capture (Priority 2): 1-2 hours
+- Optimization & upload: 1 hour
+- Documentation: 30 minutes
+
+**Priority**: High - Required for CurseForge/Modrinth initial release approval
+
+**Note**: Consider using the following mods for better screenshot quality:
+- Iris Shaders (visual enhancement)
+- Sodium (performance while capturing)
+- Replay Mod (cinematic camera angles)
+- Distant Horizons (extended render distance)
+
+---
+
 ### Time Cycle Configuration (Phase 2.5)
 
 **Purpose**: 固定時刻を設定し、他のディメンションmodと同様の独特な雰囲気を作り出す
