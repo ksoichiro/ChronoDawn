@@ -1,10 +1,10 @@
 {
-  "fallback": "chronosphere:master_clock/stairs_bottom_pool",
+  "fallback": "minecraft:empty",
   "elements": [
     {
       "weight": 1,
       "element": {
-        "location": "chronosphere:master_clock_stairs",
+        "location": "chronosphere:master_clock_stairs_bottom",
         "processors": "chronosphere:convert_decorative_water",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
