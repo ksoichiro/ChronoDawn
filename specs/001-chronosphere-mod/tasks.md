@@ -420,3 +420,25 @@
   - **Dependencies**: None (future enhancement)
   - **Priority**: Low (cosmetic improvement)
 
+---
+
+### Mod Rebranding
+
+**Purpose**: Mod名称とディメンション名を「Chronosphere」から「Chrono Dawn」に変更する
+
+- [ ] T308 [Rebranding] Rename mod and dimension from "Chronosphere" to "Chrono Dawn"
+  - **Scope**:
+    - Mod名称変更 (Chronosphere → Chrono Dawn)
+    - ディメンション名変更 (chronosphere → chrono_dawn)
+    - パッケージ名は維持 (com.chronosphere)
+  - **Files to Update**:
+    - Documentation files (README.md, docs/*, CLAUDE.md, etc.)
+    - Mod metadata files (fabric.mod.json, neoforge.mods.toml)
+    - Resource files (dimension configs, lang files, etc.)
+    - Build configuration files (gradle.properties, build.gradle)
+  - **Testing**:
+    - Verify mod loads correctly with new name
+    - Verify dimension is accessible with new identifier
+    - Verify translations are correct
+  - **Priority**: Medium (branding update)
+
