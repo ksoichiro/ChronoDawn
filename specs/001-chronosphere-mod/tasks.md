@@ -20,7 +20,7 @@
 - [X] T034l [P] Test dimension visual appearance with fixed time and grey sky in-game
 - [X] T034m [P] Evaluate time/sky settings and document adjustments needed (fixed_time: 4000-8000, effects: overworld/end/custom)
 - [X] T034n [P] Research custom DimensionSpecialEffects for precise sky color control (Completed: 2025-12-17, see research.md)
-- [ ] T034p [P] Implement SkyColorMixin for Time Tyrant defeat sky color change (0x909090 → 0x9098A0)
+- [X] T034p [P] Implement SkyColorMixin for Time Tyrant defeat sky color change (0x909090 → 0x5588DD) (Completed: 2025-12-21)
 - [ ] T034o [P] (Future) Design sky color unlock mechanic tied to boss defeat (Option D element)
 
 **Current Settings**: `fixed_time: 6000` (noon), `effects: minecraft:overworld`, biome `sky_color: 9474192` (grey)
@@ -49,9 +49,9 @@
 
 3. **Apply sky color override**
    - Default color: `0x909090` (144, 144, 144) - current grey
-   - After Time Tyrant defeat: `0x9098A0` (144, 152, 160) - slightly brighter with blue tint
+   - After Time Tyrant defeat: `0x5588DD` (85, 136, 221) - bright blue sky
    - Apply color only in Chronosphere dimension
-   - Use color interpolation for smooth transition
+   - Direct color replacement (no interpolation needed)
 
 4. **Update Mixin configuration files**
    - Add SkyColorMixin to `chronosphere.mixins.json`
@@ -60,7 +60,7 @@
 
 5. **Testing**
    - Test without Time Tyrant defeat (should show grey sky: 0x909090)
-   - Test with Time Tyrant defeat (should show brighter sky: 0x9098A0)
+   - Test with Time Tyrant defeat (should show bright blue sky: 0x5588DD)
    - Test dimension transition (color should reset when leaving/entering)
    - Test multiplayer sync (all players should see same sky color)
 
@@ -71,7 +71,7 @@
 
 **Success Criteria**:
 - Sky color remains grey (0x909090) by default
-- Sky color becomes slightly brighter (0x9098A0) after Time Tyrant defeat
+- Sky color becomes bright blue (0x5588DD) after Time Tyrant defeat
 - Color change persists across game sessions
 - No performance impact on rendering
 - Works on both Fabric and NeoForge
