@@ -63,7 +63,7 @@ public class TimeDistortionEventHandler {
      */
     private static void onServerLevelTick(ServerLevel level) {
         // Only process ChronoDawn dimension
-        if (!level.dimension().equals(ModDimensions.CHRONOSPHERE_DIMENSION)) {
+        if (!level.dimension().equals(ModDimensions.CHRONO_DAWN_DIMENSION)) {
             return;
         }
 

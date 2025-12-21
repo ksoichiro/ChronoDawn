@@ -64,7 +64,7 @@ public class EntityEventHandler {
         TickEvent.SERVER_LEVEL_POST.register(level -> {
             // Only process entities in ChronoDawn dimension
             // Use location() to compare ResourceLocation instead of ResourceKey
-            if (level.dimension().location().equals(ModDimensions.CHRONOSPHERE_DIMENSION.location())) {
+            if (level.dimension().location().equals(ModDimensions.CHRONO_DAWN_DIMENSION.location())) {
                 // T178: Optimize time distortion processing to 5-tick intervals
                 timeDistortionTickCounter++;
                 if (timeDistortionTickCounter >= 5) {

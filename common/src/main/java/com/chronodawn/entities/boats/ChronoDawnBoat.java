@@ -18,7 +18,7 @@ import net.minecraft.world.level.Level;
  */
 public class ChronoDawnBoat extends Boat {
 
-    private static final EntityDataAccessor<Integer> DATA_CHRONOSPHERE_TYPE = SynchedEntityData.defineId(
+    private static final EntityDataAccessor<Integer> DATA_CHRONO_DAWN_TYPE = SynchedEntityData.defineId(
             ChronoDawnBoat.class, EntityDataSerializers.INT);
 
     public ChronoDawnBoat(EntityType<? extends Boat> entityType, Level level) {
@@ -26,7 +26,7 @@ public class ChronoDawnBoat extends Boat {
     }
 
     public ChronoDawnBoat(Level level, double x, double y, double z) {
-        this(ModEntities.CHRONOSPHERE_BOAT.get(), level);
+        this(ModEntities.CHRONO_DAWN_BOAT.get(), level);
         this.setPos(x, y, z);
         this.xo = x;
         this.yo = y;
@@ -36,7 +36,7 @@ public class ChronoDawnBoat extends Boat {
     @Override
     protected void defineSynchedData(SynchedEntityData.Builder builder) {
         super.defineSynchedData(builder);
-        builder.define(DATA_CHRONOSPHERE_TYPE, ChronoDawnBoatType.TIME_WOOD.ordinal());
+        builder.define(DATA_CHRONO_DAWN_TYPE, ChronoDawnBoatType.TIME_WOOD.ordinal());
     }
 
     @Override
@@ -54,11 +54,11 @@ public class ChronoDawnBoat extends Boat {
     }
 
     public void setChronoDawnBoatType(ChronoDawnBoatType type) {
-        this.entityData.set(DATA_CHRONOSPHERE_TYPE, type.ordinal());
+        this.entityData.set(DATA_CHRONO_DAWN_TYPE, type.ordinal());
     }
 
     public ChronoDawnBoatType getChronoDawnBoatType() {
-        return ChronoDawnBoatType.byId(this.entityData.get(DATA_CHRONOSPHERE_TYPE));
+        return ChronoDawnBoatType.byId(this.entityData.get(DATA_CHRONO_DAWN_TYPE));
     }
 
     @Override

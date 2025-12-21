@@ -20,7 +20,7 @@ public class ModDimensions {
      * Resource key for the ChronoDawn dimension level.
      * This is used for dimension teleportation and world access.
      */
-    public static final ResourceKey<Level> CHRONOSPHERE_DIMENSION = ResourceKey.create(
+    public static final ResourceKey<Level> CHRONO_DAWN_DIMENSION = ResourceKey.create(
         Registries.DIMENSION,
         ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "chronodawn")
     );
@@ -29,7 +29,7 @@ public class ModDimensions {
      * Resource key for the ChronoDawn dimension type.
      * This defines the dimension's environmental properties (fixed time, no ceiling, etc.).
      */
-    public static final ResourceKey<DimensionType> CHRONOSPHERE_DIMENSION_TYPE = ResourceKey.create(
+    public static final ResourceKey<DimensionType> CHRONO_DAWN_DIMENSION_TYPE = ResourceKey.create(
         Registries.DIMENSION_TYPE,
         ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "chronodawn")
     );

@@ -14,7 +14,7 @@ Explore a frozen dimension, defeat time-controlling bosses, and master ultimate 
 logoFile="chronodawn_logo.png"
 authors="YourName"
 credits="Built with Architectury"
-displayURL="https://github.com/ksoichiro/Chronosphere"
+displayURL="https://github.com/ksoichiro/ChronoDawn"
 
 [[mixins]]
 config="chronodawn-neoforge.mixins.json"

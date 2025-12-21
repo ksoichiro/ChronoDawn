@@ -1,12 +1,12 @@
-# Data Model: Chronosphere Mod
+# Data Model: Chrono Dawn Mod
 
-**Feature**: Chronosphere Mod - 時間操作をテーマにしたMinecraft Mod
+**Feature**: Chrono Dawn Mod - 時間操作をテーマにしたMinecraft Mod
 **Architecture**: Architectury Multi-Loader (NeoForge + Fabric)
 **Date**: 2025-10-19 (Updated for Architectury)
 
 ## Overview
 
-このドキュメントは、Chronosphere Modのデータモデルを定義します。Minecraft Modの特性上、エンティティはブロック、アイテム、Mob、ディメンション、構造物など多岐にわたります。
+このドキュメントは、Chrono Dawn Modのデータモデルを定義します。Minecraft Modの特性上、エンティティはブロック、アイテム、Mob、ディメンション、構造物など多岐にわたります。
 
 **Architectury Multi-Loader対応**:
 - このModはArchitecturyフレームワークを使用し、NeoForgeとFabricの両方に対応
@@ -16,10 +16,10 @@
 
 ## Core Systems
 
-### Dimension: Chronosphere
+### Dimension: Chrono Dawn
 
 **Type**: Custom Dimension
-**Key**: `chronosphere:chronosphere_dimension`
+**Key**: `chronodawn:chronodawn_dimension`
 
 **Properties**:
 - `dimension_type`: カスタムディメンションタイプ（時間の歪みを表現する環境設定）
@@ -49,8 +49,8 @@
 
 **Portal States**:
 1. **未起動**: フレームのみ存在
-2. **起動済み**: 時の砂時計で起動、クロノスフィアへの転送可能
-3. **機能停止**: プレイヤーがクロノスフィアに突入した直後、自動的に機能停止
+2. **起動済み**: 時の砂時計で起動、クロノドーンへの転送可能
+3. **機能停止**: プレイヤーがクロノドーンに突入した直後、自動的に機能停止
 4. **安定化**: ポータル安定化装置を使用後、双方向転送が可能
 
 **Validation Rules**:
@@ -63,7 +63,7 @@
 ### Clockstone Ore (クロックストーン鉱石)
 
 **Type**: Custom Ore Block
-**Location**: オーバーワールド（古代遺跡）、クロノスフィア（地下）
+**Location**: オーバーワールド（古代遺跡）、クロノドーン（地下）
 
 **Properties**:
 - `hardness`: 3.0
@@ -74,7 +74,7 @@
 ### Reversing Time Sandstone (逆流の砂岩)
 
 **Type**: Special Block
-**Location**: クロノスフィア
+**Location**: クロノドーン
 
 **Properties**:
 - `restoration_time`: 3秒（破壊後、元の状態に戻るまでの時間）
@@ -93,7 +93,7 @@
 ### Unstable Fungus (不安定な菌糸)
 
 **Type**: Special Block
-**Location**: クロノスフィア
+**Location**: クロノドーン
 
 **Properties**:
 - `on_entity_collision`: エンティティが衝突時にランダム速度効果を付与
@@ -290,8 +290,8 @@
 **Obtained From**: 時間の暴君撃破
 
 **Effect**:
-- 所持しているだけで、クロノスフィア内のMobの基本速度低下効果がさらに強化される（Slowness IV → Slowness V）
-- クロノスフィアの時間安定化の象徴
+- 所持しているだけで、クロノドーン内のMobの基本速度低下効果がさらに強化される（Slowness IV → Slowness V）
+- クロノドーンの時間安定化の象徴
 
 #### Key to Master Clock (マスタークロックへの鍵)
 
@@ -394,7 +394,7 @@
 ### Forgotten Library (忘れられた図書館)
 
 **Type**: World Generation Structure
-**Location**: クロノスフィア（地上）
+**Location**: クロノドーン（地上）
 **Generation Frequency**: 稀（チャンクあたり0.5%）
 
 **Contents**:
@@ -405,7 +405,7 @@
 ### Desert Clock Tower (砂漠の時計塔)
 
 **Type**: World Generation Structure
-**Location**: クロノスフィア（砂漠バイオーム）
+**Location**: クロノドーン（砂漠バイオーム）
 **Generation Frequency**: 稀（チャンクあたり0.3%）
 
 **Contents**:
@@ -415,16 +415,16 @@
 ### Master Clock (マスタークロック)
 
 **Type**: World Generation Structure (Underground Palace with Jigsaw System)
-**Location**: クロノスフィア（ワールドスポーン近く、concentric_rings placement）
+**Location**: クロノドーン（ワールドスポーン近く、concentric_rings placement）
 **Generation Frequency**: 1つのみ（ディメンション全体）
-**Design Document**: `specs/001-chronosphere-mod/master-clock-design.md`
+**Design Document**: `specs/chrono-dawn-mod/master-clock-design.md`
 
 **Placement Configuration**:
 - `type`: `minecraft:concentric_rings`
 - `distance`: 80 chunks（ワールドスポーンから80-100チャンク範囲）
 - `spread`: 20 chunks
 - `count`: 1
-- `preferred_biomes`: `#chronosphere:has_master_clock`
+- `preferred_biomes`: `#chronodawn:has_master_clock`
 
 **Structure Composition**:
 
@@ -476,7 +476,7 @@
 **Implementation**: イベントハンドラー（EntityTickEvent）
 
 **Effect Application**:
-- クロノスフィア内の全カスタムMobにSlowness IVを付与
+- クロノドーン内の全カスタムMobにSlowness IVを付与
 - プレイヤーは影響を受けない
 - クロノスの瞳獲得後、Slowness V に強化
 
@@ -501,11 +501,11 @@
 **Implementation**: None (uses vanilla Minecraft respawn mechanics)
 
 **Design Philosophy**: Similar to End dimension behavior
-- Chronosphere respawn follows Minecraft's standard respawn mechanics
+- Chrono Dawn respawn follows Minecraft's standard respawn mechanics
 - Players respawn at their set bed/respawn anchor, or world spawn if none set
 - Portal Stabilizer does NOT affect respawn location
 - Portal Stabilizer only makes portal bidirectional (like End return portal)
-- Players can escape Chronosphere by breaking bed and dying (same as End)
+- Players can escape Chrono Dawn by breaking bed and dying (same as End)
 
 **Rules**:
 1. ベッド/リスポーンアンカーを設置済み: その場所にリスポーン（通常のMinecraft動作）
@@ -513,7 +513,7 @@
 3. ポータル安定化装置の有無: リスポーン位置には**影響しない**
 
 **Escape Mechanic**:
-- プレイヤーはクロノスフィアでベッドを設置して破壊し、死亡することでオーバーワールドに脱出可能
+- プレイヤーはクロノドーンでベッドを設置して破壊し、死亡することでオーバーワールドに脱出可能
 - この仕様により、ポータルが一方通行でも過度に難しくならない
 - エンドディメンションと同じバランス設計
 
@@ -534,19 +534,19 @@
 - `defeated_bosses`: 撃破済みのボスリスト
 
 **Dimension State**:
-- `is_stabilized`: クロノスフィアが安定化されているか（時間の暴君撃破後）
+- `is_stabilized`: クロノドーンが安定化されているか（時間の暴君撃破後）
 - `time_distortion_level`: 時間の歪みレベル（Slowness IVまたはV）
 
 ## Validation Rules
 
 ### Item Crafting
 
-- すべてのレシピはJSONファイルで定義（`data/chronosphere/recipes/`）
+- すべてのレシピはJSONファイルで定義（`data/chronodawn/recipes/`）
 - 不安定な砂時計のクラフトはカスタムイベントをトリガー
 
 ### Boss Spawning
 
-- 時の番人: クロノスフィア内でランダムスポーン（1ワールドにつき最大3体）
+- 時の番人: クロノドーン内でランダムスポーン（1ワールドにつき最大3体）
 - 時間の暴君: マスタークロック最深部に1体のみ（撃破後リスポーンしない）
 
 ### Portal Validation

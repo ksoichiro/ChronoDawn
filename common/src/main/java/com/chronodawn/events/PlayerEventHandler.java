@@ -73,7 +73,7 @@ public class PlayerEventHandler {
                 // Check if dimension changed
                 if (previousDimension != null && !previousDimension.equals(currentDimension)) {
                     // Player changed dimension
-                    if (currentDimension.equals(ModDimensions.CHRONOSPHERE_DIMENSION)) {
+                    if (currentDimension.equals(ModDimensions.CHRONO_DAWN_DIMENSION)) {
                         // Player entered ChronoDawn
                         onPlayerChangeDimension(player);
                     }
@@ -98,7 +98,7 @@ public class PlayerEventHandler {
         ResourceKey<Level> dimensionKey = level.dimension();
 
         // Check if player entered ChronoDawn
-        if (!dimensionKey.equals(ModDimensions.CHRONOSPHERE_DIMENSION)) {
+        if (!dimensionKey.equals(ModDimensions.CHRONO_DAWN_DIMENSION)) {
             return;
         }
 

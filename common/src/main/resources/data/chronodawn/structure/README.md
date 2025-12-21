@@ -5,11 +5,11 @@ This directory should contain the actual structure NBT files created using Minec
 ## Required Files
 
 - `ancient_ruins/main.nbt` - Ancient Ruins structure (Overworld)
-- `forgotten_library/main.nbt` - Forgotten Library structure (Chronosphere)
+- `forgotten_library/main.nbt` - Forgotten Library structure (Chrono Dawn)
 
 ## Creating Structure NBT Files
 
-1. Launch Minecraft with the Chronosphere mod installed
+1. Launch Minecraft with the Chrono Dawn mod installed
 2. Use `/give @s structure_block` to get a Structure Block
 3. Build your structure in-game
 4. Use the Structure Block to save the structure
@@ -24,7 +24,7 @@ This directory should contain the actual structure NBT files created using Minec
 - **Theme**: Ancient, weathered stone ruins
 
 ### Forgotten Library
-- **Location**: Chronosphere surface
+- **Location**: Chrono Dawn surface
 - **Size**: Medium (up to 4 jigsaw pieces)
 - **Contains**: Portal Stabilizer blueprint, books, loot chests
 - **Theme**: Mystical library with temporal elements

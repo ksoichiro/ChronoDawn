@@ -1,13 +1,13 @@
-# Implementation Plan: Chronosphere Mod - 時間操作をテーマにしたMinecraft Modの開発
+# Implementation Plan: Chrono Dawn Mod - 時間操作をテーマにしたMinecraft Modの開発
 
-**Branch**: `001-chronosphere-mod` | **Date**: 2025-10-19 | **Spec**: [spec.md](spec.md)
-**Input**: Feature specification from `/specs/001-chronosphere-mod/spec.md`
+**Branch**: `main` | **Date**: 2025-10-19 | **Spec**: [spec.md](spec.md)
+**Input**: Feature specification from `/specs/chrono-dawn-mod/spec.md`
 
 **Note**: This template is filled in by the `/speckit.plan` command. See `.specify/templates/commands/plan.md` for the execution workflow.
 
 ## Summary
 
-時間操作をテーマにしたMinecraft Mod「クロノスフィアの残響」の実装。プレイヤーは時間が停止したディメンション「クロノスフィア」を探索し、時間操作アイテムを駆使してラスボス「時間の暴君」を撃破する。サーバー負荷を抑えつつ、既存のMinecraftシステム(ステータス効果、イベントフック)を活用して時間の歪みを表現する。
+時間操作をテーマにしたMinecraft Mod「クロノドーンの残響」の実装。プレイヤーは時間が停止したディメンション「クロノドーン」を探索し、時間操作アイテムを駆使してラスボス「時間の暴君」を撃破する。サーバー負荷を抑えつつ、既存のMinecraftシステム(ステータス効果、イベントフック)を活用して時間の歪みを表現する。
 
 ## Technical Context
 
@@ -33,7 +33,7 @@
 
 **Note**: プロジェクトの憲法(constitution.md)はテンプレート状態のため、このModプロジェクトに適用可能な設計原則を以下に定義します。
 
-### Design Principles for Chronosphere Mod
+### Design Principles for Chrono Dawn Mod
 
 1. **Vanilla-First Design**: 既存のMinecraftシステム(ステータス効果、イベントフック、既存のエンティティ挙動)を最大限活用し、独自の複雑な実装を避ける
    - ✅ **PASS**: FR-025で明示的に要求されている。Mob速度低下はステータス効果、ブロック修復はイベントフックで実装予定
@@ -107,10 +107,10 @@ specs/[###-feature]/
 ### Source Code (repository root) - Architectury Multi-Loader Structure
 
 ```
-Chronosphere/
+Chrono Dawn/
 ├── common/                        # ローダー非依存の共通コード
-│   ├── src/main/java/com/chronosphere/
-│   │   ├── Chronosphere.java      # 共通エントリーポイント
+│   ├── src/main/java/com/chronodawn/
+│   │   ├── ChronoDawn.java       # 共通エントリーポイント
 │   │   ├── core/                  # Core systems
 │   │   │   ├── dimension/         # Dimension logic (loader-agnostic)
 │   │   │   ├── portal/            # Portal mechanics & stabilization
@@ -139,38 +139,38 @@ Chronosphere/
 │   │   │   ├── ModItems.java
 │   │   │   └── ModEntities.java
 │   │   ├── platform/              # @ExpectPlatform abstractions
-│   │   │   └── ChronospherePlatform.java
+│   │   │   └── ChronoDawnPlatform.java
 │   │   └── util/                  # Utility classes
 │   └── src/main/resources/
-│       ├── data/chronosphere/     # Data packs (recipes, loot tables, etc)
+│       ├── data/chronodawn/     # Data packs (recipes, loot tables, etc)
 │       │   ├── recipes/
 │       │   ├── loot_tables/
 │       │   └── worldgen/
-│       └── assets/chronosphere/   # Assets (textures, models, sounds)
+│       └── assets/chronodawn/   # Assets (textures, models, sounds)
 │           ├── textures/
 │           ├── models/
 │           └── sounds/
 │
 ├── fabric/                        # Fabric固有実装
-│   ├── src/main/java/com/chronosphere/fabric/
-│   │   ├── ChronosphereFabric.java           # Fabric entry point
+│   ├── src/main/java/com/chronodawn/fabric/
+│   │   ├── ChronoDawnFabric.java           # Fabric entry point
 │   │   ├── client/
-│   │   │   └── ChronosphereClientFabric.java # Client initialization
+│   │   │   └── ChronoDawnClientFabric.java # Client initialization
 │   │   ├── platform/              # @ExpectPlatform implementations
-│   │   │   └── ChronospherePlatformImpl.java
+│   │   │   └── ChronoDawnPlatformImpl.java
 │   │   └── compat/                # Fabric API integrations
 │   │       └── CustomPortalFabric.java
 │   └── src/main/resources/
 │       ├── fabric.mod.json        # Fabric mod metadata
-│       └── chronosphere.mixins.json
+│       └── chronodawn.mixins.json
 │
 ├── neoforge/                      # NeoForge固有実装
-│   ├── src/main/java/com/chronosphere/neoforge/
-│   │   ├── ChronosphereNeoForge.java         # NeoForge entry point
+│   ├── src/main/java/com/chronodawn/neoforge/
+│   │   ├── ChronoDawnNeoForge.java         # NeoForge entry point
 │   │   ├── client/
-│   │   │   └── ChronosphereClientNeoForge.java # Client initialization
+│   │   │   └── ChronoDawnClientNeoForge.java # Client initialization
 │   │   ├── platform/              # @ExpectPlatform implementations
-│   │   │   └── ChronospherePlatformImpl.java
+│   │   │   └── ChronoDawnPlatformImpl.java
 │   │   ├── event/                 # NeoForge event handlers
 │   │   │   └── EntityRendererHandler.java # Manual registration
 │   │   └── compat/                # NeoForge API integrations
@@ -181,7 +181,7 @@ Chronosphere/
 │       │   └── mods.toml
 │       └── pack.mcmeta
 │
-├── common/src/test/java/com/chronosphere/  # 共通テスト
+├── common/src/test/java/com/chronodawn/  # 共通テスト
 │   ├── integration/               # Integration tests (run per loader)
 │   │   ├── DimensionTest.java
 │   │   ├── PortalTest.java

@@ -244,16 +244,16 @@ worktree-5 (us3-phase2-utility): Unstable Pocket Watch
 1. オプション3（2段階アプローチ）を採用
 2. 第1段階worktree作成:
    ```bash
-   git worktree add -b us3-phase1-structures ../Chronosphere-us3-structures
-   git worktree add -b us3-phase1-boss ../Chronosphere-us3-boss
+   git worktree add -b us3-phase1-structures ../ChronoDawn-us3-structures
+   git worktree add -b us3-phase1-boss ../ChronoDawn-us3-boss
    ```
 
 ### Boss Materials完了時
 3. 第2段階worktree作成:
    ```bash
-   git worktree add -b us3-phase2-weapons ../Chronosphere-us3-weapons
-   git worktree add -b us3-phase2-armor ../Chronosphere-us3-armor
-   git worktree add -b us3-phase2-utility ../Chronosphere-us3-utility
+   git worktree add -b us3-phase2-weapons ../ChronoDawn-us3-weapons
+   git worktree add -b us3-phase2-armor ../ChronoDawn-us3-armor
+   git worktree add -b us3-phase2-utility ../ChronoDawn-us3-utility
    ```
 
 ---

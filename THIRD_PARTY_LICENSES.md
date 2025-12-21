@@ -1,6 +1,6 @@
 # Third-Party Licenses
 
-This document lists all third-party dependencies used in Chronosphere and their respective licenses.
+This document lists all third-party dependencies used in Chrono Dawn and their respective licenses.
 
 ## Runtime Dependencies
 
@@ -146,14 +146,14 @@ Weak copyleft license that requires source code availability for modifications b
 ## Notes
 
 - All dependencies are used in compliance with their respective licenses
-- Runtime dependencies are not bundled with Chronosphere; users must install them separately
-- For Patchouli, Chronosphere only uses the API and does not bundle the mod via Jar-in-Jar
-- NeoForge's LGPL-2.1 license does not affect Chronosphere's license due to linking exception
-- Architectury API's LGPL-3.0 license does not affect Chronosphere's license due to linking exception
+- Runtime dependencies are not bundled with Chrono Dawn; users must install them separately
+- For Patchouli, Chrono Dawn only uses the API and does not bundle the mod via Jar-in-Jar
+- NeoForge's LGPL-2.1 license does not affect Chrono Dawn's license due to linking exception
+- Architectury API's LGPL-3.0 license does not affect Chrono Dawn's license due to linking exception
 
 ## License Compliance
 
-Chronosphere is licensed under the MIT License. All dependencies are compatible with this license:
+Chrono Dawn is licensed under the MIT License. All dependencies are compatible with this license:
 - **Permissive licenses** (Apache 2.0, MIT, EPL 2.0): Fully compatible
 - **LGPL licenses** (LGPL-2.1, LGPL-3.0): Compatible due to dynamic linking (no license propagation)
 - **CC BY-NC-SA 3.0** (Patchouli): Compatible as dependency (API usage only)

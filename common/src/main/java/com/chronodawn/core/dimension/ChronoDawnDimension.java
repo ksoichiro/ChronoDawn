@@ -28,7 +28,7 @@ public class ChronoDawnDimension {
      * @return ResourceKey for the ChronoDawn dimension
      */
     public static ResourceKey<Level> getDimensionKey() {
-        return ModDimensions.CHRONOSPHERE_DIMENSION;
+        return ModDimensions.CHRONO_DAWN_DIMENSION;
     }
 
     /**
@@ -38,7 +38,7 @@ public class ChronoDawnDimension {
      * @return true if the level is ChronoDawn, false otherwise
      */
     public static boolean isChronoDawnDimension(Level level) {
-        return level.dimension().equals(ModDimensions.CHRONOSPHERE_DIMENSION);
+        return level.dimension().equals(ModDimensions.CHRONO_DAWN_DIMENSION);
     }
 
     /**

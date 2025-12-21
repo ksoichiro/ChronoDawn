@@ -1,6 +1,6 @@
-# Quickstart Guide: Chronosphere Mod Development
+# Quickstart Guide: Chrono Dawn Mod Development
 
-**Feature**: Chronosphere Mod - 時間操作をテーマにしたMinecraft Mod
+**Feature**: Chrono Dawn Mod - 時間操作をテーマにしたMinecraft Mod
 **Target Version**: Minecraft Java Edition 1.21.1
 **Architecture**: Architectury Multi-Loader (NeoForge 21.1.x + Fabric)
 **Date**: 2025-10-19 (Updated for Architectury)
@@ -30,9 +30,8 @@
 ### Step 1: Clone Repository
 
 ```bash
-git clone https://github.com/ksoichiro/Chronosphere.git
-cd Chronosphere
-git checkout 001-chronosphere-mod
+git clone https://github.com/ksoichiro/ChronoDawn.git
+cd ChronoDawn
 ```
 
 ### Step 2: Initialize Architectury Multi-Loader Environment
@@ -43,8 +42,8 @@ git checkout 001-chronosphere-mod
 2. Configure template:
    - Minecraft Version: 1.21.1
    - Mod Loaders: NeoForge + Fabric
-   - Mod ID: chronosphere
-   - Package: com.chronosphere
+   - Mod ID: chronodawn
+   - Package: com.chronodawn
    - Architectury API Version: 13.0.8
 3. Download generated template
 4. Extract to project root
@@ -70,8 +69,8 @@ cd MultiLoader-Template
 ```properties
 # Mod properties
 mod_version=1.0.0
-maven_group=com.chronosphere
-archives_name=chronosphere
+maven_group=com.chronodawn
+archives_name=chronodawn
 enabled_platforms=fabric
 
 # Minecraft properties
@@ -102,7 +101,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'chronosphere'
+rootProject.name = 'chronodawn'
 
 include 'common'
 include 'fabric'
@@ -147,7 +146,7 @@ gradlew.bat :fabric:runClient
 ./gradlew :fabric:runClient
 ```
 
-Minecraftが起動し、Modリストに "Chronosphere" が表示されることを確認（Fabricローダー）
+Minecraftが起動し、Modリストに "Chrono Dawn" が表示されることを確認（Fabricローダー）
 
 #### Build Mod
 
@@ -166,10 +165,10 @@ gradlew.bat build
 ## Project Structure Overview (Architectury Multi-Loader)
 
 ```
-Chronosphere/
+Chrono Dawn/
 ├── common/                             # ローダー非依存の共通コード
-│   ├── src/main/java/com/chronosphere/
-│   │   ├── Chronosphere.java           # 共通エントリーポイント
+│   ├── src/main/java/com/chronodawn/
+│   │   ├── ChronoDawn.java            # 共通エントリーポイント
 │   │   ├── core/                       # Core systems (dimension, portal, time)
 │   │   ├── blocks/                     # Custom blocks
 │   │   ├── items/                      # Custom items
@@ -180,20 +179,20 @@ Chronosphere/
 │   │   ├── platform/                   # @ExpectPlatform abstractions
 │   │   └── util/                       # Utility classes
 │   ├── src/main/resources/
-│   │   ├── data/chronosphere/          # Data packs (recipes, loot tables, worldgen)
-│   │   └── assets/chronosphere/        # Assets (textures, models, sounds)
-│   └── src/test/java/com/chronosphere/  # 共通テスト
+│   │   ├── data/chronodawn/          # Data packs (recipes, loot tables, worldgen)
+│   │   └── assets/chronodawn/        # Assets (textures, models, sounds)
+│   └── src/test/java/com/chronodawn/  # 共通テスト
 │       ├── integration/                # Integration tests (run per loader)
 │       └── unit/                       # Unit tests
 ├── fabric/                             # Fabric固有実装
-│   ├── src/main/java/com/chronosphere/fabric/
-│   │   ├── ChronosphereFabric.java     # Fabric entry point
+│   ├── src/main/java/com/chronodawn/fabric/
+│   │   ├── ChronoDawnFabric.java     # Fabric entry point
 │   │   ├── client/                     # Client initialization (if needed)
 │   │   └── platform/                   # Platform-specific implementations
 │   └── src/main/resources/
 │       ├── fabric.mod.json             # Fabric mod metadata
 │       └── pack.mcmeta
-├── specs/001-chronosphere-mod/         # Design documents
+├── specs/chrono-dawn-mod/         # Design documents
 │   ├── spec.md                         # Feature specification
 │   ├── plan.md                         # Implementation plan
 │   ├── research.md                     # Technology research
@@ -212,16 +211,16 @@ Chronosphere/
 
 #### Task 1.1: Setup Mod Entry Points
 
-**Common Entry Point** (`common/src/main/java/com/chronosphere/Chronosphere.java`):
+**Common Entry Point** (`common/src/main/java/com/chronodawn/ChronoDawn.java`):
 
 ```java
-public class Chronosphere {
-    public static final String MOD_ID = "chronosphere";
+public class ChronoDawn {
+    public static final String MOD_ID = "chronodawn";
     private static final Logger LOGGER = LogUtils.getLogger();
 
     public static void init() {
         // Register common components using Architectury API
-        LOGGER.info("Chronosphere Mod (common) initialized");
+        LOGGER.info("Chrono Dawn Mod (common) initialized");
 
         // Initialize registries
         ModBlocks.register();
@@ -229,18 +228,18 @@ public class Chronosphere {
         ModEntities.register();
 
         // Register event handlers
-        ChronosphereEvents.register();
+        ChronoDawnEvents.register();
     }
 }
 ```
 
-**Fabric Entry Point** (`fabric/src/main/java/com/chronosphere/fabric/ChronosphereFabric.java`):
+**Fabric Entry Point** (`fabric/src/main/java/com/chronodawn/fabric/ChronoDawnFabric.java`):
 
 ```java
-public class ChronosphereFabric implements ModInitializer {
+public class ChronoDawnFabric implements ModInitializer {
     @Override
     public void onInitialize() {
-        Chronosphere.init();
+        Chrono Dawn.init();
         // Fabric-specific initialization
     }
 }
@@ -248,35 +247,35 @@ public class ChronosphereFabric implements ModInitializer {
 
 #### Task 1.2: Create Custom Dimension
 
-**Reference**: `specs/001-chronosphere-mod/data-model.md` (Dimension: Chronosphere)
-**Implementation**: `src/main/java/com/chronosphere/core/dimension/`
+**Reference**: `specs/chrono-dawn-mod/data-model.md` (Dimension: Chrono Dawn)
+**Implementation**: `src/main/java/com/chronodawn/core/dimension/`
 
 **Key Files**:
-- `ChronosphereDimension.java` - ディメンション登録
-- `ChronosphereBiomeProvider.java` - バイオーム生成
+- `ChronoDawnDimension.java` - ディメンション登録
+- `ChronoDawnBiomeProvider.java` - バイオーム生成
 
 **Data Files**:
-- `src/main/resources/data/chronosphere/dimension/chronosphere_dimension.json`
+- `src/main/resources/data/chronodawn/dimension/chronodawn_dimension.json`
 
 #### Task 1.3: Implement Portal System
 
-**Reference**: `specs/001-chronosphere-mod/data-model.md` (Portal System)
+**Reference**: `specs/chrono-dawn-mod/data-model.md` (Portal System)
 **Dependencies**: Custom Portal API Reforged
-**Implementation**: `src/main/java/com/chronosphere/core/portal/`
+**Implementation**: `src/main/java/com/chronodawn/core/portal/`
 
 **Key Files**:
-- `ChronospherePortal.java` - ポータルロジック
+- `ChronoDawnPortal.java` - ポータルロジック
 - `PortalRegistry.java` - ポータル管理
 
 #### Task 1.4: Add Time Distortion Effect
 
-**Reference**: `specs/001-chronosphere-mod/data-model.md` (Time Distortion Effects)
-**Implementation**: `src/main/java/com/chronosphere/events/EntityEventHandler.java`
+**Reference**: `specs/chrono-dawn-mod/data-model.md` (Time Distortion Effects)
+**Implementation**: `src/main/java/com/chronodawn/events/EntityEventHandler.java`
 
 ```java
 @SubscribeEvent
 public void onEntityTick(LivingEvent.LivingTickEvent event) {
-    if (event.getEntity().level().dimension() == CHRONOSPHERE_DIMENSION) {
+    if (event.getEntity().level().dimension() == CHRONO_DAWN_DIMENSION) {
         // Apply Slowness IV to custom mobs
         if (isCustomMob(event.getEntity())) {
             event.getEntity().addEffect(new MobEffectInstance(
@@ -292,67 +291,67 @@ public void onEntityTick(LivingEvent.LivingTickEvent event) {
 #### Task 2.1: Create Base Materials
 
 **Files**:
-- `src/main/java/com/chronosphere/items/base/ClockstonItem.java`
-- `src/main/java/com/chronosphere/blocks/ClockstoneOre.java`
+- `src/main/java/com/chronodawn/items/base/ClockstonItem.java`
+- `src/main/java/com/chronodawn/blocks/ClockstoneOre.java`
 
-**Textures**: `src/main/resources/assets/chronosphere/textures/item/clockstone.png`
+**Textures**: `src/main/resources/assets/chronodawn/textures/item/clockstone.png`
 
 #### Task 2.2: Create Portal Items
 
 **Files**:
-- `src/main/java/com/chronosphere/items/TimeHourglassItem.java`
-- `src/main/java/com/chronosphere/items/PortalStabilizerItem.java`
+- `src/main/java/com/chronodawn/items/TimeHourglassItem.java`
+- `src/main/java/com/chronodawn/items/PortalStabilizerItem.java`
 
 **Recipes**:
-- `src/main/resources/data/chronosphere/recipes/time_hourglass.json`
-- `src/main/resources/data/chronosphere/recipes/portal_stabilizer.json`
+- `src/main/resources/data/chronodawn/recipes/time_hourglass.json`
+- `src/main/resources/data/chronodawn/recipes/portal_stabilizer.json`
 
 ### Phase 3: World Generation (P1)
 
 #### Task 3.1: Generate Structures
 
-**Reference**: `specs/001-chronosphere-mod/data-model.md` (Structures)
-**Implementation**: `src/main/java/com/chronosphere/worldgen/structures/`
+**Reference**: `specs/chrono-dawn-mod/data-model.md` (Structures)
+**Implementation**: `src/main/java/com/chronodawn/worldgen/structures/`
 
 **Structures**:
 - Ancient Ruins (オーバーワールド)
-- Forgotten Library (クロノスフィア)
+- Forgotten Library (クロノドーン)
 
 #### Task 3.2: Add Custom Blocks
 
 **Files**:
-- `src/main/java/com/chronosphere/blocks/ReversingTimeSandstone.java`
-- `src/main/java/com/chronosphere/blocks/UnstableFungus.java`
+- `src/main/java/com/chronodawn/blocks/ReversingTimeSandstone.java`
+- `src/main/java/com/chronodawn/blocks/UnstableFungus.java`
 
 ### Phase 4: Boss Entities (P2-P3)
 
 #### Task 4.1: Implement Time Guardian (中ボス)
 
-**Reference**: `specs/001-chronosphere-mod/data-model.md` (Time Guardian)
-**Implementation**: `src/main/java/com/chronosphere/entities/bosses/TimeGuardianEntity.java`
+**Reference**: `specs/chrono-dawn-mod/data-model.md` (Time Guardian)
+**Implementation**: `src/main/java/com/chronodawn/entities/bosses/TimeGuardianEntity.java`
 
-**Loot Table**: `src/main/resources/data/chronosphere/loot_tables/entities/time_guardian.json`
+**Loot Table**: `src/main/resources/data/chronodawn/loot_tables/entities/time_guardian.json`
 
 #### Task 4.2: Implement Time Tyrant (ラスボス)
 
-**Reference**: `specs/001-chronosphere-mod/data-model.md` (Time Tyrant)
-**Implementation**: `src/main/java/com/chronosphere/entities/bosses/TimeTyrantEntity.java`
+**Reference**: `specs/chrono-dawn-mod/data-model.md` (Time Tyrant)
+**Implementation**: `src/main/java/com/chronodawn/entities/bosses/TimeTyrantEntity.java`
 
-**Loot Table**: `src/main/resources/data/chronosphere/loot_tables/entities/time_tyrant.json`
+**Loot Table**: `src/main/resources/data/chronodawn/loot_tables/entities/time_tyrant.json`
 
 ### Phase 5: Ultimate Artifacts (P3)
 
 #### Task 5.1: Implement Chronoblade
 
-**File**: `src/main/java/com/chronosphere/items/artifacts/ChronobladeItem.java`
-**Recipe**: `src/main/resources/data/chronosphere/recipes/chronoblade.json`
+**File**: `src/main/java/com/chronodawn/items/artifacts/ChronobladeItem.java`
+**Recipe**: `src/main/resources/data/chronodawn/recipes/chronoblade.json`
 
 **Special Effect**: 攻撃命中時、25%の確率でMobの攻撃AIをスキップ
 
 #### Task 5.2: Implement Time Guardian's Mail
 
-**File**: `src/main/java/com/chronosphere/items/artifacts/TimeGuardianMailItem.java`
-**Recipe**: `src/main/resources/data/chronosphere/recipes/time_guardian_mail.json`
+**File**: `src/main/java/com/chronodawn/items/artifacts/TimeGuardianMailItem.java`
+**Recipe**: `src/main/resources/data/chronodawn/recipes/time_guardian_mail.json`
 
 **Special Effect**: 致命的ダメージ時、20%の確率でロールバック
 
@@ -361,7 +360,7 @@ public void onEntityTick(LivingEvent.LivingTickEvent event) {
 ### Unit Testing
 
 **Framework**: JUnit 5 + mcjunitlib
-**Location**: `src/test/java/com/chronosphere/unit/`
+**Location**: `src/test/java/com/chronodawn/unit/`
 
 ```bash
 # Run unit tests
@@ -373,7 +372,7 @@ public void onEntityTick(LivingEvent.LivingTickEvent event) {
 ```java
 @Test
 public void testTimeDistortionEffect() {
-    // Test that custom mobs receive Slowness IV in Chronosphere dimension
+    // Test that custom mobs receive Slowness IV in Chrono Dawn dimension
     // ...
 }
 ```
@@ -381,7 +380,7 @@ public void testTimeDistortionEffect() {
 ### Integration Testing
 
 **Framework**: Minecraft GameTest Framework
-**Location**: `src/test/java/com/chronosphere/integration/`
+**Location**: `src/test/java/com/chronodawn/integration/`
 
 ```bash
 # Run game tests
@@ -410,7 +409,7 @@ public static void testPortalTravel(GameTestHelper helper) {
 3. Test checklist:
    - [ ] Find Ancient Ruins in Overworld
    - [ ] Craft Time Hourglass
-   - [ ] Activate portal and travel to Chronosphere
+   - [ ] Activate portal and travel to Chrono Dawn
    - [ ] Verify portal stops working after entry
    - [ ] Find Forgotten Library
    - [ ] Craft Portal Stabilizer
@@ -424,7 +423,7 @@ public static void testPortalTravel(GameTestHelper helper) {
 **File**: `src/main/resources/log4j2.xml`
 
 ```xml
-<Logger level="debug" name="com.chronosphere"/>
+<Logger level="debug" name="com.chronodawn"/>
 ```
 
 ### Common Issues
@@ -435,11 +434,11 @@ public static void testPortalTravel(GameTestHelper helper) {
 
 #### Issue 2: Dimension not generating
 
-**Solution**: Verify dimension JSON in `data/chronosphere/dimension/`
+**Solution**: Verify dimension JSON in `data/chronodawn/dimension/`
 
 #### Issue 3: Portal not activating
 
-**Solution**: Check portal frame validation logic in `ChronospherePortal.java`
+**Solution**: Check portal frame validation logic in `ChronoDawnPortal.java`
 
 ## Building for Distribution
 
@@ -464,10 +463,10 @@ public static void testPortalTravel(GameTestHelper helper) {
 
 ### Documentation
 
-- **Spec**: `specs/001-chronosphere-mod/spec.md`
-- **Plan**: `specs/001-chronosphere-mod/plan.md`
-- **Research**: `specs/001-chronosphere-mod/research.md`
-- **Data Model**: `specs/001-chronosphere-mod/data-model.md`
+- **Spec**: `specs/chrono-dawn-mod/spec.md`
+- **Plan**: `specs/chrono-dawn-mod/plan.md`
+- **Research**: `specs/chrono-dawn-mod/research.md`
+- **Data Model**: `specs/chrono-dawn-mod/data-model.md`
 
 ### External Resources
 
@@ -504,6 +503,6 @@ public static void testPortalTravel(GameTestHelper helper) {
 
 問題が発生した場合:
 
-1. `specs/001-chronosphere-mod/` 内のドキュメントを確認
+1. `specs/chrono-dawn-mod/` 内のドキュメントを確認
 2. NeoForge公式ドキュメントを参照
 3. プロジェクトのIssueトラッカーで報告

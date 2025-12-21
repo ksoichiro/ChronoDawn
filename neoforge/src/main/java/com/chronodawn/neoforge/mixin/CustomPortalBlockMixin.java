@@ -64,7 +64,7 @@ public class CustomPortalBlockMixin {
 
             // Spawn custom ChronoDawn portal particle
             level.addParticle(
-                ModParticles.CHRONOSPHERE_PORTAL.get(),
+                ModParticles.CHRONO_DAWN_PORTAL.get(),
                 x, y, z,
                 velocityX, velocityY, velocityZ
             );

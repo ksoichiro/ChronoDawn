@@ -74,11 +74,8 @@ Chrono Dawn uses the **Architectury** framework to support both Fabric and NeoFo
 
 ```bash
 # Clone repository
-git clone https://github.com/ksoichiro/Chronosphere.git
-cd Chronosphere
-
-# Checkout development branch
-git checkout 001-chronosphere-mod
+git clone https://github.com/ksoichiro/ChronoDawn.git
+cd ChronoDawn
 
 # Build project (downloads dependencies)
 ./gradlew build
@@ -124,10 +121,10 @@ git checkout 001-chronosphere-mod
 ## Project Structure
 
 ```
-Chronosphere/
+ChronoDawn/
 ├── common/                                 # Common module (~80%)
 │   ├── src/main/java/com/chronodawn/
-│   │   ├── Chronosphere.java               # Common entry point
+│   │   ├── ChronoDawn.java                 # Common entry point
 │   │   ├── blocks/                         # Custom blocks
 │   │   │   ├── ModBlocks.java              # Block registration
 │   │   │   ├── ReversingTimeSandstone.java
@@ -174,7 +171,7 @@ Chronosphere/
 │       └── integration/                    # Integration tests
 ├── fabric/                                 # Fabric module (~10%)
 │   ├── src/main/java/com/chronodawn/fabric/
-│   │   ├── ChronosphereFabric.java         # Fabric entry point
+│   │   ├── ChronoDawnFabric.java           # Fabric entry point
 │   │   ├── client/                         # Client-side initialization
 │   │   ├── platform/                       # Platform implementations
 │   │   └── compat/                         # Fabric-specific compatibility
@@ -185,7 +182,7 @@ Chronosphere/
 │       └── pack.mcmeta
 ├── neoforge/                               # NeoForge module (~10%)
 │   ├── src/main/java/com/chronodawn/neoforge/
-│   │   ├── ChronosphereNeoForge.java       # NeoForge entry point
+│   │   ├── ChronoDawnNeoForge.java         # NeoForge entry point
 │   │   ├── client/                         # Client-side initialization
 │   │   ├── platform/                       # Platform implementations
 │   │   └── compat/                         # NeoForge-specific compatibility
@@ -195,7 +192,7 @@ Chronosphere/
 │       │   └── neoforge.mods.toml          # NeoForge mod metadata
 │       ├── chronodawn-neoforge.mixins.json # NeoForge Mixin config (no refMap)
 │       └── pack.mcmeta
-├── specs/001-chronosphere-mod/             # Design documents
+├── specs/chrono-dawn-mod/                  # Design documents
 │   ├── spec.md                             # Feature specification
 │   ├── plan.md                             # Implementation plan
 │   ├── tasks.md                            # Task tracking
@@ -287,7 +284,7 @@ After building:
 **Location**: `common/src/main/java/com/chronodawn/core/dimension/`
 
 **Key Classes**:
-- `ChronosphereDimension.java`: Dimension registration and key definitions
+- `ChronoDawnDimension.java`: Dimension registration and key definitions
 - Custom biomes in `common/src/main/resources/data/chronodawn/worldgen/biome/`
 
 **Dimension JSON**: `common/src/main/resources/data/chronodawn/dimension/chronodawn_dimension.json`
@@ -328,7 +325,7 @@ After building:
 ```java
 public class EntityEventHandler {
     public static void onEntityTick(ServerLevel level, Entity entity) {
-        if (level.dimension().equals(ChronosphereDimension.DIMENSION_KEY)) {
+        if (level.dimension().equals(ChronoDawnDimension.DIMENSION_KEY)) {
             if (entity instanceof LivingEntity living && isHostileMob(living)) {
                 // Apply Slowness IV to hostile mobs
                 living.addEffect(new MobEffectInstance(
@@ -349,7 +346,7 @@ public class EntityEventHandler {
 
 **Structures**: `common/src/main/java/com/chronodawn/worldgen/structures/`
 - Ancient Ruins (Overworld)
-- Forgotten Library (Chronosphere)
+- Forgotten Library (Chrono Dawn)
 - Master Clock (final dungeon)
 - Phantom Catacombs (maze with boss)
 
@@ -514,7 +511,7 @@ public static void testPortalTravel(GameTestHelper helper) {
 
 2. **Create Test World**: Creative mode recommended
 
-3. **Test Checklist**: See `specs/001-chronosphere-mod/quickstart.md`
+3. **Test Checklist**: See `specs/chrono-dawn-mod/quickstart.md`
 
 ---
 
@@ -608,7 +605,7 @@ docs: improve player guide boss strategies
 5. **Build All Loaders**: `./gradlew build`
 6. **Commit Changes**: Use conventional commits
 7. **Push to Fork**: `git push origin feature/my-feature`
-8. **Create Pull Request**: Target `001-chronosphere-mod` branch
+8. **Create Pull Request**: Target `main` branch
 
 ### Testing Requirements
 
@@ -665,7 +662,7 @@ public class PlatformHelperImpl {
 ```java
 public class ModBlocks {
     public static final DeferredRegister<Block> BLOCKS =
-        DeferredRegister.create(Chronosphere.MOD_ID, Registries.BLOCK);
+        DeferredRegister.create(ChronoDawn.MOD_ID, Registries.BLOCK);
 
     public static final RegistrySupplier<Block> MY_BLOCK = BLOCKS.register(
         "my_block",
@@ -682,7 +679,7 @@ public class ModBlocks {
 
 **Architectury Events**:
 ```java
-public class ChronosphereEvents {
+public class ChronoDawnEvents {
     public static void register() {
         EntityEvent.LIVING_TICK.register((entity) -> {
             if (entity.level() instanceof ServerLevel serverLevel) {
@@ -757,9 +754,9 @@ See `CLAUDE.md` → "Mixin Configuration" for full details.
 
 ### Documentation
 
-- **Project Docs**: `specs/001-chronosphere-mod/`
+- **Project Docs**: `specs/chrono-dawn-mod/`
 - **Design Guidelines**: `CLAUDE.md`
-- **Quickstart Guide**: `specs/001-chronosphere-mod/quickstart.md`
+- **Quickstart Guide**: `specs/chrono-dawn-mod/quickstart.md`
 
 ### External Resources
 
@@ -783,4 +780,4 @@ See `CLAUDE.md` → "Mixin Configuration" for full details.
 
 ---
 
-**For questions or support, open an issue on [GitHub](https://github.com/ksoichiro/Chronosphere/issues).**
+**For questions or support, open an issue on [GitHub](https://github.com/ksoichiro/ChronoDawn/issues).**

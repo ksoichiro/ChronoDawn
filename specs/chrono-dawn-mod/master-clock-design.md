@@ -5,7 +5,7 @@
 
 ## Overview
 
-Master Clockは、クロノスフィアの最終ダンジョンとなる地下宮殿型構造物です。
+Master Clockは、クロノドーンの最終ダンジョンとなる地下宮殿型構造物です。
 ワールドスポーン近くに1つだけ生成され、Time Tyrant（ラスボス）との戦闘の舞台となります。
 
 ## Design Decisions
@@ -27,7 +27,7 @@ Master Clockは、クロノスフィアの最終ダンジョンとなる地下�
     "distance": 80,
     "spread": 20,
     "count": 1,
-    "preferred_biomes": "#chronosphere:has_master_clock"
+    "preferred_biomes": "#chronodawn:has_master_clock"
   }
 }
 ```
@@ -122,16 +122,16 @@ Y-25 to Y-50:  ボス部屋（広大なホール）
 **Template Pool Structure**:
 ```json
 {
-  "name": "chronosphere:master_clock/room_pool",
+  "name": "chronodawn:master_clock/room_pool",
   "elements": [
-    {"element": "chronosphere:master_clock/room_trap_arrows", "weight": 1},
-    {"element": "chronosphere:master_clock/room_spawner", "weight": 1},
-    {"element": "chronosphere:master_clock/room_maze", "weight": 1},
-    {"element": "chronosphere:master_clock/room_puzzle_redstone", "weight": 1},
-    {"element": "chronosphere:master_clock/room_lava", "weight": 1},
-    {"element": "chronosphere:master_clock/room_time_puzzle", "weight": 1},
-    {"element": "chronosphere:master_clock/room_guardian_arena", "weight": 1},
-    {"element": "chronosphere:master_clock/room_rest", "weight": 1}
+    {"element": "chronodawn:master_clock/room_trap_arrows", "weight": 1},
+    {"element": "chronodawn:master_clock/room_spawner", "weight": 1},
+    {"element": "chronodawn:master_clock/room_maze", "weight": 1},
+    {"element": "chronodawn:master_clock/room_puzzle_redstone", "weight": 1},
+    {"element": "chronodawn:master_clock/room_lava", "weight": 1},
+    {"element": "chronodawn:master_clock/room_time_puzzle", "weight": 1},
+    {"element": "chronodawn:master_clock/room_guardian_arena", "weight": 1},
+    {"element": "chronodawn:master_clock/room_rest", "weight": 1}
   ]
 }
 ```
@@ -242,7 +242,7 @@ Time Tyrant戦闘
 
 #### NBT Structures
 ```
-common/src/main/resources/data/chronosphere/structure/
+common/src/main/resources/data/chronodawn/structure/
   ├─ master_clock_entrance.nbt          (15x10x15)
   ├─ master_clock_room_trap_arrows.nbt  (15x8x15)
   ├─ master_clock_room_spawner.nbt      (17x8x17)
@@ -257,7 +257,7 @@ common/src/main/resources/data/chronosphere/structure/
 
 #### JSON Configurations
 ```
-common/src/main/resources/data/chronosphere/worldgen/
+common/src/main/resources/data/chronodawn/worldgen/
   ├─ template_pool/master_clock/
   │   ├─ entrance_pool.json
   │   ├─ room_pool.json
@@ -272,7 +272,7 @@ common/src/main/resources/data/chronosphere/worldgen/
 
 #### Java Classes
 ```
-common/src/main/java/com/chronosphere/
+common/src/main/java/com/chronodawn/
   ├─ items/quest/
   │   └─ AncientGearItem.java
   └─ events/
@@ -287,7 +287,7 @@ common/src/main/java/com/chronosphere/
   "elements": [
     {
       "element": {
-        "location": "chronosphere:master_clock/entrance",
+        "location": "chronodawn:master_clock/entrance",
         "processors": "minecraft:empty",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"
@@ -302,14 +302,14 @@ common/src/main/java/com/chronosphere/
 ```json
 {
   "elements": [
-    {"element": "chronosphere:master_clock/room_trap_arrows", "weight": 1},
-    {"element": "chronosphere:master_clock/room_spawner", "weight": 1},
-    {"element": "chronosphere:master_clock/room_maze", "weight": 1},
-    {"element": "chronosphere:master_clock/room_puzzle_redstone", "weight": 1},
-    {"element": "chronosphere:master_clock/room_lava", "weight": 1},
-    {"element": "chronosphere:master_clock/room_time_puzzle", "weight": 1},
-    {"element": "chronosphere:master_clock/room_guardian_arena", "weight": 1},
-    {"element": "chronosphere:master_clock/room_rest", "weight": 1}
+    {"element": "chronodawn:master_clock/room_trap_arrows", "weight": 1},
+    {"element": "chronodawn:master_clock/room_spawner", "weight": 1},
+    {"element": "chronodawn:master_clock/room_maze", "weight": 1},
+    {"element": "chronodawn:master_clock/room_puzzle_redstone", "weight": 1},
+    {"element": "chronodawn:master_clock/room_lava", "weight": 1},
+    {"element": "chronodawn:master_clock/room_time_puzzle", "weight": 1},
+    {"element": "chronodawn:master_clock/room_guardian_arena", "weight": 1},
+    {"element": "chronodawn:master_clock/room_rest", "weight": 1}
   ]
 }
 ```
@@ -372,4 +372,4 @@ public void testAncientGearsCollection() {
 
 - **Minecraft Structures**: Stronghold (concentric_rings), Ancient City (Jigsaw)
 - **Desert Clock Tower**: 既存実装（21x50x21, NBT+JSON）
-- **Reversing Time Sandstone**: common/src/main/java/com/chronosphere/blocks/ReversingTimeSandstone.java
+- **Reversing Time Sandstone**: common/src/main/java/com/chronodawn/blocks/ReversingTimeSandstone.java

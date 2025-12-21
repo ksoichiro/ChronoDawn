@@ -34,7 +34,7 @@ Simply describe what you want to do (e.g., "I want to update Minecraft to 1.21.2
 ---
 
 ## Active Technologies
-- Java 21 (Minecraft Java Edition 1.21.1) + NeoForge 21.1.x, Fabric Loader, mcjunitlib (001-chronosphere-mod)
+- Java 21 (Minecraft Java Edition 1.21.1) + NeoForge 21.1.x, Fabric Loader, mcjunitlib
 - Custom Portal API 0.0.1-beta66-1.21 (Fabric) - for custom portal implementation
 
 ## Project Structure
@@ -50,13 +50,13 @@ tests/
 Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 
 ## Recent Changes
-- 001-chronosphere-mod: Added Java 21 (Minecraft Java Edition 1.21.1) + NeoForge 21.1.x, mcjunitlib
-- 2025-10-23: Migrated to Groovy DSL and Mojang mappings for Minecraft 1.21.1 compatibility
-- 2025-10-24: Implemented Time Distortion Effect (Slowness IV for hostile mobs in Chronosphere)
-- 2025-10-24: Added Custom Portal API 0.0.1-beta66-1.21 dependency for future portal implementation
-- 2025-10-26: **CRITICAL DESIGN DECISION**: Respawn mechanics follow Minecraft standard (End-like), not custom logic (see spec.md "Game Design Philosophy")
-- 2025-10-27: Implemented Time Wood tree worldgen with custom blocks (Log, Leaves, Planks, Sapling)
+- 2025-12-21: Rebranded mod to "Chrono Dawn", renamed directory from `001-chronosphere-mod` to `chrono-dawn-mod`
 - 2025-10-27: Fixed leaves decay logic using minecraft:logs tag and distance tracking (T079-T080)
+- 2025-10-27: Implemented Time Wood tree worldgen with custom blocks (Log, Leaves, Planks, Sapling)
+- 2025-10-26: **CRITICAL DESIGN DECISION**: Respawn mechanics follow Minecraft standard (End-like), not custom logic (see spec.md "Game Design Philosophy")
+- 2025-10-24: Added Custom Portal API 0.0.1-beta66-1.21 dependency for future portal implementation
+- 2025-10-24: Implemented Time Distortion Effect (Slowness IV for hostile mobs in Chrono Dawn dimension)
+- 2025-10-23: Migrated to Groovy DSL and Mojang mappings for Minecraft 1.21.1 compatibility
 
 ## Build Configuration
 - **Build DSL**: Groovy DSL (not Kotlin DSL) - for compatibility with Architectury Loom 1.11-SNAPSHOT
@@ -88,7 +88,7 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 ## Workflow Guidelines
 
 ### Research and Investigation
-- **Document Research Results**: When conducting research or investigation for future tasks, always save findings to appropriate files (e.g., `specs/001-chronosphere-mod/research.md`) rather than keeping them only in session conversation
+- **Document Research Results**: When conducting research or investigation for future tasks, always save findings to appropriate files (e.g., `specs/chrono-dawn-mod/research.md`) rather than keeping them only in session conversation
 - **Add Related Tasks**: After completing research, add corresponding tasks to `tasks.md` with clear implementation steps
 - **Cross-Reference**: Link research decisions to related task IDs for traceability
 
@@ -111,7 +111,7 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 ## Critical Game Design Decisions
 
 ### Respawn Mechanics (2025-10-26)
-**Decision**: Chronosphere follows Minecraft's standard respawn behavior (like End dimension)
+**Decision**: Chrono Dawn follows Minecraft's standard respawn behavior (like End dimension)
 - Players respawn at bed/respawn anchor, or world spawn if none set
 - Portal Stabilizer does NOT affect respawn location
 - Portal Stabilizer only makes portal bidirectional (one-way → two-way)
@@ -119,7 +119,7 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 
 **Rationale**: Maintains tension (one-way portal) without excessive difficulty (can always escape)
 
-**See**: `specs/001-chronosphere-mod/spec.md` → "Game Design Philosophy" section for full details
+**See**: `specs/chrono-dawn-mod/spec.md` → "Game Design Philosophy" section for full details
 
 ## Structure Worldgen Guidelines
 

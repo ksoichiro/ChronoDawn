@@ -1,4 +1,4 @@
-# Research Findings: Chronosphere Mod
+# Research Findings: Chrono Dawn Mod
 
 ## Decision 1: Minecraft Version
 
@@ -183,25 +183,25 @@ For a mod with custom dimensions, boss fights, item effects, and dimension trave
 project/
 ├── common/           # ローダー非依存コード（共通ロジック）
 │   ├── src/main/java/
-│   │   └── com/chronosphere/
+│   │   └── com/chronodawn/
 │   │       ├── core/           # ディメンション、ポータルロジック
 │   │       ├── blocks/         # ブロック定義
 │   │       ├── items/          # アイテム定義
 │   │       ├── entities/       # エンティティ定義
 │   │       └── platform/       # @ExpectPlatform抽象化
 │   └── src/main/resources/
-│       └── data/chronosphere/  # 共通データパック
+│       └── data/chronodawn/  # 共通データパック
 ├── fabric/           # Fabric固有実装
 │   ├── src/main/java/
-│   │   └── com/chronosphere/fabric/
-│   │       ├── ChronosphereFabric.java
+│   │   └── com/chronodawn/fabric/
+│   │       ├── ChronoDawnFabric.java
 │   │       └── platform/       # @ExpectPlatform実装
 │   └── src/main/resources/
 │       └── fabric.mod.json
 ├── neoforge/         # NeoForge固有実装
 │   ├── src/main/java/
-│   │   └── com/chronosphere/neoforge/
-│   │       ├── ChronosphereNeoForge.java
+│   │   └── com/chronodawn/neoforge/
+│   │       ├── ChronoDawnNeoForge.java
 │   │       └── platform/       # @ExpectPlatform実装
 │   └── src/main/resources/
 │       └── META-INF/neoforge.mods.toml
@@ -245,7 +245,7 @@ project/
 3. **@ExpectPlatformパターンの活用**:
    ```java
    // common: インターフェース定義
-   public class ChronospherePlatform {
+   public class ChronoDawnPlatform {
        @ExpectPlatform
        public static Path getConfigDirectory() {
            throw new AssertionError();
@@ -253,7 +253,7 @@ project/
    }
 
    // neoforge: 実装
-   public class ChronospherePlatformImpl {
+   public class ChronoDawnPlatformImpl {
        public static Path getConfigDirectory() {
            return NeoForgeLoader.getInstance()
                .getConfigDirectory().toPath();
@@ -261,7 +261,7 @@ project/
    }
 
    // fabric: 実装
-   public class ChronospherePlatformImpl {
+   public class ChronoDawnPlatformImpl {
        public static Path getConfigDirectory() {
            return FabricLoader.getInstance()
                .getConfigDir();
@@ -320,7 +320,7 @@ Testing Library: mcjunitlib for JUnit integration
 **Rationale**:
 
 ### Design Goal
-- **Visual Differentiation**: Distinguish Chronosphere portal from all other portals (Nether: purple, End: green, Aether mod: blue)
+- **Visual Differentiation**: Distinguish Chrono Dawn portal from all other portals (Nether: purple, End: green, Aether mod: blue)
 - **Thematic Consistency**: Orange/gold color evokes clock hands, brass gears, and ancient timepieces
 - **Single Color Application**: One RGB value controls all portal visual elements (simplifies customization)
 
@@ -329,8 +329,8 @@ Testing Library: mcjunitlib for JUnit integration
 **Custom Portal API Integration**:
 - Both Fabric and NeoForge versions use Custom Portal API's `.tintColor(r, g, b)` method
 - Located in loader-specific modules:
-  - Fabric: `fabric/src/main/java/com/chronosphere/fabric/compat/CustomPortalFabric.java`
-  - NeoForge: `neoforge/src/main/java/com/chronosphere/neoforge/compat/CustomPortalNeoForge.java`
+  - Fabric: `fabric/src/main/java/com/chronodawn/fabric/compat/CustomPortalFabric.java`
+  - NeoForge: `neoforge/src/main/java/com/chronodawn/neoforge/compat/CustomPortalNeoForge.java`
 
 **Initial Implementation** (CustomPortalFabric.java - Original):
 ```java
@@ -416,7 +416,7 @@ All three elements use the same RGB color values, ensuring consistent theming.
 1. Build structure in creative mode in appropriate biome/dimension
 2. Place Structure Block at corner position (lower corner recommended)
 3. Set block to **Save mode** (click [D] button until [S] appears)
-4. Enter structure name using namespace format: `chronosphere:structure_name`
+4. Enter structure name using namespace format: `chronodawn:structure_name`
 
 **Step 2: Configuration**
 - **Relative Position**: Offset from Structure Block to opposite corner (auto-detect with Corner mode)
@@ -425,12 +425,12 @@ All three elements use the same RGB color values, ensuring consistent theming.
 - **Remove blocks**: Disable to preserve full structure
 
 **Step 3: Save Location**
-- Saved to: `.minecraft/saves/(WorldName)/generated/chronosphere/structures/`
+- Saved to: `.minecraft/saves/(WorldName)/generated/chronodawn/structures/`
 - File format: `structure_name.nbt` (binary NBT format)
-- Copy file to mod resources: `common/src/main/resources/data/chronosphere/structures/`
+- Copy file to mod resources: `common/src/main/resources/data/chronodawn/structures/`
 
 **Step 4: Worldgen Integration**
-Structures require 3 JSON files in `common/src/main/resources/data/chronosphere/worldgen/`:
+Structures require 3 JSON files in `common/src/main/resources/data/chronodawn/worldgen/`:
 
 1. **template_pool/[name].json**: Defines which NBT to place
    - `elements[].location`: Path to NBT file
@@ -462,7 +462,7 @@ Structures require 3 JSON files in `common/src/main/resources/data/chronosphere/
 - **Generation**: Overworld, 0.1% per chunk (rare but discoverable)
 
 **Forgotten Library** (T070):
-- **Location**: Chronosphere surface, any biome
+- **Location**: Chrono Dawn surface, any biome
 - **Size**: ~35×25×35 blocks (larger than Ancient Ruins)
 - **Theme**: Ancient library with bookshelves, reading areas, decay
 - **Required Elements**:
@@ -470,7 +470,7 @@ Structures require 3 JSON files in `common/src/main/resources/data/chronosphere/
   - Multiple bookshelves (decoration, ~20-30)
   - Chests with random loot
   - Decorative elements: Crafting tables, enchanting table, candles
-- **Generation**: Chronosphere, 0.5% per chunk (higher than Ancient Ruins)
+- **Generation**: Chrono Dawn, 0.5% per chunk (higher than Ancient Ruins)
 
 ### Implementation Strategy
 
@@ -492,7 +492,7 @@ Structures require 3 JSON files in `common/src/main/resources/data/chronosphere/
 
 **Loot Tables**:
 - Blueprints are Written Books with custom text (recipe instructions)
-- Loot tables defined in `data/chronosphere/loot_tables/chests/`
+- Loot tables defined in `data/chronodawn/loot_tables/chests/`
 - Reference: `ancient_ruins.json`, `forgotten_library.json`
 
 **Worldgen Performance**:
@@ -530,10 +530,10 @@ Structures require 3 JSON files in `common/src/main/resources/data/chronosphere/
 
 ## Decision 7: Day-Night Cycle vs Fixed Time
 
-**Current Status**: Chronosphere dimension has day-night cycle (`"fixed_time": false` in dimension_type.json)
+**Current Status**: Chrono Dawn dimension has day-night cycle (`"fixed_time": false` in dimension_type.json)
 
 **Background**:
-During gameplay testing, user observed that Chronosphere has a day-night cycle, unlike major dimension mods (Twilight Forest, Aether, Blue Skies) which use fixed time. This raises design questions about how time mechanics impact gameplay and thematic consistency.
+During gameplay testing, user observed that Chrono Dawn has a day-night cycle, unlike major dimension mods (Twilight Forest, Aether, Blue Skies) which use fixed time. This raises design questions about how time mechanics impact gameplay and thematic consistency.
 
 ### Analysis: Major Dimension Mods' Time Design
 
@@ -570,7 +570,7 @@ During gameplay testing, user observed that Chronosphere has a day-night cycle, 
 4. **Bed Utility**: Beds serve their normal function (skip night)
 5. **Dynamic Atmosphere**: Sunrises/sunsets add visual variety
 
-### Thematic Considerations for Chronosphere
+### Thematic Considerations for Chrono Dawn
 
 **Mod Theme**: Time manipulation and temporal mechanics
 
@@ -669,7 +669,7 @@ During gameplay testing, user observed that Chronosphere has a day-night cycle, 
 3. Future implementation of sky color unlock mechanic tied to boss defeat
 
 **Design Questions to Consider**:
-1. Should Chronosphere feel **safe** (eternal day) or **challenging** (night spawns)?
+1. Should Chrono Dawn feel **safe** (eternal day) or **challenging** (night spawns)?
 2. Does "time manipulation" mean time is **active** (flowing) or **controlled** (frozen)?
 3. Should time mechanics be **atmospheric** (fixed time for mood) or **mechanical** (cycle affects gameplay)?
 4. Is the Time Distortion Effect (Slowness IV) sufficient challenge, or do we want nighttime danger too?
@@ -678,7 +678,7 @@ During gameplay testing, user observed that Chronosphere has a day-night cycle, 
 
 **To Change to Fixed Time**:
 ```json
-// chronosphere.json
+// chronodawn.json
 "fixed_time": 6000,  // Eternal noon
 // OR
 "fixed_time": 13000, // Eternal sunset/dusk (recommended for "time frozen at twilight" feel)
@@ -705,13 +705,13 @@ During gameplay testing, user observed that Chronosphere has a day-night cycle, 
 | Aether | Fixed day → Unlockable | Progression mechanic (boss reward) |
 | Blue Skies (Everbright) | Fixed day | Contrasting paired dimensions |
 | Blue Skies (Everdawn) | Fixed dusk | Temperature/visual theming |
-| **Chronosphere (current)** | **Day-night cycle** | **Undecided** |
+| **Chrono Dawn (current)** | **Day-night cycle** | **Undecided** |
 
-**Related Configuration**: `common/src/main/resources/data/chronosphere/dimension_type/chronosphere.json`
+**Related Configuration**: `common/src/main/resources/data/chronodawn/dimension_type/chronodawn.json`
 
 ## Decision 8: Multi-Noise Biome Generation for Multiple Biomes
 
-**Current Status**: Chronosphere uses fixed biome source (`"type": "minecraft:fixed"`) with single `chronosphere_plains` biome, causing poor ocean/land visibility
+**Current Status**: Chrono Dawn uses fixed biome source (`"type": "minecraft:fixed"`) with single `chronodawn_plains` biome, causing poor ocean/land visibility
 
 **Background**:
 Players cannot distinguish between ocean and land because both use the same biome. The dimension needs multiple biomes (ocean, plains, forest) with distinct characteristics.
@@ -771,11 +771,11 @@ Players cannot distinguish between ocean and land because both use the same biom
 }
 ```
 
-### Biome Design for Chronosphere
+### Biome Design for Chrono Dawn
 
 **Planned Biomes**:
 
-1. **chronosphere_ocean**:
+1. **chronodawn_ocean**:
    - **Purpose**: Ocean biome with clear water visibility
    - **Parameters**:
      - `continentalness`: [-1.0, -0.4] (deep ocean/ocean range)
@@ -785,7 +785,7 @@ Players cannot distinguish between ocean and land because both use the same biom
    - **Visual**: Custom water_color for visibility, no tree features
    - **Spawns**: Water creatures (fish, squid)
 
-2. **chronosphere_plains** (existing, will update):
+2. **chronodawn_plains** (existing, will update):
    - **Purpose**: Flat land with sparse Time Wood trees
    - **Parameters**:
      - `continentalness`: [-0.1, 0.3] (coast to low inland)
@@ -795,7 +795,7 @@ Players cannot distinguish between ocean and land because both use the same biom
    - **Visual**: Existing grey sky, existing tree density
    - **Spawns**: Basic hostile/neutral mobs
 
-3. **chronosphere_forest**:
+3. **chronodawn_forest**:
    - **Purpose**: Dense forest with high Time Wood tree concentration
    - **Parameters**:
      - `continentalness`: [-0.1, 0.3] (same as plains for smooth transition)
@@ -808,19 +808,19 @@ Players cannot distinguish between ocean and land because both use the same biom
 ### Implementation Strategy
 
 **Phase 1: Biome JSON Creation** (T088e-f):
-- Create `chronosphere_ocean.json` with appropriate water_color and empty tree features
-- Create `chronosphere_forest.json` with increased tree placement frequency
+- Create `chronodawn_ocean.json` with appropriate water_color and empty tree features
+- Create `chronodawn_forest.json` with increased tree placement frequency
 
 **Phase 2: Multi-Noise Configuration** (T088g):
-- Create `multi_noise_biome_source_parameter_list/chronosphere.json`
+- Create `multi_noise_biome_source_parameter_list/chronodawn.json`
 - Configure climate parameters for ocean/plains/forest distribution
 
 **Phase 3: Dimension Update** (T088h):
-- Update `dimension/chronosphere.json` to use:
+- Update `dimension/chronodawn.json` to use:
   ```json
   "biome_source": {
     "type": "minecraft:multi_noise",
-    "preset": "chronosphere:chronosphere"
+    "preset": "chronodawn:chronodawn"
   }
   ```
 
@@ -856,10 +856,10 @@ Players cannot distinguish between ocean and land because both use the same biom
 **Related Tasks**: T088d-i (Multiple Biomes Enhancement)
 
 **Related Files**:
-- `data/chronosphere/worldgen/biome/chronosphere_ocean.json`
-- `data/chronosphere/worldgen/biome/chronosphere_forest.json`
-- `data/chronosphere/worldgen/multi_noise_biome_source_parameter_list/chronosphere.json`
-- `data/chronosphere/dimension/chronosphere.json`
+- `data/chronodawn/worldgen/biome/chronodawn_ocean.json`
+- `data/chronodawn/worldgen/biome/chronodawn_forest.json`
+- `data/chronodawn/worldgen/multi_noise_biome_source_parameter_list/chronodawn.json`
+- `data/chronodawn/dimension/chronodawn.json`
 
 ## Decision 9: Decorative Terrain Features
 
@@ -935,7 +935,7 @@ After implementing multiple biomes, vegetation, and mob spawning, the terrain st
       "to_place": {
         "type": "minecraft:simple_state_provider",
         "state": {
-          "Name": "chronosphere:time_wood_log",
+          "Name": "chronodawn:time_wood_log",
           "Properties": {
             "axis": "x"
           }
@@ -957,31 +957,31 @@ After implementing multiple biomes, vegetation, and mob spawning, the terrain st
 - **Fallen Logs**: 0-1 per chunk (rare, adds occasional surprise)
 - **Gravel Disks**: 1-3 per chunk (more common, adds texture variety)
 
-### Design for Chronosphere
+### Design for Chrono Dawn
 
 **Boulder Variant**:
 - **Block**: Mossy Cobblestone (suggests age/abandonment)
-- **Biomes**: chronosphere_plains, chronosphere_forest
+- **Biomes**: chronodawn_plains, chronodawn_forest
 - **Placement**: 0.05 probability per chunk (5% chance = 1 every 20 chunks)
 
 **Fallen Log Variant**:
 - **Block**: Time Wood Log (horizontal orientation)
-- **Biomes**: chronosphere_forest only
+- **Biomes**: chronodawn_forest only
 - **Placement**: 0.03 probability per chunk (3% chance = 1 every 33 chunks)
 
 **Gravel Disk Variant**:
 - **Block**: Gravel
-- **Biomes**: chronosphere_plains (creates visual breaks in grass)
+- **Biomes**: chronodawn_plains (creates visual breaks in grass)
 - **Placement**: 0.1 probability per chunk (10% chance = 2 every 20 chunks)
 
 ### Implementation Files Required
 
-1. **Configured Features** (`data/chronosphere/worldgen/configured_feature/`):
+1. **Configured Features** (`data/chronodawn/worldgen/configured_feature/`):
    - `boulder.json` - Forest rock feature with mossy cobblestone
    - `fallen_log.json` - Simple block feature with horizontal Time Wood Log
    - `gravel_disk.json` - Disk feature for gravel patches
 
-2. **Placed Features** (`data/chronosphere/worldgen/placed_feature/`):
+2. **Placed Features** (`data/chronodawn/worldgen/placed_feature/`):
    - `boulder_placed.json` - Rare placement with count and probability
    - `fallen_log_placed.json` - Rare placement in forests
    - `gravel_disk_placed.json` - Common placement in plains
@@ -1041,34 +1041,34 @@ After implementing multiple biomes, vegetation, and mob spawning, the terrain st
 **Related Tasks**: T088ad-ai (Decorative Terrain Features - Completed), T088ai-a (Future: Straight fallen logs)
 
 **Related Files**:
-- `data/chronosphere/worldgen/configured_feature/boulder.json`
-- `data/chronosphere/worldgen/configured_feature/fallen_log.json`
-- `data/chronosphere/worldgen/configured_feature/gravel_disk.json`
-- `data/chronosphere/worldgen/placed_feature/boulder_placed.json`
-- `data/chronosphere/worldgen/placed_feature/fallen_log_placed.json`
-- `data/chronosphere/worldgen/placed_feature/gravel_disk_placed.json`
-- `data/chronosphere/worldgen/biome/chronosphere_plains.json` (added boulder, gravel_disk)
-- `data/chronosphere/worldgen/biome/chronosphere_forest.json` (added boulder, fallen_log)
-- `data/chronosphere/worldgen/multi_noise_biome_source_parameter_list/chronosphere.json` (fixed continentalness ranges)
+- `data/chronodawn/worldgen/configured_feature/boulder.json`
+- `data/chronodawn/worldgen/configured_feature/fallen_log.json`
+- `data/chronodawn/worldgen/configured_feature/gravel_disk.json`
+- `data/chronodawn/worldgen/placed_feature/boulder_placed.json`
+- `data/chronodawn/worldgen/placed_feature/fallen_log_placed.json`
+- `data/chronodawn/worldgen/placed_feature/gravel_disk_placed.json`
+- `data/chronodawn/worldgen/biome/chronodawn_plains.json` (added boulder, gravel_disk)
+- `data/chronodawn/worldgen/biome/chronodawn_forest.json` (added boulder, fallen_log)
+- `data/chronodawn/worldgen/multi_noise_biome_source_parameter_list/chronodawn.json` (fixed continentalness ranges)
 
 ## Decision 10: Custom Portal API - Portal Placement Control
 
-**Current Issue**: Portals spawning on Chronosphere side sometimes appear on top of trees instead of ground level
+**Current Issue**: Portals spawning on Chrono Dawn side sometimes appear on top of trees instead of ground level
 
 **Background**:
-When players travel from Overworld to Chronosphere via portal, Custom Portal API searches for suitable return portal location. The default behavior can place portals on top of trees or other tall structures, making them inaccessible.
+When players travel from Overworld to Chrono Dawn via portal, Custom Portal API searches for suitable return portal location. The default behavior can place portals on top of trees or other tall structures, making them inaccessible.
 
 ### Custom Portal API Methods Available (Version 0.0.1-beta66-1.21)
 
 **Portal Placement Y-Range Control**:
 
 1. **`setPortalSearchYRange(int bottomY, int topY)`**
-   - Sets Y-level range for searching valid location to create **destination portal** (Chronosphere-side portal when traveling FROM Overworld)
+   - Sets Y-level range for searching valid location to create **destination portal** (Chrono Dawn-side portal when traveling FROM Overworld)
    - Default: Uses world's bottom and top bounds
    - Returns: `CustomPortalBuilder` (for method chaining)
 
 2. **`setReturnPortalSearchYRange(int bottomY, int topY)`**
-   - Sets Y-level range for searching valid location to create **return portal** (Overworld-side portal when traveling FROM Chronosphere)
+   - Sets Y-level range for searching valid location to create **return portal** (Overworld-side portal when traveling FROM Chrono Dawn)
    - Default: Uses world's bottom and top bounds
    - Returns: `CustomPortalBuilder` (for method chaining)
 
@@ -1103,7 +1103,7 @@ CustomPortalBuilder.beginPortal()
 ```
 
 **Rationale**:
-- Chronosphere has fixed time at noon (Y=6000 ticks), making visibility less of an issue
+- Chrono Dawn has fixed time at noon (Y=6000 ticks), making visibility less of an issue
 - Restricting Y-range to 60-120 ensures portals spawn on ground level, not tree canopy
 - Range accounts for terrain variation (plains Y=64-80, hills Y=80-120)
 - Players can still build portals at any Y-level; this only affects **automatic portal creation** when traveling without existing portal
@@ -1145,10 +1145,10 @@ Implement custom portal placement logic using Architectury Events:
 ### Implementation Impact
 
 **Immediate Change (Option A)**:
-- File: `fabric/src/main/java/com/chronosphere/fabric/compat/CustomPortalFabric.java`
+- File: `fabric/src/main/java/com/chronodawn/fabric/compat/CustomPortalFabric.java`
 - Change: Add `.setPortalSearchYRange(60, 120)` to builder chain
-- Testing: Enter Chronosphere multiple times in forest biome, verify portal spawns on ground
-- NeoForge: Same change needed in `neoforge/src/main/java/com/chronosphere/neoforge/compat/CustomPortalNeoForge.java` (T049)
+- Testing: Enter Chrono Dawn multiple times in forest biome, verify portal spawns on ground
+- NeoForge: Same change needed in `neoforge/src/main/java/com/chronodawn/neoforge/compat/CustomPortalNeoForge.java` (T049)
 
 **Y-Range Selection Rationale**:
 - Bottom Y=60: Slightly below typical ground level (Y=64), allows for valley spawns
@@ -1157,7 +1157,7 @@ Implement custom portal placement logic using Architectury Events:
 
 **Testing Plan**:
 1. Create portal in Overworld near Time Wood forest
-2. Enter Chronosphere
+2. Enter Chrono Dawn
 3. Verify return portal spawns on ground level, not on tree canopy
 4. Test in multiple biomes (plains, forest, ocean shore)
 5. Confirm portal remains accessible and functional
@@ -1167,7 +1167,7 @@ Implement custom portal placement logic using Architectury Events:
 - Only affects automatic portal creation during initial travel
 - May need adjustment if custom mountains/valleys added in future biomes
 
-**Related Tasks**: T049a (Fix Chronosphere-side portal placement)
+**Related Tasks**: T049a (Fix Chrono Dawn-side portal placement)
 
 **References**:
 - Custom Portal API GitHub: https://github.com/kyrptonaught/customportalapi
@@ -1372,7 +1372,7 @@ SpawnData: { entity: { id: "minecraft:zombie" } }
   - Available spawn space (air blocks)
   - Light level (for some mob types)
 - Slowness affects **movement speed**, not spawn eligibility
-- Chronosphere's Time Distortion Effect applies Slowness IV to hostile mobs every tick, but this happens post-spawn
+- Chrono Dawn's Time Distortion Effect applies Slowness IV to hostile mobs every tick, but this happens post-spawn
 
 **Implementation Reference** (`EntityEventHandler.java`):
 ```java
@@ -1557,9 +1557,9 @@ structure.write_file("structure_fixed.nbt")
 **Most Common Mistake**: Forgetting to wrap entity data in `entity:{}` compound in 1.21+ format.
 
 **Related Files**:
-- Structure NBT files: `common/src/main/resources/data/chronosphere/structure/*.nbt`
-- Entity event handler: `common/src/main/java/com/chronosphere/events/EntityEventHandler.java`
-- Time Distortion Effect: `common/src/main/java/com/chronosphere/core/time/TimeDistortionEffect.java`
+- Structure NBT files: `common/src/main/resources/data/chronodawn/structure/*.nbt`
+- Entity event handler: `common/src/main/java/com/chronodawn/events/EntityEventHandler.java`
+- Time Distortion Effect: `common/src/main/java/com/chronodawn/core/time/TimeDistortionEffect.java`
 
 **References**:
 - Minecraft Wiki - Block Entity Format: https://minecraft.wiki/w/Block_entity_format
@@ -1818,7 +1818,7 @@ structure.save('desert_clock_tower_fixed.nbt')
 **Step-by-Step Process**:
 
 1. **Verify Current Issue**:
-   - Test Desert Clock Tower in-game: `/place structure chronosphere:desert_clock_tower`
+   - Test Desert Clock Tower in-game: `/place structure chronodawn:desert_clock_tower`
    - Approach spawner within 16 blocks
    - Check if flames appear and mobs spawn
 
@@ -1832,7 +1832,7 @@ structure.save('desert_clock_tower_fixed.nbt')
      - Replace `desert_clock_tower.nbt` file
 
    - **Option B**: Edit NBT with NBTExplorer
-     - Open `common/src/main/resources/data/chronosphere/structure/desert_clock_tower.nbt`
+     - Open `common/src/main/resources/data/chronodawn/structure/desert_clock_tower.nbt`
      - Find spawner blocks in `blocks[]` array
      - Update `SpawnData` and `SpawnPotentials` to 1.21+ format
      - Save and test
@@ -1844,9 +1844,9 @@ structure.save('desert_clock_tower_fixed.nbt')
 
 ### Related Files
 
-- Structure NBT: `common/src/main/resources/data/chronosphere/structure/desert_clock_tower.nbt`
-- Entity Event Handler: `common/src/main/java/com/chronosphere/events/EntityEventHandler.java`
-- Time Distortion Effect: `common/src/main/java/com/chronosphere/core/time/TimeDistortionEffect.java`
+- Structure NBT: `common/src/main/resources/data/chronodawn/structure/desert_clock_tower.nbt`
+- Entity Event Handler: `common/src/main/java/com/chronodawn/events/EntityEventHandler.java`
+- Time Distortion Effect: `common/src/main/java/com/chronodawn/core/time/TimeDistortionEffect.java`
 
 ### Final Design Decision: Abandoning Spawners in Desert Clock Tower
 
@@ -1966,8 +1966,8 @@ InteractionEvent.RIGHT_CLICK_BLOCK.register((player, hand, pos, face) -> {
         return EventResult.pass();
     }
 
-    // Only restrict in Chronosphere dimension
-    if (!player.level().dimension().equals(ModDimensions.CHRONOSPHERE_DIMENSION)) {
+    // Only restrict in Chrono Dawn dimension
+    if (!player.level().dimension().equals(ModDimensions.CHRONO_DAWN_DIMENSION)) {
         return EventResult.pass();
     }
 
@@ -1979,11 +1979,11 @@ InteractionEvent.RIGHT_CLICK_BLOCK.register((player, hand, pos, face) -> {
 
     // Check global state: are portals unstable?
     if (player.level() instanceof ServerLevel serverLevel) {
-        ChronosphereGlobalState globalState = ChronosphereGlobalState.get(serverLevel.getServer());
+        ChronoDawnGlobalState globalState = ChronoDawnGlobalState.get(serverLevel.getServer());
         if (globalState.arePortalsUnstable()) {
             // Display warning message
             player.displayClientMessage(
-                Component.translatable("item.chronosphere.time_hourglass.portal_deactivated"),
+                Component.translatable("item.chronodawn.time_hourglass.portal_deactivated"),
                 true
             );
         }
@@ -2011,11 +2011,11 @@ InteractionEvent.RIGHT_CLICK_BLOCK.register((player, hand, pos, face) -> {
 
     // Check global state: are portals unstable?
     if (player.level() instanceof ServerLevel serverLevel) {
-        ChronosphereGlobalState globalState = ChronosphereGlobalState.get(serverLevel.getServer());
+        ChronoDawnGlobalState globalState = ChronoDawnGlobalState.get(serverLevel.getServer());
         if (globalState.arePortalsUnstable()) {
             // Display warning and PREVENT consumption
             player.displayClientMessage(
-                Component.translatable("item.chronosphere.time_hourglass.portal_deactivated"),
+                Component.translatable("item.chronodawn.time_hourglass.portal_deactivated"),
                 true
             );
             return EventResult.interruptFalse(); // Cancel interaction
@@ -2030,7 +2030,7 @@ InteractionEvent.RIGHT_CLICK_BLOCK.register((player, hand, pos, face) -> {
             hourglassStack.shrink(1);
         }
 
-        Chronosphere.LOGGER.info("Player {} consumed Time Hourglass to ignite portal at {}",
+        Chrono Dawn.LOGGER.info("Player {} consumed Time Hourglass to ignite portal at {}",
             player.getName().getString(), pos);
     }
 
@@ -2168,7 +2168,7 @@ public InteractionResult useOn(UseOnContext context) {
 4. Consider frame validation enhancement if playtesting reveals user frustration
 
 **Implementation Location**:
-- File: `common/src/main/java/com/chronosphere/events/BlockEventHandler.java`
+- File: `common/src/main/java/com/chronodawn/events/BlockEventHandler.java`
 - Method: `InteractionEvent.RIGHT_CLICK_BLOCK` event handler (lines 91-128)
 - Add consumption logic after unstable portal check, before `return EventResult.pass()`
 
@@ -2176,11 +2176,11 @@ public InteractionResult useOn(UseOnContext context) {
 ```java
 // Check global state: are portals unstable?
 if (player.level() instanceof ServerLevel serverLevel) {
-    ChronosphereGlobalState globalState = ChronosphereGlobalState.get(serverLevel.getServer());
+    ChronoDawnGlobalState globalState = ChronoDawnGlobalState.get(serverLevel.getServer());
     if (globalState.arePortalsUnstable()) {
         // Display warning and prevent consumption
         player.displayClientMessage(
-            Component.translatable("item.chronosphere.time_hourglass.portal_deactivated"),
+            Component.translatable("item.chronodawn.time_hourglass.portal_deactivated"),
             true
         );
         return EventResult.interruptFalse(); // Cancel interaction
@@ -2211,8 +2211,8 @@ return EventResult.pass();
 - CustomPortalBuilder source (1.19.4): https://github.com/kyrptonaught/customportalapi/blob/1.19.4/src/main/java/net/kyrptonaught/customportalapi/api/CustomPortalBuilder.java
 - PortalIgnitionSource source (analyzed via WebFetch, no direct link available)
 - Architectury Events Documentation: https://docs.architectury.dev/
-- Portal Stabilizer Item Implementation: `common/src/main/java/com/chronosphere/items/PortalStabilizerItem.java`
-- BlockEventHandler Implementation: `common/src/main/java/com/chronosphere/events/BlockEventHandler.java`
+- Portal Stabilizer Item Implementation: `common/src/main/java/com/chronodawn/items/PortalStabilizerItem.java`
+- BlockEventHandler Implementation: `common/src/main/java/com/chronodawn/events/BlockEventHandler.java`
 
 ## Decision 13: Custom Portal API Block Types and Portal Ignition Detection
 
@@ -2237,7 +2237,7 @@ portalBlock = new CustomPortalBlock(Block.Settings.of(Material.PORTAL)
 ```
 
 **IMPORTANT DISTINCTION**:
-- **Frame Block**: Defined by mod (e.g., Clockstone Block for Chronosphere)
+- **Frame Block**: Defined by mod (e.g., Clockstone Block for Chrono Dawn)
 - **Portal Block**: Always `customportalapi:customportalblock` (the visible portal surface inside frame)
 
 ### Fallback to Nether Portal Blocks
@@ -2359,7 +2359,7 @@ CustomPortalBuilder.beginPortal()
 
 ### Recommended Approach
 
-**For Chronosphere Mod**: Use **Method 1 (Block Check)** as primary implementation.
+**For Chrono Dawn Mod**: Use **Method 1 (Block Check)** as primary implementation.
 
 **Rationale**:
 1. **Already Implemented**: BlockEventHandler.java already uses this method successfully
@@ -2384,9 +2384,9 @@ CustomPortalBuilder.beginPortal()
 - **Recommendation**: Keep Method 1 for now, consider Method 2 for future optimization
 
 **Related Code**:
-- `common/src/main/java/com/chronosphere/events/BlockEventHandler.java` (lines 132-165)
-- `common/src/main/java/com/chronosphere/events/PlayerEventHandler.java` (lines 192-232)
-- `fabric/src/main/java/com/chronosphere/fabric/compat/CustomPortalFabric.java`
+- `common/src/main/java/com/chronodawn/events/BlockEventHandler.java` (lines 132-165)
+- `common/src/main/java/com/chronodawn/events/PlayerEventHandler.java` (lines 192-232)
+- `fabric/src/main/java/com/chronodawn/fabric/compat/CustomPortalFabric.java`
 
 **References**:
 - Custom Portal API GitHub: https://github.com/kyrptonaught/customportalapi
@@ -2395,11 +2395,11 @@ CustomPortalBuilder.beginPortal()
 
 ## Decision 14: Multi-Noise Biome Parameters and Structure Generation (T088iu-iv)
 
-**Context**: Implementing desert biome in Chronosphere dimension with appropriate terrain generation and Desert Clock Tower structure spawning.
+**Context**: Implementing desert biome in Chrono Dawn dimension with appropriate terrain generation and Desert Clock Tower structure spawning.
 
 **Date**: 2025-11-04
 
-**Task**: T088iu-iv - Add desert biome to Chronosphere dimension
+**Task**: T088iu-iv - Add desert biome to Chrono Dawn dimension
 
 ---
 
@@ -2471,7 +2471,7 @@ Multi-noise biome generation uses 6 climate parameters to determine biome placem
 Volume = (temp_range) × (humidity_range) × (continentalness_range) × (erosion_range)
 ```
 
-**Chronosphere Biomes Comparison** (depth and weirdness excluded as they're full range):
+**Chrono Dawn Biomes Comparison** (depth and weirdness excluded as they're full range):
 
 | Biome | Temperature | Humidity | Continentalness | Erosion | Volume | Relative |
 |-------|-------------|----------|-----------------|---------|--------|----------|
@@ -2522,7 +2522,7 @@ Y-31: Stone      <- Base layer
   "type": "minecraft:condition",
   "if_true": {
     "type": "minecraft:biome",
-    "biome_is": ["minecraft:desert", "chronosphere:chronosphere_desert"]
+    "biome_is": ["minecraft:desert", "chronodawn:chronodawn_desert"]
   },
   "then_run": {
     "type": "minecraft:sequence",
@@ -2540,7 +2540,7 @@ Y-31: Stone      <- Base layer
 }
 ```
 
-**Implementation**: Added `chronosphere:chronosphere_desert` to existing vanilla desert surface rules (3 locations in overworld.json).
+**Implementation**: Added `chronodawn:chronodawn_desert` to existing vanilla desert surface rules (3 locations in overworld.json).
 
 ---
 
@@ -2632,7 +2632,7 @@ Structure placement uses `structure_set` JSON files with two key parameters:
 
 ```json
 {
-  "biome": "chronosphere:chronosphere_desert",
+  "biome": "chronodawn:chronodawn_desert",
   "parameters": {
     "temperature": [0.5, 1.0],           // High temp (0.5 range)
     "humidity": [-1.0, -0.1],            // Very dry (0.9 range) 
@@ -2654,17 +2654,17 @@ Structure placement uses `structure_set` JSON files with two key parameters:
 ### Related Files
 
 **Biome Definition**:
-- `common/src/main/resources/data/chronosphere/worldgen/biome/chronosphere_desert.json`
+- `common/src/main/resources/data/chronodawn/worldgen/biome/chronodawn_desert.json`
 
 **Dimension Configuration**:
-- `common/src/main/resources/data/chronosphere/dimension/chronosphere.json`
+- `common/src/main/resources/data/chronodawn/dimension/chronodawn.json`
 
 **Surface Rules** (overrides vanilla):
 - `common/src/main/resources/data/minecraft/worldgen/noise_settings/overworld.json`
 
 **Structure Configuration**:
-- `common/src/main/resources/data/chronosphere/worldgen/structure/desert_clock_tower.json`
-- `common/src/main/resources/data/chronosphere/worldgen/structure_set/desert_clock_tower.json`
+- `common/src/main/resources/data/chronodawn/worldgen/structure/desert_clock_tower.json`
+- `common/src/main/resources/data/chronodawn/worldgen/structure_set/desert_clock_tower.json`
 
 ---
 
@@ -2694,7 +2694,7 @@ Structure placement uses `structure_set` JSON files with two key parameters:
 
 ### Comparative Analysis: Structure Definition Settings
 
-Analyzed four Jigsaw-based structures in Chronosphere to identify configuration differences:
+Analyzed four Jigsaw-based structures in Chrono Dawn to identify configuration differences:
 
 | Setting | master_clock | desert_clock_tower | ancient_ruins | forgotten_library |
 |---------|---|---|---|---|
@@ -2825,7 +2825,7 @@ Minecraft world generation documentation confirms:
    - Verify: structure still properly embedded (depth preserved)
 
 3. **Files to Modify**:
-   - `/common/src/main/resources/data/chronosphere/worldgen/structure/master_clock.json`
+   - `/common/src/main/resources/data/chronodawn/worldgen/structure/master_clock.json`
    - Line 8: Change `"terrain_adaptation": "beard_box"` to `"terrain_adaptation": "beard_thin"`
 
 4. **Success Criteria**:
@@ -2854,29 +2854,29 @@ Minecraft world generation documentation confirms:
 ### Files Analyzed
 
 **Structure Definition Files**:
-- `/common/src/main/resources/data/chronosphere/worldgen/structure/master_clock.json`
-- `/common/src/main/resources/data/chronosphere/worldgen/structure/desert_clock_tower.json`
-- `/common/src/main/resources/data/chronosphere/worldgen/structure/ancient_ruins.json`
-- `/common/src/main/resources/data/chronosphere/worldgen/structure/forgotten_library.json`
+- `/common/src/main/resources/data/chronodawn/worldgen/structure/master_clock.json`
+- `/common/src/main/resources/data/chronodawn/worldgen/structure/desert_clock_tower.json`
+- `/common/src/main/resources/data/chronodawn/worldgen/structure/ancient_ruins.json`
+- `/common/src/main/resources/data/chronodawn/worldgen/structure/forgotten_library.json`
 
 **Template Pool Files**:
-- `/common/src/main/resources/data/chronosphere/worldgen/template_pool/master_clock/entrance_pool.json`
-- `/common/src/main/resources/data/chronosphere/worldgen/template_pool/desert_clock_tower/start_pool.json`
-- `/common/src/main/resources/data/chronosphere/worldgen/template_pool/ancient_ruins/start_pool.json`
-- `/common/src/main/resources/data/chronosphere/worldgen/template_pool/forgotten_library/start_pool.json`
+- `/common/src/main/resources/data/chronodawn/worldgen/template_pool/master_clock/entrance_pool.json`
+- `/common/src/main/resources/data/chronodawn/worldgen/template_pool/desert_clock_tower/start_pool.json`
+- `/common/src/main/resources/data/chronodawn/worldgen/template_pool/ancient_ruins/start_pool.json`
+- `/common/src/main/resources/data/chronodawn/worldgen/template_pool/forgotten_library/start_pool.json`
 
 **Structure Data Files**:
-- `/common/src/main/resources/data/chronosphere/structure/master_clock_entrance.nbt`
-- `/common/src/main/resources/data/chronosphere/structure/master_clock_boss_room.nbt`
-- `/common/src/main/resources/data/chronosphere/structure/desert_clock_tower.nbt`
-- `/common/src/main/resources/data/chronosphere/structure/ancient_ruins.nbt`
-- `/common/src/main/resources/data/chronosphere/structure/forgotten_library.nbt`
+- `/common/src/main/resources/data/chronodawn/structure/master_clock_entrance.nbt`
+- `/common/src/main/resources/data/chronodawn/structure/master_clock_boss_room.nbt`
+- `/common/src/main/resources/data/chronodawn/structure/desert_clock_tower.nbt`
+- `/common/src/main/resources/data/chronodawn/structure/ancient_ruins.nbt`
+- `/common/src/main/resources/data/chronodawn/structure/forgotten_library.nbt`
 
 ## Research: Structure Waterlogging in Underground Generation
 
 **Date**: 2025-11-11  
 **Context**: Master Clock boss room water intrusion issue (T132)  
-**Related Files**: `common/src/main/resources/data/chronosphere/worldgen/processor_list/remove_water.json`
+**Related Files**: `common/src/main/resources/data/chronodawn/worldgen/processor_list/remove_water.json`
 
 ### Problem Statement
 
@@ -3115,10 +3115,10 @@ The standard solution used by experienced modders:
 
 **Date**: 2025-11-13
 
-**Research Question**: How do other dimension mods (e.g., Blue Skies) enable hostile mob spawning in always-bright dimensions? Can we implement similar mechanics for Chronosphere?
+**Research Question**: How do other dimension mods (e.g., Blue Skies) enable hostile mob spawning in always-bright dimensions? Can we implement similar mechanics for Chrono Dawn?
 
 **Background**:
-Chronosphere dimension has `fixed_time: 6000` (eternal noon), making it always bright. However, Minecraft's natural spawning system only attempts to spawn `monster` category mobs in dark areas (light level < 8). This causes hostile mobs to spawn only in caves, not on the surface.
+Chrono Dawn dimension has `fixed_time: 6000` (eternal noon), making it always bright. However, Minecraft's natural spawning system only attempts to spawn `monster` category mobs in dark areas (light level < 8). This causes hostile mobs to spawn only in caves, not on the surface.
 
 **Related Tasks**: T200-207 (Custom Mob Implementation), T200 (Hostile mob spawning issues)
 
@@ -3259,18 +3259,18 @@ public static final RegistrySupplier<EntityType<TimeKeeperEntity>> TIME_KEEPER =
     );
 ```
 
-**Biome Configuration** (chronosphere_plains.json):
+**Biome Configuration** (chronodawn_plains.json):
 ```json
 {
   "spawners": {
     "monster": [
       {"type": "minecraft:zombie", "weight": 30, "minCount": 2, "maxCount": 3},
       {"type": "minecraft:skeleton", "weight": 30, "minCount": 2, "maxCount": 3},
-      {"type": "chronosphere:temporal_wraith", "weight": 40, "minCount": 2, "maxCount": 4}
+      {"type": "chronodawn:temporal_wraith", "weight": 40, "minCount": 2, "maxCount": 4}
     ],
     "creature": [
       {"type": "minecraft:cow", "weight": 6, "minCount": 2, "maxCount": 3},
-      {"type": "chronosphere:time_keeper", "weight": 8, "minCount": 1, "maxCount": 2}
+      {"type": "chronodawn:time_keeper", "weight": 8, "minCount": 1, "maxCount": 2}
     ]
   }
 }
@@ -3294,7 +3294,7 @@ public static boolean checkTemporalWraithSpawnRules(
 }
 ```
 
-**Spawn Placement Registration** (ChronosphereFabric.java):
+**Spawn Placement Registration** (ChronoDawnFabric.java):
 ```java
 private void registerSpawnPlacements() {
     SpawnPlacements.register(
@@ -3320,8 +3320,8 @@ private void registerSpawnPlacements() {
                     target = "Lnet/minecraft/world/level/Level;getRawBrightness(Lnet/minecraft/core/BlockPos;I)I")
        )
        private static int redirectLightCheck(Level level, BlockPos pos, int amount) {
-           // Allow spawning in Chronosphere regardless of light
-           if (level.dimension().equals(ModDimensions.CHRONOSPHERE_DIMENSION)) {
+           // Allow spawning in Chrono Dawn regardless of light
+           if (level.dimension().equals(ModDimensions.CHRONO_DAWN_DIMENSION)) {
                return 0; // Pretend it's dark
            }
            return level.getRawBrightness(pos, amount);
@@ -3357,23 +3357,23 @@ private void registerSpawnPlacements() {
 ### Related Files
 
 **Entity Registration**:
-- `common/src/main/java/com/chronosphere/registry/ModEntities.java`
+- `common/src/main/java/com/chronodawn/registry/ModEntities.java`
 
 **Entity Classes**:
-- `common/src/main/java/com/chronosphere/entities/mobs/TemporalWraithEntity.java`
-- `common/src/main/java/com/chronosphere/entities/mobs/ClockworkSentinelEntity.java`
-- `common/src/main/java/com/chronosphere/entities/mobs/TimeKeeperEntity.java`
+- `common/src/main/java/com/chronodawn/entities/mobs/TemporalWraithEntity.java`
+- `common/src/main/java/com/chronodawn/entities/mobs/ClockworkSentinelEntity.java`
+- `common/src/main/java/com/chronodawn/entities/mobs/TimeKeeperEntity.java`
 
 **Spawn Placement**:
-- `fabric/src/main/java/com/chronosphere/fabric/ChronosphereFabric.java`
+- `fabric/src/main/java/com/chronodawn/fabric/ChronoDawnFabric.java`
 
 **Biome Configuration**:
-- `common/src/main/resources/data/chronosphere/worldgen/biome/chronosphere_plains.json`
-- `common/src/main/resources/data/chronosphere/worldgen/biome/chronosphere_forest.json`
-- `common/src/main/resources/data/chronosphere/worldgen/biome/chronosphere_desert.json`
+- `common/src/main/resources/data/chronodawn/worldgen/biome/chronodawn_plains.json`
+- `common/src/main/resources/data/chronodawn/worldgen/biome/chronodawn_forest.json`
+- `common/src/main/resources/data/chronodawn/worldgen/biome/chronodawn_desert.json`
 
 **Dimension Configuration**:
-- `common/src/main/resources/data/chronosphere/dimension_type/chronosphere.json` (`fixed_time: 6000`)
+- `common/src/main/resources/data/chronodawn/dimension_type/chronodawn.json` (`fixed_time: 6000`)
 
 ---
 
@@ -3511,7 +3511,7 @@ if (!playersWithAegis.isEmpty()) {
 **Type**: Fully underground structure
 
 **Location**:
-- Biomes: `chronosphere:chronosphere_plains`, `chronosphere:chronosphere_forest`
+- Biomes: `chronodawn:chronodawn_plains`, `chronodawn:chronodawn_forest`
 - Y-level: 10-40
 - Spacing: 48 chunks (medium rarity)
 - Separation: 24 chunks
@@ -3575,39 +3575,39 @@ fireproof: true
 #### Files to Create/Modify
 
 **Entity**:
-- `common/src/main/java/com/chronosphere/entities/bosses/ChronosWardenEntity.java`
-- `common/src/main/java/com/chronosphere/entities/ai/StoneStanceGoal.java`
-- `common/src/main/java/com/chronosphere/entities/ai/GroundSlamGoal.java`
+- `common/src/main/java/com/chronodawn/entities/bosses/ChronosWardenEntity.java`
+- `common/src/main/java/com/chronodawn/entities/ai/StoneStanceGoal.java`
+- `common/src/main/java/com/chronodawn/entities/ai/GroundSlamGoal.java`
 
 **Registry**:
-- `common/src/main/java/com/chronosphere/registry/ModEntities.java` (add CHRONOS_WARDEN)
-- `common/src/main/java/com/chronosphere/registry/ModItems.java` (add GUARDIAN_STONE)
+- `common/src/main/java/com/chronodawn/registry/ModEntities.java` (add CHRONOS_WARDEN)
+- `common/src/main/java/com/chronodawn/registry/ModItems.java` (add GUARDIAN_STONE)
 
 **Client Rendering**:
-- `fabric/src/main/java/com/chronosphere/fabric/client/ChronosphereClientFabric.java`
-- `neoforge/src/main/java/com/chronosphere/neoforge/event/EntityRendererHandler.java`
-- `common/src/main/java/com/chronosphere/client/renderer/entity/ChronosWardenRenderer.java`
-- `common/src/main/java/com/chronosphere/client/model/ChronosWardenModel.java`
+- `fabric/src/main/java/com/chronodawn/fabric/client/ChronoDawnClientFabric.java`
+- `neoforge/src/main/java/com/chronodawn/neoforge/event/EntityRendererHandler.java`
+- `common/src/main/java/com/chronodawn/client/renderer/entity/ChronosWardenRenderer.java`
+- `common/src/main/java/com/chronodawn/client/model/ChronosWardenModel.java`
 
 **Resources**:
-- `common/src/main/resources/assets/chronosphere/textures/entity/chronos_warden.png`
-- `common/src/main/resources/assets/chronosphere/textures/item/guardian_stone.png`
-- `common/src/main/resources/assets/chronosphere/models/item/guardian_stone.json`
-- `common/src/main/resources/assets/chronosphere/lang/en_us.json` (add translations)
-- `common/src/main/resources/assets/chronosphere/lang/ja_jp.json` (add translations)
+- `common/src/main/resources/assets/chronodawn/textures/entity/chronos_warden.png`
+- `common/src/main/resources/assets/chronodawn/textures/item/guardian_stone.png`
+- `common/src/main/resources/assets/chronodawn/models/item/guardian_stone.json`
+- `common/src/main/resources/assets/chronodawn/lang/en_us.json` (add translations)
+- `common/src/main/resources/assets/chronodawn/lang/ja_jp.json` (add translations)
 
 **Loot Tables**:
-- `common/src/main/resources/data/chronosphere/loot_table/entities/chronos_warden.json`
-- `common/src/main/resources/data/chronosphere/loot_table/chests/guardian_vault_treasure.json`
+- `common/src/main/resources/data/chronodawn/loot_table/entities/chronos_warden.json`
+- `common/src/main/resources/data/chronodawn/loot_table/chests/guardian_vault_treasure.json`
 
 **Structure**:
-- `common/src/main/resources/data/chronosphere/structure/guardian_vault.nbt`
-- `common/src/main/resources/data/chronosphere/worldgen/structure/guardian_vault.json`
-- `common/src/main/resources/data/chronosphere/worldgen/structure_set/guardian_vault.json`
-- `common/src/main/resources/data/chronosphere/worldgen/template_pool/guardian_vault_pool.json`
+- `common/src/main/resources/data/chronodawn/structure/guardian_vault.nbt`
+- `common/src/main/resources/data/chronodawn/worldgen/structure/guardian_vault.json`
+- `common/src/main/resources/data/chronodawn/worldgen/structure_set/guardian_vault.json`
+- `common/src/main/resources/data/chronodawn/worldgen/template_pool/guardian_vault_pool.json`
 
 **Tags**:
-- `common/src/main/resources/data/chronosphere/tags/entity_types/bosses.json` (add chronos_warden)
+- `common/src/main/resources/data/chronodawn/tags/entity_types/bosses.json` (add chronos_warden)
 
 ---
 
@@ -3664,7 +3664,7 @@ fireproof: true
 **Type**: Surface + Underground composite (Master Clock style)
 
 **Location**:
-- Biomes: `chronosphere:chronosphere_desert`, `chronosphere:chronosphere_mountain`
+- Biomes: `chronodawn:chronodawn_desert`, `chronodawn:chronodawn_mountain`
 - Y-level: Surface (64-80) + Underground shaft to Y=30
 - Spacing: 56 chunks (rare)
 - Separation: 28 chunks
@@ -3749,41 +3749,41 @@ fireproof: true
 #### Files to Create/Modify
 
 **Entity**:
-- `common/src/main/java/com/chronosphere/entities/bosses/ClockworkColossusEntity.java`
-- `common/src/main/java/com/chronosphere/entities/projectiles/GearProjectileEntity.java`
-- `common/src/main/java/com/chronosphere/entities/ai/ColossusGroundSlamGoal.java`
+- `common/src/main/java/com/chronodawn/entities/bosses/ClockworkColossusEntity.java`
+- `common/src/main/java/com/chronodawn/entities/projectiles/GearProjectileEntity.java`
+- `common/src/main/java/com/chronodawn/entities/ai/ColossusGroundSlamGoal.java`
 
 **Registry**:
-- `common/src/main/java/com/chronosphere/registry/ModEntities.java` (add CLOCKWORK_COLOSSUS, GEAR_PROJECTILE)
-- `common/src/main/java/com/chronosphere/registry/ModItems.java` (add COLOSSUS_GEAR)
+- `common/src/main/java/com/chronodawn/registry/ModEntities.java` (add CLOCKWORK_COLOSSUS, GEAR_PROJECTILE)
+- `common/src/main/java/com/chronodawn/registry/ModItems.java` (add COLOSSUS_GEAR)
 
 **Client Rendering**:
-- `common/src/main/java/com/chronosphere/client/renderer/entity/ClockworkColossusRenderer.java`
-- `common/src/main/java/com/chronosphere/client/model/ClockworkColossusModel.java`
-- `common/src/main/java/com/chronosphere/client/renderer/entity/GearProjectileRenderer.java`
+- `common/src/main/java/com/chronodawn/client/renderer/entity/ClockworkColossusRenderer.java`
+- `common/src/main/java/com/chronodawn/client/model/ClockworkColossusModel.java`
+- `common/src/main/java/com/chronodawn/client/renderer/entity/GearProjectileRenderer.java`
 
 **Resources**:
-- `common/src/main/resources/assets/chronosphere/textures/entity/clockwork_colossus.png`
-- `common/src/main/resources/assets/chronosphere/textures/entity/gear_projectile.png`
-- `common/src/main/resources/assets/chronosphere/textures/item/colossus_gear.png`
-- `common/src/main/resources/assets/chronosphere/models/item/colossus_gear.json`
-- `common/src/main/resources/assets/chronosphere/lang/en_us.json`
-- `common/src/main/resources/assets/chronosphere/lang/ja_jp.json`
+- `common/src/main/resources/assets/chronodawn/textures/entity/clockwork_colossus.png`
+- `common/src/main/resources/assets/chronodawn/textures/entity/gear_projectile.png`
+- `common/src/main/resources/assets/chronodawn/textures/item/colossus_gear.png`
+- `common/src/main/resources/assets/chronodawn/models/item/colossus_gear.json`
+- `common/src/main/resources/assets/chronodawn/lang/en_us.json`
+- `common/src/main/resources/assets/chronodawn/lang/ja_jp.json`
 
 **Loot Tables**:
-- `common/src/main/resources/data/chronosphere/loot_table/entities/clockwork_colossus.json`
-- `common/src/main/resources/data/chronosphere/loot_table/chests/clockwork_depths_vault.json`
+- `common/src/main/resources/data/chronodawn/loot_table/entities/clockwork_colossus.json`
+- `common/src/main/resources/data/chronodawn/loot_table/chests/clockwork_depths_vault.json`
 
 **Structure**:
-- `common/src/main/resources/data/chronosphere/structure/clockwork_depths_surface.nbt`
-- `common/src/main/resources/data/chronosphere/structure/clockwork_depths_underground.nbt`
-- `common/src/main/resources/data/chronosphere/worldgen/structure/clockwork_depths.json`
-- `common/src/main/resources/data/chronosphere/worldgen/structure_set/clockwork_depths.json`
-- `common/src/main/resources/data/chronosphere/worldgen/template_pool/clockwork_depths_pool.json`
+- `common/src/main/resources/data/chronodawn/structure/clockwork_depths_surface.nbt`
+- `common/src/main/resources/data/chronodawn/structure/clockwork_depths_underground.nbt`
+- `common/src/main/resources/data/chronodawn/worldgen/structure/clockwork_depths.json`
+- `common/src/main/resources/data/chronodawn/worldgen/structure_set/clockwork_depths.json`
+- `common/src/main/resources/data/chronodawn/worldgen/template_pool/clockwork_depths_pool.json`
 
 **Tags**:
-- `common/src/main/resources/data/chronosphere/tags/entity_types/bosses.json` (add clockwork_colossus)
-- `common/src/main/resources/data/chronosphere/tags/entity_types/time_immune.json` (NEW TAG for time immunity)
+- `common/src/main/resources/data/chronodawn/tags/entity_types/bosses.json` (add clockwork_colossus)
+- `common/src/main/resources/data/chronodawn/tags/entity_types/time_immune.json` (NEW TAG for time immunity)
 
 ---
 
@@ -3842,7 +3842,7 @@ fireproof: true
 **Type**: Fully underground maze structure
 
 **Location**:
-- Biomes: `chronosphere:chronosphere_mountain`, `chronosphere:chronosphere_ocean`
+- Biomes: `chronodawn:chronodawn_mountain`, `chronodawn:chronodawn_ocean`
 - Y-level: 20-50
 - Spacing: 52 chunks
 - Separation: 26 chunks
@@ -3915,38 +3915,38 @@ has_foil: true (enchant glint)
 #### Files to Create/Modify
 
 **Entity**:
-- `common/src/main/java/com/chronosphere/entities/bosses/TemporalPhantomEntity.java`
-- `common/src/main/java/com/chronosphere/entities/summons/PhantomCloneEntity.java`
-- `common/src/main/java/com/chronosphere/entities/projectiles/WarpBoltEntity.java`
-- `common/src/main/java/com/chronosphere/entities/ai/PhantomCloneSummonGoal.java`
-- `common/src/main/java/com/chronosphere/entities/ai/BlinkStrikeGoal.java`
+- `common/src/main/java/com/chronodawn/entities/bosses/TemporalPhantomEntity.java`
+- `common/src/main/java/com/chronodawn/entities/summons/PhantomCloneEntity.java`
+- `common/src/main/java/com/chronodawn/entities/projectiles/WarpBoltEntity.java`
+- `common/src/main/java/com/chronodawn/entities/ai/PhantomCloneSummonGoal.java`
+- `common/src/main/java/com/chronodawn/entities/ai/BlinkStrikeGoal.java`
 
 **Registry**:
-- `common/src/main/java/com/chronosphere/registry/ModEntities.java` (add TEMPORAL_PHANTOM, PHANTOM_CLONE, WARP_BOLT)
-- `common/src/main/java/com/chronosphere/registry/ModItems.java` (add PHANTOM_ESSENCE)
+- `common/src/main/java/com/chronodawn/registry/ModEntities.java` (add TEMPORAL_PHANTOM, PHANTOM_CLONE, WARP_BOLT)
+- `common/src/main/java/com/chronodawn/registry/ModItems.java` (add PHANTOM_ESSENCE)
 
 **Client Rendering**:
-- `common/src/main/java/com/chronosphere/client/renderer/entity/TemporalPhantomRenderer.java`
-- `common/src/main/java/com/chronosphere/client/model/TemporalPhantomModel.java`
-- `common/src/main/java/com/chronosphere/client/renderer/entity/PhantomCloneRenderer.java`
-- `common/src/main/java/com/chronosphere/client/renderer/entity/WarpBoltRenderer.java`
+- `common/src/main/java/com/chronodawn/client/renderer/entity/TemporalPhantomRenderer.java`
+- `common/src/main/java/com/chronodawn/client/model/TemporalPhantomModel.java`
+- `common/src/main/java/com/chronodawn/client/renderer/entity/PhantomCloneRenderer.java`
+- `common/src/main/java/com/chronodawn/client/renderer/entity/WarpBoltRenderer.java`
 
 **Resources**:
-- `common/src/main/resources/assets/chronosphere/textures/entity/temporal_phantom.png`
-- `common/src/main/resources/assets/chronosphere/textures/entity/phantom_clone.png` (same as phantom but translucent)
-- `common/src/main/resources/assets/chronosphere/textures/entity/warp_bolt.png`
-- `common/src/main/resources/assets/chronosphere/textures/item/phantom_essence.png`
-- `common/src/main/resources/assets/chronosphere/models/item/phantom_essence.json`
+- `common/src/main/resources/assets/chronodawn/textures/entity/temporal_phantom.png`
+- `common/src/main/resources/assets/chronodawn/textures/entity/phantom_clone.png` (same as phantom but translucent)
+- `common/src/main/resources/assets/chronodawn/textures/entity/warp_bolt.png`
+- `common/src/main/resources/assets/chronodawn/textures/item/phantom_essence.png`
+- `common/src/main/resources/assets/chronodawn/models/item/phantom_essence.json`
 
 **Loot Tables**:
-- `common/src/main/resources/data/chronosphere/loot_table/entities/temporal_phantom.json`
-- `common/src/main/resources/data/chronosphere/loot_table/chests/phantom_catacombs_vault.json`
+- `common/src/main/resources/data/chronodawn/loot_table/entities/temporal_phantom.json`
+- `common/src/main/resources/data/chronodawn/loot_table/chests/phantom_catacombs_vault.json`
 
 **Structure**:
-- `common/src/main/resources/data/chronosphere/structure/phantom_catacombs.nbt`
-- `common/src/main/resources/data/chronosphere/worldgen/structure/phantom_catacombs.json`
-- `common/src/main/resources/data/chronosphere/worldgen/structure_set/phantom_catacombs.json`
-- `common/src/main/resources/data/chronosphere/worldgen/template_pool/phantom_catacombs_pool.json`
+- `common/src/main/resources/data/chronodawn/structure/phantom_catacombs.nbt`
+- `common/src/main/resources/data/chronodawn/worldgen/structure/phantom_catacombs.json`
+- `common/src/main/resources/data/chronodawn/worldgen/structure_set/phantom_catacombs.json`
+- `common/src/main/resources/data/chronodawn/worldgen/template_pool/phantom_catacombs_pool.json`
 
 ---
 
@@ -4010,7 +4010,7 @@ has_foil: true (enchant glint)
 **Type**: Fully underground structure
 
 **Location**:
-- Biomes: `chronosphere:chronosphere_swamp`, `chronosphere:chronosphere_forest`
+- Biomes: `chronodawn:chronodawn_swamp`, `chronodawn:chronodawn_forest`
 - Y-level: 15-35
 - Spacing: 50 chunks
 - Separation: 25 chunks
@@ -4089,34 +4089,34 @@ fireproof: true
 #### Files to Create/Modify
 
 **Entity**:
-- `common/src/main/java/com/chronosphere/entities/bosses/EntropyKeeperEntity.java`
-- `common/src/main/java/com/chronosphere/entities/ai/EntropyBurstGoal.java`
-- `common/src/main/java/com/chronosphere/entities/ai/TemporalRotGoal.java`
+- `common/src/main/java/com/chronodawn/entities/bosses/EntropyKeeperEntity.java`
+- `common/src/main/java/com/chronodawn/entities/ai/EntropyBurstGoal.java`
+- `common/src/main/java/com/chronodawn/entities/ai/TemporalRotGoal.java`
 
 **Registry**:
-- `common/src/main/java/com/chronosphere/registry/ModEntities.java` (add ENTROPY_KEEPER)
-- `common/src/main/java/com/chronosphere/registry/ModItems.java` (add ENTROPY_CORE, CORRUPTED_CLOCKSTONE)
+- `common/src/main/java/com/chronodawn/registry/ModEntities.java` (add ENTROPY_KEEPER)
+- `common/src/main/java/com/chronodawn/registry/ModItems.java` (add ENTROPY_CORE, CORRUPTED_CLOCKSTONE)
 
 **Client Rendering**:
-- `common/src/main/java/com/chronosphere/client/renderer/entity/EntropyKeeperRenderer.java`
-- `common/src/main/java/com/chronosphere/client/model/EntropyKeeperModel.java`
+- `common/src/main/java/com/chronodawn/client/renderer/entity/EntropyKeeperRenderer.java`
+- `common/src/main/java/com/chronodawn/client/model/EntropyKeeperModel.java`
 
 **Resources**:
-- `common/src/main/resources/assets/chronosphere/textures/entity/entropy_keeper.png`
-- `common/src/main/resources/assets/chronosphere/textures/item/entropy_core.png`
-- `common/src/main/resources/assets/chronosphere/textures/item/corrupted_clockstone.png`
-- `common/src/main/resources/assets/chronosphere/models/item/entropy_core.json`
-- `common/src/main/resources/assets/chronosphere/models/item/corrupted_clockstone.json`
+- `common/src/main/resources/assets/chronodawn/textures/entity/entropy_keeper.png`
+- `common/src/main/resources/assets/chronodawn/textures/item/entropy_core.png`
+- `common/src/main/resources/assets/chronodawn/textures/item/corrupted_clockstone.png`
+- `common/src/main/resources/assets/chronodawn/models/item/entropy_core.json`
+- `common/src/main/resources/assets/chronodawn/models/item/corrupted_clockstone.json`
 
 **Loot Tables**:
-- `common/src/main/resources/data/chronosphere/loot_table/entities/entropy_keeper.json`
-- `common/src/main/resources/data/chronosphere/loot_table/chests/entropy_crypt_vault.json`
+- `common/src/main/resources/data/chronodawn/loot_table/entities/entropy_keeper.json`
+- `common/src/main/resources/data/chronodawn/loot_table/chests/entropy_crypt_vault.json`
 
 **Structure**:
-- `common/src/main/resources/data/chronosphere/structure/entropy_crypt.nbt`
-- `common/src/main/resources/data/chronosphere/worldgen/structure/entropy_crypt.json`
-- `common/src/main/resources/data/chronosphere/worldgen/structure_set/entropy_crypt.json`
-- `common/src/main/resources/data/chronosphere/worldgen/template_pool/entropy_crypt_pool.json`
+- `common/src/main/resources/data/chronodawn/structure/entropy_crypt.nbt`
+- `common/src/main/resources/data/chronodawn/worldgen/structure/entropy_crypt.json`
+- `common/src/main/resources/data/chronodawn/worldgen/structure_set/entropy_crypt.json`
+- `common/src/main/resources/data/chronodawn/worldgen/template_pool/entropy_crypt_pool.json`
 
 ---
 
@@ -4253,24 +4253,24 @@ ECG
 ### Files to Create/Modify
 
 **Item**:
-- `common/src/main/java/com/chronosphere/items/ChronoAegisItem.java`
+- `common/src/main/java/com/chronodawn/items/ChronoAegisItem.java`
 
 **Effect**:
-- `common/src/main/java/com/chronosphere/effects/ChronoAegisEffect.java`
+- `common/src/main/java/com/chronodawn/effects/ChronoAegisEffect.java`
 
 **Registry**:
-- `common/src/main/java/com/chronosphere/registry/ModItems.java` (add CHRONO_AEGIS)
-- `common/src/main/java/com/chronosphere/registry/ModEffects.java` (add CHRONO_AEGIS_BUFF)
+- `common/src/main/java/com/chronodawn/registry/ModItems.java` (add CHRONO_AEGIS)
+- `common/src/main/java/com/chronodawn/registry/ModEffects.java` (add CHRONO_AEGIS_BUFF)
 
 **Time Tyrant Modifications**:
-- `common/src/main/java/com/chronosphere/entities/bosses/TimeTyrantEntity.java` (modify all attack methods)
+- `common/src/main/java/com/chronodawn/entities/bosses/TimeTyrantEntity.java` (modify all attack methods)
 
 **Resources**:
-- `common/src/main/resources/assets/chronosphere/textures/item/chrono_aegis.png`
-- `common/src/main/resources/assets/chronosphere/models/item/chrono_aegis.json`
-- `common/src/main/resources/data/chronosphere/recipe/chrono_aegis.json`
-- `common/src/main/resources/assets/chronosphere/lang/en_us.json` (add translations)
-- `common/src/main/resources/assets/chronosphere/lang/ja_jp.json` (add translations)
+- `common/src/main/resources/assets/chronodawn/textures/item/chrono_aegis.png`
+- `common/src/main/resources/assets/chronodawn/models/item/chrono_aegis.json`
+- `common/src/main/resources/data/chronodawn/recipe/chrono_aegis.json`
+- `common/src/main/resources/assets/chronodawn/lang/en_us.json` (add translations)
+- `common/src/main/resources/assets/chronodawn/lang/ja_jp.json` (add translations)
 
 **Localization**:
 - EN: `Chrono Aegis`
@@ -4485,7 +4485,7 @@ ECG
 ### Mod Compatibility
 - Should not conflict with other dimension/boss mods
 - Structure generation respects vanilla spacing rules
-- Entity IDs namespaced under `chronosphere:`
+- Entity IDs namespaced under `chronodawn:`
 
 ---
 
@@ -4598,7 +4598,7 @@ Time Tyrant (最終ボス) is incorrectly receiving the Time Distortion Effect t
 
 ### Technical Analysis
 
-**File**: `common/src/main/java/com/chronosphere/core/time/TimeDistortionEffect.java`
+**File**: `common/src/main/java/com/chronodawn/core/time/TimeDistortionEffect.java`
 **Method**: `isHostileMob()` (lines 107-128)
 
 ```java
@@ -4631,7 +4631,7 @@ private static boolean isHostileMob(LivingEntity entity) {
 ### Effect Interaction
 
 **Time Distortion Effect**:
-- Applied every tick to all Monster entities in Chronosphere dimension
+- Applied every tick to all Monster entities in Chrono Dawn dimension
 - Slowness IV (amplifier 3): 60% movement speed reduction
 - Slowness V (amplifier 4, with Eye of Chronos): 75% movement speed reduction
 - Duration: 100 ticks (5 seconds), continuously reapplied
@@ -4667,7 +4667,7 @@ if (entity instanceof TimeGuardianEntity) {
 }
 
 // Exclude Time Tyrant (boss should move at normal speed)
-if (entity instanceof com.chronosphere.entities.bosses.TimeTyrantEntity) {
+if (entity instanceof com.chronodawn.entities.bosses.TimeTyrantEntity) {
     return false;
 }
 ```
@@ -4675,31 +4675,31 @@ if (entity instanceof com.chronosphere.entities.bosses.TimeTyrantEntity) {
 ### Related Files
 
 **Time Tyrant Entity**:
-- `common/src/main/java/com/chronosphere/entities/bosses/TimeTyrantEntity.java`
+- `common/src/main/java/com/chronodawn/entities/bosses/TimeTyrantEntity.java`
   - Line 71: `extends Monster`
   - Lines 454-482: `handleTimeAccelerationAbility()` (Speed II buff)
 
 **Time Distortion Effect**:
-- `common/src/main/java/com/chronosphere/core/time/TimeDistortionEffect.java`
+- `common/src/main/java/com/chronodawn/core/time/TimeDistortionEffect.java`
   - Lines 65-88: `applyTimeDistortion()` (main logic)
   - Lines 107-128: `isHostileMob()` (exclusion logic)
 
 **Entity Event Handler**:
-- `common/src/main/java/com/chronosphere/events/EntityEventHandler.java`
-  - Lines 104-111: `processChronosphereEntities()` (calls `applyTimeDistortion()`)
+- `common/src/main/java/com/chronodawn/events/EntityEventHandler.java`
+  - Lines 104-111: `processChronoDawnEntities()` (calls `applyTimeDistortion()`)
 
 ### Testing Recommendations
 
 After implementing the fix:
 
 1. **Verify Time Acceleration works**:
-   - Spawn Time Tyrant with `/summon chronosphere:time_tyrant`
+   - Spawn Time Tyrant with `/summon chronodawn:time_tyrant`
    - Reduce HP to Phase 2 (66%-33% HP)
    - Observe speed increase when Time Acceleration triggers
    - Expected: Boss moves noticeably faster with Speed II particles
 
 2. **Verify no Slowness effect**:
-   - Use `/effect give @e[type=chronosphere:time_tyrant] minecraft:glowing 999999 0 true` to track boss
+   - Use `/effect give @e[type=chronodawn:time_tyrant] minecraft:glowing 999999 0 true` to track boss
    - Check active effects with F3 debug screen or effect particles
    - Expected: No Slowness particles, only Speed particles during Time Acceleration
 
@@ -4731,11 +4731,11 @@ After implementing the fix:
 
 ### Problem
 
-Ancient Ruins are underground structures and difficult to discover without guidance items (compass/map). Time Compass cannot help because it's obtained after entering Chronosphere.
+Ancient Ruins are underground structures and difficult to discover without guidance items (compass/map). Time Compass cannot help because it's obtained after entering Chrono Dawn.
 
 ### Solution
 
-Create a distinctive overworld biome that signals the presence of Ancient Ruins underneath. The biome itself represents the Temporal Seal weakening, causing Chronosphere influence to leak into the Overworld.
+Create a distinctive overworld biome that signals the presence of Ancient Ruins underneath. The biome itself represents the Temporal Seal weakening, causing Chrono Dawn influence to leak into the Overworld.
 
 ### Design
 
@@ -4751,11 +4751,11 @@ Create a distinctive overworld biome that signals the presence of Ancient Ruins 
 - Overall feel: Mysterious and unusual, but not overtly threatening
 
 **Lore Integration**:
-- The Temporal Seal weakening causes Chronosphere energy to seep into Overworld
+- The Temporal Seal weakening causes Chrono Dawn energy to seep into Overworld
 - Creates visible anomalies in nature (blue-purple vegetation)
 - Ancient Ruins always located underneath these anomalous forests
 - Players discover this connection through exploration, not explicit instruction
-- Chronicle of Chronosphere confirms this after entering Chronosphere (post-discovery knowledge)
+- Chronicle of Chrono Dawn confirms this after entering Chrono Dawn (post-discovery knowledge)
 
 **Generation Requirements**:
 - Ancient Ruins ALWAYS generate at/near the center of this biome
@@ -4787,7 +4787,7 @@ Create a distinctive overworld biome that signals the presence of Ancient Ruins 
 
 5. **Localization**
    - Add biome name to en_us.json and ja_jp.json
-   - Update Chronicle of Chronosphere to reference "strange forests" or "異常な森"
+   - Update Chronicle of Chrono Dawn to reference "strange forests" or "異常な森"
 
 6. **Testing**
    - Verify biome visibility from distance
@@ -4802,8 +4802,8 @@ Create a distinctive overworld biome that signals the presence of Ancient Ruins 
 3. Notices unusual blue-purple forest in distance
 4. Investigates out of curiosity → "What is this strange forest?"
 5. Finds Ancient Ruins underground through exploration or mining
-6. Enters Chronosphere
-7. Receives Chronicle of Chronosphere
+6. Enters Chrono Dawn
+7. Receives Chronicle of Chrono Dawn
 8. Reads about Temporal Seal weakening and connects the dots
 9. Realizes the strange forest was a symptom of the larger problem
 
@@ -4825,18 +4825,18 @@ Create a distinctive overworld biome that signals the presence of Ancient Ruins 
 ### Related Files (When Implemented)
 
 **Biome Configuration**:
-- `common/src/main/resources/data/chronosphere/worldgen/biome/strange_forest.json`
+- `common/src/main/resources/data/chronodawn/worldgen/biome/strange_forest.json`
 
 **Structure Placement**:
-- `common/src/main/resources/data/chronosphere/worldgen/structure/ancient_ruins.json` (modify biome filter)
+- `common/src/main/resources/data/chronodawn/worldgen/structure/ancient_ruins.json` (modify biome filter)
 
 **Localization**:
-- `common/src/main/resources/assets/chronosphere/lang/en_us.json`
-- `common/src/main/resources/assets/chronosphere/lang/ja_jp.json`
+- `common/src/main/resources/assets/chronodawn/lang/en_us.json`
+- `common/src/main/resources/assets/chronodawn/lang/ja_jp.json`
 
 **Color Providers** (if using Option B):
-- `fabric/src/main/java/com/chronosphere/fabric/client/ChronosphereClientFabric.java`
-- `neoforge/src/main/java/com/chronosphere/neoforge/client/ChronosphereClientNeoForge.java`
+- `fabric/src/main/java/com/chronodawn/fabric/client/ChronoDawnClientFabric.java`
+- `neoforge/src/main/java/com/chronodawn/neoforge/client/ChronoDawnClientNeoForge.java`
 
 ---
 
@@ -4844,7 +4844,7 @@ Create a distinctive overworld biome that signals the presence of Ancient Ruins 
 
 ### Overview
 
-GameTest is Minecraft's official automated end-to-end (E2E) testing framework, designed for testing in-world scenarios, boss fights, structure generation, and gameplay mechanics. This research covers how to implement executable GameTests in the Chronosphere mod's Architectury multi-loader project.
+GameTest is Minecraft's official automated end-to-end (E2E) testing framework, designed for testing in-world scenarios, boss fights, structure generation, and gameplay mechanics. This research covers how to implement executable GameTests in the Chrono Dawn mod's Architectury multi-loader project.
 
 ### Key Findings
 
@@ -4855,7 +4855,7 @@ GameTest is Minecraft's official automated end-to-end (E2E) testing framework, d
 2. Write test functions (Java methods) that set up conditions and verify outcomes
 3. Run tests using `/test` commands or automated GameTestServer
 
-**Use Cases for Chronosphere Mod**:
+**Use Cases for Chrono Dawn Mod**:
 - Boss fight mechanics (Time Tyrant, Time Guardian, Entropy Keeper)
 - Structure generation validation (Master Clock, Phantom Catacombs, Entropy Crypt)
 - Portal activation and dimension travel
@@ -4880,7 +4880,7 @@ GameTest is Minecraft's official automated end-to-end (E2E) testing framework, d
 
 1. **Common module**: Write shared test structures (.nbt) and test logic classes
 2. **Loader modules**: Register tests using platform-specific mechanisms
-3. **Structure location**: `common/src/main/resources/data/chronosphere/structure/` (accessible to both loaders)
+3. **Structure location**: `common/src/main/resources/data/chronodawn/structure/` (accessible to both loaders)
 
 #### 3. Required Dependencies and Configuration
 
@@ -4902,7 +4902,7 @@ loom {
             runDir("run-gametest")
 
             // Enable test namespaces
-            property 'neoforge.enabledGameTestNamespaces', 'chronosphere'
+            property 'neoforge.enabledGameTestNamespaces', 'chronodawn'
         }
     }
 }
@@ -4924,7 +4924,7 @@ dependencies {
 fabricApi {
     configureTests {
         createSourceSet = true
-        modId = "chronosphere-test-fabric"
+        modId = "chronodawn-test-fabric"
         enableGameTests = true
         enableClientGameTests = true
         eula = true
@@ -4959,12 +4959,12 @@ tasks.test {
    ```
    /give @s structure_block
    Place structure block, set to "Save" mode
-   Set Structure Name: "chronosphere:boss_fight_arena"
+   Set Structure Name: "chronodawn:boss_fight_arena"
    Set Size: 35x20x35 (example for Time Tyrant arena)
    Click "SAVE"
    ```
-3. Result: `.nbt` file saved to `world/generated/chronosphere/structures/boss_fight_arena.nbt`
-4. Copy to `common/src/main/resources/data/chronosphere/structure/boss_fight_arena.nbt`
+3. Result: `.nbt` file saved to `world/generated/chronodawn/structures/boss_fight_arena.nbt`
+4. Copy to `common/src/main/resources/data/chronodawn/structure/boss_fight_arena.nbt`
 
 **Method 2: Programmatic Generation** (For simple structures)
 
@@ -4974,11 +4974,11 @@ Use `StructureTemplate` API to create structures via code.
 
 **Option A: JSON-based** (Data-driven approach)
 
-`common/src/main/resources/data/chronosphere/test_instance/boss_fight_time_tyrant.json`:
+`common/src/main/resources/data/chronodawn/test_instance/boss_fight_time_tyrant.json`:
 ```json
 {
-  "environment": "chronosphere:boss_fight_environment",
-  "structure": "chronosphere:boss_fight_arena",
+  "environment": "chronodawn:boss_fight_environment",
+  "structure": "chronodawn:boss_fight_arena",
   "max_ticks": 6000,
   "setup_ticks": 100,
   "required": true,
@@ -4988,15 +4988,15 @@ Use `StructureTemplate` API to create structures via code.
   "required_successes": 1,
   "sky_access": true,
   "type": "minecraft:function",
-  "function": "chronosphere:test_time_tyrant_spawns"
+  "function": "chronodawn:test_time_tyrant_spawns"
 }
 ```
 
 **Option B: Java-based** (Programmatic approach)
 
 ```java
-// common/src/test/java/com/chronosphere/gametest/TimeTyrantGameTest.java
-package com.chronosphere.gametest;
+// common/src/test/java/com/chronodawn/gametest/TimeTyrantGameTest.java
+package com.chronodawn.gametest;
 
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -5007,7 +5007,7 @@ import net.minecraft.core.BlockPos;
 public class TimeTyrantGameTest {
 
     @GameTest(
-        template = "chronosphere:boss_fight_arena",
+        template = "chronodawn:boss_fight_arena",
         timeoutTicks = 6000,  // 5 minutes (100 ticks/sec)
         required = true
     )
@@ -5041,7 +5041,7 @@ public class TimeTyrantGameTest {
     }
 
     @GameTest(
-        template = "chronosphere:boss_fight_arena",
+        template = "chronodawn:boss_fight_arena",
         timeoutTicks = 12000  // 10 minutes for full fight
     )
     public static void testTimeTyrantPhaseTransitions(GameTestHelper helper) {
@@ -5080,18 +5080,18 @@ public class TimeTyrantGameTest {
 
 ##### Registration (NeoForge)
 
-`neoforge/src/main/java/com/chronosphere/neoforge/ChronosphereNeoForge.java`:
+`neoforge/src/main/java/com/chronodawn/neoforge/ChronoDawnNeoForge.java`:
 ```java
-package com.chronosphere.neoforge;
+package com.chronodawn.neoforge;
 
-import com.chronosphere.gametest.TimeTyrantGameTest;
-import com.chronosphere.gametest.MasterClockStructureTest;
+import com.chronodawn.gametest.TimeTyrantGameTest;
+import com.chronodawn.gametest.MasterClockStructureTest;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterGameTestsEvent;
 
-@EventBusSubscriber(modid = "chronosphere", bus = EventBusSubscriber.Bus.MOD)
-public class ChronosphereGameTestRegistrar {
+@EventBusSubscriber(modid = "chronodawn", bus = EventBusSubscriber.Bus.MOD)
+public class ChronoDawnGameTestRegistrar {
 
     @SubscribeEvent
     public static void registerGameTests(RegisterGameTestsEvent event) {
@@ -5108,14 +5108,14 @@ public class ChronosphereGameTestRegistrar {
 ```json
 {
   "schemaVersion": 1,
-  "id": "chronosphere",
+  "id": "chronodawn",
   "entrypoints": {
     "main": [
-      "com.chronosphere.fabric.ChronosphereFabric"
+      "com.chronodawn.fabric.ChronoDawnFabric"
     ],
     "fabric-gametest": [
-      "com.chronosphere.gametest.TimeTyrantGameTest",
-      "com.chronosphere.gametest.MasterClockStructureTest"
+      "com.chronodawn.gametest.TimeTyrantGameTest",
+      "com.chronodawn.gametest.MasterClockStructureTest"
     ]
   }
 }
@@ -5124,10 +5124,10 @@ public class ChronosphereGameTestRegistrar {
 **Alternative: Use CustomTestMethodInvoker** (For setup/teardown logic)
 
 ```java
-// fabric/src/gametest/java/com/chronosphere/fabric/gametest/FabricTimeTyrantTest.java
-package com.chronosphere.fabric.gametest;
+// fabric/src/gametest/java/com/chronodawn/fabric/gametest/FabricTimeTyrantTest.java
+package com.chronodawn.fabric.gametest;
 
-import com.chronosphere.gametest.TimeTyrantGameTest;
+import com.chronodawn.gametest.TimeTyrantGameTest;
 import net.fabricmc.fabric.api.gametest.v1.CustomTestMethodInvoker;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.level.block.Blocks;
@@ -5157,7 +5157,7 @@ public class FabricTimeTyrantTest extends TimeTyrantGameTest
 
 **Command-based** (In-game):
 ```
-/test run chronosphere:boss_fight_time_tyrant
+/test run chronodawn:boss_fight_time_tyrant
 /test runall  # Run all registered tests
 /test runfailed  # Re-run failed tests
 ```
@@ -5233,32 +5233,32 @@ jobs:
 
 ##### Directory Structure
 ```
-Chronosphere/
+Chrono Dawn/
 ├── common/
-│   ├── src/main/resources/data/chronosphere/structure/
+│   ├── src/main/resources/data/chronodawn/structure/
 │   │   ├── boss_fight_arena.nbt          # Arena structure
 │   │   ├── master_clock_test.nbt         # Master Clock test scenario
 │   │   └── phantom_catacombs_test.nbt    # Phantom Catacombs test
-│   └── src/test/java/com/chronosphere/gametest/
+│   └── src/test/java/com/chronodawn/gametest/
 │       ├── TimeTyrantGameTest.java       # Time Tyrant boss tests
 │       ├── TimeGuardianGameTest.java     # Time Guardian boss tests
 │       ├── EntropyKeeperGameTest.java    # Entropy Keeper boss tests
 │       ├── MasterClockStructureTest.java # Structure generation tests
 │       └── PortalActivationTest.java     # Portal mechanics tests
 ├── neoforge/
-│   └── src/main/java/com/chronosphere/neoforge/
-│       └── ChronosphereGameTestRegistrar.java  # NeoForge test registration
+│   └── src/main/java/com/chronodawn/neoforge/
+│       └── ChronoDawnGameTestRegistrar.java  # NeoForge test registration
 └── fabric/
     ├── src/main/resources/fabric.mod.json       # Fabric test entrypoints
-    └── src/gametest/java/com/chronosphere/fabric/gametest/
+    └── src/gametest/java/com/chronodawn/fabric/gametest/
         └── FabricTimeTyrantTest.java            # Fabric-specific setup (optional)
 ```
 
 ##### Complete Example: Master Clock Structure Test
 
 ```java
-// common/src/test/java/com/chronosphere/gametest/MasterClockStructureTest.java
-package com.chronosphere.gametest;
+// common/src/test/java/com/chronodawn/gametest/MasterClockStructureTest.java
+package com.chronodawn.gametest;
 
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -5268,7 +5268,7 @@ import net.minecraft.core.BlockPos;
 public class MasterClockStructureTest {
 
     @GameTest(
-        template = "chronosphere:master_clock_test",
+        template = "chronodawn:master_clock_test",
         timeoutTicks = 200,
         required = true
     )
@@ -5290,7 +5290,7 @@ public class MasterClockStructureTest {
     }
 
     @GameTest(
-        template = "chronosphere:master_clock_test",
+        template = "chronodawn:master_clock_test",
         timeoutTicks = 400
     )
     public static void testBossRoomGeneration(GameTestHelper helper) {
@@ -5310,7 +5310,7 @@ public class MasterClockStructureTest {
     }
 
     @GameTest(
-        template = "chronosphere:master_clock_test",
+        template = "chronodawn:master_clock_test",
         timeoutTicks = 1000
     )
     public static void testAncientGearLootChests(GameTestHelper helper) {
@@ -5334,8 +5334,8 @@ public class MasterClockStructureTest {
 ##### Complete Example: Entropy Keeper Boss Test
 
 ```java
-// common/src/test/java/com/chronosphere/gametest/EntropyKeeperGameTest.java
-package com.chronosphere.gametest;
+// common/src/test/java/com/chronodawn/gametest/EntropyKeeperGameTest.java
+package com.chronodawn.gametest;
 
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -5345,7 +5345,7 @@ import net.minecraft.core.BlockPos;
 public class EntropyKeeperGameTest {
 
     @GameTest(
-        template = "chronosphere:entropy_crypt_boss_room",
+        template = "chronodawn:entropy_crypt_boss_room",
         timeoutTicks = 6000,
         required = true
     )
@@ -5374,7 +5374,7 @@ public class EntropyKeeperGameTest {
     }
 
     @GameTest(
-        template = "chronosphere:entropy_crypt_boss_room",
+        template = "chronodawn:entropy_crypt_boss_room",
         timeoutTicks = 12000
     )
     public static void testEntropyKeeperRewardChestOnDefeat(GameTestHelper helper) {
@@ -5403,7 +5403,7 @@ public class EntropyKeeperGameTest {
 }
 ```
 
-#### 7. Best Practices for Chronosphere Mod GameTests
+#### 7. Best Practices for Chrono Dawn Mod GameTests
 
 ##### Structure Templates
 - **Size**: Keep test structures small (max 50x50x50) to reduce memory usage
@@ -5440,7 +5440,7 @@ public void testTimeTyrantSpawnsInBossRoom() {
 
 **With GameTest Framework**:
 ```java
-@GameTest(template = "chronosphere:boss_fight_arena", timeoutTicks = 6000)
+@GameTest(template = "chronodawn:boss_fight_arena", timeoutTicks = 6000)
 public static void testTimeTyrantSpawnsInBossRoom(GameTestHelper helper) {
     var boss = helper.spawn(ModEntities.TIME_TYRANT.get(), new BlockPos(17, 4, 17));
     helper.assertTrue(boss.isAlive(), "Time Tyrant should spawn alive");
@@ -5459,12 +5459,12 @@ public static void testTimeTyrantSpawnsInBossRoom(GameTestHelper helper) {
 #### Phase 1: Setup GameTest Infrastructure
 1. Add GameTestServer run configuration to `neoforge/build.gradle`
 2. Configure Fabric test source set in `fabric/build.gradle`
-3. Create test structure directory: `common/src/main/resources/data/chronosphere/structure/`
+3. Create test structure directory: `common/src/main/resources/data/chronodawn/structure/`
 
 #### Phase 2: Create Basic Test Structures
 1. Launch dev client, build small test arenas using structure blocks
 2. Save structures for boss fights (Time Tyrant, Time Guardian, Entropy Keeper)
-3. Copy .nbt files to `common/src/main/resources/data/chronosphere/structure/`
+3. Copy .nbt files to `common/src/main/resources/data/chronodawn/structure/`
 
 #### Phase 3: Write Core GameTests
 1. Migrate `TimeTyrantFightTest` from @Disabled JUnit to executable GameTest
@@ -5518,7 +5518,7 @@ public static void testTimeTyrantSpawnsInBossRoom(GameTestHelper helper) {
      - Build Time Tyrant arena structure (35x20x35)
      - Build Time Guardian arena structure (25x15x25)
      - Build Entropy Keeper arena structure (25x15x25)
-     - Save structures to common/src/main/resources/data/chronosphere/structure/
+     - Save structures to common/src/main/resources/data/chronodawn/structure/
 
 3. **T242 [US3] Migrate boss fight tests to executable GameTests**
    - Priority: P2
@@ -5643,8 +5643,8 @@ public class TimeWoodBoatItem extends BoatItem {
 #### Textures and Models
 
 **Required Assets**:
-- Boat textures: `assets/chronosphere/textures/entity/boat/time_wood.png`
-- Chest boat textures: `assets/chronosphere/textures/entity/chest_boat/time_wood.png`
+- Boat textures: `assets/chronodawn/textures/entity/boat/time_wood.png`
+- Chest boat textures: `assets/chronodawn/textures/entity/chest_boat/time_wood.png`
 - Item models: Standard boat item models (can reuse vanilla structure)
 
 **Texture Creation Strategy**:
@@ -5714,7 +5714,7 @@ Result: time_wood_chest_boat
 2. Test chest boat storage functionality
 3. Test crafting recipes
 4. Test boat breaking and item drops
-5. Verify in Chronosphere ocean biome
+5. Verify in Chrono Dawn ocean biome
 
 ### Architectury-Specific Considerations
 
@@ -5789,7 +5789,7 @@ public static final RegistrySupplier<EntityType<TimeWoodBoat>> TIME_WOOD_BOAT =
 
 ### 方法1: プログラム的配置
 
-**概要**: プレイヤーがクロノスフィアに入った時、スポーン地点周辺に構造物を直接配置
+**概要**: プレイヤーがクロノドーンに入った時、スポーン地点周辺に構造物を直接配置
 
 ```java
 public class TimeKeeperVillagePlacer {
@@ -5807,7 +5807,7 @@ public class TimeKeeperVillagePlacer {
         // 構造物テンプレートを配置
         StructureTemplateManager manager = level.getServer().getStructureManager();
         StructureTemplate template = manager.getOrCreate(
-            ResourceLocation.fromNamespaceAndPath("chronosphere", "time_keeper_village")
+            ResourceLocation.fromNamespaceAndPath("chronodawn", "time_keeper_village")
         );
         template.placeInWorld(level, villagePos, villagePos,
             new StructurePlaceSettings(), level.random, 2);
@@ -5833,13 +5833,13 @@ public class TimeKeeperVillagePlacer {
 
 ```json
 {
-  "structures": [{ "structure": "chronosphere:time_keeper_village", "weight": 1 }],
+  "structures": [{ "structure": "chronodawn:time_keeper_village", "weight": 1 }],
   "placement": {
     "type": "minecraft:concentric_rings",
     "distance": 4,
     "spread": 3,
     "count": 128,
-    "preferred_biomes": "#chronosphere:has_time_keeper_village"
+    "preferred_biomes": "#chronodawn:has_time_keeper_village"
   }
 }
 ```
@@ -5864,7 +5864,7 @@ public class TimeKeeperVillagePlacer {
     "separation": 8,
     "salt": 12345,
     "exclusion_zone": {
-      "other_set": "chronosphere:master_clock",
+      "other_set": "chronodawn:master_clock",
       "chunk_count": 10
     }
   }
@@ -5980,7 +5980,7 @@ public class GuaranteedRadiusStructurePlacement extends StructurePlacement {
 ```java
 public class ModStructurePlacementTypes {
     public static final DeferredRegister<StructurePlacementType<?>> PLACEMENT_TYPES =
-        DeferredRegister.create(Registries.STRUCTURE_PLACEMENT, "chronosphere");
+        DeferredRegister.create(Registries.STRUCTURE_PLACEMENT, "chronodawn");
 
     public static final DeferredHolder<StructurePlacementType<?>,
         StructurePlacementType<GuaranteedRadiusStructurePlacement>> GUARANTEED_RADIUS =
@@ -5995,11 +5995,11 @@ public class ModStructurePlacementTypes {
 ```json
 {
   "structures": [{
-    "structure": "chronosphere:time_keeper_village",
+    "structure": "chronodawn:time_keeper_village",
     "weight": 1
   }],
   "placement": {
-    "type": "chronosphere:guaranteed_radius",
+    "type": "chronodawn:guaranteed_radius",
     "salt": 12345,
     "radius_chunks": 50,
     "min_distance": 15,
@@ -6119,11 +6119,11 @@ GuaranteedRadiusStructurePlacementにより構造物の候補位置を制御で�
 #### 方法A: 複数のstructure定義 + structure_set
 
 ```
-data/chronosphere/worldgen/structure/
+data/chronodawn/worldgen/structure/
 ├─ desert_clock_tower.json          (biomes: land biomes)
 └─ desert_clock_tower_ocean.json    (biomes: ocean)
 
-data/chronosphere/worldgen/structure_set/
+data/chronodawn/worldgen/structure_set/
 ├─ desert_clock_tower.json          (land版のみ)
 └─ desert_clock_tower_ocean.json    (ocean版のみ)
 ```
@@ -6137,8 +6137,8 @@ data/chronosphere/worldgen/structure_set/
 // start_pool.json
 {
   "elements": [
-    { "element": "chronosphere:desert_clock_tower/land", "weight": 1 },
-    { "element": "chronosphere:desert_clock_tower/ocean", "weight": 1 }
+    { "element": "chronodawn:desert_clock_tower/land", "weight": 1 },
+    { "element": "chronodawn:desert_clock_tower/ocean", "weight": 1 }
   ]
 }
 ```
@@ -6153,28 +6153,28 @@ data/chronosphere/worldgen/structure_set/
 ```json
 // desert_clock_tower_ocean.json (structure_set)
 {
-  "structures": [{ "structure": "chronosphere:desert_clock_tower_ocean", "weight": 1 }],
+  "structures": [{ "structure": "chronodawn:desert_clock_tower_ocean", "weight": 1 }],
   "placement": {
-    "type": "chronosphere:guaranteed_radius",
+    "type": "chronodawn:guaranteed_radius",
     "salt": 1663542343,
     "radius_chunks": 80,
     "min_distance": 15,
     "exclusion_zone": {
-      "other_set": "chronosphere:desert_clock_tower",
+      "other_set": "chronodawn:desert_clock_tower",
       "chunk_count": 30
     }
   }
 }
 ```
 
-### Chronosphere次元のバイオーム調整
+### Chrono Dawn次元のバイオーム調整
 
 構造物バリエーションに加えて、海洋バイオームを縮小することで問題を軽減：
 
 ```json
 // 現在の海洋バイオーム定義
 {
-  "biome": "chronosphere:chronosphere_ocean",
+  "biome": "chronodawn:chronodawn_ocean",
   "parameters": {
     "continentalness": [-1.0, -0.3]  // 広い範囲
   }
@@ -6182,7 +6182,7 @@ data/chronosphere/worldgen/structure_set/
 
 // 調整後
 {
-  "biome": "chronosphere:chronosphere_ocean",
+  "biome": "chronodawn:chronodawn_ocean",
   "parameters": {
     "continentalness": [-1.0, -0.85]  // 極端に狭い範囲
   }
@@ -6197,7 +6197,7 @@ data/chronosphere/worldgen/structure_set/
 - **100%保証**: ✅
 
 #### Desert Clock Tower
-- **現状**: 通常版のみ（chronosphere_desert限定）
+- **現状**: 通常版のみ（chronodawn_desert限定）
 - **必要**: 海洋版の追加
 - **対応**: T284で詳細設計
 
@@ -6236,7 +6236,7 @@ data/chronosphere/worldgen/structure_set/
 
 ### デザインコンセプト: 浮遊島 + Jigsaw接続 (廃止)
 
-Chronosphereの異世界感に合致した浮遊島デザインを採用。
+Chrono Dawnの異世界感に合致した浮遊島デザインを採用。
 **既存塔NBTをJigsawで再利用し、重複管理を回避**。
 
 ```
@@ -6295,9 +6295,9 @@ desert_clock_tower_ocean_platform.nbt (25x5x25)
 │   ├─ 側面: Cut Sandstone (風化した見た目)
 │   └─ 上面: Sandstone + Sand パッチ
 ├─ Jigsawブロック（上面中央）
-│   ├─ name: chronosphere:platform_top
-│   ├─ target: chronosphere:tower_bottom
-│   ├─ pool: chronosphere:desert_clock_tower/tower_pool
+│   ├─ name: chronodawn:platform_top
+│   ├─ target: chronodawn:tower_bottom
+│   ├─ pool: chronodawn:desert_clock_tower/tower_pool
 │   └─ final_state: minecraft:sandstone
 └─ アクセス構造（オプション）
     └─ 端から垂れ下がる足場
@@ -6306,8 +6306,8 @@ desert_clock_tower_ocean_platform.nbt (25x5x25)
 **既存修正: desert_clock_tower.nbt**
 ```
 底面にJigsawブロックを追加:
-├─ name: chronosphere:tower_bottom
-├─ target: chronosphere:platform_top
+├─ name: chronodawn:tower_bottom
+├─ target: chronodawn:platform_top
 ├─ pool: minecraft:empty
 └─ final_state: 既存の床ブロック
 ```
@@ -6330,10 +6330,10 @@ desert_clock_tower_ocean_platform.nbt (25x5x25)
 // worldgen/structure/desert_clock_tower_ocean.json
 {
   "type": "minecraft:jigsaw",
-  "start_pool": "chronosphere:desert_clock_tower_ocean/start_pool",
+  "start_pool": "chronodawn:desert_clock_tower_ocean/start_pool",
   "size": 1,
   "max_distance_from_center": 80,
-  "biomes": "chronosphere:chronosphere_ocean",
+  "biomes": "chronodawn:chronodawn_ocean",
   "step": "surface_structures",
   "terrain_adaptation": "none",
   "start_height": {
@@ -6350,17 +6350,17 @@ desert_clock_tower_ocean_platform.nbt (25x5x25)
 {
   "structures": [
     {
-      "structure": "chronosphere:desert_clock_tower_ocean",
+      "structure": "chronodawn:desert_clock_tower_ocean",
       "weight": 1
     }
   ],
   "placement": {
-    "type": "chronosphere:guaranteed_radius",
+    "type": "chronodawn:guaranteed_radius",
     "salt": 1663542343,
     "radius_chunks": 80,
     "min_distance": 15,
     "exclusion_zone": {
-      "other_set": "chronosphere:desert_clock_tower",
+      "other_set": "chronodawn:desert_clock_tower",
       "chunk_count": 30
     }
   }
@@ -6375,8 +6375,8 @@ desert_clock_tower_ocean_platform.nbt (25x5x25)
 // tags/worldgen/structure/desert_clock_towers.json
 {
   "values": [
-    "chronosphere:desert_clock_tower",
-    "chronosphere:desert_clock_tower_ocean"
+    "chronodawn:desert_clock_tower",
+    "chronodawn:desert_clock_tower_ocean"
   ]
 }
 ```
@@ -6431,15 +6431,15 @@ TimeCompassItemの検索ロジックを構造物タグ対応に変更。
 {
   "replace": false,
   "values": [
-    "chronosphere:chronosphere_plains",
-    "chronosphere:chronosphere_forest",
-    "chronosphere:chronosphere_dark_forest",
-    "chronosphere:chronosphere_ancient_forest",
-    "chronosphere:chronosphere_desert",
-    "chronosphere:chronosphere_mountain",
-    "chronosphere:chronosphere_snowy",
-    "chronosphere:chronosphere_swamp",
-    "chronosphere:chronosphere_ocean"  // ← 追加
+    "chronodawn:chronodawn_plains",
+    "chronodawn:chronodawn_forest",
+    "chronodawn:chronodawn_dark_forest",
+    "chronodawn:chronodawn_ancient_forest",
+    "chronodawn:chronodawn_desert",
+    "chronodawn:chronodawn_mountain",
+    "chronodawn:chronodawn_snowy",
+    "chronodawn:chronodawn_swamp",
+    "chronodawn:chronodawn_ocean"  // ← 追加
   ]
 }
 ```
@@ -6459,7 +6459,7 @@ TimeCompassItemの検索ロジックを構造物タグ対応に変更。
 // tags/worldgen/structure/master_clocks.json
 {
   "values": [
-    "chronosphere:master_clock"
+    "chronodawn:master_clock"
   ]
 }
 ```
@@ -6499,7 +6499,7 @@ TimeCompassItemの検索ロジックを構造物タグ対応に変更。
 **削除:**
 - `GuaranteedRadiusStructurePlacement.java`
 - `ModStructurePlacementTypes.java`
-- `Chronosphere.java` からの登録呼び出し
+- `ChronoDawn.java` からの登録呼び出し
 - `desert_clock_tower_ocean` 関連ファイル一式
 
 **変更:**
@@ -6507,7 +6507,7 @@ TimeCompassItemの検索ロジックを構造物タグ対応に変更。
 // 変更前
 {
   "placement": {
-    "type": "chronosphere:guaranteed_radius",
+    "type": "chronodawn:guaranteed_radius",
     "salt": 1663542342,
     "radius_chunks": 80,
     "spacing": 30,
@@ -6578,7 +6578,7 @@ TimeCompassItemの検索ロジックを構造物タグ対応に変更。
 
 ### 配置ロジック
 
-1. **トリガー**: プレイヤーがChronosphereに初めて入った時
+1. **トリガー**: プレイヤーがChrono Dawnに初めて入った時
 2. **位置選定**:
    - スポーン地点から32-64ブロックの範囲
    - `WORLD_SURFACE_WG` heightmapを使用して地表を検出
@@ -6595,7 +6595,7 @@ public class TimeKeeperVillagePlacer {
     private static final int MIN_DISTANCE = 32;  // 最小距離
     private static final int MAX_DISTANCE = 64;  // 最大距離
 
-    public static void onPlayerEnterChronosphere(ServerPlayer player) {
+    public static void onPlayerEnterChrono Dawn(ServerPlayer player) {
         ServerLevel level = player.serverLevel();
         TimeKeeperVillageData data = TimeKeeperVillageData.get(level);
 
@@ -6642,7 +6642,7 @@ public class TimeKeeperVillageData extends SavedData {
     public static TimeKeeperVillageData get(ServerLevel level) {
         return level.getDataStorage().computeIfAbsent(
             TimeKeeperVillageData.factory(),
-            "chronosphere_time_keeper_village"
+            "chronodawn_time_keeper_village"
         );
     }
 
@@ -6652,10 +6652,10 @@ public class TimeKeeperVillageData extends SavedData {
 
 ### NBT構造ファイル
 
-`common/src/main/resources/data/chronosphere/structure/time_keeper_village.nbt`
+`common/src/main/resources/data/chronodawn/structure/time_keeper_village.nbt`
 
 含めるエンティティ:
-- 2x `chronosphere:time_keeper` (座標指定、AI無効化フラグなし)
+- 2x `chronodawn:time_keeper` (座標指定、AI無効化フラグなし)
 
 含めるブロック:
 - Time Wood Planks (床)
@@ -6667,7 +6667,7 @@ public class TimeKeeperVillageData extends SavedData {
 
 ### テスト項目 (T277)
 
-1. 新規ワールドでChronosphereに入り、村が配置されることを確認
+1. 新規ワールドでChrono Dawnに入り、村が配置されることを確認
 2. 村の位置がスポーン地点から32-64ブロック以内であることを確認
 3. Time Keeperが正しくスポーンし、取引が機能することを確認
 4. ワールド再読み込み後も村が存続することを確認
@@ -6679,17 +6679,17 @@ public class TimeKeeperVillageData extends SavedData {
 ## T034n: DimensionSpecialEffects Research
 
 **Date**: 2025-12-17  
-**Task**: Research custom DimensionSpecialEffects for precise sky color control in Chronosphere dimension  
+**Task**: Research custom DimensionSpecialEffects for precise sky color control in Chrono Dawn dimension  
 **Priority**: High [P]
 
 ### Executive Summary
 
-Chronosphereディメンションの空の色をより精密に制御するため、DimensionSpecialEffectsのカスタム実装について調査しました。現在はバイオームJSONの`sky_color`フィールドで灰色(0x909090)の空を実現していますが、より高度な制御(ボス撃破による空の色変化など)を実現するには、クライアントサイドのMixinまたはカスタムDimensionSpecialEffectsの実装が必要です。
+Chrono Dawnディメンションの空の色をより精密に制御するため、DimensionSpecialEffectsのカスタム実装について調査しました。現在はバイオームJSONの`sky_color`フィールドで灰色(0x909090)の空を実現していますが、より高度な制御(ボス撃破による空の色変化など)を実現するには、クライアントサイドのMixinまたはカスタムDimensionSpecialEffectsの実装が必要です。
 
 ### Current Implementation
 
 #### Dimension Type Configuration
-**File**: `common/src/main/resources/data/chronosphere/dimension_type/chronosphere.json`
+**File**: `common/src/main/resources/data/chronodawn/dimension_type/chronodawn.json`
 
 ```json
 {
@@ -6704,7 +6704,7 @@ Chronosphereディメンションの空の色をより精密に制御するた�
 - 空の色はバイオームJSONで制御
 
 #### Biome Sky Colors
-**Files**: `common/src/main/resources/data/chronosphere/worldgen/biome/*.json`
+**Files**: `common/src/main/resources/data/chronodawn/worldgen/biome/*.json`
 
 全バイオームで統一した灰色の空を定義:
 ```json
@@ -6718,15 +6718,15 @@ Chronosphereディメンションの空の色をより精密に制御するた�
 ```
 
 **適用バイオーム**:
-- chronosphere_plains, chronosphere_desert, chronosphere_forest
-- chronosphere_dark_forest, chronosphere_ancient_forest
-- chronosphere_mountain, chronosphere_ocean
-- chronosphere_snowy, chronosphere_swamp
+- chronodawn_plains, chronodawn_desert, chronodawn_forest
+- chronodawn_dark_forest, chronodawn_ancient_forest
+- chronodawn_mountain, chronodawn_ocean
+- chronodawn_snowy, chronodawn_swamp
 
 ### Existing Client-Side Rendering Infrastructure
 
 #### 1. Fog Rendering Mixin
-**File**: `common/src/main/java/com/chronosphere/mixin/client/FogRendererMixin.java`
+**File**: `common/src/main/java/com/chronodawn/mixin/client/FogRendererMixin.java`
 
 既にFogRendererに対するMixinが実装されており、Dark ForestバイオームでHoag色の霧を制御しています:
 
@@ -6736,7 +6736,7 @@ public class FogRendererMixin {
     @Inject(method = "setupFog", at = @At("TAIL"))
     private static void modifyDarkForestFog(...) {
         // Dark Forest biome detection
-        if (currentBiome.is(ChronosphereBiomeProvider.CHRONOSPHERE_DARK_FOREST)) {
+        if (currentBiome.is(ChronoDawnBiomeProvider.CHRONO_DAWN_DARK_FOREST)) {
             RenderSystem.setShaderFogStart(5.0f);
             RenderSystem.setShaderFogEnd(60.0f);
         }
@@ -6747,12 +6747,12 @@ public class FogRendererMixin {
 **特徴**:
 - バイオーム位置を検出し、条件に応じてレンダリングを変更
 - `RenderSystem` APIを使用して直接レンダリングパラメータを設定
-- クライアントサイド限定(Mixinは`chronosphere.mixins.json`で定義)
+- クライアントサイド限定(Mixinは`chronodawn.mixins.json`で定義)
 
 #### 2. Client Initialization
 **Files**:
-- `fabric/src/main/java/com/chronosphere/fabric/client/ChronosphereClientFabric.java`
-- `neoforge/src/main/java/com/chronosphere/neoforge/client/ChronosphereClientNeoForge.java`
+- `fabric/src/main/java/com/chronodawn/fabric/client/ChronoDawnClientFabric.java`
+- `neoforge/src/main/java/com/chronodawn/neoforge/client/ChronoDawnClientNeoForge.java`
 
 既存のクライアント初期化で実装されている機能:
 - ブロック色プロバイダー(ColorProviderRegistry)
@@ -6791,9 +6791,9 @@ public class FogRendererMixin {
 @Mixin(LevelRenderer.class)
 public class SkyColorMixin {
     @Inject(method = "renderSky", at = @At("HEAD"))
-    private void modifyChronosphereSkyColor(CallbackInfo ci) {
-        // Chronosphereディメンションかチェック
-        if (isInChronosphere()) {
+    private void modifyChronoDawnSkyColor(CallbackInfo ci) {
+        // Chrono Dawnディメンションかチェック
+        if (isInChrono Dawn()) {
             // ボス撃破状況に応じて空の色を動的に変更
             int skyColor = calculateSkyColor();
             // レンダリングパラメータを設定
@@ -6812,7 +6812,7 @@ public class SkyColorMixin {
 **課題**:
 - 正確なフックポイントの特定が必要
 - Minecraft内部APIの変更に影響を受ける可能性
-- Mixin設定ファイルの更新が必要(`chronosphere-fabric.mixins.json`, `chronosphere-neoforge.mixins.json`)
+- Mixin設定ファイルの更新が必要(`chronodawn-fabric.mixins.json`, `chronodawn-neoforge.mixins.json`)
 
 #### Approach 3: Custom DimensionSpecialEffects (Advanced)
 **難易度**: 高  
@@ -6851,7 +6851,7 @@ MinecraftのDimensionSpecialEffects APIを使用してカスタムディメン�
 **推奨実装計画**:
 1. Minecraft 1.21.1のLevelRendererクラスを解析し、空の色レンダリングメソッドを特定
 2. 新しいMixinクラス `SkyColorMixin` を作成(FogRendererMixinを参考に)
-3. Chronosphereディメンション検出ロジックを実装
+3. Chrono Dawnディメンション検出ロジックを実装
 4. ボス撃破状況に応じた空の色計算ロジックを実装
 5. Mixin設定ファイルを更新
 6. クライアントサイドテスト
@@ -6890,13 +6890,13 @@ MinecraftのDimensionSpecialEffects APIを使用してカスタムディメン�
 
 **既存の参考実装**:
 - `FogRendererMixin.java` (lines 28-82) - バイオーム検出とレンダリング制御のパターン
-- `ChronosphereClientFabric.java` (lines 63-505) - クライアントサイド登録パターン
-- `ChronosphereBiomeProvider.java` - バイオームキー定義
+- `ChronoDawnClientFabric.java` (lines 63-505) - クライアントサイド登録パターン
+- `ChronoDawnBiomeProvider.java` - バイオームキー定義
 
 **Mixin設定ファイル**:
-- `common/src/main/resources/chronosphere.mixins.json` - 共通Mixin定義
-- `fabric/src/main/resources/chronosphere-fabric.mixins.json` - Fabric固有(refMap必須)
-- `neoforge/src/main/resources/chronosphere-neoforge.mixins.json` - NeoForge固有(refMapなし)
+- `common/src/main/resources/chronodawn.mixins.json` - 共通Mixin定義
+- `fabric/src/main/resources/chronodawn-fabric.mixins.json` - Fabric固有(refMap必須)
+- `neoforge/src/main/resources/chronodawn-neoforge.mixins.json` - NeoForge固有(refMapなし)
 
 **カラー値参照**:
 - 現在の灰色空: `9474192` (0x909090)
@@ -6928,13 +6928,13 @@ DimensionSpecialEffectsのカスタム実装は技術的に可能ですが、**�
 ## Snowy Biome Boundary Smoothing (2025-12-19)
 
 ### 問題
-クロノスフィアのsnowyバイオームで、雪と草ブロックの境界が完全な直線になっている。
+クロノドーンのsnowyバイオームで、雪と草ブロックの境界が完全な直線になっている。
 
 ### 調査結果
 
 **現在の設定:**
 - `freeze_top_layer` feature使用（`minecraft:biome`プレースメント）
-- バイオームソース設定（`dimension/chronosphere.json`）:
+- バイオームソース設定（`dimension/chronodawn.json`）:
   - snowy: temperature [-1.0, -0.2]
   - dark_forest: temperature [-0.2, 0.5]
   - 他のバイオーム: temperature [-0.2, 0.5]
@@ -6978,4 +6978,4 @@ DimensionSpecialEffectsのカスタム実装は技術的に可能ですが、**�
 
 ### 参照
 - CLAUDE.md: Custom Noise Settings セクション
-- 関連タスク: T307 (specs/001-chronosphere-mod/tasks.md)
+- 関連タスク: T307 (specs/chrono-dawn-mod/tasks.md)

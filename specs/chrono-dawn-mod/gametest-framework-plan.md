@@ -25,7 +25,7 @@
 fabricApi {
     configureTests {
         createSourceSet = true
-        modId = "chronosphere-test"
+        modId = "chronodawn-test"
         enableGameTests = true
         enableClientGameTests = true
         eula = true
@@ -43,7 +43,7 @@ fabricApi {
 runs {
     gameTestServer {
         gameTestServer()
-        systemProperty 'neoforge.enabledGameTestNamespaces', 'chronosphere'
+        systemProperty 'neoforge.enabledGameTestNamespaces', 'chronodawn'
     }
 }
 ```
@@ -62,7 +62,7 @@ runs {
 fabricApi {
     configureTests {
         createSourceSet = true
-        modId = "chronosphere-test"
+        modId = "chronodawn-test"
         enableGameTests = true
         enableClientGameTests = false  // サーバーサイドのみで開始
         eula = true
@@ -71,18 +71,18 @@ fabricApi {
 ```
 
 #### T172b: Fabric GameTest ソースセット作成
-- `fabric/src/gametest/java/com/chronosphere/gametest/`
+- `fabric/src/gametest/java/com/chronodawn/gametest/`
 - `fabric/src/gametest/resources/`
 
 #### T172c: サンプル GameTest 作成
 ```java
-package com.chronosphere.gametest;
+package com.chronodawn.gametest;
 
 import net.minecraft.gametest.framework.GameTest;
 import net.minecraft.gametest.framework.GameTestHelper;
 
-public class ChronosphereGameTests {
-    @GameTest(template = "chronosphere:empty_3x3")
+public class ChronoDawnGameTests {
+    @GameTest(template = "chronodawn:empty_3x3")
     public void testTimeGuardianSpawn(GameTestHelper helper) {
         // Time Guardian エンティティのスポーンテスト
         helper.spawn(ModEntityTypes.TIME_GUARDIAN.get(), new BlockPos(1, 1, 1));
@@ -92,7 +92,7 @@ public class ChronosphereGameTests {
 ```
 
 #### T172d: テスト用構造体テンプレート作成
-- `fabric/src/gametest/resources/data/chronosphere/gametest/structures/`
+- `fabric/src/gametest/resources/data/chronodawn/gametest/structures/`
 - `empty_3x3.nbt` - 基本的な空の構造体
 - `boss_arena.nbt` - ボス戦テスト用アリーナ
 
@@ -114,7 +114,7 @@ loom {
             ideConfigGenerated(true)
             runDir("run")
             // GameTest 有効化
-            property("neoforge.enabledGameTestNamespaces", "chronosphere")
+            property("neoforge.enabledGameTestNamespaces", "chronodawn")
         }
     }
 }
@@ -122,17 +122,17 @@ loom {
 
 #### T173b: NeoForge GameTest 登録クラス作成
 ```java
-package com.chronosphere.neoforge.gametest;
+package com.chronodawn.neoforge.gametest;
 
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.RegisterGameTestsEvent;
 
-@EventBusSubscriber(modid = "chronosphere", bus = EventBusSubscriber.Bus.MOD)
-public class ChronosphereGameTestsNeoForge {
+@EventBusSubscriber(modid = "chronodawn", bus = EventBusSubscriber.Bus.MOD)
+public class ChronoDawnGameTestsNeoForge {
     @SubscribeEvent
     public static void registerTests(RegisterGameTestsEvent event) {
-        event.register(ChronosphereGameTests.class);
+        event.register(ChronoDawnGameTests.class);
     }
 }
 ```
@@ -145,7 +145,7 @@ public class ChronosphereGameTestsNeoForge {
 ### Phase 3: 共通 GameTest ロジック
 
 #### T172f/T173d: 共通テストロジックを common モジュールに配置
-- `common/src/main/java/com/chronosphere/gametest/` (共有テストロジック)
+- `common/src/main/java/com/chronodawn/gametest/` (共有テストロジック)
 - プラットフォーム固有の登録は各モジュールで実施
 
 ### Phase 4: 既存 @Disabled テストの移行
@@ -188,7 +188,7 @@ public class ChronosphereGameTestsNeoForge {
 - **テスト数**: 9件全て合格
 - **実装**:
   - `fabric/build.gradle`: `loom { runs { gameTest { ... } } }` 設定追加
-  - `fabric/src/gametest/java/.../ChronosphereGameTestsFabric.java`: @GameTest使用
+  - `fabric/src/gametest/java/.../ChronoDawnGameTestsFabric.java`: @GameTest使用
   - `FabricGameTest.EMPTY_STRUCTURE` テンプレート使用（Fabric標準）
 
 ### Phase 2: NeoForge GameTest ✅ 完了 (2025-12)
@@ -197,14 +197,14 @@ public class ChronosphereGameTestsNeoForge {
 - **テスト数**: 9件全て合格
 - **実装**:
   - `neoforge/build.gradle`: `gameTestServer` run configuration追加
-  - `neoforge/src/main/java/.../ChronosphereGameTestsNeoForge.java`: @GameTestGenerator使用
+  - `neoforge/src/main/java/.../ChronoDawnGameTestsNeoForge.java`: @GameTestGenerator使用
   - `RegisterGameTestsEvent` でテストクラス登録
-  - 既存の `chronosphere:ancient_ruins` 構造体テンプレート使用
+  - 既存の `chronodawn:ancient_ruins` 構造体テンプレート使用
 
 ### Phase 3: 共通GameTestロジック ✅ 完了 (2025-12)
 - **コミット**: de34c79
 - **実装**:
-  - `common/src/main/java/com/chronosphere/gametest/ChronosphereGameTestLogic.java`: 共通テストロジック
+  - `common/src/main/java/com/chronodawn/gametest/ChronoDawnGameTestLogic.java`: 共通テストロジック
   - Fabric/NeoForge両方が `Consumer<GameTestHelper>` で共通ロジックを呼び出し
 - **結果**: コード重複削減（172行追加、177行削除）
 

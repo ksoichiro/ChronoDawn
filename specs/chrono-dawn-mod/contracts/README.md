@@ -1,6 +1,6 @@
-# Contracts: Chronosphere Mod
+# Contracts: Chrono Dawn Mod
 
-このディレクトリには、Minecraft Mod「Chronosphere」のデータコントラクトとビルド設定が含まれています。
+このディレクトリには、Minecraft Mod「Chrono Dawn」のデータコントラクトとビルド設定が含まれています。
 
 **Architecture**: Architectury Multi-Loader (NeoForge + Fabric)
 
@@ -35,7 +35,7 @@ Architecturyマルチローダー構成のためのGradle設定ファイル:
 - `chronoblade_recipe.json` - クロノブレードのレシピ
 
 **Schema**: Minecraft Recipe JSON Schema (1.21.1)
-**Location**: `data/chronosphere/recipes/`
+**Location**: `data/chronodawn/recipes/`
 
 ### 2. Loot Tables (ルートテーブル)
 
@@ -46,7 +46,7 @@ Architecturyマルチローダー構成のためのGradle設定ファイル:
 - `time_tyrant_loot.json` - 時間の暴君のドロップテーブル
 
 **Schema**: Minecraft Loot Table JSON Schema (1.21.1)
-**Location**: `data/chronosphere/loot_tables/`
+**Location**: `data/chronodawn/loot_tables/`
 
 ### 3. World Generation (ワールド生成)
 
@@ -54,20 +54,20 @@ Architecturyマルチローダー構成のためのGradle設定ファイル:
 
 例:
 - `ancient_ruins_structure.json` - 古代遺跡の構造物定義
-- `chronosphere_biome.json` - クロノスフィアのバイオーム定義
+- `chronodawn_biome.json` - クロノドーンのバイオーム定義
 
 **Schema**: Minecraft World Generation JSON Schema (1.21.1)
-**Location**: `data/chronosphere/worldgen/`
+**Location**: `data/chronodawn/worldgen/`
 
 ### 4. Dimension (ディメンション)
 
 カスタムディメンションの設定を定義するJSON仕様。
 
 例:
-- `chronosphere_dimension.json` - クロノスフィアディメンションの定義
+- `chronodawn_dimension.json` - クロノドーンディメンションの定義
 
 **Schema**: Minecraft Dimension JSON Schema (1.21.1)
-**Location**: `data/chronosphere/dimension/`
+**Location**: `data/chronodawn/dimension/`
 
 ## Sample Contracts
 

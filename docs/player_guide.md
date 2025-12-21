@@ -55,7 +55,7 @@ Chrono Dawn is a time-themed dimension mod that adds:
 
 ### Required Dependencies
 
-Download and install these mods alongside Chronosphere:
+Download and install these mods alongside Chrono Dawn:
 
 1. **Architectury API** (version 13.0.8+)
    - [CurseForge](https://www.curseforge.com/minecraft/mc-mods/architectury-api)
@@ -75,12 +75,12 @@ Download and install these mods alongside Chronosphere:
 1. Install Minecraft 1.21.1
 2. Install your chosen mod loader (Fabric or NeoForge)
 3. Download required dependencies (Architectury API, Custom Portal API, Patchouli)
-4. Download **Chronosphere Mod** (choose the version matching your loader):
+4. Download **Chrono Dawn Mod** (choose the version matching your loader):
    - `chronodawn-fabric-0.1.0.jar` for Fabric
    - `chronodawn-neoforge-0.1.0.jar` for NeoForge
 5. Place all JAR files in your `.minecraft/mods/` folder
 6. Launch Minecraft with your chosen mod loader profile
-7. Verify "Chronosphere" appears in the mod list
+7. Verify "Chrono Dawn" appears in the mod list
 
 ---
 
@@ -183,14 +183,14 @@ All hostile mobs in Chrono Dawn receive **Slowness IV**, making them move extrem
 
 Chrono Dawn contains **8 unique biomes**:
 
-1. **Chronosphere Forest** - Dense with Time Wood trees, moderate difficulty
-2. **Chronosphere Desert** - Sandy terrain
-3. **Chronosphere Mountain** - High peaks and steep cliffs
-4. **Chronosphere Ocean** - Deep waters
-5. **Chronosphere Snowy** - Frozen landscape with **Frozen Time Ice**
-6. **Chronosphere Swamp** - Murky waters and unique vegetation
-7. **Chronosphere Dark Forest** - Dense with **Dark Time Wood** trees
-8. **Chronosphere Ancient Forest** - Contains **Ancient Time Wood** trees
+1. **Chrono Dawn Forest** - Dense with Time Wood trees, moderate difficulty
+2. **Chrono Dawn Desert** - Sandy terrain
+3. **Chrono Dawn Mountain** - High peaks and steep cliffs
+4. **Chrono Dawn Ocean** - Deep waters
+5. **Chrono Dawn Snowy** - Frozen landscape with **Frozen Time Ice**
+6. **Chrono Dawn Swamp** - Murky waters and unique vegetation
+7. **Chrono Dawn Dark Forest** - Dense with **Dark Time Wood** trees
+8. **Chrono Dawn Ancient Forest** - Contains **Ancient Time Wood** trees
 
 ### Sky and Atmosphere
 
@@ -203,17 +203,17 @@ Chrono Dawn contains **8 unique biomes**:
 
 Harvest three unique wood types:
 
-#### Time Wood (Chronosphere Forest)
+#### Time Wood (Chrono Dawn Forest)
 - Yellow-olive wood with unique texture
 - Full block set (logs, planks, stairs, slabs, fences, doors, trapdoors, buttons, pressure plates)
 - Saplings for renewable tree farming
 - Boats and chest boats
 
-#### Dark Time Wood (Chronosphere Dark Forest)
+#### Dark Time Wood (Chrono Dawn Dark Forest)
 - Darker variant of Time Wood
 - Same full block set as Time Wood
 
-#### Ancient Time Wood (Chronosphere Ancient Forest)
+#### Ancient Time Wood (Chrono Dawn Ancient Forest)
 - Ancient variant of Time Wood
 - Same full block set as Time Wood
 
@@ -221,11 +221,11 @@ Harvest three unique wood types:
 
 ## Structures and Exploration
 
-### Forgotten Library (Chronosphere)
+### Forgotten Library (Chrono Dawn)
 
 **Purpose**: Contains the **Portal Stabilizer recipe**
 
-**Location**: Various biomes in Chronosphere
+**Location**: Various biomes in Chrono Dawn
 
 **What to Find**:
 - Recipe for Portal Stabilizer (in chests or written books)
@@ -241,11 +241,11 @@ Harvest three unique wood types:
 
 ---
 
-### Desert Clock Tower (Chronosphere)
+### Desert Clock Tower (Chrono Dawn)
 
 **Purpose**: Source of **Enhanced Clockstone** and **Time Guardian** mini-boss
 
-**Location**: Various biomes in Chronosphere (spawns in most biomes except Ocean)
+**Location**: Various biomes in Chrono Dawn (spawns in most biomes except Ocean)
 
 **Features**:
 - **5-floor tower** structure
@@ -271,13 +271,13 @@ Harvest three unique wood types:
 
 ---
 
-### Guardian Vault (Chronosphere)
+### Guardian Vault (Chrono Dawn)
 
 **Boss**: **Chronos Warden**
 
 **Structure Type**: Underground dungeon
 
-**Location**: Various biomes in Chronosphere
+**Location**: Various biomes in Chrono Dawn
 
 **Features**:
 - Stone-themed architecture
@@ -295,13 +295,13 @@ Harvest three unique wood types:
 
 ---
 
-### Clockwork Depths (Chronosphere)
+### Clockwork Depths (Chrono Dawn)
 
 **Boss**: **Clockwork Colossus**
 
 **Structure Type**: Underground mechanical dungeon
 
-**Location**: Various biomes in Chronosphere
+**Location**: Various biomes in Chrono Dawn
 
 **Features**:
 - Clockwork-themed design
@@ -319,13 +319,13 @@ Harvest three unique wood types:
 
 ---
 
-### Phantom Catacombs (Chronosphere)
+### Phantom Catacombs (Chrono Dawn)
 
 **Boss**: **Temporal Phantom**
 
 **Structure Type**: Multi-level maze dungeon
 
-**Location**: Various biomes in Chronosphere
+**Location**: Various biomes in Chrono Dawn
 
 **Features**:
 - **Complex maze layout** with multiple paths
@@ -350,13 +350,13 @@ Harvest three unique wood types:
 
 ---
 
-### Entropy Crypt (Chronosphere)
+### Entropy Crypt (Chrono Dawn)
 
 **Boss**: **Entropy Keeper**
 
 **Structure Type**: Underground crypt
 
-**Location**: Various biomes in Chronosphere
+**Location**: Various biomes in Chrono Dawn
 
 **Features**:
 - Decay-themed design
@@ -379,7 +379,7 @@ Harvest three unique wood types:
 
 ---
 
-### Master Clock (Chronosphere)
+### Master Clock (Chrono Dawn)
 
 **Boss**: **Time Tyrant** (Final Boss)
 
@@ -388,7 +388,7 @@ Harvest three unique wood types:
 **Requirements**:
 - **Master Clock Key** (dropped by Time Guardian in Desert Clock Tower)
 
-**Location**: Various biomes in Chronosphere
+**Location**: Various biomes in Chrono Dawn
 
 **Features**:
 - Multi-level structure
@@ -608,11 +608,11 @@ These four bosses must be defeated to craft the **Chrono Aegis** shield, which p
 5. **Build portal frame** (minimum 4×5)
 6. **Prepare supplies** (food, armor, weapons, bed, tools)
 7. **Activate portal** with Time Hourglass
-8. **Enter Chronosphere** (one-way!)
+8. **Enter Chrono Dawn** (one-way!)
 
 ### Mid Game
 
-9. **Explore Chronosphere** to find Forgotten Library
+9. **Explore Chrono Dawn** to find Forgotten Library
 10. **Discover Portal Stabilizer recipe** in Forgotten Library
 11. **Locate Desert Clock Tower** (spawns in various biomes)
 12. **Defeat Time Guardian** to obtain Enhanced Clockstone and Master Clock Key
@@ -642,7 +642,7 @@ These four bosses must be defeated to craft the **Chrono Aegis** shield, which p
 ### Portal and Utility Items
 
 #### Time Hourglass
-- **Use**: Activates Chronosphere portals
+- **Use**: Activates Chrono Dawn portals
 - **Durability**: Single-use (consumed on activation)
 - **Recipe**: Unlocked by "Time Hourglass Blueprint" found in Ancient Ruins chests
 
@@ -658,7 +658,7 @@ These four bosses must be defeated to craft the **Chrono Aegis** shield, which p
 - **⚠️ Warning**: High risk - only craft when safe!
 
 #### Time Compass
-- **Use**: Points toward time-related structures in Chronosphere
+- **Use**: Points toward time-related structures in Chrono Dawn
 
 #### Master Clock Key
 - **Use**: Unlocks Master Clock dungeon entrance
@@ -680,10 +680,10 @@ These four bosses must be defeated to craft the **Chrono Aegis** shield, which p
 
 #### Fruit of Time
 - **Effect**: Restores 4 hunger points + grants Haste I for 60 seconds
-- **Source**: Grows on Fruit of Time blocks in Chronosphere
+- **Source**: Grows on Fruit of Time blocks in Chrono Dawn
 
 #### Time Wheat
-- **Use**: Crop that grows in Chronosphere
+- **Use**: Crop that grows in Chrono Dawn
 - **Products**: Time Bread, Time Wheat Cookies, Golden Time Wheat
 
 #### Chrono Melon
@@ -721,7 +721,7 @@ These four bosses must be defeated to craft the **Chrono Aegis** shield, which p
 - **Use**: Portal Stabilizer crafting, advanced recipes, better equipment
 
 #### Time Crystal
-- **Source**: Time Crystal Ore (found in Chronosphere)
+- **Source**: Time Crystal Ore (found in Chrono Dawn)
 - **Use**: Advanced crafting material
 
 #### Time Crystal Block
@@ -860,8 +860,8 @@ All three wood types have the same variants:
 - **Use**: Decorative mechanical-themed block
 
 #### Frozen Time Ice
-- **Property**: Special ice block unique to Chronosphere Snowy biome
-- **Use**: Chronosphere-themed ice
+- **Property**: Special ice block unique to Chrono Dawn Snowy biome
+- **Use**: Chrono Dawn-themed ice
 
 ---
 
@@ -870,14 +870,14 @@ All three wood types have the same variants:
 ### General Tips
 
 1. **Don't Rush the Portal**
-   - Prepare supplies before entering Chronosphere (food, armor, weapons, tools)
+   - Prepare supplies before entering Chrono Dawn (food, armor, weapons, tools)
    - The portal becomes one-way - plan accordingly!
    - Set a bed in Overworld before entering (respawn point)
 
 2. **Bring Essentials**
    - Food and healing items
    - Building blocks (for emergencies, marking paths)
-   - Bed (to set respawn point in Chronosphere)
+   - Bed (to set respawn point in Chrono Dawn)
    - Tools and weapons
    - Torches for lighting
 
@@ -888,7 +888,7 @@ All three wood types have the same variants:
    - You can outrun any hostile mob
 
 4. **Set Up a Base**
-   - Build a safe base in Chronosphere
+   - Build a safe base in Chrono Dawn
    - Store items before boss fights
    - Set respawn point with a bed
    - Create storage for loot
@@ -902,7 +902,7 @@ All three wood types have the same variants:
 
 2. **Multiple Portals**
    - After stabilization, you can create portal networks
-   - Link different Overworld locations to Chronosphere
+   - Link different Overworld locations to Chrono Dawn
    - Each portal needs a Time Hourglass to activate
 
 3. **Emergency Escape**
@@ -968,7 +968,7 @@ All three wood types have the same variants:
    - Mine in Ancient Ruins (Overworld)
    - Limited supply per structure
    - Explore multiple Ancient Ruins if needed
-   - Also found underground in Chronosphere
+   - Also found underground in Chrono Dawn
 
 2. **Enhanced Clockstone**
    - Desert Clock Tower loot chests
@@ -977,7 +977,7 @@ All three wood types have the same variants:
    - Limited quantity - use wisely
 
 3. **Time Crystal**
-   - Mine Time Crystal Ore in Chronosphere
+   - Mine Time Crystal Ore in Chrono Dawn
    - Used for advanced recipes
    - Renewable resource (ore respawns)
 
@@ -1005,21 +1005,21 @@ All three wood types have the same variants:
    - Provides good hunger restoration
 
 4. **Temporal Root**
-   - Found naturally in Chronosphere
+   - Found naturally in Chrono Dawn
    - Bake for better food value
    - Make stew for variety
 
 ### Advanced Tips
 
 1. **Respawn Mechanics**
-   - You can set respawn point with beds or respawn anchors in Chronosphere
+   - You can set respawn point with beds or respawn anchors in Chrono Dawn
    - Beds work safely (unlike Nether/End where they explode)
    - If no respawn point is set, you respawn in Overworld
    - Portal Stabilizer does **NOT** affect respawn location
    - You can always escape by breaking bed and dying (last resort!)
 
 2. **Time Distortion Stacking**
-   - Mobs already have Slowness IV in Chronosphere
+   - Mobs already have Slowness IV in Chrono Dawn
    - You can apply additional slowness with Chrono Aegis (when blocking)
    - Makes combat trivially easy!
 
@@ -1107,7 +1107,7 @@ All three wood types have the same variants:
 
 ## FAQ
 
-### Q: Can I return to the Overworld after entering Chronosphere?
+### Q: Can I return to the Overworld after entering Chrono Dawn?
 
 **A**: Not immediately. The portal becomes one-way after entry. You must:
 1. Find the Forgotten Library
@@ -1116,7 +1116,7 @@ All three wood types have the same variants:
 
 ### Q: What happens if I die in Chrono Dawn?
 
-**A**: You respawn at your bed/respawn anchor (if set), or at world spawn if none set. The portal does NOT affect respawn location. If you haven't stabilized the portal, you may need to rebuild it to return to Chronosphere.
+**A**: You respawn at your bed/respawn anchor (if set), or at world spawn if none set. The portal does NOT affect respawn location. If you haven't stabilized the portal, you may need to rebuild it to return to Chrono Dawn.
 
 ### Q: Can I fight bosses multiple times?
 
@@ -1156,7 +1156,7 @@ All three wood types have the same variants:
 **A**: Yes! After stabilizing the dimension, you can create multiple portals. Each portal needs:
 - Clockstone Block frame (4×5 minimum)
 - Time Hourglass to activate
-- All portals link between Overworld and Chronosphere (not to each other)
+- All portals link between Overworld and Chrono Dawn (not to each other)
 
 ### Q: What's the difference between the three wood types?
 
@@ -1164,7 +1164,7 @@ All three wood types have the same variants:
 
 ### Q: How do I get the in-game guide book?
 
-**A**: Install the **Patchouli** mod dependency (version 1.21.1-92+). You'll receive the "Chronicle of Chronosphere" guide book automatically.
+**A**: Install the **Patchouli** mod dependency (version 1.21.1-92+). You'll receive the "Chronicle of Chrono Dawn" guide book automatically.
 
 ---
 
@@ -1187,4 +1187,4 @@ You're now ready to explore Chrono Dawn! Remember the key steps:
 
 **For technical information, see the [Developer Guide](developer_guide.md).**
 
-**For issues or questions, visit the [GitHub Repository](https://github.com/ksoichiro/Chronosphere).**
+**For issues or questions, visit the [GitHub Repository](https://github.com/ksoichiro/ChronoDawn).**

@@ -44,7 +44,7 @@ public abstract class LevelGetTimeMixin implements ChronoDawnTimeHolder {
         Level level = (Level) (Object) this;
 
         // Check if this is ChronoDawn dimension (works for both ServerLevel and ClientLevel)
-        if (level.dimension().equals(ModDimensions.CHRONOSPHERE_DIMENSION)) {
+        if (level.dimension().equals(ModDimensions.CHRONO_DAWN_DIMENSION)) {
             // Initialize with saved time if not set yet
             if (chronodawn$independentTime == null) {
                 if (level instanceof ServerLevel serverLevel) {
@@ -82,7 +82,7 @@ public abstract class LevelGetTimeMixin implements ChronoDawnTimeHolder {
         Level level = (Level) (Object) this;
 
         // Only process ServerLevel for now (client-server sync needs custom packet)
-        if (level instanceof ServerLevel && level.dimension().equals(ModDimensions.CHRONOSPHERE_DIMENSION)) {
+        if (level instanceof ServerLevel && level.dimension().equals(ModDimensions.CHRONO_DAWN_DIMENSION)) {
             if (chronodawn$independentTime != null) {
                 // Day is 0-12000, Night is 12000-24000 (within 24000 cycle)
                 long timeOfDay = chronodawn$independentTime % 24000L;
@@ -100,7 +100,7 @@ public abstract class LevelGetTimeMixin implements ChronoDawnTimeHolder {
     private void interceptGetSkyDarken(CallbackInfoReturnable<Integer> cir) {
         Level level = (Level) (Object) this;
 
-        if (level.dimension().equals(ModDimensions.CHRONOSPHERE_DIMENSION)) {
+        if (level.dimension().equals(ModDimensions.CHRONO_DAWN_DIMENSION)) {
             if (chronodawn$independentTime != null) {
                 // Calculate sky darken based on independent time
                 long timeOfDay = chronodawn$independentTime % 24000L;

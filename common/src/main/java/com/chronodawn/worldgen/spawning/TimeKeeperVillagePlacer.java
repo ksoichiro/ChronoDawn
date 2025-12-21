@@ -77,7 +77,7 @@ public class TimeKeeperVillagePlacer {
         ServerLevel level = player.serverLevel();
 
         // Verify we're in ChronoDawn dimension
-        if (!level.dimension().equals(ModDimensions.CHRONOSPHERE_DIMENSION)) {
+        if (!level.dimension().equals(ModDimensions.CHRONO_DAWN_DIMENSION)) {
             return;
         }
 

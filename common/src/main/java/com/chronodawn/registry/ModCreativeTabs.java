@@ -30,7 +30,7 @@ public class ModCreativeTabs {
      * Task: T034b [Phase 2] Register ChronoDawn creative tab with icon
      * Task: T034c [Phase 2] Implement item group population
      */
-    public static final RegistrySupplier<CreativeModeTab> CHRONOSPHERE_TAB = TABS.register(
+    public static final RegistrySupplier<CreativeModeTab> CHRONO_DAWN_TAB = TABS.register(
         "chronodawn",
         () -> CreativeTabRegistry.create(builder ->
             builder.title(Component.translatable("itemGroup.chronodawn.chronodawn"))

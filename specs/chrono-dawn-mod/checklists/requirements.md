@@ -1,4 +1,4 @@
-# Specification Quality Checklist: Chronosphere Mod
+# Specification Quality Checklist: Chrono Dawn Mod
 
 **Purpose**: Validate specification completeness and quality before proceeding to planning
 **Created**: 2025-10-18

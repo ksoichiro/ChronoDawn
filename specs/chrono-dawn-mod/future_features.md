@@ -1,4 +1,4 @@
-# Future Features - Chronosphere Mod
+# Future Features - Chrono Dawn Mod
 
 このドキュメントは、計画されているが未実装の機能を記録します。
 
@@ -88,7 +88,7 @@
 - **用途**: 生より良い、回復効果付き
 
 ### ワールドジェン配置
-- **バイオーム**: chronosphere_plains（レアパッチ）
+- **バイオーム**: chronodawn_plains（レアパッチ）
 - **頻度**: レア（村の野生ニンジン/ジャガイモのように）
 - **配置ルール**: 水の近くの農地に小さなパッチ（2-4作物）
 
@@ -133,7 +133,7 @@
 - **用途**: 装飾、または9スライスにクラフト
 
 ### ワールドジェン配置
-- **バイオーム**: chronosphere_plains、chronosphere_forest
+- **バイオーム**: chronodawn_plains、chronodawn_forest
 - **頻度**: やや珍しいパッチ
 - **配置ルール**: 小さなメロンパッチ（カボチャパッチのように）
 
@@ -173,7 +173,7 @@
 - **用途**: 生で食べる、シチューに使用、または植える
 
 ### ワールドジェン配置
-- **バイオーム**: chronosphere_forest（暗い場所）、chronosphere_cave エリア
+- **バイオーム**: chronodawn_forest（暗い場所）、chronodawn_cave エリア
 - **頻度**: 暗所でやや珍しい
 - **配置ルール**: 低光量エリアの小さなクラスター（バニラキノコと同様）
 

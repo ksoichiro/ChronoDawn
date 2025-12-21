@@ -501,7 +501,7 @@ public class ModBlocks {
      * Invisible, indestructible, no collision - intended for structure placement only.
      *
      * Task: T115m [US2]
-     * Reference: specs/001-chronosphere-mod/lore.md
+     * Reference: specs/chrono-dawn-mod/lore.md
      */
     public static final RegistrySupplier<Block> TEMPORAL_PARTICLE_EMITTER = BLOCKS.register(
         "temporal_particle_emitter",

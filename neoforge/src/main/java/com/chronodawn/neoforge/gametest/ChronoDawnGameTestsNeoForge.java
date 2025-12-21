@@ -60,10 +60,10 @@ public class ChronoDawnGameTestsNeoForge {
             ChronoDawnGameTestLogic.TEST_CLOCKWORK_SENTINEL_CAN_SPAWN));
 
         tests.add(createTest("testChronoDawnBoatCanSpawn",
-            ChronoDawnGameTestLogic.TEST_CHRONOSPHERE_BOAT_CAN_SPAWN));
+            ChronoDawnGameTestLogic.TEST_CHRONO_DAWN_BOAT_CAN_SPAWN));
 
         tests.add(createTest("testChronoDawnChestBoatCanSpawn",
-            ChronoDawnGameTestLogic.TEST_CHRONOSPHERE_CHEST_BOAT_CAN_SPAWN));
+            ChronoDawnGameTestLogic.TEST_CHRONO_DAWN_CHEST_BOAT_CAN_SPAWN));
 
         tests.add(createTest("testChronosWardenCanSpawn",
             ChronoDawnGameTestLogic.TEST_CHRONOS_WARDEN_CAN_SPAWN));

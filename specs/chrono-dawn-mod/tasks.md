@@ -1,7 +1,7 @@
-# Tasks: Chronosphere Mod - 時間操作をテーマにしたMinecraft Mod
+# Tasks: Chrono Dawn Mod - 時間操作をテーマにしたMinecraft Mod
 
-**Feature Branch**: `001-chronosphere-mod`
-**Input**: Design documents from `/specs/001-chronosphere-mod/`
+**Branch**: `main`
+**Input**: Design documents from `/specs/chrono-dawn-mod/`
 **Prerequisites**: plan.md, spec.md, research.md, data-model.md, contracts/, quickstart.md
 
 **Architecture**: Architectury Multi-Loader Framework (common / fabric / neoforge)
@@ -16,7 +16,7 @@
 **Purpose**: 固定時刻を設定し、他のディメンションmodと同様の独特な雰囲気を作り出す
 
 - [X] T034j [P] Research day-night cycle vs fixed time design (Decision 7)
-- [X] T034k [P] Implement fixed time (6000 ticks = noon) and End sky effects in dimension_type/chronosphere.json
+- [X] T034k [P] Implement fixed time (6000 ticks = noon) and End sky effects in dimension_type/chronodawn.json
 - [X] T034l [P] Test dimension visual appearance with fixed time and grey sky in-game
 - [X] T034m [P] Evaluate time/sky settings and document adjustments needed (fixed_time: 4000-8000, effects: overworld/end/custom)
 - [X] T034n [P] Research custom DimensionSpecialEffects for precise sky color control (Completed: 2025-12-17, see research.md)
@@ -37,26 +37,26 @@
 
 **Detailed Steps**:
 1. **Create SkyColorMixin class**
-   - File: `common/src/main/java/com/chronosphere/mixin/client/SkyColorMixin.java`
+   - File: `common/src/main/java/com/chronodawn/mixin/client/SkyColorMixin.java`
    - Target: `net.minecraft.client.renderer.LevelRenderer`
    - Method to hook: `renderSky()` or related sky rendering method
    - Pattern: Similar to FogRendererMixin (biome detection + RenderSystem calls)
 
 2. **Implement boss defeat detection**
-   - Check Time Tyrant advancement: `chronosphere:time_tyrant_defeated`
+   - Check Time Tyrant advancement: `chronodawn:time_tyrant_defeated`
    - Use AdvancementManager on client-side to query completion status
    - Cache result to avoid repeated checks
 
 3. **Apply sky color override**
    - Default color: `0x909090` (144, 144, 144) - current grey
    - After Time Tyrant defeat: `0x5588DD` (85, 136, 221) - bright blue sky
-   - Apply color only in Chronosphere dimension
+   - Apply color only in Chrono Dawn dimension
    - Direct color replacement (no interpolation needed)
 
 4. **Update Mixin configuration files**
-   - Add SkyColorMixin to `chronosphere.mixins.json`
-   - Update `chronosphere-fabric.mixins.json` (with refMap)
-   - Update `chronosphere-neoforge.mixins.json` (without refMap)
+   - Add SkyColorMixin to `chronodawn.mixins.json`
+   - Update `chronodawn-fabric.mixins.json` (with refMap)
+   - Update `chronodawn-neoforge.mixins.json` (without refMap)
 
 5. **Testing**
    - Test without Time Tyrant defeat (should show grey sky: 0x909090)
@@ -121,9 +121,9 @@
 
 **Note**: 優先度は低い。Phase 6（Polish）段階での実装を検討
 
-- [ ] T088aj [P] [US1] (Optional) Design small rock circle feature for chronosphere_plains (Stonehenge-like miniature)
-- [ ] T088ak [P] [US1] (Optional) Design mushroom circle feature for chronosphere_forest (fairy ring theme)
-- [ ] T088al [P] [US1] (Optional) Design coral-like time structure for chronosphere_ocean (temporal reef theme)
+- [ ] T088aj [P] [US1] (Optional) Design small rock circle feature for chronodawn_plains (Stonehenge-like miniature)
+- [ ] T088ak [P] [US1] (Optional) Design mushroom circle feature for chronodawn_forest (fairy ring theme)
+- [ ] T088al [P] [US1] (Optional) Design coral-like time structure for chronodawn_ocean (temporal reef theme)
 - [ ] T088am [P] [US1] (Optional) Implement landmark features and configure rare placement
 - [ ] T088an [US1] (Optional) Test landmark generation and ensure they don't interfere with main structures
 
@@ -158,7 +158,7 @@
   - Multi-level Jigsaw structure: tower (surface) → gearshaft → engine_room → archive_vault
   - ClockworkColossusSpawner for proximity-based boss spawning (Clockwork Block markers)
   - Template pools: tower_pool, gearshaft_pool, engine_room_pool, archive_vault_pool
-  - Spawns in chronosphere_desert and chronosphere_mountain biomes
+  - Spawns in chronodawn_desert and chronodawn_mountain biomes
   - Boss spawns when player approaches within 20 blocks of Clockwork Block markers
 
 #### T236: Temporal Phantom (時間の幻影) - PARTIALLY COMPLETED
@@ -169,7 +169,7 @@
   - TemporalPhantomSpawner for proximity-based boss spawning (player enters boss_room)
   - Complete waterlogging prevention system (DecorativeWaterFluid, CopyFluidLevelProcessor, StructureStartMixin)
   - Template pools: entrance_pool, corridor_pool, maze_room_pool, room_7_pool, boss_room_pool, terminator_pool
-  - Spawns in chronosphere_forest and chronosphere_swamp biomes
+  - Spawns in chronodawn_forest and chronodawn_swamp biomes
   - Boss spawns when player enters boss_room (21x21x9 area, 1-second interval check)
   - Terrain adaptation: "none" (prevents surface terrain deletion)
 - [x] T236s: Create custom texture for Temporal Phantom (COMPLETED)
@@ -188,7 +188,7 @@
   - Custom BlockSetType allows hand interaction with iron sounds
   - ACTIVATED property tracks boss spawn state
   - Template pools: entrance_pool, stairs_pool, main_pool
-  - Spawns in chronosphere_swamp and chronosphere_forest biomes
+  - Spawns in chronodawn_swamp and chronodawn_forest biomes
   - Mixin refmap configuration for production JAR compatibility
 
 #### T238: Chrono Aegis System - PARTIALLY COMPLETED
@@ -219,7 +219,7 @@
   - StructureStartMixin for waterlogging prevention (removes Aquifer water before placement)
   - ChronosWardenSpawner for boss spawning (Boss Room Door with DoorType: "guardian_vault")
   - Loot table for treasure chests
-  - Spawns in chronosphere_plains and chronosphere_forest biomes
+  - Spawns in chronodawn_plains and chronodawn_forest biomes
 - [x] T240: Fix Clarity auto-cleanse feature (implemented using event system in EntityEventHandler.handleChronoAegisClarity)
 - [x] T241: Comprehensive testing (boss spawning, Chrono Aegis crafting, Time Tyrant fight)
   - **Completed**: Verified Chrono Aegis makes Time Tyrant fight easier, balanced for player advantage
@@ -243,7 +243,7 @@
     - 近接攻撃: 基本ダメージ12のみ（Strength I効果なし）
     - 遠距離攻撃: 8秒間隔に延長（頻度60%減）
   - **Files Modified**:
-    - common/src/main/java/com/chronosphere/entities/bosses/ClockworkColossusEntity.java (lines 52, 55, 90, 213, 218-223)
+    - common/src/main/java/com/chronodawn/entities/bosses/ClockworkColossusEntity.java (lines 52, 55, 90, 213, 218-223)
   - **Testing**: ビルド成功、92テスト全てパス
 
 ### Future Boss Battle Enhancements (US3 - Phase 7+)
@@ -255,10 +255,10 @@
 - T171l-n: テストプレイによるゲームバランス確認後に実装
 
 - [ ] T171j [US3] Design large-scale Master Clock dungeon layout (20+ rooms, multi-floor, complex maze structure, environmental hazards)
-- [ ] T171k [US3] Implement large-scale Master Clock dungeon generation system in common/src/main/java/com/chronosphere/worldgen/structures/MasterClockLargeGenerator.java
-- [ ] T171l [US3] Implement Temporal Anchor environmental mechanic in common/src/main/java/com/chronosphere/blocks/TemporalAnchorBlock.java (3 anchors in dungeon, destroy to weaken Time Tyrant: teleport frequency, Time Acceleration, AoE range)
+- [ ] T171k [US3] Implement large-scale Master Clock dungeon generation system in common/src/main/java/com/chronodawn/worldgen/structures/MasterClockLargeGenerator.java
+- [ ] T171l [US3] Implement Temporal Anchor environmental mechanic in common/src/main/java/com/chronodawn/blocks/TemporalAnchorBlock.java (3 anchors in dungeon, destroy to weaken Time Tyrant: teleport frequency, Time Acceleration, AoE range)
 - [ ] T171m [US3] Adjust Time Tyrant base stats based on playtesting (HP 500→400, Attack 18→15, Defense 15→12) if needed
-- [ ] T171n [US3] Implement Grave Marker death recovery system in common/src/main/java/com/chronosphere/mechanics/GraveMarkerHandler.java (death marker at boss room entrance, safe item recovery from outside)
+- [ ] T171n [US3] Implement Grave Marker death recovery system in common/src/main/java/com/chronodawn/mechanics/GraveMarkerHandler.java (death marker at boss room entrance, safe item recovery from outside)
 
 ### Custom Terrain Features (US3 Enhancement - Medium Priority)
 
@@ -267,10 +267,10 @@
 **Note**: 現在はオーバーワールドと同じ地形生成アルゴリズムを使用。時間のテーマに沿った特殊地形を追加して探索の面白さを増す
 
 - [ ] T289 [US3] Design Temporal Rift Canyon structure concept (distorted terrain, floating blocks, time crystal veins exposed in walls, visual effects)
-- [ ] T290 [P] [US3] Create Temporal Rift Canyon structure NBT in common/src/main/resources/data/chronosphere/structures/temporal_rift_canyon.nbt (canyon with irregular terrain, time crystal ores)
-- [ ] T291 [P] [US3] Create Floating Clockwork Ruins structure NBT in common/src/main/resources/data/chronosphere/structures/floating_clockwork_ruins.nbt (floating islands with broken clockwork mechanisms, loot chests)
-- [ ] T292 [P] [US3] Create Time Crystal Caverns feature in common/src/main/java/com/chronosphere/worldgen/features/TimeCrystalCavernsFeature.java (underground crystal formations, glowing effects)
-- [ ] T293 [P] [US3] Configure custom terrain feature placement in common/src/main/resources/data/chronosphere/worldgen/structure_set/ and placed_feature/ (rare placement, biome-specific)
+- [ ] T290 [P] [US3] Create Temporal Rift Canyon structure NBT in common/src/main/resources/data/chronodawn/structures/temporal_rift_canyon.nbt (canyon with irregular terrain, time crystal ores)
+- [ ] T291 [P] [US3] Create Floating Clockwork Ruins structure NBT in common/src/main/resources/data/chronodawn/structures/floating_clockwork_ruins.nbt (floating islands with broken clockwork mechanisms, loot chests)
+- [ ] T292 [P] [US3] Create Time Crystal Caverns feature in common/src/main/java/com/chronodawn/worldgen/features/TimeCrystalCavernsFeature.java (underground crystal formations, glowing effects)
+- [ ] T293 [P] [US3] Configure custom terrain feature placement in common/src/main/resources/data/chronodawn/worldgen/structure_set/ and placed_feature/ (rare placement, biome-specific)
 - [ ] T294 [US3] Test custom terrain features in-game and verify they generate correctly without breaking existing structures
 
 **Note**: Task IDs renumbered from T260-T265 to T289-T294 to avoid conflict with T265 (coal ore) in Basic Resources section
@@ -284,7 +284,7 @@
 - [x] T178 [P] Optimize entity tick rate for time distortion (5-tick interval) in EntityEventHandler.java
   - **Completed**: Changed time distortion processing from every tick to every 5 ticks
   - Added timeDistortionTickCounter to EntityEventHandler
-  - Reduces entity processing load by 80% in Chronosphere dimension
+  - Reduces entity processing load by 80% in Chrono Dawn dimension
   - Slowness effect duration (100 ticks) ensures continuous coverage without gaps
   - Tested in-game on both Fabric and NeoForge loaders
 - [x] T179 [P] Implement portal registry caching in PortalRegistry.java
@@ -312,20 +312,20 @@
 
 **Purpose**: プレイテストで発見されたディメンション機能の改善
 
-- [x] T301 [P] Fix bed sleeping mechanic in Chronosphere (currently sleeping doesn't advance time to morning)
-  - **Issue**: Chronosphere has day-night cycle but sleeping in bed doesn't skip to morning
+- [x] T301 [P] Fix bed sleeping mechanic in Chrono Dawn (currently sleeping doesn't advance time to morning)
+  - **Issue**: Chrono Dawn has day-night cycle but sleeping in bed doesn't skip to morning
   - **Root Cause**: Custom dimensions don't naturally support time skipping when sleeping (Minecraft limitation)
-  - **Solution**: Implemented SleepMixin to manually check if all players in Chronosphere are sleeping and advance time to morning
+  - **Solution**: Implemented SleepMixin to manually check if all players in Chrono Dawn are sleeping and advance time to morning
   - **Implementation Details**:
     - Created SleepMixin.java that hooks into ServerLevel.tick()
-    - Checks if ALL players in Chronosphere dimension are sleeping long enough
+    - Checks if ALL players in Chrono Dawn dimension are sleeping long enough
     - Advances time to morning (1000 ticks) when all players are sleeping
     - Independent from Overworld sleep mechanics (dimension-specific)
-    - Respects Chronosphere's variable time cycle system
+    - Respects Chrono Dawn's variable time cycle system
   - **Files Modified**:
-    - common/src/main/java/com/chronosphere/mixin/SleepMixin.java (new)
-    - fabric/src/main/resources/chronosphere-fabric.mixins.json
-    - neoforge/src/main/resources/chronosphere-neoforge.mixins.json
+    - common/src/main/java/com/chronodawn/mixin/SleepMixin.java (new)
+    - fabric/src/main/resources/chronodawn-fabric.mixins.json
+    - neoforge/src/main/resources/chronodawn-neoforge.mixins.json
   - **Tested**: Build successful, all game tests passed (92/92)
 
 ### Playtest Improvements - Boss Battle
@@ -337,7 +337,7 @@
   - **Investigation**: Check BossRoomDoorBlock.java unlock condition logic
   - **Fix**: Update unlock requirement to check for both Ancient Clockwork x3 AND Key to Master Clock
   - **Completed**: Modified BlockEventHandler.java:166 to require both hasRequiredAncientGears() AND hasKeyToMasterClock()
-  - **File**: common/src/main/java/com/chronosphere/events/BlockEventHandler.java:166
+  - **File**: common/src/main/java/com/chronodawn/events/BlockEventHandler.java:166
 - [ ] T303 [P] Prevent non-boss mob spawning in Desert Clock Tower boss room
   - **Issue**: Other mobs spawn in Desert Clock Tower boss room during battle
   - **Investigation**: Check structure configuration and spawning rules for desert_clock_tower
@@ -353,12 +353,12 @@
 - [x] T304 [P] Fix Master Clock boss room ceiling height for Time Tyrant
   - **Issue**: Time Tyrant cannot pass through some low-height areas in Master Clock boss room
   - **Solution**: Increased ceiling height in problematic areas to accommodate Time Tyrant (height = 3.5 blocks)
-  - **Files Modified**: common/src/main/resources/data/chronosphere/structures/master_clock_boss_room.nbt
+  - **Files Modified**: common/src/main/resources/data/chronodawn/structures/master_clock_boss_room.nbt
   - **Commit**: 035a723 (fix: improve Master Clock boss room layout for better gameplay)
 - [x] T305 [P] Prevent player camping in Master Clock boss room
   - **Issue**: Players can hide in safe spots and attack Time Tyrant without risk
   - **Solution**: Removed hiding spots from room layout to ensure boss has proper access to entire arena
-  - **Files Modified**: common/src/main/resources/data/chronosphere/structures/master_clock_boss_room.nbt
+  - **Files Modified**: common/src/main/resources/data/chronodawn/structures/master_clock_boss_room.nbt
   - **Commit**: 035a723 (fix: improve Master Clock boss room layout for better gameplay)
 
 ### Playtest Improvements - Exploration
@@ -370,7 +370,7 @@
   - **Investigation**: Check Ancient Ruins spawn frequency and distribution
   - **Possible solutions**:
     - Add craftable compass that points to nearest Ancient Ruins
-    - Increase structure spawn rate in chronosphere_plains/forest
+    - Increase structure spawn rate in chronodawn_plains/forest
     - Add visual cues (e.g., beacon beam visible from distance)
     - Add advancement hint system with approximate coordinates
 
@@ -416,7 +416,7 @@
     1. Add transition biomes (Snowy Plains, Snowy Forest, etc.) with intermediate temperatures
     2. Implement custom noise settings for more complex biome distribution
     3. Implement custom snow placement Feature with noise-based logic (last resort)
-  - **Reference**: specs/001-chronosphere-mod/research.md → "Snowy Biome Boundary Smoothing (2025-12-19)"
+  - **Reference**: specs/chrono-dawn-mod/research.md → "Snowy Biome Boundary Smoothing (2025-12-19)"
   - **Dependencies**: None (future enhancement)
   - **Priority**: Low (cosmetic improvement)
 
@@ -424,13 +424,13 @@
 
 ### Mod Rebranding
 
-**Purpose**: Mod名称とディメンション名を「Chronosphere」から「Chrono Dawn」に変更する
+**Purpose**: Mod名称とディメンション名を「Chrono Dawn」から「Chrono Dawn」に変更する
 
-- [ ] T308 [Rebranding] Rename mod and dimension from "Chronosphere" to "Chrono Dawn"
+- [ ] T308 [Rebranding] Rename mod and dimension from "Chrono Dawn" to "Chrono Dawn"
   - **Scope**:
-    - Mod名称変更 (Chronosphere → Chrono Dawn)
-    - ディメンション名変更 (chronosphere → chrono_dawn)
-    - パッケージ名は維持 (com.chronosphere)
+    - Mod名称変更 (Chrono Dawn → Chrono Dawn)
+    - ディメンション名変更 (chronodawn → chrono_dawn)
+    - パッケージ名は維持 (com.chronodawn)
   - **Files to Update**:
     - Documentation files (README.md, docs/*, CLAUDE.md, etc.)
     - Mod metadata files (fabric.mod.json, neoforge.mods.toml)

@@ -74,7 +74,7 @@ public class FogRendererMixin {
         Holder<Biome> currentBiome = clientLevel.getBiome(cameraPos);
 
         // Apply fog only if camera is actually inside Dark Forest biome
-        if (currentBiome.is(ChronoDawnBiomeProvider.CHRONOSPHERE_DARK_FOREST)) {
+        if (currentBiome.is(ChronoDawnBiomeProvider.CHRONO_DAWN_DARK_FOREST)) {
             RenderSystem.setShaderFogStart(DARK_FOREST_FOG_START);
             RenderSystem.setShaderFogEnd(DARK_FOREST_FOG_END);
         }

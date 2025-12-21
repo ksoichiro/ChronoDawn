@@ -255,7 +255,7 @@ public class ModEntities {
      * Reference: research.md (Time Wood Boats Implementation Plan)
      * Task: T268-T270 [US1] Create Time Wood Boat variants
      */
-    public static final RegistrySupplier<EntityType<ChronoDawnBoat>> CHRONOSPHERE_BOAT = ENTITIES.register(
+    public static final RegistrySupplier<EntityType<ChronoDawnBoat>> CHRONO_DAWN_BOAT = ENTITIES.register(
         "chronodawn_boat",
         () -> EntityType.Builder.<ChronoDawnBoat>of(ChronoDawnBoat::new, MobCategory.MISC)
             .sized(1.375F, 0.5625F) // Standard boat size
@@ -272,7 +272,7 @@ public class ModEntities {
      * Reference: research.md (Time Wood Boats Implementation Plan)
      * Task: T268-T270 [US1] Create Time Wood Chest Boat variants
      */
-    public static final RegistrySupplier<EntityType<ChronoDawnChestBoat>> CHRONOSPHERE_CHEST_BOAT = ENTITIES.register(
+    public static final RegistrySupplier<EntityType<ChronoDawnChestBoat>> CHRONO_DAWN_CHEST_BOAT = ENTITIES.register(
         "chronodawn_chest_boat",
         () -> EntityType.Builder.<ChronoDawnChestBoat>of(ChronoDawnChestBoat::new, MobCategory.MISC)
             .sized(1.375F, 0.5625F) // Standard boat size

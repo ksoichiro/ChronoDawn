@@ -99,7 +99,7 @@ public class TimeDistortionEffect {
      */
     private static boolean isInChronoDawnDimension(LivingEntity entity) {
         // FIXED: Use location() to compare ResourceLocation instead of ResourceKey
-        return entity.level().dimension().location().equals(ModDimensions.CHRONOSPHERE_DIMENSION.location());
+        return entity.level().dimension().location().equals(ModDimensions.CHRONO_DAWN_DIMENSION.location());
     }
 
     /**

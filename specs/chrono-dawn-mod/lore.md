@@ -1,9 +1,9 @@
-# Chronosphere - World Lore and Setting
+# Chrono Dawn - World Lore and Setting
 
 **Last Updated**: 2025-11-19
 **Task Reference**: T115i-l (Player Guidance)
 
-This document defines the worldbuilding, lore, and narrative framework for the Chronosphere mod. All in-game elements (structures, items, mobs, books) should align with this setting.
+This document defines the worldbuilding, lore, and narrative framework for the Chrono Dawn mod. All in-game elements (structures, items, mobs, books) should align with this setting.
 
 ---
 
@@ -13,7 +13,7 @@ This document defines the worldbuilding, lore, and narrative framework for the C
 2. [Time Tyrant's Grand Plan](#time-tyrants-grand-plan)
 3. [Ancient Civilization History](#ancient-civilization-history)
 4. [Temporal Seal Mechanics](#temporal-seal-mechanics)
-5. [Chronicle of Chronosphere Origin](#chronicle-of-chronosphere-origin)
+5. [Chronicle of Chrono Dawn Origin](#chronicle-of-chrono-dawn-origin)
 6. [Player's Path to Victory](#players-path-to-victory)
 7. [Key Terms and Concepts](#key-terms-and-concepts)
 8. [In-Game Manifestations](#in-game-manifestations)
@@ -22,20 +22,20 @@ This document defines the worldbuilding, lore, and narrative framework for the C
 
 ## Core World Concept
 
-### Chronosphere's Role in the Multiverse
+### Chrono Dawn's Role in the Multiverse
 
-**Chronosphere is the time source dimension for all dimensions.**
+**Chrono Dawn is the time source dimension for all dimensions.**
 
 - Functions as the "heart of time" for the entire multiverse
 - Supplies temporal energy that allows time to flow in all dimensions
-- All dimensions (Overworld, Nether, End, etc.) depend on Chronosphere for temporal stability
-- Controlling Chronosphere means controlling time across all dimensions
+- All dimensions (Overworld, Nether, End, etc.) depend on Chrono Dawn for temporal stability
+- Controlling Chrono Dawn means controlling time across all dimensions
 
-**Current State**: Time in Chronosphere is completely frozen. Only the player maintains normal temporal flow due to being an Overworld native.
+**Current State**: Time in Chrono Dawn is completely frozen. Only the player maintains normal temporal flow due to being an Overworld native.
 
 ### Time Distortion Effect
 
-In the frozen Chronosphere:
+In the frozen Chrono Dawn:
 - Hostile mobs move at 20% normal speed (Slowness IV effect)
 - Environment appears static and lifeless
 - Player moves at normal speed, creating significant combat advantage
@@ -47,14 +47,14 @@ In the frozen Chronosphere:
 
 ### Three-Phase Plan for Ultimate Power
 
-**Phase 1: Freeze Chronosphere** ✓ COMPLETED
-- Successfully froze time in the Chronosphere dimension
+**Phase 1: Freeze Chrono Dawn** ✓ COMPLETED
+- Successfully froze time in the Chrono Dawn dimension
 - Gained control over the time source
 - Established Stasis Core as power center
 
 **Phase 2: Accumulate Energy** ⏳ NEARLY COMPLETE
 - Spend millennia accumulating temporal energy
-- Use frozen Chronosphere as energy reservoir
+- Use frozen Chrono Dawn as energy reservoir
 - Build up power sufficient to freeze all dimensions simultaneously
 - **Duration**: Thousands of years (ancient civilization era → present)
 
@@ -88,14 +88,14 @@ Ancient civilization in the Overworld possessed advanced temporal research capab
 **Phase 2: Discovery Era**
 
 Early anomalies intensified, prompting investigation:
-- Traced anomalies to Chronosphere dimension
+- Traced anomalies to Chrono Dawn dimension
 - Developed **Time Hourglass** technology to create portal
-- Sent expedition team to Chronosphere
+- Sent expedition team to Chrono Dawn
 
 **Phase 3: Confrontation Era**
 
 Expedition discovered the horrifying truth:
-- Found Chronosphere completely frozen in time
+- Found Chrono Dawn completely frozen in time
 - Encountered Time Tyrant at the Master Clock Tower
 - Learned of Time Tyrant's plan to freeze all dimensions
 - Realized the threat to the entire multiverse
@@ -105,14 +105,14 @@ Expedition discovered the horrifying truth:
 Ancient scholars recognized they couldn't defeat Time Tyrant:
 - Time Tyrant was too powerful even before millennia of energy accumulation
 - Stasis Core was fully functional with no exploitable weaknesses
-- Expedition members lacked time resistance (weakened by prolonged Chronosphere exposure)
+- Expedition members lacked time resistance (weakened by prolonged Chrono Dawn exposure)
 - Direct combat was impossible
 
 They chose to buy time for future generations:
 - Designed and placed **Temporal Seal** to slow Time Tyrant's energy accumulation
-- Wrote **Chronicle of Chronosphere** documenting their findings and strategies
-- Encoded Chronicle with magic to transfer to next Chronosphere visitor when seal begins failing
-- **All expedition members died in Chronosphere** - none returned
+- Wrote **Chronicle of Chrono Dawn** documenting their findings and strategies
+- Encoded Chronicle with magic to transfer to next Chrono Dawn visitor when seal begins failing
+- **All expedition members died in Chrono Dawn** - none returned
 
 **Phase 5: Abandonment**
 
@@ -132,7 +132,7 @@ Ancient Ruins research facility was abandoned:
 
 **Mechanism**:
 - Magical/technological seal placed around Master Clock Tower area
-- Disrupts temporal energy flow from frozen Chronosphere to Stasis Core
+- Disrupts temporal energy flow from frozen Chrono Dawn to Stasis Core
 - Reduces energy accumulation rate by ~95%
 - Cannot be removed by Time Tyrant without abandoning accumulated energy
 
@@ -161,7 +161,7 @@ Ancient Ruins research facility was abandoned:
 
 ---
 
-## Chronicle of Chronosphere Origin
+## Chronicle of Chrono Dawn Origin
 
 ### The Last Scholar's Legacy
 
@@ -169,12 +169,12 @@ Ancient Ruins research facility was abandoned:
 
 **Writing Context**:
 - Written as the scholar's final act before death
-- Composed in Chronosphere after placing Temporal Seal
+- Composed in Chrono Dawn after placing Temporal Seal
 - Knew they would not return to Overworld
 - Intended as warning and strategy guide for future defenders
 
 **Content**:
-- Chronosphere dimension mechanics
+- Chrono Dawn dimension mechanics
 - Time Tyrant's plan and motivations
 - Structure locations and purposes
 - Combat strategies and weaknesses
@@ -183,12 +183,12 @@ Ancient Ruins research facility was abandoned:
 **Magical Encoding**:
 The Chronicle was encoded with transfer magic that activates when:
 1. Temporal Seal begins failing (Ancient Ruins reactivate)
-2. Someone enters Chronosphere for the first time
+2. Someone enters Chrono Dawn for the first time
 
-Both conditions are now met. The book manifests in the inventory of anyone entering Chronosphere.
+Both conditions are now met. The book manifests in the inventory of anyone entering Chrono Dawn.
 
 **Available Version**:
-- English version only (auto-given when entering Chronosphere)
+- English version only (auto-given when entering Chrono Dawn)
 
 ---
 
@@ -201,7 +201,7 @@ The player has **four critical advantages** that the ancient expedition lacked:
 ### 1. Temporal Seal Collapse Creates Vulnerabilities
 
 **Ancient Expedition Faced**:
-- Time Tyrant immediately after freezing Chronosphere
+- Time Tyrant immediately after freezing Chrono Dawn
 - Stable energy accumulation system
 - Fully functional Stasis Core with no weaknesses
 - Near-invincible opponent
@@ -230,7 +230,7 @@ The player has **four critical advantages** that the ancient expedition lacked:
 ### 3. Overworld Native Time Resistance
 
 **Expedition's Weakness**:
-- Prolonged Chronosphere exposure reduced time resistance
+- Prolonged Chrono Dawn exposure reduced time resistance
 - Gradually became vulnerable to Time Tyrant's temporal manipulation
 - Lost combat effectiveness over time
 - Could not maintain full strength for final battle
@@ -279,13 +279,13 @@ Player victory is not plot convenience, but the result of:
 **Two Distinct Concepts:**
 
 1. **Portal Stabilization** (Portal Stabilizer item)
-   - Makes Chronosphere portal **bidirectional** (was one-way)
-   - Allows free travel between Overworld and Chronosphere
+   - Makes Chrono Dawn portal **bidirectional** (was one-way)
+   - Allows free travel between Overworld and Chrono Dawn
    - Similar to End dimension return portal after dragon defeat
    - Portal-specific effect, not dimension-wide
 
 2. **Dimension Stabilization** (Eye of Chronos item)
-   - Achieves **permanent time flow restoration** in Chronosphere
+   - Achieves **permanent time flow restoration** in Chrono Dawn
    - Granted only after defeating Time Tyrant and destroying Stasis Core
    - Dimension-wide effect
    - Ends time freeze permanently
@@ -322,7 +322,7 @@ Visual representation of temporal instability:
 
 | Lore Element | In-Game Implementation | Player Experience |
 |--------------|------------------------|-------------------|
-| Chronosphere is time source | Time Distortion effect (mob slowness) | Combat advantage in dimension |
+| Chrono Dawn is time source | Time Distortion effect (mob slowness) | Combat advantage in dimension |
 | Time Tyrant's freeze | Hostile mobs slowed, static environment | Eerie, frozen world atmosphere |
 | Ancient Ruins research facility | Structure with Time Hourglass recipe | Discovery and portal creation |
 | Temporal Seal failure | Particle effects at Ancient Ruins | Visual cue that something is wrong |
@@ -342,19 +342,19 @@ Visual representation of temporal instability:
 - Shows time distortion particles when Temporal Seal fails
 - Originally built thousands of years ago, now reactivated
 
-**Forgotten Library** (Chronosphere)
-- Ancient expedition's Chronosphere base
+**Forgotten Library** (Chrono Dawn)
+- Ancient expedition's Chrono Dawn base
 - Contains Portal Stabilizer recipe (their return plan that failed)
 - Evidence of hasty abandonment
 - No survivors, only written knowledge remains
 
-**Desert Clock Tower** (Chronosphere)
+**Desert Clock Tower** (Chrono Dawn)
 - Time Keeper infrastructure (pre-freeze structure)
 - Source of Enhanced Clockstone
-- Shows Chronosphere's original clockwork civilization
+- Shows Chrono Dawn's original clockwork civilization
 
-**Master Clock Tower** (Chronosphere)
-- Heart of Chronosphere's time mechanics
+**Master Clock Tower** (Chrono Dawn)
+- Heart of Chrono Dawn's time mechanics
 - Where Time Tyrant established Stasis Core
 - Temporal Seal placed here by ancient expedition
 - Final confrontation location
@@ -367,13 +367,13 @@ Visual representation of temporal instability:
 - Defeated by seal-collapse vulnerability + player preparation
 
 **Time Guardian** (Mini-Boss)
-- Originally served Chronosphere's time function
+- Originally served Chrono Dawn's time function
 - Corrupted/controlled by Time Tyrant
 - Guards path to Master Clock Tower
 - Drops Key to Master Clock
 
 **Time Keeper** (Neutral NPC)
-- Survivors of original Chronosphere inhabitants
+- Survivors of original Chrono Dawn inhabitants
 - Frozen in time, limited awareness
 - Trade with player (still performing ancient functions)
 
@@ -385,7 +385,7 @@ Visual representation of temporal instability:
 **Temporal Wraith** (Hostile Mob)
 - Manifestations of temporal distortion
 - Byproduct of time freeze effect
-- Show Chronosphere's corrupted state
+- Show Chrono Dawn's corrupted state
 
 ---
 
@@ -401,11 +401,11 @@ Visual representation of temporal instability:
 
 2. **Maintain Mystery**: Not all questions need explicit answers:
    - What happened to ancient civilization after expedition failed?
-   - How exactly does Chronosphere supply time to other dimensions?
+   - How exactly does Chrono Dawn supply time to other dimensions?
    - What is Time Tyrant's true origin?
 
 3. **Justify Game Mechanics**: Every mechanic has lore explanation:
-   - Why one-way portal? → Time Tyrant sealed Chronosphere
+   - Why one-way portal? → Time Tyrant sealed Chrono Dawn
    - Why mob slowness? → Time freeze effect
    - Why player is special? → Overworld native with time resistance
    - Why player can win? → Seal collapse creates unique opportunity
@@ -432,7 +432,7 @@ Visual representation of temporal instability:
 ## Changelog
 
 - **2025-11-19**: Initial lore documentation created (T115i-l)
-  - Defined Chronosphere as multiverse time source
+  - Defined Chrono Dawn as multiverse time source
   - Established Time Tyrant's three-phase plan
   - Documented ancient civilization history
   - Explained Temporal Seal mechanics

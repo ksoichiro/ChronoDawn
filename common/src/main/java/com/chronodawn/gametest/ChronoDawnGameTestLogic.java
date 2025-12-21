@@ -141,17 +141,17 @@ public final class ChronoDawnGameTestLogic {
     /**
      * Test that ChronoDawn Boat entity can be spawned.
      */
-    public static final Consumer<GameTestHelper> TEST_CHRONOSPHERE_BOAT_CAN_SPAWN = helper -> {
-        helper.spawn(ModEntities.CHRONOSPHERE_BOAT.get(), TEST_POS);
-        helper.succeedWhenEntityPresent(ModEntities.CHRONOSPHERE_BOAT.get(), TEST_POS);
+    public static final Consumer<GameTestHelper> TEST_CHRONO_DAWN_BOAT_CAN_SPAWN = helper -> {
+        helper.spawn(ModEntities.CHRONO_DAWN_BOAT.get(), TEST_POS);
+        helper.succeedWhenEntityPresent(ModEntities.CHRONO_DAWN_BOAT.get(), TEST_POS);
     };
 
     /**
      * Test that ChronoDawn Chest Boat entity can be spawned.
      */
-    public static final Consumer<GameTestHelper> TEST_CHRONOSPHERE_CHEST_BOAT_CAN_SPAWN = helper -> {
-        helper.spawn(ModEntities.CHRONOSPHERE_CHEST_BOAT.get(), TEST_POS);
-        helper.succeedWhenEntityPresent(ModEntities.CHRONOSPHERE_CHEST_BOAT.get(), TEST_POS);
+    public static final Consumer<GameTestHelper> TEST_CHRONO_DAWN_CHEST_BOAT_CAN_SPAWN = helper -> {
+        helper.spawn(ModEntities.CHRONO_DAWN_CHEST_BOAT.get(), TEST_POS);
+        helper.succeedWhenEntityPresent(ModEntities.CHRONO_DAWN_CHEST_BOAT.get(), TEST_POS);
     };
 
     /**

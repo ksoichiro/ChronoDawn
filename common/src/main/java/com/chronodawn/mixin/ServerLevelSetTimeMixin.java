@@ -29,7 +29,7 @@ public abstract class ServerLevelSetTimeMixin {
     private void interceptSetDayTime(long time, CallbackInfo ci) {
         ServerLevel level = (ServerLevel) (Object) this;
 
-        if (level.dimension().equals(ModDimensions.CHRONOSPHERE_DIMENSION)) {
+        if (level.dimension().equals(ModDimensions.CHRONO_DAWN_DIMENSION)) {
             // Store in memory field (for fast access)
             ChronoDawnTimeHolder holder = (ChronoDawnTimeHolder) level;
             holder.chronodawn$setIndependentTime(time);

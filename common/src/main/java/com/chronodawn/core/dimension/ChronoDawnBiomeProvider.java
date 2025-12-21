@@ -22,7 +22,7 @@ public class ChronoDawnBiomeProvider {
      * Resource key for the ChronoDawn Plains biome.
      * This is the default biome for the ChronoDawn dimension.
      */
-    public static final ResourceKey<Biome> CHRONOSPHERE_PLAINS = ResourceKey.create(
+    public static final ResourceKey<Biome> CHRONO_DAWN_PLAINS = ResourceKey.create(
         Registries.BIOME,
         ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "chronodawn_plains")
     );
@@ -31,7 +31,7 @@ public class ChronoDawnBiomeProvider {
      * Resource key for the ChronoDawn Desert biome.
      * This biome will contain the Desert Clock Tower structure (User Story 2).
      */
-    public static final ResourceKey<Biome> CHRONOSPHERE_DESERT = ResourceKey.create(
+    public static final ResourceKey<Biome> CHRONO_DAWN_DESERT = ResourceKey.create(
         Registries.BIOME,
         ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "chronodawn_desert")
     );
@@ -40,7 +40,7 @@ public class ChronoDawnBiomeProvider {
      * Resource key for the ChronoDawn Dark Forest biome.
      * This biome features dense fog and reduced visibility.
      */
-    public static final ResourceKey<Biome> CHRONOSPHERE_DARK_FOREST = ResourceKey.create(
+    public static final ResourceKey<Biome> CHRONO_DAWN_DARK_FOREST = ResourceKey.create(
         Registries.BIOME,
         ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "chronodawn_dark_forest")
     );
@@ -62,7 +62,7 @@ public class ChronoDawnBiomeProvider {
      * @return ResourceKey for the default biome (ChronoDawn Plains)
      */
     public static ResourceKey<Biome> getDefaultBiome() {
-        return CHRONOSPHERE_PLAINS;
+        return CHRONO_DAWN_PLAINS;
     }
 
     /**

@@ -200,16 +200,16 @@ This mod is built with **Architectury** and supports **both Fabric and NeoForge*
 
 ## 📚 Documentation
 
-- **Player Guide**: [GitHub](https://github.com/ksoichiro/Chrono Dawn/blob/001-chronosphere-mod/docs/player_guide.md)
-- **Developer Guide**: [GitHub](https://github.com/ksoichiro/Chrono Dawn/blob/001-chronosphere-mod/docs/developer_guide.md)
-- **GitHub Repository**: [Link](https://github.com/ksoichiro/Chrono Dawn)
+- **Player Guide**: [GitHub](https://github.com/ksoichiro/ChronoDawn/blob/main/docs/player_guide.md)
+- **Developer Guide**: [GitHub](https://github.com/ksoichiro/ChronoDawn/blob/main/docs/developer_guide.md)
+- **GitHub Repository**: [Link](https://github.com/ksoichiro/ChronoDawn)
 
 ---
 
 ## 🤝 Support
 
-- **Bug Reports**: [GitHub Issues](https://github.com/ksoichiro/Chrono Dawn/issues)
-- **Feature Requests**: [GitHub Issues](https://github.com/ksoichiro/Chrono Dawn/issues)
+- **Bug Reports**: [GitHub Issues](https://github.com/ksoichiro/ChronoDawn/issues)
+- **Feature Requests**: [GitHub Issues](https://github.com/ksoichiro/ChronoDawn/issues)
 - **Discord**: Coming soon
 
 ---

@@ -430,13 +430,13 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
 
         // Register ChronoDawn Boat with custom renderer
         EntityRendererRegistry.register(
-            ModEntities.CHRONOSPHERE_BOAT.get(),
+            ModEntities.CHRONO_DAWN_BOAT.get(),
             ChronoDawnBoatRenderer::new
         );
 
         // Register ChronoDawn Chest Boat with custom renderer
         EntityRendererRegistry.register(
-            ModEntities.CHRONOSPHERE_CHEST_BOAT.get(),
+            ModEntities.CHRONO_DAWN_CHEST_BOAT.get(),
             ChronoDawnChestBoatRenderer::new
         );
     }

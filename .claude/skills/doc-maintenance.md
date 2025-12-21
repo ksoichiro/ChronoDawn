@@ -97,14 +97,14 @@ Patchouli: 1.21.1-92+
    - Section: "Boss Battles"
    - Add boss entry with stats and abilities
 
-5. **specs/001-chronosphere-mod/spec.md**
+5. **specs/chrono-dawn-mod/spec.md**
    - Add to User Stories if boss is critical to progression
    - Add to Requirements section
 
-6. **specs/001-chronosphere-mod/data-model.md**
+6. **specs/chrono-dawn-mod/data-model.md**
    - Add boss entity definition with complete specifications
 
-7. **specs/001-chronosphere-mod/tasks.md**
+7. **specs/chrono-dawn-mod/tasks.md**
    - Add implementation tasks for the boss
 
 ### Template
@@ -145,7 +145,7 @@ Patchouli: 1.21.1-92+
    - Add: `- Structure Name (location, description)`
 
 2. **docs/player_guide.md**
-   - Section: "Exploring the Chronosphere" or appropriate section
+   - Section: "Exploring the Chrono Dawn" or appropriate section
    - Add structure description and how to find it
 
 3. **docs/curseforge_description.md** (lines ~22-29)
@@ -156,11 +156,11 @@ Patchouli: 1.21.1-92+
    - Section: "Structures"
    - Add structure entry
 
-5. **specs/001-chronosphere-mod/spec.md**
+5. **specs/chrono-dawn-mod/spec.md**
    - Add to User Stories if structure is critical
    - Add to Requirements if needed
 
-6. **specs/001-chronosphere-mod/data-model.md**
+6. **specs/chrono-dawn-mod/data-model.md**
    - Add structure definition (generation rules, loot, etc.)
 
 ---
@@ -190,7 +190,7 @@ Patchouli: 1.21.1-92+
    - Section: "Ultimate Artifacts"
    - Add item entry with ability description
 
-5. **specs/001-chronosphere-mod/data-model.md**
+5. **specs/chrono-dawn-mod/data-model.md**
    - Add item definition with complete specifications
 
 ### Template
@@ -374,9 +374,9 @@ When adding/removing content:
 
 **Developer**:
 - `docs/developer_guide.md` - Development setup and architecture
-- `specs/001-chronosphere-mod/spec.md` - Feature specification
-- `specs/001-chronosphere-mod/data-model.md` - Data models
-- `specs/001-chronosphere-mod/tasks.md` - Implementation tasks
+- `specs/chrono-dawn-mod/spec.md` - Feature specification
+- `specs/chrono-dawn-mod/data-model.md` - Data models
+- `specs/chrono-dawn-mod/tasks.md` - Implementation tasks
 
 **Configuration**:
 - `gradle.properties` - Version definitions
@@ -406,4 +406,4 @@ When adding/removing content:
 ---
 
 **Last Updated**: 2025-12-08 (Added THIRD_PARTY_LICENSES.md to maintenance checklists)
-**Maintained by**: Chronosphere Development Team
+**Maintained by**: Chrono Dawn Development Team

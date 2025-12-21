@@ -23,8 +23,8 @@ public class RegistryTest extends ChronoDawnTestBase {
     public void testDimensionKeysInitialized() {
         logTest("Testing dimension keys initialization");
 
-        assertNotNull(ModDimensions.CHRONOSPHERE_DIMENSION, "ChronoDawn dimension key should not be null");
-        assertNotNull(ModDimensions.CHRONOSPHERE_DIMENSION_TYPE, "ChronoDawn dimension type key should not be null");
+        assertNotNull(ModDimensions.CHRONO_DAWN_DIMENSION, "ChronoDawn dimension key should not be null");
+        assertNotNull(ModDimensions.CHRONO_DAWN_DIMENSION_TYPE, "ChronoDawn dimension type key should not be null");
     }
 
     /**

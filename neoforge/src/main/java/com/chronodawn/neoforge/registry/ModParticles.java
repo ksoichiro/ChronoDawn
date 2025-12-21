@@ -21,7 +21,7 @@ public class ModParticles {
      * ChronoDawn portal particle - orange colored portal particle
      * with "sucking in" movement like Nether portal.
      */
-    public static final Supplier<SimpleParticleType> CHRONOSPHERE_PORTAL =
+    public static final Supplier<SimpleParticleType> CHRONO_DAWN_PORTAL =
         PARTICLE_TYPES.register("chronodawn_portal", () -> new SimpleParticleType(false));
 
     /**

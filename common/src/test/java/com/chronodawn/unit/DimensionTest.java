@@ -25,11 +25,11 @@ public class DimensionTest extends ChronoDawnTestBase {
     public void testDimensionKeyExists() {
         logTest("Testing dimension key existence");
 
-        // Verify that CHRONOSPHERE_DIMENSION key is properly defined
-        assertNotNull(ModDimensions.CHRONOSPHERE_DIMENSION, "ChronoDawn dimension key should not be null");
+        // Verify that CHRONO_DAWN_DIMENSION key is properly defined
+        assertNotNull(ModDimensions.CHRONO_DAWN_DIMENSION, "ChronoDawn dimension key should not be null");
 
         // Verify the dimension has correct namespace and path
-        ResourceLocation location = ModDimensions.CHRONOSPHERE_DIMENSION.location();
+        ResourceLocation location = ModDimensions.CHRONO_DAWN_DIMENSION.location();
         assertEquals(ChronoDawn.MOD_ID, location.getNamespace(), "Dimension should use chronodawn namespace");
         assertEquals("chronodawn", location.getPath(), "Dimension path should be 'chronodawn'");
     }
@@ -38,11 +38,11 @@ public class DimensionTest extends ChronoDawnTestBase {
     public void testDimensionTypeKeyExists() {
         logTest("Testing dimension type key existence");
 
-        // Verify that CHRONOSPHERE_DIMENSION_TYPE key is properly defined
-        assertNotNull(ModDimensions.CHRONOSPHERE_DIMENSION_TYPE, "ChronoDawn dimension type key should not be null");
+        // Verify that CHRONO_DAWN_DIMENSION_TYPE key is properly defined
+        assertNotNull(ModDimensions.CHRONO_DAWN_DIMENSION_TYPE, "ChronoDawn dimension type key should not be null");
 
         // Verify the dimension type has correct namespace and path
-        ResourceLocation location = ModDimensions.CHRONOSPHERE_DIMENSION_TYPE.location();
+        ResourceLocation location = ModDimensions.CHRONO_DAWN_DIMENSION_TYPE.location();
         assertEquals(ChronoDawn.MOD_ID, location.getNamespace(), "Dimension type should use chronodawn namespace");
         assertEquals("chronodawn", location.getPath(), "Dimension type path should be 'chronodawn'");
     }

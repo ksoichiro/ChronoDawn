@@ -59,9 +59,8 @@ A multi-loader Minecraft mod that adds a mysterious time-themed dimension called
 ### Clone Repository
 
 ```bash
-git clone https://github.com/ksoichiro/Chronosphere.git
-cd Chronosphere
-git checkout 001-chronosphere-mod
+git clone https://github.com/ksoichiro/ChronoDawn.git
+cd ChronoDawn
 ```
 
 ### Build All Loaders
@@ -222,29 +221,29 @@ gradlew.bat test
 ## Project Structure
 
 ```
-Chronosphere/
+ChronoDawn/
 ├── common/                          # Loader-independent shared code (~80%)
 │   ├── src/main/java/com/chronodawn/
-│   │   ├── Chronosphere.java        # Common entry point
+│   │   ├── ChronoDawn.java          # Common entry point
 │   │   ├── blocks/                  # Custom blocks
 │   │   ├── items/                   # Custom items
 │   │   ├── entities/                # Custom entities (bosses, mobs)
 │   │   ├── worldgen/                # World generation features
 │   │   └── registry/                # Registry wrappers
 │   └── src/main/resources/
-│       ├── data/chronodawn/       # Data packs (recipes, worldgen, structures)
-│       └── assets/chronodawn/     # Assets (textures, models, sounds)
+│       ├── data/chronodawn/         # Data packs (recipes, worldgen, structures)
+│       └── assets/chronodawn/       # Assets (textures, models, sounds)
 ├── fabric/                          # Fabric-specific implementation (~10%)
 │   ├── src/main/java/com/chronodawn/fabric/
-│   │   └── ChronosphereFabric.java  # Fabric entry point
+│   │   └── ChronoDawnFabric.java    # Fabric entry point
 │   └── src/main/resources/
 │       └── fabric.mod.json          # Fabric mod metadata
 ├── neoforge/                        # NeoForge-specific implementation (~10%)
 │   ├── src/main/java/com/chronodawn/neoforge/
-│   │   └── ChronosphereNeoForge.java # NeoForge entry point
+│   │   └── ChronoDawnNeoForge.java  # NeoForge entry point
 │   └── src/main/resources/
 │       └── META-INF/neoforge.mods.toml # NeoForge mod metadata
-├── specs/001-chronosphere-mod/      # Design documents
+├── specs/chrono-dawn-mod/           # Design documents
 ├── build.gradle                     # Root build configuration (Groovy DSL)
 ├── settings.gradle                  # Multi-module settings
 └── gradle.properties                # Version configuration
@@ -252,11 +251,11 @@ Chronosphere/
 
 ## Documentation
 
-- **Feature Specification**: `specs/001-chronosphere-mod/spec.md`
-- **Implementation Plan**: `specs/001-chronosphere-mod/plan.md`
-- **Development Guide**: `specs/001-chronosphere-mod/quickstart.md`
-- **Data Model**: `specs/001-chronosphere-mod/data-model.md`
-- **Research Notes**: `specs/001-chronosphere-mod/research.md`
+- **Feature Specification**: `specs/chrono-dawn-mod/spec.md`
+- **Implementation Plan**: `specs/chrono-dawn-mod/plan.md`
+- **Development Guide**: `specs/chrono-dawn-mod/quickstart.md`
+- **Data Model**: `specs/chrono-dawn-mod/data-model.md`
+- **Research Notes**: `specs/chrono-dawn-mod/research.md`
 
 ## Technical Notes
 
@@ -297,8 +296,8 @@ See `CLAUDE.md` → "Mixin Configuration" section for details.
 ## Support
 
 For issues, feature requests, or questions:
-- Open an issue on [GitHub Issues](https://github.com/ksoichiro/Chronosphere/issues)
-- Check existing documentation in `specs/001-chronosphere-mod/`
+- Open an issue on [GitHub Issues](https://github.com/ksoichiro/ChronoDawn/issues)
+- Check existing documentation in `specs/chrono-dawn-mod/`
 
 ---
 

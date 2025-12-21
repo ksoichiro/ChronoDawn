@@ -229,13 +229,13 @@ public class ChronoDawnClientNeoForge {
 
         // Register ChronoDawn Boat with custom renderer
         event.registerEntityRenderer(
-            ModEntities.CHRONOSPHERE_BOAT.get(),
+            ModEntities.CHRONO_DAWN_BOAT.get(),
             ChronoDawnBoatRenderer::new
         );
 
         // Register ChronoDawn Chest Boat with custom renderer
         event.registerEntityRenderer(
-            ModEntities.CHRONOSPHERE_CHEST_BOAT.get(),
+            ModEntities.CHRONO_DAWN_CHEST_BOAT.get(),
             ChronoDawnChestBoatRenderer::new
         );
 
@@ -475,7 +475,7 @@ public class ChronoDawnClientNeoForge {
     public static void onRegisterParticleProviders(RegisterParticleProvidersEvent event) {
         // Register ChronoDawn portal particle provider
         event.registerSpriteSet(
-            ModParticles.CHRONOSPHERE_PORTAL.get(),
+            ModParticles.CHRONO_DAWN_PORTAL.get(),
             ChronoDawnPortalParticle.Provider::new
         );
 

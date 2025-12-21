@@ -59,7 +59,7 @@ public abstract class SleepMixin {
         ServerLevel level = (ServerLevel) (Object) this;
 
         // Only process ChronoDawn dimension
-        if (!level.dimension().equals(ModDimensions.CHRONOSPHERE_DIMENSION)) {
+        if (!level.dimension().equals(ModDimensions.CHRONO_DAWN_DIMENSION)) {
             return;
         }
 
@@ -68,7 +68,7 @@ public abstract class SleepMixin {
             .getPlayerList()
             .getPlayers()
             .stream()
-            .filter(p -> p.level().dimension().equals(ModDimensions.CHRONOSPHERE_DIMENSION))
+            .filter(p -> p.level().dimension().equals(ModDimensions.CHRONO_DAWN_DIMENSION))
             .collect(Collectors.toList());
 
         // If no players in ChronoDawn, do nothing

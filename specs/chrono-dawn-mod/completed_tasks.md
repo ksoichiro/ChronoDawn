@@ -1,6 +1,6 @@
-# Completed Tasks: Chronosphere Mod
+# Completed Tasks: Chrono Dawn Mod
 
-**Feature Branch**: `001-chronosphere-mod`
+**Branch**: `main`
 
 This file contains all completed task sections that have been moved from tasks.md for better organization.
 
@@ -10,12 +10,12 @@ This file contains all completed task sections that have been moved from tasks.m
 
 ### Basic Resources (US1 Enhancement - High Priority)
 
-**Purpose**: Chronosphere内でサバイバルプレイに必要な基本リソースを入手可能にする
+**Purpose**: Chrono Dawn内でサバイバルプレイに必要な基本リソースを入手可能にする
 
 **Note**: 石炭は松明や燃料として必須。長期滞在を可能にするため優先度は高い
 
-- [x] T265 [P] [US1] Add coal ore generation in Chronosphere (frequency, Y-level distribution, biome placement)
-  - **Completed**: Added coal ore to all 9 Chronosphere biomes
+- [x] T265 [P] [US1] Add coal ore generation in Chrono Dawn (frequency, Y-level distribution, biome placement)
+  - **Completed**: Added coal ore to all 9 Chrono Dawn biomes
   - **Configuration**: 30 attempts/chunk, Y0-256 trapezoid distribution
 - [x] T266 [P] [US1] Configure coal ore worldgen feature (vein size, rarity comparable to Overworld)
   - **Completed**: Vein size 17 (matches vanilla), uses vanilla coal_ore and deepslate_coal_ore
@@ -44,15 +44,15 @@ This file contains all completed task sections that have been moved from tasks.m
 **Estimated Effort**: 5-7 hours total
 
 - [x] T268 [P] [US1] Create Time Wood Boat and Time Wood Chest Boat items and entities
-  - **Completed**: Created unified ChronosphereBoat and ChronosphereChestBoat entities with ChronosphereBoatType enum
-  - ChronosphereBoatItem handles all boat types with type parameter
+  - **Completed**: Created unified ChronoDawnBoat and ChronoDawnChestBoat entities with ChronoDawnBoatType enum
+  - ChronoDawnBoatItem handles all boat types with type parameter
   - Registered entities in ModEntities, items in ModItems
 - [x] T269 [P] [US1] Create Dark Time Wood Boat and Dark Time Wood Chest Boat items and entities
-  - **Completed**: Uses same ChronosphereBoat/ChronosphereChestBoat with DARK_TIME_WOOD type
-  - Items registered with ChronosphereBoatType.DARK_TIME_WOOD
+  - **Completed**: Uses same ChronoDawnBoat/ChronoDawnChestBoat with DARK_TIME_WOOD type
+  - Items registered with ChronoDawnBoatType.DARK_TIME_WOOD
 - [x] T270 [P] [US1] Create Ancient Time Wood Boat and Ancient Time Wood Chest Boat items and entities
-  - **Completed**: Uses same ChronosphereBoat/ChronosphereChestBoat with ANCIENT_TIME_WOOD type
-  - Items registered with ChronosphereBoatType.ANCIENT_TIME_WOOD
+  - **Completed**: Uses same ChronoDawnBoat/ChronoDawnChestBoat with ANCIENT_TIME_WOOD type
+  - Items registered with ChronoDawnBoatType.ANCIENT_TIME_WOOD
 - [x] T271 [P] [US1] Add boat crafting recipes (planks → boat, boat + chest → chest boat)
   - **Completed**: Created 6 shaped recipes (3 boat variants: 5 planks in boat shape)
   - Created 6 shapeless recipes (3 chest boat variants: boat + chest)
@@ -63,9 +63,9 @@ This file contains all completed task sections that have been moved from tasks.m
   - Dark Time Wood: R×0.70, G×0.70, B×0.75 (darker tone)
   - Ancient Time Wood: R×0.80, G×0.75, B×0.70 (aged/grayish)
   - Created item textures, entity textures (boat/ and chest_boat/), and item models
-  - Created custom renderers (ChronosphereBoatRenderer, ChronosphereChestBoatRenderer)
+  - Created custom renderers (ChronoDawnBoatRenderer, ChronoDawnChestBoatRenderer)
   - Registered renderers in both Fabric and NeoForge client
-- [x] T273 [US1] Test boat functionality (movement, durability, chest storage) in Chronosphere ocean biome
+- [x] T273 [US1] Test boat functionality (movement, durability, chest storage) in Chrono Dawn ocean biome
   - Test boat placement and riding ✓ (Fabric)
   - Test chest boat storage ✓ (Fabric)
   - Test crafting recipes ✓ (Fabric)
@@ -80,16 +80,16 @@ This file contains all completed task sections that have been moved from tasks.m
 
 ### Biome Enhancements (US1 Enhancement - Medium Priority)
 
-**Purpose**: バイオームの見た目と大きさを調整し、Chronosphereの独自性を向上
+**Purpose**: バイオームの見た目と大きさを調整し、Chrono Dawnの独自性を向上
 
 - [x] T298 [P] [US1] Add distinctive features to Snowy biome (ice structures, frozen time effects, unique blocks) to differentiate from Overworld
   - **Completed**: Added ice pillars with varied heights (4-11 blocks) using packed_ice, blue_ice, and frozen_time_ice
   - Random thick 3x3 clusters (25% chance), reduced density for natural look at biome boundaries
   - Files: ice_pillar.json, ice_pillar_cluster.json, ice_pillar_random.json, ice_spike_placed.json
-- [x] T299 [P] [US1] Adjust biome size/scale in dimension_type/chronosphere.json or noise settings to reduce biome area
+- [x] T299 [P] [US1] Adjust biome size/scale in dimension_type/chronodawn.json or noise settings to reduce biome area
   - **Completed**: Implemented BiomeScalingMixin with 2.5x coordinate scaling (biomes ~40% smaller)
   - Adjusted continentalness parameters to align with vanilla terrain generation
-  - File: BiomeScalingMixin.java, dimension/chronosphere.json
+  - File: BiomeScalingMixin.java, dimension/chronodawn.json
   - **Custom Noise Settings Experiment** (attempted but not used):
     - Created simple custom noise_settings and density_functions
     - Result: Terrain generation failed (Y=-40 to 320 steep mountains, lava seas, flat summits)
@@ -98,7 +98,7 @@ This file contains all completed task sections that have been moved from tasks.m
     - Conclusion: Using vanilla `minecraft:overworld` settings is more practical
     - Reference: If future terrain customization is needed, start with vanilla density functions as base
 - [x] T300 [P] [US1] Change grass drop from vanilla seeds to Temporal Wheat Seeds (modify grass block loot table)
-  - **Completed**: Override vanilla short_grass loot table to drop time_wheat_seeds (12.5% chance) in Chronosphere only
+  - **Completed**: Override vanilla short_grass loot table to drop time_wheat_seeds (12.5% chance) in Chrono Dawn only
   - File: minecraft/loot_table/blocks/short_grass.json
 
 ### Custom Mobs (US1 Enhancement - High Priority)
@@ -108,12 +108,12 @@ This file contains all completed task sections that have been moved from tasks.m
 **Note**: ボス以外の通常モブがないという問題を解決。敵対・中立・友好モブを追加して探索体験を豊かにする
 
 - [X] T200 [US1] Design custom mob concepts (hostile, neutral, friendly with time theme, behavior patterns, drops, spawn conditions)
-- [X] T201 [P] [US1] Create Temporal Wraith entity in common/src/main/java/com/chronosphere/entities/mobs/TemporalWraithEntity.java (hostile, phases through blocks when hit, inflicts Slowness II on attack)
-- [X] T202 [P] [US1] Create Clockwork Sentinel entity in common/src/main/java/com/chronosphere/entities/mobs/ClockworkSentinelEntity.java (hostile, immune to time distortion effects, drops Ancient Gears)
-- [X] T203 [P] [US1] Create Time Keeper entity in common/src/main/java/com/chronosphere/entities/mobs/TimeKeeperEntity.java (neutral, villager-like trading for time-related items)
+- [X] T201 [P] [US1] Create Temporal Wraith entity in common/src/main/java/com/chronodawn/entities/mobs/TemporalWraithEntity.java (hostile, phases through blocks when hit, inflicts Slowness II on attack)
+- [X] T202 [P] [US1] Create Clockwork Sentinel entity in common/src/main/java/com/chronodawn/entities/mobs/ClockworkSentinelEntity.java (hostile, immune to time distortion effects, drops Ancient Gears)
+- [X] T203 [P] [US1] Create Time Keeper entity in common/src/main/java/com/chronodawn/entities/mobs/TimeKeeperEntity.java (neutral, villager-like trading for time-related items)
 - [X] T204 [P] [US1] Register custom mobs in ModEntities registry and configure spawning in biomes (Temporal Wraith in forest/plains, Clockwork Sentinel in desert/structures, Time Keeper in libraries)
-- [X] T205 [P] [US1] Create custom mob textures and models in common/src/main/resources/assets/chronosphere/textures/entity/
-- [X] T206 [P] [US1] Create custom mob loot tables in common/src/main/resources/data/chronosphere/loot_tables/entities/
+- [X] T205 [P] [US1] Create custom mob textures and models in common/src/main/resources/assets/chronodawn/textures/entity/
+- [X] T206 [P] [US1] Create custom mob loot tables in common/src/main/resources/data/chronodawn/loot_tables/entities/
 - [X] T207 [US1] Test custom mob spawning, AI behavior, and loot drops in-game
 - [X] T208 [P] [US1] Create spawn eggs for custom mobs in ModItems for creative mode and debugging (temporal_wraith_spawn_egg, clockwork_sentinel_spawn_egg, time_keeper_spawn_egg)
   - **Completed**: Implemented spawn eggs for regular mobs only (Temporal Wraith, Clockwork Sentinel, Time Keeper)
@@ -132,7 +132,7 @@ This file contains all completed task sections that have been moved from tasks.m
     - Increased custom mob weights (temporal_wraith, clockwork_sentinel) to 100
     - Increased creature weights and counts in Plains/Forest (cow: 8, sheep: 12, pig: 10, chicken: 10)
     - Added biome-specific variants (husk in Desert, stray in Snowy)
-  - **Files**: All 7 biome JSON files (chronosphere_plains.json, chronosphere_forest.json, chronosphere_desert.json, chronosphere_mountain.json, chronosphere_ocean.json, chronosphere_snowy.json, chronosphere_swamp.json)
+  - **Files**: All 7 biome JSON files (chronodawn_plains.json, chronodawn_forest.json, chronodawn_desert.json, chronodawn_mountain.json, chronodawn_ocean.json, chronodawn_snowy.json, chronodawn_swamp.json)
 - [X] T210 [P] [US2] Add ranged attack capability to Time Guardian (design projectile, implement attack pattern, configure AI goals)
   - **Note**: Time Guardian (時の番人) is the mini-boss, not Time Keeper (時間の管理者/trading mob)
   - **Completed**: Implemented Time Blast projectile with custom ranged attack AI
@@ -149,7 +149,7 @@ This file contains all completed task sections that have been moved from tasks.m
 
 - [X] T211 [US1] Design time-themed crop concepts (plant types, growth stages, harvest items, growth conditions)
 - [X] T212 [P] [US1] Implement time-themed crop block and item (Temporal Wheat, Time Berry Bush, or similar)
-- [X] T213 [P] [US1] Create crop textures for all growth stages in common/src/main/resources/assets/chronosphere/textures/block/
+- [X] T213 [P] [US1] Create crop textures for all growth stages in common/src/main/resources/assets/chronodawn/textures/block/
 - [X] T214 [P] [US1] Add crop worldgen placement (natural generation in specific biomes)
 - [X] T215 [P] [US1] Implement additional food items (cooked variants, crafted recipes, nutritional values)
 - [X] T216 [P] [US1] Add eating effect to Time Bread (e.g., Speed I for 30 seconds, or Regeneration I for 10 seconds)
@@ -181,7 +181,7 @@ This file contains all completed task sections that have been moved from tasks.m
   - Note: Using temporary placeholders with basic modifications, will be replaced with custom designs later
 - **T214 Worldgen**:
   - Configured features and placed features for all 3 crops
-  - Added to chronosphere_plains and chronosphere_forest biomes
+  - Added to chronodawn_plains and chronodawn_forest biomes
 - **T215 Food Items**:
   - 11 recipes created (1 smelting + 10 crafting)
   - All food effects implemented (Regeneration, Speed, Night Vision, Absorption, Saturation)
@@ -195,7 +195,7 @@ This file contains all completed task sections that have been moved from tasks.m
 - [X] T218 [P] [US2] Add hidden chest under carpet blocks in Forgotten Library structure NBT (1-2 chests with valuable loot tables)
   - **Completed**: Added 4 hidden chests in strategic locations throughout Forgotten Library
   - **Implementation**: Placed chests under carpet blocks using Structure Block in-game editing
-  - **File**: common/src/main/resources/data/chronosphere/structure/forgotten_library.nbt
+  - **File**: common/src/main/resources/data/chronodawn/structure/forgotten_library.nbt
 - [X] T219 [US2] Test hidden chest placement and ensure carpet blocks can be broken to reveal chests
   - **Completed**: Verified in-game that carpet blocks can be broken to reveal hidden chests
   - **Note**: 4 chests provide additional exploration rewards and discovery mechanics
@@ -222,10 +222,10 @@ This file contains all completed task sections that have been moved from tasks.m
 
 ### Tests for User Story 2
 
-- [X] T089 [P] [US2] Write GameTest for Desert Clock Tower generation in common/src/test/java/com/chronosphere/integration/DesertClockTowerTest.java
-- [X] T090 [P] [US2] Write unit test for Time Clock cooldown logic in common/src/test/java/com/chronosphere/unit/TimeClockTest.java
-- [X] T091 [P] [US2] Write unit test for Spatially Linked Pickaxe drop multiplier in common/src/test/java/com/chronosphere/unit/PickaxeDropTest.java
-- [X] T092 [P] [US2] Write GameTest for Time Guardian boss fight in common/src/test/java/com/chronosphere/integration/TimeGuardianFightTest.java
+- [X] T089 [P] [US2] Write GameTest for Desert Clock Tower generation in common/src/test/java/com/chronodawn/integration/DesertClockTowerTest.java
+- [X] T090 [P] [US2] Write unit test for Time Clock cooldown logic in common/src/test/java/com/chronodawn/unit/TimeClockTest.java
+- [X] T091 [P] [US2] Write unit test for Spatially Linked Pickaxe drop multiplier in common/src/test/java/com/chronodawn/unit/PickaxeDropTest.java
+- [X] T092 [P] [US2] Write GameTest for Time Guardian boss fight in common/src/test/java/com/chronodawn/integration/TimeGuardianFightTest.java
 
 ### Player Guidance & Discovery System (US2 Enhancement)
 
@@ -236,11 +236,11 @@ This file contains all completed task sections that have been moved from tasks.m
 **Guidance Methods**: 書物アイテム、村人との取引（地図）、進捗ヒント、構造物の出現頻度調整、ロケーターアイテムなど
 
 - [X] T115f [US2] Research appropriate player guidance methods (book items, advancement hints, villager trades, structure frequency)
-- [X] T115g [P] [US2] Create Chronicle of Chronosphere book item (guide book explaining dimension mechanics, structures, and progression)
-  - Created ChronicleOfChronosphereItem.java with English version only
-  - Book auto-given on first Chronosphere entry
+- [X] T115g [P] [US2] Create Chronicle of Chrono Dawn book item (guide book explaining dimension mechanics, structures, and progression)
+  - Created ChronicleOfChronoDawnItem.java with English version only
+  - Book auto-given on first Chrono Dawn entry
   - Added to creative tab as readable vanilla written_book
-  - Documented complete worldbuilding in specs/001-chronosphere-mod/lore.md
+  - Documented complete worldbuilding in specs/chrono-dawn-mod/lore.md
 - [X] T115h [P] [US2] Add Time Keeper trades for Time Compass items (Desert Clock Tower Compass, Master Clock Compass)
   - Trade 1: 16 Clockstone → Time Compass (Desert Clock Tower) - 3 max uses
   - Trade 2: 8 Enhanced Clockstone → Time Compass (Master Clock) - 1 max use
@@ -263,7 +263,7 @@ This file contains all completed task sections that have been moved from tasks.m
   - Shows localized messages with coordinates, distance, and 8-direction heading
   - Inherits vanilla compass model/textures for seamless integration
 - [X] T115l [US2] Add initial guidance on first dimension entry (chat message, advancement, or book given to player)
-  - Chronicle of Chronosphere auto-given to player on first Chronosphere entry
+  - Chronicle of Chrono Dawn auto-given to player on first Chrono Dawn entry
   - Book dropped at player's feet if inventory is full
 - [X] T115m [US2] Implement time distortion particle effects for Ancient Ruins (Temporal Seal failure visualization)
   - Created TemporalParticleEmitterBlock (invisible, indestructible, no collision)
@@ -366,11 +366,11 @@ This file contains all completed task sections that have been moved from tasks.m
 
 ### Tests for User Story 3
 
-- [X] T123 [P] [US3] Write GameTest for Master Clock structure generation in common/src/test/java/com/chronosphere/integration/MasterClockTest.java
-- [X] T124 [P] [US3] Write GameTest for Time Tyrant boss fight in common/src/test/java/com/chronosphere/integration/TimeTyrantFightTest.java
-- [X] T125 [P] [US3] Write unit test for Chronoblade AI skip probability in common/src/test/java/com/chronosphere/unit/ChronobladeTest.java
-- [X] T126 [P] [US3] Write unit test for Time Guardian Mail rollback logic in common/src/test/java/com/chronosphere/unit/TimeGuardianMailTest.java
-- [X] T127 [P] [US3] Write GameTest for Echoing Time Boots decoy in common/src/test/java/com/chronosphere/integration/DecoyTest.java
+- [X] T123 [P] [US3] Write GameTest for Master Clock structure generation in common/src/test/java/com/chronodawn/integration/MasterClockTest.java
+- [X] T124 [P] [US3] Write GameTest for Time Tyrant boss fight in common/src/test/java/com/chronodawn/integration/TimeTyrantFightTest.java
+- [X] T125 [P] [US3] Write unit test for Chronoblade AI skip probability in common/src/test/java/com/chronodawn/unit/ChronobladeTest.java
+- [X] T126 [P] [US3] Write unit test for Time Guardian Mail rollback logic in common/src/test/java/com/chronodawn/unit/TimeGuardianMailTest.java
+- [X] T127 [P] [US3] Write GameTest for Echoing Time Boots decoy in common/src/test/java/com/chronodawn/integration/DecoyTest.java
 
 ### Master Clock Structure Improvements (US3 Enhancement - High Priority)
 
@@ -405,7 +405,7 @@ This file contains all completed task sections that have been moved from tasks.m
 - [X] T274 [P] [US2] Design Time Keeper Village structure concept (small settlement with 1-2 Time Keepers, basic shelter, trading post)
   - **Completed**: Simple village structure with shelter and trading area
 - [X] T275 [P] [US2] Create Time Keeper Village NBT structure file (time_keeper_village.nbt)
-  - **File**: common/src/main/resources/data/chronosphere/structure/time_keeper_village.nbt
+  - **File**: common/src/main/resources/data/chronodawn/structure/time_keeper_village.nbt
 - [X] T276 [P] [US2] Implement TimeKeeperVillagePlacer.java for programmatic placement near spawn (64 blocks)
   - **Implemented**: TimeKeeperVillagePlacer with TimeKeeperVillageData (SavedData)
   - Placement range: 32-256 blocks from player entry point
@@ -423,7 +423,7 @@ This file contains all completed task sections that have been moved from tasks.m
   - **Implemented**: ModStructurePlacementTypes with GUARANTEED_RADIUS placement type
   - **Status**: Deprecated and removed (commit d2c8f0a)
 - [X] T280 [P] [US3] Create Architectury platform-specific registration (Fabric/NeoForge)
-  - **Implemented**: Platform-specific registration in Chronosphere.java
+  - **Implemented**: Platform-specific registration in ChronoDawn.java
   - **Status**: Deprecated and removed (commit d2c8f0a)
 - [X] T281 [US3] Test custom placement type with test structure
   - **Completed**: Testing performed successfully
@@ -456,7 +456,7 @@ This file contains all completed task sections that have been moved from tasks.m
 
 - [X] T172 [P] Run all GameTests on Fabric loader using ./gradlew :fabric:runGameTest
   - Implemented GameTest Framework for Fabric using Architectury Loom's gametest source set
-  - Created ChronosphereGameTestsFabric.java with shared test logic in ChronosphereGameTestLogic.java
+  - Created ChronoDawnGameTestsFabric.java with shared test logic in ChronoDawnGameTestLogic.java
   - Uses @GameTest annotation with FabricGameTest.EMPTY_STRUCTURE template
   - **Current Status**: 92 tests pass (commits: 9cca9db initial, 51934c9 player input tests)
   - **Test Categories**:
@@ -467,15 +467,15 @@ This file contains all completed task sections that have been moved from tasks.m
     - Player input simulation (6 tests)
 - [X] T173 [P] Run all GameTests on NeoForge loader using ./gradlew :neoforge:runGameTestServer
   - Implemented GameTest Framework for NeoForge using @GameTestGenerator pattern
-  - Created ChronosphereGameTestsNeoForge.java with shared test logic in ChronosphereGameTestLogic.java
+  - Created ChronoDawnGameTestsNeoForge.java with shared test logic in ChronoDawnGameTestLogic.java
   - Uses RegisterGameTestsEvent for test registration and existing structure template
   - **Current Status**: 91 tests pass (commits: 6790b80 initial, 51934c9 player input tests)
   - **Test Categories**: Same as Fabric (player input simulation uses `helper.makeMockPlayer(GameType)` API)
-- [X] T174 Verify entity renderer registration for Fabric (standard API) in fabric/src/main/java/com/chronosphere/fabric/client/ChronosphereClientFabric.java
+- [X] T174 Verify entity renderer registration for Fabric (standard API) in fabric/src/main/java/com/chronodawn/fabric/client/ChronoDawnClientFabric.java
   - **Verified**: 15 entities and 7 model layers registered using standard Fabric API
   - Uses `EntityRendererRegistry.register()` and `EntityModelLayerRegistry.registerModelLayer()`
   - All custom renderers properly implemented in common/client package
-- [X] T175 Verify entity renderer registration for NeoForge (manual event registration) in neoforge/src/main/java/com/chronosphere/neoforge/client/ChronosphereClientNeoForge.java
+- [X] T175 Verify entity renderer registration for NeoForge (manual event registration) in neoforge/src/main/java/com/chronodawn/neoforge/client/ChronoDawnClientNeoForge.java
   - **Verified**: 15 entities and 7 model layers registered using event-based system
   - Uses `@SubscribeEvent` with `EntityRenderersEvent.RegisterRenderers` and `EntityRenderersEvent.RegisterLayerDefinitions`
   - All entity types and model layers match Fabric implementation

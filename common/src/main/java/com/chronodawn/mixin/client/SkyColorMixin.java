@@ -60,7 +60,7 @@ public class SkyColorMixin {
         }
 
         // Only apply to ChronoDawn dimension
-        if (!minecraft.level.dimension().equals(ModDimensions.CHRONOSPHERE_DIMENSION)) {
+        if (!minecraft.level.dimension().equals(ModDimensions.CHRONO_DAWN_DIMENSION)) {
             return;
         }
 

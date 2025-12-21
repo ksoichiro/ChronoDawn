@@ -31,7 +31,7 @@ import net.minecraft.world.item.ItemStack;
  * - After stabilization: Bidirectional travel between Overworld and ChronoDawn
  * - Stabilization: Use Portal Stabilizer item on deactivated portal
  *
- * Reference: specs/001-chronosphere-mod/spec.md (User Story 1 - Portal System)
+ * Reference: specs/chrono-dawn-mod/spec.md (User Story 1 - Portal System)
  * Task: T048 [US1] Integrate Custom Portal API (NeoForge)
  */
 public class CustomPortalNeoForge {
@@ -50,7 +50,7 @@ public class CustomPortalNeoForge {
      * - Teleport overlay (screen effect during teleportation)
      * - Particles (effects around portal frame)
      *
-     * Reference: specs/001-chronosphere-mod/spec.md (Design Decision 2)
+     * Reference: specs/chrono-dawn-mod/spec.md (Design Decision 2)
      */
     private static final int PORTAL_COLOR_R = 219;
     private static final int PORTAL_COLOR_G = 136;
@@ -66,7 +66,7 @@ public class CustomPortalNeoForge {
         ChronoDawn.LOGGER.info("Initializing Custom Portal API Reforged integration (NeoForge)");
 
         // Get the ChronoDawn dimension identifier
-        ResourceLocation dimensionId = ModDimensions.CHRONOSPHERE_DIMENSION.location();
+        ResourceLocation dimensionId = ModDimensions.CHRONO_DAWN_DIMENSION.location();
 
         // Register ChronoDawn portal using Custom Portal Builder
         CustomPortalBuilder.beginPortal()
@@ -82,7 +82,7 @@ public class CustomPortalNeoForge {
             .registerPreIgniteEvent((player, world, portalPos, framePos, ignitionSource) -> {
                 // Check if in ChronoDawn dimension with unstable portals
                 if (world instanceof ServerLevel serverLevel) {
-                    if (serverLevel.dimension().equals(ModDimensions.CHRONOSPHERE_DIMENSION)) {
+                    if (serverLevel.dimension().equals(ModDimensions.CHRONO_DAWN_DIMENSION)) {
                         ChronoDawnGlobalState globalState = ChronoDawnGlobalState.get(serverLevel.getServer());
                         if (globalState.arePortalsUnstable()) {
                             // Portals are unstable - prevent ignition and show warning

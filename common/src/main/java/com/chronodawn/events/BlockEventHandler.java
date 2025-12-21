@@ -99,7 +99,7 @@ public class BlockEventHandler {
             }
 
             // Portals are unstable - remove any portal blocks in ChronoDawn
-            ServerLevel chronodawnLevel = server.getLevel(ModDimensions.CHRONOSPHERE_DIMENSION);
+            ServerLevel chronodawnLevel = server.getLevel(ModDimensions.CHRONO_DAWN_DIMENSION);
             if (chronodawnLevel == null) {
                 return;
             }
@@ -107,7 +107,7 @@ public class BlockEventHandler {
             // Check all loaded chunks for custom portal blocks
             // Note: This only checks near registered portals to avoid scanning entire dimension
             for (PortalStateMachine portal : PortalRegistry.getInstance().getAllPortals()) {
-                if (!portal.getSourceDimension().equals(ModDimensions.CHRONOSPHERE_DIMENSION)) {
+                if (!portal.getSourceDimension().equals(ModDimensions.CHRONO_DAWN_DIMENSION)) {
                     continue;
                 }
 

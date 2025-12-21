@@ -32,7 +32,7 @@ public class GrassTimeWheatSeedModifier extends LootModifier {
         codecStart(inst).apply(inst, GrassTimeWheatSeedModifier::new)
     );
 
-    private static final ResourceKey<Level> CHRONOSPHERE_DIMENSION =
+    private static final ResourceKey<Level> CHRONO_DAWN_DIMENSION =
         ResourceKey.create(Registries.DIMENSION,
             ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "chronodawn"));
 
@@ -57,7 +57,7 @@ public class GrassTimeWheatSeedModifier extends LootModifier {
     protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
         // Check if we're in the ChronoDawn dimension
         Level level = context.getLevel();
-        if (level.dimension() != CHRONOSPHERE_DIMENSION) {
+        if (level.dimension() != CHRONO_DAWN_DIMENSION) {
             return generatedLoot;
         }
 

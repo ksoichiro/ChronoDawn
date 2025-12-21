@@ -49,7 +49,7 @@ This guide explains how to protect boss rooms from block breaking using the Boss
 ### 1. Obtain Marker Blocks
 
 ```
-/give @s chronosphere:boss_room_boundary_marker
+/give @s chronodawn:boss_room_boundary_marker
 ```
 
 ### 2. Place Markers
@@ -123,7 +123,7 @@ Y-axis (vertical)
 
 Add the boss room protection processor to your structure's processor list:
 
-**File**: `data/chronosphere/worldgen/processor_list/your_structure_combined.json`
+**File**: `data/chronodawn/worldgen/processor_list/your_structure_combined.json`
 
 ```json
 {
@@ -135,7 +135,7 @@ Add the boss room protection processor to your structure's processor list:
       ]
     },
     {
-      "processor_type": "chronosphere:boss_room_protection"
+      "processor_type": "chronodawn:boss_room_protection"
     }
   ]
 }
@@ -173,17 +173,17 @@ When a player tries to break a block in a protected area:
 
 Messages are defined in language files:
 
-**File**: `assets/chronosphere/lang/en_us.json`
+**File**: `assets/chronodawn/lang/en_us.json`
 ```json
 {
-  "message.chronosphere.boss_room_protected": "This area is protected until you defeat the boss"
+  "message.chronodawn.boss_room_protected": "This area is protected until you defeat the boss"
 }
 ```
 
-**File**: `assets/chronosphere/lang/ja_jp.json`
+**File**: `assets/chronodawn/lang/ja_jp.json`
 ```json
 {
-  "message.chronosphere.boss_room_protected": "このエリアはボスを倒すまで保護されています"
+  "message.chronodawn.boss_room_protected": "このエリアはボスを倒すまで保護されています"
 }
 ```
 
@@ -208,7 +208,7 @@ BlockProtectionHandler.registerProtection(serverLevel, areaKey, box);
 ```
 
 **Key Format**: `dimension:minPos_maxPos`
-- Example: `chronosphere:chronosphere:BlockPos{x=100, y=60, z=200}_BlockPos{x=120, y=70, z=220}`
+- Example: `chronodawn:chronodawn:BlockPos{x=100, y=60, z=200}_BlockPos{x=120, y=70, z=220}`
 
 ### Position-Based Boss Defeat Detection
 
@@ -222,7 +222,7 @@ public static boolean onBossDefeatedAt(ServerLevel level, BlockPos bossPos) {
 
         if (key.startsWith(dimensionKey + ":") && area.isInside(bossPos)) {
             DEFEATED_BOSSES.add(key);
-            Chronosphere.LOGGER.info("Boss defeated at {}! Unprotected boss room: {}",
+            ChronoDawn.LOGGER.info("Boss defeated at {}! Unprotected boss room: {}",
                                      bossPos, key);
             return true;
         }
@@ -264,7 +264,7 @@ public static boolean onBossDefeatedAt(ServerLevel level, BlockPos bossPos) {
          "rules": [...]
        },
        {
-         "processor_type": "chronosphere:boss_room_protection"
+         "processor_type": "chronodawn:boss_room_protection"
        }
      ]
    }
@@ -311,25 +311,25 @@ This system can be applied to any boss room structure:
 ## Files Reference
 
 ### Core Implementation
-- `common/src/main/java/com/chronosphere/blocks/BossRoomBoundaryMarkerBlock.java`
-- `common/src/main/java/com/chronosphere/blocks/BossRoomBoundaryMarkerBlockEntity.java`
-- `common/src/main/java/com/chronosphere/worldgen/processors/BossRoomProtectionProcessor.java`
-- `common/src/main/java/com/chronosphere/worldgen/protection/BlockProtectionHandler.java`
+- `common/src/main/java/com/chronodawn/blocks/BossRoomBoundaryMarkerBlock.java`
+- `common/src/main/java/com/chronodawn/blocks/BossRoomBoundaryMarkerBlockEntity.java`
+- `common/src/main/java/com/chronodawn/worldgen/processors/BossRoomProtectionProcessor.java`
+- `common/src/main/java/com/chronodawn/worldgen/protection/BlockProtectionHandler.java`
 
 ### Platform-Specific
-- `fabric/src/main/java/com/chronosphere/fabric/event/BlockProtectionEventHandler.java`
-- `neoforge/src/main/java/com/chronosphere/neoforge/event/BlockProtectionEventHandler.java`
+- `fabric/src/main/java/com/chronodawn/fabric/event/BlockProtectionEventHandler.java`
+- `neoforge/src/main/java/com/chronodawn/neoforge/event/BlockProtectionEventHandler.java`
 
 ### Resources
-- `common/src/main/resources/assets/chronosphere/textures/block/boss_room_boundary_marker.png`
-- `common/src/main/resources/assets/chronosphere/lang/en_us.json`
-- `common/src/main/resources/assets/chronosphere/lang/ja_jp.json`
+- `common/src/main/resources/assets/chronodawn/textures/block/boss_room_boundary_marker.png`
+- `common/src/main/resources/assets/chronodawn/lang/en_us.json`
+- `common/src/main/resources/assets/chronodawn/lang/ja_jp.json`
 
 ### Registry
-- `common/src/main/java/com/chronosphere/registry/ModBlocks.java`
-- `common/src/main/java/com/chronosphere/registry/ModBlockEntities.java`
-- `common/src/main/java/com/chronosphere/registry/ModItems.java`
-- `common/src/main/java/com/chronosphere/registry/ModStructureProcessorTypes.java`
+- `common/src/main/java/com/chronodawn/registry/ModBlocks.java`
+- `common/src/main/java/com/chronodawn/registry/ModBlockEntities.java`
+- `common/src/main/java/com/chronodawn/registry/ModItems.java`
+- `common/src/main/java/com/chronodawn/registry/ModStructureProcessorTypes.java`
 
 ## Troubleshooting
 
@@ -339,7 +339,7 @@ This system can be applied to any boss room structure:
 
 ### Protection not registered during world generation
 - **Solution**: Verify processor is added to structure's processor list
-- Check: `data/chronosphere/worldgen/processor_list/your_structure_combined.json`
+- Check: `data/chronodawn/worldgen/processor_list/your_structure_combined.json`
 
 ### Boss room still protected after boss defeat
 - **Solution**: Ensure boss entity calls `BlockProtectionHandler.onBossDefeatedAt()` in `die()` method

@@ -1,4 +1,4 @@
-# Texture Design Guide - Chronosphere Mod
+# Texture Design Guide - Chrono Dawn Mod
 
 **Created**: 2025-11-02
 **Purpose**: アイテムテクスチャのコンセプトとデザイン指針
@@ -7,7 +7,7 @@
 
 ## Color Theme
 
-**Chronosphere Modのテーマカラー**:
+**Chrono Dawn Modのテーマカラー**:
 - **メインカラー**: `#db8813` (RGB: 219, 136, 19) - オレンジ/ゴールド
 - ポータルの色と統一し、時計や時間のテーマに合致
 
@@ -23,11 +23,11 @@
 
 ## 1. Clockstone（クロックストーン）
 
-**ファイル**: `common/src/main/resources/assets/chronosphere/textures/item/clockstone.png`
+**ファイル**: `common/src/main/resources/assets/chronodawn/textures/item/clockstone.png`
 
 **コンセプト**:
 - 基本的な時間の力を持つ鉱石
-- オーバーワールドの古代遺跡やクロノスフィアで採掘可能
+- オーバーワールドの古代遺跡やクロノドーンで採掘可能
 - 全ての時間操作アイテムの基礎素材
 
 **デザイン**:
@@ -41,7 +41,7 @@
 
 ## 2. Enhanced Clockstone（強化クロックストーン）
 
-**ファイル**: `common/src/main/resources/assets/chronosphere/textures/item/enhanced_clockstone.png`
+**ファイル**: `common/src/main/resources/assets/chronodawn/textures/item/enhanced_clockstone.png`
 
 **コンセプト**:
 - 砂漠の時計塔で入手できる上位素材
@@ -75,7 +75,7 @@
 
 ## 3. Time Clock（タイムクロック）
 
-**ファイル**: `common/src/main/resources/assets/chronosphere/textures/item/time_clock.png`
+**ファイル**: `common/src/main/resources/assets/chronodawn/textures/item/time_clock.png`
 
 **コンセプト**:
 - 周囲のMobの攻撃AIをキャンセルする時間操作デバイス
@@ -97,7 +97,7 @@
 
 ## 4. Key to Master Clock（マスタークロックへの鍵）
 
-**ファイル**: `common/src/main/resources/assets/chronosphere/textures/item/key_to_master_clock.png`
+**ファイル**: `common/src/main/resources/assets/chronodawn/textures/item/key_to_master_clock.png`
 
 **コンセプト**:
 - 時の番人（中ボス）を倒して入手する重要なキーアイテム
@@ -121,7 +121,7 @@
 
 ## 5. Unstable Hourglass（不安定な砂時計）
 
-**ファイル**: `common/src/main/resources/assets/chronosphere/textures/item/unstable_hourglass.png`
+**ファイル**: `common/src/main/resources/assets/chronodawn/textures/item/unstable_hourglass.png`
 
 **コンセプト**:
 - クラフト時に反転共鳴（危険な効果）を発動する
@@ -242,8 +242,8 @@ Emphasizing Enhanced Clockstone material:
 ### Technical Specifications
 
 - **Format**: PNG image data, 16 x 16, 8-bit/color RGBA, non-interlaced
-- **Location**: `common/src/main/resources/assets/chronosphere/textures/item/spatially_linked_pickaxe.png`
-- **Model**: `common/src/main/resources/assets/chronosphere/models/item/spatially_linked_pickaxe.json`
+- **Location**: `common/src/main/resources/assets/chronodawn/textures/item/spatially_linked_pickaxe.png`
+- **Model**: `common/src/main/resources/assets/chronodawn/models/item/spatially_linked_pickaxe.json`
 
 ### Creation Steps
 
@@ -268,7 +268,7 @@ Emphasizing Enhanced Clockstone material:
 
 ## 6. Ancient Gear（古代の歯車）
 
-**ファイル**: `common/src/main/resources/assets/chronosphere/textures/item/ancient_gear.png`
+**ファイル**: `common/src/main/resources/assets/chronodawn/textures/item/ancient_gear.png`
 
 **コンセプト**:
 - Master Clockダンジョンで収集するクエストアイテム
@@ -314,11 +314,11 @@ Emphasizing Enhanced Clockstone material:
 ### Overview
 
 T240-249で追加された装飾・建築用ブロックのテクスチャデザインガイド。
-すべてのブロックはChronosphere次元のテーマカラー（紫/青）を基調とする。
+すべてのブロックはChrono Dawn次元のテーマカラー（紫/青）を基調とする。
 
 **Recommended Texture Size**: 16x16 pixels (Minecraft standard)
 
-**Color Palette for Chronosphere**:
+**Color Palette for Chrono Dawn**:
 - **Primary**: Purple (`#9B59B6`), Blue (`#3498DB`)
 - **Secondary**: Light Blue (`#5DADE2`), Teal
 - **Metallic**: Copper, Bronze, Antique Gold
@@ -329,7 +329,7 @@ T240-249で追加された装飾・建築用ブロックのテクスチャデザ
 
 ## 7. Clockwork Block（歯車ブロック）
 
-**ファイル**: `common/src/main/resources/assets/chronosphere/textures/block/clockwork_block.png`
+**ファイル**: `common/src/main/resources/assets/chronodawn/textures/block/clockwork_block.png`
 
 **Concept**: Steampunk/Mechanical clock themed decorative block
 
@@ -361,8 +361,8 @@ T240-249で追加された装飾・建築用ブロックのテクスチャデザ
 ## 8. Time Crystal Block（時間水晶ブロック）
 
 **ファイル（2層構造）**:
-- `common/src/main/resources/assets/chronosphere/textures/block/time_crystal_block_outer.png` - 外側のガラス層
-- `common/src/main/resources/assets/chronosphere/textures/block/time_crystal_block_core.png` - 内側の発光コア
+- `common/src/main/resources/assets/chronodawn/textures/block/time_crystal_block_outer.png` - 外側のガラス層
+- `common/src/main/resources/assets/chronodawn/textures/block/time_crystal_block_core.png` - 内側の発光コア
 
 **Concept**: Multi-layer glowing crystal block - beacon-like appearance with inner core
 
@@ -447,13 +447,13 @@ When both layers combine, it should look like a glass cube with a glowing crysta
 
 ## 9. Temporal Bricks（時のレンガ）
 
-**ファイル**: `common/src/main/resources/assets/chronosphere/textures/block/temporal_bricks.png`
+**ファイル**: `common/src/main/resources/assets/chronodawn/textures/block/temporal_bricks.png`
 
 **Concept**: Time-themed brick building block
 
 **Design**:
 - **Theme**: Brick pattern with clock/time decorations
-- **Color**: Purple/Blue base (MapColor.COLOR_PURPLE) - Chronosphere theme color
+- **Color**: Purple/Blue base (MapColor.COLOR_PURPLE) - Chrono Dawn theme color
 - **Texture**: Stone brick pattern with time motifs
 - **Details**:
   - Standard brick layout (similar to Stone Bricks)
@@ -484,7 +484,7 @@ When both layers combine, it should look like a glass cube with a glowing crysta
 
 ## 10. Temporal Moss（時の苔）
 
-**ファイル**: `common/src/main/resources/assets/chronosphere/textures/block/temporal_moss.png`
+**ファイル**: `common/src/main/resources/assets/chronodawn/textures/block/temporal_moss.png`
 
 **Concept**: Time-affected moss block exclusive to swamp biome
 
@@ -509,7 +509,7 @@ When both layers combine, it should look like a glass cube with a glowing crysta
 - Light: None
 - Special: Spreads to adjacent blocks, bonemeal-able
 
-**Biome**: chronosphere_swamp exclusive
+**Biome**: chronodawn_swamp exclusive
 
 **Current Status**: ⚠️ Placeholder (copy of unstable_fungus.png)
 
@@ -518,8 +518,8 @@ When both layers combine, it should look like a glass cube with a glowing crysta
 ## 11. Frozen Time Ice（凍結時間の氷）
 
 **ファイル（2層構造）**:
-- `common/src/main/resources/assets/chronosphere/textures/block/frozen_time_ice_outer.png` - 外側の透明な氷層
-- `common/src/main/resources/assets/chronosphere/textures/block/frozen_time_ice_core.png` - 内側の凍結結晶コア
+- `common/src/main/resources/assets/chronodawn/textures/block/frozen_time_ice_outer.png` - 外側の透明な氷層
+- `common/src/main/resources/assets/chronodawn/textures/block/frozen_time_ice_core.png` - 内側の凍結結晶コア
 
 **Concept**: Multi-layer frozen ice block - transparent ice with frozen crystal inside
 
@@ -576,7 +576,7 @@ When both layers combine, it should look like a glass cube with a glowing crysta
 - Both textures should have alpha channel for transparency
 - Outer layer more transparent than inner layer
 
-**Biome**: chronosphere_snowy exclusive
+**Biome**: chronodawn_snowy exclusive
 
 **Texture Creation Tips**:
 
@@ -608,7 +608,7 @@ When both layers combine, it should look like a transparent ice block with froze
 
 ## 12. Time Wood Fence（時の木フェンス）
 
-**ファイル**: `common/src/main/resources/assets/chronosphere/textures/block/time_wood_fence_***.png`
+**ファイル**: `common/src/main/resources/assets/chronodawn/textures/block/time_wood_fence_***.png`
 
 **Concept**: Fence variant using Time Wood Planks texture
 
@@ -631,7 +631,7 @@ When both layers combine, it should look like a transparent ice block with froze
 
 ## Design Principles - Blocks
 
-1. **Thematic Consistency**: All blocks use purple/blue as Chronosphere dimension theme
+1. **Thematic Consistency**: All blocks use purple/blue as Chrono Dawn dimension theme
 2. **Vanilla Compatibility**: Follow Minecraft's 16x16 pixel art style
 3. **Functional Clarity**: Visual design indicates block function (light, decoration, building)
 4. **Biome Exclusivity**: Moss (swamp) and Ice (snowy) have appropriate natural appearance
@@ -653,7 +653,7 @@ When both layers combine, it should look like a transparent ice block with froze
 
 ## Optional: Animation File for Clockwork Block
 
-**ファイル**: `common/src/main/resources/assets/chronosphere/textures/block/clockwork_block.png.mcmeta`
+**ファイル**: `common/src/main/resources/assets/chronodawn/textures/block/clockwork_block.png.mcmeta`
 
 ```json
 {
@@ -667,7 +667,7 @@ When both layers combine, it should look like a transparent ice block with froze
 This creates smooth rotating gear animation. The PNG should contain multiple frames vertically stacked.
 ## 9. Fragment of Stasis Core（静止のコアの破片）
 
-**ファイル**: `common/src/main/resources/assets/chronosphere/textures/item/fragment_of_stasis_core.png`
+**ファイル**: `common/src/main/resources/assets/chronodawn/textures/item/fragment_of_stasis_core.png`
 
 **コンセプト**:
 - Time Tyrant（ラスボス）を倒して入手するボス素材
@@ -681,7 +681,7 @@ This creates smooth rotating gear animation. The PNG should contain multiple fra
 - **カラー**:
   - 青白い/シアン色（時間の静止を表現）
   - または深い紫/インディゴ（Time Tyrantのテーマカラー）
-  - わずかにオレンジ/ゴールド（#db8813）のアクセント（Chronosphere modのテーマカラーを残す）
+  - わずかにオレンジ/ゴールド（#db8813）のアクセント（Chrono Dawn modのテーマカラーを残す）
   - 凍結したような透明感
 - **特徴**:
   - 不規則な破片形状（粉々に砕けたコアの一部）
@@ -713,7 +713,7 @@ This creates smooth rotating gear animation. The PNG should contain multiple fra
 
 ## 10. Eye of Chronos（クロノスの瞳）
 
-**ファイル**: `common/src/main/resources/assets/chronosphere/textures/item/eye_of_chronos.png`
+**ファイル**: `common/src/main/resources/assets/chronodawn/textures/item/eye_of_chronos.png`
 
 **コンセプト**:
 - Time Tyrant（ラスボス）を倒して確定ドロップする究極のアーティファクト
@@ -794,7 +794,7 @@ This creates smooth rotating gear animation. The PNG should contain multiple fra
 
 ## 11. Chronoblade（クロノブレード）
 
-**ファイル**: `common/src/main/resources/assets/chronosphere/textures/item/chronoblade.png`
+**ファイル**: `common/src/main/resources/assets/chronodawn/textures/item/chronoblade.png`
 
 **コンセプト**:
 - Time Tyrant撃破後に作成できる究極の武器
@@ -835,7 +835,7 @@ This creates smooth rotating gear animation. The PNG should contain multiple fra
 
 ## 12. Time Tyrant's Mail（時間の暴君のメイル）
 
-**ファイル**: `common/src/main/resources/assets/chronosphere/textures/item/time_tyrant_mail.png`
+**ファイル**: `common/src/main/resources/assets/chronodawn/textures/item/time_tyrant_mail.png`
 
 **コンセプト**:
 - Time Tyrant撃破後に作成できる究極のチェストプレート
@@ -875,7 +875,7 @@ This creates smooth rotating gear animation. The PNG should contain multiple fra
 
 ## 13. Echoing Time Boots（時間の残響ブーツ）
 
-**ファイル**: `common/src/main/resources/assets/chronosphere/textures/item/echoing_time_boots.png`
+**ファイル**: `common/src/main/resources/assets/chronodawn/textures/item/echoing_time_boots.png`
 
 **コンセプト**:
 - Time Tyrant撃破後に作成できる究極のブーツ
@@ -915,7 +915,7 @@ This creates smooth rotating gear animation. The PNG should contain multiple fra
 
 ## 14. Unstable Pocket Watch（不安定な懐中時計）
 
-**ファイル**: `common/src/main/resources/assets/chronosphere/textures/item/unstable_pocket_watch.png`
+**ファイル**: `common/src/main/resources/assets/chronodawn/textures/item/unstable_pocket_watch.png`
 
 **コンセプト**:
 - Time Tyrant撃破後に作成できる究極のユーティリティアイテム
@@ -1167,7 +1167,7 @@ This creates smooth rotating gear animation. The PNG should contain multiple fra
 
 ## 15. Guardian Stone（守護者の石）
 
-**ファイル**: `common/src/main/resources/assets/chronosphere/textures/item/guardian_stone.png`
+**ファイル**: `common/src/main/resources/assets/chronodawn/textures/item/guardian_stone.png`
 
 **コンセプト**:
 - Chronos Warden（クロノスの監視者）を倒して入手するボス素材
@@ -1216,7 +1216,7 @@ magick time_crystal.png -colorspace Gray -modulate 100,0 guardian_stone_base.png
 
 ## 16. Colossus Gear（巨人の歯車）
 
-**ファイル**: `common/src/main/resources/assets/chronosphere/textures/item/colossus_gear.png`
+**ファイル**: `common/src/main/resources/assets/chronodawn/textures/item/colossus_gear.png`
 
 **コンセプト**:
 - Clockwork Colossus（機械仕掛けの巨人）を倒して入手するボス素材
@@ -1267,7 +1267,7 @@ magick time_crystal.png -colorspace Gray -modulate 100,0 guardian_stone_base.png
 
 ## 17. Phantom Essence（幻影のエッセンス）
 
-**ファイル**: `common/src/main/resources/assets/chronosphere/textures/item/phantom_essence.png`
+**ファイル**: `common/src/main/resources/assets/chronodawn/textures/item/phantom_essence.png`
 
 **コンセプト**:
 - Temporal Phantom（時間の幻影）を倒して入手するボス素材
@@ -1323,7 +1323,7 @@ magick time_crystal.png \
 
 ## 18. Entropy Core（エントロピーコア）
 
-**ファイル**: `common/src/main/resources/assets/chronosphere/textures/item/entropy_core.png`
+**ファイル**: `common/src/main/resources/assets/chronodawn/textures/item/entropy_core.png`
 
 **コンセプト**:
 - Entropy Keeper（エントロピーの管理者）を倒して入手するボス素材
@@ -1380,7 +1380,7 @@ magick clockstone.png \
 
 ## 19. Chrono Aegis（クロノスの盾）
 
-**ファイル**: `common/src/main/resources/assets/chronosphere/textures/item/chrono_aegis.png`
+**ファイル**: `common/src/main/resources/assets/chronodawn/textures/item/chrono_aegis.png`
 
 **コンセプト**:
 - 4つの追加ボス素材（Guardian Stone, Colossus Gear, Phantom Essence, Entropy Core）をクラフトして作成
@@ -1468,7 +1468,7 @@ magick clockstone.png \
 
 ## E1. Chronos Warden（クロノスの監視者）
 
-**ファイル**: `common/src/main/resources/assets/chronosphere/textures/entity/chronos_warden.png`
+**ファイル**: `common/src/main/resources/assets/chronodawn/textures/entity/chronos_warden.png`
 
 **コンセプト**:
 - Phase 1の追加ボス（4体のうちの1体目）
@@ -1568,7 +1568,7 @@ magick clockstone.png \
 
 ## E2. Clockwork Colossus（機械仕掛けの巨人）
 
-**ファイル**: `common/src/main/resources/assets/chronosphere/textures/entity/clockwork_colossus.png`
+**ファイル**: `common/src/main/resources/assets/chronodawn/textures/entity/clockwork_colossus.png`
 
 **コンセプト**:
 - Phase 1の追加ボス（4体のうちの2体目）
@@ -1661,7 +1661,7 @@ magick clockstone.png \
 
 ## E3. Temporal Phantom（時の亡霊）
 
-**ファイル**: `common/src/main/resources/assets/chronosphere/textures/entity/temporal_phantom.png`
+**ファイル**: `common/src/main/resources/assets/chronodawn/textures/entity/temporal_phantom.png`
 
 **コンセプト**:
 - Phase 2の追加ボス（4体のうちの3体目）
@@ -1750,7 +1750,7 @@ magick clockstone.png \
 
 ## E4. Entropy Keeper（エントロピーの管理者）
 
-**ファイル**: `common/src/main/resources/assets/chronosphere/textures/entity/entropy_keeper.png`
+**ファイル**: `common/src/main/resources/assets/chronodawn/textures/entity/entropy_keeper.png`
 
 **コンセプト**:
 - Phase 2の追加ボス（4体のうちの4体目）

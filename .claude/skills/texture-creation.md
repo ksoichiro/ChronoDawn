@@ -90,4 +90,4 @@ magick input.png \
 ---
 
 **Last Updated**: 2025-12-08
-**Maintained by**: Chronosphere Development Team
+**Maintained by**: Chrono Dawn Development Team

@@ -136,15 +136,15 @@ This mod is built with **Architectury** and supports **both Fabric and NeoForge*
 
 ## 📚 Documentation
 
-- **Player Guide**: Detailed walkthrough and tips ([View on GitHub](https://github.com/ksoichiro/Chronosphere/blob/001-chronosphere-mod/docs/player_guide.md))
-- **Developer Guide**: For developers and contributors ([View on GitHub](https://github.com/ksoichiro/Chronosphere/blob/001-chronosphere-mod/docs/developer_guide.md))
+- **Player Guide**: Detailed walkthrough and tips ([View on GitHub](https://github.com/ksoichiro/ChronoDawn/blob/main/docs/player_guide.md))
+- **Developer Guide**: For developers and contributors ([View on GitHub](https://github.com/ksoichiro/ChronoDawn/blob/main/docs/developer_guide.md))
 - **Wiki**: Coming soon!
 
 ---
 
 ## 🐛 Bug Reports & Suggestions
 
-Found a bug or have a suggestion? Report it on our [GitHub Issues](https://github.com/ksoichiro/Chronosphere/issues) page!
+Found a bug or have a suggestion? Report it on our [GitHub Issues](https://github.com/ksoichiro/ChronoDawn/issues) page!
 
 ---
 
@@ -152,7 +152,7 @@ Found a bug or have a suggestion? Report it on our [GitHub Issues](https://githu
 
 [Add screenshots of the following:]
 - Ancient Ruins structure in Overworld
-- Chronosphere portal (orange/gold color)
+- Chrono Dawn portal (orange/gold color)
 - Different biomes in Chrono Dawn
 - Forgotten Library structure
 - Time Guardian boss battle
@@ -179,7 +179,7 @@ Found a bug or have a suggestion? Report it on our [GitHub Issues](https://githu
 
 ## 🔗 Links
 
-- **GitHub Repository**: [https://github.com/ksoichiro/Chronosphere](https://github.com/ksoichiro/Chronosphere)
+- **GitHub Repository**: [https://github.com/ksoichiro/ChronoDawn](https://github.com/ksoichiro/ChronoDawn)
 - **Discord**: [Coming soon]
 - **Modrinth**: [Link to Modrinth page]
 

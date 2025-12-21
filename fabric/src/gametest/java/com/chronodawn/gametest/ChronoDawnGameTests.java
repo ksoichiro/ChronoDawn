@@ -41,12 +41,12 @@ public class ChronoDawnGameTests implements FabricGameTest {
 
     @GameTest(template = EMPTY_STRUCTURE)
     public void testChronoDawnBoatCanSpawn(GameTestHelper helper) {
-        ChronoDawnGameTestLogic.TEST_CHRONOSPHERE_BOAT_CAN_SPAWN.accept(helper);
+        ChronoDawnGameTestLogic.TEST_CHRONO_DAWN_BOAT_CAN_SPAWN.accept(helper);
     }
 
     @GameTest(template = EMPTY_STRUCTURE)
     public void testChronoDawnChestBoatCanSpawn(GameTestHelper helper) {
-        ChronoDawnGameTestLogic.TEST_CHRONOSPHERE_CHEST_BOAT_CAN_SPAWN.accept(helper);
+        ChronoDawnGameTestLogic.TEST_CHRONO_DAWN_CHEST_BOAT_CAN_SPAWN.accept(helper);
     }
 
     @GameTest(template = EMPTY_STRUCTURE)
