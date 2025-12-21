@@ -17,6 +17,7 @@ import com.chronosphere.registry.ModTreeDecoratorTypes;
 import com.chronosphere.worldgen.spawning.ChronosWardenSpawner;
 import com.chronosphere.worldgen.spawning.ClockworkColossusSpawner;
 import com.chronosphere.worldgen.spawning.EntropyKeeperSpawner;
+import com.chronosphere.worldgen.spawning.MasterClockBossRoomPlacer;
 import com.chronosphere.worldgen.spawning.PhantomCatacombsBossRoomPlacer;
 import com.chronosphere.worldgen.spawning.TemporalPhantomSpawner;
 import com.chronosphere.worldgen.spawning.TimeGuardianSpawner;
@@ -62,6 +63,7 @@ public class Chronosphere {
         TimeTyrantSpawner.register();
         ChronosWardenSpawner.register();
         ClockworkColossusSpawner.register();
+        MasterClockBossRoomPlacer.register();
         PhantomCatacombsBossRoomPlacer.register();
         TemporalPhantomSpawner.register();
         // EntropyKeeperSpawner disabled - Entropy Keeper now spawns via EntropyCryptTrapdoorBlock
