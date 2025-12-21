@@ -25,11 +25,11 @@ Simply describe what you want to do (e.g., "I want to update Minecraft to 1.21.2
 - `gradle.properties` - Version definitions
 - `fabric.mod.json` / `neoforge.mods.toml` - Mod metadata
 
-**Current Versions** (as of 2025-12-08):
+**Current Versions** (as of 2025-12-21):
 - Minecraft: 1.21.1
 - Fabric Loader: 0.17.3+ | Fabric API: 0.116.7+
 - NeoForge: 21.1.209+
-- Architectury API: 13.0.8+ | Custom Portal API: 0.0.1-beta66-1.21+ | Patchouli: 1.21.1-92+
+- Architectury API: 13.0.8+ | Custom Portal API: 0.0.1-beta66-1.21+ | Lavender: 0.1.15+1.21 (Fabric only, NeoForge TBD)
 
 ---
 

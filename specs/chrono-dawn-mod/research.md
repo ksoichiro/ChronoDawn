@@ -6978,4 +6978,209 @@ DimensionSpecialEffectsのカスタム実装は技術的に可能ですが、**�
 
 ### 参照
 - CLAUDE.md: Custom Noise Settings セクション
+
+---
+
+## Lavender Guidebook System Migration (2025-12-21)
+
+### Decision: Migrate from Patchouli to Lavender
+
+**Background**:
+- **Licensing Constraint**: Patchouli is licensed under CC-BY-NC-SA 3.0 (NonCommercial, ShareAlike), which restricts commercial use and creates legal uncertainty for future monetization options
+- **All Other Dependencies Compatible**: Architectury, NeoForge, Fabric, and Custom Portal API all permit proprietary or commercial licensing
+- **Lavender as Alternative**: MIT-licensed guidebook system, providing full control over project licensing
+
+**Research Sources**:
+- [Lavender on Modrinth](https://modrinth.com/mod/lavender) - Official mod page
+- [Lavender Documentation](https://docs.wispforest.io/lavender/) - Official documentation
+- [Lavender Setup Guide](https://docs.wispforest.io/lavender/setup/)
+- [Lavender Getting Started](https://docs.wispforest.io/lavender/getting-started)
+- [Lavender Markdown Syntax](https://docs.wispforest.io/lavender/markdown-syntax)
+- [Lavender Metadata Format](https://docs.wispforest.io/lavender/metadata-format)
+
+### Lavender Overview
+
+**Key Features**:
+- **License**: MIT License (full commercial freedom)
+- **Minecraft Version**: 1.21.1 supported (version 0.1.15+1.21)
+- **Mod Loaders**: Fabric and Quilt (NeoForge support uncertain - needs verification)
+- **Data Format**: Markdown-based content with JSON frontmatter
+- **Dependencies**: Requires owo-lib (recommended to bundle owo-sentinel)
+- **Features**:
+  - Markdown-based authoring (easy to learn, readable)
+  - Offhand viewing support (reference while following instructions)
+  - Fully data-driven with hot reloading
+  - Built-in recipe visualization for all vanilla recipe types
+  - Toast notifications for unlocked entries
+  - Advancement-based entry locking
+
+### Lavender vs Patchouli Comparison
+
+| Feature | Patchouli | Lavender |
+|---------|-----------|----------|
+| License | CC-BY-NC-SA 3.0 | MIT |
+| Content Format | JSON pages | Markdown + JSON frontmatter |
+| Version (MC 1.21.1) | 1.21.1-92 | 0.1.15+1.21 |
+| Loaders | Fabric, NeoForge | Fabric, Quilt (NeoForge TBD) |
+| Recipe Display | Yes | Yes (all vanilla types) |
+| Offhand Viewing | No | Yes |
+| Hot Reload | Yes | Yes (near-instant) |
+| Dependencies | None | owo-lib |
+
+### Setup Requirements
+
+**Gradle Configuration**:
+```gradle
+repositories {
+    maven { url 'https://maven.wispforest.io' }
+}
+
+dependencies {
+    modImplementation "io.wispforest:lavender:${project.lavender_version}"
+    include "io.wispforest:owo-sentinel:${project.owo_version}"
+}
+```
+
+**gradle.properties**:
+```properties
+lavender_version=0.1.15+1.21
+```
+
+### File Structure
+
+**Lavender Directory**: `assets/chronodawn/lavender/`
+
+```
+lavender/
+├── books/
+│   └── chronicle.json          # Book definition
+├── entries/chronicle/          # Entry files (Markdown)
+│   ├── basics/
+│   ├── bosses/
+│   ├── progression/
+│   └── structures/
+├── categories/chronicle/       # Category definitions
+│   ├── basics.json
+│   ├── bosses.json
+│   ├── progression.json
+│   └── structures.json
+└── structures/                 # Multi-block structure definitions
+```
+
+**Note**: Unlike Patchouli's language-based subdirectories (`en_us/`, `ja_jp/`), Lavender uses a single structure with translation keys or separate language files (documentation unclear - needs verification during implementation).
+
+### Content Format
+
+**Entry File Example** (Markdown with JSON frontmatter):
+```markdown
+```json
+{
+  "title": "Welcome to Chrono Dawn",
+  "icon": "chronodawn:time_crystal",
+  "category": "chronodawn:basics",
+  "associated_items": ["chronodawn:time_crystal"],
+  "ordinal": 1
+}
+```
+
+Welcome, traveler.
+
+You have entered a dimension where time itself has frozen. This chronicle will guide you through your journey.
+
+The Chrono Dawn is a realm of mystery and danger, but also great rewards for those brave enough to explore its depths.
+
+;;;;;;
+
+## Getting Started
+
+To begin your journey, you will need to craft a <item;chronodawn:time_hourglass>.
+```
+
+**Markdown Features**:
+- Standard formatting: `*italic*`, `**bold**`, `__underline__`, `~~strikethrough~~`
+- Colors: `{color}text{}` (Minecraft colors or hex codes like `{#F1C27B}`)
+- Internal links: `[text](^namespace:path/to/entry)`
+- Item tooltips: `<item;minecraft:diamond_shovel>`
+- Entity display: `<entity;minecraft:zombie>`
+- Block display: `<block;minecraft:furnace>`
+- Recipe display: `<recipe;minecraft:warped_fence_gate>`
+- Keybindings: `<keybind;key.attack>`
+- Page breaks: `;;;;;;` (surrounded by blank lines)
+- Images: `![tooltip](minecraft:textures/path.png,fit)`
+
+**Category File Example**:
+```json
+{
+  "title": "Basic Knowledge",
+  "icon": "minecraft:clock",
+  "ordinal": 1
+}
+```
+
+**Book Definition**:
+```json
+{}
+```
+(Minimal definition; additional optional properties include `texture`, `display_completion`, `dynamic_book_model`, `extend`)
+
+### Migration Strategy
+
+**Phase 1: Setup**
+1. Add Lavender dependencies to Fabric build.gradle
+2. Verify NeoForge compatibility (may require separate Lavender fork or alternative solution)
+3. Remove Patchouli dependencies
+
+**Phase 2: Content Migration**
+1. Create Lavender directory structure
+2. Convert Patchouli JSON entries to Lavender Markdown format:
+   - Extract text from Patchouli JSON pages
+   - Add JSON frontmatter (title, icon, category, ordinal)
+   - Convert Patchouli syntax to Lavender Markdown syntax
+   - Add page breaks (`;;;;;;`) between multi-page entries
+3. Create category definitions (minimal conversion - already JSON)
+4. Handle i18n:
+   - English content: Primary Markdown files
+   - Japanese content: Separate translation approach (TBD during implementation)
+
+**Phase 3: Testing**
+1. Test book opening and navigation
+2. Test language switching (English ↔ Japanese)
+3. Test on both Fabric and NeoForge (if supported)
+4. Test offhand viewing feature
+5. Verify all recipe displays work
+
+**Phase 4: Documentation**
+1. Update README.md, player_guide.md, developer_guide.md
+2. Update CurseForge and Modrinth descriptions
+3. Update LICENSE file with chosen license (MIT or Proprietary)
+
+### Open Questions
+
+1. **NeoForge Support**: Does Lavender 0.1.15+1.21 support NeoForge, or is it Fabric/Quilt only?
+   - **Action**: Test with NeoForge build, or check GitHub issues/documentation
+   - **Fallback**: If unsupported, may need to find alternative or maintain Patchouli for NeoForge temporarily
+
+2. **i18n Approach**: How does Lavender handle multiple languages?
+   - **Possible approaches**:
+     - Separate Markdown files per language (e.g., `entries/chronicle/en_us/`, `entries/chronicle/ja_jp/`)
+     - Translation key-based system (titles/content separated)
+   - **Action**: Review Lavender docs or existing mods using Lavender with i18n
+
+3. **Guidebook Item**: Should we use Lavender's default book item, or create a custom item?
+   - **Patchouli approach**: Uses `patchouli:book_purple` model with custom item
+   - **Lavender approach**: May provide default book item or require custom implementation
+   - **Action**: Check Lavender docs during implementation
+
+4. **owo-lib Dependency**: What features does owo-lib provide, and is owo-sentinel sufficient?
+   - **Action**: Review owo-lib documentation to understand dependency scope
+
+### Next Steps
+
+1. **T501**: Remove Patchouli dependencies (straightforward)
+2. **T502**: Add Lavender dependencies (may require NeoForge compatibility check)
+3. **T503**: Create Lavender guidebook structure (verify i18n approach first)
+4. **T504-505**: Implement content (English then Japanese)
+5. **T506**: Create guidebook item and recipe
+6. **T507**: Test functionality
+7. **T508-510**: Update documentation, licensing, and final verification
 - 関連タスク: T307 (specs/chrono-dawn-mod/tasks.md)

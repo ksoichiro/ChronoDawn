@@ -26,6 +26,7 @@ configurations {
 repositories {
     maven { url 'https://maven.kyrptonaught.dev' }
     maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
+    maven { url 'https://maven.wispforest.io' }
 }
 
 dependencies {
@@ -37,8 +38,8 @@ dependencies {
     modImplementation 'net.kyrptonaught:customportalapi:0.0.1-beta66-1.21'
     include 'net.kyrptonaught:customportalapi:0.0.1-beta66-1.21'
 
-    // Patchouli for guide book
-    modImplementation "vazkii.patchouli:Patchouli:1.21.1-92-FABRIC"
+    // Lavender for guide book
+    modImplementation "io.wispforest:lavender:$rootProject.lavender_version"
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')

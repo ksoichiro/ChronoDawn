@@ -30,9 +30,7 @@
     "fabric-api": "*",
     "architectury": ">=13.0.8",
     "minecraft": "~1.21.1",
-    "java": ">=21"
-  },
-  "recommends": {
-    "patchouli": ">=1.21.1-92"
+    "java": ">=21",
+    "lavender": ">=0.1.15"
   }
 }
