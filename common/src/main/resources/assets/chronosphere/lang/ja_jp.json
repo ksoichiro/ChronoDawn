@@ -1,5 +1,5 @@
 {
-  "itemGroup.chronosphere.chronosphere": "クロノスフィア",
+  "itemGroup.chronosphere.chronosphere": "クロノドーン",
 
   "block.chronosphere.clockstone_ore": "クロックストーン鉱石",
   "block.chronosphere.time_crystal_ore": "時間の結晶鉱石",
@@ -97,7 +97,7 @@
   "direction.west": "西",
   "direction.northwest": "北西",
   "item.chronosphere.decorative_water_bucket": "装飾用の水バケツ",
-  "item.chronosphere.chronicle_of_chronosphere": "クロノスフィア年代記",
+  "item.chronosphere.chronicle_of_chronosphere": "クロノドーン年代記",
   "item.chronosphere.chronicle_of_chronosphere.tooltip": "凍結世界を生き延びるためのガイド",
   "item.chronosphere.fruit_of_time": "時間の果実",
   "item.chronosphere.time_fruit_pie": "時の果実パイ",
@@ -177,7 +177,7 @@
   "item.chronosphere.portal_stabilizer.no_portal": "近くに機能停止したポータルが見つかりません",
   "item.chronosphere.portal_stabilizer.already_stabilized": "このポータルはすでに安定化されています",
   "item.chronosphere.portal_stabilizer.cannot_stabilize": "このポータルはまだ安定化できません",
-  "item.chronosphere.portal_stabilizer.success_reignite_required": "クロノスフィア次元が安定化されました！時の砂時計でポータルを再点火してください",
+  "item.chronosphere.portal_stabilizer.success_reignite_required": "クロノドーン次元が安定化されました！時の砂時計でポータルを再点火してください",
 
   "item.chronosphere.time_hourglass.portal_deactivated": "このポータルは機能停止しています。再起動するにはポータル安定化装置が必要です",
   "item.chronosphere.time_hourglass.already_active": "このポータルはすでに起動しています",
@@ -208,30 +208,30 @@
   "entity.chronosphere.temporal_phantom": "時間の幻影",
   "entity.chronosphere.entropy_keeper": "エントロピーの管理者",
 
-  "biome.chronosphere.chronosphere_plains": "クロノスフィア平原",
-  "biome.chronosphere.chronosphere_ocean": "クロノスフィア海洋",
-  "biome.chronosphere.chronosphere_forest": "クロノスフィア森林",
+  "biome.chronosphere.chronosphere_plains": "クロノドーン平原",
+  "biome.chronosphere.chronosphere_ocean": "クロノドーン海洋",
+  "biome.chronosphere.chronosphere_forest": "クロノドーン森林",
   "biome.chronosphere.chronosphere_dark_forest": "暗い時の森",
   "biome.chronosphere.chronosphere_ancient_forest": "古代の時の森",
-  "biome.chronosphere.chronosphere_desert": "クロノスフィア砂漠",
-  "biome.chronosphere.chronosphere_mountain": "クロノスフィア山岳",
-  "biome.chronosphere.chronosphere_swamp": "クロノスフィア湿地",
-  "biome.chronosphere.chronosphere_snowy": "クロノスフィア雪原",
-  "biome.chronosphere.chronosphere_cave": "クロノスフィア洞窟",
+  "biome.chronosphere.chronosphere_desert": "クロノドーン砂漠",
+  "biome.chronosphere.chronosphere_mountain": "クロノドーン山岳",
+  "biome.chronosphere.chronosphere_swamp": "クロノドーン湿地",
+  "biome.chronosphere.chronosphere_snowy": "クロノドーン雪原",
+  "biome.chronosphere.chronosphere_cave": "クロノドーン洞窟",
   "biome.chronosphere.strange_forest": "奇妙な森",
 
   "message.chronosphere.stasis_core_destroyed": "静止のコアが砕け散った！",
-  "message.chronosphere.tyrant_defeated": "クロノスフィアが揺れる... 時間の暴君が倒された！",
+  "message.chronosphere.tyrant_defeated": "クロノドーンが揺れる... 時間の暴君が倒された！",
   "message.chronosphere.tyrant_defeated_title": "時間の暴君撃破",
-  "message.chronosphere.tyrant_defeated_subtitle": "クロノスフィアが安定化された",
+  "message.chronosphere.tyrant_defeated_subtitle": "クロノドーンが安定化された",
 
-  "advancements.chronosphere.root.title": "クロノスフィア",
+  "advancements.chronosphere.root.title": "クロノドーン",
   "advancements.chronosphere.root.description": "時間操作の世界へようこそ",
 
   "advancements.chronosphere.portal_creation.title": "時を超える門",
   "advancements.chronosphere.portal_creation.description": "時の砂時計を入手。クロックストーンブロックでポータルを作り、点火して凍結世界へ突入しよう",
   "advancements.chronosphere.dimension_entry.title": "凍結した世界へ",
-  "advancements.chronosphere.dimension_entry.description": "クロノスフィア次元に初突入。忘れられた図書館を探して帰還方法を見つけよう",
+  "advancements.chronosphere.dimension_entry.description": "クロノドーン次元に初突入。忘れられた図書館を探して帰還方法を見つけよう",
 
   "advancements.chronosphere.portal_stabilization.title": "時間の固定",
   "advancements.chronosphere.portal_stabilization.description": "ポータル安定化装置を入手。ポータルフレームに使用して次元間の双方向移動を可能にしよう",
@@ -245,7 +245,7 @@
 
   "advancements.chronosphere.master_clock_access.title": "時間の心臓部",
   "advancements.chronosphere.master_clock_access.description": "時の番人からマスタークロックの鍵を入手する",
-  "advancements.chronosphere.time_tyrant_defeat.title": "クロノスフィアの解放者",
+  "advancements.chronosphere.time_tyrant_defeat.title": "クロノドーンの解放者",
   "advancements.chronosphere.time_tyrant_defeat.description": "時間の暴君を倒し、静止のコアを破壊する",
   "advancements.chronosphere.ultimate_artifacts.title": "時の支配者",
   "advancements.chronosphere.ultimate_artifacts.description": "静止のコアの破片から究極のアーティファクトを作成する",
@@ -259,7 +259,7 @@
   "advancements.chronosphere.time_bread.title": "凍結時代のパン",
   "advancements.chronosphere.time_bread.description": "時のパンを食べる",
   "advancements.chronosphere.all_foods_consumed.title": "時のグルメ",
-  "advancements.chronosphere.all_foods_consumed.description": "クロノスフィアの全てのカスタム食料を食べる（時間の果実、時の果実パイ、時のジャム、時のパン）",
+  "advancements.chronosphere.all_foods_consumed.description": "クロノドーンの全てのカスタム食料を食べる（時間の果実、時の果実パイ、時のジャム、時のパン）",
 
   "advancements.chronosphere.tier1_full_set.title": "時計仕掛けの戦士",
   "advancements.chronosphere.tier1_full_set.description": "Tier 1クロックストーン装備一式を入手する",
@@ -290,11 +290,11 @@
   "item.chronosphere.clockwork_sentinel_spawn_egg": "時計仕掛けの番兵のスポーンエッグ",
   "item.chronosphere.time_keeper_spawn_egg": "時間の管理者のスポーンエッグ",
 
-  "advancements.chronosphere.grant_chronicle_book.title": "クロノスフィアの記録",
-  "advancements.chronosphere.grant_chronicle_book.description": "クロノスフィアの記録ガイドブックを受け取った",
+  "advancements.chronosphere.grant_chronicle_book.title": "クロノドーンの記録",
+  "advancements.chronosphere.grant_chronicle_book.description": "クロノドーンの記録ガイドブックを受け取った",
 
-  "patchouli.book.chronosphere.chronicle.name": "クロノスフィアの記録",
-  "patchouli.book.chronosphere.chronicle.landing_text": "ようこそ、旅人よ。あなたは時間そのものが凍結した次元に入りました。この記録があなたのクロノスフィアでの旅を導きます。",
+  "patchouli.book.chronosphere.chronicle.name": "クロノドーンの記録",
+  "patchouli.book.chronosphere.chronicle.landing_text": "ようこそ、旅人よ。あなたは時間そのものが凍結した次元に入りました。この記録があなたのクロノドーンでの旅を導きます。",
 
   "patchouli.gui.lexicon.edition_str": "%s版",
   "patchouli.gui.lexicon.categories": "カテゴリー",

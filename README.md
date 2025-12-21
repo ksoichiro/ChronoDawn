@@ -1,22 +1,22 @@
-# Chronosphere Mod
+# Chrono Dawn
 
 **Time-manipulation themed dimension mod for Minecraft**
 
-A multi-loader Minecraft mod that adds a mysterious time-themed dimension called "Chronosphere" with custom portals, unique biomes, powerful bosses, and time-manipulating artifacts.
+A multi-loader Minecraft mod that adds a mysterious time-themed dimension called "Chrono Dawn" with custom portals, unique biomes, powerful bosses, and time-manipulating artifacts.
 
 ## Features
 
 ### Core Mechanics
-- **Custom Dimension**: Explore the Chronosphere, a dimension frozen in perpetual twilight
+- **Custom Dimension**: Explore Chrono Dawn, a dimension frozen in perpetual twilight
 - **Portal System**: One-way portal travel using Time Hourglass, upgradeable to bidirectional with Portal Stabilizer
-- **Time Distortion**: Hostile mobs move slower in the Chronosphere dimension
+- **Time Distortion**: Hostile mobs move slower in Chrono Dawn dimension
 - **8 Unique Biomes**: Forest, Desert, Mountain, Ocean, Snowy, Swamp, Dark Forest, and Ancient Forest
 
 ### Content
 - **Custom Wood Type**: Time Wood trees with full block set (logs, planks, stairs, slabs, doors, etc.)
 - **Major Structures**:
   - Ancient Ruins (Overworld spawn)
-  - Forgotten Library (Chronosphere)
+  - Forgotten Library (Chrono Dawn)
   - Guardian Vault (Chronos Warden boss)
   - Clockwork Depths (Clockwork Colossus boss)
   - Phantom Catacombs (Temporal Phantom boss)
@@ -148,8 +148,8 @@ gradlew.bat :neoforge:runClient
 
 Launch the development client and verify:
 - [ ] Minecraft starts successfully
-- [ ] "Chronosphere" appears in mod list
-- [ ] Creative inventory includes Chronosphere items
+- [ ] "Chrono Dawn" appears in mod list
+- [ ] Creative inventory includes Chrono Dawn items
 - [ ] World generation includes Ancient Ruins structures
 
 ## Testing
@@ -177,7 +177,7 @@ gradlew.bat test
 1. **Portal System**:
    - [ ] Find Ancient Ruins in Overworld
    - [ ] Craft Time Hourglass
-   - [ ] Activate portal and travel to Chronosphere
+   - [ ] Activate portal and travel to Chrono Dawn
    - [ ] Verify portal is one-way (stops working after entry)
 
 2. **Dimension Features**:
@@ -186,9 +186,9 @@ gradlew.bat test
    - [ ] Find Forgotten Library structure
 
 3. **Portal Stabilizer**:
-   - [ ] Craft Portal Stabilizer in Chronosphere
+   - [ ] Craft Portal Stabilizer in Chrono Dawn
    - [ ] Stabilize portal for bidirectional travel
-   - [ ] Test round-trip travel Overworld ↔ Chronosphere
+   - [ ] Test round-trip travel Overworld ↔ Chrono Dawn
 
 4. **Boss Battles**:
    - [ ] Defeat Time Guardian mini-boss

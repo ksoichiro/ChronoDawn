@@ -1,8 +1,8 @@
-# Chronosphere Mod - Developer Guide
+# Chrono Dawn - Developer Guide
 
-**Contributing to Chronosphere Mod**
+**Contributing to Chrono Dawn**
 
-This guide provides technical documentation for developers who want to contribute to or extend Chronosphere Mod.
+This guide provides technical documentation for developers who want to contribute to or extend Chrono Dawn.
 
 ## Table of Contents
 
@@ -23,7 +23,7 @@ This guide provides technical documentation for developers who want to contribut
 
 ### Multi-Loader Architecture (Architectury)
 
-Chronosphere uses the **Architectury** framework to support both Fabric and NeoForge loaders with a shared codebase.
+Chrono Dawn uses the **Architectury** framework to support both Fabric and NeoForge loaders with a shared codebase.
 
 **Design Principle**: **80% Common, 20% Loader-Specific**
 

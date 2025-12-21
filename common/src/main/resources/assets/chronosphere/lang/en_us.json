@@ -1,5 +1,5 @@
 {
-  "itemGroup.chronosphere.chronosphere": "Chronosphere",
+  "itemGroup.chronosphere.chronosphere": "Chrono Dawn",
 
   "block.chronosphere.clockstone_ore": "Clockstone Ore",
   "block.chronosphere.time_crystal_ore": "Time Crystal Ore",
@@ -97,7 +97,7 @@
   "direction.west": "West",
   "direction.northwest": "Northwest",
   "item.chronosphere.decorative_water_bucket": "Decorative Water Bucket",
-  "item.chronosphere.chronicle_of_chronosphere": "Chronicle of Chronosphere",
+  "item.chronosphere.chronicle_of_chronosphere": "Chronicle of Chrono Dawn",
   "item.chronosphere.chronicle_of_chronosphere.tooltip": "A guide to surviving the frozen world",
   "item.chronosphere.fruit_of_time": "Fruit of Time",
   "item.chronosphere.time_fruit_pie": "Time Fruit Pie",
@@ -177,7 +177,7 @@
   "item.chronosphere.portal_stabilizer.no_portal": "No deactivated portal found nearby",
   "item.chronosphere.portal_stabilizer.already_stabilized": "This portal is already stabilized",
   "item.chronosphere.portal_stabilizer.cannot_stabilize": "This portal cannot be stabilized yet",
-  "item.chronosphere.portal_stabilizer.success_reignite_required": "Chronosphere dimension stabilized! Use Time Hourglass to reignite the portal",
+  "item.chronosphere.portal_stabilizer.success_reignite_required": "Chrono Dawn dimension stabilized! Use Time Hourglass to reignite the portal",
 
   "item.chronosphere.time_hourglass.portal_deactivated": "This portal is deactivated. You need a Portal Stabilizer to reactivate it",
   "item.chronosphere.time_hourglass.already_active": "This portal is already active",
@@ -208,30 +208,30 @@
   "entity.chronosphere.temporal_phantom": "Temporal Phantom",
   "entity.chronosphere.entropy_keeper": "Entropy Keeper",
 
-  "biome.chronosphere.chronosphere_plains": "Chronosphere Plains",
-  "biome.chronosphere.chronosphere_ocean": "Chronosphere Ocean",
-  "biome.chronosphere.chronosphere_forest": "Chronosphere Forest",
+  "biome.chronosphere.chronosphere_plains": "Chrono Dawn Plains",
+  "biome.chronosphere.chronosphere_ocean": "Chrono Dawn Ocean",
+  "biome.chronosphere.chronosphere_forest": "Chrono Dawn Forest",
   "biome.chronosphere.chronosphere_dark_forest": "Dark Time Forest",
   "biome.chronosphere.chronosphere_ancient_forest": "Ancient Time Forest",
-  "biome.chronosphere.chronosphere_desert": "Chronosphere Desert",
-  "biome.chronosphere.chronosphere_mountain": "Chronosphere Mountains",
-  "biome.chronosphere.chronosphere_swamp": "Chronosphere Swamp",
-  "biome.chronosphere.chronosphere_snowy": "Chronosphere Snowy Plains",
-  "biome.chronosphere.chronosphere_cave": "Chronosphere Caves",
+  "biome.chronosphere.chronosphere_desert": "Chrono Dawn Desert",
+  "biome.chronosphere.chronosphere_mountain": "Chrono Dawn Mountains",
+  "biome.chronosphere.chronosphere_swamp": "Chrono Dawn Swamp",
+  "biome.chronosphere.chronosphere_snowy": "Chrono Dawn Snowy Plains",
+  "biome.chronosphere.chronosphere_cave": "Chrono Dawn Caves",
   "biome.chronosphere.strange_forest": "Strange Forest",
 
   "message.chronosphere.stasis_core_destroyed": "The Stasis Core shatters into fragments!",
-  "message.chronosphere.tyrant_defeated": "The Chronosphere trembles... Time Tyrant has been vanquished!",
+  "message.chronosphere.tyrant_defeated": "The Chrono Dawn trembles... Time Tyrant has been vanquished!",
   "message.chronosphere.tyrant_defeated_title": "Time Tyrant Defeated",
-  "message.chronosphere.tyrant_defeated_subtitle": "The Chronosphere is stabilized",
+  "message.chronosphere.tyrant_defeated_subtitle": "The Chrono Dawn is stabilized",
 
-  "advancements.chronosphere.root.title": "Chronosphere",
+  "advancements.chronosphere.root.title": "Chrono Dawn",
   "advancements.chronosphere.root.description": "Welcome to the world of time manipulation",
 
   "advancements.chronosphere.portal_creation.title": "A Gateway Through Time",
   "advancements.chronosphere.portal_creation.description": "Obtain Time Hourglass. Build a portal frame with Clockstone Blocks and ignite it to enter the frozen world",
   "advancements.chronosphere.dimension_entry.title": "Entering the Frozen World",
-  "advancements.chronosphere.dimension_entry.description": "Enter Chronosphere for the first time. Find the Forgotten Library to discover how to return home",
+  "advancements.chronosphere.dimension_entry.description": "Enter Chrono Dawn for the first time. Find the Forgotten Library to discover how to return home",
 
   "advancements.chronosphere.portal_stabilization.title": "Anchoring Time",
   "advancements.chronosphere.portal_stabilization.description": "Obtain Portal Stabilizer. Use it on the portal frame to enable two-way travel between dimensions",
@@ -245,7 +245,7 @@
 
   "advancements.chronosphere.master_clock_access.title": "The Heart of Time",
   "advancements.chronosphere.master_clock_access.description": "Obtain the Master Clock Key from the Time Guardian",
-  "advancements.chronosphere.time_tyrant_defeat.title": "Liberator of Chronosphere",
+  "advancements.chronosphere.time_tyrant_defeat.title": "Liberator of Chrono Dawn",
   "advancements.chronosphere.time_tyrant_defeat.description": "Defeat the Time Tyrant and shatter the Stasis Core",
   "advancements.chronosphere.ultimate_artifacts.title": "Master of Time",
   "advancements.chronosphere.ultimate_artifacts.description": "Craft an ultimate artifact from Stasis Core Shards",
@@ -259,7 +259,7 @@
   "advancements.chronosphere.time_bread.title": "Bread from a Frozen Age",
   "advancements.chronosphere.time_bread.description": "Eat Time Bread",
   "advancements.chronosphere.all_foods_consumed.title": "Gourmet of Time",
-  "advancements.chronosphere.all_foods_consumed.description": "Eat all custom Chronosphere foods (Time Fruit, Time Fruit Pie, Time Jam, Time Bread)",
+  "advancements.chronosphere.all_foods_consumed.description": "Eat all custom Chrono Dawn foods (Time Fruit, Time Fruit Pie, Time Jam, Time Bread)",
 
   "advancements.chronosphere.tier1_full_set.title": "Clockwork Warrior",
   "advancements.chronosphere.tier1_full_set.description": "Obtain a full set of Tier 1 Clockstone armor",
@@ -290,11 +290,11 @@
   "item.chronosphere.clockwork_sentinel_spawn_egg": "Clockwork Sentinel Spawn Egg",
   "item.chronosphere.time_keeper_spawn_egg": "Time Keeper Spawn Egg",
 
-  "advancements.chronosphere.grant_chronicle_book.title": "Chronicle of Chronosphere",
-  "advancements.chronosphere.grant_chronicle_book.description": "Received the Chronicle of Chronosphere guide book",
+  "advancements.chronosphere.grant_chronicle_book.title": "Chronicle of Chrono Dawn",
+  "advancements.chronosphere.grant_chronicle_book.description": "Received the Chronicle of Chrono Dawn guide book",
 
-  "patchouli.book.chronosphere.chronicle.name": "Chronicle of Chronosphere",
-  "patchouli.book.chronosphere.chronicle.landing_text": "Welcome, traveler. You have entered a dimension where time itself has frozen. This chronicle will guide you through your journey in the Chronosphere.",
+  "patchouli.book.chronosphere.chronicle.name": "Chronicle of Chrono Dawn",
+  "patchouli.book.chronosphere.chronicle.landing_text": "Welcome, traveler. You have entered a dimension where time itself has frozen. This chronicle will guide you through your journey in the Chrono Dawn.",
 
   "patchouli.gui.lexicon.edition_str": "%s Edition",
   "patchouli.gui.lexicon.categories": "Categories",

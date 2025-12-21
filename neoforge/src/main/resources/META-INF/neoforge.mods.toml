@@ -6,9 +6,9 @@ showAsResourcePack=false
 [[mods]]
 modId="chronosphere"
 version="${version}"
-displayName="Chronosphere"
+displayName="Chrono Dawn"
 description='''
-A time manipulation themed Minecraft mod featuring the Chronosphere dimension.
+A time manipulation themed Minecraft mod featuring the Chrono Dawn dimension.
 Explore a frozen dimension, defeat time-controlling bosses, and master ultimate artifacts.
 '''
 logoFile="chronosphere_logo.png"
