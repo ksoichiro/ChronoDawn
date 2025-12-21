@@ -171,9 +171,17 @@ Found a bug or have a suggestion? Report it on our [GitHub Issues](https://githu
 
 ---
 
-## 📜 License
+## 📜 License & Permissions
 
-[Add your license information]
+**License**: All Rights Reserved - Copyright (c) 2025 Soichiro Kashima
+
+**Source Code**: Not publicly available
+
+**Modpack Inclusion**: ✅ Allowed - You may include this mod's JAR file in modpacks
+
+**Redistribution**: ✅ Allowed - You may redistribute this mod with proper attribution
+
+**Note**: This mod currently depends on Patchouli (CC-BY-NC-SA 3.0 license), which restricts commercial use. We are migrating to Lavender (MIT license) to remove this restriction. Once migration is complete, all usage restrictions from Patchouli will be lifted.
 
 ---
 
