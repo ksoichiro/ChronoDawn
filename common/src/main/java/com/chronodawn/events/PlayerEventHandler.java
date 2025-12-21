@@ -10,9 +10,6 @@ import com.chronodawn.registry.ModDimensions;
 import com.chronodawn.registry.ModItems;
 import com.chronodawn.worldgen.spawning.TimeKeeperVillagePlacer;
 import dev.architectury.event.events.common.TickEvent;
-import io.wispforest.lavender.book.Book;
-import io.wispforest.lavender.book.BookLoader;
-import io.wispforest.lavender.book.LavenderBookItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
@@ -108,8 +105,8 @@ public class PlayerEventHandler {
         ChronoDawn.LOGGER.info("Player {} entered ChronoDawn at position {}",
             player.getName().getString(), player.blockPosition());
 
-        // Give Chrono Dawn Chronicle guidebook (Lavender)
-        giveChronicleBook(player);
+        // Note: Guidebook distribution is handled by LavenderBookEventHandler in the Fabric module
+        // (Lavender is Fabric-only, so book distribution logic is separated by loader)
 
         // Place Time Keeper Village near spawn if not already placed
         // This ensures players can find a Time Keeper for trading and Time Compass acquisition
@@ -280,72 +277,6 @@ public class PlayerEventHandler {
         // NeoForge version (Custom Portal API Reforged): cpapireforged:custom_portal_block
         if (namespace.equals("cpapireforged") && path.equals("custom_portal_block")) {
             return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Give Chrono Dawn Chronicle guidebook to player if they don't already have it.
-     * Uses Lavender's dynamic book system.
-     *
-     * @param player Player to give the book to
-     */
-    private static void giveChronicleBook(ServerPlayer player) {
-        // Check if player already has the chronicle book
-        if (hasChronicleBook(player)) {
-            ChronoDawn.LOGGER.info("Player {} already has Chronicle book, skipping",
-                player.getName().getString());
-            return;
-        }
-
-        try {
-            // Get the chronicle book definition
-            ResourceLocation bookId = ResourceLocation.fromNamespaceAndPath("chronodawn", "chronicle");
-            Book book = BookLoader.books().get(bookId);
-
-            if (book == null) {
-                ChronoDawn.LOGGER.error("Failed to find Chronicle book with ID: {}", bookId);
-                return;
-            }
-
-            // Create dynamic book item stack
-            ItemStack bookStack = LavenderBookItem.createDynamic(book);
-
-            // Give book to player
-            if (!player.getInventory().add(bookStack)) {
-                // Inventory full, drop at player's feet
-                player.drop(bookStack, false);
-                ChronoDawn.LOGGER.info("Player {} inventory full, dropped Chronicle book at their position",
-                    player.getName().getString());
-            } else {
-                ChronoDawn.LOGGER.info("Gave Chronicle book to player {}", player.getName().getString());
-            }
-        } catch (Exception e) {
-            ChronoDawn.LOGGER.error("Failed to give Chronicle book to player {}: {}",
-                player.getName().getString(), e.getMessage(), e);
-        }
-    }
-
-    /**
-     * Check if player already has the Chronicle book in their inventory.
-     *
-     * @param player Player to check
-     * @return true if player has the book
-     */
-    private static boolean hasChronicleBook(ServerPlayer player) {
-        ResourceLocation bookId = ResourceLocation.fromNamespaceAndPath("chronodawn", "chronicle");
-
-        // Check all inventory slots
-        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
-            ItemStack stack = player.getInventory().getItem(i);
-            if (!stack.isEmpty() && stack.getItem() instanceof LavenderBookItem) {
-                // Check if this is our chronicle book
-                ResourceLocation stackBookId = stack.get(LavenderBookItem.BOOK_ID);
-                if (bookId.equals(stackBookId)) {
-                    return true;
-                }
-            }
         }
 
         return false;

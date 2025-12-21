@@ -1,7 +1,7 @@
 ```json
 {
   "title": "Boss Encounters",
-  "icon": "chronodawn:time_guardian_stone",
+  "icon": "chronodawn:time_crystal",
   "ordinal": 4
 }
 ```

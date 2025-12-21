@@ -7184,3 +7184,80 @@ To begin your journey, you will need to craft a <item;chronodawn:time_hourglass>
 6. **T507**: Test functionality
 7. **T508-510**: Update documentation, licensing, and final verification
 - 関連タスク: T307 (specs/chrono-dawn-mod/tasks.md)
+
+### Implementation Findings (2025-12-22)
+
+#### Lavender Migration Results (T500-T507)
+
+**Successfully Implemented:**
+- ✅ Patchouli → Lavender migration (Fabric only, MIT license)
+- ✅ Dynamic book distribution using `LavenderBookItem.createDynamic()`
+- ✅ Bilingual support (English/Japanese) using `ja_jp/` subdirectory structure
+- ✅ 11 entries across 4 categories migrated from Patchouli format
+- ✅ Internal links between entries (`[text](^chronodawn:category/entry)`)
+- ✅ Recipe displays (`<recipe;chronodawn:item_id>`)
+- ✅ Page breaks (`;;;;;` with 2 blank lines before/after)
+
+**Critical Fixes Applied:**
+1. **Icon Resolution**: All category/entry icons must reference existing items
+   - Fixed: `time_guardian_stone` → `time_crystal`
+   - Fixed: `stasis_core_shard` → `fragment_of_stasis_core`
+2. **Dynamic Book Name**: Added `dynamic_book_name` field to `books/chronicle.json`
+   ```json
+   {
+     "dynamic_book_name": {
+       "translate": "lavender.book.chronodawn.chronicle"
+     }
+   }
+   ```
+3. **API Usage**: `BookLoader.get(bookId)` not `BookLoader.books().get()`
+4. **Loader Separation**: Lavender code must be in `fabric/` module (not `common/`)
+
+**Known Limitations (Lavender 0.1.15+1.21):**
+1. **Markdown Headers After Page Breaks**: `##` headers don't render on pages after `;;;;;`
+   - Solution: Omit headers, rely on recipe/content itself
+2. **Unicode Text Clipping** (Upstream Bug):
+   - Issue #20: "First line of text get clipped for unicode characters"
+   - Issue #21: "Chinese font occlusion problem"
+   - Affects: Japanese text displays with top ~2-3 pixels cut off
+   - Status: Cannot fix in mod code, awaiting Lavender update
+   - Impact: Minor visual issue, content remains readable
+
+**File Structure:**
+```
+common/src/main/resources/assets/chronodawn/lavender/
+├── books/
+│   └── chronicle.json                    # Book definition with dynamic_book_name
+├── categories/chronicle/
+│   ├── basics.md                         # Category definition (Markdown + frontmatter)
+│   ├── structures.md
+│   ├── progression.md
+│   └── bosses.md
+└── entries/chronicle/
+    ├── basics/
+    │   ├── welcome.md                    # Entry (Markdown + JSON frontmatter)
+    │   ├── time_distortion.md
+    │   └── survival_basics.md
+    ├── structures/
+    │   ├── ancient_clock_tower.md
+    │   ├── phantom_catacombs.md
+    │   └── master_clock_tower.md
+    ├── progression/
+    │   ├── portal_stabilizer.md          # Multi-page with recipe
+    │   └── after_victory.md
+    ├── bosses/
+    │   ├── time_guardian.md
+    │   ├── time_tyrant.md
+    │   └── clockwork_sentinel.md
+    └── ja_jp/                            # Japanese translations (same structure)
+        ├── basics/
+        ├── structures/
+        ├── progression/
+        └── bosses/
+```
+
+**References:**
+- Lavender Documentation: https://docs.wispforest.io/lavender/ (404, use GitHub source)
+- Lavender GitHub: https://github.com/wisp-forest/lavender
+- Issue #20: https://github.com/wisp-forest/lavender/issues/20
+- Issue #21: https://github.com/wisp-forest/lavender/issues/21

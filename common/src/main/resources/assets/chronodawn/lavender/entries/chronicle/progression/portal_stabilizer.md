@@ -14,8 +14,8 @@ The portal will become bidirectional, allowing free travel between worlds.
 
 Use Time Hourglass to reignite the portal after stabilization.
 
-;;;;;;
 
-## Portal Stabilizer Recipe
+;;;;;
+
 
 <recipe;chronodawn:portal_stabilizer>

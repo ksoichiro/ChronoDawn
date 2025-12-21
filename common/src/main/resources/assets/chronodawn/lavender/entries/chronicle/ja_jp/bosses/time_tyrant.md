@@ -1,7 +1,7 @@
 ```json
 {
   "title": "時間の暴君",
-  "icon": "chronodawn:stasis_core_shard",
+  "icon": "chronodawn:fragment_of_stasis_core",
   "category": "chronodawn:bosses",
   "ordinal": 2
 }

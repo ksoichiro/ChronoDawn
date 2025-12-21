@@ -1,7 +1,7 @@
 ```json
 {
   "title": "時の番人",
-  "icon": "chronodawn:time_guardian_stone",
+  "icon": "chronodawn:time_crystal",
   "category": "chronodawn:bosses",
   "ordinal": 1
 }

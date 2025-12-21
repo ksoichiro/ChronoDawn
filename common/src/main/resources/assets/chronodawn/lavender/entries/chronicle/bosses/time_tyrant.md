@@ -1,7 +1,7 @@
 ```json
 {
   "title": "Time Tyrant",
-  "icon": "chronodawn:stasis_core_shard",
+  "icon": "chronodawn:fragment_of_stasis_core",
   "category": "chronodawn:bosses",
   "ordinal": 2
 }
