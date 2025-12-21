@@ -11,6 +11,118 @@
 
 **Organization**: タスクはUser Storyごとにグループ化され、各ストーリーを独立して実装・テスト可能にする。
 
+---
+
+## License Compliance & Guidebook Migration (Priority)
+
+**Purpose**: Resolve licensing concerns by migrating from Patchouli (CC-BY-NC-SA 3.0) to Lavender (MIT), enabling full control over project licensing.
+
+**Background**:
+- Patchouli is licensed under CC-BY-NC-SA 3.0 (NonCommercial, ShareAlike)
+- This restricts commercial use and creates legal uncertainty for future monetization
+- Lavender is a modern alternative to Patchouli with MIT license
+- All other dependencies (Architectury, NeoForge, Custom Portal API) permit proprietary licensing
+
+**Tasks**:
+
+- [ ] T500 [P] Research Lavender implementation and architecture
+  - Read Lavender documentation: https://docs.wispforest.io
+  - Compare data format between Patchouli and Lavender
+  - Understand Lavender's book structure (categories, entries, pages)
+  - Verify 1.21.1 compatibility for both Fabric and NeoForge
+  - Document migration strategy in research.md
+
+- [ ] T501 [P] Remove Patchouli dependencies
+  - Remove from `fabric/build.gradle`: modImplementation "vazkii.patchouli:Patchouli:1.21.1-92-FABRIC"
+  - Remove from `neoforge/build.gradle`: modCompileOnly/modRuntimeOnly Patchouli dependencies
+  - Update CLAUDE.md to remove Patchouli from "Current Versions" section
+  - Commit: "refactor: remove Patchouli dependency to resolve licensing concerns"
+
+- [ ] T502 [P] Add Lavender dependencies
+  - Add Lavender Fabric dependency to `fabric/build.gradle`
+  - Add Lavender NeoForge dependency to `neoforge/build.gradle`
+  - Add Lavender version to `gradle.properties`
+  - Update CLAUDE.md "Current Versions" section with Lavender version
+  - Test build for both loaders
+  - Commit: "feat: add Lavender dependency for guidebook system"
+
+- [ ] T503 [P] Create Lavender guidebook structure
+  - Create data pack structure for Lavender books: `common/src/main/resources/data/chronodawn/lavender/`
+  - Define book metadata (title, icon, landing text)
+  - Plan category structure (Getting Started, Dimension, Bosses, Items, etc.)
+  - Create English and Japanese language files
+  - Document structure in research.md
+
+- [ ] T504 [P] Implement basic guidebook content (English)
+  - Getting Started category: Portal creation, dimension entry
+  - Dimension category: Biomes, mechanics, respawn behavior
+  - Bosses category: Time Guardian, Chronos Warden, other bosses
+  - Items category: Time Hourglass, Portal Stabilizer, boss drops
+  - Reference existing content from README.md and spec.md
+
+- [ ] T505 [P] Implement Japanese guidebook content
+  - Translate all English content to Japanese
+  - Ensure proper i18n file structure for Lavender
+  - Test language switching in-game
+
+- [ ] T506 [P] Create guidebook item and recipe
+  - Create custom guidebook item (or use Lavender's default)
+  - Add crafting recipe (e.g., book + Time Fragment)
+  - Add item texture and model
+  - Register item in both Fabric and NeoForge
+
+- [ ] T507 [P] Test guidebook functionality
+  - Test book opening and navigation
+  - Test language switching (English ↔ Japanese)
+  - Test on both Fabric and NeoForge
+  - Test offhand viewing feature
+  - Verify all links and cross-references work
+
+- [ ] T508 [P] Update project documentation
+  - Update README.md "Requirements" section (remove Patchouli, add Lavender)
+  - Update README.md "Installing Pre-built JAR" section
+  - Update docs/player_guide.md with new guidebook instructions
+  - Update docs/curseforge_description.md
+  - Update docs/modrinth_description.md
+  - Update CLAUDE.md "Current Versions"
+
+- [ ] T509 [P] Update LICENSE and licensing documentation
+  - Choose final license (MIT or Proprietary)
+  - Update LICENSE file accordingly
+  - Update README.md "License" section
+  - Add license headers to source files if needed
+  - Document licensing decision in research.md
+
+- [ ] T510 [P] Final verification and cleanup
+  - Verify no Patchouli references remain in code
+  - Build both Fabric and NeoForge JARs
+  - Test complete gameplay loop with new guidebook
+  - Update changelog/release notes
+  - Commit: "docs: update documentation for Lavender guidebook"
+
+**Branch Strategy**: Use git worktree for isolated development
+- Branch name: `migrate-to-lavender`
+- Worktree path: `.worktrees/migrate-to-lavender/`
+
+**Success Criteria**:
+- Patchouli completely removed from dependencies
+- Lavender guidebook functional with English and Japanese content
+- All documentation updated to reflect changes
+- LICENSE file updated with chosen license
+- No build errors on Fabric or NeoForge
+- Guidebook content matches or exceeds Patchouli version
+
+**Estimated Effort**: 6-8 hours total
+- Research & setup: 1-2 hours
+- Dependency migration: 30 minutes
+- Content creation (English): 2-3 hours
+- Translation (Japanese): 1-2 hours
+- Testing & documentation: 1-2 hours
+
+**Priority**: High - Blocks future commercialization options
+
+---
+
 ### Time Cycle Configuration (Phase 2.5)
 
 **Purpose**: 固定時刻を設定し、他のディメンションmodと同様の独特な雰囲気を作り出す
