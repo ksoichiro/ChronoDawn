@@ -1,14 +1,14 @@
 {
   "replace": false,
   "values": [
-    "chronosphere:time_wood_fence",
-    "chronosphere:time_wood_log",
-    "chronosphere:time_wood_planks",
-    "chronosphere:time_wood_stairs",
-    "chronosphere:time_wood_slab",
-    "chronosphere:dark_time_wood_log",
-    "chronosphere:dark_time_wood_planks",
-    "chronosphere:ancient_time_wood_log",
-    "chronosphere:ancient_time_wood_planks"
+    "chronodawn:time_wood_fence",
+    "chronodawn:time_wood_log",
+    "chronodawn:time_wood_planks",
+    "chronodawn:time_wood_stairs",
+    "chronodawn:time_wood_slab",
+    "chronodawn:dark_time_wood_log",
+    "chronodawn:dark_time_wood_planks",
+    "chronodawn:ancient_time_wood_log",
+    "chronodawn:ancient_time_wood_planks"
   ]
 }

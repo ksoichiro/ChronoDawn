@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "chronosphere:fragment_of_stasis_core",
+          "name": "chronodawn:fragment_of_stasis_core",
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -24,7 +24,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "chronosphere:eye_of_chronos",
+          "name": "chronodawn:eye_of_chronos",
           "functions": [
             {
               "function": "minecraft:set_count",
@@ -39,7 +39,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "chronosphere:enhanced_clockstone",
+          "name": "chronodawn:enhanced_clockstone",
           "functions": [
             {
               "function": "minecraft:set_count",

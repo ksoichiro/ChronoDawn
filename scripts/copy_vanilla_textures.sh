@@ -5,7 +5,7 @@
 
 set -e
 
-echo "=== Vanilla Texture Copier for Chronosphere Mod ==="
+echo "=== Vanilla Texture Copier for Chrono Dawn Mod ==="
 echo ""
 
 # Detect OS and set Minecraft directory
@@ -28,7 +28,7 @@ MC_VERSION="1.21.1"
 MC_JAR="$MC_DIR/versions/$MC_VERSION/$MC_VERSION.jar"
 
 # Output directory
-OUTPUT_DIR="common/src/main/resources/assets/chronosphere/textures/entity/mobs"
+OUTPUT_DIR="common/src/main/resources/assets/chronodawn/textures/entity/mobs"
 
 # Check if Minecraft JAR exists
 if [ ! -f "$MC_JAR" ]; then

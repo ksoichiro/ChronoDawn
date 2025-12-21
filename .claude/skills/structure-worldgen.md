@@ -59,7 +59,7 @@ Simply describe what you want to do, and Claude will reference the appropriate g
 **Files**: `DecorativeWaterFluid.java`, `ModFluids.java`
 
 **Purpose**:
-- Create `chronosphere:decorative_water` fluid that looks identical to vanilla water
+- Create `chronodawn:decorative_water` fluid that looks identical to vanilla water
 - Use in NBT structures for decorative water features (waterfalls, pools)
 - Distinguishable from Aquifer water (`minecraft:water`) during generation
 - Preserves flow state (level=0-15) for waterfalls
@@ -101,7 +101,7 @@ public StructureBlockInfo processBlock(...) {
 @Inject(method = "placeInChunk", at = @At("HEAD"))
 private void removeWaterBeforePlacement(...) {
     // Phase 2a: Before structure placement
-    // Remove ONLY minecraft:water (Aquifer), preserve chronosphere:decorative_water
+    // Remove ONLY minecraft:water (Aquifer), preserve chronodawn:decorative_water
     for (BlockPos pos : structurePieceBoundingBox) {
         if (state.is(Blocks.WATER) && !state.is(ModBlocks.DECORATIVE_WATER)) {
             level.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);

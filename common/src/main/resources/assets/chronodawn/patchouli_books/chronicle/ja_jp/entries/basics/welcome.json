@@ -1,0 +1,12 @@
+{
+  "name": "クロノドーンへようこそ",
+  "icon": "chronodawn:time_crystal",
+  "category": "chronodawn:basics",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "ようこそ、旅人よ。$(br2)あなたは時間そのものが凍結した次元に入りました。この記録があなたの旅を導きます。$(br2)クロノドーンは謎と危険に満ちた領域ですが、その深淵を探索する勇気ある者には大きな報酬が待っています。"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "砂漠の時計塔",
+  "icon": "chronodawn:enhanced_clockstone",
+  "category": "chronodawn:structures",
+  "sortnum": 2,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "砂漠バイオームには、歯車と時計仕掛けの塔が立っています。$(br2)内部では、$(item)強化された時計石$()が見つかります - 高度なツールや武器のための素材です。$(br2)塔は$(l:chronodawn:bosses/time_guardian)時の番人$()によって守られています。これはさらに進むために倒さなければならないミニボスです。"
+    }
+  ]
+}

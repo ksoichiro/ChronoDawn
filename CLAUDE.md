@@ -1,4 +1,4 @@
-# Chronosphere Development Guidelines
+# Chrono Dawn Development Guidelines
 
 Auto-generated from all feature plans. Last updated: 2025-10-19
 
@@ -78,9 +78,9 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 - Debug Mixin-related errors (InvalidInjectionException, refMap issues)
 
 **Quick Reference**:
-- **Fabric**: Must include `"refmap": "common-common-refmap.json"` in `chronosphere-fabric.mixins.json`
-- **NeoForge**: Must NOT include refMap property in `chronosphere-neoforge.mixins.json`
-- **Common**: `chronosphere.mixins.json` excluded from builds (reference only)
+- **Fabric**: Must include `"refmap": "common-common-refmap.json"` in `chronodawn-fabric.mixins.json`
+- **NeoForge**: Must NOT include refMap property in `chronodawn-neoforge.mixins.json`
+- **Common**: `chronodawn.mixins.json` excluded from builds (reference only)
 - When adding Mixins: Update BOTH loader-specific configs
 
 <!-- MANUAL ADDITIONS START -->

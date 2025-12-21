@@ -1,6 +1,6 @@
-# Chronosphere Player Guide
+# Chrono Dawn Player Guide
 
-Welcome to the **Chronosphere**, a mysterious dimension where time stands still! This guide will help you navigate this frozen world, defeat powerful bosses, and claim legendary time-manipulating artifacts.
+Welcome to **Chrono Dawn**, a mysterious dimension where time stands still! This guide will help you navigate this frozen world, defeat powerful bosses, and claim legendary time-manipulating artifacts.
 
 ---
 
@@ -9,7 +9,7 @@ Welcome to the **Chronosphere**, a mysterious dimension where time stands still!
 1. [Introduction](#introduction)
 2. [Installation](#installation)
 3. [Getting Started](#getting-started)
-4. [Entering the Chronosphere](#entering-the-chronosphere)
+4. [Entering Chrono Dawn](#entering-chrono-dawn)
 5. [Dimension Features](#dimension-features)
 6. [Structures and Exploration](#structures-and-exploration)
 7. [Boss Battles](#boss-battles)
@@ -24,9 +24,9 @@ Welcome to the **Chronosphere**, a mysterious dimension where time stands still!
 
 ## Introduction
 
-### What is Chronosphere?
+### What is Chrono Dawn?
 
-Chronosphere is a time-themed dimension mod that adds:
+Chrono Dawn is a time-themed dimension mod that adds:
 - A new dimension with **8 unique biomes**
 - Multiple **challenging boss fights**
 - **Time-manipulating items** and equipment
@@ -76,8 +76,8 @@ Download and install these mods alongside Chronosphere:
 2. Install your chosen mod loader (Fabric or NeoForge)
 3. Download required dependencies (Architectury API, Custom Portal API, Patchouli)
 4. Download **Chronosphere Mod** (choose the version matching your loader):
-   - `chronosphere-fabric-0.1.0.jar` for Fabric
-   - `chronosphere-neoforge-0.1.0.jar` for NeoForge
+   - `chronodawn-fabric-0.1.0.jar` for Fabric
+   - `chronodawn-neoforge-0.1.0.jar` for NeoForge
 5. Place all JAR files in your `.minecraft/mods/` folder
 6. Launch Minecraft with your chosen mod loader profile
 7. Verify "Chronosphere" appears in the mod list
@@ -91,12 +91,12 @@ Download and install these mods alongside Chronosphere:
 Ancient Ruins generate naturally in the **Overworld**. These structures contain:
 - **Loot chests** with "Time Hourglass Blueprint" and other resources
 - **Clockstone Ore** - Mine with a stone pickaxe or better
-- First clues about the Chronosphere dimension
+- First clues about Chrono Dawn dimension
 
 **How to find Ancient Ruins**:
 - Explore the Overworld surface in various biomes
 - Look for distinctive ancient stone structures above ground
-- Use `/locate structure chronosphere:ancient_ruins` (if cheats enabled)
+- Use `/locate structure chronodawn:ancient_ruins` (if cheats enabled)
 
 **Tip**: Ancient Ruins are surface structures that spawn in various biomes. Keep exploring the landscape until you find one!
 
@@ -120,7 +120,7 @@ Ancient Ruins generate naturally in the **Overworld**. These structures contain:
 
 ---
 
-## Entering the Chronosphere
+## Entering Chrono Dawn
 
 ### Building a Portal Frame
 
@@ -152,7 +152,7 @@ C = Clockstone Block (corners are optional, like Nether portals)
 
 1. Right-click the portal frame with the **Time Hourglass**
 2. The portal activates with an orange/gold glow
-3. Walk through to enter the Chronosphere
+3. Walk through to enter Chrono Dawn
 
 **⚠️ CRITICAL WARNING**: The portal becomes **one-way** after you enter! You cannot return until you find the **Portal Stabilizer**!
 
@@ -170,7 +170,7 @@ C = Clockstone Block (corners are optional, like Nether portals)
 
 ### Time Distortion Effect
 
-All hostile mobs in the Chronosphere receive **Slowness IV**, making them move extremely slowly. You move at normal speed, giving you a significant advantage!
+All hostile mobs in Chrono Dawn receive **Slowness IV**, making them move extremely slowly. You move at normal speed, giving you a significant advantage!
 
 **Benefits**:
 - Safer exploration
@@ -181,7 +181,7 @@ All hostile mobs in the Chronosphere receive **Slowness IV**, making them move e
 
 ### Biomes
 
-The Chronosphere contains **8 unique biomes**:
+Chrono Dawn contains **8 unique biomes**:
 
 1. **Chronosphere Forest** - Dense with Time Wood trees, moderate difficulty
 2. **Chronosphere Desert** - Sandy terrain
@@ -235,9 +235,9 @@ Harvest three unique wood types:
 **Why It's Important**: The Portal Stabilizer allows bidirectional travel, enabling you to return to the Overworld!
 
 **How to find**:
-- Explore the Chronosphere dimension systematically
+- Explore Chrono Dawn dimension systematically
 - Look for distinctive ancient library architecture
-- Use `/locate structure chronosphere:forgotten_library` (if cheats enabled)
+- Use `/locate structure chronodawn:forgotten_library` (if cheats enabled)
 
 ---
 
@@ -1083,7 +1083,7 @@ All three wood types have the same variants:
 
 **Can't find structures**:
 - Keep exploring different biomes
-- Use `/locate structure chronosphere:[structure_name]` (if cheats enabled)
+- Use `/locate structure chronodawn:[structure_name]` (if cheats enabled)
 - Structures: `ancient_ruins`, `forgotten_library`, `desert_clock_tower`, `guardian_vault`, `clockwork_depths`, `phantom_catacombs`, `entropy_crypt`, `master_clock`
 
 **Lost in Phantom Catacombs**:
@@ -1114,7 +1114,7 @@ All three wood types have the same variants:
 2. Craft the Portal Stabilizer
 3. Stabilize your portal to enable bidirectional travel
 
-### Q: What happens if I die in the Chronosphere?
+### Q: What happens if I die in Chrono Dawn?
 
 **A**: You respawn at your bed/respawn anchor (if set), or at world spawn if none set. The portal does NOT affect respawn location. If you haven't stabilized the portal, you may need to rebuild it to return to Chronosphere.
 
@@ -1137,13 +1137,13 @@ All three wood types have the same variants:
    - Entropy Keeper
 3. **Time Tyrant** (Master Clock) - final boss (use Chrono Aegis!)
 
-### Q: Can I bring items from the Chronosphere back to the Overworld?
+### Q: Can I bring items from Chrono Dawn back to the Overworld?
 
 **A**: Yes! After stabilizing the portal with the Portal Stabilizer, you can freely travel between dimensions with items.
 
 ### Q: What if I lose my Master Clock Key?
 
-**A**: You can find another Desert Clock Tower and defeat another Time Guardian to obtain a new key. Multiple Desert Clock Towers spawn in the Chronosphere, so you're not locked out permanently. Store important items safely to avoid the hassle of searching again!
+**A**: You can find another Desert Clock Tower and defeat another Time Guardian to obtain a new key. Multiple Desert Clock Towers spawn in Chrono Dawn, so you're not locked out permanently. Store important items safely to avoid the hassle of searching again!
 
 ### Q: Are there any renewable resources?
 
@@ -1170,7 +1170,7 @@ All three wood types have the same variants:
 
 ## Conclusion
 
-You're now ready to explore the Chronosphere! Remember the key steps:
+You're now ready to explore Chrono Dawn! Remember the key steps:
 
 1. **Prepare Before Entry**: Gather resources, craft extras, set respawn
 2. **Find Forgotten Library**: Get Portal Stabilizer recipe

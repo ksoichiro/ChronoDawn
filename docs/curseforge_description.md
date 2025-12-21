@@ -1,31 +1,31 @@
-# Chronosphere Mod - CurseForge Description
+# Chrono Dawn - CurseForge Description
 
 ---
 
-## 🕰️ Chronosphere - A Time-Manipulation Adventure
+## 🕰️ Chrono Dawn - A Time-Manipulation Adventure
 
 **Explore a mysterious dimension where time stands still!**
 
-Chronosphere adds a brand new dimension to Minecraft, filled with unique biomes, powerful bosses, and time-bending artifacts. Master the power of time itself and conquer the challenges of a frozen world.
+Chrono Dawn adds a brand new dimension to Minecraft, filled with unique biomes, powerful bosses, and time-bending artifacts. Master the power of time itself and conquer the challenges of a frozen world.
 
 ---
 
 ## ✨ Features
 
-### 🌍 New Dimension: The Chronosphere
+### 🌍 New Dimension: Chrono Dawn
 - **8 Unique Biomes**: Forest, Desert, Mountain, Ocean, Snowy, Swamp, Dark Forest, and Ancient Forest
 - **Perpetual Twilight**: A dimension frozen in time with stunning orange-gold skies
 - **Time Distortion Effect**: Hostile mobs move in slow motion while you move at normal speed
 - **Custom Portal System**: One-way portal travel that can be upgraded to bidirectional
 
 ### 🏛️ Epic Structures
-- **Ancient Ruins** (Overworld): Discover the secrets to enter the Chronosphere
-- **Forgotten Library** (Chronosphere): Find the blueprints to stabilize the dimension
-- **Desert Clock Tower** (Chronosphere): Obtain rare Enhanced Clockstone
-- **Guardian Vault** (Chronosphere): Face Chronos Warden
-- **Clockwork Depths** (Chronosphere): Challenge Clockwork Colossus
-- **Phantom Catacombs** (Chronosphere): Navigate a maze to find Temporal Phantom
-- **Entropy Crypt** (Chronosphere): Confront Entropy Keeper
+- **Ancient Ruins** (Overworld): Discover the secrets to enter Chrono Dawn
+- **Forgotten Library** (Chrono Dawn): Find the blueprints to stabilize the dimension
+- **Desert Clock Tower** (Chrono Dawn): Obtain rare Enhanced Clockstone
+- **Guardian Vault** (Chrono Dawn): Face Chronos Warden
+- **Clockwork Depths** (Chrono Dawn): Challenge Clockwork Colossus
+- **Phantom Catacombs** (Chrono Dawn): Navigate a maze to find Temporal Phantom
+- **Entropy Crypt** (Chrono Dawn): Confront Entropy Keeper
 - **Master Clock** (Final Dungeon): Face the ultimate challenge
 
 ### 👹 Powerful Boss Battles
@@ -58,13 +58,13 @@ Defeat bosses to craft legendary time-manipulating gear:
 ### Step 1: Find Ancient Ruins
 Explore the Overworld to discover **Ancient Ruins**. Mine **Clockstone Ore** and craft the **Time Hourglass**.
 
-### Step 2: Enter the Chronosphere
+### Step 2: Enter Chrono Dawn
 Build a portal frame using **Clockstone Blocks** (minimum 4×5, maximum 23×23). Activate it with the **Time Hourglass** to enter the dimension.
 
 **⚠️ Warning**: The portal becomes one-way after entry! You'll need to find a way back.
 
 ### Step 3: Find the Forgotten Library
-Explore the Chronosphere to locate the **Forgotten Library**. Discover the **Portal Stabilizer** recipe to unlock bidirectional travel.
+Explore Chrono Dawn to locate the **Forgotten Library**. Discover the **Portal Stabilizer** recipe to unlock bidirectional travel.
 
 ### Step 4: Stabilize the Portal
 Craft the **Portal Stabilizer** using **Enhanced Clockstone** from the **Desert Clock Tower**. Use it on your portal to enable free travel between dimensions.
@@ -92,7 +92,7 @@ Use **Fragments of Stasis Core** (dropped by the Time Tyrant) to create legendar
 ## 🎮 Gameplay Features
 
 ### Time Manipulation Mechanics
-- **Time Distortion**: Hostile mobs in the Chronosphere move extremely slowly
+- **Time Distortion**: Hostile mobs in Chrono Dawn move extremely slowly
 - **Reversing Time Sandstone**: Blocks that regenerate after being broken
 - **Unstable Fungus**: Blocks that apply random speed effects when stepped on
 - **Time Clock**: Cancel enemy attacks with a cooldown-based utility item
@@ -153,7 +153,7 @@ Found a bug or have a suggestion? Report it on our [GitHub Issues](https://githu
 [Add screenshots of the following:]
 - Ancient Ruins structure in Overworld
 - Chronosphere portal (orange/gold color)
-- Different biomes in the Chronosphere
+- Different biomes in Chrono Dawn
 - Forgotten Library structure
 - Time Guardian boss battle
 - Temporal Phantom boss in Phantom Catacombs
@@ -187,4 +187,4 @@ Found a bug or have a suggestion? Report it on our [GitHub Issues](https://githu
 
 **Developed for Minecraft Java Edition 1.21.1**
 
-Master time. Conquer the Chronosphere. 🕰️
+Master time. Conquer Chrono Dawn. 🕰️

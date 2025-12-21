@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "chronosphere:block/time_crystal_ore"
-  }
-}

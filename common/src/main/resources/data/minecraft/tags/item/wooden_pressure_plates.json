@@ -1,8 +1,8 @@
 {
   "replace": false,
   "values": [
-    "chronosphere:time_wood_pressure_plate",
-    "chronosphere:dark_time_wood_pressure_plate",
-    "chronosphere:ancient_time_wood_pressure_plate"
+    "chronodawn:time_wood_pressure_plate",
+    "chronodawn:dark_time_wood_pressure_plate",
+    "chronodawn:ancient_time_wood_pressure_plate"
   ]
 }

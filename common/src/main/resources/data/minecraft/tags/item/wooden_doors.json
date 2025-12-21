@@ -1,8 +1,8 @@
 {
   "replace": false,
   "values": [
-    "chronosphere:time_wood_door",
-    "chronosphere:dark_time_wood_door",
-    "chronosphere:ancient_time_wood_door"
+    "chronodawn:time_wood_door",
+    "chronodawn:dark_time_wood_door",
+    "chronodawn:ancient_time_wood_door"
   ]
 }

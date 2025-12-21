@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/button_pressed",
-  "textures": {
-    "texture": "chronosphere:block/ancient_time_wood_planks"
-  }
-}

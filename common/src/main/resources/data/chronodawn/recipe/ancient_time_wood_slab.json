@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building_blocks",
+  "pattern": [
+    "PPP"
+  ],
+  "key": {
+    "P": {
+      "item": "chronodawn:ancient_time_wood_planks"
+    }
+  },
+  "result": {
+    "id": "chronodawn:ancient_time_wood_slab",
+    "count": 6
+  }
+}

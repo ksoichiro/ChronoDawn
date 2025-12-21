@@ -1,20 +1,20 @@
 {
   "schemaVersion": 1,
-  "id": "chronosphere-test",
+  "id": "chronodawn-test",
   "version": "1.0.0",
-  "name": "Chronosphere Tests",
-  "description": "GameTest tests for Chronosphere mod",
+  "name": "Chrono Dawn Tests",
+  "description": "GameTest tests for Chrono Dawn mod",
   "authors": [],
   "contact": {},
   "license": "All Rights Reserved",
   "environment": "*",
   "entrypoints": {
     "fabric-gametest": [
-      "com.chronosphere.gametest.ChronosphereGameTests"
+      "com.chronodawn.gametest.ChronoDawnGameTests"
     ]
   },
   "depends": {
-    "chronosphere": "*",
+    "chronodawn": "*",
     "fabric-gametest-api-v1": "*"
   }
 }

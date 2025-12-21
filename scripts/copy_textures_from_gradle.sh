@@ -25,7 +25,7 @@ echo "Found minecraft-merged JAR: $MC_JAR"
 echo ""
 
 # Output directory
-OUTPUT_DIR="common/src/main/resources/assets/chronosphere/textures/entity/mobs"
+OUTPUT_DIR="common/src/main/resources/assets/chronodawn/textures/entity/mobs"
 
 # Create temporary directory
 TEMP_DIR=$(mktemp -d)

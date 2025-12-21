@@ -1,9 +1,0 @@
-{
-  "replace": false,
-  "values": [
-    "chronosphere:chronosphere_plains",
-    "chronosphere:chronosphere_desert",
-    "chronosphere:chronosphere_mountain",
-    "chronosphere:chronosphere_snowy"
-  ]
-}

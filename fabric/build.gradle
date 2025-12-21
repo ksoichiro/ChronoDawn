@@ -54,7 +54,7 @@ loom {
 fabricApi {
     configureTests {
         createSourceSet = true
-        modId = "chronosphere-test"
+        modId = "chronodawn-test"
         enableGameTests = true
         enableClientGameTests = false  // Server-side only for now
         eula = true  // By setting this to true, you agree to the Minecraft EULA
@@ -63,8 +63,8 @@ fabricApi {
 
 processResources {
     from(project(':common').sourceSets.main.resources) {
-        // Exclude common mixin config (use chronosphere-fabric.mixins.json instead)
-        exclude 'chronosphere.mixins.json'
+        // Exclude common mixin config (use chronodawn-fabric.mixins.json instead)
+        exclude 'chronodawn.mixins.json'
     }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
@@ -79,7 +79,7 @@ shadowJar {
     configurations = [project.configurations.shadowBundle]
     archiveClassifier = 'dev-shadow'
     // Exclude common mixin config
-    exclude 'chronosphere.mixins.json'
+    exclude 'chronodawn.mixins.json'
 }
 
 remapJar {

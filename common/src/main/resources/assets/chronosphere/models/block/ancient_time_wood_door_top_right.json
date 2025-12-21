@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/door_top_right",
-  "textures": {
-    "bottom": "chronosphere:block/ancient_time_wood_door_bottom",
-    "top": "chronosphere:block/ancient_time_wood_door_top"
-  }
-}
