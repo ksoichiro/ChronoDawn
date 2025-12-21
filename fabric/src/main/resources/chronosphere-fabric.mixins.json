@@ -13,7 +13,9 @@
     "StructureStartMixin"
   ],
   "client": [
-    "client.FogRendererMixin"
+    "client.ClientAdvancementsAccessor",
+    "client.FogRendererMixin",
+    "client.SkyColorMixin"
   ],
   "injectors": {
     "defaultRequire": 1
