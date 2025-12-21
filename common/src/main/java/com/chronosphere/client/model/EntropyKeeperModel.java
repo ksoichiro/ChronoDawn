@@ -99,24 +99,24 @@ public class EntropyKeeperModel<T extends Mob> extends EntityModel<T> {
         // Left leg - with pivot at hip
         PartDefinition leftLeg = root.addOrReplaceChild("left_leg", CubeListBuilder.create(), PartPose.offset(3.0F, -18.0F, 3.0F));
 
-        leftLeg.addOrReplaceChild("leg_left4_r1", CubeListBuilder.create().texOffs(48, 11).addBox(2.0F, -18.0F, -3.0F, 2.0F, 9.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-3.0F, 18.0F, -3.0F, -0.2182F, -0.1309F, 0.0F));
+        leftLeg.addOrReplaceChild("leg_left4_r1", CubeListBuilder.create().texOffs(48, 11).addBox(2.0F, -20.0F, -3.0F, 2.0F, 9.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-3.0F, 18.0F, -3.0F, -0.2182F, -0.1309F, 0.0F));
 
-        leftLeg.addOrReplaceChild("leg_left3_r1", CubeListBuilder.create().texOffs(48, 28).addBox(2.0F, -10.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-3.0F, 18.0F, -3.0F, 0.0F, -0.1309F, 0.0F));
+        leftLeg.addOrReplaceChild("leg_left3_r1", CubeListBuilder.create().texOffs(48, 28).addBox(2.0F, -12.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-3.0F, 18.0F, -3.0F, 0.0F, -0.1309F, 0.0F));
 
-        leftLeg.addOrReplaceChild("leg_left2_r1", CubeListBuilder.create().texOffs(48, 0).addBox(2.0F, -9.0F, 2.0F, 2.0F, 9.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-3.0F, 18.0F, -3.0F, 0.3054F, -0.1745F, 0.0F));
+        leftLeg.addOrReplaceChild("leg_left2_r1", CubeListBuilder.create().texOffs(48, 0).addBox(2.0F, -11.0F, 3.0F, 2.0F, 9.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-3.0F, 18.0F, -3.0F, 0.3054F, -0.1745F, 0.0F));
 
-        leftLeg.addOrReplaceChild("leg_left_r1", CubeListBuilder.create().texOffs(0, 32).addBox(2.0F, -1.0F, -3.0F, 2.0F, 1.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-3.0F, 18.0F, -3.0F, 0.0F, -0.1745F, 0.0F));
+        leftLeg.addOrReplaceChild("leg_left_r1", CubeListBuilder.create().texOffs(0, 32).addBox(2.0F, -1.0F, 0.0F, 2.0F, 1.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-3.0F, 18.0F, -3.0F, 0.7854F, -0.1745F, 0.0F));
 
         // Right leg - with pivot at hip
         PartDefinition rightLeg = root.addOrReplaceChild("right_leg", CubeListBuilder.create(), PartPose.offset(-3.0F, -18.0F, 3.0F));
 
-        rightLeg.addOrReplaceChild("leg_right4_r1", CubeListBuilder.create().texOffs(12, 47).addBox(-4.0F, -18.0F, -3.0F, 2.0F, 9.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.0F, 18.0F, -3.0F, -0.2182F, 0.1309F, 0.0F));
+        rightLeg.addOrReplaceChild("leg_right4_r1", CubeListBuilder.create().texOffs(12, 47).addBox(-4.0F, -20.0F, -3.0F, 2.0F, 9.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.0F, 18.0F, -3.0F, -0.2182F, 0.1309F, 0.0F));
 
-        rightLeg.addOrReplaceChild("leg_right3_r1", CubeListBuilder.create().texOffs(40, 6).addBox(-4.0F, -10.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.0F, 18.0F, -3.0F, 0.0F, 0.1309F, 0.0F));
+        rightLeg.addOrReplaceChild("leg_right3_r1", CubeListBuilder.create().texOffs(40, 6).addBox(-4.0F, -12.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.0F, 18.0F, -3.0F, 0.0F, 0.1309F, 0.0F));
 
-        rightLeg.addOrReplaceChild("leg_right2_r1", CubeListBuilder.create().texOffs(40, 43).addBox(-4.0F, -9.0F, 2.0F, 2.0F, 9.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.0F, 18.0F, -3.0F, 0.3054F, 0.1745F, 0.0F));
+        rightLeg.addOrReplaceChild("leg_right2_r1", CubeListBuilder.create().texOffs(40, 43).addBox(-4.0F, -11.0F, 3.0F, 2.0F, 9.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.0F, 18.0F, -3.0F, 0.3054F, 0.1745F, 0.0F));
 
-        rightLeg.addOrReplaceChild("leg_right_r1", CubeListBuilder.create().texOffs(24, 30).addBox(-4.0F, -1.0F, -3.0F, 2.0F, 1.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.0F, 18.0F, -3.0F, 0.0F, 0.1745F, 0.0F));
+        rightLeg.addOrReplaceChild("leg_right_r1", CubeListBuilder.create().texOffs(24, 30).addBox(-4.0F, -1.0F, 0.0F, 2.0F, 1.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(3.0F, 18.0F, -3.0F, 0.7854F, 0.1745F, 0.0F));
 
         return LayerDefinition.create(meshdefinition, 64, 64);
     }
