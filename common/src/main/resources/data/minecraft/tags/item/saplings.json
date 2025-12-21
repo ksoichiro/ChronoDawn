@@ -1,8 +1,8 @@
 {
   "replace": false,
   "values": [
-    "chronosphere:time_wood_sapling",
-    "chronosphere:dark_time_wood_sapling",
-    "chronosphere:ancient_time_wood_sapling"
+    "chronodawn:time_wood_sapling",
+    "chronodawn:dark_time_wood_sapling",
+    "chronodawn:ancient_time_wood_sapling"
   ]
 }

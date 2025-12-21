@@ -47,7 +47,7 @@ Simply describe what you want to do, and Claude will reference the appropriate c
    - Update `recommends` section if applicable
 
 8. **neoforge/src/main/resources/META-INF/neoforge.mods.toml**
-   - Update `[[dependencies.chronosphere]]` entries
+   - Update `[[dependencies.chronodawn]]` entries
    - Update `versionRange` fields
 
 9. **THIRD_PARTY_LICENSES.md**
@@ -279,7 +279,7 @@ When adding/removing content:
    - Specify version range
 
 5. **neoforge/src/main/resources/META-INF/neoforge.mods.toml**
-   - Add `[[dependencies.chronosphere]]` entry
+   - Add `[[dependencies.chronodawn]]` entry
    - Set `type` to "required" or "optional"
    - Specify `versionRange`
 

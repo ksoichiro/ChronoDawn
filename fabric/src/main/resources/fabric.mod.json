@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "chronosphere",
+  "id": "chronodawn",
   "version": "${version}",
   "name": "Chrono Dawn",
   "description": "A time manipulation themed Minecraft mod featuring the Chrono Dawn dimension",
@@ -12,18 +12,18 @@
     "sources": "https://github.com/ksoichiro/Chronosphere"
   },
   "license": "MIT",
-  "icon": "assets/chronosphere/icon.png",
+  "icon": "assets/chronodawn/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.chronosphere.fabric.ChronosphereFabric"
+      "com.chronodawn.fabric.ChronoDawnFabric"
     ],
     "client": [
-      "com.chronosphere.fabric.client.ChronosphereClientFabric"
+      "com.chronodawn.fabric.client.ChronoDawnClientFabric"
     ]
   },
   "mixins": [
-    "chronosphere-fabric.mixins.json"
+    "chronodawn-fabric.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.15.11",

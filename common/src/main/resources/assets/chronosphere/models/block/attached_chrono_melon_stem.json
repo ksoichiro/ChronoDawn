@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/stem_fruit",
-  "textures": {
-    "stem": "chronosphere:block/chrono_melon_stem",
-    "upperstem": "chronosphere:block/attached_chrono_melon_stem"
-  }
-}

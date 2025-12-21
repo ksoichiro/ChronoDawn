@@ -126,7 +126,7 @@ git checkout 001-chronosphere-mod
 ```
 Chronosphere/
 ├── common/                                 # Common module (~80%)
-│   ├── src/main/java/com/chronosphere/
+│   ├── src/main/java/com/chronodawn/
 │   │   ├── Chronosphere.java               # Common entry point
 │   │   ├── blocks/                         # Custom blocks
 │   │   │   ├── ModBlocks.java              # Block registration
@@ -157,23 +157,23 @@ Chronosphere/
 │   │   │   └── StructureStartMixin.java    # Waterlogging prevention
 │   │   └── util/                           # Utility classes
 │   ├── src/main/resources/
-│   │   ├── data/chronosphere/
+│   │   ├── data/chronodawn/
 │   │   │   ├── dimension/                  # Dimension JSON
 │   │   │   ├── worldgen/                   # Biomes, features, structures
 │   │   │   ├── recipes/                    # Crafting recipes
 │   │   │   ├── loot_tables/                # Loot tables
 │   │   │   └── structures/                 # NBT structure files
-│   │   └── assets/chronosphere/
+│   │   └── assets/chronodawn/
 │   │       ├── textures/                   # Textures (blocks, items, entities)
 │   │       ├── models/                     # Block/item models
 │   │       ├── blockstates/                # Block state definitions
 │   │       ├── lang/                       # Translations
 │   │       └── sounds/                     # Sound files
-│   └── src/test/java/com/chronosphere/     # Tests
+│   └── src/test/java/com/chronodawn/     # Tests
 │       ├── unit/                           # Unit tests
 │       └── integration/                    # Integration tests
 ├── fabric/                                 # Fabric module (~10%)
-│   ├── src/main/java/com/chronosphere/fabric/
+│   ├── src/main/java/com/chronodawn/fabric/
 │   │   ├── ChronosphereFabric.java         # Fabric entry point
 │   │   ├── client/                         # Client-side initialization
 │   │   ├── platform/                       # Platform implementations
@@ -181,10 +181,10 @@ Chronosphere/
 │   │       └── CustomPortalFabric.java     # Custom Portal API (Fabric)
 │   └── src/main/resources/
 │       ├── fabric.mod.json                 # Fabric mod metadata
-│       ├── chronosphere-fabric.mixins.json # Fabric Mixin config (with refMap)
+│       ├── chronodawn-fabric.mixins.json # Fabric Mixin config (with refMap)
 │       └── pack.mcmeta
 ├── neoforge/                               # NeoForge module (~10%)
-│   ├── src/main/java/com/chronosphere/neoforge/
+│   ├── src/main/java/com/chronodawn/neoforge/
 │   │   ├── ChronosphereNeoForge.java       # NeoForge entry point
 │   │   ├── client/                         # Client-side initialization
 │   │   ├── platform/                       # Platform implementations
@@ -193,7 +193,7 @@ Chronosphere/
 │   └── src/main/resources/
 │       ├── META-INF/
 │       │   └── neoforge.mods.toml          # NeoForge mod metadata
-│       ├── chronosphere-neoforge.mixins.json # NeoForge Mixin config (no refMap)
+│       ├── chronodawn-neoforge.mixins.json # NeoForge Mixin config (no refMap)
 │       └── pack.mcmeta
 ├── specs/001-chronosphere-mod/             # Design documents
 │   ├── spec.md                             # Feature specification
@@ -236,8 +236,8 @@ architectury {
 
 ```properties
 mod_version=0.1.0
-maven_group=com.chronosphere
-archives_name=chronosphere
+maven_group=com.chronodawn
+archives_name=chronodawn
 minecraft_version=1.21.1
 architectury_api_version=13.0.8
 fabric_loader_version=0.17.3
@@ -274,9 +274,9 @@ neoforge_version=21.1.209
 ### Output Files
 
 After building:
-- **Fabric JAR**: `fabric/build/libs/chronosphere-fabric-0.1.0.jar`
-- **NeoForge JAR**: `neoforge/build/libs/chronosphere-neoforge-0.1.0.jar`
-- **Common JAR**: `common/build/libs/chronosphere-common-0.1.0.jar` (bundled into loader JARs)
+- **Fabric JAR**: `fabric/build/libs/chronodawn-fabric-0.1.0.jar`
+- **NeoForge JAR**: `neoforge/build/libs/chronodawn-neoforge-0.1.0.jar`
+- **Common JAR**: `common/build/libs/chronodawn-common-0.1.0.jar` (bundled into loader JARs)
 
 ---
 
@@ -284,17 +284,17 @@ After building:
 
 ### 1. Dimension System
 
-**Location**: `common/src/main/java/com/chronosphere/core/dimension/`
+**Location**: `common/src/main/java/com/chronodawn/core/dimension/`
 
 **Key Classes**:
 - `ChronosphereDimension.java`: Dimension registration and key definitions
-- Custom biomes in `common/src/main/resources/data/chronosphere/worldgen/biome/`
+- Custom biomes in `common/src/main/resources/data/chronodawn/worldgen/biome/`
 
-**Dimension JSON**: `common/src/main/resources/data/chronosphere/dimension/chronosphere_dimension.json`
+**Dimension JSON**: `common/src/main/resources/data/chronodawn/dimension/chronodawn_dimension.json`
 
 ```json
 {
-  "type": "chronosphere:chronosphere_dimension_type",
+  "type": "chronodawn:chronodawn_dimension_type",
   "generator": {
     "type": "minecraft:noise",
     "biome_source": {
@@ -308,9 +308,9 @@ After building:
 ### 2. Portal System
 
 **Location**:
-- Common: `common/src/main/java/com/chronosphere/core/portal/`
-- Fabric: `fabric/src/main/java/com/chronosphere/fabric/compat/CustomPortalFabric.java`
-- NeoForge: `neoforge/src/main/java/com/chronosphere/neoforge/compat/CustomPortalNeoForge.java`
+- Common: `common/src/main/java/com/chronodawn/core/portal/`
+- Fabric: `fabric/src/main/java/com/chronodawn/fabric/compat/CustomPortalFabric.java`
+- NeoForge: `neoforge/src/main/java/com/chronodawn/neoforge/compat/CustomPortalNeoForge.java`
 
 **Key Components**:
 - **PortalRegistry**: Tracks portal states (INACTIVE, ACTIVE, STABILIZED)
@@ -322,7 +322,7 @@ After building:
 
 ### 3. Time Distortion Effect
 
-**Location**: `common/src/main/java/com/chronosphere/events/EntityEventHandler.java`
+**Location**: `common/src/main/java/com/chronodawn/events/EntityEventHandler.java`
 
 **Implementation**:
 ```java
@@ -344,20 +344,20 @@ public class EntityEventHandler {
 
 ### 4. Worldgen System
 
-**Biomes**: `common/src/main/resources/data/chronosphere/worldgen/biome/`
+**Biomes**: `common/src/main/resources/data/chronodawn/worldgen/biome/`
 - 8 custom biomes with unique features
 
-**Structures**: `common/src/main/java/com/chronosphere/worldgen/structures/`
+**Structures**: `common/src/main/java/com/chronodawn/worldgen/structures/`
 - Ancient Ruins (Overworld)
 - Forgotten Library (Chronosphere)
 - Master Clock (final dungeon)
 - Phantom Catacombs (maze with boss)
 
-**Structure NBT Files**: `common/src/main/resources/data/chronosphere/structure/`
+**Structure NBT Files**: `common/src/main/resources/data/chronodawn/structure/`
 
 ### 5. Boss System
 
-**Entities**: `common/src/main/java/com/chronosphere/entities/bosses/`
+**Entities**: `common/src/main/java/com/chronodawn/entities/bosses/`
 
 **Boss AI Components**:
 - **TimeGuardianAI**: AI state machine for Time Guardian
@@ -372,7 +372,7 @@ public class EntityEventHandler {
 
 ### Adding a New Block
 
-1. **Create Block Class** (`common/src/main/java/com/chronosphere/blocks/MyCustomBlock.java`):
+1. **Create Block Class** (`common/src/main/java/com/chronodawn/blocks/MyCustomBlock.java`):
 ```java
 public class MyCustomBlock extends Block {
     public MyCustomBlock(Properties properties) {
@@ -393,16 +393,16 @@ public static final RegistrySupplier<Block> MY_CUSTOM_BLOCK = BLOCKS.register(
 );
 ```
 
-3. **Add Blockstate JSON** (`assets/chronosphere/blockstates/my_custom_block.json`)
+3. **Add Blockstate JSON** (`assets/chronodawn/blockstates/my_custom_block.json`)
 
-4. **Add Model JSON** (`assets/chronosphere/models/block/my_custom_block.json`)
+4. **Add Model JSON** (`assets/chronodawn/models/block/my_custom_block.json`)
 
-5. **Add Texture** (`assets/chronosphere/textures/block/my_custom_block.png`)
+5. **Add Texture** (`assets/chronodawn/textures/block/my_custom_block.png`)
 
-6. **Add Translation** (`assets/chronosphere/lang/en_us.json`):
+6. **Add Translation** (`assets/chronodawn/lang/en_us.json`):
 ```json
 {
-  "block.chronosphere.my_custom_block": "My Custom Block"
+  "block.chronodawn.my_custom_block": "My Custom Block"
 }
 ```
 
@@ -410,13 +410,13 @@ public static final RegistrySupplier<Block> MY_CUSTOM_BLOCK = BLOCKS.register(
 
 1. **Create Item Class** (if custom behavior needed)
 2. **Register Item** (`ModItems.java`)
-3. **Add Model JSON** (`assets/chronosphere/models/item/my_item.json`)
-4. **Add Texture** (`assets/chronosphere/textures/item/my_item.png`)
+3. **Add Model JSON** (`assets/chronodawn/models/item/my_item.json`)
+4. **Add Texture** (`assets/chronodawn/textures/item/my_item.png`)
 5. **Add Translation**
 
 ### Adding a New Entity
 
-1. **Create Entity Class** (`common/src/main/java/com/chronosphere/entities/MyEntity.java`):
+1. **Create Entity Class** (`common/src/main/java/com/chronodawn/entities/MyEntity.java`):
 ```java
 public class MyEntity extends Mob {
     public MyEntity(EntityType<? extends Mob> type, Level level) {
@@ -444,9 +444,9 @@ public static final RegistrySupplier<EntityType<MyEntity>> MY_ENTITY = ENTITIES.
 ### Adding a Structure
 
 1. **Create NBT Structure** using Minecraft structure blocks
-2. **Save to**: `common/src/main/resources/data/chronosphere/structure/`
-3. **Define Structure JSON**: `data/chronosphere/worldgen/structure/my_structure.json`
-4. **Add to Structure Set**: `data/chronosphere/worldgen/structure_set/my_structure_set.json`
+2. **Save to**: `common/src/main/resources/data/chronodawn/structure/`
+3. **Define Structure JSON**: `data/chronodawn/worldgen/structure/my_structure.json`
+4. **Add to Structure Set**: `data/chronodawn/worldgen/structure_set/my_structure_set.json`
 5. **Implement Structure Processor** (if custom logic needed)
 
 ---
@@ -457,7 +457,7 @@ public static final RegistrySupplier<EntityType<MyEntity>> MY_ENTITY = ENTITIES.
 
 **Framework**: JUnit 5
 
-**Location**: `common/src/test/java/com/chronosphere/unit/`
+**Location**: `common/src/test/java/com/chronodawn/unit/`
 
 **Example Test**:
 ```java
@@ -481,7 +481,7 @@ public void testTimeHourglassActivation() {
 
 **Framework**: Minecraft GameTest Framework
 
-**Location**: `common/src/test/java/com/chronosphere/integration/`
+**Location**: `common/src/test/java/com/chronodawn/integration/`
 
 **Example Test**:
 ```java
@@ -531,7 +531,7 @@ public static void testPortalTravel(GameTestHelper helper) {
         </Console>
     </Appenders>
     <Loggers>
-        <Logger level="debug" name="com.chronosphere"/>
+        <Logger level="debug" name="com.chronodawn"/>
         <Root level="info">
             <AppenderRef ref="Console"/>
         </Root>
@@ -642,7 +642,7 @@ public class PlatformHelper {
 public class PlatformHelperImpl {
     public static String getModVersion() {
         return FabricLoader.getInstance()
-            .getModContainer("chronosphere")
+            .getModContainer("chronodawn")
             .get().getMetadata().getVersion().getFriendlyString();
     }
 }
@@ -653,7 +653,7 @@ public class PlatformHelperImpl {
 public class PlatformHelperImpl {
     public static String getModVersion() {
         return ModList.get()
-            .getModContainerById("chronosphere")
+            .getModContainerById("chronodawn")
             .get().getModInfo().getVersion().toString();
     }
 }
@@ -701,11 +701,11 @@ public class ChronosphereEvents {
 
 **Critical**: Fabric and NeoForge require **separate** Mixin configs due to mapping differences.
 
-**Fabric**: `chronosphere-fabric.mixins.json` (with refMap)
+**Fabric**: `chronodawn-fabric.mixins.json` (with refMap)
 ```json
 {
   "required": true,
-  "package": "com.chronosphere.mixin",
+  "package": "com.chronodawn.mixin",
   "refmap": "common-common-refmap.json",
   "mixins": [
     "StructureStartMixin"
@@ -713,11 +713,11 @@ public class ChronosphereEvents {
 }
 ```
 
-**NeoForge**: `chronosphere-neoforge.mixins.json` (without refMap)
+**NeoForge**: `chronodawn-neoforge.mixins.json` (without refMap)
 ```json
 {
   "required": true,
-  "package": "com.chronosphere.mixin",
+  "package": "com.chronodawn.mixin",
   "mixins": [
     "StructureStartMixin"
   ]

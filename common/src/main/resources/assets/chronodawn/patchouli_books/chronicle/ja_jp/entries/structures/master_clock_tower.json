@@ -1,0 +1,12 @@
+{
+  "name": "マスタークロック",
+  "icon": "chronodawn:ancient_gear",
+  "category": "chronodawn:structures",
+  "sortnum": 3,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "この凍結した世界の心臓部。$(br2)$(bold)入場要件：$()$(br)ボスの部屋を開くには3つの古代の歯車が必要です。$(br2)$(l:chronodawn:bosses/clockwork_sentinel)時計仕掛けの番兵$()を倒すと、これらの歯車が得られるかもしれません。$(br2)内部には$(l:chronodawn:bosses/time_tyrant)時間の暴君$()が待っています。停滞コアの最終守護者です。"
+    }
+  ]
+}

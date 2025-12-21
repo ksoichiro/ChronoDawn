@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "food",
+  "key": {
+    "W": {
+      "item": "chronodawn:time_wheat"
+    },
+    "J": {
+      "item": "chronodawn:time_jam"
+    },
+    "C": {
+      "item": "chronodawn:clockwork_block"
+    }
+  },
+  "pattern": [
+    "WJW",
+    "C C"
+  ],
+  "result": {
+    "id": "chronodawn:clockwork_cookie",
+    "count": 4
+  }
+}

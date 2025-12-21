@@ -75,8 +75,8 @@ gradlew.bat build
 ```
 
 **Output Files**:
-- `fabric/build/libs/chronosphere-0.1.0+1.21.1-fabric.jar` - Fabric loader JAR
-- `neoforge/build/libs/chronosphere-0.1.0+1.21.1-neoforge.jar` - NeoForge loader JAR
+- `fabric/build/libs/chronodawn-0.1.0+1.21.1-fabric.jar` - Fabric loader JAR
+- `neoforge/build/libs/chronodawn-0.1.0+1.21.1-neoforge.jar` - NeoForge loader JAR
 - `common/build/libs/common-0.1.0.jar` - Common module (not usable standalone)
 
 ### Build Specific Loader
@@ -206,7 +206,7 @@ gradlew.bat test
    - Architectury API 13.0.8+
    - Custom Portal API (Fabric version)
    - Patchouli 1.21.1-92+
-5. Copy `chronosphere-0.1.0+1.21.1-fabric.jar` to `.minecraft/mods/` folder
+5. Copy `chronodawn-0.1.0+1.21.1-fabric.jar` to `.minecraft/mods/` folder
 6. Launch Minecraft with Fabric profile
 
 ### For NeoForge
@@ -216,7 +216,7 @@ gradlew.bat test
    - Architectury API 13.0.8+
    - Custom Portal API (NeoForge version)
    - Patchouli 1.21.1-92+
-4. Copy `chronosphere-0.1.0+1.21.1-neoforge.jar` to `.minecraft/mods/` folder
+4. Copy `chronodawn-0.1.0+1.21.1-neoforge.jar` to `.minecraft/mods/` folder
 5. Launch Minecraft with NeoForge profile
 
 ## Project Structure
@@ -224,7 +224,7 @@ gradlew.bat test
 ```
 Chronosphere/
 ├── common/                          # Loader-independent shared code (~80%)
-│   ├── src/main/java/com/chronosphere/
+│   ├── src/main/java/com/chronodawn/
 │   │   ├── Chronosphere.java        # Common entry point
 │   │   ├── blocks/                  # Custom blocks
 │   │   ├── items/                   # Custom items
@@ -232,15 +232,15 @@ Chronosphere/
 │   │   ├── worldgen/                # World generation features
 │   │   └── registry/                # Registry wrappers
 │   └── src/main/resources/
-│       ├── data/chronosphere/       # Data packs (recipes, worldgen, structures)
-│       └── assets/chronosphere/     # Assets (textures, models, sounds)
+│       ├── data/chronodawn/       # Data packs (recipes, worldgen, structures)
+│       └── assets/chronodawn/     # Assets (textures, models, sounds)
 ├── fabric/                          # Fabric-specific implementation (~10%)
-│   ├── src/main/java/com/chronosphere/fabric/
+│   ├── src/main/java/com/chronodawn/fabric/
 │   │   └── ChronosphereFabric.java  # Fabric entry point
 │   └── src/main/resources/
 │       └── fabric.mod.json          # Fabric mod metadata
 ├── neoforge/                        # NeoForge-specific implementation (~10%)
-│   ├── src/main/java/com/chronosphere/neoforge/
+│   ├── src/main/java/com/chronodawn/neoforge/
 │   │   └── ChronosphereNeoForge.java # NeoForge entry point
 │   └── src/main/resources/
 │       └── META-INF/neoforge.mods.toml # NeoForge mod metadata
@@ -267,8 +267,8 @@ Chronosphere/
 
 ### Mixin Configuration
 - Fabric and NeoForge use **separate** Mixin configuration files
-- **Fabric**: `chronosphere-fabric.mixins.json` (with refMap for Intermediary mappings)
-- **NeoForge**: `chronosphere-neoforge.mixins.json` (without refMap for Mojang mappings)
+- **Fabric**: `chronodawn-fabric.mixins.json` (with refMap for Intermediary mappings)
+- **NeoForge**: `chronodawn-neoforge.mixins.json` (without refMap for Mojang mappings)
 
 See `CLAUDE.md` → "Mixin Configuration" section for details.
 

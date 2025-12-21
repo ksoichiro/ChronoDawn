@@ -1,7 +1,7 @@
 {
   "replace": false,
   "values": [
-    "chronosphere:time_wood_leaves",
-    "chronosphere:temporal_moss"
+    "chronodawn:time_wood_leaves",
+    "chronodawn:temporal_moss"
   ]
 }

@@ -9,7 +9,7 @@ Welcome to **Chrono Dawn**, a mysterious dimension where time stands still! This
 1. [Introduction](#introduction)
 2. [Installation](#installation)
 3. [Getting Started](#getting-started)
-4. [Entering Chrono Dawn](#entering-the-chronosphere)
+4. [Entering Chrono Dawn](#entering-chrono-dawn)
 5. [Dimension Features](#dimension-features)
 6. [Structures and Exploration](#structures-and-exploration)
 7. [Boss Battles](#boss-battles)
@@ -76,8 +76,8 @@ Download and install these mods alongside Chronosphere:
 2. Install your chosen mod loader (Fabric or NeoForge)
 3. Download required dependencies (Architectury API, Custom Portal API, Patchouli)
 4. Download **Chronosphere Mod** (choose the version matching your loader):
-   - `chronosphere-fabric-0.1.0.jar` for Fabric
-   - `chronosphere-neoforge-0.1.0.jar` for NeoForge
+   - `chronodawn-fabric-0.1.0.jar` for Fabric
+   - `chronodawn-neoforge-0.1.0.jar` for NeoForge
 5. Place all JAR files in your `.minecraft/mods/` folder
 6. Launch Minecraft with your chosen mod loader profile
 7. Verify "Chronosphere" appears in the mod list
@@ -96,7 +96,7 @@ Ancient Ruins generate naturally in the **Overworld**. These structures contain:
 **How to find Ancient Ruins**:
 - Explore the Overworld surface in various biomes
 - Look for distinctive ancient stone structures above ground
-- Use `/locate structure chronosphere:ancient_ruins` (if cheats enabled)
+- Use `/locate structure chronodawn:ancient_ruins` (if cheats enabled)
 
 **Tip**: Ancient Ruins are surface structures that spawn in various biomes. Keep exploring the landscape until you find one!
 
@@ -237,7 +237,7 @@ Harvest three unique wood types:
 **How to find**:
 - Explore Chrono Dawn dimension systematically
 - Look for distinctive ancient library architecture
-- Use `/locate structure chronosphere:forgotten_library` (if cheats enabled)
+- Use `/locate structure chronodawn:forgotten_library` (if cheats enabled)
 
 ---
 
@@ -1083,7 +1083,7 @@ All three wood types have the same variants:
 
 **Can't find structures**:
 - Keep exploring different biomes
-- Use `/locate structure chronosphere:[structure_name]` (if cheats enabled)
+- Use `/locate structure chronodawn:[structure_name]` (if cheats enabled)
 - Structures: `ancient_ruins`, `forgotten_library`, `desert_clock_tower`, `guardian_vault`, `clockwork_depths`, `phantom_catacombs`, `entropy_crypt`, `master_clock`
 
 **Lost in Phantom Catacombs**:

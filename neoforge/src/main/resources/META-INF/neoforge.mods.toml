@@ -4,43 +4,43 @@ license="MIT"
 showAsResourcePack=false
 
 [[mods]]
-modId="chronosphere"
+modId="chronodawn"
 version="${version}"
 displayName="Chrono Dawn"
 description='''
 A time manipulation themed Minecraft mod featuring the Chrono Dawn dimension.
 Explore a frozen dimension, defeat time-controlling bosses, and master ultimate artifacts.
 '''
-logoFile="chronosphere_logo.png"
+logoFile="chronodawn_logo.png"
 authors="YourName"
 credits="Built with Architectury"
 displayURL="https://github.com/ksoichiro/Chronosphere"
 
 [[mixins]]
-config="chronosphere-neoforge.mixins.json"
+config="chronodawn-neoforge.mixins.json"
 
-[[dependencies.chronosphere]]
+[[dependencies.chronodawn]]
 modId="neoforge"
 type="required"
 versionRange="[21.1,)"
 ordering="NONE"
 side="BOTH"
 
-[[dependencies.chronosphere]]
+[[dependencies.chronodawn]]
 modId="minecraft"
 type="required"
 versionRange="[1.21.1]"
 ordering="NONE"
 side="BOTH"
 
-[[dependencies.chronosphere]]
+[[dependencies.chronodawn]]
 modId="architectury"
 type="required"
 versionRange="[13.0.8,)"
 ordering="AFTER"
 side="BOTH"
 
-[[dependencies.chronosphere]]
+[[dependencies.chronodawn]]
 modId="patchouli"
 type="optional"
 versionRange="[1.21.1-92,)"

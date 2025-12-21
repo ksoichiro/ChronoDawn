@@ -9,7 +9,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'chronosphere'
+rootProject.name = 'chronodawn'
 
 include 'common'
 include 'fabric'

@@ -26,7 +26,7 @@
   "distance": 69,
   "spread": 25,
   "count": 128,
-  "preferred_biomes": "#chronosphere:has_ancient_ruins"
+  "preferred_biomes": "#chronodawn:has_ancient_ruins"
 }
 ```
 
@@ -92,7 +92,7 @@ Caused by: java.lang.IllegalStateException: Structure size including terrain ada
   "distance": 44,
   "spread": 25,
   "count": 3,
-  "preferred_biomes": "#chronosphere:has_ancient_ruins"
+  "preferred_biomes": "#chronodawn:has_ancient_ruins"
 }
 ```
 
@@ -114,7 +114,7 @@ Caused by: java.lang.IllegalStateException: Structure size including terrain ada
   "distance": 44,
   "spread": 25,
   "count": 3,
-  "preferred_biomes": "#chronosphere:has_ancient_ruins"
+  "preferred_biomes": "#chronodawn:has_ancient_ruins"
 }
 ```
 
@@ -136,7 +136,7 @@ Caused by: java.lang.IllegalStateException: Structure size including terrain ada
 - バイオーム定義は配置場所（樹木豊富）の制約のみ
 
 **利点:**
-- ✓ /locate structure chronosphere:ancient_ruins が使用可能
+- ✓ /locate structure chronodawn:ancient_ruins が使用可能
 - ✓ 森林・タイガ・平原に配置（樹木豊富）
 - ✓ 周辺80ブロックが青紫色に変わる（視認性）
 - ✓ 700-1500ブロック範囲（3リング: 700/1100/1500）
@@ -168,7 +168,7 @@ Caused by: java.lang.IllegalStateException: Structure size including terrain ada
 {
   "terrain_adaptation": "beard_thin",
   "max_distance_from_center": 80,
-  "biomes": "#chronosphere:has_ancient_ruins"
+  "biomes": "#chronodawn:has_ancient_ruins"
 }
 ```
 
@@ -184,7 +184,7 @@ Caused by: java.lang.IllegalStateException: Structure size including terrain ada
 
 **利点:**
 - ✓ 安定した距離: 最小384ブロック、平均500-1000ブロック
-- ✓ /locate structure chronosphere:ancient_ruins が使用可能
+- ✓ /locate structure chronodawn:ancient_ruins が使用可能
 - ✓ 森林・タイガのみに配置（樹木豊富）
 - ✓ terrain_adaptation="beard_thin"で地形に滑らかに馴染む
 - ✓ バイオーム制限があっても距離が安定
@@ -201,7 +201,7 @@ Caused by: java.lang.IllegalStateException: Structure size including terrain ada
 - **実装**: random_spread（spacing=48, separation=24）
 - **配置**: 森林・タイガのみ、最小384ブロック、平均500-1000ブロック
 - **地形適応**: beard_thin（斜面でも滑らかに配置）
-- **コマンド**: /locate structure chronosphere:ancient_ruins が機能
+- **コマンド**: /locate structure chronodawn:ancient_ruins が機能
 - **次のステップ**: 高い塔を追加して視認性向上
 
 ---
@@ -362,29 +362,29 @@ Caused by: java.lang.IllegalStateException: Structure size including terrain ada
 ### 🔗 関連ファイル
 
 **Entity Classes:**
-- `common/src/main/java/com/chronosphere/entities/bosses/ChronosWardenEntity.java`
-- `common/src/main/java/com/chronosphere/entities/bosses/ClockworkColossusEntity.java`
-- `common/src/main/java/com/chronosphere/entities/bosses/TemporalPhantomEntity.java`
-- `common/src/main/java/com/chronosphere/entities/bosses/EntropyKeeperEntity.java`
-- `common/src/main/java/com/chronosphere/entities/bosses/TimeTyrantEntity.java` (変更)
+- `common/src/main/java/com/chronodawn/entities/bosses/ChronosWardenEntity.java`
+- `common/src/main/java/com/chronodawn/entities/bosses/ClockworkColossusEntity.java`
+- `common/src/main/java/com/chronodawn/entities/bosses/TemporalPhantomEntity.java`
+- `common/src/main/java/com/chronodawn/entities/bosses/EntropyKeeperEntity.java`
+- `common/src/main/java/com/chronodawn/entities/bosses/TimeTyrantEntity.java` (変更)
 
 **Item Classes:**
-- `common/src/main/java/com/chronosphere/items/GuardianStoneItem.java`
-- `common/src/main/java/com/chronosphere/items/ColossusGearItem.java`
-- `common/src/main/java/com/chronosphere/items/PhantomEssenceItem.java`
-- `common/src/main/java/com/chronosphere/items/EntropyCoreItem.java`
-- `common/src/main/java/com/chronosphere/items/ChronoAegisItem.java`
+- `common/src/main/java/com/chronodawn/items/GuardianStoneItem.java`
+- `common/src/main/java/com/chronodawn/items/ColossusGearItem.java`
+- `common/src/main/java/com/chronodawn/items/PhantomEssenceItem.java`
+- `common/src/main/java/com/chronodawn/items/EntropyCoreItem.java`
+- `common/src/main/java/com/chronodawn/items/ChronoAegisItem.java`
 
 **Registry Classes:**
-- `common/src/main/java/com/chronosphere/registry/ModEntities.java`
-- `common/src/main/java/com/chronosphere/registry/ModItems.java`
-- `common/src/main/java/com/chronosphere/registry/ModEffects.java` (新規)
+- `common/src/main/java/com/chronodawn/registry/ModEntities.java`
+- `common/src/main/java/com/chronodawn/registry/ModItems.java`
+- `common/src/main/java/com/chronodawn/registry/ModEffects.java` (新規)
 
 **Effect Classes:**
-- `common/src/main/java/com/chronosphere/effects/ChronoAegisEffect.java` (新規)
+- `common/src/main/java/com/chronodawn/effects/ChronoAegisEffect.java` (新規)
 
 **Event Handlers:**
-- `common/src/main/java/com/chronosphere/events/EntityEventHandler.java` (Clarity機能用に変更)
+- `common/src/main/java/com/chronodawn/events/EntityEventHandler.java` (Clarity機能用に変更)
 
 ---
 
@@ -397,22 +397,22 @@ Caused by: java.lang.IllegalStateException: Structure size including terrain ada
 ### 完了したタスク
 
 **T093: Desert Clock Tower structure NBT and JSON configuration**
-- テンプレートプールJSON作成: `/common/src/main/resources/data/chronosphere/worldgen/template_pool/desert_clock_tower/start_pool.json`
-- プロセッサリストJSON作成: `/common/src/main/resources/data/chronosphere/worldgen/processor_list/desert_clock_tower_loot.json`
-- プレースホルダーNBT作成: `/common/src/main/resources/data/chronosphere/structure/desert_clock_tower.nbt`
+- テンプレートプールJSON作成: `/common/src/main/resources/data/chronodawn/worldgen/template_pool/desert_clock_tower/start_pool.json`
+- プロセッサリストJSON作成: `/common/src/main/resources/data/chronodawn/worldgen/processor_list/desert_clock_tower_loot.json`
+- プレースホルダーNBT作成: `/common/src/main/resources/data/chronodawn/structure/desert_clock_tower.nbt`
   - ⚠️ **重要**: 現在ancient_ruins.nbtをプレースホルダーとして使用
   - **TODO**: 実際の塔構造をゲーム内で構造ブロックを使用して作成
 
 **T094: Desert Clock Tower structure feature**
-- 構造物JSON作成: `/common/src/main/resources/data/chronosphere/worldgen/structure/desert_clock_tower.json`
+- 構造物JSON作成: `/common/src/main/resources/data/chronodawn/worldgen/structure/desert_clock_tower.json`
 - 設定:
   - Type: `minecraft:jigsaw`
-  - Biome: `chronosphere:chronosphere_plains`
+  - Biome: `chronodawn:chronodawn_plains`
   - Terrain adaptation: `beard_thin`
   - Start height: `absolute: 0`
 
 **T095: Desert Clock Tower structure set**
-- 構造物セットJSON作成: `/common/src/main/resources/data/chronosphere/worldgen/structure_set/desert_clock_tower.json`
+- 構造物セットJSON作成: `/common/src/main/resources/data/chronodawn/worldgen/structure_set/desert_clock_tower.json`
 - 配置設定:
   - Type: `minecraft:random_spread`
   - Salt: `1663542342`
@@ -420,7 +420,7 @@ Caused by: java.lang.IllegalStateException: Structure size including terrain ada
   - Separation: `8`
 
 **T099: Enhanced Clockstone loot configuration**
-- ルートテーブル作成: `/common/src/main/resources/data/chronosphere/loot_table/chests/desert_clock_tower.json`
+- ルートテーブル作成: `/common/src/main/resources/data/chronodawn/loot_table/chests/desert_clock_tower.json`
 - ルート内容:
   - **Pool 1** (保証): Enhanced Clockstone x4-8
   - **Pool 2** (保証): Clockstone x8-16
@@ -435,7 +435,7 @@ Caused by: java.lang.IllegalStateException: Structure size including terrain ada
 
 - **配置戦略**: ancient_ruins（spacing 16）よりレア（spacing 20）でEnhanced Clockstoneをより価値あるものに
 - **ルートバランス**: 保証されたEnhanced Clockstoneドロップ（4-8）で時間操作アイテム用の十分な素材を提供
-- **バイオーム制限**: 現在chronosphere_plainsのみ - 将来他のchronosphereバイオームに拡大可能
+- **バイオーム制限**: 現在chronodawn_plainsのみ - 将来他のchronodawnバイオームに拡大可能
 - **構造物適応**: `beard_thin`を使用して自然な地形ブレンディング
 
 ### 次のステップ（TODO）

@@ -1383,7 +1383,7 @@
                                 "type": "minecraft:biome",
                                 "biome_is": [
                                   "minecraft:desert",
-                                  "chronosphere:chronosphere_desert"
+                                  "chronodawn:chronodawn_desert"
                                 ]
                               },
                               "then_run": {
@@ -2160,7 +2160,7 @@
                                 "type": "minecraft:biome",
                                 "biome_is": [
                                   "minecraft:desert",
-                                  "chronosphere:chronosphere_desert"
+                                  "chronodawn:chronodawn_desert"
                                 ]
                               },
                               "then_run": {
@@ -2396,7 +2396,7 @@
                       "type": "minecraft:biome",
                       "biome_is": [
                         "minecraft:desert",
-                        "chronosphere:chronosphere_desert"
+                        "chronodawn:chronodawn_desert"
                       ]
                     },
                     "then_run": {
