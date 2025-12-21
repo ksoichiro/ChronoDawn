@@ -337,7 +337,10 @@
   "subtitles.chronodawn.portal_stabilize_activate": "Portal Stabilizer activates",
   "subtitles.chronodawn.time_compass_chime": "Time Compass chimes",
   "subtitles.chronodawn.time_compass_update": "Time Compass updates",
-  "subtitles.chronodawn.time_compass_break": "Time Compass breaks"
+  "subtitles.chronodawn.time_compass_break": "Time Compass breaks",
+
+  "lavender.book.chronodawn.chronicle": "Chrono Dawn Chronicle",
+  "lavender.book.chronodawn.chronicle.landing_text": "Welcome to the Chrono Dawn, a dimension where time itself has frozen. This chronicle will guide you through your journey in this mysterious realm."
 }
 
 

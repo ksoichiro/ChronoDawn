@@ -337,5 +337,8 @@
   "subtitles.chronodawn.portal_stabilize_activate": "ポータル安定化装置が起動",
   "subtitles.chronodawn.time_compass_chime": "タイムコンパスが鳴る",
   "subtitles.chronodawn.time_compass_update": "タイムコンパスが更新",
-  "subtitles.chronodawn.time_compass_break": "タイムコンパスが破損"
+  "subtitles.chronodawn.time_compass_break": "タイムコンパスが破損",
+
+  "lavender.book.chronodawn.chronicle": "クロノドーンの記録",
+  "lavender.book.chronodawn.chronicle.landing_text": "ようこそクロノドーンへ。時間が凍結されたこの次元へ。この記録は、あなたの謎に満ちた領域での旅を導くでしょう。"
 }
