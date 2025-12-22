@@ -287,7 +287,14 @@ See `CLAUDE.md` → "Mixin Configuration" section for details.
 
 ## License
 
-[Add your license here]
+This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+
+**Key Points:**
+- ✅ Free for both personal and commercial use
+- ✅ Modification and redistribution permitted
+- ✅ No restrictive copyleft requirements
+
+All dependencies use permissive licenses compatible with commercial use. See [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md) for details.
 
 ## Credits
 
