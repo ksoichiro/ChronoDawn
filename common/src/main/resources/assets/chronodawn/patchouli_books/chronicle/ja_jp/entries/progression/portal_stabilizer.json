@@ -1,0 +1,17 @@
+{
+  "name": "ポータル安定装置",
+  "icon": "chronodawn:portal_stabilizer",
+  "category": "chronodawn:progression",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "クラフトしたら、ポータルの時計石フレームで使用してください。$(br2)ポータルは双方向になり、世界間の自由な移動が可能になります。$(br2)安定化後、$(item)時の砂時計$()を使ってポータルを再点火してください。"
+    },
+    {
+      "type": "patchouli:crafting",
+      "recipe": "chronodawn:portal_stabilizer",
+      "text": "ポータル安定装置のレシピ"
+    }
+  ]
+}

@@ -327,6 +327,15 @@
   "subtitles.chronodawn.time_compass_update": "タイムコンパスが更新",
   "subtitles.chronodawn.time_compass_break": "タイムコンパスが破損",
 
-  "lavender.book.chronodawn.chronicle": "クロノドーンの記録",
-  "lavender.book.chronodawn.chronicle.landing_text": "ようこそクロノドーンへ。時間が凍結されたこの次元へ。この記録は、あなたの謎に満ちた領域での旅を導くでしょう。"
+  "advancements.chronodawn.grant_chronicle_book.title": "クロノドーンの記録",
+  "advancements.chronodawn.grant_chronicle_book.description": "クロノドーンの記録ガイドブックを受け取った",
+
+  "patchouli.book.chronodawn.chronicle.name": "クロノドーンの記録",
+  "patchouli.book.chronodawn.chronicle.landing_text": "ようこそ、旅人よ。あなたは時間そのものが凍結した次元に入りました。この記録があなたのクロノドーンでの旅を導きます。",
+
+  "patchouli.gui.lexicon.edition_str": "%s版",
+  "patchouli.gui.lexicon.categories": "カテゴリー",
+  "patchouli.gui.lexicon.index": "エントリー索引",
+  "patchouli.gui.lexicon.chapters": "章",
+  "patchouli.gui.lexicon.index.info": "この本で利用可能なすべての章の索引です。$(br2)索引または他のカテゴリーで検索するには、クエリを入力するだけです。検索バーが表示されてサポートします。"
 }

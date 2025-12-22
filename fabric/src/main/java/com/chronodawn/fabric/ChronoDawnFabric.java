@@ -13,7 +13,6 @@ import com.chronodawn.entities.mobs.TemporalWraithEntity;
 import com.chronodawn.entities.mobs.TimeKeeperEntity;
 import com.chronodawn.fabric.compat.CustomPortalFabric;
 import com.chronodawn.fabric.event.BlockProtectionEventHandler;
-import com.chronodawn.fabric.event.LavenderBookEventHandler;
 import com.chronodawn.registry.ModEntities;
 import com.chronodawn.worldgen.processors.BossRoomProtectionProcessor;
 import net.fabricmc.api.ModInitializer;
@@ -46,9 +45,6 @@ public class ChronoDawnFabric implements ModInitializer {
 
         // Register block protection event handler
         BlockProtectionEventHandler.register();
-
-        // Register Lavender guidebook event handler (Fabric only)
-        LavenderBookEventHandler.register();
 
         // Register server tick event for pending boss room protections
         // Check every 100 ticks (5 seconds) instead of every tick to reduce load

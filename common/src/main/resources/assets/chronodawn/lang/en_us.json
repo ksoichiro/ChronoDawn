@@ -327,8 +327,17 @@
   "subtitles.chronodawn.time_compass_update": "Time Compass updates",
   "subtitles.chronodawn.time_compass_break": "Time Compass breaks",
 
-  "lavender.book.chronodawn.chronicle": "Chrono Dawn Chronicle",
-  "lavender.book.chronodawn.chronicle.landing_text": "Welcome to the Chrono Dawn, a dimension where time itself has frozen. This chronicle will guide you through your journey in this mysterious realm."
+  "advancements.chronodawn.grant_chronicle_book.title": "Chronicle of Chrono Dawn",
+  "advancements.chronodawn.grant_chronicle_book.description": "Received the Chronicle of Chrono Dawn guide book",
+
+  "patchouli.book.chronodawn.chronicle.name": "Chronicle of Chrono Dawn",
+  "patchouli.book.chronodawn.chronicle.landing_text": "Welcome, traveler. You have entered a dimension where time itself has frozen. This chronicle will guide you through your journey in the Chrono Dawn.",
+
+  "patchouli.gui.lexicon.edition_str": "%s Edition",
+  "patchouli.gui.lexicon.categories": "Categories",
+  "patchouli.gui.lexicon.index": "Entry Index",
+  "patchouli.gui.lexicon.chapters": "Chapters",
+  "patchouli.gui.lexicon.index.info": "An index of all the entries available in this book.$(br2)To search the index or other categories, simply type your query, and a search bar will show up to assist."
 }
 
 

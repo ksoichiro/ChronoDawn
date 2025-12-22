@@ -1,0 +1,12 @@
+{
+  "name": "Time Guardian",
+  "icon": "chronodawn:time_guardian_stone",
+  "category": "chronodawn:bosses",
+  "sortnum": 1,
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "text": "This mini-boss guards the path to the Master Clock.$(br2)Defeat it to obtain the $(item)Key to Master Clock$().$(br2)$(bold)Strategy:$()$(br)Use $(item)Time Clock$() to cancel its attacks. The Time Guardian can launch ranged $(item)Time Blast$() projectiles that apply debuffs, so maintain distance when possible."
+    }
+  ]
+}

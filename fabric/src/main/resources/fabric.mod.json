@@ -31,6 +31,6 @@
     "architectury": ">=13.0.8",
     "minecraft": "~1.21.1",
     "java": ">=21",
-    "lavender": ">=0.1.15"
+    "patchouli": ">=1.21.1-92"
   }
 }
