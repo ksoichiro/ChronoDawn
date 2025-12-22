@@ -29,16 +29,15 @@ Chrono Dawn adds a brand new dimension to Minecraft centered around time manipul
 - Fabric API 0.116.7+
 - Architectury API 13.0.8+
 - Custom Portal API 0.0.1-beta66-1.21+
-- Patchouli 1.21.1-92+ (in-game guide book)
+- Lavender 0.1.15+1.21 (for in-game guide book)
 
 ### For NeoForge
 - Minecraft 1.21.1
 - NeoForge 21.1.209+
 - Architectury API 13.0.8+
 - Custom Portal API 0.0.1-beta66-1.21+
-- Patchouli 1.21.1-92+ (in-game guide book)
 
-**Note**: Download the correct version for your mod loader (Fabric or NeoForge).
+**Note**: Download the correct version for your mod loader (Fabric or NeoForge). In-game guidebook is currently available on Fabric only.
 
 ---
 

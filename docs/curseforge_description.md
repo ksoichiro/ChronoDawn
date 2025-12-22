@@ -125,7 +125,7 @@ This mod is built with **Architectury** and supports **both Fabric and NeoForge*
 - **Dependencies**:
   - Architectury API 13.0.8+
   - Custom Portal API 0.0.1-beta66-1.21+
-  - Patchouli 1.21.1-92+ (in-game guide book)
+  - Lavender 0.1.15+1.21 (Fabric only, for in-game guide book)
 
 ### Compatibility
 - Works with most dimension and world generation mods
