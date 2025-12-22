@@ -24,7 +24,14 @@ Screenshots follow the pattern: `NN-description.png`
 
 ## Screenshot List
 
-### Priority 1: Essential Screenshots (Required for Release)
+### Featured Image (Main/Hero Image)
+
+**00-featured-dimension-overview.png** - Desert Clock Tower and Chrono Dawn dimension landscape
+- **Purpose**: Main promotional image for CurseForge and Modrinth project pages
+- **Highlights**: Desert Clock Tower structure, grey sky, dimension landscape, flora
+- **Use**: Featured/Hero image on both platforms
+
+### Priority 1: Essential Screenshots (Gallery)
 
 1. **01-ancient-ruins.png** - Ancient Ruins structure in Overworld
 2. **02-portal-activation.png** - Chrono Dawn portal with orange/gold glow
