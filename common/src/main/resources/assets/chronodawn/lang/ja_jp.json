@@ -290,18 +290,6 @@
   "item.chronodawn.clockwork_sentinel_spawn_egg": "時計仕掛けの番兵のスポーンエッグ",
   "item.chronodawn.time_keeper_spawn_egg": "時間の管理者のスポーンエッグ",
 
-  "advancements.chronodawn.grant_chronicle_book.title": "クロノドーンの記録",
-  "advancements.chronodawn.grant_chronicle_book.description": "クロノドーンの記録ガイドブックを受け取った",
-
-  "patchouli.book.chronodawn.chronicle.name": "クロノドーンの記録",
-  "patchouli.book.chronodawn.chronicle.landing_text": "ようこそ、旅人よ。あなたは時間そのものが凍結した次元に入りました。この記録があなたのクロノドーンでの旅を導きます。",
-
-  "patchouli.gui.lexicon.edition_str": "%s版",
-  "patchouli.gui.lexicon.categories": "カテゴリー",
-  "patchouli.gui.lexicon.index": "エントリー索引",
-  "patchouli.gui.lexicon.chapters": "章",
-  "patchouli.gui.lexicon.index.info": "この本で利用可能なすべての章の索引です。$(br2)索引または他のカテゴリーで検索するには、クエリを入力するだけです。検索バーが表示されてサポートします。",
-
   "item.chronodawn.time_wood_boat": "時の木のボート",
   "item.chronodawn.time_wood_chest_boat": "チェスト付き時の木のボート",
   "item.chronodawn.dark_time_wood_boat": "暗い時の木のボート",
