@@ -150,16 +150,11 @@ Found a bug or have a suggestion? Report it on our [GitHub Issues](https://githu
 
 ## 📷 Screenshots
 
-[Add screenshots of the following:]
-- Ancient Ruins structure in Overworld
-- Chrono Dawn portal (orange/gold color)
-- Different biomes in Chrono Dawn
-- Forgotten Library structure
-- Time Guardian boss battle
-- Temporal Phantom boss in Phantom Catacombs
-- Time Tyrant boss in Master Clock dungeon
-- Ultimate artifacts (Chronoblade, Time Guardian's Mail, etc.)
-- Time Wood trees and blocks
+Check out the **Gallery** tab above for screenshots showcasing:
+- The mysterious Chrono Dawn dimension
+- Epic boss battles against Time Guardian, Temporal Phantom, and Time Tyrant
+- Ancient structures and dungeons
+- Ultimate time-manipulating artifacts
 
 ---
 
