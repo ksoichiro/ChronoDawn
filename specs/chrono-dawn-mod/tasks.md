@@ -158,6 +158,102 @@
 
 ---
 
+## License Migration to LGPL-3.0 (Pending Patchouli Removal)
+
+**Purpose**: Migrate project license from "All Rights Reserved" to LGPL-3.0 to enable open-source distribution while protecting against unauthorized commercial use.
+
+**Background**:
+- Current license: All Rights Reserved (proprietary)
+- Goal: Allow community contributions while preventing "fork and monetize" scenarios
+- Patchouli dependency blocks commercialization (CC-BY-NC-SA 3.0)
+- Will implement custom guidebook UI to remove Patchouli dependency
+
+**Key Decision**: LGPL-3.0 chosen for Minecraft mod compatibility
+- GPL-3.0 requires Classpath Exception for Minecraft compatibility (complex)
+- LGPL-3.0 is standard in Minecraft modding community (Forge, Applied Energistics 2)
+- Derivative works must remain LGPL-3.0 and publish source (prevents proprietary forks)
+- Commercial use allowed but impractical due to source disclosure requirement
+
+**Dependencies**:
+- ✅ Custom Portal API: MIT License (compatible)
+- ✅ Architectury API: Apache 2.0 (compatible)
+- ✅ Fabric API: Apache 2.0 (compatible)
+- ✅ NeoForge: LGPL 2.1 (compatible)
+- ⚠️ Patchouli: CC-BY-NC-SA 3.0 (will be removed via custom UI implementation)
+
+**Prerequisites**:
+- Must complete Patchouli removal (custom guidebook UI implementation)
+- Patchouli's non-commercial license conflicts with LGPL-3.0's commercial-use-allowed terms
+
+**Tasks**:
+
+- [ ] T600 [Documentation] Remove Patchouli reference from README.md
+  - Remove L295: "**Note**: This mod currently depends on Patchouli..."
+  - This reference is inaccurate (Patchouli will be removed)
+  - Commit: "docs: remove obsolete Patchouli dependency note"
+
+- [ ] T601 [License] Replace LICENSE file with LGPL-3.0 text
+  - Download LGPL-3.0 full text from https://www.gnu.org/licenses/lgpl-3.0.txt
+  - Replace content of `/LICENSE` file
+  - Add copyright notice: "Copyright (C) 2025 Soichiro Kashima"
+  - Commit: "license: migrate from All Rights Reserved to LGPL-3.0"
+
+- [ ] T602 [Documentation] Update README.md license section
+  - Replace "All Rights Reserved" section with LGPL-3.0 notice
+  - Add: "This program is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License..."
+  - Include link to LICENSE file
+  - Commit: "docs: update README.md to reflect LGPL-3.0 license"
+
+- [ ] T603 [Metadata] Update fabric.mod.json license field
+  - Change `"license"` field from "All Rights Reserved" to "LGPL-3.0"
+  - File: `/fabric/src/main/resources/fabric.mod.json`
+  - Commit: "meta: update Fabric mod metadata to LGPL-3.0"
+
+- [ ] T604 [Metadata] Update neoforge.mods.toml license field
+  - Change `license` field from "All Rights Reserved" to "LGPL-3.0"
+  - File: `/neoforge/src/main/resources/META-INF/neoforge.mods.toml`
+  - Commit: "meta: update NeoForge mod metadata to LGPL-3.0"
+
+- [ ] T605 [Platform] Update docs/curseforge_description.md license section
+  - Update license information to LGPL-3.0
+  - Add note about source code availability on GitHub
+  - Commit: "docs: update CurseForge description with LGPL-3.0 license"
+
+- [ ] T606 [Platform] Update docs/modrinth_description.md license section
+  - Update license information to LGPL-3.0
+  - Add note about source code availability on GitHub
+  - Commit: "docs: update Modrinth description with LGPL-3.0 license"
+
+- [ ] T607 [Optional] Add LGPL-3.0 headers to main source files
+  - Add standard LGPL-3.0 header comment to key Java files:
+    - `/common/src/main/java/com/chronodawn/ChronoDawn.java`
+    - `/fabric/src/main/java/com/chronodawn/fabric/ChronoDawnFabric.java`
+    - `/neoforge/src/main/java/com/chronodawn/neoforge/ChronoDawnNeoForge.java`
+  - Header template: Copyright notice + LGPL-3.0 boilerplate
+  - Optional: Can add to other files incrementally
+  - Commit: "license: add LGPL-3.0 headers to main entry points"
+
+- [ ] T608 [Guidelines] Update CLAUDE.md project guidelines
+  - Update license policy in project guidelines
+  - Document LGPL-3.0 compliance requirements
+  - Note: Derivative works must remain LGPL-3.0
+  - Commit: "docs: update CLAUDE.md with LGPL-3.0 license policy"
+
+**Estimated Effort**: 1-2 hours
+- License file replacement: 10 minutes
+- Documentation updates (6 files): 40-60 minutes
+- Source file headers (optional): 30-40 minutes
+- Testing & verification: 20 minutes
+
+**Priority**: Medium - Should complete after Patchouli removal (custom UI implementation)
+
+**Post-Migration Actions** (Not in tasks.md):
+- Update CurseForge project settings to select "LGPL-3.0" license
+- Update Modrinth project settings to select "LGPL-3.0" license
+- Consider trademark registration for "Chrono Dawn" name (additional protection)
+
+---
+
 ## Screenshots & Release Preparation (Priority)
 
 **Purpose**: Create high-quality screenshots for CurseForge and Modrinth galleries to ensure successful initial release approval and attract users.
