@@ -47,7 +47,7 @@ A multi-loader Minecraft mod that adds a mysterious time-themed dimension called
 - **Dependencies**:
   - Architectury API 13.0.8+
   - Custom Portal API 0.0.1-beta66-1.21+
-  - Lavender 0.1.15+1.21 (Fabric only, for in-game guide book)
+  - Patchouli 1.21.1-92+ (for in-game guide book)
 
 ### For Developers
 - **Java Development Kit (JDK)**: 21 or higher
@@ -204,7 +204,7 @@ gradlew.bat test
 4. Download and install required dependencies:
    - Architectury API 13.0.8+
    - Custom Portal API (Fabric version)
-   - Lavender 0.1.15+1.21
+   - Patchouli 1.21.1-92+
 5. Copy `chronodawn-0.1.0+1.21.1-fabric.jar` to `.minecraft/mods/` folder
 6. Launch Minecraft with Fabric profile
 
@@ -214,10 +214,11 @@ gradlew.bat test
 3. Download and install required dependencies:
    - Architectury API 13.0.8+
    - Custom Portal API (NeoForge version)
+   - Patchouli 1.21.1-92+
 4. Copy `chronodawn-0.1.0+1.21.1-neoforge.jar` to `.minecraft/mods/` folder
 5. Launch Minecraft with NeoForge profile
 
-**Note**: In-game guidebook is currently available on Fabric only (requires Lavender mod).
+**Note**: Download the correct version for your mod loader (Fabric or NeoForge).
 
 ## Project Structure
 

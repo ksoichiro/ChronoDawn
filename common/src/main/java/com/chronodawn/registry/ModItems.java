@@ -734,7 +734,7 @@ public class ModItems {
         () -> new DecorativeWaterBucketItem(ModFluids.DECORATIVE_WATER.get(), new Item.Properties().stacksTo(1))
     );
 
-    // Chronicle of ChronoDawn item removed - replaced by Lavender guide book system (chronodawn:chronicle)
+    // Chronicle of ChronoDawn item removed - replaced by Patchouli guide book system (chronodawn:chronicle)
 
     // === Consumables ===
 
@@ -1418,7 +1418,7 @@ public class ModItems {
         output.accept(TIME_HOURGLASS.get());
         output.accept(PORTAL_STABILIZER.get());
         // Decorative Water Bucket is intentionally excluded from creative tab (admin/command only)
-        // Chronicle of ChronoDawn is now distributed via Lavender (Fabric only, automatic distribution on dimension entry)
+        // Chronicle of ChronoDawn is now distributed via Patchouli (advancement + loot table system)
         // Add example Time Compass (targets Desert Clock Tower by default)
         output.accept(com.chronodawn.items.TimeCompassItem.createCompass(
             com.chronodawn.items.TimeCompassItem.STRUCTURE_DESERT_CLOCK_TOWER));

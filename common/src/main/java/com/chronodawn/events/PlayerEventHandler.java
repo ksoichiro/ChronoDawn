@@ -105,8 +105,8 @@ public class PlayerEventHandler {
         ChronoDawn.LOGGER.info("Player {} entered ChronoDawn at position {}",
             player.getName().getString(), player.blockPosition());
 
-        // Note: Guidebook distribution is handled by LavenderBookEventHandler in the Fabric module
-        // (Lavender is Fabric-only, so book distribution logic is separated by loader)
+        // Note: Guidebook distribution is handled by Patchouli advancement + loot table system
+        // See: data/chronodawn/advancement/grant_chronicle_book.json
 
         // Place Time Keeper Village near spawn if not already placed
         // This ensures players can find a Time Keeper for trading and Time Compass acquisition

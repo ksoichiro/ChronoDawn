@@ -65,10 +65,10 @@ Download and install these mods alongside Chrono Dawn:
    - [CurseForge](https://www.curseforge.com/minecraft/mc-mods/custom-portal-api)
    - [Modrinth](https://modrinth.com/mod/customportalapi)
 
-3. **Lavender** (version 0.1.15+1.21, Fabric only)
+3. **Patchouli** (version 1.21.1-92+)
    - Provides in-game guide book
-   - [Modrinth](https://modrinth.com/mod/lavender)
-   - [CurseForge](https://www.curseforge.com/minecraft/mc-mods/lavender-api)
+   - [CurseForge](https://www.curseforge.com/minecraft/mc-mods/patchouli)
+   - [Modrinth](https://modrinth.com/mod/patchouli)
 
 ### Installation Steps
 
@@ -77,7 +77,7 @@ Download and install these mods alongside Chrono Dawn:
 3. Download required dependencies:
    - Architectury API
    - Custom Portal API
-   - Lavender (Fabric only)
+   - Patchouli
 4. Download **Chrono Dawn Mod** (choose the version matching your loader):
    - `chronodawn-fabric-0.1.0.jar` for Fabric
    - `chronodawn-neoforge-0.1.0.jar` for NeoForge
@@ -1167,7 +1167,7 @@ All three wood types have the same variants:
 
 ### Q: How do I get the in-game guide book?
 
-**A**: On **Fabric**, install the **Lavender** mod dependency (version 0.1.15+1.21). You'll receive the "Chrono Dawn Chronicle" guide book automatically when entering the Chrono Dawn dimension. On **NeoForge**, the guidebook is currently not available (Lavender is Fabric-only).
+**A**: Install the **Patchouli** mod dependency (version 1.21.1-92+). You'll receive the "Chronicle of Chrono Dawn" guide book automatically when entering the Chrono Dawn dimension.
 
 ---
 

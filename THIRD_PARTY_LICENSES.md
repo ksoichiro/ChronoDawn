@@ -68,13 +68,13 @@ This document lists all third-party dependencies used in Chrono Dawn and their r
 
 ### Documentation System
 
-#### Lavender
-- **Project**: Lavender
-- **Version**: 0.1.15+1.21 (FABRIC only)
-- **Developer**: gliscowo (Wisp Forest)
-- **License**: MIT License
-- **URL**: https://github.com/wisp-forest/lavender
-- **License URL**: https://github.com/wisp-forest/lavender/blob/1.21.4/LICENSE
+#### Patchouli
+- **Project**: Patchouli
+- **Version**: 1.21.1-92 (FABRIC/NEOFORGE)
+- **Developer**: Vazkii (VazkiiMods)
+- **License**: CC BY-NC-SA 3.0 (Creative Commons Attribution-NonCommercial-ShareAlike 3.0)
+- **URL**: https://github.com/VazkiiMods/Patchouli
+- **License URL**: https://github.com/VazkiiMods/Patchouli/blob/1.21.x/LICENSE
 - **Note**: API usage only, no bundling via Jar-in-Jar
 
 ## Development Dependencies
@@ -133,6 +133,11 @@ Very permissive license allowing nearly unrestricted use, modification, and dist
 
 **Used by**: Custom Portal API, Architectury Loom, Architectury Plugin
 
+### CC BY-NC-SA 3.0 (Creative Commons Attribution-NonCommercial-ShareAlike 3.0)
+Allows redistribution and adaptation for non-commercial purposes only, with attribution required. Derivative works must use the same license.
+
+**Used by**: Patchouli
+
 ### Eclipse Public License 2.0
 Weak copyleft license that requires source code availability for modifications but allows linking with code under other licenses.
 
@@ -142,7 +147,7 @@ Weak copyleft license that requires source code availability for modifications b
 
 - All dependencies are used in compliance with their respective licenses
 - Runtime dependencies are not bundled with Chrono Dawn; users must install them separately
-- For Lavender, Chrono Dawn only uses the API and does not bundle the mod via Jar-in-Jar
+- For Patchouli, Chrono Dawn only uses the API and does not bundle the mod via Jar-in-Jar
 - NeoForge's LGPL-2.1 license does not affect Chrono Dawn's license due to linking exception
 - Architectury API's LGPL-3.0 license does not affect Chrono Dawn's license due to linking exception
 
@@ -151,6 +156,7 @@ Weak copyleft license that requires source code availability for modifications b
 Chrono Dawn is licensed under the MIT License. All dependencies are compatible with this license:
 - **Permissive licenses** (Apache 2.0, MIT, EPL 2.0): Fully compatible
 - **LGPL licenses** (LGPL-2.1, LGPL-3.0): Compatible due to dynamic linking (no license propagation)
+- **CC BY-NC-SA 3.0** (Patchouli): Compatible as dependency (API usage only)
 
 For questions about licensing, please contact the project maintainer.
 

@@ -7261,3 +7261,35 @@ common/src/main/resources/assets/chronodawn/lavender/
 - Lavender GitHub: https://github.com/wisp-forest/lavender
 - Issue #20: https://github.com/wisp-forest/lavender/issues/20
 - Issue #21: https://github.com/wisp-forest/lavender/issues/21
+
+### Reversion to Patchouli (2025-12-23)
+
+**Critical Issue Discovered:**
+- **Lavender is Fabric-only**: No NeoForge support as of v0.1.15+1.21
+- **User Impact**: NeoForge users would have no guidebook, creating unacceptable experience gap
+- **Multi-loader Requirement**: Project targets both Fabric and NeoForge with feature parity
+
+**Decision: Revert to Patchouli** (T511-T512)
+
+**Rationale:**
+1. **Multi-loader Support Required**: Patchouli supports both Fabric and NeoForge
+2. **License Clarification**: Patchouli API dependency usage (not Jar-in-Jar bundling) is acceptable per official documentation
+3. **Stable Solution**: Patchouli is mature and widely used (no Unicode rendering bugs)
+4. **Future Alternative**: Custom UI implementation documented in `custom-guidebook-ui-plan.md` as potential post-1.0 option
+
+**Reversion Actions (T511-T512):**
+- ✅ Removed Lavender dependencies from fabric/build.gradle
+- ✅ Added Patchouli dependencies to both fabric/ and neoforge/ modules
+- ✅ Restored all 30 Patchouli book files from git commit ef261ec
+- ✅ Restored advancement + loot table distribution system
+- ✅ Removed Lavender-specific code (LavenderBookEventHandler.java)
+- ✅ Updated all documentation (README, player guide, CurseForge/Modrinth descriptions)
+- ✅ Updated THIRD_PARTY_LICENSES.md (Lavender → Patchouli)
+- ✅ Updated language files (removed Lavender keys, restored Patchouli keys)
+- ✅ Verified builds: Fabric (92 GameTests passed), NeoForge (successful)
+
+**Current State (2025-12-23):**
+- Using Patchouli 1.21.1-92 for both Fabric and NeoForge
+- Bilingual guidebook (English/Japanese) fully functional
+- Automatic distribution via advancement system when entering Chrono Dawn
+- All Lavender references removed from codebase and documentation
