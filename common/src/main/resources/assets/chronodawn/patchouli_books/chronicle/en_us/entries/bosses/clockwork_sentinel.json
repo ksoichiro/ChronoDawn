@@ -6,7 +6,7 @@
   "pages": [
     {
       "type": "patchouli:text",
-      "text": "These mechanical guardians roam the Chronosphere, immune to Time Distortion effects.$(br2)Defeating them drops $(item)Ancient Gears$(), which are required to access the Time Tyrant's chamber.$(br2)You need 3 Ancient Gears to unlock the boss room door in the Master Clock Tower."
+      "text": "These mechanical guardians roam the Chrono Dawn, immune to Time Distortion effects.$(br2)Defeating them drops $(item)Ancient Gears$(), which are required to access the Time Tyrant's chamber.$(br2)You need 3 Ancient Gears to unlock the boss room door in the Master Clock Tower."
     }
   ]
 }
