@@ -158,6 +158,110 @@
 
 ---
 
+## Custom Guidebook UI Implementation (Future - Post 1.0)
+
+**Purpose**: Implement custom, dependency-free guidebook UI system to remove Patchouli dependency and achieve complete licensing independence.
+
+**Background**:
+- Current: Patchouli 1.21.1-92 (CC-BY-NC-SA 3.0) for both Fabric and NeoForge
+- Patchouli API dependency usage is acceptable per official documentation
+- Custom UI provides: complete control, zero dependencies, MIT license ownership
+- Detailed plan available in `custom-guidebook-ui-plan.md`
+
+**Rationale**:
+- **Licensing Independence**: Complete MIT ownership with no external license ambiguity
+- **Long-term Sustainability**: No dependency on third-party update cycles
+- **Tailored Experience**: Only features Chrono Dawn actually needs
+- **Multi-loader Compatibility**: 90%+ shared codebase via Architectury
+
+**Design Goals**:
+- Category Navigation (4-5 categories: Getting Started, Progression, Structures, Bosses)
+- Entry Display with text rendering and multi-page support
+- Recipe Integration using vanilla UI components
+- Bilingual Support (English + Japanese)
+- Multi-loader via Architectury MenuRegistry
+
+**Tasks**:
+
+- [ ] T700 [P] Phase 1: Implement basic structure
+  - Create data models (Category, Entry, Page) in common/
+  - Implement JSON loader (ChronicleData.java)
+  - Create basic ChronicleScreen with layout
+  - Define JSON format for categories and entries
+  - Test with 1 category and 1 entry on both loaders
+  - Commit: "feat: add basic Chronicle guidebook structure"
+
+- [ ] T701 [P] Phase 2: Implement category navigation
+  - Implement CategoryListWidget for left sidebar
+  - Handle category selection and state management
+  - Load entries for selected category dynamically
+  - Add category icon rendering
+  - Test navigation between multiple categories
+  - Commit: "feat: add category navigation to Chronicle guidebook"
+
+- [ ] T702 [P] Phase 3: Implement entry display
+  - Implement EntryPageWidget for content area
+  - Add text rendering with proper word wrap
+  - Implement multi-page support (prev/next buttons)
+  - Integrate vanilla recipe display
+  - Test with multi-page entries containing recipes
+  - Commit: "feat: add entry display and pagination to Chronicle guidebook"
+
+- [ ] T703 [P] Phase 4: Add bilingual support
+  - Detect client language (Minecraft.getInstance().options.languageCode)
+  - Load appropriate language text from JSON
+  - Implement fallback to English for missing translations
+  - Test language switching (English ↔ Japanese)
+  - Commit: "feat: add bilingual support to Chronicle guidebook"
+
+- [ ] T704 [P] Phase 5: Migrate content from Patchouli
+  - Convert all 30 Patchouli book files to JSON format
+  - Categories: getting_started, progression, structures, bosses
+  - Translate all content to Japanese
+  - Verify all content displays correctly in both languages
+  - Test recipe displays for all items
+  - Commit: "feat: migrate all guidebook content from Patchouli to Chronicle"
+
+- [ ] T705 [P] Phase 6: Polish and multi-loader testing
+  - Fix any rendering bugs or text overflow issues
+  - Optimize performance (lazy-load content, cache layouts)
+  - Test thoroughly on both Fabric and NeoForge
+  - Conduct user testing for UX feedback
+  - Add keybind for opening Chronicle book (default: 'H')
+  - Commit: "feat: finalize Chronicle guidebook UI implementation"
+
+- [ ] T706 [P] Remove Patchouli dependency
+  - Remove Patchouli from fabric/build.gradle
+  - Remove Patchouli from neoforge/build.gradle
+  - Update gradle.properties (remove patchouli_version)
+  - Delete all Patchouli book files from resources/
+  - Update fabric.mod.json and neoforge.mods.toml dependencies
+  - Remove Patchouli distribution logic from PlayerEventHandler.java
+  - Update THIRD_PARTY_LICENSES.md (remove Patchouli)
+  - Commit: "refactor: remove Patchouli dependency after Chronicle UI migration"
+
+**Estimated Effort**: 10-15 hours total
+- Phase 1 (Basic Structure): 3-4 hours
+- Phase 2 (Category Navigation): 2-3 hours
+- Phase 3 (Entry Display): 3-4 hours
+- Phase 4 (Bilingual Support): 1-2 hours
+- Phase 5 (Content Migration): 2-3 hours
+- Phase 6 (Polish & Testing): 1-2 hours
+
+**Priority**: Low - Post 1.0 release (Patchouli is adequate for now)
+
+**Trigger Conditions** (when to implement):
+1. Patchouli stops being maintained for newer Minecraft versions
+2. Breaking changes in Patchouli API requiring major refactoring
+3. Need for custom features not supported by Patchouli
+4. Community feedback requests for custom guidebook features
+
+**Dependencies**:
+- Must complete before T601-T608 (LGPL-3.0 migration)
+- Blocks commercialization options due to Patchouli CC-BY-NC-SA 3.0 license
+
+---
+
 ## License Migration to LGPL-3.0 (Pending Patchouli Removal)
 
 **Purpose**: Migrate project license from "All Rights Reserved" to LGPL-3.0 to enable open-source distribution while protecting against unauthorized commercial use.
