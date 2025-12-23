@@ -136,19 +136,19 @@
 
 **Tasks**:
 
-- [ ] T511 [P] Set up screenshot infrastructure
-  - Create `docs/screenshots/` directory
-  - Configure Git LFS for large image files (optional, if needed)
-  - Add `.gitattributes` for PNG/JPG files if using Git LFS
-  - Document screenshot naming convention (NN-description.png)
+- [x] T511 [P] Set up screenshot infrastructure
+  - Created `docs/screenshots/` directory
+  - Git LFS not needed (files within 5MiB limit)
+  - Documented screenshot naming convention in `docs/screenshots/README.md`
+  - Added comprehensive quality guidelines and capture instructions
 
-- [ ] T512 [P] Create project icon
-  - Design 400x400px+ project icon (1:1 aspect ratio)
-  - Use Time Hourglass or Chrono Dawn portal as base
-  - Save as `docs/screenshots/icon.png`
-  - Test on both CurseForge and Modrinth (upload preview)
+- [x] T512 [P] Create project icon
+  - Created 512x512px icon: `assets/icon.png` (44 KB)
+  - Based on time_clock texture with decorative rings
+  - Includes GIMP source file: `assets/icon.xcf`
+  - Ready for both CurseForge and Modrinth
 
-- [ ] T513 [P] Capture essential screenshots (Priority 1)
+- [x] T513 [P] Capture essential screenshots (Priority 1)
   - Screenshot 1: Ancient Ruins structure in Overworld
   - Screenshot 2: Chrono Dawn portal (orange/gold glow)
   - Screenshot 3: Chrono Dawn dimension overview (grey sky, Time Wood trees)
@@ -159,16 +159,13 @@
   - Screenshot 8: Ultimate artifacts showcase (Chronoblade, Time Guardian's Mail equipped)
   - All screenshots: 1920x1080, PNG format, F1 to hide HUD
 
-- [ ] T514 [P] Capture supplementary screenshots (Priority 2)
-  - Screenshot 9: Chrono Dawn Forest biome
-  - Screenshot 10: Chrono Dawn Desert biome with Desert Clock Tower
-  - Screenshot 11: Time Wood building example (house or structure)
-  - Screenshot 12: Master Clock dungeon interior
-  - Screenshot 13: Portal Stabilizer crafting/usage
-  - Screenshot 14: Multiple boss drops display (Guardian Stone, Colossus Gear, etc.)
-  - Consider using shaders (Iris) for enhanced visuals
+- [x] T514 [P] Capture supplementary screenshots (Priority 2) - PARTIAL
+  - Created featured image: `00-featured-dimension-overview.png` (Desert Clock Tower + dimension landscape)
+  - Decided to use 8 essential + 1 featured image (9 total) for initial release
+  - Additional supplementary screenshots deferred (can add post-release)
+  - Used Complementary Shaders Unbound for enhanced visuals
 
-- [ ] T515 [P] Optimize and organize screenshots
+- [x] T515 [P] Optimize and organize screenshots
   - Rename files with consistent naming: `01-ancient-ruins.png`, `02-portal.png`, etc.
   - Optimize file sizes if needed (keep under 5MiB for Modrinth)
   - Verify 1920x1080 resolution for all screenshots
@@ -189,12 +186,13 @@
   - Verify proper display on project page
   - Ensure consistency with CurseForge
 
-- [ ] T518 [P] Update documentation with screenshots
-  - Embed key screenshots in README.md (GitHub)
-  - Update curseforge_description.md to reference uploaded images
-  - Update modrinth_description.md to reference uploaded images
-  - Consider adding screenshot section to player_guide.md
-  - Commit all screenshots to repository
+- [x] T518 [P] Update documentation with screenshots
+  - Created comprehensive upload guide: `docs/UPLOAD_GUIDE.md`
+  - Updated curseforge_description.md with Gallery reference (instead of placeholders)
+  - Modrinth_description.md confirmed ready (no image URLs needed)
+  - Screenshots organized and documented in `docs/screenshots/README.md`
+  - All screenshots committed to repository
+  - README.md and player_guide.md updates deferred to post-upload (T516/T517 completion)
 
 **Success Criteria**:
 - Project icon created (400x400px+, appealing design)
