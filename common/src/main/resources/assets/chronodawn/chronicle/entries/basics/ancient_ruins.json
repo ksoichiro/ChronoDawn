@@ -1,0 +1,23 @@
+{
+  "category": "basics",
+  "title": {
+    "en_us": "Finding Ancient Ruins",
+    "ja_jp": "古代遺跡を見つける"
+  },
+  "icon": "minecraft:stonebrick",
+  "sortnum": 2,
+  "pages": [
+    {
+      "text": {
+        "en_us": "Ancient Ruins generate naturally in the Overworld. These surface structures are your first step towards entering Chrono Dawn.\n\nWhat you'll find:\n• Time Hourglass Blueprint (Knowledge Book)\n• Clockstone Ore\n• Loot chests with resources\n• First clues about the dimension",
+        "ja_jp": "古代遺跡はオーバーワールドに自然生成されます。これらの地上構造物は、クロノドーンへ入るための最初のステップです。\n\n見つかるもの:\n• タイムアワーグラスの設計図（知識の本）\n• クロックストーン鉱石\n• 資源の入った戦利品チェスト\n• 次元に関する最初の手がかり"
+      }
+    },
+    {
+      "text": {
+        "en_us": "How to find Ancient Ruins:\n\n1. Explore the Overworld surface in various biomes\n2. Look for distinctive ancient stone structures\n3. Use /locate structure chronodawn:ancient_ruins (if cheats enabled)\n\nTip: Ancient Ruins spawn on the surface, making them easier to spot than underground structures!",
+        "ja_jp": "古代遺跡の見つけ方:\n\n1. さまざまなバイオームでオーバーワールドの地表を探索する\n2. 特徴的な古代の石造りの構造物を探す\n3. /locate structure chronodawn:ancient_ruins を使用（チート有効時）\n\nヒント: 古代遺跡は地表に生成されるため、地下構造物より見つけやすいです！"
+      }
+    }
+  ]
+}

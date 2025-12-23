@@ -1,0 +1,20 @@
+{
+  "category": "basics",
+  "title": {
+    "en_us": "Crafting the Time Hourglass",
+    "ja_jp": "タイムアワーグラスの作成"
+  },
+  "icon": "chronodawn:time_hourglass",
+  "sortnum": 3,
+  "pages": [
+    {
+      "text": {
+        "en_us": "The Time Hourglass is the key to activating the portal to Chrono Dawn. It is consumed upon use, so craft multiple if you plan to build more than one portal.\n\nTo unlock the recipe:\n1. Find Ancient Ruins in the Overworld\n2. Open loot chests inside\n3. Find the Time Hourglass Blueprint (Knowledge Book)\n4. Right-click the blueprint to unlock the recipe",
+        "ja_jp": "タイムアワーグラスは、クロノドーンへのポータルを起動するための鍵です。使用時に消費されるため、複数のポータルを作る予定であれば複数作成してください。\n\nレシピのアンロック方法:\n1. オーバーワールドで古代遺跡を見つける\n2. 内部の戦利品チェストを開く\n3. タイムアワーグラスの設計図（知識の本）を見つける\n4. 設計図を右クリックしてレシピをアンロック"
+      }
+    },
+    {
+      "recipe": "chronodawn:time_hourglass"
+    }
+  ]
+}

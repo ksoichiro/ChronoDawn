@@ -1,0 +1,23 @@
+{
+  "category": "basics",
+  "title": {
+    "en_us": "Activating the Portal",
+    "ja_jp": "ポータルの起動"
+  },
+  "icon": "chronodawn:time_hourglass",
+  "sortnum": 5,
+  "pages": [
+    {
+      "text": {
+        "en_us": "To activate your portal to Chrono Dawn:\n\n1. Build a complete Clockstone Block frame\n2. Right-click the frame with Time Hourglass\n3. The portal activates with an orange/gold glow\n4. Walk through to enter Chrono Dawn\n\n⚠️ CRITICAL WARNING:\nThe portal becomes ONE-WAY after you enter! You cannot return until you find the Portal Stabilizer!",
+        "ja_jp": "クロノドーンへのポータルを起動するには:\n\n1. 完全なクロックストーンブロックのフレームを建設する\n2. タイムアワーグラスでフレームを右クリックする\n3. ポータルがオレンジ/金色の光で起動する\n4. 通り抜けてクロノドーンに入る\n\n⚠️ 重要な警告:\nポータルは入った後一方通行になります！ポータルスタビライザーを見つけるまで戻れません！"
+      }
+    },
+    {
+      "text": {
+        "en_us": "Preparation Checklist (before entering):\n\n☐ Full armor and weapons\n☐ Food and healing items\n☐ Building blocks (for emergencies)\n☐ Bed (set respawn in Overworld)\n☐ Tools (pickaxe, axe, shovel)\n☐ Torches or light sources\n☐ Multiple Time Hourglasses (for extra portals)\n\nRemember: You're trapped until you find the Forgotten Library and craft a Portal Stabilizer!",
+        "ja_jp": "準備チェックリスト（入る前に）:\n\n☐ 完全な防具と武器\n☐ 食料と治癒アイテム\n☐ 建築ブロック（緊急用）\n☐ ベッド（オーバーワールドにリスポーン設定）\n☐ ツール（ツルハシ、斧、シャベル）\n☐ 松明または光源\n☐ 複数のタイムアワーグラス（追加ポータル用）\n\n注意: 忘れられた図書館を見つけてポータルスタビライザーを作成するまで脱出できません！"
+      }
+    }
+  ]
+}

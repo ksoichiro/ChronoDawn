@@ -1,14 +1,14 @@
 {
   "basics": {
     "title": {
-      "en_us": "Basic Knowledge",
-      "ja_jp": "基礎知識"
+      "en_us": "Getting Started",
+      "ja_jp": "はじめに"
     },
     "description": {
-      "en_us": "Essential information about the Chrono Dawn dimension and its mechanics.",
-      "ja_jp": "クロノドーン次元とそのメカニクスに関する重要な情報。"
+      "en_us": "Essential information to begin your journey in Chrono Dawn.",
+      "ja_jp": "クロノドーンでの冒険を始めるために必要な基本情報です。"
     },
-    "icon": "minecraft:clock",
+    "icon": "chronodawn:time_hourglass",
     "sortnum": 1
   },
   "progression": {
@@ -18,7 +18,7 @@
     },
     "description": {
       "en_us": "Guidance on advancing through the dimension and achieving your goals.",
-      "ja_jp": "次元を進み、目標を達成するためのガイダンス。"
+      "ja_jp": "次元を進み、目標を達成するためのガイダンスです。"
     },
     "icon": "chronodawn:portal_stabilizer",
     "sortnum": 2
@@ -32,19 +32,31 @@
       "en_us": "Discover the mysterious structures scattered throughout the dimension.",
       "ja_jp": "次元全体に点在する神秘的な構造物を発見しましょう。"
     },
-    "icon": "chronodawn:clockwork_block",
+    "icon": "minecraft:stonebrick",
     "sortnum": 3
   },
   "bosses": {
     "title": {
-      "en_us": "Boss Encounters",
+      "en_us": "Boss Battles",
       "ja_jp": "ボス戦"
     },
     "description": {
       "en_us": "Prepare yourself for epic battles against powerful guardians of time.",
       "ja_jp": "時間の強力な守護者との壮大な戦いに備えましょう。"
     },
-    "icon": "chronodawn:time_crystal",
+    "icon": "minecraft:diamond_sword",
     "sortnum": 4
+  },
+  "items": {
+    "title": {
+      "en_us": "Items & Equipment",
+      "ja_jp": "アイテムと装備"
+    },
+    "description": {
+      "en_us": "Learn about the unique items and equipment found in Chrono Dawn.",
+      "ja_jp": "クロノドーンで見つかる独自のアイテムと装備について学びましょう。"
+    },
+    "icon": "chronodawn:time_crystal",
+    "sortnum": 5
   }
 }

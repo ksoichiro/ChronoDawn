@@ -1,0 +1,23 @@
+{
+  "category": "basics",
+  "title": {
+    "en_us": "Escaping Chrono Dawn",
+    "ja_jp": "クロノドーンから脱出する"
+  },
+  "icon": "chronodawn:portal_stabilizer",
+  "sortnum": 6,
+  "pages": [
+    {
+      "text": {
+        "en_us": "The portal to Chrono Dawn is ONE-WAY by default. To return to the Overworld, you have two options:\n\nOption 1: Portal Stabilizer\n• Find the Forgotten Library\n• Craft a Portal Stabilizer\n• Use it on your portal to make it bidirectional\n\nOption 2: Die and Respawn\n• Break your bed in the Overworld (if set)\n• Die in Chrono Dawn\n• Respawn at world spawn or last bed",
+        "ja_jp": "クロノドーンへのポータルはデフォルトで一方通行です。オーバーワールドに戻るには2つの選択肢があります:\n\n選択肢1: ポータルスタビライザー\n• 忘れられた図書館を見つける\n• ポータルスタビライザーを作成する\n• ポータルで使用して双方向にする\n\n選択肢2: 死んでリスポーン\n• オーバーワールドのベッドを壊す（設定している場合）\n• クロノドーンで死ぬ\n• ワールドスポーンまたは最後のベッドでリスポーン"
+      }
+    },
+    {
+      "text": {
+        "en_us": "Respawn Mechanics:\n\n• You respawn at your bed/respawn anchor in the Overworld\n• If no bed is set, you respawn at world spawn\n• Portal Stabilizer does NOT affect respawn location\n• You can always escape by dying (emergency exit)\n\nTip: The Portal Stabilizer is the proper way to enable two-way travel. Find the Forgotten Library to unlock its recipe!",
+        "ja_jp": "リスポーンの仕組み:\n\n• オーバーワールドのベッド/リスポーンアンカーでリスポーンする\n• ベッドが設定されていない場合、ワールドスポーンでリスポーン\n• ポータルスタビライザーはリスポーン場所に影響しない\n• 死ぬことでいつでも脱出できる（緊急脱出）\n\nヒント: ポータルスタビライザーが双方向移動を可能にする正しい方法です。忘れられた図書館を見つけてレシピをアンロックしましょう！"
+      }
+    }
+  ]
+}

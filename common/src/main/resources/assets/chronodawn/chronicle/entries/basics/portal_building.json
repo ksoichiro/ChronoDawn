@@ -1,0 +1,26 @@
+{
+  "category": "basics",
+  "title": {
+    "en_us": "Building the Portal",
+    "ja_jp": "ポータルの建設"
+  },
+  "icon": "chronodawn:clockstone_block",
+  "sortnum": 4,
+  "pages": [
+    {
+      "text": {
+        "en_us": "Build a portal frame using Clockstone Blocks (crafted from 9 Clockstone each).\n\nPortal Size:\n• Minimum: 4×5 blocks (inner space 2×3)\n• Maximum: 23×23 blocks\n• Corners are optional (like Nether portals)\n\nMaterials needed for minimum portal:\n• 90 Clockstone (10 blocks × 9 each)\n• 1 Time Hourglass (to activate)",
+        "ja_jp": "クロックストーンブロック（それぞれ9個のクロックストーンから作成）を使用してポータルフレームを建設します。\n\nポータルのサイズ:\n• 最小: 4×5ブロック（内部空間2×3）\n• 最大: 23×23ブロック\n• 角は任意（ネザーポータルと同様）\n\n最小ポータルに必要な材料:\n• クロックストーン90個（ブロック10個×各9個）\n• タイムアワーグラス1個（起動用）"
+      }
+    },
+    {
+      "text": {
+        "en_us": "How to build:\n\n1. Gather Clockstone from Ancient Ruins\n2. Smelt Clockstone Ore in a furnace\n3. Craft Clockstone Blocks (9 Clockstone each)\n4. Build a rectangular frame (hollow inside)\n5. Frame must be complete with no gaps\n\nExample (minimum 4×5 frame):\n CC\nC  C\nC  C\nC  C\n CC\n\nC = Clockstone Block",
+        "ja_jp": "建設方法:\n\n1. 古代遺跡からクロックストーンを集める\n2. かまどでクロックストーン鉱石を精錬する\n3. クロックストーンブロックを作成（各9個）\n4. 長方形のフレームを建設（内部は空洞）\n5. フレームは隙間なく完成させる必要がある\n\n例（最小4×5フレーム）:\n CC\nC  C\nC  C\nC  C\n CC\n\nC = クロックストーンブロック"
+      }
+    },
+    {
+      "recipe": "chronodawn:clockstone_block"
+    }
+  ]
+}
