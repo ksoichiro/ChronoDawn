@@ -52,7 +52,14 @@ public class ChronicleData {
             loadEntries(resourceManager);
 
             loaded = true;
-            ChronoDawn.LOGGER.info("Loaded {} Chronicle categories", categories.size());
+
+            // Count total entries
+            int totalEntries = categories.values().stream()
+                .mapToInt(category -> category.getEntries().size())
+                .sum();
+
+            ChronoDawn.LOGGER.info("Loaded {} Chronicle categories with {} total entries",
+                categories.size(), totalEntries);
         } catch (IOException e) {
             ChronoDawn.LOGGER.error("Failed to load Chronicle data", e);
         }
@@ -96,16 +103,42 @@ public class ChronicleData {
     }
 
     private void loadEntriesForCategory(ResourceManager resourceManager, String categoryId) {
-        // Try common entry names based on Patchouli structure
-        // In production, this would be replaced with a proper discovery mechanism
-        String[] commonEntryNames = {
-            "welcome", "first_goal", "time_distortion",  // basics
-            "portal_stabilizer", "after_victory",        // progression
-            "desert_clock_tower", "forgotten_library", "master_clock_tower",  // structures
-            "clockwork_sentinel", "time_guardian", "time_tyrant"  // bosses
-        };
+        // Define all entry names for each category
+        // Note: ResourceManager doesn't provide directory listing, so we enumerate explicitly
+        Map<String, String[]> categoryEntries = new HashMap<>();
 
-        for (String entryName : commonEntryNames) {
+        // Getting Started category
+        categoryEntries.put("basics", new String[]{
+            "welcome", "ancient_ruins", "time_hourglass",
+            "portal_building", "portal_activation", "escaping"
+        });
+
+        // Progression category
+        categoryEntries.put("progression", new String[]{
+            "time_distortion", "biomes", "wood_types",
+            "forgotten_library", "portal_stabilizer", "progression_path"
+        });
+
+        // Structures category
+        categoryEntries.put("structures", new String[]{
+            "desert_clock_tower", "guardian_vault", "clockwork_depths",
+            "phantom_catacombs", "entropy_crypt", "master_clock"
+        });
+
+        // Boss Battles category
+        categoryEntries.put("bosses", new String[]{
+            "time_guardian", "chronos_warden", "clockwork_colossus",
+            "temporal_phantom", "entropy_keeper", "time_tyrant"
+        });
+
+        // Items & Equipment category
+        categoryEntries.put("items", new String[]{
+            "clockstone", "time_crystals", "chrono_aegis", "ultimate_artifacts"
+        });
+
+        String[] entryNames = categoryEntries.getOrDefault(categoryId, new String[0]);
+
+        for (String entryName : entryNames) {
             ResourceLocation entryLocation = ResourceLocation.fromNamespaceAndPath(
                 "chronodawn",
                 "chronicle/entries/" + categoryId + "/" + entryName + ".json"
@@ -126,7 +159,7 @@ public class ChronicleData {
                     }
                 }
             } catch (IOException e) {
-                // Entry file doesn't exist, skip silently
+                ChronoDawn.LOGGER.warn("Failed to load entry: {}/{}", categoryId, entryName);
             }
         }
     }
