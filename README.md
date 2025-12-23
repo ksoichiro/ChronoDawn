@@ -288,14 +288,11 @@ See `CLAUDE.md` → "Mixin Configuration" section for details.
 
 ## License
 
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
+**All Rights Reserved** - Copyright (c) 2025 Soichiro Kashima
 
-**Key Points:**
-- ✅ Free for both personal and commercial use
-- ✅ Modification and redistribution permitted
-- ✅ No restrictive copyleft requirements
+This software is protected by copyright. Use, reproduction, modification, and distribution are prohibited without the express permission of the copyright holder.
 
-All dependencies use permissive licenses compatible with commercial use. See [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md) for details.
+**Note**: This mod currently depends on Patchouli (CC-BY-NC-SA 3.0 license), which restricts commercial use.
 
 ## Credits
 
