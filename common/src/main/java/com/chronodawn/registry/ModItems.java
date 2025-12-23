@@ -1418,7 +1418,7 @@ public class ModItems {
         output.accept(TIME_HOURGLASS.get());
         output.accept(PORTAL_STABILIZER.get());
         // Decorative Water Bucket is intentionally excluded from creative tab (admin/command only)
-        // Chronicle of ChronoDawn is now distributed via Patchouli advancement system
+        // Chronicle of ChronoDawn is now distributed via Patchouli (advancement + loot table system)
         // Add example Time Compass (targets Desert Clock Tower by default)
         output.accept(com.chronodawn.items.TimeCompassItem.createCompass(
             com.chronodawn.items.TimeCompassItem.STRUCTURE_DESERT_CLOCK_TOWER));

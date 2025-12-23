@@ -125,7 +125,7 @@ This mod is built with **Architectury** and supports **both Fabric and NeoForge*
 - **Dependencies**:
   - Architectury API 13.0.8+
   - Custom Portal API 0.0.1-beta66-1.21+
-  - Patchouli 1.21.1-92+ (in-game guide book)
+  - Patchouli 1.21.1-92+ (for in-game guide book)
 
 ### Compatibility
 - Works with most dimension and world generation mods
@@ -181,7 +181,7 @@ Found a bug or have a suggestion? Report it on our [GitHub Issues](https://githu
 
 **Redistribution**: ✅ Allowed - You may redistribute this mod with proper attribution
 
-**Note**: This mod currently depends on Patchouli (CC-BY-NC-SA 3.0 license), which restricts commercial use. We are migrating to Lavender (MIT license) to remove this restriction. Once migration is complete, all usage restrictions from Patchouli will be lifted.
+**Note**: This mod currently depends on Patchouli (CC-BY-NC-SA 3.0 license), which restricts commercial use.
 
 ---
 

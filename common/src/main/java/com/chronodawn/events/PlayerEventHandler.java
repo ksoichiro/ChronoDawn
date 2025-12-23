@@ -105,7 +105,7 @@ public class PlayerEventHandler {
         ChronoDawn.LOGGER.info("Player {} entered ChronoDawn at position {}",
             player.getName().getString(), player.blockPosition());
 
-        // Chronicle of ChronoDawn book is given automatically via advancement system
+        // Note: Guidebook distribution is handled by Patchouli advancement + loot table system
         // See: data/chronodawn/advancement/grant_chronicle_book.json
 
         // Place Time Keeper Village near spawn if not already placed

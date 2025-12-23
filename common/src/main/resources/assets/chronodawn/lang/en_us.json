@@ -290,18 +290,6 @@
   "item.chronodawn.clockwork_sentinel_spawn_egg": "Clockwork Sentinel Spawn Egg",
   "item.chronodawn.time_keeper_spawn_egg": "Time Keeper Spawn Egg",
 
-  "advancements.chronodawn.grant_chronicle_book.title": "Chronicle of Chrono Dawn",
-  "advancements.chronodawn.grant_chronicle_book.description": "Received the Chronicle of Chrono Dawn guide book",
-
-  "patchouli.book.chronodawn.chronicle.name": "Chronicle of Chrono Dawn",
-  "patchouli.book.chronodawn.chronicle.landing_text": "Welcome, traveler. You have entered a dimension where time itself has frozen. This chronicle will guide you through your journey in the Chrono Dawn.",
-
-  "patchouli.gui.lexicon.edition_str": "%s Edition",
-  "patchouli.gui.lexicon.categories": "Categories",
-  "patchouli.gui.lexicon.index": "Entry Index",
-  "patchouli.gui.lexicon.chapters": "Chapters",
-  "patchouli.gui.lexicon.index.info": "An index of all the entries available in this book.$(br2)To search in the index or other categories, just start typing a query. A search bar will pop up to assist.",
-
   "item.chronodawn.time_wood_boat": "Time Wood Boat",
   "item.chronodawn.time_wood_chest_boat": "Time Wood Boat with Chest",
   "item.chronodawn.dark_time_wood_boat": "Dark Time Wood Boat",
@@ -337,7 +325,19 @@
   "subtitles.chronodawn.portal_stabilize_activate": "Portal Stabilizer activates",
   "subtitles.chronodawn.time_compass_chime": "Time Compass chimes",
   "subtitles.chronodawn.time_compass_update": "Time Compass updates",
-  "subtitles.chronodawn.time_compass_break": "Time Compass breaks"
+  "subtitles.chronodawn.time_compass_break": "Time Compass breaks",
+
+  "advancements.chronodawn.grant_chronicle_book.title": "Chronicle of Chrono Dawn",
+  "advancements.chronodawn.grant_chronicle_book.description": "Received the Chronicle of Chrono Dawn guide book",
+
+  "patchouli.book.chronodawn.chronicle.name": "Chronicle of Chrono Dawn",
+  "patchouli.book.chronodawn.chronicle.landing_text": "Welcome, traveler. You have entered a dimension where time itself has frozen. This chronicle will guide you through your journey in the Chrono Dawn.",
+
+  "patchouli.gui.lexicon.edition_str": "%s Edition",
+  "patchouli.gui.lexicon.categories": "Categories",
+  "patchouli.gui.lexicon.index": "Entry Index",
+  "patchouli.gui.lexicon.chapters": "Chapters",
+  "patchouli.gui.lexicon.index.info": "An index of all the entries available in this book.$(br2)To search the index or other categories, simply type your query, and a search bar will show up to assist."
 }
 
 

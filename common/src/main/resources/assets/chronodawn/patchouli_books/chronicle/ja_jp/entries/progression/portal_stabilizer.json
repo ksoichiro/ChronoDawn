@@ -1,5 +1,5 @@
 {
-  "name": "ポータル安定化装置",
+  "name": "ポータル安定装置",
   "icon": "chronodawn:portal_stabilizer",
   "category": "chronodawn:progression",
   "sortnum": 1,
@@ -11,8 +11,7 @@
     {
       "type": "patchouli:crafting",
       "recipe": "chronodawn:portal_stabilizer",
-      "text": "ポータル安定化装置のレシピ",
-      "advancement": "chronodawn:obtain_portal_stabilizer_blueprint"
+      "text": "ポータル安定装置のレシピ"
     }
   ]
 }

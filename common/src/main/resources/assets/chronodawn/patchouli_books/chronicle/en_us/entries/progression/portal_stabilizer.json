@@ -11,8 +11,7 @@
     {
       "type": "patchouli:crafting",
       "recipe": "chronodawn:portal_stabilizer",
-      "text": "Portal Stabilizer Recipe",
-      "advancement": "chronodawn:obtain_portal_stabilizer_blueprint"
+      "text": "Portal Stabilizer Recipe"
     }
   ]
 }

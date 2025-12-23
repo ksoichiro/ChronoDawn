@@ -74,7 +74,10 @@ Download and install these mods alongside Chrono Dawn:
 
 1. Install Minecraft 1.21.1
 2. Install your chosen mod loader (Fabric or NeoForge)
-3. Download required dependencies (Architectury API, Custom Portal API, Patchouli)
+3. Download required dependencies:
+   - Architectury API
+   - Custom Portal API
+   - Patchouli
 4. Download **Chrono Dawn Mod** (choose the version matching your loader):
    - `chronodawn-fabric-0.1.0.jar` for Fabric
    - `chronodawn-neoforge-0.1.0.jar` for NeoForge
@@ -1164,7 +1167,7 @@ All three wood types have the same variants:
 
 ### Q: How do I get the in-game guide book?
 
-**A**: Install the **Patchouli** mod dependency (version 1.21.1-92+). You'll receive the "Chronicle of Chrono Dawn" guide book automatically.
+**A**: Install the **Patchouli** mod dependency (version 1.21.1-92+). You'll receive the "Chronicle of Chrono Dawn" guide book automatically when entering the Chrono Dawn dimension.
 
 ---
 

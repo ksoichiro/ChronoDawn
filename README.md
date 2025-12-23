@@ -218,6 +218,8 @@ gradlew.bat test
 4. Copy `chronodawn-0.1.0+1.21.1-neoforge.jar` to `.minecraft/mods/` folder
 5. Launch Minecraft with NeoForge profile
 
+**Note**: Download the correct version for your mod loader (Fabric or NeoForge).
+
 ## Project Structure
 
 ```
@@ -290,7 +292,7 @@ See `CLAUDE.md` → "Mixin Configuration" section for details.
 
 This software is protected by copyright. Use, reproduction, modification, and distribution are prohibited without the express permission of the copyright holder.
 
-**Note**: This mod currently depends on Patchouli (CC-BY-NC-SA 3.0 license), which restricts commercial use. We are migrating to Lavender (MIT license) to remove this restriction.
+**Note**: This mod currently depends on Patchouli (CC-BY-NC-SA 3.0 license), which restricts commercial use.
 
 ## Credits
 

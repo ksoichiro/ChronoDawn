@@ -6,6 +6,5 @@
   "model": "patchouli:book_purple",
   "use_resource_pack": true,
   "show_progress": false,
-  "index_icon": "chronodawn:time_crystal",
-  "book_texture": "patchouli:textures/gui/book_purple.png"
+  "index_icon": "chronodawn:time_crystal"
 }

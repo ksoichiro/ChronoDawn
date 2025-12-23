@@ -13,104 +13,139 @@
 
 ---
 
-## License Compliance & Guidebook Migration (Priority)
+## License Compliance & Guidebook Migration (✅ REVERTED TO PATCHOULI)
 
-**Purpose**: Resolve licensing concerns by migrating from Patchouli (CC-BY-NC-SA 3.0) to Lavender (MIT), enabling full control over project licensing.
+**Purpose**: Attempted migration from Patchouli (CC-BY-NC-SA 3.0) to Lavender (MIT) for licensing freedom.
 
 **Background**:
 - Patchouli is licensed under CC-BY-NC-SA 3.0 (NonCommercial, ShareAlike)
-- This restricts commercial use and creates legal uncertainty for future monetization
-- Lavender is a modern alternative to Patchouli with MIT license
-- All other dependencies (Architectury, NeoForge, Custom Portal API) permit proprietary licensing
+- Initial concern about commercial use restrictions
+- Lavender appeared as MIT-licensed alternative
+
+**Critical Discovery (2025-12-23)**:
+- **Lavender is Fabric-only** - No NeoForge support as of v0.1.15+1.21
+- NeoForge users would have no guidebook (unacceptable experience gap)
+- Multi-loader support is core project requirement
+
+**Final Decision**:
+- **Reverted to Patchouli 1.21.1-92** (supports both Fabric and NeoForge)
+- **License Clarification**: Patchouli API dependency usage (not Jar-in-Jar) is acceptable per official docs
+- **Future Option**: Custom UI implementation documented in `custom-guidebook-ui-plan.md` for post-1.0
+- Project remains under **MIT License**
 
 **Tasks**:
 
-- [ ] T500 [P] Research Lavender implementation and architecture
+- [x] T500 [P] Research Lavender implementation and architecture
   - Read Lavender documentation: https://docs.wispforest.io
   - Compare data format between Patchouli and Lavender
   - Understand Lavender's book structure (categories, entries, pages)
   - Verify 1.21.1 compatibility for both Fabric and NeoForge
   - Document migration strategy in research.md
 
-- [ ] T501 [P] Remove Patchouli dependencies
+- [x] T501 [P] Remove Patchouli dependencies
   - Remove from `fabric/build.gradle`: modImplementation "vazkii.patchouli:Patchouli:1.21.1-92-FABRIC"
   - Remove from `neoforge/build.gradle`: modCompileOnly/modRuntimeOnly Patchouli dependencies
   - Update CLAUDE.md to remove Patchouli from "Current Versions" section
   - Commit: "refactor: remove Patchouli dependency to resolve licensing concerns"
 
-- [ ] T502 [P] Add Lavender dependencies
+- [x] T502 [P] Add Lavender dependencies (Fabric only - NeoForge not supported)
   - Add Lavender Fabric dependency to `fabric/build.gradle`
-  - Add Lavender NeoForge dependency to `neoforge/build.gradle`
   - Add Lavender version to `gradle.properties`
   - Update CLAUDE.md "Current Versions" section with Lavender version
-  - Test build for both loaders
+  - Test build for Fabric
   - Commit: "feat: add Lavender dependency for guidebook system"
 
-- [ ] T503 [P] Create Lavender guidebook structure
-  - Create data pack structure for Lavender books: `common/src/main/resources/data/chronodawn/lavender/`
-  - Define book metadata (title, icon, landing text)
-  - Plan category structure (Getting Started, Dimension, Bosses, Items, etc.)
+- [x] T503 [P] Create Lavender guidebook structure
+  - Create data pack structure for Lavender books: `common/src/main/resources/assets/chronodawn/lavender/`
+  - Define book metadata (title, icon, landing text, dynamic_book_name)
+  - Plan category structure (Basics, Structures, Progression, Bosses)
   - Create English and Japanese language files
   - Document structure in research.md
 
-- [ ] T504 [P] Implement basic guidebook content (English)
-  - Getting Started category: Portal creation, dimension entry
-  - Dimension category: Biomes, mechanics, respawn behavior
-  - Bosses category: Time Guardian, Chronos Warden, other bosses
-  - Items category: Time Hourglass, Portal Stabilizer, boss drops
+- [x] T504 [P] Implement basic guidebook content (English)
+  - Basics category: Welcome, Time Distortion, Survival
+  - Structures category: Clock Tower, Catacombs, Master Clock
+  - Progression category: Portal Stabilizer, After Victory
+  - Bosses category: Time Guardian, Time Tyrant, Clockwork Sentinel
   - Reference existing content from README.md and spec.md
 
-- [ ] T505 [P] Implement Japanese guidebook content
+- [x] T505 [P] Implement Japanese guidebook content
   - Translate all English content to Japanese
-  - Ensure proper i18n file structure for Lavender
+  - Ensure proper i18n file structure for Lavender (ja_jp/ subdirectory)
   - Test language switching in-game
 
-- [ ] T506 [P] Create guidebook item and recipe
-  - Create custom guidebook item (or use Lavender's default)
-  - Add crafting recipe (e.g., book + Time Fragment)
-  - Add item texture and model
-  - Register item in both Fabric and NeoForge
+- [x] T506 [P] Create guidebook item and recipe
+  - Use Lavender's dynamic book system (LavenderBookItem.createDynamic)
+  - Implement automatic distribution when entering Chrono Dawn dimension
+  - Create LavenderBookEventHandler in fabric module
+  - Test duplicate prevention
 
-- [ ] T507 [P] Test guidebook functionality
+- [x] T507 [P] Test guidebook functionality
   - Test book opening and navigation
   - Test language switching (English ↔ Japanese)
-  - Test on both Fabric and NeoForge
-  - Test offhand viewing feature
-  - Verify all links and cross-references work
+  - Test on Fabric (NeoForge: guidebook not available)
+  - Fixed: icon resolution, dynamic_book_name, page breaks
+  - Documented known limitations (Unicode clipping)
 
-- [ ] T508 [P] Update project documentation
+- [x] T508 [P] Update project documentation
   - Update README.md "Requirements" section (remove Patchouli, add Lavender)
   - Update README.md "Installing Pre-built JAR" section
   - Update docs/player_guide.md with new guidebook instructions
   - Update docs/curseforge_description.md
   - Update docs/modrinth_description.md
-  - Update CLAUDE.md "Current Versions"
+  - Updated THIRD_PARTY_LICENSES.md (Patchouli → Lavender)
 
-- [ ] T509 [P] Update LICENSE and licensing documentation
-  - Choose final license (MIT or Proprietary)
-  - Update LICENSE file accordingly
-  - Update README.md "License" section
-  - Add license headers to source files if needed
-  - Document licensing decision in research.md
+- [x] T509 [P] Update LICENSE and licensing documentation
+  - Final choice: **MIT License** (no change needed)
+  - LICENSE file already MIT (no update required)
+  - Update README.md "License" section with commercial use note
+  - No license headers needed (permissive license)
+  - Document licensing decision in tasks.md
 
-- [ ] T510 [P] Final verification and cleanup
-  - Verify no Patchouli references remain in code
-  - Build both Fabric and NeoForge JARs
-  - Test complete gameplay loop with new guidebook
-  - Update changelog/release notes
-  - Commit: "docs: update documentation for Lavender guidebook"
+- [x] T510 [P] Final verification and cleanup (Lavender migration)
+  - ✅ Verified Lavender guidebook functional on Fabric
+  - ✅ Built Fabric JAR successfully
+  - ✅ Tested guidebook navigation and language switching
+  - ⚠️ Discovered critical NeoForge incompatibility → Triggered reversion
+
+**Reversion Tasks** (2025-12-23):
+
+- [x] T511 [P] Revert to Patchouli dependencies
+  - ✅ Removed Lavender dependencies from fabric/build.gradle
+  - ✅ Removed lavender_version from gradle.properties
+  - ✅ Added Patchouli dependencies to both fabric/ and neoforge/
+  - ✅ Restored all 30 Patchouli book files from git commit ef261ec
+  - ✅ Restored advancement + loot table distribution system
+  - ✅ Deleted Lavender-specific code (LavenderBookEventHandler.java)
+  - ✅ Deleted Lavender directory structure (common/src/main/resources/assets/chronodawn/lavender/)
+  - ✅ Updated fabric.mod.json and neoforge.mods.toml dependencies
+  - ✅ Verified builds: Fabric (92 GameTests passed), NeoForge (successful)
+
+- [x] T512 [P] Update documentation for Patchouli reversion
+  - ✅ Updated README.md (Lavender → Patchouli, added NeoForge requirements)
+  - ✅ Updated THIRD_PARTY_LICENSES.md (Lavender MIT → Patchouli CC-BY-NC-SA 3.0)
+  - ✅ Updated docs/player_guide.md (Lavender → Patchouli FAQ)
+  - ✅ Updated docs/curseforge_description.md (added Patchouli dependency)
+  - ✅ Updated docs/modrinth_description.md (Lavender → Patchouli for both loaders)
+  - ✅ Updated CLAUDE.md (Lavender → Patchouli in Current Versions)
+  - ✅ Updated language files (removed Lavender keys, restored Patchouli keys)
+  - ✅ Updated code comments (PlayerEventHandler.java, ModItems.java)
+  - ✅ Created custom-guidebook-ui-plan.md documenting future custom UI option
+  - ✅ Updated research.md with reversion rationale
+  - ✅ Updated tasks.md with T511-T512 and final status
 
 **Branch Strategy**: Use git worktree for isolated development
-- Branch name: `migrate-to-lavender`
+- Branch name: `migrate-to-lavender` (kept for historical reference)
 - Worktree path: `.worktrees/migrate-to-lavender/`
 
-**Success Criteria**:
-- Patchouli completely removed from dependencies
-- Lavender guidebook functional with English and Japanese content
-- All documentation updated to reflect changes
-- LICENSE file updated with chosen license
-- No build errors on Fabric or NeoForge
-- Guidebook content matches or exceeds Patchouli version
+**Final Status (2025-12-23)**:
+- ✅ Patchouli 1.21.1-92 restored for both Fabric and NeoForge
+- ✅ All Lavender code and references removed
+- ✅ Bilingual guidebook (English/Japanese) functional
+- ✅ Multi-loader support maintained (Fabric and NeoForge)
+- ✅ No build errors on either loader
+- ✅ Documentation fully updated
+- 📋 Future option: Custom UI implementation plan documented
 
 **Estimated Effort**: 6-8 hours total
 - Research & setup: 1-2 hours
