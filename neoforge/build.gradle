@@ -62,10 +62,6 @@ dependencies {
     // Custom Portal API Reforged for NeoForge
     modImplementation "net.kyrptonaught.customportalapi:cpapireforged-neo-1.21.1:1.2.2"
 
-    // Patchouli for guide book
-    modCompileOnly "vazkii.patchouli:Patchouli:1.21.1-92-NEOFORGE:api"
-    modRuntimeOnly "vazkii.patchouli:Patchouli:1.21.1-92-NEOFORGE"
-
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive false }
 }

@@ -31,8 +31,5 @@
     "architectury": ">=13.0.8",
     "minecraft": "~1.21.1",
     "java": ">=21"
-  },
-  "recommends": {
-    "patchouli": ">=1.21.1-92"
   }
 }
