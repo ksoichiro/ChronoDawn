@@ -1,0 +1,50 @@
+{
+  "basics": {
+    "title": {
+      "en_us": "Basic Knowledge",
+      "ja_jp": "基礎知識"
+    },
+    "description": {
+      "en_us": "Essential information about the Chrono Dawn dimension and its mechanics.",
+      "ja_jp": "クロノドーン次元とそのメカニクスに関する重要な情報。"
+    },
+    "icon": "minecraft:clock",
+    "sortnum": 1
+  },
+  "progression": {
+    "title": {
+      "en_us": "Progression",
+      "ja_jp": "進行"
+    },
+    "description": {
+      "en_us": "Guidance on advancing through the dimension and achieving your goals.",
+      "ja_jp": "次元を進み、目標を達成するためのガイダンス。"
+    },
+    "icon": "chronodawn:portal_stabilizer",
+    "sortnum": 2
+  },
+  "structures": {
+    "title": {
+      "en_us": "Structures",
+      "ja_jp": "構造物"
+    },
+    "description": {
+      "en_us": "Discover the mysterious structures scattered throughout the dimension.",
+      "ja_jp": "次元全体に点在する神秘的な構造物を発見しましょう。"
+    },
+    "icon": "chronodawn:clockwork_block",
+    "sortnum": 3
+  },
+  "bosses": {
+    "title": {
+      "en_us": "Boss Encounters",
+      "ja_jp": "ボス戦"
+    },
+    "description": {
+      "en_us": "Prepare yourself for epic battles against powerful guardians of time.",
+      "ja_jp": "時間の強力な守護者との壮大な戦いに備えましょう。"
+    },
+    "icon": "chronodawn:time_crystal",
+    "sortnum": 4
+  }
+}

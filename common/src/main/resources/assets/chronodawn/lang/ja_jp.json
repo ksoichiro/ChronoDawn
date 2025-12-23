@@ -337,5 +337,12 @@
   "patchouli.gui.lexicon.categories": "カテゴリー",
   "patchouli.gui.lexicon.index": "エントリー索引",
   "patchouli.gui.lexicon.chapters": "章",
-  "patchouli.gui.lexicon.index.info": "この本で利用可能なすべての章の索引です。$(br2)索引または他のカテゴリーで検索するには、クエリを入力するだけです。検索バーが表示されてサポートします。"
+  "patchouli.gui.lexicon.index.info": "この本で利用可能なすべての章の索引です。$(br2)索引または他のカテゴリーで検索するには、クエリを入力するだけです。検索バーが表示されてサポートします。",
+
+  "item.chronodawn.chronicle_book": "クロノドーンの記録",
+
+  "gui.chronodawn.chronicle.title": "クロノドーンの記録",
+  "gui.chronodawn.chronicle.previous": "前へ",
+  "gui.chronodawn.chronicle.next": "次へ",
+  "gui.chronodawn.chronicle.page": "ページ %s / %s"
 }

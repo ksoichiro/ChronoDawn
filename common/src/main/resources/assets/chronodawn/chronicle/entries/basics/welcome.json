@@ -1,0 +1,20 @@
+{
+  "category": "basics",
+  "title": {
+    "en_us": "Welcome to Chrono Dawn",
+    "ja_jp": "クロノドーンへようこそ"
+  },
+  "icon": "chronodawn:time_crystal",
+  "sortnum": 1,
+  "pages": [
+    {
+      "text": {
+        "en_us": "Welcome, traveler.\n\nYou have entered a dimension where time itself has frozen. This chronicle will guide you through your journey.\n\nThe Chrono Dawn is a realm of mystery and danger, but also great rewards for those brave enough to explore its depths.",
+        "ja_jp": "ようこそ、旅人よ。\n\nあなたは時間そのものが凍結した次元に入りました。この記録があなたの旅を導きます。\n\nクロノドーンは謎と危険に満ちた領域ですが、その深淵を探索する勇気ある者には大きな報酬が待っています。"
+      }
+    },
+    {
+      "recipe": "chronodawn:time_hourglass"
+    }
+  ]
+}
