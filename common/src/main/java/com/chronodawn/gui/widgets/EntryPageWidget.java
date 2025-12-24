@@ -77,12 +77,19 @@ public class EntryPageWidget extends AbstractWidget {
         if (previousButton != null && nextButton != null) {
             if (currentEntry == null || currentEntry.getPages().isEmpty()) {
                 previousButton.visible = false;
+                previousButton.active = false;
                 nextButton.visible = false;
+                nextButton.active = false;
                 pageNumberText = Component.empty();
             } else {
                 int totalPages = currentEntry.getPages().size();
-                previousButton.visible = currentPageIndex > 0;
-                nextButton.visible = currentPageIndex < totalPages - 1;
+                boolean hasPrevious = currentPageIndex > 0;
+                boolean hasNext = currentPageIndex < totalPages - 1;
+
+                previousButton.visible = hasPrevious;
+                previousButton.active = hasPrevious;
+                nextButton.visible = hasNext;
+                nextButton.active = hasNext;
                 pageNumberText = Component.translatable("gui.chronodawn.chronicle.page",
                     currentPageIndex + 1, totalPages);
             }
