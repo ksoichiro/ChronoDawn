@@ -344,5 +344,6 @@
   "gui.chronodawn.chronicle.title": "クロノドーンの記録",
   "gui.chronodawn.chronicle.previous": "前へ",
   "gui.chronodawn.chronicle.next": "次へ",
-  "gui.chronodawn.chronicle.page": "ページ %s / %s"
+  "gui.chronodawn.chronicle.page": "ページ %s / %s",
+  "gui.chronodawn.chronicle.select_category": "カテゴリーを選択して開始"
 }

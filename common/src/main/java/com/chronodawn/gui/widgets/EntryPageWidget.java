@@ -178,11 +178,11 @@ public class EntryPageWidget extends AbstractWidget {
     public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         if (virtualPages.isEmpty()) {
             // No entry selected - show placeholder
-            String text = "Select a category to begin";
+            Component placeholderText = Component.translatable("gui.chronodawn.chronicle.select_category");
             Font font = Minecraft.getInstance().font;
-            int textX = getX() + (width - font.width(text)) / 2;
+            int textX = getX() + (width - font.width(placeholderText)) / 2;
             int textY = getY() + height / 2;
-            graphics.drawString(font, text, textX, textY, 0x808080, false);
+            graphics.drawString(font, placeholderText, textX, textY, 0x808080, false);
             return;
         }
 

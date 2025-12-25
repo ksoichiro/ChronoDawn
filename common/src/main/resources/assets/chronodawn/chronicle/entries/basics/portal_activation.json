@@ -15,20 +15,20 @@
     },
     {
       "text": {
-        "en_us": "⚠️ CRITICAL WARNING ⚠️\n\nThe portal becomes ONE-WAY after you enter Chrono Dawn!\n\nWhat this means:\n• The portal will deactivate behind you\n• You CANNOT return through the same portal\n• You are effectively trapped in the dimension\n• The only way out is finding the Forgotten Library and crafting a Portal Stabilizer\n\nDO NOT enter unless you are fully prepared for a one-way journey!",
-        "ja_jp": "⚠️ 重要な警告 ⚠️\n\nクロノドーンに入った後、ポータルは一方通行になります！\n\nこれは何を意味するか:\n• ポータルがあなたの後ろで非アクティブ化される\n• 同じポータルを通って戻ることはできない\n• 事実上、次元に閉じ込められる\n• 脱出する唯一の方法は、忘れられた図書館を見つけてポータルスタビライザーを作成すること\n\n完全に準備ができていない限り、入らないでください！"
+        "en_us": "*** CRITICAL WARNING ***\n\nThe portal becomes ONE-WAY after you enter Chrono Dawn!\n\nWhat this means:\n• The portal will deactivate behind you\n• You CANNOT return through the same portal\n• You are effectively trapped in the dimension\n• The only way out is finding the Forgotten Library and crafting a Portal Stabilizer\n\nDO NOT enter unless you are fully prepared for a one-way journey!",
+        "ja_jp": "*** 重要な警告 ***\n\nクロノドーンに入った後、ポータルは一方通行になります！\n\nこれは何を意味するか:\n• ポータルがあなたの後ろで非アクティブ化される\n• 同じポータルを通って戻ることはできない\n• 事実上、次元に閉じ込められる\n• 脱出する唯一の方法は、忘れられた図書館を見つけてポータルスタビライザーを作成すること\n\n完全に準備ができていない限り、入らないでください！"
       }
     },
     {
       "text": {
-        "en_us": "Essential Preparation Checklist:\n\nCombat Gear:\n☐ Full set of armor (Iron or better)\n☐ Weapons (sword, bow with arrows)\n☐ Shield for defense\n\nSurvival Items:\n☐ Plenty of food (64+ items)\n☐ Healing potions or golden apples\n☐ Bed to set respawn point in Overworld BEFORE entering\n\nTools & Resources:\n☐ Pickaxe, axe, shovel (Iron or better)\n☐ Torches or other light sources (64+)",
-        "ja_jp": "必須準備チェックリスト:\n\n戦闘装備:\n☐ フルセットの防具（鉄以上）\n☐ 武器（剣、矢付きの弓）\n☐ 防御用の盾\n\n生存アイテム:\n☐ 大量の食料（64個以上）\n☐ 治癒ポーションまたは金のリンゴ\n☐ 入る前にオーバーワールドでリスポーンポイントを設定するためのベッド\n\nツールと資源:\n☐ ツルハシ、斧、シャベル（鉄以上）\n☐ 松明またはその他の光源（64個以上）"
+        "en_us": "Essential Preparation Checklist:\n\nCombat Gear:\n[ ] Full set of armor (Iron or better)\n[ ] Weapons (sword, bow with arrows)\n[ ] Shield for defense\n\nSurvival Items:\n[ ] Plenty of food (64+ items)\n[ ] Healing potions or golden apples\n[ ] Bed to set respawn point in Overworld BEFORE entering\n\nTools & Resources:\n[ ] Pickaxe, axe, shovel (Iron or better)\n[ ] Torches or other light sources (64+)",
+        "ja_jp": "必須準備チェックリスト:\n\n戦闘装備:\n[ ] フルセットの防具（鉄以上）\n[ ] 武器（剣、矢付きの弓）\n[ ] 防御用の盾\n\n生存アイテム:\n[ ] 大量の食料（64個以上）\n[ ] 治癒ポーションまたは金のリンゴ\n[ ] 入る前にオーバーワールドでリスポーンポイントを設定するためのベッド\n\nツールと資源:\n[ ] ツルハシ、斧、シャベル（鉄以上）\n[ ] 松明またはその他の光源（64個以上）"
       }
     },
     {
       "text": {
-        "en_us": "Additional Recommendations:\n\n☐ Building blocks (64+ cobblestone or similar)\n☐ Crafting table and furnace\n☐ Extra Time Hourglasses (to build escape portals in Chrono Dawn)\n☐ Water bucket (for emergencies)\n☐ Ender chest (to safely store valuable finds)\n\nFirst Goal in Chrono Dawn:\nFind the Forgotten Library structure to obtain the Portal Stabilizer blueprint. This is your ticket home!\n\nGood luck, traveler!",
-        "ja_jp": "追加の推奨事項:\n\n☐ 建築ブロック（丸石など64個以上）\n☐ 作業台とかまど\n☐ 追加のタイムアワーグラス（クロノドーンで脱出ポータルを建設するため）\n☐ 水入りバケツ（緊急用）\n☐ エンダーチェスト（貴重な発見物を安全に保管するため）\n\nクロノドーンでの最初の目標:\n忘れられた図書館の構造物を見つけて、ポータルスタビライザーの設計図を入手してください。これがあなたの帰宅チケットです！\n\n幸運を祈ります、旅人よ！"
+        "en_us": "Additional Recommendations:\n\n[ ] Building blocks (64+ cobblestone or similar)\n[ ] Crafting table and furnace\n[ ] Extra Time Hourglasses (to build escape portals in Chrono Dawn)\n[ ] Water bucket (for emergencies)\n[ ] Ender chest (to safely store valuable finds)\n\nFirst Goal in Chrono Dawn:\nFind the Forgotten Library structure to obtain the Portal Stabilizer blueprint. This is your ticket home!\n\nGood luck, traveler!",
+        "ja_jp": "追加の推奨事項:\n\n[ ] 建築ブロック（丸石など64個以上）\n[ ] 作業台とかまど\n[ ] 追加のタイムアワーグラス（クロノドーンで脱出ポータルを建設するため）\n[ ] 水入りバケツ（緊急用）\n[ ] エンダーチェスト（貴重な発見物を安全に保管するため）\n\nクロノドーンでの最初の目標:\n忘れられた図書館の構造物を見つけて、ポータルスタビライザーの設計図を入手してください。これがあなたの帰宅チケットです！\n\n幸運を祈ります、旅人よ！"
       }
     }
   ]

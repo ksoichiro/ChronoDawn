@@ -31,11 +31,18 @@ public class CategoryListWidget extends AbstractWidget {
     // Track which categories are expanded
     private final Map<Category, Boolean> expandedCategories = new HashMap<>();
 
+    // Scroll offset for vertical scrolling
+    private int scrollOffset = 0;
+
+    // Tooltip text for truncated items
+    private String hoveredTooltipText = null;
+
     private static final int CATEGORY_HEIGHT = 20;
     private static final int ENTRY_HEIGHT = 18;
     private static final int ICON_SIZE = 16;
     private static final int PADDING = 2;
     private static final int ENTRY_INDENT = 10;
+    private static final int SCROLL_AMOUNT = 18; // Scroll by one entry height
 
     public CategoryListWidget(int x, int y, int width, int height,
                                List<Category> categories,
@@ -60,73 +67,100 @@ public class CategoryListWidget extends AbstractWidget {
 
     @Override
     public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        int currentY = getY();
+        // Enable scissor for clipping content outside widget bounds
+        graphics.enableScissor(getX(), getY(), getX() + width, getY() + height);
+
+        // Reset tooltip text
+        hoveredTooltipText = null;
+
+        int currentY = getY() - scrollOffset;
         String languageCode = ChronicleScreen.getLanguageCode();
 
         for (Category category : categories) {
             boolean isExpanded = expandedCategories.getOrDefault(category, false);
 
-            // Render category
-            boolean isCategoryHovered = mouseX >= getX() && mouseX < getX() + width &&
-                                       mouseY >= currentY && mouseY < currentY + CATEGORY_HEIGHT;
-            boolean isCategorySelected = category == selectedCategory;
+            // Check if category is visible
+            if (currentY + CATEGORY_HEIGHT > getY() && currentY < getY() + height) {
+                // Render category
+                boolean isCategoryHovered = mouseX >= getX() && mouseX < getX() + width &&
+                                           mouseY >= currentY && mouseY < currentY + CATEGORY_HEIGHT;
+                boolean isCategorySelected = category == selectedCategory;
 
-            // Render category background
-            int backgroundColor = isCategorySelected ? 0x40D0C0A0 : (isCategoryHovered ? 0x20D0C0A0 : 0x00000000);
-            if (backgroundColor != 0) {
-                graphics.fill(getX(), currentY, getX() + width, currentY + CATEGORY_HEIGHT, backgroundColor);
+                // Render category background
+                int backgroundColor = isCategorySelected ? 0x40D0C0A0 : (isCategoryHovered ? 0x20D0C0A0 : 0x00000000);
+                if (backgroundColor != 0) {
+                    graphics.fill(getX(), currentY, getX() + width, currentY + CATEGORY_HEIGHT, backgroundColor);
+                }
+
+                // Render expand/collapse indicator
+                String expandIndicator = isExpanded ? "▼" : "▶";
+                graphics.drawString(Minecraft.getInstance().font, expandIndicator,
+                    getX() + 2, currentY + (CATEGORY_HEIGHT - 8) / 2, 0x5F5F5F, false);
+
+                // Render category icon
+                ItemStack icon = getIconStack(category);
+                graphics.renderItem(icon, getX() + PADDING + 10, currentY + PADDING);
+
+                // Render category text (truncated if too long)
+                String title = category.getTitle().get(languageCode);
+                int textX = getX() + ICON_SIZE + PADDING * 2 + 10;
+                int textY = currentY + (CATEGORY_HEIGHT - 8) / 2;
+                int textColor = isCategorySelected ? 0x3F3F3F : 0x5F5F5F;
+                int maxCategoryWidth = width - ICON_SIZE - PADDING * 2 - 12;
+                String displayTitle = Minecraft.getInstance().font.plainSubstrByWidth(title, maxCategoryWidth);
+                graphics.drawString(Minecraft.getInstance().font, displayTitle, textX, textY, textColor, false);
+
+                // Set tooltip if text is truncated and hovered
+                if (isCategoryHovered && !displayTitle.equals(title)) {
+                    hoveredTooltipText = title;
+                }
             }
-
-            // Render expand/collapse indicator
-            String expandIndicator = isExpanded ? "▼" : "▶";
-            graphics.drawString(Minecraft.getInstance().font, expandIndicator,
-                getX() + 2, currentY + (CATEGORY_HEIGHT - 8) / 2, 0x5F5F5F, false);
-
-            // Render category icon
-            ItemStack icon = getIconStack(category);
-            graphics.renderItem(icon, getX() + PADDING + 10, currentY + PADDING);
-
-            // Render category text
-            String title = category.getTitle().get(languageCode);
-            int textX = getX() + ICON_SIZE + PADDING * 2 + 10;
-            int textY = currentY + (CATEGORY_HEIGHT - 8) / 2;
-            int textColor = isCategorySelected ? 0x3F3F3F : 0x5F5F5F;
-            graphics.drawString(Minecraft.getInstance().font, title, textX, textY, textColor, false);
 
             currentY += CATEGORY_HEIGHT;
 
             // Render entries if expanded
             if (isExpanded) {
                 for (Entry entry : category.getEntries()) {
-                    boolean isEntryHovered = mouseX >= getX() && mouseX < getX() + width &&
-                                            mouseY >= currentY && mouseY < currentY + ENTRY_HEIGHT;
-                    boolean isEntrySelected = entry == selectedEntry;
+                    // Check if entry is visible
+                    if (currentY + ENTRY_HEIGHT > getY() && currentY < getY() + height) {
+                        boolean isEntryHovered = mouseX >= getX() && mouseX < getX() + width &&
+                                                mouseY >= currentY && mouseY < currentY + ENTRY_HEIGHT;
+                        boolean isEntrySelected = entry == selectedEntry;
 
-                    // Render entry background
-                    int entryBgColor = isEntrySelected ? 0x30A0907F : (isEntryHovered ? 0x15A0907F : 0x00000000);
-                    if (entryBgColor != 0) {
-                        graphics.fill(getX(), currentY, getX() + width, currentY + ENTRY_HEIGHT, entryBgColor);
+                        // Render entry background
+                        int entryBgColor = isEntrySelected ? 0x30A0907F : (isEntryHovered ? 0x15A0907F : 0x00000000);
+                        if (entryBgColor != 0) {
+                            graphics.fill(getX(), currentY, getX() + width, currentY + ENTRY_HEIGHT, entryBgColor);
+                        }
+
+                        // Render entry icon (smaller)
+                        ItemStack entryIcon = getIconStack(entry);
+                        graphics.renderItem(entryIcon, getX() + ENTRY_INDENT + PADDING, currentY + 1);
+
+                        // Render entry text
+                        String entryTitle = entry.getTitle().get(languageCode);
+                        int entryTextX = getX() + ENTRY_INDENT + ICON_SIZE + PADDING;
+                        int entryTextY = currentY + (ENTRY_HEIGHT - 8) / 2;
+                        int entryTextColor = isEntrySelected ? 0x2F2F2F : 0x6F6F6F;
+
+                        // Truncate text if too long
+                        int maxWidth = width - ENTRY_INDENT - ICON_SIZE - PADDING * 2;
+                        String displayText = Minecraft.getInstance().font.plainSubstrByWidth(entryTitle, maxWidth);
+                        graphics.drawString(Minecraft.getInstance().font, displayText, entryTextX, entryTextY, entryTextColor, false);
+
+                        // Set tooltip if text is truncated and hovered
+                        if (isEntryHovered && !displayText.equals(entryTitle)) {
+                            hoveredTooltipText = entryTitle;
+                        }
                     }
-
-                    // Render entry icon (smaller)
-                    ItemStack entryIcon = getIconStack(entry);
-                    graphics.renderItem(entryIcon, getX() + ENTRY_INDENT + PADDING, currentY + 1);
-
-                    // Render entry text
-                    String entryTitle = entry.getTitle().get(languageCode);
-                    int entryTextX = getX() + ENTRY_INDENT + ICON_SIZE + PADDING;
-                    int entryTextY = currentY + (ENTRY_HEIGHT - 8) / 2;
-                    int entryTextColor = isEntrySelected ? 0x2F2F2F : 0x6F6F6F;
-
-                    // Truncate text if too long
-                    int maxWidth = width - ENTRY_INDENT - ICON_SIZE - PADDING * 2;
-                    String displayText = Minecraft.getInstance().font.plainSubstrByWidth(entryTitle, maxWidth);
-                    graphics.drawString(Minecraft.getInstance().font, displayText, entryTextX, entryTextY, entryTextColor, false);
 
                     currentY += ENTRY_HEIGHT;
                 }
             }
         }
+
+        // Disable scissor after rendering
+        graphics.disableScissor();
     }
 
     @Override
@@ -135,13 +169,14 @@ public class CategoryListWidget extends AbstractWidget {
             return false; // Only handle left clicks
         }
 
-        int currentY = getY();
+        int currentY = getY() - scrollOffset;
         for (Category category : categories) {
             boolean isExpanded = expandedCategories.getOrDefault(category, false);
 
             // Check if category was clicked
             if (mouseX >= getX() && mouseX < getX() + width &&
-                mouseY >= currentY && mouseY < currentY + CATEGORY_HEIGHT) {
+                mouseY >= currentY && mouseY < currentY + CATEGORY_HEIGHT &&
+                mouseY >= getY() && mouseY < getY() + height) {
                 // Toggle expansion
                 expandedCategories.put(category, !isExpanded);
                 selectedCategory = category;
@@ -153,7 +188,8 @@ public class CategoryListWidget extends AbstractWidget {
             if (isExpanded) {
                 for (Entry entry : category.getEntries()) {
                     if (mouseX >= getX() && mouseX < getX() + width &&
-                        mouseY >= currentY && mouseY < currentY + ENTRY_HEIGHT) {
+                        mouseY >= currentY && mouseY < currentY + ENTRY_HEIGHT &&
+                        mouseY >= getY() && mouseY < getY() + height) {
                         // Entry clicked
                         selectedCategory = category;
                         selectedEntry = entry;
@@ -167,6 +203,33 @@ public class CategoryListWidget extends AbstractWidget {
             }
         }
 
+        return false;
+    }
+
+    @Override
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+        // Only handle scroll if mouse is over this widget
+        if (mouseX >= getX() && mouseX < getX() + width &&
+            mouseY >= getY() && mouseY < getY() + height) {
+
+            // Calculate total content height
+            int totalHeight = 0;
+            for (Category category : categories) {
+                totalHeight += CATEGORY_HEIGHT;
+                if (expandedCategories.getOrDefault(category, false)) {
+                    totalHeight += category.getEntries().size() * ENTRY_HEIGHT;
+                }
+            }
+
+            // Update scroll offset
+            scrollOffset -= (int) (scrollY * SCROLL_AMOUNT);
+
+            // Clamp scroll offset to valid range
+            int maxScroll = Math.max(0, totalHeight - height);
+            scrollOffset = Math.max(0, Math.min(scrollOffset, maxScroll));
+
+            return true;
+        }
         return false;
     }
 
@@ -211,6 +274,15 @@ public class CategoryListWidget extends AbstractWidget {
             output.add(net.minecraft.client.gui.narration.NarratedElementType.TITLE,
                 Component.literal(selectedCategory.getTitle().get(languageCode)));
         }
+    }
+
+    /**
+     * Get the tooltip text for the currently hovered item (if truncated).
+     *
+     * @return Tooltip text, or null if no truncated item is hovered
+     */
+    public String getHoveredTooltip() {
+        return hoveredTooltipText;
     }
 
     /**

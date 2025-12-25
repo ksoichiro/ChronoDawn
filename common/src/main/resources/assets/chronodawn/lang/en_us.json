@@ -344,7 +344,8 @@
   "gui.chronodawn.chronicle.title": "Chronicle of Chrono Dawn",
   "gui.chronodawn.chronicle.previous": "Previous",
   "gui.chronodawn.chronicle.next": "Next",
-  "gui.chronodawn.chronicle.page": "Page %s of %s"
+  "gui.chronodawn.chronicle.page": "Page %s of %s",
+  "gui.chronodawn.chronicle.select_category": "Select a category to begin"
 }
 
 

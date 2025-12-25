@@ -43,7 +43,8 @@ public class ChronicleScreen extends Screen {
         this.topPos = (this.height - BOOK_HEIGHT) / 2;
 
         // Initialize category list widget with entry selection callback
-        int categoryListWidth = 100;
+        // Set category list to half of book width (minus margins)
+        int categoryListWidth = (BOOK_WIDTH - 30) / 2; // 30 = left margin (10) + center margin (20)
         int categoryListHeight = BOOK_HEIGHT - 40;
         this.categoryList = new CategoryListWidget(
             leftPos + 10,
@@ -124,6 +125,14 @@ public class ChronicleScreen extends Screen {
 
         // Layer 4: Render widgets (category list, entry pages, buttons) on top
         super.render(graphics, mouseX, mouseY, partialTick);
+
+        // Layer 5: Render tooltips (must be last to appear on top)
+        if (categoryList != null) {
+            String tooltip = categoryList.getHoveredTooltip();
+            if (tooltip != null) {
+                graphics.renderTooltip(this.font, Component.literal(tooltip), mouseX, mouseY);
+            }
+        }
     }
 
     @Override
