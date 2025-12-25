@@ -9,12 +9,21 @@
   "pages": [
     {
       "text": {
-        "en_us": "Welcome, traveler.\n\nYou have entered a dimension where time itself has frozen. This chronicle will guide you through your journey.\n\nThe Chrono Dawn is a realm of mystery and danger, but also great rewards for those brave enough to explore its depths.",
-        "ja_jp": "ようこそ、旅人よ。\n\nあなたは時間そのものが凍結した次元に入りました。この記録があなたの旅を導きます。\n\nクロノドーンは謎と危険に満ちた領域ですが、その深淵を探索する勇気ある者には大きな報酬が待っています。"
+        "en_us": "Welcome, traveler.\n\nYou have entered a dimension where time itself has frozen. This chronicle will guide you through your journey in the Chrono Dawn.",
+        "ja_jp": "ようこそ、旅人よ。\n\nあなたは時間そのものが凍結した次元に入りました。この記録があなたのクロノドーンでの旅を導きます。"
       }
     },
     {
-      "recipe": "chronodawn:time_hourglass"
+      "text": {
+        "en_us": "The Chrono Dawn is a realm of mystery and danger, but also great rewards for those brave enough to explore its depths.\n\nTime has stopped here, creating unique phenomena and powerful artifacts.",
+        "ja_jp": "クロノドーンは謎と危険に満ちた領域ですが、その深淵を探索する勇気ある者には大きな報酬が待っています。\n\nここでは時間が止まり、独特な現象と強力なアーティファクトを生み出しています。"
+      }
+    },
+    {
+      "text": {
+        "en_us": "What you'll find:\n\n• Six unique biomes\n• Ancient structures\n• Powerful bosses\n• Legendary items\n• Time-based mechanics\n\nRead on to learn how to survive and thrive!",
+        "ja_jp": "見つかるもの:\n\n• 6つのユニークなバイオーム\n• 古代の構造物\n• 強力なボス\n• 伝説のアイテム\n• 時間ベースのメカニクス\n\n生き延びて繁栄する方法を学びましょう！"
+      }
     }
   ]
 }

@@ -21,8 +21,8 @@ public class ChronicleScreen extends Screen {
     // Use vanilla book texture as placeholder (no custom texture needed)
     private static final ResourceLocation BOOK_TEXTURE =
         ResourceLocation.fromNamespaceAndPath("minecraft", "textures/gui/book.png");
-    private static final int BOOK_WIDTH = 276;
-    private static final int BOOK_HEIGHT = 180;
+    private static final int BOOK_WIDTH = 320;
+    private static final int BOOK_HEIGHT = 240;
 
     private final ChronicleData data;
     private int leftPos;
