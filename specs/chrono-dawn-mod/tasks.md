@@ -183,7 +183,7 @@
 
 **Tasks**:
 
-- [ ] T700 [P] Phase 1: Implement basic structure
+- [x] T700 [P] Phase 1: Implement basic structure (2025-12-26)
   - Create data models (Category, Entry, Page) in common/
   - Implement JSON loader (ChronicleData.java)
   - Create basic ChronicleScreen with layout
@@ -191,7 +191,7 @@
   - Test with 1 category and 1 entry on both loaders
   - Commit: "feat: add basic Chronicle guidebook structure"
 
-- [ ] T701 [P] Phase 2: Implement category navigation
+- [x] T701 [P] Phase 2: Implement category navigation (2025-12-26)
   - Implement CategoryListWidget for left sidebar
   - Handle category selection and state management
   - Load entries for selected category dynamically
@@ -199,7 +199,7 @@
   - Test navigation between multiple categories
   - Commit: "feat: add category navigation to Chronicle guidebook"
 
-- [ ] T702 [P] Phase 3: Implement entry display
+- [x] T702 [P] Phase 3: Implement entry display (2025-12-26)
   - Implement EntryPageWidget for content area
   - Add text rendering with proper word wrap
   - Implement multi-page support (prev/next buttons)
@@ -207,14 +207,14 @@
   - Test with multi-page entries containing recipes
   - Commit: "feat: add entry display and pagination to Chronicle guidebook"
 
-- [ ] T703 [P] Phase 4: Add bilingual support
+- [x] T703 [P] Phase 4: Add bilingual support (2025-12-26)
   - Detect client language (Minecraft.getInstance().options.languageCode)
   - Load appropriate language text from JSON
   - Implement fallback to English for missing translations
   - Test language switching (English ↔ Japanese)
   - Commit: "feat: add bilingual support to Chronicle guidebook"
 
-- [ ] T704 [P] Phase 5: Migrate content from Patchouli
+- [x] T704 [P] Phase 5: Migrate content from Patchouli (2025-12-26)
   - Convert all 30 Patchouli book files to JSON format
   - Categories: getting_started, progression, structures, bosses
   - Translate all content to Japanese
@@ -222,15 +222,15 @@
   - Test recipe displays for all items
   - Commit: "feat: migrate all guidebook content from Patchouli to Chronicle"
 
-- [ ] T705 [P] Phase 6: Polish and multi-loader testing
+- [x] T705 [P] Phase 6: Polish and multi-loader testing (2025-12-26)
   - Fix any rendering bugs or text overflow issues
   - Optimize performance (lazy-load content, cache layouts)
   - Test thoroughly on both Fabric and NeoForge
   - Conduct user testing for UX feedback
-  - Add keybind for opening Chronicle book (default: 'H')
+  - Add scrolling, tooltips, and automatic page splitting
   - Commit: "feat: finalize Chronicle guidebook UI implementation"
 
-- [ ] T706 [P] Remove Patchouli dependency
+- [x] T706 [P] Remove Patchouli dependency (2025-12-26)
   - Remove Patchouli from fabric/build.gradle
   - Remove Patchouli from neoforge/build.gradle
   - Update gradle.properties (remove patchouli_version)
@@ -238,6 +238,7 @@
   - Update fabric.mod.json and neoforge.mods.toml dependencies
   - Remove Patchouli distribution logic from PlayerEventHandler.java
   - Update THIRD_PARTY_LICENSES.md (remove Patchouli)
+  - Update README.md and docs/ (remove Patchouli references)
   - Commit: "refactor: remove Patchouli dependency after Chronicle UI migration"
 
 **Estimated Effort**: 10-15 hours total

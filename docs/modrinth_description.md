@@ -29,14 +29,12 @@ Chrono Dawn adds a brand new dimension to Minecraft centered around time manipul
 - Fabric API 0.116.7+
 - Architectury API 13.0.8+
 - Custom Portal API 0.0.1-beta66-1.21+
-- Patchouli 1.21.1-92+ (for in-game guide book)
 
 ### For NeoForge
 - Minecraft 1.21.1
 - NeoForge 21.1.209+
 - Architectury API 13.0.8+
 - Custom Portal API 0.0.1-beta66-1.21+
-- Patchouli 1.21.1-92+ (for in-game guide book)
 
 **Note**: Download the correct version for your mod loader (Fabric or NeoForge).
 
@@ -230,8 +228,6 @@ This mod is built with **Architectury** and supports **both Fabric and NeoForge*
 **Modpack Inclusion**: ✅ Allowed - You may include this mod's JAR file in modpacks
 
 **Redistribution**: ✅ Allowed - You may redistribute this mod with proper attribution
-
-**Note**: This mod currently depends on Patchouli (CC-BY-NC-SA 3.0 license), which restricts commercial use.
 
 ---
 

@@ -125,7 +125,6 @@ This mod is built with **Architectury** and supports **both Fabric and NeoForge*
 - **Dependencies**:
   - Architectury API 13.0.8+
   - Custom Portal API 0.0.1-beta66-1.21+
-  - Patchouli 1.21.1-92+ (for in-game guide book)
 
 ### Compatibility
 - Works with most dimension and world generation mods
@@ -175,8 +174,6 @@ Check out the **Gallery** tab above for screenshots showcasing:
 **Modpack Inclusion**: ✅ Allowed - You may include this mod's JAR file in modpacks
 
 **Redistribution**: ✅ Allowed - You may redistribute this mod with proper attribution
-
-**Note**: This mod currently depends on Patchouli (CC-BY-NC-SA 3.0 license), which restricts commercial use.
 
 ---
 
