@@ -23,10 +23,15 @@ import java.util.Optional;
 /**
  * Widget for displaying entry pages in the Chronicle guidebook.
  * Handles text rendering, pagination, and recipe display.
+ *
+ * Automatically splits long text into multiple pages based on available display area.
  */
 public class EntryPageWidget extends AbstractWidget {
     private Entry currentEntry;
     private int currentPageIndex = 0;
+
+    // Virtual pages created by splitting long text pages
+    private List<VirtualPage> virtualPages = new ArrayList<>();
 
     private Button previousButton;
     private Button nextButton;
@@ -35,18 +40,71 @@ public class EntryPageWidget extends AbstractWidget {
     private static final int TEXT_MARGIN = 5;
     private static final int LINE_HEIGHT = 10;
 
+    /**
+     * Represents a virtual page (portion of original page that fits on screen).
+     */
+    private static class VirtualPage {
+        final Page.PageType type;
+        final List<String> lines; // For text pages
+        final ResourceLocation recipe; // For recipe pages
+
+        VirtualPage(List<String> lines) {
+            this.type = Page.PageType.TEXT;
+            this.lines = lines;
+            this.recipe = null;
+        }
+
+        VirtualPage(ResourceLocation recipe) {
+            this.type = Page.PageType.RECIPE;
+            this.lines = null;
+            this.recipe = recipe;
+        }
+    }
+
     public EntryPageWidget(int x, int y, int width, int height) {
         super(x, y, width, height, Component.empty());
     }
 
     /**
      * Set the entry to display.
+     * Automatically splits long text pages into multiple virtual pages.
      *
      * @param entry Entry to display (null to clear)
      */
     public void setEntry(Entry entry) {
         this.currentEntry = entry;
         this.currentPageIndex = 0;
+        this.virtualPages.clear();
+
+        if (entry != null) {
+            // Calculate how many lines can fit on one page
+            int maxTextHeight = height - 40; // Reserve space for page number
+            int maxLinesPerPage = maxTextHeight / LINE_HEIGHT;
+
+            Font font = Minecraft.getInstance().font;
+            int maxLineWidth = width - (TEXT_MARGIN * 2);
+
+            // Process each page in the entry
+            for (Page page : entry.getPages()) {
+                if (page.getType() == Page.PageType.TEXT) {
+                    // Get text and wrap it
+                    String languageCode = ChronicleScreen.getLanguageCode();
+                    String text = page.getText().get(languageCode);
+                    List<String> allLines = wrapText(text, maxLineWidth, font);
+
+                    // Split wrapped lines into virtual pages
+                    for (int i = 0; i < allLines.size(); i += maxLinesPerPage) {
+                        int endIndex = Math.min(i + maxLinesPerPage, allLines.size());
+                        List<String> pageLines = allLines.subList(i, endIndex);
+                        virtualPages.add(new VirtualPage(new ArrayList<>(pageLines)));
+                    }
+                } else if (page.getType() == Page.PageType.RECIPE) {
+                    // Recipe pages are not split
+                    virtualPages.add(new VirtualPage(page.getRecipe()));
+                }
+            }
+        }
+
         updatePageButtons();
     }
 
@@ -71,18 +129,18 @@ public class EntryPageWidget extends AbstractWidget {
     }
 
     /**
-     * Update button visibility based on current page.
+     * Update button visibility based on current virtual page.
      */
     private void updatePageButtons() {
         if (previousButton != null && nextButton != null) {
-            if (currentEntry == null || currentEntry.getPages().isEmpty()) {
+            if (virtualPages.isEmpty()) {
                 previousButton.visible = false;
                 previousButton.active = false;
                 nextButton.visible = false;
                 nextButton.active = false;
                 pageNumberText = Component.empty();
             } else {
-                int totalPages = currentEntry.getPages().size();
+                int totalPages = virtualPages.size();
                 boolean hasPrevious = currentPageIndex > 0;
                 boolean hasNext = currentPageIndex < totalPages - 1;
 
@@ -100,7 +158,7 @@ public class EntryPageWidget extends AbstractWidget {
      * Go to previous page.
      */
     public void previousPage() {
-        if (currentEntry != null && currentPageIndex > 0) {
+        if (!virtualPages.isEmpty() && currentPageIndex > 0) {
             currentPageIndex--;
             updatePageButtons();
         }
@@ -110,7 +168,7 @@ public class EntryPageWidget extends AbstractWidget {
      * Go to next page.
      */
     public void nextPage() {
-        if (currentEntry != null && currentPageIndex < currentEntry.getPages().size() - 1) {
+        if (!virtualPages.isEmpty() && currentPageIndex < virtualPages.size() - 1) {
             currentPageIndex++;
             updatePageButtons();
         }
@@ -118,7 +176,7 @@ public class EntryPageWidget extends AbstractWidget {
 
     @Override
     public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
-        if (currentEntry == null || currentEntry.getPages().isEmpty()) {
+        if (virtualPages.isEmpty()) {
             // No entry selected - show placeholder
             String text = "Select a category to begin";
             Font font = Minecraft.getInstance().font;
@@ -128,12 +186,12 @@ public class EntryPageWidget extends AbstractWidget {
             return;
         }
 
-        Page page = currentEntry.getPages().get(currentPageIndex);
+        VirtualPage virtualPage = virtualPages.get(currentPageIndex);
 
-        if (page.getType() == Page.PageType.TEXT) {
-            renderTextPage(graphics, page);
-        } else if (page.getType() == Page.PageType.RECIPE) {
-            renderRecipePage(graphics, page);
+        if (virtualPage.type == Page.PageType.TEXT) {
+            renderTextVirtualPage(graphics, virtualPage);
+        } else if (virtualPage.type == Page.PageType.RECIPE) {
+            renderRecipeVirtualPage(graphics, virtualPage);
         }
 
         // Render page number
@@ -146,39 +204,25 @@ public class EntryPageWidget extends AbstractWidget {
     }
 
     /**
-     * Render a text page with word wrap.
+     * Render a text virtual page (already wrapped and split).
      */
-    private void renderTextPage(GuiGraphics graphics, Page page) {
-        String languageCode = ChronicleScreen.getLanguageCode();
-        String text = page.getText().get(languageCode);
-
+    private void renderTextVirtualPage(GuiGraphics graphics, VirtualPage virtualPage) {
         Font font = Minecraft.getInstance().font;
-        // Calculate max line width from widget width
-        int maxLineWidth = width - (TEXT_MARGIN * 2);
-        List<String> lines = wrapText(text, maxLineWidth, font);
-
         int textX = getX() + TEXT_MARGIN;
         int textY = getY() + TEXT_MARGIN;
 
-        // Reserve space for page number at bottom (40 pixels)
-        int maxTextHeight = height - 40;
-
-        for (String line : lines) {
-            // Check if we have space for this line
-            if (textY + LINE_HEIGHT - getY() > maxTextHeight) {
-                break; // Stop rendering if we've reached the bottom margin
-            }
-
+        // Render pre-wrapped lines (already fit on this page)
+        for (String line : virtualPage.lines) {
             graphics.drawString(font, line, textX, textY, 0x000000, false);
             textY += LINE_HEIGHT;
         }
     }
 
     /**
-     * Render a recipe page showing the crafting recipe.
+     * Render a recipe virtual page showing the crafting recipe.
      */
-    private void renderRecipePage(GuiGraphics graphics, Page page) {
-        ResourceLocation recipeId = page.getRecipe();
+    private void renderRecipeVirtualPage(GuiGraphics graphics, VirtualPage virtualPage) {
+        ResourceLocation recipeId = virtualPage.recipe;
         RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
 
         Optional<RecipeHolder<?>> recipeHolder = recipeManager.byKey(recipeId);
