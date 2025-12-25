@@ -1,5 +1,6 @@
 package com.chronodawn.gui.widgets;
 
+import com.chronodawn.ChronoDawn;
 import com.chronodawn.gui.ChronicleScreen;
 import com.chronodawn.gui.data.Entry;
 import com.chronodawn.gui.data.Page;
@@ -67,6 +68,9 @@ public class EntryPageWidget extends AbstractWidget {
             nextAction
         ).bounds(getX() + width - 25, buttonY, 20, 20).build();
 
+        ChronoDawn.LOGGER.info("Initialized navigation buttons at y={}, previous x={}, next x={}",
+            buttonY, getX() + 5, getX() + width - 25);
+
         updatePageButtons();
     }
 
@@ -81,6 +85,7 @@ public class EntryPageWidget extends AbstractWidget {
                 nextButton.visible = false;
                 nextButton.active = false;
                 pageNumberText = Component.empty();
+                ChronoDawn.LOGGER.info("updatePageButtons: No entry, buttons hidden");
             } else {
                 int totalPages = currentEntry.getPages().size();
                 boolean hasPrevious = currentPageIndex > 0;
@@ -92,6 +97,8 @@ public class EntryPageWidget extends AbstractWidget {
                 nextButton.active = hasNext;
                 pageNumberText = Component.translatable("gui.chronodawn.chronicle.page",
                     currentPageIndex + 1, totalPages);
+                ChronoDawn.LOGGER.info("updatePageButtons: page {}/{}, previous={}, next={}",
+                    currentPageIndex + 1, totalPages, hasPrevious, hasNext);
             }
         }
     }
@@ -100,9 +107,14 @@ public class EntryPageWidget extends AbstractWidget {
      * Go to previous page.
      */
     public void previousPage() {
+        ChronoDawn.LOGGER.info("previousPage() called - currentEntry: {}, currentPageIndex: {}",
+            currentEntry != null ? "present" : "null", currentPageIndex);
         if (currentEntry != null && currentPageIndex > 0) {
             currentPageIndex--;
+            ChronoDawn.LOGGER.info("Moved to previous page: {}", currentPageIndex);
             updatePageButtons();
+        } else {
+            ChronoDawn.LOGGER.info("Cannot go to previous page");
         }
     }
 
@@ -110,9 +122,15 @@ public class EntryPageWidget extends AbstractWidget {
      * Go to next page.
      */
     public void nextPage() {
+        ChronoDawn.LOGGER.info("nextPage() called - currentEntry: {}, currentPageIndex: {}, totalPages: {}",
+            currentEntry != null ? "present" : "null", currentPageIndex,
+            currentEntry != null ? currentEntry.getPages().size() : 0);
         if (currentEntry != null && currentPageIndex < currentEntry.getPages().size() - 1) {
             currentPageIndex++;
+            ChronoDawn.LOGGER.info("Moved to next page: {}", currentPageIndex);
             updatePageButtons();
+        } else {
+            ChronoDawn.LOGGER.info("Cannot go to next page");
         }
     }
 
@@ -183,10 +201,19 @@ public class EntryPageWidget extends AbstractWidget {
 
         Optional<RecipeHolder<?>> recipeHolder = recipeManager.byKey(recipeId);
         if (recipeHolder.isEmpty()) {
-            // Recipe not found
+            // Recipe not found - render error message with word wrap
             Font font = Minecraft.getInstance().font;
             String errorText = "Recipe not found: " + recipeId;
-            graphics.drawString(font, errorText, getX() + TEXT_MARGIN, getY() + TEXT_MARGIN, 0xFF0000, false);
+            int maxLineWidth = width - (TEXT_MARGIN * 2);
+            List<String> lines = wrapText(errorText, maxLineWidth, font);
+
+            int textX = getX() + TEXT_MARGIN;
+            int textY = getY() + TEXT_MARGIN;
+
+            for (String line : lines) {
+                graphics.drawString(font, line, textX, textY, 0xFF0000, false);
+                textY += LINE_HEIGHT;
+            }
             return;
         }
 
@@ -262,6 +289,21 @@ public class EntryPageWidget extends AbstractWidget {
 
     public Button getNextButton() {
         return nextButton;
+    }
+
+    @Override
+    public boolean mouseClicked(double mouseX, double mouseY, int button) {
+        // Check if buttons are clicked first
+        if (previousButton != null && previousButton.mouseClicked(mouseX, mouseY, button)) {
+            ChronoDawn.LOGGER.info("Previous button clicked");
+            return true;
+        }
+        if (nextButton != null && nextButton.mouseClicked(mouseX, mouseY, button)) {
+            ChronoDawn.LOGGER.info("Next button clicked");
+            return true;
+        }
+        // Default behavior for the widget itself
+        return super.mouseClicked(mouseX, mouseY, button);
     }
 
     @Override
