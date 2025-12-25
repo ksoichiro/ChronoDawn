@@ -1,6 +1,5 @@
 package com.chronodawn.gui;
 
-import com.chronodawn.gui.data.Category;
 import com.chronodawn.gui.data.ChronicleData;
 import com.chronodawn.gui.data.Entry;
 import com.chronodawn.gui.widgets.CategoryListWidget;
@@ -10,8 +9,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-
-import java.util.List;
 
 /**
  * Main GUI screen for the Chronicle guidebook.
@@ -30,7 +27,6 @@ public class ChronicleScreen extends Screen {
 
     private CategoryListWidget categoryList;
     private EntryPageWidget entryPage;
-    private Category selectedCategory;
     private Entry selectedEntry;
 
     public ChronicleScreen() {
@@ -46,7 +42,7 @@ public class ChronicleScreen extends Screen {
         this.leftPos = (this.width - BOOK_WIDTH) / 2;
         this.topPos = (this.height - BOOK_HEIGHT) / 2;
 
-        // Initialize category list widget
+        // Initialize category list widget with entry selection callback
         int categoryListWidth = 100;
         int categoryListHeight = BOOK_HEIGHT - 40;
         this.categoryList = new CategoryListWidget(
@@ -55,15 +51,11 @@ public class ChronicleScreen extends Screen {
             categoryListWidth,
             categoryListHeight,
             data.getCategories(),
-            category -> {
-                selectedCategory = category;
-                // Select first entry in category by default
-                List<Entry> entries = category.getEntries();
-                if (!entries.isEmpty()) {
-                    selectedEntry = entries.get(0);
-                    if (entryPage != null) {
-                        entryPage.setEntry(selectedEntry);
-                    }
+            entry -> {
+                // Entry selected - update the entry page
+                selectedEntry = entry;
+                if (entryPage != null) {
+                    entryPage.setEntry(selectedEntry);
                 }
             }
         );
