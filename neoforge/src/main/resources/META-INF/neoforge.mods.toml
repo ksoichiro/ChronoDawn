@@ -13,7 +13,6 @@ Explore a frozen dimension, defeat time-controlling bosses, and master ultimate 
 '''
 logoFile="chronodawn_logo.png"
 authors="ksoichiro"
-credits="Built with Architectury"
 displayURL="https://github.com/ksoichiro/ChronoDawn"
 
 [[mixins]]
