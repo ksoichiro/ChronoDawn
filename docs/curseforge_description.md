@@ -49,7 +49,7 @@ Defeat bosses to craft legendary time-manipulating gear:
 - **Chronicle of Chrono Dawn**: An in-game guidebook automatically given when entering the dimension
 - **Custom UI**: Browse categories, entries, and detailed information about the mod
 - **Progressive Discovery**: Learn about biomes, structures, bosses, items, and progression steps
-- **No External Dependencies**: Built-in custom guidebook system (no Patchouli required)
+- **Built-in System**: Fully integrated custom guidebook with no external dependencies
 
 ### 🌲 New Content
 - **Time Wood**: A unique wood type with full block set (logs, planks, stairs, slabs, doors, trapdoors)
