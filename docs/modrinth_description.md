@@ -1,221 +1,173 @@
-# Chrono Dawn
-
-**A time-manipulation dimension mod for Minecraft**
-
-Explore a mysterious dimension frozen in time, face powerful bosses, and wield legendary time-bending artifacts.
+# Chrono Dawn - Modrinth Description
 
 ---
 
-## 🕰️ Overview
+## 🕰️ Chrono Dawn - A Time-Manipulation Adventure
 
-Chrono Dawn adds a brand new dimension to Minecraft centered around time manipulation. Enter a world where hostile mobs move in slow motion, discover ancient structures, defeat epic bosses, and craft ultimate artifacts that bend the flow of time itself.
+**Explore a mysterious dimension where time stands still!**
 
-### Key Features
-
-- **New Dimension**: Chrono Dawn with 8 unique biomes
-- **Time Distortion**: Hostile mobs move extremely slowly
-- **Epic Bosses**: Time Guardian, Temporal Phantom, and Time Tyrant
-- **Ultimate Artifacts**: Time-manipulating weapons and armor
-- **Custom Portal System**: One-way entry, upgradeable to bidirectional
-- **Unique Content**: Time Wood, special blocks, and consumables
+Chrono Dawn adds a brand new dimension to Minecraft, filled with unique biomes, powerful bosses, and time-bending artifacts. Master the power of time itself and conquer the challenges of a frozen world.
 
 ---
 
-## 📦 Requirements
+## ✨ Features
 
-### For Fabric
-- Minecraft 1.21.1
-- Fabric Loader 0.17.3+
-- Fabric API 0.116.7+
-- Architectury API 13.0.8+
-- Custom Portal API 0.0.1-beta66-1.21+
+### 🌍 New Dimension: Chrono Dawn
+- **8 Unique Biomes**: Forest, Desert, Mountain, Ocean, Snowy, Swamp, Dark Forest, and Ancient Forest
+- **Perpetual Twilight**: A dimension frozen in time with stunning orange-gold skies
+- **Time Distortion Effect**: Hostile mobs move in slow motion while you move at normal speed
+- **Custom Portal System**: One-way portal travel that can be upgraded to bidirectional
 
-### For NeoForge
-- Minecraft 1.21.1
-- NeoForge 21.1.209+
-- Architectury API 13.0.8+
-- Custom Portal API 0.0.1-beta66-1.21+
+### 🏛️ Epic Structures
+- **Ancient Ruins** (Overworld): Discover the secrets to enter Chrono Dawn
+- **Forgotten Library** (Chrono Dawn): Find the blueprints to stabilize the dimension
+- **Desert Clock Tower** (Chrono Dawn): Obtain rare Enhanced Clockstone
+- **Guardian Vault** (Chrono Dawn): Face the Chronos Warden boss
+- **Clockwork Depths** (Chrono Dawn): Challenge the Clockwork Colossus boss
+- **Phantom Catacombs** (Chrono Dawn): Navigate a maze to find the Temporal Phantom boss
+- **Entropy Crypt** (Chrono Dawn): Confront the Entropy Keeper boss
+- **Master Clock** (Final Dungeon): Face the ultimate challenge
 
-**Note**: Download the correct version for your mod loader (Fabric or NeoForge).
+### 👹 Powerful Boss Battles
+- **Time Guardian**: A mini-boss guarding the path to the Master Clock (drops Master Clock Key)
+- **4 Mid-Bosses** (required for Chrono Aegis crafting):
+  - **Chronos Warden**: Stone guardian in the Guardian Vault
+  - **Clockwork Colossus**: Mechanical giant in the Clockwork Depths
+  - **Temporal Phantom**: Spectral enemy in the Phantom Catacombs maze
+  - **Entropy Keeper**: Decay-themed boss in the Entropy Crypt
+- **Time Tyrant**: The final boss controlling the flow of time itself
 
----
+### ⚔️ Ultimate Artifacts
+Defeat bosses to craft legendary time-manipulating gear:
+- **Chronoblade**: A sword that can skip enemy attacks
+- **Time Guardian's Mail**: Armor that can rewind time to avoid death
+- **Echo Boots of Time**: Boots that create decoy afterimages
+- **Chrono Aegis**: A shield crafted from 4 mid-boss drops that provides major advantages against Time Tyrant
+- **Unstable Pocket Watch**: Swap speed effects with enemies
 
-## 🎮 Getting Started
+### 📖 Chronicle Guidebook
+- **Chronicle of Chrono Dawn**: An in-game guidebook automatically given when entering the dimension
+- **Custom UI**: Browse categories, entries, and detailed information about the mod
+- **Progressive Discovery**: Learn about biomes, structures, bosses, items, and progression steps
+- **No External Dependencies**: Built-in custom guidebook system (no Patchouli required)
 
-### 1. Find Ancient Ruins
-Explore the Overworld to discover Ancient Ruins structures. Mine **Clockstone Ore** and craft the **Time Hourglass**.
-
-### 2. Build a Portal
-Create a portal frame using **Clockstone Blocks** (minimum 4×5, maximum 23×23). Right-click with the **Time Hourglass** to activate.
-
-### 3. Enter the Chrono Dawn
-Walk through the portal to enter the dimension. **⚠️ Warning**: The portal becomes one-way after entry!
-
-### 4. Find the Forgotten Library
-Explore the Chrono Dawn to locate the **Forgotten Library**. Discover the **Portal Stabilizer** recipe inside.
-
-### 5. Stabilize the Portal
-Craft the **Portal Stabilizer** and use it on your portal to enable bidirectional travel between dimensions.
-
-### 6. Defeat Mid-Bosses for Chrono Aegis
-- **Chronos Warden** (Guardian Vault): Obtain Guardian Stone
-- **Clockwork Colossus** (Clockwork Depths): Obtain Colossus Gear
-- **Temporal Phantom** (Phantom Catacombs): Obtain Phantom Essence
-- **Entropy Keeper** (Entropy Crypt): Obtain Entropy Core
-- Craft **Chrono Aegis** shield from 4 mid-boss drops
-
-### 7. Defeat Final Bosses
-- **Time Guardian**: Obtain the Master Clock Key
-- **Time Tyrant**: Face the final boss in the Master Clock dungeon (Chrono Aegis recommended)
-
-### 8. Craft Ultimate Artifacts
-Use **Fragments of Stasis Core** from Time Tyrant to create legendary time-manipulating gear.
+### 🌲 New Content
+- **Time Wood**: A unique wood type with full block set (logs, planks, stairs, slabs, doors, trapdoors)
+- **Custom Items**: Time Hourglass, Portal Stabilizer, Time Clock, and more
+- **Special Blocks**: Reversing Time Sandstone (regenerates after breaking), Unstable Fungus (random speed effects)
+- **New Food**: Fruit of Time (grants Haste effect)
 
 ---
 
-## 🌍 Dimension Features
+## 📖 How to Play
 
-### Biomes
-The Chrono Dawn contains 8 unique biomes:
-- Chrono Dawn Forest
-- Chrono Dawn Desert
-- Chrono Dawn Mountain
-- Chrono Dawn Ocean
-- Chrono Dawn Snowy
-- Chrono Dawn Swamp
-- Chrono Dawn Dark Forest
-- Chrono Dawn Ancient Forest
+### Step 1: Find Ancient Ruins
+Explore the Overworld to discover **Ancient Ruins**. Mine **Clockstone Ore** and craft the **Time Hourglass**.
 
-### Structures
-- **Ancient Ruins** (Overworld): Starting point for your journey
-- **Forgotten Library** (Chrono Dawn): Portal Stabilizer recipe location
-- **Desert Clock Tower** (Chrono Dawn): Source of Enhanced Clockstone
-- **Guardian Vault** (Chrono Dawn): Chronos Warden boss location
-- **Clockwork Depths** (Chrono Dawn): Clockwork Colossus boss location
-- **Phantom Catacombs** (Chrono Dawn): Maze structure with Temporal Phantom boss
-- **Entropy Crypt** (Chrono Dawn): Entropy Keeper boss location
-- **Master Clock** (Chrono Dawn): Final dungeon with Time Tyrant boss
+### Step 2: Enter Chrono Dawn
+Build a portal frame using **Clockstone Blocks** (minimum 4×5, maximum 23×23). Activate it with the **Time Hourglass** to enter the dimension.
 
-### Time Wood
-Harvest **Time Wood** trees for a unique building material with full block set:
-- Time Wood Log
-- Time Wood Planks
-- Time Wood Stairs, Slabs, Fences
-- Time Wood Doors and Trapdoors
+**⚠️ Warning**: The portal becomes one-way after entry! You'll need to find a way back.
 
----
+### Step 3: Find the Forgotten Library
+Explore Chrono Dawn to locate the **Forgotten Library**. Discover the **Portal Stabilizer** recipe to unlock bidirectional travel.
 
-## ⚔️ Boss Battles
+### Step 4: Stabilize the Portal
+Craft the **Portal Stabilizer** using **Enhanced Clockstone** from the **Desert Clock Tower**. Use it on your portal to enable free travel between dimensions.
 
-### Time Guardian (Mini-Boss)
-- **Health**: 200 HP
-- **Abilities**: Temporal Slash, Time Warp (teleport)
-- **Drops**: Master Clock Key, Enhanced Clockstone
+### Step 5: Defeat the Mid-Bosses
+- Defeat **Chronos Warden** in the Guardian Vault to obtain **Guardian Stone**
+- Defeat **Clockwork Colossus** in the Clockwork Depths to obtain **Colossus Gear**
+- Defeat **Temporal Phantom** in the Phantom Catacombs to obtain **Phantom Essence**
+- Defeat **Entropy Keeper** in the Entropy Crypt to obtain **Entropy Core**
 
-### Mid-Bosses (Chrono Aegis Materials)
+### Step 6: Craft Chrono Aegis
+- Use the 4 mid-boss drops to craft **Chrono Aegis**, a powerful shield
+- Chrono Aegis provides significant advantages against the Time Tyrant final boss
 
-**Chronos Warden** (Guardian Vault):
-- **Health**: 180 HP
-- **Abilities**: Stone Stance (damage reduction), Ground Slam (AOE knockback)
-- **Drops**: Guardian Stone
+### Step 7: Conquer the Final Boss
+- Defeat the **Time Guardian** mini-boss to obtain the Master Clock Key
+- Use the Master Clock Key to access the **Master Clock** dungeon
+- Face the **Time Tyrant** and claim ultimate power over time
 
-**Clockwork Colossus** (Clockwork Depths):
-- **Health**: 200 HP
-- **Abilities**: Overcharge (attack speed boost), Repair Protocol (health regen)
-- **Drops**: Colossus Gear
-
-**Temporal Phantom** (Phantom Catacombs):
-- **Health**: 150 HP
-- **Abilities**: Phase Shift (invulnerability), Phantom Clones, Spectral Strike
-- **Drops**: Phantom Essence
-
-**Entropy Keeper** (Entropy Crypt):
-- **Health**: 160 HP
-- **Abilities**: Decay Aura (Wither effect), Entropy Burst (decay wave)
-- **Drops**: Entropy Core
-
-### Time Tyrant (Final Boss)
-- **Health**: 500 HP
-- **Abilities**: Temporal Barrage, Time Freeze, Stasis Wave (AOE)
-- **Phase 2**: Activated below 50% HP with stronger abilities
-- **Drops**: Eye of Chronos, multiple Fragments of Stasis Core
-- **Note**: Chrono Aegis (crafted from 4 mid-boss drops) provides significant advantages
+### Step 8: Craft Ultimate Artifacts
+Use **Fragments of Stasis Core** (dropped by the Time Tyrant) to create legendary artifacts with time-manipulating abilities.
 
 ---
 
-## 🛡️ Ultimate Artifacts
+## 🎮 Gameplay Features
 
-### Chronoblade (Sword)
-- **Attack**: 9 damage, 1.6 speed
-- **Ability**: 25% chance to skip enemy's next attack AI
-
-### Time Guardian's Mail (Chestplate)
-- **Armor**: 8 points
-- **Ability**: 20% chance to rewind time on fatal damage (avoid death)
-
-### Echo Boots of Time (Boots)
-- **Armor**: 3 points
-- **Ability**: Spawn decoy afterimage when sprinting (attracts enemy aggro)
-
-### Chrono Aegis (Shield)
-- **Crafting**: Requires drops from all 4 mid-bosses (Guardian Stone, Colossus Gear, Phantom Essence, Entropy Core)
-- **Ability**: Provides significant advantages against Time Tyrant (Time Stop Resistance, Dimensional Anchor, Temporal Shield, Time Reversal Disruption, Clarity)
-- **Bonus**: Apply Slowness II to attackers while blocking
-
-### Unstable Pocket Watch (Utility)
-- **Ability**: Swap speed effects between you and nearby mobs
-
----
-
-## 🎯 Gameplay Mechanics
-
-### Time Distortion
-All hostile mobs in the Chrono Dawn receive **Slowness IV**, making them extremely slow while you move at normal speed. Use this advantage to explore safely and dominate combat.
+### Time Manipulation Mechanics
+- **Time Distortion**: Hostile mobs in Chrono Dawn move extremely slowly
+- **Reversing Time Sandstone**: Blocks that regenerate after being broken
+- **Unstable Fungus**: Blocks that apply random speed effects when stepped on
+- **Time Clock**: Cancel enemy attacks with a cooldown-based utility item
 
 ### Portal System
-- **Initial Entry**: One-way portal creates survival tension
-- **Stabilization**: Use Portal Stabilizer to unlock bidirectional travel
-- **Multiple Portals**: Create portal networks after dimension is stabilized
+- **One-Way Entry**: Initial portal travel is one-way, creating survival tension
+- **Dimension Stabilization**: Use Portal Stabilizer to unlock bidirectional travel
+- **Multiple Portals**: Create portal networks after stabilization
 
-### Special Blocks
-- **Reversing Time Sandstone**: Regenerates 3 seconds after being broken
-- **Unstable Fungus**: Applies random speed effect (Speed I or Slowness I) when stepped on
-
-### Consumables
-- **Fruit of Time**: Restores hunger and grants Haste I for 60 seconds
+### Boss Mechanics
+- **Dynamic AI**: Each boss has unique attack patterns and abilities
+- **Phase Transitions**: Time Tyrant becomes more powerful below 50% health
+- **Proximity Spawning**: Temporal Phantom spawns when you enter the boss room
+- **Loot Rewards**: Defeat bosses to obtain crafting materials for ultimate artifacts
 
 ---
 
-## 🛠️ Multi-Loader Support
+## 🛠️ Technical Details
 
+### Multi-Loader Support
 This mod is built with **Architectury** and supports **both Fabric and NeoForge**!
+- Download the correct version for your mod loader
+- Shared codebase ensures consistent experience across loaders
 
-- Shared codebase ensures consistent experience
-- Download the version matching your mod loader
-- Same features and content on both loaders
+### Requirements
+- **Minecraft**: Java Edition 1.21.1
+- **Mod Loader**:
+  - Fabric Loader 0.17.3+ with Fabric API 0.116.7+
+  - OR NeoForge 21.1.209+
+- **Dependencies**:
+  - Architectury API 13.0.8+
+  - Custom Portal API 0.0.1-beta66-1.21+
+
+### Compatibility
+- Works with most dimension and world generation mods
+- Compatible with performance mods (Sodium, Starlight, etc.)
+- Datapack-friendly worldgen configuration
 
 ---
 
 ## 📚 Documentation
 
-- **Player Guide**: [GitHub](https://github.com/ksoichiro/ChronoDawn/blob/main/docs/player_guide.md)
-- **Developer Guide**: [GitHub](https://github.com/ksoichiro/ChronoDawn/blob/main/docs/developer_guide.md)
-- **GitHub Repository**: [Link](https://github.com/ksoichiro/ChronoDawn)
+- **Player Guide**: Detailed walkthrough and tips ([View on GitHub](https://github.com/ksoichiro/ChronoDawn/blob/main/docs/player_guide.md))
+- **Developer Guide**: For developers and contributors ([View on GitHub](https://github.com/ksoichiro/ChronoDawn/blob/main/docs/developer_guide.md))
+- **Wiki**: Coming soon!
 
 ---
 
-## 🤝 Support
+## 🐛 Bug Reports & Suggestions
 
-- **Bug Reports**: [GitHub Issues](https://github.com/ksoichiro/ChronoDawn/issues)
-- **Feature Requests**: [GitHub Issues](https://github.com/ksoichiro/ChronoDawn/issues)
-- **Discord**: Coming soon
+Found a bug or have a suggestion? Report it on our [GitHub Issues](https://github.com/ksoichiro/ChronoDawn/issues) page!
 
 ---
 
-## 🙏 Credits
+## 📷 Screenshots
+
+Check out the **Gallery** above for screenshots showcasing:
+- The mysterious Chrono Dawn dimension
+- Epic boss battles against Time Guardian, Temporal Phantom, and Time Tyrant
+- Ancient structures and dungeons
+- Ultimate time-manipulating artifacts
+
+---
+
+## 🤝 Credits
 
 - Built with [Architectury](https://github.com/architectury/architectury-api)
 - Portal system powered by [Custom Portal API](https://github.com/kyrptonaught/customportalapi)
+- Special thanks to the Minecraft modding community!
 
 ---
 
@@ -231,4 +183,14 @@ This mod is built with **Architectury** and supports **both Fabric and NeoForge*
 
 ---
 
-**Master time. Conquer the Chrono Dawn.** 🕰️
+## 🔗 Links
+
+- **GitHub Repository**: [https://github.com/ksoichiro/ChronoDawn](https://github.com/ksoichiro/ChronoDawn)
+- **Discord**: [Coming soon]
+- **CurseForge**: [Link to CurseForge page]
+
+---
+
+**Developed for Minecraft Java Edition 1.21.1**
+
+Master time. Conquer Chrono Dawn. 🕰️
