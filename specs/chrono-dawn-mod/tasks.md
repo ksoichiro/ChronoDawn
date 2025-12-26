@@ -751,6 +751,63 @@
 - [x] T296 [P] Add mod icon/logo image (512x512 PNG) to resources - Added to Fabric and NeoForge (2025-12-27)
 - [x] T297 [P] Add LICENSE file and document dependency licenses (Architectury, Custom Portal API, Patchouli, etc.)
 
+### OSS Internationalization (English Translation)
+
+**Purpose**: Complete English translation of all documentation for international open-source contributors
+
+**Background**: After LGPL-3.0 license adoption, the project is now fully open source. To maximize international contribution, all internal documentation should be available in English.
+
+**Priority**: High (for OSS adoption)
+
+**Phase 1: Essential Documentation** (Immediate):
+
+- [ ] T707 [P] Create CONTRIBUTING.md in English
+  - Write contribution guidelines (setup, workflow, code style, PR process)
+  - Include link to developer_guide.md for technical details
+  - Document LGPL-3.0 license compliance requirements
+  - Estimated effort: 30-40 minutes
+  - Status: Required for OSS launch
+
+- [ ] T708 [P] Translate specs/chrono-dawn-mod/spec.md to English
+  - Translate design specification (156 lines of Japanese content)
+  - Essential for new contributors to understand feature design
+  - Maintain existing structure and content
+  - Estimated effort: 1-1.5 hours
+  - Status: High priority for feature understanding
+
+- [ ] T709 [P] Translate specs/chrono-dawn-mod/tasks.md to English
+  - Translate task descriptions and notes (49 lines of Japanese content)
+  - Important for project progress visibility
+  - Keep task IDs and completion status unchanged
+  - Estimated effort: 30 minutes
+  - Status: High priority for collaboration
+
+**Phase 2: Historical Documentation** (Lower priority, can be done later):
+
+- [ ] T710 [Documentation] Translate docs/implementation_history.md to English
+  - Translate implementation history (227 lines of Japanese)
+  - Provides context for design decisions
+  - Estimated effort: 1.5-2 hours
+  - Status: Medium priority (historical reference)
+
+- [ ] T711 [Documentation] Translate docs/initial_design.md to English
+  - Translate initial design document (45 lines of Japanese)
+  - Historical value for understanding project evolution
+  - Estimated effort: 30 minutes
+  - Status: Low priority (historical reference)
+
+**Estimated Total Effort**:
+- Phase 1 (Essential): 2-2.5 hours
+- Phase 2 (Historical): 2-2.5 hours
+- Complete: 4-5 hours
+
+**Success Criteria**:
+- All essential documentation (spec.md, tasks.md, CONTRIBUTING.md) available in English
+- New international contributors can understand project structure and contribute
+- No Japanese content in critical development files
+
+---
+
 ### Playtest Improvements - Dimension Mechanics
 
 **Purpose**: プレイテストで発見されたディメンション機能の改善
