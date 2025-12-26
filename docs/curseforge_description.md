@@ -45,6 +45,12 @@ Defeat bosses to craft legendary time-manipulating gear:
 - **Chrono Aegis**: A shield crafted from 4 mid-boss drops that provides major advantages against Time Tyrant
 - **Unstable Pocket Watch**: Swap speed effects with enemies
 
+### 📖 Chronicle Guidebook
+- **Chronicle of Chrono Dawn**: An in-game guidebook automatically given when entering the dimension
+- **Custom UI**: Browse categories, entries, and detailed information about the mod
+- **Progressive Discovery**: Learn about biomes, structures, bosses, items, and progression steps
+- **No External Dependencies**: Built-in custom guidebook system (no Patchouli required)
+
 ### 🌲 New Content
 - **Time Wood**: A unique wood type with full block set (logs, planks, stairs, slabs, doors, trapdoors)
 - **Custom Items**: Time Hourglass, Portal Stabilizer, Time Clock, and more
