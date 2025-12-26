@@ -1,9 +1,9 @@
-# Feature Specification: Chrono Dawn Mod - 時間操作をテーマにしたMinecraft Modの開発
+# Feature Specification: Chrono Dawn Mod - Time-Manipulation Themed Minecraft Mod Development
 
 **Branch**: `main`
 **Created**: 2025-10-18
 **Status**: Draft
-**Input**: User description: "Minecraftのmodを開発してください。ベースとなるアイデアは @DRAFT.md に記述されています。"
+**Input**: User description: "Please develop a Minecraft mod. The base idea is described in @DRAFT.md"
 
 ## Game Design Philosophy *(critical design decisions)*
 
@@ -156,62 +156,62 @@ private static final int PORTAL_COLOR_B = 19;
 
 ## User Scenarios & Testing *(mandatory)*
 
-### User Story 1 - ディメンションへの初回突入と帰還路の確保 (Priority: P1)
+### User Story 1 - Initial Dimension Entry and Securing Return Path (Priority: P1)
 
-プレイヤーはオーバーワールドの古代遺跡でクロックストーンと時の砂時計の設計図を発見し、ポータルを作成してクロノドーンに突入する。しかし、突入直後にポータルが機能停止し、プレイヤーは閉じ込められる。プレイヤーは忘れられた図書館でポータル安定化装置の設計図を発見し、これを作成・使用することでオーバーワールドへの自由な往来を確保する。
+The player discovers Clockstone and the Time Hourglass blueprint in Ancient Ruins in the Overworld, creates a portal, and enters Chrono Dawn. However, immediately after entry, the portal becomes inactive and the player is trapped. The player discovers the Portal Stabilizer blueprint in the Forgotten Library, crafts and uses it to secure free travel between the Overworld and Chrono Dawn.
 
-**Why this priority**: Modの基本的なゲームループ(ディメンション往復)を確立する最重要フェーズ。これがないとプレイヤーはディメンション内で閉じ込められたままになり、Modとして成立しない。
+**Why this priority**: This is the most critical phase that establishes the mod's fundamental game loop (dimension travel). Without this, players remain trapped in the dimension and the mod cannot function as intended.
 
-**Independent Test**: オーバーワールドで古代遺跡を発見し、ポータルを作成してクロノドーンに突入できること。ディメンション内で生存に必要な食料(時間の果実)を入手でき、忘れられた図書館でポータル安定化装置の設計図を発見できること。安定化装置を作成してポータルを修復し、オーバーワールドとクロノドーンを自由に往来できることを確認。
+**Independent Test**: Verify that players can discover Ancient Ruins in the Overworld, create a portal, and enter Chrono Dawn. Confirm that players can obtain food (Fruit of Time) necessary for survival in the dimension and discover the Portal Stabilizer blueprint in the Forgotten Library. Verify that players can craft the stabilizer, repair the portal, and travel freely between the Overworld and Chrono Dawn.
 
 **Acceptance Scenarios**:
 
-1. **Given** プレイヤーがオーバーワールドにいる, **When** 古代遺跡を探索する, **Then** クロックストーンと時の砂時計の設計図を発見できる
-2. **Given** プレイヤーが時の砂時計を作成した, **When** ポータルを起動する, **Then** クロノドーンに突入できる
-3. **Given** プレイヤーがクロノドーンに突入した, **When** 突入が完了する, **Then** ポータルが機能停止し、通常の手段では帰還できない状態になる
-4. **Given** プレイヤーがクロノドーンにいる, **When** 忘れられた図書館を探索する, **Then** ポータル安定化装置の設計図を発見できる
-5. **Given** プレイヤーがポータル安定化装置を作成した, **When** ポータルフレームに使用する, **Then** クロノドーン次元が安定化され、壮大なエフェクト(パーティクル+サウンド)とメッセージが全プレイヤーに表示される **And** Time Hourglassでポータルを再点火できるようになる **And** ポータルを通じてオーバーワールドへ自由に帰還できるようになる
-6. **Given** プレイヤーがクロノドーン内にいる, **When** 時間の果実を入手・使用する, **Then** 満腹度が回復し、採掘速度が一時的に上昇する
+1. **Given** the player is in the Overworld, **When** exploring Ancient Ruins, **Then** Clockstone and Time Hourglass blueprint can be discovered
+2. **Given** the player has crafted the Time Hourglass, **When** activating the portal, **Then** the player can enter Chrono Dawn
+3. **Given** the player has entered Chrono Dawn, **When** entry is complete, **Then** the portal becomes inactive and return through normal means is impossible
+4. **Given** the player is in Chrono Dawn, **When** exploring the Forgotten Library, **Then** the Portal Stabilizer blueprint can be discovered
+5. **Given** the player has crafted the Portal Stabilizer, **When** using it on the portal frame, **Then** the Chrono Dawn dimension is stabilized with a spectacular effect (particles + sound) and message displayed to all players **And** the portal can be re-ignited with the Time Hourglass **And** free return to the Overworld through the portal becomes possible
+6. **Given** the player is in Chrono Dawn, **When** obtaining and consuming Fruit of Time, **Then** hunger is restored and mining speed temporarily increases
 
 ---
 
-### User Story 2 - 時間操作アイテムの獲得とボス戦への準備 (Priority: P2)
+### User Story 2 - Obtaining Time Manipulation Items and Boss Battle Preparation (Priority: P2)
 
-プレイヤーは砂漠の時計塔を探索し、強化クロックストーンを入手する。これを使用して時間操作アイテム(タイムクロック、空間連結ツルハシなど)を作成し、戦闘と採掘の効率を向上させる。その後、時の番人(中ボス)を撃破してマスタークロックへの鍵を入手する。
+The player explores the Desert Clock Tower and obtains Enhanced Clockstone. Using this, they craft time manipulation items (Time Clock, Spatial Connection Pickaxe, etc.) to improve combat and mining efficiency. Afterwards, they defeat the Time Guardian (mid-boss) to obtain the Master Clock Key.
 
-**Why this priority**: P1で確立した基本ループに戦略性と進行感を追加する。時間操作アイテムはプレイヤーに「時間を操作している」という実感を与え、Modの独自性を強化する。
+**Why this priority**: Adds strategy and progression to the basic loop established in P1. Time manipulation items give players a tangible sense of "manipulating time" and strengthen the mod's uniqueness.
 
-**Independent Test**: 砂漠の時計塔を探索して強化クロックストーンを入手できること。タイムクロックや空間連結ツルハシなどの時間操作アイテムを作成できること。タイムクロックを使用して周囲のMobの攻撃をキャンセルできること。空間連結ツルハシで採掘時にドロップが増加することを確認。時の番人を発見し、戦闘に勝利してマスタークロックへの鍵を入手できることを確認。
+**Independent Test**: Verify that players can explore the Desert Clock Tower and obtain Enhanced Clockstone. Confirm that time manipulation items like Time Clock and Spatial Connection Pickaxe can be crafted. Verify that Time Clock can be used to cancel surrounding mob attacks. Confirm that the Spatial Connection Pickaxe increases drop rates when mining. Verify that the Time Guardian can be found, defeated in combat, and the Master Clock Key obtained.
 
 **Acceptance Scenarios**:
 
-1. **Given** プレイヤーがクロノドーンにいる, **When** 砂漠の時計塔を探索する, **Then** 強化クロックストーンを入手できる
-2. **Given** プレイヤーが強化クロックストーンを入手した, **When** レシピに従ってクラフトする, **Then** タイムクロック、空間連結ツルハシなどの時間操作アイテムを作成できる
-3. **Given** プレイヤーがタイムクロックを所持している, **When** 使用する(クールダウンあり), **Then** 周囲のMobの次の攻撃AIルーチンが強制的にキャンセルされる
-4. **Given** プレイヤーが空間連結ツルハシを所持している, **When** ブロックを破壊する, **Then** 確率でドロップアイテムが2倍になる
-5. **Given** プレイヤーが時間操作アイテムを所持している, **When** 時の番人と戦闘する, **Then** 時の番人を撃破し、マスタークロックへの鍵を入手できる
+1. **Given** the player is in Chrono Dawn, **When** exploring the Desert Clock Tower, **Then** Enhanced Clockstone can be obtained
+2. **Given** the player has obtained Enhanced Clockstone, **When** crafting according to recipes, **Then** time manipulation items like Time Clock and Spatial Connection Pickaxe can be created
+3. **Given** the player has Time Clock, **When** using it (with cooldown), **Then** surrounding mobs' next attack AI routines are forcibly cancelled
+4. **Given** the player has Spatial Connection Pickaxe, **When** breaking blocks, **Then** drop items are doubled with a certain probability
+5. **Given** the player has time manipulation items, **When** battling the Time Guardian, **Then** the Time Guardian can be defeated and the Master Clock Key obtained
 
 ---
 
-### User Story 3 - ラスボス撃破と最終報酬の獲得 (Priority: P3)
+### User Story 3 - Final Boss Defeat and Ultimate Rewards (Priority: P3)
 
-プレイヤーはマスタークロックへの鍵を使用して最深部に到達し、ラスボス「時間の暴君」と戦闘する。暴君を撃破すると静止のコアが破壊され、クロノドーンの時間が安定化する。プレイヤーは報酬として「クロノスの瞳」を獲得し、究極のアーティファクト(クロノブレード、時の番人のメイルなど)を作成できるようになる。
+The player uses the Master Clock Key to reach the deepest chamber and battles the final boss "Time Tyrant". Upon defeating the Tyrant, the Stasis Core is destroyed and Chrono Dawn's time is stabilized. As a reward, the player obtains the "Eye of Chronos" and can craft ultimate artifacts (Chronoblade, Time Guardian's Mail, etc.).
 
-**Why this priority**: Modのエンドゲームコンテンツであり、全てのストーリーと探索の集大成。P1とP2が完成していれば、これがなくてもModとして遊べるが、これがあることで完全な達成感を提供する。
+**Why this priority**: This is the mod's endgame content and the culmination of all story and exploration. Even without this, the mod can be enjoyed if P1 and P2 are complete, but this provides complete sense of accomplishment.
 
-**Independent Test**: マスタークロックへの鍵を使用してマスタークロック最深部に到達できること。時間の暴君と戦闘し、撃破できること。撃破後に静止のコアが破壊され、クロノスの瞳を獲得できること。クロノスの瞳と静止のコアの破片を使用して究極のアーティファクト(クロノブレード、時の番人のメイル、時間の残響ブーツ、空間連結ツルハシ、不安定な懐中時計)を作成できることを確認。
+**Independent Test**: Verify that the Master Clock Key can be used to reach the deepest chamber of the Master Clock. Confirm that the Time Tyrant can be battled and defeated. Verify that upon defeat, the Stasis Core is destroyed and the Eye of Chronos is obtained. Confirm that ultimate artifacts (Chronoblade, Time Guardian's Mail, Echo Boots of Time, Spatial Connection Pickaxe, Unstable Pocket Watch) can be crafted using the Eye of Chronos and Fragments of Stasis Core.
 
 **Acceptance Scenarios**:
 
-1. **Given** プレイヤーがマスタークロックへの鍵を所持している, **When** マスタークロックの入口で使用する, **Then** 最深部への道が開かれる
-2. **Given** プレイヤーがマスタークロック最深部に到達した, **When** 時間の暴君と戦闘する, **Then** 時間の暴君を撃破できる
-3. **Given** プレイヤーが時間の暴君を撃破した, **When** 撃破が完了する, **Then** 静止のコアが破壊され、クロノスの瞳と静止のコアの破片を獲得できる
-4. **Given** プレイヤーがクロノスの瞳を獲得した, **When** クロノドーンに滞在する, **Then** ディメンション内のMobの速度低下がさらに強化され、探索が安定化する
-5. **Given** プレイヤーが静止のコアの破片を所持している, **When** レシピに従ってクラフトする, **Then** 究極のアーティファクト(クロノブレード、時の番人のメイル、時間の残響ブーツなど)を作成できる
-6. **Given** プレイヤーがクロノブレードを所持している, **When** Mobに攻撃を命中させる, **Then** 確率でMobの次の攻撃AIがスキップされ、一方的な攻撃機会が生まれる
-7. **Given** プレイヤーが時の番人のメイルを装備している, **When** 致命的なダメージを受ける, **Then** 確率でダメージ前のHPと位置にロールバックされ、即死を回避できる
-8. **Given** プレイヤーが時間の残響ブーツを装備している, **When** ダッシュする, **Then** 敵のターゲットを引くデコイ(残像エンティティ)が短時間召喚される
-9. **Given** プレイヤーが不安定な懐中時計を所持している, **When** 使用する, **Then** 周囲のMobとプレイヤーの速度ステータス効果が瞬時に入れ替わる
+1. **Given** the player has the Master Clock Key, **When** using it at the Master Clock entrance, **Then** the path to the deepest chamber opens
+2. **Given** the player has reached the Master Clock's deepest chamber, **When** battling the Time Tyrant, **Then** the Time Tyrant can be defeated
+3. **Given** the player has defeated the Time Tyrant, **When** the defeat is complete, **Then** the Stasis Core is destroyed and the Eye of Chronos and Fragments of Stasis Core can be obtained
+4. **Given** the player has obtained the Eye of Chronos, **When** staying in Chrono Dawn, **Then** mob slowdown in the dimension is further enhanced and exploration is stabilized
+5. **Given** the player has Fragments of Stasis Core, **When** crafting according to recipes, **Then** ultimate artifacts (Chronoblade, Time Guardian's Mail, Echo Boots of Time, etc.) can be created
+6. **Given** the player has Chronoblade, **When** hitting mobs with attacks, **Then** there is a chance the mob's next attack AI is skipped, creating a one-sided attack opportunity
+7. **Given** the player is equipped with Time Guardian's Mail, **When** receiving fatal damage, **Then** there is a chance to roll back to HP and position before damage, avoiding instant death
+8. **Given** the player is equipped with Echo Boots of Time, **When** sprinting, **Then** a decoy (afterimage entity) that draws enemy targets is summoned briefly
+9. **Given** the player has Unstable Pocket Watch, **When** using it, **Then** speed status effects of surrounding mobs and the player are instantly swapped
 
 ---
 
