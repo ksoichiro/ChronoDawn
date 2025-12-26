@@ -363,6 +363,50 @@ public class EntityEventHandler {
 
 **Boss Spawning**: See `PhantomCatacombsBossRoomPlacer.java` for programmatic boss room placement
 
+### 6. Chronicle Guidebook UI
+
+**Location**: `common/src/main/java/com/chronodawn/client/gui/screens/chronicle/`
+
+**Description**: Custom in-game guidebook system that replaced Patchouli dependency. Chronicle provides players with information about biomes, structures, bosses, items, and progression.
+
+**Key Components**:
+- **ChronicleScreen.java**: Main screen with category sidebar and entry display
+- **ChronicleData.java**: JSON data loader for guidebook content
+- **ChronicleBookItem.java**: Item that opens the Chronicle GUI
+
+**Data Files**: `common/src/main/resources/assets/chronodawn/chronicle/`
+- **categories.json**: Category definitions
+- **entries.json**: Entry data with localized text
+
+**Features**:
+- Bilingual support (English/Japanese)
+- Category-based navigation
+- Scrollable entry list and content area
+- Automatic distribution when entering Chrono Dawn dimension
+
+**Adding New Entries**:
+
+1. Add entry data to `entries.json`:
+```json
+{
+  "id": "new_entry",
+  "category": "progression",
+  "icon": "chronodawn:item/example_item",
+  "title": {
+    "en_us": "Entry Title",
+    "ja_jp": "エントリータイトル"
+  },
+  "content": {
+    "en_us": "Entry content...",
+    "ja_jp": "エントリー内容..."
+  }
+}
+```
+
+2. Reference from code:
+- Chronicle data is loaded automatically when screen opens
+- No code changes needed for new entries (data-driven)
+
 ---
 
 ## Adding New Features
@@ -776,7 +820,52 @@ See `CLAUDE.md` → "Mixin Configuration" for full details.
 
 ## License
 
-[Add license information here]
+**Chrono Dawn** is licensed under the **GNU Lesser General Public License v3.0 (LGPL-3.0)**.
+
+### What This Means
+
+- ✅ **Free to Use**: You can use this mod in any way, including commercially
+- ✅ **Free to Modify**: You can modify the source code and create derivative works
+- ✅ **Free to Distribute**: You can redistribute the mod and modifications
+- ⚠️ **Copyleft**: Modified versions must also be licensed under LGPL-3.0
+- ✅ **Dynamic Linking**: Mods that use Chrono Dawn as a dependency (normal Minecraft mod usage) can use any license
+
+### For Contributors
+
+When contributing code to Chrono Dawn:
+
+1. **All contributions** are licensed under LGPL-3.0
+2. **Ensure compatibility**: Only use dependencies with LGPL-3.0-compatible licenses (MIT, Apache 2.0, BSD)
+3. **Avoid incompatible licenses**: Do not add dependencies with GPL-incompatible licenses (CC-BY-NC, proprietary)
+4. **Document dependencies**: Add third-party licenses to `THIRD_PARTY_LICENSES.md`
+
+### License Header (Optional)
+
+While not required, you may add LGPL-3.0 headers to new source files:
+
+```java
+/*
+ * Chrono Dawn - A Time-Manipulation Dimension Mod for Minecraft
+ * Copyright (C) 2025 Soichiro Kashima
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+```
+
+### Full License Text
+
+See the [LICENSE](../LICENSE) file for the complete LGPL-3.0 license text.
 
 ---
 
