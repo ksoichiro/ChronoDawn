@@ -1,0 +1,23 @@
+{
+  "category": "bosses",
+  "title": {
+    "en_us": "Chronos Warden",
+    "ja_jp": "クロノスウォーデン"
+  },
+  "icon": "chronodawn:guardian_stone",
+  "sortnum": 2,
+  "pages": [
+    {
+      "text": {
+        "en_us": "Chronos Warden is a mid-boss found in the Guardian Vault. One of four bosses required for crafting Chrono Aegis.\n\nDifficulty: ★★★☆☆ (Moderate-Hard)\n\nLocation: Guardian Vault (underground)\n\nAbilities:\n• Stone Stance - Enters defensive stance reducing incoming damage for 5 seconds\n• Ground Slam - Area-of-effect knockback attack",
+        "ja_jp": "クロノスウォーデンは、ガーディアンの地下室に出現する中ボスです。クロノイージスの作成に必要な4体のボスのうちの1体です。\n\n難易度: ★★★☆☆（中〜難）\n\n場所: ガーディアンの地下室（地下）\n\n能力:\n• ストーンスタンス - 防御姿勢に入り5秒間ダメージを軽減\n• グラウンドスラム - 範囲ノックバック攻撃"
+      }
+    },
+    {
+      "text": {
+        "en_us": "Drops:\n• Guardian Stone (1/4 Chrono Aegis material) - ESSENTIAL\n• Enhanced Clockstone\n• Experience and loot\n\nCombat Strategy:\n• Don't attack during Stone Stance (reduced damage)\n• Keep distance to avoid Ground Slam knockback\n• Use vault's pillars for cover\n• Sustained damage over time\n• Bring high-defense armor",
+        "ja_jp": "ドロップ:\n• ガーディアンストーン（クロノイージス材料1/4） - 必須\n• 強化クロックストーン\n• 経験値と戦利品\n\n戦闘戦略:\n• ストーンスタンス中は攻撃しない（ダメージ軽減）\n• グラウンドスラムのノックバックを避けるため距離を保つ\n• 地下室の柱を盾に使う\n• 継続的なダメージを与える\n• 高防御力の防具を持参"
+      }
+    }
+  ]
+}

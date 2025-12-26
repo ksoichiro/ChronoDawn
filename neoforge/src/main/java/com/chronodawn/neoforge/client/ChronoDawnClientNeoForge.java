@@ -1,6 +1,9 @@
 package com.chronodawn.neoforge.client;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.gui.ChronicleScreen;
+import com.chronodawn.gui.data.ChronicleData;
+import com.chronodawn.items.ChronicleBookItem;
 import com.chronodawn.client.model.ChronosWardenModel;
 import com.chronodawn.client.model.ClockworkColossusModel;
 import com.chronodawn.client.model.ClockworkSentinelModel;
@@ -45,8 +48,10 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
 import java.util.Optional;
 
@@ -557,5 +562,39 @@ public class ChronoDawnClientNeoForge {
 
         // Normalize to 0.0-1.0 range
         return (float) Mth.positiveModulo(compassAngle, 1.0);
+    }
+
+    /**
+     * Register Chronicle Data resource reload listener.
+     * Loads guidebook data from JSON files when resources are loaded/reloaded.
+     *
+     * @param event The reload listeners registration event
+     */
+    @SubscribeEvent
+    public static void onRegisterClientReloadListeners(RegisterClientReloadListenersEvent event) {
+        event.registerReloadListener((preparationBarrier, resourceManager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor) ->
+            preparationBarrier.wait(null).thenRunAsync(() -> {
+                ChronicleData.getInstance().load(resourceManager);
+                ChronoDawn.LOGGER.info("Chronicle data loaded/reloaded");
+            }, gameExecutor)
+        );
+    }
+
+    /**
+     * Handle Chronicle Book item usage.
+     * Opens Chronicle GUI when player right-clicks with Chronicle Book.
+     *
+     * @param event The right-click item event
+     */
+    @SubscribeEvent
+    public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
+        var stack = event.getItemStack();
+        if (stack.getItem() instanceof ChronicleBookItem) {
+            if (event.getLevel().isClientSide()) {
+                net.minecraft.client.Minecraft.getInstance().setScreen(new ChronicleScreen());
+            }
+            event.setCancellationResult(net.minecraft.world.InteractionResult.SUCCESS);
+            event.setCanceled(true);
+        }
     }
 }

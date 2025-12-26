@@ -1,0 +1,23 @@
+{
+  "category": "bosses",
+  "title": {
+    "en_us": "Entropy Keeper",
+    "ja_jp": "エントロピーキーパー"
+  },
+  "icon": "chronodawn:entropy_core",
+  "sortnum": 5,
+  "pages": [
+    {
+      "text": {
+        "en_us": "Entropy Keeper is a mid-boss found in the Entropy Crypt. One of four bosses required for crafting Chrono Aegis.\n\nDifficulty: ★★★☆☆ (Moderate-Hard)\n\nLocation: Entropy Crypt (underground)\n\nAbilities:\n• Decay Aura - Applies Wither effect to nearby players (constant damage over time)\n• Entropy Burst - Unleashes wave of decay dealing damage and debuffs",
+        "ja_jp": "エントロピーキーパーは、エントロピーの墓所に出現する中ボスです。クロノイージスの作成に必要な4体のボスのうちの1体です。\n\n難易度: ★★★☆☆（中〜難）\n\n場所: エントロピーの墓所（地下）\n\n能力:\n• 崩壊オーラ - 近くのプレイヤーにウィザー効果を適用（継続ダメージ）\n• エントロピーバースト - 崩壊の波を放ちダメージとデバフを与える"
+      }
+    },
+    {
+      "text": {
+        "en_us": "Drops:\n• Entropy Core (1/4 Chrono Aegis material) - ESSENTIAL\n• Decay-themed loot\n• Experience and items\n\nCombat Strategy:\n• Bring multiple milk buckets to remove Wither effect\n• Keep distance to minimize Decay Aura exposure\n• Dodge Entropy Burst waves (telegraphed attack)\n• Use ranged attacks to minimize time in aura range\n• Retreat to heal and drink milk when necessary",
+        "ja_jp": "ドロップ:\n• エントロピーコア（クロノイージス材料1/4） - 必須\n• 崩壊をテーマにした戦利品\n• 経験値とアイテム\n\n戦闘戦略:\n• ウィザー効果を除去するため複数のミルクバケツを持参\n• 崩壊オーラへの露出を最小限にするため距離を保つ\n• エントロピーバーストの波を避ける（予告攻撃）\n• オーラ範囲内の時間を最小限にするため遠距離攻撃を使用\n• 必要に応じて後退して回復しミルクを飲む"
+      }
+    }
+  ]
+}

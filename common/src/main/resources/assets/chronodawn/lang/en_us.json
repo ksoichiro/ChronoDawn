@@ -337,7 +337,15 @@
   "patchouli.gui.lexicon.categories": "Categories",
   "patchouli.gui.lexicon.index": "Entry Index",
   "patchouli.gui.lexicon.chapters": "Chapters",
-  "patchouli.gui.lexicon.index.info": "An index of all the entries available in this book.$(br2)To search the index or other categories, simply type your query, and a search bar will show up to assist."
+  "patchouli.gui.lexicon.index.info": "An index of all the entries available in this book.$(br2)To search the index or other categories, simply type your query, and a search bar will show up to assist.",
+
+  "item.chronodawn.chronicle_book": "Chronicle of Chrono Dawn",
+
+  "gui.chronodawn.chronicle.title": "Chronicle of Chrono Dawn",
+  "gui.chronodawn.chronicle.previous": "Previous",
+  "gui.chronodawn.chronicle.next": "Next",
+  "gui.chronodawn.chronicle.page": "Page %s of %s",
+  "gui.chronodawn.chronicle.select_category": "Select a category to begin"
 }
 
 

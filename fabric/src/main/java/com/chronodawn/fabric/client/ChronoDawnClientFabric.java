@@ -1,5 +1,6 @@
 package com.chronodawn.fabric.client;
 
+import com.chronodawn.ChronoDawn;
 import com.chronodawn.client.model.ChronosWardenModel;
 import com.chronodawn.client.model.ClockworkColossusModel;
 import com.chronodawn.client.model.ClockworkSentinelModel;
@@ -10,6 +11,9 @@ import com.chronodawn.client.model.TemporalWraithModel;
 import com.chronodawn.client.model.TimeGuardianModel;
 import com.chronodawn.client.model.TimeKeeperModel;
 import com.chronodawn.client.model.TimeTyrantModel;
+import com.chronodawn.gui.ChronicleScreen;
+import com.chronodawn.gui.data.ChronicleData;
+import com.chronodawn.items.ChronicleBookItem;
 import com.chronodawn.client.renderer.ChronosWardenRenderer;
 import com.chronodawn.client.renderer.ChronoDawnBoatRenderer;
 import com.chronodawn.client.renderer.ChronoDawnChestBoatRenderer;
@@ -34,6 +38,10 @@ import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.event.client.player.ClientPlayerBlockBreakEvents;
+import net.fabricmc.fabric.api.event.player.UseItemCallback;
+import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.RenderType;
@@ -70,6 +78,28 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
         registerEntityModelLayers();
         registerEntityRenderers();
         registerItemProperties();
+        registerChronicleDataLoader();
+        registerChronicleBookHandler();
+    }
+
+    /**
+     * Register Chronicle Data resource reload listener.
+     * Loads guidebook data from JSON files when resources are loaded/reloaded.
+     */
+    private void registerChronicleDataLoader() {
+        ResourceManagerHelper.get(net.minecraft.server.packs.PackType.CLIENT_RESOURCES)
+            .registerReloadListener(new SimpleSynchronousResourceReloadListener() {
+                @Override
+                public ResourceLocation getFabricId() {
+                    return ResourceLocation.fromNamespaceAndPath("chronodawn", "chronicle_data");
+                }
+
+                @Override
+                public void onResourceManagerReload(net.minecraft.server.packs.resources.ResourceManager resourceManager) {
+                    ChronicleData.getInstance().load(resourceManager);
+                    ChronoDawn.LOGGER.info("Chronicle data loaded/reloaded");
+                }
+            });
     }
 
     /**
@@ -508,5 +538,21 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
 
         // Normalize to 0.0-1.0 range
         return (float) Mth.positiveModulo(compassAngle, 1.0);
+    }
+
+    /**
+     * Register Chronicle Book item use handler.
+     * Opens the Chronicle GUI when the Chronicle Book is used.
+     */
+    private void registerChronicleBookHandler() {
+        UseItemCallback.EVENT.register((player, world, hand) -> {
+            var stack = player.getItemInHand(hand);
+            if (stack.getItem() instanceof ChronicleBookItem) {
+                // Open Chronicle GUI on client side
+                net.minecraft.client.Minecraft.getInstance().setScreen(new ChronicleScreen());
+                return net.minecraft.world.InteractionResultHolder.success(stack);
+            }
+            return net.minecraft.world.InteractionResultHolder.pass(stack);
+        });
     }
 }

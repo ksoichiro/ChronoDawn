@@ -105,8 +105,8 @@ public class PlayerEventHandler {
         ChronoDawn.LOGGER.info("Player {} entered ChronoDawn at position {}",
             player.getName().getString(), player.blockPosition());
 
-        // Note: Guidebook distribution is handled by Patchouli advancement + loot table system
-        // See: data/chronodawn/advancement/grant_chronicle_book.json
+        // Note: Chronicle Book is available in creative tab and can be crafted/found
+        // Players can access the guidebook at any time by using the Chronicle Book item
 
         // Place Time Keeper Village near spawn if not already placed
         // This ensures players can find a Time Keeper for trading and Time Compass acquisition

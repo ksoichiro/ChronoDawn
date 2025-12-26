@@ -1,6 +1,7 @@
 package com.chronodawn.registry;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.items.ChronicleBookItem;
 import com.chronodawn.items.DecorativeWaterBucketItem;
 import com.chronodawn.items.PortalStabilizerItem;
 import com.chronodawn.items.TimeHourglassItem;
@@ -734,7 +735,15 @@ public class ModItems {
         () -> new DecorativeWaterBucketItem(ModFluids.DECORATIVE_WATER.get(), new Item.Properties().stacksTo(1))
     );
 
-    // Chronicle of ChronoDawn item removed - replaced by Patchouli guide book system (chronodawn:chronicle)
+    /**
+     * Chronicle Book - Custom guidebook item.
+     * Opens the Chronicle GUI when used, replacing Patchouli dependency.
+     * Distributed via advancement grant_chronicle_book when entering ChronoDawn.
+     */
+    public static final RegistrySupplier<Item> CHRONICLE_BOOK = ITEMS.register(
+        "chronicle_book",
+        () -> new ChronicleBookItem(ChronicleBookItem.createProperties())
+    );
 
     // === Consumables ===
 
@@ -1418,7 +1427,7 @@ public class ModItems {
         output.accept(TIME_HOURGLASS.get());
         output.accept(PORTAL_STABILIZER.get());
         // Decorative Water Bucket is intentionally excluded from creative tab (admin/command only)
-        // Chronicle of ChronoDawn is now distributed via Patchouli (advancement + loot table system)
+        output.accept(CHRONICLE_BOOK.get());
         // Add example Time Compass (targets Desert Clock Tower by default)
         output.accept(com.chronodawn.items.TimeCompassItem.createCompass(
             com.chronodawn.items.TimeCompassItem.STRUCTURE_DESERT_CLOCK_TOWER));

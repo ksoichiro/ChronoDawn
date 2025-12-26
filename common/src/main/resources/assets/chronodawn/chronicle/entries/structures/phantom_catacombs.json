@@ -1,0 +1,29 @@
+{
+  "category": "structures",
+  "title": {
+    "en_us": "Phantom Catacombs",
+    "ja_jp": "幻影のカタコンベ"
+  },
+  "icon": "minecraft:cobblestone",
+  "sortnum": 4,
+  "pages": [
+    {
+      "text": {
+        "en_us": "The Phantom Catacombs is a multi-level maze dungeon containing the Temporal Phantom mid-boss.\n\nStructure Type: Multi-level maze dungeon\n\nLocation: Various biomes in Chrono Dawn\n\nFeatures:\n• Complex maze layout with multiple paths\n• Boss spawns when entering boss room\n• Spectral-themed decoration\n• Loot chests throughout the maze",
+        "ja_jp": "幻影のカタコンベは、時の幻影の中ボスがいる多層迷路ダンジョンです。\n\n構造タイプ: 多層迷路ダンジョン\n\n場所: クロノドーンのさまざまなバイオーム\n\n特徴:\n• 複数の経路がある複雑な迷路レイアウト\n• ボス部屋に入るとボスが出現\n• スペクトルをテーマにした装飾\n• 迷路全体に戦利品チェスト"
+      }
+    },
+    {
+      "text": {
+        "en_us": "Navigation:\n\n1. Enter the catacombs\n2. Navigate the maze (use torches or blocks to mark paths)\n3. Explore to find the boss room\n4. Prepare before entering (boss spawns on entry!)\n\nBoss: Temporal Phantom\n\nDrops:\n• Phantom Essence (required for Chrono Aegis)\n• Spectral loot\n• Experience and items",
+        "ja_jp": "ナビゲーション:\n\n1. カタコンベに入る\n2. 迷路を進む（松明やブロックで道を記す）\n3. 探索してボス部屋を見つける\n4. 入る前に準備する（入室時にボスが出現！）\n\nボス: 時の幻影\n\nドロップ:\n• ファントムエッセンス（クロノイージスに必要）\n• スペクトラル戦利品\n• 経験値とアイテム"
+      }
+    },
+    {
+      "text": {
+        "en_us": "Tips:\n\n• Bring materials to mark paths (avoid getting lost)\n• Boss spawns immediately on room entry - be ready!\n• Wait out Phase Shift invulnerability\n• Focus on the real phantom (higher opacity, more health)\n• Dodge Spectral Strike projectiles\n\nSee \"Temporal Phantom\" in Boss Battles for detailed strategies!",
+        "ja_jp": "ヒント:\n\n• 道を記すための材料を持参（迷子にならないように）\n• 部屋に入るとすぐにボスが出現 - 準備を！\n• フェーズシフトの無敵状態が終わるまで待つ\n• 本物の幻影に集中（不透明度が高く、体力が多い）\n• スペクトラルストライクの発射物を避ける\n\n詳細な戦略については、ボス戦の「時の幻影」を参照してください！"
+      }
+    }
+  ]
+}

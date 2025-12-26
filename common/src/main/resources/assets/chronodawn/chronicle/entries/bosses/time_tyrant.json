@@ -1,0 +1,29 @@
+{
+  "category": "bosses",
+  "title": {
+    "en_us": "Time Tyrant (Final Boss)",
+    "ja_jp": "タイムタイラント（最終ボス）"
+  },
+  "icon": "chronodawn:eye_of_chronos",
+  "sortnum": 6,
+  "pages": [
+    {
+      "text": {
+        "en_us": "Time Tyrant is the final boss of Chrono Dawn, found in the Master Clock dungeon.\n\nDifficulty: ★★★★★ (Extreme)\n\nLocation: Master Clock dungeon (requires Master Clock Key)\n\nRequirements:\n• Master Clock Key (from Time Guardian)\n• Chrono Aegis HIGHLY RECOMMENDED (from 4 mid-boss drops)\n\nThe fight is EXTREMELY difficult without Chrono Aegis!",
+        "ja_jp": "タイムタイラントは、マスタークロックダンジョンに出現するクロノドーンの最終ボスです。\n\n難易度: ★★★★★（極難）\n\n場所: マスタークロックダンジョン（マスタークロックの鍵が必要）\n\n必要条件:\n• マスタークロックの鍵（タイムガーディアンから）\n• クロノイージスを強く推奨（4つの中ボスドロップから）\n\nクロノイージスなしでは戦闘は極めて困難です！"
+      }
+    },
+    {
+      "text": {
+        "en_us": "Phase Transitions:\n\n• Phase 1 (100%-66% HP): Basic attacks\n• Phase 2 (66%-33% HP): Increased aggression and new abilities\n• Phase 3 (33%-0% HP): Most dangerous phase, all abilities unlocked\n\nDrops:\n• Eye of Chronos (ultimate artifact material)\n• Fragments of Stasis Core (multiple pieces)\n• Rare loot and massive experience",
+        "ja_jp": "フェーズ転換:\n\n• フェーズ1（100%-66% HP）: 基本攻撃\n• フェーズ2（66%-33% HP）: 攻撃性増加と新能力\n• フェーズ3（33%-0% HP）: 最も危険なフェーズ、すべての能力が解放\n\nドロップ:\n• クロノスの眼（究極のアーティファクト材料）\n• スタシスコアの破片（複数個）\n• 希少な戦利品と膨大な経験値"
+      }
+    },
+    {
+      "text": {
+        "en_us": "Combat Preparation:\n\n⚠️ CRITICAL TIPS:\n• Bring your absolute best gear\n• Full set of enchanted armor\n• Multiple stacks of golden apples\n• Healing potions (Instant Health II)\n• Strength and Regeneration potions\n• Chrono Aegis shield (provides massive advantages)\n• Multiple weapon types\n\nBoss room walls are indestructible - no escape once inside!",
+        "ja_jp": "戦闘準備:\n\n⚠️ 重要なヒント:\n• 最高の装備を持参\n• エンチャントされた防具一式\n• 複数スタックの金のリンゴ\n• 治癒ポーション（即時回復II）\n• 力と再生のポーション\n• クロノイージスの盾（大きな優位性を提供）\n• 複数の武器タイプ\n\nボス部屋の壁は破壊不可 - 中に入ったら脱出できません！"
+      }
+    }
+  ]
+}
