@@ -33,6 +33,34 @@ Simply describe what you want to do (e.g., "I want to update Minecraft to 1.21.2
 
 ---
 
+## License Compliance
+
+**Project License**: LGPL-3.0 (GNU Lesser General Public License v3.0)
+
+**CRITICAL**: This project is licensed under LGPL-3.0. All contributions and modifications must comply with LGPL-3.0 terms.
+
+**Key Requirements**:
+1. **Copyleft**: Derivative works must remain LGPL-3.0 (or compatible license)
+2. **Source Code**: Source code must be made available to users
+3. **License Notice**: Include LGPL-3.0 license notice in distributions
+4. **Dynamic Linking**: Mods using this code via dynamic linking (normal Minecraft mod usage) can use any license
+5. **Static Linking/Modification**: Modified versions or statically linked code must be LGPL-3.0
+
+**When Adding Dependencies**:
+- Verify dependency license is LGPL-3.0 compatible (MIT, Apache 2.0, BSD are compatible)
+- Avoid GPL-incompatible licenses (CC-BY-NC, proprietary)
+- Document all third-party licenses in `THIRD_PARTY_LICENSES.md`
+
+**Files Requiring License Headers** (Optional but Recommended):
+- Core implementation files in `common/src/main/java/com/chronodawn/`
+- Platform-specific entry points in `fabric/` and `neoforge/`
+
+**License Change History**:
+- 2025-12-27: Changed from "All Rights Reserved" to LGPL-3.0 (T601-T608)
+- Rationale: Patchouli dependency removed (T706), enabling FOSS licensing
+
+---
+
 ## Active Technologies
 - Java 21 (Minecraft Java Edition 1.21.1) + NeoForge 21.1.x, Fabric Loader, mcjunitlib
 - Custom Portal API 0.0.1-beta66-1.21 (Fabric) - for custom portal implementation
