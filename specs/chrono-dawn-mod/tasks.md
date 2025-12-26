@@ -297,37 +297,35 @@
   - This reference is inaccurate (Patchouli will be removed)
   - Commit: "docs: remove obsolete Patchouli dependency note"
 
-- [ ] T601 [License] Replace LICENSE file with LGPL-3.0 text
-  - Download LGPL-3.0 full text from https://www.gnu.org/licenses/lgpl-3.0.txt
-  - Replace content of `/LICENSE` file
-  - Add copyright notice: "Copyright (C) 2025 Soichiro Kashima"
-  - Commit: "license: migrate from All Rights Reserved to LGPL-3.0"
+- [x] T601 [License] Replace LICENSE file with LGPL-3.0 text (2025-12-27)
+  - Downloaded LGPL-3.0 full text from https://www.gnu.org/licenses/lgpl-3.0.txt
+  - Replaced content of `/LICENSE` file with copyright notice and LGPL-3.0 text
+  - Commit: "license: change from All Rights Reserved to LGPL-3.0"
 
-- [ ] T602 [Documentation] Update README.md license section
-  - Replace "All Rights Reserved" section with LGPL-3.0 notice
-  - Add: "This program is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License..."
-  - Include link to LICENSE file
-  - Commit: "docs: update README.md to reflect LGPL-3.0 license"
+- [x] T602 [Documentation] Update README.md license section (2025-12-27)
+  - Replaced "All Rights Reserved" section with LGPL-3.0 notice
+  - Added standard LGPL-3.0 disclaimer and warranty notice
+  - Commit: "docs: update README.md license section to LGPL-3.0"
 
-- [ ] T603 [Metadata] Update fabric.mod.json license field
-  - Change `"license"` field from "All Rights Reserved" to "LGPL-3.0"
+- [x] T603 [Metadata] Update fabric.mod.json license field (2025-12-27)
+  - Changed `"license"` field from "All Rights Reserved" to "LGPL-3.0"
   - File: `/fabric/src/main/resources/fabric.mod.json`
-  - Commit: "meta: update Fabric mod metadata to LGPL-3.0"
+  - Commit: "meta: update mod metadata license fields to LGPL-3.0"
 
-- [ ] T604 [Metadata] Update neoforge.mods.toml license field
-  - Change `license` field from "All Rights Reserved" to "LGPL-3.0"
+- [x] T604 [Metadata] Update neoforge.mods.toml license field (2025-12-27)
+  - Changed `license` field from "All Rights Reserved" to "LGPL-3.0"
   - File: `/neoforge/src/main/resources/META-INF/neoforge.mods.toml`
-  - Commit: "meta: update NeoForge mod metadata to LGPL-3.0"
+  - Commit: "meta: update mod metadata license fields to LGPL-3.0"
 
-- [ ] T605 [Platform] Update docs/curseforge_description.md license section
-  - Update license information to LGPL-3.0
-  - Add note about source code availability on GitHub
-  - Commit: "docs: update CurseForge description with LGPL-3.0 license"
+- [x] T605 [Platform] Update docs/curseforge_description.md license section (2025-12-27)
+  - Updated license information to LGPL-3.0
+  - Added note about source code availability on GitHub
+  - Commit: "docs: update platform descriptions with LGPL-3.0 license"
 
-- [ ] T606 [Platform] Update docs/modrinth_description.md license section
-  - Update license information to LGPL-3.0
-  - Add note about source code availability on GitHub
-  - Commit: "docs: update Modrinth description with LGPL-3.0 license"
+- [x] T606 [Platform] Update docs/modrinth_description.md license section (2025-12-27)
+  - Updated license information to LGPL-3.0
+  - Added note about source code availability on GitHub
+  - Commit: "docs: update platform descriptions with LGPL-3.0 license"
 
 - [ ] T607 [Optional] Add LGPL-3.0 headers to main source files
   - Add standard LGPL-3.0 header comment to key Java files:
@@ -336,13 +334,13 @@
     - `/neoforge/src/main/java/com/chronodawn/neoforge/ChronoDawnNeoForge.java`
   - Header template: Copyright notice + LGPL-3.0 boilerplate
   - Optional: Can add to other files incrementally
-  - Commit: "license: add LGPL-3.0 headers to main entry points"
+  - Status: Deferred (optional enhancement)
 
-- [ ] T608 [Guidelines] Update CLAUDE.md project guidelines
-  - Update license policy in project guidelines
-  - Document LGPL-3.0 compliance requirements
-  - Note: Derivative works must remain LGPL-3.0
-  - Commit: "docs: update CLAUDE.md with LGPL-3.0 license policy"
+- [x] T608 [Guidelines] Update CLAUDE.md project guidelines (2025-12-27)
+  - Updated license policy in project guidelines
+  - Documented LGPL-3.0 compliance requirements and copyleft obligations
+  - Added license change history
+  - Commit: "docs: add LGPL-3.0 compliance guidelines to CLAUDE.md"
 
 **Estimated Effort**: 1-2 hours
 - License file replacement: 10 minutes
