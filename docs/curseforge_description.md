@@ -173,13 +173,15 @@ Check out the **Gallery** tab above for screenshots showcasing:
 
 ## 📜 License & Permissions
 
-**License**: All Rights Reserved - Copyright (c) 2025 Soichiro Kashima
+**License**: LGPL-3.0 - Copyright (C) 2025 Soichiro Kashima
 
-**Source Code**: Not publicly available
+**Source Code**: Available on [GitHub](https://github.com/ksoichiro/ChronoDawn)
 
-**Modpack Inclusion**: ✅ Allowed - You may include this mod's JAR file in modpacks
+**Freedom to Use**: ✅ Free to use, modify, and redistribute under LGPL-3.0 terms
 
-**Redistribution**: ✅ Allowed - You may redistribute this mod with proper attribution
+**Modpack Inclusion**: ✅ Allowed - You may include this mod in modpacks
+
+**Redistribution**: ✅ Allowed - You may redistribute this mod (must remain LGPL-3.0)
 
 ---
 
