@@ -775,7 +775,7 @@
   - Estimated effort: 1-1.5 hours
   - Status: High priority for feature understanding
 
-- [ ] T709 [P] Translate specs/chrono-dawn-mod/tasks.md to English
+- [x] T709 [P] Translate specs/chrono-dawn-mod/tasks.md to English - Completed 2025-12-27
   - Translate task descriptions and notes (49 lines of Japanese content)
   - Important for project progress visibility
   - Keep task IDs and completion status unchanged
