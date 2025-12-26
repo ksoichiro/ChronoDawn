@@ -5,13 +5,13 @@
   "name": "Chrono Dawn",
   "description": "A time manipulation themed Minecraft mod featuring the Chrono Dawn dimension",
   "authors": [
-    "YourName"
+    "ksoichiro"
   ],
   "contact": {
     "homepage": "https://github.com/ksoichiro/ChronoDawn",
     "sources": "https://github.com/ksoichiro/ChronoDawn"
   },
-  "license": "MIT",
+  "license": "All Rights Reserved",
   "icon": "assets/chronodawn/icon.png",
   "environment": "*",
   "entrypoints": {

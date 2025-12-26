@@ -1,6 +1,6 @@
 modLoader="javafml"
 loaderVersion="[4,)"
-license="MIT"
+license="All Rights Reserved"
 showAsResourcePack=false
 
 [[mods]]
@@ -12,7 +12,7 @@ A time manipulation themed Minecraft mod featuring the Chrono Dawn dimension.
 Explore a frozen dimension, defeat time-controlling bosses, and master ultimate artifacts.
 '''
 logoFile="chronodawn_logo.png"
-authors="YourName"
+authors="ksoichiro"
 credits="Built with Architectury"
 displayURL="https://github.com/ksoichiro/ChronoDawn"
 
