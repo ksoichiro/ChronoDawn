@@ -747,8 +747,8 @@
 - [x] T187 [P] Create Modrinth mod page description (docs/modrinth_description.md - includes Chronicle UI, unified with CurseForge)
 - [x] T188 [P] Write player guide in docs/player_guide.md
 - [ ] T189 [P] Write developer guide in docs/developer_guide.md
-- [x] T295 [P] Configure mod metadata (license="All Rights Reserved", authors="ksoichiro" in fabric.mod.json and neoforge.mods.toml) - Icon still pending (T296)
-- [ ] T296 [P] Add mod icon/logo image (512x512 or 256x256 PNG) to resources
+- [x] T295 [P] Configure mod metadata (license="LGPL-3.0", authors="ksoichiro" in fabric.mod.json and neoforge.mods.toml) - Completed 2025-12-27
+- [x] T296 [P] Add mod icon/logo image (512x512 PNG) to resources - Added to Fabric and NeoForge (2025-12-27)
 - [x] T297 [P] Add LICENSE file and document dependency licenses (Architectury, Custom Portal API, Patchouli, etc.)
 
 ### Playtest Improvements - Dimension Mechanics
