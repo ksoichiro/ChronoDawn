@@ -22,19 +22,19 @@ Chrono Dawn adds a brand new dimension to Minecraft, filled with unique biomes, 
 - **Ancient Ruins** (Overworld): Discover the secrets to enter Chrono Dawn
 - **Forgotten Library** (Chrono Dawn): Find the blueprints to stabilize the dimension
 - **Desert Clock Tower** (Chrono Dawn): Obtain rare Enhanced Clockstone
-- **Guardian Vault** (Chrono Dawn): Face Chronos Warden
-- **Clockwork Depths** (Chrono Dawn): Challenge Clockwork Colossus
-- **Phantom Catacombs** (Chrono Dawn): Navigate a maze to find Temporal Phantom
-- **Entropy Crypt** (Chrono Dawn): Confront Entropy Keeper
+- **Guardian Vault** (Chrono Dawn): Face the Chronos Warden boss
+- **Clockwork Depths** (Chrono Dawn): Challenge the Clockwork Colossus boss
+- **Phantom Catacombs** (Chrono Dawn): Navigate a maze to find the Temporal Phantom boss
+- **Entropy Crypt** (Chrono Dawn): Confront the Entropy Keeper boss
 - **Master Clock** (Final Dungeon): Face the ultimate challenge
 
 ### 👹 Powerful Boss Battles
 - **Time Guardian**: A mini-boss guarding the path to the Master Clock (drops Master Clock Key)
 - **4 Mid-Bosses** (required for Chrono Aegis crafting):
-  - **Chronos Warden**: Stone guardian in the Guardian Vault (drops Guardian Stone)
-  - **Clockwork Colossus**: Mechanical giant in the Clockwork Depths (drops Colossus Gear)
-  - **Temporal Phantom**: Spectral enemy in the Phantom Catacombs maze (drops Phantom Essence)
-  - **Entropy Keeper**: Decay-themed boss in the Entropy Crypt (drops Entropy Core)
+  - **Chronos Warden**: Stone guardian in the Guardian Vault
+  - **Clockwork Colossus**: Mechanical giant in the Clockwork Depths
+  - **Temporal Phantom**: Spectral enemy in the Phantom Catacombs maze
+  - **Entropy Keeper**: Decay-themed boss in the Entropy Crypt
 - **Time Tyrant**: The final boss controlling the flow of time itself
 
 ### ⚔️ Ultimate Artifacts
