@@ -217,160 +217,160 @@ The player uses the Master Clock Key to reach the deepest chamber and battles th
 
 ### Edge Cases
 
-- プレイヤーがポータル安定化装置を作成せずにクロノドーンで死亡した場合、どのように脱出するか?(リスポーン処理の設定)
-- ポータル安定化はディメンション全体に適用されるため、安定化後に新しく作成したポータルも即座にTime Hourglassで点火可能になる(複数ポータル作成が自由)
-- 安定化後、オーバーワールドからクロノドーンに移動した際、クロノドーン側に生成されたポータルは自動的にDEACTIVATEされない(そのまま残り、双方向移動可能)
-- Portal Stabilizerは点火機能を持たず、ディメンション安定化のみを行う。点火はTime Hourglassで実施する
-- 時の番人を倒さずにマスタークロックに到達しようとした場合、どうなるか?(鍵が必要なため進行不可)
-- クロノブレードや時の番人のメイルの確率発動はどの程度の頻度か?(10%、25%、50%など - バランス調整が必要)
-- 反転共鳴が発動した際、プレイヤーが安全地帯に逃げ込めない場合のリスク軽減策は?(効果時間の調整、警告表示など)
-- 不安定な砂岩が修復される間に他のブロックが配置された場合の挙動は?(配置したブロックを破壊して元に戻す、または修復をスキップする)
-- 時間の果実の採掘速度上昇効果は既存のHasteエンチャントと重複するか?(重複する、または上限を設ける)
-- プレイヤーが不安定な懐中時計を連続使用した場合、速度効果が蓄積されるか?(効果の上書き、またはクールダウンの設定)
+- If the player dies in Chrono Dawn without creating the Portal Stabilizer, how do they escape? (Respawn handling configuration)
+- Portal stabilization applies to the entire dimension, so new portals created after stabilization can be immediately ignited with Time Hourglass (multiple portals can be freely created)
+- After stabilization, when moving from Overworld to Chrono Dawn, the portal generated on the Chrono Dawn side is NOT automatically deactivated (remains active, allowing bidirectional travel)
+- Portal Stabilizer does NOT have ignition functionality, only performs dimension stabilization. Ignition is done with Time Hourglass
+- What happens if a player attempts to reach the Master Clock without defeating the Time Guardian? (Cannot progress due to key requirement)
+- What is the frequency of probability-based activation for Chronoblade or Time Guardian's Mail? (10%, 25%, 50%, etc. - requires balance adjustment)
+- When Reversal Resonance activates, what mitigation measures exist if the player cannot escape to a safe zone? (Effect duration adjustment, warning display, etc.)
+- What is the behavior if other blocks are placed while Reversing Time Sandstone is restoring? (Destroy placed blocks and restore, or skip restoration)
+- Does the mining speed boost effect of Fruit of Time stack with existing Haste enchantments? (Stacks, or set an upper limit)
+- If the player uses Unstable Pocket Watch consecutively, do speed effects accumulate? (Effect overwrite, or cooldown setting)
 
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
 
-- **FR-001**: システムはオーバーワールドに古代遺跡を生成し、プレイヤーがクロックストーンと時の砂時計の設計図を発見できるようにしなければならない
-- **FR-002**: プレイヤーは時の砂時計を作成し、ポータルを起動してクロノドーンディメンションに突入できなければならない
-- **FR-003**: プレイヤーがクロノドーンに突入した直後、ポータルは機能停止し、プレイヤーは通常の手段では帰還できない状態にならなければならない
-- **FR-004**: クロノドーン内に忘れられた図書館を生成し、プレイヤーがポータル安定化装置の設計図を発見できるようにしなければならない
-- **FR-005**: プレイヤーはポータル安定化装置を作成し、使用することでクロノドーンディメンションを安定化し、その後Time Hourglassでポータルを再点火することで、オーバーワールドとクロノドーンを自由に往来できるようにしなければならない
-- **FR-006**: クロノドーン内の大半のカスタムMobに恒常的な極端な速度低下(Slowness IV～V相当)を付与し、プレイヤーは通常の速度で行動できなければならない
-- **FR-007**: クロノドーン内に時間の果実を生成し、プレイヤーが入手・使用することで満腹度を回復し、一時的に採掘速度を上昇(Haste I相当)させなければならない
-- **FR-008**: 特定のブロック(逆流の砂岩など)の破壊イベントをフックし、数秒後に元のブロックに修復する処理を実行しなければならない。修復完了までドロップアイテムの放出を停止しなければならない
-- **FR-009**: 不安定な菌糸ブロックのエンティティ衝突イベントをフックし、衝突したプレイヤーにランダムな速度効果(Speed IまたはSlowness I)を0.5秒間付与しなければならない
-- **FR-010**: プレイヤーが不安定な砂時計を作成した際、または中ボス・ラスボスを撃破した直後の短時間(30秒～1分)に限定して反転共鳴を発動し、プレイヤーにSlowness IV、周囲のMobにSpeed IIを付与しなければならない
-- **FR-011**: クロノドーン内に砂漠の時計塔を生成し、プレイヤーが強化クロックストーンを入手できるようにしなければならない
-- **FR-012**: プレイヤーは強化クロックストーンを使用してタイムクロック、空間連結ツルハシなどの時間操作アイテムを作成できなければならない
-- **FR-013**: タイムクロックを使用すると、周囲のMobの次の攻撃AIルーチンを強制的にキャンセルしなければならない(クールダウンあり)
-- **FR-014**: 空間連結ツルハシでブロックを破壊すると、確率でドロップアイテム生成処理を二重に実行しなければならない
-- **FR-015**: クロノドーン内に中ボス「時の番人」を生成し、プレイヤーが撃破するとマスタークロックへの鍵を入手できなければならない
-- **FR-016**: マスタークロックへの鍵を使用すると、マスタークロック最深部への道が開かれなければならない
-- **FR-017**: マスタークロック最深部にラスボス「時間の暴君」を生成し、プレイヤーが撃破すると静止のコアが破壊され、クロノスの瞳と静止のコアの破片を獲得できなければならない
-- **FR-018**: クロノスの瞳を獲得すると、クロノドーン内のMobの基本速度低下効果がさらに強化されなければならない
-- **FR-019**: 静止のコアの破片を使用して究極のアーティファクト(クロノブレード、時の番人のメイル、時間の残響ブーツ、空間連結ツルハシの強化版、不安定な懐中時計)を作成できなければならない
-- **FR-020**: クロノブレードで攻撃を命中させると、確率でMobの次の攻撃AIを強制的にスキップしなければならない
-- **FR-021**: 時の番人のメイルを装備している状態で致命的なダメージを受けると、確率でダメージ前のHPと位置にロールバックしなければならない
-- **FR-022**: 時間の残響ブーツを装備してダッシュすると、敵のターゲットを引くデコイ(残像エンティティ)を短時間召喚しなければならない
-- **FR-023**: 不安定な懐中時計を使用すると、周囲のMobとプレイヤーの現在の速度ステータス効果を瞬時に入れ替えなければならない
-- **FR-024**: プレイヤーがクロノドーンで死亡した際のリスポーン処理は、オーバーワールドまたはクロノドーン内の安全地点のいずれかに設定されなければならない
-- **FR-025**: システムはサーバー負荷を抑えるため、既存のMinecraftシステム(ステータス効果、イベントフック)を最大限活用して時間特性を実装しなければならない
+- **FR-001**: The system must generate Ancient Ruins in the Overworld, allowing players to discover Clockstone and Time Hourglass blueprints
+- **FR-002**: Players must be able to create Time Hourglass, activate portals, and enter the Chrono Dawn dimension
+- **FR-003**: Immediately after the player enters Chrono Dawn, the portal must deactivate, making it impossible for the player to return through normal means
+- **FR-004**: The system must generate Forgotten Library in Chrono Dawn, allowing players to discover Portal Stabilizer blueprints
+- **FR-005**: Players must be able to create and use Portal Stabilizer to stabilize the Chrono Dawn dimension, then re-ignite the portal with Time Hourglass to enable free travel between Overworld and Chrono Dawn
+- **FR-006**: The majority of custom mobs in Chrono Dawn must have permanent extreme speed reduction (Slowness IV-V equivalent), while players must be able to move at normal speed
+- **FR-007**: The system must generate Fruit of Time in Chrono Dawn, allowing players to collect and consume it to restore hunger and temporarily increase mining speed (Haste I equivalent)
+- **FR-008**: The system must hook block destruction events for specific blocks (such as Reversing Time Sandstone) and execute restoration to the original block after a few seconds. Drop item emission must be suspended until restoration is complete
+- **FR-009**: The system must hook entity collision events for Unstable Fungus blocks and apply random speed effects (Speed I or Slowness I) to colliding players for 0.5 seconds
+- **FR-010**: The system must trigger Reversal Resonance for a short time (30 seconds to 1 minute) when the player creates Unstable Pocket Watch or immediately after defeating mid-bosses or final boss, applying Slowness IV to the player and Speed II to surrounding mobs
+- **FR-011**: The system must generate Desert Clock Tower in Chrono Dawn, allowing players to obtain Enhanced Clockstone
+- **FR-012**: Players must be able to use Enhanced Clockstone to create time manipulation items such as Time Clock and Spatial Link Pickaxe
+- **FR-013**: Using Time Clock must forcibly cancel the next attack AI routine of surrounding mobs (with cooldown)
+- **FR-014**: Breaking blocks with Spatial Link Pickaxe must probabilistically execute drop item generation processing twice
+- **FR-015**: The system must spawn mid-boss "Time Guardian" in Chrono Dawn, allowing players to obtain Master Clock Key upon defeat
+- **FR-016**: Using Master Clock Key must open the path to the deepest part of Master Clock
+- **FR-017**: The system must spawn final boss "Time Tyrant" in the deepest part of Master Clock; upon player defeat, the Stasis Core is destroyed, and players must obtain Eye of Chronos and Fragments of Stasis Core
+- **FR-018**: Upon obtaining Eye of Chronos, the basic speed reduction effect of mobs in Chrono Dawn must be further enhanced
+- **FR-019**: Players must be able to use Fragments of Stasis Core to create ultimate artifacts (Chronoblade, Time Guardian's Mail, Echo Boots of Time, enhanced version of Spatial Link Pickaxe, Unstable Pocket Watch)
+- **FR-020**: Landing attacks with Chronoblade must probabilistically skip the next attack AI of mobs
+- **FR-021**: While equipped with Time Guardian's Mail, receiving fatal damage must probabilistically roll back to HP and position before damage
+- **FR-022**: Dashing while equipped with Echo Boots of Time must summon a decoy (afterimage entity) that draws enemy targets for a short time
+- **FR-023**: Using Unstable Pocket Watch must instantly swap current speed status effects between surrounding mobs and the player
+- **FR-024**: Respawn processing when the player dies in Chrono Dawn must be set to either Overworld or a safe point within Chrono Dawn
+- **FR-025**: To reduce server load, the system must implement time characteristics by maximally utilizing existing Minecraft systems (status effects, event hooks)
 
-#### 新規追加要件 (Gameplay Enhancement)
+#### Additional Requirements (Gameplay Enhancement)
 
-- **FR-026**: クロノドーン内に時間をテーマにした独自モブ（時の亡霊、時計仕掛けの番兵、時間の管理者）を生成し、プレイヤーに多様な戦闘・取引体験を提供しなければならない
-- **FR-027**: 時計仕掛けの番兵は時間歪曲効果（Slowness IV）に免疫を持ち、通常速度で動作しなければならない
-- **FR-028**: 時の亡霊は攻撃を受けた際にブロックをすり抜けて逃げる特性を持ち、攻撃時にプレイヤーにSlowness IIを付与しなければならない
-- **FR-029**: 時間の管理者は中立モブとして取引インターフェースを提供し、時間関連アイテムと交換可能なアイテムを提供しなければならない
-- **FR-030**: クロノドーン内に時のクリスタル鉱石を生成し、プレイヤーがY座標0-48で採掘できるようにしなければならない
-- **FR-031**: プレイヤーはクロックストーンと時のクリスタルを使用して基本装備セット（Tier 1: 剣・斧・シャベル・クワ・フルアーマー）を作成できなければならない
-- **FR-032**: プレイヤーは強化クロックストーンと時のクリスタルを使用して上位装備セット（Tier 2: Enhanced Clockstone装備）を作成できなければならない
-- **FR-033**: Tier 2の剣は攻撃時に確率で敵を2秒間凍結させ、Tier 2のフルアーマー装備時には時間歪曲効果への完全免疫を付与しなければならない
-- **FR-034**: プレイヤーは時間の果実を使用して加工食料（時の果実パイ、時のジャム）を作成でき、それぞれ異なるバフ効果を得られなければならない
-- **FR-035**: クロノドーン内に時の小麦を自生させ、プレイヤーが収穫・栽培して時のパンを作成できるようにしなければならない
-- **FR-036**: クロノドーン内に追加バイオーム（山岳、沼地、雪原、洞窟）を生成し、プレイヤーに探索の多様性を提供しなければならない
-- **FR-037**: 各バイオームに固有のブロック（時間の苔、凍結した時の氷）を生成し、バイオームの識別性を向上させなければならない
-- **FR-038**: プレイヤーは装飾ブロック（時計仕掛けブロック、時のクリスタルブロック、時間のレンガ）と建築用バリエーション（階段・ハーフブロック・壁・フェンス）を作成できなければならない
-- **FR-039**: マスタークロック撃破後に時間をテーマにした独自地形（時間の裂け目峡谷、浮遊する時計仕掛けの廃墟、時のクリスタル洞窟）を生成し、エンドゲームの探索要素を提供しなければならない
+- **FR-026**: The system must spawn unique time-themed mobs (Temporal Wraith, Clockwork Sentinel, Time Keeper) in Chrono Dawn, providing players with diverse combat and trading experiences
+- **FR-027**: Clockwork Sentinels must be immune to time distortion effects (Slowness IV) and move at normal speed
+- **FR-028**: Temporal Wraiths must have the ability to phase through blocks when attacked to escape, and must apply Slowness II to players upon attack
+- **FR-029**: Time Keepers must provide a trading interface as neutral mobs, offering items exchangeable for time-related items
+- **FR-030**: The system must generate Time Crystal Ore in Chrono Dawn, allowing players to mine it at Y-coordinate 0-48
+- **FR-031**: Players must be able to use Clockstone and Time Crystal to create basic equipment set (Tier 1: sword, axe, shovel, hoe, full armor)
+- **FR-032**: Players must be able to use Enhanced Clockstone and Time Crystal to create advanced equipment set (Tier 2: Enhanced Clockstone equipment)
+- **FR-033**: Tier 2 swords must probabilistically freeze enemies for 2 seconds on attack, and wearing full Tier 2 armor must grant complete immunity to time distortion effects
+- **FR-034**: Players must be able to use Fruit of Time to create processed foods (Time Fruit Pie, Time Jam), each providing different buff effects
+- **FR-035**: The system must naturally generate Time Wheat in Chrono Dawn, allowing players to harvest, cultivate, and create Time Bread
+- **FR-036**: The system must generate additional biomes (Mountain, Swamp, Snowy, Cave) in Chrono Dawn, providing diversity in player exploration
+- **FR-037**: The system must generate biome-specific blocks (Temporal Moss, Frozen Time Ice) in each biome to improve biome distinctiveness
+- **FR-038**: Players must be able to create decorative blocks (Clockwork Block, Time Crystal Block, Temporal Bricks) and building variations (stairs, slabs, walls, fences)
+- **FR-039**: The system must generate unique time-themed terrain features (Temporal Rift Canyon, Floating Clockwork Ruins, Time Crystal Caverns) after defeating Master Clock, providing endgame exploration elements
 
 ### Key Entities
 
-- **クロックストーン**: クロノドーンの基本素材。古代遺跡で発見でき、ポータル作成やアイテムの基本素材として使用される。
-- **時の砂時計**: クロックストーンから作成される特殊アイテム。ポータルを起動してクロノドーンへの突入を可能にする。
-- **ポータル安定化装置**: 忘れられた図書館で設計図を発見し、クラフトによって作成される。機能停止したポータルを修復し、自由な往来を可能にする。
-- **時間の果実**: クロノドーン内で入手できる特殊な食料。満腹度回復と一時的な採掘速度上昇効果を持つ。
-- **強化クロックストーン**: 砂漠の時計塔で入手できる上位素材。時間操作アイテムのレシピに必要。
-- **タイムクロック**: 強化クロックストーンから作成されるユーティリティアイテム。使用すると周囲のMobの攻撃AIをキャンセルする(クールダウンあり)。
-- **空間連結ツルハシ**: 強化クロックストーンから作成されるツール。ブロック破壊時に確率でドロップアイテムが2倍になる。
-- **不安定な砂時計**: 究極アイテムの素材。クラフト時に反転共鳴を誘発するリスクを伴う。
-- **マスタークロックへの鍵**: 時の番人を撃破すると入手できる重要アイテム。マスタークロック最深部への道を開く。
-- **静止のコアの破片**: 時間の暴君を撃破すると入手できる最重要素材。究極のアーティファクトの作成に必須。
-- **クロノスの瞳**: 時間の暴君を撃破すると入手できる究極のアーティファクト。獲得後、クロノドーンのMobの速度低下がさらに強化される。
-- **クロノブレード**: 静止のコアの破片から作成される究極の剣。攻撃命中時、確率でMobの次の攻撃AIをスキップする。
-- **時の番人のメイル**: 静止のコアの破片から作成される究極のチェストプレート。致命的なダメージを受けた際、確率でダメージ前の状態にロールバックする。
-- **時間の残響ブーツ**: 静止のコアの破片から作成される究極のブーツ。ダッシュ時に敵のターゲットを引くデコイを召喚する。
-- **不安定な懐中時計**: 静止のコアの破片から作成される究極のユーティリティアイテム。使用時、周囲のMobとプレイヤーの速度ステータス効果を入れ替える。
-- **古代遺跡**: オーバーワールドに生成される構造物。クロックストーンと時の砂時計の設計図を発見できる。
-- **忘れられた図書館**: クロノドーン内に生成される構造物。ポータル安定化装置の設計図を発見できる。
-- **砂漠の時計塔**: クロノドーン内に生成される構造物。強化クロックストーンを入手できる。
-- **マスタークロック**: クロノドーン内の最深部にある構造物。時間の暴君が待ち構えている。
-- **時の番人**: クロノドーン内に出現する中ボス。撃破するとマスタークロックへの鍵をドロップする。
-- **時間の暴君**: マスタークロック最深部に出現するラスボス。ディメンションを永遠に静止させた元凶。撃破すると静止のコアの破片とクロノスの瞳を入手できる。
-- **逆流の砂岩**: クロノドーン内に生成される特殊ブロック。破壊後数秒で元の状態に修復される。
-- **不安定な菌糸**: クロノドーン内に生成される特殊ブロック。衝突したプレイヤーにランダムな速度効果を付与する。
+- **Clockstone**: Basic material of Chrono Dawn. Can be discovered in Ancient Ruins and used as base material for portal creation and items.
+- **Time Hourglass**: Special item created from Clockstone. Activates portals and enables entry into Chrono Dawn.
+- **Portal Stabilizer**: Blueprints discovered in Forgotten Library, created through crafting. Repairs deactivated portals and enables free travel.
+- **Fruit of Time**: Special food obtainable in Chrono Dawn. Restores hunger and provides temporary mining speed boost.
+- **Enhanced Clockstone**: Advanced material obtainable in Desert Clock Tower. Required for time manipulation item recipes.
+- **Time Clock**: Utility item created from Enhanced Clockstone. Cancels attack AI of surrounding mobs when used (with cooldown).
+- **Spatial Link Pickaxe**: Tool created from Enhanced Clockstone. Probabilistically doubles drop items when breaking blocks.
+- **Unstable Hourglass**: Material for ultimate items. Carries risk of triggering Reversal Resonance during crafting.
+- **Master Clock Key**: Important item obtained by defeating Time Guardian. Opens the path to the deepest part of Master Clock.
+- **Fragments of Stasis Core**: Most important material obtained by defeating Time Tyrant. Essential for creating ultimate artifacts.
+- **Eye of Chronos**: Ultimate artifact obtained by defeating Time Tyrant. After acquisition, speed reduction of mobs in Chrono Dawn is further enhanced.
+- **Chronoblade**: Ultimate sword created from Fragments of Stasis Core. Probabilistically skips next attack AI of mobs upon landing hits.
+- **Time Guardian's Mail**: Ultimate chestplate created from Fragments of Stasis Core. Probabilistically rolls back to state before damage when receiving fatal damage.
+- **Echo Boots of Time**: Ultimate boots created from Fragments of Stasis Core. Summons decoy that draws enemy targets when dashing.
+- **Unstable Pocket Watch**: Ultimate utility item created from Fragments of Stasis Core. Swaps speed status effects of surrounding mobs and player when used.
+- **Ancient Ruins**: Structure generated in Overworld. Clockstone and Time Hourglass blueprints can be discovered.
+- **Forgotten Library**: Structure generated in Chrono Dawn. Portal Stabilizer blueprints can be discovered.
+- **Desert Clock Tower**: Structure generated in Chrono Dawn. Enhanced Clockstone can be obtained.
+- **Master Clock**: Structure in the deepest part of Chrono Dawn. Time Tyrant awaits.
+- **Time Guardian**: Mid-boss appearing in Chrono Dawn. Drops Master Clock Key upon defeat.
+- **Time Tyrant**: Final boss appearing in the deepest part of Master Clock. Root cause of eternally frozen dimension. Fragments of Stasis Core and Eye of Chronos can be obtained upon defeat.
+- **Reversing Time Sandstone**: Special block generated in Chrono Dawn. Restores to original state a few seconds after being broken.
+- **Unstable Fungus**: Special block generated in Chrono Dawn. Applies random speed effects to colliding players.
 
-#### 新規追加モブ (Gameplay Enhancement)
+#### Additional Mobs (Gameplay Enhancement)
 
-- **時の亡霊 (Temporal Wraith)**: クロノドーン内の森林・平原バイオームに出現する敵対モブ。攻撃を受けるとブロックをすり抜けて逃げる特性を持ち、攻撃時にプレイヤーにSlowness IIを付与する。
-- **時計仕掛けの番兵 (Clockwork Sentinel)**: 砂漠バイオームや構造物に出現する敵対モブ。時間歪曲効果（Slowness IV）に免疫を持ち、通常速度で動く脅威。撃破すると古代の歯車（Ancient Gear）をドロップする。
-- **時間の管理者 (Time Keeper)**: 忘れられた図書館周辺に出現する中立モブ。村人のように取引が可能で、時間関連アイテム（時の砂時計、ポータル安定化装置の素材など）と交換できる。
+- **Temporal Wraith**: Hostile mob appearing in forest and plains biomes within Chrono Dawn. Has the ability to phase through blocks to escape when attacked, and applies Slowness II to players upon attack.
+- **Clockwork Sentinel**: Hostile mob appearing in desert biomes and structures. Immune to time distortion effects (Slowness IV) and moves at normal speed as a threat. Drops Ancient Gear upon defeat.
+- **Time Keeper**: Neutral mob appearing near Forgotten Library. Can trade like villagers, offering exchanges for time-related items (Time Hourglass, Portal Stabilizer materials, etc.).
 
-#### 新規追加装備 (Gameplay Enhancement)
+#### Additional Equipment (Gameplay Enhancement)
 
-- **時のクリスタル鉱石 (Time Crystal Ore)**: クロックストーン鉱石よりも希少な鉱石。Y座標0-48に生成され、鉱脈サイズは3-5ブロック。時のクリスタルを採掘できる。
-- **時のクリスタル (Time Crystal)**: 時のクリスタル鉱石から採掘できる素材。装備のクラフトに使用され、耐久性を向上させる。
-- **クロックストーン装備セット (Tier 1)**: クロックストーンと時のクリスタルから作成される基本装備。剣・斧・シャベル・クワ・フルアーマー（ヘルメット・チェストプレート・レギンス・ブーツ）を含む。鉄装備よりやや優れた性能。
-- **強化クロックストーン装備セット (Tier 2)**: 強化クロックストーンと時のクリスタルから作成される上位装備。剣は敵を攻撃時に確率で2秒間凍結させ、フルアーマー装備時には時間歪曲効果への完全免疫を得る。
+- **Time Crystal Ore**: Rarer ore than Clockstone Ore. Generated at Y-coordinate 0-48 with vein size 3-5 blocks. Time Crystal can be mined.
+- **Time Crystal**: Material mined from Time Crystal Ore. Used in equipment crafting to improve durability.
+- **Clockstone Equipment Set (Tier 1)**: Basic equipment created from Clockstone and Time Crystal. Includes sword, axe, shovel, hoe, and full armor (helmet, chestplate, leggings, boots). Performance slightly better than iron equipment.
+- **Enhanced Clockstone Equipment Set (Tier 2)**: Advanced equipment created from Enhanced Clockstone and Time Crystal. Swords probabilistically freeze enemies for 2 seconds on attack, and wearing full armor grants complete immunity to time distortion effects.
 
-#### 新規追加食料 (Gameplay Enhancement)
+#### Additional Food (Gameplay Enhancement)
 
-- **時の果実パイ (Time Fruit Pie)**: 時間の果実3個と小麦から作成。満腹度8回復 + 30秒間Haste II効果。
-- **時のジャム (Time Jam)**: 時間の果実4個と砂糖から作成。満腹度4回復 + 60秒間Speed I効果。
-- **時の小麦 (Time Wheat)**: クロノドーン内の平原・森林バイオームに自生する作物。8段階の成長を経て収穫可能。バニラの小麦と同様に栽培できる。
-- **時の小麦の種 (Time Wheat Seeds)**: 時の小麦を収穫すると入手。栽培に使用。
-- **時のパン (Time Bread)**: 時の小麦3個から作成。満腹度5回復。
+- **Time Fruit Pie**: Created from 3 Fruit of Time and wheat. Restores 8 hunger + 30 seconds Haste II effect.
+- **Time Jam**: Created from 4 Fruit of Time and sugar. Restores 4 hunger + 60 seconds Speed I effect.
+- **Time Wheat**: Crop naturally growing in plains and forest biomes within Chrono Dawn. Can be harvested after 8 growth stages. Can be cultivated like vanilla wheat.
+- **Time Wheat Seeds**: Obtained by harvesting Time Wheat. Used for cultivation.
+- **Time Bread**: Created from 3 Time Wheat. Restores 5 hunger.
 
-#### 新規追加ブロック (Gameplay Enhancement)
+#### Additional Blocks (Gameplay Enhancement)
 
-- **時計仕掛けブロック (Clockwork Block)**: 装飾用ブロック。歯車が回転するアニメーションテクスチャを持つ。
-- **時のクリスタルブロック (Time Crystal Block)**: 装飾用ブロック。光レベル10を発し、時のクリスタル9個から作成される。
-- **時間のレンガ (Temporal Bricks)**: 建築用ブロック。クロックストーン4個から作成。階段・ハーフブロック・壁・フェンスのバリエーションあり。
-- **時間の苔 (Temporal Moss)**: 沼地バイオーム限定の装飾ブロック。バニラの苔のように周囲に広がる特性を持つ。
-- **凍結した時の氷 (Frozen Time Ice)**: 雪原バイオーム限定のブロック。通常の氷と異なり溶けず、永続的に滑りやすい。
+- **Clockwork Block**: Decorative block. Features animated texture with rotating gears.
+- **Time Crystal Block**: Decorative block. Emits light level 10, created from 9 Time Crystals.
+- **Temporal Bricks**: Building block. Created from 4 Clockstone. Available in variations including stairs, slabs, walls, and fences.
+- **Temporal Moss**: Decorative block exclusive to swamp biome. Has the ability to spread to surroundings like vanilla moss.
+- **Frozen Time Ice**: Block exclusive to snowy biome. Unlike normal ice, does not melt and remains permanently slippery.
 
-#### 新規追加バイオーム (Gameplay Enhancement)
+#### Additional Biomes (Gameplay Enhancement)
 
-- **クロノドーン山岳 (Chrono Dawn Mountain)**: 高標高の石地形。植生は少なく、岩がちな地形。
-- **クロノドーン沼地 (Chrono Dawn Swamp)**: 水と粘土が多い地形。時間の苔が自生し、独自の植生を持つ。
-- **クロノドーン雪原 (Chrono Dawn Snowy)**: 雪と氷に覆われた地形。凍結した時の氷が生成され、凍った時間をテーマにしている。
-- **クロノドーン洞窟 (Chrono Dawn Cave)**: 地下バイオーム。壁に時のクリスタル鉱石が露出している。
+- **Chrono Dawn Mountain**: High-altitude stone terrain. Sparse vegetation with rocky landscape.
+- **Chrono Dawn Swamp**: Terrain rich in water and clay. Temporal Moss grows naturally with unique vegetation.
+- **Chrono Dawn Snowy**: Terrain covered in snow and ice. Frozen Time Ice is generated, themed around frozen time.
+- **Chrono Dawn Cave**: Underground biome. Time Crystal Ore is exposed on walls.
 
-#### 新規追加地形特性 (US3 Enhancement)
+#### Additional Terrain Features (US3 Enhancement)
 
-- **時間の裂け目峡谷 (Temporal Rift Canyon)**: 歪んだ地形と浮遊ブロックを持つ特殊構造物。壁に時のクリスタル鉱脈が露出している。
-- **浮遊する時計仕掛けの廃墟 (Floating Clockwork Ruins)**: 壊れた時計仕掛けのメカニズムを持つ浮島構造物。ルート・チェストを含む。
-- **時のクリスタル洞窟 (Time Crystal Caverns)**: 地下に生成される結晶構造物。発光効果を持つ時のクリスタルが形成されている。
+- **Temporal Rift Canyon**: Special structure with distorted terrain and floating blocks. Time Crystal veins are exposed on walls.
+- **Floating Clockwork Ruins**: Floating island structure with broken clockwork mechanisms. Contains loot chests.
+- **Time Crystal Caverns**: Crystal structure generated underground. Time Crystals with luminous effects are formed.
 
 ## Assumptions and Dependencies
 
 ### Assumptions
 
-- プレイヤーはMinecraftの基本操作(移動、採掘、クラフト、戦闘)に習熟していることを前提とする
-- 確率発動の効果(クロノブレード、時の番人のメイルなど)の具体的な確率値は、実装後のバランス調整で決定される(推奨範囲: 10%～50%)
-- 古代遺跡、忘れられた図書館、砂漠の時計塔、マスタークロックの構造物はプレイヤーが発見可能な範囲に生成される
-- クロノドーン内の時間特性(Mob速度低下、ブロック修復など)はプレイヤーの探索体験を損なわない程度に調整される
-- サーバー環境では複数プレイヤーが同時にクロノドーンに滞在する可能性があるが、個々のプレイヤー体験は独立している
+- Players are assumed to be proficient in basic Minecraft operations (movement, mining, crafting, combat)
+- Specific probability values for probability-based effects (Chronoblade, Time Guardian's Mail, etc.) will be determined through balance adjustments after implementation (recommended range: 10%-50%)
+- Structures such as Ancient Ruins, Forgotten Library, Desert Clock Tower, and Master Clock are generated within discoverable range for players
+- Time characteristics in Chrono Dawn (mob speed reduction, block restoration, etc.) are adjusted to not impair player exploration experience
+- In server environments, multiple players may be in Chrono Dawn simultaneously, but individual player experiences are independent
 
 ### Dependencies
 
-- Minecraftのバージョン: [実装時に決定 - 推奨: 最新の安定版または広く使用されているバージョン]
-- Modローダー: [実装時に決定 - Forge, Fabric, NeoForgeなど]
-- サーバー環境での動作を考慮した設計が必要
-- 既存のMinecraftゲームシステム(ディメンション生成、ポータルメカニズム、エンティティ挙動、ステータス効果)に依存
+- Minecraft version: [To be determined at implementation - Recommended: Latest stable or widely-used version]
+- Mod loader: [To be determined at implementation - Forge, Fabric, NeoForge, etc.]
+- Design must consider operation in server environments
+- Depends on existing Minecraft game systems (dimension generation, portal mechanics, entity behavior, status effects)
 
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
 
-- **SC-001**: プレイヤーはオーバーワールドで古代遺跡を発見し、10分以内にクロノドーンへの突入に必要な素材と設計図を入手できる
-- **SC-002**: プレイヤーはクロノドーンに突入後、30分以内にポータル安定化装置を作成し、オーバーワールドへの帰還路を確保できる
-- **SC-003**: クロノドーン内のMobは通常のMobと比較して50%以上の速度低下が観察され、プレイヤーは戦略的な戦闘を行える
-- **SC-004**: プレイヤーは砂漠の時計塔を探索し、20分以内に強化クロックストーンと時間操作アイテムを入手できる
-- **SC-005**: プレイヤーは時の番人との戦闘を5回以内の試行で撃破し、マスタークロックへの鍵を入手できる
-- **SC-006**: プレイヤーは時間の暴君との戦闘を10回以内の試行で撃破し、クロノスの瞳と静止のコアの破片を入手できる
-- **SC-007**: プレイヤーは究極のアーティファクトを装備し、通常の装備と比較して戦闘効率が30%以上向上することを体感できる
-- **SC-008**: サーバー負荷は既存のMinecraft環境と比較して10%以内の増加に抑えられる
-- **SC-009**: プレイヤーの90%以上が、ポータル安定化装置の作成プロセスを理解し、初回プレイで帰還路を確保できる
-- **SC-010**: プレイヤーの80%以上が、時間操作アイテムの効果を体感し、「時間を操作している」という独自性を評価する
+- **SC-001**: Players can discover Ancient Ruins in the Overworld and obtain materials and blueprints necessary for entering Chrono Dawn within 10 minutes
+- **SC-002**: After entering Chrono Dawn, players can create Portal Stabilizer and secure return path to Overworld within 30 minutes
+- **SC-003**: Mobs in Chrono Dawn show 50% or more speed reduction compared to normal mobs, allowing players to engage in strategic combat
+- **SC-004**: Players can explore Desert Clock Tower and obtain Enhanced Clockstone and time manipulation items within 20 minutes
+- **SC-005**: Players can defeat Time Guardian within 5 attempts and obtain Master Clock Key
+- **SC-006**: Players can defeat Time Tyrant within 10 attempts and obtain Eye of Chronos and Fragments of Stasis Core
+- **SC-007**: Players equipped with ultimate artifacts can perceive combat efficiency improvement of 30% or more compared to normal equipment
+- **SC-008**: Server load increase is kept within 10% compared to existing Minecraft environment
+- **SC-009**: 90% or more of players can understand Portal Stabilizer creation process and secure return path on first playthrough
+- **SC-010**: 80% or more of players can perceive the effects of time manipulation items and appreciate the uniqueness of "manipulating time"
