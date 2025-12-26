@@ -292,10 +292,11 @@
 
 **Tasks**:
 
-- [ ] T600 [Documentation] Remove Patchouli reference from README.md
-  - Remove L295: "**Note**: This mod currently depends on Patchouli..."
-  - This reference is inaccurate (Patchouli will be removed)
-  - Commit: "docs: remove obsolete Patchouli dependency note"
+- [x] T600 [Documentation] Remove Patchouli references from documentation (2025-12-27)
+  - Removed Patchouli from CLAUDE.md "Current Versions" list
+  - Replaced "no Patchouli required" in CurseForge/Modrinth descriptions
+  - Updated to generic "no external dependencies" description
+  - Commit: "docs: remove all Patchouli references from documentation"
 
 - [x] T601 [License] Replace LICENSE file with LGPL-3.0 text (2025-12-27)
   - Downloaded LGPL-3.0 full text from https://www.gnu.org/licenses/lgpl-3.0.txt
