@@ -1,4 +1,4 @@
-# Tasks: Chrono Dawn Mod - 時間操作をテーマにしたMinecraft Mod
+# Tasks: Chrono Dawn Mod - Time-Manipulation Themed Minecraft Mod
 
 **Branch**: `main`
 **Input**: Design documents from `/specs/chrono-dawn-mod/`
@@ -7,9 +7,9 @@
 **Architecture**: Architectury Multi-Loader Framework (common / fabric / neoforge)
 **Tech Stack**: Java 21, Minecraft 1.21.1, NeoForge 21.1.x + Fabric
 
-**Tests**: テストタスクは明示的に要求されている (quickstart.md参照)。JUnit 5 + GameTest Frameworkを使用。
+**Tests**: Test tasks are explicitly requested (see quickstart.md). Uses JUnit 5 + GameTest Framework.
 
-**Organization**: タスクはUser Storyごとにグループ化され、各ストーリーを独立して実装・テスト可能にする。
+**Organization**: Tasks are grouped by User Story, making each story independently implementable and testable.
 
 ---
 
@@ -456,7 +456,7 @@
 
 ### Time Cycle Configuration (Phase 2.5)
 
-**Purpose**: 固定時刻を設定し、他のディメンションmodと同様の独特な雰囲気を作り出す
+**Purpose**: Set fixed time to create unique atmosphere similar to other dimension mods
 
 - [X] T034j [P] Research day-night cycle vs fixed time design (Decision 7)
 - [X] T034k [P] Implement fixed time (6000 ticks = noon) and End sky effects in dimension_type/chronodawn.json
@@ -468,7 +468,7 @@
 
 **Current Settings**: `fixed_time: 6000` (noon), `effects: minecraft:overworld`, biome `sky_color: 9474192` (grey)
 
-**Note**: 固定時刻の値（4000-8000=明るい時間帯）と空の色はプレイテスト後に調整可能
+**Note**: Fixed time value (4000-8000 = bright time period) and sky color are adjustable after playtesting
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -542,9 +542,9 @@
 
 ### Decorative Terrain Features (US1 Enhancement)
 
-**Purpose**: 装飾的な地形要素を追加して探索の視覚的多様性を向上
+**Purpose**: Add decorative terrain elements to enhance visual diversity of exploration
 
-**Note**: MVP後の改善として実装。植生とモブスポーンの後に実装推奨
+**Note**: Implement as post-MVP improvement. Recommended to implement after vegetation and mob spawning
 
 - [X] T088ad [US1] Research vanilla decorative features (boulders, fallen logs, disk features for gravel/sand)
 - [X] T088ae [P] [US1] Create boulder configured_feature (cobblestone/mossy cobblestone clusters)
@@ -560,9 +560,9 @@
 
 ### Biome-Specific Landmarks (US1 Enhancement - Optional)
 
-**Purpose**: バイオームに固有の小規模構造物を追加して識別性を向上
+**Purpose**: Add biome-specific small structures to improve distinctiveness
 
-**Note**: 優先度は低い。Phase 6（Polish）段階での実装を検討
+**Note**: Low priority. Consider implementation in Phase 6 (Polish) stage
 
 - [ ] T088aj [P] [US1] (Optional) Design small rock circle feature for chronodawn_plains (Stonehenge-like miniature)
 - [ ] T088ak [P] [US1] (Optional) Design mushroom circle feature for chronodawn_forest (fairy ring theme)
@@ -572,9 +572,9 @@
 
 ### Ambient Sounds & Particles (US1 Enhancement - Optional)
 
-**Purpose**: 環境音とパーティクルで没入感を向上
+**Purpose**: Enhance immersion with ambient sounds and particles
 
-**Note**: 優先度は最も低い。Phase 6（Polish）段階での実装を検討
+**Note**: Lowest priority. Consider implementation in Phase 6 (Polish) stage
 
 - [ ] T088ao [P] [US1] (Optional) Research custom biome ambient sounds (wind, waves, cave echoes)
 - [ ] T088ap [P] [US1] (Optional) Create custom sound files or select vanilla sounds for each biome
@@ -585,17 +585,17 @@
 
 ### Additional Boss Enemies (US3 Enhancement - Medium Priority)
 
-**Purpose**: 4つの追加ミニボスとChrono Aegisシステムの実装
+**Purpose**: Implement 4 additional mid-bosses and Chrono Aegis system
 
 **Implementation Status**: Boss entities, Chrono Aegis, Guardian Vault, and Clockwork Depths complete. Temporal Phantom and Entropy Keeper structures pending
 
 **Reference**: See research.md "Additional Bosses Implementation Plan (T234-T238)"
 
-#### T234: Chronos Warden (クロノスの監視者) - COMPLETED
+#### T234: Chronos Warden (Guardian of Chronos) - COMPLETED
 - [x] T234a-i: Entity, item, renderer, texture, translations implemented
 - [x] T234j-o: Guardian Vault structure generation (COMPLETED - see T239)
 
-#### T235: Clockwork Colossus (機械仕掛けの巨像) - COMPLETED
+#### T235: Clockwork Colossus (Mechanical Giant) - COMPLETED
 - [x] T235a-l: Entity, Gear Projectile, item, renderer, translations implemented
 - [x] T235m-r: Clockwork Depths structure generation (COMPLETED)
   - Multi-level Jigsaw structure: tower (surface) → gearshaft → engine_room → archive_vault
@@ -604,7 +604,7 @@
   - Spawns in chronodawn_desert and chronodawn_mountain biomes
   - Boss spawns when player approaches within 20 blocks of Clockwork Block markers
 
-#### T236: Temporal Phantom (時間の幻影) - PARTIALLY COMPLETED
+#### T236: Temporal Phantom (Phantom of Time) - PARTIALLY COMPLETED
 - [x] T236a-l: Entity, item, renderer, texture, translations implemented
 - [x] T236m-r: Phantom Catacombs structure generation (COMPLETED)
   - Jigsaw-based underground maze structure with entrance, corridors, maze rooms, dead-ends
@@ -623,7 +623,7 @@
   - **AI improvements**: Safe teleport validation, ranged attack implementation, increased movement speed (0.25 → 0.3)
   - **Commits**: fa1b684, fd001bb, 197cfd5
 
-#### T237: Entropy Keeper (エントロピーの管理者) - COMPLETED
+#### T237: Entropy Keeper (Keeper of Entropy) - COMPLETED
 - [x] T237a-m: Entity, item, renderer, texture, translations implemented
 - [x] T237n-r: Entropy Crypt structure generation (COMPLETED)
   - Jigsaw structure: entrance (surface) → stairs → main (Boss Chamber + Vault)
@@ -674,28 +674,28 @@
 
 #### Boss Balance Adjustments (US3 - High Priority)
 
-**Purpose**: プレイヤーフィードバックに基づくボス戦闘のバランス調整
+**Purpose**: Adjust boss combat balance based on player feedback
 
 - [x] T245: Clockwork Colossus - Shield Durability Balance
-  - **Issue**: 盾の耐久度消費が激しい（フィードバック）
-  - **Analysis**: Phase 2のStrength I効果により近接攻撃が約18ダメージ（盾消費19）+ Gear Shot 5秒ごと（盾消費9）で、336耐久度の盾が約20-30回の防御で消耗
-  - **Solution Implemented**: Fallback Solution（Phase 2バフとGear Shot調整）
-    - Phase 2のStrength I効果を削除（Speed IIのみに変更）
-    - Gear Shotクールダウンを5秒→8秒に延長
-  - **Result**: 盾の耐久度消費が大幅に軽減
-    - 近接攻撃: 基本ダメージ12のみ（Strength I効果なし）
-    - 遠距離攻撃: 8秒間隔に延長（頻度60%減）
+  - **Issue**: Shield durability consumption is excessive (feedback)
+  - **Analysis**: Phase 2 Strength I effect causes melee attacks of ~18 damage (shield consumption 19) + Gear Shot every 5 seconds (shield consumption 9), causing 336 durability shield to deplete in ~20-30 blocks
+  - **Solution Implemented**: Fallback Solution (Phase 2 buff and Gear Shot adjustment)
+    - Removed Phase 2 Strength I effect (changed to Speed II only)
+    - Extended Gear Shot cooldown from 5 seconds → 8 seconds
+  - **Result**: Shield durability consumption significantly reduced
+    - Melee attacks: Base damage 12 only (no Strength I effect)
+    - Ranged attacks: Extended to 8 second intervals (60% frequency reduction)
   - **Files Modified**:
     - common/src/main/java/com/chronodawn/entities/bosses/ClockworkColossusEntity.java (lines 52, 55, 90, 213, 218-223)
-  - **Testing**: ビルド成功、92テスト全てパス
+  - **Testing**: Build successful, all 92 tests passed
 
 ### Future Boss Battle Enhancements (US3 - Phase 7+)
 
-**Purpose**: Master Clock大規模化とテストプレイ後のバランス調整
+**Purpose**: Master Clock expansion and balance adjustments after playtesting
 
 **Dependencies**:
-- T171j-k: Master Clockダンジョンを現在の4部屋から大規模化
-- T171l-n: テストプレイによるゲームバランス確認後に実装
+- T171j-k: Expand Master Clock dungeon from current 4 rooms to large-scale
+- T171l-n: Implement after game balance confirmation through playtesting
 
 - [ ] T171j [US3] Design large-scale Master Clock dungeon layout (20+ rooms, multi-floor, complex maze structure, environmental hazards)
 - [ ] T171k [US3] Implement large-scale Master Clock dungeon generation system in common/src/main/java/com/chronodawn/worldgen/structures/MasterClockLargeGenerator.java
@@ -705,9 +705,9 @@
 
 ### Custom Terrain Features (US3 Enhancement - Medium Priority)
 
-**Purpose**: 時間をテーマにした独自地形を追加し、地形生成の独自性を向上
+**Purpose**: Add unique time-themed terrain to enhance terrain generation distinctiveness
 
-**Note**: 現在はオーバーワールドと同じ地形生成アルゴリズムを使用。時間のテーマに沿った特殊地形を追加して探索の面白さを増す
+**Note**: Currently uses the same terrain generation algorithm as Overworld. Add special terrain along time theme to increase exploration interest
 
 - [ ] T289 [US3] Design Temporal Rift Canyon structure concept (distorted terrain, floating blocks, time crystal veins exposed in walls, visual effects)
 - [ ] T290 [P] [US3] Create Temporal Rift Canyon structure NBT in common/src/main/resources/data/chronodawn/structures/temporal_rift_canyon.nbt (canyon with irregular terrain, time crystal ores)
@@ -718,7 +718,7 @@
 
 **Note**: Task IDs renumbered from T260-T265 to T289-T294 to avoid conflict with T265 (coal ore) in Basic Resources section
 
-**Checkpoint**: 全User Storyが独立して機能すること
+**Checkpoint**: All User Stories function independently
 
 ---
 
@@ -761,14 +761,14 @@
 
 **Phase 1: Essential Documentation** (Immediate):
 
-- [ ] T707 [P] Create CONTRIBUTING.md in English
+- [x] T707 [P] Create CONTRIBUTING.md in English - Completed 2025-12-27
   - Write contribution guidelines (setup, workflow, code style, PR process)
   - Include link to developer_guide.md for technical details
   - Document LGPL-3.0 license compliance requirements
   - Estimated effort: 30-40 minutes
   - Status: Required for OSS launch
 
-- [ ] T708 [P] Translate specs/chrono-dawn-mod/spec.md to English
+- [x] T708 [P] Translate specs/chrono-dawn-mod/spec.md to English - Completed 2025-12-27
   - Translate design specification (156 lines of Japanese content)
   - Essential for new contributors to understand feature design
   - Maintain existing structure and content
@@ -810,7 +810,7 @@
 
 ### Playtest Improvements - Dimension Mechanics
 
-**Purpose**: プレイテストで発見されたディメンション機能の改善
+**Purpose**: Improvements to dimension functionality discovered through playtesting
 
 - [x] T301 [P] Fix bed sleeping mechanic in Chrono Dawn (currently sleeping doesn't advance time to morning)
   - **Issue**: Chrono Dawn has day-night cycle but sleeping in bed doesn't skip to morning
@@ -830,7 +830,7 @@
 
 ### Playtest Improvements - Boss Battle
 
-**Purpose**: プレイテストで発見されたボスバトル関連の改善
+**Purpose**: Boss battle improvements discovered through playtesting
 
 - [x] T302 [P] Fix Master Clock boss room door unlock requirement
   - **Issue**: Door opens with only Ancient Clockwork x3, should also require Key to Master Clock
@@ -863,7 +863,7 @@
 
 ### Playtest Improvements - Exploration
 
-**Purpose**: プレイテストで発見された探索関連の改善
+**Purpose**: Exploration improvements discovered through playtesting
 
 - [ ] T306 [P] Add Ancient Ruins location assistance system
   - **Issue**: Players cannot find Ancient Ruins in some cases
@@ -886,22 +886,22 @@
 
 ## Notes
 
-- [P]タスク = 異なるファイル、依存関係なし
-- [Story]ラベルはタスクを特定のUser Storyにマッピング (トレーサビリティ確保)
-- 各User Storyは独立して完了・テスト可能であるべき
-- 実装前にテストがFAILすることを確認
-- 各タスクまたは論理的なグループ後にコミット
-- 任意のCheckpointで停止してストーリーを独立して検証
-- 避けるべき: 曖昧なタスク、同一ファイルの競合、独立性を破壊するストーリー間依存
-- Architectury特有の注意: commonモジュールで80%のロジックを実装、ローダー固有実装は20%に抑制
-- エンティティレンダリング: Fabricは標準API、NeoForgeは手動イベント登録 (Issue #641対応)
+- [P] tasks = different files, no dependencies
+- [Story] labels map tasks to specific User Stories (ensuring traceability)
+- Each User Story should be independently completable and testable
+- Verify tests FAIL before implementation
+- Commit after each task or logical group
+- Can stop at any Checkpoint to verify story independently
+- Avoid: ambiguous tasks, conflicts in same file, inter-story dependencies breaking independence
+- Architectury-specific note: Implement 80% of logic in common module, limit loader-specific implementation to 20%
+- Entity rendering: Fabric uses standard API, NeoForge uses manual event registration (addresses Issue #641)
 
 ---
 
 
 ### Biome System Improvements
 
-**Purpose**: バイオーム境界の視覚的品質向上（将来の改善課題）
+**Purpose**: Improve visual quality of biome boundaries (future improvement task)
 
 - [ ] T307 [Research] Investigate snowy biome boundary smoothing solutions
   - **Issue**: Snowy biome boundaries with other biomes (especially dark_forest) are too sharp/linear
@@ -924,13 +924,13 @@
 
 ### Mod Rebranding
 
-**Purpose**: Mod名称とディメンション名を「Chrono Dawn」から「Chrono Dawn」に変更する
+**Purpose**: Change mod name and dimension name from "Chronosphere" to "Chrono Dawn"
 
-- [ ] T308 [Rebranding] Rename mod and dimension from "Chrono Dawn" to "Chrono Dawn"
+- [ ] T308 [Rebranding] Rename mod and dimension from "Chronosphere" to "Chrono Dawn"
   - **Scope**:
-    - Mod名称変更 (Chrono Dawn → Chrono Dawn)
-    - ディメンション名変更 (chronodawn → chrono_dawn)
-    - パッケージ名は維持 (com.chronodawn)
+    - Mod name change (Chronosphere → Chrono Dawn)
+    - Dimension name change (chronodawn → chrono_dawn)
+    - Package name maintained (com.chronodawn)
   - **Files to Update**:
     - Documentation files (README.md, docs/*, CLAUDE.md, etc.)
     - Mod metadata files (fabric.mod.json, neoforge.mods.toml)
