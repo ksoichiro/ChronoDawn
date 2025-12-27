@@ -1,69 +1,69 @@
-# マインクラフト Mod 仕様書：クロノドーンの残響 (Echoes of the Chrono Dawn)
+# Minecraft Mod Specification: Echoes of the Chrono Dawn
 
-## 1. Mod 概要
+## 1. Mod Overview
 
-* タイトル: クロノドーンの残響 (Echoes of the Chrono Dawn)
-* テーマ: 時間の流れが停止し、歪んだ世界「クロノドーン」からの脱出と、時間の力の制御。
-* 目標: ディメンションを探索し、ラスボス「時間の暴君」を打倒することで、世界の時間を安定させ、究極の時間操作アーティファクトを獲得する。
-* 特徴: 既存のMob速度、ブロックの破壊、アイテムの挙動に干渉するユニークなゲームプレイ。サーバー負荷を抑えたトリックで「時間の歪み」を表現。
+* Title: Echoes of the Chrono Dawn
+* Theme: Escape from "Chrono Dawn," a world where time has stopped and become distorted, and gain control over the power of time.
+* Objective: Explore the dimension, defeat the final boss "Time Tyrant," stabilize the world's time, and acquire the ultimate time manipulation artifact.
+* Features: Unique gameplay that interferes with existing mob speed, block breaking, and item behavior. Expresses "time distortion" using tricks that minimize server load.
 
-## 2. ストーリーラインと進捗目標
+## 2. Storyline and Progression Goals
 
-プレイヤーはオーバーワールドの古代遺跡でこの世界の存在を知り、ポータルを作成し突入する。
+Players discover the existence of this world in ancient ruins in the Overworld, create a portal, and enter.
 
-### フェーズ 1：予期せぬ閉じ込めと脱出への道
+### Phase 1: Unexpected Confinement and Path to Escape
 
-1. **「痕跡の発見」:** オーバーワールドの古代遺跡で**クロックストーン**と**時の砂時計の設計図**を発見する。
-2. **「不安定な門」:** **時の砂時計**を使用してポータルを起動しクロノドーンへ。突入直後、ポータルが時間の歪みにより**機能停止**する。
-3. **「生存と帰還の手がかり」:** **時間の果実**など特殊な食料を確保し、**忘れられた図書館**で帰還に必要な**「ポータル安定化装置の設計図」**を発見する。
-4. **「ポータルの修復」:** 安定化装置をクラフトし、機能停止したポータルに使用することで、オーバーワールドへの**自由な往来**を確保する。
+1. **"Discovery of Traces":** Discover **Clockstone** and **Time Hourglass Blueprint** in ancient ruins in the Overworld.
+2. **"Unstable Gate":** Activate the portal using **Time Hourglass** and enter Chrono Dawn. Immediately after entry, the portal **stops functioning** due to time distortion.
+3. **"Survival and Clues to Return":** Secure special food such as **Fruit of Time**, and discover the **"Portal Stabilizer Blueprint"** necessary for return in the **Forgotten Library**.
+4. **"Portal Repair":** Craft the stabilizer and use it on the non-functioning portal to secure **free travel** to and from the Overworld.
 
-### フェーズ 2：時間の謎と暴君の痕跡
+### Phase 2: Time Mysteries and Traces of the Tyrant
 
-1. **「歪みの技術」:** **砂漠の時計塔**を探索し、時間操作のアイテム（**タイムクロック**、**空間連結ツルハシ**など）のレシピに必要な**強化クロックストーン**を入手する。
-2. **「番人の妨害」:** プレイヤーの探索を阻止するために現れる中ボス、**「時の番人」を撃破し、ラスボス「時間の暴君」がいるマスタークロック**への**鍵**を入手する。
+1. **"Distortion Technology":** Explore the **Desert Clock Tower** and obtain **Enhanced Clockstone** necessary for time manipulation item recipes (**Time Clock**, **Spatially Linked Pickaxe**, etc.).
+2. **"Guardian's Interference":** Defeat the mid-boss **"Time Guardian"** that appears to prevent player exploration, and obtain the **key** to the **Master Clock** where the final boss "Time Tyrant" resides.
 
-### フェーズ 3：最終決戦と世界の安定化
+### Phase 3: Final Battle and World Stabilization
 
-1. **「暴君との対峙」:** マスタークロックの最深部で、ディメンションを永遠に静止させた元凶であるラスボス**「時間の暴君」**と戦闘する。
-2. **「コアの解放」:** 暴君を撃破し、時間の流れを止めていた**「静止のコア」**を破壊する。
-3. **「クロノドーンの解放者」:** 報酬として**「クロノスの瞳」**を獲得し、クロノドーンの世界が安定（特殊なMobやブロックが安定供給される）し、自由に行き来が可能となる。
+1. **"Confrontation with the Tyrant":** Battle the final boss **"Time Tyrant"**, the source that eternally froze the dimension, in the deepest part of Master Clock.
+2. **"Core Liberation":** Defeat the tyrant and destroy the **"Stasis Core"** that was stopping the flow of time.
+3. **"Liberator of Chrono Dawn":** Acquire the **"Eye of Chronos"** as a reward, Chrono Dawn world stabilizes (special mobs and blocks become stably available), and free travel becomes possible.
 
-## 3. ディメンション：クロノドーンの特性と挙動（低負荷実装）
+## 3. Dimension: Chrono Dawn Characteristics and Behavior (Low Load Implementation)
 
-ディメンションのゲーム性を担保する主要な時間特性は、サーバー負荷を避けるため、既存のMinecraftシステム（ステータス効果、イベントフック）を利用します。
+To avoid server load, the main time characteristics that ensure dimension gameplay utilize existing Minecraft systems (status effects, event hooks).
 
-| 特性名 | 実装の仕組み | ゲームプレイ上の役割 |
+| Characteristic Name | Implementation Mechanism | Gameplay Role |
 | ------ | ------------ | -------------------- |
-| エンティティの遅延 | 大半のカスタムMobに恒常的な極端な速度低下（Slowness IV～V）を付与。プレイヤーは通常の速度で行動。 | Mobの攻撃タイミングを予測・観察できる戦略的な戦闘を促進。 |
-| 不安定な修復 | 特定のブロック（逆流の砂岩など）の破壊イベントをフックし、数秒後に元のブロックにすり替える処理を実行。修復完了までドロップアイテムの放出を停止させる。 | 採掘が不可能または困難な**「進路の障害物」**として機能。時限パズルの要素。 |
-| ランダム速度床 | 不安定な菌糸ブロックのエンティティ衝突イベントをフック。衝突したプレイヤーに、ランダムな（Speed IまたはSlowness I）効果を0.5秒間付与。 | 足元に予測不能性を生み出し、移動と回避の難易度を局所的に上昇させる。 |
-| 反転共鳴（リスク） | トリガー限定発動: プレイヤーが不安定な砂時計をクラフトした際、またはボス Mobを撃破した直後の短時間（30秒〜1分）に限定して発生。プレイヤーにSlowness IV、周囲の MobにSpeed IIを付与し、状況を逆転させる。 | リスクとリワードを明確化する、プレイヤー行動依存の難易度調整ギミック。 |
+| Entity Delay | Apply extreme constant speed reduction (Slowness IV～V) to most custom mobs. Players act at normal speed. | Promotes strategic combat where attack timing of mobs can be predicted and observed. |
+| Unstable Repair | Hook break events of specific blocks (Reversing Time Sandstone, etc.) and execute processing to swap back to original block after a few seconds. Prevents item drop emission until repair completion. | Functions as **"path obstacle"** where mining is impossible or difficult. Timed puzzle element. |
+| Random Speed Floor | Hook entity collision events of Unstable Mycelium block. Applies random (Speed I or Slowness I) effect to colliding players for 0.5 seconds. | Creates unpredictability underfoot, locally increases difficulty of movement and evasion. |
+| Reverse Resonance (Risk) | Limited trigger activation: Occurs only for short periods (30 seconds～1 minute) when player crafts Unstable Hourglass or immediately after defeating boss mob. Applies Slowness IV to player, Speed II to surrounding mobs, reversing the situation. | Risk-reward mechanism that clarifies difficulty adjustment gimmick dependent on player action. |
 
-## 4. 新しい素材とアイテム
+## 4. New Materials and Items
 
-| アイテム名 | 種類 | 入手/用途 | ユニークな効果 |
+| Item Name | Type | Acquisition/Use | Unique Effect |
 | ---- | ---- | ---- | ---- |
-| クロックストーン | 鉱石/素材 | ポータル作成、アイテムの基本素材。 | なし (ベース素材)。 |
-| 静止のコアの破片 | ボス素材 | 「時間の暴君」ドロップ。究極のアイテムの必須素材。 | なし (最重要素材)。 |
-| 時間の果実 | 食料 | 満腹度回復。食べると一時的にプレイヤーの採掘速度を上昇させる（Haste I）。 | 採掘効率を上げる唯一の食料源。 |
-| 不安定な砂時計 | ユーティリティ | 究極アイテムの素材。クラフト時に反転共鳴を誘発するリスクを伴う。 | リスクと引き換えに、次のフェーズに進むためのキー素材。 |
-| タイムクロック | ユーティリティ | 使用後クールダウンあり。 | 使用時、周囲のMobの次の攻撃AIルーチンを強制的にキャンセルさせる。 |
+| Clockstone | Ore/Material | Portal creation, basic item material. | None (base material). |
+| Stasis Core Fragment | Boss Material | "Time Tyrant" drop. Essential material for ultimate items. | None (most important material). |
+| Fruit of Time | Food | Restores hunger. Temporarily increases player mining speed (Haste I) when eaten. | Only food source that increases mining efficiency. |
+| Unstable Hourglass | Utility | Material for ultimate items. Involves risk of triggering Reverse Resonance when crafted. | Key material for advancing to next phase in exchange for risk. |
+| Time Clock | Utility | Has cooldown after use. | When used, forcefully cancels next attack AI routine of surrounding mobs. |
 
-## 5. 究極のアーティファクト (静止のコアの破片を使用)
+## 5. Ultimate Artifacts (Using Stasis Core Fragment)
 
-### 5.1. 武器と防具
+### 5.1. Weapons and Armor
 
-| アイテム名 | 部位 | 実装ロジック | バニラとの差別化（ユニーク性） |
+| Item Name | Slot | Implementation Logic | Differentiation from Vanilla (Uniqueness) |
 | ---- | ---- | ---- | ---- |
-| クロノブレード | 剣 | 攻撃命中時、確率でMobの**次の攻撃AIを強制的にスキップ（クールダウンリセット）**する。 | Mobの行動そのものに干渉し、一方的な攻撃機会を生み出す。 |
-| 時の番人のメイル | チェストプレート | プレイヤーが致命的なダメージを受けた際、確率で**ダメージ前のHPと位置にロールバック（巻き戻し）**する。 | ダメージ軽減ではなく、即死イベント自体を無効化する時間操作防御。 |
-| 時間の残響ブーツ | ブーツ | プレイヤーが走った際に、敵のターゲットを引くデコイ（残像エンティティ）を短時間召喚する。 | 敵のターゲットを逸らす、戦術的な回避・誘導に特化した機能。 |
+| Chronoblade | Sword | When attack hits, probabilistically **forcefully skips mob's next attack AI (cooldown reset)**. | Interferes with mob behavior itself, creating one-sided attack opportunities. |
+| Time Guardian's Mail | Chestplate | When player receives fatal damage, probabilistically **rolls back to HP and position before damage (rewind)**. | Time manipulation defense that nullifies instant death events themselves rather than damage reduction. |
+| Echoing Time Boots | Boots | When player runs, summons decoy (afterimage entity) that draws enemy targets for short time. | Specialized in tactical evasion/luring by diverting enemy targets. |
 
-### 5.2. ツールとユーティリティ
+### 5.2. Tools and Utilities
 
-| アイテム名 | 種類 | 実装ロジック | バニラとの差別化（ユニーク性） |
+| Item Name | Type | Implementation Logic | Differentiation from Vanilla (Uniqueness) |
 | ---- | ---- | ---- | ---- |
-| 空間連結ツルハシ | ツルハシ | ブロック破壊時、確率でドロップアイテム生成処理を二重に実行する。 | バニラの幸運エンチャントと効果が重複し、採集効率を桁外れに向上させる。 |
-| 不安定な懐中時計 | ユーティリティ | 使用時、周囲のMobとプレイヤーの現在の速度ステータス効果を瞬時に入れ替える。 | プレイヤーの意思で速度の優位性を一時的に交換できる、戦略的な切り札。 |
-| クロノスの瞳 | 究極アーティファクト | (最終報酬) 獲得後、クロノドーンのMobの基本遅延効果がさらに強化される（安定化）。 | ディメンション全体の環境を永続的に変化させる。 |
+| Spatially Linked Pickaxe | Pickaxe | When breaking blocks, probabilistically executes item drop generation processing twice. | Effects stack with vanilla Fortune enchantment, dramatically improving gathering efficiency. |
+| Unstable Pocket Watch | Utility | When used, instantly swaps current speed status effects of surrounding mobs and players. | Strategic trump card that can temporarily exchange speed advantage by player's will. |
+| Eye of Chronos | Ultimate Artifact | (Final reward) After acquisition, base delay effect of Chrono Dawn mobs is further enhanced (stabilized). | Permanently changes the environment of the entire dimension. |

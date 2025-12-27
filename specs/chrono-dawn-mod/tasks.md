@@ -348,15 +348,15 @@
 
 **Phase 2: Historical Documentation** (Lower priority, can be done later):
 
-- [ ] T710 [Documentation] Translate docs/implementation_history.md to English
-  - Translate implementation history (227 lines of Japanese)
-  - Provides context for design decisions
+- [x] T710 [Documentation] Translate docs/implementation_history.md to English (2025-12-27)
+  - Translated implementation history (466 lines)
+  - Provides context for design decisions (Ancient Ruins placement trials, Additional Bosses, Desert Clock Tower)
   - Estimated effort: 1.5-2 hours
   - Status: Medium priority (historical reference)
 
-- [ ] T711 [Documentation] Translate docs/initial_design.md to English
-  - Translate initial design document (45 lines of Japanese)
-  - Historical value for understanding project evolution
+- [x] T711 [Documentation] Translate docs/initial_design.md to English (2025-12-27)
+  - Translated initial design document (70 lines)
+  - Historical value for understanding project evolution (original storyline, dimension mechanics, artifacts concept)
   - Estimated effort: 30 minutes
   - Status: Low priority (historical reference)
 
