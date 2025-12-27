@@ -14,6 +14,9 @@
       }
     },
     {
+      "image": "chronodawn:textures/gui/chronicle/phantom_catacombs.png"
+    },
+    {
       "text": {
         "en_us": "Navigation:\n\n1. Enter the catacombs\n2. Navigate the maze (use torches or blocks to mark paths)\n3. Explore to find the boss room\n4. Prepare before entering (boss spawns on entry!)\n\nBoss: Temporal Phantom\n\nDrops:\n• Phantom Essence (required for Chrono Aegis)\n• Spectral loot\n• Experience and items",
         "ja_jp": "ナビゲーション:\n\n1. カタコンベに入る\n2. 迷路を進む（松明やブロックで道を記す）\n3. 探索してボス部屋を見つける\n4. 入る前に準備する（入室時にボスが出現！）\n\nボス: 時の幻影\n\nドロップ:\n• ファントムエッセンス（クロノイージスに必要）\n• スペクトラル戦利品\n• 経験値とアイテム"

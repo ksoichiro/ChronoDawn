@@ -14,6 +14,9 @@
       }
     },
     {
+      "image": "chronodawn:textures/gui/chronicle/master_clock.png"
+    },
+    {
       "text": {
         "en_us": "Accessing the Dungeon:\n\n1. Obtain Master Clock Key from Time Guardian\n2. Locate Master Clock structure\n3. Use Master Clock Key at entrance\n4. Navigate through dungeon to boss room\n\nBoss: Time Tyrant (Final Boss)\n\nDrops:\n• Eye of Chronos\n• Fragments of Stasis Core (multiple pieces)\n• Rare loot and experience",
         "ja_jp": "ダンジョンへのアクセス:\n\n1. タイムガーディアンからマスタークロックの鍵を入手\n2. マスタークロック構造物を見つける\n3. 入口でマスタークロックの鍵を使用\n4. ダンジョンを進んでボス部屋へ\n\nボス: タイムタイラント（最終ボス）\n\nドロップ:\n• クロノスの眼\n• スタシスコアの破片（複数個）\n• 希少な戦利品と経験値"

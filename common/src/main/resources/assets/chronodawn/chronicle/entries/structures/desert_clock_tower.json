@@ -14,6 +14,9 @@
       }
     },
     {
+      "image": "chronodawn:textures/gui/chronicle/desert_clock_tower.png"
+    },
+    {
       "text": {
         "en_us": "How Teleporters Work:\n\n• Hold right-click for 3 seconds to charge\n• UP direction: 4th floor → 5th floor (boss room)\n• DOWN direction: 5th floor → 4th floor (appears after defeating Time Guardian)\n\nLoot:\n• Enhanced Clockstone (boss or chests)\n• Master Clock Key (from Time Guardian)\n• Time Crystals and other valuables",
         "ja_jp": "テレポーターの仕組み:\n\n• 右クリックを3秒間長押しでチャージ\n• 上方向: 4階→5階（ボス部屋）\n• 下方向: 5階→4階（タイムガーディアン撃破後に出現）\n\n戦利品:\n• 強化クロックストーン（ボスまたはチェスト）\n• マスタークロックの鍵（タイムガーディアンから）\n• タイムクリスタルやその他の貴重品"

@@ -14,6 +14,9 @@
       }
     },
     {
+      "image": "chronodawn:textures/gui/chronicle/guardian_vault.png"
+    },
+    {
       "text": {
         "en_us": "Boss: Chronos Warden\n\nDrops:\n• Guardian Stone (required for Chrono Aegis)\n• Enhanced Clockstone\n• Experience and loot\n\nTips:\n• Use pillars for cover during boss fight\n• Bring armor with high defense\n• Wait out Stone Stance defensive ability\n• Keep distance from Ground Slam attack\n\nSee \"Chronos Warden\" in Boss Battles for detailed strategies!",
         "ja_jp": "ボス: クロノスウォーデン\n\nドロップ:\n• ガーディアンストーン（クロノイージスに必要）\n• 強化クロックストーン\n• 経験値と戦利品\n\nヒント:\n• ボス戦中は柱を盾に使う\n• 高い防御力を持つ防具を持参\n• ストーンスタンスの防御能力が終わるまで待つ\n• グラウンドスラム攻撃から距離を保つ\n\n詳細な戦略については、ボス戦の「クロノスウォーデン」を参照してください！"

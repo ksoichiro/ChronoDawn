@@ -3,15 +3,19 @@ package com.chronodawn.gui.widgets;
 import com.chronodawn.gui.ChronicleScreen;
 import com.chronodawn.gui.data.Entry;
 import com.chronodawn.gui.data.Page;
+import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -19,6 +23,8 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.registries.BuiltInRegistries;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -50,17 +56,27 @@ public class EntryPageWidget extends AbstractWidget {
         final Page.PageType type;
         final List<String> lines; // For text pages
         final ResourceLocation recipe; // For recipe pages
+        final ResourceLocation image; // For image pages
 
         VirtualPage(List<String> lines) {
             this.type = Page.PageType.TEXT;
             this.lines = lines;
             this.recipe = null;
+            this.image = null;
         }
 
         VirtualPage(ResourceLocation recipe) {
             this.type = Page.PageType.RECIPE;
             this.lines = null;
             this.recipe = recipe;
+            this.image = null;
+        }
+
+        VirtualPage(Page.PageType type, ResourceLocation image) {
+            this.type = type;
+            this.lines = null;
+            this.recipe = null;
+            this.image = image;
         }
     }
 
@@ -104,6 +120,9 @@ public class EntryPageWidget extends AbstractWidget {
                 } else if (page.getType() == Page.PageType.RECIPE) {
                     // Recipe pages are not split
                     virtualPages.add(new VirtualPage(page.getRecipe()));
+                } else if (page.getType() == Page.PageType.IMAGE) {
+                    // Image pages are not split
+                    virtualPages.add(new VirtualPage(Page.PageType.IMAGE, page.getImage()));
                 }
             }
         }
@@ -218,6 +237,8 @@ public class EntryPageWidget extends AbstractWidget {
             renderTextVirtualPage(graphics, virtualPage);
         } else if (virtualPage.type == Page.PageType.RECIPE) {
             renderRecipeVirtualPage(graphics, virtualPage);
+        } else if (virtualPage.type == Page.PageType.IMAGE) {
+            renderImageVirtualPage(graphics, virtualPage);
         }
 
         // Render page number
@@ -284,6 +305,208 @@ public class EntryPageWidget extends AbstractWidget {
         int textX = getX() + (width - font.width(itemName)) / 2;
         int textY = iconY + 20;
         graphics.drawString(font, itemName, textX, textY, 0x000000, false);
+    }
+
+    /**
+     * Render an image virtual page with automatic scaling to fit page dimensions.
+     * Maintains aspect ratio and applies sepia/beige tone to match book background.
+     */
+    private void renderImageVirtualPage(GuiGraphics graphics, VirtualPage virtualPage) {
+        ResourceLocation imageLocation = virtualPage.image;
+
+        try {
+            // Calculate available space (leave margin and space for page number)
+            int availableWidth = width - (TEXT_MARGIN * 2);
+            int availableHeight = height - 50; // Reserve space for page number
+
+            // Get image dimensions
+            int[] dimensions = getImageDimensions(imageLocation);
+            if (dimensions == null) {
+                throw new Exception("Could not load image dimensions");
+            }
+
+            int imageWidth = dimensions[0];
+            int imageHeight = dimensions[1];
+
+            // Calculate scale factor to fit within available space while maintaining aspect ratio
+            float scaleX = (float) availableWidth / imageWidth;
+            float scaleY = (float) availableHeight / imageHeight;
+            float scale = Math.min(scaleX, scaleY); // Use smaller scale to fit both dimensions
+
+            // Calculate final render dimensions
+            int renderWidth = (int) (imageWidth * scale);
+            int renderHeight = (int) (imageHeight * scale);
+
+            // Center the image on the page
+            int renderX = getX() + (width - renderWidth) / 2;
+            int renderY = getY() + (height - 40 - renderHeight) / 2;
+
+            // Apply sepia/beige tone to match book background (0xF0E0D0)
+            // RGB values: R=0.94, G=0.88, B=0.82 (slight warm tone)
+            graphics.setColor(0.94f, 0.88f, 0.82f, 1.0f);
+
+            // Use PoseStack to scale the image
+            var poseStack = graphics.pose();
+            poseStack.pushPose();
+            poseStack.translate(renderX, renderY, 0);
+            poseStack.scale(scale, scale, 1.0f);
+
+            // Render image at original size (will be scaled by matrix)
+            graphics.blit(imageLocation, 0, 0, 0, 0,
+                         imageWidth, imageHeight,
+                         imageWidth, imageHeight);
+
+            poseStack.popPose();
+
+            // Reset color to white (default)
+            graphics.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+
+            // Apply vignette effect (fade edges to match book background)
+            renderVignetteEffect(graphics, renderX, renderY, renderWidth, renderHeight);
+
+        } catch (Exception e) {
+            // If image fails to load, show error message
+            Font font = Minecraft.getInstance().font;
+            String errorText = "Failed to load image: " + imageLocation;
+            int maxLineWidth = width - (TEXT_MARGIN * 2);
+            List<String> lines = wrapText(errorText, maxLineWidth, font);
+
+            int textX = getX() + TEXT_MARGIN;
+            int textY = getY() + TEXT_MARGIN;
+
+            for (String line : lines) {
+                graphics.drawString(font, line, textX, textY, 0xFF0000, false);
+                textY += LINE_HEIGHT;
+            }
+        }
+    }
+
+    /**
+     * Render vignette effect (fade edges) around the image for a sketch-like appearance.
+     *
+     * @param graphics GuiGraphics for rendering
+     * @param x Image X position
+     * @param y Image Y position
+     * @param width Image width
+     * @param height Image height
+     */
+    private void renderVignetteEffect(GuiGraphics graphics, int x, int y, int width, int height) {
+        // Book background color (0xF0E0D0 = RGB 240, 224, 208)
+        int bookBgColor = 0xF0E0D0;
+        int r = (bookBgColor >> 16) & 0xFF;
+        int g = (bookBgColor >> 8) & 0xFF;
+        int b = bookBgColor & 0xFF;
+
+        // Vignette fade distance (how far the fade extends inward)
+        int fadeDistance = 15;
+
+        // Top edge gradient (opaque to transparent, top to bottom)
+        for (int i = 0; i <= fadeDistance; i++) {
+            int alpha = (int) (255 * (1.0f - (float) i / fadeDistance));
+            int color = (alpha << 24) | (r << 16) | (g << 8) | b;
+            graphics.fill(x, y + i, x + width, y + i + 1, color);
+        }
+
+        // Bottom edge gradient (transparent to opaque, bottom to top)
+        for (int i = 0; i <= fadeDistance; i++) {
+            int alpha = (int) (255 * (1.0f - (float) i / fadeDistance));
+            int color = (alpha << 24) | (r << 16) | (g << 8) | b;
+            graphics.fill(x, y + height - i, x + width, y + height - i + 1, color);
+        }
+
+        // Left edge gradient (opaque to transparent, left to right)
+        for (int i = 0; i <= fadeDistance; i++) {
+            int alpha = (int) (255 * (1.0f - (float) i / fadeDistance));
+            int color = (alpha << 24) | (r << 16) | (g << 8) | b;
+            graphics.fill(x + i, y, x + i + 1, y + height, color);
+        }
+
+        // Right edge gradient (opaque to transparent, right to left)
+        for (int i = 0; i <= fadeDistance; i++) {
+            int alpha = (int) (255 * (1.0f - (float) i / fadeDistance));
+            int color = (alpha << 24) | (r << 16) | (g << 8) | b;
+            graphics.fill(x + width - i, y, x + width - i + 1, y + height, color);
+        }
+
+        // Corner fade (diagonal gradients for smoother corners)
+        // Top-left corner (distance from top-left corner)
+        for (int i = 0; i <= fadeDistance; i++) {
+            for (int j = 0; j <= fadeDistance; j++) {
+                float distance = (float) Math.sqrt(i * i + j * j);
+                if (distance <= fadeDistance) {
+                    int alpha = (int) (255 * (1.0f - distance / fadeDistance));
+                    int color = (alpha << 24) | (r << 16) | (g << 8) | b;
+                    graphics.fill(x + i, y + j, x + i + 1, y + j + 1, color);
+                }
+            }
+        }
+
+        // Top-right corner (distance from top-right corner)
+        for (int i = 0; i <= fadeDistance; i++) {
+            for (int j = 0; j <= fadeDistance; j++) {
+                float distance = (float) Math.sqrt(i * i + j * j);
+                if (distance <= fadeDistance) {
+                    int alpha = (int) (255 * (1.0f - distance / fadeDistance));
+                    int color = (alpha << 24) | (r << 16) | (g << 8) | b;
+                    graphics.fill(x + width - 1 - i, y + j, x + width - i, y + j + 1, color);
+                }
+            }
+        }
+
+        // Bottom-left corner (distance from bottom-left corner)
+        for (int i = 0; i <= fadeDistance; i++) {
+            for (int j = 0; j <= fadeDistance; j++) {
+                float distance = (float) Math.sqrt(i * i + j * j);
+                if (distance <= fadeDistance) {
+                    int alpha = (int) (255 * (1.0f - distance / fadeDistance));
+                    int color = (alpha << 24) | (r << 16) | (g << 8) | b;
+                    graphics.fill(x + i, y + height - 1 - j, x + i + 1, y + height - j, color);
+                }
+            }
+        }
+
+        // Bottom-right corner (distance from bottom-right corner)
+        for (int i = 0; i <= fadeDistance; i++) {
+            for (int j = 0; j <= fadeDistance; j++) {
+                float distance = (float) Math.sqrt(i * i + j * j);
+                if (distance <= fadeDistance) {
+                    int alpha = (int) (255 * (1.0f - distance / fadeDistance));
+                    int color = (alpha << 24) | (r << 16) | (g << 8) | b;
+                    graphics.fill(x + width - 1 - i, y + height - 1 - j,
+                                 x + width - i, y + height - j, color);
+                }
+            }
+        }
+    }
+
+    /**
+     * Get the dimensions of an image texture.
+     *
+     * @param imageLocation Resource location of the image
+     * @return int array [width, height], or null if failed
+     */
+    private int[] getImageDimensions(ResourceLocation imageLocation) {
+        try {
+            ResourceManager resourceManager = Minecraft.getInstance().getResourceManager();
+
+            // Convert texture location to resource location
+            // textures/gui/chronicle/image.png -> assets/chronodawn/textures/gui/chronicle/image.png
+            ResourceLocation resourcePath = ResourceLocation.fromNamespaceAndPath(
+                imageLocation.getNamespace(),
+                imageLocation.getPath()
+            );
+
+            // Open the image file
+            try (InputStream stream = resourceManager.open(resourcePath)) {
+                NativeImage image = NativeImage.read(stream);
+                int width = image.getWidth();
+                int height = image.getHeight();
+                image.close();
+                return new int[]{width, height};
+            }
+        } catch (IOException e) {
+            return null;
+        }
     }
 
     /**

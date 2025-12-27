@@ -14,6 +14,9 @@
       }
     },
     {
+      "image": "chronodawn:textures/gui/chronicle/entropy_crypt.png"
+    },
+    {
       "text": {
         "en_us": "Triggering the Boss:\n\n• Activate a specific trapdoor in the structure\n• Boss spawns immediately - be prepared!\n\nBoss: Entropy Keeper\n\nDrops:\n• Entropy Core (required for Chrono Aegis)\n• Decay-themed loot\n• Experience and items",
         "ja_jp": "ボスの発生:\n\n• 構造物内の特定のトラップドアを起動\n• ボスがすぐに出現 - 準備を！\n\nボス: エントロピーキーパー\n\nドロップ:\n• エントロピーコア（クロノイージスに必要）\n• 崩壊をテーマにした戦利品\n• 経験値とアイテム"
