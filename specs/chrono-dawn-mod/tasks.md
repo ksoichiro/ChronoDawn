@@ -328,14 +328,14 @@
   - Added note about source code availability on GitHub
   - Commit: "docs: update platform descriptions with LGPL-3.0 license"
 
-- [ ] T607 [Optional] Add LGPL-3.0 headers to main source files
+- [x] T607 [Optional] Add LGPL-3.0 headers to main source files (2025-12-27)
   - Add standard LGPL-3.0 header comment to key Java files:
     - `/common/src/main/java/com/chronodawn/ChronoDawn.java`
     - `/fabric/src/main/java/com/chronodawn/fabric/ChronoDawnFabric.java`
     - `/neoforge/src/main/java/com/chronodawn/neoforge/ChronoDawnNeoForge.java`
   - Header template: Copyright notice + LGPL-3.0 boilerplate
   - Optional: Can add to other files incrementally
-  - Status: Deferred (optional enhancement)
+  - Status: Completed - Added to all 3 main entry point files
 
 - [x] T608 [Guidelines] Update CLAUDE.md project guidelines (2025-12-27)
   - Updated license policy in project guidelines
