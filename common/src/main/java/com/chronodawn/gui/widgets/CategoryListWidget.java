@@ -7,7 +7,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -196,6 +198,9 @@ public class CategoryListWidget extends AbstractWidget {
                         if (selectionCallback != null) {
                             selectionCallback.onEntrySelected(entry);
                         }
+                        Minecraft.getInstance().getSoundManager().play(
+                            SimpleSoundInstance.forUI(SoundEvents.BOOK_PAGE_TURN, 1.0F)
+                        );
                         return true;
                     }
                     currentY += ENTRY_HEIGHT;

@@ -9,7 +9,10 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
+import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
@@ -115,17 +118,34 @@ public class EntryPageWidget extends AbstractWidget {
     public void initializeButtons(Button.OnPress previousAction, Button.OnPress nextAction) {
         int buttonY = getY() + height - 25;
 
-        this.previousButton = Button.builder(
+        this.previousButton = new SilentButton(
+            getX() + 5, buttonY, 20, 20,
             Component.literal("<"),
             previousAction
-        ).bounds(getX() + 5, buttonY, 20, 20).build();
+        );
 
-        this.nextButton = Button.builder(
+        this.nextButton = new SilentButton(
+            getX() + width - 25, buttonY, 20, 20,
             Component.literal(">"),
             nextAction
-        ).bounds(getX() + width - 25, buttonY, 20, 20).build();
+        );
 
         updatePageButtons();
+    }
+
+    /**
+     * Custom Button that doesn't play click sound.
+     * Used for page navigation buttons where page turn sound is played separately.
+     */
+    private static class SilentButton extends Button {
+        public SilentButton(int x, int y, int width, int height, Component message, OnPress onPress) {
+            super(x, y, width, height, message, onPress, DEFAULT_NARRATION);
+        }
+
+        @Override
+        public void playDownSound(SoundManager soundManager) {
+            // Disable button click sound (page turn sound is played separately)
+        }
     }
 
     /**
@@ -161,6 +181,9 @@ public class EntryPageWidget extends AbstractWidget {
         if (!virtualPages.isEmpty() && currentPageIndex > 0) {
             currentPageIndex--;
             updatePageButtons();
+            Minecraft.getInstance().getSoundManager().play(
+                SimpleSoundInstance.forUI(SoundEvents.BOOK_PAGE_TURN, 1.0F)
+            );
         }
     }
 
@@ -171,6 +194,9 @@ public class EntryPageWidget extends AbstractWidget {
         if (!virtualPages.isEmpty() && currentPageIndex < virtualPages.size() - 1) {
             currentPageIndex++;
             updatePageButtons();
+            Minecraft.getInstance().getSoundManager().play(
+                SimpleSoundInstance.forUI(SoundEvents.BOOK_PAGE_TURN, 1.0F)
+            );
         }
     }
 
