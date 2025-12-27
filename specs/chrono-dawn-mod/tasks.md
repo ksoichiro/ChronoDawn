@@ -407,14 +407,14 @@
   - Remove any screenshots with artifacts or quality issues
   - Create README.md in `docs/screenshots/` describing each image
 
-- [ ] T516 [P] Upload to CurseForge gallery
+- [x] T516 [P] Upload to CurseForge gallery
   - Upload project icon (400x400px+)
   - Upload 8-14 gallery screenshots in priority order
   - Add title and description for each screenshot
   - Verify proper display on project page
   - Document upload process in research.md
 
-- [ ] T517 [P] Upload to Modrinth gallery
+- [x] T517 [P] Upload to Modrinth gallery
   - Upload project icon
   - Upload same gallery screenshots (max 5MiB each)
   - Add title for each screenshot (required)
