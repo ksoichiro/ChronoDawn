@@ -57,7 +57,7 @@ public class DeferredSpawnEggItem extends SpawnEggItem {
         try {
             // Try to find the BY_ID field with various possible names
             Field byIdField = null;
-            String[] possibleFieldNames = {"BY_ID", "f_43221_", "byId"};
+            String[] possibleFieldNames = {"BY_ID", "f_43221_", "byId", "BY_COLOR"};
 
             for (String fieldName : possibleFieldNames) {
                 try {
@@ -65,6 +65,18 @@ public class DeferredSpawnEggItem extends SpawnEggItem {
                     break;
                 } catch (NoSuchFieldException ignored) {
                     // Try next name
+                }
+            }
+
+            // If still not found, search for Map<EntityType, SpawnEggItem> field
+            if (byIdField == null) {
+                Field[] fields = SpawnEggItem.class.getDeclaredFields();
+                for (Field field : fields) {
+                    if (java.lang.reflect.Modifier.isStatic(field.getModifiers())
+                        && field.getType() == java.util.Map.class) {
+                        byIdField = field;
+                        break;
+                    }
                 }
             }
 
@@ -82,7 +94,6 @@ public class DeferredSpawnEggItem extends SpawnEggItem {
             EntityType<?> entityType = entityTypeSupplier.get();
             if (entityType != null) {
                 byIdMap.put((EntityType<? extends Mob>) entityType, this);
-                ChronoDawn.LOGGER.info("Registered spawn egg for entity type: {} using field: {}", entityType, byIdField.getName());
             }
         } catch (Exception e) {
             ChronoDawn.LOGGER.warn("Failed to register spawn egg colors to vanilla map via reflection", e);

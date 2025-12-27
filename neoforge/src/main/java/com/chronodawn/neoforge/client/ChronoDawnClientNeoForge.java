@@ -468,6 +468,22 @@ public class ChronoDawnClientNeoForge {
             ModBlocks.ATTACHED_CHRONO_MELON_STEM.get()
         );
 
+        // Register Spawn Egg item colors for NeoForge
+        // NeoForge requires explicit color handler registration with alpha channel
+        event.register(
+            (stack, tintIndex) -> {
+                if (stack.getItem() instanceof com.chronodawn.items.DeferredSpawnEggItem egg) {
+                    int color = egg.getColor(tintIndex);
+                    // Add full alpha channel (0xFF) to ensure color is fully opaque
+                    return 0xFF000000 | color;
+                }
+                return 0xFFFFFFFF; // White with alpha
+            },
+            ModItems.TEMPORAL_WRAITH_SPAWN_EGG.get(),
+            ModItems.CLOCKWORK_SENTINEL_SPAWN_EGG.get(),
+            ModItems.TIME_KEEPER_SPAWN_EGG.get()
+        );
+
         ChronoDawn.LOGGER.info("Registered item color handlers for NeoForge");
     }
 
