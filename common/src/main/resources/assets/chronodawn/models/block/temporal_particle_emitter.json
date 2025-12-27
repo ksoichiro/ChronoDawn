@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/block",
   "textures": {
-    "particle": "minecraft:block/air"
+    "particle": "chronodawn:item/temporal_particle_emitter"
   }
 }
