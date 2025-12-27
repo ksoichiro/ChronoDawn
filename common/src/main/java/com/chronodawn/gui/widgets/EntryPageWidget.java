@@ -9,9 +9,9 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.ImageButton;
+import net.minecraft.client.gui.components.WidgetSprites;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
-import net.minecraft.client.renderer.texture.AbstractTexture;
-import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
@@ -36,6 +36,18 @@ import java.util.Optional;
  * Automatically splits long text into multiple pages based on available display area.
  */
 public class EntryPageWidget extends AbstractWidget {
+    // Vanilla book.png texture for page navigation buttons
+    private static final ResourceLocation BOOK_TEXTURE =
+        ResourceLocation.fromNamespaceAndPath("minecraft", "textures/gui/book.png");
+    private static final WidgetSprites PAGE_FORWARD_SPRITES = new WidgetSprites(
+        ResourceLocation.fromNamespaceAndPath("minecraft", "widget/page_forward"),
+        ResourceLocation.fromNamespaceAndPath("minecraft", "widget/page_forward_highlighted")
+    );
+    private static final WidgetSprites PAGE_BACKWARD_SPRITES = new WidgetSprites(
+        ResourceLocation.fromNamespaceAndPath("minecraft", "widget/page_backward"),
+        ResourceLocation.fromNamespaceAndPath("minecraft", "widget/page_backward_highlighted")
+    );
+
     private Entry currentEntry;
     private int currentPageIndex = 0;
 
@@ -135,17 +147,18 @@ public class EntryPageWidget extends AbstractWidget {
      * Should be called from parent screen's init() method.
      */
     public void initializeButtons(Button.OnPress previousAction, Button.OnPress nextAction) {
-        int buttonY = getY() + height - 25;
+        int buttonY = getY() + height - 15; // Align with left page bottom
 
-        this.previousButton = new SilentButton(
-            getX() + 5, buttonY, 20, 20,
-            Component.literal("<"),
+        // Use vanilla book page navigation button images (23x13 pixels)
+        this.previousButton = new SilentImageButton(
+            getX() + 5, buttonY, 23, 13,
+            PAGE_BACKWARD_SPRITES,
             previousAction
         );
 
-        this.nextButton = new SilentButton(
-            getX() + width - 25, buttonY, 20, 20,
-            Component.literal(">"),
+        this.nextButton = new SilentImageButton(
+            getX() + width - 28, buttonY, 23, 13,
+            PAGE_FORWARD_SPRITES,
             nextAction
         );
 
@@ -153,12 +166,12 @@ public class EntryPageWidget extends AbstractWidget {
     }
 
     /**
-     * Custom Button that doesn't play click sound.
+     * Custom ImageButton that doesn't play click sound.
      * Used for page navigation buttons where page turn sound is played separately.
      */
-    private static class SilentButton extends Button {
-        public SilentButton(int x, int y, int width, int height, Component message, OnPress onPress) {
-            super(x, y, width, height, message, onPress, DEFAULT_NARRATION);
+    private static class SilentImageButton extends ImageButton {
+        public SilentImageButton(int x, int y, int width, int height, WidgetSprites sprites, OnPress onPress) {
+            super(x, y, width, height, sprites, onPress);
         }
 
         @Override
@@ -241,11 +254,13 @@ public class EntryPageWidget extends AbstractWidget {
             renderImageVirtualPage(graphics, virtualPage);
         }
 
-        // Render page number
+        // Render page number (aligned with navigation buttons)
         if (pageNumberText != null) {
             Font font = Minecraft.getInstance().font;
             int textX = getX() + (width - font.width(pageNumberText)) / 2;
-            int textY = getY() + height - 35;
+            // Button Y position: height - 15, button height: 13, font height: ~9
+            // Center text vertically within button: (13 - 9) / 2 = 2
+            int textY = getY() + height - 15 + 2;
             graphics.drawString(font, pageNumberText, textX, textY, 0x3F3F3F, false);
         }
     }
@@ -577,6 +592,12 @@ public class EntryPageWidget extends AbstractWidget {
         }
         // Default behavior for the widget itself
         return super.mouseClicked(mouseX, mouseY, button);
+    }
+
+    @Override
+    public void playDownSound(SoundManager soundManager) {
+        // Disable click sound for the entry page widget itself
+        // (Navigation buttons have their own sound handling)
     }
 
     @Override

@@ -39,6 +39,7 @@ public class CategoryListWidget extends AbstractWidget {
     // Tooltip text for truncated items
     private String hoveredTooltipText = null;
 
+    private static final int TITLE_HEIGHT = 20;
     private static final int CATEGORY_HEIGHT = 20;
     private static final int ENTRY_HEIGHT = 18;
     private static final int ICON_SIZE = 16;
@@ -77,6 +78,15 @@ public class CategoryListWidget extends AbstractWidget {
 
         int currentY = getY() - scrollOffset;
         String languageCode = ChronicleScreen.getLanguageCode();
+
+        // Render title at the top (scrollable)
+        if (currentY + TITLE_HEIGHT > getY() && currentY < getY() + height) {
+            Component title = Component.translatable("gui.chronodawn.chronicle.title");
+            int titleX = getX() + (width - Minecraft.getInstance().font.width(title)) / 2;
+            int titleY = currentY + (TITLE_HEIGHT - 8) / 2;
+            graphics.drawString(Minecraft.getInstance().font, title, titleX, titleY, 0x3F3F3F, false);
+        }
+        currentY += TITLE_HEIGHT;
 
         for (Category category : categories) {
             boolean isExpanded = expandedCategories.getOrDefault(category, false);
@@ -172,6 +182,9 @@ public class CategoryListWidget extends AbstractWidget {
         }
 
         int currentY = getY() - scrollOffset;
+        // Skip title area
+        currentY += TITLE_HEIGHT;
+
         for (Category category : categories) {
             boolean isExpanded = expandedCategories.getOrDefault(category, false);
 
@@ -217,8 +230,8 @@ public class CategoryListWidget extends AbstractWidget {
         if (mouseX >= getX() && mouseX < getX() + width &&
             mouseY >= getY() && mouseY < getY() + height) {
 
-            // Calculate total content height
-            int totalHeight = 0;
+            // Calculate total content height (including title)
+            int totalHeight = TITLE_HEIGHT;
             for (Category category : categories) {
                 totalHeight += CATEGORY_HEIGHT;
                 if (expandedCategories.getOrDefault(category, false)) {
@@ -266,6 +279,12 @@ public class CategoryListWidget extends AbstractWidget {
             return new ItemStack(Items.PAPER); // Fallback to paper
         }
         return new ItemStack(item);
+    }
+
+    @Override
+    public void playDownSound(net.minecraft.client.sounds.SoundManager soundManager) {
+        // Disable default click sound for the category list widget
+        // (Entry selection plays page turn sound explicitly in mouseClicked)
     }
 
     @Override

@@ -24,6 +24,7 @@ public class ChronicleScreen extends Screen {
     private final ChronicleData data;
     private int leftPos;
     private int topPos;
+    private int categoryListWidth;
 
     private CategoryListWidget categoryList;
     private EntryPageWidget entryPage;
@@ -44,11 +45,11 @@ public class ChronicleScreen extends Screen {
 
         // Initialize category list widget with entry selection callback
         // Set category list to half of book width (minus margins)
-        int categoryListWidth = (BOOK_WIDTH - 30) / 2; // 30 = left margin (10) + center margin (20)
-        int categoryListHeight = BOOK_HEIGHT - 40;
+        this.categoryListWidth = (BOOK_WIDTH - 30) / 2; // 30 = left margin (10) + center margin (20)
+        int categoryListHeight = BOOK_HEIGHT - 20; // Match right page height
         this.categoryList = new CategoryListWidget(
             leftPos + 10,
-            topPos + 30,
+            topPos + 10, // Match right page start position
             categoryListWidth,
             categoryListHeight,
             data.getCategories(),
@@ -62,13 +63,13 @@ public class ChronicleScreen extends Screen {
         );
         addRenderableWidget(categoryList);
 
-        // Initialize entry page widget
+        // Initialize entry page widget (right page can start higher since title is on left page)
         int entryPageX = leftPos + categoryListWidth + 20;
         int entryPageWidth = BOOK_WIDTH - categoryListWidth - 30;
-        int entryPageHeight = BOOK_HEIGHT - 40;
+        int entryPageHeight = BOOK_HEIGHT - 20; // Expanded height (was BOOK_HEIGHT - 40)
         this.entryPage = new EntryPageWidget(
             entryPageX,
-            topPos + 30,
+            topPos + 10, // Start higher (was topPos + 30)
             entryPageWidth,
             entryPageHeight
         );
@@ -117,16 +118,10 @@ public class ChronicleScreen extends Screen {
         graphics.fill(leftPos, topPos, leftPos + 2, topPos + BOOK_HEIGHT, 0xFF5C4033);
         graphics.fill(leftPos + BOOK_WIDTH - 2, topPos, leftPos + BOOK_WIDTH, topPos + BOOK_HEIGHT, 0xFF5C4033);
 
-        // Layer 3: Render title
-        Component title = Component.translatable("gui.chronodawn.chronicle.title");
-        int titleX = leftPos + (BOOK_WIDTH / 2) - (this.font.width(title) / 2);
-        int titleY = topPos + 12;
-        graphics.drawString(this.font, title, titleX, titleY, 0x3F3F3F, false);
-
-        // Layer 4: Render widgets (category list, entry pages, buttons) on top
+        // Layer 3: Render widgets (category list, entry pages, buttons) on top
         super.render(graphics, mouseX, mouseY, partialTick);
 
-        // Layer 5: Render tooltips (must be last to appear on top)
+        // Layer 4: Render tooltips (must be last to appear on top)
         if (categoryList != null) {
             String tooltip = categoryList.getHoveredTooltip();
             if (tooltip != null) {
