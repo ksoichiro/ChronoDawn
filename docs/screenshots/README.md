@@ -19,8 +19,18 @@ Screenshots follow the pattern: `NN-description.png`
 
 - **Resolution**: 1920x1080 (16:9 aspect ratio)
 - **Format**: PNG
-- **File Size**: <5MiB (Modrinth compatibility)
+- **File Size**: <2MB (CurseForge compatibility)
 - **HUD**: Hidden (press F1 before capturing)
+
+### Image Optimization
+
+Original screenshots are compressed to meet CurseForge's 2MB size limit:
+
+```bash
+magick input.png -resize 80% -quality 90 -strip output.png
+```
+
+This reduces file size by ~60-65% while maintaining visual quality.
 
 ## Screenshot List
 
@@ -72,7 +82,7 @@ Before uploading, verify each screenshot:
 
 - [ ] Resolution is exactly 1920x1080
 - [ ] HUD is hidden (no hotbar, health bar, etc.)
-- [ ] File size is under 5MiB
+- [ ] File size is under 2MB
 - [ ] Image is sharp and well-lit
 - [ ] No debug information visible (F3 screen)
 - [ ] Represents mod features accurately
