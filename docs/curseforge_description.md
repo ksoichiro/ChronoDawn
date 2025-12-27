@@ -129,8 +129,9 @@ This mod is built with **Architectury** and supports **both Fabric and NeoForge*
   - Fabric Loader 0.17.3+ with Fabric API 0.116.7+
   - OR NeoForge 21.1.209+
 - **Dependencies**:
-  - Architectury API 13.0.8+
-  - Custom Portal API 0.0.1-beta66-1.21+
+  - **Architectury API** 13.0.8+ (required for both loaders)
+  - **For Fabric**: Custom Portal API is bundled (no separate installation needed)
+  - **For NeoForge**: Custom Portal API ReForged 1.2.2+ (install separately)
 
 ### Compatibility
 - Works with most dimension and world generation mods

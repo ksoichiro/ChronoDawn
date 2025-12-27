@@ -57,21 +57,23 @@ Chrono Dawn is a time-themed dimension mod that adds:
 
 Download and install these mods alongside Chrono Dawn:
 
-1. **Architectury API** (version 13.0.8+)
+1. **Architectury API** (version 13.0.8+) - Required for both loaders
    - [CurseForge](https://www.curseforge.com/minecraft/mc-mods/architectury-api)
    - [Modrinth](https://modrinth.com/mod/architectury-api)
 
-2. **Custom Portal API** (version 0.0.1-beta66-1.21+)
-   - [CurseForge](https://www.curseforge.com/minecraft/mc-mods/custom-portal-api)
-   - [Modrinth](https://modrinth.com/mod/customportalapi)
+2. **Custom Portal API** - Loader-specific requirements:
+   - **For Fabric**: Bundled in the mod (no separate installation needed)
+   - **For NeoForge**: Custom Portal API ReForged 1.2.2+ required (install separately)
+     - [CurseForge](https://www.curseforge.com/minecraft/mc-mods/custom-portal-api-reforged)
+     - [Modrinth](https://modrinth.com/mod/custom-portal-api-reforged)
 
 ### Installation Steps
 
 1. Install Minecraft 1.21.1
 2. Install your chosen mod loader (Fabric or NeoForge)
 3. Download required dependencies:
-   - Architectury API
-   - Custom Portal API
+   - **Architectury API** (required for both loaders)
+   - **Custom Portal API ReForged** (NeoForge only - Fabric version includes this bundled)
 4. Download **Chrono Dawn Mod** (choose the version matching your loader):
    - `chronodawn-fabric-0.1.0.jar` for Fabric
    - `chronodawn-neoforge-0.1.0.jar` for NeoForge

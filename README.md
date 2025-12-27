@@ -45,8 +45,9 @@ A multi-loader Minecraft mod that adds a mysterious time-themed dimension called
   - Fabric Loader 0.17.3+ with Fabric API 0.116.7+
   - OR NeoForge 21.1.209+
 - **Dependencies**:
-  - Architectury API 13.0.8+
-  - Custom Portal API 0.0.1-beta66-1.21+
+  - **Architectury API** 13.0.8+ (required for both loaders)
+  - **For Fabric**: Custom Portal API is bundled (no separate installation needed)
+  - **For NeoForge**: Custom Portal API ReForged 1.2.2+ (install separately)
 
 ### For Developers
 - **Java Development Kit (JDK)**: 21 or higher
@@ -200,18 +201,18 @@ gradlew.bat test
 1. Install Minecraft 1.21.1
 2. Install Fabric Loader 0.17.3+
 3. Download and install Fabric API 0.116.7+
-4. Download and install required dependencies:
-   - Architectury API 13.0.8+
-   - Custom Portal API (Fabric version)
+4. Download and install Architectury API 13.0.8+
 5. Copy `chronodawn-0.1.0+1.21.1-fabric.jar` to `.minecraft/mods/` folder
 6. Launch Minecraft with Fabric profile
+
+**Note**: Custom Portal API is bundled in the Fabric version - no separate installation needed!
 
 ### For NeoForge
 1. Install Minecraft 1.21.1
 2. Install NeoForge 21.1.209+
 3. Download and install required dependencies:
    - Architectury API 13.0.8+
-   - Custom Portal API (NeoForge version)
+   - Custom Portal API ReForged 1.2.2+ ([CurseForge](https://www.curseforge.com/minecraft/mc-mods/custom-portal-api-reforged) | [Modrinth](https://modrinth.com/mod/custom-portal-api-reforged))
 4. Copy `chronodawn-0.1.0+1.21.1-neoforge.jar` to `.minecraft/mods/` folder
 5. Launch Minecraft with NeoForge profile
 
