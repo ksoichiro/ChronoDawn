@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.Block;
  * Special Ability (Sword):
  * - 25% chance to freeze enemy on hit for 2 seconds (Slowness X effect)
  *
- * Repair Material: Enhanced Clockstone
+ * Repair Material: Time Crystal
  *
  * Reference: T250-251 - Create Enhanced Clockstone equipment (Tier 2)
  */

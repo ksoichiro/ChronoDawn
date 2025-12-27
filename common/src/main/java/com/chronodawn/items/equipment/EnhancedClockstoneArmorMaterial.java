@@ -40,7 +40,7 @@ import java.util.function.Supplier;
  * - Complete immunity to ChronoDawn time distortion effects (Slowness IV/V)
  * - Implemented in TimeDistortionEffect.java
  *
- * Repair Material: Enhanced Clockstone
+ * Repair Material: Time Crystal
  *
  * Reference: T252 - Create Enhanced Clockstone Armor Set with immunity to time distortion
  */

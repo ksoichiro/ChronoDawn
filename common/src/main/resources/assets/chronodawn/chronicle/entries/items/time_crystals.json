@@ -9,14 +9,20 @@
   "pages": [
     {
       "text": {
-        "en_us": "Time Crystals are precious gems found throughout Chrono Dawn.\n\nHow to obtain:\n• Mine Time Crystal Ore (found in various biomes)\n• Boss drops from Time Guardian and other bosses\n• Loot chests in structures\n• Trade with villagers (if available)\n\nUses:\n• Craft time-related items and equipment\n• Craft ultimate artifacts\n• Currency for special trades",
-        "ja_jp": "タイムクリスタルは、クロノドーン全体で見つかる貴重な宝石です。\n\n入手方法:\n• タイムクリスタル鉱石を採掘（各種バイオームで見つかる）\n• タイムガーディアンや他のボスからのドロップ\n• 構造物内の戦利品チェスト\n• 村人との取引（利用可能な場合）\n\n用途:\n• 時間関連のアイテムと装備を作成\n• 究極のアーティファクトを作成\n• 特別な取引の通貨"
+        "en_us": "Time Crystals are precious gems found throughout Chrono Dawn.\n\nHow to obtain:\n• Mine Time Crystal Ore (found in various biomes)\n• Boss drops from Time Guardian and other bosses\n• Loot chests in structures\n• Trade with villagers (if available)\n\nUses:\n• Craft Clockstone and Enhanced Clockstone equipment\n• Repair equipment in anvils (50% durability restoration)\n• Craft Ancient Gears (Master Clock key item)\n• Craft Time Crystal Blocks for decoration",
+        "ja_jp": "タイムクリスタルは、クロノドーン全体で見つかる貴重な宝石です。\n\n入手方法:\n• タイムクリスタル鉱石を採掘（各種バイオームで見つかる）\n• タイムガーディアンや他のボスからのドロップ\n• 構造物内の戦利品チェスト\n• 村人との取引（利用可能な場合）\n\n用途:\n• クロックストーンと強化クロックストーンの装備を作成\n• 金床で装備を修理（50%の耐久値回復）\n• 古代の歯車を作成（マスタークロックの鍵アイテム）\n• タイムクリスタルブロックを装飾用に作成"
       }
     },
     {
       "text": {
-        "en_us": "Properties:\n\n• Glows with a soft orange-gold light\n• Stackable up to 64\n• Can be used to craft Time Crystal Blocks for decoration\n• Essential material for advanced crafting\n\nTip: Time Crystals are valuable - don't waste them on unnecessary crafting! Save them for important progression items.",
-        "ja_jp": "特性:\n\n• 柔らかなオレンジゴールドの光を放つ\n• 最大64個までスタック可能\n• 装飾用のタイムクリスタルブロックを作成可能\n• 高度なクラフトに必須の材料\n\nヒント: タイムクリスタルは貴重です - 不必要なクラフトで無駄にしないでください！重要な進行アイテムのために保存しましょう。"
+        "en_us": "Anvil Repair:\n\nTime Crystals are the universal repair material for all Chrono Dawn equipment.\n\nHow to repair:\n1. Place damaged equipment in left slot of anvil\n2. Place Time Crystal in right slot\n3. Time Crystal restores 50% durability (vanilla materials restore only 25%)\n\nCompatible equipment:\n• All Clockstone tools and armor\n• All Enhanced Clockstone tools and armor",
+        "ja_jp": "金床での修理:\n\nタイムクリスタルは、すべてのクロノドーン装備の万能修理材料です。\n\n修理方法:\n1. 金床の左スロットに損傷した装備を配置\n2. 右スロットにタイムクリスタルを配置\n3. タイムクリスタルは50%の耐久値を回復（バニラの材料は25%のみ）\n\n対応装備:\n• すべてのクロックストーンツールと防具\n• すべての強化クロックストーンツールと防具"
+      }
+    },
+    {
+      "text": {
+        "en_us": "Properties:\n\n• Glows with a soft orange-gold light\n• Stackable up to 64\n• Can be used to craft Time Crystal Blocks for decoration\n• Essential material for advanced crafting\n\nTip: Time Crystals are valuable - don't waste them on unnecessary crafting! Save them for important progression items and equipment repairs.",
+        "ja_jp": "特性:\n\n• 柔らかなオレンジゴールドの光を放つ\n• 最大64個までスタック可能\n• 装飾用のタイムクリスタルブロックを作成可能\n• 高度なクラフトに必須の材料\n\nヒント: タイムクリスタルは貴重です - 不必要なクラフトで無駄にしないでください！重要な進行アイテムと装備の修理のために保存しましょう。"
       }
     }
   ]
