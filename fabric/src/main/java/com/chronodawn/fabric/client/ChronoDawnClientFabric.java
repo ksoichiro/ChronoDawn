@@ -548,8 +548,10 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
         UseItemCallback.EVENT.register((player, world, hand) -> {
             var stack = player.getItemInHand(hand);
             if (stack.getItem() instanceof ChronicleBookItem) {
-                // Open Chronicle GUI on client side
-                net.minecraft.client.Minecraft.getInstance().setScreen(new ChronicleScreen());
+                // Only open GUI on client side to avoid server thread errors
+                if (world.isClientSide()) {
+                    net.minecraft.client.Minecraft.getInstance().setScreen(new ChronicleScreen());
+                }
                 return net.minecraft.world.InteractionResultHolder.success(stack);
             }
             return net.minecraft.world.InteractionResultHolder.pass(stack);
