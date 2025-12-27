@@ -406,14 +406,18 @@
   - **Issue**: Other mobs spawn in Desert Clock Tower boss room during battle
   - **Investigation**: Check structure configuration and spawning rules for desert_clock_tower
   - **Possible solutions**: Add no_mob_spawning flag to boss room area, or implement custom spawning blocker
-- [ ] T303a [P] Prevent Master Clock structure from being overwritten by other structures
+- [x] T303a [P] Prevent Master Clock structure from being overwritten by other structures
   - **Issue**: Master Clock may be overwritten by other structures (e.g., Ancient Ruins, Desert Clock Tower)
-  - **Investigation**: Check structure generation priority and placement rules
-  - **Possible solutions**:
-    - Adjust structure generation priority (step parameter in structure_set)
-    - Add structure spacing/separation rules to prevent overlap
-    - Implement custom structure conflict detection system
-    - Use higher `step` value (e.g., RAW_GENERATION) to ensure Master Clock generates before other structures
+  - **Solution**: Adjusted structure generation step priority
+    - Master Clock: `underground_structures` (earlier generation)
+    - Ancient Ruins: `surface_structures` (later generation)
+    - Desert Clock Tower: `surface_structures` (later generation)
+  - **Result**: Master Clock now generates before other structures, preventing overwrites
+  - **Files Modified**:
+    - common/src/main/resources/data/chronodawn/worldgen/structure_set/master_clock_set.json
+    - common/src/main/resources/data/chronodawn/worldgen/structure_set/ancient_ruins_set.json
+    - common/src/main/resources/data/chronodawn/worldgen/structure_set/desert_clock_tower_set.json
+  - **Commit**: 4bb4268 (fix: prevent Master Clock structure from being overridden)
 - [x] T304 [P] Fix Master Clock boss room ceiling height for Time Tyrant
   - **Issue**: Time Tyrant cannot pass through some low-height areas in Master Clock boss room
   - **Solution**: Increased ceiling height in problematic areas to accommodate Time Tyrant (height = 3.5 blocks)
