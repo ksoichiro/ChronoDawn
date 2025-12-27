@@ -4,6 +4,10 @@
 
 A multi-loader Minecraft mod that adds a mysterious time-themed dimension called "Chrono Dawn" with custom portals, unique biomes, powerful bosses, and time-manipulating artifacts.
 
+![Chrono Dawn Overview](docs/screenshots/featured-for-readme.png)
+
+*More screenshots available on [CurseForge](https://www.curseforge.com/minecraft/mc-mods/chrono-dawn) and [Modrinth](https://modrinth.com/mod/chrono-dawn)*
+
 ## Features
 
 ### Core Mechanics
