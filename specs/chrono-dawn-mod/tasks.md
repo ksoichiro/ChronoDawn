@@ -227,9 +227,14 @@
   - **Completed**: Verified Chrono Aegis makes Time Tyrant fight easier, balanced for player advantage
 
 #### Future Improvements (Low Priority)
-- [ ] T242: Improve boss visual diversity (custom models instead of reusing TimeGuardianModel)
+- [x] T242: Improve boss visual diversity (custom models instead of reusing TimeGuardianModel)
+  - **Completed**: All 4 mid-bosses have custom models implemented
+  - ChronosWardenModel.java, ClockworkColossusModel.java, TemporalPhantomModel.java, EntropyKeeperModel.java
 - [ ] T243: Add boss-specific sound effects
-- [ ] T244: Create advancement system for defeating all 4 bosses
+- [x] T244: Create advancement system for defeating all 4 bosses
+  - **Completed**: chrono_aegis_obtained.json advancement requires all 4 boss drops
+  - Criteria: Guardian Stone + Phantom Essence + Colossus Gear + Entropy Core
+  - Frame: Challenge, Rewards: 100 XP
 
 #### Boss Balance Adjustments (US3 - High Priority)
 
