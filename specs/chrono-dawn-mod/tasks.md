@@ -402,10 +402,13 @@
   - **Fix**: Update unlock requirement to check for both Ancient Clockwork x3 AND Key to Master Clock
   - **Completed**: Modified BlockEventHandler.java:166 to require both hasRequiredAncientGears() AND hasKeyToMasterClock()
   - **File**: common/src/main/java/com/chronodawn/events/BlockEventHandler.java:166
-- [ ] T303 [P] Prevent non-boss mob spawning in Desert Clock Tower boss room
+- [x] T303 [P] Prevent non-boss mob spawning in Desert Clock Tower boss room
   - **Issue**: Other mobs spawn in Desert Clock Tower boss room during battle
-  - **Investigation**: Check structure configuration and spawning rules for desert_clock_tower
-  - **Possible solutions**: Add no_mob_spawning flag to boss room area, or implement custom spawning blocker
+  - **Solution**: Added light sources to boss room in Desert Clock Tower structure NBT to prevent hostile mob spawning
+  - **Implementation**: Modified desert_clock_tower.nbt to include lighting blocks (light level 7+) in boss room
+  - **Result**: Hostile mobs no longer spawn in boss room during Time Guardian battle (Minecraft's natural spawning rules prevent spawning at light level 7+)
+  - **Files Modified**: common/src/main/resources/data/chronodawn/structure/desert_clock_tower.nbt
+  - **Commit**: 304b2ed (fix: add lighting to Desert Clock Tower boss room to prevent non-boss mob spawning)
 - [x] T303a [P] Prevent Master Clock structure from being overwritten by other structures
   - **Issue**: Master Clock may be overwritten by other structures (e.g., Ancient Ruins, Desert Clock Tower)
   - **Solution**: Adjusted structure generation step priority
