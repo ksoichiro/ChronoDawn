@@ -188,6 +188,23 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 - Transform: `magick input.png -channel R -evaluate multiply 0.95 +channel ...`
 - Known transformation: **Time Wood** (from Jungle) → R×0.95, G×1.17, B×0.85
 
+## Chronicle Structure Addition Guidelines
+
+**Chronicle Structure Skill**: Detailed guidance for adding structure information to Chronicle with visual hints is available in `.claude/skills/chronicle-structure.md`. Claude will automatically reference this skill when you:
+- Add new structures to Chronicle
+- Convert screenshots to Chronicle-style images
+- Add image pages to Chronicle entries
+- Create visual hints for structures
+
+**Workflow**: 3-step process for adding structures with images to Chronicle.
+
+**Quick Reference**:
+- Screenshot location: `assets/screenshots/chronicle/<structure_name>.png`
+- Convert script: `./scripts/convert_chronicle_image.sh <structure_name>.png`
+- Output location: `common/src/main/resources/assets/chronodawn/textures/gui/chronicle/<structure_name>.png`
+- JSON entry: Add `{"image": "chronodawn:textures/gui/chronicle/<structure_name>.png"}` page
+- Image features: Auto-scaling, sepia tone, 15px vignette fade effect
+
 ## Custom Noise Settings (Terrain Generation)
 
 **Custom Noise Settings Skill**: Detailed guidance for understanding and customizing Minecraft's terrain generation system is available in `.claude/skills/noise-settings.md` (future). This section documents lessons learned from attempting custom noise settings.
