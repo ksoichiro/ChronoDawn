@@ -4,7 +4,166 @@
 
 This file contains all completed task sections that have been moved from tasks.md for better organization.
 
-**Last Updated**: 2025-12-13
+**Last Updated**: 2025-12-27
+
+---
+
+## License Compliance & Guidebook Migration (✅ REVERTED TO PATCHOULI)
+
+**Purpose**: Attempted migration from Patchouli (CC-BY-NC-SA 3.0) to Lavender (MIT) for licensing freedom.
+
+**Background**:
+- Patchouli is licensed under CC-BY-NC-SA 3.0 (NonCommercial, ShareAlike)
+- Initial concern about commercial use restrictions
+- Lavender appeared as MIT-licensed alternative
+
+**Critical Discovery (2025-12-23)**:
+- **Lavender is Fabric-only** - No NeoForge support as of v0.1.15+1.21
+- NeoForge users would have no guidebook (unacceptable experience gap)
+- Multi-loader support is core project requirement
+
+**Final Decision**:
+- **Reverted to Patchouli 1.21.1-92** (supports both Fabric and NeoForge)
+- **License Clarification**: Patchouli API dependency usage (not Jar-in-Jar) is acceptable per official docs
+- **Future Option**: Custom UI implementation documented in `custom-guidebook-ui-plan.md` for post-1.0
+- Project now uses **LGPL-3.0 License** (after Patchouli removal)
+
+**Tasks**:
+
+- [x] T500 [P] Research Lavender implementation and architecture
+- [x] T501 [P] Remove Patchouli dependencies
+- [x] T502 [P] Add Lavender dependencies (Fabric only - NeoForge not supported)
+- [x] T503 [P] Create Lavender guidebook structure
+- [x] T504 [P] Implement basic guidebook content (English)
+- [x] T505 [P] Implement Japanese guidebook content
+- [x] T506 [P] Create guidebook item and recipe
+- [x] T507 [P] Test guidebook functionality
+- [x] T508 [P] Update project documentation
+- [x] T509 [P] Update LICENSE and licensing documentation
+- [x] T510 [P] Final verification and cleanup (Lavender migration)
+
+**Reversion Tasks** (2025-12-23):
+- [x] T511 [P] Revert to Patchouli dependencies
+- [x] T512 [P] Update documentation for Patchouli reversion
+
+**Final Status (2025-12-23)**:
+- ✅ Patchouli 1.21.1-92 restored for both Fabric and NeoForge
+- ✅ All Lavender code and references removed
+- ✅ Bilingual guidebook (English/Japanese) functional
+- ✅ Multi-loader support maintained (Fabric and NeoForge)
+- ✅ No build errors on either loader
+- ✅ Documentation fully updated
+- 📋 Future option: Custom UI implementation plan documented
+
+---
+
+## Custom Guidebook UI Implementation (✅ COMPLETED 2025-12-26)
+
+**Purpose**: Implement custom, dependency-free guidebook UI system to remove Patchouli dependency and achieve complete licensing independence.
+
+**Background**:
+- Removed Patchouli 1.21.1-92 (CC-BY-NC-SA 3.0) dependency
+- Custom UI provides: complete control, zero dependencies, full license ownership
+- Multi-loader compatible via Architectury
+
+**Implementation**:
+- Custom "Chronicle" guidebook system with category navigation
+- Entry display with text rendering and multi-page support
+- Recipe integration using vanilla UI components
+- Bilingual support (English + Japanese)
+- Multi-loader via Architectury MenuRegistry
+
+**Tasks**:
+
+- [x] T700 [P] Phase 1: Implement basic structure (2025-12-26)
+- [x] T701 [P] Phase 2: Implement category navigation (2025-12-26)
+- [x] T702 [P] Phase 3: Implement entry display (2025-12-26)
+- [x] T703 [P] Phase 4: Add bilingual support (2025-12-26)
+- [x] T704 [P] Phase 5: Migrate content from Patchouli (2025-12-26)
+- [x] T705 [P] Phase 6: Polish and multi-loader testing (2025-12-26)
+- [x] T706 [P] Remove Patchouli dependency (2025-12-26)
+
+**Final Status**:
+- ✅ Chronicle guidebook fully functional
+- ✅ All Patchouli content migrated
+- ✅ Bilingual support working (English/Japanese)
+- ✅ Zero external dependencies
+- ✅ Patchouli completely removed
+- ✅ Enabled LGPL-3.0 license migration
+
+---
+
+## License Migration to LGPL-3.0 (✅ COMPLETED 2025-12-27)
+
+**Purpose**: Migrated project license from "All Rights Reserved" to LGPL-3.0 to enable open-source distribution.
+
+**Background**:
+- Previous license: All Rights Reserved (proprietary)
+- Patchouli CC-BY-NC-SA 3.0 dependency blocked commercial use
+- Custom Chronicle UI removed Patchouli dependency
+- Enabled LGPL-3.0 migration
+
+**Key Decision**: LGPL-3.0 for Minecraft mod compatibility
+- Standard in Minecraft modding community (Forge, Applied Energistics 2)
+- Derivative works must remain LGPL-3.0 and publish source
+- Commercial use allowed but requires source disclosure
+
+**Tasks**:
+
+- [x] T600 [Documentation] Remove Patchouli references from documentation (2025-12-27)
+- [x] T601 [License] Replace LICENSE file with LGPL-3.0 text (2025-12-27)
+- [x] T602 [Documentation] Update README.md license section (2025-12-27)
+- [x] T603 [Metadata] Update fabric.mod.json license field (2025-12-27)
+- [x] T604 [Metadata] Update neoforge.mods.toml license field (2025-12-27)
+- [x] T605 [Platform] Update docs/curseforge_description.md license section (2025-12-27)
+- [x] T606 [Platform] Update docs/modrinth_description.md license section (2025-12-27)
+- [x] T607 [Optional] Add LGPL-3.0 headers to main source files (2025-12-27)
+  - Added to ChronoDawn.java, ChronoDawnFabric.java, ChronoDawnNeoForge.java
+  - Header: Copyright (C) 2025 ksoichiro + LGPL-3.0 version 3 only boilerplate
+- [x] T608 [Guidelines] Update CLAUDE.md project guidelines (2025-12-27)
+
+**Final Status**:
+- ✅ LICENSE file replaced with LGPL-3.0
+- ✅ All metadata files updated
+- ✅ Documentation updated across all platforms
+- ✅ License headers added to main entry points
+- ✅ CLAUDE.md updated with compliance guidelines
+- ✅ Project is now fully open source under LGPL-3.0
+
+---
+
+## Screenshots & Release Preparation (✅ COMPLETED 2025-12-27)
+
+**Purpose**: Created high-quality screenshots for CurseForge and Modrinth galleries to ensure successful initial release approval.
+
+**Background**:
+- Both platforms require screenshots for mod listings
+- Quality screenshots critical for first impressions
+- Screenshots showcase: structures, bosses, dimension, items
+- Resolution: 1920x1080 (16:9 aspect ratio)
+- CurseForge icon requirement: minimum 400x400px
+
+**Tasks**:
+
+- [x] T513 [P] Set up screenshot infrastructure
+- [x] T514 [P] Create project icon (512x512px)
+- [x] T515 [P] Capture essential screenshots (Priority 1)
+  - 8 essential screenshots + 1 featured image (9 total)
+  - All 1920x1080 PNG format, F1 to hide HUD
+  - Used Complementary Shaders Unbound for enhanced visuals
+- [x] T516 [P] Capture supplementary screenshots (Priority 2) - PARTIAL
+- [x] T517 [P] Optimize and organize screenshots
+- [x] T518 [P] Upload to CurseForge gallery (2025-12-27)
+- [x] T519 [P] Upload to Modrinth gallery (2025-12-27)
+- [x] T520 [P] Update documentation with screenshots
+
+**Final Status**:
+- ✅ 9 high-quality screenshots captured
+- ✅ Project icon created (512x512px)
+- ✅ All screenshots uploaded to CurseForge
+- ✅ All screenshots uploaded to Modrinth
+- ✅ Documentation updated
+- ✅ Ready for initial release approval
 
 ---
 
