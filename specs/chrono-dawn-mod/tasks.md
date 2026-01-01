@@ -391,6 +391,23 @@
     - fabric/src/main/resources/chronodawn-fabric.mixins.json
     - neoforge/src/main/resources/chronodawn-neoforge.mixins.json
   - **Tested**: Build successful, all game tests passed (92/92)
+- [ ] T310 [P] Fix portal regeneration in multiplayer when multiple players use same portal
+  - **Issue**: When multiple players transition to Chrono Dawn through the same portal, a once-broken portal regenerates and becomes indestructible
+  - **Investigation**: Check portal breaking/regeneration logic in multiplayer scenarios
+  - **Possible causes**:
+    - Race condition in portal state management between multiple players
+    - Portal state not properly synchronized across server and clients
+    - Portal breaking event not properly broadcast to all players
+  - **Priority**: High (multiplayer gameplay issue)
+- [ ] T311 [P] Fix portal generation to spawn on surface instead of underground
+  - **Issue**: Portal generated at Y=-48 underground (in a cave), making game progression significantly harder
+  - **Investigation**: Check portal placement logic and Y-coordinate calculation
+  - **Expected behavior**: Portal should generate on surface (ground level)
+  - **Possible solutions**:
+    - Adjust portal placement algorithm to find surface level
+    - Use heightmap-based Y-coordinate calculation
+    - Ensure portal spawns above ground in open air
+  - **Priority**: High (gameplay difficulty issue)
 
 ### Playtest Improvements - Boss Battle
 
@@ -431,6 +448,14 @@
   - **Solution**: Removed hiding spots from room layout to ensure boss has proper access to entire arena
   - **Files Modified**: common/src/main/resources/data/chronodawn/structures/master_clock_boss_room.nbt
   - **Commit**: 035a723 (fix: improve Master Clock boss room layout for better gameplay)
+- [ ] T309 [P] Fix Phantom Catacombs structure search freezing
+  - **Issue**: When using structure search for Phantom Catacombs, the world freezes, especially in multiplayer where other players get disconnected and boss room placement never completes
+  - **Investigation**: Check Phantom Catacombs structure generation logic and boss room placement algorithm
+  - **Possible causes**:
+    - Infinite loop or deadlock in boss room placement collision detection
+    - Excessive chunk loading during structure search
+    - Synchronous boss room placement blocking main thread
+  - **Priority**: Critical (game-breaking bug)
 
 ### Playtest Improvements - Exploration
 
