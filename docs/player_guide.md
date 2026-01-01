@@ -75,8 +75,8 @@ Download and install these mods alongside Chrono Dawn:
    - **Architectury API** (required for both loaders)
    - **Custom Portal API ReForged** (NeoForge only - Fabric version includes this bundled)
 4. Download **Chrono Dawn Mod** (choose the version matching your loader):
-   - `chronodawn-fabric-0.1.0.jar` for Fabric
-   - `chronodawn-neoforge-0.1.0.jar` for NeoForge
+   - `chronodawn-0.2.0-beta+1.21.1-fabric.jar` for Fabric
+   - `chronodawn-0.2.0-beta+1.21.1-neoforge.jar` for NeoForge
 5. Place all JAR files in your `.minecraft/mods/` folder
 6. Launch Minecraft with your chosen mod loader profile
 7. Verify "Chrono Dawn" appears in the mod list
