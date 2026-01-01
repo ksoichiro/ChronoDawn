@@ -470,6 +470,15 @@
     - Add visual cues (e.g., beacon beam visible from distance)
     - Add advancement hint system with approximate coordinates
 
+### Playtest Improvements - Guidebook Distribution
+
+**Purpose**: Fix guidebook distribution bugs discovered through playtesting
+
+- [ ] T712 [P] Fix guidebook not being distributed on NeoForge when entering Chrono Dawn dimension
+  - **Issue**: On NeoForge, Chronicle guidebook is not distributed when player enters Chrono Dawn dimension (works on Fabric)
+  - **Investigation**: Check PlayerRespawnEvent handling differences between Fabric and NeoForge
+  - **Priority**: High (platform-specific bug affecting player experience)
+
 ### Final Validation
 
 - [ ] T190 Run full test suite for both loaders using ./gradlew test
