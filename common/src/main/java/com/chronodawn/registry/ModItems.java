@@ -860,6 +860,16 @@ public class ModItems {
     );
 
     /**
+     * Time Blossom - Decorative flower from the ChronoDawn dimension.
+     * Can be placed as a block or in flower pots.
+     * Purple-themed appearance.
+     */
+    public static final RegistrySupplier<Item> TIME_BLOSSOM = ITEMS.register(
+        "time_blossom",
+        () -> new BlockItem(ModBlocks.TIME_BLOSSOM.get(), new Item.Properties())
+    );
+
+    /**
      * Temporal Root Stew - Hearty stew combining Baked Temporal Root and Timeless Mushroom.
      * Restores 8 hunger points with Regeneration II for 10 seconds.
      * Recipe: 1x Baked Temporal Root + 1x Timeless Mushroom + 1x Bowl
@@ -1447,6 +1457,7 @@ public class ModItems {
         output.accept(CHRONO_MELON_SLICE.get());
         output.accept(CHRONO_MELON.get());
         output.accept(TIMELESS_MUSHROOM.get());
+        output.accept(TIME_BLOSSOM.get());
 
         // === Crafted Foods (T215) ===
         output.accept(TEMPORAL_ROOT_STEW.get());

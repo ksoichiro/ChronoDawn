@@ -350,6 +350,18 @@ public class ChronoDawnClientNeoForge {
             RenderType.cutout()
         );
 
+        // Register Time Blossom to use cutout rendering (for transparency)
+        ItemBlockRenderTypes.setRenderLayer(
+            ModBlocks.TIME_BLOSSOM.get(),
+            RenderType.cutout()
+        );
+
+        // Register Potted Time Blossom to use cutout rendering (for transparency)
+        ItemBlockRenderTypes.setRenderLayer(
+            ModBlocks.POTTED_TIME_BLOSSOM.get(),
+            RenderType.cutout()
+        );
+
         // Register Dark Time Wood blocks to use cutout rendering (for transparency)
         ItemBlockRenderTypes.setRenderLayer(
             ModBlocks.DARK_TIME_WOOD_SAPLING.get(),

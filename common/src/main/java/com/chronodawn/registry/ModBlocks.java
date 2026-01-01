@@ -67,6 +67,7 @@ import com.chronodawn.blocks.ChronoMelonStemBlock;
 import com.chronodawn.blocks.AttachedChronoMelonStemBlock;
 import com.chronodawn.blocks.ChronoMelonBlock;
 import com.chronodawn.blocks.TimelessMushroomBlock;
+import com.chronodawn.blocks.TimeBlossomBlock;
 import com.chronodawn.registry.ModFluids;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -460,6 +461,25 @@ public class ModBlocks {
         () -> new TimelessMushroomBlock(
             Block.Properties.ofFullCopy(Blocks.BROWN_MUSHROOM)
         )
+    );
+
+    /**
+     * Time Blossom - Decorative flower found in the ChronoDawn dimension.
+     * Simple flower with purple-themed appearance.
+     * Can be placed in flower pots.
+     */
+    public static final RegistrySupplier<Block> TIME_BLOSSOM = BLOCKS.register(
+        "time_blossom",
+        () -> new TimeBlossomBlock(TimeBlossomBlock.createProperties())
+    );
+
+    /**
+     * Potted Time Blossom - Decorative potted version of Time Blossom.
+     * Can be created by using Time Blossom on a flower pot.
+     */
+    public static final RegistrySupplier<Block> POTTED_TIME_BLOSSOM = BLOCKS.register(
+        "potted_time_blossom",
+        () -> new FlowerPotBlock(TIME_BLOSSOM.get(), Block.Properties.ofFullCopy(Blocks.FLOWER_POT))
     );
 
     /**
