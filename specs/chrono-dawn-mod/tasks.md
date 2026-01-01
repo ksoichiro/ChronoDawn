@@ -474,10 +474,12 @@
 
 **Purpose**: Fix guidebook distribution bugs discovered through playtesting
 
-- [ ] T712 [P] Fix guidebook not being distributed on NeoForge when entering Chrono Dawn dimension
-  - **Issue**: On NeoForge, Chronicle guidebook is not distributed when player enters Chrono Dawn dimension (works on Fabric)
-  - **Investigation**: Check PlayerRespawnEvent handling differences between Fabric and NeoForge
-  - **Priority**: High (platform-specific bug affecting player experience)
+- [x] T712 [P] Fix Chronicle Book not being distributed when entering Chrono Dawn dimension
+  - **Issue**: Chronicle Book was not distributed on dimension entry on BOTH Fabric and NeoForge
+  - **Root Cause**: giveChronicleBook() call was removed during Patchouli to Chronicle GUI migration (commit 053897a)
+  - **Fix**: Restored giveChronicleBook() and hasChronicleBook() methods in PlayerEventHandler.java (common module)
+  - **Verified**: Both Fabric and NeoForge now distribute Chronicle Book on dimension entry ✓
+  - **Priority**: High (affects player experience on both platforms)
 
 ### Final Validation
 
