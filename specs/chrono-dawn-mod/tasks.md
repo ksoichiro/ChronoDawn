@@ -545,3 +545,262 @@
     - ✅ Translations verified
   - **Priority**: Medium (branding update)
 
+---
+
+### Multi-Version Support (Infrastructure)
+
+**Purpose**: Support Minecraft 1.20.6 and 1.21.1 from a single codebase using custom Gradle scripts and abstraction layer
+
+**Strategy**: Gradle-based multi-version setup with version-specific directories and compatibility layer (no external preprocessors)
+
+**Documentation**: See `docs/multiversion_migration_plan.md` for detailed implementation plan
+
+**Target Versions**: Minecraft 1.20.6 (pack_format: 41, NBT-based APIs) + 1.21.1 (pack_format: 48, Component-based APIs)
+
+**Estimated Duration**: 28-39 days (1-1.5 months) across 6 phases
+
+#### Phase 1: Data Pack Integration (2-3 days)
+
+**Goal**: Separate version-specific Data Packs and switch at build time with Gradle
+
+- [ ] T401 [Infrastructure] Create version property files
+  - Create `props/` directory
+  - Create `props/1.20.6.properties` with minecraft_version, pack_format, architectury_api_version, etc.
+  - Create `props/1.21.1.properties` with corresponding values
+  - **Priority**: High
+  - **Risk**: Low
+
+- [ ] T402 [Infrastructure] Add version switching logic to root build.gradle
+  - Implement `loadVersionProperties()` function
+  - Add command-line property `target_mc_version` support
+  - Propagate properties to subprojects
+  - **Priority**: High
+  - **Risk**: Low
+
+- [ ] T403 [Infrastructure] Create version-specific resource directories
+  - Create `common/src/main/resources-1.21.1/` (copy current data)
+  - Create `common/src/main/resources-1.20.6/` with plural folder names
+  - Rename folders: `advancement/` → `advancements/`, `loot_table/` → `loot_tables/`, `recipe/` → `recipes/`, `tags/item/` → `tags/items/`
+  - Update `pack_format` to 41 in 1.20.6 pack.mcmeta
+  - **Priority**: High
+  - **Risk**: Low
+  - **Files**: ~320 data pack files
+
+- [ ] T404 [Infrastructure] Configure Gradle sourceSets for resources
+  - Add `sourceSets.main.resources` configuration to `common/build.gradle`
+  - Implement version-specific resource directory selection
+  - Add `processResources` task configuration with pack_format expansion
+  - **Priority**: High
+  - **Risk**: Low
+
+- [ ] T405 [Infrastructure] Verify Data Pack integration
+  - Test: `./gradlew :common:processResources -Ptarget_mc_version=1.21.1` uses singular folders
+  - Test: `./gradlew :common:processResources -Ptarget_mc_version=1.20.6` uses plural folders
+  - Verify pack.mcmeta pack_format values
+  - **Priority**: High
+  - **Risk**: Low
+
+#### Phase 2: Abstraction Layer Design (3-4 days)
+
+**Goal**: Design abstraction interfaces to absorb API differences between versions
+
+- [ ] T406 [Infrastructure] Design compat package structure
+  - Design `ItemDataHandler` interface (setString, getString, setInt, getInt, etc.)
+  - Design `SavedDataHandler` interface (save method with registries parameter)
+  - Design `RegistryHandler` interface (if needed)
+  - Document interface contracts and null safety guarantees
+  - **Priority**: High
+  - **Risk**: Medium (design mistakes impact subsequent phases)
+
+- [ ] T407 [Infrastructure] Survey existing code API usage patterns
+  - Create list of `getOrCreateTag()` usage locations (47 files identified)
+  - Survey `SavedData.save()` signature changes (7 files)
+  - Survey BlockEntity `saveAdditional()` signature changes
+  - Document all version-specific API calls
+  - **Priority**: High
+  - **Risk**: Medium
+
+- [ ] T408 [Infrastructure] Finalize abstraction layer specifications
+  - Finalize ItemDataHandler method list with all required data types
+  - Define error handling policy (exceptions vs null returns)
+  - Define version detection mechanism (system properties)
+  - Create API documentation for compat package
+  - **Priority**: High
+  - **Risk**: Medium
+
+#### Phase 3: Abstraction Layer Implementation (5-7 days)
+
+**Goal**: Implement abstraction layer and separate version-specific code
+
+- [ ] T409 [Infrastructure] Implement ItemDataHandler abstraction
+  - Create `common/src/main/java/com/chronodawn/compat/ItemDataHandler.java` interface
+  - Create `common/src/main/java/com/chronodawn/compat/v1_20_6/ItemDataHandler120.java` (NBT implementation)
+  - Create `common/src/main/java/com/chronodawn/compat/v1_21_1/ItemDataHandler121.java` (Component implementation)
+  - Create `CompatHandlers` factory class with version detection
+  - **Priority**: High
+  - **Risk**: Medium
+
+- [ ] T410 [Infrastructure] Implement SavedDataHandler abstraction
+  - Create SavedDataHandler interface
+  - Implement 1.20.6 version (ignore registries parameter)
+  - Implement 1.21.1 version (use HolderLookup.Provider)
+  - Add to CompatHandlers factory
+  - **Priority**: High
+  - **Risk**: Medium
+
+- [ ] T411 [Infrastructure] Configure Gradle for version-specific Java code
+  - Add `compat_package` property to version property files
+  - Update `sourceSets.main.java` to include version-specific directories
+  - Set `chronodawn.minecraft.version` system property at compile time
+  - **Priority**: High
+  - **Risk**: Medium
+
+- [ ] T412 [Infrastructure] Verify abstraction layer implementation
+  - Test: 1.20.6 build uses ItemDataHandler120
+  - Test: 1.21.1 build uses ItemDataHandler121
+  - Create unit tests for compat handlers (if possible)
+  - Verify no compile errors for both versions
+  - **Priority**: High
+  - **Risk**: Medium
+
+#### Phase 4: Migrate Existing Code (10-14 days)
+
+**Goal**: Refactor existing 47 files to use abstraction layer
+
+- [ ] T413 [Infrastructure] Migrate items package to compat layer
+  - Refactor `PortalStabilizerItem.java` to use ItemDataHandler
+  - Refactor `TimeClockItem.java` to use ItemDataHandler
+  - Refactor `TimeCompassItem.java`, `ChronoAegisItem.java`, `DecorativeWaterBucketItem.java`
+  - Refactor other items (~10 files)
+  - **Priority**: Medium
+  - **Risk**: High (potential bugs)
+  - **Files**: ~15 files
+
+- [ ] T414 [Infrastructure] Migrate data package to compat layer
+  - Modify `ChronoDawnWorldData.java` save() method to use SavedDataHandler
+  - Modify `PortalRegistryData.java` save() method
+  - Modify other SavedData classes (~5 files)
+  - **Priority**: Medium
+  - **Risk**: High
+  - **Files**: ~7 files
+
+- [ ] T415 [Infrastructure] Migrate entities/bosses package to compat layer
+  - Modify `TimeTyrantEntity.java` NBT handling
+  - Modify `TimeGuardianEntity.java`, `TemporalPhantomEntity.java`, `EntropyKeeperEntity.java`, `ClockworkColossusEntity.java`
+  - Modify other entity classes
+  - **Priority**: Medium
+  - **Risk**: High
+  - **Files**: ~10 files
+
+- [ ] T416 [Infrastructure] Migrate blocks package to compat layer
+  - Modify `BossRoomDoorBlockEntity.java` NBT handling
+  - Modify other BlockEntity classes
+  - **Priority**: Medium
+  - **Risk**: High
+  - **Files**: ~5 files
+
+- [ ] T417 [Infrastructure] Migrate remaining files to compat layer
+  - Survey and migrate core/, gui/, worldgen/, etc. packages
+  - Refactor all remaining direct NBT/Component API calls
+  - **Priority**: Medium
+  - **Risk**: High
+  - **Files**: ~10 files
+
+- [ ] T418 [Infrastructure] Verify code migration completion
+  - Run static analysis: `grep -r "getOrCreateTag()" | grep -v "compat/"` (expect: 0 results)
+  - Verify successful build for both versions
+  - Run test suite for both versions
+  - **Priority**: High
+  - **Risk**: High
+
+#### Phase 5: Build Script Enhancement (3-4 days)
+
+**Goal**: CI/CD support and improved developer experience
+
+- [ ] T419 [Infrastructure] Add convenient Gradle tasks
+  - Create `build1206` task (shortcut for 1.20.6 build)
+  - Create `build1211` task (shortcut for 1.21.1 build)
+  - Create `buildAll` task (sequential build for all versions)
+  - **Priority**: Low
+  - **Risk**: Low
+
+- [ ] T420 [Infrastructure] Configure output JAR naming
+  - Update Fabric build.gradle: `chronodawn-0.1.0+1.20.6-fabric.jar`
+  - Update NeoForge build.gradle: `chronodawn-0.1.0+1.21.1-neoforge.jar`
+  - **Priority**: Low
+  - **Risk**: Low
+
+- [ ] T421 [Infrastructure] Update GitHub Actions workflow (if applicable)
+  - Configure matrix build for both versions
+  - Configure artifact upload with version labels
+  - **Priority**: Low
+  - **Risk**: Low
+
+- [ ] T422 [Infrastructure] Update documentation
+  - Update build instructions in README.md
+  - Add Gradle multi-version setup notes to CLAUDE.md
+  - Update developer_guide.md with version switching commands
+  - **Priority**: Low
+  - **Risk**: Low
+
+#### Phase 6: Integration Testing and Verification (5-7 days)
+
+**Goal**: Verify operation in both versions with real Minecraft environments
+
+- [ ] T423 [Infrastructure] Verify 1.20.6 build and runtime
+  - Build: `./gradlew clean build -Ptarget_mc_version=1.20.6`
+  - Test Minecraft 1.20.6 startup
+  - Verify Data Pack loaded (plural folders)
+  - Test Portal Stabilizer (ItemStack NBT)
+  - Test SavedData persistence
+  - **Priority**: High
+  - **Risk**: High
+
+- [ ] T424 [Infrastructure] Verify 1.21.1 build and runtime
+  - Build: `./gradlew clean build -Ptarget_mc_version=1.21.1`
+  - Test Minecraft 1.21.1 startup
+  - Verify Data Pack loaded (singular folders)
+  - Test Portal Stabilizer (ItemStack Components)
+  - Test SavedData persistence
+  - **Priority**: High
+  - **Risk**: High
+
+- [ ] T425 [Infrastructure] Cross-version feature testing
+  - Test all bosses spawn correctly in both versions
+  - Test all structures generate correctly in both versions
+  - Test Chronicle guidebook in both versions
+  - Test portal mechanics in both versions
+  - Test dimension features in both versions
+  - **Priority**: High
+  - **Risk**: High
+
+- [ ] T426 [Infrastructure] Performance verification
+  - Measure and compare startup time (1.20.6 vs 1.21.1)
+  - Measure memory usage in both versions
+  - Verify no performance degradation from abstraction layer
+  - **Priority**: Medium
+  - **Risk**: Medium
+
+- [ ] T427 [Infrastructure] Bug fixes and polish
+  - Fix all bugs discovered during testing
+  - Re-test after fixes
+  - Create regression test suite
+  - **Priority**: High
+  - **Risk**: High
+
+**Rollback Plan**:
+- If Phase 3-4 becomes too difficult: Implement Plan B (Data Pack multi-version only, Java code via Git branches)
+- If critical issues found in Phase 6: Implement Plan C (Revert to 1.21.1 only, postpone 1.20.6 support)
+
+**Success Criteria**:
+- ✅ Both 1.20.6 and 1.21.1 builds compile without errors
+- ✅ Both versions run in production Minecraft environments
+- ✅ All features work correctly in both versions
+- ✅ No direct NBT/Component API calls outside compat/ package
+- ✅ Documentation updated with multi-version build instructions
+
+**Notes**:
+- External dependencies: None (no Stonecutter, Manifold, or other preprocessors)
+- AI development efficiency: All code in single codebase, visible to AI
+- Maintainability: Standard Gradle features only, no complex toolchains
+

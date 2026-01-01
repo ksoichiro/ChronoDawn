@@ -91,6 +91,27 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 - **Mappings**: Mojang mappings (not Yarn) - code uses official Minecraft class names (e.g., `net.minecraft.core.Registry`)
 - **Shadow Plugin**: com.gradleup.shadow 8.3.6 - for bundling common module into platform-specific JARs
 
+## Multi-Version Support (Planned)
+
+**Documentation**: Detailed migration plan is available in `docs/multiversion_migration_plan.md`.
+
+**Target Versions**: Minecraft 1.20.6 + 1.21.1 (同一コードベース)
+
+**Strategy**:
+- Gradle 自前スクリプト + 抽象化レイヤー方式（外部プリプロセッサ非依存）
+- 全コードを1箇所に集約（AI 開発効率を重視し、Git ブランチ分離を避ける）
+
+**Key Components**:
+1. **Data Pack**: バージョン固有ディレクトリ（`resources-1.20.6/`, `resources-1.21.1/`）を Gradle で切り替え
+   - 1.20.6: 複数形フォルダ（`advancements/`, `loot_tables/`, `recipes/`）+ pack_format: 41
+   - 1.21.1: 単数形フォルダ（`advancement/`, `loot_table/`, `recipe/`）+ pack_format: 48
+2. **Java Code**: `compat/` パッケージで API 差異を吸収
+   - ItemStack: NBT (1.20.6) vs DataComponents (1.21.1)
+   - SavedData: `HolderLookup.Provider` の有無
+3. **Build Command**: `./gradlew build -Ptarget_mc_version=1.20.6` または `1.21.1`
+
+**Status**: 計画策定完了（Phase 1-6）、実装は未着手
+
 ## Development Notes
 - When writing code, use Mojang mapping names (e.g., `net.minecraft.world.level.Level`, not Yarn's `class_XXXX`)
 - Build files use Groovy syntax (e.g., `maven { url 'https://...' }`, not `maven { url = "https://..." }`)
