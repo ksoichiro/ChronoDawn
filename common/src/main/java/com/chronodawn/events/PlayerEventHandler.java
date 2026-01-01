@@ -105,8 +105,8 @@ public class PlayerEventHandler {
         ChronoDawn.LOGGER.info("Player {} entered ChronoDawn at position {}",
             player.getName().getString(), player.blockPosition());
 
-        // Note: Chronicle Book is available in creative tab and can be crafted/found
-        // Players can access the guidebook at any time by using the Chronicle Book item
+        // Give Chronicle Book to player on first entry to ChronoDawn dimension
+        giveChronicleBook(player);
 
         // Place Time Keeper Village near spawn if not already placed
         // This ensures players can find a Time Keeper for trading and Time Compass acquisition
@@ -277,6 +277,57 @@ public class PlayerEventHandler {
         // NeoForge version (Custom Portal API Reforged): cpapireforged:custom_portal_block
         if (namespace.equals("cpapireforged") && path.equals("custom_portal_block")) {
             return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Give Chronicle Book to player if they don't already have it.
+     * Chronicle Book is the custom guidebook that replaces Patchouli.
+     *
+     * @param player Player to give the book to
+     */
+    private static void giveChronicleBook(ServerPlayer player) {
+        // Check if player already has the chronicle book
+        if (hasChronicleBook(player)) {
+            ChronoDawn.LOGGER.info("Player {} already has Chronicle book, skipping",
+                player.getName().getString());
+            return;
+        }
+
+        try {
+            // Create Chronicle Book item stack
+            ItemStack bookStack = new ItemStack(ModItems.CHRONICLE_BOOK.get());
+
+            // Give book to player
+            if (!player.getInventory().add(bookStack)) {
+                // Inventory full, drop at player's feet
+                player.drop(bookStack, false);
+                ChronoDawn.LOGGER.info("Player {} inventory full, dropped Chronicle book at their position",
+                    player.getName().getString());
+            } else {
+                ChronoDawn.LOGGER.info("Gave Chronicle book to player {}", player.getName().getString());
+            }
+        } catch (Exception e) {
+            ChronoDawn.LOGGER.error("Failed to give Chronicle book to player {}: {}",
+                player.getName().getString(), e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Check if player already has the Chronicle book in their inventory.
+     *
+     * @param player Player to check
+     * @return true if player has the book
+     */
+    private static boolean hasChronicleBook(ServerPlayer player) {
+        // Check all inventory slots
+        for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+            ItemStack stack = player.getInventory().getItem(i);
+            if (stack.is(ModItems.CHRONICLE_BOOK.get())) {
+                return true;
+            }
         }
 
         return false;
