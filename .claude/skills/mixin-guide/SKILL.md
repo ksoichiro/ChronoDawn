@@ -1,3 +1,8 @@
+---
+name: mixin-guide
+description: Guide for configuring Mixins in Architectury multi-loader projects
+---
+
 # Mixin Configuration Guide
 
 **Purpose**: Guide for configuring Mixins in Architectury multi-loader projects.

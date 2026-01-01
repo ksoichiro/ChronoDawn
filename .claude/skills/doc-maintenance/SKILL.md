@@ -1,3 +1,8 @@
+---
+name: doc-maintenance
+description: Guide documentation updates when changing versions, adding content, or preparing releases
+---
+
 # Documentation Maintenance
 
 **Purpose**: Guide documentation updates when changing versions, adding content, or preparing releases.

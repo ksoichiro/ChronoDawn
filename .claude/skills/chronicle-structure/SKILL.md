@@ -1,3 +1,8 @@
+---
+name: chronicle-structure
+description: Guide for adding structure information to Chronicle with visual hints
+---
+
 # Chronicle Structure Addition Guide
 
 **Purpose**: Guide for adding new structure information to Chronicle with visual hints (images).

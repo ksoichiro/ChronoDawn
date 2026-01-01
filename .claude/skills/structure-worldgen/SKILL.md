@@ -1,3 +1,8 @@
+---
+name: structure-worldgen
+description: Comprehensive guidance for implementing complex structure generation in Minecraft mods
+---
+
 # Structure Worldgen Guide
 
 **Purpose**: Guide for implementing complex structure generation with waterlogging prevention, Jigsaw techniques, and boss spawning.
