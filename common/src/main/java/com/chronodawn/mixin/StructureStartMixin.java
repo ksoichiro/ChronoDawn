@@ -18,6 +18,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -75,7 +77,8 @@ public abstract class StructureStartMixin {
     public abstract java.util.List<net.minecraft.world.level.levelgen.structure.StructurePiece> getPieces();
 
     // Store water positions before structure placement
-    private final java.util.Set<BlockPos> waterPositionsBeforePlacement = new java.util.HashSet<>();
+    // Thread-safe: Synchronized set prevents race conditions in multiplayer
+    private final Set<BlockPos> waterPositionsBeforePlacement = Collections.synchronizedSet(new HashSet<>());
 
     /**
      * Inject before structure placement to record and remove existing water.

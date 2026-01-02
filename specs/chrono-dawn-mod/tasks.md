@@ -859,7 +859,7 @@
 
 **Priority**: Critical (affects all multiplayer gameplay)
 
-- [ ] T428 [Performance] Audit and fix main thread blocking in structure generation
+- [x] T428 [Performance] Audit and fix main thread blocking in structure generation
   - **Issue**: Long-running synchronous operations on main thread cause world freezing
   - **Investigation**:
     - Scan all structure generation code for large-scale block scanning (e.g., Boss Room Placers)

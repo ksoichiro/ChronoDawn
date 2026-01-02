@@ -2,6 +2,7 @@ package com.chronodawn.worldgen.spawning;
 
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.registry.ModBlocks;
+import com.chronodawn.registry.ModDimensions;
 import dev.architectury.event.events.common.TickEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -1642,6 +1643,11 @@ public class PhantomCatacombsBossRoomPlacer {
      * @param level The ServerLevel to check
      */
     public static void checkAndPlaceRooms(ServerLevel level) {
+        // Only process Chrono Dawn dimension (Phantom Catacombs only spawns there)
+        if (!level.dimension().equals(ModDimensions.CHRONO_DAWN_DIMENSION)) {
+            return;
+        }
+
         ResourceLocation dimensionId = level.dimension().location();
 
         ChronoDawn.LOGGER.debug("[DimensionCheck] checkAndPlaceRooms called for dimension: {}", dimensionId);

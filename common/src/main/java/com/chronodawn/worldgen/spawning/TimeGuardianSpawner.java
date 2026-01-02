@@ -1,6 +1,7 @@
 package com.chronodawn.worldgen.spawning;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.data.BossSpawnData;
 import com.chronodawn.entities.bosses.TimeGuardianEntity;
 import com.chronodawn.registry.ModEntities;
 import dev.architectury.event.events.common.LifecycleEvent;
@@ -9,27 +10,25 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Time Guardian Spawner
  *
  * Manages spawning of Time Guardian entities in Desert Clock Tower structures.
  *
- * Spawn Conditions (from data-model.md):
+ * Spawn Conditions:
  * - Location: Desert Clock Tower top floor (ChronoDawn dimension)
- * - Frequency: Spawns in Desert Clock Tower structures
- * - Max per world: 3 (based on max number of Time Guardians)
+ * - Frequency: One per Desert Clock Tower structure
+ * - Persistence: Uses SavedData to prevent duplicate spawning after server restart
  *
  * Implementation Strategy:
  * - Uses server tick event to periodically check for newly generated Desert Clock Towers
  * - Spawns Time Guardian at the top floor of the structure
+ * - Uses SavedData to persist spawn state across server restarts
  * - Tracks spawned structures to avoid duplicate spawning
- * - Respects max spawn limit per world
  *
  * Reference: data-model.md (Boss Spawning - Time Guardian)
  * Task: T114 [US2] Create Time Guardian spawn logic (spawns on Desert Clock Tower top floor)
@@ -40,22 +39,9 @@ public class TimeGuardianSpawner {
         "desert_clock_tower"
     );
 
-    // Track structure positions where we've already attempted to spawn Time Guardians
-    // Use BlockPos instead of ChunkPos for more precise tracking
-    private static final Set<BlockPos> spawnedStructures = new HashSet<>();
-
-    // Maximum Time Guardians per world (from data-model.md)
-    private static final int MAX_TIME_GUARDIANS_PER_WORLD = 3;
-
-    // Counter for spawned Time Guardians in current world
-    private static int spawnedGuardiansCount = 0;
-
     // Check interval (in ticks) - check every 5 seconds
     private static final int CHECK_INTERVAL = 100;
-    private static int tickCounter = 0;
-
-    // Track world dimension to reset counters when changing worlds
-    private static net.minecraft.resources.ResourceLocation lastWorldId = null;
+    private static final AtomicInteger tickCounter = new AtomicInteger(0);
 
     /**
      * Initialize Time Guardian spawning system.
@@ -79,286 +65,137 @@ public class TimeGuardianSpawner {
      * @param level The ServerLevel to check
      */
     public static void checkAndSpawnGuardians(ServerLevel level) {
-        // Reset tracking if we're in a different world
-        ResourceLocation currentWorldId = level.dimension().location();
-        if (lastWorldId == null || !lastWorldId.equals(currentWorldId)) {
-            reset();
-            lastWorldId = currentWorldId;
-        }
-
-        // Increment tick counter
-        tickCounter++;
-
-        // Only check every CHECK_INTERVAL ticks
-        if (tickCounter < CHECK_INTERVAL) {
+        // Increment tick counter and check interval
+        int currentTick = tickCounter.incrementAndGet();
+        if (currentTick < CHECK_INTERVAL) {
             return;
         }
-        tickCounter = 0;
-
-        // Check if we've reached the spawn limit
-        if (spawnedGuardiansCount >= MAX_TIME_GUARDIANS_PER_WORLD) {
-            // Count actual Time Guardians in the world to verify
-            int actualGuardianCount = level.getEntities(ModEntities.TIME_GUARDIAN.get(), entity -> true).size();
-
-            ChronoDawn.LOGGER.info("Time Guardian spawn check skipped - counter: {}/{}, actual guardians in world: {}",
-                spawnedGuardiansCount, MAX_TIME_GUARDIANS_PER_WORLD, actualGuardianCount);
-
-            // If the counter is wrong (actual count is less), reset the counter
-            if (actualGuardianCount < spawnedGuardiansCount) {
-                ChronoDawn.LOGGER.warn("Counter mismatch detected! Resetting counter from {} to {}",
-                    spawnedGuardiansCount, actualGuardianCount);
-                spawnedGuardiansCount = actualGuardianCount;
-                // Don't return - continue checking
-            } else {
-                return;
-            }
-        }
+        tickCounter.set(0);
 
         // Only process if there are players in the dimension
         if (level.players().isEmpty()) {
             return;
         }
 
-        // Check chunks around the first player only (to avoid duplicate processing)
-        var player = level.players().get(0);
-        ChunkPos playerChunkPos = new ChunkPos(player.blockPosition());
+        // Get saved data for this world (persists across server restarts)
+        BossSpawnData data = level.getDataStorage().computeIfAbsent(
+            BossSpawnData.factory(),
+            BossSpawnData.getDataName()
+        );
 
-        // Check chunks in a 16-chunk radius around player (increased from 5 to 16 chunks = 256 blocks)
-        // This ensures Desert Clock Towers are detected even at moderate distances
-        int checkRadius = 16;
-
-        for (int x = -checkRadius; x <= checkRadius; x++) {
-            for (int z = -checkRadius; z <= checkRadius; z++) {
-                ChunkPos chunkPos = new ChunkPos(playerChunkPos.x + x, playerChunkPos.z + z);
-
-                // Check if this chunk contains a Desert Clock Tower structure
-                if (hasDesertClockTower(level, chunkPos)) {
-                    BlockPos structurePos = chunkPos.getWorldPosition();
-
-                    // Skip if we've already successfully spawned at this structure
-                    if (spawnedStructures.contains(structurePos)) {
-                        continue;
-                    }
-
-                    ChronoDawn.LOGGER.info("Found Desert Clock Tower at chunk {} - attempting to spawn Time Guardian", chunkPos);
-
-                    // Attempt to spawn Time Guardian at the top of the structure
-                    boolean spawnSuccess = spawnTimeGuardianAtTower(level, chunkPos);
-
-                    // Only mark as processed if spawn was successful
-                    if (spawnSuccess) {
-                        spawnedStructures.add(structurePos);
-                        ChronoDawn.LOGGER.info("Successfully spawned and marked structure at {} as processed", structurePos);
-                    } else {
-                        ChronoDawn.LOGGER.warn("Failed to spawn Time Guardian at {} - will retry on next check", structurePos);
-                    }
-
-                    // Check if we've reached the limit
-                    if (spawnedGuardiansCount >= MAX_TIME_GUARDIANS_PER_WORLD) {
-                        return;
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Check if a chunk contains a Desert Clock Tower structure.
-     *
-     * @param level The ServerLevel to check
-     * @param chunkPos The chunk position to check
-     * @return true if the chunk contains a Desert Clock Tower
-     */
-    private static boolean hasDesertClockTower(ServerLevel level, ChunkPos chunkPos) {
-        // Get structure starts for this chunk
+        // Check all players for nearby Desert Clock Tower structures
         var structureManager = level.structureManager();
-        BlockPos worldPos = chunkPos.getWorldPosition();
 
-        // Check all structures in this chunk
-        var structures = structureManager.getAllStructuresAt(worldPos);
+        for (var player : level.players()) {
+            BlockPos playerPos = player.blockPosition();
+            ChunkPos playerChunkPos = new ChunkPos(playerPos);
 
-        for (var entry : structures.entrySet()) {
-            Structure structure = entry.getKey();
+            // Check chunks in a 8-chunk radius around player
+            for (int x = -8; x <= 8; x++) {
+                for (int z = -8; z <= 8; z++) {
+                    ChunkPos chunkPos = new ChunkPos(playerChunkPos.x + x, playerChunkPos.z + z);
 
-            // Get structure's resource location
-            var structureLocation = level.registryAccess()
-                .registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
-                .getKey(structure);
-
-            if (structureLocation != null && structureLocation.equals(DESERT_CLOCK_TOWER_ID)) {
-                ChronoDawn.LOGGER.info("Detected Desert Clock Tower at chunk {} (world pos: {})", chunkPos, worldPos);
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Spawn a Time Guardian at the top floor of the Desert Clock Tower.
-     *
-     * @param level The ServerLevel to spawn in
-     * @param chunkPos The chunk position containing the structure
-     * @return true if spawn was successful, false otherwise
-     */
-    private static boolean spawnTimeGuardianAtTower(ServerLevel level, ChunkPos chunkPos) {
-        // Get the structure start
-        var structureManager = level.structureManager();
-        BlockPos chunkBlockPos = chunkPos.getWorldPosition();
-
-        // Try to get structure at this position
-        for (var entry : structureManager.getAllStructuresAt(chunkBlockPos).entrySet()) {
-            Structure structure = entry.getKey();
-
-            var structureLocation = level.registryAccess()
-                .registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
-                .getKey(structure);
-
-            if (structureLocation != null && structureLocation.equals(DESERT_CLOCK_TOWER_ID)) {
-                ChronoDawn.LOGGER.info("Attempting to spawn Time Guardian at Desert Clock Tower in chunk {}", chunkPos);
-
-                // Find the structure's bounds by searching for stone bricks, andesite, and white glass
-                BlockPos towerSpawnPos = findTowerTopFloor(level, chunkBlockPos);
-
-                if (towerSpawnPos == null) {
-                    ChronoDawn.LOGGER.warn("Could not find Desert Clock Tower top floor at chunk {}", chunkPos);
-                    return false;
-                }
-
-                ChronoDawn.LOGGER.info("Calculated spawn position: {}", towerSpawnPos);
-
-                // Check if a Time Guardian already exists near this position
-                if (isGuardianNearby(level, towerSpawnPos)) {
-                    ChronoDawn.LOGGER.debug("Time Guardian already exists near {}", towerSpawnPos);
-                    // Return true because this structure already has a guardian (success state)
-                    return true;
-                }
-
-                // Find a valid spawn position (air block with solid ground)
-                BlockPos spawnPos = findValidSpawnPosition(level, towerSpawnPos);
-
-                if (spawnPos == null) {
-                    ChronoDawn.LOGGER.warn("Could not find valid spawn position near {} - skipping Time Guardian spawn", towerSpawnPos);
-                    return false;
-                }
-
-                ChronoDawn.LOGGER.info("Found valid spawn position: {}", spawnPos);
-
-                // Create and spawn Time Guardian
-                TimeGuardianEntity guardian = ModEntities.TIME_GUARDIAN.get().create(level);
-                if (guardian != null) {
-                    guardian.moveTo(
-                        spawnPos.getX() + 0.5,
-                        spawnPos.getY(),
-                        spawnPos.getZ() + 0.5,
-                        0.0f, 0.0f
+                    // Find structures matching Desert Clock Tower ID
+                    var structures = structureManager.startsForStructure(
+                        chunkPos,
+                        structure -> {
+                            var location = level.registryAccess()
+                                .registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
+                                .getKey(structure);
+                            return location != null && location.equals(DESERT_CLOCK_TOWER_ID);
+                        }
                     );
 
-                    guardian.finalizeSpawn(
-                        level,
-                        level.getCurrentDifficultyAt(spawnPos),
-                        MobSpawnType.STRUCTURE,
-                        null
-                    );
+                    // Process each Desert Clock Tower structure
+                    for (StructureStart structureStart : structures) {
+                        // Use structure bounding box instead of expensive block scanning
+                        var boundingBox = structureStart.getBoundingBox();
+                        BlockPos structureCenter = new BlockPos(
+                            (boundingBox.minX() + boundingBox.maxX()) / 2,
+                            (boundingBox.minY() + boundingBox.maxY()) / 2,
+                            (boundingBox.minZ() + boundingBox.maxZ()) / 2
+                        );
 
-                    level.addFreshEntity(guardian);
+                        // Skip if already spawned (check persisted data)
+                        if (data.hasTimeGuardianStructureSpawned(structureCenter)) {
+                            continue;
+                        }
 
-                    // Increment counter AFTER successfully adding entity
-                    spawnedGuardiansCount++;
+                        // Check if player is within reasonable distance (64 blocks)
+                        double distanceSq = playerPos.distSqr(structureCenter);
+                        if (distanceSq > 64 * 64) {
+                            continue;
+                        }
 
-                    ChronoDawn.LOGGER.info(
-                        "✓ Time Guardian spawned at [{}, {}, {}] - Counter incremented to {}/{}",
-                        spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(),
-                        spawnedGuardiansCount, MAX_TIME_GUARDIANS_PER_WORLD
-                    );
+                        double distance = Math.sqrt(distanceSq);
+                        ChronoDawn.LOGGER.info("Found Desert Clock Tower near player at {} (distance: {} blocks) - attempting spawn",
+                            structureCenter, distance);
 
-                    // Return true to indicate successful spawn
-                    return true;
-                } else {
-                    ChronoDawn.LOGGER.error("Failed to create Time Guardian entity at {}", spawnPos);
-                    return false;
-                }
-            }
-        }
+                        // Spawn at 5th floor (approximately 80% of structure height from bottom)
+                        // This ensures spawning inside the tower, not on the rooftop
+                        int structureHeight = boundingBox.maxY() - boundingBox.minY();
+                        BlockPos spawnPos = new BlockPos(
+                            structureCenter.getX(),
+                            boundingBox.minY() + (int)(structureHeight * 0.8),
+                            structureCenter.getZ()
+                        );
 
-        // No Desert Clock Tower structure found in this chunk
-        return false;
-    }
-
-    /**
-     * Find the top floor spawn position of the Desert Clock Tower.
-     * Searches for stone bricks, andesite, and white glass to locate the tower structure.
-     *
-     * @param level The ServerLevel to search in
-     * @param searchCenter The center position to search around
-     * @return The spawn position near the top floor, or null if not found
-     */
-    private static BlockPos findTowerTopFloor(ServerLevel level, BlockPos searchCenter) {
-        // Desert Clock Tower uses stone bricks, andesite, and white glass
-        // Search for the highest concentration of these blocks
-        int searchRadius = 20;
-        int maxY = level.getMaxBuildHeight();
-        int minY = level.getMinBuildHeight();
-
-        BlockPos bestPosition = null;
-        int maxBlockCount = 0;
-        int highestY = minY;
-
-        // Search in horizontal plane at different heights
-        for (int y = maxY; y >= minY; y -= 5) {
-            for (int x = -searchRadius; x <= searchRadius; x += 3) {
-                for (int z = -searchRadius; z <= searchRadius; z += 3) {
-                    BlockPos checkPos = new BlockPos(searchCenter.getX() + x, y, searchCenter.getZ() + z);
-
-                    // Count structure blocks nearby (stone bricks, andesite, white glass)
-                    int blockCount = 0;
-                    for (int dx = -3; dx <= 3; dx++) {
-                        for (int dy = -2; dy <= 2; dy++) {
-                            for (int dz = -3; dz <= 3; dz++) {
-                                BlockPos nearbyPos = checkPos.offset(dx, dy, dz);
-                                var blockState = level.getBlockState(nearbyPos);
-
-                                if (blockState.is(net.minecraft.world.level.block.Blocks.STONE_BRICKS) ||
-                                    blockState.is(net.minecraft.world.level.block.Blocks.ANDESITE) ||
-                                    blockState.is(net.minecraft.world.level.block.Blocks.WHITE_STAINED_GLASS)) {
-                                    blockCount++;
-                                }
-                            }
+                        if (spawnTimeGuardian(level, spawnPos)) {
+                            data.markTimeGuardianStructureSpawned(structureCenter);
+                            ChronoDawn.LOGGER.info("Successfully spawned Time Guardian at {}", spawnPos);
                         }
                     }
-
-                    // Update best position if this is the highest position with many structure blocks
-                    if (blockCount > maxBlockCount || (blockCount > 10 && y > highestY)) {
-                        maxBlockCount = blockCount;
-                        bestPosition = checkPos;
-                        highestY = y;
-                    }
                 }
             }
-
-            // If we found a good position, stop searching lower
-            if (maxBlockCount > 20) {
-                break;
-            }
         }
-
-        if (bestPosition != null && maxBlockCount > 10) {
-            // Spawn 5 blocks below the highest structure point, offset from center
-            // Adjusted from -10 to -5 to spawn on 5th floor instead of 4th floor
-            BlockPos spawnPos = new BlockPos(
-                bestPosition.getX() + 2,
-                highestY - 5,
-                bestPosition.getZ() + 2
-            );
-            ChronoDawn.LOGGER.info("Found tower top floor at {} (block count: {})", spawnPos, maxBlockCount);
-            return spawnPos;
-        }
-
-        // Fallback: use the search center at a reasonable height
-        ChronoDawn.LOGGER.warn("Could not find Desert Clock Tower structure, using fallback position");
-        return new BlockPos(searchCenter.getX(), level.getSeaLevel() + 40, searchCenter.getZ());
     }
 
+    /**
+     * Spawn a Time Guardian at the given position.
+     *
+     * @param level The ServerLevel to spawn in
+     * @param spawnPos The position to spawn at
+     * @return true if spawn was successful, false otherwise
+     */
+    private static boolean spawnTimeGuardian(ServerLevel level, BlockPos spawnPos) {
+        // Check if a Time Guardian already exists near this position
+        if (isGuardianNearby(level, spawnPos)) {
+            return true; // Already has guardian (success state)
+        }
+
+        // Find a valid spawn position (air block with solid ground)
+        BlockPos validPos = findValidSpawnPosition(level, spawnPos);
+        if (validPos == null) {
+            ChronoDawn.LOGGER.warn("Could not find valid spawn position near {}", spawnPos);
+            return false;
+        }
+
+        // Create and spawn Time Guardian
+        TimeGuardianEntity guardian = ModEntities.TIME_GUARDIAN.get().create(level);
+        if (guardian != null) {
+            guardian.moveTo(
+                validPos.getX() + 0.5,
+                validPos.getY(),
+                validPos.getZ() + 0.5,
+                0.0f, 0.0f
+            );
+
+            guardian.finalizeSpawn(
+                level,
+                level.getCurrentDifficultyAt(validPos),
+                MobSpawnType.STRUCTURE,
+                null
+            );
+
+            level.addFreshEntity(guardian);
+
+            ChronoDawn.LOGGER.info("Successfully spawned Time Guardian at {}", validPos);
+            return true;
+        } else {
+            ChronoDawn.LOGGER.error("Failed to create Time Guardian entity at {}", validPos);
+            return false;
+        }
+    }
 
     /**
      * Check if a Time Guardian already exists near the given position.
@@ -394,13 +231,11 @@ public class TimeGuardianSpawner {
             BlockPos checkPos = startPos.below(i);
 
             if (isValidSpawnLocation(level, checkPos, entityHeight)) {
-                ChronoDawn.LOGGER.debug("Found valid spawn position {} blocks below start position", i);
                 return checkPos;
             }
         }
 
         // If vertical search failed, try horizontal search in a 5x5 area
-        ChronoDawn.LOGGER.debug("Vertical search failed, trying horizontal search");
         for (int dx = -2; dx <= 2; dx++) {
             for (int dz = -2; dz <= 2; dz++) {
                 // Skip center (already checked in vertical search)
@@ -413,7 +248,6 @@ public class TimeGuardianSpawner {
                     BlockPos checkPos = horizontalPos.below(dy);
 
                     if (isValidSpawnLocation(level, checkPos, entityHeight)) {
-                        ChronoDawn.LOGGER.debug("Found valid spawn position at horizontal offset ({}, {}) and {} blocks down", dx, dz, dy);
                         return checkPos;
                     }
                 }
@@ -455,18 +289,17 @@ public class TimeGuardianSpawner {
     }
 
     /**
-     * Reset spawn tracking (useful for testing or world reset).
+     * Reset spawn tracking for a specific world (useful for testing or debugging).
+     *
+     * @param level The ServerLevel to reset spawn data for
      */
-    public static void reset() {
-        int previousCount = spawnedGuardiansCount;
-        int previousStructures = spawnedStructures.size();
-
-        spawnedStructures.clear();
-        spawnedGuardiansCount = 0;
-        tickCounter = 0;
-        lastWorldId = null;
-
-        ChronoDawn.LOGGER.info("Time Guardian Spawner reset (was tracking {} guardians, {} structures)",
-            previousCount, previousStructures);
+    public static void reset(ServerLevel level) {
+        BossSpawnData data = level.getDataStorage().computeIfAbsent(
+            BossSpawnData.factory(),
+            BossSpawnData.getDataName()
+        );
+        data.resetTimeGuardian();
+        tickCounter.set(0);
+        ChronoDawn.LOGGER.info("Time Guardian Spawner reset for dimension: {}", level.dimension().location());
     }
 }
