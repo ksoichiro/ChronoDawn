@@ -10,10 +10,6 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * Chronos Warden Spawner
  *
@@ -23,9 +19,11 @@ import java.util.Set;
  * - Location: Guardian Vault structure (ChronoDawn dimension)
  * - Frequency: One per Guardian Vault door
  * - Trigger: Spawns when Guardian Vault door is opened
+ * - Persistence: Uses SavedData to prevent duplicate spawning after server restart
  *
  * Implementation Strategy:
  * - Event-based spawning via BossRoomDoorBlock
+ * - Uses SavedData to persist spawn state across server restarts
  * - Tracks spawned doors to avoid duplicate spawning
  * - Calculates spawn position relative to door facing direction
  *
@@ -33,8 +31,6 @@ import java.util.Set;
  * Task: Chronos Warden spawn logic (Guardian Vault structure)
  */
 public class ChronosWardenSpawner {
-    // Track boss room doors that have already spawned Chronos Warden
-    private static final Set<BlockPos> spawnedDoors = Collections.synchronizedSet(new HashSet<>());
 
     /**
      * Initialize Chronos Warden spawning system.
@@ -100,8 +96,14 @@ public class ChronosWardenSpawner {
     public static void spawnOnDoorOpen(ServerLevel level, BlockPos doorPos, BlockState doorState) {
         ChronoDawn.LOGGER.info("Guardian Vault Door opened at {}", doorPos);
 
+        // Get saved data for this world (persists across server restarts)
+        ChronosWardenSpawnData data = level.getDataStorage().computeIfAbsent(
+            ChronosWardenSpawnData.factory(),
+            ChronosWardenSpawnData.getDataName()
+        );
+
         // Check if we've already spawned from this door
-        if (spawnedDoors.contains(doorPos)) {
+        if (data.hasDoorSpawned(doorPos)) {
             ChronoDawn.LOGGER.info("Chronos Warden already spawned from this door - not spawning again");
             return;
         }
@@ -149,8 +151,8 @@ public class ChronosWardenSpawner {
 
             level.addFreshEntity(warden);
 
-            // Mark this door as spawned
-            spawnedDoors.add(doorPos);
+            // Mark this door as spawned (persisted to disk)
+            data.markDoorSpawned(doorPos);
 
             ChronoDawn.LOGGER.info(
                 "Chronos Warden spawned at [{}, {}, {}] from Guardian Vault Door",
@@ -162,10 +164,16 @@ public class ChronosWardenSpawner {
     }
 
     /**
-     * Reset spawn tracking (useful for testing or world reset).
+     * Reset spawn tracking for a specific world (useful for testing or debugging).
+     *
+     * @param level The ServerLevel to reset spawn data for
      */
-    public static void reset() {
-        spawnedDoors.clear();
-        ChronoDawn.LOGGER.info("Chronos Warden Spawner reset");
+    public static void reset(ServerLevel level) {
+        ChronosWardenSpawnData data = level.getDataStorage().computeIfAbsent(
+            ChronosWardenSpawnData.factory(),
+            ChronosWardenSpawnData.getDataName()
+        );
+        data.reset();
+        ChronoDawn.LOGGER.info("Chronos Warden Spawner reset for dimension: {}", level.dimension().location());
     }
 }

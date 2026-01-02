@@ -9,11 +9,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -21,16 +18,16 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * Manages spawning of Time Guardian entities in Desert Clock Tower structures.
  *
- * Spawn Conditions (from data-model.md):
+ * Spawn Conditions:
  * - Location: Desert Clock Tower top floor (ChronoDawn dimension)
- * - Frequency: Spawns in Desert Clock Tower structures
- * - Max per world: 3 (based on max number of Time Guardians)
+ * - Frequency: One per Desert Clock Tower structure
+ * - Persistence: Uses SavedData to prevent duplicate spawning after server restart
  *
  * Implementation Strategy:
  * - Uses server tick event to periodically check for newly generated Desert Clock Towers
  * - Spawns Time Guardian at the top floor of the structure
+ * - Uses SavedData to persist spawn state across server restarts
  * - Tracks spawned structures to avoid duplicate spawning
- * - Respects max spawn limit per world
  *
  * Reference: data-model.md (Boss Spawning - Time Guardian)
  * Task: T114 [US2] Create Time Guardian spawn logic (spawns on Desert Clock Tower top floor)
@@ -41,21 +38,9 @@ public class TimeGuardianSpawner {
         "desert_clock_tower"
     );
 
-    // Track structure positions where we've already attempted to spawn Time Guardians (thread-safe)
-    private static final Set<BlockPos> spawnedStructures = ConcurrentHashMap.newKeySet();
-
-    // Maximum Time Guardians per world (from data-model.md)
-    private static final int MAX_TIME_GUARDIANS_PER_WORLD = 3;
-
-    // Counter for spawned Time Guardians in current world (thread-safe)
-    private static final AtomicInteger spawnedGuardiansCount = new AtomicInteger(0);
-
     // Check interval (in ticks) - check every 5 seconds
     private static final int CHECK_INTERVAL = 100;
     private static final AtomicInteger tickCounter = new AtomicInteger(0);
-
-    // Track world dimension to reset counters when changing worlds
-    private static volatile net.minecraft.resources.ResourceLocation lastWorldId = null;
 
     /**
      * Initialize Time Guardian spawning system.
@@ -79,13 +64,6 @@ public class TimeGuardianSpawner {
      * @param level The ServerLevel to check
      */
     public static void checkAndSpawnGuardians(ServerLevel level) {
-        // Reset tracking if we're in a different world
-        ResourceLocation currentWorldId = level.dimension().location();
-        if (lastWorldId == null || !lastWorldId.equals(currentWorldId)) {
-            reset();
-            lastWorldId = currentWorldId;
-        }
-
         // Increment tick counter and check interval
         int currentTick = tickCounter.incrementAndGet();
         if (currentTick < CHECK_INTERVAL) {
@@ -93,26 +71,16 @@ public class TimeGuardianSpawner {
         }
         tickCounter.set(0);
 
-        // Check if we've reached the spawn limit
-        int currentCount = spawnedGuardiansCount.get();
-        if (currentCount >= MAX_TIME_GUARDIANS_PER_WORLD) {
-            // Count actual Time Guardians in the world to verify
-            int actualGuardianCount = level.getEntities(ModEntities.TIME_GUARDIAN.get(), entity -> true).size();
-
-            // If the counter is wrong (actual count is less), reset the counter
-            if (actualGuardianCount < currentCount) {
-                ChronoDawn.LOGGER.warn("Counter mismatch detected! Resetting counter from {} to {}",
-                    currentCount, actualGuardianCount);
-                spawnedGuardiansCount.set(actualGuardianCount);
-            } else {
-                return;
-            }
-        }
-
         // Only process if there are players in the dimension
         if (level.players().isEmpty()) {
             return;
         }
+
+        // Get saved data for this world (persists across server restarts)
+        TimeGuardianSpawnData data = level.getDataStorage().computeIfAbsent(
+            TimeGuardianSpawnData.factory(),
+            TimeGuardianSpawnData.getDataName()
+        );
 
         // Check all players for nearby Desert Clock Tower structures
         var structureManager = level.structureManager();
@@ -147,8 +115,8 @@ public class TimeGuardianSpawner {
                             (boundingBox.minZ() + boundingBox.maxZ()) / 2
                         );
 
-                        // Skip if already spawned
-                        if (spawnedStructures.contains(structureCenter)) {
+                        // Skip if already spawned (check persisted data)
+                        if (data.hasStructureSpawned(structureCenter)) {
                             continue;
                         }
 
@@ -172,14 +140,8 @@ public class TimeGuardianSpawner {
                         );
 
                         if (spawnTimeGuardian(level, spawnPos)) {
-                            spawnedStructures.add(structureCenter);
-                            spawnedGuardiansCount.incrementAndGet();
+                            data.markStructureSpawned(structureCenter);
                             ChronoDawn.LOGGER.info("Successfully spawned Time Guardian at {}", spawnPos);
-
-                            // Check limit again
-                            if (spawnedGuardiansCount.get() >= MAX_TIME_GUARDIANS_PER_WORLD) {
-                                return;
-                            }
                         }
                     }
                 }
@@ -326,18 +288,17 @@ public class TimeGuardianSpawner {
     }
 
     /**
-     * Reset spawn tracking (useful for testing or world reset).
+     * Reset spawn tracking for a specific world (useful for testing or debugging).
+     *
+     * @param level The ServerLevel to reset spawn data for
      */
-    public static void reset() {
-        int previousCount = spawnedGuardiansCount.get();
-        int previousStructures = spawnedStructures.size();
-
-        spawnedStructures.clear();
-        spawnedGuardiansCount.set(0);
+    public static void reset(ServerLevel level) {
+        TimeGuardianSpawnData data = level.getDataStorage().computeIfAbsent(
+            TimeGuardianSpawnData.factory(),
+            TimeGuardianSpawnData.getDataName()
+        );
+        data.reset();
         tickCounter.set(0);
-        lastWorldId = null;
-
-        ChronoDawn.LOGGER.info("Time Guardian Spawner reset (was tracking {} guardians, {} structures)",
-            previousCount, previousStructures);
+        ChronoDawn.LOGGER.info("Time Guardian Spawner reset for dimension: {}", level.dimension().location());
     }
 }
