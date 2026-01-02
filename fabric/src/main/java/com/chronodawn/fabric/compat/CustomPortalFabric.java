@@ -78,10 +78,11 @@ public class CustomPortalFabric {
             .destDimID(dimensionId)
             // Set portal tint color (orange #db8813 for time theme)
             .tintColor(PORTAL_COLOR_R, PORTAL_COLOR_G, PORTAL_COLOR_B)
-            // Set portal placement Y range (Y=60-120) to avoid spawning on top of trees
-            // Lower bound Y=60: Slightly below standard ground level (Y=64), allows valley placements
-            // Upper bound Y=120: Well above tree canopy height (Time Wood trees ~10-15 blocks tall)
-            .setPortalSearchYRange(60, 120)
+            // Set portal placement Y range (Y=70-100) to prioritize surface generation
+            // Lower bound Y=70: Above most cave systems, near typical ground level (Y=64)
+            // Upper bound Y=100: High enough for hill/mountain biomes but below extreme heights
+            // This range significantly reduces underground cave spawning while allowing terrain variation
+            .setPortalSearchYRange(70, 100)
             // Register pre-ignition event - prevent ignition of unstable portals in ChronoDawn
             .registerPreIgniteEvent((player, world, portalPos, framePos, ignitionSource) -> {
                 // Check if in ChronoDawn dimension with unstable portals

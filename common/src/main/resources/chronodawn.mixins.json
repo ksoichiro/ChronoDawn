@@ -4,7 +4,8 @@
   "package": "com.chronodawn.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "StructureStartMixin"
+    "StructureStartMixin",
+    "PortalPlacerMixin"
   ],
   "client": [
     "client.FogRendererMixin"

@@ -78,6 +78,9 @@ public class CustomPortalNeoForge {
             .destDimID(dimensionId)
             // Set portal tint color (orange #db8813 for time theme)
             .tintColor(PORTAL_COLOR_R, PORTAL_COLOR_G, PORTAL_COLOR_B)
+            // Note: NeoForge version of Custom Portal API Reforged (cpapireforged) does not support
+            // setPortalSearchYRange() method (unlike Fabric version). Portal surface generation is
+            // handled by PortalPlacerMixin using heightmap-based surface detection instead.
             // Register pre-ignition event - prevent ignition of unstable portals in ChronoDawn
             .registerPreIgniteEvent((player, world, portalPos, framePos, ignitionSource) -> {
                 // Check if in ChronoDawn dimension with unstable portals
