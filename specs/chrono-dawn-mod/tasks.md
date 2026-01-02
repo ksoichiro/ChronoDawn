@@ -391,14 +391,19 @@
     - fabric/src/main/resources/chronodawn-fabric.mixins.json
     - neoforge/src/main/resources/chronodawn-neoforge.mixins.json
   - **Tested**: Build successful, all game tests passed (92/92)
-- [ ] T310 [P] Fix portal regeneration in multiplayer when multiple players use same portal
+- [x] T310 [P] Fix portal regeneration in multiplayer when multiple players use same portal
   - **Issue**: When multiple players transition to Chrono Dawn through the same portal, a once-broken portal regenerates and becomes indestructible
-  - **Investigation**: Check portal breaking/regeneration logic in multiplayer scenarios
-  - **Possible causes**:
-    - Race condition in portal state management between multiple players
-    - Portal state not properly synchronized across server and clients
-    - Portal breaking event not properly broadcast to all players
-  - **Priority**: High (multiplayer gameplay issue)
+  - **Root Cause**: BlockEventHandler only checked Fabric portal block ID (customportalapi:customportalblock), causing NeoForge portal blocks (cpapireforged:custom_portal_block) to persist after deactivation
+  - **Result**: On NeoForge, portals regenerated and remained functional after death/re-entry, unlike Fabric where portals were properly removed
+  - **Solution**: Added `isCustomPortalBlock()` method to check both loader-specific portal block IDs
+    - Fabric: customportalapi:customportalblock
+    - NeoForge: cpapireforged:custom_portal_block
+  - **Changes**:
+    - common/src/main/java/com/chronodawn/events/BlockEventHandler.java
+      - Added isCustomPortalBlock() helper method
+      - Replaced hardcoded Fabric-only check with loader-agnostic method
+  - **Tested**: Multiplayer verified on both Fabric and NeoForge - portal blocks properly removed, no indestructible portals
+  - **Commit**: 247749d
 - [x] T311 [P] Fix portal generation to spawn on surface instead of underground
   - **Issue**: Portal generated at Y=-48 underground (in a cave), making game progression significantly harder
   - **Investigation**: Check portal placement logic and Y-coordinate calculation
