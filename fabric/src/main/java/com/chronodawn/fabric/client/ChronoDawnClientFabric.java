@@ -237,15 +237,33 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             RenderType.cutout()
         );
 
-        // Register Time Blossom to use cutout rendering (for transparency)
+        // Register Purple Time Blossom to use cutout rendering (for transparency)
         BlockRenderLayerMap.INSTANCE.putBlock(
-            ModBlocks.TIME_BLOSSOM.get(),
+            ModBlocks.PURPLE_TIME_BLOSSOM.get(),
+            RenderType.cutout()
+        );
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.POTTED_PURPLE_TIME_BLOSSOM.get(),
             RenderType.cutout()
         );
 
-        // Register Potted Time Blossom to use cutout rendering (for transparency)
+        // Register Orange Time Blossom to use cutout rendering (for transparency)
         BlockRenderLayerMap.INSTANCE.putBlock(
-            ModBlocks.POTTED_TIME_BLOSSOM.get(),
+            ModBlocks.ORANGE_TIME_BLOSSOM.get(),
+            RenderType.cutout()
+        );
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.POTTED_ORANGE_TIME_BLOSSOM.get(),
+            RenderType.cutout()
+        );
+
+        // Register Pink Time Blossom to use cutout rendering (for transparency)
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.PINK_TIME_BLOSSOM.get(),
+            RenderType.cutout()
+        );
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.POTTED_PINK_TIME_BLOSSOM.get(),
             RenderType.cutout()
         );
 

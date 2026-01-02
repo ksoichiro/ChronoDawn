@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:block/cross",
   "textures": {
-    "cross": "chronodawn:block/time_blossom"
+    "cross": "chronodawn:block/purple_time_blossom"
   }
 }

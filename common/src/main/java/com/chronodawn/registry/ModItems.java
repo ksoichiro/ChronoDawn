@@ -860,13 +860,30 @@ public class ModItems {
     );
 
     /**
-     * Time Blossom - Decorative flower from the ChronoDawn dimension.
+     * Purple Time Blossom - Decorative flower with purple time-themed appearance.
      * Can be placed as a block or in flower pots.
-     * Purple-themed appearance.
      */
-    public static final RegistrySupplier<Item> TIME_BLOSSOM = ITEMS.register(
-        "time_blossom",
-        () -> new BlockItem(ModBlocks.TIME_BLOSSOM.get(), new Item.Properties())
+    public static final RegistrySupplier<Item> PURPLE_TIME_BLOSSOM = ITEMS.register(
+        "purple_time_blossom",
+        () -> new BlockItem(ModBlocks.PURPLE_TIME_BLOSSOM.get(), new Item.Properties())
+    );
+
+    /**
+     * Orange Time Blossom - Decorative flower with orange time-themed appearance.
+     * Can be placed as a block or in flower pots.
+     */
+    public static final RegistrySupplier<Item> ORANGE_TIME_BLOSSOM = ITEMS.register(
+        "orange_time_blossom",
+        () -> new BlockItem(ModBlocks.ORANGE_TIME_BLOSSOM.get(), new Item.Properties())
+    );
+
+    /**
+     * Pink Time Blossom - Decorative flower with pink time-themed appearance.
+     * Can be placed as a block or in flower pots.
+     */
+    public static final RegistrySupplier<Item> PINK_TIME_BLOSSOM = ITEMS.register(
+        "pink_time_blossom",
+        () -> new BlockItem(ModBlocks.PINK_TIME_BLOSSOM.get(), new Item.Properties())
     );
 
     /**
@@ -1457,7 +1474,9 @@ public class ModItems {
         output.accept(CHRONO_MELON_SLICE.get());
         output.accept(CHRONO_MELON.get());
         output.accept(TIMELESS_MUSHROOM.get());
-        output.accept(TIME_BLOSSOM.get());
+        output.accept(PURPLE_TIME_BLOSSOM.get());
+        output.accept(ORANGE_TIME_BLOSSOM.get());
+        output.accept(PINK_TIME_BLOSSOM.get());
 
         // === Crafted Foods (T215) ===
         output.accept(TEMPORAL_ROOT_STEW.get());

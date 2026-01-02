@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "chronodawn:block/time_blossom"
+    "layer0": "chronodawn:block/orange_time_blossom"
   }
 }

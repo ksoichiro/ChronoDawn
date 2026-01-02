@@ -464,22 +464,60 @@ public class ModBlocks {
     );
 
     /**
-     * Time Blossom - Decorative flower found in the ChronoDawn dimension.
-     * Simple flower with purple-themed appearance.
+     * Purple Time Blossom - Decorative flower found in the ChronoDawn dimension.
+     * Purple variant with time-themed appearance.
      * Can be placed in flower pots.
      */
-    public static final RegistrySupplier<Block> TIME_BLOSSOM = BLOCKS.register(
-        "time_blossom",
+    public static final RegistrySupplier<Block> PURPLE_TIME_BLOSSOM = BLOCKS.register(
+        "purple_time_blossom",
         () -> new TimeBlossomBlock(TimeBlossomBlock.createProperties())
     );
 
     /**
-     * Potted Time Blossom - Decorative potted version of Time Blossom.
-     * Can be created by using Time Blossom on a flower pot.
+     * Orange Time Blossom - Decorative flower found in the ChronoDawn dimension.
+     * Orange variant with time-themed appearance.
+     * Can be placed in flower pots.
      */
-    public static final RegistrySupplier<Block> POTTED_TIME_BLOSSOM = BLOCKS.register(
-        "potted_time_blossom",
-        () -> new FlowerPotBlock(TIME_BLOSSOM.get(), Block.Properties.ofFullCopy(Blocks.FLOWER_POT))
+    public static final RegistrySupplier<Block> ORANGE_TIME_BLOSSOM = BLOCKS.register(
+        "orange_time_blossom",
+        () -> new TimeBlossomBlock(TimeBlossomBlock.createProperties())
+    );
+
+    /**
+     * Pink Time Blossom - Decorative flower found in the ChronoDawn dimension.
+     * Pink variant with time-themed appearance.
+     * Can be placed in flower pots.
+     */
+    public static final RegistrySupplier<Block> PINK_TIME_BLOSSOM = BLOCKS.register(
+        "pink_time_blossom",
+        () -> new TimeBlossomBlock(TimeBlossomBlock.createProperties())
+    );
+
+    /**
+     * Potted Purple Time Blossom - Decorative potted version of Purple Time Blossom.
+     * Can be created by using Purple Time Blossom on a flower pot.
+     */
+    public static final RegistrySupplier<Block> POTTED_PURPLE_TIME_BLOSSOM = BLOCKS.register(
+        "potted_purple_time_blossom",
+        () -> new FlowerPotBlock(PURPLE_TIME_BLOSSOM.get(), Block.Properties.ofFullCopy(Blocks.FLOWER_POT))
+    );
+
+    /**
+     * Potted Orange Time Blossom - Decorative potted version of Orange Time Blossom.
+     * Can be created by using Orange Time Blossom on a flower pot.
+     */
+    public static final RegistrySupplier<Block> POTTED_ORANGE_TIME_BLOSSOM = BLOCKS.register(
+        "potted_orange_time_blossom",
+        () -> new FlowerPotBlock(ORANGE_TIME_BLOSSOM.get(), Block.Properties.ofFullCopy(Blocks.FLOWER_POT))
+    );
+
+    /**
+     * Potted Pink Time Blossom - Decorative potted version of Pink Time Blossom.
+     * Can be created by using Pink Time Blossom on a flower pot.
+     */
+    public static final RegistrySupplier<Block> POTTED_PINK_TIME_BLOSSOM = BLOCKS.register(
+        "potted_pink_time_blossom",
+        () -> new FlowerPotBlock(PINK_TIME_BLOSSOM.get(), Block.Properties.ofFullCopy(Blocks.FLOWER_POT))
     );
 
     /**

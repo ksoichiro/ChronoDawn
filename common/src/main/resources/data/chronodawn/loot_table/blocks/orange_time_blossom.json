@@ -6,7 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "chronodawn:time_blossom"
+          "name": "chronodawn:orange_time_blossom"
         }
       ],
       "rolls": 1.0,
@@ -17,5 +17,5 @@
       ]
     }
   ],
-  "random_sequence": "chronodawn:blocks/time_blossom"
+  "random_sequence": "chronodawn:blocks/orange_time_blossom"
 }
