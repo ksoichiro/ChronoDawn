@@ -10,7 +10,8 @@
     "LevelGetTimeMixin",
     "ServerLevelSetTimeMixin",
     "SleepMixin",
-    "StructureStartMixin"
+    "StructureStartMixin",
+    "PortalPlacerMixin"
   ],
   "client": [
     "client.ClientAdvancementsAccessor",

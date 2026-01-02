@@ -399,15 +399,27 @@
     - Portal state not properly synchronized across server and clients
     - Portal breaking event not properly broadcast to all players
   - **Priority**: High (multiplayer gameplay issue)
-- [ ] T311 [P] Fix portal generation to spawn on surface instead of underground
+- [x] T311 [P] Fix portal generation to spawn on surface instead of underground
   - **Issue**: Portal generated at Y=-48 underground (in a cave), making game progression significantly harder
   - **Investigation**: Check portal placement logic and Y-coordinate calculation
   - **Expected behavior**: Portal should generate on surface (ground level)
-  - **Possible solutions**:
-    - Adjust portal placement algorithm to find surface level
-    - Use heightmap-based Y-coordinate calculation
-    - Ensure portal spawns above ground in open air
-  - **Priority**: High (gameplay difficulty issue)
+  - **Solution implemented**:
+    - **Fabric**: Added `setPortalSearchYRange(70, 100)` to restrict portal search range
+    - **NeoForge**: Custom Portal API Reforged v1.2.2 lacks `setPortalSearchYRange` method
+    - **Both platforms**: Implemented `PortalPlacerMixin` to modify `topY`/`bottomY` local variables to Y=70-100 range
+    - Prevents deep underground spawning (Y=-48) while allowing terrain variation
+  - **Test results**:
+    - NeoForge (structure present): Y=73 on Forgotten Library roof ✅
+    - NeoForge (flat terrain): Ground level ✅
+    - Fabric: Surface generation confirmed ✅
+  - **Files modified**:
+    - `common/src/main/java/com/chronodawn/mixin/PortalPlacerMixin.java` (new)
+    - `common/src/main/resources/chronodawn.mixins.json`
+    - `fabric/src/main/resources/chronodawn-fabric.mixins.json`
+    - `neoforge/src/main/resources/chronodawn-neoforge.mixins.json`
+    - `fabric/src/main/java/com/chronodawn/fabric/compat/CustomPortalFabric.java`
+    - `neoforge/src/main/java/com/chronodawn/neoforge/compat/CustomPortalNeoForge.java`
+  - **Priority**: High (gameplay difficulty issue) - RESOLVED
 
 ### Playtest Improvements - Boss Battle
 
