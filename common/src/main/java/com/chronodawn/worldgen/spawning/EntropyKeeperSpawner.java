@@ -29,10 +29,12 @@ import java.util.concurrent.ConcurrentHashMap;
  * - Location: Entropy Crypt boss chamber (ChronoDawn dimension)
  * - Frequency: One per structure
  * - Condition: Spawns when player enters boss chamber
+ * - Persistence: Uses SavedData to prevent duplicate spawning after server restart
  *
  * Implementation Strategy:
  * - Detects Entropy Crypt structures via structure registry
  * - Uses Amethyst Block as marker for boss spawn position
+ * - Uses SavedData to persist spawn state across server restarts
  * - Tracks spawned structures to avoid duplicate spawning
  * - Spawns Entropy Keeper when player approaches marker
  *
@@ -45,24 +47,18 @@ public class EntropyKeeperSpawner {
         "entropy_crypt"
     );
 
-    // Track structure positions where we've already attempted to spawn Entropy Keeper (per dimension)
-    private static final Map<ResourceLocation, Set<BlockPos>> processedStructures = new ConcurrentHashMap<>();
-
-    // Track boss chamber markers where Entropy Keeper has spawned (per dimension)
-    private static final Map<ResourceLocation, Set<BlockPos>> spawnedMarkers = new ConcurrentHashMap<>();
-
-    // Cache found markers to avoid repeated expensive searches
+    // Cache found markers to avoid repeated expensive searches (per-server runtime cache)
     // Key: structure identifier (first marker position), Value: marker position
     private static final Map<BlockPos, BlockPos> cachedMarkers = new ConcurrentHashMap<>();
 
-    // Track chunks we've already searched (to avoid re-scanning)
+    // Track chunks we've already searched (to avoid re-scanning) (per-server runtime cache)
     // Key: chunk position, Value: timestamp when searched
     private static final Map<ChunkPos, Long> searchedChunks = new ConcurrentHashMap<>();
     private static final long SEARCH_CACHE_DURATION_MS = 300000; // Cache for 5 minutes
 
     // Check interval (in ticks) - check every 2 seconds
     private static final int CHECK_INTERVAL = 40;
-    private static final Map<ResourceLocation, Integer> tickCounters = new ConcurrentHashMap<>();
+    private static int tickCounter = 0;
 
     /**
      * Initialize Entropy Keeper spawning system.
@@ -95,25 +91,23 @@ public class EntropyKeeperSpawner {
             return;
         }
 
-        ResourceLocation dimensionId = level.dimension().location();
-
-        // Initialize tick counter for this dimension
-        int tickCounter = tickCounters.compute(dimensionId, (k, v) -> (v == null ? 0 : v) + 1);
-
-        // Only check every CHECK_INTERVAL ticks
+        // Increment tick counter and check interval
+        tickCounter++;
         if (tickCounter < CHECK_INTERVAL) {
             return;
         }
-        tickCounters.put(dimensionId, 0);
+        tickCounter = 0;
 
         // Only process if there are players in the dimension
         if (level.players().isEmpty()) {
             return;
         }
 
-        // Initialize tracking sets for this dimension (use ConcurrentHashMap.newKeySet() for thread-safety)
-        Set<BlockPos> processed = processedStructures.computeIfAbsent(dimensionId, k -> ConcurrentHashMap.newKeySet());
-        Set<BlockPos> spawned = spawnedMarkers.computeIfAbsent(dimensionId, k -> ConcurrentHashMap.newKeySet());
+        // Get saved data for this world (persists across server restarts)
+        EntropyKeeperSpawnData data = level.getDataStorage().computeIfAbsent(
+            EntropyKeeperSpawnData.factory(),
+            EntropyKeeperSpawnData.getDataName()
+        );
 
         // Check chunks around each player
         for (ServerPlayer player : level.players()) {
@@ -129,19 +123,19 @@ public class EntropyKeeperSpawner {
                         BlockPos structurePos = chunkPos.getWorldPosition();
 
                         // Skip if we've already processed this structure
-                        if (processed.contains(structurePos)) {
+                        if (data.isStructureProcessed(structurePos)) {
                             continue;
                         }
 
                         // Mark this structure as processed
-                        processed.add(structurePos);
+                        data.markStructureProcessed(structurePos);
 
                         ChronoDawn.LOGGER.info("Found Entropy Crypt structure at chunk {} (block pos: {})", chunkPos, structurePos);
 
                         // Check cache first, then find boss chamber marker and spawn if player is nearby
                         BlockPos markerPos = findBossChamberMarker(level, chunkPos, structurePos);
 
-                        if (markerPos != null && !spawned.contains(markerPos)) {
+                        if (markerPos != null && !data.hasMarkerSpawned(markerPos)) {
                             // Check if player is within spawn trigger range (20 blocks)
                             double distance = player.position().distanceTo(markerPos.getCenter());
 
@@ -155,7 +149,7 @@ public class EntropyKeeperSpawner {
 
                                 // Spawn Entropy Keeper
                                 spawnEntropyKeeper(level, markerPos);
-                                spawned.add(markerPos);
+                                data.markMarkerSpawned(markerPos);
 
                                 // Remove marker block
                                 level.setBlock(markerPos, Blocks.AIR.defaultBlockState(), 3);
@@ -351,14 +345,19 @@ public class EntropyKeeperSpawner {
     }
 
     /**
-     * Reset spawn tracking (useful for testing or world reset).
+     * Reset spawn tracking for a specific world (useful for testing or debugging).
+     *
+     * @param level The ServerLevel to reset spawn data for
      */
-    public static void reset() {
-        processedStructures.clear();
-        spawnedMarkers.clear();
-        tickCounters.clear();
+    public static void reset(ServerLevel level) {
+        EntropyKeeperSpawnData data = level.getDataStorage().computeIfAbsent(
+            EntropyKeeperSpawnData.factory(),
+            EntropyKeeperSpawnData.getDataName()
+        );
+        data.reset();
+        tickCounter = 0;
         cachedMarkers.clear();
         searchedChunks.clear();
-        ChronoDawn.LOGGER.debug("Entropy Keeper Spawner reset");
+        ChronoDawn.LOGGER.info("Entropy Keeper Spawner reset for dimension: {}", level.dimension().location());
     }
 }

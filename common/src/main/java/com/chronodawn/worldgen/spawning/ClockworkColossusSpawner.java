@@ -25,10 +25,12 @@ import java.util.concurrent.ConcurrentHashMap;
  * - Location: Clockwork Depths Engine Room (ChronoDawn dimension)
  * - Trigger: Player enters within 20 blocks of the spawn marker
  * - Max per structure: 1
+ * - Persistence: Uses SavedData to prevent duplicate spawning after server restart
  *
  * Implementation Strategy:
  * - Uses server tick event to check for Clockwork Depths structures
  * - Searches for Structure Void marker block in engine room
+ * - Uses SavedData to persist spawn state across server restarts
  * - Spawns Clockwork Colossus when player approaches marker
  * - Spawn position: 3 blocks above marker, 7 blocks away from center
  *
@@ -46,25 +48,22 @@ public class ClockworkColossusSpawner {
         "clockwork_depths"
     );
 
-    // Track structure positions where we've already spawned Clockwork Colossus (per dimension)
-    private static final Map<ResourceLocation, Set<BlockPos>> spawnedStructures = new ConcurrentHashMap<>();
-
-    // Track registered engine rooms (bounding boxes from BossRoomProtectionProcessor)
+    // Track registered engine rooms (bounding boxes from BossRoomProtectionProcessor) (per-server runtime cache)
     // Key: dimension ID, Value: Set of bounding boxes
     private static final Map<ResourceLocation, Set<net.minecraft.world.level.levelgen.structure.BoundingBox>> engineRooms = new ConcurrentHashMap<>();
 
-    // Cache found markers to avoid repeated expensive searches
+    // Cache found markers to avoid repeated expensive searches (per-server runtime cache)
     // Key: structure identifier (first marker position), Value: all marker positions
     private static final Map<BlockPos, List<BlockPos>> cachedMarkers = new ConcurrentHashMap<>();
 
-    // Track chunks we've already searched (to avoid re-scanning)
+    // Track chunks we've already searched (to avoid re-scanning) (per-server runtime cache)
     // Key: chunk position, Value: timestamp when searched
     private static final Map<ChunkPos, Long> searchedChunks = new ConcurrentHashMap<>();
     private static final long SEARCH_CACHE_DURATION_MS = 300000; // Cache for 5 minutes
 
     // Check interval (in ticks) - check every 10 seconds to reduce load
     private static final int CHECK_INTERVAL = 200;
-    private static final Map<ResourceLocation, Integer> tickCounters = new ConcurrentHashMap<>();
+    private static int tickCounter = 0;
 
     // Distance threshold for player proximity spawning
     private static final double SPAWN_DISTANCE = 20.0;
@@ -104,21 +103,18 @@ public class ClockworkColossusSpawner {
 
         ResourceLocation dimensionId = level.dimension().location();
 
-        // Initialize tracking for this dimension if needed (use ConcurrentHashMap.newKeySet() for thread-safety)
-        spawnedStructures.putIfAbsent(dimensionId, ConcurrentHashMap.newKeySet());
-        Set<BlockPos> dimensionSpawned = spawnedStructures.get(dimensionId);
+        // Get saved data for this world (persists across server restarts)
+        ClockworkColossusSpawnData data = level.getDataStorage().computeIfAbsent(
+            ClockworkColossusSpawnData.factory(),
+            ClockworkColossusSpawnData.getDataName()
+        );
 
-        // Increment tick counter for this dimension
-        tickCounters.putIfAbsent(dimensionId, 0);
-        int currentTick = tickCounters.get(dimensionId);
-        currentTick++;
-        tickCounters.put(dimensionId, currentTick);  // Write back to map!
-
-        // Only check every CHECK_INTERVAL ticks
-        if (currentTick < CHECK_INTERVAL) {
+        // Increment tick counter
+        tickCounter++;
+        if (tickCounter < CHECK_INTERVAL) {
             return;
         }
-        tickCounters.put(dimensionId, 0);
+        tickCounter = 0;
 
         // Only process if there are players in the dimension
         if (level.players().isEmpty()) {
@@ -145,8 +141,8 @@ public class ClockworkColossusSpawner {
                         (room.minZ() + room.maxZ()) / 2
                     );
 
-                    // Check if we've already spawned in this room
-                    if (dimensionSpawned.contains(roomCenter)) {
+                    // Check if we've already spawned in this room (check persisted data)
+                    if (data.hasStructureSpawned(roomCenter)) {
                         continue;
                     }
 
@@ -172,8 +168,8 @@ public class ClockworkColossusSpawner {
                         continue;
                     }
 
-                    // Mark this room as spawned
-                    dimensionSpawned.add(roomCenter);
+                    // Mark this room as spawned (persisted to disk)
+                    data.markStructureSpawned(roomCenter);
                     ChronoDawn.LOGGER.info("Spawning Clockwork Colossus in engine room at {}", roomCenter);
 
                     // Spawn Clockwork Colossus
@@ -502,13 +498,22 @@ public class ClockworkColossusSpawner {
     }
 
     /**
-     * Reset spawn tracking (useful for testing or world reset).
+     * Reset spawn tracking for a specific world (useful for testing or debugging).
+     *
+     * @param level The ServerLevel to reset spawn data for
      */
-    public static void reset() {
-        spawnedStructures.clear();
-        engineRooms.clear();
-        tickCounters.clear();
+    public static void reset(ServerLevel level) {
+        ClockworkColossusSpawnData data = level.getDataStorage().computeIfAbsent(
+            ClockworkColossusSpawnData.factory(),
+            ClockworkColossusSpawnData.getDataName()
+        );
+        data.reset();
+        tickCounter = 0;
+
+        ResourceLocation dimensionId = level.dimension().location();
+        engineRooms.remove(dimensionId);
         cachedMarkers.clear();
         searchedChunks.clear();
+        ChronoDawn.LOGGER.info("Clockwork Colossus Spawner reset for dimension: {}", dimensionId);
     }
 }
