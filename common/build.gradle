@@ -20,6 +20,41 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
 }
 
+// Multi-version support: Configure resource directories
+sourceSets {
+    main {
+        resources {
+            // Clear default srcDirs to control order explicitly
+            srcDirs = []
+
+            // Version-specific resources FIRST (higher priority)
+            def versionResources = file("src/main/resources-${project.ext.minecraft_version}")
+            if (versionResources.exists()) {
+                srcDir versionResources
+                logger.lifecycle("Using version-specific resources: ${versionResources.name}")
+            } else {
+                logger.warn("Version-specific resources not found: ${versionResources.absolutePath}")
+            }
+
+            // Common resources SECOND (lower priority, will be excluded if duplicates exist)
+            srcDir 'src/main/resources'
+        }
+    }
+}
+
+// Expand pack_format variable in pack.mcmeta
+processResources {
+    // First source directory wins (version-specific resources take precedence)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    inputs.property 'minecraft_version', project.ext.minecraft_version
+    inputs.property 'pack_format', project.ext.pack_format
+
+    filesMatching('pack.mcmeta') {
+        expand 'pack_format': project.ext.pack_format
+    }
+}
+
 tasks.test {
     useJUnitPlatform()
 }

@@ -6,7 +6,13 @@ plugins {
 
 architectury {
     platformSetupLoomIde()
-    neoForge()
+    // Multi-version support: Use Forge for 1.20.1-1.20.4, NeoForge for 1.20.5+
+    def mcVersion = project.ext.minecraft_version
+    if (mcVersion.startsWith("1.20.") && mcVersion < "1.20.5") {
+        forge()
+    } else {
+        neoForge()
+    }
 }
 
 loom {
@@ -56,11 +62,23 @@ repositories {
 }
 
 dependencies {
-    neoForge "net.neoforged:neoforge:${neoforge_version}"
-    modApi "dev.architectury:architectury-neoforge:${architectury_api_version}"
+    // Multi-version support: Use Forge for 1.20.1-1.20.4, NeoForge for 1.20.5+
+    def mcVersion = project.ext.minecraft_version
+    if (mcVersion.startsWith("1.20.") && mcVersion < "1.20.5") {
+        // Minecraft 1.20.1-1.20.4 uses Forge
+        neoForge "net.minecraftforge:forge:${mcVersion}-${neoforge_version}"
+        modApi "dev.architectury:architectury-forge:${architectury_api_version}"
+    } else {
+        // Minecraft 1.20.5+ uses NeoForge
+        neoForge "net.neoforged:neoforge:${neoforge_version}"
+        modApi "dev.architectury:architectury-neoforge:${architectury_api_version}"
+    }
 
-    // Custom Portal API Reforged for NeoForge
-    modImplementation "net.kyrptonaught.customportalapi:cpapireforged-neo-1.21.1:1.2.2"
+    // Custom Portal API Reforged for NeoForge (version-specific)
+    if (mcVersion >= "1.21") {
+        modImplementation "net.kyrptonaught.customportalapi:cpapireforged-neo-1.21.1:1.2.2"
+    }
+    // TODO: Add Custom Portal API for 1.20.1 if available
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive false }

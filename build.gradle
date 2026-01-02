@@ -4,8 +4,31 @@ plugins {
     id 'com.gradleup.shadow' version '8.3.6' apply false
 }
 
+// Multi-version support: Load version-specific properties
+ext.loadVersionProperties = { String version ->
+    def propsFile = file("props/${version}.properties")
+    if (!propsFile.exists()) {
+        throw new GradleException("Version properties not found: ${propsFile.absolutePath}")
+    }
+
+    logger.lifecycle("Loading version properties: ${propsFile.name}")
+    def props = new Properties()
+    propsFile.withInputStream { props.load(it) }
+
+    // Override gradle.properties with version-specific values
+    props.each { key, value ->
+        project.ext.set(key.toString(), value.toString())
+    }
+
+    logger.lifecycle("Target Minecraft version: ${project.ext.minecraft_version}")
+}
+
+// Determine target version from command line or use default
+def targetVersion = project.findProperty('target_mc_version') ?: '1.21.1'
+loadVersionProperties(targetVersion)
+
 architectury {
-    minecraft = project.minecraft_version
+    minecraft = project.ext.minecraft_version
 }
 
 allprojects {
@@ -18,6 +41,16 @@ subprojects {
     apply plugin: 'architectury-plugin'
     apply plugin: 'maven-publish'
 
+    // Propagate version-specific properties to subprojects
+    ext.minecraft_version = rootProject.ext.minecraft_version
+    ext.pack_format = rootProject.ext.pack_format
+    ext.compat_package = rootProject.ext.compat_package
+    ext.architectury_api_version = rootProject.ext.architectury_api_version
+    ext.fabric_loader_version = rootProject.ext.fabric_loader_version
+    ext.fabric_api_version = rootProject.ext.fabric_api_version
+    ext.neoforge_version = rootProject.ext.neoforge_version
+    ext.custom_portal_api_fabric_version = rootProject.ext.custom_portal_api_fabric_version
+
     repositories {
         maven { url 'https://maven.architectury.dev/' }
         maven { url 'https://maven.neoforged.net/releases/' }
@@ -29,7 +62,7 @@ subprojects {
     }
 
     dependencies {
-        minecraft "com.mojang:minecraft:$rootProject.minecraft_version"
+        minecraft "com.mojang:minecraft:$rootProject.ext.minecraft_version"
         mappings loom.officialMojangMappings()
     }
 
