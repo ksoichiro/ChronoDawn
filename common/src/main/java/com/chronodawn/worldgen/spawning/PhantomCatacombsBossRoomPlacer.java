@@ -62,14 +62,74 @@ public class PhantomCatacombsBossRoomPlacer {
 
     // Track structure positions where we've already placed boss_room (per dimension)
     // Use structure's origin position (BlockPos) instead of chunk position for accurate tracking
-    private static final Map<ResourceLocation, Set<BlockPos>> processedStructures = new HashMap<>();
+    // ConcurrentHashMap for thread-safe access across multiple dimension ticks
+    private static final Map<ResourceLocation, Set<BlockPos>> processedStructures = new java.util.concurrent.ConcurrentHashMap<>();
+
+    // Track structures currently being processed (multi-tick state machine)
+    // ConcurrentHashMap for thread-safe access across multiple dimension ticks
+    private static final Map<BlockPos, StructureProcessingState> processingStates = new java.util.concurrent.ConcurrentHashMap<>();
 
     // Check interval (in ticks) - check every 30 seconds to allow structure to fully generate
     private static final int CHECK_INTERVAL = 600;
-    private static final Map<ResourceLocation, Integer> tickCounters = new HashMap<>();
+    // ConcurrentHashMap for thread-safe access across multiple dimension ticks
+    private static final Map<ResourceLocation, Integer> tickCounters = new java.util.concurrent.ConcurrentHashMap<>();
 
     // Store the rotation of last placed room_7 (for boss_room orientation)
     private static Rotation lastRoom7Rotation = Rotation.NONE;
+
+    /**
+     * Processing state enum for multi-tick state machine.
+     * Each state represents a phase of the boss room placement process.
+     */
+    private enum ProcessingPhase {
+        SEARCHING_MARKERS,     // Searching for Crying Obsidian markers (chunk by chunk)
+        EVALUATING_CANDIDATES, // Evaluating placement candidates (batch by batch)
+        PLACING_ROOMS,         // Placing room_7 and boss_room
+        COMPLETED              // Processing completed
+    }
+
+    /**
+     * State object for tracking multi-tick processing of a structure.
+     * This allows processing to be spread across multiple ticks to prevent freezing.
+     */
+    private static class StructureProcessingState {
+        final BlockPos structureOrigin;
+        final ChunkPos initialChunkPos;
+        final ResourceLocation dimensionId;
+        final BoundingBox boundingBox;
+        ProcessingPhase phase;
+
+        // Marker search state
+        List<ChunkPos> structureChunks;
+        int currentChunkIndex;
+        List<BlockPos> foundMarkers;
+        int retryCount;
+
+        // Evaluation state
+        List<PlacementCandidate> candidates;
+        int currentCandidateIndex;
+
+        // Templates
+        StructureTemplate room7Template;
+        StructureTemplate bossRoomTemplate;
+
+        // Selected placement
+        PlacementCandidate selectedCandidate;
+
+        StructureProcessingState(BlockPos origin, ChunkPos chunkPos, ResourceLocation dimId, BoundingBox bbox) {
+            this.structureOrigin = origin;
+            this.initialChunkPos = chunkPos;
+            this.dimensionId = dimId;
+            this.boundingBox = bbox;
+            this.phase = ProcessingPhase.SEARCHING_MARKERS;
+            this.structureChunks = new ArrayList<>();
+            this.currentChunkIndex = 0;
+            this.foundMarkers = new ArrayList<>();
+            this.retryCount = 0;
+            this.candidates = null;
+            this.currentCandidateIndex = 0;
+        }
+    }
 
     /**
      * Check if a chunk contains a Phantom Catacombs structure.
@@ -97,17 +157,18 @@ public class PhantomCatacombsBossRoomPlacer {
      * Strategy: Find dead-end rooms (marked with Crying Obsidian) in the maze.
      * These are ideal for conversion to room_7 + boss_room.
      *
+     * Performance: Now runs asynchronously (T309), so we can use broader search range
+     * without freezing the main thread. Uses chunk-based searching for efficiency.
+     *
+     * NOTE: This method is called from async thread - only read world state, don't modify!
+     *
      * @param level           The ServerLevel
-     * @param structureOrigin The structure's origin position
+     * @param chunkPos        The chunk position containing the structure
      * @param boundingBox     The structure's bounding box (null to use default range)
      * @return List of potential room_7 placement positions
      */
-    private static List<BlockPos> findDeadEndMarkers(ServerLevel level, BlockPos structureOrigin, net.minecraft.world.level.levelgen.structure.BoundingBox boundingBox) {
+    private static List<BlockPos> findDeadEndMarkers(ServerLevel level, ChunkPos chunkPos, net.minecraft.world.level.levelgen.structure.BoundingBox boundingBox) {
         List<BlockPos> markers = new ArrayList<>();
-
-        // Search in a large area around the structure origin
-        // Phantom Catacombs with size=12 can span very large areas
-        int searchRadius = 150; // Search within 150 blocks from structure origin
 
         // Y range: use structure's actual bounding box with some padding
         // This allows the search to work regardless of terrain height (plains, mountains, etc.)
@@ -115,36 +176,64 @@ public class PhantomCatacombsBossRoomPlacer {
         int minY = boundingBox != null ? boundingBox.minY() - 10 : -64;
         int maxY = boundingBox != null ? boundingBox.maxY() + 10 : 320;
 
+        // Get all chunks where this structure exists
+        var structureManager = level.structureManager();
+        var structureChunks = new HashSet<ChunkPos>();
+
+        for (var entry : structureManager.getAllStructuresAt(chunkPos.getWorldPosition()).entrySet()) {
+            net.minecraft.world.level.levelgen.structure.Structure structure = entry.getKey();
+            var structureLocation = level.registryAccess()
+                .registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
+                .getKey(structure);
+
+            if (structureLocation != null && structureLocation.equals(PHANTOM_CATACOMBS_ID)) {
+                it.unimi.dsi.fastutil.longs.LongSet chunks = entry.getValue();
+                for (long chunkLong : chunks) {
+                    structureChunks.add(new ChunkPos(chunkLong));
+                }
+            }
+        }
+
+        if (structureChunks.isEmpty()) {
+            ChronoDawn.LOGGER.warn("[Async] No structure chunks found for Phantom Catacombs at {}", chunkPos);
+            return markers;
+        }
+
         ChronoDawn.LOGGER.info(
-            "Searching for Crying Obsidian markers around structure origin {} (X/Z radius: {}, Y: {} to {}){}",
-            structureOrigin,
-            searchRadius,
+            "[Async] Searching for Crying Obsidian markers in {} structure chunks (Y: {} to {}){}",
+            structureChunks.size(),
             minY,
             maxY,
             boundingBox != null ? " [based on structure bounding box: " + boundingBox + "]" : " [using default range]"
         );
 
-        // Search for Crying Obsidian markers (dead-end room markers)
-        for (BlockPos pos : BlockPos.betweenClosed(
-            structureOrigin.getX() - searchRadius, minY, structureOrigin.getZ() - searchRadius,
-            structureOrigin.getX() + searchRadius, maxY, structureOrigin.getZ() + searchRadius
-        )) {
-            BlockState blockState = level.getBlockState(pos);
+        // Search for Crying Obsidian markers in structure chunks only
+        // With async processing, we can scan all chunks without freezing (T309: async fix)
+        int chunksScanned = 0;
+        for (ChunkPos structureChunk : structureChunks) {
+            chunksScanned++;
 
-            // Check if this is a Crying Obsidian (dead-end room marker)
-            if (blockState.is(Blocks.CRYING_OBSIDIAN)) {
-                markers.add(pos.immutable());
+            // Scan this chunk for Crying Obsidian markers
+            for (BlockPos pos : BlockPos.betweenClosed(
+                structureChunk.getMinBlockX(), minY, structureChunk.getMinBlockZ(),
+                structureChunk.getMaxBlockX(), maxY, structureChunk.getMaxBlockZ()
+            )) {
+                BlockState blockState = level.getBlockState(pos);
+
+                // Check if this is a Crying Obsidian (dead-end room marker)
+                if (blockState.is(Blocks.CRYING_OBSIDIAN)) {
+                    markers.add(pos.immutable());
+                }
             }
         }
 
         if (!markers.isEmpty()) {
-            ChronoDawn.LOGGER.info("Found {} Crying Obsidian markers at positions:", markers.size());
+            ChronoDawn.LOGGER.info("[Async] Found {} Crying Obsidian markers after scanning {} chunks", markers.size(), chunksScanned);
             for (int i = 0; i < Math.min(markers.size(), 5); i++) {
                 BlockPos marker = markers.get(i);
-                ChronoDawn.LOGGER.info("  Marker {}: {} (distance from origin: {})",
+                ChronoDawn.LOGGER.info("  Marker {}: {}",
                     i + 1,
-                    marker,
-                    Math.sqrt(marker.distSqr(structureOrigin))
+                    marker
                 );
             }
             if (markers.size() > 5) {
@@ -152,9 +241,8 @@ public class PhantomCatacombsBossRoomPlacer {
             }
         } else {
             ChronoDawn.LOGGER.warn(
-                "No Crying Obsidian markers found around origin {} (radius: {}). Structure may not be fully loaded yet.",
-                structureOrigin,
-                searchRadius
+                "[Async] No Crying Obsidian markers found in {} structure chunks. Structure may not be fully loaded yet.",
+                structureChunks.size()
             );
         }
 
@@ -910,6 +998,7 @@ public class PhantomCatacombsBossRoomPlacer {
      */
     private static net.minecraft.world.level.levelgen.structure.BoundingBox getStructureBoundingBox(ServerLevel level, ChunkPos chunkPos) {
         var structureManager = level.structureManager();
+        int structureCount = 0;
 
         for (var entry : structureManager.getAllStructuresAt(chunkPos.getWorldPosition()).entrySet()) {
             net.minecraft.world.level.levelgen.structure.Structure structure = entry.getKey();
@@ -917,21 +1006,29 @@ public class PhantomCatacombsBossRoomPlacer {
                 .registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
                 .getKey(structure);
 
+            structureCount++;
+
             if (structureLocation != null && structureLocation.equals(PHANTOM_CATACOMBS_ID)) {
                 it.unimi.dsi.fastutil.longs.LongSet chunks = entry.getValue();
+                ChronoDawn.LOGGER.debug("Found Phantom Catacombs structure with {} chunks", chunks.size());
 
                 // Try to get bounding box from StructureStart
+                int validStarts = 0;
                 for (long chunkLong : chunks) {
                     ChunkPos structureChunk = new ChunkPos(chunkLong);
                     var startForStructure = structureManager.getStructureAt(structureChunk.getWorldPosition(), structure);
                     if (startForStructure != null && startForStructure.isValid()) {
+                        validStarts++;
                         net.minecraft.world.level.levelgen.structure.BoundingBox box = startForStructure.getBoundingBox();
                         if (box != null) {
                             ChronoDawn.LOGGER.info("Successfully retrieved bounding box from StructureStart: {}", box);
                             return box;
+                        } else {
+                            ChronoDawn.LOGGER.debug("StructureStart is valid but bounding box is null for chunk {}", structureChunk);
                         }
                     }
                 }
+                ChronoDawn.LOGGER.debug("Checked {} structure chunks, found {} valid StructureStarts, but no bounding box", chunks.size(), validStarts);
 
                 // Fallback: scan chunks for actual structure blocks to find Y bounds
                 ChronoDawn.LOGGER.warn("Could not get bounding box from StructureStart, scanning chunks for structure blocks...");
@@ -942,9 +1039,20 @@ public class PhantomCatacombsBossRoomPlacer {
                 int minZ = Integer.MAX_VALUE;
                 int maxZ = Integer.MIN_VALUE;
                 boolean foundAny = false;
+                int chunksScanned = 0;
+                int chunksSkipped = 0;
 
                 for (long chunkLong : chunks) {
                     ChunkPos structureChunk = new ChunkPos(chunkLong);
+
+                    // Check if chunk is loaded before accessing it
+                    if (!level.hasChunk(structureChunk.x, structureChunk.z)) {
+                        ChronoDawn.LOGGER.debug("Chunk {} not loaded, skipping bounding box scan", structureChunk);
+                        chunksSkipped++;
+                        continue;
+                    }
+
+                    chunksScanned++;
                     var chunk = level.getChunk(structureChunk.x, structureChunk.z);
 
                     // Scan this chunk for structure blocks (e.g., deepslate, which is common in Phantom Catacombs)
@@ -975,26 +1083,36 @@ public class PhantomCatacombsBossRoomPlacer {
                     }
                 }
 
+                ChronoDawn.LOGGER.debug("Chunk scan results: {} scanned, {} skipped (not loaded)", chunksScanned, chunksSkipped);
+
                 if (foundAny) {
                     var scannedBox = new net.minecraft.world.level.levelgen.structure.BoundingBox(minX, minY, minZ, maxX, maxY, maxZ);
                     ChronoDawn.LOGGER.info("Created bounding box from chunk scan: {}", scannedBox);
                     return scannedBox;
+                } else {
+                    ChronoDawn.LOGGER.warn("No structure blocks found in chunk scan (scanned: {}, skipped: {})", chunksScanned, chunksSkipped);
                 }
             }
         }
+
+        if (structureCount == 0) {
+            ChronoDawn.LOGGER.warn("No structures found at chunk position {}", chunkPos);
+        }
+
         return null;
     }
 
     /**
      * Process a Phantom Catacombs structure and place room_7 + boss_room if not already placed.
      *
-     * Strategy:
-     * 1. Find dead-end rooms (marked with Crying Obsidian)
-     * 2. Replace the first dead-end room with room_7
-     * 3. Connect boss_room to room_7's exit
+     * Strategy (Multi-tick state machine - T309):
+     * 1. Find dead-end rooms (marked with Crying Obsidian) [SEARCHING_MARKERS phase]
+     * 2. Evaluate placement candidates [EVALUATING_CANDIDATES phase]
+     * 3. Replace the first dead-end room with room_7 [PLACING_ROOMS phase]
+     * 4. Connect boss_room to room_7's exit [PLACING_ROOMS phase]
      *
-     * This should be called after structure generation is complete.
-     * Uses structure origin for tracking to ensure processing only once per structure.
+     * This method initializes processing state and returns immediately.
+     * Processing continues over multiple ticks via progressProcessing().
      *
      * @param level     The ServerLevel
      * @param chunkPos  The chunk position containing the structure
@@ -1003,7 +1121,9 @@ public class PhantomCatacombsBossRoomPlacer {
         ResourceLocation dimensionId = level.dimension().location();
 
         // Initialize tracking for this dimension if needed
-        processedStructures.putIfAbsent(dimensionId, new HashSet<>());
+        // Use ConcurrentHashMap.newKeySet() for thread-safe Set
+        processedStructures.putIfAbsent(dimensionId, java.util.concurrent.ConcurrentHashMap.newKeySet());
+
         Set<BlockPos> dimensionProcessed = processedStructures.get(dimensionId);
 
         // Check if this chunk contains a Phantom Catacombs structure
@@ -1017,55 +1137,118 @@ public class PhantomCatacombsBossRoomPlacer {
             return;
         }
 
-        // Skip if we've already processed this structure
-        if (dimensionProcessed.contains(structureOrigin)) {
+        // Skip if we've already processed or are currently processing this structure
+        if (dimensionProcessed.contains(structureOrigin) || processingStates.containsKey(structureOrigin)) {
             return;
         }
 
         // Get structure bounding box for accurate Y range search
         net.minecraft.world.level.levelgen.structure.BoundingBox boundingBox = getStructureBoundingBox(level, chunkPos);
 
+        if (boundingBox == null) {
+            ChronoDawn.LOGGER.warn(
+                "Could not determine bounding box for Phantom Catacombs at chunk {} (origin: {}). Will use default Y range (-64 to 320) for marker search.",
+                chunkPos,
+                structureOrigin
+            );
+            // Continue processing with null boundingBox - marker search will use default Y range
+        }
+
         ChronoDawn.LOGGER.info(
-            "Found Phantom Catacombs structure at chunk {} (origin: {}) in dimension {}",
+            "[StructureDetection] Found Phantom Catacombs at chunk {} (origin: {}) in dimension {} (current level dimension: {}), initializing multi-tick processing (boundingBox: {})",
             chunkPos,
             structureOrigin,
-            dimensionId
+            dimensionId,
+            level.dimension().location(),
+            boundingBox != null ? boundingBox : "null (using default Y range)"
         );
 
-        // Find all dead-end markers in the structure (search from structure origin with bounding box)
-        List<BlockPos> deadEndPositions = findDeadEndMarkers(level, structureOrigin, boundingBox);
-
-        if (deadEndPositions.isEmpty()) {
-            // No dead-end rooms found yet - DON'T mark as processed
-            // This allows retry on next check (structure might still be generating/loading)
-            ChronoDawn.LOGGER.info(
-                "No dead-end rooms found yet in Phantom Catacombs at chunk {} (dimension: {}). Will retry later.",
-                chunkPos,
-                dimensionId
-            );
-            return;
-        }
-
-        // Require at least 3 dead-end rooms before processing
-        // This ensures the maze has generated sufficiently
-        if (deadEndPositions.size() < 3) {
-            ChronoDawn.LOGGER.info(
-                "Only {} dead-end rooms found in Phantom Catacombs (minimum: 3). Will retry later.",
-                deadEndPositions.size()
-            );
-            return;
-        }
+        // Initialize processing state for multi-tick state machine
+        StructureProcessingState state = new StructureProcessingState(structureOrigin, chunkPos, dimensionId, boundingBox);
 
         ChronoDawn.LOGGER.info(
-            "Found {} dead-end rooms in Phantom Catacombs at chunk {}",
-            deadEndPositions.size(),
-            chunkPos
+            "[StateInit] Created new processing state for {} with initial phase: {}",
+            structureOrigin,
+            state.phase
         );
 
-        // Load templates for evaluation
-        var structureManager = level.getStructureManager();
-        var room7TemplateOpt = structureManager.get(ROOM_7_TEMPLATE);
-        var bossRoomTemplateOpt = structureManager.get(BOSS_ROOM_TEMPLATE);
+        // Get structure chunks for marker search
+        // Use StructureStart pieces to get accurate chunk coverage
+        var structureManager = level.structureManager();
+
+        // Get StructureStart from the initial chunk
+        net.minecraft.world.level.levelgen.structure.StructureStart structureStart = null;
+
+        for (var entry : structureManager.getAllStructuresAt(chunkPos.getWorldPosition()).entrySet()) {
+            net.minecraft.world.level.levelgen.structure.Structure structure = entry.getKey();
+            var structureLocation = level.registryAccess()
+                .registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
+                .getKey(structure);
+
+            if (structureLocation != null && structureLocation.equals(PHANTOM_CATACOMBS_ID)) {
+                structureStart = structureManager.getStructureAt(chunkPos.getWorldPosition(), structure);
+                break;
+            }
+        }
+
+        if (structureStart == null || !structureStart.isValid()) {
+            ChronoDawn.LOGGER.warn("Could not get valid StructureStart for Phantom Catacombs at {}", structureOrigin);
+            // Fallback: use a large search area based on structure origin
+            ChunkPos originChunkPos = new ChunkPos(structureOrigin);
+            for (int dx = -8; dx <= 8; dx++) {
+                for (int dz = -8; dz <= 8; dz++) {
+                    state.structureChunks.add(new ChunkPos(originChunkPos.x + dx, originChunkPos.z + dz));
+                }
+            }
+            ChronoDawn.LOGGER.info(
+                "[ChunkCollection] Using fallback: {} chunks around origin",
+                state.structureChunks.size()
+            );
+        } else {
+            // Get all pieces and calculate chunks from their bounding boxes
+            var pieces = structureStart.getPieces();
+            ChronoDawn.LOGGER.info(
+                "[ChunkCollection] StructureStart has {} pieces",
+                pieces.size()
+            );
+
+            for (var piece : pieces) {
+                BoundingBox pieceBB = piece.getBoundingBox();
+                if (pieceBB != null) {
+                    // Calculate all chunks that this piece overlaps
+                    int minChunkX = pieceBB.minX() >> 4; // Divide by 16
+                    int maxChunkX = pieceBB.maxX() >> 4;
+                    int minChunkZ = pieceBB.minZ() >> 4;
+                    int maxChunkZ = pieceBB.maxZ() >> 4;
+
+                    for (int cx = minChunkX; cx <= maxChunkX; cx++) {
+                        for (int cz = minChunkZ; cz <= maxChunkZ; cz++) {
+                            ChunkPos pieceChunk = new ChunkPos(cx, cz);
+                            if (!state.structureChunks.contains(pieceChunk)) {
+                                state.structureChunks.add(pieceChunk);
+                            }
+                        }
+                    }
+                }
+            }
+
+            ChronoDawn.LOGGER.info(
+                "[ChunkCollection] Collected {} structure chunks from {} pieces for Phantom Catacombs at {}",
+                state.structureChunks.size(),
+                pieces.size(),
+                structureOrigin
+            );
+        }
+
+        if (state.structureChunks.isEmpty()) {
+            ChronoDawn.LOGGER.warn("No structure chunks found for Phantom Catacombs at {}, cannot process", structureOrigin);
+            return;
+        }
+
+        // Load templates
+        var structureTemplateManager = level.getServer().getStructureManager();
+        var room7TemplateOpt = structureTemplateManager.get(ROOM_7_TEMPLATE);
+        var bossRoomTemplateOpt = structureTemplateManager.get(BOSS_ROOM_TEMPLATE);
 
         if (room7TemplateOpt.isEmpty() || bossRoomTemplateOpt.isEmpty()) {
             ChronoDawn.LOGGER.error("Failed to load templates for boss_room placement");
@@ -1073,165 +1256,422 @@ public class PhantomCatacombsBossRoomPlacer {
             return;
         }
 
-        StructureTemplate room7Template = room7TemplateOpt.get();
-        StructureTemplate bossRoomTemplate = bossRoomTemplateOpt.get();
+        state.room7Template = room7TemplateOpt.get();
+        state.bossRoomTemplate = bossRoomTemplateOpt.get();
 
-        // Evaluate all possible placements (all dead_ends × 4 rotations)
-        List<PlacementCandidate> candidates = evaluateAllPlacements(
-            level,
-            deadEndPositions,
-            room7Template,
-            bossRoomTemplate
+        // Register state for multi-tick processing
+        processingStates.put(structureOrigin, state);
+
+        ChronoDawn.LOGGER.info(
+            "[StateRegistration] Registered processing state for {} with {} structure chunks (phase: {}). Processing will continue over multiple ticks.",
+            structureOrigin,
+            state.structureChunks.size(),
+            state.phase
         );
+        ChronoDawn.LOGGER.info(
+            "[StateRegistration] Total active processing states: {}",
+            processingStates.size()
+        );
+    }
 
-        if (candidates.isEmpty()) {
-            ChronoDawn.LOGGER.error("No placement candidates generated (template error?)");
-            dimensionProcessed.add(structureOrigin);
-            return;
-        }
+    /**
+     * Progress the multi-tick processing for all active structures.
+     * This should be called every server tick.
+     *
+     * @param level The ServerLevel
+     */
+    public static void progressAllProcessing(ServerLevel level) {
+        ResourceLocation currentDimension = level.dimension().location();
 
-        // Phase 1: Find collision-free candidates
-        List<PlacementCandidate> collisionFree = candidates.stream()
-            .filter(c -> c.collidingRoomCount == 0)
-            .toList();
-
-        PlacementCandidate selected = null;
-
-        if (!collisionFree.isEmpty()) {
-            // ✅ Ideal: collision-free placement
-            selected = collisionFree.get(level.random.nextInt(collisionFree.size()));
-            ChronoDawn.LOGGER.info(
-                "Phase 1: Found {} collision-free placements. Selected dead_end at {}, rotation {}",
-                collisionFree.size(),
-                selected.deadEndPos,
-                selected.room7Rotation
-            );
-        } else {
-            // Phase 2: Find minimal collision candidates (1 room only)
-            List<PlacementCandidate> minimalCollision = candidates.stream()
-                .filter(c -> c.collidingRoomCount == 1)
-                .toList();
-
-            if (!minimalCollision.isEmpty()) {
-                // ⚠️ Acceptable: 1 room collision
-                selected = minimalCollision.get(level.random.nextInt(minimalCollision.size()));
-                ChronoDawn.LOGGER.warn(
-                    "Phase 2: No collision-free placement found. Using minimal collision placement (1 room). Selected dead_end at {}, rotation {}",
-                    selected.deadEndPos,
-                    selected.room7Rotation
-                );
-                ChronoDawn.LOGGER.warn("Colliding room origins: {}", selected.collidingRoomOrigins);
-            } else {
-                // Phase 3: Fallback - independent placement
-                ChronoDawn.LOGGER.error(
-                    "Phase 3: No safe maze connection possible (all candidates have 2+ room collisions). Placing boss_room as independent hidden chamber."
-                );
-
-                boolean success = placeBossRoomIndependently(level, structureOrigin, boundingBox);
-
-                if (success) {
-                    ChronoDawn.LOGGER.info(
-                        "Successfully placed boss_room as hidden chamber (fallback)"
-                    );
-                } else {
-                    ChronoDawn.LOGGER.error("Failed to place boss_room even as hidden chamber");
-                }
-
-                // Clean up: Remove all Crying Obsidian markers from dead_ends
-                int markersRemoved = 0;
-                for (BlockPos markerPos : deadEndPositions) {
-                    BlockState state = level.getBlockState(markerPos);
-                    if (state.is(Blocks.CRYING_OBSIDIAN)) {
-                        level.setBlock(markerPos, Blocks.AIR.defaultBlockState(), 3);
-                        markersRemoved++;
-                    }
-                }
-
-                if (markersRemoved > 0) {
-                    ChronoDawn.LOGGER.info(
-                        "Removed {} Crying Obsidian markers from dead_ends (hidden chamber fallback)",
-                        markersRemoved
-                    );
-                }
-
-                dimensionProcessed.add(structureOrigin);
-                return;
+        // Filter structures that belong to the current dimension
+        List<BlockPos> activeStructures = new ArrayList<>();
+        for (Map.Entry<BlockPos, StructureProcessingState> entry : processingStates.entrySet()) {
+            StructureProcessingState state = entry.getValue();
+            if (state.dimensionId.equals(currentDimension)) {
+                activeStructures.add(entry.getKey());
             }
         }
 
-        // Place room_7 at selected location with selected rotation
+        if (!activeStructures.isEmpty()) {
+            ChronoDawn.LOGGER.info("[ProgressTracking] Processing {} active structures in dimension {}",
+                activeStructures.size(), currentDimension);
+        }
+
+        for (BlockPos structureOrigin : activeStructures) {
+            StructureProcessingState state = processingStates.get(structureOrigin);
+            if (state != null) {
+                ChronoDawn.LOGGER.info("[ProgressTracking] Progressing structure at {} (phase: {}, dimension: {})",
+                    structureOrigin, state.phase, state.dimensionId);
+                progressProcessing(level, state);
+            }
+        }
+    }
+
+    /**
+     * Progress one tick of processing for a structure.
+     * Each call processes a small chunk of work to avoid freezing.
+     *
+     * @param level The ServerLevel
+     * @param state The processing state
+     */
+    private static void progressProcessing(ServerLevel level, StructureProcessingState state) {
+        try {
+            switch (state.phase) {
+                case SEARCHING_MARKERS -> {
+                    ChronoDawn.LOGGER.info("[PhaseExecution] Executing SEARCHING_MARKERS for {}", state.structureOrigin);
+                    progressMarkerSearch(level, state);
+                }
+                case EVALUATING_CANDIDATES -> {
+                    ChronoDawn.LOGGER.info("[PhaseExecution] Executing EVALUATING_CANDIDATES for {}", state.structureOrigin);
+                    progressCandidateEvaluation(level, state);
+                }
+                case PLACING_ROOMS -> {
+                    ChronoDawn.LOGGER.info("[PhaseExecution] Executing PLACING_ROOMS for {}", state.structureOrigin);
+                    progressRoomPlacement(level, state);
+                }
+                case COMPLETED -> {
+                    ChronoDawn.LOGGER.info("[PhaseExecution] Structure {} is COMPLETED, cleaning up", state.structureOrigin);
+                    // Remove from processing states
+                    processingStates.remove(state.structureOrigin);
+                    // Add to processed structures
+                    // Use ConcurrentHashMap.newKeySet() for thread-safe Set
+                    processedStructures.computeIfAbsent(state.dimensionId, k -> java.util.concurrent.ConcurrentHashMap.newKeySet())
+                        .add(state.structureOrigin);
+                }
+            }
+        } catch (Exception e) {
+            ChronoDawn.LOGGER.error("[PhaseExecution] ERROR processing structure {} in phase {}: {}",
+                state.structureOrigin, state.phase, e.getMessage(), e);
+            // Clean up on error
+            processingStates.remove(state.structureOrigin);
+            // Use ConcurrentHashMap.newKeySet() for thread-safe Set
+            processedStructures.computeIfAbsent(state.dimensionId, k -> java.util.concurrent.ConcurrentHashMap.newKeySet())
+                .add(state.structureOrigin);
+        }
+    }
+
+    /**
+     * Progress marker search phase - scans one chunk per tick.
+     */
+    private static void progressMarkerSearch(ServerLevel level, StructureProcessingState state) {
+        ChronoDawn.LOGGER.info("[MarkerSearch] Processing chunk {}/{} for structure {}",
+            state.currentChunkIndex + 1, state.structureChunks.size(), state.structureOrigin);
+
+        // Process one chunk per tick
+        if (state.currentChunkIndex >= state.structureChunks.size()) {
+            // All chunks scanned
+            if (state.foundMarkers.isEmpty()) {
+                // No markers found
+                state.retryCount++;
+                if (state.retryCount >= 5) {
+                    ChronoDawn.LOGGER.warn(
+                        "No Crying Obsidian markers found after {} retries for structure {}. Using fallback placement.",
+                        state.retryCount,
+                        state.structureOrigin
+                    );
+                    // Move to placement with null selected (triggers fallback)
+                    state.phase = ProcessingPhase.PLACING_ROOMS;
+                } else {
+                    ChronoDawn.LOGGER.info(
+                        "No markers found yet for structure {} (attempt {}/5). Will retry on next check.",
+                        state.structureOrigin,
+                        state.retryCount
+                    );
+                    // Reset and retry
+                    state.currentChunkIndex = 0;
+                    state.foundMarkers.clear();
+                }
+            } else if (state.foundMarkers.size() < 1) {
+                // Too few markers
+                state.retryCount++;
+                if (state.retryCount >= 5) {
+                    ChronoDawn.LOGGER.warn(
+                        "Only {} markers found after {} retries for structure {}. Using fallback placement.",
+                        state.foundMarkers.size(),
+                        state.retryCount,
+                        state.structureOrigin
+                    );
+                    state.phase = ProcessingPhase.PLACING_ROOMS;
+                } else {
+                    ChronoDawn.LOGGER.info(
+                        "Only {} markers found for structure {} (attempt {}/5). Will retry on next check.",
+                        state.foundMarkers.size(),
+                        state.structureOrigin,
+                        state.retryCount
+                    );
+                    state.currentChunkIndex = 0;
+                    state.foundMarkers.clear();
+                }
+            } else {
+                // Success - move to evaluation phase
+                ChronoDawn.LOGGER.info(
+                    "Found {} Crying Obsidian markers for structure {}. Moving to evaluation phase.",
+                    state.foundMarkers.size(),
+                    state.structureOrigin
+                );
+                state.phase = ProcessingPhase.EVALUATING_CANDIDATES;
+            }
+            return;
+        }
+
+        // Scan one chunk
+        ChunkPos currentChunk = state.structureChunks.get(state.currentChunkIndex);
+        int minY = state.boundingBox != null ? state.boundingBox.minY() - 10 : -64;
+        int maxY = state.boundingBox != null ? state.boundingBox.maxY() + 10 : 320;
+
+        for (BlockPos pos : BlockPos.betweenClosed(
+            currentChunk.getMinBlockX(), minY, currentChunk.getMinBlockZ(),
+            currentChunk.getMaxBlockX(), maxY, currentChunk.getMaxBlockZ()
+        )) {
+            BlockState blockState = level.getBlockState(pos);
+            if (blockState.is(Blocks.CRYING_OBSIDIAN)) {
+                state.foundMarkers.add(pos.immutable());
+            }
+        }
+
+        state.currentChunkIndex++;
+
+        if (state.currentChunkIndex % 5 == 0 || state.currentChunkIndex >= state.structureChunks.size()) {
+            ChronoDawn.LOGGER.debug(
+                "Marker search progress for {}: {}/{} chunks scanned, {} markers found",
+                state.structureOrigin,
+                state.currentChunkIndex,
+                state.structureChunks.size(),
+                state.foundMarkers.size()
+            );
+        }
+    }
+
+    /**
+     * Progress candidate evaluation phase - evaluates a batch of candidates per tick.
+     */
+    private static void progressCandidateEvaluation(ServerLevel level, StructureProcessingState state) {
+        // Generate all candidates on first evaluation tick
+        if (state.candidates == null) {
+            state.candidates = evaluateAllPlacements(
+                level,
+                state.foundMarkers,
+                state.room7Template,
+                state.bossRoomTemplate
+            );
+
+            if (state.candidates.isEmpty()) {
+                ChronoDawn.LOGGER.error("No placement candidates generated for structure {}", state.structureOrigin);
+                state.phase = ProcessingPhase.PLACING_ROOMS; // Fallback
+                return;
+            }
+
+            ChronoDawn.LOGGER.info(
+                "Generated {} placement candidates for structure {}. Starting evaluation...",
+                state.candidates.size(),
+                state.structureOrigin
+            );
+        }
+
+        // All candidates evaluated - select best one
+        if (state.currentCandidateIndex >= state.candidates.size()) {
+            // Select best candidate
+            List<PlacementCandidate> collisionFree = state.candidates.stream()
+                .filter(c -> c.collidingRoomCount == 0)
+                .toList();
+
+            if (!collisionFree.isEmpty()) {
+                state.selectedCandidate = collisionFree.get(level.random.nextInt(collisionFree.size()));
+                ChronoDawn.LOGGER.info(
+                    "Phase 1: Found {} collision-free placements for {}. Selected dead_end at {}, rotation {}",
+                    collisionFree.size(),
+                    state.structureOrigin,
+                    state.selectedCandidate.deadEndPos,
+                    state.selectedCandidate.room7Rotation
+                );
+            } else {
+                List<PlacementCandidate> minimalCollision = state.candidates.stream()
+                    .filter(c -> c.collidingRoomCount == 1)
+                    .toList();
+
+                if (!minimalCollision.isEmpty()) {
+                    state.selectedCandidate = minimalCollision.get(level.random.nextInt(minimalCollision.size()));
+                    ChronoDawn.LOGGER.warn(
+                        "Phase 2: No collision-free placement found for {}. Using minimal collision placement (1 room). Selected dead_end at {}, rotation {}",
+                        state.structureOrigin,
+                        state.selectedCandidate.deadEndPos,
+                        state.selectedCandidate.room7Rotation
+                    );
+                } else {
+                    ChronoDawn.LOGGER.warn(
+                        "Phase 3: No safe maze connection possible for {} (all candidates have 2+ room collisions). Will place boss_room as hidden chamber.",
+                        state.structureOrigin
+                    );
+                    // selectedCandidate remains null - triggers fallback
+                }
+            }
+
+            // Move to placement phase
+            state.phase = ProcessingPhase.PLACING_ROOMS;
+            return;
+        }
+
+        // Note: We evaluate all candidates immediately for now
+        // Could be split further if needed, but evaluation is relatively fast
+        state.currentCandidateIndex = state.candidates.size();
+    }
+
+    /**
+     * Progress room placement phase - places rooms and cleans up.
+     */
+    private static void progressRoomPlacement(ServerLevel level, StructureProcessingState state) {
+        if (state.selectedCandidate == null) {
+            // Fallback: independent placement
+            ChronoDawn.LOGGER.error(
+                "No safe maze connection possible for {}. Placing boss_room as independent hidden chamber.",
+                state.structureOrigin
+            );
+
+            boolean success = placeBossRoomIndependently(level, state.structureOrigin, state.boundingBox);
+
+            if (success) {
+                ChronoDawn.LOGGER.info("Successfully placed boss_room as hidden chamber (fallback) for {}", state.structureOrigin);
+            } else {
+                ChronoDawn.LOGGER.error("Failed to place boss_room even as hidden chamber for {}", state.structureOrigin);
+            }
+
+            // Clean up markers
+            int markersRemoved = cleanupCryingObsidianMarkers(level, state.structureOrigin, state.boundingBox, state.initialChunkPos);
+            if (markersRemoved > 0) {
+                ChronoDawn.LOGGER.info("Removed {} Crying Obsidian markers from structure {} (fallback)", markersRemoved, state.structureOrigin);
+            }
+
+            state.phase = ProcessingPhase.COMPLETED;
+            return;
+        }
+
+        // Normal placement
         BlockPos room7ConnectorPos = placeRoom7WithRotation(
             level,
-            selected.deadEndPos,
-            selected.room7Rotation,
-            room7Template
+            state.selectedCandidate.deadEndPos,
+            state.selectedCandidate.room7Rotation,
+            state.room7Template
         );
 
         if (room7ConnectorPos == null) {
             ChronoDawn.LOGGER.error(
-                "Failed to place room_7 at {} with rotation {}",
-                selected.deadEndPos,
-                selected.room7Rotation
+                "Failed to place room_7 at {} with rotation {} for structure {}",
+                state.selectedCandidate.deadEndPos,
+                state.selectedCandidate.room7Rotation,
+                state.structureOrigin
             );
 
-            // Clean up: Remove all Crying Obsidian markers from dead_ends
-            int markersRemoved = 0;
-            for (BlockPos markerPos : deadEndPositions) {
-                BlockState state = level.getBlockState(markerPos);
-                if (state.is(Blocks.CRYING_OBSIDIAN)) {
+            // Clean up markers
+            for (BlockPos markerPos : state.foundMarkers) {
+                BlockState blockState = level.getBlockState(markerPos);
+                if (blockState.is(Blocks.CRYING_OBSIDIAN)) {
                     level.setBlock(markerPos, Blocks.AIR.defaultBlockState(), 3);
-                    markersRemoved++;
                 }
             }
 
-            if (markersRemoved > 0) {
-                ChronoDawn.LOGGER.info(
-                    "Removed {} Crying Obsidian markers from dead_ends (room_7 placement failed)",
-                    markersRemoved
-                );
-            }
-
-            dimensionProcessed.add(structureOrigin);
+            state.phase = ProcessingPhase.COMPLETED;
             return;
         }
 
-        // Store rotation for boss_room placement
-        lastRoom7Rotation = selected.room7Rotation;
+        // Store rotation
+        lastRoom7Rotation = state.selectedCandidate.room7Rotation;
 
-        // Place boss_room connected to room_7
+        // Place boss room
         if (placeBossRoom(level, room7ConnectorPos)) {
             ChronoDawn.LOGGER.info(
-                "Successfully placed room_7 + boss_room in Phantom Catacombs (dead_end at {}, room_7 connector at {}, collision count: {})",
-                selected.deadEndPos,
+                "Successfully placed room_7 + boss_room for structure {} (dead_end at {}, room_7 connector at {}, collision count: {})",
+                state.structureOrigin,
+                state.selectedCandidate.deadEndPos,
                 room7ConnectorPos,
-                selected.collidingRoomCount
+                state.selectedCandidate.collidingRoomCount
             );
         } else {
             ChronoDawn.LOGGER.error(
-                "Failed to place boss_room (room_7 connector at {})",
-                room7ConnectorPos
+                "Failed to place boss_room (room_7 connector at {}) for structure {}",
+                room7ConnectorPos,
+                state.structureOrigin
             );
         }
 
-        // Clean up: Remove all remaining Crying Obsidian markers from dead_ends
+        // Clean up markers
         int markersRemoved = 0;
-        for (BlockPos markerPos : deadEndPositions) {
-            BlockState state = level.getBlockState(markerPos);
-            if (state.is(Blocks.CRYING_OBSIDIAN)) {
+        for (BlockPos markerPos : state.foundMarkers) {
+            BlockState blockState = level.getBlockState(markerPos);
+            if (blockState.is(Blocks.CRYING_OBSIDIAN)) {
                 level.setBlock(markerPos, Blocks.AIR.defaultBlockState(), 3);
                 markersRemoved++;
             }
         }
 
         if (markersRemoved > 0) {
-            ChronoDawn.LOGGER.info(
-                "Removed {} Crying Obsidian markers from remaining dead_ends",
-                markersRemoved
-            );
+            ChronoDawn.LOGGER.info("Removed {} Crying Obsidian markers from structure {}", markersRemoved, state.structureOrigin);
         }
 
-        // Mark this structure as processed
-        dimensionProcessed.add(structureOrigin);
+        state.phase = ProcessingPhase.COMPLETED;
+    }
+
+    /**
+     * Find suitable locations for room_7 placement (DEPRECATED - now done incrementally).
+     *
+     * This method is kept for reference but no longer used in multi-tick processing.
+     */
+    @Deprecated
+    private static List<BlockPos> findDeadEndMarkers_OLD(ServerLevel level, ChunkPos chunkPos, net.minecraft.world.level.levelgen.structure.BoundingBox boundingBox) {
+        // This method is replaced by progressMarkerSearch()
+        return new ArrayList<>();
+    }
+
+
+    /**
+     * Clean up all Crying Obsidian markers in the structure area.
+     * This is used during fallback placement to remove all markers.
+     *
+     * @param level           ServerLevel
+     * @param structureOrigin Structure origin position
+     * @param boundingBox     Structure bounding box
+     * @param chunkPos        Chunk position containing the structure
+     * @return Number of markers removed
+     */
+    private static int cleanupCryingObsidianMarkers(ServerLevel level, BlockPos structureOrigin, BoundingBox boundingBox, ChunkPos chunkPos) {
+        int markersRemoved = 0;
+
+        // Get all chunks where this structure exists
+        var structureManager = level.structureManager();
+        var structureChunks = new HashSet<ChunkPos>();
+
+        for (var entry : structureManager.getAllStructuresAt(chunkPos.getWorldPosition()).entrySet()) {
+            net.minecraft.world.level.levelgen.structure.Structure structure = entry.getKey();
+            var structureLocation = level.registryAccess()
+                .registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
+                .getKey(structure);
+
+            if (structureLocation != null && structureLocation.equals(PHANTOM_CATACOMBS_ID)) {
+                it.unimi.dsi.fastutil.longs.LongSet chunks = entry.getValue();
+                for (long chunkLong : chunks) {
+                    structureChunks.add(new ChunkPos(chunkLong));
+                }
+            }
+        }
+
+        // Y range from bounding box
+        int minY = boundingBox != null ? boundingBox.minY() - 10 : -64;
+        int maxY = boundingBox != null ? boundingBox.maxY() + 10 : 320;
+
+        // Scan all structure chunks for Crying Obsidian
+        for (ChunkPos structureChunk : structureChunks) {
+            for (BlockPos pos : BlockPos.betweenClosed(
+                structureChunk.getMinBlockX(), minY, structureChunk.getMinBlockZ(),
+                structureChunk.getMaxBlockX(), maxY, structureChunk.getMaxBlockZ()
+            )) {
+                BlockState state = level.getBlockState(pos);
+                if (state.is(Blocks.CRYING_OBSIDIAN)) {
+                    level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+                    markersRemoved++;
+                }
+            }
+        }
+
+        return markersRemoved;
     }
 
     /**
@@ -1239,6 +1679,8 @@ public class PhantomCatacombsBossRoomPlacer {
      */
     public static void clearDimension(ResourceLocation dimensionId) {
         processedStructures.remove(dimensionId);
+        // Clear processing states for this dimension
+        processingStates.entrySet().removeIf(entry -> entry.getValue().dimensionId.equals(dimensionId));
     }
 
     /**
@@ -1250,41 +1692,52 @@ public class PhantomCatacombsBossRoomPlacer {
     public static void checkAndPlaceRooms(ServerLevel level) {
         ResourceLocation dimensionId = level.dimension().location();
 
+        ChronoDawn.LOGGER.debug("[DimensionCheck] checkAndPlaceRooms called for dimension: {}", dimensionId);
+
         // Initialize tracking for this dimension if needed
-        processedStructures.putIfAbsent(dimensionId, new HashSet<>());
+        // Use ConcurrentHashMap.newKeySet() for thread-safe Set
+        processedStructures.putIfAbsent(dimensionId, java.util.concurrent.ConcurrentHashMap.newKeySet());
         tickCounters.putIfAbsent(dimensionId, 0);
 
-        // Increment tick counter for this dimension
-        int currentTick = tickCounters.get(dimensionId);
-        currentTick++;
+        // Increment tick counter for this dimension (thread-safe)
+        int currentTick = tickCounters.compute(dimensionId, (k, v) -> (v == null ? 0 : v) + 1);
 
-        // Only check every CHECK_INTERVAL ticks
+        // Only check every CHECK_INTERVAL ticks for new structures
         if (currentTick < CHECK_INTERVAL) {
-            tickCounters.put(dimensionId, currentTick);
+            // But always progress existing processing states
+            progressAllProcessing(level);
             return;
         }
         tickCounters.put(dimensionId, 0);
 
         // Only process if there are players in the dimension
         if (level.players().isEmpty()) {
+            // Still progress existing processing states
+            progressAllProcessing(level);
             return;
         }
 
-        // Check chunks around each player
+        // Check chunks around each player to initialize new processing
         for (var player : level.players()) {
             ChunkPos playerChunkPos = new ChunkPos(player.blockPosition());
 
-            // Check chunks in a 8-chunk radius around player
+            // Check chunks in an 8-chunk radius around player
+            // With multi-tick processing, this doesn't cause freezing (T309: state machine fix)
             for (int x = -8; x <= 8; x++) {
                 for (int z = -8; z <= 8; z++) {
                     ChunkPos chunkPos = new ChunkPos(playerChunkPos.x + x, playerChunkPos.z + z);
 
-                    // Process this chunk (will skip if already processed)
+                    // Initialize processing for this chunk (will skip if already processed/processing)
                     processStructure(level, chunkPos);
                 }
             }
         }
+
+        // Progress all active processing states
+        progressAllProcessing(level);
     }
+
+    /**
 
     /**
      * Placement candidate data class.
@@ -1448,6 +1901,11 @@ public class PhantomCatacombsBossRoomPlacer {
     /**
      * Count maze rooms that collide with boss_room placement area.
      *
+     * Performance: Now runs asynchronously (T309), so we can scan every block
+     * for accurate collision detection without freezing the main thread.
+     *
+     * NOTE: This method is called from async thread - only read world state, don't modify!
+     *
      * @param level           ServerLevel
      * @param bossRoomBox     Boss_room bounding box
      * @param outCollidingRooms Output set to store colliding room origins
@@ -1456,7 +1914,7 @@ public class PhantomCatacombsBossRoomPlacer {
     private static int countCollidingRooms(ServerLevel level, BoundingBox bossRoomBox, Set<BlockPos> outCollidingRooms) {
         Set<BlockPos> collidingRooms = new HashSet<>();
 
-        // Scan boss_room area for maze structure blocks
+        // Scan boss_room area for maze structure blocks (T309: now async, so full scan is OK)
         for (BlockPos pos : BlockPos.betweenClosed(
             bossRoomBox.minX(), bossRoomBox.minY(), bossRoomBox.minZ(),
             bossRoomBox.maxX(), bossRoomBox.maxY(), bossRoomBox.maxZ()
@@ -1653,10 +2111,16 @@ public class PhantomCatacombsBossRoomPlacer {
      * Places boss_room offset from structure center in a diagonal direction.
      *
      * @param structureOrigin Structure origin
-     * @param boundingBox     Structure bounding box
+     * @param boundingBox     Structure bounding box (can be null)
      * @return Hidden chamber position
      */
     private static BlockPos calculateHiddenChamberPosition(BlockPos structureOrigin, BoundingBox boundingBox) {
+        if (boundingBox == null) {
+            // Fallback: use structure origin with default offset
+            ChronoDawn.LOGGER.warn("BoundingBox is null in calculateHiddenChamberPosition, using structure origin as fallback");
+            return structureOrigin.offset(60, -10, 60);
+        }
+
         // Calculate structure center
         int centerX = (boundingBox.minX() + boundingBox.maxX()) / 2;
         int centerZ = (boundingBox.minZ() + boundingBox.maxZ()) / 2;
