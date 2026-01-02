@@ -1,4 +1,4 @@
-package com.chronodawn.compat.v1_20_1;
+package com.chronodawn.compat;
 
 import com.chronodawn.compat.SavedDataHandler;
 import net.minecraft.nbt.CompoundTag;

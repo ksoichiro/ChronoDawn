@@ -77,10 +77,18 @@ public class DimensionStateData extends ChronoDawnWorldData {
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
+    public CompoundTag saveData(CompoundTag tag) {
         tag.putBoolean("is_stabilized", isStabilized);
         tag.putString("time_distortion_level", timeDistortionLevel.name());
         return tag;
+    }
+
+    @Override
+    public void loadData(CompoundTag tag) {
+        isStabilized = tag.getBoolean("is_stabilized");
+        timeDistortionLevel = TimeDistortionLevel.valueOf(
+            tag.getString("time_distortion_level")
+        );
     }
 
     // TODO: Add dimension state management methods in future phases:

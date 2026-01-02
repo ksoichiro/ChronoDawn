@@ -1,5 +1,6 @@
 package com.chronodawn.blocks;
 
+import com.chronodawn.compat.CompatBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -11,7 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * BlockEntity for Clock Tower Teleporter.
  * Stores the target teleportation position for DOWN teleporters.
  */
-public class ClockTowerTeleporterBlockEntity extends BlockEntity {
+public class ClockTowerTeleporterBlockEntity extends CompatBlockEntity {
     private BlockPos targetPos = null;
 
     public ClockTowerTeleporterBlockEntity(BlockPos pos, BlockState state) {
@@ -34,8 +35,7 @@ public class ClockTowerTeleporterBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
+    public void saveData(CompoundTag tag) {
         if (targetPos != null) {
             tag.putInt("TargetX", targetPos.getX());
             tag.putInt("TargetY", targetPos.getY());
@@ -44,8 +44,7 @@ public class ClockTowerTeleporterBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadAdditional(tag, registries);
+    public void loadData(CompoundTag tag) {
         if (tag.contains("TargetX")) {
             targetPos = new BlockPos(
                 tag.getInt("TargetX"),

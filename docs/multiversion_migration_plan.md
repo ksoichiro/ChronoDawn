@@ -406,6 +406,91 @@ processResources {
 **Duration**: 10-14 days
 **Risk**: High (massive file changes, potential bugs)
 
+#### Progress Report (2026-01-02)
+
+**Status**: **In Progress** - Extended migration approach (T401-T427)
+
+**Note**: Target version changed from 1.20.6 to **1.20.1** during implementation to maximize version coverage.
+
+**Completed Tasks**:
+
+- ✅ **T4-1: ItemStack DataComponents Migration (1 file)**
+  - `TimeCompassItem.java`: Migrated to `CompatHandlers.ITEM_DATA`
+  - Pattern: `DataComponents.CUSTOM_DATA` → `CompatHandlers.ITEM_DATA.setString()`
+
+- ✅ **T4-2: SavedData Migration (7 files)**
+  - `ChronoDawnGlobalState.java`, `ChronoDawnWorldData.java`, `ChronoDawnTimeData.java`, `TimeKeeperVillageData.java`
+  - `DimensionStateData.java`, `PlayerProgressData.java`, `PortalRegistryData.java`
+  - Pattern: Extend `CompatSavedData`, implement `saveData(CompoundTag)` / `loadData(CompoundTag)`
+  - Result: Version-independent save/load logic
+
+- ✅ **T4-3: BlockEntity Migration (3 files)**
+  - `BossRoomDoorBlockEntity.java`, `ClockTowerTeleporterBlockEntity.java`, `BossRoomBoundaryMarkerBlockEntity.java`
+  - Pattern: Extend `CompatBlockEntity`, implement `saveData(CompoundTag)` / `loadData(CompoundTag)`
+
+- ✅ **T4-4: Extended API Survey**
+  - Identified additional version-specific APIs beyond initial 47 files
+  - Categories: TreeGrower, BootstrapContext, Entity APIs, Tooltip APIs, ArmorMaterial, GUI APIs
+
+- ✅ **T4-5: TreeGrower Migration (3 saplings × 2 versions = 6 files)**
+  - Version-specific implementations in `compat/v1_20_1/blocks/` and `compat/v1_21_1/blocks/`
+  - **1.20.1**: `AbstractTreeGrower` inheritance (custom inner class)
+  - **1.21.1**: `TreeGrower` instance usage
+  - Files: `TimeWoodSapling.java`, `AncientTimeWoodSapling.java`, `DarkTimeWoodSapling.java`
+  - Original files in `blocks/` removed
+
+- ✅ **T4-6: BootstrapContext Removal (3 files)**
+  - `FruitOfTimeTreeFeature.java`, `AncientTimeWoodTreeFeature.java`, `DarkTimeWoodTreeFeature.java`
+  - **Discovery**: `bootstrap()` methods were unused - tree configs are JSON-defined
+  - Solution: Removed `bootstrap()` and `createTreeConfiguration()` methods
+  - Result: Simplified to ResourceKey constants only (version-independent)
+
+**Remaining Tasks**:
+
+- 📋 **T4-7: Entity APIs (SynchedEntityData.Builder) - 5 files**
+  - TimeKeeperEntity, GearProjectileEntity, ClockworkColossusEntity, ChronosWardenEntity, TimeGuardianEntity
+
+- 📋 **T4-8: Tooltip APIs (TooltipContext) - 2 files**
+  - ChronoAegisItem, TimeCompassItem (appendHoverText method)
+
+- 📋 **T4-9: ArmorMaterial.Layer - 2 files**
+  - ClockstoneArmorMaterial, EnhancedClockstoneArmorMaterial
+
+- 📋 **T4-10: Remaining APIs - 3 files**
+  - ClientAdvancementsAccessor (AdvancementHolder)
+  - AnvilMenuMixin (DataComponents)
+  - EntryPageWidget (GUI APIs)
+
+- 📋 **T4-11: Final Verification**
+  - Build verification for both 1.20.1 and 1.21.1
+
+**Implementation Patterns Discovered**:
+
+1. **CompatSavedData/CompatBlockEntity Package Structure**:
+   ```
+   Location: compat/v1_20_1/CompatSavedData.java, compat/v1_21_1/CompatSavedData.java
+   Package: package com.chronodawn.compat;  // Version-neutral
+   Import:  import com.chronodawn.compat.CompatSavedData;  // No version in path
+   ```
+   Gradle exclude rules select correct implementation at build time.
+
+2. **Version-Specific File Separation**:
+   - Required when API structure fundamentally differs (inheritance → instantiation)
+   - Both versions use same package declaration for seamless integration
+   - Example: TreeGrower (AbstractTreeGrower vs TreeGrower class)
+
+3. **Code Simplification Opportunities**:
+   - Data generation code (bootstrap methods) may be unused
+   - Modern Minecraft uses JSON-based feature definitions
+   - Verify actual usage before implementing compatibility layer
+
+**Build Status**:
+- **1.21.1**: ✅ BUILD SUCCESSFUL
+- **1.20.1**: ❌ BUILD FAILED (~12 files remaining)
+
+**Files Migrated**: 26 files (20 original + 6 version-specific additions)
+**Estimated Remaining**: ~12 files
+
 ---
 
 ### Phase 5: Build Script Enhancement (Priority: Low)

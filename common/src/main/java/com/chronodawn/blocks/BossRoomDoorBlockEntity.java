@@ -1,9 +1,11 @@
 package com.chronodawn.blocks;
 
+import com.chronodawn.compat.CompatBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
@@ -20,7 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
  *
  * The door type is stored in NBT and set in structure files.
  */
-public class BossRoomDoorBlockEntity extends BlockEntity {
+public class BossRoomDoorBlockEntity extends CompatBlockEntity {
     private String doorType = "entrance"; // Default to entrance door
 
     public BossRoomDoorBlockEntity(BlockPos pos, BlockState state) {
@@ -85,14 +87,12 @@ public class BossRoomDoorBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
+    public void saveData(CompoundTag tag) {
         tag.putString("DoorType", doorType);
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadAdditional(tag, registries);
+    public void loadData(CompoundTag tag) {
         if (tag.contains("DoorType")) {
             doorType = tag.getString("DoorType");
         }

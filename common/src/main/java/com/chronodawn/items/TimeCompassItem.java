@@ -1,12 +1,13 @@
 package com.chronodawn.items;
 
+import com.chronodawn.compat.CompatHandlers;
 import com.chronodawn.registry.ModSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.core.HolderSet;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -20,7 +21,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.Structure;
 
@@ -91,10 +91,8 @@ public class TimeCompassItem extends Item {
     public static ItemStack createCompass(String structureType) {
         ItemStack stack = new ItemStack(com.chronodawn.registry.ModItems.TIME_COMPASS.get());
 
-        // Store structure type in custom data component
-        CustomData.update(DataComponents.CUSTOM_DATA, stack, tag -> {
-            tag.putString(NBT_TARGET_STRUCTURE, structureType);
-        });
+        // Store structure type in custom data (version-independent)
+        CompatHandlers.ITEM_DATA.setString(stack, NBT_TARGET_STRUCTURE, structureType);
 
         return stack;
     }
@@ -106,11 +104,8 @@ public class TimeCompassItem extends Item {
      * @return Structure type string, or null if not set
      */
     public static String getTargetStructure(ItemStack stack) {
-        CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
-        if (customData != null) {
-            return customData.copyTag().getString(NBT_TARGET_STRUCTURE);
-        }
-        return null;
+        String target = CompatHandlers.ITEM_DATA.getString(stack, NBT_TARGET_STRUCTURE);
+        return target.isEmpty() ? null : target;
     }
 
     /**
@@ -120,7 +115,7 @@ public class TimeCompassItem extends Item {
      * @param globalPos Target position (dimension + coordinates)
      */
     public static void setTargetPosition(ItemStack stack, GlobalPos globalPos) {
-        CustomData.update(DataComponents.CUSTOM_DATA, stack, tag -> {
+        CompatHandlers.ITEM_DATA.updateCustomData(stack, tag -> {
             tag.putInt(NBT_TARGET_POS_X, globalPos.pos().getX());
             tag.putInt(NBT_TARGET_POS_Y, globalPos.pos().getY());
             tag.putInt(NBT_TARGET_POS_Z, globalPos.pos().getZ());
@@ -135,25 +130,22 @@ public class TimeCompassItem extends Item {
      * @return Target position, or empty if not set
      */
     public static Optional<GlobalPos> getTargetPosition(ItemStack stack) {
-        CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
-        if (customData != null) {
-            var tag = customData.copyTag();
-            if (tag.contains(NBT_TARGET_POS_X) && tag.contains(NBT_TARGET_DIMENSION)) {
-                int x = tag.getInt(NBT_TARGET_POS_X);
-                int y = tag.getInt(NBT_TARGET_POS_Y);
-                int z = tag.getInt(NBT_TARGET_POS_Z);
-                String dimensionStr = tag.getString(NBT_TARGET_DIMENSION);
+        CompoundTag tag = CompatHandlers.ITEM_DATA.getCustomData(stack);
+        if (tag.contains(NBT_TARGET_POS_X) && tag.contains(NBT_TARGET_DIMENSION)) {
+            int x = tag.getInt(NBT_TARGET_POS_X);
+            int y = tag.getInt(NBT_TARGET_POS_Y);
+            int z = tag.getInt(NBT_TARGET_POS_Z);
+            String dimensionStr = tag.getString(NBT_TARGET_DIMENSION);
 
-                try {
-                    ResourceKey<Level> dimension = ResourceKey.create(
-                        net.minecraft.core.registries.Registries.DIMENSION,
-                        net.minecraft.resources.ResourceLocation.parse(dimensionStr)
-                    );
-                    return Optional.of(GlobalPos.of(dimension, new BlockPos(x, y, z)));
-                } catch (Exception e) {
-                    // Invalid dimension string
-                    return Optional.empty();
-                }
+            try {
+                ResourceKey<Level> dimension = ResourceKey.create(
+                    net.minecraft.core.registries.Registries.DIMENSION,
+                    net.minecraft.resources.ResourceLocation.parse(dimensionStr)
+                );
+                return Optional.of(GlobalPos.of(dimension, new BlockPos(x, y, z)));
+            } catch (Exception e) {
+                // Invalid dimension string
+                return Optional.empty();
             }
         }
         return Optional.empty();

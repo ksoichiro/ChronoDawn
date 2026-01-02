@@ -1,4 +1,4 @@
-package com.chronodawn.compat.v1_21_1;
+package com.chronodawn.compat;
 
 import com.chronodawn.compat.BlockEntityDataHandler;
 import net.minecraft.core.BlockPos;

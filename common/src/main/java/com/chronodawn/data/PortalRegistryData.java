@@ -95,7 +95,7 @@ public class PortalRegistryData extends ChronoDawnWorldData {
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
+    public CompoundTag saveData(CompoundTag tag) {
         ListTag portalList = new ListTag();
 
         for (PortalEntry entry : portals.values()) {
@@ -108,6 +108,18 @@ public class PortalRegistryData extends ChronoDawnWorldData {
 
         tag.put("portals", portalList);
         return tag;
+    }
+
+    @Override
+    public void loadData(CompoundTag tag) {
+        ListTag portalList = tag.getList("portals", Tag.TAG_COMPOUND);
+
+        for (int i = 0; i < portalList.size(); i++) {
+            CompoundTag portalTag = portalList.getCompound(i);
+            UUID portalId = portalTag.getUUID("portal_id");
+            // TODO: Load dimension, position, state, linkedPortalId from portalTag
+            // This will be fully implemented in future phases when portal system is added
+        }
     }
 
     // TODO: Add portal management methods in future phases:

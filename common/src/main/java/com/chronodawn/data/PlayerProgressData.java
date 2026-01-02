@@ -89,7 +89,7 @@ public class PlayerProgressData extends ChronoDawnWorldData {
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
+    public CompoundTag saveData(CompoundTag tag) {
         CompoundTag playersTag = new CompoundTag();
 
         for (Map.Entry<UUID, PlayerProgress> entry : playerData.entrySet()) {
@@ -115,6 +115,31 @@ public class PlayerProgressData extends ChronoDawnWorldData {
 
         tag.put("players", playersTag);
         return tag;
+    }
+
+    @Override
+    public void loadData(CompoundTag tag) {
+        CompoundTag playersTag = tag.getCompound("players");
+
+        for (String key : playersTag.getAllKeys()) {
+            UUID playerId = UUID.fromString(key);
+            CompoundTag playerTag = playersTag.getCompound(key);
+
+            PlayerProgress progress = new PlayerProgress();
+            progress.hasChronosEye = playerTag.getBoolean("has_chronos_eye");
+
+            ListTag portalList = playerTag.getList("stabilized_portals", Tag.TAG_STRING);
+            for (int i = 0; i < portalList.size(); i++) {
+                progress.stabilizedPortals.add(UUID.fromString(portalList.getString(i)));
+            }
+
+            ListTag bossList = playerTag.getList("defeated_bosses", Tag.TAG_STRING);
+            for (int i = 0; i < bossList.size(); i++) {
+                progress.defeatedBosses.add(bossList.getString(i));
+            }
+
+            playerData.put(playerId, progress);
+        }
     }
 
     /**

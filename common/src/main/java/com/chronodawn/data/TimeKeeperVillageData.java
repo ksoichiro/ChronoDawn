@@ -6,6 +6,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
+import com.chronodawn.compat.CompatSavedData;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 
 /**
@@ -19,7 +20,7 @@ import net.minecraft.world.level.storage.DimensionDataStorage;
  *
  * Task: T276 [US2] Implement TimeKeeperVillagePlacer.java
  */
-public class TimeKeeperVillageData extends SavedData {
+public class TimeKeeperVillageData extends CompatSavedData {
     private static final String DATA_NAME = "chronodawn_time_keeper_village";
 
     private boolean placed = false;
@@ -56,28 +57,32 @@ public class TimeKeeperVillageData extends SavedData {
      */
     public static TimeKeeperVillageData load(CompoundTag tag, HolderLookup.Provider provider) {
         TimeKeeperVillageData data = new TimeKeeperVillageData();
-        data.placed = tag.getBoolean("Placed");
-
-        if (tag.contains("PosX") && tag.contains("PosY") && tag.contains("PosZ")) {
-            data.position = new BlockPos(
-                tag.getInt("PosX"),
-                tag.getInt("PosY"),
-                tag.getInt("PosZ")
-            );
-        }
-
+        data.loadData(tag);
         ChronoDawn.LOGGER.info("Loaded TimeKeeperVillageData: placed={}, position={}",
             data.placed, data.position);
         return data;
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag, HolderLookup.Provider provider) {
+    public CompoundTag saveData(CompoundTag tag) {
         tag.putBoolean("Placed", placed);
         tag.putInt("PosX", position.getX());
         tag.putInt("PosY", position.getY());
         tag.putInt("PosZ", position.getZ());
         return tag;
+    }
+
+    @Override
+    public void loadData(CompoundTag tag) {
+        placed = tag.getBoolean("Placed");
+
+        if (tag.contains("PosX") && tag.contains("PosY") && tag.contains("PosZ")) {
+            position = new BlockPos(
+                tag.getInt("PosX"),
+                tag.getInt("PosY"),
+                tag.getInt("PosZ")
+            );
+        }
     }
 
     /**

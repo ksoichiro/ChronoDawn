@@ -1,6 +1,7 @@
 package com.chronodawn.data;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.compat.CompatSavedData;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.MinecraftServer;
@@ -26,7 +27,7 @@ import net.minecraft.world.level.storage.DimensionDataStorage;
  * This ensures that once a player enters ChronoDawn, they cannot create
  * new portals with Time Hourglass until they use Portal Stabilizer.
  */
-public class ChronoDawnGlobalState extends SavedData {
+public class ChronoDawnGlobalState extends CompatSavedData {
     private static final String DATA_NAME = "chronodawn_global_state";
 
     private boolean hasEnteredChronoDawn = false;
@@ -69,20 +70,25 @@ public class ChronoDawnGlobalState extends SavedData {
      */
     public static ChronoDawnGlobalState load(CompoundTag tag, HolderLookup.Provider provider) {
         ChronoDawnGlobalState state = new ChronoDawnGlobalState();
-        state.hasEnteredChronoDawn = tag.getBoolean("HasEnteredChronoDawn");
-        state.isPortalStabilized = tag.getBoolean("IsPortalStabilized");
-        state.isTyrantDefeated = tag.getBoolean("IsTyrantDefeated");
+        state.loadData(tag);
         ChronoDawn.LOGGER.info("Loaded ChronoDawnGlobalState: hasEntered={}, isStabilized={}, tyrantDefeated={}",
             state.hasEnteredChronoDawn, state.isPortalStabilized, state.isTyrantDefeated);
         return state;
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag, HolderLookup.Provider provider) {
+    public CompoundTag saveData(CompoundTag tag) {
         tag.putBoolean("HasEnteredChronoDawn", hasEnteredChronoDawn);
         tag.putBoolean("IsPortalStabilized", isPortalStabilized);
         tag.putBoolean("IsTyrantDefeated", isTyrantDefeated);
         return tag;
+    }
+
+    @Override
+    public void loadData(CompoundTag tag) {
+        hasEnteredChronoDawn = tag.getBoolean("HasEnteredChronoDawn");
+        isPortalStabilized = tag.getBoolean("IsPortalStabilized");
+        isTyrantDefeated = tag.getBoolean("IsTyrantDefeated");
     }
 
     /**
