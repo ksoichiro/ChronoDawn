@@ -536,3 +536,103 @@
     - ✅ Translations verified
   - **Priority**: Medium (branding update)
 
+---
+
+### Playtest Improvements - Structure Generation
+
+**Purpose**: Fix structure generation issues discovered through playtesting
+
+- [X] T309 [P] Fix Phantom Catacombs structure search freezing (2026-01-02)
+  - **Issue**: When using structure search for Phantom Catacombs, the world freezes, especially in multiplayer where other players get disconnected and boss room placement never completes
+  - **Root Cause**: Synchronous marker search scanning up to 34M blocks on main thread
+  - **Solution Implemented**: Multi-tick state machine
+    - Process 1 chunk per tick to avoid main thread blocking
+    - State phases: SEARCHING_MARKERS → EVALUATING_CANDIDATES → PLACING_ROOMS → COMPLETED
+    - Thread-safe state management using ConcurrentHashMap
+    - Dimension filtering to prevent cross-dimension interference
+    - StructurePiece-based chunk collection for accurate coverage
+  - **Files Modified**:
+    - `common/src/main/java/com/chronodawn/worldgen/spawning/PhantomCatacombsBossRoomPlacer.java`
+  - **Testing**: Verified on both Fabric and NeoForge, multiplayer stability confirmed
+  - **Commits**:
+    - 6e80ceb (feat: implement multi-tick state machine)
+    - 1a956b6 (fix: use ConcurrentHashMap for thread safety)
+    - d5c81f6 (refactor: reduce excessive logging)
+  - **Priority**: Critical (game-breaking bug)
+
+---
+
+### Performance & Thread Safety Audit (Critical)
+
+**Purpose**: Identify and fix potential performance and thread safety issues across all server-side code
+
+**Background**: Lessons learned from T309 (Phantom Catacombs freezing fix):
+1. Main thread blocking causes world freezing and player disconnections in multiplayer
+2. Non-thread-safe collections (HashMap, HashSet, ArrayList) cause race conditions in multi-threaded server environment
+
+**Priority**: Critical (affects all multiplayer gameplay)
+
+- [ ] T428 [Performance] Audit and fix main thread blocking in structure generation
+  - **Issue**: Long-running synchronous operations on main thread cause world freezing
+  - **Investigation**:
+    - Scan all structure generation code for large-scale block scanning (e.g., Boss Room Placers)
+    - Identify chunk-loading operations that may block main thread
+    - Check for nested loops scanning large areas (>10,000 blocks)
+  - **Files to check**:
+    - `common/src/main/java/com/chronodawn/worldgen/spawning/PhantomCatacombsBossRoomPlacer.java` ✓ (Fixed in T309)
+    - Other Boss Room Placers (if any exist)
+    - Structure generation classes in `common/src/main/java/com/chronodawn/worldgen/structures/`
+  - **Solution patterns**:
+    - Multi-tick state machine (process 1 chunk per tick)
+    - Async processing with main thread synchronization
+    - Limit search area to reasonable bounds
+  - **Success criteria**:
+    - No single-tick operations scanning >1,000 blocks
+    - No world freezing during structure generation in multiplayer
+    - Server TPS remains stable during structure placement
+  - **Reference**: T309 implementation (PhantomCatacombsBossRoomPlacer.java multi-tick state machine)
+  - **Priority**: Critical
+  - **Risk**: High
+
+- [ ] T429 [Thread Safety] Audit and fix non-thread-safe collection usage
+  - **Issue**: HashMap, HashSet, ArrayList are not thread-safe and cause race conditions in multiplayer
+  - **Investigation**:
+    - Scan all server-side shared state for non-thread-safe collections
+    - Identify collections accessed by multiple dimensions/threads simultaneously
+    - Check static fields and cached data structures
+  - **Files to check**:
+    - `common/src/main/java/com/chronodawn/worldgen/spawning/PhantomCatacombsBossRoomPlacer.java` ✓ (Fixed in T309)
+    - Other Boss Spawner classes (`TemporalPhantomSpawner.java`, `ChronosWardenSpawner.java`, etc.)
+    - Registry classes (`PortalRegistry.java`, etc.)
+    - Event handlers (`EntityEventHandler.java`, `BlockEventHandler.java`, etc.)
+  - **Solution patterns**:
+    - Replace HashMap → ConcurrentHashMap
+    - Replace HashSet → ConcurrentHashMap.newKeySet()
+    - Replace ArrayList → CopyOnWriteArrayList (if read-heavy)
+    - Use atomic operations (compute, computeIfAbsent, etc.)
+  - **Search commands**:
+    ```bash
+    # Find HashMap usage
+    grep -r "new HashMap<" --include="*.java" common/src/main/java/com/chronodawn/
+    # Find HashSet usage
+    grep -r "new HashSet<" --include="*.java" common/src/main/java/com/chronodawn/
+    # Find ArrayList in static fields
+    grep -r "static.*new ArrayList<" --include="*.java" common/src/main/java/com/chronodawn/
+    ```
+  - **Success criteria**:
+    - No HashMap/HashSet/ArrayList in server-side shared state
+    - All static collections use thread-safe implementations
+    - No race conditions in multiplayer testing
+  - **Reference**: T309 fix (ConcurrentHashMap usage in PhantomCatacombsBossRoomPlacer.java)
+  - **Priority**: Critical
+  - **Risk**: High
+
+**Estimated Total Effort**: 1-2 days (T428: 4-6 hours, T429: 4-6 hours)
+
+**Testing Requirements**:
+- Single-player: No performance degradation
+- Multiplayer: No world freezing with 2+ players
+- Multiplayer: No race conditions when multiple players trigger same structure/boss spawn
+
+---
+
