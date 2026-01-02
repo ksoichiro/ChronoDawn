@@ -820,6 +820,30 @@
 
 ---
 
+### Playtest Improvements - Structure Generation
+
+**Purpose**: Fix structure generation issues discovered through playtesting
+
+- [X] T309 [P] Fix Phantom Catacombs structure search freezing (2026-01-02)
+  - **Issue**: When using structure search for Phantom Catacombs, the world freezes, especially in multiplayer where other players get disconnected and boss room placement never completes
+  - **Root Cause**: Synchronous marker search scanning up to 34M blocks on main thread
+  - **Solution Implemented**: Multi-tick state machine
+    - Process 1 chunk per tick to avoid main thread blocking
+    - State phases: SEARCHING_MARKERS → EVALUATING_CANDIDATES → PLACING_ROOMS → COMPLETED
+    - Thread-safe state management using ConcurrentHashMap
+    - Dimension filtering to prevent cross-dimension interference
+    - StructurePiece-based chunk collection for accurate coverage
+  - **Files Modified**:
+    - `common/src/main/java/com/chronodawn/worldgen/spawning/PhantomCatacombsBossRoomPlacer.java`
+  - **Testing**: Verified on both Fabric and NeoForge, multiplayer stability confirmed
+  - **Commits**:
+    - 6e80ceb (feat: implement multi-tick state machine)
+    - 1a956b6 (fix: use ConcurrentHashMap for thread safety)
+    - d5c81f6 (refactor: reduce excessive logging)
+  - **Priority**: Critical (game-breaking bug)
+
+---
+
 ### Performance & Thread Safety Audit (Critical)
 
 **Purpose**: Identify and fix potential performance and thread safety issues across all server-side code
@@ -885,7 +909,51 @@
   - **Priority**: Critical
   - **Risk**: High
 
-**Estimated Total Effort**: 1-2 days (T428: 4-6 hours, T429: 4-6 hours)
+- [ ] T430 [Dimension Isolation] Audit and fix dimension filtering in chunk processing
+  - **Issue**: Processing logic may handle entities/structures from all dimensions instead of current dimension only
+  - **Investigation**:
+    - Scan all server-level tick handlers that process chunks/structures/entities
+    - Identify code that stores state globally without dimension filtering
+    - Check for cross-dimension interference in structure generation and entity processing
+  - **Files to check**:
+    - `common/src/main/java/com/chronodawn/worldgen/spawning/PhantomCatacombsBossRoomPlacer.java` ✓ (Fixed in T309)
+    - Other Boss Spawner classes with tick-based processing
+    - Entity tick handlers (`EntityEventHandler.java`)
+    - Structure generation classes
+  - **Solution patterns**:
+    - Store dimension ID alongside structure/entity state
+    - Filter by `level.dimension().location()` before processing
+    - Use dimension-keyed maps: `Map<ResourceLocation, Map<?, ?>>`
+  - **Example code pattern**:
+    ```java
+    // Store dimension ID with state
+    private static class ProcessingState {
+        ResourceLocation dimensionId;
+        // ... other fields
+    }
+
+    // Filter by dimension before processing
+    public static void progressAllProcessing(ServerLevel level) {
+        ResourceLocation currentDimension = level.dimension().location();
+
+        for (Map.Entry<?, ProcessingState> entry : states.entrySet()) {
+            ProcessingState state = entry.getValue();
+            if (state.dimensionId.equals(currentDimension)) {
+                // Process only structures belonging to current dimension
+                progressProcessing(level, state);
+            }
+        }
+    }
+    ```
+  - **Success criteria**:
+    - Each dimension processes only its own structures/entities
+    - No cross-dimension interference in multiplayer
+    - Overworld/Nether/End dimensions don't process Chrono Dawn structures
+  - **Reference**: T309 fix (dimension filtering in PhantomCatacombsBossRoomPlacer.java:1277-1292)
+  - **Priority**: Critical
+  - **Risk**: High
+
+**Estimated Total Effort**: 1.5-2.5 days (T428: 4-6 hours, T429: 4-6 hours, T430: 4-6 hours)
 
 **Testing Requirements**:
 - Single-player: No performance degradation
