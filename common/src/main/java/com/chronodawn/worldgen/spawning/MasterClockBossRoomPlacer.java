@@ -74,10 +74,79 @@ public class MasterClockBossRoomPlacer {
     // Thread-safe: ConcurrentHashMap prevents race conditions in multiplayer
     private static final Map<ResourceLocation, Set<BlockPos>> processedStructures = new ConcurrentHashMap<>();
 
+    // Track structures currently being processed (multi-tick state machine)
+    // Thread-safe: ConcurrentHashMap prevents race conditions in multiplayer
+    private static final Map<BlockPos, StructureProcessingState> processingStates = new ConcurrentHashMap<>();
+
     // Check interval (in ticks) - check every 30 seconds
     private static final int CHECK_INTERVAL = 600;
     // Thread-safe: ConcurrentHashMap prevents race conditions in multiplayer
     private static final Map<ResourceLocation, Integer> tickCounters = new ConcurrentHashMap<>();
+
+    /**
+     * Processing state enum for multi-tick state machine.
+     * Each state represents a phase of the boss room placement process.
+     */
+    private enum ProcessingPhase {
+        SEARCHING_SURFACE_MARKER,  // Searching for Dropper marker at surface (chunk by chunk)
+        SEARCHING_JIGSAW,          // Searching for Jigsaw block (chunk by chunk)
+        PLACING_CORRIDOR,          // Placing corridor at Y=-30
+        PLACING_STAIRS,            // Placing stairs segments (segment by segment)
+        PLACING_BOSS_ROOM,         // Placing boss room at Y=-50
+        FINALIZING,                // Final cleanup and waterlogging
+        COMPLETED                  // Processing completed
+    }
+
+    /**
+     * State object for tracking multi-tick processing of a structure.
+     * This allows processing to be spread across multiple ticks to prevent freezing.
+     */
+    private static class StructureProcessingState {
+        final BlockPos structureOrigin;
+        final ChunkPos initialChunkPos;
+        final ResourceLocation dimensionId;
+        ProcessingPhase phase;
+
+        // Marker search state
+        List<ChunkPos> structureChunks;
+        int currentChunkIndex;
+        BlockPos surfaceMarkerPos;
+        Direction surfaceMarkerDirection; // Direction from dropper
+        BlockPos surfaceJigsawPos;
+        int searchRetryCount;
+
+        // Stairs placement state
+        List<BlockPos> stairsPositions;
+        int currentStairsIndex;
+        List<net.minecraft.world.level.levelgen.structure.BoundingBox> protectedAreas;
+        net.minecraft.core.Vec3i stairsTemplateSize;
+        Rotation stairsRotation;
+
+        // Templates
+        StructureTemplate corridorTemplate;
+        StructureTemplate stairsTemplate;
+        StructureTemplate stairsBottomTemplate;
+        StructureTemplate bossRoomTemplate;
+
+        // Boss room position
+        BlockPos bossRoomPos;
+        Rotation bossRoomRotation;
+
+        StructureProcessingState(BlockPos origin, ChunkPos chunkPos, ResourceLocation dimId) {
+            this.structureOrigin = origin;
+            this.initialChunkPos = chunkPos;
+            this.dimensionId = dimId;
+            this.phase = ProcessingPhase.SEARCHING_SURFACE_MARKER;
+            this.structureChunks = new ArrayList<>();
+            this.currentChunkIndex = 0;
+            this.surfaceMarkerPos = null;
+            this.surfaceJigsawPos = null;
+            this.searchRetryCount = 0;
+            this.stairsPositions = new ArrayList<>();
+            this.currentStairsIndex = 0;
+            this.protectedAreas = new ArrayList<>();
+        }
+    }
 
     /**
      * Check if a chunk contains a Master Clock structure.
@@ -1290,7 +1359,9 @@ public class MasterClockBossRoomPlacer {
     }
 
     /**
-     * Process a Master Clock structure and place boss_room if not already placed.
+     * Initialize processing for a Master Clock structure.
+     * Creates a state machine entry if structure is found and not already processed.
+     * Actual processing happens in progressAllProcessing().
      */
     public static void processStructure(ServerLevel level, ChunkPos chunkPos) {
         ResourceLocation dimensionId = level.dimension().location();
@@ -1308,83 +1379,30 @@ public class MasterClockBossRoomPlacer {
             return;
         }
 
+        // Already processed
         if (dimensionProcessed.contains(structureOrigin)) {
             return;
         }
 
+        // Already processing
+        if (processingStates.containsKey(structureOrigin)) {
+            return;
+        }
+
+        // Initialize new processing state
         ChronoDawn.LOGGER.info(
-            "Found Master Clock structure at chunk {} (origin: {})",
+            "Found Master Clock structure at chunk {} (origin: {}), initializing multi-tick processing",
             chunkPos,
             structureOrigin
         );
 
-        // Step 1: Find Dropper marker (connection point and direction)
-        BlockPos surfaceDropperPos = findSurfaceDropperMarker(level, structureOrigin);
-        if (surfaceDropperPos == null) {
-            ChronoDawn.LOGGER.info("No Surface Dropper marker found yet, will retry later");
-            return;
-        }
-
-        // Step 2: Get horizontal direction from Dropper facing
-        BlockState dropperState = level.getBlockState(surfaceDropperPos);
-        Direction horizontalDirection = dropperState.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING);
-
-        // Verify it's a horizontal direction
-        if (horizontalDirection == Direction.UP || horizontalDirection == Direction.DOWN) {
-            ChronoDawn.LOGGER.error("Dropper must face horizontally, not {}", horizontalDirection);
-            return;
-        }
-
-        ChronoDawn.LOGGER.info("Surface Dropper marker horizontal direction: {}", horizontalDirection);
-
-        // Remove the Dropper marker
-        level.setBlock(surfaceDropperPos, Blocks.AIR.defaultBlockState(), 3);
-
-        // Step 3: Place stairs dynamically from Dropper position (connection point)
-        StairsPlacementResult stairsResult = placeStairsDynamically(level, surfaceDropperPos, horizontalDirection, CORRIDOR_Y);
-        if (stairsResult == null) {
-            ChronoDawn.LOGGER.error("Failed to place stairs");
-            return;
-        }
-
-        // Step 4: Get actual Jigsaw Block facing direction from stairs_bottom
-        BlockState jigsawState = level.getBlockState(stairsResult.stairsBottomJigsawPos);
-        if (!jigsawState.is(Blocks.JIGSAW)) {
-            ChronoDawn.LOGGER.error("Expected Jigsaw Block at stairs end {}, but found: {}",
-                stairsResult.stairsBottomJigsawPos, jigsawState.getBlock());
-            return;
-        }
-
-        var jigsawOrientation = jigsawState.getValue(net.minecraft.world.level.block.JigsawBlock.ORIENTATION);
-        Direction jigsawFacing = jigsawOrientation.front();
-        ChronoDawn.LOGGER.info("Using Jigsaw Block facing {} for corridor placement", jigsawFacing);
-
-        // Step 5: Place corridor at stairs end using actual Jigsaw facing
-        CorridorPlacementResult corridorResult = placeCorridor(level, stairsResult.stairsBottomJigsawPos, jigsawFacing,
-            stairsResult.jigsawsToRemove, stairsResult.stairsPositions, stairsResult.stairsTemplateSize,
-            stairsResult.stairsRotation, stairsResult.protectedAreas);
-        if (corridorResult == null) {
-            ChronoDawn.LOGGER.error("Failed to place corridor");
-            return;
-        }
-
-        // Step 6: Place boss_room connected to corridor via Jigsaw
-        if (placeBossRoom(level, corridorResult.jigsawPos, corridorResult.rotation,
-                corridorResult.stairsPositions, corridorResult.stairsTemplateSize, corridorResult.stairsRotation,
-                corridorResult.protectedAreas)) {
-            ChronoDawn.LOGGER.info(
-                "Successfully placed boss_room for Master Clock at {}",
-                structureOrigin
-            );
-        } else {
-            ChronoDawn.LOGGER.error("Failed to place boss_room");
-        }
-
-        dimensionProcessed.add(structureOrigin);
+        StructureProcessingState state = new StructureProcessingState(structureOrigin, chunkPos, dimensionId);
+        processingStates.put(structureOrigin, state);
     }
 
     /**
      * Check for Master Clock structures and place boss_room if needed.
+     * Uses multi-tick state machine to prevent freezing (T428 fix).
      */
     public static void checkAndPlaceRooms(ServerLevel level) {
         // Only process Chrono Dawn dimension (Master Clock only spawns there)
@@ -1402,6 +1420,8 @@ public class MasterClockBossRoomPlacer {
         int currentTick = tickCounters.compute(dimensionId, (k, v) -> (v == null ? 0 : v) + 1);
 
         if (currentTick < CHECK_INTERVAL) {
+            // Still progress active processing states even between checks
+            progressAllProcessing(level);
             return;
         }
         tickCounters.put(dimensionId, 0);
@@ -1410,6 +1430,7 @@ public class MasterClockBossRoomPlacer {
             return;
         }
 
+        // Initialize processing for structures near players
         for (var player : level.players()) {
             ChunkPos playerChunkPos = new ChunkPos(player.blockPosition());
 
@@ -1420,6 +1441,233 @@ public class MasterClockBossRoomPlacer {
                 }
             }
         }
+
+        // Progress all active processing states
+        progressAllProcessing(level);
+    }
+
+    /**
+     * Progress all active processing states by one step.
+     * Called every tick to advance multi-tick state machine.
+     */
+    private static void progressAllProcessing(ServerLevel level) {
+        if (processingStates.isEmpty()) {
+            return;
+        }
+
+        // Process each active state
+        List<BlockPos> completedStructures = new ArrayList<>();
+
+        for (Map.Entry<BlockPos, StructureProcessingState> entry : processingStates.entrySet()) {
+            BlockPos structureOrigin = entry.getKey();
+            StructureProcessingState state = entry.getValue();
+
+            // Verify dimension matches
+            if (!state.dimensionId.equals(level.dimension().location())) {
+                continue;
+            }
+
+            // Process current phase
+            switch (state.phase) {
+                case SEARCHING_SURFACE_MARKER -> progressSearchSurfaceMarker(level, state);
+                case SEARCHING_JIGSAW -> progressSearchJigsaw(level, state);
+                case PLACING_CORRIDOR -> progressPlacingCorridor(level, state);
+                case PLACING_STAIRS -> progressPlacingStairs(level, state);
+                case PLACING_BOSS_ROOM -> progressPlacingBossRoom(level, state);
+                case FINALIZING -> progressFinalizing(level, state);
+                case COMPLETED -> completedStructures.add(structureOrigin);
+            }
+        }
+
+        // Remove completed states and mark as processed
+        for (BlockPos structureOrigin : completedStructures) {
+            processingStates.remove(structureOrigin);
+            Set<BlockPos> dimensionProcessed = processedStructures.get(level.dimension().location());
+            if (dimensionProcessed != null) {
+                dimensionProcessed.add(structureOrigin);
+            }
+            ChronoDawn.LOGGER.info("Completed boss_room placement for Master Clock at {}", structureOrigin);
+        }
+    }
+
+    /**
+     * Phase 1: Search for Surface Dropper marker (chunk by chunk).
+     */
+    private static void progressSearchSurfaceMarker(ServerLevel level, StructureProcessingState state) {
+        // Initialize chunk list on first call
+        if (state.structureChunks.isEmpty()) {
+            // Create search area around structure origin
+            // Master Clock structures are typically 3-5 chunks across
+            int searchRadius = 3; // chunks
+            ChunkPos origin = new ChunkPos(state.structureOrigin);
+
+            for (int cx = -searchRadius; cx <= searchRadius; cx++) {
+                for (int cz = -searchRadius; cz <= searchRadius; cz++) {
+                    state.structureChunks.add(new ChunkPos(origin.x + cx, origin.z + cz));
+                }
+            }
+
+            ChronoDawn.LOGGER.debug("Master Clock at {}: searching {} chunks for surface marker",
+                state.structureOrigin, state.structureChunks.size());
+        }
+
+        // Process one chunk per tick
+        if (state.currentChunkIndex < state.structureChunks.size()) {
+            ChunkPos chunkPos = state.structureChunks.get(state.currentChunkIndex);
+
+            // Search this chunk for Dropper
+            BlockPos chunkMin = chunkPos.getWorldPosition();
+            for (int x = 0; x < 16; x++) {
+                for (int z = 0; z < 16; z++) {
+                    for (int y = level.getMinBuildHeight(); y < level.getMaxBuildHeight(); y++) {
+                        BlockPos pos = chunkMin.offset(x, y, z);
+                        BlockState blockState = level.getBlockState(pos);
+                        if (blockState.is(Blocks.DROPPER)) {
+                            state.surfaceMarkerPos = pos;
+                            state.surfaceMarkerDirection = blockState.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING);
+                            ChronoDawn.LOGGER.info("Found surface Dropper marker at {} facing {}", pos, state.surfaceMarkerDirection);
+                            state.phase = ProcessingPhase.SEARCHING_JIGSAW;
+                            return;
+                        }
+                    }
+                }
+            }
+
+            state.currentChunkIndex++;
+        } else {
+            // All chunks searched, no marker found
+            state.searchRetryCount++;
+            if (state.searchRetryCount > 3) {
+                ChronoDawn.LOGGER.warn("Master Clock at {}: no surface marker found after {} retries, giving up",
+                    state.structureOrigin, state.searchRetryCount);
+                state.phase = ProcessingPhase.COMPLETED;
+            } else {
+                ChronoDawn.LOGGER.debug("Master Clock at {}: no surface marker found, retry {}/3",
+                    state.structureOrigin, state.searchRetryCount);
+                state.currentChunkIndex = 0; // Retry from beginning
+            }
+        }
+    }
+
+    /**
+     * Phase 2: Search for Jigsaw block (not used in current implementation, skip to stairs).
+     */
+    private static void progressSearchJigsaw(ServerLevel level, StructureProcessingState state) {
+        // For now, skip jigsaw search and go directly to corridor placement
+        // This can be implemented if needed
+        state.phase = ProcessingPhase.PLACING_CORRIDOR;
+    }
+
+    /**
+     * Phase 3: Place corridor at Y=-30 (single step).
+     */
+    private static void progressPlacingCorridor(ServerLevel level, StructureProcessingState state) {
+        if (state.surfaceMarkerPos == null || state.surfaceMarkerDirection == null) {
+            ChronoDawn.LOGGER.error("Cannot place corridor: no surface marker or direction");
+            state.phase = ProcessingPhase.COMPLETED;
+            return;
+        }
+
+        // Verify direction is horizontal
+        if (state.surfaceMarkerDirection == Direction.UP || state.surfaceMarkerDirection == Direction.DOWN) {
+            ChronoDawn.LOGGER.error("Dropper must face horizontally, not {}", state.surfaceMarkerDirection);
+            state.phase = ProcessingPhase.COMPLETED;
+            return;
+        }
+
+        // Remove dropper marker
+        level.setBlock(state.surfaceMarkerPos, Blocks.AIR.defaultBlockState(), 3);
+        ChronoDawn.LOGGER.debug("Removed dropper marker at {}", state.surfaceMarkerPos);
+
+        // Initialize stairs placement (will be done in next phase)
+        state.phase = ProcessingPhase.PLACING_STAIRS;
+    }
+
+    /**
+     * Phase 4: Place stairs segments (one segment per tick).
+     */
+    private static void progressPlacingStairs(ServerLevel level, StructureProcessingState state) {
+        // For this initial implementation, place all stairs at once
+        // TODO: Split into segments in future optimization
+        if (state.surfaceMarkerPos == null || state.surfaceMarkerDirection == null) {
+            state.phase = ProcessingPhase.COMPLETED;
+            return;
+        }
+
+        // Place stairs using existing method (will optimize later)
+        StairsPlacementResult result = placeStairsDynamically(level, state.surfaceMarkerPos, state.surfaceMarkerDirection, CORRIDOR_Y);
+        if (result == null) {
+            ChronoDawn.LOGGER.error("Failed to place stairs");
+            state.phase = ProcessingPhase.COMPLETED;
+            return;
+        }
+
+        // Store stairs info for boss room placement
+        state.stairsPositions = result.stairsPositions;
+        state.protectedAreas = result.protectedAreas;
+
+        // Get jigsaw position and rotation for boss room
+        BlockState jigsawState = level.getBlockState(result.stairsBottomJigsawPos);
+        if (!jigsawState.is(Blocks.JIGSAW)) {
+            ChronoDawn.LOGGER.error("Expected jigsaw at stairs end");
+            state.phase = ProcessingPhase.COMPLETED;
+            return;
+        }
+
+        // Place corridor
+        var jigsawOrientation = jigsawState.getValue(net.minecraft.world.level.block.JigsawBlock.ORIENTATION);
+        Direction jigsawFacing = jigsawOrientation.front();
+
+        CorridorPlacementResult corridorResult = placeCorridor(level, result.stairsBottomJigsawPos, jigsawFacing,
+            result.jigsawsToRemove, result.stairsPositions, result.stairsTemplateSize,
+            result.stairsRotation, result.protectedAreas);
+
+        if (corridorResult == null) {
+            ChronoDawn.LOGGER.error("Failed to place corridor");
+            state.phase = ProcessingPhase.COMPLETED;
+            return;
+        }
+
+        // Store boss room info
+        state.bossRoomPos = corridorResult.jigsawPos;
+        state.bossRoomRotation = corridorResult.rotation;
+        state.stairsPositions = corridorResult.stairsPositions;
+        state.protectedAreas = corridorResult.protectedAreas;
+        state.stairsTemplateSize = result.stairsTemplateSize;
+        state.stairsRotation = result.stairsRotation;
+
+        state.phase = ProcessingPhase.PLACING_BOSS_ROOM;
+        ChronoDawn.LOGGER.debug("Stairs and corridor placed, proceeding to boss room");
+    }
+
+    /**
+     * Phase 5: Place boss room (single step).
+     */
+    private static void progressPlacingBossRoom(ServerLevel level, StructureProcessingState state) {
+        if (state.bossRoomPos == null) {
+            state.phase = ProcessingPhase.COMPLETED;
+            return;
+        }
+
+        boolean success = placeBossRoom(level, state.bossRoomPos, state.bossRoomRotation,
+            state.stairsPositions, state.stairsTemplateSize, state.stairsRotation, state.protectedAreas);
+
+        if (success) {
+            ChronoDawn.LOGGER.info("Boss room placed successfully at {}", state.bossRoomPos);
+            state.phase = ProcessingPhase.FINALIZING;
+        } else {
+            ChronoDawn.LOGGER.error("Failed to place boss room");
+            state.phase = ProcessingPhase.COMPLETED;
+        }
+    }
+
+    /**
+     * Phase 6: Finalize (cleanup, waterlogging, etc.).
+     */
+    private static void progressFinalizing(ServerLevel level, StructureProcessingState state) {
+        // Any final cleanup can go here
+        ChronoDawn.LOGGER.debug("Finalizing boss room placement for {}", state.structureOrigin);
+        state.phase = ProcessingPhase.COMPLETED;
     }
 
     /**
