@@ -6,8 +6,8 @@ import dev.architectury.event.events.common.TickEvent;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import net.minecraft.resources.ResourceKey;
 
 /**
@@ -28,16 +28,20 @@ import net.minecraft.resources.ResourceKey;
 public class TimeDistortionEventHandler {
 
     // Time speed multiplier per dimension
-    private static final Map<ResourceKey<net.minecraft.world.level.Level>, Float> timeSpeedMap = new HashMap<>();
+    // Thread-safe: ConcurrentHashMap prevents time corruption in multiplayer
+    private static final Map<ResourceKey<net.minecraft.world.level.Level>, Float> timeSpeedMap = new ConcurrentHashMap<>();
 
     // Current time until next speed change per dimension
-    private static final Map<ResourceKey<net.minecraft.world.level.Level>, Integer> timeUntilChangeMap = new HashMap<>();
+    // Thread-safe: ConcurrentHashMap prevents race conditions in multiplayer
+    private static final Map<ResourceKey<net.minecraft.world.level.Level>, Integer> timeUntilChangeMap = new ConcurrentHashMap<>();
 
     // Target time for sleep skip (null = no sleep skip in progress)
-    private static final Map<ResourceKey<net.minecraft.world.level.Level>, Long> sleepSkipTargetTimeMap = new HashMap<>();
+    // Thread-safe: ConcurrentHashMap prevents sleep skip failures in multiplayer
+    private static final Map<ResourceKey<net.minecraft.world.level.Level>, Long> sleepSkipTargetTimeMap = new ConcurrentHashMap<>();
 
     // Accumulated fractional ticks per dimension (for sub-tick time advancement)
-    private static final Map<ResourceKey<net.minecraft.world.level.Level>, Float> accumulatedTicksMap = new HashMap<>();
+    // Thread-safe: ConcurrentHashMap prevents lost time advancement in multiplayer
+    private static final Map<ResourceKey<net.minecraft.world.level.Level>, Float> accumulatedTicksMap = new ConcurrentHashMap<>();
 
     // How many ticks to add per game tick during sleep skip (gradual advancement)
     private static final long SLEEP_SKIP_TICKS_PER_TICK = 500;

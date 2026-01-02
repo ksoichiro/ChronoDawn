@@ -1,6 +1,7 @@
 package com.chronodawn.worldgen.spawning;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.registry.ModDimensions;
 import dev.architectury.event.events.common.TickEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -17,11 +18,10 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlac
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Master Clock Boss Room Placer
@@ -71,11 +71,13 @@ public class MasterClockBossRoomPlacer {
     private static final int CORRIDOR_Y = -30;
 
     // Track structure positions where we've already placed boss_room (per dimension)
-    private static final Map<ResourceLocation, Set<BlockPos>> processedStructures = new HashMap<>();
+    // Thread-safe: ConcurrentHashMap prevents race conditions in multiplayer
+    private static final Map<ResourceLocation, Set<BlockPos>> processedStructures = new ConcurrentHashMap<>();
 
     // Check interval (in ticks) - check every 30 seconds
     private static final int CHECK_INTERVAL = 600;
-    private static final Map<ResourceLocation, Integer> tickCounters = new HashMap<>();
+    // Thread-safe: ConcurrentHashMap prevents race conditions in multiplayer
+    private static final Map<ResourceLocation, Integer> tickCounters = new ConcurrentHashMap<>();
 
     /**
      * Check if a chunk contains a Master Clock structure.
@@ -1293,7 +1295,8 @@ public class MasterClockBossRoomPlacer {
     public static void processStructure(ServerLevel level, ChunkPos chunkPos) {
         ResourceLocation dimensionId = level.dimension().location();
 
-        processedStructures.putIfAbsent(dimensionId, new HashSet<>());
+        // Thread-safe: Use ConcurrentHashMap.newKeySet() for thread-safe Set
+        processedStructures.putIfAbsent(dimensionId, ConcurrentHashMap.newKeySet());
         Set<BlockPos> dimensionProcessed = processedStructures.get(dimensionId);
 
         if (!hasMasterClock(level, chunkPos)) {
@@ -1384,16 +1387,21 @@ public class MasterClockBossRoomPlacer {
      * Check for Master Clock structures and place boss_room if needed.
      */
     public static void checkAndPlaceRooms(ServerLevel level) {
+        // Only process Chrono Dawn dimension (Master Clock only spawns there)
+        if (!level.dimension().equals(ModDimensions.CHRONO_DAWN_DIMENSION)) {
+            return;
+        }
+
         ResourceLocation dimensionId = level.dimension().location();
 
-        processedStructures.putIfAbsent(dimensionId, new HashSet<>());
+        // Thread-safe: Use ConcurrentHashMap.newKeySet() for thread-safe Set
+        processedStructures.putIfAbsent(dimensionId, ConcurrentHashMap.newKeySet());
         tickCounters.putIfAbsent(dimensionId, 0);
 
-        int currentTick = tickCounters.get(dimensionId);
-        currentTick++;
+        // Thread-safe: Use atomic compute operation for tick counter increment
+        int currentTick = tickCounters.compute(dimensionId, (k, v) -> (v == null ? 0 : v) + 1);
 
         if (currentTick < CHECK_INTERVAL) {
-            tickCounters.put(dimensionId, currentTick);
             return;
         }
         tickCounters.put(dimensionId, 0);
