@@ -627,7 +627,51 @@
   - **Priority**: Critical
   - **Risk**: High
 
-**Estimated Total Effort**: 1-2 days (T428: 4-6 hours, T429: 4-6 hours)
+- [ ] T430 [Dimension Isolation] Audit and fix dimension filtering in chunk processing
+  - **Issue**: Processing logic may handle entities/structures from all dimensions instead of current dimension only
+  - **Investigation**:
+    - Scan all server-level tick handlers that process chunks/structures/entities
+    - Identify code that stores state globally without dimension filtering
+    - Check for cross-dimension interference in structure generation and entity processing
+  - **Files to check**:
+    - `common/src/main/java/com/chronodawn/worldgen/spawning/PhantomCatacombsBossRoomPlacer.java` ✓ (Fixed in T309)
+    - Other Boss Spawner classes with tick-based processing
+    - Entity tick handlers (`EntityEventHandler.java`)
+    - Structure generation classes
+  - **Solution patterns**:
+    - Store dimension ID alongside structure/entity state
+    - Filter by `level.dimension().location()` before processing
+    - Use dimension-keyed maps: `Map<ResourceLocation, Map<?, ?>>`
+  - **Example code pattern**:
+    ```java
+    // Store dimension ID with state
+    private static class ProcessingState {
+        ResourceLocation dimensionId;
+        // ... other fields
+    }
+
+    // Filter by dimension before processing
+    public static void progressAllProcessing(ServerLevel level) {
+        ResourceLocation currentDimension = level.dimension().location();
+
+        for (Map.Entry<?, ProcessingState> entry : states.entrySet()) {
+            ProcessingState state = entry.getValue();
+            if (state.dimensionId.equals(currentDimension)) {
+                // Process only structures belonging to current dimension
+                progressProcessing(level, state);
+            }
+        }
+    }
+    ```
+  - **Success criteria**:
+    - Each dimension processes only its own structures/entities
+    - No cross-dimension interference in multiplayer
+    - Overworld/Nether/End dimensions don't process Chrono Dawn structures
+  - **Reference**: T309 fix (dimension filtering in PhantomCatacombsBossRoomPlacer.java:1277-1292)
+  - **Priority**: Critical
+  - **Risk**: High
+
+**Estimated Total Effort**: 1.5-2.5 days (T428: 4-6 hours, T429: 4-6 hours, T430: 4-6 hours)
 
 **Testing Requirements**:
 - Single-player: No performance degradation
