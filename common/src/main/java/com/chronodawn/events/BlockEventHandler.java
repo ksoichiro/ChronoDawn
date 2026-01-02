@@ -122,7 +122,8 @@ public class BlockEventHandler {
                             var block = state.getBlock();
                             var blockId = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(block);
 
-                            if (blockId.getNamespace().equals("customportalapi") && blockId.getPath().equals("customportalblock")) {
+                            // T310: Check both Fabric and NeoForge portal block IDs
+                            if (isCustomPortalBlock(blockId)) {
                                 chronodawnLevel.removeBlock(checkPos, false);
                                 foundAndRemovedBlocks = true;
                             }
@@ -521,5 +522,31 @@ public class BlockEventHandler {
         }
 
         return false; // Key not found
+    }
+
+    /**
+     * Check if the given block ID is a Custom Portal API portal block.
+     * Supports both Fabric (customportalapi) and NeoForge (cpapireforged) versions.
+     *
+     * T310: This method ensures portal block removal works consistently across both loaders.
+     *
+     * @param blockId Block resource location
+     * @return true if block is a Custom Portal API portal block
+     */
+    private static boolean isCustomPortalBlock(net.minecraft.resources.ResourceLocation blockId) {
+        String namespace = blockId.getNamespace();
+        String path = blockId.getPath();
+
+        // Fabric version: customportalapi:customportalblock
+        if (namespace.equals("customportalapi") && path.equals("customportalblock")) {
+            return true;
+        }
+
+        // NeoForge version (Custom Portal API Reforged): cpapireforged:custom_portal_block
+        if (namespace.equals("cpapireforged") && path.equals("custom_portal_block")) {
+            return true;
+        }
+
+        return false;
     }
 }
