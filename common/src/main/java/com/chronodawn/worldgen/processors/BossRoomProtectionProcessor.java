@@ -163,6 +163,12 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
      * 4. Remove processed markers
      */
     public static void registerPendingProtections(ServerLevel level) {
+        // Filter to only process Chrono Dawn dimension
+        // Boss Room Boundary Markers only exist in Chrono Dawn dimension
+        if (!level.dimension().equals(com.chronodawn.registry.ModDimensions.CHRONO_DAWN_DIMENSION)) {
+            return;
+        }
+
         if (PENDING_MARKERS.isEmpty()) {
             return;
         }
