@@ -1,6 +1,7 @@
 package com.chronodawn.worldgen.spawning;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.data.BossSpawnData;
 import com.chronodawn.entities.bosses.ChronosWardenEntity;
 import com.chronodawn.registry.ModEntities;
 import dev.architectury.event.events.common.LifecycleEvent;
@@ -97,13 +98,13 @@ public class ChronosWardenSpawner {
         ChronoDawn.LOGGER.info("Guardian Vault Door opened at {}", doorPos);
 
         // Get saved data for this world (persists across server restarts)
-        ChronosWardenSpawnData data = level.getDataStorage().computeIfAbsent(
-            ChronosWardenSpawnData.factory(),
-            ChronosWardenSpawnData.getDataName()
+        BossSpawnData data = level.getDataStorage().computeIfAbsent(
+            BossSpawnData.factory(),
+            BossSpawnData.getDataName()
         );
 
         // Check if we've already spawned from this door
-        if (data.hasDoorSpawned(doorPos)) {
+        if (data.hasChronosWardenDoorSpawned(doorPos)) {
             ChronoDawn.LOGGER.info("Chronos Warden already spawned from this door - not spawning again");
             return;
         }
@@ -152,7 +153,7 @@ public class ChronosWardenSpawner {
             level.addFreshEntity(warden);
 
             // Mark this door as spawned (persisted to disk)
-            data.markDoorSpawned(doorPos);
+            data.markChronosWardenDoorSpawned(doorPos);
 
             ChronoDawn.LOGGER.info(
                 "Chronos Warden spawned at [{}, {}, {}] from Guardian Vault Door",
@@ -169,11 +170,11 @@ public class ChronosWardenSpawner {
      * @param level The ServerLevel to reset spawn data for
      */
     public static void reset(ServerLevel level) {
-        ChronosWardenSpawnData data = level.getDataStorage().computeIfAbsent(
-            ChronosWardenSpawnData.factory(),
-            ChronosWardenSpawnData.getDataName()
+        BossSpawnData data = level.getDataStorage().computeIfAbsent(
+            BossSpawnData.factory(),
+            BossSpawnData.getDataName()
         );
-        data.reset();
+        data.resetChronosWarden();
         ChronoDawn.LOGGER.info("Chronos Warden Spawner reset for dimension: {}", level.dimension().location());
     }
 }

@@ -1,6 +1,7 @@
 package com.chronodawn.worldgen.spawning;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.data.BossSpawnData;
 import com.chronodawn.entities.bosses.ClockworkColossusEntity;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModEntities;
@@ -104,9 +105,9 @@ public class ClockworkColossusSpawner {
         ResourceLocation dimensionId = level.dimension().location();
 
         // Get saved data for this world (persists across server restarts)
-        ClockworkColossusSpawnData data = level.getDataStorage().computeIfAbsent(
-            ClockworkColossusSpawnData.factory(),
-            ClockworkColossusSpawnData.getDataName()
+        BossSpawnData data = level.getDataStorage().computeIfAbsent(
+            BossSpawnData.factory(),
+            BossSpawnData.getDataName()
         );
 
         // Increment tick counter
@@ -142,7 +143,7 @@ public class ClockworkColossusSpawner {
                     );
 
                     // Check if we've already spawned in this room (check persisted data)
-                    if (data.hasStructureSpawned(roomCenter)) {
+                    if (data.hasClockworkColossusStructureSpawned(roomCenter)) {
                         continue;
                     }
 
@@ -169,7 +170,7 @@ public class ClockworkColossusSpawner {
                     }
 
                     // Mark this room as spawned (persisted to disk)
-                    data.markStructureSpawned(roomCenter);
+                    data.markClockworkColossusStructureSpawned(roomCenter);
                     ChronoDawn.LOGGER.info("Spawning Clockwork Colossus in engine room at {}", roomCenter);
 
                     // Spawn Clockwork Colossus
@@ -503,11 +504,11 @@ public class ClockworkColossusSpawner {
      * @param level The ServerLevel to reset spawn data for
      */
     public static void reset(ServerLevel level) {
-        ClockworkColossusSpawnData data = level.getDataStorage().computeIfAbsent(
-            ClockworkColossusSpawnData.factory(),
-            ClockworkColossusSpawnData.getDataName()
+        BossSpawnData data = level.getDataStorage().computeIfAbsent(
+            BossSpawnData.factory(),
+            BossSpawnData.getDataName()
         );
-        data.reset();
+        data.resetClockworkColossus();
         tickCounter = 0;
 
         ResourceLocation dimensionId = level.dimension().location();

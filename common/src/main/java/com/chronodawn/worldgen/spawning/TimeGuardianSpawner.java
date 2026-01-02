@@ -1,6 +1,7 @@
 package com.chronodawn.worldgen.spawning;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.data.BossSpawnData;
 import com.chronodawn.entities.bosses.TimeGuardianEntity;
 import com.chronodawn.registry.ModEntities;
 import dev.architectury.event.events.common.LifecycleEvent;
@@ -77,9 +78,9 @@ public class TimeGuardianSpawner {
         }
 
         // Get saved data for this world (persists across server restarts)
-        TimeGuardianSpawnData data = level.getDataStorage().computeIfAbsent(
-            TimeGuardianSpawnData.factory(),
-            TimeGuardianSpawnData.getDataName()
+        BossSpawnData data = level.getDataStorage().computeIfAbsent(
+            BossSpawnData.factory(),
+            BossSpawnData.getDataName()
         );
 
         // Check all players for nearby Desert Clock Tower structures
@@ -116,7 +117,7 @@ public class TimeGuardianSpawner {
                         );
 
                         // Skip if already spawned (check persisted data)
-                        if (data.hasStructureSpawned(structureCenter)) {
+                        if (data.hasTimeGuardianStructureSpawned(structureCenter)) {
                             continue;
                         }
 
@@ -140,7 +141,7 @@ public class TimeGuardianSpawner {
                         );
 
                         if (spawnTimeGuardian(level, spawnPos)) {
-                            data.markStructureSpawned(structureCenter);
+                            data.markTimeGuardianStructureSpawned(structureCenter);
                             ChronoDawn.LOGGER.info("Successfully spawned Time Guardian at {}", spawnPos);
                         }
                     }
@@ -293,11 +294,11 @@ public class TimeGuardianSpawner {
      * @param level The ServerLevel to reset spawn data for
      */
     public static void reset(ServerLevel level) {
-        TimeGuardianSpawnData data = level.getDataStorage().computeIfAbsent(
-            TimeGuardianSpawnData.factory(),
-            TimeGuardianSpawnData.getDataName()
+        BossSpawnData data = level.getDataStorage().computeIfAbsent(
+            BossSpawnData.factory(),
+            BossSpawnData.getDataName()
         );
-        data.reset();
+        data.resetTimeGuardian();
         tickCounter.set(0);
         ChronoDawn.LOGGER.info("Time Guardian Spawner reset for dimension: {}", level.dimension().location());
     }

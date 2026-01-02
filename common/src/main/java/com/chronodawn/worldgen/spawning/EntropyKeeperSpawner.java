@@ -1,6 +1,7 @@
 package com.chronodawn.worldgen.spawning;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.data.BossSpawnData;
 import com.chronodawn.entities.bosses.EntropyKeeperEntity;
 import com.chronodawn.registry.ModEntities;
 import dev.architectury.event.events.common.LifecycleEvent;
@@ -104,9 +105,9 @@ public class EntropyKeeperSpawner {
         }
 
         // Get saved data for this world (persists across server restarts)
-        EntropyKeeperSpawnData data = level.getDataStorage().computeIfAbsent(
-            EntropyKeeperSpawnData.factory(),
-            EntropyKeeperSpawnData.getDataName()
+        BossSpawnData data = level.getDataStorage().computeIfAbsent(
+            BossSpawnData.factory(),
+            BossSpawnData.getDataName()
         );
 
         // Check chunks around each player
@@ -123,19 +124,19 @@ public class EntropyKeeperSpawner {
                         BlockPos structurePos = chunkPos.getWorldPosition();
 
                         // Skip if we've already processed this structure
-                        if (data.isStructureProcessed(structurePos)) {
+                        if (data.isEntropyKeeperStructureProcessed(structurePos)) {
                             continue;
                         }
 
                         // Mark this structure as processed
-                        data.markStructureProcessed(structurePos);
+                        data.markEntropyKeeperStructureProcessed(structurePos);
 
                         ChronoDawn.LOGGER.info("Found Entropy Crypt structure at chunk {} (block pos: {})", chunkPos, structurePos);
 
                         // Check cache first, then find boss chamber marker and spawn if player is nearby
                         BlockPos markerPos = findBossChamberMarker(level, chunkPos, structurePos);
 
-                        if (markerPos != null && !data.hasMarkerSpawned(markerPos)) {
+                        if (markerPos != null && !data.hasEntropyKeeperMarkerSpawned(markerPos)) {
                             // Check if player is within spawn trigger range (20 blocks)
                             double distance = player.position().distanceTo(markerPos.getCenter());
 
@@ -149,7 +150,7 @@ public class EntropyKeeperSpawner {
 
                                 // Spawn Entropy Keeper
                                 spawnEntropyKeeper(level, markerPos);
-                                data.markMarkerSpawned(markerPos);
+                                data.markEntropyKeeperMarkerSpawned(markerPos);
 
                                 // Remove marker block
                                 level.setBlock(markerPos, Blocks.AIR.defaultBlockState(), 3);
@@ -350,11 +351,11 @@ public class EntropyKeeperSpawner {
      * @param level The ServerLevel to reset spawn data for
      */
     public static void reset(ServerLevel level) {
-        EntropyKeeperSpawnData data = level.getDataStorage().computeIfAbsent(
-            EntropyKeeperSpawnData.factory(),
-            EntropyKeeperSpawnData.getDataName()
+        BossSpawnData data = level.getDataStorage().computeIfAbsent(
+            BossSpawnData.factory(),
+            BossSpawnData.getDataName()
         );
-        data.reset();
+        data.resetEntropyKeeper();
         tickCounter = 0;
         cachedMarkers.clear();
         searchedChunks.clear();

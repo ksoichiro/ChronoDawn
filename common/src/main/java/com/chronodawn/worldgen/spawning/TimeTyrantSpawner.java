@@ -2,6 +2,7 @@ package com.chronodawn.worldgen.spawning;
 
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.core.dimension.DimensionStabilizer;
+import com.chronodawn.data.BossSpawnData;
 import com.chronodawn.entities.bosses.TimeTyrantEntity;
 import com.chronodawn.registry.ModEntities;
 import dev.architectury.event.events.common.LifecycleEvent;
@@ -102,9 +103,9 @@ public class TimeTyrantSpawner {
         ChronoDawn.LOGGER.info("Boss Room Door opened at {}", doorPos);
 
         // Get saved data for this world (persists across server restarts)
-        TimeTyrantSpawnData data = level.getDataStorage().computeIfAbsent(
-            TimeTyrantSpawnData.factory(),
-            TimeTyrantSpawnData.getDataName()
+        BossSpawnData data = level.getDataStorage().computeIfAbsent(
+            BossSpawnData.factory(),
+            BossSpawnData.getDataName()
         );
 
         // Check if Time Tyrant has already been defeated
@@ -114,13 +115,13 @@ public class TimeTyrantSpawner {
         }
 
         // Check if we've already spawned from this door
-        if (data.hasDoorSpawned(doorPos)) {
+        if (data.hasTimeTyrantDoorSpawned(doorPos)) {
             ChronoDawn.LOGGER.info("Time Tyrant already spawned from this door - not spawning again");
             return;
         }
 
         // Check if we've reached the spawn limit
-        int currentCount = data.getSpawnCount();
+        int currentCount = data.getTimeTyrantSpawnCount();
         if (currentCount >= MAX_TIME_TYRANTS_PER_WORLD) {
             ChronoDawn.LOGGER.info("Time Tyrant spawn limit reached ({}/{}) - not spawning",
                 currentCount, MAX_TIME_TYRANTS_PER_WORLD);
@@ -163,11 +164,11 @@ public class TimeTyrantSpawner {
             level.addFreshEntity(tyrant);
 
             // Mark this door as spawned (persisted to disk)
-            data.markDoorSpawned(doorPos);
+            data.markTimeTyrantDoorSpawned(doorPos);
 
             // Increment counter (persisted to disk)
-            data.incrementSpawnCount();
-            int newCount = data.getSpawnCount();
+            data.incrementTimeTyrantSpawnCount();
+            int newCount = data.getTimeTyrantSpawnCount();
 
             ChronoDawn.LOGGER.info(
                 "Time Tyrant spawned at [{}, {}, {}] from Boss Room Door (Total: {}/{})",
@@ -185,11 +186,11 @@ public class TimeTyrantSpawner {
      * @param level The ServerLevel to reset spawn data for
      */
     public static void reset(ServerLevel level) {
-        TimeTyrantSpawnData data = level.getDataStorage().computeIfAbsent(
-            TimeTyrantSpawnData.factory(),
-            TimeTyrantSpawnData.getDataName()
+        BossSpawnData data = level.getDataStorage().computeIfAbsent(
+            BossSpawnData.factory(),
+            BossSpawnData.getDataName()
         );
-        data.reset();
+        data.resetTimeTyrant();
         ChronoDawn.LOGGER.info("Time Tyrant Spawner reset for dimension: {}", level.dimension().location());
     }
 }
