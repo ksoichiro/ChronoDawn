@@ -35,6 +35,7 @@ import com.chronodawn.blocks.TimeWoodSapling;
 import com.chronodawn.blocks.TimeWoodSlab;
 import com.chronodawn.blocks.TimeWoodStairs;
 import com.chronodawn.blocks.TimeWoodTrapdoor;
+import com.chronodawn.blocks.StrippedTimeWoodLog;
 import com.chronodawn.blocks.UnstableFungus;
 import com.chronodawn.blocks.DarkTimeWoodLog;
 import com.chronodawn.blocks.DarkTimeWoodLeaves;
@@ -42,6 +43,7 @@ import com.chronodawn.blocks.DarkTimeWoodPlanks;
 import com.chronodawn.blocks.DarkTimeWoodStairs;
 import com.chronodawn.blocks.DarkTimeWoodSlab;
 import com.chronodawn.blocks.DarkTimeWoodFence;
+import com.chronodawn.blocks.StrippedDarkTimeWoodLog;
 import com.chronodawn.blocks.DarkTimeWoodDoor;
 import com.chronodawn.blocks.DarkTimeWoodTrapdoor;
 import com.chronodawn.blocks.DarkTimeWoodFenceGate;
@@ -54,6 +56,7 @@ import com.chronodawn.blocks.AncientTimeWoodPlanks;
 import com.chronodawn.blocks.AncientTimeWoodStairs;
 import com.chronodawn.blocks.AncientTimeWoodSlab;
 import com.chronodawn.blocks.AncientTimeWoodFence;
+import com.chronodawn.blocks.StrippedAncientTimeWoodLog;
 import com.chronodawn.blocks.AncientTimeWoodDoor;
 import com.chronodawn.blocks.AncientTimeWoodTrapdoor;
 import com.chronodawn.blocks.AncientTimeWoodFenceGate;
@@ -178,6 +181,15 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> TIME_WOOD_LOG = BLOCKS.register(
         "time_wood_log",
         () -> new TimeWoodLog(TimeWoodLog.createProperties())
+    );
+
+    /**
+     * Stripped Time Wood Log - Stripped variant of Time Wood Log.
+     * Obtained by right-clicking Time Wood Log with an axe.
+     */
+    public static final RegistrySupplier<Block> STRIPPED_TIME_WOOD_LOG = BLOCKS.register(
+        "stripped_time_wood_log",
+        () -> new StrippedTimeWoodLog(StrippedTimeWoodLog.createProperties())
     );
 
     /**
@@ -632,6 +644,15 @@ public class ModBlocks {
     );
 
     /**
+     * Stripped Dark Time Wood Log - Stripped variant of Dark Time Wood Log.
+     * Obtained by right-clicking Dark Time Wood Log with an axe.
+     */
+    public static final RegistrySupplier<Block> STRIPPED_DARK_TIME_WOOD_LOG = BLOCKS.register(
+        "stripped_dark_time_wood_log",
+        () -> new StrippedDarkTimeWoodLog(StrippedDarkTimeWoodLog.createProperties())
+    );
+
+    /**
      * Dark Time Wood Leaves - Darker variant of Time Wood Leaves.
      * Forms the canopy of tall dark trees.
      */
@@ -737,6 +758,15 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> ANCIENT_TIME_WOOD_LOG = BLOCKS.register(
         "ancient_time_wood_log",
         () -> new AncientTimeWoodLog(AncientTimeWoodLog.createProperties())
+    );
+
+    /**
+     * Stripped Ancient Time Wood Log - Stripped variant of Ancient Time Wood Log.
+     * Obtained by right-clicking Ancient Time Wood Log with an axe.
+     */
+    public static final RegistrySupplier<Block> STRIPPED_ANCIENT_TIME_WOOD_LOG = BLOCKS.register(
+        "stripped_ancient_time_wood_log",
+        () -> new StrippedAncientTimeWoodLog(StrippedAncientTimeWoodLog.createProperties())
     );
 
     /**

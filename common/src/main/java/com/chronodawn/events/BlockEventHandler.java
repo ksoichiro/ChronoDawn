@@ -24,6 +24,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 
 import java.util.HashMap;
 import java.util.List;
@@ -140,6 +143,46 @@ public class BlockEventHandler {
         // Register server tick event to process restoration timers
         TickEvent.SERVER_LEVEL_POST.register(level -> {
             processRestorationTimers(level);
+        });
+
+        // Register block interaction event for axe stripping (Time Wood logs)
+        InteractionEvent.RIGHT_CLICK_BLOCK.register((player, hand, pos, face) -> {
+            // Only process main hand interactions on server side
+            if (player.level().isClientSide() || hand != net.minecraft.world.InteractionHand.MAIN_HAND) {
+                return EventResult.pass();
+            }
+
+            // Check if player is holding an axe
+            ItemStack heldItem = player.getItemInHand(hand);
+            if (!(heldItem.getItem() instanceof AxeItem)) {
+                return EventResult.pass();
+            }
+
+            BlockState state = player.level().getBlockState(pos);
+            BlockState strippedState = getStrippedState(state);
+
+            if (strippedState != null) {
+                // Play stripping sound
+                player.level().playSound(null, pos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
+
+                // Replace block with stripped variant
+                player.level().setBlock(pos, strippedState.setValue(
+                    net.minecraft.world.level.block.RotatedPillarBlock.AXIS,
+                    state.getValue(net.minecraft.world.level.block.RotatedPillarBlock.AXIS)
+                ), 11); // 11 = update clients + neighbors + render on main thread
+
+                // Damage the axe (1 durability)
+                if (!player.isCreative()) {
+                    net.minecraft.world.entity.EquipmentSlot slot = hand == net.minecraft.world.InteractionHand.MAIN_HAND
+                        ? net.minecraft.world.entity.EquipmentSlot.MAINHAND
+                        : net.minecraft.world.entity.EquipmentSlot.OFFHAND;
+                    heldItem.hurtAndBreak(1, player, slot);
+                }
+
+                return EventResult.interruptTrue();
+            }
+
+            return EventResult.pass();
         });
 
         // Register block interaction event for Master Clock door unlocking
@@ -548,5 +591,23 @@ public class BlockEventHandler {
         }
 
         return false;
+    }
+
+    /**
+     * Get the stripped variant of a log block.
+     * Returns null if the block is not strippable.
+     *
+     * @param state The current block state
+     * @return The stripped block state, or null if not strippable
+     */
+    private static BlockState getStrippedState(BlockState state) {
+        if (state.is(ModBlocks.TIME_WOOD_LOG.get())) {
+            return ModBlocks.STRIPPED_TIME_WOOD_LOG.get().defaultBlockState();
+        } else if (state.is(ModBlocks.DARK_TIME_WOOD_LOG.get())) {
+            return ModBlocks.STRIPPED_DARK_TIME_WOOD_LOG.get().defaultBlockState();
+        } else if (state.is(ModBlocks.ANCIENT_TIME_WOOD_LOG.get())) {
+            return ModBlocks.STRIPPED_ANCIENT_TIME_WOOD_LOG.get().defaultBlockState();
+        }
+        return null;
     }
 }
