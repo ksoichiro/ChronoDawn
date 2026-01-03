@@ -887,6 +887,24 @@ public class ModItems {
     );
 
     /**
+     * Dawn Bell - Tall blue flower representing dawn/morning in the time cycle.
+     * 2 blocks high, cannot be potted.
+     */
+    public static final RegistrySupplier<Item> DAWN_BELL = ITEMS.register(
+        "dawn_bell",
+        () -> new BlockItem(ModBlocks.DAWN_BELL.get(), new Item.Properties())
+    );
+
+    /**
+     * Dusk Bell - Tall red flower representing dusk/evening in the time cycle.
+     * 2 blocks high, cannot be potted.
+     */
+    public static final RegistrySupplier<Item> DUSK_BELL = ITEMS.register(
+        "dusk_bell",
+        () -> new BlockItem(ModBlocks.DUSK_BELL.get(), new Item.Properties())
+    );
+
+    /**
      * Temporal Root Stew - Hearty stew combining Baked Temporal Root and Timeless Mushroom.
      * Restores 8 hunger points with Regeneration II for 10 seconds.
      * Recipe: 1x Baked Temporal Root + 1x Timeless Mushroom + 1x Bowl
@@ -1477,6 +1495,8 @@ public class ModItems {
         output.accept(PURPLE_TIME_BLOSSOM.get());
         output.accept(ORANGE_TIME_BLOSSOM.get());
         output.accept(PINK_TIME_BLOSSOM.get());
+        output.accept(DAWN_BELL.get());
+        output.accept(DUSK_BELL.get());
 
         // === Crafted Foods (T215) ===
         output.accept(TEMPORAL_ROOT_STEW.get());

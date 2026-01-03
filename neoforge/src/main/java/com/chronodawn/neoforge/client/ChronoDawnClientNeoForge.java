@@ -380,6 +380,18 @@ public class ChronoDawnClientNeoForge {
             RenderType.cutout()
         );
 
+        // Register Dawn Bell to use cutout rendering (for transparency)
+        ItemBlockRenderTypes.setRenderLayer(
+            ModBlocks.DAWN_BELL.get(),
+            RenderType.cutout()
+        );
+
+        // Register Dusk Bell to use cutout rendering (for transparency)
+        ItemBlockRenderTypes.setRenderLayer(
+            ModBlocks.DUSK_BELL.get(),
+            RenderType.cutout()
+        );
+
         // Register Dark Time Wood blocks to use cutout rendering (for transparency)
         ItemBlockRenderTypes.setRenderLayer(
             ModBlocks.DARK_TIME_WOOD_SAPLING.get(),

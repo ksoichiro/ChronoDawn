@@ -21,6 +21,24 @@
           "data": {
             "Name": "chronodawn:pink_time_blossom"
           }
+        },
+        {
+          "weight": 2,
+          "data": {
+            "Name": "chronodawn:dawn_bell",
+            "Properties": {
+              "half": "lower"
+            }
+          }
+        },
+        {
+          "weight": 2,
+          "data": {
+            "Name": "chronodawn:dusk_bell",
+            "Properties": {
+              "half": "lower"
+            }
+          }
         }
       ]
     }

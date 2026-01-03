@@ -68,6 +68,8 @@ import com.chronodawn.blocks.AttachedChronoMelonStemBlock;
 import com.chronodawn.blocks.ChronoMelonBlock;
 import com.chronodawn.blocks.TimelessMushroomBlock;
 import com.chronodawn.blocks.TimeBlossomBlock;
+import com.chronodawn.blocks.DawnBellBlock;
+import com.chronodawn.blocks.DuskBellBlock;
 import com.chronodawn.registry.ModFluids;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -518,6 +520,26 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> POTTED_PINK_TIME_BLOSSOM = BLOCKS.register(
         "potted_pink_time_blossom",
         () -> new FlowerPotBlock(PINK_TIME_BLOSSOM.get(), Block.Properties.ofFullCopy(Blocks.FLOWER_POT))
+    );
+
+    /**
+     * Dawn Bell - Tall blue flower found in the ChronoDawn dimension.
+     * Represents the dawn/morning in the time cycle theme.
+     * 2 blocks high, cannot be potted.
+     */
+    public static final RegistrySupplier<Block> DAWN_BELL = BLOCKS.register(
+        "dawn_bell",
+        () -> new DawnBellBlock(DawnBellBlock.createProperties())
+    );
+
+    /**
+     * Dusk Bell - Tall red flower found in the ChronoDawn dimension.
+     * Represents the dusk/evening in the time cycle theme.
+     * 2 blocks high, cannot be potted.
+     */
+    public static final RegistrySupplier<Block> DUSK_BELL = BLOCKS.register(
+        "dusk_bell",
+        () -> new DuskBellBlock(DuskBellBlock.createProperties())
     );
 
     /**
