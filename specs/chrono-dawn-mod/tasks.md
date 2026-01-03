@@ -540,7 +540,7 @@
     - Add visual cues (e.g., beacon beam visible from distance)
     - Add advancement hint system with approximate coordinates
 
-- [ ] T713 [P] Add iron ore generation to Chrono Dawn dimension
+- [x] T713 [P] Add iron ore generation to Chrono Dawn dimension
   - **Issue**: Iron ore does not generate in Chrono Dawn dimension, preventing crafting of buckets, shields, and other essential items
   - **Feedback Source**: Playtest feedback (2026-01-03)
   - **Implementation**:
