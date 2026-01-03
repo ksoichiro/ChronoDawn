@@ -558,7 +558,7 @@
     - Reference: Time Crystal ore settings at `worldgen/configured_feature/ore_time_crystal.json` and `worldgen/placed_feature/ore_time_crystal.json`
   - **Expected Behavior**: Iron ore generates at similar frequency to Time Crystal ore, allowing players to obtain iron without returning to Overworld
 
-- [ ] T717 [P] Reduce Clockstone ore generation frequency
+- [x] T717 [P] Reduce Clockstone ore generation frequency
   - **Issue**: Clockstone ore generates too frequently, making it too abundant and reducing resource gathering challenge
   - **Feedback Source**: Playtest feedback (2026-01-03)
   - **Current Settings**:
