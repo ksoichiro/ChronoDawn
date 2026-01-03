@@ -153,6 +153,7 @@
 
   "item.chronodawn.chrono_aegis.already_active": "クロノスの盾の効果はすでに有効です！",
   "item.chronodawn.chrono_aegis.activated": "クロノスの盾が発動！時間の暴君に対する防護が10分間有効になります。",
+  "item.chronodawn.chrono_aegis.received_from_ally": "%sがクロノスの盾を発動！あなたは10分間防護されます。",
   "item.chronodawn.chrono_aegis.tooltip": "時間の守護者たちのエッセンスから鍛造された強力なアーティファクト。",
   "item.chronodawn.chrono_aegis.tooltip.duration": "右クリックで発動（10分間持続）",
 

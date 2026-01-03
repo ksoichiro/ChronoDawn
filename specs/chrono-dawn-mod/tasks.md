@@ -573,7 +573,7 @@
     - `common/src/main/resources/data/chronodawn/worldgen/placed_feature/ore_clockstone.json` (change count value)
   - **Expected Behavior**: Clockstone ore becomes moderately rare, maintaining its value as a tier 1 crafting material without being overly abundant
 
-- [ ] T718 [P] Extend Chrono Aegis buff to all nearby players instead of only the user
+- [x] T718 [P] Extend Chrono Aegis buff to all nearby players instead of only the user
   - **Issue**: Chrono Aegis buff currently applies only to the player who uses the item, making multiplayer boss fights unbalanced (only one player gets protection)
   - **Feedback Source**: Playtest feedback (2026-01-03)
   - **Current Implementation**: `ChronoAegisItem.use()` calls `player.addEffect()` only on the user (line 70-77)
