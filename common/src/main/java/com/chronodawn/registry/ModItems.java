@@ -1307,6 +1307,104 @@ public class ModItems {
         )
     );
 
+    // === Boss Spawn Eggs (Command-only, not in creative tab) ===
+
+    /**
+     * Time Guardian Spawn Egg - For debugging and testing only (command-only).
+     * Primary color: Gold (0xFFD700) - Background
+     * Secondary color: Royal blue (0x4169E1) - Spots
+     * NOT displayed in creative tab (following vanilla behavior for Ender Dragon and Wither)
+     */
+    public static final RegistrySupplier<Item> TIME_GUARDIAN_SPAWN_EGG = ITEMS.register(
+        "time_guardian_spawn_egg",
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.TIME_GUARDIAN,
+            0xFFD700, // Background: Gold
+            0x4169E1, // Spots: Royal blue
+            new Item.Properties()
+        )
+    );
+
+    /**
+     * Time Tyrant Spawn Egg - For debugging and testing only (command-only).
+     * Primary color: Dark red (0x8B0000) - Background
+     * Secondary color: Gold (0xFFD700) - Spots
+     * NOT displayed in creative tab (following vanilla behavior for Ender Dragon and Wither)
+     */
+    public static final RegistrySupplier<Item> TIME_TYRANT_SPAWN_EGG = ITEMS.register(
+        "time_tyrant_spawn_egg",
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.TIME_TYRANT,
+            0x8B0000, // Background: Dark red
+            0xFFD700, // Spots: Gold
+            new Item.Properties()
+        )
+    );
+
+    /**
+     * Chronos Warden Spawn Egg - For debugging and testing only (command-only).
+     * Primary color: Dark slate gray (0x2F4F4F) - Background
+     * Secondary color: Dark turquoise (0x00CED1) - Spots
+     * NOT displayed in creative tab (following vanilla behavior for Ender Dragon and Wither)
+     */
+    public static final RegistrySupplier<Item> CHRONOS_WARDEN_SPAWN_EGG = ITEMS.register(
+        "chronos_warden_spawn_egg",
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.CHRONOS_WARDEN,
+            0x2F4F4F, // Background: Dark slate gray
+            0x00CED1, // Spots: Dark turquoise
+            new Item.Properties()
+        )
+    );
+
+    /**
+     * Clockwork Colossus Spawn Egg - For debugging and testing only (command-only).
+     * Primary color: Slate gray (0x708090) - Background
+     * Secondary color: Dark orange (0xFF8C00) - Spots
+     * NOT displayed in creative tab (following vanilla behavior for Ender Dragon and Wither)
+     */
+    public static final RegistrySupplier<Item> CLOCKWORK_COLOSSUS_SPAWN_EGG = ITEMS.register(
+        "clockwork_colossus_spawn_egg",
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.CLOCKWORK_COLOSSUS,
+            0x708090, // Background: Slate gray
+            0xFF8C00, // Spots: Dark orange
+            new Item.Properties()
+        )
+    );
+
+    /**
+     * Entropy Keeper Spawn Egg - For debugging and testing only (command-only).
+     * Primary color: Midnight blue (0x191970) - Background
+     * Secondary color: Medium purple (0x9370DB) - Spots
+     * NOT displayed in creative tab (following vanilla behavior for Ender Dragon and Wither)
+     */
+    public static final RegistrySupplier<Item> ENTROPY_KEEPER_SPAWN_EGG = ITEMS.register(
+        "entropy_keeper_spawn_egg",
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.ENTROPY_KEEPER,
+            0x191970, // Background: Midnight blue
+            0x9370DB, // Spots: Medium purple
+            new Item.Properties()
+        )
+    );
+
+    /**
+     * Temporal Phantom Spawn Egg - For debugging and testing only (command-only).
+     * Primary color: Dark gray (0x2F2F2F) - Background
+     * Secondary color: Light gray (0xE0E0E0) - Spots
+     * NOT displayed in creative tab (following vanilla behavior for Ender Dragon and Wither)
+     */
+    public static final RegistrySupplier<Item> TEMPORAL_PHANTOM_SPAWN_EGG = ITEMS.register(
+        "temporal_phantom_spawn_egg",
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.TEMPORAL_PHANTOM,
+            0x2F2F2F, // Background: Dark gray
+            0xE0E0E0, // Spots: Light gray
+            new Item.Properties()
+        )
+    );
+
     // === Boats ===
 
     /**
@@ -1389,6 +1487,31 @@ public class ModItems {
 
         if (TIME_KEEPER_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
             ((com.chronodawn.items.DeferredSpawnEggItem) TIME_KEEPER_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        // Boss spawn eggs (command-only, not in creative tab)
+        if (TIME_GUARDIAN_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) TIME_GUARDIAN_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (TIME_TYRANT_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) TIME_TYRANT_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (CHRONOS_WARDEN_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) CHRONOS_WARDEN_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (CLOCKWORK_COLOSSUS_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) CLOCKWORK_COLOSSUS_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (ENTROPY_KEEPER_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) ENTROPY_KEEPER_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (TEMPORAL_PHANTOM_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) TEMPORAL_PHANTOM_SPAWN_EGG.get()).initializeSpawnEgg();
         }
 
         ChronoDawn.LOGGER.info("Spawn eggs initialized");
