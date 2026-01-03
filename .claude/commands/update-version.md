@@ -1,6 +1,7 @@
 ---
 description: Update mod version across all project files
 allowed-tools: Read, Edit, Bash(grep*)
+argument-hint: [version]
 ---
 
 ## User Input
