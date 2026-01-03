@@ -717,7 +717,7 @@
   - **Expected Behavior**: Players can craft Wood blocks from logs and strip them with axes, matching vanilla wood behavior
   - **Note**: This task depends on T719 being completed first (stripped log blocks must exist)
 
-- [ ] T722 [P] Fix slow mining speed for Stripped Time Wood Logs and Wood blocks with axes
+- [x] T722 [P] Fix slow mining speed for Stripped Time Wood Logs and Wood blocks with axes
   - **Issue**: Stripped Time Wood Log (3 variants) have slow mining speed when using axes, not matching vanilla stripped log behavior
   - **Feedback Source**: Playtest feedback (2026-01-03)
   - **Potential Issue**: T721 Wood blocks may have the same problem
