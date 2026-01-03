@@ -49,7 +49,8 @@ public class ChronobladeItem extends SwordItem {
     public static final ChronobladeTier TIER = new ChronobladeTier();
 
     public ChronobladeItem(Properties properties) {
-        super(TIER, properties.attributes(SwordItem.createAttributes(TIER, 4, -2.4f)));
+        // 1.20.1: SwordItem constructor takes (tier, attackDamageModifier, attackSpeedModifier, properties)
+        super(TIER, 4, -2.4f, properties);
     }
 
     /**

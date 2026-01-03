@@ -24,7 +24,8 @@ import net.minecraft.world.level.material.PushReaction;
  */
 public class DarkTimeWoodPressurePlate extends PressurePlateBlock {
     public DarkTimeWoodPressurePlate(BlockBehaviour.Properties properties) {
-        super(BlockSetType.OAK, properties);
+        // 1.20.1: PressurePlateBlock constructor takes (properties, blockSetType)
+        super(properties, BlockSetType.OAK);
     }
 
     /**

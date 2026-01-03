@@ -56,8 +56,9 @@ public class TimeArrowEntity extends AbstractArrow {
         ChronoDawn.LOGGER.info("TimeArrowEntity constructed with shooter: {}", shooter.getName().getString());
     }
 
+    // 1.20.1: AbstractArrow uses getPickupItem() instead of getDefaultPickupItem()
     @Override
-    protected ItemStack getDefaultPickupItem() {
+    protected ItemStack getPickupItem() {
         return new ItemStack(ModItems.TIME_ARROW.get());
     }
 

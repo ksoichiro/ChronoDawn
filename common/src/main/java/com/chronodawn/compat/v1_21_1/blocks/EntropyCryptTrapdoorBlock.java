@@ -8,6 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
@@ -46,8 +47,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * Task: T429 [Thread Safety] Fix non-thread-safe collection usage
  */
 public class EntropyCryptTrapdoorBlock extends TrapDoorBlock {
-    public static final MapCodec<EntropyCryptTrapdoorBlock> CODEC = simpleCodec(EntropyCryptTrapdoorBlock::new);
-
     /**
      * Property to track if the boss has been spawned.
      * false = boss not yet spawned, will spawn on interaction
@@ -61,14 +60,11 @@ public class EntropyCryptTrapdoorBlock extends TrapDoorBlock {
 
     /**
      * Custom BlockSetType that looks/sounds like iron but allows hand interaction.
-     * This enables our custom useWithoutItem logic to work properly.
+     * This enables our custom use logic to work properly.
      */
-    private static final BlockSetType ENTROPY_CRYPT_TYPE = new BlockSetType(
-        "entropy_crypt",
+    private static final BlockSetType ENTROPY_CRYPT_TYPE = BlockSetType.register(
+        new BlockSetType("entropy_crypt",
         true,  // canOpenByHand - allows hand interaction
-        true,  // canOpenByWindCharge
-        false, // canButtonBeActivatedByArrows
-        BlockSetType.PressurePlateSensitivity.EVERYTHING,
         net.minecraft.world.level.block.SoundType.METAL,  // soundType - sounds like iron
         net.minecraft.sounds.SoundEvents.IRON_DOOR_CLOSE,
         net.minecraft.sounds.SoundEvents.IRON_DOOR_OPEN,
@@ -77,11 +73,11 @@ public class EntropyCryptTrapdoorBlock extends TrapDoorBlock {
         net.minecraft.sounds.SoundEvents.METAL_PRESSURE_PLATE_CLICK_OFF,
         net.minecraft.sounds.SoundEvents.METAL_PRESSURE_PLATE_CLICK_ON,
         net.minecraft.sounds.SoundEvents.STONE_BUTTON_CLICK_OFF,
-        net.minecraft.sounds.SoundEvents.STONE_BUTTON_CLICK_ON
+        net.minecraft.sounds.SoundEvents.STONE_BUTTON_CLICK_ON)
     );
 
     public EntropyCryptTrapdoorBlock(Properties properties) {
-        super(ENTROPY_CRYPT_TYPE, properties);
+        super(properties, ENTROPY_CRYPT_TYPE);
         this.registerDefaultState(this.stateDefinition.any()
             .setValue(FACING, Direction.NORTH)
             .setValue(OPEN, false)
@@ -92,18 +88,13 @@ public class EntropyCryptTrapdoorBlock extends TrapDoorBlock {
     }
 
     @Override
-    public MapCodec<? extends TrapDoorBlock> codec() {
-        return CODEC;
-    }
-
-    @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
         builder.add(ACTIVATED);
     }
 
     @Override
-    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
         // Check if boss has already been spawned
         if (!state.getValue(ACTIVATED)) {
             // First interaction - spawn the boss
@@ -112,7 +103,7 @@ public class EntropyCryptTrapdoorBlock extends TrapDoorBlock {
                 if (spawnedPositions.contains(pos)) {
                     // Already spawned this session, just activate and allow opening
                     level.setBlock(pos, state.setValue(ACTIVATED, true), 3);
-                    return super.useWithoutItem(state.setValue(ACTIVATED, true), level, pos, player, hitResult);
+                    return super.use(state.setValue(ACTIVATED, true), level, pos, player, hand, hitResult);
                 }
 
                 // Spawn Entropy Keeper
@@ -148,7 +139,7 @@ public class EntropyCryptTrapdoorBlock extends TrapDoorBlock {
         }
 
         // Already activated - function as normal trapdoor
-        return super.useWithoutItem(state, level, pos, player, hitResult);
+        return super.use(state, level, pos, player, hand, hitResult);
     }
 
     /**
@@ -186,7 +177,7 @@ public class EntropyCryptTrapdoorBlock extends TrapDoorBlock {
             keeper.setYRot(yaw);
             keeper.setYHeadRot(yaw);
 
-            keeper.finalizeSpawn(level, level.getCurrentDifficultyAt(spawnPos), MobSpawnType.TRIGGERED, null);
+            keeper.finalizeSpawn(level, level.getCurrentDifficultyAt(spawnPos), MobSpawnType.TRIGGERED, null, null);
             return level.addFreshEntity(keeper);
         }
 

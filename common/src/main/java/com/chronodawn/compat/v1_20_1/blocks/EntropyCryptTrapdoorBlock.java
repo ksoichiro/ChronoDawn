@@ -54,9 +54,10 @@ public class EntropyCryptTrapdoorBlock extends TrapDoorBlock {
     /**
      * Custom BlockSetType that looks/sounds like iron but allows hand interaction.
      * This enables our custom use logic to work properly.
+     *
+     * 1.20.1: BlockSetType.register() is private, so we create the instance directly
      */
-    private static final BlockSetType ENTROPY_CRYPT_TYPE = BlockSetType.register(
-        new BlockSetType("entropy_crypt",
+    private static final BlockSetType ENTROPY_CRYPT_TYPE = new BlockSetType("entropy_crypt",
         true,  // canOpenByHand - allows hand interaction
         net.minecraft.world.level.block.SoundType.METAL,  // soundType - sounds like iron
         net.minecraft.sounds.SoundEvents.IRON_DOOR_CLOSE,
@@ -66,8 +67,7 @@ public class EntropyCryptTrapdoorBlock extends TrapDoorBlock {
         net.minecraft.sounds.SoundEvents.METAL_PRESSURE_PLATE_CLICK_OFF,
         net.minecraft.sounds.SoundEvents.METAL_PRESSURE_PLATE_CLICK_ON,
         net.minecraft.sounds.SoundEvents.STONE_BUTTON_CLICK_OFF,
-        net.minecraft.sounds.SoundEvents.STONE_BUTTON_CLICK_ON)
-    );
+        net.minecraft.sounds.SoundEvents.STONE_BUTTON_CLICK_ON);
 
     public EntropyCryptTrapdoorBlock(Properties properties) {
         super(properties, ENTROPY_CRYPT_TYPE);

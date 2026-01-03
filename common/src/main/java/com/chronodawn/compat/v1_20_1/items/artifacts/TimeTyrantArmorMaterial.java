@@ -17,12 +17,12 @@ import java.util.EnumMap;
 import java.util.List;
 
 public class TimeTyrantArmorMaterial {
+    // 1.20.1: ArmorItem.Type.BODY does not exist
     private static final EnumMap<ArmorItem.Type, Integer> DEFENSE_VALUES = Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
         map.put(ArmorItem.Type.BOOTS, 3);
         map.put(ArmorItem.Type.LEGGINGS, 6);
         map.put(ArmorItem.Type.CHESTPLATE, 8);
         map.put(ArmorItem.Type.HELMET, 3);
-        map.put(ArmorItem.Type.BODY, 8);
     });
 
     public static final Holder<ArmorMaterial> MATERIAL = Registry.registerForHolder(

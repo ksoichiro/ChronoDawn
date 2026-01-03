@@ -17,23 +17,57 @@ import java.util.EnumMap;
 import java.util.List;
 
 public class TimeTyrantArmorMaterial {
+    private static final EnumMap<ArmorItem.Type, Integer> DEFENSE_VALUES = Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
+        map.put(ArmorItem.Type.BOOTS, 3);
+        map.put(ArmorItem.Type.LEGGINGS, 6);
+        map.put(ArmorItem.Type.CHESTPLATE, 8);
+        map.put(ArmorItem.Type.HELMET, 3);
+        map.put(ArmorItem.Type.BODY, 8);
+    });
+
     public static final Holder<ArmorMaterial> MATERIAL = Registry.registerForHolder(
         BuiltInRegistries.ARMOR_MATERIAL,
         CompatResourceLocation.create(ChronoDawn.MOD_ID, "time_tyrant"),
-        new ArmorMaterial(
-            Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
-                map.put(ArmorItem.Type.BOOTS, 3);
-                map.put(ArmorItem.Type.LEGGINGS, 6);
-                map.put(ArmorItem.Type.CHESTPLATE, 8);
-                map.put(ArmorItem.Type.HELMET, 3);
-                map.put(ArmorItem.Type.BODY, 8);
-            }),
-            18,
-            SoundEvents.ARMOR_EQUIP_NETHERITE,
-            () -> Ingredient.of(ModItems.TIME_CRYSTAL.get()),
-            List.of(new ArmorMaterial.Layer(CompatResourceLocation.create(ChronoDawn.MOD_ID, "time_tyrant"))),
-            2.5f,
-            0.1f
-        )
+        new ArmorMaterial() {
+            @Override
+            public int getDurabilityForType(ArmorItem.Type type) {
+                return DEFENSE_VALUES.get(type);
+            }
+
+            @Override
+            public int getDefenseForType(ArmorItem.Type type) {
+                return DEFENSE_VALUES.get(type);
+            }
+
+            @Override
+            public int getEnchantmentValue() {
+                return 18;
+            }
+
+            @Override
+            public net.minecraft.sounds.SoundEvent getEquipSound() {
+                return SoundEvents.ARMOR_EQUIP_NETHERITE;
+            }
+
+            @Override
+            public Ingredient getRepairIngredient() {
+                return Ingredient.of(ModItems.TIME_CRYSTAL.get());
+            }
+
+            @Override
+            public String getName() {
+                return ChronoDawn.MOD_ID + ":time_tyrant";
+            }
+
+            @Override
+            public float getToughness() {
+                return 2.5f;
+            }
+
+            @Override
+            public float getKnockbackResistance() {
+                return 0.1f;
+            }
+        }
     );
 }
