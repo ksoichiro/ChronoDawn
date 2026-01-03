@@ -61,10 +61,7 @@ public class SpatiallyLinkedPickaxeItem extends PickaxeItem {
             return 3; // Diamond mining level
         }
 
-        @Override
-        public TagKey<Block> getIncorrectBlocksForDrops() {
-            return BlockTags.INCORRECT_FOR_DIAMOND_TOOL;
-        }
+        // 1.20.1: getIncorrectBlocksForDrops() method does not exist in Tier interface
 
         @Override
         public int getEnchantmentValue() {
@@ -79,7 +76,8 @@ public class SpatiallyLinkedPickaxeItem extends PickaxeItem {
     };
 
     public SpatiallyLinkedPickaxeItem(Properties properties) {
-        super(SPATIALLY_LINKED_TIER, properties.attributes(PickaxeItem.createAttributes(SPATIALLY_LINKED_TIER, 1.0f, -2.8f)));
+        // 1.20.1: PickaxeItem constructor takes (tier, attackDamageModifier, attackSpeedModifier, properties)
+        super(SPATIALLY_LINKED_TIER, 1, -2.8f, properties);
     }
 
     /**

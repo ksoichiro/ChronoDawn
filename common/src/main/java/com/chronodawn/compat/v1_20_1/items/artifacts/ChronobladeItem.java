@@ -109,10 +109,7 @@ public class ChronobladeItem extends SwordItem {
             return 4; // Netherite mining level
         }
 
-        @Override
-        public net.minecraft.tags.TagKey<net.minecraft.world.level.block.Block> getIncorrectBlocksForDrops() {
-            return net.minecraft.tags.BlockTags.INCORRECT_FOR_NETHERITE_TOOL;
-        }
+        // 1.20.1: getIncorrectBlocksForDrops() method does not exist in Tier interface
 
         @Override
         public int getEnchantmentValue() {

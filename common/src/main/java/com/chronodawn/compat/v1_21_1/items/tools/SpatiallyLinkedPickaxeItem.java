@@ -79,6 +79,7 @@ public class SpatiallyLinkedPickaxeItem extends PickaxeItem {
     };
 
     public SpatiallyLinkedPickaxeItem(Properties properties) {
+        // 1.21.1: Use createAttributes()
         super(SPATIALLY_LINKED_TIER, properties.attributes(PickaxeItem.createAttributes(SPATIALLY_LINKED_TIER, 1.0f, -2.8f)));
     }
 
