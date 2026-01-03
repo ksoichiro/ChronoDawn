@@ -639,7 +639,7 @@
     - Architectury example: Use `UseOnContext` event to intercept axe usage
   - **Expected Behavior**: Right-clicking Time Wood logs with any axe converts them to stripped variants, matching vanilla behavior
 
-- [ ] T720 [P] Fix NeoForge block placement item loss in protected boss rooms
+- [x] T720 [P] Fix NeoForge block placement item loss in protected boss rooms
   - **Issue**: On NeoForge, when players try to place blocks in protected boss rooms, the block placement is cancelled but the item is consumed from inventory, causing item loss
   - **Feedback Source**: Playtest feedback (2026-01-03)
   - **Root Cause**: NeoForge's `BlockEvent.EntityPlaceEvent` fires AFTER the item is consumed, so cancelling the event doesn't restore the item
