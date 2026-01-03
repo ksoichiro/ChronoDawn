@@ -33,7 +33,8 @@ import net.minecraft.world.item.ArmorItem;
  */
 public class EnhancedClockstoneArmorItem extends ArmorItem {
     public EnhancedClockstoneArmorItem(Type type, Properties properties) {
-        super(EnhancedClockstoneArmorMaterial.ENHANCED_CLOCKSTONE, type, properties);
+        // 1.20.1: ArmorItem constructor takes ArmorMaterial directly (not Holder)
+        super(EnhancedClockstoneArmorMaterial.ENHANCED_CLOCKSTONE.value(), type, properties);
     }
 
     /**

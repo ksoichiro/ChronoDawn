@@ -75,15 +75,47 @@ public class ClockstoneArmorMaterial {
         return Registry.registerForHolder(
             BuiltInRegistries.ARMOR_MATERIAL,
             CompatResourceLocation.create(ChronoDawn.MOD_ID, name),
-            new ArmorMaterial(
-                defenseMap,
-                enchantmentValue,
-                BuiltInRegistries.SOUND_EVENT.wrapAsHolder(equipSound),
-                repairIngredient,
-                List.of(),
-                toughness,
-                knockbackResistance
-            ) {}
+            new ArmorMaterial() {
+                @Override
+                public int getDurabilityForType(ArmorItem.Type type) {
+                    return defenseMap.getOrDefault(type, 0);
+                }
+
+                @Override
+                public int getDefenseForType(ArmorItem.Type type) {
+                    return defenseMap.getOrDefault(type, 0);
+                }
+
+                @Override
+                public int getEnchantmentValue() {
+                    return enchantmentValue;
+                }
+
+                @Override
+                public SoundEvent getEquipSound() {
+                    return equipSound;
+                }
+
+                @Override
+                public Ingredient getRepairIngredient() {
+                    return repairIngredient.get();
+                }
+
+                @Override
+                public String getName() {
+                    return ChronoDawn.MOD_ID + ":" + name;
+                }
+
+                @Override
+                public float getToughness() {
+                    return toughness;
+                }
+
+                @Override
+                public float getKnockbackResistance() {
+                    return knockbackResistance;
+                }
+            }
         );
     }
 }

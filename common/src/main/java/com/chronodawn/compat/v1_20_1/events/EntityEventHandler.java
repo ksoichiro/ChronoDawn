@@ -11,14 +11,9 @@ import com.chronodawn.worldgen.spawning.TimeTyrantSpawner;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.EntityEvent;
 import dev.architectury.event.events.common.TickEvent;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.LivingEntity;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Entity event handler using Architectury Event API.
@@ -58,9 +53,8 @@ public class EntityEventHandler {
     /**
      * Tick counter for time distortion effect processing.
      * Processes every 5 ticks to reduce performance impact.
-     * T430: Now uses per-dimension AtomicInteger for thread-safety and dimension isolation.
      */
-    private static final Map<ResourceLocation, AtomicInteger> timeDistortionTickCounters = new ConcurrentHashMap<>();
+    private static int timeDistortionTickCounter = 0;
     /**
      * Register entity event listeners.
      */
@@ -72,13 +66,9 @@ public class EntityEventHandler {
             // Use location() to compare ResourceLocation instead of ResourceKey
             if (level.dimension().location().equals(ModDimensions.CHRONO_DAWN_DIMENSION.location())) {
                 // T178: Optimize time distortion processing to 5-tick intervals
-                // T430: Use per-dimension tick counter for thread-safety and dimension isolation
-                ResourceLocation dimensionId = level.dimension().location();
-                timeDistortionTickCounters.putIfAbsent(dimensionId, new AtomicInteger(0));
-                AtomicInteger tickCounter = timeDistortionTickCounters.get(dimensionId);
-
-                if (tickCounter.incrementAndGet() >= 5) {
-                    tickCounter.set(0);
+                timeDistortionTickCounter++;
+                if (timeDistortionTickCounter >= 5) {
+                    timeDistortionTickCounter = 0;
                     processChronoDawnEntities(level);
                 }
 
@@ -262,10 +252,9 @@ public class EntityEventHandler {
      */
     private static void handleChronoAegisClarity(ServerPlayer player) {
         // Check if player has Chrono Aegis buff
-        net.minecraft.core.Holder<net.minecraft.world.effect.MobEffect> aegisEffect =
-            net.minecraft.core.registries.BuiltInRegistries.MOB_EFFECT.wrapAsHolder(
-                com.chronodawn.registry.ModEffects.CHRONO_AEGIS_BUFF.get()
-            );
+        // 1.20.1: hasEffect() takes MobEffect directly (not Holder)
+        net.minecraft.world.effect.MobEffect aegisEffect =
+            com.chronodawn.registry.ModEffects.CHRONO_AEGIS_BUFF.get();
 
         if (!player.hasEffect(aegisEffect)) {
             return;
