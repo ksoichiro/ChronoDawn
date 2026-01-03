@@ -474,6 +474,59 @@
     - Synchronous boss room placement blocking main thread
   - **Priority**: Critical (game-breaking bug)
 
+- [ ] T714 [P] Exclude all boss entities from Time Distortion Effect (Slowness debuff)
+  - **Issue**: Boss mobs (Entropy Keeper, Chronos Warden, Clockwork Colossus, Temporal Phantom) are affected by Time Distortion Effect (Slowness IV/V), making them move too slowly during battles
+  - **Feedback Source**: Playtest feedback (2026-01-03)
+  - **Current State**: Only Time Guardian and Time Tyrant are excluded from Time Distortion Effect
+  - **Implementation**:
+    - Update `TimeDistortionEffect.isHostileMob()` method to exclude all boss entities
+    - Add exclusion checks for: ChronosWardenEntity, ClockworkColossusEntity, EntropyKeeperEntity, TemporalPhantomEntity
+    - Reference: `common/src/main/java/com/chronodawn/core/time/TimeDistortionEffect.java:111-142` (isHostileMob method)
+  - **Files to Modify**:
+    - `common/src/main/java/com/chronodawn/core/time/TimeDistortionEffect.java`
+  - **Expected Behavior**: All boss mobs move at normal speed without Slowness debuff, maintaining proper difficulty balance
+
+- [ ] T715 [P] Add spawn eggs for all boss entities (command-only, not in creative tab)
+  - **Requirement**: Boss spawn eggs should be available for testing and debugging via `/give` command, but not displayed in creative inventory tab (following vanilla behavior for Ender Dragon and Wither)
+  - **Feedback Source**: Playtest feedback (2026-01-03)
+  - **Implementation**:
+    - Create spawn egg items for all boss entities using DeferredSpawnEggItem
+    - Add spawn eggs to ModItems.java registry
+    - Call initializeSpawnEgg() in registerSpawnEggs() method
+    - **Do NOT add to creative tab** (do not call output.accept() in addItemsToCreativeTab())
+  - **Boss Entities to Add**:
+    - Time Guardian (TimeGuardianEntity) - Suggest colors: 0xFFD700 (gold) background, 0x4169E1 (royal blue) spots
+    - Time Tyrant (TimeTyrantEntity) - Suggest colors: 0x8B0000 (dark red) background, 0xFFD700 (gold) spots
+    - Chronos Warden (ChronosWardenEntity) - Suggest colors: 0x2F4F4F (dark slate gray) background, 0x00CED1 (dark turquoise) spots
+    - Clockwork Colossus (ClockworkColossusEntity) - Suggest colors: 0x708090 (slate gray) background, 0xFF8C00 (dark orange) spots
+    - Entropy Keeper (EntropyKeeperEntity) - Suggest colors: 0x191970 (midnight blue) background, 0x9370DB (medium purple) spots
+    - Temporal Phantom (TemporalPhantomEntity) - Suggest colors: 0x2F2F2F (dark gray) background, 0xE0E0E0 (light gray) spots
+  - **Reference Implementation**:
+    - Existing spawn eggs: `ModItems.java:1270-1308` (TEMPORAL_WRAITH_SPAWN_EGG, etc.)
+    - Creative tab registration: `ModItems.java:1581-1588` (DO NOT add boss eggs here)
+  - **Files to Modify**:
+    - `common/src/main/java/com/chronodawn/registry/ModItems.java`
+  - **Expected Behavior**: Boss spawn eggs can be obtained via `/give @s chronodawn:time_guardian_spawn_egg` but do not appear in creative inventory
+
+- [ ] T716 [P] Fix duplicate recipe conflict between Enhanced Clockstone Pickaxe and Spatially Linked Pickaxe
+  - **Issue**: Enhanced Clockstone Pickaxe and Spatially Linked Pickaxe have identical recipes (Enhanced Clockstone x3 + Stick x2), causing recipe conflict where only one can be crafted
+  - **Feedback Source**: Playtest feedback (2026-01-03)
+  - **Current Recipes**:
+    - Enhanced Clockstone Pickaxe: `EEE / _S_ / _S_` (E=Enhanced Clockstone, S=Stick)
+    - Spatially Linked Pickaxe: `EEE / _S_ / _S_` (E=Enhanced Clockstone, S=Stick) ← Same pattern!
+  - **Design Spec Reference**: `data-model.md:252-266` specifies Spatially Linked Pickaxe recipe should be:
+    - Stasis Core Fragment x2 + Enhanced Clockstone x3 + Diamond Pickaxe x1
+  - **Problem**: Stasis Core Fragment is not yet implemented
+  - **Proposed Solution** (choose one):
+    1. **Option A** (Recommended): Change Spatially Linked Pickaxe recipe to use Time Crystal instead of Stasis Core Fragment until it's implemented
+       - Pattern: `TCT / EPE / _T_` (T=Time Crystal, C=Clockwork Block or Enhanced Clockstone, E=Enhanced Clockstone, P=Diamond Pickaxe)
+    2. **Option B**: Use smithing table upgrade: Enhanced Clockstone Pickaxe + Time Crystal → Spatially Linked Pickaxe
+    3. **Option C**: Implement Stasis Core Fragment first, then use the spec-compliant recipe
+  - **Files to Modify**:
+    - `common/src/main/resources/data/chronodawn/recipe/spatially_linked_pickaxe.json`
+    - `common/src/main/resources/data/chronodawn/advancement/recipes/misc/spatially_linked_pickaxe.json` (if recipe structure changes)
+  - **Expected Behavior**: Both pickaxes can be crafted with distinct recipes, no recipe conflict
+
 ### Playtest Improvements - Exploration
 
 **Purpose**: Exploration improvements discovered through playtesting
@@ -486,6 +539,129 @@
     - Increase structure spawn rate in chronodawn_plains/forest
     - Add visual cues (e.g., beacon beam visible from distance)
     - Add advancement hint system with approximate coordinates
+
+- [ ] T713 [P] Add iron ore generation to Chrono Dawn dimension
+  - **Issue**: Iron ore does not generate in Chrono Dawn dimension, preventing crafting of buckets, shields, and other essential items
+  - **Feedback Source**: Playtest feedback (2026-01-03)
+  - **Implementation**:
+    - Create `ore_iron.json` configured_feature (similar to Time Crystal ore settings)
+    - Create `ore_iron.json` placed_feature with generation frequency similar to Time Crystal (count: 3, height: Y=0-48)
+    - Add `chronodawn:ore_iron` to all biome feature lists (step 6: underground_ores)
+    - Reference: Time Crystal ore settings at `worldgen/configured_feature/ore_time_crystal.json` and `worldgen/placed_feature/ore_time_crystal.json`
+  - **Expected Behavior**: Iron ore generates at similar frequency to Time Crystal ore, allowing players to obtain iron without returning to Overworld
+
+- [ ] T717 [P] Reduce Clockstone ore generation frequency
+  - **Issue**: Clockstone ore generates too frequently, making it too abundant and reducing resource gathering challenge
+  - **Feedback Source**: Playtest feedback (2026-01-03)
+  - **Current Settings**:
+    - Size: 9 (vein size)
+    - Count: 16 (spawn attempts per chunk)
+    - Height: Y=-16 to 80
+  - **Proposed Adjustment**:
+    - Reduce count from 16 to 8-10 (about 50% reduction)
+    - Keep size: 9 and height range unchanged
+    - This aligns Clockstone frequency closer to iron ore in vanilla (which has count ~10-12 per major height band)
+  - **Files to Modify**:
+    - `common/src/main/resources/data/chronodawn/worldgen/placed_feature/ore_clockstone.json` (change count value)
+  - **Expected Behavior**: Clockstone ore becomes moderately rare, maintaining its value as a tier 1 crafting material without being overly abundant
+
+- [ ] T718 [P] Extend Chrono Aegis buff to all nearby players instead of only the user
+  - **Issue**: Chrono Aegis buff currently applies only to the player who uses the item, making multiplayer boss fights unbalanced (only one player gets protection)
+  - **Feedback Source**: Playtest feedback (2026-01-03)
+  - **Current Implementation**: `ChronoAegisItem.use()` calls `player.addEffect()` only on the user (line 70-77)
+  - **Proposed Implementation**:
+    - Apply buff to all players within a radius (suggest 32 blocks, similar to beacon range)
+    - Use `level.players()` to get all players in dimension, filter by distance from user
+    - Apply same 10-minute Chrono Aegis buff to each player in range
+    - Display message to each affected player indicating they received the buff
+    - Play sound effect at user's location (visible/audible to all nearby players)
+  - **Design Considerations**:
+    - Item still consumed from user's inventory (single use)
+    - All players in range receive full 10-minute buff
+    - Range should be generous to cover typical boss arena (32-64 blocks recommended)
+    - Consider cross-dimension check: only apply to players in same dimension as user
+  - **Files to Modify**:
+    - `common/src/main/java/com/chronodawn/items/ChronoAegisItem.java` (modify use() method)
+  - **Reference Implementation**:
+    - Vanilla beacon: applies effects to all players in range
+    - Current code: `ChronoAegisItem.java:52-102` (use() method)
+  - **Expected Behavior**: When a player uses Chrono Aegis, all nearby players (within 32 blocks) receive the 10-minute buff, making multiplayer boss fights more balanced
+
+- [ ] T719 [P] Add axe stripping functionality for Time Wood logs (bark removal with right-click)
+  - **Issue**: Time Wood logs (Time Wood Log, Dark Time Wood Log, Ancient Time Wood Log) cannot be stripped with axe right-click, unlike vanilla logs
+  - **Feedback Source**: Playtest feedback (2026-01-03)
+  - **Current State**: Stripped variants do not exist
+  - **Implementation**:
+    1. **Create Stripped Log Blocks** (3 variants):
+       - Stripped Time Wood Log
+       - Stripped Dark Time Wood Log
+       - Stripped Ancient Time Wood Log
+       - Use `RotatedPillarBlock` class (same as regular logs)
+       - Copy block properties from corresponding regular logs
+    2. **Create Stripped Wood Blocks** (3 variants, optional but recommended for parity):
+       - Stripped Time Wood (all-bark block, if regular Time Wood exists)
+       - Stripped Dark Time Wood
+       - Stripped Ancient Time Wood
+    3. **Register Strippable Mappings**:
+       - Use `UseOnContext` event to register axe stripping behavior
+       - Map: Time Wood Log → Stripped Time Wood Log
+       - Map: Dark Time Wood Log → Stripped Dark Time Wood Log
+       - Map: Ancient Time Wood Log → Stripped Ancient Time Wood Log
+       - Reference: Vanilla uses `AxeItem.STRIPPABLES` map (access via mixin or event)
+    4. **Add Block/Item Registration**:
+       - Register stripped blocks in `ModBlocks.java`
+       - Register stripped block items in `ModItems.java`
+       - Add to creative tab
+    5. **Add Loot Tables**:
+       - Create loot tables for stripped logs (drop themselves)
+       - Path: `data/chronodawn/loot_table/blocks/stripped_time_wood_log.json`, etc.
+    6. **Add Textures**:
+       - Create stripped log textures (top and side)
+       - Follow vanilla stripped log pattern (lighter, no bark texture)
+  - **Files to Modify/Create**:
+    - `common/src/main/java/com/chronodawn/registry/ModBlocks.java` (add stripped blocks)
+    - `common/src/main/java/com/chronodawn/registry/ModItems.java` (add stripped block items)
+    - `common/src/main/java/com/chronodawn/events/BlockEventHandler.java` (add stripping logic)
+    - `common/src/main/resources/assets/chronodawn/blockstates/stripped_*.json` (3 files)
+    - `common/src/main/resources/assets/chronodawn/models/block/stripped_*.json` (3 files)
+    - `common/src/main/resources/assets/chronodawn/textures/block/stripped_*_log*.png` (6 textures)
+    - `common/src/main/resources/data/chronodawn/loot_table/blocks/stripped_*.json` (3 files)
+  - **Reference Implementation**:
+    - Vanilla: Oak Log → Stripped Oak Log (right-click with any axe)
+    - Architectury example: Use `UseOnContext` event to intercept axe usage
+  - **Expected Behavior**: Right-clicking Time Wood logs with any axe converts them to stripped variants, matching vanilla behavior
+
+- [ ] T720 [P] Fix NeoForge block placement item loss in protected boss rooms
+  - **Issue**: On NeoForge, when players try to place blocks in protected boss rooms, the block placement is cancelled but the item is consumed from inventory, causing item loss
+  - **Feedback Source**: Playtest feedback (2026-01-03)
+  - **Root Cause**: NeoForge's `BlockEvent.EntityPlaceEvent` fires AFTER the item is consumed, so cancelling the event doesn't restore the item
+  - **Current Implementation**:
+    - NeoForge: Uses `BlockEvent.EntityPlaceEvent` which is too late (line 80-119 in `neoforge/event/BlockProtectionEventHandler.java`)
+    - Fabric: Uses `UseBlockCallback.EVENT` which fires BEFORE placement, correctly preventing item consumption (line 71-114 in `fabric/event/BlockProtectionEventHandler.java`)
+  - **Proposed Solution**:
+    - Replace `BlockEvent.EntityPlaceEvent` with `PlayerInteractEvent.RightClickBlock` event in NeoForge implementation
+    - Check protection BEFORE block placement occurs
+    - Return `InteractionResult.FAIL` to cancel placement without consuming item
+    - Pattern similar to Fabric's UseBlockCallback approach
+  - **Implementation Steps**:
+    1. Remove `@SubscribeEvent onBlockPlace(BlockEvent.EntityPlaceEvent)` method
+    2. Add new `@SubscribeEvent onRightClickBlock(PlayerInteractEvent.RightClickBlock)` method
+    3. Check if player is holding a BlockItem (similar to Fabric line 80)
+    4. Calculate placement position from hit result
+    5. Check protection (boss room and permanent)
+    6. Return `InteractionResult.FAIL` if protected (cancels action without consuming item)
+    7. Return `InteractionResult.PASS` if not protected (allows normal placement)
+  - **Files to Modify**:
+    - `neoforge/src/main/java/com/chronodawn/neoforge/event/BlockProtectionEventHandler.java`
+  - **Reference Implementation**:
+    - Fabric implementation (correct): `fabric/event/BlockProtectionEventHandler.java:71-114`
+    - NeoForge PlayerInteractEvent.RightClickBlock documentation
+  - **Testing**:
+    - Verify block placement is prevented in protected areas WITHOUT consuming items
+    - Verify warning message still displays
+    - Verify creative mode bypass still works
+    - Test with various block types (normal blocks, slabs, stairs, etc.)
+  - **Expected Behavior**: When players attempt to place blocks in protected boss rooms on NeoForge, the placement is cancelled AND the item remains in inventory (matching Fabric behavior)
 
 ### Playtest Improvements - Guidebook Distribution
 
