@@ -717,6 +717,23 @@
   - **Expected Behavior**: Players can craft Wood blocks from logs and strip them with axes, matching vanilla wood behavior
   - **Note**: This task depends on T719 being completed first (stripped log blocks must exist)
 
+- [ ] T722 [P] Fix slow mining speed for Stripped Time Wood Logs and Wood blocks with axes
+  - **Issue**: Stripped Time Wood Log (3 variants) have slow mining speed when using axes, not matching vanilla stripped log behavior
+  - **Feedback Source**: Playtest feedback (2026-01-03)
+  - **Potential Issue**: T721 Wood blocks may have the same problem
+  - **Implementation**:
+    - Check block material/properties for Stripped Time Wood Log blocks
+    - Ensure blocks are properly tagged for axe mining efficiency
+    - Add blocks to minecraft:mineable/axe block tag if missing
+    - Verify correct hardness and resistance values
+    - Test all 3 Stripped Log variants and 6 Wood variants after T721 completion
+  - **Files to Check/Modify**:
+    - `common/src/main/java/com/chronodawn/blocks/StrippedTimeWoodLog.java` (and variants)
+    - `common/src/main/resources/data/minecraft/tags/blocks/mineable/axe.json` (or chronodawn override)
+    - Block registration in `ModBlocks.java`
+  - **Expected Behavior**: Stripped logs and wood blocks should mine quickly with axes, matching vanilla wood block behavior
+  - **Note**: Should be implemented after T721 completion to fix both stripped logs and wood blocks together
+
 ### Playtest Improvements - Guidebook Distribution
 
 **Purpose**: Fix guidebook distribution bugs discovered through playtesting
