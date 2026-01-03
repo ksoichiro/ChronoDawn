@@ -4,10 +4,13 @@ import com.chronodawn.ChronoDawn;
 import com.chronodawn.worldgen.protection.BlockProtectionHandler;
 import com.chronodawn.worldgen.protection.PermanentProtectionHandler;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
 
 /**
@@ -18,13 +21,14 @@ import net.neoforged.neoforge.event.level.BlockEvent;
  *
  * Features:
  * - Listens to BlockEvent.BreakEvent (block breaking)
- * - Listens to BlockEvent.EntityPlaceEvent (block placement)
+ * - Listens to PlayerInteractEvent.RightClickBlock (block placement)
  * - Checks if block position is protected (temporary or permanent)
  * - Cancels events and displays message in survival mode
  * - Allows creative mode players to bypass protection
  *
  * Implementation: T224 - Boss room protection system (NeoForge)
  *                T302 - Permanent Master Clock wall protection
+ *                T720 - Fixed NeoForge block placement item loss
  */
 @EventBusSubscriber(modid = ChronoDawn.MOD_ID)
 public class BlockProtectionEventHandler {
@@ -73,26 +77,36 @@ public class BlockProtectionEventHandler {
     }
 
     /**
-     * Handle block place event.
-     * Prevents placing blocks in protected boss rooms.
+     * Handle right-click block interaction event.
+     * Prevents placing blocks in protected boss rooms BEFORE item consumption.
+     *
+     * This event fires BEFORE the block is placed, allowing us to cancel the action
+     * without consuming the item from the player's inventory.
      */
     @SubscribeEvent
-    public static void onBlockPlace(BlockEvent.EntityPlaceEvent event) {
-        // Only check player-placed blocks
-        if (!(event.getEntity() instanceof Player player)) {
-            return;
-        }
-
-        Level level = (Level) event.getLevel();
+    public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
+        Player player = event.getEntity();
+        Level level = event.getLevel();
 
         // Allow creative mode players to place anything
         if (player.isCreative()) {
             return;
         }
 
+        // Only check block placement, not other interactions (door open, button press, etc.)
+        // Check if player is holding a block item that could be placed
+        var heldItem = player.getItemInHand(event.getHand());
+        if (heldItem.isEmpty() || !(heldItem.getItem() instanceof BlockItem)) {
+            // Not holding a block item - allow interaction (door, button, etc.)
+            return;
+        }
+
+        // Calculate the placement position (clicked block + face direction)
+        var pos = event.getPos().relative(event.getFace());
+
         // Check if this position is protected (boss room or permanent)
-        boolean isPermanentlyProtected = PermanentProtectionHandler.isProtected(level, event.getPos());
-        boolean isBossRoomProtected = BlockProtectionHandler.isProtected(level, event.getPos());
+        boolean isPermanentlyProtected = PermanentProtectionHandler.isProtected(level, pos);
+        boolean isBossRoomProtected = BlockProtectionHandler.isProtected(level, pos);
 
         if (isPermanentlyProtected) {
             // Display warning message for permanent protection
@@ -101,7 +115,10 @@ public class BlockProtectionEventHandler {
                 true // action bar
             );
 
-            // Cancel block place event
+            ChronoDawn.LOGGER.info("Blocked permanent protected block placement at {} by {}", pos, player.getName().getString());
+
+            // Cancel block placement (FAIL = cancel without consuming item)
+            event.setCancellationResult(InteractionResult.FAIL);
             event.setCanceled(true);
             return;
         }
@@ -113,7 +130,10 @@ public class BlockProtectionEventHandler {
                 true // action bar
             );
 
-            // Cancel block place event
+            ChronoDawn.LOGGER.info("Blocked boss room protected block placement at {} by {}", pos, player.getName().getString());
+
+            // Cancel block placement (FAIL = cancel without consuming item)
+            event.setCancellationResult(InteractionResult.FAIL);
             event.setCanceled(true);
         }
     }
