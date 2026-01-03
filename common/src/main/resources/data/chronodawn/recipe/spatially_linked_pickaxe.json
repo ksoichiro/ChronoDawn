@@ -2,16 +2,22 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "pattern": [
-    "EEE",
-    " S ",
-    " S "
+    "TCT",
+    "EPE",
+    " T "
   ],
   "key": {
+    "T": {
+      "item": "chronodawn:time_crystal"
+    },
+    "C": {
+      "item": "chronodawn:enhanced_clockstone"
+    },
     "E": {
       "item": "chronodawn:enhanced_clockstone"
     },
-    "S": {
-      "item": "minecraft:stick"
+    "P": {
+      "item": "minecraft:diamond_pickaxe"
     }
   },
   "result": {
