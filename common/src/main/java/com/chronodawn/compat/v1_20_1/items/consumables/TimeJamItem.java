@@ -42,7 +42,7 @@ public class TimeJamItem extends Item {
     public static Properties createProperties() {
         FoodProperties foodProperties = new FoodProperties.Builder()
                 .nutrition(4)        // 4 hunger points (2 drumsticks)
-                .saturation(0.5f)  // Saturation modifier (total: 4 * 0.5 = 2.0)
+                .saturationMod(0.5f)  // Saturation modifier (total: 4 * 0.5 = 2.0)
                 .effect(
                         new MobEffectInstance(
                                 MobEffects.MOVEMENT_SPEED,  // Speed I

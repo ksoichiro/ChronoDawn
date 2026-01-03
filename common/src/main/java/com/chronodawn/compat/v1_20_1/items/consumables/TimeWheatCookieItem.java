@@ -21,7 +21,7 @@ public class TimeWheatCookieItem extends Item {
     public static Properties createProperties() {
         FoodProperties foodProperties = new FoodProperties.Builder()
                 .nutrition(2)
-                .saturation(0.4f)
+                .saturationMod(0.4f)
                 .fast()
                 .build();
 

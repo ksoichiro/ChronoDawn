@@ -43,7 +43,7 @@ public class TimeBreadItem extends Item {
     public static Properties createProperties() {
         FoodProperties foodProperties = new FoodProperties.Builder()
                 .nutrition(5)        // 5 hunger points (2.5 drumsticks)
-                .saturation(0.6f)  // Saturation modifier (total: 5 * 0.6 = 3.0)
+                .saturationMod(0.6f)  // Saturation modifier (total: 5 * 0.6 = 3.0)
                 .effect(
                         new MobEffectInstance(
                                 MobEffects.REGENERATION,  // Regeneration I

@@ -22,7 +22,7 @@ public class GlisteningChronoMelonItem extends Item {
     public static Properties createProperties() {
         FoodProperties foodProperties = new FoodProperties.Builder()
                 .nutrition(2)
-                .saturation(1.2f)
+                .saturationMod(1.2f)
                 .effect(new MobEffectInstance(MobEffects.ABSORPTION, 30 * 20, 0), 1.0f)
                 .build();
 

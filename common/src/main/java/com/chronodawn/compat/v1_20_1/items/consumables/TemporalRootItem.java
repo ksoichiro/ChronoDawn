@@ -44,7 +44,7 @@ public class TemporalRootItem extends ItemNameBlockItem {
     public static Properties createProperties() {
         FoodProperties foodProperties = new FoodProperties.Builder()
                 .nutrition(3)        // 3 hunger points (1.5 drumsticks)
-                .saturation(0.6f)  // Saturation modifier (total: 3 * 0.6 = 1.8)
+                .saturationMod(0.6f)  // Saturation modifier (total: 3 * 0.6 = 1.8)
                 .build();
 
         return new Properties()

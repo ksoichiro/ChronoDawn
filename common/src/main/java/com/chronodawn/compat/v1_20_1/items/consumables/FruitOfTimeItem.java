@@ -44,7 +44,7 @@ public class FruitOfTimeItem extends Item {
     public static Properties createProperties() {
         FoodProperties foodProperties = new FoodProperties.Builder()
                 .nutrition(4)        // 4 hunger points (2 drumsticks)
-                .saturation(0.6f)  // Saturation modifier (total: 4 * 0.6 = 2.4)
+                .saturationMod(0.6f)  // Saturation modifier (total: 4 * 0.6 = 2.4)
                 .effect(
                         new MobEffectInstance(
                                 MobEffects.DIG_SPEED,  // Haste I

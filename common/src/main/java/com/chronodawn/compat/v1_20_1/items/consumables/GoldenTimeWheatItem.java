@@ -23,7 +23,7 @@ public class GoldenTimeWheatItem extends Item {
     public static Properties createProperties() {
         FoodProperties foodProperties = new FoodProperties.Builder()
                 .nutrition(4)
-                .saturation(1.2f)
+                .saturationMod(1.2f)
                 .effect(new MobEffectInstance(MobEffects.REGENERATION, 10 * 20, 1), 1.0f)
                 .effect(new MobEffectInstance(MobEffects.ABSORPTION, 120 * 20, 1), 1.0f)
                 .alwaysEdible()

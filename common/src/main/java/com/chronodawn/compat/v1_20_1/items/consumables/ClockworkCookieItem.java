@@ -47,7 +47,7 @@ public class ClockworkCookieItem extends Item {
     public static Properties createProperties() {
         FoodProperties foodProperties = new FoodProperties.Builder()
                 .nutrition(2)              // 2 hunger points (1 drumstick)
-                .saturation(0.4f)  // Saturation modifier (total: 2 * 0.4 = 0.8)
+                .saturationMod(0.4f)  // Saturation modifier (total: 2 * 0.4 = 0.8)
                 .effect(
                         new MobEffectInstance(
                                 MobEffects.DAMAGE_RESISTANCE,  // Resistance I

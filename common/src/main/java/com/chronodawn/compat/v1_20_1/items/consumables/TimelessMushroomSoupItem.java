@@ -27,7 +27,7 @@ public class TimelessMushroomSoupItem extends Item {
     public static Properties createProperties() {
         FoodProperties foodProperties = new FoodProperties.Builder()
                 .nutrition(6)
-                .saturation(0.6f)
+                .saturationMod(0.6f)
                 .effect(new MobEffectInstance(MobEffects.NIGHT_VISION, 60 * 20, 0), 1.0f)
                 .build();
 

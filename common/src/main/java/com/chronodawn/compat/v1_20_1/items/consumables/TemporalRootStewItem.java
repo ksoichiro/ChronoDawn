@@ -28,7 +28,7 @@ public class TemporalRootStewItem extends Item {
     public static Properties createProperties() {
         FoodProperties foodProperties = new FoodProperties.Builder()
                 .nutrition(8)
-                .saturation(0.6f)
+                .saturationMod(0.6f)
                 .effect(new MobEffectInstance(MobEffects.REGENERATION, 10 * 20, 1), 1.0f)
                 .build();
 

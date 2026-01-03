@@ -42,7 +42,7 @@ public class TimeFruitPieItem extends Item {
     public static Properties createProperties() {
         FoodProperties foodProperties = new FoodProperties.Builder()
                 .nutrition(8)        // 8 hunger points (4 drumsticks)
-                .saturation(0.8f)  // Saturation modifier (total: 8 * 0.8 = 6.4)
+                .saturationMod(0.8f)  // Saturation modifier (total: 8 * 0.8 = 6.4)
                 .effect(
                         new MobEffectInstance(
                                 MobEffects.DIG_SPEED,  // Haste II

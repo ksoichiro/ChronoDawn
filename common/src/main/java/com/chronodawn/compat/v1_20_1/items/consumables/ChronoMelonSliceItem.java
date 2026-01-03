@@ -47,7 +47,7 @@ public class ChronoMelonSliceItem extends Item {
     public static Properties createProperties() {
         FoodProperties foodProperties = new FoodProperties.Builder()
                 .nutrition(2)        // 2 hunger points (1 drumstick)
-                .saturation(0.3f)  // Saturation modifier (total: 2 * 0.3 = 0.6)
+                .saturationMod(0.3f)  // Saturation modifier (total: 2 * 0.3 = 0.6)
                 .fast()              // Fast eating speed (1.6 seconds instead of 3.2)
                 .build();
 

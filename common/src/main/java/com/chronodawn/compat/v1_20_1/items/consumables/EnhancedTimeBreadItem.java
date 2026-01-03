@@ -23,7 +23,7 @@ public class EnhancedTimeBreadItem extends Item {
     public static Properties createProperties() {
         FoodProperties foodProperties = new FoodProperties.Builder()
                 .nutrition(7)
-                .saturation(0.8f)
+                .saturationMod(0.8f)
                 .effect(new MobEffectInstance(MobEffects.SATURATION, 5 * 20, 0), 1.0f)
                 .build();
 

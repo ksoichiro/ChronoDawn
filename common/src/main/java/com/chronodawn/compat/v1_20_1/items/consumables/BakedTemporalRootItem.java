@@ -48,7 +48,7 @@ public class BakedTemporalRootItem extends Item {
     public static Properties createProperties() {
         FoodProperties foodProperties = new FoodProperties.Builder()
                 .nutrition(6)        // 6 hunger points (3 drumsticks)
-                .saturation(0.6f)  // Saturation modifier (total: 6 * 0.6 = 3.6)
+                .saturationMod(0.6f)  // Saturation modifier (total: 6 * 0.6 = 3.6)
                 .effect(
                         new MobEffectInstance(
                                 MobEffects.REGENERATION,  // Regeneration I

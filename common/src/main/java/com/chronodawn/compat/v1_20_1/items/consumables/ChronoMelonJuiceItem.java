@@ -30,7 +30,7 @@ public class ChronoMelonJuiceItem extends Item {
     public static Properties createProperties() {
         FoodProperties foodProperties = new FoodProperties.Builder()
                 .nutrition(4)
-                .saturation(0.4f)
+                .saturationMod(0.4f)
                 .effect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 60 * 20, 0), 1.0f)
                 .build();
 
