@@ -474,7 +474,7 @@
     - Synchronous boss room placement blocking main thread
   - **Priority**: Critical (game-breaking bug)
 
-- [ ] T714 [P] Exclude all boss entities from Time Distortion Effect (Slowness debuff)
+- [x] T714 [P] Exclude all boss entities from Time Distortion Effect (Slowness debuff)
   - **Issue**: Boss mobs (Entropy Keeper, Chronos Warden, Clockwork Colossus, Temporal Phantom) are affected by Time Distortion Effect (Slowness IV/V), making them move too slowly during battles
   - **Feedback Source**: Playtest feedback (2026-01-03)
   - **Current State**: Only Time Guardian and Time Tyrant are excluded from Time Distortion Effect
@@ -482,9 +482,17 @@
     - Update `TimeDistortionEffect.isHostileMob()` method to exclude all boss entities
     - Add exclusion checks for: ChronosWardenEntity, ClockworkColossusEntity, EntropyKeeperEntity, TemporalPhantomEntity
     - Reference: `common/src/main/java/com/chronodawn/core/time/TimeDistortionEffect.java:111-142` (isHostileMob method)
-  - **Files to Modify**:
+  - **Files Modified**:
     - `common/src/main/java/com/chronodawn/core/time/TimeDistortionEffect.java`
-  - **Expected Behavior**: All boss mobs move at normal speed without Slowness debuff, maintaining proper difficulty balance
+      - Added imports for all 4 boss entities (ChronosWardenEntity, ClockworkColossusEntity, EntropyKeeperEntity, TemporalPhantomEntity)
+      - Updated `isHostileMob()` method to exclude all boss entities
+      - Added debug logging for boss exclusion verification
+      - Updated class documentation to reflect all boss exclusions
+    - `common/src/main/java/com/chronodawn/entities/bosses/ChronosWardenEntity.java`
+      - Increased movement speed from 0.15 to 0.20 (standard boss speed, matching Time Guardian and Entropy Keeper)
+      - Updated class documentation to reflect new movement speed
+  - **Result**: All boss mobs now move at normal speed without Slowness debuff, maintaining proper difficulty balance
+  - **Completed**: 2026-01-03
 
 - [ ] T715 [P] Add spawn eggs for all boss entities (command-only, not in creative tab)
   - **Requirement**: Boss spawn eggs should be available for testing and debugging via `/give` command, but not displayed in creative inventory tab (following vanilla behavior for Ender Dragon and Wither)
