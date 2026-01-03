@@ -51,12 +51,10 @@ public class ChronoDawnGlobalState extends CompatSavedData {
         }
 
         DimensionDataStorage storage = overworld.getDataStorage();
-        return storage.computeIfAbsent(
-            new SavedData.Factory<>(
-                ChronoDawnGlobalState::new,
-                ChronoDawnGlobalState::load,
-                null
-            ),
+        return CompatSavedData.computeIfAbsent(
+            storage,
+            ChronoDawnGlobalState::new,
+            ChronoDawnGlobalState::load,
             DATA_NAME
         );
     }

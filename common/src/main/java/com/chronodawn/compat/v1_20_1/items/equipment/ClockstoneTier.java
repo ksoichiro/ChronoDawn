@@ -46,6 +46,11 @@ public class ClockstoneTier implements Tier {
     }
 
     @Override
+    public int getLevel() {
+        return 2; // Iron mining level
+    }
+
+    @Override
     public TagKey<Block> getIncorrectBlocksForDrops() {
         return BlockTags.INCORRECT_FOR_IRON_TOOL; // Iron mining level
     }

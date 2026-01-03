@@ -1,8 +1,13 @@
 package com.chronodawn.compat;
 
 import com.chronodawn.compat.SavedDataHandler;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.minecraft.world.level.storage.DimensionDataStorage;
+
+import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 /**
  * Base class for SavedData that abstracts version differences (Minecraft 1.20.1).
@@ -60,4 +65,32 @@ public abstract class CompatSavedData extends SavedData implements SavedDataHand
      */
     @Override
     public abstract void loadData(CompoundTag tag);
+
+    /**
+     * Version-compatible wrapper for DimensionDataStorage.computeIfAbsent().
+     * Handles API differences between 1.20.1 and 1.21.1.
+     *
+     * 1.20.1: computeIfAbsent(Function<CompoundTag, T>, Supplier<T>, String)
+     * 1.21.1: computeIfAbsent(SavedData.Factory<T>, String)
+     *
+     * @param storage DimensionDataStorage instance
+     * @param constructor Supplier that creates new instance
+     * @param deserializer BiFunction that loads from NBT (tag, provider) -> T
+     * @param id SavedData ID
+     * @param <T> SavedData type
+     * @return Loaded or newly created SavedData instance
+     */
+    public static <T extends SavedData> T computeIfAbsent(
+        DimensionDataStorage storage,
+        Supplier<T> constructor,
+        BiFunction<CompoundTag, HolderLookup.Provider, T> deserializer,
+        String id
+    ) {
+        // 1.20.1: computeIfAbsent(Function<CompoundTag, T>, Supplier<T>, String)
+        return storage.computeIfAbsent(
+            tag -> deserializer.apply(tag, null), // HolderLookup.Provider is null in 1.20.1
+            constructor,
+            id
+        );
+    }
 }

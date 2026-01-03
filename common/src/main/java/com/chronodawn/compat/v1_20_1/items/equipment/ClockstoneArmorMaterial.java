@@ -80,9 +80,10 @@ public class ClockstoneArmorMaterial {
                 enchantmentValue,
                 BuiltInRegistries.SOUND_EVENT.wrapAsHolder(equipSound),
                 repairIngredient,
+                List.of(),
                 toughness,
                 knockbackResistance
-            )
+            ) {}
         );
     }
 }

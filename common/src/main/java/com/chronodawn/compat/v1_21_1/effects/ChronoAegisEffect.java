@@ -52,6 +52,7 @@ public class ChronoAegisEffect extends MobEffect {
         // This design avoids ConcurrentModificationException that occurs when
         // calling removeEffect() during applyEffectTick() while the game is
         // saving entity NBT data.
+        // 1.21.1 version: boolean return type
         return true;
     }
 }

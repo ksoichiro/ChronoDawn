@@ -1,6 +1,7 @@
 package com.chronodawn.data;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.compat.CompatSavedData;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -48,8 +49,10 @@ public class PlayerProgressData extends ChronoDawnWorldData {
      * @return Player progress data instance
      */
     public static PlayerProgressData get(ServerLevel level) {
-        return level.getDataStorage().computeIfAbsent(
-            new SavedData.Factory<>(PlayerProgressData::new, PlayerProgressData::load, null),
+        return CompatSavedData.computeIfAbsent(
+            level.getDataStorage(),
+            PlayerProgressData::new,
+            PlayerProgressData::load,
             DATA_NAME
         );
     }

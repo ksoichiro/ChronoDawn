@@ -1,6 +1,7 @@
 package com.chronodawn.data;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.compat.CompatSavedData;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -54,8 +55,10 @@ public class DimensionStateData extends ChronoDawnWorldData {
      * @return Dimension state data instance
      */
     public static DimensionStateData get(ServerLevel level) {
-        return level.getDataStorage().computeIfAbsent(
-            new SavedData.Factory<>(DimensionStateData::new, DimensionStateData::load, null),
+        return CompatSavedData.computeIfAbsent(
+            level.getDataStorage(),
+            DimensionStateData::new,
+            DimensionStateData::load,
             DATA_NAME
         );
     }

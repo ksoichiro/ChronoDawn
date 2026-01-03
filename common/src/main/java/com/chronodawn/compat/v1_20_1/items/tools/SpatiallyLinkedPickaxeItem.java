@@ -57,6 +57,11 @@ public class SpatiallyLinkedPickaxeItem extends PickaxeItem {
         }
 
         @Override
+        public int getLevel() {
+            return 3; // Diamond mining level
+        }
+
+        @Override
         public TagKey<Block> getIncorrectBlocksForDrops() {
             return BlockTags.INCORRECT_FOR_DIAMOND_TOOL;
         }

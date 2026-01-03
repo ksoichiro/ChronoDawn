@@ -38,12 +38,10 @@ public class TimeKeeperVillageData extends CompatSavedData {
      */
     public static TimeKeeperVillageData get(ServerLevel level) {
         DimensionDataStorage storage = level.getDataStorage();
-        return storage.computeIfAbsent(
-            new SavedData.Factory<>(
-                TimeKeeperVillageData::new,
-                TimeKeeperVillageData::load,
-                null
-            ),
+        return CompatSavedData.computeIfAbsent(
+            storage,
+            TimeKeeperVillageData::new,
+            TimeKeeperVillageData::load,
             DATA_NAME
         );
     }

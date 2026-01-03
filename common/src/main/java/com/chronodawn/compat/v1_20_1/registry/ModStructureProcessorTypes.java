@@ -27,7 +27,7 @@ public class ModStructureProcessorTypes {
     public static final RegistrySupplier<StructureProcessorType<CopyFluidLevelProcessor>> COPY_FLUID_LEVEL =
         STRUCTURE_PROCESSOR_TYPES.register(
             "copy_fluid_level",
-            () -> () -> CopyFluidLevelProcessor.CODEC
+            () -> () -> CopyFluidLevelProcessor.CODEC.codec()
         );
 
     /**
@@ -37,7 +37,7 @@ public class ModStructureProcessorTypes {
     public static final RegistrySupplier<StructureProcessorType<BossRoomProtectionProcessor>> BOSS_ROOM_PROTECTION =
         STRUCTURE_PROCESSOR_TYPES.register(
             "boss_room_protection",
-            () -> () -> BossRoomProtectionProcessor.CODEC
+            () -> () -> BossRoomProtectionProcessor.CODEC.codec()
         );
 
     /**

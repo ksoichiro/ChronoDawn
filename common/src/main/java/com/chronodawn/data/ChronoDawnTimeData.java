@@ -32,12 +32,10 @@ public class ChronoDawnTimeData extends CompatSavedData {
      * Get or create the ChronoDawnTimeData for the given level.
      */
     public static ChronoDawnTimeData get(ServerLevel level) {
-        return level.getDataStorage().computeIfAbsent(
-            new Factory<>(
-                ChronoDawnTimeData::new,
-                ChronoDawnTimeData::load,
-                null // No data fixer type needed
-            ),
+        return CompatSavedData.computeIfAbsent(
+            level.getDataStorage(),
+            ChronoDawnTimeData::new,
+            ChronoDawnTimeData::load,
             DATA_NAME
         );
     }

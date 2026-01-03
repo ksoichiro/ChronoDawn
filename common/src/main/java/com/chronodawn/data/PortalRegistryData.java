@@ -1,6 +1,7 @@
 package com.chronodawn.data;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.compat.CompatSavedData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -67,8 +68,10 @@ public class PortalRegistryData extends ChronoDawnWorldData {
      * @return Portal registry data instance
      */
     public static PortalRegistryData get(ServerLevel level) {
-        return level.getDataStorage().computeIfAbsent(
-            new SavedData.Factory<>(PortalRegistryData::new, PortalRegistryData::load, null),
+        return CompatSavedData.computeIfAbsent(
+            level.getDataStorage(),
+            PortalRegistryData::new,
+            PortalRegistryData::load,
             DATA_NAME
         );
     }
