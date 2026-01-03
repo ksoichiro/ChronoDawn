@@ -463,6 +463,9 @@ public class MasterClockBossRoomPlacer {
             ChronoDawn.LOGGER.info("IMMEDIATE finalize for stairs #{} at {}", stairsPlaced + 1, currentPos);
             finalizeWaterloggingAfterPlacement(level, currentPos, templateSize, rotation);
 
+            // STEP 3.3: Process markers immediately (register protection for this structure only)
+            com.chronodawn.worldgen.processors.BossRoomProtectionProcessor.processPendingMarkersImmediate(level);
+
             // STEP 3.5: Schedule delayed finalize to catch late waterlogging from adjacent chunks
             // Store immutable copy for lambda capture
             final BlockPos finalCurrentPos = currentPos.immutable();
@@ -471,7 +474,6 @@ public class MasterClockBossRoomPlacer {
             final int finalStairsNumber = stairsPlaced + 1;
             level.getServer().tell(new net.minecraft.server.TickTask(level.getServer().getTickCount() + 2, () -> {
                 finalizeWaterloggingAfterPlacement(level, finalCurrentPos, finalTemplateSize, finalRotation);
-                ChronoDawn.LOGGER.info("Delayed finalize for stairs #{} completed", finalStairsNumber);
             }));
 
             // STEP 4: Add this structure to protected areas to prevent later structures from removing its water
@@ -582,13 +584,15 @@ public class MasterClockBossRoomPlacer {
         // STEP 3: Finalize waterlogging AFTER placement
         finalizeWaterloggingAfterPlacement(level, stairsBottomPos, stairsBottomTemplateSizeOriginal, rotation);
 
+        // STEP 3.3: Process markers immediately (register protection for this structure only)
+        com.chronodawn.worldgen.processors.BossRoomProtectionProcessor.processPendingMarkersImmediate(level);
+
         // STEP 3.5: Schedule delayed finalize for stairs_bottom
         final BlockPos finalStairsBottomPos = stairsBottomPos.immutable();
         final net.minecraft.core.Vec3i finalStairsBottomTemplateSizeOriginal = stairsBottomTemplateSizeOriginal;
         final Rotation finalRotation = rotation;
         level.getServer().tell(new net.minecraft.server.TickTask(level.getServer().getTickCount() + 2, () -> {
             finalizeWaterloggingAfterPlacement(level, finalStairsBottomPos, finalStairsBottomTemplateSizeOriginal, finalRotation);
-            ChronoDawn.LOGGER.info("Delayed finalize for stairs_bottom completed");
         }));
 
         // STEP 4: Add this structure to protected areas
@@ -598,6 +602,7 @@ public class MasterClockBossRoomPlacer {
                 stairsBottomPos.offset(stairsBottomTemplateSize.getX() - 1, stairsBottomTemplateSize.getY() - 1, stairsBottomTemplateSize.getZ() - 1)
             );
         protectedAreas.add(stairsBottomBoundingBox);
+        ChronoDawn.LOGGER.info("Stairs_bottom bounding box: {}", stairsBottomBoundingBox);
 
         // Record stairs_bottom top Jigsaw position for later removal (at Y=11)
         BlockPos stairsBottomTopJigsawOffset = switch (rotation) {
@@ -756,10 +761,33 @@ public class MasterClockBossRoomPlacer {
             case COUNTERCLOCKWISE_90 -> new BlockPos(7, 10, 0); // 270° (EAST)
         };
 
-        // Calculate corridor placement position so its Jigsaw aligns with stairs_bottom Jigsaw
-        BlockPos corridorPlacementPos = stairsBottomJigsawPos.subtract(corridorStairsBottomJigsawOffset);
-        ChronoDawn.LOGGER.info("Corridor placement position: {} (to align Jigsaw at {} with stairs_bottom Jigsaw)",
-            corridorPlacementPos, corridorStairsBottomJigsawOffset);
+        // Calculate corridor placement position
+        // NOTE: Jigsaw blocks should be ADJACENT (touching), not OVERLAPPING
+        // Horizontal connections require 1-block offset in the Jigsaw facing direction
+        BlockPos jigsawOffset = switch (rotation) {
+            case NONE -> new BlockPos(1, 0, 0);              // East (+X)
+            case CLOCKWISE_90 -> new BlockPos(0, 0, 1);      // South (+Z)
+            case CLOCKWISE_180 -> new BlockPos(-1, 0, 0);    // West (-X)
+            case COUNTERCLOCKWISE_90 -> new BlockPos(0, 0, -1); // North (-Z)
+        };
+
+        BlockPos corridorPlacementPos = stairsBottomJigsawPos.subtract(corridorStairsBottomJigsawOffset).offset(jigsawOffset);
+
+        // Calculate where corridor's Jigsaw will actually be placed
+        BlockPos calculatedCorridorJigsawPos = corridorPlacementPos.offset(corridorStairsBottomJigsawOffset);
+
+        ChronoDawn.LOGGER.info("Corridor placement position: {} (offset by {} to prevent overlap)",
+            corridorPlacementPos, jigsawOffset);
+        ChronoDawn.LOGGER.info("Alignment check: stairs_bottom Jigsaw={}, corridor Jigsaw will be at={}, distance={}",
+            stairsBottomJigsawPos, calculatedCorridorJigsawPos, stairsBottomJigsawPos.distManhattan(calculatedCorridorJigsawPos));
+
+        // Get DecorativeWater block for protection
+        var decorativeWaterBlock = net.minecraft.core.registries.BuiltInRegistries.BLOCK
+            .get(ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "decorative_water"));
+
+        // Get template size for water removal
+        net.minecraft.core.Vec3i corridorSize = template.getSize();
+        net.minecraft.core.Vec3i corridorTemplateSize = template.getSize(rotation);
 
         // Create placement settings
         StructurePlaceSettings settings = new StructurePlaceSettings()
@@ -786,28 +814,99 @@ public class MasterClockBossRoomPlacer {
             ChronoDawn.LOGGER.error("Failed to load processor list: {}", e.getMessage(), e);
         }
 
-        // Place corridor template
+        // STEP 1: Remove Aquifer water BEFORE placement
+        int corridorWaterRemoved = removeAquiferWaterBeforePlacement(level, corridorPlacementPos, corridorTemplateSize, decorativeWaterBlock, protectedAreas);
+        if (corridorWaterRemoved > 0) {
+            ChronoDawn.LOGGER.info("Removed {} Aquifer water blocks before placing corridor", corridorWaterRemoved);
+        }
+
+        // STEP 2: Place corridor template (processors will be applied)
         template.placeInWorld(level, corridorPlacementPos, corridorPlacementPos, settings, level.random, 3);
 
         ChronoDawn.LOGGER.info("Placed corridor at {}", corridorPlacementPos);
 
+        // Calculate and log corridor bounding box
+        net.minecraft.world.level.levelgen.structure.BoundingBox corridorBoundingBox =
+            net.minecraft.world.level.levelgen.structure.BoundingBox.fromCorners(
+                corridorPlacementPos,
+                corridorPlacementPos.offset(corridorTemplateSize.getX() - 1, corridorTemplateSize.getY() - 1, corridorTemplateSize.getZ() - 1)
+            );
+        ChronoDawn.LOGGER.info("Corridor bounding box: {}", corridorBoundingBox);
+
+        // Check overlap with stairs_bottom
+        boolean overlapsStairsBottom = false;
+        for (var protectedBox : protectedAreas) {
+            if (corridorBoundingBox.intersects(protectedBox)) {
+                ChronoDawn.LOGGER.warn("OVERLAP DETECTED: Corridor {} overlaps with protected area {}", corridorBoundingBox, protectedBox);
+                overlapsStairsBottom = true;
+            }
+        }
+
+        // Verify corridor's stairs_bottom side Jigsaw was placed at expected position
+        BlockState actualCorridorJigsawState = level.getBlockState(calculatedCorridorJigsawPos);
+        if (actualCorridorJigsawState.is(Blocks.JIGSAW)) {
+            ChronoDawn.LOGGER.info("VERIFIED: Corridor's stairs_bottom side Jigsaw found at expected position {}", calculatedCorridorJigsawPos);
+        } else {
+            ChronoDawn.LOGGER.warn("MISALIGNMENT: Expected corridor Jigsaw at {}, but found: {}", calculatedCorridorJigsawPos, actualCorridorJigsawState.getBlock());
+            // Search for actual Jigsaw position
+            for (int dx = -2; dx <= 2; dx++) {
+                for (int dy = -2; dy <= 2; dy++) {
+                    for (int dz = -2; dz <= 2; dz++) {
+                        BlockPos searchPos = calculatedCorridorJigsawPos.offset(dx, dy, dz);
+                        if (level.getBlockState(searchPos).is(Blocks.JIGSAW)) {
+                            ChronoDawn.LOGGER.warn("Found corridor Jigsaw at {} (offset from expected: {}, {}, {})", searchPos, dx, dy, dz);
+                        }
+                    }
+                }
+            }
+        }
+
+        // STEP 3: Finalize waterlogging AFTER placement
+        finalizeWaterloggingAfterPlacement(level, corridorPlacementPos, corridorSize, rotation);
+
+        // STEP 3.3: Process markers immediately (register protection for this structure only)
+        com.chronodawn.worldgen.processors.BossRoomProtectionProcessor.processPendingMarkersImmediate(level);
+
+        // STEP 3.5: Schedule delayed finalize for corridor
+        final BlockPos finalCorridorPos = corridorPlacementPos.immutable();
+        final net.minecraft.core.Vec3i finalCorridorSize = corridorSize;
+        final Rotation finalRotation = rotation;
+        level.getServer().tell(new net.minecraft.server.TickTask(level.getServer().getTickCount() + 2, () -> {
+            finalizeWaterloggingAfterPlacement(level, finalCorridorPos, finalCorridorSize, finalRotation);
+        }));
+
         // Remove all Jigsaw Blocks from corridor
-        net.minecraft.core.Vec3i corridorSize = template.getSize();
+        // Use corridorTemplateSize (with rotation) for correct bounding box
+        int corridorJigsawsRemoved = 0;
         for (BlockPos pos : BlockPos.betweenClosed(
             corridorPlacementPos,
-            corridorPlacementPos.offset(corridorSize.getX() - 1, corridorSize.getY() - 1, corridorSize.getZ() - 1)
+            corridorPlacementPos.offset(corridorTemplateSize.getX() - 1, corridorTemplateSize.getY() - 1, corridorTemplateSize.getZ() - 1)
         )) {
             BlockState state = level.getBlockState(pos);
             if (state.is(Blocks.JIGSAW)) {
                 level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+                corridorJigsawsRemoved++;
             }
+        }
+        if (corridorJigsawsRemoved > 0) {
+            ChronoDawn.LOGGER.info("Removed {} Jigsaw Blocks from corridor (range-based)", corridorJigsawsRemoved);
+        }
+
+        // Explicitly remove corridor's stairs_bottom side Jigsaw Block (connection point)
+        BlockState corridorStairsBottomJigsawState = level.getBlockState(calculatedCorridorJigsawPos);
+        if (corridorStairsBottomJigsawState.is(Blocks.JIGSAW)) {
+            level.setBlock(calculatedCorridorJigsawPos, Blocks.AIR.defaultBlockState(), 3);
+            ChronoDawn.LOGGER.info("Removed corridor's stairs_bottom side Jigsaw Block at {}", calculatedCorridorJigsawPos);
+        } else {
+            ChronoDawn.LOGGER.warn("Corridor's stairs_bottom side Jigsaw Block not found at {} (found: {})",
+                calculatedCorridorJigsawPos, corridorStairsBottomJigsawState.getBlock());
         }
 
         // Also remove stairs_bottom side Jigsaw Block (now that corridor is connected)
         BlockState stairsBottomJigsawState = level.getBlockState(stairsBottomJigsawPos);
         if (stairsBottomJigsawState.is(Blocks.JIGSAW)) {
             level.setBlock(stairsBottomJigsawPos, Blocks.AIR.defaultBlockState(), 3);
-            ChronoDawn.LOGGER.info("Removed stairs_bottom side Jigsaw Block");
+            ChronoDawn.LOGGER.info("Removed stairs_bottom side Jigsaw Block at {}", stairsBottomJigsawPos);
         }
 
         // Remove all recorded Jigsaw Blocks from stairs and stairs_bottom
@@ -1203,14 +1302,24 @@ public class MasterClockBossRoomPlacer {
             case COUNTERCLOCKWISE_90 -> new BlockPos(17, 1, 0); // 270° (EAST)
         };
 
-        // Calculate boss_room placement position so its Jigsaw aligns with corridor Jigsaw
-        BlockPos placementPos = corridorJigsawPos.subtract(bossRoomJigsawOffset);
+        // Calculate boss_room placement position
+        // NOTE: Jigsaw blocks should be ADJACENT (touching), not OVERLAPPING
+        // Horizontal connections require 1-block offset in the Jigsaw facing direction
+        BlockPos jigsawOffset = switch (bossRoomRotation) {
+            case NONE -> new BlockPos(1, 0, 0);              // East (+X)
+            case CLOCKWISE_90 -> new BlockPos(0, 0, 1);      // South (+Z)
+            case CLOCKWISE_180 -> new BlockPos(-1, 0, 0);    // West (-X)
+            case COUNTERCLOCKWISE_90 -> new BlockPos(0, 0, -1); // North (-Z)
+        };
+
+        BlockPos placementPos = corridorJigsawPos.subtract(bossRoomJigsawOffset).offset(jigsawOffset);
 
         ChronoDawn.LOGGER.info(
-            "Boss_room placement position: {} (Jigsaw offset: {}, rotation: {})",
+            "Boss_room placement position: {} (Jigsaw offset: {}, rotation: {}, overlap prevention: {})",
             placementPos,
             bossRoomJigsawOffset,
-            bossRoomRotation
+            bossRoomRotation,
+            jigsawOffset
         );
 
         // Get DecorativeWater block for protection
@@ -1261,16 +1370,19 @@ public class MasterClockBossRoomPlacer {
         // STEP 3: Finalize waterlogging AFTER placement (mimic StructureStartMixin @RETURN)
         finalizeWaterloggingAfterPlacement(level, placementPos, templateSize, bossRoomRotation);
 
+        // STEP 3.3: Process markers immediately (register protection for this structure only)
+        com.chronodawn.worldgen.processors.BossRoomProtectionProcessor.processPendingMarkersImmediate(level);
+
         // STEP 3.5: Schedule delayed finalize for boss_room
         final BlockPos finalPlacementPos = placementPos.immutable();
         final net.minecraft.core.Vec3i finalTemplateSize = templateSize;
         final Rotation finalBossRoomRotation = bossRoomRotation;
         level.getServer().tell(new net.minecraft.server.TickTask(level.getServer().getTickCount() + 2, () -> {
             finalizeWaterloggingAfterPlacement(level, finalPlacementPos, finalTemplateSize, finalBossRoomRotation);
-            ChronoDawn.LOGGER.info("Delayed finalize for boss_room completed");
         }));
 
         // Remove all Jigsaw Blocks from boss room (corridor connection is already established)
+        int bossRoomJigsawsRemoved = 0;
         for (BlockPos pos : BlockPos.betweenClosed(
             placementPos,
             placementPos.offset(templateSize.getX() - 1, templateSize.getY() - 1, templateSize.getZ() - 1)
@@ -1278,12 +1390,33 @@ public class MasterClockBossRoomPlacer {
             BlockState state = level.getBlockState(pos);
             if (state.is(Blocks.JIGSAW)) {
                 level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+                bossRoomJigsawsRemoved++;
             }
+        }
+        if (bossRoomJigsawsRemoved > 0) {
+            ChronoDawn.LOGGER.info("Removed {} Jigsaw Blocks from boss_room (range-based)", bossRoomJigsawsRemoved);
+        }
+
+        // Explicitly remove boss_room's corridor side Jigsaw Block (connection point)
+        BlockPos bossRoomCorridorJigsawPos = placementPos.offset(bossRoomJigsawOffset);
+        BlockState bossRoomCorridorJigsawState = level.getBlockState(bossRoomCorridorJigsawPos);
+        if (bossRoomCorridorJigsawState.is(Blocks.JIGSAW)) {
+            level.setBlock(bossRoomCorridorJigsawPos, Blocks.AIR.defaultBlockState(), 3);
+            ChronoDawn.LOGGER.info("Removed boss_room's corridor side Jigsaw Block at {}", bossRoomCorridorJigsawPos);
+        } else {
+            ChronoDawn.LOGGER.warn("Boss_room's corridor side Jigsaw Block not found at {} (found: {})",
+                bossRoomCorridorJigsawPos, bossRoomCorridorJigsawState.getBlock());
         }
 
         // Remove the corridor Jigsaw Block now that boss room is placed
-        level.setBlock(corridorJigsawPos, Blocks.AIR.defaultBlockState(), 3);
-        ChronoDawn.LOGGER.info("Removed corridor Jigsaw Block at {}", corridorJigsawPos);
+        BlockState corridorJigsawState = level.getBlockState(corridorJigsawPos);
+        if (corridorJigsawState.is(Blocks.JIGSAW)) {
+            level.setBlock(corridorJigsawPos, Blocks.AIR.defaultBlockState(), 3);
+            ChronoDawn.LOGGER.info("Removed corridor's boss_room side Jigsaw Block at {}", corridorJigsawPos);
+        } else {
+            ChronoDawn.LOGGER.warn("Corridor's boss_room side Jigsaw Block not found at {} (found: {})",
+                corridorJigsawPos, corridorJigsawState.getBlock());
+        }
 
         // Convert decorative_water to vanilla water for ALL structures (stairs, boss_room)
         // This is done AFTER all structures are placed to prevent decorative_water from being removed
