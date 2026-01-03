@@ -508,7 +508,7 @@
     - `common/src/main/java/com/chronodawn/registry/ModItems.java`
   - **Expected Behavior**: Boss spawn eggs can be obtained via `/give @s chronodawn:time_guardian_spawn_egg` but do not appear in creative inventory
 
-- [ ] T716 [P] Fix duplicate recipe conflict between Enhanced Clockstone Pickaxe and Spatially Linked Pickaxe
+- [x] T716 [P] Fix duplicate recipe conflict between Enhanced Clockstone Pickaxe and Spatially Linked Pickaxe
   - **Issue**: Enhanced Clockstone Pickaxe and Spatially Linked Pickaxe have identical recipes (Enhanced Clockstone x3 + Stick x2), causing recipe conflict where only one can be crafted
   - **Feedback Source**: Playtest feedback (2026-01-03)
   - **Current Recipes**:
