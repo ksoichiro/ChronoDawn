@@ -523,7 +523,13 @@ public class ChronoDawnClientNeoForge {
             },
             ModItems.TEMPORAL_WRAITH_SPAWN_EGG.get(),
             ModItems.CLOCKWORK_SENTINEL_SPAWN_EGG.get(),
-            ModItems.TIME_KEEPER_SPAWN_EGG.get()
+            ModItems.TIME_KEEPER_SPAWN_EGG.get(),
+            ModItems.TIME_GUARDIAN_SPAWN_EGG.get(),
+            ModItems.TIME_TYRANT_SPAWN_EGG.get(),
+            ModItems.CHRONOS_WARDEN_SPAWN_EGG.get(),
+            ModItems.CLOCKWORK_COLOSSUS_SPAWN_EGG.get(),
+            ModItems.ENTROPY_KEEPER_SPAWN_EGG.get(),
+            ModItems.TEMPORAL_PHANTOM_SPAWN_EGG.get()
         );
 
         ChronoDawn.LOGGER.info("Registered item color handlers for NeoForge");

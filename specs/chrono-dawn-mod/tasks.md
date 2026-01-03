@@ -494,7 +494,7 @@
   - **Result**: All boss mobs now move at normal speed without Slowness debuff, maintaining proper difficulty balance
   - **Completed**: 2026-01-03
 
-- [ ] T715 [P] Add spawn eggs for all boss entities (command-only, not in creative tab)
+- [x] T715 [P] Add spawn eggs for all boss entities (command-only, not in creative tab)
   - **Requirement**: Boss spawn eggs should be available for testing and debugging via `/give` command, but not displayed in creative inventory tab (following vanilla behavior for Ender Dragon and Wither)
   - **Feedback Source**: Playtest feedback (2026-01-03)
   - **Implementation**:
