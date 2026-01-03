@@ -80,6 +80,9 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FlowerPotBlock;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.MapColor;
 
 /**
  * Architectury Registry wrapper for custom blocks.
@@ -190,6 +193,35 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> STRIPPED_TIME_WOOD_LOG = BLOCKS.register(
         "stripped_time_wood_log",
         () -> new StrippedTimeWoodLog(StrippedTimeWoodLog.createProperties())
+    );
+
+    /**
+     * Time Wood - All-bark variant of Time Wood Log.
+     * Crafted from 4 Time Wood Logs (2x2 pattern).
+     * Can be stripped to Stripped Time Wood with an axe.
+     */
+    public static final RegistrySupplier<Block> TIME_WOOD = BLOCKS.register(
+        "time_wood",
+        () -> new RotatedPillarBlock(
+            Block.Properties.of()
+                .mapColor(MapColor.WOOD)
+                .strength(2.0f, 2.0f)
+                .sound(SoundType.WOOD)
+        )
+    );
+
+    /**
+     * Stripped Time Wood - Stripped variant of Time Wood.
+     * Obtained by right-clicking Time Wood with an axe.
+     */
+    public static final RegistrySupplier<Block> STRIPPED_TIME_WOOD = BLOCKS.register(
+        "stripped_time_wood",
+        () -> new RotatedPillarBlock(
+            Block.Properties.of()
+                .mapColor(MapColor.WOOD)
+                .strength(2.0f, 2.0f)
+                .sound(SoundType.WOOD)
+        )
     );
 
     /**
@@ -653,6 +685,35 @@ public class ModBlocks {
     );
 
     /**
+     * Dark Time Wood - All-bark variant of Dark Time Wood Log.
+     * Crafted from 4 Dark Time Wood Logs (2x2 pattern).
+     * Can be stripped to Stripped Dark Time Wood with an axe.
+     */
+    public static final RegistrySupplier<Block> DARK_TIME_WOOD = BLOCKS.register(
+        "dark_time_wood",
+        () -> new RotatedPillarBlock(
+            Block.Properties.of()
+                .mapColor(MapColor.WOOD)
+                .strength(2.0f, 2.0f)
+                .sound(SoundType.WOOD)
+        )
+    );
+
+    /**
+     * Stripped Dark Time Wood - Stripped variant of Dark Time Wood.
+     * Obtained by right-clicking Dark Time Wood with an axe.
+     */
+    public static final RegistrySupplier<Block> STRIPPED_DARK_TIME_WOOD = BLOCKS.register(
+        "stripped_dark_time_wood",
+        () -> new RotatedPillarBlock(
+            Block.Properties.of()
+                .mapColor(MapColor.WOOD)
+                .strength(2.0f, 2.0f)
+                .sound(SoundType.WOOD)
+        )
+    );
+
+    /**
      * Dark Time Wood Leaves - Darker variant of Time Wood Leaves.
      * Forms the canopy of tall dark trees.
      */
@@ -767,6 +828,35 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> STRIPPED_ANCIENT_TIME_WOOD_LOG = BLOCKS.register(
         "stripped_ancient_time_wood_log",
         () -> new StrippedAncientTimeWoodLog(StrippedAncientTimeWoodLog.createProperties())
+    );
+
+    /**
+     * Ancient Time Wood - All-bark variant of Ancient Time Wood Log.
+     * Crafted from 4 Ancient Time Wood Logs (2x2 pattern).
+     * Can be stripped to Stripped Ancient Time Wood with an axe.
+     */
+    public static final RegistrySupplier<Block> ANCIENT_TIME_WOOD = BLOCKS.register(
+        "ancient_time_wood",
+        () -> new RotatedPillarBlock(
+            Block.Properties.of()
+                .mapColor(MapColor.WOOD)
+                .strength(2.0f, 2.0f)
+                .sound(SoundType.WOOD)
+        )
+    );
+
+    /**
+     * Stripped Ancient Time Wood - Stripped variant of Ancient Time Wood.
+     * Obtained by right-clicking Ancient Time Wood with an axe.
+     */
+    public static final RegistrySupplier<Block> STRIPPED_ANCIENT_TIME_WOOD = BLOCKS.register(
+        "stripped_ancient_time_wood",
+        () -> new RotatedPillarBlock(
+            Block.Properties.of()
+                .mapColor(MapColor.WOOD)
+                .strength(2.0f, 2.0f)
+                .sound(SoundType.WOOD)
+        )
     );
 
     /**

@@ -151,6 +151,22 @@ public class ModItems {
     );
 
     /**
+     * Time Wood - BlockItem for placing Time Wood block (all-bark variant).
+     */
+    public static final RegistrySupplier<Item> TIME_WOOD = ITEMS.register(
+        "time_wood",
+        () -> new BlockItem(ModBlocks.TIME_WOOD.get(), new Item.Properties())
+    );
+
+    /**
+     * Stripped Time Wood - BlockItem for placing Stripped Time Wood block.
+     */
+    public static final RegistrySupplier<Item> STRIPPED_TIME_WOOD = ITEMS.register(
+        "stripped_time_wood",
+        () -> new BlockItem(ModBlocks.STRIPPED_TIME_WOOD.get(), new Item.Properties())
+    );
+
+    /**
      * Time Wood Leaves - BlockItem for placing Time Wood Leaves block.
      */
     public static final RegistrySupplier<Item> TIME_WOOD_LEAVES = ITEMS.register(
@@ -190,6 +206,22 @@ public class ModItems {
     public static final RegistrySupplier<Item> STRIPPED_DARK_TIME_WOOD_LOG = ITEMS.register(
         "stripped_dark_time_wood_log",
         () -> new BlockItem(ModBlocks.STRIPPED_DARK_TIME_WOOD_LOG.get(), new Item.Properties())
+    );
+
+    /**
+     * Dark Time Wood - BlockItem for placing Dark Time Wood block (all-bark variant).
+     */
+    public static final RegistrySupplier<Item> DARK_TIME_WOOD = ITEMS.register(
+        "dark_time_wood",
+        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD.get(), new Item.Properties())
+    );
+
+    /**
+     * Stripped Dark Time Wood - BlockItem for placing Stripped Dark Time Wood block.
+     */
+    public static final RegistrySupplier<Item> STRIPPED_DARK_TIME_WOOD = ITEMS.register(
+        "stripped_dark_time_wood",
+        () -> new BlockItem(ModBlocks.STRIPPED_DARK_TIME_WOOD.get(), new Item.Properties())
     );
 
     /**
@@ -296,6 +328,22 @@ public class ModItems {
     public static final RegistrySupplier<Item> STRIPPED_ANCIENT_TIME_WOOD_LOG = ITEMS.register(
         "stripped_ancient_time_wood_log",
         () -> new BlockItem(ModBlocks.STRIPPED_ANCIENT_TIME_WOOD_LOG.get(), new Item.Properties())
+    );
+
+    /**
+     * Ancient Time Wood - BlockItem for placing Ancient Time Wood block (all-bark variant).
+     */
+    public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD = ITEMS.register(
+        "ancient_time_wood",
+        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD.get(), new Item.Properties())
+    );
+
+    /**
+     * Stripped Ancient Time Wood - BlockItem for placing Stripped Ancient Time Wood block.
+     */
+    public static final RegistrySupplier<Item> STRIPPED_ANCIENT_TIME_WOOD = ITEMS.register(
+        "stripped_ancient_time_wood",
+        () -> new BlockItem(ModBlocks.STRIPPED_ANCIENT_TIME_WOOD.get(), new Item.Properties())
     );
 
     /**
@@ -1559,6 +1607,8 @@ public class ModItems {
         output.accept(UNSTABLE_FUNGUS.get());
         output.accept(TIME_WOOD_LOG.get());
         output.accept(STRIPPED_TIME_WOOD_LOG.get());
+        output.accept(TIME_WOOD.get());
+        output.accept(STRIPPED_TIME_WOOD.get());
         output.accept(TIME_WOOD_LEAVES.get());
         output.accept(TIME_WOOD_PLANKS.get());
         output.accept(TIME_WOOD_STAIRS.get());
@@ -1573,6 +1623,8 @@ public class ModItems {
         // Dark Time Wood
         output.accept(DARK_TIME_WOOD_LOG.get());
         output.accept(STRIPPED_DARK_TIME_WOOD_LOG.get());
+        output.accept(DARK_TIME_WOOD.get());
+        output.accept(STRIPPED_DARK_TIME_WOOD.get());
         output.accept(DARK_TIME_WOOD_LEAVES.get());
         output.accept(DARK_TIME_WOOD_PLANKS.get());
         output.accept(DARK_TIME_WOOD_STAIRS.get());
@@ -1587,6 +1639,8 @@ public class ModItems {
         // Ancient Time Wood
         output.accept(ANCIENT_TIME_WOOD_LOG.get());
         output.accept(STRIPPED_ANCIENT_TIME_WOOD_LOG.get());
+        output.accept(ANCIENT_TIME_WOOD.get());
+        output.accept(STRIPPED_ANCIENT_TIME_WOOD.get());
         output.accept(ANCIENT_TIME_WOOD_LEAVES.get());
         output.accept(ANCIENT_TIME_WOOD_PLANKS.get());
         output.accept(ANCIENT_TIME_WOOD_STAIRS.get());
