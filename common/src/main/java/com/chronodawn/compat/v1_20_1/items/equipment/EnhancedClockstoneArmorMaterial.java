@@ -76,10 +76,8 @@ public class EnhancedClockstoneArmorMaterial {
             defenseMap.put(type, defense.get(type));
         }
 
-        return Registry.registerForHolder(
-            BuiltInRegistries.ARMOR_MATERIAL,
-            CompatResourceLocation.create(ChronoDawn.MOD_ID, name),
-            new ArmorMaterial() {
+        // 1.20.1: BuiltInRegistries.ARMOR_MATERIAL does not exist, use Holder.direct() instead
+        ArmorMaterial material = new ArmorMaterial() {
                 @Override
                 public int getDurabilityForType(ArmorItem.Type type) {
                     return defenseMap.getOrDefault(type, 0);
@@ -119,7 +117,8 @@ public class EnhancedClockstoneArmorMaterial {
                 public float getKnockbackResistance() {
                     return knockbackResistance;
                 }
-            }
-        );
+            };
+
+        return Holder.direct(material);
     }
 }

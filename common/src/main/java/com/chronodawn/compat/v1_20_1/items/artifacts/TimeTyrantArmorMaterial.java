@@ -25,10 +25,8 @@ public class TimeTyrantArmorMaterial {
         map.put(ArmorItem.Type.HELMET, 3);
     });
 
-    public static final Holder<ArmorMaterial> MATERIAL = Registry.registerForHolder(
-        BuiltInRegistries.ARMOR_MATERIAL,
-        CompatResourceLocation.create(ChronoDawn.MOD_ID, "time_tyrant"),
-        new ArmorMaterial() {
+    // 1.20.1: BuiltInRegistries.ARMOR_MATERIAL does not exist, use Holder.direct() instead
+    public static final Holder<ArmorMaterial> MATERIAL = Holder.direct(new ArmorMaterial() {
             @Override
             public int getDurabilityForType(ArmorItem.Type type) {
                 return DEFENSE_VALUES.get(type);
@@ -68,6 +66,5 @@ public class TimeTyrantArmorMaterial {
             public float getKnockbackResistance() {
                 return 0.1f;
             }
-        }
-    );
+        });
 }
