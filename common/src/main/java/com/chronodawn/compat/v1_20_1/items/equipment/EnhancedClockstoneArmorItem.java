@@ -44,9 +44,17 @@ public class EnhancedClockstoneArmorItem extends ArmorItem {
      * @return Item properties with appropriate settings
      */
     public static Properties createProperties(Type type) {
+        // 1.20.1: ArmorItem.Type.getDurability() does not exist, use fixed values
+        int durability = switch (type) {
+            case HELMET -> 308;      // Multiplier 28 (between clockstone 20 and diamond 33)
+            case CHESTPLATE -> 448;
+            case LEGGINGS -> 420;
+            case BOOTS -> 364;
+        };
+
         return new Properties()
                 .stacksTo(1)
-                .durability(type.getDurability(28)); // Durability multiplier: 28 (between clockstone 20 and diamond 33)
+                .durability(durability);
     }
 
     /**
