@@ -76,18 +76,40 @@ If invalid, show error and explain correct format using `.claude/skills/versioni
      - `chronodawn-<version>+1.21.1-neoforge.jar`
      - `common-<version>.jar`
 
-9. **Verification**:
+9. **Update CHANGELOG.md**:
+   - Read current CHANGELOG.md to understand structure
+   - Update `[Unreleased]` section header with new version and date:
+     - Change `## [Unreleased]` to `## [<version>] - YYYY-MM-DD`
+     - Add new empty `## [Unreleased]` section at the top
+   - Update comparison links at bottom:
+     - Update `[Unreleased]` link to compare from new version tag to HEAD
+     - Add new version link: `[<version>]: https://github.com/ksoichiro/ChronoDawn/compare/v<previous>+1.21.1...v<new>+1.21.1`
+   - Example:
+     ```markdown
+     ## [Unreleased]
+
+     ## [0.3.0-beta] - 2026-01-15
+     ### Added
+     - New feature description
+
+     [Unreleased]: https://github.com/ksoichiro/ChronoDawn/compare/v0.3.0-beta+1.21.1...HEAD
+     [0.3.0-beta]: https://github.com/ksoichiro/ChronoDawn/compare/v0.2.0-beta+1.21.1...v0.3.0-beta+1.21.1
+     ```
+
+10. **Verification**:
    - Search for old version string in all updated files
    - Confirm no occurrences remain
    - Show summary of changed files
 
-10. **Report**:
+11. **Report**:
     - Show diff summary for each file
     - Confirm version update complete
     - Remind user: fabric.mod.json and neoforge.mods.toml use `${version}` (auto-updated)
+    - Remind user: CHANGELOG.md section content can be used for GitHub Release, CurseForge, and Modrinth
     - Suggest next steps:
       - Test build: `./gradlew clean build`
       - Verify JAR names match documentation
+      - Copy CHANGELOG.md section for release notes when creating GitHub Release/CurseForge/Modrinth upload
 
 ## Important Notes
 
@@ -96,6 +118,11 @@ If invalid, show error and explain correct format using `.claude/skills/versioni
 - **Common JAR** does NOT include Minecraft version: `common-<version>.jar`
 - **Prerelease identifiers** use hyphen: `-beta`, `-alpha`, `-rc.1`
 - **Build metadata** uses plus: `+1.21.1` (auto-generated, not in gradle.properties)
+- **CHANGELOG.md** follows [Keep a Changelog](https://keepachangelog.com/) format:
+  - Categories: Added, Changed, Deprecated, Removed, Fixed, Security
+  - Version sections use format: `## [<version>] - YYYY-MM-DD`
+  - Comparison links at bottom use full version with build metadata: `v<version>+1.21.1`
+  - Content can be copied directly to GitHub Release, CurseForge, and Modrinth changelogs
 
 ## Version Update Examples
 
@@ -152,6 +179,7 @@ Updated files:
   - README.md (3 locations)
   - docs/player_guide.md (1 location)
   - docs/developer_guide.md (2 locations)
+  - CHANGELOG.md (version header, comparison links)
 
 Next steps:
   1. Test build: ./gradlew clean build
@@ -159,6 +187,10 @@ Next steps:
      - fabric/build/libs/chronodawn-<version>+1.21.1-fabric.jar
      - neoforge/build/libs/chronodawn-<version>+1.21.1-neoforge.jar
   3. Commit changes (if ready)
+
+For release:
+  - Copy CHANGELOG.md [<version>] section for GitHub Release notes
+  - Use same content for CurseForge and Modrinth changelog fields
 ```
 
 ## Reference

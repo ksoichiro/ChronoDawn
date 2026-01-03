@@ -1,0 +1,100 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+## [0.2.0-beta] - TBD
+
+### Added
+- Wood and Stripped Wood blocks for all Time Wood variants (Ancient, Dawn, Dusk, Twilight, Eternal)
+- Axe stripping functionality for Time Wood logs (right-click with axe to convert Log → Stripped Log)
+- Spawn eggs for all boss entities (Time Guardian, Chronos Warden, Clockwork Colossus, Temporal Phantom, Entropy Keeper, Time Tyrant)
+- Iron ore generation in Chrono Dawn dimension for sustainable gameplay
+- Dawn Bell and Dusk Bell custom flowers in Chrono Dawn dimension
+- Time Blossom flowers replacing vanilla flowers in worldgen
+- Persistent boss spawn tracking system using SavedData (prevents duplicate boss spawns)
+
+### Changed
+- Chrono Aegis shield buff now affects all nearby players (not just wielder)
+- Replaced vanilla flowers with Time Blossom in Chrono Dawn dimension worldgen
+
+### Fixed
+- Added Stripped Time Wood Logs and Wood blocks to `minecraft:mineable/axe` tag (fixes slow mining speed with axes)
+- Prevented item loss when placing blocks in protected areas on NeoForge
+- Reduced Clockstone ore generation frequency (was too common)
+- Resolved recipe conflict between Enhanced Clockstone Pickaxe and Spatially Linked Pickaxe
+- Excluded all bosses from Time Distortion Effect (Slowness IV) and increased Chronos Warden base speed
+- Fixed EntropyKeeperSpawner block scanning freeze issue
+- Implemented multi-tick state machine for MasterClock boss room placement (prevents server lag)
+- Resolved thread-safety issues in boss spawner systems
+- Improved BossRoomProtectionProcessor performance with dimension filtering
+- Fixed immediate marker pairing for programmatic structure placement
+
+### Performance
+- Optimized TimeGuardianSpawner for better performance and thread-safety
+- Refactored ClockworkColossusSpawner for improved reliability and thread-safety
+- Consolidated boss spawn data into single BossSpawnData class
+- Added dimension filtering to BossRoomProtectionProcessor (avoids unnecessary processing)
+
+## [0.1.0] - 2025-12-27
+
+### Added
+- **Core Features**:
+  - Chrono Dawn dimension with perpetual twilight atmosphere
+  - Custom portal system using Time Hourglass (one-way) and Portal Stabilizer (bidirectional)
+  - Time Distortion effect (hostile mobs move slower in Chrono Dawn)
+  - 8 unique biomes: Forest, Desert, Mountain, Ocean, Snowy, Swamp, Dark Forest, Ancient Forest
+
+- **Content**:
+  - Time Wood custom wood type with full block set (logs, planks, stairs, slabs, doors, trapdoors, fences, buttons, pressure plates)
+  - 4 Time Wood variants: Ancient, Dawn, Dusk, Twilight, Eternal
+  - Custom sapling with unique tree generation
+
+- **Structures**:
+  - Ancient Ruins (Overworld spawn point with portal frame)
+  - Forgotten Library (Chrono Dawn exploration structure)
+  - Guardian Vault (Chronos Warden boss dungeon)
+  - Clockwork Depths (Clockwork Colossus boss dungeon)
+  - Phantom Catacombs (Temporal Phantom boss dungeon)
+  - Entropy Crypt (Entropy Keeper boss dungeon)
+  - Master Clock (final dungeon with Time Tyrant boss)
+
+- **Boss Enemies**:
+  - Time Guardian (mini-boss, drops Master Clock Key)
+  - Chronos Warden (mid-boss, drops Guardian Stone)
+  - Clockwork Colossus (mid-boss, drops Colossus Gear)
+  - Temporal Phantom (mid-boss, drops Phantom Essence)
+  - Entropy Keeper (mid-boss, drops Entropy Core)
+  - Time Tyrant (final boss)
+
+- **Ultimate Artifacts**:
+  - Chronoblade (powerful sword)
+  - Time Guardian's Mail (enhanced armor)
+  - Chrono Aegis (protective shield)
+
+- **Resources**:
+  - Clockstone ore and refined resources
+  - Custom tools and equipment progression
+  - Portal activation items (Time Hourglass, Portal Stabilizer)
+
+- **Technical**:
+  - Multi-loader architecture (Fabric + NeoForge)
+  - Architectury framework with shared common code
+  - Custom Portal API integration
+  - Performance-optimized entity tick handling
+  - Boss room protection system
+
+### Technical Notes
+- Built for Minecraft Java Edition 1.21.1
+- Fabric Loader 0.17.3+ with Fabric API 0.116.7+
+- NeoForge 21.1.209+
+- Architectury API 13.0.8+
+- Custom Portal API 0.0.1-beta66-1.21 (Fabric bundled, NeoForge requires separate installation)
+
+[Unreleased]: https://github.com/ksoichiro/ChronoDawn/compare/v0.1.0+1.21.1...HEAD
+[0.2.0-beta]: https://github.com/ksoichiro/ChronoDawn/compare/v0.1.0+1.21.1...HEAD
+[0.1.0]: https://github.com/ksoichiro/ChronoDawn/releases/tag/v0.1.0+1.21.1
