@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 /**
- * Mixin to improve Custom Portal API portal placement by restricting Y search range.
+ * Fabric-specific Mixin to improve Custom Portal API portal placement by restricting Y search range.
  *
  * This Mixin intercepts the portal placement logic in Custom Portal API's PortalPlacer
  * to ensure portals spawn on the surface instead of underground caves.
@@ -25,14 +25,17 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
  * - Matches Fabric's setPortalSearchYRange configuration
  *
  * Why This Approach?
- * - NeoForge Custom Portal API Reforged v1.2.2 does not have setPortalSearchYRange method
  * - Fabric Custom Portal API v0.0.1-beta66-1.21 has setPortalSearchYRange (also used)
- * - This Mixin provides equivalent functionality by modifying internal search range variables
+ * - This Mixin provides additional safety by modifying internal search range variables
  *
- * IMPORTANT: Yarn Mappings
- * - Custom Portal API JAR uses Yarn mappings (Intermediary names)
+ * IMPORTANT: Yarn Mappings (Fabric-specific)
+ * - Fabric's Custom Portal API JAR uses Yarn mappings (Intermediary names)
  * - Method signature uses class_XXXX names instead of Mojang names
  * - This is required because Custom Portal API is bundled (not remapped at runtime)
+ * - class_3218 = ServerLevel (ServerWorld in Yarn)
+ * - class_2338 = BlockPos
+ * - class_2680 = BlockState
+ * - class_2350$class_2351 = Direction$Axis
  *
  * Task: T311 - Fix portal surface generation (issue: portal generated at Y=-48 underground)
  */
