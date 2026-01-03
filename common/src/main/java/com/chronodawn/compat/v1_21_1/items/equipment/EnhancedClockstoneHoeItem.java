@@ -24,6 +24,7 @@ import net.minecraft.world.item.HoeItem;
  */
 public class EnhancedClockstoneHoeItem extends HoeItem {
     public EnhancedClockstoneHoeItem(Properties properties) {
+        // 1.21.1: Uses createAttributes() for attribute building
         super(EnhancedClockstoneTier.INSTANCE, properties.attributes(HoeItem.createAttributes(EnhancedClockstoneTier.INSTANCE, 0, 0.0f)));
     }
 
