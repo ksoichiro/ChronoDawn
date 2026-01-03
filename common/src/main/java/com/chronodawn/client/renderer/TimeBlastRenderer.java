@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import com.chronodawn.compat.CompatResourceLocation;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
@@ -27,7 +28,7 @@ public class TimeBlastRenderer extends EntityRenderer<TimeBlastEntity> {
      * Texture location for Time Blast entity (uses a simple glowing texture).
      */
     private static final ResourceLocation TEXTURE_LOCATION =
-        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "textures/entity/projectiles/time_blast.png");
+        CompatResourceLocation.create(ChronoDawn.MOD_ID, "textures/entity/projectiles/time_blast.png");
 
     private static final RenderType RENDER_TYPE = RenderType.entityCutoutNoCull(TEXTURE_LOCATION);
 

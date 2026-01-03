@@ -7,6 +7,7 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import com.chronodawn.compat.CompatResourceLocation;
 
 /**
  * Renderer for Time Guardian entity.
@@ -18,14 +19,14 @@ import net.minecraft.resources.ResourceLocation;
  */
 public class TimeGuardianRenderer extends MobRenderer<TimeGuardianEntity, TimeGuardianModel<TimeGuardianEntity>> {
     // Custom texture for Time Guardian
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(
+    private static final ResourceLocation TEXTURE = CompatResourceLocation.create(
         ChronoDawn.MOD_ID,
         "textures/entity/time_guardian.png"
     );
 
     // Model layer location for Time Guardian
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
-        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "time_guardian"),
+        CompatResourceLocation.create(ChronoDawn.MOD_ID, "time_guardian"),
         "main"
     );
 

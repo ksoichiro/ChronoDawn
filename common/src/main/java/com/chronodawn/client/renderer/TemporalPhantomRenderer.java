@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import com.chronodawn.compat.CompatResourceLocation;
 
 /**
  * Renderer for Temporal Phantom entity.
@@ -20,14 +21,14 @@ import net.minecraft.resources.ResourceLocation;
  * Task: T236s [US3] Create custom texture for Temporal Phantom
  */
 public class TemporalPhantomRenderer extends MobRenderer<TemporalPhantomEntity, TemporalPhantomModel<TemporalPhantomEntity>> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(
+    private static final ResourceLocation TEXTURE = CompatResourceLocation.create(
         ChronoDawn.MOD_ID,
         "textures/entity/temporal_phantom.png"
     );
 
     // Model layer location for Temporal Phantom
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
-        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "temporal_phantom"),
+        CompatResourceLocation.create(ChronoDawn.MOD_ID, "temporal_phantom"),
         "main"
     );
 

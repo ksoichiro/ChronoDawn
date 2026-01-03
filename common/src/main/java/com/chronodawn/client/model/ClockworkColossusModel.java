@@ -10,6 +10,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
+import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.util.Mth;
 
 /**
@@ -24,7 +25,7 @@ import net.minecraft.util.Mth;
 public class ClockworkColossusModel extends EntityModel<ClockworkColossusEntity> {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
-        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "clockwork_colossus"),
+        CompatResourceLocation.create(ChronoDawn.MOD_ID, "clockwork_colossus"),
         "main"
     );
 

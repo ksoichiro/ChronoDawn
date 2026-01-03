@@ -445,10 +445,18 @@ processResources {
   - Solution: Removed `bootstrap()` and `createTreeConfiguration()` methods
   - Result: Simplified to ResourceKey constants only (version-independent)
 
-**Remaining Tasks**:
+- ✅ **T4-7: Entity APIs (SynchedEntityData.Builder) - 11 files**
+  - Initial 5 files: TimeKeeperEntity, GearProjectileEntity, ClockworkColossusEntity, ChronosWardenEntity, TimeGuardianEntity
+  - Additional 6 files discovered: TemporalPhantomEntity, EntropyKeeperEntity, TimeTyrantEntity, TimeBlastEntity, ChronoDawnChestBoat, ChronoDawnBoat
+  - **Solution**: Moved all 11 Entity files to version-specific directories (v1_20_1/entities/, v1_21_1/entities/)
+  - **1.20.1 API**: `protected void defineSynchedData()` (no parameter, use `this.entityData.define()`)
+  - **1.21.1 API**: `protected void defineSynchedData(SynchedEntityData.Builder builder)` (builder parameter)
+  - **T4-7.1**: Fixed TimeKeeperEntity `ItemCost` issue
+    - `ItemCost` class is new in 1.21.1, doesn't exist in 1.20.1
+    - Replaced `new ItemCost(item, count)` with `new ItemStack(item, count)` for 1.20.1
+    - Changed `Optional.of(new ItemCost(...))` to direct `new ItemStack(...)` in MerchantOffer constructor
 
-- 📋 **T4-7: Entity APIs (SynchedEntityData.Builder) - 5 files**
-  - TimeKeeperEntity, GearProjectileEntity, ClockworkColossusEntity, ChronosWardenEntity, TimeGuardianEntity
+**Remaining Tasks**:
 
 - 📋 **T4-8: Tooltip APIs (TooltipContext) - 2 files**
   - ChronoAegisItem, TimeCompassItem (appendHoverText method)
@@ -486,10 +494,10 @@ processResources {
 
 **Build Status**:
 - **1.21.1**: ✅ BUILD SUCCESSFUL
-- **1.20.1**: ❌ BUILD FAILED (~12 files remaining)
+- **1.20.1**: ❌ BUILD FAILED (13 errors remaining, 0 Entity-related)
 
-**Files Migrated**: 26 files (20 original + 6 version-specific additions)
-**Estimated Remaining**: ~12 files
+**Files Migrated**: 37 files (20 original + 17 version-specific additions)
+**Estimated Remaining**: ~7 files (13 errors across 7 files)
 
 ---
 

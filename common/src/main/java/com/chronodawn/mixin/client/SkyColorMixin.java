@@ -9,6 +9,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
+import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -41,7 +42,7 @@ public class SkyColorMixin {
     // Advancement ID for Time Tyrant defeat
     @Unique
     private static final ResourceLocation TIME_TYRANT_DEFEATED_ADVANCEMENT =
-        ResourceLocation.fromNamespaceAndPath("chronodawn", "story/us3/time_tyrant_defeat");
+        CompatResourceLocation.create("chronodawn", "story/us3/time_tyrant_defeat");
 
     /**
      * Inject into getSkyColor to modify the sky color in ChronoDawn.

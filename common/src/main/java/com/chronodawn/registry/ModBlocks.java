@@ -1,6 +1,7 @@
 package com.chronodawn.registry;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.compat.CompatBlockProperties;
 import com.chronodawn.blocks.BossRoomBoundaryMarkerBlock;
 import com.chronodawn.blocks.BossRoomDoorBlock;
 import com.chronodawn.blocks.EntropyCryptTrapdoorBlock;
@@ -174,7 +175,7 @@ public class ModBlocks {
      */
     public static final RegistrySupplier<Block> POTTED_UNSTABLE_FUNGUS = BLOCKS.register(
         "potted_unstable_fungus",
-        () -> new FlowerPotBlock(UNSTABLE_FUNGUS.get(), Block.Properties.ofFullCopy(Blocks.FLOWER_POT))
+        () -> new FlowerPotBlock(UNSTABLE_FUNGUS.get(), CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT))
     );
 
     /**
@@ -257,7 +258,7 @@ public class ModBlocks {
      */
     public static final RegistrySupplier<Block> POTTED_TIME_WOOD_SAPLING = BLOCKS.register(
         "potted_time_wood_sapling",
-        () -> new FlowerPotBlock(TIME_WOOD_SAPLING.get(), Block.Properties.ofFullCopy(Blocks.FLOWER_POT))
+        () -> new FlowerPotBlock(TIME_WOOD_SAPLING.get(), CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT))
     );
 
     /**
@@ -279,7 +280,7 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> CLOCK_TOWER_TELEPORTER = BLOCKS.register(
         "clock_tower_teleporter",
         () -> new ClockTowerTeleporterBlock(
-            Block.Properties.ofFullCopy(Blocks.GLOWSTONE)
+            CompatBlockProperties.ofFullCopy(Blocks.GLOWSTONE)
                 .lightLevel(state -> 15)
                 .noOcclusion()
         )
@@ -431,7 +432,7 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> TIME_WHEAT = BLOCKS.register(
         "time_wheat",
         () -> new TimeWheatBlock(
-            Block.Properties.ofFullCopy(Blocks.WHEAT)
+            CompatBlockProperties.ofFullCopy(Blocks.WHEAT)
         )
     );
 
@@ -444,7 +445,7 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> TIME_WHEAT_BALE = BLOCKS.register(
         "time_wheat_bale",
         () -> new TimeWheatBaleBlock(
-            Block.Properties.ofFullCopy(Blocks.HAY_BLOCK)
+            CompatBlockProperties.ofFullCopy(Blocks.HAY_BLOCK)
         )
     );
 
@@ -456,7 +457,7 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> TEMPORAL_ROOT = BLOCKS.register(
         "temporal_root",
         () -> new TemporalRootBlock(
-            Block.Properties.ofFullCopy(Blocks.CARROTS)
+            CompatBlockProperties.ofFullCopy(Blocks.CARROTS)
         )
     );
 
@@ -468,7 +469,7 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> CHRONO_MELON_STEM = BLOCKS.register(
         "chrono_melon_stem",
         () -> new ChronoMelonStemBlock(
-            Block.Properties.ofFullCopy(Blocks.MELON_STEM)
+            CompatBlockProperties.ofFullCopy(Blocks.MELON_STEM)
         )
     );
 
@@ -480,7 +481,7 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> ATTACHED_CHRONO_MELON_STEM = BLOCKS.register(
         "attached_chrono_melon_stem",
         () -> new AttachedChronoMelonStemBlock(
-            Block.Properties.ofFullCopy(Blocks.ATTACHED_MELON_STEM)
+            CompatBlockProperties.ofFullCopy(Blocks.ATTACHED_MELON_STEM)
         )
     );
 
@@ -492,7 +493,7 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> CHRONO_MELON = BLOCKS.register(
         "chrono_melon",
         () -> new ChronoMelonBlock(
-            Block.Properties.ofFullCopy(Blocks.MELON)
+            CompatBlockProperties.ofFullCopy(Blocks.MELON)
         )
     );
 
@@ -505,7 +506,7 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> TIMELESS_MUSHROOM = BLOCKS.register(
         "timeless_mushroom",
         () -> new TimelessMushroomBlock(
-            Block.Properties.ofFullCopy(Blocks.BROWN_MUSHROOM)
+            CompatBlockProperties.ofFullCopy(Blocks.BROWN_MUSHROOM)
         )
     );
 
@@ -545,7 +546,7 @@ public class ModBlocks {
      */
     public static final RegistrySupplier<Block> POTTED_PURPLE_TIME_BLOSSOM = BLOCKS.register(
         "potted_purple_time_blossom",
-        () -> new FlowerPotBlock(PURPLE_TIME_BLOSSOM.get(), Block.Properties.ofFullCopy(Blocks.FLOWER_POT))
+        () -> new FlowerPotBlock(PURPLE_TIME_BLOSSOM.get(), CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT))
     );
 
     /**
@@ -554,7 +555,7 @@ public class ModBlocks {
      */
     public static final RegistrySupplier<Block> POTTED_ORANGE_TIME_BLOSSOM = BLOCKS.register(
         "potted_orange_time_blossom",
-        () -> new FlowerPotBlock(ORANGE_TIME_BLOSSOM.get(), Block.Properties.ofFullCopy(Blocks.FLOWER_POT))
+        () -> new FlowerPotBlock(ORANGE_TIME_BLOSSOM.get(), CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT))
     );
 
     /**
@@ -563,7 +564,7 @@ public class ModBlocks {
      */
     public static final RegistrySupplier<Block> POTTED_PINK_TIME_BLOSSOM = BLOCKS.register(
         "potted_pink_time_blossom",
-        () -> new FlowerPotBlock(PINK_TIME_BLOSSOM.get(), Block.Properties.ofFullCopy(Blocks.FLOWER_POT))
+        () -> new FlowerPotBlock(PINK_TIME_BLOSSOM.get(), CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT))
     );
 
     /**
@@ -596,7 +597,7 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> BOSS_ROOM_DOOR = BLOCKS.register(
         "boss_room_door",
         () -> new BossRoomDoorBlock(
-            Block.Properties.ofFullCopy(Blocks.IRON_DOOR)
+            CompatBlockProperties.ofFullCopy(Blocks.IRON_DOOR)
                 .noOcclusion()
         )
     );
@@ -612,7 +613,7 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> ENTROPY_CRYPT_TRAPDOOR = BLOCKS.register(
         "entropy_crypt_trapdoor",
         () -> new EntropyCryptTrapdoorBlock(
-            Block.Properties.ofFullCopy(Blocks.IRON_TRAPDOOR)
+            CompatBlockProperties.ofFullCopy(Blocks.IRON_TRAPDOOR)
                 .noOcclusion()
         )
     );
@@ -647,7 +648,7 @@ public class ModBlocks {
      */
     public static final RegistrySupplier<Block> DECORATIVE_WATER = BLOCKS.register(
         "decorative_water",
-        () -> new DecorativeWaterBlock(ModFluids.DECORATIVE_WATER.get(), Block.Properties.ofFullCopy(Blocks.WATER))
+        () -> new DecorativeWaterBlock(ModFluids.DECORATIVE_WATER.get(), CompatBlockProperties.ofFullCopy(Blocks.WATER))
     );
 
     /**
@@ -807,7 +808,7 @@ public class ModBlocks {
      */
     public static final RegistrySupplier<Block> POTTED_DARK_TIME_WOOD_SAPLING = BLOCKS.register(
         "potted_dark_time_wood_sapling",
-        () -> new FlowerPotBlock(DARK_TIME_WOOD_SAPLING.get(), Block.Properties.ofFullCopy(Blocks.FLOWER_POT))
+        () -> new FlowerPotBlock(DARK_TIME_WOOD_SAPLING.get(), CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT))
     );
 
     // ===== Ancient Time Wood Blocks =====
@@ -953,7 +954,7 @@ public class ModBlocks {
      */
     public static final RegistrySupplier<Block> POTTED_ANCIENT_TIME_WOOD_SAPLING = BLOCKS.register(
         "potted_ancient_time_wood_sapling",
-        () -> new FlowerPotBlock(ANCIENT_TIME_WOOD_SAPLING.get(), Block.Properties.ofFullCopy(Blocks.FLOWER_POT))
+        () -> new FlowerPotBlock(ANCIENT_TIME_WOOD_SAPLING.get(), CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT))
     );
 
     /**

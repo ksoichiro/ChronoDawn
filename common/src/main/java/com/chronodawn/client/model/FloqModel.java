@@ -9,6 +9,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
+import com.chronodawn.compat.CompatResourceLocation;
 
 /**
  * Floq Model
@@ -18,7 +19,7 @@ import net.minecraft.resources.ResourceLocation;
 public class FloqModel extends EntityModel<FloqEntity> {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
-        ResourceLocation.fromNamespaceAndPath("chronodawn", "floq"),
+        CompatResourceLocation.create("chronodawn", "floq"),
         "main"
     );
 

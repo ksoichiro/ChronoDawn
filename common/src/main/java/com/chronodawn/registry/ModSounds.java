@@ -5,6 +5,7 @@ import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
+import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 
 /**
@@ -212,7 +213,7 @@ public class ModSounds {
      * @return The registered sound event supplier
      */
     private static RegistrySupplier<SoundEvent> registerSound(String name) {
-        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, name);
+        ResourceLocation id = CompatResourceLocation.create(ChronoDawn.MOD_ID, name);
         return SOUNDS.register(name, () -> SoundEvent.createVariableRangeEvent(id));
     }
 

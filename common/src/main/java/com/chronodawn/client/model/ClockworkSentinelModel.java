@@ -7,6 +7,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
+import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -20,7 +21,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 public class ClockworkSentinelModel extends EntityModel<ClockworkSentinelEntity> {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
-        ResourceLocation.fromNamespaceAndPath("chronodawn", "clockwork_sentinel"),
+        CompatResourceLocation.create("chronodawn", "clockwork_sentinel"),
         "main"
     );
 

@@ -7,6 +7,7 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import com.chronodawn.compat.CompatResourceLocation;
 
 /**
  * Renderer for Entropy Keeper entity.
@@ -16,14 +17,14 @@ import net.minecraft.resources.ResourceLocation;
  * Task: T237 [Phase 2] Implement Entropy Keeper
  */
 public class EntropyKeeperRenderer extends MobRenderer<EntropyKeeperEntity, EntropyKeeperModel<EntropyKeeperEntity>> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(
+    private static final ResourceLocation TEXTURE = CompatResourceLocation.create(
         ChronoDawn.MOD_ID,
         "textures/entity/entropy_keeper.png"
     );
 
     // Model layer location for Entropy Keeper
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
-        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "entropy_keeper"),
+        CompatResourceLocation.create(ChronoDawn.MOD_ID, "entropy_keeper"),
         "main"
     );
 

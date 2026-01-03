@@ -7,6 +7,7 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import com.chronodawn.compat.CompatResourceLocation;
 
 /**
  * Renderer for Time Tyrant entity.
@@ -18,14 +19,14 @@ import net.minecraft.resources.ResourceLocation;
 public class TimeTyrantRenderer extends MobRenderer<TimeTyrantEntity, TimeTyrantModel> {
     // Custom texture for Time Tyrant
     // TODO: Create custom texture for Time Tyrant in textures/entity/time_tyrant.png
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(
+    private static final ResourceLocation TEXTURE = CompatResourceLocation.create(
         ChronoDawn.MOD_ID,
         "textures/entity/time_tyrant.png"
     );
 
     // Model layer location for Time Tyrant
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
-        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "time_tyrant"),
+        CompatResourceLocation.create(ChronoDawn.MOD_ID, "time_tyrant"),
         "main"
     );
 

@@ -1,6 +1,7 @@
 package com.chronodawn.blocks;
 
 import com.chronodawn.compat.CompatBlockEntity;
+import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -103,7 +104,7 @@ public class BossRoomBoundaryMarkerBlockEntity extends CompatBlockEntity {
             markerType = tag.getString("MarkerType");
         }
         if (tag.contains("ReplaceWith")) {
-            replaceWith = ResourceLocation.parse(tag.getString("ReplaceWith"));
+            replaceWith = CompatResourceLocation.parse(tag.getString("ReplaceWith"));
         }
     }
 }

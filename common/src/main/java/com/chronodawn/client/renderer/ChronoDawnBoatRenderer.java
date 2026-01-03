@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.vehicle.Boat;
 
@@ -46,7 +47,7 @@ public class ChronoDawnBoatRenderer extends EntityRenderer<ChronoDawnBoat> {
 
         for (ChronoDawnBoatType type : ChronoDawnBoatType.values()) {
             String texturePath = "textures/entity/boat/" + type.getName() + ".png";
-            ResourceLocation texture = ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, texturePath);
+            ResourceLocation texture = CompatResourceLocation.create(ChronoDawn.MOD_ID, texturePath);
 
             // Use vanilla boat model layer
             ModelLayerLocation modelLayer = net.minecraft.client.model.geom.ModelLayers.createBoatModelName(Boat.Type.OAK);

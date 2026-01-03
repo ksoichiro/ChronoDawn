@@ -14,6 +14,7 @@ import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.resources.ResourceLocation;
+import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.util.Mth;
 
 /**
@@ -36,7 +37,7 @@ import net.minecraft.util.Mth;
 public class ChronosWardenModel extends EntityModel<ChronosWardenEntity> {
     // Model layer location for Chronos Warden
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
-        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "chronos_warden"),
+        CompatResourceLocation.create(ChronoDawn.MOD_ID, "chronos_warden"),
         "main"
     );
 

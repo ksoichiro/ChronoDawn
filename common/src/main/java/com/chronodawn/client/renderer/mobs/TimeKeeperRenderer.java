@@ -5,6 +5,7 @@ import com.chronodawn.entities.mobs.TimeKeeperEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import com.chronodawn.compat.CompatResourceLocation;
 
 /**
  * Renderer for Time Keeper entity.
@@ -14,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
  * Model: Custom model created with Blockbench
  */
 public class TimeKeeperRenderer extends MobRenderer<TimeKeeperEntity, TimeKeeperModel> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(
+    private static final ResourceLocation TEXTURE = CompatResourceLocation.create(
         "chronodawn",
         "textures/entity/mobs/time_keeper.png"
     );

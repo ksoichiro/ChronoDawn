@@ -7,6 +7,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Blocks;
@@ -39,27 +40,27 @@ import java.util.concurrent.ConcurrentHashMap;
  * Implementation inspired by PhantomCatacombsBossRoomPlacer.
  */
 public class MasterClockBossRoomPlacer {
-    private static final ResourceLocation MASTER_CLOCK_ID = ResourceLocation.fromNamespaceAndPath(
+    private static final ResourceLocation MASTER_CLOCK_ID = CompatResourceLocation.create(
         ChronoDawn.MOD_ID,
         "master_clock"
     );
 
-    private static final ResourceLocation BOSS_ROOM_TEMPLATE = ResourceLocation.fromNamespaceAndPath(
+    private static final ResourceLocation BOSS_ROOM_TEMPLATE = CompatResourceLocation.create(
         ChronoDawn.MOD_ID,
         "master_clock_boss_room"
     );
 
-    private static final ResourceLocation STAIRS_TEMPLATE = ResourceLocation.fromNamespaceAndPath(
+    private static final ResourceLocation STAIRS_TEMPLATE = CompatResourceLocation.create(
         ChronoDawn.MOD_ID,
         "master_clock_stairs"
     );
 
-    private static final ResourceLocation STAIRS_BOTTOM_TEMPLATE = ResourceLocation.fromNamespaceAndPath(
+    private static final ResourceLocation STAIRS_BOTTOM_TEMPLATE = CompatResourceLocation.create(
         ChronoDawn.MOD_ID,
         "master_clock_stairs_bottom"
     );
 
-    private static final ResourceLocation CORRIDOR_TEMPLATE = ResourceLocation.fromNamespaceAndPath(
+    private static final ResourceLocation CORRIDOR_TEMPLATE = CompatResourceLocation.create(
         ChronoDawn.MOD_ID,
         "master_clock_corridor"
     );
@@ -404,7 +405,7 @@ public class MasterClockBossRoomPlacer {
             .setIgnoreEntities(false);
 
         // Add processors
-        ResourceLocation processorListId = ResourceLocation.fromNamespaceAndPath(
+        ResourceLocation processorListId = CompatResourceLocation.create(
             ChronoDawn.MOD_ID,
             "convert_decorative_water"
         );
@@ -435,7 +436,7 @@ public class MasterClockBossRoomPlacer {
 
         // Get DecorativeWater block for protection
         var decorativeWaterBlock = net.minecraft.core.registries.BuiltInRegistries.BLOCK
-            .get(ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "decorative_water"));
+            .get(CompatResourceLocation.create(ChronoDawn.MOD_ID, "decorative_water"));
 
         // List to store Jigsaw Block positions for later removal
         List<BlockPos> jigsawsToRemove = new ArrayList<>();
@@ -548,7 +549,7 @@ public class MasterClockBossRoomPlacer {
             .setIgnoreEntities(false);
 
         // Add processors for stairs_bottom
-        ResourceLocation processorListId2 = ResourceLocation.fromNamespaceAndPath(
+        ResourceLocation processorListId2 = CompatResourceLocation.create(
             ChronoDawn.MOD_ID,
             "convert_decorative_water"
         );
@@ -795,7 +796,7 @@ public class MasterClockBossRoomPlacer {
             .setIgnoreEntities(false);
 
         // Add processors
-        ResourceLocation processorListId = ResourceLocation.fromNamespaceAndPath(
+        ResourceLocation processorListId = CompatResourceLocation.create(
             ChronoDawn.MOD_ID,
             "convert_decorative_water"
         );
@@ -1324,7 +1325,7 @@ public class MasterClockBossRoomPlacer {
 
         // Get DecorativeWater block for protection
         var decorativeWaterBlock = net.minecraft.core.registries.BuiltInRegistries.BLOCK
-            .get(ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "decorative_water"));
+            .get(CompatResourceLocation.create(ChronoDawn.MOD_ID, "decorative_water"));
 
         // Get template size for water removal
         net.minecraft.core.Vec3i templateSize = template.getSize();
@@ -1336,7 +1337,7 @@ public class MasterClockBossRoomPlacer {
         }
 
         // Load processor list for waterlogging prevention
-        ResourceLocation processorListId = ResourceLocation.fromNamespaceAndPath(
+        ResourceLocation processorListId = CompatResourceLocation.create(
             ChronoDawn.MOD_ID,
             "convert_decorative_water"
         );
