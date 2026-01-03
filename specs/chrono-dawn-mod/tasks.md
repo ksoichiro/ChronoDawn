@@ -671,6 +671,52 @@
     - Test with various block types (normal blocks, slabs, stairs, etc.)
   - **Expected Behavior**: When players attempt to place blocks in protected boss rooms on NeoForge, the placement is cancelled AND the item remains in inventory (matching Fabric behavior)
 
+- [ ] T721 [P] Add Wood and Stripped Wood blocks for all Time Wood variants
+  - **Issue**: Time Wood variants only have Log blocks, but lack Wood (all-bark) and Stripped Wood blocks that vanilla wood types have
+  - **Feedback Source**: User request (2026-01-03)
+  - **Missing Blocks**:
+    - Wood blocks (6 variants - all sides with bark texture):
+      - Time Wood (from Time Wood Log)
+      - Dark Time Wood (from Dark Time Wood Log)
+      - Ancient Time Wood (from Ancient Time Wood Log)
+      - Stripped Time Wood (from Stripped Time Wood Log)
+      - Stripped Dark Time Wood (from Stripped Dark Time Wood Log)
+      - Stripped Ancient Time Wood (from Stripped Ancient Time Wood Log)
+  - **Implementation**:
+    1. **Create Wood Block Classes** (if needed, or reuse RotatedPillarBlock):
+       - Use `RotatedPillarBlock` with axis property (same as logs)
+       - Copy block properties from corresponding log blocks
+    2. **Add Block Registration**:
+       - Register 6 new wood blocks in `ModBlocks.java`
+       - Register 6 new block items in `ModItems.java`
+       - Add to creative tab in appropriate order (after logs, before planks)
+    3. **Add Crafting Recipes**:
+       - Create recipes: 4 logs → 3 wood (2x2 pattern, vanilla pattern)
+       - Example: `time_wood_log` x4 → `time_wood` x3
+       - Create recipes for all 6 variants
+    4. **Add Strippable Mappings** (for non-stripped wood → stripped wood):
+       - Map: Time Wood → Stripped Time Wood (axe right-click)
+       - Map: Dark Time Wood → Stripped Dark Time Wood
+       - Map: Ancient Time Wood → Stripped Ancient Time Wood
+    5. **Add Block Models and Textures**:
+       - Create blockstates JSON (axis property)
+       - Create block models (cube_column with side and end textures)
+       - Create textures: reuse log bark textures for all 6 sides
+    6. **Add Loot Tables**:
+       - Create loot tables for all 6 wood blocks (drop themselves)
+  - **Files to Modify/Create**:
+    - `common/src/main/java/com/chronodawn/registry/ModBlocks.java` (add 6 wood blocks)
+    - `common/src/main/java/com/chronodawn/registry/ModItems.java` (add 6 block items)
+    - `common/src/main/java/com/chronodawn/events/BlockEventHandler.java` (add stripping mappings for wood → stripped wood)
+    - `common/src/main/resources/data/chronodawn/recipe/*.json` (6 crafting recipes)
+    - `common/src/main/resources/assets/chronodawn/blockstates/*.json` (6 blockstate files)
+    - `common/src/main/resources/assets/chronodawn/models/block/*.json` (6 block models)
+    - `common/src/main/resources/data/chronodawn/loot_table/blocks/*.json` (6 loot tables)
+  - **Reference Implementation**:
+    - Vanilla: Oak Log → Oak Wood (4 logs in 2x2), Oak Wood → Stripped Oak Wood (axe right-click)
+  - **Expected Behavior**: Players can craft Wood blocks from logs and strip them with axes, matching vanilla wood behavior
+  - **Note**: This task depends on T719 being completed first (stripped log blocks must exist)
+
 ### Playtest Improvements - Guidebook Distribution
 
 **Purpose**: Fix guidebook distribution bugs discovered through playtesting
