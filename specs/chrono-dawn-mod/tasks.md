@@ -671,7 +671,7 @@
     - Test with various block types (normal blocks, slabs, stairs, etc.)
   - **Expected Behavior**: When players attempt to place blocks in protected boss rooms on NeoForge, the placement is cancelled AND the item remains in inventory (matching Fabric behavior)
 
-- [ ] T721 [P] Add Wood and Stripped Wood blocks for all Time Wood variants
+- [x] T721 [P] Add Wood and Stripped Wood blocks for all Time Wood variants
   - **Issue**: Time Wood variants only have Log blocks, but lack Wood (all-bark) and Stripped Wood blocks that vanilla wood types have
   - **Feedback Source**: User request (2026-01-03)
   - **Missing Blocks**:

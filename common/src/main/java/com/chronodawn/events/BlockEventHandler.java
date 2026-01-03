@@ -594,19 +594,28 @@ public class BlockEventHandler {
     }
 
     /**
-     * Get the stripped variant of a log block.
+     * Get the stripped variant of a log block or wood block.
      * Returns null if the block is not strippable.
      *
      * @param state The current block state
      * @return The stripped block state, or null if not strippable
      */
     private static BlockState getStrippedState(BlockState state) {
+        // Log blocks
         if (state.is(ModBlocks.TIME_WOOD_LOG.get())) {
             return ModBlocks.STRIPPED_TIME_WOOD_LOG.get().defaultBlockState();
         } else if (state.is(ModBlocks.DARK_TIME_WOOD_LOG.get())) {
             return ModBlocks.STRIPPED_DARK_TIME_WOOD_LOG.get().defaultBlockState();
         } else if (state.is(ModBlocks.ANCIENT_TIME_WOOD_LOG.get())) {
             return ModBlocks.STRIPPED_ANCIENT_TIME_WOOD_LOG.get().defaultBlockState();
+        }
+        // Wood blocks (all-bark variants)
+        else if (state.is(ModBlocks.TIME_WOOD.get())) {
+            return ModBlocks.STRIPPED_TIME_WOOD.get().defaultBlockState();
+        } else if (state.is(ModBlocks.DARK_TIME_WOOD.get())) {
+            return ModBlocks.STRIPPED_DARK_TIME_WOOD.get().defaultBlockState();
+        } else if (state.is(ModBlocks.ANCIENT_TIME_WOOD.get())) {
+            return ModBlocks.STRIPPED_ANCIENT_TIME_WOOD.get().defaultBlockState();
         }
         return null;
     }
