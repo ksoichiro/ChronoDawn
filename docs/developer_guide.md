@@ -232,7 +232,7 @@ architectury {
 #### `gradle.properties`
 
 ```properties
-mod_version=0.2.0-beta
+mod_version=0.2.0
 maven_group=com.chronodawn
 archives_name=chronodawn
 minecraft_version=1.21.1
@@ -271,9 +271,9 @@ neoforge_version=21.1.209
 ### Output Files
 
 After building:
-- **Fabric JAR**: `fabric/build/libs/chronodawn-0.2.0-beta+1.21.1-fabric.jar`
-- **NeoForge JAR**: `neoforge/build/libs/chronodawn-0.2.0-beta+1.21.1-neoforge.jar`
-- **Common JAR**: `common/build/libs/common-0.2.0-beta.jar` (bundled into loader JARs)
+- **Fabric JAR**: `fabric/build/libs/chronodawn-0.2.0+1.21.1-fabric.jar`
+- **NeoForge JAR**: `neoforge/build/libs/chronodawn-0.2.0+1.21.1-neoforge.jar`
+- **Common JAR**: `common/build/libs/common-0.2.0.jar` (bundled into loader JARs)
 
 ---
 

@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.2.0-beta] - TBD
+## [0.2.0] - 2026-01-04
 
 ### Added
 - Wood and Stripped Wood blocks for all Time Wood variants (Ancient, Dawn, Dusk, Twilight, Eternal)
@@ -95,6 +95,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Architectury API 13.0.8+
 - Custom Portal API 0.0.1-beta66-1.21 (Fabric bundled, NeoForge requires separate installation)
 
-[Unreleased]: https://github.com/ksoichiro/ChronoDawn/compare/v0.1.0+1.21.1...HEAD
-[0.2.0-beta]: https://github.com/ksoichiro/ChronoDawn/compare/v0.1.0+1.21.1...HEAD
+[Unreleased]: https://github.com/ksoichiro/ChronoDawn/compare/v0.2.0+1.21.1...HEAD
+[0.2.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.1.0+1.21.1...v0.2.0+1.21.1
 [0.1.0]: https://github.com/ksoichiro/ChronoDawn/releases/tag/v0.1.0+1.21.1
