@@ -66,17 +66,43 @@ public class ChronoAegisItem extends Item {
                 return InteractionResultHolder.fail(stack);
             }
 
-            // Apply Chrono Aegis buff (10 minutes = 12000 ticks)
-            player.addEffect(new MobEffectInstance(
-                effectHolder,
-                12000, // 10 minutes
-                0, // Level 0
-                false, // Not ambient
-                true, // Show particles
-                true // Show icon
-            ));
+            // Apply Chrono Aegis buff to all nearby players (32 block radius)
+            final double BUFF_RANGE = 32.0;
+            int playersAffected = 0;
 
-            // Play activation sound
+            for (Player nearbyPlayer : level.players()) {
+                // Check if player is in same dimension and within range
+                if (nearbyPlayer.level().dimension() == player.level().dimension() &&
+                    nearbyPlayer.distanceTo(player) <= BUFF_RANGE) {
+
+                    // Apply buff
+                    nearbyPlayer.addEffect(new MobEffectInstance(
+                        effectHolder,
+                        12000, // 10 minutes
+                        0, // Level 0
+                        false, // Not ambient
+                        true, // Show particles
+                        true // Show icon
+                    ));
+
+                    // Notify each player
+                    if (nearbyPlayer == player) {
+                        nearbyPlayer.displayClientMessage(
+                            Component.translatable("item.chronodawn.chrono_aegis.activated"),
+                            true
+                        );
+                    } else {
+                        nearbyPlayer.displayClientMessage(
+                            Component.translatable("item.chronodawn.chrono_aegis.received_from_ally", player.getName()),
+                            true
+                        );
+                    }
+
+                    playersAffected++;
+                }
+            }
+
+            // Play activation sound at user's location (audible to all nearby players)
             level.playSound(
                 null,
                 player.getX(), player.getY(), player.getZ(),
@@ -89,11 +115,6 @@ public class ChronoAegisItem extends Item {
             if (!player.getAbilities().instabuild) {
                 stack.shrink(1);
             }
-
-            player.displayClientMessage(
-                Component.translatable("item.chronodawn.chrono_aegis.activated"),
-                true
-            );
 
             return InteractionResultHolder.success(stack);
         }

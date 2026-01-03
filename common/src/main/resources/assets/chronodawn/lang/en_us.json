@@ -153,6 +153,7 @@
 
   "item.chronodawn.chrono_aegis.already_active": "Chrono Aegis buff is already active!",
   "item.chronodawn.chrono_aegis.activated": "Chrono Aegis activated! Protection against Time Tyrant for 10 minutes.",
+  "item.chronodawn.chrono_aegis.received_from_ally": "%s activated Chrono Aegis! You are protected for 10 minutes.",
   "item.chronodawn.chrono_aegis.tooltip": "A powerful artifact forged from the essence of defeated temporal guardians.",
   "item.chronodawn.chrono_aegis.tooltip.duration": "Right-click to activate (10 minutes duration)",
 
