@@ -172,7 +172,7 @@ public class TimeCompassItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
         String targetStructure = getTargetStructure(stack);
 
         if (targetStructure != null) {

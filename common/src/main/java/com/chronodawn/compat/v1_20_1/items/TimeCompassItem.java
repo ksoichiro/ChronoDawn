@@ -141,7 +141,8 @@ public class TimeCompassItem extends Item {
             try {
                 ResourceKey<Level> dimension = ResourceKey.create(
                     net.minecraft.core.registries.Registries.DIMENSION,
-                    net.minecraft.resources.ResourceLocation.parse(dimensionStr)
+                    // 1.20.1: Use CompatResourceLocation.parse() instead of ResourceLocation.parse()
+                    CompatResourceLocation.parse(dimensionStr)
                 );
                 return Optional.of(GlobalPos.of(dimension, new BlockPos(x, y, z)));
             } catch (Exception e) {

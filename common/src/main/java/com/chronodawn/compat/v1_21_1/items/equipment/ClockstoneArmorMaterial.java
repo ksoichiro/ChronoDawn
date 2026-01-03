@@ -54,11 +54,6 @@ public class ClockstoneArmorMaterial {
         14, // Enchantability (same as iron)
         SoundEvents.ARMOR_EQUIP_IRON,
         () -> Ingredient.of(ModItems.TIME_CRYSTAL.get()),
-        List.of(
-            new ArmorMaterial.Layer(
-                CompatResourceLocation.create(ChronoDawn.MOD_ID, "clockstone")
-            )
-        ),
         1.0f, // Toughness (between iron 0.0f and diamond 2.0f)
         0.0f  // Knockback Resistance
     );
@@ -67,9 +62,8 @@ public class ClockstoneArmorMaterial {
         String name,
         EnumMap<ArmorItem.Type, Integer> defense,
         int enchantmentValue,
-        Holder<SoundEvent> equipSound,
+        SoundEvent equipSound,
         Supplier<Ingredient> repairIngredient,
-        List<ArmorMaterial.Layer> layers,
         float toughness,
         float knockbackResistance
     ) {
@@ -81,15 +75,47 @@ public class ClockstoneArmorMaterial {
         return Registry.registerForHolder(
             BuiltInRegistries.ARMOR_MATERIAL,
             CompatResourceLocation.create(ChronoDawn.MOD_ID, name),
-            new ArmorMaterial(
-                defenseMap,
-                enchantmentValue,
-                equipSound,
-                repairIngredient,
-                layers,
-                toughness,
-                knockbackResistance
-            )
+            new ArmorMaterial() {
+                @Override
+                public int getDurabilityForType(ArmorItem.Type type) {
+                    return defenseMap.getOrDefault(type, 0);
+                }
+
+                @Override
+                public int getDefenseForType(ArmorItem.Type type) {
+                    return defenseMap.getOrDefault(type, 0);
+                }
+
+                @Override
+                public int getEnchantmentValue() {
+                    return enchantmentValue;
+                }
+
+                @Override
+                public SoundEvent getEquipSound() {
+                    return equipSound;
+                }
+
+                @Override
+                public Ingredient getRepairIngredient() {
+                    return repairIngredient.get();
+                }
+
+                @Override
+                public String getName() {
+                    return ChronoDawn.MOD_ID + ":" + name;
+                }
+
+                @Override
+                public float getToughness() {
+                    return toughness;
+                }
+
+                @Override
+                public float getKnockbackResistance() {
+                    return knockbackResistance;
+                }
+            }
         );
     }
 }

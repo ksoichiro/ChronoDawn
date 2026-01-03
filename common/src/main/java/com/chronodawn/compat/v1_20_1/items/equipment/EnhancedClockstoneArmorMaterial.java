@@ -46,6 +46,7 @@ import java.util.function.Supplier;
  * Reference: T252 - Create Enhanced Clockstone Armor Set with immunity to time distortion
  */
 public class EnhancedClockstoneArmorMaterial {
+    // 1.20.1: ArmorItem.Type.BODY does not exist
     public static final Holder<ArmorMaterial> ENHANCED_CLOCKSTONE = register(
         "enhanced_clockstone",
         Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
@@ -53,7 +54,6 @@ public class EnhancedClockstoneArmorMaterial {
             map.put(ArmorItem.Type.LEGGINGS, 6);
             map.put(ArmorItem.Type.CHESTPLATE, 7);
             map.put(ArmorItem.Type.HELMET, 3);
-            map.put(ArmorItem.Type.BODY, 7); // For horses/llamas
         }),
         16, // Enchantability (better than iron/clockstone and diamond)
         SoundEvents.ARMOR_EQUIP_DIAMOND,

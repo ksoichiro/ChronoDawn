@@ -42,6 +42,7 @@ import java.util.function.Supplier;
  * Reference: tasks.md (T215)
  */
 public class ClockstoneArmorMaterial {
+    // 1.20.1: ArmorItem.Type.BODY does not exist
     public static final Holder<ArmorMaterial> CLOCKSTONE = register(
         "clockstone",
         Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
@@ -49,7 +50,6 @@ public class ClockstoneArmorMaterial {
             map.put(ArmorItem.Type.LEGGINGS, 5);
             map.put(ArmorItem.Type.CHESTPLATE, 6);
             map.put(ArmorItem.Type.HELMET, 2);
-            map.put(ArmorItem.Type.BODY, 6); // For horses/llamas
         }),
         14, // Enchantability (same as iron)
         SoundEvents.ARMOR_EQUIP_IRON,
