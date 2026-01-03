@@ -143,6 +143,14 @@ public class ModItems {
     );
 
     /**
+     * Stripped Time Wood Log - BlockItem for placing Stripped Time Wood Log block.
+     */
+    public static final RegistrySupplier<Item> STRIPPED_TIME_WOOD_LOG = ITEMS.register(
+        "stripped_time_wood_log",
+        () -> new BlockItem(ModBlocks.STRIPPED_TIME_WOOD_LOG.get(), new Item.Properties())
+    );
+
+    /**
      * Time Wood Leaves - BlockItem for placing Time Wood Leaves block.
      */
     public static final RegistrySupplier<Item> TIME_WOOD_LEAVES = ITEMS.register(
@@ -174,6 +182,14 @@ public class ModItems {
     public static final RegistrySupplier<Item> DARK_TIME_WOOD_LOG = ITEMS.register(
         "dark_time_wood_log",
         () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_LOG.get(), new Item.Properties())
+    );
+
+    /**
+     * Stripped Dark Time Wood Log - BlockItem for placing Stripped Dark Time Wood Log block.
+     */
+    public static final RegistrySupplier<Item> STRIPPED_DARK_TIME_WOOD_LOG = ITEMS.register(
+        "stripped_dark_time_wood_log",
+        () -> new BlockItem(ModBlocks.STRIPPED_DARK_TIME_WOOD_LOG.get(), new Item.Properties())
     );
 
     /**
@@ -272,6 +288,14 @@ public class ModItems {
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_LOG = ITEMS.register(
         "ancient_time_wood_log",
         () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_LOG.get(), new Item.Properties())
+    );
+
+    /**
+     * Stripped Ancient Time Wood Log - BlockItem for placing Stripped Ancient Time Wood Log block.
+     */
+    public static final RegistrySupplier<Item> STRIPPED_ANCIENT_TIME_WOOD_LOG = ITEMS.register(
+        "stripped_ancient_time_wood_log",
+        () -> new BlockItem(ModBlocks.STRIPPED_ANCIENT_TIME_WOOD_LOG.get(), new Item.Properties())
     );
 
     /**
@@ -1534,6 +1558,7 @@ public class ModItems {
         output.accept(REVERSING_TIME_SANDSTONE.get());
         output.accept(UNSTABLE_FUNGUS.get());
         output.accept(TIME_WOOD_LOG.get());
+        output.accept(STRIPPED_TIME_WOOD_LOG.get());
         output.accept(TIME_WOOD_LEAVES.get());
         output.accept(TIME_WOOD_PLANKS.get());
         output.accept(TIME_WOOD_STAIRS.get());
@@ -1547,6 +1572,7 @@ public class ModItems {
         output.accept(TIME_WOOD_SAPLING.get());
         // Dark Time Wood
         output.accept(DARK_TIME_WOOD_LOG.get());
+        output.accept(STRIPPED_DARK_TIME_WOOD_LOG.get());
         output.accept(DARK_TIME_WOOD_LEAVES.get());
         output.accept(DARK_TIME_WOOD_PLANKS.get());
         output.accept(DARK_TIME_WOOD_STAIRS.get());
@@ -1560,6 +1586,7 @@ public class ModItems {
         output.accept(DARK_TIME_WOOD_SAPLING.get());
         // Ancient Time Wood
         output.accept(ANCIENT_TIME_WOOD_LOG.get());
+        output.accept(STRIPPED_ANCIENT_TIME_WOOD_LOG.get());
         output.accept(ANCIENT_TIME_WOOD_LEAVES.get());
         output.accept(ANCIENT_TIME_WOOD_PLANKS.get());
         output.accept(ANCIENT_TIME_WOOD_STAIRS.get());

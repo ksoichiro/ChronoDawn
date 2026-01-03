@@ -595,7 +595,7 @@
     - Current code: `ChronoAegisItem.java:52-102` (use() method)
   - **Expected Behavior**: When a player uses Chrono Aegis, all nearby players (within 32 blocks) receive the 10-minute buff, making multiplayer boss fights more balanced
 
-- [ ] T719 [P] Add axe stripping functionality for Time Wood logs (bark removal with right-click)
+- [x] T719 [P] Add axe stripping functionality for Time Wood logs (bark removal with right-click)
   - **Issue**: Time Wood logs (Time Wood Log, Dark Time Wood Log, Ancient Time Wood Log) cannot be stripped with axe right-click, unlike vanilla logs
   - **Feedback Source**: Playtest feedback (2026-01-03)
   - **Current State**: Stripped variants do not exist
