@@ -53,10 +53,7 @@ public class EnhancedClockstoneTier implements Tier {
         return 3; // Diamond mining level
     }
 
-    @Override
-    public TagKey<Block> getIncorrectBlocksForDrops() {
-        return BlockTags.INCORRECT_FOR_DIAMOND_TOOL; // Diamond mining level
-    }
+    // 1.20.1: getIncorrectBlocksForDrops() method does not exist in Tier interface
 
     @Override
     public int getEnchantmentValue() {
