@@ -78,9 +78,9 @@ gradlew.bat build
 ```
 
 **Output Files**:
-- `fabric/build/libs/chronodawn-0.2.0+1.21.1-fabric.jar` - Fabric loader JAR
-- `neoforge/build/libs/chronodawn-0.2.0+1.21.1-neoforge.jar` - NeoForge loader JAR
-- `common/build/libs/common-0.2.0.jar` - Common module (not usable standalone)
+- `fabric/build/libs/chronodawn-0.3.0-beta+1.21.1-fabric.jar` - Fabric loader JAR
+- `neoforge/build/libs/chronodawn-0.3.0-beta+1.21.1-neoforge.jar` - NeoForge loader JAR
+- `common/build/libs/common-0.3.0-beta.jar` - Common module (not usable standalone)
 
 ### Build Specific Loader
 
@@ -206,7 +206,7 @@ gradlew.bat test
 2. Install Fabric Loader 0.17.3+
 3. Download and install Fabric API 0.116.7+
 4. Download and install Architectury API 13.0.8+
-5. Copy `chronodawn-0.2.0+1.21.1-fabric.jar` to `.minecraft/mods/` folder
+5. Copy `chronodawn-0.3.0-beta+1.21.1-fabric.jar` to `.minecraft/mods/` folder
 6. Launch Minecraft with Fabric profile
 
 **Note**: Custom Portal API is bundled in the Fabric version - no separate installation needed!
@@ -217,7 +217,7 @@ gradlew.bat test
 3. Download and install required dependencies:
    - Architectury API 13.0.8+
    - Custom Portal API ReForged 1.2.2+ ([CurseForge](https://www.curseforge.com/minecraft/mc-mods/custom-portal-api-reforged) | [Modrinth](https://modrinth.com/mod/custom-portal-api-reforged))
-4. Copy `chronodawn-0.2.0+1.21.1-neoforge.jar` to `.minecraft/mods/` folder
+4. Copy `chronodawn-0.3.0-beta+1.21.1-neoforge.jar` to `.minecraft/mods/` folder
 5. Launch Minecraft with NeoForge profile
 
 **Note**: Download the correct version for your mod loader (Fabric or NeoForge).
