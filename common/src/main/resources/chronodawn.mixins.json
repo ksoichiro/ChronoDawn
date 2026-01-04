@@ -4,11 +4,17 @@
   "package": "com.chronodawn.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "StructureStartMixin",
-    "PortalPlacerMixin"
+    "AnvilMenuAccessor",
+    "AnvilMenuMixin",
+    "LevelGetTimeMixin",
+    "ServerLevelSetTimeMixin",
+    "SleepMixin",
+    "StructureStartMixin"
   ],
   "client": [
-    "client.FogRendererMixin"
+    "client.ClientAdvancementsAccessor",
+    "client.FogRendererMixin",
+    "client.SkyColorMixin"
   ],
   "injectors": {
     "defaultRequire": 1

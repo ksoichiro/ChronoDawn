@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.0-beta] - 2026-01-04
 
+### Fixed
+- Resolved NeoForge runClient module resolution error caused by loader-specific Mixins using common package name
+- Moved loader-specific PortalPlacerMixin to loader-specific packages (com.chronodawn.fabric.mixin, com.chronodawn.neoforge.mixin)
+
 ## [0.2.0] - 2026-01-04
 
 ### Added

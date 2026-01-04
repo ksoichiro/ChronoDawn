@@ -1,21 +1,11 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "com.chronodawn.mixin",
+  "package": "com.chronodawn.neoforge.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "AnvilMenuAccessor",
-    "AnvilMenuMixin",
-    "LevelGetTimeMixin",
-    "ServerLevelSetTimeMixin",
-    "SleepMixin",
-    "StructureStartMixin",
+    "CustomPortalBlockMixin",
     "PortalPlacerMixin"
-  ],
-  "client": [
-    "client.ClientAdvancementsAccessor",
-    "client.FogRendererMixin",
-    "client.SkyColorMixin"
   ],
   "injectors": {
     "defaultRequire": 1
