@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Block Protection Handler
@@ -26,14 +27,21 @@ import java.util.Set;
  * 2. Check protection in block break events
  * 3. Unprotect area when boss is defeated
  *
+ * Thread Safety (T429):
+ * - Uses ConcurrentHashMap for protected areas to prevent race conditions
+ * - Uses ConcurrentHashMap.newKeySet() for defeated bosses tracking
+ *
  * Implementation: T224 - Boss room protection system
+ * Task: T429 [Thread Safety] Fix non-thread-safe collection usage
  */
 public class BlockProtectionHandler {
     // Key: Dimension + UniqueID, Value: BoundingBox
-    private static final Map<String, BoundingBox> PROTECTED_AREAS = new HashMap<>();
+    // T429: Use ConcurrentHashMap for thread-safe access in multiplayer
+    private static final Map<String, BoundingBox> PROTECTED_AREAS = new ConcurrentHashMap<>();
 
     // Set of defeated boss room keys (dimension + uniqueId)
-    private static final Set<String> DEFEATED_BOSSES = new HashSet<>();
+    // T429: Use ConcurrentHashMap.newKeySet() for thread-safe Set
+    private static final Set<String> DEFEATED_BOSSES = ConcurrentHashMap.newKeySet();
 
     /**
      * Register a protected area (boss room).

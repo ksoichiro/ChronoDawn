@@ -22,6 +22,7 @@ import net.minecraft.world.phys.BlockHitResult;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Custom trapdoor block for Entropy Crypt structure.
@@ -38,6 +39,11 @@ import java.util.Set;
  * Usage:
  * - Place in Boss Chamber floor (above Vault)
  * - Set ACTIVATED=false in NBT
+ *
+ * Thread Safety (T429):
+ * - Uses ConcurrentHashMap.newKeySet() for spawn position tracking
+ *
+ * Task: T429 [Thread Safety] Fix non-thread-safe collection usage
  */
 public class EntropyCryptTrapdoorBlock extends TrapDoorBlock {
     public static final MapCodec<EntropyCryptTrapdoorBlock> CODEC = simpleCodec(EntropyCryptTrapdoorBlock::new);
@@ -50,7 +56,8 @@ public class EntropyCryptTrapdoorBlock extends TrapDoorBlock {
     public static final BooleanProperty ACTIVATED = BooleanProperty.create("activated");
 
     // Track positions where boss has been spawned (per world session)
-    private static final Set<BlockPos> spawnedPositions = new HashSet<>();
+    // T429: Use ConcurrentHashMap.newKeySet() for thread-safe Set
+    private static final Set<BlockPos> spawnedPositions = ConcurrentHashMap.newKeySet();
 
     /**
      * Custom BlockSetType that looks/sounds like iron but allows hand interaction.

@@ -31,6 +31,7 @@ import net.minecraft.sounds.SoundSource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Block event handler using Architectury Event API.
@@ -47,7 +48,11 @@ import java.util.Map;
  * - Spatially Linked Pickaxe drop doubling logic
  * - Portal frame validation and activation
  *
+ * Thread Safety (T429):
+ * - Uses ConcurrentHashMap for pendingRestorations to prevent race conditions in multiplayer
+ *
  * Reference: data-model.md (Blocks, Portal System)
+ * Task: T429 [Thread Safety] Fix non-thread-safe collection usage
  */
 public class BlockEventHandler {
     /**
@@ -68,8 +73,9 @@ public class BlockEventHandler {
     /**
      * Map to track pending block restorations.
      * Key: BlockPos (immutable), Value: RestorationData
+     * T429: Use ConcurrentHashMap for thread-safe access in multiplayer
      */
-    private static final Map<BlockPos, RestorationData> pendingRestorations = new HashMap<>();
+    private static final Map<BlockPos, RestorationData> pendingRestorations = new ConcurrentHashMap<>();
 
     /**
      * Register block event listeners.

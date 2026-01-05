@@ -10,6 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Portal Registry - Manages all ChronoDawn portals.
@@ -32,11 +33,16 @@ import java.util.*;
  *
  * Performance Optimization (T179):
  * - Uses unmodifiable Sets for dimension portal lookups to avoid defensive copying
- * - HashMap lookups provide O(1) performance for portal access by ID or position
+ * - ConcurrentHashMap lookups provide O(1) performance for portal access by ID or position
+ *
+ * Thread Safety (T429):
+ * - Uses ConcurrentHashMap for all maps to prevent race conditions in multiplayer
+ * - Uses ConcurrentHashMap.newKeySet() for thread-safe Sets
  *
  * Reference: data-model.md (Portal System → Portal Registry)
  * Task: T047 [US1] Implement portal registry
  * Task: T179 [Performance] Implement portal registry caching
+ * Task: T429 [Thread Safety] Fix non-thread-safe collection usage
  */
 public class PortalRegistry {
     private static final PortalRegistry INSTANCE = new PortalRegistry();
@@ -49,10 +55,11 @@ public class PortalRegistry {
     private final Map<ResourceKey<Level>, Set<UUID>> unmodifiableDimensionPortalCache;
 
     private PortalRegistry() {
-        this.portals = new HashMap<>();
-        this.portalsByDimension = new HashMap<>();
-        this.portalsByPosition = new HashMap<>();
-        this.unmodifiableDimensionPortalCache = new HashMap<>();
+        // T429: Use ConcurrentHashMap for thread-safe access in multiplayer
+        this.portals = new ConcurrentHashMap<>();
+        this.portalsByDimension = new ConcurrentHashMap<>();
+        this.portalsByPosition = new ConcurrentHashMap<>();
+        this.unmodifiableDimensionPortalCache = new ConcurrentHashMap<>();
     }
 
     /**
@@ -78,8 +85,9 @@ public class PortalRegistry {
         portals.put(portalId, portal);
 
         // Add to dimension index
+        // T429: Use ConcurrentHashMap.newKeySet() for thread-safe Set
         portalsByDimension
-            .computeIfAbsent(dimension, k -> new HashSet<>())
+            .computeIfAbsent(dimension, k -> ConcurrentHashMap.newKeySet())
             .add(portalId);
 
         // Add to position index
@@ -156,8 +164,10 @@ public class PortalRegistry {
             if (dimensionPortals == null || dimensionPortals.isEmpty()) {
                 return Collections.emptySet();
             }
-            // Return unmodifiable view of the set
-            return Collections.unmodifiableSet(new HashSet<>(dimensionPortals));
+            // T429: Create thread-safe copy using ConcurrentHashMap.newKeySet()
+            Set<UUID> copy = ConcurrentHashMap.newKeySet();
+            copy.addAll(dimensionPortals);
+            return Collections.unmodifiableSet(copy);
         });
     }
 

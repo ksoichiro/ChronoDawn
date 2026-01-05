@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.Blocks;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Player event handler using Architectury Event API.
@@ -53,12 +54,17 @@ import java.util.UUID;
  * - Unstable Hourglass crafting trigger (reversed resonance effect)
  * - Item cooldown management (Time Clock, Time Guardian's Mail rollback)
  *
+ * Thread Safety (T429):
+ * - Uses ConcurrentHashMap for player dimension tracking to prevent race conditions
+ *
  * Reference: data-model.md (Items, Game Mechanics)
  * Task: T087 [US1] Implement respawn handler - REVERTED to Minecraft standard behavior
+ * Task: T429 [Thread Safety] Fix non-thread-safe collection usage
  */
 public class PlayerEventHandler {
     // Track player dimensions to detect changes
-    private static final Map<UUID, ResourceKey<Level>> playerDimensions = new HashMap<>();
+    // T429: Use ConcurrentHashMap for thread-safe access in multiplayer
+    private static final Map<UUID, ResourceKey<Level>> playerDimensions = new ConcurrentHashMap<>();
 
     /**
      * Register player event listeners.

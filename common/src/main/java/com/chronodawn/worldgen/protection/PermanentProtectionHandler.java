@@ -8,6 +8,7 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Permanent Protection Handler
@@ -26,11 +27,16 @@ import java.util.Map;
  * 2. Check protection in block break events
  * 3. Protection remains active indefinitely
  *
+ * Thread Safety (T429):
+ * - Uses ConcurrentHashMap to prevent race conditions during structure generation
+ *
  * Implementation: T302 - Prevent Master Clock wall bypass
+ * Task: T429 [Thread Safety] Fix non-thread-safe collection usage
  */
 public class PermanentProtectionHandler {
     // Key: Dimension + UniqueID, Value: BoundingBox
-    private static final Map<String, BoundingBox> PROTECTED_AREAS = new HashMap<>();
+    // T429: Use ConcurrentHashMap for thread-safe access during structure generation
+    private static final Map<String, BoundingBox> PROTECTED_AREAS = new ConcurrentHashMap<>();
 
     /**
      * Register a permanently protected area.
