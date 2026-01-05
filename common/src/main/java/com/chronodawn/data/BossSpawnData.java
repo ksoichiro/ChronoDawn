@@ -7,8 +7,10 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.saveddata.SavedData;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Consolidated saved data for all boss spawning states.
@@ -25,21 +27,21 @@ public class BossSpawnData extends SavedData {
     private static final String DATA_NAME = "boss_spawns";
 
     // Time Tyrant data
-    private final Set<BlockPos> timeTyrantSpawnedDoors = new HashSet<>();
+    private final Set<BlockPos> timeTyrantSpawnedDoors = Collections.newSetFromMap(new ConcurrentHashMap<>());
     private int timeTyrantSpawnCount = 0;
 
     // Time Guardian data
-    private final Set<BlockPos> timeGuardianSpawnedStructures = new HashSet<>();
+    private final Set<BlockPos> timeGuardianSpawnedStructures = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
     // Chronos Warden data
-    private final Set<BlockPos> chronosWardenSpawnedDoors = new HashSet<>();
+    private final Set<BlockPos> chronosWardenSpawnedDoors = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
     // Entropy Keeper data
-    private final Set<BlockPos> entropyKeeperProcessedStructures = new HashSet<>();
-    private final Set<BlockPos> entropyKeeperSpawnedMarkers = new HashSet<>();
+    private final Set<BlockPos> entropyKeeperProcessedStructures = Collections.newSetFromMap(new ConcurrentHashMap<>());
+    private final Set<BlockPos> entropyKeeperSpawnedMarkers = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
     // Clockwork Colossus data
-    private final Set<BlockPos> clockworkColossusSpawnedStructures = new HashSet<>();
+    private final Set<BlockPos> clockworkColossusSpawnedStructures = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
     public BossSpawnData() {
         super();

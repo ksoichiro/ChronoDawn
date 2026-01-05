@@ -12,7 +12,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.saveddata.SavedData;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -58,7 +58,7 @@ public class PortalRegistryData extends ChronoDawnWorldData {
         }
     }
 
-    private final Map<UUID, PortalEntry> portals = new HashMap<>();
+    private final Map<UUID, PortalEntry> portals = new ConcurrentHashMap<>();
 
     /**
      * Get or create portal registry data for the given level.
