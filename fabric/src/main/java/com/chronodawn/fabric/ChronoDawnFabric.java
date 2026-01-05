@@ -30,6 +30,7 @@ import com.chronodawn.entities.mobs.TemporalWraithEntity;
 import com.chronodawn.entities.mobs.TimeKeeperEntity;
 import com.chronodawn.fabric.compat.CustomPortalFabric;
 import com.chronodawn.fabric.event.BlockProtectionEventHandler;
+import com.chronodawn.fabric.registry.ModParticles;
 import com.chronodawn.registry.ModEntities;
 import com.chronodawn.worldgen.processors.BossRoomProtectionProcessor;
 import net.fabricmc.api.ModInitializer;
@@ -43,6 +44,9 @@ public class ChronoDawnFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         ChronoDawn.init();
+
+        // Register particle types (Fabric-specific)
+        ModParticles.register();
 
         // Register entity attributes (Fabric-specific)
         registerEntityAttributes();

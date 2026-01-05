@@ -29,6 +29,8 @@ import com.chronodawn.client.renderer.mobs.ClockworkSentinelRenderer;
 import com.chronodawn.client.renderer.mobs.FloqRenderer;
 import com.chronodawn.client.renderer.mobs.TemporalWraithRenderer;
 import com.chronodawn.client.renderer.mobs.TimeKeeperRenderer;
+import com.chronodawn.fabric.client.particle.ChronoDawnPortalParticle;
+import com.chronodawn.fabric.registry.ModParticles;
 import com.chronodawn.items.TimeCompassItem;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModEntities;
@@ -37,6 +39,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.event.client.player.ClientPlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
@@ -77,6 +80,7 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
         registerRenderLayers();
         registerEntityModelLayers();
         registerEntityRenderers();
+        registerParticles();
         registerItemProperties();
         registerChronicleDataLoader();
         registerChronicleBookHandler();
@@ -511,6 +515,19 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             ModEntities.CHRONO_DAWN_CHEST_BOAT.get(),
             ChronoDawnChestBoatRenderer::new
         );
+    }
+
+    /**
+     * Register particle providers for custom particles.
+     */
+    private void registerParticles() {
+        // Register ChronoDawn portal particle provider
+        ParticleFactoryRegistry.getInstance().register(
+            ModParticles.CHRONO_DAWN_PORTAL.get(),
+            ChronoDawnPortalParticle.Provider::new
+        );
+
+        ChronoDawn.LOGGER.info("Registered particle providers for Fabric");
     }
 
     /**
