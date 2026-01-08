@@ -465,7 +465,7 @@
   - **Solution**: Removed hiding spots from room layout to ensure boss has proper access to entire arena
   - **Files Modified**: common/src/main/resources/data/chronodawn/structures/master_clock_boss_room.nbt
   - **Commit**: 035a723 (fix: improve Master Clock boss room layout for better gameplay)
-- [ ] T309 [P] Fix Phantom Catacombs structure search freezing
+- [x] T309 [P] Fix Phantom Catacombs structure search freezing
   - **Issue**: When using structure search for Phantom Catacombs, the world freezes, especially in multiplayer where other players get disconnected and boss room placement never completes
   - **Investigation**: Check Phantom Catacombs structure generation logic and boss room placement algorithm
   - **Possible causes**:
@@ -747,11 +747,11 @@
 
 ### Final Validation
 
-- [ ] T190 Run full test suite for both loaders using ./gradlew test
-- [ ] T191 Validate quickstart.md manual testing checklist
-- [ ] T192 Build final JARs for distribution using ./gradlew build
-- [ ] T193 Test Fabric JAR in production Minecraft 1.21.1 + Fabric environment
-- [ ] T194 Test NeoForge JAR in production Minecraft 1.21.1 + NeoForge environment
+- [x] T190 Run full test suite for both loaders using ./gradlew test
+- [x] T191 Validate quickstart.md manual testing checklist
+- [x] T192 Build final JARs for distribution using ./gradlew build
+- [x] T193 Test Fabric JAR in production Minecraft 1.21.1 + Fabric environment
+- [x] T194 Test NeoForge JAR in production Minecraft 1.21.1 + NeoForge environment
 
 ---
 
