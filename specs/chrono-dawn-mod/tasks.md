@@ -1128,7 +1128,7 @@
   - **Priority**: Critical
   - **Risk**: High
 
-- [ ] T429 [Thread Safety] Audit and fix non-thread-safe collection usage
+- [x] T429 [Thread Safety] Audit and fix non-thread-safe collection usage
   - **Issue**: HashMap, HashSet, ArrayList are not thread-safe and cause race conditions in multiplayer
   - **Investigation**:
     - Scan all server-side shared state for non-thread-safe collections
