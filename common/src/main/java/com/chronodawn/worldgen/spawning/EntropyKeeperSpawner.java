@@ -49,12 +49,12 @@ public class EntropyKeeperSpawner {
     );
 
     // Cache found markers to avoid repeated expensive searches (per-server runtime cache)
-    // Key: structure identifier (first marker position), Value: marker position
-    private static final Map<BlockPos, BlockPos> cachedMarkers = new ConcurrentHashMap<>();
+    // Key: dimension ID, Value: Map of structure identifier → marker position (T430: dimension isolation)
+    private static final Map<ResourceLocation, Map<BlockPos, BlockPos>> cachedMarkers = new ConcurrentHashMap<>();
 
     // Track chunks we've already searched (to avoid re-scanning) (per-server runtime cache)
-    // Key: chunk position, Value: timestamp when searched
-    private static final Map<ChunkPos, Long> searchedChunks = new ConcurrentHashMap<>();
+    // Key: dimension ID, Value: Map of chunk position → timestamp (T430: dimension isolation)
+    private static final Map<ResourceLocation, Map<ChunkPos, Long>> searchedChunks = new ConcurrentHashMap<>();
     private static final long SEARCH_CACHE_DURATION_MS = 300000; // Cache for 5 minutes
 
     // Check interval (in ticks) - check every 2 seconds
@@ -190,6 +190,7 @@ public class EntropyKeeperSpawner {
     /**
      * Find boss chamber marker (Amethyst Block) in Entropy Crypt structure.
      * Uses caching to avoid repeated expensive searches.
+     * T430: Now dimension-aware to prevent cross-dimension cache collisions.
      *
      * @param level The ServerLevel
      * @param chunkPos The chunk position containing the structure
@@ -198,21 +199,29 @@ public class EntropyKeeperSpawner {
      */
     private static BlockPos findBossChamberMarker(ServerLevel level, ChunkPos chunkPos, BlockPos structurePos) {
         long startTime = System.nanoTime();
+        ResourceLocation dimensionId = level.dimension().location();
+
+        // Initialize dimension-specific caches if needed
+        cachedMarkers.putIfAbsent(dimensionId, new ConcurrentHashMap<>());
+        searchedChunks.putIfAbsent(dimensionId, new ConcurrentHashMap<>());
+
+        Map<BlockPos, BlockPos> dimensionMarkerCache = cachedMarkers.get(dimensionId);
+        Map<ChunkPos, Long> dimensionSearchCache = searchedChunks.get(dimensionId);
 
         // Check if we've already found this marker (cache lookup)
-        BlockPos cachedMarker = cachedMarkers.get(structurePos);
+        BlockPos cachedMarker = dimensionMarkerCache.get(structurePos);
         if (cachedMarker != null) {
             ChronoDawn.LOGGER.debug("Using cached marker position for structure at {}: {}", structurePos, cachedMarker);
             return cachedMarker;
         }
 
         // Check if we've searched this chunk recently
-        Long lastSearchTime = searchedChunks.get(chunkPos);
+        Long lastSearchTime = dimensionSearchCache.get(chunkPos);
         long currentTime = System.currentTimeMillis();
 
         // Periodically clean up expired search cache
-        if (searchedChunks.size() > 100) {
-            searchedChunks.entrySet().removeIf(entry ->
+        if (dimensionSearchCache.size() > 100) {
+            dimensionSearchCache.entrySet().removeIf(entry ->
                 currentTime - entry.getValue() > SEARCH_CACHE_DURATION_MS
             );
         }
@@ -248,10 +257,10 @@ public class EntropyKeeperSpawner {
             if (foundMarker != null) break;
         }
 
-        // Cache the result
-        searchedChunks.put(chunkPos, currentTime);
+        // Cache the result (dimension-specific)
+        dimensionSearchCache.put(chunkPos, currentTime);
         if (foundMarker != null) {
-            cachedMarkers.put(structurePos, foundMarker);
+            dimensionMarkerCache.put(structurePos, foundMarker);
         }
 
         long endTime = System.nanoTime();
@@ -347,6 +356,7 @@ public class EntropyKeeperSpawner {
 
     /**
      * Reset spawn tracking for a specific world (useful for testing or debugging).
+     * T430: Now properly clears dimension-specific caches.
      *
      * @param level The ServerLevel to reset spawn data for
      */
@@ -357,8 +367,10 @@ public class EntropyKeeperSpawner {
         );
         data.resetEntropyKeeper();
         tickCounter = 0;
-        cachedMarkers.clear();
-        searchedChunks.clear();
-        ChronoDawn.LOGGER.info("Entropy Keeper Spawner reset for dimension: {}", level.dimension().location());
+
+        ResourceLocation dimensionId = level.dimension().location();
+        cachedMarkers.remove(dimensionId);
+        searchedChunks.remove(dimensionId);
+        ChronoDawn.LOGGER.info("Entropy Keeper Spawner reset for dimension: {}", dimensionId);
     }
 }

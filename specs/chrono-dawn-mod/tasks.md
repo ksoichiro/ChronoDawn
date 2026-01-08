@@ -1161,7 +1161,7 @@
   - **Priority**: Critical
   - **Risk**: High
 
-- [ ] T430 [Dimension Isolation] Audit and fix dimension filtering in chunk processing
+- [x] T430 [Dimension Isolation] Audit and fix dimension filtering in chunk processing
   - **Issue**: Processing logic may handle entities/structures from all dimensions instead of current dimension only
   - **Investigation**:
     - Scan all server-level tick handlers that process chunks/structures/entities
