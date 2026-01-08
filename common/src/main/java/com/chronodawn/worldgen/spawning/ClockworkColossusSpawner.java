@@ -54,12 +54,12 @@ public class ClockworkColossusSpawner {
     private static final Map<ResourceLocation, Set<net.minecraft.world.level.levelgen.structure.BoundingBox>> engineRooms = new ConcurrentHashMap<>();
 
     // Cache found markers to avoid repeated expensive searches (per-server runtime cache)
-    // Key: structure identifier (first marker position), Value: all marker positions
-    private static final Map<BlockPos, List<BlockPos>> cachedMarkers = new ConcurrentHashMap<>();
+    // Key: dimension ID, Value: Map of structure identifier → marker positions (T430: dimension isolation)
+    private static final Map<ResourceLocation, Map<BlockPos, List<BlockPos>>> cachedMarkers = new ConcurrentHashMap<>();
 
     // Track chunks we've already searched (to avoid re-scanning) (per-server runtime cache)
-    // Key: chunk position, Value: timestamp when searched
-    private static final Map<ChunkPos, Long> searchedChunks = new ConcurrentHashMap<>();
+    // Key: dimension ID, Value: Map of chunk position → timestamp (T430: dimension isolation)
+    private static final Map<ResourceLocation, Map<ChunkPos, Long>> searchedChunks = new ConcurrentHashMap<>();
     private static final long SEARCH_CACHE_DURATION_MS = 300000; // Cache for 5 minutes
 
     // Check interval (in ticks) - check every 10 seconds to reduce load
@@ -439,11 +439,17 @@ public class ClockworkColossusSpawner {
 
     /**
      * Cache found markers for future lookups.
+     * T430: Now dimension-aware to prevent cross-dimension cache collisions.
      *
+     * @param dimensionId The dimension ID
      * @param markers List of marker positions found in a structure
      */
-    private static void cacheMarkers(List<BlockPos> markers) {
+    private static void cacheMarkers(ResourceLocation dimensionId, List<BlockPos> markers) {
         if (markers.isEmpty()) return;
+
+        // Initialize dimension map if needed
+        cachedMarkers.putIfAbsent(dimensionId, new ConcurrentHashMap<>());
+        Map<BlockPos, List<BlockPos>> dimensionCache = cachedMarkers.get(dimensionId);
 
         // Use first marker as key
         BlockPos key = markers.stream()
@@ -456,18 +462,25 @@ public class ClockworkColossusSpawner {
             })
             .orElse(markers.get(0));
 
-        cachedMarkers.put(key, new ArrayList<>(markers));
+        dimensionCache.put(key, new ArrayList<>(markers));
     }
 
     /**
      * Get cached markers for a chunk (if any).
+     * T430: Now dimension-aware to prevent cross-dimension cache collisions.
      *
+     * @param dimensionId The dimension ID
      * @param chunkPos Chunk position
      * @return List of marker positions, or null if not cached
      */
-    private static List<BlockPos> getCachedMarkersForChunk(ChunkPos chunkPos) {
+    private static List<BlockPos> getCachedMarkersForChunk(ResourceLocation dimensionId, ChunkPos chunkPos) {
+        Map<BlockPos, List<BlockPos>> dimensionCache = cachedMarkers.get(dimensionId);
+        if (dimensionCache == null) {
+            return null;
+        }
+
         // Check if any cached marker set has markers in this chunk
-        for (List<BlockPos> markers : cachedMarkers.values()) {
+        for (List<BlockPos> markers : dimensionCache.values()) {
             for (BlockPos marker : markers) {
                 int markerChunkX = marker.getX() >> 4;
                 int markerChunkZ = marker.getZ() >> 4;
@@ -500,6 +513,7 @@ public class ClockworkColossusSpawner {
 
     /**
      * Reset spawn tracking for a specific world (useful for testing or debugging).
+     * T430: Now properly clears dimension-specific caches.
      *
      * @param level The ServerLevel to reset spawn data for
      */
@@ -513,8 +527,8 @@ public class ClockworkColossusSpawner {
 
         ResourceLocation dimensionId = level.dimension().location();
         engineRooms.remove(dimensionId);
-        cachedMarkers.clear();
-        searchedChunks.clear();
+        cachedMarkers.remove(dimensionId);
+        searchedChunks.remove(dimensionId);
         ChronoDawn.LOGGER.info("Clockwork Colossus Spawner reset for dimension: {}", dimensionId);
     }
 }

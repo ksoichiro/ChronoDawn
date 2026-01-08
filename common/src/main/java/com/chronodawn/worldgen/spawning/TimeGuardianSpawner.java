@@ -12,6 +12,8 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -41,7 +43,8 @@ public class TimeGuardianSpawner {
 
     // Check interval (in ticks) - check every 5 seconds
     private static final int CHECK_INTERVAL = 100;
-    private static final AtomicInteger tickCounter = new AtomicInteger(0);
+    // T430: Use per-dimension tick counters to prevent cross-dimension interference
+    private static final Map<ResourceLocation, AtomicInteger> tickCounters = new ConcurrentHashMap<>();
 
     /**
      * Initialize Time Guardian spawning system.
@@ -61,10 +64,17 @@ public class TimeGuardianSpawner {
     /**
      * Check for Desert Clock Tower structures and spawn Time Guardian if needed.
      * This should be called periodically (e.g., from a tick event).
+     * T430: Now uses per-dimension tick counter to prevent cross-dimension interference.
      *
      * @param level The ServerLevel to check
      */
     public static void checkAndSpawnGuardians(ServerLevel level) {
+        ResourceLocation dimensionId = level.dimension().location();
+
+        // Initialize tick counter for this dimension if needed
+        tickCounters.putIfAbsent(dimensionId, new AtomicInteger(0));
+        AtomicInteger tickCounter = tickCounters.get(dimensionId);
+
         // Increment tick counter and check interval
         int currentTick = tickCounter.incrementAndGet();
         if (currentTick < CHECK_INTERVAL) {
@@ -290,6 +300,7 @@ public class TimeGuardianSpawner {
 
     /**
      * Reset spawn tracking for a specific world (useful for testing or debugging).
+     * T430: Now properly resets dimension-specific tick counter.
      *
      * @param level The ServerLevel to reset spawn data for
      */
@@ -299,7 +310,9 @@ public class TimeGuardianSpawner {
             BossSpawnData.getDataName()
         );
         data.resetTimeGuardian();
-        tickCounter.set(0);
-        ChronoDawn.LOGGER.info("Time Guardian Spawner reset for dimension: {}", level.dimension().location());
+
+        ResourceLocation dimensionId = level.dimension().location();
+        tickCounters.remove(dimensionId);
+        ChronoDawn.LOGGER.info("Time Guardian Spawner reset for dimension: {}", dimensionId);
     }
 }
