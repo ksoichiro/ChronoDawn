@@ -37,13 +37,6 @@ public class ChronoAegisEffect extends MobEffect {
     }
 
     @Override
-    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
-        // This effect does not use tick-based application
-        // All functionality is implemented externally (see class javadoc)
-        return false;
-    }
-
-    @Override
     public void applyEffectTick(LivingEntity entity, int amplifier) {
         // This method is not used - all functionality is implemented in:
         // - TimeTyrantEntity (effects 1-4)
