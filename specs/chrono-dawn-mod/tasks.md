@@ -616,3 +616,11 @@
 
 ---
 
+### Chronicle Visual Enhancements
+
+**Purpose**: Improve Chronicle guidebook visual design to make it look more book-like
+
+- [ ] T717 [P] Improve Chronicle guidebook background appearance to be more book-like
+
+---
+
