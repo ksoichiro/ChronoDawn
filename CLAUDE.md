@@ -91,26 +91,38 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 - **Mappings**: Mojang mappings (not Yarn) - code uses official Minecraft class names (e.g., `net.minecraft.core.Registry`)
 - **Shadow Plugin**: com.gradleup.shadow 8.3.6 - for bundling common module into platform-specific JARs
 
-## Multi-Version Support (Planned)
+## Multi-Version Support
 
 **Documentation**: Detailed migration plan is available in `docs/multiversion_migration_plan.md`.
 
-**Target Versions**: Minecraft 1.20.6 + 1.21.1 (同一コードベース)
+**Supported Versions**: Minecraft 1.20.1 + 1.21.1 (同一コードベース)
 
 **Strategy**:
 - Gradle 自前スクリプト + 抽象化レイヤー方式（外部プリプロセッサ非依存）
 - 全コードを1箇所に集約（AI 開発効率を重視し、Git ブランチ分離を避ける）
+- Phase 1-5 完了、Phase 6 (統合テスト) 未着手
 
 **Key Components**:
-1. **Data Pack**: バージョン固有ディレクトリ（`resources-1.20.6/`, `resources-1.21.1/`）を Gradle で切り替え
-   - 1.20.6: 複数形フォルダ（`advancements/`, `loot_tables/`, `recipes/`）+ pack_format: 41
+1. **Data Pack**: バージョン固有ディレクトリ（`resources-1.20.1/`, `resources-1.21.1/`）を Gradle で切り替え
+   - 1.20.1: 複数形フォルダ（`advancements/`, `loot_tables/`, `recipes/`）+ pack_format: 18
    - 1.21.1: 単数形フォルダ（`advancement/`, `loot_table/`, `recipe/`）+ pack_format: 48
 2. **Java Code**: `compat/` パッケージで API 差異を吸収
-   - ItemStack: NBT (1.20.6) vs DataComponents (1.21.1)
+   - ItemStack: NBT (1.20.1) vs DataComponents (1.21.1)
    - SavedData: `HolderLookup.Provider` の有無
-3. **Build Command**: `./gradlew build -Ptarget_mc_version=1.20.6` または `1.21.1`
+   - ArmorMaterial: Interface (1.20.1) vs Record (1.21.1)
+   - Tier: getLevel() method (1.20.1 only, removed in 1.21.1)
+3. **Build Commands**:
+   - `./gradlew build1201` - Build for Minecraft 1.20.1
+   - `./gradlew build1211` - Build for Minecraft 1.21.1 (default)
+   - `./gradlew buildAll` - Build all versions sequentially
+   - `./gradlew build -Ptarget_mc_version=1.20.1` - Explicit version build
 
-**Status**: 計画策定完了（Phase 1-6）、実装は未着手
+**Output JARs**:
+- Fabric: `chronodawn-{version}+{mc_version}-fabric.jar`
+- NeoForge: `chronodawn-{version}+{mc_version}-neoforge.jar`
+- Example: `chronodawn-0.3.0-beta+1.21.1-fabric.jar`
+
+**Status**: ✅ Phase 1-5 完了、Phase 6 (統合テスト) 未着手
 
 ## Development Notes
 - When writing code, use Mojang mapping names (e.g., `net.minecraft.world.level.Level`, not Yarn's `class_XXXX`)
