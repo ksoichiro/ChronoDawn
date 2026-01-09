@@ -41,6 +41,23 @@ dependencies {
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
 }
 
+// Multi-version support: Configure version-specific source directories
+sourceSets {
+    main {
+        java {
+            // Default Java source directory
+            srcDir 'src/main/java'
+
+            // Add version-specific source directory
+            def versionSpecificSrc = file("src/main/java-${project.ext.minecraft_version}")
+            if (versionSpecificSrc.exists()) {
+                srcDir versionSpecificSrc
+                logger.lifecycle("Fabric: Using version-specific sources: ${versionSpecificSrc.name}")
+            }
+        }
+    }
+}
+
 loom {
     if (project(':common').loom.accessWidenerPath != null) {
         accessWidenerPath = project(':common').loom.accessWidenerPath

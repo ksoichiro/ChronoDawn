@@ -141,22 +141,58 @@ render(PoseStack, VertexConsumer, int packedLight, int packedOverlay, int color)
   - PortalRegistry: Use CompatResourceLocation.parse()
 - **Error reduction**: 6 → 0
 
-**Build Status**: ✅ **BOTH VERSIONS BUILD SUCCESSFULLY**
-- 1.20.1: BUILD SUCCESSFUL (0 errors)
-- 1.21.1: BUILD SUCCESSFUL (0 errors)
+**Build Status**: ✅ **COMMON MODULE BUILD SUCCESSFUL**
+- common:build 1.20.1: ✅ BUILD SUCCESSFUL (0 errors)
+- common:build 1.21.1: ✅ BUILD SUCCESSFUL (0 errors)
+
+**Part 5 (Fabric Module)**: Loader-specific fixes (in progress)
+- Identified issue: **NeoForge only supports Minecraft 1.20.5+**
+  - 1.20.1 support requires Forge (legacy ModLoader)
+  - **Decision**: 1.20.1 support is **Fabric-only** (NeoForge users use 1.21.1)
+- Fabric module version-specific separation:
+  - Created `fabric/src/main/java-1.20.1/` and `fabric/src/main/java-1.21.1/`
+  - Updated `fabric/build.gradle` to support version-specific sources
+  - Moved ChronoDawnFabric.java, ChronoDawnClientFabric.java, ChronoDawnFuelRegistry.java
+- Fixed Fabric 1.20.1 compatibility:
+  - ChronoDawnFabric: `SpawnPlacementTypes.ON_GROUND` → `SpawnPlacements.Type.ON_GROUND`
+  - ChronoDawnClientFabric: Removed unused `ClientPlayerBlockBreakEvents` import
+  - ChronoDawnClientFabric: `ResourceLocation.fromNamespaceAndPath()` → `new ResourceLocation()`
+  - ChronoDawnFuelRegistry: `ResourceLocation.parse()` → `new ResourceLocation()`
+- NeoForge module disabled for 1.20.1:
+  - Updated `settings.gradle` to exclude `neoforge` when `target_mc_version=1.20.1`
+- **Remaining issue**: 1 error in ChronoDawnFuelRegistry
+  - `FabricTagKey` class not found in Fabric API 0.92.2+1.20.1
+  - Needs investigation or temporary workaround
+
+**Build Status Update**:
+- ✅ common:build 1.20.1: BUILD SUCCESSFUL (0 errors)
+- ✅ common:build 1.21.1: BUILD SUCCESSFUL (0 errors)
+- ⚠️ fabric:build 1.20.1: BUILD FAILED (1 error - FabricTagKey)
+- ✅ fabric:build 1.21.1: Not tested yet (expected success)
+- ➖ neoforge:build 1.20.1: SKIPPED (not supported)
+- ✅ neoforge:build 1.21.1: Not tested yet (expected success)
 
 ## Current Error Count
 
+### Common Module
 - **Starting**: 106 errors
 - **After Part 1**: ~100 errors
 - **After Part 2**: 84 errors
 - **After Part 3**: 6 errors
-- **After Part 4**: **0 errors** ✅ (current)
-- **Target**: 0 errors ✅ **ACHIEVED**
+- **After Part 4**: **0 errors** ✅ **ACHIEVED**
+
+### Fabric Module
+- **Part 5**: 1 error remaining (FabricTagKey)
+
+### Overall Status
+- **Common**: ✅ Fully compatible with 1.20.1 and 1.21.1
+- **Fabric**: ⚠️ 1 error remaining for 1.20.1
+- **NeoForge**: ➖ 1.20.1 not supported (requires Minecraft 1.20.5+)
 
 ## Git Log
 
 ```
+6ad9f4f docs: Update progress report - 1.20.1 compatibility complete
 fc8eb48 fix: Complete 1.20.1 compatibility - all errors resolved
 5fed080 wip: Fix 1.20.1 compatibility errors (part 3 - major progress)
 fa8a7e0 docs: Update progress report for 1.20.1 build fixes
@@ -168,26 +204,31 @@ a286a04 wip: Fix 1.20.1 compatibility errors (part 1)
 
 ## Token Usage
 
-Session total: ~90,000 / 200,000 tokens (45% used)
+Session total: ~112,000 / 200,000 tokens (56% used)
 
-## Phase 6: Integration Testing (Next)
+## Next Steps
 
-**Prerequisites**: ✅ All compilation errors resolved
+### Immediate (Part 5 completion)
+1. **Fix FabricTagKey error** in ChronoDawnFuelRegistry.java
+   - Option A: Temporarily disable fuel registry for 1.20.1
+   - Option B: Find alternative Fabric API method
+   - Option C: Investigate if different Fabric API version has FabricTagKey
 
-**Testing Tasks**:
-1. Test 1.20.1 JAR in Minecraft 1.20.1
-   - Launch game with mod installed
-   - Test basic functionality (items, blocks, dimension)
-   - Run game tests: `./gradlew :fabric:runGametest -Ptarget_mc_version=1.20.1`
-2. Test 1.21.1 JAR in Minecraft 1.21.1
-   - Verify no regressions from version-specific changes
-   - Run game tests: `./gradlew :fabric:runGametest -Ptarget_mc_version=1.21.1`
-3. Update multiversion_migration_plan.md with final status
+### After Part 5
+2. **Verify all builds**:
+   - `./gradlew build -Ptarget_mc_version=1.20.1 -x test` (Fabric only)
+   - `./gradlew build -Ptarget_mc_version=1.21.1 -x test` (Fabric + NeoForge)
+
+3. **Phase 6: Integration Testing**:
+   - Test 1.20.1 JAR in Minecraft 1.20.1 (Fabric)
+   - Test 1.21.1 JARs in Minecraft 1.21.1 (Fabric + NeoForge)
+   - Run game tests
+   - Update multiversion_migration_plan.md
 
 ## Notes for Next Session
 
-1. ✅ All compilation errors resolved
-2. ✅ Version separation strategy validated
-3. ✅ Both versions build successfully
-4. Ready for Phase 6 integration testing
-5. Consider adding automated build verification in CI/CD
+1. ✅ Common module: All compilation errors resolved
+2. ⚠️ Fabric module: 1 error remaining (FabricTagKey)
+3. ✅ NeoForge strategy: 1.20.1 excluded (Fabric-only support)
+4. ✅ Version separation working (common, fabric modules)
+5. 📝 Document final decision: **1.20.1 = Fabric only, 1.21.1 = Fabric + NeoForge**
