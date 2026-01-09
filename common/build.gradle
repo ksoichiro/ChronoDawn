@@ -83,3 +83,8 @@ processResources {
 tasks.test {
     useJUnitPlatform()
 }
+
+// Set duplicates strategy for sourcesJar to avoid conflicts
+tasks.named('sourcesJar') {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}

@@ -8,8 +8,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.BlockSetType.PressurePlateSensitivity;
 import net.minecraft.world.phys.BlockHitResult;
 
 import java.util.HashSet;
@@ -61,23 +62,12 @@ public class EntropyCryptTrapdoorBlock extends TrapDoorBlock {
     /**
      * Custom BlockSetType that looks/sounds like iron but allows hand interaction.
      * This enables our custom use logic to work properly.
+     * Note: In 1.21.1, we use IRON directly as BlockSetType.register() is private
      */
-    private static final BlockSetType ENTROPY_CRYPT_TYPE = BlockSetType.register(
-        new BlockSetType("entropy_crypt",
-        true,  // canOpenByHand - allows hand interaction
-        net.minecraft.world.level.block.SoundType.METAL,  // soundType - sounds like iron
-        net.minecraft.sounds.SoundEvents.IRON_DOOR_CLOSE,
-        net.minecraft.sounds.SoundEvents.IRON_DOOR_OPEN,
-        net.minecraft.sounds.SoundEvents.IRON_TRAPDOOR_CLOSE,
-        net.minecraft.sounds.SoundEvents.IRON_TRAPDOOR_OPEN,
-        net.minecraft.sounds.SoundEvents.METAL_PRESSURE_PLATE_CLICK_OFF,
-        net.minecraft.sounds.SoundEvents.METAL_PRESSURE_PLATE_CLICK_ON,
-        net.minecraft.sounds.SoundEvents.STONE_BUTTON_CLICK_OFF,
-        net.minecraft.sounds.SoundEvents.STONE_BUTTON_CLICK_ON)
-    );
+    private static final BlockSetType ENTROPY_CRYPT_TYPE = BlockSetType.IRON;
 
     public EntropyCryptTrapdoorBlock(Properties properties) {
-        super(properties, ENTROPY_CRYPT_TYPE);
+        super(ENTROPY_CRYPT_TYPE, properties);
         this.registerDefaultState(this.stateDefinition.any()
             .setValue(FACING, Direction.NORTH)
             .setValue(OPEN, false)
@@ -94,7 +84,7 @@ public class EntropyCryptTrapdoorBlock extends TrapDoorBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
         // Check if boss has already been spawned
         if (!state.getValue(ACTIVATED)) {
             // First interaction - spawn the boss
@@ -103,7 +93,7 @@ public class EntropyCryptTrapdoorBlock extends TrapDoorBlock {
                 if (spawnedPositions.contains(pos)) {
                     // Already spawned this session, just activate and allow opening
                     level.setBlock(pos, state.setValue(ACTIVATED, true), 3);
-                    return super.use(state.setValue(ACTIVATED, true), level, pos, player, hand, hitResult);
+                    return super.useWithoutItem(state.setValue(ACTIVATED, true), level, pos, player, hitResult);
                 }
 
                 // Spawn Entropy Keeper
@@ -139,7 +129,7 @@ public class EntropyCryptTrapdoorBlock extends TrapDoorBlock {
         }
 
         // Already activated - function as normal trapdoor
-        return super.use(state, level, pos, player, hand, hitResult);
+        return super.useWithoutItem(state, level, pos, player, hitResult);
     }
 
     /**
@@ -177,7 +167,7 @@ public class EntropyCryptTrapdoorBlock extends TrapDoorBlock {
             keeper.setYRot(yaw);
             keeper.setYHeadRot(yaw);
 
-            keeper.finalizeSpawn(level, level.getCurrentDifficultyAt(spawnPos), MobSpawnType.TRIGGERED, null, null);
+            keeper.finalizeSpawn(level, level.getCurrentDifficultyAt(spawnPos), MobSpawnType.TRIGGERED, null);
             return level.addFreshEntity(keeper);
         }
 

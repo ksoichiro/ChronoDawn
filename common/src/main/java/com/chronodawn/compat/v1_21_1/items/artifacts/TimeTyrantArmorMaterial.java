@@ -15,6 +15,8 @@ import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Supplier;
 
 public class TimeTyrantArmorMaterial {
     private static final EnumMap<ArmorItem.Type, Integer> DEFENSE_VALUES = Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
@@ -28,46 +30,18 @@ public class TimeTyrantArmorMaterial {
     public static final Holder<ArmorMaterial> MATERIAL = Registry.registerForHolder(
         BuiltInRegistries.ARMOR_MATERIAL,
         CompatResourceLocation.create(ChronoDawn.MOD_ID, "time_tyrant"),
-        new ArmorMaterial() {
-            @Override
-            public int getDurabilityForType(ArmorItem.Type type) {
-                return DEFENSE_VALUES.get(type);
-            }
-
-            @Override
-            public int getDefenseForType(ArmorItem.Type type) {
-                return DEFENSE_VALUES.get(type);
-            }
-
-            @Override
-            public int getEnchantmentValue() {
-                return 18;
-            }
-
-            @Override
-            public net.minecraft.sounds.SoundEvent getEquipSound() {
-                return SoundEvents.ARMOR_EQUIP_NETHERITE;
-            }
-
-            @Override
-            public Ingredient getRepairIngredient() {
-                return Ingredient.of(ModItems.TIME_CRYSTAL.get());
-            }
-
-            @Override
-            public String getName() {
-                return ChronoDawn.MOD_ID + ":time_tyrant";
-            }
-
-            @Override
-            public float getToughness() {
-                return 2.5f;
-            }
-
-            @Override
-            public float getKnockbackResistance() {
-                return 0.1f;
-            }
-        }
+        new ArmorMaterial(
+            DEFENSE_VALUES,  // defense values
+            18,  // enchantment value
+            SoundEvents.ARMOR_EQUIP_NETHERITE,  // equip sound (now Holder<SoundEvent>)
+            () -> Ingredient.of(ModItems.TIME_CRYSTAL.get()),  // repair ingredient supplier
+            List.of(
+                new ArmorMaterial.Layer(
+                    CompatResourceLocation.create(ChronoDawn.MOD_ID, "time_tyrant")
+                )
+            ),  // layers
+            2.5f,  // toughness
+            0.1f  // knockback resistance
+        )
     );
 }
