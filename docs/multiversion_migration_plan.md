@@ -492,12 +492,51 @@ processResources {
    - Modern Minecraft uses JSON-based feature definitions
    - Verify actual usage before implementing compatibility layer
 
-**Build Status**:
-- **1.21.1**: ✅ BUILD SUCCESSFUL
-- **1.20.1**: ❌ BUILD FAILED (13 errors remaining, 0 Entity-related)
+**Build Status** (Updated: 2026-01-09):
+- **1.21.1**: ✅ BUILD SUCCESSFUL (91/91 game tests passed)
+- **1.20.1**: ⚠️ BUILD FAILED (84 errors remaining, mostly Model files)
 
-**Files Migrated**: 37 files (20 original + 17 version-specific additions)
-**Estimated Remaining**: ~7 files (13 errors across 7 files)
+**Phase 4 Extended Progress (2026-01-09)**:
+
+**Additional Fixes Completed (T4-13)**:
+- ✅ BlockSetType constructor: Added canOpenByWindCharge, canButtonBeActivatedByArrows, pressurePlateSensitivity parameters
+- ✅ TrapDoorBlock: Changed to (BlockSetType, Properties) constructor, use() → useWithoutItem()
+- ✅ ArmorMaterial: Migrated interface → record (TimeTyrant, Clockstone, EnhancedClockstone)
+- ✅ Tier: Removed getLevel() method (deprecated in 1.21.1)
+- ✅ Item.appendHoverText(): TooltipContext parameter
+- ✅ Mob.finalizeSpawn(): Reduced from 5 to 4 parameters (1.21.1)
+
+**1.20.1 Compatibility Fixes (T4-14, ongoing)**:
+- ✅ PressurePlateBlock: Added Sensitivity parameter (3 files)
+- ✅ MapCodec/simpleCodec: Removed 1.21-only methods (2 files)
+- ✅ FoodProperties.alwaysEdible(): Removed (1.21+ only)
+- ✅ ResourceLocation.parse(): Changed to constructor
+- ✅ GameTestHelper.makeMockPlayer(): Removed GameType parameter (6 locations)
+- ✅ Mob.finalizeSpawn(): Added SpawnGroupData/CompoundTag parameters (1.20.1 needs 5 params)
+- ✅ ItemStack.hurtAndBreak(): Consumer-based API (2 locations)
+
+**Remaining Issues (84 errors)**:
+- ❌ EntityModel.renderToBuffer() signature change (9 model files × ~6-12 errors each)
+  - 1.20.1: `render(PoseStack, VertexConsumer, int, int, float, float, float, float)` (RGBA floats)
+  - 1.21.1: `render(PoseStack, VertexConsumer, int, int, int)` (packed color int)
+  - Affected: FloqModel, TimeTyrantModel, TimeKeeperModel, TimeGuardianModel, etc.
+- ❌ ChronoAegisEffect.applyEffectTick() override signature
+- ❌ Minor issues in TimeArrowItem, SkyColorMixin, DeferredSpawnEggItem, TimeBlastRenderer
+
+**Commits**:
+- `67f40cd`: Phase 4 complete (1.21.1 API compatibility)
+- `2a45ae4`: Phase 5 complete (Build tasks, JAR naming, documentation)
+- `a286a04`: 1.20.1 fixes part 1 (PressurePlate, MapCodec, alwaysEdible, ResourceLocation)
+- `d320402`: 1.20.1 fixes part 2 (makeMockPlayer, finalizeSpawn, hurtAndBreak)
+
+**Next Steps**:
+1. Fix EntityModel render method signatures (9 files, version-specific implementation likely needed)
+2. Fix remaining 4 files (ChronoAegisEffect, TimeArrowItem, SkyColorMixin, etc.)
+3. Verify 1.20.1 build success
+4. Run Phase 6 integration tests
+
+**Files Migrated**: 50+ files (including Phase 4 and Phase 5 changes)
+**Estimated Time to Complete 1.20.1 Build**: 2-3 hours (Model layer refactoring)
 
 ---
 
