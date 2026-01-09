@@ -229,7 +229,8 @@ public class PortalRegistry {
             CompoundTag portalTag = portalList.getCompound(i);
 
             UUID portalId = portalTag.getUUID("PortalId");
-            ResourceLocation dimensionLoc = ResourceLocation.parse(portalTag.getString("Dimension"));
+            // 1.20.1: use new ResourceLocation() instead of parse()
+            ResourceLocation dimensionLoc = new ResourceLocation(portalTag.getString("Dimension"));
             ResourceKey<Level> dimension = ResourceKey.create(
                 net.minecraft.core.registries.Registries.DIMENSION,
                 dimensionLoc

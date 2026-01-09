@@ -26,7 +26,7 @@ public class GoldenTimeWheatItem extends Item {
                 .saturationMod(1.2f)
                 .effect(new MobEffectInstance(MobEffects.REGENERATION, 10 * 20, 1), 1.0f)
                 .effect(new MobEffectInstance(MobEffects.ABSORPTION, 120 * 20, 1), 1.0f)
-                .alwaysEdible()
+                // Note: alwaysEdible() is 1.21+ only
                 .build();
 
         return new Properties().food(foodProperties);

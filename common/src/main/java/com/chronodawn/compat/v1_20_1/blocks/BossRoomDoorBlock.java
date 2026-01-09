@@ -1,6 +1,5 @@
 package com.chronodawn.blocks;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.EntityBlock;
@@ -23,17 +22,12 @@ import org.jetbrains.annotations.Nullable;
  * Usage in structure files:
  * - Entrance door: {DoorType: "entrance"} - requires Key to Master Clock
  * - Boss room door: {DoorType: "boss_room"} - requires 3x Ancient Gears
+ *
+ * Note: MapCodec is 1.21+ only, not required in 1.20.1
  */
 public class BossRoomDoorBlock extends DoorBlock implements EntityBlock {
-    public static final MapCodec<BossRoomDoorBlock> CODEC = simpleCodec(BossRoomDoorBlock::new);
-
     public BossRoomDoorBlock(Properties properties) {
         super(properties, BlockSetType.IRON);
-    }
-
-    @Override
-    public MapCodec<? extends DoorBlock> codec() {
-        return CODEC;
     }
 
     @Nullable

@@ -1,7 +1,6 @@
 package com.chronodawn.blocks;
 
 import com.chronodawn.registry.ModBlocks;
-import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
@@ -42,18 +41,14 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  *
  * Reference: WORK_NOTES.md (Crop 3: Timeless Mushroom)
  * Task: T212 [US1] Create Timeless Mushroom block
+ *
+ * Note: MapCodec is 1.21+ only, not required in 1.20.1
  */
 public class TimelessMushroomBlock extends BushBlock implements BonemealableBlock {
-    public static final MapCodec<TimelessMushroomBlock> CODEC = simpleCodec(TimelessMushroomBlock::new);
     private static final VoxelShape SHAPE = Block.box(5.0D, 0.0D, 5.0D, 11.0D, 6.0D, 11.0D);
 
     public TimelessMushroomBlock(BlockBehaviour.Properties properties) {
         super(properties);
-    }
-
-    @Override
-    protected MapCodec<? extends BushBlock> codec() {
-        return CODEC;
     }
 
     @Override

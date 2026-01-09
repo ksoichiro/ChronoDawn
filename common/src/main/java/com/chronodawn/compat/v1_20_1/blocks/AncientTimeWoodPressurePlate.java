@@ -24,8 +24,8 @@ import net.minecraft.world.level.material.PushReaction;
  */
 public class AncientTimeWoodPressurePlate extends PressurePlateBlock {
     public AncientTimeWoodPressurePlate(BlockBehaviour.Properties properties) {
-        // 1.20.1: PressurePlateBlock constructor takes (properties, blockSetType)
-        super(properties, BlockSetType.OAK);
+        // 1.20.1: PressurePlateBlock constructor takes (sensitivity, properties, blockSetType)
+        super(PressurePlateBlock.Sensitivity.EVERYTHING, properties, BlockSetType.OAK);
     }
 
     /**
