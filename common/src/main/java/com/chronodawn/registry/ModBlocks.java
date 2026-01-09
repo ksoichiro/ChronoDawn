@@ -462,6 +462,18 @@ public class ModBlocks {
     );
 
     /**
+     * Chrono Melon - Full melon block that drops slices.
+     * Drops 3-7 Chrono Melon Slices when broken (without Silk Touch).
+     * Fortune enchantment increases drop count.
+     */
+    public static final RegistrySupplier<Block> CHRONO_MELON = BLOCKS.register(
+        "chrono_melon",
+        () -> new ChronoMelonBlock(
+            CompatBlockProperties.ofFullCopy(Blocks.MELON)
+        )
+    );
+
+    /**
      * Chrono Melon Stem - Stem block that grows Chrono Melons.
      * Has 8 growth stages (0-7) like vanilla melon/pumpkin stems.
      * Produces melons on adjacent blocks when mature.
@@ -482,18 +494,6 @@ public class ModBlocks {
         "attached_chrono_melon_stem",
         () -> new AttachedChronoMelonStemBlock(
             CompatBlockProperties.ofFullCopy(Blocks.ATTACHED_MELON_STEM)
-        )
-    );
-
-    /**
-     * Chrono Melon - Full melon block that drops slices.
-     * Drops 3-7 Chrono Melon Slices when broken (without Silk Touch).
-     * Fortune enchantment increases drop count.
-     */
-    public static final RegistrySupplier<Block> CHRONO_MELON = BLOCKS.register(
-        "chrono_melon",
-        () -> new ChronoMelonBlock(
-            CompatBlockProperties.ofFullCopy(Blocks.MELON)
         )
     );
 

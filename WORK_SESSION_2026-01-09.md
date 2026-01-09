@@ -232,3 +232,103 @@ Session total: ~112,000 / 200,000 tokens (56% used)
 3. ✅ NeoForge strategy: 1.20.1 excluded (Fabric-only support)
 4. ✅ Version separation working (common, fabric modules)
 5. 📝 Document final decision: **1.20.1 = Fabric only, 1.21.1 = Fabric + NeoForge**
+
+---
+
+## Continuation (2026-01-10)
+
+### Part 6: Fabric Module Runtime Fixes (Complete Build Success)
+
+**Phase 5 (Fabric Module) Completion Work**
+
+#### Issue 1: FabricTagKey Error (Fixed ✅)
+- **Problem**: `ChronoDawnFuelRegistry.java` used TagKey-based registration, but Fabric API 0.92.2+1.20.1 doesn't have `FabricTagKey`
+- **Solution**: Changed 1.20.1 version to individual item registration
+  - Registered 39 Time Wood items individually using `FuelRegistry.INSTANCE.add(item, burnTime)`
+  - 1.21.1 version kept TagKey-based registration
+- **Commit**: `c82b6e0`
+
+#### Issue 2: sourcesJar Duplicate Files Error (Fixed ✅)
+- **Problem**: `sourcesJar` task failed with duplicate file error when using version-specific source directories
+- **Solution**: Added `duplicatesStrategy = DuplicatesStrategy.EXCLUDE` to `fabric/build.gradle`
+- **Commit**: `c82b6e0`
+
+#### Issue 3: Runtime Dependency Errors (Fixed ✅)
+- **Problem**: `fabric.mod.json` had 1.21.1 dependencies hardcoded, causing incompatibility errors at runtime
+- **Error Message**:
+  ```
+  Mod 'Chrono Dawn' requires architectury >=13.0.8 but 9.2.14 is loaded
+  Mod 'Chrono Dawn' requires minecraft ~1.21.1 but 1.20.1 is loaded
+  ```
+- **Solution**: Created version-specific `fabric.mod.json`
+  - Deleted `fabric/src/main/resources/fabric.mod.json`
+  - Created `fabric/src/main/resources-1.20.1/fabric.mod.json` (architectury >=9.2.14, minecraft ~1.20.1)
+  - Created `fabric/src/main/resources-1.21.1/fabric.mod.json` (architectury >=13.0.8, minecraft ~1.21.1)
+  - Updated `fabric/build.gradle` to support version-specific resources directories
+- **Commit**: `c82b6e0`
+
+#### Issue 4: Custom Portal API Dependency (Fixed ✅)
+- **Problem**: Custom Portal API 0.0.1-beta66-1.20.1 does not exist (only 1.21 version available)
+- **Solution**: Restricted Custom Portal API to 1.21.1 only
+  - Modified `fabric/build.gradle` dependencies with version check
+  - Moved `CustomPortalFabric.java` to `fabric/src/main/java-1.21.1/`
+  - Commented out Custom Portal API calls in 1.20.1 version of `ChronoDawnFabric.java`
+- **Commit**: `c82b6e0`
+
+#### Issue 5: Block Registration Order (Fixed ✅)
+- **Problem**: `ChronoMelonStemBlock` constructor calls `ModBlocks.CHRONO_MELON.get()` but `CHRONO_MELON` was registered after `CHRONO_MELON_STEM`
+- **Error**: `NullPointerException: Registry Object not present: chronodawn:chrono_melon`
+- **Solution**: Moved `CHRONO_MELON` registration before `CHRONO_MELON_STEM` in `ModBlocks.java`
+- **Status**: ⚠️ Fixed but runtime error still occurs (needs further investigation)
+
+### Build Status (2026-01-10)
+
+- ✅ **1.20.1 (Fabric)**: BUILD SUCCESSFUL
+  - JAR: `chronodawn-0.2.0-beta+1.20.1-fabric.jar` (9.3M)
+  - Loading: `Loading Minecraft 1.20.1 with Fabric Loader 0.15.11` ✅
+- ✅ **1.21.1 (Fabric + NeoForge)**: BUILD SUCCESSFUL
+  - JAR: `chronodawn-0.2.0-beta+1.21.1-fabric.jar` (9.3M)
+  - JAR: `chronodawn-0.2.0-beta+1.21.1-neoforge.jar` (9.3M)
+
+### Runtime Status
+
+- ✅ **Dependencies**: All mod compatibility errors resolved
+- ⚠️ **Startup**: Runtime error still occurs (under investigation)
+
+### Modified Files Summary
+
+1. **`fabric/build.gradle`**
+   - Added version-specific resources support
+   - Added `duplicatesStrategy = DuplicatesStrategy.EXCLUDE` to `sourcesJar`
+   - Custom Portal API dependency conditional on version
+
+2. **`fabric/src/main/resources-1.20.1/fabric.mod.json`** (New)
+   - Dependencies: architectury >=9.2.14, minecraft ~1.20.1
+
+3. **`fabric/src/main/resources-1.21.1/fabric.mod.json`** (New)
+   - Dependencies: architectury >=13.0.8, minecraft ~1.21.1
+
+4. **`fabric/src/main/java-1.20.1/com/chronodawn/fabric/ChronoDawnFuelRegistry.java`**
+   - Changed from TagKey-based to individual item registration (39 items)
+
+5. **`fabric/src/main/java-1.20.1/com/chronodawn/fabric/ChronoDawnFabric.java`**
+   - Commented out Custom Portal API initialization
+
+6. **`fabric/src/main/java-1.21.1/com/chronodawn/fabric/compat/CustomPortalFabric.java`** (Moved)
+   - Moved from `fabric/src/main/java/` to version-specific directory
+
+7. **`common/src/main/java/com/chronodawn/registry/ModBlocks.java`**
+   - Reordered: `CHRONO_MELON` now registered before `CHRONO_MELON_STEM`
+
+### Token Usage
+
+Session total: ~112,000 / 200,000 tokens (56% used)
+
+### Next Steps
+
+1. **Investigate remaining runtime error** in 1.20.1 startup
+2. **Test 1.21.1 startup** to verify it works correctly
+3. **Phase 6: Integration Testing** after startup issues are resolved
+   - In-game dimension teleportation test
+   - Feature verification in both versions
+   - Game test execution

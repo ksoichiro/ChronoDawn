@@ -33,9 +33,12 @@ dependencies {
     modApi "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
     modApi "dev.architectury:architectury-fabric:$rootProject.architectury_api_version"
 
-    // Custom Portal API for Fabric
-    modImplementation 'net.kyrptonaught:customportalapi:0.0.1-beta66-1.21'
-    include 'net.kyrptonaught:customportalapi:0.0.1-beta66-1.21'
+    // Custom Portal API for Fabric (1.21.1 only)
+    // Note: Custom Portal API is not available for Minecraft 1.20.1
+    if (project.ext.minecraft_version == '1.21.1') {
+        modImplementation "net.kyrptonaught:customportalapi:$rootProject.custom_portal_api_fabric_version"
+        include "net.kyrptonaught:customportalapi:$rootProject.custom_portal_api_fabric_version"
+    }
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
@@ -53,6 +56,17 @@ sourceSets {
             if (versionSpecificSrc.exists()) {
                 srcDir versionSpecificSrc
                 logger.lifecycle("Fabric: Using version-specific sources: ${versionSpecificSrc.name}")
+            }
+        }
+        resources {
+            // Default resources directory
+            srcDir 'src/main/resources'
+
+            // Add version-specific resources directory
+            def versionSpecificRes = file("src/main/resources-${project.ext.minecraft_version}")
+            if (versionSpecificRes.exists()) {
+                srcDir versionSpecificRes
+                logger.lifecycle("Fabric: Using version-specific resources: ${versionSpecificRes.name}")
             }
         }
     }
@@ -116,6 +130,7 @@ java {
 tasks.named('sourcesJar').configure {
     archiveBaseName = rootProject.archives_name
     archiveVersion = "${rootProject.mod_version}+${rootProject.minecraft_version}-fabric"
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 tasks.named('remapSourcesJar').configure {
