@@ -339,11 +339,13 @@ public class TimeKeeperVillagePlacer {
                     level.random.nextFloat() * 360.0F,
                     0.0F
                 );
+                // 1.20.1: finalizeSpawn needs 5 parameters (SpawnGroupData, CompoundTag)
                 timeKeeper.finalizeSpawn(
                     level,
                     level.getCurrentDifficultyAt(spawnPos),
                     MobSpawnType.STRUCTURE,
-                    null
+                    null,  // SpawnGroupData
+                    null   // CompoundTag
                 );
                 timeKeeper.setPersistenceRequired();  // Prevent despawning
                 level.addFreshEntity(timeKeeper);

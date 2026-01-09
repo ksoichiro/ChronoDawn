@@ -223,15 +223,17 @@ public class EntropyKeeperEntity extends Monster {
 
         if (hit && target instanceof Player player) {
             // Deal -5 durability to all equipped items
+            // 1.20.1: hurtAndBreak takes Consumer instead of EquipmentSlot
             player.getInventory().armor.forEach(stack -> {
                 if (!stack.isEmpty() && stack.isDamageableItem()) {
-                    stack.hurtAndBreak(5, player, player.getEquipmentSlotForItem(stack));
+                    net.minecraft.world.entity.EquipmentSlot slot = player.getEquipmentSlotForItem(stack);
+                    stack.hurtAndBreak(5, player, (p) -> p.broadcastBreakEvent(slot));
                 }
             });
 
             // Damage held item
             if (!player.getMainHandItem().isEmpty() && player.getMainHandItem().isDamageableItem()) {
-                player.getMainHandItem().hurtAndBreak(5, player, net.minecraft.world.entity.EquipmentSlot.MAINHAND);
+                player.getMainHandItem().hurtAndBreak(5, player, (p) -> p.broadcastBreakEvent(net.minecraft.world.entity.EquipmentSlot.MAINHAND));
             }
         }
 

@@ -1264,7 +1264,7 @@ public final class ChronoDawnGameTestLogic {
     public static final Consumer<GameTestHelper> TEST_MOCK_PLAYER_CAN_BE_CREATED = helper -> {
         helper.runAfterDelay(1, () -> {
             try {
-                Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+                Player player = helper.makeMockPlayer();
                 if (player != null) {
                     helper.succeed();
                 } else {
@@ -1283,7 +1283,7 @@ public final class ChronoDawnGameTestLogic {
     public static final Consumer<GameTestHelper> TEST_PLAYER_CAN_EQUIP_CHESTPLATE = helper -> {
         helper.runAfterDelay(1, () -> {
             try {
-                Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+                Player player = helper.makeMockPlayer();
                 ItemStack chestplate = new ItemStack(ModItems.CLOCKSTONE_CHESTPLATE.get());
 
                 // Equip chestplate to player
@@ -1309,7 +1309,7 @@ public final class ChronoDawnGameTestLogic {
     public static final Consumer<GameTestHelper> TEST_TIME_TYRANT_MAIL_CAN_BE_EQUIPPED = helper -> {
         helper.runAfterDelay(1, () -> {
             try {
-                Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+                Player player = helper.makeMockPlayer();
                 ItemStack mail = new ItemStack(ModItems.TIME_TYRANT_MAIL.get());
 
                 // Equip Time Tyrant's Mail to chest slot
@@ -1335,7 +1335,7 @@ public final class ChronoDawnGameTestLogic {
     public static final Consumer<GameTestHelper> TEST_PLAYER_CAN_HOLD_CHRONOBLADE = helper -> {
         helper.runAfterDelay(1, () -> {
             try {
-                Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+                Player player = helper.makeMockPlayer();
                 ItemStack chronoblade = new ItemStack(ModItems.CHRONOBLADE.get());
 
                 // Equip Chronoblade to main hand
@@ -1361,7 +1361,7 @@ public final class ChronoDawnGameTestLogic {
     public static final Consumer<GameTestHelper> TEST_PLAYER_CAN_EQUIP_FULL_ARMOR_SET = helper -> {
         helper.runAfterDelay(1, () -> {
             try {
-                Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+                Player player = helper.makeMockPlayer();
 
                 // Create full armor set
                 ItemStack helmet = new ItemStack(ModItems.CLOCKSTONE_HELMET.get());
@@ -1401,7 +1401,7 @@ public final class ChronoDawnGameTestLogic {
     public static final Consumer<GameTestHelper> TEST_PLAYER_INVENTORY_CAN_RECEIVE_ITEMS = helper -> {
         helper.runAfterDelay(1, () -> {
             try {
-                Player player = helper.makeMockPlayer(GameType.SURVIVAL);
+                Player player = helper.makeMockPlayer();
                 ItemStack timeCrystal = new ItemStack(ModItems.TIME_CRYSTAL.get(), 10);
 
                 // Add items to player inventory
