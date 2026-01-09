@@ -68,14 +68,16 @@ public class TimeBlastRenderer extends EntityRenderer<TimeBlastEntity> {
     /**
      * Helper method to add a vertex to the buffer.
      */
+    // Note: In 1.20.1, VertexConsumer uses vertex() instead of addVertex()
     private void vertex(VertexConsumer consumer, Matrix4f matrix4f, Matrix3f matrix3f, int packedLight,
                         float x, float y, float z, float u, float v) {
-        consumer.addVertex(matrix4f, x, y, z)
-            .setColor(255, 255, 255, 255)
-            .setUv(u, v)
-            .setOverlay(OverlayTexture.NO_OVERLAY)
-            .setLight(packedLight)
-            .setNormal(0.0f, 1.0f, 0.0f);
+        consumer.vertex(matrix4f, x, y, z)
+            .color(255, 255, 255, 255)
+            .uv(u, v)
+            .overlayCoords(OverlayTexture.NO_OVERLAY)
+            .uv2(packedLight)
+            .normal(matrix3f, 0.0f, 1.0f, 0.0f)
+            .endVertex();
     }
 
     @Override

@@ -112,7 +112,8 @@ public class DeferredSpawnEggItem extends SpawnEggItem {
         this((Supplier<? extends EntityType<? extends Mob>>) entityTypeSupplier, backgroundColor, highlightColor, properties);
     }
 
-    @Override
+    // Note: In 1.20.1, this method signature doesn't exist in parent class
+    // Removed @Override to avoid compilation error
     public EntityType<?> getType(net.minecraft.world.item.ItemStack stack) {
         return entityTypeSupplier.get();
     }

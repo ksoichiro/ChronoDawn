@@ -43,9 +43,10 @@ public class TimeArrowItem extends ArrowItem {
         return new Properties();
     }
 
+    // Note: In 1.20.1, createArrow() has 3 parameters (no weapon)
     @Override
-    public AbstractArrow createArrow(Level level, ItemStack stack, LivingEntity shooter, ItemStack weapon) {
-        ChronoDawn.LOGGER.info("TimeArrowItem.createArrow called - creating TimeArrowEntity (weapon: {})", weapon.getItem());
+    public AbstractArrow createArrow(Level level, ItemStack stack, LivingEntity shooter) {
+        ChronoDawn.LOGGER.info("TimeArrowItem.createArrow called - creating TimeArrowEntity");
         TimeArrowEntity arrow = new TimeArrowEntity(ModEntities.TIME_ARROW.get(), shooter, level, stack.copyWithCount(1));
         ChronoDawn.LOGGER.info("Created TimeArrowEntity: {}", arrow.getClass().getName());
         return arrow;

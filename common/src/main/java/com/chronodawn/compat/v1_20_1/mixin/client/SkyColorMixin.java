@@ -108,12 +108,6 @@ public class SkyColorMixin {
         // Get advancement manager
         var advancementManager = connection.getAdvancements();
 
-        // Get the advancement holder
-        var holder = advancementManager.get(TIME_TYRANT_DEFEATED_ADVANCEMENT);
-        if (holder == null) {
-            return false;
-        }
-
         // Access the progress map using the accessor
         var progressAccessor = (ClientAdvancementsAccessor) advancementManager;
         var progressMap = progressAccessor.chronodawn$getProgress();
@@ -122,8 +116,22 @@ public class SkyColorMixin {
             return false;
         }
 
-        // Get progress for this specific advancement using the holder as key
-        var progress = progressMap.get(holder);
+        // Note: In 1.20.1, ClientAdvancements.get() doesn't exist
+        // Find the advancement by ResourceLocation from the progress map
+        net.minecraft.advancements.Advancement advancement = null;
+        for (net.minecraft.advancements.Advancement adv : progressMap.keySet()) {
+            if (adv.getId().equals(TIME_TYRANT_DEFEATED_ADVANCEMENT)) {
+                advancement = adv;
+                break;
+            }
+        }
+
+        if (advancement == null) {
+            return false;
+        }
+
+        // Get progress for this specific advancement
+        var progress = progressMap.get(advancement);
         if (progress == null) {
             return false;
         }

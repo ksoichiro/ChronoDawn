@@ -224,8 +224,9 @@ public class CategoryListWidget extends AbstractWidget {
         return false;
     }
 
+    // Note: In 1.20.1, mouseScrolled() has 3 parameters (no scrollX)
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
+    public boolean mouseScrolled(double mouseX, double mouseY, double scrollY) {
         // Only handle scroll if mouse is over this widget
         if (mouseX >= getX() && mouseX < getX() + width &&
             mouseY >= getY() && mouseY < getY() + height) {

@@ -1,6 +1,7 @@
 package com.chronodawn.core.portal;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -229,8 +230,8 @@ public class PortalRegistry {
             CompoundTag portalTag = portalList.getCompound(i);
 
             UUID portalId = portalTag.getUUID("PortalId");
-            // 1.20.1: use new ResourceLocation() instead of parse()
-            ResourceLocation dimensionLoc = new ResourceLocation(portalTag.getString("Dimension"));
+            // Use CompatResourceLocation.parse() for version compatibility
+            ResourceLocation dimensionLoc = CompatResourceLocation.parse(portalTag.getString("Dimension"));
             ResourceKey<Level> dimension = ResourceKey.create(
                 net.minecraft.core.registries.Registries.DIMENSION,
                 dimensionLoc

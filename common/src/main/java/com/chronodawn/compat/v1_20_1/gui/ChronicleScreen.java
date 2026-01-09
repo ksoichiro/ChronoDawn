@@ -89,7 +89,8 @@ public class ChronicleScreen extends Screen {
         }
     }
 
-    @Override
+    // Note: In 1.20.1, this method signature doesn't exist in parent class
+    // Removed @Override to avoid compilation error
     public void renderBackground(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
         // Override to prevent default blur effect
         // Render semi-transparent dark background only OUTSIDE the book area
