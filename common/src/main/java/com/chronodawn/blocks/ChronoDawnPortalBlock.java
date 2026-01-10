@@ -192,38 +192,40 @@ public class ChronoDawnPortalBlock extends Block {
         }
 
         // Spawn orange/golden particles (Nether Portal style)
-        // Based on vanilla NetherPortalBlock particle logic
+        // Gentle, floating particles that slowly drift away from portal surface
         Direction.Axis axis = state.getValue(AXIS);
 
-        for (int i = 0; i < 4; ++i) {
-            double x = pos.getX() + random.nextDouble();
-            double y = pos.getY() + random.nextDouble();
-            double z = pos.getZ() + random.nextDouble();
-            double speedX = (random.nextDouble() - 0.5) * 0.5;
-            double speedY = (random.nextDouble() - 0.5) * 0.5;
-            double speedZ = (random.nextDouble() - 0.5) * 0.5;
+        // Reduce particle spawn frequency - only spawn 1 particle per tick
+        double x = pos.getX() + random.nextDouble();
+        double y = pos.getY() + random.nextDouble();
+        double z = pos.getZ() + random.nextDouble();
 
-            int j = random.nextInt(2) * 2 - 1;
+        // Very gentle particle speed - subtle floating motion
+        double speedX = (random.nextDouble() - 0.5) * 0.1;
+        double speedY = (random.nextDouble() - 0.5) * 0.1;
+        double speedZ = (random.nextDouble() - 0.5) * 0.1;
 
-            // Adjust particle spawn position based on portal axis
-            if (axis == Direction.Axis.X) {
-                // X-axis portal (particles flow along Z)
-                z = pos.getZ() + 0.5 + 0.25 * j;
-                speedZ = random.nextFloat() * 2.0F * j;
-            } else {
-                // Z-axis portal (particles flow along X)
-                x = pos.getX() + 0.5 + 0.25 * j;
-                speedX = random.nextFloat() * 2.0F * j;
-            }
+        int j = random.nextInt(2) * 2 - 1;
 
-            // Use lava particles for better orange effect
-            // LAVA particles are orange/red and don't rise like FLAME
-            level.addParticle(ParticleTypes.LAVA, x, y, z, speedX, speedY, speedZ);
+        // Adjust particle spawn position based on portal axis
+        // Spawn particles slightly away from portal surface
+        if (axis == Direction.Axis.X) {
+            // X-axis portal (particles drift gently along Z)
+            z = pos.getZ() + 0.5 + 0.25 * j;
+            speedZ = random.nextFloat() * 0.3F * j; // Reduced from 2.0F to 0.3F
+        } else {
+            // Z-axis portal (particles drift gently along X)
+            x = pos.getX() + 0.5 + 0.25 * j;
+            speedX = random.nextFloat() * 0.3F * j; // Reduced from 2.0F to 0.3F
+        }
 
-            // Add some flame particles for glow effect
-            if (random.nextInt(3) == 0) {
-                level.addParticle(ParticleTypes.FLAME, x, y, z, speedX * 0.5, speedY * 0.5, speedZ * 0.5);
-            }
+        // Use lava particles for better orange effect
+        // LAVA particles are orange/red and don't rise like FLAME
+        level.addParticle(ParticleTypes.LAVA, x, y, z, speedX, speedY, speedZ);
+
+        // Occasionally add flame particles for glow effect (less frequent)
+        if (random.nextInt(5) == 0) {
+            level.addParticle(ParticleTypes.FLAME, x, y, z, speedX * 0.5, speedY * 0.5, speedZ * 0.5);
         }
     }
 

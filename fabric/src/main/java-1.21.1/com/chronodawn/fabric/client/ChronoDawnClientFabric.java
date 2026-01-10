@@ -358,6 +358,12 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             ModBlocks.ANCIENT_TIME_WOOD_LEAVES.get(),
             RenderType.cutoutMipped()
         );
+
+        // Register ChronoDawn Portal to use translucent rendering (for portal transparency)
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.CHRONO_DAWN_PORTAL.get(),
+            RenderType.translucent()
+        );
     }
 
     /**

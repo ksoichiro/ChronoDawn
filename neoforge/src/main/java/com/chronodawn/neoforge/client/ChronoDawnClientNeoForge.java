@@ -443,6 +443,12 @@ public class ChronoDawnClientNeoForge {
             ModBlocks.ANCIENT_TIME_WOOD_LEAVES.get(),
             RenderType.cutoutMipped()
         );
+
+        // Register ChronoDawn Portal to use translucent rendering (for portal transparency)
+        ItemBlockRenderTypes.setRenderLayer(
+            ModBlocks.CHRONO_DAWN_PORTAL.get(),
+            RenderType.translucent()
+        );
     }
 
     /**
