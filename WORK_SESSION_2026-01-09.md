@@ -591,3 +591,105 @@ Session total: ~110,000 / 200,000 tokens (55% used)
 3. **Documentation**: Check Fabric API and Architectury documentation
    - Worldgen differences between 1.20.1 and 1.21.1
    - Known issues or migration guides
+
+---
+
+## Continuation (2026-01-10 - Part 9: World Generation JSON Format Fix)
+
+### Issue 9: Uniform Int Provider Format Difference (Fixed ✅)
+
+**Problem**: Multiple "Not a JSON object: null" errors in worldgen JSON files
+
+**Error Pattern**:
+```
+> Errors in registry minecraft:dimension_type:
+>> Errors in element chronodawn:chronodawn:
+Caused by: java.lang.RuntimeException: Not a JSON object: null
+
+> Errors in registry minecraft:worldgen/configured_feature:
+>> Errors in element chronodawn:ice_pillar:
+Caused by: java.lang.RuntimeException: Not a JSON object: null; Not a JSON object: null
+
+> Errors in registry minecraft:worldgen/placed_feature:
+>> Errors in element chronodawn:boulder_placed:
+Caused by: java.lang.RuntimeException: Not a JSON object: null
+```
+
+**Root Cause**: Minecraft 1.20.1 requires `uniform` int providers to have a `value` object wrapper, while 1.21.1 accepts `min_inclusive`/`max_inclusive` directly.
+
+**Format Difference**:
+- **1.20.1**: `{"type":"minecraft:uniform","value":{"min_inclusive":2,"max_inclusive":5}}`
+- **1.21.1**: `{"type":"minecraft:uniform","min_inclusive":2,"max_inclusive":5}`
+
+**Solution**: Added `value` object wrapper to all `uniform` int providers in 1.20.1 JSON files
+
+### Modified Files Summary (Part 9)
+
+1. **`dimension_type/chronodawn.json`**
+   - Fixed: `monster_spawn_light_level` uniform int provider
+
+2. **`worldgen/configured_feature/gravel_disk.json`**
+   - Fixed: `radius` uniform int provider
+
+3. **`worldgen/configured_feature/sand_disk.json`**
+   - Fixed: `radius` uniform int provider
+
+4. **`worldgen/configured_feature/ice_pillar.json`**
+   - Fixed: 3 `height` uniform int providers in layers
+
+5. **`worldgen/placed_feature/boulder_placed.json`**
+   - Fixed: `count` uniform int provider
+
+### Build Status (2026-01-10 - Part 9 Complete)
+
+- ✅ **1.20.1 (Fabric)**: BUILD SUCCESSFUL
+  - JAR: `chronodawn-0.2.0-beta+1.20.1-fabric.jar`
+  - **Startup**: ✅ SUCCESS (Main menu loads)
+  - **World Generation**: ✅ SUCCESS (runClient confirmed working)
+- ✅ **1.21.1 (Fabric + NeoForge)**: BUILD SUCCESSFUL
+  - JAR: `chronodawn-0.2.0-beta+1.21.1-fabric.jar`
+  - JAR: `chronodawn-0.2.0-beta+1.21.1-neoforge.jar`
+  - **Startup**: Not tested yet
+  - **World Generation**: Not tested yet
+
+### Git Log (2026-01-10 - Part 9)
+
+```
+df03608 fix: Fix 1.20.1 worldgen JSON format - add value objects to uniform int providers
+```
+
+### Investigation Resources
+
+- [Block state provider – Minecraft Wiki](https://minecraft.wiki/w/Block_state_provider)
+- [Disk – Minecraft Wiki](https://minecraft.wiki/w/Disk)
+- [Block column feature - xenondevs](https://xenondevs.xyz/docs/nova/addon/worldgen/features/configurations/block-column/)
+- [Dimension type – Minecraft Wiki](https://minecraft.wiki/w/Dimension_type)
+- [MC Assets - overworld.json (1.20.1)](https://mcasset.cloud/1.20.1/data/minecraft/dimension_type/overworld.json)
+
+### Token Usage
+
+Session total: ~117,000 / 200,000 tokens (58.5% used)
+
+### Status Summary
+
+**Completed**:
+- ✅ Phase 1-5: Multi-version build system working
+- ✅ Compilation errors: All resolved (0 errors)
+- ✅ Runtime startup: Working (menu loads) for 1.20.1
+- ✅ ChronoMelonBlock ClassCastException: Fixed
+- ✅ TreeDecoratorType NoSuchMethodException: Fixed
+- ✅ phantom_catacombs size range: Fixed
+- ✅ World generation JSON parse errors: Fixed (uniform int provider format)
+- ✅ 1.20.1 runClient: Confirmed working
+
+**In Progress**:
+- ⚠️ 1.21.1 runtime testing: Not yet tested
+- ⚠️ Phase 6: Integration testing
+
+**Next Steps**:
+1. Test 1.21.1 startup and world generation
+2. Verify both versions work correctly in-game
+3. Run game tests for both versions
+4. Update multiversion_migration_plan.md with completion status
+5. Consider updating WORK_SESSION file naming (currently 2026-01-09 but work continued on 2026-01-10)
+

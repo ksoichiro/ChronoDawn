@@ -5,6 +5,7 @@ import com.chronodawn.compat.CompatBlockProperties;
 import com.chronodawn.blocks.BossRoomBoundaryMarkerBlock;
 import com.chronodawn.blocks.BossRoomDoorBlock;
 import com.chronodawn.blocks.EntropyCryptTrapdoorBlock;
+import com.chronodawn.blocks.ChronoDawnPortalBlock;
 import com.chronodawn.blocks.ClockstoneBlock;
 import com.chronodawn.blocks.ClockstoneOre;
 import com.chronodawn.blocks.ClockstoneSlab;
@@ -147,6 +148,16 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> CLOCKSTONE_WALL = BLOCKS.register(
         "clockstone_wall",
         () -> new ClockstoneWall(ClockstoneWall.createProperties())
+    );
+
+    /**
+     * ChronoDawn Portal - Custom portal block for dimension travel.
+     * Forms the interior of ChronoDawn portals when ignited with Time Hourglass.
+     * Cannot be obtained as item - only created during portal ignition.
+     */
+    public static final RegistrySupplier<Block> CHRONO_DAWN_PORTAL = BLOCKS.register(
+        "chrono_dawn_portal",
+        () -> new ChronoDawnPortalBlock(ChronoDawnPortalBlock.createProperties())
     );
 
     /**
