@@ -91,10 +91,17 @@ public class ChronoDawnPortalBlock extends Block {
     private static final int PORTAL_TIME_THRESHOLD = 80;
 
     /**
-     * Tracks how long entities have been inside portals.
-     * Map: Entity UUID -> Portal time (ticks)
+     * Tracks entity portal states and teleportation progress.
+     * Map: Entity UUID -> State value
+     *
+     * State values:
+     * -1: Just teleported (transitions to 1 on next tick)
+     * 0: Not in portal or re-entered after exit (allows teleportation)
+     * 1: In arrival portal, preventing re-teleport (maintained while standing still)
+     * 2-79: Counting up to teleportation threshold
+     * 80+: Ready to teleport
      */
-    private static final Map<UUID, Integer> PORTAL_TIMERS = new HashMap<>();
+    private static final Map<UUID, Integer> ENTITY_PORTAL_STATES = new HashMap<>();
 
     /**
      * Tracks the last portal position each entity was in.
@@ -155,21 +162,21 @@ public class ChronoDawnPortalBlock extends Block {
             ChronoDawn.LOGGER.debug("Destroyed portal block at {} due to broken frame", pos);
         }
 
-        // Periodic cleanup of stale portal timer entries (every ~10 seconds)
+        // Periodic cleanup of stale portal state entries (every ~10 seconds)
         if (random.nextInt(200) == 0) {
-            cleanupStalePortalTimers(level);
+            cleanupStalePortalStates(level);
         }
     }
 
     /**
-     * Clean up portal timer entries for entities that no longer exist.
+     * Clean up portal state entries for entities that no longer exist.
      * This is a fallback cleanup for edge cases (e.g., server restart, entity death).
      * Main cleanup happens in entityInside() via tick gap detection.
      *
      * @param level Server level
      */
-    private static void cleanupStalePortalTimers(ServerLevel level) {
-        PORTAL_TIMERS.entrySet().removeIf(entry -> {
+    private static void cleanupStalePortalStates(ServerLevel level) {
+        ENTITY_PORTAL_STATES.entrySet().removeIf(entry -> {
             UUID entityId = entry.getKey();
             Entity entity = findEntityInAllDimensions(level.getServer(), entityId);
             if (entity == null) {
@@ -292,9 +299,9 @@ public class ChronoDawnPortalBlock extends Block {
         // - Same portal movement (player moving within 2x3 portal interior)
         // - Different portal (player teleported or walked to another portal)
         if (lastPortalPos != null && lastPortalPos.distSqr(pos) > 25) {
-            // Different portal - clear records and reset timer
+            // Different portal - clear records and reset state
             com.chronodawn.core.portal.PortalTeleportHandler.clearArrivalDimension(entityId);
-            PORTAL_TIMERS.remove(entityId);
+            ENTITY_PORTAL_STATES.remove(entityId);
             exitedAndReentered = true;
             ChronoDawn.LOGGER.debug("Entity {} moved to different portal (distance > 5 blocks), cleared arrival record",
                 entity.getName().getString());
@@ -302,9 +309,9 @@ public class ChronoDawnPortalBlock extends Block {
         // Case 2: Same portal area, but tick gap > 20 (1 second)
         // This means player exited portal and re-entered
         else if (lastPortalPos != null && lastTick != null && currentTick - lastTick > 20) {
-            // Exited and re-entered same portal - clear records and reset timer
+            // Exited and re-entered same portal - clear records and reset state
             com.chronodawn.core.portal.PortalTeleportHandler.clearArrivalDimension(entityId);
-            PORTAL_TIMERS.remove(entityId);
+            ENTITY_PORTAL_STATES.remove(entityId);
             exitedAndReentered = true;
             ChronoDawn.LOGGER.debug("Entity {} exited and re-entered portal (tick gap: {}), cleared arrival record",
                 entity.getName().getString(), currentTick - lastTick);
@@ -318,18 +325,18 @@ public class ChronoDawnPortalBlock extends Block {
         // This prevents re-teleporting while still in the dimension they just arrived in
         if (!com.chronodawn.core.portal.PortalTeleportHandler.canTeleportFromDimension(entityId, level.dimension())) {
             // Entity is still in the dimension they just arrived in
-            int currentTimer = PORTAL_TIMERS.getOrDefault(entityId, 0);
+            int currentState = ENTITY_PORTAL_STATES.getOrDefault(entityId, 0);
 
-            if (currentTimer == -1) {
+            if (currentState == -1) {
                 // Just teleported, still in arrival portal
-                // Set timer to 1 to prevent re-teleport while standing still
+                // Set state to 1 to prevent re-teleport while standing still
                 // This transition (-1 → 1) happens on the first tick after teleportation
-                PORTAL_TIMERS.put(entityId, 1);
+                ENTITY_PORTAL_STATES.put(entityId, 1);
                 ChronoDawn.LOGGER.debug("Prevented re-teleport for {} - just teleported, still in arrival dimension",
                     entity.getName().getString());
                 return;
-            } else if (currentTimer == 0) {
-                // CRITICAL: Timer is 0, meaning either:
+            } else if (currentState == 0) {
+                // CRITICAL: State is 0, meaning either:
                 // (a) First time entering this portal, OR
                 // (b) Exited and re-entered quickly (tick gap < 20, not detected by tick gap check above)
                 //
@@ -338,38 +345,38 @@ public class ChronoDawnPortalBlock extends Block {
                 com.chronodawn.core.portal.PortalTeleportHandler.clearArrivalDimension(entityId);
                 ChronoDawn.LOGGER.debug("Cleared arrival dimension for {} - rapid re-entry",
                     entity.getName().getString());
-                // Don't return - allow timer to start and teleportation to proceed
+                // Don't return - allow state to start counting and teleportation to proceed
             } else {
-                // Timer >= 1 = still in arrival portal, prevent re-teleport
-                // Keep timer at 1 to maintain "still in portal" state
-                PORTAL_TIMERS.put(entityId, 1);
+                // State >= 1 = still in arrival portal, prevent re-teleport
+                // Keep state at 1 to maintain "still in portal" state
+                ENTITY_PORTAL_STATES.put(entityId, 1);
                 ChronoDawn.LOGGER.debug("Prevented re-teleport for {} - still in arrival dimension {}",
                     entity.getName().getString(), level.dimension().location());
                 return;
             }
         }
 
-        // Increment portal timer for this entity
-        int portalTime = PORTAL_TIMERS.getOrDefault(entityId, 0);
-        portalTime++;
-        PORTAL_TIMERS.put(entityId, portalTime);
+        // Increment portal state counter for this entity
+        int stateValue = ENTITY_PORTAL_STATES.getOrDefault(entityId, 0);
+        stateValue++;
+        ENTITY_PORTAL_STATES.put(entityId, stateValue);
 
         // Only teleport after entity has been inside portal for threshold time
-        if (portalTime >= PORTAL_TIME_THRESHOLD) {
+        if (stateValue >= PORTAL_TIME_THRESHOLD) {
             // Attempt teleportation
             boolean success = com.chronodawn.core.portal.PortalTeleportHandler.teleportThroughPortal(entity, pos);
 
             if (success) {
-                // Set timer to -1 to indicate "just teleported"
+                // Set state to -1 to indicate "just teleported"
                 // This flag prevents immediate re-evaluation on the next tick
                 // and allows the state machine to transition: -1 → 1 (arrival portal)
-                PORTAL_TIMERS.put(entityId, -1);
+                ENTITY_PORTAL_STATES.put(entityId, -1);
 
                 ChronoDawn.LOGGER.info("Entity {} teleported through portal at {} in dimension {} after {} ticks",
-                    entity.getName().getString(), pos, level.dimension().location(), portalTime);
+                    entity.getName().getString(), pos, level.dimension().location(), stateValue);
             } else {
-                // Teleportation failed, reset timer
-                PORTAL_TIMERS.remove(entityId);
+                // Teleportation failed, reset state
+                ENTITY_PORTAL_STATES.remove(entityId);
             }
         }
     }
