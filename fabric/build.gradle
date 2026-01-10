@@ -24,7 +24,6 @@ configurations {
 }
 
 repositories {
-    maven { url 'https://maven.kyrptonaught.dev' }
     maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
 }
 
@@ -32,13 +31,6 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
     modApi "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
     modApi "dev.architectury:architectury-fabric:$rootProject.architectury_api_version"
-
-    // Custom Portal API for Fabric (1.21.1 only)
-    // Note: Custom Portal API is not available for Minecraft 1.20.1
-    if (project.ext.minecraft_version == '1.21.1') {
-        modImplementation "net.kyrptonaught:customportalapi:$rootProject.custom_portal_api_fabric_version"
-        include "net.kyrptonaught:customportalapi:$rootProject.custom_portal_api_fabric_version"
-    }
 
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')

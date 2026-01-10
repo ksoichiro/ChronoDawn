@@ -206,19 +206,8 @@ public class PlayerEventHandler {
                     BlockPos searchPos = centerPos.offset(x, y, z);
                     var blockState = level.getBlockState(searchPos);
 
-                    // Check for Custom Portal API's custom portal block
-                    // Supports both Fabric (customportalapi) and NeoForge (cpapireforged) versions
-                    Block block = blockState.getBlock();
-                    ResourceLocation blockId = BuiltInRegistries.BLOCK.getKey(block);
-
-                    // Debug: Log any non-air blocks that might be portal-related
-                    if (!blockState.isAir() && (blockId.getPath().contains("portal") ||
-                        blockId.getNamespace().contains("portal") ||
-                        blockId.getNamespace().contains("cpapi"))) {
-                        ChronoDawn.LOGGER.info("Found potential portal block: {} at {}", blockId, searchPos);
-                    }
-
-                    if (isCustomPortalBlock(blockId)) {
+                    // Check for ChronoDawn portal blocks
+                    if (blockState.is(ModBlocks.CHRONO_DAWN_PORTAL.get())) {
                         foundPortalBlock = true;
                         level.removeBlock(searchPos, false);
                         removedBlocks++;
@@ -241,12 +230,9 @@ public class PlayerEventHandler {
                     for (int z = -50; z <= 50; z++) {
                         BlockPos searchPos = centerPos.offset(x, y, z);
                         var blockState = level.getBlockState(searchPos);
-                        Block block = blockState.getBlock();
-                        ResourceLocation blockId = BuiltInRegistries.BLOCK.getKey(block);
 
-                        // Check for Custom Portal API's custom portal block
-                        // Supports both Fabric (customportalapi) and NeoForge (cpapireforged) versions
-                        if (isCustomPortalBlock(blockId)) {
+                        // Check for ChronoDawn portal blocks
+                        if (blockState.is(ModBlocks.CHRONO_DAWN_PORTAL.get())) {
                             level.removeBlock(searchPos, false);
                             removedBlocks++;
                         }
@@ -262,30 +248,6 @@ public class PlayerEventHandler {
         }
 
         ChronoDawn.LOGGER.info("Extinguished {} portal blocks near {}", removedBlocks, centerPos);
-    }
-
-    /**
-     * Check if the given block ID is a Custom Portal API portal block.
-     * Supports both Fabric (customportalapi) and NeoForge (cpapireforged) versions.
-     *
-     * @param blockId Block resource location
-     * @return true if block is a Custom Portal API portal block
-     */
-    private static boolean isCustomPortalBlock(ResourceLocation blockId) {
-        String namespace = blockId.getNamespace();
-        String path = blockId.getPath();
-
-        // Fabric version: customportalapi:customportalblock
-        if (namespace.equals("customportalapi") && path.equals("customportalblock")) {
-            return true;
-        }
-
-        // NeoForge version (Custom Portal API Reforged): cpapireforged:custom_portal_block
-        if (namespace.equals("cpapireforged") && path.equals("custom_portal_block")) {
-            return true;
-        }
-
-        return false;
     }
 
     /**

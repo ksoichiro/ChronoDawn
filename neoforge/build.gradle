@@ -55,10 +55,6 @@ configurations {
 
 repositories {
     maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
-    maven {
-        name = 'AzureDoom Mods'
-        url = 'https://maven.azuredoom.com/mods'
-    }
 }
 
 dependencies {
@@ -73,12 +69,6 @@ dependencies {
         neoForge "net.neoforged:neoforge:${neoforge_version}"
         modApi "dev.architectury:architectury-neoforge:${architectury_api_version}"
     }
-
-    // Custom Portal API Reforged for NeoForge (version-specific)
-    if (mcVersion >= "1.21") {
-        modImplementation "net.kyrptonaught.customportalapi:cpapireforged-neo-1.21.1:1.2.2"
-    }
-    // TODO: Add Custom Portal API for 1.20.1 if available
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive false }

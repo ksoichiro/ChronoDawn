@@ -38,10 +38,3 @@ type="required"
 versionRange="[13.0.8,)"
 ordering="AFTER"
 side="BOTH"
-
-[[dependencies.chronodawn]]
-modId="cpapireforged"
-type="required"
-versionRange="[1.2.2,)"
-ordering="AFTER"
-side="BOTH"

@@ -28,7 +28,6 @@ import com.chronodawn.entities.mobs.ClockworkSentinelEntity;
 import com.chronodawn.entities.mobs.FloqEntity;
 import com.chronodawn.entities.mobs.TemporalWraithEntity;
 import com.chronodawn.entities.mobs.TimeKeeperEntity;
-import com.chronodawn.neoforge.compat.CustomPortalNeoForge;
 import com.chronodawn.neoforge.registry.ModFluidTypes;
 import com.chronodawn.neoforge.registry.ModLootModifiers;
 import com.chronodawn.neoforge.registry.ModParticles;
@@ -218,16 +217,12 @@ public class ChronoDawnNeoForge {
     /**
      * Common setup for NeoForge.
      * Initializes spawn eggs after all entities are registered.
-     * Registers portal with Custom Portal API Reforged.
      */
     private void commonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             // Initialize spawn eggs - must be done after entities are registered
             ModItems.initializeSpawnEggs();
             ChronoDawn.LOGGER.info("Initialized spawn eggs for NeoForge");
-
-            // Initialize Custom Portal API Reforged integration
-            CustomPortalNeoForge.init();
         });
     }
 
