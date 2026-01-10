@@ -74,6 +74,13 @@ public class PortalTeleportHandler {
         ServerLevel sourceLevel = (ServerLevel) player.level();
         MinecraftServer server = sourceLevel.getServer();
 
+        // Read source portal axis for consistent orientation
+        BlockState sourcePortalState = sourceLevel.getBlockState(sourcePortalPos);
+        Direction.Axis sourceAxis = Direction.Axis.X; // Default axis
+        if (sourcePortalState.is(ModBlocks.CHRONO_DAWN_PORTAL.get())) {
+            sourceAxis = sourcePortalState.getValue(com.chronodawn.blocks.ChronoDawnPortalBlock.AXIS);
+        }
+
         // Determine destination dimension
         ResourceKey<Level> destDimensionKey = getDestinationDimension(sourceLevel.dimension());
         ServerLevel destLevel = server.getLevel(destDimensionKey);
@@ -96,19 +103,21 @@ public class PortalTeleportHandler {
             ChronoDawn.LOGGER.info("Found existing portal at {} in dimension {}",
                 destPortalPos, destDimensionKey.location());
         } else {
-            // Generate new portal (this returns frame bottom-left position)
-            BlockPos framePos = generatePortal(destLevel, destCoords);
+            // Generate new portal with same axis as source portal
+            BlockPos framePos = generatePortal(destLevel, destCoords, sourceAxis);
             if (framePos == null) {
                 ChronoDawn.LOGGER.error("Failed to generate portal at {} in dimension {}",
                     destCoords, destDimensionKey.location());
                 return false;
             }
-            ChronoDawn.LOGGER.info("Generated new portal at {} in dimension {}",
-                framePos, destDimensionKey.location());
+            ChronoDawn.LOGGER.info("Generated new portal at {} in dimension {} with axis {}",
+                framePos, destDimensionKey.location(), sourceAxis);
 
             // Calculate portal interior position from frame bottom-left
-            // Portal is 4x5 with axis X, interior portal blocks start at (1, 1, 0) offset
-            destPortalPos = framePos.offset(1, 1, 0);
+            // Offset depends on axis: X axis uses (1, 1, 0), Z axis uses (0, 1, 1)
+            destPortalPos = sourceAxis == Direction.Axis.X
+                ? framePos.offset(1, 1, 0)
+                : framePos.offset(0, 1, 1);
         }
 
         // Play portal travel sound (same as Nether portal)
@@ -184,7 +193,61 @@ public class PortalTeleportHandler {
      * @return Portal position if found, empty otherwise
      */
     private static Optional<BlockPos> findNearbyPortal(ServerLevel level, BlockPos coords) {
-        // Search in a radius around destination coordinates
+        // First, try to find existing portals using PortalRegistry
+        // This is much more efficient than scanning blocks
+        Set<UUID> portalsInDimension = PortalRegistry.getInstance().getPortalsInDimension(level.dimension());
+
+        ChronoDawn.LOGGER.info("Searching for existing portal in dimension {} near {} (found {} portals in dimension)",
+            level.dimension().location(), coords, portalsInDimension.size());
+
+        BlockPos nearestPortal = null;
+        double nearestDistance = Double.MAX_VALUE;
+
+        for (UUID portalId : portalsInDimension) {
+            PortalStateMachine portal = PortalRegistry.getInstance().getPortal(portalId);
+            if (portal == null) {
+                continue;
+            }
+
+            BlockPos portalPos = portal.getPosition();
+
+            // Calculate distance (ignoring Y coordinate for more lenient matching)
+            double distance = Math.sqrt(
+                Math.pow(portalPos.getX() - coords.getX(), 2) +
+                Math.pow(portalPos.getZ() - coords.getZ(), 2)
+            );
+
+            ChronoDawn.LOGGER.info("  Portal at {} - horizontal distance: {} blocks (search coords: {})",
+                portalPos, String.format("%.1f", distance), coords);
+
+            // Only consider portals within reasonable horizontal distance (128 blocks)
+            if (distance < 128 && distance < nearestDistance) {
+                nearestDistance = distance;
+                nearestPortal = portalPos;
+            }
+        }
+
+        if (nearestPortal != null) {
+            // Find actual portal block position (registry stores frame bottom-left)
+            // Search for portal blocks near the frame position (axis-independent)
+            for (int dx = 0; dx <= 5; dx++) {
+                for (int dy = 0; dy <= 5; dy++) {
+                    for (int dz = 0; dz <= 5; dz++) {
+                        BlockPos checkPos = nearestPortal.offset(dx, dy, dz);
+                        if (level.getBlockState(checkPos).is(ModBlocks.CHRONO_DAWN_PORTAL.get())) {
+                            ChronoDawn.LOGGER.info("Found existing portal at {} (frame at {}, distance: {} blocks from {})",
+                                checkPos, nearestPortal, nearestDistance, coords);
+                            return Optional.of(checkPos);
+                        }
+                    }
+                }
+            }
+
+            // Portal frame exists in registry but portal blocks are missing
+            ChronoDawn.LOGGER.warn("Portal frame at {} exists in registry but portal blocks not found", nearestPortal);
+        }
+
+        // Fallback: Search in a radius around destination coordinates (block-by-block search)
         for (int x = -PORTAL_SEARCH_RADIUS; x <= PORTAL_SEARCH_RADIUS; x++) {
             for (int y = -PORTAL_SEARCH_RADIUS; y <= PORTAL_SEARCH_RADIUS; y++) {
                 for (int z = -PORTAL_SEARCH_RADIUS; z <= PORTAL_SEARCH_RADIUS; z++) {
@@ -209,14 +272,15 @@ public class PortalTeleportHandler {
      *
      * @param level Destination level
      * @param coords Destination coordinates (X, Z, Y is initial search point)
+     * @param axis Portal axis (X or Z)
      * @return Portal position if generated, null if failed
      */
-    private static BlockPos generatePortal(ServerLevel level, BlockPos coords) {
+    private static BlockPos generatePortal(ServerLevel level, BlockPos coords, Direction.Axis axis) {
         // Find ground level starting from coords.y
         BlockPos groundPos = findGroundLevel(level, coords);
 
-        // Generate a 4x5 portal at ground level
-        generatePortalStructure(level, groundPos, Direction.Axis.X);
+        // Generate a 4x5 portal at ground level with specified axis
+        generatePortalStructure(level, groundPos, axis);
         return groundPos;
     }
 
