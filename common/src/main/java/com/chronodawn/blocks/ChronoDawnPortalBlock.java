@@ -42,6 +42,10 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 /**
  * ChronoDawn Portal Block - Custom portal block for dimension travel.
  *
@@ -79,6 +83,18 @@ public class ChronoDawnPortalBlock extends Block {
      */
     protected static final VoxelShape X_AXIS_AABB = Block.box(0.0, 0.0, 6.0, 16.0, 16.0, 10.0);
     protected static final VoxelShape Z_AXIS_AABB = Block.box(6.0, 0.0, 0.0, 10.0, 16.0, 16.0);
+
+    /**
+     * Portal timer threshold (ticks) - same as Nether Portal.
+     * 80 ticks = 4 seconds
+     */
+    private static final int PORTAL_TIME_THRESHOLD = 80;
+
+    /**
+     * Tracks how long entities have been inside portals.
+     * Map: Entity UUID -> Portal time (ticks)
+     */
+    private static final Map<UUID, Integer> PORTAL_TIMERS = new HashMap<>();
 
     /**
      * Portal color - Orange (#db8813 / RGB 219, 136, 19).
@@ -124,6 +140,25 @@ public class ChronoDawnPortalBlock extends Block {
             level.removeBlock(pos, false);
             ChronoDawn.LOGGER.debug("Destroyed portal block at {} due to broken frame", pos);
         }
+
+        // Periodic cleanup of stale portal timer entries (every ~10 seconds)
+        if (random.nextInt(200) == 0) {
+            cleanupStalePortalTimers(level);
+        }
+    }
+
+    /**
+     * Clean up portal timer entries for entities that no longer exist or are far from portals.
+     *
+     * @param level Server level
+     */
+    private static void cleanupStalePortalTimers(ServerLevel level) {
+        PORTAL_TIMERS.entrySet().removeIf(entry -> {
+            UUID entityId = entry.getKey();
+            Entity entity = level.getServer().overworld().getEntity(entityId);
+            // Remove if entity doesn't exist anymore
+            return entity == null;
+        });
     }
 
     /**
@@ -179,14 +214,48 @@ public class ChronoDawnPortalBlock extends Block {
 
     @Override
     public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-        // Phase 3: Implement teleportation logic
-        // TODO: Handle entity collision and trigger teleportation
-        // - Check teleport cooldown
-        // - Look up portal in PortalRegistry
-        // - Call PortalTeleportHandler
-        // - Update portal state (ACTIVATED → DEACTIVATED)
+        // Only process on server side
+        if (level.isClientSide()) {
+            return;
+        }
 
-        ChronoDawn.LOGGER.debug("Entity {} entered portal at {}", entity.getName().getString(), pos);
+        // Check if entity can use portals
+        if (entity.isPassenger() || entity.isVehicle()) {
+            return;
+        }
+
+        // Check portal cooldown (prevents instant re-teleport)
+        if (entity.getPortalCooldown() > 0) {
+            // Reset portal timer if on cooldown
+            PORTAL_TIMERS.remove(entity.getUUID());
+            return;
+        }
+
+        // Increment portal timer for this entity
+        UUID entityId = entity.getUUID();
+        int portalTime = PORTAL_TIMERS.getOrDefault(entityId, 0);
+        portalTime++;
+        PORTAL_TIMERS.put(entityId, portalTime);
+
+        // Only teleport after entity has been inside portal for threshold time
+        if (portalTime >= PORTAL_TIME_THRESHOLD) {
+            // Attempt teleportation
+            boolean success = com.chronodawn.core.portal.PortalTeleportHandler.teleportThroughPortal(entity, pos);
+
+            if (success) {
+                // Reset portal timer
+                PORTAL_TIMERS.remove(entityId);
+
+                // Set portal cooldown (300 ticks = 15 seconds)
+                entity.setPortalCooldown(300);
+
+                ChronoDawn.LOGGER.info("Entity {} teleported through portal at {} after {} ticks",
+                    entity.getName().getString(), pos, portalTime);
+            } else {
+                // Teleportation failed, reset timer
+                PORTAL_TIMERS.remove(entityId);
+            }
+        }
     }
 
     @Override
@@ -272,15 +341,17 @@ public class ChronoDawnPortalBlock extends Block {
         // Validate frame when neighbor changes
         Direction.Axis axis = state.getValue(AXIS);
         Direction.Axis directionAxis = direction.getAxis();
-        Direction.Axis otherAxis = axis == Direction.Axis.X ? Direction.Axis.Z : Direction.Axis.X;
-        boolean isRelevantDirection = directionAxis != axis && directionAxis != Direction.Axis.Y;
 
-        // If relevant neighbor changed and frame is invalid, destroy portal block
-        // Note: Cannot fully validate frame in updateShape as we only have LevelAccessor
-        // Full validation is done in randomTick() with ServerLevel
+        // Check if the changed neighbor is relevant (perpendicular to portal axis or vertical)
+        boolean isRelevantDirection = directionAxis != axis;
+
+        // If relevant neighbor changed and is neither a frame block nor a portal block,
+        // destroy this portal block immediately
         if (isRelevantDirection && !isFrameBlock(neighborState) && !neighborState.is(this)) {
-            // If neighbor is not a frame block or portal block, this portal block may be invalid
-            // Will be validated and removed in randomTick if frame is actually broken
+            // Frame is broken, destroy portal block
+            ChronoDawn.LOGGER.debug("Destroyed portal block at {} due to broken frame (neighbor at {} changed to {})",
+                currentPos, neighborPos, neighborState.getBlock().getName().getString());
+            return Blocks.AIR.defaultBlockState();
         }
 
         return super.updateShape(state, direction, neighborState, level, currentPos, neighborPos);

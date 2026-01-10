@@ -1,9 +1,20 @@
 package com.chronodawn.blocks;
 
+import com.chronodawn.ChronoDawn;
+import com.chronodawn.registry.ModBlocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
+
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Set;
 
 /**
  * Clockstone Block - Portal frame building material.
@@ -46,5 +57,58 @@ public class ClockstoneBlock extends Block {
                 .strength(5.0f, 6.0f)              // Harder than stone
                 .requiresCorrectToolForDrops()      // Requires pickaxe
                 .sound(SoundType.METAL);            // Metallic sound for mystical material
+    }
+
+    @Override
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+        // When Clockstone frame block is broken, destroy all connected portal blocks
+        if (!state.is(newState.getBlock())) {
+            destroyConnectedPortal(level, pos);
+        }
+        super.onRemove(state, level, pos, newState, isMoving);
+    }
+
+    /**
+     * Destroy all portal blocks connected to this frame position.
+     * Uses BFS to find and destroy all portal blocks that form a connected portal.
+     *
+     * @param level The level
+     * @param framePos Position of the broken frame block
+     */
+    private void destroyConnectedPortal(Level level, BlockPos framePos) {
+        Set<BlockPos> visited = new HashSet<>();
+        Queue<BlockPos> queue = new LinkedList<>();
+
+        // Start BFS from all 6 adjacent positions
+        for (Direction direction : Direction.values()) {
+            BlockPos adjacent = framePos.relative(direction);
+            if (level.getBlockState(adjacent).is(ModBlocks.CHRONO_DAWN_PORTAL.get())) {
+                queue.add(adjacent);
+                visited.add(adjacent);
+            }
+        }
+
+        // BFS to find all connected portal blocks
+        while (!queue.isEmpty()) {
+            BlockPos current = queue.poll();
+
+            // Remove this portal block
+            level.removeBlock(current, false);
+
+            // Check all 6 adjacent positions for more portal blocks
+            for (Direction direction : Direction.values()) {
+                BlockPos adjacent = current.relative(direction);
+                BlockState adjacentState = level.getBlockState(adjacent);
+
+                if (adjacentState.is(ModBlocks.CHRONO_DAWN_PORTAL.get()) && !visited.contains(adjacent)) {
+                    queue.add(adjacent);
+                    visited.add(adjacent);
+                }
+            }
+        }
+
+        if (!visited.isEmpty()) {
+            ChronoDawn.LOGGER.info("Destroyed {} connected portal blocks due to frame break at {}", visited.size(), framePos);
+        }
     }
 }

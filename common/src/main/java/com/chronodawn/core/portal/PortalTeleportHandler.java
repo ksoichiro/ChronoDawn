@@ -1,0 +1,411 @@
+package com.chronodawn.core.portal;
+
+import com.chronodawn.ChronoDawn;
+import com.chronodawn.data.ChronoDawnGlobalState;
+import com.chronodawn.items.TimeHourglassItem;
+import com.chronodawn.registry.ModBlocks;
+import com.chronodawn.registry.ModDimensions;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.phys.Vec3;
+
+import java.util.*;
+
+/**
+ * Portal Teleport Handler - Handles player teleportation through ChronoDawn portals.
+ *
+ * This class manages the teleportation process:
+ * - Determines destination dimension (Overworld ↔ ChronoDawn)
+ * - Calculates destination coordinates (1:1 mapping, no scaling)
+ * - Searches for existing portals at destination
+ * - Generates new portals if none exist (Y=70-100 range)
+ * - Updates portal states after teleportation
+ *
+ * Teleportation Flow:
+ * 1. Player enters portal (collision with portal block)
+ * 2. Calculate destination dimension and coordinates
+ * 3. Search for existing portal at destination
+ * 4. If no portal found, generate new portal (Y=70-100)
+ * 5. Teleport player to destination
+ * 6. Update portal state (ACTIVATED → DEACTIVATED)
+ * 7. Mark ChronoDawn entered (if entering ChronoDawn for first time)
+ *
+ * Reference: docs/portal_implementation_plan.md (Phase 3)
+ */
+public class PortalTeleportHandler {
+    /**
+     * Portal search radius (blocks) around destination coordinates.
+     */
+    private static final int PORTAL_SEARCH_RADIUS = 16;
+
+    /**
+     * Minimum Y level for portal generation.
+     */
+    private static final int MIN_PORTAL_Y = 70;
+
+    /**
+     * Maximum Y level for portal generation.
+     */
+    private static final int MAX_PORTAL_Y = 100;
+
+    /**
+     * Teleport an entity through a ChronoDawn portal.
+     *
+     * @param entity Entity to teleport
+     * @param sourcePortalPos Source portal position
+     * @return true if teleportation succeeded
+     */
+    public static boolean teleportThroughPortal(Entity entity, BlockPos sourcePortalPos) {
+        if (!(entity instanceof ServerPlayer player)) {
+            // Only players can teleport for now
+            return false;
+        }
+
+        ServerLevel sourceLevel = (ServerLevel) player.level();
+        MinecraftServer server = sourceLevel.getServer();
+
+        // Determine destination dimension
+        ResourceKey<Level> destDimensionKey = getDestinationDimension(sourceLevel.dimension());
+        ServerLevel destLevel = server.getLevel(destDimensionKey);
+
+        if (destLevel == null) {
+            ChronoDawn.LOGGER.error("Destination dimension {} not found", destDimensionKey.location());
+            return false;
+        }
+
+        // Calculate destination coordinates (1:1 mapping)
+        BlockPos destCoords = calculateDestinationCoords(sourcePortalPos);
+
+        // Search for existing portal at destination
+        Optional<BlockPos> existingPortal = findNearbyPortal(destLevel, destCoords);
+
+        BlockPos destPortalPos;
+        if (existingPortal.isPresent()) {
+            // Use existing portal (this is a portal block position)
+            destPortalPos = existingPortal.get();
+            ChronoDawn.LOGGER.info("Found existing portal at {} in dimension {}",
+                destPortalPos, destDimensionKey.location());
+        } else {
+            // Generate new portal (this returns frame bottom-left position)
+            BlockPos framePos = generatePortal(destLevel, destCoords);
+            if (framePos == null) {
+                ChronoDawn.LOGGER.error("Failed to generate portal at {} in dimension {}",
+                    destCoords, destDimensionKey.location());
+                return false;
+            }
+            ChronoDawn.LOGGER.info("Generated new portal at {} in dimension {}",
+                framePos, destDimensionKey.location());
+
+            // Calculate portal interior position from frame bottom-left
+            // Portal is 4x5 with axis X, interior portal blocks start at (1, 1, 0) offset
+            destPortalPos = framePos.offset(1, 1, 0);
+        }
+
+        // Play portal travel sound (same as Nether portal)
+        sourceLevel.playSound(
+            null,
+            sourcePortalPos,
+            SoundEvents.PORTAL_TRAVEL,
+            SoundSource.BLOCKS,
+            0.25F,
+            sourceLevel.getRandom().nextFloat() * 0.4F + 0.8F
+        );
+
+        // Teleport player to destination dimension
+        Vec3 destPosition = Vec3.atCenterOf(destPortalPos);
+        player.teleportTo(destLevel, destPosition.x, destPosition.y, destPosition.z, player.getYRot(), player.getXRot());
+
+        // Update portal state (ACTIVATED → DEACTIVATED)
+        PortalStateMachine sourcePortal = PortalRegistry.getInstance().getPortalAt(sourcePortalPos);
+        if (sourcePortal != null && sourcePortal.getCurrentState() == PortalState.ACTIVATED) {
+            sourcePortal.deactivate();
+            ChronoDawn.LOGGER.info("Deactivated source portal at {}", sourcePortalPos);
+        }
+
+        // Mark ChronoDawn entered (if entering ChronoDawn for first time)
+        if (destDimensionKey.equals(ModDimensions.CHRONO_DAWN_DIMENSION)) {
+            ChronoDawnGlobalState globalState = ChronoDawnGlobalState.get(server);
+            globalState.markChronoDawnEntered();
+
+            // Destroy unstable portal (if portals are unstable)
+            if (globalState.arePortalsUnstable()) {
+                destroyUnstablePortal(destLevel, destPortalPos);
+                ChronoDawn.LOGGER.info("Destroyed unstable portal at {} in ChronoDawn dimension", destPortalPos);
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Get the destination dimension based on source dimension.
+     *
+     * @param sourceDimension Source dimension key
+     * @return Destination dimension key
+     */
+    private static ResourceKey<Level> getDestinationDimension(ResourceKey<Level> sourceDimension) {
+        if (sourceDimension.equals(ModDimensions.CHRONO_DAWN_DIMENSION)) {
+            // ChronoDawn → Overworld
+            return Level.OVERWORLD;
+        } else {
+            // Overworld (or any other dimension) → ChronoDawn
+            return ModDimensions.CHRONO_DAWN_DIMENSION;
+        }
+    }
+
+    /**
+     * Calculate destination coordinates (1:1 X/Z mapping, Y will be adjusted to ground level).
+     *
+     * @param sourcePos Source portal position
+     * @return Destination coordinates (X/Z only, Y will be determined by ground search)
+     */
+    private static BlockPos calculateDestinationCoords(BlockPos sourcePos) {
+        // 1:1 coordinate mapping for X and Z (no scaling like Nether Portal)
+        // Y coordinate will be determined by findGroundLevel() when generating portal
+        // Start search from high position (Y=150) to find surface, not underground caves
+        return new BlockPos(sourcePos.getX(), 150, sourcePos.getZ());
+    }
+
+    /**
+     * Find a nearby portal at destination coordinates.
+     *
+     * @param level Destination level
+     * @param coords Destination coordinates
+     * @return Portal position if found, empty otherwise
+     */
+    private static Optional<BlockPos> findNearbyPortal(ServerLevel level, BlockPos coords) {
+        // Search in a radius around destination coordinates
+        for (int x = -PORTAL_SEARCH_RADIUS; x <= PORTAL_SEARCH_RADIUS; x++) {
+            for (int y = -PORTAL_SEARCH_RADIUS; y <= PORTAL_SEARCH_RADIUS; y++) {
+                for (int z = -PORTAL_SEARCH_RADIUS; z <= PORTAL_SEARCH_RADIUS; z++) {
+                    BlockPos checkPos = coords.offset(x, y, z);
+                    BlockState state = level.getBlockState(checkPos);
+
+                    if (state.is(ModBlocks.CHRONO_DAWN_PORTAL.get())) {
+                        // Found portal block, return this position
+                        return Optional.of(checkPos);
+                    }
+                }
+            }
+        }
+
+        return Optional.empty();
+    }
+
+    /**
+     * Generate a new portal at destination coordinates.
+     *
+     * Finds ground level and places portal on solid ground.
+     *
+     * @param level Destination level
+     * @param coords Destination coordinates (X, Z, Y is initial search point)
+     * @return Portal position if generated, null if failed
+     */
+    private static BlockPos generatePortal(ServerLevel level, BlockPos coords) {
+        // Find ground level starting from coords.y
+        BlockPos groundPos = findGroundLevel(level, coords);
+
+        // Generate a 4x5 portal at ground level
+        generatePortalStructure(level, groundPos, Direction.Axis.X);
+        return groundPos;
+    }
+
+    /**
+     * Find ground level for portal placement using Heightmap.
+     *
+     * Uses WORLD_SURFACE heightmap to find the true surface level,
+     * avoiding underground caves. Ensures there's enough air space above for the portal.
+     *
+     * @param level Level
+     * @param start Starting search position (X/Z coordinates, Y is ignored)
+     * @return Ground position suitable for portal placement (one block above solid ground)
+     */
+    private static BlockPos findGroundLevel(ServerLevel level, BlockPos start) {
+        // Use Heightmap to find true surface level (avoids underground caves)
+        int surfaceY = level.getHeight(Heightmap.Types.WORLD_SURFACE, start.getX(), start.getZ());
+
+        // Start checking from surface level
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(start.getX(), surfaceY, start.getZ());
+
+        // Check if there's a solid block at surface level
+        BlockState surfaceBlock = level.getBlockState(pos);
+
+        // If surface is not solid (e.g., water, air), search downward for solid ground
+        if (!surfaceBlock.isSolid() || surfaceBlock.isAir()) {
+            while (pos.getY() > level.getMinBuildHeight()) {
+                BlockState currentBlock = level.getBlockState(pos);
+                if (currentBlock.isSolid() && !currentBlock.isAir()) {
+                    // Found solid ground
+                    break;
+                }
+                pos.move(Direction.DOWN);
+            }
+        }
+
+        // Now pos is at solid ground level, check if there's enough air above
+        BlockPos.MutableBlockPos airPos = pos.mutable().move(Direction.UP);
+
+        // Check if there's enough air above (6 blocks: 1 spawn + 5 for portal)
+        boolean hasEnoughAir = true;
+        for (int i = 0; i < 6; i++) {
+            BlockState airState = level.getBlockState(airPos);
+            if (!airState.isAir()) {
+                hasEnoughAir = false;
+                break;
+            }
+            airPos.move(Direction.UP);
+        }
+
+        if (hasEnoughAir) {
+            // Found suitable surface, return position one block above solid ground
+            return pos.above().immutable();
+        }
+
+        // If not enough air at surface (e.g., dense forest), try a few blocks higher
+        for (int offset = 1; offset <= 5; offset++) {
+            BlockPos testPos = pos.above(offset);
+            boolean canPlaceHere = true;
+
+            // Check if this position and 5 blocks above are all air
+            for (int i = 0; i < 6; i++) {
+                if (!level.getBlockState(testPos.above(i)).isAir()) {
+                    canPlaceHere = false;
+                    break;
+                }
+            }
+
+            if (canPlaceHere) {
+                return testPos;
+            }
+        }
+
+        // Fallback: return surface + 1 (may clip through trees, but at least on surface)
+        return pos.above().immutable();
+    }
+
+    /**
+     * Generate a portal structure at given position.
+     *
+     * Creates a 4x5 Clockstone frame with portal blocks in the interior.
+     *
+     * @param level Level
+     * @param pos Bottom-left corner position
+     * @param axis Portal axis
+     */
+    private static void generatePortalStructure(ServerLevel level, BlockPos pos, Direction.Axis axis) {
+        int width = 4;
+        int height = 5;
+
+        Direction horizontal = axis == Direction.Axis.X ? Direction.EAST : Direction.SOUTH;
+        Direction vertical = Direction.UP;
+
+        // Generate Clockstone frame
+        BlockState clockstoneState = ModBlocks.CLOCKSTONE_BLOCK.get().defaultBlockState();
+
+        // Bottom edge
+        for (int x = 0; x < width; x++) {
+            level.setBlock(pos.relative(horizontal, x), clockstoneState, 3);
+        }
+
+        // Top edge
+        for (int x = 0; x < width; x++) {
+            level.setBlock(pos.relative(horizontal, x).relative(vertical, height - 1), clockstoneState, 3);
+        }
+
+        // Left edge
+        for (int y = 0; y < height; y++) {
+            level.setBlock(pos.relative(vertical, y), clockstoneState, 3);
+        }
+
+        // Right edge
+        for (int y = 0; y < height; y++) {
+            level.setBlock(pos.relative(horizontal, width - 1).relative(vertical, y), clockstoneState, 3);
+        }
+
+        // Fill interior with portal blocks
+        BlockState portalState = ModBlocks.CHRONO_DAWN_PORTAL.get()
+            .defaultBlockState()
+            .setValue(com.chronodawn.blocks.ChronoDawnPortalBlock.AXIS, axis);
+
+        for (int x = 1; x < width - 1; x++) {
+            for (int y = 1; y < height - 1; y++) {
+                level.setBlock(pos.relative(horizontal, x).relative(vertical, y), portalState, 3);
+            }
+        }
+
+        // Register portal in registry
+        UUID portalId = UUID.randomUUID();
+        PortalStateMachine portal = new PortalStateMachine(
+            portalId,
+            level.dimension(),
+            pos
+        );
+        portal.activate();
+        PortalRegistry.getInstance().registerPortal(portal);
+
+        ChronoDawn.LOGGER.info("Generated 4x5 portal structure at {} in dimension {}",
+            pos, level.dimension().location());
+    }
+
+    /**
+     * Destroy an unstable portal with glass break sound effect.
+     *
+     * When portals are unstable (player entered ChronoDawn but hasn't stabilized),
+     * the portal blocks shatter like glass and disappear.
+     *
+     * @param level The level containing the portal
+     * @param portalPos Position of a portal block in the unstable portal
+     */
+    private static void destroyUnstablePortal(ServerLevel level, BlockPos portalPos) {
+        Set<BlockPos> visited = new HashSet<>();
+        Queue<BlockPos> queue = new LinkedList<>();
+
+        // Start BFS from the given portal position
+        if (level.getBlockState(portalPos).is(ModBlocks.CHRONO_DAWN_PORTAL.get())) {
+            queue.add(portalPos);
+            visited.add(portalPos);
+        }
+
+        // BFS to find all connected portal blocks
+        while (!queue.isEmpty()) {
+            BlockPos current = queue.poll();
+
+            // Remove this portal block
+            level.removeBlock(current, false);
+
+            // Check all 6 adjacent positions for more portal blocks
+            for (Direction direction : Direction.values()) {
+                BlockPos adjacent = current.relative(direction);
+                BlockState adjacentState = level.getBlockState(adjacent);
+
+                if (adjacentState.is(ModBlocks.CHRONO_DAWN_PORTAL.get()) && !visited.contains(adjacent)) {
+                    queue.add(adjacent);
+                    visited.add(adjacent);
+                }
+            }
+        }
+
+        // Play glass break sound at portal center
+        if (!visited.isEmpty()) {
+            level.playSound(
+                null,
+                portalPos,
+                SoundEvents.GLASS_BREAK,
+                SoundSource.BLOCKS,
+                1.0F,
+                1.0F
+            );
+            ChronoDawn.LOGGER.info("Destroyed {} unstable portal blocks with glass break sound", visited.size());
+        }
+    }
+}
