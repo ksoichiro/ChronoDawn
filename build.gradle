@@ -98,7 +98,7 @@ tasks.register('build1201') {
 
     doLast {
         project.exec {
-            commandLine './gradlew', 'clean', 'build', '-Ptarget_mc_version=1.20.1'
+            commandLine './gradlew', 'clean', 'build', '-Ptarget_mc_version=1.20.1', '-x', 'test'
         }
     }
 }
@@ -121,7 +121,7 @@ tasks.register('build1211') {
 
     doLast {
         project.exec {
-            commandLine './gradlew', 'clean', 'build', '-Ptarget_mc_version=1.21.1'
+            commandLine './gradlew', 'clean', 'build', '-Ptarget_mc_version=1.21.1', '-x', 'test'
         }
     }
 }

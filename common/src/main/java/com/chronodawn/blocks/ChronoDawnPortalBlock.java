@@ -101,7 +101,7 @@ public class ChronoDawnPortalBlock extends Block {
     public static BlockBehaviour.Properties createProperties() {
         return BlockBehaviour.Properties.of()
                 .noCollission()      // Entities pass through
-                .randomTicks()       // Enable random ticks for validation
+                // .randomTicks()       // TODO Phase 2: Enable after portal ignition implementation
                 .strength(-1.0F)     // Unbreakable by normal means
                 .lightLevel((state) -> 11)  // Orange glow (similar to Nether Portal)
                 .noLootTable();      // Don't drop items when destroyed
@@ -177,8 +177,8 @@ public class ChronoDawnPortalBlock extends Block {
 
     @Override
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-        // Spawn orange particles around portal
-        if (random.nextInt(100) == 0) {
+        // Play ambient sound more frequently (every ~2 seconds instead of ~5 seconds)
+        if (random.nextInt(40) == 0) {
             level.playLocalSound(
                     pos.getX() + 0.5,
                     pos.getY() + 0.5,
@@ -191,7 +191,10 @@ public class ChronoDawnPortalBlock extends Block {
             );
         }
 
-        // Spawn orange/golden particles
+        // Spawn orange/golden particles (Nether Portal style)
+        // Based on vanilla NetherPortalBlock particle logic
+        Direction.Axis axis = state.getValue(AXIS);
+
         for (int i = 0; i < 4; ++i) {
             double x = pos.getX() + random.nextDouble();
             double y = pos.getY() + random.nextDouble();
@@ -201,17 +204,26 @@ public class ChronoDawnPortalBlock extends Block {
             double speedZ = (random.nextDouble() - 0.5) * 0.5;
 
             int j = random.nextInt(2) * 2 - 1;
-            if (!level.getBlockState(pos.west()).is(this) && !level.getBlockState(pos.east()).is(this)) {
-                x = pos.getX() + 0.5 + 0.25 * j;
-                speedX = random.nextFloat() * 2.0F * j;
-            } else {
+
+            // Adjust particle spawn position based on portal axis
+            if (axis == Direction.Axis.X) {
+                // X-axis portal (particles flow along Z)
                 z = pos.getZ() + 0.5 + 0.25 * j;
                 speedZ = random.nextFloat() * 2.0F * j;
+            } else {
+                // Z-axis portal (particles flow along X)
+                x = pos.getX() + 0.5 + 0.25 * j;
+                speedX = random.nextFloat() * 2.0F * j;
             }
 
-            // Use flame particles for orange effect (vanilla doesn't have orange portal particles)
-            // TODO: Consider custom particle type in future for better visual effect
-            level.addParticle(ParticleTypes.FLAME, x, y, z, speedX, speedY, speedZ);
+            // Use lava particles for better orange effect
+            // LAVA particles are orange/red and don't rise like FLAME
+            level.addParticle(ParticleTypes.LAVA, x, y, z, speedX, speedY, speedZ);
+
+            // Add some flame particles for glow effect
+            if (random.nextInt(3) == 0) {
+                level.addParticle(ParticleTypes.FLAME, x, y, z, speedX * 0.5, speedY * 0.5, speedZ * 0.5);
+            }
         }
     }
 
