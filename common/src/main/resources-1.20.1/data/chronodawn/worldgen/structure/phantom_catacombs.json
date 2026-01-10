@@ -1,7 +1,7 @@
 {
   "type": "minecraft:jigsaw",
   "start_pool": "chronodawn:phantom_catacombs/entrance_pool",
-  "size": 12,
+  "size": 7,
   "max_distance_from_center": 80,
   "biomes": "#chronodawn:has_phantom_catacombs",
   "step": "underground_structures",
