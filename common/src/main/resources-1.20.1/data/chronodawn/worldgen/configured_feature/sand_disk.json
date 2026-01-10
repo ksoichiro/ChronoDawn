@@ -8,10 +8,13 @@
       "max_inclusive": 6
     },
     "state_provider": {
-      "type": "minecraft:simple_state_provider",
-      "state": {
-        "Name": "minecraft:sand"
-      }
+      "fallback": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "minecraft:sand"
+        }
+      },
+      "rules": []
     },
     "target": {
       "type": "minecraft:matching_blocks",
