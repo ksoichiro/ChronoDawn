@@ -314,14 +314,6 @@ public class ChronoDawnPortalBlock extends Block {
         LAST_PORTAL_POSITION.put(entityId, pos.immutable());
         LAST_INSIDE_TICK.put(entityId, currentTick);
 
-        // Check portal cooldown (prevents instant re-teleport)
-        if (entity.getPortalCooldown() > 0) {
-            // Set special value (-1) to indicate "in cooldown"
-            // This helps distinguish between "just exited cooldown" vs "re-entered portal"
-            PORTAL_TIMERS.put(entityId, -1);
-            return;
-        }
-
         // Check if entity can teleport from current dimension
         // This prevents re-teleporting while still in the dimension they just arrived in
         if (!com.chronodawn.core.portal.PortalTeleportHandler.canTeleportFromDimension(entityId, level.dimension())) {
@@ -329,10 +321,11 @@ public class ChronoDawnPortalBlock extends Block {
             int currentTimer = PORTAL_TIMERS.getOrDefault(entityId, 0);
 
             if (currentTimer == -1) {
-                // Cooldown just expired, still in arrival portal
+                // Just teleported, still in arrival portal
                 // Set timer to 1 to prevent re-teleport while standing still
+                // This transition (-1 → 1) happens on the first tick after teleportation
                 PORTAL_TIMERS.put(entityId, 1);
-                ChronoDawn.LOGGER.debug("Prevented re-teleport for {} - cooldown just ended, still in arrival dimension",
+                ChronoDawn.LOGGER.debug("Prevented re-teleport for {} - just teleported, still in arrival dimension",
                     entity.getName().getString());
                 return;
             } else if (currentTimer == 0) {
@@ -367,11 +360,10 @@ public class ChronoDawnPortalBlock extends Block {
             boolean success = com.chronodawn.core.portal.PortalTeleportHandler.teleportThroughPortal(entity, pos);
 
             if (success) {
-                // Reset portal timer
-                PORTAL_TIMERS.remove(entityId);
-
-                // Set portal cooldown (300 ticks = 15 seconds)
-                entity.setPortalCooldown(300);
+                // Set timer to -1 to indicate "just teleported"
+                // This flag prevents immediate re-evaluation on the next tick
+                // and allows the state machine to transition: -1 → 1 (arrival portal)
+                PORTAL_TIMERS.put(entityId, -1);
 
                 ChronoDawn.LOGGER.info("Entity {} teleported through portal at {} in dimension {} after {} ticks",
                     entity.getName().getString(), pos, level.dimension().location(), portalTime);
