@@ -37,7 +37,7 @@ public class ChronoMelonStemBlock extends StemBlock {
 
     public ChronoMelonStemBlock(Properties properties) {
         super(
-            (net.minecraft.world.level.block.StemGrownBlock) ModBlocks.CHRONO_MELON.get(),  // Fruit block instance
+            (net.minecraft.world.level.block.StemGrownBlock) ModBlocks.CHRONO_MELON.get(),  // Fruit block instance (now implements StemGrownBlock)
             ModItems.CHRONO_MELON_SEEDS,  // Seed item supplier
             properties
         );

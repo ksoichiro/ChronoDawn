@@ -332,3 +332,111 @@ Session total: ~112,000 / 200,000 tokens (56% used)
    - In-game dimension teleportation test
    - Feature verification in both versions
    - Game test execution
+
+---
+
+## Continuation (2026-01-10 continued)
+
+### Part 7: Runtime Fixes - ChronoMelonBlock and TreeDecoratorType
+
+**Startup Issues Resolution**
+
+#### Issue 6: ChronoMelonBlock ClassCastException (Fixed ✅)
+- **Problem**: `ChronoMelonBlock cannot be cast to StemGrownBlock` at runtime
+- **Error**: `ClassCastException: class com.chronodawn.blocks.ChronoMelonBlock cannot be cast to class net.minecraft.world.level.block.StemGrownBlock`
+- **Root Cause**: `StemBlock` constructor signature differs between versions
+  - 1.20.1: Requires `StemGrownBlock` instance (abstract class)
+  - 1.21.1: Requires `ResourceKey<Block>` (getKey() method)
+- **Solution**: Separated `ChronoMelonBlock` into version-specific directories
+  - Created `common/src/main/java/com/chronodawn/compat/v1_20_1/blocks/ChronoMelonBlock.java`
+    - Extends `StemGrownBlock` (abstract class in 1.20.1)
+    - Implements `getStem()` and `getAttachedStem()` methods
+  - Created `common/src/main/java/com/chronodawn/compat/v1_21_1/blocks/ChronoMelonBlock.java`
+    - Extends `Block` (no StemGrownBlock needed in 1.21.1)
+  - Updated `ChronoMelonStemBlock` and `AttachedChronoMelonStemBlock` constructors for both versions
+  - Added import to `ModBlocks.java`: `import com.chronodawn.blocks.ChronoMelonBlock;`
+
+#### Issue 7: TreeDecoratorType NoSuchMethodException (Fixed ✅)
+- **Problem**: `NoSuchMethodException: net.minecraft.world.level.levelgen.feature.treedecorators.TreeDecoratorType.<init>(com.mojang.serialization.MapCodec)`
+- **Root Cause**: `TreeDecoratorType` constructor signature changed between versions
+  - 1.20.1: Takes `Codec` parameter
+  - 1.21.1: Takes `MapCodec` parameter
+- **Solution**: Separated `FruitDecorator` and `ModTreeDecoratorTypes` into version-specific directories
+  - **FruitDecorator**:
+    - 1.20.1 version: Uses `Codec<FruitDecorator>`
+    - 1.21.1 version: Uses `MapCodec<FruitDecorator>`
+  - **ModTreeDecoratorTypes**:
+    - 1.20.1 version: Reflection with `Codec.class` parameter
+    - 1.21.1 version: Reflection with `MapCodec.class` parameter
+  - Created directories:
+    - `common/src/main/java/com/chronodawn/compat/v1_20_1/worldgen/decorators/`
+    - `common/src/main/java/com/chronodawn/compat/v1_21_1/worldgen/decorators/`
+    - `common/src/main/java/com/chronodawn/compat/v1_20_1/registry/`
+    - `common/src/main/java/com/chronodawn/compat/v1_21_1/registry/`
+
+### Build Status (2026-01-10 Final)
+
+- ✅ **1.20.1 (Fabric)**: BUILD SUCCESSFUL
+  - JAR: `chronodawn-0.2.0-beta+1.20.1-fabric.jar` (9.2M)
+  - **Startup**: ✅ SUCCESS
+  - **World Generation**: ⚠️ CRASHES (under investigation)
+- ✅ **1.21.1 (Fabric + NeoForge)**: BUILD SUCCESSFUL
+  - JAR: `chronodawn-0.2.0-beta+1.21.1-fabric.jar` (9.3M)
+  - JAR: `chronodawn-0.2.0-beta+1.21.1-neoforge.jar` (9.3M)
+  - **Startup**: Not tested yet
+
+### Runtime Status
+
+- ✅ **Dependencies**: All resolved
+- ✅ **Mod Loading**: Success
+- ✅ **Startup (1.20.1)**: Success (Main menu loads)
+- ⚠️ **World Generation**: Crashes during world creation (needs investigation)
+
+### Modified Files Summary (Part 7)
+
+1. **`common/src/main/java/com/chronodawn/compat/v1_20_1/blocks/ChronoMelonBlock.java`** (New)
+   - Extends `StemGrownBlock` for 1.20.1 compatibility
+
+2. **`common/src/main/java/com/chronodawn/compat/v1_21_1/blocks/ChronoMelonBlock.java`** (New)
+   - Extends `Block` (standard implementation for 1.21.1)
+
+3. **`common/src/main/java/com/chronodawn/compat/v1_20_1/blocks/ChronoMelonStemBlock.java`** (Modified)
+   - Changed constructor to use `.get()` and cast to `StemGrownBlock`
+
+4. **`common/src/main/java/com/chronodawn/compat/v1_20_1/blocks/AttachedChronoMelonStemBlock.java`** (Modified)
+   - Changed constructor to use `.get()` and cast to `StemGrownBlock`
+
+5. **`common/src/main/java/com/chronodawn/compat/v1_20_1/worldgen/decorators/FruitDecorator.java`** (New)
+   - Uses `Codec<FruitDecorator>` instead of `MapCodec`
+
+6. **`common/src/main/java/com/chronodawn/compat/v1_21_1/worldgen/decorators/FruitDecorator.java`** (New)
+   - Uses `MapCodec<FruitDecorator>` (original implementation)
+
+7. **`common/src/main/java/com/chronodawn/compat/v1_20_1/registry/ModTreeDecoratorTypes.java`** (New)
+   - Reflection uses `Codec.class` parameter
+
+8. **`common/src/main/java/com/chronodawn/compat/v1_21_1/registry/ModTreeDecoratorTypes.java`** (New)
+   - Reflection uses `MapCodec.class` parameter (original implementation)
+
+9. **`common/src/main/java/com/chronodawn/registry/ModBlocks.java`** (Modified)
+   - Added import: `import com.chronodawn.blocks.ChronoMelonBlock;`
+
+10. **Deleted files**:
+    - `common/src/main/java/com/chronodawn/blocks/ChronoMelonBlock.java` (moved to version-specific)
+    - `common/src/main/java/com/chronodawn/worldgen/decorators/FruitDecorator.java` (moved to version-specific)
+    - `common/src/main/java/com/chronodawn/registry/ModTreeDecoratorTypes.java` (moved to version-specific)
+
+### Token Usage
+
+Session total: ~85,000 / 200,000 tokens (42.5% used)
+
+### Next Steps
+
+1. **Investigate world generation crash** (highest priority)
+   - Analyze crash log to identify root cause
+   - Likely related to worldgen features, biomes, or structures
+2. **Test 1.21.1 startup and world generation**
+3. **Phase 6: Integration Testing** after crash resolution
+   - Verify dimension teleportation
+   - Test all features in both versions
+   - Run game tests
