@@ -44,6 +44,13 @@ import java.util.*;
  */
 public class PortalTeleportHandler {
     /**
+     * Tracks the last dimension each entity arrived at after teleportation.
+     * Used to prevent re-teleporting to the same dimension until entity changes dimensions.
+     * Map: Entity UUID -> Last arrival dimension
+     */
+    private static final Map<UUID, ResourceKey<Level>> LAST_ARRIVAL_DIMENSION = new HashMap<>();
+
+    /**
      * Portal search radius (blocks) around destination coordinates.
      */
     private static final int PORTAL_SEARCH_RADIUS = 16;
@@ -57,6 +64,86 @@ public class PortalTeleportHandler {
      * Maximum Y level for portal generation.
      */
     private static final int MAX_PORTAL_Y = 100;
+
+    /**
+     * Check if entity can teleport from the current dimension.
+     * Prevents re-teleportation while still in the dimension they just arrived in.
+     *
+     * @param entityId Entity UUID
+     * @param currentDimension Current dimension the entity is in
+     * @return true if teleportation is allowed
+     */
+    public static boolean canTeleportFromDimension(UUID entityId, ResourceKey<Level> currentDimension) {
+        ResourceKey<Level> lastArrivalDim = LAST_ARRIVAL_DIMENSION.get(entityId);
+        if (lastArrivalDim == null) {
+            // No previous teleport record, allow teleportation
+            return true;
+        }
+
+        // Allow teleportation only if current dimension is different from last arrival dimension
+        // This prevents re-teleporting while still in the dimension you just arrived in
+        return !lastArrivalDim.equals(currentDimension);
+    }
+
+    /**
+     * Record the dimension the entity just arrived at.
+     *
+     * @param entityId Entity UUID
+     * @param arrivalDimension Dimension the entity arrived at
+     */
+    private static void recordArrivalDimension(UUID entityId, ResourceKey<Level> arrivalDimension) {
+        LAST_ARRIVAL_DIMENSION.put(entityId, arrivalDimension);
+        ChronoDawn.LOGGER.debug("Recorded arrival dimension {} for entity {}",
+            arrivalDimension.location(), entityId);
+    }
+
+    /**
+     * Clear the arrival dimension record for an entity.
+     * Called when entity exits a portal.
+     *
+     * @param entityId Entity UUID
+     */
+    public static void clearArrivalDimension(UUID entityId) {
+        LAST_ARRIVAL_DIMENSION.remove(entityId);
+    }
+
+    /**
+     * Clean up stale arrival dimension records.
+     * Removes records for entities that no longer exist or are not in portals.
+     *
+     * @param server Minecraft server
+     */
+    public static void cleanupStaleArrivalRecords(net.minecraft.server.MinecraftServer server) {
+        LAST_ARRIVAL_DIMENSION.entrySet().removeIf(entry -> {
+            UUID entityId = entry.getKey();
+
+            // Find entity across all dimensions
+            Entity entity = null;
+            for (ServerLevel level : server.getAllLevels()) {
+                entity = level.getEntity(entityId);
+                if (entity != null) break;
+            }
+
+            if (entity == null) {
+                // Entity doesn't exist anymore
+                ChronoDawn.LOGGER.debug("Cleared arrival dimension for non-existent entity {}", entityId);
+                return true;
+            }
+
+            // Check if entity is still in a portal
+            BlockPos entityPos = entity.blockPosition();
+            BlockState stateAtEntity = entity.level().getBlockState(entityPos);
+
+            if (!stateAtEntity.is(ModBlocks.CHRONO_DAWN_PORTAL.get())) {
+                // Entity is no longer in a portal, clear the record
+                ChronoDawn.LOGGER.debug("Cleared arrival dimension for entity {} - not in portal",
+                    entity.getName().getString());
+                return true;
+            }
+
+            return false;
+        });
+    }
 
     /**
      * Teleport an entity through a ChronoDawn portal.
@@ -156,6 +243,7 @@ public class PortalTeleportHandler {
         }
 
         // Mark ChronoDawn entered (if entering ChronoDawn for first time)
+        boolean portalWasDestroyed = false;
         if (destDimensionKey.equals(ModDimensions.CHRONO_DAWN_DIMENSION)) {
             ChronoDawnGlobalState globalState = ChronoDawnGlobalState.get(server);
             globalState.markChronoDawnEntered();
@@ -164,7 +252,18 @@ public class PortalTeleportHandler {
             if (globalState.arePortalsUnstable()) {
                 destroyUnstablePortal(destLevel, destPortalPos);
                 ChronoDawn.LOGGER.info("Destroyed unstable portal at {} in ChronoDawn dimension", destPortalPos);
+                portalWasDestroyed = true;
             }
+        }
+
+        // Record arrival dimension to prevent immediate re-teleportation to same dimension
+        // CRITICAL: Only record if portal was NOT destroyed
+        // If portal is destroyed, player is no longer "in portal" so no need to prevent re-entry
+        if (!portalWasDestroyed) {
+            recordArrivalDimension(player.getUUID(), destDimensionKey);
+        } else {
+            ChronoDawn.LOGGER.info("Skipped recording arrival dimension for {} - portal was destroyed",
+                player.getName().getString());
         }
 
         return true;
@@ -571,6 +670,19 @@ public class PortalTeleportHandler {
                 1.0F
             );
             ChronoDawn.LOGGER.info("Destroyed {} unstable portal blocks with glass break sound", visited.size());
+
+            // Clear arrival dimension records for all players near the destroyed portal
+            // This is critical - when portal is destroyed, players are no longer "in portal"
+            // but the cleanup doesn't run immediately, so we clear it here
+            double searchRadius = 10.0; // blocks
+            for (Entity entity : level.getEntitiesOfClass(Entity.class,
+                    new net.minecraft.world.phys.AABB(portalPos).inflate(searchRadius))) {
+                if (entity instanceof net.minecraft.server.level.ServerPlayer) {
+                    clearArrivalDimension(entity.getUUID());
+                    ChronoDawn.LOGGER.info("Cleared arrival dimension for {} - portal destroyed",
+                        entity.getName().getString());
+                }
+            }
         }
     }
 }

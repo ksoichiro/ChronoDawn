@@ -97,17 +97,18 @@ public class ChronoDawnPortalBlock extends Block {
     private static final Map<UUID, Integer> PORTAL_TIMERS = new HashMap<>();
 
     /**
-     * Tracks the last portal position and dimension each entity teleported from.
-     * Used to prevent re-teleporting from the same portal until entity exits.
-     * Map: Entity UUID -> Last portal location (dimension + position)
+     * Tracks the last portal position each entity was in.
+     * Used for detecting when entities exit portals for immediate cleanup.
+     * Map: Entity UUID -> Last portal position
      */
-    private static final Map<UUID, PortalLocation> LAST_TELEPORT_PORTAL = new HashMap<>();
+    private static final Map<UUID, BlockPos> LAST_PORTAL_POSITION = new HashMap<>();
 
     /**
-     * Simple record to store portal location (dimension + position).
+     * Tracks the last game tick when entityInside() was called for each entity.
+     * Used to detect when entities exit and re-enter portals (tick gap > 20).
+     * Map: Entity UUID -> Last tick time
      */
-    private record PortalLocation(net.minecraft.resources.ResourceKey<Level> dimension, BlockPos pos) {
-    }
+    private static final Map<UUID, Long> LAST_INSIDE_TICK = new HashMap<>();
 
     /**
      * Portal color - Orange (#db8813 / RGB 219, 136, 19).
@@ -161,7 +162,9 @@ public class ChronoDawnPortalBlock extends Block {
     }
 
     /**
-     * Clean up portal timer entries for entities that no longer exist or are far from portals.
+     * Clean up portal timer entries for entities that no longer exist.
+     * This is a fallback cleanup for edge cases (e.g., server restart, entity death).
+     * Main cleanup happens in entityInside() via tick gap detection.
      *
      * @param level Server level
      */
@@ -169,34 +172,29 @@ public class ChronoDawnPortalBlock extends Block {
         PORTAL_TIMERS.entrySet().removeIf(entry -> {
             UUID entityId = entry.getKey();
             Entity entity = findEntityInAllDimensions(level.getServer(), entityId);
-            // Remove if entity doesn't exist anymore
+            if (entity == null) {
+                // Entity no longer exists, clear all records
+                LAST_PORTAL_POSITION.remove(entityId);
+                LAST_INSIDE_TICK.remove(entityId);
+                com.chronodawn.core.portal.PortalTeleportHandler.clearArrivalDimension(entityId);
+                return true;
+            }
+            return false;
+        });
+
+        // Also clean up LAST_PORTAL_POSITION and LAST_INSIDE_TICK for entities that no longer exist
+        LAST_PORTAL_POSITION.entrySet().removeIf(entry -> {
+            Entity entity = findEntityInAllDimensions(level.getServer(), entry.getKey());
             return entity == null;
         });
 
-        // Clean up LAST_TELEPORT_PORTAL for entities no longer in portals
-        LAST_TELEPORT_PORTAL.entrySet().removeIf(entry -> {
-            UUID entityId = entry.getKey();
-            PortalLocation lastPortalLoc = entry.getValue();
-            Entity entity = findEntityInAllDimensions(level.getServer(), entityId);
-
-            if (entity == null) {
-                // Entity doesn't exist anymore
-                return true;
-            }
-
-            // Check if entity is still inside a portal block
-            BlockPos entityPos = entity.blockPosition();
-            BlockState stateAtEntity = entity.level().getBlockState(entityPos);
-
-            // If entity is no longer in a portal, or is in a different dimension/portal, clear the record
-            if (!stateAtEntity.is(ModBlocks.CHRONO_DAWN_PORTAL.get()) ||
-                !entity.level().dimension().equals(lastPortalLoc.dimension()) ||
-                entityPos.distSqr(lastPortalLoc.pos()) > 25) {
-                return true;
-            }
-
-            return false;
+        LAST_INSIDE_TICK.entrySet().removeIf(entry -> {
+            Entity entity = findEntityInAllDimensions(level.getServer(), entry.getKey());
+            return entity == null;
         });
+
+        // Clean up arrival dimension records in PortalTeleportHandler (for deleted entities)
+        com.chronodawn.core.portal.PortalTeleportHandler.cleanupStaleArrivalRecords(level.getServer());
     }
 
     /**
@@ -281,23 +279,81 @@ public class ChronoDawnPortalBlock extends Block {
 
         UUID entityId = entity.getUUID();
 
-        // Check if entity recently teleported from this same portal
-        // Prevent re-teleport until entity exits the portal
-        PortalLocation lastPortalLoc = LAST_TELEPORT_PORTAL.get(entityId);
-        if (lastPortalLoc != null && isSamePortal(lastPortalLoc, level.dimension(), pos)) {
-            // Entity is still in the same portal they teleported from
-            // Reset timer to prevent re-teleport
+        // Get current game time for re-entry detection
+        long currentTick = level.getGameTime();
+        BlockPos lastPortalPos = LAST_PORTAL_POSITION.get(entityId);
+        Long lastTick = LAST_INSIDE_TICK.get(entityId);
+
+        // CRITICAL: Detect portal exit and re-entry
+        boolean exitedAndReentered = false;
+
+        // Case 1: Entity moved to a different portal (distance-based)
+        // Use distance > 25 (5+ blocks) to distinguish between:
+        // - Same portal movement (player moving within 2x3 portal interior)
+        // - Different portal (player teleported or walked to another portal)
+        if (lastPortalPos != null && lastPortalPos.distSqr(pos) > 25) {
+            // Different portal - clear records and reset timer
+            com.chronodawn.core.portal.PortalTeleportHandler.clearArrivalDimension(entityId);
             PORTAL_TIMERS.remove(entityId);
-            ChronoDawn.LOGGER.debug("Prevented re-teleport for {} - still in same portal at {}",
-                entity.getName().getString(), pos);
-            return;
+            exitedAndReentered = true;
+            ChronoDawn.LOGGER.debug("Entity {} moved to different portal (distance > 5 blocks), cleared arrival record",
+                entity.getName().getString());
         }
+        // Case 2: Same portal area, but tick gap > 20 (1 second)
+        // This means player exited portal and re-entered
+        else if (lastPortalPos != null && lastTick != null && currentTick - lastTick > 20) {
+            // Exited and re-entered same portal - clear records and reset timer
+            com.chronodawn.core.portal.PortalTeleportHandler.clearArrivalDimension(entityId);
+            PORTAL_TIMERS.remove(entityId);
+            exitedAndReentered = true;
+            ChronoDawn.LOGGER.debug("Entity {} exited and re-entered portal (tick gap: {}), cleared arrival record",
+                entity.getName().getString(), currentTick - lastTick);
+        }
+
+        // Update tracking maps
+        LAST_PORTAL_POSITION.put(entityId, pos.immutable());
+        LAST_INSIDE_TICK.put(entityId, currentTick);
 
         // Check portal cooldown (prevents instant re-teleport)
         if (entity.getPortalCooldown() > 0) {
-            // Reset portal timer if on cooldown
-            PORTAL_TIMERS.remove(entityId);
+            // Set special value (-1) to indicate "in cooldown"
+            // This helps distinguish between "just exited cooldown" vs "re-entered portal"
+            PORTAL_TIMERS.put(entityId, -1);
             return;
+        }
+
+        // Check if entity can teleport from current dimension
+        // This prevents re-teleporting while still in the dimension they just arrived in
+        if (!com.chronodawn.core.portal.PortalTeleportHandler.canTeleportFromDimension(entityId, level.dimension())) {
+            // Entity is still in the dimension they just arrived in
+            int currentTimer = PORTAL_TIMERS.getOrDefault(entityId, 0);
+
+            if (currentTimer == -1) {
+                // Cooldown just expired, still in arrival portal
+                // Set timer to 1 to prevent re-teleport while standing still
+                PORTAL_TIMERS.put(entityId, 1);
+                ChronoDawn.LOGGER.debug("Prevented re-teleport for {} - cooldown just ended, still in arrival dimension",
+                    entity.getName().getString());
+                return;
+            } else if (currentTimer == 0) {
+                // CRITICAL: Timer is 0, meaning either:
+                // (a) First time entering this portal, OR
+                // (b) Exited and re-entered quickly (tick gap < 20, not detected by tick gap check above)
+                //
+                // This is a fallback for rapid re-entry (< 1 second)
+                // Clear the arrival record now to allow teleportation
+                com.chronodawn.core.portal.PortalTeleportHandler.clearArrivalDimension(entityId);
+                ChronoDawn.LOGGER.debug("Cleared arrival dimension for {} - rapid re-entry",
+                    entity.getName().getString());
+                // Don't return - allow timer to start and teleportation to proceed
+            } else {
+                // Timer >= 1 = still in arrival portal, prevent re-teleport
+                // Keep timer at 1 to maintain "still in portal" state
+                PORTAL_TIMERS.put(entityId, 1);
+                ChronoDawn.LOGGER.debug("Prevented re-teleport for {} - still in arrival dimension {}",
+                    entity.getName().getString(), level.dimension().location());
+                return;
+            }
         }
 
         // Increment portal timer for this entity
@@ -314,9 +370,6 @@ public class ChronoDawnPortalBlock extends Block {
                 // Reset portal timer
                 PORTAL_TIMERS.remove(entityId);
 
-                // Record this portal (dimension + position) to prevent immediate re-entry
-                LAST_TELEPORT_PORTAL.put(entityId, new PortalLocation(level.dimension(), pos.immutable()));
-
                 // Set portal cooldown (300 ticks = 15 seconds)
                 entity.setPortalCooldown(300);
 
@@ -327,27 +380,6 @@ public class ChronoDawnPortalBlock extends Block {
                 PORTAL_TIMERS.remove(entityId);
             }
         }
-    }
-
-    /**
-     * Check if two portal locations (dimension + position) belong to the same portal.
-     * Portals are considered the same if they're in the same dimension and within 5 blocks of each other.
-     *
-     * @param lastPortalLoc Last portal location (dimension + position)
-     * @param currentDimension Current dimension
-     * @param currentPos Current portal block position
-     * @return true if locations are part of the same portal
-     */
-    private boolean isSamePortal(PortalLocation lastPortalLoc,
-                                  net.minecraft.resources.ResourceKey<Level> currentDimension,
-                                  BlockPos currentPos) {
-        // Must be in same dimension
-        if (!lastPortalLoc.dimension().equals(currentDimension)) {
-            return false;
-        }
-
-        // Must be within 5 blocks of each other
-        return lastPortalLoc.pos().distSqr(currentPos) <= 25; // 5^2 = 25
     }
 
     @Override
