@@ -81,6 +81,15 @@ public class PortalTeleportHandler {
             sourceAxis = sourcePortalState.getValue(com.chronodawn.blocks.ChronoDawnPortalBlock.AXIS);
         }
 
+        // Find source portal frame position from PortalRegistry
+        // This ensures we use consistent frame bottom-left coordinates for 1:1 mapping
+        BlockPos sourceFramePos = findSourcePortalFrame(sourceLevel, sourcePortalPos);
+        if (sourceFramePos == null) {
+            ChronoDawn.LOGGER.warn("Could not find portal frame for portal block at {}, using block position as fallback",
+                sourcePortalPos);
+            sourceFramePos = sourcePortalPos;
+        }
+
         // Determine destination dimension
         ResourceKey<Level> destDimensionKey = getDestinationDimension(sourceLevel.dimension());
         ServerLevel destLevel = server.getLevel(destDimensionKey);
@@ -90,8 +99,8 @@ public class PortalTeleportHandler {
             return false;
         }
 
-        // Calculate destination coordinates (1:1 mapping)
-        BlockPos destCoords = calculateDestinationCoords(sourcePortalPos);
+        // Calculate destination coordinates (1:1 mapping using frame position)
+        BlockPos destCoords = calculateDestinationCoords(sourceFramePos);
 
         // Search for existing portal at destination
         Optional<BlockPos> existingPortal = findNearbyPortal(destLevel, destCoords);
@@ -157,6 +166,44 @@ public class PortalTeleportHandler {
     }
 
     /**
+     * Find source portal frame position from PortalRegistry.
+     * This ensures consistent coordinate mapping based on frame bottom-left position.
+     *
+     * @param level Source level
+     * @param portalBlockPos Portal block position (where player collided)
+     * @return Frame bottom-left position, or null if not found
+     */
+    private static BlockPos findSourcePortalFrame(ServerLevel level, BlockPos portalBlockPos) {
+        // Search for portals in this dimension
+        Set<UUID> portalsInDimension = PortalRegistry.getInstance().getPortalsInDimension(level.dimension());
+
+        for (UUID portalId : portalsInDimension) {
+            PortalStateMachine portal = PortalRegistry.getInstance().getPortal(portalId);
+            if (portal == null) {
+                continue;
+            }
+
+            BlockPos framePos = portal.getPosition();
+
+            // Check if portal block is within this portal's area (5x5x5 from frame bottom-left)
+            for (int dx = 0; dx <= 5; dx++) {
+                for (int dy = 0; dy <= 5; dy++) {
+                    for (int dz = 0; dz <= 5; dz++) {
+                        BlockPos checkPos = framePos.offset(dx, dy, dz);
+                        if (checkPos.equals(portalBlockPos)) {
+                            ChronoDawn.LOGGER.info("Found source portal frame at {} for portal block at {}",
+                                framePos, portalBlockPos);
+                            return framePos;
+                        }
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Get the destination dimension based on source dimension.
      *
      * @param sourceDimension Source dimension key
@@ -175,22 +222,23 @@ public class PortalTeleportHandler {
     /**
      * Calculate destination coordinates (1:1 X/Z mapping, Y will be adjusted to ground level).
      *
-     * @param sourcePos Source portal position
+     * @param sourceFramePos Source portal frame bottom-left position
      * @return Destination coordinates (X/Z only, Y will be determined by ground search)
      */
-    private static BlockPos calculateDestinationCoords(BlockPos sourcePos) {
+    private static BlockPos calculateDestinationCoords(BlockPos sourceFramePos) {
         // 1:1 coordinate mapping for X and Z (no scaling like Nether Portal)
+        // Use frame bottom-left position to ensure consistent portal alignment
         // Y coordinate will be determined by findGroundLevel() when generating portal
         // Start search from high position (Y=150) to find surface, not underground caves
-        return new BlockPos(sourcePos.getX(), 150, sourcePos.getZ());
+        return new BlockPos(sourceFramePos.getX(), 150, sourceFramePos.getZ());
     }
 
     /**
      * Find a nearby portal at destination coordinates.
      *
      * @param level Destination level
-     * @param coords Destination coordinates
-     * @return Portal position if found, empty otherwise
+     * @param coords Destination coordinates (expected to be frame bottom-left position)
+     * @return Portal block position if found, empty otherwise
      */
     private static Optional<BlockPos> findNearbyPortal(ServerLevel level, BlockPos coords) {
         // First, try to find existing portals using PortalRegistry
@@ -271,9 +319,9 @@ public class PortalTeleportHandler {
      * Finds ground level and places portal on solid ground.
      *
      * @param level Destination level
-     * @param coords Destination coordinates (X, Z, Y is initial search point)
-     * @param axis Portal axis (X or Z)
-     * @return Portal position if generated, null if failed
+     * @param coords Destination coordinates (expected X/Z for frame bottom-left, Y is initial search point)
+     * @param axis Portal axis (X or Z) - should match source portal axis
+     * @return Portal frame bottom-left position if generated, null if failed
      */
     private static BlockPos generatePortal(ServerLevel level, BlockPos coords, Direction.Axis axis) {
         // Find ground level starting from coords.y
