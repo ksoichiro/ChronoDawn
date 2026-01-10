@@ -358,6 +358,10 @@
 
   "item.chronodawn.chronicle_book": "クロノドーンの記録",
 
+  "message.chronodawn.portal.unstable": "ポータルフレームは暗いまま - 時間そのものがあなたの試みに抵抗しているようだ",
+  "message.chronodawn.portal.invalid_frame": "有効なポータルフレームが検出されませんでした",
+  "message.chronodawn.portal.ignited": "ポータルが正常に点火されました！",
+
   "gui.chronodawn.chronicle.title": "クロノドーンの記録",
   "gui.chronodawn.chronicle.previous": "前へ",
   "gui.chronodawn.chronicle.next": "次へ",

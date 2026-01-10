@@ -107,6 +107,8 @@ public class PortalFrameValidator {
     /**
      * Validate the entire frame structure.
      *
+     * Like Nether Portal, corners are optional - only edges need to be Clockstone Blocks.
+     *
      * @param level The level
      * @param bottomLeft Bottom-left corner position
      * @param horizontal Horizontal direction
@@ -118,25 +120,37 @@ public class PortalFrameValidator {
     private static boolean validateFrameStructure(Level level, BlockPos bottomLeft, Direction horizontal,
                                                     Direction vertical, int width, int height) {
         Set<BlockPos> framePositions = new HashSet<>();
+        Set<BlockPos> cornerPositions = new HashSet<>();
 
-        // Collect all frame positions (edges only)
-        // Bottom edge
-        for (int x = 0; x < width; x++) {
+        // Identify corner positions (these are optional)
+        BlockPos bottomLeftCorner = bottomLeft;
+        BlockPos bottomRightCorner = bottomLeft.relative(horizontal, width - 1);
+        BlockPos topLeftCorner = bottomLeft.relative(vertical, height - 1);
+        BlockPos topRightCorner = bottomLeft.relative(horizontal, width - 1).relative(vertical, height - 1);
+
+        cornerPositions.add(bottomLeftCorner);
+        cornerPositions.add(bottomRightCorner);
+        cornerPositions.add(topLeftCorner);
+        cornerPositions.add(topRightCorner);
+
+        // Collect all frame positions (edges only, excluding corners)
+        // Bottom edge (excluding corners)
+        for (int x = 1; x < width - 1; x++) {
             framePositions.add(bottomLeft.relative(horizontal, x));
         }
 
-        // Top edge
-        for (int x = 0; x < width; x++) {
+        // Top edge (excluding corners)
+        for (int x = 1; x < width - 1; x++) {
             framePositions.add(bottomLeft.relative(horizontal, x).relative(vertical, height - 1));
         }
 
-        // Left edge
-        for (int y = 0; y < height; y++) {
+        // Left edge (excluding corners)
+        for (int y = 1; y < height - 1; y++) {
             framePositions.add(bottomLeft.relative(vertical, y));
         }
 
-        // Right edge
-        for (int y = 0; y < height; y++) {
+        // Right edge (excluding corners)
+        for (int y = 1; y < height - 1; y++) {
             framePositions.add(bottomLeft.relative(horizontal, width - 1).relative(vertical, y));
         }
 

@@ -101,7 +101,7 @@ public class ChronoDawnPortalBlock extends Block {
     public static BlockBehaviour.Properties createProperties() {
         return BlockBehaviour.Properties.of()
                 .noCollission()      // Entities pass through
-                // .randomTicks()       // TODO Phase 2: Enable after portal ignition implementation
+                .randomTicks()       // Validate portal frame integrity
                 .strength(-1.0F)     // Unbreakable by normal means
                 .lightLevel((state) -> 11)  // Orange glow (similar to Nether Portal)
                 .noLootTable();      // Don't drop items when destroyed
@@ -129,28 +129,42 @@ public class ChronoDawnPortalBlock extends Block {
     /**
      * Check if this portal block has a valid frame.
      *
+     * A portal block is valid if it has at least one frame block or portal block
+     * in any of the 4 cardinal directions (up, down, left, right relative to portal plane).
+     *
      * @param level The level
      * @param pos Portal block position
      * @param axis Portal axis
      * @return true if portal frame is valid
      */
     private boolean isValidPortalPosition(Level level, BlockPos pos, Direction.Axis axis) {
-        // Check if adjacent blocks are Clockstone Block or other portal blocks
+        // Check horizontal adjacent blocks (perpendicular to portal axis)
         Direction.Axis otherAxis = axis == Direction.Axis.X ? Direction.Axis.Z : Direction.Axis.X;
-        Direction direction1 = Direction.get(Direction.AxisDirection.NEGATIVE, otherAxis);
-        Direction direction2 = Direction.get(Direction.AxisDirection.POSITIVE, otherAxis);
+        Direction horizontalNeg = Direction.get(Direction.AxisDirection.NEGATIVE, otherAxis);
+        Direction horizontalPos = Direction.get(Direction.AxisDirection.POSITIVE, otherAxis);
 
-        BlockPos adjacentPos1 = pos.relative(direction1);
-        BlockPos adjacentPos2 = pos.relative(direction2);
+        // Check vertical adjacent blocks
+        Direction up = Direction.UP;
+        Direction down = Direction.DOWN;
 
-        BlockState state1 = level.getBlockState(adjacentPos1);
-        BlockState state2 = level.getBlockState(adjacentPos2);
+        // Check all 4 cardinal directions around the portal block
+        BlockState stateHorizontalNeg = level.getBlockState(pos.relative(horizontalNeg));
+        BlockState stateHorizontalPos = level.getBlockState(pos.relative(horizontalPos));
+        BlockState stateUp = level.getBlockState(pos.relative(up));
+        BlockState stateDown = level.getBlockState(pos.relative(down));
 
-        // Valid if adjacent blocks are frame blocks or portal blocks
-        boolean valid1 = isFrameBlock(state1) || (state1.is(this) && state1.getValue(AXIS) == axis);
-        boolean valid2 = isFrameBlock(state2) || (state2.is(this) && state2.getValue(AXIS) == axis);
+        // Valid if any adjacent block is a frame block or portal block
+        boolean validHorizontalNeg = isFrameBlock(stateHorizontalNeg) ||
+                                     (stateHorizontalNeg.is(this) && stateHorizontalNeg.getValue(AXIS) == axis);
+        boolean validHorizontalPos = isFrameBlock(stateHorizontalPos) ||
+                                     (stateHorizontalPos.is(this) && stateHorizontalPos.getValue(AXIS) == axis);
+        boolean validUp = isFrameBlock(stateUp) ||
+                         (stateUp.is(this) && stateUp.getValue(AXIS) == axis);
+        boolean validDown = isFrameBlock(stateDown) ||
+                           (stateDown.is(this) && stateDown.getValue(AXIS) == axis);
 
-        return valid1 || valid2;
+        // Portal is valid if at least one adjacent block is a frame or portal block
+        return validHorizontalNeg || validHorizontalPos || validUp || validDown;
     }
 
     /**
