@@ -440,3 +440,154 @@ Session total: ~85,000 / 200,000 tokens (42.5% used)
    - Verify dimension teleportation
    - Test all features in both versions
    - Run game tests
+
+---
+
+## Continuation (2026-01-10 - Part 8: World Generation JSON Errors)
+
+### Issue 8: World Generation JSON Parse Errors (In Progress ⚠️)
+
+**Problem**: Multiple "Not a JSON object: null" errors during world generation
+
+**Error Pattern**:
+```
+> Errors in registry minecraft:dimension_type:
+>> Errors in element chronodawn:chronodawn:
+java.lang.IllegalStateException: Failed to parse chronodawn:dimension_type/chronodawn.json from pack fabric
+Caused by: java.lang.RuntimeException: Not a JSON object: null
+
+> Errors in registry minecraft:worldgen/configured_feature:
+>> Errors in element chronodawn:gravel_disk:
+Caused by: java.lang.RuntimeException: No key rules in MapLike; No key fallback in MapLike
+
+>> Errors in element chronodawn:ice_pillar:
+Caused by: java.lang.RuntimeException: Not a JSON object: null
+
+>> Errors in element chronodawn:sand_disk:
+Caused by: java.lang.RuntimeException: Not a JSON object: null
+
+> Errors in registry minecraft:worldgen/placed_feature:
+>> Errors in element chronodawn:boulder_placed:
+Caused by: java.lang.RuntimeException: Not a JSON object: null
+```
+
+**Affected Files**:
+- `dimension_type/chronodawn.json`
+- `worldgen/configured_feature/gravel_disk.json`
+- `worldgen/configured_feature/ice_pillar.json`
+- `worldgen/configured_feature/sand_disk.json`
+- `worldgen/placed_feature/boulder_placed.json`
+
+**Attempted Fixes**:
+1. ✅ **phantom_catacombs.json**: Changed `size: 12` → `size: 7` (Fixed - commit `8e35827`)
+   - Error: "Value 12 outside of range [0:7]"
+   - Status: Resolved
+
+2. ❌ **Attempt 1**: Simplified JSON structure (commit `e79ae98`)
+   - Removed `fallback`/`rules` from `state_provider`
+   - Removed `allowed_placement` from `block_column`
+   - Removed `fixed_time` from `dimension_type`
+   - Result: **FAILED** - Caused "No key rules/fallback" errors
+
+3. ❌ **Attempt 2**: Reverted to original structure (commit `d16f30e`)
+   - Restored `fallback`/`rules` in `state_provider`
+   - Restored `allowed_placement` in `block_column`
+   - Restored `fixed_time` in `dimension_type`
+   - Result: **FAILED** - Same "Not a JSON object: null" errors persist
+
+**Analysis**:
+- JSON files are **valid** and **present** in JAR
+- JSON content is **correct** (verified with `unzip -p`)
+- 1.20.1 and 1.21.1 use **identical** JSON structure
+- Error occurs at **runtime** during world generation, not at build time
+- Root cause appears to be **deeper than JSON format compatibility**
+
+**Possible Causes (To Investigate)**:
+1. **Resource Pack Priority**: Fabric may be loading resources in wrong order
+2. **Data Pack Format Version**: `pack_format: 18` (1.20.1) vs `pack_format: 48` (1.21.1)
+3. **Codec/Parser Changes**: Underlying Minecraft codec system changed between versions
+4. **Registry Timing**: Features registering before dependencies are available
+5. **Fabric API Compatibility**: Version 0.92.2+1.20.1 may have worldgen bugs
+
+**Investigation Steps for Next Session**:
+1. Check `pack.mcmeta` format version in both 1.20.1 and 1.21.1 resources
+2. Compare vanilla Minecraft worldgen JSON files for 1.20.1 structure
+3. Test with minimal worldgen features (disable most features, test one by one)
+4. Review Fabric API changelogs for worldgen-related bugs
+5. Check if other mods have similar issues with 1.20.1 worldgen
+
+### Build Status (2026-01-10 - End of Session)
+
+- ✅ **1.20.1 (Fabric)**: BUILD SUCCESSFUL
+  - JAR: `chronodawn-0.2.0-beta+1.20.1-fabric.jar` (9.2M)
+  - **Startup**: ✅ SUCCESS
+  - **World Generation**: ❌ CRASHES (JSON parse errors)
+- ✅ **1.21.1 (Fabric + NeoForge)**: BUILD SUCCESSFUL
+  - JAR: `chronodawn-0.2.0-beta+1.21.1-fabric.jar` (9.3M)
+  - JAR: `chronodawn-0.2.0-beta+1.21.1-neoforge.jar` (9.3M)
+  - **Startup**: Not tested yet
+  - **World Generation**: Not tested yet
+
+### Git Log (2026-01-10)
+
+```
+d16f30e fix: Revert to original JSON structure for 1.20.1 worldgen features
+e79ae98 fix: Fix 1.20.1 JSON format compatibility for worldgen features
+8e35827 fix: Adjust phantom_catacombs size for Minecraft 1.20.1
+7b028ea wip: Fix 1.20.1 runtime errors - ChronoMelonBlock and TreeDecoratorType
+```
+
+### Modified Files Summary (Part 8)
+
+**Reverted to Original Structure** (commit `d16f30e`):
+1. `common/src/main/resources-1.20.1/data/chronodawn/dimension_type/chronodawn.json`
+   - Has `fixed_time: false`
+2. `common/src/main/resources-1.20.1/data/chronodawn/worldgen/configured_feature/gravel_disk.json`
+   - Has `fallback` and `rules` in `state_provider`
+3. `common/src/main/resources-1.20.1/data/chronodawn/worldgen/configured_feature/sand_disk.json`
+   - Has `fallback` and `rules` in `state_provider`
+4. `common/src/main/resources-1.20.1/data/chronodawn/worldgen/configured_feature/ice_pillar.json`
+   - Has `allowed_placement` field
+
+**Permanent Fix**:
+- `common/src/main/resources-1.20.1/data/chronodawn/worldgen/structure/phantom_catacombs.json`
+  - `size: 7` (down from 12 to fit [0:7] range)
+
+### Token Usage
+
+Session total: ~110,000 / 200,000 tokens (55% used)
+
+### Status Summary
+
+**Completed**:
+- ✅ Phase 1-5: Multi-version build system working
+- ✅ Compilation errors: All resolved (0 errors)
+- ✅ Runtime startup: Working (menu loads)
+- ✅ ChronoMelonBlock ClassCastException: Fixed
+- ✅ TreeDecoratorType NoSuchMethodException: Fixed
+- ✅ phantom_catacombs size range: Fixed
+
+**In Progress**:
+- ⚠️ World generation JSON parse errors: Multiple files affected
+  - Requires deeper investigation into Minecraft 1.20.1 worldgen system
+  - May need to reference vanilla worldgen files for correct format
+  - May need to disable/simplify worldgen features temporarily
+
+**Not Started**:
+- 1.21.1 runtime testing
+- Phase 6: Integration testing
+- Game tests execution
+
+### Notes for Next Session
+
+1. **Priority**: Investigate worldgen JSON parse errors
+   - Focus on understanding 1.20.1 worldgen JSON format requirements
+   - Compare with vanilla Minecraft 1.20.1 worldgen files
+   - Consider creating minimal test case with single feature
+2. **Alternative Approach**: Temporarily disable problematic worldgen features
+   - Comment out feature registrations in biome JSON
+   - Test world generation with minimal features
+   - Add features back one by one to identify specific issue
+3. **Documentation**: Check Fabric API and Architectury documentation
+   - Worldgen differences between 1.20.1 and 1.21.1
+   - Known issues or migration guides
