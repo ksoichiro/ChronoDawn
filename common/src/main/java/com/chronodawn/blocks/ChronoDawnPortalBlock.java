@@ -85,10 +85,11 @@ public class ChronoDawnPortalBlock extends Block {
     protected static final VoxelShape Z_AXIS_AABB = Block.box(6.0, 0.0, 0.0, 10.0, 16.0, 16.0);
 
     /**
-     * Portal timer threshold (ticks) - same as Nether Portal.
-     * 80 ticks = 4 seconds
+     * Portal timer threshold (ticks) for survival mode.
+     * 120 ticks = 6 seconds (longer than Nether Portal's 4 seconds)
+     * Creative mode teleports immediately (no waiting time).
      */
-    private static final int PORTAL_TIME_THRESHOLD = 80;
+    private static final int PORTAL_TIME_THRESHOLD = 120;
 
     /**
      * Tracks entity portal states and teleportation progress.
@@ -98,8 +99,9 @@ public class ChronoDawnPortalBlock extends Block {
      * -1: Just teleported (transitions to 1 on next tick)
      * 0: Not in portal or re-entered after exit (allows teleportation)
      * 1: In arrival portal, preventing re-teleport (maintained while standing still)
-     * 2-79: Counting up to teleportation threshold
-     * 80+: Ready to teleport
+     * 2-119: Counting up to teleportation threshold (survival mode)
+     * 120+: Ready to teleport (survival mode)
+     * Note: Creative mode players teleport immediately regardless of state value
      */
     private static final Map<UUID, Integer> ENTITY_PORTAL_STATES = new HashMap<>();
 
@@ -361,8 +363,25 @@ public class ChronoDawnPortalBlock extends Block {
         stateValue++;
         ENTITY_PORTAL_STATES.put(entityId, stateValue);
 
+        // Check if entity should teleport
+        // Creative mode: teleport immediately (like vanilla Nether Portal)
+        // Survival mode: wait for threshold time
+        boolean shouldTeleport = false;
+        if (entity instanceof net.minecraft.server.level.ServerPlayer player) {
+            if (player.getAbilities().invulnerable) {
+                // Creative mode: teleport immediately
+                shouldTeleport = true;
+            } else {
+                // Survival mode: wait for threshold
+                shouldTeleport = stateValue >= PORTAL_TIME_THRESHOLD;
+            }
+        } else {
+            // Non-player entities: use threshold
+            shouldTeleport = stateValue >= PORTAL_TIME_THRESHOLD;
+        }
+
         // Only teleport after entity has been inside portal for threshold time
-        if (stateValue >= PORTAL_TIME_THRESHOLD) {
+        if (shouldTeleport) {
             // Attempt teleportation
             boolean success = com.chronodawn.core.portal.PortalTeleportHandler.teleportThroughPortal(entity, pos);
 
