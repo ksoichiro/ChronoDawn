@@ -97,6 +97,13 @@ public class ChronoDawnPortalBlock extends Block {
     private static final Map<UUID, Integer> PORTAL_TIMERS = new HashMap<>();
 
     /**
+     * Tracks the last portal position each entity teleported from.
+     * Used to prevent re-teleporting from the same portal until entity exits.
+     * Map: Entity UUID -> Last portal block position
+     */
+    private static final Map<UUID, BlockPos> LAST_TELEPORT_PORTAL = new HashMap<>();
+
+    /**
      * Portal color - Orange (#db8813 / RGB 219, 136, 19).
      * Represents time/temporal energy (clock hands, brass gears).
      */
@@ -155,10 +162,51 @@ public class ChronoDawnPortalBlock extends Block {
     private static void cleanupStalePortalTimers(ServerLevel level) {
         PORTAL_TIMERS.entrySet().removeIf(entry -> {
             UUID entityId = entry.getKey();
-            Entity entity = level.getServer().overworld().getEntity(entityId);
+            Entity entity = findEntityInAllDimensions(level.getServer(), entityId);
             // Remove if entity doesn't exist anymore
             return entity == null;
         });
+
+        // Clean up LAST_TELEPORT_PORTAL for entities no longer in portals
+        LAST_TELEPORT_PORTAL.entrySet().removeIf(entry -> {
+            UUID entityId = entry.getKey();
+            BlockPos lastPortalPos = entry.getValue();
+            Entity entity = findEntityInAllDimensions(level.getServer(), entityId);
+
+            if (entity == null) {
+                // Entity doesn't exist anymore
+                return true;
+            }
+
+            // Check if entity is still inside a portal block
+            BlockPos entityPos = entity.blockPosition();
+            BlockState stateAtEntity = entity.level().getBlockState(entityPos);
+
+            // If entity is no longer in a portal, or is in a different portal, clear the record
+            if (!stateAtEntity.is(ModBlocks.CHRONO_DAWN_PORTAL.get()) ||
+                entityPos.distSqr(lastPortalPos) > 25) {
+                return true;
+            }
+
+            return false;
+        });
+    }
+
+    /**
+     * Find an entity across all dimensions.
+     *
+     * @param server Minecraft server
+     * @param entityId Entity UUID
+     * @return Entity if found, null otherwise
+     */
+    private static Entity findEntityInAllDimensions(net.minecraft.server.MinecraftServer server, UUID entityId) {
+        for (ServerLevel level : server.getAllLevels()) {
+            Entity entity = level.getEntity(entityId);
+            if (entity != null) {
+                return entity;
+            }
+        }
+        return null;
     }
 
     /**
@@ -224,15 +272,26 @@ public class ChronoDawnPortalBlock extends Block {
             return;
         }
 
+        UUID entityId = entity.getUUID();
+
+        // Check if entity recently teleported from this same portal
+        // Prevent re-teleport until entity exits the portal
+        BlockPos lastPortalPos = LAST_TELEPORT_PORTAL.get(entityId);
+        if (lastPortalPos != null && isSamePortal(lastPortalPos, pos, level)) {
+            // Entity is still in the same portal they teleported from
+            // Reset timer to prevent re-teleport
+            PORTAL_TIMERS.remove(entityId);
+            return;
+        }
+
         // Check portal cooldown (prevents instant re-teleport)
         if (entity.getPortalCooldown() > 0) {
             // Reset portal timer if on cooldown
-            PORTAL_TIMERS.remove(entity.getUUID());
+            PORTAL_TIMERS.remove(entityId);
             return;
         }
 
         // Increment portal timer for this entity
-        UUID entityId = entity.getUUID();
         int portalTime = PORTAL_TIMERS.getOrDefault(entityId, 0);
         portalTime++;
         PORTAL_TIMERS.put(entityId, portalTime);
@@ -246,6 +305,9 @@ public class ChronoDawnPortalBlock extends Block {
                 // Reset portal timer
                 PORTAL_TIMERS.remove(entityId);
 
+                // Record this portal to prevent immediate re-entry
+                LAST_TELEPORT_PORTAL.put(entityId, pos.immutable());
+
                 // Set portal cooldown (300 ticks = 15 seconds)
                 entity.setPortalCooldown(300);
 
@@ -256,6 +318,20 @@ public class ChronoDawnPortalBlock extends Block {
                 PORTAL_TIMERS.remove(entityId);
             }
         }
+    }
+
+    /**
+     * Check if two portal block positions belong to the same portal.
+     * Positions are considered part of the same portal if they're within 5 blocks of each other.
+     *
+     * @param pos1 First portal block position
+     * @param pos2 Second portal block position
+     * @param level Level to check in
+     * @return true if positions are part of the same portal
+     */
+    private boolean isSamePortal(BlockPos pos1, BlockPos pos2, Level level) {
+        // Check if positions are close enough to be the same portal (within 5 blocks)
+        return pos1.distSqr(pos2) <= 25; // 5^2 = 25
     }
 
     @Override

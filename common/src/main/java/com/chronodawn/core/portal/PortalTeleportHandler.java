@@ -139,9 +139,14 @@ public class PortalTeleportHandler {
             sourceLevel.getRandom().nextFloat() * 0.4F + 0.8F
         );
 
-        // Teleport player to destination dimension
-        Vec3 destPosition = Vec3.atCenterOf(destPortalPos);
-        player.teleportTo(destLevel, destPosition.x, destPosition.y, destPosition.z, player.getYRot(), player.getXRot());
+        // Calculate safe teleport position
+        // Portal interior is 2x3 (width 2, height 3), place player at center
+        Vec3 destPosition = calculateSafeTeleportPosition(destPortalPos, sourceAxis);
+
+        // Calculate player rotation (face away from portal)
+        float destYRot = calculateTeleportRotation(sourceAxis);
+
+        player.teleportTo(destLevel, destPosition.x, destPosition.y, destPosition.z, destYRot, player.getXRot());
 
         // Update portal state (ACTIVATED → DEACTIVATED)
         PortalStateMachine sourcePortal = PortalRegistry.getInstance().getPortalAt(sourcePortalPos);
@@ -163,6 +168,54 @@ public class PortalTeleportHandler {
         }
 
         return true;
+    }
+
+    /**
+     * Calculate safe teleport position within portal.
+     * Places player at horizontal center of portal interior, just above ground.
+     *
+     * @param portalBlockPos Portal block position (one of the interior blocks)
+     * @param axis Portal axis
+     * @return Safe teleport position
+     */
+    private static Vec3 calculateSafeTeleportPosition(BlockPos portalBlockPos, Direction.Axis axis) {
+        // Portal interior is 2x3 (width 2, height 3)
+        // Place player at horizontal center, just above ground (y + 0.1)
+
+        if (axis == Direction.Axis.X) {
+            // X-axis portal: portal extends along X axis
+            // Center is at x+0.5, z+0.5 (middle of 2-wide area)
+            return new Vec3(
+                portalBlockPos.getX() + 0.5,
+                portalBlockPos.getY() + 0.1,  // Just above ground
+                portalBlockPos.getZ() + 0.5   // Center of portal width
+            );
+        } else {
+            // Z-axis portal: portal extends along Z axis
+            // Center is at x+0.5, z+0.5 (middle of 2-wide area)
+            return new Vec3(
+                portalBlockPos.getX() + 0.5,  // Center of portal width
+                portalBlockPos.getY() + 0.1,  // Just above ground
+                portalBlockPos.getZ() + 0.5
+            );
+        }
+    }
+
+    /**
+     * Calculate player rotation when exiting portal.
+     * Player should face away from portal plane.
+     *
+     * @param axis Portal axis
+     * @return Y rotation (degrees)
+     */
+    private static float calculateTeleportRotation(Direction.Axis axis) {
+        if (axis == Direction.Axis.X) {
+            // X-axis portal: face south (positive Z direction)
+            return 180.0F;
+        } else {
+            // Z-axis portal: face east (positive X direction)
+            return 90.0F;
+        }
     }
 
     /**
