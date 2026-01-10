@@ -15,9 +15,37 @@ import net.minecraft.resources.ResourceLocation;
  * Displays categories in the left sidebar and entry content on the right.
  */
 public class ChronicleScreen extends Screen {
-    // Use vanilla book texture as placeholder (no custom texture needed)
-    private static final ResourceLocation BOOK_TEXTURE =
-        ResourceLocation.fromNamespaceAndPath("minecraft", "textures/gui/book.png");
+    // Use 13-part parchment-style book textures for maximum flexibility (Nine-patch-like structure)
+    // Corners (4 parts - fixed size 16x16)
+    private static final ResourceLocation CORNER_TOP_LEFT =
+        ResourceLocation.fromNamespaceAndPath("chronodawn", "textures/gui/chronicle/corner_top_left.png");
+    private static final ResourceLocation CORNER_TOP_RIGHT =
+        ResourceLocation.fromNamespaceAndPath("chronodawn", "textures/gui/chronicle/corner_top_right.png");
+    private static final ResourceLocation CORNER_BOTTOM_LEFT =
+        ResourceLocation.fromNamespaceAndPath("chronodawn", "textures/gui/chronicle/corner_bottom_left.png");
+    private static final ResourceLocation CORNER_BOTTOM_RIGHT =
+        ResourceLocation.fromNamespaceAndPath("chronodawn", "textures/gui/chronicle/corner_bottom_right.png");
+    // Edges (4 parts - tileable 16x16)
+    private static final ResourceLocation EDGE_TOP =
+        ResourceLocation.fromNamespaceAndPath("chronodawn", "textures/gui/chronicle/edge_top.png");
+    private static final ResourceLocation EDGE_BOTTOM =
+        ResourceLocation.fromNamespaceAndPath("chronodawn", "textures/gui/chronicle/edge_bottom.png");
+    private static final ResourceLocation EDGE_LEFT =
+        ResourceLocation.fromNamespaceAndPath("chronodawn", "textures/gui/chronicle/edge_left.png");
+    private static final ResourceLocation EDGE_RIGHT =
+        ResourceLocation.fromNamespaceAndPath("chronodawn", "textures/gui/chronicle/edge_right.png");
+    // Pages (2 parts - stretchable 64x64)
+    private static final ResourceLocation PAGE_LEFT =
+        ResourceLocation.fromNamespaceAndPath("chronodawn", "textures/gui/chronicle/page_left.png");
+    private static final ResourceLocation PAGE_RIGHT =
+        ResourceLocation.fromNamespaceAndPath("chronodawn", "textures/gui/chronicle/page_right.png");
+    // Binding shadow (3 parts - top/middle/bottom for seamless corners)
+    private static final ResourceLocation BINDING_TOP =
+        ResourceLocation.fromNamespaceAndPath("chronodawn", "textures/gui/chronicle/binding_top.png");
+    private static final ResourceLocation BINDING_MIDDLE =
+        ResourceLocation.fromNamespaceAndPath("chronodawn", "textures/gui/chronicle/binding_middle.png");
+    private static final ResourceLocation BINDING_BOTTOM =
+        ResourceLocation.fromNamespaceAndPath("chronodawn", "textures/gui/chronicle/binding_bottom.png");
     private static final int BOOK_WIDTH = 320;
     private static final int BOOK_HEIGHT = 240;
 
@@ -109,14 +137,116 @@ public class ChronicleScreen extends Screen {
         // Layer 1: Render dark background (via our overridden renderBackground)
         renderBackground(graphics, mouseX, mouseY, partialTick);
 
-        // Layer 2: Render book background (sharp, no blur)
-        graphics.fill(leftPos, topPos, leftPos + BOOK_WIDTH, topPos + BOOK_HEIGHT, 0xFFF0E0D0);
+        // Layer 2: Render book background using 11-part parchment-style textures
+        // This Nine-patch-like structure allows precise positioning and easy customization
 
-        // Render book border (darker brown)
-        graphics.fill(leftPos, topPos, leftPos + BOOK_WIDTH, topPos + 2, 0xFF5C4033);
-        graphics.fill(leftPos, topPos + BOOK_HEIGHT - 2, leftPos + BOOK_WIDTH, topPos + BOOK_HEIGHT, 0xFF5C4033);
-        graphics.fill(leftPos, topPos, leftPos + 2, topPos + BOOK_HEIGHT, 0xFF5C4033);
-        graphics.fill(leftPos + BOOK_WIDTH - 2, topPos, leftPos + BOOK_WIDTH, topPos + BOOK_HEIGHT, 0xFF5C4033);
+        final int CORNER_SIZE = 16;
+        final int EDGE_SIZE = 16;
+        final int BINDING_WIDTH = 16;
+
+        // Calculate binding position (between left and right pages)
+        int bindingX = leftPos + categoryListWidth + 10; // Position after category list
+
+        // Calculate dimensions
+        int innerWidth = BOOK_WIDTH - (CORNER_SIZE * 2);
+        int innerHeight = BOOK_HEIGHT - (CORNER_SIZE * 2);
+        int leftPageWidth = bindingX - leftPos - CORNER_SIZE;
+        int rightPageWidth = BOOK_WIDTH - (bindingX - leftPos) - BINDING_WIDTH - CORNER_SIZE;
+
+        // === Render page backgrounds (behind everything) ===
+        // Left page background (stretched)
+        graphics.blit(
+            PAGE_LEFT,
+            leftPos + CORNER_SIZE, topPos + CORNER_SIZE,  // Position (inside borders)
+            0, 0,                                          // UV
+            leftPageWidth, innerHeight,                    // Size
+            64, 64                                         // Texture size
+        );
+
+        // Right page background (stretched)
+        graphics.blit(
+            PAGE_RIGHT,
+            bindingX + BINDING_WIDTH, topPos + CORNER_SIZE, // Position (after binding)
+            0, 0,                                            // UV
+            rightPageWidth, innerHeight,                     // Size
+            64, 64                                           // Texture size
+        );
+
+        // === Render corners (fixed size) ===
+        // Top-left corner
+        graphics.blit(CORNER_TOP_LEFT, leftPos, topPos, 0, 0, CORNER_SIZE, CORNER_SIZE, 16, 16);
+        // Top-right corner
+        graphics.blit(CORNER_TOP_RIGHT, leftPos + BOOK_WIDTH - CORNER_SIZE, topPos, 0, 0, CORNER_SIZE, CORNER_SIZE, 16, 16);
+        // Bottom-left corner
+        graphics.blit(CORNER_BOTTOM_LEFT, leftPos, topPos + BOOK_HEIGHT - CORNER_SIZE, 0, 0, CORNER_SIZE, CORNER_SIZE, 16, 16);
+        // Bottom-right corner
+        graphics.blit(CORNER_BOTTOM_RIGHT, leftPos + BOOK_WIDTH - CORNER_SIZE, topPos + BOOK_HEIGHT - CORNER_SIZE, 0, 0, CORNER_SIZE, CORNER_SIZE, 16, 16);
+
+        // === Render binding shadow (in the center, 3 parts spanning full height) ===
+        // Binding top (same height as top edge)
+        graphics.blit(
+            BINDING_TOP,
+            bindingX, topPos,                   // Position (same height as top corners)
+            0, 0,                                // UV
+            BINDING_WIDTH, CORNER_SIZE,          // Size (16x16)
+            16, 16                               // Texture size
+        );
+
+        // Binding middle (tiled vertically between top and bottom)
+        int bindingMiddleHeight = BOOK_HEIGHT - (CORNER_SIZE * 2);
+        for (int y = 0; y < bindingMiddleHeight; y += EDGE_SIZE) {
+            int height = Math.min(EDGE_SIZE, bindingMiddleHeight - y);
+            graphics.blit(
+                BINDING_MIDDLE,
+                bindingX, topPos + CORNER_SIZE + y,  // Position
+                0, 0,                                 // UV
+                BINDING_WIDTH, height,                // Size
+                16, 16                                // Texture size
+            );
+        }
+
+        // Binding bottom (same height as bottom edge)
+        graphics.blit(
+            BINDING_BOTTOM,
+            bindingX, topPos + BOOK_HEIGHT - CORNER_SIZE, // Position (same height as bottom corners)
+            0, 0,                                          // UV
+            BINDING_WIDTH, CORNER_SIZE,                    // Size (16x16)
+            16, 16                                         // Texture size
+        );
+
+        // === Render edges (tiled, split by binding) ===
+        // Top edge - left side (from left corner to binding)
+        for (int x = CORNER_SIZE; x < bindingX - leftPos; x += EDGE_SIZE) {
+            int width = Math.min(EDGE_SIZE, bindingX - leftPos - x);
+            graphics.blit(EDGE_TOP, leftPos + x, topPos, 0, 0, width, EDGE_SIZE, 16, 16);
+        }
+        // Top edge - right side (from binding to right corner)
+        for (int x = bindingX - leftPos + BINDING_WIDTH; x < BOOK_WIDTH - CORNER_SIZE; x += EDGE_SIZE) {
+            int width = Math.min(EDGE_SIZE, BOOK_WIDTH - CORNER_SIZE - x);
+            graphics.blit(EDGE_TOP, leftPos + x, topPos, 0, 0, width, EDGE_SIZE, 16, 16);
+        }
+
+        // Bottom edge - left side (from left corner to binding)
+        for (int x = CORNER_SIZE; x < bindingX - leftPos; x += EDGE_SIZE) {
+            int width = Math.min(EDGE_SIZE, bindingX - leftPos - x);
+            graphics.blit(EDGE_BOTTOM, leftPos + x, topPos + BOOK_HEIGHT - EDGE_SIZE, 0, 0, width, EDGE_SIZE, 16, 16);
+        }
+        // Bottom edge - right side (from binding to right corner)
+        for (int x = bindingX - leftPos + BINDING_WIDTH; x < BOOK_WIDTH - CORNER_SIZE; x += EDGE_SIZE) {
+            int width = Math.min(EDGE_SIZE, BOOK_WIDTH - CORNER_SIZE - x);
+            graphics.blit(EDGE_BOTTOM, leftPos + x, topPos + BOOK_HEIGHT - EDGE_SIZE, 0, 0, width, EDGE_SIZE, 16, 16);
+        }
+
+        // Left edge (tiled vertically, full height between corners)
+        for (int y = CORNER_SIZE; y < BOOK_HEIGHT - CORNER_SIZE; y += EDGE_SIZE) {
+            int height = Math.min(EDGE_SIZE, BOOK_HEIGHT - CORNER_SIZE - y);
+            graphics.blit(EDGE_LEFT, leftPos, topPos + y, 0, 0, EDGE_SIZE, height, 16, 16);
+        }
+        // Right edge (tiled vertically, full height between corners)
+        for (int y = CORNER_SIZE; y < BOOK_HEIGHT - CORNER_SIZE; y += EDGE_SIZE) {
+            int height = Math.min(EDGE_SIZE, BOOK_HEIGHT - CORNER_SIZE - y);
+            graphics.blit(EDGE_RIGHT, leftPos + BOOK_WIDTH - EDGE_SIZE, topPos + y, 0, 0, EDGE_SIZE, height, 16, 16);
+        }
 
         // Layer 3: Render widgets (category list, entry pages, buttons) on top
         super.render(graphics, mouseX, mouseY, partialTick);
