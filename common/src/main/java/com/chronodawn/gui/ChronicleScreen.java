@@ -15,7 +15,7 @@ import net.minecraft.resources.ResourceLocation;
  * Displays categories in the left sidebar and entry content on the right.
  */
 public class ChronicleScreen extends Screen {
-    // Use 13-part parchment-style book textures for maximum flexibility (Nine-patch-like structure)
+    // Use 12-part parchment-style book textures for maximum flexibility (Nine-patch-like structure)
     // Corners (4 parts - fixed size 16x16)
     private static final ResourceLocation CORNER_TOP_LEFT =
         ResourceLocation.fromNamespaceAndPath("chronodawn", "textures/gui/chronicle/corner_top_left.png");
@@ -34,11 +34,9 @@ public class ChronicleScreen extends Screen {
         ResourceLocation.fromNamespaceAndPath("chronodawn", "textures/gui/chronicle/edge_left.png");
     private static final ResourceLocation EDGE_RIGHT =
         ResourceLocation.fromNamespaceAndPath("chronodawn", "textures/gui/chronicle/edge_right.png");
-    // Pages (2 parts - stretchable 64x64)
-    private static final ResourceLocation PAGE_LEFT =
-        ResourceLocation.fromNamespaceAndPath("chronodawn", "textures/gui/chronicle/page_left.png");
-    private static final ResourceLocation PAGE_RIGHT =
-        ResourceLocation.fromNamespaceAndPath("chronodawn", "textures/gui/chronicle/page_right.png");
+    // Page background (1 part - tileable 16x16)
+    private static final ResourceLocation PAGE_BACKGROUND =
+        ResourceLocation.fromNamespaceAndPath("chronodawn", "textures/gui/chronicle/page.png");
     // Binding shadow (3 parts - top/middle/bottom for seamless corners)
     private static final ResourceLocation BINDING_TOP =
         ResourceLocation.fromNamespaceAndPath("chronodawn", "textures/gui/chronicle/binding_top.png");
@@ -137,7 +135,7 @@ public class ChronicleScreen extends Screen {
         // Layer 1: Render dark background (via our overridden renderBackground)
         renderBackground(graphics, mouseX, mouseY, partialTick);
 
-        // Layer 2: Render book background using 11-part parchment-style textures
+        // Layer 2: Render book background using 12-part parchment-style textures
         // This Nine-patch-like structure allows precise positioning and easy customization
 
         final int CORNER_SIZE = 16;
@@ -153,24 +151,36 @@ public class ChronicleScreen extends Screen {
         int leftPageWidth = bindingX - leftPos - CORNER_SIZE;
         int rightPageWidth = BOOK_WIDTH - (bindingX - leftPos) - BINDING_WIDTH - CORNER_SIZE;
 
-        // === Render page backgrounds (behind everything) ===
-        // Left page background (stretched)
-        graphics.blit(
-            PAGE_LEFT,
-            leftPos + CORNER_SIZE, topPos + CORNER_SIZE,  // Position (inside borders)
-            0, 0,                                          // UV
-            leftPageWidth, innerHeight,                    // Size
-            64, 64                                         // Texture size
-        );
+        // === Render page backgrounds (behind everything, tiled) ===
+        // Left page background (tiled 16x16)
+        for (int y = 0; y < innerHeight; y += EDGE_SIZE) {
+            for (int x = 0; x < leftPageWidth; x += EDGE_SIZE) {
+                int width = Math.min(EDGE_SIZE, leftPageWidth - x);
+                int height = Math.min(EDGE_SIZE, innerHeight - y);
+                graphics.blit(
+                    PAGE_BACKGROUND,
+                    leftPos + CORNER_SIZE + x, topPos + CORNER_SIZE + y,  // Position
+                    0, 0,                                                  // UV
+                    width, height,                                         // Size
+                    16, 16                                                 // Texture size
+                );
+            }
+        }
 
-        // Right page background (stretched)
-        graphics.blit(
-            PAGE_RIGHT,
-            bindingX + BINDING_WIDTH, topPos + CORNER_SIZE, // Position (after binding)
-            0, 0,                                            // UV
-            rightPageWidth, innerHeight,                     // Size
-            64, 64                                           // Texture size
-        );
+        // Right page background (tiled 16x16)
+        for (int y = 0; y < innerHeight; y += EDGE_SIZE) {
+            for (int x = 0; x < rightPageWidth; x += EDGE_SIZE) {
+                int width = Math.min(EDGE_SIZE, rightPageWidth - x);
+                int height = Math.min(EDGE_SIZE, innerHeight - y);
+                graphics.blit(
+                    PAGE_BACKGROUND,
+                    bindingX + BINDING_WIDTH + x, topPos + CORNER_SIZE + y, // Position
+                    0, 0,                                                     // UV
+                    width, height,                                            // Size
+                    16, 16                                                    // Texture size
+                );
+            }
+        }
 
         // === Render corners (fixed size) ===
         // Top-left corner
