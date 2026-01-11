@@ -161,7 +161,6 @@ public class ChronoDawnPortalBlock extends Block {
         // If frame is broken, destroy portal blocks
         if (!isValidPortalPosition(level, pos, state.getValue(AXIS))) {
             level.removeBlock(pos, false);
-            ChronoDawn.LOGGER.debug("Destroyed portal block at {} due to broken frame", pos);
         }
 
         // Periodic cleanup of stale portal state entries (every ~10 seconds)
@@ -305,8 +304,6 @@ public class ChronoDawnPortalBlock extends Block {
             com.chronodawn.core.portal.PortalTeleportHandler.clearArrivalDimension(entityId);
             ENTITY_PORTAL_STATES.remove(entityId);
             exitedAndReentered = true;
-            ChronoDawn.LOGGER.debug("Entity {} moved to different portal (distance > 5 blocks), cleared arrival record",
-                entity.getName().getString());
         }
         // Case 2: Same portal area, but tick gap > 20 (1 second)
         // This means player exited portal and re-entered
@@ -315,8 +312,6 @@ public class ChronoDawnPortalBlock extends Block {
             com.chronodawn.core.portal.PortalTeleportHandler.clearArrivalDimension(entityId);
             ENTITY_PORTAL_STATES.remove(entityId);
             exitedAndReentered = true;
-            ChronoDawn.LOGGER.debug("Entity {} exited and re-entered portal (tick gap: {}), cleared arrival record",
-                entity.getName().getString(), currentTick - lastTick);
         }
 
         // Update tracking maps
@@ -334,8 +329,6 @@ public class ChronoDawnPortalBlock extends Block {
                 // Set state to 1 to prevent re-teleport while standing still
                 // This transition (-1 → 1) happens on the first tick after teleportation
                 ENTITY_PORTAL_STATES.put(entityId, 1);
-                ChronoDawn.LOGGER.debug("Prevented re-teleport for {} - just teleported, still in arrival dimension",
-                    entity.getName().getString());
                 return;
             } else if (currentState == 0) {
                 // CRITICAL: State is 0, meaning either:
@@ -345,15 +338,11 @@ public class ChronoDawnPortalBlock extends Block {
                 // This is a fallback for rapid re-entry (< 1 second)
                 // Clear the arrival record now to allow teleportation
                 com.chronodawn.core.portal.PortalTeleportHandler.clearArrivalDimension(entityId);
-                ChronoDawn.LOGGER.debug("Cleared arrival dimension for {} - rapid re-entry",
-                    entity.getName().getString());
                 // Don't return - allow state to start counting and teleportation to proceed
             } else {
                 // State >= 1 = still in arrival portal, prevent re-teleport
                 // Keep state at 1 to maintain "still in portal" state
                 ENTITY_PORTAL_STATES.put(entityId, 1);
-                ChronoDawn.LOGGER.debug("Prevented re-teleport for {} - still in arrival dimension {}",
-                    entity.getName().getString(), level.dimension().location());
                 return;
             }
         }
@@ -376,16 +365,10 @@ public class ChronoDawnPortalBlock extends Block {
         if (entity instanceof net.minecraft.server.level.ServerPlayer player) {
             if (player.getAbilities().invulnerable) {
                 // Creative mode: teleport immediately
-                ChronoDawn.LOGGER.info("Portal: {} at state {} - Creative mode instant teleport",
-                    entity.getName().getString(), stateValue);
                 shouldTeleport = true;
             } else {
                 // Survival mode: wait for threshold
                 shouldTeleport = stateValue >= PORTAL_TIME_THRESHOLD;
-                if (stateValue % 20 == 0) { // Log every second
-                    ChronoDawn.LOGGER.info("Portal: {} at state {}/{} - Survival mode countdown",
-                        entity.getName().getString(), stateValue, PORTAL_TIME_THRESHOLD);
-                }
             }
         } else {
             // Non-player entities: use threshold
@@ -402,9 +385,6 @@ public class ChronoDawnPortalBlock extends Block {
                 // This flag prevents immediate re-evaluation on the next tick
                 // and allows the state machine to transition: -1 → 1 (arrival portal)
                 ENTITY_PORTAL_STATES.put(entityId, -1);
-
-                ChronoDawn.LOGGER.info("Entity {} teleported through portal at {} in dimension {} after {} ticks",
-                    entity.getName().getString(), pos, level.dimension().location(), stateValue);
             } else {
                 // Teleportation failed, reset state
                 ENTITY_PORTAL_STATES.remove(entityId);
@@ -502,8 +482,6 @@ public class ChronoDawnPortalBlock extends Block {
         // destroy this portal block immediately
         if (isRelevantDirection && !isFrameBlock(neighborState) && !neighborState.is(this)) {
             // Frame is broken, destroy portal block
-            ChronoDawn.LOGGER.debug("Destroyed portal block at {} due to broken frame (neighbor at {} changed to {})",
-                currentPos, neighborPos, neighborState.getBlock().getName().getString());
             return Blocks.AIR.defaultBlockState();
         }
 

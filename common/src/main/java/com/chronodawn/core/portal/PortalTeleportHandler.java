@@ -93,8 +93,6 @@ public class PortalTeleportHandler {
      */
     private static void recordArrivalDimension(UUID entityId, ResourceKey<Level> arrivalDimension) {
         LAST_ARRIVAL_DIMENSION.put(entityId, arrivalDimension);
-        ChronoDawn.LOGGER.debug("Recorded arrival dimension {} for entity {}",
-            arrivalDimension.location(), entityId);
     }
 
     /**
@@ -126,7 +124,6 @@ public class PortalTeleportHandler {
 
             if (entity == null) {
                 // Entity doesn't exist anymore
-                ChronoDawn.LOGGER.debug("Cleared arrival dimension for non-existent entity {}", entityId);
                 return true;
             }
 
@@ -136,8 +133,6 @@ public class PortalTeleportHandler {
 
             if (!stateAtEntity.is(ModBlocks.CHRONO_DAWN_PORTAL.get())) {
                 // Entity is no longer in a portal, clear the record
-                ChronoDawn.LOGGER.debug("Cleared arrival dimension for entity {} - not in portal",
-                    entity.getName().getString());
                 return true;
             }
 
@@ -196,8 +191,6 @@ public class PortalTeleportHandler {
         if (existingPortal.isPresent()) {
             // Use existing portal (this is a portal block position)
             destPortalPos = existingPortal.get();
-            ChronoDawn.LOGGER.info("Found existing portal at {} in dimension {}",
-                destPortalPos, destDimensionKey.location());
         } else {
             // Generate new portal with same axis as source portal
             BlockPos framePos = generatePortal(destLevel, destCoords, sourceAxis);
@@ -206,8 +199,6 @@ public class PortalTeleportHandler {
                     destCoords, destDimensionKey.location());
                 return false;
             }
-            ChronoDawn.LOGGER.info("Generated new portal at {} in dimension {} with axis {}",
-                framePos, destDimensionKey.location(), sourceAxis);
 
             // Calculate portal interior position from frame bottom-left
             // Offset depends on axis: X axis uses (1, 1, 0), Z axis uses (0, 1, 1)
@@ -239,7 +230,6 @@ public class PortalTeleportHandler {
         PortalStateMachine sourcePortal = PortalRegistry.getInstance().getPortalAt(sourcePortalPos);
         if (sourcePortal != null && sourcePortal.getCurrentState() == PortalState.ACTIVATED) {
             sourcePortal.deactivate();
-            ChronoDawn.LOGGER.info("Deactivated source portal at {}", sourcePortalPos);
         }
 
         // Mark ChronoDawn entered (if entering ChronoDawn for first time)
@@ -251,7 +241,6 @@ public class PortalTeleportHandler {
             // Destroy unstable portal (if portals are unstable)
             if (globalState.arePortalsUnstable()) {
                 destroyUnstablePortal(destLevel, destPortalPos);
-                ChronoDawn.LOGGER.info("Destroyed unstable portal at {} in ChronoDawn dimension", destPortalPos);
                 portalWasDestroyed = true;
             }
         }
@@ -261,9 +250,6 @@ public class PortalTeleportHandler {
         // If portal is destroyed, player is no longer "in portal" so no need to prevent re-entry
         if (!portalWasDestroyed) {
             recordArrivalDimension(player.getUUID(), destDimensionKey);
-        } else {
-            ChronoDawn.LOGGER.info("Skipped recording arrival dimension for {} - portal was destroyed",
-                player.getName().getString());
         }
 
         return true;
@@ -343,8 +329,6 @@ public class PortalTeleportHandler {
                     for (int dz = 0; dz <= 5; dz++) {
                         BlockPos checkPos = framePos.offset(dx, dy, dz);
                         if (checkPos.equals(portalBlockPos)) {
-                            ChronoDawn.LOGGER.info("Found source portal frame at {} for portal block at {}",
-                                framePos, portalBlockPos);
                             return framePos;
                         }
                     }
@@ -397,9 +381,6 @@ public class PortalTeleportHandler {
         // This is much more efficient than scanning blocks
         Set<UUID> portalsInDimension = PortalRegistry.getInstance().getPortalsInDimension(level.dimension());
 
-        ChronoDawn.LOGGER.info("Searching for existing portal in dimension {} near {} (found {} portals in dimension)",
-            level.dimension().location(), coords, portalsInDimension.size());
-
         BlockPos nearestPortal = null;
         double nearestDistance = Double.MAX_VALUE;
 
@@ -417,9 +398,6 @@ public class PortalTeleportHandler {
                 Math.pow(portalPos.getZ() - coords.getZ(), 2)
             );
 
-            ChronoDawn.LOGGER.info("  Portal at {} - horizontal distance: {} blocks (search coords: {})",
-                portalPos, String.format("%.1f", distance), coords);
-
             // Only consider portals within reasonable horizontal distance (128 blocks)
             if (distance < 128 && distance < nearestDistance) {
                 nearestDistance = distance;
@@ -435,8 +413,6 @@ public class PortalTeleportHandler {
                     for (int dz = 0; dz <= 5; dz++) {
                         BlockPos checkPos = nearestPortal.offset(dx, dy, dz);
                         if (level.getBlockState(checkPos).is(ModBlocks.CHRONO_DAWN_PORTAL.get())) {
-                            ChronoDawn.LOGGER.info("Found existing portal at {} (frame at {}, distance: {} blocks from {})",
-                                checkPos, nearestPortal, nearestDistance, coords);
                             return Optional.of(checkPos);
                         }
                     }
@@ -575,6 +551,48 @@ public class PortalTeleportHandler {
         Direction horizontal = axis == Direction.Axis.X ? Direction.EAST : Direction.SOUTH;
         Direction vertical = Direction.UP;
 
+        // Ensure portal is placed on solid ground
+        // Check all positions where the bottom frame will be placed
+        BlockPos.MutableBlockPos adjustedPos = pos.mutable();
+        boolean needsAdjustment = false;
+
+        for (int x = 0; x < width; x++) {
+            BlockPos framePos = pos.relative(horizontal, x);
+            BlockState blockBelow = level.getBlockState(framePos.below());
+
+            // If any bottom frame position doesn't have solid ground below, we need to adjust
+            if (!blockBelow.isSolid() || blockBelow.canBeReplaced()) {
+                needsAdjustment = true;
+                break;
+            }
+        }
+
+        if (needsAdjustment) {
+            // Search downward for solid ground
+            while (adjustedPos.getY() > level.getMinBuildHeight()) {
+                boolean allSolid = true;
+
+                // Check if all bottom frame positions have solid ground below at this level
+                for (int x = 0; x < width; x++) {
+                    BlockPos checkPos = adjustedPos.relative(horizontal, x);
+                    BlockState blockBelow = level.getBlockState(checkPos.below());
+
+                    if (!blockBelow.isSolid() || blockBelow.canBeReplaced()) {
+                        allSolid = false;
+                        break;
+                    }
+                }
+
+                if (allSolid) {
+                    // Found solid ground for all frame positions
+                    pos = adjustedPos.immutable();
+                    break;
+                }
+
+                adjustedPos.move(Direction.DOWN);
+            }
+        }
+
         // Generate Clockstone frame
         BlockState clockstoneState = ModBlocks.CLOCKSTONE_BLOCK.get().defaultBlockState();
 
@@ -618,9 +636,6 @@ public class PortalTeleportHandler {
         );
         portal.activate();
         PortalRegistry.getInstance().registerPortal(portal);
-
-        ChronoDawn.LOGGER.info("Generated 4x5 portal structure at {} in dimension {}",
-            pos, level.dimension().location());
     }
 
     /**
@@ -671,7 +686,6 @@ public class PortalTeleportHandler {
                 1.0F,
                 1.0F
             );
-            ChronoDawn.LOGGER.info("Destroyed {} unstable portal blocks with glass break sound", visited.size());
 
             // Clear arrival dimension records for all players near the destroyed portal
             // This is critical - when portal is destroyed, players are no longer "in portal"
@@ -681,8 +695,6 @@ public class PortalTeleportHandler {
                     new net.minecraft.world.phys.AABB(portalPos).inflate(searchRadius))) {
                 if (entity instanceof net.minecraft.server.level.ServerPlayer) {
                     clearArrivalDimension(entity.getUUID());
-                    ChronoDawn.LOGGER.info("Cleared arrival dimension for {} - portal destroyed",
-                        entity.getName().getString());
                 }
             }
         }

@@ -72,33 +72,31 @@ public class PortalFrameValidator {
         Direction horizontal = axis == Direction.Axis.X ? Direction.EAST : Direction.SOUTH;
         Direction vertical = Direction.UP;
 
-        com.chronodawn.ChronoDawn.LOGGER.info("validateFrame: Checking frame at pos={}, axis={}", pos, axis);
+        // Find portal bounds by searching in all 4 directions
+        PortalBounds bounds = findPortalBounds(level, pos, horizontal, vertical);
 
-        // Find the bottom-left corner position by searching from current position
-        BlockPos bottomLeft = findBottomLeft(level, pos, horizontal, vertical);
+        // Calculate dimensions from bounds
+        int width = bounds.maxHorizontal - bounds.minHorizontal + 1;
+        int height = bounds.maxVertical - bounds.minVertical + 1;
 
-        com.chronodawn.ChronoDawn.LOGGER.info("validateFrame: Bottom-left position: {}", bottomLeft);
-
-        // Find the frame dimensions
-        int width = findFrameDimension(level, bottomLeft, horizontal, MAX_WIDTH);
-        int height = findFrameDimension(level, bottomLeft, vertical, MAX_HEIGHT);
-
-        com.chronodawn.ChronoDawn.LOGGER.info("validateFrame: Found dimensions width={}, height={}", width, height);
+        // Construct bottom-left position from bounds
+        BlockPos bottomLeft;
+        if (horizontal.getAxis() == Direction.Axis.X) {
+            bottomLeft = new BlockPos(bounds.minHorizontal, bounds.minVertical, pos.getZ());
+        } else {
+            bottomLeft = new BlockPos(pos.getX(), bounds.minVertical, bounds.minHorizontal);
+        }
 
         // Validate dimensions
         if (width < MIN_WIDTH || width > MAX_WIDTH || height < MIN_HEIGHT || height > MAX_HEIGHT) {
-            com.chronodawn.ChronoDawn.LOGGER.info("validateFrame: FAILED - Invalid dimensions (min={}x{}, max={}x{})",
-                MIN_WIDTH, MIN_HEIGHT, MAX_WIDTH, MAX_HEIGHT);
             return null;
         }
 
         // Validate frame structure
         if (!validateFrameStructure(level, bottomLeft, horizontal, vertical, width, height)) {
-            com.chronodawn.ChronoDawn.LOGGER.info("validateFrame: FAILED - Frame structure validation failed");
             return null;
         }
 
-        com.chronodawn.ChronoDawn.LOGGER.info("validateFrame: SUCCESS - Valid portal frame");
         // Return valid portal frame data
         return new PortalFrameData(bottomLeft, width, height, axis);
     }
@@ -113,49 +111,49 @@ public class PortalFrameValidator {
      * @param vertical Vertical direction (UP)
      * @return Bottom-left corner position (may be air if corner is missing)
      */
-    private static BlockPos findBottomLeft(Level level, BlockPos pos, Direction horizontal, Direction vertical) {
-        // Search all 4 directions to find the minimum coordinates
+    /**
+     * Portal bounds data containing min/max coordinates.
+     */
+    private static class PortalBounds {
+        final int minHorizontal;
+        final int maxHorizontal;
+        final int minVertical;
+        final int maxVertical;
+
+        PortalBounds(int minH, int maxH, int minV, int maxV) {
+            this.minHorizontal = minH;
+            this.maxHorizontal = maxH;
+            this.minVertical = minV;
+            this.maxVertical = maxV;
+        }
+    }
+
+    /**
+     * Find the bounding box of all frame blocks by searching in a 2D grid around the clicked position.
+     * This handles corner-optional portals by finding all frame blocks regardless of which block was clicked.
+     */
+    private static PortalBounds findPortalBounds(Level level, BlockPos pos, Direction horizontal, Direction vertical) {
         int minHorizontal = getHorizontalCoord(pos, horizontal.getAxis());
+        int maxHorizontal = minHorizontal;
         int minVertical = pos.getY();
+        int maxVertical = minVertical;
 
-        // Search left (negative horizontal direction)
-        for (int i = 0; i <= MAX_WIDTH; i++) {
-            BlockPos checkPos = pos.relative(horizontal.getOpposite(), i);
-            if (isFrameBlock(level, checkPos)) {
-                minHorizontal = Math.min(minHorizontal, getHorizontalCoord(checkPos, horizontal.getAxis()));
+        // Search in a 2D grid around the clicked position to find all frame blocks
+        // This searches all combinations of horizontal/vertical offsets, not just along lines
+        for (int h = -MAX_WIDTH; h <= MAX_WIDTH; h++) {
+            for (int v = -MAX_HEIGHT; v <= MAX_HEIGHT; v++) {
+                BlockPos checkPos = pos.relative(horizontal, h).relative(vertical, v);
+                if (isFrameBlock(level, checkPos)) {
+                    int coord = getHorizontalCoord(checkPos, horizontal.getAxis());
+                    minHorizontal = Math.min(minHorizontal, coord);
+                    maxHorizontal = Math.max(maxHorizontal, coord);
+                    minVertical = Math.min(minVertical, checkPos.getY());
+                    maxVertical = Math.max(maxVertical, checkPos.getY());
+                }
             }
         }
 
-        // Search right (positive horizontal direction)
-        for (int i = 0; i <= MAX_WIDTH; i++) {
-            BlockPos checkPos = pos.relative(horizontal, i);
-            if (isFrameBlock(level, checkPos)) {
-                minHorizontal = Math.min(minHorizontal, getHorizontalCoord(checkPos, horizontal.getAxis()));
-            }
-        }
-
-        // Search down (negative vertical direction)
-        for (int i = 0; i <= MAX_HEIGHT; i++) {
-            BlockPos checkPos = pos.relative(vertical.getOpposite(), i);
-            if (isFrameBlock(level, checkPos)) {
-                minVertical = Math.min(minVertical, checkPos.getY());
-            }
-        }
-
-        // Search up (positive vertical direction)
-        for (int i = 0; i <= MAX_HEIGHT; i++) {
-            BlockPos checkPos = pos.relative(vertical, i);
-            if (isFrameBlock(level, checkPos)) {
-                minVertical = Math.min(minVertical, checkPos.getY());
-            }
-        }
-
-        // Construct bottom-left position from minimum coordinates
-        if (horizontal.getAxis() == Direction.Axis.X) {
-            return new BlockPos(minHorizontal, minVertical, pos.getZ());
-        } else {
-            return new BlockPos(pos.getX(), minVertical, minHorizontal);
-        }
+        return new PortalBounds(minHorizontal, maxHorizontal, minVertical, maxVertical);
     }
 
     /**

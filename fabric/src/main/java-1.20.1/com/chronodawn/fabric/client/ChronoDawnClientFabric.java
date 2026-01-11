@@ -41,7 +41,6 @@ import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.fabricmc.fabric.api.event.client.player.ClientPlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
@@ -95,7 +94,7 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             .registerReloadListener(new SimpleSynchronousResourceReloadListener() {
                 @Override
                 public ResourceLocation getFabricId() {
-                    return ResourceLocation.fromNamespaceAndPath("chronodawn", "chronicle_data");
+                    return new ResourceLocation("chronodawn", "chronicle_data");
                 }
 
                 @Override
@@ -533,7 +532,7 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
         // This makes the compass needle point towards the target structure
         net.minecraft.client.renderer.item.ItemProperties.register(
             ModItems.TIME_COMPASS.get(),
-            ResourceLocation.fromNamespaceAndPath("minecraft", "angle"),
+            new ResourceLocation("minecraft", "angle"),
             (stack, level, entity, seed) -> {
                 // Get target position from compass NBT
                 Optional<GlobalPos> targetPos = TimeCompassItem.getTargetPosition(stack);
