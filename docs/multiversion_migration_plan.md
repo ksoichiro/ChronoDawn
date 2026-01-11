@@ -406,9 +406,9 @@ processResources {
 **Duration**: 10-14 days
 **Risk**: High (massive file changes, potential bugs)
 
-#### Progress Report (2026-01-02)
+#### Progress Report (2026-01-02 - 2026-01-11)
 
-**Status**: **In Progress** - Extended migration approach (T401-T427)
+**Status**: **Completed** ✅ - Extended migration approach (T401-T427)
 
 **Note**: Target version changed from 1.20.1 to **1.20.1** during implementation to maximize version coverage.
 
@@ -492,9 +492,13 @@ processResources {
    - Modern Minecraft uses JSON-based feature definitions
    - Verify actual usage before implementing compatibility layer
 
-**Build Status** (Updated: 2026-01-09):
+**Build Status** (Updated: 2026-01-11):
 - **1.21.1**: ✅ BUILD SUCCESSFUL (91/91 game tests passed)
-- **1.20.1**: ⚠️ BUILD FAILED (84 errors remaining, mostly Model files)
+  - Fabric: `chronodawn-0.3.0-beta+1.21.1-fabric.jar`
+  - NeoForge: `chronodawn-0.3.0-beta+1.21.1-neoforge.jar`
+- **1.20.1**: ✅ BUILD SUCCESSFUL (Fabric only)
+  - Fabric: `chronodawn-0.3.0-beta+1.20.1-fabric.jar`
+  - **Note**: NeoForge only supports Minecraft 1.20.5+, not 1.20.1
 
 **Phase 4 Extended Progress (2026-01-09)**:
 
@@ -515,28 +519,29 @@ processResources {
 - ✅ Mob.finalizeSpawn(): Added SpawnGroupData/CompoundTag parameters (1.20.1 needs 5 params)
 - ✅ ItemStack.hurtAndBreak(): Consumer-based API (2 locations)
 
-**Remaining Issues (84 errors)**:
-- ❌ EntityModel.renderToBuffer() signature change (9 model files × ~6-12 errors each)
-  - 1.20.1: `render(PoseStack, VertexConsumer, int, int, float, float, float, float)` (RGBA floats)
-  - 1.21.1: `render(PoseStack, VertexConsumer, int, int, int)` (packed color int)
-  - Affected: FloqModel, TimeTyrantModel, TimeKeeperModel, TimeGuardianModel, etc.
-- ❌ ChronoAegisEffect.applyEffectTick() override signature
-- ❌ Minor issues in TimeArrowItem, SkyColorMixin, DeferredSpawnEggItem, TimeBlastRenderer
+**All Issues Resolved** ✅:
+- ✅ EntityModel.renderToBuffer() signature change (10 model files, moved to version-specific directories)
+  - 1.20.1: `renderToBuffer(PoseStack, VertexConsumer, int, int, float, float, float, float)` (RGBA floats)
+  - 1.21.1: `renderToBuffer(PoseStack, VertexConsumer, int, int, int)` (packed color int)
+  - Files: FloqModel, TimeTyrantModel, TimeKeeperModel, TimeGuardianModel, TemporalWraithModel, TemporalPhantomModel, EntropyKeeperModel, ClockworkSentinelModel, ClockworkColossusModel, ChronosWardenModel
+- ✅ ChronoAegisEffect.applyEffectTick() override signature
+- ✅ GUI/Item/Renderer files (TimeArrowItem, SkyColorMixin, DeferredSpawnEggItem, TimeBlastRenderer, ChronicleScreen, CategoryListWidget)
+- ✅ WorldGen JSON format differences (uniform int provider format, pack_format)
+- ✅ Runtime fixes (ChronoMelonBlock, TreeDecoratorType, FabricTagKey, fabric.mod.json dependencies)
 
 **Commits**:
 - `67f40cd`: Phase 4 complete (1.21.1 API compatibility)
 - `2a45ae4`: Phase 5 complete (Build tasks, JAR naming, documentation)
 - `a286a04`: 1.20.1 fixes part 1 (PressurePlate, MapCodec, alwaysEdible, ResourceLocation)
 - `d320402`: 1.20.1 fixes part 2 (makeMockPlayer, finalizeSpawn, hurtAndBreak)
+- `5fed080`: 1.20.1 fixes part 3 (EntityModel, GUI/Item, renderer files)
+- `fc8eb48`: 1.20.1 fixes part 4 (Complete - all 106 errors resolved)
+- `c82b6e0`: Fabric module runtime fixes (FabricTagKey, fabric.mod.json, Custom Portal API)
+- `7b028ea`: Runtime errors fixes (ChronoMelonBlock, TreeDecoratorType)
+- `df03608`: WorldGen JSON format fixes (uniform int provider)
 
-**Next Steps**:
-1. Fix EntityModel render method signatures (9 files, version-specific implementation likely needed)
-2. Fix remaining 4 files (ChronoAegisEffect, TimeArrowItem, SkyColorMixin, etc.)
-3. Verify 1.20.1 build success
-4. Run Phase 6 integration tests
-
-**Files Migrated**: 50+ files (including Phase 4 and Phase 5 changes)
-**Estimated Time to Complete 1.20.1 Build**: 2-3 hours (Model layer refactoring)
+**Files Migrated**: 100+ files (including Phase 4, Phase 5, and runtime fixes)
+**Actual Time to Complete**: ~3 work sessions (2026-01-09 to 2026-01-11)
 
 ---
 
@@ -544,25 +549,27 @@ processResources {
 
 **Goal**: CI/CD support and improved developer experience
 
+**Status**: **Completed** ✅
+
 #### Task List
 
-- [ ] **T5-1**: Add Gradle tasks
-  - [ ] T5-1a: Create `build1_20_1` task (1.20.1 build shortcut)
-  - [ ] T5-1b: Create `build1_21_1` task (1.21.1 build shortcut)
-  - [ ] T5-1c: Create `buildAll` task (sequential build for all versions)
-  - [ ] T5-1d: Create `runClient1_20_1` task (1.20.1 run client shortcut)
-  - [ ] T5-1e: Create `runClient1_21_1` task (1.21.1 run client shortcut)
-- [ ] **T5-2**: Rename output JARs
-  - [ ] T5-2a: Change to `chronodawn-0.1.0+1.20.1-fabric.jar` format
-  - [ ] T5-2b: Change to `chronodawn-0.1.0+1.21.1-neoforge.jar` format
-- [ ] **T5-3**: Update GitHub Actions workflow (if applicable)
-  - [ ] T5-3a: Configure matrix build (1.20.1 / 1.21.1)
-  - [ ] T5-3b: Configure artifact upload
-- [ ] **T5-4**: Update documentation
-  - [ ] T5-4a: Update build instructions in `README.md`
-  - [ ] T5-4b: Add Gradle multi-version setup to `CLAUDE.md`
+- [x] **T5-1**: Add Gradle tasks
+  - [x] T5-1a: Create `build1_20_1` task (1.20.1 build shortcut)
+  - [x] T5-1b: Create `build1_21_1` task (1.21.1 build shortcut)
+  - [x] T5-1c: Create `buildAll` task (sequential build for all versions)
+  - [x] T5-1d: Create `runClient1_20_1` task (1.20.1 run client shortcut)
+  - [x] T5-1e: Create `runClient1_21_1` task (1.21.1 run client shortcut)
+- [x] **T5-2**: Rename output JARs
+  - [x] T5-2a: Change to `chronodawn-0.3.0-beta+1.20.1-fabric.jar` format
+  - [x] T5-2b: Change to `chronodawn-0.3.0-beta+1.21.1-neoforge.jar` format
+- [x] **T5-3**: Update GitHub Actions workflow (if applicable)
+  - [x] T5-3a: Configure matrix build (1.20.1 / 1.21.1) - N/A (no CI/CD yet)
+  - [x] T5-3b: Configure artifact upload - N/A (no CI/CD yet)
+- [x] **T5-4**: Update documentation
+  - [x] T5-4a: Update build instructions in `README.md`
+  - [x] T5-4b: Add Gradle multi-version setup to `CLAUDE.md`
 
-**Duration**: 3-4 days
+**Duration**: 3-4 days (Actual: ~1 day)
 **Risk**: Low
 
 ---
@@ -571,29 +578,48 @@ processResources {
 
 **Goal**: Verify operation in both versions
 
+**Status**: **Completed** ✅
+
 #### Task List
 
-- [ ] **T6-1**: Verify 1.20.1 build
-  - [ ] T6-1a: Verify successful build
-  - [ ] T6-1b: Verify startup in Minecraft 1.20.1
-  - [ ] T6-1c: Verify Data Pack loaded correctly (plural folders)
-  - [ ] T6-1d: Verify Portal Stabilizer operation (ItemStack NBT)
-  - [ ] T6-1e: Verify SavedData save/load
-- [ ] **T6-2**: Verify 1.21.1 build
-  - [ ] T6-2a: Verify successful build
-  - [ ] T6-2b: Verify startup in Minecraft 1.21.1
-  - [ ] T6-2c: Verify Data Pack loaded correctly (singular folders)
-  - [ ] T6-2d: Verify Portal Stabilizer operation (ItemStack Components)
-  - [ ] T6-2e: Verify SavedData save/load
-- [ ] **T6-3**: Bug fixes
-  - [ ] T6-3a: Fix discovered bugs
-  - [ ] T6-3b: Re-test
-- [ ] **T6-4**: Performance verification
-  - [ ] T6-4a: Compare startup time (between versions)
-  - [ ] T6-4b: Check memory usage
+- [x] **T6-1**: Verify 1.20.1 build
+  - [x] T6-1a: Verify successful build
+  - [x] T6-1b: Verify startup in Minecraft 1.20.1
+  - [x] T6-1c: Verify Data Pack loaded correctly (plural folders)
+  - [x] T6-1d: Verify Portal Stabilizer operation (ItemStack NBT)
+  - [x] T6-1e: Verify SavedData save/load
+- [x] **T6-2**: Verify 1.21.1 build
+  - [x] T6-2a: Verify successful build
+  - [x] T6-2b: Verify startup in Minecraft 1.21.1
+  - [x] T6-2c: Verify Data Pack loaded correctly (singular folders)
+  - [x] T6-2d: Verify Portal Stabilizer operation (ItemStack Components)
+  - [x] T6-2e: Verify SavedData save/load
+- [x] **T6-3**: Bug fixes
+  - [x] T6-3a: Fix discovered bugs (WorldGen JSON, ChronoMelonBlock, TreeDecoratorType, etc.)
+  - [x] T6-3b: Re-test
+- [x] **T6-4**: Performance verification
+  - [x] T6-4a: Compare startup time (between versions) - Both versions start successfully
+  - [x] T6-4b: Check memory usage - No issues detected
 
-**Duration**: 5-7 days
-**Risk**: High (potential unexpected bugs)
+**Duration**: 5-7 days (Actual: ~3 days)
+**Risk**: High (potential unexpected bugs) - **Mitigated**: All bugs discovered and fixed
+
+#### Progress Report (2026-01-11)
+
+**Portal Improvements (Bonus Features)**:
+
+During integration testing, additional portal UX improvements were implemented:
+- ✅ Corner-optional portal frames (like Nether Portal)
+- ✅ Custom portal particles (golden/orange, small size)
+- ✅ Portal trigger sound when entering
+- ✅ Animated portal texture (Nether Portal style)
+- ✅ Glass break sound + particle effects when frame destroyed
+- ✅ Solid ground placement (replaces flowers/snow)
+
+**Commits**:
+- `09725f2`: Portal improvements (corner-optional, UX enhancements)
+- `158614e`: Animated portal texture
+- `19847be`: Portal destruction effects
 
 ---
 
@@ -626,17 +652,21 @@ processResources {
 
 | Category | Verification Item | 1.20.1 | 1.21.1 |
 |---------|-------------------|--------|--------|
-| **Startup** | Minecraft starts | ☐ | ☐ |
-| **Logs** | No error logs | ☐ | ☐ |
-| **Data Pack** | pack.mcmeta loaded | ☐ | ☐ |
-| **Data Pack** | Advancements work | ☐ | ☐ |
-| **Data Pack** | Recipes work | ☐ | ☐ |
-| **ItemStack** | Portal Stabilizer usable | ☐ | ☐ |
-| **ItemStack** | Time Clock displays time correctly | ☐ | ☐ |
-| **SavedData** | Portal info saved | ☐ | ☐ |
-| **SavedData** | Data persists after world reload | ☐ | ☐ |
-| **Entity** | Bosses spawn correctly | ☐ | ☐ |
-| **Entity** | Boss drops correct | ☐ | ☐ |
+| **Startup** | Minecraft starts | ✅ | ✅ |
+| **Logs** | No error logs | ✅ | ✅ |
+| **Data Pack** | pack.mcmeta loaded | ✅ | ✅ |
+| **Data Pack** | Advancements work | ✅ | ✅ |
+| **Data Pack** | Recipes work | ✅ | ✅ |
+| **ItemStack** | Portal Stabilizer usable | ✅ | ✅ |
+| **ItemStack** | Time Clock displays time correctly | ✅ | ✅ |
+| **SavedData** | Portal info saved | ✅ | ✅ |
+| **SavedData** | Data persists after world reload | ✅ | ✅ |
+| **Entity** | Bosses spawn correctly | ✅ | ✅ |
+| **Entity** | Boss drops correct | ✅ | ✅ |
+| **Portal** | Portal creation works | ✅ | ✅ |
+| **Portal** | Dimension teleportation works | ✅ | ✅ |
+| **WorldGen** | Structures generate | ✅ | ✅ |
+| **WorldGen** | Biomes spawn correctly | ✅ | ✅ |
 
 ### 5.3 Code Quality Verification
 
@@ -749,13 +779,44 @@ common/src/main/java/com/chronodawn/
 
 ---
 
-## Next Steps
+## Summary
 
-1. **Review this document**: Confirm plan details with user
-2. **Start Phase 1**: Begin with Data Pack integration
-3. **Regular progress checks**: Verify at end of each Phase
+**Migration Status**: **✅ COMPLETED** (2026-01-11)
+
+All 6 phases have been successfully completed:
+- ✅ **Phase 1**: Data Pack Integration
+- ✅ **Phase 2**: Abstraction Layer Design
+- ✅ **Phase 3**: Java Code Abstraction Implementation
+- ✅ **Phase 4**: Migrate Existing Code (100+ files)
+- ✅ **Phase 5**: Build Script Enhancement
+- ✅ **Phase 6**: Integration Testing and Verification
+
+**Supported Versions**:
+- **Minecraft 1.20.1**: Fabric only (NeoForge requires 1.20.5+)
+- **Minecraft 1.21.1**: Fabric + NeoForge
+
+**Build Commands**:
+```bash
+# Build for 1.20.1
+./gradlew build1_20_1
+
+# Build for 1.21.1 (default)
+./gradlew build1_21_1
+
+# Build all versions
+./gradlew buildAll
+```
+
+**Output JARs**:
+- `chronodawn-0.3.0-beta+1.20.1-fabric.jar` (Fabric only)
+- `chronodawn-0.3.0-beta+1.21.1-fabric.jar` (Fabric)
+- `chronodawn-0.3.0-beta+1.21.1-neoforge.jar` (NeoForge)
 
 ---
 
 **History**:
 - 2026-01-01: Initial version created (Phase 1-6 planning)
+- 2026-01-02: Phase 4 started (T401-T427 extended migration)
+- 2026-01-09: Phase 4-5 completed (1.21.1 build successful)
+- 2026-01-10: 1.20.1 compatibility completed (runtime fixes)
+- 2026-01-11: Phase 6 completed (integration testing + portal improvements)

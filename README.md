@@ -70,7 +70,7 @@ cd ChronoDawn
 ### Multi-Version Build Support
 
 Chrono Dawn supports multiple Minecraft versions from the same codebase:
-- **1.20.1**: Forge/Fabric (legacy support)
+- **1.20.1**: Fabric only (legacy support) - *NeoForge requires Minecraft 1.20.5+*
 - **1.21.1**: NeoForge/Fabric (current version, default)
 
 ### Build for Specific Minecraft Version

@@ -100,7 +100,7 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 **Strategy**:
 - Gradle 自前スクリプト + 抽象化レイヤー方式（外部プリプロセッサ非依存）
 - 全コードを1箇所に集約（AI 開発効率を重視し、Git ブランチ分離を避ける）
-- Phase 1-5 完了、Phase 6 (統合テスト) 未着手
+- **Status**: ✅ Phase 1-6 完了（統合テスト完了、2026-01-11）
 
 **Key Components**:
 1. **Data Pack**: バージョン固有ディレクトリ（`resources-1.20.1/`, `resources-1.21.1/`）を Gradle で切り替え
@@ -133,8 +133,7 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
    - Fabric: `chronodawn-{version}+{mc_version}-fabric.jar`
    - NeoForge: `chronodawn-{version}+{mc_version}-neoforge.jar`
    - Example: `chronodawn-0.3.0-beta+1.21.1-fabric.jar`
-
-**Status**: ✅ Phase 1-5 完了、Phase 6 (統合テスト) 未着手
+   - **Note**: 1.20.1 は Fabric 専用（NeoForge は 1.20.5+ のみ対応）
 
 ## Development Notes
 - When writing code, use Mojang mapping names (e.g., `net.minecraft.world.level.Level`, not Yarn's `class_XXXX`)
