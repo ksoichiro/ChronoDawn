@@ -114,35 +114,55 @@ public class PortalFrameValidator {
      * @return Bottom-left corner position (may be air if corner is missing)
      */
     private static BlockPos findBottomLeft(Level level, BlockPos pos, Direction horizontal, Direction vertical) {
-        // Search left (opposite of horizontal direction)
-        BlockPos leftMost = pos;
-        for (int i = 1; i <= MAX_WIDTH; i++) {
+        // Search all 4 directions to find the minimum coordinates
+        int minHorizontal = getHorizontalCoord(pos, horizontal.getAxis());
+        int minVertical = pos.getY();
+
+        // Search left (negative horizontal direction)
+        for (int i = 0; i <= MAX_WIDTH; i++) {
             BlockPos checkPos = pos.relative(horizontal.getOpposite(), i);
-
-            // Continue if it's a frame block, or if it's air but the right neighbor is a frame block (missing corner)
-            if (isFrameBlock(level, checkPos) ||
-                (!isFrameBlock(level, checkPos) && isFrameBlock(level, checkPos.relative(horizontal, 1)))) {
-                leftMost = checkPos;
-            } else {
-                break;
+            if (isFrameBlock(level, checkPos)) {
+                minHorizontal = Math.min(minHorizontal, getHorizontalCoord(checkPos, horizontal.getAxis()));
             }
         }
 
-        // Search down (opposite of vertical direction)
-        BlockPos bottomLeft = leftMost;
-        for (int i = 1; i <= MAX_HEIGHT; i++) {
-            BlockPos checkPos = leftMost.relative(vertical.getOpposite(), i);
-
-            // Continue if it's a frame block, or if it's air but the upper neighbor is a frame block (missing corner)
-            if (isFrameBlock(level, checkPos) ||
-                (!isFrameBlock(level, checkPos) && isFrameBlock(level, checkPos.relative(vertical, 1)))) {
-                bottomLeft = checkPos;
-            } else {
-                break;
+        // Search right (positive horizontal direction)
+        for (int i = 0; i <= MAX_WIDTH; i++) {
+            BlockPos checkPos = pos.relative(horizontal, i);
+            if (isFrameBlock(level, checkPos)) {
+                minHorizontal = Math.min(minHorizontal, getHorizontalCoord(checkPos, horizontal.getAxis()));
             }
         }
 
-        return bottomLeft;
+        // Search down (negative vertical direction)
+        for (int i = 0; i <= MAX_HEIGHT; i++) {
+            BlockPos checkPos = pos.relative(vertical.getOpposite(), i);
+            if (isFrameBlock(level, checkPos)) {
+                minVertical = Math.min(minVertical, checkPos.getY());
+            }
+        }
+
+        // Search up (positive vertical direction)
+        for (int i = 0; i <= MAX_HEIGHT; i++) {
+            BlockPos checkPos = pos.relative(vertical, i);
+            if (isFrameBlock(level, checkPos)) {
+                minVertical = Math.min(minVertical, checkPos.getY());
+            }
+        }
+
+        // Construct bottom-left position from minimum coordinates
+        if (horizontal.getAxis() == Direction.Axis.X) {
+            return new BlockPos(minHorizontal, minVertical, pos.getZ());
+        } else {
+            return new BlockPos(pos.getX(), minVertical, minHorizontal);
+        }
+    }
+
+    /**
+     * Get the horizontal coordinate for the given axis.
+     */
+    private static int getHorizontalCoord(BlockPos pos, Direction.Axis axis) {
+        return axis == Direction.Axis.X ? pos.getX() : pos.getZ();
     }
 
     /**
