@@ -21,6 +21,7 @@ import com.chronodawn.ChronoDawn;
 import com.chronodawn.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -42,9 +43,7 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * ChronoDawn Portal Block - Custom portal block for dimension travel.
@@ -158,9 +157,9 @@ public class ChronoDawnPortalBlock extends Block {
     @Override
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         // Validate portal frame integrity
-        // If frame is broken, destroy portal blocks
+        // If frame is broken, destroy portal blocks with glass break sound
         if (!isValidPortalPosition(level, pos, state.getValue(AXIS))) {
-            level.removeBlock(pos, false);
+            destroyPortalWithSound(level, pos);
         }
 
         // Periodic cleanup of stale portal state entries (every ~10 seconds)
@@ -481,10 +480,78 @@ public class ChronoDawnPortalBlock extends Block {
         // If relevant neighbor changed and is neither a frame block nor a portal block,
         // destroy this portal block immediately
         if (isRelevantDirection && !isFrameBlock(neighborState) && !neighborState.is(this)) {
-            // Frame is broken, destroy portal block
+            // Frame is broken, destroy portal block with sound
+            if (!level.isClientSide()) {
+                destroyPortalWithSound((ServerLevel) level, currentPos);
+            }
             return Blocks.AIR.defaultBlockState();
         }
 
         return super.updateShape(state, direction, neighborState, level, currentPos, neighborPos);
+    }
+
+    /**
+     * Destroy a portal and all connected portal blocks with glass break sound.
+     * Called when portal frame is broken.
+     *
+     * @param level Server level
+     * @param startPos Starting portal block position
+     */
+    private void destroyPortalWithSound(ServerLevel level, BlockPos startPos) {
+        // Check if this block is still a portal (might already be destroyed)
+        if (!level.getBlockState(startPos).is(this)) {
+            return;
+        }
+
+        // Find all connected portal blocks using flood fill
+        Set<BlockPos> portalBlocks = new HashSet<>();
+        Queue<BlockPos> toCheck = new LinkedList<>();
+        toCheck.add(startPos);
+        portalBlocks.add(startPos);
+
+        while (!toCheck.isEmpty()) {
+            BlockPos current = toCheck.poll();
+
+            // Check all 6 directions
+            for (Direction direction : Direction.values()) {
+                BlockPos neighbor = current.relative(direction);
+                if (!portalBlocks.contains(neighbor) && level.getBlockState(neighbor).is(this)) {
+                    portalBlocks.add(neighbor);
+                    toCheck.add(neighbor);
+                }
+            }
+        }
+
+        // Destroy all connected portal blocks with particle effects
+        BlockState portalState = this.defaultBlockState();
+        for (BlockPos pos : portalBlocks) {
+            // Spawn break particles before removing the block
+            // Use BLOCK_MARKER particle type for portal block destruction
+            level.sendParticles(
+                new BlockParticleOption(ParticleTypes.BLOCK, portalState),
+                pos.getX() + 0.5,
+                pos.getY() + 0.5,
+                pos.getZ() + 0.5,
+                15, // particle count
+                0.3, // x spread
+                0.3, // y spread
+                0.3, // z spread
+                0.1  // speed
+            );
+
+            level.removeBlock(pos, false);
+        }
+
+        // Play glass break sound at the center of the portal
+        if (!portalBlocks.isEmpty()) {
+            level.playSound(
+                null,
+                startPos,
+                SoundEvents.GLASS_BREAK,
+                SoundSource.BLOCKS,
+                1.0F,
+                1.0F
+            );
+        }
     }
 }
