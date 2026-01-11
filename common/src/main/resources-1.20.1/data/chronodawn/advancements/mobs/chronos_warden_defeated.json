@@ -12,7 +12,7 @@
   },
   "display": {
     "icon": {
-      "id": "chronodawn:guardian_stone"
+      "item": "chronodawn:guardian_stone"
     },
     "title": {
       "translate": "advancements.chronodawn.chronos_warden_defeated.title"

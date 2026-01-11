@@ -14,7 +14,7 @@
   },
   "display": {
     "icon": {
-      "id": "chronodawn:enhanced_clockstone"
+      "item": "chronodawn:enhanced_clockstone"
     },
     "title": {
       "translate": "advancements.chronodawn.desert_clock_tower.title"

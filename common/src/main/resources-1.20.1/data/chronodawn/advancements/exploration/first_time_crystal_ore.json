@@ -16,7 +16,7 @@
   },
   "display": {
     "icon": {
-      "id": "chronodawn:time_crystal"
+      "item": "chronodawn:time_crystal"
     },
     "title": {
       "translate": "advancements.chronodawn.first_time_crystal_ore.title"

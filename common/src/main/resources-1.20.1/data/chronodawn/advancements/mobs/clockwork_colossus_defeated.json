@@ -12,7 +12,7 @@
   },
   "display": {
     "icon": {
-      "id": "chronodawn:colossus_gear"
+      "item": "chronodawn:colossus_gear"
     },
     "title": {
       "translate": "advancements.chronodawn.clockwork_colossus_defeated.title"

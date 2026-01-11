@@ -12,7 +12,7 @@
   },
   "display": {
     "icon": {
-      "id": "minecraft:phantom_membrane"
+      "item": "minecraft:phantom_membrane"
     },
     "title": {
       "translate": "advancements.chronodawn.temporal_wraith_defeated.title"

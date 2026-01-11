@@ -16,7 +16,7 @@
   },
   "display": {
     "icon": {
-      "id": "chronodawn:time_hourglass"
+      "item": "chronodawn:time_hourglass"
     },
     "title": {
       "translate": "advancements.chronodawn.portal_creation.title"

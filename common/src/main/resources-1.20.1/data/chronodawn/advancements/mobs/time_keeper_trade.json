@@ -12,7 +12,7 @@
   },
   "display": {
     "icon": {
-      "id": "minecraft:emerald"
+      "item": "minecraft:emerald"
     },
     "title": {
       "translate": "advancements.chronodawn.time_keeper_trade.title"

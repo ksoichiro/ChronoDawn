@@ -14,7 +14,7 @@
   },
   "display": {
     "icon": {
-      "id": "chronodawn:time_fruit_pie"
+      "item": "chronodawn:time_fruit_pie"
     },
     "title": {
       "translate": "advancements.chronodawn.time_fruit_pie.title"

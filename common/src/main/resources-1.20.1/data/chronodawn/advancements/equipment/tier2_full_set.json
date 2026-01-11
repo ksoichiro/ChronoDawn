@@ -44,7 +44,7 @@
   },
   "display": {
     "icon": {
-      "id": "chronodawn:enhanced_clockstone_chestplate"
+      "item": "chronodawn:enhanced_clockstone_chestplate"
     },
     "title": {
       "translate": "advancements.chronodawn.tier2_full_set.title"

@@ -6,7 +6,5 @@
   "ingredient": {
     "item": "chronodawn:time_wood_log"
   },
-  "result": {
-    "id": "minecraft:charcoal"
-  }
+  "result": "minecraft:charcoal"
 }

@@ -36,7 +36,7 @@
   ],
   "display": {
     "icon": {
-      "id": "chronodawn:time_clock"
+      "item": "chronodawn:time_clock"
     },
     "title": {
       "translate": "advancements.chronodawn.time_manipulation_tools.title"

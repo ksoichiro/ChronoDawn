@@ -10,17 +10,8 @@
           "weight": 1,
           "functions": [
             {
-              "function": "minecraft:set_components",
-              "components": {
-                "minecraft:recipes": [
-                  "chronodawn:portal_stabilizer"
-                ],
-                "minecraft:custom_name": "{\"text\":\"Portal Stabilizer Blueprint\",\"color\":\"aqua\",\"italic\":false}",
-                "minecraft:lore": [
-                  "{\"text\":\"Ancient knowledge to stabilize\",\"color\":\"gray\",\"italic\":true}",
-                  "{\"text\":\"dimensional portals.\",\"color\":\"gray\",\"italic\":true}"
-                ]
-              }
+              "function": "minecraft:set_nbt",
+              "tag": "{Recipes:[\"chronodawn:portal_stabilizer\"],display:{Name:\"{\\\"text\\\":\\\"Portal Stabilizer Blueprint\\\",\\\"color\\\":\\\"aqua\\\",\\\"italic\\\":false}\",Lore:[\"{\\\"text\\\":\\\"Ancient knowledge to stabilize\\\",\\\"color\\\":\\\"gray\\\",\\\"italic\\\":true}\",\"{\\\"text\\\":\\\"dimensional portals.\\\",\\\"color\\\":\\\"gray\\\",\\\"italic\\\":true}\"]}}"
             }
           ]
         }

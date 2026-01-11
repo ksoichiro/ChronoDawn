@@ -14,7 +14,7 @@
   },
   "display": {
     "icon": {
-      "id": "chronodawn:time_jam"
+      "item": "chronodawn:time_jam"
     },
     "title": {
       "translate": "advancements.chronodawn.time_jam.title"

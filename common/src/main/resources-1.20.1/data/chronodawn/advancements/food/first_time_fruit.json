@@ -14,7 +14,7 @@
   },
   "display": {
     "icon": {
-      "id": "chronodawn:fruit_of_time"
+      "item": "chronodawn:fruit_of_time"
     },
     "title": {
       "translate": "advancements.chronodawn.first_time_fruit.title"

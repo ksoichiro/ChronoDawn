@@ -13,11 +13,11 @@
                 {
                   "condition": "minecraft:match_tool",
                   "predicate": {
-                    "items": "minecraft:shears"
+                    "items": ["minecraft:shears"]
                   }
                 }
               ],
-              "name": "minecraft:short_grass"
+              "name": "minecraft:grass"
             },
             {
               "type": "minecraft:item",

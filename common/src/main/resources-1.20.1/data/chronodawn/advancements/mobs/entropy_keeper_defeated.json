@@ -12,7 +12,7 @@
   },
   "display": {
     "icon": {
-      "id": "chronodawn:entropy_core"
+      "item": "chronodawn:entropy_core"
     },
     "title": {
       "translate": "advancements.chronodawn.entropy_keeper_defeated.title"

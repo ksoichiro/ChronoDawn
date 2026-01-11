@@ -15,7 +15,7 @@
   },
   "display": {
     "icon": {
-      "id": "chronodawn:clockstone"
+      "item": "chronodawn:clockstone"
     },
     "title": {
       "translate": "advancements.chronodawn.root.title"

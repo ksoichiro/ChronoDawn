@@ -14,7 +14,7 @@
   },
   "display": {
     "icon": {
-      "id": "chronodawn:time_bread"
+      "item": "chronodawn:time_bread"
     },
     "title": {
       "translate": "advancements.chronodawn.time_bread.title"

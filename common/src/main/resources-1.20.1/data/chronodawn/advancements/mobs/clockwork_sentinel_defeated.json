@@ -12,7 +12,7 @@
   },
   "display": {
     "icon": {
-      "id": "chronodawn:ancient_gear"
+      "item": "chronodawn:ancient_gear"
     },
     "title": {
       "translate": "advancements.chronodawn.clockwork_sentinel_defeated.title"

@@ -30,17 +30,8 @@
           "weight": 1,
           "functions": [
             {
-              "function": "minecraft:set_components",
-              "components": {
-                "minecraft:recipes": [
-                  "chronodawn:time_hourglass"
-                ],
-                "minecraft:custom_name": "{\"text\":\"Time Hourglass Blueprint\",\"color\":\"gold\",\"italic\":false}",
-                "minecraft:lore": [
-                  "{\"text\":\"Ancient instructions for crafting\",\"color\":\"gray\",\"italic\":true}",
-                  "{\"text\":\"a device to activate portals.\",\"color\":\"gray\",\"italic\":true}"
-                ]
-              }
+              "function": "minecraft:set_nbt",
+              "tag": "{Recipes:[\"chronodawn:time_hourglass\"],display:{Name:\"{\\\"text\\\":\\\"Time Hourglass Blueprint\\\",\\\"color\\\":\\\"gold\\\",\\\"italic\\\":false}\",Lore:[\"{\\\"text\\\":\\\"Ancient instructions for crafting\\\",\\\"color\\\":\\\"gray\\\",\\\"italic\\\":true}\",\"{\\\"text\\\":\\\"a device to activate portals.\\\",\\\"color\\\":\\\"gray\\\",\\\"italic\\\":true}\"]}}"
             }
           ]
         }

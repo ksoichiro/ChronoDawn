@@ -44,7 +44,7 @@
   },
   "display": {
     "icon": {
-      "id": "minecraft:golden_apple"
+      "item": "minecraft:golden_apple"
     },
     "title": {
       "translate": "advancements.chronodawn.all_foods_consumed.title"

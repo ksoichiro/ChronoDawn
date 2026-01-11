@@ -12,7 +12,7 @@
   },
   "display": {
     "icon": {
-      "id": "chronodawn:key_to_master_clock"
+      "item": "chronodawn:key_to_master_clock"
     },
     "title": {
       "translate": "advancements.chronodawn.time_guardian_defeat.title"

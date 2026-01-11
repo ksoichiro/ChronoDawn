@@ -10,7 +10,7 @@
   },
   "display": {
     "icon": {
-      "id": "chronodawn:clockstone_block"
+      "item": "chronodawn:clockstone_block"
     },
     "title": {
       "translate": "advancements.chronodawn.dimension_entry.title"

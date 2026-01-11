@@ -6,7 +6,5 @@
   "ingredient": {
     "item": "chronodawn:dark_time_wood_log"
   },
-  "result": {
-    "id": "minecraft:charcoal"
-  }
+  "result": "minecraft:charcoal"
 }

@@ -12,7 +12,7 @@
   },
   "display": {
     "icon": {
-      "id": "chronodawn:eye_of_chronos"
+      "item": "chronodawn:eye_of_chronos"
     },
     "title": {
       "translate": "advancements.chronodawn.time_tyrant_defeat.title"

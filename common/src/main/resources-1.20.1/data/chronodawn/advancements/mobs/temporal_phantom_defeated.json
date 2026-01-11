@@ -12,7 +12,7 @@
   },
   "display": {
     "icon": {
-      "id": "chronodawn:phantom_essence"
+      "item": "chronodawn:phantom_essence"
     },
     "title": {
       "translate": "advancements.chronodawn.temporal_phantom_defeated.title"

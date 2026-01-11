@@ -12,7 +12,7 @@
     }
   },
   "result": {
-    "id": "chronodawn:clockstone_block",
+    "item": "chronodawn:clockstone_block",
     "count": 1
   }
 }

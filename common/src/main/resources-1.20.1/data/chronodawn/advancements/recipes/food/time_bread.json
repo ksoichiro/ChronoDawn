@@ -11,7 +11,7 @@
       "conditions": {
         "items": [
           {
-            "items": "chronodawn:time_wheat"
+            "items": ["chronodawn:time_wheat"]
           }
         ]
       },
