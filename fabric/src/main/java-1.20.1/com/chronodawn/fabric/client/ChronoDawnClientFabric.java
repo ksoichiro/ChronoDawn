@@ -270,6 +270,18 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             RenderType.cutout()
         );
 
+        // Register Dawn Bell to use cutout rendering (for transparency)
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.DAWN_BELL.get(),
+            RenderType.cutout()
+        );
+
+        // Register Dusk Bell to use cutout rendering (for transparency)
+        BlockRenderLayerMap.INSTANCE.putBlock(
+            ModBlocks.DUSK_BELL.get(),
+            RenderType.cutout()
+        );
+
         // Register Time Wood Door to use cutout rendering (for transparency)
         BlockRenderLayerMap.INSTANCE.putBlock(
             ModBlocks.TIME_WOOD_DOOR.get(),

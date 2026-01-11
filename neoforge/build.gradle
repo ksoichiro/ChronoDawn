@@ -27,19 +27,19 @@ loom {
             client()
             setConfigName("NeoForge Client")
             ideConfigGenerated(true)
-            runDir("run")
+            runDir("run-${project.ext.minecraft_version}")
         }
         server {
             server()
             setConfigName("NeoForge Server")
             ideConfigGenerated(true)
-            runDir("run")
+            runDir("run-${project.ext.minecraft_version}")
         }
         gameTestServer {
             server()
             setConfigName("NeoForge GameTest Server")
             ideConfigGenerated(true)
-            runDir("run")
+            runDir("run-${project.ext.minecraft_version}")
             // Enable GameTest framework
             property("neoforge.enabledGameTestNamespaces", "chronodawn")
             // Auto-run all tests and exit

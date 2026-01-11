@@ -31,6 +31,8 @@ bin/
 
 # Minecraft Development
 run/
+fabric/run-*/
+neoforge/run-*/
 logs/
 crash-reports/
 

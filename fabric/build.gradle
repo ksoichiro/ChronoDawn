@@ -68,6 +68,18 @@ loom {
     if (project(':common').loom.accessWidenerPath != null) {
         accessWidenerPath = project(':common').loom.accessWidenerPath
     }
+
+    // Multi-version support: Use version-specific run directory
+    runs {
+        client {
+            client()
+            runDir("run-${project.ext.minecraft_version}")
+        }
+        server {
+            server()
+            runDir("run-${project.ext.minecraft_version}")
+        }
+    }
 }
 
 // GameTest Framework configuration
