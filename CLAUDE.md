@@ -76,15 +76,6 @@ tests/
 ## Code Style
 Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 
-## Recent Changes
-- 2025-12-21: Rebranded mod to "Chrono Dawn", renamed directory from `001-chronosphere-mod` to `chrono-dawn-mod`
-- 2025-10-27: Fixed leaves decay logic using minecraft:logs tag and distance tracking (T079-T080)
-- 2025-10-27: Implemented Time Wood tree worldgen with custom blocks (Log, Leaves, Planks, Sapling)
-- 2025-10-26: **CRITICAL DESIGN DECISION**: Respawn mechanics follow Minecraft standard (End-like), not custom logic (see spec.md "Game Design Philosophy")
-- 2025-10-24: Implemented custom portal system with independent implementation (no external dependencies)
-- 2025-10-24: Implemented Time Distortion Effect (Slowness IV for hostile mobs in Chrono Dawn dimension)
-- 2025-10-23: Migrated to Groovy DSL and Mojang mappings for Minecraft 1.21.1 compatibility
-
 ## Build Configuration
 - **Build DSL**: Groovy DSL (not Kotlin DSL) - for compatibility with Architectury Loom 1.11-SNAPSHOT
 - **Mappings**: Mojang mappings (not Yarn) - code uses official Minecraft class names (e.g., `net.minecraft.core.Registry`)
