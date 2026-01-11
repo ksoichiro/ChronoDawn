@@ -139,3 +139,6 @@ publishing {
         // Add publishing repositories here
     }
 }
+
+// Multi-version run client tasks (auto-generated for all supported versions)
+apply from: "${rootProject.projectDir}/gradle/subproject-run-tasks.gradle"

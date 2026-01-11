@@ -112,15 +112,27 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
    - ArmorMaterial: Interface (1.20.1) vs Record (1.21.1)
    - Tier: getLevel() method (1.20.1 only, removed in 1.21.1)
 3. **Build Commands**:
-   - `./gradlew build1201` - Build for Minecraft 1.20.1
-   - `./gradlew build1211` - Build for Minecraft 1.21.1 (default)
+   - `./gradlew build1_20_1` - Build for Minecraft 1.20.1
+   - `./gradlew build1_21_1` - Build for Minecraft 1.21.1 (default)
    - `./gradlew buildAll` - Build all versions sequentially
    - `./gradlew build -Ptarget_mc_version=1.20.1` - Explicit version build
 
-**Output JARs**:
-- Fabric: `chronodawn-{version}+{mc_version}-fabric.jar`
-- NeoForge: `chronodawn-{version}+{mc_version}-neoforge.jar`
-- Example: `chronodawn-0.3.0-beta+1.21.1-fabric.jar`
+4. **Run Client Commands** (auto-generated from `gradle/subproject-run-tasks.gradle`):
+   - **Fabric**:
+     - `./gradlew fabric:runClient1_20_1` - Run Fabric client for 1.20.1
+     - `./gradlew fabric:runClient1_21_1` - Run Fabric client for 1.21.1
+   - **NeoForge/Forge**:
+     - `./gradlew neoforge:runClient1_20_1` - Run NeoForge/Forge client for 1.20.1
+     - `./gradlew neoforge:runClient1_21_1` - Run NeoForge client for 1.21.1
+   - **Explicit version run** (alternative method):
+     - `./gradlew :fabric:runClient -Ptarget_mc_version=1.20.1`
+     - `./gradlew :neoforge:runClient -Ptarget_mc_version=1.21.1`
+   - **Adding new versions**: Edit `supportedVersions` list in `gradle/subproject-run-tasks.gradle`
+
+5. **Output JARs**:
+   - Fabric: `chronodawn-{version}+{mc_version}-fabric.jar`
+   - NeoForge: `chronodawn-{version}+{mc_version}-neoforge.jar`
+   - Example: `chronodawn-0.3.0-beta+1.21.1-fabric.jar`
 
 **Status**: ✅ Phase 1-5 完了、Phase 6 (統合テスト) 未着手
 

@@ -2,7 +2,7 @@
 
 **Date**: 2026-01-01
 **Author**: Claude + User
-**Target Versions**: Minecraft 1.20.6 + 1.21.1 (Single Codebase)
+**Target Versions**: Minecraft 1.20.1 + 1.21.1 (Single Codebase)
 **Strategy**: Custom Gradle Scripts + Abstraction Layer Approach
 
 ---
@@ -23,19 +23,19 @@
 
 ### 1.1 Purpose
 
-- Support both Minecraft 1.20.6 and 1.21.1 from a **single codebase**
+- Support both Minecraft 1.20.1 and 1.21.1 from a **single codebase**
 - Prioritize **AI development efficiency** by consolidating all code in one location (avoid Git branch separation)
 - Ensure maintainability with **no external library dependencies** (no preprocessors like Stonecutter/Manifold)
 
 ### 1.2 Basic Policy
 
-1. **Data Pack**: Use version-specific directories (`resources-1.20.6/`, `resources-1.21.1/`) with Gradle switching
+1. **Data Pack**: Use version-specific directories (`resources-1.20.1/`, `resources-1.21.1/`) with Gradle switching
 2. **Java Code**: Abstract version differences through a compatibility layer, with version-specific implementations in `compat/` package
 3. **Gradle Scripts**: Custom `sourceSets` configuration for build-time version selection
 
 ### 1.3 Scope
 
-- **Target Versions**: Minecraft 1.20.6, 1.21.1
+- **Target Versions**: Minecraft 1.20.1, 1.21.1
 - **Target Loaders**: Fabric, NeoForge (maintain existing Architectury structure)
 - **Out of Scope**: 1.20.1-1.20.4 (Architectury Loom 1.11 only supports 1.20.4+)
 
@@ -47,7 +47,7 @@
 
 #### A. Data Pack (Folder Naming: Singular/Plural)
 
-| Category | 1.20.6 (Plural) | 1.21.1 (Singular) | Impact |
+| Category | 1.20.1 (Plural) | 1.21.1 (Singular) | Impact |
 |----------|----------------|-------------------|--------|
 | **Advancements** | `advancement`**s** | `advancement` | ~100 files |
 | **Loot Tables** | `loot_table`**s** | `loot_table` | ~50 files |
@@ -56,14 +56,14 @@
 | **Tags** | `tags/item`**s** | `tags/item` | ~20 files |
 
 **Pack Format**:
-- 1.20.6: `pack_format: 41`
+- 1.20.1: `pack_format: 18`
 - 1.21.1: `pack_format: 48`
 
 **Current State**: Only 1.21.1 format (singular) exists
 
 #### B. Java API Breaking Changes
 
-| Category | 1.20.6 (NBT-based) | 1.21.1 (Component-based) | Affected Files |
+| Category | 1.20.1 (NBT-based) | 1.21.1 (Component-based) | Affected Files |
 |----------|--------------------|-----------------------|--------------|
 | **ItemStack Data** | `stack.getOrCreateTag()` | `stack.set(DataComponents.CUSTOM_DATA, ...)` | 47 files |
 | **SavedData** | `CompoundTag` only | `CompoundTag` + `HolderLookup.Provider` | 7 files |
@@ -82,10 +82,10 @@ common/src/main/java/com/chronodawn/
 
 #### C. Dependency Library Versions
 
-| Library | 1.20.6 | 1.21.1 (Current) | Compatibility |
+| Library | 1.20.1 | 1.21.1 (Current) | Compatibility |
 |---------|--------|------------------|---------------|
 | Architectury API | `12.1.4` | `13.0.8` | **Incompatible** |
-| Fabric API | `0.100.4+1.20.6` | `0.116.7+1.21.1` | **Incompatible** |
+| Fabric API | `0.100.4+1.20.1` | `0.116.7+1.21.1` | **Incompatible** |
 | NeoForge | `20.6.145` | `21.1.209` | **Incompatible** |
 | Custom Portal API (Fabric) | `0.0.1-beta66-1.20` | `0.0.1-beta66-1.21` | **Incompatible** |
 
@@ -99,7 +99,7 @@ common/src/main/java/com/chronodawn/
 ChronoDawn/
 ├── gradle.properties                # Default version settings
 ├── props/                           # Version-specific configurations (NEW)
-│   ├── 1.20.6.properties
+│   ├── 1.20.1.properties
 │   └── 1.21.1.properties
 ├── common/
 │   ├── build.gradle                 # Multi-version Gradle configuration
@@ -107,7 +107,7 @@ ChronoDawn/
 │       ├── java/com/chronodawn/
 │       │   ├── compat/              # Version-specific implementations (NEW)
 │       │   │   ├── ItemDataHandler.java         # Interface
-│       │   │   ├── v1_20_6/                     # 1.20.6 implementation
+│       │   │   ├── v1_20_1/                     # 1.20.1 implementation
 │       │   │   │   └── ItemDataHandler120.java
 │       │   │   └── v1_21_1/                     # 1.21.1 implementation
 │       │   │       └── ItemDataHandler121.java
@@ -115,8 +115,8 @@ ChronoDawn/
 │       │   ├── blocks/
 │       │   └── ...
 │       ├── resources/               # Common resources (assets, structure NBTs, etc.)
-│       ├── resources-1.20.6/        # 1.20.6-specific (NEW)
-│       │   ├── pack.mcmeta          # pack_format: 41
+│       ├── resources-1.20.1/        # 1.20.1-specific (NEW)
+│       │   ├── pack.mcmeta          # pack_format: 18
 │       │   └── data/chronodawn/
 │       │       ├── advancements/    # Plural
 │       │       ├── loot_tables/     # Plural
@@ -145,7 +145,7 @@ public interface ItemDataHandler {
     // ... other data types
 }
 
-// 1.20.6 implementation
+// 1.20.1 implementation
 public class ItemDataHandler120 implements ItemDataHandler {
     @Override
     public void setString(ItemStack stack, String key, String value) {
@@ -196,7 +196,7 @@ public class CompatHandlers {
 // common/src/main/java/com/chronodawn/compat/SavedDataHandler.java
 public interface SavedDataHandler {
     CompoundTag save(CompoundTag tag, Object registries);
-    // registries is ignored in 1.20.6, used as HolderLookup.Provider in 1.21.1
+    // registries is ignored in 1.20.1, used as HolderLookup.Provider in 1.21.1
 }
 ```
 
@@ -204,15 +204,15 @@ public interface SavedDataHandler {
 
 #### A. Version Property Files
 
-**props/1.20.6.properties**:
+**props/1.20.1.properties**:
 ```properties
-minecraft_version=1.20.6
-pack_format=41
+minecraft_version=1.20.1
+pack_format=18
 architectury_api_version=12.1.4
-fabric_api_version=0.100.4+1.20.6
+fabric_api_version=0.100.4+1.20.1
 neoforge_version=20.6.145
 custom_portal_api_fabric_version=0.0.1-beta66-1.20
-compat_package=v1_20_6
+compat_package=v1_20_1
 ```
 
 **props/1.21.1.properties**:
@@ -310,16 +310,16 @@ processResources {
 - [ ] **T1-1**: Create `props/` directory and version property files
 - [ ] **T1-2**: Add version switching logic to root `build.gradle`
 - [ ] **T1-3**: Create `common/src/main/resources-1.21.1/` directory (copy current data)
-- [ ] **T1-4**: Create `common/src/main/resources-1.20.6/` directory
+- [ ] **T1-4**: Create `common/src/main/resources-1.20.1/` directory
   - [ ] T1-4a: Rename `advancement/` → `advancements/` (copy all files)
   - [ ] T1-4b: Rename `loot_table/` → `loot_tables/`
   - [ ] T1-4c: Rename `recipe/` → `recipes/`
   - [ ] T1-4d: Rename `tags/item/` → `tags/items/`
-  - [ ] T1-4e: Change `pack_format` to 41 in `pack.mcmeta`
+  - [ ] T1-4e: Change `pack_format` to 18 in `pack.mcmeta`
 - [ ] **T1-5**: Add `sourceSets.main.resources` configuration to `common/build.gradle`
 - [ ] **T1-6**: Verification
   - [ ] T1-6a: Verify singular folders used with `./gradlew :common:processResources -Ptarget_mc_version=1.21.1`
-  - [ ] T1-6b: Verify plural folders used with `./gradlew :common:processResources -Ptarget_mc_version=1.20.6`
+  - [ ] T1-6b: Verify plural folders used with `./gradlew :common:processResources -Ptarget_mc_version=1.20.1`
 
 **Duration**: 2-3 days
 **Risk**: Low (standard Gradle features only)
@@ -358,19 +358,19 @@ processResources {
 
 - [ ] **T3-1**: Implement `compat/` package
   - [ ] T3-1a: Implement `ItemDataHandler` interface
-  - [ ] T3-1b: Implement `v1_20_6/ItemDataHandler120.java` (NBT version)
+  - [ ] T3-1b: Implement `v1_20_1/ItemDataHandler120.java` (NBT version)
   - [ ] T3-1c: Implement `v1_21_1/ItemDataHandler121.java` (Component version)
   - [ ] T3-1d: Implement `CompatHandlers` factory class
 - [ ] **T3-2**: Implement `SavedDataHandler`
   - [ ] T3-2a: Implement interface
-  - [ ] T3-2b: Implement 1.20.6 version (no `HolderLookup.Provider`)
+  - [ ] T3-2b: Implement 1.20.1 version (no `HolderLookup.Provider`)
   - [ ] T3-2c: Implement 1.21.1 version (with `HolderLookup.Provider`)
 - [ ] **T3-3**: Extend Gradle build scripts
   - [ ] T3-3a: Add `compat_package` property
   - [ ] T3-3b: Add version-specific directory to `sourceSets.main.java`
   - [ ] T3-3c: Set system property at compile time
 - [ ] **T3-4**: Verification
-  - [ ] T3-4a: Verify `ItemDataHandler120` used in 1.20.6 build
+  - [ ] T3-4a: Verify `ItemDataHandler120` used in 1.20.1 build
   - [ ] T3-4b: Verify `ItemDataHandler121` used in 1.21.1 build
   - [ ] T3-4c: Create unit tests (if possible)
 
@@ -410,7 +410,7 @@ processResources {
 
 **Status**: **In Progress** - Extended migration approach (T401-T427)
 
-**Note**: Target version changed from 1.20.6 to **1.20.1** during implementation to maximize version coverage.
+**Note**: Target version changed from 1.20.1 to **1.20.1** during implementation to maximize version coverage.
 
 **Completed Tasks**:
 
@@ -547,14 +547,16 @@ processResources {
 #### Task List
 
 - [ ] **T5-1**: Add Gradle tasks
-  - [ ] T5-1a: Create `build1206` task (1.20.6 build shortcut)
-  - [ ] T5-1b: Create `build1211` task (1.21.1 build shortcut)
+  - [ ] T5-1a: Create `build1_20_1` task (1.20.1 build shortcut)
+  - [ ] T5-1b: Create `build1_21_1` task (1.21.1 build shortcut)
   - [ ] T5-1c: Create `buildAll` task (sequential build for all versions)
+  - [ ] T5-1d: Create `runClient1_20_1` task (1.20.1 run client shortcut)
+  - [ ] T5-1e: Create `runClient1_21_1` task (1.21.1 run client shortcut)
 - [ ] **T5-2**: Rename output JARs
-  - [ ] T5-2a: Change to `chronodawn-0.1.0+1.20.6-fabric.jar` format
+  - [ ] T5-2a: Change to `chronodawn-0.1.0+1.20.1-fabric.jar` format
   - [ ] T5-2b: Change to `chronodawn-0.1.0+1.21.1-neoforge.jar` format
 - [ ] **T5-3**: Update GitHub Actions workflow (if applicable)
-  - [ ] T5-3a: Configure matrix build (1.20.6 / 1.21.1)
+  - [ ] T5-3a: Configure matrix build (1.20.1 / 1.21.1)
   - [ ] T5-3b: Configure artifact upload
 - [ ] **T5-4**: Update documentation
   - [ ] T5-4a: Update build instructions in `README.md`
@@ -571,9 +573,9 @@ processResources {
 
 #### Task List
 
-- [ ] **T6-1**: Verify 1.20.6 build
+- [ ] **T6-1**: Verify 1.20.1 build
   - [ ] T6-1a: Verify successful build
-  - [ ] T6-1b: Verify startup in Minecraft 1.20.6
+  - [ ] T6-1b: Verify startup in Minecraft 1.20.1
   - [ ] T6-1c: Verify Data Pack loaded correctly (plural folders)
   - [ ] T6-1d: Verify Portal Stabilizer operation (ItemStack NBT)
   - [ ] T6-1e: Verify SavedData save/load
@@ -602,8 +604,8 @@ processResources {
 #### Command Examples
 
 ```bash
-# 1.20.6 build
-./gradlew clean build -Ptarget_mc_version=1.20.6
+# 1.20.1 build
+./gradlew clean build -Ptarget_mc_version=1.20.1
 
 # 1.21.1 build
 ./gradlew clean build -Ptarget_mc_version=1.21.1
@@ -622,7 +624,7 @@ processResources {
 
 #### Checklist
 
-| Category | Verification Item | 1.20.6 | 1.21.1 |
+| Category | Verification Item | 1.20.1 | 1.21.1 |
 |---------|-------------------|--------|--------|
 | **Startup** | Minecraft starts | ☐ | ☐ |
 | **Logs** | No error logs | ☐ | ☐ |
@@ -653,7 +655,7 @@ grep -r "getOrCreateTag()\|getOrCreateTagElement\|set(DataComponents" common/src
 
 ```bash
 # Unit tests implemented in Phase 3+
-./gradlew test -Ptarget_mc_version=1.20.6
+./gradlew test -Ptarget_mc_version=1.20.1
 ./gradlew test -Ptarget_mc_version=1.21.1
 ```
 
@@ -684,7 +686,7 @@ grep -r "getOrCreateTag()\|getOrCreateTagElement\|set(DataComponents" common/src
 If implementation becomes difficult in Phase 3-4:
 
 1. **Plan B**: Multi-version Data Pack only, Git branch separation for Java code
-2. **Plan C**: Revert to 1.21.1 only, postpone 1.20.6 support
+2. **Plan C**: Revert to 1.21.1 only, postpone 1.20.1 support
 
 ---
 
@@ -697,15 +699,15 @@ If implementation becomes difficult in Phase 3-4:
 - [Fabric Custom Data Components Guide](https://docs.fabricmc.net/develop/items/custom-data-components)
 - [Minecraft Wiki - Data Component Format](https://minecraft.wiki/w/Data_component_format)
 - [Minecraft Wiki - Pack Format](https://minecraft.wiki/w/Pack_format)
-- [Fabric for Minecraft 1.20.5 & 1.20.6](https://fabricmc.net/2024/04/19/1205.html)
+- [Fabric for Minecraft 1.20.5 & 1.20.1](https://fabricmc.net/2024/04/19/1205.html)
 
 ### 7.2 Glossary
 
 | Term | Description |
 |------|-------------|
 | **Data Pack** | Minecraft's data-driven content (advancements, loot_tables, recipes, etc.) |
-| **pack_format** | Data Pack version number (1.20.6=41, 1.21.1=48) |
-| **NBT** | Named Binary Tag, Minecraft's data storage format (used for ItemStack until 1.20.6) |
+| **pack_format** | Data Pack version number (1.20.1=18, 1.21.1=48) |
+| **NBT** | Named Binary Tag, Minecraft's data storage format (used for ItemStack until 1.20.1) |
 | **DataComponents** | New ItemStack data storage system introduced in 1.20.5+ |
 | **SavedData** | World data persistence API (saved to `data/<mod_id>_<name>.dat`) |
 | **HolderLookup.Provider** | Registry access interface required in 1.21.1+ |

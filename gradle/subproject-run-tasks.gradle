@@ -1,0 +1,37 @@
+// Multi-version run client tasks for subprojects (fabric, neoforge)
+// This script dynamically generates runClient tasks for all supported Minecraft versions.
+// When you add a new version, tasks are automatically created for both loaders.
+//
+// HOW TO ADD A NEW VERSION:
+// 1. Add the version to the supportedVersions list below (e.g., '1.22.0')
+// 2. Tasks will be auto-generated: fabric:runClient1_22_0, neoforge:runClient1_22_0
+// 3. No need to edit fabric/build.gradle or neoforge/build.gradle
+
+// Supported Minecraft versions
+def supportedVersions = ['1.20.1', '1.21.1']
+
+// Generate runClient tasks for each version
+supportedVersions.each { version ->
+    // Task name: runClient1_20_1, runClient1_21_1, etc.
+    def taskName = "runClient${version.replace('.', '_')}"
+
+    tasks.register(taskName) {
+        group = 'chrono dawn run'
+        description = "Run ${project.name} client for Minecraft ${version}"
+
+        doFirst {
+            logger.lifecycle('')
+            logger.lifecycle('====================================')
+            logger.lifecycle("Running ${project.name} client for Minecraft ${version}...")
+            logger.lifecycle('====================================')
+            logger.lifecycle('')
+        }
+
+        doLast {
+            project.exec {
+                workingDir rootProject.projectDir
+                commandLine './gradlew', ":${project.name}:runClient", "-Ptarget_mc_version=${version}"
+            }
+        }
+    }
+}
