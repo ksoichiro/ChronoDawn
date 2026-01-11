@@ -4,6 +4,7 @@ import com.chronodawn.ChronoDawn;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.dimension.DimensionType;
 
@@ -22,7 +23,7 @@ public class ModDimensions {
      */
     public static final ResourceKey<Level> CHRONO_DAWN_DIMENSION = ResourceKey.create(
         Registries.DIMENSION,
-        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "chronodawn")
+        CompatResourceLocation.create(ChronoDawn.MOD_ID, "chronodawn")
     );
 
     /**
@@ -31,7 +32,7 @@ public class ModDimensions {
      */
     public static final ResourceKey<DimensionType> CHRONO_DAWN_DIMENSION_TYPE = ResourceKey.create(
         Registries.DIMENSION_TYPE,
-        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "chronodawn")
+        CompatResourceLocation.create(ChronoDawn.MOD_ID, "chronodawn")
     );
 
     /**

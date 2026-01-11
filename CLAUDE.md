@@ -91,26 +91,49 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 - **Mappings**: Mojang mappings (not Yarn) - code uses official Minecraft class names (e.g., `net.minecraft.core.Registry`)
 - **Shadow Plugin**: com.gradleup.shadow 8.3.6 - for bundling common module into platform-specific JARs
 
-## Multi-Version Support (Planned)
+## Multi-Version Support
 
 **Documentation**: Detailed migration plan is available in `docs/multiversion_migration_plan.md`.
 
-**Target Versions**: Minecraft 1.20.6 + 1.21.1 (同一コードベース)
+**Supported Versions**: Minecraft 1.20.1 + 1.21.1 (single codebase)
 
 **Strategy**:
-- Gradle 自前スクリプト + 抽象化レイヤー方式（外部プリプロセッサ非依存）
-- 全コードを1箇所に集約（AI 開発効率を重視し、Git ブランチ分離を避ける）
+- Custom Gradle scripts + abstraction layer approach (no external preprocessor dependencies)
+- All code consolidated in one place (prioritizing AI development efficiency, avoiding Git branch separation)
+- **Status**: ✅ Phase 1-6 completed (integration testing complete, 2026-01-11)
 
 **Key Components**:
-1. **Data Pack**: バージョン固有ディレクトリ（`resources-1.20.6/`, `resources-1.21.1/`）を Gradle で切り替え
-   - 1.20.6: 複数形フォルダ（`advancements/`, `loot_tables/`, `recipes/`）+ pack_format: 41
-   - 1.21.1: 単数形フォルダ（`advancement/`, `loot_table/`, `recipe/`）+ pack_format: 48
-2. **Java Code**: `compat/` パッケージで API 差異を吸収
-   - ItemStack: NBT (1.20.6) vs DataComponents (1.21.1)
-   - SavedData: `HolderLookup.Provider` の有無
-3. **Build Command**: `./gradlew build -Ptarget_mc_version=1.20.6` または `1.21.1`
+1. **Data Pack**: Version-specific directories (`resources-1.20.1/`, `resources-1.21.1/`) switched via Gradle
+   - 1.20.1: Plural folders (`advancements/`, `loot_tables/`, `recipes/`) + pack_format: 18
+   - 1.21.1: Singular folders (`advancement/`, `loot_table/`, `recipe/`) + pack_format: 48
+2. **Java Code**: `compat/` package absorbs API differences
+   - ItemStack: NBT (1.20.1) vs DataComponents (1.21.1)
+   - SavedData: `HolderLookup.Provider` presence/absence
+   - ArmorMaterial: Interface (1.20.1) vs Record (1.21.1)
+   - Tier: getLevel() method (1.20.1 only, removed in 1.21.1)
+3. **Build Commands**:
+   - `./gradlew build1_20_1` - Build for Minecraft 1.20.1
+   - `./gradlew build1_21_1` - Build for Minecraft 1.21.1 (default)
+   - `./gradlew buildAll` - Build all versions sequentially
+   - `./gradlew build -Ptarget_mc_version=1.20.1` - Explicit version build
 
-**Status**: 計画策定完了（Phase 1-6）、実装は未着手
+4. **Run Client Commands** (auto-generated from `gradle/subproject-run-tasks.gradle`):
+   - **Fabric**:
+     - `./gradlew fabric:runClient1_20_1` - Run Fabric client for 1.20.1
+     - `./gradlew fabric:runClient1_21_1` - Run Fabric client for 1.21.1
+   - **NeoForge/Forge**:
+     - `./gradlew neoforge:runClient1_20_1` - Run NeoForge/Forge client for 1.20.1
+     - `./gradlew neoforge:runClient1_21_1` - Run NeoForge client for 1.21.1
+   - **Explicit version run** (alternative method):
+     - `./gradlew :fabric:runClient -Ptarget_mc_version=1.20.1`
+     - `./gradlew :neoforge:runClient -Ptarget_mc_version=1.21.1`
+   - **Adding new versions**: Edit `supportedVersions` list in `gradle/subproject-run-tasks.gradle`
+
+5. **Output JARs**:
+   - Fabric: `chronodawn-{version}+{mc_version}-fabric.jar`
+   - NeoForge: `chronodawn-{version}+{mc_version}-neoforge.jar`
+   - Example: `chronodawn-0.3.0-beta+1.21.1-fabric.jar`
+   - **Note**: 1.20.1 is Fabric-only (NeoForge only supports 1.20.5+)
 
 ## Development Notes
 - When writing code, use Mojang mapping names (e.g., `net.minecraft.world.level.Level`, not Yarn's `class_XXXX`)

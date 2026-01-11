@@ -5,6 +5,7 @@ import com.chronodawn.entities.projectiles.TimeArrowEntity;
 import net.minecraft.client.renderer.entity.ArrowRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
+import com.chronodawn.compat.CompatResourceLocation;
 
 /**
  * Custom renderer for Time Arrow entity.
@@ -21,7 +22,7 @@ public class TimeArrowRenderer extends ArrowRenderer<TimeArrowEntity> {
      * Texture location for Time Arrow entity.
      */
     private static final ResourceLocation TEXTURE_LOCATION =
-        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "textures/entity/projectiles/time_arrow.png");
+        CompatResourceLocation.create(ChronoDawn.MOD_ID, "textures/entity/projectiles/time_arrow.png");
 
     public TimeArrowRenderer(EntityRendererProvider.Context context) {
         super(context);

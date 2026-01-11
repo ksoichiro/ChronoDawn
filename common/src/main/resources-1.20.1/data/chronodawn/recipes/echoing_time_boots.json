@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "combat",
+  "pattern": [
+    "F F",
+    "E E"
+  ],
+  "key": {
+    "F": {
+      "item": "chronodawn:fragment_of_stasis_core"
+    },
+    "E": {
+      "item": "chronodawn:enhanced_clockstone"
+    }
+  },
+  "result": {
+    "item": "chronodawn:echoing_time_boots",
+    "count": 1
+  }
+}

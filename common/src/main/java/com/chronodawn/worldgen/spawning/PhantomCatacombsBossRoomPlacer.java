@@ -6,6 +6,7 @@ import com.chronodawn.registry.ModDimensions;
 import dev.architectury.event.events.common.TickEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
+import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.core.Direction;
@@ -46,17 +47,17 @@ import java.util.Set;
  * Reference: T238 - Phantom Catacombs boss room placement
  */
 public class PhantomCatacombsBossRoomPlacer {
-    private static final ResourceLocation PHANTOM_CATACOMBS_ID = ResourceLocation.fromNamespaceAndPath(
+    private static final ResourceLocation PHANTOM_CATACOMBS_ID = CompatResourceLocation.create(
         ChronoDawn.MOD_ID,
         "phantom_catacombs"
     );
 
-    private static final ResourceLocation ROOM_7_TEMPLATE = ResourceLocation.fromNamespaceAndPath(
+    private static final ResourceLocation ROOM_7_TEMPLATE = CompatResourceLocation.create(
         ChronoDawn.MOD_ID,
         "phantom_catacombs_room_7"
     );
 
-    private static final ResourceLocation BOSS_ROOM_TEMPLATE = ResourceLocation.fromNamespaceAndPath(
+    private static final ResourceLocation BOSS_ROOM_TEMPLATE = CompatResourceLocation.create(
         ChronoDawn.MOD_ID,
         "phantom_catacombs_boss_room"
     );
@@ -864,7 +865,7 @@ public class PhantomCatacombsBossRoomPlacer {
         }
 
         // Load processor list for waterlogging prevention
-        ResourceLocation processorListId = ResourceLocation.fromNamespaceAndPath(
+        ResourceLocation processorListId = CompatResourceLocation.create(
             ChronoDawn.MOD_ID,
             "convert_decorative_water"
         );
@@ -1971,7 +1972,7 @@ public class PhantomCatacombsBossRoomPlacer {
         StructureTemplate template = templateOptional.get();
 
         // Load processor list for waterlogging prevention
-        ResourceLocation processorListId = ResourceLocation.fromNamespaceAndPath(
+        ResourceLocation processorListId = CompatResourceLocation.create(
             ChronoDawn.MOD_ID,
             "convert_decorative_water"
         );

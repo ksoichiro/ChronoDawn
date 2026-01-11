@@ -358,6 +358,10 @@
 
   "item.chronodawn.chronicle_book": "Chronicle of Chrono Dawn",
 
+  "message.chronodawn.portal.unstable": "The portal frame remains dark - time itself seems to resist your efforts",
+  "message.chronodawn.portal.invalid_frame": "No valid portal frame detected",
+  "message.chronodawn.portal.ignited": "Portal ignited successfully!",
+
   "gui.chronodawn.chronicle.title": "Chronicle of Chrono Dawn",
   "gui.chronodawn.chronicle.previous": "Previous",
   "gui.chronodawn.chronicle.next": "Next",

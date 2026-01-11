@@ -67,17 +67,39 @@ git clone https://github.com/ksoichiro/ChronoDawn.git
 cd ChronoDawn
 ```
 
-### Build All Loaders
+### Multi-Version Build Support
 
+Chrono Dawn supports multiple Minecraft versions from the same codebase:
+- **1.20.1**: Fabric only (legacy support) - *NeoForge requires Minecraft 1.20.5+*
+- **1.21.1**: NeoForge/Fabric (current version, default)
+
+### Build for Specific Minecraft Version
+
+#### Build for Minecraft 1.21.1 (Default)
 ```bash
-# Windows
-gradlew.bat build
+# Shortcut command (recommended)
+./gradlew build1211
 
-# macOS/Linux
-./gradlew build
+# Or explicit version
+./gradlew build -Ptarget_mc_version=1.21.1
 ```
 
-**Output Files**:
+#### Build for Minecraft 1.20.1
+```bash
+# Shortcut command (recommended)
+./gradlew build1201
+
+# Or explicit version
+./gradlew build -Ptarget_mc_version=1.20.1
+```
+
+#### Build for All Versions
+```bash
+# Build both 1.20.1 and 1.21.1 sequentially
+./gradlew buildAll
+```
+
+**Output Files** (example for 1.21.1):
 - `fabric/build/libs/chronodawn-0.3.0-beta+1.21.1-fabric.jar` - Fabric loader JAR
 - `neoforge/build/libs/chronodawn-0.3.0-beta+1.21.1-neoforge.jar` - NeoForge loader JAR
 - `common/build/libs/common-0.3.0-beta.jar` - Common module (not usable standalone)
@@ -86,20 +108,12 @@ gradlew.bat build
 
 #### Fabric Only
 ```bash
-# Windows
-gradlew.bat :fabric:build
-
-# macOS/Linux
-./gradlew :fabric:build
+./gradlew :fabric:build -Ptarget_mc_version=1.21.1
 ```
 
 #### NeoForge Only
 ```bash
-# Windows
-gradlew.bat :neoforge:build
-
-# macOS/Linux
-./gradlew :neoforge:build
+./gradlew :neoforge:build -Ptarget_mc_version=1.21.1
 ```
 
 ## Development Setup

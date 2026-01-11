@@ -1,6 +1,7 @@
 package com.chronodawn.data;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.compat.CompatSavedData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -67,8 +68,10 @@ public class PortalRegistryData extends ChronoDawnWorldData {
      * @return Portal registry data instance
      */
     public static PortalRegistryData get(ServerLevel level) {
-        return level.getDataStorage().computeIfAbsent(
-            new SavedData.Factory<>(PortalRegistryData::new, PortalRegistryData::load, null),
+        return CompatSavedData.computeIfAbsent(
+            level.getDataStorage(),
+            PortalRegistryData::new,
+            PortalRegistryData::load,
             DATA_NAME
         );
     }
@@ -95,7 +98,7 @@ public class PortalRegistryData extends ChronoDawnWorldData {
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
+    public CompoundTag saveData(CompoundTag tag) {
         ListTag portalList = new ListTag();
 
         for (PortalEntry entry : portals.values()) {
@@ -108,6 +111,18 @@ public class PortalRegistryData extends ChronoDawnWorldData {
 
         tag.put("portals", portalList);
         return tag;
+    }
+
+    @Override
+    public void loadData(CompoundTag tag) {
+        ListTag portalList = tag.getList("portals", Tag.TAG_COMPOUND);
+
+        for (int i = 0; i < portalList.size(); i++) {
+            CompoundTag portalTag = portalList.getCompound(i);
+            UUID portalId = portalTag.getUUID("portal_id");
+            // TODO: Load dimension, position, state, linkedPortalId from portalTag
+            // This will be fully implemented in future phases when portal system is added
+        }
     }
 
     // TODO: Add portal management methods in future phases:

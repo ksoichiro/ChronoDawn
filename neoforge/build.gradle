@@ -6,8 +6,18 @@ plugins {
 
 architectury {
     platformSetupLoomIde()
-    neoForge()
+    // Multi-version support: Use Forge for 1.20.1-1.20.4, NeoForge for 1.20.5+
+    def mcVersion = project.ext.minecraft_version
+    if (mcVersion.startsWith("1.20.") && mcVersion < "1.20.5") {
+        forge()
+    } else {
+        neoForge()
+    }
 }
+
+// Note: NeoForge only supports Minecraft 1.21.1 (not 1.20.1)
+// Version-specific source directories are not needed for NeoForge
+// All NeoForge code is in src/main/java and src/main/resources
 
 loom {
     accessWidenerPath = project(":common").loom.accessWidenerPath
@@ -49,29 +59,34 @@ configurations {
 
 repositories {
     maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
-    maven {
-        name = 'AzureDoom Mods'
-        url = 'https://maven.azuredoom.com/mods'
-    }
 }
 
 dependencies {
-    neoForge "net.neoforged:neoforge:${neoforge_version}"
-    modApi "dev.architectury:architectury-neoforge:${architectury_api_version}"
-
-    // Custom Portal API Reforged for NeoForge
-    modImplementation "net.kyrptonaught.customportalapi:cpapireforged-neo-1.21.1:1.2.2"
+    // Multi-version support: Use Forge for 1.20.1-1.20.4, NeoForge for 1.20.5+
+    def mcVersion = project.ext.minecraft_version
+    if (mcVersion.startsWith("1.20.") && mcVersion < "1.20.5") {
+        // Minecraft 1.20.1-1.20.4 uses Forge
+        neoForge "net.minecraftforge:forge:${mcVersion}-${neoforge_version}"
+        modApi "dev.architectury:architectury-forge:${architectury_api_version}"
+    } else {
+        // Minecraft 1.20.5+ uses NeoForge
+        neoForge "net.neoforged:neoforge:${neoforge_version}"
+        modApi "dev.architectury:architectury-neoforge:${architectury_api_version}"
+    }
 
     common(project(path: ":common", configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive false }
 }
 
 tasks.named("processResources", ProcessResources).configure {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     inputs.property "version", project.version
 
     filesMatching("META-INF/neoforge.mods.toml") {
         expand "version": project.version
     }
+
+    // pack.mcmeta expansion is handled in root build.gradle (common for fabric/neoforge)
 
     // Include common resources (data, assets, pack.mcmeta)
     from(project(":common").sourceSets.main.resources) {
@@ -104,6 +119,7 @@ tasks.named("jar").configure {
 }
 
 tasks.named("sourcesJar").configure {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     def commonSources = project(":common").tasks.named("sourcesJar")
     dependsOn commonSources
     from commonSources.flatMap { it.archiveFile }.map { zipTree(it) }
@@ -129,3 +145,6 @@ publishing {
         // Add publishing repositories here
     }
 }
+
+// Multi-version run client tasks (auto-generated for all supported versions)
+apply from: "${rootProject.projectDir}/gradle/subproject-run-tasks.gradle"

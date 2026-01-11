@@ -24,7 +24,6 @@ configurations {
 }
 
 repositories {
-    maven { url 'https://maven.kyrptonaught.dev' }
     maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
 }
 
@@ -33,12 +32,36 @@ dependencies {
     modApi "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
     modApi "dev.architectury:architectury-fabric:$rootProject.architectury_api_version"
 
-    // Custom Portal API for Fabric
-    modImplementation 'net.kyrptonaught:customportalapi:0.0.1-beta66-1.21'
-    include 'net.kyrptonaught:customportalapi:0.0.1-beta66-1.21'
-
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
+}
+
+// Multi-version support: Configure version-specific source directories
+sourceSets {
+    main {
+        java {
+            // Default Java source directory
+            srcDir 'src/main/java'
+
+            // Add version-specific source directory
+            def versionSpecificSrc = file("src/main/java-${project.ext.minecraft_version}")
+            if (versionSpecificSrc.exists()) {
+                srcDir versionSpecificSrc
+                logger.lifecycle("Fabric: Using version-specific sources: ${versionSpecificSrc.name}")
+            }
+        }
+        resources {
+            // Default resources directory
+            srcDir 'src/main/resources'
+
+            // Add version-specific resources directory
+            def versionSpecificRes = file("src/main/resources-${project.ext.minecraft_version}")
+            if (versionSpecificRes.exists()) {
+                srcDir versionSpecificRes
+                logger.lifecycle("Fabric: Using version-specific resources: ${versionSpecificRes.name}")
+            }
+        }
+    }
 }
 
 loom {
@@ -70,6 +93,8 @@ processResources {
     filesMatching('fabric.mod.json') {
         expand 'version': project.version
     }
+
+    // pack.mcmeta expansion is handled in root build.gradle (common for fabric/neoforge)
 }
 
 shadowJar {
@@ -94,6 +119,7 @@ java {
 tasks.named('sourcesJar').configure {
     archiveBaseName = rootProject.archives_name
     archiveVersion = "${rootProject.mod_version}+${rootProject.minecraft_version}-fabric"
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 tasks.named('remapSourcesJar').configure {
@@ -113,3 +139,6 @@ publishing {
         // Add publishing repositories here
     }
 }
+
+// Multi-version run client tasks (auto-generated for all supported versions)
+apply from: "${rootProject.projectDir}/gradle/subproject-run-tasks.gradle"

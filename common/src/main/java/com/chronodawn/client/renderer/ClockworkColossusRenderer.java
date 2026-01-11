@@ -7,6 +7,7 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import com.chronodawn.compat.CompatResourceLocation;
 
 /**
  * Clockwork Colossus Renderer
@@ -17,14 +18,14 @@ import net.minecraft.resources.ResourceLocation;
  * Task: T235h [Phase 1] Create renderer for Clockwork Colossus
  */
 public class ClockworkColossusRenderer extends MobRenderer<ClockworkColossusEntity, ClockworkColossusModel> {
-    private static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath(
+    private static final ResourceLocation TEXTURE = CompatResourceLocation.create(
         ChronoDawn.MOD_ID,
         "textures/entity/clockwork_colossus.png"
     );
 
     // Custom model layer location for Clockwork Colossus
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
-        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "clockwork_colossus"),
+        CompatResourceLocation.create(ChronoDawn.MOD_ID, "clockwork_colossus"),
         "main"
     );
 

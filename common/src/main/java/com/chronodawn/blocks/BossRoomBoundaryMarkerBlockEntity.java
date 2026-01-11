@@ -1,5 +1,7 @@
 package com.chronodawn.blocks;
 
+import com.chronodawn.compat.CompatBlockEntity;
+import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -7,6 +9,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
@@ -22,7 +25,7 @@ import net.minecraft.world.level.block.state.BlockState;
  *
  * Implementation: T224 - Boss room protection with marker blocks
  */
-public class BossRoomBoundaryMarkerBlockEntity extends BlockEntity {
+public class BossRoomBoundaryMarkerBlockEntity extends CompatBlockEntity {
     private String markerType = "boss_room_min"; // Default to min
     private ResourceLocation replaceWith = BuiltInRegistries.BLOCK.getKey(Blocks.AIR); // Default to air
 
@@ -90,20 +93,18 @@ public class BossRoomBoundaryMarkerBlockEntity extends BlockEntity {
     }
 
     @Override
-    protected void saveAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.saveAdditional(tag, registries);
+    public void saveData(CompoundTag tag) {
         tag.putString("MarkerType", markerType);
         tag.putString("ReplaceWith", replaceWith.toString());
     }
 
     @Override
-    protected void loadAdditional(CompoundTag tag, HolderLookup.Provider registries) {
-        super.loadAdditional(tag, registries);
+    public void loadData(CompoundTag tag) {
         if (tag.contains("MarkerType")) {
             markerType = tag.getString("MarkerType");
         }
         if (tag.contains("ReplaceWith")) {
-            replaceWith = ResourceLocation.parse(tag.getString("ReplaceWith"));
+            replaceWith = CompatResourceLocation.parse(tag.getString("ReplaceWith"));
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.chronodawn.data;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.compat.CompatSavedData;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -54,8 +55,10 @@ public class DimensionStateData extends ChronoDawnWorldData {
      * @return Dimension state data instance
      */
     public static DimensionStateData get(ServerLevel level) {
-        return level.getDataStorage().computeIfAbsent(
-            new SavedData.Factory<>(DimensionStateData::new, DimensionStateData::load, null),
+        return CompatSavedData.computeIfAbsent(
+            level.getDataStorage(),
+            DimensionStateData::new,
+            DimensionStateData::load,
             DATA_NAME
         );
     }
@@ -77,10 +80,18 @@ public class DimensionStateData extends ChronoDawnWorldData {
     }
 
     @Override
-    public CompoundTag save(CompoundTag tag, HolderLookup.Provider registries) {
+    public CompoundTag saveData(CompoundTag tag) {
         tag.putBoolean("is_stabilized", isStabilized);
         tag.putString("time_distortion_level", timeDistortionLevel.name());
         return tag;
+    }
+
+    @Override
+    public void loadData(CompoundTag tag) {
+        isStabilized = tag.getBoolean("is_stabilized");
+        timeDistortionLevel = TimeDistortionLevel.valueOf(
+            tag.getString("time_distortion_level")
+        );
     }
 
     // TODO: Add dimension state management methods in future phases:

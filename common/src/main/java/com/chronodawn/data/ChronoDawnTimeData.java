@@ -5,6 +5,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
+import com.chronodawn.compat.CompatSavedData;
 
 /**
  * Saved data for ChronoDawn independent time.
@@ -12,7 +13,7 @@ import net.minecraft.world.level.saveddata.SavedData;
  *
  * Task: T301 [P] Fix bed sleeping mechanic in ChronoDawn
  */
-public class ChronoDawnTimeData extends SavedData {
+public class ChronoDawnTimeData extends CompatSavedData {
 
     private static final String DATA_NAME = "chronodawn_time";
     private static final String TIME_KEY = "IndependentTime";
@@ -31,12 +32,10 @@ public class ChronoDawnTimeData extends SavedData {
      * Get or create the ChronoDawnTimeData for the given level.
      */
     public static ChronoDawnTimeData get(ServerLevel level) {
-        return level.getDataStorage().computeIfAbsent(
-            new Factory<>(
-                ChronoDawnTimeData::new,
-                ChronoDawnTimeData::load,
-                null // No data fixer type needed
-            ),
+        return CompatSavedData.computeIfAbsent(
+            level.getDataStorage(),
+            ChronoDawnTimeData::new,
+            ChronoDawnTimeData::load,
             DATA_NAME
         );
     }
@@ -45,19 +44,28 @@ public class ChronoDawnTimeData extends SavedData {
      * Load data from NBT.
      */
     public static ChronoDawnTimeData load(CompoundTag tag, HolderLookup.Provider provider) {
-        long time = tag.getLong(TIME_KEY);
-        ChronoDawn.LOGGER.info("ChronoDawnTimeData: Loaded independent time = {}", time);
-        return new ChronoDawnTimeData(time);
+        ChronoDawnTimeData data = new ChronoDawnTimeData();
+        data.loadData(tag);
+        ChronoDawn.LOGGER.info("ChronoDawnTimeData: Loaded independent time = {}", data.independentTime);
+        return data;
     }
 
     /**
-     * Save data to NBT.
+     * Save data to NBT (version-independent).
      */
     @Override
-    public CompoundTag save(CompoundTag tag, HolderLookup.Provider provider) {
+    public CompoundTag saveData(CompoundTag tag) {
         tag.putLong(TIME_KEY, independentTime);
         ChronoDawn.LOGGER.info("ChronoDawnTimeData: Saved independent time = {}", independentTime);
         return tag;
+    }
+
+    /**
+     * Load data from NBT (version-independent).
+     */
+    @Override
+    public void loadData(CompoundTag tag) {
+        independentTime = tag.getLong(TIME_KEY);
     }
 
     public long getIndependentTime() {

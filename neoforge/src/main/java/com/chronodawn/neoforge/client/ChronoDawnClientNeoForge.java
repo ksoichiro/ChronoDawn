@@ -30,9 +30,9 @@ import com.chronodawn.client.renderer.mobs.FloqRenderer;
 import com.chronodawn.client.renderer.mobs.TemporalWraithRenderer;
 import com.chronodawn.client.renderer.mobs.TimeKeeperRenderer;
 import com.chronodawn.items.TimeCompassItem;
-import com.chronodawn.neoforge.client.particle.ChronoDawnPortalParticle;
-import com.chronodawn.neoforge.registry.ModParticles;
+import com.chronodawn.client.particle.ChronoDawnPortalParticle;
 import com.chronodawn.registry.ModBlocks;
+import com.chronodawn.registry.ModParticles;
 import com.chronodawn.registry.ModEntities;
 import com.chronodawn.registry.ModItems;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -442,6 +442,12 @@ public class ChronoDawnClientNeoForge {
         ItemBlockRenderTypes.setRenderLayer(
             ModBlocks.ANCIENT_TIME_WOOD_LEAVES.get(),
             RenderType.cutoutMipped()
+        );
+
+        // Register ChronoDawn Portal to use translucent rendering (for portal transparency)
+        ItemBlockRenderTypes.setRenderLayer(
+            ModBlocks.CHRONO_DAWN_PORTAL.get(),
+            RenderType.translucent()
         );
     }
 

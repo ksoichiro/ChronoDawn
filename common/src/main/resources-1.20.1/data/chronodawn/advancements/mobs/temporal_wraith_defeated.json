@@ -1,0 +1,28 @@
+{
+  "parent": "chronodawn:story/us1/dimension_entry",
+  "criteria": {
+    "killed_temporal_wraith": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "chronodawn:temporal_wraith"
+        }
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "item": "minecraft:phantom_membrane"
+    },
+    "title": {
+      "translate": "advancements.chronodawn.temporal_wraith_defeated.title"
+    },
+    "description": {
+      "translate": "advancements.chronodawn.temporal_wraith_defeated.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  }
+}

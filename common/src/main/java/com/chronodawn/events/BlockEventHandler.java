@@ -96,9 +96,6 @@ public class BlockEventHandler {
             return EventResult.pass();
         });
 
-        // Time Hourglass portal ignition handling (including unstable portal checks and item consumption)
-        // is now handled entirely by CustomPortalFabric.registerPreIgniteEvent() and registerIgniteEvent()
-
         // Register server tick event to remove portal blocks when portals are unstable
         TickEvent.SERVER_POST.register(server -> {
             // Check global state
@@ -113,7 +110,7 @@ public class BlockEventHandler {
                 return;
             }
 
-            // Check all loaded chunks for custom portal blocks
+            // Check all loaded chunks for portal blocks
             // Note: This only checks near registered portals to avoid scanning entire dimension
             for (PortalStateMachine portal : PortalRegistry.getInstance().getAllPortals()) {
                 if (!portal.getSourceDimension().equals(ModDimensions.CHRONO_DAWN_DIMENSION)) {
@@ -128,11 +125,9 @@ public class BlockEventHandler {
                         for (int z = -10; z <= 10; z++) {
                             BlockPos checkPos = portalPos.offset(x, y, z);
                             BlockState state = chronodawnLevel.getBlockState(checkPos);
-                            var block = state.getBlock();
-                            var blockId = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(block);
 
-                            // T310: Check both Fabric and NeoForge portal block IDs
-                            if (isCustomPortalBlock(blockId)) {
+                            // Check for ChronoDawn portal blocks
+                            if (state.is(ModBlocks.CHRONO_DAWN_PORTAL.get())) {
                                 chronodawnLevel.removeBlock(checkPos, false);
                                 foundAndRemovedBlocks = true;
                             }
@@ -182,7 +177,8 @@ public class BlockEventHandler {
                     net.minecraft.world.entity.EquipmentSlot slot = hand == net.minecraft.world.InteractionHand.MAIN_HAND
                         ? net.minecraft.world.entity.EquipmentSlot.MAINHAND
                         : net.minecraft.world.entity.EquipmentSlot.OFFHAND;
-                    heldItem.hurtAndBreak(1, player, slot);
+                    // Version-independent item damage
+                    com.chronodawn.compat.ItemDurabilityHandler.getInstance().damageItem(heldItem, 1, player, slot);
                 }
 
                 return EventResult.interruptTrue();
@@ -571,32 +567,6 @@ public class BlockEventHandler {
         }
 
         return false; // Key not found
-    }
-
-    /**
-     * Check if the given block ID is a Custom Portal API portal block.
-     * Supports both Fabric (customportalapi) and NeoForge (cpapireforged) versions.
-     *
-     * T310: This method ensures portal block removal works consistently across both loaders.
-     *
-     * @param blockId Block resource location
-     * @return true if block is a Custom Portal API portal block
-     */
-    private static boolean isCustomPortalBlock(net.minecraft.resources.ResourceLocation blockId) {
-        String namespace = blockId.getNamespace();
-        String path = blockId.getPath();
-
-        // Fabric version: customportalapi:customportalblock
-        if (namespace.equals("customportalapi") && path.equals("customportalblock")) {
-            return true;
-        }
-
-        // NeoForge version (Custom Portal API Reforged): cpapireforged:custom_portal_block
-        if (namespace.equals("cpapireforged") && path.equals("custom_portal_block")) {
-            return true;
-        }
-
-        return false;
     }
 
     /**

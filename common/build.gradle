@@ -20,6 +20,71 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
 }
 
+// Multi-version support: Configure source and resource directories
+sourceSets {
+    main {
+        java {
+            // Default Java source directory
+            srcDir 'src/main/java'
+
+            // Exclude version-specific compat implementations that don't match target version
+            def compatPackage = project.ext.compat_package // "v1_20_1" or "v1_21_1"
+
+            // Exclude all version-specific directories except the target one
+            ['v1_20_1', 'v1_21_1'].each { version ->
+                if (version != compatPackage) {
+                    exclude "com/chronodawn/compat/${version}/**"
+                }
+            }
+
+            logger.lifecycle("Using version-specific compat implementations: ${compatPackage}")
+        }
+
+        resources {
+            // Clear default srcDirs to control order explicitly
+            srcDirs = []
+
+            // Version-specific resources FIRST (higher priority)
+            def versionResources = file("src/main/resources-${project.ext.minecraft_version}")
+            if (versionResources.exists()) {
+                srcDir versionResources
+                logger.lifecycle("Using version-specific resources: ${versionResources.name}")
+            } else {
+                logger.warn("Version-specific resources not found: ${versionResources.absolutePath}")
+            }
+
+            // Common resources SECOND (lower priority, will be excluded if duplicates exist)
+            srcDir 'src/main/resources'
+        }
+    }
+}
+
+// Set version info as Java system property at runtime (for compat handlers)
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += ["-Achronodawn.minecraft.version=${project.ext.minecraft_version}"]
+    doFirst {
+        System.setProperty('chronodawn.minecraft.version', project.ext.minecraft_version as String)
+    }
+}
+
+// Expand pack_format variable in pack.mcmeta
+processResources {
+    // First source directory wins (version-specific resources take precedence)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    inputs.property 'minecraft_version', project.ext.minecraft_version
+    inputs.property 'pack_format', project.ext.pack_format
+
+    filesMatching('pack.mcmeta') {
+        expand 'pack_format': project.ext.pack_format
+    }
+}
+
 tasks.test {
     useJUnitPlatform()
+}
+
+// Set duplicates strategy for sourcesJar to avoid conflicts
+tasks.named('sourcesJar') {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }

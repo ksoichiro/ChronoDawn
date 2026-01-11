@@ -1,6 +1,7 @@
 package com.chronodawn.worldgen.processors;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.compat.CompatResourceLocation;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.worldgen.protection.BlockProtectionHandler;
 import com.chronodawn.worldgen.protection.PermanentProtectionHandler;
@@ -224,7 +225,7 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
 
         // Replace marker with specified block
         var replacementBlock = net.minecraft.core.registries.BuiltInRegistries.BLOCK.get(
-            net.minecraft.resources.ResourceLocation.parse(replaceWith)
+            CompatResourceLocation.parse(replaceWith)
         );
         var replacementState = replacementBlock.defaultBlockState();
 

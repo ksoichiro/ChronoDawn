@@ -5,6 +5,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 
 /**
@@ -24,7 +25,7 @@ public class ChronoDawnBiomeProvider {
      */
     public static final ResourceKey<Biome> CHRONO_DAWN_PLAINS = ResourceKey.create(
         Registries.BIOME,
-        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "chronodawn_plains")
+        CompatResourceLocation.create(ChronoDawn.MOD_ID, "chronodawn_plains")
     );
 
     /**
@@ -33,7 +34,7 @@ public class ChronoDawnBiomeProvider {
      */
     public static final ResourceKey<Biome> CHRONO_DAWN_DESERT = ResourceKey.create(
         Registries.BIOME,
-        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "chronodawn_desert")
+        CompatResourceLocation.create(ChronoDawn.MOD_ID, "chronodawn_desert")
     );
 
     /**
@@ -42,7 +43,7 @@ public class ChronoDawnBiomeProvider {
      */
     public static final ResourceKey<Biome> CHRONO_DAWN_DARK_FOREST = ResourceKey.create(
         Registries.BIOME,
-        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "chronodawn_dark_forest")
+        CompatResourceLocation.create(ChronoDawn.MOD_ID, "chronodawn_dark_forest")
     );
 
     /**

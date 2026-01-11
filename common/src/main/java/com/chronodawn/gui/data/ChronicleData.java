@@ -4,6 +4,7 @@ import com.chronodawn.ChronoDawn;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
+import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 
@@ -66,7 +67,7 @@ public class ChronicleData {
     }
 
     private void loadCategories(ResourceManager resourceManager) throws IOException {
-        ResourceLocation categoriesLocation = ResourceLocation.fromNamespaceAndPath("chronodawn", "chronicle/categories.json");
+        ResourceLocation categoriesLocation = CompatResourceLocation.create("chronodawn", "chronicle/categories.json");
 
         Optional<Resource> resource = resourceManager.getResource(categoriesLocation);
         if (resource.isEmpty()) {
@@ -139,7 +140,7 @@ public class ChronicleData {
         String[] entryNames = categoryEntries.getOrDefault(categoryId, new String[0]);
 
         for (String entryName : entryNames) {
-            ResourceLocation entryLocation = ResourceLocation.fromNamespaceAndPath(
+            ResourceLocation entryLocation = CompatResourceLocation.create(
                 "chronodawn",
                 "chronicle/entries/" + categoryId + "/" + entryName + ".json"
             );
