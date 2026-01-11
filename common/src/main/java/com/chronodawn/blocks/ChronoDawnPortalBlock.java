@@ -376,10 +376,16 @@ public class ChronoDawnPortalBlock extends Block {
         if (entity instanceof net.minecraft.server.level.ServerPlayer player) {
             if (player.getAbilities().invulnerable) {
                 // Creative mode: teleport immediately
+                ChronoDawn.LOGGER.info("Portal: {} at state {} - Creative mode instant teleport",
+                    entity.getName().getString(), stateValue);
                 shouldTeleport = true;
             } else {
                 // Survival mode: wait for threshold
                 shouldTeleport = stateValue >= PORTAL_TIME_THRESHOLD;
+                if (stateValue % 20 == 0) { // Log every second
+                    ChronoDawn.LOGGER.info("Portal: {} at state {}/{} - Survival mode countdown",
+                        entity.getName().getString(), stateValue, PORTAL_TIME_THRESHOLD);
+                }
             }
         } else {
             // Non-player entities: use threshold

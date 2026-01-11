@@ -41,8 +41,9 @@ public class ChronoDawnPortalParticle extends TextureSheetParticle {
         this.gCol = 0.7F * colorVariation;
         this.bCol = 0.2F * colorVariation;
 
-        // Particle size (smaller than default)
-        this.quadSize = (float) (Math.random() * 0.5 + 0.1);
+        // Particle size (small, similar to Nether Portal)
+        // Nether Portal uses very small particles (0.05 to 0.15)
+        this.quadSize = (float) (Math.random() * 0.1 + 0.05);
 
         // Lifetime (40-80 ticks = 2-4 seconds)
         this.lifetime = (int) (Math.random() * 40.0) + 40;

@@ -7,8 +7,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Set;
 
 /**
@@ -100,88 +98,61 @@ public class PortalFrameValidator {
 
     /**
      * Find the bottom-left corner of the portal frame bounding box.
-     * Explores from the given position in all directions to find the frame bounds.
-     * This returns the minimum position in both horizontal and vertical directions.
+     * Searches from the given position in all directions to find the frame bounds.
+     * Works even when corners are missing (air blocks).
      *
      * @param level The level
-     * @param pos Starting position (any frame block)
+     * @param pos Starting position (any frame or interior block)
      * @param horizontal Horizontal direction (EAST or SOUTH)
      * @param vertical Vertical direction (UP)
      * @return Bottom-left corner position of the bounding box, or null if invalid
      */
     private static BlockPos findBottomLeftCorner(Level level, BlockPos pos, Direction horizontal, Direction vertical) {
-        // Collect all frame blocks in the vicinity to find the bounding box
-        Set<BlockPos> frameBlocks = new HashSet<>();
-        Set<BlockPos> visited = new HashSet<>();
-        Queue<BlockPos> toVisit = new LinkedList<>();
+        // Search in negative horizontal direction to find left edge
+        BlockPos leftEdge = pos;
+        for (int i = 0; i < MAX_WIDTH; i++) {
+            BlockPos checkPos = pos.relative(horizontal.getOpposite(), i);
 
-        toVisit.add(pos);
-        visited.add(pos);
+            // Check if this position or the position above/below it has a frame block
+            // This handles missing corners
+            boolean hasFrameInColumn = isFrameBlock(level, checkPos) ||
+                                        isFrameBlock(level, checkPos.relative(vertical, 1)) ||
+                                        isFrameBlock(level, checkPos.relative(vertical, -1));
 
-        // Flood fill to find all connected frame blocks (within limits)
-        while (!toVisit.isEmpty()) {
-            BlockPos current = toVisit.poll();
-            if (!isFrameBlock(level, current)) {
-                continue;
-            }
-
-            frameBlocks.add(current);
-
-            // Check all 4 perpendicular directions (not diagonal)
-            for (Direction dir : new Direction[]{horizontal, horizontal.getOpposite(), vertical, vertical.getOpposite()}) {
-                BlockPos neighbor = current.relative(dir);
-                if (!visited.contains(neighbor)) {
-                    visited.add(neighbor);
-                    // Only continue if within reasonable bounds
-                    if (Math.abs(neighbor.getX() - pos.getX()) <= MAX_WIDTH &&
-                        Math.abs(neighbor.getY() - pos.getY()) <= MAX_HEIGHT &&
-                        Math.abs(neighbor.getZ() - pos.getZ()) <= MAX_WIDTH) {
-                        toVisit.add(neighbor);
-                    }
-                }
-            }
-        }
-
-        if (frameBlocks.isEmpty()) {
-            return null;
-        }
-
-        // Find the minimum position (bottom-left of bounding box)
-        BlockPos min = null;
-        for (BlockPos framePos : frameBlocks) {
-            if (min == null) {
-                min = framePos;
+            if (hasFrameInColumn) {
+                leftEdge = checkPos;
             } else {
-                // Compare positions based on axis
-                int minHorizontal = getHorizontalCoordinate(min, horizontal.getAxis());
-                int minVertical = min.getY();
-                int currentHorizontal = getHorizontalCoordinate(framePos, horizontal.getAxis());
-                int currentVertical = framePos.getY();
-
-                if (currentVertical < minVertical ||
-                    (currentVertical == minVertical && currentHorizontal < minHorizontal)) {
-                    min = framePos;
-                }
+                // No frame blocks in this column, stop searching
+                break;
             }
         }
 
-        return min;
-    }
+        // Search in negative vertical direction to find bottom edge
+        BlockPos bottomLeft = leftEdge;
+        for (int i = 0; i < MAX_HEIGHT; i++) {
+            BlockPos checkPos = leftEdge.relative(vertical.getOpposite(), i);
 
-    /**
-     * Get the coordinate value for the given axis.
-     *
-     * @param pos Position
-     * @param axis Axis (X or Z)
-     * @return X or Z coordinate
-     */
-    private static int getHorizontalCoordinate(BlockPos pos, Direction.Axis axis) {
-        return axis == Direction.Axis.X ? pos.getX() : pos.getZ();
+            // Check if this position or the position left/right of it has a frame block
+            // This handles missing corners
+            boolean hasFrameInRow = isFrameBlock(level, checkPos) ||
+                                     isFrameBlock(level, checkPos.relative(horizontal, 1)) ||
+                                     isFrameBlock(level, checkPos.relative(horizontal, -1));
+
+            if (hasFrameInRow) {
+                bottomLeft = checkPos;
+            } else {
+                // No frame blocks in this row, stop searching
+                break;
+            }
+        }
+
+        return bottomLeft;
     }
 
     /**
      * Find the extent (width or height) of the frame in a given direction.
-     * This scans from the bottom-left position to find where the frame ends.
+     * Searches from the bottom-left position to find where the frame ends.
+     * Works even when corners are missing (air blocks).
      *
      * @param level The level
      * @param start Starting position (bottom-left of bounding box)
@@ -190,30 +161,31 @@ public class PortalFrameValidator {
      * @return Frame extent, or 0 if invalid
      */
     private static int findFrameExtent(Level level, BlockPos start, Direction direction, int maxSize) {
-        // Scan from start position to find the last frame block in this direction
-        // We need to account for missing corners
+        // Determine perpendicular direction for checking adjacent blocks
+        Direction perpendicular;
+        if (direction.getAxis() == Direction.Axis.Y) {
+            // Vertical direction, check horizontal neighbors
+            perpendicular = Direction.EAST;
+        } else {
+            // Horizontal direction, check vertical neighbors
+            perpendicular = Direction.UP;
+        }
+
         int maxExtent = 1; // At least the starting position
 
         for (int i = 1; i < maxSize; i++) {
             BlockPos checkPos = start.relative(direction, i);
 
-            // Check if this position or any position perpendicular to it has a frame block
-            // This handles missing corners
-            Direction perpendicular = direction.getAxis() == Direction.Axis.Y ?
-                Direction.EAST : Direction.UP;
+            // Check if this position or adjacent positions have a frame block
+            // This handles missing corners by checking perpendicular positions
+            boolean hasFrameInLine = isFrameBlock(level, checkPos) ||
+                                      isFrameBlock(level, checkPos.relative(perpendicular, 1)) ||
+                                      isFrameBlock(level, checkPos.relative(perpendicular, -1));
 
-            boolean hasFrameInLine = false;
-            for (int offset = -1; offset <= 1; offset++) {
-                BlockPos testPos = checkPos.relative(perpendicular, offset);
-                if (isFrameBlock(level, testPos)) {
-                    hasFrameInLine = true;
-                    maxExtent = i + 1;
-                    break;
-                }
-            }
-
-            if (!hasFrameInLine) {
-                // No frame blocks found in this line, assume end of frame
+            if (hasFrameInLine) {
+                maxExtent = i + 1;
+            } else {
+                // No frame blocks found, end of frame
                 break;
             }
         }
