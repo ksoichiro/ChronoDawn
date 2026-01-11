@@ -20,14 +20,15 @@ import java.util.Set;
  * - Minimum size: 4x5 (width x height)
  * - Maximum size: 23x23 (width x height)
  * - Must form a complete rectangular frame
- * - All edges must be Clockstone Blocks (corners are optional, like Nether Portal)
+ * - All corners and edges must be Clockstone Blocks
  * - Interior must be air blocks (or will be filled with portal blocks)
  *
  * Validation Process:
- * 1. Find the frame's width and height
- * 2. Verify all edge blocks are Clockstone Blocks (corners optional)
- * 3. Verify interior is air or portal blocks
- * 4. Verify size is within valid range
+ * 1. Check if bottom-left corner is Clockstone Block
+ * 2. Find the frame's width and height
+ * 3. Verify all frame blocks are Clockstone Blocks
+ * 4. Verify interior is air or portal blocks
+ * 5. Verify size is within valid range
  *
  * Reference: data-model.md (Portal System → Portal Frame)
  * Task: T045 [US1] Create portal frame validation logic
@@ -55,32 +56,20 @@ public class PortalFrameValidator {
 
     /**
      * Validate a portal frame starting from a given position.
-     * The position can be any frame block (not necessarily bottom-left corner).
      *
      * @param level The level containing the portal
-     * @param pos Starting position (any frame block)
+     * @param pos Starting position (should be bottom-left corner of frame)
      * @param axis Portal axis (X or Z)
      * @return PortalFrameData if valid, null if invalid
      */
     public static PortalFrameData validateFrame(Level level, BlockPos pos, Direction.Axis axis) {
-        // First check if starting position is a frame block
-        if (!isFrameBlock(level, pos)) {
-            return null;
-        }
-
         // Determine the horizontal and vertical directions based on axis
         Direction horizontal = axis == Direction.Axis.X ? Direction.EAST : Direction.SOUTH;
         Direction vertical = Direction.UP;
 
-        // Find the rectangular bounds by exploring in all directions
-        BlockPos bottomLeft = findBottomLeftCorner(level, pos, horizontal, vertical);
-        if (bottomLeft == null) {
-            return null;
-        }
-
-        // Find the frame dimensions from bottom-left position
-        int width = findFrameExtent(level, bottomLeft, horizontal, MAX_WIDTH);
-        int height = findFrameExtent(level, bottomLeft, vertical, MAX_HEIGHT);
+        // Find the frame dimensions
+        int width = findFrameDimension(level, pos, horizontal, MAX_WIDTH);
+        int height = findFrameDimension(level, pos, vertical, MAX_HEIGHT);
 
         // Validate dimensions
         if (width < MIN_WIDTH || width > MAX_WIDTH || height < MIN_HEIGHT || height > MAX_HEIGHT) {
@@ -88,109 +77,46 @@ public class PortalFrameValidator {
         }
 
         // Validate frame structure
-        if (!validateFrameStructure(level, bottomLeft, horizontal, vertical, width, height)) {
+        if (!validateFrameStructure(level, pos, horizontal, vertical, width, height)) {
             return null;
         }
 
         // Return valid portal frame data
-        return new PortalFrameData(bottomLeft, width, height, axis);
+        return new PortalFrameData(pos, width, height, axis);
     }
 
     /**
-     * Find the bottom-left corner of the portal frame bounding box.
-     * Searches from the given position in all directions to find the frame bounds.
-     * Works even when corners are missing (air blocks).
+     * Find the dimension of the frame in a given direction.
+     * Allows for one missing corner block (air) at the end.
      *
      * @param level The level
-     * @param pos Starting position (any frame or interior block)
-     * @param horizontal Horizontal direction (EAST or SOUTH)
-     * @param vertical Vertical direction (UP)
-     * @return Bottom-left corner position of the bounding box, or null if invalid
-     */
-    private static BlockPos findBottomLeftCorner(Level level, BlockPos pos, Direction horizontal, Direction vertical) {
-        // Search in negative horizontal direction to find left edge
-        BlockPos leftEdge = pos;
-        for (int i = 0; i < MAX_WIDTH; i++) {
-            BlockPos checkPos = pos.relative(horizontal.getOpposite(), i);
-
-            // Check if this position or the position above/below it has a frame block
-            // This handles missing corners
-            boolean hasFrameInColumn = isFrameBlock(level, checkPos) ||
-                                        isFrameBlock(level, checkPos.relative(vertical, 1)) ||
-                                        isFrameBlock(level, checkPos.relative(vertical, -1));
-
-            if (hasFrameInColumn) {
-                leftEdge = checkPos;
-            } else {
-                // No frame blocks in this column, stop searching
-                break;
-            }
-        }
-
-        // Search in negative vertical direction to find bottom edge
-        BlockPos bottomLeft = leftEdge;
-        for (int i = 0; i < MAX_HEIGHT; i++) {
-            BlockPos checkPos = leftEdge.relative(vertical.getOpposite(), i);
-
-            // Check if this position or the position left/right of it has a frame block
-            // This handles missing corners
-            boolean hasFrameInRow = isFrameBlock(level, checkPos) ||
-                                     isFrameBlock(level, checkPos.relative(horizontal, 1)) ||
-                                     isFrameBlock(level, checkPos.relative(horizontal, -1));
-
-            if (hasFrameInRow) {
-                bottomLeft = checkPos;
-            } else {
-                // No frame blocks in this row, stop searching
-                break;
-            }
-        }
-
-        return bottomLeft;
-    }
-
-    /**
-     * Find the extent (width or height) of the frame in a given direction.
-     * Searches from the bottom-left position to find where the frame ends.
-     * Works even when corners are missing (air blocks).
-     *
-     * @param level The level
-     * @param start Starting position (bottom-left of bounding box)
-     * @param direction Direction to search (horizontal or vertical)
+     * @param start Starting position
+     * @param direction Direction to search
      * @param maxSize Maximum size to search
-     * @return Frame extent, or 0 if invalid
+     * @return Frame dimension, or 0 if invalid
      */
-    private static int findFrameExtent(Level level, BlockPos start, Direction direction, int maxSize) {
-        // Determine perpendicular direction for checking adjacent blocks
-        Direction perpendicular;
-        if (direction.getAxis() == Direction.Axis.Y) {
-            // Vertical direction, check horizontal neighbors
-            perpendicular = Direction.EAST;
-        } else {
-            // Horizontal direction, check vertical neighbors
-            perpendicular = Direction.UP;
-        }
-
-        int maxExtent = 1; // At least the starting position
-
-        for (int i = 1; i < maxSize; i++) {
+    private static int findFrameDimension(Level level, BlockPos start, Direction direction, int maxSize) {
+        int dimension = 0;
+        for (int i = 1; i <= maxSize; i++) {
             BlockPos checkPos = start.relative(direction, i);
-
-            // Check if this position or adjacent positions have a frame block
-            // This handles missing corners by checking perpendicular positions
-            boolean hasFrameInLine = isFrameBlock(level, checkPos) ||
-                                      isFrameBlock(level, checkPos.relative(perpendicular, 1)) ||
-                                      isFrameBlock(level, checkPos.relative(perpendicular, -1));
-
-            if (hasFrameInLine) {
-                maxExtent = i + 1;
+            if (isFrameBlock(level, checkPos)) {
+                dimension = i;
             } else {
-                // No frame blocks found, end of frame
+                // Not a frame block - might be a corner (air) or end of frame
+                // Check if the next block is a frame block (indicating this is a missing corner)
+                if (i + 1 <= maxSize) {
+                    BlockPos nextPos = start.relative(direction, i + 1);
+                    if (isFrameBlock(level, nextPos)) {
+                        // This is a missing corner, continue searching
+                        continue;
+                    }
+                }
+                // End of frame
                 break;
             }
         }
-
-        return maxExtent;
+        // Add 1 to include the starting position
+        return dimension + 1;
     }
 
     /**
