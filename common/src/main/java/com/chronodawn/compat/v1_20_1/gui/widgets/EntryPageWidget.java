@@ -142,16 +142,21 @@ public class EntryPageWidget extends AbstractWidget {
         int buttonY = getY() + height - 15; // Align with left page bottom
 
         // Use vanilla book page navigation button images (23x13 pixels)
-        // 1.20.1: Texture offsets for book.png (previous button: 3,194,13 / next button: 116,194,13)
-        this.previousButton = new SilentImageButton(
+        // 1.20.1: Texture coordinates extracted from assets/minecraft/textures/gui/book.png
+        // Arrow shapes analyzed:
+        //   u=3, v=207: Left arrow (beige) = Previous normal
+        //   u=26, v=207: Left arrow (red) = Previous hover
+        //   u=14, v=194: Right arrow (beige) = Next normal
+        //   u=37, v=194: Right arrow (red) = Next hover
+        this.previousButton = new BookNavigationButton(
             getX() + 5, buttonY, 23, 13,
-            3, 194, 13, // Texture offsets for previous button in book.png
+            3, 207, 26, 207, // normal(u,v), hover(u,v)
             previousAction
         );
 
-        this.nextButton = new SilentImageButton(
+        this.nextButton = new BookNavigationButton(
             getX() + width - 28, buttonY, 23, 13,
-            116, 194, 13, // Texture offsets for next button in book.png
+            3, 194, 26, 194, // normal(u,v), hover(u,v)
             nextAction
         );
 
@@ -159,13 +164,41 @@ public class EntryPageWidget extends AbstractWidget {
     }
 
     /**
-     * Custom ImageButton that doesn't play click sound.
-     * Used for page navigation buttons where page turn sound is played separately.
-     * 1.20.1 version uses texture offsets instead of WidgetSprites.
+     * Custom button for book page navigation in 1.20.1.
+     * Handles both u and v coordinate changes on hover (ImageButton only supports v changes).
      */
-    private static class SilentImageButton extends ImageButton {
-        public SilentImageButton(int x, int y, int width, int height, int xTexStart, int yTexStart, int yDiffTex, OnPress onPress) {
-            super(x, y, width, height, xTexStart, yTexStart, yDiffTex, BOOK_TEXTURE, onPress);
+    private static class BookNavigationButton extends Button {
+        private final int normalU;
+        private final int normalV;
+        private final int hoverU;
+        private final int hoverV;
+
+        public BookNavigationButton(int x, int y, int width, int height,
+                                   int normalU, int normalV, int hoverU, int hoverV,
+                                   OnPress onPress) {
+            super(x, y, width, height, Component.empty(), onPress, DEFAULT_NARRATION);
+            this.normalU = normalU;
+            this.normalV = normalV;
+            this.hoverU = hoverU;
+            this.hoverV = hoverV;
+        }
+
+        @Override
+        public void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+            if (!this.visible) {
+                return;
+            }
+
+            // Select texture coordinates based on hover state
+            int u = this.isHoveredOrFocused() ? hoverU : normalU;
+            int v = this.isHoveredOrFocused() ? hoverV : normalV;
+
+            // Render button texture from book.png using 7-parameter blit
+            // blit(ResourceLocation texture, int x, int y, int u, int v, int width, int height)
+            graphics.blit(BOOK_TEXTURE,
+                this.getX(), this.getY(),
+                u, v,
+                this.width, this.height);
         }
 
         @Override
@@ -194,6 +227,7 @@ public class EntryPageWidget extends AbstractWidget {
                 previousButton.active = hasPrevious;
                 nextButton.visible = hasNext;
                 nextButton.active = hasNext;
+
                 pageNumberText = Component.translatable("gui.chronodawn.chronicle.page",
                     currentPageIndex + 1, totalPages);
             }
