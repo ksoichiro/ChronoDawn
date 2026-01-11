@@ -95,20 +95,20 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 
 **Documentation**: Detailed migration plan is available in `docs/multiversion_migration_plan.md`.
 
-**Supported Versions**: Minecraft 1.20.1 + 1.21.1 (同一コードベース)
+**Supported Versions**: Minecraft 1.20.1 + 1.21.1 (single codebase)
 
 **Strategy**:
-- Gradle 自前スクリプト + 抽象化レイヤー方式（外部プリプロセッサ非依存）
-- 全コードを1箇所に集約（AI 開発効率を重視し、Git ブランチ分離を避ける）
-- **Status**: ✅ Phase 1-6 完了（統合テスト完了、2026-01-11）
+- Custom Gradle scripts + abstraction layer approach (no external preprocessor dependencies)
+- All code consolidated in one place (prioritizing AI development efficiency, avoiding Git branch separation)
+- **Status**: ✅ Phase 1-6 completed (integration testing complete, 2026-01-11)
 
 **Key Components**:
-1. **Data Pack**: バージョン固有ディレクトリ（`resources-1.20.1/`, `resources-1.21.1/`）を Gradle で切り替え
-   - 1.20.1: 複数形フォルダ（`advancements/`, `loot_tables/`, `recipes/`）+ pack_format: 18
-   - 1.21.1: 単数形フォルダ（`advancement/`, `loot_table/`, `recipe/`）+ pack_format: 48
-2. **Java Code**: `compat/` パッケージで API 差異を吸収
+1. **Data Pack**: Version-specific directories (`resources-1.20.1/`, `resources-1.21.1/`) switched via Gradle
+   - 1.20.1: Plural folders (`advancements/`, `loot_tables/`, `recipes/`) + pack_format: 18
+   - 1.21.1: Singular folders (`advancement/`, `loot_table/`, `recipe/`) + pack_format: 48
+2. **Java Code**: `compat/` package absorbs API differences
    - ItemStack: NBT (1.20.1) vs DataComponents (1.21.1)
-   - SavedData: `HolderLookup.Provider` の有無
+   - SavedData: `HolderLookup.Provider` presence/absence
    - ArmorMaterial: Interface (1.20.1) vs Record (1.21.1)
    - Tier: getLevel() method (1.20.1 only, removed in 1.21.1)
 3. **Build Commands**:
@@ -133,7 +133,7 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
    - Fabric: `chronodawn-{version}+{mc_version}-fabric.jar`
    - NeoForge: `chronodawn-{version}+{mc_version}-neoforge.jar`
    - Example: `chronodawn-0.3.0-beta+1.21.1-fabric.jar`
-   - **Note**: 1.20.1 は Fabric 専用（NeoForge は 1.20.5+ のみ対応）
+   - **Note**: 1.20.1 is Fabric-only (NeoForge only supports 1.20.5+)
 
 ## Development Notes
 - When writing code, use Mojang mapping names (e.g., `net.minecraft.world.level.Level`, not Yarn's `class_XXXX`)
