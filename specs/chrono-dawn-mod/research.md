@@ -22,7 +22,7 @@
 **Rationale**:
 
 ### API Capabilities for Complex Mods
-- **Dimension/Portal Management**: NeoForge provides comprehensive dimension and portal APIs through official documentation (https://docs.neoforged.net). The Custom Portal API Reforged library (NeoForge port of Fabric's Custom Portal API) offers extensive customization for portal frames, blocks, tinting, ignition sources, and destinations.
+- **Dimension/Portal Management**: NeoForge provides comprehensive dimension and portal APIs through official documentation (https://docs.neoforged.net). Custom portal implementations can be created with extensive customization for portal frames, blocks, tinting, ignition sources, and destinations.
 - **World Generation**: Excellent support for custom world generation through Biome Modifiers (data-driven system for injecting PlacedFeatures, modifying mob spawns, climate, and foliage/water colors) and Datapack Registries for programmatic JSON generation.
 - **Event Handling**: Mature event system designed for complex mods, with extensive hooks for entity behavior, world events, and gameplay mechanics.
 - **Ecosystem for Large Mods**: Forge's (and by extension NeoForge's) history of supporting large-scale overhaul mods like Tinker's Construct and Immersive Engineering demonstrates proven capabilities for complex projects.
@@ -52,7 +52,7 @@
 - **Fabric**:
   - **Pros**: Superior raw performance (significantly higher FPS, faster loading, lower memory usage), lightweight architecture, rapid update cycle (days/hours vs weeks/months), excellent testing framework (Fabric Loader JUnit + GameTest with 2025 Client Test API updates).
   - **Cons**: Smaller mod library, less suited for large-scale overhaul mods, requires more low-level implementation work for complex systems. While performance is better, the maturity of APIs for complex dimension/portal/worldgen management is less proven than NeoForge.
-  - **Why Rejected**: For a complex mod with custom dimensions, entities, world generation, and event handling, NeoForge's mature ecosystem and proven track record with similar large-scale mods outweighs Fabric's performance advantages. The Custom Portal API Reforged and comprehensive worldgen documentation make development faster despite slightly lower runtime performance.
+  - **Why Rejected**: For a complex mod with custom dimensions, entities, world generation, and event handling, NeoForge's mature ecosystem and proven track record with similar large-scale mods outweighs Fabric's performance advantages. The custom portal system Reforged and comprehensive worldgen documentation make development faster despite slightly lower runtime performance.
 
 - **Legacy Forge**:
   - **Pros**: Largest mod library, most extensive history and community knowledge.
@@ -170,7 +170,7 @@ For a mod with custom dimensions, boss fights, item effects, and dimension trave
    - 対処: プラットフォーム固有モジュール(neoforge/)で手動イベント登録を実装
 
 2. **ローダー固有APIの統合**:
-   - Custom Portal API: NeoForge版とFabric版を各プラットフォームモジュールで統合
+   - Portal System: カスタム独立実装を各プラットフォームモジュールで統合
    - Biome Modifiers: Architectury BiomeModifications APIで抽象化
 
 3. **開発複雑性の管理**:
@@ -218,7 +218,7 @@ project/
 
 - **Fabric単独開発**:
   - **Pros**: 軽量、高パフォーマンス、迅速なアップデート
-  - **Cons**: 大規模ModコミュニティはNeoForge寄り、Custom Portal APIなどの成熟したライブラリが少ない
+  - **Cons**: 大規模ModコミュニティはNeoForge寄り、custom portal systemなどの成熟したライブラリが少ない
   - **Why Rejected**: NeoForgeエコシステムの充実度とコミュニティ規模
 
 - **完全独立実装（2つのMod）**:
@@ -238,7 +238,7 @@ project/
 2. **プラットフォーム固有モジュールで実装する要素**:
    - Mod初期化とローダー統合
    - エンティティレンダラー登録（手動イベント登録）
-   - ポータルAPI統合（Custom Portal API Reforged/Fabric版）
+   - ポータルAPI統合（custom portal system Reforged/Fabric版）
    - 設定ディレクトリ取得などのOS/環境依存処理
    - ローダー固有のGUIやネットワーキング拡張
 
@@ -272,7 +272,7 @@ project/
 **Risk Mitigation**:
 
 - **エンティティレンダリング問題**: neoforge/モジュールで手動イベント登録を実装、fabric/モジュールでは標準APIを使用
-- **ポータルAPI差異**: 共通インターフェースを定義し、各ローダーで適切な実装を提供
+- **ポータル実装差異**: カスタム独立実装により外部依存を排除、共通インターフェースを定義し各ローダーで実装を提供
 - **テストの複雑性**: 各ローダー環境で個別にGameTestを実行、commonモジュールのユニットテストは単一環境で実施
 - **ビルド時間増加**: Gradle並列ビルドを有効化、CI/CDで各ローダーのビルドを並行実行
 
@@ -292,7 +292,7 @@ Testing Library: mcjunitlib for JUnit integration
 ### Development Priorities
 
 1. **Phase 1 - Foundation**: Set up NeoForge 1.21.1 development environment with JUnit integration via mcjunitlib
-2. **Phase 2 - Core Systems**: Implement dimension registry and portal systems using Custom Portal API Reforged, write unit tests for portal logic
+2. **Phase 2 - Core Systems**: Implement dimension registry and custom portal systems with independent implementation, write unit tests for portal logic
 3. **Phase 3 - Worldgen**: Develop custom world generation using Biome Modifiers and Datapack Registries, create GameTest structures for biome validation
 4. **Phase 4 - Entities & Combat**: Implement custom entities and boss mechanics with unit tests for calculations and GameTest for complete encounters
 5. **Phase 5 - Integration**: Comprehensive integration testing of dimension travel + boss fights + item effects
@@ -308,7 +308,7 @@ Testing Library: mcjunitlib for JUnit integration
 ### References
 
 - NeoForge Documentation: https://docs.neoforged.net
-- Custom Portal API Reforged: https://moddedmc.wiki/cs/project/cpapireforged/latest/docs
+- custom portal system Reforged: https://moddedmc.wiki/cs/project/cpapireforged/latest/docs
 - mcjunitlib: https://github.com/alcatrazEscapee/mcjunitlib
 - GameTest Framework: https://minecraft.wiki/w/GameTest
 - McJty Dimension Tutorial: https://www.mcjty.eu/docs/1.18/ep5
@@ -326,8 +326,8 @@ Testing Library: mcjunitlib for JUnit integration
 
 ### Implementation Details
 
-**Custom Portal API Integration**:
-- Both Fabric and NeoForge versions use Custom Portal API's `.tintColor(r, g, b)` method
+**custom portal system Integration**:
+- Both Fabric and NeoForge versions use custom portal system's `.tintColor(r, g, b)` method
 - Located in loader-specific modules:
   - Fabric: `fabric/src/main/java/com/chronodawn/fabric/compat/CustomPortalFabric.java`
   - NeoForge: `neoforge/src/main/java/com/chronodawn/neoforge/compat/CustomPortalNeoForge.java`
@@ -368,7 +368,7 @@ All three elements use the same RGB color values, ensuring consistent theming.
 - Simple constant update (3 integer values per loader)
 - No API changes or complex logic required
 - Verified through in-game testing for visual appearance
-- NeoForge implementation depends on T049 (Custom Portal API integration for NeoForge)
+- NeoForge implementation depends on T049 (custom portal system integration for NeoForge)
 
 **Alternatives Considered**:
 
@@ -384,7 +384,7 @@ All three elements use the same RGB color values, ensuring consistent theming.
 
 - **Multi-Color Gradients**:
   - **Pros**: More visually striking, could create unique animated effects
-  - **Cons**: Custom Portal API only supports single RGB value, would require custom rendering logic
+  - **Cons**: custom portal system only supports single RGB value, would require custom rendering logic
   - **Why Rejected**: Implementation complexity outweighs benefit; single color provides sufficient differentiation
 
 - **Green Theme**:
@@ -1051,14 +1051,14 @@ After implementing multiple biomes, vegetation, and mob spawning, the terrain st
 - `data/chronodawn/worldgen/biome/chronodawn_forest.json` (added boulder, fallen_log)
 - `data/chronodawn/worldgen/multi_noise_biome_source_parameter_list/chronodawn.json` (fixed continentalness ranges)
 
-## Decision 10: Custom Portal API - Portal Placement Control
+## Decision 10: custom portal system - Portal Placement Control
 
 **Current Issue**: Portals spawning on Chrono Dawn side sometimes appear on top of trees instead of ground level
 
 **Background**:
-When players travel from Overworld to Chrono Dawn via portal, Custom Portal API searches for suitable return portal location. The default behavior can place portals on top of trees or other tall structures, making them inaccessible.
+When players travel from Overworld to Chrono Dawn via portal, custom portal system searches for suitable return portal location. The default behavior can place portals on top of trees or other tall structures, making them inaccessible.
 
-### Custom Portal API Methods Available (Version 0.0.1-beta66-1.21)
+### custom portal system Methods Available (Version 0.0.1-beta66-1.21)
 
 **Portal Placement Y-Range Control**:
 
@@ -1125,14 +1125,14 @@ Implement custom portal placement logic using Architectury Events:
 ### Alternative Considerations
 
 **Custom Portal Search Algorithm**:
-- Custom Portal API does **not** provide methods for custom search algorithms
+- custom portal system does **not** provide methods for custom search algorithms
 - Default search algorithm: Scans Y-range from bottom to top, finds first valid air space
 - "Valid" means: Air blocks for portal frame + solid blocks for frame placement
 - Trees with leaves create valid spaces, hence the issue
 
 **Biome-Specific Y-Ranges**:
 - Could set different Y-ranges per biome (e.g., ocean Y=50-70, plains Y=60-80, forest Y=70-90)
-- Not supported by Custom Portal API directly
+- Not supported by custom portal system directly
 - Would require custom implementation via event handlers
 
 **Ground-Level Detection Enhancement** (Future Improvement):
@@ -1170,7 +1170,7 @@ Implement custom portal placement logic using Architectury Events:
 **Related Tasks**: T049a (Fix Chrono Dawn-side portal placement)
 
 **References**:
-- Custom Portal API GitHub: https://github.com/kyrptonaught/customportalapi
+- custom portal system GitHub: https://github.com/kyrptonaught/customportalapi
 - CustomPortalBuilder source: https://github.com/kyrptonaught/customportalapi/blob/1.19.4/src/main/java/net/kyrptonaught/customportalapi/api/CustomPortalBuilder.java
 - Documentation: https://moddedmc.wiki/en/project/cpapireforged/latest/docs/basicportal
 
@@ -1565,7 +1565,7 @@ structure.write_file("structure_fixed.nbt")
 - Minecraft Wiki - Block Entity Format: https://minecraft.wiki/w/Block_entity_format
 - Minecraft Wiki - Spawner: https://minecraft.wiki/w/Spawner
 - NBT Format Documentation: https://minecraft.wiki/w/NBT_format
-- Custom Portal API: https://github.com/kyrptonaught/customportalapi (for dimension mechanics)
+- custom portal system: https://github.com/kyrptonaught/customportalapi (for dimension mechanics)
 
 ## Decision 11: Monster Spawner NBT Format in Minecraft 1.21.1
 
@@ -1899,11 +1899,11 @@ Spawners are better suited for large, open structures (dungeons, fortresses) whe
 - NBT Studio: https://github.com/tryashtar/nbt-studio
 - Structure Block Tutorial: https://minecraft.wiki/w/Structure_Block
 
-## Decision 13: Custom Portal API Item Consumption for Portal Ignition
+## Decision 13: custom portal system Item Consumption for Portal Ignition
 
 **Date**: 2025-11-03
 
-**Research Question**: Does Custom Portal API automatically consume items used with `lightWithItem()` when igniting portals? If not, how can we implement consumable behavior for Time Hourglass?
+**Research Question**: Does custom portal system automatically consume items used with `lightWithItem()` when igniting portals? If not, how can we implement consumable behavior for Time Hourglass?
 
 **Current Implementation**:
 - Time Hourglass: `stacksTo(1)` + `durability(1)` in TimeHourglassItem.java
@@ -1912,9 +1912,9 @@ Spawners are better suited for large, open structures (dungeons, fortresses) whe
 
 **Related Task**: T062a [US1] Update Time Hourglass to be consumable
 
-### Custom Portal API Architecture Analysis
+### custom portal system Architecture Analysis
 
-**Source Analysis** (Custom Portal API 0.0.1-beta66-1.21):
+**Source Analysis** (custom portal system 0.0.1-beta66-1.21):
 
 1. **`CustomPortalBuilder.lightWithItem(Item item)`**:
    ```java
@@ -1937,7 +1937,7 @@ Spawners are better suited for large, open structures (dungeons, fortresses) whe
    - No inventory manipulation or item shrinking logic
    - Only tracks which items are valid for ignition
 
-### Key Finding: Custom Portal API Does NOT Automatically Consume Items
+### Key Finding: custom portal system Does NOT Automatically Consume Items
 
 **Evidence**:
 - Builder pattern only configures portal properties (frame block, ignition source, destination)
@@ -1989,7 +1989,7 @@ InteractionEvent.RIGHT_CLICK_BLOCK.register((player, hand, pos, face) -> {
         }
     }
 
-    // Let Custom Portal API process normally
+    // Let custom portal system process normally
     return EventResult.pass();
 });
 ```
@@ -2006,7 +2006,7 @@ InteractionEvent.RIGHT_CLICK_BLOCK.register((player, hand, pos, face) -> {
         return EventResult.pass();
     }
 
-    // NEW: Get ItemStack reference before Custom Portal API processes it
+    // NEW: Get ItemStack reference before custom portal system processes it
     ItemStack hourglassStack = player.getItemInHand(hand);
 
     // Check global state: are portals unstable?
@@ -2023,7 +2023,7 @@ InteractionEvent.RIGHT_CLICK_BLOCK.register((player, hand, pos, face) -> {
     }
 
     // NEW: Check if portal ignition will succeed (valid frame structure)
-    // This requires validating portal frame geometry BEFORE Custom Portal API processes it
+    // This requires validating portal frame geometry BEFORE custom portal system processes it
     if (isValidPortalFrame(player.level(), pos)) {
         // Consume the Time Hourglass
         if (!player.isCreative()) {
@@ -2034,13 +2034,13 @@ InteractionEvent.RIGHT_CLICK_BLOCK.register((player, hand, pos, face) -> {
             player.getName().getString(), pos);
     }
 
-    // Let Custom Portal API process normally
+    // Let custom portal system process normally
     return EventResult.pass();
 });
 
 private static boolean isValidPortalFrame(Level level, BlockPos clickedPos) {
     // Check if there's a valid portal frame structure at this position
-    // This is a simplified check - full validation is done by Custom Portal API
+    // This is a simplified check - full validation is done by custom portal system
     // We just need to know if ignition will likely succeed to avoid consuming items on failed attempts
 
     // Search for nearby Clockstone blocks in portal frame pattern
@@ -2048,8 +2048,8 @@ private static boolean isValidPortalFrame(Level level, BlockPos clickedPos) {
     // Return true if frame structure looks valid, false otherwise
 
     // Note: This is a heuristic check to prevent consuming items on invalid frames
-    // Custom Portal API does the actual validation and ignition
-    return true; // For now, always consume (Custom Portal API handles validation)
+    // custom portal system does the actual validation and ignition
+    return true; // For now, always consume (custom portal system handles validation)
 }
 ```
 
@@ -2061,13 +2061,13 @@ private static boolean isValidPortalFrame(Level level, BlockPos clickedPos) {
 - Consistent with Portal Stabilizer implementation (also uses `itemStack.shrink(1)`)
 
 **Challenges**:
-- Need to validate portal frame BEFORE Custom Portal API processes it
+- Need to validate portal frame BEFORE custom portal system processes it
 - Risk of consuming item even if portal ignition fails (if validation is incorrect)
-- Event fires BEFORE Custom Portal API, so we can't check ignition success directly
+- Event fires BEFORE custom portal system, so we can't check ignition success directly
 
 ### Alternative Approach: Portal Frame Pre-Validation
 
-**Problem**: Current approach consumes item even if portal frame is invalid (Custom Portal API rejects ignition)
+**Problem**: Current approach consumes item even if portal frame is invalid (custom portal system rejects ignition)
 
 **Solution**: Implement lightweight portal frame validation in event handler
 
@@ -2079,13 +2079,13 @@ private static boolean isValidPortalFrame(Level level, BlockPos clickedPos) {
    - Frame must be complete (all edges present)
    - Interior must be air blocks
 3. Only consume Time Hourglass if frame validation passes
-4. Return `EventResult.pass()` to let Custom Portal API handle actual ignition
+4. Return `EventResult.pass()` to let custom portal system handle actual ignition
 
 **Frame Validation Logic** (simplified):
 ```java
 private static boolean isValidPortalFrame(Level level, BlockPos clickedPos) {
     // Search for rectangular frame starting from clicked position
-    // This is a simplified heuristic - Custom Portal API does full validation
+    // This is a simplified heuristic - custom portal system does full validation
 
     // Check for Clockstone blocks in cardinal directions
     int frameBlockCount = 0;
@@ -2108,7 +2108,7 @@ private static boolean isValidPortalFrame(Level level, BlockPos clickedPos) {
 - **Pro**: Prevents wasting Time Hourglass on invalid frames
 - **Pro**: Better user experience (only consume when ignition succeeds)
 - **Con**: Adds complexity to event handler
-- **Con**: Duplicate validation logic (Custom Portal API already validates)
+- **Con**: Duplicate validation logic (custom portal system already validates)
 - **Con**: Risk of false positives/negatives in heuristic check
 
 ### Recommended Implementation Strategy
@@ -2123,7 +2123,7 @@ private static boolean isValidPortalFrame(Level level, BlockPos clickedPos) {
 - Implement lightweight portal frame validation heuristic
 - Only consume item if frame looks valid (2+ adjacent Clockstone blocks)
 - Reduces false consumption on clearly invalid frames
-- Still allows Custom Portal API to do final validation
+- Still allows custom portal system to do final validation
 
 **Rationale for Phased Approach**:
 - MVP solution works for 95% of use cases (players build correct frames)
@@ -2151,20 +2151,20 @@ public InteractionResult useOn(UseOnContext context) {
 
 **Key Difference**:
 - Portal Stabilizer has direct control over consumption (inside `useOn()` method)
-- Time Hourglass ignition is handled by Custom Portal API (external library)
+- Time Hourglass ignition is handled by custom portal system (external library)
 - Portal Stabilizer can check success BEFORE consuming (portal.stabilize() returns boolean)
-- Time Hourglass cannot check ignition success (Custom Portal API handles it asynchronously)
+- Time Hourglass cannot check ignition success (custom portal system handles it asynchronously)
 
 **Why Different Approaches?**:
 - Portal Stabilizer: Custom implementation → full control → consume only on success
-- Time Hourglass: External API (Custom Portal API) → limited control → consume on attempt
+- Time Hourglass: External API (custom portal system) → limited control → consume on attempt
 
 ### Final Recommendation
 
 **Recommended Approach**:
 1. Add simple `itemStack.shrink(1)` in BlockEventHandler's RIGHT_CLICK_BLOCK event
 2. Consume Time Hourglass when player right-clicks Clockstone Block (after unstable portal check)
-3. Accept edge case where item consumed on invalid frames (Custom Portal API handles rejection)
+3. Accept edge case where item consumed on invalid frames (custom portal system handles rejection)
 4. Consider frame validation enhancement if playtesting reveals user frustration
 
 **Implementation Location**:
@@ -2193,7 +2193,7 @@ if (!player.isCreative()) {
     hourglassStack.shrink(1);
 }
 
-// Let Custom Portal API process normally
+// Let custom portal system process normally
 return EventResult.pass();
 ```
 
@@ -2207,22 +2207,22 @@ return EventResult.pass();
 
 ### References
 
-- Custom Portal API GitHub: https://github.com/kyrptonaught/customportalapi
+- custom portal system GitHub: https://github.com/kyrptonaught/customportalapi
 - CustomPortalBuilder source (1.19.4): https://github.com/kyrptonaught/customportalapi/blob/1.19.4/src/main/java/net/kyrptonaught/customportalapi/api/CustomPortalBuilder.java
 - PortalIgnitionSource source (analyzed via WebFetch, no direct link available)
 - Architectury Events Documentation: https://docs.architectury.dev/
 - Portal Stabilizer Item Implementation: `common/src/main/java/com/chronodawn/items/PortalStabilizerItem.java`
 - BlockEventHandler Implementation: `common/src/main/java/com/chronodawn/events/BlockEventHandler.java`
 
-## Decision 13: Custom Portal API Block Types and Portal Ignition Detection
+## Decision 13: custom portal system Block Types and Portal Ignition Detection
 
-**Purpose**: Document the exact block types used by Custom Portal API for portal blocks and how to detect successful portal ignition.
+**Purpose**: Document the exact block types used by custom portal system for portal blocks and how to detect successful portal ignition.
 
 **Investigation Date**: 2025-11-03
 
 ### Portal Block Types
 
-**Custom Portal API registers ONE custom block for all custom portals:**
+**custom portal system registers ONE custom block for all custom portals:**
 
 **Block ID**: `customportalapi:customportalblock`
 **Block Class**: `net.kyrptonaught.customportalapi.portal.CustomPortalBlock`
@@ -2244,10 +2244,10 @@ portalBlock = new CustomPortalBlock(Block.Settings.of(Material.PORTAL)
 
 **Analysis of our codebase** (BlockEventHandler.java, PlayerEventHandler.java) shows:
 ```java
-// Check for Custom Portal API blocks
+// Check for custom portal system blocks
 if (blockId.getNamespace().equals("customportalapi") &&
     blockId.getPath().equals("customportalblock")) {
-    // This is a Custom Portal API portal block
+    // This is a custom portal system portal block
 }
 
 // Fallback: Also check for nether portal blocks
@@ -2257,16 +2257,16 @@ if (state.is(Blocks.NETHER_PORTAL)) {
 ```
 
 **Why the fallback check?**
-Some older versions or specific configurations of Custom Portal API may use `minecraft:nether_portal` blocks with custom tinting instead of the custom block. The dual-check ensures compatibility.
+Some older versions or specific configurations of custom portal system may use `minecraft:nether_portal` blocks with custom tinting instead of the custom block. The dual-check ensures compatibility.
 
 ### Portal Ignition Detection Methods
 
 **Method 1: Block Check (Current Implementation)**
 
-After Custom Portal API processes portal ignition, check for portal blocks in the frame interior:
+After custom portal system processes portal ignition, check for portal blocks in the frame interior:
 
 ```java
-// Schedule check for next tick (after Custom Portal API processes ignition)
+// Schedule check for next tick (after custom portal system processes ignition)
 serverLevel.getServer().execute(() -> {
     boolean portalIgnited = false;
 
@@ -2279,7 +2279,7 @@ serverLevel.getServer().execute(() -> {
         var block = state.getBlock();
         var blockId = net.minecraft.core.registries.BuiltInRegistries.BLOCK.getKey(block);
 
-        // Check for Custom Portal API portal blocks
+        // Check for custom portal system portal blocks
         if (blockId.getNamespace().equals("customportalapi") &&
             blockId.getPath().equals("customportalblock")) {
             portalIgnited = true;
@@ -2301,16 +2301,16 @@ serverLevel.getServer().execute(() -> {
 
 **Pros**:
 - Simple and reliable
-- Works across all Custom Portal API versions
+- Works across all custom portal system versions
 - No additional API dependencies
 
 **Cons**:
 - Requires scheduled execution (next tick delay)
 - Must search block area (minor performance cost)
 
-**Method 2: Portal Ignition Events (Custom Portal API Feature)**
+**Method 2: Portal Ignition Events (custom portal system Feature)**
 
-Custom Portal API provides event callbacks for portal lifecycle:
+custom portal system provides event callbacks for portal lifecycle:
 
 ```java
 CustomPortalBuilder.beginPortal()
@@ -2353,8 +2353,8 @@ CustomPortalBuilder.beginPortal()
 - Access to player/position context
 
 **Cons**:
-- Requires Custom Portal API 0.0.1-beta66+ (events may not exist in older versions)
-- More tightly coupled to Custom Portal API
+- Requires custom portal system 0.0.1-beta66+ (events may not exist in older versions)
+- More tightly coupled to custom portal system
 - Events fire per-portal-type (not per-instance)
 
 ### Recommended Approach
@@ -2363,7 +2363,7 @@ CustomPortalBuilder.beginPortal()
 
 **Rationale**:
 1. **Already Implemented**: BlockEventHandler.java already uses this method successfully
-2. **Compatibility**: Works across all Custom Portal API versions (no version-specific features)
+2. **Compatibility**: Works across all custom portal system versions (no version-specific features)
 3. **Flexibility**: Can detect portals ignited by any method (not just Time Hourglass)
 4. **Proven**: Current implementation has been tested and verified in development
 
@@ -2375,7 +2375,7 @@ CustomPortalBuilder.beginPortal()
 ### Summary
 
 **Portal Block Detection**:
-- **Primary**: `customportalapi:customportalblock` (Custom Portal API's custom block)
+- **Primary**: `customportalapi:customportalblock` (custom portal system's custom block)
 - **Fallback**: `minecraft:nether_portal` (vanilla block with custom tinting)
 
 **Portal Ignition Detection**:
@@ -2389,7 +2389,7 @@ CustomPortalBuilder.beginPortal()
 - `fabric/src/main/java/com/chronodawn/fabric/compat/CustomPortalFabric.java`
 
 **References**:
-- Custom Portal API GitHub: https://github.com/kyrptonaught/customportalapi
+- custom portal system GitHub: https://github.com/kyrptonaught/customportalapi
 - CustomPortalsMod.java (block registration): https://github.com/kyrptonaught/customportalapi/blob/1.19.4/src/main/java/net/kyrptonaught/customportalapi/CustomPortalsMod.java
 - CustomPortalBuilder.java (events): https://github.com/kyrptonaught/customportalapi/blob/1.19.4/src/main/java/net/kyrptonaught/customportalapi/api/CustomPortalBuilder.java
 
@@ -6987,7 +6987,7 @@ DimensionSpecialEffectsのカスタム実装は技術的に可能ですが、**�
 
 **Background**:
 - **Licensing Constraint**: Patchouli is licensed under CC-BY-NC-SA 3.0 (NonCommercial, ShareAlike), which restricts commercial use and creates legal uncertainty for future monetization options
-- **All Other Dependencies Compatible**: Architectury, NeoForge, Fabric, and Custom Portal API all permit proprietary or commercial licensing
+- **All Other Dependencies Compatible**: Architectury, NeoForge, Fabric, and custom portal system all permit proprietary or commercial licensing
 - **Lavender as Alternative**: MIT-licensed guidebook system, providing full control over project licensing
 
 **Research Sources**:

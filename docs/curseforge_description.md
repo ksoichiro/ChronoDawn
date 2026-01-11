@@ -130,8 +130,6 @@ This mod is built with **Architectury** and supports **both Fabric and NeoForge*
   - OR NeoForge 21.1.209+
 - **Dependencies**:
   - **Architectury API** 13.0.8+ (required for both loaders)
-  - **For Fabric**: Custom Portal API is bundled (no separate installation needed)
-  - **For NeoForge**: Custom Portal API ReForged 1.2.2+ (install separately)
 
 ### Compatibility
 - Works with most dimension and world generation mods
@@ -167,7 +165,6 @@ Check out the **Gallery** tab above for screenshots showcasing:
 ## 🤝 Credits
 
 - Built with [Architectury](https://github.com/architectury/architectury-api)
-- Portal system powered by [Custom Portal API](https://github.com/kyrptonaught/customportalapi)
 - Special thanks to the Minecraft modding community!
 
 ---

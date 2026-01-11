@@ -17,7 +17,7 @@
 - Architectury API 13.0.8
 - NeoForge 21.1.x (neoforgeモジュール)
 - Fabric Loader 0.17.2+ + Fabric API 0.115.6+ (fabricモジュール)
-- Custom Portal API (Reforged版 / Fabric版)
+- custom portal system (Reforged版 / Fabric版)
 - mcjunitlib (テスト用)
 **Storage**: ワールドデータ(Minecraftの標準セーブシステム)、設定ファイル(JSON/TOML形式)
 **Testing**: JUnit 5 + Minecraft GameTest Framework (ハイブリッドアプローチ: 自動テスト80% / 手動テスト20%)

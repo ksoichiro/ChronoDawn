@@ -37,7 +37,7 @@ Chrono Dawn is a time-themed dimension mod that adds:
 ### Key Features
 
 - **Time Distortion Effect**: Hostile mobs move in slow motion (Slowness IV) while you move at normal speed
-- **Custom Portal System**: One-way entry that can be upgraded to bidirectional travel
+- **Independent Portal System**: One-way entry that can be upgraded to bidirectional travel
 - **Epic Boss Battles**: Time Guardian, 4 mid-bosses, and Time Tyrant final boss
 - **Ultimate Artifacts**: Time-manipulating weapons, armor, and tools
 - **Three Wood Types**: Time Wood, Dark Time Wood, Ancient Time Wood
@@ -61,19 +61,12 @@ Download and install these mods alongside Chrono Dawn:
    - [CurseForge](https://www.curseforge.com/minecraft/mc-mods/architectury-api)
    - [Modrinth](https://modrinth.com/mod/architectury-api)
 
-2. **Custom Portal API** - Loader-specific requirements:
-   - **For Fabric**: Bundled in the mod (no separate installation needed)
-   - **For NeoForge**: Custom Portal API ReForged 1.2.2+ required (install separately)
-     - [CurseForge](https://www.curseforge.com/minecraft/mc-mods/custom-portal-api-reforged)
-     - [Modrinth](https://modrinth.com/mod/custom-portal-api-reforged)
-
 ### Installation Steps
 
 1. Install Minecraft 1.21.1
 2. Install your chosen mod loader (Fabric or NeoForge)
 3. Download required dependencies:
    - **Architectury API** (required for both loaders)
-   - **Custom Portal API ReForged** (NeoForge only - Fabric version includes this bundled)
 4. Download **Chrono Dawn Mod** (choose the version matching your loader):
    - `chronodawn-0.3.0-beta+1.21.1-fabric.jar` for Fabric
    - `chronodawn-0.3.0-beta+1.21.1-neoforge.jar` for NeoForge

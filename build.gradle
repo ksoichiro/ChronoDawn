@@ -49,7 +49,6 @@ subprojects {
     ext.fabric_loader_version = rootProject.ext.fabric_loader_version
     ext.fabric_api_version = rootProject.ext.fabric_api_version
     ext.neoforge_version = rootProject.ext.neoforge_version
-    ext.custom_portal_api_fabric_version = rootProject.ext.custom_portal_api_fabric_version
 
     repositories {
         maven { url 'https://maven.architectury.dev/' }

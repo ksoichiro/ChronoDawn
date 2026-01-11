@@ -48,23 +48,6 @@ This document lists all third-party dependencies used in Chrono Dawn and their r
 - **URL**: https://github.com/architectury/architectury-api
 - **License URL**: https://github.com/architectury/architectury-api/blob/1.19.2/LICENSE.md
 
-### Portal System
-
-#### Custom Portal API (Fabric)
-- **Project**: Custom Portal API
-- **Version**: 0.0.1-beta66-1.21
-- **Developer**: kyrptonaught
-- **License**: MIT License
-- **URL**: https://github.com/kyrptonaught/customportalapi
-- **Platform**: Fabric
-
-#### Custom Portal API Reforged (NeoForge)
-- **Project**: Custom Portal API Reforged
-- **Version**: 1.2.2 (NeoForge 1.21.1)
-- **Developer**: kyrptonaught
-- **License**: MIT License
-- **URL**: https://github.com/kyrptonaught/customportalapi
-- **Platform**: NeoForge
 
 ## Development Dependencies
 
@@ -120,7 +103,7 @@ Similar to LGPL-2.1 but with updated terms for modern software development. Allo
 ### MIT License
 Very permissive license allowing nearly unrestricted use, modification, and distribution. Only requires preservation of copyright and license notices.
 
-**Used by**: Custom Portal API, Architectury Loom, Architectury Plugin
+**Used by**: Architectury Loom, Architectury Plugin
 
 ### Eclipse Public License 2.0
 Weak copyleft license that requires source code availability for modifications but allows linking with code under other licenses.

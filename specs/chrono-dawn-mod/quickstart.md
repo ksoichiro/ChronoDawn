@@ -260,7 +260,6 @@ public class ChronoDawnFabric implements ModInitializer {
 #### Task 1.3: Implement Portal System
 
 **Reference**: `specs/chrono-dawn-mod/data-model.md` (Portal System)
-**Dependencies**: Custom Portal API Reforged
 **Implementation**: `src/main/java/com/chronodawn/core/portal/`
 
 **Key Files**:
@@ -473,7 +472,6 @@ public static void testPortalTravel(GameTestHelper helper) {
 - **Fabric Docs**: https://docs.fabricmc.net/
 - **Architectury Docs**: https://docs.architectury.dev/
 - **Minecraft Wiki**: https://minecraft.wiki
-- **Custom Portal API Reforged**: https://www.curseforge.com/minecraft/mc-mods/custom-portal-api-reforged
 - **mcjunitlib**: https://github.com/alcatrazEscapee/mcjunitlib
 
 ### Community

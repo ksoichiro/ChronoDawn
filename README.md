@@ -38,7 +38,7 @@ A multi-loader Minecraft mod that adds a mysterious time-themed dimension called
 ### Technical Features
 - **Multi-Loader Architecture**: Supports both Fabric and NeoForge loaders
 - **Architectury Framework**: Shared common code (80%) with loader-specific implementations (20%)
-- **Custom Portal API**: Advanced portal mechanics with Custom Portal API
+- **Custom Portal System**: Advanced portal mechanics with independent implementation
 - **Performance Optimized**: Efficient entity tick handling and caching systems
 
 ## Requirements
@@ -50,8 +50,6 @@ A multi-loader Minecraft mod that adds a mysterious time-themed dimension called
   - OR NeoForge 21.1.209+
 - **Dependencies**:
   - **Architectury API** 13.0.8+ (required for both loaders)
-  - **For Fabric**: Custom Portal API is bundled (no separate installation needed)
-  - **For NeoForge**: Custom Portal API ReForged 1.2.2+ (install separately)
 
 ### For Developers
 - **Java Development Kit (JDK)**: 21 or higher
@@ -223,14 +221,10 @@ gradlew.bat test
 5. Copy `chronodawn-0.3.0-beta+1.21.1-fabric.jar` to `.minecraft/mods/` folder
 6. Launch Minecraft with Fabric profile
 
-**Note**: Custom Portal API is bundled in the Fabric version - no separate installation needed!
-
 ### For NeoForge
 1. Install Minecraft 1.21.1
 2. Install NeoForge 21.1.209+
-3. Download and install required dependencies:
-   - Architectury API 13.0.8+
-   - Custom Portal API ReForged 1.2.2+ ([CurseForge](https://www.curseforge.com/minecraft/mc-mods/custom-portal-api-reforged) | [Modrinth](https://modrinth.com/mod/custom-portal-api-reforged))
+3. Download and install Architectury API 13.0.8+
 4. Copy `chronodawn-0.3.0-beta+1.21.1-neoforge.jar` to `.minecraft/mods/` folder
 5. Launch Minecraft with NeoForge profile
 
@@ -313,8 +307,6 @@ See the [LICENSE](LICENSE) file for full license text.
 ## Credits
 
 - Built with [Architectury](https://github.com/architectury/architectury-api)
-- Portal mechanics powered by [Custom Portal API](https://github.com/kyrptonaught/customportalapi)
-
 ## Support
 
 For issues, feature requests, or questions:

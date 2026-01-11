@@ -82,7 +82,7 @@ Escape:   Break bed and die to return to Overworld → Always possible
 ### Design Decision 2: Portal Visual Design - Color Theme (2025-10-26)
 
 **Background**:
-Chrono Dawn Mod introduces a custom dimensional portal using the Custom Portal API. Visual differentiation from Minecraft's existing portal types (Nether's purple, End's green) and popular mod portals (Aether's blue) is critical for player recognition and mod identity.
+Chrono Dawn Mod introduces a custom dimensional portal using the custom portal system. Visual differentiation from Minecraft's existing portal types (Nether's purple, End's green) and popular mod portals (Aether's blue) is critical for player recognition and mod identity.
 
 **Decision**:
 Chrono Dawn portal uses an **orange/gold color theme** with hex color **#db8813** (RGB: 219, 136, 19).
@@ -109,7 +109,7 @@ Particles:         Orange (#db8813) → Unified visual feedback
 
 3. **Implementation Simplicity**
    - Single RGB value controls all portal visual elements (block, overlay, particles)
-   - Custom Portal API's `.tintColor(r, g, b)` method provides straightforward implementation
+   - custom portal system's `.tintColor(r, g, b)` method provides straightforward implementation
    - No complex rendering logic or gradient systems required
 
 **Color Specification**:

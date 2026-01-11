@@ -640,7 +640,7 @@ This file contains all completed task sections that have been moved from tasks.m
   - All entity types and model layers match Fabric implementation
   - Proper event bus registration with `@EventBusSubscriber`
 - [X] T176 Test portal mechanics on both loaders for consistency
-  - Implemented Custom Portal API Reforged integration for NeoForge (cpapireforged 1.2.2)
+  - Implemented custom portal system Reforged integration for NeoForge (cpapireforged 1.2.2)
   - Created CustomPortalNeoForge.java for portal registration
   - Added Mixin (CustomPortalBlockMixin) to override particle effects with custom orange particles
   - Updated PlayerEventHandler to recognize cpapireforged:custom_portal_block for portal deactivation
@@ -677,7 +677,7 @@ This file contains all completed task sections that have been moved from tasks.m
 - [x] T189 [P] Write developer guide in docs/developer_guide.md - Updated with Chronicle UI and LGPL-3.0 (2025-12-27)
 - [x] T295 [P] Configure mod metadata (license="LGPL-3.0", authors="ksoichiro" in fabric.mod.json and neoforge.mods.toml) - Completed 2025-12-27
 - [x] T296 [P] Add mod icon/logo image (512x512 PNG) to resources - Added to Fabric and NeoForge (2025-12-27)
-- [x] T297 [P] Add LICENSE file and document dependency licenses (Architectury, Custom Portal API, Patchouli, etc.)
+- [x] T297 [P] Add LICENSE file and document dependency licenses (Architectury, custom portal system, Patchouli, etc.)
 
 **Final Status**:
 - ✅ All documentation files created and updated
@@ -766,7 +766,7 @@ This file contains all completed task sections that have been moved from tasks.m
   - **Expected behavior**: Portal should generate on surface (ground level)
   - **Solution implemented**:
     - **Fabric**: Added `setPortalSearchYRange(70, 100)` to restrict portal search range
-    - **NeoForge**: Custom Portal API Reforged v1.2.2 lacks `setPortalSearchYRange` method
+    - **NeoForge**: custom portal system Reforged v1.2.2 lacks `setPortalSearchYRange` method
     - **Both platforms**: Implemented `PortalPlacerMixin` to modify `topY`/`bottomY` local variables to Y=70-100 range
     - Prevents deep underground spawning (Y=-48) while allowing terrain variation
   - **Test results**:

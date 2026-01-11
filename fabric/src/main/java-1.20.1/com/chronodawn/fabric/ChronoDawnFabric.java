@@ -28,7 +28,6 @@ import com.chronodawn.entities.mobs.ClockworkSentinelEntity;
 import com.chronodawn.entities.mobs.FloqEntity;
 import com.chronodawn.entities.mobs.TemporalWraithEntity;
 import com.chronodawn.entities.mobs.TimeKeeperEntity;
-// import com.chronodawn.fabric.compat.CustomPortalFabric; // 1.20.1: Custom Portal API not available
 import com.chronodawn.fabric.event.BlockProtectionEventHandler;
 import com.chronodawn.registry.ModEntities;
 import com.chronodawn.worldgen.processors.BossRoomProtectionProcessor;
@@ -52,9 +51,6 @@ public class ChronoDawnFabric implements ModInitializer {
         // Initialize spawn eggs (Fabric-specific timing)
         com.chronodawn.registry.ModItems.initializeSpawnEggs();
         ChronoDawn.LOGGER.info("Initialized spawn eggs for Fabric");
-
-        // Initialize Custom Portal API integration (1.20.1: Not available)
-        // CustomPortalFabric.init();
 
         // Register fuel items
         ChronoDawnFuelRegistry.register();

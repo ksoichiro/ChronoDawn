@@ -29,7 +29,7 @@ Simply describe what you want to do (e.g., "I want to update Minecraft to 1.21.2
 - Minecraft: 1.21.1
 - Fabric Loader: 0.17.3+ | Fabric API: 0.116.7+
 - NeoForge: 21.1.209+
-- Architectury API: 13.0.8+ | Custom Portal API: 0.0.1-beta66-1.21+
+- Architectury API: 13.0.8+
 
 ---
 
@@ -63,7 +63,6 @@ Simply describe what you want to do (e.g., "I want to update Minecraft to 1.21.2
 
 ## Active Technologies
 - Java 21 (Minecraft Java Edition 1.21.1) + NeoForge 21.1.x, Fabric Loader, mcjunitlib
-- Custom Portal API 0.0.1-beta66-1.21 (Fabric) - for custom portal implementation
 
 ## Project Structure
 ```
@@ -82,7 +81,7 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 - 2025-10-27: Fixed leaves decay logic using minecraft:logs tag and distance tracking (T079-T080)
 - 2025-10-27: Implemented Time Wood tree worldgen with custom blocks (Log, Leaves, Planks, Sapling)
 - 2025-10-26: **CRITICAL DESIGN DECISION**: Respawn mechanics follow Minecraft standard (End-like), not custom logic (see spec.md "Game Design Philosophy")
-- 2025-10-24: Added Custom Portal API 0.0.1-beta66-1.21 dependency for future portal implementation
+- 2025-10-24: Implemented custom portal system with independent implementation (no external dependencies)
 - 2025-10-24: Implemented Time Distortion Effect (Slowness IV for hostile mobs in Chrono Dawn dimension)
 - 2025-10-23: Migrated to Groovy DSL and Mojang mappings for Minecraft 1.21.1 compatibility
 

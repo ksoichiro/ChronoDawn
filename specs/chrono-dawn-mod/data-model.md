@@ -39,8 +39,8 @@
 **Type**: Custom Portal
 **Implementation**:
 - **共通ロジック**: `common/` モジュールでポータル状態管理、検証ロジックを実装
-- **NeoForge**: Custom Portal API Reforged を使用（`neoforge/compat/CustomPortalNeoForge.java`）
-- **Fabric**: Custom Portal API (Fabric版) を使用（`fabric/compat/CustomPortalFabric.java`）
+- **NeoForge**: custom portal system Reforged を使用（`neoforge/compat/CustomPortalNeoForge.java`）
+- **Fabric**: custom portal system (Fabric版) を使用（`fabric/compat/CustomPortalFabric.java`）
 
 **Portal Frame**:
 - `frame_block`: クロックストーンブロック（最小サイズ: 4x5、最大サイズ: 23x23）

@@ -49,7 +49,6 @@ Chrono Dawn uses the **Architectury** framework to support both Fabric and NeoFo
 - **Fabric Loader**: 0.17.3+
 - **NeoForge**: 21.1.209+
 - **Architectury API**: 13.0.8+
-- **Custom Portal API**: 0.0.1-beta66-1.21+
 - **Gradle**: Build automation (Groovy DSL)
 - **Mojang Mappings**: Official Minecraft class names
 
@@ -306,12 +305,12 @@ After building:
 
 **Location**:
 - Common: `common/src/main/java/com/chronodawn/core/portal/`
-- Fabric: `fabric/src/main/java/com/chronodawn/fabric/compat/CustomPortalFabric.java`
-- NeoForge: `neoforge/src/main/java/com/chronodawn/neoforge/compat/CustomPortalNeoForge.java`
+- Fabric: `fabric/src/main/java/com/chronodawn/fabric/compat/ChronoDawnPortalFabric.java`
+- NeoForge: `neoforge/src/main/java/com/chronodawn/neoforge/compat/ChronoDawnPortalNeoForge.java`
 
 **Key Components**:
 - **PortalRegistry**: Tracks portal states (INACTIVE, ACTIVE, STABILIZED)
-- **CustomPortalFabric/NeoForge**: Loader-specific portal implementations using Custom Portal API
+- **ChronoDawnPortalFabric/NeoForge**: Loader-specific portal implementations using custom portal system
 - **TimeHourglassItem**: Portal ignition logic
 - **PortalStabilizerItem**: Dimension stabilization logic
 
