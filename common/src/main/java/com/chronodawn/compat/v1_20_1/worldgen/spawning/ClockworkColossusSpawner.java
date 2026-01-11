@@ -14,12 +14,8 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.levelgen.structure.Structure;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Clockwork Colossus Spawner
@@ -54,22 +50,23 @@ public class ClockworkColossusSpawner {
     // Track structure positions where we've already spawned Clockwork Colossus (per dimension)
     private static final Map<ResourceLocation, Set<BlockPos>> spawnedStructures = new HashMap<>();
 
-    // Track registered engine rooms (bounding boxes from BossRoomProtectionProcessor)
+    // Track registered engine rooms (bounding boxes from BossRoomProtectionProcessor) (per-server runtime cache)
     // Key: dimension ID, Value: Set of bounding boxes
-    private static final Map<ResourceLocation, Set<net.minecraft.world.level.levelgen.structure.BoundingBox>> engineRooms = new HashMap<>();
+    private static final Map<ResourceLocation, Set<net.minecraft.world.level.levelgen.structure.BoundingBox>> engineRooms = new ConcurrentHashMap<>();
 
-    // Cache found markers to avoid repeated expensive searches
-    // Key: structure identifier (first marker position), Value: all marker positions
-    private static final Map<BlockPos, List<BlockPos>> cachedMarkers = new HashMap<>();
+    // Cache found markers to avoid repeated expensive searches (per-server runtime cache)
+    // Key: dimension ID, Value: Map of structure identifier → marker positions (T430: dimension isolation)
+    private static final Map<ResourceLocation, Map<BlockPos, List<BlockPos>>> cachedMarkers = new ConcurrentHashMap<>();
 
-    // Track chunks we've already searched (to avoid re-scanning)
-    // Key: chunk position, Value: timestamp when searched
-    private static final Map<ChunkPos, Long> searchedChunks = new HashMap<>();
+    // Track chunks we've already searched (to avoid re-scanning) (per-server runtime cache)
+    // Key: dimension ID, Value: Map of chunk position → timestamp (T430: dimension isolation)
+    private static final Map<ResourceLocation, Map<ChunkPos, Long>> searchedChunks = new ConcurrentHashMap<>();
     private static final long SEARCH_CACHE_DURATION_MS = 300000; // Cache for 5 minutes
 
     // Check interval (in ticks) - check every 10 seconds to reduce load
     private static final int CHECK_INTERVAL = 200;
-    private static final Map<ResourceLocation, Integer> tickCounters = new HashMap<>();
+    // T430: Tick counter remains static (not per-dimension) for backward compatibility with 1.20.1
+    private static int tickCounter = 0;
 
     // Distance threshold for player proximity spawning
     private static final double SPAWN_DISTANCE = 20.0;
@@ -151,7 +148,7 @@ public class ClockworkColossusSpawner {
                         // Use cached markers if available
                         if (lastSearchTime != null && currentTime - lastSearchTime < SEARCH_CACHE_DURATION_MS) {
                             // We've searched this chunk recently - check cache
-                            markerPositions = getCachedMarkersForChunk(chunkPos);
+                            markerPositions = getCachedMarkersForChunk(dimensionId, chunkPos);
                             if (markerPositions == null) {
                                 // No markers found in previous search - skip
                                 continue;
@@ -167,8 +164,8 @@ public class ClockworkColossusSpawner {
                                 // Markers not found - cache this fact to avoid re-searching
                                 continue;
                             } else {
-                                // Cache found markers
-                                cacheMarkers(markerPositions);
+                                // Cache found markers (T430: dimension-aware)
+                                cacheMarkers(dimensionId, markerPositions);
                             }
                         }
 
@@ -443,11 +440,17 @@ public class ClockworkColossusSpawner {
 
     /**
      * Cache found markers for future lookups.
+     * T430: Now dimension-aware to prevent cross-dimension cache collisions.
      *
+     * @param dimensionId The dimension ID
      * @param markers List of marker positions found in a structure
      */
-    private static void cacheMarkers(List<BlockPos> markers) {
+    private static void cacheMarkers(ResourceLocation dimensionId, List<BlockPos> markers) {
         if (markers.isEmpty()) return;
+
+        // Initialize dimension map if needed
+        cachedMarkers.putIfAbsent(dimensionId, new ConcurrentHashMap<>());
+        Map<BlockPos, List<BlockPos>> dimensionCache = cachedMarkers.get(dimensionId);
 
         // Use first marker as key
         BlockPos key = markers.stream()
@@ -460,18 +463,25 @@ public class ClockworkColossusSpawner {
             })
             .orElse(markers.get(0));
 
-        cachedMarkers.put(key, new ArrayList<>(markers));
+        dimensionCache.put(key, new ArrayList<>(markers));
     }
 
     /**
      * Get cached markers for a chunk (if any).
+     * T430: Now dimension-aware to prevent cross-dimension cache collisions.
      *
+     * @param dimensionId The dimension ID
      * @param chunkPos Chunk position
      * @return List of marker positions, or null if not cached
      */
-    private static List<BlockPos> getCachedMarkersForChunk(ChunkPos chunkPos) {
+    private static List<BlockPos> getCachedMarkersForChunk(ResourceLocation dimensionId, ChunkPos chunkPos) {
+        Map<BlockPos, List<BlockPos>> dimensionCache = cachedMarkers.get(dimensionId);
+        if (dimensionCache == null) {
+            return null;
+        }
+
         // Check if any cached marker set has markers in this chunk
-        for (List<BlockPos> markers : cachedMarkers.values()) {
+        for (List<BlockPos> markers : dimensionCache.values()) {
             for (BlockPos marker : markers) {
                 int markerChunkX = marker.getX() >> 4;
                 int markerChunkZ = marker.getZ() >> 4;
@@ -502,13 +512,18 @@ public class ClockworkColossusSpawner {
     }
 
     /**
-     * Reset spawn tracking (useful for testing or world reset).
+     * Reset spawn tracking for a specific world (useful for testing or debugging).
+     * T430: Now properly clears dimension-specific caches.
+     *
+     * @param level The ServerLevel to reset spawn data for
      */
-    public static void reset() {
-        spawnedStructures.clear();
-        engineRooms.clear();
-        tickCounters.clear();
-        cachedMarkers.clear();
-        searchedChunks.clear();
+    public static void reset(ServerLevel level) {
+        ResourceLocation dimensionId = level.dimension().location();
+        spawnedStructures.remove(dimensionId);
+        engineRooms.remove(dimensionId);
+        cachedMarkers.remove(dimensionId);
+        searchedChunks.remove(dimensionId);
+        tickCounter = 0;
+        ChronoDawn.LOGGER.info("Clockwork Colossus Spawner reset for dimension: {}", dimensionId);
     }
 }

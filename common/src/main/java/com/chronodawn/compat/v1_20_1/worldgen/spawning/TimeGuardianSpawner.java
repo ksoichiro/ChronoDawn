@@ -14,7 +14,10 @@ import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureStart;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Time Guardian Spawner
@@ -53,7 +56,8 @@ public class TimeGuardianSpawner {
 
     // Check interval (in ticks) - check every 5 seconds
     private static final int CHECK_INTERVAL = 100;
-    private static int tickCounter = 0;
+    // T430: Use per-dimension tick counters to prevent cross-dimension interference
+    private static final Map<ResourceLocation, AtomicInteger> tickCounters = new ConcurrentHashMap<>();
 
     // Track world dimension to reset counters when changing worlds
     private static net.minecraft.resources.ResourceLocation lastWorldId = null;
@@ -76,25 +80,30 @@ public class TimeGuardianSpawner {
     /**
      * Check for Desert Clock Tower structures and spawn Time Guardian if needed.
      * This should be called periodically (e.g., from a tick event).
+     * T430: Now uses per-dimension tick counter to prevent cross-dimension interference.
      *
      * @param level The ServerLevel to check
      */
     public static void checkAndSpawnGuardians(ServerLevel level) {
+        ResourceLocation dimensionId = level.dimension().location();
+
+        // Initialize tick counter for this dimension if needed
+        tickCounters.putIfAbsent(dimensionId, new AtomicInteger(0));
+        AtomicInteger tickCounter = tickCounters.get(dimensionId);
+
+        // Increment tick counter and check interval
+        int currentTick = tickCounter.incrementAndGet();
+        if (currentTick < CHECK_INTERVAL) {
+            return;
+        }
+        tickCounter.set(0);
+
         // Reset tracking if we're in a different world
         ResourceLocation currentWorldId = level.dimension().location();
         if (lastWorldId == null || !lastWorldId.equals(currentWorldId)) {
             reset();
             lastWorldId = currentWorldId;
         }
-
-        // Increment tick counter
-        tickCounter++;
-
-        // Only check every CHECK_INTERVAL ticks
-        if (tickCounter < CHECK_INTERVAL) {
-            return;
-        }
-        tickCounter = 0;
 
         // Check if we've reached the spawn limit
         if (spawnedGuardiansCount >= MAX_TIME_GUARDIANS_PER_WORLD) {

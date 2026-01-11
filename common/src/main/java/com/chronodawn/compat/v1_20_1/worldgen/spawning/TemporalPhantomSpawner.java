@@ -15,10 +15,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.phys.AABB;
 
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Temporal Phantom Spawner
@@ -47,14 +46,17 @@ public class TemporalPhantomSpawner {
 
     // Track boss_room positions (per dimension)
     // Key: dimension ID, Value: Set of boss_room center positions
-    private static final Map<ResourceLocation, Set<BlockPos>> bossRoomPositions = new HashMap<>();
+    // T430: Thread-safe ConcurrentHashMap prevents race conditions in multiplayer
+    private static final Map<ResourceLocation, Set<BlockPos>> bossRoomPositions = new ConcurrentHashMap<>();
 
     // Track boss_rooms where Temporal Phantom has already spawned (per dimension)
-    private static final Map<ResourceLocation, Set<BlockPos>> spawnedBossRooms = new HashMap<>();
+    // T430: Thread-safe ConcurrentHashMap prevents race conditions in multiplayer
+    private static final Map<ResourceLocation, Set<BlockPos>> spawnedBossRooms = new ConcurrentHashMap<>();
 
     // Check interval (in ticks) - check every 1 second
     private static final int CHECK_INTERVAL = 20;
-    private static final Map<ResourceLocation, Integer> tickCounters = new HashMap<>();
+    // T430: Thread-safe ConcurrentHashMap prevents race conditions in multiplayer
+    private static final Map<ResourceLocation, Integer> tickCounters = new ConcurrentHashMap<>();
 
     /**
      * Register boss_room position for later spawn checking.
@@ -65,7 +67,8 @@ public class TemporalPhantomSpawner {
      */
     public static void registerBossRoom(ServerLevel level, BlockPos bossRoomCenter) {
         ResourceLocation dimensionId = level.dimension().location();
-        bossRoomPositions.putIfAbsent(dimensionId, new HashSet<>());
+        // T430: Use ConcurrentHashMap.newKeySet() for thread-safe Set
+        bossRoomPositions.putIfAbsent(dimensionId, ConcurrentHashMap.newKeySet());
         bossRoomPositions.get(dimensionId).add(bossRoomCenter.immutable());
 
         ChronoDawn.LOGGER.info(
@@ -106,8 +109,8 @@ public class TemporalPhantomSpawner {
 
         // Initialize tick counter for this dimension
         tickCounters.putIfAbsent(dimensionId, 0);
-        int tickCounter = tickCounters.get(dimensionId) + 1;
-        tickCounters.put(dimensionId, tickCounter);
+        // T430: Use atomic compute operation for tick counter increment
+        int tickCounter = tickCounters.compute(dimensionId, (k, v) -> (v == null ? 0 : v) + 1);
 
         // Only check every CHECK_INTERVAL ticks
         if (tickCounter < CHECK_INTERVAL) {
@@ -126,7 +129,8 @@ public class TemporalPhantomSpawner {
         }
 
         // Initialize spawned tracking for this dimension
-        spawnedBossRooms.putIfAbsent(dimensionId, new HashSet<>());
+        // T430: Use ConcurrentHashMap.newKeySet() for thread-safe Set
+        spawnedBossRooms.putIfAbsent(dimensionId, ConcurrentHashMap.newKeySet());
         Set<BlockPos> spawned = spawnedBossRooms.get(dimensionId);
         Set<BlockPos> bossRooms = bossRoomPositions.get(dimensionId);
 

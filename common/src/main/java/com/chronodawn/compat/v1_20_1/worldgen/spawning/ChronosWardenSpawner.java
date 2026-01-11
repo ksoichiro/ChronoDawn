@@ -52,7 +52,8 @@ public class ChronosWardenSpawner {
 
     // Check interval (in ticks) - check every 5 seconds
     private static final int CHECK_INTERVAL = 100;
-    private static int tickCounter = 0;
+    // T430: Per-dimension tick counters to prevent cross-dimension interference
+    private static final Map<ResourceLocation, Integer> tickCounters = new java.util.HashMap<>();
 
     // Track world dimension to reset counters when changing worlds
     private static ResourceLocation lastWorldId = null;
@@ -86,14 +87,16 @@ public class ChronosWardenSpawner {
             lastWorldId = currentWorldId;
         }
 
-        // Increment tick counter
-        tickCounter++;
+        // T430: Use per-dimension tick counter
+        tickCounters.putIfAbsent(currentWorldId, 0);
+        int tickCounter = tickCounters.get(currentWorldId) + 1;
 
         // Only check every CHECK_INTERVAL ticks
         if (tickCounter < CHECK_INTERVAL) {
+            tickCounters.put(currentWorldId, tickCounter);
             return;
         }
-        tickCounter = 0;
+        tickCounters.put(currentWorldId, 0);
 
         // Only process if there are players in the dimension
         if (level.players().isEmpty()) {
@@ -401,11 +404,12 @@ public class ChronosWardenSpawner {
 
     /**
      * Reset spawn tracking (useful for testing or world reset).
+     * T430: Now clears per-dimension tick counters.
      */
     public static void reset() {
         spawnedStructures.clear();
         spawnedDoors.clear();
-        tickCounter = 0;
+        tickCounters.clear();
         lastWorldId = null;
         ChronoDawn.LOGGER.info("Chronos Warden Spawner reset");
     }

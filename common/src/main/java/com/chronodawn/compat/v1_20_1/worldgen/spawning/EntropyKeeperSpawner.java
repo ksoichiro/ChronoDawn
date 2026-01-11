@@ -56,6 +56,7 @@ public class EntropyKeeperSpawner {
 
     // Check interval (in ticks) - check every 2 seconds
     private static final int CHECK_INTERVAL = 40;
+    // T430: Per-dimension tick counters to prevent cross-dimension interference
     private static final Map<ResourceLocation, Integer> tickCounters = new HashMap<>();
 
     /**
@@ -301,12 +302,16 @@ public class EntropyKeeperSpawner {
     }
 
     /**
-     * Reset spawn tracking (useful for testing or world reset).
+     * Reset spawn tracking for a specific world (useful for testing or debugging).
+     * T430: Now properly clears dimension-specific caches.
+     *
+     * @param level The ServerLevel to reset spawn data for
      */
-    public static void reset() {
-        processedStructures.clear();
-        spawnedMarkers.clear();
-        tickCounters.clear();
-        ChronoDawn.LOGGER.debug("Entropy Keeper Spawner reset");
+    public static void reset(ServerLevel level) {
+        ResourceLocation dimensionId = level.dimension().location();
+        processedStructures.remove(dimensionId);
+        spawnedMarkers.remove(dimensionId);
+        tickCounters.remove(dimensionId);
+        ChronoDawn.LOGGER.info("Entropy Keeper Spawner reset for dimension: {}", dimensionId);
     }
 }
