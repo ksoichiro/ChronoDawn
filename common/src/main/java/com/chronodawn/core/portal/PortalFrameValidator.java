@@ -69,9 +69,14 @@ public class PortalFrameValidator {
 
         com.chronodawn.ChronoDawn.LOGGER.info("validateFrame: Checking frame at pos={}, axis={}", pos, axis);
 
+        // Find the bottom-left corner position by searching from current position
+        BlockPos bottomLeft = findBottomLeft(level, pos, horizontal, vertical);
+
+        com.chronodawn.ChronoDawn.LOGGER.info("validateFrame: Bottom-left position: {}", bottomLeft);
+
         // Find the frame dimensions
-        int width = findFrameDimension(level, pos, horizontal, MAX_WIDTH);
-        int height = findFrameDimension(level, pos, vertical, MAX_HEIGHT);
+        int width = findFrameDimension(level, bottomLeft, horizontal, MAX_WIDTH);
+        int height = findFrameDimension(level, bottomLeft, vertical, MAX_HEIGHT);
 
         com.chronodawn.ChronoDawn.LOGGER.info("validateFrame: Found dimensions width={}, height={}", width, height);
 
@@ -83,14 +88,56 @@ public class PortalFrameValidator {
         }
 
         // Validate frame structure
-        if (!validateFrameStructure(level, pos, horizontal, vertical, width, height)) {
+        if (!validateFrameStructure(level, bottomLeft, horizontal, vertical, width, height)) {
             com.chronodawn.ChronoDawn.LOGGER.info("validateFrame: FAILED - Frame structure validation failed");
             return null;
         }
 
         com.chronodawn.ChronoDawn.LOGGER.info("validateFrame: SUCCESS - Valid portal frame");
         // Return valid portal frame data
-        return new PortalFrameData(pos, width, height, axis);
+        return new PortalFrameData(bottomLeft, width, height, axis);
+    }
+
+    /**
+     * Find the bottom-left corner position of the portal frame.
+     * Works even when corners are missing (air blocks).
+     *
+     * @param level The level
+     * @param pos Starting position (any frame block or corner position)
+     * @param horizontal Horizontal direction (EAST or SOUTH)
+     * @param vertical Vertical direction (UP)
+     * @return Bottom-left corner position (may be air if corner is missing)
+     */
+    private static BlockPos findBottomLeft(Level level, BlockPos pos, Direction horizontal, Direction vertical) {
+        // Search left (opposite of horizontal direction)
+        BlockPos leftMost = pos;
+        for (int i = 1; i <= MAX_WIDTH; i++) {
+            BlockPos checkPos = pos.relative(horizontal.getOpposite(), i);
+
+            // Continue if it's a frame block, or if it's air but the right neighbor is a frame block (missing corner)
+            if (isFrameBlock(level, checkPos) ||
+                (!isFrameBlock(level, checkPos) && isFrameBlock(level, checkPos.relative(horizontal, 1)))) {
+                leftMost = checkPos;
+            } else {
+                break;
+            }
+        }
+
+        // Search down (opposite of vertical direction)
+        BlockPos bottomLeft = leftMost;
+        for (int i = 1; i <= MAX_HEIGHT; i++) {
+            BlockPos checkPos = leftMost.relative(vertical.getOpposite(), i);
+
+            // Continue if it's a frame block, or if it's air but the upper neighbor is a frame block (missing corner)
+            if (isFrameBlock(level, checkPos) ||
+                (!isFrameBlock(level, checkPos) && isFrameBlock(level, checkPos.relative(vertical, 1)))) {
+                bottomLeft = checkPos;
+            } else {
+                break;
+            }
+        }
+
+        return bottomLeft;
     }
 
     /**
