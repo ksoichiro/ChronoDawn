@@ -1,6 +1,5 @@
 package com.chronodawn.blocks;
 
-import com.mojang.serialization.MapCodec;
 import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -23,15 +22,8 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
  * - Drops 1x Dawn Bell item when either block is broken
  */
 public class DawnBellBlock extends DoublePlantBlock {
-    public static final MapCodec<DawnBellBlock> CODEC = simpleCodec(DawnBellBlock::new);
-
     public DawnBellBlock(BlockBehaviour.Properties properties) {
         super(properties);
-    }
-
-    @Override
-    public MapCodec<? extends DoublePlantBlock> codec() {
-        return CODEC;
     }
 
     /**

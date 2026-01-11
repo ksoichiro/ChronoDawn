@@ -784,7 +784,7 @@ public class MasterClockBossRoomPlacer {
 
         // Get DecorativeWater block for protection
         var decorativeWaterBlock = net.minecraft.core.registries.BuiltInRegistries.BLOCK
-            .get(ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "decorative_water"));
+            .get(CompatResourceLocation.create(ChronoDawn.MOD_ID, "decorative_water"));
 
         // Get template size for water removal
         net.minecraft.core.Vec3i corridorSize = template.getSize();

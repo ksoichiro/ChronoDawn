@@ -177,7 +177,8 @@ public class BlockEventHandler {
                     net.minecraft.world.entity.EquipmentSlot slot = hand == net.minecraft.world.InteractionHand.MAIN_HAND
                         ? net.minecraft.world.entity.EquipmentSlot.MAINHAND
                         : net.minecraft.world.entity.EquipmentSlot.OFFHAND;
-                    heldItem.hurtAndBreak(1, player, slot);
+                    // Version-independent item damage
+                    com.chronodawn.compat.ItemDurabilityHandler.getInstance().damageItem(heldItem, 1, player, slot);
                 }
 
                 return EventResult.interruptTrue();

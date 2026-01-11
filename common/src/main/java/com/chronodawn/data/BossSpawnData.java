@@ -1,14 +1,12 @@
 package com.chronodawn.data;
 
+import com.chronodawn.compat.CompatSavedData;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.world.level.saveddata.SavedData;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -23,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * - EntropyKeeperSpawnData
  * - ClockworkColossusSpawnData
  */
-public class BossSpawnData extends SavedData {
+public class BossSpawnData extends CompatSavedData {
     private static final String DATA_NAME = "boss_spawns";
 
     // Time Tyrant data
@@ -47,22 +45,24 @@ public class BossSpawnData extends SavedData {
         super();
     }
 
+    public static String getDataName() {
+        return DATA_NAME;
+    }
+
     /**
-     * Factory method for SavedData system.
+     * Static load method for CompatSavedData.computeIfAbsent().
      */
-    public static Factory<BossSpawnData> factory() {
-        return new Factory<>(
-            BossSpawnData::new,
-            BossSpawnData::load,
-            null
-        );
+    public static BossSpawnData load(CompoundTag tag, net.minecraft.core.HolderLookup.Provider provider) {
+        BossSpawnData data = new BossSpawnData();
+        data.loadData(tag);
+        return data;
     }
 
     /**
      * Load saved data from NBT.
      */
-    public static BossSpawnData load(CompoundTag tag, HolderLookup.Provider provider) {
-        BossSpawnData data = new BossSpawnData();
+    @Override
+    public void loadData(CompoundTag tag) {
 
         // Load Time Tyrant data
         if (tag.contains("TimeTyrant")) {
@@ -71,9 +71,9 @@ public class BossSpawnData extends SavedData {
             for (int i = 0; i < doorsList.size(); i++) {
                 CompoundTag doorTag = doorsList.getCompound(i);
                 BlockPos pos = BlockPos.of(doorTag.getLong("Pos"));
-                data.timeTyrantSpawnedDoors.add(pos);
+                this.timeTyrantSpawnedDoors.add(pos);
             }
-            data.timeTyrantSpawnCount = tyrantTag.getInt("SpawnCount");
+            this.timeTyrantSpawnCount = tyrantTag.getInt("SpawnCount");
         }
 
         // Load Time Guardian data
@@ -83,7 +83,7 @@ public class BossSpawnData extends SavedData {
             for (int i = 0; i < structuresList.size(); i++) {
                 CompoundTag structureTag = structuresList.getCompound(i);
                 BlockPos pos = BlockPos.of(structureTag.getLong("Pos"));
-                data.timeGuardianSpawnedStructures.add(pos);
+                this.timeGuardianSpawnedStructures.add(pos);
             }
         }
 
@@ -94,7 +94,7 @@ public class BossSpawnData extends SavedData {
             for (int i = 0; i < doorsList.size(); i++) {
                 CompoundTag doorTag = doorsList.getCompound(i);
                 BlockPos pos = BlockPos.of(doorTag.getLong("Pos"));
-                data.chronosWardenSpawnedDoors.add(pos);
+                this.chronosWardenSpawnedDoors.add(pos);
             }
         }
 
@@ -106,14 +106,14 @@ public class BossSpawnData extends SavedData {
             for (int i = 0; i < processedList.size(); i++) {
                 CompoundTag structureTag = processedList.getCompound(i);
                 BlockPos pos = BlockPos.of(structureTag.getLong("Pos"));
-                data.entropyKeeperProcessedStructures.add(pos);
+                this.entropyKeeperProcessedStructures.add(pos);
             }
 
             ListTag markersList = keeperTag.getList("SpawnedMarkers", Tag.TAG_COMPOUND);
             for (int i = 0; i < markersList.size(); i++) {
                 CompoundTag markerTag = markersList.getCompound(i);
                 BlockPos pos = BlockPos.of(markerTag.getLong("Pos"));
-                data.entropyKeeperSpawnedMarkers.add(pos);
+                this.entropyKeeperSpawnedMarkers.add(pos);
             }
         }
 
@@ -124,18 +124,16 @@ public class BossSpawnData extends SavedData {
             for (int i = 0; i < structuresList.size(); i++) {
                 CompoundTag structureTag = structuresList.getCompound(i);
                 BlockPos pos = BlockPos.of(structureTag.getLong("Pos"));
-                data.clockworkColossusSpawnedStructures.add(pos);
+                this.clockworkColossusSpawnedStructures.add(pos);
             }
         }
-
-        return data;
     }
 
     /**
      * Save data to NBT.
      */
     @Override
-    public CompoundTag save(CompoundTag tag, HolderLookup.Provider provider) {
+    public CompoundTag saveData(CompoundTag tag) {
         // Save Time Tyrant data
         CompoundTag tyrantTag = new CompoundTag();
         ListTag tyrantDoorsList = new ListTag();
@@ -325,12 +323,5 @@ public class BossSpawnData extends SavedData {
         resetEntropyKeeper();
         resetClockworkColossus();
         setDirty();
-    }
-
-    /**
-     * Get the data name for this SavedData.
-     */
-    public static String getDataName() {
-        return DATA_NAME;
     }
 }

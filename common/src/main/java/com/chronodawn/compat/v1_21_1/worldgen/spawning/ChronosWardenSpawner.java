@@ -1,6 +1,7 @@
 package com.chronodawn.worldgen.spawning;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.compat.CompatSavedData;
 import com.chronodawn.data.BossSpawnData;
 import com.chronodawn.entities.bosses.ChronosWardenEntity;
 import com.chronodawn.registry.ModEntities;
@@ -98,8 +99,10 @@ public class ChronosWardenSpawner {
         ChronoDawn.LOGGER.info("Guardian Vault Door opened at {}", doorPos);
 
         // Get saved data for this world (persists across server restarts)
-        BossSpawnData data = level.getDataStorage().computeIfAbsent(
-            BossSpawnData.factory(),
+        BossSpawnData data = CompatSavedData.computeIfAbsent(
+            level.getDataStorage(),
+            BossSpawnData::new,
+            BossSpawnData::load,
             BossSpawnData.getDataName()
         );
 
@@ -170,8 +173,10 @@ public class ChronosWardenSpawner {
      * @param level The ServerLevel to reset spawn data for
      */
     public static void reset(ServerLevel level) {
-        BossSpawnData data = level.getDataStorage().computeIfAbsent(
-            BossSpawnData.factory(),
+        BossSpawnData data = CompatSavedData.computeIfAbsent(
+            level.getDataStorage(),
+            BossSpawnData::new,
+            BossSpawnData::load,
             BossSpawnData.getDataName()
         );
         data.resetChronosWarden();
