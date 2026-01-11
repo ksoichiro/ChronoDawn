@@ -63,6 +63,11 @@ public class PortalFrameValidator {
      * @return PortalFrameData if valid, null if invalid
      */
     public static PortalFrameData validateFrame(Level level, BlockPos pos, Direction.Axis axis) {
+        // First check if starting position is a frame block
+        if (!isFrameBlock(level, pos)) {
+            return null;
+        }
+
         // Determine the horizontal and vertical directions based on axis
         Direction horizontal = axis == Direction.Axis.X ? Direction.EAST : Direction.SOUTH;
         Direction vertical = Direction.UP;
