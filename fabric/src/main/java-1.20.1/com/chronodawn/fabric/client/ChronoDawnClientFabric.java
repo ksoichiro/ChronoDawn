@@ -11,6 +11,7 @@ import com.chronodawn.client.model.TemporalWraithModel;
 import com.chronodawn.client.model.TimeGuardianModel;
 import com.chronodawn.client.model.TimeKeeperModel;
 import com.chronodawn.client.model.TimeTyrantModel;
+import com.chronodawn.client.particle.ChronoDawnPortalParticle;
 import com.chronodawn.gui.ChronicleScreen;
 import com.chronodawn.gui.data.ChronicleData;
 import com.chronodawn.items.ChronicleBookItem;
@@ -33,11 +34,14 @@ import com.chronodawn.items.TimeCompassItem;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModEntities;
 import com.chronodawn.registry.ModItems;
+import com.chronodawn.registry.ModParticles;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.event.client.player.ClientPlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
@@ -76,6 +80,7 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
         registerRenderLayers();
         registerEntityModelLayers();
         registerEntityRenderers();
+        registerParticles();
         registerItemProperties();
         registerChronicleDataLoader();
         registerChronicleBookHandler();
@@ -90,7 +95,7 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             .registerReloadListener(new SimpleSynchronousResourceReloadListener() {
                 @Override
                 public ResourceLocation getFabricId() {
-                    return new ResourceLocation("chronodawn", "chronicle_data");
+                    return ResourceLocation.fromNamespaceAndPath("chronodawn", "chronicle_data");
                 }
 
                 @Override
@@ -507,6 +512,17 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
     }
 
     /**
+     * Register particle factories for custom particles.
+     */
+    private void registerParticles() {
+        // Register ChronoDawn Portal particle
+        ParticleFactoryRegistry.getInstance().register(
+            ModParticles.CHRONO_DAWN_PORTAL.get(),
+            ChronoDawnPortalParticle.Provider::new
+        );
+    }
+
+    /**
      * Register item properties for dynamic item rendering.
      *
      * Time Compass uses the "angle" property to rotate the needle
@@ -517,7 +533,7 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
         // This makes the compass needle point towards the target structure
         net.minecraft.client.renderer.item.ItemProperties.register(
             ModItems.TIME_COMPASS.get(),
-            new ResourceLocation("minecraft", "angle"),
+            ResourceLocation.fromNamespaceAndPath("minecraft", "angle"),
             (stack, level, entity, seed) -> {
                 // Get target position from compass NBT
                 Optional<GlobalPos> targetPos = TimeCompassItem.getTargetPosition(stack);

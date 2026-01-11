@@ -520,10 +520,11 @@ public class PortalTeleportHandler {
         BlockPos.MutableBlockPos airPos = pos.mutable().move(Direction.UP);
 
         // Check if there's enough air above (6 blocks: 1 spawn + 5 for portal)
+        // Allow air or replaceable blocks (snow, grass, carpet, etc.)
         boolean hasEnoughAir = true;
         for (int i = 0; i < 6; i++) {
             BlockState airState = level.getBlockState(airPos);
-            if (!airState.isAir()) {
+            if (!airState.isAir() && !airState.canBeReplaced()) {
                 hasEnoughAir = false;
                 break;
             }
@@ -540,9 +541,10 @@ public class PortalTeleportHandler {
             BlockPos testPos = pos.above(offset);
             boolean canPlaceHere = true;
 
-            // Check if this position and 5 blocks above are all air
+            // Check if this position and 5 blocks above are all air or replaceable
             for (int i = 0; i < 6; i++) {
-                if (!level.getBlockState(testPos.above(i)).isAir()) {
+                BlockState state = level.getBlockState(testPos.above(i));
+                if (!state.isAir() && !state.canBeReplaced()) {
                     canPlaceHere = false;
                     break;
                 }

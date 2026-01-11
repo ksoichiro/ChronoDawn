@@ -363,6 +363,12 @@ public class ChronoDawnPortalBlock extends Block {
         stateValue++;
         ENTITY_PORTAL_STATES.put(entityId, stateValue);
 
+        // Play portal trigger sound when countdown starts (state 0 → 1)
+        // Same sound as Nether Portal
+        if (stateValue == 1 && entity instanceof net.minecraft.server.level.ServerPlayer) {
+            level.playSound(null, pos, SoundEvents.PORTAL_TRIGGER, SoundSource.BLOCKS, 1.0F, 1.0F);
+        }
+
         // Check if entity should teleport
         // Creative mode: teleport immediately (like vanilla Nether Portal)
         // Survival mode: wait for threshold time
@@ -444,14 +450,13 @@ public class ChronoDawnPortalBlock extends Block {
             speedX = random.nextFloat() * 0.3F * j; // Reduced from 2.0F to 0.3F
         }
 
-        // Use lava particles for better orange effect
-        // LAVA particles are orange/red and don't rise like FLAME
-        level.addParticle(ParticleTypes.LAVA, x, y, z, speedX, speedY, speedZ);
-
-        // Occasionally add flame particles for glow effect (less frequent)
-        if (random.nextInt(5) == 0) {
-            level.addParticle(ParticleTypes.FLAME, x, y, z, speedX * 0.5, speedY * 0.5, speedZ * 0.5);
-        }
+        // Use custom ChronoDawn Portal particles
+        // Golden/orange particles that float gently like Nether Portal
+        level.addParticle(
+            com.chronodawn.registry.ModParticles.CHRONO_DAWN_PORTAL.get(),
+            x, y, z,
+            speedX, speedY, speedZ
+        );
     }
 
     public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {

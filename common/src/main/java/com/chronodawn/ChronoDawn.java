@@ -28,6 +28,7 @@ import com.chronodawn.registry.ModEffects;
 import com.chronodawn.registry.ModEntities;
 import com.chronodawn.registry.ModFluids;
 import com.chronodawn.registry.ModItems;
+import com.chronodawn.registry.ModParticles;
 import com.chronodawn.registry.ModSounds;
 import com.chronodawn.registry.ModStructureProcessorTypes;
 import com.chronodawn.registry.ModTreeDecoratorTypes;
@@ -57,6 +58,7 @@ public class ChronoDawn {
         ModSounds.register();
         ModEffects.register();
         ModEntities.register();
+        ModParticles.register();
         ModDimensions.register();
         ModCreativeTabs.register();
         ModTreeDecoratorTypes.register();
