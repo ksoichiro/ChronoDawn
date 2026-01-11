@@ -81,6 +81,8 @@ tasks.named("processResources", ProcessResources).configure {
         expand "version": project.version
     }
 
+    // pack.mcmeta expansion is handled in root build.gradle (common for fabric/neoforge)
+
     // Include common resources (data, assets, pack.mcmeta)
     from(project(":common").sourceSets.main.resources) {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE

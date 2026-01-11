@@ -76,6 +76,17 @@ subprojects {
         it.options.encoding = 'UTF-8'
         it.options.release = 21
     }
+
+    // Common resource processing for platform modules (fabric, neoforge)
+    if (project.name in ['fabric', 'neoforge']) {
+        tasks.withType(ProcessResources).configureEach {
+            inputs.property 'pack_format', project.ext.pack_format
+
+            filesMatching('pack.mcmeta') {
+                expand 'pack_format': project.ext.pack_format
+            }
+        }
+    }
 }
 
 // Multi-version build tasks (Phase 5: Build Script Enhancement)

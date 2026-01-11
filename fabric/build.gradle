@@ -89,15 +89,12 @@ processResources {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
     inputs.property 'version', project.version
-    inputs.property 'pack_format', project.ext.pack_format
 
     filesMatching('fabric.mod.json') {
         expand 'version': project.version
     }
 
-    filesMatching('pack.mcmeta') {
-        expand 'pack_format': project.ext.pack_format
-    }
+    // pack.mcmeta expansion is handled in root build.gradle (common for fabric/neoforge)
 }
 
 shadowJar {
