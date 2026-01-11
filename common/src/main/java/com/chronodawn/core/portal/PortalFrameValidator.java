@@ -67,20 +67,28 @@ public class PortalFrameValidator {
         Direction horizontal = axis == Direction.Axis.X ? Direction.EAST : Direction.SOUTH;
         Direction vertical = Direction.UP;
 
+        com.chronodawn.ChronoDawn.LOGGER.info("validateFrame: Checking frame at pos={}, axis={}", pos, axis);
+
         // Find the frame dimensions
         int width = findFrameDimension(level, pos, horizontal, MAX_WIDTH);
         int height = findFrameDimension(level, pos, vertical, MAX_HEIGHT);
 
+        com.chronodawn.ChronoDawn.LOGGER.info("validateFrame: Found dimensions width={}, height={}", width, height);
+
         // Validate dimensions
         if (width < MIN_WIDTH || width > MAX_WIDTH || height < MIN_HEIGHT || height > MAX_HEIGHT) {
+            com.chronodawn.ChronoDawn.LOGGER.info("validateFrame: FAILED - Invalid dimensions (min={}x{}, max={}x{})",
+                MIN_WIDTH, MIN_HEIGHT, MAX_WIDTH, MAX_HEIGHT);
             return null;
         }
 
         // Validate frame structure
         if (!validateFrameStructure(level, pos, horizontal, vertical, width, height)) {
+            com.chronodawn.ChronoDawn.LOGGER.info("validateFrame: FAILED - Frame structure validation failed");
             return null;
         }
 
+        com.chronodawn.ChronoDawn.LOGGER.info("validateFrame: SUCCESS - Valid portal frame");
         // Return valid portal frame data
         return new PortalFrameData(pos, width, height, axis);
     }
