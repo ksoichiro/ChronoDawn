@@ -4,7 +4,6 @@
   "package": "com.chronodawn.fabric.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "PortalPlacerMixin"
   ],
   "injectors": {
     "defaultRequire": 1
