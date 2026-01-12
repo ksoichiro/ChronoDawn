@@ -474,7 +474,7 @@ public class TimeGuardianSpawner {
 
         spawnedStructures.clear();
         spawnedGuardiansCount = 0;
-        tickCounter = 0;
+        tickCounters.clear();
         lastWorldId = null;
 
         ChronoDawn.LOGGER.info("Time Guardian Spawner reset (was tracking {} guardians, {} structures)",

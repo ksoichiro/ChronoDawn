@@ -103,18 +103,15 @@ public class ClockworkColossusSpawner {
 
         // Initialize tracking for this dimension if needed
         spawnedStructures.putIfAbsent(dimensionId, new HashSet<>());
-        tickCounters.putIfAbsent(dimensionId, 0);
 
-        // Increment tick counter for this dimension
-        int currentTick = tickCounters.get(dimensionId);
-        currentTick++;
+        // Increment tick counter (static, not per-dimension for 1.20.1 compatibility)
+        tickCounter++;
 
         // Only check every CHECK_INTERVAL ticks
-        if (currentTick < CHECK_INTERVAL) {
-            tickCounters.put(dimensionId, currentTick);
+        if (tickCounter < CHECK_INTERVAL) {
             return;
         }
-        tickCounters.put(dimensionId, 0);
+        tickCounter = 0;
 
         // Only process if there are players in the dimension
         if (level.players().isEmpty()) {
@@ -132,13 +129,17 @@ public class ClockworkColossusSpawner {
 
                     // Check if this chunk contains a Clockwork Depths structure
                     if (hasClockworkDepths(level, chunkPos)) {
+                        // Initialize dimension-specific search cache if needed
+                        searchedChunks.putIfAbsent(dimensionId, new ConcurrentHashMap<>());
+                        Map<ChunkPos, Long> dimensionSearchCache = searchedChunks.get(dimensionId);
+
                         // Check if we've already searched this chunk recently
-                        Long lastSearchTime = searchedChunks.get(chunkPos);
+                        Long lastSearchTime = dimensionSearchCache.get(chunkPos);
                         long currentTime = System.currentTimeMillis();
 
                         // Periodically clean up expired search cache
-                        if (searchedChunks.size() > 100) {
-                            searchedChunks.entrySet().removeIf(entry ->
+                        if (dimensionSearchCache.size() > 100) {
+                            dimensionSearchCache.entrySet().removeIf(entry ->
                                 currentTime - entry.getValue() > SEARCH_CACHE_DURATION_MS
                             );
                         }
@@ -158,7 +159,7 @@ public class ClockworkColossusSpawner {
                             markerPositions = findEngineRoomMarkers(level, chunkPos);
 
                             // Cache the search result
-                            searchedChunks.put(chunkPos, currentTime);
+                            dimensionSearchCache.put(chunkPos, currentTime);
 
                             if (markerPositions.isEmpty()) {
                                 // Markers not found - cache this fact to avoid re-searching

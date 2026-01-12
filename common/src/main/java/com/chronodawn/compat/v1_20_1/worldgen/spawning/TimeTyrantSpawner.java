@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.Structure;
 
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
