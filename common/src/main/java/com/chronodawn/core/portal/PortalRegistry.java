@@ -55,6 +55,9 @@ public class PortalRegistry {
     // T179: Cache unmodifiable views of dimension portal sets for performance
     private final Map<ResourceKey<Level>, Set<UUID>> unmodifiableDimensionPortalCache;
 
+    // Reference to SavedData for automatic persistence
+    private com.chronodawn.data.PortalRegistryData savedData;
+
     private PortalRegistry() {
         // T429: Use ConcurrentHashMap for thread-safe access in multiplayer
         this.portals = new ConcurrentHashMap<>();
@@ -70,6 +73,35 @@ public class PortalRegistry {
      */
     public static PortalRegistry getInstance() {
         return INSTANCE;
+    }
+
+    /**
+     * Set the SavedData instance for automatic persistence.
+     * This should be called when the world is loaded.
+     *
+     * @param savedData PortalRegistryData instance
+     */
+    public void setSavedData(com.chronodawn.data.PortalRegistryData savedData) {
+        this.savedData = savedData;
+    }
+
+    /**
+     * Mark the portal registry as dirty to trigger a save.
+     */
+    private void markDirty() {
+        if (savedData != null) {
+            savedData.savePortalRegistry();
+        }
+    }
+
+    /**
+     * Mark the portal registry as dirty when a portal state changes.
+     * Public method for PortalStateMachine to call.
+     *
+     * @param portalId Portal UUID that changed
+     */
+    public void markDirtyForPortal(UUID portalId) {
+        markDirty();
     }
 
     /**
@@ -96,6 +128,9 @@ public class PortalRegistry {
 
         // T179: Invalidate cache for this dimension
         unmodifiableDimensionPortalCache.remove(dimension);
+
+        // Mark data as dirty for persistence
+        markDirty();
 
         ChronoDawn.LOGGER.info("Registered portal {} at {} in dimension {}",
             portalId, position, dimension.location());
@@ -125,6 +160,9 @@ public class PortalRegistry {
 
         // T179: Invalidate cache for this dimension
         unmodifiableDimensionPortalCache.remove(dimension);
+
+        // Mark data as dirty for persistence
+        markDirty();
 
         ChronoDawn.LOGGER.info("Unregistered portal {} from dimension {}",
             portalId, dimension.location());

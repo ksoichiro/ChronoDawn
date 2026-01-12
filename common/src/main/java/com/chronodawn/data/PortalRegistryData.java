@@ -1,7 +1,11 @@
 package com.chronodawn.data;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.compat.CompatResourceLocation;
 import com.chronodawn.compat.CompatSavedData;
+import com.chronodawn.core.portal.PortalRegistry;
+import com.chronodawn.core.portal.PortalState;
+import com.chronodawn.core.portal.PortalStateMachine;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -22,44 +26,18 @@ import java.util.UUID;
  *
  * This class manages the persistent state of all portals in the world:
  * - Portal ID and location
- * - Portal state (unactivated, activated, stopped, stabilized)
- * - Linked portal IDs (for round-trip travel)
+ * - Portal state (INACTIVE, ACTIVATED, DEACTIVATED, STABILIZED)
+ * - Dimension association
+ *
+ * Architecture:
+ * - This class acts as a bridge between Minecraft's SavedData system and PortalRegistry
+ * - Portal data is stored in PortalRegistry (in-memory singleton)
+ * - This class saves/loads that data to/from disk via NBT
  *
  * Reference: data-model.md (Data Persistence - Portal Registry)
  */
 public class PortalRegistryData extends ChronoDawnWorldData {
     private static final String DATA_NAME = ChronoDawn.MOD_ID + "_portal_registry";
-
-    /**
-     * Portal state enum.
-     */
-    public enum PortalState {
-        UNACTIVATED,    // Frame exists but not activated
-        ACTIVATED,      // Activated with Time Hourglass
-        STOPPED,        // Automatically stopped after first use
-        STABILIZED      // Stabilized with Portal Stabilizer (permanent)
-    }
-
-    /**
-     * Portal entry data structure.
-     */
-    public static class PortalEntry {
-        public UUID portalId;
-        public ResourceKey<Level> dimension;
-        public BlockPos position;
-        public PortalState state;
-        public UUID linkedPortalId; // null if no link
-
-        public PortalEntry(UUID portalId, ResourceKey<Level> dimension, BlockPos position, PortalState state) {
-            this.portalId = portalId;
-            this.dimension = dimension;
-            this.position = position;
-            this.state = state;
-            this.linkedPortalId = null;
-        }
-    }
-
-    private final Map<UUID, PortalEntry> portals = new ConcurrentHashMap<>();
 
     /**
      * Get or create portal registry data for the given level.
@@ -85,50 +63,28 @@ public class PortalRegistryData extends ChronoDawnWorldData {
      */
     private static PortalRegistryData load(CompoundTag tag, HolderLookup.Provider registries) {
         PortalRegistryData data = new PortalRegistryData();
-        ListTag portalList = tag.getList("portals", Tag.TAG_COMPOUND);
-
-        for (int i = 0; i < portalList.size(); i++) {
-            CompoundTag portalTag = portalList.getCompound(i);
-            UUID portalId = portalTag.getUUID("portal_id");
-            // TODO: Load dimension, position, state, linkedPortalId from portalTag
-            // This will be fully implemented in future phases when portal system is added
-        }
-
+        data.loadData(tag);
         return data;
     }
 
     @Override
     public CompoundTag saveData(CompoundTag tag) {
-        ListTag portalList = new ListTag();
-
-        for (PortalEntry entry : portals.values()) {
-            CompoundTag portalTag = new CompoundTag();
-            portalTag.putUUID("portal_id", entry.portalId);
-            // TODO: Save dimension, position, state, linkedPortalId to portalTag
-            // This will be fully implemented in future phases when portal system is added
-            portalList.add(portalTag);
-        }
-
-        tag.put("portals", portalList);
+        // Delegate to PortalRegistry for actual data serialization
+        PortalRegistry.getInstance().saveToNBT(tag);
         return tag;
     }
 
     @Override
     public void loadData(CompoundTag tag) {
-        ListTag portalList = tag.getList("portals", Tag.TAG_COMPOUND);
-
-        for (int i = 0; i < portalList.size(); i++) {
-            CompoundTag portalTag = portalList.getCompound(i);
-            UUID portalId = portalTag.getUUID("portal_id");
-            // TODO: Load dimension, position, state, linkedPortalId from portalTag
-            // This will be fully implemented in future phases when portal system is added
-        }
+        // Delegate to PortalRegistry for actual data deserialization
+        PortalRegistry.getInstance().loadFromNBT(tag);
     }
 
-    // TODO: Add portal management methods in future phases:
-    // - registerPortal(UUID id, ResourceKey<Level> dimension, BlockPos pos)
-    // - setPortalState(UUID id, PortalState state)
-    // - linkPortals(UUID portal1, UUID portal2)
-    // - getPortal(UUID id)
-    // - removePortal(UUID id)
+    /**
+     * Save portal registry data to disk.
+     * This marks the data as dirty and triggers a save on next world save.
+     */
+    public void savePortalRegistry() {
+        this.setDirty();
+    }
 }

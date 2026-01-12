@@ -19,6 +19,7 @@ package com.chronodawn;
 
 import com.chronodawn.core.dimension.ChronoDawnBiomeProvider;
 import com.chronodawn.core.dimension.ChronoDawnDimension;
+import com.chronodawn.core.portal.PortalPersistenceManager;
 import com.chronodawn.events.ChronoDawnEvents;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModBlockEntities;
@@ -74,6 +75,9 @@ public class ChronoDawn {
         // Initialize dimension systems (Phase 3 - User Story 1)
         ChronoDawnDimension.init();
         ChronoDawnBiomeProvider.init();
+
+        // Initialize portal persistence
+        PortalPersistenceManager.initialize();
 
         // Initialize spawn systems (Phase 4 - User Story 2)
         TimeGuardianSpawner.register();
