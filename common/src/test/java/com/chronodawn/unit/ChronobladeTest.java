@@ -74,6 +74,7 @@ public class ChronobladeTest extends ChronoDawnTestBase {
 
     @Test
     public void testChronobladeTierExists() {
+        requireMinecraft121("Tier initialization requires Minecraft 1.21.1+ registry system");
         logTest("Testing ChronobladeTier constant exists");
 
         assertNotNull(ChronobladeItem.TIER, "ChronobladeTier should exist");

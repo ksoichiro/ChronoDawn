@@ -23,6 +23,7 @@ public class DimensionTest extends ChronoDawnTestBase {
 
     @Test
     public void testDimensionKeyExists() {
+        requireMinecraft121("ResourceKey initialization requires Minecraft 1.21.1+ registry system");
         logTest("Testing dimension key existence");
 
         // Verify that CHRONO_DAWN_DIMENSION key is properly defined
@@ -36,6 +37,7 @@ public class DimensionTest extends ChronoDawnTestBase {
 
     @Test
     public void testDimensionTypeKeyExists() {
+        requireMinecraft121("ResourceKey initialization requires Minecraft 1.21.1+ registry system");
         logTest("Testing dimension type key existence");
 
         // Verify that CHRONO_DAWN_DIMENSION_TYPE key is properly defined

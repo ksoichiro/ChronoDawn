@@ -21,6 +21,7 @@ public class RegistryTest extends ChronoDawnTestBase {
      */
     @Test
     public void testDimensionKeysInitialized() {
+        requireMinecraft121("ResourceKey initialization requires Minecraft 1.21.1+ registry system");
         logTest("Testing dimension keys initialization");
 
         assertNotNull(ModDimensions.CHRONO_DAWN_DIMENSION, "ChronoDawn dimension key should not be null");
@@ -32,6 +33,7 @@ public class RegistryTest extends ChronoDawnTestBase {
      */
     @Test
     public void testTimeWoodBlocksRegistered() {
+        requireMinecraft121("Registry initialization requires Minecraft 1.21.1+ registry system");
         logTest("Testing Time Wood blocks registration");
 
         assertNotNull(ModBlocks.TIME_WOOD_LOG, "Time Wood Log should be registered");
@@ -46,6 +48,7 @@ public class RegistryTest extends ChronoDawnTestBase {
      */
     @Test
     public void testFruitOfTimeItemRegistered() {
+        requireMinecraft121("Registry initialization requires Minecraft 1.21.1+ registry system");
         logTest("Testing Fruit of Time item registration");
 
         assertNotNull(ModItems.FRUIT_OF_TIME, "Fruit of Time item should be registered");

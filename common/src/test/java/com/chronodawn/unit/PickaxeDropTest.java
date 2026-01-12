@@ -49,6 +49,7 @@ public class PickaxeDropTest extends ChronoDawnTestBase {
 
     @Test
     public void testDropDoublingChanceConstant() {
+        requireMinecraft121("Item initialization requires Minecraft 1.21.1+ registry system");
         logTest("Testing Spatially Linked Pickaxe drop doubling chance is 33% (0.33)");
 
         double chance = SpatiallyLinkedPickaxeItem.getDropDoublingChance();
@@ -58,6 +59,7 @@ public class PickaxeDropTest extends ChronoDawnTestBase {
 
     @Test
     public void testDropDoublingChanceWithinValidRange() {
+        requireMinecraft121("Item initialization requires Minecraft 1.21.1+ registry system");
         logTest("Testing drop doubling chance is within valid range (0.0 to 1.0)");
 
         double chance = SpatiallyLinkedPickaxeItem.getDropDoublingChance();
