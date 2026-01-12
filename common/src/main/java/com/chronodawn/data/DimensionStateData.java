@@ -73,9 +73,18 @@ public class DimensionStateData extends ChronoDawnWorldData {
     private static DimensionStateData load(CompoundTag tag, HolderLookup.Provider registries) {
         DimensionStateData data = new DimensionStateData();
         data.isStabilized = tag.getBoolean("is_stabilized");
-        data.timeDistortionLevel = TimeDistortionLevel.valueOf(
-            tag.getString("time_distortion_level")
-        );
+
+        // Load time distortion level with default fallback
+        String levelString = tag.getString("time_distortion_level");
+        if (levelString.isEmpty()) {
+            data.timeDistortionLevel = TimeDistortionLevel.SLOWNESS_IV;
+            ChronoDawn.LOGGER.info("DimensionStateData loaded with default time distortion level (SLOWNESS_IV)");
+        } else {
+            data.timeDistortionLevel = TimeDistortionLevel.valueOf(levelString);
+            ChronoDawn.LOGGER.info("DimensionStateData loaded: isStabilized={}, timeDistortionLevel={}",
+                data.isStabilized, data.timeDistortionLevel);
+        }
+
         return data;
     }
 
@@ -83,15 +92,25 @@ public class DimensionStateData extends ChronoDawnWorldData {
     public CompoundTag saveData(CompoundTag tag) {
         tag.putBoolean("is_stabilized", isStabilized);
         tag.putString("time_distortion_level", timeDistortionLevel.name());
+        ChronoDawn.LOGGER.info("DimensionStateData saved: isStabilized={}, timeDistortionLevel={}",
+            isStabilized, timeDistortionLevel);
         return tag;
     }
 
     @Override
     public void loadData(CompoundTag tag) {
         isStabilized = tag.getBoolean("is_stabilized");
-        timeDistortionLevel = TimeDistortionLevel.valueOf(
-            tag.getString("time_distortion_level")
-        );
+
+        // Load time distortion level with default fallback
+        String levelString = tag.getString("time_distortion_level");
+        if (levelString.isEmpty()) {
+            timeDistortionLevel = TimeDistortionLevel.SLOWNESS_IV;
+            ChronoDawn.LOGGER.info("DimensionStateData loadData() with default time distortion level (SLOWNESS_IV)");
+        } else {
+            timeDistortionLevel = TimeDistortionLevel.valueOf(levelString);
+            ChronoDawn.LOGGER.info("DimensionStateData loadData(): isStabilized={}, timeDistortionLevel={}",
+                isStabilized, timeDistortionLevel);
+        }
     }
 
     /**

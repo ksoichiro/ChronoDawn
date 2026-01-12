@@ -29,13 +29,15 @@ import static org.junit.jupiter.api.Assertions.*;
 public class MasterClockTest extends ChronoDawnTestBase {
 
     // Base resource path (relative to common module)
-    private static final String RESOURCES_BASE = "src/main/resources/data/chronodawn/";
+    // Multi-version support: Use version-specific resource directory based on system property
+    private static final String RESOURCES_BASE = getResourceBasePath();
 
     // NBT Structure Files (actual file names)
-    private static final String SURFACE_NBT = "structure/master_clock_surface.nbt";
-    private static final String CORRIDOR_NBT = "structure/master_clock_corridor.nbt";
-    private static final String STAIRS_NBT = "structure/master_clock_stairs.nbt";
-    private static final String BOSS_ROOM_NBT = "structure/master_clock_boss_room.nbt";
+    // Multi-version support: 1.20.1 uses "structures/", 1.21.1 uses "structure/"
+    private static final String SURFACE_NBT = getStructurePath("master_clock_surface.nbt");
+    private static final String CORRIDOR_NBT = getStructurePath("master_clock_corridor.nbt");
+    private static final String STAIRS_NBT = getStructurePath("master_clock_stairs.nbt");
+    private static final String BOSS_ROOM_NBT = getStructurePath("master_clock_boss_room.nbt");
 
     // JSON Configuration Files
     private static final String STRUCTURE_JSON = "worldgen/structure/master_clock.json";
@@ -49,6 +51,41 @@ public class MasterClockTest extends ChronoDawnTestBase {
 
     // Resolved base path for test execution
     private static Path resolvedBasePath;
+
+    /**
+     * Get the version-specific resource base path.
+     * Uses system property 'chronodawn.minecraft.version' to determine correct resource directory.
+     *
+     * @return Resource base path string (e.g., "src/main/resources-1.21.1/data/chronodawn/")
+     */
+    private static String getResourceBasePath() {
+        String minecraftVersion = System.getProperty("chronodawn.minecraft.version");
+        if (minecraftVersion == null || minecraftVersion.isEmpty()) {
+            // Fallback to default version if property not set
+            minecraftVersion = "1.21.1";
+        }
+
+        // Use version-specific resource directory
+        return "src/main/resources-" + minecraftVersion + "/data/chronodawn/";
+    }
+
+    /**
+     * Get the version-specific structure path.
+     * Minecraft 1.20.1 uses "structures/" (plural), 1.21.1 uses "structure/" (singular).
+     *
+     * @param fileName Structure file name
+     * @return Structure path (e.g., "structures/master_clock_surface.nbt" for 1.20.1)
+     */
+    private static String getStructurePath(String fileName) {
+        String minecraftVersion = System.getProperty("chronodawn.minecraft.version");
+        if (minecraftVersion == null || minecraftVersion.isEmpty()) {
+            minecraftVersion = "1.21.1";
+        }
+
+        // 1.20.1 uses plural "structures/", 1.21.1+ uses singular "structure/"
+        String structureDir = minecraftVersion.startsWith("1.20") ? "structures" : "structure";
+        return structureDir + "/" + fileName;
+    }
 
     @BeforeAll
     static void setupPaths() {

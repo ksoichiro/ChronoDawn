@@ -1054,6 +1054,14 @@ public class TimeTyrantEntity extends Monster {
         // Unprotect Master Clock boss room when defeated
         if (!this.level().isClientSide && this.level() instanceof ServerLevel serverLevel) {
             BlockProtectionHandler.onBossDefeatedAt(serverLevel, this.blockPosition());
+
+            // Stabilize dimension and enhance time distortion (T140, T147)
+            com.chronodawn.core.dimension.DimensionStabilizer.stabilizeDimension(serverLevel);
+
+            // Enhance time distortion effect (Slowness IV → V)
+            com.chronodawn.data.DimensionStateData dimensionState =
+                com.chronodawn.data.DimensionStateData.get(serverLevel);
+            dimensionState.enhanceTimeDistortion();
         }
     }
 

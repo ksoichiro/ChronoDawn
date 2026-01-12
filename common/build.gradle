@@ -82,6 +82,9 @@ processResources {
 
 tasks.test {
     useJUnitPlatform()
+
+    // Pass Minecraft version to tests for multi-version resource path resolution
+    systemProperty 'chronodawn.minecraft.version', project.ext.minecraft_version
 }
 
 // Set duplicates strategy for sourcesJar to avoid conflicts

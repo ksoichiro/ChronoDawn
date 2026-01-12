@@ -1,26 +1,24 @@
 package com.chronodawn.events;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.compat.CompatAdvancementHelper;
+import com.chronodawn.compat.CompatResourceLocation;
 import com.chronodawn.core.portal.PortalRegistry;
 import com.chronodawn.core.portal.PortalState;
 import com.chronodawn.core.portal.PortalStateMachine;
 import com.chronodawn.data.ChronoDawnGlobalState;
-import com.chronodawn.data.DimensionStateData;
-import com.chronodawn.data.PlayerProgressData;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModDimensions;
 import com.chronodawn.registry.ModItems;
 import com.chronodawn.worldgen.spawning.TimeKeeperVillagePlacer;
 import dev.architectury.event.events.common.TickEvent;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
 import java.util.HashMap;
@@ -68,11 +66,15 @@ public class PlayerEventHandler {
     // T429: Use ConcurrentHashMap for thread-safe access in multiplayer
     private static final Map<UUID, ResourceKey<Level>> playerDimensions = new ConcurrentHashMap<>();
 
+    // Track players who have already been checked for Time Tyrant advancement
+    // Avoids redundant checks every tick
+    private static final java.util.Set<UUID> checkedPlayers = java.util.concurrent.ConcurrentHashMap.newKeySet();
+
     /**
      * Register player event listeners.
      */
     public static void register() {
-        // Register server tick event to monitor player dimension changes and Eye of Chronos acquisition
+        // Register server tick event to monitor player dimension changes
         TickEvent.SERVER_POST.register(server -> {
             for (ServerPlayer player : server.getPlayerList().getPlayers()) {
                 ResourceKey<Level> currentDimension = player.level().dimension();
@@ -90,55 +92,61 @@ public class PlayerEventHandler {
                 // Update tracked dimension
                 playerDimensions.put(player.getUUID(), currentDimension);
 
-                // Check for Eye of Chronos acquisition (once per player)
-                checkEyeOfChronosAcquisition(player);
+                // Check and grant Time Tyrant defeat advancement if world state says defeated
+                checkAndGrantTyrantDefeatAdvancement(player);
             }
         });
 
         ChronoDawn.LOGGER.info("Registered PlayerEventHandler");
     }
 
+
     /**
-     * Check if player has acquired Eye of Chronos for the first time.
-     * When Eye of Chronos is obtained, enhance the ChronoDawn dimension's time distortion permanently.
+     * Check if Time Tyrant has been defeated, and grant advancement if player doesn't have it yet.
+     * This ensures all players have the advancement based on world state, not individual progress.
+     *
+     * Design Note:
+     * This method uses advancements as a "proxy" for world state synchronization:
+     * - World state (ChronoDawnGlobalState.isTyrantDefeated) is server-side only
+     * - Sky color rendering is client-side (SkyColorMixin)
+     * - Minecraft automatically syncs advancements to clients
+     * - By granting advancement to all players when defeated, we effectively sync world state
+     *
+     * This approach avoids implementing custom server→client packets while achieving the same result.
+     * Future improvement: Implement custom packet to directly sync world state to client.
      *
      * @param player Player to check
      */
-    private static void checkEyeOfChronosAcquisition(ServerPlayer player) {
-        // Get player progress data from overworld (global data storage)
-        ServerLevel overworld = player.server.getLevel(net.minecraft.world.level.Level.OVERWORLD);
-        if (overworld == null) {
+    private static void checkAndGrantTyrantDefeatAdvancement(ServerPlayer player) {
+        UUID playerId = player.getUUID();
+
+        // Skip if already checked this player (performance optimization)
+        if (checkedPlayers.contains(playerId)) {
             return;
         }
 
-        PlayerProgressData progressData = PlayerProgressData.get(overworld);
-        PlayerProgressData.PlayerProgress progress = progressData.getProgress(player.getUUID());
-
-        // If player already has Eye of Chronos flag set, skip
-        if (progress.hasChronosEye) {
-            return;
+        // Check if Time Tyrant has been defeated (world state)
+        ChronoDawnGlobalState globalState = ChronoDawnGlobalState.get(player.server);
+        if (!globalState.isTyrantDefeated()) {
+            return; // Not defeated yet, check again later
         }
 
-        // Check if player has Eye of Chronos in inventory
-        boolean hasEyeOfChronos = player.getInventory().contains(ModItems.EYE_OF_CHRONOS.get().getDefaultInstance());
-        if (!hasEyeOfChronos) {
-            return;
-        }
+        // Mark as checked (defeated, so grant advancement once)
+        checkedPlayers.add(playerId);
 
-        // First time obtaining Eye of Chronos
-        ChronoDawn.LOGGER.info("Player {} obtained Eye of Chronos for the first time!", player.getName().getString());
+        // Get advancement ID
+        ResourceLocation advancementId = CompatResourceLocation.create(
+            "chronodawn",
+            "story/us3/time_tyrant_defeat"
+        );
 
-        // Set player progress flag
-        progressData.setChronosEye(player.getUUID(), true);
-
-        // Enhance ChronoDawn dimension time distortion (permanent, world-wide)
-        ServerLevel chronoDawnLevel = player.server.getLevel(ModDimensions.CHRONO_DAWN_DIMENSION);
-        if (chronoDawnLevel != null) {
-            DimensionStateData dimensionState = DimensionStateData.get(chronoDawnLevel);
-            dimensionState.enhanceTimeDistortion();
-            ChronoDawn.LOGGER.info("ChronoDawn dimension enhanced - Slowness V now active for all hostile mobs");
-        } else {
-            ChronoDawn.LOGGER.warn("ChronoDawn dimension not found when trying to enhance time distortion");
+        // Grant advancement if player doesn't have it yet
+        // This advancement serves dual purpose:
+        // 1. Player achievement (Liberator of Chrono Dawn)
+        // 2. Proxy for world state on client side (enables sky color change)
+        if (CompatAdvancementHelper.grantAdvancement(player.server, player, advancementId)) {
+            ChronoDawn.LOGGER.info("Auto-granted Time Tyrant defeat advancement to player {} based on world state",
+                player.getName().getString());
         }
     }
 

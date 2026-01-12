@@ -20,12 +20,26 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 /**
  * Client-side mixin to modify sky color in ChronoDawn dimension.
  *
- * This mixin changes the sky color from grey (0x909090) to brighter (0x9098A0)
+ * This mixin changes the sky color from grey (0x909090) to bright blue (0x5588DD)
  * when the Time Tyrant has been defeated, as indicated by the advancement
  * chronodawn:story/us3/time_tyrant_defeat.
  *
  * The color change is applied by intercepting the Biome.getSkyColor method
  * and returning a modified color value based on advancement status.
+ *
+ * Design Note (Advancement as World State Proxy):
+ * Ideally, this would check the server-side world state (ChronoDawnGlobalState.isTyrantDefeated()).
+ * However, sky color rendering is client-side and cannot directly access server SavedData.
+ *
+ * Solution: Use advancement as a proxy for world state:
+ * - Server grants advancement to all players when Time Tyrant is defeated
+ * - Minecraft automatically syncs advancements to clients
+ * - Client checks advancement status (which reflects world state)
+ *
+ * This approach avoids custom server→client packets while achieving the same result.
+ * All players (including those who log in after defeat) receive the advancement automatically.
+ *
+ * Future improvement: Implement custom packet to directly sync ChronoDawnGlobalState to client.
  */
 @Mixin(Biome.class)
 public class SkyColorMixin {
