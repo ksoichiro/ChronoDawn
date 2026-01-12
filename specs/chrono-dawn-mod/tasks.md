@@ -624,3 +624,92 @@
 
 ---
 
+### Portal Visual Effects Enhancements (Phase 7+ - Low Priority)
+
+**Purpose**: Add advanced screen distortion effects to portal overlay
+
+**Current Implementation** (as of 2026-01-12):
+- ✅ Animated orange/gold overlay with pulsing effect (60% opacity, 48%-72% range)
+- ✅ Black fade-in effect on dimension transition (1 second duration)
+- ✅ Portal detection at player feet and eye positions
+- ✅ Multi-version support (Fabric 1.20.1/1.21.1, NeoForge 1.21.1)
+
+**Future Enhancement**: Screen distortion effect (similar to Nether portal warping)
+
+#### Implementation Options
+
+**Option 1: Nausea Potion Effect** (Easy - 5 minutes)
+- **Implementation**: `player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 20, 0, false, false))`
+- **Pros**:
+  - 1 line of code
+  - Uses vanilla visual effects
+- **Cons**:
+  - Displays status icon in HUD (user rejected this approach)
+  - Cannot customize distortion strength
+- **Effort**: 5 minutes
+- **Decision**: Not recommended (status icon issue)
+
+**Option 2: Custom GLSL Shader** (Complex - 3-5 hours)
+- **Implementation Requirements**:
+  1. GameRenderer Mixin for shader application
+  2. GLSL shader file (`assets/chronodawn/shaders/post/portal_distortion.json`)
+  3. PostChain configuration for rendering pipeline
+  4. Sin/cos wave-based coordinate transformation
+- **Pros**:
+  - No status icon
+  - Fully customizable distortion effect
+  - Professional quality visual effect
+- **Cons**:
+  - 3-5 hours implementation time
+  - Requires OpenGL/GLSL knowledge
+  - Difficult debugging
+  - Multi-version compatibility challenges (shader API changed)
+  - Performance considerations
+- **Effort**: 3-5 hours
+- **Decision**: Low priority (high implementation cost)
+
+**Option 3: Current Implementation** (Completed)
+- **Implementation**: Sine wave alpha animation (pulse effect)
+- **Pros**:
+  - Already implemented
+  - No performance impact
+  - No bug risk
+  - Sufficient "portal presence" feeling
+- **Cons**:
+  - Not full-screen warping like Nether portal
+  - More subtle effect
+- **Effort**: 0 hours (done)
+- **Decision**: Current approach (recommended for now)
+
+#### Future Tasks (Low Priority)
+
+- [ ] T721 [P] (Optional) Research custom shader implementation for portal distortion
+  - Investigate GameRenderer Mixin injection points
+  - Research GLSL shader file structure in Minecraft
+  - Document shader API differences between 1.20.1 and 1.21.1
+  - Estimate actual implementation complexity
+  - **Priority**: Low
+  - **Dependencies**: None
+  - **Effort**: 1-2 hours research
+
+- [ ] T722 [P] (Optional) Implement custom GLSL shader for portal screen distortion
+  - Create portal_distortion.json shader file
+  - Implement GameRendererMixin for shader application
+  - Configure PostChain rendering pipeline
+  - Test distortion effect intensity and performance
+  - Ensure multi-version compatibility
+  - **Priority**: Low
+  - **Dependencies**: T721
+  - **Effort**: 3-5 hours implementation + 1-2 hours testing
+  - **Risk**: Medium (shader debugging is difficult)
+
+**Recommendation**: Keep current pulsing overlay effect. Custom shader implementation should only be considered if users specifically request full-screen distortion effect during playtesting.
+
+**Technical Notes** (from implementation experience):
+- System.out.println() in render loop (60 FPS) causes severe performance issues
+- Debug logging can cause tick gaps leading to teleport timing problems
+- Performance issues in client render thread affect server synchronization
+- Always avoid I/O operations in high-frequency render loops
+
+---
+

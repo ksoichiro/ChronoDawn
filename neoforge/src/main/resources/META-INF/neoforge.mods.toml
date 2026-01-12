@@ -18,6 +18,9 @@ displayURL="https://github.com/ksoichiro/ChronoDawn"
 [[mixins]]
 config="chronodawn-neoforge.mixins.json"
 
+[[mixins]]
+config="chronodawn-neoforge-compat.mixins.json"
+
 [[dependencies.chronodawn]]
 modId="neoforge"
 type="required"

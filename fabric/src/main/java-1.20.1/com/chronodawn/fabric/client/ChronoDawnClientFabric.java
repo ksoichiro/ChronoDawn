@@ -41,6 +41,7 @@ import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
@@ -83,6 +84,7 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
         registerItemProperties();
         registerChronicleDataLoader();
         registerChronicleBookHandler();
+        registerPortalEffects();
     }
 
     /**
@@ -617,6 +619,16 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
                 return net.minecraft.world.InteractionResultHolder.success(stack);
             }
             return net.minecraft.world.InteractionResultHolder.pass(stack);
+        });
+    }
+
+    /**
+     * Register portal effects handler for client tick events.
+     * Manages portal-related visual effects (nausea, fade, overlay).
+     */
+    private void registerPortalEffects() {
+        ClientTickEvents.END_CLIENT_TICK.register(client -> {
+            com.chronodawn.compat.v1_20_1.client.PortalEffectHandler.onClientTick();
         });
     }
 }

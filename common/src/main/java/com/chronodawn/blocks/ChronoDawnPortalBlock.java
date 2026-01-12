@@ -369,17 +369,36 @@ public class ChronoDawnPortalBlock extends Block {
                 // This transition (-1 → 1) happens on the first tick after teleportation
                 ENTITY_PORTAL_STATES.put(entityId, 1);
                 return;
-            } else if (currentState == 0) {
-                // CRITICAL: State is 0, meaning either:
-                // (a) First time entering this portal, OR
-                // (b) Exited and re-entered quickly (tick gap < 20, not detected by tick gap check above)
-                //
-                // This is a fallback for rapid re-entry (< 1 second)
-                // Clear the arrival record now to allow teleportation
-                com.chronodawn.core.portal.PortalTeleportHandler.clearArrivalDimension(entityId);
-                // Don't return - allow state to start counting and teleportation to proceed
             } else {
-                // State >= 1 = still in arrival portal, prevent re-teleport
+                // State is 0 or >= 1: Still in arrival dimension, prevent re-teleport
+                //
+                // CRITICAL FIX (2026-01-12): Don't clear arrival record when state is 0
+                //
+                // WHY STATE CAN BE 0 IN ARRIVAL DIMENSION:
+                // The tick gap detection (line 337-348) resets state to 0 when currentTick - lastTick > 20.
+                // This can happen due to:
+                // 1. Performance issues (heavy I/O operations, debug logging, etc.)
+                // 2. Server lag or TPS drops
+                // 3. Client-server synchronization delays
+                // 4. Long-running operations blocking the main thread
+                //
+                // WHY WE MUST NOT CLEAR ARRIVAL RECORD:
+                // If we clear the arrival record when state == 0, the entity becomes immediately
+                // eligible for re-teleportation, causing an infinite teleport loop:
+                //   1. Teleport succeeds → state = -1
+                //   2. Next tick → state = 1 (correct)
+                //   3. Performance issue causes tick gap > 20
+                //   4. Tick gap detection resets state to 0
+                //   5. [BUG] Clearing arrival record → canTeleport becomes true
+                //   6. Immediately re-teleport → infinite loop
+                //
+                // CORRECT BEHAVIOR:
+                // As long as canTeleport is false (entity is in arrival dimension),
+                // we must maintain the teleportation block regardless of state value.
+                // The arrival record should only be cleared when:
+                // - Entity exits and re-enters the portal (detected by tick gap or distance)
+                // - Entity moves to a different portal (distance > 25)
+                //
                 // Keep state at 1 to maintain "still in portal" state
                 ENTITY_PORTAL_STATES.put(entityId, 1);
                 return;
