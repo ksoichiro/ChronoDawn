@@ -15,9 +15,33 @@ architectury {
     }
 }
 
-// Note: NeoForge only supports Minecraft 1.21.1 (not 1.20.1)
-// Version-specific source directories are not needed for NeoForge
-// All NeoForge code is in src/main/java and src/main/resources
+// Multi-version support: Configure version-specific source directories
+sourceSets {
+    main {
+        java {
+            // Default Java source directory
+            srcDir 'src/main/java'
+
+            // Add version-specific source directory
+            def versionSpecificSrc = file("src/main/java-${project.ext.minecraft_version}")
+            if (versionSpecificSrc.exists()) {
+                srcDir versionSpecificSrc
+                logger.lifecycle("NeoForge: Using version-specific sources: ${versionSpecificSrc.name}")
+            }
+        }
+        resources {
+            // Default resources directory
+            srcDir 'src/main/resources'
+
+            // Add version-specific resources directory
+            def versionSpecificRes = file("src/main/resources-${project.ext.minecraft_version}")
+            if (versionSpecificRes.exists()) {
+                srcDir versionSpecificRes
+                logger.lifecycle("NeoForge: Using version-specific resources: ${versionSpecificRes.name}")
+            }
+        }
+    }
+}
 
 loom {
     accessWidenerPath = project(":common").loom.accessWidenerPath

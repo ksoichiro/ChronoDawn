@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.chronodawn.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "refmap": "common-common-refmap.json",
+  "client": [
+    "GuiPortalOverlayMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -48,6 +48,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
@@ -665,6 +666,26 @@ public class ChronoDawnClientNeoForge {
             }
             event.setCancellationResult(net.minecraft.world.InteractionResult.SUCCESS);
             event.setCanceled(true);
+        }
+    }
+
+    /**
+     * Event subscriber for FORGE bus events (game events, not mod events).
+     * Handles runtime client events like tick events.
+     */
+    @EventBusSubscriber(modid = ChronoDawn.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.GAME)
+    public static class ForgeEventHandlers {
+        /**
+         * Handle client tick events for portal effects.
+         * Called every client tick after all other tick logic completes.
+         *
+         * @param event The client tick end event
+         */
+        @SubscribeEvent
+        public static void onClientTickEnd(ClientTickEvent.Post event) {
+            // Call portal effect handler
+            // Note: Use version-specific handler based on target Minecraft version
+            com.chronodawn.compat.v1_21_1.client.PortalEffectHandler.onClientTick();
         }
     }
 }
