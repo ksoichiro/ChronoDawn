@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
 
 public class ChronoDawn {
     public static final String MOD_ID = "chronodawn";
-    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    public static final Logger LOGGER = LoggerFactory.getLogger(ChronoDawn.class);
 
     public static void init() {
         LOGGER.info("ChronoDawn Mod (common) initialized");
