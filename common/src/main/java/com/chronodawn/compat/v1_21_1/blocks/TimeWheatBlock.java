@@ -2,8 +2,6 @@ package com.chronodawn.blocks;
 
 import com.chronodawn.registry.ModItems;
 import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
@@ -79,18 +77,5 @@ public class TimeWheatBlock extends CropBlock {
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(AGE);
     }
-
-    @Override
-    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        // Growth logic (same as vanilla crops)
-        if (level.getRawBrightness(pos, 0) >= 9) {
-            int currentAge = this.getAge(state);
-            if (currentAge < this.getMaxAge()) {
-                float growthSpeed = getGrowthSpeed(this, level, pos);
-                if (random.nextInt((int) (25.0F / growthSpeed) + 1) == 0) {
-                    level.setBlock(pos, this.getStateForAge(currentAge + 1), 2);
-                }
-            }
-        }
-    }
 }
+
