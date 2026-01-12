@@ -94,9 +94,59 @@ public class DimensionStateData extends ChronoDawnWorldData {
         );
     }
 
-    // TODO: Add dimension state management methods in future phases:
-    // - isStabilized()
-    // - setStabilized(boolean stabilized)
-    // - getTimeDistortionLevel()
-    // - setTimeDistortionLevel(TimeDistortionLevel level)
+    /**
+     * Check if the dimension is stabilized (Time Tyrant defeated).
+     *
+     * @return true if dimension is stabilized
+     */
+    public boolean isStabilized() {
+        return isStabilized;
+    }
+
+    /**
+     * Set dimension stabilization state.
+     * This should be called when Time Tyrant is defeated and Eye of Chronos is obtained.
+     *
+     * @param stabilized Whether the dimension is stabilized
+     */
+    public void setStabilized(boolean stabilized) {
+        if (this.isStabilized != stabilized) {
+            this.isStabilized = stabilized;
+            this.setDirty();
+            ChronoDawn.LOGGER.info("Dimension stabilization state changed to: {}", stabilized);
+        }
+    }
+
+    /**
+     * Get current time distortion level.
+     *
+     * @return Current time distortion level
+     */
+    public TimeDistortionLevel getTimeDistortionLevel() {
+        return timeDistortionLevel;
+    }
+
+    /**
+     * Set time distortion level.
+     * This should be called when Eye of Chronos is obtained (upgrade to Slowness V).
+     *
+     * @param level Time distortion level to set
+     */
+    public void setTimeDistortionLevel(TimeDistortionLevel level) {
+        if (this.timeDistortionLevel != level) {
+            this.timeDistortionLevel = level;
+            this.setDirty();
+            ChronoDawn.LOGGER.info("Time distortion level changed to: {}", level);
+        }
+    }
+
+    /**
+     * Enhance time distortion when Eye of Chronos is obtained.
+     * This is a convenience method that sets both stabilization and enhanced distortion.
+     */
+    public void enhanceTimeDistortion() {
+        setStabilized(true);
+        setTimeDistortionLevel(TimeDistortionLevel.SLOWNESS_V);
+        ChronoDawn.LOGGER.info("Dimension enhanced with Eye of Chronos - Slowness V activated");
+    }
 }

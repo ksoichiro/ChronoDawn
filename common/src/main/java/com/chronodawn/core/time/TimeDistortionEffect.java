@@ -1,6 +1,7 @@
 package com.chronodawn.core.time;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.data.DimensionStateData;
 import com.chronodawn.entities.bosses.ChronosWardenEntity;
 import com.chronodawn.entities.bosses.ClockworkColossusEntity;
 import com.chronodawn.entities.bosses.EntropyKeeperEntity;
@@ -36,12 +37,15 @@ import net.minecraft.world.entity.player.Player;
  * - Exclusion: Time Keeper (friendly trader NPC)
  *
  * Eye of Chronos Enhancement:
- * - When any player in the dimension has Eye of Chronos in inventory, all hostile mobs
- *   receive Slowness V instead of Slowness IV for extreme slow
+ * - When Eye of Chronos is obtained for the first time, the dimension is permanently enhanced
+ * - Enhancement is stored in DimensionStateData (persistent, world-wide, multiplayer-safe)
+ * - All hostile mobs receive Slowness V instead of Slowness IV
+ * - Slowness IV: 60% movement speed reduction
+ * - Slowness V: 75% movement speed reduction
  *
  * Reference: data-model.md (Time Distortion Effects)
  * Task: T073 [US1] Implement time distortion effect logic
- * Task: T147 [US3] Implement enhanced time distortion effect (Slowness V) when Eye of Chronos is in inventory
+ * Task: T147 [US3] Implement enhanced time distortion effect (Slowness V) when Eye of Chronos is obtained
  * Task: T229a [US3] Exclude Time Tyrant from time distortion effect to allow boss abilities to function
  * Task: T254 [US2] Implement time-manipulation effects for Tier 2 equipment (Enhanced Clockstone armor immunity)
  * Task: T714 [Playtest Feedback] Exclude all boss entities from Time Distortion Effect
@@ -83,11 +87,11 @@ public class TimeDistortionEffect {
             return;
         }
 
-        // Check if any player in the dimension has Eye of Chronos
-        boolean hasEyeOfChronos = hasEyeOfChronosInDimension(entity);
+        // Check dimension state for Eye of Chronos enhancement (permanent, world-wide)
+        boolean isEnhanced = isDimensionEnhanced(entity);
 
-        // Apply Slowness effect (IV or V depending on Eye of Chronos)
-        int amplifier = hasEyeOfChronos ? ENHANCED_SLOWNESS_AMPLIFIER : SLOWNESS_AMPLIFIER;
+        // Apply Slowness effect (IV or V depending on dimension enhancement state)
+        int amplifier = isEnhanced ? ENHANCED_SLOWNESS_AMPLIFIER : SLOWNESS_AMPLIFIER;
         entity.addEffect(new MobEffectInstance(
                 MobEffects.MOVEMENT_SLOWDOWN, // Slowness effect
                 EFFECT_DURATION,               // Duration in ticks
@@ -164,25 +168,22 @@ public class TimeDistortionEffect {
     }
 
     /**
-     * Check if any player in the dimension has Eye of Chronos in their inventory.
+     * Check if ChronoDawn dimension has been enhanced with Eye of Chronos.
+     * This checks the persistent dimension state, not player inventory.
      *
      * @param entity The entity (used to get the dimension)
-     * @return true if any player in the dimension has Eye of Chronos
+     * @return true if dimension is enhanced (Slowness V active)
      */
-    private static boolean hasEyeOfChronosInDimension(LivingEntity entity) {
+    private static boolean isDimensionEnhanced(LivingEntity entity) {
         // Only check on server side
         if (!(entity.level() instanceof ServerLevel serverLevel)) {
             return false;
         }
 
-        // Check all players in the dimension
-        for (Player player : serverLevel.players()) {
-            // Check if player has Eye of Chronos in inventory
-            if (player.getInventory().contains(ModItems.EYE_OF_CHRONOS.get().getDefaultInstance())) {
-                return true;
-            }
-        }
+        // Get dimension state data
+        DimensionStateData dimensionState = DimensionStateData.get(serverLevel);
 
-        return false;
+        // Check if time distortion level is enhanced (Slowness V)
+        return dimensionState.getTimeDistortionLevel() == DimensionStateData.TimeDistortionLevel.SLOWNESS_V;
     }
 }

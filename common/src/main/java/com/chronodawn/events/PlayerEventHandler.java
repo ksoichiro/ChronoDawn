@@ -5,6 +5,8 @@ import com.chronodawn.core.portal.PortalRegistry;
 import com.chronodawn.core.portal.PortalState;
 import com.chronodawn.core.portal.PortalStateMachine;
 import com.chronodawn.data.ChronoDawnGlobalState;
+import com.chronodawn.data.DimensionStateData;
+import com.chronodawn.data.PlayerProgressData;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModDimensions;
 import com.chronodawn.registry.ModItems;
@@ -70,7 +72,7 @@ public class PlayerEventHandler {
      * Register player event listeners.
      */
     public static void register() {
-        // Register server tick event to monitor player dimension changes
+        // Register server tick event to monitor player dimension changes and Eye of Chronos acquisition
         TickEvent.SERVER_POST.register(server -> {
             for (ServerPlayer player : server.getPlayerList().getPlayers()) {
                 ResourceKey<Level> currentDimension = player.level().dimension();
@@ -87,10 +89,57 @@ public class PlayerEventHandler {
 
                 // Update tracked dimension
                 playerDimensions.put(player.getUUID(), currentDimension);
+
+                // Check for Eye of Chronos acquisition (once per player)
+                checkEyeOfChronosAcquisition(player);
             }
         });
 
         ChronoDawn.LOGGER.info("Registered PlayerEventHandler");
+    }
+
+    /**
+     * Check if player has acquired Eye of Chronos for the first time.
+     * When Eye of Chronos is obtained, enhance the ChronoDawn dimension's time distortion permanently.
+     *
+     * @param player Player to check
+     */
+    private static void checkEyeOfChronosAcquisition(ServerPlayer player) {
+        // Get player progress data from overworld (global data storage)
+        ServerLevel overworld = player.server.getLevel(net.minecraft.world.level.Level.OVERWORLD);
+        if (overworld == null) {
+            return;
+        }
+
+        PlayerProgressData progressData = PlayerProgressData.get(overworld);
+        PlayerProgressData.PlayerProgress progress = progressData.getProgress(player.getUUID());
+
+        // If player already has Eye of Chronos flag set, skip
+        if (progress.hasChronosEye) {
+            return;
+        }
+
+        // Check if player has Eye of Chronos in inventory
+        boolean hasEyeOfChronos = player.getInventory().contains(ModItems.EYE_OF_CHRONOS.get().getDefaultInstance());
+        if (!hasEyeOfChronos) {
+            return;
+        }
+
+        // First time obtaining Eye of Chronos
+        ChronoDawn.LOGGER.info("Player {} obtained Eye of Chronos for the first time!", player.getName().getString());
+
+        // Set player progress flag
+        progressData.setChronosEye(player.getUUID(), true);
+
+        // Enhance ChronoDawn dimension time distortion (permanent, world-wide)
+        ServerLevel chronoDawnLevel = player.server.getLevel(ModDimensions.CHRONO_DAWN_DIMENSION);
+        if (chronoDawnLevel != null) {
+            DimensionStateData dimensionState = DimensionStateData.get(chronoDawnLevel);
+            dimensionState.enhanceTimeDistortion();
+            ChronoDawn.LOGGER.info("ChronoDawn dimension enhanced - Slowness V now active for all hostile mobs");
+        } else {
+            ChronoDawn.LOGGER.warn("ChronoDawn dimension not found when trying to enhance time distortion");
+        }
     }
 
     /**
