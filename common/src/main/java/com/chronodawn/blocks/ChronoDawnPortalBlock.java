@@ -85,10 +85,10 @@ public class ChronoDawnPortalBlock extends Block {
 
     /**
      * Portal timer threshold (ticks) for survival mode.
-     * 120 ticks = 6 seconds (longer than Nether Portal's 4 seconds)
+     * 80 ticks = 4 seconds (same as Nether Portal)
      * Creative mode teleports immediately (no waiting time).
      */
-    private static final int PORTAL_TIME_THRESHOLD = 120;
+    private static final int PORTAL_TIME_THRESHOLD = 80;
 
     /**
      * Tracks entity portal states and teleportation progress.
@@ -98,8 +98,8 @@ public class ChronoDawnPortalBlock extends Block {
      * -1: Just teleported (transitions to 1 on next tick)
      * 0: Not in portal or re-entered after exit (allows teleportation)
      * 1: In arrival portal, preventing re-teleport (maintained while standing still)
-     * 2-119: Counting up to teleportation threshold (survival mode)
-     * 120+: Ready to teleport (survival mode)
+     * 2-79: Counting up to teleportation threshold (survival mode)
+     * 80+: Ready to teleport (survival mode)
      * Note: Creative mode players teleport immediately regardless of state value
      */
     private static final Map<UUID, Integer> ENTITY_PORTAL_STATES = new HashMap<>();
@@ -117,6 +117,13 @@ public class ChronoDawnPortalBlock extends Block {
      * Map: Entity UUID -> Last tick time
      */
     private static final Map<UUID, Long> LAST_INSIDE_TICK = new HashMap<>();
+
+    /**
+     * Tracks the last game tick when the portal counter was incremented for each entity.
+     * Used to prevent duplicate counter increments when entity touches multiple portal blocks in the same tick.
+     * Map: Entity UUID -> Last counter increment tick
+     */
+    private static final Map<UUID, Long> LAST_COUNTER_INCREMENT_TICK = new HashMap<>();
 
     /**
      * Portal color - Orange (#db8813 / RGB 219, 136, 19).
@@ -183,19 +190,25 @@ public class ChronoDawnPortalBlock extends Block {
                 // Entity no longer exists, clear all records
                 LAST_PORTAL_POSITION.remove(entityId);
                 LAST_INSIDE_TICK.remove(entityId);
+                LAST_COUNTER_INCREMENT_TICK.remove(entityId);
                 com.chronodawn.core.portal.PortalTeleportHandler.clearArrivalDimension(entityId);
                 return true;
             }
             return false;
         });
 
-        // Also clean up LAST_PORTAL_POSITION and LAST_INSIDE_TICK for entities that no longer exist
+        // Also clean up LAST_PORTAL_POSITION, LAST_INSIDE_TICK, and LAST_COUNTER_INCREMENT_TICK for entities that no longer exist
         LAST_PORTAL_POSITION.entrySet().removeIf(entry -> {
             Entity entity = findEntityInAllDimensions(level.getServer(), entry.getKey());
             return entity == null;
         });
 
         LAST_INSIDE_TICK.entrySet().removeIf(entry -> {
+            Entity entity = findEntityInAllDimensions(level.getServer(), entry.getKey());
+            return entity == null;
+        });
+
+        LAST_COUNTER_INCREMENT_TICK.entrySet().removeIf(entry -> {
             Entity entity = findEntityInAllDimensions(level.getServer(), entry.getKey());
             return entity == null;
         });
@@ -227,12 +240,12 @@ public class ChronoDawnPortalBlock extends Block {
      * A portal block is valid if it has at least one frame block or portal block
      * in any of the 4 cardinal directions (up, down, left, right relative to portal plane).
      *
-     * @param level The level
+     * @param level The level accessor
      * @param pos Portal block position
      * @param axis Portal axis
      * @return true if portal frame is valid
      */
-    private boolean isValidPortalPosition(Level level, BlockPos pos, Direction.Axis axis) {
+    private boolean isValidPortalPosition(LevelAccessor level, BlockPos pos, Direction.Axis axis) {
         // Check horizontal adjacent blocks (perpendicular to portal axis)
         Direction.Axis otherAxis = axis == Direction.Axis.X ? Direction.Axis.Z : Direction.Axis.X;
         Direction horizontalNeg = Direction.get(Direction.AxisDirection.NEGATIVE, otherAxis);
@@ -286,6 +299,15 @@ public class ChronoDawnPortalBlock extends Block {
 
         UUID entityId = entity.getUUID();
 
+        // Log entity entering portal (only for players, once per second to avoid spam)
+        if (entity instanceof net.minecraft.server.level.ServerPlayer player) {
+            int currentState = ENTITY_PORTAL_STATES.getOrDefault(entityId, 0);
+            if (currentState == 0 || currentState % 20 == 0) {
+                ChronoDawn.LOGGER.info("Player {} inside portal at {} (current state: {})",
+                    player.getName().getString(), pos, currentState);
+            }
+        }
+
         // Get current game time for re-entry detection
         long currentTick = level.getGameTime();
         BlockPos lastPortalPos = LAST_PORTAL_POSITION.get(entityId);
@@ -301,16 +323,28 @@ public class ChronoDawnPortalBlock extends Block {
         if (lastPortalPos != null && lastPortalPos.distSqr(pos) > 25) {
             // Different portal - clear records and reset state
             com.chronodawn.core.portal.PortalTeleportHandler.clearArrivalDimension(entityId);
+            int oldState = ENTITY_PORTAL_STATES.getOrDefault(entityId, 0);
             ENTITY_PORTAL_STATES.remove(entityId);
+            LAST_COUNTER_INCREMENT_TICK.remove(entityId);
             exitedAndReentered = true;
+            if (entity instanceof net.minecraft.server.level.ServerPlayer player) {
+                ChronoDawn.LOGGER.info("Player {} moved to different portal (distance > 25), reset counter from {}",
+                    player.getName().getString(), oldState);
+            }
         }
         // Case 2: Same portal area, but tick gap > 20 (1 second)
         // This means player exited portal and re-entered
         else if (lastPortalPos != null && lastTick != null && currentTick - lastTick > 20) {
             // Exited and re-entered same portal - clear records and reset state
             com.chronodawn.core.portal.PortalTeleportHandler.clearArrivalDimension(entityId);
+            int oldState = ENTITY_PORTAL_STATES.getOrDefault(entityId, 0);
             ENTITY_PORTAL_STATES.remove(entityId);
+            LAST_COUNTER_INCREMENT_TICK.remove(entityId);
             exitedAndReentered = true;
+            if (entity instanceof net.minecraft.server.level.ServerPlayer player) {
+                ChronoDawn.LOGGER.info("Player {} exited and re-entered portal (tick gap > 20), reset counter from {}",
+                    player.getName().getString(), oldState);
+            }
         }
 
         // Update tracking maps
@@ -319,9 +353,15 @@ public class ChronoDawnPortalBlock extends Block {
 
         // Check if entity can teleport from current dimension
         // This prevents re-teleporting while still in the dimension they just arrived in
-        if (!com.chronodawn.core.portal.PortalTeleportHandler.canTeleportFromDimension(entityId, level.dimension())) {
+        boolean canTeleport = com.chronodawn.core.portal.PortalTeleportHandler.canTeleportFromDimension(entityId, level.dimension());
+        if (!canTeleport) {
             // Entity is still in the dimension they just arrived in
             int currentState = ENTITY_PORTAL_STATES.getOrDefault(entityId, 0);
+
+            if (entity instanceof net.minecraft.server.level.ServerPlayer player && currentState == 0) {
+                ChronoDawn.LOGGER.info("Player {} cannot teleport from dimension {} (still in arrival dimension, state: {})",
+                    player.getName().getString(), level.dimension().location(), currentState);
+            }
 
             if (currentState == -1) {
                 // Just teleported, still in arrival portal
@@ -347,9 +387,19 @@ public class ChronoDawnPortalBlock extends Block {
         }
 
         // Increment portal state counter for this entity
+        // CRITICAL: Prevent duplicate increments in the same tick
+        // Players can touch multiple portal blocks simultaneously (2x3 portal interior)
+        // Each block calls entityInside() every tick, causing multiple increments per tick
+        Long lastIncrementTick = LAST_COUNTER_INCREMENT_TICK.get(entityId);
+        if (lastIncrementTick != null && lastIncrementTick == currentTick) {
+            // Already incremented counter this tick, skip to avoid duplicate increment
+            return;
+        }
+
         int stateValue = ENTITY_PORTAL_STATES.getOrDefault(entityId, 0);
         stateValue++;
         ENTITY_PORTAL_STATES.put(entityId, stateValue);
+        LAST_COUNTER_INCREMENT_TICK.put(entityId, currentTick);
 
         // Play portal trigger sound when countdown starts (state 0 → 1)
         // Same sound as Nether Portal
@@ -365,9 +415,16 @@ public class ChronoDawnPortalBlock extends Block {
             if (player.getAbilities().invulnerable) {
                 // Creative mode: teleport immediately
                 shouldTeleport = true;
+                ChronoDawn.LOGGER.info("Portal counter for {}: {} (Creative mode, teleporting immediately)",
+                    player.getName().getString(), stateValue);
             } else {
                 // Survival mode: wait for threshold
                 shouldTeleport = stateValue >= PORTAL_TIME_THRESHOLD;
+                if (stateValue % 20 == 0 || shouldTeleport) {
+                    // Log every second or when ready to teleport
+                    ChronoDawn.LOGGER.info("Portal counter for {}: {}/{} (Survival mode, shouldTeleport={})",
+                        player.getName().getString(), stateValue, PORTAL_TIME_THRESHOLD, shouldTeleport);
+                }
             }
         } else {
             // Non-player entities: use threshold
@@ -376,6 +433,11 @@ public class ChronoDawnPortalBlock extends Block {
 
         // Only teleport after entity has been inside portal for threshold time
         if (shouldTeleport) {
+            if (entity instanceof net.minecraft.server.level.ServerPlayer player) {
+                ChronoDawn.LOGGER.info("Teleporting player {} after {} ticks in portal",
+                    player.getName().getString(), stateValue);
+            }
+
             // Attempt teleportation
             boolean success = com.chronodawn.core.portal.PortalTeleportHandler.teleportThroughPortal(entity, pos);
 
@@ -384,9 +446,17 @@ public class ChronoDawnPortalBlock extends Block {
                 // This flag prevents immediate re-evaluation on the next tick
                 // and allows the state machine to transition: -1 → 1 (arrival portal)
                 ENTITY_PORTAL_STATES.put(entityId, -1);
+                LAST_COUNTER_INCREMENT_TICK.remove(entityId);
+                if (entity instanceof net.minecraft.server.level.ServerPlayer player) {
+                    ChronoDawn.LOGGER.info("Player {} teleported successfully", player.getName().getString());
+                }
             } else {
                 // Teleportation failed, reset state
                 ENTITY_PORTAL_STATES.remove(entityId);
+                LAST_COUNTER_INCREMENT_TICK.remove(entityId);
+                if (entity instanceof net.minecraft.server.level.ServerPlayer player) {
+                    ChronoDawn.LOGGER.warn("Teleportation failed for player {}", player.getName().getString());
+                }
             }
         }
     }
@@ -477,14 +547,17 @@ public class ChronoDawnPortalBlock extends Block {
         // Check if the changed neighbor is relevant (perpendicular to portal axis or vertical)
         boolean isRelevantDirection = directionAxis != axis;
 
-        // If relevant neighbor changed and is neither a frame block nor a portal block,
-        // destroy this portal block immediately
-        if (isRelevantDirection && !isFrameBlock(neighborState) && !neighborState.is(this)) {
-            // Frame is broken, destroy portal block with sound
-            if (!level.isClientSide()) {
-                destroyPortalWithSound((ServerLevel) level, currentPos);
+        // If a relevant neighbor changed, validate portal frame integrity
+        // This ensures portal only breaks when frame blocks are destroyed,
+        // not when unrelated blocks (grass, etc.) are placed/broken nearby
+        if (isRelevantDirection) {
+            if (!isValidPortalPosition(level, currentPos, axis)) {
+                // Portal frame is broken, destroy portal block
+                if (!level.isClientSide()) {
+                    destroyPortalWithSound((ServerLevel) level, currentPos);
+                }
+                return Blocks.AIR.defaultBlockState();
             }
-            return Blocks.AIR.defaultBlockState();
         }
 
         return super.updateShape(state, direction, neighborState, level, currentPos, neighborPos);

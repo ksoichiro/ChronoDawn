@@ -226,6 +226,16 @@ public class PortalTeleportHandler {
 
         player.teleportTo(destLevel, destPosition.x, destPosition.y, destPosition.z, destYRot, player.getXRot());
 
+        // Play arrival sound at destination (same as Nether portal)
+        destLevel.playSound(
+            null,
+            destPortalPos,
+            SoundEvents.PORTAL_TRAVEL,
+            SoundSource.BLOCKS,
+            0.25F,
+            destLevel.getRandom().nextFloat() * 0.4F + 0.8F
+        );
+
         // Update portal state (ACTIVATED → DEACTIVATED)
         PortalStateMachine sourcePortal = PortalRegistry.getInstance().getPortalAt(sourcePortalPos);
         if (sourcePortal != null && sourcePortal.getCurrentState() == PortalState.ACTIVATED) {
