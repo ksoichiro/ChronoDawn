@@ -7,25 +7,37 @@
         {
           "weight": 3,
           "data": {
-            "Name": "minecraft:orange_tulip"
+            "Name": "chronodawn:purple_time_blossom"
           }
         },
         {
           "weight": 3,
           "data": {
-            "Name": "minecraft:dandelion"
+            "Name": "chronodawn:orange_time_blossom"
           }
         },
         {
           "weight": 2,
           "data": {
-            "Name": "minecraft:allium"
+            "Name": "chronodawn:pink_time_blossom"
           }
         },
         {
-          "weight": 1,
+          "weight": 2,
           "data": {
-            "Name": "minecraft:azure_bluet"
+            "Name": "chronodawn:dawn_bell",
+            "Properties": {
+              "half": "lower"
+            }
+          }
+        },
+        {
+          "weight": 2,
+          "data": {
+            "Name": "chronodawn:dusk_bell",
+            "Properties": {
+              "half": "lower"
+            }
           }
         }
       ]
