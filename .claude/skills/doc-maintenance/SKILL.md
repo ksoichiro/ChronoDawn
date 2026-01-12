@@ -57,7 +57,7 @@ Simply describe what you want to do, and Claude will reference the appropriate c
 
 9. **THIRD_PARTY_LICENSES.md**
    - Update version numbers in "Runtime Dependencies" section
-   - Update: Minecraft, Fabric Loader, Fabric API, NeoForge, Architectury API, Custom Portal API, Patchouli
+   - Update: Minecraft, Fabric Loader, Fabric API, NeoForge, Architectury API
    - Update "Last updated" date at the bottom
 
 ### Current Versions (Reference)
@@ -68,8 +68,6 @@ Fabric Loader: 0.17.3+
 Fabric API: 0.116.7+
 NeoForge: 21.1.209+
 Architectury API: 13.0.8+
-Custom Portal API: 0.0.1-beta66-1.21+
-Patchouli: 1.21.1-92+
 ```
 
 **After updating**, update this reference list in this skill file.

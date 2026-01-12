@@ -305,12 +305,12 @@ After building:
 
 **Location**:
 - Common: `common/src/main/java/com/chronodawn/core/portal/`
-- Fabric: `fabric/src/main/java/com/chronodawn/fabric/compat/ChronoDawnPortalFabric.java`
-- NeoForge: `neoforge/src/main/java/com/chronodawn/neoforge/compat/ChronoDawnPortalNeoForge.java`
+- Blocks: `common/src/main/java/com/chronodawn/blocks/ChronoDawnPortalBlock.java`
 
 **Key Components**:
 - **PortalRegistry**: Tracks portal states (INACTIVE, ACTIVE, STABILIZED)
-- **ChronoDawnPortalFabric/NeoForge**: Loader-specific portal implementations using custom portal system
+- **ChronoDawnPortalBlock**: Custom portal block implementation
+- **PortalTeleportHandler**: Handles teleportation logic between dimensions
 - **TimeHourglassItem**: Portal ignition logic
 - **PortalStabilizerItem**: Dimension stabilization logic
 
