@@ -18,6 +18,8 @@ Usage:
 import sys
 import os
 import argparse
+import gzip
+import io
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -215,6 +217,31 @@ def convert_block_entity(block_entity: Any) -> tag.Compound:
     return tag.Compound(converted)
 
 
+def save_nbt_deterministic(nbt_data: nbtlib.File, output_path: str) -> None:
+    """
+    Save NBT file with deterministic output (fixed mtime for gzip).
+
+    This ensures that the same NBT data always produces the same binary file,
+    making the conversion process idempotent.
+
+    Args:
+        nbt_data: The NBT File object to save
+        output_path: Path to save the NBT file
+    """
+    # First, write uncompressed NBT data to a BytesIO buffer
+    buffer = io.BytesIO()
+    nbt_data.write(buffer, nbt_data.byteorder)
+    uncompressed_data = buffer.getvalue()
+
+    # Compress with gzip.compress which produces deterministic output
+    # when mtime=0 is set (available in Python 3.8+)
+    compressed_data = gzip.compress(uncompressed_data, compresslevel=9, mtime=0)
+
+    # Write compressed data to file
+    with open(output_path, 'wb') as f:
+        f.write(compressed_data)
+
+
 def convert_nbt_structure(input_path: str, output_path: str) -> bool:
     """
     Convert an NBT structure file from 1.21.1 to 1.20.1 format.
@@ -272,8 +299,8 @@ def convert_nbt_structure(input_path: str, output_path: str) -> bool:
                             block['nbt'] = converted_nbt
                             converted_count += 1
 
-        # Save the converted NBT file
-        nbt_data.save(output_path)
+        # Save the converted NBT file with deterministic output
+        save_nbt_deterministic(nbt_data, output_path)
 
         if converted_count > 0:
             print(f"  Converted {converted_count} container(s)")
