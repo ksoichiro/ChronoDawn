@@ -67,6 +67,68 @@ tasks.withType(JavaCompile).configureEach {
     }
 }
 
+// NBT Structure Multi-Version Conversion
+// Converts 1.21.1 NBT structure files to 1.20.1 format when building for 1.20.1
+tasks.register('convertNbtStructures', Exec) {
+    group = 'chrono dawn build'
+    description = 'Convert NBT structure files from 1.21.1 to 1.20.1 format'
+
+    // Only run when target version is 1.20.1
+    onlyIf {
+        project.ext.minecraft_version == '1.20.1'
+    }
+
+    def inputDir = file('src/main/resources-1.21.1/data/chronodawn/structure')
+    def outputDir = file('src/main/resources-1.20.1/data/chronodawn/structures')
+    def scriptPath = rootProject.file('scripts/convert_nbt_1_21_to_1_20.py')
+
+    inputs.dir(inputDir).optional()
+    outputs.dir(outputDir)
+
+    doFirst {
+        // Check if Python 3 and nbtlib are available
+        try {
+            exec {
+                commandLine 'python3', '-c', 'import nbtlib'
+                standardOutput = new ByteArrayOutputStream()
+                errorOutput = new ByteArrayOutputStream()
+            }
+        } catch (Exception e) {
+            throw new GradleException(
+                'Python 3 with nbtlib is required for NBT conversion. ' +
+                'Install with: pip3 install nbtlib'
+            )
+        }
+
+        if (!inputDir.exists()) {
+            logger.warn("Input directory does not exist: ${inputDir}")
+            logger.warn("Skipping NBT conversion")
+            return
+        }
+
+        if (!scriptPath.exists()) {
+            throw new GradleException("NBT conversion script not found: ${scriptPath}")
+        }
+
+        logger.lifecycle('')
+        logger.lifecycle('Converting NBT structures from 1.21.1 to 1.20.1 format...')
+        logger.lifecycle("  Input:  ${inputDir}")
+        logger.lifecycle("  Output: ${outputDir}")
+        logger.lifecycle('')
+    }
+
+    commandLine 'python3', scriptPath.absolutePath, '--batch', inputDir.absolutePath, outputDir.absolutePath
+
+    doLast {
+        logger.lifecycle('')
+        logger.lifecycle('✅ NBT structure conversion complete')
+        logger.lifecycle('')
+    }
+}
+
+// Run NBT conversion before processing resources
+processResources.dependsOn convertNbtStructures
+
 // Expand pack_format variable in pack.mcmeta
 processResources {
     // First source directory wins (version-specific resources take precedence)
@@ -88,6 +150,8 @@ tasks.test {
 }
 
 // Set duplicates strategy for sourcesJar to avoid conflicts
+// Also ensure NBT conversion runs before sourcesJar
 tasks.named('sourcesJar') {
+    dependsOn convertNbtStructures
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }

@@ -7293,3 +7293,172 @@ common/src/main/resources/assets/chronodawn/lavender/
 - Bilingual guidebook (English/Japanese) fully functional
 - Automatic distribution via advancement system when entering Chrono Dawn
 - All Lavender references removed from codebase and documentation
+
+---
+
+## NBT Structure Multi-Version Support (2026-01-12)
+
+### Problem Statement
+
+**Issue:** NBT structure files created in Minecraft 1.21.1 are incompatible with 1.20.1, specifically:
+- Container items (chests, barrels) are not recognized in 1.20.1
+- Root cause: Item data format changed from NBT `tag` (1.20.4) to `components` (1.20.5+)
+
+### Item Data Format Changes (1.20.4 → 1.20.5+)
+
+**Major Structural Change in Minecraft 1.20.5:**
+- Item data migrated from unstructured NBT format to structured data components
+- This change affects all item storage: player inventory, containers, structure files
+
+#### Field Name Changes
+
+| Field | 1.20.4 (Old) | 1.20.5+ (New) |
+|-------|-------------|---------------|
+| Item ID | `id` (string) | `id` (namespaced string) |
+| Count | `Count` (byte) | `count` (integer) |
+| Slot | `Slot` (byte) | `slot` (integer) |
+| Data | `tag: {...}` | `components: {"minecraft:...": ...}` |
+
+#### Container Items Format
+
+**1.20.4 Format (Old NBT):**
+```snbt
+Items: [
+  {
+    Slot: 0b,
+    id: "minecraft:diamond_sword",
+    Count: 1b,
+    tag: {
+      Enchantments: [
+        {id: "minecraft:sharpness", lvl: 5s}
+      ]
+    }
+  }
+]
+```
+
+**1.20.5+ Format (New Components):**
+```snbt
+Items: [
+  {
+    slot: 0,
+    item: {
+      id: "minecraft:diamond_sword",
+      count: 1,
+      components: {
+        "minecraft:enchantments": {
+          levels: {
+            "minecraft:sharpness": 5
+          }
+        }
+      }
+    }
+  }
+]
+```
+
+#### Structure NBT File Format
+
+**Location:** `block_entities` field in structure NBT files
+
+**Example Block Entity (Chest) in 1.20.4:**
+```snbt
+block_entities: [
+  {
+    id: "minecraft:chest",
+    x: 5,
+    y: 2,
+    z: 3,
+    Items: [
+      {Slot: 0b, id: "minecraft:stone", Count: 64b}
+    ]
+  }
+]
+```
+
+**Example Block Entity (Chest) in 1.20.5+:**
+```snbt
+block_entities: [
+  {
+    id: "minecraft:chest",
+    x: 5,
+    y: 2,
+    z: 3,
+    Items: [
+      {slot: 0, item: {id: "minecraft:stone", count: 64}}
+    ]
+  }
+]
+```
+
+### Conversion Strategy
+
+#### Tools Evaluated
+
+1. **nbtlib (Python)** ✅ Selected
+   - CLI and library for NBT ↔ SNBT/JSON conversion
+   - Easy to script and automate
+   - GitHub: https://github.com/vberlier/nbtlib
+
+2. **NBT Studio (GUI)**
+   - Modern NBT ↔ SNBT editor
+   - Good for manual editing, not for automation
+   - GitHub: https://github.com/tryashtar/nbt-studio
+
+3. **Querz/NBT (Java)**
+   - Java library for NBT manipulation
+   - Could integrate with Gradle, but Python is simpler
+   - GitHub: https://github.com/Querz/NBT
+
+#### Implementation Plan
+
+**Approach:** Python script for automated conversion
+
+**Script Workflow:**
+1. Read 1.21.1 NBT structure file (master source)
+2. Parse `block_entities` field
+3. For each container block entity:
+   - Convert `Items` array format:
+     - `slot` (int) → `Slot` (byte)
+     - `item.id` → `id`
+     - `item.count` (int) → `Count` (byte)
+     - `item.components` → `tag`
+4. Write converted NBT to 1.20.1 structure file
+
+**Build Integration:**
+- Add Gradle task to run conversion script
+- Execute during `build1_20_1` task
+- Input: `resources-1.21.1/data/chronodawn/structure/*.nbt`
+- Output: `resources-1.20.1/data/chronodawn/structures/*.nbt`
+
+### Component → Tag Conversion Rules
+
+**Common Components Mapping:**
+
+| 1.20.5+ Component | 1.20.4 NBT Tag |
+|-------------------|----------------|
+| `minecraft:custom_data` | `tag` (direct copy) |
+| `minecraft:enchantments` | `tag.Enchantments` |
+| `minecraft:display` (name) | `tag.display.Name` |
+| `minecraft:lore` | `tag.display.Lore` |
+| `minecraft:damage` | `tag.Damage` |
+| `minecraft:unbreakable` | `tag.Unbreakable` |
+
+**Note:** Minecraft automatically upgrades 1.20.4 → 1.20.5 on world load, but does NOT downgrade. Manual conversion required for backwards compatibility.
+
+### Current Status
+
+- ✅ nbtlib installed (`pip3 install nbtlib`)
+- ✅ NBT file structure investigated (no `block_entities` in current files)
+- ⏳ Conversion script implementation (next step)
+- ⏳ Build process integration (after script completion)
+
+### References
+
+- [Data component format – Minecraft Wiki](https://minecraft.wiki/w/Data_component_format)
+- [Item format/Before 1.20.5 – Minecraft Wiki](https://minecraft.wiki/w/Item_format/Before_1.20.5)
+- [NBT format – Minecraft Wiki](https://minecraft.wiki/w/NBT_format)
+- [Item command converter | PaperMC Docs](https://docs.papermc.io/misc/tools/item-command-converter/)
+- [nbtlib (Python)](https://github.com/vberlier/nbtlib)
+- [NBT Studio](https://github.com/tryashtar/nbt-studio)
+- [Querz/NBT (Java)](https://github.com/Querz/NBT)
