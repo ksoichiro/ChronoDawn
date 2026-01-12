@@ -9,6 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.0-beta] - 2026-01-04
 
+### ⚠️ BREAKING CHANGES
+
+**Warning**: This update is NOT compatible with worlds created in v0.2.0 or earlier.
+
+- **Portal System Rewrite**: Custom Portal API dependency has been removed and replaced with an independent portal implementation. Existing portals will not function correctly.
+  - **Action Required**: Break and rebuild portals using Time Hourglass
+  - **Technical Details**: Portal placement and teleportation logic has been rewritten using Mixins instead of Custom Portal API
+- **Save Data Migration**: Eye of Chronos effect storage format has changed from inventory-based detection to persistent dimension state (SavedData).
+  - **Impact**: Boss defeat progress tracked by Eye of Chronos may be reset
+  - **Affected Features**: Final boss access requirements, dimension-specific persistent effects
+
+**Recommendation**: Back up your world before updating. If you have in-progress gameplay in v0.2.0 worlds, consider completing your current objectives before updating.
+
 ### Fixed
 - Resolved NeoForge runClient module resolution error caused by loader-specific Mixins using common package name
 - Moved loader-specific PortalPlacerMixin to loader-specific packages (com.chronodawn.fabric.mixin, com.chronodawn.neoforge.mixin)

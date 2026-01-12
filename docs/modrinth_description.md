@@ -59,6 +59,20 @@ Defeat bosses to craft legendary time-manipulating gear:
 
 ---
 
+## ⚠️ Important Notice for v0.3.0-beta
+
+**This version is NOT compatible with worlds created in v0.2.0 or earlier.**
+
+Breaking changes in this release:
+- **Portal System Rewrite**: Existing portals will not function. You must break and rebuild them using Time Hourglass.
+- **Save Data Changes**: Boss defeat progress may be reset.
+
+**Recommendation**: Back up your world before updating, or start a new world for v0.3.0-beta.
+
+See [CHANGELOG.md on GitHub](https://github.com/ksoichiro/ChronoDawn/blob/main/CHANGELOG.md) for detailed information.
+
+---
+
 ## 📖 How to Play
 
 ### Step 1: Find Ancient Ruins
