@@ -353,6 +353,10 @@
   "subtitles.chronodawn.time_compass_update": "Time Compass updates",
   "subtitles.chronodawn.time_compass_break": "Time Compass breaks",
 
+  "tag.item.chronodawn.time_wood_logs": "Time Wood Logs",
+  "tag.item.chronodawn.ancient_time_wood_logs": "Ancient Time Wood Logs",
+  "tag.item.chronodawn.dark_time_wood_logs": "Dark Time Wood Logs",
+
   "advancements.chronodawn.grant_chronicle_book.title": "Chronicle of Chrono Dawn",
   "advancements.chronodawn.grant_chronicle_book.description": "Received the Chronicle of Chrono Dawn guide book",
 

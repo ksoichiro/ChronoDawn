@@ -353,6 +353,10 @@
   "subtitles.chronodawn.time_compass_update": "タイムコンパスが更新",
   "subtitles.chronodawn.time_compass_break": "タイムコンパスが破損",
 
+  "tag.item.chronodawn.time_wood_logs": "時の木の原木",
+  "tag.item.chronodawn.ancient_time_wood_logs": "古代の時の木の原木",
+  "tag.item.chronodawn.dark_time_wood_logs": "暗い時の木の原木",
+
   "advancements.chronodawn.grant_chronicle_book.title": "クロノドーンの記録",
   "advancements.chronodawn.grant_chronicle_book.description": "クロノドーンの記録ガイドブックを受け取った",
 
