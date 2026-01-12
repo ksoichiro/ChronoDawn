@@ -84,7 +84,8 @@ public class ClockworkColossusSpawner {
         });
 
         LifecycleEvent.SERVER_LEVEL_LOAD.register(level -> {
-            if (level instanceof ServerLevel serverLevel) {
+            if (level instanceof ServerLevel) {
+                ServerLevel serverLevel = (ServerLevel) level;
                 ChronoDawn.LOGGER.info("Clockwork Colossus Spawner initialized for dimension: {}", serverLevel.dimension().location());
             }
         });

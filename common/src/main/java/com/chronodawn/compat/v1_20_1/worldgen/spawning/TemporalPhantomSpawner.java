@@ -83,7 +83,8 @@ public class TemporalPhantomSpawner {
      */
     public static void register() {
         LifecycleEvent.SERVER_LEVEL_LOAD.register(level -> {
-            if (level instanceof ServerLevel serverLevel) {
+            if (level instanceof ServerLevel) {
+                ServerLevel serverLevel = (ServerLevel) level;
                 ChronoDawn.LOGGER.info("Temporal Phantom Spawner initialized for dimension: {}", serverLevel.dimension().location());
             }
         });

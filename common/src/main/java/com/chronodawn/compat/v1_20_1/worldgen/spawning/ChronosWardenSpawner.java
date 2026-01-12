@@ -66,7 +66,8 @@ public class ChronosWardenSpawner {
     public static void register() {
         // Use server tick event to check for Guardian Vault structures
         LifecycleEvent.SERVER_LEVEL_LOAD.register(level -> {
-            if (level instanceof ServerLevel serverLevel) {
+            if (level instanceof ServerLevel) {
+                ServerLevel serverLevel = (ServerLevel) level;
                 ChronoDawn.LOGGER.info("Chronos Warden Spawner initialized for dimension: {}", serverLevel.dimension().location());
             }
         });

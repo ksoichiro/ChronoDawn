@@ -49,6 +49,7 @@ subprojects {
     ext.fabric_loader_version = rootProject.ext.fabric_loader_version
     ext.fabric_api_version = rootProject.ext.fabric_api_version
     ext.neoforge_version = rootProject.ext.neoforge_version
+    ext.java_version = rootProject.ext.java_version
 
     repositories {
         maven { url 'https://maven.architectury.dev/' }
@@ -67,13 +68,19 @@ subprojects {
 
     java {
         withSourcesJar()
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        def javaVer = JavaVersion.toVersion(project.ext.java_version)
+        sourceCompatibility = javaVer
+        targetCompatibility = javaVer
+
+        // Use toolchain to automatically download and use the correct JDK
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(project.ext.java_version)
+        }
     }
 
     tasks.withType(JavaCompile).configureEach {
         it.options.encoding = 'UTF-8'
-        it.options.release = 21
+        it.options.release = project.ext.java_version as Integer
     }
 
     // Common resource processing for platform modules (fabric, neoforge)

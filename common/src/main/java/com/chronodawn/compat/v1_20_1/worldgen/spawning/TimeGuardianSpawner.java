@@ -69,7 +69,8 @@ public class TimeGuardianSpawner {
     public static void register() {
         // Use server tick event to check for Desert Clock Tower structures
         LifecycleEvent.SERVER_LEVEL_LOAD.register(level -> {
-            if (level instanceof ServerLevel serverLevel) {
+            if (level instanceof ServerLevel) {
+                ServerLevel serverLevel = (ServerLevel) level;
                 ChronoDawn.LOGGER.info("Time Guardian Spawner initialized for dimension: {}", serverLevel.dimension().location());
             }
         });
