@@ -531,6 +531,7 @@ public class ChronoDawnClientNeoForge {
             ModItems.TEMPORAL_WRAITH_SPAWN_EGG.get(),
             ModItems.CLOCKWORK_SENTINEL_SPAWN_EGG.get(),
             ModItems.TIME_KEEPER_SPAWN_EGG.get(),
+            ModItems.FLOQ_SPAWN_EGG.get(),
             ModItems.TIME_GUARDIAN_SPAWN_EGG.get(),
             ModItems.TIME_TYRANT_SPAWN_EGG.get(),
             ModItems.CHRONOS_WARDEN_SPAWN_EGG.get(),
