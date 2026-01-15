@@ -46,7 +46,58 @@ public class DeferredSpawnEggItem extends SpawnEggItem {
      * Must be called after all entities are registered.
      */
     public void initializeSpawnEgg() {
+        setEntityTypeInParent();
         registerColorsToVanillaMap();
+    }
+
+    /**
+     * Set the entity type in parent SpawnEggItem class using reflection.
+     * In 1.20.1, SpawnEggItem.useOn() directly accesses the EntityType field,
+     * so we must populate it after entity registration.
+     */
+    private void setEntityTypeInParent() {
+        try {
+            EntityType<?> entityType = entityTypeSupplier.get();
+            if (entityType == null) {
+                ChronoDawn.LOGGER.warn("Entity type is null when initializing spawn egg");
+                return;
+            }
+
+            // Try to find the EntityType field with various possible names
+            Field entityTypeField = null;
+            String[] possibleFieldNames = {"defaultType", "f_43220_", "type"};
+
+            for (String fieldName : possibleFieldNames) {
+                try {
+                    entityTypeField = SpawnEggItem.class.getDeclaredField(fieldName);
+                    break;
+                } catch (NoSuchFieldException ignored) {
+                    // Try next name
+                }
+            }
+
+            // If still not found, search for EntityType field
+            if (entityTypeField == null) {
+                Field[] fields = SpawnEggItem.class.getDeclaredFields();
+                for (Field field : fields) {
+                    if (field.getType() == EntityType.class) {
+                        entityTypeField = field;
+                        break;
+                    }
+                }
+            }
+
+            if (entityTypeField == null) {
+                ChronoDawn.LOGGER.warn("Could not find EntityType field in SpawnEggItem");
+                return;
+            }
+
+            entityTypeField.setAccessible(true);
+            entityTypeField.set(this, entityType);
+            ChronoDawn.LOGGER.info("Successfully set entity type for spawn egg: {}", entityType.getDescriptionId());
+        } catch (Exception e) {
+            ChronoDawn.LOGGER.warn("Failed to set entity type in parent SpawnEggItem via reflection", e);
+        }
     }
 
     /**
