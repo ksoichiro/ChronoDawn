@@ -1477,6 +1477,21 @@ public class ModItems {
         )
     );
 
+    /**
+     * Floq Spawn Egg - For creative mode and debugging.
+     * Primary color: Teal (0x008080) - Background
+     * Secondary color: Light green (0x90EE90) - Spots
+     */
+    public static final RegistrySupplier<Item> FLOQ_SPAWN_EGG = ITEMS.register(
+        "floq_spawn_egg",
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.FLOQ,
+            0x008080, // Background: Teal
+            0x90EE90, // Spots: Light green
+            new Item.Properties()
+        )
+    );
+
     // === Boats ===
 
     /**
@@ -1584,6 +1599,10 @@ public class ModItems {
 
         if (TEMPORAL_PHANTOM_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
             ((com.chronodawn.items.DeferredSpawnEggItem) TEMPORAL_PHANTOM_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (FLOQ_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) FLOQ_SPAWN_EGG.get()).initializeSpawnEgg();
         }
 
         ChronoDawn.LOGGER.info("Spawn eggs initialized");
@@ -1790,6 +1809,9 @@ public class ModItems {
         }
         if (TIME_KEEPER_SPAWN_EGG.isPresent()) {
             output.accept(TIME_KEEPER_SPAWN_EGG.get());
+        }
+        if (FLOQ_SPAWN_EGG.isPresent()) {
+            output.accept(FLOQ_SPAWN_EGG.get());
         }
     }
 }
