@@ -2,8 +2,8 @@
   "required": true,
   "minVersion": "0.8",
   "package": "com.chronodawn.mixin",
-  "compatibilityLevel": "JAVA_21",
-  "refmap": "common-common-refmap.json",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "fabric-fabric-refmap.json",
   "client": [
     "GuiPortalOverlayMixin"
   ],
