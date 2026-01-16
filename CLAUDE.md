@@ -8,15 +8,7 @@ Auto-generated from all feature plans. Last updated: 2025-10-19
 
 **CRITICAL**: When updating versions, dependencies, or content, documentation must be kept consistent across all files.
 
-**Documentation Maintenance Skill**: Detailed checklists and guidance are available in `.claude/skills/doc-maintenance.md`. Claude will automatically reference this skill when you:
-- Update Minecraft or dependency versions
-- Add new bosses, structures, or items
-- Prepare for a release
-- Add new mod dependencies
-
-Simply describe what you want to do (e.g., "I want to update Minecraft to 1.21.2" or "I added a new boss"), and Claude will automatically use the appropriate checklist.
-
-**Quick Reference - Key Files**:
+**Key Files**:
 - `README.md` - Project overview and installation
 - `docs/player_guide.md` - Player guide
 - `docs/developer_guide.md` - Developer guide
@@ -37,27 +29,14 @@ Simply describe what you want to do (e.g., "I want to update Minecraft to 1.21.2
 
 **Project License**: LGPL-3.0 (GNU Lesser General Public License v3.0)
 
-**CRITICAL**: This project is licensed under LGPL-3.0. All contributions and modifications must comply with LGPL-3.0 terms.
+**CRITICAL**: All contributions and modifications must comply with LGPL-3.0 terms.
 
-**Key Requirements**:
-1. **Copyleft**: Derivative works must remain LGPL-3.0 (or compatible license)
-2. **Source Code**: Source code must be made available to users
-3. **License Notice**: Include LGPL-3.0 license notice in distributions
-4. **Dynamic Linking**: Mods using this code via dynamic linking (normal Minecraft mod usage) can use any license
-5. **Static Linking/Modification**: Modified versions or statically linked code must be LGPL-3.0
-
-**When Adding Dependencies**:
-- Verify dependency license is LGPL-3.0 compatible (MIT, Apache 2.0, BSD are compatible)
-- Avoid GPL-incompatible licenses (CC-BY-NC, proprietary)
+**Quick Reference**:
+- Compatible licenses: MIT, Apache 2.0, BSD
+- Incompatible licenses: CC-BY-NC, proprietary
 - Document all third-party licenses in `THIRD_PARTY_LICENSES.md`
-
-**Files Requiring License Headers** (Optional but Recommended):
-- Core implementation files in `common/src/main/java/com/chronodawn/`
-- Platform-specific entry points in `fabric/` and `neoforge/`
-
-**License Change History**:
-- 2025-12-27: Changed from "All Rights Reserved" to LGPL-3.0 (T601-T608)
-- Rationale: Patchouli dependency removed (T706), enabling FOSS licensing
+- Dynamic linking (normal mod usage): Any license OK
+- Static linking/modification: Must be LGPL-3.0
 
 ---
 
@@ -83,47 +62,18 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 
 ## Multi-Version Support
 
-**Documentation**: Detailed migration plan is available in `docs/multiversion_migration_plan.md`.
-
 **Supported Versions**: Minecraft 1.20.1 + 1.21.1 (single codebase)
 
-**Strategy**:
-- Custom Gradle scripts + abstraction layer approach (no external preprocessor dependencies)
-- All code consolidated in one place (prioritizing AI development efficiency, avoiding Git branch separation)
-- **Status**: ✅ Phase 1-6 completed (integration testing complete, 2026-01-11)
+**Build Commands**:
+- `./gradlew build1_20_1` - Build for 1.20.1
+- `./gradlew build1_21_1` - Build for 1.21.1 (default)
+- `./gradlew buildAll` - Build all versions
 
-**Key Components**:
-1. **Data Pack**: Version-specific directories (`resources-1.20.1/`, `resources-1.21.1/`) switched via Gradle
-   - 1.20.1: Plural folders (`advancements/`, `loot_tables/`, `recipes/`) + pack_format: 18
-   - 1.21.1: Singular folders (`advancement/`, `loot_table/`, `recipe/`) + pack_format: 48
-2. **Java Code**: `compat/` package absorbs API differences
-   - ItemStack: NBT (1.20.1) vs DataComponents (1.21.1)
-   - SavedData: `HolderLookup.Provider` presence/absence
-   - ArmorMaterial: Interface (1.20.1) vs Record (1.21.1)
-   - Tier: getLevel() method (1.20.1 only, removed in 1.21.1)
-3. **Build Commands**:
-   - `./gradlew build1_20_1` - Build for Minecraft 1.20.1
-   - `./gradlew build1_21_1` - Build for Minecraft 1.21.1 (default)
-   - `./gradlew buildAll` - Build all versions sequentially
-   - `./gradlew build -Ptarget_mc_version=1.20.1` - Explicit version build
+**Run Client**:
+- Fabric: `./gradlew fabric:runClient1_20_1` or `./gradlew fabric:runClient1_21_1`
+- NeoForge: `./gradlew neoforge:runClient1_20_1` or `./gradlew neoforge:runClient1_21_1`
 
-4. **Run Client Commands** (auto-generated from `gradle/subproject-run-tasks.gradle`):
-   - **Fabric**:
-     - `./gradlew fabric:runClient1_20_1` - Run Fabric client for 1.20.1
-     - `./gradlew fabric:runClient1_21_1` - Run Fabric client for 1.21.1
-   - **NeoForge/Forge**:
-     - `./gradlew neoforge:runClient1_20_1` - Run NeoForge/Forge client for 1.20.1
-     - `./gradlew neoforge:runClient1_21_1` - Run NeoForge client for 1.21.1
-   - **Explicit version run** (alternative method):
-     - `./gradlew :fabric:runClient -Ptarget_mc_version=1.20.1`
-     - `./gradlew :neoforge:runClient -Ptarget_mc_version=1.21.1`
-   - **Adding new versions**: Edit `supportedVersions` list in `gradle/subproject-run-tasks.gradle`
-
-5. **Output JARs**:
-   - Fabric: `chronodawn-{version}+{mc_version}-fabric.jar`
-   - NeoForge: `chronodawn-{version}+{mc_version}-neoforge.jar`
-   - Example: `chronodawn-0.3.0-beta+1.21.1-fabric.jar`
-   - **Note**: 1.20.1 is Fabric-only (NeoForge only supports 1.20.5+)
+**Key Strategy**: Custom Gradle scripts + abstraction layer (`compat/` package) for API differences
 
 ## Development Notes
 - When writing code, use Mojang mapping names (e.g., `net.minecraft.world.level.Level`, not Yarn's `class_XXXX`)
@@ -134,12 +84,7 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 
 **CRITICAL**: Fabric and NeoForge require **different** Mixin configurations due to mapping differences.
 
-**Mixin Configuration Skill**: Detailed guidance for configuring Mixins in Architectury multi-loader projects is available in `.claude/skills/mixin-guide.md`. Claude will automatically reference this skill when you:
-- Add new Mixin classes
-- Configure Mixin files for Fabric or NeoForge
-- Debug Mixin-related errors (InvalidInjectionException, refMap issues)
-
-**Quick Reference**:
+**Key Points**:
 - **Fabric**: Must include `"refmap": "common-common-refmap.json"` in `chronodawn-fabric.mixins.json`
 - **NeoForge**: Must NOT include refMap property in `chronodawn-neoforge.mixins.json`
 - **Common**: `chronodawn.mixins.json` excluded from builds (reference only)
@@ -172,8 +117,7 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 
 ## Critical Game Design Decisions
 
-### Respawn Mechanics (2025-10-26)
-**Decision**: Chrono Dawn follows Minecraft's standard respawn behavior (like End dimension)
+**Respawn Mechanics**:
 - Players respawn at bed/respawn anchor, or world spawn if none set
 - Portal Stabilizer does NOT affect respawn location
 - Portal Stabilizer only makes portal bidirectional (one-way → two-way)
@@ -181,18 +125,9 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 
 **Rationale**: Maintains tension (one-way portal) without excessive difficulty (can always escape)
 
-**See**: `specs/chrono-dawn-mod/spec.md` → "Game Design Philosophy" section for full details
-
 ## Structure Worldgen Guidelines
 
-**Structure Worldgen Skill**: Comprehensive guidance for implementing complex structure generation is available in `.claude/skills/structure-worldgen.md`. Claude will automatically reference this skill when you:
-- Create underground or multi-chunk structures
-- Implement waterlogging prevention systems
-- Use Jigsaw structures with programmatic boss room placement
-- Configure terrain adaptation for structures
-- Implement boss spawning systems
-
-**Key Topics Covered**:
+**Key Topics**:
 - **Underground Structure Waterlogging**: Solutions for Aquifer-related waterlogging in Minecraft 1.18+
 - **Advanced Waterlogging Prevention**: Three-component system (Custom Decorative Water, Structure Processor, Mixin)
 - **Structure Generation Priority**: Using `step` parameter to control generation order
@@ -200,7 +135,7 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 - **Terrain Adaptation**: Configuring terrain integration for underground + surface structures
 - **Boss Spawning System**: Proximity-based spawning patterns
 
-**Quick Reference**:
+**Guidelines**:
 - Avoid waterloggable blocks in deep underground structures (Y < 40)
 - Use `terrain_adaptation: "none"` for structures with surface + underground components
 - For boss rooms: Use marker-based programmatic placement with rotation-aware calculations
@@ -208,15 +143,9 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 
 ## Texture Creation Guidelines
 
-**Texture Creation Skill**: Detailed guidance for creating mod textures using vanilla texture reuse and color transformation is available in `.claude/skills/texture-creation.md`. Claude will automatically reference this skill when you:
-- Create textures for custom blocks or items
-- Reuse vanilla textures with color modifications
-- Use ImageMagick for texture processing
-- Create wood variant textures (doors, trapdoors, etc.)
-
 **Approach**: Extract vanilla textures and apply RGB channel color transformation for rapid, consistent texture creation.
 
-**Quick Reference**:
+**Quick Steps**:
 - Extract from Minecraft JAR: `~/.gradle/caches/fabric-loom/minecraftMaven/net/minecraft/minecraft/1.21.1/minecraft-1.21.1.jar`
 - Analyze colors: `magick texture.png -format %c histogram:info:-`
 - Transform: `magick input.png -channel R -evaluate multiply 0.95 +channel ...`
@@ -224,15 +153,9 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 
 ## Chronicle Structure Addition Guidelines
 
-**Chronicle Structure Skill**: Detailed guidance for adding structure information to Chronicle with visual hints is available in `.claude/skills/chronicle-structure.md`. Claude will automatically reference this skill when you:
-- Add new structures to Chronicle
-- Convert screenshots to Chronicle-style images
-- Add image pages to Chronicle entries
-- Create visual hints for structures
-
 **Workflow**: 3-step process for adding structures with images to Chronicle.
 
-**Quick Reference**:
+**Steps**:
 - Screenshot location: `assets/screenshots/chronicle/<structure_name>.png`
 - Convert script: `./scripts/convert_chronicle_image.sh <structure_name>.png`
 - Output location: `common/src/main/resources/assets/chronodawn/textures/gui/chronicle/<structure_name>.png`
@@ -241,23 +164,13 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 
 ## Custom Noise Settings (Terrain Generation)
 
-**Custom Noise Settings Skill**: Detailed guidance for understanding and customizing Minecraft's terrain generation system is available in `.claude/skills/noise-settings.md` (future). This section documents lessons learned from attempting custom noise settings.
-
 **Difficulty Assessment** (based on T299 experiment, 2025-12-13):
 - **Simple approach** (BiomeScalingMixin): Easy, effective for biome size adjustment
 - **Custom noise settings**: Very difficult, requires 10-15 hours of trial-and-error
-
-**Lessons Learned**:
-1. **Vanilla settings are highly optimized** - `minecraft:overworld` provides balanced, natural terrain
-2. **Parameter tuning is complex** - Small changes cause drastic terrain changes (e.g., Y=-40 to 320 mountains, lava seas, flat summits)
-3. **Density functions require mathematical understanding** - How noise values translate to terrain density
-4. **BiomeScalingMixin is more practical** - Coordinate scaling achieves biome size reduction without terrain issues
 
 **Recommendation**:
 - For biome size: Use Mixin-based coordinate scaling
 - For terrain customization: Start with vanilla density functions as base, modify incrementally
 - Avoid creating noise_settings from scratch unless absolutely necessary
-
-**Reference**: See T299 in tasks.md for detailed experiment results
 
 <!-- MANUAL ADDITIONS END -->
