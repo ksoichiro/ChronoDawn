@@ -8,7 +8,7 @@ A multi-loader Minecraft mod that adds a mysterious time-themed dimension called
 
 *More screenshots available on [CurseForge](https://www.curseforge.com/minecraft/mc-mods/chrono-dawn) and [Modrinth](https://modrinth.com/mod/chrono-dawn)*
 
-## ⚠️ Important Notice for v0.3.0-beta
+## ⚠️ Important Notice for v0.3.0
 
 **This version is NOT compatible with worlds created in v0.2.0 or earlier.**
 
@@ -16,7 +16,7 @@ Breaking changes in this release:
 - **Portal System Rewrite**: Existing portals will not function. You must break and rebuild them using Time Hourglass.
 - **Save Data Changes**: Boss defeat progress may be reset.
 
-**Recommendation**: Back up your world before updating, or start a new world for v0.3.0-beta.
+**Recommendation**: Back up your world before updating, or start a new world for v0.3.0.
 
 See [CHANGELOG.md](CHANGELOG.md) for detailed information.
 
@@ -110,9 +110,9 @@ Chrono Dawn supports multiple Minecraft versions from the same codebase:
 ```
 
 **Output Files** (example for 1.21.1):
-- `fabric/build/libs/chronodawn-0.3.0-beta+1.21.1-fabric.jar` - Fabric loader JAR
-- `neoforge/build/libs/chronodawn-0.3.0-beta+1.21.1-neoforge.jar` - NeoForge loader JAR
-- `common/build/libs/common-0.3.0-beta.jar` - Common module (not usable standalone)
+- `fabric/build/libs/chronodawn-0.3.0+1.21.1-fabric.jar` - Fabric loader JAR
+- `neoforge/build/libs/chronodawn-0.3.0+1.21.1-neoforge.jar` - NeoForge loader JAR
+- `common/build/libs/common-0.3.0.jar` - Common module (not usable standalone)
 
 ### Build Specific Loader
 
@@ -225,21 +225,21 @@ gradlew.bat test
 
 ## Installing Pre-built JAR
 
-**⚠️ Important**: Version 0.3.0-beta is NOT compatible with v0.2.0 worlds. Back up your world or start a new one.
+**⚠️ Important**: Version 0.3.0 is NOT compatible with v0.2.0 worlds. Back up your world or start a new one.
 
 ### For Fabric
 1. Install Minecraft 1.21.1
 2. Install Fabric Loader 0.17.3+
 3. Download and install Fabric API 0.116.7+
 4. Download and install Architectury API 13.0.8+
-5. Copy `chronodawn-0.3.0-beta+1.21.1-fabric.jar` to `.minecraft/mods/` folder
+5. Copy `chronodawn-0.3.0+1.21.1-fabric.jar` to `.minecraft/mods/` folder
 6. Launch Minecraft with Fabric profile
 
 ### For NeoForge
 1. Install Minecraft 1.21.1
 2. Install NeoForge 21.1.209+
 3. Download and install Architectury API 13.0.8+
-4. Copy `chronodawn-0.3.0-beta+1.21.1-neoforge.jar` to `.minecraft/mods/` folder
+4. Copy `chronodawn-0.3.0+1.21.1-neoforge.jar` to `.minecraft/mods/` folder
 5. Launch Minecraft with NeoForge profile
 
 **Note**: Download the correct version for your mod loader (Fabric or NeoForge).

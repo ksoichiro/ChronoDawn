@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-01-17
+
+### Changed
+- Official stable release of 0.3.0 (no functional changes from 0.3.0-beta)
+
 ## [0.3.0-beta] - 2026-01-04
 
 ### ⚠️ BREAKING CHANGES
@@ -114,7 +119,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Architectury API 13.0.8+
 - Custom Portal API 0.0.1-beta66-1.21 (Fabric bundled, NeoForge requires separate installation)
 
-[Unreleased]: https://github.com/ksoichiro/ChronoDawn/compare/v0.3.0-beta+1.21.1...HEAD
+[Unreleased]: https://github.com/ksoichiro/ChronoDawn/compare/v0.3.0+1.21.1...HEAD
+[0.3.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.3.0-beta+1.21.1...v0.3.0+1.21.1
 [0.3.0-beta]: https://github.com/ksoichiro/ChronoDawn/compare/v0.2.0+1.21.1...v0.3.0-beta+1.21.1
 [0.2.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.1.0+1.21.1...v0.2.0+1.21.1
 [0.1.0]: https://github.com/ksoichiro/ChronoDawn/releases/tag/v0.1.0+1.21.1
