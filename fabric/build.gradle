@@ -32,8 +32,10 @@ dependencies {
     modApi "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
     modApi "dev.architectury:architectury-fabric:$rootProject.architectury_api_version"
 
-    common(project(path: ':common', configuration: 'namedElements')) { transitive false }
-    shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
+    // Multi-version subproject dependencies
+    implementation(project(':common-base')) { transitive false }
+    common(project(path: ':common-1.21.1', configuration: 'namedElements')) { transitive false }
+    shadowBundle project(path: ':common-1.21.1', configuration: 'transformProductionFabric')
 }
 
 // Multi-version support: Configure version-specific source directories
@@ -65,8 +67,8 @@ sourceSets {
 }
 
 loom {
-    if (project(':common').loom.accessWidenerPath != null) {
-        accessWidenerPath = project(':common').loom.accessWidenerPath
+    if (project(':common-1.21.1').loom.accessWidenerPath != null) {
+        accessWidenerPath = project(':common-1.21.1').loom.accessWidenerPath
     }
 
     // Multi-version support: Use version-specific run directory
@@ -94,7 +96,7 @@ fabricApi {
 }
 
 processResources {
-    from(project(':common').sourceSets.main.resources) {
+    from(project(':common-1.21.1').sourceSets.main.resources) {
         // Exclude common mixin config (use chronodawn-fabric.mixins.json instead)
         exclude 'chronodawn.mixins.json'
     }

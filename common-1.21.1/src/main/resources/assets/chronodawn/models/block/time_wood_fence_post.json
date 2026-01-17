@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/fence_post",
+  "textures": {
+    "texture": "chronodawn:block/time_wood_planks"
+  }
+}
