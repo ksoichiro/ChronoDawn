@@ -265,6 +265,13 @@ public class BlockEventHandler {
                         player.displayClientMessage(message, true);
                     }
 
+                    // Trigger Master Clock boss room placement when entrance door is opened
+                    // This ensures the structure is generated before the player enters
+                    if (!isBossRoomDoor && !isGuardianVaultDoor && !wasOpen && player.level() instanceof ServerLevel serverLevel) {
+                        ChronoDawn.LOGGER.info("Entrance door opened at {} - triggering Master Clock boss room placement", doorPosToUse);
+                        com.chronodawn.worldgen.spawning.MasterClockBossRoomPlacer.triggerBossRoomPlacementAtDoor(serverLevel, doorPosToUse);
+                    }
+
                     // Spawn Time Tyrant when boss room door is opened (not closed)
                     if (isBossRoomDoor && !wasOpen && player.level() instanceof ServerLevel serverLevel) {
                         ChronoDawn.LOGGER.info("Boss room door opened at {} - spawning Time Tyrant", doorPosToUse);

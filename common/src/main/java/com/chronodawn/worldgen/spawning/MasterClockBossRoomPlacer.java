@@ -1805,6 +1805,71 @@ public class MasterClockBossRoomPlacer {
     }
 
     /**
+     * Trigger boss room placement for a Master Clock structure at a specific position.
+     * This method is called when the entrance door is opened to ensure the structure is generated
+     * before the player enters, preventing them from seeing the ungenerated state.
+     *
+     * @param level The server level
+     * @param doorPos The position of the entrance door that was opened
+     */
+    public static void triggerBossRoomPlacementAtDoor(ServerLevel level, BlockPos doorPos) {
+        // Only process in Chrono Dawn dimension
+        if (!level.dimension().equals(ModDimensions.CHRONO_DAWN_DIMENSION)) {
+            return;
+        }
+
+        ChronoDawn.LOGGER.info("Entrance door opened at {}, searching for Master Clock structure", doorPos);
+
+        // Search for Master Clock structure near the door
+        ChunkPos doorChunkPos = new ChunkPos(doorPos);
+
+        // Search in a wider radius (10 chunks) to find the structure origin
+        for (int x = -10; x <= 10; x++) {
+            for (int z = -10; z <= 10; z++) {
+                ChunkPos chunkPos = new ChunkPos(doorChunkPos.x + x, doorChunkPos.z + z);
+
+                if (!hasMasterClock(level, chunkPos)) {
+                    continue;
+                }
+
+                BlockPos structureOrigin = getStructureOrigin(level, chunkPos);
+                if (structureOrigin == null) {
+                    continue;
+                }
+
+                ResourceLocation dimensionId = level.dimension().location();
+                processedStructures.putIfAbsent(dimensionId, ConcurrentHashMap.newKeySet());
+                Set<BlockPos> dimensionProcessed = processedStructures.get(dimensionId);
+
+                // Check if already processed or processing
+                if (dimensionProcessed.contains(structureOrigin)) {
+                    ChronoDawn.LOGGER.info("Master Clock at {} already processed, skipping", structureOrigin);
+                    return;
+                }
+
+                if (processingStates.containsKey(structureOrigin)) {
+                    ChronoDawn.LOGGER.info("Master Clock at {} already being processed, skipping", structureOrigin);
+                    return;
+                }
+
+                // Initialize processing immediately
+                ChronoDawn.LOGGER.info(
+                    "Found Master Clock structure at {} near entrance door, starting boss room placement",
+                    structureOrigin
+                );
+
+                StructureProcessingState state = new StructureProcessingState(structureOrigin, chunkPos, dimensionId);
+                processingStates.put(structureOrigin, state);
+
+                // Trigger immediate processing (will be progressed on next server tick)
+                return;
+            }
+        }
+
+        ChronoDawn.LOGGER.warn("No Master Clock structure found near entrance door at {}", doorPos);
+    }
+
+    /**
      * Register event handlers.
      */
     public static void register() {
