@@ -4,7 +4,7 @@ import com.chronodawn.core.time.MobAICanceller;
 import com.chronodawn.entities.bosses.TimeTyrantEntity;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -89,15 +89,15 @@ public class TimeClockItem extends Item {
      * @param level The world level
      * @param player The player using the item
      * @param hand The hand holding the item
-     * @return InteractionResultHolder indicating success or failure
+     * @return InteractionResult indicating success or failure
      */
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
 
         // Check if player is on cooldown
         if (player.getCooldowns().isOnCooldown(this)) {
-            return InteractionResultHolder.fail(itemStack);
+            return InteractionResult.FAIL;
         }
 
         // Server-side logic only
@@ -118,14 +118,14 @@ public class TimeClockItem extends Item {
 
                     // Apply longer cooldown for boss effect
                     player.getCooldowns().addCooldown(this, BOSS_COOLDOWN_TICKS);
-                    return InteractionResultHolder.success(itemStack);
+                    return InteractionResult.SUCCESS;
                 } else {
                     // Already used in current phase
                     player.displayClientMessage(
                         Component.translatable("message.chronodawn.time_clock_boss_limit"),
                         true
                     );
-                    return InteractionResultHolder.fail(itemStack);
+                    return InteractionResult.FAIL;
                 }
             }
 
@@ -139,7 +139,7 @@ public class TimeClockItem extends Item {
             player.getCooldowns().addCooldown(this, COOLDOWN_TICKS);
         }
 
-        return InteractionResultHolder.success(itemStack);
+        return InteractionResult.SUCCESS;
     }
 
     /**

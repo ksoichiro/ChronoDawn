@@ -16,7 +16,7 @@ import com.chronodawn.compat.CompatResourceLocation;
  *
  * Reference: T134-T135 [US3] Time Tyrant entity creation and registration
  */
-public class TimeTyrantRenderer extends MobRenderer<TimeTyrantEntity, TimeTyrantModel> {
+public class TimeTyrantRenderer extends MobRenderer<TimeTyrantEntity, TimeTyrantRenderState, TimeTyrantModel> {
     // Custom texture for Time Tyrant
     // TODO: Create custom texture for Time Tyrant in textures/entity/time_tyrant.png
     private static final ResourceLocation TEXTURE = CompatResourceLocation.create(
@@ -35,7 +35,12 @@ public class TimeTyrantRenderer extends MobRenderer<TimeTyrantEntity, TimeTyrant
     }
 
     @Override
-    public ResourceLocation getTextureLocation(TimeTyrantEntity entity) {
+    public TimeTyrantRenderState createRenderState() {
+        return new TimeTyrantRenderState();
+    }
+
+    @Override
+    public ResourceLocation getTextureLocation(TimeTyrantRenderState state) {
         return TEXTURE;
     }
 }

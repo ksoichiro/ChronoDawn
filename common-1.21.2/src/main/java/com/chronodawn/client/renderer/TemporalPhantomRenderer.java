@@ -20,7 +20,7 @@ import com.chronodawn.compat.CompatResourceLocation;
  * Task: T236 [Phase 2] Implement Temporal Phantom
  * Task: T236s [US3] Create custom texture for Temporal Phantom
  */
-public class TemporalPhantomRenderer extends MobRenderer<TemporalPhantomEntity, TemporalPhantomModel<TemporalPhantomEntity>> {
+public class TemporalPhantomRenderer extends MobRenderer<TemporalPhantomEntity, TemporalPhantomRenderState, TemporalPhantomModel<TemporalPhantomRenderState>> {
     private static final ResourceLocation TEXTURE = CompatResourceLocation.create(
         ChronoDawn.MOD_ID,
         "textures/entity/temporal_phantom.png"
@@ -37,16 +37,27 @@ public class TemporalPhantomRenderer extends MobRenderer<TemporalPhantomEntity, 
     }
 
     @Override
-    public ResourceLocation getTextureLocation(TemporalPhantomEntity entity) {
+    public TemporalPhantomRenderState createRenderState() {
+        return new TemporalPhantomRenderState();
+    }
+
+    @Override
+    public void extractRenderState(TemporalPhantomEntity entity, TemporalPhantomRenderState state, float partialTick) {
+        super.extractRenderState(entity, state, partialTick);
+        state.phaseShiftActive = entity.isPhaseShiftActive();
+    }
+
+    @Override
+    public ResourceLocation getTextureLocation(TemporalPhantomRenderState state) {
         return TEXTURE;
     }
 
     @Override
-    protected void scale(TemporalPhantomEntity entity, PoseStack poseStack, float partialTick) {
-        super.scale(entity, poseStack, partialTick);
+    protected void scale(TemporalPhantomRenderState state, PoseStack poseStack, float partialTick) {
+        super.scale(state, poseStack, partialTick);
 
         // Apply transparency when Phase Shift is active
-        if (entity.isPhaseShiftActive()) {
+        if (state.phaseShiftActive) {
             // Make entity semi-transparent (handled by render layer in future)
         }
     }
@@ -56,8 +67,8 @@ public class TemporalPhantomRenderer extends MobRenderer<TemporalPhantomEntity, 
      * This allows the texture's alpha channel to be properly rendered.
      */
     @Override
-    public RenderType getRenderType(TemporalPhantomEntity entity, boolean bodyVisible, boolean translucent, boolean glowing) {
-        ResourceLocation texture = this.getTextureLocation(entity);
+    public RenderType getRenderType(TemporalPhantomRenderState state, boolean bodyVisible, boolean translucent, boolean glowing) {
+        ResourceLocation texture = this.getTextureLocation(state);
         return RenderType.entityTranslucent(texture);
     }
 }

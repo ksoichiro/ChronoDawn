@@ -14,7 +14,7 @@ import com.chronodawn.compat.CompatResourceLocation;
  * Texture location: assets/chronodawn/textures/entity/mobs/clockwork_sentinel.png
  * Model: Custom model created with Blockbench
  */
-public class ClockworkSentinelRenderer extends MobRenderer<ClockworkSentinelEntity, ClockworkSentinelModel> {
+public class ClockworkSentinelRenderer extends MobRenderer<ClockworkSentinelEntity, ClockworkSentinelRenderState, ClockworkSentinelModel> {
     private static final ResourceLocation TEXTURE = CompatResourceLocation.create(
         "chronodawn",
         "textures/entity/mobs/clockwork_sentinel.png"
@@ -25,7 +25,12 @@ public class ClockworkSentinelRenderer extends MobRenderer<ClockworkSentinelEnti
     }
 
     @Override
-    public ResourceLocation getTextureLocation(ClockworkSentinelEntity entity) {
+    public ClockworkSentinelRenderState createRenderState() {
+        return new ClockworkSentinelRenderState();
+    }
+
+    @Override
+    public ResourceLocation getTextureLocation(ClockworkSentinelRenderState state) {
         return TEXTURE;
     }
 }

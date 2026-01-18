@@ -1,7 +1,7 @@
 package com.chronodawn.items;
 
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -19,13 +19,11 @@ public class ChronicleBookItem extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        ItemStack stack = player.getItemInHand(hand);
-
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         // On client side, GUI opening is handled via platform-specific events
         // See: ChronoDawnClientFabric and ChronoDawnClientNeoForge
 
-        return InteractionResultHolder.success(stack);
+        return InteractionResult.SUCCESS;
     }
 
     public static Properties createProperties() {

@@ -89,7 +89,7 @@ public class BossRoomBoundaryMarkerBlockEntity extends CompatBlockEntity {
      */
     public BlockState getReplacementState() {
         var block = BuiltInRegistries.BLOCK.get(replaceWith);
-        return block != null ? block.defaultBlockState() : Blocks.AIR.defaultBlockState();
+        return block != null ? block.getStateDefinition().any() : Blocks.AIR.getStateDefinition().any();
     }
 
     @Override

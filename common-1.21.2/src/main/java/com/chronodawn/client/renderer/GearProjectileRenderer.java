@@ -23,7 +23,7 @@ import net.minecraft.world.item.Items;
  *
  * Task: T235b [P] GearProjectileEntity renderer
  */
-public class GearProjectileRenderer extends EntityRenderer<GearProjectileEntity> {
+public class GearProjectileRenderer extends EntityRenderer<GearProjectileEntity, GearProjectileRenderState> {
     private static final ResourceLocation TEXTURE = CompatResourceLocation.create(
         ChronoDawn.MOD_ID,
         "textures/entity/gear_projectile.png"
@@ -37,15 +37,25 @@ public class GearProjectileRenderer extends EntityRenderer<GearProjectileEntity>
     }
 
     @Override
-    public void render(GearProjectileEntity entity, float entityYaw, float partialTick,
-                      PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
+    public GearProjectileRenderState createRenderState() {
+        return new GearProjectileRenderState();
+    }
+
+    @Override
+    public void extractRenderState(GearProjectileEntity entity, GearProjectileRenderState state, float partialTick) {
+        super.extractRenderState(entity, state, partialTick);
+        state.tickCount = entity.tickCount;
+    }
+
+    @Override
+    public void render(GearProjectileRenderState state, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
         poseStack.pushPose();
 
         // Scale to make it visible
         poseStack.scale(0.5f, 0.5f, 0.5f);
 
         // Rotate based on entity's rotation (spinning effect)
-        float rotation = entity.tickCount + partialTick;
+        float rotation = state.tickCount + state.ageInTicks;
         poseStack.mulPose(Axis.YP.rotationDegrees(rotation * 20.0f)); // Spin around Y axis
         poseStack.mulPose(Axis.ZP.rotationDegrees(rotation * 15.0f)); // Wobble on Z axis
 
@@ -58,17 +68,17 @@ public class GearProjectileRenderer extends EntityRenderer<GearProjectileEntity>
             OverlayTexture.NO_OVERLAY,
             poseStack,
             buffer,
-            entity.level(),
-            entity.getId()
+            null, // level is no longer available in render state
+            0 // entity ID is no longer available
         );
 
         poseStack.popPose();
 
-        super.render(entity, entityYaw, partialTick, poseStack, buffer, packedLight);
+        super.render(state, poseStack, buffer, packedLight);
     }
 
     @Override
-    public ResourceLocation getTextureLocation(GearProjectileEntity entity) {
+    public ResourceLocation getTextureLocation(GearProjectileRenderState state) {
         return TEXTURE;
     }
 }

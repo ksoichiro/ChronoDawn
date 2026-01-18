@@ -5,7 +5,7 @@ import com.chronodawn.entities.boats.ChronoDawnBoatType;
 import com.chronodawn.entities.boats.ChronoDawnChestBoat;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.player.Player;
@@ -49,14 +49,14 @@ public class ChronoDawnBoatItem extends Item {
     }
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResult use(Level level, Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
 
         // Raycast to find water surface
         HitResult hitResult = getPlayerPOVHitResult(level, player, ClipContext.Fluid.ANY);
 
         if (hitResult.getType() == HitResult.Type.MISS) {
-            return InteractionResultHolder.pass(itemStack);
+            return InteractionResult.PASS;
         }
 
         Vec3 viewVector = player.getViewVector(1.0F);
@@ -72,7 +72,7 @@ public class ChronoDawnBoatItem extends Item {
             for (Entity entity : entities) {
                 AABB boundingBox = entity.getBoundingBox().inflate((double) entity.getPickRadius());
                 if (boundingBox.contains(eyePosition)) {
-                    return InteractionResultHolder.pass(itemStack);
+                    return InteractionResult.PASS;
                 }
             }
         }
@@ -82,7 +82,7 @@ public class ChronoDawnBoatItem extends Item {
             boat.setYRot(player.getYRot());
 
             if (!level.noCollision(boat, boat.getBoundingBox())) {
-                return InteractionResultHolder.fail(itemStack);
+                return InteractionResult.FAIL;
             }
 
             if (!level.isClientSide()) {
@@ -95,10 +95,10 @@ public class ChronoDawnBoatItem extends Item {
             }
 
             player.awardStat(Stats.ITEM_USED.get(this));
-            return InteractionResultHolder.sidedSuccess(itemStack, level.isClientSide());
+            return InteractionResult.sidedSuccess(level.isClientSide());
         }
 
-        return InteractionResultHolder.pass(itemStack);
+        return InteractionResult.PASS;
     }
 
     /**

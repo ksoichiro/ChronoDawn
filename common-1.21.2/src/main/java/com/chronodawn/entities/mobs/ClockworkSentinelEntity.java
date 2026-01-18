@@ -3,7 +3,7 @@ package com.chronodawn.entities.mobs;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
@@ -110,7 +110,7 @@ public class ClockworkSentinelEntity extends Monster {
     public static boolean checkClockworkSentinelSpawnRules(
         EntityType<ClockworkSentinelEntity> entityType,
         ServerLevelAccessor level,
-        MobSpawnType spawnType,
+        EntitySpawnReason spawnType,
         net.minecraft.core.BlockPos pos,
         RandomSource random
     ) {

@@ -16,7 +16,7 @@ import net.minecraft.util.Mth;
  * Texture location: assets/chronodawn/textures/entity/mobs/floq.png
  * Model: Custom model created with Blockbench
  */
-public class FloqRenderer extends MobRenderer<FloqEntity, FloqModel> {
+public class FloqRenderer extends MobRenderer<FloqEntity, FloqRenderState, FloqModel> {
     private static final ResourceLocation TEXTURE = CompatResourceLocation.create(
         "chronodawn",
         "textures/entity/mobs/floq.png"
@@ -27,7 +27,20 @@ public class FloqRenderer extends MobRenderer<FloqEntity, FloqModel> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(FloqEntity entity) {
+    public FloqRenderState createRenderState() {
+        return new FloqRenderState();
+    }
+
+    @Override
+    public void extractRenderState(FloqEntity entity, FloqRenderState state, float partialTick) {
+        super.extractRenderState(entity, state, partialTick);
+        state.squish = entity.squish;
+        state.oSquish = entity.oSquish;
+        state.onGround = entity.onGround();
+    }
+
+    @Override
+    public ResourceLocation getTextureLocation(FloqRenderState state) {
         return TEXTURE;
     }
 
@@ -35,9 +48,9 @@ public class FloqRenderer extends MobRenderer<FloqEntity, FloqModel> {
      * Apply scale transformation for squish animation
      */
     @Override
-    protected void scale(FloqEntity entity, PoseStack poseStack, float partialTick) {
+    protected void scale(FloqRenderState state, PoseStack poseStack, float partialTick) {
         // Interpolate squish value for smooth animation between ticks
-        float squish = Mth.lerp(partialTick, entity.oSquish, entity.squish);
+        float squish = Mth.lerp(partialTick, state.oSquish, state.squish);
 
         // Apply squash and stretch
         // Positive squish = stretched (jumping): tall and thin
@@ -49,7 +62,7 @@ public class FloqRenderer extends MobRenderer<FloqEntity, FloqModel> {
         poseStack.scale(xzScale, yScale, xzScale);
 
         // Then translate AFTER scaling to keep bottom at ground level
-        if (entity.onGround()) {
+        if (state.onGround) {
             // Updated model with PartPose.offset(0, 1, 0):
             // All parts are offset 1 block (16 pixels) up
             // Body in model space: y=17 to y=23 (height=6, center at y=20)

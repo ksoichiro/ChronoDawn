@@ -17,7 +17,7 @@ import com.chronodawn.compat.CompatResourceLocation;
  *
  * Reference: T171g - Boss Battle Balance Enhancement
  */
-public class TimeArrowRenderer extends ArrowRenderer<TimeArrowEntity> {
+public class TimeArrowRenderer extends ArrowRenderer<TimeArrowEntity, TimeArrowRenderState> {
     /**
      * Texture location for Time Arrow entity.
      */
@@ -29,7 +29,12 @@ public class TimeArrowRenderer extends ArrowRenderer<TimeArrowEntity> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(TimeArrowEntity entity) {
+    public TimeArrowRenderState createRenderState() {
+        return new TimeArrowRenderState();
+    }
+
+    @Override
+    public ResourceLocation getTextureLocation(TimeArrowRenderState state) {
         return TEXTURE_LOCATION;
     }
 }

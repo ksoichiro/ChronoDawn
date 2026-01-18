@@ -14,7 +14,7 @@ import com.chronodawn.compat.CompatResourceLocation;
  * Texture location: assets/chronodawn/textures/entity/mobs/time_keeper.png
  * Model: Custom model created with Blockbench
  */
-public class TimeKeeperRenderer extends MobRenderer<TimeKeeperEntity, TimeKeeperModel> {
+public class TimeKeeperRenderer extends MobRenderer<TimeKeeperEntity, TimeKeeperRenderState, TimeKeeperModel> {
     private static final ResourceLocation TEXTURE = CompatResourceLocation.create(
         "chronodawn",
         "textures/entity/mobs/time_keeper.png"
@@ -25,7 +25,12 @@ public class TimeKeeperRenderer extends MobRenderer<TimeKeeperEntity, TimeKeeper
     }
 
     @Override
-    public ResourceLocation getTextureLocation(TimeKeeperEntity entity) {
+    public TimeKeeperRenderState createRenderState() {
+        return new TimeKeeperRenderState();
+    }
+
+    @Override
+    public ResourceLocation getTextureLocation(TimeKeeperRenderState state) {
         return TEXTURE;
     }
 }

@@ -15,7 +15,7 @@ import com.chronodawn.compat.CompatResourceLocation;
  *
  * Task: T234e [Phase 1] Create ChronosWardenRenderer
  */
-public class ChronosWardenRenderer extends MobRenderer<ChronosWardenEntity, ChronosWardenModel> {
+public class ChronosWardenRenderer extends MobRenderer<ChronosWardenEntity, ChronosWardenRenderState, ChronosWardenModel> {
     // Custom texture for Chronos Warden
     private static final ResourceLocation TEXTURE = CompatResourceLocation.create(
         ChronoDawn.MOD_ID,
@@ -28,7 +28,12 @@ public class ChronosWardenRenderer extends MobRenderer<ChronosWardenEntity, Chro
     }
 
     @Override
-    public ResourceLocation getTextureLocation(ChronosWardenEntity entity) {
+    public ChronosWardenRenderState createRenderState() {
+        return new ChronosWardenRenderState();
+    }
+
+    @Override
+    public ResourceLocation getTextureLocation(ChronosWardenRenderState state) {
         return TEXTURE;
     }
 }

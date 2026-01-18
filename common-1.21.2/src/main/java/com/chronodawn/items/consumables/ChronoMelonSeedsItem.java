@@ -1,8 +1,7 @@
 package com.chronodawn.items.consumables;
 
 import com.chronodawn.registry.ModBlocks;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemNameBlockItem;
+import net.minecraft.world.item.BlockItem;
 
 /**
  * Chrono Melon Seeds - Seeds for planting Chrono Melon Stems.
@@ -22,14 +21,14 @@ import net.minecraft.world.item.ItemNameBlockItem;
  *
  * Note:
  * - Similar to vanilla melon seeds
- * - Extends ItemNameBlockItem to allow planting
+ * - Extends BlockItem with useItemPrefixedTranslationKey for 1.21.2
  *
  * Reference: WORK_NOTES.md (Crop 2: Chrono Melon)
  * Task: T212 [US1] Create Chrono Melon Seeds item
  */
-public class ChronoMelonSeedsItem extends ItemNameBlockItem {
+public class ChronoMelonSeedsItem extends BlockItem {
     public ChronoMelonSeedsItem(Properties properties) {
-        super(ModBlocks.CHRONO_MELON_STEM.get(), properties);
+        super(ModBlocks.CHRONO_MELON_STEM.get(), properties.useItemPrefixedTranslationKey());
     }
 
     /**

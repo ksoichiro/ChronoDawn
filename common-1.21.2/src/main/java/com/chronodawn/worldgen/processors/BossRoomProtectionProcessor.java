@@ -227,7 +227,7 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
         var replacementBlock = net.minecraft.core.registries.BuiltInRegistries.BLOCK.get(
             CompatResourceLocation.parse(replaceWith)
         );
-        var replacementState = replacementBlock.defaultBlockState();
+        var replacementState = replacementBlock.getStateDefinition().any();
 
         ChronoDawn.LOGGER.debug("Replacing boss room marker at {} with {}", worldPos, replacementState);
 

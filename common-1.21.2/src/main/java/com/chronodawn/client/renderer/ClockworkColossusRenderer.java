@@ -17,7 +17,7 @@ import com.chronodawn.compat.CompatResourceLocation;
  * Reference: research.md (Additional Bosses - Clockwork Colossus)
  * Task: T235h [Phase 1] Create renderer for Clockwork Colossus
  */
-public class ClockworkColossusRenderer extends MobRenderer<ClockworkColossusEntity, ClockworkColossusModel> {
+public class ClockworkColossusRenderer extends MobRenderer<ClockworkColossusEntity, ClockworkColossusRenderState, ClockworkColossusModel> {
     private static final ResourceLocation TEXTURE = CompatResourceLocation.create(
         ChronoDawn.MOD_ID,
         "textures/entity/clockwork_colossus.png"
@@ -34,7 +34,12 @@ public class ClockworkColossusRenderer extends MobRenderer<ClockworkColossusEnti
     }
 
     @Override
-    public ResourceLocation getTextureLocation(ClockworkColossusEntity entity) {
+    public ClockworkColossusRenderState createRenderState() {
+        return new ClockworkColossusRenderState();
+    }
+
+    @Override
+    public ResourceLocation getTextureLocation(ClockworkColossusRenderState state) {
         return TEXTURE;
     }
 }

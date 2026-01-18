@@ -14,7 +14,7 @@ import com.chronodawn.compat.CompatResourceLocation;
  * Texture location: assets/chronodawn/textures/entity/mobs/temporal_wraith.png
  * Model: Custom model created with Blockbench
  */
-public class TemporalWraithRenderer extends MobRenderer<TemporalWraithEntity, TemporalWraithModel> {
+public class TemporalWraithRenderer extends MobRenderer<TemporalWraithEntity, TemporalWraithRenderState, TemporalWraithModel> {
     private static final ResourceLocation TEXTURE = CompatResourceLocation.create(
         "chronodawn",
         "textures/entity/mobs/temporal_wraith.png"
@@ -25,7 +25,12 @@ public class TemporalWraithRenderer extends MobRenderer<TemporalWraithEntity, Te
     }
 
     @Override
-    public ResourceLocation getTextureLocation(TemporalWraithEntity entity) {
+    public TemporalWraithRenderState createRenderState() {
+        return new TemporalWraithRenderState();
+    }
+
+    @Override
+    public ResourceLocation getTextureLocation(TemporalWraithRenderState state) {
         return TEXTURE;
     }
 }
