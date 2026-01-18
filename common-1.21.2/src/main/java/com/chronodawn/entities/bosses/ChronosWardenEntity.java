@@ -297,13 +297,13 @@ public class ChronosWardenEntity extends Monster {
     }
 
     @Override
-    public boolean doHurtTarget(net.minecraft.world.entity.Entity target) {
+    public boolean doHurtTarget(ServerLevel serverLevel, net.minecraft.world.entity.Entity target) {
         // Cannot attack during Stone Stance
         if (isInStoneStance()) {
             return false;
         }
 
-        boolean success = super.doHurtTarget(target);
+        boolean success = super.doHurtTarget(serverLevel, target);
 
         if (success && target instanceof LivingEntity livingTarget) {
             // Guardian's Burden: inflict Mining Fatigue II
@@ -318,7 +318,7 @@ public class ChronosWardenEntity extends Monster {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(ServerLevel serverLevel, DamageSource source, float amount) {
         // During Stone Stance: 80% damage reduction
         if (isInStoneStance()) {
             // Check if damage is from behind (weak spot)
@@ -332,7 +332,7 @@ public class ChronosWardenEntity extends Monster {
                 double dot = myLookVec.dot(toAttacker);
                 if (dot < 0) {
                     // Attack from behind - take normal damage
-                    return super.hurt(source, amount);
+                    return super.hurtServer(serverLevel, source, amount);
                 }
             }
 
@@ -340,7 +340,7 @@ public class ChronosWardenEntity extends Monster {
             amount *= (1.0f - STONE_STANCE_DAMAGE_REDUCTION);
         }
 
-        return super.hurt(source, amount);
+        return super.hurtServer(serverLevel, source, amount);
     }
 
     /**
@@ -461,8 +461,8 @@ public class ChronosWardenEntity extends Monster {
     }
 
     @Override
-    protected void customServerAiStep() {
-        super.customServerAiStep();
+    protected void customServerAiStep(ServerLevel serverLevel) {
+        super.customServerAiStep(serverLevel);
         // Prevent movement during Stone Stance
         if (isInStoneStance()) {
             this.getNavigation().stop();

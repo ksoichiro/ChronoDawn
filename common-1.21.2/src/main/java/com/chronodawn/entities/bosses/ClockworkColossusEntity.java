@@ -460,8 +460,8 @@ public class ClockworkColossusEntity extends Monster implements RangedAttackMob 
     }
 
     @Override
-    protected void customServerAiStep() {
-        super.customServerAiStep();
+    protected void customServerAiStep(ServerLevel serverLevel) {
+        super.customServerAiStep(serverLevel);
         this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
     }
 

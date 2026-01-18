@@ -154,7 +154,7 @@ public class TemporalPhantomEntity extends Monster implements RangedAttackMob {
                 if (blinkStrikeCooldown > 0) {
                     blinkStrikeCooldown--;
                 } else if (this.getTarget() instanceof Player player) {
-                    performBlinkStrike(player);
+                    performBlinkStrike((ServerLevel) this.level(), player);
                     blinkStrikeCooldown = 240; // 12 seconds
                 }
             }
@@ -183,10 +183,9 @@ public class TemporalPhantomEntity extends Monster implements RangedAttackMob {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(ServerLevel serverLevel, DamageSource source, float amount) {
         // Phase Shift: 30% chance to dodge physical attacks
-        if (!this.level().isClientSide &&
-            source.getDirectEntity() instanceof LivingEntity &&
+        if (source.getDirectEntity() instanceof LivingEntity &&
             phaseShiftCooldownTicks == 0 &&
             this.random.nextFloat() < PHASE_SHIFT_CHANCE) {
 
@@ -205,7 +204,7 @@ public class TemporalPhantomEntity extends Monster implements RangedAttackMob {
             );
 
             // Spawn particles
-            if (this.level() instanceof ServerLevel serverLevel) {
+            if (this.level() instanceof ServerLevel) {
                 serverLevel.sendParticles(
                     ParticleTypes.PORTAL,
                     this.getX(), this.getY() + 1.0, this.getZ(),
@@ -218,7 +217,7 @@ public class TemporalPhantomEntity extends Monster implements RangedAttackMob {
             return false; // Dodge the attack
         }
 
-        return super.hurt(source, amount);
+        return super.hurtServer(serverLevel, source, amount);
     }
 
     @Override
@@ -311,7 +310,7 @@ public class TemporalPhantomEntity extends Monster implements RangedAttackMob {
      * Blink Strike: Teleport behind target and attack.
      * Teleport range: 5-8 blocks behind player.
      */
-    private void performBlinkStrike(Player target) {
+    private void performBlinkStrike(ServerLevel serverLevel, Player target) {
         // Calculate position behind player
         Vec3 lookDir = target.getLookAngle();
         double distance = 5.0 + this.random.nextDouble() * 3.0; // 5-8 blocks
@@ -332,7 +331,7 @@ public class TemporalPhantomEntity extends Monster implements RangedAttackMob {
         }
 
         // Immediate melee attack after successful teleport
-        this.doHurtTarget(target);
+        this.doHurtTarget(serverLevel, target);
     }
 
     /**

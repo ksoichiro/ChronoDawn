@@ -190,8 +190,8 @@ public class TimeGuardianEntity extends Monster implements RangedAttackMob {
     }
 
     @Override
-    public boolean doHurtTarget(net.minecraft.world.entity.Entity target) {
-        boolean success = super.doHurtTarget(target);
+    public boolean doHurtTarget(ServerLevel serverLevel, net.minecraft.world.entity.Entity target) {
+        boolean success = super.doHurtTarget(serverLevel, target);
 
         if (success && target instanceof LivingEntity livingTarget) {
             // Time Guardian's melee attack inflicts temporal slowdown (Slowness I)
@@ -574,13 +574,13 @@ public class TimeGuardianEntity extends Monster implements RangedAttackMob {
     }
 
     @Override
-    protected void customServerAiStep() {
-        super.customServerAiStep();
+    protected void customServerAiStep(ServerLevel serverLevel) {
+        super.customServerAiStep(serverLevel);
         this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
 
         // Dynamically manage boss bar visibility based on player position
         // Add players who reached boss floor, remove players who left
-        if (this.level() instanceof ServerLevel serverLevel) {
+        if (this.level() instanceof ServerLevel) {
             for (ServerPlayer player : serverLevel.players()) {
                 boolean isOnBossFloor = isPlayerOnBossFloor(player);
                 boolean hasPlayerInBossEvent = this.bossEvent.getPlayers().contains(player);

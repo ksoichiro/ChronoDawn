@@ -148,7 +148,7 @@ public class ExtendedMeleeAttackGoal extends Goal {
 
             this.resetAttackCooldown();
             this.mob.swing(InteractionHand.MAIN_HAND);
-            this.mob.doHurtTarget(target);
+            this.mob.doHurtTarget(getServerLevel(target), target);
         }
     }
 

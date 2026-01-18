@@ -218,8 +218,8 @@ public class EntropyKeeperEntity extends Monster {
      * Override doHurtTarget to apply equipment damage.
      */
     @Override
-    public boolean doHurtTarget(net.minecraft.world.entity.Entity target) {
-        boolean hit = super.doHurtTarget(target);
+    public boolean doHurtTarget(ServerLevel serverLevel, net.minecraft.world.entity.Entity target) {
+        boolean hit = super.doHurtTarget(serverLevel, target);
 
         if (hit && target instanceof Player player) {
             // Deal -5 durability to all equipped items

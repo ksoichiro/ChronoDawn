@@ -982,8 +982,8 @@ public class TimeTyrantEntity extends Monster {
     }
 
     @Override
-    public void customServerAiStep() {
-        super.customServerAiStep();
+    public void customServerAiStep(ServerLevel serverLevel) {
+        super.customServerAiStep(serverLevel);
         this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
     }
 
@@ -1075,13 +1075,13 @@ public class TimeTyrantEntity extends Monster {
      * from a distance without engaging in close combat.
      */
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(ServerLevel serverLevel, DamageSource source, float amount) {
         // Check if damage is from a projectile
         if (source.getDirectEntity() instanceof Projectile) {
             // Apply 70% damage reduction (Projectile Resistance)
             amount *= 0.3f;
         }
 
-        return super.hurt(source, amount);
+        return super.hurtServer(serverLevel, source, amount);
     }
 }
