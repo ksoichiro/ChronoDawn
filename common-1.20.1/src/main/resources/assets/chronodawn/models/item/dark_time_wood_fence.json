@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/fence_inventory",
+  "textures": {
+    "texture": "chronodawn:block/dark_time_wood_planks"
+  }
+}

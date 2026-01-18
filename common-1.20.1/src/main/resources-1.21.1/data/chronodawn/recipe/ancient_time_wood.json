@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "chronodawn:ancient_time_wood_log"
+    }
+  },
+  "result": {
+    "id": "chronodawn:ancient_time_wood",
+    "count": 3
+  }
+}

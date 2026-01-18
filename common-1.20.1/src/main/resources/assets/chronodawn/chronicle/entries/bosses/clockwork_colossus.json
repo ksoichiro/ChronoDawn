@@ -1,0 +1,23 @@
+{
+  "category": "bosses",
+  "title": {
+    "en_us": "Clockwork Colossus",
+    "ja_jp": "時計仕掛けの巨像"
+  },
+  "icon": "chronodawn:colossus_gear",
+  "sortnum": 3,
+  "pages": [
+    {
+      "text": {
+        "en_us": "Clockwork Colossus is a mid-boss found in the Clockwork Depths. One of four bosses required for crafting Chrono Aegis.\n\nDifficulty: ★★★☆☆ (Moderate-Hard)\n\nLocation: Clockwork Depths (underground)\n\nAbilities:\n• Overcharge - Temporarily increases attack speed and damage\n• Repair Protocol - Regenerates health slowly when not in combat\n• Gear Throw - Ranged projectile attack",
+        "ja_jp": "時計仕掛けの巨像は、歯車の深淵に出現する中ボスです。クロノイージスの作成に必要な4体のボスのうちの1体です。\n\n難易度: ★★★☆☆（中〜難）\n\n場所: 歯車の深淵（地下）\n\n能力:\n• オーバーチャージ - 一時的に攻撃速度とダメージを増加\n• リペアプロトコル - 戦闘していない時ゆっくり体力を回復\n• ギアスロー - 遠距離発射物攻撃"
+      }
+    },
+    {
+      "text": {
+        "en_us": "Drops:\n• Colossus Gear (1/4 Chrono Aegis material) - ESSENTIAL\n• Clockwork-themed items\n• Experience and loot\n\nCombat Strategy:\n• Maintain continuous pressure to prevent Repair Protocol\n• Retreat during Overcharge phase (increased danger)\n• Dodge gear projectiles\n• Deal burst damage during vulnerable moments\n• Use ranged weapons when boss uses Gear Throw",
+        "ja_jp": "ドロップ:\n• コロッサスギア（クロノイージス材料1/4） - 必須\n• 時計仕掛けのアイテム\n• 経験値と戦利品\n\n戦闘戦略:\n• リペアプロトコルを防ぐため継続的な圧力を維持\n• オーバーチャージフェーズ中は後退（危険度増加）\n• 歯車の発射物を避ける\n• 脆弱な瞬間にバーストダメージを与える\n• ボスがギアスローを使う時は遠距離武器を使用"
+      }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "chronodawn:time_wheat"
+    },
+    {
+      "item": "chronodawn:time_wheat"
+    },
+    {
+      "item": "chronodawn:chrono_melon_slice"
+    }
+  ],
+  "result": {
+    "item": "chronodawn:time_wheat_cookie",
+    "count": 8
+  }
+}

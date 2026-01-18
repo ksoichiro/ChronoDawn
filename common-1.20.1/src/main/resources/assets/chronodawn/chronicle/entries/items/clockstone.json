@@ -1,0 +1,23 @@
+{
+  "category": "items",
+  "title": {
+    "en_us": "Clockstone & Enhanced Clockstone",
+    "ja_jp": "クロックストーンと強化クロックストーン"
+  },
+  "icon": "chronodawn:clockstone",
+  "sortnum": 1,
+  "pages": [
+    {
+      "text": {
+        "en_us": "Clockstone\n\nThe fundamental material of Chrono Dawn.\n\nHow to obtain:\n• Mine Clockstone Ore in Ancient Ruins (Overworld)\n• Smelt Clockstone Ore in a furnace\n• 1 Clockstone Ore → 1 Clockstone\n\nUses:\n• Craft Clockstone Blocks (portal frames)\n• Craft various Chrono Dawn items\n• Essential for entering the dimension",
+        "ja_jp": "クロックストーン\n\nクロノドーンの基本材料です。\n\n入手方法:\n• 古代遺跡（オーバーワールド）でクロックストーン鉱石を採掘\n• かまどでクロックストーン鉱石を精錬\n• クロックストーン鉱石1個→クロックストーン1個\n\n用途:\n• クロックストーンブロックを作成（ポータルフレーム）\n• 各種クロノドーンアイテムを作成\n• 次元に入るために必須"
+      }
+    },
+    {
+      "text": {
+        "en_us": "Enhanced Clockstone\n\nA more powerful version of Clockstone.\n\nHow to obtain:\n• Defeat Time Guardian (Desert Clock Tower)\n• Find in loot chests throughout Chrono Dawn\n• Boss drops from mid-bosses\n\nUses:\n• Craft Portal Stabilizer (enables two-way portal)\n• Craft advanced Chrono Dawn items\n• Required for progression items",
+        "ja_jp": "強化クロックストーン\n\nクロックストーンのより強力なバージョンです。\n\n入手方法:\n• タイムガーディアンを倒す（砂漠の時計塔）\n• クロノドーン全体の戦利品チェストで見つける\n• 中ボスからのドロップ\n\n用途:\n• ポータルスタビライザーを作成（双方向ポータルを有効化）\n• 高度なクロノドーンアイテムを作成\n• 進行アイテムに必要"
+      }
+    }
+  ]
+}

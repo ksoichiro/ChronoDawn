@@ -43,8 +43,11 @@ sourceSets {
     }
 }
 
+// Multi-version support: Determine which common module to use
+def commonModule = project.ext.minecraft_version == '1.20.1' ? ':common-1.20.1' : ':common-1.21.1'
+
 loom {
-    accessWidenerPath = project(":common-1.21.1").loom.accessWidenerPath
+    accessWidenerPath = project(commonModule).loom.accessWidenerPath
 
     runs {
         client {
@@ -100,11 +103,14 @@ dependencies {
 
     // Multi-version subproject dependencies
     implementation(project(':common-base')) { transitive false }
-    common(project(path: ":common-1.21.1", configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: ":common-1.21.1", configuration: "transformProductionNeoForge")) { transitive false }
+    common(project(path: commonModule, configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: commonModule, configuration: "transformProductionNeoForge")) { transitive false }
 }
 
 tasks.named("processResources", ProcessResources).configure {
+    // Ensure common module's NBT conversion completes before processing resources
+    dependsOn project(commonModule).tasks.named('convertNbtStructures')
+
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     inputs.property "version", project.version
 
@@ -115,7 +121,7 @@ tasks.named("processResources", ProcessResources).configure {
     // pack.mcmeta expansion is handled in root build.gradle (common for fabric/neoforge)
 
     // Include common resources (data, assets, pack.mcmeta)
-    from(project(":common-1.21.1").sourceSets.main.resources) {
+    from(project(commonModule).sourceSets.main.resources) {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         // Exclude loader-specific files
         exclude "fabric.mod.json"
@@ -146,7 +152,7 @@ tasks.named("jar").configure {
 
 tasks.named("sourcesJar").configure {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    def commonSources = project(":common-1.21.1").tasks.named("sourcesJar")
+    def commonSources = project(commonModule).tasks.named("sourcesJar")
     dependsOn commonSources
     from commonSources.flatMap { it.archiveFile }.map { zipTree(it) }
     archiveBaseName = rootProject.archives_name
