@@ -330,7 +330,7 @@ public class TimeKeeperVillagePlacer {
 
         int spawnedCount = 0;
         for (BlockPos spawnPos : spawnPositions) {
-            TimeKeeperEntity timeKeeper = ModEntities.TIME_KEEPER.get().create(level);
+            TimeKeeperEntity timeKeeper = ModEntities.TIME_KEEPER.get().create(level, net.minecraft.world.entity.EntitySpawnReason.STRUCTURE);
             if (timeKeeper != null) {
                 timeKeeper.moveTo(
                     spawnPos.getX() + 0.5,

@@ -185,7 +185,7 @@ public class TimeGuardianSpawner {
         }
 
         // Create and spawn Time Guardian
-        TimeGuardianEntity guardian = ModEntities.TIME_GUARDIAN.get().create(level);
+        TimeGuardianEntity guardian = ModEntities.TIME_GUARDIAN.get().create(level, net.minecraft.world.entity.EntitySpawnReason.STRUCTURE);
         if (guardian != null) {
             guardian.moveTo(
                 validPos.getX() + 0.5,

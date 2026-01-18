@@ -103,7 +103,7 @@ public abstract class StructureStartMixin {
         // Get structure registry key to check if waterlogging prevention is needed
         net.minecraft.resources.ResourceLocation structureLocation =
             level.registryAccess()
-                .registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
+                .lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
                 .getKey(structure);
 
         // Only apply to structures that need waterlogging prevention
@@ -200,7 +200,7 @@ public abstract class StructureStartMixin {
         // Get structure registry key to check if waterlogging prevention is needed
         net.minecraft.resources.ResourceLocation structureLocation =
             level.registryAccess()
-                .registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
+                .lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
                 .getKey(structure);
 
         // Only apply to structures that need waterlogging prevention

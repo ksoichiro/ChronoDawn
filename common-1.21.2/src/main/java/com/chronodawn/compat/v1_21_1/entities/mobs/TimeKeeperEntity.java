@@ -425,7 +425,7 @@ public class TimeKeeperEntity extends AbstractVillager {
         com.chronodawn.ChronoDawn.LOGGER.info("Time Keeper: Searching from position: {}", searchOrigin);
 
         // Get structure registry
-        var structureRegistry = searchLevel.registryAccess().registryOrThrow(Registries.STRUCTURE);
+        var structureRegistry = searchLevel.registryAccess().lookupOrThrow(Registries.STRUCTURE);
         var structureHolder = structureRegistry.get(structureId);
 
         if (structureHolder != null) {

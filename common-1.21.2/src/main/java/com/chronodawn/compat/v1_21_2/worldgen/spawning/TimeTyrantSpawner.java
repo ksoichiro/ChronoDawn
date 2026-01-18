@@ -148,7 +148,7 @@ public class TimeTyrantSpawner {
         }
 
         // Create and spawn Time Tyrant
-        TimeTyrantEntity tyrant = ModEntities.TIME_TYRANT.get().create(level);
+        TimeTyrantEntity tyrant = ModEntities.TIME_TYRANT.get().create(level, net.minecraft.world.entity.EntitySpawnReason.STRUCTURE);
         if (tyrant != null) {
             tyrant.moveTo(
                 spawnPos.getX() + 0.5,

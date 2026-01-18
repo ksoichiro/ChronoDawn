@@ -180,7 +180,7 @@ public class EntropyKeeperSpawner {
             Structure structure = entry.getKey();
 
             var structureLocation = level.registryAccess()
-                .registryOrThrow(Registries.STRUCTURE)
+                .lookupOrThrow(Registries.STRUCTURE)
                 .getKey(structure);
 
             if (structureLocation != null && structureLocation.equals(ENTROPY_CRYPT_ID)) {

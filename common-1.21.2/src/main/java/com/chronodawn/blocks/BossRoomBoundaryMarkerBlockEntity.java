@@ -88,8 +88,10 @@ public class BossRoomBoundaryMarkerBlockEntity extends CompatBlockEntity {
      * @return BlockState to replace this marker with
      */
     public BlockState getReplacementState() {
-        var block = BuiltInRegistries.BLOCK.get(replaceWith);
-        return block != null ? block.getStateDefinition().any() : Blocks.AIR.getStateDefinition().any();
+        var blockHolder = BuiltInRegistries.BLOCK.get(replaceWith);
+        return blockHolder
+            .map(holder -> holder.value().defaultBlockState())
+            .orElse(Blocks.AIR.defaultBlockState());
     }
 
     @Override

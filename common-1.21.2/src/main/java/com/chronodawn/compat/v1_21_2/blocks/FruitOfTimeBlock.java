@@ -140,8 +140,16 @@ public class FruitOfTimeBlock extends Block implements BonemealableBlock {
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
-                                   LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    protected BlockState updateShape(
+        BlockState state,
+        net.minecraft.world.level.LevelReader level,
+        net.minecraft.world.level.ScheduledTickAccess tickAccess,
+        BlockPos pos,
+        Direction direction,
+        BlockPos neighborPos,
+        BlockState neighborState,
+        net.minecraft.util.RandomSource random
+    ) {
         // Break if the supporting leaves above are removed
         if (direction == Direction.UP && !state.canSurvive(level, pos)) {
             return Blocks.AIR.defaultBlockState();

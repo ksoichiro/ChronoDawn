@@ -158,7 +158,7 @@ public class MasterClockBossRoomPlacer {
         for (var entry : structureManager.getAllStructuresAt(chunkPos.getWorldPosition()).entrySet()) {
             net.minecraft.world.level.levelgen.structure.Structure structure = entry.getKey();
             var structureLocation = level.registryAccess()
-                .registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
+                .lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
                 .getKey(structure);
 
             if (structureLocation != null && structureLocation.equals(MASTER_CLOCK_ID)) {
@@ -178,7 +178,7 @@ public class MasterClockBossRoomPlacer {
         for (var entry : structureManager.getAllStructuresAt(chunkPos.getWorldPosition()).entrySet()) {
             net.minecraft.world.level.levelgen.structure.Structure structure = entry.getKey();
             var structureLocation = level.registryAccess()
-                .registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
+                .lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
                 .getKey(structure);
 
             if (structureLocation != null && structureLocation.equals(MASTER_CLOCK_ID)) {
@@ -412,13 +412,14 @@ public class MasterClockBossRoomPlacer {
 
         try {
             var processorListRegistry = level.registryAccess()
-                .registryOrThrow(net.minecraft.core.registries.Registries.PROCESSOR_LIST);
-            var processorList = processorListRegistry.get(processorListId);
+                .lookupOrThrow(net.minecraft.core.registries.Registries.PROCESSOR_LIST);
+            var processorListHolder = processorListRegistry.get(processorListId);
 
-            if (processorList != null) {
+            if (processorListHolder.isPresent()) {
+                var processors = processorListHolder.get().value().list();
                 ChronoDawn.LOGGER.info("Applying {} processors for stairs from {}",
-                    processorList.list().size(), processorListId);
-                for (var processor : processorList.list()) {
+                    processors.size(), processorListId);
+                for (var processor : processors) {
                     settings.addProcessor(processor);
                 }
             } else {
@@ -436,7 +437,9 @@ public class MasterClockBossRoomPlacer {
 
         // Get DecorativeWater block for protection
         var decorativeWaterBlock = net.minecraft.core.registries.BuiltInRegistries.BLOCK
-            .get(CompatResourceLocation.create(ChronoDawn.MOD_ID, "decorative_water"));
+            .get(CompatResourceLocation.create(ChronoDawn.MOD_ID, "decorative_water"))
+            .map(holder -> holder.value())
+            .orElse(null);
 
         // List to store Jigsaw Block positions for later removal
         List<BlockPos> jigsawsToRemove = new ArrayList<>();
@@ -467,15 +470,15 @@ public class MasterClockBossRoomPlacer {
             // STEP 3.3: Process markers immediately (register protection for this structure only)
             com.chronodawn.worldgen.processors.BossRoomProtectionProcessor.processPendingMarkersImmediate(level);
 
-            // STEP 3.5: Schedule delayed finalize to catch late waterlogging from adjacent chunks
+            // STEP 3.5: Execute finalize to catch late waterlogging from adjacent chunks
             // Store immutable copy for lambda capture
             final BlockPos finalCurrentPos = currentPos.immutable();
             final net.minecraft.core.Vec3i finalTemplateSize = templateSize;
             final Rotation finalRotation = rotation;
             final int finalStairsNumber = stairsPlaced + 1;
-            level.getServer().tell(new net.minecraft.server.TickTask(level.getServer().getTickCount() + 2, () -> {
+            level.getServer().execute(() -> {
                 finalizeWaterloggingAfterPlacement(level, finalCurrentPos, finalTemplateSize, finalRotation);
-            }));
+            });
 
             // STEP 4: Add this structure to protected areas to prevent later structures from removing its water
             net.minecraft.world.level.levelgen.structure.BoundingBox stairsBoundingBox =
@@ -556,13 +559,14 @@ public class MasterClockBossRoomPlacer {
 
         try {
             var processorListRegistry = level.registryAccess()
-                .registryOrThrow(net.minecraft.core.registries.Registries.PROCESSOR_LIST);
-            var processorList = processorListRegistry.get(processorListId2);
+                .lookupOrThrow(net.minecraft.core.registries.Registries.PROCESSOR_LIST);
+            var processorListHolder = processorListRegistry.get(processorListId2);
 
-            if (processorList != null) {
+            if (processorListHolder.isPresent()) {
+                var processors = processorListHolder.get().value().list();
                 ChronoDawn.LOGGER.info("Applying {} processors for stairs_bottom from {}",
-                    processorList.list().size(), processorListId2);
-                for (var processor : processorList.list()) {
+                    processors.size(), processorListId2);
+                for (var processor : processors) {
                     stairsBottomSettings.addProcessor(processor);
                 }
             } else {
@@ -588,13 +592,13 @@ public class MasterClockBossRoomPlacer {
         // STEP 3.3: Process markers immediately (register protection for this structure only)
         com.chronodawn.worldgen.processors.BossRoomProtectionProcessor.processPendingMarkersImmediate(level);
 
-        // STEP 3.5: Schedule delayed finalize for stairs_bottom
+        // STEP 3.5: Execute finalize for stairs_bottom
         final BlockPos finalStairsBottomPos = stairsBottomPos.immutable();
         final net.minecraft.core.Vec3i finalStairsBottomTemplateSizeOriginal = stairsBottomTemplateSizeOriginal;
         final Rotation finalRotation = rotation;
-        level.getServer().tell(new net.minecraft.server.TickTask(level.getServer().getTickCount() + 2, () -> {
+        level.getServer().execute(() -> {
             finalizeWaterloggingAfterPlacement(level, finalStairsBottomPos, finalStairsBottomTemplateSizeOriginal, finalRotation);
-        }));
+        });
 
         // STEP 4: Add this structure to protected areas
         net.minecraft.world.level.levelgen.structure.BoundingBox stairsBottomBoundingBox =
@@ -784,7 +788,9 @@ public class MasterClockBossRoomPlacer {
 
         // Get DecorativeWater block for protection
         var decorativeWaterBlock = net.minecraft.core.registries.BuiltInRegistries.BLOCK
-            .get(CompatResourceLocation.create(ChronoDawn.MOD_ID, "decorative_water"));
+            .get(CompatResourceLocation.create(ChronoDawn.MOD_ID, "decorative_water"))
+            .map(holder -> holder.value())
+            .orElse(null);
 
         // Get template size for water removal
         net.minecraft.core.Vec3i corridorSize = template.getSize();
@@ -803,11 +809,12 @@ public class MasterClockBossRoomPlacer {
 
         try {
             var processorListRegistry = level.registryAccess()
-                .registryOrThrow(net.minecraft.core.registries.Registries.PROCESSOR_LIST);
-            var processorList = processorListRegistry.get(processorListId);
+                .lookupOrThrow(net.minecraft.core.registries.Registries.PROCESSOR_LIST);
+            var processorListHolder = processorListRegistry.get(processorListId);
 
-            if (processorList != null) {
-                for (var processor : processorList.list()) {
+            if (processorListHolder.isPresent()) {
+                var processors = processorListHolder.get().value().list();
+                for (var processor : processors) {
                     settings.addProcessor(processor);
                 }
             }
@@ -868,13 +875,13 @@ public class MasterClockBossRoomPlacer {
         // STEP 3.3: Process markers immediately (register protection for this structure only)
         com.chronodawn.worldgen.processors.BossRoomProtectionProcessor.processPendingMarkersImmediate(level);
 
-        // STEP 3.5: Schedule delayed finalize for corridor
+        // STEP 3.5: Execute finalize for corridor
         final BlockPos finalCorridorPos = corridorPlacementPos.immutable();
         final net.minecraft.core.Vec3i finalCorridorSize = corridorSize;
         final Rotation finalRotation = rotation;
-        level.getServer().tell(new net.minecraft.server.TickTask(level.getServer().getTickCount() + 2, () -> {
+        level.getServer().execute(() -> {
             finalizeWaterloggingAfterPlacement(level, finalCorridorPos, finalCorridorSize, finalRotation);
-        }));
+        });
 
         // Remove all Jigsaw Blocks from corridor
         // Use corridorTemplateSize (with rotation) for correct bounding box
@@ -1325,7 +1332,9 @@ public class MasterClockBossRoomPlacer {
 
         // Get DecorativeWater block for protection
         var decorativeWaterBlock = net.minecraft.core.registries.BuiltInRegistries.BLOCK
-            .get(CompatResourceLocation.create(ChronoDawn.MOD_ID, "decorative_water"));
+            .get(CompatResourceLocation.create(ChronoDawn.MOD_ID, "decorative_water"))
+            .map(holder -> holder.value())
+            .orElse(null);
 
         // Get template size for water removal
         net.minecraft.core.Vec3i templateSize = template.getSize();
@@ -1350,14 +1359,15 @@ public class MasterClockBossRoomPlacer {
         // Add processors
         try {
             var processorListRegistry = level.registryAccess()
-                .registryOrThrow(net.minecraft.core.registries.Registries.PROCESSOR_LIST);
-            var processorList = processorListRegistry.get(processorListId);
+                .lookupOrThrow(net.minecraft.core.registries.Registries.PROCESSOR_LIST);
+            var processorListHolder = processorListRegistry.get(processorListId);
 
-            if (processorList != null) {
-                for (var processor : processorList.list()) {
+            if (processorListHolder.isPresent()) {
+                var processors = processorListHolder.get().value().list();
+                for (var processor : processors) {
                     settings.addProcessor(processor);
                 }
-                ChronoDawn.LOGGER.info("Applied {} structure processors", processorList.list().size());
+                ChronoDawn.LOGGER.info("Applied {} structure processors", processors.size());
             } else {
                 ChronoDawn.LOGGER.error("Processor list {} not found", processorListId);
             }
@@ -1374,13 +1384,13 @@ public class MasterClockBossRoomPlacer {
         // STEP 3.3: Process markers immediately (register protection for this structure only)
         com.chronodawn.worldgen.processors.BossRoomProtectionProcessor.processPendingMarkersImmediate(level);
 
-        // STEP 3.5: Schedule delayed finalize for boss_room
+        // STEP 3.5: Execute finalize for boss_room
         final BlockPos finalPlacementPos = placementPos.immutable();
         final net.minecraft.core.Vec3i finalTemplateSize = templateSize;
         final Rotation finalBossRoomRotation = bossRoomRotation;
-        level.getServer().tell(new net.minecraft.server.TickTask(level.getServer().getTickCount() + 2, () -> {
+        level.getServer().execute(() -> {
             finalizeWaterloggingAfterPlacement(level, finalPlacementPos, finalTemplateSize, finalBossRoomRotation);
-        }));
+        });
 
         // Remove all Jigsaw Blocks from boss room (corridor connection is already established)
         int bossRoomJigsawsRemoved = 0;
@@ -1433,13 +1443,10 @@ public class MasterClockBossRoomPlacer {
         final List<BlockPos> finalStairsPositions = new ArrayList<>(stairsPositions);
         final net.minecraft.core.Vec3i finalStairsTemplateSize = stairsTemplateSize;
 
-        // Schedule multiple checks at increasing intervals to catch chunk load waterlogging
-        int[] checkDelays = {10, 40, 100, 200}; // 0.5s, 2s, 5s, 10s
+        // Execute finalize for all stairs to catch chunk load waterlogging
         final Rotation finalStairsRotation = stairsRotation;
-        for (int checkDelay : checkDelays) {
-            final int finalDelay = checkDelay;
-            level.getServer().tell(new net.minecraft.server.TickTask(level.getServer().getTickCount() + checkDelay, () -> {
-                ChronoDawn.LOGGER.info("Performing delayed finalize for all stairs ({} ticks after boss_room)", finalDelay);
+        level.getServer().execute(() -> {
+            ChronoDawn.LOGGER.info("Performing finalize for all stairs after boss_room");
                 int totalRemovedInFinal = 0;
                 for (BlockPos stairsPos : finalStairsPositions) {
                     // Use rotation-aware check (manual check first to log waterlogged blocks found)
@@ -1475,18 +1482,17 @@ public class MasterClockBossRoomPlacer {
                     }
 
                     if (waterloggedBefore > 0) {
-                        ChronoDawn.LOGGER.warn("Found {} late waterlogged blocks at {} before delayed finalize (delay={})", waterloggedBefore, stairsPos, finalDelay);
+                        ChronoDawn.LOGGER.warn("Found {} late waterlogged blocks at {} before finalize", waterloggedBefore, stairsPos);
                         finalizeWaterloggingAfterPlacement(level, stairsPos, finalStairsTemplateSize, finalStairsRotation);
                         totalRemovedInFinal += waterloggedBefore;
                     }
                 }
                 if (totalRemovedInFinal > 0) {
-                    ChronoDawn.LOGGER.info("Delayed finalize (delay={}) removed {} late waterlogged blocks from stairs", finalDelay, totalRemovedInFinal);
+                    ChronoDawn.LOGGER.info("Finalize removed {} late waterlogged blocks from stairs", totalRemovedInFinal);
                 } else {
-                    ChronoDawn.LOGGER.info("Delayed finalize (delay={}): no late waterlogging detected", finalDelay);
+                    ChronoDawn.LOGGER.info("Finalize: no late waterlogging detected");
                 }
-            }));
-        }
+            });
 
         ChronoDawn.LOGGER.info("Successfully placed boss_room via Jigsaw connection");
         return true;
@@ -1653,7 +1659,7 @@ public class MasterClockBossRoomPlacer {
             BlockPos chunkMin = chunkPos.getWorldPosition();
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
-                    for (int y = level.getMinBuildHeight(); y < level.getMaxBuildHeight(); y++) {
+                    for (int y = level.getMinY(); y < level.getMaxY(); y++) {
                         BlockPos pos = chunkMin.offset(x, y, z);
                         BlockState blockState = level.getBlockState(pos);
                         if (blockState.is(Blocks.DROPPER)) {

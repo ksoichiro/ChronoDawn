@@ -142,7 +142,7 @@ public class PhantomCatacombsBossRoomPlacer {
         for (var entry : structureManager.getAllStructuresAt(chunkPos.getWorldPosition()).entrySet()) {
             net.minecraft.world.level.levelgen.structure.Structure structure = entry.getKey();
             var structureLocation = level.registryAccess()
-                .registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
+                .lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
                 .getKey(structure);
 
             if (structureLocation != null && structureLocation.equals(PHANTOM_CATACOMBS_ID)) {
@@ -185,7 +185,7 @@ public class PhantomCatacombsBossRoomPlacer {
         for (var entry : structureManager.getAllStructuresAt(chunkPos.getWorldPosition()).entrySet()) {
             net.minecraft.world.level.levelgen.structure.Structure structure = entry.getKey();
             var structureLocation = level.registryAccess()
-                .registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
+                .lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
                 .getKey(structure);
 
             if (structureLocation != null && structureLocation.equals(PHANTOM_CATACOMBS_ID)) {
@@ -328,7 +328,7 @@ public class PhantomCatacombsBossRoomPlacer {
                 BlockState state = level.getBlockState(checkPos);
 
                 // Count air and non-solid blocks (corridors/rooms)
-                if (state.isAir() || !state.isSolidRender(level, checkPos)) {
+                if (state.isAir() || !state.isSolidRender()) {
                     airCount++;
                 }
             }
@@ -723,7 +723,7 @@ public class PhantomCatacombsBossRoomPlacer {
             for (int i = 1; i <= 10; i++) {
                 BlockPos checkPos = connectorPos.relative(dir, i);
                 if (level.getBlockState(checkPos).isAir() ||
-                    !level.getBlockState(checkPos).isSolidRender(level, checkPos)) {
+                    !level.getBlockState(checkPos).isSolidRender()) {
                     airBlocks++;
                 }
             }
@@ -877,16 +877,17 @@ public class PhantomCatacombsBossRoomPlacer {
 
         // Add processors from registry
         try {
-            var processorListRegistry = level.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.PROCESSOR_LIST);
-            var processorList = processorListRegistry.get(processorListId);
+            var processorListRegistry = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.PROCESSOR_LIST);
+            var processorListHolder = processorListRegistry.get(processorListId);
 
-            if (processorList != null) {
-                ChronoDawn.LOGGER.debug("Found processor list {}: {} processors", processorListId, processorList.list().size());
-                for (var processor : processorList.list()) {
+            if (processorListHolder.isPresent()) {
+                var processors = processorListHolder.get().value().list();
+                ChronoDawn.LOGGER.debug("Found processor list {}: {} processors", processorListId, processors.size());
+                for (var processor : processors) {
                     settings.addProcessor(processor);
                     ChronoDawn.LOGGER.debug("  Added processor: {}", processor.getClass().getSimpleName());
                 }
-                ChronoDawn.LOGGER.debug("Successfully applied {} structure processors to boss_room placement", processorList.list().size());
+                ChronoDawn.LOGGER.debug("Successfully applied {} structure processors to boss_room placement", processors.size());
             } else {
                 ChronoDawn.LOGGER.error("Processor list {} not found in registry! Boss_room WILL have waterlogging issues", processorListId);
                 ChronoDawn.LOGGER.error("Available processor lists: {}", processorListRegistry.keySet());
@@ -979,7 +980,7 @@ public class PhantomCatacombsBossRoomPlacer {
         for (var entry : structureManager.getAllStructuresAt(chunkPos.getWorldPosition()).entrySet()) {
             net.minecraft.world.level.levelgen.structure.Structure structure = entry.getKey();
             var structureLocation = level.registryAccess()
-                .registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
+                .lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
                 .getKey(structure);
 
             if (structureLocation != null && structureLocation.equals(PHANTOM_CATACOMBS_ID)) {
@@ -1005,7 +1006,7 @@ public class PhantomCatacombsBossRoomPlacer {
         for (var entry : structureManager.getAllStructuresAt(chunkPos.getWorldPosition()).entrySet()) {
             net.minecraft.world.level.levelgen.structure.Structure structure = entry.getKey();
             var structureLocation = level.registryAccess()
-                .registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
+                .lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
                 .getKey(structure);
 
             structureCount++;
@@ -1060,7 +1061,7 @@ public class PhantomCatacombsBossRoomPlacer {
                     // Scan this chunk for structure blocks (e.g., deepslate, which is common in Phantom Catacombs)
                     for (int x = 0; x < 16; x++) {
                         for (int z = 0; z < 16; z++) {
-                            for (int y = level.getMinBuildHeight(); y < level.getMaxBuildHeight(); y++) {
+                            for (int y = level.getMinY(); y < level.getMaxY(); y++) {
                                 BlockPos pos = new BlockPos(structureChunk.getMinBlockX() + x, y, structureChunk.getMinBlockZ() + z);
                                 BlockState state = chunk.getBlockState(pos);
 
@@ -1182,7 +1183,7 @@ public class PhantomCatacombsBossRoomPlacer {
         for (var entry : structureManager.getAllStructuresAt(chunkPos.getWorldPosition()).entrySet()) {
             net.minecraft.world.level.levelgen.structure.Structure structure = entry.getKey();
             var structureLocation = level.registryAccess()
-                .registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
+                .lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
                 .getKey(structure);
 
             if (structureLocation != null && structureLocation.equals(PHANTOM_CATACOMBS_ID)) {
@@ -1596,7 +1597,7 @@ public class PhantomCatacombsBossRoomPlacer {
         for (var entry : structureManager.getAllStructuresAt(chunkPos.getWorldPosition()).entrySet()) {
             net.minecraft.world.level.levelgen.structure.Structure structure = entry.getKey();
             var structureLocation = level.registryAccess()
-                .registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
+                .lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
                 .getKey(structure);
 
             if (structureLocation != null && structureLocation.equals(PHANTOM_CATACOMBS_ID)) {
@@ -1984,15 +1985,16 @@ public class PhantomCatacombsBossRoomPlacer {
 
         // Add processors from registry
         try {
-            var processorListRegistry = level.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.PROCESSOR_LIST);
-            var processorList = processorListRegistry.get(processorListId);
+            var processorListRegistry = level.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.PROCESSOR_LIST);
+            var processorListHolder = processorListRegistry.get(processorListId);
 
-            if (processorList != null) {
-                ChronoDawn.LOGGER.debug("Found processor list {}: {} processors (hidden chamber)", processorListId, processorList.list().size());
-                for (var processor : processorList.list()) {
+            if (processorListHolder.isPresent()) {
+                var processors = processorListHolder.get().value().list();
+                ChronoDawn.LOGGER.debug("Found processor list {}: {} processors (hidden chamber)", processorListId, processors.size());
+                for (var processor : processors) {
                     settings.addProcessor(processor);
                 }
-                ChronoDawn.LOGGER.debug("Successfully applied {} structure processors to hidden chamber placement", processorList.list().size());
+                ChronoDawn.LOGGER.debug("Successfully applied {} structure processors to hidden chamber placement", processors.size());
             } else {
                 ChronoDawn.LOGGER.error("Processor list {} not found for hidden chamber", processorListId);
             }

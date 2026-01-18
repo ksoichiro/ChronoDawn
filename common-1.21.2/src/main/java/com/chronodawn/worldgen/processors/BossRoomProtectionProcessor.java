@@ -224,10 +224,12 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
         }
 
         // Replace marker with specified block
-        var replacementBlock = net.minecraft.core.registries.BuiltInRegistries.BLOCK.get(
+        var replacementBlockHolder = net.minecraft.core.registries.BuiltInRegistries.BLOCK.get(
             CompatResourceLocation.parse(replaceWith)
         );
-        var replacementState = replacementBlock.getStateDefinition().any();
+        var replacementState = replacementBlockHolder
+            .map(holder -> holder.value().defaultBlockState())
+            .orElse(net.minecraft.world.level.block.Blocks.AIR.defaultBlockState());
 
         ChronoDawn.LOGGER.debug("Replacing boss room marker at {} with {}", worldPos, replacementState);
 

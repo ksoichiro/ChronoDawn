@@ -7,6 +7,7 @@ import com.chronodawn.gui.widgets.EntryPageWidget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import com.chronodawn.compat.CompatResourceLocation;
@@ -159,9 +160,10 @@ public class ChronicleScreen extends Screen {
                 int width = Math.min(EDGE_SIZE, leftPageWidth - x);
                 int height = Math.min(EDGE_SIZE, innerHeight - y);
                 graphics.blit(
+                    RenderType::guiTextured,
                     PAGE_BACKGROUND,
                     leftPos + CORNER_SIZE + x, topPos + CORNER_SIZE + y,  // Position
-                    0, 0,                                                  // UV
+                    0.0f, 0.0f,                                            // UV
                     width, height,                                         // Size
                     16, 16                                                 // Texture size
                 );
@@ -174,31 +176,33 @@ public class ChronicleScreen extends Screen {
                 int width = Math.min(EDGE_SIZE, rightPageWidth - x);
                 int height = Math.min(EDGE_SIZE, innerHeight - y);
                 graphics.blit(
+                    RenderType::guiTextured,
                     PAGE_BACKGROUND,
                     bindingX + BINDING_WIDTH + x, topPos + CORNER_SIZE + y, // Position
-                    0, 0,                                                     // UV
-                    width, height,                                            // Size
-                    16, 16                                                    // Texture size
+                    0.0f, 0.0f,                                              // UV
+                    width, height,                                           // Size
+                    16, 16                                                   // Texture size
                 );
             }
         }
 
         // === Render corners (fixed size) ===
         // Top-left corner
-        graphics.blit(CORNER_TOP_LEFT, leftPos, topPos, 0, 0, CORNER_SIZE, CORNER_SIZE, 16, 16);
+        graphics.blit(RenderType::guiTextured, CORNER_TOP_LEFT, leftPos, topPos, 0.0f, 0.0f, CORNER_SIZE, CORNER_SIZE, 16, 16);
         // Top-right corner
-        graphics.blit(CORNER_TOP_RIGHT, leftPos + BOOK_WIDTH - CORNER_SIZE, topPos, 0, 0, CORNER_SIZE, CORNER_SIZE, 16, 16);
+        graphics.blit(RenderType::guiTextured, CORNER_TOP_RIGHT, leftPos + BOOK_WIDTH - CORNER_SIZE, topPos, 0.0f, 0.0f, CORNER_SIZE, CORNER_SIZE, 16, 16);
         // Bottom-left corner
-        graphics.blit(CORNER_BOTTOM_LEFT, leftPos, topPos + BOOK_HEIGHT - CORNER_SIZE, 0, 0, CORNER_SIZE, CORNER_SIZE, 16, 16);
+        graphics.blit(RenderType::guiTextured, CORNER_BOTTOM_LEFT, leftPos, topPos + BOOK_HEIGHT - CORNER_SIZE, 0.0f, 0.0f, CORNER_SIZE, CORNER_SIZE, 16, 16);
         // Bottom-right corner
-        graphics.blit(CORNER_BOTTOM_RIGHT, leftPos + BOOK_WIDTH - CORNER_SIZE, topPos + BOOK_HEIGHT - CORNER_SIZE, 0, 0, CORNER_SIZE, CORNER_SIZE, 16, 16);
+        graphics.blit(RenderType::guiTextured, CORNER_BOTTOM_RIGHT, leftPos + BOOK_WIDTH - CORNER_SIZE, topPos + BOOK_HEIGHT - CORNER_SIZE, 0.0f, 0.0f, CORNER_SIZE, CORNER_SIZE, 16, 16);
 
         // === Render binding shadow (in the center, 3 parts spanning full height) ===
         // Binding top (same height as top edge)
         graphics.blit(
+            RenderType::guiTextured,
             BINDING_TOP,
             bindingX, topPos,                   // Position (same height as top corners)
-            0, 0,                                // UV
+            0.0f, 0.0f,                          // UV
             BINDING_WIDTH, CORNER_SIZE,          // Size (16x16)
             16, 16                               // Texture size
         );
@@ -208,9 +212,10 @@ public class ChronicleScreen extends Screen {
         for (int y = 0; y < bindingMiddleHeight; y += EDGE_SIZE) {
             int height = Math.min(EDGE_SIZE, bindingMiddleHeight - y);
             graphics.blit(
+                RenderType::guiTextured,
                 BINDING_MIDDLE,
                 bindingX, topPos + CORNER_SIZE + y,  // Position
-                0, 0,                                 // UV
+                0.0f, 0.0f,                           // UV
                 BINDING_WIDTH, height,                // Size
                 16, 16                                // Texture size
             );
@@ -218,9 +223,10 @@ public class ChronicleScreen extends Screen {
 
         // Binding bottom (same height as bottom edge)
         graphics.blit(
+            RenderType::guiTextured,
             BINDING_BOTTOM,
             bindingX, topPos + BOOK_HEIGHT - CORNER_SIZE, // Position (same height as bottom corners)
-            0, 0,                                          // UV
+            0.0f, 0.0f,                                    // UV
             BINDING_WIDTH, CORNER_SIZE,                    // Size (16x16)
             16, 16                                         // Texture size
         );
@@ -229,34 +235,34 @@ public class ChronicleScreen extends Screen {
         // Top edge - left side (from left corner to binding)
         for (int x = CORNER_SIZE; x < bindingX - leftPos; x += EDGE_SIZE) {
             int width = Math.min(EDGE_SIZE, bindingX - leftPos - x);
-            graphics.blit(EDGE_TOP, leftPos + x, topPos, 0, 0, width, EDGE_SIZE, 16, 16);
+            graphics.blit(RenderType::guiTextured, EDGE_TOP, leftPos + x, topPos, 0.0f, 0.0f, width, EDGE_SIZE, 16, 16);
         }
         // Top edge - right side (from binding to right corner)
         for (int x = bindingX - leftPos + BINDING_WIDTH; x < BOOK_WIDTH - CORNER_SIZE; x += EDGE_SIZE) {
             int width = Math.min(EDGE_SIZE, BOOK_WIDTH - CORNER_SIZE - x);
-            graphics.blit(EDGE_TOP, leftPos + x, topPos, 0, 0, width, EDGE_SIZE, 16, 16);
+            graphics.blit(RenderType::guiTextured, EDGE_TOP, leftPos + x, topPos, 0.0f, 0.0f, width, EDGE_SIZE, 16, 16);
         }
 
         // Bottom edge - left side (from left corner to binding)
         for (int x = CORNER_SIZE; x < bindingX - leftPos; x += EDGE_SIZE) {
             int width = Math.min(EDGE_SIZE, bindingX - leftPos - x);
-            graphics.blit(EDGE_BOTTOM, leftPos + x, topPos + BOOK_HEIGHT - EDGE_SIZE, 0, 0, width, EDGE_SIZE, 16, 16);
+            graphics.blit(RenderType::guiTextured, EDGE_BOTTOM, leftPos + x, topPos + BOOK_HEIGHT - EDGE_SIZE, 0.0f, 0.0f, width, EDGE_SIZE, 16, 16);
         }
         // Bottom edge - right side (from binding to right corner)
         for (int x = bindingX - leftPos + BINDING_WIDTH; x < BOOK_WIDTH - CORNER_SIZE; x += EDGE_SIZE) {
             int width = Math.min(EDGE_SIZE, BOOK_WIDTH - CORNER_SIZE - x);
-            graphics.blit(EDGE_BOTTOM, leftPos + x, topPos + BOOK_HEIGHT - EDGE_SIZE, 0, 0, width, EDGE_SIZE, 16, 16);
+            graphics.blit(RenderType::guiTextured, EDGE_BOTTOM, leftPos + x, topPos + BOOK_HEIGHT - EDGE_SIZE, 0.0f, 0.0f, width, EDGE_SIZE, 16, 16);
         }
 
         // Left edge (tiled vertically, full height between corners)
         for (int y = CORNER_SIZE; y < BOOK_HEIGHT - CORNER_SIZE; y += EDGE_SIZE) {
             int height = Math.min(EDGE_SIZE, BOOK_HEIGHT - CORNER_SIZE - y);
-            graphics.blit(EDGE_LEFT, leftPos, topPos + y, 0, 0, EDGE_SIZE, height, 16, 16);
+            graphics.blit(RenderType::guiTextured, EDGE_LEFT, leftPos, topPos + y, 0.0f, 0.0f, EDGE_SIZE, height, 16, 16);
         }
         // Right edge (tiled vertically, full height between corners)
         for (int y = CORNER_SIZE; y < BOOK_HEIGHT - CORNER_SIZE; y += EDGE_SIZE) {
             int height = Math.min(EDGE_SIZE, BOOK_HEIGHT - CORNER_SIZE - y);
-            graphics.blit(EDGE_RIGHT, leftPos + BOOK_WIDTH - EDGE_SIZE, topPos + y, 0, 0, EDGE_SIZE, height, 16, 16);
+            graphics.blit(RenderType::guiTextured, EDGE_RIGHT, leftPos + BOOK_WIDTH - EDGE_SIZE, topPos + y, 0.0f, 0.0f, EDGE_SIZE, height, 16, 16);
         }
 
         // Layer 3: Render widgets (category list, entry pages, buttons) on top

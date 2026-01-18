@@ -193,7 +193,7 @@ public class TimeGuardianSpawner {
 
             // Get structure's resource location
             var structureLocation = level.registryAccess()
-                .registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
+                .lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
                 .getKey(structure);
 
             if (structureLocation != null && structureLocation.equals(DESERT_CLOCK_TOWER_ID)) {
@@ -222,7 +222,7 @@ public class TimeGuardianSpawner {
             Structure structure = entry.getKey();
 
             var structureLocation = level.registryAccess()
-                .registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
+                .lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
                 .getKey(structure);
 
             if (structureLocation != null && structureLocation.equals(DESERT_CLOCK_TOWER_ID)) {

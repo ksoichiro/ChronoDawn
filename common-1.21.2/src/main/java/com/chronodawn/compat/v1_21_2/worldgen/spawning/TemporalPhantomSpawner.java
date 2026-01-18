@@ -200,7 +200,7 @@ public class TemporalPhantomSpawner {
         );
 
         // Create and spawn Temporal Phantom entity
-        TemporalPhantomEntity phantom = ModEntities.TEMPORAL_PHANTOM.get().create(level);
+        TemporalPhantomEntity phantom = ModEntities.TEMPORAL_PHANTOM.get().create(level, net.minecraft.world.entity.EntitySpawnReason.STRUCTURE);
         if (phantom != null) {
             phantom.moveTo(
                 spawnPos.getX() + 0.5,

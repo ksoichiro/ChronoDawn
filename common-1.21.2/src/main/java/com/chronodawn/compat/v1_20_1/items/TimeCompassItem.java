@@ -370,7 +370,7 @@ public class TimeCompassItem extends Item {
         BlockPos searchOrigin = player.blockPosition();
 
         // Get structure registry
-        var structureRegistry = searchLevel.registryAccess().registryOrThrow(Registries.STRUCTURE);
+        var structureRegistry = searchLevel.registryAccess().lookupOrThrow(Registries.STRUCTURE);
         var structureHolder = structureRegistry.get(structureId);
 
         if (structureHolder != null) {

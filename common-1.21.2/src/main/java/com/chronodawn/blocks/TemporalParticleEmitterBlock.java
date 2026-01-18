@@ -107,14 +107,6 @@ public class TemporalParticleEmitterBlock extends Block {
     }
 
     /**
-     * This block does not propagate skylight downward.
-     */
-    @Override
-    public boolean propagatesSkylightDown(BlockState state, net.minecraft.world.level.BlockGetter level, BlockPos pos) {
-        return true;
-    }
-
-    /**
      * This block is air-like and replaceable.
      */
     @Override

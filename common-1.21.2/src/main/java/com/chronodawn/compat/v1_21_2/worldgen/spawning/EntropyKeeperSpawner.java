@@ -299,7 +299,7 @@ public class EntropyKeeperSpawner {
         );
 
         // Create and spawn Entropy Keeper entity
-        EntropyKeeperEntity keeper = ModEntities.ENTROPY_KEEPER.get().create(level);
+        EntropyKeeperEntity keeper = ModEntities.ENTROPY_KEEPER.get().create(level, net.minecraft.world.entity.EntitySpawnReason.STRUCTURE);
         if (keeper != null) {
             keeper.moveTo(
                 spawnPos.getX() + 0.5,

@@ -32,6 +32,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.Rotation;
@@ -245,7 +247,7 @@ public class ChronoDawnPortalBlock extends Block {
      * @param axis Portal axis
      * @return true if portal frame is valid
      */
-    private boolean isValidPortalPosition(LevelAccessor level, BlockPos pos, Direction.Axis axis) {
+    private boolean isValidPortalPosition(BlockGetter level, BlockPos pos, Direction.Axis axis) {
         // Check horizontal adjacent blocks (perpendicular to portal axis)
         Direction.Axis otherAxis = axis == Direction.Axis.X ? Direction.Axis.Z : Direction.Axis.X;
         Direction horizontalNeg = Direction.get(Direction.AxisDirection.NEGATIVE, otherAxis);
@@ -557,8 +559,16 @@ public class ChronoDawnPortalBlock extends Block {
     }
 
     @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState,
-                                    LevelAccessor level, BlockPos currentPos, BlockPos neighborPos) {
+    protected BlockState updateShape(
+        BlockState state,
+        LevelReader level,
+        ScheduledTickAccess tickAccess,
+        BlockPos currentPos,
+        Direction direction,
+        BlockPos neighborPos,
+        BlockState neighborState,
+        RandomSource random
+    ) {
         // Validate frame when neighbor changes
         Direction.Axis axis = state.getValue(AXIS);
         Direction.Axis directionAxis = direction.getAxis();
@@ -572,14 +582,14 @@ public class ChronoDawnPortalBlock extends Block {
         if (isRelevantDirection) {
             if (!isValidPortalPosition(level, currentPos, axis)) {
                 // Portal frame is broken, destroy portal block
-                if (!level.isClientSide()) {
-                    destroyPortalWithSound((ServerLevel) level, currentPos);
+                if (level instanceof ServerLevel serverLevel) {
+                    destroyPortalWithSound(serverLevel, currentPos);
                 }
                 return Blocks.AIR.defaultBlockState();
             }
         }
 
-        return super.updateShape(state, direction, neighborState, level, currentPos, neighborPos);
+        return super.updateShape(state, level, tickAccess, currentPos, direction, neighborPos, neighborState, random);
     }
 
     /**

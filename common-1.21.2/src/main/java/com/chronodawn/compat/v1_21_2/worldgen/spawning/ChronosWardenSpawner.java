@@ -134,7 +134,7 @@ public class ChronosWardenSpawner {
         // during structure generation (marker blocks in NBT → BoundingBox calculation)
 
         // Create and spawn Chronos Warden
-        ChronosWardenEntity warden = ModEntities.CHRONOS_WARDEN.get().create(level);
+        ChronosWardenEntity warden = ModEntities.CHRONOS_WARDEN.get().create(level, net.minecraft.world.entity.EntitySpawnReason.STRUCTURE);
         if (warden != null) {
             warden.moveTo(
                 spawnPos.getX() + 0.5,

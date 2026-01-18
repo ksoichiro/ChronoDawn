@@ -373,7 +373,7 @@ public class ClockworkColossusSpawner {
         }
 
         // Create and spawn Clockwork Colossus
-        ClockworkColossusEntity colossus = ModEntities.CLOCKWORK_COLOSSUS.get().create(level);
+        ClockworkColossusEntity colossus = ModEntities.CLOCKWORK_COLOSSUS.get().create(level, net.minecraft.world.entity.EntitySpawnReason.STRUCTURE);
         if (colossus != null) {
             colossus.moveTo(
                 spawnPos.getX() + 0.5,
