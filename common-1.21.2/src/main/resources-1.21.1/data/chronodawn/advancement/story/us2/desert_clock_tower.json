@@ -1,0 +1,30 @@
+{
+  "parent": "chronodawn:story/us1/dimension_entry",
+  "criteria": {
+    "has_enhanced_clockstone": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": ["chronodawn:enhanced_clockstone"]
+          }
+        ]
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "chronodawn:enhanced_clockstone"
+    },
+    "title": {
+      "translate": "advancements.chronodawn.desert_clock_tower.title"
+    },
+    "description": {
+      "translate": "advancements.chronodawn.desert_clock_tower.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  }
+}

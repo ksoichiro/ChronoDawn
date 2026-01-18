@@ -1,0 +1,32 @@
+{
+  "category": "structures",
+  "title": {
+    "en_us": "Master Clock",
+    "ja_jp": "マスタークロック"
+  },
+  "icon": "minecraft:netherite_block",
+  "sortnum": 6,
+  "pages": [
+    {
+      "text": {
+        "en_us": "The Master Clock is the final dungeon containing the Time Tyrant final boss.\n\nRequirements:\n• Master Clock Key (dropped by Time Guardian)\n\nLocation: Various biomes in Chrono Dawn\n\nFeatures:\n• Multi-level structure\n• Protected boss room (walls cannot be broken)\n• Time Tyrant spawns at center\n• Multiple rooms and traps",
+        "ja_jp": "マスタークロックは、タイムタイラント最終ボスがいる最終ダンジョンです。\n\n必要条件:\n• マスタークロックの鍵（タイムガーディアンがドロップ）\n\n場所: クロノドーンのさまざまなバイオーム\n\n特徴:\n• 多層構造\n• 保護されたボス部屋（壁は破壊できない）\n• 中央にタイムタイラントが出現\n• 複数の部屋とトラップ"
+      }
+    },
+    {
+      "image": "chronodawn:textures/gui/chronicle/master_clock.png"
+    },
+    {
+      "text": {
+        "en_us": "Accessing the Dungeon:\n\n1. Obtain Master Clock Key from Time Guardian\n2. Locate Master Clock structure\n3. Use Master Clock Key at entrance\n4. Navigate through dungeon to boss room\n\nBoss: Time Tyrant (Final Boss)\n\nDrops:\n• Eye of Chronos\n• Fragments of Stasis Core (multiple pieces)\n• Rare loot and experience",
+        "ja_jp": "ダンジョンへのアクセス:\n\n1. タイムガーディアンからマスタークロックの鍵を入手\n2. マスタークロック構造物を見つける\n3. 入口でマスタークロックの鍵を使用\n4. ダンジョンを進んでボス部屋へ\n\nボス: タイムタイラント（最終ボス）\n\nドロップ:\n• クロノスの眼\n• スタシスコアの破片（複数個）\n• 希少な戦利品と経験値"
+      }
+    },
+    {
+      "text": {
+        "en_us": "! CRITICAL TIPS:\n\n• HIGHLY RECOMMENDED: Craft Chrono Aegis first (from 4 mid-boss drops)\n• Bring your best gear, food, and potions\n• Fight is extremely difficult without Chrono Aegis\n• Prepare for phase transitions at 66% and 33% HP\n• Boss room walls are indestructible\n\nSee \"Time Tyrant\" in Boss Battles for detailed strategies!",
+        "ja_jp": "! 重要なヒント:\n\n• 強く推奨: 先にクロノイージスを作成（4つの中ボスドロップから）\n• 最高の装備、食料、ポーションを持参\n• クロノイージスなしでは戦闘は極めて困難\n• 66%と33%のHPでフェーズ転換に備える\n• ボス部屋の壁は破壊不可\n\n詳細な戦略については、ボス戦の「タイムタイラント」を参照してください！"
+      }
+    }
+  ]
+}

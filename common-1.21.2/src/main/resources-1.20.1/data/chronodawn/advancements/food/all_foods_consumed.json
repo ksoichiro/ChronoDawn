@@ -1,0 +1,63 @@
+{
+  "parent": "chronodawn:food/first_time_fruit",
+  "criteria": {
+    "time_fruit": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "items": [
+            "chronodawn:fruit_of_time"
+          ]
+        }
+      }
+    },
+    "time_fruit_pie": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "items": [
+            "chronodawn:time_fruit_pie"
+          ]
+        }
+      }
+    },
+    "time_jam": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "items": [
+            "chronodawn:time_jam"
+          ]
+        }
+      }
+    },
+    "time_bread": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "items": [
+            "chronodawn:time_bread"
+          ]
+        }
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "item": "minecraft:golden_apple"
+    },
+    "title": {
+      "translate": "advancements.chronodawn.all_foods_consumed.title"
+    },
+    "description": {
+      "translate": "advancements.chronodawn.all_foods_consumed.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "rewards": {
+    "experience": 100
+  }
+}

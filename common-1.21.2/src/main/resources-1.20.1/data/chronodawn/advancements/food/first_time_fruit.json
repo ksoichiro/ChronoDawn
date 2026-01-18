@@ -1,0 +1,30 @@
+{
+  "parent": "chronodawn:story/us1/dimension_entry",
+  "criteria": {
+    "consumed_time_fruit": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "items": [
+            "chronodawn:fruit_of_time"
+          ]
+        }
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "item": "chronodawn:fruit_of_time"
+    },
+    "title": {
+      "translate": "advancements.chronodawn.first_time_fruit.title"
+    },
+    "description": {
+      "translate": "advancements.chronodawn.first_time_fruit.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  }
+}

@@ -44,7 +44,8 @@ sourceSets {
 }
 
 // Multi-version support: Determine which common module to use
-def commonModule = project.ext.minecraft_version == '1.20.1' ? ':common-1.20.1' : ':common-1.21.1'
+def commonModule = project.ext.minecraft_version == '1.20.1' ? ':common-1.20.1' :
+                   project.ext.minecraft_version == '1.21.2' ? ':common-1.21.2' : ':common-1.21.1'
 
 loom {
     accessWidenerPath = project(commonModule).loom.accessWidenerPath

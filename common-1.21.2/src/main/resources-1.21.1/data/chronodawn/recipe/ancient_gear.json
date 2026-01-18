@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "ICI",
+    "CEC",
+    "ICI"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "C": {
+      "item": "chronodawn:time_crystal"
+    },
+    "E": {
+      "item": "chronodawn:enhanced_clockstone"
+    }
+  },
+  "result": {
+    "id": "chronodawn:ancient_gear",
+    "count": 1
+  }
+}

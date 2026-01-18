@@ -24,6 +24,9 @@ def targetMcVersion = settings.gradle.startParameter.projectProperties.get('targ
 if (targetMcVersion == '1.20.1') {
     include 'common-1.20.1'
     logger.lifecycle("Common module: common-1.20.1")
+} else if (targetMcVersion == '1.21.2') {
+    include 'common-1.21.2'
+    logger.lifecycle("Common module: common-1.21.2")
 } else {
     include 'common-1.21.1'
     logger.lifecycle("Common module: common-1.21.1")

@@ -28,7 +28,8 @@ repositories {
 }
 
 // Multi-version support: Determine which common module to use
-def commonModule = project.ext.minecraft_version == '1.20.1' ? ':common-1.20.1' : ':common-1.21.1'
+def commonModule = project.ext.minecraft_version == '1.20.1' ? ':common-1.20.1' :
+                   project.ext.minecraft_version == '1.21.2' ? ':common-1.21.2' : ':common-1.21.1'
 
 dependencies {
     modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"

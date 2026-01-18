@@ -1,0 +1,31 @@
+{
+  "parent": "chronodawn:story/us1/dimension_entry",
+  "criteria": {
+    "killed_time_guardian": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "chronodawn:time_guardian"
+        }
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "item": "chronodawn:key_to_master_clock"
+    },
+    "title": {
+      "translate": "advancements.chronodawn.time_guardian_defeat.title"
+    },
+    "description": {
+      "translate": "advancements.chronodawn.time_guardian_defeat.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "rewards": {
+    "experience": 100
+  }
+}

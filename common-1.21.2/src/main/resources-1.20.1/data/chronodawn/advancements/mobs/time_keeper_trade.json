@@ -1,0 +1,28 @@
+{
+  "parent": "chronodawn:story/us1/dimension_entry",
+  "criteria": {
+    "traded_with_time_keeper": {
+      "trigger": "minecraft:villager_trade",
+      "conditions": {
+        "villager": {
+          "type": "chronodawn:time_keeper"
+        }
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "item": "minecraft:emerald"
+    },
+    "title": {
+      "translate": "advancements.chronodawn.time_keeper_trade.title"
+    },
+    "description": {
+      "translate": "advancements.chronodawn.time_keeper_trade.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  }
+}

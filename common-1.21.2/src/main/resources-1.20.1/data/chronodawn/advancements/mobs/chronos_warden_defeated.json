@@ -1,0 +1,28 @@
+{
+  "parent": "chronodawn:story/us2/time_guardian_defeat",
+  "criteria": {
+    "killed_chronos_warden": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "chronodawn:chronos_warden"
+        }
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "item": "chronodawn:guardian_stone"
+    },
+    "title": {
+      "translate": "advancements.chronodawn.chronos_warden_defeated.title"
+    },
+    "description": {
+      "translate": "advancements.chronodawn.chronos_warden_defeated.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  }
+}
