@@ -1,4 +1,4 @@
-package com.chronodawn.blocks;
+package com.chronodawn.compat.v1_20_1.blocks;
 
 import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.SoundType;

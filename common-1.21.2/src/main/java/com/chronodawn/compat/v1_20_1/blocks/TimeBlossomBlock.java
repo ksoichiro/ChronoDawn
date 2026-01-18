@@ -1,4 +1,4 @@
-package com.chronodawn.blocks;
+package com.chronodawn.compat.v1_20_1.blocks;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;

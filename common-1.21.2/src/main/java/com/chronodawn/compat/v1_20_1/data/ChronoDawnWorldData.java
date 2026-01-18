@@ -1,4 +1,4 @@
-package com.chronodawn.data;
+package com.chronodawn.compat.v1_20_1.data;
 
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.compat.CompatSavedData;

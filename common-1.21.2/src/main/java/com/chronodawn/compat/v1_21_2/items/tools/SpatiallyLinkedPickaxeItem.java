@@ -1,4 +1,4 @@
-package com.chronodawn.items.tools;
+package com.chronodawn.compat.v1_21_2.items.tools;
 
 import com.chronodawn.registry.ModItems;
 import net.minecraft.tags.BlockTags;

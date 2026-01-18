@@ -1,4 +1,4 @@
-package com.chronodawn.gui.data;
+package com.chronodawn.compat.v1_20_1.gui.data;
 
 import com.chronodawn.compat.CompatResourceLocation;
 import com.google.gson.JsonObject;

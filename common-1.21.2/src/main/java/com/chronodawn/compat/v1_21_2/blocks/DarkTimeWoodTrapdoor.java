@@ -1,4 +1,4 @@
-package com.chronodawn.blocks;
+package com.chronodawn.compat.v1_21_2.blocks;
 
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.TrapDoorBlock;

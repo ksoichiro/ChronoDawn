@@ -1,4 +1,4 @@
-package com.chronodawn.gui;
+package com.chronodawn.compat.v1_20_1.gui;
 
 import com.chronodawn.gui.data.ChronicleData;
 import com.chronodawn.gui.data.Entry;

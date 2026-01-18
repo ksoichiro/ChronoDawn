@@ -1,4 +1,4 @@
-package com.chronodawn.items;
+package com.chronodawn.compat.v1_21_2.items;
 
 import com.chronodawn.ChronoDawn;
 import dev.architectury.registry.registries.RegistrySupplier;

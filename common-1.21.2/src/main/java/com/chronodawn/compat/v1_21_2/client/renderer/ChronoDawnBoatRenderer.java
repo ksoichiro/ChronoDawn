@@ -1,4 +1,4 @@
-package com.chronodawn.client.renderer;
+package com.chronodawn.compat.v1_21_2.client.renderer;
 
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.entities.boats.ChronoDawnBoat;

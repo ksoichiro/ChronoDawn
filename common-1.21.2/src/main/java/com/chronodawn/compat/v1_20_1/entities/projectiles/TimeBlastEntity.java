@@ -1,4 +1,4 @@
-package com.chronodawn.entities.projectiles;
+package com.chronodawn.compat.v1_20_1.entities.projectiles;
 
 import com.chronodawn.registry.ModEntities;
 import net.minecraft.core.particles.ParticleTypes;

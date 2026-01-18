@@ -1,4 +1,4 @@
-package com.chronodawn.gui.data;
+package com.chronodawn.compat.v1_21_2.gui.data;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

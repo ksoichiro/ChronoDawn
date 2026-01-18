@@ -1,4 +1,4 @@
-package com.chronodawn.entities.bosses;
+package com.chronodawn.compat.v1_20_1.entities.bosses;
 
 import com.chronodawn.core.time.MobAICanceller;
 import com.chronodawn.entities.ai.TimeGuardianRangedAttackGoal;

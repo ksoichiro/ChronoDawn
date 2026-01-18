@@ -1,4 +1,4 @@
-package com.chronodawn.entities.bosses;
+package com.chronodawn.compat.v1_21_2.entities.bosses;
 
 import com.chronodawn.entities.projectiles.TimeBlastEntity;
 import com.chronodawn.registry.ModSounds;

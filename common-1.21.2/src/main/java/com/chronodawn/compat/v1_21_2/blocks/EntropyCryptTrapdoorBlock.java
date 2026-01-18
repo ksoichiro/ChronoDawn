@@ -1,4 +1,4 @@
-package com.chronodawn.blocks;
+package com.chronodawn.compat.v1_21_2.blocks;
 
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.entities.bosses.EntropyKeeperEntity;

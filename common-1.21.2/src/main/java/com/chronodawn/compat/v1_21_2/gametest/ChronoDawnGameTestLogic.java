@@ -1,4 +1,4 @@
-package com.chronodawn.gametest;
+package com.chronodawn.compat.v1_21_2.gametest;
 
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModEntities;

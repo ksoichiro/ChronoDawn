@@ -1,4 +1,4 @@
-package com.chronodawn.client.model;
+package com.chronodawn.compat.v1_21_1.client.model;
 
 import com.chronodawn.entities.bosses.TimeTyrantEntity;
 import com.mojang.blaze3d.vertex.PoseStack;

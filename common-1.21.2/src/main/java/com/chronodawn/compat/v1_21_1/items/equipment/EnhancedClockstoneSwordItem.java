@@ -1,4 +1,4 @@
-package com.chronodawn.items.equipment;
+package com.chronodawn.compat.v1_21_1.items.equipment;
 
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;

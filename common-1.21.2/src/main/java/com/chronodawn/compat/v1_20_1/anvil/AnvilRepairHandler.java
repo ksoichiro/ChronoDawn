@@ -1,4 +1,4 @@
-package com.chronodawn.anvil;
+package com.chronodawn.compat.v1_20_1.anvil;
 
 import com.chronodawn.registry.ModItems;
 import net.minecraft.world.item.ItemStack;

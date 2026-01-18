@@ -1,4 +1,4 @@
-package com.chronodawn.worldgen.spawning;
+package com.chronodawn.compat.v1_21_1.worldgen.spawning;
 
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.compat.CompatSavedData;

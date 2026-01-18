@@ -1,4 +1,4 @@
-package com.chronodawn.entities.boats;
+package com.chronodawn.compat.v1_21_1.entities.boats;
 
 import com.chronodawn.registry.ModEntities;
 import net.minecraft.nbt.CompoundTag;

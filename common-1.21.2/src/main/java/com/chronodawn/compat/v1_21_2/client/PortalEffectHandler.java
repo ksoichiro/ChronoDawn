@@ -1,4 +1,4 @@
-package com.chronodawn.compat.v1_21_1.client;
+package com.chronodawn.compat.v1_21_2.client;
 
 import com.chronodawn.client.PortalFadeHandler;
 import com.chronodawn.registry.ModBlocks;

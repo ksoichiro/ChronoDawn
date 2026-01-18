@@ -1,4 +1,4 @@
-package com.chronodawn.client.renderer;
+package com.chronodawn.compat.v1_21_1.client.renderer;
 
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.entities.projectiles.TimeBlastEntity;

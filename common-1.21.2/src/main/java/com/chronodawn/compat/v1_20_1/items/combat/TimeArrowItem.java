@@ -1,4 +1,4 @@
-package com.chronodawn.items.combat;
+package com.chronodawn.compat.v1_20_1.items.combat;
 
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.entities.projectiles.TimeArrowEntity;

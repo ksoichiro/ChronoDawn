@@ -1,4 +1,4 @@
-package com.chronodawn.worldgen.decorators;
+package com.chronodawn.compat.v1_20_1.worldgen.decorators;
 
 import com.chronodawn.blocks.FruitOfTimeBlock;
 import com.chronodawn.registry.ModBlocks;

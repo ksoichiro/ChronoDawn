@@ -1,4 +1,4 @@
-package com.chronodawn.entities.bosses;
+package com.chronodawn.compat.v1_21_1.entities.bosses;
 
 import com.chronodawn.registry.ModSounds;
 import com.chronodawn.worldgen.protection.BlockProtectionHandler;

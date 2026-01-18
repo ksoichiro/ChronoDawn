@@ -1,4 +1,4 @@
-package com.chronodawn.entities.mobs;
+package com.chronodawn.compat.v1_21_1.entities.mobs;
 
 import com.chronodawn.items.TimeCompassItem;
 import net.minecraft.core.BlockPos;

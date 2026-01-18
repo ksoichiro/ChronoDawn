@@ -1,4 +1,4 @@
-package com.chronodawn.mixin.client;
+package com.chronodawn.compat.v1_21_2.mixin.client;
 
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementProgress;

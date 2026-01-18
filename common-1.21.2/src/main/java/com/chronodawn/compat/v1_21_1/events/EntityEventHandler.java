@@ -1,4 +1,4 @@
-package com.chronodawn.events;
+package com.chronodawn.compat.v1_21_1.events;
 
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.core.teleport.TeleporterChargingHandler;

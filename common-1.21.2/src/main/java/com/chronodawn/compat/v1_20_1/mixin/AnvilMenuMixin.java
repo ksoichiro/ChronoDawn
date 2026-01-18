@@ -1,4 +1,4 @@
-package com.chronodawn.mixin;
+package com.chronodawn.compat.v1_20_1.mixin;
 
 import com.chronodawn.anvil.AnvilRepairHandler;
 import net.minecraft.nbt.CompoundTag;

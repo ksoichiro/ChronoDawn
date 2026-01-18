@@ -1,4 +1,4 @@
-package com.chronodawn.registry;
+package com.chronodawn.compat.v1_21_2.registry;
 
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.worldgen.processors.BossRoomProtectionProcessor;

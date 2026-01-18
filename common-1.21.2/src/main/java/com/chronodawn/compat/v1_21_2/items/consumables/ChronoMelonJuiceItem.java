@@ -1,6 +1,7 @@
-package com.chronodawn.items.consumables;
+package com.chronodawn.compat.v1_21_2.items.consumables;
 
 import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -11,6 +12,8 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
+import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.level.Level;
 
 /**
@@ -31,11 +34,16 @@ public class ChronoMelonJuiceItem extends Item {
         FoodProperties foodProperties = new FoodProperties.Builder()
                 .nutrition(4)
                 .saturationModifier(0.4f)
-                .effect(new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 60 * 20, 0), 1.0f)
                 .build();
 
         return new Properties()
                 .food(foodProperties)
+                .component(DataComponents.CONSUMABLE,
+                        Consumable.builder()
+                                .onConsume(new ApplyStatusEffectsConsumeEffect(
+                                        new MobEffectInstance(MobEffects.MOVEMENT_SPEED, 60 * 20, 0),
+                                        1.0f))
+                                .build())
                 .craftRemainder(Items.GLASS_BOTTLE)
                 .stacksTo(16);
     }

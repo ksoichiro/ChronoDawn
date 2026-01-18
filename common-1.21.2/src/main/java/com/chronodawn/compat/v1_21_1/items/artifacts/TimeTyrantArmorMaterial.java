@@ -1,4 +1,4 @@
-package com.chronodawn.items.artifacts;
+package com.chronodawn.compat.v1_21_1.items.artifacts;
 
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.registry.ModItems;

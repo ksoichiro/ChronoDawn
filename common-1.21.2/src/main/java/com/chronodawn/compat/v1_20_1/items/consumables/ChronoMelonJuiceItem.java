@@ -1,4 +1,4 @@
-package com.chronodawn.items.consumables;
+package com.chronodawn.compat.v1_20_1.items.consumables;
 
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.server.level.ServerPlayer;

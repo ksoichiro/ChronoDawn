@@ -1,5 +1,6 @@
-package com.chronodawn.items.consumables;
+package com.chronodawn.compat.v1_21_2.items.consumables;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -8,6 +9,8 @@ import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
+import net.minecraft.world.item.component.Consumable;
 import net.minecraft.world.level.Level;
 
 /**
@@ -29,11 +32,16 @@ public class TemporalRootStewItem extends Item {
         FoodProperties foodProperties = new FoodProperties.Builder()
                 .nutrition(8)
                 .saturationModifier(0.6f)
-                .effect(new MobEffectInstance(MobEffects.REGENERATION, 10 * 20, 1), 1.0f)
                 .build();
 
         return new Properties()
                 .food(foodProperties)
+                .component(DataComponents.CONSUMABLE,
+                        Consumable.builder()
+                                .onConsume(new ApplyStatusEffectsConsumeEffect(
+                                        new MobEffectInstance(MobEffects.REGENERATION, 10 * 20, 1),
+                                        1.0f))
+                                .build())
                 .craftRemainder(Items.BOWL)
                 .stacksTo(1);
     }

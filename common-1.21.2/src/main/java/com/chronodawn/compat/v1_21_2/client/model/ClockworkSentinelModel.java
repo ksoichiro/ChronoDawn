@@ -1,4 +1,4 @@
-package com.chronodawn.client.model;
+package com.chronodawn.compat.v1_21_2.client.model;
 
 import com.chronodawn.entities.mobs.ClockworkSentinelEntity;
 import net.minecraft.client.model.EntityModel;

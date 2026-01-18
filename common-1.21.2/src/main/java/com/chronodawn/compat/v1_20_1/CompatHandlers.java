@@ -1,4 +1,4 @@
-package com.chronodawn.compat;
+package com.chronodawn.compat.v1_20_1;
 
 import com.chronodawn.compat.v1_20_1.ItemDataHandler120;
 

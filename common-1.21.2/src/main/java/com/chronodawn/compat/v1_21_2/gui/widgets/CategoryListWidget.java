@@ -1,4 +1,4 @@
-package com.chronodawn.gui.widgets;
+package com.chronodawn.compat.v1_21_2.gui.widgets;
 
 import com.chronodawn.gui.ChronicleScreen;
 import com.chronodawn.gui.data.Category;

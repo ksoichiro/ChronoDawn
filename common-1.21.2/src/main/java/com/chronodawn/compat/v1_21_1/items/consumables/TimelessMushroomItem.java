@@ -1,4 +1,4 @@
-package com.chronodawn.items.consumables;
+package com.chronodawn.compat.v1_21_1.items.consumables;
 
 import com.chronodawn.registry.ModBlocks;
 import net.minecraft.world.food.FoodProperties;

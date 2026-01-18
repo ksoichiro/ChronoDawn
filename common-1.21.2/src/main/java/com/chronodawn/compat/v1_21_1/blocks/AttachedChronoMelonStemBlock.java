@@ -1,4 +1,4 @@
-package com.chronodawn.blocks;
+package com.chronodawn.compat.v1_21_1.blocks;
 
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModItems;

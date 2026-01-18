@@ -1,4 +1,4 @@
-package com.chronodawn.compat;
+package com.chronodawn.compat.v1_21_1;
 
 import com.chronodawn.compat.SavedDataHandler;
 import net.minecraft.core.HolderLookup;

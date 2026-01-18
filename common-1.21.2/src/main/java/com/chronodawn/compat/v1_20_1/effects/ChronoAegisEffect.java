@@ -1,4 +1,4 @@
-package com.chronodawn.effects;
+package com.chronodawn.compat.v1_20_1.effects;
 
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;

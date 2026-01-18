@@ -1,4 +1,4 @@
-package com.chronodawn.compat;
+package com.chronodawn.compat.v1_21_1;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;

@@ -1,4 +1,4 @@
-package com.chronodawn.compat;
+package com.chronodawn.compat.v1_21_1;
 
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;

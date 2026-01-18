@@ -1,4 +1,4 @@
-package com.chronodawn.items.artifacts;
+package com.chronodawn.compat.v1_20_1.items.artifacts;
 
 import net.minecraft.world.item.ArmorItem;
 

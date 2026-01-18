@@ -1,4 +1,4 @@
-package com.chronodawn.compat.v1_21_1;
+package com.chronodawn.compat.v1_21_2;
 
 import com.chronodawn.compat.ItemDataHandler;
 import net.minecraft.core.component.DataComponents;

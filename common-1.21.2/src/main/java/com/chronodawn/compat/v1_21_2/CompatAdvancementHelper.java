@@ -1,4 +1,4 @@
-package com.chronodawn.compat;
+package com.chronodawn.compat.v1_21_2;
 
 import com.chronodawn.ChronoDawn;
 import net.minecraft.advancements.AdvancementHolder;

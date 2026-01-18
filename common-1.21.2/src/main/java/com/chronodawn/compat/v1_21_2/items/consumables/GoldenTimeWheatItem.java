@@ -1,9 +1,12 @@
-package com.chronodawn.items.consumables;
+package com.chronodawn.compat.v1_21_2.items.consumables;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
+import net.minecraft.world.item.component.Consumable;
 
 /**
  * Golden Time Wheat (黄金の時の小麦)
@@ -24,11 +27,19 @@ public class GoldenTimeWheatItem extends Item {
         FoodProperties foodProperties = new FoodProperties.Builder()
                 .nutrition(4)
                 .saturationModifier(1.2f)
-                .effect(new MobEffectInstance(MobEffects.REGENERATION, 10 * 20, 1), 1.0f)
-                .effect(new MobEffectInstance(MobEffects.ABSORPTION, 120 * 20, 1), 1.0f)
                 .alwaysEdible()
                 .build();
 
-        return new Properties().food(foodProperties);
+        return new Properties()
+                .food(foodProperties)
+                .component(DataComponents.CONSUMABLE,
+                        Consumable.builder()
+                                .onConsume(new ApplyStatusEffectsConsumeEffect(
+                                        new MobEffectInstance(MobEffects.REGENERATION, 10 * 20, 1),
+                                        1.0f))
+                                .onConsume(new ApplyStatusEffectsConsumeEffect(
+                                        new MobEffectInstance(MobEffects.ABSORPTION, 120 * 20, 1),
+                                        1.0f))
+                                .build());
     }
 }

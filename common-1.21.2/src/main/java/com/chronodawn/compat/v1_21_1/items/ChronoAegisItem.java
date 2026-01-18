@@ -1,4 +1,4 @@
-package com.chronodawn.items;
+package com.chronodawn.compat.v1_21_1.items;
 
 import com.chronodawn.registry.ModEffects;
 import com.chronodawn.registry.ModSounds;
