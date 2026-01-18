@@ -150,13 +150,13 @@ public class BlockEventHandler {
         InteractionEvent.RIGHT_CLICK_BLOCK.register((player, hand, pos, face) -> {
             // Only process main hand interactions on server side
             if (player.level().isClientSide() || hand != net.minecraft.world.InteractionHand.MAIN_HAND) {
-                return EventResult.pass();
+                return EventResult.pass().asMinecraft();
             }
 
             // Check if player is holding an axe
             ItemStack heldItem = player.getItemInHand(hand);
             if (!(heldItem.getItem() instanceof AxeItem)) {
-                return EventResult.pass();
+                return EventResult.pass().asMinecraft();
             }
 
             BlockState state = player.level().getBlockState(pos);
@@ -181,17 +181,17 @@ public class BlockEventHandler {
                     com.chronodawn.compat.ItemDurabilityHandler.getInstance().damageItem(heldItem, 1, player, slot);
                 }
 
-                return EventResult.interruptTrue();
+                return EventResult.interruptTrue().asMinecraft();
             }
 
-            return EventResult.pass();
+            return EventResult.pass().asMinecraft();
         });
 
         // Register block interaction event for Master Clock door unlocking
         InteractionEvent.RIGHT_CLICK_BLOCK.register((player, hand, pos, face) -> {
             // Only process main hand interactions on server side
             if (player.level().isClientSide() || hand != net.minecraft.world.InteractionHand.MAIN_HAND) {
-                return EventResult.pass();
+                return EventResult.pass().asMinecraft();
             }
 
             BlockState state = player.level().getBlockState(pos);
@@ -288,15 +288,15 @@ public class BlockEventHandler {
                         com.chronodawn.worldgen.spawning.ChronosWardenSpawner.spawnOnDoorOpen(serverLevel, doorPosToUse, openedState);
                     }
 
-                    return EventResult.interruptTrue();
+                    return EventResult.interruptTrue().asMinecraft();
                 } else {
                     // Player doesn't have the required key/items
                     player.displayClientMessage(message, true);
-                    return EventResult.interruptFalse();
+                    return EventResult.interruptFalse().asMinecraft();
                 }
             }
 
-            return EventResult.pass();
+            return EventResult.pass().asMinecraft();
         });
 
         ChronoDawn.LOGGER.info("Registered BlockEventHandler with Reversing Time Sandstone restoration and Time Hourglass control");

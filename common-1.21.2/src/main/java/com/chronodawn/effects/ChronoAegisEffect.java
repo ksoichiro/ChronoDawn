@@ -1,5 +1,6 @@
 package com.chronodawn.effects;
 
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
@@ -44,7 +45,7 @@ public class ChronoAegisEffect extends MobEffect {
     }
 
     @Override
-    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
+    public boolean applyEffectTick(ServerLevel serverLevel, LivingEntity entity, int amplifier) {
         // This method is not used - all functionality is implemented in:
         // - TimeTyrantEntity (effects 1-4)
         // - EntityEventHandler.handleChronoAegisClarity() (effect 5: Clarity)
