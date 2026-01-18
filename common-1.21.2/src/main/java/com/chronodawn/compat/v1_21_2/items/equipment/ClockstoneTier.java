@@ -24,7 +24,7 @@ import net.minecraft.world.item.crafting.Ingredient;
  */
 public class ClockstoneTier {
     public static final ToolMaterial INSTANCE = new ToolMaterial(
-        BlockTags.INCORRECT_FOR_IRON_TOOL, // Iron mining level
+        () -> BlockTags.INCORRECT_FOR_IRON_TOOL, // Iron mining level
         450, // Durability: Between iron (250) and diamond (1561)
         6.5f, // Mining speed: Between iron (6.0f) and diamond (8.0f)
         2.5f, // Attack damage bonus: Between iron (2.0f) and diamond (3.0f)

@@ -259,8 +259,8 @@ public class CategoryListWidget extends AbstractWidget {
      */
     private ItemStack getIconStack(Category category) {
         ResourceLocation iconId = category.getIcon();
-        var item = BuiltInRegistries.ITEM.get(iconId);
-        if (item == null || item == Items.AIR) {
+        var item = BuiltInRegistries.ITEM.get(iconId).map(holder -> holder.value()).orElse(Items.AIR);
+        if (item == Items.AIR) {
             return new ItemStack(Items.BOOK); // Fallback to book
         }
         return new ItemStack(item);
@@ -274,8 +274,8 @@ public class CategoryListWidget extends AbstractWidget {
      */
     private ItemStack getIconStack(Entry entry) {
         ResourceLocation iconId = entry.getIcon();
-        var item = BuiltInRegistries.ITEM.get(iconId);
-        if (item == null || item == Items.AIR) {
+        var item = BuiltInRegistries.ITEM.get(iconId).map(holder -> holder.value()).orElse(Items.AIR);
+        if (item == Items.AIR) {
             return new ItemStack(Items.PAPER); // Fallback to paper
         }
         return new ItemStack(item);

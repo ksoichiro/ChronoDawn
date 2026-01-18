@@ -39,7 +39,7 @@ public class SpatiallyLinkedPickaxeItem extends PickaxeItem {
      * Uses diamond-equivalent stats.
      */
     private static final ToolMaterial SPATIALLY_LINKED_TIER = new ToolMaterial(
-        BlockTags.INCORRECT_FOR_DIAMOND_TOOL, // Diamond mining level
+        () -> BlockTags.INCORRECT_FOR_DIAMOND_TOOL, // Diamond mining level
         1561, // Diamond durability
         8.0f, // Diamond mining speed
         3.0f, // Diamond attack damage bonus

@@ -232,7 +232,7 @@ public class ClockworkColossusSpawner {
             Structure structure = entry.getKey();
 
             var structureLocation = level.registryAccess()
-                .registry(net.minecraft.core.registries.Registries.STRUCTURE).orElseThrow()
+                .lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
                 .getKey(structure);
 
             if (structureLocation != null && structureLocation.equals(CLOCKWORK_DEPTHS_ID)) {

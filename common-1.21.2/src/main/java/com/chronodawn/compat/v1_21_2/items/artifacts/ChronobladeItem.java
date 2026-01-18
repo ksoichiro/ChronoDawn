@@ -49,7 +49,7 @@ public class ChronobladeItem extends SwordItem {
      * Custom tier for Chronoblade (netherite+).
      */
     public static final ToolMaterial TIER = new ToolMaterial(
-        BlockTags.INCORRECT_FOR_NETHERITE_TOOL, // Netherite mining level
+        () -> BlockTags.INCORRECT_FOR_NETHERITE_TOOL, // Netherite mining level
         2000, // More durable than netherite (2031)
         9.0f, // Faster than netherite (9.0f)
         3.5f, // Slightly stronger than netherite (4.0 base = 8.0 total damage)

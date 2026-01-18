@@ -20,7 +20,7 @@ rootProject.name = 'chronodawn'
 include 'common-base'
 
 // Include version-specific common module based on target Minecraft version
-def targetMcVersion = settings.gradle.startParameter.projectProperties.get('target_mc_version') ?: '1.21.1'
+def targetMcVersion = settings.hasProperty('target_mc_version') ? settings.target_mc_version : '1.21.1'
 if (targetMcVersion == '1.20.1') {
     include 'common-1.20.1'
     logger.lifecycle("Common module: common-1.20.1")

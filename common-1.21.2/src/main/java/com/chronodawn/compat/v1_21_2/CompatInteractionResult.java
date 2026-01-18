@@ -17,7 +17,7 @@ public class CompatInteractionResult {
      * @return SUCCESS on server side, CONSUME on client side
      */
     public static InteractionResult sidedSuccess(ItemStack stack, boolean isClientSide) {
-        // In 1.21.2, sidedSuccess only takes the boolean parameter
-        return InteractionResult.sidedSuccess(isClientSide);
+        // In 1.21.2, sidedSuccess was removed; use SUCCESS on server, CONSUME on client
+        return isClientSide ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
     }
 }

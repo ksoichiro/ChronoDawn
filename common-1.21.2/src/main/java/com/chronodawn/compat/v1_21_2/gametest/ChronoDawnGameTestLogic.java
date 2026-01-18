@@ -971,7 +971,7 @@ public final class ChronoDawnGameTestLogic {
 
         helper.runAfterDelay(1, () -> {
             if (chestplate.getItem() instanceof net.minecraft.world.item.ArmorItem armorItem) {
-                int actualDefense = armorItem.getDefense();
+                int actualDefense = armorItem.getMaterial().value().getDefense(armorItem.getType());
                 if (actualDefense == CLOCKSTONE_CHESTPLATE_DEFENSE) {
                     helper.succeed();
                 } else {
@@ -992,7 +992,7 @@ public final class ChronoDawnGameTestLogic {
 
         helper.runAfterDelay(1, () -> {
             if (chestplate.getItem() instanceof net.minecraft.world.item.ArmorItem armorItem) {
-                int actualDefense = armorItem.getDefense();
+                int actualDefense = armorItem.getMaterial().value().getDefense(armorItem.getType());
                 if (actualDefense == ENHANCED_CLOCKSTONE_CHESTPLATE_DEFENSE) {
                     helper.succeed();
                 } else {
@@ -1033,7 +1033,7 @@ public final class ChronoDawnGameTestLogic {
 
         helper.runAfterDelay(1, () -> {
             if (helmet.getItem() instanceof net.minecraft.world.item.ArmorItem armorItem) {
-                int actualDefense = armorItem.getDefense();
+                int actualDefense = armorItem.getMaterial().value().getDefense(armorItem.getType());
                 if (actualDefense == CLOCKSTONE_HELMET_DEFENSE) {
                     helper.succeed();
                 } else {
@@ -1054,7 +1054,7 @@ public final class ChronoDawnGameTestLogic {
 
         helper.runAfterDelay(1, () -> {
             if (leggings.getItem() instanceof net.minecraft.world.item.ArmorItem armorItem) {
-                int actualDefense = armorItem.getDefense();
+                int actualDefense = armorItem.getMaterial().value().getDefense(armorItem.getType());
                 if (actualDefense == CLOCKSTONE_LEGGINGS_DEFENSE) {
                     helper.succeed();
                 } else {
@@ -1075,7 +1075,7 @@ public final class ChronoDawnGameTestLogic {
 
         helper.runAfterDelay(1, () -> {
             if (boots.getItem() instanceof net.minecraft.world.item.ArmorItem armorItem) {
-                int actualDefense = armorItem.getDefense();
+                int actualDefense = armorItem.getMaterial().value().getDefense(armorItem.getType());
                 if (actualDefense == CLOCKSTONE_BOOTS_DEFENSE) {
                     helper.succeed();
                 } else {
@@ -1096,7 +1096,7 @@ public final class ChronoDawnGameTestLogic {
 
         helper.runAfterDelay(1, () -> {
             if (helmet.getItem() instanceof net.minecraft.world.item.ArmorItem armorItem) {
-                int actualDefense = armorItem.getDefense();
+                int actualDefense = armorItem.getMaterial().value().getDefense(armorItem.getType());
                 if (actualDefense == ENHANCED_CLOCKSTONE_HELMET_DEFENSE) {
                     helper.succeed();
                 } else {
@@ -1117,7 +1117,7 @@ public final class ChronoDawnGameTestLogic {
 
         helper.runAfterDelay(1, () -> {
             if (leggings.getItem() instanceof net.minecraft.world.item.ArmorItem armorItem) {
-                int actualDefense = armorItem.getDefense();
+                int actualDefense = armorItem.getMaterial().value().getDefense(armorItem.getType());
                 if (actualDefense == ENHANCED_CLOCKSTONE_LEGGINGS_DEFENSE) {
                     helper.succeed();
                 } else {
@@ -1138,7 +1138,7 @@ public final class ChronoDawnGameTestLogic {
 
         helper.runAfterDelay(1, () -> {
             if (boots.getItem() instanceof net.minecraft.world.item.ArmorItem armorItem) {
-                int actualDefense = armorItem.getDefense();
+                int actualDefense = armorItem.getMaterial().value().getDefense(armorItem.getType());
                 if (actualDefense == ENHANCED_CLOCKSTONE_BOOTS_DEFENSE) {
                     helper.succeed();
                 } else {

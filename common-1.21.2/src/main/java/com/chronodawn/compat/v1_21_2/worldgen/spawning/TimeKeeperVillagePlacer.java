@@ -171,7 +171,7 @@ public class TimeKeeperVillagePlacer {
             int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z);
 
             // Sanity check: if Y is still at minimum world height, skip this position
-            if (y <= level.getMinBuildHeight()) {
+            if (y <= level.getMinY()) {
                 ChronoDawn.LOGGER.debug("Skipping position ({}, {}) - heightmap returned minimum height {}", x, z, y);
                 continue;
             }

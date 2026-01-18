@@ -29,7 +29,7 @@ import net.minecraft.world.level.block.Block;
  */
 public class EnhancedClockstoneTier {
     public static final ToolMaterial INSTANCE = new ToolMaterial(
-        BlockTags.INCORRECT_FOR_DIAMOND_TOOL, // Diamond mining level
+        () -> BlockTags.INCORRECT_FOR_DIAMOND_TOOL, // Diamond mining level
         1200, // Close to diamond (1561), much better than Tier 1 (450)
         7.5f, // Between clockstone (6.5f) and diamond (8.0f)
         3.0f, // Same as diamond

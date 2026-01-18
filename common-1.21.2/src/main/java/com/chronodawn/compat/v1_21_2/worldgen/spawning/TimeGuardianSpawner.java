@@ -114,7 +114,7 @@ public class TimeGuardianSpawner {
                         chunkPos,
                         structure -> {
                             var location = level.registryAccess()
-                                .registry(net.minecraft.core.registries.Registries.STRUCTURE).orElseThrow()
+                                .lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
                                 .getKey(structure);
                             return location != null && location.equals(DESERT_CLOCK_TOWER_ID);
                         }

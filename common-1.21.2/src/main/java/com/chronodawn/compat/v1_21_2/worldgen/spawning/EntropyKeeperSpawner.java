@@ -180,7 +180,7 @@ public class EntropyKeeperSpawner {
             Structure structure = entry.getKey();
 
             var structureLocation = level.registryAccess()
-                .registry(Registries.STRUCTURE).orElseThrow()
+                .lookupOrThrow(Registries.STRUCTURE)
                 .getKey(structure);
 
             if (structureLocation != null && structureLocation.equals(ENTROPY_CRYPT_ID)) {
@@ -239,8 +239,8 @@ public class EntropyKeeperSpawner {
         // Search for Amethyst Block marker in a limited area around structure
         // Reduced search radius to 30 blocks (was 50) and limited Y range
         int searchRadius = 30;
-        int minY = Math.max(structurePos.getY() - 20, level.getMinBuildHeight());
-        int maxY = Math.min(structurePos.getY() + 20, level.getMaxBuildHeight());
+        int minY = Math.max(structurePos.getY() - 20, level.getMinY());
+        int maxY = Math.min(structurePos.getY() + 20, level.getMaxY());
 
         BlockPos foundMarker = null;
 
