@@ -10,6 +10,8 @@ import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 
+import java.util.function.Supplier;
+
 /**
  * Custom boat entity for ChronoDawn mod wood types.
  * Extends vanilla Boat to support Time Wood variants.
@@ -21,12 +23,12 @@ public class ChronoDawnBoat extends Boat {
     private static final EntityDataAccessor<Integer> DATA_CHRONO_DAWN_TYPE = SynchedEntityData.defineId(
             ChronoDawnBoat.class, EntityDataSerializers.INT);
 
-    public ChronoDawnBoat(EntityType<? extends Boat> entityType, Level level) {
-        super(entityType, level);
+    public ChronoDawnBoat(EntityType<? extends Boat> entityType, Level level, Supplier<Item> supplier) {
+        super(entityType, level, supplier);
     }
 
-    public ChronoDawnBoat(Level level, double x, double y, double z) {
-        this(ModEntities.CHRONO_DAWN_BOAT.get(), level);
+    public ChronoDawnBoat(Level level, Supplier<Item> supplier, double x, double y, double z) {
+        this(ModEntities.CHRONO_DAWN_BOAT.get(), level, supplier);
         this.setPos(x, y, z);
         this.xo = x;
         this.yo = y;
@@ -61,13 +63,8 @@ public class ChronoDawnBoat extends Boat {
         return ChronoDawnBoatType.byId(this.entityData.get(DATA_CHRONO_DAWN_TYPE));
     }
 
-    @Override
-    public Item getDropItem() {
-        return getChronoDawnBoatType().getBoatItem();
-    }
-
     /**
-     * Note: In Minecraft 1.21.2, Boat.Type was removed and boats are now separate entity types.
-     * We use ChronoDawnBoatType for our custom boat variants, so no changes needed.
+     * Note: In Minecraft 1.21.2, getDropItem() is no longer overridable.
+     * The drop item is now determined by the Supplier<Item> passed to the constructor.
      */
 }

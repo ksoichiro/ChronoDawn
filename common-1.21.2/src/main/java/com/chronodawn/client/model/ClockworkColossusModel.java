@@ -1,16 +1,13 @@
 package com.chronodawn.client.model;
 
 import com.chronodawn.ChronoDawn;
-import com.chronodawn.entities.bosses.ClockworkColossusEntity;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.chronodawn.client.renderer.ClockworkColossusRenderState;
+import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.resources.ResourceLocation;
-import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.util.Mth;
 
 /**
@@ -22,7 +19,7 @@ import net.minecraft.util.Mth;
  * Reference: research.md (Additional Bosses - Clockwork Colossus)
  * Task: T235h [Phase 1] Create model for Clockwork Colossus
  */
-public class ClockworkColossusModel extends EntityModel<ClockworkColossusEntity> {
+public class ClockworkColossusModel extends EntityModel<ClockworkColossusRenderState> {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
         CompatResourceLocation.create(ChronoDawn.MOD_ID, "clockwork_colossus"),
@@ -38,6 +35,7 @@ public class ClockworkColossusModel extends EntityModel<ClockworkColossusEntity>
     private final ModelPart right_leg;
 
     public ClockworkColossusModel(ModelPart root) {
+        super(root);
         this.root = root.getChild("root");
         this.body = this.root.getChild("body");
         this.left_arm = this.body.getChild("left_arm");
@@ -113,7 +111,7 @@ public class ClockworkColossusModel extends EntityModel<ClockworkColossusEntity>
     }
 
     @Override
-    public void setupAnim(ClockworkColossusEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setupAnim(ClockworkColossusRenderState entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         // Head rotation
         this.head.yRot = netHeadYaw * ((float)Math.PI / 180F);
         this.head.xRot = headPitch * ((float)Math.PI / 180F);
@@ -129,10 +127,5 @@ public class ClockworkColossusModel extends EntityModel<ClockworkColossusEntity>
         // Add slight arm swing for idle animation
         this.right_arm.zRot = 0.0F;
         this.left_arm.zRot = 0.0F;
-    }
-
-    @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-        root.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
     }
 }

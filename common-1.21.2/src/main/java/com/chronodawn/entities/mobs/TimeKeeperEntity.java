@@ -101,21 +101,21 @@ public class TimeKeeperEntity extends AbstractVillager {
     }
 
     /**
-     * Override hurt to allow player attacks despite being invulnerable.
+     * Override hurtServer to allow player attacks despite being invulnerable.
      * The invulnerable flag makes hostile mobs ignore Time Keeper,
      * but we still want players to be able to attack if needed.
      */
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(ServerLevel serverLevel, DamageSource source, float amount) {
         // Allow damage that bypasses invulnerability (/kill, void, etc.)
         if (source.is(net.minecraft.tags.DamageTypeTags.BYPASSES_INVULNERABILITY)) {
-            return super.hurt(source, amount);
+            return super.hurtServer(serverLevel, source, amount);
         }
         // Allow damage from players
         if (source.getEntity() instanceof Player) {
             // Temporarily remove invulnerable flag to process damage
             this.setInvulnerable(false);
-            boolean result = super.hurt(source, amount);
+            boolean result = super.hurtServer(serverLevel, source, amount);
             this.setInvulnerable(true);
             return result;
         }
@@ -425,14 +425,15 @@ public class TimeKeeperEntity extends AbstractVillager {
         com.chronodawn.ChronoDawn.LOGGER.info("Time Keeper: Searching from position: {}", searchOrigin);
 
         // Get structure registry
+        // In 1.21.2, get() returns Optional<Holder.Reference<T>>
         var structureRegistry = searchLevel.registryAccess().lookupOrThrow(Registries.STRUCTURE);
-        var structureHolder = structureRegistry.get(structureId);
+        var structureHolderOpt = structureRegistry.get(structureId);
 
-        if (structureHolder != null) {
+        if (structureHolderOpt.isPresent()) {
             com.chronodawn.ChronoDawn.LOGGER.info("Time Keeper: Structure found in registry: {}", structureId);
 
             // Create HolderSet for the single structure
-            HolderSet<Structure> structureSet = HolderSet.direct(structureRegistry.wrapAsHolder(structureHolder));
+            HolderSet<Structure> structureSet = HolderSet.direct(structureHolderOpt.get());
 
             // Locate nearest structure
             var structurePair = searchLevel.getChunkSource().getGenerator().findNearestMapStructure(

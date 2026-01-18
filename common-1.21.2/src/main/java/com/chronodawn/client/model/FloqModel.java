@@ -1,5 +1,6 @@
 package com.chronodawn.client.model;
 
+import com.chronodawn.client.renderer.mobs.FloqRenderState;
 import com.chronodawn.entities.mobs.FloqEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -16,7 +17,7 @@ import com.chronodawn.compat.CompatResourceLocation;
  * Made with Blockbench 5.0.4
  * Exported for Minecraft version 1.17 or later with Mojang mappings
  */
-public class FloqModel extends EntityModel<FloqEntity> {
+public class FloqModel extends EntityModel<FloqRenderState> {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
         CompatResourceLocation.create("chronodawn", "floq"),
@@ -29,6 +30,7 @@ public class FloqModel extends EntityModel<FloqEntity> {
     private final ModelPart mouth;
 
     public FloqModel(ModelPart root) {
+        super(root);
         this.body = root.getChild("body");
         this.right_eye = root.getChild("right_eye");
         this.left_eye = root.getChild("left_eye");

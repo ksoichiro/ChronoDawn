@@ -1,9 +1,12 @@
 package com.chronodawn.items.consumables;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.component.Consumable;
+import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 
 /**
  * Time Fruit Pie - Crafted food item from Time Fruits and wheat.
@@ -43,17 +46,20 @@ public class TimeFruitPieItem extends Item {
         FoodProperties foodProperties = new FoodProperties.Builder()
                 .nutrition(8)        // 8 hunger points (4 drumsticks)
                 .saturationModifier(0.8f)  // Saturation modifier (total: 8 * 0.8 = 6.4)
-                .effect(
-                        new MobEffectInstance(
-                                MobEffects.DIG_SPEED,  // Haste II
-                                30 * 20,               // 30 seconds (20 ticks/second)
-                                1                      // Amplifier 1 = Haste II
-                        ),
-                        1.0f  // 100% chance to apply effect
-                )
                 .build();
 
         return new Properties()
-                .food(foodProperties);
+                .food(foodProperties)
+                .component(DataComponents.CONSUMABLE,
+                        Consumable.builder()
+                                .onConsume(new ApplyStatusEffectsConsumeEffect(
+                                        new MobEffectInstance(
+                                                MobEffects.DIG_SPEED,  // Haste II
+                                                30 * 20,               // 30 seconds (20 ticks/second)
+                                                1                      // Amplifier 1 = Haste II
+                                        ),
+                                        1.0f  // 100% chance to apply effect
+                                ))
+                                .build());
     }
 }

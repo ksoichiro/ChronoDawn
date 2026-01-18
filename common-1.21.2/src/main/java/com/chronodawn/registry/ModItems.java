@@ -58,6 +58,7 @@ import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.equipment.ArmorType;
 
 /**
  * Architectury Registry wrapper for custom items.
@@ -1113,7 +1114,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> CLOCKSTONE_HELMET = ITEMS.register(
         "clockstone_helmet",
-        () -> new ClockstoneArmorItem(ArmorItem.Type.HELMET, ClockstoneArmorItem.createProperties(ArmorItem.Type.HELMET))
+        () -> new ClockstoneArmorItem(ArmorType.HELMET, ClockstoneArmorItem.createProperties(ArmorType.HELMET))
     );
 
     /**
@@ -1122,7 +1123,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> CLOCKSTONE_CHESTPLATE = ITEMS.register(
         "clockstone_chestplate",
-        () -> new ClockstoneArmorItem(ArmorItem.Type.CHESTPLATE, ClockstoneArmorItem.createProperties(ArmorItem.Type.CHESTPLATE))
+        () -> new ClockstoneArmorItem(ArmorType.CHESTPLATE, ClockstoneArmorItem.createProperties(ArmorType.CHESTPLATE))
     );
 
     /**
@@ -1131,7 +1132,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> CLOCKSTONE_LEGGINGS = ITEMS.register(
         "clockstone_leggings",
-        () -> new ClockstoneArmorItem(ArmorItem.Type.LEGGINGS, ClockstoneArmorItem.createProperties(ArmorItem.Type.LEGGINGS))
+        () -> new ClockstoneArmorItem(ArmorType.LEGGINGS, ClockstoneArmorItem.createProperties(ArmorType.LEGGINGS))
     );
 
     /**
@@ -1140,7 +1141,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> CLOCKSTONE_BOOTS = ITEMS.register(
         "clockstone_boots",
-        () -> new ClockstoneArmorItem(ArmorItem.Type.BOOTS, ClockstoneArmorItem.createProperties(ArmorItem.Type.BOOTS))
+        () -> new ClockstoneArmorItem(ArmorType.BOOTS, ClockstoneArmorItem.createProperties(ArmorType.BOOTS))
     );
 
     // === Tier 2 Equipment - Weapons ===
@@ -1244,7 +1245,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_HELMET = ITEMS.register(
         "enhanced_clockstone_helmet",
-        () -> new EnhancedClockstoneArmorItem(ArmorItem.Type.HELMET, EnhancedClockstoneArmorItem.createProperties(ArmorItem.Type.HELMET))
+        () -> new EnhancedClockstoneArmorItem(ArmorType.HELMET, EnhancedClockstoneArmorItem.createProperties(ArmorType.HELMET))
     );
 
     /**
@@ -1254,7 +1255,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_CHESTPLATE = ITEMS.register(
         "enhanced_clockstone_chestplate",
-        () -> new EnhancedClockstoneArmorItem(ArmorItem.Type.CHESTPLATE, EnhancedClockstoneArmorItem.createProperties(ArmorItem.Type.CHESTPLATE))
+        () -> new EnhancedClockstoneArmorItem(ArmorType.CHESTPLATE, EnhancedClockstoneArmorItem.createProperties(ArmorType.CHESTPLATE))
     );
 
     /**
@@ -1264,7 +1265,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_LEGGINGS = ITEMS.register(
         "enhanced_clockstone_leggings",
-        () -> new EnhancedClockstoneArmorItem(ArmorItem.Type.LEGGINGS, EnhancedClockstoneArmorItem.createProperties(ArmorItem.Type.LEGGINGS))
+        () -> new EnhancedClockstoneArmorItem(ArmorType.LEGGINGS, EnhancedClockstoneArmorItem.createProperties(ArmorType.LEGGINGS))
     );
 
     /**
@@ -1274,7 +1275,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_BOOTS = ITEMS.register(
         "enhanced_clockstone_boots",
-        () -> new EnhancedClockstoneArmorItem(ArmorItem.Type.BOOTS, EnhancedClockstoneArmorItem.createProperties(ArmorItem.Type.BOOTS))
+        () -> new EnhancedClockstoneArmorItem(ArmorType.BOOTS, EnhancedClockstoneArmorItem.createProperties(ArmorType.BOOTS))
     );
 
     // === Tools ===

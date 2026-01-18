@@ -1,20 +1,13 @@
 package com.chronodawn.client.model;
 
 import com.chronodawn.ChronoDawn;
-import com.chronodawn.entities.bosses.ChronosWardenEntity;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.chronodawn.client.renderer.ChronosWardenRenderState;
+import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.resources.ResourceLocation;
-import com.chronodawn.compat.CompatResourceLocation;
+import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
 
 /**
@@ -34,7 +27,7 @@ import net.minecraft.util.Mth;
  *
  * Task: T234e [Phase 1] Create ChronosWardenModel
  */
-public class ChronosWardenModel extends EntityModel<ChronosWardenEntity> {
+public class ChronosWardenModel extends EntityModel<ChronosWardenRenderState> {
     // Model layer location for Chronos Warden
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
         CompatResourceLocation.create(ChronoDawn.MOD_ID, "chronos_warden"),
@@ -50,6 +43,7 @@ public class ChronosWardenModel extends EntityModel<ChronosWardenEntity> {
     private final ModelPart rightLeg;
 
     public ChronosWardenModel(ModelPart root) {
+        super(root);
         this.root = root.getChild("root");
         this.body = this.root.getChild("body");
         this.leftArm = this.body.getChild("left_arm");
@@ -107,7 +101,7 @@ public class ChronosWardenModel extends EntityModel<ChronosWardenEntity> {
     }
 
     @Override
-    public void setupAnim(ChronosWardenEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setupAnim(ChronosWardenRenderState entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         // Reset all rotations to default
         this.head.xRot = 0.0F;
         this.head.yRot = 0.0F;
@@ -152,10 +146,5 @@ public class ChronosWardenModel extends EntityModel<ChronosWardenEntity> {
             this.rightArm.zRot = 0.3F * armRaise;
             this.leftArm.zRot = -0.3F * armRaise;
         }
-    }
-
-    @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-        root.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
     }
 }

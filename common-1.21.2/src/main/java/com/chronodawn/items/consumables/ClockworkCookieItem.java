@@ -1,9 +1,12 @@
 package com.chronodawn.items.consumables;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.component.Consumable;
+import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 
 /**
  * Clockwork Cookie (歯車クッキー)
@@ -48,26 +51,27 @@ public class ClockworkCookieItem extends Item {
         FoodProperties foodProperties = new FoodProperties.Builder()
                 .nutrition(2)              // 2 hunger points (1 drumstick)
                 .saturationModifier(0.4f)  // Saturation modifier (total: 2 * 0.4 = 0.8)
-                .effect(
-                        new MobEffectInstance(
-                                MobEffects.DAMAGE_RESISTANCE,  // Resistance I
-                                30 * 20,                       // 30 seconds (20 ticks/second)
-                                0                              // Amplifier 0 = Resistance I
-                        ),
-                        1.0f  // 100% chance to apply effect
-                )
-                .effect(
-                        new MobEffectInstance(
-                                MobEffects.FIRE_RESISTANCE,    // Fire Resistance
-                                30 * 20,                       // 30 seconds (20 ticks/second)
-                                0                              // Amplifier 0 = Fire Resistance I
-                        ),
-                        1.0f  // 100% chance to apply effect
-                )
                 .fast()  // Fast eating speed (1.6 seconds)
                 .build();
 
         return new Properties()
-                .food(foodProperties);
+                .food(foodProperties)
+                .component(DataComponents.CONSUMABLE,
+                        Consumable.builder()
+                                .onConsume(new ApplyStatusEffectsConsumeEffect(
+                                        new MobEffectInstance(
+                                                MobEffects.DAMAGE_RESISTANCE,  // Resistance I
+                                                30 * 20,                       // 30 seconds (20 ticks/second)
+                                                0                              // Amplifier 0 = Resistance I
+                                        ),
+                                        1.0f))  // 100% chance to apply effect
+                                .onConsume(new ApplyStatusEffectsConsumeEffect(
+                                        new MobEffectInstance(
+                                                MobEffects.FIRE_RESISTANCE,    // Fire Resistance
+                                                30 * 20,                       // 30 seconds (20 ticks/second)
+                                                0                              // Amplifier 0 = Fire Resistance I
+                                        ),
+                                        1.0f))  // 100% chance to apply effect
+                                .build());
     }
 }

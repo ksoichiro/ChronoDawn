@@ -1,6 +1,7 @@
 package com.chronodawn.entities.mobs;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -94,8 +95,8 @@ public class TemporalWraithEntity extends Monster {
      * Override doHurtTarget to inflict Slowness II on attack
      */
     @Override
-    public boolean doHurtTarget(net.minecraft.world.entity.Entity target) {
-        boolean result = super.doHurtTarget(target);
+    public boolean doHurtTarget(ServerLevel serverLevel, net.minecraft.world.entity.Entity target) {
+        boolean result = super.doHurtTarget(serverLevel, target);
 
         if (result && target instanceof LivingEntity livingEntity) {
             // Apply Slowness II for 10 seconds (200 ticks)

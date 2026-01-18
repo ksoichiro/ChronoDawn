@@ -1,6 +1,7 @@
 package com.chronodawn.registry;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.compat.CompatResourceLocation;
 import com.chronodawn.entities.bosses.ChronosWardenEntity;
 import com.chronodawn.entities.bosses.EntropyKeeperEntity;
 import com.chronodawn.entities.bosses.TemporalPhantomEntity;
@@ -17,6 +18,7 @@ import com.chronodawn.entities.projectiles.TimeBlastEntity;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 
@@ -41,7 +43,7 @@ public class ModEntities {
             .sized(1.0f, 2.8f) // Width 1.0, Height 2.8 (taller than player for boss presence)
             .clientTrackingRange(10) // Tracking range for clients
             .updateInterval(3) // Update interval in ticks
-            .build("time_guardian")
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "time_guardian")))
     );
 
     /**
@@ -59,7 +61,7 @@ public class ModEntities {
             .sized(1.0f, 2.5f) // Width 1.0, Height 2.5 (stone guardian size)
             .clientTrackingRange(10) // Tracking range for clients
             .updateInterval(3) // Update interval in ticks
-            .build("chronos_warden")
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "chronos_warden")))
     );
 
     /**
@@ -77,7 +79,7 @@ public class ModEntities {
             .sized(1.0f, 2.5f) // Width 1.0, Height 2.5 (mechanical colossus size)
             .clientTrackingRange(10) // Tracking range for clients
             .updateInterval(3) // Update interval in ticks
-            .build("clockwork_colossus")
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "clockwork_colossus")))
     );
 
     /**
@@ -94,7 +96,7 @@ public class ModEntities {
             .sized(0.5f, 0.5f) // Small projectile size
             .clientTrackingRange(4) // Short tracking range
             .updateInterval(10) // Update interval in ticks
-            .build("gear_projectile")
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "gear_projectile")))
     );
 
     /**
@@ -109,7 +111,7 @@ public class ModEntities {
             .sized(0.6f, 1.8f) // Smaller than player (spectral appearance)
             .clientTrackingRange(8)
             .updateInterval(3)
-            .build("temporal_wraith")
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "temporal_wraith")))
     );
 
     /**
@@ -124,7 +126,7 @@ public class ModEntities {
             .sized(0.9f, 2.0f) // Slightly larger than player (mechanical guardian)
             .clientTrackingRange(10)
             .updateInterval(3)
-            .build("clockwork_sentinel")
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "clockwork_sentinel")))
     );
 
     /**
@@ -139,7 +141,7 @@ public class ModEntities {
             .sized(0.6f, 1.95f) // Similar to villager
             .clientTrackingRange(10)
             .updateInterval(3)
-            .build("time_keeper")
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "time_keeper")))
     );
 
     /**
@@ -154,7 +156,7 @@ public class ModEntities {
             .sized(0.6f, 0.6f) // Small cube
             .clientTrackingRange(8)
             .updateInterval(3)
-            .build("floq")
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "floq")))
     );
 
     /**
@@ -169,7 +171,7 @@ public class ModEntities {
             .sized(1.5f, 4.0f) // Width 1.5, Height 4.0 (includes head/horns)
             .clientTrackingRange(10) // Tracking range for clients
             .updateInterval(3) // Update interval in ticks
-            .build("time_tyrant")
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "time_tyrant")))
     );
 
     /**
@@ -184,7 +186,7 @@ public class ModEntities {
             .sized(0.5f, 0.5f) // Standard arrow size
             .clientTrackingRange(4) // Standard arrow tracking range
             .updateInterval(20) // Standard arrow update interval
-            .build("time_arrow")
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "time_arrow")))
     );
 
     /**
@@ -199,7 +201,7 @@ public class ModEntities {
             .sized(0.5f, 0.5f) // Small projectile size
             .clientTrackingRange(4) // Standard projectile tracking range
             .updateInterval(10) // Update interval in ticks
-            .build("time_blast")
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "time_blast")))
     );
 
     /**
@@ -220,7 +222,7 @@ public class ModEntities {
             .sized(0.8f, 2.0f)
             .clientTrackingRange(10)
             .updateInterval(3)
-            .build("temporal_phantom")
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "temporal_phantom")))
     );
 
     /**
@@ -241,7 +243,7 @@ public class ModEntities {
             .sized(0.9f, 2.2f)
             .clientTrackingRange(10)
             .updateInterval(3)
-            .build("entropy_keeper")
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "entropy_keeper")))
     );
 
     // === Boat Entities ===
@@ -257,10 +259,13 @@ public class ModEntities {
      */
     public static final RegistrySupplier<EntityType<ChronoDawnBoat>> CHRONO_DAWN_BOAT = ENTITIES.register(
         "chronodawn_boat",
-        () -> EntityType.Builder.<ChronoDawnBoat>of(ChronoDawnBoat::new, MobCategory.MISC)
+        () -> EntityType.Builder.<ChronoDawnBoat>of(
+                (entityType, level) -> new ChronoDawnBoat(entityType, level, () -> net.minecraft.world.item.Items.OAK_BOAT),
+                MobCategory.MISC
+            )
             .sized(1.375F, 0.5625F) // Standard boat size
             .clientTrackingRange(10)
-            .build("chronodawn_boat")
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "chronodawn_boat")))
     );
 
     /**
@@ -274,10 +279,13 @@ public class ModEntities {
      */
     public static final RegistrySupplier<EntityType<ChronoDawnChestBoat>> CHRONO_DAWN_CHEST_BOAT = ENTITIES.register(
         "chronodawn_chest_boat",
-        () -> EntityType.Builder.<ChronoDawnChestBoat>of(ChronoDawnChestBoat::new, MobCategory.MISC)
+        () -> EntityType.Builder.<ChronoDawnChestBoat>of(
+                (entityType, level) -> new ChronoDawnChestBoat(entityType, level, () -> net.minecraft.world.item.Items.OAK_CHEST_BOAT),
+                MobCategory.MISC
+            )
             .sized(1.375F, 0.5625F) // Standard boat size
             .clientTrackingRange(10)
-            .build("chronodawn_chest_boat")
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "chronodawn_chest_boat")))
     );
 
     /**

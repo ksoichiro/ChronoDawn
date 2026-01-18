@@ -20,7 +20,7 @@ import com.chronodawn.compat.CompatResourceLocation;
  * Task: T236 [Phase 2] Implement Temporal Phantom
  * Task: T236s [US3] Create custom texture for Temporal Phantom
  */
-public class TemporalPhantomRenderer extends MobRenderer<TemporalPhantomEntity, TemporalPhantomRenderState, TemporalPhantomModel<TemporalPhantomRenderState>> {
+public class TemporalPhantomRenderer extends MobRenderer<TemporalPhantomEntity, TemporalPhantomRenderState, TemporalPhantomModel> {
     private static final ResourceLocation TEXTURE = CompatResourceLocation.create(
         ChronoDawn.MOD_ID,
         "textures/entity/temporal_phantom.png"

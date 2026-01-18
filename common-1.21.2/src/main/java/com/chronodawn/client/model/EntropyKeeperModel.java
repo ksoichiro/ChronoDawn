@@ -1,17 +1,11 @@
 package com.chronodawn.client.model;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.chronodawn.client.renderer.EntropyKeeperRenderState;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Mob;
 
 /**
  * Entropy Keeper Model
@@ -28,7 +22,7 @@ import net.minecraft.world.entity.Mob;
  *   - left_leg
  *   - right_leg
  */
-public class EntropyKeeperModel<T extends Mob> extends EntityModel<T> {
+public class EntropyKeeperModel extends EntityModel<EntropyKeeperRenderState> {
     private final ModelPart root;
     private final ModelPart body;
     private final ModelPart head;
@@ -38,6 +32,7 @@ public class EntropyKeeperModel<T extends Mob> extends EntityModel<T> {
     private final ModelPart rightLeg;
 
     public EntropyKeeperModel(ModelPart root) {
+        super(root);
         this.root = root.getChild("root");
         this.body = this.root.getChild("body");
         this.head = this.body.getChild("head");
@@ -122,7 +117,7 @@ public class EntropyKeeperModel<T extends Mob> extends EntityModel<T> {
     }
 
     @Override
-    public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setupAnim(EntropyKeeperRenderState entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         // Reset all rotations to default
         this.head.xRot = 0.0F;
         this.head.yRot = 0.0F;
@@ -172,10 +167,5 @@ public class EntropyKeeperModel<T extends Mob> extends EntityModel<T> {
             this.rightArm.zRot = 0.3F * armRaise;
             this.leftArm.zRot = -0.3F * armRaise;
         }
-    }
-
-    @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-        root.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
     }
 }

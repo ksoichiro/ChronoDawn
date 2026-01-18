@@ -1,6 +1,7 @@
 package com.chronodawn.anvil;
 
 import com.chronodawn.registry.ModItems;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ItemStack;
 
 /**
@@ -40,8 +41,16 @@ public class AnvilRepairHandler {
             return null; // Not repairable
         }
 
-        // Check if Time Crystal is valid repair material for this item
-        if (!leftInput.getItem().isValidRepairItem(leftInput, rightInput)) {
+        // Check if the item has a REPAIRABLE component (is repairable at all)
+        // In 1.21.2, REPAIRABLE component defines which items can be used for repair
+        var repairable = leftInput.get(DataComponents.REPAIRABLE);
+        if (repairable == null) {
+            return null; // Item is not repairable
+        }
+
+        // Check if Time Crystal is a valid repair material for this item
+        // Repairable.items() returns HolderSet<Item>
+        if (!repairable.items().contains(rightInput.getItemHolder())) {
             return null; // Time Crystal is not valid for this item
         }
 

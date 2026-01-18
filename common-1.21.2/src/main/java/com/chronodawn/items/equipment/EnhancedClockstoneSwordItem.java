@@ -48,7 +48,7 @@ public class EnhancedClockstoneSwordItem extends SwordItem {
 
     public EnhancedClockstoneSwordItem(Properties properties) {
         // 1.21.1: Uses createAttributes() for attribute building
-        super(EnhancedClockstoneTier.INSTANCE, properties.attributes(SwordItem.createAttributes(EnhancedClockstoneTier.INSTANCE, 3, -2.4f)));
+        super(EnhancedClockstoneTier.INSTANCE, properties.attributes(EnhancedClockstoneTier.INSTANCE.applySwordProperties(properties,3, -2.4f)));
     }
 
     /**

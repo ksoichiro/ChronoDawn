@@ -1,9 +1,12 @@
 package com.chronodawn.items.consumables;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.component.Consumable;
+import net.minecraft.world.item.consume_effects.ApplyStatusEffectsConsumeEffect;
 
 /**
  * Baked Temporal Root - Cooked root vegetable with healing properties.
@@ -49,17 +52,18 @@ public class BakedTemporalRootItem extends Item {
         FoodProperties foodProperties = new FoodProperties.Builder()
                 .nutrition(6)        // 6 hunger points (3 drumsticks)
                 .saturationModifier(0.6f)  // Saturation modifier (total: 6 * 0.6 = 3.6)
-                .effect(
-                        new MobEffectInstance(
-                                MobEffects.REGENERATION,  // Regeneration I
-                                5 * 20,                   // 5 seconds (20 ticks/second)
-                                0                         // Amplifier 0 = Regeneration I
-                        ),
-                        1.0f  // 100% chance to apply effect
-                )
                 .build();
 
         return new Properties()
-                .food(foodProperties);
+                .food(foodProperties)
+                .component(DataComponents.CONSUMABLE,
+                        Consumable.builder()
+                                .onConsume(new ApplyStatusEffectsConsumeEffect(
+                                    new MobEffectInstance(
+                                            MobEffects.REGENERATION,  // Regeneration I
+                                            5 * 20,                   // 5 seconds (20 ticks/second)
+                                            0),                       // Amplifier 0 = Regeneration I
+                                    1.0f))  // 100% chance to apply effect
+                                .build());
     }
 }

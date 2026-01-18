@@ -1,16 +1,11 @@
 package com.chronodawn.client.model;
 
+import com.chronodawn.client.renderer.TimeTyrantRenderState;
 import com.chronodawn.entities.bosses.TimeTyrantEntity;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
 
 /**
@@ -35,7 +30,7 @@ import net.minecraft.util.Mth;
  * Size: 1.5x4.0 (larger than Time Guardian, includes head/horns)
  * Texture: 256x256 pixels
  */
-public class TimeTyrantModel extends EntityModel<TimeTyrantEntity> {
+public class TimeTyrantModel extends EntityModel<TimeTyrantRenderState> {
     private final ModelPart root;
     private final ModelPart body;
     private final ModelPart head;
@@ -49,6 +44,7 @@ public class TimeTyrantModel extends EntityModel<TimeTyrantEntity> {
     private final ModelPart rightLeg;
 
     public TimeTyrantModel(ModelPart root) {
+        super(root);
         this.root = root.getChild("root");
         this.body = this.root.getChild("body");
         this.leftArm = this.body.getChild("left_arm");
@@ -209,10 +205,5 @@ public class TimeTyrantModel extends EntityModel<TimeTyrantEntity> {
                 this.leftArm.zRot = -0.3F;
             }
         }
-    }
-
-    @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-        root.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
     }
 }

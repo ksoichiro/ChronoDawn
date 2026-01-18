@@ -1,7 +1,9 @@
 package com.chronodawn.items.consumables;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.component.Consumable;
 
 /**
  * Chrono Melon Slice - Basic food item from Chrono Melon.
@@ -48,10 +50,13 @@ public class ChronoMelonSliceItem extends Item {
         FoodProperties foodProperties = new FoodProperties.Builder()
                 .nutrition(2)        // 2 hunger points (1 drumstick)
                 .saturationModifier(0.3f)  // Saturation modifier (total: 2 * 0.3 = 0.6)
-                .fast()              // Fast eating speed (1.6 seconds instead of 3.2)
                 .build();
 
         return new Properties()
-                .food(foodProperties);
+                .food(foodProperties)
+                .component(DataComponents.CONSUMABLE,
+                        Consumable.builder()
+                                .consumeSeconds(1.6f) // Fast eating speed (1.6 seconds instead of 3.2)
+                                .build());
     }
 }

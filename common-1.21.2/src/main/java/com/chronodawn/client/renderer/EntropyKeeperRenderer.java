@@ -16,7 +16,7 @@ import com.chronodawn.compat.CompatResourceLocation;
  *
  * Task: T237 [Phase 2] Implement Entropy Keeper
  */
-public class EntropyKeeperRenderer extends MobRenderer<EntropyKeeperEntity, EntropyKeeperRenderState, EntropyKeeperModel<EntropyKeeperRenderState>> {
+public class EntropyKeeperRenderer extends MobRenderer<EntropyKeeperEntity, EntropyKeeperRenderState, EntropyKeeperModel> {
     private static final ResourceLocation TEXTURE = CompatResourceLocation.create(
         ChronoDawn.MOD_ID,
         "textures/entity/entropy_keeper.png"

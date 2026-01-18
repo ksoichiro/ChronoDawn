@@ -1,24 +1,21 @@
 package com.chronodawn.client.model;
 
+import com.chronodawn.client.renderer.mobs.ClockworkSentinelRenderState;
+import com.chronodawn.compat.CompatResourceLocation;
 import com.chronodawn.entities.mobs.ClockworkSentinelEntity;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.resources.ResourceLocation;
-import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 
 /**
  * Custom model for Clockwork Sentinel.
  * Made with Blockbench 5.0.3
  * Exported for Minecraft version 1.17 or later with Mojang mappings
  */
-public class ClockworkSentinelModel extends EntityModel<ClockworkSentinelEntity> {
+public class ClockworkSentinelModel extends EntityModel<ClockworkSentinelRenderState> {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
         CompatResourceLocation.create("chronodawn", "clockwork_sentinel"),
@@ -35,6 +32,7 @@ public class ClockworkSentinelModel extends EntityModel<ClockworkSentinelEntity>
     private final ModelPart right_leg;
 
     public ClockworkSentinelModel(ModelPart root) {
+        super(root);
         this.root = root.getChild("root");
         this.body = this.root.getChild("body");
         this.head = this.body.getChild("head");
@@ -81,10 +79,5 @@ public class ClockworkSentinelModel extends EntityModel<ClockworkSentinelEntity>
         // Arm animation (walking)
         this.right_arm.xRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 2.0F * limbSwingAmount * 0.5F;
         this.left_arm.xRot = Mth.cos(limbSwing * 0.6662F) * 2.0F * limbSwingAmount * 0.5F;
-    }
-
-    @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-        root.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
     }
 }

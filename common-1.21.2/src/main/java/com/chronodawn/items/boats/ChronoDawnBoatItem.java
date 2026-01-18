@@ -9,7 +9,10 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.AbstractBoat;
+import net.minecraft.world.entity.vehicle.AbstractChestBoat;
 import net.minecraft.world.entity.vehicle.Boat;
+import net.minecraft.world.entity.vehicle.ChestBoat;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ClipContext;
@@ -78,7 +81,7 @@ public class ChronoDawnBoatItem extends Item {
         }
 
         if (hitResult.getType() == HitResult.Type.BLOCK) {
-            Boat boat = createBoat(level, hitResult);
+            AbstractBoat boat = createBoat(level, hitResult);
             boat.setYRot(player.getYRot());
 
             if (!level.noCollision(boat, boat.getBoundingBox())) {
@@ -95,7 +98,7 @@ public class ChronoDawnBoatItem extends Item {
             }
 
             player.awardStat(Stats.ITEM_USED.get(this));
-            return InteractionResult.sidedSuccess(level.isClientSide());
+            return level.isClientSide() ? InteractionResult.CONSUME : InteractionResult.SUCCESS;
         }
 
         return InteractionResult.PASS;
@@ -104,15 +107,27 @@ public class ChronoDawnBoatItem extends Item {
     /**
      * Creates the appropriate boat entity based on the item configuration.
      */
-    private Boat createBoat(Level level, HitResult hitResult) {
+    private AbstractBoat createBoat(Level level, HitResult hitResult) {
         Vec3 location = hitResult.getLocation();
 
         if (hasChest) {
-            ChronoDawnChestBoat chestBoat = new ChronoDawnChestBoat(level, location.x, location.y, location.z);
+            ChronoDawnChestBoat chestBoat = new ChronoDawnChestBoat(
+                level,
+                () -> boatType.getChestBoatItem(),
+                location.x,
+                location.y,
+                location.z
+            );
             chestBoat.setChronoDawnBoatType(boatType);
             return chestBoat;
         } else {
-            ChronoDawnBoat boat = new ChronoDawnBoat(level, location.x, location.y, location.z);
+            ChronoDawnBoat boat = new ChronoDawnBoat(
+                level,
+                () -> boatType.getBoatItem(),
+                location.x,
+                location.y,
+                location.z
+            );
             boat.setChronoDawnBoatType(boatType);
             return boat;
         }

@@ -11,6 +11,8 @@ import net.minecraft.world.entity.vehicle.ChestBoat;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 
+import java.util.function.Supplier;
+
 /**
  * Custom chest boat entity for ChronoDawn mod wood types.
  * Extends vanilla ChestBoat to support Time Wood variants with storage.
@@ -22,12 +24,12 @@ public class ChronoDawnChestBoat extends ChestBoat {
     private static final EntityDataAccessor<Integer> DATA_CHRONO_DAWN_TYPE = SynchedEntityData.defineId(
             ChronoDawnChestBoat.class, EntityDataSerializers.INT);
 
-    public ChronoDawnChestBoat(EntityType<? extends Boat> entityType, Level level) {
-        super(entityType, level);
+    public ChronoDawnChestBoat(EntityType<? extends ChestBoat> entityType, Level level, Supplier<Item> supplier) {
+        super(entityType, level, supplier);
     }
 
-    public ChronoDawnChestBoat(Level level, double x, double y, double z) {
-        this(ModEntities.CHRONO_DAWN_CHEST_BOAT.get(), level);
+    public ChronoDawnChestBoat(Level level, Supplier<Item> supplier, double x, double y, double z) {
+        this(ModEntities.CHRONO_DAWN_CHEST_BOAT.get(), level, supplier);
         this.setPos(x, y, z);
         this.xo = x;
         this.yo = y;
@@ -62,13 +64,8 @@ public class ChronoDawnChestBoat extends ChestBoat {
         return ChronoDawnBoatType.byId(this.entityData.get(DATA_CHRONO_DAWN_TYPE));
     }
 
-    @Override
-    public Item getDropItem() {
-        return getChronoDawnBoatType().getChestBoatItem();
-    }
-
     /**
-     * Note: In Minecraft 1.21.2, Boat.Type was removed and boats are now separate entity types.
-     * We use ChronoDawnBoatType for our custom boat variants, so no changes needed.
+     * Note: In Minecraft 1.21.2, getDropItem() is no longer overridable.
+     * The drop item is now determined by the Supplier<Item> passed to the constructor.
      */
 }

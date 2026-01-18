@@ -1,15 +1,12 @@
 package com.chronodawn.client.model;
 
-import com.chronodawn.entities.mobs.TemporalWraithEntity;
+import com.chronodawn.client.renderer.mobs.TemporalWraithRenderState;
+import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
-import net.minecraft.resources.ResourceLocation;
-import com.chronodawn.compat.CompatResourceLocation;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 
 /**
  * Custom model for Temporal Wraith.
@@ -18,7 +15,7 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
  *
  * A floating ghost with a single leg piece, arms held forward, no walking animation.
  */
-public class TemporalWraithModel extends EntityModel<TemporalWraithEntity> {
+public class TemporalWraithModel extends EntityModel<TemporalWraithRenderState> {
     // This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(
         CompatResourceLocation.create("chronodawn", "temporal_wraith"),
@@ -34,6 +31,7 @@ public class TemporalWraithModel extends EntityModel<TemporalWraithEntity> {
     private final ModelPart legs;
 
     public TemporalWraithModel(ModelPart root) {
+        super(root);
         this.root = root.getChild("root");
         this.body = this.root.getChild("body");
         this.left_arm = this.body.getChild("left_arm");
@@ -66,7 +64,7 @@ public class TemporalWraithModel extends EntityModel<TemporalWraithEntity> {
     }
 
     @Override
-    public void setupAnim(TemporalWraithEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setupAnim(TemporalWraithRenderState entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         // Head rotation only - floating ghost does not walk
         this.head.yRot = netHeadYaw * ((float)Math.PI / 180F);
         this.head.xRot = headPitch * ((float)Math.PI / 180F);
@@ -76,11 +74,6 @@ public class TemporalWraithModel extends EntityModel<TemporalWraithEntity> {
         this.left_arm.xRot = -1.5F;
 
         // Legs do not animate - floating ghost
-    }
-
-    @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-        root.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
     }
 }
 

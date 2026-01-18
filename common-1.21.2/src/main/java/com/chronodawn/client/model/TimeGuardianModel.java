@@ -1,17 +1,11 @@
 package com.chronodawn.client.model;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.chronodawn.client.renderer.TimeGuardianRenderState;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
-import net.minecraft.client.model.geom.builders.CubeDeformation;
-import net.minecraft.client.model.geom.builders.CubeListBuilder;
-import net.minecraft.client.model.geom.builders.LayerDefinition;
-import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Mob;
 
 /**
  * Time Guardian Model
@@ -30,7 +24,7 @@ import net.minecraft.world.entity.Mob;
  *   - left_leg
  *   - right_leg
  */
-public class TimeGuardianModel<T extends Mob> extends EntityModel<T> {
+public class TimeGuardianModel extends EntityModel<TimeGuardianRenderState> {
     private final ModelPart root;
     private final ModelPart body;
     private final ModelPart head;
@@ -42,6 +36,7 @@ public class TimeGuardianModel<T extends Mob> extends EntityModel<T> {
     private final ModelPart rightLeg;
 
     public TimeGuardianModel(ModelPart root) {
+        super(root);
         this.root = root.getChild("root");
         this.body = this.root.getChild("body");
         this.head = this.body.getChild("head");
@@ -165,10 +160,5 @@ public class TimeGuardianModel<T extends Mob> extends EntityModel<T> {
             this.leftForearm.xRot = -0.5F * armRaise;
             this.rightForearm.xRot = -0.5F * armRaise;
         }
-    }
-
-    @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-        root.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
     }
 }
