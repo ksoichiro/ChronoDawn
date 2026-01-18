@@ -28,6 +28,10 @@ import com.chronodawn.entities.mobs.ClockworkSentinelEntity;
 import com.chronodawn.entities.mobs.FloqEntity;
 import com.chronodawn.entities.mobs.TemporalWraithEntity;
 import com.chronodawn.entities.mobs.TimeKeeperEntity;
+import com.chronodawn.entities.mobs.EpochHuskEntity;
+import com.chronodawn.entities.mobs.ForgottenMinuteEntity;
+import com.chronodawn.entities.mobs.ChronalLeechEntity;
+import com.chronodawn.entities.mobs.MomentCreeperEntity;
 import com.chronodawn.neoforge.registry.ModFluidTypes;
 import com.chronodawn.neoforge.registry.ModLootModifiers;
 import com.chronodawn.neoforge.registry.ModParticles;
@@ -211,6 +215,26 @@ public class ChronoDawnNeoForge {
             FloqEntity.createAttributes().build()
         );
 
+        event.put(
+            ModEntities.EPOCH_HUSK.get(),
+            EpochHuskEntity.createAttributes().build()
+        );
+
+        event.put(
+            ModEntities.FORGOTTEN_MINUTE.get(),
+            ForgottenMinuteEntity.createAttributes().build()
+        );
+
+        event.put(
+            ModEntities.CHRONAL_LEECH.get(),
+            ChronalLeechEntity.createAttributes().build()
+        );
+
+        event.put(
+            ModEntities.MOMENT_CREEPER.get(),
+            MomentCreeperEntity.createAttributes().build()
+        );
+
         ChronoDawn.LOGGER.info("Registered entity attributes for NeoForge");
     }
 
@@ -266,6 +290,42 @@ public class ChronoDawnNeoForge {
             SpawnPlacementTypes.ON_GROUND,
             Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             FloqEntity::checkFloqSpawnRules,
+            RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+
+        // Epoch Husk - spawns on ground in daylight
+        event.register(
+            ModEntities.EPOCH_HUSK.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            EpochHuskEntity::checkEpochHuskSpawnRules,
+            RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+
+        // Forgotten Minute - spawns on ground in daylight
+        event.register(
+            ModEntities.FORGOTTEN_MINUTE.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            ForgottenMinuteEntity::checkForgottenMinuteSpawnRules,
+            RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+
+        // Chronal Leech - spawns on ground in daylight
+        event.register(
+            ModEntities.CHRONAL_LEECH.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            ChronalLeechEntity::checkChronalLeechSpawnRules,
+            RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+
+        // Moment Creeper - spawns on ground in daylight
+        event.register(
+            ModEntities.MOMENT_CREEPER.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            MomentCreeperEntity::checkMomentCreeperSpawnRules,
             RegisterSpawnPlacementsEvent.Operation.REPLACE
         );
 

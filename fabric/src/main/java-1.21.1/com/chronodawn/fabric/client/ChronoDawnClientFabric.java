@@ -11,6 +11,10 @@ import com.chronodawn.client.model.TemporalWraithModel;
 import com.chronodawn.client.model.TimeGuardianModel;
 import com.chronodawn.client.model.TimeKeeperModel;
 import com.chronodawn.client.model.TimeTyrantModel;
+import com.chronodawn.client.model.EpochHuskModel;
+import com.chronodawn.client.model.ForgottenMinuteModel;
+import com.chronodawn.client.model.ChronalLeechModel;
+import com.chronodawn.client.model.MomentCreeperModel;
 import com.chronodawn.client.particle.ChronoDawnPortalParticle;
 import com.chronodawn.gui.ChronicleScreen;
 import com.chronodawn.gui.data.ChronicleData;
@@ -30,6 +34,10 @@ import com.chronodawn.client.renderer.mobs.ClockworkSentinelRenderer;
 import com.chronodawn.client.renderer.mobs.FloqRenderer;
 import com.chronodawn.client.renderer.mobs.TemporalWraithRenderer;
 import com.chronodawn.client.renderer.mobs.TimeKeeperRenderer;
+import com.chronodawn.client.renderer.mobs.EpochHuskRenderer;
+import com.chronodawn.client.renderer.mobs.ForgottenMinuteRenderer;
+import com.chronodawn.client.renderer.mobs.ChronalLeechRenderer;
+import com.chronodawn.client.renderer.mobs.MomentCreeperRenderer;
 import com.chronodawn.items.TimeCompassItem;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModEntities;
@@ -431,6 +439,30 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             EntropyKeeperRenderer.LAYER_LOCATION,
             EntropyKeeperModel::createBodyLayer
         );
+
+        // Register Epoch Husk model layer
+        EntityModelLayerRegistry.registerModelLayer(
+            EpochHuskModel.LAYER_LOCATION,
+            EpochHuskModel::createBodyLayer
+        );
+
+        // Register Forgotten Minute model layer
+        EntityModelLayerRegistry.registerModelLayer(
+            ForgottenMinuteModel.LAYER_LOCATION,
+            ForgottenMinuteModel::createBodyLayer
+        );
+
+        // Register Chronal Leech model layer
+        EntityModelLayerRegistry.registerModelLayer(
+            ChronalLeechModel.LAYER_LOCATION,
+            ChronalLeechModel::createBodyLayer
+        );
+
+        // Register Moment Creeper model layer
+        EntityModelLayerRegistry.registerModelLayer(
+            MomentCreeperModel.LAYER_LOCATION,
+            MomentCreeperModel::createBodyLayer
+        );
     }
 
     /**
@@ -492,6 +524,26 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
         EntityRendererRegistry.register(
             ModEntities.FLOQ.get(),
             FloqRenderer::new
+        );
+
+        EntityRendererRegistry.register(
+            ModEntities.EPOCH_HUSK.get(),
+            EpochHuskRenderer::new
+        );
+
+        EntityRendererRegistry.register(
+            ModEntities.FORGOTTEN_MINUTE.get(),
+            ForgottenMinuteRenderer::new
+        );
+
+        EntityRendererRegistry.register(
+            ModEntities.CHRONAL_LEECH.get(),
+            ChronalLeechRenderer::new
+        );
+
+        EntityRendererRegistry.register(
+            ModEntities.MOMENT_CREEPER.get(),
+            MomentCreeperRenderer::new
         );
 
         // Register Clockwork Colossus with custom renderer
