@@ -47,8 +47,7 @@ public class EnhancedClockstoneSwordItem extends SwordItem {
     private static final int FREEZE_AMPLIFIER = 9; // Slowness X
 
     public EnhancedClockstoneSwordItem(Properties properties) {
-        // 1.21.1: Uses createAttributes() for attribute building
-        super(EnhancedClockstoneTier.INSTANCE, properties.attributes(EnhancedClockstoneTier.INSTANCE.applySwordProperties(properties,3, -2.4f)));
+        super(EnhancedClockstoneTier.INSTANCE, 3, -2.4f, properties);
     }
 
     /**

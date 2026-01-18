@@ -23,8 +23,7 @@ import net.minecraft.world.item.SwordItem;
  */
 public class ClockstoneSwordItem extends SwordItem {
     public ClockstoneSwordItem(Properties properties) {
-        // 1.21.1: Uses createAttributes() for attribute building
-        super(ClockstoneTier.INSTANCE, properties.attributes(SwordItem.createAttributes(ClockstoneTier.INSTANCE, 3, -2.4f)));
+        super(ClockstoneTier.INSTANCE, 3, -2.4f, properties);
     }
 
     /**

@@ -1,8 +1,13 @@
 package com.chronodawn.items.artifacts;
 
+import com.chronodawn.ChronoDawn;
+import com.chronodawn.compat.CompatResourceLocation;
 import com.chronodawn.registry.ModItems;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.ToolMaterial;
@@ -46,19 +51,30 @@ public class ChronobladeItem extends SwordItem {
     public static final float AI_SKIP_CHANCE = 0.25f;
 
     /**
+     * Time Crystal repair tag for Chronoblade
+     */
+    private static final TagKey<Item> TIME_CRYSTAL_TAG = TagKey.create(
+        Registries.ITEM,
+        CompatResourceLocation.create(ChronoDawn.MOD_ID, "repairs_chronoblade")
+    );
+
+    /**
      * Custom tier for Chronoblade (netherite+).
+     * In 1.21.2, ToolMaterial constructor signature:
+     * (TagKey<Block> incorrectBlocksForDrops, int uses, float speed, float attackDamageBonus,
+     *  int enchantmentValue, TagKey<Item> repairItems)
      */
     public static final ToolMaterial TIER = new ToolMaterial(
-        () -> BlockTags.INCORRECT_FOR_NETHERITE_TOOL, // Netherite mining level
+        BlockTags.INCORRECT_FOR_NETHERITE_TOOL, // Netherite mining level
         2000, // More durable than netherite (2031)
         9.0f, // Faster than netherite (9.0f)
         3.5f, // Slightly stronger than netherite (4.0 base = 8.0 total damage)
         18, // Better than netherite (15)
-        () -> Ingredient.of(ModItems.TIME_CRYSTAL.get()) // Can be repaired with Time Crystal
+        TIME_CRYSTAL_TAG // Can be repaired with Time Crystal
     );
 
     public ChronobladeItem(Properties properties) {
-        super(TIER, properties.attributes(SwordItem.createAttributes(TIER, 4, -2.4f)));
+        super(TIER, 4, -2.4f, properties);
     }
 
     /**

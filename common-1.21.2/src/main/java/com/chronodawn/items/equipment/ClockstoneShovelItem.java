@@ -24,8 +24,7 @@ import net.minecraft.world.item.ShovelItem;
  */
 public class ClockstoneShovelItem extends ShovelItem {
     public ClockstoneShovelItem(Properties properties) {
-        // 1.21.1: Uses createAttributes() for attribute building
-        super(ClockstoneTier.INSTANCE, properties.attributes(ShovelItem.createAttributes(ClockstoneTier.INSTANCE, 1.5f, -3.0f)));
+        super(ClockstoneTier.INSTANCE, 1.5f, -3.0f, properties);
     }
 
     /**

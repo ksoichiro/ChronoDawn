@@ -24,8 +24,7 @@ import net.minecraft.world.item.PickaxeItem;
  */
 public class ClockstonePickaxeItem extends PickaxeItem {
     public ClockstonePickaxeItem(Properties properties) {
-        // 1.21.1: Uses createAttributes() for attribute building
-        super(ClockstoneTier.INSTANCE, properties.attributes(PickaxeItem.createAttributes(ClockstoneTier.INSTANCE, 1.0f, -2.8f)));
+        super(ClockstoneTier.INSTANCE, 1.0f, -2.8f, properties);
     }
 
     /**

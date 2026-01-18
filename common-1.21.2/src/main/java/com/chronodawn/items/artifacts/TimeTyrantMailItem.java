@@ -1,6 +1,7 @@
 package com.chronodawn.items.artifacts;
 
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.equipment.ArmorType;
 
 /**
  * Time Tyrant's Mail - Ultimate Chestplate with Rollback Effect
@@ -19,7 +20,8 @@ import net.minecraft.world.item.ArmorItem;
  */
 public class TimeTyrantMailItem extends ArmorItem {
     public TimeTyrantMailItem(Properties properties) {
-        super(TimeTyrantArmorMaterial.MATERIAL, Type.CHESTPLATE, properties);
+        // In 1.21.2, ArmorItem constructor expects ArmorMaterial, not Holder<ArmorMaterial>
+        super(TimeTyrantArmorMaterial.MATERIAL.value(), ArmorType.CHESTPLATE, properties);
     }
 
     public static Properties createProperties() {

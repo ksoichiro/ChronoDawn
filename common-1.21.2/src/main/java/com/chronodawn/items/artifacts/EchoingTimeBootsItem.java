@@ -1,6 +1,7 @@
 package com.chronodawn.items.artifacts;
 
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.equipment.ArmorType;
 
 /**
  * Echoing Time Boots - Ultimate Boots with Decoy Summoning
@@ -19,7 +20,8 @@ import net.minecraft.world.item.ArmorItem;
  */
 public class EchoingTimeBootsItem extends ArmorItem {
     public EchoingTimeBootsItem(Properties properties) {
-        super(TimeTyrantArmorMaterial.MATERIAL, Type.BOOTS, properties);
+        // In 1.21.2, ArmorItem constructor expects ArmorMaterial, not Holder<ArmorMaterial>
+        super(TimeTyrantArmorMaterial.MATERIAL.value(), ArmorType.BOOTS, properties);
     }
 
     public static Properties createProperties() {

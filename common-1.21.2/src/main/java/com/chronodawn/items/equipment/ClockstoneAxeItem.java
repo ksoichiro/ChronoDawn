@@ -24,8 +24,7 @@ import net.minecraft.world.item.AxeItem;
  */
 public class ClockstoneAxeItem extends AxeItem {
     public ClockstoneAxeItem(Properties properties) {
-        // 1.21.1: Uses createAttributes() for attribute building
-        super(ClockstoneTier.INSTANCE, properties.attributes(AxeItem.createAttributes(ClockstoneTier.INSTANCE, 6.0f, -3.1f)));
+        super(ClockstoneTier.INSTANCE, 6.0f, -3.1f, properties);
     }
 
     /**

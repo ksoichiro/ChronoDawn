@@ -1,8 +1,13 @@
 package com.chronodawn.items.equipment;
 
+import com.chronodawn.ChronoDawn;
+import com.chronodawn.compat.CompatResourceLocation;
 import com.chronodawn.registry.ModItems;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
@@ -28,12 +33,21 @@ import net.minecraft.world.level.block.Block;
  * Reference: T250-251 - Create Enhanced Clockstone equipment (Tier 2)
  */
 public class EnhancedClockstoneTier {
+    // Time Crystal repair tag (custom tag for Time Crystal as repair material)
+    private static final TagKey<Item> TIME_CRYSTAL_TAG = TagKey.create(
+        Registries.ITEM,
+        CompatResourceLocation.create(ChronoDawn.MOD_ID, "repairs_enhanced_clockstone_tools")
+    );
+
+    // In 1.21.2, ToolMaterial constructor signature:
+    // (TagKey<Block> incorrectBlocksForDrops, int uses, float speed, float attackDamageBonus,
+    //  int enchantmentValue, TagKey<Item> repairItems)
     public static final ToolMaterial INSTANCE = new ToolMaterial(
-        () -> BlockTags.INCORRECT_FOR_DIAMOND_TOOL, // Diamond mining level
+        BlockTags.INCORRECT_FOR_DIAMOND_TOOL, // Diamond mining level
         1200, // Close to diamond (1561), much better than Tier 1 (450)
         7.5f, // Between clockstone (6.5f) and diamond (8.0f)
         3.0f, // Same as diamond
         16, // Better than iron/clockstone (14) and diamond (10)
-        () -> Ingredient.of(ModItems.TIME_CRYSTAL.get()) // Repair ingredient
+        TIME_CRYSTAL_TAG // Repair ingredient as TagKey
     );
 }

@@ -30,7 +30,8 @@ import net.minecraft.world.item.equipment.ArmorType;
  */
 public class ClockstoneArmorItem extends ArmorItem {
     public ClockstoneArmorItem(ArmorType type, Properties properties) {
-        super(ClockstoneArmorMaterial.CLOCKSTONE, type, properties);
+        // In 1.21.2, ArmorItem constructor expects ArmorMaterial, not Holder<ArmorMaterial>
+        super(ClockstoneArmorMaterial.CLOCKSTONE.value(), type, properties);
     }
 
     /**

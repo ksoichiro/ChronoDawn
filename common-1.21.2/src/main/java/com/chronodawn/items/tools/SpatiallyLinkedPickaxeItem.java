@@ -1,7 +1,12 @@
 package com.chronodawn.items.tools;
 
+import com.chronodawn.ChronoDawn;
+import com.chronodawn.compat.CompatResourceLocation;
 import com.chronodawn.registry.ModItems;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -35,21 +40,32 @@ import net.minecraft.world.item.crafting.Ingredient;
  */
 public class SpatiallyLinkedPickaxeItem extends PickaxeItem {
     /**
+     * Time Crystal repair tag for Spatially Linked Pickaxe
+     */
+    private static final TagKey<Item> TIME_CRYSTAL_TAG = TagKey.create(
+        Registries.ITEM,
+        CompatResourceLocation.create(ChronoDawn.MOD_ID, "repairs_spatially_linked_pickaxe")
+    );
+
+    /**
      * Custom tier for Spatially Linked Pickaxe.
      * Uses diamond-equivalent stats.
+     * In 1.21.2, ToolMaterial constructor signature:
+     * (TagKey<Block> incorrectBlocksForDrops, int uses, float speed, float attackDamageBonus,
+     *  int enchantmentValue, TagKey<Item> repairItems)
      */
     private static final ToolMaterial SPATIALLY_LINKED_TIER = new ToolMaterial(
-        () -> BlockTags.INCORRECT_FOR_DIAMOND_TOOL, // Diamond mining level
+        BlockTags.INCORRECT_FOR_DIAMOND_TOOL, // Diamond mining level
         1561, // Diamond durability
         8.0f, // Diamond mining speed
         3.0f, // Diamond attack damage bonus
         10, // Diamond enchantability
-        () -> Ingredient.of(ModItems.TIME_CRYSTAL.get()) // Can be repaired with Time Crystal
+        TIME_CRYSTAL_TAG // Can be repaired with Time Crystal
     );
 
     public SpatiallyLinkedPickaxeItem(Properties properties) {
-        // 1.21.2: Use createAttributes()
-        super(SPATIALLY_LINKED_TIER, properties.attributes(PickaxeItem.createAttributes(SPATIALLY_LINKED_TIER, 1.0f, -2.8f)));
+        // 1.21.2: PickaxeItem constructor takes (ToolMaterial, float attackDamage, float attackSpeed, Properties)
+        super(SPATIALLY_LINKED_TIER, 1.0f, -2.8f, properties);
     }
 
     /**
