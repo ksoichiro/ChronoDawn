@@ -12,7 +12,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Vector3f;
 
 import java.util.Map;
 import java.util.UUID;
@@ -29,9 +28,10 @@ public class TeleporterChargingHandler {
     private static final double MAX_DISTANCE = 3.0; // Maximum distance from teleporter while charging
 
     // Orange color for particles (ChronoDawn theme color #db8813)
-    // RGB(219, 136, 19) normalized to 0-1 range
+    // 1.21.2: DustParticleOptions constructor changed from Vector3f to ARGB int
+    // RGB(219, 136, 19) = 0xDB8813, with full alpha (0xFF) = 0xFFDB8813
     private static final DustParticleOptions ORANGE_PARTICLE = new DustParticleOptions(
-        new Vector3f(0.859f, 0.533f, 0.075f),
+        0xFFDB8813, // ARGB color (was Vector3f in 1.21.1)
         1.0f // particle size
     );
 
