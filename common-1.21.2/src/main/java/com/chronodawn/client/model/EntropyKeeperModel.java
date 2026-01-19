@@ -117,7 +117,9 @@ public class EntropyKeeperModel extends EntityModel<EntropyKeeperRenderState> {
     }
 
     @Override
-    public void setupAnim(EntropyKeeperRenderState entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setupAnim(EntropyKeeperRenderState state) {
+        super.setupAnim(state);
+
         // Reset all rotations to default
         this.head.xRot = 0.0F;
         this.head.yRot = 0.0F;
@@ -131,29 +133,29 @@ public class EntropyKeeperModel extends EntityModel<EntropyKeeperRenderState> {
         this.rightLeg.xRot = 0.0F;
 
         // Head rotation (look at target)
-        this.head.yRot = netHeadYaw * ((float)Math.PI / 180F);
-        this.head.xRot = headPitch * ((float)Math.PI / 180F);
+        this.head.yRot = state.yRot * ((float)Math.PI / 180F);
+        this.head.xRot = state.xRot * ((float)Math.PI / 180F);
 
         // Walking animation - arms swing
-        this.rightArm.xRot = Mth.cos(limbSwing * 0.6662F) * 0.8F * limbSwingAmount;
-        this.leftArm.xRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 0.8F * limbSwingAmount;
+        this.rightArm.xRot = Mth.cos(state.walkAnimationPos * 0.6662F) * 0.8F * state.walkAnimationSpeed;
+        this.leftArm.xRot = Mth.cos(state.walkAnimationPos * 0.6662F + (float)Math.PI) * 0.8F * state.walkAnimationSpeed;
 
         // Walking animation - legs swing (opposite to arms for natural gait)
         // Right arm forward = Left leg forward
-        this.rightLeg.xRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
-        this.leftLeg.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+        this.rightLeg.xRot = Mth.cos(state.walkAnimationPos * 0.6662F + (float)Math.PI) * 1.4F * state.walkAnimationSpeed;
+        this.leftLeg.xRot = Mth.cos(state.walkAnimationPos * 0.6662F) * 1.4F * state.walkAnimationSpeed;
 
         // Idle animation - slight arm sway (only when not walking and not attacking)
-        if (limbSwingAmount < 0.01F && entity.attackAnim <= 0.0F) {
-            float idleSwing = ageInTicks * 0.05F;
+        if (state.walkAnimationSpeed < 0.01F && state.attackTime <= 0.0F) {
+            float idleSwing = state.ageInTicks * 0.05F;
             this.rightArm.xRot += Mth.cos(idleSwing) * 0.05F;
             this.leftArm.xRot += Mth.cos(idleSwing + (float)Math.PI) * 0.05F;
         }
 
         // Attack animation - raise arms (like Iron Golem)
-        if (entity.attackAnim > 0.0F) {
-            // attackAnim goes from 1.0 (start of attack) to 0.0 (end of attack)
-            float attackProgress = entity.attackAnim;
+        if (state.attackTime > 0.0F) {
+            // attackTime goes from 1.0 (start of attack) to 0.0 (end of attack)
+            float attackProgress = state.attackTime;
 
             // Both arms raise up during attack
             // Use sine wave for smooth up-down motion

@@ -29,7 +29,7 @@ public class EntropyKeeperRenderer extends MobRenderer<EntropyKeeperEntity, Entr
     );
 
     public EntropyKeeperRenderer(EntityRendererProvider.Context context) {
-        super(context, new EntropyKeeperModel<>(context.bakeLayer(LAYER_LOCATION)), 0.5f);
+        super(context, new EntropyKeeperModel(context.bakeLayer(LAYER_LOCATION)), 0.5f);
     }
 
     @Override

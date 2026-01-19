@@ -1,7 +1,6 @@
 package com.chronodawn.client.model;
 
 import com.chronodawn.client.renderer.mobs.FloqRenderState;
-import com.chronodawn.entities.mobs.FloqEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.EntityModel;
@@ -53,7 +52,8 @@ public class FloqModel extends EntityModel<FloqRenderState> {
     }
 
     @Override
-    public void setupAnim(FloqEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setupAnim(FloqRenderState state) {
+        super.setupAnim(state);
         // Animation is handled by FloqRenderer.scale() method
         // No per-frame setup needed here
     }

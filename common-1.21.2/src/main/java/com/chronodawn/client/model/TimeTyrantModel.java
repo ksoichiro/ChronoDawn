@@ -1,7 +1,6 @@
 package com.chronodawn.client.model;
 
 import com.chronodawn.client.renderer.TimeTyrantRenderState;
-import com.chronodawn.entities.bosses.TimeTyrantEntity;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -129,7 +128,9 @@ public class TimeTyrantModel extends EntityModel<TimeTyrantRenderState> {
     }
 
     @Override
-    public void setupAnim(TimeTyrantEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setupAnim(TimeTyrantRenderState state) {
+        super.setupAnim(state);
+
         // Reset all rotations to default
         this.head.xRot = 0.0F;
         this.head.yRot = 0.0F;
@@ -145,20 +146,20 @@ public class TimeTyrantModel extends EntityModel<TimeTyrantRenderState> {
         this.rightLeg.xRot = 0.0F;
 
         // Head rotation (look at target)
-        this.head.yRot = netHeadYaw * ((float)Math.PI / 180F);
-        this.head.xRot = headPitch * ((float)Math.PI / 180F);
+        this.head.yRot = state.yRot * ((float)Math.PI / 180F);
+        this.head.xRot = state.xRot * ((float)Math.PI / 180F);
 
         // Walking animation - arms swing
-        this.rightArm.xRot = Mth.cos(limbSwing * 0.6662F) * 0.8F * limbSwingAmount;
-        this.leftArm.xRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 0.8F * limbSwingAmount;
+        this.rightArm.xRot = Mth.cos(state.walkAnimationPos * 0.6662F) * 0.8F * state.walkAnimationSpeed;
+        this.leftArm.xRot = Mth.cos(state.walkAnimationPos * 0.6662F + (float)Math.PI) * 0.8F * state.walkAnimationSpeed;
 
         // Walking animation - legs swing (opposite to arms for natural gait)
-        this.rightLeg.xRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
-        this.leftLeg.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+        this.rightLeg.xRot = Mth.cos(state.walkAnimationPos * 0.6662F + (float)Math.PI) * 1.4F * state.walkAnimationSpeed;
+        this.leftLeg.xRot = Mth.cos(state.walkAnimationPos * 0.6662F) * 1.4F * state.walkAnimationSpeed;
 
         // Idle animation - slight menacing sway (only when not walking and not attacking)
-        if (limbSwingAmount < 0.01F && entity.attackAnim <= 0.0F) {
-            float idleSwing = ageInTicks * 0.03F; // Slower than Time Guardian for more intimidating presence
+        if (state.walkAnimationSpeed < 0.01F && state.attackTime <= 0.0F) {
+            float idleSwing = state.ageInTicks * 0.03F; // Slower than Time Guardian for more intimidating presence
             this.rightArm.xRot += Mth.cos(idleSwing) * 0.08F;
             this.leftArm.xRot += Mth.cos(idleSwing + (float)Math.PI) * 0.08F;
             // Slight body sway for added menace
@@ -166,8 +167,8 @@ public class TimeTyrantModel extends EntityModel<TimeTyrantRenderState> {
         }
 
         // Attack animation - aggressive stance
-        if (entity.attackAnim > 0.0F) {
-            float attackProgress = entity.attackAnim;
+        if (state.attackTime > 0.0F) {
+            float attackProgress = state.attackTime;
             float armRaise = Mth.sin(attackProgress * (float)Math.PI);
 
             // More aggressive arm raise than Time Guardian
@@ -187,18 +188,18 @@ public class TimeTyrantModel extends EntityModel<TimeTyrantRenderState> {
         }
 
         // Phase-specific animations based on boss phase
-        int phase = entity.getPhase();
+        int phase = state.phase;
         if (phase == 2) {
             // Phase 2: Faster idle animation (Time Acceleration effect)
-            if (limbSwingAmount < 0.01F && entity.attackAnim <= 0.0F) {
-                float fastIdleSwing = ageInTicks * 0.08F;
+            if (state.walkAnimationSpeed < 0.01F && state.attackTime <= 0.0F) {
+                float fastIdleSwing = state.ageInTicks * 0.08F;
                 this.rightArm.xRot += Mth.cos(fastIdleSwing) * 0.1F;
                 this.leftArm.xRot += Mth.cos(fastIdleSwing + (float)Math.PI) * 0.1F;
             }
         } else if (phase == 3) {
             // Phase 3: Aggressive stance with hovering arms (danger mode)
-            if (entity.attackAnim <= 0.0F && limbSwingAmount < 0.01F) {
-                float dangerSwing = ageInTicks * 0.05F;
+            if (state.attackTime <= 0.0F && state.walkAnimationSpeed < 0.01F) {
+                float dangerSwing = state.ageInTicks * 0.05F;
                 this.rightArm.xRot = -1.5F + Mth.cos(dangerSwing) * 0.2F;
                 this.leftArm.xRot = -1.5F + Mth.cos(dangerSwing + (float)Math.PI) * 0.2F;
                 this.rightArm.zRot = 0.3F;

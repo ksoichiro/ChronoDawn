@@ -64,10 +64,12 @@ public class TemporalWraithModel extends EntityModel<TemporalWraithRenderState> 
     }
 
     @Override
-    public void setupAnim(TemporalWraithRenderState entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setupAnim(TemporalWraithRenderState state) {
+        super.setupAnim(state);
+
         // Head rotation only - floating ghost does not walk
-        this.head.yRot = netHeadYaw * ((float)Math.PI / 180F);
-        this.head.xRot = headPitch * ((float)Math.PI / 180F);
+        this.head.yRot = state.yRot * ((float)Math.PI / 180F);
+        this.head.xRot = state.xRot * ((float)Math.PI / 180F);
 
         // Arms extended forward - zombie-like pose
         this.right_arm.xRot = -1.5F;

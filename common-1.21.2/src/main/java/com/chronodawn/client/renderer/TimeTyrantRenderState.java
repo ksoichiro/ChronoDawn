@@ -6,4 +6,6 @@ import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
  * Render state for Time Tyrant entity.
  */
 public class TimeTyrantRenderState extends LivingEntityRenderState {
+    public float attackTime;
+    public int phase;
 }

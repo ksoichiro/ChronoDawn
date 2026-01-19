@@ -33,7 +33,7 @@ public class TemporalPhantomRenderer extends MobRenderer<TemporalPhantomEntity, 
     );
 
     public TemporalPhantomRenderer(EntityRendererProvider.Context context) {
-        super(context, new TemporalPhantomModel<>(context.bakeLayer(LAYER_LOCATION)), 0.5f);
+        super(context, new TemporalPhantomModel(context.bakeLayer(LAYER_LOCATION)), 0.5f);
     }
 
     @Override
@@ -53,8 +53,8 @@ public class TemporalPhantomRenderer extends MobRenderer<TemporalPhantomEntity, 
     }
 
     @Override
-    protected void scale(TemporalPhantomRenderState state, PoseStack poseStack, float partialTick) {
-        super.scale(state, poseStack, partialTick);
+    protected void scale(TemporalPhantomRenderState state, PoseStack poseStack) {
+        super.scale(state, poseStack);
 
         // Apply transparency when Phase Shift is active
         if (state.phaseShiftActive) {

@@ -106,7 +106,7 @@ public class ChronoDawnBoatRenderer extends EntityRenderer<ChronoDawnBoat, Chron
         poseStack.scale(-1.0F, -1.0F, 1.0F);
         poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
 
-        model.setupAnim(null, state.ageInTicks, 0.0F, -0.1F, 0.0F, 0.0F);
+        model.setupAnim(state);
 
         VertexConsumer vertexConsumer = buffer.getBuffer(model.renderType(texture));
         model.renderToBuffer(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY);

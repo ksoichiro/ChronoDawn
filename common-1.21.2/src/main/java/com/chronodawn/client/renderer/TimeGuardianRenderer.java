@@ -17,7 +17,7 @@ import com.chronodawn.compat.CompatResourceLocation;
  * Reference: T110-T115 [US2] Time Guardian implementation
  * Reference: T115a [US2] Custom model and texture
  */
-public class TimeGuardianRenderer extends MobRenderer<TimeGuardianEntity, TimeGuardianRenderState, TimeGuardianModel<TimeGuardianRenderState>> {
+public class TimeGuardianRenderer extends MobRenderer<TimeGuardianEntity, TimeGuardianRenderState, TimeGuardianModel> {
     // Custom texture for Time Guardian
     private static final ResourceLocation TEXTURE = CompatResourceLocation.create(
         ChronoDawn.MOD_ID,

@@ -7,4 +7,5 @@ import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
  */
 public class TemporalPhantomRenderState extends LivingEntityRenderState {
     public boolean phaseShiftActive;
+    public float attackTime;
 }
