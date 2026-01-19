@@ -4,11 +4,13 @@ import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModEntities;
 import com.chronodawn.registry.ModItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
 import net.minecraft.world.level.GameType;
 
 import java.util.function.Consumer;
@@ -25,6 +27,32 @@ public final class ChronoDawnGameTestLogic {
 
     private ChronoDawnGameTestLogic() {
         // Utility class
+    }
+
+    /**
+     * Helper method to get armor defense value from ItemStack using DataComponents.
+     * In 1.21.2, ArmorItem no longer provides direct getMaterial()/getType() methods.
+     * Instead, armor defense values are stored in the ATTRIBUTE_MODIFIERS DataComponent.
+     *
+     * @param stack ItemStack containing armor item
+     * @param slot  Equipment slot for the armor piece
+     * @return Armor defense value, or 0 if not found
+     */
+    private static int getArmorDefenseFromItemStack(ItemStack stack, EquipmentSlot slot) {
+        ItemAttributeModifiers modifiers = stack.get(DataComponents.ATTRIBUTE_MODIFIERS);
+        if (modifiers == null) {
+            return 0;
+        }
+
+        // Use array to capture value from lambda (forEach doesn't allow returning values)
+        int[] defense = {0};
+        modifiers.forEach(slot, (attribute, modifier) -> {
+            if (attribute.is(Attributes.ARMOR)) {
+                defense[0] = (int) modifier.amount();
+            }
+        });
+
+        return defense[0];
     }
 
     // Standard test position
@@ -971,7 +999,7 @@ public final class ChronoDawnGameTestLogic {
 
         helper.runAfterDelay(1, () -> {
             if (chestplate.getItem() instanceof net.minecraft.world.item.ArmorItem armorItem) {
-                int actualDefense = armorItem.getMaterial().value().getDefense(armorItem.getType());
+                int actualDefense = getArmorDefenseFromItemStack(chestplate, EquipmentSlot.CHEST);
                 if (actualDefense == CLOCKSTONE_CHESTPLATE_DEFENSE) {
                     helper.succeed();
                 } else {
@@ -992,7 +1020,7 @@ public final class ChronoDawnGameTestLogic {
 
         helper.runAfterDelay(1, () -> {
             if (chestplate.getItem() instanceof net.minecraft.world.item.ArmorItem armorItem) {
-                int actualDefense = armorItem.getMaterial().value().getDefense(armorItem.getType());
+                int actualDefense = getArmorDefenseFromItemStack(chestplate, EquipmentSlot.CHEST);
                 if (actualDefense == ENHANCED_CLOCKSTONE_CHESTPLATE_DEFENSE) {
                     helper.succeed();
                 } else {
@@ -1033,7 +1061,7 @@ public final class ChronoDawnGameTestLogic {
 
         helper.runAfterDelay(1, () -> {
             if (helmet.getItem() instanceof net.minecraft.world.item.ArmorItem armorItem) {
-                int actualDefense = armorItem.getMaterial().value().getDefense(armorItem.getType());
+                int actualDefense = getArmorDefenseFromItemStack(helmet, EquipmentSlot.HEAD);
                 if (actualDefense == CLOCKSTONE_HELMET_DEFENSE) {
                     helper.succeed();
                 } else {
@@ -1054,7 +1082,7 @@ public final class ChronoDawnGameTestLogic {
 
         helper.runAfterDelay(1, () -> {
             if (leggings.getItem() instanceof net.minecraft.world.item.ArmorItem armorItem) {
-                int actualDefense = armorItem.getMaterial().value().getDefense(armorItem.getType());
+                int actualDefense = getArmorDefenseFromItemStack(leggings, EquipmentSlot.LEGS);
                 if (actualDefense == CLOCKSTONE_LEGGINGS_DEFENSE) {
                     helper.succeed();
                 } else {
@@ -1075,7 +1103,7 @@ public final class ChronoDawnGameTestLogic {
 
         helper.runAfterDelay(1, () -> {
             if (boots.getItem() instanceof net.minecraft.world.item.ArmorItem armorItem) {
-                int actualDefense = armorItem.getMaterial().value().getDefense(armorItem.getType());
+                int actualDefense = getArmorDefenseFromItemStack(boots, EquipmentSlot.FEET);
                 if (actualDefense == CLOCKSTONE_BOOTS_DEFENSE) {
                     helper.succeed();
                 } else {
@@ -1096,7 +1124,7 @@ public final class ChronoDawnGameTestLogic {
 
         helper.runAfterDelay(1, () -> {
             if (helmet.getItem() instanceof net.minecraft.world.item.ArmorItem armorItem) {
-                int actualDefense = armorItem.getMaterial().value().getDefense(armorItem.getType());
+                int actualDefense = getArmorDefenseFromItemStack(helmet, EquipmentSlot.HEAD);
                 if (actualDefense == ENHANCED_CLOCKSTONE_HELMET_DEFENSE) {
                     helper.succeed();
                 } else {
@@ -1117,7 +1145,7 @@ public final class ChronoDawnGameTestLogic {
 
         helper.runAfterDelay(1, () -> {
             if (leggings.getItem() instanceof net.minecraft.world.item.ArmorItem armorItem) {
-                int actualDefense = armorItem.getMaterial().value().getDefense(armorItem.getType());
+                int actualDefense = getArmorDefenseFromItemStack(leggings, EquipmentSlot.LEGS);
                 if (actualDefense == ENHANCED_CLOCKSTONE_LEGGINGS_DEFENSE) {
                     helper.succeed();
                 } else {
@@ -1138,7 +1166,7 @@ public final class ChronoDawnGameTestLogic {
 
         helper.runAfterDelay(1, () -> {
             if (boots.getItem() instanceof net.minecraft.world.item.ArmorItem armorItem) {
-                int actualDefense = armorItem.getMaterial().value().getDefense(armorItem.getType());
+                int actualDefense = getArmorDefenseFromItemStack(boots, EquipmentSlot.FEET);
                 if (actualDefense == ENHANCED_CLOCKSTONE_BOOTS_DEFENSE) {
                     helper.succeed();
                 } else {
