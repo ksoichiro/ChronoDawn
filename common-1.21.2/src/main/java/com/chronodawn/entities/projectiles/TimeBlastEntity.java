@@ -123,6 +123,7 @@ public class TimeBlastEntity extends ThrowableProjectile {
         // Apply effects to living entities (typically players)
         if (result.getEntity() instanceof LivingEntity target) {
             // Damage the target (4.0 = 2 hearts)
+            // In 1.21.2, hurt() returns void
             target.hurt(this.damageSources().mobProjectile(this, (LivingEntity) this.getOwner()), 4.0f);
 
             // Apply Slowness II for 5 seconds

@@ -126,39 +126,40 @@ public class GearProjectileEntity extends ThrowableProjectile {
         // Damage the hit entity
         DamageSource damageSource = this.damageSources().mobProjectile(this, owner instanceof LivingEntity living ? living : null);
 
-        if (entity.hurt(damageSource, DAMAGE)) {
-            // Apply knockback
-            if (entity instanceof LivingEntity livingEntity) {
-                Vec3 movement = this.getDeltaMovement();
-                double knockbackX = movement.x * KNOCKBACK;
-                double knockbackZ = movement.z * KNOCKBACK;
-                livingEntity.knockback(KNOCKBACK, -knockbackX, -knockbackZ);
-            }
+        // In 1.21.2, hurt() returns void, not boolean
+        entity.hurt(damageSource, DAMAGE);
 
-            // Play impact sound
-            this.level().playSound(
-                null,
+        // Apply knockback
+        if (entity instanceof LivingEntity livingEntity) {
+            Vec3 movement = this.getDeltaMovement();
+            double knockbackX = movement.x * KNOCKBACK;
+            double knockbackZ = movement.z * KNOCKBACK;
+            livingEntity.knockback(KNOCKBACK, -knockbackX, -knockbackZ);
+        }
+
+        // Play impact sound
+        this.level().playSound(
+            null,
+            this.getX(),
+            this.getY(),
+            this.getZ(),
+            ModSounds.GEAR_IMPACT.get(),
+            SoundSource.HOSTILE,
+            0.5f,
+            1.2f
+        );
+
+        // Impact particles
+        if (this.level() instanceof ServerLevel serverLevel) {
+            serverLevel.sendParticles(
+                ParticleTypes.CRIT,
                 this.getX(),
                 this.getY(),
                 this.getZ(),
-                ModSounds.GEAR_IMPACT.get(),
-                SoundSource.HOSTILE,
-                0.5f,
-                1.2f
+                10,
+                0.2, 0.2, 0.2,
+                0.1
             );
-
-            // Impact particles
-            if (this.level() instanceof ServerLevel serverLevel) {
-                serverLevel.sendParticles(
-                    ParticleTypes.CRIT,
-                    this.getX(),
-                    this.getY(),
-                    this.getZ(),
-                    10,
-                    0.2, 0.2, 0.2,
-                    0.1
-                );
-            }
         }
 
         // Remove projectile after hit
@@ -217,7 +218,7 @@ public class GearProjectileEntity extends ThrowableProjectile {
     }
 
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurtServer(ServerLevel serverLevel, DamageSource source, float amount) {
         return false; // Projectile cannot be damaged
     }
 }
