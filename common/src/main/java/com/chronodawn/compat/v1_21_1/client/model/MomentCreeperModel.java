@@ -68,6 +68,51 @@ public class MomentCreeperModel extends EntityModel<MomentCreeperEntity> {
         this.leg2.xRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
         this.leg3.xRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
         this.leg4.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+
+        // Swelling animation
+        float swelling = entity.getSwelling(ageInTicks);
+        if (swelling > 0.0F) {
+            // Scale all parts when swelling (1.0 + swelling * 0.05 at max = 1.05x, subtle 5% increase)
+            float scale = 1.0F + swelling * 0.05F;
+            this.head.xScale = scale;
+            this.head.yScale = scale;
+            this.head.zScale = scale;
+            this.body.xScale = scale;
+            this.body.yScale = scale;
+            this.body.zScale = scale;
+            this.leg1.xScale = scale;
+            this.leg1.yScale = scale;
+            this.leg1.zScale = scale;
+            this.leg2.xScale = scale;
+            this.leg2.yScale = scale;
+            this.leg2.zScale = scale;
+            this.leg3.xScale = scale;
+            this.leg3.yScale = scale;
+            this.leg3.zScale = scale;
+            this.leg4.xScale = scale;
+            this.leg4.yScale = scale;
+            this.leg4.zScale = scale;
+        } else {
+            // Reset to normal scale
+            this.head.xScale = 1.0F;
+            this.head.yScale = 1.0F;
+            this.head.zScale = 1.0F;
+            this.body.xScale = 1.0F;
+            this.body.yScale = 1.0F;
+            this.body.zScale = 1.0F;
+            this.leg1.xScale = 1.0F;
+            this.leg1.yScale = 1.0F;
+            this.leg1.zScale = 1.0F;
+            this.leg2.xScale = 1.0F;
+            this.leg2.yScale = 1.0F;
+            this.leg2.zScale = 1.0F;
+            this.leg3.xScale = 1.0F;
+            this.leg3.yScale = 1.0F;
+            this.leg3.zScale = 1.0F;
+            this.leg4.xScale = 1.0F;
+            this.leg4.yScale = 1.0F;
+            this.leg4.zScale = 1.0F;
+        }
     }
 
     @Override
