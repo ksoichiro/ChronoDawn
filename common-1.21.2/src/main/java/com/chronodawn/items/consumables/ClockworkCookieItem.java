@@ -51,7 +51,6 @@ public class ClockworkCookieItem extends Item {
         FoodProperties foodProperties = new FoodProperties.Builder()
                 .nutrition(2)              // 2 hunger points (1 drumstick)
                 .saturationModifier(0.4f)  // Saturation modifier (total: 2 * 0.4 = 0.8)
-                .fast()  // Fast eating speed (1.6 seconds)
                 .build();
 
         return new Properties()
@@ -72,6 +71,7 @@ public class ClockworkCookieItem extends Item {
                                                 0                              // Amplifier 0 = Fire Resistance I
                                         ),
                                         1.0f))  // 100% chance to apply effect
+                                .consumeSeconds(1.6f) // Fast eating speed (1.6 seconds)
                                 .build());
     }
 }

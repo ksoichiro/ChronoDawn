@@ -1,7 +1,9 @@
 package com.chronodawn.items.consumables;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.component.Consumable;
 
 /**
  * Time Wheat Cookie (時の小麦クッキー)
@@ -22,9 +24,13 @@ public class TimeWheatCookieItem extends Item {
         FoodProperties foodProperties = new FoodProperties.Builder()
                 .nutrition(2)
                 .saturationModifier(0.4f)
-                .fast()
                 .build();
 
-        return new Properties().food(foodProperties);
+        return new Properties()
+                .food(foodProperties)
+                .component(DataComponents.CONSUMABLE,
+                        Consumable.builder()
+                                .consumeSeconds(1.6f) // Fast eating speed (1.6 seconds instead of 3.2)
+                                .build());
     }
 }
