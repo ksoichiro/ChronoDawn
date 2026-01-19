@@ -21,14 +21,14 @@ import net.minecraft.world.item.BlockItem;
  *
  * Note:
  * - Similar to vanilla melon seeds
- * - Extends BlockItem with useItemPrefixedTranslationKey for 1.21.2
+ * - Extends BlockItem with useBlockDescriptionPrefix (replaces ItemNameBlockItem in 1.21.2)
  *
  * Reference: WORK_NOTES.md (Crop 2: Chrono Melon)
  * Task: T212 [US1] Create Chrono Melon Seeds item
  */
 public class ChronoMelonSeedsItem extends BlockItem {
     public ChronoMelonSeedsItem(Properties properties) {
-        super(ModBlocks.CHRONO_MELON_STEM.get(), properties.useItemPrefixedTranslationKey());
+        super(ModBlocks.CHRONO_MELON_STEM.get(), properties.useBlockDescriptionPrefix());
     }
 
     /**

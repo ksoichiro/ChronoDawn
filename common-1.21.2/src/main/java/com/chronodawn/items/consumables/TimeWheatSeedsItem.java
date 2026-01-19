@@ -17,15 +17,16 @@ import net.minecraft.world.item.BlockItem;
  * - Found naturally in ChronoDawn dimension (plains/forest biomes)
  *
  * Note:
- * - This is a plantable item (BlockItem with useItemPrefixedTranslationKey)
+ * - This is a plantable item (BlockItem with useBlockDescriptionPrefix)
  * - Places TimeWheatBlock when used on farmland
+ * - Migration from ItemNameBlockItem (removed in 1.21.2)
  *
  * Reference: spec.md (User Story 1 Enhancement, FR-035)
  * Task: T223 [US1] Create Time Wheat Seeds item
  */
 public class TimeWheatSeedsItem extends BlockItem {
     public TimeWheatSeedsItem(Properties properties) {
-        super(ModBlocks.TIME_WHEAT.get(), properties.useItemPrefixedTranslationKey());
+        super(ModBlocks.TIME_WHEAT.get(), properties.useBlockDescriptionPrefix());
     }
 
     /**
