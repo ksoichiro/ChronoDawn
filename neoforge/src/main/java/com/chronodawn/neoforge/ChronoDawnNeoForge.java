@@ -302,10 +302,10 @@ public class ChronoDawnNeoForge {
             RegisterSpawnPlacementsEvent.Operation.REPLACE
         );
 
-        // Forgotten Minute - spawns on ground in daylight
+        // Forgotten Minute - flying mob with no spawn restrictions
         event.register(
             ModEntities.FORGOTTEN_MINUTE.get(),
-            SpawnPlacementTypes.ON_GROUND,
+            SpawnPlacementTypes.NO_RESTRICTIONS,
             Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             ForgottenMinuteEntity::checkForgottenMinuteSpawnRules,
             RegisterSpawnPlacementsEvent.Operation.REPLACE

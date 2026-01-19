@@ -204,10 +204,10 @@ public class ChronoDawnFabric implements ModInitializer {
             EpochHuskEntity::checkEpochHuskSpawnRules
         );
 
-        // Forgotten Minute - spawns on ground in daylight
+        // Forgotten Minute - flying mob with no spawn restrictions
         SpawnPlacements.register(
             ModEntities.FORGOTTEN_MINUTE.get(),
-            SpawnPlacementTypes.ON_GROUND,
+            SpawnPlacementTypes.NO_RESTRICTIONS,
             Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             ForgottenMinuteEntity::checkForgottenMinuteSpawnRules
         );
