@@ -83,8 +83,6 @@ public class TimeBlastRenderer extends EntityRenderer<TimeBlastEntity, TimeBlast
             .setNormal(0.0f, 1.0f, 0.0f);
     }
 
-    @Override
-    public ResourceLocation getTextureLocation(TimeBlastRenderState state) {
-        return TEXTURE_LOCATION;
-    }
+    // Note: getTextureLocation() removed in 1.21.2
+    // Texture is defined in RENDER_TYPE static field
 }

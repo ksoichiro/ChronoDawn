@@ -77,8 +77,6 @@ public class GearProjectileRenderer extends EntityRenderer<GearProjectileEntity,
         super.render(state, poseStack, buffer, packedLight);
     }
 
-    @Override
-    public ResourceLocation getTextureLocation(GearProjectileRenderState state) {
-        return TEXTURE;
-    }
+    // Note: getTextureLocation() removed in 1.21.2
+    // Texture is obtained directly in render() method
 }
