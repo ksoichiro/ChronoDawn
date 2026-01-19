@@ -356,7 +356,9 @@ public class EntryPageWidget extends AbstractWidget {
             poseStack.scale(scale, scale, 1.0f);
 
             // Render image at original size (will be scaled by matrix)
-            graphics.blit(imageLocation, 0, 0, 0, 0,
+            // 1.21.2: blit() signature changed - requires RenderType function and float UV coordinates
+            graphics.blit(net.minecraft.client.renderer.RenderType::guiTextured,
+                         imageLocation, 0, 0, 0.0f, 0.0f,
                          imageWidth, imageHeight,
                          imageWidth, imageHeight);
 
