@@ -372,11 +372,13 @@ public class TimeCompassItem extends Item {
 
         // Get structure registry
         var structureRegistry = searchLevel.registryAccess().lookupOrThrow(Registries.STRUCTURE);
-        var structureHolder = structureRegistry.get(structureId);
+        // 1.21.2: get() now returns Optional<Reference<Structure>>
+        var structureHolderOptional = structureRegistry.get(structureId);
 
-        if (structureHolder != null) {
+        if (structureHolderOptional.isPresent()) {
             // Create HolderSet for the single structure
-            HolderSet<Structure> structureSet = HolderSet.direct(structureRegistry.wrapAsHolder(structureHolder));
+            // 1.21.2: wrapAsHolder() is no longer needed, get() already returns Reference<Structure>
+            HolderSet<Structure> structureSet = HolderSet.direct(structureHolderOptional.get());
 
             // Locate nearest structure
             var structurePair = searchLevel.getChunkSource().getGenerator().findNearestMapStructure(
