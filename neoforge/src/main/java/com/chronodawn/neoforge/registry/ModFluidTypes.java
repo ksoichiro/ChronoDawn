@@ -44,7 +44,9 @@ public class ModFluidTypes {
             .pathType(PathType.WATER)
             .adjacentPathType(null)
         ) {
-            @Override
+            // 1.21.2: initializeClient() method signature may have changed
+            // Temporarily comment out @Override to check if method exists
+            // @Override
             public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
                 consumer.accept(new IClientFluidTypeExtensions() {
                     @Override

@@ -644,12 +644,19 @@ public class ChronoDawnClientNeoForge {
      */
     @SubscribeEvent
     public static void onRegisterClientReloadListeners(RegisterClientReloadListenersEvent event) {
-        event.registerReloadListener((preparationBarrier, resourceManager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor) ->
-            preparationBarrier.wait(null).thenRunAsync(() -> {
+        // 1.21.2: PreparableReloadListener API changed, use SimplePreparableReloadListener
+        event.registerReloadListener(new net.minecraft.server.packs.resources.SimplePreparableReloadListener<Void>() {
+            @Override
+            protected Void prepare(net.minecraft.server.packs.resources.ResourceManager resourceManager, net.minecraft.util.profiling.ProfilerFiller profiler) {
+                return null;
+            }
+
+            @Override
+            protected void apply(Void object, net.minecraft.server.packs.resources.ResourceManager resourceManager, net.minecraft.util.profiling.ProfilerFiller profiler) {
                 ChronicleData.getInstance().load(resourceManager);
                 ChronoDawn.LOGGER.info("Chronicle data loaded/reloaded");
-            }, gameExecutor)
-        );
+            }
+        });
     }
 
     /**
@@ -685,8 +692,7 @@ public class ChronoDawnClientNeoForge {
         @SubscribeEvent
         public static void onClientTickEnd(ClientTickEvent.Post event) {
             // Call portal effect handler
-            // Note: Use version-specific handler based on target Minecraft version
-            com.chronodawn.compat.v1_21_1.client.PortalEffectHandler.onClientTick();
+            com.chronodawn.client.PortalEffectHandler.onClientTick();
         }
     }
 }
