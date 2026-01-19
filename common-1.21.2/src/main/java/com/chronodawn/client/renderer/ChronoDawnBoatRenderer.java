@@ -119,8 +119,6 @@ public class ChronoDawnBoatRenderer extends EntityRenderer<ChronoDawnBoat, Chron
         return boatResources.get(state.boatType);
     }
 
-    @Override
-    public ResourceLocation getTextureLocation(ChronoDawnBoatRenderState state) {
-        return getModelWithLocation(state).getFirst();
-    }
+    // Note: getTextureLocation() removed in 1.21.2
+    // Texture is now obtained directly in render() method via getModelWithLocation()
 }
