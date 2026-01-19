@@ -3,6 +3,7 @@ package com.chronodawn.mixin;
 import com.chronodawn.anvil.AnvilRepairHandler;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.inventory.AnvilMenu;
+import net.minecraft.world.inventory.ItemCombinerMenuSlotDefinition;
 import net.minecraft.world.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -19,8 +20,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(AnvilMenu.class)
 public abstract class AnvilMenuMixin extends net.minecraft.world.inventory.ItemCombinerMenu {
 
-    public AnvilMenuMixin(net.minecraft.world.inventory.MenuType<?> p_39773_, int p_39774_, net.minecraft.world.entity.player.Inventory p_39775_, net.minecraft.world.inventory.ContainerLevelAccess p_39776_) {
-        super(p_39773_, p_39774_, p_39775_, p_39776_);
+    public AnvilMenuMixin(net.minecraft.world.inventory.MenuType<?> p_39773_, int p_39774_, net.minecraft.world.entity.player.Inventory p_39775_, net.minecraft.world.inventory.ContainerLevelAccess p_39776_, ItemCombinerMenuSlotDefinition slotDefinition) {
+        // 1.21.2: ItemCombinerMenu constructor now requires ItemCombinerMenuSlotDefinition parameter
+        super(p_39773_, p_39774_, p_39775_, p_39776_, slotDefinition);
     }
 
     /**
