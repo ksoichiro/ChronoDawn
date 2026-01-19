@@ -13,7 +13,7 @@ import net.minecraft.client.renderer.entity.state.BoatRenderState;
 public class ChronoDawnChestBoatRenderState extends BoatRenderState {
     /**
      * Custom boat type for ChronoDawn chest boats.
-     * Note: Other fields (hurtTime, damage, hurtDir, bubbleAngle, isUnderWater, yRot)
+     * Note: Other fields (hurtDir, bubbleAngle, isUnderWater, yRot)
      * are inherited from BoatRenderState.
      */
     public ChronoDawnBoatType boatType;
