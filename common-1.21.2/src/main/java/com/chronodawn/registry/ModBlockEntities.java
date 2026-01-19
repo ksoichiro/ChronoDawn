@@ -7,7 +7,10 @@ import com.chronodawn.blocks.ClockTowerTeleporterBlockEntity;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+
+import java.util.Set;
 
 /**
  * Architectury Registry wrapper for custom block entities.
@@ -21,10 +24,11 @@ public class ModBlockEntities {
      */
     public static final RegistrySupplier<BlockEntityType<ClockTowerTeleporterBlockEntity>> CLOCK_TOWER_TELEPORTER =
         BLOCK_ENTITIES.register("clock_tower_teleporter", () ->
-            BlockEntityType.Builder.of(
+            // 1.21.2: BlockEntityType.Builder removed, use constructor with Set<Block> directly
+            new BlockEntityType<>(
                 ClockTowerTeleporterBlockEntity::new,
-                ModBlocks.CLOCK_TOWER_TELEPORTER.get()
-            ).build(null)
+                Set.<Block>of(ModBlocks.CLOCK_TOWER_TELEPORTER.get())
+            )
         );
 
     /**
@@ -32,10 +36,11 @@ public class ModBlockEntities {
      */
     public static final RegistrySupplier<BlockEntityType<BossRoomDoorBlockEntity>> BOSS_ROOM_DOOR =
         BLOCK_ENTITIES.register("boss_room_door", () ->
-            BlockEntityType.Builder.of(
+            // 1.21.2: BlockEntityType.Builder removed, use constructor with Set<Block> directly
+            new BlockEntityType<>(
                 BossRoomDoorBlockEntity::new,
-                ModBlocks.BOSS_ROOM_DOOR.get()
-            ).build(null)
+                Set.<Block>of(ModBlocks.BOSS_ROOM_DOOR.get())
+            )
         );
 
     /**
@@ -43,10 +48,11 @@ public class ModBlockEntities {
      */
     public static final RegistrySupplier<BlockEntityType<BossRoomBoundaryMarkerBlockEntity>> BOSS_ROOM_BOUNDARY_MARKER =
         BLOCK_ENTITIES.register("boss_room_boundary_marker", () ->
-            BlockEntityType.Builder.of(
+            // 1.21.2: BlockEntityType.Builder removed, use constructor with Set<Block> directly
+            new BlockEntityType<>(
                 BossRoomBoundaryMarkerBlockEntity::new,
-                ModBlocks.BOSS_ROOM_BOUNDARY_MARKER.get()
-            ).build(null)
+                Set.<Block>of(ModBlocks.BOSS_ROOM_BOUNDARY_MARKER.get())
+            )
         );
 
     /**
