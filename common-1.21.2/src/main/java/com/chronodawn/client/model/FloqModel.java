@@ -58,13 +58,6 @@ public class FloqModel extends EntityModel<FloqRenderState> {
         // No per-frame setup needed here
     }
 
-    @Override
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
-        // Scale transformation is applied in FloqRenderer.scale() method
-        // Just render the parts directly here
-        body.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        right_eye.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        left_eye.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-        mouth.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-    }
+    // Note: renderToBuffer() is now final in 1.21.2 and automatically renders all child parts.
+    // The model parts (body, right_eye, left_eye, mouth) are automatically rendered by the base EntityModel class.
 }

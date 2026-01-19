@@ -34,8 +34,9 @@ public class FloqRenderer extends MobRenderer<FloqEntity, FloqRenderState, FloqM
     @Override
     public void extractRenderState(FloqEntity entity, FloqRenderState state, float partialTick) {
         super.extractRenderState(entity, state, partialTick);
-        state.squish = entity.squish;
-        state.oSquish = entity.oSquish;
+        // Interpolate squish value for smooth animation between ticks (done here instead of scale() in 1.21.2)
+        state.squish = Mth.lerp(partialTick, entity.oSquish, entity.squish);
+        state.oSquish = entity.oSquish; // Keep for reference
         state.onGround = entity.onGround();
     }
 
@@ -46,11 +47,13 @@ public class FloqRenderer extends MobRenderer<FloqEntity, FloqRenderState, FloqM
 
     /**
      * Apply scale transformation for squish animation
+     * Note: In 1.21.2, partialTick parameter was removed from scale().
+     * Interpolation is now done in extractRenderState() instead.
      */
     @Override
-    protected void scale(FloqRenderState state, PoseStack poseStack, float partialTick) {
-        // Interpolate squish value for smooth animation between ticks
-        float squish = Mth.lerp(partialTick, state.oSquish, state.squish);
+    protected void scale(FloqRenderState state, PoseStack poseStack) {
+        // Use pre-interpolated squish value from extractRenderState()
+        float squish = state.squish;
 
         // Apply squash and stretch
         // Positive squish = stretched (jumping): tall and thin
