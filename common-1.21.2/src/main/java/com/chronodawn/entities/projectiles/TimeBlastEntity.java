@@ -43,7 +43,11 @@ public class TimeBlastEntity extends ThrowableProjectile {
      * @param shooter The entity that fired the projectile
      */
     public TimeBlastEntity(Level level, LivingEntity shooter) {
-        super(ModEntities.TIME_BLAST.get(), shooter, level);
+        // 1.21.2: ThrowableProjectile(EntityType, LivingEntity, Level) removed
+        // Use ThrowableProjectile(EntityType, double x, double y, double z, Level) instead
+        super(ModEntities.TIME_BLAST.get(),
+              shooter.getX(), shooter.getY(), shooter.getZ(), level);
+        this.setOwner(shooter);
     }
 
     @Override
