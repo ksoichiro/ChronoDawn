@@ -96,7 +96,8 @@ public class TimeClockItem extends Item {
         ItemStack itemStack = player.getItemInHand(hand);
 
         // Check if player is on cooldown
-        if (player.getCooldowns().isOnCooldown(this)) {
+        // 1.21.2: ItemCooldowns now uses ItemStack instead of Item
+        if (player.getCooldowns().isOnCooldown(itemStack)) {
             return InteractionResult.FAIL;
         }
 
@@ -117,7 +118,8 @@ public class TimeClockItem extends Item {
                     );
 
                     // Apply longer cooldown for boss effect
-                    player.getCooldowns().addCooldown(this, BOSS_COOLDOWN_TICKS);
+                    // 1.21.2: ItemCooldowns now uses ItemStack instead of Item
+                    player.getCooldowns().addCooldown(itemStack, BOSS_COOLDOWN_TICKS);
                     return InteractionResult.SUCCESS;
                 } else {
                     // Already used in current phase
@@ -133,10 +135,12 @@ public class TimeClockItem extends Item {
             MobAICanceller.cancelAttackAI(level, player.position(), EFFECT_RADIUS);
 
             // Apply normal cooldown
-            player.getCooldowns().addCooldown(this, COOLDOWN_TICKS);
+            // 1.21.2: ItemCooldowns now uses ItemStack instead of Item
+            player.getCooldowns().addCooldown(itemStack, COOLDOWN_TICKS);
         } else {
             // Client-side: apply normal cooldown
-            player.getCooldowns().addCooldown(this, COOLDOWN_TICKS);
+            // 1.21.2: ItemCooldowns now uses ItemStack instead of Item
+            player.getCooldowns().addCooldown(itemStack, COOLDOWN_TICKS);
         }
 
         return InteractionResult.SUCCESS;
