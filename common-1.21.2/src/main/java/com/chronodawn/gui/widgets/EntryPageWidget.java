@@ -23,6 +23,9 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.resources.ResourceLocation;
 import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import com.mojang.blaze3d.systems.RenderSystem;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -285,42 +288,26 @@ public class EntryPageWidget extends AbstractWidget {
      * Render a recipe virtual page showing the crafting recipe.
      */
     private void renderRecipeVirtualPage(GuiGraphics graphics, VirtualPage virtualPage) {
-        ResourceLocation recipeId = virtualPage.recipe;
-        RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
+        // TODO: 1.21.2 - Recipe API changed significantly
+        // - Level.getRecipeManager() removed
+        // - ClientPacketListener.getRecipeManager() removed
+        // - RecipeManager.byKey() signature changed
+        // - Recipe.getResultItem() signature changed or removed
+        // Need to investigate proper way to access recipes in 1.21.2
 
-        Optional<RecipeHolder<?>> recipeHolder = recipeManager.byKey(recipeId);
-        if (recipeHolder.isEmpty()) {
-            // Recipe not found - render error message with word wrap
-            Font font = Minecraft.getInstance().font;
-            String errorText = "Recipe not found: " + recipeId;
-            int maxLineWidth = width - (TEXT_MARGIN * 2);
-            List<String> lines = wrapText(errorText, maxLineWidth, font);
-
-            int textX = getX() + TEXT_MARGIN;
-            int textY = getY() + TEXT_MARGIN;
-
-            for (String line : lines) {
-                graphics.drawString(font, line, textX, textY, 0xFF0000, false);
-                textY += LINE_HEIGHT;
-            }
-            return;
-        }
-
-        // Simple recipe display (show output item)
-        // TODO: In a full implementation, render the actual crafting grid
-        var recipe = recipeHolder.get().value();
-        ItemStack result = recipe.getResultItem(Minecraft.getInstance().level.registryAccess());
-
-        int iconX = getX() + width / 2 - 8;
-        int iconY = getY() + 20;
-        graphics.renderItem(result, iconX, iconY);
-
-        // Render item name
+        // Temporarily show placeholder message
         Font font = Minecraft.getInstance().font;
-        String itemName = result.getHoverName().getString();
-        int textX = getX() + (width - font.width(itemName)) / 2;
-        int textY = iconY + 20;
-        graphics.drawString(font, itemName, textX, textY, 0x000000, false);
+        String placeholder = "Recipe display (TODO: Fix 1.21.2 Recipe API)";
+        int maxLineWidth = width - (TEXT_MARGIN * 2);
+        List<String> lines = wrapText(placeholder, maxLineWidth, font);
+
+        int textX = getX() + TEXT_MARGIN;
+        int textY = getY() + TEXT_MARGIN;
+
+        for (String line : lines) {
+            graphics.drawString(font, line, textX, textY, 0x808080, false);
+            textY += LINE_HEIGHT;
+        }
     }
 
     /**
@@ -359,7 +346,8 @@ public class EntryPageWidget extends AbstractWidget {
 
             // Apply sepia/beige tone to match book background (0xF0E0D0)
             // RGB values: R=0.94, G=0.88, B=0.82 (slight warm tone)
-            graphics.setColor(0.94f, 0.88f, 0.82f, 1.0f);
+            // 1.21.2: GuiGraphics.setColor() removed, use RenderSystem.setShaderColor() instead
+            RenderSystem.setShaderColor(0.94f, 0.88f, 0.82f, 1.0f);
 
             // Use PoseStack to scale the image
             var poseStack = graphics.pose();
@@ -375,7 +363,8 @@ public class EntryPageWidget extends AbstractWidget {
             poseStack.popPose();
 
             // Reset color to white (default)
-            graphics.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+            // 1.21.2: GuiGraphics.setColor() removed, use RenderSystem.setShaderColor() instead
+            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
 
             // Apply vignette effect (fade edges to match book background)
             renderVignetteEffect(graphics, renderX, renderY, renderWidth, renderHeight);
