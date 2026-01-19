@@ -224,7 +224,9 @@ public class PortalTeleportHandler {
         // Calculate player rotation (face away from portal)
         float destYRot = calculateTeleportRotation(sourceAxis);
 
-        player.teleportTo(destLevel, destPosition.x, destPosition.y, destPosition.z, destYRot, player.getXRot());
+        // 1.21.2: teleportTo() signature changed - requires Set<RelativeMovement> and boolean parameters
+        player.teleportTo(destLevel, destPosition.x, destPosition.y, destPosition.z,
+            Set.of(), destYRot, player.getXRot(), false);
 
         // Play arrival sound at destination (same as Nether portal)
         destLevel.playSound(
@@ -492,7 +494,7 @@ public class PortalTeleportHandler {
 
         // If surface is not solid (e.g., water, air), search downward for solid ground
         if (!surfaceBlock.isSolid() || surfaceBlock.isAir()) {
-            while (pos.getY() > level.getMinBuildHeight()) {
+            while (pos.getY() > level.getMinY()) {
                 BlockState currentBlock = level.getBlockState(pos);
                 if (currentBlock.isSolid() && !currentBlock.isAir()) {
                     // Found solid ground
@@ -579,7 +581,7 @@ public class PortalTeleportHandler {
 
         if (needsAdjustment) {
             // Search downward for solid ground
-            while (adjustedPos.getY() > level.getMinBuildHeight()) {
+            while (adjustedPos.getY() > level.getMinY()) {
                 boolean allSolid = true;
 
                 // Check if all bottom frame positions have solid ground below at this level
