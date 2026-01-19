@@ -63,7 +63,8 @@ public class ChronoAegisItem extends Item {
                     Component.translatable("item.chronodawn.chrono_aegis.already_active"),
                     true
                 );
-                return InteractionResult.fail(stack);
+                // In 1.21.2, InteractionResult no longer takes ItemStack parameter
+                return InteractionResult.FAIL;
             }
 
             // Apply Chrono Aegis buff to all nearby players (32 block radius)
@@ -116,10 +117,12 @@ public class ChronoAegisItem extends Item {
                 stack.shrink(1);
             }
 
-            return InteractionResult.success(stack);
+            // In 1.21.2, InteractionResult no longer takes ItemStack parameter
+            return InteractionResult.SUCCESS;
         }
 
-        return InteractionResult.sidedSuccess(stack, level.isClientSide());
+        // In 1.21.2, return success on client side
+        return InteractionResult.SUCCESS;
     }
 
     @Override

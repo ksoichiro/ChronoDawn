@@ -38,6 +38,7 @@ public class UnstablePocketWatchItem extends Item {
             UnstablePocketWatchSwapHandler.swapEffects(player, level);
         }
 
-        return InteractionResult.sidedSuccess(level.isClientSide());
+        // In 1.21.2, InteractionResult no longer takes ItemStack parameter
+        return InteractionResult.SUCCESS;
     }
 }

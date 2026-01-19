@@ -219,7 +219,8 @@ public class TimeCompassItem extends Item {
                         .withStyle(ChatFormatting.RED),
                     true
                 );
-                return InteractionResult.fail(stack);
+                // In 1.21.2, InteractionResult.FAIL doesn't take ItemStack
+                return InteractionResult.FAIL;
             }
 
             // Check if already has position
@@ -247,7 +248,7 @@ public class TimeCompassItem extends Item {
                     false
                 );
                 level.playSound(null, player.blockPosition(), ModSounds.TIME_COMPASS_CHIME.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
-                return InteractionResult.success(stack);
+                return InteractionResult.SUCCESS;
             }
 
             // Search for structure
@@ -278,7 +279,7 @@ public class TimeCompassItem extends Item {
                     );
                     level.playSound(null, player.blockPosition(), ModSounds.TIME_COMPASS_UPDATE.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
                 }
-                return InteractionResult.success(stack);
+                return InteractionResult.SUCCESS;
             } else {
                 Component structureName = Component.translatable(getStructureDisplayName(targetStructure));
                 player.displayClientMessage(
@@ -288,11 +289,12 @@ public class TimeCompassItem extends Item {
                     false
                 );
                 level.playSound(null, player.blockPosition(), ModSounds.TIME_COMPASS_BREAK.get(), SoundSource.PLAYERS, 1.0f, 0.5f);
-                return InteractionResult.fail(stack);
+                return InteractionResult.FAIL;
             }
         }
 
-        return InteractionResult.sidedSuccess(stack, level.isClientSide);
+        // In 1.21.2, return success on client side
+        return InteractionResult.SUCCESS;
     }
 
     /**
