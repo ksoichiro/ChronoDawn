@@ -75,8 +75,15 @@ public class FogRendererMixin {
 
         // Apply fog only if camera is actually inside Dark Forest biome
         if (currentBiome.is(ChronoDawnBiomeProvider.CHRONO_DAWN_DARK_FOREST)) {
-            RenderSystem.setShaderFogStart(DARK_FOREST_FOG_START);
-            RenderSystem.setShaderFogEnd(DARK_FOREST_FOG_END);
+            // TODO: 1.21.2 - Fog API changed significantly
+            // RenderSystem.setShaderFogStart/End() removed
+            // Need to investigate proper way to set fog parameters in 1.21.2
+            // Possible approaches:
+            // - Use FogRenderer.FogData or FogParameters
+            // - Inject at different method/location
+            // - Use new fog API structure
+            // RenderSystem.setShaderFogStart(DARK_FOREST_FOG_START);
+            // RenderSystem.setShaderFogEnd(DARK_FOREST_FOG_END);
         }
     }
 }
