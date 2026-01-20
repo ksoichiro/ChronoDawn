@@ -1,5 +1,10 @@
 package com.chronodawn.items.consumables;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -36,6 +41,8 @@ public class EnhancedTimeBreadItem extends Item {
                                 .onConsume(new ApplyStatusEffectsConsumeEffect(
                                         new MobEffectInstance(MobEffects.SATURATION, 5 * 20, 0),
                                         1.0f))
-                                .build());
+                                .build())
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "enhanced_time_bread")));
     }
 }

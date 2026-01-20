@@ -1,5 +1,10 @@
 package com.chronodawn.items.consumables;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+
 import com.chronodawn.registry.ModBlocks;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.BlockItem;
@@ -60,6 +65,8 @@ public class TimelessMushroomItem extends BlockItem {
                 .build();
 
         return new Properties()
-                .food(foodProperties);
+                .food(foodProperties)
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "timeless_mushroom")));
     }
 }

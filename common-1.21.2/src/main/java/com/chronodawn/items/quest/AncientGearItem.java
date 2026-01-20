@@ -1,5 +1,10 @@
 package com.chronodawn.items.quest;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+
 import net.minecraft.world.item.Item;
 
 /**
@@ -34,6 +39,8 @@ public class AncientGearItem extends Item {
      */
     public static Properties createProperties() {
         return new Properties()
-                .stacksTo(64);
+                .stacksTo(64)
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "ancient_gear")));
     }
 }

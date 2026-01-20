@@ -9,7 +9,10 @@ import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModDimensions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -57,7 +60,9 @@ public class TimeHourglassItem extends Item {
      */
     public static Properties createProperties() {
         return new Properties()
-                .stacksTo(64); // Consumable item - can stack for convenience
+                .stacksTo(64) // Consumable item - can stack for convenience
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "time_hourglass")));
     }
 
     @Override

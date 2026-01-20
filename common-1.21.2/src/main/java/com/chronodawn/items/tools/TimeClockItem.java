@@ -1,8 +1,12 @@
 package com.chronodawn.items.tools;
 
+import com.chronodawn.ChronoDawn;
 import com.chronodawn.core.time.MobAICanceller;
 import com.chronodawn.entities.bosses.TimeTyrantEntity;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -73,7 +77,9 @@ public class TimeClockItem extends Item {
      */
     public static Properties createProperties() {
         return new Properties()
-                .stacksTo(1);
+                .stacksTo(1)
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "time_clock")));
     }
 
     /**

@@ -8,6 +8,9 @@ import com.chronodawn.data.ChronoDawnGlobalState;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModSounds;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
@@ -61,7 +64,9 @@ public class PortalStabilizerItem extends Item {
     public static Properties createProperties() {
         return new Properties()
                 .stacksTo(1)
-                .durability(1); // Single-use item
+                .durability(1) // Single-use item
+                .setId(ResourceKey.create(net.minecraft.core.registries.Registries.ITEM,
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "portal_stabilizer")));
     }
 
     @Override

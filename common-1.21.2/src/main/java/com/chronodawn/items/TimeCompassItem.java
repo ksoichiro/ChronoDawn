@@ -1,5 +1,6 @@
 package com.chronodawn.items;
 
+import com.chronodawn.ChronoDawn;
 import com.chronodawn.compat.CompatHandlers;
 import com.chronodawn.registry.ModSounds;
 import net.minecraft.ChatFormatting;
@@ -80,7 +81,9 @@ public class TimeCompassItem extends Item {
 
     public static Properties createProperties() {
         return new Item.Properties()
-            .stacksTo(1); // Compass doesn't stack
+            .stacksTo(1) // Compass doesn't stack
+            .setId(ResourceKey.create(net.minecraft.core.registries.Registries.ITEM,
+                net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "time_compass")));
     }
 
     /**

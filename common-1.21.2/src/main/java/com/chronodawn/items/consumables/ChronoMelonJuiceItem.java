@@ -1,5 +1,10 @@
 package com.chronodawn.items.consumables;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerPlayer;
@@ -45,7 +50,9 @@ public class ChronoMelonJuiceItem extends Item {
                                         1.0f))
                                 .build())
                 .craftRemainder(Items.GLASS_BOTTLE)
-                .stacksTo(16);
+                .stacksTo(16)
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "chrono_melon_juice")));
     }
 
     @Override

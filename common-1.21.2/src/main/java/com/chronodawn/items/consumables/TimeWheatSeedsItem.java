@@ -1,5 +1,10 @@
 package com.chronodawn.items.consumables;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+
 import com.chronodawn.registry.ModBlocks;
 import net.minecraft.world.item.BlockItem;
 
@@ -35,6 +40,8 @@ public class TimeWheatSeedsItem extends BlockItem {
      * @return Item properties
      */
     public static Properties createProperties() {
-        return new Properties();
+        return new Properties()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "time_wheat_seeds")));
     }
 }

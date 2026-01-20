@@ -1,5 +1,10 @@
 package com.chronodawn.items.consumables;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.Item;
@@ -57,6 +62,8 @@ public class ChronoMelonSliceItem extends Item {
                 .component(DataComponents.CONSUMABLE,
                         Consumable.builder()
                                 .consumeSeconds(1.6f) // Fast eating speed (1.6 seconds instead of 3.2)
-                                .build());
+                                .build())
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "chrono_melon_slice")));
     }
 }

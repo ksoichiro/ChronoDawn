@@ -1,5 +1,10 @@
 package com.chronodawn.items.boats;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+
 import com.chronodawn.entities.boats.ChronoDawnBoat;
 import com.chronodawn.entities.boats.ChronoDawnBoatType;
 import com.chronodawn.entities.boats.ChronoDawnChestBoat;
@@ -48,7 +53,9 @@ public class ChronoDawnBoatItem extends Item {
      * Creates properties for boat items.
      */
     public static Properties createProperties() {
-        return new Properties().stacksTo(1);
+        return new Properties().stacksTo(1)
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "chrono_dawn_boat")));
     }
 
     @Override

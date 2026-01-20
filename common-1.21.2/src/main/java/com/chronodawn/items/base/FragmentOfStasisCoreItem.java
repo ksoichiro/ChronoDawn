@@ -1,5 +1,9 @@
 package com.chronodawn.items.base;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 
 /**
@@ -31,6 +35,8 @@ public class FragmentOfStasisCoreItem extends Item {
      */
     public static Properties createProperties() {
         return new Properties()
-            .rarity(net.minecraft.world.item.Rarity.RARE);
+            .rarity(net.minecraft.world.item.Rarity.RARE)
+            .setId(ResourceKey.create(Registries.ITEM,
+                ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "fragment_of_stasis_core")));
     }
 }

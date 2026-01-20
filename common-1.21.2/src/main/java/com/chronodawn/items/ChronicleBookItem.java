@@ -1,5 +1,9 @@
 package com.chronodawn.items;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -28,6 +32,8 @@ public class ChronicleBookItem extends Item {
 
     public static Properties createProperties() {
         return new Item.Properties()
-            .stacksTo(1); // Chronicle book is unique, only 1 per stack
+            .stacksTo(1) // Chronicle book is unique, only 1 per stack
+            .setId(ResourceKey.create(Registries.ITEM,
+                ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "chronicle_book")));
     }
 }

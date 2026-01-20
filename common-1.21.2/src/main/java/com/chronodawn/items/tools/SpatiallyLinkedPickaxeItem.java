@@ -1,5 +1,8 @@
 package com.chronodawn.items.tools;
 
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.compat.CompatResourceLocation;
 import com.chronodawn.registry.ModItems;
@@ -76,7 +79,9 @@ public class SpatiallyLinkedPickaxeItem extends PickaxeItem {
     public static Properties createProperties() {
         return new Properties()
                 .stacksTo(1)
-                .durability(1561);
+                .durability(1561)
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "spatially_linked_pickaxe")));
     }
 
     /**

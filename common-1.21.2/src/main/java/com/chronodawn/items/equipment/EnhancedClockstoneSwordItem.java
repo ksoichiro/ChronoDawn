@@ -1,5 +1,10 @@
 package com.chronodawn.items.equipment;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
@@ -58,7 +63,9 @@ public class EnhancedClockstoneSwordItem extends SwordItem {
     public static Properties createProperties() {
         return new Properties()
                 .stacksTo(1)
-                .durability(1200);
+                .durability(1200)
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "enhanced_clockstone_sword")));
     }
 
     /**

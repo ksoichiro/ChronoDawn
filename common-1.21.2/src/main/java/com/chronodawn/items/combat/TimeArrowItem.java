@@ -1,5 +1,9 @@
 package com.chronodawn.items.combat;
 
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.entities.projectiles.TimeArrowEntity;
 import com.chronodawn.registry.ModEntities;
@@ -40,7 +44,9 @@ public class TimeArrowItem extends ArrowItem {
      * @return Item properties with appropriate settings
      */
     public static Properties createProperties() {
-        return new Properties();
+        return new Properties()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "time_arrow")));
     }
 
     @Override

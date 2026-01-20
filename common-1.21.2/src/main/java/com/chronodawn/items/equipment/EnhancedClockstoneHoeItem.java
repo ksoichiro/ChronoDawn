@@ -1,5 +1,10 @@
 package com.chronodawn.items.equipment;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+
 import net.minecraft.world.item.HoeItem;
 
 /**
@@ -35,6 +40,8 @@ public class EnhancedClockstoneHoeItem extends HoeItem {
     public static Properties createProperties() {
         return new Properties()
                 .stacksTo(1)
-                .durability(1200);
+                .durability(1200)
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "enhanced_clockstone_hoe")));
     }
 }

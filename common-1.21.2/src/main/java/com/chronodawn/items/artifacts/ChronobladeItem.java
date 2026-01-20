@@ -1,5 +1,8 @@
 package com.chronodawn.items.artifacts;
 
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.compat.CompatResourceLocation;
 import com.chronodawn.registry.ModItems;
@@ -86,7 +89,9 @@ public class ChronobladeItem extends SwordItem {
         return new Properties()
                 .stacksTo(1)
                 .durability(2000)
-                .rarity(net.minecraft.world.item.Rarity.EPIC);
+                .rarity(net.minecraft.world.item.Rarity.EPIC)
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "chronoblade")));
     }
 
     /**

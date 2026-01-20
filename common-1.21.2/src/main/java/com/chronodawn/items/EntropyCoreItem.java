@@ -1,5 +1,9 @@
 package com.chronodawn.items;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Rarity;
 
@@ -32,6 +36,8 @@ public class EntropyCoreItem extends Item {
         return new Properties()
             .rarity(Rarity.RARE)
             .fireResistant()
-            .stacksTo(16);
+            .stacksTo(16)
+            .setId(ResourceKey.create(Registries.ITEM,
+                ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "entropy_core")));
     }
 }
