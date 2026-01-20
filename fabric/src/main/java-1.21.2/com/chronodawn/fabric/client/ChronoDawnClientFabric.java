@@ -1,6 +1,7 @@
 package com.chronodawn.fabric.client;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.entities.boats.ChronoDawnBoatType;
 import com.chronodawn.client.model.ChronosWardenModel;
 import com.chronodawn.client.model.ClockworkColossusModel;
 import com.chronodawn.client.model.ClockworkSentinelModel;
@@ -46,6 +47,8 @@ import net.fabricmc.fabric.api.event.client.player.ClientPlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
+import net.minecraft.client.model.BoatModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.RenderType;
@@ -372,6 +375,9 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
      * Register entity model layers for custom entity models.
      */
     private void registerEntityModelLayers() {
+        // Register Boat and Chest Boat model layers for all ChronoDawn boat types
+        registerBoatModelLayers();
+
         // Register Time Guardian model layer
         EntityModelLayerRegistry.registerModelLayer(
             TimeGuardianRenderer.LAYER_LOCATION,
@@ -431,6 +437,31 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             EntropyKeeperRenderer.LAYER_LOCATION,
             EntropyKeeperModel::createBodyLayer
         );
+    }
+
+    /**
+     * Register boat and chest boat model layers for all ChronoDawn boat types.
+     * In Minecraft 1.21.2, custom boats require explicit model layer registration.
+     */
+    private void registerBoatModelLayers() {
+        for (ChronoDawnBoatType type : ChronoDawnBoatType.values()) {
+            // Register boat model layer
+            ModelLayerLocation boatLayer = new ModelLayerLocation(
+                ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "boat/" + type.getName()),
+                "main"
+            );
+            EntityModelLayerRegistry.registerModelLayer(boatLayer, BoatModel::createBoatModel);
+
+            // Register chest boat model layer
+            ModelLayerLocation chestBoatLayer = new ModelLayerLocation(
+                ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "chest_boat/" + type.getName()),
+                "main"
+            );
+            EntityModelLayerRegistry.registerModelLayer(chestBoatLayer, BoatModel::createChestBoatModel);
+        }
+
+        ChronoDawn.LOGGER.info("Registered {} boat and {} chest boat model layers",
+            ChronoDawnBoatType.values().length, ChronoDawnBoatType.values().length);
     }
 
     /**

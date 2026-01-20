@@ -17,6 +17,7 @@ import com.chronodawn.client.model.TimeTyrantModel;
 import com.chronodawn.client.renderer.ChronosWardenRenderer;
 import com.chronodawn.client.renderer.ChronoDawnBoatRenderer;
 import com.chronodawn.client.renderer.ChronoDawnChestBoatRenderer;
+import com.chronodawn.entities.boats.ChronoDawnBoatType;
 import com.chronodawn.client.renderer.ClockworkColossusRenderer;
 import com.chronodawn.client.renderer.EntropyKeeperRenderer;
 import com.chronodawn.client.renderer.GearProjectileRenderer;
@@ -35,6 +36,8 @@ import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModParticles;
 import com.chronodawn.registry.ModEntities;
 import com.chronodawn.registry.ModItems;
+import net.minecraft.client.model.BoatModel;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
@@ -147,7 +150,26 @@ public class ChronoDawnClientNeoForge {
             EntropyKeeperModel::createBodyLayer
         );
 
+        // Register boat and chest boat model layers for all ChronoDawn boat types
+        for (ChronoDawnBoatType type : ChronoDawnBoatType.values()) {
+            // Register boat model layer
+            ModelLayerLocation boatLayer = new ModelLayerLocation(
+                ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "boat/" + type.getName()),
+                "main"
+            );
+            event.registerLayerDefinition(boatLayer, BoatModel::createBoatModel);
+
+            // Register chest boat model layer
+            ModelLayerLocation chestBoatLayer = new ModelLayerLocation(
+                ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "chest_boat/" + type.getName()),
+                "main"
+            );
+            event.registerLayerDefinition(chestBoatLayer, BoatModel::createChestBoatModel);
+        }
+
         ChronoDawn.LOGGER.info("Registered entity model layers for NeoForge");
+        ChronoDawn.LOGGER.info("Registered {} boat and {} chest boat model layers",
+            ChronoDawnBoatType.values().length, ChronoDawnBoatType.values().length);
     }
 
     /**
