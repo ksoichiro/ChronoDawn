@@ -302,6 +302,8 @@ public class ModBlocks {
             CompatBlockProperties.ofFullCopy(Blocks.GLOWSTONE)
                 .lightLevel(state -> 15)
                 .noOcclusion()
+                .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "clock_tower_teleporter")))
         )
     );
 
@@ -451,7 +453,15 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> TIME_WHEAT = BLOCKS.register(
         "time_wheat",
         () -> new TimeWheatBlock(
-            CompatBlockProperties.ofFullCopy(Blocks.WHEAT)
+            Block.Properties.of()
+                .mapColor(net.minecraft.world.level.material.MapColor.PLANT)
+                .noCollission()
+                .randomTicks()
+                .instabreak()
+                .sound(net.minecraft.world.level.block.SoundType.CROP)
+                .pushReaction(net.minecraft.world.level.material.PushReaction.DESTROY)
+                .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "time_wheat")))
         )
     );
 
@@ -465,6 +475,8 @@ public class ModBlocks {
         "time_wheat_bale",
         () -> new TimeWheatBaleBlock(
             CompatBlockProperties.ofFullCopy(Blocks.HAY_BLOCK)
+                .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "time_wheat_bale")))
         )
     );
 
@@ -477,6 +489,8 @@ public class ModBlocks {
         "temporal_root",
         () -> new TemporalRootBlock(
             CompatBlockProperties.ofFullCopy(Blocks.CARROTS)
+                .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "temporal_root")))
         )
     );
 
@@ -489,6 +503,8 @@ public class ModBlocks {
         "chrono_melon",
         () -> new ChronoMelonBlock(
             CompatBlockProperties.ofFullCopy(Blocks.MELON)
+                .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "chrono_melon")))
         )
     );
 
@@ -501,6 +517,8 @@ public class ModBlocks {
         "chrono_melon_stem",
         () -> new ChronoMelonStemBlock(
             CompatBlockProperties.ofFullCopy(Blocks.MELON_STEM)
+                .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "chrono_melon_stem")))
         )
     );
 
@@ -513,6 +531,8 @@ public class ModBlocks {
         "attached_chrono_melon_stem",
         () -> new AttachedChronoMelonStemBlock(
             CompatBlockProperties.ofFullCopy(Blocks.ATTACHED_MELON_STEM)
+                .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "attached_chrono_melon_stem")))
         )
     );
 
@@ -526,6 +546,8 @@ public class ModBlocks {
         "timeless_mushroom",
         () -> new TimelessMushroomBlock(
             CompatBlockProperties.ofFullCopy(Blocks.BROWN_MUSHROOM)
+                .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "timeless_mushroom")))
         )
     );
 
@@ -624,6 +646,8 @@ public class ModBlocks {
         () -> new BossRoomDoorBlock(
             CompatBlockProperties.ofFullCopy(Blocks.IRON_DOOR)
                 .noOcclusion()
+                .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "boss_room_door")))
         )
     );
 
@@ -640,6 +664,8 @@ public class ModBlocks {
         () -> new EntropyCryptTrapdoorBlock(
             CompatBlockProperties.ofFullCopy(Blocks.IRON_TRAPDOOR)
                 .noOcclusion()
+                .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "entropy_crypt_trapdoor")))
         )
     );
 
@@ -673,7 +699,9 @@ public class ModBlocks {
      */
     public static final RegistrySupplier<Block> DECORATIVE_WATER = BLOCKS.register(
         "decorative_water",
-        () -> new DecorativeWaterBlock(ModFluids.DECORATIVE_WATER.get(), CompatBlockProperties.ofFullCopy(Blocks.WATER))
+        () -> new DecorativeWaterBlock(ModFluids.DECORATIVE_WATER.get(), CompatBlockProperties.ofFullCopy(Blocks.WATER)
+                .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "decorative_water"))))
     );
 
     /**
