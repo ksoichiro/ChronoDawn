@@ -7462,3 +7462,105 @@ block_entities: [
 - [nbtlib (Python)](https://github.com/vberlier/nbtlib)
 - [NBT Studio](https://github.com/tryashtar/nbt-studio)
 - [Querz/NBT (Java)](https://github.com/Querz/NBT)
+
+---
+
+## FogRenderer.setupFog() API Changes in Minecraft 1.21.2
+
+**Date**: 2026-01-21  
+**Context**: Migration to Minecraft 1.21.2 support  
+**Task**: Fix FogRendererMixin method signature error
+
+### Problem
+
+FogRendererMixin's method signature does not match the 1.21.2 API, causing a Mixin error:
+
+```
+Invalid descriptor on chronodawn-fabric.mixins.json:client.FogRendererMixin
+Expected: (Camera, FogMode, Vector4f, float, boolean, float, CallbackInfoReturnable)
+Found:    (Camera, FogMode, float, boolean, float, CallbackInfo)
+```
+
+### API Changes in 1.21.2
+
+#### Method Signature Changes
+
+**1.21.1 (Old)**:
+```java
+@Inject(method = "setupFog", at = @At("TAIL"))
+private static void modifyDarkForestFog(
+    Camera camera,
+    FogRenderer.FogMode fogMode,
+    float viewDistance,
+    boolean thickFog,
+    float partialTick,
+    CallbackInfo ci
+)
+```
+
+**1.21.2 (New)**:
+```java
+@Inject(method = "setupFog", at = @At("TAIL"))
+private static void modifyDarkForestFog(
+    Camera camera,
+    FogRenderer.FogMode fogMode,
+    Vector4f fogColor,        // NEW: Fog color (RGBA)
+    float viewDistance,
+    boolean thickFog,
+    float partialTick,
+    CallbackInfoReturnable<?> cir  // CHANGED: Method now returns a value
+)
+```
+
+#### Key Changes
+
+1. **New `Vector4f fogColor` parameter** (3rd position):
+   - Represents fog color in RGBA format
+   - `x` = Red component (0.0-1.0)
+   - `y` = Green component (0.0-1.0)
+   - `z` = Blue component (0.0-1.0)
+   - `w` = Alpha component (0.0-1.0)
+
+2. **`CallbackInfo` → `CallbackInfoReturnable<?>`**:
+   - The `setupFog` method now returns a value (likely `FogData` or similar)
+   - Mixins targeting this method must use `CallbackInfoReturnable`
+
+3. **Removed Fog Setting Methods**:
+   - `RenderSystem.setShaderFogStart()` - **REMOVED**
+   - `RenderSystem.setShaderFogEnd()` - **REMOVED**
+   - These methods no longer exist in 1.21.2
+
+### Migration Guide
+
+According to NeoForge's 1.21.1→1.21.2 migration primer, fog methods for individual values have been replaced with a **FogParameters data object**.
+
+**Problem**: The new fog modification API is not yet documented. Possible approaches:
+
+1. **Return modified FogData/FogParameters** via `CallbackInfoReturnable`
+2. **Inject at different location** where FogData is mutable
+3. **Use NeoForge/Fabric events** if available (e.g., `FogEvent.FogDensity`)
+
+### Current Status
+
+**Implementation**: ❌ Not yet implemented - fog modification API not found  
+**Workaround**: Mixin signature updated, but fog modification code commented out
+
+**TODO**:
+- Investigate FogData/FogParameters structure in 1.21.2
+- Find proper way to modify fog start/end distances
+- Test with actual fog mods (e.g., SimpleFogControl, IMB11/Fog) for reference
+
+### References
+
+- [NeoForge 1.21.1→1.21.2 Migration Primer](https://github.com/neoforged/.github/blob/main/primers/1.21.2/index.md)
+- [Minecraft 1.21.5→1.21.6 Mod Migration Primer](https://docs.neoforged.net/primer/docs/1.21.6/)
+- [Vector4f (Forge Javadocs)](https://nekoyue.github.io/ForgeJavaDocs-NG/javadoc/1.16.5/net/minecraft/util/math/vector/Vector4f.html)
+- [FogRenderer (Forge 1.16.5)](https://nekoyue.github.io/ForgeJavaDocs-NG/javadoc/1.16.5/net/minecraft/client/renderer/FogRenderer.html)
+- [SimpleFogControl Mod (GitHub)](https://github.com/Draradech/SimpleFogControl)
+- [IMB11/Fog Mod (GitHub)](https://github.com/IMB11/Fog)
+- [Fabric Mixin Examples](https://wiki.fabricmc.net/tutorial:mixin_examples)
+
+### Related Files
+
+- `common-1.21.2/src/main/java/com/chronodawn/mixin/client/FogRendererMixin.java:50-89`
+- Error message indicates expected signature from Mixin bytecode verification
