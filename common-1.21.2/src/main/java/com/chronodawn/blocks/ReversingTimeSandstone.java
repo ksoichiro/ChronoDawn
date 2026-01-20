@@ -1,6 +1,10 @@
 package com.chronodawn.blocks;
 
+import com.chronodawn.ChronoDawn;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -39,7 +43,9 @@ public class ReversingTimeSandstone extends Block {
                 .mapColor(MapColor.SAND)
                 .strength(0.8f, 0.8f) // hardness, blast resistance (similar to sandstone)
                 .sound(SoundType.STONE)
-                .pushReaction(PushReaction.BLOCK); // Cannot be moved by pistons
+                .pushReaction(PushReaction.BLOCK) // Cannot be moved by pistons
+                .setId(ResourceKey.create(Registries.BLOCK,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "reversing_time_sandstone")));
     }
 
 }

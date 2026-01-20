@@ -1,5 +1,10 @@
 package com.chronodawn.blocks;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.RandomSource;
@@ -56,7 +61,9 @@ public class TemporalParticleEmitterBlock extends Block {
                 .noCollission()                       // No collision box
                 .noOcclusion()                        // Does not block light
                 .air()                                // Behaves like air
-                .pushReaction(PushReaction.BLOCK);    // Cannot be pushed by pistons
+                .pushReaction(PushReaction.BLOCK)    // Cannot be pushed by pistons
+                .setId(ResourceKey.create(Registries.BLOCK,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "temporal_particle_emitter")));
     }
 
     /**

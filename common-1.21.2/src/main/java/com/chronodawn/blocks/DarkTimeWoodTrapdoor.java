@@ -1,5 +1,10 @@
 package com.chronodawn.blocks;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.TrapDoorBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -36,6 +41,8 @@ public class DarkTimeWoodTrapdoor extends TrapDoorBlock {
                 .mapColor(MapColor.WOOD)
                 .strength(3.0f, 3.0f) // hardness, blast resistance (same as Oak Trapdoor)
                 .sound(SoundType.WOOD)
-                .noOcclusion();
+                .noOcclusion()
+                .setId(ResourceKey.create(Registries.BLOCK,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "dark_time_wood_trapdoor")));
     }
 }

@@ -1,5 +1,9 @@
 package com.chronodawn.blocks;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -61,6 +65,8 @@ public class TimeWoodLeaves extends LeavesBlock {
                 .isValidSpawn((state, level, pos, entityType) -> false) // Mobs can't spawn on leaves
                 .isSuffocating((state, level, pos) -> false)
                 .isViewBlocking((state, level, pos) -> false)
-                .pushReaction(PushReaction.DESTROY); // Destroyed by pistons
+                .pushReaction(PushReaction.DESTROY) // Destroyed by pistons
+                .setId(ResourceKey.create(Registries.BLOCK,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "time_wood_leaves")));
     }
 }

@@ -1,5 +1,10 @@
 package com.chronodawn.blocks;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -56,7 +61,9 @@ public class TemporalMossBlock extends Block implements BonemealableBlock {
                 .mapColor(MapColor.COLOR_GREEN)      // Green color for moss
                 .strength(0.1f, 0.1f)                // Very soft, fragile
                 .sound(SoundType.MOSS_CARPET)         // Moss sound (same as vanilla moss)
-                .randomTicks();                       // Enable random tick for spreading
+                .randomTicks()                       // Enable random tick for spreading
+                .setId(ResourceKey.create(Registries.BLOCK,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "temporal_moss")));
     }
 
     /**

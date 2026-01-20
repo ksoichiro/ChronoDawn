@@ -1,5 +1,10 @@
 package com.chronodawn.blocks;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+
 import net.minecraft.world.level.block.FenceGateBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -35,6 +40,8 @@ public class DarkTimeWoodFenceGate extends FenceGateBlock {
         return BlockBehaviour.Properties.of()
                 .mapColor(MapColor.WOOD)
                 .strength(2.0f, 3.0f) // hardness, blast resistance (same as Oak Fence Gate)
-                .sound(SoundType.WOOD);
+                .sound(SoundType.WOOD)
+                .setId(ResourceKey.create(Registries.BLOCK,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "dark_time_wood_fence_gate")));
     }
 }

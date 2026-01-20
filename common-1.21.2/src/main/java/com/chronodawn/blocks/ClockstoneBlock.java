@@ -5,7 +5,11 @@ import com.chronodawn.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -52,11 +56,10 @@ public class ClockstoneBlock extends Block {
      * @return Block properties with appropriate settings for portal frame material
      */
     public static BlockBehaviour.Properties createProperties() {
-        return BlockBehaviour.Properties.of()
-                .mapColor(MapColor.COLOR_PURPLE)  // Purple color for time-themed block
-                .strength(5.0f, 6.0f)              // Harder than stone
-                .requiresCorrectToolForDrops()      // Requires pickaxe
-                .sound(SoundType.METAL);            // Metallic sound for mystical material
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                .strength(5.0f, 6.0f)
+                .setId(ResourceKey.create(Registries.BLOCK,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "clockstone_block")));
     }
 
     @Override

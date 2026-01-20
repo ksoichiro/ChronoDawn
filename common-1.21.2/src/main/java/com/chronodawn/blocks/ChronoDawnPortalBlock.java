@@ -151,7 +151,9 @@ public class ChronoDawnPortalBlock extends Block {
                 .randomTicks()       // Validate portal frame integrity
                 .strength(-1.0F)     // Unbreakable by normal means
                 .lightLevel((state) -> 11)  // Orange glow (similar to Nether Portal)
-                .noLootTable();      // Don't drop items when destroyed
+                .noLootTable()       // Don't drop items when destroyed
+                .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "chrono_dawn_portal")));
     }
 
     @Override

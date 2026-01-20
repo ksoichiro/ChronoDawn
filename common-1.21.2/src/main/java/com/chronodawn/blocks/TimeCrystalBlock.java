@@ -1,6 +1,11 @@
 package com.chronodawn.blocks;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
@@ -44,12 +49,15 @@ public class TimeCrystalBlock extends Block {
      * @return Block properties with appropriate settings for glowing crystal block
      */
     public static BlockBehaviour.Properties createProperties() {
-        return BlockBehaviour.Properties.of()
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.GLASS)
                 .mapColor(MapColor.COLOR_LIGHT_BLUE)  // Light blue color for crystal theme
                 .strength(3.0f, 3.0f)                  // Medium hardness, fragile
-                .requiresCorrectToolForDrops()          // Requires pickaxe
+                // TODO: 1.21.2 - requiresCorrectToolForDrops() causes "Block id not set" error
+                // .requiresCorrectToolForDrops()          // Requires pickaxe
                 .sound(SoundType.GLASS)                 // Glass-like sound for crystal
                 .lightLevel(state -> 10)                // Emits light level 10
-                .noOcclusion();                         // Allow transparency like glass
+                .noOcclusion()                         // Allow transparency like glass
+                .setId(ResourceKey.create(Registries.BLOCK,
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "time_crystal_block")));
     }
 }

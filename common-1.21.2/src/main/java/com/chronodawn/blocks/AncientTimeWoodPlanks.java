@@ -1,5 +1,9 @@
 package com.chronodawn.blocks;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -33,6 +37,8 @@ public class AncientTimeWoodPlanks extends Block {
         return BlockBehaviour.Properties.of()
                 .mapColor(MapColor.COLOR_BROWN) // Weathered brown color
                 .strength(2.0f, 3.0f)
-                .sound(SoundType.WOOD);
+                .sound(SoundType.WOOD)
+                .setId(ResourceKey.create(Registries.BLOCK,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "ancient_time_wood_planks")));
     }
 }

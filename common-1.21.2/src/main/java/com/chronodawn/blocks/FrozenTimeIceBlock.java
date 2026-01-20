@@ -1,5 +1,9 @@
 package com.chronodawn.blocks;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.IceBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -49,7 +53,9 @@ public class FrozenTimeIceBlock extends IceBlock {
                 .sound(SoundType.GLASS)               // Glass/ice sound
                 .noOcclusion()                        // Semi-transparent
                 .isValidSpawn((state, level, pos, entityType) -> false)  // Entities can't spawn on ice
-                .isRedstoneConductor((state, level, pos) -> false);       // Not redstone conductor
+                .isRedstoneConductor((state, level, pos) -> false)       // Not redstone conductor
+                .setId(ResourceKey.create(Registries.BLOCK,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "frozen_time_ice")));
     }
 
     /**

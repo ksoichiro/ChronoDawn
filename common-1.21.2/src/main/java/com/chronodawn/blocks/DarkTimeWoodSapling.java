@@ -1,5 +1,10 @@
 package com.chronodawn.blocks;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+
 import com.chronodawn.worldgen.features.DarkTimeWoodTreeFeature;
 import net.minecraft.world.level.block.SaplingBlock;
 import net.minecraft.world.level.block.SoundType;
@@ -53,6 +58,8 @@ public class DarkTimeWoodSapling extends SaplingBlock {
                 .randomTicks()
                 .instabreak()
                 .sound(SoundType.GRASS)
-                .pushReaction(PushReaction.DESTROY);
+                .pushReaction(PushReaction.DESTROY)
+                .setId(ResourceKey.create(Registries.BLOCK,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "dark_time_wood_sapling")));
     }
 }

@@ -1,9 +1,12 @@
 package com.chronodawn.blocks;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.MapColor;
 
 /**
  * Clockstone Ore block.
@@ -30,10 +33,9 @@ public class ClockstoneOre extends Block {
      * @return Block properties with appropriate settings
      */
     public static BlockBehaviour.Properties createProperties() {
-        return BlockBehaviour.Properties.of()
-                .mapColor(MapColor.STONE)
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_ORE)
                 .strength(3.0f, 3.0f) // hardness, blast resistance
-                .requiresCorrectToolForDrops() // Requires pickaxe
-                .sound(SoundType.STONE);
+                .setId(ResourceKey.create(Registries.BLOCK,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "clockstone_ore")));
     }
 }

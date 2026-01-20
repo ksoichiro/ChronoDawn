@@ -1,5 +1,10 @@
 package com.chronodawn.blocks;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -37,6 +42,8 @@ public class StrippedTimeWoodLog extends RotatedPillarBlock {
         return BlockBehaviour.Properties.of()
                 .mapColor(MapColor.WOOD)
                 .strength(2.0f, 2.0f) // hardness, blast resistance (same as Oak Log)
-                .sound(SoundType.WOOD);
+                .sound(SoundType.WOOD)
+                .setId(ResourceKey.create(Registries.BLOCK,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "stripped_time_wood_log")));
     }
 }

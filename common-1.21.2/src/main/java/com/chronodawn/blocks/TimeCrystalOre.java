@@ -1,6 +1,11 @@
 package com.chronodawn.blocks;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
@@ -31,10 +36,9 @@ public class TimeCrystalOre extends Block {
      * @return Block properties with appropriate settings
      */
     public static BlockBehaviour.Properties createProperties() {
-        return BlockBehaviour.Properties.of()
-                .mapColor(MapColor.STONE)
-                .strength(3.5f, 3.5f) // hardness, blast resistance (slightly harder than Clockstone Ore)
-                .requiresCorrectToolForDrops() // Requires pickaxe
-                .sound(SoundType.STONE);
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.DIAMOND_ORE)
+                .strength(3.5f, 3.5f)
+                .setId(ResourceKey.create(Registries.BLOCK,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "time_crystal_ore")));
     }
 }

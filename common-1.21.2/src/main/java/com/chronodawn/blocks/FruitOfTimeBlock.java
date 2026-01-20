@@ -1,5 +1,10 @@
 package com.chronodawn.blocks;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModItems;
 import net.minecraft.core.BlockPos;
@@ -91,7 +96,9 @@ public class FruitOfTimeBlock extends Block implements BonemealableBlock {
                 .strength(0.2f, 3.0f)                   // Weak hardness, moderate blast resistance
                 .sound(SoundType.WOOD)
                 .noOcclusion()                          // Not a full block
-                .pushReaction(PushReaction.DESTROY);    // Destroyed by pistons
+                .pushReaction(PushReaction.DESTROY)    // Destroyed by pistons
+                .setId(ResourceKey.create(Registries.BLOCK,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "fruit_of_time")));
     }
 
     @Override

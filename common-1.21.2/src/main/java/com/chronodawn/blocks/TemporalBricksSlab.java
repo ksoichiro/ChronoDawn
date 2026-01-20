@@ -1,5 +1,10 @@
 package com.chronodawn.blocks;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
@@ -24,6 +29,8 @@ public class TemporalBricksSlab extends SlabBlock {
      * @return Block properties copied from Temporal Bricks
      */
     public static BlockBehaviour.Properties createProperties() {
-        return TemporalBricksBlock.createProperties();
+        return TemporalBricksBlock.createProperties()
+                .setId(ResourceKey.create(Registries.BLOCK,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "temporal_bricks_slab")));
     }
 }

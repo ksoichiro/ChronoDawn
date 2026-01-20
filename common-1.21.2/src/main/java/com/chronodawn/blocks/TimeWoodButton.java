@@ -1,5 +1,10 @@
 package com.chronodawn.blocks;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+
 import net.minecraft.world.level.block.ButtonBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -39,6 +44,8 @@ public class TimeWoodButton extends ButtonBlock {
                 .mapColor(MapColor.WOOD)
                 .noCollission()
                 .strength(0.5f) // hardness and blast resistance (same as Oak Button)
-                .sound(SoundType.WOOD);
+                .sound(SoundType.WOOD)
+                .setId(ResourceKey.create(Registries.BLOCK,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "time_wood_button")));
     }
 }

@@ -186,7 +186,9 @@ public class ModBlocks {
      */
     public static final RegistrySupplier<Block> POTTED_UNSTABLE_FUNGUS = BLOCKS.register(
         "potted_unstable_fungus",
-        () -> new FlowerPotBlock(UNSTABLE_FUNGUS.get(), CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT))
+        () -> new FlowerPotBlock(null, CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT)
+                .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "potted_unstable_fungus"))))
     );
 
     /**
@@ -219,6 +221,8 @@ public class ModBlocks {
                 .mapColor(MapColor.WOOD)
                 .strength(2.0f, 2.0f)
                 .sound(SoundType.WOOD)
+                .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "time_wood")))
         )
     );
 
@@ -233,6 +237,8 @@ public class ModBlocks {
                 .mapColor(MapColor.WOOD)
                 .strength(2.0f, 2.0f)
                 .sound(SoundType.WOOD)
+                .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "stripped_time_wood")))
         )
     );
 
@@ -269,7 +275,9 @@ public class ModBlocks {
      */
     public static final RegistrySupplier<Block> POTTED_TIME_WOOD_SAPLING = BLOCKS.register(
         "potted_time_wood_sapling",
-        () -> new FlowerPotBlock(TIME_WOOD_SAPLING.get(), CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT))
+        () -> new FlowerPotBlock(null, CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT)
+                .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "potted_time_wood_sapling"))))
     );
 
     /**
@@ -557,7 +565,9 @@ public class ModBlocks {
      */
     public static final RegistrySupplier<Block> POTTED_PURPLE_TIME_BLOSSOM = BLOCKS.register(
         "potted_purple_time_blossom",
-        () -> new FlowerPotBlock(PURPLE_TIME_BLOSSOM.get(), CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT))
+        () -> new FlowerPotBlock(null, CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT)
+                .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "potted_purple_time_blossom"))))
     );
 
     /**
@@ -566,7 +576,9 @@ public class ModBlocks {
      */
     public static final RegistrySupplier<Block> POTTED_ORANGE_TIME_BLOSSOM = BLOCKS.register(
         "potted_orange_time_blossom",
-        () -> new FlowerPotBlock(ORANGE_TIME_BLOSSOM.get(), CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT))
+        () -> new FlowerPotBlock(null, CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT)
+                .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "potted_orange_time_blossom"))))
     );
 
     /**
@@ -575,7 +587,9 @@ public class ModBlocks {
      */
     public static final RegistrySupplier<Block> POTTED_PINK_TIME_BLOSSOM = BLOCKS.register(
         "potted_pink_time_blossom",
-        () -> new FlowerPotBlock(PINK_TIME_BLOSSOM.get(), CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT))
+        () -> new FlowerPotBlock(null, CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT)
+                .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "potted_pink_time_blossom"))))
     );
 
     /**
@@ -673,7 +687,9 @@ public class ModBlocks {
         () -> new BossRoomBoundaryMarkerBlock(Block.Properties.of()
             .strength(-1.0F, 3600000.0F) // Unbreakable like bedrock
             .noLootTable()
-            .noOcclusion())
+            .noOcclusion()
+            .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "boss_room_boundary_marker"))))
     );
 
     // ===== Dark Time Wood Blocks =====
@@ -708,6 +724,8 @@ public class ModBlocks {
                 .mapColor(MapColor.WOOD)
                 .strength(2.0f, 2.0f)
                 .sound(SoundType.WOOD)
+                .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "dark_time_wood")))
         )
     );
 
@@ -722,6 +740,8 @@ public class ModBlocks {
                 .mapColor(MapColor.WOOD)
                 .strength(2.0f, 2.0f)
                 .sound(SoundType.WOOD)
+                .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "stripped_dark_time_wood")))
         )
     );
 
@@ -819,7 +839,9 @@ public class ModBlocks {
      */
     public static final RegistrySupplier<Block> POTTED_DARK_TIME_WOOD_SAPLING = BLOCKS.register(
         "potted_dark_time_wood_sapling",
-        () -> new FlowerPotBlock(DARK_TIME_WOOD_SAPLING.get(), CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT))
+        () -> new FlowerPotBlock(null, CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT)
+                .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "potted_dark_time_wood_sapling"))))
     );
 
     // ===== Ancient Time Wood Blocks =====
@@ -854,6 +876,8 @@ public class ModBlocks {
                 .mapColor(MapColor.WOOD)
                 .strength(2.0f, 2.0f)
                 .sound(SoundType.WOOD)
+                .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "ancient_time_wood")))
         )
     );
 
@@ -868,6 +892,8 @@ public class ModBlocks {
                 .mapColor(MapColor.WOOD)
                 .strength(2.0f, 2.0f)
                 .sound(SoundType.WOOD)
+                .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "stripped_ancient_time_wood")))
         )
     );
 
@@ -965,7 +991,9 @@ public class ModBlocks {
      */
     public static final RegistrySupplier<Block> POTTED_ANCIENT_TIME_WOOD_SAPLING = BLOCKS.register(
         "potted_ancient_time_wood_sapling",
-        () -> new FlowerPotBlock(ANCIENT_TIME_WOOD_SAPLING.get(), CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT))
+        () -> new FlowerPotBlock(null, CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT)
+                .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                    net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "potted_ancient_time_wood_sapling"))))
     );
 
     /**

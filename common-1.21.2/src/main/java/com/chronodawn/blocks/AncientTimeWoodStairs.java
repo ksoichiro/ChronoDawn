@@ -1,5 +1,10 @@
 package com.chronodawn.blocks;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+
 import com.chronodawn.registry.ModBlocks;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -23,6 +28,8 @@ public class AncientTimeWoodStairs extends StairBlock {
      * @return Block properties copied from Ancient Time Wood Planks
      */
     public static BlockBehaviour.Properties createProperties() {
-        return AncientTimeWoodPlanks.createProperties();
+        return AncientTimeWoodPlanks.createProperties()
+                .setId(ResourceKey.create(Registries.BLOCK,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "ancient_time_wood_stairs")));
     }
 }

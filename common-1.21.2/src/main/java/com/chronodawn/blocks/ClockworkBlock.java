@@ -1,6 +1,11 @@
 package com.chronodawn.blocks;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
@@ -42,10 +47,13 @@ public class ClockworkBlock extends Block {
      * @return Block properties with appropriate settings for decorative mechanical block
      */
     public static BlockBehaviour.Properties createProperties() {
-        return BlockBehaviour.Properties.of()
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.IRON_BLOCK)
                 .mapColor(MapColor.METAL)         // Metallic color for clockwork theme
                 .strength(3.5f, 5.0f)             // Medium hardness, good blast resistance
-                .requiresCorrectToolForDrops()     // Requires pickaxe
-                .sound(SoundType.METAL);           // Metallic sound for mechanical block
+                // TODO: 1.21.2 - requiresCorrectToolForDrops() causes "Block id not set" error
+                // .requiresCorrectToolForDrops()     // Requires pickaxe
+                .sound(SoundType.METAL)           // Metallic sound for mechanical block
+                .setId(ResourceKey.create(Registries.BLOCK,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "clockwork_block")));
     }
 }

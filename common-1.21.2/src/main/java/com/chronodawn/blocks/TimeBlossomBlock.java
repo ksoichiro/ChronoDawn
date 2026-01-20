@@ -1,5 +1,10 @@
 package com.chronodawn.blocks;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
@@ -56,7 +61,9 @@ public class TimeBlossomBlock extends BushBlock {
             .noOcclusion()
             .instabreak()
             .sound(SoundType.GRASS)
-            .offsetType(BlockBehaviour.OffsetType.XZ);
+            .offsetType(BlockBehaviour.OffsetType.XZ)
+                .setId(ResourceKey.create(Registries.BLOCK,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "purple_time_blossom")));
     }
 
     @Override

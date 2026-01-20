@@ -1,5 +1,10 @@
 package com.chronodawn.blocks;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -55,7 +60,9 @@ public class UnstableFungus extends Block {
                 .mapColor(MapColor.COLOR_PURPLE)
                 .strength(0.0f, 0.0f) // Very weak, similar to mushrooms
                 .sound(SoundType.FUNGUS)
-                .noCollission(); // Entities can walk through it
+                .noCollission() // Entities can walk through it
+                .setId(ResourceKey.create(Registries.BLOCK,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "unstable_fungus")));
     }
 
     /**

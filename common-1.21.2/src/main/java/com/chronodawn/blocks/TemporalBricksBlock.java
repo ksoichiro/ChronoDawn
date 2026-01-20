@@ -1,6 +1,11 @@
 package com.chronodawn.blocks;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
@@ -42,10 +47,13 @@ public class TemporalBricksBlock extends Block {
      * @return Block properties with appropriate settings for brick building material
      */
     public static BlockBehaviour.Properties createProperties() {
-        return BlockBehaviour.Properties.of()
+        return BlockBehaviour.Properties.ofFullCopy(Blocks.STONE_BRICKS)
                 .mapColor(MapColor.COLOR_PURPLE)   // Purple color for time theme
                 .strength(2.5f, 6.0f)              // Medium hardness, good blast resistance
-                .requiresCorrectToolForDrops()      // Requires pickaxe
-                .sound(SoundType.STONE);            // Stone sound for brick material
+                // TODO: 1.21.2 - requiresCorrectToolForDrops() causes "Block id not set" error
+                // .requiresCorrectToolForDrops()      // Requires pickaxe
+                .sound(SoundType.STONE)            // Stone sound for brick material
+                .setId(ResourceKey.create(Registries.BLOCK,
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "temporal_bricks")));
     }
 }

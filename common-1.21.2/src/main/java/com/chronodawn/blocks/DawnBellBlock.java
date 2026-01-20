@@ -1,5 +1,10 @@
 package com.chronodawn.blocks;
 
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+
 import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -36,6 +41,8 @@ public class DawnBellBlock extends DoublePlantBlock {
             .noOcclusion()
             .instabreak()
             .sound(SoundType.GRASS)
-            .offsetType(BlockBehaviour.OffsetType.XZ);
+            .offsetType(BlockBehaviour.OffsetType.XZ)
+                .setId(ResourceKey.create(Registries.BLOCK,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "dawn_bell")));
     }
 }
