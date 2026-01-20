@@ -1,0 +1,7 @@
+{
+  "processors": [
+    {
+      "processor_type": "chronodawn:boss_room_protection"
+    }
+  ]
+}
