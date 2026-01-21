@@ -461,29 +461,33 @@ public class ChronoDawnPortalBlock extends Block {
                     player.getName().getString(), stateValue);
             }
 
-            // CRITICAL: Schedule teleportation for next tick to avoid ConcurrentModificationException
-            // We're currently inside Entity.checkInsideBlocks() iteration, and teleportation
-            // may generate new portal blocks at destination, which would modify the world
-            // while still iterating through blocks the entity is inside.
-            level.getServer().execute(() -> {
-                // Attempt teleportation
-                boolean success = com.chronodawn.core.portal.PortalTeleportHandler.teleportThroughPortal(entity, pos);
+            // CRITICAL: Use MinecraftServer.execute() to defer teleportation to after entity tick
+            // We're currently inside Entity.checkInsideBlocks() iteration (called from Entity.tick()).
+            // Teleportation must happen AFTER the entire entity tick completes to avoid
+            // ConcurrentModificationException when iterating the blocks the entity is inside.
+            net.minecraft.server.MinecraftServer server = ((net.minecraft.server.level.ServerLevel)level).getServer();
+            server.execute(() -> {
+                // Double-check entity still exists and is in a portal
+                if (!entity.isRemoved() && level.getBlockState(pos).is(ModBlocks.CHRONO_DAWN_PORTAL.get())) {
+                    // Attempt teleportation
+                    boolean success = com.chronodawn.core.portal.PortalTeleportHandler.teleportThroughPortal(entity, pos);
 
-                if (success) {
-                    // Set state to -1 to indicate "just teleported"
-                    // This flag prevents immediate re-evaluation on the next tick
-                    // and allows the state machine to transition: -1 → 1 (arrival portal)
-                    ENTITY_PORTAL_STATES.put(entityId, -1);
-                    LAST_COUNTER_INCREMENT_TICK.remove(entityId);
-                    if (entity instanceof net.minecraft.server.level.ServerPlayer player) {
-                        ChronoDawn.LOGGER.info("Player {} teleported successfully", player.getName().getString());
-                    }
-                } else {
-                    // Teleportation failed, reset state
-                    ENTITY_PORTAL_STATES.remove(entityId);
-                    LAST_COUNTER_INCREMENT_TICK.remove(entityId);
-                    if (entity instanceof net.minecraft.server.level.ServerPlayer player) {
-                        ChronoDawn.LOGGER.warn("Teleportation failed for player {}", player.getName().getString());
+                    if (success) {
+                        // Set state to -1 to indicate "just teleported"
+                        // This flag prevents immediate re-evaluation on the next tick
+                        // and allows the state machine to transition: -1 → 1 (arrival portal)
+                        ENTITY_PORTAL_STATES.put(entityId, -1);
+                        LAST_COUNTER_INCREMENT_TICK.remove(entityId);
+                        if (entity instanceof net.minecraft.server.level.ServerPlayer player) {
+                            ChronoDawn.LOGGER.info("Player {} teleported successfully", player.getName().getString());
+                        }
+                    } else {
+                        // Teleportation failed, reset state
+                        ENTITY_PORTAL_STATES.remove(entityId);
+                        LAST_COUNTER_INCREMENT_TICK.remove(entityId);
+                        if (entity instanceof net.minecraft.server.level.ServerPlayer player) {
+                            ChronoDawn.LOGGER.warn("Teleportation failed for player {}", player.getName().getString());
+                        }
                     }
                 }
             });
