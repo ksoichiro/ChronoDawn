@@ -5,6 +5,7 @@ import com.chronodawn.registry.ModItems;
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -15,6 +16,8 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.world.item.equipment.EquipmentAsset;
+import net.minecraft.world.item.equipment.EquipmentAssets;
 import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.EnumMap;
@@ -46,61 +49,37 @@ import java.util.function.Supplier;
  * Reference: tasks.md (T215)
  */
 public class ClockstoneArmorMaterial {
+    // Base durability multiplier
+    public static final int BASE_DURABILITY = 20;
+
+    // Equipment asset registry key (points to assets/chronodawn/equipment/clockstone.json)
+    public static final ResourceKey<EquipmentAsset> CLOCKSTONE_EQUIPMENT_KEY = ResourceKey.create(
+        EquipmentAssets.ROOT_ID,
+        CompatResourceLocation.create(ChronoDawn.MOD_ID, "clockstone")
+    );
+
     // Time Crystal repair tag (custom tag for Time Crystal as repair material)
     private static final TagKey<Item> TIME_CRYSTAL_TAG = TagKey.create(
         net.minecraft.core.registries.Registries.ITEM,
         CompatResourceLocation.create(ChronoDawn.MOD_ID, "repairs_clockstone_armor")
     );
 
-    public static final Holder<ArmorMaterial> CLOCKSTONE = register(
-        "clockstone",
-        20, // Durability multiplier (iron: 15, diamond: 33)
-        Util.make(new EnumMap<>(ArmorType.class), map -> {
-            map.put(ArmorType.BOOTS, 2);
-            map.put(ArmorType.LEGGINGS, 5);
-            map.put(ArmorType.CHESTPLATE, 6);
-            map.put(ArmorType.HELMET, 2);
-            map.put(ArmorType.BODY, 6); // For horses/llamas
-        }),
-        14, // Enchantability (same as iron)
-        SoundEvents.ARMOR_EQUIP_IRON,
-        TIME_CRYSTAL_TAG, // Repair ingredient as TagKey
-        1.0f, // Toughness (between iron 0.0f and diamond 2.0f)
-        0.0f  // Knockback Resistance
+    public static final Holder<ArmorMaterial> CLOCKSTONE = Holder.direct(
+        new ArmorMaterial(
+            Util.make(new EnumMap<>(ArmorType.class), map -> {
+                map.put(ArmorType.BOOTS, 2);
+                map.put(ArmorType.LEGGINGS, 5);
+                map.put(ArmorType.CHESTPLATE, 6);
+                map.put(ArmorType.HELMET, 2);
+                map.put(ArmorType.BODY, 6); // For horses/llamas
+            }),
+            14, // Enchantability (same as iron)
+            SoundEvents.ARMOR_EQUIP_IRON,
+            TIME_CRYSTAL_TAG, // Repair ingredient as TagKey
+            1.0f, // Toughness (between iron 0.0f and diamond 2.0f)
+            0.0f,  // Knockback Resistance
+            CLOCKSTONE_EQUIPMENT_KEY  // Equipment asset key
+        )
     );
 
-    private static Holder<ArmorMaterial> register(
-        String name,
-        int durabilityMultiplier,
-        EnumMap<ArmorType, Integer> defense,
-        int enchantmentValue,
-        Holder<SoundEvent> equipSound,
-        TagKey<Item> repairIngredient,
-        float toughness,
-        float knockbackResistance
-    ) {
-        ResourceLocation id = CompatResourceLocation.create(ChronoDawn.MOD_ID, name);
-
-        EnumMap<ArmorType, Integer> defenseMap = new EnumMap<>(ArmorType.class);
-        for (ArmorType type : ArmorType.values()) {
-            defenseMap.put(type, defense.get(type));
-        }
-
-        // In 1.21.2, ArmorMaterial constructor signature:
-        // (int durabilityMultiplier, Map<ArmorType,Integer> defense, int enchantmentValue,
-        //  Holder<SoundEvent> equipSound, float toughness, float knockbackResistance,
-        //  TagKey<Item> repairIngredient, ResourceLocation equipmentAsset)
-        ArmorMaterial material = new ArmorMaterial(
-            durabilityMultiplier,  // durability multiplier
-            defenseMap,  // defense values
-            enchantmentValue,  // enchantment value
-            equipSound,  // equip sound (Holder<SoundEvent>)
-            toughness,  // toughness
-            knockbackResistance,  // knockback resistance
-            repairIngredient,  // repair ingredient as TagKey
-            id  // ResourceLocation for equipment asset (replaces Layer)
-        );
-
-        return Holder.direct(material);
-    }
 }

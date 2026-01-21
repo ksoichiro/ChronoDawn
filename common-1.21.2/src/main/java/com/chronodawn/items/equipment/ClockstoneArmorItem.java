@@ -43,6 +43,6 @@ public class ClockstoneArmorItem extends ArmorItem {
     public static Properties createProperties(ArmorType type) {
         return new Properties()
                 .stacksTo(1)
-                .durability(type.getDurability(20)); // Durability multiplier: 20
+                .durability(type.getDurability(ClockstoneArmorMaterial.BASE_DURABILITY));
     }
 }

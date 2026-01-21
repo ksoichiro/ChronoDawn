@@ -47,7 +47,7 @@ public class EnhancedClockstoneArmorItem extends ArmorItem {
     public static Properties createProperties(ArmorType type) {
         return new Properties()
                 .stacksTo(1)
-                .durability(type.getDurability(28)); // Durability multiplier: 28 (between clockstone 20 and diamond 33)
+                .durability(type.getDurability(EnhancedClockstoneArmorMaterial.BASE_DURABILITY));
     }
 
     /**
