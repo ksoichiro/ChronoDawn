@@ -1,0 +1,29 @@
+{
+  "category": "items",
+  "title": {
+    "en_us": "Ultimate Artifacts",
+    "ja_jp": "究極のアーティファクト"
+  },
+  "icon": "chronodawn:eye_of_chronos",
+  "sortnum": 4,
+  "pages": [
+    {
+      "text": {
+        "en_us": "Ultimate Artifacts are the most powerful items in Chrono Dawn, crafted from materials dropped by the Time Tyrant final boss.\n\nKey Materials:\n• Eye of Chronos (from Time Tyrant)\n• Fragments of Stasis Core (multiple pieces from Time Tyrant)\n• Time Crystals\n• Enhanced Clockstone\n\nThese items grant incredible time-manipulating abilities!",
+        "ja_jp": "究極のアーティファクトは、クロノドーンで最も強力なアイテムで、タイムタイラント最終ボスがドロップする材料から作成されます。\n\n主要材料:\n• クロノスの眼（タイムタイラントから）\n• スタシスコアの破片（タイムタイラントから複数個）\n• タイムクリスタル\n• 強化クロックストーン\n\nこれらのアイテムは信じられない時間操作能力を付与します！"
+      }
+    },
+    {
+      "text": {
+        "en_us": "Types of Ultimate Artifacts:\n\n• Temporal Weapons - Deal massive damage with time-based effects\n• Chrono Armor - Provides ultimate protection and time manipulation\n• Time-Bending Tools - Manipulate time flow and reality\n• Special Equipment - Unique abilities for advanced gameplay\n\nEach artifact type requires specific combinations of Time Tyrant drops and other rare materials.",
+        "ja_jp": "究極のアーティファクトの種類:\n\n• テンポラルウェポン - 時間ベースの効果で大ダメージを与える\n• クロノアーマー - 究極の防御と時間操作を提供\n• 時間を曲げるツール - 時間の流れと現実を操作\n• 特別な装備 - 高度なゲームプレイのためのユニーク能力\n\n各アーティファクトタイプには、タイムタイラントのドロップと他の希少材料の特定の組み合わせが必要です。"
+      }
+    },
+    {
+      "text": {
+        "en_us": "How to obtain:\n\n1. Defeat all four mid-bosses\n2. Craft Chrono Aegis\n3. Obtain Master Clock Key from Time Guardian\n4. Enter Master Clock dungeon\n5. Defeat Time Tyrant with Chrono Aegis\n6. Collect Eye of Chronos and Stasis Core Fragments\n7. Use crafting recipes to create ultimate artifacts\n\nCongratulations on completing Chrono Dawn!",
+        "ja_jp": "入手方法:\n\n1. 4体の中ボスすべてを倒す\n2. クロノイージスを作成\n3. タイムガーディアンからマスタークロックの鍵を入手\n4. マスタークロックダンジョンに入る\n5. クロノイージスでタイムタイラントを倒す\n6. クロノスの眼とスタシスコアの破片を収集\n7. クラフトレシピを使用して究極のアーティファクトを作成\n\nクロノドーン完走おめでとうございます！"
+      }
+    }
+  ]
+}
