@@ -20,7 +20,7 @@
   "spawners": {
     "monster": [
       {
-        "type": "minecraft:zombie",
+        "type": "chronodawn:epoch_husk",
         "weight": 95,
         "minCount": 4,
         "maxCount": 4
@@ -38,7 +38,7 @@
         "maxCount": 4
       },
       {
-        "type": "minecraft:creeper",
+        "type": "chronodawn:moment_creeper",
         "weight": 100,
         "minCount": 4,
         "maxCount": 4
@@ -72,6 +72,18 @@
         "weight": 100,
         "minCount": 2,
         "maxCount": 4
+      },
+      {
+        "type": "chronodawn:chronal_leech",
+        "weight": 15,
+        "minCount": 1,
+        "maxCount": 2
+      },
+      {
+        "type": "chronodawn:forgotten_minute",
+        "weight": 35,
+        "minCount": 1,
+        "maxCount": 2
       }
     ],
     "creature": [
