@@ -83,12 +83,18 @@ public class ChronoDawnChestBoatRenderer extends EntityRenderer<ChronoDawnChestB
         poseStack.translate(0.0F, 0.375F, 0.0F);
         poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - state.yRot));
 
-        // TODO: Apply hurt/damage animation if BoatRenderState provides these fields
-        // In 1.21.2, these fields may be handled differently or removed from RenderState
+        // Apply damage wobble animation
+        float damageWobbleTicks = state.damageWobbleTicks;
+        if (damageWobbleTicks > 0.0F) {
+            poseStack.mulPose(Axis.XP.rotationDegrees(
+                Mth.sin(damageWobbleTicks) * damageWobbleTicks * state.damageWobbleStrength / 10.0F * state.damageWobbleSide
+            ));
+        }
 
-        float bubbleAngle = state.bubbleAngle;
-        if (!Mth.equal(bubbleAngle, 0.0F)) {
-            poseStack.mulPose(Axis.XP.rotationDegrees(state.bubbleAngle));
+        // Apply bubble wobble animation
+        float bubbleWobble = state.bubbleWobble;
+        if (!Mth.equal(bubbleWobble, 0.0F)) {
+            poseStack.mulPose(Axis.XP.rotationDegrees(Mth.sin(bubbleWobble) * bubbleWobble * 0.05F));
         }
 
         Pair<ResourceLocation, BoatModel> pair = getModelWithLocation(state);
@@ -103,13 +109,11 @@ public class ChronoDawnChestBoatRenderer extends EntityRenderer<ChronoDawnChestB
         VertexConsumer vertexConsumer = buffer.getBuffer(model.renderType(texture));
         model.renderToBuffer(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY);
 
-        // TODO: Render water patch inside boat
-        // In 1.21.2, waterPatch() method may have been removed or changed
-        // Need to investigate vanilla BoatRenderer implementation
-        // if (!state.isUnderWater) {
-        //     VertexConsumer waterVertexConsumer = buffer.getBuffer(RenderType.waterMask());
-        //     model.waterPatch().render(poseStack, waterVertexConsumer, packedLight, OverlayTexture.NO_OVERLAY);
-        // }
+        // Render water patch inside boat when not fully submerged
+        if (!state.submergedInWater) {
+            VertexConsumer waterVertexConsumer = buffer.getBuffer(RenderType.waterMask());
+            model.waterPatch().render(poseStack, waterVertexConsumer, packedLight, OverlayTexture.NO_OVERLAY);
+        }
 
         poseStack.popPose();
         super.render(state, poseStack, buffer, packedLight);
