@@ -121,6 +121,14 @@ public class ChronoDawnPortalBlock extends Block {
     private static final Map<UUID, Long> LAST_INSIDE_TICK = new HashMap<>();
 
     /**
+     * Entities pending teleportation to be processed at end of server tick.
+     * Map: Entity UUID -> Portal position
+     * This queue is processed by ServerTickEvents.END_SERVER_TICK to avoid
+     * ConcurrentModificationException during Entity.checkInsideBlocks() iteration.
+     */
+    private static final Map<UUID, BlockPos> PENDING_TELEPORTS = new java.util.concurrent.ConcurrentHashMap<>();
+
+    /**
      * Tracks the last game tick when the portal counter was incremented for each entity.
      * Used to prevent duplicate counter increments when entity touches multiple portal blocks in the same tick.
      * Map: Entity UUID -> Last counter increment tick
@@ -461,36 +469,17 @@ public class ChronoDawnPortalBlock extends Block {
                     player.getName().getString(), stateValue);
             }
 
-            // CRITICAL: Use MinecraftServer.execute() to defer teleportation to after entity tick
+            // CRITICAL: Queue teleportation for processing at END_SERVER_TICK
             // We're currently inside Entity.checkInsideBlocks() iteration (called from Entity.tick()).
-            // Teleportation must happen AFTER the entire entity tick completes to avoid
-            // ConcurrentModificationException when iterating the blocks the entity is inside.
-            net.minecraft.server.MinecraftServer server = ((net.minecraft.server.level.ServerLevel)level).getServer();
-            server.execute(() -> {
-                // Double-check entity still exists and is in a portal
-                if (!entity.isRemoved() && level.getBlockState(pos).is(ModBlocks.CHRONO_DAWN_PORTAL.get())) {
-                    // Attempt teleportation
-                    boolean success = com.chronodawn.core.portal.PortalTeleportHandler.teleportThroughPortal(entity, pos);
+            // Teleportation MUST NOT happen here to avoid ConcurrentModificationException.
+            // Instead, add entity to pending teleports queue, which will be processed by
+            // ServerTickEvents.END_SERVER_TICK after ALL entity ticks complete.
+            PENDING_TELEPORTS.put(entityId, pos.immutable());
 
-                    if (success) {
-                        // Set state to -1 to indicate "just teleported"
-                        // This flag prevents immediate re-evaluation on the next tick
-                        // and allows the state machine to transition: -1 → 1 (arrival portal)
-                        ENTITY_PORTAL_STATES.put(entityId, -1);
-                        LAST_COUNTER_INCREMENT_TICK.remove(entityId);
-                        if (entity instanceof net.minecraft.server.level.ServerPlayer player) {
-                            ChronoDawn.LOGGER.info("Player {} teleported successfully", player.getName().getString());
-                        }
-                    } else {
-                        // Teleportation failed, reset state
-                        ENTITY_PORTAL_STATES.remove(entityId);
-                        LAST_COUNTER_INCREMENT_TICK.remove(entityId);
-                        if (entity instanceof net.minecraft.server.level.ServerPlayer player) {
-                            ChronoDawn.LOGGER.warn("Teleportation failed for player {}", player.getName().getString());
-                        }
-                    }
-                }
-            });
+            if (entity instanceof net.minecraft.server.level.ServerPlayer player) {
+                ChronoDawn.LOGGER.info("Queued player {} for teleportation after {} ticks in portal",
+                    player.getName().getString(), stateValue);
+            }
         }
     }
 
@@ -667,5 +656,69 @@ public class ChronoDawnPortalBlock extends Block {
                 1.0F
             );
         }
+    }
+
+    /**
+     * Process pending teleportations queued during entity ticks.
+     * This method MUST be called from ServerTickEvents.END_SERVER_TICK to avoid
+     * ConcurrentModificationException when teleporting entities that are inside portals.
+     *
+     * @param server Minecraft server
+     */
+    public static void processPendingTeleports(net.minecraft.server.MinecraftServer server) {
+        if (PENDING_TELEPORTS.isEmpty()) {
+            return;
+        }
+
+        // Process all pending teleports
+        for (var entry : PENDING_TELEPORTS.entrySet()) {
+            UUID entityId = entry.getKey();
+            BlockPos portalPos = entry.getValue();
+
+            // Find entity across all dimensions
+            Entity entity = null;
+            for (net.minecraft.server.level.ServerLevel level : server.getAllLevels()) {
+                entity = level.getEntity(entityId);
+                if (entity != null) break;
+            }
+
+            if (entity == null || entity.isRemoved()) {
+                // Entity no longer exists
+                ENTITY_PORTAL_STATES.remove(entityId);
+                LAST_COUNTER_INCREMENT_TICK.remove(entityId);
+                continue;
+            }
+
+            // Verify entity is still in a portal
+            Level level = entity.level();
+            if (!level.getBlockState(portalPos).is(ModBlocks.CHRONO_DAWN_PORTAL.get())) {
+                // Entity is no longer in portal
+                ENTITY_PORTAL_STATES.remove(entityId);
+                LAST_COUNTER_INCREMENT_TICK.remove(entityId);
+                continue;
+            }
+
+            // Attempt teleportation
+            boolean success = com.chronodawn.core.portal.PortalTeleportHandler.teleportThroughPortal(entity, portalPos);
+
+            if (success) {
+                // Set state to -1 to indicate "just teleported"
+                ENTITY_PORTAL_STATES.put(entityId, -1);
+                LAST_COUNTER_INCREMENT_TICK.remove(entityId);
+                if (entity instanceof net.minecraft.server.level.ServerPlayer player) {
+                    ChronoDawn.LOGGER.info("Player {} teleported successfully", player.getName().getString());
+                }
+            } else {
+                // Teleportation failed, reset state
+                ENTITY_PORTAL_STATES.remove(entityId);
+                LAST_COUNTER_INCREMENT_TICK.remove(entityId);
+                if (entity instanceof net.minecraft.server.level.ServerPlayer player) {
+                    ChronoDawn.LOGGER.warn("Teleportation failed for player {}", player.getName().getString());
+                }
+            }
+        }
+
+        // Clear the queue
+        PENDING_TELEPORTS.clear();
     }
 }

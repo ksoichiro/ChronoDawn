@@ -59,10 +59,16 @@ public class ChronoDawnFabric implements ModInitializer {
         // Register block protection event handler
         BlockProtectionEventHandler.register();
 
-        // Register server tick event for pending boss room protections
-        // Check every 100 ticks (5 seconds) instead of every tick to reduce load
+        // Register server tick event for pending boss room protections and portal teleports
+        // Check boss room protections every 100 ticks (5 seconds) instead of every tick to reduce load
+        // Process portal teleports every tick to ensure responsiveness
         final int[] tickCounter = {0};
         ServerTickEvents.END_SERVER_TICK.register(server -> {
+            // Process pending portal teleports (every tick)
+            // CRITICAL: This must run after ALL entity ticks to avoid ConcurrentModificationException
+            com.chronodawn.blocks.ChronoDawnPortalBlock.processPendingTeleports(server);
+
+            // Process boss room protections (every 100 ticks)
             tickCounter[0]++;
             if (tickCounter[0] >= 100) {
                 tickCounter[0] = 0;
