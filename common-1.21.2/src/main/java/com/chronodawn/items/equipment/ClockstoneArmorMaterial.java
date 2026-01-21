@@ -5,7 +5,6 @@ import com.chronodawn.registry.ModItems;
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -16,8 +15,6 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
-import net.minecraft.world.item.equipment.EquipmentAsset;
-import net.minecraft.world.item.equipment.EquipmentAssets;
 import net.minecraft.world.item.crafting.Ingredient;
 
 import java.util.EnumMap;
@@ -52,12 +49,6 @@ public class ClockstoneArmorMaterial {
     // Base durability multiplier
     public static final int BASE_DURABILITY = 20;
 
-    // Equipment asset registry key (points to assets/chronodawn/equipment/clockstone.json)
-    public static final ResourceKey<EquipmentAsset> CLOCKSTONE_EQUIPMENT_KEY = ResourceKey.create(
-        EquipmentAssets.ROOT_ID,
-        CompatResourceLocation.create(ChronoDawn.MOD_ID, "clockstone")
-    );
-
     // Time Crystal repair tag (custom tag for Time Crystal as repair material)
     private static final TagKey<Item> TIME_CRYSTAL_TAG = TagKey.create(
         net.minecraft.core.registries.Registries.ITEM,
@@ -66,6 +57,7 @@ public class ClockstoneArmorMaterial {
 
     public static final Holder<ArmorMaterial> CLOCKSTONE = Holder.direct(
         new ArmorMaterial(
+            BASE_DURABILITY,  // durability multiplier
             Util.make(new EnumMap<>(ArmorType.class), map -> {
                 map.put(ArmorType.BOOTS, 2);
                 map.put(ArmorType.LEGGINGS, 5);
@@ -75,10 +67,10 @@ public class ClockstoneArmorMaterial {
             }),
             14, // Enchantability (same as iron)
             SoundEvents.ARMOR_EQUIP_IRON,
-            TIME_CRYSTAL_TAG, // Repair ingredient as TagKey
             1.0f, // Toughness (between iron 0.0f and diamond 2.0f)
             0.0f,  // Knockback Resistance
-            CLOCKSTONE_EQUIPMENT_KEY  // Equipment asset key
+            TIME_CRYSTAL_TAG, // Repair ingredient as TagKey
+            CompatResourceLocation.create(ChronoDawn.MOD_ID, "clockstone")  // Equipment asset location
         )
     );
 

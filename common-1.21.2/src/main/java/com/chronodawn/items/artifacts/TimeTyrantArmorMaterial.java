@@ -4,7 +4,6 @@ import com.chronodawn.ChronoDawn;
 import com.chronodawn.registry.ModItems;
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.sounds.SoundEvents;
@@ -13,20 +12,12 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorType;
-import net.minecraft.world.item.equipment.EquipmentAsset;
-import net.minecraft.world.item.equipment.EquipmentAssets;
 
 import java.util.EnumMap;
 
 public class TimeTyrantArmorMaterial {
     // Base durability multiplier
     public static final int BASE_DURABILITY = 37;
-
-    // Equipment asset registry key (points to assets/chronodawn/equipment/time_tyrant.json)
-    public static final ResourceKey<EquipmentAsset> TIME_TYRANT_EQUIPMENT_KEY = ResourceKey.create(
-        EquipmentAssets.ROOT_ID,
-        CompatResourceLocation.create(ChronoDawn.MOD_ID, "time_tyrant")
-    );
 
     // Time Crystal repair tag (custom tag for Time Crystal as repair material)
     private static final TagKey<Item> TIME_CRYSTAL_TAG = TagKey.create(
@@ -36,6 +27,7 @@ public class TimeTyrantArmorMaterial {
 
     public static final Holder<ArmorMaterial> MATERIAL = Holder.direct(
         new ArmorMaterial(
+            BASE_DURABILITY,  // durability multiplier
             Util.make(new EnumMap<>(ArmorType.class), map -> {
                 map.put(ArmorType.BOOTS, 3);
                 map.put(ArmorType.LEGGINGS, 6);
@@ -45,10 +37,10 @@ public class TimeTyrantArmorMaterial {
             }),
             18,  // enchantment value
             SoundEvents.ARMOR_EQUIP_NETHERITE,  // equip sound
-            TIME_CRYSTAL_TAG,  // repair ingredient
             2.5f,  // toughness
             0.1f,  // knockback resistance
-            TIME_TYRANT_EQUIPMENT_KEY  // equipment asset key
+            TIME_CRYSTAL_TAG,  // repair ingredient
+            CompatResourceLocation.create(ChronoDawn.MOD_ID, "time_tyrant")  // equipment asset location
         )
     );
 }
