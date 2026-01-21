@@ -2,21 +2,11 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "chronodawn:chrono_melon_slice"
-    },
-    {
-      "item": "chronodawn:chrono_melon_slice"
-    },
-    {
-      "item": "chronodawn:chrono_melon_slice"
-    },
-    {
-      "item": "chronodawn:chrono_melon_slice"
-    },
-    {
-      "item": "minecraft:glass_bottle"
-    }
+    "chronodawn:chrono_melon_slice",
+    "chronodawn:chrono_melon_slice",
+    "chronodawn:chrono_melon_slice",
+    "chronodawn:chrono_melon_slice",
+    "minecraft:glass_bottle"
   ],
   "result": {
     "id": "chronodawn:chrono_melon_juice",

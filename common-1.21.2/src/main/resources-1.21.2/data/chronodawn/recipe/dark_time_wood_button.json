@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "redstone",
   "ingredients": [
-    {
-      "item": "chronodawn:dark_time_wood_planks"
-    }
+    "chronodawn:dark_time_wood_planks"
   ],
   "result": {
     "id": "chronodawn:dark_time_wood_button",

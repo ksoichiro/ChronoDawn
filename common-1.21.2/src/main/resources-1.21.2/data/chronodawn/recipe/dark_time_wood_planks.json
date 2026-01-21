@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [
-    {
-      "item": "chronodawn:dark_time_wood_log"
-    }
+    "chronodawn:dark_time_wood_log"
   ],
   "result": {
     "id": "chronodawn:dark_time_wood_planks",

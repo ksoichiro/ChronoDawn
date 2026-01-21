@@ -109,17 +109,23 @@ public class TimeHourglassItem extends Item {
         }
 
         // Fill portal interior with portal blocks
-        fillPortalBlocks(level, frameData);
+        // IMPORTANT: Schedule for next tick to avoid ConcurrentModificationException
+        // (player may be standing inside the frame when portal is ignited)
+        MinecraftServer finalServer = server;
+        PortalFrameValidator.PortalFrameData finalFrameData = frameData;
+        server.execute(() -> {
+            fillPortalBlocks(level, finalFrameData);
 
-        // Register portal in registry
-        UUID portalId = UUID.randomUUID();
-        PortalStateMachine portal = new PortalStateMachine(
-            portalId,
-            level.dimension(),
-            frameData.getBottomLeft()
-        );
-        portal.activate();
-        PortalRegistry.getInstance().registerPortal(portal);
+            // Register portal in registry
+            UUID portalId = UUID.randomUUID();
+            PortalStateMachine portal = new PortalStateMachine(
+                portalId,
+                level.dimension(),
+                finalFrameData.getBottomLeft()
+            );
+            portal.activate();
+            PortalRegistry.getInstance().registerPortal(portal);
+        });
 
         // Play ignition sound (fire charge use - similar to flint and steel)
         level.playSound(

@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "chronodawn:chrono_melon_slice"
-    }
+    "chronodawn:chrono_melon_slice"
   ],
   "result": {
     "id": "chronodawn:chrono_melon_seeds",

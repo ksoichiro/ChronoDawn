@@ -2,18 +2,10 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "chronodawn:guardian_stone"
-    },
-    {
-      "item": "chronodawn:phantom_essence"
-    },
-    {
-      "item": "chronodawn:colossus_gear"
-    },
-    {
-      "item": "chronodawn:entropy_core"
-    }
+    "chronodawn:guardian_stone",
+    "chronodawn:phantom_essence",
+    "chronodawn:colossus_gear",
+    "chronodawn:entropy_core"
   ],
   "result": {
     "id": "chronodawn:chrono_aegis",

@@ -2,15 +2,9 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    {
-      "item": "chronodawn:timeless_mushroom"
-    },
-    {
-      "item": "chronodawn:timeless_mushroom"
-    },
-    {
-      "item": "minecraft:bowl"
-    }
+    "chronodawn:timeless_mushroom",
+    "chronodawn:timeless_mushroom",
+    "minecraft:bowl"
   ],
   "result": {
     "id": "chronodawn:timeless_mushroom_soup",
