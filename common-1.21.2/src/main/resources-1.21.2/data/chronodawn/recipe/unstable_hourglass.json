@@ -7,15 +7,9 @@
     "GEG"
   ],
   "key": {
-    "G": {
-      "item": "minecraft:glass"
-    },
-    "E": {
-      "item": "chronodawn:enhanced_clockstone"
-    },
-    "C": {
-      "item": "chronodawn:clockstone_block"
-    }
+    "G": "minecraft:glass",
+    "E": "chronodawn:enhanced_clockstone",
+    "C": "chronodawn:clockstone_block"
   },
   "result": {
     "id": "chronodawn:unstable_hourglass",

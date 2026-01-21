@@ -7,18 +7,10 @@
     " R "
   ],
   "key": {
-    "G": {
-      "item": "minecraft:gold_ingot"
-    },
-    "E": {
-      "item": "chronodawn:enhanced_clockstone"
-    },
-    "C": {
-      "item": "chronodawn:clockstone_block"
-    },
-    "R": {
-      "item": "minecraft:redstone"
-    }
+    "G": "minecraft:gold_ingot",
+    "E": "chronodawn:enhanced_clockstone",
+    "C": "chronodawn:clockstone_block",
+    "R": "minecraft:redstone"
   },
   "result": {
     "id": "chronodawn:time_clock",

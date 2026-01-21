@@ -7,15 +7,9 @@
     "CIC"
   ],
   "key": {
-    "C": {
-      "item": "chronodawn:clockstone"
-    },
-    "I": {
-      "item": "minecraft:iron_ingot"
-    },
-    "R": {
-      "item": "minecraft:redstone"
-    }
+    "C": "chronodawn:clockstone",
+    "I": "minecraft:iron_ingot",
+    "R": "minecraft:redstone"
   },
   "result": {
     "id": "chronodawn:clockwork_block",

@@ -2,9 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "category": "building",
   "key": {
-    "M": {
-      "item": "chronodawn:chrono_melon_slice"
-    }
+    "M": "chronodawn:chrono_melon_slice"
   },
   "pattern": [
     "MMM",

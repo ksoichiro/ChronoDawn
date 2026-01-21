@@ -7,15 +7,9 @@
     "GCG"
   ],
   "key": {
-    "G": {
-      "item": "minecraft:glass"
-    },
-    "C": {
-      "item": "chronodawn:clockstone"
-    },
-    "S": {
-      "item": "minecraft:sand"
-    }
+    "G": "minecraft:glass",
+    "C": "chronodawn:clockstone",
+    "S": "minecraft:sand"
   },
   "result": {
     "id": "chronodawn:time_hourglass",

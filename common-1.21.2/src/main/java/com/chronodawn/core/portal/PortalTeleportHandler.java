@@ -251,8 +251,11 @@ public class PortalTeleportHandler {
             globalState.markChronoDawnEntered();
 
             // Destroy unstable portal (if portals are unstable)
+            // IMPORTANT: Schedule for next tick to avoid ConcurrentModificationException
+            // (player is still in Entity.checkInsideBlocks() when this runs)
             if (globalState.arePortalsUnstable()) {
-                destroyUnstablePortal(destLevel, destPortalPos);
+                BlockPos finalDestPortalPos = destPortalPos;
+                server.execute(() -> destroyUnstablePortal(destLevel, finalDestPortalPos));
                 portalWasDestroyed = true;
             }
         }

@@ -6,9 +6,7 @@
     "##"
   ],
   "key": {
-    "#": {
-      "item": "chronodawn:time_wood_log"
-    }
+    "#": "chronodawn:time_wood_log"
   },
   "result": {
     "id": "chronodawn:time_wood",

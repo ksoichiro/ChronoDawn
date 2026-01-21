@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "food",
   "key": {
-    "F": {
-      "item": "chronodawn:fruit_of_time"
-    },
-    "W": {
-      "item": "chronodawn:time_wheat"
-    }
+    "F": "chronodawn:fruit_of_time",
+    "W": "chronodawn:time_wheat"
   },
   "pattern": [
     "FFF",

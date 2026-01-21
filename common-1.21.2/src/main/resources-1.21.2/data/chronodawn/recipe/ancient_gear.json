@@ -7,15 +7,9 @@
     "ICI"
   ],
   "key": {
-    "I": {
-      "item": "minecraft:iron_ingot"
-    },
-    "C": {
-      "item": "chronodawn:time_crystal"
-    },
-    "E": {
-      "item": "chronodawn:enhanced_clockstone"
-    }
+    "I": "minecraft:iron_ingot",
+    "C": "chronodawn:time_crystal",
+    "E": "chronodawn:enhanced_clockstone"
   },
   "result": {
     "id": "chronodawn:ancient_gear",

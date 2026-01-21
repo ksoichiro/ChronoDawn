@@ -6,12 +6,8 @@
     "PSP"
   ],
   "key": {
-    "P": {
-      "item": "chronodawn:ancient_time_wood_planks"
-    },
-    "S": {
-      "item": "minecraft:stick"
-    }
+    "P": "chronodawn:ancient_time_wood_planks",
+    "S": "minecraft:stick"
   },
   "result": {
     "id": "chronodawn:ancient_time_wood_fence",

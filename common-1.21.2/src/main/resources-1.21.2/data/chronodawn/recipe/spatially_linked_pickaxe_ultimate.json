@@ -7,15 +7,9 @@
     " E "
   ],
   "key": {
-    "F": {
-      "item": "chronodawn:fragment_of_stasis_core"
-    },
-    "P": {
-      "item": "chronodawn:spatially_linked_pickaxe"
-    },
-    "E": {
-      "item": "chronodawn:eye_of_chronos"
-    }
+    "F": "chronodawn:fragment_of_stasis_core",
+    "P": "chronodawn:spatially_linked_pickaxe",
+    "E": "chronodawn:eye_of_chronos"
   },
   "result": {
     "id": "chronodawn:spatially_linked_pickaxe",

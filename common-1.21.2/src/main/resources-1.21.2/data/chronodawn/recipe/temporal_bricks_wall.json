@@ -6,9 +6,7 @@
     "BBB"
   ],
   "key": {
-    "B": {
-      "item": "chronodawn:temporal_bricks"
-    }
+    "B": "chronodawn:temporal_bricks"
   },
   "result": {
     "id": "chronodawn:temporal_bricks_wall",

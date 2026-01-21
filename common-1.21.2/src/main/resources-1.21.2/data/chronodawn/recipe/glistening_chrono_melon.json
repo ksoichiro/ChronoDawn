@@ -2,12 +2,8 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "G": {
-      "item": "minecraft:gold_nugget"
-    },
-    "M": {
-      "item": "chronodawn:chrono_melon_slice"
-    }
+    "G": "minecraft:gold_nugget",
+    "M": "chronodawn:chrono_melon_slice"
   },
   "pattern": [
     "GGG",

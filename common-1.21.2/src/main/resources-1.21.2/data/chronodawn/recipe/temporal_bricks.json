@@ -6,9 +6,7 @@
     "CC"
   ],
   "key": {
-    "C": {
-      "item": "chronodawn:clockstone"
-    }
+    "C": "chronodawn:clockstone"
   },
   "result": {
     "id": "chronodawn:temporal_bricks",

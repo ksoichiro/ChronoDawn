@@ -7,9 +7,7 @@
     "EEE"
   ],
   "key": {
-    "E": {
-      "item": "chronodawn:enhanced_clockstone"
-    }
+    "E": "chronodawn:enhanced_clockstone"
   },
   "result": {
     "id": "chronodawn:enhanced_clockstone_chestplate",

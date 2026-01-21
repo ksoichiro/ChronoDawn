@@ -7,12 +7,8 @@
     " S "
   ],
   "key": {
-    "E": {
-      "item": "chronodawn:enhanced_clockstone"
-    },
-    "S": {
-      "item": "minecraft:stick"
-    }
+    "E": "chronodawn:enhanced_clockstone",
+    "S": "minecraft:stick"
   },
   "result": {
     "id": "chronodawn:enhanced_clockstone_pickaxe",

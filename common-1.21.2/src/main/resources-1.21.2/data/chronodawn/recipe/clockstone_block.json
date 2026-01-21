@@ -7,9 +7,7 @@
     "CCC"
   ],
   "key": {
-    "C": {
-      "item": "chronodawn:clockstone"
-    }
+    "C": "chronodawn:clockstone"
   },
   "result": {
     "id": "chronodawn:clockstone_block",

@@ -7,9 +7,7 @@
     "TTT"
   ],
   "key": {
-    "T": {
-      "item": "chronodawn:time_crystal"
-    }
+    "T": "chronodawn:time_crystal"
   },
   "result": {
     "id": "chronodawn:time_crystal_block",

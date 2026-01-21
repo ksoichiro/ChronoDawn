@@ -6,12 +6,8 @@
     "SPS"
   ],
   "key": {
-    "S": {
-      "item": "minecraft:stick"
-    },
-    "P": {
-      "item": "chronodawn:dark_time_wood_planks"
-    }
+    "S": "minecraft:stick",
+    "P": "chronodawn:dark_time_wood_planks"
   },
   "result": {
     "id": "chronodawn:dark_time_wood_fence_gate",

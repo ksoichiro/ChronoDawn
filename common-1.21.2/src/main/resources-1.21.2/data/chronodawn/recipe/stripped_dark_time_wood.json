@@ -6,9 +6,7 @@
     "##"
   ],
   "key": {
-    "#": {
-      "item": "chronodawn:stripped_dark_time_wood_log"
-    }
+    "#": "chronodawn:stripped_dark_time_wood_log"
   },
   "result": {
     "id": "chronodawn:stripped_dark_time_wood",

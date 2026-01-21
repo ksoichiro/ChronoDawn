@@ -6,9 +6,7 @@
     "PPP"
   ],
   "key": {
-    "P": {
-      "item": "chronodawn:time_wood_planks"
-    }
+    "P": "chronodawn:time_wood_planks"
   },
   "result": {
     "id": "chronodawn:time_wood_trapdoor",

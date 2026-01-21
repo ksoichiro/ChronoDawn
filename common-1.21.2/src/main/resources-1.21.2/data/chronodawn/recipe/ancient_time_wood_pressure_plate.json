@@ -5,9 +5,7 @@
     "PP"
   ],
   "key": {
-    "P": {
-      "item": "chronodawn:ancient_time_wood_planks"
-    }
+    "P": "chronodawn:ancient_time_wood_planks"
   },
   "result": {
     "id": "chronodawn:ancient_time_wood_pressure_plate",

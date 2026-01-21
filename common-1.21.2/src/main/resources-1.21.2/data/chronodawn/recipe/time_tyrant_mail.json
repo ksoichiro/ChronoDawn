@@ -7,15 +7,9 @@
     "FUF"
   ],
   "key": {
-    "F": {
-      "item": "chronodawn:fragment_of_stasis_core"
-    },
-    "E": {
-      "item": "chronodawn:enhanced_clockstone"
-    },
-    "U": {
-      "item": "chronodawn:unstable_hourglass"
-    }
+    "F": "chronodawn:fragment_of_stasis_core",
+    "E": "chronodawn:enhanced_clockstone",
+    "U": "chronodawn:unstable_hourglass"
   },
   "result": {
     "id": "chronodawn:time_tyrant_mail",
