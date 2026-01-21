@@ -3,9 +3,7 @@
   "category": "misc",
   "cookingtime": 200,
   "experience": 0.15,
-  "ingredient": {
-    "item": "chronodawn:ancient_time_wood_log"
-  },
+  "ingredient": "chronodawn:ancient_time_wood_log",
   "result": {
     "id": "minecraft:charcoal"
   }
