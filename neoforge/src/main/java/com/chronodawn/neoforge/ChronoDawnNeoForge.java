@@ -89,9 +89,9 @@ public class ChronoDawnNeoForge {
      * Process portal teleports every tick to ensure responsiveness.
      */
     private void onServerTick(ServerTickEvent.Post event) {
-        // Process pending portal teleports (every tick)
+        // Process pending portal teleports (every tick, version-specific)
         // CRITICAL: This must run after ALL entity ticks to avoid ConcurrentModificationException
-        com.chronodawn.blocks.ChronoDawnPortalBlock.processPendingTeleports(event.getServer());
+        VersionSpecificServerHelper.processPendingTeleports(event.getServer());
 
         // Process boss room protections (every 100 ticks)
         tickCounter++;

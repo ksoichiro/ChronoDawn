@@ -30,15 +30,18 @@ sourceSets {
             }
         }
         resources {
-            // Default resources directory
-            srcDir 'src/main/resources'
+            // Clear default srcDirs to control order explicitly
+            srcDirs = []
 
-            // Add version-specific resources directory
+            // Version-specific resources FIRST (higher priority)
             def versionSpecificRes = file("src/main/resources-${project.ext.minecraft_version}")
             if (versionSpecificRes.exists()) {
                 srcDir versionSpecificRes
                 logger.lifecycle("NeoForge: Using version-specific resources: ${versionSpecificRes.name}")
             }
+
+            // Default resources SECOND (lower priority)
+            srcDir 'src/main/resources'
         }
     }
 }

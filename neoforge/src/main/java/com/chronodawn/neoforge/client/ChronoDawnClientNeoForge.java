@@ -36,7 +36,6 @@ import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModParticles;
 import com.chronodawn.registry.ModEntities;
 import com.chronodawn.registry.ModItems;
-import net.minecraft.client.model.BoatModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -153,26 +152,10 @@ public class ChronoDawnClientNeoForge {
             EntropyKeeperModel::createBodyLayer
         );
 
-        // Register boat and chest boat model layers for all ChronoDawn boat types
-        for (ChronoDawnBoatType type : ChronoDawnBoatType.values()) {
-            // Register boat model layer
-            ModelLayerLocation boatLayer = new ModelLayerLocation(
-                ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "boat/" + type.getName()),
-                "main"
-            );
-            event.registerLayerDefinition(boatLayer, BoatModel::createBoatModel);
-
-            // Register chest boat model layer
-            ModelLayerLocation chestBoatLayer = new ModelLayerLocation(
-                ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "chest_boat/" + type.getName()),
-                "main"
-            );
-            event.registerLayerDefinition(chestBoatLayer, BoatModel::createChestBoatModel);
-        }
+        // Register boat and chest boat model layers (version-specific)
+        VersionSpecificClientHelper.registerBoatModelLayers(event);
 
         ChronoDawn.LOGGER.info("Registered entity model layers for NeoForge");
-        ChronoDawn.LOGGER.info("Registered {} boat and {} chest boat model layers",
-            ChronoDawnBoatType.values().length, ChronoDawnBoatType.values().length);
     }
 
     /**
@@ -734,8 +717,8 @@ public class ChronoDawnClientNeoForge {
          */
         @SubscribeEvent
         public static void onClientTickEnd(ClientTickEvent.Post event) {
-            // Call portal effect handler
-            com.chronodawn.client.PortalEffectHandler.onClientTick();
+            // Call portal effect handler (version-specific path)
+            VersionSpecificClientHelper.onClientTick();
         }
 
         /**
