@@ -45,10 +45,10 @@ Chrono Dawn uses the **Architectury** framework to support both Fabric and NeoFo
 ### Key Technologies
 
 - **Java 21**: Target language version
-- **Minecraft**: Java Edition 1.21.1
+- **Minecraft**: Java Edition 1.21.1 / 1.21.2
 - **Fabric Loader**: 0.17.3+
-- **NeoForge**: 21.1.209+
-- **Architectury API**: 13.0.8+
+- **NeoForge**: 21.1.209+ (for 1.21.1) / 21.2.0-beta+ (for 1.21.2)
+- **Architectury API**: 13.0.8+ (for 1.21.1) / 14.0.4+ (for 1.21.2)
 - **Gradle**: Build automation (Groovy DSL)
 - **Mojang Mappings**: Official Minecraft class names
 
@@ -234,11 +234,11 @@ architectury {
 mod_version=0.4.0-beta
 maven_group=com.chronodawn
 archives_name=chronodawn
-minecraft_version=1.21.1
-architectury_api_version=13.0.8
+minecraft_version=1.21.2
+architectury_api_version=14.0.4
 fabric_loader_version=0.17.3
-fabric_api_version=0.116.7+1.21.1
-neoforge_version=21.1.209
+fabric_api_version=0.116.7+1.21.2
+neoforge_version=21.2.0-beta
 ```
 
 ### Build Commands
@@ -270,8 +270,8 @@ neoforge_version=21.1.209
 ### Output Files
 
 After building:
-- **Fabric JAR**: `fabric/build/libs/chronodawn-0.4.0-beta+1.21.1-fabric.jar`
-- **NeoForge JAR**: `neoforge/build/libs/chronodawn-0.4.0-beta+1.21.1-neoforge.jar`
+- **Fabric JAR**: `fabric/build/libs/chronodawn-0.4.0-beta+1.21.2-fabric.jar`
+- **NeoForge JAR**: `neoforge/build/libs/chronodawn-0.4.0-beta+1.21.2-neoforge.jar`
 - **Common JAR**: `common/build/libs/common-0.4.0-beta.jar` (bundled into loader JARs)
 
 ---

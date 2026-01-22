@@ -17,11 +17,10 @@ Auto-generated from all feature plans. Last updated: 2025-10-19
 - `gradle.properties` - Version definitions
 - `fabric.mod.json` / `neoforge.mods.toml` - Mod metadata
 
-**Current Versions** (as of 2025-12-27):
-- Minecraft: 1.21.1
-- Fabric Loader: 0.17.3+ | Fabric API: 0.116.7+
-- NeoForge: 21.1.209+
-- Architectury API: 13.0.8+
+**Current Versions** (as of 2026-01-23):
+- Minecraft: 1.21.1 or 1.21.2
+- For 1.21.1: Fabric Loader 0.17.3+ | Fabric API 0.116.7+ | NeoForge 21.1.209+ | Architectury API 13.0.8+
+- For 1.21.2: Fabric Loader 0.17.3+ | Fabric API | NeoForge 21.2.0-beta+ | Architectury API 14.0.4+
 
 ---
 
@@ -41,7 +40,7 @@ Auto-generated from all feature plans. Last updated: 2025-10-19
 ---
 
 ## Active Technologies
-- Java 21 (Minecraft Java Edition 1.21.1) + NeoForge 21.1.x, Fabric Loader, mcjunitlib
+- Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2) + NeoForge 21.1.x / 21.2.x, Fabric Loader, mcjunitlib
 
 ## Project Structure
 ```
@@ -50,10 +49,10 @@ tests/
 ```
 
 ## Commands
-# Add commands for Java 21 (Minecraft Java Edition 1.21.1)
+# Add commands for Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2)
 
 ## Code Style
-Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
+Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2): Follow standard conventions
 
 ## Build Configuration
 - **Build DSL**: Groovy DSL (not Kotlin DSL) - for compatibility with Architectury Loom 1.11-SNAPSHOT
@@ -62,16 +61,17 @@ Java 21 (Minecraft Java Edition 1.21.1): Follow standard conventions
 
 ## Multi-Version Support
 
-**Supported Versions**: Minecraft 1.20.1 + 1.21.1 (single codebase)
+**Supported Versions**: Minecraft 1.20.1 + 1.21.1 + 1.21.2 (single codebase)
 
 **Build Commands**:
 - `./gradlew build1_20_1` - Build for 1.20.1
-- `./gradlew build1_21_1` - Build for 1.21.1 (default)
+- `./gradlew build1_21_1` - Build for 1.21.1
+- `./gradlew build1_21_2` - Build for 1.21.2 (default)
 - `./gradlew buildAll` - Build all versions
 
 **Run Client**:
-- Fabric: `./gradlew fabric:runClient1_20_1` or `./gradlew fabric:runClient1_21_1`
-- NeoForge: `./gradlew neoforge:runClient1_20_1` or `./gradlew neoforge:runClient1_21_1`
+- Fabric: `./gradlew fabric:runClient1_20_1`, `./gradlew fabric:runClient1_21_1`, or `./gradlew fabric:runClient1_21_2`
+- NeoForge: `./gradlew neoforge:runClient1_20_1`, `./gradlew neoforge:runClient1_21_1`, or `./gradlew neoforge:runClient1_21_2`
 
 **Key Strategy**: Custom Gradle scripts + abstraction layer (`compat/` package) for API differences
 
