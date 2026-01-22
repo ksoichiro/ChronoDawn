@@ -55,7 +55,10 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import com.chronodawn.neoforge.registry.ModFluidTypes;
 
 import java.util.Optional;
 
@@ -579,6 +582,42 @@ public class ChronoDawnClientNeoForge {
         );
 
         ChronoDawn.LOGGER.info("Registered particle providers for NeoForge");
+    }
+
+    /**
+     * Register client extensions for fluid types.
+     * In NeoForge 1.21.2, FluidType.initializeClient() was removed and replaced with
+     * RegisterClientExtensionsEvent for registering fluid client extensions.
+     *
+     * @param event The client extensions registration event
+     */
+    @SubscribeEvent
+    public static void onRegisterClientExtensions(RegisterClientExtensionsEvent event) {
+        // Register Decorative Water fluid type client extensions
+        event.registerFluidType(new IClientFluidTypeExtensions() {
+            @Override
+            public ResourceLocation getStillTexture() {
+                return ResourceLocation.withDefaultNamespace("block/water_still");
+            }
+
+            @Override
+            public ResourceLocation getFlowingTexture() {
+                return ResourceLocation.withDefaultNamespace("block/water_flow");
+            }
+
+            @Override
+            public ResourceLocation getOverlayTexture() {
+                return ResourceLocation.withDefaultNamespace("block/water_overlay");
+            }
+
+            @Override
+            public int getTintColor() {
+                // Use vanilla water color
+                return 0xFF3F76E4;
+            }
+        }, ModFluidTypes.DECORATIVE_WATER_TYPE.get());
+
+        ChronoDawn.LOGGER.info("Registered fluid type client extensions for NeoForge");
     }
 
     /**
