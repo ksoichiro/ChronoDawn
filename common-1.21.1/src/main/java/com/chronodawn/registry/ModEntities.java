@@ -10,6 +10,10 @@ import com.chronodawn.entities.mobs.ClockworkSentinelEntity;
 import com.chronodawn.entities.mobs.FloqEntity;
 import com.chronodawn.entities.mobs.TemporalWraithEntity;
 import com.chronodawn.entities.mobs.TimeKeeperEntity;
+import com.chronodawn.entities.mobs.EpochHuskEntity;
+import com.chronodawn.entities.mobs.ForgottenMinuteEntity;
+import com.chronodawn.entities.mobs.ChronalLeechEntity;
+import com.chronodawn.entities.mobs.MomentCreeperEntity;
 import com.chronodawn.entities.boats.ChronoDawnBoat;
 import com.chronodawn.entities.boats.ChronoDawnChestBoat;
 import com.chronodawn.entities.projectiles.TimeArrowEntity;
@@ -125,6 +129,62 @@ public class ModEntities {
             .clientTrackingRange(10)
             .updateInterval(3)
             .build("clockwork_sentinel")
+    );
+
+    /**
+     * Epoch Husk (エポック・ハスク) - Hostile Mob
+     *
+     * A weathered humanoid creature with time slowdown aura when damaged.
+     */
+    public static final RegistrySupplier<EntityType<EpochHuskEntity>> EPOCH_HUSK = ENTITIES.register(
+        "epoch_husk",
+        () -> EntityType.Builder.of(EpochHuskEntity::new, MobCategory.MONSTER)
+            .sized(0.6f, 1.95f) // Zombie-like size
+            .clientTrackingRange(8)
+            .updateInterval(3)
+            .build("epoch_husk")
+    );
+
+    /**
+     * Forgotten Minute (フォーゴトン・ミニット) - Hostile Mob
+     *
+     * A semi-transparent creature that appears and disappears, strengthens nearby enemies when attacked.
+     */
+    public static final RegistrySupplier<EntityType<ForgottenMinuteEntity>> FORGOTTEN_MINUTE = ENTITIES.register(
+        "forgotten_minute",
+        () -> EntityType.Builder.of(ForgottenMinuteEntity::new, MobCategory.MONSTER)
+            .sized(0.4f, 0.8f) // Small Vex-like size
+            .clientTrackingRange(8)
+            .updateInterval(3)
+            .build("forgotten_minute")
+    );
+
+    /**
+     * Chronal Leech (クローナル・リーチ) - Hostile Mob
+     *
+     * A small creature that extends player attack cooldown, spawns in groups.
+     */
+    public static final RegistrySupplier<EntityType<ChronalLeechEntity>> CHRONAL_LEECH = ENTITIES.register(
+        "chronal_leech",
+        () -> EntityType.Builder.of(ChronalLeechEntity::new, MobCategory.MONSTER)
+            .sized(0.4f, 0.3f) // Small silverfish-like size
+            .clientTrackingRange(8)
+            .updateInterval(3)
+            .build("chronal_leech")
+    );
+
+    /**
+     * Moment Creeper (モーメント・クリーパー) - Hostile Mob
+     *
+     * A creeper variant that freezes before exploding, with less terrain damage but strong time debuff.
+     */
+    public static final RegistrySupplier<EntityType<MomentCreeperEntity>> MOMENT_CREEPER = ENTITIES.register(
+        "moment_creeper",
+        () -> EntityType.Builder.of(MomentCreeperEntity::new, MobCategory.MONSTER)
+            .sized(0.6f, 1.7f) // Standard creeper size
+            .clientTrackingRange(8)
+            .updateInterval(3)
+            .build("moment_creeper")
     );
 
     /**

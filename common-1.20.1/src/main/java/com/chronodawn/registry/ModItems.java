@@ -1492,6 +1492,46 @@ public class ModItems {
         )
     );
 
+    public static final RegistrySupplier<Item> EPOCH_HUSK_SPAWN_EGG = ITEMS.register(
+        "epoch_husk_spawn_egg",
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.EPOCH_HUSK,
+            0xC9B78A, // Background: Sandy tan
+            0x8B7355, // Spots: Dark brown
+            new Item.Properties()
+        )
+    );
+
+    public static final RegistrySupplier<Item> FORGOTTEN_MINUTE_SPAWN_EGG = ITEMS.register(
+        "forgotten_minute_spawn_egg",
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.FORGOTTEN_MINUTE,
+            0xA0A0D0, // Background: Pale purple
+            0x6060A0, // Spots: Dark purple
+            new Item.Properties()
+        )
+    );
+
+    public static final RegistrySupplier<Item> CHRONAL_LEECH_SPAWN_EGG = ITEMS.register(
+        "chronal_leech_spawn_egg",
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.CHRONAL_LEECH,
+            0x4A3A3A, // Background: Dark gray-brown
+            0x8B0000, // Spots: Dark red
+            new Item.Properties()
+        )
+    );
+
+    public static final RegistrySupplier<Item> MOMENT_CREEPER_SPAWN_EGG = ITEMS.register(
+        "moment_creeper_spawn_egg",
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.MOMENT_CREEPER,
+            0x0DA70B, // Background: Creeper green
+            0x000000, // Spots: Black
+            new Item.Properties()
+        )
+    );
+
     // === Boats ===
 
     /**
@@ -1603,6 +1643,22 @@ public class ModItems {
 
         if (FLOQ_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
             ((com.chronodawn.items.DeferredSpawnEggItem) FLOQ_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (EPOCH_HUSK_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) EPOCH_HUSK_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (FORGOTTEN_MINUTE_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) FORGOTTEN_MINUTE_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (CHRONAL_LEECH_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) CHRONAL_LEECH_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (MOMENT_CREEPER_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) MOMENT_CREEPER_SPAWN_EGG.get()).initializeSpawnEgg();
         }
 
         ChronoDawn.LOGGER.info("Spawn eggs initialized");
@@ -1812,6 +1868,18 @@ public class ModItems {
         }
         if (FLOQ_SPAWN_EGG.isPresent()) {
             output.accept(FLOQ_SPAWN_EGG.get());
+        }
+        if (EPOCH_HUSK_SPAWN_EGG.isPresent()) {
+            output.accept(EPOCH_HUSK_SPAWN_EGG.get());
+        }
+        if (FORGOTTEN_MINUTE_SPAWN_EGG.isPresent()) {
+            output.accept(FORGOTTEN_MINUTE_SPAWN_EGG.get());
+        }
+        if (CHRONAL_LEECH_SPAWN_EGG.isPresent()) {
+            output.accept(CHRONAL_LEECH_SPAWN_EGG.get());
+        }
+        if (MOMENT_CREEPER_SPAWN_EGG.isPresent()) {
+            output.accept(MOMENT_CREEPER_SPAWN_EGG.get());
         }
     }
 }
