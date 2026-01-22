@@ -49,11 +49,10 @@ public class ClockstoneArmorMaterial {
     // Base durability multiplier
     public static final int BASE_DURABILITY = 20;
 
-    // Time Crystal repair tag (custom tag for Time Crystal as repair material)
-    private static final TagKey<Item> TIME_CRYSTAL_TAG = TagKey.create(
-        net.minecraft.core.registries.Registries.ITEM,
-        CompatResourceLocation.create(ChronoDawn.MOD_ID, "repairs_clockstone_armor")
-    );
+    // Time Crystal repair tag
+    // TEMPORARY: Using vanilla tag to test if tag mechanism works
+    // TODO: Find proper solution for custom mod tags in NeoForge 1.21.2
+    private static final TagKey<Item> TIME_CRYSTAL_TAG = ItemTags.REPAIRS_IRON_ARMOR;
 
     public static final Holder<ArmorMaterial> CLOCKSTONE = Holder.direct(
         new ArmorMaterial(

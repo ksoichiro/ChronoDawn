@@ -30,11 +30,10 @@ import net.minecraft.world.level.block.Block;
  * Reference: tasks.md (T213-215)
  */
 public class ClockstoneTier {
-    // Time Crystal repair tag (custom tag for Time Crystal as repair material)
-    private static final TagKey<Item> TIME_CRYSTAL_TAG = TagKey.create(
-        Registries.ITEM,
-        CompatResourceLocation.create(ChronoDawn.MOD_ID, "repairs_clockstone_tools")
-    );
+    // Time Crystal repair tag
+    // TEMPORARY: Using vanilla tag to test if tag mechanism works
+    // TODO: Find proper solution for custom mod tags in NeoForge 1.21.2
+    private static final TagKey<Item> TIME_CRYSTAL_TAG = ItemTags.IRON_TOOL_MATERIALS;
 
     // In 1.21.2, ToolMaterial constructor signature:
     // (TagKey<Block> incorrectBlocksForDrops, int uses, float speed, float attackDamageBonus,

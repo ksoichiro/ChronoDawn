@@ -1,7 +1,13 @@
 package com.chronodawn.anvil;
 
+import com.chronodawn.items.artifacts.ChronobladeItem;
+import com.chronodawn.items.artifacts.EchoingTimeBootsItem;
+import com.chronodawn.items.artifacts.TimeTyrantMailItem;
+import com.chronodawn.items.equipment.*;
+import com.chronodawn.items.tools.SpatiallyLinkedPickaxeItem;
 import com.chronodawn.registry.ModItems;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 /**
@@ -9,6 +15,10 @@ import net.minecraft.world.item.ItemStack;
  *
  * Handles custom anvil repair mechanics for ChronoDawn equipment.
  * When using Time Crystal as repair material, restores 50% durability instead of vanilla's 25%.
+ *
+ * In NeoForge 1.21.2, custom repair tags cause "Unbound tags in registry" errors during
+ * registry freeze. To work around this, we directly check if the item is a ChronoDawn
+ * equipment item instead of relying on the REPAIRABLE component's tag.
  *
  * Usage:
  * - Call calculateTimeCrystalRepair() from anvil event handlers
@@ -23,8 +33,44 @@ public class AnvilRepairHandler {
     public static final float TIME_CRYSTAL_REPAIR_PERCENTAGE = 0.5f;
 
     /**
+     * Check if the given item is a ChronoDawn equipment that can be repaired with Time Crystal.
+     *
+     * This method directly checks the item class instead of relying on tags,
+     * because custom tags cause "Unbound tags" errors in NeoForge 1.21.2.
+     *
+     * @param item The item to check
+     * @return true if the item is a ChronoDawn equipment repairable with Time Crystal
+     */
+    public static boolean isChronoDawnRepairable(Item item) {
+        // Tier 1 Clockstone Equipment
+        if (item instanceof ClockstoneArmorItem) return true;
+        if (item instanceof ClockstonePickaxeItem) return true;
+        if (item instanceof ClockstoneSwordItem) return true;
+        if (item instanceof ClockstoneAxeItem) return true;
+        if (item instanceof ClockstoneShovelItem) return true;
+        if (item instanceof ClockstoneHoeItem) return true;
+
+        // Tier 2 Enhanced Clockstone Equipment
+        if (item instanceof EnhancedClockstoneArmorItem) return true;
+        if (item instanceof EnhancedClockstonePickaxeItem) return true;
+        if (item instanceof EnhancedClockstoneSwordItem) return true;
+        if (item instanceof EnhancedClockstoneAxeItem) return true;
+        if (item instanceof EnhancedClockstoneShovelItem) return true;
+        if (item instanceof EnhancedClockstoneHoeItem) return true;
+
+        // Artifact Equipment
+        if (item instanceof ChronobladeItem) return true;
+        if (item instanceof TimeTyrantMailItem) return true;
+        if (item instanceof EchoingTimeBootsItem) return true;
+        if (item instanceof SpatiallyLinkedPickaxeItem) return true;
+
+        return false;
+    }
+
+    /**
      * Calculate custom repair for Time Crystal material.
-     * If the repair material is Time Crystal, restore 50% durability.
+     * If the repair material is Time Crystal and the item is ChronoDawn equipment,
+     * restore 50% durability.
      *
      * @param leftInput The item being repaired (left slot)
      * @param rightInput The repair material (right slot)
@@ -36,22 +82,15 @@ public class AnvilRepairHandler {
             return null; // Not Time Crystal, use vanilla logic
         }
 
-        // Check if left item is damageable and has a valid repair ingredient
+        // Check if left item is damageable
         if (!leftInput.isDamageableItem()) {
             return null; // Not repairable
         }
 
-        // Check if the item has a REPAIRABLE component (is repairable at all)
-        // In 1.21.2, REPAIRABLE component defines which items can be used for repair
-        var repairable = leftInput.get(DataComponents.REPAIRABLE);
-        if (repairable == null) {
-            return null; // Item is not repairable
-        }
-
-        // Check if Time Crystal is a valid repair material for this item
-        // Repairable.items() returns HolderSet<Item>
-        if (!repairable.items().contains(rightInput.getItemHolder())) {
-            return null; // Time Crystal is not valid for this item
+        // Check if the item is a ChronoDawn equipment that can be repaired with Time Crystal
+        // This bypasses the REPAIRABLE component check to avoid tag-related issues in NeoForge 1.21.2
+        if (!isChronoDawnRepairable(leftInput.getItem())) {
+            return null; // Not a ChronoDawn equipment
         }
 
         // Calculate repair amount (50% of max durability)
