@@ -682,26 +682,8 @@ public class ChronoDawnClientNeoForge {
     }
 
     /**
-     * Handle Chronicle Book item usage.
-     * Opens Chronicle GUI when player right-clicks with Chronicle Book.
-     *
-     * @param event The right-click item event
-     */
-    @SubscribeEvent
-    public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
-        var stack = event.getItemStack();
-        if (stack.getItem() instanceof ChronicleBookItem) {
-            if (event.getLevel().isClientSide()) {
-                net.minecraft.client.Minecraft.getInstance().setScreen(new ChronicleScreen());
-            }
-            event.setCancellationResult(net.minecraft.world.InteractionResult.SUCCESS);
-            event.setCanceled(true);
-        }
-    }
-
-    /**
      * Event subscriber for FORGE bus events (game events, not mod events).
-     * Handles runtime client events like tick events.
+     * Handles runtime client events like tick events and player interactions.
      */
     @EventBusSubscriber(modid = ChronoDawn.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.GAME)
     public static class ForgeEventHandlers {
@@ -715,6 +697,24 @@ public class ChronoDawnClientNeoForge {
         public static void onClientTickEnd(ClientTickEvent.Post event) {
             // Call portal effect handler
             com.chronodawn.client.PortalEffectHandler.onClientTick();
+        }
+
+        /**
+         * Handle Chronicle Book item usage.
+         * Opens Chronicle GUI when player right-clicks with Chronicle Book.
+         *
+         * @param event The right-click item event
+         */
+        @SubscribeEvent
+        public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
+            var stack = event.getItemStack();
+            if (stack.getItem() instanceof ChronicleBookItem) {
+                if (event.getLevel().isClientSide()) {
+                    net.minecraft.client.Minecraft.getInstance().setScreen(new ChronicleScreen());
+                }
+                event.setCancellationResult(net.minecraft.world.InteractionResult.SUCCESS);
+                event.setCanceled(true);
+            }
         }
     }
 }
