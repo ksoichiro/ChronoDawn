@@ -227,6 +227,10 @@
   "entity.chronodawn.clockwork_colossus": "時計仕掛けの巨像",
   "entity.chronodawn.temporal_phantom": "時間の幻影",
   "entity.chronodawn.entropy_keeper": "エントロピーの管理者",
+  "entity.chronodawn.epoch_husk": "エポック・ハスク",
+  "entity.chronodawn.forgotten_minute": "フォーゴトン・ミニット",
+  "entity.chronodawn.chronal_leech": "クロナル・リーチ",
+  "entity.chronodawn.moment_creeper": "モーメント・クリーパー",
 
   "biome.chronodawn.chronodawn_plains": "クロノドーン平原",
   "biome.chronodawn.chronodawn_ocean": "クロノドーン海洋",

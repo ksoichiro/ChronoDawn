@@ -227,6 +227,10 @@
   "entity.chronodawn.clockwork_colossus": "Clockwork Colossus",
   "entity.chronodawn.temporal_phantom": "Temporal Phantom",
   "entity.chronodawn.entropy_keeper": "Entropy Keeper",
+  "entity.chronodawn.epoch_husk": "Epoch Husk",
+  "entity.chronodawn.forgotten_minute": "Forgotten Minute",
+  "entity.chronodawn.chronal_leech": "Chronal Leech",
+  "entity.chronodawn.moment_creeper": "Moment Creeper",
 
   "biome.chronodawn.chronodawn_plains": "Chrono Dawn Plains",
   "biome.chronodawn.chronodawn_ocean": "Chrono Dawn Ocean",
@@ -316,6 +320,10 @@
   "item.chronodawn.entropy_keeper_spawn_egg": "Entropy Keeper Spawn Egg",
   "item.chronodawn.temporal_phantom_spawn_egg": "Temporal Phantom Spawn Egg",
   "item.chronodawn.floq_spawn_egg": "Floq Spawn Egg",
+  "item.chronodawn.epoch_husk_spawn_egg": "Epoch Husk Spawn Egg",
+  "item.chronodawn.forgotten_minute_spawn_egg": "Forgotten Minute Spawn Egg",
+  "item.chronodawn.chronal_leech_spawn_egg": "Chronal Leech Spawn Egg",
+  "item.chronodawn.moment_creeper_spawn_egg": "Moment Creeper Spawn Egg",
 
   "item.chronodawn.time_wood_boat": "Time Wood Boat",
   "item.chronodawn.time_wood_chest_boat": "Time Wood Boat with Chest",

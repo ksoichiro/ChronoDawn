@@ -227,6 +227,10 @@
   "entity.chronodawn.clockwork_colossus": "Clockwork Colossus",
   "entity.chronodawn.temporal_phantom": "Temporal Phantom",
   "entity.chronodawn.entropy_keeper": "Entropy Keeper",
+  "entity.chronodawn.epoch_husk": "Epoch Husk",
+  "entity.chronodawn.forgotten_minute": "Forgotten Minute",
+  "entity.chronodawn.chronal_leech": "Chronal Leech",
+  "entity.chronodawn.moment_creeper": "Moment Creeper",
 
   "biome.chronodawn.chronodawn_plains": "Chrono Dawn Plains",
   "biome.chronodawn.chronodawn_ocean": "Chrono Dawn Ocean",

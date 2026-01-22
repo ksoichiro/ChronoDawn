@@ -227,6 +227,10 @@
   "entity.chronodawn.clockwork_colossus": "時計仕掛けの巨像",
   "entity.chronodawn.temporal_phantom": "時間の幻影",
   "entity.chronodawn.entropy_keeper": "エントロピーの管理者",
+  "entity.chronodawn.epoch_husk": "エポック・ハスク",
+  "entity.chronodawn.forgotten_minute": "フォーゴトン・ミニット",
+  "entity.chronodawn.chronal_leech": "クロナル・リーチ",
+  "entity.chronodawn.moment_creeper": "モーメント・クリーパー",
 
   "biome.chronodawn.chronodawn_plains": "クロノドーン平原",
   "biome.chronodawn.chronodawn_ocean": "クロノドーン海洋",
@@ -316,6 +320,10 @@
   "item.chronodawn.entropy_keeper_spawn_egg": "エントロピーの管理者のスポーンエッグ",
   "item.chronodawn.temporal_phantom_spawn_egg": "時間の幻影のスポーンエッグ",
   "item.chronodawn.floq_spawn_egg": "フロックのスポーンエッグ",
+  "item.chronodawn.epoch_husk_spawn_egg": "エポック・ハスクのスポーンエッグ",
+  "item.chronodawn.forgotten_minute_spawn_egg": "フォーゴトン・ミニットのスポーンエッグ",
+  "item.chronodawn.chronal_leech_spawn_egg": "クロナル・リーチのスポーンエッグ",
+  "item.chronodawn.moment_creeper_spawn_egg": "モーメント・クリーパーのスポーンエッグ",
 
   "item.chronodawn.time_wood_boat": "時の木のボート",
   "item.chronodawn.time_wood_chest_boat": "チェスト付き時の木のボート",
