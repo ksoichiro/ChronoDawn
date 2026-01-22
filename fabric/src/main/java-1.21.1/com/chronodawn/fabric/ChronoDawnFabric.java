@@ -28,6 +28,10 @@ import com.chronodawn.entities.mobs.ClockworkSentinelEntity;
 import com.chronodawn.entities.mobs.FloqEntity;
 import com.chronodawn.entities.mobs.TemporalWraithEntity;
 import com.chronodawn.entities.mobs.TimeKeeperEntity;
+import com.chronodawn.entities.mobs.EpochHuskEntity;
+import com.chronodawn.entities.mobs.ForgottenMinuteEntity;
+import com.chronodawn.entities.mobs.ChronalLeechEntity;
+import com.chronodawn.entities.mobs.MomentCreeperEntity;
 import com.chronodawn.fabric.event.BlockProtectionEventHandler;
 import com.chronodawn.registry.ModEntities;
 import com.chronodawn.worldgen.processors.BossRoomProtectionProcessor;
@@ -132,6 +136,26 @@ public class ChronoDawnFabric implements ModInitializer {
             FloqEntity.createAttributes()
         );
 
+        FabricDefaultAttributeRegistry.register(
+            ModEntities.EPOCH_HUSK.get(),
+            EpochHuskEntity.createAttributes()
+        );
+
+        FabricDefaultAttributeRegistry.register(
+            ModEntities.FORGOTTEN_MINUTE.get(),
+            ForgottenMinuteEntity.createAttributes()
+        );
+
+        FabricDefaultAttributeRegistry.register(
+            ModEntities.CHRONAL_LEECH.get(),
+            ChronalLeechEntity.createAttributes()
+        );
+
+        FabricDefaultAttributeRegistry.register(
+            ModEntities.MOMENT_CREEPER.get(),
+            MomentCreeperEntity.createAttributes()
+        );
+
         ChronoDawn.LOGGER.info("Registered entity attributes for Fabric");
     }
 
@@ -170,6 +194,38 @@ public class ChronoDawnFabric implements ModInitializer {
             SpawnPlacementTypes.ON_GROUND,
             Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             FloqEntity::checkFloqSpawnRules
+        );
+
+        // Epoch Husk - spawns on ground in daylight
+        SpawnPlacements.register(
+            ModEntities.EPOCH_HUSK.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            EpochHuskEntity::checkEpochHuskSpawnRules
+        );
+
+        // Forgotten Minute - flying mob with no spawn restrictions
+        SpawnPlacements.register(
+            ModEntities.FORGOTTEN_MINUTE.get(),
+            SpawnPlacementTypes.NO_RESTRICTIONS,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            ForgottenMinuteEntity::checkForgottenMinuteSpawnRules
+        );
+
+        // Chronal Leech - spawns on ground in daylight
+        SpawnPlacements.register(
+            ModEntities.CHRONAL_LEECH.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            ChronalLeechEntity::checkChronalLeechSpawnRules
+        );
+
+        // Moment Creeper - spawns on ground in daylight
+        SpawnPlacements.register(
+            ModEntities.MOMENT_CREEPER.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            MomentCreeperEntity::checkMomentCreeperSpawnRules
         );
 
         ChronoDawn.LOGGER.info("Registered spawn placements for custom mobs");

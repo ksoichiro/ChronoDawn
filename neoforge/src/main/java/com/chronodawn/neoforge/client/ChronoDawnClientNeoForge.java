@@ -14,6 +14,10 @@ import com.chronodawn.client.model.TemporalWraithModel;
 import com.chronodawn.client.model.TimeGuardianModel;
 import com.chronodawn.client.model.TimeKeeperModel;
 import com.chronodawn.client.model.TimeTyrantModel;
+import com.chronodawn.client.model.EpochHuskModel;
+import com.chronodawn.client.model.ForgottenMinuteModel;
+import com.chronodawn.client.model.ChronalLeechModel;
+import com.chronodawn.client.model.MomentCreeperModel;
 import com.chronodawn.client.renderer.ChronosWardenRenderer;
 import com.chronodawn.client.renderer.ChronoDawnBoatRenderer;
 import com.chronodawn.client.renderer.ChronoDawnChestBoatRenderer;
@@ -30,6 +34,10 @@ import com.chronodawn.client.renderer.mobs.ClockworkSentinelRenderer;
 import com.chronodawn.client.renderer.mobs.FloqRenderer;
 import com.chronodawn.client.renderer.mobs.TemporalWraithRenderer;
 import com.chronodawn.client.renderer.mobs.TimeKeeperRenderer;
+import com.chronodawn.client.renderer.mobs.EpochHuskRenderer;
+import com.chronodawn.client.renderer.mobs.ForgottenMinuteRenderer;
+import com.chronodawn.client.renderer.mobs.ChronalLeechRenderer;
+import com.chronodawn.client.renderer.mobs.MomentCreeperRenderer;
 import com.chronodawn.items.TimeCompassItem;
 import com.chronodawn.client.particle.ChronoDawnPortalParticle;
 import com.chronodawn.registry.ModBlocks;
@@ -152,6 +160,26 @@ public class ChronoDawnClientNeoForge {
             EntropyKeeperModel::createBodyLayer
         );
 
+        event.registerLayerDefinition(
+            EpochHuskModel.LAYER_LOCATION,
+            EpochHuskModel::createBodyLayer
+        );
+
+        event.registerLayerDefinition(
+            ForgottenMinuteModel.LAYER_LOCATION,
+            ForgottenMinuteModel::createBodyLayer
+        );
+
+        event.registerLayerDefinition(
+            ChronalLeechModel.LAYER_LOCATION,
+            ChronalLeechModel::createBodyLayer
+        );
+
+        event.registerLayerDefinition(
+            MomentCreeperModel.LAYER_LOCATION,
+            MomentCreeperModel::createBodyLayer
+        );
+
         // Register boat and chest boat model layers (version-specific)
         VersionSpecificClientHelper.registerBoatModelLayers(event);
 
@@ -239,6 +267,26 @@ public class ChronoDawnClientNeoForge {
         event.registerEntityRenderer(
             ModEntities.FLOQ.get(),
             FloqRenderer::new
+        );
+
+        event.registerEntityRenderer(
+            ModEntities.EPOCH_HUSK.get(),
+            EpochHuskRenderer::new
+        );
+
+        event.registerEntityRenderer(
+            ModEntities.FORGOTTEN_MINUTE.get(),
+            ForgottenMinuteRenderer::new
+        );
+
+        event.registerEntityRenderer(
+            ModEntities.CHRONAL_LEECH.get(),
+            ChronalLeechRenderer::new
+        );
+
+        event.registerEntityRenderer(
+            ModEntities.MOMENT_CREEPER.get(),
+            MomentCreeperRenderer::new
         );
 
         // Register ChronoDawn Boat with custom renderer
@@ -545,7 +593,11 @@ public class ChronoDawnClientNeoForge {
             ModItems.CHRONOS_WARDEN_SPAWN_EGG.get(),
             ModItems.CLOCKWORK_COLOSSUS_SPAWN_EGG.get(),
             ModItems.ENTROPY_KEEPER_SPAWN_EGG.get(),
-            ModItems.TEMPORAL_PHANTOM_SPAWN_EGG.get()
+            ModItems.TEMPORAL_PHANTOM_SPAWN_EGG.get(),
+            ModItems.EPOCH_HUSK_SPAWN_EGG.get(),
+            ModItems.FORGOTTEN_MINUTE_SPAWN_EGG.get(),
+            ModItems.CHRONAL_LEECH_SPAWN_EGG.get(),
+            ModItems.MOMENT_CREEPER_SPAWN_EGG.get()
         );
 
         ChronoDawn.LOGGER.info("Registered item color handlers for NeoForge");
