@@ -1689,7 +1689,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> TIME_WOOD_BOAT = ITEMS.register(
         "time_wood_boat",
-        () -> new ChronoDawnBoatItem(ChronoDawnBoatType.TIME_WOOD, false, ChronoDawnBoatItem.createProperties())
+        () -> new ChronoDawnBoatItem(ChronoDawnBoatType.TIME_WOOD, false, ChronoDawnBoatItem.createProperties("time_wood_boat"))
     );
 
     /**
@@ -1698,7 +1698,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> TIME_WOOD_CHEST_BOAT = ITEMS.register(
         "time_wood_chest_boat",
-        () -> new ChronoDawnBoatItem(ChronoDawnBoatType.TIME_WOOD, true, ChronoDawnBoatItem.createProperties())
+        () -> new ChronoDawnBoatItem(ChronoDawnBoatType.TIME_WOOD, true, ChronoDawnBoatItem.createProperties("time_wood_chest_boat"))
     );
 
     /**
@@ -1707,7 +1707,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> DARK_TIME_WOOD_BOAT = ITEMS.register(
         "dark_time_wood_boat",
-        () -> new ChronoDawnBoatItem(ChronoDawnBoatType.DARK_TIME_WOOD, false, ChronoDawnBoatItem.createProperties())
+        () -> new ChronoDawnBoatItem(ChronoDawnBoatType.DARK_TIME_WOOD, false, ChronoDawnBoatItem.createProperties("dark_time_wood_boat"))
     );
 
     /**
@@ -1716,7 +1716,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> DARK_TIME_WOOD_CHEST_BOAT = ITEMS.register(
         "dark_time_wood_chest_boat",
-        () -> new ChronoDawnBoatItem(ChronoDawnBoatType.DARK_TIME_WOOD, true, ChronoDawnBoatItem.createProperties())
+        () -> new ChronoDawnBoatItem(ChronoDawnBoatType.DARK_TIME_WOOD, true, ChronoDawnBoatItem.createProperties("dark_time_wood_chest_boat"))
     );
 
     /**
@@ -1725,7 +1725,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_BOAT = ITEMS.register(
         "ancient_time_wood_boat",
-        () -> new ChronoDawnBoatItem(ChronoDawnBoatType.ANCIENT_TIME_WOOD, false, ChronoDawnBoatItem.createProperties())
+        () -> new ChronoDawnBoatItem(ChronoDawnBoatType.ANCIENT_TIME_WOOD, false, ChronoDawnBoatItem.createProperties("ancient_time_wood_boat"))
     );
 
     /**
@@ -1734,7 +1734,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_CHEST_BOAT = ITEMS.register(
         "ancient_time_wood_chest_boat",
-        () -> new ChronoDawnBoatItem(ChronoDawnBoatType.ANCIENT_TIME_WOOD, true, ChronoDawnBoatItem.createProperties())
+        () -> new ChronoDawnBoatItem(ChronoDawnBoatType.ANCIENT_TIME_WOOD, true, ChronoDawnBoatItem.createProperties("ancient_time_wood_chest_boat"))
     );
 
     /**

@@ -51,11 +51,12 @@ public class ChronoDawnBoatItem extends Item {
 
     /**
      * Creates properties for boat items.
+     * Note: setId() should be called with the specific boat item ID in ModItems registration.
      */
-    public static Properties createProperties() {
+    public static Properties createProperties(String itemId) {
         return new Properties().stacksTo(1)
                 .setId(ResourceKey.create(Registries.ITEM,
-                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "chrono_dawn_boat")));
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, itemId)));
     }
 
     @Override

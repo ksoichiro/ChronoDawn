@@ -9,7 +9,9 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.math.Axis;
 import net.minecraft.client.model.BoatModel;
+import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -32,11 +34,17 @@ import java.util.Map;
 public class ChronoDawnBoatRenderer extends EntityRenderer<ChronoDawnBoat, ChronoDawnBoatRenderState> {
 
     private final Map<ChronoDawnBoatType, Pair<ResourceLocation, BoatModel>> boatResources;
+    private final Model waterPatchModel;
 
     public ChronoDawnBoatRenderer(EntityRendererProvider.Context context) {
         super(context);
         this.shadowRadius = 0.8F;
         this.boatResources = createBoatResources(context);
+        // Create water patch model from vanilla layer (masks water inside boat)
+        this.waterPatchModel = new Model.Simple(
+            context.bakeLayer(ModelLayers.BOAT_WATER_PATCH),
+            resourceLocation -> RenderType.waterMask()
+        );
     }
 
     @Override
@@ -47,9 +55,18 @@ public class ChronoDawnBoatRenderer extends EntityRenderer<ChronoDawnBoat, Chron
     @Override
     public void extractRenderState(ChronoDawnBoat entity, ChronoDawnBoatRenderState state, float partialTick) {
         super.extractRenderState(entity, state, partialTick);
-        // Note: hurtTime, hurtDir, bubbleAngle, isUnderWater, yRot are set by super.extractRenderState()
-        // in 1.21.2, as they are part of BoatRenderState
+        // Set custom boat type
         state.boatType = entity.getChronoDawnBoatType();
+
+        // Set BoatRenderState specific fields (not set by EntityRenderer.extractRenderState)
+        state.yRot = entity.getYRot(partialTick);
+        state.hurtTime = (float) entity.getHurtTime() - partialTick;
+        state.hurtDir = entity.getHurtDir();
+        state.damageTime = Math.max(0.0F, entity.getDamage() - partialTick);
+        state.bubbleAngle = entity.getBubbleAngle(partialTick);
+        state.isUnderWater = entity.isUnderWater();
+        state.rowingTimeLeft = entity.getRowingTime(0, partialTick);
+        state.rowingTimeRight = entity.getRowingTime(1, partialTick);
     }
 
     private static Map<ChronoDawnBoatType, Pair<ResourceLocation, BoatModel>> createBoatResources(
@@ -95,13 +112,15 @@ public class ChronoDawnBoatRenderer extends EntityRenderer<ChronoDawnBoat, Chron
         VertexConsumer vertexConsumer = buffer.getBuffer(model.renderType(texture));
         model.renderToBuffer(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY);
 
-        // TODO: Render water patch inside boat
-        // In 1.21.2, waterPatch() method has been removed from BoatModel
-        // Need to investigate alternative approach for water rendering
-        // if (!state.submergedInWater) {
-        //     VertexConsumer waterVertexConsumer = buffer.getBuffer(RenderType.waterMask());
-        //     model.waterPatch().render(poseStack, waterVertexConsumer, packedLight, OverlayTexture.NO_OVERLAY);
-        // }
+        // Render water patch to mask water inside boat (only when not fully submerged)
+        if (!state.isUnderWater) {
+            this.waterPatchModel.renderToBuffer(
+                poseStack,
+                buffer.getBuffer(RenderType.waterMask()),
+                packedLight,
+                OverlayTexture.NO_OVERLAY
+            );
+        }
 
         poseStack.popPose();
         super.render(state, poseStack, buffer, packedLight);
