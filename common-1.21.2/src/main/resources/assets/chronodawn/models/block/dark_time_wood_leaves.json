@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/leaves",
+  "textures": {
+    "all": "chronodawn:block/dark_time_wood_leaves"
+  }
+}

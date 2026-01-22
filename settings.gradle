@@ -16,11 +16,26 @@ plugins {
 
 rootProject.name = 'chronodawn'
 
-include 'common'
+// Multi-version subprojects
+include 'common-base'
+
+// Include version-specific common module based on target Minecraft version
+def targetMcVersion = settings.hasProperty('target_mc_version') ? settings.target_mc_version : '1.21.1'
+if (targetMcVersion == '1.20.1') {
+    include 'common-1.20.1'
+    logger.lifecycle("Common module: common-1.20.1")
+} else if (targetMcVersion == '1.21.2') {
+    include 'common-1.21.2'
+    logger.lifecycle("Common module: common-1.21.2")
+} else {
+    include 'common-1.21.1'
+    logger.lifecycle("Common module: common-1.21.1")
+}
+
+// Platform-specific projects
 include 'fabric'
 
 // NeoForge only supports Minecraft 1.20.5+, so exclude it for 1.20.1
-def targetMcVersion = settings.gradle.startParameter.projectProperties.get('target_mc_version') ?: '1.21.1'
 if (targetMcVersion != '1.20.1') {
     include 'neoforge'
     logger.lifecycle("NeoForge module enabled for Minecraft ${targetMcVersion}")

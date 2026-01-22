@@ -1,0 +1,28 @@
+{
+  "parent": "chronodawn:story/us2/time_guardian_defeat",
+  "criteria": {
+    "killed_temporal_phantom": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "chronodawn:temporal_phantom"
+        }
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "item": "chronodawn:phantom_essence"
+    },
+    "title": {
+      "translate": "advancements.chronodawn.temporal_phantom_defeated.title"
+    },
+    "description": {
+      "translate": "advancements.chronodawn.temporal_phantom_defeated.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  }
+}

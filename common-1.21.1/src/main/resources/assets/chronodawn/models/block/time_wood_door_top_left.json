@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/door_top_left",
+  "textures": {
+    "top": "chronodawn:block/time_wood_door_top",
+    "bottom": "chronodawn:block/time_wood_door_bottom"
+  }
+}

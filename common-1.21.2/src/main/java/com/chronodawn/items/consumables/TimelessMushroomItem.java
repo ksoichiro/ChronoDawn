@@ -1,0 +1,72 @@
+package com.chronodawn.items.consumables;
+
+import com.chronodawn.ChronoDawn;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+
+import com.chronodawn.registry.ModBlocks;
+import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.item.BlockItem;
+
+/**
+ * Timeless Mushroom - Edible mushroom that can be planted or eaten.
+ *
+ * Provides:
+ * - Nutrition: Restores 2 hunger points (1 drumstick)
+ * - No special effects when eaten raw
+ *
+ * Properties:
+ * - Nutrition: 2 hunger points (1 drumstick)
+ * - Saturation: 0.3 (total 0.6)
+ * - Effect: None (raw state)
+ * - Eating Speed: Normal
+ * - Plantable: Yes (can be planted in dark areas)
+ *
+ * Acquisition:
+ * - Breaking Timeless Mushroom blocks
+ * - Finding in world generation (dark forest areas)
+ * - Mushroom spreading in darkness
+ *
+ * Usage:
+ * - Can be eaten raw for basic nutrition
+ * - Can be planted in dark areas (light level 12 or less)
+ * - Can be used in Timeless Mushroom Soup recipe
+ * - Can be used in Temporal Root Stew recipe
+ *
+ * Visual Theme:
+ * - Silver/white color with faint glow
+ * - Distinct from Unstable Fungus (purple/blue)
+ * - "Timeless" theme = pale, ethereal, ghost-like
+ *
+ * Note:
+ * - This item serves both as food and plantable mushroom
+ * - Uses BlockItem with useBlockDescriptionPrefix (replaces ItemNameBlockItem)
+ * - Different from Unstable Fungus (which is not edible)
+ * - Migration from ItemNameBlockItem (removed in 1.21.2)
+ *
+ * Reference: WORK_NOTES.md (Crop 3: Timeless Mushroom)
+ * Task: T212 [US1] Create Timeless Mushroom item
+ */
+public class TimelessMushroomItem extends BlockItem {
+    public TimelessMushroomItem(Properties properties) {
+        super(ModBlocks.TIMELESS_MUSHROOM.get(), properties.useBlockDescriptionPrefix());
+    }
+
+    /**
+     * Create default properties for Timeless Mushroom.
+     *
+     * @return Item properties with food configuration
+     */
+    public static Properties createProperties() {
+        FoodProperties foodProperties = new FoodProperties.Builder()
+                .nutrition(2)        // 2 hunger points (1 drumstick)
+                .saturationModifier(0.3f)  // Saturation modifier (total: 2 * 0.3 = 0.6)
+                .build();
+
+        return new Properties()
+                .food(foodProperties)
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "timeless_mushroom")));
+    }
+}

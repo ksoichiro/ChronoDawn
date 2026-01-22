@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building_blocks",
+  "pattern": [
+    "CC",
+    "CC"
+  ],
+  "key": {
+    "C": {
+      "item": "chronodawn:clockstone"
+    }
+  },
+  "result": {
+    "item": "chronodawn:temporal_bricks",
+    "count": 1
+  }
+}

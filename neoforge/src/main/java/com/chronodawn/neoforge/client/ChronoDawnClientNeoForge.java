@@ -17,6 +17,7 @@ import com.chronodawn.client.model.TimeTyrantModel;
 import com.chronodawn.client.renderer.ChronosWardenRenderer;
 import com.chronodawn.client.renderer.ChronoDawnBoatRenderer;
 import com.chronodawn.client.renderer.ChronoDawnChestBoatRenderer;
+import com.chronodawn.entities.boats.ChronoDawnBoatType;
 import com.chronodawn.client.renderer.ClockworkColossusRenderer;
 import com.chronodawn.client.renderer.EntropyKeeperRenderer;
 import com.chronodawn.client.renderer.GearProjectileRenderer;
@@ -35,6 +36,7 @@ import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModParticles;
 import com.chronodawn.registry.ModEntities;
 import com.chronodawn.registry.ModItems;
+import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
@@ -52,7 +54,10 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
+import com.chronodawn.neoforge.registry.ModFluidTypes;
 
 import java.util.Optional;
 
@@ -146,6 +151,9 @@ public class ChronoDawnClientNeoForge {
             EntropyKeeperRenderer.LAYER_LOCATION,
             EntropyKeeperModel::createBodyLayer
         );
+
+        // Register boat and chest boat model layers (version-specific)
+        VersionSpecificClientHelper.registerBoatModelLayers(event);
 
         ChronoDawn.LOGGER.info("Registered entity model layers for NeoForge");
     }
@@ -560,6 +568,42 @@ public class ChronoDawnClientNeoForge {
     }
 
     /**
+     * Register client extensions for fluid types.
+     * In NeoForge 1.21.2, FluidType.initializeClient() was removed and replaced with
+     * RegisterClientExtensionsEvent for registering fluid client extensions.
+     *
+     * @param event The client extensions registration event
+     */
+    @SubscribeEvent
+    public static void onRegisterClientExtensions(RegisterClientExtensionsEvent event) {
+        // Register Decorative Water fluid type client extensions
+        event.registerFluidType(new IClientFluidTypeExtensions() {
+            @Override
+            public ResourceLocation getStillTexture() {
+                return ResourceLocation.withDefaultNamespace("block/water_still");
+            }
+
+            @Override
+            public ResourceLocation getFlowingTexture() {
+                return ResourceLocation.withDefaultNamespace("block/water_flow");
+            }
+
+            @Override
+            public ResourceLocation getOverlayTexture() {
+                return ResourceLocation.withDefaultNamespace("block/water_overlay");
+            }
+
+            @Override
+            public int getTintColor() {
+                // Use vanilla water color
+                return 0xFF3F76E4;
+            }
+        }, ModFluidTypes.DECORATIVE_WATER_TYPE.get());
+
+        ChronoDawn.LOGGER.info("Registered fluid type client extensions for NeoForge");
+    }
+
+    /**
      * Legacy method - now replaced by event-based registration.
      * Kept for compatibility with existing code structure.
      */
@@ -644,35 +688,24 @@ public class ChronoDawnClientNeoForge {
      */
     @SubscribeEvent
     public static void onRegisterClientReloadListeners(RegisterClientReloadListenersEvent event) {
-        event.registerReloadListener((preparationBarrier, resourceManager, preparationsProfiler, reloadProfiler, backgroundExecutor, gameExecutor) ->
-            preparationBarrier.wait(null).thenRunAsync(() -> {
+        // 1.21.2: PreparableReloadListener API changed, use SimplePreparableReloadListener
+        event.registerReloadListener(new net.minecraft.server.packs.resources.SimplePreparableReloadListener<Void>() {
+            @Override
+            protected Void prepare(net.minecraft.server.packs.resources.ResourceManager resourceManager, net.minecraft.util.profiling.ProfilerFiller profiler) {
+                return null;
+            }
+
+            @Override
+            protected void apply(Void object, net.minecraft.server.packs.resources.ResourceManager resourceManager, net.minecraft.util.profiling.ProfilerFiller profiler) {
                 ChronicleData.getInstance().load(resourceManager);
                 ChronoDawn.LOGGER.info("Chronicle data loaded/reloaded");
-            }, gameExecutor)
-        );
-    }
-
-    /**
-     * Handle Chronicle Book item usage.
-     * Opens Chronicle GUI when player right-clicks with Chronicle Book.
-     *
-     * @param event The right-click item event
-     */
-    @SubscribeEvent
-    public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
-        var stack = event.getItemStack();
-        if (stack.getItem() instanceof ChronicleBookItem) {
-            if (event.getLevel().isClientSide()) {
-                net.minecraft.client.Minecraft.getInstance().setScreen(new ChronicleScreen());
             }
-            event.setCancellationResult(net.minecraft.world.InteractionResult.SUCCESS);
-            event.setCanceled(true);
-        }
+        });
     }
 
     /**
      * Event subscriber for FORGE bus events (game events, not mod events).
-     * Handles runtime client events like tick events.
+     * Handles runtime client events like tick events and player interactions.
      */
     @EventBusSubscriber(modid = ChronoDawn.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.GAME)
     public static class ForgeEventHandlers {
@@ -684,9 +717,26 @@ public class ChronoDawnClientNeoForge {
          */
         @SubscribeEvent
         public static void onClientTickEnd(ClientTickEvent.Post event) {
-            // Call portal effect handler
-            // Note: Use version-specific handler based on target Minecraft version
-            com.chronodawn.compat.v1_21_1.client.PortalEffectHandler.onClientTick();
+            // Call portal effect handler (version-specific path)
+            VersionSpecificClientHelper.onClientTick();
+        }
+
+        /**
+         * Handle Chronicle Book item usage.
+         * Opens Chronicle GUI when player right-clicks with Chronicle Book.
+         *
+         * @param event The right-click item event
+         */
+        @SubscribeEvent
+        public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
+            var stack = event.getItemStack();
+            if (stack.getItem() instanceof ChronicleBookItem) {
+                if (event.getLevel().isClientSide()) {
+                    net.minecraft.client.Minecraft.getInstance().setScreen(new ChronicleScreen());
+                }
+                event.setCancellationResult(net.minecraft.world.InteractionResult.SUCCESS);
+                event.setCanceled(true);
+            }
         }
     }
 }

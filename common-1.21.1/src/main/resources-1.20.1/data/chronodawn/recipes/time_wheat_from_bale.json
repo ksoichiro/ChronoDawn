@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "chronodawn:time_wheat_bale"
+    }
+  ],
+  "result": {
+    "item": "chronodawn:time_wheat",
+    "count": 9
+  }
+}

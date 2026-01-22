@@ -1,0 +1,52 @@
+{
+  "parent": "chronodawn:story/us2/desert_clock_tower",
+  "criteria": {
+    "has_time_clock": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "chronodawn:time_clock"
+            ]
+          }
+        ]
+      }
+    },
+    "has_spatially_linked_pickaxe": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "chronodawn:spatially_linked_pickaxe"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_time_clock"
+    ],
+    [
+      "has_spatially_linked_pickaxe"
+    ]
+  ],
+  "display": {
+    "icon": {
+      "item": "chronodawn:time_clock"
+    },
+    "title": {
+      "translate": "advancements.chronodawn.time_manipulation_tools.title"
+    },
+    "description": {
+      "translate": "advancements.chronodawn.time_manipulation_tools.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  }
+}

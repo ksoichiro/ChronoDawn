@@ -1,0 +1,28 @@
+{
+  "parent": "chronodawn:story/us1/dimension_entry",
+  "criteria": {
+    "killed_clockwork_sentinel": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "chronodawn:clockwork_sentinel"
+        }
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "item": "chronodawn:ancient_gear"
+    },
+    "title": {
+      "translate": "advancements.chronodawn.clockwork_sentinel_defeated.title"
+    },
+    "description": {
+      "translate": "advancements.chronodawn.clockwork_sentinel_defeated.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  }
+}

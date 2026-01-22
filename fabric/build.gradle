@@ -27,13 +27,19 @@ repositories {
     maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
 }
 
+// Multi-version support: Determine which common module to use
+def commonModule = project.ext.minecraft_version == '1.20.1' ? ':common-1.20.1' :
+                   project.ext.minecraft_version == '1.21.2' ? ':common-1.21.2' : ':common-1.21.1'
+
 dependencies {
     modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
     modApi "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
     modApi "dev.architectury:architectury-fabric:$rootProject.architectury_api_version"
 
-    common(project(path: ':common', configuration: 'namedElements')) { transitive false }
-    shadowBundle project(path: ':common', configuration: 'transformProductionFabric')
+    // Multi-version subproject dependencies
+    implementation(project(':common-base')) { transitive false }
+    common(project(path: commonModule, configuration: 'namedElements')) { transitive false }
+    shadowBundle project(path: commonModule, configuration: 'transformProductionFabric')
 }
 
 // Multi-version support: Configure version-specific source directories
@@ -65,8 +71,8 @@ sourceSets {
 }
 
 loom {
-    if (project(':common').loom.accessWidenerPath != null) {
-        accessWidenerPath = project(':common').loom.accessWidenerPath
+    if (project(commonModule).loom.accessWidenerPath != null) {
+        accessWidenerPath = project(commonModule).loom.accessWidenerPath
     }
 
     // Multi-version support: Use version-specific run directory
@@ -94,7 +100,10 @@ fabricApi {
 }
 
 processResources {
-    from(project(':common').sourceSets.main.resources) {
+    // Ensure common module's NBT conversion completes before processing resources
+    dependsOn project(commonModule).tasks.named('convertNbtStructures')
+
+    from(project(commonModule).sourceSets.main.resources) {
         // Exclude common mixin config (use chronodawn-fabric.mixins.json instead)
         exclude 'chronodawn.mixins.json'
     }

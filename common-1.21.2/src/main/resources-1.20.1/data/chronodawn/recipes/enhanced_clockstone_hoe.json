@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "tools",
+  "pattern": [
+    "EE",
+    " S",
+    " S"
+  ],
+  "key": {
+    "E": {
+      "item": "chronodawn:enhanced_clockstone"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "chronodawn:enhanced_clockstone_hoe",
+    "count": 1
+  }
+}

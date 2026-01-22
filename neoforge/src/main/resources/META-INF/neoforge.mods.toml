@@ -24,14 +24,14 @@ config="chronodawn-neoforge-compat.mixins.json"
 [[dependencies.chronodawn]]
 modId="neoforge"
 type="required"
-versionRange="[21.1,)"
+versionRange="[21.2.0-beta,)"
 ordering="NONE"
 side="BOTH"
 
 [[dependencies.chronodawn]]
 modId="minecraft"
 type="required"
-versionRange="[1.21.1]"
+versionRange="[1.21.2]"
 ordering="NONE"
 side="BOTH"
 

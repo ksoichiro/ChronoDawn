@@ -1,0 +1,35 @@
+{
+  "parent": "chronodawn:story/us1/dimension_entry",
+  "criteria": {
+    "stabilized_portal": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "chronodawn:portal_stabilizer"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "item": "chronodawn:portal_stabilizer"
+    },
+    "title": {
+      "translate": "advancements.chronodawn.portal_stabilization.title"
+    },
+    "description": {
+      "translate": "advancements.chronodawn.portal_stabilization.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "rewards": {
+    "experience": 50
+  }
+}

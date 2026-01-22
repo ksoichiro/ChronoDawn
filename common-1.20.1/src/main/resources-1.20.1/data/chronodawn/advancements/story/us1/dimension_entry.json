@@ -1,0 +1,26 @@
+{
+  "parent": "chronodawn:story/us1/portal_creation",
+  "criteria": {
+    "entered_chronodawn": {
+      "trigger": "minecraft:changed_dimension",
+      "conditions": {
+        "to": "chronodawn:chronodawn"
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "item": "chronodawn:clockstone_block"
+    },
+    "title": {
+      "translate": "advancements.chronodawn.dimension_entry.title"
+    },
+    "description": {
+      "translate": "advancements.chronodawn.dimension_entry.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

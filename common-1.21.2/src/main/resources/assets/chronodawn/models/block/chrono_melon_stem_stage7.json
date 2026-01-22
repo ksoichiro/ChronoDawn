@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/stem_growth7",
+  "textures": {
+    "stem": "chronodawn:block/chrono_melon_stem"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "chronodawn:guardian_stone",
+    "chronodawn:phantom_essence",
+    "chronodawn:colossus_gear",
+    "chronodawn:entropy_core"
+  ],
+  "result": {
+    "id": "chronodawn:chrono_aegis",
+    "count": 1
+  }
+}

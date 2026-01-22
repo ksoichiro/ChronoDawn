@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "chronodawn:clockstone_block"
+    }
+  ],
+  "result": {
+    "id": "chronodawn:clockstone",
+    "count": 9
+  }
+}

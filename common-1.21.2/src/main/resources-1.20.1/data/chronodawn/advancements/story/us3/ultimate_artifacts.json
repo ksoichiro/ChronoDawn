@@ -1,0 +1,85 @@
+{
+  "parent": "chronodawn:story/us3/time_tyrant_defeat",
+  "criteria": {
+    "has_chronoblade": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "chronodawn:chronoblade"
+            ]
+          }
+        ]
+      }
+    },
+    "has_time_tyrant_mail": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "chronodawn:time_tyrant_mail"
+            ]
+          }
+        ]
+      }
+    },
+    "has_echoing_time_boots": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "chronodawn:echoing_time_boots"
+            ]
+          }
+        ]
+      }
+    },
+    "has_unstable_pocket_watch": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "chronodawn:unstable_pocket_watch"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_chronoblade"
+    ],
+    [
+      "has_time_tyrant_mail"
+    ],
+    [
+      "has_echoing_time_boots"
+    ],
+    [
+      "has_unstable_pocket_watch"
+    ]
+  ],
+  "display": {
+    "icon": {
+      "item": "chronodawn:chronoblade"
+    },
+    "title": {
+      "translate": "advancements.chronodawn.ultimate_artifacts.title"
+    },
+    "description": {
+      "translate": "advancements.chronodawn.ultimate_artifacts.description"
+    },
+    "frame": "challenge",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  },
+  "rewards": {
+    "experience": 100
+  }
+}

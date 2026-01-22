@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building",
+  "ingredients": [
+    "chronodawn:ancient_time_wood_log"
+  ],
+  "result": {
+    "id": "chronodawn:ancient_time_wood_planks",
+    "count": 4
+  }
+}

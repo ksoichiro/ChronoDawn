@@ -8,7 +8,7 @@
 // 3. No need to edit fabric/build.gradle or neoforge/build.gradle
 
 // Supported Minecraft versions
-def supportedVersions = ['1.20.1', '1.21.1']
+def supportedVersions = ['1.20.1', '1.21.1', '1.21.2']
 
 // Generate runClient tasks for each version
 supportedVersions.each { version ->

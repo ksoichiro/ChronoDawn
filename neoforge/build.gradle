@@ -30,21 +30,28 @@ sourceSets {
             }
         }
         resources {
-            // Default resources directory
-            srcDir 'src/main/resources'
+            // Clear default srcDirs to control order explicitly
+            srcDirs = []
 
-            // Add version-specific resources directory
+            // Version-specific resources FIRST (higher priority)
             def versionSpecificRes = file("src/main/resources-${project.ext.minecraft_version}")
             if (versionSpecificRes.exists()) {
                 srcDir versionSpecificRes
                 logger.lifecycle("NeoForge: Using version-specific resources: ${versionSpecificRes.name}")
             }
+
+            // Default resources SECOND (lower priority)
+            srcDir 'src/main/resources'
         }
     }
 }
 
+// Multi-version support: Determine which common module to use
+def commonModule = project.ext.minecraft_version == '1.20.1' ? ':common-1.20.1' :
+                   project.ext.minecraft_version == '1.21.2' ? ':common-1.21.2' : ':common-1.21.1'
+
 loom {
-    accessWidenerPath = project(":common").loom.accessWidenerPath
+    accessWidenerPath = project(commonModule).loom.accessWidenerPath
 
     runs {
         client {
@@ -98,11 +105,16 @@ dependencies {
         modApi "dev.architectury:architectury-neoforge:${architectury_api_version}"
     }
 
-    common(project(path: ":common", configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive false }
+    // Multi-version subproject dependencies
+    implementation(project(':common-base')) { transitive false }
+    common(project(path: commonModule, configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: commonModule, configuration: "transformProductionNeoForge")) { transitive false }
 }
 
 tasks.named("processResources", ProcessResources).configure {
+    // Ensure common module's NBT conversion completes before processing resources
+    dependsOn project(commonModule).tasks.named('convertNbtStructures')
+
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     inputs.property "version", project.version
 
@@ -113,7 +125,7 @@ tasks.named("processResources", ProcessResources).configure {
     // pack.mcmeta expansion is handled in root build.gradle (common for fabric/neoforge)
 
     // Include common resources (data, assets, pack.mcmeta)
-    from(project(":common").sourceSets.main.resources) {
+    from(project(commonModule).sourceSets.main.resources) {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         // Exclude loader-specific files
         exclude "fabric.mod.json"
@@ -144,7 +156,7 @@ tasks.named("jar").configure {
 
 tasks.named("sourcesJar").configure {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    def commonSources = project(":common").tasks.named("sourcesJar")
+    def commonSources = project(commonModule).tasks.named("sourcesJar")
     dependsOn commonSources
     from commonSources.flatMap { it.archiveFile }.map { zipTree(it) }
     archiveBaseName = rootProject.archives_name

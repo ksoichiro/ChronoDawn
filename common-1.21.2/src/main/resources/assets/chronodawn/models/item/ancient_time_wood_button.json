@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/button_inventory",
+  "textures": {
+    "texture": "chronodawn:block/ancient_time_wood_planks"
+  }
+}

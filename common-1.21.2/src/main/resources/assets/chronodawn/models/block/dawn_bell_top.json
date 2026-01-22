@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "chronodawn:block/dawn_bell_top"
+  }
+}

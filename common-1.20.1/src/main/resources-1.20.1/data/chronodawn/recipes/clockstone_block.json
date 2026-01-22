@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "CCC",
+    "CCC",
+    "CCC"
+  ],
+  "key": {
+    "C": {
+      "item": "chronodawn:clockstone"
+    }
+  },
+  "result": {
+    "item": "chronodawn:clockstone_block",
+    "count": 1
+  }
+}

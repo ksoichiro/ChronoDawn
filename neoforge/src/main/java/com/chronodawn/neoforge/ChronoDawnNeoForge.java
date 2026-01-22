@@ -84,10 +84,16 @@ public class ChronoDawnNeoForge {
 
     /**
      * Server tick event handler for NeoForge.
-     * Registers pending boss room protections.
-     * Check every 100 ticks (5 seconds) instead of every tick to reduce load.
+     * Processes pending portal teleports and registers pending boss room protections.
+     * Check boss room protections every 100 ticks (5 seconds) instead of every tick to reduce load.
+     * Process portal teleports every tick to ensure responsiveness.
      */
     private void onServerTick(ServerTickEvent.Post event) {
+        // Process pending portal teleports (every tick, version-specific)
+        // CRITICAL: This must run after ALL entity ticks to avoid ConcurrentModificationException
+        VersionSpecificServerHelper.processPendingTeleports(event.getServer());
+
+        // Process boss room protections (every 100 ticks)
         tickCounter++;
         if (tickCounter >= 100) {
             tickCounter = 0;

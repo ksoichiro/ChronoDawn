@@ -138,12 +138,12 @@ This mod is built with **Architectury** and supports **both Fabric and NeoForge*
 - Shared codebase ensures consistent experience across loaders
 
 ### Requirements
-- **Minecraft**: Java Edition 1.21.1
-- **Mod Loader**:
-  - Fabric Loader 0.17.3+ with Fabric API 0.116.7+
-  - OR NeoForge 21.1.209+
+- **Minecraft**: Java Edition 1.21.1 or 1.21.2
+- **Mod Loader** (version depends on Minecraft version):
+  - **For 1.21.1**: Fabric Loader 0.17.3+ with Fabric API 0.116.7+, OR NeoForge 21.1.209+
+  - **For 1.21.2**: Fabric Loader 0.17.3+ with Fabric API, OR NeoForge 21.2.0-beta+
 - **Dependencies**:
-  - **Architectury API** 13.0.8+ (required for both loaders)
+  - **Architectury API** 13.0.8+ (for 1.21.1) or 14.0.4+ (for 1.21.2)
 
 ### Compatibility
 - Works with most dimension and world generation mods
@@ -205,6 +205,6 @@ Check out the **Gallery** tab above for screenshots showcasing:
 
 ---
 
-**Developed for Minecraft Java Edition 1.21.1**
+**Developed for Minecraft Java Edition 1.21.1 / 1.21.2**
 
 Master time. Conquer Chrono Dawn. 🕰️

@@ -56,12 +56,12 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed information.
 ## Requirements
 
 ### For Players
-- **Minecraft**: Java Edition 1.21.1
-- **Mod Loader**:
-  - Fabric Loader 0.17.3+ with Fabric API 0.116.7+
-  - OR NeoForge 21.1.209+
+- **Minecraft**: Java Edition 1.21.1 or 1.21.2
+- **Mod Loader** (version depends on Minecraft version):
+  - **For 1.21.1**: Fabric Loader 0.17.3+ with Fabric API 0.116.7+, OR NeoForge 21.1.209+
+  - **For 1.21.2**: Fabric Loader 0.17.3+ with Fabric API, OR NeoForge 21.2.0-beta+
 - **Dependencies**:
-  - **Architectury API** 13.0.8+ (required for both loaders)
+  - **Architectury API** 13.0.8+ (for 1.21.1) or 14.0.4+ (for 1.21.2)
 
 ### For Developers
 - **Java Development Kit (JDK)**: 21 or higher
@@ -81,14 +81,24 @@ cd ChronoDawn
 
 Chrono Dawn supports multiple Minecraft versions from the same codebase:
 - **1.20.1**: Fabric only (legacy support) - *NeoForge requires Minecraft 1.20.5+*
-- **1.21.1**: NeoForge/Fabric (current version, default)
+- **1.21.1**: NeoForge/Fabric (stable)
+- **1.21.2**: NeoForge/Fabric (current version, default)
 
 ### Build for Specific Minecraft Version
 
-#### Build for Minecraft 1.21.1 (Default)
+#### Build for Minecraft 1.21.2 (Default)
 ```bash
 # Shortcut command (recommended)
-./gradlew build1211
+./gradlew build1_21_2
+
+# Or explicit version
+./gradlew build -Ptarget_mc_version=1.21.2
+```
+
+#### Build for Minecraft 1.21.1
+```bash
+# Shortcut command (recommended)
+./gradlew build1_21_1
 
 # Or explicit version
 ./gradlew build -Ptarget_mc_version=1.21.1
@@ -97,7 +107,7 @@ Chrono Dawn supports multiple Minecraft versions from the same codebase:
 #### Build for Minecraft 1.20.1
 ```bash
 # Shortcut command (recommended)
-./gradlew build1201
+./gradlew build1_20_1
 
 # Or explicit version
 ./gradlew build -Ptarget_mc_version=1.20.1
@@ -105,25 +115,25 @@ Chrono Dawn supports multiple Minecraft versions from the same codebase:
 
 #### Build for All Versions
 ```bash
-# Build both 1.20.1 and 1.21.1 sequentially
+# Build all supported versions sequentially
 ./gradlew buildAll
 ```
 
-**Output Files** (example for 1.21.1):
-- `fabric/build/libs/chronodawn-0.4.0-beta+1.21.1-fabric.jar` - Fabric loader JAR
-- `neoforge/build/libs/chronodawn-0.4.0-beta+1.21.1-neoforge.jar` - NeoForge loader JAR
+**Output Files** (example for 1.21.2):
+- `fabric/build/libs/chronodawn-0.4.0-beta+1.21.2-fabric.jar` - Fabric loader JAR
+- `neoforge/build/libs/chronodawn-0.4.0-beta+1.21.2-neoforge.jar` - NeoForge loader JAR
 - `common/build/libs/common-0.4.0-beta.jar` - Common module (not usable standalone)
 
 ### Build Specific Loader
 
 #### Fabric Only
 ```bash
-./gradlew :fabric:build -Ptarget_mc_version=1.21.1
+./gradlew :fabric:build -Ptarget_mc_version=1.21.2
 ```
 
 #### NeoForge Only
 ```bash
-./gradlew :neoforge:build -Ptarget_mc_version=1.21.1
+./gradlew :neoforge:build -Ptarget_mc_version=1.21.2
 ```
 
 ## Development Setup
@@ -227,20 +237,27 @@ gradlew.bat test
 
 **⚠️ Important**: Version 0.3.0 is NOT compatible with v0.2.0 worlds. Back up your world or start a new one.
 
-### For Fabric
-1. Install Minecraft 1.21.1
+### For Fabric (Minecraft 1.21.2)
+1. Install Minecraft 1.21.2
 2. Install Fabric Loader 0.17.3+
-3. Download and install Fabric API 0.116.7+
-4. Download and install Architectury API 13.0.8+
-5. Copy `chronodawn-0.4.0-beta+1.21.1-fabric.jar` to `.minecraft/mods/` folder
+3. Download and install Fabric API
+4. Download and install Architectury API 14.0.4+
+5. Copy `chronodawn-0.4.0-beta+1.21.2-fabric.jar` to `.minecraft/mods/` folder
 6. Launch Minecraft with Fabric profile
 
-### For NeoForge
-1. Install Minecraft 1.21.1
-2. Install NeoForge 21.1.209+
-3. Download and install Architectury API 13.0.8+
-4. Copy `chronodawn-0.4.0-beta+1.21.1-neoforge.jar` to `.minecraft/mods/` folder
+### For NeoForge (Minecraft 1.21.2)
+1. Install Minecraft 1.21.2
+2. Install NeoForge 21.2.0-beta+
+3. Download and install Architectury API 14.0.4+
+4. Copy `chronodawn-0.4.0-beta+1.21.2-neoforge.jar` to `.minecraft/mods/` folder
 5. Launch Minecraft with NeoForge profile
+
+### For Minecraft 1.21.1
+Use the same steps above, but with:
+- Minecraft 1.21.1
+- NeoForge 21.1.209+ or Fabric Loader 0.17.3+ with Fabric API 0.116.7+
+- Architectury API 13.0.8+
+- JAR files with `+1.21.1` in the filename
 
 **Note**: Download the correct version for your mod loader (Fabric or NeoForge).
 
@@ -329,4 +346,4 @@ For issues, feature requests, or questions:
 
 ---
 
-**Developed for Minecraft Java Edition 1.21.1**
+**Developed for Minecraft Java Edition 1.21.1 / 1.21.2**

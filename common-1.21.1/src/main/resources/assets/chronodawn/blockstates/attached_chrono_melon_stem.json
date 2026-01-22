@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "chronodawn:block/attached_chrono_melon_stem",
+      "y": 180
+    },
+    "facing=north": {
+      "model": "chronodawn:block/attached_chrono_melon_stem",
+      "y": 90
+    },
+    "facing=south": {
+      "model": "chronodawn:block/attached_chrono_melon_stem",
+      "y": 270
+    },
+    "facing=west": {
+      "model": "chronodawn:block/attached_chrono_melon_stem"
+    }
+  }
+}

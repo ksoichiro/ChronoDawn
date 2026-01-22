@@ -1,0 +1,30 @@
+{
+  "parent": "chronodawn:food/first_time_fruit",
+  "criteria": {
+    "consumed_time_jam": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "items": [
+            "chronodawn:time_jam"
+          ]
+        }
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "item": "chronodawn:time_jam"
+    },
+    "title": {
+      "translate": "advancements.chronodawn.time_jam.title"
+    },
+    "description": {
+      "translate": "advancements.chronodawn.time_jam.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "chronodawn:dark_time_wood_log"
+    }
+  },
+  "result": {
+    "item": "chronodawn:dark_time_wood",
+    "count": 3
+  }
+}

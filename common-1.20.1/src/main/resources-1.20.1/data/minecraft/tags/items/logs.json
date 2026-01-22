@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "chronodawn:time_wood_log",
+    "chronodawn:stripped_time_wood_log",
+    "chronodawn:time_wood",
+    "chronodawn:stripped_time_wood",
+    "chronodawn:dark_time_wood_log",
+    "chronodawn:stripped_dark_time_wood_log",
+    "chronodawn:dark_time_wood",
+    "chronodawn:stripped_dark_time_wood",
+    "chronodawn:ancient_time_wood_log",
+    "chronodawn:stripped_ancient_time_wood_log",
+    "chronodawn:ancient_time_wood",
+    "chronodawn:stripped_ancient_time_wood"
+  ]
+}

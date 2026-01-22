@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "chronodawn",
+  "version": "${version}",
+  "name": "Chrono Dawn",
+  "description": "A time manipulation themed Minecraft mod featuring the Chrono Dawn dimension",
+  "authors": [
+    "ksoichiro"
+  ],
+  "contact": {
+    "homepage": "https://github.com/ksoichiro/ChronoDawn",
+    "sources": "https://github.com/ksoichiro/ChronoDawn"
+  },
+  "license": "LGPL-3.0",
+  "icon": "assets/chronodawn/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.chronodawn.fabric.ChronoDawnFabric"
+    ],
+    "client": [
+      "com.chronodawn.fabric.client.ChronoDawnClientFabric"
+    ]
+  },
+  "mixins": [
+    "chronodawn-fabric.mixins.json",
+    "chronodawn-fabric-compat.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.15.11",
+    "fabric-api": "*",
+    "architectury": ">=13.0.8",
+    "minecraft": "~1.21.2",
+    "java": ">=21"
+  }
+}

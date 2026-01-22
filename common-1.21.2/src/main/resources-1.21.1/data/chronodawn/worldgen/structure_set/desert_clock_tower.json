@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "chronodawn:desert_clock_tower",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 1663542342,
+    "spacing": 30,
+    "separation": 10
+  }
+}
