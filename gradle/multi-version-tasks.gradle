@@ -111,3 +111,72 @@ tasks.register('buildAll') {
         logger.lifecycle('')
     }
 }
+
+// ============================================================
+// GameTest Tasks
+// ============================================================
+
+/**
+ * Run GameTests for all supported Minecraft versions and loaders
+ * Usage: ./gradlew gameTestAll
+ *
+ * Runs:
+ *   - fabric:runGameTest for 1.20.1, 1.21.1, 1.21.2
+ *   - neoforge:runGameTestServer for 1.21.1, 1.21.2
+ */
+tasks.register('gameTestAll') {
+    group = 'chrono dawn test'
+    description = 'Run GameTests for all supported Minecraft versions and loaders'
+
+    doLast {
+        def configurations = [
+            [loader: 'fabric', task: 'runGameTest', version: '1.20.1'],
+            [loader: 'fabric', task: 'runGameTest', version: '1.21.1'],
+            [loader: 'fabric', task: 'runGameTest', version: '1.21.2'],
+            [loader: 'neoforge', task: 'runGameTestServer', version: '1.21.1'],
+            [loader: 'neoforge', task: 'runGameTestServer', version: '1.21.2'],
+        ]
+        def passed = []
+        def failed = []
+
+        configurations.each { config ->
+            def label = "${config.loader} ${config.version}"
+            logger.lifecycle('')
+            logger.lifecycle(">>> Running GameTests: ${label}...")
+            logger.lifecycle('')
+
+            try {
+                project.exec {
+                    commandLine './gradlew', 'clean', ":${config.loader}:${config.task}", "-Ptarget_mc_version=${config.version}"
+                    errorOutput = System.err
+                }
+                logger.lifecycle("PASSED: ${label}")
+                passed.add(label)
+            } catch (Exception e) {
+                logger.error("FAILED: ${label}")
+                failed.add(label)
+            }
+        }
+
+        logger.lifecycle('')
+        logger.lifecycle('====================================================')
+        logger.lifecycle('GameTest Summary:')
+        logger.lifecycle('====================================================')
+
+        passed.each { label ->
+            logger.lifecycle("   PASSED: ${label}")
+        }
+        failed.each { label ->
+            logger.lifecycle("   FAILED: ${label}")
+        }
+
+        logger.lifecycle('')
+        logger.lifecycle("Total: ${passed.size()} passed, ${failed.size()} failed")
+        logger.lifecycle('====================================================')
+        logger.lifecycle('')
+
+        if (!failed.isEmpty()) {
+            throw new GradleException("GameTests failed for: ${failed.join(', ')}")
+        }
+    }
+}

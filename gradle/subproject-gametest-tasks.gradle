@@ -1,0 +1,49 @@
+// Multi-version GameTest run tasks for subprojects (fabric, neoforge)
+// This script dynamically generates GameTest tasks for all supported Minecraft versions.
+//
+// HOW TO ADD A NEW VERSION:
+// 1. Add the version to the supportedVersions list below
+// 2. Add NeoForge-unsupported versions to neoforgeUnsupported if applicable
+// 3. Tasks will be auto-generated for supported loader/version combinations
+//
+// Generated tasks:
+//   fabric:runGameTest1_20_1, fabric:runGameTest1_21_1, fabric:runGameTest1_21_2
+//   neoforge:runGameTestServer1_21_1, neoforge:runGameTestServer1_21_2
+
+// Supported Minecraft versions
+def supportedVersions = ['1.20.1', '1.21.1', '1.21.2']
+
+// Versions not supported by NeoForge (uses Forge instead)
+def neoforgeUnsupported = ['1.20.1']
+
+// Base task name differs per loader
+def baseTaskName = project.name == 'neoforge' ? 'runGameTestServer' : 'runGameTest'
+
+// Generate GameTest tasks for each supported version
+supportedVersions.each { version ->
+    if (project.name == 'neoforge' && neoforgeUnsupported.contains(version)) {
+        return
+    }
+
+    def taskName = "${baseTaskName}${version.replace('.', '_')}"
+
+    tasks.register(taskName) {
+        group = 'chrono dawn test'
+        description = "Run ${project.name} GameTests for Minecraft ${version}"
+
+        doFirst {
+            logger.lifecycle('')
+            logger.lifecycle('====================================')
+            logger.lifecycle("Running ${project.name} GameTests for Minecraft ${version}...")
+            logger.lifecycle('====================================')
+            logger.lifecycle('')
+        }
+
+        doLast {
+            project.exec {
+                workingDir rootProject.projectDir
+                commandLine './gradlew', "clean", ":${project.name}:${baseTaskName}", "-Ptarget_mc_version=${version}"
+            }
+        }
+    }
+}
