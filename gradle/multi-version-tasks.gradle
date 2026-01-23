@@ -120,12 +120,19 @@ tasks.register('buildAll') {
  * Run GameTests for all supported Minecraft versions and loaders
  * Usage: ./gradlew gameTestAll
  *
- * Runs sequentially (Architectury Loom requires isolated build state per configuration):
- *   - fabric:runGameTest for 1.20.1, 1.21.1, 1.21.2
- *   - neoforge:runGameTestServer for 1.21.1, 1.21.2
+ * Runs in parallel groups (fabric + neoforge can run concurrently since they
+ * use separate .gradle/architectury/ directories for runtime transformer config).
+ * Within the same platform, versions run sequentially to avoid .gradle/architectury/
+ * file conflicts (paths are hardcoded in Architectury Plugin with no API to override).
  *
- * Each run uses clean to prevent Architectury Transformer from picking up
- * stale dev JARs from other version configurations.
+ * Each process uses -PbuildDirSuffix to isolate build output directories,
+ * eliminating the need for 'clean' between runs.
+ *
+ * Groups:
+ *   1. fabric 1.20.1 || neoforge 1.21.1
+ *   2. fabric 1.21.1 || neoforge 1.21.2
+ *   3. fabric 1.21.2
+ *
  * Individual log files are saved to build/gametest-*.log for debugging.
  */
 tasks.register('gameTestAll') {
@@ -133,55 +140,109 @@ tasks.register('gameTestAll') {
     description = 'Run GameTests for all supported Minecraft versions and loaders'
 
     doLast {
-        def configurations = [
-            [loader: 'fabric', task: 'runGameTest', version: '1.20.1'],
-            [loader: 'fabric', task: 'runGameTest', version: '1.21.1'],
-            [loader: 'fabric', task: 'runGameTest', version: '1.21.2'],
-            [loader: 'neoforge', task: 'runGameTestServer', version: '1.21.1'],
-            [loader: 'neoforge', task: 'runGameTestServer', version: '1.21.2'],
+        // Each group contains configs that can run in parallel (different platforms).
+        // Groups run sequentially (same platform must not overlap due to
+        // .gradle/architectury/ path being hardcoded in Architectury Plugin).
+        def groups = [
+            [
+                [loader: 'fabric', task: 'runGameTest', version: '1.20.1'],
+                [loader: 'neoforge', task: 'runGameTestServer', version: '1.21.1'],
+            ],
+            [
+                [loader: 'fabric', task: 'runGameTest', version: '1.21.1'],
+                [loader: 'neoforge', task: 'runGameTestServer', version: '1.21.2'],
+            ],
+            [
+                [loader: 'fabric', task: 'runGameTest', version: '1.21.2'],
+            ],
         ]
-        def passed = []
-        def failed = []
+
+        def passed = java.util.Collections.synchronizedList([])
+        def failed = java.util.Collections.synchronizedList([])
 
         def gradlew = new File(projectDir, 'gradlew').absolutePath
         def logDir = new File(projectDir, 'build')
         logDir.mkdirs()
 
-        configurations.each { config ->
-            def label = "${config.loader} ${config.version}"
-            def suffix = "${config.version}-${config.loader}"
+        groups.eachWithIndex { group, groupIdx ->
             logger.lifecycle('')
-            logger.lifecycle(">>> Running GameTests: ${label}...")
+            logger.lifecycle("--- Group ${groupIdx + 1}/${groups.size()} ---")
 
-            def cmd = [
-                gradlew, 'clean',
-                ':' + config.loader + ':' + config.task,
-                '-Ptarget_mc_version=' + config.version,
-                '--parallel',
-                '--stacktrace'
-            ] as List<String>
+            def threads = []
 
-            def logFile = new File(logDir, 'gametest-' + suffix + '.log')
+            group.each { config ->
+                def label = config.loader + ' ' + config.version
+                def suffix = config.version + '-' + config.loader
 
-            try {
-                def pb = new ProcessBuilder(cmd)
-                pb.directory(projectDir)
-                pb.redirectErrorStream(true)
-                pb.redirectOutput(logFile)
+                logger.lifecycle(">>> Starting GameTests: ${label}...")
 
-                def process = pb.start()
-                def exitCode = process.waitFor()
+                def thread = new Thread({
+                    def cmd = [
+                        gradlew,
+                        ':' + config.loader + ':' + config.task,
+                        '-Ptarget_mc_version=' + config.version,
+                        '-PbuildDirSuffix=' + suffix,
+                        '--parallel',
+                        '--stacktrace'
+                    ] as List<String>
 
-                if (exitCode == 0) {
+                    def logFile = new File(logDir, 'gametest-' + suffix + '.log')
+
+                    try {
+                        def pb = new ProcessBuilder(cmd)
+                        pb.directory(projectDir)
+                        pb.redirectErrorStream(true)
+                        pb.redirectOutput(logFile)
+
+                        def process = pb.start()
+                        def exitCode = process.waitFor()
+
+                        if (exitCode == 0) {
+                            passed.add(label)
+                        } else {
+                            failed.add(label + ' (see ' + logFile.absolutePath + ')')
+                        }
+                    } catch (Exception e) {
+                        failed.add(label + ' (' + e.message + ')')
+                    }
+                }, 'gametest-' + suffix)
+
+                thread.start()
+                threads.add(thread)
+            }
+
+            // Wait for all threads in this group to complete
+            threads.each { it.join() }
+
+            // Report group results
+            group.each { config ->
+                def label = config.loader + ' ' + config.version
+                if (passed.contains(label)) {
                     logger.lifecycle("    PASSED: ${label}")
-                    passed.add(label)
-                } else {
-                    logger.error("    FAILED: ${label} (see ${logFile.absolutePath})")
-                    failed.add(label)
                 }
-            } catch (Exception e) {
-                logger.error("    ERROR: ${label} - ${e.message}")
-                failed.add(label)
+            }
+            group.each { config ->
+                def label = config.loader + ' ' + config.version
+                def failEntry = failed.find { it.startsWith(label) }
+                if (failEntry) {
+                    logger.error("    FAILED: ${failEntry}")
+                }
+            }
+        }
+
+        // Clean up parallel build directories in root and all subdirectories
+        // that contain build.gradle (i.e., all subprojects)
+        def dirsToClean = [projectDir]
+        projectDir.eachDir { dir ->
+            if (new File(dir, 'build.gradle').exists()) {
+                dirsToClean.add(dir)
+            }
+        }
+        dirsToClean.each { dir ->
+            dir.eachFile { file ->
+                if (file.isDirectory() && file.name.startsWith('build-')) {
+                    file.deleteDir()
+                }
             }
         }
 
@@ -190,11 +251,11 @@ tasks.register('gameTestAll') {
         logger.lifecycle('GameTest Summary:')
         logger.lifecycle('====================================================')
 
-        passed.each { label ->
+        passed.sort().each { label ->
             logger.lifecycle("   PASSED: ${label}")
         }
-        failed.each { label ->
-            logger.lifecycle("   FAILED: ${label}")
+        failed.sort().each { entry ->
+            logger.lifecycle("   FAILED: ${entry}")
         }
 
         logger.lifecycle('')
@@ -204,7 +265,7 @@ tasks.register('gameTestAll') {
         logger.lifecycle('')
 
         if (!failed.isEmpty()) {
-            throw new GradleException("GameTests failed for: ${failed.join(', ')}")
+            throw new GradleException("GameTests failed for: ${failed.collect { it.split(' \\(')[0] }.join(', ')}")
         }
     }
 }

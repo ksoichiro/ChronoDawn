@@ -36,6 +36,14 @@ allprojects {
     version = rootProject.mod_version
 }
 
+// Parallel gameTest support: isolate build directories per configuration
+// to prevent dev JAR conflicts between different MC version builds.
+if (project.hasProperty('buildDirSuffix')) {
+    allprojects {
+        layout.buildDirectory = file("${projectDir}/build-${rootProject.property('buildDirSuffix')}")
+    }
+}
+
 subprojects {
     apply plugin: 'dev.architectury.loom'
     apply plugin: 'architectury-plugin'
