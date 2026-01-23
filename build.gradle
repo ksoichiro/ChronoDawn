@@ -97,3 +97,6 @@ subprojects {
 
 // Multi-version build and run tasks (Phase 5: Build Script Enhancement)
 apply from: 'gradle/multi-version-tasks.gradle'
+
+// Resource validation (JSON syntax and cross-reference checks)
+apply from: 'gradle/resource-validation.gradle'

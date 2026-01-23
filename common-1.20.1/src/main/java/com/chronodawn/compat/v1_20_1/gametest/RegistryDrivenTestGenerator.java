@@ -17,11 +17,19 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
 /**
@@ -42,6 +50,14 @@ public final class RegistryDrivenTestGenerator {
         "FRUIT_OF_TIME_BLOCK", "fruit_of_time",
         "CHRONO_DAWN_BOAT", "chronodawn_boat",
         "CHRONO_DAWN_CHEST_BOAT", "chronodawn_chest_boat"
+    );
+
+    // Technical blocks/entities that don't need player-facing translations
+    private static final Set<String> TRANSLATION_EXCLUDED_BLOCKS = Set.of(
+        "CHRONO_DAWN_PORTAL"
+    );
+    private static final Set<String> TRANSLATION_EXCLUDED_ENTITIES = Set.of(
+        "GEAR_PROJECTILE", "TIME_ARROW"
     );
 
     public record NamedTest(String name, Consumer<GameTestHelper> test, int timeoutTicks) {
@@ -311,6 +327,129 @@ public final class RegistryDrivenTestGenerator {
     }
 
     /**
+     * Generates tests verifying blockstate JSON files exist for all registered blocks.
+     */
+    public static List<NamedTest> generateBlockstateExistenceTests() {
+        List<NamedTest> tests = new ArrayList<>();
+        for (Field field : ModBlocks.class.getDeclaredFields()) {
+            if (!isRegistrySupplierField(field)) continue;
+            String fieldName = field.getName();
+            String expectedId = ID_OVERRIDES.getOrDefault(fieldName, fieldName.toLowerCase());
+            String resourcePath = "assets/chronodawn/blockstates/" + expectedId + ".json";
+            tests.add(new NamedTest("blockstate_exists_" + expectedId, helper -> {
+                helper.runAfterDelay(1, () -> {
+                    if (resourceExists(resourcePath)) {
+                        helper.succeed();
+                    } else {
+                        helper.fail("Missing blockstate file: " + resourcePath);
+                    }
+                });
+            }));
+        }
+        return tests;
+    }
+
+    /**
+     * Generates tests verifying item model JSON files exist for all registered items.
+     * Excludes block items (items that have a corresponding field in ModBlocks).
+     */
+    public static List<NamedTest> generateItemModelExistenceTests() {
+        Set<String> blockFieldNames = getBlockFieldNames();
+        List<NamedTest> tests = new ArrayList<>();
+        for (Field field : ModItems.class.getDeclaredFields()) {
+            if (!isRegistrySupplierField(field)) continue;
+            String fieldName = field.getName();
+            if (blockFieldNames.contains(fieldName)) continue;
+            String expectedId = ID_OVERRIDES.getOrDefault(fieldName, fieldName.toLowerCase());
+            String resourcePath = "assets/chronodawn/models/item/" + expectedId + ".json";
+            tests.add(new NamedTest("item_model_exists_" + expectedId, helper -> {
+                helper.runAfterDelay(1, () -> {
+                    if (resourceExists(resourcePath)) {
+                        helper.succeed();
+                    } else {
+                        helper.fail("Missing item model file: " + resourcePath);
+                    }
+                });
+            }));
+        }
+        return tests;
+    }
+
+    /**
+     * Generates tests verifying translation keys exist for all registered items, blocks, and entities.
+     * Excludes POTTED_* blocks which may not have their own translation keys.
+     */
+    public static List<NamedTest> generateTranslationKeyTests() {
+        List<NamedTest> tests = new ArrayList<>();
+        Map<String, String> langMap = loadLangFile();
+        if (langMap.isEmpty()) {
+            tests.add(new NamedTest("translation_lang_file_load", helper -> {
+                helper.runAfterDelay(1, () -> helper.fail("Failed to load en_us.json lang file"));
+            }));
+            return tests;
+        }
+
+        // Items (block items use block.chronodawn.<id> as translation key)
+        Set<String> blockFieldNames = getBlockFieldNames();
+        for (Field field : ModItems.class.getDeclaredFields()) {
+            if (!isRegistrySupplierField(field)) continue;
+            String fieldName = field.getName();
+            String expectedId = ID_OVERRIDES.getOrDefault(fieldName, fieldName.toLowerCase());
+            String translationKey = blockFieldNames.contains(fieldName)
+                ? "block.chronodawn." + expectedId
+                : "item.chronodawn." + expectedId;
+            tests.add(new NamedTest("translation_item_" + expectedId, helper -> {
+                helper.runAfterDelay(1, () -> {
+                    if (langMap.containsKey(translationKey)) {
+                        helper.succeed();
+                    } else {
+                        helper.fail("Missing translation key: " + translationKey);
+                    }
+                });
+            }));
+        }
+
+        // Blocks (exclude POTTED_* and technical blocks)
+        for (Field field : ModBlocks.class.getDeclaredFields()) {
+            if (!isRegistrySupplierField(field)) continue;
+            String fieldName = field.getName();
+            if (fieldName.startsWith("POTTED_")) continue;
+            if (TRANSLATION_EXCLUDED_BLOCKS.contains(fieldName)) continue;
+            String expectedId = ID_OVERRIDES.getOrDefault(fieldName, fieldName.toLowerCase());
+            String translationKey = "block.chronodawn." + expectedId;
+            tests.add(new NamedTest("translation_block_" + expectedId, helper -> {
+                helper.runAfterDelay(1, () -> {
+                    if (langMap.containsKey(translationKey)) {
+                        helper.succeed();
+                    } else {
+                        helper.fail("Missing translation key: " + translationKey);
+                    }
+                });
+            }));
+        }
+
+        // Entities (exclude technical entities like projectiles)
+        for (Field field : ModEntities.class.getDeclaredFields()) {
+            if (!isRegistrySupplierField(field)) continue;
+            String fieldName = field.getName();
+            if (TRANSLATION_EXCLUDED_ENTITIES.contains(fieldName)) continue;
+            String expectedId = ID_OVERRIDES.getOrDefault(fieldName, fieldName.toLowerCase());
+            String translationKey = "entity.chronodawn." + expectedId;
+            tests.add(new NamedTest("translation_entity_" + expectedId, helper -> {
+                helper.runAfterDelay(1, () -> {
+                    if (langMap.containsKey(translationKey)) {
+                        helper.succeed();
+                    } else {
+                        helper.fail("Missing translation key: " + translationKey);
+                    }
+                });
+            }));
+        }
+
+        return tests;
+    }
+
+    /**
      * Generate all tests from all categories.
      */
     public static List<NamedTest> generateAllTests() {
@@ -327,6 +466,9 @@ public final class RegistryDrivenTestGenerator {
         all.addAll(generateFoodPropertyTests());
         all.addAll(generateBlockItemConsistencyTests());
         all.addAll(generateEquipmentStackSizeTests());
+        all.addAll(generateBlockstateExistenceTests());
+        all.addAll(generateItemModelExistenceTests());
+        all.addAll(generateTranslationKeyTests());
         all.addAll(generateBossFightTests());
         return all;
     }
@@ -375,5 +517,33 @@ public final class RegistryDrivenTestGenerator {
             case "knockback_resistance" -> entity.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE);
             default -> throw new IllegalArgumentException("Unknown attribute: " + attributeName);
         };
+    }
+
+    private static boolean resourceExists(String path) {
+        return RegistryDrivenTestGenerator.class.getClassLoader().getResource(path) != null;
+    }
+
+    private static Map<String, String> loadLangFile() {
+        try (InputStream is = RegistryDrivenTestGenerator.class.getClassLoader()
+                .getResourceAsStream("assets/chronodawn/lang/en_us.json")) {
+            if (is == null) return Collections.emptyMap();
+            Gson gson = new Gson();
+            return gson.fromJson(
+                new InputStreamReader(is, StandardCharsets.UTF_8),
+                new TypeToken<Map<String, String>>() {}.getType()
+            );
+        } catch (Exception e) {
+            return Collections.emptyMap();
+        }
+    }
+
+    private static Set<String> getBlockFieldNames() {
+        Set<String> names = new java.util.HashSet<>();
+        for (Field field : ModBlocks.class.getDeclaredFields()) {
+            if (isRegistrySupplierField(field)) {
+                names.add(field.getName());
+            }
+        }
+        return names;
     }
 }

@@ -1,0 +1,114 @@
+// Resource validation task: validates JSON syntax and cross-references in assets
+import groovy.json.JsonSlurper
+import groovy.json.JsonException
+
+tasks.register('validateResources') {
+    group = 'verification'
+    description = 'Validates JSON syntax and resource cross-references in assets'
+
+    doLast {
+        def resourceDir = file("${rootProject.projectDir}/common/src/main/resources")
+        def assetsDir = file("${resourceDir}/assets/chronodawn")
+        def errors = []
+
+        // 1. JSON syntax check
+        logger.lifecycle("Checking JSON syntax...")
+        def jsonSlurper = new JsonSlurper()
+        def jsonFiles = fileTree(dir: resourceDir, includes: ['**/*.json'])
+        jsonFiles.each { File jsonFile ->
+            try {
+                jsonSlurper.parseText(jsonFile.text)
+            } catch (JsonException e) {
+                errors << "JSON syntax error in ${jsonFile.relativePath(resourceDir)}: ${e.message}"
+            } catch (Exception e) {
+                errors << "Failed to parse ${jsonFile.relativePath(resourceDir)}: ${e.message}"
+            }
+        }
+        logger.lifecycle("  Checked ${jsonFiles.files.size()} JSON files")
+
+        // 2. Blockstate -> model reference check
+        logger.lifecycle("Checking blockstate -> model references...")
+        def blockstatesDir = file("${assetsDir}/blockstates")
+        def modelsBlockDir = file("${assetsDir}/models/block")
+        int blockstateRefs = 0
+        if (blockstatesDir.exists()) {
+            blockstatesDir.eachFileMatch(~/.+\.json/) { File bsFile ->
+                try {
+                    def bs = jsonSlurper.parseText(bsFile.text)
+                    def models = extractModelReferences(bs)
+                    models.each { String modelRef ->
+                        if (modelRef.startsWith("chronodawn:block/")) {
+                            def modelName = modelRef.replace("chronodawn:block/", "")
+                            def modelFile = new File(modelsBlockDir, "${modelName}.json")
+                            if (!modelFile.exists()) {
+                                errors << "Blockstate ${bsFile.name} references model '${modelRef}' but ${modelFile.name} does not exist"
+                            }
+                            blockstateRefs++
+                        }
+                    }
+                } catch (Exception e) {
+                    // JSON syntax errors already caught above
+                }
+            }
+        }
+        logger.lifecycle("  Checked ${blockstateRefs} blockstate -> model references")
+
+        // 3. Model -> texture reference check
+        logger.lifecycle("Checking model -> texture references...")
+        def modelsDir = file("${assetsDir}/models")
+        def texturesDir = file("${assetsDir}/textures")
+        int textureRefs = 0
+        if (modelsDir.exists()) {
+            fileTree(dir: modelsDir, includes: ['**/*.json']).each { File modelFile ->
+                try {
+                    def model = jsonSlurper.parseText(modelFile.text)
+                    if (model instanceof Map && model.textures instanceof Map) {
+                        model.textures.each { key, value ->
+                            if (value instanceof String && value.startsWith("chronodawn:")) {
+                                def texturePath = value.replace("chronodawn:", "")
+                                def textureFile = new File(texturesDir, "${texturePath}.png")
+                                if (!textureFile.exists()) {
+                                    def relativePath = modelFile.toPath().relativize(modelsDir.toPath()).toString()
+                                    def modelRelative = modelsDir.toPath().relativize(modelFile.toPath()).toString()
+                                    errors << "Model ${modelRelative} references texture '${value}' but ${texturePath}.png does not exist"
+                                }
+                                textureRefs++
+                            }
+                            // Skip minecraft: prefixed references
+                        }
+                    }
+                } catch (Exception e) {
+                    // JSON syntax errors already caught above
+                }
+            }
+        }
+        logger.lifecycle("  Checked ${textureRefs} model -> texture references")
+
+        // Report results
+        if (errors.isEmpty()) {
+            logger.lifecycle("Resource validation passed: all references are valid.")
+        } else {
+            errors.each { logger.error("  ERROR: ${it}") }
+            throw new GradleException("Resource validation failed with ${errors.size()} error(s)")
+        }
+    }
+}
+
+// Extract all model references from a blockstate JSON structure
+def extractModelReferences(Object node) {
+    def models = []
+    if (node instanceof Map) {
+        node.each { key, value ->
+            if (key == "model" && value instanceof String) {
+                models << value
+            } else {
+                models.addAll(extractModelReferences(value))
+            }
+        }
+    } else if (node instanceof List) {
+        node.each { item ->
+            models.addAll(extractModelReferences(item))
+        }
+    }
+    return models
+}
