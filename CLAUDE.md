@@ -86,6 +86,7 @@ Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2): Follow standard conventions
 - When writing code, use Mojang mapping names (e.g., `net.minecraft.world.level.Level`, not Yarn's `class_XXXX`)
 - Build files use Groovy syntax (e.g., `maven { url 'https://...' }`, not `maven { url = "https://..." }`)
 - Common module code is bundled into Fabric JAR using Shadow plugin
+- **Parallel build constraint**: Architectury Plugin hardcodes `.gradle/architectury/` paths (private Kotlin lazy val, no setter/API), preventing parallel builds within the same platform (fabric×fabric or neoforge×neoforge). `gameTestAll` only parallelizes fabric‖neoforge pairs. See `docs/developer_guide.md` "gameTestAll Architecture" for details.
 
 ## Mixin Configuration
 

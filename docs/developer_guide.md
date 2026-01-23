@@ -522,24 +522,20 @@ public static final RegistrySupplier<EntityType<MyEntity>> MY_ENTITY = ENTITIES.
 
 **Framework**: JUnit 5
 
-**Location**: `common/src/test/java/com/chronodawn/unit/`
+**Location**: `common-1.21.2/src/test/java/com/chronodawn/unit/`
 
-**Example Test**:
-```java
-@Test
-public void testTimeHourglassActivation() {
-    // Test portal activation logic
-    PortalRegistry registry = new PortalRegistry();
-    BlockPos portalPos = new BlockPos(0, 64, 0);
+**Test Types**:
 
-    registry.setPortalState(portalPos, PortalState.ACTIVE);
-    assertEquals(PortalState.ACTIVE, registry.getPortalState(portalPos));
-}
-```
+- **ResourceValidationTest** — Uses `@TestFactory` to generate dynamic tests that verify the following without launching a Minecraft server:
+  - Blockstate JSON existence for all blocks
+  - Item model JSON existence for all items
+  - Translation key completeness (`en_us.json`)
+
+  Parses source files to extract `RegistrySupplier` field names and validates resource existence via `ClassLoader.getResource()` (~0.1s for 402 tests).
 
 **Run Tests**:
 ```bash
-./gradlew test
+./gradlew :common-1.21.2:test
 ```
 
 ### Integration Testing (GameTest)
@@ -556,11 +552,10 @@ public void testTimeHourglassActivation() {
 - **Entity spawning** — Verifies all entities can be spawned
 - **Tool durability / Armor defense** — Validates equipment properties
 - **Registry ID consistency** — Field names match registry IDs
-- **Blockstate existence** — All blocks have blockstate JSON files
-- **Item model existence** — All items have model JSON files
-- **Translation key completeness** — All items/blocks/entities have translations
 - **Food properties / Equipment stack size** — Property validation
 - **Boss fight tests** — Boss encounter mechanics
+
+> **Note**: Blockstate/model/translation existence tests have been migrated to JUnit (see Unit Testing above).
 
 **Run GameTests**:
 ```bash
@@ -572,6 +567,46 @@ public void testTimeHourglassActivation() {
 # Run for all versions and loaders
 ./gradlew gameTestAll
 ```
+
+### gameTestAll Architecture
+
+`gameTestAll` runs 5 configurations (fabric×3 versions + neoforge×2 versions) with partial parallelization.
+
+**Parallelization strategy**:
+```
+Group 1: fabric 1.20.1  ║  neoforge 1.21.1
+Group 2: fabric 1.21.1  ║  neoforge 1.21.2
+Group 3: fabric 1.21.2
+```
+
+Same-platform configurations run sequentially; different platforms run in parallel.
+
+**Technical constraint (Architectury Plugin)**:
+
+`ArchitectPluginExtension` in the Architectury Plugin hardcodes the runtime transformer configuration file paths:
+
+```
+<subproject>/.gradle/architectury/.properties   ← classpath info
+<subproject>/.gradle/architectury/.transforms    ← transformer config
+```
+
+These are defined as private Kotlin lazy val with no public setter or API to override. Consequently:
+
+- `fabric/.gradle/architectury/` — shared by all fabric version builds (potential conflict)
+- `neoforge/.gradle/architectury/` — shared by all neoforge version builds (potential conflict)
+- fabric and neoforge use different directories, so no conflict between them
+
+**Build directory isolation**:
+
+The `-PbuildDirSuffix=<version>-<loader>` parameter isolates build output directories for each process, enabling safe parallel execution without `clean` (configured via `layout.buildDirectory` in `build.gradle`).
+
+**Path to full parallelization**:
+
+Further speedup requires either forking the Architectury Plugin or submitting an upstream patch:
+- Make `PrepareArchitecturyTransformer` output path configurable
+- Alternatively, use git worktree to physically isolate project directories
+
+**Log files**: Each configuration's output is saved to `build/gametest-<version>-<loader>.log`.
 
 ### Resource Validation
 
