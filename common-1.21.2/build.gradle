@@ -25,6 +25,7 @@ dependencies {
     // Testing dependencies
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+    testImplementation 'com.google.code.gson:gson:2.10.1'
 }
 
 // Multi-version support: Configure source and resource directories
@@ -168,6 +169,8 @@ tasks.test {
 
     // Pass Minecraft version to tests for multi-version resource path resolution
     systemProperty 'chronodawn.minecraft.version', project.ext.minecraft_version
+    // Pass source directory for source-parsing based resource validation tests
+    systemProperty 'chronodawn.source.dir', file('src/main/java').absolutePath
 }
 
 // Set duplicates strategy for sourcesJar to avoid conflicts

@@ -12,6 +12,7 @@
 # Gradle
 .gradle/
 build/
+build-*/
 out/
 bin/
 
@@ -46,8 +47,11 @@ Thumbs.db
 
 # Architectury
 common/build/
+common/build-*/
 fabric/build/
+fabric/build-*/
 neoforge/build/
+neoforge/build-*/
 
 # Blockbench
 assets/*.java

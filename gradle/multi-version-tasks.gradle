@@ -120,9 +120,13 @@ tasks.register('buildAll') {
  * Run GameTests for all supported Minecraft versions and loaders
  * Usage: ./gradlew gameTestAll
  *
- * Runs:
+ * Runs sequentially (Architectury Loom requires isolated build state per configuration):
  *   - fabric:runGameTest for 1.20.1, 1.21.1, 1.21.2
  *   - neoforge:runGameTestServer for 1.21.1, 1.21.2
+ *
+ * Each run uses clean to prevent Architectury Transformer from picking up
+ * stale dev JARs from other version configurations.
+ * Individual log files are saved to build/gametest-*.log for debugging.
  */
 tasks.register('gameTestAll') {
     group = 'chrono dawn test'
@@ -139,21 +143,44 @@ tasks.register('gameTestAll') {
         def passed = []
         def failed = []
 
+        def gradlew = new File(projectDir, 'gradlew').absolutePath
+        def logDir = new File(projectDir, 'build')
+        logDir.mkdirs()
+
         configurations.each { config ->
             def label = "${config.loader} ${config.version}"
+            def suffix = "${config.version}-${config.loader}"
             logger.lifecycle('')
             logger.lifecycle(">>> Running GameTests: ${label}...")
-            logger.lifecycle('')
+
+            def cmd = [
+                gradlew, 'clean',
+                ':' + config.loader + ':' + config.task,
+                '-Ptarget_mc_version=' + config.version,
+                '--parallel',
+                '--stacktrace'
+            ] as List<String>
+
+            def logFile = new File(logDir, 'gametest-' + suffix + '.log')
 
             try {
-                project.exec {
-                    commandLine './gradlew', 'clean', ":${config.loader}:${config.task}", "-Ptarget_mc_version=${config.version}"
-                    errorOutput = System.err
+                def pb = new ProcessBuilder(cmd)
+                pb.directory(projectDir)
+                pb.redirectErrorStream(true)
+                pb.redirectOutput(logFile)
+
+                def process = pb.start()
+                def exitCode = process.waitFor()
+
+                if (exitCode == 0) {
+                    logger.lifecycle("    PASSED: ${label}")
+                    passed.add(label)
+                } else {
+                    logger.error("    FAILED: ${label} (see ${logFile.absolutePath})")
+                    failed.add(label)
                 }
-                logger.lifecycle("PASSED: ${label}")
-                passed.add(label)
             } catch (Exception e) {
-                logger.error("FAILED: ${label}")
+                logger.error("    ERROR: ${label} - ${e.message}")
                 failed.add(label)
             }
         }
@@ -172,6 +199,7 @@ tasks.register('gameTestAll') {
 
         logger.lifecycle('')
         logger.lifecycle("Total: ${passed.size()} passed, ${failed.size()} failed")
+        logger.lifecycle("Logs: ${logDir.absolutePath}/gametest-*.log")
         logger.lifecycle('====================================================')
         logger.lifecycle('')
 
