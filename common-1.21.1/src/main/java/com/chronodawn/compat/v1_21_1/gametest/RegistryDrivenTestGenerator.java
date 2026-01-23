@@ -1,6 +1,8 @@
 package com.chronodawn.gametest;
 
 import com.chronodawn.gametest.boss.BossFightTestLogic;
+import com.chronodawn.registry.ModItems;
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -9,6 +11,8 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -136,6 +140,45 @@ public final class RegistryDrivenTestGenerator {
     }
 
     /**
+     * Generates tests verifying that all item registry IDs match their field names.
+     *
+     * Uses reflection to scan ModItems for all RegistrySupplier fields and checks
+     * that each item's registry ID equals the field name in lowercase.
+     * This catches accidental ID changes that would break saves, recipes, and loot tables.
+     */
+    public static List<NamedTest> generateItemIdTests() {
+        List<NamedTest> tests = new ArrayList<>();
+        for (Field field : ModItems.class.getDeclaredFields()) {
+            if (!Modifier.isPublic(field.getModifiers())
+                || !Modifier.isStatic(field.getModifiers())
+                || !Modifier.isFinal(field.getModifiers())
+                || !RegistrySupplier.class.isAssignableFrom(field.getType())) {
+                continue;
+            }
+            String fieldName = field.getName();
+            String expectedId = fieldName.toLowerCase();
+            tests.add(new NamedTest("item_id_" + expectedId, helper -> {
+                helper.runAfterDelay(1, () -> {
+                    try {
+                        @SuppressWarnings("unchecked")
+                        RegistrySupplier<?> supplier = (RegistrySupplier<?>) field.get(null);
+                        String actualId = supplier.getId().getPath();
+                        if (actualId.equals(expectedId)) {
+                            helper.succeed();
+                        } else {
+                            helper.fail(fieldName + " has ID \"" + actualId +
+                                "\", expected \"" + expectedId + "\"");
+                        }
+                    } catch (Exception e) {
+                        helper.fail("Failed to check ID for " + fieldName + ": " + e.getMessage());
+                    }
+                });
+            }));
+        }
+        return tests;
+    }
+
+    /**
      * Generate all tests from all categories.
      */
     public static List<NamedTest> generateAllTests() {
@@ -145,6 +188,7 @@ public final class RegistryDrivenTestGenerator {
         all.addAll(generateToolDurabilityTests());
         all.addAll(generateArmorDefenseTests());
         all.addAll(generateEntityAttributeTests());
+        all.addAll(generateItemIdTests());
         all.addAll(generateBossFightTests());
         return all;
     }
