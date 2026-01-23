@@ -1,29 +1,34 @@
 package com.chronodawn.gametest;
 
 import com.chronodawn.gametest.boss.BossFightTestLogic;
+import com.chronodawn.registry.ModBlocks;
+import com.chronodawn.registry.ModEntities;
 import com.chronodawn.registry.ModItems;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 /**
  * Generates GameTest functions from registry-driven test data.
  *
- * This class reads test definitions from {@link RegistryDrivenTestData}
- * and produces named test functions that can be used by both Fabric and NeoForge.
- *
- * Version: 1.21.1 (uses ArmorItem.getDefense() API)
+ * Version: 1.21.1 (uses ArmorItem.getDefense() API, item.getFoodProperties())
  */
 public final class RegistryDrivenTestGenerator {
 
@@ -32,6 +37,13 @@ public final class RegistryDrivenTestGenerator {
     }
 
     public static final BlockPos TEST_POS = new BlockPos(1, 2, 1);
+
+    // Known cases where field name doesn't match registry ID (intentional naming differences)
+    private static final Map<String, String> ID_OVERRIDES = Map.of(
+        "FRUIT_OF_TIME_BLOCK", "fruit_of_time",
+        "CHRONO_DAWN_BOAT", "chronodawn_boat",
+        "CHRONO_DAWN_CHEST_BOAT", "chronodawn_chest_boat"
+    );
 
     public record NamedTest(String name, Consumer<GameTestHelper> test, int timeoutTicks) {
         public NamedTest(String name, Consumer<GameTestHelper> test) {
@@ -141,36 +153,157 @@ public final class RegistryDrivenTestGenerator {
 
     /**
      * Generates tests verifying that all item registry IDs match their field names.
-     *
-     * Uses reflection to scan ModItems for all RegistrySupplier fields and checks
-     * that each item's registry ID equals the field name in lowercase.
-     * This catches accidental ID changes that would break saves, recipes, and loot tables.
      */
     public static List<NamedTest> generateItemIdTests() {
+        return generateRegistryIdTests(ModItems.class, "item_id_");
+    }
+
+    /**
+     * Generates tests verifying that all block registry IDs match their field names.
+     */
+    public static List<NamedTest> generateBlockIdTests() {
+        return generateRegistryIdTests(ModBlocks.class, "block_id_");
+    }
+
+    /**
+     * Generates tests verifying that all entity registry IDs match their field names.
+     */
+    public static List<NamedTest> generateEntityIdTests() {
+        return generateRegistryIdTests(ModEntities.class, "entity_id_");
+    }
+
+    /**
+     * Generates tests verifying spawn egg items reference the correct entity.
+     */
+    public static List<NamedTest> generateSpawnEggEntityTests() {
         List<NamedTest> tests = new ArrayList<>();
         for (Field field : ModItems.class.getDeclaredFields()) {
-            if (!Modifier.isPublic(field.getModifiers())
-                || !Modifier.isStatic(field.getModifiers())
-                || !Modifier.isFinal(field.getModifiers())
-                || !RegistrySupplier.class.isAssignableFrom(field.getType())) {
-                continue;
-            }
+            if (!isRegistrySupplierField(field)) continue;
+            String fieldName = field.getName();
+            if (!fieldName.endsWith("_SPAWN_EGG")) continue;
+
+            String expectedEntityId = fieldName.substring(0, fieldName.length() - "_SPAWN_EGG".length()).toLowerCase();
+            tests.add(new NamedTest("spawn_egg_entity_" + expectedEntityId, helper -> {
+                helper.runAfterDelay(1, () -> {
+                    ResourceLocation entityId = ResourceLocation.fromNamespaceAndPath("chronodawn", expectedEntityId);
+                    if (BuiltInRegistries.ENTITY_TYPE.containsKey(entityId)) {
+                        helper.succeed();
+                    } else {
+                        helper.fail("Spawn egg " + fieldName + " expects entity \"" +
+                            expectedEntityId + "\" but it is not registered");
+                    }
+                });
+            }));
+        }
+        return tests;
+    }
+
+    /**
+     * Generates tests verifying food items have valid nutrition and saturation values.
+     */
+    public static List<NamedTest> generateFoodPropertyTests() {
+        List<NamedTest> tests = new ArrayList<>();
+        for (Field field : ModItems.class.getDeclaredFields()) {
+            if (!isRegistrySupplierField(field)) continue;
             String fieldName = field.getName();
             String expectedId = fieldName.toLowerCase();
-            tests.add(new NamedTest("item_id_" + expectedId, helper -> {
+            tests.add(new NamedTest("food_check_" + expectedId, helper -> {
+                helper.runAfterDelay(1, () -> {
+                    try {
+                        @SuppressWarnings("unchecked")
+                        RegistrySupplier<Item> supplier = (RegistrySupplier<Item>) field.get(null);
+                        ItemStack stack = new ItemStack(supplier.get());
+                        FoodProperties food = stack.get(DataComponents.FOOD);
+                        if (food == null) {
+                            helper.succeed(); // Not a food item
+                            return;
+                        }
+                        if (food.nutrition() <= 0) {
+                            helper.fail(fieldName + " is food but has nutrition=" + food.nutrition() + " (expected > 0)");
+                        } else if (food.saturation() < 0) {
+                            helper.fail(fieldName + " is food but has saturation=" + food.saturation() + " (expected >= 0)");
+                        } else {
+                            helper.succeed();
+                        }
+                    } catch (Exception e) {
+                        helper.fail("Failed to check food for " + fieldName + ": " + e.getMessage());
+                    }
+                });
+            }));
+        }
+        return tests;
+    }
+
+    /**
+     * Generates tests verifying that blocks with items have matching registry IDs.
+     */
+    public static List<NamedTest> generateBlockItemConsistencyTests() {
+        List<NamedTest> tests = new ArrayList<>();
+        for (Field field : ModBlocks.class.getDeclaredFields()) {
+            if (!isRegistrySupplierField(field)) continue;
+            String fieldName = field.getName();
+            String expectedId = fieldName.toLowerCase();
+            tests.add(new NamedTest("block_item_" + expectedId, helper -> {
                 helper.runAfterDelay(1, () -> {
                     try {
                         @SuppressWarnings("unchecked")
                         RegistrySupplier<?> supplier = (RegistrySupplier<?>) field.get(null);
-                        String actualId = supplier.getId().getPath();
-                        if (actualId.equals(expectedId)) {
+                        ResourceLocation blockId = supplier.getId();
+                        if (BuiltInRegistries.ITEM.containsKey(blockId)) {
                             helper.succeed();
                         } else {
-                            helper.fail(fieldName + " has ID \"" + actualId +
-                                "\", expected \"" + expectedId + "\"");
+                            boolean hasItemField = false;
+                            for (Field itemField : ModItems.class.getDeclaredFields()) {
+                                if (itemField.getName().equals(fieldName) && isRegistrySupplierField(itemField)) {
+                                    hasItemField = true;
+                                    break;
+                                }
+                            }
+                            if (hasItemField) {
+                                helper.fail(fieldName + " has a ModItems field but no item registered with ID \"" +
+                                    blockId + "\"");
+                            } else {
+                                helper.succeed();
+                            }
                         }
                     } catch (Exception e) {
-                        helper.fail("Failed to check ID for " + fieldName + ": " + e.getMessage());
+                        helper.fail("Failed to check block-item for " + fieldName + ": " + e.getMessage());
+                    }
+                });
+            }));
+        }
+        return tests;
+    }
+
+    /**
+     * Generates tests verifying equipment items have maxStackSize of 1.
+     */
+    public static List<NamedTest> generateEquipmentStackSizeTests() {
+        List<NamedTest> tests = new ArrayList<>();
+        for (var spec : RegistryDrivenTestData.getToolSpecs()) {
+            String name = spec.item().getId().getPath();
+            tests.add(new NamedTest("stack_size_" + name, helper -> {
+                helper.runAfterDelay(1, () -> {
+                    ItemStack stack = new ItemStack(spec.item().get());
+                    int maxStack = stack.getMaxStackSize();
+                    if (maxStack == 1) {
+                        helper.succeed();
+                    } else {
+                        helper.fail(name + " maxStackSize=" + maxStack + ", expected 1");
+                    }
+                });
+            }));
+        }
+        for (var spec : RegistryDrivenTestData.getArmorSpecs()) {
+            String name = spec.item().getId().getPath();
+            tests.add(new NamedTest("stack_size_" + name, helper -> {
+                helper.runAfterDelay(1, () -> {
+                    ItemStack stack = new ItemStack(spec.item().get());
+                    int maxStack = stack.getMaxStackSize();
+                    if (maxStack == 1) {
+                        helper.succeed();
+                    } else {
+                        helper.fail(name + " maxStackSize=" + maxStack + ", expected 1");
                     }
                 });
             }));
@@ -189,8 +322,50 @@ public final class RegistryDrivenTestGenerator {
         all.addAll(generateArmorDefenseTests());
         all.addAll(generateEntityAttributeTests());
         all.addAll(generateItemIdTests());
+        all.addAll(generateBlockIdTests());
+        all.addAll(generateEntityIdTests());
+        all.addAll(generateSpawnEggEntityTests());
+        all.addAll(generateFoodPropertyTests());
+        all.addAll(generateBlockItemConsistencyTests());
+        all.addAll(generateEquipmentStackSizeTests());
         all.addAll(generateBossFightTests());
         return all;
+    }
+
+    // --- Utility methods ---
+
+    private static boolean isRegistrySupplierField(Field field) {
+        return Modifier.isPublic(field.getModifiers())
+            && Modifier.isStatic(field.getModifiers())
+            && Modifier.isFinal(field.getModifiers())
+            && RegistrySupplier.class.isAssignableFrom(field.getType());
+    }
+
+    private static List<NamedTest> generateRegistryIdTests(Class<?> registryClass, String testPrefix) {
+        List<NamedTest> tests = new ArrayList<>();
+        for (Field field : registryClass.getDeclaredFields()) {
+            if (!isRegistrySupplierField(field)) continue;
+            String fieldName = field.getName();
+            String expectedId = ID_OVERRIDES.getOrDefault(fieldName, fieldName.toLowerCase());
+            tests.add(new NamedTest(testPrefix + expectedId, helper -> {
+                helper.runAfterDelay(1, () -> {
+                    try {
+                        @SuppressWarnings("unchecked")
+                        RegistrySupplier<?> supplier = (RegistrySupplier<?>) field.get(null);
+                        String actualId = supplier.getId().getPath();
+                        if (actualId.equals(expectedId)) {
+                            helper.succeed();
+                        } else {
+                            helper.fail(fieldName + " has ID \"" + actualId +
+                                "\", expected \"" + expectedId + "\"");
+                        }
+                    } catch (Exception e) {
+                        helper.fail("Failed to check ID for " + fieldName + ": " + e.getMessage());
+                    }
+                });
+            }));
+        }
+        return tests;
     }
 
     private static double getAttributeValue(LivingEntity entity, String attributeName) {
