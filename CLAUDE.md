@@ -73,6 +73,13 @@ Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2): Follow standard conventions
 - Fabric: `./gradlew fabric:runClient1_20_1`, `./gradlew fabric:runClient1_21_1`, or `./gradlew fabric:runClient1_21_2`
 - NeoForge: `./gradlew neoforge:runClient1_20_1`, `./gradlew neoforge:runClient1_21_1`, or `./gradlew neoforge:runClient1_21_2`
 
+**GameTest**:
+- `./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.2` - Run GameTests for specific version
+- `./gradlew gameTestAll` - Run GameTests for all versions and loaders
+
+**Resource Validation**:
+- `./gradlew validateResources` - Check JSON syntax and cross-references (blockstate→model, model→texture)
+
 **Key Strategy**: Custom Gradle scripts + abstraction layer (`compat/` package) for API differences
 
 ## Development Notes

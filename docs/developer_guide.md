@@ -244,24 +244,49 @@ neoforge_version=21.2.0-beta
 ### Build Commands
 
 ```bash
-# Build all modules
+# Build for default version (1.21.1)
 ./gradlew build
+
+# Build for a specific Minecraft version
+./gradlew build -Ptarget_mc_version=1.21.2
+./gradlew build -Ptarget_mc_version=1.21.1
+./gradlew build -Ptarget_mc_version=1.20.1
+
+# Build all supported versions at once
+./gradlew buildAll
+
+# Shorthand for specific versions
+./gradlew build1_20_1
+./gradlew build1_21_1
 
 # Build specific module
 ./gradlew :fabric:build
 ./gradlew :neoforge:build
 
-# Run development client
-./gradlew :fabric:runClient
-./gradlew :neoforge:runClient
+# Run development client (version-specific)
+./gradlew :fabric:runClient1_21_2
+./gradlew :fabric:runClient1_21_1
+./gradlew :fabric:runClient1_20_1
+./gradlew :neoforge:runClient1_21_2
+./gradlew :neoforge:runClient1_21_1
+./gradlew :neoforge:runClient1_20_1
 
 # Run development server
 ./gradlew :fabric:runServer
 ./gradlew :neoforge:runServer
 
-# Run tests
+# Run unit tests
 ./gradlew test
 ./gradlew :common:test
+
+# Run GameTests (in-game integration tests)
+./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.2
+./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.1
+./gradlew :fabric:runGameTest -Ptarget_mc_version=1.20.1
+./gradlew gameTestAll   # All versions and loaders
+
+# Validate resource files (JSON syntax + cross-references)
+./gradlew validateResources
 
 # Clean build artifacts
 ./gradlew clean
@@ -517,32 +542,51 @@ public void testTimeHourglassActivation() {
 ./gradlew test
 ```
 
-### Integration Testing
+### Integration Testing (GameTest)
 
-**Framework**: Minecraft GameTest Framework
+**Framework**: Minecraft GameTest Framework with registry-driven test generation
 
-**Location**: `common/src/test/java/com/chronodawn/integration/`
+**Location**:
+- `common-1.21.2/src/main/java/com/chronodawn/gametest/` (1.21.2)
+- `common-1.21.1/src/main/java/com/chronodawn/compat/v1_21_1/gametest/` (1.21.1)
+- `common-1.20.1/src/main/java/com/chronodawn/compat/v1_20_1/gametest/` (1.20.1)
 
-**Example Test**:
-```java
-@GameTest
-public static void testPortalTravel(GameTestHelper helper) {
-    BlockPos portalFrame = new BlockPos(1, 1, 1);
-
-    // Build portal frame
-    helper.setBlock(portalFrame, ModBlocks.CLOCKSTONE_BLOCK.get());
-
-    // Activate portal
-    helper.useBlock(portalFrame, helper.makeMockPlayer());
-
-    // Verify activation
-    helper.succeed();
-}
-```
+**Test Categories** (auto-generated from registries):
+- **Block placement** — Verifies all blocks can be placed
+- **Entity spawning** — Verifies all entities can be spawned
+- **Tool durability / Armor defense** — Validates equipment properties
+- **Registry ID consistency** — Field names match registry IDs
+- **Blockstate existence** — All blocks have blockstate JSON files
+- **Item model existence** — All items have model JSON files
+- **Translation key completeness** — All items/blocks/entities have translations
+- **Food properties / Equipment stack size** — Property validation
+- **Boss fight tests** — Boss encounter mechanics
 
 **Run GameTests**:
 ```bash
-./gradlew runGameTest
+# Run for a specific version
+./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.2
+./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.1
+./gradlew :fabric:runGameTest -Ptarget_mc_version=1.20.1
+
+# Run for all versions and loaders
+./gradlew gameTestAll
+```
+
+### Resource Validation
+
+**Tool**: Gradle `validateResources` task
+
+**Location**: `gradle/resource-validation.gradle`
+
+Validates data/asset file integrity at build time without launching the game:
+
+- **JSON syntax check** — Parses all `.json` files under `common/src/main/resources/`
+- **Blockstate → model reference check** — Verifies `"model": "chronodawn:block/<name>"` targets exist
+- **Model → texture reference check** — Verifies `"textures"` entries with `chronodawn:` prefix have matching `.png` files
+
+```bash
+./gradlew validateResources
 ```
 
 ### Manual Testing
@@ -655,6 +699,8 @@ docs: improve player guide boss strategies
 Before submitting PR:
 - [ ] All unit tests pass (`./gradlew test`)
 - [ ] Both loaders build successfully (`./gradlew build`)
+- [ ] GameTests pass (`./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.2`)
+- [ ] Resource validation passes (`./gradlew validateResources`)
 - [ ] Manual testing completed (launch game, test feature)
 - [ ] No new warnings or errors in logs
 - [ ] Documentation updated (if applicable)
