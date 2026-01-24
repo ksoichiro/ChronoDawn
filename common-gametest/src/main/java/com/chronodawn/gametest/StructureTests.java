@@ -91,6 +91,9 @@ public final class StructureTests {
                 new BlockRequirement("boss_room_door", ModBlocks.BOSS_ROOM_DOOR, 1),
                 new BlockRequirement("boss_room_boundary_marker", ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
                 new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1)
+            )),
+            new StructureSpec("guardian_vault_entrance", 7, 6, 7, List.of(
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1)
             ))
         );
     }
