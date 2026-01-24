@@ -125,6 +125,12 @@ public final class StructureTests {
                 new BlockRequirement("boss_room_boundary_marker", ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
                 new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 2),
                 new BlockRequirement("crimson_wall_sign", () -> Blocks.CRIMSON_WALL_SIGN, 4)
+            )),
+            new StructureSpec("clockwork_depths_archive_vault", 7, 9, 7, List.of(
+                new BlockRequirement("chest", () -> Blocks.CHEST, 1),
+                new BlockRequirement("barrel", () -> Blocks.BARREL, 4),
+                new BlockRequirement("anvil", () -> Blocks.ANVIL, 1),
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1)
             ))
         );
     }
