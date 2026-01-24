@@ -104,6 +104,12 @@ public final class StructureTests {
             )),
             new StructureSpec("entropy_crypt_entrance", 7, 6, 7, List.of(
                 new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1)
+            )),
+            new StructureSpec("entropy_crypt_main", 26, 20, 25, List.of(
+                new BlockRequirement("boss_room_boundary_marker", ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
+                new BlockRequirement("entropy_crypt_trapdoor", ModBlocks.ENTROPY_CRYPT_TRAPDOOR, 1),
+                new BlockRequirement("chest", () -> Blocks.CHEST, 3),
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1)
             ))
         );
     }
