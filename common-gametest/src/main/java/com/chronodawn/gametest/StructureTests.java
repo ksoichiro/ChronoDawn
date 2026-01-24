@@ -131,6 +131,9 @@ public final class StructureTests {
                 new BlockRequirement("barrel", () -> Blocks.BARREL, 4),
                 new BlockRequirement("anvil", () -> Blocks.ANVIL, 1),
                 new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1)
+            )),
+            new StructureSpec("phantom_catacombs_entrance", 9, 7, 9, List.of(
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1)
             ))
         );
     }
