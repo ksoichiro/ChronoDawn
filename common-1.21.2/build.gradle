@@ -34,6 +34,8 @@ sourceSets {
         java {
             // Default Java source directory
             srcDir 'src/main/java'
+            // Shared gametest utilities
+            srcDir '../common-gametest/src/main/java'
 
             // Exclude version-specific compat implementations that don't match target version
             def compatPackage = project.ext.compat_package // "v1_20_1" or "v1_21_1"

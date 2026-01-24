@@ -328,6 +328,7 @@ public final class RegistryDrivenTestGenerator {
         all.addAll(generateFoodPropertyTests());
         all.addAll(generateBlockItemConsistencyTests());
         all.addAll(generateEquipmentStackSizeTests());
+        all.addAll(TranslationKeyTests.generate(ModItems.class, ID_OVERRIDES, NamedTest::new));
         all.addAll(generateBossFightTests());
         return all;
     }
