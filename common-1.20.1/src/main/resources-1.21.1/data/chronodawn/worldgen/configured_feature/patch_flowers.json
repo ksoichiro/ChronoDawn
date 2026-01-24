@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:flower",
-  "config": {
-    "tries": 64,
-    "xz_spread": 6,
-    "y_spread": 2,
-    "feature": "chronodawn:flower_block"
-  }
-}

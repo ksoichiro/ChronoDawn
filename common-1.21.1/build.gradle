@@ -31,18 +31,6 @@ sourceSets {
             srcDir 'src/main/java'
             // Shared gametest utilities
             srcDir '../common-gametest/src/main/java'
-
-            // Exclude version-specific compat implementations that don't match target version
-            def compatPackage = project.ext.compat_package // "v1_20_1" or "v1_21_1"
-
-            // Exclude all version-specific directories except the target one
-            ['v1_20_1', 'v1_21_1'].each { version ->
-                if (version != compatPackage) {
-                    exclude "com/chronodawn/compat/${version}/**"
-                }
-            }
-
-            logger.lifecycle("Using version-specific compat implementations: ${compatPackage}")
         }
 
         resources {
@@ -63,19 +51,6 @@ sourceSets {
         }
     }
 
-    test {
-        java {
-            // Exclude version-specific compat implementations that don't match target version
-            def compatPackage = project.ext.compat_package // "v1_20_1" or "v1_21_1"
-
-            // Exclude all version-specific directories except the target one
-            ['v1_20_1', 'v1_21_1'].each { version ->
-                if (version != compatPackage) {
-                    exclude "com/chronodawn/compat/${version}/**"
-                }
-            }
-        }
-    }
 }
 
 // Set version info as Java system property at runtime (for compat handlers)
