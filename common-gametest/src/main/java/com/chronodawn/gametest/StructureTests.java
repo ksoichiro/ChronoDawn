@@ -101,6 +101,9 @@ public final class StructureTests {
                 new BlockRequirement("chest", () -> Blocks.CHEST, 1),
                 new BlockRequirement("barrel", () -> Blocks.BARREL, 9),
                 new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1)
+            )),
+            new StructureSpec("entropy_crypt_entrance", 7, 6, 7, List.of(
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1)
             ))
         );
     }
