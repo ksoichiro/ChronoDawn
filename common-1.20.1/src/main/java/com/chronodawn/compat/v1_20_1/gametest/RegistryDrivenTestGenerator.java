@@ -1,5 +1,6 @@
 package com.chronodawn.gametest;
 
+import com.chronodawn.gametest.MobBehaviorTests;
 import com.chronodawn.gametest.boss.BossFightTestLogic;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModEntities;
@@ -329,6 +330,10 @@ public final class RegistryDrivenTestGenerator {
         all.addAll(generateEquipmentStackSizeTests());
         all.addAll(TranslationKeyTests.generate(ModItems.class, ID_OVERRIDES, NamedTest::new));
         all.addAll(generateBossFightTests());
+        all.addAll(MobBehaviorTests.generateSpawnEggUsageTests(RegistryDrivenTestData.getSpawnEggSpecs(), NamedTest::new));
+        all.addAll(MobBehaviorTests.generateMobCategoryTests(RegistryDrivenTestData.getMobCategorySpecs(), NamedTest::new));
+        all.addAll(MobBehaviorTests.generateMobPersistenceTests(RegistryDrivenTestData.getPersistentEntities(), NamedTest::new));
+        all.addAll(MobBehaviorTests.generateFlyingMobTests(RegistryDrivenTestData.getFlyingEntities(), NamedTest::new));
         return all;
     }
 

@@ -6,6 +6,7 @@ import com.chronodawn.registry.ModItems;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
@@ -227,6 +228,71 @@ public final class RegistryDrivenTestData {
             new EntityAttributeSpec(ModEntities.CHRONAL_LEECH, "max_health", 10.0),
             new EntityAttributeSpec(ModEntities.CHRONAL_LEECH, "attack_damage", 2.0),
             new EntityAttributeSpec(ModEntities.MOMENT_CREEPER, "max_health", 22.0)
+        );
+    }
+
+    @SuppressWarnings("unchecked")
+    public static List<MobBehaviorTests.SpawnEggSpec> getSpawnEggSpecs() {
+        return List.of(
+            new MobBehaviorTests.SpawnEggSpec(ModItems.TEMPORAL_WRAITH_SPAWN_EGG, (RegistrySupplier) ModEntities.TEMPORAL_WRAITH),
+            new MobBehaviorTests.SpawnEggSpec(ModItems.CLOCKWORK_SENTINEL_SPAWN_EGG, (RegistrySupplier) ModEntities.CLOCKWORK_SENTINEL),
+            new MobBehaviorTests.SpawnEggSpec(ModItems.TIME_KEEPER_SPAWN_EGG, (RegistrySupplier) ModEntities.TIME_KEEPER),
+            new MobBehaviorTests.SpawnEggSpec(ModItems.FLOQ_SPAWN_EGG, (RegistrySupplier) ModEntities.FLOQ),
+            new MobBehaviorTests.SpawnEggSpec(ModItems.EPOCH_HUSK_SPAWN_EGG, (RegistrySupplier) ModEntities.EPOCH_HUSK),
+            new MobBehaviorTests.SpawnEggSpec(ModItems.FORGOTTEN_MINUTE_SPAWN_EGG, (RegistrySupplier) ModEntities.FORGOTTEN_MINUTE),
+            new MobBehaviorTests.SpawnEggSpec(ModItems.CHRONAL_LEECH_SPAWN_EGG, (RegistrySupplier) ModEntities.CHRONAL_LEECH),
+            new MobBehaviorTests.SpawnEggSpec(ModItems.MOMENT_CREEPER_SPAWN_EGG, (RegistrySupplier) ModEntities.MOMENT_CREEPER),
+            new MobBehaviorTests.SpawnEggSpec(ModItems.TIME_GUARDIAN_SPAWN_EGG, (RegistrySupplier) ModEntities.TIME_GUARDIAN),
+            new MobBehaviorTests.SpawnEggSpec(ModItems.TIME_TYRANT_SPAWN_EGG, (RegistrySupplier) ModEntities.TIME_TYRANT),
+            new MobBehaviorTests.SpawnEggSpec(ModItems.CHRONOS_WARDEN_SPAWN_EGG, (RegistrySupplier) ModEntities.CHRONOS_WARDEN),
+            new MobBehaviorTests.SpawnEggSpec(ModItems.CLOCKWORK_COLOSSUS_SPAWN_EGG, (RegistrySupplier) ModEntities.CLOCKWORK_COLOSSUS),
+            new MobBehaviorTests.SpawnEggSpec(ModItems.TEMPORAL_PHANTOM_SPAWN_EGG, (RegistrySupplier) ModEntities.TEMPORAL_PHANTOM),
+            new MobBehaviorTests.SpawnEggSpec(ModItems.ENTROPY_KEEPER_SPAWN_EGG, (RegistrySupplier) ModEntities.ENTROPY_KEEPER)
+        );
+    }
+
+    public static List<MobBehaviorTests.MobCategorySpec> getMobCategorySpecs() {
+        return List.of(
+            // Bosses - MONSTER
+            new MobBehaviorTests.MobCategorySpec(ModEntities.TIME_GUARDIAN, MobCategory.MONSTER),
+            new MobBehaviorTests.MobCategorySpec(ModEntities.TIME_TYRANT, MobCategory.MONSTER),
+            new MobBehaviorTests.MobCategorySpec(ModEntities.CHRONOS_WARDEN, MobCategory.MONSTER),
+            new MobBehaviorTests.MobCategorySpec(ModEntities.CLOCKWORK_COLOSSUS, MobCategory.MONSTER),
+            new MobBehaviorTests.MobCategorySpec(ModEntities.TEMPORAL_PHANTOM, MobCategory.MONSTER),
+            new MobBehaviorTests.MobCategorySpec(ModEntities.ENTROPY_KEEPER, MobCategory.MONSTER),
+            // Regular hostile mobs - MONSTER
+            new MobBehaviorTests.MobCategorySpec(ModEntities.TEMPORAL_WRAITH, MobCategory.MONSTER),
+            new MobBehaviorTests.MobCategorySpec(ModEntities.CLOCKWORK_SENTINEL, MobCategory.MONSTER),
+            new MobBehaviorTests.MobCategorySpec(ModEntities.FLOQ, MobCategory.MONSTER),
+            new MobBehaviorTests.MobCategorySpec(ModEntities.EPOCH_HUSK, MobCategory.MONSTER),
+            new MobBehaviorTests.MobCategorySpec(ModEntities.FORGOTTEN_MINUTE, MobCategory.MONSTER),
+            new MobBehaviorTests.MobCategorySpec(ModEntities.CHRONAL_LEECH, MobCategory.MONSTER),
+            new MobBehaviorTests.MobCategorySpec(ModEntities.MOMENT_CREEPER, MobCategory.MONSTER),
+            // Neutral/Passive - CREATURE
+            new MobBehaviorTests.MobCategorySpec(ModEntities.TIME_KEEPER, MobCategory.CREATURE),
+            // Boats - MISC
+            new MobBehaviorTests.MobCategorySpec(ModEntities.CHRONO_DAWN_BOAT, MobCategory.MISC),
+            new MobBehaviorTests.MobCategorySpec(ModEntities.CHRONO_DAWN_CHEST_BOAT, MobCategory.MISC)
+        );
+    }
+
+    /**
+     * Entities that should persist (never despawn).
+     */
+    @SuppressWarnings("unchecked")
+    public static List<RegistrySupplier<EntityType<?>>> getPersistentEntities() {
+        return List.of(
+            (RegistrySupplier<EntityType<?>>) (RegistrySupplier<?>) ModEntities.TIME_KEEPER
+        );
+    }
+
+    /**
+     * Entities that should fly (use FlyingMoveControl).
+     */
+    @SuppressWarnings("unchecked")
+    public static List<RegistrySupplier<EntityType<?>>> getFlyingEntities() {
+        return List.of(
+            (RegistrySupplier<EntityType<?>>) (RegistrySupplier<?>) ModEntities.FORGOTTEN_MINUTE
         );
     }
 }
