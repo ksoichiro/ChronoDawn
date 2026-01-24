@@ -134,6 +134,9 @@ public final class StructureTests {
             )),
             new StructureSpec("phantom_catacombs_entrance", 9, 7, 9, List.of(
                 new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1)
+            )),
+            new StructureSpec("phantom_catacombs_corridor", 5, 40, 5, List.of(
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 2)
             ))
         );
     }
