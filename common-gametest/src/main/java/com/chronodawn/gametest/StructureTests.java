@@ -145,6 +145,27 @@ public final class StructureTests {
             new StructureSpec("phantom_catacombs_room_dead_end", 7, 9, 7, List.of(
                 new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1),
                 new BlockRequirement("crying_obsidian", () -> Blocks.CRYING_OBSIDIAN, 1)
+            )),
+            new StructureSpec("phantom_catacombs_room_1", 7, 9, 7, List.of(
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 2)
+            )),
+            new StructureSpec("phantom_catacombs_room_2", 7, 9, 7, List.of(
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 4)
+            )),
+            new StructureSpec("phantom_catacombs_room_3", 7, 9, 7, List.of(
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 4)
+            )),
+            new StructureSpec("phantom_catacombs_room_4", 7, 9, 7, List.of(
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 3)
+            )),
+            new StructureSpec("phantom_catacombs_room_5", 7, 9, 7, List.of(
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 3)
+            )),
+            new StructureSpec("phantom_catacombs_room_6", 7, 9, 7, List.of(
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 2)
+            )),
+            new StructureSpec("phantom_catacombs_room_7", 7, 9, 7, List.of(
+                new BlockRequirement("crying_obsidian", () -> Blocks.CRYING_OBSIDIAN, 1)
             ))
         );
     }
