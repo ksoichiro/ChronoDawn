@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cross",
-  "textures": {
-    "cross": "chronodawn:block/unstable_fungus"
-  }
-}

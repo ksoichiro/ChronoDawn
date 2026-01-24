@@ -121,7 +121,8 @@ cd ChronoDawn
 
 ```
 ChronoDawn/
-├── common/                                 # Common module (~80%)
+├── common-base/                            # Shared common module shell
+├── common-1.21.2/                          # Common module for MC 1.21.2 (~80% of code)
 │   ├── src/main/java/com/chronodawn/
 │   │   ├── ChronoDawn.java                 # Common entry point
 │   │   ├── blocks/                         # Custom blocks
@@ -165,9 +166,9 @@ ChronoDawn/
 │   │       ├── blockstates/                # Block state definitions
 │   │       ├── lang/                       # Translations
 │   │       └── sounds/                     # Sound files
-│   └── src/test/java/com/chronodawn/     # Tests
-│       ├── unit/                           # Unit tests
-│       └── integration/                    # Integration tests
+│   └── src/test/java/com/chronodawn/     # JUnit tests
+├── common-1.21.1/                          # Common module for MC 1.21.1
+├── common-1.20.1/                          # Common module for MC 1.20.1
 ├── fabric-base/                            # Shared Fabric sources (NOT a Gradle subproject)
 │   └── src/main/java/com/chronodawn/fabric/
 │       ├── event/                          # Event handlers
@@ -297,7 +298,7 @@ neoforge_version=21.2.0-beta
 After building:
 - **Fabric JAR**: `fabric-1.21.2/build/libs/chronodawn-0.4.0-beta+1.21.2-fabric.jar`
 - **NeoForge JAR**: `neoforge-1.21.2/build/libs/chronodawn-0.4.0-beta+1.21.2-neoforge.jar`
-- **Common JAR**: `common/build/libs/common-0.4.0-beta.jar` (bundled into loader JARs)
+- **Common JAR**: `common-1.21.2/build/libs/common-1.21.2-0.4.0-beta.jar` (bundled into loader JARs)
 
 ---
 
@@ -305,13 +306,13 @@ After building:
 
 ### 1. Dimension System
 
-**Location**: `common/src/main/java/com/chronodawn/core/dimension/`
+**Location**: `common-1.21.2/src/main/java/com/chronodawn/core/dimension/`
 
 **Key Classes**:
 - `ChronoDawnDimension.java`: Dimension registration and key definitions
-- Custom biomes in `common/src/main/resources/data/chronodawn/worldgen/biome/`
+- Custom biomes in `common-1.21.2/src/main/resources/data/chronodawn/worldgen/biome/`
 
-**Dimension JSON**: `common/src/main/resources/data/chronodawn/dimension/chronodawn_dimension.json`
+**Dimension JSON**: `common-1.21.2/src/main/resources/data/chronodawn/dimension/chronodawn_dimension.json`
 
 ```json
 {
@@ -329,8 +330,8 @@ After building:
 ### 2. Portal System
 
 **Location**:
-- Common: `common/src/main/java/com/chronodawn/core/portal/`
-- Blocks: `common/src/main/java/com/chronodawn/blocks/ChronoDawnPortalBlock.java`
+- Common: `common-1.21.2/src/main/java/com/chronodawn/core/portal/`
+- Blocks: `common-1.21.2/src/main/java/com/chronodawn/blocks/ChronoDawnPortalBlock.java`
 
 **Key Components**:
 - **PortalRegistry**: Tracks portal states (INACTIVE, ACTIVE, STABILIZED)
@@ -343,7 +344,7 @@ After building:
 
 ### 3. Time Distortion Effect
 
-**Location**: `common/src/main/java/com/chronodawn/events/EntityEventHandler.java`
+**Location**: `common-1.21.2/src/main/java/com/chronodawn/events/EntityEventHandler.java`
 
 **Implementation**:
 ```java
@@ -365,20 +366,20 @@ public class EntityEventHandler {
 
 ### 4. Worldgen System
 
-**Biomes**: `common/src/main/resources/data/chronodawn/worldgen/biome/`
+**Biomes**: `common-1.21.2/src/main/resources/data/chronodawn/worldgen/biome/`
 - 8 custom biomes with unique features
 
-**Structures**: `common/src/main/java/com/chronodawn/worldgen/structures/`
+**Structures**: `common-1.21.2/src/main/java/com/chronodawn/worldgen/structures/`
 - Ancient Ruins (Overworld)
 - Forgotten Library (Chrono Dawn)
 - Master Clock (final dungeon)
 - Phantom Catacombs (maze with boss)
 
-**Structure NBT Files**: `common/src/main/resources/data/chronodawn/structure/`
+**Structure NBT Files**: `common-1.21.2/src/main/resources/data/chronodawn/structure/`
 
 ### 5. Boss System
 
-**Entities**: `common/src/main/java/com/chronodawn/entities/bosses/`
+**Entities**: `common-1.21.2/src/main/java/com/chronodawn/entities/bosses/`
 
 **Boss AI Components**:
 - **TimeGuardianAI**: AI state machine for Time Guardian
@@ -389,7 +390,7 @@ public class EntityEventHandler {
 
 ### 6. Chronicle Guidebook UI
 
-**Location**: `common/src/main/java/com/chronodawn/client/gui/screens/chronicle/`
+**Location**: `common-1.21.2/src/main/java/com/chronodawn/client/gui/screens/chronicle/`
 
 **Description**: Custom in-game guidebook system that replaced Patchouli dependency. Chronicle provides players with information about biomes, structures, bosses, items, and progression.
 
@@ -398,7 +399,7 @@ public class EntityEventHandler {
 - **ChronicleData.java**: JSON data loader for guidebook content
 - **ChronicleBookItem.java**: Item that opens the Chronicle GUI
 
-**Data Files**: `common/src/main/resources/assets/chronodawn/chronicle/`
+**Data Files**: `common-1.21.2/src/main/resources/assets/chronodawn/chronicle/`
 - **categories.json**: Category definitions
 - **entries.json**: Entry data with localized text
 
@@ -437,7 +438,7 @@ public class EntityEventHandler {
 
 ### Adding a New Block
 
-1. **Create Block Class** (`common/src/main/java/com/chronodawn/blocks/MyCustomBlock.java`):
+1. **Create Block Class** (`common-1.21.2/src/main/java/com/chronodawn/blocks/MyCustomBlock.java`):
 ```java
 public class MyCustomBlock extends Block {
     public MyCustomBlock(Properties properties) {
@@ -481,7 +482,7 @@ public static final RegistrySupplier<Block> MY_CUSTOM_BLOCK = BLOCKS.register(
 
 ### Adding a New Entity
 
-1. **Create Entity Class** (`common/src/main/java/com/chronodawn/entities/MyEntity.java`):
+1. **Create Entity Class** (`common-1.21.2/src/main/java/com/chronodawn/entities/MyEntity.java`):
 ```java
 public class MyEntity extends Mob {
     public MyEntity(EntityType<? extends Mob> type, Level level) {
@@ -509,7 +510,7 @@ public static final RegistrySupplier<EntityType<MyEntity>> MY_ENTITY = ENTITIES.
 ### Adding a Structure
 
 1. **Create NBT Structure** using Minecraft structure blocks
-2. **Save to**: `common/src/main/resources/data/chronodawn/structure/`
+2. **Save to**: `common-1.21.2/src/main/resources/data/chronodawn/structure/`
 3. **Define Structure JSON**: `data/chronodawn/worldgen/structure/my_structure.json`
 4. **Add to Structure Set**: `data/chronodawn/worldgen/structure_set/my_structure_set.json`
 5. **Implement Structure Processor** (if custom logic needed)
@@ -603,7 +604,7 @@ Shared sources are included via `srcDir` references to `fabric-base/` and `neofo
 
 Validates data/asset file integrity at build time without launching the game:
 
-- **JSON syntax check** — Parses all `.json` files under `common/src/main/resources/`
+- **JSON syntax check** — Parses all `.json` files under `common-1.21.2/src/main/resources/`
 - **Blockstate → model reference check** — Verifies `"model": "chronodawn:block/<name>"` targets exist
 - **Model → texture reference check** — Verifies `"textures"` entries with `chronodawn:` prefix have matching `.png` files
 
@@ -628,7 +629,7 @@ Validates data/asset file integrity at build time without launching the game:
 
 ### Enable Debug Logging
 
-**Add to** `common/src/main/resources/log4j2.xml`:
+**Add to** `common-1.21.2/src/main/resources/log4j2.xml`:
 ```xml
 <Configuration status="warn">
     <Appenders>

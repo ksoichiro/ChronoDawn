@@ -120,9 +120,8 @@ Chrono Dawn supports multiple Minecraft versions from the same codebase:
 ```
 
 **Output Files** (example for 1.21.2):
-- `fabric/build/libs/chronodawn-0.4.0-beta+1.21.2-fabric.jar` - Fabric loader JAR
-- `neoforge/build/libs/chronodawn-0.4.0-beta+1.21.2-neoforge.jar` - NeoForge loader JAR
-- `common/build/libs/common-0.4.0-beta.jar` - Common module (not usable standalone)
+- `fabric-1.21.2/build/libs/chronodawn-0.4.0-beta+1.21.2-fabric.jar` - Fabric loader JAR
+- `neoforge-1.21.2/build/libs/chronodawn-0.4.0-beta+1.21.2-neoforge.jar` - NeoForge loader JAR
 
 ### Build Specific Loader
 
@@ -265,7 +264,10 @@ Use the same steps above, but with:
 
 ```
 ChronoDawn/
-├── common/                          # Loader-independent shared code (~80%)
+├── common-base/                     # Shared common module shell
+├── common-1.20.1/                   # Common module for MC 1.20.1
+├── common-1.21.1/                   # Common module for MC 1.21.1
+├── common-1.21.2/                   # Common module for MC 1.21.2 (~80% of code)
 │   ├── src/main/java/com/chronodawn/
 │   │   ├── ChronoDawn.java          # Common entry point
 │   │   ├── blocks/                  # Custom blocks
@@ -276,16 +278,13 @@ ChronoDawn/
 │   └── src/main/resources/
 │       ├── data/chronodawn/         # Data packs (recipes, worldgen, structures)
 │       └── assets/chronodawn/       # Assets (textures, models, sounds)
-├── fabric/                          # Fabric-specific implementation (~10%)
-│   ├── src/main/java/com/chronodawn/fabric/
-│   │   └── ChronoDawnFabric.java    # Fabric entry point
-│   └── src/main/resources/
-│       └── fabric.mod.json          # Fabric mod metadata
-├── neoforge/                        # NeoForge-specific implementation (~10%)
-│   ├── src/main/java/com/chronodawn/neoforge/
-│   │   └── ChronoDawnNeoForge.java  # NeoForge entry point
-│   └── src/main/resources/
-│       └── META-INF/neoforge.mods.toml # NeoForge mod metadata
+├── fabric-base/                     # Shared Fabric sources
+├── fabric-1.20.1/                   # Fabric subproject for MC 1.20.1
+├── fabric-1.21.1/                   # Fabric subproject for MC 1.21.1
+├── fabric-1.21.2/                   # Fabric subproject for MC 1.21.2
+├── neoforge-base/                   # Shared NeoForge sources
+├── neoforge-1.21.1/                 # NeoForge subproject for MC 1.21.1
+├── neoforge-1.21.2/                 # NeoForge subproject for MC 1.21.2
 ├── specs/chrono-dawn-mod/           # Design documents
 ├── build.gradle                     # Root build configuration (Groovy DSL)
 ├── settings.gradle                  # Multi-module settings

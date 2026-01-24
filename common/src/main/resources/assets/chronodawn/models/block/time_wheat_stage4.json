@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/crop",
-  "textures": {
-    "crop": "chronodawn:block/time_wheat_stage4"
-  }
-}
