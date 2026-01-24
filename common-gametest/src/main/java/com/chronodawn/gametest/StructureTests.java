@@ -113,6 +113,10 @@ public final class StructureTests {
             )),
             new StructureSpec("entropy_crypt_stairs", 5, 20, 5, List.of(
                 new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 2)
+            )),
+            new StructureSpec("clockwork_depths_tower", 11, 15, 11, List.of(
+                new BlockRequirement("campfire", () -> Blocks.CAMPFIRE, 4),
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1)
             ))
         );
     }
