@@ -3,6 +3,79 @@
 // across multiple Minecraft versions.
 
 // ============================================================
+// Clean Tasks
+// ============================================================
+
+/**
+ * Clean for Minecraft 1.20.1
+ * Usage: ./gradlew clean1_20_1
+ */
+tasks.register('clean1_20_1') {
+    group = 'chrono dawn build'
+    description = 'Clean build outputs for Minecraft 1.20.1'
+
+    doLast {
+        project.exec {
+            commandLine './gradlew', 'clean', '-Ptarget_mc_version=1.20.1'
+        }
+    }
+}
+
+/**
+ * Clean for Minecraft 1.21.1
+ * Usage: ./gradlew clean1_21_1
+ */
+tasks.register('clean1_21_1') {
+    group = 'chrono dawn build'
+    description = 'Clean build outputs for Minecraft 1.21.1'
+
+    doLast {
+        project.exec {
+            commandLine './gradlew', 'clean', '-Ptarget_mc_version=1.21.1'
+        }
+    }
+}
+
+/**
+ * Clean for Minecraft 1.21.2
+ * Usage: ./gradlew clean1_21_2
+ */
+tasks.register('clean1_21_2') {
+    group = 'chrono dawn build'
+    description = 'Clean build outputs for Minecraft 1.21.2'
+
+    doLast {
+        project.exec {
+            commandLine './gradlew', 'clean', '-Ptarget_mc_version=1.21.2'
+        }
+    }
+}
+
+/**
+ * Clean for all supported Minecraft versions
+ * Usage: ./gradlew cleanAll
+ */
+tasks.register('cleanAll') {
+    group = 'chrono dawn build'
+    description = 'Clean build outputs for all supported Minecraft versions (1.20.1, 1.21.1, 1.21.2)'
+
+    doLast {
+        def versions = ['1.20.1', '1.21.1', '1.21.2']
+
+        versions.each { version ->
+            logger.lifecycle(">>> Cleaning for Minecraft ${version}...")
+
+            project.exec {
+                commandLine './gradlew', 'clean', "-Ptarget_mc_version=${version}"
+            }
+        }
+
+        logger.lifecycle('')
+        logger.lifecycle('All versions cleaned successfully.')
+    }
+}
+
+// ============================================================
 // Build Tasks
 // ============================================================
 
@@ -176,6 +249,74 @@ runClientConfigurations.each { config ->
                 }
             }
         }
+    }
+}
+
+// ============================================================
+// Test Tasks
+// ============================================================
+
+/**
+ * Run unit tests for all supported Minecraft versions
+ * Usage: ./gradlew testAll
+ *
+ * Runs only common module JUnit tests (not GameTests).
+ * GameTests are run separately via gameTestAll.
+ */
+tasks.register('testAll') {
+    group = 'chrono dawn test'
+    description = 'Run unit tests for all supported Minecraft versions (1.20.1, 1.21.1, 1.21.2)'
+
+    doFirst {
+        logger.lifecycle('')
+        logger.lifecycle('====================================================')
+        logger.lifecycle('Running unit tests for ALL supported Minecraft versions...')
+        logger.lifecycle('Versions: 1.20.1, 1.21.1, 1.21.2')
+        logger.lifecycle('====================================================')
+        logger.lifecycle('')
+    }
+
+    doLast {
+        def versions = ['1.20.1', '1.21.1', '1.21.2']
+        def failed = []
+
+        versions.each { version ->
+            logger.lifecycle('')
+            logger.lifecycle(">>> Running unit tests for Minecraft ${version}...")
+            logger.lifecycle('')
+
+            try {
+                project.exec {
+                    commandLine './gradlew', ":common-${version}:test", "-Ptarget_mc_version=${version}"
+                    errorOutput = System.err
+                }
+                logger.lifecycle("SUCCESS: Minecraft ${version}")
+            } catch (Exception e) {
+                logger.error("FAILED: Minecraft ${version}")
+                failed.add(version)
+            }
+        }
+
+        logger.lifecycle('')
+        logger.lifecycle('====================================================')
+        logger.lifecycle('Unit Test Summary:')
+        logger.lifecycle('====================================================')
+
+        if (failed.isEmpty()) {
+            logger.lifecycle('All versions passed!')
+            versions.each { version ->
+                logger.lifecycle("   - Minecraft ${version}")
+            }
+        } else {
+            logger.lifecycle("${failed.size()} version(s) failed:")
+            failed.each { version ->
+                logger.lifecycle("   - Minecraft ${version}")
+            }
+            throw new GradleException("Unit tests failed for: ${failed.join(', ')}")
+        }
+
+        logger.lifecycle('====================================================')
+        logger.lifecycle('')
     }
 }
 

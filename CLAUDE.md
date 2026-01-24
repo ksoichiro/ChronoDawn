@@ -76,6 +76,12 @@ Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2): Follow standard conventions
 
 **Supported Versions**: Minecraft 1.20.1 + 1.21.1 + 1.21.2 (single codebase)
 
+**Clean Commands**:
+- `./gradlew clean1_20_1` - Clean for 1.20.1
+- `./gradlew clean1_21_1` - Clean for 1.21.1
+- `./gradlew clean1_21_2` - Clean for 1.21.2
+- `./gradlew cleanAll` - Clean all versions
+
 **Build Commands**:
 - `./gradlew build1_20_1` - Build for 1.20.1
 - `./gradlew build1_21_1` - Build for 1.21.1
@@ -85,6 +91,10 @@ Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2): Follow standard conventions
 **Run Client**:
 - Fabric: `./gradlew runClientFabric1_20_1`, `./gradlew runClientFabric1_21_1`, `./gradlew runClientFabric1_21_2`
 - NeoForge: `./gradlew runClientNeoForge1_21_1`, `./gradlew runClientNeoForge1_21_2`
+
+**Unit Test** (JUnit only, not GameTest):
+- `./gradlew :common-1.21.2:test -Ptarget_mc_version=1.21.2` - Run unit tests for specific version
+- `./gradlew testAll` - Run unit tests for all versions
 
 **GameTest**:
 - `./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.2` - Run GameTests for specific version
