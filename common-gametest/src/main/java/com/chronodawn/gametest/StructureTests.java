@@ -69,6 +69,11 @@ public final class StructureTests {
                 new BlockRequirement("chest", () -> Blocks.CHEST, 7),
                 new BlockRequirement("barrel", () -> Blocks.BARREL, 1),
                 new BlockRequirement("enchanting_table", () -> Blocks.ENCHANTING_TABLE, 1)
+            )),
+            new StructureSpec("master_clock_surface", 15, 10, 15, List.of(
+                new BlockRequirement("boss_room_boundary_marker", ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
+                new BlockRequirement("boss_room_door", ModBlocks.BOSS_ROOM_DOOR, 1),
+                new BlockRequirement("dropper", () -> Blocks.DROPPER, 1)
             ))
         );
     }
