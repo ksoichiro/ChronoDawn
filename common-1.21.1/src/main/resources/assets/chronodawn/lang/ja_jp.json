@@ -232,6 +232,7 @@
   "entity.chronodawn.chronal_leech": "クロナル・リーチ",
   "entity.chronodawn.moment_creeper": "モーメント・クリーパー",
   "entity.chronodawn.glide_fish": "グライドフィッシュ",
+  "entity.chronodawn.secondhand_archer": "セカンドハンド・アーチャー",
 
   "biome.chronodawn.chronodawn_plains": "クロノドーン平原",
   "biome.chronodawn.chronodawn_ocean": "クロノドーン海洋",
@@ -326,6 +327,8 @@
   "item.chronodawn.chronal_leech_spawn_egg": "クロナル・リーチのスポーンエッグ",
   "item.chronodawn.moment_creeper_spawn_egg": "モーメント・クリーパーのスポーンエッグ",
   "item.chronodawn.glide_fish_spawn_egg": "グライドフィッシュのスポーンエッグ",
+  "item.chronodawn.timeline_strider_spawn_egg": "タイムライン・ストライダーのスポーンエッグ",
+  "item.chronodawn.secondhand_archer_spawn_egg": "セカンドハンド・アーチャーのスポーンエッグ",
   "item.chronodawn.glide_fish": "グライドフィッシュ",
   "item.chronodawn.cooked_glide_fish": "焼きグライドフィッシュ",
 

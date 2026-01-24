@@ -37,7 +37,7 @@
         "maxCount": 4
       },
       {
-        "type": "minecraft:skeleton",
+        "type": "chronodawn:secondhand_archer",
         "weight": 100,
         "minCount": 4,
         "maxCount": 4

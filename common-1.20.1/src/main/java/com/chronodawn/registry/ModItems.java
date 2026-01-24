@@ -1585,6 +1585,16 @@ public class ModItems {
         )
     );
 
+    public static final RegistrySupplier<Item> SECONDHAND_ARCHER_SPAWN_EGG = ITEMS.register(
+        "secondhand_archer_spawn_egg",
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.SECONDHAND_ARCHER,
+            0x7A6B5A, // Background: Brownish-gray
+            0xD4C4A8, // Spots: Light tan/bone
+            new Item.Properties()
+        )
+    );
+
     // === Boats ===
 
     /**
@@ -1720,6 +1730,10 @@ public class ModItems {
 
         if (TIMELINE_STRIDER_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
             ((com.chronodawn.items.DeferredSpawnEggItem) TIMELINE_STRIDER_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (SECONDHAND_ARCHER_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) SECONDHAND_ARCHER_SPAWN_EGG.get()).initializeSpawnEgg();
         }
 
         ChronoDawn.LOGGER.info("Spawn eggs initialized");
@@ -1947,6 +1961,9 @@ public class ModItems {
         }
         if (TIMELINE_STRIDER_SPAWN_EGG.isPresent()) {
             output.accept(TIMELINE_STRIDER_SPAWN_EGG.get());
+        }
+        if (SECONDHAND_ARCHER_SPAWN_EGG.isPresent()) {
+            output.accept(SECONDHAND_ARCHER_SPAWN_EGG.get());
         }
         if (GLIDE_FISH.isPresent()) {
             output.accept(GLIDE_FISH.get());

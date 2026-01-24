@@ -15,6 +15,7 @@ import com.chronodawn.entities.mobs.ForgottenMinuteEntity;
 import com.chronodawn.entities.mobs.ChronalLeechEntity;
 import com.chronodawn.entities.mobs.MomentCreeperEntity;
 import com.chronodawn.entities.mobs.GlideFishEntity;
+import com.chronodawn.entities.mobs.SecondhandArcherEntity;
 import com.chronodawn.entities.mobs.TimelineStriderEntity;
 import com.chronodawn.entities.boats.ChronoDawnBoat;
 import com.chronodawn.entities.boats.ChronoDawnChestBoat;
@@ -334,6 +335,21 @@ public class ModEntities {
             .clientTrackingRange(8)
             .updateInterval(3)
             .build("timeline_strider")
+    );
+
+    /**
+     * Secondhand Archer - Skeleton-like hostile mob with bow attacks.
+     *
+     * Spawns with a bow and attacks with arrows.
+     * Replaces Skeleton spawns in ChronoDawn dimension.
+     */
+    public static final RegistrySupplier<EntityType<SecondhandArcherEntity>> SECONDHAND_ARCHER = ENTITIES.register(
+        "secondhand_archer",
+        () -> EntityType.Builder.of(SecondhandArcherEntity::new, MobCategory.MONSTER)
+            .sized(0.6f, 1.99f)
+            .clientTrackingRange(8)
+            .updateInterval(3)
+            .build("secondhand_archer")
     );
 
     // === Boat Entities ===

@@ -233,6 +233,7 @@
   "entity.chronodawn.moment_creeper": "Moment Creeper",
   "entity.chronodawn.glide_fish": "Glide Fish",
   "entity.chronodawn.timeline_strider": "Timeline Strider",
+  "entity.chronodawn.secondhand_archer": "Secondhand Archer",
 
   "biome.chronodawn.chronodawn_plains": "Chrono Dawn Plains",
   "biome.chronodawn.chronodawn_ocean": "Chrono Dawn Ocean",
@@ -328,6 +329,7 @@
   "item.chronodawn.moment_creeper_spawn_egg": "Moment Creeper Spawn Egg",
   "item.chronodawn.glide_fish_spawn_egg": "Glide Fish Spawn Egg",
   "item.chronodawn.timeline_strider_spawn_egg": "Timeline Strider Spawn Egg",
+  "item.chronodawn.secondhand_archer_spawn_egg": "Secondhand Archer Spawn Egg",
   "item.chronodawn.glide_fish": "Glide Fish",
   "item.chronodawn.cooked_glide_fish": "Cooked Glide Fish",
 

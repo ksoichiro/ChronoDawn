@@ -10,6 +10,7 @@ import com.chronodawn.client.model.ClockworkSentinelModel;
 import com.chronodawn.client.model.EntropyKeeperModel;
 import com.chronodawn.client.model.FloqModel;
 import com.chronodawn.client.model.GlideFishModel;
+import com.chronodawn.client.model.SecondhandArcherModel;
 import com.chronodawn.client.model.TimelineStriderModel;
 import com.chronodawn.client.model.TemporalPhantomModel;
 import com.chronodawn.client.model.TemporalWraithModel;
@@ -35,6 +36,7 @@ import com.chronodawn.client.renderer.TimeTyrantRenderer;
 import com.chronodawn.client.renderer.mobs.ClockworkSentinelRenderer;
 import com.chronodawn.client.renderer.mobs.FloqRenderer;
 import com.chronodawn.client.renderer.mobs.GlideFishRenderer;
+import com.chronodawn.client.renderer.mobs.SecondhandArcherRenderer;
 import com.chronodawn.client.renderer.mobs.TimelineStriderRenderer;
 import com.chronodawn.client.renderer.mobs.TemporalWraithRenderer;
 import com.chronodawn.client.renderer.mobs.TimeKeeperRenderer;
@@ -194,6 +196,11 @@ public class ChronoDawnClientNeoForge {
             TimelineStriderModel::createBodyLayer
         );
 
+        event.registerLayerDefinition(
+            SecondhandArcherModel.LAYER_LOCATION,
+            SecondhandArcherModel::createBodyLayer
+        );
+
         // Register boat and chest boat model layers (version-specific)
         VersionSpecificClientHelper.registerBoatModelLayers(event);
 
@@ -311,6 +318,11 @@ public class ChronoDawnClientNeoForge {
         event.registerEntityRenderer(
             ModEntities.TIMELINE_STRIDER.get(),
             TimelineStriderRenderer::new
+        );
+
+        event.registerEntityRenderer(
+            ModEntities.SECONDHAND_ARCHER.get(),
+            SecondhandArcherRenderer::new
         );
 
         // Register ChronoDawn Boat with custom renderer
@@ -623,7 +635,8 @@ public class ChronoDawnClientNeoForge {
             ModItems.CHRONAL_LEECH_SPAWN_EGG.get(),
             ModItems.MOMENT_CREEPER_SPAWN_EGG.get(),
             ModItems.GLIDE_FISH_SPAWN_EGG.get(),
-            ModItems.TIMELINE_STRIDER_SPAWN_EGG.get()
+            ModItems.TIMELINE_STRIDER_SPAWN_EGG.get(),
+            ModItems.SECONDHAND_ARCHER_SPAWN_EGG.get()
         );
 
         ChronoDawn.LOGGER.info("Registered item color handlers for NeoForge");

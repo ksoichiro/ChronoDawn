@@ -12,6 +12,7 @@ import com.chronodawn.client.model.FloqModel;
 import com.chronodawn.client.model.ForgottenMinuteModel;
 import com.chronodawn.client.model.GlideFishModel;
 import com.chronodawn.client.model.MomentCreeperModel;
+import com.chronodawn.client.model.SecondhandArcherModel;
 import com.chronodawn.client.model.TemporalPhantomModel;
 import com.chronodawn.client.model.TemporalWraithModel;
 import com.chronodawn.client.model.TimeGuardianModel;
@@ -39,6 +40,7 @@ import com.chronodawn.client.renderer.mobs.FloqRenderer;
 import com.chronodawn.client.renderer.mobs.ForgottenMinuteRenderer;
 import com.chronodawn.client.renderer.mobs.GlideFishRenderer;
 import com.chronodawn.client.renderer.mobs.MomentCreeperRenderer;
+import com.chronodawn.client.renderer.mobs.SecondhandArcherRenderer;
 import com.chronodawn.client.renderer.mobs.TemporalWraithRenderer;
 import com.chronodawn.client.renderer.mobs.TimeKeeperRenderer;
 import com.chronodawn.client.renderer.mobs.TimelineStriderRenderer;
@@ -485,6 +487,12 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             TimelineStriderModel.LAYER_LOCATION,
             TimelineStriderModel::createBodyLayer
         );
+
+        // Register Secondhand Archer model layer
+        EntityModelLayerRegistry.registerModelLayer(
+            SecondhandArcherModel.LAYER_LOCATION,
+            SecondhandArcherModel::createBodyLayer
+        );
     }
 
     /**
@@ -620,6 +628,11 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
         EntityRendererRegistry.register(
             ModEntities.TIMELINE_STRIDER.get(),
             TimelineStriderRenderer::new
+        );
+
+        EntityRendererRegistry.register(
+            ModEntities.SECONDHAND_ARCHER.get(),
+            SecondhandArcherRenderer::new
         );
 
         // Register ChronoDawn Boat with custom renderer

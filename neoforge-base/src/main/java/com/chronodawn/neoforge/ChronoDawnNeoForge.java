@@ -27,6 +27,7 @@ import com.chronodawn.entities.bosses.TimeTyrantEntity;
 import com.chronodawn.entities.mobs.ClockworkSentinelEntity;
 import com.chronodawn.entities.mobs.FloqEntity;
 import com.chronodawn.entities.mobs.GlideFishEntity;
+import com.chronodawn.entities.mobs.SecondhandArcherEntity;
 import com.chronodawn.entities.mobs.TimelineStriderEntity;
 import com.chronodawn.entities.mobs.TemporalWraithEntity;
 import com.chronodawn.entities.mobs.TimeKeeperEntity;
@@ -253,6 +254,11 @@ public class ChronoDawnNeoForge {
             TimelineStriderEntity.createAttributes().build()
         );
 
+        event.put(
+            ModEntities.SECONDHAND_ARCHER.get(),
+            SecondhandArcherEntity.createAttributes().build()
+        );
+
         ChronoDawn.LOGGER.info("Registered entity attributes for NeoForge");
     }
 
@@ -362,6 +368,15 @@ public class ChronoDawnNeoForge {
             SpawnPlacementTypes.ON_GROUND,
             Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             TimelineStriderEntity::checkTimelineStriderSpawnRules,
+            RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+
+        // Secondhand Archer - spawns on ground in daylight
+        event.register(
+            ModEntities.SECONDHAND_ARCHER.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            SecondhandArcherEntity::checkSecondhandArcherSpawnRules,
             RegisterSpawnPlacementsEvent.Operation.REPLACE
         );
 
