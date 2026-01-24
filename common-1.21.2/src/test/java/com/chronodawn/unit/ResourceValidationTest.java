@@ -21,7 +21,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -46,6 +45,18 @@ public class ResourceValidationTest {
         "FRUIT_OF_TIME_BLOCK", "fruit_of_time",
         "CHRONO_DAWN_BOAT", "chronodawn_boat",
         "CHRONO_DAWN_CHEST_BOAT", "chronodawn_chest_boat"
+    );
+
+    // Blocks that intentionally don't have loot tables
+    private static final Set<String> LOOT_TABLE_EXCLUDED_BLOCKS = Set.of(
+        "CHRONO_DAWN_PORTAL",           // Portal block, not obtainable
+        "BOSS_ROOM_BOUNDARY_MARKER",    // Structure marker, uses .noLootTable()
+        "DECORATIVE_WATER",             // Placeholder converted to vanilla water
+        "TEMPORAL_PARTICLE_EMITTER",    // Invisible, indestructible effect block
+        "REVERSING_TIME_SANDSTONE",     // Self-restoring block, no drops by design
+        "BOSS_ROOM_DOOR",               // Iron door equivalent, no drop
+        "ENTROPY_CRYPT_TRAPDOOR",       // Iron trapdoor equivalent, boss trigger
+        "UNSTABLE_FUNGUS"               // Special effect block, no drop by design
     );
 
     // Technical blocks/entities that don't need player-facing translations
@@ -176,6 +187,68 @@ public class ResourceValidationTest {
                     axeTagValues.contains("chronodawn:" + blockId),
                     "Block 'chronodawn:" + blockId + "' should be in mineable/axe tag"
                 );
+            }));
+        }
+
+        return tests;
+    }
+
+    /**
+     * Validates that all blocks have a loot table file, except those
+     * intentionally excluded (portals, structure markers, etc.).
+     */
+    @TestFactory
+    Collection<DynamicTest> lootTableExistenceTests() {
+        List<String> blockFieldNames = getFieldNames("ModBlocks.java");
+        Collection<DynamicTest> tests = new ArrayList<>();
+
+        for (String fieldName : blockFieldNames) {
+            if (fieldName.startsWith("POTTED_")) continue;
+            if (LOOT_TABLE_EXCLUDED_BLOCKS.contains(fieldName)) continue;
+            String blockId = ID_OVERRIDES.getOrDefault(fieldName, fieldName.toLowerCase());
+            String resourcePath = "data/chronodawn/loot_table/blocks/" + blockId + ".json";
+            tests.add(DynamicTest.dynamicTest("loot_table_exists_" + blockId, () -> {
+                assertNotNull(
+                    getClass().getClassLoader().getResource(resourcePath),
+                    "Missing loot table file: " + resourcePath
+                );
+            }));
+        }
+
+        return tests;
+    }
+
+    /**
+     * Validates that planks recipes use tag-based ingredients so that
+     * all log variants (including stripped) can be crafted into planks.
+     */
+    @SuppressWarnings("unchecked")
+    @TestFactory
+    Collection<DynamicTest> planksRecipeTagTests() {
+        String[] woodFamilies = {"time_wood", "dark_time_wood", "ancient_time_wood"};
+        Collection<DynamicTest> tests = new ArrayList<>();
+
+        for (String family : woodFamilies) {
+            String recipePath = "data/chronodawn/recipe/" + family + "_planks.json";
+            tests.add(DynamicTest.dynamicTest("planks_recipe_uses_tag_" + family, () -> {
+                try (InputStream is = getClass().getClassLoader().getResourceAsStream(recipePath)) {
+                    assertNotNull(is, "Missing recipe file: " + recipePath);
+                    Gson gson = new Gson();
+                    Map<String, Object> recipe = gson.fromJson(
+                        new InputStreamReader(is, StandardCharsets.UTF_8),
+                        new TypeToken<Map<String, Object>>() {}.getType()
+                    );
+                    List<Object> ingredients = (List<Object>) recipe.get("ingredients");
+                    assertNotNull(ingredients, "Recipe has no ingredients: " + recipePath);
+                    assertTrue(!ingredients.isEmpty(), "Recipe has empty ingredients: " + recipePath);
+                    Object ingredient = ingredients.get(0);
+                    String ingredientStr = ingredient.toString();
+                    assertTrue(
+                        ingredientStr.contains("#chronodawn:" + family + "_logs"),
+                        "Planks recipe for " + family + " should use tag '#chronodawn:" +
+                        family + "_logs' but got: " + ingredientStr
+                    );
+                }
             }));
         }
 
