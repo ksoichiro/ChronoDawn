@@ -28,34 +28,13 @@ dependencies {
     testImplementation 'com.google.code.gson:gson:2.10.1'
 }
 
-// Multi-version support: Configure source and resource directories
 sourceSets {
     main {
         java {
-            // Default Java source directory
             srcDir 'src/main/java'
-            // Shared gametest utilities
             srcDir '../common-gametest/src/main/java'
         }
-
-        resources {
-            // Clear default srcDirs to control order explicitly
-            srcDirs = []
-
-            // Version-specific resources FIRST (higher priority)
-            def versionResources = file("src/main/resources-${project.ext.minecraft_version}")
-            if (versionResources.exists()) {
-                srcDir versionResources
-                logger.lifecycle("Using version-specific resources: ${versionResources.name}")
-            } else {
-                logger.warn("Version-specific resources not found: ${versionResources.absolutePath}")
-            }
-
-            // Common resources SECOND (lower priority, will be excluded if duplicates exist)
-            srcDir 'src/main/resources'
-        }
     }
-
 }
 
 // Set version info as Java system property at runtime (for compat handlers)
@@ -77,8 +56,8 @@ tasks.register('convertNbtStructures', Exec) {
         project.ext.minecraft_version == '1.20.1'
     }
 
-    def inputDir = rootProject.file('common-1.21.1/src/main/resources-1.21.1/data/chronodawn/structure')
-    def outputDir = file('src/main/resources-1.20.1/data/chronodawn/structures')
+    def inputDir = rootProject.file('common-1.21.1/src/main/resources/data/chronodawn/structure')
+    def outputDir = file('src/main/resources/data/chronodawn/structures')
     def scriptPath = rootProject.file('scripts/convert_nbt_1_21_to_1_20.py')
 
     inputs.dir(inputDir).optional()
@@ -130,10 +109,6 @@ processResources.dependsOn convertNbtStructures
 
 // Expand pack_format variable in pack.mcmeta
 processResources {
-    // First source directory wins (version-specific resources take precedence)
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-
-    inputs.property 'minecraft_version', project.ext.minecraft_version
     inputs.property 'pack_format', project.ext.pack_format
 
     filesMatching('pack.mcmeta') {

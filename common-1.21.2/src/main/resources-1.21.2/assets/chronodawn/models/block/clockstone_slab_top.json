@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab_top",
-  "textures": {
-    "bottom": "chronodawn:block/clockstone_block",
-    "top": "chronodawn:block/clockstone_block",
-    "side": "chronodawn:block/clockstone_block"
-  }
-}

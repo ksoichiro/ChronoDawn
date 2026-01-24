@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/crop",
-  "textures": {
-    "crop": "chronodawn:block/temporal_root_stage_3"
-  }
-}

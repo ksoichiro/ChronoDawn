@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cross",
-  "textures": {
-    "cross": "chronodawn:block/ancient_time_wood_sapling"
-  }
-}
