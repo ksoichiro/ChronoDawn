@@ -120,6 +120,11 @@ public final class StructureTests {
             )),
             new StructureSpec("clockwork_depths_gearshaft", 13, 21, 13, List.of(
                 new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 2)
+            )),
+            new StructureSpec("clockwork_depths_engine_room", 30, 17, 30, List.of(
+                new BlockRequirement("boss_room_boundary_marker", ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 2),
+                new BlockRequirement("crimson_wall_sign", () -> Blocks.CRIMSON_WALL_SIGN, 4)
             ))
         );
     }
