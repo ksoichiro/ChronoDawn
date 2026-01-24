@@ -55,6 +55,10 @@ public final class StructureTests {
                 new BlockRequirement("chest", () -> Blocks.CHEST, 2),
                 new BlockRequirement("temporal_particle_emitter", ModBlocks.TEMPORAL_PARTICLE_EMITTER, 20),
                 new BlockRequirement("clockstone_ore", ModBlocks.CLOCKSTONE_ORE, 30)
+            )),
+            new StructureSpec("desert_clock_tower", 21, 48, 21, List.of(
+                new BlockRequirement("chest", () -> Blocks.CHEST, 3),
+                new BlockRequirement("clock_tower_teleporter", ModBlocks.CLOCK_TOWER_TELEPORTER, 1)
             ))
         );
     }
