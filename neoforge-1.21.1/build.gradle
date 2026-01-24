@@ -24,6 +24,7 @@ sourceSets {
 }
 
 def commonModule = ':common-1.21.1'
+def log4j2DevConfig = rootProject.file('neoforge-base/log4j2-dev.xml').absolutePath
 
 loom {
     accessWidenerPath = project(commonModule).loom.accessWidenerPath
@@ -34,6 +35,8 @@ loom {
             setConfigName("NeoForge Client")
             ideConfigGenerated(true)
             runDir("run")
+            vmArg("-Dfabric.log.disableAnsi=false")
+            vmArg("-Dlog4j2.configurationFile=${log4j2DevConfig}")
         }
         server {
             server()

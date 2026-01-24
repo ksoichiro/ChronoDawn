@@ -240,10 +240,23 @@ runClientConfigurations.each { config ->
 
                 def pb = new ProcessBuilder(cmd)
                 pb.directory(projectDir)
-                pb.inheritIO()
+                pb.redirectErrorStream(true)
 
                 def process = pb.start()
+
+                // Forward output preserving ANSI escape sequences
+                def outputThread = Thread.start {
+                    def is = process.inputStream
+                    def buf = new byte[8192]
+                    int len
+                    while ((len = is.read(buf)) != -1) {
+                        System.out.write(buf, 0, len)
+                        System.out.flush()
+                    }
+                }
+
                 def exitCode = process.waitFor()
+                outputThread.join()
                 if (exitCode != 0) {
                     throw new GradleException("${loader} client for ${config.version} exited with code ${exitCode}")
                 }

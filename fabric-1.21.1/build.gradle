@@ -60,6 +60,7 @@ loom {
         client {
             client()
             runDir("run")
+            vmArg("-Dfabric.log.disableAnsi=false")
         }
         server {
             server()
