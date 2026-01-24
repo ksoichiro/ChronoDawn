@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "building",
   "ingredients": [
-    "chronodawn:time_wood_log"
+    "#chronodawn:time_wood_logs"
   ],
   "result": {
     "id": "chronodawn:time_wood_planks",

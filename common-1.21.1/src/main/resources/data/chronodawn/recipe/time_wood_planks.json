@@ -3,7 +3,7 @@
   "category": "building",
   "ingredients": [
     {
-      "item": "chronodawn:time_wood_log"
+      "tag": "chronodawn:time_wood_logs"
     }
   ],
   "result": {
