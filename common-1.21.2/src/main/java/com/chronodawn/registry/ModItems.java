@@ -1846,6 +1846,18 @@ public class ModItems {
         )
     );
 
+    public static final RegistrySupplier<Item> TIMELINE_STRIDER_SPAWN_EGG = ITEMS.register(
+        "timeline_strider_spawn_egg",
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.TIMELINE_STRIDER,
+            0x1B1B3A, // Background: Dark navy
+            0xFFD700, // Spots: Golden yellow
+            new Item.Properties()
+                    .setId(ResourceKey.create(Registries.ITEM,
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "timeline_strider_spawn_egg")))
+        )
+    );
+
     // === Boats ===
 
     /**
@@ -1977,6 +1989,10 @@ public class ModItems {
 
         if (GLIDE_FISH_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
             ((com.chronodawn.items.DeferredSpawnEggItem) GLIDE_FISH_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (TIMELINE_STRIDER_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) TIMELINE_STRIDER_SPAWN_EGG.get()).initializeSpawnEgg();
         }
 
         ChronoDawn.LOGGER.info("Spawn eggs initialized");
@@ -2201,6 +2217,9 @@ public class ModItems {
         }
         if (GLIDE_FISH_SPAWN_EGG.isPresent()) {
             output.accept(GLIDE_FISH_SPAWN_EGG.get());
+        }
+        if (TIMELINE_STRIDER_SPAWN_EGG.isPresent()) {
+            output.accept(TIMELINE_STRIDER_SPAWN_EGG.get());
         }
         if (GLIDE_FISH.isPresent()) {
             output.accept(GLIDE_FISH.get());

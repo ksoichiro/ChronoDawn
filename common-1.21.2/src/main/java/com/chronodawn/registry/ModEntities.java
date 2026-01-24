@@ -10,6 +10,7 @@ import com.chronodawn.entities.bosses.TimeTyrantEntity;
 import com.chronodawn.entities.mobs.ClockworkSentinelEntity;
 import com.chronodawn.entities.mobs.FloqEntity;
 import com.chronodawn.entities.mobs.GlideFishEntity;
+import com.chronodawn.entities.mobs.TimelineStriderEntity;
 import com.chronodawn.entities.mobs.TemporalWraithEntity;
 import com.chronodawn.entities.mobs.TimeKeeperEntity;
 import com.chronodawn.entities.mobs.EpochHuskEntity;
@@ -320,6 +321,21 @@ public class ModEntities {
             .clientTrackingRange(8)
             .updateInterval(3)
             .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "glide_fish")))
+    );
+
+    /**
+     * Timeline Strider - Enderman-like hostile mob with teleportation.
+     *
+     * Neutral until stared at, teleports when damaged.
+     * Drops Time Crystal.
+     */
+    public static final RegistrySupplier<EntityType<TimelineStriderEntity>> TIMELINE_STRIDER = ENTITIES.register(
+        "timeline_strider",
+        () -> EntityType.Builder.of(TimelineStriderEntity::new, MobCategory.MONSTER)
+            .sized(0.6f, 2.9f)
+            .clientTrackingRange(8)
+            .updateInterval(3)
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "timeline_strider")))
     );
 
     // === Boat Entities ===

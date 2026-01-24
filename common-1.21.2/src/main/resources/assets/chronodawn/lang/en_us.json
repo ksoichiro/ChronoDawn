@@ -232,6 +232,7 @@
   "entity.chronodawn.chronal_leech": "Chronal Leech",
   "entity.chronodawn.moment_creeper": "Moment Creeper",
   "entity.chronodawn.glide_fish": "Glide Fish",
+  "entity.chronodawn.timeline_strider": "Timeline Strider",
 
   "biome.chronodawn.chronodawn_plains": "Chrono Dawn Plains",
   "biome.chronodawn.chronodawn_ocean": "Chrono Dawn Ocean",
@@ -326,6 +327,7 @@
   "item.chronodawn.chronal_leech_spawn_egg": "Chronal Leech Spawn Egg",
   "item.chronodawn.moment_creeper_spawn_egg": "Moment Creeper Spawn Egg",
   "item.chronodawn.glide_fish_spawn_egg": "Glide Fish Spawn Egg",
+  "item.chronodawn.timeline_strider_spawn_egg": "Timeline Strider Spawn Egg",
   "item.chronodawn.glide_fish": "Glide Fish",
   "item.chronodawn.cooked_glide_fish": "Cooked Glide Fish",
 

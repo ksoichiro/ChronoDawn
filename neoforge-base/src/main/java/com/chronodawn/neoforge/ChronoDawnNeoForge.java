@@ -27,6 +27,7 @@ import com.chronodawn.entities.bosses.TimeTyrantEntity;
 import com.chronodawn.entities.mobs.ClockworkSentinelEntity;
 import com.chronodawn.entities.mobs.FloqEntity;
 import com.chronodawn.entities.mobs.GlideFishEntity;
+import com.chronodawn.entities.mobs.TimelineStriderEntity;
 import com.chronodawn.entities.mobs.TemporalWraithEntity;
 import com.chronodawn.entities.mobs.TimeKeeperEntity;
 import com.chronodawn.entities.mobs.EpochHuskEntity;
@@ -247,6 +248,11 @@ public class ChronoDawnNeoForge {
             GlideFishEntity.createAttributes().build()
         );
 
+        event.put(
+            ModEntities.TIMELINE_STRIDER.get(),
+            TimelineStriderEntity.createAttributes().build()
+        );
+
         ChronoDawn.LOGGER.info("Registered entity attributes for NeoForge");
     }
 
@@ -347,6 +353,15 @@ public class ChronoDawnNeoForge {
             SpawnPlacementTypes.IN_WATER,
             Heightmap.Types.OCEAN_FLOOR,
             net.minecraft.world.entity.animal.WaterAnimal::checkSurfaceWaterAnimalSpawnRules,
+            RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+
+        // Timeline Strider - spawns on ground in daylight
+        event.register(
+            ModEntities.TIMELINE_STRIDER.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            TimelineStriderEntity::checkTimelineStriderSpawnRules,
             RegisterSpawnPlacementsEvent.Operation.REPLACE
         );
 

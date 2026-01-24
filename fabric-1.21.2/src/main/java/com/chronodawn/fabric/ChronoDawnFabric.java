@@ -32,6 +32,7 @@ import com.chronodawn.entities.mobs.ForgottenMinuteEntity;
 import com.chronodawn.entities.mobs.GlideFishEntity;
 import com.chronodawn.entities.mobs.MomentCreeperEntity;
 import com.chronodawn.entities.mobs.TemporalWraithEntity;
+import com.chronodawn.entities.mobs.TimelineStriderEntity;
 import com.chronodawn.entities.mobs.TimeKeeperEntity;
 import com.chronodawn.fabric.event.BlockProtectionEventHandler;
 import com.chronodawn.registry.ModEntities;
@@ -168,6 +169,11 @@ public class ChronoDawnFabric implements ModInitializer {
             GlideFishEntity.createAttributes()
         );
 
+        FabricDefaultAttributeRegistry.register(
+            ModEntities.TIMELINE_STRIDER.get(),
+            TimelineStriderEntity.createAttributes()
+        );
+
         ChronoDawn.LOGGER.info("Registered entity attributes for Fabric");
     }
 
@@ -246,6 +252,14 @@ public class ChronoDawnFabric implements ModInitializer {
             SpawnPlacementTypes.IN_WATER,
             Heightmap.Types.OCEAN_FLOOR,
             net.minecraft.world.entity.animal.WaterAnimal::checkSurfaceWaterAnimalSpawnRules
+        );
+
+        // Timeline Strider - spawns on ground in daylight (Monster with any light)
+        SpawnPlacements.register(
+            ModEntities.TIMELINE_STRIDER.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            TimelineStriderEntity::checkTimelineStriderSpawnRules
         );
 
         ChronoDawn.LOGGER.info("Registered spawn placements for custom mobs");

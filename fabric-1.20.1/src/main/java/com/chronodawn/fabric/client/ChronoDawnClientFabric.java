@@ -16,6 +16,7 @@ import com.chronodawn.client.model.ForgottenMinuteModel;
 import com.chronodawn.client.model.ChronalLeechModel;
 import com.chronodawn.client.model.MomentCreeperModel;
 import com.chronodawn.client.model.GlideFishModel;
+import com.chronodawn.client.model.TimelineStriderModel;
 import com.chronodawn.client.particle.ChronoDawnPortalParticle;
 import com.chronodawn.gui.ChronicleScreen;
 import com.chronodawn.gui.data.ChronicleData;
@@ -40,6 +41,7 @@ import com.chronodawn.client.renderer.mobs.ForgottenMinuteRenderer;
 import com.chronodawn.client.renderer.mobs.ChronalLeechRenderer;
 import com.chronodawn.client.renderer.mobs.MomentCreeperRenderer;
 import com.chronodawn.client.renderer.mobs.GlideFishRenderer;
+import com.chronodawn.client.renderer.mobs.TimelineStriderRenderer;
 import com.chronodawn.items.TimeCompassItem;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModEntities;
@@ -470,6 +472,12 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             GlideFishModel.LAYER_LOCATION,
             GlideFishModel::createBodyLayer
         );
+
+        // Register Timeline Strider model layer
+        EntityModelLayerRegistry.registerModelLayer(
+            TimelineStriderModel.LAYER_LOCATION,
+            TimelineStriderModel::createBodyLayer
+        );
     }
 
     /**
@@ -556,6 +564,11 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
         EntityRendererRegistry.register(
             ModEntities.GLIDE_FISH.get(),
             GlideFishRenderer::new
+        );
+
+        EntityRendererRegistry.register(
+            ModEntities.TIMELINE_STRIDER.get(),
+            TimelineStriderRenderer::new
         );
 
         // Register Clockwork Colossus with custom renderer

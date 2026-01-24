@@ -41,6 +41,8 @@ import com.chronodawn.client.renderer.mobs.GlideFishRenderer;
 import com.chronodawn.client.renderer.mobs.MomentCreeperRenderer;
 import com.chronodawn.client.renderer.mobs.TemporalWraithRenderer;
 import com.chronodawn.client.renderer.mobs.TimeKeeperRenderer;
+import com.chronodawn.client.renderer.mobs.TimelineStriderRenderer;
+import com.chronodawn.client.model.TimelineStriderModel;
 import com.chronodawn.items.TimeCompassItem;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModEntities;
@@ -477,6 +479,12 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             GlideFishModel.LAYER_LOCATION,
             GlideFishModel::createBodyLayer
         );
+
+        // Register Timeline Strider model layer
+        EntityModelLayerRegistry.registerModelLayer(
+            TimelineStriderModel.LAYER_LOCATION,
+            TimelineStriderModel::createBodyLayer
+        );
     }
 
     /**
@@ -607,6 +615,11 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
         EntityRendererRegistry.register(
             ModEntities.GLIDE_FISH.get(),
             GlideFishRenderer::new
+        );
+
+        EntityRendererRegistry.register(
+            ModEntities.TIMELINE_STRIDER.get(),
+            TimelineStriderRenderer::new
         );
 
         // Register ChronoDawn Boat with custom renderer
