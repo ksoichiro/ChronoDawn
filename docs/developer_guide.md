@@ -121,7 +121,8 @@ cd ChronoDawn
 
 ```
 ChronoDawn/
-├── common-base/                            # Shared common module shell
+├── common-shared/                          # Shared version-agnostic sources (included via srcDir)
+├── common-gametest/                        # Shared gametest sources (included via srcDir)
 ├── common-1.21.2/                          # Common module for MC 1.21.2 (~80% of code)
 │   ├── src/main/java/com/chronodawn/
 │   │   ├── ChronoDawn.java                 # Common entry point

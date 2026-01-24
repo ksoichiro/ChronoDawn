@@ -44,7 +44,6 @@ Auto-generated from all feature plans. Last updated: 2025-10-19
 
 ## Project Structure
 ```
-common-base/          (shared common module shell)
 common-shared/        (shared version-agnostic sources, NOT a Gradle subproject)
 common-gametest/      (shared gametest sources, NOT a Gradle subproject)
 common-1.20.1/        (version-specific common module)
