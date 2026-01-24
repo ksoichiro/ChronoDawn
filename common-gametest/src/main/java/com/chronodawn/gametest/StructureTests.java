@@ -74,6 +74,10 @@ public final class StructureTests {
                 new BlockRequirement("boss_room_boundary_marker", ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
                 new BlockRequirement("boss_room_door", ModBlocks.BOSS_ROOM_DOOR, 1),
                 new BlockRequirement("dropper", () -> Blocks.DROPPER, 1)
+            )),
+            new StructureSpec("master_clock_stairs", 15, 8, 15, List.of(
+                new BlockRequirement("boss_room_boundary_marker", ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 2)
             ))
         );
     }
