@@ -153,6 +153,38 @@ public final class RegistryDrivenTestGenerator {
     }
 
     /**
+     * Generates tests verifying advancements are loaded by the server.
+     */
+    public static List<NamedTest> generateAdvancementLoadedTests() {
+        return AdvancementTests.generateAdvancementLoadedTests(
+            RegistryDrivenTestData.getAdvancementSpecs(), NamedTest::new);
+    }
+
+    /**
+     * Generates tests verifying advancement grant and check via CompatAdvancementHelper.
+     */
+    public static List<NamedTest> generateAdvancementGrantTests() {
+        return AdvancementTests.generateAdvancementGrantTests(
+            RegistryDrivenTestData.getAdvancementSpecs(), NamedTest::new);
+    }
+
+    /**
+     * Generates tests verifying advancement parent references are valid.
+     */
+    public static List<NamedTest> generateAdvancementParentTests() {
+        return AdvancementTests.generateAdvancementParentTests(
+            RegistryDrivenTestData.getAdvancementSpecs(), NamedTest::new);
+    }
+
+    /**
+     * Generates tests verifying granting a child advancement does not grant its parent.
+     */
+    public static List<NamedTest> generateAdvancementIsolationTests() {
+        return AdvancementTests.generateAdvancementIsolationTests(
+            RegistryDrivenTestData.getAdvancementSpecs(), NamedTest::new);
+    }
+
+    /**
      * Generates tests verifying that all item registry IDs match their field names.
      */
     public static List<NamedTest> generateItemIdTests() {
@@ -335,6 +367,10 @@ public final class RegistryDrivenTestGenerator {
         all.addAll(MobBehaviorTests.generateMobCategoryTests(RegistryDrivenTestData.getMobCategorySpecs(), NamedTest::new));
         all.addAll(MobBehaviorTests.generateMobPersistenceTests(RegistryDrivenTestData.getPersistentEntities(), NamedTest::new));
         all.addAll(MobBehaviorTests.generateFlyingMobTests(RegistryDrivenTestData.getFlyingEntities(), NamedTest::new));
+        all.addAll(generateAdvancementLoadedTests());
+        all.addAll(generateAdvancementGrantTests());
+        all.addAll(generateAdvancementParentTests());
+        all.addAll(generateAdvancementIsolationTests());
         return all;
     }
 

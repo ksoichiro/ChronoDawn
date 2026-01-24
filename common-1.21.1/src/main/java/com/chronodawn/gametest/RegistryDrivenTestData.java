@@ -295,4 +295,38 @@ public final class RegistryDrivenTestData {
             (RegistrySupplier<EntityType<?>>) (RegistrySupplier<?>) ModEntities.FORGOTTEN_MINUTE
         );
     }
+
+    /**
+     * Advancement specifications: advancement ID + expected parent ID.
+     * Tests verify advancement loading, parent validity, grant/check, and isolation.
+     */
+    public static List<AdvancementTests.AdvancementSpec> getAdvancementSpecs() {
+        return List.of(
+            // Root advancement (no parent)
+            new AdvancementTests.AdvancementSpec("root"),
+            // Story US1
+            new AdvancementTests.AdvancementSpec("story/us1/portal_creation", "root"),
+            new AdvancementTests.AdvancementSpec("story/us1/dimension_entry", "story/us1/portal_creation"),
+            // Story US2
+            new AdvancementTests.AdvancementSpec("story/us2/time_guardian_defeat", "story/us1/dimension_entry"),
+            new AdvancementTests.AdvancementSpec("story/us2/desert_clock_tower", "story/us1/dimension_entry"),
+            new AdvancementTests.AdvancementSpec("story/us2/time_manipulation_tools", "story/us2/desert_clock_tower"),
+            new AdvancementTests.AdvancementSpec("story/us2/chrono_aegis_obtained", "story/us2/time_guardian_defeat"),
+            // Story US3
+            new AdvancementTests.AdvancementSpec("story/us3/master_clock_access", "story/us2/time_guardian_defeat"),
+            new AdvancementTests.AdvancementSpec("story/us3/time_tyrant_defeat", "story/us3/master_clock_access"),
+            new AdvancementTests.AdvancementSpec("story/us3/ultimate_artifacts", "story/us3/time_tyrant_defeat"),
+            // Equipment
+            new AdvancementTests.AdvancementSpec("equipment/tier1_full_set", "story/us1/dimension_entry"),
+            new AdvancementTests.AdvancementSpec("equipment/tier2_full_set", "story/us2/desert_clock_tower"),
+            // Exploration
+            new AdvancementTests.AdvancementSpec("exploration/first_time_crystal_ore", "story/us1/dimension_entry"),
+            // Mobs
+            new AdvancementTests.AdvancementSpec("mobs/chronos_warden_defeated", "story/us2/time_guardian_defeat"),
+            new AdvancementTests.AdvancementSpec("mobs/clockwork_colossus_defeated", "story/us2/time_guardian_defeat"),
+            new AdvancementTests.AdvancementSpec("mobs/temporal_phantom_defeated", "story/us2/time_guardian_defeat"),
+            new AdvancementTests.AdvancementSpec("mobs/entropy_keeper_defeated", "story/us2/time_guardian_defeat")
+        );
+    }
 }
+

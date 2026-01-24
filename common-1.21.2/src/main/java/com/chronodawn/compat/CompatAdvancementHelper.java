@@ -43,6 +43,17 @@ public class CompatAdvancementHelper {
     }
 
     /**
+     * Check if an advancement exists in the server's advancement registry.
+     *
+     * @param server Minecraft server
+     * @param advancementId Advancement resource location
+     * @return true if the advancement is registered
+     */
+    public static boolean advancementExists(MinecraftServer server, ResourceLocation advancementId) {
+        return server.getAdvancements().get(advancementId) != null;
+    }
+
+    /**
      * Check if a player has completed an advancement.
      *
      * @param server Minecraft server
