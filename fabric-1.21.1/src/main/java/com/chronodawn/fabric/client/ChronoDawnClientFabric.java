@@ -683,7 +683,7 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
      */
     private void registerPortalEffects() {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            com.chronodawn.compat.v1_21_1.client.PortalEffectHandler.onClientTick();
+            com.chronodawn.client.PortalEffectHandler.onClientTick();
         });
     }
 }

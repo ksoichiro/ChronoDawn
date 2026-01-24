@@ -43,7 +43,6 @@ public class VersionSpecificClientHelper {
 
     /**
      * Handle client tick for portal effects.
-     * In 1.21.2, PortalEffectHandler is in the main client package.
      */
     public static void onClientTick() {
         com.chronodawn.client.PortalEffectHandler.onClientTick();

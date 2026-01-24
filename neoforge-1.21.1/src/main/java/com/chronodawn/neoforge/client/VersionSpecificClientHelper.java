@@ -26,9 +26,8 @@ public class VersionSpecificClientHelper {
 
     /**
      * Handle client tick for portal effects.
-     * In 1.21.1, PortalEffectHandler is in the compat package.
      */
     public static void onClientTick() {
-        com.chronodawn.compat.v1_21_1.client.PortalEffectHandler.onClientTick();
+        com.chronodawn.client.PortalEffectHandler.onClientTick();
     }
 }

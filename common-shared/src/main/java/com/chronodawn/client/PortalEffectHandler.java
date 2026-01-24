@@ -1,18 +1,12 @@
-package com.chronodawn.compat.v1_21_1.client;
+package com.chronodawn.client;
 
-import com.chronodawn.client.PortalFadeHandler;
-import com.chronodawn.registry.ModBlocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.state.BlockState;
 
 /**
- * Handles portal-related effects on the client side (Minecraft 1.21.1).
+ * Handles portal-related effects on the client side.
  *
  * This handler manages fade effect trigger:
  * - Detects dimension changes and triggers fade-in effect

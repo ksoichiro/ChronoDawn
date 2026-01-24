@@ -22,7 +22,7 @@ public interface ItemDurabilityHandler {
      * Get the version-specific handler instance.
      */
     static ItemDurabilityHandler getInstance() {
-        // This will be loaded from compat/v1_20_1 or compat/v1_21_1 depending on version
+        // Version-specific handler loaded via reflection
         try {
             // Try 1.21.1 first
             Class<?> handler121 = Class.forName("com.chronodawn.compat.ItemDurabilityHandler121");
