@@ -33,12 +33,17 @@ if (targetMcVersion == '1.20.1') {
 }
 
 // Platform-specific projects
+// Each version uses a separate directory (fabric-X.XX.X, neoforge-X.XX.X)
+// so that .gradle/architectury/ paths don't conflict, enabling full parallel gameTest.
+// Project names remain 'fabric'/'neoforge' as required by Architectury Plugin.
 include 'fabric'
+project(':fabric').projectDir = file("fabric-${targetMcVersion}")
+logger.lifecycle("Fabric module: fabric-${targetMcVersion}")
 
-// NeoForge only supports Minecraft 1.20.5+, so exclude it for 1.20.1
 if (targetMcVersion != '1.20.1') {
     include 'neoforge'
-    logger.lifecycle("NeoForge module enabled for Minecraft ${targetMcVersion}")
+    project(':neoforge').projectDir = file("neoforge-${targetMcVersion}")
+    logger.lifecycle("NeoForge module: neoforge-${targetMcVersion}")
 } else {
     logger.lifecycle("NeoForge module disabled for Minecraft 1.20.1 (not supported)")
 }

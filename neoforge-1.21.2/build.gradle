@@ -1,54 +1,29 @@
-// neoforge/build.gradle
-
 plugins {
     id 'com.gradleup.shadow'
 }
 
 architectury {
     platformSetupLoomIde()
-    // Multi-version support: Use Forge for 1.20.1-1.20.4, NeoForge for 1.20.5+
-    def mcVersion = project.ext.minecraft_version
-    if (mcVersion.startsWith("1.20.") && mcVersion < "1.20.5") {
-        forge()
-    } else {
-        neoForge()
-    }
+    neoForge()
 }
 
-// Multi-version support: Configure version-specific source directories
 sourceSets {
     main {
         java {
-            // Default Java source directory
+            srcDir '../neoforge-base/src/main/java'
             srcDir 'src/main/java'
-
-            // Add version-specific source directory
-            def versionSpecificSrc = file("src/main/java-${project.ext.minecraft_version}")
-            if (versionSpecificSrc.exists()) {
-                srcDir versionSpecificSrc
-                logger.lifecycle("NeoForge: Using version-specific sources: ${versionSpecificSrc.name}")
-            }
         }
         resources {
-            // Clear default srcDirs to control order explicitly
             srcDirs = []
-
             // Version-specific resources FIRST (higher priority)
-            def versionSpecificRes = file("src/main/resources-${project.ext.minecraft_version}")
-            if (versionSpecificRes.exists()) {
-                srcDir versionSpecificRes
-                logger.lifecycle("NeoForge: Using version-specific resources: ${versionSpecificRes.name}")
-            }
-
-            // Default resources SECOND (lower priority)
             srcDir 'src/main/resources'
+            // Shared resources SECOND (lower priority)
+            srcDir '../neoforge-base/src/main/resources'
         }
     }
 }
 
-// Multi-version support: Determine which common module to use
-def commonModule = project.ext.minecraft_version == '1.20.1' ? ':common-1.20.1' :
-                   project.ext.minecraft_version == '1.21.2' ? ':common-1.21.2' : ':common-1.21.1'
+def commonModule = ':common-1.21.2'
 
 loom {
     accessWidenerPath = project(commonModule).loom.accessWidenerPath
@@ -58,22 +33,20 @@ loom {
             client()
             setConfigName("NeoForge Client")
             ideConfigGenerated(true)
-            runDir("run-${project.ext.minecraft_version}")
+            runDir("run")
         }
         server {
             server()
             setConfigName("NeoForge Server")
             ideConfigGenerated(true)
-            runDir("run-${project.ext.minecraft_version}")
+            runDir("run")
         }
         gameTestServer {
             server()
             setConfigName("NeoForge GameTest Server")
             ideConfigGenerated(true)
-            runDir("run-${project.ext.minecraft_version}")
-            // Enable GameTest framework
+            runDir("run")
             property("neoforge.enabledGameTestNamespaces", "chronodawn")
-            // Auto-run all tests and exit
             property("neoforge.gameTestServer", "true")
             programArgs("--nogui")
         }
@@ -82,7 +55,7 @@ loom {
 
 configurations {
     common
-    shadowCommon // Don't use shadow from the shadow plugin since it *excludes* files.
+    shadowCommon
     compileClasspath.extendsFrom common
     runtimeClasspath.extendsFrom common
     developmentNeoForge.extendsFrom common
@@ -93,26 +66,15 @@ repositories {
 }
 
 dependencies {
-    // Multi-version support: Use Forge for 1.20.1-1.20.4, NeoForge for 1.20.5+
-    def mcVersion = project.ext.minecraft_version
-    if (mcVersion.startsWith("1.20.") && mcVersion < "1.20.5") {
-        // Minecraft 1.20.1-1.20.4 uses Forge
-        neoForge "net.minecraftforge:forge:${mcVersion}-${neoforge_version}"
-        modApi "dev.architectury:architectury-forge:${architectury_api_version}"
-    } else {
-        // Minecraft 1.20.5+ uses NeoForge
-        neoForge "net.neoforged:neoforge:${neoforge_version}"
-        modApi "dev.architectury:architectury-neoforge:${architectury_api_version}"
-    }
+    neoForge "net.neoforged:neoforge:${neoforge_version}"
+    modApi "dev.architectury:architectury-neoforge:${architectury_api_version}"
 
-    // Multi-version subproject dependencies
     implementation(project(':common-base')) { transitive false }
     common(project(path: commonModule, configuration: "namedElements")) { transitive false }
     shadowCommon(project(path: commonModule, configuration: "transformProductionNeoForge")) { transitive false }
 }
 
 tasks.named("processResources", ProcessResources).configure {
-    // Ensure common module's NBT conversion completes before processing resources
     dependsOn project(commonModule).tasks.named('convertNbtStructures')
 
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -122,12 +84,8 @@ tasks.named("processResources", ProcessResources).configure {
         expand "version": project.version
     }
 
-    // pack.mcmeta expansion is handled in root build.gradle (common for fabric/neoforge)
-
-    // Include common resources (data, assets, pack.mcmeta)
     from(project(commonModule).sourceSets.main.resources) {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        // Exclude loader-specific files
         exclude "fabric.mod.json"
         exclude "chronodawn.mixins.json"
         exclude "architectury.common.json"
@@ -178,12 +136,5 @@ publishing {
     }
 
     repositories {
-        // Add publishing repositories here
     }
 }
-
-// Multi-version run client tasks (auto-generated for all supported versions)
-apply from: "${rootProject.projectDir}/gradle/subproject-run-tasks.gradle"
-
-// Multi-version GameTest tasks (auto-generated for all supported versions)
-apply from: "${rootProject.projectDir}/gradle/subproject-gametest-tasks.gradle"

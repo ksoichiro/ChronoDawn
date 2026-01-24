@@ -103,7 +103,7 @@ cd ChronoDawn
 
 4. **Run Configurations**:
    - Gradle tasks are auto-detected
-   - Use `fabric:runClient` or `neoforge:runClient` to launch development game
+   - Use `:fabric:runClient -Ptarget_mc_version=1.21.2` or `:neoforge:runClient -Ptarget_mc_version=1.21.2` to launch development game
 
 #### Eclipse
 
@@ -168,29 +168,30 @@ ChronoDawn/
 │   └── src/test/java/com/chronodawn/     # Tests
 │       ├── unit/                           # Unit tests
 │       └── integration/                    # Integration tests
-├── fabric/                                 # Fabric module (~10%)
+├── fabric-base/                            # Shared Fabric sources (NOT a Gradle subproject)
+│   └── src/main/java/com/chronodawn/fabric/
+│       ├── event/                          # Event handlers
+│       └── platform/                       # Platform implementations
+├── fabric-1.20.1/                          # Fabric 1.20.1 subproject
+├── fabric-1.21.1/                          # Fabric 1.21.1 subproject
+├── fabric-1.21.2/                          # Fabric 1.21.2 subproject
 │   ├── src/main/java/com/chronodawn/fabric/
-│   │   ├── ChronoDawnFabric.java           # Fabric entry point
-│   │   ├── client/                         # Client-side initialization
-│   │   ├── platform/                       # Platform implementations
-│   │   └── compat/                         # Fabric-specific compatibility
-│   │       └── CustomPortalFabric.java     # Custom Portal API (Fabric)
+│   │   ├── ChronoDawnFabric.java           # Fabric entry point (version-specific)
+│   │   └── client/                         # Client-side initialization
 │   └── src/main/resources/
 │       ├── fabric.mod.json                 # Fabric mod metadata
-│       ├── chronodawn-fabric.mixins.json # Fabric Mixin config (with refMap)
-│       └── pack.mcmeta
-├── neoforge/                               # NeoForge module (~10%)
+│       └── chronodawn-fabric.mixins.json   # Fabric Mixin config (with refMap)
+├── neoforge-base/                          # Shared NeoForge sources (NOT a Gradle subproject)
+│   └── src/main/java/com/chronodawn/neoforge/
+│       ├── ChronoDawnNeoForge.java         # NeoForge entry point
+│       ├── client/                         # Client-side initialization
+│       └── platform/                       # Platform implementations
+├── neoforge-1.21.1/                        # NeoForge 1.21.1 subproject
+├── neoforge-1.21.2/                        # NeoForge 1.21.2 subproject
 │   ├── src/main/java/com/chronodawn/neoforge/
-│   │   ├── ChronoDawnNeoForge.java         # NeoForge entry point
-│   │   ├── client/                         # Client-side initialization
-│   │   ├── platform/                       # Platform implementations
-│   │   └── compat/                         # NeoForge-specific compatibility
-│   │       └── CustomPortalNeoForge.java   # Custom Portal API (NeoForge)
+│   │   └── mixin/                          # Version-specific mixins
 │   └── src/main/resources/
-│       ├── META-INF/
-│       │   └── neoforge.mods.toml          # NeoForge mod metadata
-│       ├── chronodawn-neoforge.mixins.json # NeoForge Mixin config (no refMap)
-│       └── pack.mcmeta
+│       └── META-INF/neoforge.mods.toml     # NeoForge mod metadata
 ├── specs/chrono-dawn-mod/                  # Design documents
 │   ├── spec.md                             # Feature specification
 │   ├── plan.md                             # Implementation plan
@@ -260,30 +261,29 @@ neoforge_version=21.2.0-beta
 ./gradlew build1_21_1
 
 # Build specific module
-./gradlew :fabric:build
-./gradlew :neoforge:build
+./gradlew :fabric:build -Ptarget_mc_version=1.21.2
+./gradlew :neoforge:build -Ptarget_mc_version=1.21.2
 
 # Run development client (version-specific)
-./gradlew :fabric:runClient1_21_2
-./gradlew :fabric:runClient1_21_1
-./gradlew :fabric:runClient1_20_1
-./gradlew :neoforge:runClient1_21_2
-./gradlew :neoforge:runClient1_21_1
-./gradlew :neoforge:runClient1_20_1
+./gradlew :fabric:runClient -Ptarget_mc_version=1.21.2
+./gradlew :fabric:runClient -Ptarget_mc_version=1.21.1
+./gradlew :fabric:runClient -Ptarget_mc_version=1.20.1
+./gradlew :neoforge:runClient -Ptarget_mc_version=1.21.2
+./gradlew :neoforge:runClient -Ptarget_mc_version=1.21.1
 
 # Run development server
-./gradlew :fabric:runServer
-./gradlew :neoforge:runServer
+./gradlew :fabric:runServer -Ptarget_mc_version=1.21.2
+./gradlew :neoforge:runServer -Ptarget_mc_version=1.21.2
 
 # Run unit tests
 ./gradlew test
-./gradlew :common:test
+./gradlew :common-1.21.2:test -Ptarget_mc_version=1.21.2
 
 # Run GameTests (in-game integration tests)
 ./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.2
 ./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.1
 ./gradlew :fabric:runGameTest -Ptarget_mc_version=1.20.1
-./gradlew gameTestAll   # All versions and loaders
+./gradlew gameTestAll   # All versions and loaders (fully parallel)
 
 # Validate resource files (JSON syntax + cross-references)
 ./gradlew validateResources
@@ -295,8 +295,8 @@ neoforge_version=21.2.0-beta
 ### Output Files
 
 After building:
-- **Fabric JAR**: `fabric/build/libs/chronodawn-0.4.0-beta+1.21.2-fabric.jar`
-- **NeoForge JAR**: `neoforge/build/libs/chronodawn-0.4.0-beta+1.21.2-neoforge.jar`
+- **Fabric JAR**: `fabric-1.21.2/build/libs/chronodawn-0.4.0-beta+1.21.2-fabric.jar`
+- **NeoForge JAR**: `neoforge-1.21.2/build/libs/chronodawn-0.4.0-beta+1.21.2-neoforge.jar`
 - **Common JAR**: `common/build/libs/common-0.4.0-beta.jar` (bundled into loader JARs)
 
 ---
@@ -563,50 +563,37 @@ public static final RegistrySupplier<EntityType<MyEntity>> MY_ENTITY = ENTITIES.
 ./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.2
 ./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.1
 ./gradlew :fabric:runGameTest -Ptarget_mc_version=1.20.1
+./gradlew :neoforge:runGameTestServer -Ptarget_mc_version=1.21.2
+./gradlew :neoforge:runGameTestServer -Ptarget_mc_version=1.21.1
 
-# Run for all versions and loaders
+# Run for all versions and loaders (fully parallel)
 ./gradlew gameTestAll
 ```
 
 ### gameTestAll Architecture
 
-`gameTestAll` runs 5 configurations (fabric×3 versions + neoforge×2 versions) with partial parallelization.
+`gameTestAll` runs 5 configurations (fabric×3 versions + neoforge×2 versions) grouped by version.
 
 **Parallelization strategy**:
+
+Configurations are grouped by Minecraft version. Each version group runs as a single Gradle process (with `--parallel`), and different versions run in parallel:
 ```
-Group 1: fabric 1.20.1  ║  neoforge 1.21.1
-Group 2: fabric 1.21.1  ║  neoforge 1.21.2
-Group 3: fabric 1.21.2
-```
-
-Same-platform configurations run sequentially; different platforms run in parallel.
-
-**Technical constraint (Architectury Plugin)**:
-
-`ArchitectPluginExtension` in the Architectury Plugin hardcodes the runtime transformer configuration file paths:
-
-```
-<subproject>/.gradle/architectury/.properties   ← classpath info
-<subproject>/.gradle/architectury/.transforms    ← transformer config
+Thread 1: :fabric:runGameTest (1.20.1)                          ║
+Thread 2: :fabric:runGameTest + :neoforge:runGameTestServer (1.21.1)  ║  3 versions in parallel
+Thread 3: :fabric:runGameTest + :neoforge:runGameTestServer (1.21.2)  ║
 ```
 
-These are defined as private Kotlin lazy val with no public setter or API to override. Consequently:
+Within each version group, fabric and neoforge share the same common module build, so they run in a single Gradle invocation to avoid concurrent build output conflicts.
 
-- `fabric/.gradle/architectury/` — shared by all fabric version builds (potential conflict)
-- `neoforge/.gradle/architectury/` — shared by all neoforge version builds (potential conflict)
-- fabric and neoforge use different directories, so no conflict between them
+**How it works**:
 
-**Build directory isolation**:
+Each version uses a separate directory (e.g., `fabric-1.21.2/`) via `project(':fabric').projectDir = file("fabric-1.21.2")` in settings.gradle. This gives each version its own `.gradle/architectury/` directory and build output.
 
-The `-PbuildDirSuffix=<version>-<loader>` parameter isolates build output directories for each process, enabling safe parallel execution without `clean` (configured via `layout.buildDirectory` in `build.gradle`).
+Each subprocess uses `--project-cache-dir .gradle/gametest-<version>` to avoid lock conflicts with the outer Gradle process and other subprocesses.
 
-**Path to full parallelization**:
+Shared sources are included via `srcDir` references to `fabric-base/` and `neoforge-base/` directories (which are source directories, not Gradle subprojects).
 
-Further speedup requires either forking the Architectury Plugin or submitting an upstream patch:
-- Make `PrepareArchitecturyTransformer` output path configurable
-- Alternatively, use git worktree to physically isolate project directories
-
-**Log files**: Each configuration's output is saved to `build/gametest-<version>-<loader>.log`.
+**Log files**: Each version group's output is saved to `build/gametest-<version>.log`.
 
 ### Resource Validation
 
@@ -628,7 +615,7 @@ Validates data/asset file integrity at build time without launching the game:
 
 1. **Launch Development Client**:
    ```bash
-   ./gradlew :fabric:runClient
+   ./gradlew :fabric:runClient -Ptarget_mc_version=1.21.2
    ```
 
 2. **Create Test World**: Creative mode recommended
@@ -661,7 +648,7 @@ Validates data/asset file integrity at build time without launching the game:
 ### IntelliJ IDEA Debugging
 
 1. **Set Breakpoints**: Click left margin in code editor
-2. **Launch Debug Mode**: Run → Debug 'fabric:runClient'
+2. **Launch Debug Mode**: Run → Debug 'Fabric Client'
 3. **Step Through Code**: F8 (step over), F7 (step into)
 
 ### Common Debug Scenarios

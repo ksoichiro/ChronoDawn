@@ -32,8 +32,8 @@ bin/
 
 # Minecraft Development
 run/
-fabric/run-*/
-neoforge/run-*/
+fabric-*/run/
+neoforge-*/run/
 logs/
 crash-reports/
 
@@ -47,11 +47,9 @@ Thumbs.db
 
 # Architectury
 common/build/
-common/build-*/
-fabric/build/
-fabric/build-*/
-neoforge/build/
-neoforge/build-*/
+common-*/build/
+fabric-*/build/
+neoforge-*/build/
 
 # Blockbench
 assets/*.java

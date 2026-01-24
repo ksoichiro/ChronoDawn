@@ -44,8 +44,19 @@ Auto-generated from all feature plans. Last updated: 2025-10-19
 
 ## Project Structure
 ```
-src/
-tests/
+common-base/          (shared common module shell)
+common-1.20.1/        (version-specific common module)
+common-1.21.1/        (version-specific common module)
+common-1.21.2/        (version-specific common module)
+fabric-base/          (shared Fabric sources, NOT a Gradle subproject)
+fabric-1.20.1/        (version-specific Fabric subproject)
+fabric-1.21.1/        (version-specific Fabric subproject)
+fabric-1.21.2/        (version-specific Fabric subproject)
+neoforge-base/        (shared NeoForge sources, NOT a Gradle subproject)
+neoforge-1.21.1/      (version-specific NeoForge subproject)
+neoforge-1.21.2/      (version-specific NeoForge subproject)
+gradle/               (build scripts)
+props/                (version-specific properties)
 ```
 
 ## Commands
@@ -70,12 +81,13 @@ Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2): Follow standard conventions
 - `./gradlew buildAll` - Build all versions
 
 **Run Client**:
-- Fabric: `./gradlew fabric:runClient1_20_1`, `./gradlew fabric:runClient1_21_1`, or `./gradlew fabric:runClient1_21_2`
-- NeoForge: `./gradlew neoforge:runClient1_20_1`, `./gradlew neoforge:runClient1_21_1`, or `./gradlew neoforge:runClient1_21_2`
+- Fabric: `./gradlew :fabric:runClient -Ptarget_mc_version=1.20.1`, `./gradlew :fabric:runClient -Ptarget_mc_version=1.21.1`, or `./gradlew :fabric:runClient -Ptarget_mc_version=1.21.2`
+- NeoForge: `./gradlew :neoforge:runClient -Ptarget_mc_version=1.21.1`, or `./gradlew :neoforge:runClient -Ptarget_mc_version=1.21.2`
 
 **GameTest**:
 - `./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.2` - Run GameTests for specific version
-- `./gradlew gameTestAll` - Run GameTests for all versions and loaders
+- `./gradlew :neoforge:runGameTestServer -Ptarget_mc_version=1.21.2` - Run NeoForge GameTests
+- `./gradlew gameTestAll` - Run GameTests for all versions and loaders (parallel by version)
 
 **Resource Validation**:
 - `./gradlew validateResources` - Check JSON syntax and cross-references (blockstate→model, model→texture)
@@ -86,7 +98,7 @@ Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2): Follow standard conventions
 - When writing code, use Mojang mapping names (e.g., `net.minecraft.world.level.Level`, not Yarn's `class_XXXX`)
 - Build files use Groovy syntax (e.g., `maven { url 'https://...' }`, not `maven { url = "https://..." }`)
 - Common module code is bundled into Fabric JAR using Shadow plugin
-- **Parallel build constraint**: Architectury Plugin hardcodes `.gradle/architectury/` paths (private Kotlin lazy val, no setter/API), preventing parallel builds within the same platform (fabric×fabric or neoforge×neoforge). `gameTestAll` only parallelizes fabric‖neoforge pairs. See `docs/developer_guide.md` "gameTestAll Architecture" for details.
+- **Parallel GameTest**: `gameTestAll` groups configurations by Minecraft version (3 parallel threads). Within each version, fabric and neoforge run in a single Gradle process to avoid common module build conflicts. Each version uses a separate directory (fabric-1.20.1, fabric-1.21.1, etc.) with its own `.gradle/architectury/` path.
 
 ## Mixin Configuration
 
@@ -116,9 +128,9 @@ Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2): Follow standard conventions
 - **Example**:
   ```
   Verification is possible:
-  1. Run ./gradlew :fabric:build
+  1. Run ./gradlew :fabric:build -Ptarget_mc_version=1.21.2
   2. Confirm that the build succeeds
-  3. Confirm that JAR files are generated in fabric/build/libs/
+  3. Confirm that JAR files are generated in fabric-1.21.2/build/libs/
   Expected result: Build completes without errors and JAR files are generated
   ```
 - **Wait for User Decision**: Allow user to decide whether to proceed with verification before committing
