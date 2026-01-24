@@ -117,6 +117,9 @@ public final class StructureTests {
             new StructureSpec("clockwork_depths_tower", 11, 15, 11, List.of(
                 new BlockRequirement("campfire", () -> Blocks.CAMPFIRE, 4),
                 new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1)
+            )),
+            new StructureSpec("clockwork_depths_gearshaft", 13, 21, 13, List.of(
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 2)
             ))
         );
     }
