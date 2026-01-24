@@ -64,6 +64,11 @@ public final class StructureTests {
                 new BlockRequirement("chest", () -> Blocks.CHEST, 2),
                 new BlockRequirement("barrel", () -> Blocks.BARREL, 1),
                 new BlockRequirement("time_crystal_block", ModBlocks.TIME_CRYSTAL_BLOCK, 1)
+            )),
+            new StructureSpec("forgotten_library", 35, 15, 35, List.of(
+                new BlockRequirement("chest", () -> Blocks.CHEST, 7),
+                new BlockRequirement("barrel", () -> Blocks.BARREL, 1),
+                new BlockRequirement("enchanting_table", () -> Blocks.ENCHANTING_TABLE, 1)
             ))
         );
     }
