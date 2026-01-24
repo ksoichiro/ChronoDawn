@@ -137,6 +137,10 @@ public final class StructureTests {
             )),
             new StructureSpec("phantom_catacombs_corridor", 5, 40, 5, List.of(
                 new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 2)
+            )),
+            new StructureSpec("phantom_catacombs_boss_room", 21, 9, 21, List.of(
+                new BlockRequirement("boss_room_boundary_marker", ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
+                new BlockRequirement("amethyst_block", () -> Blocks.AMETHYST_BLOCK, 1)
             ))
         );
     }
