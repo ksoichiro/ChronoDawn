@@ -10,6 +10,7 @@ import com.chronodawn.entities.bosses.TimeTyrantEntity;
 import com.chronodawn.entities.mobs.ClockworkSentinelEntity;
 import com.chronodawn.entities.mobs.FloqEntity;
 import com.chronodawn.entities.mobs.GlideFishEntity;
+import com.chronodawn.entities.mobs.ParadoxCrawlerEntity;
 import com.chronodawn.entities.mobs.SecondhandArcherEntity;
 import com.chronodawn.entities.mobs.TimelineStriderEntity;
 import com.chronodawn.entities.mobs.TemporalWraithEntity;
@@ -337,6 +338,21 @@ public class ModEntities {
             .clientTrackingRange(8)
             .updateInterval(3)
             .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "timeline_strider")))
+    );
+
+    /**
+     * Paradox Crawler - Spider-like hostile mob with wall climbing.
+     *
+     * Has wall climbing ability and leap attacks.
+     * Replaces Spider spawns in ChronoDawn dimension.
+     */
+    public static final RegistrySupplier<EntityType<ParadoxCrawlerEntity>> PARADOX_CRAWLER = ENTITIES.register(
+        "paradox_crawler",
+        () -> EntityType.Builder.of(ParadoxCrawlerEntity::new, MobCategory.MONSTER)
+            .sized(1.4f, 0.9f)
+            .clientTrackingRange(8)
+            .updateInterval(3)
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "paradox_crawler")))
     );
 
     /**

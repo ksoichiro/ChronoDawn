@@ -33,6 +33,7 @@ import com.chronodawn.entities.mobs.ForgottenMinuteEntity;
 import com.chronodawn.entities.mobs.ChronalLeechEntity;
 import com.chronodawn.entities.mobs.MomentCreeperEntity;
 import com.chronodawn.entities.mobs.GlideFishEntity;
+import com.chronodawn.entities.mobs.ParadoxCrawlerEntity;
 import com.chronodawn.entities.mobs.SecondhandArcherEntity;
 import com.chronodawn.entities.mobs.TimelineStriderEntity;
 import com.chronodawn.fabric.event.BlockProtectionEventHandler;
@@ -173,6 +174,11 @@ public class ChronoDawnFabric implements ModInitializer {
             SecondhandArcherEntity.createAttributes()
         );
 
+        FabricDefaultAttributeRegistry.register(
+            ModEntities.PARADOX_CRAWLER.get(),
+            ParadoxCrawlerEntity.createAttributes()
+        );
+
         ChronoDawn.LOGGER.info("Registered entity attributes for Fabric");
     }
 
@@ -267,6 +273,14 @@ public class ChronoDawnFabric implements ModInitializer {
             SpawnPlacements.Type.ON_GROUND,
             Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             SecondhandArcherEntity::checkSecondhandArcherSpawnRules
+        );
+
+        // Paradox Crawler - spawns on ground
+        SpawnPlacements.register(
+            ModEntities.PARADOX_CRAWLER.get(),
+            SpawnPlacements.Type.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            ParadoxCrawlerEntity::checkParadoxCrawlerSpawnRules
         );
 
         ChronoDawn.LOGGER.info("Registered spawn placements for custom mobs");

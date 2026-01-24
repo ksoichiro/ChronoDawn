@@ -27,6 +27,7 @@ import com.chronodawn.entities.bosses.TimeTyrantEntity;
 import com.chronodawn.entities.mobs.ClockworkSentinelEntity;
 import com.chronodawn.entities.mobs.FloqEntity;
 import com.chronodawn.entities.mobs.GlideFishEntity;
+import com.chronodawn.entities.mobs.ParadoxCrawlerEntity;
 import com.chronodawn.entities.mobs.SecondhandArcherEntity;
 import com.chronodawn.entities.mobs.TimelineStriderEntity;
 import com.chronodawn.entities.mobs.TemporalWraithEntity;
@@ -259,6 +260,11 @@ public class ChronoDawnNeoForge {
             SecondhandArcherEntity.createAttributes().build()
         );
 
+        event.put(
+            ModEntities.PARADOX_CRAWLER.get(),
+            ParadoxCrawlerEntity.createAttributes().build()
+        );
+
         ChronoDawn.LOGGER.info("Registered entity attributes for NeoForge");
     }
 
@@ -377,6 +383,15 @@ public class ChronoDawnNeoForge {
             SpawnPlacementTypes.ON_GROUND,
             Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             SecondhandArcherEntity::checkSecondhandArcherSpawnRules,
+            RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+
+        // Paradox Crawler - spawns on ground in daylight
+        event.register(
+            ModEntities.PARADOX_CRAWLER.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            ParadoxCrawlerEntity::checkParadoxCrawlerSpawnRules,
             RegisterSpawnPlacementsEvent.Operation.REPLACE
         );
 

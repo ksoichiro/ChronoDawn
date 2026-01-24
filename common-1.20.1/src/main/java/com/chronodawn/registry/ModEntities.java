@@ -15,6 +15,7 @@ import com.chronodawn.entities.mobs.ForgottenMinuteEntity;
 import com.chronodawn.entities.mobs.ChronalLeechEntity;
 import com.chronodawn.entities.mobs.MomentCreeperEntity;
 import com.chronodawn.entities.mobs.GlideFishEntity;
+import com.chronodawn.entities.mobs.ParadoxCrawlerEntity;
 import com.chronodawn.entities.mobs.SecondhandArcherEntity;
 import com.chronodawn.entities.mobs.TimelineStriderEntity;
 import com.chronodawn.entities.boats.ChronoDawnBoat;
@@ -318,6 +319,21 @@ public class ModEntities {
             .clientTrackingRange(8)
             .updateInterval(3)
             .build("glide_fish")
+    );
+
+    /**
+     * Paradox Crawler - Spider-like hostile mob that climbs walls.
+     *
+     * A temporal arachnid creature that crawls on surfaces.
+     * Drops string and spider eyes.
+     */
+    public static final RegistrySupplier<EntityType<ParadoxCrawlerEntity>> PARADOX_CRAWLER = ENTITIES.register(
+        "paradox_crawler",
+        () -> EntityType.Builder.of(ParadoxCrawlerEntity::new, MobCategory.MONSTER)
+            .sized(1.4f, 0.9f)
+            .clientTrackingRange(8)
+            .updateInterval(3)
+            .build("paradox_crawler")
     );
 
     /**
