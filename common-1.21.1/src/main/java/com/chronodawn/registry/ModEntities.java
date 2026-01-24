@@ -14,6 +14,7 @@ import com.chronodawn.entities.mobs.EpochHuskEntity;
 import com.chronodawn.entities.mobs.ForgottenMinuteEntity;
 import com.chronodawn.entities.mobs.ChronalLeechEntity;
 import com.chronodawn.entities.mobs.MomentCreeperEntity;
+import com.chronodawn.entities.mobs.GlideFishEntity;
 import com.chronodawn.entities.boats.ChronoDawnBoat;
 import com.chronodawn.entities.boats.ChronoDawnChestBoat;
 import com.chronodawn.entities.projectiles.TimeArrowEntity;
@@ -302,6 +303,21 @@ public class ModEntities {
             .clientTrackingRange(10)
             .updateInterval(3)
             .build("entropy_keeper")
+    );
+
+    /**
+     * Glide Fish (グライドフィッシュ) - Passive Water Creature
+     *
+     * A small fish with wide pectoral fins that glides through water.
+     * Found in ocean, swamp, forest, and plains biomes.
+     */
+    public static final RegistrySupplier<EntityType<GlideFishEntity>> GLIDE_FISH = ENTITIES.register(
+        "glide_fish",
+        () -> EntityType.Builder.of(GlideFishEntity::new, MobCategory.WATER_CREATURE)
+            .sized(0.5f, 0.3f)
+            .clientTrackingRange(8)
+            .updateInterval(3)
+            .build("glide_fish")
     );
 
     // === Boat Entities ===

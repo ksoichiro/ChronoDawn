@@ -29,6 +29,7 @@ import com.chronodawn.entities.mobs.ClockworkSentinelEntity;
 import com.chronodawn.entities.mobs.EpochHuskEntity;
 import com.chronodawn.entities.mobs.FloqEntity;
 import com.chronodawn.entities.mobs.ForgottenMinuteEntity;
+import com.chronodawn.entities.mobs.GlideFishEntity;
 import com.chronodawn.entities.mobs.MomentCreeperEntity;
 import com.chronodawn.entities.mobs.TemporalWraithEntity;
 import com.chronodawn.entities.mobs.TimeKeeperEntity;
@@ -162,6 +163,11 @@ public class ChronoDawnFabric implements ModInitializer {
             MomentCreeperEntity.createAttributes()
         );
 
+        FabricDefaultAttributeRegistry.register(
+            ModEntities.GLIDE_FISH.get(),
+            GlideFishEntity.createAttributes()
+        );
+
         ChronoDawn.LOGGER.info("Registered entity attributes for Fabric");
     }
 
@@ -232,6 +238,14 @@ public class ChronoDawnFabric implements ModInitializer {
             SpawnPlacementTypes.ON_GROUND,
             Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             MomentCreeperEntity::checkMomentCreeperSpawnRules
+        );
+
+        // GlideFish - spawns in water
+        SpawnPlacements.register(
+            ModEntities.GLIDE_FISH.get(),
+            SpawnPlacementTypes.IN_WATER,
+            Heightmap.Types.OCEAN_FLOOR,
+            net.minecraft.world.entity.animal.WaterAnimal::checkSurfaceWaterAnimalSpawnRules
         );
 
         ChronoDawn.LOGGER.info("Registered spawn placements for custom mobs");

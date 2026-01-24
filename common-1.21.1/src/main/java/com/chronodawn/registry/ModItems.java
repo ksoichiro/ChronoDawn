@@ -1332,6 +1332,36 @@ public class ModItems {
         () -> new AncientGearItem(AncientGearItem.createProperties())
     );
 
+    // === Mob Drops ===
+
+    /**
+     * Glide Fish - Food item dropped by Glide Fish.
+     * Nutrition: 2, Saturation: 0.1
+     */
+    public static final RegistrySupplier<Item> GLIDE_FISH = ITEMS.register(
+        "glide_fish",
+        () -> new Item(new Item.Properties().food(
+            new net.minecraft.world.food.FoodProperties.Builder()
+                .nutrition(2)
+                .saturationModifier(0.1f)
+                .build()
+        ))
+    );
+
+    /**
+     * Cooked Glide Fish - Cooked version of Glide Fish.
+     * Nutrition: 5, Saturation: 0.6 (equivalent to cooked cod).
+     */
+    public static final RegistrySupplier<Item> COOKED_GLIDE_FISH = ITEMS.register(
+        "cooked_glide_fish",
+        () -> new Item(new Item.Properties().food(
+            new net.minecraft.world.food.FoodProperties.Builder()
+                .nutrition(5)
+                .saturationModifier(0.6f)
+                .build()
+        ))
+    );
+
     // === Spawn Eggs ===
 
     /**
@@ -1532,6 +1562,21 @@ public class ModItems {
         )
     );
 
+    /**
+     * Glide Fish Spawn Egg - For creative mode and debugging.
+     * Primary color: Light blue (0x87CEEB) - Background
+     * Secondary color: Silver (0xC0C0C0) - Spots
+     */
+    public static final RegistrySupplier<Item> GLIDE_FISH_SPAWN_EGG = ITEMS.register(
+        "glide_fish_spawn_egg",
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.GLIDE_FISH,
+            0x87CEEB, // Background: Light blue
+            0xC0C0C0, // Spots: Silver
+            new Item.Properties()
+        )
+    );
+
     // === Boats ===
 
     /**
@@ -1659,6 +1704,10 @@ public class ModItems {
 
         if (MOMENT_CREEPER_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
             ((com.chronodawn.items.DeferredSpawnEggItem) MOMENT_CREEPER_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (GLIDE_FISH_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) GLIDE_FISH_SPAWN_EGG.get()).initializeSpawnEgg();
         }
 
         ChronoDawn.LOGGER.info("Spawn eggs initialized");
@@ -1881,5 +1930,12 @@ public class ModItems {
         if (MOMENT_CREEPER_SPAWN_EGG.isPresent()) {
             output.accept(MOMENT_CREEPER_SPAWN_EGG.get());
         }
+        if (GLIDE_FISH_SPAWN_EGG.isPresent()) {
+            output.accept(GLIDE_FISH_SPAWN_EGG.get());
+        }
+
+        // === Mob Drops ===
+        output.accept(GLIDE_FISH.get());
+        output.accept(COOKED_GLIDE_FISH.get());
     }
 }

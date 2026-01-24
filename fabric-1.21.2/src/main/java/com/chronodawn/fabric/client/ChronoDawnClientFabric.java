@@ -10,6 +10,7 @@ import com.chronodawn.client.model.ChronalLeechModel;
 import com.chronodawn.client.model.EpochHuskModel;
 import com.chronodawn.client.model.FloqModel;
 import com.chronodawn.client.model.ForgottenMinuteModel;
+import com.chronodawn.client.model.GlideFishModel;
 import com.chronodawn.client.model.MomentCreeperModel;
 import com.chronodawn.client.model.TemporalPhantomModel;
 import com.chronodawn.client.model.TemporalWraithModel;
@@ -36,6 +37,7 @@ import com.chronodawn.client.renderer.mobs.ClockworkSentinelRenderer;
 import com.chronodawn.client.renderer.mobs.EpochHuskRenderer;
 import com.chronodawn.client.renderer.mobs.FloqRenderer;
 import com.chronodawn.client.renderer.mobs.ForgottenMinuteRenderer;
+import com.chronodawn.client.renderer.mobs.GlideFishRenderer;
 import com.chronodawn.client.renderer.mobs.MomentCreeperRenderer;
 import com.chronodawn.client.renderer.mobs.TemporalWraithRenderer;
 import com.chronodawn.client.renderer.mobs.TimeKeeperRenderer;
@@ -469,6 +471,12 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             MomentCreeperModel.LAYER_LOCATION,
             MomentCreeperModel::createBodyLayer
         );
+
+        // Register GlideFish model layer
+        EntityModelLayerRegistry.registerModelLayer(
+            GlideFishModel.LAYER_LOCATION,
+            GlideFishModel::createBodyLayer
+        );
     }
 
     /**
@@ -594,6 +602,11 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
         EntityRendererRegistry.register(
             ModEntities.MOMENT_CREEPER.get(),
             MomentCreeperRenderer::new
+        );
+
+        EntityRendererRegistry.register(
+            ModEntities.GLIDE_FISH.get(),
+            GlideFishRenderer::new
         );
 
         // Register ChronoDawn Boat with custom renderer

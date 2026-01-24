@@ -9,6 +9,7 @@ import com.chronodawn.client.model.ClockworkColossusModel;
 import com.chronodawn.client.model.ClockworkSentinelModel;
 import com.chronodawn.client.model.EntropyKeeperModel;
 import com.chronodawn.client.model.FloqModel;
+import com.chronodawn.client.model.GlideFishModel;
 import com.chronodawn.client.model.TemporalPhantomModel;
 import com.chronodawn.client.model.TemporalWraithModel;
 import com.chronodawn.client.model.TimeGuardianModel;
@@ -32,6 +33,7 @@ import com.chronodawn.client.renderer.TimeGuardianRenderer;
 import com.chronodawn.client.renderer.TimeTyrantRenderer;
 import com.chronodawn.client.renderer.mobs.ClockworkSentinelRenderer;
 import com.chronodawn.client.renderer.mobs.FloqRenderer;
+import com.chronodawn.client.renderer.mobs.GlideFishRenderer;
 import com.chronodawn.client.renderer.mobs.TemporalWraithRenderer;
 import com.chronodawn.client.renderer.mobs.TimeKeeperRenderer;
 import com.chronodawn.client.renderer.mobs.EpochHuskRenderer;
@@ -180,6 +182,11 @@ public class ChronoDawnClientNeoForge {
             MomentCreeperModel::createBodyLayer
         );
 
+        event.registerLayerDefinition(
+            GlideFishModel.LAYER_LOCATION,
+            GlideFishModel::createBodyLayer
+        );
+
         // Register boat and chest boat model layers (version-specific)
         VersionSpecificClientHelper.registerBoatModelLayers(event);
 
@@ -287,6 +294,11 @@ public class ChronoDawnClientNeoForge {
         event.registerEntityRenderer(
             ModEntities.MOMENT_CREEPER.get(),
             MomentCreeperRenderer::new
+        );
+
+        event.registerEntityRenderer(
+            ModEntities.GLIDE_FISH.get(),
+            GlideFishRenderer::new
         );
 
         // Register ChronoDawn Boat with custom renderer
@@ -597,7 +609,8 @@ public class ChronoDawnClientNeoForge {
             ModItems.EPOCH_HUSK_SPAWN_EGG.get(),
             ModItems.FORGOTTEN_MINUTE_SPAWN_EGG.get(),
             ModItems.CHRONAL_LEECH_SPAWN_EGG.get(),
-            ModItems.MOMENT_CREEPER_SPAWN_EGG.get()
+            ModItems.MOMENT_CREEPER_SPAWN_EGG.get(),
+            ModItems.GLIDE_FISH_SPAWN_EGG.get()
         );
 
         ChronoDawn.LOGGER.info("Registered item color handlers for NeoForge");

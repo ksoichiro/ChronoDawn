@@ -9,6 +9,7 @@ import com.chronodawn.entities.bosses.TimeGuardianEntity;
 import com.chronodawn.entities.bosses.TimeTyrantEntity;
 import com.chronodawn.entities.mobs.ClockworkSentinelEntity;
 import com.chronodawn.entities.mobs.FloqEntity;
+import com.chronodawn.entities.mobs.GlideFishEntity;
 import com.chronodawn.entities.mobs.TemporalWraithEntity;
 import com.chronodawn.entities.mobs.TimeKeeperEntity;
 import com.chronodawn.entities.mobs.EpochHuskEntity;
@@ -304,6 +305,21 @@ public class ModEntities {
             .clientTrackingRange(10)
             .updateInterval(3)
             .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "entropy_keeper")))
+    );
+
+    /**
+     * GlideFish - Water Creature
+     *
+     * A small fish that spawns in ChronoDawn dimension waters.
+     * Behaves similarly to vanilla Cod/Salmon.
+     */
+    public static final RegistrySupplier<EntityType<GlideFishEntity>> GLIDE_FISH = ENTITIES.register(
+        "glide_fish",
+        () -> EntityType.Builder.of(GlideFishEntity::new, MobCategory.WATER_CREATURE)
+            .sized(0.5f, 0.3f)
+            .clientTrackingRange(8)
+            .updateInterval(3)
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "glide_fish")))
     );
 
     // === Boat Entities ===

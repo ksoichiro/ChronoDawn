@@ -86,7 +86,14 @@
         "maxCount": 6
       }
     ],
-    "water_creature": [],
+    "water_creature": [
+      {
+        "type": "chronodawn:glide_fish",
+        "weight": 10,
+        "minCount": 1,
+        "maxCount": 3
+      }
+    ],
     "water_ambient": [
       {
         "type": "minecraft:tropical_fish",

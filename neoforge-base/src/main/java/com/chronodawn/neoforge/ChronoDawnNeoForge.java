@@ -26,6 +26,7 @@ import com.chronodawn.entities.bosses.TimeGuardianEntity;
 import com.chronodawn.entities.bosses.TimeTyrantEntity;
 import com.chronodawn.entities.mobs.ClockworkSentinelEntity;
 import com.chronodawn.entities.mobs.FloqEntity;
+import com.chronodawn.entities.mobs.GlideFishEntity;
 import com.chronodawn.entities.mobs.TemporalWraithEntity;
 import com.chronodawn.entities.mobs.TimeKeeperEntity;
 import com.chronodawn.entities.mobs.EpochHuskEntity;
@@ -241,6 +242,11 @@ public class ChronoDawnNeoForge {
             MomentCreeperEntity.createAttributes().build()
         );
 
+        event.put(
+            ModEntities.GLIDE_FISH.get(),
+            GlideFishEntity.createAttributes().build()
+        );
+
         ChronoDawn.LOGGER.info("Registered entity attributes for NeoForge");
     }
 
@@ -332,6 +338,15 @@ public class ChronoDawnNeoForge {
             SpawnPlacementTypes.ON_GROUND,
             Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             MomentCreeperEntity::checkMomentCreeperSpawnRules,
+            RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+
+        // GlideFish - spawns in water
+        event.register(
+            ModEntities.GLIDE_FISH.get(),
+            SpawnPlacementTypes.IN_WATER,
+            Heightmap.Types.OCEAN_FLOOR,
+            net.minecraft.world.entity.animal.WaterAnimal::checkSurfaceWaterAnimalSpawnRules,
             RegisterSpawnPlacementsEvent.Operation.REPLACE
         );
 
