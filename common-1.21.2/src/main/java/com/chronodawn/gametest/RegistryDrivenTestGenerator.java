@@ -18,9 +18,15 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -320,6 +326,45 @@ public final class RegistryDrivenTestGenerator {
     }
 
     /**
+     * Generates tests verifying that all items have valid translation keys at runtime.
+     *
+     * For each item in ModItems, calls getDescriptionId() on the actual item instance
+     * and verifies the returned key exists in en_us.json. This catches cases where
+     * BlockItems are missing .useBlockDescriptionPrefix() (which would cause them to
+     * use "item." prefix instead of "block." prefix, resulting in untranslated names).
+     */
+    public static List<NamedTest> generateTranslationKeyTests() {
+        Map<String, String> langMap = loadLangFile();
+
+        List<NamedTest> tests = new ArrayList<>();
+        for (Field field : ModItems.class.getDeclaredFields()) {
+            if (!isRegistrySupplierField(field)) continue;
+            String fieldName = field.getName();
+            String expectedId = ID_OVERRIDES.getOrDefault(fieldName, fieldName.toLowerCase());
+            tests.add(new NamedTest("translation_key_" + expectedId, helper -> {
+                helper.runAfterDelay(1, () -> {
+                    try {
+                        @SuppressWarnings("unchecked")
+                        RegistrySupplier<Item> supplier = (RegistrySupplier<Item>) field.get(null);
+                        Item item = supplier.get();
+                        String descriptionId = item.getDescriptionId();
+                        if (langMap.containsKey(descriptionId)) {
+                            helper.succeed();
+                        } else {
+                            helper.fail(fieldName + " has descriptionId \"" + descriptionId +
+                                "\" which is not in en_us.json");
+                        }
+                    } catch (Exception e) {
+                        helper.fail("Failed to check translation for " + fieldName +
+                            ": " + e.getMessage());
+                    }
+                });
+            }));
+        }
+        return tests;
+    }
+
+    /**
      * Generate all tests from all categories.
      */
     public static List<NamedTest> generateAllTests() {
@@ -336,6 +381,7 @@ public final class RegistryDrivenTestGenerator {
         all.addAll(generateFoodPropertyTests());
         all.addAll(generateBlockItemConsistencyTests());
         all.addAll(generateEquipmentStackSizeTests());
+        all.addAll(generateTranslationKeyTests());
         all.addAll(generateBossFightTests());
         return all;
     }
@@ -357,6 +403,19 @@ public final class RegistryDrivenTestGenerator {
             }
         });
         return defense[0];
+    }
+
+    private static Map<String, String> loadLangFile() {
+        try (InputStream is = RegistryDrivenTestGenerator.class.getResourceAsStream(
+                "/assets/chronodawn/lang/en_us.json")) {
+            if (is == null) return Collections.emptyMap();
+            String content = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+            Gson gson = new Gson();
+            return gson.fromJson(content,
+                new TypeToken<Map<String, String>>() {}.getType());
+        } catch (Exception e) {
+            return Collections.emptyMap();
+        }
     }
 
     private static boolean isRegistrySupplierField(Field field) {

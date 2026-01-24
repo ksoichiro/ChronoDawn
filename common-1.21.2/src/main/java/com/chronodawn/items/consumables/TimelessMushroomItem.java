@@ -41,16 +41,15 @@ import net.minecraft.world.item.BlockItem;
  *
  * Note:
  * - This item serves both as food and plantable mushroom
- * - Uses BlockItem with useBlockDescriptionPrefix (replaces ItemNameBlockItem)
+ * - Extends BlockItem but uses item.* description prefix for consistency with plantable items
  * - Different from Unstable Fungus (which is not edible)
- * - Migration from ItemNameBlockItem (removed in 1.21.2)
  *
  * Reference: WORK_NOTES.md (Crop 3: Timeless Mushroom)
  * Task: T212 [US1] Create Timeless Mushroom item
  */
 public class TimelessMushroomItem extends BlockItem {
     public TimelessMushroomItem(Properties properties) {
-        super(ModBlocks.TIMELESS_MUSHROOM.get(), properties.useBlockDescriptionPrefix());
+        super(ModBlocks.TIMELESS_MUSHROOM.get(), properties);
     }
 
     /**

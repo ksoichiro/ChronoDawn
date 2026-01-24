@@ -30,15 +30,14 @@ import net.minecraft.world.item.BlockItem;
  *
  * Note:
  * - This item serves both as food and seed (like carrots/potatoes)
- * - Uses BlockItem with useBlockDescriptionPrefix (replaces ItemNameBlockItem)
- * - Migration from ItemNameBlockItem (removed in 1.21.2)
+ * - Extends BlockItem but uses item.* description prefix since item name differs from crop block
  *
  * Reference: WORK_NOTES.md (Crop 1: Temporal Root)
  * Task: T212 [US1] Create Temporal Root item
  */
 public class TemporalRootItem extends BlockItem {
     public TemporalRootItem(Properties properties) {
-        super(ModBlocks.TEMPORAL_ROOT.get(), properties.useBlockDescriptionPrefix());
+        super(ModBlocks.TEMPORAL_ROOT.get(), properties);
     }
 
     /**

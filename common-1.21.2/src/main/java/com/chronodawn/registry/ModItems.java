@@ -79,6 +79,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> CLOCKSTONE_ORE = ITEMS.register(
         "clockstone_ore",
         () -> new BlockItem(ModBlocks.CLOCKSTONE_ORE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "clockstone_ore"))))
     );
@@ -89,6 +90,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> TIME_CRYSTAL_ORE = ITEMS.register(
         "time_crystal_ore",
         () -> new BlockItem(ModBlocks.TIME_CRYSTAL_ORE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "time_crystal_ore"))))
     );
@@ -99,6 +101,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> CLOCKSTONE_BLOCK = ITEMS.register(
         "clockstone_block",
         () -> new BlockItem(ModBlocks.CLOCKSTONE_BLOCK.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "clockstone_block"))))
     );
@@ -109,6 +112,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> CLOCKSTONE_STAIRS = ITEMS.register(
         "clockstone_stairs",
         () -> new BlockItem(ModBlocks.CLOCKSTONE_STAIRS.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "clockstone_stairs"))))
     );
@@ -119,6 +123,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> CLOCKSTONE_SLAB = ITEMS.register(
         "clockstone_slab",
         () -> new BlockItem(ModBlocks.CLOCKSTONE_SLAB.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "clockstone_slab"))))
     );
@@ -129,6 +134,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> CLOCKSTONE_WALL = ITEMS.register(
         "clockstone_wall",
         () -> new BlockItem(ModBlocks.CLOCKSTONE_WALL.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "clockstone_wall"))))
     );
@@ -139,6 +145,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> REVERSING_TIME_SANDSTONE = ITEMS.register(
         "reversing_time_sandstone",
         () -> new BlockItem(ModBlocks.REVERSING_TIME_SANDSTONE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "reversing_time_sandstone"))))
     );
@@ -149,6 +156,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> UNSTABLE_FUNGUS = ITEMS.register(
         "unstable_fungus",
         () -> new BlockItem(ModBlocks.UNSTABLE_FUNGUS.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "unstable_fungus"))))
     );
@@ -159,6 +167,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> TIME_WOOD_LOG = ITEMS.register(
         "time_wood_log",
         () -> new BlockItem(ModBlocks.TIME_WOOD_LOG.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "time_wood_log"))))
     );
@@ -169,6 +178,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> STRIPPED_TIME_WOOD_LOG = ITEMS.register(
         "stripped_time_wood_log",
         () -> new BlockItem(ModBlocks.STRIPPED_TIME_WOOD_LOG.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "stripped_time_wood_log"))))
     );
@@ -179,6 +189,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> TIME_WOOD = ITEMS.register(
         "time_wood",
         () -> new BlockItem(ModBlocks.TIME_WOOD.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "time_wood"))))
     );
@@ -189,6 +200,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> STRIPPED_TIME_WOOD = ITEMS.register(
         "stripped_time_wood",
         () -> new BlockItem(ModBlocks.STRIPPED_TIME_WOOD.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "stripped_time_wood"))))
     );
@@ -199,6 +211,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> TIME_WOOD_LEAVES = ITEMS.register(
         "time_wood_leaves",
         () -> new BlockItem(ModBlocks.TIME_WOOD_LEAVES.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "time_wood_leaves"))))
     );
@@ -209,6 +222,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> TIME_WOOD_PLANKS = ITEMS.register(
         "time_wood_planks",
         () -> new BlockItem(ModBlocks.TIME_WOOD_PLANKS.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "time_wood_planks"))))
     );
@@ -219,6 +233,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> TIME_WOOD_SAPLING = ITEMS.register(
         "time_wood_sapling",
         () -> new BlockItem(ModBlocks.TIME_WOOD_SAPLING.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "time_wood_sapling"))))
     );
@@ -231,6 +246,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> DARK_TIME_WOOD_LOG = ITEMS.register(
         "dark_time_wood_log",
         () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_LOG.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "dark_time_wood_log"))))
     );
@@ -241,6 +257,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> STRIPPED_DARK_TIME_WOOD_LOG = ITEMS.register(
         "stripped_dark_time_wood_log",
         () -> new BlockItem(ModBlocks.STRIPPED_DARK_TIME_WOOD_LOG.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "stripped_dark_time_wood_log"))))
     );
@@ -251,6 +268,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> DARK_TIME_WOOD = ITEMS.register(
         "dark_time_wood",
         () -> new BlockItem(ModBlocks.DARK_TIME_WOOD.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "dark_time_wood"))))
     );
@@ -261,6 +279,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> STRIPPED_DARK_TIME_WOOD = ITEMS.register(
         "stripped_dark_time_wood",
         () -> new BlockItem(ModBlocks.STRIPPED_DARK_TIME_WOOD.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "stripped_dark_time_wood"))))
     );
@@ -271,6 +290,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> DARK_TIME_WOOD_LEAVES = ITEMS.register(
         "dark_time_wood_leaves",
         () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_LEAVES.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "dark_time_wood_leaves"))))
     );
@@ -281,6 +301,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> DARK_TIME_WOOD_PLANKS = ITEMS.register(
         "dark_time_wood_planks",
         () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_PLANKS.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "dark_time_wood_planks"))))
     );
@@ -291,6 +312,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> DARK_TIME_WOOD_STAIRS = ITEMS.register(
         "dark_time_wood_stairs",
         () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_STAIRS.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "dark_time_wood_stairs"))))
     );
@@ -301,6 +323,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> DARK_TIME_WOOD_SLAB = ITEMS.register(
         "dark_time_wood_slab",
         () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_SLAB.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "dark_time_wood_slab"))))
     );
@@ -311,6 +334,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> DARK_TIME_WOOD_FENCE = ITEMS.register(
         "dark_time_wood_fence",
         () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_FENCE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "dark_time_wood_fence"))))
     );
@@ -321,6 +345,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> DARK_TIME_WOOD_DOOR = ITEMS.register(
         "dark_time_wood_door",
         () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_DOOR.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "dark_time_wood_door"))))
     );
@@ -331,6 +356,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> DARK_TIME_WOOD_TRAPDOOR = ITEMS.register(
         "dark_time_wood_trapdoor",
         () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_TRAPDOOR.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "dark_time_wood_trapdoor"))))
     );
@@ -341,6 +367,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> DARK_TIME_WOOD_FENCE_GATE = ITEMS.register(
         "dark_time_wood_fence_gate",
         () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_FENCE_GATE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "dark_time_wood_fence_gate"))))
     );
@@ -351,6 +378,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> DARK_TIME_WOOD_BUTTON = ITEMS.register(
         "dark_time_wood_button",
         () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_BUTTON.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "dark_time_wood_button"))))
     );
@@ -361,6 +389,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> DARK_TIME_WOOD_PRESSURE_PLATE = ITEMS.register(
         "dark_time_wood_pressure_plate",
         () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_PRESSURE_PLATE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "dark_time_wood_pressure_plate"))))
     );
@@ -371,6 +400,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> DARK_TIME_WOOD_SAPLING = ITEMS.register(
         "dark_time_wood_sapling",
         () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_SAPLING.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "dark_time_wood_sapling"))))
     );
@@ -383,6 +413,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_LOG = ITEMS.register(
         "ancient_time_wood_log",
         () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_LOG.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "ancient_time_wood_log"))))
     );
@@ -393,6 +424,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> STRIPPED_ANCIENT_TIME_WOOD_LOG = ITEMS.register(
         "stripped_ancient_time_wood_log",
         () -> new BlockItem(ModBlocks.STRIPPED_ANCIENT_TIME_WOOD_LOG.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "stripped_ancient_time_wood_log"))))
     );
@@ -403,6 +435,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD = ITEMS.register(
         "ancient_time_wood",
         () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "ancient_time_wood"))))
     );
@@ -413,6 +446,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> STRIPPED_ANCIENT_TIME_WOOD = ITEMS.register(
         "stripped_ancient_time_wood",
         () -> new BlockItem(ModBlocks.STRIPPED_ANCIENT_TIME_WOOD.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "stripped_ancient_time_wood"))))
     );
@@ -423,6 +457,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_LEAVES = ITEMS.register(
         "ancient_time_wood_leaves",
         () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_LEAVES.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "ancient_time_wood_leaves"))))
     );
@@ -433,6 +468,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_PLANKS = ITEMS.register(
         "ancient_time_wood_planks",
         () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_PLANKS.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "ancient_time_wood_planks"))))
     );
@@ -443,6 +479,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_STAIRS = ITEMS.register(
         "ancient_time_wood_stairs",
         () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_STAIRS.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "ancient_time_wood_stairs"))))
     );
@@ -453,6 +490,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_SLAB = ITEMS.register(
         "ancient_time_wood_slab",
         () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_SLAB.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "ancient_time_wood_slab"))))
     );
@@ -463,6 +501,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_FENCE = ITEMS.register(
         "ancient_time_wood_fence",
         () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_FENCE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "ancient_time_wood_fence"))))
     );
@@ -473,6 +512,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_DOOR = ITEMS.register(
         "ancient_time_wood_door",
         () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_DOOR.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "ancient_time_wood_door"))))
     );
@@ -483,6 +523,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_TRAPDOOR = ITEMS.register(
         "ancient_time_wood_trapdoor",
         () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_TRAPDOOR.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "ancient_time_wood_trapdoor"))))
     );
@@ -493,6 +534,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_FENCE_GATE = ITEMS.register(
         "ancient_time_wood_fence_gate",
         () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_FENCE_GATE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "ancient_time_wood_fence_gate"))))
     );
@@ -503,6 +545,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_BUTTON = ITEMS.register(
         "ancient_time_wood_button",
         () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_BUTTON.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "ancient_time_wood_button"))))
     );
@@ -513,6 +556,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_PRESSURE_PLATE = ITEMS.register(
         "ancient_time_wood_pressure_plate",
         () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_PRESSURE_PLATE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "ancient_time_wood_pressure_plate"))))
     );
@@ -523,6 +567,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_SAPLING = ITEMS.register(
         "ancient_time_wood_sapling",
         () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_SAPLING.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "ancient_time_wood_sapling"))))
     );
@@ -533,6 +578,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> TIME_WHEAT_BALE = ITEMS.register(
         "time_wheat_bale",
         () -> new BlockItem(ModBlocks.TIME_WHEAT_BALE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "time_wheat_bale"))))
     );
@@ -546,6 +592,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> CLOCK_TOWER_TELEPORTER = ITEMS.register(
         "clock_tower_teleporter",
         () -> new BlockItem(ModBlocks.CLOCK_TOWER_TELEPORTER.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "clock_tower_teleporter"))))
     );
@@ -556,6 +603,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> CLOCKWORK_BLOCK = ITEMS.register(
         "clockwork_block",
         () -> new BlockItem(ModBlocks.CLOCKWORK_BLOCK.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "clockwork_block"))))
     );
@@ -566,6 +614,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> TIME_CRYSTAL_BLOCK = ITEMS.register(
         "time_crystal_block",
         () -> new BlockItem(ModBlocks.TIME_CRYSTAL_BLOCK.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "time_crystal_block"))))
     );
@@ -576,6 +625,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> TEMPORAL_BRICKS = ITEMS.register(
         "temporal_bricks",
         () -> new BlockItem(ModBlocks.TEMPORAL_BRICKS.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "temporal_bricks"))))
     );
@@ -586,6 +636,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> TEMPORAL_BRICKS_STAIRS = ITEMS.register(
         "temporal_bricks_stairs",
         () -> new BlockItem(ModBlocks.TEMPORAL_BRICKS_STAIRS.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "temporal_bricks_stairs"))))
     );
@@ -596,6 +647,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> TEMPORAL_BRICKS_SLAB = ITEMS.register(
         "temporal_bricks_slab",
         () -> new BlockItem(ModBlocks.TEMPORAL_BRICKS_SLAB.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "temporal_bricks_slab"))))
     );
@@ -606,6 +658,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> TEMPORAL_BRICKS_WALL = ITEMS.register(
         "temporal_bricks_wall",
         () -> new BlockItem(ModBlocks.TEMPORAL_BRICKS_WALL.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "temporal_bricks_wall"))))
     );
@@ -616,6 +669,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> TIME_WOOD_STAIRS = ITEMS.register(
         "time_wood_stairs",
         () -> new BlockItem(ModBlocks.TIME_WOOD_STAIRS.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "time_wood_stairs"))))
     );
@@ -626,6 +680,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> TIME_WOOD_SLAB = ITEMS.register(
         "time_wood_slab",
         () -> new BlockItem(ModBlocks.TIME_WOOD_SLAB.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "time_wood_slab"))))
     );
@@ -636,6 +691,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> TIME_WOOD_FENCE = ITEMS.register(
         "time_wood_fence",
         () -> new BlockItem(ModBlocks.TIME_WOOD_FENCE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "time_wood_fence"))))
     );
@@ -646,6 +702,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> TIME_WOOD_DOOR = ITEMS.register(
         "time_wood_door",
         () -> new BlockItem(ModBlocks.TIME_WOOD_DOOR.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "time_wood_door"))))
     );
@@ -656,6 +713,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> TIME_WOOD_TRAPDOOR = ITEMS.register(
         "time_wood_trapdoor",
         () -> new BlockItem(ModBlocks.TIME_WOOD_TRAPDOOR.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "time_wood_trapdoor"))))
     );
@@ -666,6 +724,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> TIME_WOOD_FENCE_GATE = ITEMS.register(
         "time_wood_fence_gate",
         () -> new BlockItem(ModBlocks.TIME_WOOD_FENCE_GATE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "time_wood_fence_gate"))))
     );
@@ -676,6 +735,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> TIME_WOOD_BUTTON = ITEMS.register(
         "time_wood_button",
         () -> new BlockItem(ModBlocks.TIME_WOOD_BUTTON.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "time_wood_button"))))
     );
@@ -686,6 +746,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> TIME_WOOD_PRESSURE_PLATE = ITEMS.register(
         "time_wood_pressure_plate",
         () -> new BlockItem(ModBlocks.TIME_WOOD_PRESSURE_PLATE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "time_wood_pressure_plate"))))
     );
@@ -696,6 +757,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> TEMPORAL_MOSS = ITEMS.register(
         "temporal_moss",
         () -> new BlockItem(ModBlocks.TEMPORAL_MOSS.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "temporal_moss"))))
     );
@@ -706,6 +768,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> FROZEN_TIME_ICE = ITEMS.register(
         "frozen_time_ice",
         () -> new BlockItem(ModBlocks.FROZEN_TIME_ICE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "frozen_time_ice"))))
     );
@@ -717,6 +780,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> BOSS_ROOM_DOOR = ITEMS.register(
         "boss_room_door",
         () -> new BlockItem(ModBlocks.BOSS_ROOM_DOOR.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "boss_room_door"))))
     );
@@ -729,6 +793,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> ENTROPY_CRYPT_TRAPDOOR = ITEMS.register(
         "entropy_crypt_trapdoor",
         () -> new BlockItem(ModBlocks.ENTROPY_CRYPT_TRAPDOOR.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "entropy_crypt_trapdoor"))))
     );
@@ -741,6 +806,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> TEMPORAL_PARTICLE_EMITTER = ITEMS.register(
         "temporal_particle_emitter",
         () -> new BlockItem(ModBlocks.TEMPORAL_PARTICLE_EMITTER.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "temporal_particle_emitter"))))
     );
@@ -752,6 +818,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> BOSS_ROOM_BOUNDARY_MARKER = ITEMS.register(
         "boss_room_boundary_marker",
         () -> new BlockItem(ModBlocks.BOSS_ROOM_BOUNDARY_MARKER.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "boss_room_boundary_marker"))))
     );
@@ -1060,6 +1127,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> CHRONO_MELON = ITEMS.register(
         "chrono_melon",
         () -> new BlockItem(ModBlocks.CHRONO_MELON.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "chrono_melon"))))
     );
@@ -1081,6 +1149,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> PURPLE_TIME_BLOSSOM = ITEMS.register(
         "purple_time_blossom",
         () -> new BlockItem(ModBlocks.PURPLE_TIME_BLOSSOM.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "purple_time_blossom"))))
     );
@@ -1092,6 +1161,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> ORANGE_TIME_BLOSSOM = ITEMS.register(
         "orange_time_blossom",
         () -> new BlockItem(ModBlocks.ORANGE_TIME_BLOSSOM.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "orange_time_blossom"))))
     );
@@ -1103,6 +1173,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> PINK_TIME_BLOSSOM = ITEMS.register(
         "pink_time_blossom",
         () -> new BlockItem(ModBlocks.PINK_TIME_BLOSSOM.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "pink_time_blossom"))))
     );
@@ -1114,6 +1185,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> DAWN_BELL = ITEMS.register(
         "dawn_bell",
         () -> new BlockItem(ModBlocks.DAWN_BELL.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "dawn_bell"))))
     );
@@ -1125,6 +1197,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> DUSK_BELL = ITEMS.register(
         "dusk_bell",
         () -> new BlockItem(ModBlocks.DUSK_BELL.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "dusk_bell"))))
     );
