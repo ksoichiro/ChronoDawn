@@ -27,6 +27,7 @@ sourceSets {
     main {
         java {
             srcDir 'src/main/java'
+            srcDir '../common-shared/src/main/java'
             srcDir '../common-gametest/src/main/java'
         }
     }
