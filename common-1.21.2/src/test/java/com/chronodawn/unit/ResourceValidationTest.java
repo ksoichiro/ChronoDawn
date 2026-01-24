@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -149,6 +150,54 @@ public class ResourceValidationTest {
         return tests;
     }
 
+    /**
+     * Validates that all wood-type blocks and melon blocks are included
+     * in the mineable/axe tag for proper axe mining speed.
+     */
+    @TestFactory
+    Collection<DynamicTest> mineableAxeTagTests() {
+        Set<String> axeTagValues = loadTagValues("data/minecraft/tags/block/mineable/axe.json");
+        if (axeTagValues.isEmpty()) {
+            return Collections.singletonList(
+                DynamicTest.dynamicTest("mineable_axe_tag_load", () -> {
+                    throw new AssertionError("Failed to load mineable/axe.json tag file");
+                })
+            );
+        }
+
+        List<String> blockFieldNames = getFieldNames("ModBlocks.java");
+        Collection<DynamicTest> tests = new ArrayList<>();
+
+        for (String fieldName : blockFieldNames) {
+            if (!shouldBeInMineableAxe(fieldName)) continue;
+            String blockId = ID_OVERRIDES.getOrDefault(fieldName, fieldName.toLowerCase());
+            tests.add(DynamicTest.dynamicTest("mineable_axe_contains_" + blockId, () -> {
+                assertTrue(
+                    axeTagValues.contains("chronodawn:" + blockId),
+                    "Block 'chronodawn:" + blockId + "' should be in mineable/axe tag"
+                );
+            }));
+        }
+
+        return tests;
+    }
+
+    /**
+     * Determines if a block should be in the mineable/axe tag based on its field name.
+     */
+    private static boolean shouldBeInMineableAxe(String fieldName) {
+        // Wood family blocks (except leaves, saplings, and potted variants)
+        if (fieldName.contains("TIME_WOOD")) {
+            if (fieldName.endsWith("_LEAVES")) return false;
+            if (fieldName.endsWith("_SAPLING")) return false;
+            if (fieldName.startsWith("POTTED_")) return false;
+            return true;
+        }
+        // Melon block (not stems)
+        if (fieldName.equals("CHRONO_MELON")) return true;
+        return false;
+    }
+
     // --- Utility methods ---
 
     /**
@@ -187,6 +236,27 @@ public class ResourceValidationTest {
             );
         } catch (Exception e) {
             return Collections.emptyMap();
+        }
+    }
+
+    /**
+     * Load tag values from a tag JSON file on the classpath.
+     * Returns the set of block IDs (e.g., "chronodawn:time_wood_log").
+     */
+    @SuppressWarnings("unchecked")
+    private Set<String> loadTagValues(String resourcePath) {
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream(resourcePath)) {
+            if (is == null) return Collections.emptySet();
+            Gson gson = new Gson();
+            Map<String, Object> tagData = gson.fromJson(
+                new InputStreamReader(is, StandardCharsets.UTF_8),
+                new TypeToken<Map<String, Object>>() {}.getType()
+            );
+            List<String> values = (List<String>) tagData.get("values");
+            if (values == null) return Collections.emptySet();
+            return new HashSet<>(values);
+        } catch (Exception e) {
+            return Collections.emptySet();
         }
     }
 }
