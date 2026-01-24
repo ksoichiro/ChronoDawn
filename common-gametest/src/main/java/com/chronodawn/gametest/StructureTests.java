@@ -59,6 +59,11 @@ public final class StructureTests {
             new StructureSpec("desert_clock_tower", 21, 48, 21, List.of(
                 new BlockRequirement("chest", () -> Blocks.CHEST, 3),
                 new BlockRequirement("clock_tower_teleporter", ModBlocks.CLOCK_TOWER_TELEPORTER, 1)
+            )),
+            new StructureSpec("time_keeper_village", 11, 8, 11, List.of(
+                new BlockRequirement("chest", () -> Blocks.CHEST, 2),
+                new BlockRequirement("barrel", () -> Blocks.BARREL, 1),
+                new BlockRequirement("time_crystal_block", ModBlocks.TIME_CRYSTAL_BLOCK, 1)
             ))
         );
     }
