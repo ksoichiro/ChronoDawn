@@ -14,7 +14,9 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * Shared structure template test generator used across all Minecraft versions.
@@ -232,6 +234,47 @@ public final class StructureTests {
                 }));
             }
         }
+
+        // Coverage test: verify all .nbt files have corresponding specs
+        tests.add(generateStructureCoverageTest(specs, factory));
+
         return tests;
+    }
+
+    /**
+     * Generates a test that verifies all .nbt structure files in the mod's resources
+     * have a corresponding StructureSpec in getStructureSpecs().
+     * Fails if any structure template exists without a test spec.
+     */
+    static <T> T generateStructureCoverageTest(
+            List<StructureSpec> specs,
+            MobBehaviorTests.TestFactory<T> factory) {
+        return factory.create("structure_coverage_all_nbt_have_specs", helper -> {
+            helper.runAfterDelay(1, () -> {
+                var resourceManager = helper.getLevel().getServer().getResourceManager();
+                var resources = resourceManager.listResources("structure",
+                    id -> id.getNamespace().equals(ChronoDawn.MOD_ID) && id.getPath().endsWith(".nbt"));
+
+                Set<String> testedIds = specs.stream()
+                    .map(StructureSpec::id)
+                    .collect(Collectors.toSet());
+
+                List<String> untestedIds = new ArrayList<>();
+                for (var entry : resources.keySet()) {
+                    String path = entry.getPath();
+                    // path is "structure/<id>.nbt"
+                    String id = path.substring("structure/".length(), path.length() - ".nbt".length());
+                    if (!testedIds.contains(id)) {
+                        untestedIds.add(id);
+                    }
+                }
+
+                if (!untestedIds.isEmpty()) {
+                    helper.fail("Structure templates without test specs: " + String.join(", ", untestedIds));
+                    return;
+                }
+                helper.succeed();
+            });
+        });
     }
 }
