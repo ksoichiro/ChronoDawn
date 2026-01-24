@@ -27,125 +27,93 @@ Validate that the input follows Semantic Versioning 2.0.0:
 - Including build metadata (e.g., `0.2.0+1.21.1`) - This is auto-generated
 - Invalid prerelease identifiers (e.g., `0.2.0-Beta`, `0.2.0_beta`)
 
-If invalid, show error and explain correct format using `.claude/skills/versioning.md` examples.
+If invalid, show error and explain correct format.
+
+## Conventions
+
+This document uses the following placeholders:
+
+| Placeholder | Description | Example |
+|---|---|---|
+| `<version>` | Mod version (semver) | `0.4.0-beta` |
+| `<old_version>` | Current mod version before update | `0.3.0-beta` |
+| `<mc_version>` | Minecraft version | `1.21.2` |
+| `<loader>` | Mod loader name | `fabric`, `neoforge` |
+| `<tag_mc_version>` | MC version used in git tags (see CHANGELOG) | `1.21.1` |
 
 ## Outline
 
-1. **Read versioning guide**: Load `.claude/skills/versioning.md` to understand version format and update procedure
-
-2. **Validate version format**:
+1. **Validate version format**:
    - Check format: `<major>.<minor>.<patch>` or `<major>.<minor>.<patch>-<prerelease>`
    - All components must be numeric (except prerelease identifier)
    - Prerelease identifier (if present): alphanumeric + dots (e.g., `beta`, `alpha`, `rc.1`)
    - If invalid, stop and show error with examples
 
-3. **Extract version components**:
-   - Parse major, minor, patch
-   - Parse prerelease identifier (if present)
-   - Store for use in file updates
+2. **Read current version**:
+   - Read `gradle.properties` and find `mod_version=` line
+   - Extract current `mod_version` value as `<old_version>`
+   - Show `<old_version>` → `<version>` for user confirmation
 
-4. **Read current version**:
-   - Read `gradle.properties` line 6
-   - Extract current `mod_version` value
-   - Show current → new version for user confirmation
+3. **Update gradle.properties**:
+   - Replace `mod_version=<old_version>` with `mod_version=<version>`
 
-5. **Update gradle.properties**:
-   - Update line 6: `mod_version=<new-version>`
-   - Example: `mod_version=0.3.0-beta`
+4. **Update documentation files**:
+   - Target files: `README.md`, `docs/player_guide.md`, `docs/developer_guide.md`
+   - Search for `<old_version>` in each file and replace with `<version>`
+   - This covers all occurrences including:
+     - JAR file names: `chronodawn-<version>+<mc_version>-<loader>.jar`
+     - Output paths: `<loader>-<mc_version>/build/libs/chronodawn-...`
+     - Common JAR: `common-<mc_version>-<version>.jar`
+     - gradle.properties examples: `mod_version=<version>`
 
-6. **Update README.md**:
-   - Line 81-83: Build output file names
-     - `chronodawn-<version>+1.21.1-fabric.jar`
-     - `chronodawn-<version>+1.21.1-neoforge.jar`
-     - `common-<version>.jar`
-   - Line 209: Fabric installation JAR name
-     - `chronodawn-<version>+1.21.1-fabric.jar`
-   - Line 220: NeoForge installation JAR name
-     - `chronodawn-<version>+1.21.1-neoforge.jar`
-
-7. **Update docs/player_guide.md**:
-   - Line 78-79: Download file names
-     - `chronodawn-<version>+1.21.1-fabric.jar`
-     - `chronodawn-<version>+1.21.1-neoforge.jar`
-
-8. **Update docs/developer_guide.md**:
-   - Line 235: gradle.properties example
-     - `mod_version=<version>`
-   - Line 274-276: Build output file names
-     - `chronodawn-<version>+1.21.1-fabric.jar`
-     - `chronodawn-<version>+1.21.1-neoforge.jar`
-     - `common-<version>.jar`
-
-9. **Update CHANGELOG.md**:
+5. **Update CHANGELOG.md**:
    - Read current CHANGELOG.md to understand structure
    - Update `[Unreleased]` section header with new version and date:
      - Change `## [Unreleased]` to `## [<version>] - YYYY-MM-DD`
      - Add new empty `## [Unreleased]` section at the top
    - Update comparison links at bottom:
      - Update `[Unreleased]` link to compare from new version tag to HEAD
-     - Add new version link: `[<version>]: https://github.com/ksoichiro/ChronoDawn/compare/v<previous>+1.21.1...v<new>+1.21.1`
+     - Add new version link comparing from previous tag to new tag
+   - Determine `<tag_mc_version>` by reading the existing comparison links in CHANGELOG.md
    - Example:
      ```markdown
      ## [Unreleased]
 
-     ## [0.3.0-beta] - 2026-01-15
+     ## [<version>] - YYYY-MM-DD
      ### Added
-     - New feature description
+     - ...
 
-     [Unreleased]: https://github.com/ksoichiro/ChronoDawn/compare/v0.3.0-beta+1.21.1...HEAD
-     [0.3.0-beta]: https://github.com/ksoichiro/ChronoDawn/compare/v0.2.0-beta+1.21.1...v0.3.0-beta+1.21.1
+     [Unreleased]: https://github.com/ksoichiro/ChronoDawn/compare/v<version>+<tag_mc_version>...HEAD
+     [<version>]: https://github.com/ksoichiro/ChronoDawn/compare/v<old_version>+<tag_mc_version>...v<version>+<tag_mc_version>
      ```
 
-10. **Verification**:
-   - Search for old version string in all updated files
-   - Confirm no occurrences remain
+6. **Verification**:
+   - Search for `<old_version>` in all updated files
+   - Confirm no occurrences remain (except in CHANGELOG.md history sections which retain old versions)
    - Show summary of changed files
 
-11. **Report**:
+7. **Report**:
     - Show diff summary for each file
     - Confirm version update complete
-    - Remind user: fabric.mod.json and neoforge.mods.toml use `${version}` (auto-updated)
+    - Remind user: `fabric.mod.json` and `neoforge.mods.toml` use `${version}` (auto-updated by build)
     - Remind user: CHANGELOG.md section content can be used for GitHub Release, CurseForge, and Modrinth
     - Suggest next steps:
-      - Test build: `./gradlew clean build`
+      - Test build: `./gradlew cleanAll buildAll`
       - Verify JAR names match documentation
-      - Copy CHANGELOG.md section for release notes when creating GitHub Release/CurseForge/Modrinth upload
+      - Copy CHANGELOG.md section for release notes
 
 ## Important Notes
 
-- **Do NOT** include `+1.21.1` in gradle.properties - this is auto-appended by build scripts
-- **Do include** `+1.21.1-fabric` and `+1.21.1-neoforge` in documentation JAR names
-- **Common JAR** does NOT include Minecraft version: `common-<version>.jar`
-- **Prerelease identifiers** use hyphen: `-beta`, `-alpha`, `-rc.1`
-- **Build metadata** uses plus: `+1.21.1` (auto-generated, not in gradle.properties)
+- **gradle.properties**: Only contains the semver part (e.g., `0.4.0-beta`). Build metadata (`+<mc_version>`) is auto-appended by build scripts.
+- **Documentation JAR names**: Include MC version and loader as build metadata (e.g., `chronodawn-<version>+<mc_version>-<loader>.jar`)
+- **Output paths**: Version-specific directories (e.g., `<loader>-<mc_version>/build/libs/`)
+- **Common JAR**: Format is `common-<mc_version>-<version>.jar`
+- **CHANGELOG tags**: Use the MC version found in existing comparison links (`<tag_mc_version>`). Do not assume a specific version—read from the file.
+- **Search-based replacement**: Always use grep/search to find `<old_version>` occurrences. Do not rely on line numbers.
 - **CHANGELOG.md** follows [Keep a Changelog](https://keepachangelog.com/) format:
   - Categories: Added, Changed, Deprecated, Removed, Fixed, Security
-  - Version sections use format: `## [<version>] - YYYY-MM-DD`
-  - Comparison links at bottom use full version with build metadata: `v<version>+1.21.1`
+  - Version sections: `## [<version>] - YYYY-MM-DD`
   - Content can be copied directly to GitHub Release, CurseForge, and Modrinth changelogs
-
-## Version Update Examples
-
-### Example 1: Beta Version
-```
-Input: 0.3.0-beta
-gradle.properties: mod_version=0.3.0-beta
-README.md: chronodawn-0.3.0-beta+1.21.1-fabric.jar
-```
-
-### Example 2: Stable Release
-```
-Input: 1.0.0
-gradle.properties: mod_version=1.0.0
-README.md: chronodawn-1.0.0+1.21.1-fabric.jar
-```
-
-### Example 3: Release Candidate
-```
-Input: 1.0.0-rc.1
-gradle.properties: mod_version=1.0.0-rc.1
-README.md: chronodawn-1.0.0-rc.1+1.21.1-fabric.jar
-```
 
 ## Error Handling
 
@@ -158,42 +126,14 @@ Valid formats:
   - Pre-release: X.Y.Z-<identifier> (e.g., 0.2.0-beta, 1.0.0-rc.1)
 
 Examples:
-  ✓ 0.3.0-beta
-  ✓ 1.0.0
-  ✓ 1.2.3-rc.1
-  ✗ 0.3.0+1.21.1 (build metadata not allowed)
-  ✗ 0.3.0-Beta (use lowercase)
-  ✗ v0.3.0 (no 'v' prefix)
+  Valid: 0.3.0-beta, 1.0.0, 1.2.3-rc.1
+  Invalid: 0.3.0+1.21.1 (build metadata not allowed)
+  Invalid: 0.3.0-Beta (use lowercase)
+  Invalid: v0.3.0 (no 'v' prefix)
 
-See .claude/skills/versioning.md for details.
-```
-
-## Success Message
-
-After successful update:
-```
-✓ Version updated: <old> → <new>
-
-Updated files:
-  - gradle.properties
-  - README.md (3 locations)
-  - docs/player_guide.md (1 location)
-  - docs/developer_guide.md (2 locations)
-  - CHANGELOG.md (version header, comparison links)
-
-Next steps:
-  1. Test build: ./gradlew clean build
-  2. Verify JAR names:
-     - fabric/build/libs/chronodawn-<version>+1.21.1-fabric.jar
-     - neoforge/build/libs/chronodawn-<version>+1.21.1-neoforge.jar
-  3. Commit changes (if ready)
-
-For release:
-  - Copy CHANGELOG.md [<version>] section for GitHub Release notes
-  - Use same content for CurseForge and Modrinth changelog fields
+See https://semver.org/ for details.
 ```
 
 ## Reference
 
-- Versioning guide: `.claude/skills/versioning.md`
 - Semantic Versioning: https://semver.org/
