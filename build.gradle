@@ -23,8 +23,11 @@ ext.loadVersionProperties = { String version ->
     logger.lifecycle("Target Minecraft version: ${project.ext.minecraft_version}")
 }
 
-// Determine target version from command line or use default
-def targetVersion = project.findProperty('target_mc_version') ?: '1.21.1'
+// Determine target version (defined in gradle.properties, overridable via -P)
+def targetVersion = project.findProperty('target_mc_version')
+if (targetVersion == null) {
+    throw new GradleException("'target_mc_version' property is not defined. Check gradle.properties or pass -Ptarget_mc_version=<version>")
+}
 loadVersionProperties(targetVersion)
 
 architectury {
