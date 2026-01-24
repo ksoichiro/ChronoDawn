@@ -182,6 +182,14 @@ public final class RegistryDrivenTestGenerator {
     }
 
     /**
+     * Generates tests verifying structure template loading, minimum size, and required blocks.
+     */
+    public static List<NamedTest> generateStructureTests() {
+        return StructureTests.generateStructureTests(
+            StructureTests.getStructureSpecs(), NamedTest::new);
+    }
+
+    /**
      * Generates tests verifying that all item registry IDs match their field names.
      */
     public static List<NamedTest> generateItemIdTests() {
@@ -378,6 +386,7 @@ public final class RegistryDrivenTestGenerator {
         all.addAll(generateAdvancementGrantTests());
         all.addAll(generateAdvancementParentTests());
         all.addAll(generateAdvancementIsolationTests());
+        all.addAll(generateStructureTests());
         return all;
     }
 

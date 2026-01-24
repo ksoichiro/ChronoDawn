@@ -1,0 +1,126 @@
+package com.chronodawn.gametest;
+
+import com.chronodawn.ChronoDawn;
+import com.chronodawn.compat.CompatResourceLocation;
+import com.chronodawn.registry.ModBlocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Supplier;
+
+/**
+ * Shared structure template test generator used across all Minecraft versions.
+ *
+ * Generates tests for:
+ * - Template loading and minimum size validation
+ * - Required block presence and minimum count verification
+ */
+public final class StructureTests {
+
+    private StructureTests() {
+        // Utility class
+    }
+
+    /**
+     * Block requirement: name + block supplier + minimum count.
+     * Uses Supplier to defer registry resolution until test execution time.
+     */
+    public record BlockRequirement(String name, Supplier<Block> blockSupplier, int minCount) {}
+
+    /**
+     * Structure template specification: template ID + minimum dimensions + block requirements.
+     */
+    public record StructureSpec(
+        String id,
+        int minWidth,
+        int minHeight,
+        int minDepth,
+        List<BlockRequirement> blockRequirements
+    ) {}
+
+    /**
+     * Shared structure specs for all versions.
+     */
+    public static List<StructureSpec> getStructureSpecs() {
+        return List.of(
+            new StructureSpec("ancient_ruins", 5, 3, 5, List.of(
+                new BlockRequirement("chest", () -> Blocks.CHEST, 2),
+                new BlockRequirement("temporal_particle_emitter", ModBlocks.TEMPORAL_PARTICLE_EMITTER, 20),
+                new BlockRequirement("clockstone_ore", ModBlocks.CLOCKSTONE_ORE, 30)
+            ))
+        );
+    }
+
+    /**
+     * Generates tests verifying structure template loading, minimum size, and required blocks.
+     */
+    public static <T> List<T> generateStructureTests(
+            List<StructureSpec> specs,
+            MobBehaviorTests.TestFactory<T> factory) {
+        List<T> tests = new ArrayList<>();
+        for (var spec : specs) {
+            ResourceLocation templateId = CompatResourceLocation.create(ChronoDawn.MOD_ID, spec.id());
+
+            // Template load + size test
+            tests.add(factory.create("structure_load_" + spec.id(), helper -> {
+                helper.runAfterDelay(1, () -> {
+                    var templateManager = helper.getLevel().getStructureManager();
+                    var templateOpt = templateManager.get(templateId);
+                    if (templateOpt.isEmpty()) {
+                        helper.fail("Structure template '" + spec.id() + "' could not be loaded");
+                        return;
+                    }
+                    StructureTemplate template = templateOpt.get();
+                    var size = template.getSize();
+                    if (size.getX() < spec.minWidth() || size.getY() < spec.minHeight() || size.getZ() < spec.minDepth()) {
+                        helper.fail("Structure '" + spec.id() + "' size " +
+                            size.getX() + "x" + size.getY() + "x" + size.getZ() +
+                            " is smaller than minimum " +
+                            spec.minWidth() + "x" + spec.minHeight() + "x" + spec.minDepth());
+                        return;
+                    }
+                    helper.succeed();
+                });
+            }));
+
+            // Block requirement tests
+            for (var req : spec.blockRequirements()) {
+                String testName = req.minCount() > 1
+                    ? "structure_contains_" + req.minCount() + "_" + req.name() + "_" + spec.id()
+                    : "structure_contains_" + req.name() + "_" + spec.id();
+                tests.add(factory.create(testName, helper -> {
+                    helper.runAfterDelay(1, () -> {
+                        Block block = req.blockSupplier().get();
+                        var templateManager = helper.getLevel().getStructureManager();
+                        var templateOpt = templateManager.get(templateId);
+                        if (templateOpt.isEmpty()) {
+                            helper.fail("Structure template '" + spec.id() + "' could not be loaded");
+                            return;
+                        }
+                        StructureTemplate template = templateOpt.get();
+                        var blocks = template.filterBlocks(
+                            BlockPos.ZERO,
+                            new StructurePlaceSettings(),
+                            block
+                        );
+                        if (blocks.size() < req.minCount()) {
+                            helper.fail("Structure '" + spec.id() + "' contains " +
+                                blocks.size() + " " + req.name() + ", expected at least " + req.minCount());
+                            return;
+                        }
+                        helper.succeed();
+                    });
+                }));
+            }
+        }
+        return tests;
+    }
+}
