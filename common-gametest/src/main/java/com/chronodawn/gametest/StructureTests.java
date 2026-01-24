@@ -141,6 +141,10 @@ public final class StructureTests {
             new StructureSpec("phantom_catacombs_boss_room", 21, 9, 21, List.of(
                 new BlockRequirement("boss_room_boundary_marker", ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
                 new BlockRequirement("amethyst_block", () -> Blocks.AMETHYST_BLOCK, 1)
+            )),
+            new StructureSpec("phantom_catacombs_room_dead_end", 7, 9, 7, List.of(
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1),
+                new BlockRequirement("crying_obsidian", () -> Blocks.CRYING_OBSIDIAN, 1)
             ))
         );
     }
