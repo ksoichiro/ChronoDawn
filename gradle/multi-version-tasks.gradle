@@ -137,6 +137,49 @@ tasks.register('buildAll') {
 }
 
 // ============================================================
+// Run Client Tasks (convenience shortcuts)
+// ============================================================
+
+def runClientConfigurations = [
+    [version: '1.20.1', loaders: ['fabric']],
+    [version: '1.21.1', loaders: ['fabric', 'neoforge']],
+    [version: '1.21.2', loaders: ['fabric', 'neoforge']],
+]
+
+runClientConfigurations.each { config ->
+    def versionSuffix = config.version.replace('.', '_')
+
+    config.loaders.each { loader ->
+        def loaderName = loader == 'neoforge' ? 'NeoForge' : loader.capitalize()
+        def taskName = "runClient${loaderName}${versionSuffix}"
+
+        tasks.register(taskName) {
+            group = 'chrono dawn run'
+            description = "Run ${loaderName} client for Minecraft ${config.version}"
+
+            doLast {
+                def gradlew = new File(projectDir, 'gradlew').absolutePath
+                def cmd = [
+                    gradlew,
+                    ':' + loader + ':runClient',
+                    '-Ptarget_mc_version=' + config.version,
+                ] as List<String>
+
+                def pb = new ProcessBuilder(cmd)
+                pb.directory(projectDir)
+                pb.inheritIO()
+
+                def process = pb.start()
+                def exitCode = process.waitFor()
+                if (exitCode != 0) {
+                    throw new GradleException("${loader} client for ${config.version} exited with code ${exitCode}")
+                }
+            }
+        }
+    }
+}
+
+// ============================================================
 // GameTest Tasks
 // ============================================================
 

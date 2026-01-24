@@ -81,8 +81,8 @@ Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2): Follow standard conventions
 - `./gradlew buildAll` - Build all versions
 
 **Run Client**:
-- Fabric: `./gradlew :fabric:runClient -Ptarget_mc_version=1.20.1`, `./gradlew :fabric:runClient -Ptarget_mc_version=1.21.1`, or `./gradlew :fabric:runClient -Ptarget_mc_version=1.21.2`
-- NeoForge: `./gradlew :neoforge:runClient -Ptarget_mc_version=1.21.1`, or `./gradlew :neoforge:runClient -Ptarget_mc_version=1.21.2`
+- Fabric: `./gradlew runClientFabric1_20_1`, `./gradlew runClientFabric1_21_1`, `./gradlew runClientFabric1_21_2`
+- NeoForge: `./gradlew runClientNeoForge1_21_1`, `./gradlew runClientNeoForge1_21_2`
 
 **GameTest**:
 - `./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.2` - Run GameTests for specific version
