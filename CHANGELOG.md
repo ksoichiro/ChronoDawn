@@ -7,13 +7,71 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.4.0-beta] - 2026-01-17
+## [0.4.0-beta] - 2026-01-25
 
 ### Added
 
+#### Minecraft 1.21.2 Support
+- Added Minecraft 1.21.2 support alongside existing 1.20.1 and 1.21.1
+- Migrated to 1.21.2 APIs: EntityRenderState, ArmorMaterial, ToolMaterial, Consumable, data-driven equipment
+- Version-specific Gradle tasks: `clean1_21_2`, `build1_21_2`, `runClientFabric1_21_2`, `runClientNeoForge1_21_2`
+
+#### New Mobs
+- **Timeline Strider**: Enderman replacement in Chrono Dawn dimension
+- **Secondhand Archer**: Skeleton replacement in Chrono Dawn dimension
+- **Paradox Crawler**: Spider replacement in Chrono Dawn dimension
+- **Epoch Husk**: Zombie replacement in Chrono Dawn dimension
+- **Forgotten Minute**: Flying hostile mob with unique AI behavior
+- **Chronal Leech**: Hostile mob in Chrono Dawn dimension
+- **Moment Creeper**: Creeper variant with complete creeper behavior
+- **Chrono Turtle**: Friendly water mob with spawn egg
+- **Glide Fish**: Water creature mob with food items (raw/cooked) and cooking recipes
+
+#### Gameplay Features
+- Master Clock structure generation triggered by entrance door open
+- Custom mob spawns added to all Chrono Dawn dimension biomes
+
+#### Development & Testing
+- Comprehensive GameTest suite: structure templates, mob behavior, advancements, registry validation, block protection
+- `checkAll` task for full verification (clean → validateResources → build → test → gameTest)
+- `cleanAll`, `testAll`, `gameTestAll` Gradle tasks
+- `runClient` shortcut tasks for each version and loader combination
+- Registry-driven GameTest generation replacing hand-written tests
+- Resource validation tests (JSON syntax, blockstate→model, model→texture cross-references)
+- Multi-language translation validation
+- Centralized ID definitions (ModBlockId, ModItemId, ModEntityId, ModBlockEntityId) with GameTest validation
+- Colored log output for runClient tasks
+
 ### Changed
+- Restructured project to multi-version subproject architecture
+- Extracted 54 version-agnostic source files into `common-shared/`
+- Centralized default `target_mc_version` in `gradle.properties`
+- Moved Glide Fish items to Food section in creative tab
+- Changed ChronoDawn log output from INFO to DEBUG level
+- Reduced excessive DEBUG logging from checkAndPlaceRooms
+- Parallelized `gameTestAll` by Minecraft version for faster execution
+- Migrated render layer configuration from code to JSON model metadata
+- Replaced string literals with enum references (ModBlockId, ModItemId) throughout codebase
+- Used custom models for boss_room_door to eliminate deprecated BlockRenderLayerMap API
 
 ### Fixed
+
+#### Resource & Recipe Fixes
+- Restored BlockRenderLayerMap registration for Fabric (translucent blocks)
+- Added missing item tag translations for Fabric tag conventions
+- Added missing loot tables for wood doors, trapdoors, fence gates, buttons, pressure plates
+- Used tag-based ingredients for planks recipes to allow all log variants
+- Added missing wood blocks and chrono_melon to `minecraft:mineable/axe` tag
+- Added `useBlockDescriptionPrefix` to BlockItems for proper translation keys
+
+#### Build & Development
+- Added Architectury Transformer cache cleanup to cleanAll task
+- Added IDE `bin/` cleanup to cleanAll task
+- Fixed portal teleports at END_SERVER_TICK to prevent ConcurrentModificationException
+
+### Performance
+- Parallelized gameTestAll execution by Minecraft version
+- Removed excessive DEBUG logging from structure generation
 
 ## [0.3.0] - 2026-01-17
 
