@@ -259,12 +259,15 @@ public final class StructureTests {
                     .map(StructureSpec::id)
                     .collect(Collectors.toSet());
 
+                // Test utility structures that are not game structures
+                Set<String> excludedIds = Set.of("empty_test");
+
                 List<String> untestedIds = new ArrayList<>();
                 for (var entry : resources.keySet()) {
                     String path = entry.getPath();
                     // path is "structure/<id>.nbt"
                     String id = path.substring("structure/".length(), path.length() - ".nbt".length());
-                    if (!testedIds.contains(id)) {
+                    if (!testedIds.contains(id) && !excludedIds.contains(id)) {
                         untestedIds.add(id);
                     }
                 }

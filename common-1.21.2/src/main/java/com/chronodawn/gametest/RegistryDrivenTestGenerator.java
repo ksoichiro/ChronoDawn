@@ -190,6 +190,13 @@ public final class RegistryDrivenTestGenerator {
     }
 
     /**
+     * Generates tests verifying portal frame construction, ignition, and dimension transition.
+     */
+    public static List<NamedTest> generatePortalTests() {
+        return PortalTests.generateTests(NamedTest::new);
+    }
+
+    /**
      * Generates tests verifying that all item registry IDs match their field names.
      */
     public static List<NamedTest> generateItemIdTests() {
@@ -387,6 +394,7 @@ public final class RegistryDrivenTestGenerator {
         all.addAll(generateAdvancementParentTests());
         all.addAll(generateAdvancementIsolationTests());
         all.addAll(generateStructureTests());
+        all.addAll(generatePortalTests());
         return all;
     }
 

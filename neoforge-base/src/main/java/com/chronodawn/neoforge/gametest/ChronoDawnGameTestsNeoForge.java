@@ -28,7 +28,8 @@ import net.minecraft.gametest.framework.GameTestHelper;
 public class ChronoDawnGameTestsNeoForge {
 
     private static final String BATCH = "chronodawn";
-    private static final String TEMPLATE = "chronodawn:ancient_ruins";
+    // Use empty 10x10x10 structure template for reliable test execution
+    private static final String TEMPLATE = "chronodawn:empty_test";
     private static final int DEFAULT_TIMEOUT = 100;
 
     @SubscribeEvent
