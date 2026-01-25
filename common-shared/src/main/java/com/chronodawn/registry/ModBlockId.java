@@ -27,150 +27,160 @@ import java.util.List;
  * Master list of all block IDs in the mod.
  * This enum serves as the single source of truth for block IDs.
  * GameTests use this to verify all defined blocks are properly registered.
+ *
+ * <p>Each block can specify optional attributes using a fluent builder pattern:
+ * <ul>
+ *   <li>{@code cutout()} - for blocks with transparency (saplings, doors, crops)</li>
+ *   <li>{@code cutoutMipped()} - for leaves with mipmapping</li>
+ *   <li>{@code translucent()} - for glass-like or ice-like blocks</li>
+ *   <li>{@code minVersion()} - for version-specific blocks</li>
+ * </ul>
  */
 public enum ModBlockId {
     // Ores
-    CLOCKSTONE_ORE("clockstone_ore"),
-    TIME_CRYSTAL_ORE("time_crystal_ore"),
+    CLOCKSTONE_ORE(def("clockstone_ore")),
+    TIME_CRYSTAL_ORE(def("time_crystal_ore")),
 
     // Clockstone variants
-    CLOCKSTONE_BLOCK("clockstone_block"),
-    CLOCKSTONE_STAIRS("clockstone_stairs"),
-    CLOCKSTONE_SLAB("clockstone_slab"),
-    CLOCKSTONE_WALL("clockstone_wall"),
+    CLOCKSTONE_BLOCK(def("clockstone_block")),
+    CLOCKSTONE_STAIRS(def("clockstone_stairs")),
+    CLOCKSTONE_SLAB(def("clockstone_slab")),
+    CLOCKSTONE_WALL(def("clockstone_wall")),
 
     // Temporal Bricks variants
-    TEMPORAL_BRICKS("temporal_bricks"),
-    TEMPORAL_BRICKS_STAIRS("temporal_bricks_stairs"),
-    TEMPORAL_BRICKS_SLAB("temporal_bricks_slab"),
-    TEMPORAL_BRICKS_WALL("temporal_bricks_wall"),
+    TEMPORAL_BRICKS(def("temporal_bricks")),
+    TEMPORAL_BRICKS_STAIRS(def("temporal_bricks_stairs")),
+    TEMPORAL_BRICKS_SLAB(def("temporal_bricks_slab")),
+    TEMPORAL_BRICKS_WALL(def("temporal_bricks_wall")),
 
     // Special blocks
-    TIME_CRYSTAL_BLOCK("time_crystal_block"),
-    REVERSING_TIME_SANDSTONE("reversing_time_sandstone"),
-    FROZEN_TIME_ICE("frozen_time_ice"),
-    CLOCKWORK_BLOCK("clockwork_block"),
-    TEMPORAL_MOSS("temporal_moss"),
-    TEMPORAL_PARTICLE_EMITTER("temporal_particle_emitter"),
-    CHRONO_DAWN_PORTAL("chrono_dawn_portal"),
-    DECORATIVE_WATER("decorative_water"),
+    TIME_CRYSTAL_BLOCK(def("time_crystal_block").translucent()),
+    REVERSING_TIME_SANDSTONE(def("reversing_time_sandstone")),
+    FROZEN_TIME_ICE(def("frozen_time_ice").translucent()),
+    CLOCKWORK_BLOCK(def("clockwork_block")),
+    TEMPORAL_MOSS(def("temporal_moss")),
+    TEMPORAL_PARTICLE_EMITTER(def("temporal_particle_emitter")),
+    CHRONO_DAWN_PORTAL(def("chrono_dawn_portal").translucent()),
+    DECORATIVE_WATER(def("decorative_water")),
 
     // Time Wood (regular)
-    TIME_WOOD_LOG("time_wood_log"),
-    TIME_WOOD("time_wood"),
-    STRIPPED_TIME_WOOD_LOG("stripped_time_wood_log"),
-    STRIPPED_TIME_WOOD("stripped_time_wood"),
-    TIME_WOOD_PLANKS("time_wood_planks"),
-    TIME_WOOD_STAIRS("time_wood_stairs"),
-    TIME_WOOD_SLAB("time_wood_slab"),
-    TIME_WOOD_FENCE("time_wood_fence"),
-    TIME_WOOD_FENCE_GATE("time_wood_fence_gate"),
-    TIME_WOOD_DOOR("time_wood_door"),
-    TIME_WOOD_TRAPDOOR("time_wood_trapdoor"),
-    TIME_WOOD_BUTTON("time_wood_button"),
-    TIME_WOOD_PRESSURE_PLATE("time_wood_pressure_plate"),
-    TIME_WOOD_LEAVES("time_wood_leaves"),
-    TIME_WOOD_SAPLING("time_wood_sapling"),
+    TIME_WOOD_LOG(def("time_wood_log")),
+    TIME_WOOD(def("time_wood")),
+    STRIPPED_TIME_WOOD_LOG(def("stripped_time_wood_log")),
+    STRIPPED_TIME_WOOD(def("stripped_time_wood")),
+    TIME_WOOD_PLANKS(def("time_wood_planks")),
+    TIME_WOOD_STAIRS(def("time_wood_stairs")),
+    TIME_WOOD_SLAB(def("time_wood_slab")),
+    TIME_WOOD_FENCE(def("time_wood_fence")),
+    TIME_WOOD_FENCE_GATE(def("time_wood_fence_gate")),
+    TIME_WOOD_DOOR(def("time_wood_door").cutout()),
+    TIME_WOOD_TRAPDOOR(def("time_wood_trapdoor").cutout()),
+    TIME_WOOD_BUTTON(def("time_wood_button")),
+    TIME_WOOD_PRESSURE_PLATE(def("time_wood_pressure_plate")),
+    TIME_WOOD_LEAVES(def("time_wood_leaves").cutoutMipped()),
+    TIME_WOOD_SAPLING(def("time_wood_sapling").cutout()),
 
     // Dark Time Wood
-    DARK_TIME_WOOD_LOG("dark_time_wood_log"),
-    DARK_TIME_WOOD("dark_time_wood"),
-    STRIPPED_DARK_TIME_WOOD_LOG("stripped_dark_time_wood_log"),
-    STRIPPED_DARK_TIME_WOOD("stripped_dark_time_wood"),
-    DARK_TIME_WOOD_PLANKS("dark_time_wood_planks"),
-    DARK_TIME_WOOD_STAIRS("dark_time_wood_stairs"),
-    DARK_TIME_WOOD_SLAB("dark_time_wood_slab"),
-    DARK_TIME_WOOD_FENCE("dark_time_wood_fence"),
-    DARK_TIME_WOOD_FENCE_GATE("dark_time_wood_fence_gate"),
-    DARK_TIME_WOOD_DOOR("dark_time_wood_door"),
-    DARK_TIME_WOOD_TRAPDOOR("dark_time_wood_trapdoor"),
-    DARK_TIME_WOOD_BUTTON("dark_time_wood_button"),
-    DARK_TIME_WOOD_PRESSURE_PLATE("dark_time_wood_pressure_plate"),
-    DARK_TIME_WOOD_LEAVES("dark_time_wood_leaves"),
-    DARK_TIME_WOOD_SAPLING("dark_time_wood_sapling"),
+    DARK_TIME_WOOD_LOG(def("dark_time_wood_log")),
+    DARK_TIME_WOOD(def("dark_time_wood")),
+    STRIPPED_DARK_TIME_WOOD_LOG(def("stripped_dark_time_wood_log")),
+    STRIPPED_DARK_TIME_WOOD(def("stripped_dark_time_wood")),
+    DARK_TIME_WOOD_PLANKS(def("dark_time_wood_planks")),
+    DARK_TIME_WOOD_STAIRS(def("dark_time_wood_stairs")),
+    DARK_TIME_WOOD_SLAB(def("dark_time_wood_slab")),
+    DARK_TIME_WOOD_FENCE(def("dark_time_wood_fence")),
+    DARK_TIME_WOOD_FENCE_GATE(def("dark_time_wood_fence_gate")),
+    DARK_TIME_WOOD_DOOR(def("dark_time_wood_door").cutout()),
+    DARK_TIME_WOOD_TRAPDOOR(def("dark_time_wood_trapdoor").cutout()),
+    DARK_TIME_WOOD_BUTTON(def("dark_time_wood_button")),
+    DARK_TIME_WOOD_PRESSURE_PLATE(def("dark_time_wood_pressure_plate")),
+    DARK_TIME_WOOD_LEAVES(def("dark_time_wood_leaves").cutoutMipped()),
+    DARK_TIME_WOOD_SAPLING(def("dark_time_wood_sapling").cutout()),
 
     // Ancient Time Wood
-    ANCIENT_TIME_WOOD_LOG("ancient_time_wood_log"),
-    ANCIENT_TIME_WOOD("ancient_time_wood"),
-    STRIPPED_ANCIENT_TIME_WOOD_LOG("stripped_ancient_time_wood_log"),
-    STRIPPED_ANCIENT_TIME_WOOD("stripped_ancient_time_wood"),
-    ANCIENT_TIME_WOOD_PLANKS("ancient_time_wood_planks"),
-    ANCIENT_TIME_WOOD_STAIRS("ancient_time_wood_stairs"),
-    ANCIENT_TIME_WOOD_SLAB("ancient_time_wood_slab"),
-    ANCIENT_TIME_WOOD_FENCE("ancient_time_wood_fence"),
-    ANCIENT_TIME_WOOD_FENCE_GATE("ancient_time_wood_fence_gate"),
-    ANCIENT_TIME_WOOD_DOOR("ancient_time_wood_door"),
-    ANCIENT_TIME_WOOD_TRAPDOOR("ancient_time_wood_trapdoor"),
-    ANCIENT_TIME_WOOD_BUTTON("ancient_time_wood_button"),
-    ANCIENT_TIME_WOOD_PRESSURE_PLATE("ancient_time_wood_pressure_plate"),
-    ANCIENT_TIME_WOOD_LEAVES("ancient_time_wood_leaves"),
-    ANCIENT_TIME_WOOD_SAPLING("ancient_time_wood_sapling"),
+    ANCIENT_TIME_WOOD_LOG(def("ancient_time_wood_log")),
+    ANCIENT_TIME_WOOD(def("ancient_time_wood")),
+    STRIPPED_ANCIENT_TIME_WOOD_LOG(def("stripped_ancient_time_wood_log")),
+    STRIPPED_ANCIENT_TIME_WOOD(def("stripped_ancient_time_wood")),
+    ANCIENT_TIME_WOOD_PLANKS(def("ancient_time_wood_planks")),
+    ANCIENT_TIME_WOOD_STAIRS(def("ancient_time_wood_stairs")),
+    ANCIENT_TIME_WOOD_SLAB(def("ancient_time_wood_slab")),
+    ANCIENT_TIME_WOOD_FENCE(def("ancient_time_wood_fence")),
+    ANCIENT_TIME_WOOD_FENCE_GATE(def("ancient_time_wood_fence_gate")),
+    ANCIENT_TIME_WOOD_DOOR(def("ancient_time_wood_door").cutout()),
+    ANCIENT_TIME_WOOD_TRAPDOOR(def("ancient_time_wood_trapdoor").cutout()),
+    ANCIENT_TIME_WOOD_BUTTON(def("ancient_time_wood_button")),
+    ANCIENT_TIME_WOOD_PRESSURE_PLATE(def("ancient_time_wood_pressure_plate")),
+    ANCIENT_TIME_WOOD_LEAVES(def("ancient_time_wood_leaves").cutoutMipped()),
+    ANCIENT_TIME_WOOD_SAPLING(def("ancient_time_wood_sapling").cutout()),
 
     // Crops and plants
-    TIME_WHEAT("time_wheat"),
-    TIME_WHEAT_BALE("time_wheat_bale"),
-    TEMPORAL_ROOT("temporal_root"),
-    CHRONO_MELON("chrono_melon"),
-    CHRONO_MELON_STEM("chrono_melon_stem"),
-    ATTACHED_CHRONO_MELON_STEM("attached_chrono_melon_stem"),
-    TIMELESS_MUSHROOM("timeless_mushroom"),
-    UNSTABLE_FUNGUS("unstable_fungus"),
-    FRUIT_OF_TIME("fruit_of_time"),
+    TIME_WHEAT(def("time_wheat").cutout()),
+    TIME_WHEAT_BALE(def("time_wheat_bale")),
+    TEMPORAL_ROOT(def("temporal_root").cutout()),
+    CHRONO_MELON(def("chrono_melon")),
+    CHRONO_MELON_STEM(def("chrono_melon_stem").cutout()),
+    ATTACHED_CHRONO_MELON_STEM(def("attached_chrono_melon_stem").cutout()),
+    TIMELESS_MUSHROOM(def("timeless_mushroom").cutout()),
+    UNSTABLE_FUNGUS(def("unstable_fungus").cutout()),
+    FRUIT_OF_TIME(def("fruit_of_time")),
 
     // Flowers
-    ORANGE_TIME_BLOSSOM("orange_time_blossom"),
-    PINK_TIME_BLOSSOM("pink_time_blossom"),
-    PURPLE_TIME_BLOSSOM("purple_time_blossom"),
-    DAWN_BELL("dawn_bell"),
-    DUSK_BELL("dusk_bell"),
+    ORANGE_TIME_BLOSSOM(def("orange_time_blossom").cutout()),
+    PINK_TIME_BLOSSOM(def("pink_time_blossom").cutout()),
+    PURPLE_TIME_BLOSSOM(def("purple_time_blossom").cutout()),
+    DAWN_BELL(def("dawn_bell").cutout()),
+    DUSK_BELL(def("dusk_bell").cutout()),
 
     // Potted plants
-    POTTED_TIME_WOOD_SAPLING("potted_time_wood_sapling"),
-    POTTED_DARK_TIME_WOOD_SAPLING("potted_dark_time_wood_sapling"),
-    POTTED_ANCIENT_TIME_WOOD_SAPLING("potted_ancient_time_wood_sapling"),
-    POTTED_ORANGE_TIME_BLOSSOM("potted_orange_time_blossom"),
-    POTTED_PINK_TIME_BLOSSOM("potted_pink_time_blossom"),
-    POTTED_PURPLE_TIME_BLOSSOM("potted_purple_time_blossom"),
-    POTTED_UNSTABLE_FUNGUS("potted_unstable_fungus"),
+    POTTED_TIME_WOOD_SAPLING(def("potted_time_wood_sapling").cutout()),
+    POTTED_DARK_TIME_WOOD_SAPLING(def("potted_dark_time_wood_sapling").cutout()),
+    POTTED_ANCIENT_TIME_WOOD_SAPLING(def("potted_ancient_time_wood_sapling").cutout()),
+    POTTED_ORANGE_TIME_BLOSSOM(def("potted_orange_time_blossom").cutout()),
+    POTTED_PINK_TIME_BLOSSOM(def("potted_pink_time_blossom").cutout()),
+    POTTED_PURPLE_TIME_BLOSSOM(def("potted_purple_time_blossom").cutout()),
+    POTTED_UNSTABLE_FUNGUS(def("potted_unstable_fungus").cutout()),
 
     // Structure blocks
-    BOSS_ROOM_BOUNDARY_MARKER("boss_room_boundary_marker"),
-    BOSS_ROOM_DOOR("boss_room_door"),
-    CLOCK_TOWER_TELEPORTER("clock_tower_teleporter"),
-    ENTROPY_CRYPT_TRAPDOOR("entropy_crypt_trapdoor"),
+    BOSS_ROOM_BOUNDARY_MARKER(def("boss_room_boundary_marker")),
+    BOSS_ROOM_DOOR(def("boss_room_door").cutout()),
+    CLOCK_TOWER_TELEPORTER(def("clock_tower_teleporter")),
+    ENTROPY_CRYPT_TRAPDOOR(def("entropy_crypt_trapdoor").cutout()),
     ;
 
-    private final String id;
-    private final MinecraftVersion minVersion;
+    private final BlockDef def;
 
-    ModBlockId(String id) {
-        this(id, MinecraftVersion.MC_1_20_1);
-    }
-
-    ModBlockId(String id, MinecraftVersion minVersion) {
-        this.id = id;
-        this.minVersion = minVersion;
+    ModBlockId(BlockDef def) {
+        this.def = def;
     }
 
     /**
      * Returns the block ID string (e.g., "clockstone_ore").
      */
     public String id() {
-        return id;
+        return def.id;
     }
 
     /**
      * Returns the minimum Minecraft version required for this block.
      */
     public MinecraftVersion minVersion() {
-        return minVersion;
+        return def.minVersion;
+    }
+
+    /**
+     * Returns the render layer for this block.
+     * Used by client-side code to register appropriate render types.
+     */
+    public RenderLayer renderLayer() {
+        return def.renderLayer;
     }
 
     /**
      * Checks if this block is available for the specified Minecraft version.
      */
     public boolean isAvailableFor(MinecraftVersion version) {
-        return version.isAtLeast(minVersion);
+        return version.isAtLeast(def.minVersion);
     }
 
     /**
@@ -187,5 +197,73 @@ public enum ModBlockId {
      */
     public static List<ModBlockId> availableForCurrent() {
         return availableFor(CurrentVersion.VERSION);
+    }
+
+    /**
+     * Creates a new BlockDef builder with the specified ID.
+     */
+    private static BlockDef def(String id) {
+        return new BlockDef(id);
+    }
+
+    /**
+     * Render layer types for blocks.
+     * These correspond to Minecraft's RenderType values.
+     */
+    public enum RenderLayer {
+        /** Default solid rendering (opaque blocks) */
+        SOLID,
+        /** Cutout rendering for blocks with transparency (saplings, doors, crops) */
+        CUTOUT,
+        /** Cutout with mipmapping for leaves */
+        CUTOUT_MIPPED,
+        /** Translucent rendering for glass-like or ice-like blocks */
+        TRANSLUCENT
+    }
+
+    /**
+     * Builder class for defining block properties.
+     * Allows fluent configuration of optional attributes.
+     */
+    public static class BlockDef {
+        private final String id;
+        private MinecraftVersion minVersion = MinecraftVersion.MC_1_20_1;
+        private RenderLayer renderLayer = RenderLayer.SOLID;
+
+        BlockDef(String id) {
+            this.id = id;
+        }
+
+        /**
+         * Sets the minimum Minecraft version for this block.
+         */
+        public BlockDef minVersion(MinecraftVersion version) {
+            this.minVersion = version;
+            return this;
+        }
+
+        /**
+         * Sets the render layer to CUTOUT (for transparency without mipmapping).
+         */
+        public BlockDef cutout() {
+            this.renderLayer = RenderLayer.CUTOUT;
+            return this;
+        }
+
+        /**
+         * Sets the render layer to CUTOUT_MIPPED (for leaves with mipmapping).
+         */
+        public BlockDef cutoutMipped() {
+            this.renderLayer = RenderLayer.CUTOUT_MIPPED;
+            return this;
+        }
+
+        /**
+         * Sets the render layer to TRANSLUCENT (for glass-like blocks).
+         */
+        public BlockDef translucent() {
+            this.renderLayer = RenderLayer.TRANSLUCENT;
+            return this;
+        }
     }
 }

@@ -50,6 +50,7 @@ import com.chronodawn.client.renderer.mobs.TimeKeeperRenderer;
 import com.chronodawn.client.renderer.mobs.TimelineStriderRenderer;
 import com.chronodawn.client.model.TimelineStriderModel;
 import com.chronodawn.items.TimeCompassItem;
+import com.chronodawn.registry.ModBlockId;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModEntities;
 import com.chronodawn.registry.ModItems;
@@ -72,7 +73,10 @@ import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -190,60 +194,34 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
      *
      * Fabric does not support the render_type field in block model JSON files,
      * so we must register render layers programmatically using BlockRenderLayerMap.
+     *
+     * Render layer information is defined in ModBlockId using a fluent builder pattern,
+     * allowing centralized management of block properties.
      */
     private void registerRenderLayers() {
-        // Saplings - cutout for transparency
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TIME_WOOD_SAPLING.get(), RenderType.cutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.DARK_TIME_WOOD_SAPLING.get(), RenderType.cutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.ANCIENT_TIME_WOOD_SAPLING.get(), RenderType.cutout());
+        for (ModBlockId blockId : ModBlockId.availableForCurrent()) {
+            if (blockId.renderLayer() == ModBlockId.RenderLayer.SOLID) {
+                continue; // SOLID blocks don't need registration
+            }
 
-        // Potted saplings - cutout for transparency
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.POTTED_TIME_WOOD_SAPLING.get(), RenderType.cutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.POTTED_DARK_TIME_WOOD_SAPLING.get(), RenderType.cutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.POTTED_ANCIENT_TIME_WOOD_SAPLING.get(), RenderType.cutout());
+            ResourceLocation blockLoc = ResourceLocation.fromNamespaceAndPath(
+                ChronoDawn.MOD_ID, blockId.id());
+            // In 1.21.2, get() returns Optional<Reference<Block>>
+            var blockHolder = BuiltInRegistries.BLOCK.get(blockLoc);
+            Block block = blockHolder.map(holder -> holder.value()).orElse(null);
 
-        // Leaves - cutout_mipped for leaf transparency with mipmapping
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TIME_WOOD_LEAVES.get(), RenderType.cutoutMipped());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.DARK_TIME_WOOD_LEAVES.get(), RenderType.cutoutMipped());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.ANCIENT_TIME_WOOD_LEAVES.get(), RenderType.cutoutMipped());
+            if (block == null || block == Blocks.AIR) {
+                ChronoDawn.LOGGER.warn("Block not found in registry: {}", blockLoc);
+                continue;
+            }
 
-        // Doors - cutout for window transparency
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TIME_WOOD_DOOR.get(), RenderType.cutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.DARK_TIME_WOOD_DOOR.get(), RenderType.cutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.ANCIENT_TIME_WOOD_DOOR.get(), RenderType.cutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.BOSS_ROOM_DOOR.get(), RenderType.cutout());
-
-        // Trapdoors - cutout for transparency
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TIME_WOOD_TRAPDOOR.get(), RenderType.cutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.DARK_TIME_WOOD_TRAPDOOR.get(), RenderType.cutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.ANCIENT_TIME_WOOD_TRAPDOOR.get(), RenderType.cutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.ENTROPY_CRYPT_TRAPDOOR.get(), RenderType.cutout());
-
-        // Crops - cutout for transparency
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TIME_WHEAT.get(), RenderType.cutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TEMPORAL_ROOT.get(), RenderType.cutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.CHRONO_MELON_STEM.get(), RenderType.cutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.ATTACHED_CHRONO_MELON_STEM.get(), RenderType.cutout());
-
-        // Flowers and plants - cutout for transparency
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.UNSTABLE_FUNGUS.get(), RenderType.cutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.POTTED_UNSTABLE_FUNGUS.get(), RenderType.cutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TIMELESS_MUSHROOM.get(), RenderType.cutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.PURPLE_TIME_BLOSSOM.get(), RenderType.cutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.POTTED_PURPLE_TIME_BLOSSOM.get(), RenderType.cutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.ORANGE_TIME_BLOSSOM.get(), RenderType.cutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.POTTED_ORANGE_TIME_BLOSSOM.get(), RenderType.cutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.PINK_TIME_BLOSSOM.get(), RenderType.cutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.POTTED_PINK_TIME_BLOSSOM.get(), RenderType.cutout());
-
-        // Bells - cutout for transparency
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.DAWN_BELL.get(), RenderType.cutout());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.DUSK_BELL.get(), RenderType.cutout());
-
-        // Translucent blocks - for glass-like and ice-like transparency
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.TIME_CRYSTAL_BLOCK.get(), RenderType.translucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.FROZEN_TIME_ICE.get(), RenderType.translucent());
-        BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.CHRONO_DAWN_PORTAL.get(), RenderType.translucent());
+            switch (blockId.renderLayer()) {
+                case CUTOUT -> BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.cutout());
+                case CUTOUT_MIPPED -> BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.cutoutMipped());
+                case TRANSLUCENT -> BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.translucent());
+                default -> {} // SOLID already handled above
+            }
+        }
     }
 
     /**
