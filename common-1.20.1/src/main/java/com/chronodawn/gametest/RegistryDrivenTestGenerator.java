@@ -2,8 +2,10 @@ package com.chronodawn.gametest;
 
 import com.chronodawn.gametest.MobBehaviorTests;
 import com.chronodawn.gametest.boss.BossFightTestLogic;
+import com.chronodawn.registry.ModBlockId;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModEntities;
+import com.chronodawn.registry.ModItemId;
 import com.chronodawn.registry.ModItems;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.BlockPos;
@@ -352,6 +354,27 @@ public final class RegistryDrivenTestGenerator {
     }
 
     /**
+     * Generates tests verifying all items defined in ModItemId enum are registered.
+     */
+    public static List<NamedTest> generateItemRegistryConsistencyTests() {
+        return RegistryConsistencyTests.generateItemTests(NamedTest::new);
+    }
+
+    /**
+     * Generates tests verifying all blocks defined in ModBlockId enum are registered.
+     */
+    public static List<NamedTest> generateBlockRegistryConsistencyTests() {
+        return RegistryConsistencyTests.generateBlockTests(NamedTest::new);
+    }
+
+    /**
+     * Generates a summary test checking all registry consistency at once.
+     */
+    public static List<NamedTest> generateRegistryConsistencySummaryTest() {
+        return RegistryConsistencyTests.generateSummaryTest(NamedTest::new);
+    }
+
+    /**
      * Generate all tests from all categories.
      */
     public static List<NamedTest> generateAllTests() {
@@ -379,6 +402,10 @@ public final class RegistryDrivenTestGenerator {
         all.addAll(generateAdvancementParentTests());
         all.addAll(generateAdvancementIsolationTests());
         all.addAll(generateStructureTests());
+        // Registry consistency tests (ModItemId/ModBlockId enum verification)
+        all.addAll(generateItemRegistryConsistencyTests());
+        all.addAll(generateBlockRegistryConsistencyTests());
+        all.addAll(generateRegistryConsistencySummaryTest());
         return all;
     }
 
