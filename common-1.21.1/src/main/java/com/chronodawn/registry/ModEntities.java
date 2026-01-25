@@ -368,6 +368,22 @@ public class ModEntities {
             .build("secondhand_archer")
     );
 
+    /**
+     * ChronoTurtle - Friendly water creature in ChronoDawn dimension.
+     *
+     * Spawns in water biomes of ChronoDawn dimension.
+     * Behaves similarly to vanilla Turtle with smooth swimming.
+     * Drops Turtle Scute with a chance when killed.
+     */
+    public static final RegistrySupplier<EntityType<com.chronodawn.entities.mobs.ChronoTurtleEntity>> CHRONO_TURTLE = ENTITIES.register(
+        "chrono_turtle",
+        () -> EntityType.Builder.of(com.chronodawn.entities.mobs.ChronoTurtleEntity::new, MobCategory.WATER_CREATURE)
+            .sized(1.2f, 0.4f)  // Similar to vanilla turtle
+            .clientTrackingRange(8)
+            .updateInterval(3)
+            .build("chrono_turtle")
+    );
+
     // === Boat Entities ===
 
     /**

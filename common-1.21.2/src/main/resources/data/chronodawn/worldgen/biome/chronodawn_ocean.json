@@ -64,6 +64,12 @@
         "weight": 15,
         "minCount": 2,
         "maxCount": 4
+      },
+      {
+        "type": "chronodawn:chrono_turtle",
+        "weight": 8,
+        "minCount": 1,
+        "maxCount": 3
       }
     ],
     "water_ambient": [

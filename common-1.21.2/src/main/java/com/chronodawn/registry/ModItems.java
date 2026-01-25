@@ -1882,6 +1882,18 @@ public class ModItems {
         )
     );
 
+    public static final RegistrySupplier<Item> CHRONO_TURTLE_SPAWN_EGG = ITEMS.register(
+        "chrono_turtle_spawn_egg",
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.CHRONO_TURTLE,
+            0x3D7A5A, // Background: Deep teal-green (shell color)
+            0x8BC4A4, // Spots: Light sea green (accent)
+            new Item.Properties()
+                    .setId(ResourceKey.create(Registries.ITEM,
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "chrono_turtle_spawn_egg")))
+        )
+    );
+
     // === Boats ===
 
     /**
@@ -2025,6 +2037,10 @@ public class ModItems {
 
         if (PARADOX_CRAWLER_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
             ((com.chronodawn.items.DeferredSpawnEggItem) PARADOX_CRAWLER_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (CHRONO_TURTLE_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) CHRONO_TURTLE_SPAWN_EGG.get()).initializeSpawnEgg();
         }
 
         ChronoDawn.LOGGER.info("Spawn eggs initialized");
@@ -2258,6 +2274,9 @@ public class ModItems {
         }
         if (PARADOX_CRAWLER_SPAWN_EGG.isPresent()) {
             output.accept(PARADOX_CRAWLER_SPAWN_EGG.get());
+        }
+        if (CHRONO_TURTLE_SPAWN_EGG.isPresent()) {
+            output.accept(CHRONO_TURTLE_SPAWN_EGG.get());
         }
         if (GLIDE_FISH.isPresent()) {
             output.accept(GLIDE_FISH.get());

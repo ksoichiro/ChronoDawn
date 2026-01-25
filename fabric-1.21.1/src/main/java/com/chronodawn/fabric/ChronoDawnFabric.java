@@ -36,6 +36,7 @@ import com.chronodawn.entities.mobs.GlideFishEntity;
 import com.chronodawn.entities.mobs.ParadoxCrawlerEntity;
 import com.chronodawn.entities.mobs.SecondhandArcherEntity;
 import com.chronodawn.entities.mobs.TimelineStriderEntity;
+import com.chronodawn.entities.mobs.ChronoTurtleEntity;
 import com.chronodawn.fabric.event.BlockProtectionEventHandler;
 import com.chronodawn.registry.ModEntities;
 import com.chronodawn.worldgen.processors.BossRoomProtectionProcessor;
@@ -181,6 +182,11 @@ public class ChronoDawnFabric implements ModInitializer {
             ParadoxCrawlerEntity.createAttributes()
         );
 
+        FabricDefaultAttributeRegistry.register(
+            ModEntities.CHRONO_TURTLE.get(),
+            ChronoTurtleEntity.createAttributes()
+        );
+
         ChronoDawn.LOGGER.info("Registered entity attributes for Fabric");
     }
 
@@ -283,6 +289,14 @@ public class ChronoDawnFabric implements ModInitializer {
             SpawnPlacementTypes.ON_GROUND,
             Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             ParadoxCrawlerEntity::checkParadoxCrawlerSpawnRules
+        );
+
+        // Chrono Turtle - spawns in water
+        SpawnPlacements.register(
+            ModEntities.CHRONO_TURTLE.get(),
+            SpawnPlacementTypes.IN_WATER,
+            Heightmap.Types.OCEAN_FLOOR,
+            WaterAnimal::checkSurfaceWaterAnimalSpawnRules
         );
 
         ChronoDawn.LOGGER.info("Registered spawn placements for custom mobs");

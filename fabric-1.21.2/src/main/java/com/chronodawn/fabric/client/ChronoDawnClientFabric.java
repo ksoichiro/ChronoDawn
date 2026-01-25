@@ -14,6 +14,7 @@ import com.chronodawn.client.model.GlideFishModel;
 import com.chronodawn.client.model.MomentCreeperModel;
 import com.chronodawn.client.model.ParadoxCrawlerModel;
 import com.chronodawn.client.model.SecondhandArcherModel;
+import com.chronodawn.client.model.ChronoTurtleModel;
 import com.chronodawn.client.model.TemporalPhantomModel;
 import com.chronodawn.client.model.TemporalWraithModel;
 import com.chronodawn.client.model.TimeGuardianModel;
@@ -43,6 +44,7 @@ import com.chronodawn.client.renderer.mobs.GlideFishRenderer;
 import com.chronodawn.client.renderer.mobs.MomentCreeperRenderer;
 import com.chronodawn.client.renderer.mobs.ParadoxCrawlerRenderer;
 import com.chronodawn.client.renderer.mobs.SecondhandArcherRenderer;
+import com.chronodawn.client.renderer.mobs.ChronoTurtleRenderer;
 import com.chronodawn.client.renderer.mobs.TemporalWraithRenderer;
 import com.chronodawn.client.renderer.mobs.TimeKeeperRenderer;
 import com.chronodawn.client.renderer.mobs.TimelineStriderRenderer;
@@ -501,6 +503,12 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             ParadoxCrawlerModel.LAYER_LOCATION,
             ParadoxCrawlerModel::createBodyLayer
         );
+
+        // Register Chrono Turtle model layer
+        EntityModelLayerRegistry.registerModelLayer(
+            ChronoTurtleModel.LAYER_LOCATION,
+            ChronoTurtleModel::createBodyLayer
+        );
     }
 
     /**
@@ -646,6 +654,11 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
         EntityRendererRegistry.register(
             ModEntities.PARADOX_CRAWLER.get(),
             ParadoxCrawlerRenderer::new
+        );
+
+        EntityRendererRegistry.register(
+            ModEntities.CHRONO_TURTLE.get(),
+            ChronoTurtleRenderer::new
         );
 
         // Register ChronoDawn Boat with custom renderer
