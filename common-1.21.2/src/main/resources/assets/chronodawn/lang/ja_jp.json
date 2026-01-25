@@ -374,6 +374,13 @@
   "tag.item.chronodawn.time_wood_logs": "時の木の原木",
   "tag.item.chronodawn.ancient_time_wood_logs": "古代の時の木の原木",
   "tag.item.chronodawn.dark_time_wood_logs": "暗い時の木の原木",
+  "tag.item.chronodawn.repairs_clockstone_tools": "クロックストーンツール修理材",
+  "tag.item.chronodawn.repairs_clockstone_armor": "クロックストーン防具修理材",
+  "tag.item.chronodawn.repairs_enhanced_clockstone_tools": "強化クロックストーンツール修理材",
+  "tag.item.chronodawn.repairs_enhanced_clockstone_armor": "強化クロックストーン防具修理材",
+  "tag.item.chronodawn.repairs_chronoblade": "クロノブレード修理材",
+  "tag.item.chronodawn.repairs_time_tyrant_armor": "時間の暴君防具修理材",
+  "tag.item.chronodawn.repairs_spatially_linked_pickaxe": "空間連結ツルハシ修理材",
 
   "advancements.chronodawn.grant_chronicle_book.title": "クロノドーンの記録",
   "advancements.chronodawn.grant_chronicle_book.description": "クロノドーンの記録ガイドブックを受け取った",

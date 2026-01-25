@@ -377,6 +377,13 @@
   "tag.item.chronodawn.time_wood_logs": "Time Wood Logs",
   "tag.item.chronodawn.ancient_time_wood_logs": "Ancient Time Wood Logs",
   "tag.item.chronodawn.dark_time_wood_logs": "Dark Time Wood Logs",
+  "tag.item.chronodawn.repairs_clockstone_tools": "Repairs Clockstone Tools",
+  "tag.item.chronodawn.repairs_clockstone_armor": "Repairs Clockstone Armor",
+  "tag.item.chronodawn.repairs_enhanced_clockstone_tools": "Repairs Enhanced Clockstone Tools",
+  "tag.item.chronodawn.repairs_enhanced_clockstone_armor": "Repairs Enhanced Clockstone Armor",
+  "tag.item.chronodawn.repairs_chronoblade": "Repairs Chronoblade",
+  "tag.item.chronodawn.repairs_time_tyrant_armor": "Repairs Time Tyrant Armor",
+  "tag.item.chronodawn.repairs_spatially_linked_pickaxe": "Repairs Spatially Linked Pickaxe",
 
   "advancements.chronodawn.grant_chronicle_book.title": "Chronicle of Chrono Dawn",
   "advancements.chronodawn.grant_chronicle_book.description": "Received the Chronicle of Chrono Dawn guide book",
