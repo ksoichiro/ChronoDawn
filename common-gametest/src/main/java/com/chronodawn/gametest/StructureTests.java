@@ -2,6 +2,7 @@ package com.chronodawn.gametest;
 
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.compat.CompatResourceLocation;
+import com.chronodawn.registry.ModBlockId;
 import com.chronodawn.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -55,17 +56,17 @@ public final class StructureTests {
         return List.of(
             new StructureSpec("ancient_ruins", 5, 3, 5, List.of(
                 new BlockRequirement("chest", () -> Blocks.CHEST, 2),
-                new BlockRequirement("temporal_particle_emitter", ModBlocks.TEMPORAL_PARTICLE_EMITTER, 20),
-                new BlockRequirement("clockstone_ore", ModBlocks.CLOCKSTONE_ORE, 30)
+                new BlockRequirement(ModBlockId.TEMPORAL_PARTICLE_EMITTER.id(), ModBlocks.TEMPORAL_PARTICLE_EMITTER, 20),
+                new BlockRequirement(ModBlockId.CLOCKSTONE_ORE.id(), ModBlocks.CLOCKSTONE_ORE, 30)
             )),
             new StructureSpec("desert_clock_tower", 21, 48, 21, List.of(
                 new BlockRequirement("chest", () -> Blocks.CHEST, 3),
-                new BlockRequirement("clock_tower_teleporter", ModBlocks.CLOCK_TOWER_TELEPORTER, 1)
+                new BlockRequirement(ModBlockId.CLOCK_TOWER_TELEPORTER.id(), ModBlocks.CLOCK_TOWER_TELEPORTER, 1)
             )),
             new StructureSpec("time_keeper_village", 11, 8, 11, List.of(
                 new BlockRequirement("chest", () -> Blocks.CHEST, 2),
                 new BlockRequirement("barrel", () -> Blocks.BARREL, 1),
-                new BlockRequirement("time_crystal_block", ModBlocks.TIME_CRYSTAL_BLOCK, 1)
+                new BlockRequirement(ModBlockId.TIME_CRYSTAL_BLOCK.id(), ModBlocks.TIME_CRYSTAL_BLOCK, 1)
             )),
             new StructureSpec("forgotten_library", 35, 15, 35, List.of(
                 new BlockRequirement("chest", () -> Blocks.CHEST, 7),
@@ -73,33 +74,33 @@ public final class StructureTests {
                 new BlockRequirement("enchanting_table", () -> Blocks.ENCHANTING_TABLE, 1)
             )),
             new StructureSpec("master_clock_surface", 15, 10, 15, List.of(
-                new BlockRequirement("boss_room_boundary_marker", ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
-                new BlockRequirement("boss_room_door", ModBlocks.BOSS_ROOM_DOOR, 1),
+                new BlockRequirement(ModBlockId.BOSS_ROOM_BOUNDARY_MARKER.id(), ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
+                new BlockRequirement(ModBlockId.BOSS_ROOM_DOOR.id(), ModBlocks.BOSS_ROOM_DOOR, 1),
                 new BlockRequirement("dropper", () -> Blocks.DROPPER, 1)
             )),
             new StructureSpec("master_clock_stairs", 15, 8, 15, List.of(
-                new BlockRequirement("boss_room_boundary_marker", ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
+                new BlockRequirement(ModBlockId.BOSS_ROOM_BOUNDARY_MARKER.id(), ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
                 new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 2)
             )),
             new StructureSpec("master_clock_stairs_bottom", 15, 12, 15, List.of(
-                new BlockRequirement("boss_room_boundary_marker", ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
+                new BlockRequirement(ModBlockId.BOSS_ROOM_BOUNDARY_MARKER.id(), ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
                 new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 2)
             )),
             new StructureSpec("master_clock_corridor", 15, 15, 15, List.of(
-                new BlockRequirement("boss_room_boundary_marker", ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
+                new BlockRequirement(ModBlockId.BOSS_ROOM_BOUNDARY_MARKER.id(), ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
                 new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 2)
             )),
             new StructureSpec("master_clock_boss_room", 35, 20, 35, List.of(
-                new BlockRequirement("boss_room_door", ModBlocks.BOSS_ROOM_DOOR, 1),
-                new BlockRequirement("boss_room_boundary_marker", ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
+                new BlockRequirement(ModBlockId.BOSS_ROOM_DOOR.id(), ModBlocks.BOSS_ROOM_DOOR, 1),
+                new BlockRequirement(ModBlockId.BOSS_ROOM_BOUNDARY_MARKER.id(), ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
                 new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1)
             )),
             new StructureSpec("guardian_vault_entrance", 7, 6, 7, List.of(
                 new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1)
             )),
             new StructureSpec("guardian_vault_main", 30, 20, 25, List.of(
-                new BlockRequirement("boss_room_boundary_marker", ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
-                new BlockRequirement("boss_room_door", ModBlocks.BOSS_ROOM_DOOR, 1),
+                new BlockRequirement(ModBlockId.BOSS_ROOM_BOUNDARY_MARKER.id(), ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
+                new BlockRequirement(ModBlockId.BOSS_ROOM_DOOR.id(), ModBlocks.BOSS_ROOM_DOOR, 1),
                 new BlockRequirement("chest", () -> Blocks.CHEST, 1),
                 new BlockRequirement("barrel", () -> Blocks.BARREL, 9),
                 new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1)
@@ -108,8 +109,8 @@ public final class StructureTests {
                 new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1)
             )),
             new StructureSpec("entropy_crypt_main", 26, 20, 25, List.of(
-                new BlockRequirement("boss_room_boundary_marker", ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
-                new BlockRequirement("entropy_crypt_trapdoor", ModBlocks.ENTROPY_CRYPT_TRAPDOOR, 1),
+                new BlockRequirement(ModBlockId.BOSS_ROOM_BOUNDARY_MARKER.id(), ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
+                new BlockRequirement(ModBlockId.ENTROPY_CRYPT_TRAPDOOR.id(), ModBlocks.ENTROPY_CRYPT_TRAPDOOR, 1),
                 new BlockRequirement("chest", () -> Blocks.CHEST, 3),
                 new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1)
             )),
@@ -124,7 +125,7 @@ public final class StructureTests {
                 new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 2)
             )),
             new StructureSpec("clockwork_depths_engine_room", 30, 17, 30, List.of(
-                new BlockRequirement("boss_room_boundary_marker", ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
+                new BlockRequirement(ModBlockId.BOSS_ROOM_BOUNDARY_MARKER.id(), ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
                 new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 2),
                 new BlockRequirement("crimson_wall_sign", () -> Blocks.CRIMSON_WALL_SIGN, 4)
             )),
@@ -141,7 +142,7 @@ public final class StructureTests {
                 new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 2)
             )),
             new StructureSpec("phantom_catacombs_boss_room", 21, 9, 21, List.of(
-                new BlockRequirement("boss_room_boundary_marker", ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
+                new BlockRequirement(ModBlockId.BOSS_ROOM_BOUNDARY_MARKER.id(), ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
                 new BlockRequirement("amethyst_block", () -> Blocks.AMETHYST_BLOCK, 1)
             )),
             new StructureSpec("phantom_catacombs_room_dead_end", 7, 9, 7, List.of(
