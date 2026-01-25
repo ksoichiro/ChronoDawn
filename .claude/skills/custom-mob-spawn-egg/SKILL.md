@@ -1,6 +1,6 @@
 ---
 name: custom-mob-spawn-egg
-description: Checklist and guide for adding spawn eggs when implementing custom mobs in ChronoDawn. Use when adding new mob entities, spawn eggs, or fixing spawn egg rendering issues (grayscale, missing texture).
+description: MANDATORY checklist when adding any new mob, creature, or entity to ChronoDawn. Must be consulted for every new hostile mob, passive mob, or custom entity implementation to ensure spawn egg model JSON, NeoForge color handler, and all registration steps are complete. Also use when fixing spawn egg visual bugs (black square, grayscale, invisible, missing texture).
 ---
 
 # Custom Mob Spawn Egg Implementation Guide
@@ -122,7 +122,7 @@ Add entries to both `en_us.json` and `ja_jp.json` for all 3 versions:
 
 | Symptom | Cause | Fix |
 |---------|-------|-----|
-| Spawn egg invisible | Missing item model JSON | Add `models/item/xxx_spawn_egg.json` |
+| Spawn egg invisible, or black square (dark purple on hover) | Missing item model JSON | Add `models/item/xxx_spawn_egg.json` with `"parent": "item/template_spawn_egg"` |
 | Grayscale on NeoForge only | Missing NeoForge color handler | Add to `onRegisterItemColors` in `ChronoDawnClientNeoForge.java` |
 | Correct on NeoForge, broken on Fabric | Missing `initializeSpawnEgg()` call | Add to `initializeSpawnEggs()` |
 | No name displayed | Missing lang entry | Add to `en_us.json` / `ja_jp.json` |
