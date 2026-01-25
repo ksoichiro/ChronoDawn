@@ -37,6 +37,7 @@ import com.chronodawn.entities.mobs.ForgottenMinuteEntity;
 import com.chronodawn.entities.mobs.ChronalLeechEntity;
 import com.chronodawn.entities.mobs.MomentCreeperEntity;
 import com.chronodawn.entities.mobs.ChronoTurtleEntity;
+import com.chronodawn.entities.mobs.TimeboundRabbitEntity;
 import com.chronodawn.neoforge.registry.ModFluidTypes;
 import com.chronodawn.neoforge.registry.ModLootModifiers;
 import com.chronodawn.neoforge.registry.ModParticles;
@@ -271,6 +272,11 @@ public class ChronoDawnNeoForge {
             ChronoTurtleEntity.createAttributes().build()
         );
 
+        event.put(
+            ModEntities.TIMEBOUND_RABBIT.get(),
+            TimeboundRabbitEntity.createAttributes().build()
+        );
+
         ChronoDawn.LOGGER.debug("Registered entity attributes for NeoForge");
     }
 
@@ -407,6 +413,15 @@ public class ChronoDawnNeoForge {
             SpawnPlacementTypes.IN_WATER,
             Heightmap.Types.OCEAN_FLOOR,
             net.minecraft.world.entity.animal.WaterAnimal::checkSurfaceWaterAnimalSpawnRules,
+            RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+
+        // Timebound Rabbit - spawns on ground like animals
+        event.register(
+            ModEntities.TIMEBOUND_RABBIT.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            TimeboundRabbitEntity::checkTimeboundRabbitSpawnRules,
             RegisterSpawnPlacementsEvent.Operation.REPLACE
         );
 

@@ -1622,6 +1622,21 @@ public class ModItems {
         )
     );
 
+    /**
+     * Timebound Rabbit Spawn Egg - For creative mode and debugging.
+     * Primary color: Sky blue (0x5BA3D8) - Background (main body)
+     * Secondary color: Deep blue (0x2E6E9C) - Spots (accent)
+     */
+    public static final RegistrySupplier<Item> TIMEBOUND_RABBIT_SPAWN_EGG = ITEMS.register(
+        ModItemId.TIMEBOUND_RABBIT_SPAWN_EGG.id(),
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.TIMEBOUND_RABBIT,
+            0x5BA3D8, // Background: Sky blue
+            0x2E6E9C, // Spots: Deep blue
+            new Item.Properties()
+        )
+    );
+
     // === Boats ===
 
     /**
@@ -1769,6 +1784,10 @@ public class ModItems {
 
         if (CHRONO_TURTLE_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
             ((com.chronodawn.items.DeferredSpawnEggItem) CHRONO_TURTLE_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (TIMEBOUND_RABBIT_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) TIMEBOUND_RABBIT_SPAWN_EGG.get()).initializeSpawnEgg();
         }
 
         ChronoDawn.LOGGER.debug("Spawn eggs initialized");
@@ -2009,6 +2028,9 @@ public class ModItems {
         }
         if (CHRONO_TURTLE_SPAWN_EGG.isPresent()) {
             output.accept(CHRONO_TURTLE_SPAWN_EGG.get());
+        }
+        if (TIMEBOUND_RABBIT_SPAWN_EGG.isPresent()) {
+            output.accept(TIMEBOUND_RABBIT_SPAWN_EGG.get());
         }
     }
 }

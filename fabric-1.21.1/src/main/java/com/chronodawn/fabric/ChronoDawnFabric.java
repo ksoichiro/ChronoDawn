@@ -36,6 +36,7 @@ import com.chronodawn.entities.mobs.GlideFishEntity;
 import com.chronodawn.entities.mobs.ParadoxCrawlerEntity;
 import com.chronodawn.entities.mobs.SecondhandArcherEntity;
 import com.chronodawn.entities.mobs.TimelineStriderEntity;
+import com.chronodawn.entities.mobs.TimeboundRabbitEntity;
 import com.chronodawn.entities.mobs.ChronoTurtleEntity;
 import com.chronodawn.fabric.event.BlockProtectionEventHandler;
 import com.chronodawn.registry.ModEntities;
@@ -187,6 +188,11 @@ public class ChronoDawnFabric implements ModInitializer {
             ChronoTurtleEntity.createAttributes()
         );
 
+        FabricDefaultAttributeRegistry.register(
+            ModEntities.TIMEBOUND_RABBIT.get(),
+            TimeboundRabbitEntity.createAttributes()
+        );
+
         ChronoDawn.LOGGER.debug("Registered entity attributes for Fabric");
     }
 
@@ -297,6 +303,14 @@ public class ChronoDawnFabric implements ModInitializer {
             SpawnPlacementTypes.IN_WATER,
             Heightmap.Types.OCEAN_FLOOR,
             WaterAnimal::checkSurfaceWaterAnimalSpawnRules
+        );
+
+        // Timebound Rabbit - spawns on ground like animals
+        SpawnPlacements.register(
+            ModEntities.TIMEBOUND_RABBIT.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            TimeboundRabbitEntity::checkTimeboundRabbitSpawnRules
         );
 
         ChronoDawn.LOGGER.debug("Registered spawn placements for custom mobs");

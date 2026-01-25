@@ -75,7 +75,7 @@
         "maxCount": 2
       },
       {
-        "type": "minecraft:rabbit",
+        "type": "chronodawn:timebound_rabbit",
         "weight": 10,
         "minCount": 2,
         "maxCount": 3

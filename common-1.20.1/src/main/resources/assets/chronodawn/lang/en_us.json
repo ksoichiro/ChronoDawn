@@ -235,6 +235,8 @@
   "entity.chronodawn.timeline_strider": "Timeline Strider",
   "entity.chronodawn.secondhand_archer": "Secondhand Archer",
   "entity.chronodawn.paradox_crawler": "Paradox Crawler",
+  "entity.chronodawn.chrono_turtle": "Chrono Turtle",
+  "entity.chronodawn.timebound_rabbit": "Timebound Rabbit",
 
   "biome.chronodawn.chronodawn_plains": "Chrono Dawn Plains",
   "biome.chronodawn.chronodawn_ocean": "Chrono Dawn Ocean",
@@ -333,6 +335,7 @@
   "item.chronodawn.timeline_strider_spawn_egg": "Timeline Strider Spawn Egg",
   "item.chronodawn.secondhand_archer_spawn_egg": "Secondhand Archer Spawn Egg",
   "item.chronodawn.paradox_crawler_spawn_egg": "Paradox Crawler Spawn Egg",
+  "item.chronodawn.timebound_rabbit_spawn_egg": "Timebound Rabbit Spawn Egg",
   "item.chronodawn.glide_fish": "Glide Fish",
   "item.chronodawn.cooked_glide_fish": "Cooked Glide Fish",
 

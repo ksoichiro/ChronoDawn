@@ -13,6 +13,7 @@ import com.chronodawn.entities.mobs.GlideFishEntity;
 import com.chronodawn.entities.mobs.ParadoxCrawlerEntity;
 import com.chronodawn.entities.mobs.SecondhandArcherEntity;
 import com.chronodawn.entities.mobs.TimelineStriderEntity;
+import com.chronodawn.entities.mobs.TimeboundRabbitEntity;
 import com.chronodawn.entities.mobs.TemporalWraithEntity;
 import com.chronodawn.entities.mobs.TimeKeeperEntity;
 import com.chronodawn.entities.mobs.EpochHuskEntity;
@@ -386,6 +387,21 @@ public class ModEntities {
             .clientTrackingRange(8)
             .updateInterval(3)
             .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.CHRONO_TURTLE.id())))
+    );
+
+    /**
+     * Timebound Rabbit - Friendly creature similar to vanilla Rabbit
+     *
+     * Spawns in ChronoDawn dimension biomes, replacing vanilla rabbits.
+     * Drops rabbit meat and rabbit hide like vanilla rabbits.
+     */
+    public static final RegistrySupplier<EntityType<TimeboundRabbitEntity>> TIMEBOUND_RABBIT = ENTITIES.register(
+        ModEntityId.TIMEBOUND_RABBIT.id(),
+        () -> EntityType.Builder.of(TimeboundRabbitEntity::new, MobCategory.CREATURE)
+            .sized(0.4f, 0.5f)  // Similar to vanilla rabbit
+            .clientTrackingRange(8)
+            .updateInterval(3)
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.TIMEBOUND_RABBIT.id())))
     );
 
     // === Boat Entities ===

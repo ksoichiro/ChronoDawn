@@ -212,6 +212,7 @@ public enum ModItemId {
     CLOCKWORK_SENTINEL_SPAWN_EGG("clockwork_sentinel_spawn_egg"),
     FLOQ_SPAWN_EGG("floq_spawn_egg"),
     CHRONO_TURTLE_SPAWN_EGG("chrono_turtle_spawn_egg"),
+    TIMEBOUND_RABBIT_SPAWN_EGG("timebound_rabbit_spawn_egg"),
     GLIDE_FISH_SPAWN_EGG("glide_fish_spawn_egg"),
     TIMELINE_STRIDER_SPAWN_EGG("timeline_strider_spawn_egg"),
     EPOCH_HUSK_SPAWN_EGG("epoch_husk_spawn_egg"),

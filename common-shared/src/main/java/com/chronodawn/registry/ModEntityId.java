@@ -53,6 +53,7 @@ public enum ModEntityId {
     FLOQ("floq"),
     GLIDE_FISH("glide_fish"),
     CHRONO_TURTLE("chrono_turtle"),
+    TIMEBOUND_RABBIT("timebound_rabbit"),
 
     // === Projectiles ===
     GEAR_PROJECTILE("gear_projectile"),

@@ -235,6 +235,7 @@
   "entity.chronodawn.secondhand_archer": "セカンドハンド・アーチャー",
   "entity.chronodawn.paradox_crawler": "パラドックス・クローラー",
   "entity.chronodawn.chrono_turtle": "クロノタートル",
+  "entity.chronodawn.timebound_rabbit": "タイムバウンド・ラビット",
 
   "biome.chronodawn.chronodawn_plains": "クロノドーン平原",
   "biome.chronodawn.chronodawn_ocean": "クロノドーン海洋",
@@ -333,6 +334,7 @@
   "item.chronodawn.secondhand_archer_spawn_egg": "セカンドハンド・アーチャーのスポーンエッグ",
   "item.chronodawn.paradox_crawler_spawn_egg": "パラドックス・クローラーのスポーンエッグ",
   "item.chronodawn.chrono_turtle_spawn_egg": "クロノタートルのスポーンエッグ",
+  "item.chronodawn.timebound_rabbit_spawn_egg": "タイムバウンド・ラビットのスポーンエッグ",
   "item.chronodawn.glide_fish": "グライドフィッシュ",
   "item.chronodawn.cooked_glide_fish": "焼きグライドフィッシュ",
 
