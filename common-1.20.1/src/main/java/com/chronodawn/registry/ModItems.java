@@ -1637,6 +1637,21 @@ public class ModItems {
         )
     );
 
+    /**
+     * Pulse Hog Spawn Egg - For creative mode and debugging.
+     * Primary color: Medium purple (0x7B68EE) - Background (main body)
+     * Secondary color: Dark slate blue (0x483D8B) - Spots (accent)
+     */
+    public static final RegistrySupplier<Item> PULSE_HOG_SPAWN_EGG = ITEMS.register(
+        ModItemId.PULSE_HOG_SPAWN_EGG.id(),
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.PULSE_HOG,
+            0x7B68EE, // Background: Medium purple
+            0x483D8B, // Spots: Dark slate blue
+            new Item.Properties()
+        )
+    );
+
     // === Boats ===
 
     /**
@@ -1788,6 +1803,10 @@ public class ModItems {
 
         if (TIMEBOUND_RABBIT_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
             ((com.chronodawn.items.DeferredSpawnEggItem) TIMEBOUND_RABBIT_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (PULSE_HOG_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) PULSE_HOG_SPAWN_EGG.get()).initializeSpawnEgg();
         }
 
         ChronoDawn.LOGGER.debug("Spawn eggs initialized");
@@ -2031,6 +2050,9 @@ public class ModItems {
         }
         if (TIMEBOUND_RABBIT_SPAWN_EGG.isPresent()) {
             output.accept(TIMEBOUND_RABBIT_SPAWN_EGG.get());
+        }
+        if (PULSE_HOG_SPAWN_EGG.isPresent()) {
+            output.accept(PULSE_HOG_SPAWN_EGG.get());
         }
     }
 }

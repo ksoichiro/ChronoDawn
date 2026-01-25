@@ -14,6 +14,7 @@ import com.chronodawn.entities.mobs.ParadoxCrawlerEntity;
 import com.chronodawn.entities.mobs.SecondhandArcherEntity;
 import com.chronodawn.entities.mobs.TimelineStriderEntity;
 import com.chronodawn.entities.mobs.TimeboundRabbitEntity;
+import com.chronodawn.entities.mobs.PulseHogEntity;
 import com.chronodawn.entities.mobs.TemporalWraithEntity;
 import com.chronodawn.entities.mobs.TimeKeeperEntity;
 import com.chronodawn.entities.mobs.EpochHuskEntity;
@@ -402,6 +403,21 @@ public class ModEntities {
             .clientTrackingRange(8)
             .updateInterval(3)
             .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.TIMEBOUND_RABBIT.id())))
+    );
+
+    /**
+     * Pulse Hog - Friendly creature similar to vanilla Pig
+     *
+     * Spawns in ChronoDawn dimension biomes, replacing vanilla pigs.
+     * Drops porkchop like vanilla pigs.
+     */
+    public static final RegistrySupplier<EntityType<PulseHogEntity>> PULSE_HOG = ENTITIES.register(
+        ModEntityId.PULSE_HOG.id(),
+        () -> EntityType.Builder.of(PulseHogEntity::new, MobCategory.CREATURE)
+            .sized(0.9f, 0.9f)  // Similar to vanilla pig
+            .clientTrackingRange(10)
+            .updateInterval(3)
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.PULSE_HOG.id())))
     );
 
     // === Boat Entities ===

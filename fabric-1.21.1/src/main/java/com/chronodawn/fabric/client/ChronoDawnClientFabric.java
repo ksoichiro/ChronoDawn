@@ -20,6 +20,7 @@ import com.chronodawn.client.model.ParadoxCrawlerModel;
 import com.chronodawn.client.model.SecondhandArcherModel;
 import com.chronodawn.client.model.TimelineStriderModel;
 import com.chronodawn.client.model.TimeboundRabbitModel;
+import com.chronodawn.client.model.PulseHogModel;
 import com.chronodawn.client.model.ChronoTurtleModel;
 import com.chronodawn.client.particle.ChronoDawnPortalParticle;
 import com.chronodawn.gui.ChronicleScreen;
@@ -49,6 +50,7 @@ import com.chronodawn.client.renderer.mobs.ParadoxCrawlerRenderer;
 import com.chronodawn.client.renderer.mobs.SecondhandArcherRenderer;
 import com.chronodawn.client.renderer.mobs.TimelineStriderRenderer;
 import com.chronodawn.client.renderer.mobs.TimeboundRabbitRenderer;
+import com.chronodawn.client.renderer.mobs.PulseHogRenderer;
 import com.chronodawn.client.renderer.mobs.ChronoTurtleRenderer;
 import com.chronodawn.items.TimeCompassItem;
 import com.chronodawn.registry.ModBlockId;
@@ -344,6 +346,12 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             TimeboundRabbitModel.LAYER_LOCATION,
             TimeboundRabbitModel::createBodyLayer
         );
+
+        // Register Pulse Hog model layer
+        EntityModelLayerRegistry.registerModelLayer(
+            PulseHogModel.LAYER_LOCATION,
+            PulseHogModel::createBodyLayer
+        );
     }
 
     /**
@@ -478,6 +486,12 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
         EntityRendererRegistry.register(
             ModEntities.TIMEBOUND_RABBIT.get(),
             TimeboundRabbitRenderer::new
+        );
+
+        // Register Pulse Hog renderer
+        EntityRendererRegistry.register(
+            ModEntities.PULSE_HOG.get(),
+            PulseHogRenderer::new
         );
 
         // Register ChronoDawn Boat with custom renderer

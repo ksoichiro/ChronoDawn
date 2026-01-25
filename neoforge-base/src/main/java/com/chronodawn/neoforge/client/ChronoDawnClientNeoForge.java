@@ -24,6 +24,7 @@ import com.chronodawn.client.model.ChronalLeechModel;
 import com.chronodawn.client.model.MomentCreeperModel;
 import com.chronodawn.client.model.ChronoTurtleModel;
 import com.chronodawn.client.model.TimeboundRabbitModel;
+import com.chronodawn.client.model.PulseHogModel;
 import com.chronodawn.client.renderer.ChronosWardenRenderer;
 import com.chronodawn.client.renderer.ChronoDawnBoatRenderer;
 import com.chronodawn.client.renderer.ChronoDawnChestBoatRenderer;
@@ -50,6 +51,7 @@ import com.chronodawn.client.renderer.mobs.ChronalLeechRenderer;
 import com.chronodawn.client.renderer.mobs.MomentCreeperRenderer;
 import com.chronodawn.client.renderer.mobs.ChronoTurtleRenderer;
 import com.chronodawn.client.renderer.mobs.TimeboundRabbitRenderer;
+import com.chronodawn.client.renderer.mobs.PulseHogRenderer;
 import com.chronodawn.items.TimeCompassItem;
 import com.chronodawn.client.particle.ChronoDawnPortalParticle;
 import com.chronodawn.registry.ModBlocks;
@@ -219,6 +221,11 @@ public class ChronoDawnClientNeoForge {
             TimeboundRabbitModel::createBodyLayer
         );
 
+        event.registerLayerDefinition(
+            PulseHogModel.LAYER_LOCATION,
+            PulseHogModel::createBodyLayer
+        );
+
         // Register boat and chest boat model layers (version-specific)
         VersionSpecificClientHelper.registerBoatModelLayers(event);
 
@@ -358,6 +365,11 @@ public class ChronoDawnClientNeoForge {
             TimeboundRabbitRenderer::new
         );
 
+        event.registerEntityRenderer(
+            ModEntities.PULSE_HOG.get(),
+            PulseHogRenderer::new
+        );
+
         // Register ChronoDawn Boat with custom renderer
         event.registerEntityRenderer(
             ModEntities.CHRONO_DAWN_BOAT.get(),
@@ -468,7 +480,8 @@ public class ChronoDawnClientNeoForge {
             ModItems.SECONDHAND_ARCHER_SPAWN_EGG.get(),
             ModItems.PARADOX_CRAWLER_SPAWN_EGG.get(),
             ModItems.CHRONO_TURTLE_SPAWN_EGG.get(),
-            ModItems.TIMEBOUND_RABBIT_SPAWN_EGG.get()
+            ModItems.TIMEBOUND_RABBIT_SPAWN_EGG.get(),
+            ModItems.PULSE_HOG_SPAWN_EGG.get()
         );
 
         ChronoDawn.LOGGER.debug("Registered item color handlers for NeoForge");

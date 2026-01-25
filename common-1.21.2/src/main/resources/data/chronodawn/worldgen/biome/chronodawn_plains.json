@@ -94,7 +94,7 @@
         "maxCount": 4
       },
       {
-        "type": "minecraft:pig",
+        "type": "chronodawn:pulse_hog",
         "weight": 10,
         "minCount": 4,
         "maxCount": 4

@@ -236,6 +236,7 @@
   "entity.chronodawn.paradox_crawler": "パラドックス・クローラー",
   "entity.chronodawn.chrono_turtle": "クロノタートル",
   "entity.chronodawn.timebound_rabbit": "タイムバウンド・ラビット",
+  "entity.chronodawn.pulse_hog": "パルス・ホッグ",
 
   "biome.chronodawn.chronodawn_plains": "クロノドーン平原",
   "biome.chronodawn.chronodawn_ocean": "クロノドーン海洋",
@@ -335,6 +336,7 @@
   "item.chronodawn.paradox_crawler_spawn_egg": "パラドックス・クローラーのスポーンエッグ",
   "item.chronodawn.chrono_turtle_spawn_egg": "クロノタートルのスポーンエッグ",
   "item.chronodawn.timebound_rabbit_spawn_egg": "タイムバウンド・ラビットのスポーンエッグ",
+  "item.chronodawn.pulse_hog_spawn_egg": "パルス・ホッグのスポーンエッグ",
   "item.chronodawn.glide_fish": "グライドフィッシュ",
   "item.chronodawn.cooked_glide_fish": "焼きグライドフィッシュ",
 

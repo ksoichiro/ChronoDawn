@@ -38,6 +38,7 @@ import com.chronodawn.entities.mobs.ChronalLeechEntity;
 import com.chronodawn.entities.mobs.MomentCreeperEntity;
 import com.chronodawn.entities.mobs.ChronoTurtleEntity;
 import com.chronodawn.entities.mobs.TimeboundRabbitEntity;
+import com.chronodawn.entities.mobs.PulseHogEntity;
 import com.chronodawn.neoforge.registry.ModFluidTypes;
 import com.chronodawn.neoforge.registry.ModLootModifiers;
 import com.chronodawn.neoforge.registry.ModParticles;
@@ -277,6 +278,11 @@ public class ChronoDawnNeoForge {
             TimeboundRabbitEntity.createAttributes().build()
         );
 
+        event.put(
+            ModEntities.PULSE_HOG.get(),
+            PulseHogEntity.createAttributes().build()
+        );
+
         ChronoDawn.LOGGER.debug("Registered entity attributes for NeoForge");
     }
 
@@ -422,6 +428,15 @@ public class ChronoDawnNeoForge {
             SpawnPlacementTypes.ON_GROUND,
             Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             TimeboundRabbitEntity::checkTimeboundRabbitSpawnRules,
+            RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+
+        // Pulse Hog - spawns on ground like animals
+        event.register(
+            ModEntities.PULSE_HOG.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            PulseHogEntity::checkPulseHogSpawnRules,
             RegisterSpawnPlacementsEvent.Operation.REPLACE
         );
 

@@ -37,6 +37,7 @@ import com.chronodawn.entities.mobs.ParadoxCrawlerEntity;
 import com.chronodawn.entities.mobs.SecondhandArcherEntity;
 import com.chronodawn.entities.mobs.TimelineStriderEntity;
 import com.chronodawn.entities.mobs.TimeboundRabbitEntity;
+import com.chronodawn.entities.mobs.PulseHogEntity;
 import com.chronodawn.entities.mobs.ChronoTurtleEntity;
 import com.chronodawn.fabric.event.BlockProtectionEventHandler;
 import com.chronodawn.registry.ModEntities;
@@ -193,6 +194,11 @@ public class ChronoDawnFabric implements ModInitializer {
             TimeboundRabbitEntity.createAttributes()
         );
 
+        FabricDefaultAttributeRegistry.register(
+            ModEntities.PULSE_HOG.get(),
+            PulseHogEntity.createAttributes()
+        );
+
         ChronoDawn.LOGGER.debug("Registered entity attributes for Fabric");
     }
 
@@ -311,6 +317,14 @@ public class ChronoDawnFabric implements ModInitializer {
             SpawnPlacementTypes.ON_GROUND,
             Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             TimeboundRabbitEntity::checkTimeboundRabbitSpawnRules
+        );
+
+        // Pulse Hog - spawns on ground like animals
+        SpawnPlacements.register(
+            ModEntities.PULSE_HOG.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            PulseHogEntity::checkPulseHogSpawnRules
         );
 
         ChronoDawn.LOGGER.debug("Registered spawn placements for custom mobs");
