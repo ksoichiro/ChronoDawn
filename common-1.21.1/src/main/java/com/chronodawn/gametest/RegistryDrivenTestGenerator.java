@@ -5,6 +5,7 @@ import com.chronodawn.gametest.boss.BossFightTestLogic;
 import com.chronodawn.registry.ModBlockId;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModEntities;
+import com.chronodawn.registry.ModEntityId;
 import com.chronodawn.registry.ModItemId;
 import com.chronodawn.registry.ModItems;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -369,6 +370,13 @@ public final class RegistryDrivenTestGenerator {
     }
 
     /**
+     * Generates tests verifying all entities defined in ModEntityId enum are registered.
+     */
+    public static List<NamedTest> generateEntityRegistryConsistencyTests() {
+        return RegistryConsistencyTests.generateEntityTests(NamedTest::new);
+    }
+
+    /**
      * Generates a summary test checking all registry consistency at once.
      */
     public static List<NamedTest> generateRegistryConsistencySummaryTest() {
@@ -403,9 +411,10 @@ public final class RegistryDrivenTestGenerator {
         all.addAll(generateAdvancementParentTests());
         all.addAll(generateAdvancementIsolationTests());
         all.addAll(generateStructureTests());
-        // Registry consistency tests (ModItemId/ModBlockId enum verification)
+        // Registry consistency tests (ModItemId/ModBlockId/ModEntityId enum verification)
         all.addAll(generateItemRegistryConsistencyTests());
         all.addAll(generateBlockRegistryConsistencyTests());
+        all.addAll(generateEntityRegistryConsistencyTests());
         all.addAll(generateRegistryConsistencySummaryTest());
         return all;
     }

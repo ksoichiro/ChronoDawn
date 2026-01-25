@@ -29,6 +29,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import com.chronodawn.registry.ModEntityId;
 
 /**
  * Architectury Registry wrapper for custom entities.
@@ -46,12 +47,12 @@ public class ModEntities {
      * Task: T111 [US2] Register Time Guardian in ModEntities registry
      */
     public static final RegistrySupplier<EntityType<TimeGuardianEntity>> TIME_GUARDIAN = ENTITIES.register(
-        "time_guardian",
+        ModEntityId.TIME_GUARDIAN.id(),
         () -> EntityType.Builder.of(TimeGuardianEntity::new, MobCategory.MONSTER)
             .sized(1.0f, 2.8f) // Width 1.0, Height 2.8 (taller than player for boss presence)
             .clientTrackingRange(10) // Tracking range for clients
             .updateInterval(3) // Update interval in ticks
-            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "time_guardian")))
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.TIME_GUARDIAN.id())))
     );
 
     /**
@@ -64,12 +65,12 @@ public class ModEntities {
      * Task: T234g [Phase 1] Register Chronos Warden in ModEntities registry
      */
     public static final RegistrySupplier<EntityType<ChronosWardenEntity>> CHRONOS_WARDEN = ENTITIES.register(
-        "chronos_warden",
+        ModEntityId.CHRONOS_WARDEN.id(),
         () -> EntityType.Builder.of(ChronosWardenEntity::new, MobCategory.MONSTER)
             .sized(1.0f, 2.5f) // Width 1.0, Height 2.5 (stone guardian size)
             .clientTrackingRange(10) // Tracking range for clients
             .updateInterval(3) // Update interval in ticks
-            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "chronos_warden")))
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.CHRONOS_WARDEN.id())))
     );
 
     /**
@@ -82,12 +83,12 @@ public class ModEntities {
      * Task: T235f [Phase 1] Register Clockwork Colossus in ModEntities registry
      */
     public static final RegistrySupplier<EntityType<com.chronodawn.entities.bosses.ClockworkColossusEntity>> CLOCKWORK_COLOSSUS = ENTITIES.register(
-        "clockwork_colossus",
+        ModEntityId.CLOCKWORK_COLOSSUS.id(),
         () -> EntityType.Builder.of(com.chronodawn.entities.bosses.ClockworkColossusEntity::new, MobCategory.MONSTER)
             .sized(1.0f, 2.5f) // Width 1.0, Height 2.5 (mechanical colossus size)
             .clientTrackingRange(10) // Tracking range for clients
             .updateInterval(3) // Update interval in ticks
-            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "clockwork_colossus")))
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.CLOCKWORK_COLOSSUS.id())))
     );
 
     /**
@@ -99,12 +100,12 @@ public class ModEntities {
      * Task: T235f [Phase 1] Register Gear Projectile in ModEntities registry
      */
     public static final RegistrySupplier<EntityType<com.chronodawn.entities.projectiles.GearProjectileEntity>> GEAR_PROJECTILE = ENTITIES.register(
-        "gear_projectile",
+        ModEntityId.GEAR_PROJECTILE.id(),
         () -> EntityType.Builder.<com.chronodawn.entities.projectiles.GearProjectileEntity>of(com.chronodawn.entities.projectiles.GearProjectileEntity::new, MobCategory.MISC)
             .sized(0.5f, 0.5f) // Small projectile size
             .clientTrackingRange(4) // Short tracking range
             .updateInterval(10) // Update interval in ticks
-            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "gear_projectile")))
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.GEAR_PROJECTILE.id())))
     );
 
     /**
@@ -114,12 +115,12 @@ public class ModEntities {
      * Task: T204 [P] [US1] Register custom mobs in ModEntities registry
      */
     public static final RegistrySupplier<EntityType<TemporalWraithEntity>> TEMPORAL_WRAITH = ENTITIES.register(
-        "temporal_wraith",
+        ModEntityId.TEMPORAL_WRAITH.id(),
         () -> EntityType.Builder.of(TemporalWraithEntity::new, MobCategory.MONSTER)
             .sized(0.6f, 1.8f) // Smaller than player (spectral appearance)
             .clientTrackingRange(8)
             .updateInterval(3)
-            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "temporal_wraith")))
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.TEMPORAL_WRAITH.id())))
     );
 
     /**
@@ -129,12 +130,12 @@ public class ModEntities {
      * Task: T204 [P] [US1] Register custom mobs in ModEntities registry
      */
     public static final RegistrySupplier<EntityType<ClockworkSentinelEntity>> CLOCKWORK_SENTINEL = ENTITIES.register(
-        "clockwork_sentinel",
+        ModEntityId.CLOCKWORK_SENTINEL.id(),
         () -> EntityType.Builder.of(ClockworkSentinelEntity::new, MobCategory.MONSTER)
             .sized(0.9f, 2.0f) // Slightly larger than player (mechanical guardian)
             .clientTrackingRange(10)
             .updateInterval(3)
-            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "clockwork_sentinel")))
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.CLOCKWORK_SENTINEL.id())))
     );
 
     /**
@@ -143,12 +144,12 @@ public class ModEntities {
      * A weathered humanoid creature with time slowdown aura when damaged.
      */
     public static final RegistrySupplier<EntityType<EpochHuskEntity>> EPOCH_HUSK = ENTITIES.register(
-        "epoch_husk",
+        ModEntityId.EPOCH_HUSK.id(),
         () -> EntityType.Builder.of(EpochHuskEntity::new, MobCategory.MONSTER)
             .sized(0.6f, 1.95f) // Zombie-like size
             .clientTrackingRange(8)
             .updateInterval(3)
-            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "epoch_husk")))
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.EPOCH_HUSK.id())))
     );
 
     /**
@@ -157,12 +158,12 @@ public class ModEntities {
      * A semi-transparent creature that appears and disappears, strengthens nearby enemies when attacked.
      */
     public static final RegistrySupplier<EntityType<ForgottenMinuteEntity>> FORGOTTEN_MINUTE = ENTITIES.register(
-        "forgotten_minute",
+        ModEntityId.FORGOTTEN_MINUTE.id(),
         () -> EntityType.Builder.of(ForgottenMinuteEntity::new, MobCategory.MONSTER)
             .sized(0.4f, 0.8f) // Small Vex-like size
             .clientTrackingRange(8)
             .updateInterval(3)
-            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "forgotten_minute")))
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.FORGOTTEN_MINUTE.id())))
     );
 
     /**
@@ -171,12 +172,12 @@ public class ModEntities {
      * A small creature that extends player attack cooldown, spawns in groups.
      */
     public static final RegistrySupplier<EntityType<ChronalLeechEntity>> CHRONAL_LEECH = ENTITIES.register(
-        "chronal_leech",
+        ModEntityId.CHRONAL_LEECH.id(),
         () -> EntityType.Builder.of(ChronalLeechEntity::new, MobCategory.MONSTER)
             .sized(0.4f, 0.3f) // Small silverfish-like size
             .clientTrackingRange(8)
             .updateInterval(3)
-            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "chronal_leech")))
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.CHRONAL_LEECH.id())))
     );
 
     /**
@@ -185,12 +186,12 @@ public class ModEntities {
      * A creeper variant that freezes before exploding, with less terrain damage but strong time debuff.
      */
     public static final RegistrySupplier<EntityType<MomentCreeperEntity>> MOMENT_CREEPER = ENTITIES.register(
-        "moment_creeper",
+        ModEntityId.MOMENT_CREEPER.id(),
         () -> EntityType.Builder.of(MomentCreeperEntity::new, MobCategory.MONSTER)
             .sized(0.6f, 1.7f) // Standard creeper size
             .clientTrackingRange(8)
             .updateInterval(3)
-            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "moment_creeper")))
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.MOMENT_CREEPER.id())))
     );
 
     /**
@@ -200,12 +201,12 @@ public class ModEntities {
      * Task: T204 [P] [US1] Register custom mobs in ModEntities registry
      */
     public static final RegistrySupplier<EntityType<TimeKeeperEntity>> TIME_KEEPER = ENTITIES.register(
-        "time_keeper",
+        ModEntityId.TIME_KEEPER.id(),
         () -> EntityType.Builder.of(TimeKeeperEntity::new, MobCategory.CREATURE)
             .sized(0.6f, 1.95f) // Similar to villager
             .clientTrackingRange(10)
             .updateInterval(3)
-            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "time_keeper")))
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.TIME_KEEPER.id())))
     );
 
     /**
@@ -215,12 +216,12 @@ public class ModEntities {
      * Hostile mob that attacks players.
      */
     public static final RegistrySupplier<EntityType<FloqEntity>> FLOQ = ENTITIES.register(
-        "floq",
+        ModEntityId.FLOQ.id(),
         () -> EntityType.Builder.of(FloqEntity::new, MobCategory.MONSTER)
             .sized(0.6f, 0.6f) // Small cube
             .clientTrackingRange(8)
             .updateInterval(3)
-            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "floq")))
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.FLOQ.id())))
     );
 
     /**
@@ -230,12 +231,12 @@ public class ModEntities {
      * Tasks: T134-T135 [US3] Create and register Time Tyrant entity
      */
     public static final RegistrySupplier<EntityType<TimeTyrantEntity>> TIME_TYRANT = ENTITIES.register(
-        "time_tyrant",
+        ModEntityId.TIME_TYRANT.id(),
         () -> EntityType.Builder.of(TimeTyrantEntity::new, MobCategory.MONSTER)
             .sized(1.5f, 4.0f) // Width 1.5, Height 4.0 (includes head/horns)
             .clientTrackingRange(10) // Tracking range for clients
             .updateInterval(3) // Update interval in ticks
-            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "time_tyrant")))
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.TIME_TYRANT.id())))
     );
 
     /**
@@ -245,12 +246,12 @@ public class ModEntities {
      * Task: T171g [US3] Create Time Arrow item and entity
      */
     public static final RegistrySupplier<EntityType<TimeArrowEntity>> TIME_ARROW = ENTITIES.register(
-        "time_arrow",
+        ModEntityId.TIME_ARROW.id(),
         () -> EntityType.Builder.<TimeArrowEntity>of(TimeArrowEntity::new, MobCategory.MISC)
             .sized(0.5f, 0.5f) // Standard arrow size
             .clientTrackingRange(4) // Standard arrow tracking range
             .updateInterval(20) // Standard arrow update interval
-            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "time_arrow")))
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.TIME_ARROW.id())))
     );
 
     /**
@@ -260,12 +261,12 @@ public class ModEntities {
      * Task: T210 [P] [US2] Add ranged attack capability to Time Guardian
      */
     public static final RegistrySupplier<EntityType<TimeBlastEntity>> TIME_BLAST = ENTITIES.register(
-        "time_blast",
+        ModEntityId.TIME_BLAST.id(),
         () -> EntityType.Builder.<TimeBlastEntity>of(TimeBlastEntity::new, MobCategory.MISC)
             .sized(0.5f, 0.5f) // Small projectile size
             .clientTrackingRange(4) // Standard projectile tracking range
             .updateInterval(10) // Update interval in ticks
-            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "time_blast")))
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.TIME_BLAST.id())))
     );
 
     /**
@@ -281,12 +282,12 @@ public class ModEntities {
      * Task: T236 [Phase 2] Implement Temporal Phantom
      */
     public static final RegistrySupplier<EntityType<TemporalPhantomEntity>> TEMPORAL_PHANTOM = ENTITIES.register(
-        "temporal_phantom",
+        ModEntityId.TEMPORAL_PHANTOM.id(),
         () -> EntityType.Builder.of(TemporalPhantomEntity::new, MobCategory.MONSTER)
             .sized(0.8f, 2.0f)
             .clientTrackingRange(10)
             .updateInterval(3)
-            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "temporal_phantom")))
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.TEMPORAL_PHANTOM.id())))
     );
 
     /**
@@ -302,12 +303,12 @@ public class ModEntities {
      * Task: T237 [Phase 2] Implement Entropy Keeper
      */
     public static final RegistrySupplier<EntityType<EntropyKeeperEntity>> ENTROPY_KEEPER = ENTITIES.register(
-        "entropy_keeper",
+        ModEntityId.ENTROPY_KEEPER.id(),
         () -> EntityType.Builder.of(EntropyKeeperEntity::new, MobCategory.MONSTER)
             .sized(0.9f, 2.2f)
             .clientTrackingRange(10)
             .updateInterval(3)
-            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "entropy_keeper")))
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.ENTROPY_KEEPER.id())))
     );
 
     /**
@@ -317,12 +318,12 @@ public class ModEntities {
      * Behaves similarly to vanilla Cod/Salmon.
      */
     public static final RegistrySupplier<EntityType<GlideFishEntity>> GLIDE_FISH = ENTITIES.register(
-        "glide_fish",
+        ModEntityId.GLIDE_FISH.id(),
         () -> EntityType.Builder.of(GlideFishEntity::new, MobCategory.WATER_CREATURE)
             .sized(0.5f, 0.3f)
             .clientTrackingRange(8)
             .updateInterval(3)
-            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "glide_fish")))
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.GLIDE_FISH.id())))
     );
 
     /**
@@ -332,12 +333,12 @@ public class ModEntities {
      * Drops Time Crystal.
      */
     public static final RegistrySupplier<EntityType<TimelineStriderEntity>> TIMELINE_STRIDER = ENTITIES.register(
-        "timeline_strider",
+        ModEntityId.TIMELINE_STRIDER.id(),
         () -> EntityType.Builder.of(TimelineStriderEntity::new, MobCategory.MONSTER)
             .sized(0.6f, 2.9f)
             .clientTrackingRange(8)
             .updateInterval(3)
-            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "timeline_strider")))
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.TIMELINE_STRIDER.id())))
     );
 
     /**
@@ -347,12 +348,12 @@ public class ModEntities {
      * Replaces Spider spawns in ChronoDawn dimension.
      */
     public static final RegistrySupplier<EntityType<ParadoxCrawlerEntity>> PARADOX_CRAWLER = ENTITIES.register(
-        "paradox_crawler",
+        ModEntityId.PARADOX_CRAWLER.id(),
         () -> EntityType.Builder.of(ParadoxCrawlerEntity::new, MobCategory.MONSTER)
             .sized(1.4f, 0.9f)
             .clientTrackingRange(8)
             .updateInterval(3)
-            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "paradox_crawler")))
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.PARADOX_CRAWLER.id())))
     );
 
     /**
@@ -363,12 +364,12 @@ public class ModEntities {
      * Drops bones, damaged bow, arrows, and rarely Ancient Gears.
      */
     public static final RegistrySupplier<EntityType<SecondhandArcherEntity>> SECONDHAND_ARCHER = ENTITIES.register(
-        "secondhand_archer",
+        ModEntityId.SECONDHAND_ARCHER.id(),
         () -> EntityType.Builder.of(SecondhandArcherEntity::new, MobCategory.MONSTER)
             .sized(0.6f, 1.99f)
             .clientTrackingRange(8)
             .updateInterval(3)
-            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "secondhand_archer")))
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.SECONDHAND_ARCHER.id())))
     );
 
     /**
@@ -379,12 +380,12 @@ public class ModEntities {
      * Drops Turtle Scute with a chance when killed.
      */
     public static final RegistrySupplier<EntityType<com.chronodawn.entities.mobs.ChronoTurtleEntity>> CHRONO_TURTLE = ENTITIES.register(
-        "chrono_turtle",
+        ModEntityId.CHRONO_TURTLE.id(),
         () -> EntityType.Builder.of(com.chronodawn.entities.mobs.ChronoTurtleEntity::new, MobCategory.WATER_CREATURE)
             .sized(1.2f, 0.4f)  // Similar to vanilla turtle
             .clientTrackingRange(8)
             .updateInterval(3)
-            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "chrono_turtle")))
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.CHRONO_TURTLE.id())))
     );
 
     // === Boat Entities ===
@@ -399,14 +400,14 @@ public class ModEntities {
      * Task: T268-T270 [US1] Create Time Wood Boat variants
      */
     public static final RegistrySupplier<EntityType<ChronoDawnBoat>> CHRONO_DAWN_BOAT = ENTITIES.register(
-        "chronodawn_boat",
+        ModEntityId.CHRONO_DAWN_BOAT.id(),
         () -> EntityType.Builder.<ChronoDawnBoat>of(
                 (entityType, level) -> new ChronoDawnBoat(entityType, level, () -> net.minecraft.world.item.Items.OAK_BOAT),
                 MobCategory.MISC
             )
             .sized(1.375F, 0.5625F) // Standard boat size
             .clientTrackingRange(10)
-            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "chronodawn_boat")))
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.CHRONO_DAWN_BOAT.id())))
     );
 
     /**
@@ -419,14 +420,14 @@ public class ModEntities {
      * Task: T268-T270 [US1] Create Time Wood Chest Boat variants
      */
     public static final RegistrySupplier<EntityType<ChronoDawnChestBoat>> CHRONO_DAWN_CHEST_BOAT = ENTITIES.register(
-        "chronodawn_chest_boat",
+        ModEntityId.CHRONO_DAWN_CHEST_BOAT.id(),
         () -> EntityType.Builder.<ChronoDawnChestBoat>of(
                 (entityType, level) -> new ChronoDawnChestBoat(entityType, level, () -> net.minecraft.world.item.Items.OAK_CHEST_BOAT),
                 MobCategory.MISC
             )
             .sized(1.375F, 0.5625F) // Standard boat size
             .clientTrackingRange(10)
-            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "chronodawn_chest_boat")))
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.CHRONO_DAWN_CHEST_BOAT.id())))
     );
 
     /**
