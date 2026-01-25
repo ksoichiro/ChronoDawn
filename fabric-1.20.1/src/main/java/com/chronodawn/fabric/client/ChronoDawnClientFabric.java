@@ -16,6 +16,7 @@ import com.chronodawn.client.model.ForgottenMinuteModel;
 import com.chronodawn.client.model.ChronalLeechModel;
 import com.chronodawn.client.model.MomentCreeperModel;
 import com.chronodawn.client.model.GlideFishModel;
+import com.chronodawn.client.model.ChronoTurtleModel;
 import com.chronodawn.client.model.ParadoxCrawlerModel;
 import com.chronodawn.client.model.SecondhandArcherModel;
 import com.chronodawn.client.model.TimelineStriderModel;
@@ -43,6 +44,7 @@ import com.chronodawn.client.renderer.mobs.ForgottenMinuteRenderer;
 import com.chronodawn.client.renderer.mobs.ChronalLeechRenderer;
 import com.chronodawn.client.renderer.mobs.MomentCreeperRenderer;
 import com.chronodawn.client.renderer.mobs.GlideFishRenderer;
+import com.chronodawn.client.renderer.mobs.ChronoTurtleRenderer;
 import com.chronodawn.client.renderer.mobs.ParadoxCrawlerRenderer;
 import com.chronodawn.client.renderer.mobs.SecondhandArcherRenderer;
 import com.chronodawn.client.renderer.mobs.TimelineStriderRenderer;
@@ -477,6 +479,12 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             GlideFishModel::createBodyLayer
         );
 
+        // Register Chrono Turtle model layer
+        EntityModelLayerRegistry.registerModelLayer(
+            ChronoTurtleModel.LAYER_LOCATION,
+            ChronoTurtleModel::createBodyLayer
+        );
+
         // Register Timeline Strider model layer
         EntityModelLayerRegistry.registerModelLayer(
             TimelineStriderModel.LAYER_LOCATION,
@@ -580,6 +588,12 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
         EntityRendererRegistry.register(
             ModEntities.GLIDE_FISH.get(),
             GlideFishRenderer::new
+        );
+
+        // Register Chrono Turtle with custom renderer
+        EntityRendererRegistry.register(
+            ModEntities.CHRONO_TURTLE.get(),
+            ChronoTurtleRenderer::new
         );
 
         EntityRendererRegistry.register(

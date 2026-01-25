@@ -14,6 +14,7 @@ import com.chronodawn.entities.mobs.EpochHuskEntity;
 import com.chronodawn.entities.mobs.ForgottenMinuteEntity;
 import com.chronodawn.entities.mobs.ChronalLeechEntity;
 import com.chronodawn.entities.mobs.MomentCreeperEntity;
+import com.chronodawn.entities.mobs.ChronoTurtleEntity;
 import com.chronodawn.entities.mobs.GlideFishEntity;
 import com.chronodawn.entities.mobs.ParadoxCrawlerEntity;
 import com.chronodawn.entities.mobs.SecondhandArcherEntity;
@@ -319,6 +320,22 @@ public class ModEntities {
             .clientTrackingRange(8)
             .updateInterval(3)
             .build("glide_fish")
+    );
+
+    /**
+     * ChronoTurtle - Friendly water creature that spawns in ChronoDawn dimension waters.
+     *
+     * Spawns in water biomes of ChronoDawn dimension.
+     * Behaves similarly to vanilla Turtle with smooth swimming.
+     * Drops Turtle Scute with a chance when killed.
+     */
+    public static final RegistrySupplier<EntityType<ChronoTurtleEntity>> CHRONO_TURTLE = ENTITIES.register(
+        "chrono_turtle",
+        () -> EntityType.Builder.of(ChronoTurtleEntity::new, MobCategory.WATER_CREATURE)
+            .sized(1.2f, 0.4f)  // Similar to vanilla turtle
+            .clientTrackingRange(8)
+            .updateInterval(3)
+            .build("chrono_turtle")
     );
 
     /**

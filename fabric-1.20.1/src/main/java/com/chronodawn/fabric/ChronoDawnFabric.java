@@ -33,6 +33,7 @@ import com.chronodawn.entities.mobs.ForgottenMinuteEntity;
 import com.chronodawn.entities.mobs.ChronalLeechEntity;
 import com.chronodawn.entities.mobs.MomentCreeperEntity;
 import com.chronodawn.entities.mobs.GlideFishEntity;
+import com.chronodawn.entities.mobs.ChronoTurtleEntity;
 import com.chronodawn.entities.mobs.ParadoxCrawlerEntity;
 import com.chronodawn.entities.mobs.SecondhandArcherEntity;
 import com.chronodawn.entities.mobs.TimelineStriderEntity;
@@ -162,6 +163,11 @@ public class ChronoDawnFabric implements ModInitializer {
         FabricDefaultAttributeRegistry.register(
             ModEntities.GLIDE_FISH.get(),
             GlideFishEntity.createAttributes()
+        );
+
+        FabricDefaultAttributeRegistry.register(
+            ModEntities.CHRONO_TURTLE.get(),
+            ChronoTurtleEntity.createAttributes()
         );
 
         FabricDefaultAttributeRegistry.register(
