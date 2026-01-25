@@ -2169,6 +2169,10 @@ public class ModItems {
         output.accept(CLOCKWORK_COOKIE.get());
         output.accept(GOLDEN_TIME_WHEAT.get());
 
+        // === Fish Foods ===
+        output.accept(GLIDE_FISH.get());
+        output.accept(COOKED_GLIDE_FISH.get());
+
         // === Equipment - Weapons ===
         output.accept(CLOCKSTONE_SWORD.get());
 
@@ -2277,12 +2281,6 @@ public class ModItems {
         }
         if (CHRONO_TURTLE_SPAWN_EGG.isPresent()) {
             output.accept(CHRONO_TURTLE_SPAWN_EGG.get());
-        }
-        if (GLIDE_FISH.isPresent()) {
-            output.accept(GLIDE_FISH.get());
-        }
-        if (COOKED_GLIDE_FISH.isPresent()) {
-            output.accept(COOKED_GLIDE_FISH.get());
         }
     }
 }
