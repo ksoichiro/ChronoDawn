@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 import java.util.Set;
+import com.chronodawn.registry.ModBlockEntityId;
 
 /**
  * Architectury Registry wrapper for custom block entities.
@@ -23,7 +24,7 @@ public class ModBlockEntities {
      * Clock Tower Teleporter BlockEntity - Stores target teleportation position.
      */
     public static final RegistrySupplier<BlockEntityType<ClockTowerTeleporterBlockEntity>> CLOCK_TOWER_TELEPORTER =
-        BLOCK_ENTITIES.register("clock_tower_teleporter", () ->
+        BLOCK_ENTITIES.register(ModBlockEntityId.CLOCK_TOWER_TELEPORTER.id(), () ->
             // 1.21.2: BlockEntityType.Builder removed, use constructor with Set<Block> directly
             new BlockEntityType<>(
                 ClockTowerTeleporterBlockEntity::new,
@@ -35,7 +36,7 @@ public class ModBlockEntities {
      * Boss Room Door BlockEntity - Stores door type ("entrance" or "boss_room").
      */
     public static final RegistrySupplier<BlockEntityType<BossRoomDoorBlockEntity>> BOSS_ROOM_DOOR =
-        BLOCK_ENTITIES.register("boss_room_door", () ->
+        BLOCK_ENTITIES.register(ModBlockEntityId.BOSS_ROOM_DOOR.id(), () ->
             // 1.21.2: BlockEntityType.Builder removed, use constructor with Set<Block> directly
             new BlockEntityType<>(
                 BossRoomDoorBlockEntity::new,
@@ -47,7 +48,7 @@ public class ModBlockEntities {
      * Boss Room Boundary Marker BlockEntity - Stores marker type and replacement block.
      */
     public static final RegistrySupplier<BlockEntityType<BossRoomBoundaryMarkerBlockEntity>> BOSS_ROOM_BOUNDARY_MARKER =
-        BLOCK_ENTITIES.register("boss_room_boundary_marker", () ->
+        BLOCK_ENTITIES.register(ModBlockEntityId.BOSS_ROOM_BOUNDARY_MARKER.id(), () ->
             // 1.21.2: BlockEntityType.Builder removed, use constructor with Set<Block> directly
             new BlockEntityType<>(
                 BossRoomBoundaryMarkerBlockEntity::new,

@@ -2,6 +2,7 @@ package com.chronodawn.gametest;
 
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.compat.CompatResourceLocation;
+import com.chronodawn.registry.ModBlockEntityId;
 import com.chronodawn.registry.ModBlockId;
 import com.chronodawn.registry.ModEntityId;
 import com.chronodawn.registry.ModItemId;
@@ -124,7 +125,38 @@ public final class RegistryConsistencyTests {
     }
 
     /**
-     * Generates a summary test that checks all items, blocks, and entities at once.
+     * Generates tests for all block entity IDs defined in ModBlockEntityId enum.
+     * Each test verifies that the block entity type is properly registered.
+     *
+     * @param factory factory to create test instances
+     * @return list of generated tests
+     */
+    public static <T> List<T> generateBlockEntityTests(TestFactory<T> factory) {
+        List<T> tests = new ArrayList<>();
+
+        for (ModBlockEntityId blockEntityId : ModBlockEntityId.availableForCurrent()) {
+            String testName = "registry_block_entity_" + blockEntityId.id();
+            tests.add(factory.create(testName, helper -> {
+                helper.runAfterDelay(1, () -> {
+                    ResourceLocation rl = CompatResourceLocation.create(
+                            ChronoDawn.MOD_ID, blockEntityId.id());
+
+                    if (!BuiltInRegistries.BLOCK_ENTITY_TYPE.containsKey(rl)) {
+                        helper.fail("BlockEntity not registered: " + blockEntityId.id() +
+                                " (enum: " + blockEntityId.name() + ")");
+                        return;
+                    }
+
+                    helper.succeed();
+                });
+            }));
+        }
+
+        return tests;
+    }
+
+    /**
+     * Generates a summary test that checks all items, blocks, entities, and block entities at once.
      * This provides a quick overview of registration status.
      *
      * @param factory factory to create test instances
@@ -138,6 +170,7 @@ public final class RegistryConsistencyTests {
                 List<String> missingItems = new ArrayList<>();
                 List<String> missingBlocks = new ArrayList<>();
                 List<String> missingEntities = new ArrayList<>();
+                List<String> missingBlockEntities = new ArrayList<>();
 
                 // Check all items
                 for (ModItemId itemId : ModItemId.availableForCurrent()) {
@@ -166,11 +199,21 @@ public final class RegistryConsistencyTests {
                     }
                 }
 
-                if (missingItems.isEmpty() && missingBlocks.isEmpty() && missingEntities.isEmpty()) {
-                    ChronoDawn.LOGGER.info("Registry consistency check passed: {} items, {} blocks, {} entities",
+                // Check all block entities
+                for (ModBlockEntityId blockEntityId : ModBlockEntityId.availableForCurrent()) {
+                    ResourceLocation rl = CompatResourceLocation.create(
+                            ChronoDawn.MOD_ID, blockEntityId.id());
+                    if (!BuiltInRegistries.BLOCK_ENTITY_TYPE.containsKey(rl)) {
+                        missingBlockEntities.add(blockEntityId.id());
+                    }
+                }
+
+                if (missingItems.isEmpty() && missingBlocks.isEmpty() && missingEntities.isEmpty() && missingBlockEntities.isEmpty()) {
+                    ChronoDawn.LOGGER.info("Registry consistency check passed: {} items, {} blocks, {} entities, {} block entities",
                             ModItemId.availableForCurrent().size(),
                             ModBlockId.availableForCurrent().size(),
-                            ModEntityId.availableForCurrent().size());
+                            ModEntityId.availableForCurrent().size(),
+                            ModBlockEntityId.availableForCurrent().size());
                     helper.succeed();
                 } else {
                     StringBuilder sb = new StringBuilder("Registry consistency check failed:\n");
@@ -184,7 +227,11 @@ public final class RegistryConsistencyTests {
                     }
                     if (!missingEntities.isEmpty()) {
                         sb.append("Missing entities (").append(missingEntities.size()).append("): ")
-                                .append(String.join(", ", missingEntities));
+                                .append(String.join(", ", missingEntities)).append("\n");
+                    }
+                    if (!missingBlockEntities.isEmpty()) {
+                        sb.append("Missing block entities (").append(missingBlockEntities.size()).append("): ")
+                                .append(String.join(", ", missingBlockEntities));
                     }
                     helper.fail(sb.toString());
                 }
