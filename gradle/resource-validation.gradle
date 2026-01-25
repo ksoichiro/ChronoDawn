@@ -101,7 +101,9 @@ tasks.register('validateTranslations') {
     description = 'Validates that translation keys exist across all Minecraft versions'
 
     doLast {
-        def versions = ['1.20.1', '1.21.1', '1.21.2']
+        def versions = ['1.20.1', '1.21.1', '1.21.2', '1.21.3']
+        // Map hotfix versions to their base module version
+        def moduleVersionMap = ['1.21.3': '1.21.2']
         def jsonSlurper = new JsonSlurper()
         def errors = []
 
@@ -120,7 +122,8 @@ tasks.register('validateTranslations') {
         logger.lifecycle("  Found ${entityIds.size()} entities and ${itemIds.size()} items to validate")
 
         versions.each { version ->
-            def langFile = file("${rootProject.projectDir}/common-${version}/src/main/resources/assets/chronodawn/lang/en_us.json")
+            def moduleVersion = moduleVersionMap.getOrDefault(version, version)
+            def langFile = file("${rootProject.projectDir}/common-${moduleVersion}/src/main/resources/assets/chronodawn/lang/en_us.json")
             if (!langFile.exists()) {
                 errors << "[${version}] Language file not found: ${langFile.path}"
                 return

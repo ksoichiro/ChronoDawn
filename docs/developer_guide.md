@@ -45,12 +45,14 @@ Chrono Dawn uses the **Architectury** framework to support both Fabric and NeoFo
 ### Key Technologies
 
 - **Java 21**: Target language version
-- **Minecraft**: Java Edition 1.21.1 / 1.21.2
+- **Minecraft**: Java Edition 1.21.1 / 1.21.2 / 1.21.3
 - **Fabric Loader**: 0.17.3+
-- **NeoForge**: 21.1.209+ (for 1.21.1) / 21.2.0-beta+ (for 1.21.2)
-- **Architectury API**: 13.0.8+ (for 1.21.1) / 14.0.4+ (for 1.21.2)
+- **NeoForge**: 21.1.209+ (for 1.21.1) / 21.2.0-beta+ (for 1.21.2) / 21.3.0-beta+ (for 1.21.3)
+- **Architectury API**: 13.0.8+ (for 1.21.1) / 14.0.4+ (for 1.21.2/1.21.3)
 - **Gradle**: Build automation (Groovy DSL)
 - **Mojang Mappings**: Official Minecraft class names
+
+*Note: 1.21.3 is a hotfix release that shares code modules with 1.21.2.*
 
 ---
 

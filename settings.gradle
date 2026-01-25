@@ -22,10 +22,19 @@ if (!settings.hasProperty('target_mc_version')) {
     throw new GradleException("'target_mc_version' property is not defined. Check gradle.properties or pass -Ptarget_mc_version=<version>")
 }
 def targetMcVersion = settings.target_mc_version
-if (targetMcVersion == '1.20.1') {
+
+// Map hotfix versions to their base version for module selection
+// 1.21.3 is a hotfix of 1.21.2, sharing the same modules
+def moduleVersion = targetMcVersion
+if (targetMcVersion == '1.21.3') {
+    moduleVersion = '1.21.2'
+    logger.lifecycle("Note: 1.21.3 uses 1.21.2 modules (hotfix release)")
+}
+
+if (moduleVersion == '1.20.1') {
     include 'common-1.20.1'
     logger.lifecycle("Common module: common-1.20.1")
-} else if (targetMcVersion == '1.21.2') {
+} else if (moduleVersion == '1.21.2') {
     include 'common-1.21.2'
     logger.lifecycle("Common module: common-1.21.2")
 } else {
@@ -38,13 +47,13 @@ if (targetMcVersion == '1.20.1') {
 // so that .gradle/architectury/ paths don't conflict, enabling full parallel gameTest.
 // Project names remain 'fabric'/'neoforge' as required by Architectury Plugin.
 include 'fabric'
-project(':fabric').projectDir = file("fabric-${targetMcVersion}")
-logger.lifecycle("Fabric module: fabric-${targetMcVersion}")
+project(':fabric').projectDir = file("fabric-${moduleVersion}")
+logger.lifecycle("Fabric module: fabric-${moduleVersion}")
 
-if (targetMcVersion != '1.20.1') {
+if (moduleVersion != '1.20.1') {
     include 'neoforge'
-    project(':neoforge').projectDir = file("neoforge-${targetMcVersion}")
-    logger.lifecycle("NeoForge module: neoforge-${targetMcVersion}")
+    project(':neoforge').projectDir = file("neoforge-${moduleVersion}")
+    logger.lifecycle("NeoForge module: neoforge-${moduleVersion}")
 } else {
     logger.lifecycle("NeoForge module disabled for Minecraft 1.20.1 (not supported)")
 }

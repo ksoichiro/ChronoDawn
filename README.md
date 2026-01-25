@@ -56,12 +56,12 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed information.
 ## Requirements
 
 ### For Players
-- **Minecraft**: Java Edition 1.21.1 or 1.21.2
+- **Minecraft**: Java Edition 1.21.1, 1.21.2, or 1.21.3
 - **Mod Loader** (version depends on Minecraft version):
   - **For 1.21.1**: Fabric Loader 0.17.3+ with Fabric API 0.116.7+, OR NeoForge 21.1.209+
-  - **For 1.21.2**: Fabric Loader 0.17.3+ with Fabric API, OR NeoForge 21.2.0-beta+
+  - **For 1.21.2/1.21.3**: Fabric Loader 0.17.3+ with Fabric API, OR NeoForge 21.2.0-beta+/21.3.0-beta+
 - **Dependencies**:
-  - **Architectury API** 13.0.8+ (for 1.21.1) or 14.0.4+ (for 1.21.2)
+  - **Architectury API** 13.0.8+ (for 1.21.1) or 14.0.4+ (for 1.21.2/1.21.3)
 
 ### For Developers
 - **Java Development Kit (JDK)**: 21 or higher
@@ -83,6 +83,7 @@ Chrono Dawn supports multiple Minecraft versions from the same codebase:
 - **1.20.1**: Fabric only (legacy support) - *NeoForge requires Minecraft 1.20.5+*
 - **1.21.1**: NeoForge/Fabric (stable)
 - **1.21.2**: NeoForge/Fabric (current version, default)
+- **1.21.3**: NeoForge/Fabric (uses 1.21.2 modules - hotfix release)
 
 ### Build for Specific Minecraft Version
 
@@ -113,9 +114,21 @@ Chrono Dawn supports multiple Minecraft versions from the same codebase:
 ./gradlew build -Ptarget_mc_version=1.20.1
 ```
 
-#### Build for All Versions
+#### Build for Minecraft 1.21.3
 ```bash
-# Build all supported versions sequentially
+# Shortcut command (recommended)
+./gradlew build1_21_3
+
+# Or explicit version
+./gradlew build -Ptarget_mc_version=1.21.3
+```
+
+*Note: 1.21.3 is a hotfix release that uses the same modules as 1.21.2.*
+
+#### Build for All Versions (Release)
+```bash
+# Build all release versions (1.20.1, 1.21.1, 1.21.2)
+# Note: 1.21.3 is excluded - the 1.21.2 JAR is compatible with 1.21.3
 ./gradlew buildAll
 ```
 
@@ -258,6 +271,9 @@ Use the same steps above, but with:
 - Architectury API 13.0.8+
 - JAR files with `+1.21.1` in the filename
 
+### For Minecraft 1.21.3
+Use the same steps as 1.21.2 above. The 1.21.2 JAR files are compatible with Minecraft 1.21.3 (hotfix release).
+
 **Note**: Download the correct version for your mod loader (Fabric or NeoForge).
 
 ## Project Structure
@@ -346,4 +362,4 @@ For issues, feature requests, or questions:
 
 ---
 
-**Developed for Minecraft Java Edition 1.21.1 / 1.21.2**
+**Developed for Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3**

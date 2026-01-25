@@ -17,10 +17,11 @@ Auto-generated from all feature plans. Last updated: 2025-10-19
 - `gradle.properties` - Version definitions
 - `fabric.mod.json` / `neoforge.mods.toml` - Mod metadata
 
-**Current Versions** (as of 2026-01-23):
-- Minecraft: 1.21.1 or 1.21.2
+**Current Versions** (as of 2026-01-26):
+- Minecraft: 1.21.1, 1.21.2, or 1.21.3
 - For 1.21.1: Fabric Loader 0.17.3+ | Fabric API 0.116.7+ | NeoForge 21.1.209+ | Architectury API 13.0.8+
-- For 1.21.2: Fabric Loader 0.17.3+ | Fabric API | NeoForge 21.2.0-beta+ | Architectury API 14.0.4+
+- For 1.21.2/1.21.3: Fabric Loader 0.17.3+ | Fabric API | NeoForge 21.2.0-beta+ / 21.3.0-beta+ | Architectury API 14.0.4+
+- **Note**: 1.21.3 is a hotfix release that shares modules with 1.21.2
 
 ---
 
@@ -40,7 +41,7 @@ Auto-generated from all feature plans. Last updated: 2025-10-19
 ---
 
 ## Active Technologies
-- Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2) + NeoForge 21.1.x / 21.2.x, Fabric Loader, mcjunitlib
+- Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3) + NeoForge 21.1.x / 21.2.x / 21.3.x, Fabric Loader, mcjunitlib
 
 ## Project Structure
 ```
@@ -61,10 +62,10 @@ props/                (version-specific properties)
 ```
 
 ## Commands
-# Add commands for Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2)
+# Add commands for Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3)
 
 ## Code Style
-Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2): Follow standard conventions
+Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3): Follow standard conventions
 
 ## Build Configuration
 - **Build DSL**: Groovy DSL (not Kotlin DSL) - for compatibility with Architectury Loom 1.11-SNAPSHOT
@@ -73,32 +74,36 @@ Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2): Follow standard conventions
 
 ## Multi-Version Support
 
-**Supported Versions**: Minecraft 1.20.1 + 1.21.1 + 1.21.2 (single codebase)
+**Supported Versions**: Minecraft 1.20.1 + 1.21.1 + 1.21.2 + 1.21.3 (single codebase)
+
+**Note**: 1.21.3 is a hotfix release that reuses 1.21.2 modules (no separate common-1.21.3, fabric-1.21.3, neoforge-1.21.3 directories needed).
 
 **Clean Commands**:
 - `./gradlew clean1_20_1` - Clean for 1.20.1
 - `./gradlew clean1_21_1` - Clean for 1.21.1
 - `./gradlew clean1_21_2` - Clean for 1.21.2
-- `./gradlew cleanAll` - Clean all versions
+- `./gradlew clean1_21_3` - Clean for 1.21.3 (uses 1.21.2 modules)
+- `./gradlew cleanAll` - Clean all versions (excludes 1.21.3 - shares 1.21.2 modules)
 
 **Build Commands**:
 - `./gradlew build1_20_1` - Build for 1.20.1
 - `./gradlew build1_21_1` - Build for 1.21.1
 - `./gradlew build1_21_2` - Build for 1.21.2 (default)
-- `./gradlew buildAll` - Build all versions
+- `./gradlew build1_21_3` - Build for 1.21.3 (uses 1.21.2 modules, for testing only)
+- `./gradlew buildAll` - Build for release (1.20.1, 1.21.1, 1.21.2 - excludes 1.21.3)
 
 **Run Client**:
-- Fabric: `./gradlew runClientFabric1_20_1`, `./gradlew runClientFabric1_21_1`, `./gradlew runClientFabric1_21_2`
-- NeoForge: `./gradlew runClientNeoForge1_21_1`, `./gradlew runClientNeoForge1_21_2`
+- Fabric: `./gradlew runClientFabric1_20_1`, `./gradlew runClientFabric1_21_1`, `./gradlew runClientFabric1_21_2`, `./gradlew runClientFabric1_21_3`
+- NeoForge: `./gradlew runClientNeoForge1_21_1`, `./gradlew runClientNeoForge1_21_2`, `./gradlew runClientNeoForge1_21_3`
 
 **Unit Test** (JUnit only, not GameTest):
 - `./gradlew :common-1.21.2:test -Ptarget_mc_version=1.21.2` - Run unit tests for specific version
-- `./gradlew testAll` - Run unit tests for all versions
+- `./gradlew testAll` - Run unit tests for all versions (excludes 1.21.3 - shares 1.21.2 modules)
 
 **GameTest**:
 - `./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.2` - Run GameTests for specific version
 - `./gradlew :neoforge:runGameTestServer -Ptarget_mc_version=1.21.2` - Run NeoForge GameTests
-- `./gradlew gameTestAll` - Run GameTests for all versions and loaders (parallel by version)
+- `./gradlew gameTestAll` - Run GameTests including 1.21.3 runtime verification (1.21.2+1.21.3 sequential)
 
 **Resource Validation**:
 - `./gradlew validateResources` - Check JSON syntax and cross-references (blockstate→model, model→texture)
@@ -109,9 +114,9 @@ Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2): Follow standard conventions
   1. cleanAll - Clean all build outputs and IDE directories
   2. validateResources - JSON syntax and cross-reference checks
   3. validateTranslations - Cross-version translation key validation
-  4. buildAll - Build all versions
-  5. testAll - Run all unit tests
-  6. gameTestAll - Run all GameTests
+  4. buildAll - Build for release (1.20.1, 1.21.1, 1.21.2)
+  5. testAll - Run unit tests (1.20.1, 1.21.1, 1.21.2)
+  6. gameTestAll - Run GameTests including 1.21.3 runtime verification
 
 **Key Strategy**: Custom Gradle scripts + abstraction layer (`compat/` package) for API differences
 
@@ -119,7 +124,7 @@ Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2): Follow standard conventions
 - When writing code, use Mojang mapping names (e.g., `net.minecraft.world.level.Level`, not Yarn's `class_XXXX`)
 - Build files use Groovy syntax (e.g., `maven { url 'https://...' }`, not `maven { url = "https://..." }`)
 - Common module code is bundled into Fabric JAR using Shadow plugin
-- **Parallel GameTest**: `gameTestAll` groups configurations by Minecraft version (3 parallel threads). Within each version, fabric and neoforge run in a single Gradle process to avoid common module build conflicts. Each version uses a separate directory (fabric-1.20.1, fabric-1.21.1, etc.) with its own `.gradle/architectury/` path.
+- **Parallel GameTest**: `gameTestAll` groups configurations by Minecraft version. 1.20.1 and 1.21.1 run in parallel, while 1.21.2 and 1.21.3 run sequentially in the same thread (they share modules). Within each version, fabric and neoforge run in a single Gradle process to avoid common module build conflicts. Each version uses a separate directory (fabric-1.20.1, fabric-1.21.1, etc.) with its own `.gradle/architectury/` path.
 
 ## Mixin Configuration
 

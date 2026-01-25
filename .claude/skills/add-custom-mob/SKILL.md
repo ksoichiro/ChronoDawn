@@ -1,6 +1,6 @@
 ---
 name: add-custom-mob
-description: MANDATORY checklist when adding any new mob to ChronoDawn. Must be consulted for every new hostile mob, passive mob, friendly creature, water mob, ambient mob, or custom entity implementation. Covers entity class, model, renderer, Fabric/NeoForge client registration (model layers, renderers, spawn egg colors), spawn configuration, loot tables, and multi-version support (1.20.1, 1.21.1, 1.21.2). Use this skill whenever asked to add, create, or implement a new mob, creature, or entity.
+description: MANDATORY checklist when adding any new mob to ChronoDawn. Must be consulted for every new hostile mob, passive mob, friendly creature, water mob, ambient mob, or custom entity implementation. Covers entity class, model, renderer, Fabric/NeoForge client registration (model layers, renderers, spawn egg colors), spawn configuration, loot tables, and multi-version support (1.20.1, 1.21.1, 1.21.2/1.21.3). Note that 1.21.3 uses 1.21.2 modules (hotfix release). Use this skill whenever asked to add, create, or implement a new mob, creature, or entity.
 ---
 
 # Add Custom Mob to ChronoDawn
@@ -13,7 +13,8 @@ description: MANDATORY checklist when adding any new mob to ChronoDawn. Must be 
 
 When adding a new mob, complete ALL of the following:
 
-### Java Classes (per version: 1.20.1, 1.21.1, 1.21.2)
+### Java Classes (per module: 1.20.1, 1.21.1, 1.21.2)
+*Note: 1.21.3 uses 1.21.2 modules (no separate directory)*
 - [ ] Entity class (`entities/mobs/MobNameEntity.java`)
 - [ ] Model class (`client/model/MobNameModel.java`)
 - [ ] Renderer class (`client/renderer/mobs/MobNameRenderer.java`)
@@ -359,7 +360,7 @@ event.registerLayerDefinition(MobNameModel.LAYER_LOCATION, MobNameModel::createB
 
 ### Loot Table
 
-**1.21.1 / 1.21.2** (`data/chronodawn/loot_table/entities/mob_name.json`):
+**1.21.1 / 1.21.2 / 1.21.3** (`data/chronodawn/loot_table/entities/mob_name.json`):
 ```json
 {
   "type": "minecraft:entity",
@@ -429,8 +430,8 @@ Quick reminder:
 
 ## Version API Differences Summary
 
-| Feature | 1.20.1 | 1.21.1 | 1.21.2 |
-|---------|--------|--------|--------|
+| Feature | 1.20.1 | 1.21.1 | 1.21.2/1.21.3 |
+|---------|--------|--------|---------------|
 | Spawn type enum | `MobSpawnType` | `MobSpawnType` | `EntitySpawnReason` |
 | SynchedEntityData | `defineSynchedData()` no params | `defineSynchedData(Builder)` | `defineSynchedData(Builder)` |
 | EntityModel type param | `EntityModel<Entity>` | `EntityModel<Entity>` | `EntityModel<RenderState>` |
@@ -441,6 +442,8 @@ Quick reminder:
 | Loot table directory | `loot_tables/` | `loot_table/` | `loot_table/` |
 | Looting enchant function | `looting_enchant` | `enchanted_count_increase` | `enchanted_count_increase` |
 | RenderState class | Not needed | Not needed | Required |
+
+*Note: 1.21.3 is a hotfix release that shares modules with 1.21.2. No separate code changes are needed.*
 
 ---
 

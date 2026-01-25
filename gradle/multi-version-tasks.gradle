@@ -52,8 +52,27 @@ tasks.register('clean1_21_2') {
 }
 
 /**
+ * Clean for Minecraft 1.21.3
+ * Usage: ./gradlew clean1_21_3
+ * Note: 1.21.3 shares modules with 1.21.2 (hotfix release)
+ */
+tasks.register('clean1_21_3') {
+    group = 'chrono dawn build'
+    description = 'Clean build outputs for Minecraft 1.21.3'
+
+    doLast {
+        project.exec {
+            commandLine './gradlew', 'clean', '-Ptarget_mc_version=1.21.3'
+        }
+    }
+}
+
+/**
  * Clean for all supported Minecraft versions
  * Usage: ./gradlew cleanAll
+ *
+ * Note: 1.21.3 is excluded because it shares modules with 1.21.2.
+ * Cleaning 1.21.2 also cleans the modules used by 1.21.3.
  */
 tasks.register('cleanAll') {
     group = 'chrono dawn build'
@@ -189,18 +208,47 @@ tasks.register('build1_21_2') {
 }
 
 /**
- * Build for all supported Minecraft versions
+ * Build for Minecraft 1.21.3
+ * Usage: ./gradlew build1_21_3
+ * Note: 1.21.3 shares modules with 1.21.2 (hotfix release)
+ */
+tasks.register('build1_21_3') {
+    group = 'chrono dawn build'
+    description = 'Build mod for Minecraft 1.21.3'
+
+    doFirst {
+        logger.lifecycle('')
+        logger.lifecycle('====================================')
+        logger.lifecycle('Building for Minecraft 1.21.3...')
+        logger.lifecycle('====================================')
+        logger.lifecycle('')
+    }
+
+    doLast {
+        project.exec {
+            commandLine './gradlew', 'clean', 'build', '-Ptarget_mc_version=1.21.3', '-x', 'test'
+        }
+    }
+}
+
+/**
+ * Build for all supported Minecraft versions (for release)
  * Usage: ./gradlew buildAll
+ *
+ * Note: 1.21.3 is excluded because it shares modules with 1.21.2.
+ * The 1.21.2 JAR files are compatible with Minecraft 1.21.3.
+ * Use gameTestAll to verify 1.21.3 runtime compatibility.
  */
 tasks.register('buildAll') {
     group = 'chrono dawn build'
-    description = 'Build mod for all supported Minecraft versions (1.20.1, 1.21.1, 1.21.2)'
+    description = 'Build mod for all supported Minecraft versions (1.20.1, 1.21.1, 1.21.2) - for release'
 
     doFirst {
         logger.lifecycle('')
         logger.lifecycle('====================================================')
         logger.lifecycle('Building for ALL supported Minecraft versions...')
         logger.lifecycle('Versions: 1.20.1, 1.21.1, 1.21.2')
+        logger.lifecycle('(1.21.3 excluded - uses 1.21.2 JAR files)')
         logger.lifecycle('====================================================')
         logger.lifecycle('')
     }
@@ -257,6 +305,7 @@ def runClientConfigurations = [
     [version: '1.20.1', loaders: ['fabric']],
     [version: '1.21.1', loaders: ['fabric', 'neoforge']],
     [version: '1.21.2', loaders: ['fabric', 'neoforge']],
+    [version: '1.21.3', loaders: ['fabric', 'neoforge']],
 ]
 
 runClientConfigurations.each { config ->
@@ -315,6 +364,9 @@ runClientConfigurations.each { config ->
  *
  * Runs only common module JUnit tests (not GameTests).
  * GameTests are run separately via gameTestAll.
+ *
+ * Note: 1.21.3 is excluded because it shares modules with 1.21.2.
+ * Running tests for 1.21.2 covers the same code used by 1.21.3.
  */
 tasks.register('testAll') {
     group = 'chrono dawn test'
@@ -325,6 +377,7 @@ tasks.register('testAll') {
         logger.lifecycle('====================================================')
         logger.lifecycle('Running unit tests for ALL supported Minecraft versions...')
         logger.lifecycle('Versions: 1.20.1, 1.21.1, 1.21.2')
+        logger.lifecycle('(1.21.3 excluded - shares modules with 1.21.2)')
         logger.lifecycle('====================================================')
         logger.lifecycle('')
     }
@@ -386,8 +439,11 @@ tasks.register('testAll') {
  *   2. validateResources - JSON syntax and cross-reference validation
  *   3. validateTranslations - Cross-version translation key validation
  *   4. buildAll - Build for all Minecraft versions (1.20.1, 1.21.1, 1.21.2)
- *   5. testAll - Run unit tests for all versions
- *   6. gameTestAll - Run GameTests for all versions and loaders
+ *   5. testAll - Run unit tests for all versions (1.20.1, 1.21.1, 1.21.2)
+ *   6. gameTestAll - Run GameTests for all versions including 1.21.3 runtime
+ *
+ * Note: 1.21.3 is only tested via gameTestAll (runtime verification).
+ * Build/unit tests use 1.21.2 modules which are compatible with 1.21.3.
  *
  * If any step fails, subsequent steps are skipped and the task fails.
  */
@@ -475,7 +531,10 @@ tasks.register('checkAll') {
  * Configurations are grouped by Minecraft version (3 parallel threads):
  *   Thread 1: :fabric:runGameTest (1.20.1)
  *   Thread 2: :fabric:runGameTest + :neoforge:runGameTestServer (1.21.1)
- *   Thread 3: :fabric:runGameTest + :neoforge:runGameTestServer (1.21.2)
+ *   Thread 3: :fabric:runGameTest + :neoforge:runGameTestServer (1.21.2, then 1.21.3)
+ *
+ * Note: 1.21.2 and 1.21.3 share the same modules (1.21.3 is a hotfix release),
+ * so they run sequentially in the same thread to avoid build conflicts.
  *
  * Within each version group, loaders run in a single Gradle process with
  * --parallel to avoid concurrent builds of the shared common module.
@@ -493,11 +552,16 @@ tasks.register('gameTestAll') {
         // (with --parallel) so Gradle properly orders task dependencies.
         // Different versions run as separate processes in parallel since they use
         // entirely separate build directories and common modules.
+        // Note: 1.21.2 and 1.21.3 share the same modules, so they run sequentially.
         def versionGroups = [
-            [version: '1.20.1', tasks: [':fabric:runGameTest']],
-            [version: '1.21.1', tasks: [':fabric:runGameTest', ':neoforge:runGameTestServer']],
-            [version: '1.21.2', tasks: [':fabric:runGameTest', ':neoforge:runGameTestServer']],
+            [versions: ['1.20.1'], tasks: [':fabric:runGameTest']],
+            [versions: ['1.21.1'], tasks: [':fabric:runGameTest', ':neoforge:runGameTestServer']],
+            // 1.21.2 and 1.21.3 share the same modules, so run sequentially in one thread
+            [versions: ['1.21.2', '1.21.3'], tasks: [':fabric:runGameTest', ':neoforge:runGameTestServer']],
         ]
+
+        // Map hotfix versions to their base module version for directory paths
+        def moduleVersionMap = ['1.21.3': '1.21.2']
 
         def passed = java.util.Collections.synchronizedList([])
         def failed = java.util.Collections.synchronizedList([])
@@ -509,56 +573,61 @@ tasks.register('gameTestAll') {
         def threads = []
 
         versionGroups.each { group ->
-            def version = group.version
-            def label = version
+            def groupLabel = group.versions.join('+')
 
-            logger.lifecycle(">>> Starting GameTests: version ${version}...")
+            logger.lifecycle(">>> Starting GameTests: versions ${groupLabel}...")
 
             def thread = new Thread({
-                def cmd = [gradlew]
-                cmd.addAll(group.tasks)
-                cmd.addAll([
-                    '-Ptarget_mc_version=' + version,
-                    '--project-cache-dir', '.gradle/gametest-' + version,
-                    '--parallel',
-                    '--stacktrace'
-                ])
+                // Run each version in the group sequentially
+                group.versions.each { version ->
+                    def moduleVersion = moduleVersionMap.getOrDefault(version, version)
 
-                def logFile = new File(logDir, 'gametest-' + version + '.log')
+                    def cmd = [gradlew]
+                    cmd.addAll(group.tasks)
+                    cmd.addAll([
+                        '-Ptarget_mc_version=' + version,
+                        '--project-cache-dir', '.gradle/gametest-' + version,
+                        '--parallel',
+                        '--stacktrace'
+                    ])
 
-                // Clean stale world directories to avoid session.lock conflicts
-                ['fabric', 'neoforge'].each { loader ->
-                    def worldDir = new File(projectDir, loader + '-' + version + '/run/world')
-                    if (worldDir.exists()) {
-                        worldDir.deleteDir()
-                    }
-                }
+                    def logFile = new File(logDir, 'gametest-' + version + '.log')
 
-                try {
-                    def pb = new ProcessBuilder(cmd)
-                    pb.directory(projectDir)
-                    pb.redirectErrorStream(true)
-                    pb.redirectOutput(logFile)
-
-                    def process = pb.start()
-                    def exitCode = process.waitFor()
-
-                    if (exitCode == 0) {
-                        // Extract loader names for reporting
-                        group.tasks.each { task ->
-                            def loader = task.split(':')[1]
-                            passed.add(loader + ' ' + version)
-                        }
-                    } else {
-                        group.tasks.each { task ->
-                            def loader = task.split(':')[1]
-                            failed.add(loader + ' ' + version + ' (see ' + logFile.absolutePath + ')')
+                    // Clean stale world directories to avoid session.lock conflicts
+                    // Use moduleVersion for directory path (1.21.3 uses fabric-1.21.2)
+                    ['fabric', 'neoforge'].each { loader ->
+                        def worldDir = new File(projectDir, loader + '-' + moduleVersion + '/run/world')
+                        if (worldDir.exists()) {
+                            worldDir.deleteDir()
                         }
                     }
-                } catch (Exception e) {
-                    failed.add(version + ' (' + e.message + ')')
+
+                    try {
+                        def pb = new ProcessBuilder(cmd)
+                        pb.directory(projectDir)
+                        pb.redirectErrorStream(true)
+                        pb.redirectOutput(logFile)
+
+                        def process = pb.start()
+                        def exitCode = process.waitFor()
+
+                        if (exitCode == 0) {
+                            // Extract loader names for reporting
+                            group.tasks.each { task ->
+                                def loader = task.split(':')[1]
+                                passed.add(loader + ' ' + version)
+                            }
+                        } else {
+                            group.tasks.each { task ->
+                                def loader = task.split(':')[1]
+                                failed.add(loader + ' ' + version + ' (see ' + logFile.absolutePath + ')')
+                            }
+                        }
+                    } catch (Exception e) {
+                        failed.add(version + ' (' + e.message + ')')
+                    }
                 }
-            }, 'gametest-' + version)
+            }, 'gametest-' + groupLabel)
 
             thread.start()
             threads.add(thread)
