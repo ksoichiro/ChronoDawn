@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/door_top_left_open",
+  "render_type": "minecraft:cutout",
   "textures": {
     "top": "chronodawn:block/dark_time_wood_door_top",
     "bottom": "chronodawn:block/dark_time_wood_door_bottom"

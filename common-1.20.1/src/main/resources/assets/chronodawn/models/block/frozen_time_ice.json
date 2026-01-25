@@ -1,4 +1,5 @@
 {
+  "render_type": "minecraft:translucent",
   "textures": {
     "outer": "chronodawn:block/frozen_time_ice_outer",
     "core": "chronodawn:block/frozen_time_ice_core",
