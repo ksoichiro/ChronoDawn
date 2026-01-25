@@ -358,6 +358,95 @@ tasks.register('testAll') {
 // ============================================================
 
 /**
+ * Run all verification tasks: cleanAll, validateResources, buildAll, testAll, gameTestAll
+ * Usage: ./gradlew checkAll
+ *
+ * This is the comprehensive verification task that runs all checks in sequence:
+ *   1. cleanAll - Clean all build outputs and IDE-generated directories
+ *   2. validateResources - JSON syntax and cross-reference validation
+ *   3. buildAll - Build for all Minecraft versions (1.20.1, 1.21.1, 1.21.2)
+ *   4. testAll - Run unit tests for all versions
+ *   5. gameTestAll - Run GameTests for all versions and loaders
+ *
+ * If any step fails, subsequent steps are skipped and the task fails.
+ */
+tasks.register('checkAll') {
+    group = 'chrono dawn verification'
+    description = 'Run all verification tasks: cleanAll, validateResources, buildAll, testAll, gameTestAll'
+
+    doFirst {
+        logger.lifecycle('')
+        logger.lifecycle('====================================================')
+        logger.lifecycle('Running ALL verification tasks...')
+        logger.lifecycle('====================================================')
+        logger.lifecycle('')
+    }
+
+    doLast {
+        def steps = [
+            [name: 'cleanAll', task: 'cleanAll'],
+            [name: 'validateResources', task: 'validateResources'],
+            [name: 'buildAll', task: 'buildAll'],
+            [name: 'testAll', task: 'testAll'],
+            [name: 'gameTestAll', task: 'gameTestAll'],
+        ]
+
+        def passed = []
+        def failed = null
+
+        steps.each { step ->
+            if (failed != null) {
+                logger.lifecycle(">>> Skipping ${step.name} (previous step failed)")
+                return
+            }
+
+            logger.lifecycle('')
+            logger.lifecycle(">>> Running ${step.name}...")
+            logger.lifecycle('')
+
+            try {
+                project.exec {
+                    commandLine './gradlew', step.task
+                    errorOutput = System.err
+                }
+                passed.add(step.name)
+                logger.lifecycle("SUCCESS: ${step.name}")
+            } catch (Exception e) {
+                failed = step.name
+                logger.error("FAILED: ${step.name}")
+            }
+        }
+
+        logger.lifecycle('')
+        logger.lifecycle('====================================================')
+        logger.lifecycle('Verification Summary:')
+        logger.lifecycle('====================================================')
+
+        passed.each { name ->
+            logger.lifecycle("   PASSED: ${name}")
+        }
+        if (failed != null) {
+            logger.lifecycle("   FAILED: ${failed}")
+            def skipped = steps.findAll { s -> !passed.contains(s.name) && s.name != failed }
+            skipped.each { s ->
+                logger.lifecycle("   SKIPPED: ${s.name}")
+            }
+        }
+
+        logger.lifecycle('')
+        logger.lifecycle("Total: ${passed.size()} passed, ${failed != null ? 1 : 0} failed, ${steps.size() - passed.size() - (failed != null ? 1 : 0)} skipped")
+        logger.lifecycle('====================================================')
+        logger.lifecycle('')
+
+        if (failed != null) {
+            throw new GradleException("Verification failed at: ${failed}")
+        }
+
+        logger.lifecycle('All verification tasks passed!')
+    }
+}
+
+/**
  * Run GameTests for all supported Minecraft versions and loaders
  * Usage: ./gradlew gameTestAll
  *

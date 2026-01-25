@@ -103,6 +103,14 @@ Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2): Follow standard conventions
 **Resource Validation**:
 - `./gradlew validateResources` - Check JSON syntax and cross-references (blockstate→model, model→texture)
 
+**Full Verification** (recommended before commits/PRs):
+- `./gradlew checkAll` - Run all verification tasks in sequence:
+  1. cleanAll - Clean all build outputs and IDE directories
+  2. validateResources - JSON syntax and cross-reference checks
+  3. buildAll - Build all versions
+  4. testAll - Run all unit tests
+  5. gameTestAll - Run all GameTests
+
 **Key Strategy**: Custom Gradle scripts + abstraction layer (`compat/` package) for API differences
 
 ## Development Notes

@@ -290,6 +290,10 @@ neoforge_version=21.2.0-beta
 # Validate resource files (JSON syntax + cross-references)
 ./gradlew validateResources
 
+# Run ALL verification tasks (recommended before commits/PRs)
+./gradlew checkAll
+# Runs in sequence: cleanAll → validateResources → buildAll → testAll → gameTestAll
+
 # Clean build artifacts
 ./gradlew clean
 ```
@@ -720,11 +724,19 @@ docs: improve player guide boss strategies
 
 ### Testing Requirements
 
-Before submitting PR:
-- [ ] All unit tests pass (`./gradlew test`)
-- [ ] Both loaders build successfully (`./gradlew build`)
-- [ ] GameTests pass (`./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.2`)
-- [ ] Resource validation passes (`./gradlew validateResources`)
+Before submitting PR, run full verification:
+```bash
+./gradlew checkAll
+```
+
+This single command runs all automated checks in sequence:
+- [ ] Clean all build outputs (cleanAll)
+- [ ] Resource validation passes (validateResources)
+- [ ] All versions build successfully (buildAll)
+- [ ] All unit tests pass (testAll)
+- [ ] All GameTests pass (gameTestAll)
+
+Additional manual checks:
 - [ ] Manual testing completed (launch game, test feature)
 - [ ] No new warnings or errors in logs
 - [ ] Documentation updated (if applicable)
