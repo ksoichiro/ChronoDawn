@@ -201,6 +201,13 @@ public final class RegistryDrivenTestGenerator {
     }
 
     /**
+     * Generates tests verifying block protection logic.
+     */
+    public static List<NamedTest> generateBlockProtectionTests() {
+        return BlockProtectionTests.generateTests(NamedTest::new);
+    }
+
+    /**
      * Generates tests verifying that all item registry IDs match their field names.
      */
     public static List<NamedTest> generateItemIdTests() {
@@ -434,6 +441,7 @@ public final class RegistryDrivenTestGenerator {
         all.addAll(generateAdvancementIsolationTests());
         all.addAll(generateStructureTests());
         all.addAll(generatePortalTests());
+        all.addAll(generateBlockProtectionTests());
         // Registry consistency tests (ModItemId/ModBlockId/ModEntityId/ModBlockEntityId enum verification)
         all.addAll(generateItemRegistryConsistencyTests());
         all.addAll(generateBlockRegistryConsistencyTests());
