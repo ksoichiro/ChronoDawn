@@ -70,6 +70,26 @@ tasks.register('cleanAll') {
             }
         }
 
+        // Clean IDE-generated bin/ directories that can interfere with builds/tests
+        // (e.g., IntelliJ/Eclipse output directories with unprocessed placeholders)
+        def subprojects = [
+            'common-1.20.1', 'common-1.21.1', 'common-1.21.2',
+            'fabric-1.20.1', 'fabric-1.21.1', 'fabric-1.21.2',
+            'neoforge-1.21.1', 'neoforge-1.21.2'
+        ]
+        def deletedCount = 0
+        subprojects.each { subdir ->
+            def binDir = file("${subdir}/bin")
+            if (binDir.exists()) {
+                logger.lifecycle(">>> Deleting IDE-generated directory: ${binDir}")
+                delete binDir
+                deletedCount++
+            }
+        }
+        if (deletedCount > 0) {
+            logger.lifecycle(">>> Deleted ${deletedCount} IDE-generated bin/ directories")
+        }
+
         logger.lifecycle('')
         logger.lifecycle('All versions cleaned successfully.')
     }
