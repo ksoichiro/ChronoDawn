@@ -378,21 +378,22 @@ tasks.register('testAll') {
 // ============================================================
 
 /**
- * Run all verification tasks: cleanAll, validateResources, buildAll, testAll, gameTestAll
+ * Run all verification tasks: cleanAll, validateResources, validateTranslations, buildAll, testAll, gameTestAll
  * Usage: ./gradlew checkAll
  *
  * This is the comprehensive verification task that runs all checks in sequence:
  *   1. cleanAll - Clean all build outputs and IDE-generated directories
  *   2. validateResources - JSON syntax and cross-reference validation
- *   3. buildAll - Build for all Minecraft versions (1.20.1, 1.21.1, 1.21.2)
- *   4. testAll - Run unit tests for all versions
- *   5. gameTestAll - Run GameTests for all versions and loaders
+ *   3. validateTranslations - Cross-version translation key validation
+ *   4. buildAll - Build for all Minecraft versions (1.20.1, 1.21.1, 1.21.2)
+ *   5. testAll - Run unit tests for all versions
+ *   6. gameTestAll - Run GameTests for all versions and loaders
  *
  * If any step fails, subsequent steps are skipped and the task fails.
  */
 tasks.register('checkAll') {
     group = 'chrono dawn verification'
-    description = 'Run all verification tasks: cleanAll, validateResources, buildAll, testAll, gameTestAll'
+    description = 'Run all verification tasks: cleanAll, validateResources, validateTranslations, buildAll, testAll, gameTestAll'
 
     doFirst {
         logger.lifecycle('')
@@ -406,6 +407,7 @@ tasks.register('checkAll') {
         def steps = [
             [name: 'cleanAll', task: 'cleanAll'],
             [name: 'validateResources', task: 'validateResources'],
+            [name: 'validateTranslations', task: 'validateTranslations'],
             [name: 'buildAll', task: 'buildAll'],
             [name: 'testAll', task: 'testAll'],
             [name: 'gameTestAll', task: 'gameTestAll'],

@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * JUnit 5 resource validation tests.
+ * JUnit 5 resource validation tests for Minecraft 1.21.1.
  *
  * These tests verify the existence of blockstate JSON, item model JSON,
  * and translation keys without requiring a Minecraft server environment.
@@ -242,32 +242,17 @@ public class ResourceValidationTest {
                     assertNotNull(ingredients, "Recipe has no ingredients: " + recipePath);
                     assertTrue(!ingredients.isEmpty(), "Recipe has empty ingredients: " + recipePath);
                     Object ingredient = ingredients.get(0);
-                    // 1.21.2: ingredient is a String like "#chronodawn:time_wood_logs"
-                    // Earlier versions: ingredient is a Map with "tag" key
-                    String expectedTag = "chronodawn:" + family + "_logs";
-                    if (ingredient instanceof String) {
-                        // 1.21.2 format: "#tagname"
-                        String ingredientStr = (String) ingredient;
-                        assertTrue(
-                            ingredientStr.equals("#" + expectedTag),
-                            "Planks recipe for " + family + " should use tag '#" +
-                            expectedTag + "' but got: " + ingredientStr
-                        );
-                    } else if (ingredient instanceof Map) {
-                        // 1.20.1/1.21.1 format: {tag: "tagname"}
-                        @SuppressWarnings("unchecked")
-                        Map<String, Object> ingredientMap = (Map<String, Object>) ingredient;
-                        String tagValue = (String) ingredientMap.get("tag");
-                        assertNotNull(tagValue,
-                            "Planks recipe for " + family + " should use tag-based ingredient");
-                        assertTrue(
-                            tagValue.equals(expectedTag),
-                            "Planks recipe for " + family + " should use tag '" +
-                            expectedTag + "' but got: " + tagValue
-                        );
-                    } else {
-                        throw new AssertionError("Unexpected ingredient type: " + ingredient.getClass());
-                    }
+                    // The ingredient is a Map with a "tag" key when using tag-based ingredients
+                    @SuppressWarnings("unchecked")
+                    Map<String, Object> ingredientMap = (Map<String, Object>) ingredient;
+                    String tagValue = (String) ingredientMap.get("tag");
+                    assertNotNull(tagValue,
+                        "Planks recipe for " + family + " should use tag-based ingredient");
+                    assertTrue(
+                        tagValue.equals("chronodawn:" + family + "_logs"),
+                        "Planks recipe for " + family + " should use tag 'chronodawn:" +
+                        family + "_logs' but got: " + tagValue
+                    );
                 }
             }));
         }
@@ -301,7 +286,7 @@ public class ResourceValidationTest {
         if (sourceDir == null) {
             throw new IllegalStateException(
                 "System property 'chronodawn.source.dir' not set. " +
-                "Run tests via Gradle: ./gradlew :common-1.21.2:test"
+                "Run tests via Gradle: ./gradlew :common-1.21.1:test -Ptarget_mc_version=1.21.1"
             );
         }
         Path filePath = Paths.get(sourceDir, "com", "chronodawn", "registry", fileName);

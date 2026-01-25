@@ -120,6 +120,8 @@ tasks.test {
 
     // Pass Minecraft version to tests for multi-version resource path resolution
     systemProperty 'chronodawn.minecraft.version', project.ext.minecraft_version
+    // Pass source directory for source-parsing based resource validation tests
+    systemProperty 'chronodawn.source.dir', file('src/main/java').absolutePath
 }
 
 // Set duplicates strategy for sourcesJar to avoid conflicts

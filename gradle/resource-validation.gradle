@@ -94,6 +94,92 @@ tasks.register('validateResources') {
     }
 }
 
+// Cross-version translation validation task
+// Validates that all registered entities/items have translations in all versions
+tasks.register('validateTranslations') {
+    group = 'verification'
+    description = 'Validates that translation keys exist across all Minecraft versions'
+
+    doLast {
+        def versions = ['1.20.1', '1.21.1', '1.21.2']
+        def jsonSlurper = new JsonSlurper()
+        def errors = []
+
+        // Parse ModEntityId.java to get entity IDs
+        def entityIdFile = file("${rootProject.projectDir}/common-shared/src/main/java/com/chronodawn/registry/ModEntityId.java")
+        def entityIds = extractEnumValues(entityIdFile)
+
+        // Parse ModItemId.java to get item IDs
+        def itemIdFile = file("${rootProject.projectDir}/common-shared/src/main/java/com/chronodawn/registry/ModItemId.java")
+        def itemIds = extractEnumValues(itemIdFile)
+
+        // Technical entities that don't need translations
+        def excludedEntities = ['gear_projectile', 'time_arrow', 'time_blast']
+
+        logger.lifecycle("Validating translations across ${versions.size()} versions...")
+        logger.lifecycle("  Found ${entityIds.size()} entities and ${itemIds.size()} items to validate")
+
+        versions.each { version ->
+            def langFile = file("${rootProject.projectDir}/common-${version}/src/main/resources/assets/chronodawn/lang/en_us.json")
+            if (!langFile.exists()) {
+                errors << "[${version}] Language file not found: ${langFile.path}"
+                return
+            }
+
+            def langMap = jsonSlurper.parseText(langFile.text)
+
+            // Check entity translations
+            entityIds.each { entityId ->
+                if (excludedEntities.contains(entityId)) return
+                // Use toString() to convert GString to String for proper Map key lookup
+                def key = "entity.chronodawn.${entityId}".toString()
+                if (!langMap.containsKey(key)) {
+                    errors << "[${version}] Missing entity translation: ${key}"
+                }
+            }
+
+            // Check spawn egg translations
+            entityIds.each { entityId ->
+                if (excludedEntities.contains(entityId)) return
+                // Use toString() to convert GString to String for proper Map key lookup
+                def key = "item.chronodawn.${entityId}_spawn_egg".toString()
+                def spawnEggItemId = "${entityId}_spawn_egg".toString()
+                // Only check if the spawn egg item exists in ModItemId
+                if (itemIds.contains(spawnEggItemId)) {
+                    if (!langMap.containsKey(key)) {
+                        errors << "[${version}] Missing spawn egg translation: ${key}"
+                    }
+                }
+            }
+        }
+
+        // Report results
+        if (errors.isEmpty()) {
+            logger.lifecycle("Cross-version translation validation passed.")
+        } else {
+            logger.lifecycle("")
+            errors.each { logger.error("  ERROR: ${it}") }
+            throw new GradleException("Translation validation failed with ${errors.size()} error(s)")
+        }
+    }
+}
+
+// Extract enum values from a ModXxxId.java file
+// Matches patterns like: ENTITY_NAME("entity_name"),
+def extractEnumValues(File file) {
+    def ids = []
+    if (!file.exists()) {
+        return ids
+    }
+    def content = file.text
+    def pattern = ~/(\w+)\s*\(\s*"([^"]+)"\s*\)/
+    def matcher = pattern.matcher(content)
+    while (matcher.find()) {
+        ids << matcher.group(2)  // The string value in parentheses
+    }
+    return ids
+}
+
 // Extract all model references from a blockstate JSON structure
 def extractModelReferences(Object node) {
     def models = []
