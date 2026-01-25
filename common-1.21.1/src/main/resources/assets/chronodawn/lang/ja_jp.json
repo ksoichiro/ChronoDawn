@@ -231,6 +231,9 @@
   "entity.chronodawn.forgotten_minute": "フォーゴトン・ミニット",
   "entity.chronodawn.chronal_leech": "クロナル・リーチ",
   "entity.chronodawn.moment_creeper": "モーメント・クリーパー",
+  "entity.chronodawn.glide_fish": "グライドフィッシュ",
+  "entity.chronodawn.secondhand_archer": "セカンドハンド・アーチャー",
+  "entity.chronodawn.paradox_crawler": "パラドックス・クローラー",
 
   "biome.chronodawn.chronodawn_plains": "クロノドーン平原",
   "biome.chronodawn.chronodawn_ocean": "クロノドーン海洋",
@@ -324,6 +327,12 @@
   "item.chronodawn.forgotten_minute_spawn_egg": "フォーゴトン・ミニットのスポーンエッグ",
   "item.chronodawn.chronal_leech_spawn_egg": "クロナル・リーチのスポーンエッグ",
   "item.chronodawn.moment_creeper_spawn_egg": "モーメント・クリーパーのスポーンエッグ",
+  "item.chronodawn.glide_fish_spawn_egg": "グライドフィッシュのスポーンエッグ",
+  "item.chronodawn.timeline_strider_spawn_egg": "タイムライン・ストライダーのスポーンエッグ",
+  "item.chronodawn.secondhand_archer_spawn_egg": "セカンドハンド・アーチャーのスポーンエッグ",
+  "item.chronodawn.paradox_crawler_spawn_egg": "パラドックス・クローラーのスポーンエッグ",
+  "item.chronodawn.glide_fish": "グライドフィッシュ",
+  "item.chronodawn.cooked_glide_fish": "焼きグライドフィッシュ",
 
   "item.chronodawn.time_wood_boat": "時の木のボート",
   "item.chronodawn.time_wood_chest_boat": "チェスト付き時の木のボート",

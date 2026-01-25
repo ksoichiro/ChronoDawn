@@ -26,12 +26,17 @@ import com.chronodawn.entities.bosses.TimeGuardianEntity;
 import com.chronodawn.entities.bosses.TimeTyrantEntity;
 import com.chronodawn.entities.mobs.ClockworkSentinelEntity;
 import com.chronodawn.entities.mobs.FloqEntity;
+import com.chronodawn.entities.mobs.GlideFishEntity;
+import com.chronodawn.entities.mobs.ParadoxCrawlerEntity;
+import com.chronodawn.entities.mobs.SecondhandArcherEntity;
+import com.chronodawn.entities.mobs.TimelineStriderEntity;
 import com.chronodawn.entities.mobs.TemporalWraithEntity;
 import com.chronodawn.entities.mobs.TimeKeeperEntity;
 import com.chronodawn.entities.mobs.EpochHuskEntity;
 import com.chronodawn.entities.mobs.ForgottenMinuteEntity;
 import com.chronodawn.entities.mobs.ChronalLeechEntity;
 import com.chronodawn.entities.mobs.MomentCreeperEntity;
+import com.chronodawn.entities.mobs.ChronoTurtleEntity;
 import com.chronodawn.neoforge.registry.ModFluidTypes;
 import com.chronodawn.neoforge.registry.ModLootModifiers;
 import com.chronodawn.neoforge.registry.ModParticles;
@@ -241,6 +246,31 @@ public class ChronoDawnNeoForge {
             MomentCreeperEntity.createAttributes().build()
         );
 
+        event.put(
+            ModEntities.GLIDE_FISH.get(),
+            GlideFishEntity.createAttributes().build()
+        );
+
+        event.put(
+            ModEntities.TIMELINE_STRIDER.get(),
+            TimelineStriderEntity.createAttributes().build()
+        );
+
+        event.put(
+            ModEntities.SECONDHAND_ARCHER.get(),
+            SecondhandArcherEntity.createAttributes().build()
+        );
+
+        event.put(
+            ModEntities.PARADOX_CRAWLER.get(),
+            ParadoxCrawlerEntity.createAttributes().build()
+        );
+
+        event.put(
+            ModEntities.CHRONO_TURTLE.get(),
+            ChronoTurtleEntity.createAttributes().build()
+        );
+
         ChronoDawn.LOGGER.info("Registered entity attributes for NeoForge");
     }
 
@@ -332,6 +362,51 @@ public class ChronoDawnNeoForge {
             SpawnPlacementTypes.ON_GROUND,
             Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             MomentCreeperEntity::checkMomentCreeperSpawnRules,
+            RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+
+        // GlideFish - spawns in water
+        event.register(
+            ModEntities.GLIDE_FISH.get(),
+            SpawnPlacementTypes.IN_WATER,
+            Heightmap.Types.OCEAN_FLOOR,
+            net.minecraft.world.entity.animal.WaterAnimal::checkSurfaceWaterAnimalSpawnRules,
+            RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+
+        // Timeline Strider - spawns on ground in daylight
+        event.register(
+            ModEntities.TIMELINE_STRIDER.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            TimelineStriderEntity::checkTimelineStriderSpawnRules,
+            RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+
+        // Secondhand Archer - spawns on ground in daylight
+        event.register(
+            ModEntities.SECONDHAND_ARCHER.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            SecondhandArcherEntity::checkSecondhandArcherSpawnRules,
+            RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+
+        // Paradox Crawler - spawns on ground in daylight
+        event.register(
+            ModEntities.PARADOX_CRAWLER.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            ParadoxCrawlerEntity::checkParadoxCrawlerSpawnRules,
+            RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+
+        // Chrono Turtle - spawns in water
+        event.register(
+            ModEntities.CHRONO_TURTLE.get(),
+            SpawnPlacementTypes.IN_WATER,
+            Heightmap.Types.OCEAN_FLOOR,
+            net.minecraft.world.entity.animal.WaterAnimal::checkSurfaceWaterAnimalSpawnRules,
             RegisterSpawnPlacementsEvent.Operation.REPLACE
         );
 

@@ -34,7 +34,7 @@
         "maxCount": 4
       },
       {
-        "type": "minecraft:skeleton",
+        "type": "chronodawn:secondhand_archer",
         "weight": 100,
         "minCount": 4,
         "maxCount": 4
@@ -46,13 +46,13 @@
         "maxCount": 4
       },
       {
-        "type": "minecraft:spider",
+        "type": "chronodawn:paradox_crawler",
         "weight": 100,
         "minCount": 4,
         "maxCount": 4
       },
       {
-        "type": "minecraft:enderman",
+        "type": "chronodawn:timeline_strider",
         "weight": 10,
         "minCount": 1,
         "maxCount": 4
@@ -80,7 +80,14 @@
         "maxCount": 6
       }
     ],
-    "water_creature": [],
+    "water_creature": [
+      {
+        "type": "chronodawn:glide_fish",
+        "weight": 10,
+        "minCount": 1,
+        "maxCount": 3
+      }
+    ],
     "water_ambient": [
       {
         "type": "minecraft:tropical_fish",

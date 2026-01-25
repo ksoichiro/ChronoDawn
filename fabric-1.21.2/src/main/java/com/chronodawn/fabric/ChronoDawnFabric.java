@@ -29,8 +29,13 @@ import com.chronodawn.entities.mobs.ClockworkSentinelEntity;
 import com.chronodawn.entities.mobs.EpochHuskEntity;
 import com.chronodawn.entities.mobs.FloqEntity;
 import com.chronodawn.entities.mobs.ForgottenMinuteEntity;
+import com.chronodawn.entities.mobs.GlideFishEntity;
 import com.chronodawn.entities.mobs.MomentCreeperEntity;
+import com.chronodawn.entities.mobs.ParadoxCrawlerEntity;
+import com.chronodawn.entities.mobs.SecondhandArcherEntity;
+import com.chronodawn.entities.mobs.ChronoTurtleEntity;
 import com.chronodawn.entities.mobs.TemporalWraithEntity;
+import com.chronodawn.entities.mobs.TimelineStriderEntity;
 import com.chronodawn.entities.mobs.TimeKeeperEntity;
 import com.chronodawn.fabric.event.BlockProtectionEventHandler;
 import com.chronodawn.registry.ModEntities;
@@ -162,6 +167,31 @@ public class ChronoDawnFabric implements ModInitializer {
             MomentCreeperEntity.createAttributes()
         );
 
+        FabricDefaultAttributeRegistry.register(
+            ModEntities.GLIDE_FISH.get(),
+            GlideFishEntity.createAttributes()
+        );
+
+        FabricDefaultAttributeRegistry.register(
+            ModEntities.TIMELINE_STRIDER.get(),
+            TimelineStriderEntity.createAttributes()
+        );
+
+        FabricDefaultAttributeRegistry.register(
+            ModEntities.SECONDHAND_ARCHER.get(),
+            SecondhandArcherEntity.createAttributes()
+        );
+
+        FabricDefaultAttributeRegistry.register(
+            ModEntities.PARADOX_CRAWLER.get(),
+            ParadoxCrawlerEntity.createAttributes()
+        );
+
+        FabricDefaultAttributeRegistry.register(
+            ModEntities.CHRONO_TURTLE.get(),
+            ChronoTurtleEntity.createAttributes()
+        );
+
         ChronoDawn.LOGGER.info("Registered entity attributes for Fabric");
     }
 
@@ -232,6 +262,46 @@ public class ChronoDawnFabric implements ModInitializer {
             SpawnPlacementTypes.ON_GROUND,
             Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             MomentCreeperEntity::checkMomentCreeperSpawnRules
+        );
+
+        // GlideFish - spawns in water
+        SpawnPlacements.register(
+            ModEntities.GLIDE_FISH.get(),
+            SpawnPlacementTypes.IN_WATER,
+            Heightmap.Types.OCEAN_FLOOR,
+            net.minecraft.world.entity.animal.WaterAnimal::checkSurfaceWaterAnimalSpawnRules
+        );
+
+        // Timeline Strider - spawns on ground in daylight (Monster with any light)
+        SpawnPlacements.register(
+            ModEntities.TIMELINE_STRIDER.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            TimelineStriderEntity::checkTimelineStriderSpawnRules
+        );
+
+        // Secondhand Archer - spawns on ground in daylight
+        SpawnPlacements.register(
+            ModEntities.SECONDHAND_ARCHER.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            SecondhandArcherEntity::checkSecondhandArcherSpawnRules
+        );
+
+        // Paradox Crawler - spawns on ground in daylight
+        SpawnPlacements.register(
+            ModEntities.PARADOX_CRAWLER.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            ParadoxCrawlerEntity::checkParadoxCrawlerSpawnRules
+        );
+
+        // Chrono Turtle - spawns in water
+        SpawnPlacements.register(
+            ModEntities.CHRONO_TURTLE.get(),
+            SpawnPlacementTypes.IN_WATER,
+            Heightmap.Types.OCEAN_FLOOR,
+            net.minecraft.world.entity.animal.WaterAnimal::checkSurfaceWaterAnimalSpawnRules
         );
 
         ChronoDawn.LOGGER.info("Registered spawn placements for custom mobs");

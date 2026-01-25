@@ -9,6 +9,10 @@ import com.chronodawn.entities.bosses.TimeGuardianEntity;
 import com.chronodawn.entities.bosses.TimeTyrantEntity;
 import com.chronodawn.entities.mobs.ClockworkSentinelEntity;
 import com.chronodawn.entities.mobs.FloqEntity;
+import com.chronodawn.entities.mobs.GlideFishEntity;
+import com.chronodawn.entities.mobs.ParadoxCrawlerEntity;
+import com.chronodawn.entities.mobs.SecondhandArcherEntity;
+import com.chronodawn.entities.mobs.TimelineStriderEntity;
 import com.chronodawn.entities.mobs.TemporalWraithEntity;
 import com.chronodawn.entities.mobs.TimeKeeperEntity;
 import com.chronodawn.entities.mobs.EpochHuskEntity;
@@ -304,6 +308,83 @@ public class ModEntities {
             .clientTrackingRange(10)
             .updateInterval(3)
             .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "entropy_keeper")))
+    );
+
+    /**
+     * GlideFish - Water Creature
+     *
+     * A small fish that spawns in ChronoDawn dimension waters.
+     * Behaves similarly to vanilla Cod/Salmon.
+     */
+    public static final RegistrySupplier<EntityType<GlideFishEntity>> GLIDE_FISH = ENTITIES.register(
+        "glide_fish",
+        () -> EntityType.Builder.of(GlideFishEntity::new, MobCategory.WATER_CREATURE)
+            .sized(0.5f, 0.3f)
+            .clientTrackingRange(8)
+            .updateInterval(3)
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "glide_fish")))
+    );
+
+    /**
+     * Timeline Strider - Enderman-like hostile mob with teleportation.
+     *
+     * Neutral until stared at, teleports when damaged.
+     * Drops Time Crystal.
+     */
+    public static final RegistrySupplier<EntityType<TimelineStriderEntity>> TIMELINE_STRIDER = ENTITIES.register(
+        "timeline_strider",
+        () -> EntityType.Builder.of(TimelineStriderEntity::new, MobCategory.MONSTER)
+            .sized(0.6f, 2.9f)
+            .clientTrackingRange(8)
+            .updateInterval(3)
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "timeline_strider")))
+    );
+
+    /**
+     * Paradox Crawler - Spider-like hostile mob with wall climbing.
+     *
+     * Has wall climbing ability and leap attacks.
+     * Replaces Spider spawns in ChronoDawn dimension.
+     */
+    public static final RegistrySupplier<EntityType<ParadoxCrawlerEntity>> PARADOX_CRAWLER = ENTITIES.register(
+        "paradox_crawler",
+        () -> EntityType.Builder.of(ParadoxCrawlerEntity::new, MobCategory.MONSTER)
+            .sized(1.4f, 0.9f)
+            .clientTrackingRange(8)
+            .updateInterval(3)
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "paradox_crawler")))
+    );
+
+    /**
+     * Secondhand Archer - Skeleton-like hostile mob with bow attacks.
+     *
+     * Spawns with a bow and attacks with arrows.
+     * Replaces Skeleton spawns in ChronoDawn dimension.
+     * Drops bones, damaged bow, arrows, and rarely Ancient Gears.
+     */
+    public static final RegistrySupplier<EntityType<SecondhandArcherEntity>> SECONDHAND_ARCHER = ENTITIES.register(
+        "secondhand_archer",
+        () -> EntityType.Builder.of(SecondhandArcherEntity::new, MobCategory.MONSTER)
+            .sized(0.6f, 1.99f)
+            .clientTrackingRange(8)
+            .updateInterval(3)
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "secondhand_archer")))
+    );
+
+    /**
+     * Chrono Turtle - Friendly water creature
+     *
+     * Spawns in water biomes of ChronoDawn dimension.
+     * Behaves similarly to vanilla Turtle with smooth swimming.
+     * Drops Turtle Scute with a chance when killed.
+     */
+    public static final RegistrySupplier<EntityType<com.chronodawn.entities.mobs.ChronoTurtleEntity>> CHRONO_TURTLE = ENTITIES.register(
+        "chrono_turtle",
+        () -> EntityType.Builder.of(com.chronodawn.entities.mobs.ChronoTurtleEntity::new, MobCategory.WATER_CREATURE)
+            .sized(1.2f, 0.4f)  // Similar to vanilla turtle
+            .clientTrackingRange(8)
+            .updateInterval(3)
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, "chrono_turtle")))
     );
 
     // === Boat Entities ===

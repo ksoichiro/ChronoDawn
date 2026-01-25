@@ -1332,6 +1332,36 @@ public class ModItems {
         () -> new AncientGearItem(AncientGearItem.createProperties())
     );
 
+    // === Mob Drops ===
+
+    /**
+     * Glide Fish - Food item dropped by Glide Fish.
+     * Nutrition: 2, Saturation: 0.1
+     */
+    public static final RegistrySupplier<Item> GLIDE_FISH = ITEMS.register(
+        "glide_fish",
+        () -> new Item(new Item.Properties().food(
+            new net.minecraft.world.food.FoodProperties.Builder()
+                .nutrition(2)
+                .saturationModifier(0.1f)
+                .build()
+        ))
+    );
+
+    /**
+     * Cooked Glide Fish - Cooked version of Glide Fish.
+     * Nutrition: 5, Saturation: 0.6 (equivalent to cooked cod).
+     */
+    public static final RegistrySupplier<Item> COOKED_GLIDE_FISH = ITEMS.register(
+        "cooked_glide_fish",
+        () -> new Item(new Item.Properties().food(
+            new net.minecraft.world.food.FoodProperties.Builder()
+                .nutrition(5)
+                .saturationModifier(0.6f)
+                .build()
+        ))
+    );
+
     // === Spawn Eggs ===
 
     /**
@@ -1532,6 +1562,66 @@ public class ModItems {
         )
     );
 
+    /**
+     * Glide Fish Spawn Egg - For creative mode and debugging.
+     * Primary color: Light blue (0x87CEEB) - Background
+     * Secondary color: Silver (0xC0C0C0) - Spots
+     */
+    public static final RegistrySupplier<Item> GLIDE_FISH_SPAWN_EGG = ITEMS.register(
+        "glide_fish_spawn_egg",
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.GLIDE_FISH,
+            0x87CEEB, // Background: Light blue
+            0xC0C0C0, // Spots: Silver
+            new Item.Properties()
+        )
+    );
+
+    public static final RegistrySupplier<Item> TIMELINE_STRIDER_SPAWN_EGG = ITEMS.register(
+        "timeline_strider_spawn_egg",
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.TIMELINE_STRIDER,
+            0x1B1B3A, // Background: Dark navy
+            0xFFD700, // Spots: Golden yellow
+            new Item.Properties()
+        )
+    );
+
+    public static final RegistrySupplier<Item> SECONDHAND_ARCHER_SPAWN_EGG = ITEMS.register(
+        "secondhand_archer_spawn_egg",
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.SECONDHAND_ARCHER,
+            0x7A6B5A, // Background: Brownish-gray
+            0xD4C4A8, // Spots: Light tan/bone
+            new Item.Properties()
+        )
+    );
+
+    public static final RegistrySupplier<Item> PARADOX_CRAWLER_SPAWN_EGG = ITEMS.register(
+        "paradox_crawler_spawn_egg",
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.PARADOX_CRAWLER,
+            0x2B2B4A, // Background: Dark indigo
+            0x4FC3F7, // Spots: Bright cyan
+            new Item.Properties()
+        )
+    );
+
+    /**
+     * Chrono Turtle Spawn Egg - For creative mode and debugging.
+     * Primary color: Deep teal-green (0x3D7A5A) - Background (shell color)
+     * Secondary color: Light sea green (0x8BC4A4) - Spots (accent)
+     */
+    public static final RegistrySupplier<Item> CHRONO_TURTLE_SPAWN_EGG = ITEMS.register(
+        "chrono_turtle_spawn_egg",
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.CHRONO_TURTLE,
+            0x3D7A5A, // Background: Deep teal-green (shell color)
+            0x8BC4A4, // Spots: Light sea green (accent)
+            new Item.Properties()
+        )
+    );
+
     // === Boats ===
 
     /**
@@ -1659,6 +1749,26 @@ public class ModItems {
 
         if (MOMENT_CREEPER_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
             ((com.chronodawn.items.DeferredSpawnEggItem) MOMENT_CREEPER_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (GLIDE_FISH_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) GLIDE_FISH_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (TIMELINE_STRIDER_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) TIMELINE_STRIDER_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (SECONDHAND_ARCHER_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) SECONDHAND_ARCHER_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (PARADOX_CRAWLER_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) PARADOX_CRAWLER_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (CHRONO_TURTLE_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) CHRONO_TURTLE_SPAWN_EGG.get()).initializeSpawnEgg();
         }
 
         ChronoDawn.LOGGER.info("Spawn eggs initialized");
@@ -1881,5 +1991,24 @@ public class ModItems {
         if (MOMENT_CREEPER_SPAWN_EGG.isPresent()) {
             output.accept(MOMENT_CREEPER_SPAWN_EGG.get());
         }
+        if (GLIDE_FISH_SPAWN_EGG.isPresent()) {
+            output.accept(GLIDE_FISH_SPAWN_EGG.get());
+        }
+        if (TIMELINE_STRIDER_SPAWN_EGG.isPresent()) {
+            output.accept(TIMELINE_STRIDER_SPAWN_EGG.get());
+        }
+        if (SECONDHAND_ARCHER_SPAWN_EGG.isPresent()) {
+            output.accept(SECONDHAND_ARCHER_SPAWN_EGG.get());
+        }
+        if (PARADOX_CRAWLER_SPAWN_EGG.isPresent()) {
+            output.accept(PARADOX_CRAWLER_SPAWN_EGG.get());
+        }
+        if (CHRONO_TURTLE_SPAWN_EGG.isPresent()) {
+            output.accept(CHRONO_TURTLE_SPAWN_EGG.get());
+        }
+
+        // === Mob Drops ===
+        output.accept(GLIDE_FISH.get());
+        output.accept(COOKED_GLIDE_FISH.get());
     }
 }

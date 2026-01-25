@@ -231,6 +231,10 @@
   "entity.chronodawn.forgotten_minute": "Forgotten Minute",
   "entity.chronodawn.chronal_leech": "Chronal Leech",
   "entity.chronodawn.moment_creeper": "Moment Creeper",
+  "entity.chronodawn.glide_fish": "Glide Fish",
+  "entity.chronodawn.timeline_strider": "Timeline Strider",
+  "entity.chronodawn.secondhand_archer": "Secondhand Archer",
+  "entity.chronodawn.paradox_crawler": "Paradox Crawler",
 
   "biome.chronodawn.chronodawn_plains": "Chrono Dawn Plains",
   "biome.chronodawn.chronodawn_ocean": "Chrono Dawn Ocean",
@@ -324,6 +328,12 @@
   "item.chronodawn.forgotten_minute_spawn_egg": "Forgotten Minute Spawn Egg",
   "item.chronodawn.chronal_leech_spawn_egg": "Chronal Leech Spawn Egg",
   "item.chronodawn.moment_creeper_spawn_egg": "Moment Creeper Spawn Egg",
+  "item.chronodawn.glide_fish_spawn_egg": "Glide Fish Spawn Egg",
+  "item.chronodawn.timeline_strider_spawn_egg": "Timeline Strider Spawn Egg",
+  "item.chronodawn.secondhand_archer_spawn_egg": "Secondhand Archer Spawn Egg",
+  "item.chronodawn.paradox_crawler_spawn_egg": "Paradox Crawler Spawn Egg",
+  "item.chronodawn.glide_fish": "Glide Fish",
+  "item.chronodawn.cooked_glide_fish": "Cooked Glide Fish",
 
   "item.chronodawn.time_wood_boat": "Time Wood Boat",
   "item.chronodawn.time_wood_chest_boat": "Time Wood Boat with Chest",

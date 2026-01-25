@@ -14,6 +14,10 @@ import com.chronodawn.entities.mobs.EpochHuskEntity;
 import com.chronodawn.entities.mobs.ForgottenMinuteEntity;
 import com.chronodawn.entities.mobs.ChronalLeechEntity;
 import com.chronodawn.entities.mobs.MomentCreeperEntity;
+import com.chronodawn.entities.mobs.GlideFishEntity;
+import com.chronodawn.entities.mobs.ParadoxCrawlerEntity;
+import com.chronodawn.entities.mobs.SecondhandArcherEntity;
+import com.chronodawn.entities.mobs.TimelineStriderEntity;
 import com.chronodawn.entities.boats.ChronoDawnBoat;
 import com.chronodawn.entities.boats.ChronoDawnChestBoat;
 import com.chronodawn.entities.projectiles.TimeArrowEntity;
@@ -302,6 +306,64 @@ public class ModEntities {
             .clientTrackingRange(10)
             .updateInterval(3)
             .build("entropy_keeper")
+    );
+
+    /**
+     * GlideFish - Water creature that spawns in ChronoDawn dimension waters.
+     * Behaves like vanilla Cod/Salmon with smooth swimming movement.
+     */
+    public static final RegistrySupplier<EntityType<GlideFishEntity>> GLIDE_FISH = ENTITIES.register(
+        "glide_fish",
+        () -> EntityType.Builder.of(GlideFishEntity::new, MobCategory.WATER_CREATURE)
+            .sized(0.5f, 0.3f)
+            .clientTrackingRange(8)
+            .updateInterval(3)
+            .build("glide_fish")
+    );
+
+    /**
+     * Paradox Crawler - Spider-like hostile mob that climbs walls.
+     *
+     * A temporal arachnid creature that crawls on surfaces.
+     * Drops string and spider eyes.
+     */
+    public static final RegistrySupplier<EntityType<ParadoxCrawlerEntity>> PARADOX_CRAWLER = ENTITIES.register(
+        "paradox_crawler",
+        () -> EntityType.Builder.of(ParadoxCrawlerEntity::new, MobCategory.MONSTER)
+            .sized(1.4f, 0.9f)
+            .clientTrackingRange(8)
+            .updateInterval(3)
+            .build("paradox_crawler")
+    );
+
+    /**
+     * Secondhand Archer - Skeleton-like hostile mob with ranged bow attacks.
+     *
+     * Spawns with a bow and attacks players with arrows.
+     * Replaces Skeleton spawns in the Chrono Dawn dimension.
+     */
+    public static final RegistrySupplier<EntityType<SecondhandArcherEntity>> SECONDHAND_ARCHER = ENTITIES.register(
+        "secondhand_archer",
+        () -> EntityType.Builder.of(SecondhandArcherEntity::new, MobCategory.MONSTER)
+            .sized(0.6f, 1.99f)
+            .clientTrackingRange(8)
+            .updateInterval(3)
+            .build("secondhand_archer")
+    );
+
+    /**
+     * Timeline Strider - Enderman-like hostile mob with teleportation.
+     *
+     * Neutral until stared at, teleports when damaged.
+     * Drops Time Crystal.
+     */
+    public static final RegistrySupplier<EntityType<TimelineStriderEntity>> TIMELINE_STRIDER = ENTITIES.register(
+        "timeline_strider",
+        () -> EntityType.Builder.of(TimelineStriderEntity::new, MobCategory.MONSTER)
+            .sized(0.6f, 2.9f)
+            .clientTrackingRange(8)
+            .updateInterval(3)
+            .build("timeline_strider")
     );
 
     // === Boat Entities ===

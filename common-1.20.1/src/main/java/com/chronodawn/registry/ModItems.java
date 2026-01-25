@@ -1532,6 +1532,79 @@ public class ModItems {
         )
     );
 
+    // === Water Creature Items ===
+
+    /**
+     * Glide Fish - Food item dropped by GlideFish.
+     * Restores 2 hunger points.
+     */
+    public static final RegistrySupplier<Item> GLIDE_FISH = ITEMS.register(
+        "glide_fish",
+        () -> new Item(new Item.Properties()
+                .food(new net.minecraft.world.food.FoodProperties.Builder()
+                    .nutrition(2)
+                    .saturationMod(0.1f)
+                    .build()))
+    );
+
+    /**
+     * Cooked Glide Fish - Cooked version of Glide Fish.
+     * Nutrition: 5, Saturation: 0.6 (equivalent to cooked cod).
+     */
+    public static final RegistrySupplier<Item> COOKED_GLIDE_FISH = ITEMS.register(
+        "cooked_glide_fish",
+        () -> new Item(new Item.Properties()
+                .food(new net.minecraft.world.food.FoodProperties.Builder()
+                    .nutrition(5)
+                    .saturationMod(0.6f)
+                    .build()))
+    );
+
+    /**
+     * Glide Fish Spawn Egg - For creative mode and debugging.
+     * Primary color: Steel blue (0x4682B4) - Background
+     * Secondary color: Sky blue (0x87CEEB) - Spots
+     */
+    public static final RegistrySupplier<Item> GLIDE_FISH_SPAWN_EGG = ITEMS.register(
+        "glide_fish_spawn_egg",
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.GLIDE_FISH,
+            0x4682B4, // Background: Steel blue
+            0x87CEEB, // Spots: Sky blue
+            new Item.Properties()
+        )
+    );
+
+    public static final RegistrySupplier<Item> TIMELINE_STRIDER_SPAWN_EGG = ITEMS.register(
+        "timeline_strider_spawn_egg",
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.TIMELINE_STRIDER,
+            0x1B1B3A, // Background: Dark navy
+            0xFFD700, // Spots: Golden yellow
+            new Item.Properties()
+        )
+    );
+
+    public static final RegistrySupplier<Item> SECONDHAND_ARCHER_SPAWN_EGG = ITEMS.register(
+        "secondhand_archer_spawn_egg",
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.SECONDHAND_ARCHER,
+            0x7A6B5A, // Background: Brownish-gray
+            0xD4C4A8, // Spots: Light tan/bone
+            new Item.Properties()
+        )
+    );
+
+    public static final RegistrySupplier<Item> PARADOX_CRAWLER_SPAWN_EGG = ITEMS.register(
+        "paradox_crawler_spawn_egg",
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.PARADOX_CRAWLER,
+            0x2B2B4A, // Background: Dark indigo
+            0x4FC3F7, // Spots: Bright cyan
+            new Item.Properties()
+        )
+    );
+
     // === Boats ===
 
     /**
@@ -1659,6 +1732,22 @@ public class ModItems {
 
         if (MOMENT_CREEPER_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
             ((com.chronodawn.items.DeferredSpawnEggItem) MOMENT_CREEPER_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (GLIDE_FISH_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) GLIDE_FISH_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (TIMELINE_STRIDER_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) TIMELINE_STRIDER_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (SECONDHAND_ARCHER_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) SECONDHAND_ARCHER_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (PARADOX_CRAWLER_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) PARADOX_CRAWLER_SPAWN_EGG.get()).initializeSpawnEgg();
         }
 
         ChronoDawn.LOGGER.info("Spawn eggs initialized");
@@ -1880,6 +1969,24 @@ public class ModItems {
         }
         if (MOMENT_CREEPER_SPAWN_EGG.isPresent()) {
             output.accept(MOMENT_CREEPER_SPAWN_EGG.get());
+        }
+        if (GLIDE_FISH_SPAWN_EGG.isPresent()) {
+            output.accept(GLIDE_FISH_SPAWN_EGG.get());
+        }
+        if (TIMELINE_STRIDER_SPAWN_EGG.isPresent()) {
+            output.accept(TIMELINE_STRIDER_SPAWN_EGG.get());
+        }
+        if (SECONDHAND_ARCHER_SPAWN_EGG.isPresent()) {
+            output.accept(SECONDHAND_ARCHER_SPAWN_EGG.get());
+        }
+        if (PARADOX_CRAWLER_SPAWN_EGG.isPresent()) {
+            output.accept(PARADOX_CRAWLER_SPAWN_EGG.get());
+        }
+        if (GLIDE_FISH.isPresent()) {
+            output.accept(GLIDE_FISH.get());
+        }
+        if (COOKED_GLIDE_FISH.isPresent()) {
+            output.accept(COOKED_GLIDE_FISH.get());
         }
     }
 }
