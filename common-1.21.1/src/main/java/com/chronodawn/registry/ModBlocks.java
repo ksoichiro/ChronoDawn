@@ -85,6 +85,7 @@ import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.RotatedPillarBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.MapColor;
+import com.chronodawn.registry.ModBlockId;
 
 /**
  * Architectury Registry wrapper for custom blocks.
@@ -100,7 +101,7 @@ public class ModBlocks {
      * Drops Clockstone item when mined with appropriate tool.
      */
     public static final RegistrySupplier<Block> CLOCKSTONE_ORE = BLOCKS.register(
-        "clockstone_ore",
+        ModBlockId.CLOCKSTONE_ORE.id(),
         () -> new ClockstoneOre(ClockstoneOre.createProperties())
     );
 
@@ -110,7 +111,7 @@ public class ModBlocks {
      * Spawns at Y: 0-48, vein size 3-5.
      */
     public static final RegistrySupplier<Block> TIME_CRYSTAL_ORE = BLOCKS.register(
-        "time_crystal_ore",
+        ModBlockId.TIME_CRYSTAL_ORE.id(),
         () -> new TimeCrystalOre(TimeCrystalOre.createProperties())
     );
 
@@ -119,7 +120,7 @@ public class ModBlocks {
      * Crafted from 9x Clockstone items, used to construct portal frames.
      */
     public static final RegistrySupplier<Block> CLOCKSTONE_BLOCK = BLOCKS.register(
-        "clockstone_block",
+        ModBlockId.CLOCKSTONE_BLOCK.id(),
         () -> new ClockstoneBlock(ClockstoneBlock.createProperties())
     );
 
@@ -128,7 +129,7 @@ public class ModBlocks {
      * Crafted from 6x Clockstone Block in stair pattern.
      */
     public static final RegistrySupplier<Block> CLOCKSTONE_STAIRS = BLOCKS.register(
-        "clockstone_stairs",
+        ModBlockId.CLOCKSTONE_STAIRS.id(),
         () -> new ClockstoneStairs(ClockstoneStairs.createProperties())
     );
 
@@ -137,7 +138,7 @@ public class ModBlocks {
      * Crafted from 3x Clockstone Block in horizontal row.
      */
     public static final RegistrySupplier<Block> CLOCKSTONE_SLAB = BLOCKS.register(
-        "clockstone_slab",
+        ModBlockId.CLOCKSTONE_SLAB.id(),
         () -> new ClockstoneSlab(ClockstoneSlab.createProperties())
     );
 
@@ -146,7 +147,7 @@ public class ModBlocks {
      * Crafted from 6x Clockstone Block in 2 rows of 3.
      */
     public static final RegistrySupplier<Block> CLOCKSTONE_WALL = BLOCKS.register(
-        "clockstone_wall",
+        ModBlockId.CLOCKSTONE_WALL.id(),
         () -> new ClockstoneWall(ClockstoneWall.createProperties())
     );
 
@@ -156,7 +157,7 @@ public class ModBlocks {
      * Cannot be obtained as item - only created during portal ignition.
      */
     public static final RegistrySupplier<Block> CHRONO_DAWN_PORTAL = BLOCKS.register(
-        "chrono_dawn_portal",
+        ModBlockId.CHRONO_DAWN_PORTAL.id(),
         () -> new ChronoDawnPortalBlock(ChronoDawnPortalBlock.createProperties())
     );
 
@@ -166,7 +167,7 @@ public class ModBlocks {
      * Cannot be moved by pistons, does not drop items.
      */
     public static final RegistrySupplier<Block> REVERSING_TIME_SANDSTONE = BLOCKS.register(
-        "reversing_time_sandstone",
+        ModBlockId.REVERSING_TIME_SANDSTONE.id(),
         () -> new ReversingTimeSandstone(ReversingTimeSandstone.createProperties())
     );
 
@@ -176,7 +177,7 @@ public class ModBlocks {
      * Effect duration: 0.5 seconds.
      */
     public static final RegistrySupplier<Block> UNSTABLE_FUNGUS = BLOCKS.register(
-        "unstable_fungus",
+        ModBlockId.UNSTABLE_FUNGUS.id(),
         () -> new UnstableFungus(UnstableFungus.createProperties())
     );
 
@@ -185,7 +186,7 @@ public class ModBlocks {
      * Can be created by using Unstable Fungus on a flower pot.
      */
     public static final RegistrySupplier<Block> POTTED_UNSTABLE_FUNGUS = BLOCKS.register(
-        "potted_unstable_fungus",
+        ModBlockId.POTTED_UNSTABLE_FUNGUS.id(),
         () -> new FlowerPotBlock(UNSTABLE_FUNGUS.get(), CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT))
     );
 
@@ -194,7 +195,7 @@ public class ModBlocks {
      * Forms the trunk of trees found in the ChronoDawn dimension.
      */
     public static final RegistrySupplier<Block> TIME_WOOD_LOG = BLOCKS.register(
-        "time_wood_log",
+        ModBlockId.TIME_WOOD_LOG.id(),
         () -> new TimeWoodLog(TimeWoodLog.createProperties())
     );
 
@@ -203,7 +204,7 @@ public class ModBlocks {
      * Obtained by right-clicking Time Wood Log with an axe.
      */
     public static final RegistrySupplier<Block> STRIPPED_TIME_WOOD_LOG = BLOCKS.register(
-        "stripped_time_wood_log",
+        ModBlockId.STRIPPED_TIME_WOOD_LOG.id(),
         () -> new StrippedTimeWoodLog(StrippedTimeWoodLog.createProperties())
     );
 
@@ -213,7 +214,7 @@ public class ModBlocks {
      * Can be stripped to Stripped Time Wood with an axe.
      */
     public static final RegistrySupplier<Block> TIME_WOOD = BLOCKS.register(
-        "time_wood",
+        ModBlockId.TIME_WOOD.id(),
         () -> new RotatedPillarBlock(
             Block.Properties.of()
                 .mapColor(MapColor.WOOD)
@@ -227,7 +228,7 @@ public class ModBlocks {
      * Obtained by right-clicking Time Wood with an axe.
      */
     public static final RegistrySupplier<Block> STRIPPED_TIME_WOOD = BLOCKS.register(
-        "stripped_time_wood",
+        ModBlockId.STRIPPED_TIME_WOOD.id(),
         () -> new RotatedPillarBlock(
             Block.Properties.of()
                 .mapColor(MapColor.WOOD)
@@ -241,7 +242,7 @@ public class ModBlocks {
      * Forms the canopy of trees found in the ChronoDawn dimension.
      */
     public static final RegistrySupplier<Block> TIME_WOOD_LEAVES = BLOCKS.register(
-        "time_wood_leaves",
+        ModBlockId.TIME_WOOD_LEAVES.id(),
         () -> new TimeWoodLeaves(TimeWoodLeaves.createProperties())
     );
 
@@ -250,7 +251,7 @@ public class ModBlocks {
      * Standard planks block with time-themed appearance.
      */
     public static final RegistrySupplier<Block> TIME_WOOD_PLANKS = BLOCKS.register(
-        "time_wood_planks",
+        ModBlockId.TIME_WOOD_PLANKS.id(),
         () -> new TimeWoodPlanks(TimeWoodPlanks.createProperties())
     );
 
@@ -259,7 +260,7 @@ public class ModBlocks {
      * Obtained from Time Wood Leaves.
      */
     public static final RegistrySupplier<Block> TIME_WOOD_SAPLING = BLOCKS.register(
-        "time_wood_sapling",
+        ModBlockId.TIME_WOOD_SAPLING.id(),
         () -> new TimeWoodSapling(TimeWoodSapling.createProperties())
     );
 
@@ -268,7 +269,7 @@ public class ModBlocks {
      * Can be created by using Time Wood Sapling on a flower pot.
      */
     public static final RegistrySupplier<Block> POTTED_TIME_WOOD_SAPLING = BLOCKS.register(
-        "potted_time_wood_sapling",
+        ModBlockId.POTTED_TIME_WOOD_SAPLING.id(),
         () -> new FlowerPotBlock(TIME_WOOD_SAPLING.get(), CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT))
     );
 
@@ -278,7 +279,7 @@ public class ModBlocks {
      * Similar to Cocoa blocks in vanilla Minecraft.
      */
     public static final RegistrySupplier<Block> FRUIT_OF_TIME_BLOCK = BLOCKS.register(
-        "fruit_of_time",
+        ModBlockId.FRUIT_OF_TIME.id(),
         () -> new FruitOfTimeBlock(FruitOfTimeBlock.createProperties())
     );
 
@@ -289,7 +290,7 @@ public class ModBlocks {
      * DOWN direction: 5th floor → 4th floor (appears after defeating Time Guardian).
      */
     public static final RegistrySupplier<Block> CLOCK_TOWER_TELEPORTER = BLOCKS.register(
-        "clock_tower_teleporter",
+        ModBlockId.CLOCK_TOWER_TELEPORTER.id(),
         () -> new ClockTowerTeleporterBlock(
             CompatBlockProperties.ofFullCopy(Blocks.GLOWSTONE)
                 .lightLevel(state -> 15)
@@ -302,7 +303,7 @@ public class ModBlocks {
      * Crafted from Clockstone and iron, used for steampunk/mechanical builds.
      */
     public static final RegistrySupplier<Block> CLOCKWORK_BLOCK = BLOCKS.register(
-        "clockwork_block",
+        ModBlockId.CLOCKWORK_BLOCK.id(),
         () -> new ClockworkBlock(ClockworkBlock.createProperties())
     );
 
@@ -311,7 +312,7 @@ public class ModBlocks {
      * Crafted from 9 Time Crystals, emits light level 10.
      */
     public static final RegistrySupplier<Block> TIME_CRYSTAL_BLOCK = BLOCKS.register(
-        "time_crystal_block",
+        ModBlockId.TIME_CRYSTAL_BLOCK.id(),
         () -> new TimeCrystalBlock(TimeCrystalBlock.createProperties())
     );
 
@@ -320,7 +321,7 @@ public class ModBlocks {
      * Used for construction and has stairs/slabs/walls variants.
      */
     public static final RegistrySupplier<Block> TEMPORAL_BRICKS = BLOCKS.register(
-        "temporal_bricks",
+        ModBlockId.TEMPORAL_BRICKS.id(),
         () -> new TemporalBricksBlock(TemporalBricksBlock.createProperties())
     );
 
@@ -328,7 +329,7 @@ public class ModBlocks {
      * Temporal Bricks Stairs - Stair variant of Temporal Bricks.
      */
     public static final RegistrySupplier<Block> TEMPORAL_BRICKS_STAIRS = BLOCKS.register(
-        "temporal_bricks_stairs",
+        ModBlockId.TEMPORAL_BRICKS_STAIRS.id(),
         () -> new TemporalBricksStairs(TemporalBricksStairs.createProperties())
     );
 
@@ -336,7 +337,7 @@ public class ModBlocks {
      * Temporal Bricks Slab - Slab variant of Temporal Bricks.
      */
     public static final RegistrySupplier<Block> TEMPORAL_BRICKS_SLAB = BLOCKS.register(
-        "temporal_bricks_slab",
+        ModBlockId.TEMPORAL_BRICKS_SLAB.id(),
         () -> new TemporalBricksSlab(TemporalBricksSlab.createProperties())
     );
 
@@ -344,7 +345,7 @@ public class ModBlocks {
      * Temporal Bricks Wall - Wall variant of Temporal Bricks.
      */
     public static final RegistrySupplier<Block> TEMPORAL_BRICKS_WALL = BLOCKS.register(
-        "temporal_bricks_wall",
+        ModBlockId.TEMPORAL_BRICKS_WALL.id(),
         () -> new TemporalBricksWall(TemporalBricksWall.createProperties())
     );
 
@@ -352,7 +353,7 @@ public class ModBlocks {
      * Time Wood Stairs - Stair variant of Time Wood Planks.
      */
     public static final RegistrySupplier<Block> TIME_WOOD_STAIRS = BLOCKS.register(
-        "time_wood_stairs",
+        ModBlockId.TIME_WOOD_STAIRS.id(),
         () -> new TimeWoodStairs(TimeWoodStairs.createProperties())
     );
 
@@ -360,7 +361,7 @@ public class ModBlocks {
      * Time Wood Slab - Slab variant of Time Wood Planks.
      */
     public static final RegistrySupplier<Block> TIME_WOOD_SLAB = BLOCKS.register(
-        "time_wood_slab",
+        ModBlockId.TIME_WOOD_SLAB.id(),
         () -> new TimeWoodSlab(TimeWoodSlab.createProperties())
     );
 
@@ -368,7 +369,7 @@ public class ModBlocks {
      * Time Wood Fence - Fence variant of Time Wood Planks.
      */
     public static final RegistrySupplier<Block> TIME_WOOD_FENCE = BLOCKS.register(
-        "time_wood_fence",
+        ModBlockId.TIME_WOOD_FENCE.id(),
         () -> new TimeWoodFence(TimeWoodFence.createProperties())
     );
 
@@ -377,7 +378,7 @@ public class ModBlocks {
      * Can be opened manually or with redstone signal.
      */
     public static final RegistrySupplier<Block> TIME_WOOD_DOOR = BLOCKS.register(
-        "time_wood_door",
+        ModBlockId.TIME_WOOD_DOOR.id(),
         () -> new TimeWoodDoor(TimeWoodDoor.createProperties())
     );
 
@@ -386,7 +387,7 @@ public class ModBlocks {
      * Can be placed horizontally or vertically.
      */
     public static final RegistrySupplier<Block> TIME_WOOD_TRAPDOOR = BLOCKS.register(
-        "time_wood_trapdoor",
+        ModBlockId.TIME_WOOD_TRAPDOOR.id(),
         () -> new TimeWoodTrapdoor(TimeWoodTrapdoor.createProperties())
     );
 
@@ -395,7 +396,7 @@ public class ModBlocks {
      * Can be opened manually or with redstone signal.
      */
     public static final RegistrySupplier<Block> TIME_WOOD_FENCE_GATE = BLOCKS.register(
-        "time_wood_fence_gate",
+        ModBlockId.TIME_WOOD_FENCE_GATE.id(),
         () -> new TimeWoodFenceGate(TimeWoodFenceGate.createProperties())
     );
 
@@ -404,7 +405,7 @@ public class ModBlocks {
      * Stays active for 1.5 seconds (30 ticks).
      */
     public static final RegistrySupplier<Block> TIME_WOOD_BUTTON = BLOCKS.register(
-        "time_wood_button",
+        ModBlockId.TIME_WOOD_BUTTON.id(),
         () -> new TimeWoodButton(TimeWoodButton.createProperties())
     );
 
@@ -413,7 +414,7 @@ public class ModBlocks {
      * Activated by players, mobs, items, and other entities.
      */
     public static final RegistrySupplier<Block> TIME_WOOD_PRESSURE_PLATE = BLOCKS.register(
-        "time_wood_pressure_plate",
+        ModBlockId.TIME_WOOD_PRESSURE_PLATE.id(),
         () -> new TimeWoodPressurePlate(TimeWoodPressurePlate.createProperties())
     );
 
@@ -422,7 +423,7 @@ public class ModBlocks {
      * Spreads to adjacent blocks similar to vanilla moss.
      */
     public static final RegistrySupplier<Block> TEMPORAL_MOSS = BLOCKS.register(
-        "temporal_moss",
+        ModBlockId.TEMPORAL_MOSS.id(),
         () -> new TemporalMossBlock(TemporalMossBlock.createProperties())
     );
 
@@ -431,7 +432,7 @@ public class ModBlocks {
      * Does not melt when exposed to light sources, slippery like ice.
      */
     public static final RegistrySupplier<Block> FROZEN_TIME_ICE = BLOCKS.register(
-        "frozen_time_ice",
+        ModBlockId.FROZEN_TIME_ICE.id(),
         () -> new FrozenTimeIceBlock(FrozenTimeIceBlock.createProperties())
     );
 
@@ -441,7 +442,7 @@ public class ModBlocks {
      * Drops Time Wheat Seeds and Time Wheat (when mature).
      */
     public static final RegistrySupplier<Block> TIME_WHEAT = BLOCKS.register(
-        "time_wheat",
+        ModBlockId.TIME_WHEAT.id(),
         () -> new TimeWheatBlock(
             CompatBlockProperties.ofFullCopy(Blocks.WHEAT)
         )
@@ -454,7 +455,7 @@ public class ModBlocks {
      * Reduces fall damage by 80% (same as vanilla hay bale).
      */
     public static final RegistrySupplier<Block> TIME_WHEAT_BALE = BLOCKS.register(
-        "time_wheat_bale",
+        ModBlockId.TIME_WHEAT_BALE.id(),
         () -> new TimeWheatBaleBlock(
             CompatBlockProperties.ofFullCopy(Blocks.HAY_BLOCK)
         )
@@ -466,7 +467,7 @@ public class ModBlocks {
      * Drops Temporal Root items (food + seed).
      */
     public static final RegistrySupplier<Block> TEMPORAL_ROOT = BLOCKS.register(
-        "temporal_root",
+        ModBlockId.TEMPORAL_ROOT.id(),
         () -> new TemporalRootBlock(
             CompatBlockProperties.ofFullCopy(Blocks.CARROTS)
         )
@@ -478,7 +479,7 @@ public class ModBlocks {
      * Fortune enchantment increases drop count.
      */
     public static final RegistrySupplier<Block> CHRONO_MELON = BLOCKS.register(
-        "chrono_melon",
+        ModBlockId.CHRONO_MELON.id(),
         () -> new ChronoMelonBlock(
             CompatBlockProperties.ofFullCopy(Blocks.MELON)
         )
@@ -490,7 +491,7 @@ public class ModBlocks {
      * Produces melons on adjacent blocks when mature.
      */
     public static final RegistrySupplier<Block> CHRONO_MELON_STEM = BLOCKS.register(
-        "chrono_melon_stem",
+        ModBlockId.CHRONO_MELON_STEM.id(),
         () -> new ChronoMelonStemBlock(
             CompatBlockProperties.ofFullCopy(Blocks.MELON_STEM)
         )
@@ -502,7 +503,7 @@ public class ModBlocks {
      * Points toward the melon it's attached to.
      */
     public static final RegistrySupplier<Block> ATTACHED_CHRONO_MELON_STEM = BLOCKS.register(
-        "attached_chrono_melon_stem",
+        ModBlockId.ATTACHED_CHRONO_MELON_STEM.id(),
         () -> new AttachedChronoMelonStemBlock(
             CompatBlockProperties.ofFullCopy(Blocks.ATTACHED_MELON_STEM)
         )
@@ -515,7 +516,7 @@ public class ModBlocks {
      * Distinct from Unstable Fungus (silver/white vs purple/blue).
      */
     public static final RegistrySupplier<Block> TIMELESS_MUSHROOM = BLOCKS.register(
-        "timeless_mushroom",
+        ModBlockId.TIMELESS_MUSHROOM.id(),
         () -> new TimelessMushroomBlock(
             CompatBlockProperties.ofFullCopy(Blocks.BROWN_MUSHROOM)
         )
@@ -527,7 +528,7 @@ public class ModBlocks {
      * Can be placed in flower pots.
      */
     public static final RegistrySupplier<Block> PURPLE_TIME_BLOSSOM = BLOCKS.register(
-        "purple_time_blossom",
+        ModBlockId.PURPLE_TIME_BLOSSOM.id(),
         () -> new TimeBlossomBlock(TimeBlossomBlock.createProperties())
     );
 
@@ -537,7 +538,7 @@ public class ModBlocks {
      * Can be placed in flower pots.
      */
     public static final RegistrySupplier<Block> ORANGE_TIME_BLOSSOM = BLOCKS.register(
-        "orange_time_blossom",
+        ModBlockId.ORANGE_TIME_BLOSSOM.id(),
         () -> new TimeBlossomBlock(TimeBlossomBlock.createProperties())
     );
 
@@ -547,7 +548,7 @@ public class ModBlocks {
      * Can be placed in flower pots.
      */
     public static final RegistrySupplier<Block> PINK_TIME_BLOSSOM = BLOCKS.register(
-        "pink_time_blossom",
+        ModBlockId.PINK_TIME_BLOSSOM.id(),
         () -> new TimeBlossomBlock(TimeBlossomBlock.createProperties())
     );
 
@@ -556,7 +557,7 @@ public class ModBlocks {
      * Can be created by using Purple Time Blossom on a flower pot.
      */
     public static final RegistrySupplier<Block> POTTED_PURPLE_TIME_BLOSSOM = BLOCKS.register(
-        "potted_purple_time_blossom",
+        ModBlockId.POTTED_PURPLE_TIME_BLOSSOM.id(),
         () -> new FlowerPotBlock(PURPLE_TIME_BLOSSOM.get(), CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT))
     );
 
@@ -565,7 +566,7 @@ public class ModBlocks {
      * Can be created by using Orange Time Blossom on a flower pot.
      */
     public static final RegistrySupplier<Block> POTTED_ORANGE_TIME_BLOSSOM = BLOCKS.register(
-        "potted_orange_time_blossom",
+        ModBlockId.POTTED_ORANGE_TIME_BLOSSOM.id(),
         () -> new FlowerPotBlock(ORANGE_TIME_BLOSSOM.get(), CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT))
     );
 
@@ -574,7 +575,7 @@ public class ModBlocks {
      * Can be created by using Pink Time Blossom on a flower pot.
      */
     public static final RegistrySupplier<Block> POTTED_PINK_TIME_BLOSSOM = BLOCKS.register(
-        "potted_pink_time_blossom",
+        ModBlockId.POTTED_PINK_TIME_BLOSSOM.id(),
         () -> new FlowerPotBlock(PINK_TIME_BLOSSOM.get(), CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT))
     );
 
@@ -584,7 +585,7 @@ public class ModBlocks {
      * 2 blocks high, cannot be potted.
      */
     public static final RegistrySupplier<Block> DAWN_BELL = BLOCKS.register(
-        "dawn_bell",
+        ModBlockId.DAWN_BELL.id(),
         () -> new DawnBellBlock(DawnBellBlock.createProperties())
     );
 
@@ -594,7 +595,7 @@ public class ModBlocks {
      * 2 blocks high, cannot be potted.
      */
     public static final RegistrySupplier<Block> DUSK_BELL = BLOCKS.register(
-        "dusk_bell",
+        ModBlockId.DUSK_BELL.id(),
         () -> new DuskBellBlock(DuskBellBlock.createProperties())
     );
 
@@ -606,7 +607,7 @@ public class ModBlocks {
      * Door type is stored in BlockEntity NBT and set in structure files.
      */
     public static final RegistrySupplier<Block> BOSS_ROOM_DOOR = BLOCKS.register(
-        "boss_room_door",
+        ModBlockId.BOSS_ROOM_DOOR.id(),
         () -> new BossRoomDoorBlock(
             CompatBlockProperties.ofFullCopy(Blocks.IRON_DOOR)
                 .noOcclusion()
@@ -622,7 +623,7 @@ public class ModBlocks {
      * Task: T237 - Entropy Keeper boss spawn system
      */
     public static final RegistrySupplier<Block> ENTROPY_CRYPT_TRAPDOOR = BLOCKS.register(
-        "entropy_crypt_trapdoor",
+        ModBlockId.ENTROPY_CRYPT_TRAPDOOR.id(),
         () -> new EntropyCryptTrapdoorBlock(
             CompatBlockProperties.ofFullCopy(Blocks.IRON_TRAPDOOR)
                 .noOcclusion()
@@ -640,7 +641,7 @@ public class ModBlocks {
      * Reference: specs/chrono-dawn-mod/lore.md
      */
     public static final RegistrySupplier<Block> TEMPORAL_PARTICLE_EMITTER = BLOCKS.register(
-        "temporal_particle_emitter",
+        ModBlockId.TEMPORAL_PARTICLE_EMITTER.id(),
         () -> new TemporalParticleEmitterBlock(TemporalParticleEmitterBlock.createProperties())
     );
 
@@ -658,7 +659,7 @@ public class ModBlocks {
      * Task: T239 [US3] Guardian Vault & Master Clock waterlogging prevention
      */
     public static final RegistrySupplier<Block> DECORATIVE_WATER = BLOCKS.register(
-        "decorative_water",
+        ModBlockId.DECORATIVE_WATER.id(),
         () -> new DecorativeWaterBlock(ModFluids.DECORATIVE_WATER.get(), CompatBlockProperties.ofFullCopy(Blocks.WATER))
     );
 
@@ -669,7 +670,7 @@ public class ModBlocks {
      * Not included in creative tab - placed via Structure Block.
      */
     public static final RegistrySupplier<Block> BOSS_ROOM_BOUNDARY_MARKER = BLOCKS.register(
-        "boss_room_boundary_marker",
+        ModBlockId.BOSS_ROOM_BOUNDARY_MARKER.id(),
         () -> new BossRoomBoundaryMarkerBlock(Block.Properties.of()
             .strength(-1.0F, 3600000.0F) // Unbreakable like bedrock
             .noLootTable()
@@ -683,7 +684,7 @@ public class ModBlocks {
      * Found in tall trees in the ChronoDawn dimension.
      */
     public static final RegistrySupplier<Block> DARK_TIME_WOOD_LOG = BLOCKS.register(
-        "dark_time_wood_log",
+        ModBlockId.DARK_TIME_WOOD_LOG.id(),
         () -> new DarkTimeWoodLog(DarkTimeWoodLog.createProperties())
     );
 
@@ -692,7 +693,7 @@ public class ModBlocks {
      * Obtained by right-clicking Dark Time Wood Log with an axe.
      */
     public static final RegistrySupplier<Block> STRIPPED_DARK_TIME_WOOD_LOG = BLOCKS.register(
-        "stripped_dark_time_wood_log",
+        ModBlockId.STRIPPED_DARK_TIME_WOOD_LOG.id(),
         () -> new StrippedDarkTimeWoodLog(StrippedDarkTimeWoodLog.createProperties())
     );
 
@@ -702,7 +703,7 @@ public class ModBlocks {
      * Can be stripped to Stripped Dark Time Wood with an axe.
      */
     public static final RegistrySupplier<Block> DARK_TIME_WOOD = BLOCKS.register(
-        "dark_time_wood",
+        ModBlockId.DARK_TIME_WOOD.id(),
         () -> new RotatedPillarBlock(
             Block.Properties.of()
                 .mapColor(MapColor.WOOD)
@@ -716,7 +717,7 @@ public class ModBlocks {
      * Obtained by right-clicking Dark Time Wood with an axe.
      */
     public static final RegistrySupplier<Block> STRIPPED_DARK_TIME_WOOD = BLOCKS.register(
-        "stripped_dark_time_wood",
+        ModBlockId.STRIPPED_DARK_TIME_WOOD.id(),
         () -> new RotatedPillarBlock(
             Block.Properties.of()
                 .mapColor(MapColor.WOOD)
@@ -730,7 +731,7 @@ public class ModBlocks {
      * Forms the canopy of tall dark trees.
      */
     public static final RegistrySupplier<Block> DARK_TIME_WOOD_LEAVES = BLOCKS.register(
-        "dark_time_wood_leaves",
+        ModBlockId.DARK_TIME_WOOD_LEAVES.id(),
         () -> new DarkTimeWoodLeaves(DarkTimeWoodLeaves.createProperties())
     );
 
@@ -738,7 +739,7 @@ public class ModBlocks {
      * Dark Time Wood Planks - Crafted from Dark Time Wood Logs.
      */
     public static final RegistrySupplier<Block> DARK_TIME_WOOD_PLANKS = BLOCKS.register(
-        "dark_time_wood_planks",
+        ModBlockId.DARK_TIME_WOOD_PLANKS.id(),
         () -> new DarkTimeWoodPlanks(DarkTimeWoodPlanks.createProperties())
     );
 
@@ -746,7 +747,7 @@ public class ModBlocks {
      * Dark Time Wood Stairs - Stair variant of Dark Time Wood Planks.
      */
     public static final RegistrySupplier<Block> DARK_TIME_WOOD_STAIRS = BLOCKS.register(
-        "dark_time_wood_stairs",
+        ModBlockId.DARK_TIME_WOOD_STAIRS.id(),
         () -> new DarkTimeWoodStairs(DarkTimeWoodStairs.createProperties())
     );
 
@@ -754,7 +755,7 @@ public class ModBlocks {
      * Dark Time Wood Slab - Slab variant of Dark Time Wood Planks.
      */
     public static final RegistrySupplier<Block> DARK_TIME_WOOD_SLAB = BLOCKS.register(
-        "dark_time_wood_slab",
+        ModBlockId.DARK_TIME_WOOD_SLAB.id(),
         () -> new DarkTimeWoodSlab(DarkTimeWoodSlab.createProperties())
     );
 
@@ -762,7 +763,7 @@ public class ModBlocks {
      * Dark Time Wood Fence - Fence variant of Dark Time Wood Planks.
      */
     public static final RegistrySupplier<Block> DARK_TIME_WOOD_FENCE = BLOCKS.register(
-        "dark_time_wood_fence",
+        ModBlockId.DARK_TIME_WOOD_FENCE.id(),
         () -> new DarkTimeWoodFence(DarkTimeWoodFence.createProperties())
     );
 
@@ -770,7 +771,7 @@ public class ModBlocks {
      * Dark Time Wood Door - Wooden door that can be opened/closed.
      */
     public static final RegistrySupplier<Block> DARK_TIME_WOOD_DOOR = BLOCKS.register(
-        "dark_time_wood_door",
+        ModBlockId.DARK_TIME_WOOD_DOOR.id(),
         () -> new DarkTimeWoodDoor(DarkTimeWoodDoor.createProperties())
     );
 
@@ -778,7 +779,7 @@ public class ModBlocks {
      * Dark Time Wood Trapdoor - Wooden trapdoor that can be opened/closed.
      */
     public static final RegistrySupplier<Block> DARK_TIME_WOOD_TRAPDOOR = BLOCKS.register(
-        "dark_time_wood_trapdoor",
+        ModBlockId.DARK_TIME_WOOD_TRAPDOOR.id(),
         () -> new DarkTimeWoodTrapdoor(DarkTimeWoodTrapdoor.createProperties())
     );
 
@@ -786,7 +787,7 @@ public class ModBlocks {
      * Dark Time Wood Fence Gate - Fence gate that connects to fences.
      */
     public static final RegistrySupplier<Block> DARK_TIME_WOOD_FENCE_GATE = BLOCKS.register(
-        "dark_time_wood_fence_gate",
+        ModBlockId.DARK_TIME_WOOD_FENCE_GATE.id(),
         () -> new DarkTimeWoodFenceGate(DarkTimeWoodFenceGate.createProperties())
     );
 
@@ -794,7 +795,7 @@ public class ModBlocks {
      * Dark Time Wood Button - Wooden button that emits redstone signal.
      */
     public static final RegistrySupplier<Block> DARK_TIME_WOOD_BUTTON = BLOCKS.register(
-        "dark_time_wood_button",
+        ModBlockId.DARK_TIME_WOOD_BUTTON.id(),
         () -> new DarkTimeWoodButton(DarkTimeWoodButton.createProperties())
     );
 
@@ -802,7 +803,7 @@ public class ModBlocks {
      * Dark Time Wood Pressure Plate - Wooden pressure plate that emits redstone signal.
      */
     public static final RegistrySupplier<Block> DARK_TIME_WOOD_PRESSURE_PLATE = BLOCKS.register(
-        "dark_time_wood_pressure_plate",
+        ModBlockId.DARK_TIME_WOOD_PRESSURE_PLATE.id(),
         () -> new DarkTimeWoodPressurePlate(DarkTimeWoodPressurePlate.createProperties())
     );
 
@@ -810,7 +811,7 @@ public class ModBlocks {
      * Dark Time Wood Sapling - Grows into Dark Time Wood trees (tall variant).
      */
     public static final RegistrySupplier<Block> DARK_TIME_WOOD_SAPLING = BLOCKS.register(
-        "dark_time_wood_sapling",
+        ModBlockId.DARK_TIME_WOOD_SAPLING.id(),
         () -> new DarkTimeWoodSapling(DarkTimeWoodSapling.createProperties())
     );
 
@@ -818,7 +819,7 @@ public class ModBlocks {
      * Potted Dark Time Wood Sapling - Decorative potted version of Dark Time Wood Sapling.
      */
     public static final RegistrySupplier<Block> POTTED_DARK_TIME_WOOD_SAPLING = BLOCKS.register(
-        "potted_dark_time_wood_sapling",
+        ModBlockId.POTTED_DARK_TIME_WOOD_SAPLING.id(),
         () -> new FlowerPotBlock(DARK_TIME_WOOD_SAPLING.get(), CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT))
     );
 
@@ -829,7 +830,7 @@ public class ModBlocks {
      * Found in wide-canopy trees in the ChronoDawn dimension.
      */
     public static final RegistrySupplier<Block> ANCIENT_TIME_WOOD_LOG = BLOCKS.register(
-        "ancient_time_wood_log",
+        ModBlockId.ANCIENT_TIME_WOOD_LOG.id(),
         () -> new AncientTimeWoodLog(AncientTimeWoodLog.createProperties())
     );
 
@@ -838,7 +839,7 @@ public class ModBlocks {
      * Obtained by right-clicking Ancient Time Wood Log with an axe.
      */
     public static final RegistrySupplier<Block> STRIPPED_ANCIENT_TIME_WOOD_LOG = BLOCKS.register(
-        "stripped_ancient_time_wood_log",
+        ModBlockId.STRIPPED_ANCIENT_TIME_WOOD_LOG.id(),
         () -> new StrippedAncientTimeWoodLog(StrippedAncientTimeWoodLog.createProperties())
     );
 
@@ -848,7 +849,7 @@ public class ModBlocks {
      * Can be stripped to Stripped Ancient Time Wood with an axe.
      */
     public static final RegistrySupplier<Block> ANCIENT_TIME_WOOD = BLOCKS.register(
-        "ancient_time_wood",
+        ModBlockId.ANCIENT_TIME_WOOD.id(),
         () -> new RotatedPillarBlock(
             Block.Properties.of()
                 .mapColor(MapColor.WOOD)
@@ -862,7 +863,7 @@ public class ModBlocks {
      * Obtained by right-clicking Ancient Time Wood with an axe.
      */
     public static final RegistrySupplier<Block> STRIPPED_ANCIENT_TIME_WOOD = BLOCKS.register(
-        "stripped_ancient_time_wood",
+        ModBlockId.STRIPPED_ANCIENT_TIME_WOOD.id(),
         () -> new RotatedPillarBlock(
             Block.Properties.of()
                 .mapColor(MapColor.WOOD)
@@ -876,7 +877,7 @@ public class ModBlocks {
      * Forms a broad canopy on ancient trees.
      */
     public static final RegistrySupplier<Block> ANCIENT_TIME_WOOD_LEAVES = BLOCKS.register(
-        "ancient_time_wood_leaves",
+        ModBlockId.ANCIENT_TIME_WOOD_LEAVES.id(),
         () -> new AncientTimeWoodLeaves(AncientTimeWoodLeaves.createProperties())
     );
 
@@ -884,7 +885,7 @@ public class ModBlocks {
      * Ancient Time Wood Planks - Crafted from Ancient Time Wood Logs.
      */
     public static final RegistrySupplier<Block> ANCIENT_TIME_WOOD_PLANKS = BLOCKS.register(
-        "ancient_time_wood_planks",
+        ModBlockId.ANCIENT_TIME_WOOD_PLANKS.id(),
         () -> new AncientTimeWoodPlanks(AncientTimeWoodPlanks.createProperties())
     );
 
@@ -892,7 +893,7 @@ public class ModBlocks {
      * Ancient Time Wood Stairs - Stair variant of Ancient Time Wood Planks.
      */
     public static final RegistrySupplier<Block> ANCIENT_TIME_WOOD_STAIRS = BLOCKS.register(
-        "ancient_time_wood_stairs",
+        ModBlockId.ANCIENT_TIME_WOOD_STAIRS.id(),
         () -> new AncientTimeWoodStairs(AncientTimeWoodStairs.createProperties())
     );
 
@@ -900,7 +901,7 @@ public class ModBlocks {
      * Ancient Time Wood Slab - Slab variant of Ancient Time Wood Planks.
      */
     public static final RegistrySupplier<Block> ANCIENT_TIME_WOOD_SLAB = BLOCKS.register(
-        "ancient_time_wood_slab",
+        ModBlockId.ANCIENT_TIME_WOOD_SLAB.id(),
         () -> new AncientTimeWoodSlab(AncientTimeWoodSlab.createProperties())
     );
 
@@ -908,7 +909,7 @@ public class ModBlocks {
      * Ancient Time Wood Fence - Fence variant of Ancient Time Wood Planks.
      */
     public static final RegistrySupplier<Block> ANCIENT_TIME_WOOD_FENCE = BLOCKS.register(
-        "ancient_time_wood_fence",
+        ModBlockId.ANCIENT_TIME_WOOD_FENCE.id(),
         () -> new AncientTimeWoodFence(AncientTimeWoodFence.createProperties())
     );
 
@@ -916,7 +917,7 @@ public class ModBlocks {
      * Ancient Time Wood Door - Wooden door that can be opened/closed.
      */
     public static final RegistrySupplier<Block> ANCIENT_TIME_WOOD_DOOR = BLOCKS.register(
-        "ancient_time_wood_door",
+        ModBlockId.ANCIENT_TIME_WOOD_DOOR.id(),
         () -> new AncientTimeWoodDoor(AncientTimeWoodDoor.createProperties())
     );
 
@@ -924,7 +925,7 @@ public class ModBlocks {
      * Ancient Time Wood Trapdoor - Wooden trapdoor that can be opened/closed.
      */
     public static final RegistrySupplier<Block> ANCIENT_TIME_WOOD_TRAPDOOR = BLOCKS.register(
-        "ancient_time_wood_trapdoor",
+        ModBlockId.ANCIENT_TIME_WOOD_TRAPDOOR.id(),
         () -> new AncientTimeWoodTrapdoor(AncientTimeWoodTrapdoor.createProperties())
     );
 
@@ -932,7 +933,7 @@ public class ModBlocks {
      * Ancient Time Wood Fence Gate - Fence gate that connects to fences.
      */
     public static final RegistrySupplier<Block> ANCIENT_TIME_WOOD_FENCE_GATE = BLOCKS.register(
-        "ancient_time_wood_fence_gate",
+        ModBlockId.ANCIENT_TIME_WOOD_FENCE_GATE.id(),
         () -> new AncientTimeWoodFenceGate(AncientTimeWoodFenceGate.createProperties())
     );
 
@@ -940,7 +941,7 @@ public class ModBlocks {
      * Ancient Time Wood Button - Wooden button that emits redstone signal.
      */
     public static final RegistrySupplier<Block> ANCIENT_TIME_WOOD_BUTTON = BLOCKS.register(
-        "ancient_time_wood_button",
+        ModBlockId.ANCIENT_TIME_WOOD_BUTTON.id(),
         () -> new AncientTimeWoodButton(AncientTimeWoodButton.createProperties())
     );
 
@@ -948,7 +949,7 @@ public class ModBlocks {
      * Ancient Time Wood Pressure Plate - Wooden pressure plate that emits redstone signal.
      */
     public static final RegistrySupplier<Block> ANCIENT_TIME_WOOD_PRESSURE_PLATE = BLOCKS.register(
-        "ancient_time_wood_pressure_plate",
+        ModBlockId.ANCIENT_TIME_WOOD_PRESSURE_PLATE.id(),
         () -> new AncientTimeWoodPressurePlate(AncientTimeWoodPressurePlate.createProperties())
     );
 
@@ -956,7 +957,7 @@ public class ModBlocks {
      * Ancient Time Wood Sapling - Grows into Ancient Time Wood trees (wide-canopy variant).
      */
     public static final RegistrySupplier<Block> ANCIENT_TIME_WOOD_SAPLING = BLOCKS.register(
-        "ancient_time_wood_sapling",
+        ModBlockId.ANCIENT_TIME_WOOD_SAPLING.id(),
         () -> new AncientTimeWoodSapling(AncientTimeWoodSapling.createProperties())
     );
 
@@ -964,7 +965,7 @@ public class ModBlocks {
      * Potted Ancient Time Wood Sapling - Decorative potted version of Ancient Time Wood Sapling.
      */
     public static final RegistrySupplier<Block> POTTED_ANCIENT_TIME_WOOD_SAPLING = BLOCKS.register(
-        "potted_ancient_time_wood_sapling",
+        ModBlockId.POTTED_ANCIENT_TIME_WOOD_SAPLING.id(),
         () -> new FlowerPotBlock(ANCIENT_TIME_WOOD_SAPLING.get(), CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT))
     );
 
