@@ -54,7 +54,7 @@ public class ChronoDawnBiomeProvider {
      * This method primarily exists for logging and future extension points.
      */
     public static void init() {
-        ChronoDawn.LOGGER.info("ChronoDawn biome provider initialized (biomes defined via JSON datapacks)");
+        ChronoDawn.LOGGER.debug("ChronoDawn biome provider initialized (biomes defined via JSON datapacks)");
     }
 
     /**

@@ -58,7 +58,7 @@ public class TimeDistortionEventHandler {
      */
     public static void register() {
         TickEvent.SERVER_LEVEL_POST.register(TimeDistortionEventHandler::onServerLevelTick);
-        ChronoDawn.LOGGER.info("Registered TimeDistortionEventHandler");
+        ChronoDawn.LOGGER.debug("Registered TimeDistortionEventHandler");
     }
 
     /**
@@ -77,7 +77,7 @@ public class TimeDistortionEventHandler {
         if (!timeSpeedMap.containsKey(dimensionKey)) {
             timeSpeedMap.put(dimensionKey, 1.0f); // Start at normal speed
             timeUntilChangeMap.put(dimensionKey, getRandomDuration(level.getRandom()));
-            ChronoDawn.LOGGER.info("TimeDistortionEventHandler: Initialized for ChronoDawn with speed 1.0x");
+            ChronoDawn.LOGGER.debug("TimeDistortionEventHandler: Initialized for ChronoDawn with speed 1.0x");
         }
 
         // Get current values
@@ -97,12 +97,12 @@ public class TimeDistortionEventHandler {
                 long newDayTime = currentTime + ticksThisTick;
                 level.setDayTime(newDayTime);
 
-                ChronoDawn.LOGGER.info("TimeDistortionEventHandler: Sleep skip advancing... {} / {} remaining",
+                ChronoDawn.LOGGER.debug("TimeDistortionEventHandler: Sleep skip advancing... {} / {} remaining",
                     remainingTicks - ticksThisTick, remainingTicks);
             } else {
                 // Target reached!
                 sleepSkipTargetTimeMap.remove(dimensionKey);
-                ChronoDawn.LOGGER.info("TimeDistortionEventHandler: Sleep skip complete! Final time: {}", currentTime);
+                ChronoDawn.LOGGER.debug("TimeDistortionEventHandler: Sleep skip complete! Final time: {}", currentTime);
             }
 
             return; // Skip normal time adjustment this tick
@@ -143,7 +143,7 @@ public class TimeDistortionEventHandler {
             float newSpeed = getRandomSpeed(level.getRandom());
             int newDuration = getRandomDuration(level.getRandom());
 
-            ChronoDawn.LOGGER.info("TimeDistortionEventHandler: Speed changed from {}x to {}x (duration: {} ticks)",
+            ChronoDawn.LOGGER.debug("TimeDistortionEventHandler: Speed changed from {}x to {}x (duration: {} ticks)",
                 currentSpeed, newSpeed, newDuration);
 
             timeSpeedMap.put(dimensionKey, newSpeed);
@@ -188,6 +188,6 @@ public class TimeDistortionEventHandler {
     public static void requestSleepSkip(ServerLevel level, long targetTime) {
         ResourceKey<net.minecraft.world.level.Level> dimensionKey = level.dimension();
         sleepSkipTargetTimeMap.put(dimensionKey, targetTime);
-        ChronoDawn.LOGGER.info("Sleep skip requested: target time = {}", targetTime);
+        ChronoDawn.LOGGER.debug("Sleep skip requested: target time = {}", targetTime);
     }
 }

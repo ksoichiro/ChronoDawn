@@ -60,6 +60,6 @@ public class ModBlockEntities {
      */
     public static void register() {
         BLOCK_ENTITIES.register();
-        ChronoDawn.LOGGER.info("Registered ModBlockEntities");
+        ChronoDawn.LOGGER.debug("Registered ModBlockEntities");
     }
 }

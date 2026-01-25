@@ -49,7 +49,7 @@ public class ReversedResonance {
      * @param triggerSource Source description for logging (e.g., "Time Guardian defeat")
      */
     public static void trigger(ServerLevel level, Vec3 center, int durationTicks, String triggerSource) {
-        ChronoDawn.LOGGER.info(
+        ChronoDawn.LOGGER.debug(
             "Reversed Resonance triggered at [{}, {}, {}] for {} ticks (source: {})",
             center.x, center.y, center.z, durationTicks, triggerSource
         );

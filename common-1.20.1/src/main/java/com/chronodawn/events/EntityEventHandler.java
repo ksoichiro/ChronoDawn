@@ -104,7 +104,7 @@ public class EntityEventHandler {
             }
         });
 
-        ChronoDawn.LOGGER.info("Registered EntityEventHandler with time distortion effect, Time Guardian spawning, Time Tyrant spawning, boss defeat triggers, and teleporter charging");
+        ChronoDawn.LOGGER.debug("Registered EntityEventHandler with time distortion effect, Time Guardian spawning, Time Tyrant spawning, boss defeat triggers, and teleporter charging");
     }
 
     /**
@@ -130,7 +130,7 @@ public class EntityEventHandler {
      * @param guardian The defeated Time Guardian entity
      */
     private static void handleTimeGuardianDefeat(ServerLevel level, TimeGuardianEntity guardian) {
-        ChronoDawn.LOGGER.info(
+        ChronoDawn.LOGGER.debug(
             "Time Guardian defeated at [{}, {}, {}]",
             guardian.getX(), guardian.getY(), guardian.getZ()
         );
@@ -164,7 +164,7 @@ public class EntityEventHandler {
             be.setTargetPos(upTeleporterPos);
         }
 
-        ChronoDawn.LOGGER.info("Spawned DOWN teleporter at [{}, {}, {}] targeting UP teleporter at [{}, {}, {}]",
+        ChronoDawn.LOGGER.debug("Spawned DOWN teleporter at [{}, {}, {}] targeting UP teleporter at [{}, {}, {}]",
             teleporterPos.getX(), teleporterPos.getY(), teleporterPos.getZ(),
             upTeleporterPos.getX(), upTeleporterPos.getY(), upTeleporterPos.getZ()
         );
@@ -215,7 +215,7 @@ public class EntityEventHandler {
      * @param tyrant The defeated Time Tyrant entity
      */
     private static void handleTimeTyrantDefeat(ServerLevel level, com.chronodawn.entities.bosses.TimeTyrantEntity tyrant) {
-        ChronoDawn.LOGGER.info(
+        ChronoDawn.LOGGER.debug(
             "Time Tyrant defeated at [{}, {}, {}]",
             tyrant.getX(), tyrant.getY(), tyrant.getZ()
         );

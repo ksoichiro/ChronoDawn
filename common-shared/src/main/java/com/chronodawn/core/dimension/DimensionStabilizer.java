@@ -49,7 +49,7 @@ public class DimensionStabilizer {
 
         globalState.markTyrantDefeated();
 
-        ChronoDawn.LOGGER.info("ChronoDawn dimension stabilized after Time Tyrant defeat");
+        ChronoDawn.LOGGER.debug("ChronoDawn dimension stabilized after Time Tyrant defeat");
 
         // Grant Time Tyrant defeat advancement to all online players
         grantTimeTyrantDefeatAdvancement(server);
@@ -113,11 +113,11 @@ public class DimensionStabilizer {
         for (ServerPlayer player : server.getPlayerList().getPlayers()) {
             if (CompatAdvancementHelper.grantAdvancement(server, player, advancementId)) {
                 grantedCount++;
-                ChronoDawn.LOGGER.info("Granted Time Tyrant defeat advancement to player {}",
+                ChronoDawn.LOGGER.debug("Granted Time Tyrant defeat advancement to player {}",
                     player.getName().getString());
             }
         }
 
-        ChronoDawn.LOGGER.info("Granted Time Tyrant defeat advancement to {} online players", grantedCount);
+        ChronoDawn.LOGGER.debug("Granted Time Tyrant defeat advancement to {} online players", grantedCount);
     }
 }

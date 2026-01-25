@@ -268,13 +268,13 @@ public class BlockEventHandler {
                     // Trigger Master Clock boss room placement when entrance door is opened
                     // This ensures the structure is generated before the player enters
                     if (!isBossRoomDoor && !isGuardianVaultDoor && !wasOpen && player.level() instanceof ServerLevel serverLevel) {
-                        ChronoDawn.LOGGER.info("Entrance door opened at {} - triggering Master Clock boss room placement", doorPosToUse);
+                        ChronoDawn.LOGGER.debug("Entrance door opened at {} - triggering Master Clock boss room placement", doorPosToUse);
                         com.chronodawn.worldgen.spawning.MasterClockBossRoomPlacer.triggerBossRoomPlacementAtDoor(serverLevel, doorPosToUse);
                     }
 
                     // Spawn Time Tyrant when boss room door is opened (not closed)
                     if (isBossRoomDoor && !wasOpen && player.level() instanceof ServerLevel serverLevel) {
-                        ChronoDawn.LOGGER.info("Boss room door opened at {} - spawning Time Tyrant", doorPosToUse);
+                        ChronoDawn.LOGGER.debug("Boss room door opened at {} - spawning Time Tyrant", doorPosToUse);
                         // Get the updated state after opening
                         BlockState openedState = player.level().getBlockState(doorPosToUse);
                         com.chronodawn.worldgen.spawning.TimeTyrantSpawner.spawnOnDoorOpen(serverLevel, doorPosToUse, openedState);
@@ -282,7 +282,7 @@ public class BlockEventHandler {
 
                     // Spawn Chronos Warden when Guardian Vault door is opened (not closed)
                     if (isGuardianVaultDoor && !wasOpen && player.level() instanceof ServerLevel serverLevel) {
-                        ChronoDawn.LOGGER.info("Guardian Vault door opened at {} - spawning Chronos Warden", doorPosToUse);
+                        ChronoDawn.LOGGER.debug("Guardian Vault door opened at {} - spawning Chronos Warden", doorPosToUse);
                         // Get the updated state after opening
                         BlockState openedState = player.level().getBlockState(doorPosToUse);
                         com.chronodawn.worldgen.spawning.ChronosWardenSpawner.spawnOnDoorOpen(serverLevel, doorPosToUse, openedState);
@@ -299,7 +299,7 @@ public class BlockEventHandler {
             return EventResult.pass().asMinecraft();
         });
 
-        ChronoDawn.LOGGER.info("Registered BlockEventHandler with Reversing Time Sandstone restoration and Time Hourglass control");
+        ChronoDawn.LOGGER.debug("Registered BlockEventHandler with Reversing Time Sandstone restoration and Time Hourglass control");
     }
 
     /**
@@ -322,7 +322,7 @@ public class BlockEventHandler {
         // Record the position and state for restoration
         pendingRestorations.put(immutablePos, new RestorationData(serverLevel, state));
 
-        ChronoDawn.LOGGER.info("Scheduled Reversing Time Sandstone restoration at {} in 3 seconds", immutablePos);
+        ChronoDawn.LOGGER.debug("Scheduled Reversing Time Sandstone restoration at {} in 3 seconds", immutablePos);
     }
 
     /**
@@ -380,7 +380,7 @@ public class BlockEventHandler {
         // Restore the original block
         level.setBlock(pos, originalState, 3); // 3 = update clients + neighbors
 
-        ChronoDawn.LOGGER.info("Restored Reversing Time Sandstone at {}", pos);
+        ChronoDawn.LOGGER.debug("Restored Reversing Time Sandstone at {}", pos);
     }
 
     /**

@@ -53,7 +53,7 @@ public class BlockProtectionHandler {
     public static void registerProtectedArea(ServerLevel level, BoundingBox area, Object uniqueId) {
         String key = makeKey(level, uniqueId);
         PROTECTED_AREAS.put(key, area);
-        ChronoDawn.LOGGER.info("Registered protected area: {} with bounds {}", key, area);
+        ChronoDawn.LOGGER.debug("Registered protected area: {} with bounds {}", key, area);
     }
 
     /**
@@ -65,7 +65,7 @@ public class BlockProtectionHandler {
     public static void onBossDefeated(ServerLevel level, Object uniqueId) {
         String key = makeKey(level, uniqueId);
         DEFEATED_BOSSES.add(key);
-        ChronoDawn.LOGGER.info("Boss defeated, unprotected area: {}", key);
+        ChronoDawn.LOGGER.debug("Boss defeated, unprotected area: {}", key);
     }
 
     /**
@@ -115,7 +115,7 @@ public class BlockProtectionHandler {
                 if (area.isInside(bossPos)) {
                     // Mark as defeated (unprotect)
                     DEFEATED_BOSSES.add(key);
-                    ChronoDawn.LOGGER.info(
+                    ChronoDawn.LOGGER.debug(
                         "Boss defeated at {}! Unprotected boss room: {}",
                         bossPos, key
                     );
@@ -148,6 +148,6 @@ public class BlockProtectionHandler {
     public static void reset() {
         PROTECTED_AREAS.clear();
         DEFEATED_BOSSES.clear();
-        ChronoDawn.LOGGER.info("Block Protection Handler reset");
+        ChronoDawn.LOGGER.debug("Block Protection Handler reset");
     }
 }

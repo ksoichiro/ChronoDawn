@@ -132,7 +132,7 @@ public class PortalRegistry {
         // Mark data as dirty for persistence
         markDirty();
 
-        ChronoDawn.LOGGER.info("Registered portal {} at {} in dimension {}",
+        ChronoDawn.LOGGER.debug("Registered portal {} at {} in dimension {}",
             portalId, position, dimension.location());
     }
 
@@ -164,7 +164,7 @@ public class PortalRegistry {
         // Mark data as dirty for persistence
         markDirty();
 
-        ChronoDawn.LOGGER.info("Unregistered portal {} from dimension {}",
+        ChronoDawn.LOGGER.debug("Unregistered portal {} from dimension {}",
             portalId, dimension.location());
     }
 
@@ -227,7 +227,7 @@ public class PortalRegistry {
         portalsByDimension.clear();
         portalsByPosition.clear();
         unmodifiableDimensionPortalCache.clear(); // T179: Clear cache
-        ChronoDawn.LOGGER.info("Cleared all portals from registry");
+        ChronoDawn.LOGGER.debug("Cleared all portals from registry");
     }
 
     /**
@@ -248,7 +248,7 @@ public class PortalRegistry {
         }
 
         tag.put("Portals", portalList);
-        ChronoDawn.LOGGER.info("Saved {} portals to NBT", portals.size());
+        ChronoDawn.LOGGER.debug("Saved {} portals to NBT", portals.size());
     }
 
     /**
@@ -282,6 +282,6 @@ public class PortalRegistry {
             registerPortal(portal);
         }
 
-        ChronoDawn.LOGGER.info("Loaded {} portals from NBT", portals.size());
+        ChronoDawn.LOGGER.debug("Loaded {} portals from NBT", portals.size());
     }
 }

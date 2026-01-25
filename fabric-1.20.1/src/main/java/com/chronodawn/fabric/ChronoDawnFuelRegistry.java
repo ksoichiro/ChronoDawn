@@ -139,6 +139,6 @@ public class ChronoDawnFuelRegistry {
         // Chest Boats: 1200 ticks (60 seconds)
         registry.add(ModItems.ANCIENT_TIME_WOOD_CHEST_BOAT.get(), 1200);
 
-        ChronoDawn.LOGGER.info("Registered fuel items for Fabric (1.20.1) using individual item registration");
+        ChronoDawn.LOGGER.debug("Registered fuel items for Fabric (1.20.1) using individual item registration");
     }
 }

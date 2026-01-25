@@ -68,11 +68,11 @@ public class ChronosWardenSpawner {
         LifecycleEvent.SERVER_LEVEL_LOAD.register(level -> {
             if (level instanceof ServerLevel) {
                 ServerLevel serverLevel = (ServerLevel) level;
-                ChronoDawn.LOGGER.info("Chronos Warden Spawner initialized for dimension: {}", serverLevel.dimension().location());
+                ChronoDawn.LOGGER.debug("Chronos Warden Spawner initialized for dimension: {}", serverLevel.dimension().location());
             }
         });
 
-        ChronoDawn.LOGGER.info("Registered ChronosWardenSpawner");
+        ChronoDawn.LOGGER.debug("Registered ChronosWardenSpawner");
     }
 
     /**
@@ -126,7 +126,7 @@ public class ChronosWardenSpawner {
                     // Mark this structure as processed
                     spawnedStructures.add(structurePos);
 
-                    ChronoDawn.LOGGER.info("Found Guardian Vault structure at chunk {} (block pos: {})", chunkPos, structurePos);
+                    ChronoDawn.LOGGER.debug("Found Guardian Vault structure at chunk {} (block pos: {})", chunkPos, structurePos);
 
                     // Spawn Chronos Warden at the boss room
                     spawnChronosWardenAtBossRoom(level, chunkPos);
@@ -183,7 +183,7 @@ public class ChronosWardenSpawner {
                 .getKey(structure);
 
             if (structureLocation != null && structureLocation.equals(GUARDIAN_VAULT_ID)) {
-                ChronoDawn.LOGGER.info("Attempting to spawn Chronos Warden at Guardian Vault in chunk {}", chunkPos);
+                ChronoDawn.LOGGER.debug("Attempting to spawn Chronos Warden at Guardian Vault in chunk {}", chunkPos);
 
                 // Find the boss room position by searching for structure blocks
                 BlockPos bossRoomSpawnPos = findBossRoom(level, chunkBlockPos);
@@ -193,7 +193,7 @@ public class ChronosWardenSpawner {
                     return;
                 }
 
-                ChronoDawn.LOGGER.info("Calculated spawn position: {}", bossRoomSpawnPos);
+                ChronoDawn.LOGGER.debug("Calculated spawn position: {}", bossRoomSpawnPos);
 
                 // Check if a Chronos Warden already exists near this position
                 if (isWardenNearby(level, bossRoomSpawnPos)) {
@@ -224,7 +224,7 @@ public class ChronosWardenSpawner {
 
                     level.addFreshEntity(warden);
 
-                    ChronoDawn.LOGGER.info(
+                    ChronoDawn.LOGGER.debug(
                         "Chronos Warden spawned at [{}, {}, {}]",
                         spawnPos.getX(), spawnPos.getY(), spawnPos.getZ()
                     );
@@ -251,7 +251,7 @@ public class ChronosWardenSpawner {
         int maxY = 150; // Search from high altitude
         int minY = -60; // Down to deep underground
 
-        ChronoDawn.LOGGER.info("Searching for Guardian Vault Door from Y={} to Y={} around {}", maxY, minY, searchCenter);
+        ChronoDawn.LOGGER.debug("Searching for Guardian Vault Door from Y={} to Y={} around {}", maxY, minY, searchCenter);
 
         // Search in all directions for Guardian Vault Door
         for (int y = maxY; y >= minY; y--) {
@@ -276,7 +276,7 @@ public class ChronosWardenSpawner {
                                                             .relative(facing.getClockWise(), 10)  // 10 blocks to the right
                                                             .above(1);
 
-                                ChronoDawn.LOGGER.info("Found Guardian Vault Door at {} facing {}, spawn at {}",
+                                ChronoDawn.LOGGER.debug("Found Guardian Vault Door at {} facing {}, spawn at {}",
                                     checkPos, facing, spawnPos);
                                 return spawnPos;
                             }
@@ -340,11 +340,11 @@ public class ChronosWardenSpawner {
      * @param doorState The BlockState of the door
      */
     public static void spawnOnDoorOpen(ServerLevel level, BlockPos doorPos, BlockState doorState) {
-        ChronoDawn.LOGGER.info("Guardian Vault Door opened at {}", doorPos);
+        ChronoDawn.LOGGER.debug("Guardian Vault Door opened at {}", doorPos);
 
         // Check if we've already spawned from this door
         if (spawnedDoors.contains(doorPos)) {
-            ChronoDawn.LOGGER.info("Chronos Warden already spawned from this door - not spawning again");
+            ChronoDawn.LOGGER.debug("Chronos Warden already spawned from this door - not spawning again");
             return;
         }
 
@@ -362,7 +362,7 @@ public class ChronosWardenSpawner {
 
         // Check if a Chronos Warden already exists near this position
         if (isWardenNearby(level, spawnPos)) {
-            ChronoDawn.LOGGER.info("Chronos Warden already exists near {} - not spawning", spawnPos);
+            ChronoDawn.LOGGER.debug("Chronos Warden already exists near {} - not spawning", spawnPos);
             return;
         }
 
@@ -395,7 +395,7 @@ public class ChronosWardenSpawner {
             // Mark this door as spawned
             spawnedDoors.add(doorPos);
 
-            ChronoDawn.LOGGER.info(
+            ChronoDawn.LOGGER.debug(
                 "Chronos Warden spawned at [{}, {}, {}] from Guardian Vault Door",
                 spawnPos.getX(), spawnPos.getY(), spawnPos.getZ()
             );
@@ -413,6 +413,6 @@ public class ChronosWardenSpawner {
         spawnedDoors.clear();
         tickCounters.clear();
         lastWorldId = null;
-        ChronoDawn.LOGGER.info("Chronos Warden Spawner reset");
+        ChronoDawn.LOGGER.debug("Chronos Warden Spawner reset");
     }
 }

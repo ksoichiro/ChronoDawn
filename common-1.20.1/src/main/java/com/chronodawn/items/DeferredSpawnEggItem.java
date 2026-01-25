@@ -94,7 +94,7 @@ public class DeferredSpawnEggItem extends SpawnEggItem {
 
             entityTypeField.setAccessible(true);
             entityTypeField.set(this, entityType);
-            ChronoDawn.LOGGER.info("Successfully set entity type for spawn egg: {}", entityType.getDescriptionId());
+            ChronoDawn.LOGGER.debug("Successfully set entity type for spawn egg: {}", entityType.getDescriptionId());
         } catch (Exception e) {
             ChronoDawn.LOGGER.warn("Failed to set entity type in parent SpawnEggItem via reflection", e);
         }

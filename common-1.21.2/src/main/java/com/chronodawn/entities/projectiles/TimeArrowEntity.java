@@ -37,7 +37,7 @@ public class TimeArrowEntity extends AbstractArrow {
      */
     public TimeArrowEntity(EntityType<? extends TimeArrowEntity> entityType, Level level) {
         super(entityType, level);
-        ChronoDawn.LOGGER.info("TimeArrowEntity constructed (no shooter)");
+        ChronoDawn.LOGGER.debug("TimeArrowEntity constructed (no shooter)");
     }
 
     /**
@@ -50,7 +50,7 @@ public class TimeArrowEntity extends AbstractArrow {
      */
     public TimeArrowEntity(EntityType<? extends TimeArrowEntity> entityType, LivingEntity shooter, Level level, ItemStack pickupItemStack) {
         super(entityType, shooter, level, pickupItemStack, null);
-        ChronoDawn.LOGGER.info("TimeArrowEntity constructed with shooter: {}", shooter.getName().getString());
+        ChronoDawn.LOGGER.debug("TimeArrowEntity constructed with shooter: {}", shooter.getName().getString());
     }
 
     @Override
@@ -67,15 +67,15 @@ public class TimeArrowEntity extends AbstractArrow {
             return;
         }
 
-        ChronoDawn.LOGGER.info("Time Arrow hit entity: {}", result.getEntity().getType());
+        ChronoDawn.LOGGER.debug("Time Arrow hit entity: {}", result.getEntity().getType());
 
         // Apply effects to any living entity
         if (result.getEntity() instanceof LivingEntity target) {
-            ChronoDawn.LOGGER.info("Time Arrow applying effects to LivingEntity: {}", target.getName().getString());
+            ChronoDawn.LOGGER.debug("Time Arrow applying effects to LivingEntity: {}", target.getName().getString());
 
             // Check if the hit entity is Time Tyrant for stronger effects
             if (target instanceof TimeTyrantEntity) {
-                ChronoDawn.LOGGER.info("Time Arrow hit Time Tyrant - applying strong effects");
+                ChronoDawn.LOGGER.debug("Time Arrow hit Time Tyrant - applying strong effects");
 
                 // Apply Slowness III for 5 seconds
                 target.addEffect(new MobEffectInstance(
@@ -98,7 +98,7 @@ public class TimeArrowEntity extends AbstractArrow {
                     0    // Glowing I
                 ));
             } else {
-                ChronoDawn.LOGGER.info("Time Arrow hit normal mob - applying Slowness II");
+                ChronoDawn.LOGGER.debug("Time Arrow hit normal mob - applying Slowness II");
 
                 // Apply Slowness II for 3 seconds to normal mobs
                 target.addEffect(new MobEffectInstance(

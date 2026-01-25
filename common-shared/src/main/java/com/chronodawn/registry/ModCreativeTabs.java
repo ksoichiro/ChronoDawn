@@ -45,6 +45,6 @@ public class ModCreativeTabs {
      */
     public static void register() {
         TABS.register();
-        ChronoDawn.LOGGER.info("Registered ModCreativeTabs");
+        ChronoDawn.LOGGER.debug("Registered ModCreativeTabs");
     }
 }

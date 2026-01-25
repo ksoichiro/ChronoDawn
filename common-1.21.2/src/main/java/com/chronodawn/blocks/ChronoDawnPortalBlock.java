@@ -315,7 +315,7 @@ public class ChronoDawnPortalBlock extends Block {
         if (entity instanceof net.minecraft.server.level.ServerPlayer player) {
             int currentState = ENTITY_PORTAL_STATES.getOrDefault(entityId, 0);
             if (currentState == 0 || currentState % 20 == 0) {
-                ChronoDawn.LOGGER.info("Player {} inside portal at {} (current state: {})",
+                ChronoDawn.LOGGER.debug("Player {} inside portal at {} (current state: {})",
                     player.getName().getString(), pos, currentState);
             }
         }
@@ -340,7 +340,7 @@ public class ChronoDawnPortalBlock extends Block {
             LAST_COUNTER_INCREMENT_TICK.remove(entityId);
             exitedAndReentered = true;
             if (entity instanceof net.minecraft.server.level.ServerPlayer player) {
-                ChronoDawn.LOGGER.info("Player {} moved to different portal (distance > 25), reset counter from {}",
+                ChronoDawn.LOGGER.debug("Player {} moved to different portal (distance > 25), reset counter from {}",
                     player.getName().getString(), oldState);
             }
         }
@@ -354,7 +354,7 @@ public class ChronoDawnPortalBlock extends Block {
             LAST_COUNTER_INCREMENT_TICK.remove(entityId);
             exitedAndReentered = true;
             if (entity instanceof net.minecraft.server.level.ServerPlayer player) {
-                ChronoDawn.LOGGER.info("Player {} exited and re-entered portal (tick gap > 20), reset counter from {}",
+                ChronoDawn.LOGGER.debug("Player {} exited and re-entered portal (tick gap > 20), reset counter from {}",
                     player.getName().getString(), oldState);
             }
         }
@@ -371,7 +371,7 @@ public class ChronoDawnPortalBlock extends Block {
             int currentState = ENTITY_PORTAL_STATES.getOrDefault(entityId, 0);
 
             if (entity instanceof net.minecraft.server.level.ServerPlayer player && currentState == 0) {
-                ChronoDawn.LOGGER.info("Player {} cannot teleport from dimension {} (still in arrival dimension, state: {})",
+                ChronoDawn.LOGGER.debug("Player {} cannot teleport from dimension {} (still in arrival dimension, state: {})",
                     player.getName().getString(), level.dimension().location(), currentState);
             }
 
@@ -446,14 +446,14 @@ public class ChronoDawnPortalBlock extends Block {
             if (player.getAbilities().invulnerable) {
                 // Creative mode: teleport immediately
                 shouldTeleport = true;
-                ChronoDawn.LOGGER.info("Portal counter for {}: {} (Creative mode, teleporting immediately)",
+                ChronoDawn.LOGGER.debug("Portal counter for {}: {} (Creative mode, teleporting immediately)",
                     player.getName().getString(), stateValue);
             } else {
                 // Survival mode: wait for threshold
                 shouldTeleport = stateValue >= PORTAL_TIME_THRESHOLD;
                 if (stateValue % 20 == 0 || shouldTeleport) {
                     // Log every second or when ready to teleport
-                    ChronoDawn.LOGGER.info("Portal counter for {}: {}/{} (Survival mode, shouldTeleport={})",
+                    ChronoDawn.LOGGER.debug("Portal counter for {}: {}/{} (Survival mode, shouldTeleport={})",
                         player.getName().getString(), stateValue, PORTAL_TIME_THRESHOLD, shouldTeleport);
                 }
             }
@@ -465,7 +465,7 @@ public class ChronoDawnPortalBlock extends Block {
         // Only teleport after entity has been inside portal for threshold time
         if (shouldTeleport) {
             if (entity instanceof net.minecraft.server.level.ServerPlayer player) {
-                ChronoDawn.LOGGER.info("Teleporting player {} after {} ticks in portal",
+                ChronoDawn.LOGGER.debug("Teleporting player {} after {} ticks in portal",
                     player.getName().getString(), stateValue);
             }
 
@@ -477,7 +477,7 @@ public class ChronoDawnPortalBlock extends Block {
             PENDING_TELEPORTS.put(entityId, pos.immutable());
 
             if (entity instanceof net.minecraft.server.level.ServerPlayer player) {
-                ChronoDawn.LOGGER.info("Queued player {} for teleportation after {} ticks in portal",
+                ChronoDawn.LOGGER.debug("Queued player {} for teleportation after {} ticks in portal",
                     player.getName().getString(), stateValue);
             }
         }
@@ -706,7 +706,7 @@ public class ChronoDawnPortalBlock extends Block {
                 ENTITY_PORTAL_STATES.put(entityId, -1);
                 LAST_COUNTER_INCREMENT_TICK.remove(entityId);
                 if (entity instanceof net.minecraft.server.level.ServerPlayer player) {
-                    ChronoDawn.LOGGER.info("Player {} teleported successfully", player.getName().getString());
+                    ChronoDawn.LOGGER.debug("Player {} teleported successfully", player.getName().getString());
                 }
             } else {
                 // Teleportation failed, reset state

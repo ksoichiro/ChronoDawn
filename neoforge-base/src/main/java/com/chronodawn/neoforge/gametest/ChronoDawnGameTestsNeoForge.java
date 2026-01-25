@@ -35,7 +35,7 @@ public class ChronoDawnGameTestsNeoForge {
     @SubscribeEvent
     public static void registerTests(RegisterGameTestsEvent event) {
         event.register(ChronoDawnGameTestsNeoForge.class);
-        ChronoDawn.LOGGER.info("Registered ChronoDawn GameTests for NeoForge");
+        ChronoDawn.LOGGER.debug("Registered ChronoDawn GameTests for NeoForge");
     }
 
     /**
@@ -73,7 +73,7 @@ public class ChronoDawnGameTestsNeoForge {
         tests.add(createTest("testPlayerInventoryCanReceiveItems",
             ChronoDawnGameTestLogic.TEST_PLAYER_INVENTORY_CAN_RECEIVE_ITEMS));
 
-        ChronoDawn.LOGGER.info("Generated {} GameTest functions for NeoForge", tests.size());
+        ChronoDawn.LOGGER.debug("Generated {} GameTest functions for NeoForge", tests.size());
         return tests;
     }
 

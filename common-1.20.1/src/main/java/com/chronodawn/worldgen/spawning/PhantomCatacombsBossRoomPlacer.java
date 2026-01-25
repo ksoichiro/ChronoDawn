@@ -201,7 +201,7 @@ public class PhantomCatacombsBossRoomPlacer {
             return markers;
         }
 
-        ChronoDawn.LOGGER.info(
+        ChronoDawn.LOGGER.debug(
             "[Async] Searching for Crying Obsidian markers in {} structure chunks (Y: {} to {}){}",
             structureChunks.size(),
             minY,
@@ -230,16 +230,16 @@ public class PhantomCatacombsBossRoomPlacer {
         }
 
         if (!markers.isEmpty()) {
-            ChronoDawn.LOGGER.info("[Async] Found {} Crying Obsidian markers after scanning {} chunks", markers.size(), chunksScanned);
+            ChronoDawn.LOGGER.debug("[Async] Found {} Crying Obsidian markers after scanning {} chunks", markers.size(), chunksScanned);
             for (int i = 0; i < Math.min(markers.size(), 5); i++) {
                 BlockPos marker = markers.get(i);
-                ChronoDawn.LOGGER.info("  Marker {}: {}",
+                ChronoDawn.LOGGER.debug("  Marker {}: {}",
                     i + 1,
                     marker
                 );
             }
             if (markers.size() > 5) {
-                ChronoDawn.LOGGER.info("  ... and {} more", markers.size() - 5);
+                ChronoDawn.LOGGER.debug("  ... and {} more", markers.size() - 5);
             }
         } else {
             ChronoDawn.LOGGER.warn(
@@ -550,7 +550,7 @@ public class PhantomCatacombsBossRoomPlacer {
         BlockPos rotatedConnector = StructureTemplate.calculateRelativePosition(tempSettings, room7Connector);
         BlockPos connectorWorldPos = placementPos.offset(rotatedConnector);
 
-        ChronoDawn.LOGGER.info(
+        ChronoDawn.LOGGER.debug(
             "Placed room_7 at {} (replacing dead-end at {}), connector at {}, rotation: {}",
             placementPos,
             deadEndPos,
@@ -695,7 +695,7 @@ public class PhantomCatacombsBossRoomPlacer {
         BlockPos rotatedConnector = StructureTemplate.calculateRelativePosition(tempSettings, room7Connector);
         BlockPos connectorWorldPos = placementPos.offset(rotatedConnector);
 
-        ChronoDawn.LOGGER.info(
+        ChronoDawn.LOGGER.debug(
             "Placed room_7 at {} (replacing dead-end at {}), connector at {}, rotation: {}",
             placementPos,
             deadEndPos,
@@ -937,7 +937,7 @@ public class PhantomCatacombsBossRoomPlacer {
             ChronoDawn.LOGGER.debug("Removed {} waterlogged blocks after boss_room placement", waterloggedRemoved);
         }
 
-        ChronoDawn.LOGGER.info(
+        ChronoDawn.LOGGER.debug(
             "Placed boss_room at {} (connector aligned to {}) in dimension {}",
             placementPos,
             connectorPos,
@@ -1023,7 +1023,7 @@ public class PhantomCatacombsBossRoomPlacer {
                         validStarts++;
                         net.minecraft.world.level.levelgen.structure.BoundingBox box = startForStructure.getBoundingBox();
                         if (box != null) {
-                            ChronoDawn.LOGGER.info("Successfully retrieved bounding box from StructureStart: {}", box);
+                            ChronoDawn.LOGGER.debug("Successfully retrieved bounding box from StructureStart: {}", box);
                             return box;
                         } else {
                             ChronoDawn.LOGGER.debug("StructureStart is valid but bounding box is null for chunk {}", structureChunk);
@@ -1089,7 +1089,7 @@ public class PhantomCatacombsBossRoomPlacer {
 
                 if (foundAny) {
                     var scannedBox = new net.minecraft.world.level.levelgen.structure.BoundingBox(minX, minY, minZ, maxX, maxY, maxZ);
-                    ChronoDawn.LOGGER.info("Created bounding box from chunk scan: {}", scannedBox);
+                    ChronoDawn.LOGGER.debug("Created bounding box from chunk scan: {}", scannedBox);
                     return scannedBox;
                 } else {
                     ChronoDawn.LOGGER.warn("No structure blocks found in chunk scan (scanned: {}, skipped: {})", chunksScanned, chunksSkipped);
@@ -1368,7 +1368,7 @@ public class PhantomCatacombsBossRoomPlacer {
                 }
             } else {
                 // Success - move to evaluation phase
-                ChronoDawn.LOGGER.info(
+                ChronoDawn.LOGGER.debug(
                     "Found {} Crying Obsidian markers for Phantom Catacombs at {}",
                     state.foundMarkers.size(),
                     state.structureOrigin
@@ -1431,7 +1431,7 @@ public class PhantomCatacombsBossRoomPlacer {
 
             if (!collisionFree.isEmpty()) {
                 state.selectedCandidate = collisionFree.get(level.random.nextInt(collisionFree.size()));
-                ChronoDawn.LOGGER.info(
+                ChronoDawn.LOGGER.debug(
                     "Phase 1: Found {} collision-free placements for {}. Selected dead_end at {}, rotation {}",
                     collisionFree.size(),
                     state.structureOrigin,
@@ -1484,7 +1484,7 @@ public class PhantomCatacombsBossRoomPlacer {
             boolean success = placeBossRoomIndependently(level, state.structureOrigin, state.boundingBox);
 
             if (success) {
-                ChronoDawn.LOGGER.info("Successfully placed boss_room as hidden chamber (fallback) for {}", state.structureOrigin);
+                ChronoDawn.LOGGER.debug("Successfully placed boss_room as hidden chamber (fallback) for {}", state.structureOrigin);
             } else {
                 ChronoDawn.LOGGER.error("Failed to place boss_room even as hidden chamber for {}", state.structureOrigin);
             }
@@ -1492,7 +1492,7 @@ public class PhantomCatacombsBossRoomPlacer {
             // Clean up markers
             int markersRemoved = cleanupCryingObsidianMarkers(level, state.structureOrigin, state.boundingBox, state.initialChunkPos);
             if (markersRemoved > 0) {
-                ChronoDawn.LOGGER.info("Removed {} Crying Obsidian markers from structure {} (fallback)", markersRemoved, state.structureOrigin);
+                ChronoDawn.LOGGER.debug("Removed {} Crying Obsidian markers from structure {} (fallback)", markersRemoved, state.structureOrigin);
             }
 
             state.phase = ProcessingPhase.COMPLETED;
@@ -1532,7 +1532,7 @@ public class PhantomCatacombsBossRoomPlacer {
 
         // Place boss room
         if (placeBossRoom(level, room7ConnectorPos)) {
-            ChronoDawn.LOGGER.info(
+            ChronoDawn.LOGGER.debug(
                 "Successfully placed room_7 + boss_room for structure {} (dead_end at {}, room_7 connector at {}, collision count: {})",
                 state.structureOrigin,
                 state.selectedCandidate.deadEndPos,
@@ -1558,7 +1558,7 @@ public class PhantomCatacombsBossRoomPlacer {
         }
 
         if (markersRemoved > 0) {
-            ChronoDawn.LOGGER.info("Removed {} Crying Obsidian markers from structure {}", markersRemoved, state.structureOrigin);
+            ChronoDawn.LOGGER.debug("Removed {} Crying Obsidian markers from structure {}", markersRemoved, state.structureOrigin);
         }
 
         state.phase = ProcessingPhase.COMPLETED;
@@ -2044,7 +2044,7 @@ public class PhantomCatacombsBossRoomPlacer {
             ChronoDawn.LOGGER.debug("Removed {} waterlogged blocks after hidden chamber placement", waterloggedRemoved);
         }
 
-        ChronoDawn.LOGGER.info(
+        ChronoDawn.LOGGER.debug(
             "Successfully placed boss_room as hidden chamber at {}",
             hiddenPos
         );
@@ -2100,6 +2100,6 @@ public class PhantomCatacombsBossRoomPlacer {
             }
         });
 
-        ChronoDawn.LOGGER.info("Registered PhantomCatacombsBossRoomPlacer");
+        ChronoDawn.LOGGER.debug("Registered PhantomCatacombsBossRoomPlacer");
     }
 }

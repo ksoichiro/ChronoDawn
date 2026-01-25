@@ -98,7 +98,7 @@ public abstract class SleepMixin {
             for (ServerPlayer player : chronodawnPlayers) {
                 UUID playerId = player.getUUID();
                 int sleepTime = sleepTimeMap.getOrDefault(playerId, 0);
-                ChronoDawn.LOGGER.info(
+                ChronoDawn.LOGGER.debug(
                     "DEBUG Sleep Check - Player: {}, isSleeping: {}, sleepTime: {}/{}, dayTime: {}, dayOfCycle: {}",
                     player.getName().getString(),
                     player.isSleeping(),
@@ -139,7 +139,7 @@ public abstract class SleepMixin {
 
             // Request TimeDistortionEventHandler to set time on next tick
             // TimeDistortionEventHandler will handle the actual time change
-            ChronoDawn.LOGGER.info("SleepMixin: Requesting sleep skip to time {}", newDayTime);
+            ChronoDawn.LOGGER.debug("SleepMixin: Requesting sleep skip to time {}", newDayTime);
             TimeDistortionEventHandler.requestSleepSkip(level, newDayTime);
 
             // Reset sleep counters
@@ -150,7 +150,7 @@ public abstract class SleepMixin {
                 player.stopSleepInBed(false, true);
             }
 
-            ChronoDawn.LOGGER.info(
+            ChronoDawn.LOGGER.debug(
                 "ChronoDawn: All {} players were sleeping, skipped to morning (dayTime: {} -> {})",
                 chronodawnPlayers.size(),
                 currentDayTime,

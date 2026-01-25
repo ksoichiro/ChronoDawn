@@ -59,7 +59,7 @@ public class ChronicleData {
                 .mapToInt(category -> category.getEntries().size())
                 .sum();
 
-            ChronoDawn.LOGGER.info("Loaded {} Chronicle categories with {} total entries",
+            ChronoDawn.LOGGER.debug("Loaded {} Chronicle categories with {} total entries",
                 categories.size(), totalEntries);
         } catch (IOException e) {
             ChronoDawn.LOGGER.error("Failed to load Chronicle data", e);

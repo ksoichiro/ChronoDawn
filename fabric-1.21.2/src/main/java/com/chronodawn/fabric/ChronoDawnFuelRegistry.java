@@ -61,7 +61,7 @@ public class ChronoDawnFuelRegistry {
             // Saplings: 100 ticks (5 seconds)
             builder.add(TagKey.create(Registries.ITEM, ResourceLocation.parse("minecraft:saplings")), 100);
 
-            ChronoDawn.LOGGER.info("Registered fuel items for Fabric 1.21.2+ using tags");
+            ChronoDawn.LOGGER.debug("Registered fuel items for Fabric 1.21.2+ using tags");
         });
     }
 }

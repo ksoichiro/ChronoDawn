@@ -46,7 +46,7 @@ public class ChronoDawnTimeData extends CompatSavedData {
     public static ChronoDawnTimeData load(CompoundTag tag, HolderLookup.Provider provider) {
         ChronoDawnTimeData data = new ChronoDawnTimeData();
         data.loadData(tag);
-        ChronoDawn.LOGGER.info("ChronoDawnTimeData: Loaded independent time = {}", data.independentTime);
+        ChronoDawn.LOGGER.debug("ChronoDawnTimeData: Loaded independent time = {}", data.independentTime);
         return data;
     }
 
@@ -56,7 +56,7 @@ public class ChronoDawnTimeData extends CompatSavedData {
     @Override
     public CompoundTag saveData(CompoundTag tag) {
         tag.putLong(TIME_KEY, independentTime);
-        ChronoDawn.LOGGER.info("ChronoDawnTimeData: Saved independent time = {}", independentTime);
+        ChronoDawn.LOGGER.debug("ChronoDawnTimeData: Saved independent time = {}", independentTime);
         return tag;
     }
 

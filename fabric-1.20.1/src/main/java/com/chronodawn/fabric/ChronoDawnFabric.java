@@ -58,7 +58,7 @@ public class ChronoDawnFabric implements ModInitializer {
 
         // Initialize spawn eggs (Fabric-specific timing)
         com.chronodawn.registry.ModItems.initializeSpawnEggs();
-        ChronoDawn.LOGGER.info("Initialized spawn eggs for Fabric");
+        ChronoDawn.LOGGER.debug("Initialized spawn eggs for Fabric");
 
         // Register fuel items
         ChronoDawnFuelRegistry.register();
@@ -179,7 +179,7 @@ public class ChronoDawnFabric implements ModInitializer {
             ParadoxCrawlerEntity.createAttributes()
         );
 
-        ChronoDawn.LOGGER.info("Registered entity attributes for Fabric");
+        ChronoDawn.LOGGER.debug("Registered entity attributes for Fabric");
     }
 
     /**
@@ -283,6 +283,6 @@ public class ChronoDawnFabric implements ModInitializer {
             ParadoxCrawlerEntity::checkParadoxCrawlerSpawnRules
         );
 
-        ChronoDawn.LOGGER.info("Registered spawn placements for custom mobs");
+        ChronoDawn.LOGGER.debug("Registered spawn placements for custom mobs");
     }
 }

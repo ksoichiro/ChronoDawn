@@ -110,7 +110,7 @@ public class EntropyCryptTrapdoorBlock extends TrapDoorBlock {
                         true
                     );
 
-                    ChronoDawn.LOGGER.info(
+                    ChronoDawn.LOGGER.debug(
                         "Entropy Keeper spawned from trapdoor at {} by player {}",
                         pos,
                         player.getName().getString()

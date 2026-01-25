@@ -223,6 +223,6 @@ public class ModSounds {
      */
     public static void register() {
         SOUNDS.register();
-        ChronoDawn.LOGGER.info("Registered ModSounds");
+        ChronoDawn.LOGGER.debug("Registered ModSounds");
     }
 }

@@ -134,7 +134,7 @@ public class PortalStabilizerItem extends Item {
             // Consume the item
             itemStack.shrink(1);
 
-            ChronoDawn.LOGGER.info("Portal {} stabilized by player {}", portal.getPortalId(), player != null ? player.getName().getString() : "Unknown");
+            ChronoDawn.LOGGER.debug("Portal {} stabilized by player {}", portal.getPortalId(), player != null ? player.getName().getString() : "Unknown");
             return InteractionResult.CONSUME;
         }
 

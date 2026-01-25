@@ -78,10 +78,10 @@ public class DimensionStateData extends ChronoDawnWorldData {
         String levelString = tag.getString("time_distortion_level");
         if (levelString.isEmpty()) {
             data.timeDistortionLevel = TimeDistortionLevel.SLOWNESS_IV;
-            ChronoDawn.LOGGER.info("DimensionStateData loaded with default time distortion level (SLOWNESS_IV)");
+            ChronoDawn.LOGGER.debug("DimensionStateData loaded with default time distortion level (SLOWNESS_IV)");
         } else {
             data.timeDistortionLevel = TimeDistortionLevel.valueOf(levelString);
-            ChronoDawn.LOGGER.info("DimensionStateData loaded: isStabilized={}, timeDistortionLevel={}",
+            ChronoDawn.LOGGER.debug("DimensionStateData loaded: isStabilized={}, timeDistortionLevel={}",
                 data.isStabilized, data.timeDistortionLevel);
         }
 
@@ -92,7 +92,7 @@ public class DimensionStateData extends ChronoDawnWorldData {
     public CompoundTag saveData(CompoundTag tag) {
         tag.putBoolean("is_stabilized", isStabilized);
         tag.putString("time_distortion_level", timeDistortionLevel.name());
-        ChronoDawn.LOGGER.info("DimensionStateData saved: isStabilized={}, timeDistortionLevel={}",
+        ChronoDawn.LOGGER.debug("DimensionStateData saved: isStabilized={}, timeDistortionLevel={}",
             isStabilized, timeDistortionLevel);
         return tag;
     }
@@ -105,10 +105,10 @@ public class DimensionStateData extends ChronoDawnWorldData {
         String levelString = tag.getString("time_distortion_level");
         if (levelString.isEmpty()) {
             timeDistortionLevel = TimeDistortionLevel.SLOWNESS_IV;
-            ChronoDawn.LOGGER.info("DimensionStateData loadData() with default time distortion level (SLOWNESS_IV)");
+            ChronoDawn.LOGGER.debug("DimensionStateData loadData() with default time distortion level (SLOWNESS_IV)");
         } else {
             timeDistortionLevel = TimeDistortionLevel.valueOf(levelString);
-            ChronoDawn.LOGGER.info("DimensionStateData loadData(): isStabilized={}, timeDistortionLevel={}",
+            ChronoDawn.LOGGER.debug("DimensionStateData loadData(): isStabilized={}, timeDistortionLevel={}",
                 isStabilized, timeDistortionLevel);
         }
     }
@@ -132,7 +132,7 @@ public class DimensionStateData extends ChronoDawnWorldData {
         if (this.isStabilized != stabilized) {
             this.isStabilized = stabilized;
             this.setDirty();
-            ChronoDawn.LOGGER.info("Dimension stabilization state changed to: {}", stabilized);
+            ChronoDawn.LOGGER.debug("Dimension stabilization state changed to: {}", stabilized);
         }
     }
 
@@ -155,7 +155,7 @@ public class DimensionStateData extends ChronoDawnWorldData {
         if (this.timeDistortionLevel != level) {
             this.timeDistortionLevel = level;
             this.setDirty();
-            ChronoDawn.LOGGER.info("Time distortion level changed to: {}", level);
+            ChronoDawn.LOGGER.debug("Time distortion level changed to: {}", level);
         }
     }
 
@@ -166,6 +166,6 @@ public class DimensionStateData extends ChronoDawnWorldData {
     public void enhanceTimeDistortion() {
         setStabilized(true);
         setTimeDistortionLevel(TimeDistortionLevel.SLOWNESS_V);
-        ChronoDawn.LOGGER.info("Dimension enhanced with Eye of Chronos - Slowness V activated");
+        ChronoDawn.LOGGER.debug("Dimension enhanced with Eye of Chronos - Slowness V activated");
     }
 }

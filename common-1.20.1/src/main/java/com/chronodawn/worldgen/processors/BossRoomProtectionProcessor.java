@@ -375,7 +375,7 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
                 }
 
                 double distance = Math.sqrt(minMarker.pos.distSqr(maxMarker.pos));
-                ChronoDawn.LOGGER.info(
+                ChronoDawn.LOGGER.debug(
                     "Registered boss room protection in dimension {}: min={} (placementId={}), max={} (placementId={}), distance={:.1f} blocks, bounds={}",
                     level.dimension().location(), minPos, minMarker.placementId, maxPos, maxMarker.placementId, distance, bossRoomArea
                 );
@@ -457,7 +457,7 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
                 PermanentProtectionHandler.registerProtectedArea(level, protectedArea, minPos);
 
                 double distance = Math.sqrt(minMarker.pos.distSqr(maxMarker.pos));
-                ChronoDawn.LOGGER.info(
+                ChronoDawn.LOGGER.debug(
                     "Registered permanent protection in dimension {}: min={} (placementId={}), max={} (placementId={}), distance={:.1f} blocks, bounds={}",
                     level.dimension().location(), minPos, minMarker.placementId, maxPos, maxMarker.placementId, distance, protectedArea
                 );
@@ -512,7 +512,7 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
                 // Keep the newer marker
                 uniqueMarkers.put(marker.pos, marker);
                 if (existing != null) {
-                    ChronoDawn.LOGGER.info("Removed duplicate marker at {} (kept newer one, time diff={}ms)",
+                    ChronoDawn.LOGGER.debug("Removed duplicate marker at {} (kept newer one, time diff={}ms)",
                         marker.pos, marker.addedTime - existing.addedTime);
                 }
             }
@@ -537,7 +537,7 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
 
             long age = currentTime - marker.addedTime;
             if (age > MARKER_EXPIRY_MS) {
-                ChronoDawn.LOGGER.info("Removing expired marker at {} (placementId={}, age={}s, type={})",
+                ChronoDawn.LOGGER.debug("Removing expired marker at {} (placementId={}, age={}s, type={})",
                     marker.pos, marker.placementId, age / 1000,
                     marker.isPermanent ? "permanent" : "boss_room");
                 iterator.remove();
@@ -548,7 +548,7 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
         }
 
         if (removedCount > 0) {
-            ChronoDawn.LOGGER.info("Cleaned up {} expired boss room markers (older than {} seconds)",
+            ChronoDawn.LOGGER.debug("Cleaned up {} expired boss room markers (older than {} seconds)",
                 removedCount, MARKER_EXPIRY_MS / 1000);
         }
     }
@@ -675,7 +675,7 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
         // CRITICAL: Clear ALL pending markers after processing
         PENDING_MARKERS.clear();
 
-        ChronoDawn.LOGGER.info("[IMMEDIATE] Processed {} boss room pairs, {} permanent pairs, cleared all pending markers",
+        ChronoDawn.LOGGER.debug("[IMMEDIATE] Processed {} boss room pairs, {} permanent pairs, cleared all pending markers",
             bossRoomPairCount, permanentPairCount);
     }
 }

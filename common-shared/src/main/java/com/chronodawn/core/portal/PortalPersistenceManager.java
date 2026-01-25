@@ -26,7 +26,7 @@ public class PortalPersistenceManager {
         // Load portal data when overworld loads
         LifecycleEvent.SERVER_LEVEL_LOAD.register(PortalPersistenceManager::onServerLevelLoad);
 
-        ChronoDawn.LOGGER.info("Portal Persistence Manager initialized");
+        ChronoDawn.LOGGER.debug("Portal Persistence Manager initialized");
     }
 
     /**
@@ -40,7 +40,7 @@ public class PortalPersistenceManager {
             return;
         }
 
-        ChronoDawn.LOGGER.info("Loading portal registry from world save data...");
+        ChronoDawn.LOGGER.debug("Loading portal registry from world save data...");
 
         // Get or create portal registry data
         PortalRegistryData data = PortalRegistryData.get(level);
@@ -48,6 +48,6 @@ public class PortalPersistenceManager {
         // Link registry to saved data for automatic persistence
         PortalRegistry.getInstance().setSavedData(data);
 
-        ChronoDawn.LOGGER.info("Portal registry loaded successfully");
+        ChronoDawn.LOGGER.debug("Portal registry loaded successfully");
     }
 }

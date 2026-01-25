@@ -41,6 +41,6 @@ public class ModEffects {
      */
     public static void register() {
         EFFECTS.register();
-        ChronoDawn.LOGGER.info("Registered ModEffects");
+        ChronoDawn.LOGGER.debug("Registered ModEffects");
     }
 }

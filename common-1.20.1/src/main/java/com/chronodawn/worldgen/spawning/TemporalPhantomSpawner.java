@@ -71,7 +71,7 @@ public class TemporalPhantomSpawner {
         bossRoomPositions.putIfAbsent(dimensionId, ConcurrentHashMap.newKeySet());
         bossRoomPositions.get(dimensionId).add(bossRoomCenter.immutable());
 
-        ChronoDawn.LOGGER.info(
+        ChronoDawn.LOGGER.debug(
             "Registered Phantom Catacombs boss_room at {} in dimension {} for Temporal Phantom spawning",
             bossRoomCenter,
             dimensionId
@@ -85,7 +85,7 @@ public class TemporalPhantomSpawner {
         LifecycleEvent.SERVER_LEVEL_LOAD.register(level -> {
             if (level instanceof ServerLevel) {
                 ServerLevel serverLevel = (ServerLevel) level;
-                ChronoDawn.LOGGER.info("Temporal Phantom Spawner initialized for dimension: {}", serverLevel.dimension().location());
+                ChronoDawn.LOGGER.debug("Temporal Phantom Spawner initialized for dimension: {}", serverLevel.dimension().location());
             }
         });
 
@@ -96,7 +96,7 @@ public class TemporalPhantomSpawner {
             }
         });
 
-        ChronoDawn.LOGGER.info("Registered TemporalPhantomSpawner");
+        ChronoDawn.LOGGER.debug("Registered TemporalPhantomSpawner");
     }
 
     /**
@@ -164,7 +164,7 @@ public class TemporalPhantomSpawner {
             }
 
             if (playerNearby) {
-                ChronoDawn.LOGGER.info(
+                ChronoDawn.LOGGER.debug(
                     "Player {} entered boss_room at {} (dimension: {}), spawning Temporal Phantom",
                     nearestPlayer.getName().getString(),
                     bossRoomCenter,
@@ -187,7 +187,7 @@ public class TemporalPhantomSpawner {
         // Find ground level (Y coordinate where boss should spawn)
         BlockPos spawnPos = findGroundLevel(level, bossRoomCenter);
 
-        ChronoDawn.LOGGER.info(
+        ChronoDawn.LOGGER.debug(
             "Spawning Temporal Phantom in Phantom Catacombs boss_room at {} (center: {}, dimension: {})",
             spawnPos,
             bossRoomCenter,
@@ -209,7 +209,7 @@ public class TemporalPhantomSpawner {
             boolean addedToWorld = level.addFreshEntity(phantom);
 
             if (addedToWorld) {
-                ChronoDawn.LOGGER.info(
+                ChronoDawn.LOGGER.debug(
                     "Successfully spawned Temporal Phantom at {} (UUID: {})",
                     spawnPos,
                     phantom.getUUID()
@@ -249,7 +249,7 @@ public class TemporalPhantomSpawner {
 
             // Check if there's solid ground below and air above
             if (!belowState.isAir() && checkState.isAir()) {
-                ChronoDawn.LOGGER.info(
+                ChronoDawn.LOGGER.debug(
                     "Found ground level at Y={} (below: {}, current: {})",
                     y,
                     belowState.getBlock().getName().getString(),

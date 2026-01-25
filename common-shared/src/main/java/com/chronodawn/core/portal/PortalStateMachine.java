@@ -61,7 +61,7 @@ public class PortalStateMachine {
         currentState = PortalState.ACTIVATED;
         // Notify registry to persist state change
         PortalRegistry.getInstance().markDirtyForPortal(portalId);
-        ChronoDawn.LOGGER.info("Portal {} activated at {} in dimension {}",
+        ChronoDawn.LOGGER.debug("Portal {} activated at {} in dimension {}",
             portalId, position, sourceDimension.location());
         return true;
     }
@@ -80,7 +80,7 @@ public class PortalStateMachine {
         currentState = PortalState.DEACTIVATED;
         // Notify registry to persist state change
         PortalRegistry.getInstance().markDirtyForPortal(portalId);
-        ChronoDawn.LOGGER.info("Portal {} deactivated at {} in dimension {}",
+        ChronoDawn.LOGGER.debug("Portal {} deactivated at {} in dimension {}",
             portalId, position, sourceDimension.location());
         return true;
     }
@@ -99,7 +99,7 @@ public class PortalStateMachine {
         currentState = PortalState.STABILIZED;
         // Notify registry to persist state change
         PortalRegistry.getInstance().markDirtyForPortal(portalId);
-        ChronoDawn.LOGGER.info("Portal {} stabilized at {} in dimension {}",
+        ChronoDawn.LOGGER.debug("Portal {} stabilized at {} in dimension {}",
             portalId, position, sourceDimension.location());
         return true;
     }

@@ -40,11 +40,11 @@ public class ChronosWardenSpawner {
     public static void register() {
         LifecycleEvent.SERVER_LEVEL_LOAD.register(level -> {
             if (level instanceof ServerLevel serverLevel) {
-                ChronoDawn.LOGGER.info("Chronos Warden Spawner initialized for dimension: {}", serverLevel.dimension().location());
+                ChronoDawn.LOGGER.debug("Chronos Warden Spawner initialized for dimension: {}", serverLevel.dimension().location());
             }
         });
 
-        ChronoDawn.LOGGER.info("Registered ChronosWardenSpawner");
+        ChronoDawn.LOGGER.debug("Registered ChronosWardenSpawner");
     }
 
     /**
@@ -96,7 +96,7 @@ public class ChronosWardenSpawner {
      * @param doorState The BlockState of the door
      */
     public static void spawnOnDoorOpen(ServerLevel level, BlockPos doorPos, BlockState doorState) {
-        ChronoDawn.LOGGER.info("Guardian Vault Door opened at {}", doorPos);
+        ChronoDawn.LOGGER.debug("Guardian Vault Door opened at {}", doorPos);
 
         // Get saved data for this world (persists across server restarts)
         BossSpawnData data = CompatSavedData.computeIfAbsent(
@@ -108,7 +108,7 @@ public class ChronosWardenSpawner {
 
         // Check if we've already spawned from this door
         if (data.hasChronosWardenDoorSpawned(doorPos)) {
-            ChronoDawn.LOGGER.info("Chronos Warden already spawned from this door - not spawning again");
+            ChronoDawn.LOGGER.debug("Chronos Warden already spawned from this door - not spawning again");
             return;
         }
 
@@ -126,7 +126,7 @@ public class ChronosWardenSpawner {
 
         // Check if a Chronos Warden already exists near this position
         if (isWardenNearby(level, spawnPos)) {
-            ChronoDawn.LOGGER.info("Chronos Warden already exists near {} - not spawning", spawnPos);
+            ChronoDawn.LOGGER.debug("Chronos Warden already exists near {} - not spawning", spawnPos);
             return;
         }
 
@@ -158,7 +158,7 @@ public class ChronosWardenSpawner {
             // Mark this door as spawned (persisted to disk)
             data.markChronosWardenDoorSpawned(doorPos);
 
-            ChronoDawn.LOGGER.info(
+            ChronoDawn.LOGGER.debug(
                 "Chronos Warden spawned at [{}, {}, {}] from Guardian Vault Door",
                 spawnPos.getX(), spawnPos.getY(), spawnPos.getZ()
             );
@@ -180,6 +180,6 @@ public class ChronosWardenSpawner {
             BossSpawnData.getDataName()
         );
         data.resetChronosWarden();
-        ChronoDawn.LOGGER.info("Chronos Warden Spawner reset for dimension: {}", level.dimension().location());
+        ChronoDawn.LOGGER.debug("Chronos Warden Spawner reset for dimension: {}", level.dimension().location());
     }
 }

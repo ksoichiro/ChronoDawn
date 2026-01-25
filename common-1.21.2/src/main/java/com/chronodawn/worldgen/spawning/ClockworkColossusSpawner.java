@@ -85,11 +85,11 @@ public class ClockworkColossusSpawner {
 
         LifecycleEvent.SERVER_LEVEL_LOAD.register(level -> {
             if (level instanceof ServerLevel serverLevel) {
-                ChronoDawn.LOGGER.info("Clockwork Colossus Spawner initialized for dimension: {}", serverLevel.dimension().location());
+                ChronoDawn.LOGGER.debug("Clockwork Colossus Spawner initialized for dimension: {}", serverLevel.dimension().location());
             }
         });
 
-        ChronoDawn.LOGGER.info("Registered ClockworkColossusSpawner");
+        ChronoDawn.LOGGER.debug("Registered ClockworkColossusSpawner");
     }
 
     /**
@@ -175,7 +175,7 @@ public class ClockworkColossusSpawner {
 
                     // Mark this room as spawned (persisted to disk)
                     data.markClockworkColossusStructureSpawned(roomCenter);
-                    ChronoDawn.LOGGER.info("Spawning Clockwork Colossus in engine room at {}", roomCenter);
+                    ChronoDawn.LOGGER.debug("Spawning Clockwork Colossus in engine room at {}", roomCenter);
 
                     // Spawn Clockwork Colossus
                     spawnClockworkColossusAtEngineRoom(level, markerPositions);
@@ -392,7 +392,7 @@ public class ClockworkColossusSpawner {
 
             level.addFreshEntity(colossus);
 
-            ChronoDawn.LOGGER.info(
+            ChronoDawn.LOGGER.debug(
                 "Clockwork Colossus spawned at [{}, {}, {}]",
                 spawnPos.getX(), spawnPos.getY(), spawnPos.getZ()
             );
@@ -511,7 +511,7 @@ public class ClockworkColossusSpawner {
         Set<net.minecraft.world.level.levelgen.structure.BoundingBox> rooms = engineRooms.get(dimensionId);
         rooms.add(boundingBox);
 
-        ChronoDawn.LOGGER.info("Registered Clockwork Depths engine room in dimension {}: {}",
+        ChronoDawn.LOGGER.debug("Registered Clockwork Depths engine room in dimension {}: {}",
             dimensionId, boundingBox);
     }
 
@@ -535,6 +535,6 @@ public class ClockworkColossusSpawner {
         engineRooms.remove(dimensionId);
         cachedMarkers.remove(dimensionId);
         searchedChunks.remove(dimensionId);
-        ChronoDawn.LOGGER.info("Clockwork Colossus Spawner reset for dimension: {}", dimensionId);
+        ChronoDawn.LOGGER.debug("Clockwork Colossus Spawner reset for dimension: {}", dimensionId);
     }
 }

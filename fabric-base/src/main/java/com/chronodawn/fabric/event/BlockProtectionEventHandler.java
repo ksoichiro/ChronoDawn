@@ -46,7 +46,7 @@ public class BlockProtectionEventHandler {
                     true // action bar
                 );
 
-                com.chronodawn.ChronoDawn.LOGGER.info("Blocked permanent protected block break at {} by {}", pos, player.getName().getString());
+                com.chronodawn.ChronoDawn.LOGGER.debug("Blocked permanent protected block break at {} by {}", pos, player.getName().getString());
 
                 // Cancel block break event
                 return false;

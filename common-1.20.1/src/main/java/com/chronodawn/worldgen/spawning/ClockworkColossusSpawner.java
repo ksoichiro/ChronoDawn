@@ -86,11 +86,11 @@ public class ClockworkColossusSpawner {
         LifecycleEvent.SERVER_LEVEL_LOAD.register(level -> {
             if (level instanceof ServerLevel) {
                 ServerLevel serverLevel = (ServerLevel) level;
-                ChronoDawn.LOGGER.info("Clockwork Colossus Spawner initialized for dimension: {}", serverLevel.dimension().location());
+                ChronoDawn.LOGGER.debug("Clockwork Colossus Spawner initialized for dimension: {}", serverLevel.dimension().location());
             }
         });
 
-        ChronoDawn.LOGGER.info("Registered ClockworkColossusSpawner");
+        ChronoDawn.LOGGER.debug("Registered ClockworkColossusSpawner");
     }
 
     /**
@@ -391,7 +391,7 @@ public class ClockworkColossusSpawner {
 
             level.addFreshEntity(colossus);
 
-            ChronoDawn.LOGGER.info(
+            ChronoDawn.LOGGER.debug(
                 "Clockwork Colossus spawned at [{}, {}, {}]",
                 spawnPos.getX(), spawnPos.getY(), spawnPos.getZ()
             );
@@ -509,7 +509,7 @@ public class ClockworkColossusSpawner {
         engineRooms.putIfAbsent(dimensionId, new HashSet<>());
         engineRooms.get(dimensionId).add(boundingBox);
 
-        ChronoDawn.LOGGER.info("Registered Clockwork Depths engine room in dimension {}: {}",
+        ChronoDawn.LOGGER.debug("Registered Clockwork Depths engine room in dimension {}: {}",
             dimensionId, boundingBox);
     }
 
@@ -526,6 +526,6 @@ public class ClockworkColossusSpawner {
         cachedMarkers.remove(dimensionId);
         searchedChunks.remove(dimensionId);
         tickCounter = 0;
-        ChronoDawn.LOGGER.info("Clockwork Colossus Spawner reset for dimension: {}", dimensionId);
+        ChronoDawn.LOGGER.debug("Clockwork Colossus Spawner reset for dimension: {}", dimensionId);
     }
 }

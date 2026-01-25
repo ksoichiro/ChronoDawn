@@ -435,7 +435,7 @@ public class ModEntities {
      */
     public static void register() {
         ENTITIES.register();
-        ChronoDawn.LOGGER.info("Registered ModEntities");
+        ChronoDawn.LOGGER.debug("Registered ModEntities");
     }
 }
 

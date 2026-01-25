@@ -98,7 +98,7 @@ public class TimeKeeperVillagePlacer {
             boolean success = placeVillage(level, villagePos);
             if (success) {
                 data.setPlaced(villagePos);
-                ChronoDawn.LOGGER.info("Successfully placed Time Keeper Village at {} for player {}",
+                ChronoDawn.LOGGER.debug("Successfully placed Time Keeper Village at {} for player {}",
                     villagePos, player.getName().getString());
             } else {
                 ChronoDawn.LOGGER.warn("Failed to place Time Keeper Village structure at {}", villagePos);
@@ -127,7 +127,7 @@ public class TimeKeeperVillagePlacer {
             int minDistance = DISTANCE_RANGES[phase][0];
             int maxDistance = DISTANCE_RANGES[phase][1];
 
-            ChronoDawn.LOGGER.info("Searching for Time Keeper Village location (phase {}: {}-{} blocks)",
+            ChronoDawn.LOGGER.debug("Searching for Time Keeper Village location (phase {}: {}-{} blocks)",
                 phase + 1, minDistance, maxDistance);
 
             BlockPos result = searchInRange(level, center, minDistance, maxDistance);
@@ -182,7 +182,7 @@ public class TimeKeeperVillagePlacer {
             if (isTerrainFlat(level, candidate, STRUCTURE_WIDTH, STRUCTURE_DEPTH, MAX_HEIGHT_VARIATION)) {
                 // Check if surface is suitable (not water, not lava)
                 if (isSurfaceSuitable(level, candidate)) {
-                    ChronoDawn.LOGGER.info("Found suitable position for Time Keeper Village at {} (attempt {})",
+                    ChronoDawn.LOGGER.debug("Found suitable position for Time Keeper Village at {} (attempt {})",
                         candidate, attempt + 1);
                     return candidate;
                 }
@@ -283,7 +283,7 @@ public class TimeKeeperVillagePlacer {
 
         // Get template size
         var templateSize = template.getSize();
-        ChronoDawn.LOGGER.info("Time Keeper Village template size: {}x{}x{}",
+        ChronoDawn.LOGGER.debug("Time Keeper Village template size: {}x{}x{}",
             templateSize.getX(), templateSize.getY(), templateSize.getZ());
 
         // Calculate placement position (center the structure)
@@ -301,7 +301,7 @@ public class TimeKeeperVillagePlacer {
         // Place structure
         template.placeInWorld(level, placementPos, placementPos, settings, level.random, 2);
 
-        ChronoDawn.LOGGER.info("Placed Time Keeper Village at {} (template origin: {})",
+        ChronoDawn.LOGGER.debug("Placed Time Keeper Village at {} (template origin: {})",
             pos, placementPos);
 
         // Spawn Time Keepers programmatically
@@ -351,11 +351,11 @@ public class TimeKeeperVillagePlacer {
                 level.addFreshEntity(timeKeeper);
                 spawnedCount++;
 
-                ChronoDawn.LOGGER.info("Spawned Time Keeper at {}", spawnPos);
+                ChronoDawn.LOGGER.debug("Spawned Time Keeper at {}", spawnPos);
             }
         }
 
-        ChronoDawn.LOGGER.info("Spawned {} Time Keepers at Time Keeper Village", spawnedCount);
+        ChronoDawn.LOGGER.debug("Spawned {} Time Keepers at Time Keeper Village", spawnedCount);
     }
 
     /**
@@ -382,7 +382,7 @@ public class TimeKeeperVillagePlacer {
                             // Set the loot table
                             chestBlockEntity.setLootTable(VILLAGE_LOOT_TABLE, level.random.nextLong());
                             chestsFound++;
-                            ChronoDawn.LOGGER.info("Set loot table for chest at {}", checkPos);
+                            ChronoDawn.LOGGER.debug("Set loot table for chest at {}", checkPos);
                         }
                     }
                 }
@@ -390,7 +390,7 @@ public class TimeKeeperVillagePlacer {
         }
 
         if (chestsFound > 0) {
-            ChronoDawn.LOGGER.info("Set loot tables for {} chest(s) in Time Keeper Village", chestsFound);
+            ChronoDawn.LOGGER.debug("Set loot tables for {} chest(s) in Time Keeper Village", chestsFound);
         } else {
             ChronoDawn.LOGGER.warn("No chests found in Time Keeper Village structure");
         }
@@ -433,7 +433,7 @@ public class TimeKeeperVillagePlacer {
         }
 
         if (filledBlocks > 0) {
-            ChronoDawn.LOGGER.info("Filled {} foundation blocks below Time Keeper Village", filledBlocks);
+            ChronoDawn.LOGGER.debug("Filled {} foundation blocks below Time Keeper Village", filledBlocks);
         }
     }
 }

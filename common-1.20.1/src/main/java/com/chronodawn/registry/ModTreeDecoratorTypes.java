@@ -47,6 +47,6 @@ public class ModTreeDecoratorTypes {
      */
     public static void register() {
         TREE_DECORATOR_TYPES.register();
-        ChronoDawn.LOGGER.info("Registered ModTreeDecoratorTypes");
+        ChronoDawn.LOGGER.debug("Registered ModTreeDecoratorTypes");
     }
 }

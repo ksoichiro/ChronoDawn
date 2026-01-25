@@ -66,7 +66,7 @@ public class ChronoDawnDimension {
      * @param player ServerPlayer entering the dimension
      */
     public static void onPlayerEnterDimension(ServerPlayer player) {
-        ChronoDawn.LOGGER.info("Player {} entered ChronoDawn dimension", player.getName().getString());
+        ChronoDawn.LOGGER.debug("Player {} entered ChronoDawn dimension", player.getName().getString());
 
         // Future enhancement: Track player entry for quest progression (T028)
         // Future enhancement: Trigger reversed resonance if applicable (T073-T074)
@@ -78,7 +78,7 @@ public class ChronoDawnDimension {
      * @param player ServerPlayer leaving the dimension
      */
     public static void onPlayerLeaveDimension(ServerPlayer player) {
-        ChronoDawn.LOGGER.info("Player {} left ChronoDawn dimension", player.getName().getString());
+        ChronoDawn.LOGGER.debug("Player {} left ChronoDawn dimension", player.getName().getString());
 
         // Future enhancement: Clear dimension-specific effects
     }
@@ -88,7 +88,7 @@ public class ChronoDawnDimension {
      * Called during mod initialization.
      */
     public static void init() {
-        ChronoDawn.LOGGER.info("ChronoDawn dimension logic initialized");
+        ChronoDawn.LOGGER.debug("ChronoDawn dimension logic initialized");
         // Dimension registration is handled via JSON datapacks
         // This method exists for future extension points
     }

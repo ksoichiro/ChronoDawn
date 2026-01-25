@@ -149,7 +149,7 @@ public class TimeHourglassItem extends Item {
             );
         }
 
-        ChronoDawn.LOGGER.info("Portal ignited at {} in dimension {} by player {}",
+        ChronoDawn.LOGGER.debug("Portal ignited at {} in dimension {} by player {}",
             frameData.getBottomLeft(), level.dimension().location(),
             player != null ? player.getName().getString() : "unknown");
 

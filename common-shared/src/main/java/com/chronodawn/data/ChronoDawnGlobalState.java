@@ -69,7 +69,7 @@ public class ChronoDawnGlobalState extends CompatSavedData {
     public static ChronoDawnGlobalState load(CompoundTag tag, HolderLookup.Provider provider) {
         ChronoDawnGlobalState state = new ChronoDawnGlobalState();
         state.loadData(tag);
-        ChronoDawn.LOGGER.info("Loaded ChronoDawnGlobalState: hasEntered={}, isStabilized={}, tyrantDefeated={}",
+        ChronoDawn.LOGGER.debug("Loaded ChronoDawnGlobalState: hasEntered={}, isStabilized={}, tyrantDefeated={}",
             state.hasEnteredChronoDawn, state.isPortalStabilized, state.isTyrantDefeated);
         return state;
     }
@@ -98,7 +98,7 @@ public class ChronoDawnGlobalState extends CompatSavedData {
             hasEnteredChronoDawn = true;
             isPortalStabilized = false; // Reset stabilization on first entry
             setDirty();
-            ChronoDawn.LOGGER.info("ChronoDawn entered for the first time - portals are now unstable");
+            ChronoDawn.LOGGER.debug("ChronoDawn entered for the first time - portals are now unstable");
         }
     }
 
@@ -109,7 +109,7 @@ public class ChronoDawnGlobalState extends CompatSavedData {
     public void markPortalStabilized() {
         isPortalStabilized = true;
         setDirty();
-        ChronoDawn.LOGGER.info("Portal stabilized - portals can now be created normally");
+        ChronoDawn.LOGGER.debug("Portal stabilized - portals can now be created normally");
     }
 
     /**
@@ -149,7 +149,7 @@ public class ChronoDawnGlobalState extends CompatSavedData {
     public void markTyrantDefeated() {
         isTyrantDefeated = true;
         setDirty();
-        ChronoDawn.LOGGER.info("Time Tyrant defeated - dimension permanently stabilized");
+        ChronoDawn.LOGGER.debug("Time Tyrant defeated - dimension permanently stabilized");
     }
 
     /**

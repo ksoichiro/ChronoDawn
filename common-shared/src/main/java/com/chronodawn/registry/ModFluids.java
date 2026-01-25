@@ -39,6 +39,6 @@ public class ModFluids {
      */
     public static void register() {
         FLUIDS.register();
-        ChronoDawn.LOGGER.info("Registered ModFluids");
+        ChronoDawn.LOGGER.debug("Registered ModFluids");
     }
 }

@@ -22,6 +22,6 @@ public class ModLootModifiers {
 
     public static void register(IEventBus modEventBus) {
         LOOT_MODIFIERS.register(modEventBus);
-        ChronoDawn.LOGGER.info("Registered ModLootModifiers for NeoForge");
+        ChronoDawn.LOGGER.debug("Registered ModLootModifiers for NeoForge");
     }
 }

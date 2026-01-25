@@ -43,6 +43,6 @@ public class ModDimensions {
      * This method primarily exists for logging and future extension points.
      */
     public static void register() {
-        ChronoDawn.LOGGER.info("Registered ModDimensions (keys prepared, JSON datapacks will define the dimension)");
+        ChronoDawn.LOGGER.debug("Registered ModDimensions (keys prepared, JSON datapacks will define the dimension)");
     }
 }

@@ -75,11 +75,11 @@ public class TimeTyrantSpawner {
         LifecycleEvent.SERVER_LEVEL_LOAD.register(level -> {
             if (level instanceof ServerLevel) {
                 ServerLevel serverLevel = (ServerLevel) level;
-                ChronoDawn.LOGGER.info("Time Tyrant Spawner initialized for dimension: {}", serverLevel.dimension().location());
+                ChronoDawn.LOGGER.debug("Time Tyrant Spawner initialized for dimension: {}", serverLevel.dimension().location());
             }
         });
 
-        ChronoDawn.LOGGER.info("Registered TimeTyrantSpawner");
+        ChronoDawn.LOGGER.debug("Registered TimeTyrantSpawner");
     }
 
     /**
@@ -134,7 +134,7 @@ public class TimeTyrantSpawner {
                 // Check if this chunk contains a Master Clock structure
                 if (hasMasterClock(level, chunkPos)) {
                     BlockPos structurePos = chunkPos.getWorldPosition();
-                    ChronoDawn.LOGGER.info("Found Master Clock structure at chunk {} (block pos: {})", chunkPos, structurePos);
+                    ChronoDawn.LOGGER.debug("Found Master Clock structure at chunk {} (block pos: {})", chunkPos, structurePos);
 
                     // Skip if we've already processed this structure
                     if (spawnedStructures.contains(structurePos)) {
@@ -205,7 +205,7 @@ public class TimeTyrantSpawner {
                 .getKey(structure);
 
             if (structureLocation != null && structureLocation.equals(MASTER_CLOCK_ID)) {
-                ChronoDawn.LOGGER.info("Attempting to spawn Time Tyrant at Master Clock in chunk {}", chunkPos);
+                ChronoDawn.LOGGER.debug("Attempting to spawn Time Tyrant at Master Clock in chunk {}", chunkPos);
 
                 // Find the boss room position by searching for structure blocks
                 BlockPos bossRoomSpawnPos = findBossRoom(level, chunkBlockPos);
@@ -215,7 +215,7 @@ public class TimeTyrantSpawner {
                     return;
                 }
 
-                ChronoDawn.LOGGER.info("Calculated spawn position: {}", bossRoomSpawnPos);
+                ChronoDawn.LOGGER.debug("Calculated spawn position: {}", bossRoomSpawnPos);
 
                 // Check if a Time Tyrant already exists near this position
                 if (isTyrantNearby(level, bossRoomSpawnPos)) {
@@ -249,7 +249,7 @@ public class TimeTyrantSpawner {
                     // Increment counter
                     spawnedTyrantsCount++;
 
-                    ChronoDawn.LOGGER.info(
+                    ChronoDawn.LOGGER.debug(
                         "Time Tyrant spawned at [{}, {}, {}] (Total: {}/{})",
                         spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(),
                         spawnedTyrantsCount, MAX_TIME_TYRANTS_PER_WORLD
@@ -278,7 +278,7 @@ public class TimeTyrantSpawner {
         int maxY = 150; // Search from high altitude
         int minY = -60; // Down to deep underground
 
-        ChronoDawn.LOGGER.info("Searching for Boss Room Door from Y={} to Y={} around {}", maxY, minY, searchCenter);
+        ChronoDawn.LOGGER.debug("Searching for Boss Room Door from Y={} to Y={} around {}", maxY, minY, searchCenter);
 
         // Search in all directions for Boss Room Door
         for (int y = maxY; y >= minY; y--) {
@@ -300,7 +300,7 @@ public class TimeTyrantSpawner {
                                 // Calculate spawn position (10 blocks inside the door)
                                 BlockPos spawnPos = checkPos.relative(facing, 10).above(1);
 
-                                ChronoDawn.LOGGER.info("Found Boss Room Door at {} facing {}, spawn at {}",
+                                ChronoDawn.LOGGER.debug("Found Boss Room Door at {} facing {}, spawn at {}",
                                     checkPos, facing, spawnPos);
                                 return spawnPos;
                             }
@@ -364,23 +364,23 @@ public class TimeTyrantSpawner {
      * @param doorState The BlockState of the door
      */
     public static void spawnOnDoorOpen(ServerLevel level, BlockPos doorPos, BlockState doorState) {
-        ChronoDawn.LOGGER.info("Boss Room Door opened at {}", doorPos);
+        ChronoDawn.LOGGER.debug("Boss Room Door opened at {}", doorPos);
 
         // Check if Time Tyrant has already been defeated
         if (DimensionStabilizer.isTyrantDefeated(level.getServer())) {
-            ChronoDawn.LOGGER.info("Time Tyrant already defeated - not spawning");
+            ChronoDawn.LOGGER.debug("Time Tyrant already defeated - not spawning");
             return;
         }
 
         // Check if we've already spawned from this door
         if (spawnedDoors.contains(doorPos)) {
-            ChronoDawn.LOGGER.info("Time Tyrant already spawned from this door - not spawning again");
+            ChronoDawn.LOGGER.debug("Time Tyrant already spawned from this door - not spawning again");
             return;
         }
 
         // Check if we've reached the spawn limit
         if (spawnedTyrantsCount >= MAX_TIME_TYRANTS_PER_WORLD) {
-            ChronoDawn.LOGGER.info("Time Tyrant spawn limit reached ({}/{}) - not spawning",
+            ChronoDawn.LOGGER.debug("Time Tyrant spawn limit reached ({}/{}) - not spawning",
                 spawnedTyrantsCount, MAX_TIME_TYRANTS_PER_WORLD);
             return;
         }
@@ -397,7 +397,7 @@ public class TimeTyrantSpawner {
 
         // Check if a Time Tyrant already exists near this position
         if (isTyrantNearby(level, spawnPos)) {
-            ChronoDawn.LOGGER.info("Time Tyrant already exists near {} - not spawning", spawnPos);
+            ChronoDawn.LOGGER.debug("Time Tyrant already exists near {} - not spawning", spawnPos);
             return;
         }
 
@@ -427,7 +427,7 @@ public class TimeTyrantSpawner {
             // Increment counter
             spawnedTyrantsCount++;
 
-            ChronoDawn.LOGGER.info(
+            ChronoDawn.LOGGER.debug(
                 "Time Tyrant spawned at [{}, {}, {}] from Boss Room Door (Total: {}/{})",
                 spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(),
                 spawnedTyrantsCount, MAX_TIME_TYRANTS_PER_WORLD
@@ -447,6 +447,6 @@ public class TimeTyrantSpawner {
         spawnedTyrantsCount = 0;
         tickCounters.clear();
         lastWorldId = null;
-        ChronoDawn.LOGGER.info("Time Tyrant Spawner reset");
+        ChronoDawn.LOGGER.debug("Time Tyrant Spawner reset");
     }
 }

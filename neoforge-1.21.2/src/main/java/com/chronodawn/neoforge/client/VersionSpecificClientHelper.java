@@ -37,7 +37,7 @@ public class VersionSpecificClientHelper {
             event.registerLayerDefinition(chestBoatLayer, BoatModel::createChestBoatModel);
         }
 
-        ChronoDawn.LOGGER.info("Registered {} boat and {} chest boat model layers for 1.21.2",
+        ChronoDawn.LOGGER.debug("Registered {} boat and {} chest boat model layers for 1.21.2",
             ChronoDawnBoatType.values().length, ChronoDawnBoatType.values().length);
     }
 

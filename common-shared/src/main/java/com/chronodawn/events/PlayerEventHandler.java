@@ -97,7 +97,7 @@ public class PlayerEventHandler {
             }
         });
 
-        ChronoDawn.LOGGER.info("Registered PlayerEventHandler");
+        ChronoDawn.LOGGER.debug("Registered PlayerEventHandler");
     }
 
 
@@ -145,7 +145,7 @@ public class PlayerEventHandler {
         // 1. Player achievement (Liberator of Chrono Dawn)
         // 2. Proxy for world state on client side (enables sky color change)
         if (CompatAdvancementHelper.grantAdvancement(player.server, player, advancementId)) {
-            ChronoDawn.LOGGER.info("Auto-granted Time Tyrant defeat advancement to player {} based on world state",
+            ChronoDawn.LOGGER.debug("Auto-granted Time Tyrant defeat advancement to player {} based on world state",
                 player.getName().getString());
         }
     }
@@ -165,7 +165,7 @@ public class PlayerEventHandler {
             return;
         }
 
-        ChronoDawn.LOGGER.info("Player {} entered ChronoDawn at position {}",
+        ChronoDawn.LOGGER.debug("Player {} entered ChronoDawn at position {}",
             player.getName().getString(), player.blockPosition());
 
         // Give Chronicle Book to player on first entry to ChronoDawn dimension
@@ -182,7 +182,7 @@ public class PlayerEventHandler {
         // If portals are stable, do not deactivate portal
         // This allows free bidirectional travel after stabilization
         if (!globalState.arePortalsUnstable()) {
-            ChronoDawn.LOGGER.info("Portals are stable, skipping deactivation for player {}",
+            ChronoDawn.LOGGER.debug("Portals are stable, skipping deactivation for player {}",
                 player.getName().getString());
             return;  // Early return - portal remains active
         }
@@ -194,7 +194,7 @@ public class PlayerEventHandler {
         if (portal != null) {
             // Check if portal is already registered and stabilized
             if (portal.getCurrentState() == PortalState.STABILIZED) {
-                ChronoDawn.LOGGER.info("Portal {} is already stabilized, skipping deactivation", portal.getPortalId());
+                ChronoDawn.LOGGER.debug("Portal {} is already stabilized, skipping deactivation", portal.getPortalId());
                 return;
             }
 
@@ -202,7 +202,7 @@ public class PlayerEventHandler {
             if (portal.deactivate()) {
                 // Remove portal blocks
                 extinguishPortal(level, playerPos);
-                ChronoDawn.LOGGER.info("Deactivated portal {} after player entry", portal.getPortalId());
+                ChronoDawn.LOGGER.debug("Deactivated portal {} after player entry", portal.getPortalId());
             }
         } else {
             // Register new portal as deactivated
@@ -213,7 +213,7 @@ public class PlayerEventHandler {
 
             // Remove portal blocks
             extinguishPortal(level, playerPos);
-            ChronoDawn.LOGGER.info("Registered and deactivated new portal {} at {}", portalId, playerPos);
+            ChronoDawn.LOGGER.debug("Registered and deactivated new portal {} at {}", portalId, playerPos);
         }
     }
 
@@ -253,7 +253,7 @@ public class PlayerEventHandler {
         int removedBlocks = 0;
         boolean foundPortalBlock = false;
 
-        ChronoDawn.LOGGER.info("Searching for portal blocks near {} in dimension {}",
+        ChronoDawn.LOGGER.debug("Searching for portal blocks near {} in dimension {}",
             centerPos, level.dimension().location());
 
         // Search for portal blocks in a larger 30x30x30 area
@@ -304,7 +304,7 @@ public class PlayerEventHandler {
             }
         }
 
-        ChronoDawn.LOGGER.info("Extinguished {} portal blocks near {}", removedBlocks, centerPos);
+        ChronoDawn.LOGGER.debug("Extinguished {} portal blocks near {}", removedBlocks, centerPos);
     }
 
     /**
@@ -316,7 +316,7 @@ public class PlayerEventHandler {
     private static void giveChronicleBook(ServerPlayer player) {
         // Check if player already has the chronicle book
         if (hasChronicleBook(player)) {
-            ChronoDawn.LOGGER.info("Player {} already has Chronicle book, skipping",
+            ChronoDawn.LOGGER.debug("Player {} already has Chronicle book, skipping",
                 player.getName().getString());
             return;
         }
@@ -329,10 +329,10 @@ public class PlayerEventHandler {
             if (!player.getInventory().add(bookStack)) {
                 // Inventory full, drop at player's feet
                 player.drop(bookStack, false);
-                ChronoDawn.LOGGER.info("Player {} inventory full, dropped Chronicle book at their position",
+                ChronoDawn.LOGGER.debug("Player {} inventory full, dropped Chronicle book at their position",
                     player.getName().getString());
             } else {
-                ChronoDawn.LOGGER.info("Gave Chronicle book to player {}", player.getName().getString());
+                ChronoDawn.LOGGER.debug("Gave Chronicle book to player {}", player.getName().getString());
             }
         } catch (Exception e) {
             ChronoDawn.LOGGER.error("Failed to give Chronicle book to player {}: {}",
@@ -374,12 +374,12 @@ public class PlayerEventHandler {
                 int count = stack.getCount();
                 player.getInventory().removeItem(i, count);
                 removedCount += count;
-                ChronoDawn.LOGGER.info("Removed {} Time Hourglass from slot {}", count, i);
+                ChronoDawn.LOGGER.debug("Removed {} Time Hourglass from slot {}", count, i);
             }
         }
 
         if (removedCount > 0) {
-            ChronoDawn.LOGGER.info("Removed total {} Time Hourglass items from player {}'s inventory",
+            ChronoDawn.LOGGER.debug("Removed total {} Time Hourglass items from player {}'s inventory",
                 removedCount, player.getName().getString());
         }
     }

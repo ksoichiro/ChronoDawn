@@ -46,6 +46,6 @@ public class ModStructureProcessorTypes {
      */
     public static void register() {
         STRUCTURE_PROCESSOR_TYPES.register();
-        ChronoDawn.LOGGER.info("Registered ModStructureProcessorTypes");
+        ChronoDawn.LOGGER.debug("Registered ModStructureProcessorTypes");
     }
 }

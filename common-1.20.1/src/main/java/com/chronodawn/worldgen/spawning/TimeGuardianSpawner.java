@@ -71,11 +71,11 @@ public class TimeGuardianSpawner {
         LifecycleEvent.SERVER_LEVEL_LOAD.register(level -> {
             if (level instanceof ServerLevel) {
                 ServerLevel serverLevel = (ServerLevel) level;
-                ChronoDawn.LOGGER.info("Time Guardian Spawner initialized for dimension: {}", serverLevel.dimension().location());
+                ChronoDawn.LOGGER.debug("Time Guardian Spawner initialized for dimension: {}", serverLevel.dimension().location());
             }
         });
 
-        ChronoDawn.LOGGER.info("Registered TimeGuardianSpawner");
+        ChronoDawn.LOGGER.debug("Registered TimeGuardianSpawner");
     }
 
     /**
@@ -111,7 +111,7 @@ public class TimeGuardianSpawner {
             // Count actual Time Guardians in the world to verify
             int actualGuardianCount = level.getEntities(ModEntities.TIME_GUARDIAN.get(), entity -> true).size();
 
-            ChronoDawn.LOGGER.info("Time Guardian spawn check skipped - counter: {}/{}, actual guardians in world: {}",
+            ChronoDawn.LOGGER.debug("Time Guardian spawn check skipped - counter: {}/{}, actual guardians in world: {}",
                 spawnedGuardiansCount, MAX_TIME_GUARDIANS_PER_WORLD, actualGuardianCount);
 
             // If the counter is wrong (actual count is less), reset the counter
@@ -151,7 +151,7 @@ public class TimeGuardianSpawner {
                         continue;
                     }
 
-                    ChronoDawn.LOGGER.info("Found Desert Clock Tower at chunk {} - attempting to spawn Time Guardian", chunkPos);
+                    ChronoDawn.LOGGER.debug("Found Desert Clock Tower at chunk {} - attempting to spawn Time Guardian", chunkPos);
 
                     // Attempt to spawn Time Guardian at the top of the structure
                     boolean spawnSuccess = spawnTimeGuardianAtTower(level, chunkPos);
@@ -159,7 +159,7 @@ public class TimeGuardianSpawner {
                     // Only mark as processed if spawn was successful
                     if (spawnSuccess) {
                         spawnedStructures.add(structurePos);
-                        ChronoDawn.LOGGER.info("Successfully spawned and marked structure at {} as processed", structurePos);
+                        ChronoDawn.LOGGER.debug("Successfully spawned and marked structure at {} as processed", structurePos);
                     } else {
                         ChronoDawn.LOGGER.warn("Failed to spawn Time Guardian at {} - will retry on next check", structurePos);
                     }
@@ -197,7 +197,7 @@ public class TimeGuardianSpawner {
                 .getKey(structure);
 
             if (structureLocation != null && structureLocation.equals(DESERT_CLOCK_TOWER_ID)) {
-                ChronoDawn.LOGGER.info("Detected Desert Clock Tower at chunk {} (world pos: {})", chunkPos, worldPos);
+                ChronoDawn.LOGGER.debug("Detected Desert Clock Tower at chunk {} (world pos: {})", chunkPos, worldPos);
                 return true;
             }
         }
@@ -226,7 +226,7 @@ public class TimeGuardianSpawner {
                 .getKey(structure);
 
             if (structureLocation != null && structureLocation.equals(DESERT_CLOCK_TOWER_ID)) {
-                ChronoDawn.LOGGER.info("Attempting to spawn Time Guardian at Desert Clock Tower in chunk {}", chunkPos);
+                ChronoDawn.LOGGER.debug("Attempting to spawn Time Guardian at Desert Clock Tower in chunk {}", chunkPos);
 
                 // Find the structure's bounds by searching for stone bricks, andesite, and white glass
                 BlockPos towerSpawnPos = findTowerTopFloor(level, chunkBlockPos);
@@ -236,7 +236,7 @@ public class TimeGuardianSpawner {
                     return false;
                 }
 
-                ChronoDawn.LOGGER.info("Calculated spawn position: {}", towerSpawnPos);
+                ChronoDawn.LOGGER.debug("Calculated spawn position: {}", towerSpawnPos);
 
                 // Check if a Time Guardian already exists near this position
                 if (isGuardianNearby(level, towerSpawnPos)) {
@@ -253,7 +253,7 @@ public class TimeGuardianSpawner {
                     return false;
                 }
 
-                ChronoDawn.LOGGER.info("Found valid spawn position: {}", spawnPos);
+                ChronoDawn.LOGGER.debug("Found valid spawn position: {}", spawnPos);
 
                 // Create and spawn Time Guardian
                 TimeGuardianEntity guardian = ModEntities.TIME_GUARDIAN.get().create(level);
@@ -278,7 +278,7 @@ public class TimeGuardianSpawner {
                     // Increment counter AFTER successfully adding entity
                     spawnedGuardiansCount++;
 
-                    ChronoDawn.LOGGER.info(
+                    ChronoDawn.LOGGER.debug(
                         "✓ Time Guardian spawned at [{}, {}, {}] - Counter incremented to {}/{}",
                         spawnPos.getX(), spawnPos.getY(), spawnPos.getZ(),
                         spawnedGuardiansCount, MAX_TIME_GUARDIANS_PER_WORLD
@@ -362,7 +362,7 @@ public class TimeGuardianSpawner {
                 highestY - 5,
                 bestPosition.getZ() + 2
             );
-            ChronoDawn.LOGGER.info("Found tower top floor at {} (block count: {})", spawnPos, maxBlockCount);
+            ChronoDawn.LOGGER.debug("Found tower top floor at {} (block count: {})", spawnPos, maxBlockCount);
             return spawnPos;
         }
 
@@ -478,7 +478,7 @@ public class TimeGuardianSpawner {
         tickCounters.clear();
         lastWorldId = null;
 
-        ChronoDawn.LOGGER.info("Time Guardian Spawner reset (was tracking {} guardians, {} structures)",
+        ChronoDawn.LOGGER.debug("Time Guardian Spawner reset (was tracking {} guardians, {} structures)",
             previousCount, previousStructures);
     }
 }

@@ -108,7 +108,7 @@ public class ClockstoneBlock extends Block {
         }
 
         if (!visited.isEmpty()) {
-            ChronoDawn.LOGGER.info("Destroyed {} connected portal blocks due to frame break at {}", visited.size(), framePos);
+            ChronoDawn.LOGGER.debug("Destroyed {} connected portal blocks due to frame break at {}", visited.size(), framePos);
         }
     }
 }

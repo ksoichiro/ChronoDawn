@@ -56,10 +56,10 @@ public abstract class LevelGetTimeMixin implements ChronoDawnTimeHolder {
                     if (chronodawn$independentTime == 0L) {
                         chronodawn$independentTime = cir.getReturnValue();
                         data.setIndependentTime(chronodawn$independentTime);
-                        ChronoDawn.LOGGER.info("LevelGetTimeMixin [SERVER]: Initialized independent time to {} (from shared time)",
+                        ChronoDawn.LOGGER.debug("LevelGetTimeMixin [SERVER]: Initialized independent time to {} (from shared time)",
                             chronodawn$independentTime);
                     } else {
-                        ChronoDawn.LOGGER.info("LevelGetTimeMixin [SERVER]: Loaded independent time = {} (from SavedData)",
+                        ChronoDawn.LOGGER.debug("LevelGetTimeMixin [SERVER]: Loaded independent time = {} (from SavedData)",
                             chronodawn$independentTime);
                     }
                 } else {

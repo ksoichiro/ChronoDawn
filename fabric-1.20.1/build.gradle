@@ -51,6 +51,8 @@ sourceSets {
     }
 }
 
+def log4j2DevConfig = rootProject.file('fabric-base/log4j2-dev.xml').absolutePath
+
 loom {
     if (project(commonModule).loom.accessWidenerPath != null) {
         accessWidenerPath = project(commonModule).loom.accessWidenerPath
@@ -61,10 +63,12 @@ loom {
             client()
             runDir("run")
             vmArg("-Dfabric.log.disableAnsi=false")
+            vmArg("-Dlog4j2.configurationFile=${log4j2DevConfig}")
         }
         server {
             server()
             runDir("run")
+            vmArg("-Dlog4j2.configurationFile=${log4j2DevConfig}")
         }
     }
 }

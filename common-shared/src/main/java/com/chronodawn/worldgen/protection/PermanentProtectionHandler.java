@@ -48,7 +48,7 @@ public class PermanentProtectionHandler {
     public static void registerProtectedArea(ServerLevel level, BoundingBox area, Object uniqueId) {
         String key = makeKey(level, uniqueId);
         PROTECTED_AREAS.put(key, area);
-        ChronoDawn.LOGGER.info("Registered permanent protected area: {} with bounds {}", key, area);
+        ChronoDawn.LOGGER.debug("Registered permanent protected area: {} with bounds {}", key, area);
     }
 
     /**
@@ -93,6 +93,6 @@ public class PermanentProtectionHandler {
      */
     public static void reset() {
         PROTECTED_AREAS.clear();
-        ChronoDawn.LOGGER.info("Permanent Protection Handler reset");
+        ChronoDawn.LOGGER.debug("Permanent Protection Handler reset");
     }
 }

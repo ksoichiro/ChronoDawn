@@ -59,7 +59,7 @@ public class ChronoDawnFuelRegistry {
         // Saplings: 100 ticks (5 seconds)
         registerTagFuel(registry, "minecraft:saplings", 100);
 
-        ChronoDawn.LOGGER.info("Registered fuel items for Fabric using tags");
+        ChronoDawn.LOGGER.debug("Registered fuel items for Fabric using tags");
     }
 
     /**

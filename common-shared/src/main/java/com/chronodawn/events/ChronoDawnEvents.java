@@ -21,6 +21,6 @@ public class ChronoDawnEvents {
         PlayerEventHandler.register();
         TimeDistortionEventHandler.register();
 
-        ChronoDawn.LOGGER.info("Registered ChronoDawnEvents");
+        ChronoDawn.LOGGER.debug("Registered ChronoDawnEvents");
     }
 }

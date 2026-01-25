@@ -68,7 +68,7 @@ public class PlayerProgressData extends ChronoDawnWorldData {
         PlayerProgressData data = new PlayerProgressData();
         CompoundTag playersTag = tag.getCompound("players");
 
-        ChronoDawn.LOGGER.info("PlayerProgressData loading: {} players in NBT", playersTag.getAllKeys().size());
+        ChronoDawn.LOGGER.debug("PlayerProgressData loading: {} players in NBT", playersTag.getAllKeys().size());
 
         for (String key : playersTag.getAllKeys()) {
             UUID playerId = UUID.fromString(key);
@@ -89,7 +89,7 @@ public class PlayerProgressData extends ChronoDawnWorldData {
 
             data.playerData.put(playerId, progress);
 
-            ChronoDawn.LOGGER.info("  Loaded player {}: hasChronosEye={}", playerId, progress.hasChronosEye);
+            ChronoDawn.LOGGER.debug("  Loaded player {}: hasChronosEye={}", playerId, progress.hasChronosEye);
         }
 
         return data;
@@ -122,9 +122,9 @@ public class PlayerProgressData extends ChronoDawnWorldData {
 
         tag.put("players", playersTag);
 
-        ChronoDawn.LOGGER.info("PlayerProgressData saved: {} players", playerData.size());
+        ChronoDawn.LOGGER.debug("PlayerProgressData saved: {} players", playerData.size());
         for (Map.Entry<UUID, PlayerProgress> entry : playerData.entrySet()) {
-            ChronoDawn.LOGGER.info("  Player {}: hasChronosEye={}",
+            ChronoDawn.LOGGER.debug("  Player {}: hasChronosEye={}",
                 entry.getKey(), entry.getValue().hasChronosEye);
         }
 

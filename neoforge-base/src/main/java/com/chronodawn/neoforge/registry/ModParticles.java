@@ -31,6 +31,6 @@ public class ModParticles {
      */
     public static void register(IEventBus eventBus) {
         PARTICLE_TYPES.register(eventBus);
-        ChronoDawn.LOGGER.info("Registered particle types for NeoForge");
+        ChronoDawn.LOGGER.debug("Registered particle types for NeoForge");
     }
 }

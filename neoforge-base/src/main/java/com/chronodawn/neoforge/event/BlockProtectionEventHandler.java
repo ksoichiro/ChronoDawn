@@ -57,7 +57,7 @@ public class BlockProtectionEventHandler {
                 true // action bar
             );
 
-            ChronoDawn.LOGGER.info("Blocked permanent protected block break at {} by {}", event.getPos(), player.getName().getString());
+            ChronoDawn.LOGGER.debug("Blocked permanent protected block break at {} by {}", event.getPos(), player.getName().getString());
 
             // Cancel block break event
             event.setCanceled(true);
@@ -115,7 +115,7 @@ public class BlockProtectionEventHandler {
                 true // action bar
             );
 
-            ChronoDawn.LOGGER.info("Blocked permanent protected block placement at {} by {}", pos, player.getName().getString());
+            ChronoDawn.LOGGER.debug("Blocked permanent protected block placement at {} by {}", pos, player.getName().getString());
 
             // Cancel block placement (FAIL = cancel without consuming item)
             event.setCancellationResult(InteractionResult.FAIL);
@@ -130,7 +130,7 @@ public class BlockProtectionEventHandler {
                 true // action bar
             );
 
-            ChronoDawn.LOGGER.info("Blocked boss room protected block placement at {} by {}", pos, player.getName().getString());
+            ChronoDawn.LOGGER.debug("Blocked boss room protected block placement at {} by {}", pos, player.getName().getString());
 
             // Cancel block placement (FAIL = cancel without consuming item)
             event.setCancellationResult(InteractionResult.FAIL);

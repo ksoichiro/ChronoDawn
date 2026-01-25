@@ -124,7 +124,7 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
                 @Override
                 public void onResourceManagerReload(net.minecraft.server.packs.resources.ResourceManager resourceManager) {
                     ChronicleData.getInstance().load(resourceManager);
-                    ChronoDawn.LOGGER.info("Chronicle data loaded/reloaded");
+                    ChronoDawn.LOGGER.debug("Chronicle data loaded/reloaded");
                 }
             });
     }
@@ -532,7 +532,7 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             EntityModelLayerRegistry.registerModelLayer(chestBoatLayer, BoatModel::createChestBoatModel);
         }
 
-        ChronoDawn.LOGGER.info("Registered {} boat and {} chest boat model layers",
+        ChronoDawn.LOGGER.debug("Registered {} boat and {} chest boat model layers",
             ChronoDawnBoatType.values().length, ChronoDawnBoatType.values().length);
     }
 
@@ -684,7 +684,7 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             ChronoDawnPortalParticle.Provider::new
         );
 
-        ChronoDawn.LOGGER.info("Registered particle providers for Fabric");
+        ChronoDawn.LOGGER.debug("Registered particle providers for Fabric");
     }
 
     /**

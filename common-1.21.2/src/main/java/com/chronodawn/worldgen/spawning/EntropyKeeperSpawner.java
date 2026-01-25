@@ -69,7 +69,7 @@ public class EntropyKeeperSpawner {
     public static void register() {
         LifecycleEvent.SERVER_LEVEL_LOAD.register(level -> {
             if (level instanceof ServerLevel serverLevel) {
-                ChronoDawn.LOGGER.info("Entropy Keeper Spawner initialized for dimension: {}", serverLevel.dimension().location());
+                ChronoDawn.LOGGER.debug("Entropy Keeper Spawner initialized for dimension: {}", serverLevel.dimension().location());
             }
         });
 
@@ -80,7 +80,7 @@ public class EntropyKeeperSpawner {
             }
         });
 
-        ChronoDawn.LOGGER.info("Registered EntropyKeeperSpawner");
+        ChronoDawn.LOGGER.debug("Registered EntropyKeeperSpawner");
     }
 
     /**
@@ -135,7 +135,7 @@ public class EntropyKeeperSpawner {
                         // Mark this structure as processed
                         data.markEntropyKeeperStructureProcessed(structurePos);
 
-                        ChronoDawn.LOGGER.info("Found Entropy Crypt structure at chunk {} (block pos: {})", chunkPos, structurePos);
+                        ChronoDawn.LOGGER.debug("Found Entropy Crypt structure at chunk {} (block pos: {})", chunkPos, structurePos);
 
                         // Check cache first, then find boss chamber marker and spawn if player is nearby
                         BlockPos markerPos = findBossChamberMarker(level, chunkPos, structurePos);
@@ -145,7 +145,7 @@ public class EntropyKeeperSpawner {
                             double distance = player.position().distanceTo(markerPos.getCenter());
 
                             if (distance <= 20.0) {
-                                ChronoDawn.LOGGER.info(
+                                ChronoDawn.LOGGER.debug(
                                     "Player {} is near Entropy Crypt boss marker at {} (distance: {}), spawning Entropy Keeper",
                                     player.getName().getString(),
                                     markerPos,
@@ -291,7 +291,7 @@ public class EntropyKeeperSpawner {
         // Find ground level for spawn
         BlockPos spawnPos = findGroundLevel(level, markerPos);
 
-        ChronoDawn.LOGGER.info(
+        ChronoDawn.LOGGER.debug(
             "Spawning Entropy Keeper in Entropy Crypt at {} (marker: {}, dimension: {})",
             spawnPos,
             markerPos,
@@ -313,7 +313,7 @@ public class EntropyKeeperSpawner {
             boolean addedToWorld = level.addFreshEntity(keeper);
 
             if (addedToWorld) {
-                ChronoDawn.LOGGER.info(
+                ChronoDawn.LOGGER.debug(
                     "Successfully spawned Entropy Keeper at {} (UUID: {})",
                     spawnPos,
                     keeper.getUUID()
@@ -377,6 +377,6 @@ public class EntropyKeeperSpawner {
         ResourceLocation dimensionId = level.dimension().location();
         cachedMarkers.remove(dimensionId);
         searchedChunks.remove(dimensionId);
-        ChronoDawn.LOGGER.info("Entropy Keeper Spawner reset for dimension: {}", dimensionId);
+        ChronoDawn.LOGGER.debug("Entropy Keeper Spawner reset for dimension: {}", dimensionId);
     }
 }

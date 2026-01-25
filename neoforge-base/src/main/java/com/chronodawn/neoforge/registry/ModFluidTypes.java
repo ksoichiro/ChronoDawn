@@ -51,6 +51,6 @@ public class ModFluidTypes {
      */
     public static void register(net.neoforged.bus.api.IEventBus modEventBus) {
         FLUID_TYPES.register(modEventBus);
-        ChronoDawn.LOGGER.info("Registered ModFluidTypes for NeoForge");
+        ChronoDawn.LOGGER.debug("Registered ModFluidTypes for NeoForge");
     }
 }

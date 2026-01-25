@@ -218,7 +218,7 @@ public class ChronoDawnClientNeoForge {
         // Register boat and chest boat model layers (version-specific)
         VersionSpecificClientHelper.registerBoatModelLayers(event);
 
-        ChronoDawn.LOGGER.info("Registered entity model layers for NeoForge");
+        ChronoDawn.LOGGER.debug("Registered entity model layers for NeoForge");
     }
 
     /**
@@ -361,7 +361,7 @@ public class ChronoDawnClientNeoForge {
             ChronoDawnChestBoatRenderer::new
         );
 
-        ChronoDawn.LOGGER.info("Registered entity renderers for NeoForge");
+        ChronoDawn.LOGGER.debug("Registered entity renderers for NeoForge");
     }
 
     /**
@@ -606,7 +606,7 @@ public class ChronoDawnClientNeoForge {
             ModBlocks.ATTACHED_CHRONO_MELON_STEM.get()
         );
 
-        ChronoDawn.LOGGER.info("Registered block color handlers for NeoForge");
+        ChronoDawn.LOGGER.debug("Registered block color handlers for NeoForge");
     }
 
     /**
@@ -665,7 +665,7 @@ public class ChronoDawnClientNeoForge {
             ModItems.CHRONO_TURTLE_SPAWN_EGG.get()
         );
 
-        ChronoDawn.LOGGER.info("Registered item color handlers for NeoForge");
+        ChronoDawn.LOGGER.debug("Registered item color handlers for NeoForge");
     }
 
     /**
@@ -681,7 +681,7 @@ public class ChronoDawnClientNeoForge {
             ChronoDawnPortalParticle.Provider::new
         );
 
-        ChronoDawn.LOGGER.info("Registered particle providers for NeoForge");
+        ChronoDawn.LOGGER.debug("Registered particle providers for NeoForge");
     }
 
     /**
@@ -717,7 +717,7 @@ public class ChronoDawnClientNeoForge {
             }
         }, ModFluidTypes.DECORATIVE_WATER_TYPE.get());
 
-        ChronoDawn.LOGGER.info("Registered fluid type client extensions for NeoForge");
+        ChronoDawn.LOGGER.debug("Registered fluid type client extensions for NeoForge");
     }
 
     /**
@@ -815,7 +815,7 @@ public class ChronoDawnClientNeoForge {
             @Override
             protected void apply(Void object, net.minecraft.server.packs.resources.ResourceManager resourceManager, net.minecraft.util.profiling.ProfilerFiller profiler) {
                 ChronicleData.getInstance().load(resourceManager);
-                ChronoDawn.LOGGER.info("Chronicle data loaded/reloaded");
+                ChronoDawn.LOGGER.debug("Chronicle data loaded/reloaded");
             }
         });
     }

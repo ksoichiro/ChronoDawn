@@ -56,11 +56,11 @@ public class TimeGuardianSpawner {
         // Use server tick event to check for Desert Clock Tower structures
         LifecycleEvent.SERVER_LEVEL_LOAD.register(level -> {
             if (level instanceof ServerLevel serverLevel) {
-                ChronoDawn.LOGGER.info("Time Guardian Spawner initialized for dimension: {}", serverLevel.dimension().location());
+                ChronoDawn.LOGGER.debug("Time Guardian Spawner initialized for dimension: {}", serverLevel.dimension().location());
             }
         });
 
-        ChronoDawn.LOGGER.info("Registered TimeGuardianSpawner");
+        ChronoDawn.LOGGER.debug("Registered TimeGuardianSpawner");
     }
 
     /**
@@ -142,7 +142,7 @@ public class TimeGuardianSpawner {
                         }
 
                         double distance = Math.sqrt(distanceSq);
-                        ChronoDawn.LOGGER.info("Found Desert Clock Tower near player at {} (distance: {} blocks) - attempting spawn",
+                        ChronoDawn.LOGGER.debug("Found Desert Clock Tower near player at {} (distance: {} blocks) - attempting spawn",
                             structureCenter, distance);
 
                         // Spawn at 5th floor (approximately 80% of structure height from bottom)
@@ -156,7 +156,7 @@ public class TimeGuardianSpawner {
 
                         if (spawnTimeGuardian(level, spawnPos)) {
                             data.markTimeGuardianStructureSpawned(structureCenter);
-                            ChronoDawn.LOGGER.info("Successfully spawned Time Guardian at {}", spawnPos);
+                            ChronoDawn.LOGGER.debug("Successfully spawned Time Guardian at {}", spawnPos);
                         }
                     }
                 }
@@ -203,7 +203,7 @@ public class TimeGuardianSpawner {
 
             level.addFreshEntity(guardian);
 
-            ChronoDawn.LOGGER.info("Successfully spawned Time Guardian at {}", validPos);
+            ChronoDawn.LOGGER.debug("Successfully spawned Time Guardian at {}", validPos);
             return true;
         } else {
             ChronoDawn.LOGGER.error("Failed to create Time Guardian entity at {}", validPos);
@@ -319,6 +319,6 @@ public class TimeGuardianSpawner {
 
         ResourceLocation dimensionId = level.dimension().location();
         tickCounters.remove(dimensionId);
-        ChronoDawn.LOGGER.info("Time Guardian Spawner reset for dimension: {}", dimensionId);
+        ChronoDawn.LOGGER.debug("Time Guardian Spawner reset for dimension: {}", dimensionId);
     }
 }

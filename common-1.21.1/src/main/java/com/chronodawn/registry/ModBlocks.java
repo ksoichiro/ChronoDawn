@@ -974,6 +974,6 @@ public class ModBlocks {
      */
     public static void register() {
         BLOCKS.register();
-        ChronoDawn.LOGGER.info("Registered ModBlocks");
+        ChronoDawn.LOGGER.debug("Registered ModBlocks");
     }
 }

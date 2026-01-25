@@ -355,7 +355,7 @@ public class TimeKeeperEntity extends AbstractVillager {
      * @param structureType Structure type to locate
      */
     private void locateAndSetStructurePosition(ServerLevel serverLevel, ItemStack compassStack, String structureType) {
-        com.chronodawn.ChronoDawn.LOGGER.info("Time Keeper: Locating structure for compass - type: {}", structureType);
+        com.chronodawn.ChronoDawn.LOGGER.debug("Time Keeper: Locating structure for compass - type: {}", structureType);
 
         // Determine which dimension to search in
         ServerLevel searchLevel = serverLevel;
@@ -422,7 +422,7 @@ public class TimeKeeperEntity extends AbstractVillager {
         // Get trading player's position as search origin
         Player tradingPlayer = this.getTradingPlayer();
         BlockPos searchOrigin = tradingPlayer != null ? tradingPlayer.blockPosition() : this.blockPosition();
-        com.chronodawn.ChronoDawn.LOGGER.info("Time Keeper: Searching from position: {}", searchOrigin);
+        com.chronodawn.ChronoDawn.LOGGER.debug("Time Keeper: Searching from position: {}", searchOrigin);
 
         // Get structure registry
         // In 1.21.2, get() returns Optional<Holder.Reference<T>>
@@ -430,7 +430,7 @@ public class TimeKeeperEntity extends AbstractVillager {
         var structureHolderOpt = structureRegistry.get(structureId);
 
         if (structureHolderOpt.isPresent()) {
-            com.chronodawn.ChronoDawn.LOGGER.info("Time Keeper: Structure found in registry: {}", structureId);
+            com.chronodawn.ChronoDawn.LOGGER.debug("Time Keeper: Structure found in registry: {}", structureId);
 
             // Create HolderSet for the single structure
             HolderSet<Structure> structureSet = HolderSet.direct(structureHolderOpt.get());
@@ -448,7 +448,7 @@ public class TimeKeeperEntity extends AbstractVillager {
                 BlockPos structurePos = structurePair.getFirst();
                 GlobalPos globalPos = GlobalPos.of(searchLevel.dimension(), structurePos);
                 TimeCompassItem.setTargetPosition(compassStack, globalPos);
-                com.chronodawn.ChronoDawn.LOGGER.info("Time Keeper: Successfully set compass target to: {}", structurePos);
+                com.chronodawn.ChronoDawn.LOGGER.debug("Time Keeper: Successfully set compass target to: {}", structurePos);
             } else {
                 com.chronodawn.ChronoDawn.LOGGER.warn("Time Keeper: No structure found within 100 chunks of {}", searchOrigin);
             }

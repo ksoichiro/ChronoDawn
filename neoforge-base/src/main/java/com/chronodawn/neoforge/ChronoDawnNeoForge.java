@@ -271,7 +271,7 @@ public class ChronoDawnNeoForge {
             ChronoTurtleEntity.createAttributes().build()
         );
 
-        ChronoDawn.LOGGER.info("Registered entity attributes for NeoForge");
+        ChronoDawn.LOGGER.debug("Registered entity attributes for NeoForge");
     }
 
     /**
@@ -282,7 +282,7 @@ public class ChronoDawnNeoForge {
         event.enqueueWork(() -> {
             // Initialize spawn eggs - must be done after entities are registered
             ModItems.initializeSpawnEggs();
-            ChronoDawn.LOGGER.info("Initialized spawn eggs for NeoForge");
+            ChronoDawn.LOGGER.debug("Initialized spawn eggs for NeoForge");
         });
     }
 
@@ -410,6 +410,6 @@ public class ChronoDawnNeoForge {
             RegisterSpawnPlacementsEvent.Operation.REPLACE
         );
 
-        ChronoDawn.LOGGER.info("Registered spawn placements for custom mobs");
+        ChronoDawn.LOGGER.debug("Registered spawn placements for custom mobs");
     }
 }

@@ -1667,7 +1667,7 @@ public class ModItems {
      */
     public static void register() {
         ITEMS.register();
-        ChronoDawn.LOGGER.info("Registered ModItems");
+        ChronoDawn.LOGGER.debug("Registered ModItems");
     }
 
     /**
@@ -1675,7 +1675,7 @@ public class ModItems {
      * This method must be called after entity registration is complete.
      */
     public static void initializeSpawnEggs() {
-        ChronoDawn.LOGGER.info("Initializing spawn eggs...");
+        ChronoDawn.LOGGER.debug("Initializing spawn eggs...");
 
         if (TEMPORAL_WRAITH_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
             ((com.chronodawn.items.DeferredSpawnEggItem) TEMPORAL_WRAITH_SPAWN_EGG.get()).initializeSpawnEgg();
@@ -1750,7 +1750,7 @@ public class ModItems {
             ((com.chronodawn.items.DeferredSpawnEggItem) PARADOX_CRAWLER_SPAWN_EGG.get()).initializeSpawnEgg();
         }
 
-        ChronoDawn.LOGGER.info("Spawn eggs initialized");
+        ChronoDawn.LOGGER.debug("Spawn eggs initialized");
     }
 
     /**

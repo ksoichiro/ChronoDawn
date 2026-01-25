@@ -155,7 +155,7 @@ public abstract class StructureStartMixin {
         }
 
         if (totalWaterRemoved > 0) {
-            ChronoDawn.LOGGER.info(
+            ChronoDawn.LOGGER.debug(
                 "Removed {} Aquifer water blocks in chunk {} for {}",
                 totalWaterRemoved,
                 chunkPos,
@@ -307,7 +307,7 @@ public abstract class StructureStartMixin {
         }
 
         if (totalDecorativeWaterConverted > 0) {
-            ChronoDawn.LOGGER.info(
+            ChronoDawn.LOGGER.debug(
                 "Converted {} decorative water blocks in chunk {} for {}",
                 totalDecorativeWaterConverted,
                 chunkPos,
@@ -316,7 +316,7 @@ public abstract class StructureStartMixin {
         }
 
         if (totalWaterloggedRestored > 0) {
-            ChronoDawn.LOGGER.info(
+            ChronoDawn.LOGGER.debug(
                 "Restored {} intentional waterlogged blocks in chunk {} for {}",
                 totalWaterloggedRestored,
                 chunkPos,
@@ -325,7 +325,7 @@ public abstract class StructureStartMixin {
         }
 
         if (totalWaterloggedRemoved > 0) {
-            ChronoDawn.LOGGER.info(
+            ChronoDawn.LOGGER.debug(
                 "Removed {} unintentional waterlogged blocks in chunk {} for {}",
                 totalWaterloggedRemoved,
                 chunkPos,

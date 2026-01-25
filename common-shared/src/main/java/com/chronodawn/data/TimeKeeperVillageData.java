@@ -56,7 +56,7 @@ public class TimeKeeperVillageData extends CompatSavedData {
     public static TimeKeeperVillageData load(CompoundTag tag, HolderLookup.Provider provider) {
         TimeKeeperVillageData data = new TimeKeeperVillageData();
         data.loadData(tag);
-        ChronoDawn.LOGGER.info("Loaded TimeKeeperVillageData: placed={}, position={}",
+        ChronoDawn.LOGGER.debug("Loaded TimeKeeperVillageData: placed={}, position={}",
             data.placed, data.position);
         return data;
     }
@@ -110,6 +110,6 @@ public class TimeKeeperVillageData extends CompatSavedData {
         this.placed = true;
         this.position = pos.immutable();
         setDirty();
-        ChronoDawn.LOGGER.info("Time Keeper Village marked as placed at {}", pos);
+        ChronoDawn.LOGGER.debug("Time Keeper Village marked as placed at {}", pos);
     }
 }
