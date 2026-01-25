@@ -1652,8 +1652,6 @@ public class PhantomCatacombsBossRoomPlacer {
 
         ResourceLocation dimensionId = level.dimension().location();
 
-        ChronoDawn.LOGGER.debug("[DimensionCheck] checkAndPlaceRooms called for dimension: {}", dimensionId);
-
         // Initialize tracking for this dimension if needed
         // Use ConcurrentHashMap.newKeySet() for thread-safe Set
         processedStructures.putIfAbsent(dimensionId, java.util.concurrent.ConcurrentHashMap.newKeySet());
