@@ -21,7 +21,7 @@ import java.util.function.Consumer;
  *
  * Verifies that all items have valid translation keys at runtime by calling
  * getDescriptionId() on the actual item instance and checking the returned
- * key exists in en_us.json.
+ * key exists in the specified language file.
  */
 public final class TranslationKeyTests {
 
@@ -34,27 +34,42 @@ public final class TranslationKeyTests {
         T create(String name, Consumer<GameTestHelper> test);
     }
 
+    private static final List<String> SUPPORTED_LANGUAGES = List.of("en_us", "ja_jp");
+
     /**
      * Generates tests verifying that all items in the given registry class
-     * have valid translation keys defined in en_us.json.
+     * have valid translation keys defined in all supported language files (en_us.json, ja_jp.json).
      *
      * @param itemsClass the registry class containing RegistrySupplier fields
      * @param idOverrides field name to ID overrides for test naming
      * @param factory factory to create test instances
-     * @return list of generated tests
+     * @return list of generated tests for all supported languages
      */
     public static <T> List<T> generate(
             Class<?> itemsClass,
             Map<String, String> idOverrides,
             TestFactory<T> factory) {
-        Map<String, String> langMap = loadLangFile();
+        List<T> tests = new ArrayList<>();
+        for (String langCode : SUPPORTED_LANGUAGES) {
+            tests.addAll(generateForLanguage(itemsClass, idOverrides, factory, langCode));
+        }
+        return tests;
+    }
+
+    private static <T> List<T> generateForLanguage(
+            Class<?> itemsClass,
+            Map<String, String> idOverrides,
+            TestFactory<T> factory,
+            String langCode) {
+        Map<String, String> langMap = loadLangFile(langCode);
 
         List<T> tests = new ArrayList<>();
         for (Field field : itemsClass.getDeclaredFields()) {
             if (!isRegistrySupplierField(field)) continue;
             String fieldName = field.getName();
             String expectedId = idOverrides.getOrDefault(fieldName, fieldName.toLowerCase());
-            tests.add(factory.create("translation_key_" + expectedId, helper -> {
+            String testName = "translation_key_" + langCode + "_" + expectedId;
+            tests.add(factory.create(testName, helper -> {
                 helper.runAfterDelay(1, () -> {
                     try {
                         @SuppressWarnings("unchecked")
@@ -65,7 +80,7 @@ public final class TranslationKeyTests {
                             helper.succeed();
                         } else {
                             helper.fail(fieldName + " has descriptionId \"" + descriptionId +
-                                "\" which is not in en_us.json");
+                                "\" which is not in " + langCode + ".json");
                         }
                     } catch (Exception e) {
                         helper.fail("Failed to check translation for " + fieldName +
@@ -77,9 +92,9 @@ public final class TranslationKeyTests {
         return tests;
     }
 
-    private static Map<String, String> loadLangFile() {
+    private static Map<String, String> loadLangFile(String langCode) {
         try (InputStream is = TranslationKeyTests.class.getResourceAsStream(
-                "/assets/chronodawn/lang/en_us.json")) {
+                "/assets/chronodawn/lang/" + langCode + ".json")) {
             if (is == null) return Collections.emptyMap();
             String content = new String(is.readAllBytes(), StandardCharsets.UTF_8);
             Gson gson = new Gson();
