@@ -55,8 +55,6 @@ import com.chronodawn.registry.ModParticles;
 import com.chronodawn.registry.ModEntities;
 import com.chronodawn.registry.ModItems;
 import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.resources.ResourceLocation;
@@ -102,7 +100,6 @@ public class ChronoDawnClientNeoForge {
     @SubscribeEvent
     public static void onClientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
-            registerRenderLayers();
             registerBlockColors();
             registerItemProperties();
         });
@@ -362,23 +359,6 @@ public class ChronoDawnClientNeoForge {
         );
 
         ChronoDawn.LOGGER.debug("Registered entity renderers for NeoForge");
-    }
-
-    /**
-     * Register render layers for blocks that need special rendering.
-     *
-     * Most blocks use JSON-based render_type configuration in their model files.
-     * This method only handles blocks that use vanilla models directly and cannot
-     * have render_type set in JSON (e.g., Boss Room Door uses minecraft:block/iron_door_*).
-     */
-    @SuppressWarnings("deprecation")
-    private static void registerRenderLayers() {
-        // Register Boss Room Door to use cutout rendering (for window transparency)
-        // This block uses vanilla iron door models directly, so render_type cannot be set in JSON
-        ItemBlockRenderTypes.setRenderLayer(
-            ModBlocks.BOSS_ROOM_DOOR.get(),
-            RenderType.cutout()
-        );
     }
 
     /**

@@ -54,7 +54,6 @@ import com.chronodawn.registry.ModEntities;
 import com.chronodawn.registry.ModItems;
 import com.chronodawn.registry.ModParticles;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
@@ -65,7 +64,6 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.BiomeColors;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
 import net.minecraft.resources.ResourceLocation;
@@ -95,7 +93,6 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         registerBlockColors();
-        registerRenderLayers();
         registerEntityModelLayers();
         registerEntityRenderers();
         registerParticles();
@@ -178,22 +175,6 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
         ColorProviderRegistry.ITEM.register(
             (stack, tintIndex) -> 0xD4AF37,
             ModBlocks.ATTACHED_CHRONO_MELON_STEM.get()
-        );
-    }
-
-    /**
-     * Register render layers for blocks that need special rendering.
-     *
-     * Most blocks use JSON-based render_type configuration in their model files.
-     * This method only handles blocks that use vanilla models directly and cannot
-     * have render_type set in JSON (e.g., Boss Room Door uses minecraft:block/iron_door_*).
-     */
-    private void registerRenderLayers() {
-        // Register Boss Room Door to use cutout rendering (for window transparency)
-        // This block uses vanilla iron door models directly, so render_type cannot be set in JSON
-        BlockRenderLayerMap.INSTANCE.putBlock(
-            ModBlocks.BOSS_ROOM_DOOR.get(),
-            RenderType.cutout()
         );
     }
 
