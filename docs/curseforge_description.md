@@ -51,11 +51,23 @@ Defeat bosses to craft legendary time-manipulating gear:
 - **Progressive Discovery**: Learn about biomes, structures, bosses, items, and progression steps
 - **Built-in System**: Fully integrated custom guidebook with no external dependencies
 
+### 👾 Custom Creatures
+Chrono Dawn features unique mobs that replace vanilla spawns in the dimension:
+- **Timeline Strider**: Replaces Enderman - a time-distorted entity
+- **Secondhand Archer**: Replaces Skeleton - precise temporal marksman
+- **Paradox Crawler**: Replaces Spider - phase-shifting predator
+- **Epoch Husk**: Replaces Zombie - time-worn undead
+- **Moment Creeper**: Replaces Creeper - explosive time anomaly
+- **Forgotten Minute**: Flying hostile mob with unique AI
+- **Chronal Leech**: Hostile mob that drains time energy
+- **Chrono Turtle**: Friendly water creature
+- **Glide Fish**: Water creature with cookable food items
+
 ### 🌲 New Content
 - **Time Wood**: A unique wood type with full block set (logs, planks, stairs, slabs, doors, trapdoors)
 - **Custom Items**: Time Hourglass, Portal Stabilizer, Time Clock, and more
 - **Special Blocks**: Reversing Time Sandstone (regenerates after breaking), Unstable Fungus (random speed effects)
-- **New Food**: Fruit of Time (grants Haste effect)
+- **New Food**: Fruit of Time (grants Haste effect), Glide Fish (raw and cooked)
 
 ---
 
