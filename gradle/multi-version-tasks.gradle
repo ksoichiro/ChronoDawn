@@ -90,6 +90,26 @@ tasks.register('cleanAll') {
             logger.lifecycle(">>> Deleted ${deletedCount} IDE-generated bin/ directories")
         }
 
+        // Clean Architectury Transformer runtime caches in run directories
+        // These caches can cause "Unresolved compilation problems" errors when
+        // stale transformed classes remain after code changes
+        def runDirs = [
+            'fabric-1.20.1/run', 'fabric-1.21.1/run', 'fabric-1.21.2/run',
+            'neoforge-1.21.1/run', 'neoforge-1.21.2/run'
+        ]
+        def transformerDeletedCount = 0
+        runDirs.each { runDir ->
+            def transformerDir = file("${runDir}/.architectury-transformer")
+            if (transformerDir.exists()) {
+                logger.lifecycle(">>> Deleting Architectury Transformer cache: ${transformerDir}")
+                delete transformerDir
+                transformerDeletedCount++
+            }
+        }
+        if (transformerDeletedCount > 0) {
+            logger.lifecycle(">>> Deleted ${transformerDeletedCount} Architectury Transformer cache directories")
+        }
+
         logger.lifecycle('')
         logger.lifecycle('All versions cleaned successfully.')
     }
