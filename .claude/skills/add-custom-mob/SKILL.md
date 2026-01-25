@@ -1,6 +1,6 @@
 ---
 name: add-custom-mob
-description: Comprehensive guide for adding new mobs (hostile, passive, ambient) to ChronoDawn. Covers entity class, model, renderer, registration, spawn configuration, loot tables, and platform-specific setup across all supported Minecraft versions (1.20.1, 1.21.1, 1.21.2). Use when implementing new creatures, monsters, or entities.
+description: MANDATORY checklist when adding any new mob to ChronoDawn. Must be consulted for every new hostile mob, passive mob, friendly creature, water mob, ambient mob, or custom entity implementation. Covers entity class, model, renderer, Fabric/NeoForge client registration (model layers, renderers, spawn egg colors), spawn configuration, loot tables, and multi-version support (1.20.1, 1.21.1, 1.21.2). Use this skill whenever asked to add, create, or implement a new mob, creature, or entity.
 ---
 
 # Add Custom Mob to ChronoDawn
@@ -23,9 +23,11 @@ When adding a new mob, complete ALL of the following:
 - [ ] `ModEntities.java` - Entity type registration
 - [ ] `ModItems.java` - Spawn egg registration (see [custom-mob-spawn-egg skill](#spawn-egg))
 
-### Platform-Specific Registration
+### Platform-Specific Registration (CRITICAL - Common source of crashes)
 - [ ] **Fabric** `ChronoDawnFabric.java` - Attribute & spawn placement registration
-- [ ] **Fabric** `ChronoDawnClientFabric.java` - Model layer & renderer registration
+- [ ] **Fabric** `ChronoDawnClientFabric.java` - Import statements for Model and Renderer
+- [ ] **Fabric** `ChronoDawnClientFabric.java` - Model layer registration (`EntityModelLayerRegistry.registerModelLayer`)
+- [ ] **Fabric** `ChronoDawnClientFabric.java` - Renderer registration (`EntityRendererRegistry.register`)
 - [ ] **NeoForge** `ChronoDawnNeoForge.java` - Attribute & spawn placement registration
 - [ ] **NeoForge** `ChronoDawnClientNeoForge.java` - Model layer & renderer registration
 - [ ] **NeoForge** `ChronoDawnClientNeoForge.java` - Spawn egg color handler
@@ -309,13 +311,21 @@ SpawnPlacements.register(
 
 ### Fabric - ChronoDawnClientFabric.java
 
+**IMPORTANT**: Don't forget to add imports at the top of the file!
+
 ```java
-// Model layer
+// Required imports (add to import section)
+import com.chronodawn.client.model.MobNameModel;
+import com.chronodawn.client.renderer.mobs.MobNameRenderer;
+
+// In registerEntityModelLayers() method - Model layer registration
 EntityModelLayerRegistry.registerModelLayer(MobNameModel.LAYER_LOCATION, MobNameModel::createBodyLayer);
 
-// Renderer
+// In registerEntityRenderers() method - Renderer registration
 EntityRendererRegistry.register(ModEntities.MOB_NAME.get(), MobNameRenderer::new);
 ```
+
+**Common Mistake**: Forgetting either the imports OR the registrations will cause a NullPointerException crash when spawning the entity.
 
 ### NeoForge - ChronoDawnNeoForge.java
 
@@ -436,10 +446,14 @@ Quick reminder:
 
 ## Common Issues
 
+**CRITICAL**: The most common mistakes are missing Fabric client registrations. Always verify both model layer AND renderer are registered in `ChronoDawnClientFabric.java`.
+
 | Issue | Cause | Solution |
 |-------|-------|----------|
 | Entity not spawning | Missing attribute registration | Add to Fabric/NeoForge attribute events |
-| Model not rendering | Missing model layer registration | Add to client init (both loaders) |
+| Model not rendering | Missing model layer registration | Add `EntityModelLayerRegistry.registerModelLayer()` in ChronoDawnClientFabric.java |
 | Crash on entity spawn | Wrong API for version | Check version differences table above |
-| Entity invisible | Missing renderer registration | Add to EntityRendererRegistry |
-| Spawn egg issues | See spawn egg skill | Consult `custom-mob-spawn-egg` skill |
+| **NullPointerException on entityRenderer** | **Missing Fabric renderer registration** | **Add `EntityRendererRegistry.register()` in ChronoDawnClientFabric.java** |
+| Entity invisible | Missing renderer registration | Add to EntityRendererRegistry in BOTH Fabric and NeoForge client classes |
+| Spawn egg crash | Missing spawn egg color handler | See `custom-mob-spawn-egg` skill |
+| Loot table error (1.21.2) | Using old `looting_enchant` function | Use `enchanted_count_increase` with `"enchantment": "minecraft:looting"` |
