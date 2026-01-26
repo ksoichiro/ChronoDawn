@@ -1,6 +1,6 @@
 ---
 name: texture-creation
-description: Guide for creating mod textures using vanilla texture reuse and color transformation
+description: Guide for creating textures using vanilla texture reuse and color transformation
 ---
 
 # Texture Creation Guide

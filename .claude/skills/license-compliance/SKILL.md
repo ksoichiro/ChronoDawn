@@ -1,6 +1,6 @@
 ---
 name: license-compliance
-description: LGPL-3.0 license compliance guidelines for Chrono Dawn mod
+description: LGPL-3.0 license compliance guidelines
 ---
 
 # License Compliance

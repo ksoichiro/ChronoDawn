@@ -1,6 +1,6 @@
 ---
 name: custom-mob-spawn-egg
-description: MANDATORY checklist when adding any new mob, creature, or entity to ChronoDawn. Must be consulted for every new hostile mob, passive mob, or custom entity implementation to ensure spawn egg model JSON, NeoForge color handler, and all registration steps are complete. Also use when fixing spawn egg visual bugs (black square, grayscale, invisible, missing texture).
+description: Use when adding spawn eggs or fixing spawn egg visual bugs (black square, grayscale, invisible).
 ---
 
 # Custom Mob Spawn Egg Implementation Guide

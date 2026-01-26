@@ -1,6 +1,6 @@
 ---
 name: game-design-decisions
-description: Critical game design decisions and rationale for Chrono Dawn mod
+description: Game design decisions and rationale (respawn, portals, progression)
 ---
 
 # Critical Game Design Decisions

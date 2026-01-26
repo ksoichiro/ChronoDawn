@@ -1,6 +1,6 @@
 ---
 name: versioning
-description: Versioning strategy and Semantic Versioning guide for Chrono Dawn mod
+description: Versioning strategy and Semantic Versioning guide
 ---
 
 # Versioning Guide

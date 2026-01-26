@@ -1,6 +1,6 @@
 ---
 name: multiversion-support
-description: Guide for multi-version Minecraft mod development (1.20.1 + 1.21.1)
+description: Guide for multi-version development and version-specific API differences
 ---
 
 # Multi-Version Support

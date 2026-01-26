@@ -1,6 +1,6 @@
 ---
 name: add-custom-mob
-description: MANDATORY checklist when adding any new mob to ChronoDawn. Must be consulted for every new hostile mob, passive mob, friendly creature, water mob, ambient mob, or custom entity implementation. Covers entity class, model, renderer, Fabric/NeoForge client registration (model layers, renderers, spawn egg colors), spawn configuration, loot tables, and multi-version support (1.20.1, 1.21.1, 1.21.2/1.21.3). Note that 1.21.3 uses 1.21.2 modules (hotfix release). Use this skill whenever asked to add, create, or implement a new mob, creature, or entity.
+description: Use when adding new mobs or entities. Covers entity class, model, renderer, client registration, spawn config, loot tables.
 ---
 
 # Add Custom Mob to ChronoDawn

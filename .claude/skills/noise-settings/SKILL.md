@@ -1,6 +1,6 @@
 ---
 name: noise-settings
-description: Minecraft terrain generation and noise settings customization guide
+description: Terrain generation and noise settings customization guide
 ---
 
 # Custom Noise Settings (Terrain Generation)
