@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "chronodawn:block/dark_time_wood_planks",
+    "top": "chronodawn:block/dark_time_wood_planks",
+    "side": "chronodawn:block/dark_time_wood_planks"
+  }
+}

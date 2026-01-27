@@ -37,6 +37,9 @@ if (moduleVersion == '1.20.1') {
 } else if (moduleVersion == '1.21.2') {
     include 'common-1.21.2'
     logger.lifecycle("Common module: common-1.21.2")
+} else if (moduleVersion == '1.21.4') {
+    include 'common-1.21.4'
+    logger.lifecycle("Common module: common-1.21.4")
 } else {
     include 'common-1.21.1'
     logger.lifecycle("Common module: common-1.21.1")

@@ -56,12 +56,13 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed information.
 ## Requirements
 
 ### For Players
-- **Minecraft**: Java Edition 1.21.1, 1.21.2, or 1.21.3
+- **Minecraft**: Java Edition 1.21.1, 1.21.2, 1.21.3, or 1.21.4
 - **Mod Loader** (version depends on Minecraft version):
   - **For 1.21.1**: Fabric Loader 0.17.3+ with Fabric API 0.116.7+, OR NeoForge 21.1.209+
   - **For 1.21.2/1.21.3**: Fabric Loader 0.17.3+ with Fabric API, OR NeoForge 21.2.0-beta+/21.3.0-beta+
+  - **For 1.21.4**: Fabric Loader 0.17.3+ with Fabric API 0.110.5+, OR NeoForge 21.4.0-beta+
 - **Dependencies**:
-  - **Architectury API** 13.0.8+ (for 1.21.1) or 14.0.4+ (for 1.21.2/1.21.3)
+  - **Architectury API** 13.0.8+ (for 1.21.1), 14.0.4+ (for 1.21.2/1.21.3), or 15.0.1+ (for 1.21.4)
 
 ### For Developers
 - **Java Development Kit (JDK)**: 21 or higher
@@ -82,8 +83,9 @@ cd ChronoDawn
 Chrono Dawn supports multiple Minecraft versions from the same codebase:
 - **1.20.1**: Fabric only (legacy support) - *NeoForge requires Minecraft 1.20.5+*
 - **1.21.1**: NeoForge/Fabric (stable)
-- **1.21.2**: NeoForge/Fabric (current version, default)
+- **1.21.2**: NeoForge/Fabric (stable)
 - **1.21.3**: NeoForge/Fabric (uses 1.21.2 modules - hotfix release)
+- **1.21.4**: NeoForge/Fabric (current version, default)
 
 ### Build for Specific Minecraft Version
 
@@ -125,9 +127,18 @@ Chrono Dawn supports multiple Minecraft versions from the same codebase:
 
 *Note: 1.21.3 is a hotfix release that uses the same modules as 1.21.2.*
 
+#### Build for Minecraft 1.21.4
+```bash
+# Shortcut command (recommended)
+./gradlew build1_21_4
+
+# Or explicit version
+./gradlew build -Ptarget_mc_version=1.21.4
+```
+
 #### Build for All Versions (Release)
 ```bash
-# Build all release versions (1.20.1, 1.21.1, 1.21.2)
+# Build all release versions (1.20.1, 1.21.1, 1.21.2, 1.21.4)
 # Note: 1.21.3 is excluded - the 1.21.2 JAR is compatible with 1.21.3
 ./gradlew buildAll
 ```
@@ -274,6 +285,13 @@ Use the same steps above, but with:
 ### For Minecraft 1.21.3
 Use the same steps as 1.21.2 above. The 1.21.2 JAR files are compatible with Minecraft 1.21.3 (hotfix release).
 
+### For Minecraft 1.21.4
+Use the same steps above, but with:
+- Minecraft 1.21.4
+- NeoForge 21.4.0-beta+ or Fabric Loader 0.17.3+ with Fabric API 0.110.5+
+- Architectury API 15.0.1+
+- JAR files with `+1.21.4` in the filename
+
 **Note**: Download the correct version for your mod loader (Fabric or NeoForge).
 
 ## Project Structure
@@ -284,7 +302,8 @@ ChronoDawn/
 ├── common-gametest/                 # Shared gametest sources (included via srcDir)
 ├── common-1.20.1/                   # Common module for MC 1.20.1
 ├── common-1.21.1/                   # Common module for MC 1.21.1
-├── common-1.21.2/                   # Common module for MC 1.21.2 (~80% of code)
+├── common-1.21.2/                   # Common module for MC 1.21.2
+├── common-1.21.4/                   # Common module for MC 1.21.4 (~80% of code)
 │   ├── src/main/java/com/chronodawn/
 │   │   ├── ChronoDawn.java          # Common entry point
 │   │   ├── blocks/                  # Custom blocks
@@ -299,9 +318,11 @@ ChronoDawn/
 ├── fabric-1.20.1/                   # Fabric subproject for MC 1.20.1
 ├── fabric-1.21.1/                   # Fabric subproject for MC 1.21.1
 ├── fabric-1.21.2/                   # Fabric subproject for MC 1.21.2
+├── fabric-1.21.4/                   # Fabric subproject for MC 1.21.4
 ├── neoforge-base/                   # Shared NeoForge sources
 ├── neoforge-1.21.1/                 # NeoForge subproject for MC 1.21.1
 ├── neoforge-1.21.2/                 # NeoForge subproject for MC 1.21.2
+├── neoforge-1.21.4/                 # NeoForge subproject for MC 1.21.4
 ├── specs/chrono-dawn-mod/           # Design documents
 ├── build.gradle                     # Root build configuration (Groovy DSL)
 ├── settings.gradle                  # Multi-module settings
@@ -362,4 +383,4 @@ For issues, feature requests, or questions:
 
 ---
 
-**Developed for Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3**
+**Developed for Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4**

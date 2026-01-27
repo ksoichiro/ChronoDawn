@@ -1,0 +1,6 @@
+accessWidener v2 named
+
+# Make BlockEntityType constructor accessible for 1.21.2
+# In 1.21.2, BlockEntityType.Builder was removed and the constructor became private
+# This access widener allows mods to create BlockEntityType instances directly
+accessible method net/minecraft/world/level/block/entity/BlockEntityType <init> (Lnet/minecraft/world/level/block/entity/BlockEntityType$BlockEntitySupplier;Ljava/util/Set;)V

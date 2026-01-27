@@ -68,6 +68,21 @@ tasks.register('clean1_21_3') {
 }
 
 /**
+ * Clean for Minecraft 1.21.4
+ * Usage: ./gradlew clean1_21_4
+ */
+tasks.register('clean1_21_4') {
+    group = 'chrono dawn build'
+    description = 'Clean build outputs for Minecraft 1.21.4'
+
+    doLast {
+        project.exec {
+            commandLine './gradlew', 'clean', '-Ptarget_mc_version=1.21.4'
+        }
+    }
+}
+
+/**
  * Clean for all supported Minecraft versions
  * Usage: ./gradlew cleanAll
  *
@@ -76,10 +91,10 @@ tasks.register('clean1_21_3') {
  */
 tasks.register('cleanAll') {
     group = 'chrono dawn build'
-    description = 'Clean build outputs for all supported Minecraft versions (1.20.1, 1.21.1, 1.21.2)'
+    description = 'Clean build outputs for all supported Minecraft versions (1.20.1, 1.21.1, 1.21.2, 1.21.4)'
 
     doLast {
-        def versions = ['1.20.1', '1.21.1', '1.21.2']
+        def versions = ['1.20.1', '1.21.1', '1.21.2', '1.21.4']
 
         versions.each { version ->
             logger.lifecycle(">>> Cleaning for Minecraft ${version}...")
@@ -92,9 +107,9 @@ tasks.register('cleanAll') {
         // Clean IDE-generated bin/ directories that can interfere with builds/tests
         // (e.g., IntelliJ/Eclipse output directories with unprocessed placeholders)
         def subprojects = [
-            'common-1.20.1', 'common-1.21.1', 'common-1.21.2',
-            'fabric-1.20.1', 'fabric-1.21.1', 'fabric-1.21.2',
-            'neoforge-1.21.1', 'neoforge-1.21.2'
+            'common-1.20.1', 'common-1.21.1', 'common-1.21.2', 'common-1.21.4',
+            'fabric-1.20.1', 'fabric-1.21.1', 'fabric-1.21.2', 'fabric-1.21.4',
+            'neoforge-1.21.1', 'neoforge-1.21.2', 'neoforge-1.21.4'
         ]
         def deletedCount = 0
         subprojects.each { subdir ->
@@ -232,6 +247,29 @@ tasks.register('build1_21_3') {
 }
 
 /**
+ * Build for Minecraft 1.21.4
+ * Usage: ./gradlew build1_21_4
+ */
+tasks.register('build1_21_4') {
+    group = 'chrono dawn build'
+    description = 'Build mod for Minecraft 1.21.4'
+
+    doFirst {
+        logger.lifecycle('')
+        logger.lifecycle('====================================')
+        logger.lifecycle('Building for Minecraft 1.21.4...')
+        logger.lifecycle('====================================')
+        logger.lifecycle('')
+    }
+
+    doLast {
+        project.exec {
+            commandLine './gradlew', 'clean', 'build', '-Ptarget_mc_version=1.21.4', '-x', 'test'
+        }
+    }
+}
+
+/**
  * Build for all supported Minecraft versions (for release)
  * Usage: ./gradlew buildAll
  *
@@ -241,20 +279,20 @@ tasks.register('build1_21_3') {
  */
 tasks.register('buildAll') {
     group = 'chrono dawn build'
-    description = 'Build mod for all supported Minecraft versions (1.20.1, 1.21.1, 1.21.2) - for release'
+    description = 'Build mod for all supported Minecraft versions (1.20.1, 1.21.1, 1.21.2, 1.21.4) - for release'
 
     doFirst {
         logger.lifecycle('')
         logger.lifecycle('====================================================')
         logger.lifecycle('Building for ALL supported Minecraft versions...')
-        logger.lifecycle('Versions: 1.20.1, 1.21.1, 1.21.2')
+        logger.lifecycle('Versions: 1.20.1, 1.21.1, 1.21.2, 1.21.4')
         logger.lifecycle('(1.21.3 excluded - uses 1.21.2 JAR files)')
         logger.lifecycle('====================================================')
         logger.lifecycle('')
     }
 
     doLast {
-        def versions = ['1.20.1', '1.21.1', '1.21.2']
+        def versions = ['1.20.1', '1.21.1', '1.21.2', '1.21.4']
         def failed = []
 
         versions.each { version ->
@@ -306,6 +344,7 @@ def runClientConfigurations = [
     [version: '1.21.1', loaders: ['fabric', 'neoforge']],
     [version: '1.21.2', loaders: ['fabric', 'neoforge']],
     [version: '1.21.3', loaders: ['fabric', 'neoforge']],
+    [version: '1.21.4', loaders: ['fabric', 'neoforge']],
 ]
 
 runClientConfigurations.each { config ->
@@ -370,20 +409,20 @@ runClientConfigurations.each { config ->
  */
 tasks.register('testAll') {
     group = 'chrono dawn test'
-    description = 'Run unit tests for all supported Minecraft versions (1.20.1, 1.21.1, 1.21.2)'
+    description = 'Run unit tests for all supported Minecraft versions (1.20.1, 1.21.1, 1.21.2, 1.21.4)'
 
     doFirst {
         logger.lifecycle('')
         logger.lifecycle('====================================================')
         logger.lifecycle('Running unit tests for ALL supported Minecraft versions...')
-        logger.lifecycle('Versions: 1.20.1, 1.21.1, 1.21.2')
+        logger.lifecycle('Versions: 1.20.1, 1.21.1, 1.21.2, 1.21.4')
         logger.lifecycle('(1.21.3 excluded - shares modules with 1.21.2)')
         logger.lifecycle('====================================================')
         logger.lifecycle('')
     }
 
     doLast {
-        def versions = ['1.20.1', '1.21.1', '1.21.2']
+        def versions = ['1.20.1', '1.21.1', '1.21.2', '1.21.4']
         def failed = []
 
         versions.each { version ->
@@ -438,9 +477,9 @@ tasks.register('testAll') {
  *   1. cleanAll - Clean all build outputs and IDE-generated directories
  *   2. validateResources - JSON syntax and cross-reference validation
  *   3. validateTranslations - Cross-version translation key validation
- *   4. buildAll - Build for all Minecraft versions (1.20.1, 1.21.1, 1.21.2)
- *   5. testAll - Run unit tests for all versions (1.20.1, 1.21.1, 1.21.2)
- *   6. gameTestAll - Run GameTests for all versions including 1.21.3 runtime
+ *   4. buildAll - Build for all Minecraft versions (1.20.1, 1.21.1, 1.21.2, 1.21.4)
+ *   5. testAll - Run unit tests for all versions (1.20.1, 1.21.1, 1.21.2, 1.21.4)
+ *   6. gameTestAll - Run GameTests for all versions including 1.21.3/1.21.4 runtime
  *
  * Note: 1.21.3 is only tested via gameTestAll (runtime verification).
  * Build/unit tests use 1.21.2 modules which are compatible with 1.21.3.
@@ -528,10 +567,11 @@ tasks.register('checkAll') {
  * Run GameTests for all supported Minecraft versions and loaders
  * Usage: ./gradlew gameTestAll
  *
- * Configurations are grouped by Minecraft version (3 parallel threads):
+ * Configurations are grouped by Minecraft version (4 parallel threads):
  *   Thread 1: :fabric:runGameTest (1.20.1)
  *   Thread 2: :fabric:runGameTest + :neoforge:runGameTestServer (1.21.1)
  *   Thread 3: :fabric:runGameTest + :neoforge:runGameTestServer (1.21.2, then 1.21.3)
+ *   Thread 4: :fabric:runGameTest + :neoforge:runGameTestServer (1.21.4)
  *
  * Note: 1.21.2 and 1.21.3 share the same modules (1.21.3 is a hotfix release),
  * so they run sequentially in the same thread to avoid build conflicts.
@@ -558,6 +598,7 @@ tasks.register('gameTestAll') {
             [versions: ['1.21.1'], tasks: [':fabric:runGameTest', ':neoforge:runGameTestServer']],
             // 1.21.2 and 1.21.3 share the same modules, so run sequentially in one thread
             [versions: ['1.21.2', '1.21.3'], tasks: [':fabric:runGameTest', ':neoforge:runGameTestServer']],
+            [versions: ['1.21.4'], tasks: [':fabric:runGameTest', ':neoforge:runGameTestServer']],
         ]
 
         // Map hotfix versions to their base module version for directory paths

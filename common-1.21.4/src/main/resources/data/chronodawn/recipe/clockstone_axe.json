@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "tools",
+  "pattern": [
+    "CC",
+    "CS",
+    " S"
+  ],
+  "key": {
+    "C": "chronodawn:clockstone",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "chronodawn:clockstone_axe",
+    "count": 1
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "chronodawn:time_wood_log",
+    "chronodawn:stripped_time_wood_log",
+    "chronodawn:time_wood",
+    "chronodawn:stripped_time_wood"
+  ]
+}
