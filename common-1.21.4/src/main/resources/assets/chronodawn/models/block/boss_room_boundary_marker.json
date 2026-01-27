@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "chronodawn:block/boss_room_boundary_marker"
+  }
+}

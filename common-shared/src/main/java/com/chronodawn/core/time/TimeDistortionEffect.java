@@ -129,27 +129,21 @@ public class TimeDistortionEffect {
 
         // Exclude all boss entities (bosses should move at normal speed)
         if (entity instanceof TimeGuardianEntity) {
-            ChronoDawn.LOGGER.debug("[TimeDistortion] Excluding Time Guardian from time distortion");
             return false;
         }
         if (entity instanceof com.chronodawn.entities.bosses.TimeTyrantEntity) {
-            ChronoDawn.LOGGER.debug("[TimeDistortion] Excluding Time Tyrant from time distortion");
             return false;
         }
         if (entity instanceof ChronosWardenEntity) {
-            ChronoDawn.LOGGER.debug("[TimeDistortion] Excluding Chronos Warden from time distortion");
             return false;
         }
         if (entity instanceof ClockworkColossusEntity) {
-            ChronoDawn.LOGGER.debug("[TimeDistortion] Excluding Clockwork Colossus from time distortion");
             return false;
         }
         if (entity instanceof EntropyKeeperEntity) {
-            ChronoDawn.LOGGER.debug("[TimeDistortion] Excluding Entropy Keeper from time distortion");
             return false;
         }
         if (entity instanceof TemporalPhantomEntity) {
-            ChronoDawn.LOGGER.debug("[TimeDistortion] Excluding Temporal Phantom from time distortion");
             return false;
         }
 
