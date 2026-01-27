@@ -128,8 +128,28 @@ public class EntropyCryptTrapdoorBlock extends TrapDoorBlock {
             return InteractionResult.SUCCESS;
         }
 
-        // Already activated - function as normal trapdoor
-        return super.useWithoutItem(state, level, pos, player, hitResult);
+        // Already activated - function as normal trapdoor (manually toggle since IRON type blocks hand interaction)
+        if (!level.isClientSide) {
+            state = state.cycle(OPEN);
+            level.setBlock(pos, state, 10);
+            // Play sound
+            this.playToggleSound(player, level, pos, state.getValue(OPEN));
+        }
+        return InteractionResult.SUCCESS;
+    }
+
+    /**
+     * Play trapdoor open/close sound.
+     */
+    private void playToggleSound(Player player, Level level, BlockPos pos, boolean open) {
+        level.playSound(
+            player,
+            pos,
+            open ? ENTROPY_CRYPT_TYPE.trapdoorOpen() : ENTROPY_CRYPT_TYPE.trapdoorClose(),
+            net.minecraft.sounds.SoundSource.BLOCKS,
+            1.0F,
+            level.getRandom().nextFloat() * 0.1F + 0.9F
+        );
     }
 
     /**
