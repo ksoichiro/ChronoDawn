@@ -238,6 +238,7 @@
   "entity.chronodawn.chrono_turtle": "Chrono Turtle",
   "entity.chronodawn.timebound_rabbit": "Timebound Rabbit",
   "entity.chronodawn.pulse_hog": "Pulse Hog",
+  "entity.chronodawn.secondwing_fowl": "Secondwing Fowl",
 
   "biome.chronodawn.chronodawn_plains": "Chrono Dawn Plains",
   "biome.chronodawn.chronodawn_ocean": "Chrono Dawn Ocean",
@@ -338,6 +339,7 @@
   "item.chronodawn.paradox_crawler_spawn_egg": "Paradox Crawler Spawn Egg",
   "item.chronodawn.timebound_rabbit_spawn_egg": "Timebound Rabbit Spawn Egg",
   "item.chronodawn.pulse_hog_spawn_egg": "Pulse Hog Spawn Egg",
+  "item.chronodawn.secondwing_fowl_spawn_egg": "Secondwing Fowl Spawn Egg",
   "item.chronodawn.glide_fish": "Glide Fish",
   "item.chronodawn.cooked_glide_fish": "Cooked Glide Fish",
 

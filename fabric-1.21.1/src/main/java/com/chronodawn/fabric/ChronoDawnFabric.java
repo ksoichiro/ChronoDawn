@@ -18,27 +18,8 @@
 package com.chronodawn.fabric;
 
 import com.chronodawn.ChronoDawn;
-import com.chronodawn.entities.bosses.ChronosWardenEntity;
-import com.chronodawn.entities.bosses.ClockworkColossusEntity;
-import com.chronodawn.entities.bosses.EntropyKeeperEntity;
-import com.chronodawn.entities.bosses.TemporalPhantomEntity;
-import com.chronodawn.entities.bosses.TimeGuardianEntity;
-import com.chronodawn.entities.bosses.TimeTyrantEntity;
-import com.chronodawn.entities.mobs.ClockworkSentinelEntity;
-import com.chronodawn.entities.mobs.FloqEntity;
-import com.chronodawn.entities.mobs.TemporalWraithEntity;
-import com.chronodawn.entities.mobs.TimeKeeperEntity;
-import com.chronodawn.entities.mobs.EpochHuskEntity;
-import com.chronodawn.entities.mobs.ForgottenMinuteEntity;
-import com.chronodawn.entities.mobs.ChronalLeechEntity;
-import com.chronodawn.entities.mobs.MomentCreeperEntity;
-import com.chronodawn.entities.mobs.GlideFishEntity;
-import com.chronodawn.entities.mobs.ParadoxCrawlerEntity;
-import com.chronodawn.entities.mobs.SecondhandArcherEntity;
-import com.chronodawn.entities.mobs.TimelineStriderEntity;
-import com.chronodawn.entities.mobs.TimeboundRabbitEntity;
-import com.chronodawn.entities.mobs.PulseHogEntity;
-import com.chronodawn.entities.mobs.ChronoTurtleEntity;
+import com.chronodawn.entities.bosses.*;
+import com.chronodawn.entities.mobs.*;
 import com.chronodawn.fabric.event.BlockProtectionEventHandler;
 import com.chronodawn.registry.ModEntities;
 import com.chronodawn.worldgen.processors.BossRoomProtectionProcessor;
@@ -199,6 +180,11 @@ public class ChronoDawnFabric implements ModInitializer {
             PulseHogEntity.createAttributes()
         );
 
+        FabricDefaultAttributeRegistry.register(
+            ModEntities.SECONDWING_FOWL.get(),
+            SecondwingFowlEntity.createAttributes()
+        );
+
         ChronoDawn.LOGGER.debug("Registered entity attributes for Fabric");
     }
 
@@ -325,6 +311,14 @@ public class ChronoDawnFabric implements ModInitializer {
             SpawnPlacementTypes.ON_GROUND,
             Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             PulseHogEntity::checkPulseHogSpawnRules
+        );
+
+        // Secondwing Fowl - spawns on ground like animals
+        SpawnPlacements.register(
+            ModEntities.SECONDWING_FOWL.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            SecondwingFowlEntity::checkSecondwingFowlSpawnRules
         );
 
         ChronoDawn.LOGGER.debug("Registered spawn placements for custom mobs");

@@ -214,6 +214,7 @@ public enum ModItemId {
     CHRONO_TURTLE_SPAWN_EGG("chrono_turtle_spawn_egg"),
     TIMEBOUND_RABBIT_SPAWN_EGG("timebound_rabbit_spawn_egg"),
     PULSE_HOG_SPAWN_EGG("pulse_hog_spawn_egg"),
+    SECONDWING_FOWL_SPAWN_EGG("secondwing_fowl_spawn_egg"),
     GLIDE_FISH_SPAWN_EGG("glide_fish_spawn_egg"),
     TIMELINE_STRIDER_SPAWN_EGG("timeline_strider_spawn_egg"),
     EPOCH_HUSK_SPAWN_EGG("epoch_husk_spawn_egg"),

@@ -100,7 +100,7 @@
         "maxCount": 4
       },
       {
-        "type": "minecraft:chicken",
+        "type": "chronodawn:secondwing_fowl",
         "weight": 10,
         "minCount": 4,
         "maxCount": 4

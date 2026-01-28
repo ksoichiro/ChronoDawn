@@ -1920,6 +1920,18 @@ public class ModItems {
         )
     );
 
+    public static final RegistrySupplier<Item> SECONDWING_FOWL_SPAWN_EGG = ITEMS.register(
+        ModItemId.SECONDWING_FOWL_SPAWN_EGG.id(),
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.SECONDWING_FOWL,
+            0x9370DB, // Background: Medium purple (body color)
+            0xFFD700, // Spots: Gold (beak and feet)
+            new Item.Properties()
+                    .setId(ResourceKey.create(Registries.ITEM,
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.SECONDWING_FOWL_SPAWN_EGG.id())))
+        )
+    );
+
     // === Boats ===
 
     /**
@@ -2075,6 +2087,10 @@ public class ModItems {
 
         if (PULSE_HOG_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
             ((com.chronodawn.items.DeferredSpawnEggItem) PULSE_HOG_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (SECONDWING_FOWL_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) SECONDWING_FOWL_SPAWN_EGG.get()).initializeSpawnEgg();
         }
 
         ChronoDawn.LOGGER.debug("Spawn eggs initialized");
@@ -2321,6 +2337,9 @@ public class ModItems {
         }
         if (PULSE_HOG_SPAWN_EGG.isPresent()) {
             output.accept(PULSE_HOG_SPAWN_EGG.get());
+        }
+        if (SECONDWING_FOWL_SPAWN_EGG.isPresent()) {
+            output.accept(SECONDWING_FOWL_SPAWN_EGG.get());
         }
     }
 }

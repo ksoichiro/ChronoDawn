@@ -237,6 +237,7 @@
   "entity.chronodawn.chrono_turtle": "クロノタートル",
   "entity.chronodawn.timebound_rabbit": "タイムバウンド・ラビット",
   "entity.chronodawn.pulse_hog": "パルス・ホッグ",
+  "entity.chronodawn.secondwing_fowl": "セカンドウィング・ファウル",
 
   "biome.chronodawn.chronodawn_plains": "クロノドーン平原",
   "biome.chronodawn.chronodawn_ocean": "クロノドーン海洋",
@@ -337,6 +338,7 @@
   "item.chronodawn.chrono_turtle_spawn_egg": "クロノタートルのスポーンエッグ",
   "item.chronodawn.timebound_rabbit_spawn_egg": "タイムバウンド・ラビットのスポーンエッグ",
   "item.chronodawn.pulse_hog_spawn_egg": "パルス・ホッグのスポーンエッグ",
+  "item.chronodawn.secondwing_fowl_spawn_egg": "セカンドウィング・ファウルのスポーンエッグ",
   "item.chronodawn.glide_fish": "グライドフィッシュ",
   "item.chronodawn.cooked_glide_fish": "焼きグライドフィッシュ",
 

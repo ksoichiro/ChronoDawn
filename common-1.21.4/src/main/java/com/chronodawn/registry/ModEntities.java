@@ -2,27 +2,10 @@ package com.chronodawn.registry;
 
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.compat.CompatResourceLocation;
-import com.chronodawn.entities.bosses.ChronosWardenEntity;
-import com.chronodawn.entities.bosses.EntropyKeeperEntity;
-import com.chronodawn.entities.bosses.TemporalPhantomEntity;
-import com.chronodawn.entities.bosses.TimeGuardianEntity;
-import com.chronodawn.entities.bosses.TimeTyrantEntity;
-import com.chronodawn.entities.mobs.ClockworkSentinelEntity;
-import com.chronodawn.entities.mobs.FloqEntity;
-import com.chronodawn.entities.mobs.GlideFishEntity;
-import com.chronodawn.entities.mobs.ParadoxCrawlerEntity;
-import com.chronodawn.entities.mobs.SecondhandArcherEntity;
-import com.chronodawn.entities.mobs.TimelineStriderEntity;
-import com.chronodawn.entities.mobs.TimeboundRabbitEntity;
-import com.chronodawn.entities.mobs.PulseHogEntity;
-import com.chronodawn.entities.mobs.TemporalWraithEntity;
-import com.chronodawn.entities.mobs.TimeKeeperEntity;
-import com.chronodawn.entities.mobs.EpochHuskEntity;
-import com.chronodawn.entities.mobs.ForgottenMinuteEntity;
-import com.chronodawn.entities.mobs.ChronalLeechEntity;
-import com.chronodawn.entities.mobs.MomentCreeperEntity;
 import com.chronodawn.entities.boats.ChronoDawnBoat;
 import com.chronodawn.entities.boats.ChronoDawnChestBoat;
+import com.chronodawn.entities.bosses.*;
+import com.chronodawn.entities.mobs.*;
 import com.chronodawn.entities.projectiles.TimeArrowEntity;
 import com.chronodawn.entities.projectiles.TimeBlastEntity;
 import dev.architectury.registry.registries.DeferredRegister;
@@ -31,7 +14,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import com.chronodawn.registry.ModEntityId;
 
 /**
  * Architectury Registry wrapper for custom entities.
@@ -418,6 +400,21 @@ public class ModEntities {
             .clientTrackingRange(10)
             .updateInterval(3)
             .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.PULSE_HOG.id())))
+    );
+
+    /**
+     * Secondwing Fowl - Friendly creature similar to vanilla Chicken
+     *
+     * Spawns in ChronoDawn dimension biomes, replacing vanilla chickens.
+     * Drops chicken like vanilla chickens.
+     */
+    public static final RegistrySupplier<EntityType<SecondwingFowlEntity>> SECONDWING_FOWL = ENTITIES.register(
+        ModEntityId.SECONDWING_FOWL.id(),
+        () -> EntityType.Builder.of(SecondwingFowlEntity::new, MobCategory.CREATURE)
+            .sized(0.4f, 0.7f)  // Same as vanilla chicken
+            .clientTrackingRange(10)
+            .updateInterval(3)
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.SECONDWING_FOWL.id())))
     );
 
     // === Boat Entities ===

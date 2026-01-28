@@ -39,6 +39,7 @@ import com.chronodawn.entities.mobs.MomentCreeperEntity;
 import com.chronodawn.entities.mobs.ChronoTurtleEntity;
 import com.chronodawn.entities.mobs.TimeboundRabbitEntity;
 import com.chronodawn.entities.mobs.PulseHogEntity;
+import com.chronodawn.entities.mobs.SecondwingFowlEntity;
 import com.chronodawn.neoforge.registry.ModFluidTypes;
 import com.chronodawn.neoforge.registry.ModLootModifiers;
 import com.chronodawn.neoforge.registry.ModParticles;
@@ -283,6 +284,11 @@ public class ChronoDawnNeoForge {
             PulseHogEntity.createAttributes().build()
         );
 
+        event.put(
+            ModEntities.SECONDWING_FOWL.get(),
+            SecondwingFowlEntity.createAttributes().build()
+        );
+
         ChronoDawn.LOGGER.debug("Registered entity attributes for NeoForge");
     }
 
@@ -437,6 +443,15 @@ public class ChronoDawnNeoForge {
             SpawnPlacementTypes.ON_GROUND,
             Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             PulseHogEntity::checkPulseHogSpawnRules,
+            RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+
+        // Secondwing Fowl - spawns on ground like animals
+        event.register(
+            ModEntities.SECONDWING_FOWL.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            SecondwingFowlEntity::checkSecondwingFowlSpawnRules,
             RegisterSpawnPlacementsEvent.Operation.REPLACE
         );
 

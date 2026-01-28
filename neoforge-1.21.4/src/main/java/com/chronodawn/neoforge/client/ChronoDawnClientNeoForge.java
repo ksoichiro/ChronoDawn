@@ -25,6 +25,7 @@ import com.chronodawn.client.model.MomentCreeperModel;
 import com.chronodawn.client.model.ChronoTurtleModel;
 import com.chronodawn.client.model.TimeboundRabbitModel;
 import com.chronodawn.client.model.PulseHogModel;
+import com.chronodawn.client.model.SecondwingFowlModel;
 import com.chronodawn.client.renderer.ChronosWardenRenderer;
 import com.chronodawn.client.renderer.ChronoDawnBoatRenderer;
 import com.chronodawn.client.renderer.ChronoDawnChestBoatRenderer;
@@ -52,6 +53,7 @@ import com.chronodawn.client.renderer.mobs.MomentCreeperRenderer;
 import com.chronodawn.client.renderer.mobs.ChronoTurtleRenderer;
 import com.chronodawn.client.renderer.mobs.TimeboundRabbitRenderer;
 import com.chronodawn.client.renderer.mobs.PulseHogRenderer;
+import com.chronodawn.client.renderer.mobs.SecondwingFowlRenderer;
 import com.chronodawn.items.TimeCompassItem;
 import com.chronodawn.client.particle.ChronoDawnPortalParticle;
 import com.chronodawn.registry.ModBlocks;
@@ -226,6 +228,11 @@ public class ChronoDawnClientNeoForge {
             PulseHogModel::createBodyLayer
         );
 
+        event.registerLayerDefinition(
+            SecondwingFowlModel.LAYER_LOCATION,
+            SecondwingFowlModel::createBodyLayer
+        );
+
         // Register boat and chest boat model layers (version-specific)
         VersionSpecificClientHelper.registerBoatModelLayers(event);
 
@@ -368,6 +375,11 @@ public class ChronoDawnClientNeoForge {
         event.registerEntityRenderer(
             ModEntities.PULSE_HOG.get(),
             PulseHogRenderer::new
+        );
+
+        event.registerEntityRenderer(
+            ModEntities.SECONDWING_FOWL.get(),
+            SecondwingFowlRenderer::new
         );
 
         // Register ChronoDawn Boat with custom renderer

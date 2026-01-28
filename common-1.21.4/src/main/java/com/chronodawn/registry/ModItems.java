@@ -1,58 +1,22 @@
 package com.chronodawn.registry;
 
 import com.chronodawn.ChronoDawn;
-import com.chronodawn.items.ChronicleBookItem;
-import com.chronodawn.items.DecorativeWaterBucketItem;
-import com.chronodawn.items.PortalStabilizerItem;
-import com.chronodawn.items.TimeHourglassItem;
+import com.chronodawn.entities.boats.ChronoDawnBoatType;
+import com.chronodawn.items.*;
+import com.chronodawn.items.artifacts.ChronobladeItem;
+import com.chronodawn.items.artifacts.EchoingTimeBootsItem;
+import com.chronodawn.items.artifacts.TimeTyrantMailItem;
+import com.chronodawn.items.artifacts.UnstablePocketWatchItem;
 import com.chronodawn.items.base.ClockstoneItem;
 import com.chronodawn.items.base.EnhancedClockstoneItem;
 import com.chronodawn.items.base.TimeCrystalItem;
+import com.chronodawn.items.boats.ChronoDawnBoatItem;
 import com.chronodawn.items.combat.TimeArrowItem;
-import com.chronodawn.items.consumables.FruitOfTimeItem;
-import com.chronodawn.items.consumables.TimeFruitPieItem;
-import com.chronodawn.items.consumables.TimeJamItem;
-import com.chronodawn.items.consumables.TimeWheatSeedsItem;
-import com.chronodawn.items.consumables.TimeWheatItem;
-import com.chronodawn.items.consumables.TimeBreadItem;
-import com.chronodawn.items.consumables.TemporalRootItem;
-import com.chronodawn.items.consumables.BakedTemporalRootItem;
-import com.chronodawn.items.consumables.ChronoMelonSliceItem;
-import com.chronodawn.items.consumables.ChronoMelonSeedsItem;
-import com.chronodawn.items.consumables.TimelessMushroomItem;
-import com.chronodawn.items.consumables.TemporalRootStewItem;
-import com.chronodawn.items.consumables.GlisteningChronoMelonItem;
-import com.chronodawn.items.consumables.ChronoMelonJuiceItem;
-import com.chronodawn.items.consumables.TimelessMushroomSoupItem;
-import com.chronodawn.items.consumables.EnhancedTimeBreadItem;
-import com.chronodawn.items.consumables.TimeWheatCookieItem;
-import com.chronodawn.items.consumables.ClockworkCookieItem;
-import com.chronodawn.items.consumables.GoldenTimeWheatItem;
-import com.chronodawn.items.equipment.ClockstoneArmorItem;
-import com.chronodawn.items.equipment.ClockstoneAxeItem;
-import com.chronodawn.items.equipment.ClockstoneHoeItem;
-import com.chronodawn.items.equipment.ClockstonePickaxeItem;
-import com.chronodawn.items.equipment.ClockstoneShovelItem;
-import com.chronodawn.items.equipment.ClockstoneSwordItem;
-import com.chronodawn.items.equipment.EnhancedClockstoneArmorItem;
-import com.chronodawn.items.equipment.EnhancedClockstoneAxeItem;
-import com.chronodawn.items.equipment.EnhancedClockstoneHoeItem;
-import com.chronodawn.items.equipment.EnhancedClockstonePickaxeItem;
-import com.chronodawn.items.equipment.EnhancedClockstoneShovelItem;
-import com.chronodawn.items.equipment.EnhancedClockstoneSwordItem;
-import com.chronodawn.items.artifacts.ChronobladeItem;
-import com.chronodawn.items.artifacts.TimeTyrantMailItem;
-import com.chronodawn.items.artifacts.EchoingTimeBootsItem;
-import com.chronodawn.items.artifacts.UnstablePocketWatchItem;
-import com.chronodawn.items.tools.TimeClockItem;
-import net.minecraft.world.item.ArmorItem;
-import com.chronodawn.items.KeyToMasterClockItem;
-import com.chronodawn.items.UnstableHourglassItem;
+import com.chronodawn.items.consumables.*;
+import com.chronodawn.items.equipment.*;
 import com.chronodawn.items.quest.AncientGearItem;
 import com.chronodawn.items.tools.SpatiallyLinkedPickaxeItem;
-import com.chronodawn.items.boats.ChronoDawnBoatItem;
-import com.chronodawn.entities.boats.ChronoDawnBoatType;
-import com.chronodawn.registry.ModFluids;
+import com.chronodawn.items.tools.TimeClockItem;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
@@ -61,8 +25,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.equipment.ArmorType;
-import com.chronodawn.registry.ModItemId;
-import com.chronodawn.registry.ModBlockId;
 
 /**
  * Architectury Registry wrapper for custom items.
@@ -1920,6 +1882,18 @@ public class ModItems {
         )
     );
 
+    public static final RegistrySupplier<Item> SECONDWING_FOWL_SPAWN_EGG = ITEMS.register(
+        ModItemId.SECONDWING_FOWL_SPAWN_EGG.id(),
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.SECONDWING_FOWL,
+            0x9370DB, // Background: Medium purple (body color)
+            0xFFD700, // Spots: Gold (beak and feet)
+            new Item.Properties()
+                    .setId(ResourceKey.create(Registries.ITEM,
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.SECONDWING_FOWL_SPAWN_EGG.id())))
+        )
+    );
+
     // === Boats ===
 
     /**
@@ -2075,6 +2049,10 @@ public class ModItems {
 
         if (PULSE_HOG_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
             ((com.chronodawn.items.DeferredSpawnEggItem) PULSE_HOG_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (SECONDWING_FOWL_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) SECONDWING_FOWL_SPAWN_EGG.get()).initializeSpawnEgg();
         }
 
         ChronoDawn.LOGGER.debug("Spawn eggs initialized");
@@ -2321,6 +2299,9 @@ public class ModItems {
         }
         if (PULSE_HOG_SPAWN_EGG.isPresent()) {
             output.accept(PULSE_HOG_SPAWN_EGG.get());
+        }
+        if (SECONDWING_FOWL_SPAWN_EGG.isPresent()) {
+            output.accept(SECONDWING_FOWL_SPAWN_EGG.get());
         }
     }
 }

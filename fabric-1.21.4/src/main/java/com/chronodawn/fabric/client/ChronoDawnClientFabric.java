@@ -1,95 +1,39 @@
 package com.chronodawn.fabric.client;
 
 import com.chronodawn.ChronoDawn;
-import com.chronodawn.entities.boats.ChronoDawnBoatType;
-import com.chronodawn.client.model.ChronosWardenModel;
-import com.chronodawn.client.model.ClockworkColossusModel;
-import com.chronodawn.client.model.ClockworkSentinelModel;
-import com.chronodawn.client.model.EntropyKeeperModel;
-import com.chronodawn.client.model.ChronalLeechModel;
-import com.chronodawn.client.model.EpochHuskModel;
-import com.chronodawn.client.model.FloqModel;
-import com.chronodawn.client.model.ForgottenMinuteModel;
-import com.chronodawn.client.model.GlideFishModel;
-import com.chronodawn.client.model.MomentCreeperModel;
-import com.chronodawn.client.model.ParadoxCrawlerModel;
-import com.chronodawn.client.model.SecondhandArcherModel;
-import com.chronodawn.client.model.ChronoTurtleModel;
-import com.chronodawn.client.model.TimeboundRabbitModel;
-import com.chronodawn.client.model.PulseHogModel;
-import com.chronodawn.client.model.TemporalPhantomModel;
-import com.chronodawn.client.model.TemporalWraithModel;
-import com.chronodawn.client.model.TimeGuardianModel;
-import com.chronodawn.client.model.TimeKeeperModel;
-import com.chronodawn.client.model.TimeTyrantModel;
+import com.chronodawn.client.model.*;
 import com.chronodawn.client.particle.ChronoDawnPortalParticle;
+import com.chronodawn.client.renderer.*;
+import com.chronodawn.client.renderer.mobs.*;
+import com.chronodawn.entities.boats.ChronoDawnBoatType;
 import com.chronodawn.gui.ChronicleScreen;
 import com.chronodawn.gui.data.ChronicleData;
 import com.chronodawn.items.ChronicleBookItem;
-import com.chronodawn.client.renderer.ChronosWardenRenderer;
-import com.chronodawn.client.renderer.ChronoDawnBoatRenderer;
-import com.chronodawn.client.renderer.ChronoDawnChestBoatRenderer;
-import com.chronodawn.client.renderer.ClockworkColossusRenderer;
-import com.chronodawn.client.renderer.EntropyKeeperRenderer;
-import com.chronodawn.client.renderer.GearProjectileRenderer;
-import com.chronodawn.client.renderer.TemporalPhantomRenderer;
-import com.chronodawn.client.renderer.TimeArrowRenderer;
-import com.chronodawn.client.renderer.TimeBlastRenderer;
-import com.chronodawn.client.renderer.TimeGuardianRenderer;
-import com.chronodawn.client.renderer.TimeTyrantRenderer;
-import com.chronodawn.client.renderer.mobs.ChronalLeechRenderer;
-import com.chronodawn.client.renderer.mobs.ClockworkSentinelRenderer;
-import com.chronodawn.client.renderer.mobs.EpochHuskRenderer;
-import com.chronodawn.client.renderer.mobs.FloqRenderer;
-import com.chronodawn.client.renderer.mobs.ForgottenMinuteRenderer;
-import com.chronodawn.client.renderer.mobs.GlideFishRenderer;
-import com.chronodawn.client.renderer.mobs.MomentCreeperRenderer;
-import com.chronodawn.client.renderer.mobs.ParadoxCrawlerRenderer;
-import com.chronodawn.client.renderer.mobs.SecondhandArcherRenderer;
-import com.chronodawn.client.renderer.mobs.ChronoTurtleRenderer;
-import com.chronodawn.client.renderer.mobs.TimeboundRabbitRenderer;
-import com.chronodawn.client.renderer.mobs.PulseHogRenderer;
-import com.chronodawn.client.renderer.mobs.TemporalWraithRenderer;
-import com.chronodawn.client.renderer.mobs.TimeKeeperRenderer;
-import com.chronodawn.client.renderer.mobs.TimelineStriderRenderer;
-import com.chronodawn.client.model.TimelineStriderModel;
-import com.chronodawn.items.TimeCompassItem;
 import com.chronodawn.registry.ModBlockId;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModEntities;
-import com.chronodawn.registry.ModItems;
 import com.chronodawn.registry.ModParticles;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.event.client.player.ClientPlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.client.model.BoatModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.FoliageColor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
-
-import java.util.Optional;
 
 /**
  * Fabric client-side initialization for ChronoDawn mod.
@@ -348,6 +292,12 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             PulseHogModel.LAYER_LOCATION,
             PulseHogModel::createBodyLayer
         );
+
+        // Register Secondwing Fowl model layer
+        EntityModelLayerRegistry.registerModelLayer(
+            SecondwingFowlModel.LAYER_LOCATION,
+            SecondwingFowlModel::createBodyLayer
+        );
     }
 
     /**
@@ -510,6 +460,12 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
         EntityRendererRegistry.register(
             ModEntities.PULSE_HOG.get(),
             PulseHogRenderer::new
+        );
+
+        // Register Secondwing Fowl renderer
+        EntityRendererRegistry.register(
+            ModEntities.SECONDWING_FOWL.get(),
+            SecondwingFowlRenderer::new
         );
 
         // Register ChronoDawn Boat with custom renderer

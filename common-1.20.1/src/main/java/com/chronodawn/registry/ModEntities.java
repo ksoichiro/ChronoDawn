@@ -21,6 +21,7 @@ import com.chronodawn.entities.mobs.SecondhandArcherEntity;
 import com.chronodawn.entities.mobs.TimelineStriderEntity;
 import com.chronodawn.entities.mobs.TimeboundRabbitEntity;
 import com.chronodawn.entities.mobs.PulseHogEntity;
+import com.chronodawn.entities.mobs.SecondwingFowlEntity;
 import com.chronodawn.entities.boats.ChronoDawnBoat;
 import com.chronodawn.entities.boats.ChronoDawnChestBoat;
 import com.chronodawn.entities.projectiles.TimeArrowEntity;
@@ -369,6 +370,21 @@ public class ModEntities {
             .clientTrackingRange(10)
             .updateInterval(3)
             .build("pulse_hog")
+    );
+
+    /**
+     * Secondwing Fowl - Friendly creature similar to vanilla Chicken
+     *
+     * Spawns in ChronoDawn dimension biomes, replacing vanilla chickens.
+     * Drops chicken like vanilla chickens.
+     */
+    public static final RegistrySupplier<EntityType<SecondwingFowlEntity>> SECONDWING_FOWL = ENTITIES.register(
+        ModEntityId.SECONDWING_FOWL.id(),
+        () -> EntityType.Builder.of(SecondwingFowlEntity::new, MobCategory.CREATURE)
+            .sized(0.4f, 0.7f)  // Same as vanilla chicken
+            .clientTrackingRange(10)
+            .updateInterval(3)
+            .build("secondwing_fowl")
     );
 
     /**
