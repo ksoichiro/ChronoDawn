@@ -7,6 +7,8 @@
   "mixins": [
     "AnvilMenuAccessor",
     "AnvilMenuMixin",
+    "LevelGetTimeMixin",
+    "ServerLevelSetTimeMixin",
     "SleepMixin",
     "StructureStartMixin"
   ],

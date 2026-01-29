@@ -58,7 +58,10 @@ sourceSets {
                 'DimensionStateData.java',
                 'ChronoDawnTimeData.java',
                 'TimeKeeperVillageData.java',
-                'PlayerProgressData.java'
+                'PlayerProgressData.java',
+                // Mixins with 1.21.5-specific versions (isDay() method removed)
+                'LevelGetTimeMixin.java',
+                'ServerLevelSetTimeMixin.java'
             ]
             return excludedFiles.contains(element.file.name)
         }
