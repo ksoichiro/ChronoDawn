@@ -217,6 +217,7 @@ public enum ModItemId {
     SECONDWING_FOWL_SPAWN_EGG("secondwing_fowl_spawn_egg"),
     GLIDE_FISH_SPAWN_EGG("glide_fish_spawn_egg"),
     TIMELINE_STRIDER_SPAWN_EGG("timeline_strider_spawn_egg"),
+    HOURGLASS_GOLEM_SPAWN_EGG("hourglass_golem_spawn_egg"),
     EPOCH_HUSK_SPAWN_EGG("epoch_husk_spawn_egg"),
     MOMENT_CREEPER_SPAWN_EGG("moment_creeper_spawn_egg"),
     SECONDHAND_ARCHER_SPAWN_EGG("secondhand_archer_spawn_egg"),

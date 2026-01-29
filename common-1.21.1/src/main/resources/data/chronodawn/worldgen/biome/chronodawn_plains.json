@@ -50,7 +50,7 @@
         "maxCount": 4
       },
       {
-        "type": "minecraft:witch",
+        "type": "chronodawn:hourglass_golem",
         "weight": 5,
         "minCount": 1,
         "maxCount": 1

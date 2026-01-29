@@ -279,6 +279,12 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             TimelineStriderModel::createBodyLayer
         );
 
+        // Register Hourglass Golem model layer
+        EntityModelLayerRegistry.registerModelLayer(
+            HourglassGolemModel.LAYER_LOCATION,
+            HourglassGolemModel::createBodyLayer
+        );
+
         // Register Secondhand Archer model layer
         EntityModelLayerRegistry.registerModelLayer(
             SecondhandArcherModel.LAYER_LOCATION,
@@ -425,6 +431,12 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
         EntityRendererRegistry.register(
             ModEntities.TIMELINE_STRIDER.get(),
             TimelineStriderRenderer::new
+        );
+
+        // Register Hourglass Golem with custom renderer
+        EntityRendererRegistry.register(
+            ModEntities.HOURGLASS_GOLEM.get(),
+            HourglassGolemRenderer::new
         );
 
         EntityRendererRegistry.register(

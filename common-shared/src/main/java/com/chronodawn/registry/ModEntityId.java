@@ -47,6 +47,7 @@ public enum ModEntityId {
     PARADOX_CRAWLER("paradox_crawler"),
     SECONDHAND_ARCHER("secondhand_archer"),
     TIMELINE_STRIDER("timeline_strider"),
+    HOURGLASS_GOLEM("hourglass_golem"),
 
     // === Friendly Mobs ===
     TIME_KEEPER("time_keeper"),

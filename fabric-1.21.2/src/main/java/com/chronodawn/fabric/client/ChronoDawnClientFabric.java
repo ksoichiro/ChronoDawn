@@ -9,7 +9,6 @@ import com.chronodawn.gui.data.ChronicleData;
 import com.chronodawn.items.ChronicleBookItem;
 import com.chronodawn.client.renderer.*;
 import com.chronodawn.client.renderer.mobs.*;
-import com.chronodawn.client.model.TimelineStriderModel;
 import com.chronodawn.items.TimeCompassItem;
 import com.chronodawn.registry.ModBlockId;
 import com.chronodawn.registry.ModBlocks;
@@ -288,6 +287,12 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             TimelineStriderModel::createBodyLayer
         );
 
+        // Register Hourglass Golem model layer
+        EntityModelLayerRegistry.registerModelLayer(
+            HourglassGolemModel.LAYER_LOCATION,
+            HourglassGolemModel::createBodyLayer
+        );
+
         // Register Secondhand Archer model layer
         EntityModelLayerRegistry.registerModelLayer(
             SecondhandArcherModel.LAYER_LOCATION,
@@ -458,6 +463,11 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
         EntityRendererRegistry.register(
             ModEntities.TIMELINE_STRIDER.get(),
             TimelineStriderRenderer::new
+        );
+
+        EntityRendererRegistry.register(
+            ModEntities.HOURGLASS_GOLEM.get(),
+            HourglassGolemRenderer::new
         );
 
         EntityRendererRegistry.register(

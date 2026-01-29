@@ -159,6 +159,11 @@ public class ChronoDawnFabric implements ModInitializer {
         );
 
         FabricDefaultAttributeRegistry.register(
+            ModEntities.HOURGLASS_GOLEM.get(),
+            HourglassGolemEntity.createAttributes()
+        );
+
+        FabricDefaultAttributeRegistry.register(
             ModEntities.SECONDHAND_ARCHER.get(),
             SecondhandArcherEntity.createAttributes()
         );
@@ -269,6 +274,14 @@ public class ChronoDawnFabric implements ModInitializer {
             SpawnPlacements.Type.ON_GROUND,
             Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             TimelineStriderEntity::checkTimelineStriderSpawnRules
+        );
+
+        // Hourglass Golem - spawns on ground
+        SpawnPlacements.register(
+            ModEntities.HOURGLASS_GOLEM.get(),
+            SpawnPlacements.Type.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            HourglassGolemEntity::checkHourglassGolemSpawnRules
         );
 
         // Secondhand Archer - spawns on ground in daylight

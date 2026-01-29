@@ -326,6 +326,20 @@ public class ModEntities {
     );
 
     /**
+     * Hourglass Golem - Iron Golem-like hostile mob.
+     *
+     * Drops Time Hourglass.
+     */
+    public static final RegistrySupplier<EntityType<HourglassGolemEntity>> HOURGLASS_GOLEM = ENTITIES.register(
+        ModEntityId.HOURGLASS_GOLEM.id(),
+        () -> EntityType.Builder.of(HourglassGolemEntity::new, MobCategory.MONSTER)
+            .sized(1.4f, 2.7f)
+            .clientTrackingRange(8)
+            .updateInterval(3)
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.HOURGLASS_GOLEM.id())))
+    );
+
+    /**
      * Paradox Crawler - Spider-like hostile mob with wall climbing.
      *
      * Has wall climbing ability and leap attacks.

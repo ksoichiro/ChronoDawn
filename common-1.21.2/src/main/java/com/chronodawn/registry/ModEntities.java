@@ -2,26 +2,8 @@ package com.chronodawn.registry;
 
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.compat.CompatResourceLocation;
-import com.chronodawn.entities.bosses.ChronosWardenEntity;
-import com.chronodawn.entities.bosses.EntropyKeeperEntity;
-import com.chronodawn.entities.bosses.TemporalPhantomEntity;
-import com.chronodawn.entities.bosses.TimeGuardianEntity;
-import com.chronodawn.entities.bosses.TimeTyrantEntity;
-import com.chronodawn.entities.mobs.ClockworkSentinelEntity;
-import com.chronodawn.entities.mobs.FloqEntity;
-import com.chronodawn.entities.mobs.GlideFishEntity;
-import com.chronodawn.entities.mobs.ParadoxCrawlerEntity;
-import com.chronodawn.entities.mobs.SecondhandArcherEntity;
-import com.chronodawn.entities.mobs.TimelineStriderEntity;
-import com.chronodawn.entities.mobs.TimeboundRabbitEntity;
-import com.chronodawn.entities.mobs.PulseHogEntity;
-import com.chronodawn.entities.mobs.SecondwingFowlEntity;
-import com.chronodawn.entities.mobs.TemporalWraithEntity;
-import com.chronodawn.entities.mobs.TimeKeeperEntity;
-import com.chronodawn.entities.mobs.EpochHuskEntity;
-import com.chronodawn.entities.mobs.ForgottenMinuteEntity;
-import com.chronodawn.entities.mobs.ChronalLeechEntity;
-import com.chronodawn.entities.mobs.MomentCreeperEntity;
+import com.chronodawn.entities.bosses.*;
+import com.chronodawn.entities.mobs.*;
 import com.chronodawn.entities.boats.ChronoDawnBoat;
 import com.chronodawn.entities.boats.ChronoDawnChestBoat;
 import com.chronodawn.entities.projectiles.TimeArrowEntity;
@@ -342,6 +324,20 @@ public class ModEntities {
             .clientTrackingRange(8)
             .updateInterval(3)
             .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.TIMELINE_STRIDER.id())))
+    );
+
+    /**
+     * Hourglass Golem - Iron Golem-like hostile mob.
+     *
+     * Drops Time Hourglass.
+     */
+    public static final RegistrySupplier<EntityType<HourglassGolemEntity>> HOURGLASS_GOLEM = ENTITIES.register(
+        ModEntityId.HOURGLASS_GOLEM.id(),
+        () -> EntityType.Builder.of(HourglassGolemEntity::new, MobCategory.MONSTER)
+            .sized(1.4f, 2.7f)
+            .clientTrackingRange(8)
+            .updateInterval(3)
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.HOURGLASS_GOLEM.id())))
     );
 
     /**

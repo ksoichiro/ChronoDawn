@@ -4,56 +4,10 @@ import com.chronodawn.ChronoDawn;
 import com.chronodawn.gui.ChronicleScreen;
 import com.chronodawn.gui.data.ChronicleData;
 import com.chronodawn.items.ChronicleBookItem;
-import com.chronodawn.client.model.ChronosWardenModel;
-import com.chronodawn.client.model.ClockworkColossusModel;
-import com.chronodawn.client.model.ClockworkSentinelModel;
-import com.chronodawn.client.model.EntropyKeeperModel;
-import com.chronodawn.client.model.FloqModel;
-import com.chronodawn.client.model.GlideFishModel;
-import com.chronodawn.client.model.ParadoxCrawlerModel;
-import com.chronodawn.client.model.SecondhandArcherModel;
-import com.chronodawn.client.model.TimelineStriderModel;
-import com.chronodawn.client.model.TemporalPhantomModel;
-import com.chronodawn.client.model.TemporalWraithModel;
-import com.chronodawn.client.model.TimeGuardianModel;
-import com.chronodawn.client.model.TimeKeeperModel;
-import com.chronodawn.client.model.TimeTyrantModel;
-import com.chronodawn.client.model.EpochHuskModel;
-import com.chronodawn.client.model.ForgottenMinuteModel;
-import com.chronodawn.client.model.ChronalLeechModel;
-import com.chronodawn.client.model.MomentCreeperModel;
-import com.chronodawn.client.model.ChronoTurtleModel;
-import com.chronodawn.client.model.TimeboundRabbitModel;
-import com.chronodawn.client.model.PulseHogModel;
-import com.chronodawn.client.model.SecondwingFowlModel;
-import com.chronodawn.client.renderer.ChronosWardenRenderer;
-import com.chronodawn.client.renderer.ChronoDawnBoatRenderer;
-import com.chronodawn.client.renderer.ChronoDawnChestBoatRenderer;
+import com.chronodawn.client.model.*;
+import com.chronodawn.client.renderer.*;
 import com.chronodawn.entities.boats.ChronoDawnBoatType;
-import com.chronodawn.client.renderer.ClockworkColossusRenderer;
-import com.chronodawn.client.renderer.EntropyKeeperRenderer;
-import com.chronodawn.client.renderer.GearProjectileRenderer;
-import com.chronodawn.client.renderer.TemporalPhantomRenderer;
-import com.chronodawn.client.renderer.TimeArrowRenderer;
-import com.chronodawn.client.renderer.TimeBlastRenderer;
-import com.chronodawn.client.renderer.TimeGuardianRenderer;
-import com.chronodawn.client.renderer.TimeTyrantRenderer;
-import com.chronodawn.client.renderer.mobs.ClockworkSentinelRenderer;
-import com.chronodawn.client.renderer.mobs.FloqRenderer;
-import com.chronodawn.client.renderer.mobs.GlideFishRenderer;
-import com.chronodawn.client.renderer.mobs.ParadoxCrawlerRenderer;
-import com.chronodawn.client.renderer.mobs.SecondhandArcherRenderer;
-import com.chronodawn.client.renderer.mobs.TimelineStriderRenderer;
-import com.chronodawn.client.renderer.mobs.TemporalWraithRenderer;
-import com.chronodawn.client.renderer.mobs.TimeKeeperRenderer;
-import com.chronodawn.client.renderer.mobs.EpochHuskRenderer;
-import com.chronodawn.client.renderer.mobs.ForgottenMinuteRenderer;
-import com.chronodawn.client.renderer.mobs.ChronalLeechRenderer;
-import com.chronodawn.client.renderer.mobs.MomentCreeperRenderer;
-import com.chronodawn.client.renderer.mobs.ChronoTurtleRenderer;
-import com.chronodawn.client.renderer.mobs.TimeboundRabbitRenderer;
-import com.chronodawn.client.renderer.mobs.PulseHogRenderer;
-import com.chronodawn.client.renderer.mobs.SecondwingFowlRenderer;
+import com.chronodawn.client.renderer.mobs.*;
 import com.chronodawn.items.TimeCompassItem;
 import com.chronodawn.client.particle.ChronoDawnPortalParticle;
 import com.chronodawn.registry.ModBlocks;
@@ -201,6 +155,11 @@ public class ChronoDawnClientNeoForge {
         event.registerLayerDefinition(
             TimelineStriderModel.LAYER_LOCATION,
             TimelineStriderModel::createBodyLayer
+        );
+
+        event.registerLayerDefinition(
+            HourglassGolemModel.LAYER_LOCATION,
+            HourglassGolemModel::createBodyLayer
         );
 
         event.registerLayerDefinition(
@@ -353,6 +312,11 @@ public class ChronoDawnClientNeoForge {
         );
 
         event.registerEntityRenderer(
+            ModEntities.HOURGLASS_GOLEM.get(),
+            HourglassGolemRenderer::new
+        );
+
+        event.registerEntityRenderer(
             ModEntities.SECONDHAND_ARCHER.get(),
             SecondhandArcherRenderer::new
         );
@@ -489,6 +453,7 @@ public class ChronoDawnClientNeoForge {
             ModItems.MOMENT_CREEPER_SPAWN_EGG.get(),
             ModItems.GLIDE_FISH_SPAWN_EGG.get(),
             ModItems.TIMELINE_STRIDER_SPAWN_EGG.get(),
+            ModItems.HOURGLASS_GOLEM_SPAWN_EGG.get(),
             ModItems.SECONDHAND_ARCHER_SPAWN_EGG.get(),
             ModItems.PARADOX_CRAWLER_SPAWN_EGG.get(),
             ModItems.CHRONO_TURTLE_SPAWN_EGG.get(),

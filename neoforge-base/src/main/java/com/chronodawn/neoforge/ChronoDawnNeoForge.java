@@ -18,28 +18,8 @@
 package com.chronodawn.neoforge;
 
 import com.chronodawn.ChronoDawn;
-import com.chronodawn.entities.bosses.ChronosWardenEntity;
-import com.chronodawn.entities.bosses.ClockworkColossusEntity;
-import com.chronodawn.entities.bosses.EntropyKeeperEntity;
-import com.chronodawn.entities.bosses.TemporalPhantomEntity;
-import com.chronodawn.entities.bosses.TimeGuardianEntity;
-import com.chronodawn.entities.bosses.TimeTyrantEntity;
-import com.chronodawn.entities.mobs.ClockworkSentinelEntity;
-import com.chronodawn.entities.mobs.FloqEntity;
-import com.chronodawn.entities.mobs.GlideFishEntity;
-import com.chronodawn.entities.mobs.ParadoxCrawlerEntity;
-import com.chronodawn.entities.mobs.SecondhandArcherEntity;
-import com.chronodawn.entities.mobs.TimelineStriderEntity;
-import com.chronodawn.entities.mobs.TemporalWraithEntity;
-import com.chronodawn.entities.mobs.TimeKeeperEntity;
-import com.chronodawn.entities.mobs.EpochHuskEntity;
-import com.chronodawn.entities.mobs.ForgottenMinuteEntity;
-import com.chronodawn.entities.mobs.ChronalLeechEntity;
-import com.chronodawn.entities.mobs.MomentCreeperEntity;
-import com.chronodawn.entities.mobs.ChronoTurtleEntity;
-import com.chronodawn.entities.mobs.TimeboundRabbitEntity;
-import com.chronodawn.entities.mobs.PulseHogEntity;
-import com.chronodawn.entities.mobs.SecondwingFowlEntity;
+import com.chronodawn.entities.bosses.*;
+import com.chronodawn.entities.mobs.*;
 import com.chronodawn.neoforge.registry.ModFluidTypes;
 import com.chronodawn.neoforge.registry.ModLootModifiers;
 import com.chronodawn.neoforge.registry.ModParticles;
@@ -260,6 +240,11 @@ public class ChronoDawnNeoForge {
         );
 
         event.put(
+            ModEntities.HOURGLASS_GOLEM.get(),
+            HourglassGolemEntity.createAttributes().build()
+        );
+
+        event.put(
             ModEntities.SECONDHAND_ARCHER.get(),
             SecondhandArcherEntity.createAttributes().build()
         );
@@ -398,6 +383,15 @@ public class ChronoDawnNeoForge {
             SpawnPlacementTypes.ON_GROUND,
             Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             TimelineStriderEntity::checkTimelineStriderSpawnRules,
+            RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+
+        // Hourglass Golem - spawns on ground in daylight
+        event.register(
+            ModEntities.HOURGLASS_GOLEM.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            HourglassGolemEntity::checkHourglassGolemSpawnRules,
             RegisterSpawnPlacementsEvent.Operation.REPLACE
         );
 

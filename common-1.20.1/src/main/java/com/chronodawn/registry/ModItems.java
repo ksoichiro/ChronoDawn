@@ -1587,6 +1587,16 @@ public class ModItems {
         )
     );
 
+    public static final RegistrySupplier<Item> HOURGLASS_GOLEM_SPAWN_EGG = ITEMS.register(
+        ModItemId.HOURGLASS_GOLEM_SPAWN_EGG.id(),
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.HOURGLASS_GOLEM,
+            0x9B8B6E, // Background: Stone/tan (golem body)
+            0xDAA520, // Spots: Goldenrod (hourglass sand)
+            new Item.Properties()
+        )
+    );
+
     public static final RegistrySupplier<Item> SECONDHAND_ARCHER_SPAWN_EGG = ITEMS.register(
         ModItemId.SECONDHAND_ARCHER_SPAWN_EGG.id(),
         () -> new com.chronodawn.items.DeferredSpawnEggItem(
@@ -1802,6 +1812,10 @@ public class ModItems {
 
         if (TIMELINE_STRIDER_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
             ((com.chronodawn.items.DeferredSpawnEggItem) TIMELINE_STRIDER_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (HOURGLASS_GOLEM_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) HOURGLASS_GOLEM_SPAWN_EGG.get()).initializeSpawnEgg();
         }
 
         if (SECONDHAND_ARCHER_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
@@ -2057,6 +2071,9 @@ public class ModItems {
         }
         if (TIMELINE_STRIDER_SPAWN_EGG.isPresent()) {
             output.accept(TIMELINE_STRIDER_SPAWN_EGG.get());
+        }
+        if (HOURGLASS_GOLEM_SPAWN_EGG.isPresent()) {
+            output.accept(HOURGLASS_GOLEM_SPAWN_EGG.get());
         }
         if (SECONDHAND_ARCHER_SPAWN_EGG.isPresent()) {
             output.accept(SECONDHAND_ARCHER_SPAWN_EGG.get());
