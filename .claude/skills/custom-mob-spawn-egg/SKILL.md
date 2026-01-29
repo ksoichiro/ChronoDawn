@@ -73,6 +73,7 @@ Create `models/item/mob_name_spawn_egg.json` in all version resource directories
 - `common-1.20.1/src/main/resources/assets/chronodawn/models/item/`
 - `common-1.21.1/src/main/resources/assets/chronodawn/models/item/`
 - `common-1.21.2/src/main/resources/assets/chronodawn/models/item/`
+- `common-1.21.4/src/main/resources/assets/chronodawn/models/item/`
 
 Content (identical for all versions):
 ```json
@@ -82,6 +83,45 @@ Content (identical for all versions):
 ```
 
 No custom texture file is needed - Minecraft generates the spawn egg texture procedurally from the two color values.
+
+### 4a. Item Definition File (1.21.4 ONLY - CRITICAL)
+
+**1.21.4 introduced a new item definition system.** Without this file, spawn egg colors will not display correctly.
+
+Create `items/mob_name_spawn_egg.json` in the 1.21.4 resource directory:
+- `common-1.21.4/src/main/resources/assets/chronodawn/items/`
+
+**Note**: This is a separate directory from `models/item/` - both files are required for 1.21.4.
+
+Content:
+```json
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "minecraft:item/template_spawn_egg",
+    "tints": [
+      {
+        "type": "minecraft:constant",
+        "value": 10194798
+      },
+      {
+        "type": "minecraft:constant",
+        "value": 14329120
+      }
+    ]
+  }
+}
+```
+
+**Color Value Conversion**: The `tints` array uses **decimal** values, not hex:
+- First tint (index 0): Background color
+- Second tint (index 1): Spots color
+- Convert hex to decimal: `0x9B8B6E` → `10194798`, `0xDAA520` → `14329120`
+- JavaScript conversion: `parseInt("9B8B6E", 16)` → `10194798`
+
+**IMPORTANT**: Colors must be specified in BOTH:
+1. Java code (hex): `0x9B8B6E, 0xDAA520` in ModItems.java
+2. JSON file (decimal): `10194798, 14329120` in items/*.json
 
 ### 5. NeoForge Color Handler Registration (CRITICAL)
 
@@ -127,6 +167,8 @@ Add entries to both `en_us.json` and `ja_jp.json` for all 3 versions:
 | Correct on NeoForge, broken on Fabric | Missing `initializeSpawnEgg()` call | Add to `initializeSpawnEggs()` |
 | No name displayed | Missing lang entry | Add to `en_us.json` / `ja_jp.json` |
 | Not in creative tab | Missing creative tab entry | Add to `populateCreativeTab()` |
+| **Colors wrong on 1.21.4 only** | **Missing items/*.json with tints** | **Add `items/xxx_spawn_egg.json` with tints array (1.21.4 only)** |
+| **Colors mismatch between versions** | **Hex/decimal mismatch** | **Ensure Java (hex) and JSON (decimal) colors match** |
 
 ---
 
