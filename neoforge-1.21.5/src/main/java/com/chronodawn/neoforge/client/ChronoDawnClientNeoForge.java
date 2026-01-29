@@ -37,7 +37,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
  *
  * This class is only loaded on the client side (Dist.CLIENT).
  */
-@EventBusSubscriber(modid = ChronoDawn.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = ChronoDawn.MOD_ID, value = Dist.CLIENT)
 public class ChronoDawnClientNeoForge {
 
     /**
@@ -502,17 +502,37 @@ public class ChronoDawnClientNeoForge {
         return (float) Mth.positiveModulo(compassAngle, 1.0);
     }
 
-    // Note: In 1.21.5, RegisterClientReloadListenersEvent was removed/changed.
-    // Chronicle data reloading needs alternative implementation.
-    // TODO: Implement resource reload listener using the new 1.21.5 API
-    // For now, Chronicle data is loaded during client setup.
-    // See onClientSetup() for initial loading.
+    /**
+     * Register Chronicle Data resource reload listener.
+     * Loads guidebook data from JSON files when resources are loaded/reloaded.
+     * In NeoForge 21.5+, RegisterClientReloadListenersEvent was renamed to AddClientReloadListenersEvent.
+     *
+     * @param event The reload listeners registration event
+     */
+    @SubscribeEvent
+    public static void onAddClientReloadListeners(AddClientReloadListenersEvent event) {
+        event.addListener(
+            ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "chronicle_data"),
+            new net.minecraft.server.packs.resources.SimplePreparableReloadListener<Void>() {
+                @Override
+                protected Void prepare(net.minecraft.server.packs.resources.ResourceManager resourceManager, net.minecraft.util.profiling.ProfilerFiller profiler) {
+                    return null;
+                }
+
+                @Override
+                protected void apply(Void object, net.minecraft.server.packs.resources.ResourceManager resourceManager, net.minecraft.util.profiling.ProfilerFiller profiler) {
+                    ChronicleData.getInstance().load(resourceManager);
+                    ChronoDawn.LOGGER.debug("Chronicle data loaded/reloaded");
+                }
+            }
+        );
+    }
 
     /**
      * Event subscriber for FORGE bus events (game events, not mod events).
      * Handles runtime client events like tick events and player interactions.
      */
-    @EventBusSubscriber(modid = ChronoDawn.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.GAME)
+    @EventBusSubscriber(modid = ChronoDawn.MOD_ID, value = Dist.CLIENT)
     public static class ForgeEventHandlers {
         /**
          * Handle client tick events for portal effects.
