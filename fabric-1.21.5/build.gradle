@@ -75,7 +75,9 @@ loom {
 
 // GameTest Framework configuration
 // NOTE: In 1.21.5, the GameTest system was completely rewritten to be registry-based.
-// GameTests are disabled for 1.21.5 until the new system is implemented.
+// Fabric API 1.21.5 provides a new @GameTest annotation but with different API.
+// GameTests require additional migration work for 1.21.5.
+// TODO: Migrate GameTests to Fabric API 1.21.5's new @GameTest annotation
 // fabricApi {
 //     configureTests {
 //         createSourceSet = true
@@ -85,9 +87,6 @@ loom {
 //         eula = true
 //     }
 // }
-
-// GameTest sources disabled for 1.21.5 - API completely changed
-// TODO: Implement GameTests using the new 1.21.5 registry-based system
 
 processResources {
     dependsOn project(commonModule).tasks.named('convertNbtStructures')
