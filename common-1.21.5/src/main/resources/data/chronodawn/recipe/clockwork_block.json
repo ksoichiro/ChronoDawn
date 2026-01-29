@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building_blocks",
+  "pattern": [
+    "CIC",
+    "IRI",
+    "CIC"
+  ],
+  "key": {
+    "C": "chronodawn:clockstone",
+    "I": "minecraft:iron_ingot",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "chronodawn:clockwork_block",
+    "count": 1
+  }
+}

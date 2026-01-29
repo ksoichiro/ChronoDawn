@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "chronodawn:block/clockwork_block"
+    }
+  }
+}

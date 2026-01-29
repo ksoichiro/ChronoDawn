@@ -83,6 +83,21 @@ tasks.register('clean1_21_4') {
 }
 
 /**
+ * Clean for Minecraft 1.21.5
+ * Usage: ./gradlew clean1_21_5
+ */
+tasks.register('clean1_21_5') {
+    group = 'chrono dawn build'
+    description = 'Clean build outputs for Minecraft 1.21.5'
+
+    doLast {
+        project.exec {
+            commandLine './gradlew', 'clean', '-Ptarget_mc_version=1.21.5'
+        }
+    }
+}
+
+/**
  * Clean for all supported Minecraft versions
  * Usage: ./gradlew cleanAll
  *
@@ -91,10 +106,10 @@ tasks.register('clean1_21_4') {
  */
 tasks.register('cleanAll') {
     group = 'chrono dawn build'
-    description = 'Clean build outputs for all supported Minecraft versions (1.20.1, 1.21.1, 1.21.2, 1.21.4)'
+    description = 'Clean build outputs for all supported Minecraft versions (1.20.1, 1.21.1, 1.21.2, 1.21.4, 1.21.5)'
 
     doLast {
-        def versions = ['1.20.1', '1.21.1', '1.21.2', '1.21.4']
+        def versions = ['1.20.1', '1.21.1', '1.21.2', '1.21.4', '1.21.5']
 
         versions.each { version ->
             logger.lifecycle(">>> Cleaning for Minecraft ${version}...")
@@ -107,9 +122,9 @@ tasks.register('cleanAll') {
         // Clean IDE-generated bin/ directories that can interfere with builds/tests
         // (e.g., IntelliJ/Eclipse output directories with unprocessed placeholders)
         def subprojects = [
-            'common-1.20.1', 'common-1.21.1', 'common-1.21.2', 'common-1.21.4',
-            'fabric-1.20.1', 'fabric-1.21.1', 'fabric-1.21.2', 'fabric-1.21.4',
-            'neoforge-1.21.1', 'neoforge-1.21.2', 'neoforge-1.21.4'
+            'common-1.20.1', 'common-1.21.1', 'common-1.21.2', 'common-1.21.4', 'common-1.21.5',
+            'fabric-1.20.1', 'fabric-1.21.1', 'fabric-1.21.2', 'fabric-1.21.4', 'fabric-1.21.5',
+            'neoforge-1.21.1', 'neoforge-1.21.2', 'neoforge-1.21.4', 'neoforge-1.21.5'
         ]
         def deletedCount = 0
         subprojects.each { subdir ->
@@ -128,8 +143,8 @@ tasks.register('cleanAll') {
         // These caches can cause "Unresolved compilation problems" errors when
         // stale transformed classes remain after code changes
         def runDirs = [
-            'fabric-1.20.1/run', 'fabric-1.21.1/run', 'fabric-1.21.2/run',
-            'neoforge-1.21.1/run', 'neoforge-1.21.2/run'
+            'fabric-1.20.1/run', 'fabric-1.21.1/run', 'fabric-1.21.2/run', 'fabric-1.21.4/run', 'fabric-1.21.5/run',
+            'neoforge-1.21.1/run', 'neoforge-1.21.2/run', 'neoforge-1.21.4/run', 'neoforge-1.21.5/run'
         ]
         def transformerDeletedCount = 0
         runDirs.each { runDir ->
@@ -270,6 +285,29 @@ tasks.register('build1_21_4') {
 }
 
 /**
+ * Build for Minecraft 1.21.5
+ * Usage: ./gradlew build1_21_5
+ */
+tasks.register('build1_21_5') {
+    group = 'chrono dawn build'
+    description = 'Build mod for Minecraft 1.21.5'
+
+    doFirst {
+        logger.lifecycle('')
+        logger.lifecycle('====================================')
+        logger.lifecycle('Building for Minecraft 1.21.5...')
+        logger.lifecycle('====================================')
+        logger.lifecycle('')
+    }
+
+    doLast {
+        project.exec {
+            commandLine './gradlew', 'clean', 'build', '-Ptarget_mc_version=1.21.5', '-x', 'test'
+        }
+    }
+}
+
+/**
  * Build for all supported Minecraft versions (for release)
  * Usage: ./gradlew buildAll
  *
@@ -279,20 +317,20 @@ tasks.register('build1_21_4') {
  */
 tasks.register('buildAll') {
     group = 'chrono dawn build'
-    description = 'Build mod for all supported Minecraft versions (1.20.1, 1.21.1, 1.21.2, 1.21.4) - for release'
+    description = 'Build mod for all supported Minecraft versions (1.20.1, 1.21.1, 1.21.2, 1.21.4, 1.21.5) - for release'
 
     doFirst {
         logger.lifecycle('')
         logger.lifecycle('====================================================')
         logger.lifecycle('Building for ALL supported Minecraft versions...')
-        logger.lifecycle('Versions: 1.20.1, 1.21.1, 1.21.2, 1.21.4')
+        logger.lifecycle('Versions: 1.20.1, 1.21.1, 1.21.2, 1.21.4, 1.21.5')
         logger.lifecycle('(1.21.3 excluded - uses 1.21.2 JAR files)')
         logger.lifecycle('====================================================')
         logger.lifecycle('')
     }
 
     doLast {
-        def versions = ['1.20.1', '1.21.1', '1.21.2', '1.21.4']
+        def versions = ['1.20.1', '1.21.1', '1.21.2', '1.21.4', '1.21.5']
         def failed = []
 
         versions.each { version ->
@@ -345,6 +383,7 @@ def runClientConfigurations = [
     [version: '1.21.2', loaders: ['fabric', 'neoforge']],
     [version: '1.21.3', loaders: ['fabric', 'neoforge']],
     [version: '1.21.4', loaders: ['fabric', 'neoforge']],
+    [version: '1.21.5', loaders: ['fabric', 'neoforge']],
 ]
 
 runClientConfigurations.each { config ->
@@ -409,20 +448,20 @@ runClientConfigurations.each { config ->
  */
 tasks.register('testAll') {
     group = 'chrono dawn test'
-    description = 'Run unit tests for all supported Minecraft versions (1.20.1, 1.21.1, 1.21.2, 1.21.4)'
+    description = 'Run unit tests for all supported Minecraft versions (1.20.1, 1.21.1, 1.21.2, 1.21.4, 1.21.5)'
 
     doFirst {
         logger.lifecycle('')
         logger.lifecycle('====================================================')
         logger.lifecycle('Running unit tests for ALL supported Minecraft versions...')
-        logger.lifecycle('Versions: 1.20.1, 1.21.1, 1.21.2, 1.21.4')
+        logger.lifecycle('Versions: 1.20.1, 1.21.1, 1.21.2, 1.21.4, 1.21.5')
         logger.lifecycle('(1.21.3 excluded - shares modules with 1.21.2)')
         logger.lifecycle('====================================================')
         logger.lifecycle('')
     }
 
     doLast {
-        def versions = ['1.20.1', '1.21.1', '1.21.2', '1.21.4']
+        def versions = ['1.20.1', '1.21.1', '1.21.2', '1.21.4', '1.21.5']
         def failed = []
 
         versions.each { version ->
@@ -599,6 +638,7 @@ tasks.register('gameTestAll') {
             // 1.21.2 and 1.21.3 share the same modules, so run sequentially in one thread
             [versions: ['1.21.2', '1.21.3'], tasks: [':fabric:runGameTest', ':neoforge:runGameTestServer']],
             [versions: ['1.21.4'], tasks: [':fabric:runGameTest', ':neoforge:runGameTestServer']],
+            [versions: ['1.21.5'], tasks: [':fabric:runGameTest', ':neoforge:runGameTestServer']],
         ]
 
         // Map hotfix versions to their base module version for directory paths

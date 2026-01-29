@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "tools",
+  "pattern": [
+    "E",
+    "S",
+    "S"
+  ],
+  "key": {
+    "E": "chronodawn:enhanced_clockstone",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "chronodawn:enhanced_clockstone_shovel",
+    "count": 1
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "category": "basics",
+  "title": {
+    "en_us": "Escaping Chrono Dawn",
+    "ja_jp": "クロノドーンから脱出する"
+  },
+  "icon": "chronodawn:portal_stabilizer",
+  "sortnum": 6,
+  "pages": [
+    {
+      "text": {
+        "en_us": "Once you enter Chrono Dawn through the portal, it becomes ONE-WAY. The portal deactivates behind you, trapping you in the frozen dimension. This design creates tension and encourages exploration, but don't panic - there ARE ways to escape!",
+        "ja_jp": "ポータルを通ってクロノドーンに入ると、それは一方通行になります。ポータルはあなたの後ろで非アクティブ化され、凍結した次元に閉じ込められます。この設計は緊張感を生み出し探索を促しますが、パニックにならないでください - 脱出方法はあります！"
+      }
+    },
+    {
+      "text": {
+        "en_us": "Primary Escape Method:\nPortal Stabilizer\n\nThe Portal Stabilizer is a device that permanently stabilizes your portal, making it bidirectional (two-way). Once stabilized, you can freely travel between Chrono Dawn and the Overworld.\n\nHow to obtain:\n1. Explore Chrono Dawn to find the Forgotten Library structure\n2. Search the library for the Portal Stabilizer blueprint\n3. Gather the required materials\n4. Craft the Portal Stabilizer\n5. Use it on your deactivated portal",
+        "ja_jp": "主要な脱出方法:\nポータルスタビライザー\n\nポータルスタビライザーは、ポータルを永続的に安定化し、双方向（往復）にするデバイスです。安定化すると、クロノドーンとオーバーワールド間を自由に行き来できます。\n\n入手方法:\n1. クロノドーンを探索して忘れられた図書館の構造物を見つける\n2. 図書館でポータルスタビライザーの設計図を探す\n3. 必要な材料を集める\n4. ポータルスタビライザーを作成\n5. 非アクティブ化されたポータルで使用"
+      }
+    },
+    {
+      "text": {
+        "en_us": "Emergency Escape Method:\nDeath and Respawn\n\nIf you're truly desperate or unprepared, you can escape by dying and respawning in the Overworld. This is Minecraft's standard respawn behavior (same as the End dimension).\n\nHow it works:\n1. If you set your spawn with a bed/respawn anchor in the Overworld, you respawn there\n2. If no spawn is set, you respawn at world spawn\n3. You keep experience levels and items in Ender Chest\n4. All other items are dropped where you died",
+        "ja_jp": "緊急脱出方法:\n死とリスポーン\n\n本当に絶望的な状況、または準備不足の場合、死んでオーバーワールドでリスポーンすることで脱出できます。これはMinecraftの標準的なリスポーン動作です（エンド次元と同じ）。\n\n仕組み:\n1. オーバーワールドでベッド/リスポーンアンカーでスポーンを設定していた場合、そこでリスポーン\n2. スポーンが設定されていない場合、ワールドスポーンでリスポーン\n3. 経験値レベルとエンダーチェスト内のアイテムは保持\n4. その他のアイテムはすべて死亡地点にドロップ"
+      }
+    },
+    {
+      "text": {
+        "en_us": "Important Notes:\n\n• Portal Stabilizer does NOT affect respawn location - it only makes the portal two-way\n\n• You can always escape by dying (like the End dimension)\n\n• Setting a bed/respawn anchor BEFORE entering is recommended\n\n• Store valuable items in Ender Chest before attempting risky activities\n\n• The Forgotten Library spawns in various Chrono Dawn biomes - explore to find it!\n\nRecommendation: Find the Portal Stabilizer for safe, convenient travel!",
+        "ja_jp": "重要な注意事項:\n\n• ポータルスタビライザーはリスポーン場所に影響しません - ポータルを双方向にするだけです\n\n• 死ぬことでいつでも脱出できます（エンド次元と同様）\n\n• 入る前にベッド/リスポーンアンカーを設定することを推奨\n\n• リスクの高い活動を試みる前に、貴重なアイテムをエンダーチェストに保管\n\n• 忘れられた図書館はさまざまなクロノドーンバイオームに生成されます - 探索して見つけましょう！\n\n推奨: 安全で便利な移動のためにポータルスタビライザーを見つけてください！"
+      }
+    }
+  ]
+}

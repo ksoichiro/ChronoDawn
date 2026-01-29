@@ -1,0 +1,151 @@
+plugins {
+    id 'com.gradleup.shadow'
+}
+
+architectury {
+    platformSetupLoomIde()
+    neoForge()
+}
+
+// Note: 1.21.4 requires significant API changes (Client Items system, removed ItemColors API)
+// Version-specific client sources override neoforge-base client sources
+sourceSets {
+    main {
+        java {
+            // Version-specific sources (includes 1.21.4-specific client code)
+            srcDir 'src/main/java'
+        }
+        resources {
+            srcDirs = []
+            // Version-specific resources FIRST (higher priority)
+            srcDir 'src/main/resources'
+            // Shared resources SECOND (lower priority)
+            srcDir '../neoforge-base/src/main/resources'
+        }
+    }
+}
+
+// Add neoforge-base sources excluding client package
+tasks.named('compileJava') {
+    source fileTree('../neoforge-base/src/main/java') {
+        exclude 'com/chronodawn/neoforge/client/**'
+    }
+}
+
+def commonModule = ':common-1.21.5'
+def log4j2DevConfig = rootProject.file('neoforge-base/log4j2-dev.xml').absolutePath
+
+loom {
+    accessWidenerPath = project(commonModule).loom.accessWidenerPath
+
+    runs {
+        client {
+            client()
+            setConfigName("NeoForge Client")
+            ideConfigGenerated(true)
+            runDir("run")
+            vmArg("-Dfabric.log.disableAnsi=false")
+            vmArg("-Dlog4j2.configurationFile=${log4j2DevConfig}")
+        }
+        server {
+            server()
+            setConfigName("NeoForge Server")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+        gameTestServer {
+            server()
+            setConfigName("NeoForge GameTest Server")
+            ideConfigGenerated(true)
+            runDir("run")
+            property("neoforge.enabledGameTestNamespaces", "chronodawn")
+            property("neoforge.gameTestServer", "true")
+            programArgs("--nogui")
+        }
+    }
+}
+
+configurations {
+    common
+    shadowCommon
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentNeoForge.extendsFrom common
+}
+
+repositories {
+    maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
+}
+
+dependencies {
+    neoForge "net.neoforged:neoforge:${neoforge_version}"
+    modApi "dev.architectury:architectury-neoforge:${architectury_api_version}"
+
+    common(project(path: commonModule, configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: commonModule, configuration: "transformProductionNeoForge")) { transitive false }
+}
+
+tasks.named("processResources", ProcessResources).configure {
+    dependsOn project(commonModule).tasks.named('convertNbtStructures')
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    inputs.property "version", project.version
+
+    filesMatching("META-INF/neoforge.mods.toml") {
+        expand "version": project.version
+    }
+
+    from(project(commonModule).sourceSets.main.resources) {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        exclude "fabric.mod.json"
+        exclude "chronodawn.mixins.json"
+        exclude "architectury.common.json"
+    }
+}
+
+tasks.named("shadowJar", com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar).configure {
+    exclude "fabric.mod.json"
+    exclude "architectury.common.json"
+
+    configurations = [project.configurations.shadowCommon]
+    archiveClassifier = "dev-shadow"
+}
+
+tasks.named("remapJar").configure {
+    inputFile.set tasks.named("shadowJar").flatMap { it.archiveFile }
+    dependsOn tasks.named("shadowJar")
+    archiveBaseName = rootProject.archives_name
+    archiveVersion = "${rootProject.mod_version}+${rootProject.minecraft_version}-neoforge"
+    archiveClassifier = null
+}
+
+tasks.named("jar").configure {
+    archiveClassifier = "dev"
+}
+
+tasks.named("sourcesJar").configure {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    def commonSources = project(commonModule).tasks.named("sourcesJar")
+    dependsOn commonSources
+    from commonSources.flatMap { it.archiveFile }.map { zipTree(it) }
+    archiveBaseName = rootProject.archives_name
+    archiveVersion = "${rootProject.mod_version}+${rootProject.minecraft_version}-neoforge"
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
+}
+
+publishing {
+    publications {
+        mavenNeoForge(MavenPublication) {
+            artifactId = "${archives_name}-neoforge"
+            from components.java
+        }
+    }
+
+    repositories {
+    }
+}
