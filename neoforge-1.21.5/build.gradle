@@ -28,6 +28,7 @@ sourceSets {
 // Add neoforge-base sources excluding packages that have 1.21.5-specific versions
 tasks.named('compileJava') {
     source fileTree('../neoforge-base/src/main/java') {
+        exclude 'com/chronodawn/neoforge/ChronoDawnNeoForge.java'  // Main class with GameTest registration
         exclude 'com/chronodawn/neoforge/client/**'
         exclude 'com/chronodawn/neoforge/gametest/**'  // GameTest API completely changed in 1.21.5
         exclude 'com/chronodawn/neoforge/anvil/**'     // AnvilUpdateEvent.setCost() removed in 1.21.5
