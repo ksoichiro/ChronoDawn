@@ -22,25 +22,25 @@ config="chronodawn-neoforge.mixins.json"
 config="chronodawn-neoforge-compat.mixins.json"
 
 [[mixins]]
-config="chronodawn-neoforge-1.21.4.mixins.json"
+config="chronodawn-neoforge-1.21.5.mixins.json"
 
 [[dependencies.chronodawn]]
 modId="neoforge"
 type="required"
-versionRange="[21.4.0-beta,)"
+versionRange="[21.5.0,)"
 ordering="NONE"
 side="BOTH"
 
 [[dependencies.chronodawn]]
 modId="minecraft"
 type="required"
-versionRange="[1.21.4,1.21.5)"
+versionRange="[1.21.5,1.21.6)"
 ordering="NONE"
 side="BOTH"
 
 [[dependencies.chronodawn]]
 modId="architectury"
 type="required"
-versionRange="[15.0.1,)"
+versionRange="[16.0.0,)"
 ordering="AFTER"
 side="BOTH"

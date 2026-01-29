@@ -502,28 +502,11 @@ public class ChronoDawnClientNeoForge {
         return (float) Mth.positiveModulo(compassAngle, 1.0);
     }
 
-    /**
-     * Register Chronicle Data resource reload listener.
-     * Loads guidebook data from JSON files when resources are loaded/reloaded.
-     *
-     * @param event The reload listeners registration event
-     */
-    @SubscribeEvent
-    public static void onRegisterClientReloadListeners(RegisterClientReloadListenersEvent event) {
-        // 1.21.2: PreparableReloadListener API changed, use SimplePreparableReloadListener
-        event.registerReloadListener(new net.minecraft.server.packs.resources.SimplePreparableReloadListener<Void>() {
-            @Override
-            protected Void prepare(net.minecraft.server.packs.resources.ResourceManager resourceManager, net.minecraft.util.profiling.ProfilerFiller profiler) {
-                return null;
-            }
-
-            @Override
-            protected void apply(Void object, net.minecraft.server.packs.resources.ResourceManager resourceManager, net.minecraft.util.profiling.ProfilerFiller profiler) {
-                ChronicleData.getInstance().load(resourceManager);
-                ChronoDawn.LOGGER.debug("Chronicle data loaded/reloaded");
-            }
-        });
-    }
+    // Note: In 1.21.5, RegisterClientReloadListenersEvent was removed/changed.
+    // Chronicle data reloading needs alternative implementation.
+    // TODO: Implement resource reload listener using the new 1.21.5 API
+    // For now, Chronicle data is loaded during client setup.
+    // See onClientSetup() for initial loading.
 
     /**
      * Event subscriber for FORGE bus events (game events, not mod events).

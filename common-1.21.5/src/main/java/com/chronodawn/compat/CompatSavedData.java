@@ -1,8 +1,10 @@
 package com.chronodawn.compat;
 
 import com.chronodawn.compat.SavedDataHandler;
+import com.mojang.serialization.Codec;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
 import net.minecraft.world.level.storage.DimensionDataStorage;
@@ -94,15 +96,28 @@ public abstract class CompatSavedData extends SavedData implements SavedDataHand
         Function<CompoundTag, T> loader,
         String id
     ) {
-        // 1.21.5: SavedDataType constructor takes (id, constructor, BiFunction<tag, provider, T>)
-        // Wrap our single-arg loader to match the expected BiFunction signature
-        BiFunction<CompoundTag, HolderLookup.Provider, T> biLoader =
-            (tag, provider) -> loader.apply(tag);
-
-        SavedDataType<T> type = new SavedDataType<>(
+        // 1.21.5: SavedDataType requires 4 arguments:
+        // (String id, Function<Context, T> constructor, Function<Context, Codec<T>> codecFactory, DataFixTypes)
+        //
+        // We use CompoundTag.CODEC with xmap to bridge between NBT and our SavedData objects.
+        // The loader function handles conversion from CompoundTag to SavedData instance.
+        SavedDataType<T> type = new SavedDataType<T>(
             id,
-            constructor,
-            biLoader
+            context -> constructor.get(),  // New instance constructor
+            context -> CompoundTag.CODEC.xmap(
+                tag -> loader.apply(tag),  // Decode: CompoundTag -> T
+                savedData -> {
+                    // Encode: T -> CompoundTag
+                    // Call save() which delegates to saveData()
+                    CompoundTag tag = new CompoundTag();
+                    if (savedData instanceof CompatSavedData compatData) {
+                        return compatData.saveData(tag);
+                    }
+                    // Fallback for non-CompatSavedData (shouldn't happen)
+                    return tag;
+                }
+            ),
+            DataFixTypes.LEVEL
         );
         return storage.computeIfAbsent(type);
     }

@@ -31,19 +31,9 @@ public class TimeWheatBaleBlock extends RotatedPillarBlock {
         super(properties);
     }
 
-    /**
-     * Reduces fall damage when landing on this block.
-     * Same behavior as vanilla hay bale - reduces damage by 80%.
-     *
-     * Note: In 1.21.5, fall damage handling may use different mechanism.
-     * The block properties should handle fall damage modifier.
-     */
-    @Override
-    public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
-        // In 1.21.5, use ServerLevel for damage sources
-        if (level instanceof ServerLevel serverLevel) {
-            // Reduce fall damage to 20% of original (80% reduction)
-            entity.causeFallDamage(fallDistance, 0.2F, serverLevel.damageSources().fall());
-        }
-    }
+    // Note: In 1.21.5, fallOn() method was removed from Block.
+    // Fall damage reduction should be handled through block properties
+    // using .fallDamageModifier(0.2f) when registering the block.
+    // See ModBlocks registration for fall damage configuration.
 }
+

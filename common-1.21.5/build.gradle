@@ -57,7 +57,8 @@ sourceSets {
                 'ChronoDawnGlobalState.java',
                 'DimensionStateData.java',
                 'ChronoDawnTimeData.java',
-                'TimeKeeperVillageData.java'
+                'TimeKeeperVillageData.java',
+                'PlayerProgressData.java'
             ]
             return excludedFiles.contains(element.file.name)
         }

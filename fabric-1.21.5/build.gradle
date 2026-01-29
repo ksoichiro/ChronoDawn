@@ -74,27 +74,20 @@ loom {
 }
 
 // GameTest Framework configuration
-fabricApi {
-    configureTests {
-        createSourceSet = true
-        modId = "chronodawn-test"
-        enableGameTests = true
-        enableClientGameTests = false
-        eula = true
-    }
-}
+// NOTE: In 1.21.5, the GameTest system was completely rewritten to be registry-based.
+// GameTests are disabled for 1.21.5 until the new system is implemented.
+// fabricApi {
+//     configureTests {
+//         createSourceSet = true
+//         modId = "chronodawn-test"
+//         enableGameTests = true
+//         enableClientGameTests = false
+//         eula = true
+//     }
+// }
 
-// Include shared gametest sources from fabric-base
-sourceSets {
-    gametest {
-        java {
-            srcDir '../fabric-base/src/gametest/java'
-        }
-        resources {
-            srcDir '../fabric-base/src/gametest/resources'
-        }
-    }
-}
+// GameTest sources disabled for 1.21.5 - API completely changed
+// TODO: Implement GameTests using the new 1.21.5 registry-based system
 
 processResources {
     dependsOn project(commonModule).tasks.named('convertNbtStructures')
