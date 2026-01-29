@@ -72,7 +72,7 @@ public class BossSpawnData extends CompatSavedData {
         if (!tyrantTag.isEmpty()) {
             ListTag doorsList = tyrantTag.getListOrEmpty("SpawnedDoors");
             for (int i = 0; i < doorsList.size(); i++) {
-                CompoundTag doorTag = doorsList.getCompound(i);
+                CompoundTag doorTag = doorsList.getCompound(i).orElse(new CompoundTag());
                 BlockPos pos = BlockPos.of(doorTag.getLongOr("Pos", 0L));
                 this.timeTyrantSpawnedDoors.add(pos);
             }
@@ -84,7 +84,7 @@ public class BossSpawnData extends CompatSavedData {
         if (!guardianTag.isEmpty()) {
             ListTag structuresList = guardianTag.getListOrEmpty("SpawnedStructures");
             for (int i = 0; i < structuresList.size(); i++) {
-                CompoundTag structureTag = structuresList.getCompound(i);
+                CompoundTag structureTag = structuresList.getCompound(i).orElse(new CompoundTag());
                 BlockPos pos = BlockPos.of(structureTag.getLongOr("Pos", 0L));
                 this.timeGuardianSpawnedStructures.add(pos);
             }
@@ -95,7 +95,7 @@ public class BossSpawnData extends CompatSavedData {
         if (!wardenTag.isEmpty()) {
             ListTag doorsList = wardenTag.getListOrEmpty("SpawnedDoors");
             for (int i = 0; i < doorsList.size(); i++) {
-                CompoundTag doorTag = doorsList.getCompound(i);
+                CompoundTag doorTag = doorsList.getCompound(i).orElse(new CompoundTag());
                 BlockPos pos = BlockPos.of(doorTag.getLongOr("Pos", 0L));
                 this.chronosWardenSpawnedDoors.add(pos);
             }
@@ -106,14 +106,14 @@ public class BossSpawnData extends CompatSavedData {
         if (!keeperTag.isEmpty()) {
             ListTag processedList = keeperTag.getListOrEmpty("ProcessedStructures");
             for (int i = 0; i < processedList.size(); i++) {
-                CompoundTag structureTag = processedList.getCompound(i);
+                CompoundTag structureTag = processedList.getCompound(i).orElse(new CompoundTag());
                 BlockPos pos = BlockPos.of(structureTag.getLongOr("Pos", 0L));
                 this.entropyKeeperProcessedStructures.add(pos);
             }
 
             ListTag markersList = keeperTag.getListOrEmpty("SpawnedMarkers");
             for (int i = 0; i < markersList.size(); i++) {
-                CompoundTag markerTag = markersList.getCompound(i);
+                CompoundTag markerTag = markersList.getCompound(i).orElse(new CompoundTag());
                 BlockPos pos = BlockPos.of(markerTag.getLongOr("Pos", 0L));
                 this.entropyKeeperSpawnedMarkers.add(pos);
             }
@@ -124,7 +124,7 @@ public class BossSpawnData extends CompatSavedData {
         if (!colossusTag.isEmpty()) {
             ListTag structuresList = colossusTag.getListOrEmpty("SpawnedStructures");
             for (int i = 0; i < structuresList.size(); i++) {
-                CompoundTag structureTag = structuresList.getCompound(i);
+                CompoundTag structureTag = structuresList.getCompound(i).orElse(new CompoundTag());
                 BlockPos pos = BlockPos.of(structureTag.getLongOr("Pos", 0L));
                 this.clockworkColossusSpawnedStructures.add(pos);
             }

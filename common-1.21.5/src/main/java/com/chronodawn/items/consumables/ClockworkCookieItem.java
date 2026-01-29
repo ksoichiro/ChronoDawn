@@ -64,7 +64,7 @@ public class ClockworkCookieItem extends Item {
                         Consumable.builder()
                                 .onConsume(new ApplyStatusEffectsConsumeEffect(
                                         new MobEffectInstance(
-                                                MobEffects.DAMAGE_RESISTANCE,  // Resistance I
+                                                MobEffects.RESISTANCE,  // Resistance I
                                                 30 * 20,                       // 30 seconds (20 ticks/second)
                                                 0                              // Amplifier 0 = Resistance I
                                         ),

@@ -28,6 +28,7 @@ import net.minecraft.world.entity.ai.goal.MoveTowardsTargetGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
@@ -222,12 +223,16 @@ public class EntropyKeeperEntity extends Monster {
         boolean hit = super.doHurtTarget(serverLevel, target);
 
         if (hit && target instanceof Player player) {
-            // Deal -5 durability to all equipped items
-            player.getInventory().armor.forEach(stack -> {
-                if (!stack.isEmpty() && stack.isDamageableItem()) {
-                    stack.hurtAndBreak(5, player, player.getEquipmentSlotForItem(stack));
+            // Deal -5 durability to all equipped armor items
+            // In 1.21.5, armor field is private, use EquipmentSlot to access armor items
+            for (net.minecraft.world.entity.EquipmentSlot slot : net.minecraft.world.entity.EquipmentSlot.values()) {
+                if (slot.isArmor()) {
+                    ItemStack stack = player.getItemBySlot(slot);
+                    if (!stack.isEmpty() && stack.isDamageableItem()) {
+                        stack.hurtAndBreak(5, player, slot);
+                    }
                 }
-            });
+            }
 
             // Damage held item
             if (!player.getMainHandItem().isEmpty() && player.getMainHandItem().isDamageableItem()) {

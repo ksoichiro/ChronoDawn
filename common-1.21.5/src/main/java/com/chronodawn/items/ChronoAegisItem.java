@@ -16,9 +16,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 
-import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Chrono Aegis - Ultimate preparation item for Time Tyrant boss fight
@@ -126,10 +127,11 @@ public class ChronoAegisItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
-        tooltipComponents.add(Component.translatable("item.chronodawn.chrono_aegis.tooltip"));
-        tooltipComponents.add(Component.translatable("item.chronodawn.chrono_aegis.tooltip.duration"));
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay tooltipDisplay,
+                               Consumer<Component> tooltipAdder, TooltipFlag tooltipFlag) {
+        super.appendHoverText(stack, context, tooltipDisplay, tooltipAdder, tooltipFlag);
+        tooltipAdder.accept(Component.translatable("item.chronodawn.chrono_aegis.tooltip"));
+        tooltipAdder.accept(Component.translatable("item.chronodawn.chrono_aegis.tooltip.duration"));
     }
 
     @Override

@@ -38,11 +38,28 @@ sourceSets {
             // TODO: Create 1.21.5-specific gametest files or use compatibility layer
             // srcDir '../common-gametest/src/main/java'
         }
-        // Use filter to exclude BossSpawnData from common-shared
-        // (1.21.5 has its own version with different API)
+        // Use filter to exclude files from common-shared that have 1.21.5-specific versions
+        // (1.21.5 has its own versions with different APIs)
         java.filter.exclude { element ->
-            element.file.absolutePath.contains('common-shared') &&
-            element.file.name == 'BossSpawnData.java'
+            if (!element.file.absolutePath.contains('common-shared')) {
+                return false
+            }
+            // List of files that have 1.21.5-specific versions
+            def excludedFiles = [
+                'BossSpawnData.java',
+                'ClockTowerTeleporterBlockEntity.java',
+                'BossRoomDoorBlockEntity.java',
+                'TimeWheatBaleBlock.java',
+                'TimeDistortionEffect.java',
+                'ReversedResonance.java',
+                'PortalRegistry.java',
+                'PortalRegistryData.java',
+                'ChronoDawnGlobalState.java',
+                'DimensionStateData.java',
+                'ChronoDawnTimeData.java',
+                'TimeKeeperVillageData.java'
+            ]
+            return excludedFiles.contains(element.file.name)
         }
     }
 }

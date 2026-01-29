@@ -59,7 +59,7 @@ public class TimeFruitPieItem extends Item {
                         Consumable.builder()
                                 .onConsume(new ApplyStatusEffectsConsumeEffect(
                                         new MobEffectInstance(
-                                                MobEffects.DIG_SPEED,  // Haste II
+                                                MobEffects.HASTE,  // Haste II
                                                 30 * 20,               // 30 seconds (20 ticks/second)
                                                 1                      // Amplifier 1 = Haste II
                                         ),

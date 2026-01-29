@@ -7,6 +7,7 @@ import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
 import net.minecraft.world.level.storage.DimensionDataStorage;
 
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -77,7 +78,8 @@ public abstract class CompatSavedData extends SavedData implements SavedDataHand
      * Handles API differences between 1.21.4 and 1.21.5.
      *
      * In 1.21.5, SavedData.Factory was replaced with SavedDataType.
-     * The id is now passed to SavedDataType constructor, not computeIfAbsent.
+     * SavedDataType constructor takes (id, constructor, loader).
+     * The loader receives (CompoundTag, HolderLookup.Provider).
      *
      * @param storage DimensionDataStorage instance
      * @param constructor Supplier that creates new instance
@@ -92,12 +94,15 @@ public abstract class CompatSavedData extends SavedData implements SavedDataHand
         Function<CompoundTag, T> loader,
         String id
     ) {
-        // 1.21.5: SavedDataType takes id in constructor
-        // computeIfAbsent only takes SavedDataType
+        // 1.21.5: SavedDataType constructor takes (id, constructor, BiFunction<tag, provider, T>)
+        // Wrap our single-arg loader to match the expected BiFunction signature
+        BiFunction<CompoundTag, HolderLookup.Provider, T> biLoader =
+            (tag, provider) -> loader.apply(tag);
+
         SavedDataType<T> type = new SavedDataType<>(
             id,
             constructor,
-            loader
+            biLoader
         );
         return storage.computeIfAbsent(type);
     }

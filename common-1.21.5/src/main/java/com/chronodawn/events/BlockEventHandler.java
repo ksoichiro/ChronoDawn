@@ -500,7 +500,10 @@ public class BlockEventHandler {
         int gearCount = 0;
 
         // Count Ancient Gears in player's inventory
-        for (ItemStack stack : player.getInventory().items) {
+        // In 1.21.5, use getContainerSize() and getItem() instead of direct field access
+        var inventory = player.getInventory();
+        for (int i = 0; i < inventory.getContainerSize(); i++) {
+            ItemStack stack = inventory.getItem(i);
             if (stack.is(ModItems.ANCIENT_GEAR.get())) {
                 gearCount += stack.getCount();
             }
@@ -567,7 +570,10 @@ public class BlockEventHandler {
         }
 
         // Search for Key to Master Clock in player's inventory
-        for (ItemStack stack : player.getInventory().items) {
+        // In 1.21.5, use getContainerSize() and getItem() instead of direct field access
+        var inventory = player.getInventory();
+        for (int i = 0; i < inventory.getContainerSize(); i++) {
+            ItemStack stack = inventory.getItem(i);
             if (stack.is(ModItems.KEY_TO_MASTER_CLOCK.get())) {
                 return true; // Found the key
             }

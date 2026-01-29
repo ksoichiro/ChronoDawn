@@ -56,14 +56,17 @@ public class UnstableHourglassItem extends Item {
      * - Player receives Slowness IV for 30-60 seconds
      * - Nearby mobs (within 16 blocks) receive Speed II for 30-60 seconds
      *
+     * Note: In 1.21.5, onCraftedBy signature changed to (ItemStack, Player).
+     * Level is obtained from player.level().
+     *
      * @param stack The crafted item stack
-     * @param level The world level
      * @param player The player who crafted the item
      */
     @Override
-    public void onCraftedBy(ItemStack stack, Level level, Player player) {
-        super.onCraftedBy(stack, level, player);
+    public void onCraftedBy(ItemStack stack, Player player) {
+        super.onCraftedBy(stack, player);
 
+        Level level = player.level();
         // Server-side only
         if (!level.isClientSide) {
             triggerReversedResonance(level, player);

@@ -64,16 +64,16 @@ public class GearProjectileRenderer extends EntityRenderer<GearProjectileEntity,
         poseStack.mulPose(Axis.YP.rotationDegrees(rotation * 20.0f)); // Spin around Y axis
         poseStack.mulPose(Axis.ZP.rotationDegrees(rotation * 15.0f)); // Wobble on Z axis
 
-        // Render as iron ingot (placeholder for gear) using 1.21.4 Client Items system
+        // Render as iron ingot (placeholder for gear) using 1.21.5 Client Items system
+        // In 1.21.5, updateForTopItem signature changed to (state, stack, context, level, entity, seed)
         ItemStack stack = new ItemStack(Items.IRON_INGOT);
         this.itemModelResolver.updateForTopItem(
             itemRenderState,
             stack,
             ItemDisplayContext.GROUND,
-            false,
-            null,
-            null,
-            0
+            Minecraft.getInstance().level,  // Level from client
+            null,  // No LivingEntity for projectile
+            0      // Seed for randomization
         );
         itemRenderState.render(poseStack, buffer, packedLight, OverlayTexture.NO_OVERLAY);
 

@@ -1303,7 +1303,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> CLOCKSTONE_HELMET = ITEMS.register(
         ModItemId.CLOCKSTONE_HELMET.id(),
-        () -> new ClockstoneArmorItem(ArmorType.HELMET, ClockstoneArmorItem.createProperties(ArmorType.HELMET)
+        () -> new ClockstoneArmorItem(ClockstoneArmorItem.createProperties(ArmorType.HELMET)
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_HELMET.id()))))
     );
@@ -1314,7 +1314,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> CLOCKSTONE_CHESTPLATE = ITEMS.register(
         ModItemId.CLOCKSTONE_CHESTPLATE.id(),
-        () -> new ClockstoneArmorItem(ArmorType.CHESTPLATE, ClockstoneArmorItem.createProperties(ArmorType.CHESTPLATE)
+        () -> new ClockstoneArmorItem(ClockstoneArmorItem.createProperties(ArmorType.CHESTPLATE)
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_CHESTPLATE.id()))))
     );
@@ -1325,7 +1325,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> CLOCKSTONE_LEGGINGS = ITEMS.register(
         ModItemId.CLOCKSTONE_LEGGINGS.id(),
-        () -> new ClockstoneArmorItem(ArmorType.LEGGINGS, ClockstoneArmorItem.createProperties(ArmorType.LEGGINGS)
+        () -> new ClockstoneArmorItem(ClockstoneArmorItem.createProperties(ArmorType.LEGGINGS)
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_LEGGINGS.id()))))
     );
@@ -1336,7 +1336,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> CLOCKSTONE_BOOTS = ITEMS.register(
         ModItemId.CLOCKSTONE_BOOTS.id(),
-        () -> new ClockstoneArmorItem(ArmorType.BOOTS, ClockstoneArmorItem.createProperties(ArmorType.BOOTS)
+        () -> new ClockstoneArmorItem(ClockstoneArmorItem.createProperties(ArmorType.BOOTS)
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_BOOTS.id()))))
     );
@@ -1442,7 +1442,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_HELMET = ITEMS.register(
         ModItemId.ENHANCED_CLOCKSTONE_HELMET.id(),
-        () -> new EnhancedClockstoneArmorItem(ArmorType.HELMET, EnhancedClockstoneArmorItem.createProperties(ArmorType.HELMET)
+        () -> new EnhancedClockstoneArmorItem(EnhancedClockstoneArmorItem.createProperties(ArmorType.HELMET)
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENHANCED_CLOCKSTONE_HELMET.id()))))
     );
@@ -1454,7 +1454,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_CHESTPLATE = ITEMS.register(
         ModItemId.ENHANCED_CLOCKSTONE_CHESTPLATE.id(),
-        () -> new EnhancedClockstoneArmorItem(ArmorType.CHESTPLATE, EnhancedClockstoneArmorItem.createProperties(ArmorType.CHESTPLATE)
+        () -> new EnhancedClockstoneArmorItem(EnhancedClockstoneArmorItem.createProperties(ArmorType.CHESTPLATE)
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENHANCED_CLOCKSTONE_CHESTPLATE.id()))))
     );
@@ -1466,7 +1466,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_LEGGINGS = ITEMS.register(
         ModItemId.ENHANCED_CLOCKSTONE_LEGGINGS.id(),
-        () -> new EnhancedClockstoneArmorItem(ArmorType.LEGGINGS, EnhancedClockstoneArmorItem.createProperties(ArmorType.LEGGINGS)
+        () -> new EnhancedClockstoneArmorItem(EnhancedClockstoneArmorItem.createProperties(ArmorType.LEGGINGS)
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENHANCED_CLOCKSTONE_LEGGINGS.id()))))
     );
@@ -1478,7 +1478,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_BOOTS = ITEMS.register(
         ModItemId.ENHANCED_CLOCKSTONE_BOOTS.id(),
-        () -> new EnhancedClockstoneArmorItem(ArmorType.BOOTS, EnhancedClockstoneArmorItem.createProperties(ArmorType.BOOTS)
+        () -> new EnhancedClockstoneArmorItem(EnhancedClockstoneArmorItem.createProperties(ArmorType.BOOTS)
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENHANCED_CLOCKSTONE_BOOTS.id()))))
     );

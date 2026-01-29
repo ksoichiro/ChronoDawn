@@ -61,7 +61,7 @@ public class FruitOfTimeItem extends Item {
                         Consumable.builder()
                                 .onConsume(new ApplyStatusEffectsConsumeEffect(
                                         new MobEffectInstance(
-                                                MobEffects.DIG_SPEED,  // Haste I
+                                                MobEffects.HASTE,  // Haste I
                                                 30 * 20,               // 30 seconds (20 ticks/second)
                                                 0                      // Amplifier 0 = Haste I
                                         ),

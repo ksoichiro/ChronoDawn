@@ -1,20 +1,14 @@
 package com.chronodawn.items.equipment;
 
 import com.chronodawn.ChronoDawn;
-import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.ItemAttributeModifiers;
-import net.minecraft.world.item.component.Weapon;
 
 /**
  * Enhanced Clockstone Sword - Tier 2 time-themed weapon with freeze effect.
@@ -50,12 +44,6 @@ public class EnhancedClockstoneSwordItem extends Item {
     // Attack speed: 1.6 (base 4.0 - 2.4 modifier)
     private static final float ATTACK_SPEED_MODIFIER = -2.4f;
 
-    // Durability cost when hitting entities
-    private static final int DURABILITY_COST_PER_HIT = 1;
-
-    // Shield disable duration in seconds
-    private static final float SHIELD_DISABLE_SECONDS = 5.0f;
-
     /**
      * Freeze effect chance (25% = 0.25).
      */
@@ -86,56 +74,23 @@ public class EnhancedClockstoneSwordItem extends Item {
 
         return new Properties()
                 .stacksTo(1)
-                .durability(1200)
                 .setId(ResourceKey.create(Registries.ITEM, itemId))
-                // Mark as sword-type item
-                .sword()
-                // Add weapon component for attack behavior
-                .component(DataComponents.WEAPON, new Weapon(
-                    DURABILITY_COST_PER_HIT,
-                    SHIELD_DISABLE_SECONDS
-                ))
-                // Add attribute modifiers for attack damage and speed
-                .component(DataComponents.ATTRIBUTE_MODIFIERS, createAttributeModifiers(itemId));
-    }
-
-    /**
-     * Create attribute modifiers for attack damage and speed.
-     */
-    private static ItemAttributeModifiers createAttributeModifiers(ResourceLocation itemId) {
-        return ItemAttributeModifiers.builder()
-                .add(
-                    Attributes.ATTACK_DAMAGE,
-                    new AttributeModifier(
-                        itemId,
-                        ATTACK_DAMAGE_BONUS,
-                        AttributeModifier.Operation.ADD_VALUE
-                    ),
-                    EquipmentSlotGroup.MAINHAND
-                )
-                .add(
-                    Attributes.ATTACK_SPEED,
-                    new AttributeModifier(
-                        itemId,
-                        ATTACK_SPEED_MODIFIER,
-                        AttributeModifier.Operation.ADD_VALUE
-                    ),
-                    EquipmentSlotGroup.MAINHAND
-                )
-                .build();
+                // Configure as sword using ToolMaterial: material, attackDamage, attackSpeed
+                .sword(EnhancedClockstoneTier.INSTANCE, ATTACK_DAMAGE_BONUS, ATTACK_SPEED_MODIFIER);
     }
 
     /**
      * Called when the player successfully attacks an entity with this sword.
      * Applies freeze effect (Slowness X) with 25% chance.
      *
+     * In 1.21.5, hurtEnemy returns void instead of boolean.
+     *
      * @param stack The item stack
      * @param target The entity being attacked
      * @param attacker The entity attacking (player)
-     * @return true to allow the attack
      */
     @Override
-    public boolean hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
+    public void hurtEnemy(ItemStack stack, LivingEntity target, LivingEntity attacker) {
         // Apply freeze effect with 25% chance
         if (attacker.level().getRandom().nextFloat() < FREEZE_CHANCE) {
             target.addEffect(new MobEffectInstance(
@@ -147,6 +102,6 @@ public class EnhancedClockstoneSwordItem extends Item {
             ));
         }
 
-        return super.hurtEnemy(stack, target, attacker);
+        super.hurtEnemy(stack, target, attacker);
     }
 }

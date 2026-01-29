@@ -23,11 +23,12 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.Structure;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * Time Compass - Points to nearest key structures in ChronoDawn.
@@ -136,10 +137,10 @@ public class TimeCompassItem extends Item {
     public static Optional<GlobalPos> getTargetPosition(ItemStack stack) {
         CompoundTag tag = CompatHandlers.ITEM_DATA.getCustomData(stack);
         if (tag.contains(NBT_TARGET_POS_X) && tag.contains(NBT_TARGET_DIMENSION)) {
-            int x = tag.getInt(NBT_TARGET_POS_X);
-            int y = tag.getInt(NBT_TARGET_POS_Y);
-            int z = tag.getInt(NBT_TARGET_POS_Z);
-            String dimensionStr = tag.getString(NBT_TARGET_DIMENSION);
+            int x = tag.getIntOr(NBT_TARGET_POS_X, 0);
+            int y = tag.getIntOr(NBT_TARGET_POS_Y, 0);
+            int z = tag.getIntOr(NBT_TARGET_POS_Z, 0);
+            String dimensionStr = tag.getStringOr(NBT_TARGET_DIMENSION, "");
 
             try {
                 ResourceKey<Level> dimension = ResourceKey.create(
@@ -175,14 +176,15 @@ public class TimeCompassItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay tooltipDisplay,
+                               Consumer<Component> tooltipAdder, TooltipFlag flag) {
         String targetStructure = getTargetStructure(stack);
 
         if (targetStructure != null) {
             // Add target structure type
-            tooltip.add(Component.translatable("item.chronodawn.time_compass.tooltip.target")
+            tooltipAdder.accept(Component.translatable("item.chronodawn.time_compass.tooltip.target")
                 .withStyle(ChatFormatting.GRAY));
-            tooltip.add(Component.literal("  ")
+            tooltipAdder.accept(Component.literal("  ")
                 .append(Component.translatable(getStructureDisplayName(targetStructure)))
                 .withStyle(ChatFormatting.AQUA));
 
@@ -190,13 +192,13 @@ public class TimeCompassItem extends Item {
             Optional<GlobalPos> targetPos = getTargetPosition(stack);
             if (targetPos.isPresent()) {
                 BlockPos pos = targetPos.get().pos();
-                tooltip.add(Component.literal("  ")
+                tooltipAdder.accept(Component.literal("  ")
                     .append(Component.literal(String.format("(%d, %d)", pos.getX(), pos.getZ())))
                     .withStyle(ChatFormatting.DARK_GRAY));
             }
         } else {
             // No target set (shouldn't happen in normal gameplay)
-            tooltip.add(Component.translatable("item.chronodawn.time_compass.tooltip.no_target")
+            tooltipAdder.accept(Component.translatable("item.chronodawn.time_compass.tooltip.no_target")
                 .withStyle(ChatFormatting.RED, ChatFormatting.ITALIC));
         }
     }

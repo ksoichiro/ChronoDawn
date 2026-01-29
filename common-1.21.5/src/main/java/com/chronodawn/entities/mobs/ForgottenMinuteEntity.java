@@ -99,10 +99,11 @@ public class ForgottenMinuteEntity extends Monster {
             .add(Attributes.FLYING_SPEED, 0.4); // Flying speed
     }
 
-    @Override
-    public boolean causeFallDamage(float fallDistance, float multiplier, net.minecraft.world.damagesource.DamageSource source) {
-        return false; // Flying mobs don't take fall damage
-    }
+    /**
+     * In 1.21.5, causeFallDamage is no longer overridable.
+     * Flying mobs typically don't take fall damage through the flying navigation.
+     * Fall damage immunity is handled by the mob's movement controller.
+     */
 
     /**
      * Override spawn rules to allow spawning in daylight
