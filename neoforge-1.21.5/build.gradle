@@ -61,8 +61,11 @@ loom {
             setConfigName("NeoForge GameTest Server")
             ideConfigGenerated(true)
             runDir("run")
+            // Use gametestserverArgs section from launch.cfg which has
+            // --launchTarget neoforgegametestserverdev (required for 1.21.5)
+            environment("gametestserver")
             property("neoforge.enabledGameTestNamespaces", "chronodawn")
-            property("neoforge.gameTestServer", "true")
+            property("neoforge.enableGameTest", "true")
             programArgs("--nogui")
         }
     }

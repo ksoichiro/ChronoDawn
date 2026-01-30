@@ -74,19 +74,39 @@ loom {
 }
 
 // GameTest Framework configuration
-// NOTE: In 1.21.5, the GameTest system was completely rewritten to be registry-based.
-// Fabric API 1.21.5 provides a new @GameTest annotation but with different API.
-// GameTests require additional migration work for 1.21.5.
-// TODO: Migrate GameTests to Fabric API 1.21.5's new @GameTest annotation
-// fabricApi {
-//     configureTests {
-//         createSourceSet = true
-//         modId = "chronodawn-test"
-//         enableGameTests = true
-//         enableClientGameTests = false
-//         eula = true
-//     }
-// }
+// In 1.21.5, Fabric API provides its own @GameTest annotation that replaces
+// FabricGameTest interface and @GameTestGenerator. Test methods take GameTestHelper.
+fabricApi {
+    configureTests {
+        createSourceSet = true
+        modId = "chronodawn-test"
+        enableGameTests = true
+        enableClientGameTests = false
+        eula = true
+    }
+}
+
+// Include 1.21.5-specific gametest sources (not fabric-base, which uses old API)
+// fabricApi.configureTests creates the gametest source set; we add our sources to it.
+sourceSets {
+    gametest {
+        java {
+            srcDir 'src/gametest/java'
+        }
+        resources {
+            srcDir 'src/gametest/resources'
+        }
+    }
+}
+
+// Exclude fabric-base gametest sources (uses old FabricGameTest interface incompatible with 1.21.5)
+tasks.named('compileGametestJava') {
+    source = source.filter { !it.path.contains('fabric-base') }
+}
+tasks.named('processGametestResources') {
+    // Ensure 1.21.5-specific fabric.mod.json takes priority
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
 
 processResources {
     dependsOn project(commonModule).tasks.named('convertNbtStructures')
