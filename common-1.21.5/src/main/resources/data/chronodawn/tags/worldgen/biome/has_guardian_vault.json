@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "chronodawn:chronodawn_plains",
+    "chronodawn:chronodawn_forest",
+    "chronodawn:chronodawn_dark_forest",
+    "chronodawn:chronodawn_ancient_forest"
+  ]
+}

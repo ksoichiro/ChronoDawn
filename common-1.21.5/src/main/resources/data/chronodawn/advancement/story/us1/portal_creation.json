@@ -1,0 +1,32 @@
+{
+  "parent": "chronodawn:root",
+  "criteria": {
+    "has_time_hourglass": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "chronodawn:time_hourglass"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "chronodawn:time_hourglass"
+    },
+    "title": {
+      "translate": "advancements.chronodawn.portal_creation.title"
+    },
+    "description": {
+      "translate": "advancements.chronodawn.portal_creation.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  }
+}

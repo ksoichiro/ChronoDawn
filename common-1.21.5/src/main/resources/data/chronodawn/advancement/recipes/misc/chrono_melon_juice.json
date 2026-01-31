@@ -1,0 +1,30 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_chrono_melon_slice": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": ["chronodawn:chrono_melon_slice"]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "chronodawn:chrono_melon_juice"
+      }
+    }
+  },
+  "rewards": {
+    "recipes": ["chronodawn:chrono_melon_juice"]
+  },
+  "requirements": [
+    [
+      "has_chrono_melon_slice",
+      "has_the_recipe"
+    ]
+  ]
+}

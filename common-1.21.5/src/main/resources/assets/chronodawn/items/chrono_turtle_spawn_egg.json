@@ -1,0 +1,16 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "chronodawn:item/template_spawn_egg",
+    "tints": [
+      {
+        "type": "minecraft:constant",
+        "value": 4029018
+      },
+      {
+        "type": "minecraft:constant",
+        "value": 9159844
+      }
+    ]
+  }
+}

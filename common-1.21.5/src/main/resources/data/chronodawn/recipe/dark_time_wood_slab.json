@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building_blocks",
+  "pattern": [
+    "PPP"
+  ],
+  "key": {
+    "P": "chronodawn:dark_time_wood_planks"
+  },
+  "result": {
+    "id": "chronodawn:dark_time_wood_slab",
+    "count": 6
+  }
+}
