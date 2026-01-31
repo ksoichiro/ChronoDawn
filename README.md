@@ -141,6 +141,10 @@ Chrono Dawn supports multiple Minecraft versions from the same codebase:
 # Build all release versions (1.20.1, 1.21.1, 1.21.2, 1.21.4)
 # Note: 1.21.3 is excluded - the 1.21.2 JAR is compatible with 1.21.3
 ./gradlew buildAll
+
+# Full release pipeline (cleanAll → buildAll → collectJars)
+# JARs are collected into build/release/
+./gradlew release
 ```
 
 **Output Files** (example for 1.21.2):

@@ -297,6 +297,12 @@ neoforge_version=21.2.0-beta
 # Validate resource files (JSON syntax + cross-references)
 ./gradlew validateResources
 
+# Collect release JARs into build/release/
+./gradlew collectJars
+
+# Full release pipeline (cleanAll → buildAll → collectJars)
+./gradlew release
+
 # Run ALL verification tasks (recommended before commits/PRs)
 ./gradlew checkAll
 # Runs in sequence: cleanAll → validateResources → buildAll → testAll → gameTestAll

@@ -115,6 +115,10 @@ Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4): Follow stand
 - `./gradlew validateResources` - Check JSON syntax and cross-references (blockstate→model, model→texture)
 - `./gradlew validateTranslations` - Cross-version translation key validation (entities, spawn eggs)
 
+**Release**:
+- `./gradlew collectJars` - Collect release JARs from all versions into `build/release/`
+- `./gradlew release` - Full release pipeline: cleanAll → buildAll → collectJars
+
 **Full Verification** (recommended before commits/PRs):
 - `./gradlew checkAll` - Run all verification tasks in sequence:
   1. cleanAll - Clean all build outputs and IDE directories
