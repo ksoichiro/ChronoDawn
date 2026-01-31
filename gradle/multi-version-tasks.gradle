@@ -516,9 +516,9 @@ tasks.register('testAll') {
  *   1. cleanAll - Clean all build outputs and IDE-generated directories
  *   2. validateResources - JSON syntax and cross-reference validation
  *   3. validateTranslations - Cross-version translation key validation
- *   4. buildAll - Build for all Minecraft versions (1.20.1, 1.21.1, 1.21.2, 1.21.4)
- *   5. testAll - Run unit tests for all versions (1.20.1, 1.21.1, 1.21.2, 1.21.4)
- *   6. gameTestAll - Run GameTests for all versions including 1.21.3/1.21.4 runtime
+ *   4. buildAll - Build for all Minecraft versions (1.20.1, 1.21.1, 1.21.2, 1.21.4, 1.21.5)
+ *   5. testAll - Run unit tests for all versions (1.20.1, 1.21.1, 1.21.2, 1.21.4, 1.21.5)
+ *   6. gameTestAll - Run GameTests for all versions including 1.21.3/1.21.4/1.21.5 runtime
  *
  * Note: 1.21.3 is only tested via gameTestAll (runtime verification).
  * Build/unit tests use 1.21.2 modules which are compatible with 1.21.3.

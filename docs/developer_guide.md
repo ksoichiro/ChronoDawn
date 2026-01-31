@@ -45,10 +45,10 @@ Chrono Dawn uses the **Architectury** framework to support both Fabric and NeoFo
 ### Key Technologies
 
 - **Java 21**: Target language version
-- **Minecraft**: Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4
+- **Minecraft**: Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5
 - **Fabric Loader**: 0.17.3+
-- **NeoForge**: 21.1.209+ (for 1.21.1) / 21.2.0-beta+ (for 1.21.2) / 21.3.0-beta+ (for 1.21.3) / 21.4.0-beta+ (for 1.21.4)
-- **Architectury API**: 13.0.8+ (for 1.21.1) / 14.0.4+ (for 1.21.2/1.21.3) / 15.0.1+ (for 1.21.4)
+- **NeoForge**: 21.1.209+ (for 1.21.1) / 21.2.0-beta+ (for 1.21.2) / 21.3.0-beta+ (for 1.21.3) / 21.4.0-beta+ (for 1.21.4) / 21.5.96+ (for 1.21.5)
+- **Architectury API**: 13.0.8+ (for 1.21.1) / 14.0.4+ (for 1.21.2/1.21.3) / 15.0.1+ (for 1.21.4) / 16.1.4+ (for 1.21.5)
 - **Gradle**: Build automation (Groovy DSL)
 - **Mojang Mappings**: Official Minecraft class names
 
@@ -126,7 +126,7 @@ ChronoDawn/
 ├── common-shared/                          # Shared version-agnostic sources (included via srcDir)
 ├── common-gametest/                        # Shared gametest sources (included via srcDir)
 ├── common-1.21.2/                          # Common module for MC 1.21.2
-├── common-1.21.4/                          # Common module for MC 1.21.4 (~80% of code)
+├── common-1.21.5/                          # Common module for MC 1.21.5 (~80% of code)
 │   ├── src/main/java/com/chronodawn/
 │   │   ├── ChronoDawn.java                 # Common entry point
 │   │   ├── blocks/                         # Custom blocks
@@ -250,11 +250,11 @@ neoforge_version=21.2.0-beta
 ### Build Commands
 
 ```bash
-# Build for default version (1.21.4)
+# Build for default version (1.21.5)
 ./gradlew build
 
 # Build for a specific Minecraft version
-./gradlew build -Ptarget_mc_version=1.21.4
+./gradlew build -Ptarget_mc_version=1.21.5
 ./gradlew build -Ptarget_mc_version=1.21.2
 ./gradlew build -Ptarget_mc_version=1.21.1
 ./gradlew build -Ptarget_mc_version=1.20.1
@@ -265,30 +265,30 @@ neoforge_version=21.2.0-beta
 # Shorthand for specific versions
 ./gradlew build1_20_1
 ./gradlew build1_21_1
-./gradlew build1_21_4
+./gradlew build1_21_5
 
 # Build specific module
-./gradlew :fabric:build -Ptarget_mc_version=1.21.4
-./gradlew :neoforge:build -Ptarget_mc_version=1.21.4
+./gradlew :fabric:build -Ptarget_mc_version=1.21.5
+./gradlew :neoforge:build -Ptarget_mc_version=1.21.5
 
 # Run development client (version-specific)
-./gradlew :fabric:runClient -Ptarget_mc_version=1.21.4
+./gradlew :fabric:runClient -Ptarget_mc_version=1.21.5
 ./gradlew :fabric:runClient -Ptarget_mc_version=1.21.2
 ./gradlew :fabric:runClient -Ptarget_mc_version=1.21.1
 ./gradlew :fabric:runClient -Ptarget_mc_version=1.20.1
-./gradlew :neoforge:runClient -Ptarget_mc_version=1.21.4
+./gradlew :neoforge:runClient -Ptarget_mc_version=1.21.5
 ./gradlew :neoforge:runClient -Ptarget_mc_version=1.21.1
 
 # Run development server
-./gradlew :fabric:runServer -Ptarget_mc_version=1.21.4
-./gradlew :neoforge:runServer -Ptarget_mc_version=1.21.4
+./gradlew :fabric:runServer -Ptarget_mc_version=1.21.5
+./gradlew :neoforge:runServer -Ptarget_mc_version=1.21.5
 
 # Run unit tests
 ./gradlew test
-./gradlew :common-1.21.4:test -Ptarget_mc_version=1.21.4
+./gradlew :common-1.21.5:test -Ptarget_mc_version=1.21.5
 
 # Run GameTests (in-game integration tests)
-./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.4
+./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.5
 ./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.2
 ./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.1
 ./gradlew :fabric:runGameTest -Ptarget_mc_version=1.20.1
@@ -314,9 +314,9 @@ neoforge_version=21.2.0-beta
 ### Output Files
 
 After building:
-- **Fabric JAR**: `fabric-1.21.4/build/libs/chronodawn-0.5.0-beta+1.21.4-fabric.jar`
-- **NeoForge JAR**: `neoforge-1.21.4/build/libs/chronodawn-0.5.0-beta+1.21.4-neoforge.jar`
-- **Common JAR**: `common-1.21.4/build/libs/common-1.21.4-0.5.0-beta.jar` (bundled into loader JARs)
+- **Fabric JAR**: `fabric-1.21.5/build/libs/chronodawn-0.5.0-beta+1.21.5-fabric.jar`
+- **NeoForge JAR**: `neoforge-1.21.5/build/libs/chronodawn-0.5.0-beta+1.21.5-neoforge.jar`
+- **Common JAR**: `common-1.21.5/build/libs/common-1.21.5-0.5.0-beta.jar` (bundled into loader JARs)
 
 ---
 
@@ -324,13 +324,13 @@ After building:
 
 ### 1. Dimension System
 
-**Location**: `common-1.21.4/src/main/java/com/chronodawn/core/dimension/`
+**Location**: `common-1.21.5/src/main/java/com/chronodawn/core/dimension/`
 
 **Key Classes**:
 - `ChronoDawnDimension.java`: Dimension registration and key definitions
-- Custom biomes in `common-1.21.4/src/main/resources/data/chronodawn/worldgen/biome/`
+- Custom biomes in `common-1.21.5/src/main/resources/data/chronodawn/worldgen/biome/`
 
-**Dimension JSON**: `common-1.21.4/src/main/resources/data/chronodawn/dimension/chronodawn_dimension.json`
+**Dimension JSON**: `common-1.21.5/src/main/resources/data/chronodawn/dimension/chronodawn_dimension.json`
 
 ```json
 {
@@ -348,8 +348,8 @@ After building:
 ### 2. Portal System
 
 **Location**:
-- Common: `common-1.21.4/src/main/java/com/chronodawn/core/portal/`
-- Blocks: `common-1.21.4/src/main/java/com/chronodawn/blocks/ChronoDawnPortalBlock.java`
+- Common: `common-1.21.5/src/main/java/com/chronodawn/core/portal/`
+- Blocks: `common-1.21.5/src/main/java/com/chronodawn/blocks/ChronoDawnPortalBlock.java`
 
 **Key Components**:
 - **PortalRegistry**: Tracks portal states (INACTIVE, ACTIVE, STABILIZED)
@@ -362,7 +362,7 @@ After building:
 
 ### 3. Time Distortion Effect
 
-**Location**: `common-1.21.4/src/main/java/com/chronodawn/events/EntityEventHandler.java`
+**Location**: `common-1.21.5/src/main/java/com/chronodawn/events/EntityEventHandler.java`
 
 **Implementation**:
 ```java
@@ -384,20 +384,20 @@ public class EntityEventHandler {
 
 ### 4. Worldgen System
 
-**Biomes**: `common-1.21.4/src/main/resources/data/chronodawn/worldgen/biome/`
+**Biomes**: `common-1.21.5/src/main/resources/data/chronodawn/worldgen/biome/`
 - 8 custom biomes with unique features
 
-**Structures**: `common-1.21.4/src/main/java/com/chronodawn/worldgen/structures/`
+**Structures**: `common-1.21.5/src/main/java/com/chronodawn/worldgen/structures/`
 - Ancient Ruins (Overworld)
 - Forgotten Library (Chrono Dawn)
 - Master Clock (final dungeon)
 - Phantom Catacombs (maze with boss)
 
-**Structure NBT Files**: `common-1.21.4/src/main/resources/data/chronodawn/structure/`
+**Structure NBT Files**: `common-1.21.5/src/main/resources/data/chronodawn/structure/`
 
 ### 5. Boss System
 
-**Entities**: `common-1.21.4/src/main/java/com/chronodawn/entities/bosses/`
+**Entities**: `common-1.21.5/src/main/java/com/chronodawn/entities/bosses/`
 
 **Boss AI Components**:
 - **TimeGuardianAI**: AI state machine for Time Guardian
@@ -408,7 +408,7 @@ public class EntityEventHandler {
 
 ### 6. Chronicle Guidebook UI
 
-**Location**: `common-1.21.4/src/main/java/com/chronodawn/client/gui/screens/chronicle/`
+**Location**: `common-1.21.5/src/main/java/com/chronodawn/client/gui/screens/chronicle/`
 
 **Description**: Custom in-game guidebook system that replaced Patchouli dependency. Chronicle provides players with information about biomes, structures, bosses, items, and progression.
 
@@ -417,7 +417,7 @@ public class EntityEventHandler {
 - **ChronicleData.java**: JSON data loader for guidebook content
 - **ChronicleBookItem.java**: Item that opens the Chronicle GUI
 
-**Data Files**: `common-1.21.4/src/main/resources/assets/chronodawn/chronicle/`
+**Data Files**: `common-1.21.5/src/main/resources/assets/chronodawn/chronicle/`
 - **categories.json**: Category definitions
 - **entries.json**: Entry data with localized text
 
@@ -456,7 +456,7 @@ public class EntityEventHandler {
 
 ### Adding a New Block
 
-1. **Create Block Class** (`common-1.21.4/src/main/java/com/chronodawn/blocks/MyCustomBlock.java`):
+1. **Create Block Class** (`common-1.21.5/src/main/java/com/chronodawn/blocks/MyCustomBlock.java`):
 ```java
 public class MyCustomBlock extends Block {
     public MyCustomBlock(Properties properties) {
@@ -500,7 +500,7 @@ public static final RegistrySupplier<Block> MY_CUSTOM_BLOCK = BLOCKS.register(
 
 ### Adding a New Entity
 
-1. **Create Entity Class** (`common-1.21.4/src/main/java/com/chronodawn/entities/MyEntity.java`):
+1. **Create Entity Class** (`common-1.21.5/src/main/java/com/chronodawn/entities/MyEntity.java`):
 ```java
 public class MyEntity extends Mob {
     public MyEntity(EntityType<? extends Mob> type, Level level) {
@@ -528,7 +528,7 @@ public static final RegistrySupplier<EntityType<MyEntity>> MY_ENTITY = ENTITIES.
 ### Adding a Structure
 
 1. **Create NBT Structure** using Minecraft structure blocks
-2. **Save to**: `common-1.21.4/src/main/resources/data/chronodawn/structure/`
+2. **Save to**: `common-1.21.5/src/main/resources/data/chronodawn/structure/`
 3. **Define Structure JSON**: `data/chronodawn/worldgen/structure/my_structure.json`
 4. **Add to Structure Set**: `data/chronodawn/worldgen/structure_set/my_structure_set.json`
 5. **Implement Structure Processor** (if custom logic needed)
@@ -541,7 +541,7 @@ public static final RegistrySupplier<EntityType<MyEntity>> MY_ENTITY = ENTITIES.
 
 **Framework**: JUnit 5
 
-**Location**: `common-1.21.4/src/test/java/com/chronodawn/unit/`
+**Location**: `common-1.21.5/src/test/java/com/chronodawn/unit/`
 
 **Test Types**:
 
@@ -554,7 +554,7 @@ public static final RegistrySupplier<EntityType<MyEntity>> MY_ENTITY = ENTITIES.
 
 **Run Tests**:
 ```bash
-./gradlew :common-1.21.4:test
+./gradlew :common-1.21.5:test
 ```
 
 ### Integration Testing (GameTest)
@@ -562,7 +562,7 @@ public static final RegistrySupplier<EntityType<MyEntity>> MY_ENTITY = ENTITIES.
 **Framework**: Minecraft GameTest Framework with registry-driven test generation
 
 **Location**:
-- `common-1.21.4/src/main/java/com/chronodawn/gametest/` (1.21.4)
+- `common-1.21.5/src/main/java/com/chronodawn/gametest/` (1.21.5)
 - `common-1.21.2/src/main/java/com/chronodawn/gametest/` (1.21.2)
 - `common-1.21.1/src/main/java/com/chronodawn/compat/v1_21_1/gametest/` (1.21.1)
 - `common-1.20.1/src/main/java/com/chronodawn/compat/v1_20_1/gametest/` (1.20.1)
@@ -580,11 +580,11 @@ public static final RegistrySupplier<EntityType<MyEntity>> MY_ENTITY = ENTITIES.
 **Run GameTests**:
 ```bash
 # Run for a specific version
-./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.4
+./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.5
 ./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.2
 ./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.1
 ./gradlew :fabric:runGameTest -Ptarget_mc_version=1.20.1
-./gradlew :neoforge:runGameTestServer -Ptarget_mc_version=1.21.4
+./gradlew :neoforge:runGameTestServer -Ptarget_mc_version=1.21.5
 ./gradlew :neoforge:runGameTestServer -Ptarget_mc_version=1.21.2
 ./gradlew :neoforge:runGameTestServer -Ptarget_mc_version=1.21.1
 
@@ -625,7 +625,7 @@ Shared sources are included via `srcDir` references to `fabric-base/` and `neofo
 
 Validates data/asset file integrity at build time without launching the game:
 
-- **JSON syntax check** — Parses all `.json` files under `common-1.21.4/src/main/resources/`
+- **JSON syntax check** — Parses all `.json` files under `common-1.21.5/src/main/resources/`
 - **Blockstate → model reference check** — Verifies `"model": "chronodawn:block/<name>"` targets exist
 - **Model → texture reference check** — Verifies `"textures"` entries with `chronodawn:` prefix have matching `.png` files
 
@@ -637,7 +637,7 @@ Validates data/asset file integrity at build time without launching the game:
 
 1. **Launch Development Client**:
    ```bash
-   ./gradlew :fabric:runClient -Ptarget_mc_version=1.21.4
+   ./gradlew :fabric:runClient -Ptarget_mc_version=1.21.5
    ```
 
 2. **Create Test World**: Creative mode recommended
@@ -650,7 +650,7 @@ Validates data/asset file integrity at build time without launching the game:
 
 ### Enable Debug Logging
 
-**Add to** `common-1.21.4/src/main/resources/log4j2.xml`:
+**Add to** `common-1.21.5/src/main/resources/log4j2.xml`:
 ```xml
 <Configuration status="warn">
     <Appenders>
