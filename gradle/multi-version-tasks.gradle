@@ -369,24 +369,54 @@ tasks.register('buildAll') {
 
     doLast {
         def versions = ['1.20.1', '1.21.1', '1.21.2', '1.21.4', '1.21.5', '1.21.6']
-        def failed = []
+        def maxParallel = 3
+        def passed = java.util.Collections.synchronizedList([])
+        def failed = java.util.Collections.synchronizedList([])
+
+        def gradlew = new File(projectDir, 'gradlew').absolutePath
+        def logDir = new File(projectDir, 'build')
+        logDir.mkdirs()
+
+        def executor = java.util.concurrent.Executors.newFixedThreadPool(maxParallel)
+        def futures = []
 
         versions.each { version ->
-            logger.lifecycle('')
-            logger.lifecycle(">>> Building for Minecraft ${version}...")
-            logger.lifecycle('')
+            def future = executor.submit({
+                logger.lifecycle(">>> Building for Minecraft ${version}...")
 
-            try {
-                project.exec {
-                    commandLine './gradlew', 'clean', 'build', "-Ptarget_mc_version=${version}", '-x', 'test'
-                    errorOutput = System.err
+                def logFile = new File(logDir, "build-${version}.log")
+                try {
+                    def pb = new ProcessBuilder(
+                        gradlew, 'clean', 'build',
+                        "-Ptarget_mc_version=${version}", '-x', 'test',
+                        '--project-cache-dir', ".gradle/build-${version}",
+                        '--no-parallel'
+                    )
+                    pb.directory(projectDir)
+                    pb.redirectErrorStream(true)
+                    pb.redirectOutput(logFile)
+
+                    def process = pb.start()
+                    def exitCode = process.waitFor()
+
+                    if (exitCode == 0) {
+                        passed.add(version)
+                        logger.lifecycle("SUCCESS: Minecraft ${version}")
+                    } else {
+                        failed.add(version)
+                        logger.error("FAILED: Minecraft ${version} (see ${logFile.absolutePath})")
+                    }
+                } catch (Exception e) {
+                    failed.add(version)
+                    logger.error("FAILED: Minecraft ${version} (${e.message})")
                 }
-                logger.lifecycle("SUCCESS: Minecraft ${version}")
-            } catch (Exception e) {
-                logger.error("FAILED: Minecraft ${version}")
-                failed.add(version)
-            }
+            } as Runnable)
+            futures.add(future)
         }
+
+        // Wait for all builds to complete
+        futures.each { it.get() }
+        executor.shutdown()
 
         logger.lifecycle('')
         logger.lifecycle('====================================================')
@@ -400,14 +430,19 @@ tasks.register('buildAll') {
             }
         } else {
             logger.lifecycle("${failed.size()} version(s) failed:")
-            failed.each { version ->
+            failed.sort().each { version ->
                 logger.lifecycle("   - Minecraft ${version}")
             }
-            throw new GradleException("Build failed for: ${failed.join(', ')}")
+            logger.lifecycle('')
+            logger.lifecycle("Logs: ${logDir.absolutePath}/build-*.log")
         }
 
         logger.lifecycle('====================================================')
         logger.lifecycle('')
+
+        if (!failed.isEmpty()) {
+            throw new GradleException("Build failed for: ${failed.sort().join(', ')}")
+        }
     }
 }
 
