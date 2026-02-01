@@ -14,7 +14,7 @@ import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModEntities;
 import com.chronodawn.registry.ModParticles;
 import net.fabricmc.api.ClientModInitializer;
-// BlockRenderLayerMap removed in Fabric API for 1.21.6 - render types now defined in model JSON
+import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
@@ -25,7 +25,7 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.client.model.BoatModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -128,12 +128,33 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
     /**
      * Register render layers for blocks that need special rendering.
      *
-     * In 1.21.6, BlockRenderLayerMap was removed from Fabric API.
-     * Render types are now defined in block model JSON files directly.
-     * This method is kept as a no-op for structural consistency.
+     * In 1.21.6, BlockRenderLayerMap moved from fabric-blockrenderlayer-v1 to
+     * fabric-rendering-v1 (net.fabricmc.fabric.api.client.rendering.v1 package).
+     * API changed from INSTANCE.putBlock() to static putBlock().
      */
     private void registerRenderLayers() {
-        // No-op in 1.21.6: render types are defined in model JSON
+        for (ModBlockId blockId : ModBlockId.availableForCurrent()) {
+            if (blockId.renderLayer() == ModBlockId.RenderLayer.SOLID) {
+                continue; // SOLID blocks don't need registration
+            }
+
+            ResourceLocation blockLoc = ResourceLocation.fromNamespaceAndPath(
+                ChronoDawn.MOD_ID, blockId.id());
+            var blockHolder = BuiltInRegistries.BLOCK.get(blockLoc);
+            Block block = blockHolder.map(holder -> holder.value()).orElse(null);
+
+            if (block == null || block == Blocks.AIR) {
+                ChronoDawn.LOGGER.warn("Block not found in registry: {}", blockLoc);
+                continue;
+            }
+
+            switch (blockId.renderLayer()) {
+                case CUTOUT -> BlockRenderLayerMap.putBlock(block, ChunkSectionLayer.CUTOUT);
+                case CUTOUT_MIPPED -> BlockRenderLayerMap.putBlock(block, ChunkSectionLayer.CUTOUT_MIPPED);
+                case TRANSLUCENT -> BlockRenderLayerMap.putBlock(block, ChunkSectionLayer.TRANSLUCENT);
+                default -> {} // SOLID already handled above
+            }
+        }
     }
 
     /**
