@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column_horizontal",
+  "textures": {
+    "end": "chronodawn:block/time_wheat_bale_top",
+    "side": "chronodawn:block/time_wheat_bale_side"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "category": "structures",
+  "title": {
+    "en_us": "Entropy Crypt",
+    "ja_jp": "エントロピーの墓所"
+  },
+  "icon": "minecraft:mossy_cobblestone",
+  "sortnum": 5,
+  "pages": [
+    {
+      "text": {
+        "en_us": "The Entropy Crypt is an underground crypt containing the Entropy Keeper mid-boss.\n\nStructure Type: Underground crypt\n\nLocation: Various biomes in Chrono Dawn\n\nFeatures:\n• Decay-themed design\n• Special trapdoor mechanism triggers boss\n• Dark, eerie atmosphere\n• Loot chests with decay-themed items",
+        "ja_jp": "エントロピーの墓所は、エントロピーキーパーの中ボスがいる地下墓所です。\n\n構造タイプ: 地下墓所\n\n場所: クロノドーンのさまざまなバイオーム\n\n特徴:\n• 崩壊をテーマにしたデザイン\n• 特別なトラップドア機構でボスを発生\n• 暗く不気味な雰囲気\n• 崩壊をテーマにしたアイテムが入った戦利品チェスト"
+      }
+    },
+    {
+      "image": "chronodawn:textures/gui/chronicle/entropy_crypt.png"
+    },
+    {
+      "text": {
+        "en_us": "Triggering the Boss:\n\n• Activate a specific trapdoor in the structure\n• Boss spawns immediately - be prepared!\n\nBoss: Entropy Keeper\n\nDrops:\n• Entropy Core (required for Chrono Aegis)\n• Decay-themed loot\n• Experience and items",
+        "ja_jp": "ボスの発生:\n\n• 構造物内の特定のトラップドアを起動\n• ボスがすぐに出現 - 準備を！\n\nボス: エントロピーキーパー\n\nドロップ:\n• エントロピーコア（クロノイージスに必要）\n• 崩壊をテーマにした戦利品\n• 経験値とアイテム"
+      }
+    },
+    {
+      "text": {
+        "en_us": "Tips:\n\n• Bring multiple milk buckets to remove Wither effect\n• Keep distance to minimize Decay Aura exposure\n• Dodge Entropy Burst waves (telegraphed attack)\n• Use ranged attacks when possible\n• Retreat to heal and drink milk when necessary\n\nSee \"Entropy Keeper\" in Boss Battles for detailed strategies!",
+        "ja_jp": "ヒント:\n\n• ウィザー効果を除去するために複数のミルクバケツを持参\n• 崩壊オーラへの露出を最小限にするため距離を保つ\n• エントロピーバーストの波を避ける（予告攻撃）\n• 可能な限り遠距離攻撃を使用\n• 必要に応じて後退して回復しミルクを飲む\n\n詳細な戦略については、ボス戦の「エントロピーキーパー」を参照してください！"
+      }
+    }
+  ]
+}

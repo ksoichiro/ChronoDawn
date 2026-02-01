@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "W": "chronodawn:time_wheat",
+    "R": "chronodawn:temporal_root"
+  },
+  "pattern": [
+    "WWW",
+    " R "
+  ],
+  "result": {
+    "id": "chronodawn:enhanced_time_bread",
+    "count": 1
+  }
+}
