@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "chronodawn:timeless_mushroom",
+    "chronodawn:timeless_mushroom",
+    "minecraft:bowl"
+  ],
+  "result": {
+    "id": "chronodawn:timeless_mushroom_soup",
+    "count": 1
+  }
+}

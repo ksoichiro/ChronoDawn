@@ -1,0 +1,69 @@
+{
+  "render_type": "minecraft:translucent",
+  "textures": {
+    "outer": "chronodawn:block/time_crystal_block_outer",
+    "core": "chronodawn:block/time_crystal_block_core",
+    "particle": "chronodawn:block/time_crystal_block_outer"
+  },
+  "display": {
+    "gui": {
+      "rotation": [30, 225, 0],
+      "translation": [0, 0, 0],
+      "scale": [0.625, 0.625, 0.625]
+    },
+    "ground": {
+      "rotation": [0, 0, 0],
+      "translation": [0, 3, 0],
+      "scale": [0.25, 0.25, 0.25]
+    },
+    "fixed": {
+      "rotation": [0, 0, 0],
+      "translation": [0, 0, 0],
+      "scale": [0.5, 0.5, 0.5]
+    },
+    "thirdperson_righthand": {
+      "rotation": [75, 45, 0],
+      "translation": [0, 2.5, 0],
+      "scale": [0.375, 0.375, 0.375]
+    },
+    "firstperson_righthand": {
+      "rotation": [0, 45, 0],
+      "translation": [0, 0, 0],
+      "scale": [0.40, 0.40, 0.40]
+    },
+    "firstperson_lefthand": {
+      "rotation": [0, 225, 0],
+      "translation": [0, 0, 0],
+      "scale": [0.40, 0.40, 0.40]
+    }
+  },
+  "elements": [
+    {
+      "comment": "Inner glowing core (10x10x10 cube in center)",
+      "from": [3, 3, 3],
+      "to": [13, 13, 13],
+      "shade": false,
+      "faces": {
+        "north": {"texture": "#core"},
+        "south": {"texture": "#core"},
+        "east": {"texture": "#core"},
+        "west": {"texture": "#core"},
+        "up": {"texture": "#core"},
+        "down": {"texture": "#core"}
+      }
+    },
+    {
+      "comment": "Outer transparent glass layer (full 16x16x16 cube)",
+      "from": [0, 0, 0],
+      "to": [16, 16, 16],
+      "faces": {
+        "north": {"texture": "#outer", "cullface": "north"},
+        "south": {"texture": "#outer", "cullface": "south"},
+        "east": {"texture": "#outer", "cullface": "east"},
+        "west": {"texture": "#outer", "cullface": "west"},
+        "up": {"texture": "#outer", "cullface": "up"},
+        "down": {"texture": "#outer", "cullface": "down"}
+      }
+    }
+  ]
+}

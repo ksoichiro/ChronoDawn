@@ -1,0 +1,23 @@
+{
+  "category": "items",
+  "title": {
+    "en_us": "Chrono Aegis",
+    "ja_jp": "クロノイージス"
+  },
+  "icon": "chronodawn:chrono_aegis",
+  "sortnum": 3,
+  "pages": [
+    {
+      "text": {
+        "en_us": "Chrono Aegis is a legendary shield crafted from the drops of the four mid-bosses.\n\nRequired Materials:\n• Guardian Stone (from Chronos Warden)\n• Colossus Gear (from Clockwork Colossus)\n• Phantom Essence (from Temporal Phantom)\n• Entropy Core (from Entropy Keeper)\n\nThis shield is HIGHLY RECOMMENDED before fighting Time Tyrant!",
+        "ja_jp": "クロノイージスは、4体の中ボスのドロップから作成される伝説の盾です。\n\n必要材料:\n• ガーディアンストーン（クロノスウォーデンから）\n• コロッサスギア（時計仕掛けの巨像から）\n• ファントムエッセンス（時の幻影から）\n• エントロピーコア（エントロピーキーパーから）\n\nこの盾はタイムタイラントと戦う前に強く推奨されます！"
+      }
+    },
+    {
+      "text": {
+        "en_us": "Abilities:\n\n• Provides massive damage reduction\n• Grants resistance to time-based attacks\n• Special defensive abilities against Time Tyrant\n• Increases survival chances dramatically\n\nHow to obtain all materials:\n1. Defeat Chronos Warden in Guardian Vault\n2. Defeat Clockwork Colossus in Clockwork Depths\n3. Defeat Temporal Phantom in Phantom Catacombs\n4. Defeat Entropy Keeper in Entropy Crypt\n5. Craft Chrono Aegis with all four drops",
+        "ja_jp": "能力:\n\n• 大幅なダメージ軽減を提供\n• 時間ベースの攻撃への耐性を付与\n• タイムタイラントに対する特別な防御能力\n• 生存率を劇的に向上\n\nすべての材料の入手方法:\n1. ガーディアンの地下室でクロノスウォーデンを倒す\n2. 歯車の深淵で時計仕掛けの巨像を倒す\n3. 幻影のカタコンベで時の幻影を倒す\n4. エントロピーの墓所でエントロピーキーパーを倒す\n5. 4つすべてのドロップでクロノイージスを作成"
+      }
+    }
+  ]
+}

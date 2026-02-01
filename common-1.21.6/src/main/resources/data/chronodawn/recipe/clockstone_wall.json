@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building_blocks",
+  "pattern": [
+    "CCC",
+    "CCC"
+  ],
+  "key": {
+    "C": "chronodawn:clockstone_block"
+  },
+  "result": {
+    "id": "chronodawn:clockstone_wall",
+    "count": 6
+  }
+}

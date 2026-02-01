@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "tools",
+  "pattern": [
+    " G ",
+    "ECE",
+    " R "
+  ],
+  "key": {
+    "G": "minecraft:gold_ingot",
+    "E": "chronodawn:enhanced_clockstone",
+    "C": "chronodawn:clockstone_block",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "chronodawn:time_clock",
+    "count": 1
+  }
+}
