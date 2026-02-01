@@ -14,7 +14,6 @@
   ],
   "client": [
     "client.ClientAdvancementsAccessor",
-    "client.FogRendererMixin",
     "client.SkyColorMixin"
   ],
   "injectors": {
