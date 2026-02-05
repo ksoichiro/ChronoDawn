@@ -7,7 +7,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.5.0-beta] - 2026-01-25
+### Added
+
+#### New Mobs
+- **Timebound Rabbit**: New mob in Chrono Dawn dimension
+- **Pulse Hog**: New mob in Chrono Dawn dimension
+- **Secondwing Fowl**: Chicken-based mob with vanilla chicken parameters
+- **Hourglass Golem**: Iron Golem-based mob
+
+#### Minecraft Version Support
+- Minecraft 1.21.3 support (hotfix release sharing 1.21.2 modules)
+- Minecraft 1.21.4 support with API migration (EntityRenderState, spawn egg changes)
+- Minecraft 1.21.5 support with API migration (SavedData Codec, weapon/tool APIs, MobEffects, NBT methods)
+- Minecraft 1.21.6 support with API migration (advancement background resource path, mixin config updates)
+
+#### Gameplay Features
+- Land ecosystem added to ocean biome for above-water terrain generation
+
+#### Development & Build
+- `collectJars` and `release` Gradle tasks for streamlined release pipeline
+- Cross-version translation key validation
+- GameTest support for Minecraft 1.21.5 (Fabric and NeoForge)
+
+### Fixed
+- Entropy Crypt trapdoor can now be opened after boss spawn
+
+### Performance
+- Parallelized `buildAll` task with isolated project cache for faster builds
 
 ## [0.4.0] - 2026-01-25
 
@@ -189,8 +215,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Architectury API 13.0.8+
 - Custom Portal API 0.0.1-beta66-1.21 (Fabric bundled, NeoForge requires separate installation)
 
-[Unreleased]: https://github.com/ksoichiro/ChronoDawn/compare/v0.5.0-beta+1.21.1...HEAD
-[0.5.0-beta]: https://github.com/ksoichiro/ChronoDawn/compare/v0.4.0+1.21.1...v0.5.0-beta+1.21.1
+[Unreleased]: https://github.com/ksoichiro/ChronoDawn/compare/v0.4.0+1.21.2...HEAD
 [0.4.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.4.0-beta+1.21.1...v0.4.0+1.21.1
 [0.4.0-beta]: https://github.com/ksoichiro/ChronoDawn/compare/v0.3.0+1.21.1...v0.4.0-beta+1.21.1
 [0.3.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.3.0-beta+1.21.1...v0.3.0+1.21.1
