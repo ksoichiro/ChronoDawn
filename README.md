@@ -170,8 +170,8 @@ Chrono Dawn supports multiple Minecraft versions from the same codebase:
 ```
 
 **Output Files** (example for 1.21.2):
-- `fabric-1.21.2/build/libs/chronodawn-0.5.0-beta+1.21.2-fabric.jar` - Fabric loader JAR
-- `neoforge-1.21.2/build/libs/chronodawn-0.5.0-beta+1.21.2-neoforge.jar` - NeoForge loader JAR
+- `fabric-1.21.2/build/libs/chronodawn-0.5.0+1.21.2-fabric.jar` - Fabric loader JAR
+- `neoforge-1.21.2/build/libs/chronodawn-0.5.0+1.21.2-neoforge.jar` - NeoForge loader JAR
 
 ### Build Specific Loader
 
@@ -291,14 +291,14 @@ gradlew.bat test
 2. Install Fabric Loader 0.17.3+
 3. Download and install Fabric API
 4. Download and install Architectury API 14.0.4+
-5. Copy `chronodawn-0.5.0-beta+1.21.2-fabric.jar` to `.minecraft/mods/` folder
+5. Copy `chronodawn-0.5.0+1.21.2-fabric.jar` to `.minecraft/mods/` folder
 6. Launch Minecraft with Fabric profile
 
 ### For NeoForge (Minecraft 1.21.2)
 1. Install Minecraft 1.21.2
 2. Install NeoForge 21.2.0-beta+
 3. Download and install Architectury API 14.0.4+
-4. Copy `chronodawn-0.5.0-beta+1.21.2-neoforge.jar` to `.minecraft/mods/` folder
+4. Copy `chronodawn-0.5.0+1.21.2-neoforge.jar` to `.minecraft/mods/` folder
 5. Launch Minecraft with NeoForge profile
 
 ### For Minecraft 1.21.1
