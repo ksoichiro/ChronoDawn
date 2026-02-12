@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CHC",
+    "FBF",
+    "CHC"
+  ],
+  "key": {
+    "C": "chronodawn:clockstone",
+    "H": "chronodawn:time_hourglass",
+    "F": "chronodawn:fruit_of_time",
+    "B": "chronodawn:clockstone_block"
+  },
+  "result": {
+    "id": "chronodawn:portal_stabilizer",
+    "count": 1
+  }
+}

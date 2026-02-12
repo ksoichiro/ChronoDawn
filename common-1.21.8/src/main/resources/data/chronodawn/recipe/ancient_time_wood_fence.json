@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building_blocks",
+  "pattern": [
+    "PSP",
+    "PSP"
+  ],
+  "key": {
+    "P": "chronodawn:ancient_time_wood_planks",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "chronodawn:ancient_time_wood_fence",
+    "count": 3
+  }
+}

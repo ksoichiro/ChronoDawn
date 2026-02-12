@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/template_trapdoor_open",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "texture": "chronodawn:block/ancient_time_wood_trapdoor"
+  }
+}

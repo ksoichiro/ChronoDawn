@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "EEE",
+    " S ",
+    " S "
+  ],
+  "key": {
+    "E": "chronodawn:enhanced_clockstone",
+    "S": "minecraft:stick"
+  },
+  "result": {
+    "id": "chronodawn:spatially_linked_pickaxe",
+    "count": 1
+  }
+}

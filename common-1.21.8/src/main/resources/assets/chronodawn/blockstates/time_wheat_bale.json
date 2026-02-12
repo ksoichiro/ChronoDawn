@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "chronodawn:block/time_wheat_bale_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "chronodawn:block/time_wheat_bale"
+    },
+    "axis=z": {
+      "model": "chronodawn:block/time_wheat_bale_horizontal",
+      "x": 90
+    }
+  }
+}

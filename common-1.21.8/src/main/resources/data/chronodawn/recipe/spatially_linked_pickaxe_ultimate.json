@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "tools",
+  "pattern": [
+    "FFF",
+    " P ",
+    " E "
+  ],
+  "key": {
+    "F": "chronodawn:fragment_of_stasis_core",
+    "P": "chronodawn:spatially_linked_pickaxe",
+    "E": "chronodawn:eye_of_chronos"
+  },
+  "result": {
+    "id": "chronodawn:spatially_linked_pickaxe",
+    "count": 1
+  }
+}
