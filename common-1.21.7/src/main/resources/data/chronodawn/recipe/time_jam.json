@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "food",
+  "key": {
+    "F": "chronodawn:fruit_of_time",
+    "S": "minecraft:sugar"
+  },
+  "pattern": [
+    "FFF",
+    "FSF"
+  ],
+  "result": {
+    "id": "chronodawn:time_jam",
+    "count": 1
+  }
+}

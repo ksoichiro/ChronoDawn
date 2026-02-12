@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/pressure_plate_down",
+  "textures": {
+    "texture": "chronodawn:block/dark_time_wood_planks"
+  }
+}

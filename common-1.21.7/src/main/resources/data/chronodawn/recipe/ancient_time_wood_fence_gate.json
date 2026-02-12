@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "SPS",
+    "SPS"
+  ],
+  "key": {
+    "S": "minecraft:stick",
+    "P": "chronodawn:ancient_time_wood_planks"
+  },
+  "result": {
+    "id": "chronodawn:ancient_time_wood_fence_gate",
+    "count": 1
+  }
+}

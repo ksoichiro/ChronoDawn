@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "chronodawn:block/dark_time_wood_slab"
+    },
+    "type=double": {
+      "model": "chronodawn:block/dark_time_wood_planks"
+    },
+    "type=top": {
+      "model": "chronodawn:block/dark_time_wood_slab_top"
+    }
+  }
+}

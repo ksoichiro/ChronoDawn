@@ -1,0 +1,9 @@
+{
+  "type": "minecraft:random_patch",
+  "config": {
+    "tries": 1,
+    "xz_spread": 0,
+    "y_spread": 0,
+    "feature": "chronodawn:cobweb_block"
+  }
+}

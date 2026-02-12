@@ -1,0 +1,10 @@
+{
+  "processors": [
+    {
+      "processor_type": "chronodawn:copy_fluid_level"
+    },
+    {
+      "processor_type": "chronodawn:boss_room_protection"
+    }
+  ]
+}

@@ -24,7 +24,8 @@ package com.chronodawn.version;
 public enum MinecraftVersion {
     MC_1_20_1("1.20.1", 1, 20, 1),
     MC_1_21_1("1.21.1", 1, 21, 1),
-    MC_1_21_2("1.21.2", 1, 21, 2);
+    MC_1_21_2("1.21.2", 1, 21, 2),
+    MC_1_21_7("1.21.7", 1, 21, 7);
 
     private final String displayName;
     private final int major;
@@ -93,7 +94,7 @@ public enum MinecraftVersion {
      * Returns the newest supported Minecraft version.
      */
     public static MinecraftVersion newest() {
-        return MC_1_21_2;
+        return MC_1_21_7;
     }
 
     @Override

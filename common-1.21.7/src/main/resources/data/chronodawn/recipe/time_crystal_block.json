@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building_blocks",
+  "pattern": [
+    "TTT",
+    "TTT",
+    "TTT"
+  ],
+  "key": {
+    "T": "chronodawn:time_crystal"
+  },
+  "result": {
+    "id": "chronodawn:time_crystal_block",
+    "count": 1
+  }
+}
