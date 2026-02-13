@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "chronodawn:pink_time_blossom"
+    }
+  ],
+  "result": {
+    "id": "minecraft:pink_dye",
+    "count": 1
+  }
+}

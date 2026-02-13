@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "chronodawn:dusk_bell"
+    }
+  ],
+  "result": {
+    "item": "minecraft:red_dye",
+    "count": 2
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "chronodawn:dawn_bell"
+  ],
+  "result": {
+    "id": "minecraft:blue_dye",
+    "count": 2
+  }
+}
