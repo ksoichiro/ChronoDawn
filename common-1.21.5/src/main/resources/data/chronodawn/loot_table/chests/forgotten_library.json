@@ -15,10 +15,10 @@
                 "minecraft:recipes": [
                   "chronodawn:portal_stabilizer"
                 ],
-                "minecraft:custom_name": "{\"text\":\"Portal Stabilizer Blueprint\",\"color\":\"aqua\",\"italic\":false}",
+                "minecraft:custom_name": {"text":"Portal Stabilizer Blueprint","color":"aqua","italic":false},
                 "minecraft:lore": [
-                  "{\"text\":\"Ancient knowledge to stabilize\",\"color\":\"gray\",\"italic\":true}",
-                  "{\"text\":\"dimensional portals.\",\"color\":\"gray\",\"italic\":true}"
+                  {"text":"Ancient knowledge to stabilize","color":"gray","italic":true},
+                  {"text":"dimensional portals.","color":"gray","italic":true}
                 ]
               }
             }

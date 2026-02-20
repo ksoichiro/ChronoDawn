@@ -35,10 +35,10 @@
                 "minecraft:recipes": [
                   "chronodawn:time_hourglass"
                 ],
-                "minecraft:custom_name": "{\"text\":\"Time Hourglass Blueprint\",\"color\":\"gold\",\"italic\":false}",
+                "minecraft:custom_name": {"text":"Time Hourglass Blueprint","color":"gold","italic":false},
                 "minecraft:lore": [
-                  "{\"text\":\"Ancient instructions for crafting\",\"color\":\"gray\",\"italic\":true}",
-                  "{\"text\":\"a device to activate portals.\",\"color\":\"gray\",\"italic\":true}"
+                  {"text":"Ancient instructions for crafting","color":"gray","italic":true},
+                  {"text":"a device to activate portals.","color":"gray","italic":true}
                 ]
               }
             }
