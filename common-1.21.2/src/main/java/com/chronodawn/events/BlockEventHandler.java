@@ -148,8 +148,8 @@ public class BlockEventHandler {
 
         // Register block interaction event for axe stripping (Time Wood logs)
         InteractionEvent.RIGHT_CLICK_BLOCK.register((player, hand, pos, face) -> {
-            // Only process main hand interactions on server side
-            if (player.level().isClientSide() || hand != net.minecraft.world.InteractionHand.MAIN_HAND) {
+            // Only process main hand interactions
+            if (hand != net.minecraft.world.InteractionHand.MAIN_HAND) {
                 return EventResult.pass().asMinecraft();
             }
 
@@ -163,23 +163,30 @@ public class BlockEventHandler {
             BlockState strippedState = getStrippedState(state);
 
             if (strippedState != null) {
-                // Play stripping sound
-                player.level().playSound(null, pos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
+                if (!player.level().isClientSide()) {
+                    // Server side: play sound, change block, damage axe
+                    player.level().playSound(null, pos, SoundEvents.AXE_STRIP, SoundSource.BLOCKS, 1.0F, 1.0F);
 
-                // Replace block with stripped variant
-                player.level().setBlock(pos, strippedState.setValue(
-                    net.minecraft.world.level.block.RotatedPillarBlock.AXIS,
-                    state.getValue(net.minecraft.world.level.block.RotatedPillarBlock.AXIS)
-                ), 11); // 11 = update clients + neighbors + render on main thread
+                    // Replace block with stripped variant
+                    player.level().setBlock(pos, strippedState.setValue(
+                        net.minecraft.world.level.block.RotatedPillarBlock.AXIS,
+                        state.getValue(net.minecraft.world.level.block.RotatedPillarBlock.AXIS)
+                    ), 11); // 11 = update clients + neighbors + render on main thread
 
-                // Damage the axe (1 durability)
-                if (!player.isCreative()) {
-                    net.minecraft.world.entity.EquipmentSlot slot = hand == net.minecraft.world.InteractionHand.MAIN_HAND
-                        ? net.minecraft.world.entity.EquipmentSlot.MAINHAND
-                        : net.minecraft.world.entity.EquipmentSlot.OFFHAND;
-                    // Version-independent item damage
-                    com.chronodawn.compat.ItemDurabilityHandler.getInstance().damageItem(heldItem, 1, player, slot);
+                    // Damage the axe (1 durability)
+                    if (!player.isCreative()) {
+                        net.minecraft.world.entity.EquipmentSlot slot = hand == net.minecraft.world.InteractionHand.MAIN_HAND
+                            ? net.minecraft.world.entity.EquipmentSlot.MAINHAND
+                            : net.minecraft.world.entity.EquipmentSlot.OFFHAND;
+                        // Version-independent item damage
+                        com.chronodawn.compat.ItemDurabilityHandler.getInstance().damageItem(heldItem, 1, player, slot);
+                    }
                 }
+
+                // Both client and server: trigger arm swing animation
+                // Client side needs this for the visual swing; returning interruptTrue
+                // prevents vanilla AxeItem.useOn() (which doesn't know our custom blocks)
+                player.swing(hand);
 
                 return EventResult.interruptTrue().asMinecraft();
             }
