@@ -84,7 +84,7 @@ public class CategoryListWidget extends AbstractWidget {
             Component title = Component.translatable("gui.chronodawn.chronicle.title");
             int titleX = getX() + (width - Minecraft.getInstance().font.width(title)) / 2;
             int titleY = currentY + (TITLE_HEIGHT - 8) / 2;
-            graphics.drawString(Minecraft.getInstance().font, title, titleX, titleY, 0x3F3F3F, false);
+            graphics.drawString(Minecraft.getInstance().font, title, titleX, titleY, 0xFF3F3F3F, false);
         }
         currentY += TITLE_HEIGHT;
 
@@ -107,7 +107,7 @@ public class CategoryListWidget extends AbstractWidget {
                 // Render expand/collapse indicator
                 String expandIndicator = isExpanded ? "▼" : "▶";
                 graphics.drawString(Minecraft.getInstance().font, expandIndicator,
-                    getX() + 2, currentY + (CATEGORY_HEIGHT - 8) / 2, 0x5F5F5F, false);
+                    getX() + 2, currentY + (CATEGORY_HEIGHT - 8) / 2, 0xFF5F5F5F, false);
 
                 // Render category icon
                 ItemStack icon = getIconStack(category);
@@ -117,7 +117,7 @@ public class CategoryListWidget extends AbstractWidget {
                 String title = category.getTitle().get(languageCode);
                 int textX = getX() + ICON_SIZE + PADDING * 2 + 10;
                 int textY = currentY + (CATEGORY_HEIGHT - 8) / 2;
-                int textColor = isCategorySelected ? 0x3F3F3F : 0x5F5F5F;
+                int textColor = isCategorySelected ? 0xFF3F3F3F : 0xFF5F5F5F;
                 int maxCategoryWidth = width - ICON_SIZE - PADDING * 2 - 12;
                 String displayTitle = Minecraft.getInstance().font.plainSubstrByWidth(title, maxCategoryWidth);
                 graphics.drawString(Minecraft.getInstance().font, displayTitle, textX, textY, textColor, false);
@@ -153,7 +153,7 @@ public class CategoryListWidget extends AbstractWidget {
                         String entryTitle = entry.getTitle().get(languageCode);
                         int entryTextX = getX() + ENTRY_INDENT + ICON_SIZE + PADDING;
                         int entryTextY = currentY + (ENTRY_HEIGHT - 8) / 2;
-                        int entryTextColor = isEntrySelected ? 0x2F2F2F : 0x6F6F6F;
+                        int entryTextColor = isEntrySelected ? 0xFF2F2F2F : 0xFF6F6F6F;
 
                         // Truncate text if too long
                         int maxWidth = width - ENTRY_INDENT - ICON_SIZE - PADDING * 2;

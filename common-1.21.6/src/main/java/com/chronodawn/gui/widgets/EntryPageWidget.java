@@ -245,7 +245,7 @@ public class EntryPageWidget extends AbstractWidget {
             Font font = Minecraft.getInstance().font;
             int textX = getX() + (width - font.width(placeholderText)) / 2;
             int textY = getY() + height / 2;
-            graphics.drawString(font, placeholderText, textX, textY, 0x808080, false);
+            graphics.drawString(font, placeholderText, textX, textY, 0xFF808080, false);
             return;
         }
 
@@ -266,7 +266,7 @@ public class EntryPageWidget extends AbstractWidget {
             // Button Y position: height - 15, button height: 13, font height: ~9
             // Center text vertically within button: (13 - 9) / 2 = 2
             int textY = getY() + height - 15 + 2;
-            graphics.drawString(font, pageNumberText, textX, textY, 0x3F3F3F, false);
+            graphics.drawString(font, pageNumberText, textX, textY, 0xFF3F3F3F, false);
         }
     }
 
@@ -280,7 +280,7 @@ public class EntryPageWidget extends AbstractWidget {
 
         // Render pre-wrapped lines (already fit on this page)
         for (String line : virtualPage.lines) {
-            graphics.drawString(font, line, textX, textY, 0x000000, false);
+            graphics.drawString(font, line, textX, textY, 0xFF000000, false);
             textY += LINE_HEIGHT;
         }
     }
@@ -306,7 +306,7 @@ public class EntryPageWidget extends AbstractWidget {
         int textY = getY() + TEXT_MARGIN;
 
         for (String line : lines) {
-            graphics.drawString(font, line, textX, textY, 0x808080, false);
+            graphics.drawString(font, line, textX, textY, 0xFF808080, false);
             textY += LINE_HEIGHT;
         }
     }
@@ -372,7 +372,7 @@ public class EntryPageWidget extends AbstractWidget {
             int textY = getY() + TEXT_MARGIN;
 
             for (String line : lines) {
-                graphics.drawString(font, line, textX, textY, 0xFF0000, false);
+                graphics.drawString(font, line, textX, textY, 0xFFFF0000, false);
                 textY += LINE_HEIGHT;
             }
         }
