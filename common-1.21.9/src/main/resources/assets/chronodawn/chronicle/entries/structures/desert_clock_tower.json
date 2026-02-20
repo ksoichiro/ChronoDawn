@@ -1,0 +1,32 @@
+{
+  "category": "structures",
+  "title": {
+    "en_us": "Desert Clock Tower",
+    "ja_jp": "砂漠の時計塔"
+  },
+  "icon": "minecraft:stone_bricks",
+  "sortnum": 1,
+  "pages": [
+    {
+      "text": {
+        "en_us": "The Desert Clock Tower is a 5-floor structure containing the Time Guardian mini-boss.\n\nLocation: Various biomes in Chrono Dawn (spawns in most biomes except Ocean)\n\nFeatures:\n• Clock Tower Teleporter blocks\n• Teleport between floors\n• Time Guardian on 5th floor\n• Loot chests throughout",
+        "ja_jp": "砂漠の時計塔は、タイムガーディアンの中ボスがいる5階建ての構造物です。\n\n場所: クロノドーンのさまざまなバイオーム（海洋以外のほとんどのバイオームに生成）\n\n特徴:\n• クロックタワーテレポーターブロック\n• フロア間をテレポート\n• 5階にタイムガーディアン\n• 全体に戦利品チェスト"
+      }
+    },
+    {
+      "image": "chronodawn:textures/gui/chronicle/desert_clock_tower.png"
+    },
+    {
+      "text": {
+        "en_us": "How Teleporters Work:\n\n• Hold right-click for 3 seconds to charge\n• UP direction: 4th floor → 5th floor (boss room)\n• DOWN direction: 5th floor → 4th floor (appears after defeating Time Guardian)\n\nLoot:\n• Enhanced Clockstone (boss or chests)\n• Master Clock Key (from Time Guardian)\n• Time Crystals and other valuables",
+        "ja_jp": "テレポーターの仕組み:\n\n• 右クリックを3秒間長押しでチャージ\n• 上方向: 4階→5階（ボス部屋）\n• 下方向: 5階→4階（タイムガーディアン撃破後に出現）\n\n戦利品:\n• 強化クロックストーン（ボスまたはチェスト）\n• マスタークロックの鍵（タイムガーディアンから）\n• タイムクリスタルやその他の貴重品"
+      }
+    },
+    {
+      "text": {
+        "en_us": "Tips:\n\n• Explore all 5 floors for maximum loot\n• Practice with teleporters before boss fight\n• Bring food and healing items\n• The Master Clock Key is essential for accessing the final dungeon\n\nSee the \"Time Guardian\" entry in Boss Battles for combat strategies!",
+        "ja_jp": "ヒント:\n\n• 最大の戦利品を得るため5階すべてを探索\n• ボス戦の前にテレポーターを練習\n• 食料と治癒アイテムを持参\n• マスタークロックの鍵は最終ダンジョンへのアクセスに必須\n\n戦闘戦略については、ボス戦の「タイムガーディアン」エントリーを参照してください！"
+      }
+    }
+  ]
+}

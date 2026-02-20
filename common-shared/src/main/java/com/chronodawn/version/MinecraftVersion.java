@@ -26,7 +26,8 @@ public enum MinecraftVersion {
     MC_1_21_1("1.21.1", 1, 21, 1),
     MC_1_21_2("1.21.2", 1, 21, 2),
     MC_1_21_7("1.21.7", 1, 21, 7),
-    MC_1_21_8("1.21.8", 1, 21, 8);
+    MC_1_21_8("1.21.8", 1, 21, 8),
+    MC_1_21_9("1.21.9", 1, 21, 9);
 
     private final String displayName;
     private final int major;
@@ -95,7 +96,7 @@ public enum MinecraftVersion {
      * Returns the newest supported Minecraft version.
      */
     public static MinecraftVersion newest() {
-        return MC_1_21_8;
+        return MC_1_21_9;
     }
 
     @Override

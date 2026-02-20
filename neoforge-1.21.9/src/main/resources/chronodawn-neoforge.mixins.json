@@ -1,0 +1,21 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.chronodawn.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "AnvilMenuAccessor",
+    "AnvilMenuMixin",
+    "LevelGetTimeMixin",
+    "ServerLevelSetTimeMixin",
+    "SleepMixin",
+    "StructureStartMixin"
+  ],
+  "client": [
+    "client.ClientAdvancementsAccessor",
+    "client.SkyColorMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "parent": "chronodawn:story/us2/time_guardian_defeat",
+  "criteria": {
+    "has_master_clock_key": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": ["chronodawn:key_to_master_clock"]
+          }
+        ]
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "chronodawn:key_to_master_clock"
+    },
+    "title": {
+      "translate": "advancements.chronodawn.master_clock_access.title"
+    },
+    "description": {
+      "translate": "advancements.chronodawn.master_clock_access.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  }
+}

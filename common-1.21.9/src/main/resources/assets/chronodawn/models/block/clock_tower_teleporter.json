@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "chronodawn:block/clock_tower_teleporter"
+  }
+}
