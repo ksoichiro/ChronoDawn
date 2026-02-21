@@ -18,7 +18,7 @@ Auto-generated from all feature plans. Last updated: 2025-10-19
 - `fabric.mod.json` / `neoforge.mods.toml` - Mod metadata
 
 **Current Versions** (as of 2026-02-01):
-- Minecraft: 1.21.1, 1.21.2, 1.21.3, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, or 1.21.9
+- Minecraft: 1.21.1, 1.21.2, 1.21.3, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, or 1.21.10
 - For 1.21.1: Fabric Loader 0.17.3+ | Fabric API 0.116.7+ | NeoForge 21.1.209+ | Architectury API 13.0.8+
 - For 1.21.2/1.21.3: Fabric Loader 0.17.3+ | Fabric API | NeoForge 21.2.0-beta+ / 21.3.0-beta+ | Architectury API 14.0.4+
 - For 1.21.4: Fabric Loader 0.17.3+ | Fabric API 0.110.5+ | NeoForge 21.4.0-beta+ | Architectury API 15.0.1+
@@ -27,6 +27,7 @@ Auto-generated from all feature plans. Last updated: 2025-10-19
 - For 1.21.7: Fabric Loader 0.17.3+ | Fabric API 0.129.0+ | NeoForge 21.7.25-beta+ | Architectury API 17.0.8+
 - For 1.21.8: Fabric Loader 0.17.3+ | Fabric API 0.129.0+ | NeoForge 21.8.0-beta+ | Architectury API 17.0.8+
 - For 1.21.9: Fabric Loader 0.17.3+ | Fabric API 0.134.1+ | NeoForge 21.9.16-beta+ | Architectury API 18.0.3+
+- For 1.21.10: Fabric Loader 0.17.3+ | Fabric API 0.138.4+ | NeoForge 21.10.64+ | Architectury API 18.0.8+
 - **Note**: 1.21.3 is a hotfix release that shares modules with 1.21.2
 
 ---
@@ -47,7 +48,7 @@ Auto-generated from all feature plans. Last updated: 2025-10-19
 ---
 
 ## Active Technologies
-- Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.21.6 / 1.21.7 / 1.21.8 / 1.21.9) + NeoForge 21.1.x / 21.2.x / 21.3.x / 21.4.x / 21.5.x / 21.6.x / 21.7.x / 21.8.x / 21.9.x, Fabric Loader, mcjunitlib
+- Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.21.6 / 1.21.7 / 1.21.8 / 1.21.9 / 1.21.10) + NeoForge 21.1.x / 21.2.x / 21.3.x / 21.4.x / 21.5.x / 21.6.x / 21.7.x / 21.8.x / 21.9.x / 21.10.x, Fabric Loader, mcjunitlib
 
 ## Project Structure
 ```
@@ -62,6 +63,7 @@ common-1.21.6/        (version-specific common module)
 common-1.21.7/        (version-specific common module)
 common-1.21.8/        (version-specific common module)
 common-1.21.9/        (version-specific common module)
+common-1.21.10/       (version-specific common module)
 fabric-base/          (shared Fabric sources, NOT a Gradle subproject)
 fabric-1.20.1/        (version-specific Fabric subproject)
 fabric-1.21.1/        (version-specific Fabric subproject)
@@ -72,6 +74,7 @@ fabric-1.21.6/        (version-specific Fabric subproject)
 fabric-1.21.7/        (version-specific Fabric subproject)
 fabric-1.21.8/        (version-specific Fabric subproject)
 fabric-1.21.9/        (version-specific Fabric subproject)
+fabric-1.21.10/       (version-specific Fabric subproject)
 neoforge-base/        (shared NeoForge sources, NOT a Gradle subproject)
 neoforge-1.21.1/      (version-specific NeoForge subproject)
 neoforge-1.21.2/      (version-specific NeoForge subproject)
@@ -81,6 +84,7 @@ neoforge-1.21.6/      (version-specific NeoForge subproject)
 neoforge-1.21.7/      (version-specific NeoForge subproject)
 neoforge-1.21.8/      (version-specific NeoForge subproject)
 neoforge-1.21.9/      (version-specific NeoForge subproject)
+neoforge-1.21.10/     (version-specific NeoForge subproject)
 gradle/               (build scripts)
 props/                (version-specific properties)
 ```
@@ -89,16 +93,16 @@ props/                (version-specific properties)
 # Add commands for Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3)
 
 ## Code Style
-Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.21.6 / 1.21.7 / 1.21.8 / 1.21.9): Follow standard conventions
+Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.21.6 / 1.21.7 / 1.21.8 / 1.21.9 / 1.21.10): Follow standard conventions
 
 ## Build Configuration
-- **Build DSL**: Groovy DSL (not Kotlin DSL) - for compatibility with Architectury Loom 1.11-SNAPSHOT
+- **Build DSL**: Groovy DSL (not Kotlin DSL) - for compatibility with Architectury Loom 1.13-SNAPSHOT
 - **Mappings**: Mojang mappings (not Yarn) - code uses official Minecraft class names (e.g., `net.minecraft.core.Registry`)
 - **Shadow Plugin**: com.gradleup.shadow 8.3.6 - for bundling common module into platform-specific JARs
 
 ## Multi-Version Support
 
-**Supported Versions**: Minecraft 1.20.1 + 1.21.1 + 1.21.2 + 1.21.3 + 1.21.4 + 1.21.5 + 1.21.6 + 1.21.7 + 1.21.8 + 1.21.9 (single codebase)
+**Supported Versions**: Minecraft 1.20.1 + 1.21.1 + 1.21.2 + 1.21.3 + 1.21.4 + 1.21.5 + 1.21.6 + 1.21.7 + 1.21.8 + 1.21.9 + 1.21.10 (single codebase)
 
 **Note**: 1.21.3 is a hotfix release that reuses 1.21.2 modules (no separate common-1.21.3, fabric-1.21.3, neoforge-1.21.3 directories needed).
 
@@ -112,6 +116,7 @@ Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.2
 - `./gradlew clean1_21_7` - Clean for 1.21.7
 - `./gradlew clean1_21_8` - Clean for 1.21.8
 - `./gradlew clean1_21_9` - Clean for 1.21.9
+- `./gradlew clean1_21_10` - Clean for 1.21.10
 - `./gradlew cleanAll` - Clean all versions (excludes 1.21.3 - shares 1.21.2 modules)
 
 **Build Commands**:
@@ -124,12 +129,13 @@ Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.2
 - `./gradlew build1_21_6` - Build for 1.21.6
 - `./gradlew build1_21_7` - Build for 1.21.7
 - `./gradlew build1_21_8` - Build for 1.21.8
-- `./gradlew build1_21_9` - Build for 1.21.9 (default)
-- `./gradlew buildAll` - Build for release (1.20.1, 1.21.1, 1.21.2, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9 - excludes 1.21.3)
+- `./gradlew build1_21_9` - Build for 1.21.9
+- `./gradlew build1_21_10` - Build for 1.21.10 (default)
+- `./gradlew buildAll` - Build for release (1.20.1, 1.21.1, 1.21.2, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10 - excludes 1.21.3)
 
 **Run Client**:
-- Fabric: `./gradlew runClientFabric1_20_1`, `./gradlew runClientFabric1_21_1`, `./gradlew runClientFabric1_21_2`, `./gradlew runClientFabric1_21_3`, `./gradlew runClientFabric1_21_4`, `./gradlew runClientFabric1_21_5`, `./gradlew runClientFabric1_21_6`, `./gradlew runClientFabric1_21_7`, `./gradlew runClientFabric1_21_8`, `./gradlew runClientFabric1_21_9`
-- NeoForge: `./gradlew runClientNeoForge1_21_1`, `./gradlew runClientNeoForge1_21_2`, `./gradlew runClientNeoForge1_21_3`, `./gradlew runClientNeoForge1_21_4`, `./gradlew runClientNeoForge1_21_5`, `./gradlew runClientNeoForge1_21_6`, `./gradlew runClientNeoForge1_21_7`, `./gradlew runClientNeoForge1_21_8`, `./gradlew runClientNeoForge1_21_9`
+- Fabric: `./gradlew runClientFabric1_20_1`, `./gradlew runClientFabric1_21_1`, `./gradlew runClientFabric1_21_2`, `./gradlew runClientFabric1_21_3`, `./gradlew runClientFabric1_21_4`, `./gradlew runClientFabric1_21_5`, `./gradlew runClientFabric1_21_6`, `./gradlew runClientFabric1_21_7`, `./gradlew runClientFabric1_21_8`, `./gradlew runClientFabric1_21_9`, `./gradlew runClientFabric1_21_10`
+- NeoForge: `./gradlew runClientNeoForge1_21_1`, `./gradlew runClientNeoForge1_21_2`, `./gradlew runClientNeoForge1_21_3`, `./gradlew runClientNeoForge1_21_4`, `./gradlew runClientNeoForge1_21_5`, `./gradlew runClientNeoForge1_21_6`, `./gradlew runClientNeoForge1_21_7`, `./gradlew runClientNeoForge1_21_8`, `./gradlew runClientNeoForge1_21_9`, `./gradlew runClientNeoForge1_21_10`
 
 **Unit Test** (JUnit only, not GameTest):
 - `./gradlew :common-1.21.2:test -Ptarget_mc_version=1.21.2` - Run unit tests for specific version
@@ -138,6 +144,7 @@ Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.2
 - `./gradlew :common-1.21.7:test -Ptarget_mc_version=1.21.7` - Run unit tests for 1.21.7
 - `./gradlew :common-1.21.8:test -Ptarget_mc_version=1.21.8` - Run unit tests for 1.21.8
 - `./gradlew :common-1.21.9:test -Ptarget_mc_version=1.21.9` - Run unit tests for 1.21.9
+- `./gradlew :common-1.21.10:test -Ptarget_mc_version=1.21.10` - Run unit tests for 1.21.10
 
 **GameTest**:
 - `./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.2` - Run GameTests for specific version
@@ -157,9 +164,9 @@ Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.2
   1. cleanAll - Clean all build outputs and IDE directories
   2. validateResources - JSON syntax and cross-reference checks
   3. validateTranslations - Cross-version translation key validation
-  4. buildAll - Build for release (1.20.1, 1.21.1, 1.21.2, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9)
-  5. testAll - Run unit tests (1.20.1, 1.21.1, 1.21.2, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9)
-  6. gameTestAll - Run GameTests including 1.21.3, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, and 1.21.9 runtime verification
+  4. buildAll - Build for release (1.20.1, 1.21.1, 1.21.2, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10)
+  5. testAll - Run unit tests (1.20.1, 1.21.1, 1.21.2, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10)
+  6. gameTestAll - Run GameTests including 1.21.3, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, and 1.21.10 runtime verification
 
 **Key Strategy**: Custom Gradle scripts + abstraction layer (`compat/` package) for API differences
 

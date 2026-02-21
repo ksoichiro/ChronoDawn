@@ -45,10 +45,10 @@ Chrono Dawn uses the **Architectury** framework to support both Fabric and NeoFo
 ### Key Technologies
 
 - **Java 21**: Target language version
-- **Minecraft**: Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.21.6 / 1.21.7 / 1.21.8 / 1.21.9
+- **Minecraft**: Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.21.6 / 1.21.7 / 1.21.8 / 1.21.9 / 1.21.10
 - **Fabric Loader**: 0.17.3+
-- **NeoForge**: 21.1.209+ (for 1.21.1) / 21.2.0-beta+ (for 1.21.2) / 21.3.0-beta+ (for 1.21.3) / 21.4.0-beta+ (for 1.21.4) / 21.5.96+ (for 1.21.5) / 21.6.20-beta+ (for 1.21.6) / 21.7.25-beta+ (for 1.21.7) / 21.8.0-beta+ (for 1.21.8) / 21.9.16-beta+ (for 1.21.9)
-- **Architectury API**: 13.0.8+ (for 1.21.1) / 14.0.4+ (for 1.21.2/1.21.3) / 15.0.1+ (for 1.21.4) / 16.1.4+ (for 1.21.5) / 17.0.6+ (for 1.21.6) / 17.0.8+ (for 1.21.7/1.21.8) / 18.0.3+ (for 1.21.9)
+- **NeoForge**: 21.1.209+ (for 1.21.1) / 21.2.0-beta+ (for 1.21.2) / 21.3.0-beta+ (for 1.21.3) / 21.4.0-beta+ (for 1.21.4) / 21.5.96+ (for 1.21.5) / 21.6.20-beta+ (for 1.21.6) / 21.7.25-beta+ (for 1.21.7) / 21.8.0-beta+ (for 1.21.8) / 21.9.16-beta+ (for 1.21.9) / 21.10.64+ (for 1.21.10)
+- **Architectury API**: 13.0.8+ (for 1.21.1) / 14.0.4+ (for 1.21.2/1.21.3) / 15.0.1+ (for 1.21.4) / 16.1.4+ (for 1.21.5) / 17.0.6+ (for 1.21.6) / 17.0.8+ (for 1.21.7/1.21.8) / 18.0.3+ (for 1.21.9) / 18.0.8+ (for 1.21.10)
 - **Gradle**: Build automation (Groovy DSL)
 - **Mojang Mappings**: Official Minecraft class names
 
@@ -218,13 +218,13 @@ ChronoDawn/
 
 ### Gradle Configuration (Groovy DSL)
 
-**Important**: This project uses **Groovy DSL**, not Kotlin DSL, for Architectury Loom 1.11-SNAPSHOT compatibility.
+**Important**: This project uses **Groovy DSL**, not Kotlin DSL, for Architectury Loom 1.13-SNAPSHOT compatibility.
 
 #### Root `build.gradle`
 
 ```groovy
 plugins {
-    id 'dev.architectury.loom' version '1.11-SNAPSHOT' apply false
+    id 'dev.architectury.loom' version '1.13-SNAPSHOT' apply false
     id 'architectury-plugin' version '3.4-SNAPSHOT'
     id 'com.gradleup.shadow' version '8.3.6' apply false
 }

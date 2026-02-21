@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "combat",
+  "pattern": [
+    "FCF",
+    "FEF",
+    " U "
+  ],
+  "key": {
+    "F": "chronodawn:fragment_of_stasis_core",
+    "C": "chronodawn:eye_of_chronos",
+    "E": "chronodawn:enhanced_clockstone",
+    "U": "chronodawn:unstable_hourglass"
+  },
+  "result": {
+    "id": "chronodawn:chronoblade",
+    "count": 1
+  }
+}

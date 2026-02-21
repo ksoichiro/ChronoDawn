@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "chronodawn:block/stripped_dark_time_wood_log",
+    "side": "chronodawn:block/stripped_dark_time_wood_log"
+  }
+}

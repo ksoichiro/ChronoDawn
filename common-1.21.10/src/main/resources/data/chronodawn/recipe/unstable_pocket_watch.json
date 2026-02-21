@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "tools",
+  "pattern": [
+    " F ",
+    "FUF",
+    " E "
+  ],
+  "key": {
+    "F": "chronodawn:fragment_of_stasis_core",
+    "U": "chronodawn:unstable_hourglass",
+    "E": "chronodawn:enhanced_clockstone"
+  },
+  "result": {
+    "id": "chronodawn:unstable_pocket_watch",
+    "count": 1
+  }
+}

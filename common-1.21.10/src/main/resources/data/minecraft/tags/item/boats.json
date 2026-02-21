@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "chronodawn:time_wood_boat",
+    "chronodawn:dark_time_wood_boat",
+    "chronodawn:ancient_time_wood_boat"
+  ]
+}

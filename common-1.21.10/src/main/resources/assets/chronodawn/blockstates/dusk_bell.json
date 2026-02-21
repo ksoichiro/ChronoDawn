@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "half=lower": {
+      "model": "chronodawn:block/dusk_bell_bottom"
+    },
+    "half=upper": {
+      "model": "chronodawn:block/dusk_bell_top"
+    }
+  }
+}

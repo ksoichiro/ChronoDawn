@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "chronodawn:block/ancient_time_wood_planks",
+    "top": "chronodawn:block/ancient_time_wood_planks",
+    "side": "chronodawn:block/ancient_time_wood_planks"
+  }
+}
