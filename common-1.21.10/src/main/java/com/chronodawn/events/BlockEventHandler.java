@@ -196,8 +196,8 @@ public class BlockEventHandler {
 
         // Register block interaction event for Master Clock door unlocking
         InteractionEvent.RIGHT_CLICK_BLOCK.register((player, hand, pos, face) -> {
-            // Only process main hand interactions on server side
-            if (player.level().isClientSide() || hand != net.minecraft.world.InteractionHand.MAIN_HAND) {
+            // Only process main hand interactions
+            if (hand != net.minecraft.world.InteractionHand.MAIN_HAND) {
                 return EventResult.pass().asMinecraft();
             }
 
@@ -205,34 +205,35 @@ public class BlockEventHandler {
 
             // Check if the clicked block is a boss room door (custom door with BlockEntity)
             if (state.is(ModBlocks.BOSS_ROOM_DOOR.get())) {
-                // Determine door type by reading BlockEntity NBT
-                String doorType = getDoorType(player.level(), pos);
-                boolean isBossRoomDoor = "boss_room".equals(doorType);
-                boolean isGuardianVaultDoor = "guardian_vault".equals(doorType);
+                if (!player.level().isClientSide()) {
+                    // Determine door type by reading BlockEntity NBT
+                    String doorType = getDoorType(player.level(), pos);
+                    boolean isBossRoomDoor = "boss_room".equals(doorType);
+                    boolean isGuardianVaultDoor = "guardian_vault".equals(doorType);
 
-                // Check appropriate key requirement
-                boolean canUnlock;
-                Component message;
+                    // Check appropriate key requirement
+                    boolean canUnlock;
+                    Component message;
 
-                if (isBossRoomDoor) {
-                    // Boss room door - requires 3 Ancient Gears AND Key to Master Clock
-                    canUnlock = hasRequiredAncientGears(player) && hasKeyToMasterClock(player);
-                    message = canUnlock
-                        ? Component.translatable("message.chronodawn.boss_room_unlocked")
-                        : Component.translatable("message.chronodawn.boss_room_locked");
-                } else if (isGuardianVaultDoor) {
-                    // Guardian Vault door - no key required (always unlocked)
-                    canUnlock = true;
-                    message = Component.translatable("message.chronodawn.guardian_vault_opened");
-                } else {
-                    // Entrance door - requires Key to Master Clock
-                    canUnlock = hasKeyToMasterClock(player);
-                    message = canUnlock
-                        ? Component.translatable("message.chronodawn.master_clock_unlocked")
-                        : Component.translatable("message.chronodawn.master_clock_locked");
-                }
+                    if (isBossRoomDoor) {
+                        // Boss room door - requires 3 Ancient Gears AND Key to Master Clock
+                        canUnlock = hasRequiredAncientGears(player) && hasKeyToMasterClock(player);
+                        message = canUnlock
+                            ? Component.translatable("message.chronodawn.boss_room_unlocked")
+                            : Component.translatable("message.chronodawn.boss_room_locked");
+                    } else if (isGuardianVaultDoor) {
+                        // Guardian Vault door - no key required (always unlocked)
+                        canUnlock = true;
+                        message = Component.translatable("message.chronodawn.guardian_vault_opened");
+                    } else {
+                        // Entrance door - requires Key to Master Clock
+                        canUnlock = hasKeyToMasterClock(player);
+                        message = canUnlock
+                            ? Component.translatable("message.chronodawn.master_clock_unlocked")
+                            : Component.translatable("message.chronodawn.master_clock_locked");
+                    }
 
-                if (canUnlock) {
+                    if (canUnlock) {
                     // Toggle door state
                     boolean isOpen = state.getValue(net.minecraft.world.level.block.DoorBlock.OPEN);
                     boolean wasOpen = isOpen; // Store old state for spawning logic
@@ -295,12 +296,18 @@ public class BlockEventHandler {
                         com.chronodawn.worldgen.spawning.ChronosWardenSpawner.spawnOnDoorOpen(serverLevel, doorPosToUse, openedState);
                     }
 
-                    return EventResult.interruptTrue().asMinecraft();
-                } else {
-                    // Player doesn't have the required key/items
-                    player.displayClientMessage(message, true);
-                    return EventResult.interruptFalse().asMinecraft();
+                    } else {
+                        // Player doesn't have the required key/items
+                        player.displayClientMessage(message, true);
+                    }
                 }
+
+                // Both client and server: trigger arm swing animation
+                // Client side needs this for the visual swing; returning interruptTrue
+                // prevents vanilla DoorBlock handling (iron door doesn't open by hand)
+                player.swing(hand);
+
+                return EventResult.interruptTrue().asMinecraft();
             }
 
             return EventResult.pass().asMinecraft();
