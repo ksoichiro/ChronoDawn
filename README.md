@@ -56,7 +56,7 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed information.
 ## Requirements
 
 ### For Players
-- **Minecraft**: Java Edition 1.21.1, 1.21.2, 1.21.3, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, or 1.21.10
+- **Minecraft**: Java Edition 1.21.1, 1.21.2, 1.21.3, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, or 1.21.11
 - **Mod Loader** (version depends on Minecraft version):
   - **For 1.21.1**: Fabric Loader 0.17.3+ with Fabric API 0.116.7+, OR NeoForge 21.1.209+
   - **For 1.21.2/1.21.3**: Fabric Loader 0.17.3+ with Fabric API, OR NeoForge 21.2.0-beta+/21.3.0-beta+
@@ -67,8 +67,9 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed information.
   - **For 1.21.8**: Fabric Loader 0.17.3+ with Fabric API 0.129.0+, OR NeoForge 21.8.0-beta+
   - **For 1.21.9**: Fabric Loader 0.17.3+ with Fabric API 0.134.1+, OR NeoForge 21.9.16-beta+
   - **For 1.21.10**: Fabric Loader 0.17.3+ with Fabric API 0.138.4+, OR NeoForge 21.10.64+
+  - **For 1.21.11**: Fabric Loader 0.17.3+ with Fabric API 0.141.3+, OR NeoForge 21.11.38-beta+
 - **Dependencies**:
-  - **Architectury API** 13.0.8+ (for 1.21.1), 14.0.4+ (for 1.21.2/1.21.3), 15.0.1+ (for 1.21.4), 16.1.4+ (for 1.21.5), 17.0.6+ (for 1.21.6), 17.0.8+ (for 1.21.7/1.21.8), 18.0.3+ (for 1.21.9), or 18.0.8+ (for 1.21.10)
+  - **Architectury API** 13.0.8+ (for 1.21.1), 14.0.4+ (for 1.21.2/1.21.3), 15.0.1+ (for 1.21.4), 16.1.4+ (for 1.21.5), 17.0.6+ (for 1.21.6), 17.0.8+ (for 1.21.7/1.21.8), 18.0.3+ (for 1.21.9), 18.0.8+ (for 1.21.10), or 19.0.1+ (for 1.21.11)
 
 ### For Developers
 - **Java Development Kit (JDK)**: 21 or higher
@@ -97,17 +98,18 @@ Chrono Dawn supports multiple Minecraft versions from the same codebase:
 - **1.21.7**: NeoForge/Fabric (stable)
 - **1.21.8**: NeoForge/Fabric (stable)
 - **1.21.9**: NeoForge/Fabric (stable)
-- **1.21.10**: NeoForge/Fabric (current version, default)
+- **1.21.10**: NeoForge/Fabric (stable)
+- **1.21.11**: NeoForge/Fabric (current version, default)
 
 ### Build for Specific Minecraft Version
 
-#### Build for Minecraft 1.21.10 (Default)
+#### Build for Minecraft 1.21.11 (Default)
 ```bash
 # Shortcut command (recommended)
-./gradlew build1_21_10
+./gradlew build1_21_11
 
 # Or explicit version
-./gradlew build -Ptarget_mc_version=1.21.10
+./gradlew build -Ptarget_mc_version=1.21.11
 ```
 
 #### Build for Minecraft 1.21.8
@@ -183,7 +185,7 @@ Chrono Dawn supports multiple Minecraft versions from the same codebase:
 
 #### Build for All Versions (Release)
 ```bash
-# Build all release versions (1.20.1, 1.21.1, 1.21.2, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10)
+# Build all release versions (1.20.1, 1.21.1, 1.21.2, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, 1.21.11)
 # Note: 1.21.3 is excluded - the 1.21.2 JAR is compatible with 1.21.3
 ./gradlew buildAll
 
@@ -383,6 +385,13 @@ Use the same steps above, but with:
 - Architectury API 18.0.8+
 - JAR files with `+1.21.10` in the filename
 
+### For Minecraft 1.21.11
+Use the same steps above, but with:
+- Minecraft 1.21.11
+- NeoForge 21.11.38-beta+ or Fabric Loader 0.17.3+ with Fabric API 0.141.3+
+- Architectury API 19.0.1+
+- JAR files with `+1.21.11` in the filename
+
 **Note**: Download the correct version for your mod loader (Fabric or NeoForge).
 
 ## Project Structure
@@ -400,7 +409,8 @@ ChronoDawn/
 ├── common-1.21.7/                   # Common module for MC 1.21.7
 ├── common-1.21.8/                   # Common module for MC 1.21.8
 ├── common-1.21.9/                   # Common module for MC 1.21.9
-├── common-1.21.10/                  # Common module for MC 1.21.10 (~80% of code)
+├── common-1.21.10/                  # Common module for MC 1.21.10
+├── common-1.21.11/                  # Common module for MC 1.21.11 (~80% of code)
 │   ├── src/main/java/com/chronodawn/
 │   │   ├── ChronoDawn.java          # Common entry point
 │   │   ├── blocks/                  # Custom blocks
@@ -422,6 +432,7 @@ ChronoDawn/
 ├── fabric-1.21.8/                   # Fabric subproject for MC 1.21.8
 ├── fabric-1.21.9/                   # Fabric subproject for MC 1.21.9
 ├── fabric-1.21.10/                  # Fabric subproject for MC 1.21.10
+├── fabric-1.21.11/                  # Fabric subproject for MC 1.21.11
 ├── neoforge-base/                   # Shared NeoForge sources
 ├── neoforge-1.21.1/                 # NeoForge subproject for MC 1.21.1
 ├── neoforge-1.21.2/                 # NeoForge subproject for MC 1.21.2
@@ -432,6 +443,7 @@ ChronoDawn/
 ├── neoforge-1.21.8/                 # NeoForge subproject for MC 1.21.8
 ├── neoforge-1.21.9/                 # NeoForge subproject for MC 1.21.9
 ├── neoforge-1.21.10/                # NeoForge subproject for MC 1.21.10
+├── neoforge-1.21.11/                # NeoForge subproject for MC 1.21.11
 ├── specs/chrono-dawn-mod/           # Design documents
 ├── build.gradle                     # Root build configuration (Groovy DSL)
 ├── settings.gradle                  # Multi-module settings
@@ -492,4 +504,4 @@ For issues, feature requests, or questions:
 
 ---
 
-**Developed for Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.21.6 / 1.21.7 / 1.21.8 / 1.21.9 / 1.21.10**
+**Developed for Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.21.6 / 1.21.7 / 1.21.8 / 1.21.9 / 1.21.10 / 1.21.11**

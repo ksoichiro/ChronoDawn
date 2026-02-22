@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "chronodawn:block/temporal_particle_emitter"
+    }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "food",
+  "key": {
+    "F": "chronodawn:fruit_of_time",
+    "W": "chronodawn:time_wheat"
+  },
+  "pattern": [
+    "FFF",
+    " W "
+  ],
+  "result": {
+    "id": "chronodawn:time_fruit_pie",
+    "count": 1
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/block",
+  "textures": {
+    "particle": "chronodawn:item/temporal_particle_emitter"
+  }
+}

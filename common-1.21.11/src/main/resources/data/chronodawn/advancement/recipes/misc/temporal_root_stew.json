@@ -1,0 +1,30 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_baked_temporal_root": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": ["chronodawn:baked_temporal_root"]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "chronodawn:temporal_root_stew"
+      }
+    }
+  },
+  "rewards": {
+    "recipes": ["chronodawn:temporal_root_stew"]
+  },
+  "requirements": [
+    [
+      "has_baked_temporal_root",
+      "has_the_recipe"
+    ]
+  ]
+}

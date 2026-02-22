@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "chronodawn:block/ancient_time_wood_planks"
+  }
+}

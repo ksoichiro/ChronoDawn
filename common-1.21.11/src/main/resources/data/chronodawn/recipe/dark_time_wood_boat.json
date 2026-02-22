@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "boat",
+  "pattern": [
+    "P P",
+    "PPP"
+  ],
+  "key": {
+    "P": "chronodawn:dark_time_wood_planks"
+  },
+  "result": {
+    "id": "chronodawn:dark_time_wood_boat",
+    "count": 1
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "GEG",
+    " C ",
+    "GEG"
+  ],
+  "key": {
+    "G": "minecraft:glass",
+    "E": "chronodawn:enhanced_clockstone",
+    "C": "chronodawn:clockstone_block"
+  },
+  "result": {
+    "id": "chronodawn:unstable_hourglass",
+    "count": 1
+  }
+}

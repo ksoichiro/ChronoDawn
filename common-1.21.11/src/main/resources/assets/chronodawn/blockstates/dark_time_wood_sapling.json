@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "stage=0": {
+      "model": "chronodawn:block/dark_time_wood_sapling"
+    },
+    "stage=1": {
+      "model": "chronodawn:block/dark_time_wood_sapling"
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "category": "progression",
+  "title": {
+    "en_us": "Progression Path",
+    "ja_jp": "進行の道筋"
+  },
+  "icon": "minecraft:map",
+  "sortnum": 6,
+  "pages": [
+    {
+      "text": {
+        "en_us": "Recommended progression path through Chrono Dawn:\n\n1. Find Ancient Ruins (Overworld)\n2. Unlock Time Hourglass recipe\n3. Build and activate portal\n4. Enter Chrono Dawn (one-way!)\n5. Find Forgotten Library\n6. Craft Portal Stabilizer (enable return)",
+        "ja_jp": "クロノドーンを通る推奨進行経路:\n\n1. 古代遺跡を見つける（オーバーワールド）\n2. タイムアワーグラスのレシピをアンロック\n3. ポータルを建設して起動\n4. クロノドーンに入る（一方通行！）\n5. 忘れられた図書館を見つける\n6. ポータルスタビライザーを作成（戻れるようにする）"
+      }
+    },
+    {
+      "text": {
+        "en_us": "7. Explore and find Desert Clock Tower\n8. Defeat Time Guardian (obtain Master Clock Key)\n9. Find and defeat 4 mid-bosses:\n   • Chronos Warden (Guardian Vault)\n   • Clockwork Colossus (Clockwork Depths)\n   • Temporal Phantom (Phantom Catacombs)\n   • Entropy Keeper (Entropy Crypt)\n10. Craft Chrono Aegis (from 4 boss drops)",
+        "ja_jp": "7. 探索して砂漠の時計塔を見つける\n8. タイムガーディアンを倒す（マスタークロックの鍵を入手）\n9. 4体の中ボスを見つけて倒す:\n   • クロノスウォーデン（ガーディアンの地下室）\n   • 時計仕掛けの巨像（歯車の深淵）\n   • 時の幻影（幻影のカタコンベ）\n   • エントロピーキーパー（エントロピーの墓所）\n10. クロノイージスを作成（4つのボスドロップから）"
+      }
+    },
+    {
+      "text": {
+        "en_us": "11. Find Master Clock dungeon\n12. Use Master Clock Key to enter\n13. Defeat Time Tyrant (final boss)\n14. Obtain Eye of Chronos and Stasis Core Fragments\n15. Craft ultimate artifacts\n\nTip: The Chrono Aegis is HIGHLY RECOMMENDED before fighting Time Tyrant!",
+        "ja_jp": "11. マスタークロックダンジョンを見つける\n12. マスタークロックの鍵を使用して入る\n13. タイムタイラントを倒す（最終ボス）\n14. クロノスの眼とスタシスコアの破片を入手\n15. 究極のアーティファクトを作成\n\nヒント: タイムタイラントと戦う前にクロノイージスを作ることを強く推奨します！"
+      }
+    }
+  ]
+}

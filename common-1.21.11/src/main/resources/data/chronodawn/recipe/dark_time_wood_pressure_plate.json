@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "PP"
+  ],
+  "key": {
+    "P": "chronodawn:dark_time_wood_planks"
+  },
+  "result": {
+    "id": "chronodawn:dark_time_wood_pressure_plate",
+    "count": 1
+  }
+}

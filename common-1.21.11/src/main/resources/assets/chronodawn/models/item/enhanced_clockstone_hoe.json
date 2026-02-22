@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "chronodawn:item/enhanced_clockstone_hoe"
+  }
+}

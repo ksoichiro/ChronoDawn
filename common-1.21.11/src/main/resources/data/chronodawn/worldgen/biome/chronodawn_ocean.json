@@ -1,0 +1,191 @@
+{
+  "has_precipitation": true,
+  "temperature": 0.5,
+  "temperature_modifier": "none",
+  "downfall": 0.5,
+  "effects": {
+    "water_color": "#6a90a5",
+    "grass_color": "#5b8ac4",
+    "foliage_color": "#78b0da"
+  },
+  "spawners": {
+    "monster": [
+      {
+        "type": "minecraft:drowned",
+        "weight": 100,
+        "minCount": 1,
+        "maxCount": 4
+      },
+      {
+        "type": "chronodawn:epoch_husk",
+        "weight": 95,
+        "minCount": 4,
+        "maxCount": 4
+      },
+      {
+        "type": "chronodawn:secondhand_archer",
+        "weight": 95,
+        "minCount": 4,
+        "maxCount": 4
+      },
+      {
+        "type": "chronodawn:moment_creeper",
+        "weight": 100,
+        "minCount": 4,
+        "maxCount": 4
+      },
+      {
+        "type": "chronodawn:paradox_crawler",
+        "weight": 100,
+        "minCount": 4,
+        "maxCount": 4
+      },
+      {
+        "type": "chronodawn:timeline_strider",
+        "weight": 10,
+        "minCount": 1,
+        "maxCount": 4
+      },
+      {
+        "type": "chronodawn:hourglass_golem",
+        "weight": 5,
+        "minCount": 1,
+        "maxCount": 1
+      },
+      {
+        "type": "chronodawn:temporal_wraith",
+        "weight": 100,
+        "minCount": 2,
+        "maxCount": 4
+      },
+      {
+        "type": "chronodawn:clockwork_sentinel",
+        "weight": 100,
+        "minCount": 1,
+        "maxCount": 2
+      },
+      {
+        "type": "chronodawn:floq",
+        "weight": 100,
+        "minCount": 2,
+        "maxCount": 4
+      },
+      {
+        "type": "chronodawn:chronal_leech",
+        "weight": 15,
+        "minCount": 1,
+        "maxCount": 2
+      }
+    ],
+    "creature": [
+      {
+        "type": "minecraft:cow",
+        "weight": 8,
+        "minCount": 2,
+        "maxCount": 4
+      },
+      {
+        "type": "minecraft:sheep",
+        "weight": 12,
+        "minCount": 2,
+        "maxCount": 4
+      }
+    ],
+    "ambient": [],
+    "water_creature": [
+      {
+        "type": "minecraft:squid",
+        "weight": 10,
+        "minCount": 1,
+        "maxCount": 4
+      },
+      {
+        "type": "minecraft:cod",
+        "weight": 15,
+        "minCount": 3,
+        "maxCount": 6
+      },
+      {
+        "type": "minecraft:salmon",
+        "weight": 15,
+        "minCount": 1,
+        "maxCount": 5
+      },
+      {
+        "type": "minecraft:dolphin",
+        "weight": 5,
+        "minCount": 1,
+        "maxCount": 2
+      },
+      {
+        "type": "chronodawn:glide_fish",
+        "weight": 15,
+        "minCount": 2,
+        "maxCount": 4
+      },
+      {
+        "type": "chronodawn:chrono_turtle",
+        "weight": 8,
+        "minCount": 1,
+        "maxCount": 3
+      }
+    ],
+    "water_ambient": [
+      {
+        "type": "minecraft:tropical_fish",
+        "weight": 25,
+        "minCount": 4,
+        "maxCount": 8
+      },
+      {
+        "type": "minecraft:pufferfish",
+        "weight": 5,
+        "minCount": 1,
+        "maxCount": 3
+      }
+    ],
+    "misc": []
+  },
+  "spawn_costs": {},
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "chronodawn:ore_gold",
+      "chronodawn:ore_redstone",
+      "chronodawn:ore_time_crystal",
+      "chronodawn:ore_clockstone",
+      "chronodawn:ore_coal",
+      "chronodawn:clockwork_block_cluster"
+    ],
+    [],
+    [],
+    [
+      "chronodawn:seagrass",
+      "chronodawn:kelp",
+      "chronodawn:sand_disk_placed",
+      "chronodawn:ocean_land_fruit_of_time_tree",
+      "chronodawn:ocean_land_patch_grass",
+      "chronodawn:ocean_land_patch_flowers"
+    ],
+    []
+  ],
+  "carvers": [],
+  "attributes": {
+    "minecraft:visual/sky_color": "#909090",
+    "minecraft:visual/fog_color": "#c0c0c0",
+    "minecraft:visual/water_fog_color": "#3521a9",
+    "minecraft:audio/ambient_sounds": {
+      "mood": {
+        "sound": "minecraft:ambient.underwater.loop",
+        "tick_delay": 6000,
+        "block_search_extent": 8,
+        "offset": 2.0
+      }
+    }
+  }
+}
