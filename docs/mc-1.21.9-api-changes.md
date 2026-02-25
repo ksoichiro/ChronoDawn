@@ -13,7 +13,7 @@
 
 `BlockBehaviour.Properties.noCollission()` が `noCollision()` にリネーム（typo修正）。
 
-**修正**: `common-1.21.9/` 内で `.noCollission()` → `.noCollision()` を一括置換
+**修正**: `common/1.21.9/` 内で `.noCollission()` → `.noCollision()` を一括置換
 
 **対象ファイル**:
 - `blocks/DarkTimeWoodButton.java:43`
@@ -214,8 +214,8 @@ boolean mouseClicked(MouseButtonEvent event, boolean consumed)
 
 ## H. `getSharedSpawnPos()` 削除
 
-**影響**: 1ファイル (`common-shared` の `core/dimension/ChronoDawnDimension.java:56`)
-**難易度**: 小（ただし common-shared なので除外リスト対応が必要）
+**影響**: 1ファイル (`common/shared` の `core/dimension/ChronoDawnDimension.java:56`)
+**難易度**: 小（ただし common/shared なので除外リスト対応が必要）
 
 ```java
 // Before
@@ -225,7 +225,7 @@ BlockPos worldSpawn = level.getSharedSpawnPos();
 BlockPos worldSpawn = level.getRespawnData().pos();
 ```
 
-common-shared にあるので、1.21.9 の build.gradle の `excludedFiles` に追加し、1.21.9 固有のバージョンを作成する必要がある。
+common/shared にあるので、1.21.9 の build.gradle の `excludedFiles` に追加し、1.21.9 固有のバージョンを作成する必要がある。
 
 ---
 

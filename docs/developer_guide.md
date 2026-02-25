@@ -123,80 +123,83 @@ cd ChronoDawn
 
 ```
 ChronoDawn/
-├── common-shared/                          # Shared version-agnostic sources (included via srcDir)
-├── common-gametest/                        # Shared gametest sources (included via srcDir)
-├── common-1.21.2/                          # Common module for MC 1.21.2
-├── common-1.21.11/                         # Common module for MC 1.21.11 (~80% of code)
-│   ├── src/main/java/com/chronodawn/
-│   │   ├── ChronoDawn.java                 # Common entry point
-│   │   ├── blocks/                         # Custom blocks
-│   │   │   ├── ModBlocks.java              # Block registration
-│   │   │   ├── ReversingTimeSandstone.java
-│   │   │   └── UnstableFungus.java
-│   │   ├── items/                          # Custom items
-│   │   │   ├── ModItems.java               # Item registration
-│   │   │   ├── TimeHourglassItem.java
-│   │   │   └── artifacts/                  # Ultimate artifacts
-│   │   ├── entities/                       # Custom entities
-│   │   │   ├── ModEntities.java            # Entity registration
-│   │   │   └── bosses/                     # Boss entities
-│   │   │       ├── TimeGuardianEntity.java
-│   │   │       ├── TemporalPhantomEntity.java
-│   │   │       └── TimeTyrantEntity.java
-│   │   ├── worldgen/                       # World generation
-│   │   │   ├── biomes/                     # Custom biomes
-│   │   │   ├── features/                   # Worldgen features
-│   │   │   └── structures/                 # Structure generation
-│   │   ├── events/                         # Event handlers
-│   │   │   ├── EntityEventHandler.java     # Time Distortion effect
-│   │   │   └── PlayerEventHandler.java
-│   │   ├── registry/                       # Architectury registries
-│   │   │   └── ModRegistries.java
-│   │   ├── platform/                       # @ExpectPlatform methods
-│   │   │   └── PlatformHelper.java
-│   │   ├── mixin/                          # Mixin classes
-│   │   │   └── StructureStartMixin.java    # Waterlogging prevention
-│   │   └── util/                           # Utility classes
-│   ├── src/main/resources/
-│   │   ├── data/chronodawn/
-│   │   │   ├── dimension/                  # Dimension JSON
-│   │   │   ├── worldgen/                   # Biomes, features, structures
-│   │   │   ├── recipes/                    # Crafting recipes
-│   │   │   ├── loot_tables/                # Loot tables
-│   │   │   └── structures/                 # NBT structure files
-│   │   └── assets/chronodawn/
-│   │       ├── textures/                   # Textures (blocks, items, entities)
-│   │       ├── models/                     # Block/item models
-│   │       ├── blockstates/                # Block state definitions
-│   │       ├── lang/                       # Translations
-│   │       └── sounds/                     # Sound files
-│   └── src/test/java/com/chronodawn/     # JUnit tests
-├── common-1.21.1/                          # Common module for MC 1.21.1
-├── common-1.20.1/                          # Common module for MC 1.20.1
-├── fabric-base/                            # Shared Fabric sources (NOT a Gradle subproject)
-│   └── src/main/java/com/chronodawn/fabric/
-│       ├── event/                          # Event handlers
-│       └── platform/                       # Platform implementations
-├── fabric-1.20.1/                          # Fabric 1.20.1 subproject
-├── fabric-1.21.1/                          # Fabric 1.21.1 subproject
-├── fabric-1.21.2/                          # Fabric 1.21.2 subproject
-│   ├── src/main/java/com/chronodawn/fabric/
-│   │   ├── ChronoDawnFabric.java           # Fabric entry point (version-specific)
-│   │   └── client/                         # Client-side initialization
-│   └── src/main/resources/
-│       ├── fabric.mod.json                 # Fabric mod metadata
-│       └── chronodawn-fabric.mixins.json   # Fabric Mixin config (with refMap)
-├── neoforge-base/                          # Shared NeoForge sources (NOT a Gradle subproject)
-│   └── src/main/java/com/chronodawn/neoforge/
-│       ├── ChronoDawnNeoForge.java         # NeoForge entry point
-│       ├── client/                         # Client-side initialization
-│       └── platform/                       # Platform implementations
-├── neoforge-1.21.1/                        # NeoForge 1.21.1 subproject
-├── neoforge-1.21.2/                        # NeoForge 1.21.2 subproject
-│   ├── src/main/java/com/chronodawn/neoforge/
-│   │   └── mixin/                          # Version-specific mixins
-│   └── src/main/resources/
-│       └── META-INF/neoforge.mods.toml     # NeoForge mod metadata
+├── common/
+│   ├── shared/                             # Shared version-agnostic sources (included via srcDir)
+│   ├── gametest/                           # Shared gametest sources (included via srcDir)
+│   ├── 1.21.2/                             # Common module for MC 1.21.2
+│   ├── 1.21.11/                            # Common module for MC 1.21.11 (~80% of code)
+│   │   ├── src/main/java/com/chronodawn/
+│   │   │   ├── ChronoDawn.java             # Common entry point
+│   │   │   ├── blocks/                     # Custom blocks
+│   │   │   │   ├── ModBlocks.java          # Block registration
+│   │   │   │   ├── ReversingTimeSandstone.java
+│   │   │   │   └── UnstableFungus.java
+│   │   │   ├── items/                      # Custom items
+│   │   │   │   ├── ModItems.java           # Item registration
+│   │   │   │   ├── TimeHourglassItem.java
+│   │   │   │   └── artifacts/              # Ultimate artifacts
+│   │   │   ├── entities/                   # Custom entities
+│   │   │   │   ├── ModEntities.java        # Entity registration
+│   │   │   │   └── bosses/                 # Boss entities
+│   │   │   │       ├── TimeGuardianEntity.java
+│   │   │   │       ├── TemporalPhantomEntity.java
+│   │   │   │       └── TimeTyrantEntity.java
+│   │   │   ├── worldgen/                   # World generation
+│   │   │   │   ├── biomes/                 # Custom biomes
+│   │   │   │   ├── features/               # Worldgen features
+│   │   │   │   └── structures/             # Structure generation
+│   │   │   ├── events/                     # Event handlers
+│   │   │   │   ├── EntityEventHandler.java # Time Distortion effect
+│   │   │   │   └── PlayerEventHandler.java
+│   │   │   ├── registry/                   # Architectury registries
+│   │   │   │   └── ModRegistries.java
+│   │   │   ├── platform/                   # @ExpectPlatform methods
+│   │   │   │   └── PlatformHelper.java
+│   │   │   ├── mixin/                      # Mixin classes
+│   │   │   │   └── StructureStartMixin.java # Waterlogging prevention
+│   │   │   └── util/                       # Utility classes
+│   │   ├── src/main/resources/
+│   │   │   ├── data/chronodawn/
+│   │   │   │   ├── dimension/              # Dimension JSON
+│   │   │   │   ├── worldgen/               # Biomes, features, structures
+│   │   │   │   ├── recipes/                # Crafting recipes
+│   │   │   │   ├── loot_tables/            # Loot tables
+│   │   │   │   └── structures/             # NBT structure files
+│   │   │   └── assets/chronodawn/
+│   │   │       ├── textures/               # Textures (blocks, items, entities)
+│   │   │       ├── models/                 # Block/item models
+│   │   │       ├── blockstates/            # Block state definitions
+│   │   │       ├── lang/                   # Translations
+│   │   │       └── sounds/                 # Sound files
+│   │   └── src/test/java/com/chronodawn/  # JUnit tests
+│   ├── 1.21.1/                             # Common module for MC 1.21.1
+│   └── 1.20.1/                             # Common module for MC 1.20.1
+├── fabric/
+│   ├── base/                               # Shared Fabric sources (NOT a Gradle subproject)
+│   │   └── src/main/java/com/chronodawn/fabric/
+│   │       ├── event/                      # Event handlers
+│   │       └── platform/                   # Platform implementations
+│   ├── 1.20.1/                             # Fabric 1.20.1 subproject
+│   ├── 1.21.1/                             # Fabric 1.21.1 subproject
+│   └── 1.21.2/                             # Fabric 1.21.2 subproject
+│       ├── src/main/java/com/chronodawn/fabric/
+│       │   ├── ChronoDawnFabric.java       # Fabric entry point (version-specific)
+│       │   └── client/                     # Client-side initialization
+│       └── src/main/resources/
+│           ├── fabric.mod.json             # Fabric mod metadata
+│           └── chronodawn-fabric.mixins.json # Fabric Mixin config (with refMap)
+├── neoforge/
+│   ├── base/                               # Shared NeoForge sources (NOT a Gradle subproject)
+│   │   └── src/main/java/com/chronodawn/neoforge/
+│   │       ├── ChronoDawnNeoForge.java     # NeoForge entry point
+│   │       ├── client/                     # Client-side initialization
+│   │       └── platform/                   # Platform implementations
+│   ├── 1.21.1/                             # NeoForge 1.21.1 subproject
+│   └── 1.21.2/                             # NeoForge 1.21.2 subproject
+│       ├── src/main/java/com/chronodawn/neoforge/
+│       │   └── mixin/                      # Version-specific mixins
+│       └── src/main/resources/
+│           └── META-INF/neoforge.mods.toml # NeoForge mod metadata
 ├── specs/chrono-dawn-mod/                  # Design documents
 │   ├── spec.md                             # Feature specification
 │   ├── plan.md                             # Implementation plan
@@ -319,9 +322,9 @@ neoforge_version=21.2.0-beta
 ### Output Files
 
 After building:
-- **Fabric JAR**: `fabric-1.21.11/build/libs/chronodawn-0.5.0+1.21.11-fabric.jar`
-- **NeoForge JAR**: `neoforge-1.21.11/build/libs/chronodawn-0.5.0+1.21.11-neoforge.jar`
-- **Common JAR**: `common-1.21.11/build/libs/common-1.21.11-0.5.0.jar` (bundled into loader JARs)
+- **Fabric JAR**: `fabric/1.21.11/build/libs/chronodawn-0.5.0+1.21.11-fabric.jar`
+- **NeoForge JAR**: `neoforge/1.21.11/build/libs/chronodawn-0.5.0+1.21.11-neoforge.jar`
+- **Common JAR**: `common/1.21.11/build/libs/common-1.21.11-0.5.0.jar` (bundled into loader JARs)
 
 ---
 
@@ -329,13 +332,13 @@ After building:
 
 ### 1. Dimension System
 
-**Location**: `common-1.21.11/src/main/java/com/chronodawn/core/dimension/`
+**Location**: `common/1.21.11/src/main/java/com/chronodawn/core/dimension/`
 
 **Key Classes**:
 - `ChronoDawnDimension.java`: Dimension registration and key definitions
-- Custom biomes in `common-1.21.11/src/main/resources/data/chronodawn/worldgen/biome/`
+- Custom biomes in `common/1.21.11/src/main/resources/data/chronodawn/worldgen/biome/`
 
-**Dimension JSON**: `common-1.21.11/src/main/resources/data/chronodawn/dimension/chronodawn_dimension.json`
+**Dimension JSON**: `common/1.21.11/src/main/resources/data/chronodawn/dimension/chronodawn_dimension.json`
 
 ```json
 {
@@ -353,8 +356,8 @@ After building:
 ### 2. Portal System
 
 **Location**:
-- Common: `common-1.21.11/src/main/java/com/chronodawn/core/portal/`
-- Blocks: `common-1.21.11/src/main/java/com/chronodawn/blocks/ChronoDawnPortalBlock.java`
+- Common: `common/1.21.11/src/main/java/com/chronodawn/core/portal/`
+- Blocks: `common/1.21.11/src/main/java/com/chronodawn/blocks/ChronoDawnPortalBlock.java`
 
 **Key Components**:
 - **PortalRegistry**: Tracks portal states (INACTIVE, ACTIVE, STABILIZED)
@@ -367,7 +370,7 @@ After building:
 
 ### 3. Time Distortion Effect
 
-**Location**: `common-1.21.11/src/main/java/com/chronodawn/events/EntityEventHandler.java`
+**Location**: `common/1.21.11/src/main/java/com/chronodawn/events/EntityEventHandler.java`
 
 **Implementation**:
 ```java
@@ -389,20 +392,20 @@ public class EntityEventHandler {
 
 ### 4. Worldgen System
 
-**Biomes**: `common-1.21.11/src/main/resources/data/chronodawn/worldgen/biome/`
+**Biomes**: `common/1.21.11/src/main/resources/data/chronodawn/worldgen/biome/`
 - 8 custom biomes with unique features
 
-**Structures**: `common-1.21.11/src/main/java/com/chronodawn/worldgen/structures/`
+**Structures**: `common/1.21.11/src/main/java/com/chronodawn/worldgen/structures/`
 - Ancient Ruins (Overworld)
 - Forgotten Library (Chrono Dawn)
 - Master Clock (final dungeon)
 - Phantom Catacombs (maze with boss)
 
-**Structure NBT Files**: `common-1.21.11/src/main/resources/data/chronodawn/structure/`
+**Structure NBT Files**: `common/1.21.11/src/main/resources/data/chronodawn/structure/`
 
 ### 5. Boss System
 
-**Entities**: `common-1.21.11/src/main/java/com/chronodawn/entities/bosses/`
+**Entities**: `common/1.21.11/src/main/java/com/chronodawn/entities/bosses/`
 
 **Boss AI Components**:
 - **TimeGuardianAI**: AI state machine for Time Guardian
@@ -413,7 +416,7 @@ public class EntityEventHandler {
 
 ### 6. Chronicle Guidebook UI
 
-**Location**: `common-1.21.11/src/main/java/com/chronodawn/client/gui/screens/chronicle/`
+**Location**: `common/1.21.11/src/main/java/com/chronodawn/client/gui/screens/chronicle/`
 
 **Description**: Custom in-game guidebook system that replaced Patchouli dependency. Chronicle provides players with information about biomes, structures, bosses, items, and progression.
 
@@ -422,7 +425,7 @@ public class EntityEventHandler {
 - **ChronicleData.java**: JSON data loader for guidebook content
 - **ChronicleBookItem.java**: Item that opens the Chronicle GUI
 
-**Data Files**: `common-1.21.11/src/main/resources/assets/chronodawn/chronicle/`
+**Data Files**: `common/1.21.11/src/main/resources/assets/chronodawn/chronicle/`
 - **categories.json**: Category definitions
 - **entries.json**: Entry data with localized text
 
@@ -461,7 +464,7 @@ public class EntityEventHandler {
 
 ### Adding a New Block
 
-1. **Create Block Class** (`common-1.21.11/src/main/java/com/chronodawn/blocks/MyCustomBlock.java`):
+1. **Create Block Class** (`common/1.21.11/src/main/java/com/chronodawn/blocks/MyCustomBlock.java`):
 ```java
 public class MyCustomBlock extends Block {
     public MyCustomBlock(Properties properties) {
@@ -505,7 +508,7 @@ public static final RegistrySupplier<Block> MY_CUSTOM_BLOCK = BLOCKS.register(
 
 ### Adding a New Entity
 
-1. **Create Entity Class** (`common-1.21.11/src/main/java/com/chronodawn/entities/MyEntity.java`):
+1. **Create Entity Class** (`common/1.21.11/src/main/java/com/chronodawn/entities/MyEntity.java`):
 ```java
 public class MyEntity extends Mob {
     public MyEntity(EntityType<? extends Mob> type, Level level) {
@@ -533,7 +536,7 @@ public static final RegistrySupplier<EntityType<MyEntity>> MY_ENTITY = ENTITIES.
 ### Adding a Structure
 
 1. **Create NBT Structure** using Minecraft structure blocks
-2. **Save to**: `common-1.21.11/src/main/resources/data/chronodawn/structure/`
+2. **Save to**: `common/1.21.11/src/main/resources/data/chronodawn/structure/`
 3. **Define Structure JSON**: `data/chronodawn/worldgen/structure/my_structure.json`
 4. **Add to Structure Set**: `data/chronodawn/worldgen/structure_set/my_structure_set.json`
 5. **Implement Structure Processor** (if custom logic needed)
@@ -546,7 +549,7 @@ public static final RegistrySupplier<EntityType<MyEntity>> MY_ENTITY = ENTITIES.
 
 **Framework**: JUnit 5
 
-**Location**: `common-1.21.11/src/test/java/com/chronodawn/unit/`
+**Location**: `common/1.21.11/src/test/java/com/chronodawn/unit/`
 
 **Test Types**:
 
@@ -567,11 +570,11 @@ public static final RegistrySupplier<EntityType<MyEntity>> MY_ENTITY = ENTITIES.
 **Framework**: Minecraft GameTest Framework with registry-driven test generation
 
 **Location**:
-- `common-1.21.11/src/main/java/com/chronodawn/gametest/` (1.21.11)
-- `common-1.21.5/src/main/java/com/chronodawn/gametest/` (1.21.5)
-- `common-1.21.2/src/main/java/com/chronodawn/gametest/` (1.21.2)
-- `common-1.21.1/src/main/java/com/chronodawn/compat/v1_21_1/gametest/` (1.21.1)
-- `common-1.20.1/src/main/java/com/chronodawn/compat/v1_20_1/gametest/` (1.20.1)
+- `common/1.21.11/src/main/java/com/chronodawn/gametest/` (1.21.11)
+- `common/1.21.5/src/main/java/com/chronodawn/gametest/` (1.21.5)
+- `common/1.21.2/src/main/java/com/chronodawn/gametest/` (1.21.2)
+- `common/1.21.1/src/main/java/com/chronodawn/compat/v1_21_1/gametest/` (1.21.1)
+- `common/1.20.1/src/main/java/com/chronodawn/compat/v1_20_1/gametest/` (1.20.1)
 
 **Test Categories** (auto-generated from registries):
 - **Block placement** — Verifies all blocks can be placed
@@ -617,11 +620,11 @@ Within each version group, fabric and neoforge share the same common module buil
 
 **How it works**:
 
-Each version uses a separate directory (e.g., `fabric-1.21.2/`) via `project(':fabric').projectDir = file("fabric-1.21.2")` in settings.gradle. This gives each version its own `.gradle/architectury/` directory and build output.
+Each version uses a separate directory (e.g., `fabric/1.21.2/`) via `project(':fabric').projectDir = file("fabric/1.21.2")` in settings.gradle. This gives each version its own `.gradle/architectury/` directory and build output.
 
 Each subprocess uses `--project-cache-dir .gradle/gametest-<version>` to avoid lock conflicts with the outer Gradle process and other subprocesses.
 
-Shared sources are included via `srcDir` references to `fabric-base/` and `neoforge-base/` directories (which are source directories, not Gradle subprojects).
+Shared sources are included via `srcDir` references to `fabric/base/` and `neoforge/base/` directories (which are source directories, not Gradle subprojects).
 
 **Log files**: Each version group's output is saved to `build/gametest-<version>.log`.
 
@@ -633,7 +636,7 @@ Shared sources are included via `srcDir` references to `fabric-base/` and `neofo
 
 Validates data/asset file integrity at build time without launching the game:
 
-- **JSON syntax check** — Parses all `.json` files under `common-1.21.11/src/main/resources/`
+- **JSON syntax check** — Parses all `.json` files under `common/1.21.11/src/main/resources/`
 - **Blockstate → model reference check** — Verifies `"model": "chronodawn:block/<name>"` targets exist
 - **Model → texture reference check** — Verifies `"textures"` entries with `chronodawn:` prefix have matching `.png` files
 
@@ -658,7 +661,7 @@ Validates data/asset file integrity at build time without launching the game:
 
 ### Enable Debug Logging
 
-**Add to** `common-1.21.11/src/main/resources/log4j2.xml`:
+**Add to** `common/1.21.11/src/main/resources/log4j2.xml`:
 ```xml
 <Configuration status="warn">
     <Appenders>

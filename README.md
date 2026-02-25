@@ -195,8 +195,8 @@ Chrono Dawn supports multiple Minecraft versions from the same codebase:
 ```
 
 **Output Files** (example for 1.21.2):
-- `fabric-1.21.2/build/libs/chronodawn-0.5.0+1.21.2-fabric.jar` - Fabric loader JAR
-- `neoforge-1.21.2/build/libs/chronodawn-0.5.0+1.21.2-neoforge.jar` - NeoForge loader JAR
+- `fabric/1.21.2/build/libs/chronodawn-0.5.0+1.21.2-fabric.jar` - Fabric loader JAR
+- `neoforge/1.21.2/build/libs/chronodawn-0.5.0+1.21.2-neoforge.jar` - NeoForge loader JAR
 
 ### Build Specific Loader
 
@@ -398,52 +398,55 @@ Use the same steps above, but with:
 
 ```
 ChronoDawn/
-├── common-shared/                   # Shared version-agnostic sources (included via srcDir)
-├── common-gametest/                 # Shared gametest sources (included via srcDir)
-├── common-1.20.1/                   # Common module for MC 1.20.1
-├── common-1.21.1/                   # Common module for MC 1.21.1
-├── common-1.21.2/                   # Common module for MC 1.21.2
-├── common-1.21.4/                   # Common module for MC 1.21.4
-├── common-1.21.5/                   # Common module for MC 1.21.5
-├── common-1.21.6/                   # Common module for MC 1.21.6
-├── common-1.21.7/                   # Common module for MC 1.21.7
-├── common-1.21.8/                   # Common module for MC 1.21.8
-├── common-1.21.9/                   # Common module for MC 1.21.9
-├── common-1.21.10/                  # Common module for MC 1.21.10
-├── common-1.21.11/                  # Common module for MC 1.21.11 (~80% of code)
-│   ├── src/main/java/com/chronodawn/
-│   │   ├── ChronoDawn.java          # Common entry point
-│   │   ├── blocks/                  # Custom blocks
-│   │   ├── items/                   # Custom items
-│   │   ├── entities/                # Custom entities (bosses, mobs)
-│   │   ├── worldgen/                # World generation features
-│   │   └── registry/                # Registry wrappers
-│   └── src/main/resources/
-│       ├── data/chronodawn/         # Data packs (recipes, worldgen, structures)
-│       └── assets/chronodawn/       # Assets (textures, models, sounds)
-├── fabric-base/                     # Shared Fabric sources
-├── fabric-1.20.1/                   # Fabric subproject for MC 1.20.1
-├── fabric-1.21.1/                   # Fabric subproject for MC 1.21.1
-├── fabric-1.21.2/                   # Fabric subproject for MC 1.21.2
-├── fabric-1.21.4/                   # Fabric subproject for MC 1.21.4
-├── fabric-1.21.5/                   # Fabric subproject for MC 1.21.5
-├── fabric-1.21.6/                   # Fabric subproject for MC 1.21.6
-├── fabric-1.21.7/                   # Fabric subproject for MC 1.21.7
-├── fabric-1.21.8/                   # Fabric subproject for MC 1.21.8
-├── fabric-1.21.9/                   # Fabric subproject for MC 1.21.9
-├── fabric-1.21.10/                  # Fabric subproject for MC 1.21.10
-├── fabric-1.21.11/                  # Fabric subproject for MC 1.21.11
-├── neoforge-base/                   # Shared NeoForge sources
-├── neoforge-1.21.1/                 # NeoForge subproject for MC 1.21.1
-├── neoforge-1.21.2/                 # NeoForge subproject for MC 1.21.2
-├── neoforge-1.21.4/                 # NeoForge subproject for MC 1.21.4
-├── neoforge-1.21.5/                 # NeoForge subproject for MC 1.21.5
-├── neoforge-1.21.6/                 # NeoForge subproject for MC 1.21.6
-├── neoforge-1.21.7/                 # NeoForge subproject for MC 1.21.7
-├── neoforge-1.21.8/                 # NeoForge subproject for MC 1.21.8
-├── neoforge-1.21.9/                 # NeoForge subproject for MC 1.21.9
-├── neoforge-1.21.10/                # NeoForge subproject for MC 1.21.10
-├── neoforge-1.21.11/                # NeoForge subproject for MC 1.21.11
+├── common/
+│   ├── shared/                      # Shared version-agnostic sources (included via srcDir)
+│   ├── gametest/                    # Shared gametest sources (included via srcDir)
+│   ├── 1.20.1/                      # Common module for MC 1.20.1
+│   ├── 1.21.1/                      # Common module for MC 1.21.1
+│   ├── 1.21.2/                      # Common module for MC 1.21.2
+│   ├── 1.21.4/                      # Common module for MC 1.21.4
+│   ├── 1.21.5/                      # Common module for MC 1.21.5
+│   ├── 1.21.6/                      # Common module for MC 1.21.6
+│   ├── 1.21.7/                      # Common module for MC 1.21.7
+│   ├── 1.21.8/                      # Common module for MC 1.21.8
+│   ├── 1.21.9/                      # Common module for MC 1.21.9
+│   ├── 1.21.10/                     # Common module for MC 1.21.10
+│   └── 1.21.11/                     # Common module for MC 1.21.11 (~80% of code)
+│       ├── src/main/java/com/chronodawn/
+│       │   ├── ChronoDawn.java      # Common entry point
+│       │   ├── blocks/              # Custom blocks
+│       │   ├── items/               # Custom items
+│       │   ├── entities/            # Custom entities (bosses, mobs)
+│       │   ├── worldgen/            # World generation features
+│       │   └── registry/            # Registry wrappers
+│       └── src/main/resources/
+│           ├── data/chronodawn/     # Data packs (recipes, worldgen, structures)
+│           └── assets/chronodawn/   # Assets (textures, models, sounds)
+├── fabric/
+│   ├── base/                        # Shared Fabric sources
+│   ├── 1.20.1/                      # Fabric subproject for MC 1.20.1
+│   ├── 1.21.1/                      # Fabric subproject for MC 1.21.1
+│   ├── 1.21.2/                      # Fabric subproject for MC 1.21.2
+│   ├── 1.21.4/                      # Fabric subproject for MC 1.21.4
+│   ├── 1.21.5/                      # Fabric subproject for MC 1.21.5
+│   ├── 1.21.6/                      # Fabric subproject for MC 1.21.6
+│   ├── 1.21.7/                      # Fabric subproject for MC 1.21.7
+│   ├── 1.21.8/                      # Fabric subproject for MC 1.21.8
+│   ├── 1.21.9/                      # Fabric subproject for MC 1.21.9
+│   ├── 1.21.10/                     # Fabric subproject for MC 1.21.10
+│   └── 1.21.11/                     # Fabric subproject for MC 1.21.11
+├── neoforge/
+│   ├── base/                        # Shared NeoForge sources
+│   ├── 1.21.1/                      # NeoForge subproject for MC 1.21.1
+│   ├── 1.21.2/                      # NeoForge subproject for MC 1.21.2
+│   ├── 1.21.4/                      # NeoForge subproject for MC 1.21.4
+│   ├── 1.21.5/                      # NeoForge subproject for MC 1.21.5
+│   ├── 1.21.6/                      # NeoForge subproject for MC 1.21.6
+│   ├── 1.21.7/                      # NeoForge subproject for MC 1.21.7
+│   ├── 1.21.8/                      # NeoForge subproject for MC 1.21.8
+│   ├── 1.21.9/                      # NeoForge subproject for MC 1.21.9
+│   ├── 1.21.10/                     # NeoForge subproject for MC 1.21.10
+│   └── 1.21.11/                     # NeoForge subproject for MC 1.21.11
 ├── specs/chrono-dawn-mod/           # Design documents
 ├── build.gradle                     # Root build configuration (Groovy DSL)
 ├── settings.gradle                  # Multi-module settings

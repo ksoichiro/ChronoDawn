@@ -70,10 +70,10 @@ if (MOB_NAME_SPAWN_EGG.isPresent()) {
 **Without this file, the spawn egg will be completely invisible in the inventory.**
 
 Create `models/item/mob_name_spawn_egg.json` in all version resource directories:
-- `common-1.20.1/src/main/resources/assets/chronodawn/models/item/`
-- `common-1.21.1/src/main/resources/assets/chronodawn/models/item/`
-- `common-1.21.2/src/main/resources/assets/chronodawn/models/item/`
-- `common-1.21.4/src/main/resources/assets/chronodawn/models/item/`
+- `common/1.20.1/src/main/resources/assets/chronodawn/models/item/`
+- `common/1.21.1/src/main/resources/assets/chronodawn/models/item/`
+- `common/1.21.2/src/main/resources/assets/chronodawn/models/item/`
+- `common/1.21.4/src/main/resources/assets/chronodawn/models/item/`
 
 Content (identical for all versions):
 ```json
@@ -89,7 +89,7 @@ No custom texture file is needed - Minecraft generates the spawn egg texture pro
 **1.21.4 introduced a new item definition system.** Without this file, spawn egg colors will not display correctly.
 
 Create `items/mob_name_spawn_egg.json` in the 1.21.4 resource directory:
-- `common-1.21.4/src/main/resources/assets/chronodawn/items/`
+- `common/1.21.4/src/main/resources/assets/chronodawn/items/`
 
 **Note**: This is a separate directory from `models/item/` - both files are required for 1.21.4.
 
@@ -127,7 +127,7 @@ Content:
 
 **Without this, the spawn egg will appear grayscale on NeoForge.** Fabric handles this automatically via vanilla mechanisms, but NeoForge requires explicit registration.
 
-File: `neoforge-base/src/main/java/com/chronodawn/neoforge/client/ChronoDawnClientNeoForge.java`
+File: `neoforge/base/src/main/java/com/chronodawn/neoforge/client/ChronoDawnClientNeoForge.java`
 
 Add `ModItems.MOB_NAME_SPAWN_EGG.get()` to the item list in the `onRegisterItemColors` method:
 

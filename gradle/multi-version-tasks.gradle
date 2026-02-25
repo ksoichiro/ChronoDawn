@@ -212,9 +212,9 @@ tasks.register('cleanAll') {
         // Clean IDE-generated bin/ directories that can interfere with builds/tests
         // (e.g., IntelliJ/Eclipse output directories with unprocessed placeholders)
         def subprojects = [
-            'common-1.20.1', 'common-1.21.1', 'common-1.21.2', 'common-1.21.4', 'common-1.21.5', 'common-1.21.6', 'common-1.21.7', 'common-1.21.8', 'common-1.21.9', 'common-1.21.10', 'common-1.21.11',
-            'fabric-1.20.1', 'fabric-1.21.1', 'fabric-1.21.2', 'fabric-1.21.4', 'fabric-1.21.5', 'fabric-1.21.6', 'fabric-1.21.7', 'fabric-1.21.8', 'fabric-1.21.9', 'fabric-1.21.10', 'fabric-1.21.11',
-            'neoforge-1.21.1', 'neoforge-1.21.2', 'neoforge-1.21.4', 'neoforge-1.21.5', 'neoforge-1.21.6', 'neoforge-1.21.7', 'neoforge-1.21.8', 'neoforge-1.21.9', 'neoforge-1.21.10', 'neoforge-1.21.11'
+            'common/1.20.1', 'common/1.21.1', 'common/1.21.2', 'common/1.21.4', 'common/1.21.5', 'common/1.21.6', 'common/1.21.7', 'common/1.21.8', 'common/1.21.9', 'common/1.21.10', 'common/1.21.11',
+            'fabric/1.20.1', 'fabric/1.21.1', 'fabric/1.21.2', 'fabric/1.21.4', 'fabric/1.21.5', 'fabric/1.21.6', 'fabric/1.21.7', 'fabric/1.21.8', 'fabric/1.21.9', 'fabric/1.21.10', 'fabric/1.21.11',
+            'neoforge/1.21.1', 'neoforge/1.21.2', 'neoforge/1.21.4', 'neoforge/1.21.5', 'neoforge/1.21.6', 'neoforge/1.21.7', 'neoforge/1.21.8', 'neoforge/1.21.9', 'neoforge/1.21.10', 'neoforge/1.21.11'
         ]
         def deletedCount = 0
         subprojects.each { subdir ->
@@ -233,8 +233,8 @@ tasks.register('cleanAll') {
         // These caches can cause "Unresolved compilation problems" errors when
         // stale transformed classes remain after code changes
         def runDirs = [
-            'fabric-1.20.1/run', 'fabric-1.21.1/run', 'fabric-1.21.2/run', 'fabric-1.21.4/run', 'fabric-1.21.5/run', 'fabric-1.21.6/run', 'fabric-1.21.7/run', 'fabric-1.21.8/run', 'fabric-1.21.9/run', 'fabric-1.21.10/run', 'fabric-1.21.11/run',
-            'neoforge-1.21.1/run', 'neoforge-1.21.2/run', 'neoforge-1.21.4/run', 'neoforge-1.21.5/run', 'neoforge-1.21.6/run', 'neoforge-1.21.7/run', 'neoforge-1.21.8/run', 'neoforge-1.21.9/run', 'neoforge-1.21.10/run', 'neoforge-1.21.11/run'
+            'fabric/1.20.1/run', 'fabric/1.21.1/run', 'fabric/1.21.2/run', 'fabric/1.21.4/run', 'fabric/1.21.5/run', 'fabric/1.21.6/run', 'fabric/1.21.7/run', 'fabric/1.21.8/run', 'fabric/1.21.9/run', 'fabric/1.21.10/run', 'fabric/1.21.11/run',
+            'neoforge/1.21.1/run', 'neoforge/1.21.2/run', 'neoforge/1.21.4/run', 'neoforge/1.21.5/run', 'neoforge/1.21.6/run', 'neoforge/1.21.7/run', 'neoforge/1.21.8/run', 'neoforge/1.21.9/run', 'neoforge/1.21.10/run', 'neoforge/1.21.11/run'
         ]
         def transformerDeletedCount = 0
         runDirs.each { runDir ->
@@ -902,7 +902,7 @@ tasks.register('collectJars') {
 
         versions.each { version ->
             platforms.each { platform ->
-                def libsDir = file("${rootDir}/${platform}-${version}/build/libs")
+                def libsDir = file("${rootDir}/${platform}/${version}/build/libs")
                 if (!libsDir.exists()) {
                     logger.warn("SKIP: ${libsDir} does not exist (not built yet?)")
                     return
@@ -1045,9 +1045,9 @@ tasks.register('gameTestAll') {
                     def logFile = new File(logDir, 'gametest-' + version + '.log')
 
                     // Clean stale world directories to avoid session.lock conflicts
-                    // Use moduleVersion for directory path (1.21.3 uses fabric-1.21.2)
+                    // Use moduleVersion for directory path (1.21.3 uses fabric/1.21.2)
                     ['fabric', 'neoforge'].each { loader ->
-                        def worldDir = new File(projectDir, loader + '-' + moduleVersion + '/run/world')
+                        def worldDir = new File(projectDir, loader + '/' + moduleVersion + '/run/world')
                         if (worldDir.exists()) {
                             worldDir.deleteDir()
                         }

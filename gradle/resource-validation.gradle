@@ -108,11 +108,11 @@ tasks.register('validateTranslations') {
         def errors = []
 
         // Parse ModEntityId.java to get entity IDs
-        def entityIdFile = file("${rootProject.projectDir}/common-shared/src/main/java/com/chronodawn/registry/ModEntityId.java")
+        def entityIdFile = file("${rootProject.projectDir}/common/shared/src/main/java/com/chronodawn/registry/ModEntityId.java")
         def entityIds = extractEnumValues(entityIdFile)
 
         // Parse ModItemId.java to get item IDs
-        def itemIdFile = file("${rootProject.projectDir}/common-shared/src/main/java/com/chronodawn/registry/ModItemId.java")
+        def itemIdFile = file("${rootProject.projectDir}/common/shared/src/main/java/com/chronodawn/registry/ModItemId.java")
         def itemIds = extractEnumValues(itemIdFile)
 
         // Technical entities that don't need translations
@@ -123,7 +123,7 @@ tasks.register('validateTranslations') {
 
         versions.each { version ->
             def moduleVersion = moduleVersionMap.getOrDefault(version, version)
-            def langFile = file("${rootProject.projectDir}/common-${moduleVersion}/src/main/resources/assets/chronodawn/lang/en_us.json")
+            def langFile = file("${rootProject.projectDir}/common/${moduleVersion}/src/main/resources/assets/chronodawn/lang/en_us.json")
             if (!langFile.exists()) {
                 errors << "[${version}] Language file not found: ${langFile.path}"
                 return

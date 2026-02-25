@@ -273,7 +273,7 @@ public class MobNameRenderer extends MobRenderer<MobNameEntity, MobNameModel> {
 
 ## 4. RenderState Class (1.21.2 and 1.21.4)
 
-Create in `common-1.21.2/` and `common-1.21.4/` under `src/main/java/com/chronodawn/client/renderer/mobs/`
+Create in `common/1.21.2/` and `common/1.21.4/` under `src/main/java/com/chronodawn/client/renderer/mobs/`
 
 ```java
 package com.chronodawn.client.renderer.mobs;

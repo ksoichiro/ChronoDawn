@@ -84,18 +84,18 @@ python3 convert_nbt_1_21_to_1_20.py --batch <input_dir> <output_dir>
 
 # Example: Convert all structures
 python3 convert_nbt_1_21_to_1_20.py --batch \
-  common-1.21.1/src/main/resources/data/chronodawn/structure \
-  common-1.20.1/src/main/resources/data/chronodawn/structures
+  common/1.21.1/src/main/resources/data/chronodawn/structure \
+  common/1.20.1/src/main/resources/data/chronodawn/structures
 ```
 
 ## Build Integration
 
-The conversion is automatically integrated into the Gradle build process via each `common-{version}/build.gradle`:
+The conversion is automatically integrated into the Gradle build process via each `common/{version}/build.gradle`:
 
 ### Gradle Task: `convertNbtStructures`
 
 **Behavior:**
-- **For 1.20.1 builds:** Automatically converts all NBT files from `common-1.21.1/src/main/resources/.../structure/` to `common-1.20.1/src/main/resources/.../structures/`
+- **For 1.20.1 builds:** Automatically converts all NBT files from `common/1.21.1/src/main/resources/.../structure/` to `common/1.20.1/src/main/resources/.../structures/`
 - **For 1.21.1+ builds:** Skipped (uses original files)
 
 **Usage:**

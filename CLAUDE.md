@@ -53,42 +53,45 @@ Auto-generated from all feature plans. Last updated: 2025-10-19
 
 ## Project Structure
 ```
-common-shared/        (shared version-agnostic sources, NOT a Gradle subproject)
-common-gametest/      (shared gametest sources, NOT a Gradle subproject)
-common-1.20.1/        (version-specific common module)
-common-1.21.1/        (version-specific common module)
-common-1.21.2/        (version-specific common module)
-common-1.21.4/        (version-specific common module)
-common-1.21.5/        (version-specific common module)
-common-1.21.6/        (version-specific common module)
-common-1.21.7/        (version-specific common module)
-common-1.21.8/        (version-specific common module)
-common-1.21.9/        (version-specific common module)
-common-1.21.10/       (version-specific common module)
-common-1.21.11/       (version-specific common module)
-fabric-base/          (shared Fabric sources, NOT a Gradle subproject)
-fabric-1.20.1/        (version-specific Fabric subproject)
-fabric-1.21.1/        (version-specific Fabric subproject)
-fabric-1.21.2/        (version-specific Fabric subproject)
-fabric-1.21.4/        (version-specific Fabric subproject)
-fabric-1.21.5/        (version-specific Fabric subproject)
-fabric-1.21.6/        (version-specific Fabric subproject)
-fabric-1.21.7/        (version-specific Fabric subproject)
-fabric-1.21.8/        (version-specific Fabric subproject)
-fabric-1.21.9/        (version-specific Fabric subproject)
-fabric-1.21.10/       (version-specific Fabric subproject)
-fabric-1.21.11/       (version-specific Fabric subproject)
-neoforge-base/        (shared NeoForge sources, NOT a Gradle subproject)
-neoforge-1.21.1/      (version-specific NeoForge subproject)
-neoforge-1.21.2/      (version-specific NeoForge subproject)
-neoforge-1.21.4/      (version-specific NeoForge subproject)
-neoforge-1.21.5/      (version-specific NeoForge subproject)
-neoforge-1.21.6/      (version-specific NeoForge subproject)
-neoforge-1.21.7/      (version-specific NeoForge subproject)
-neoforge-1.21.8/      (version-specific NeoForge subproject)
-neoforge-1.21.9/      (version-specific NeoForge subproject)
-neoforge-1.21.10/     (version-specific NeoForge subproject)
-neoforge-1.21.11/     (version-specific NeoForge subproject)
+common/
+  shared/             (shared version-agnostic sources, NOT a Gradle subproject)
+  gametest/           (shared gametest sources, NOT a Gradle subproject)
+  1.20.1/             (version-specific common module)
+  1.21.1/             (version-specific common module)
+  1.21.2/             (version-specific common module)
+  1.21.4/             (version-specific common module)
+  1.21.5/             (version-specific common module)
+  1.21.6/             (version-specific common module)
+  1.21.7/             (version-specific common module)
+  1.21.8/             (version-specific common module)
+  1.21.9/             (version-specific common module)
+  1.21.10/            (version-specific common module)
+  1.21.11/            (version-specific common module)
+fabric/
+  base/               (shared Fabric sources, NOT a Gradle subproject)
+  1.20.1/             (version-specific Fabric subproject)
+  1.21.1/             (version-specific Fabric subproject)
+  1.21.2/             (version-specific Fabric subproject)
+  1.21.4/             (version-specific Fabric subproject)
+  1.21.5/             (version-specific Fabric subproject)
+  1.21.6/             (version-specific Fabric subproject)
+  1.21.7/             (version-specific Fabric subproject)
+  1.21.8/             (version-specific Fabric subproject)
+  1.21.9/             (version-specific Fabric subproject)
+  1.21.10/            (version-specific Fabric subproject)
+  1.21.11/            (version-specific Fabric subproject)
+neoforge/
+  base/               (shared NeoForge sources, NOT a Gradle subproject)
+  1.21.1/             (version-specific NeoForge subproject)
+  1.21.2/             (version-specific NeoForge subproject)
+  1.21.4/             (version-specific NeoForge subproject)
+  1.21.5/             (version-specific NeoForge subproject)
+  1.21.6/             (version-specific NeoForge subproject)
+  1.21.7/             (version-specific NeoForge subproject)
+  1.21.8/             (version-specific NeoForge subproject)
+  1.21.9/             (version-specific NeoForge subproject)
+  1.21.10/            (version-specific NeoForge subproject)
+  1.21.11/            (version-specific NeoForge subproject)
 gradle/               (build scripts)
 props/                (version-specific properties)
 ```
@@ -108,7 +111,7 @@ Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.2
 
 **Supported Versions**: Minecraft 1.20.1 + 1.21.1 + 1.21.2 + 1.21.3 + 1.21.4 + 1.21.5 + 1.21.6 + 1.21.7 + 1.21.8 + 1.21.9 + 1.21.10 + 1.21.11 (single codebase)
 
-**Note**: 1.21.3 is a hotfix release that reuses 1.21.2 modules (no separate common-1.21.3, fabric-1.21.3, neoforge-1.21.3 directories needed).
+**Note**: 1.21.3 is a hotfix release that reuses 1.21.2 modules (no separate common/1.21.3, fabric/1.21.3, neoforge/1.21.3 directories needed).
 
 **Clean Commands**:
 - `./gradlew clean1_20_1` - Clean for 1.20.1
@@ -181,7 +184,7 @@ Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.2
 - When writing code, use Mojang mapping names (e.g., `net.minecraft.world.level.Level`, not Yarn's `class_XXXX`)
 - Build files use Groovy syntax (e.g., `maven { url 'https://...' }`, not `maven { url = "https://..." }`)
 - Common module code is bundled into Fabric JAR using Shadow plugin
-- **Parallel GameTest**: `gameTestAll` groups configurations by Minecraft version. 1.20.1 and 1.21.1 run in parallel, while 1.21.2 and 1.21.3 run sequentially in the same thread (they share modules). Within each version, fabric and neoforge run in a single Gradle process to avoid common module build conflicts. Each version uses a separate directory (fabric-1.20.1, fabric-1.21.1, etc.) with its own `.gradle/architectury/` path.
+- **Parallel GameTest**: `gameTestAll` groups configurations by Minecraft version. 1.20.1 and 1.21.1 run in parallel, while 1.21.2 and 1.21.3 run sequentially in the same thread (they share modules). Within each version, fabric and neoforge run in a single Gradle process to avoid common module build conflicts. Each version uses a separate directory (fabric/1.20.1, fabric/1.21.1, etc.) with its own `.gradle/architectury/` path.
 
 ## Mixin Configuration
 
@@ -213,7 +216,7 @@ Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.2
   Verification is possible:
   1. Run ./gradlew :fabric:build -Ptarget_mc_version=1.21.2
   2. Confirm that the build succeeds
-  3. Confirm that JAR files are generated in fabric-1.21.2/build/libs/
+  3. Confirm that JAR files are generated in fabric/1.21.2/build/libs/
   Expected result: Build completes without errors and JAR files are generated
   ```
 - **Wait for User Decision**: Allow user to decide whether to proceed with verification before committing
