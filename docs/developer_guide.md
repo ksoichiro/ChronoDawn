@@ -125,6 +125,9 @@ cd ChronoDawn
 ChronoDawn/
 ├── common/
 │   ├── shared/                             # Shared version-agnostic sources (included via srcDir)
+│   ├── shared-1.21.1+/                    # Shared resources for 1.21.1~1.21.11
+│   ├── shared-1.21.2+/                    # Shared resources for 1.21.2~1.21.11
+│   ├── shared-1.21.5+/                    # Shared resources for 1.21.5~1.21.11
 │   ├── gametest/                           # Shared gametest sources (included via srcDir)
 │   ├── 1.21.2/                             # Common module for MC 1.21.2
 │   ├── 1.21.11/                            # Common module for MC 1.21.11 (~80% of code)

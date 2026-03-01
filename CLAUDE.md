@@ -55,6 +55,9 @@ Auto-generated from all feature plans. Last updated: 2025-10-19
 ```
 common/
   shared/             (shared version-agnostic sources, NOT a Gradle subproject)
+  shared-1.21.1+/     (shared resources for 1.21.1~1.21.11, NOT a Gradle subproject)
+  shared-1.21.2+/     (shared resources for 1.21.2~1.21.11, NOT a Gradle subproject)
+  shared-1.21.5+/     (shared resources for 1.21.5~1.21.11, NOT a Gradle subproject)
   gametest/           (shared gametest sources, NOT a Gradle subproject)
   1.20.1/             (version-specific common module)
   1.21.1/             (version-specific common module)
