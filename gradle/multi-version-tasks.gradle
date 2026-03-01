@@ -970,7 +970,7 @@ tasks.register('release') {
  * Run GameTests for all supported Minecraft versions and loaders
  * Usage: ./gradlew gameTestAll
  *
- * Configurations are grouped by Minecraft version (4 parallel threads):
+ * Configurations are grouped by Minecraft version (2 parallel threads):
  *   Thread 1: :fabric:runGameTest (1.20.1)
  *   Thread 2: :fabric:runGameTest + :neoforge:runGameTestServer (1.21.1)
  *   Thread 3: :fabric:runGameTest + :neoforge:runGameTestServer (1.21.2, then 1.21.3)
@@ -1021,14 +1021,16 @@ tasks.register('gameTestAll') {
         def logDir = new File(projectDir, 'build')
         logDir.mkdirs()
 
-        def threads = []
+        def maxParallel = 2
+        def executor = java.util.concurrent.Executors.newFixedThreadPool(maxParallel)
+        def futures = []
 
         versionGroups.each { group ->
             def groupLabel = group.versions.join('+')
 
             logger.lifecycle(">>> Starting GameTests: versions ${groupLabel}...")
 
-            def thread = new Thread({
+            def future = executor.submit({
                 // Run each version in the group sequentially
                 group.versions.each { version ->
                     def moduleVersion = moduleVersionMap.getOrDefault(version, version)
@@ -1078,14 +1080,13 @@ tasks.register('gameTestAll') {
                         failed.add(version + ' (' + e.message + ')')
                     }
                 }
-            }, 'gametest-' + groupLabel)
-
-            thread.start()
-            threads.add(thread)
+            } as Runnable)
+            futures.add(future)
         }
 
-        // Wait for all threads to complete
-        threads.each { it.join() }
+        // Wait for all GameTests to complete
+        futures.each { it.get() }
+        executor.shutdown()
 
         logger.lifecycle('')
         logger.lifecycle('====================================================')
