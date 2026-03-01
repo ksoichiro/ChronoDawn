@@ -1,6 +1,0 @@
-{
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "chronodawn:item/cooked_glide_fish"
-  }
-}

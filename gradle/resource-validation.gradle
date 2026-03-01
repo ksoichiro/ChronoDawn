@@ -7,27 +7,39 @@ tasks.register('validateResources') {
     description = 'Validates JSON syntax and resource cross-references in assets'
 
     doLast {
-        def resourceDir = file("${rootProject.projectDir}/common/shared/src/main/resources")
-        def assetsDir = file("${resourceDir}/assets/chronodawn")
+        def sharedDirs = [
+            file("${rootProject.projectDir}/common/shared/src/main/resources"),
+            file("${rootProject.projectDir}/common/shared-1.21.1+/src/main/resources"),
+            file("${rootProject.projectDir}/common/shared-1.21.2+/src/main/resources"),
+            file("${rootProject.projectDir}/common/shared-1.21.5+/src/main/resources"),
+        ]
         def errors = []
 
-        // 1. JSON syntax check
+        // 1. JSON syntax check across all shared directories
         logger.lifecycle("Checking JSON syntax...")
         def jsonSlurper = new JsonSlurper()
-        def jsonFiles = fileTree(dir: resourceDir, includes: ['**/*.json'])
-        jsonFiles.each { File jsonFile ->
-            try {
-                jsonSlurper.parseText(jsonFile.text)
-            } catch (JsonException e) {
-                errors << "JSON syntax error in ${jsonFile.relativePath(resourceDir)}: ${e.message}"
-            } catch (Exception e) {
-                errors << "Failed to parse ${jsonFile.relativePath(resourceDir)}: ${e.message}"
+        int totalJsonFiles = 0
+        sharedDirs.each { resourceDir ->
+            if (!resourceDir.exists()) return
+            def jsonFiles = fileTree(dir: resourceDir, includes: ['**/*.json'])
+            jsonFiles.each { File jsonFile ->
+                try {
+                    jsonSlurper.parseText(jsonFile.text)
+                } catch (JsonException e) {
+                    def relPath = resourceDir.toPath().relativize(jsonFile.toPath()).toString()
+                    errors << "JSON syntax error in ${relPath}: ${e.message}"
+                } catch (Exception e) {
+                    def relPath = resourceDir.toPath().relativize(jsonFile.toPath()).toString()
+                    errors << "Failed to parse ${relPath}: ${e.message}"
+                }
             }
+            totalJsonFiles += jsonFiles.files.size()
         }
-        logger.lifecycle("  Checked ${jsonFiles.files.size()} JSON files")
+        logger.lifecycle("  Checked ${totalJsonFiles} JSON files across ${sharedDirs.size()} shared directories")
 
-        // 2. Blockstate -> model reference check
+        // 2. Blockstate -> model reference check (blockstates and block models are in common/shared)
         logger.lifecycle("Checking blockstate -> model references...")
+        def assetsDir = file("${sharedDirs[0]}/assets/chronodawn")
         def blockstatesDir = file("${assetsDir}/blockstates")
         def modelsBlockDir = file("${assetsDir}/models/block")
         int blockstateRefs = 0
@@ -53,32 +65,42 @@ tasks.register('validateResources') {
         }
         logger.lifecycle("  Checked ${blockstateRefs} blockstate -> model references")
 
-        // 3. Model -> texture reference check
+        // 3. Model -> texture reference check across all shared directories
         logger.lifecycle("Checking model -> texture references...")
-        def modelsDir = file("${assetsDir}/models")
-        def texturesDir = file("${assetsDir}/textures")
+        // Collect all textures from all shared directories
+        def allTextures = [] as Set
+        sharedDirs.each { resourceDir ->
+            def texturesDir = file("${resourceDir}/assets/chronodawn/textures")
+            if (texturesDir.exists()) {
+                fileTree(dir: texturesDir, includes: ['**/*.png']).each { File textureFile ->
+                    def relPath = texturesDir.toPath().relativize(textureFile.toPath()).toString().replace('.png', '')
+                    allTextures << relPath
+                }
+            }
+        }
         int textureRefs = 0
-        if (modelsDir.exists()) {
-            fileTree(dir: modelsDir, includes: ['**/*.json']).each { File modelFile ->
-                try {
-                    def model = jsonSlurper.parseText(modelFile.text)
-                    if (model instanceof Map && model.textures instanceof Map) {
-                        model.textures.each { key, value ->
-                            if (value instanceof String && value.startsWith("chronodawn:")) {
-                                def texturePath = value.replace("chronodawn:", "")
-                                def textureFile = new File(texturesDir, "${texturePath}.png")
-                                if (!textureFile.exists()) {
-                                    def relativePath = modelFile.toPath().relativize(modelsDir.toPath()).toString()
-                                    def modelRelative = modelsDir.toPath().relativize(modelFile.toPath()).toString()
-                                    errors << "Model ${modelRelative} references texture '${value}' but ${texturePath}.png does not exist"
+        sharedDirs.each { resourceDir ->
+            def modelsDir = file("${resourceDir}/assets/chronodawn/models")
+            if (modelsDir.exists()) {
+                fileTree(dir: modelsDir, includes: ['**/*.json']).each { File modelFile ->
+                    try {
+                        def model = jsonSlurper.parseText(modelFile.text)
+                        if (model instanceof Map && model.textures instanceof Map) {
+                            model.textures.each { key, value ->
+                                if (value instanceof String && value.startsWith("chronodawn:")) {
+                                    def texturePath = value.replace("chronodawn:", "")
+                                    if (!allTextures.contains(texturePath)) {
+                                        def modelRelative = modelsDir.toPath().relativize(modelFile.toPath()).toString()
+                                        errors << "Model ${modelRelative} references texture '${value}' but ${texturePath}.png does not exist in any shared directory"
+                                    }
+                                    textureRefs++
                                 }
-                                textureRefs++
+                                // Skip minecraft: prefixed references
                             }
-                            // Skip minecraft: prefixed references
                         }
+                    } catch (Exception e) {
+                        // JSON syntax errors already caught above
                     }
-                } catch (Exception e) {
-                    // JSON syntax errors already caught above
                 }
             }
         }
@@ -123,9 +145,21 @@ tasks.register('validateTranslations') {
 
         versions.each { version ->
             def moduleVersion = moduleVersionMap.getOrDefault(version, version)
+            // Search for lang file in version-specific dir first, then shared directories
             def langFile = file("${rootProject.projectDir}/common/${moduleVersion}/src/main/resources/assets/chronodawn/lang/en_us.json")
             if (!langFile.exists()) {
-                errors << "[${version}] Language file not found: ${langFile.path}"
+                // Try shared directories in order: most specific to least specific
+                def sharedLangDirs = ['shared-1.21.5+', 'shared-1.21.2+', 'shared-1.21.1+', 'shared']
+                for (sharedDir in sharedLangDirs) {
+                    def candidate = file("${rootProject.projectDir}/common/${sharedDir}/src/main/resources/assets/chronodawn/lang/en_us.json")
+                    if (candidate.exists()) {
+                        langFile = candidate
+                        break
+                    }
+                }
+            }
+            if (!langFile.exists()) {
+                errors << "[${version}] Language file not found in any shared directory"
                 return
             }
 
