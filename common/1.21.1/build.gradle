@@ -33,6 +33,9 @@ sourceSets {
             srcDir '../shared/src/main/java'
             srcDir '../gametest/src/main/java'
         }
+        resources {
+            srcDir '../shared/src/main/resources'
+        }
     }
 }
 
@@ -108,6 +111,8 @@ processResources.dependsOn convertNbtStructures
 
 // Expand pack_format variable in pack.mcmeta
 processResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
     inputs.property 'pack_format', project.ext.pack_format
 
     filesMatching('pack.mcmeta') {

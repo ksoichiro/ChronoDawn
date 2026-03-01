@@ -1,8 +1,0 @@
-{
-  "feature": "chronodawn:freeze_top_layer",
-  "placement": [
-    {
-      "type": "minecraft:biome"
-    }
-  ]
-}

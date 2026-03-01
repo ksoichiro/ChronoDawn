@@ -1,9 +1,0 @@
-{
-  "type": "minecraft:random_patch",
-  "config": {
-    "tries": 9,
-    "xz_spread": 1,
-    "y_spread": 0,
-    "feature": "chronodawn:ice_pillar_single_placed"
-  }
-}

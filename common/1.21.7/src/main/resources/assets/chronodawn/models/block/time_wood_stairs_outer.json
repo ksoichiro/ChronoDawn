@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/outer_stairs",
-  "textures": {
-    "bottom": "chronodawn:block/time_wood_planks",
-    "top": "chronodawn:block/time_wood_planks",
-    "side": "chronodawn:block/time_wood_planks"
-  }
-}

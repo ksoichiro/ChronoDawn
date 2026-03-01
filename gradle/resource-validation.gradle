@@ -7,7 +7,7 @@ tasks.register('validateResources') {
     description = 'Validates JSON syntax and resource cross-references in assets'
 
     doLast {
-        def resourceDir = file("${rootProject.projectDir}/common/src/main/resources")
+        def resourceDir = file("${rootProject.projectDir}/common/shared/src/main/resources")
         def assetsDir = file("${resourceDir}/assets/chronodawn")
         def errors = []
 

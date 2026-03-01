@@ -83,6 +83,9 @@ sourceSets {
             ]
             return excludedFiles.contains(element.file.name)
         }
+        resources {
+            srcDir '../shared/src/main/resources'
+        }
     }
 }
 
@@ -158,6 +161,8 @@ processResources.dependsOn convertNbtStructures
 
 // Expand pack_format variables in pack.mcmeta
 processResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
     inputs.property 'pack_format', project.ext.pack_format
     inputs.property 'pack_format_min', project.ext.pack_format_min
     inputs.property 'pack_format_max', project.ext.pack_format_max

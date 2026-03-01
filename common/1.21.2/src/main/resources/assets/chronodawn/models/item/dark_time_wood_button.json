@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/button_inventory",
-  "textures": {
-    "texture": "chronodawn:block/dark_time_wood_planks"
-  }
-}
