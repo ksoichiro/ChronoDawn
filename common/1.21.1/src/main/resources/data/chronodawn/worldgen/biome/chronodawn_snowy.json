@@ -31,7 +31,7 @@
         "maxCount": 4
       },
       {
-        "type": "minecraft:creeper",
+        "type": "chronodawn:moment_creeper",
         "weight": 100,
         "minCount": 4,
         "maxCount": 4
