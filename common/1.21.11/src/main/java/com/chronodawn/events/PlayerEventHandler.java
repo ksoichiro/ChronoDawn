@@ -11,6 +11,7 @@ import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModDimensions;
 import com.chronodawn.registry.ModItems;
 import com.chronodawn.worldgen.spawning.TimeKeeperVillagePlacer;
+import dev.architectury.event.events.common.PlayerEvent;
 import dev.architectury.event.events.common.TickEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
@@ -21,7 +22,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -66,10 +66,6 @@ public class PlayerEventHandler {
     // T429: Use ConcurrentHashMap for thread-safe access in multiplayer
     private static final Map<UUID, ResourceKey<Level>> playerDimensions = new ConcurrentHashMap<>();
 
-    // Track players who have already been checked for Time Tyrant advancement
-    // Avoids redundant checks every tick
-    private static final java.util.Set<UUID> checkedPlayers = java.util.concurrent.ConcurrentHashMap.newKeySet();
-
     /**
      * Register player event listeners.
      */
@@ -91,11 +87,12 @@ public class PlayerEventHandler {
 
                 // Update tracked dimension
                 playerDimensions.put(player.getUUID(), currentDimension);
-
-                // Check and grant Time Tyrant defeat advancement if world state says defeated
-                checkAndGrantTyrantDefeatAdvancement(player);
             }
         });
+
+        // Grant Time Tyrant defeat advancement on login for players who weren't online during defeat.
+        // Using PLAYER_JOIN instead of tick polling ensures advancement data is fully loaded.
+        PlayerEvent.PLAYER_JOIN.register(PlayerEventHandler::checkAndGrantTyrantDefeatAdvancement);
 
         ChronoDawn.LOGGER.debug("Registered PlayerEventHandler");
     }
@@ -103,7 +100,7 @@ public class PlayerEventHandler {
 
     /**
      * Check if Time Tyrant has been defeated, and grant advancement if player doesn't have it yet.
-     * This ensures all players have the advancement based on world state, not individual progress.
+     * Called once on player login via PlayerEvent.PLAYER_JOIN.
      *
      * Design Note:
      * This method uses advancements as a "proxy" for world state synchronization:
@@ -112,27 +109,17 @@ public class PlayerEventHandler {
      * - Minecraft automatically syncs advancements to clients
      * - By granting advancement to all players when defeated, we effectively sync world state
      *
-     * This approach avoids implementing custom server→client packets while achieving the same result.
-     * Future improvement: Implement custom packet to directly sync world state to client.
+     * The initial grant to online players at defeat time is handled by DimensionStabilizer.
+     * This method covers players who log in after the defeat.
      *
-     * @param player Player to check
+     * @param player Player who joined
      */
     private static void checkAndGrantTyrantDefeatAdvancement(ServerPlayer player) {
-        UUID playerId = player.getUUID();
-
-        // Skip if already checked this player (performance optimization)
-        if (checkedPlayers.contains(playerId)) {
-            return;
-        }
-
         // Check if Time Tyrant has been defeated (world state)
         ChronoDawnGlobalState globalState = ChronoDawnGlobalState.get(((net.minecraft.server.level.ServerLevel) player.level()).getServer());
         if (!globalState.isTyrantDefeated()) {
-            return; // Not defeated yet, check again later
+            return;
         }
-
-        // Mark as checked (defeated, so grant advancement once)
-        checkedPlayers.add(playerId);
 
         // Get advancement ID
         Identifier advancementId = CompatResourceLocation.create(
