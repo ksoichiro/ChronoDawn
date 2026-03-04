@@ -1,6 +1,9 @@
 # Structure NBT Files
 
-This directory should contain the actual structure NBT files created using Minecraft's Structure Block.
+**Note**: The `.nbt` files for 1.20.1 are auto-generated into `build/generated/nbt-structures/` at build time
+by the `convertNbtStructures` Gradle task. The master source files are in
+`common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/`
+and are converted from 1.21.1 Data Components format to 1.20.1 NBT tag format.
 
 ## Required Files
 

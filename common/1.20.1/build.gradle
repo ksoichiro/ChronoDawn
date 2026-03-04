@@ -35,6 +35,7 @@ sourceSets {
         }
         resources {
             srcDir '../shared/src/main/resources'
+            srcDir "${buildDir}/generated/nbt-structures"
         }
     }
 }
@@ -59,7 +60,7 @@ tasks.register('convertNbtStructures', Exec) {
     }
 
     def inputDir = rootProject.file('common/shared-1.21.1+/src/main/resources/data/chronodawn/structure')
-    def outputDir = file('src/main/resources/data/chronodawn/structures')
+    def outputDir = file("${buildDir}/generated/nbt-structures/data/chronodawn/structures")
     def scriptPath = rootProject.file('scripts/convert_nbt_1_21_to_1_20.py')
 
     inputs.dir(inputDir).optional()
