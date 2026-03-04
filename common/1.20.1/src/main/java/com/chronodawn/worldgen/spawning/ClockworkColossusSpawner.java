@@ -2,17 +2,14 @@ package com.chronodawn.worldgen.spawning;
 
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.entities.bosses.ClockworkColossusEntity;
-import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModEntities;
 import dev.architectury.event.events.common.LifecycleEvent;
 import dev.architectury.event.events.common.TickEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
-import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.levelgen.structure.Structure;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -28,44 +25,23 @@ import java.util.concurrent.ConcurrentHashMap;
  * - Max per structure: 1
  *
  * Implementation Strategy:
- * - Uses server tick event to check for Clockwork Depths structures
- * - Searches for Structure Void marker block in engine room
+ * - Uses server tick event to check registered engine rooms
+ * - Checks if any player is inside a registered engine room
+ * - Searches for DANGER!! sign markers within the engine room
  * - Spawns Clockwork Colossus when player approaches marker
- * - Spawn position: 3 blocks above marker, 7 blocks away from center
- *
- * NBT Setup Required:
- * - Place multiple Clockwork Blocks (chronodawn:clockwork_block) at desired spawn positions
- * - The boss will spawn on top of the selected Clockwork Block (Y+1)
- * - Recommended: 3-5 Clockwork Blocks around the room
- * - Clockwork Blocks are visible and thematic, fitting the structure's aesthetic
  *
  * Reference: T235 - Clockwork Colossus implementation
  */
 public class ClockworkColossusSpawner {
-    private static final ResourceLocation CLOCKWORK_DEPTHS_ID = CompatResourceLocation.create(
-        ChronoDawn.MOD_ID,
-        "clockwork_depths"
-    );
-
-    // Track structure positions where we've already spawned Clockwork Colossus (per dimension)
-    private static final Map<ResourceLocation, Set<BlockPos>> spawnedStructures = new HashMap<>();
+    // Track structure positions where we've already spawned Clockwork Colossus
+    private static final Set<BlockPos> spawnedStructures = new HashSet<>();
 
     // Track registered engine rooms (bounding boxes from BossRoomProtectionProcessor) (per-server runtime cache)
     // Key: dimension ID, Value: Set of bounding boxes
-    private static final Map<ResourceLocation, Set<net.minecraft.world.level.levelgen.structure.BoundingBox>> engineRooms = new ConcurrentHashMap<>();
-
-    // Cache found markers to avoid repeated expensive searches (per-server runtime cache)
-    // Key: dimension ID, Value: Map of structure identifier → marker positions (T430: dimension isolation)
-    private static final Map<ResourceLocation, Map<BlockPos, List<BlockPos>>> cachedMarkers = new ConcurrentHashMap<>();
-
-    // Track chunks we've already searched (to avoid re-scanning) (per-server runtime cache)
-    // Key: dimension ID, Value: Map of chunk position → timestamp (T430: dimension isolation)
-    private static final Map<ResourceLocation, Map<ChunkPos, Long>> searchedChunks = new ConcurrentHashMap<>();
-    private static final long SEARCH_CACHE_DURATION_MS = 300000; // Cache for 5 minutes
+    private static final Map<ResourceLocation, Set<BoundingBox>> engineRooms = new ConcurrentHashMap<>();
 
     // Check interval (in ticks) - check every 10 seconds to reduce load
     private static final int CHECK_INTERVAL = 200;
-    // T430: Tick counter remains static (not per-dimension) for backward compatibility with 1.20.1
     private static int tickCounter = 0;
 
     // Distance threshold for player proximity spawning
@@ -95,20 +71,20 @@ public class ClockworkColossusSpawner {
 
     /**
      * Check for Clockwork Depths structures and spawn Clockwork Colossus if player is nearby.
-     * This is called every server tick.
+     * Uses direct engine room bounding box check (same approach as 1.21.1+).
      *
      * @param level The ServerLevel to check
      */
     public static void checkAndSpawnColossus(ServerLevel level) {
+        // Only process Chrono Dawn dimension (Clockwork Depths only spawns there)
+        if (!level.dimension().equals(com.chronodawn.registry.ModDimensions.CHRONO_DAWN_DIMENSION)) {
+            return;
+        }
+
         ResourceLocation dimensionId = level.dimension().location();
 
-        // Initialize tracking for this dimension if needed
-        spawnedStructures.putIfAbsent(dimensionId, new HashSet<>());
-
-        // Increment tick counter (static, not per-dimension for 1.20.1 compatibility)
+        // Increment tick counter
         tickCounter++;
-
-        // Only check every CHECK_INTERVAL ticks
         if (tickCounter < CHECK_INTERVAL) {
             return;
         }
@@ -119,215 +95,96 @@ public class ClockworkColossusSpawner {
             return;
         }
 
-        // Check chunks around each player
-        for (var player : level.players()) {
-            ChunkPos playerChunkPos = new ChunkPos(player.blockPosition());
-
-            // Check chunks in a 6-chunk radius around player (reduced from 12 to minimize checks)
-            for (int x = -6; x <= 6; x++) {
-                for (int z = -6; z <= 6; z++) {
-                    ChunkPos chunkPos = new ChunkPos(playerChunkPos.x + x, playerChunkPos.z + z);
-
-                    // Check if this chunk contains a Clockwork Depths structure
-                    if (hasClockworkDepths(level, chunkPos)) {
-                        // Initialize dimension-specific search cache if needed
-                        searchedChunks.putIfAbsent(dimensionId, new ConcurrentHashMap<>());
-                        Map<ChunkPos, Long> dimensionSearchCache = searchedChunks.get(dimensionId);
-
-                        // Check if we've already searched this chunk recently
-                        Long lastSearchTime = dimensionSearchCache.get(chunkPos);
-                        long currentTime = System.currentTimeMillis();
-
-                        // Periodically clean up expired search cache
-                        if (dimensionSearchCache.size() > 100) {
-                            dimensionSearchCache.entrySet().removeIf(entry ->
-                                currentTime - entry.getValue() > SEARCH_CACHE_DURATION_MS
-                            );
-                        }
-
-                        List<BlockPos> markerPositions;
-
-                        // Use cached markers if available
-                        if (lastSearchTime != null && currentTime - lastSearchTime < SEARCH_CACHE_DURATION_MS) {
-                            // We've searched this chunk recently - check cache
-                            markerPositions = getCachedMarkersForChunk(dimensionId, chunkPos);
-                            if (markerPositions == null) {
-                                // No markers found in previous search - skip
-                                continue;
-                            }
-                        } else {
-                            // First time searching or cache expired - do expensive search
-                            markerPositions = findEngineRoomMarkers(level, chunkPos);
-
-                            // Cache the search result
-                            dimensionSearchCache.put(chunkPos, currentTime);
-
-                            if (markerPositions.isEmpty()) {
-                                // Markers not found - cache this fact to avoid re-searching
-                                continue;
-                            } else {
-                                // Cache found markers (T430: dimension-aware)
-                                cacheMarkers(dimensionId, markerPositions);
-                            }
-                        }
-
-                        // Use the first marker (sorted by coordinates) as structure identifier
-                        // This ensures same structure is identified consistently across chunks
-                        BlockPos structureId = markerPositions.stream()
-                            .min((a, b) -> {
-                                int cmp = Integer.compare(a.getX(), b.getX());
-                                if (cmp != 0) return cmp;
-                                cmp = Integer.compare(a.getY(), b.getY());
-                                if (cmp != 0) return cmp;
-                                return Integer.compare(a.getZ(), b.getZ());
-                            })
-                            .orElse(markerPositions.get(0));
-
-                        // Skip if we've already processed this structure in this dimension
-                        Set<BlockPos> dimensionSpawned = spawnedStructures.get(dimensionId);
-                        if (dimensionSpawned.contains(structureId)) {
-                            continue;
-                        }
-
-                        // Check if any player is close enough to trigger spawn
-                        boolean playerNearby = false;
-                        for (BlockPos marker : markerPositions) {
-                            if (isPlayerNearby(level, marker, SPAWN_DISTANCE)) {
-                                playerNearby = true;
-                                break;
-                            }
-                        }
-
-                        if (!playerNearby) {
-                            continue;
-                        }
-
-                        // Mark this structure as processed in this dimension (using first marker as ID)
-                        dimensionSpawned.add(structureId);
-
-                        // Spawn Clockwork Colossus at engine room (random marker position)
-                        spawnClockworkColossusAtEngineRoom(level, markerPositions);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Check if a chunk contains a Clockwork Depths structure.
-     *
-     * @param level The ServerLevel to check
-     * @param chunkPos The chunk position to check
-     * @return true if the chunk contains a Clockwork Depths
-     */
-    private static boolean hasClockworkDepths(ServerLevel level, ChunkPos chunkPos) {
-        var structureManager = level.structureManager();
-
-        for (var entry : structureManager.getAllStructuresAt(chunkPos.getWorldPosition()).entrySet()) {
-            Structure structure = entry.getKey();
-
-            var structureLocation = level.registryAccess()
-                .registryOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
-                .getKey(structure);
-
-            if (structureLocation != null && structureLocation.equals(CLOCKWORK_DEPTHS_ID)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Find all engine room spawn markers (Signs with "DANGER!!" text) in Clockwork Depths.
-     *
-     * The NBT should contain multiple Crimson Signs with "DANGER!!" text at desired spawn positions.
-     * Only searches within registered engine room bounding boxes.
-     *
-     * @param level The ServerLevel to search in
-     * @param chunkPos The chunk position containing the structure
-     * @return List of marker positions (empty if none found)
-     */
-    private static List<BlockPos> findEngineRoomMarkers(ServerLevel level, ChunkPos chunkPos) {
-        long startTime = System.nanoTime();
-
-        List<BlockPos> markers = new ArrayList<>();
-        ResourceLocation dimensionId = level.dimension().location();
-
-        // Get registered engine rooms for this dimension
-        Set<net.minecraft.world.level.levelgen.structure.BoundingBox> rooms = engineRooms.get(dimensionId);
+        // Check if any player is inside a registered engine room
+        Set<BoundingBox> rooms = engineRooms.get(dimensionId);
         if (rooms == null || rooms.isEmpty()) {
-            // No engine rooms registered yet in this dimension
-            return markers;
+            return;
         }
 
-        // Find engine rooms that intersect with this chunk
-        int chunkMinX = chunkPos.getMinBlockX();
-        int chunkMaxX = chunkPos.getMaxBlockX();
-        int chunkMinZ = chunkPos.getMinBlockZ();
-        int chunkMaxZ = chunkPos.getMaxBlockZ();
+        for (var player : level.players()) {
+            BlockPos playerPos = player.blockPosition();
 
-        for (net.minecraft.world.level.levelgen.structure.BoundingBox room : rooms) {
-            // Check if this room intersects with the chunk
-            if (room.maxX() < chunkMinX || room.minX() > chunkMaxX ||
-                room.maxZ() < chunkMinZ || room.minZ() > chunkMaxZ) {
-                continue; // Room doesn't intersect this chunk
-            }
+            // Check if player is inside any engine room
+            for (BoundingBox room : rooms) {
+                if (room.isInside(playerPos)) {
 
-            // Search for signs with "DANGER!!" text within this bounding box
-            for (BlockPos pos : BlockPos.betweenClosed(room.minX(), room.minY(), room.minZ(),
-                                                        room.maxX(), room.maxY(), room.maxZ())) {
-                var blockEntity = level.getBlockEntity(pos);
-                if (blockEntity instanceof net.minecraft.world.level.block.entity.SignBlockEntity sign) {
-                    // Check if sign text contains "DANGER!!"
-                    boolean isDangerSign = false;
+                    // Use room center as structure identifier for tracking
+                    BlockPos roomCenter = new BlockPos(
+                        (room.minX() + room.maxX()) / 2,
+                        (room.minY() + room.maxY()) / 2,
+                        (room.minZ() + room.maxZ()) / 2
+                    );
 
-                    // Get sign text from front side
-                    var frontText = sign.getFrontText();
-                    for (int i = 0; i < 4; i++) {
-                        String lineText = frontText.getMessage(i, false).getString();
-                        if (lineText.contains("DANGER!!")) {
-                            isDangerSign = true;
+                    // Check if we've already spawned in this room
+                    if (spawnedStructures.contains(roomCenter)) {
+                        continue;
+                    }
+
+                    // Search for markers in this engine room
+                    List<BlockPos> markerPositions = findEngineRoomMarkersInBoundingBox(level, room);
+
+                    if (markerPositions.isEmpty()) {
+                        continue;
+                    }
+
+                    // Check if player is within spawn distance of any marker
+                    boolean playerNearby = false;
+
+                    for (BlockPos marker : markerPositions) {
+                        if (player.blockPosition().distSqr(marker) <= SPAWN_DISTANCE * SPAWN_DISTANCE) {
+                            playerNearby = true;
                             break;
                         }
                     }
 
-                    if (isDangerSign) {
-                        markers.add(pos.immutable());
+                    if (!playerNearby) {
+                        continue;
                     }
+
+                    // Mark this room as spawned
+                    spawnedStructures.add(roomCenter);
+                    ChronoDawn.LOGGER.debug("Spawning Clockwork Colossus in engine room at {}", roomCenter);
+
+                    // Spawn Clockwork Colossus
+                    spawnClockworkColossusAtEngineRoom(level, markerPositions);
+                    break; // Only spawn once per player check
+                }
+            }
+        }
+    }
+
+    /**
+     * Find all markers (Signs with "DANGER!!" text) within a specific engine room bounding box.
+     *
+     * @param level The ServerLevel
+     * @param room The engine room bounding box
+     * @return List of marker positions
+     */
+    private static List<BlockPos> findEngineRoomMarkersInBoundingBox(ServerLevel level, BoundingBox room) {
+        List<BlockPos> markers = new ArrayList<>();
+
+        for (BlockPos pos : BlockPos.betweenClosed(room.minX(), room.minY(), room.minZ(),
+                                                    room.maxX(), room.maxY(), room.maxZ())) {
+            var blockEntity = level.getBlockEntity(pos);
+            if (blockEntity instanceof net.minecraft.world.level.block.entity.SignBlockEntity sign) {
+                boolean isDangerSign = false;
+
+                var frontText = sign.getFrontText();
+                for (int i = 0; i < 4; i++) {
+                    String lineText = frontText.getMessage(i, false).getString();
+                    if (lineText.contains("DANGER!!")) {
+                        isDangerSign = true;
+                        break;
+                    }
+                }
+
+                if (isDangerSign) {
+                    markers.add(pos.immutable());
                 }
             }
         }
 
-        long endTime = System.nanoTime();
-        long durationMs = (endTime - startTime) / 1_000_000;
-
-        if (durationMs > 100) {
-            ChronoDawn.LOGGER.warn("Clockwork Depths marker search took {}ms at chunk {} - found {} markers",
-                durationMs, chunkPos, markers.size());
-        } else {
-            ChronoDawn.LOGGER.debug("Clockwork Depths marker search took {}ms at chunk {} - found {} markers",
-                durationMs, chunkPos, markers.size());
-        }
-
         return markers;
-    }
-
-    /**
-     * Check if any player is within the specified distance of the given position.
-     *
-     * @param level The ServerLevel to check
-     * @param pos The position to check around
-     * @param distance The distance threshold
-     * @return true if a player is nearby
-     */
-    private static boolean isPlayerNearby(ServerLevel level, BlockPos pos, double distance) {
-        for (var player : level.players()) {
-            if (player.blockPosition().distSqr(pos) <= distance * distance) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
@@ -441,70 +298,13 @@ public class ClockworkColossusSpawner {
     }
 
     /**
-     * Cache found markers for future lookups.
-     * T430: Now dimension-aware to prevent cross-dimension cache collisions.
-     *
-     * @param dimensionId The dimension ID
-     * @param markers List of marker positions found in a structure
-     */
-    private static void cacheMarkers(ResourceLocation dimensionId, List<BlockPos> markers) {
-        if (markers.isEmpty()) return;
-
-        // Initialize dimension map if needed
-        cachedMarkers.putIfAbsent(dimensionId, new ConcurrentHashMap<>());
-        Map<BlockPos, List<BlockPos>> dimensionCache = cachedMarkers.get(dimensionId);
-
-        // Use first marker as key
-        BlockPos key = markers.stream()
-            .min((a, b) -> {
-                int cmp = Integer.compare(a.getX(), b.getX());
-                if (cmp != 0) return cmp;
-                cmp = Integer.compare(a.getY(), b.getY());
-                if (cmp != 0) return cmp;
-                return Integer.compare(a.getZ(), b.getZ());
-            })
-            .orElse(markers.get(0));
-
-        dimensionCache.put(key, new ArrayList<>(markers));
-    }
-
-    /**
-     * Get cached markers for a chunk (if any).
-     * T430: Now dimension-aware to prevent cross-dimension cache collisions.
-     *
-     * @param dimensionId The dimension ID
-     * @param chunkPos Chunk position
-     * @return List of marker positions, or null if not cached
-     */
-    private static List<BlockPos> getCachedMarkersForChunk(ResourceLocation dimensionId, ChunkPos chunkPos) {
-        Map<BlockPos, List<BlockPos>> dimensionCache = cachedMarkers.get(dimensionId);
-        if (dimensionCache == null) {
-            return null;
-        }
-
-        // Check if any cached marker set has markers in this chunk
-        for (List<BlockPos> markers : dimensionCache.values()) {
-            for (BlockPos marker : markers) {
-                int markerChunkX = marker.getX() >> 4;
-                int markerChunkZ = marker.getZ() >> 4;
-
-                if (markerChunkX == chunkPos.x && markerChunkZ == chunkPos.z) {
-                    return markers;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Register an engine room bounding box from BossRoomProtectionProcessor.
      * Called when a Clockwork Depths engine room is detected during worldgen.
      *
      * @param level The ServerLevel containing the engine room
      * @param boundingBox The bounding box of the engine room
      */
-    public static void registerEngineRoom(ServerLevel level, net.minecraft.world.level.levelgen.structure.BoundingBox boundingBox) {
+    public static void registerEngineRoom(ServerLevel level, BoundingBox boundingBox) {
         ResourceLocation dimensionId = level.dimension().location();
         engineRooms.putIfAbsent(dimensionId, new HashSet<>());
         engineRooms.get(dimensionId).add(boundingBox);
@@ -515,16 +315,13 @@ public class ClockworkColossusSpawner {
 
     /**
      * Reset spawn tracking for a specific world (useful for testing or debugging).
-     * T430: Now properly clears dimension-specific caches.
      *
      * @param level The ServerLevel to reset spawn data for
      */
     public static void reset(ServerLevel level) {
         ResourceLocation dimensionId = level.dimension().location();
-        spawnedStructures.remove(dimensionId);
+        spawnedStructures.clear();
         engineRooms.remove(dimensionId);
-        cachedMarkers.remove(dimensionId);
-        searchedChunks.remove(dimensionId);
         tickCounter = 0;
         ChronoDawn.LOGGER.debug("Clockwork Colossus Spawner reset for dimension: {}", dimensionId);
     }
