@@ -60,6 +60,7 @@ Chrono Dawn features unique mobs that replace vanilla spawns in the dimension:
 - **Moment Creeper**: Replaces Creeper - explosive time anomaly
 - **Forgotten Minute**: Flying hostile mob with unique AI
 - **Chronal Leech**: Hostile mob that drains time energy
+- **Ticking Sheep**: Replaces Sheep - shearable for light blue wool, wool regrows after eating grass
 - **Chrono Turtle**: Friendly water creature
 - **Glide Fish**: Water creature with cookable food items
 

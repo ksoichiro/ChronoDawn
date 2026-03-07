@@ -64,7 +64,7 @@
         "maxCount": 3
       },
       {
-        "type": "minecraft:sheep",
+        "type": "chronodawn:ticking_sheep",
         "weight": 8,
         "minCount": 2,
         "maxCount": 4

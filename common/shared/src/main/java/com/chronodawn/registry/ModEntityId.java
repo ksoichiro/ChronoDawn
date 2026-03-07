@@ -57,6 +57,7 @@ public enum ModEntityId {
     TIMEBOUND_RABBIT("timebound_rabbit"),
     PULSE_HOG("pulse_hog"),
     SECONDWING_FOWL("secondwing_fowl"),
+    TICKING_SHEEP("ticking_sheep"),
 
     // === Projectiles ===
     GEAR_PROJECTILE("gear_projectile"),

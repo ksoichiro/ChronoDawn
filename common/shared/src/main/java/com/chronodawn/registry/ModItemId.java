@@ -230,6 +230,7 @@ public enum ModItemId {
     CLOCKWORK_COLOSSUS_SPAWN_EGG("clockwork_colossus_spawn_egg"),
     TEMPORAL_PHANTOM_SPAWN_EGG("temporal_phantom_spawn_egg"),
     ENTROPY_KEEPER_SPAWN_EGG("entropy_keeper_spawn_egg"),
+    TICKING_SHEEP_SPAWN_EGG("ticking_sheep_spawn_egg"),
     ;
 
     private final String id;
