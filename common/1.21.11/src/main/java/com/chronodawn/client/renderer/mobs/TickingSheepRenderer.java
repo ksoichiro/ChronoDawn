@@ -23,14 +23,14 @@ import com.chronodawn.compat.CompatResourceLocation;
 import com.chronodawn.entities.mobs.TickingSheepEntity;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 /**
  * Renderer for Ticking Sheep entity.
  * Uses vanilla sheep texture for the body and custom ticking_sheep.png for the wool layer.
  */
 public class TickingSheepRenderer extends MobRenderer<TickingSheepEntity, TickingSheepRenderState, TickingSheepBodyModel> {
-    private static final ResourceLocation BODY_TEXTURE = CompatResourceLocation.create(
+    private static final Identifier BODY_TEXTURE = CompatResourceLocation.create(
         "minecraft",
         "textures/entity/sheep/sheep.png"
     );
@@ -55,7 +55,7 @@ public class TickingSheepRenderer extends MobRenderer<TickingSheepEntity, Tickin
     }
 
     @Override
-    public ResourceLocation getTextureLocation(TickingSheepRenderState state) {
+    public Identifier getTextureLocation(TickingSheepRenderState state) {
         return BODY_TEXTURE;
     }
 }

@@ -238,7 +238,7 @@ public class TickingSheepEntity extends Animal implements Shearable {
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        this.setSheared(tag.getBoolean("Sheared"));
+        this.setSheared(tag.getBooleanOr("Sheared", false));
     }
 
     // === Breeding ===

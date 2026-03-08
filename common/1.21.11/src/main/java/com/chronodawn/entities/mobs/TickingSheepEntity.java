@@ -20,6 +20,8 @@ package com.chronodawn.entities.mobs;
 import com.chronodawn.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -149,11 +151,14 @@ public class TickingSheepEntity extends Animal implements Shearable {
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
         if (itemStack.is(Items.SHEARS)) {
-            if (!this.level().isClientSide && this.readyForShearing()) {
+            if (!this.level().isClientSide() && this.readyForShearing()) {
                 ServerLevel serverLevel = (ServerLevel) this.level();
                 this.shear(serverLevel, SoundSource.PLAYERS, itemStack);
                 this.gameEvent(GameEvent.SHEAR, player);
-                itemStack.hurtAndBreak(1, player, getSlotForHand(hand));
+                net.minecraft.world.entity.EquipmentSlot slot = hand == InteractionHand.MAIN_HAND
+                    ? net.minecraft.world.entity.EquipmentSlot.MAINHAND
+                    : net.minecraft.world.entity.EquipmentSlot.OFFHAND;
+                itemStack.hurtAndBreak(1, player, slot);
                 return InteractionResult.SUCCESS;
             } else {
                 return InteractionResult.CONSUME;
@@ -189,7 +194,7 @@ public class TickingSheepEntity extends Animal implements Shearable {
 
     @Override
     public void aiStep() {
-        if (this.level().isClientSide) {
+        if (this.level().isClientSide()) {
             this.eatAnimationTick = Math.max(0, this.eatAnimationTick - 1);
         }
         super.aiStep();
@@ -230,15 +235,15 @@ public class TickingSheepEntity extends Animal implements Shearable {
     // === Save/Load ===
 
     @Override
-    public void addAdditionalSaveData(CompoundTag tag) {
-        super.addAdditionalSaveData(tag);
-        tag.putBoolean("Sheared", this.isSheared());
+    public void addAdditionalSaveData(ValueOutput output) {
+        super.addAdditionalSaveData(output);
+        output.putBoolean("Sheared", this.isSheared());
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag tag) {
-        super.readAdditionalSaveData(tag);
-        this.setSheared(tag.getBoolean("Sheared"));
+    public void readAdditionalSaveData(ValueInput input) {
+        super.readAdditionalSaveData(input);
+        this.setSheared(input.getBooleanOr("Sheared", false));
     }
 
     // === Breeding ===

@@ -21,12 +21,9 @@ import com.chronodawn.client.model.TickingSheepBodyModel;
 import com.chronodawn.client.model.TickingSheepWoolModel;
 import com.chronodawn.compat.CompatResourceLocation;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 
 /**
@@ -47,14 +44,16 @@ public class TickingSheepWoolLayer extends RenderLayer<TickingSheepRenderState, 
     }
 
     @Override
-    public void render(PoseStack poseStack, MultiBufferSource buffer, int packedLight,
+    public void submit(PoseStack poseStack, SubmitNodeCollector collector, int packedLight,
                        TickingSheepRenderState state, float yRot, float xRot) {
         if (state.isInvisible || state.sheared) {
             return;
         }
 
         this.woolModel.setupAnim(state);
-        VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.entityCutoutNoCull(WOOL_TEXTURE));
-        this.woolModel.renderToBuffer(poseStack, vertexConsumer, packedLight, OverlayTexture.NO_OVERLAY);
+        // Use coloredCutoutModelCopyLayerRender (same as vanilla SheepWoolLayer)
+        // to ensure proper depth testing, lighting, and texture rendering
+        coloredCutoutModelCopyLayerRender(this.woolModel, WOOL_TEXTURE,
+            poseStack, collector, packedLight, state, 0xFFFFFFFF, 0);
     }
 }

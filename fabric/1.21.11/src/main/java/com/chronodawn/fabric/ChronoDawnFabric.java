@@ -277,7 +277,7 @@ public class ChronoDawnFabric implements ModInitializer {
             ModEntities.GLIDE_FISH.get(),
             SpawnPlacementTypes.IN_WATER,
             Heightmap.Types.OCEAN_FLOOR,
-            net.minecraft.world.entity.animal.WaterAnimal::checkSurfaceWaterAnimalSpawnRules
+            net.minecraft.world.entity.animal.fish.WaterAnimal::checkSurfaceWaterAnimalSpawnRules
         );
 
         // Timeline Strider - spawns on ground in daylight (Monster with any light)
@@ -317,7 +317,7 @@ public class ChronoDawnFabric implements ModInitializer {
             ModEntities.CHRONO_TURTLE.get(),
             SpawnPlacementTypes.IN_WATER,
             Heightmap.Types.OCEAN_FLOOR,
-            net.minecraft.world.entity.animal.WaterAnimal::checkSurfaceWaterAnimalSpawnRules
+            net.minecraft.world.entity.animal.fish.WaterAnimal::checkSurfaceWaterAnimalSpawnRules
         );
 
         // Timebound Rabbit - spawns on ground like animals

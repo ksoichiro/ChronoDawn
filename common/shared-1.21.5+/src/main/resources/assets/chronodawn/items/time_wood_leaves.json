@@ -1,1 +1,12 @@
-{"model":{"type":"minecraft:model","model":"chronodawn:item/time_wood_leaves"}}
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "chronodawn:item/time_wood_leaves",
+    "tints": [
+      {
+        "type": "minecraft:constant",
+        "value": 7907546
+      }
+    ]
+  }
+}
