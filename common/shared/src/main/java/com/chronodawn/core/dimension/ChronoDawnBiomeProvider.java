@@ -38,6 +38,15 @@ public class ChronoDawnBiomeProvider {
     );
 
     /**
+     * Resource key for the ChronoDawn Prairies biome.
+     * A drier variant of plains with dense grass, ferns, and fallen logs.
+     */
+    public static final ResourceKey<Biome> CHRONO_DAWN_PRAIRIES = ResourceKey.create(
+        Registries.BIOME,
+        CompatResourceLocation.create(ChronoDawn.MOD_ID, "chronodawn_prairies")
+    );
+
+    /**
      * Resource key for the ChronoDawn Dark Forest biome.
      * This biome features dense fog and reduced visibility.
      */
