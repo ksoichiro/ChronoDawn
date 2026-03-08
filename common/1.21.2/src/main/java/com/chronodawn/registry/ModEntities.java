@@ -432,6 +432,21 @@ public class ModEntities {
             .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.SECONDWING_FOWL.id())))
     );
 
+    /**
+     * Ticking Sheep - Sheep-like friendly creature with explosive-looking wool
+     *
+     * Spawns in ChronoDawn dimension biomes, replacing vanilla sheep.
+     * Drops mutton and white wool.
+     */
+    public static final RegistrySupplier<EntityType<TickingSheepEntity>> TICKING_SHEEP = ENTITIES.register(
+        ModEntityId.TICKING_SHEEP.id(),
+        () -> EntityType.Builder.of(TickingSheepEntity::new, MobCategory.CREATURE)
+            .sized(0.9f, 1.3f)  // Same as vanilla sheep
+            .clientTrackingRange(10)
+            .updateInterval(3)
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.TICKING_SHEEP.id())))
+    );
+
     // === Boat Entities ===
 
     /**

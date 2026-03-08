@@ -399,7 +399,10 @@
   "gui.chronodawn.chronicle.previous": "Previous",
   "gui.chronodawn.chronicle.next": "Next",
   "gui.chronodawn.chronicle.page": "Page %s of %s",
-  "gui.chronodawn.chronicle.select_category": "Select a category to begin"
+  "gui.chronodawn.chronicle.select_category": "Select a category to begin",
+
+  "entity.chronodawn.ticking_sheep": "Ticking Sheep",
+  "item.chronodawn.ticking_sheep_spawn_egg": "Ticking Sheep Spawn Egg"
 }
 
 

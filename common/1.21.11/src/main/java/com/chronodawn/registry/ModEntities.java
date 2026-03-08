@@ -2,10 +2,10 @@ package com.chronodawn.registry;
 
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.compat.CompatResourceLocation;
-import com.chronodawn.entities.boats.ChronoDawnBoat;
-import com.chronodawn.entities.boats.ChronoDawnChestBoat;
 import com.chronodawn.entities.bosses.*;
 import com.chronodawn.entities.mobs.*;
+import com.chronodawn.entities.boats.ChronoDawnBoat;
+import com.chronodawn.entities.boats.ChronoDawnChestBoat;
 import com.chronodawn.entities.projectiles.TimeArrowEntity;
 import com.chronodawn.entities.projectiles.TimeBlastEntity;
 import dev.architectury.registry.registries.DeferredRegister;
@@ -14,6 +14,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
+import com.chronodawn.registry.ModEntityId;
 
 /**
  * Architectury Registry wrapper for custom entities.
@@ -429,6 +430,21 @@ public class ModEntities {
             .clientTrackingRange(10)
             .updateInterval(3)
             .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.SECONDWING_FOWL.id())))
+    );
+
+    /**
+     * Ticking Sheep - Sheep-like friendly creature with explosive-looking wool
+     *
+     * Spawns in ChronoDawn dimension biomes, replacing vanilla sheep.
+     * Drops mutton and white wool.
+     */
+    public static final RegistrySupplier<EntityType<TickingSheepEntity>> TICKING_SHEEP = ENTITIES.register(
+        ModEntityId.TICKING_SHEEP.id(),
+        () -> EntityType.Builder.of(TickingSheepEntity::new, MobCategory.CREATURE)
+            .sized(0.9f, 1.3f)  // Same as vanilla sheep
+            .clientTrackingRange(10)
+            .updateInterval(3)
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.TICKING_SHEEP.id())))
     );
 
     // === Boat Entities ===

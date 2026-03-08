@@ -1,30 +1,68 @@
 package com.chronodawn.registry;
 
 import com.chronodawn.ChronoDawn;
-import com.chronodawn.entities.boats.ChronoDawnBoatType;
-import com.chronodawn.items.*;
-import com.chronodawn.items.artifacts.ChronobladeItem;
-import com.chronodawn.items.artifacts.EchoingTimeBootsItem;
-import com.chronodawn.items.artifacts.TimeTyrantMailItem;
-import com.chronodawn.items.artifacts.UnstablePocketWatchItem;
+import com.chronodawn.items.ChronicleBookItem;
+import com.chronodawn.items.DecorativeWaterBucketItem;
+import com.chronodawn.items.PortalStabilizerItem;
+import com.chronodawn.items.TimeHourglassItem;
 import com.chronodawn.items.base.ClockstoneItem;
 import com.chronodawn.items.base.EnhancedClockstoneItem;
 import com.chronodawn.items.base.TimeCrystalItem;
-import com.chronodawn.items.boats.ChronoDawnBoatItem;
 import com.chronodawn.items.combat.TimeArrowItem;
-import com.chronodawn.items.consumables.*;
-import com.chronodawn.items.equipment.*;
+import com.chronodawn.items.consumables.FruitOfTimeItem;
+import com.chronodawn.items.consumables.TimeFruitPieItem;
+import com.chronodawn.items.consumables.TimeJamItem;
+import com.chronodawn.items.consumables.TimeWheatSeedsItem;
+import com.chronodawn.items.consumables.TimeWheatItem;
+import com.chronodawn.items.consumables.TimeBreadItem;
+import com.chronodawn.items.consumables.TemporalRootItem;
+import com.chronodawn.items.consumables.BakedTemporalRootItem;
+import com.chronodawn.items.consumables.ChronoMelonSliceItem;
+import com.chronodawn.items.consumables.ChronoMelonSeedsItem;
+import com.chronodawn.items.consumables.TimelessMushroomItem;
+import com.chronodawn.items.consumables.TemporalRootStewItem;
+import com.chronodawn.items.consumables.GlisteningChronoMelonItem;
+import com.chronodawn.items.consumables.ChronoMelonJuiceItem;
+import com.chronodawn.items.consumables.TimelessMushroomSoupItem;
+import com.chronodawn.items.consumables.EnhancedTimeBreadItem;
+import com.chronodawn.items.consumables.TimeWheatCookieItem;
+import com.chronodawn.items.consumables.ClockworkCookieItem;
+import com.chronodawn.items.consumables.GoldenTimeWheatItem;
+import com.chronodawn.items.equipment.ClockstoneArmorItem;
+import com.chronodawn.items.equipment.ClockstoneAxeItem;
+import com.chronodawn.items.equipment.ClockstoneHoeItem;
+import com.chronodawn.items.equipment.ClockstonePickaxeItem;
+import com.chronodawn.items.equipment.ClockstoneShovelItem;
+import com.chronodawn.items.equipment.ClockstoneSwordItem;
+import com.chronodawn.items.equipment.EnhancedClockstoneArmorItem;
+import com.chronodawn.items.equipment.EnhancedClockstoneAxeItem;
+import com.chronodawn.items.equipment.EnhancedClockstoneHoeItem;
+import com.chronodawn.items.equipment.EnhancedClockstonePickaxeItem;
+import com.chronodawn.items.equipment.EnhancedClockstoneShovelItem;
+import com.chronodawn.items.equipment.EnhancedClockstoneSwordItem;
+import com.chronodawn.items.artifacts.ChronobladeItem;
+import com.chronodawn.items.artifacts.TimeTyrantMailItem;
+import com.chronodawn.items.artifacts.EchoingTimeBootsItem;
+import com.chronodawn.items.artifacts.UnstablePocketWatchItem;
+import com.chronodawn.items.tools.TimeClockItem;
+import net.minecraft.world.item.ArmorItem;
+import com.chronodawn.items.KeyToMasterClockItem;
+import com.chronodawn.items.UnstableHourglassItem;
 import com.chronodawn.items.quest.AncientGearItem;
 import com.chronodawn.items.tools.SpatiallyLinkedPickaxeItem;
-import com.chronodawn.items.tools.TimeClockItem;
+import com.chronodawn.items.boats.ChronoDawnBoatItem;
+import com.chronodawn.entities.boats.ChronoDawnBoatType;
+import com.chronodawn.registry.ModFluids;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.equipment.ArmorType;
+import com.chronodawn.registry.ModItemId;
+import com.chronodawn.registry.ModBlockId;
 
 /**
  * Architectury Registry wrapper for custom items.
@@ -45,7 +83,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.CLOCKSTONE_ORE.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_ORE.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_ORE.id()))))
     );
 
     /**
@@ -56,7 +94,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TIME_CRYSTAL_ORE.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_CRYSTAL_ORE.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_CRYSTAL_ORE.id()))))
     );
 
     /**
@@ -67,7 +105,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.CLOCKSTONE_BLOCK.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_BLOCK.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_BLOCK.id()))))
     );
 
     /**
@@ -78,7 +116,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.CLOCKSTONE_STAIRS.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_STAIRS.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_STAIRS.id()))))
     );
 
     /**
@@ -89,7 +127,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.CLOCKSTONE_SLAB.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_SLAB.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_SLAB.id()))))
     );
 
     /**
@@ -100,7 +138,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.CLOCKSTONE_WALL.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_WALL.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_WALL.id()))))
     );
 
     /**
@@ -111,7 +149,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.REVERSING_TIME_SANDSTONE.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.REVERSING_TIME_SANDSTONE.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.REVERSING_TIME_SANDSTONE.id()))))
     );
 
     /**
@@ -122,7 +160,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.UNSTABLE_FUNGUS.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.UNSTABLE_FUNGUS.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.UNSTABLE_FUNGUS.id()))))
     );
 
     /**
@@ -133,7 +171,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TIME_WOOD_LOG.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_LOG.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_LOG.id()))))
     );
 
     /**
@@ -144,7 +182,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.STRIPPED_TIME_WOOD_LOG.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.STRIPPED_TIME_WOOD_LOG.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.STRIPPED_TIME_WOOD_LOG.id()))))
     );
 
     /**
@@ -155,7 +193,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TIME_WOOD.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD.id()))))
     );
 
     /**
@@ -166,7 +204,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.STRIPPED_TIME_WOOD.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.STRIPPED_TIME_WOOD.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.STRIPPED_TIME_WOOD.id()))))
     );
 
     /**
@@ -177,7 +215,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TIME_WOOD_LEAVES.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_LEAVES.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_LEAVES.id()))))
     );
 
     /**
@@ -188,7 +226,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TIME_WOOD_PLANKS.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_PLANKS.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_PLANKS.id()))))
     );
 
     /**
@@ -199,7 +237,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TIME_WOOD_SAPLING.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_SAPLING.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_SAPLING.id()))))
     );
 
     // === Dark Time Wood Block Items ===
@@ -212,7 +250,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_LOG.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_LOG.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_LOG.id()))))
     );
 
     /**
@@ -223,7 +261,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.STRIPPED_DARK_TIME_WOOD_LOG.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.STRIPPED_DARK_TIME_WOOD_LOG.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.STRIPPED_DARK_TIME_WOOD_LOG.id()))))
     );
 
     /**
@@ -234,7 +272,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.DARK_TIME_WOOD.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD.id()))))
     );
 
     /**
@@ -245,7 +283,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.STRIPPED_DARK_TIME_WOOD.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.STRIPPED_DARK_TIME_WOOD.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.STRIPPED_DARK_TIME_WOOD.id()))))
     );
 
     /**
@@ -256,7 +294,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_LEAVES.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_LEAVES.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_LEAVES.id()))))
     );
 
     /**
@@ -267,7 +305,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_PLANKS.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_PLANKS.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_PLANKS.id()))))
     );
 
     /**
@@ -278,7 +316,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_STAIRS.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_STAIRS.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_STAIRS.id()))))
     );
 
     /**
@@ -289,7 +327,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_SLAB.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_SLAB.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_SLAB.id()))))
     );
 
     /**
@@ -300,7 +338,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_FENCE.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_FENCE.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_FENCE.id()))))
     );
 
     /**
@@ -311,7 +349,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_DOOR.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_DOOR.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_DOOR.id()))))
     );
 
     /**
@@ -322,7 +360,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_TRAPDOOR.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_TRAPDOOR.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_TRAPDOOR.id()))))
     );
 
     /**
@@ -333,7 +371,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_FENCE_GATE.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_FENCE_GATE.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_FENCE_GATE.id()))))
     );
 
     /**
@@ -344,7 +382,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_BUTTON.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_BUTTON.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_BUTTON.id()))))
     );
 
     /**
@@ -355,7 +393,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_PRESSURE_PLATE.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_PRESSURE_PLATE.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_PRESSURE_PLATE.id()))))
     );
 
     /**
@@ -366,7 +404,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_SAPLING.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_SAPLING.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_SAPLING.id()))))
     );
 
     // === Ancient Time Wood Block Items ===
@@ -379,7 +417,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_LOG.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_LOG.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_LOG.id()))))
     );
 
     /**
@@ -390,7 +428,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.STRIPPED_ANCIENT_TIME_WOOD_LOG.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.STRIPPED_ANCIENT_TIME_WOOD_LOG.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.STRIPPED_ANCIENT_TIME_WOOD_LOG.id()))))
     );
 
     /**
@@ -401,7 +439,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD.id()))))
     );
 
     /**
@@ -412,7 +450,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.STRIPPED_ANCIENT_TIME_WOOD.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.STRIPPED_ANCIENT_TIME_WOOD.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.STRIPPED_ANCIENT_TIME_WOOD.id()))))
     );
 
     /**
@@ -423,7 +461,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_LEAVES.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_LEAVES.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_LEAVES.id()))))
     );
 
     /**
@@ -434,7 +472,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_PLANKS.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_PLANKS.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_PLANKS.id()))))
     );
 
     /**
@@ -445,7 +483,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_STAIRS.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_STAIRS.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_STAIRS.id()))))
     );
 
     /**
@@ -456,7 +494,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_SLAB.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_SLAB.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_SLAB.id()))))
     );
 
     /**
@@ -467,7 +505,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_FENCE.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_FENCE.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_FENCE.id()))))
     );
 
     /**
@@ -478,7 +516,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_DOOR.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_DOOR.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_DOOR.id()))))
     );
 
     /**
@@ -489,7 +527,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_TRAPDOOR.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_TRAPDOOR.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_TRAPDOOR.id()))))
     );
 
     /**
@@ -500,7 +538,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_FENCE_GATE.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_FENCE_GATE.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_FENCE_GATE.id()))))
     );
 
     /**
@@ -511,7 +549,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_BUTTON.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_BUTTON.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_BUTTON.id()))))
     );
 
     /**
@@ -522,7 +560,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_PRESSURE_PLATE.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_PRESSURE_PLATE.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_PRESSURE_PLATE.id()))))
     );
 
     /**
@@ -533,7 +571,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_SAPLING.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_SAPLING.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_SAPLING.id()))))
     );
 
     /**
@@ -544,7 +582,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TIME_WHEAT_BALE.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WHEAT_BALE.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WHEAT_BALE.id()))))
     );
 
     /**
@@ -558,7 +596,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.CLOCK_TOWER_TELEPORTER.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCK_TOWER_TELEPORTER.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCK_TOWER_TELEPORTER.id()))))
     );
 
     /**
@@ -569,7 +607,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.CLOCKWORK_BLOCK.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKWORK_BLOCK.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKWORK_BLOCK.id()))))
     );
 
     /**
@@ -580,7 +618,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TIME_CRYSTAL_BLOCK.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_CRYSTAL_BLOCK.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_CRYSTAL_BLOCK.id()))))
     );
 
     /**
@@ -591,7 +629,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TEMPORAL_BRICKS.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_BRICKS.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_BRICKS.id()))))
     );
 
     /**
@@ -602,7 +640,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TEMPORAL_BRICKS_STAIRS.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_BRICKS_STAIRS.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_BRICKS_STAIRS.id()))))
     );
 
     /**
@@ -613,7 +651,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TEMPORAL_BRICKS_SLAB.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_BRICKS_SLAB.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_BRICKS_SLAB.id()))))
     );
 
     /**
@@ -624,7 +662,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TEMPORAL_BRICKS_WALL.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_BRICKS_WALL.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_BRICKS_WALL.id()))))
     );
 
     /**
@@ -635,7 +673,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TIME_WOOD_STAIRS.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_STAIRS.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_STAIRS.id()))))
     );
 
     /**
@@ -646,7 +684,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TIME_WOOD_SLAB.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_SLAB.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_SLAB.id()))))
     );
 
     /**
@@ -657,7 +695,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TIME_WOOD_FENCE.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_FENCE.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_FENCE.id()))))
     );
 
     /**
@@ -668,7 +706,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TIME_WOOD_DOOR.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_DOOR.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_DOOR.id()))))
     );
 
     /**
@@ -679,7 +717,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TIME_WOOD_TRAPDOOR.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_TRAPDOOR.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_TRAPDOOR.id()))))
     );
 
     /**
@@ -690,7 +728,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TIME_WOOD_FENCE_GATE.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_FENCE_GATE.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_FENCE_GATE.id()))))
     );
 
     /**
@@ -701,7 +739,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TIME_WOOD_BUTTON.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_BUTTON.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_BUTTON.id()))))
     );
 
     /**
@@ -712,7 +750,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TIME_WOOD_PRESSURE_PLATE.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_PRESSURE_PLATE.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_PRESSURE_PLATE.id()))))
     );
 
     /**
@@ -723,7 +761,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TEMPORAL_MOSS.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_MOSS.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_MOSS.id()))))
     );
 
     /**
@@ -734,7 +772,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.FROZEN_TIME_ICE.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.FROZEN_TIME_ICE.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.FROZEN_TIME_ICE.id()))))
     );
 
     /**
@@ -746,7 +784,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.BOSS_ROOM_DOOR.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.BOSS_ROOM_DOOR.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.BOSS_ROOM_DOOR.id()))))
     );
 
     /**
@@ -759,7 +797,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.ENTROPY_CRYPT_TRAPDOOR.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENTROPY_CRYPT_TRAPDOOR.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENTROPY_CRYPT_TRAPDOOR.id()))))
     );
 
     /**
@@ -772,7 +810,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TEMPORAL_PARTICLE_EMITTER.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_PARTICLE_EMITTER.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_PARTICLE_EMITTER.id()))))
     );
 
     /**
@@ -784,7 +822,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.BOSS_ROOM_BOUNDARY_MARKER.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.BOSS_ROOM_BOUNDARY_MARKER.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.BOSS_ROOM_BOUNDARY_MARKER.id()))))
     );
 
     // === Material Items ===
@@ -930,7 +968,7 @@ public class ModItems {
         () -> new com.chronodawn.items.ChronoAegisItem(
             new Item.Properties()
                     .setId(ResourceKey.create(Registries.ITEM,
-                        Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CHRONO_AEGIS.id())))
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CHRONO_AEGIS.id())))
         )
     );
 
@@ -976,7 +1014,7 @@ public class ModItems {
         ModItemId.DECORATIVE_WATER_BUCKET.id(),
         () -> new DecorativeWaterBucketItem(ModFluids.DECORATIVE_WATER.get(), new Item.Properties().stacksTo(1)
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DECORATIVE_WATER_BUCKET.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DECORATIVE_WATER_BUCKET.id()))))
     );
 
     /**
@@ -1093,7 +1131,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.CHRONO_MELON.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CHRONO_MELON.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CHRONO_MELON.id()))))
     );
 
     /**
@@ -1115,7 +1153,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.PURPLE_TIME_BLOSSOM.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.PURPLE_TIME_BLOSSOM.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.PURPLE_TIME_BLOSSOM.id()))))
     );
 
     /**
@@ -1127,7 +1165,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.ORANGE_TIME_BLOSSOM.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ORANGE_TIME_BLOSSOM.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ORANGE_TIME_BLOSSOM.id()))))
     );
 
     /**
@@ -1139,7 +1177,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.PINK_TIME_BLOSSOM.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.PINK_TIME_BLOSSOM.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.PINK_TIME_BLOSSOM.id()))))
     );
 
     /**
@@ -1151,7 +1189,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.DAWN_BELL.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DAWN_BELL.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DAWN_BELL.id()))))
     );
 
     /**
@@ -1163,7 +1201,7 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.DUSK_BELL.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DUSK_BELL.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DUSK_BELL.id()))))
     );
 
     /**
@@ -1303,9 +1341,9 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> CLOCKSTONE_HELMET = ITEMS.register(
         ModItemId.CLOCKSTONE_HELMET.id(),
-        () -> new ClockstoneArmorItem(ClockstoneArmorItem.createProperties(ArmorType.HELMET)
+        () -> new ClockstoneArmorItem(ArmorType.HELMET, ClockstoneArmorItem.createProperties(ArmorType.HELMET)
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_HELMET.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_HELMET.id()))))
     );
 
     /**
@@ -1314,9 +1352,9 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> CLOCKSTONE_CHESTPLATE = ITEMS.register(
         ModItemId.CLOCKSTONE_CHESTPLATE.id(),
-        () -> new ClockstoneArmorItem(ClockstoneArmorItem.createProperties(ArmorType.CHESTPLATE)
+        () -> new ClockstoneArmorItem(ArmorType.CHESTPLATE, ClockstoneArmorItem.createProperties(ArmorType.CHESTPLATE)
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_CHESTPLATE.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_CHESTPLATE.id()))))
     );
 
     /**
@@ -1325,9 +1363,9 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> CLOCKSTONE_LEGGINGS = ITEMS.register(
         ModItemId.CLOCKSTONE_LEGGINGS.id(),
-        () -> new ClockstoneArmorItem(ClockstoneArmorItem.createProperties(ArmorType.LEGGINGS)
+        () -> new ClockstoneArmorItem(ArmorType.LEGGINGS, ClockstoneArmorItem.createProperties(ArmorType.LEGGINGS)
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_LEGGINGS.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_LEGGINGS.id()))))
     );
 
     /**
@@ -1336,9 +1374,9 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> CLOCKSTONE_BOOTS = ITEMS.register(
         ModItemId.CLOCKSTONE_BOOTS.id(),
-        () -> new ClockstoneArmorItem(ClockstoneArmorItem.createProperties(ArmorType.BOOTS)
+        () -> new ClockstoneArmorItem(ArmorType.BOOTS, ClockstoneArmorItem.createProperties(ArmorType.BOOTS)
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_BOOTS.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_BOOTS.id()))))
     );
 
     // === Tier 2 Equipment - Weapons ===
@@ -1442,9 +1480,9 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_HELMET = ITEMS.register(
         ModItemId.ENHANCED_CLOCKSTONE_HELMET.id(),
-        () -> new EnhancedClockstoneArmorItem(EnhancedClockstoneArmorItem.createProperties(ArmorType.HELMET)
+        () -> new EnhancedClockstoneArmorItem(ArmorType.HELMET, EnhancedClockstoneArmorItem.createProperties(ArmorType.HELMET)
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENHANCED_CLOCKSTONE_HELMET.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENHANCED_CLOCKSTONE_HELMET.id()))))
     );
 
     /**
@@ -1454,9 +1492,9 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_CHESTPLATE = ITEMS.register(
         ModItemId.ENHANCED_CLOCKSTONE_CHESTPLATE.id(),
-        () -> new EnhancedClockstoneArmorItem(EnhancedClockstoneArmorItem.createProperties(ArmorType.CHESTPLATE)
+        () -> new EnhancedClockstoneArmorItem(ArmorType.CHESTPLATE, EnhancedClockstoneArmorItem.createProperties(ArmorType.CHESTPLATE)
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENHANCED_CLOCKSTONE_CHESTPLATE.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENHANCED_CLOCKSTONE_CHESTPLATE.id()))))
     );
 
     /**
@@ -1466,9 +1504,9 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_LEGGINGS = ITEMS.register(
         ModItemId.ENHANCED_CLOCKSTONE_LEGGINGS.id(),
-        () -> new EnhancedClockstoneArmorItem(EnhancedClockstoneArmorItem.createProperties(ArmorType.LEGGINGS)
+        () -> new EnhancedClockstoneArmorItem(ArmorType.LEGGINGS, EnhancedClockstoneArmorItem.createProperties(ArmorType.LEGGINGS)
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENHANCED_CLOCKSTONE_LEGGINGS.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENHANCED_CLOCKSTONE_LEGGINGS.id()))))
     );
 
     /**
@@ -1478,9 +1516,9 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_BOOTS = ITEMS.register(
         ModItemId.ENHANCED_CLOCKSTONE_BOOTS.id(),
-        () -> new EnhancedClockstoneArmorItem(EnhancedClockstoneArmorItem.createProperties(ArmorType.BOOTS)
+        () -> new EnhancedClockstoneArmorItem(ArmorType.BOOTS, EnhancedClockstoneArmorItem.createProperties(ArmorType.BOOTS)
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENHANCED_CLOCKSTONE_BOOTS.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENHANCED_CLOCKSTONE_BOOTS.id()))))
     );
 
     // === Tools ===
@@ -1553,7 +1591,7 @@ public class ModItems {
             0xADD8E6, // Spots: Light cyan
             new Item.Properties()
                     .setId(ResourceKey.create(Registries.ITEM,
-                        Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_WRAITH_SPAWN_EGG.id())))
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_WRAITH_SPAWN_EGG.id())))
         )
     );
 
@@ -1570,7 +1608,7 @@ public class ModItems {
             0xFFD700, // Spots: Gold
             new Item.Properties()
                     .setId(ResourceKey.create(Registries.ITEM,
-                        Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKWORK_SENTINEL_SPAWN_EGG.id())))
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKWORK_SENTINEL_SPAWN_EGG.id())))
         )
     );
 
@@ -1587,7 +1625,7 @@ public class ModItems {
             0xF5F5F5, // Spots: Off-white
             new Item.Properties()
                     .setId(ResourceKey.create(Registries.ITEM,
-                        Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_KEEPER_SPAWN_EGG.id())))
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_KEEPER_SPAWN_EGG.id())))
         )
     );
 
@@ -1607,7 +1645,7 @@ public class ModItems {
             0x4169E1, // Spots: Royal blue
             new Item.Properties()
                     .setId(ResourceKey.create(Registries.ITEM,
-                        Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_GUARDIAN_SPAWN_EGG.id())))
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_GUARDIAN_SPAWN_EGG.id())))
         )
     );
 
@@ -1625,7 +1663,7 @@ public class ModItems {
             0xFFD700, // Spots: Gold
             new Item.Properties()
                     .setId(ResourceKey.create(Registries.ITEM,
-                        Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_TYRANT_SPAWN_EGG.id())))
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_TYRANT_SPAWN_EGG.id())))
         )
     );
 
@@ -1643,7 +1681,7 @@ public class ModItems {
             0x00CED1, // Spots: Dark turquoise
             new Item.Properties()
                     .setId(ResourceKey.create(Registries.ITEM,
-                        Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CHRONOS_WARDEN_SPAWN_EGG.id())))
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CHRONOS_WARDEN_SPAWN_EGG.id())))
         )
     );
 
@@ -1661,7 +1699,7 @@ public class ModItems {
             0xFF8C00, // Spots: Dark orange
             new Item.Properties()
                     .setId(ResourceKey.create(Registries.ITEM,
-                        Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKWORK_COLOSSUS_SPAWN_EGG.id())))
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKWORK_COLOSSUS_SPAWN_EGG.id())))
         )
     );
 
@@ -1679,7 +1717,7 @@ public class ModItems {
             0x9370DB, // Spots: Medium purple
             new Item.Properties()
                     .setId(ResourceKey.create(Registries.ITEM,
-                        Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENTROPY_KEEPER_SPAWN_EGG.id())))
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENTROPY_KEEPER_SPAWN_EGG.id())))
         )
     );
 
@@ -1697,7 +1735,7 @@ public class ModItems {
             0xE0E0E0, // Spots: Light gray
             new Item.Properties()
                     .setId(ResourceKey.create(Registries.ITEM,
-                        Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_PHANTOM_SPAWN_EGG.id())))
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_PHANTOM_SPAWN_EGG.id())))
         )
     );
 
@@ -1714,7 +1752,7 @@ public class ModItems {
             0x90EE90, // Spots: Light green
             new Item.Properties()
                     .setId(ResourceKey.create(Registries.ITEM,
-                        Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.FLOQ_SPAWN_EGG.id())))
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.FLOQ_SPAWN_EGG.id())))
         )
     );
 
@@ -1726,7 +1764,7 @@ public class ModItems {
             0x8B7355, // Spots: Dark brown
             new Item.Properties()
                     .setId(ResourceKey.create(Registries.ITEM,
-                        Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.EPOCH_HUSK_SPAWN_EGG.id())))
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.EPOCH_HUSK_SPAWN_EGG.id())))
         )
     );
 
@@ -1738,7 +1776,7 @@ public class ModItems {
             0x6060A0, // Spots: Dark purple
             new Item.Properties()
                     .setId(ResourceKey.create(Registries.ITEM,
-                        Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.FORGOTTEN_MINUTE_SPAWN_EGG.id())))
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.FORGOTTEN_MINUTE_SPAWN_EGG.id())))
         )
     );
 
@@ -1750,7 +1788,7 @@ public class ModItems {
             0x8B0000, // Spots: Dark red
             new Item.Properties()
                     .setId(ResourceKey.create(Registries.ITEM,
-                        Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CHRONAL_LEECH_SPAWN_EGG.id())))
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CHRONAL_LEECH_SPAWN_EGG.id())))
         )
     );
 
@@ -1762,7 +1800,7 @@ public class ModItems {
             0x000000, // Spots: Black
             new Item.Properties()
                     .setId(ResourceKey.create(Registries.ITEM,
-                        Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.MOMENT_CREEPER_SPAWN_EGG.id())))
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.MOMENT_CREEPER_SPAWN_EGG.id())))
         )
     );
 
@@ -1780,7 +1818,7 @@ public class ModItems {
                     .saturationModifier(0.1f)
                     .build())
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.GLIDE_FISH.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.GLIDE_FISH.id()))))
     );
 
     /**
@@ -1795,7 +1833,7 @@ public class ModItems {
                     .saturationModifier(0.6f)
                     .build())
                 .setId(ResourceKey.create(Registries.ITEM,
-                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.COOKED_GLIDE_FISH.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.COOKED_GLIDE_FISH.id()))))
     );
 
     public static final RegistrySupplier<Item> GLIDE_FISH_SPAWN_EGG = ITEMS.register(
@@ -1806,7 +1844,7 @@ public class ModItems {
             0x87CEEB, // Spots: Sky blue
             new Item.Properties()
                     .setId(ResourceKey.create(Registries.ITEM,
-                        Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.GLIDE_FISH_SPAWN_EGG.id())))
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.GLIDE_FISH_SPAWN_EGG.id())))
         )
     );
 
@@ -1818,7 +1856,7 @@ public class ModItems {
             0xFFD700, // Spots: Golden yellow
             new Item.Properties()
                     .setId(ResourceKey.create(Registries.ITEM,
-                        Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIMELINE_STRIDER_SPAWN_EGG.id())))
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIMELINE_STRIDER_SPAWN_EGG.id())))
         )
     );
 
@@ -1830,7 +1868,7 @@ public class ModItems {
             0xDAA520, // Spots: Goldenrod (hourglass sand)
             new Item.Properties()
                     .setId(ResourceKey.create(Registries.ITEM,
-                        Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.HOURGLASS_GOLEM_SPAWN_EGG.id())))
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.HOURGLASS_GOLEM_SPAWN_EGG.id())))
         )
     );
 
@@ -1842,7 +1880,7 @@ public class ModItems {
             0xD4C4A8, // Spots: Light tan/bone
             new Item.Properties()
                     .setId(ResourceKey.create(Registries.ITEM,
-                        Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.SECONDHAND_ARCHER_SPAWN_EGG.id())))
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.SECONDHAND_ARCHER_SPAWN_EGG.id())))
         )
     );
 
@@ -1854,7 +1892,7 @@ public class ModItems {
             0x4FC3F7, // Spots: Bright cyan
             new Item.Properties()
                     .setId(ResourceKey.create(Registries.ITEM,
-                        Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.PARADOX_CRAWLER_SPAWN_EGG.id())))
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.PARADOX_CRAWLER_SPAWN_EGG.id())))
         )
     );
 
@@ -1866,7 +1904,7 @@ public class ModItems {
             0x8BC4A4, // Spots: Light sea green (accent)
             new Item.Properties()
                     .setId(ResourceKey.create(Registries.ITEM,
-                        Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CHRONO_TURTLE_SPAWN_EGG.id())))
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CHRONO_TURTLE_SPAWN_EGG.id())))
         )
     );
 
@@ -1878,7 +1916,7 @@ public class ModItems {
             0x2E6E9C, // Spots: Deep blue
             new Item.Properties()
                     .setId(ResourceKey.create(Registries.ITEM,
-                        Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIMEBOUND_RABBIT_SPAWN_EGG.id())))
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIMEBOUND_RABBIT_SPAWN_EGG.id())))
         )
     );
 
@@ -1890,7 +1928,7 @@ public class ModItems {
             0x483D8B, // Spots: Dark slate blue
             new Item.Properties()
                     .setId(ResourceKey.create(Registries.ITEM,
-                        Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.PULSE_HOG_SPAWN_EGG.id())))
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.PULSE_HOG_SPAWN_EGG.id())))
         )
     );
 
@@ -1902,7 +1940,24 @@ public class ModItems {
             0xFFD700, // Spots: Gold (beak and feet)
             new Item.Properties()
                     .setId(ResourceKey.create(Registries.ITEM,
-                        Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.SECONDWING_FOWL_SPAWN_EGG.id())))
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.SECONDWING_FOWL_SPAWN_EGG.id())))
+        )
+    );
+
+    /**
+     * Ticking Sheep Spawn Egg - For creative mode and debugging.
+     * Primary color: Light cyan (0x7ED8D8) - Background (wool color)
+     * Secondary color: Dark red (0x8B0000) - Spots (fuse accent)
+     */
+    public static final RegistrySupplier<Item> TICKING_SHEEP_SPAWN_EGG = ITEMS.register(
+        ModItemId.TICKING_SHEEP_SPAWN_EGG.id(),
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.TICKING_SHEEP,
+            0x7ED8D8, // Background: Light cyan (wool color)
+            0x8B0000, // Spots: Dark red (fuse accent)
+            new Item.Properties()
+                    .setId(ResourceKey.create(Registries.ITEM,
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TICKING_SHEEP_SPAWN_EGG.id())))
         )
     );
 
@@ -2069,6 +2124,10 @@ public class ModItems {
 
         if (SECONDWING_FOWL_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
             ((com.chronodawn.items.DeferredSpawnEggItem) SECONDWING_FOWL_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (TICKING_SHEEP_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) TICKING_SHEEP_SPAWN_EGG.get()).initializeSpawnEgg();
         }
 
         ChronoDawn.LOGGER.debug("Spawn eggs initialized");
@@ -2321,6 +2380,9 @@ public class ModItems {
         }
         if (SECONDWING_FOWL_SPAWN_EGG.isPresent()) {
             output.accept(SECONDWING_FOWL_SPAWN_EGG.get());
+        }
+        if (TICKING_SHEEP_SPAWN_EGG.isPresent()) {
+            output.accept(TICKING_SHEEP_SPAWN_EGG.get());
         }
     }
 }

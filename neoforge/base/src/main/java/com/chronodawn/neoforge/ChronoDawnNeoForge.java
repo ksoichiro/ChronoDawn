@@ -274,6 +274,11 @@ public class ChronoDawnNeoForge {
             SecondwingFowlEntity.createAttributes().build()
         );
 
+        event.put(
+            ModEntities.TICKING_SHEEP.get(),
+            TickingSheepEntity.createAttributes().build()
+        );
+
         ChronoDawn.LOGGER.debug("Registered entity attributes for NeoForge");
     }
 
@@ -446,6 +451,15 @@ public class ChronoDawnNeoForge {
             SpawnPlacementTypes.ON_GROUND,
             Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             SecondwingFowlEntity::checkSecondwingFowlSpawnRules,
+            RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+
+        // Ticking Sheep - spawns on ground like animals
+        event.register(
+            ModEntities.TICKING_SHEEP.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            TickingSheepEntity::checkTickingSheepSpawnRules,
             RegisterSpawnPlacementsEvent.Operation.REPLACE
         );
 

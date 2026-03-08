@@ -195,6 +195,11 @@ public class ChronoDawnFabric implements ModInitializer {
             SecondwingFowlEntity.createAttributes()
         );
 
+        FabricDefaultAttributeRegistry.register(
+            ModEntities.TICKING_SHEEP.get(),
+            TickingSheepEntity.createAttributes()
+        );
+
         ChronoDawn.LOGGER.debug("Registered entity attributes for Fabric");
     }
 
@@ -272,7 +277,7 @@ public class ChronoDawnFabric implements ModInitializer {
             ModEntities.GLIDE_FISH.get(),
             SpawnPlacementTypes.IN_WATER,
             Heightmap.Types.OCEAN_FLOOR,
-            net.minecraft.world.entity.animal.fish.WaterAnimal::checkSurfaceWaterAnimalSpawnRules
+            net.minecraft.world.entity.animal.WaterAnimal::checkSurfaceWaterAnimalSpawnRules
         );
 
         // Timeline Strider - spawns on ground in daylight (Monster with any light)
@@ -312,7 +317,7 @@ public class ChronoDawnFabric implements ModInitializer {
             ModEntities.CHRONO_TURTLE.get(),
             SpawnPlacementTypes.IN_WATER,
             Heightmap.Types.OCEAN_FLOOR,
-            net.minecraft.world.entity.animal.fish.WaterAnimal::checkSurfaceWaterAnimalSpawnRules
+            net.minecraft.world.entity.animal.WaterAnimal::checkSurfaceWaterAnimalSpawnRules
         );
 
         // Timebound Rabbit - spawns on ground like animals
@@ -337,6 +342,14 @@ public class ChronoDawnFabric implements ModInitializer {
             SpawnPlacementTypes.ON_GROUND,
             Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             SecondwingFowlEntity::checkSecondwingFowlSpawnRules
+        );
+
+        // Ticking Sheep - spawns on ground like animals
+        SpawnPlacements.register(
+            ModEntities.TICKING_SHEEP.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            TickingSheepEntity::checkTickingSheepSpawnRules
         );
 
         ChronoDawn.LOGGER.debug("Registered spawn placements for custom mobs");

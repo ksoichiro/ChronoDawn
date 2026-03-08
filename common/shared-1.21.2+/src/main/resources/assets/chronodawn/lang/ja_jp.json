@@ -406,5 +406,8 @@
   "gui.chronodawn.chronicle.previous": "前へ",
   "gui.chronodawn.chronicle.next": "次へ",
   "gui.chronodawn.chronicle.page": "ページ %s / %s",
-  "gui.chronodawn.chronicle.select_category": "カテゴリーを選択して開始"
+  "gui.chronodawn.chronicle.select_category": "カテゴリーを選択して開始",
+
+  "entity.chronodawn.ticking_sheep": "ティッキング・シープ",
+  "item.chronodawn.ticking_sheep_spawn_egg": "ティッキング・シープのスポーンエッグ"
 }

@@ -192,6 +192,16 @@ public class ChronoDawnClientNeoForge {
             SecondwingFowlModel::createBodyLayer
         );
 
+        // Register Ticking Sheep model layers (body + wool)
+        event.registerLayerDefinition(
+            TickingSheepBodyModel.LAYER_LOCATION,
+            TickingSheepBodyModel::createBodyLayer
+        );
+        event.registerLayerDefinition(
+            TickingSheepWoolModel.LAYER_LOCATION,
+            TickingSheepWoolModel::createBodyLayer
+        );
+
         // Register boat and chest boat model layers (version-specific)
         VersionSpecificClientHelper.registerBoatModelLayers(event);
 
@@ -346,6 +356,12 @@ public class ChronoDawnClientNeoForge {
             SecondwingFowlRenderer::new
         );
 
+        // Register Ticking Sheep renderer
+        event.registerEntityRenderer(
+            ModEntities.TICKING_SHEEP.get(),
+            TickingSheepRenderer::new
+        );
+
         // Register ChronoDawn Boat with custom renderer
         event.registerEntityRenderer(
             ModEntities.CHRONO_DAWN_BOAT.get(),
@@ -459,7 +475,8 @@ public class ChronoDawnClientNeoForge {
             ModItems.CHRONO_TURTLE_SPAWN_EGG.get(),
             ModItems.TIMEBOUND_RABBIT_SPAWN_EGG.get(),
             ModItems.PULSE_HOG_SPAWN_EGG.get(),
-            ModItems.SECONDWING_FOWL_SPAWN_EGG.get()
+            ModItems.SECONDWING_FOWL_SPAWN_EGG.get(),
+            ModItems.TICKING_SHEEP_SPAWN_EGG.get()
         );
 
         ChronoDawn.LOGGER.debug("Registered item color handlers for NeoForge");

@@ -1,39 +1,51 @@
 package com.chronodawn.fabric.client;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.entities.boats.ChronoDawnBoatType;
 import com.chronodawn.client.model.*;
 import com.chronodawn.client.particle.ChronoDawnPortalParticle;
-import com.chronodawn.client.renderer.*;
-import com.chronodawn.client.renderer.mobs.*;
-import com.chronodawn.entities.boats.ChronoDawnBoatType;
 import com.chronodawn.gui.ChronicleScreen;
 import com.chronodawn.gui.data.ChronicleData;
 import com.chronodawn.items.ChronicleBookItem;
+import com.chronodawn.client.renderer.*;
+import com.chronodawn.client.renderer.mobs.*;
+import com.chronodawn.items.TimeCompassItem;
 import com.chronodawn.registry.ModBlockId;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModEntities;
+import com.chronodawn.registry.ModItems;
 import com.chronodawn.registry.ModParticles;
 import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.event.client.player.ClientPlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.client.model.BoatModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.Optional;
 
 /**
  * Fabric client-side initialization for ChronoDawn mod.
@@ -55,7 +67,7 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
         registerEntityModelLayers();
         registerEntityRenderers();
         registerParticles();
-        // registerItemProperties(); // Removed in 1.21.4 - use Client Items model definitions
+        registerItemProperties();
         registerChronicleDataLoader();
         registerChronicleBookHandler();
         registerPortalEffects();
@@ -95,8 +107,12 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             ModBlocks.TIME_WOOD_LEAVES.get()
         );
 
-        // Item color registration removed in 1.21.4 - use item model definitions instead
-        // In 1.21.4, item tints are defined in JSON model files
+        // Register the item color as well (for inventory/hand rendering)
+        // Use the same blue color (0x78A6DA)
+        ColorProviderRegistry.ITEM.register(
+            (stack, tintIndex) -> 0x78A6DA,
+            ModBlocks.TIME_WOOD_LEAVES.get()
+        );
 
         // Register Chrono Melon Stem color (like vanilla melon/pumpkin stems)
         // Color transitions from green (young) to golden-amber (mature)
@@ -114,7 +130,11 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             ModBlocks.CHRONO_MELON_STEM.get()
         );
 
-        // Item color registration removed in 1.21.4 - use item model definitions instead
+        // Register item color for Chrono Melon Stem (use mature color)
+        ColorProviderRegistry.ITEM.register(
+            (stack, tintIndex) -> 0xD4AF37, // Golden-amber
+            ModBlocks.CHRONO_MELON_STEM.get()
+        );
 
         // Register Attached Chrono Melon Stem color (use mature color - golden-amber)
         ColorProviderRegistry.BLOCK.register(
@@ -122,15 +142,21 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             ModBlocks.ATTACHED_CHRONO_MELON_STEM.get()
         );
 
-        // Item color registration removed in 1.21.4 - use item model definitions instead
+        // Register item color for Attached Chrono Melon Stem
+        ColorProviderRegistry.ITEM.register(
+            (stack, tintIndex) -> 0xD4AF37,
+            ModBlocks.ATTACHED_CHRONO_MELON_STEM.get()
+        );
     }
 
     /**
      * Register render layers for blocks that need special rendering.
      *
-     * In 1.21.6, BlockRenderLayerMap moved from fabric-blockrenderlayer-v1 to
-     * fabric-rendering-v1 (net.fabricmc.fabric.api.client.rendering.v1 package).
-     * API changed from INSTANCE.putBlock() to static putBlock().
+     * Fabric does not support the render_type field in block model JSON files,
+     * so we must register render layers programmatically using BlockRenderLayerMap.
+     *
+     * Render layer information is defined in ModBlockId using a fluent builder pattern,
+     * allowing centralized management of block properties.
      */
     private void registerRenderLayers() {
         for (ModBlockId blockId : ModBlockId.availableForCurrent()) {
@@ -140,6 +166,7 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
 
             ResourceLocation blockLoc = ResourceLocation.fromNamespaceAndPath(
                 ChronoDawn.MOD_ID, blockId.id());
+            // In 1.21.2, get() returns Optional<Reference<Block>>
             var blockHolder = BuiltInRegistries.BLOCK.get(blockLoc);
             Block block = blockHolder.map(holder -> holder.value()).orElse(null);
 
@@ -149,9 +176,9 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             }
 
             switch (blockId.renderLayer()) {
-                case CUTOUT -> BlockRenderLayerMap.putBlock(block, ChunkSectionLayer.CUTOUT);
-                case CUTOUT_MIPPED -> BlockRenderLayerMap.putBlock(block, ChunkSectionLayer.CUTOUT_MIPPED);
-                case TRANSLUCENT -> BlockRenderLayerMap.putBlock(block, ChunkSectionLayer.TRANSLUCENT);
+                case CUTOUT -> BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.cutout());
+                case CUTOUT_MIPPED -> BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.cutoutMipped());
+                case TRANSLUCENT -> BlockRenderLayerMap.INSTANCE.putBlock(block, RenderType.translucent());
                 default -> {} // SOLID already handled above
             }
         }
@@ -300,6 +327,16 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
         EntityModelLayerRegistry.registerModelLayer(
             SecondwingFowlModel.LAYER_LOCATION,
             SecondwingFowlModel::createBodyLayer
+        );
+
+        // Register Ticking Sheep model layers (body + wool)
+        EntityModelLayerRegistry.registerModelLayer(
+            TickingSheepBodyModel.LAYER_LOCATION,
+            TickingSheepBodyModel::createBodyLayer
+        );
+        EntityModelLayerRegistry.registerModelLayer(
+            TickingSheepWoolModel.LAYER_LOCATION,
+            TickingSheepWoolModel::createBodyLayer
         );
     }
 
@@ -476,6 +513,12 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             SecondwingFowlRenderer::new
         );
 
+        // Register Ticking Sheep renderer
+        EntityRendererRegistry.register(
+            ModEntities.TICKING_SHEEP.get(),
+            TickingSheepRenderer::new
+        );
+
         // Register ChronoDawn Boat with custom renderer
         EntityRendererRegistry.register(
             ModEntities.CHRONO_DAWN_BOAT.get(),
@@ -507,16 +550,38 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
      *
      * Time Compass uses the "angle" property to rotate the needle
      * based on the target structure's position.
-     *
-     * Note: ItemProperties was removed in 1.21.4. Time Compass angle
-     * should be defined via Client Items model definition JSON files.
-     * TODO: Implement Time Compass using 1.21.4 Client Items system.
      */
     private void registerItemProperties() {
-        // ItemProperties API removed in 1.21.4
-        // Time Compass functionality needs to be implemented using
-        // the new Client Items model definition system with special model types
-        ChronoDawn.LOGGER.info("Time Compass properties registration skipped - requires 1.21.4 Client Items implementation");
+        // Register Time Compass angle property
+        // This makes the compass needle point towards the target structure
+        net.minecraft.client.renderer.item.ItemProperties.register(
+            ModItems.TIME_COMPASS.get(),
+            ResourceLocation.fromNamespaceAndPath("minecraft", "angle"),
+            (stack, level, entity, seed) -> {
+                // Get target position from compass NBT
+                Optional<GlobalPos> targetPos = TimeCompassItem.getTargetPosition(stack);
+                if (targetPos.isEmpty() || level == null) {
+                    // No target or no level - return random angle
+                    return (float) Math.random();
+                }
+
+                GlobalPos target = targetPos.get();
+
+                // Check if we're in the correct dimension
+                if (!level.dimension().equals(target.dimension())) {
+                    // Wrong dimension - spin randomly
+                    return (float) Math.random();
+                }
+
+                // Calculate angle to target
+                Entity holder = entity != null ? entity : null;
+                if (holder == null) {
+                    return 0.0f;
+                }
+
+                return calculateCompassAngle(holder, target.pos());
+            }
+        );
     }
 
     /**

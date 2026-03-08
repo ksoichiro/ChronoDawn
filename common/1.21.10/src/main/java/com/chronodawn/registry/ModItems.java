@@ -1,22 +1,58 @@
 package com.chronodawn.registry;
 
 import com.chronodawn.ChronoDawn;
-import com.chronodawn.entities.boats.ChronoDawnBoatType;
-import com.chronodawn.items.*;
-import com.chronodawn.items.artifacts.ChronobladeItem;
-import com.chronodawn.items.artifacts.EchoingTimeBootsItem;
-import com.chronodawn.items.artifacts.TimeTyrantMailItem;
-import com.chronodawn.items.artifacts.UnstablePocketWatchItem;
+import com.chronodawn.items.ChronicleBookItem;
+import com.chronodawn.items.DecorativeWaterBucketItem;
+import com.chronodawn.items.PortalStabilizerItem;
+import com.chronodawn.items.TimeHourglassItem;
 import com.chronodawn.items.base.ClockstoneItem;
 import com.chronodawn.items.base.EnhancedClockstoneItem;
 import com.chronodawn.items.base.TimeCrystalItem;
-import com.chronodawn.items.boats.ChronoDawnBoatItem;
 import com.chronodawn.items.combat.TimeArrowItem;
-import com.chronodawn.items.consumables.*;
-import com.chronodawn.items.equipment.*;
+import com.chronodawn.items.consumables.FruitOfTimeItem;
+import com.chronodawn.items.consumables.TimeFruitPieItem;
+import com.chronodawn.items.consumables.TimeJamItem;
+import com.chronodawn.items.consumables.TimeWheatSeedsItem;
+import com.chronodawn.items.consumables.TimeWheatItem;
+import com.chronodawn.items.consumables.TimeBreadItem;
+import com.chronodawn.items.consumables.TemporalRootItem;
+import com.chronodawn.items.consumables.BakedTemporalRootItem;
+import com.chronodawn.items.consumables.ChronoMelonSliceItem;
+import com.chronodawn.items.consumables.ChronoMelonSeedsItem;
+import com.chronodawn.items.consumables.TimelessMushroomItem;
+import com.chronodawn.items.consumables.TemporalRootStewItem;
+import com.chronodawn.items.consumables.GlisteningChronoMelonItem;
+import com.chronodawn.items.consumables.ChronoMelonJuiceItem;
+import com.chronodawn.items.consumables.TimelessMushroomSoupItem;
+import com.chronodawn.items.consumables.EnhancedTimeBreadItem;
+import com.chronodawn.items.consumables.TimeWheatCookieItem;
+import com.chronodawn.items.consumables.ClockworkCookieItem;
+import com.chronodawn.items.consumables.GoldenTimeWheatItem;
+import com.chronodawn.items.equipment.ClockstoneArmorItem;
+import com.chronodawn.items.equipment.ClockstoneAxeItem;
+import com.chronodawn.items.equipment.ClockstoneHoeItem;
+import com.chronodawn.items.equipment.ClockstonePickaxeItem;
+import com.chronodawn.items.equipment.ClockstoneShovelItem;
+import com.chronodawn.items.equipment.ClockstoneSwordItem;
+import com.chronodawn.items.equipment.EnhancedClockstoneArmorItem;
+import com.chronodawn.items.equipment.EnhancedClockstoneAxeItem;
+import com.chronodawn.items.equipment.EnhancedClockstoneHoeItem;
+import com.chronodawn.items.equipment.EnhancedClockstonePickaxeItem;
+import com.chronodawn.items.equipment.EnhancedClockstoneShovelItem;
+import com.chronodawn.items.equipment.EnhancedClockstoneSwordItem;
+import com.chronodawn.items.artifacts.ChronobladeItem;
+import com.chronodawn.items.artifacts.TimeTyrantMailItem;
+import com.chronodawn.items.artifacts.EchoingTimeBootsItem;
+import com.chronodawn.items.artifacts.UnstablePocketWatchItem;
+import com.chronodawn.items.tools.TimeClockItem;
+import net.minecraft.world.item.ArmorItem;
+import com.chronodawn.items.KeyToMasterClockItem;
+import com.chronodawn.items.UnstableHourglassItem;
 import com.chronodawn.items.quest.AncientGearItem;
 import com.chronodawn.items.tools.SpatiallyLinkedPickaxeItem;
-import com.chronodawn.items.tools.TimeClockItem;
+import com.chronodawn.items.boats.ChronoDawnBoatItem;
+import com.chronodawn.entities.boats.ChronoDawnBoatType;
+import com.chronodawn.registry.ModFluids;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
@@ -25,6 +61,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.equipment.ArmorType;
+import com.chronodawn.registry.ModItemId;
+import com.chronodawn.registry.ModBlockId;
 
 /**
  * Architectury Registry wrapper for custom items.
@@ -1303,7 +1341,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> CLOCKSTONE_HELMET = ITEMS.register(
         ModItemId.CLOCKSTONE_HELMET.id(),
-        () -> new ClockstoneArmorItem(ClockstoneArmorItem.createProperties(ArmorType.HELMET)
+        () -> new ClockstoneArmorItem(ArmorType.HELMET, ClockstoneArmorItem.createProperties(ArmorType.HELMET)
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_HELMET.id()))))
     );
@@ -1314,7 +1352,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> CLOCKSTONE_CHESTPLATE = ITEMS.register(
         ModItemId.CLOCKSTONE_CHESTPLATE.id(),
-        () -> new ClockstoneArmorItem(ClockstoneArmorItem.createProperties(ArmorType.CHESTPLATE)
+        () -> new ClockstoneArmorItem(ArmorType.CHESTPLATE, ClockstoneArmorItem.createProperties(ArmorType.CHESTPLATE)
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_CHESTPLATE.id()))))
     );
@@ -1325,7 +1363,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> CLOCKSTONE_LEGGINGS = ITEMS.register(
         ModItemId.CLOCKSTONE_LEGGINGS.id(),
-        () -> new ClockstoneArmorItem(ClockstoneArmorItem.createProperties(ArmorType.LEGGINGS)
+        () -> new ClockstoneArmorItem(ArmorType.LEGGINGS, ClockstoneArmorItem.createProperties(ArmorType.LEGGINGS)
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_LEGGINGS.id()))))
     );
@@ -1336,7 +1374,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> CLOCKSTONE_BOOTS = ITEMS.register(
         ModItemId.CLOCKSTONE_BOOTS.id(),
-        () -> new ClockstoneArmorItem(ClockstoneArmorItem.createProperties(ArmorType.BOOTS)
+        () -> new ClockstoneArmorItem(ArmorType.BOOTS, ClockstoneArmorItem.createProperties(ArmorType.BOOTS)
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_BOOTS.id()))))
     );
@@ -1442,7 +1480,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_HELMET = ITEMS.register(
         ModItemId.ENHANCED_CLOCKSTONE_HELMET.id(),
-        () -> new EnhancedClockstoneArmorItem(EnhancedClockstoneArmorItem.createProperties(ArmorType.HELMET)
+        () -> new EnhancedClockstoneArmorItem(ArmorType.HELMET, EnhancedClockstoneArmorItem.createProperties(ArmorType.HELMET)
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENHANCED_CLOCKSTONE_HELMET.id()))))
     );
@@ -1454,7 +1492,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_CHESTPLATE = ITEMS.register(
         ModItemId.ENHANCED_CLOCKSTONE_CHESTPLATE.id(),
-        () -> new EnhancedClockstoneArmorItem(EnhancedClockstoneArmorItem.createProperties(ArmorType.CHESTPLATE)
+        () -> new EnhancedClockstoneArmorItem(ArmorType.CHESTPLATE, EnhancedClockstoneArmorItem.createProperties(ArmorType.CHESTPLATE)
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENHANCED_CLOCKSTONE_CHESTPLATE.id()))))
     );
@@ -1466,7 +1504,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_LEGGINGS = ITEMS.register(
         ModItemId.ENHANCED_CLOCKSTONE_LEGGINGS.id(),
-        () -> new EnhancedClockstoneArmorItem(EnhancedClockstoneArmorItem.createProperties(ArmorType.LEGGINGS)
+        () -> new EnhancedClockstoneArmorItem(ArmorType.LEGGINGS, EnhancedClockstoneArmorItem.createProperties(ArmorType.LEGGINGS)
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENHANCED_CLOCKSTONE_LEGGINGS.id()))))
     );
@@ -1478,7 +1516,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_BOOTS = ITEMS.register(
         ModItemId.ENHANCED_CLOCKSTONE_BOOTS.id(),
-        () -> new EnhancedClockstoneArmorItem(EnhancedClockstoneArmorItem.createProperties(ArmorType.BOOTS)
+        () -> new EnhancedClockstoneArmorItem(ArmorType.BOOTS, EnhancedClockstoneArmorItem.createProperties(ArmorType.BOOTS)
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENHANCED_CLOCKSTONE_BOOTS.id()))))
     );
@@ -1906,6 +1944,23 @@ public class ModItems {
         )
     );
 
+    /**
+     * Ticking Sheep Spawn Egg - For creative mode and debugging.
+     * Primary color: Light cyan (0x7ED8D8) - Background (wool color)
+     * Secondary color: Dark red (0x8B0000) - Spots (fuse accent)
+     */
+    public static final RegistrySupplier<Item> TICKING_SHEEP_SPAWN_EGG = ITEMS.register(
+        ModItemId.TICKING_SHEEP_SPAWN_EGG.id(),
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.TICKING_SHEEP,
+            0x7ED8D8, // Background: Light cyan (wool color)
+            0x8B0000, // Spots: Dark red (fuse accent)
+            new Item.Properties()
+                    .setId(ResourceKey.create(Registries.ITEM,
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TICKING_SHEEP_SPAWN_EGG.id())))
+        )
+    );
+
     // === Boats ===
 
     /**
@@ -2069,6 +2124,10 @@ public class ModItems {
 
         if (SECONDWING_FOWL_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
             ((com.chronodawn.items.DeferredSpawnEggItem) SECONDWING_FOWL_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (TICKING_SHEEP_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) TICKING_SHEEP_SPAWN_EGG.get()).initializeSpawnEgg();
         }
 
         ChronoDawn.LOGGER.debug("Spawn eggs initialized");
@@ -2321,6 +2380,9 @@ public class ModItems {
         }
         if (SECONDWING_FOWL_SPAWN_EGG.isPresent()) {
             output.accept(SECONDWING_FOWL_SPAWN_EGG.get());
+        }
+        if (TICKING_SHEEP_SPAWN_EGG.isPresent()) {
+            output.accept(TICKING_SHEEP_SPAWN_EGG.get());
         }
     }
 }
