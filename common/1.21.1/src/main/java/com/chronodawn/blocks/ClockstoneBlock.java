@@ -56,7 +56,8 @@ public class ClockstoneBlock extends Block {
                 .mapColor(MapColor.COLOR_PURPLE)  // Purple color for time-themed block
                 .strength(5.0f, 6.0f)              // Harder than stone
                 .requiresCorrectToolForDrops()      // Requires pickaxe
-                .sound(SoundType.METAL);            // Metallic sound for mystical material
+                .sound(SoundType.METAL)             // Metallic sound for mystical material
+                .lightLevel(state -> 9);
     }
 
     @Override

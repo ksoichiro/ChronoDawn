@@ -59,6 +59,7 @@ public class ClockstoneBlock extends Block {
     public static BlockBehaviour.Properties createProperties() {
         return BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
                 .strength(5.0f, 6.0f)
+                .lightLevel(state -> 9)
                 .setId(ResourceKey.create(Registries.BLOCK,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, "clockstone_block")));
     }
