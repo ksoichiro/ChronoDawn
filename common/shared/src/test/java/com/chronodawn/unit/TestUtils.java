@@ -196,13 +196,13 @@ public final class TestUtils {
         // Version-specific resources first
         resourceDirs.add(Paths.get(projectRoot, "common", mcVersion, "src", "main", "resources").toString());
         // Shared resources (from newest to oldest)
-        if (mcVersion.compareTo("1.21.5") >= 0) {
+        if (compareVersions(mcVersion, "1.21.5") >= 0) {
             resourceDirs.add(Paths.get(projectRoot, "common", "shared-1.21.5+", "src", "main", "resources").toString());
         }
-        if (mcVersion.compareTo("1.21.2") >= 0) {
+        if (compareVersions(mcVersion, "1.21.2") >= 0) {
             resourceDirs.add(Paths.get(projectRoot, "common", "shared-1.21.2+", "src", "main", "resources").toString());
         }
-        if (mcVersion.compareTo("1.21.1") >= 0) {
+        if (compareVersions(mcVersion, "1.21.1") >= 0) {
             resourceDirs.add(Paths.get(projectRoot, "common", "shared-1.21.1+", "src", "main", "resources").toString());
         }
         resourceDirs.add(Paths.get(projectRoot, "common", "shared", "src", "main", "resources").toString());
@@ -224,6 +224,23 @@ public final class TestUtils {
             }
         }
         return results;
+    }
+
+    /**
+     * Compare two Minecraft version strings semantically.
+     * Handles versions like "1.21.10" > "1.21.5" correctly
+     * (unlike String.compareTo which would give "1.21.10" < "1.21.5").
+     */
+    public static int compareVersions(String v1, String v2) {
+        String[] parts1 = v1.split("\\.");
+        String[] parts2 = v2.split("\\.");
+        int len = Math.max(parts1.length, parts2.length);
+        for (int i = 0; i < len; i++) {
+            int n1 = i < parts1.length ? Integer.parseInt(parts1[i]) : 0;
+            int n2 = i < parts2.length ? Integer.parseInt(parts2[i]) : 0;
+            if (n1 != n2) return Integer.compare(n1, n2);
+        }
+        return 0;
     }
 
     /**
