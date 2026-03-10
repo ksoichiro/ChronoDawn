@@ -90,6 +90,11 @@ sourceSets {
             srcDir '../shared/src/main/resources'
         }
     }
+    test {
+        java {
+            srcDir '../shared/src/test/java'
+        }
+    }
 }
 
 // Set version info as Java system property at runtime (for compat handlers)
@@ -184,6 +189,7 @@ tasks.test {
     systemProperty 'chronodawn.minecraft.version', project.ext.minecraft_version
     // Pass source directory for source-parsing based resource validation tests
     systemProperty 'chronodawn.source.dir', file('src/main/java').absolutePath
+    systemProperty 'chronodawn.project.root', rootProject.projectDir.absolutePath
 }
 
 // Set duplicates strategy for sourcesJar to avoid conflicts

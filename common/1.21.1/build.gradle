@@ -24,6 +24,7 @@ dependencies {
     // Testing dependencies
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+    testImplementation 'com.google.code.gson:gson:2.10.1'
 }
 
 sourceSets {
@@ -36,6 +37,11 @@ sourceSets {
         resources {
             srcDir '../shared-1.21.1+/src/main/resources'
             srcDir '../shared/src/main/resources'
+        }
+    }
+    test {
+        java {
+            srcDir '../shared/src/test/java'
         }
     }
 }
@@ -128,6 +134,7 @@ tasks.test {
     systemProperty 'chronodawn.minecraft.version', project.ext.minecraft_version
     // Pass source directory for source-parsing based resource validation tests
     systemProperty 'chronodawn.source.dir', file('src/main/java').absolutePath
+    systemProperty 'chronodawn.project.root', rootProject.projectDir.absolutePath
 }
 
 // Set duplicates strategy for sourcesJar to avoid conflicts
