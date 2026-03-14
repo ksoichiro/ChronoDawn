@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Minecraft 1.21.7 support
 - Minecraft 1.21.8 support
 - Minecraft 1.21.9 support
-- Minecraft 1.21.10 support (with vanilla density function fix)
+- Minecraft 1.21.10 support
 - Minecraft 1.21.11 support
 
 #### Gameplay Features
@@ -44,7 +44,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Removed chrono_turtle from mountain and snowy biomes
 - Synced mob spawner entries across all versions
 - Added 1.20.1-compatible disk feature format for coarse dirt
-- Resolved Ticking Sheep rendering issues for 1.21.4-1.21.11
 - Rewrote 1.20.1 Clockwork Colossus spawner to use direct engine room check
 - Replaced minecraft:creeper with chronodawn:moment_creeper in biome spawns for 1.20.1 and 1.21.1
 - Triggered arm swing animation on boss room door interaction (1.21.2-1.21.10)
