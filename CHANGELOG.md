@@ -7,6 +7,53 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-03-14
+
+### Added
+
+#### New Mobs
+- **Ticking Sheep**: Custom sheep mob ported to all supported versions
+
+#### Minecraft Version Support
+- Minecraft 1.21.7 support
+- Minecraft 1.21.8 support
+- Minecraft 1.21.9 support
+- Minecraft 1.21.10 support (with vanilla density function fix)
+- Minecraft 1.21.11 support
+
+#### Gameplay Features
+- **Chrono Dawn Prairies biome**: New biome added and ported to all supported versions
+- Light emission (level 9) added to Clockstone Block across all versions
+- Animated textures for Clockstone, teleporter, ice, and crystal blocks
+- Dye crafting recipes for custom flowers
+- Loot tables for hostile mobs
+
+#### Development & Build
+- CurseForge and Modrinth release automation scripts
+- Shared test infrastructure for cross-version validation
+- Unit tests for MinecraftVersion, ModIdEnum, PortalState, and TestUtils
+
+### Changed
+- Moved tyrant defeat advancement grant from tick polling to player join event
+- Shared identical resource files across version ranges via shared directories (shared, shared-1.21.1+, shared-1.21.2+, shared-1.21.5+)
+- Restructured version-specific directories to hierarchical layout
+- Generated 1.20.1 NBT structures into build directory instead of src
+- Limited gameTestAll to 2 parallel threads via fixed thread pool
+
+### Fixed
+- Removed chrono_turtle from mountain and snowy biomes
+- Synced mob spawner entries across all versions
+- Added 1.20.1-compatible disk feature format for coarse dirt
+- Resolved Ticking Sheep rendering issues for 1.21.4-1.21.11
+- Rewrote 1.20.1 Clockwork Colossus spawner to use direct engine room check
+- Replaced minecraft:creeper with chronodawn:moment_creeper in biome spawns for 1.20.1 and 1.21.1
+- Triggered arm swing animation on boss room door interaction (1.21.2-1.21.10)
+- Updated preliminary_surface_level to vanilla find_top_surface density function (1.21.9, 1.21.10)
+- Added 0xFF alpha prefix to drawString color values (1.21.6-1.21.8)
+- Used JSON objects for text components in loot table blueprints (1.21.5-1.21.8)
+- Restored axe stripping arm swing animation for Time Wood logs (1.21.2-1.21.8)
+- Fixed reverse sort in JAR listing for release scripts
+
 ## [0.5.0] - 2026-02-06
 
 ### Added
@@ -217,7 +264,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Architectury API 13.0.8+
 - Custom Portal API 0.0.1-beta66-1.21 (Fabric bundled, NeoForge requires separate installation)
 
-[Unreleased]: https://github.com/ksoichiro/ChronoDawn/compare/v0.5.0+1.21.2...HEAD
+[Unreleased]: https://github.com/ksoichiro/ChronoDawn/compare/v0.6.0+1.21.2...HEAD
+[0.6.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.5.0+1.21.2...v0.6.0+1.21.2
 [0.5.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.4.0+1.21.2...v0.5.0+1.21.2
 [0.4.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.4.0-beta+1.21.1...v0.4.0+1.21.1
 [0.4.0-beta]: https://github.com/ksoichiro/ChronoDawn/compare/v0.3.0+1.21.1...v0.4.0-beta+1.21.1
