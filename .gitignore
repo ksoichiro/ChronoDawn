@@ -32,6 +32,7 @@ bin/
 
 # Minecraft Development
 run/
+run-prod/
 fabric/*/run/
 neoforge/*/run/
 logs/

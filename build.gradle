@@ -92,8 +92,11 @@ subprojects {
         it.options.release = project.ext.java_version as Integer
     }
 
-    // Common resource processing for platform modules (fabric, neoforge)
+    // Common resource processing and production run for platform modules (fabric, neoforge)
     if (project.name in ['fabric', 'neoforge']) {
+        // Production run support (runProd)
+        apply from: "${rootDir}/gradle/prod-run.gradle"
+
         tasks.withType(ProcessResources).configureEach {
             inputs.property 'pack_format', project.ext.pack_format
 
