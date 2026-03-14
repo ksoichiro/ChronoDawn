@@ -223,29 +223,29 @@ Architectury API: 13.0.8+
 
 **When to use**: Adding or removing biomes, bosses, structures, wood types, or other countable content
 
-**Purpose**: Ensure numeric descriptions (e.g., "8 unique biomes", "4 mid-bosses", "three wood types") remain accurate across all documentation
+**Purpose**: Ensure numeric descriptions (e.g., "9 unique biomes", "4 mid-bosses", "three wood types") remain accurate across all documentation
 
 ### Files to Check
 
 1. **README.md**
    - Check: Biome count, boss count, structure count, wood type count
-   - Look for: "8 unique biomes", "Boss Enemies" list length, "Major Structures" list length
+   - Look for: "9 unique biomes", "Boss Enemies" list length, "Major Structures" list length
 
 2. **docs/player_guide.md**
    - Check: Biome count, boss count (categorized: mini-boss, mid-bosses, final boss), structure count, wood type count
-   - Look for: "8 unique biomes", "three wood types", mid-boss descriptions ("4 mid-bosses")
+   - Look for: "9 unique biomes", "three wood types", mid-boss descriptions ("4 mid-bosses")
 
 3. **docs/curseforge_description.md**
    - Check: Biome count, boss count, structure count, artifact count
-   - Look for: "8 Unique Biomes", boss list lengths, structure list
+   - Look for: "9 Unique Biomes", boss list lengths, structure list
 
 4. **docs/modrinth_description.md**
    - Check: Biome count, boss count, structure count, wood type count
-   - Look for: "8 unique biomes", boss list, structure list
+   - Look for: "9 unique biomes", boss list, structure list
 
 5. **CLAUDE.md**
    - Check: Current versions list if content affects version compatibility
-   - Look for: "8 unique biomes" in Recent Changes or Active Technologies
+   - Look for: "9 unique biomes" in Recent Changes or Active Technologies
 
 ### Verification Method
 
@@ -255,7 +255,7 @@ When adding/removing content:
 3. Update Table of Contents if section counts change
 4. Check for phrases like "all X", "both", "each of the Y"
 
-**Tip**: Use `grep -r "8 unique biomes" docs/` to find all occurrences quickly
+**Tip**: Use `grep -r "9 unique biomes" docs/` to find all occurrences quickly
 
 ---
 

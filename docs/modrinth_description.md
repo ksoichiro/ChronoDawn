@@ -13,7 +13,7 @@ Chrono Dawn adds a brand new dimension to Minecraft, filled with unique biomes, 
 ## ✨ Features
 
 ### 🌍 New Dimension: Chrono Dawn
-- **8 Unique Biomes**: Forest, Desert, Mountain, Ocean, Snowy, Swamp, Dark Forest, and Ancient Forest
+- **9 Unique Biomes**: Forest, Desert, Mountain, Ocean, Snowy, Swamp, Dark Forest, Ancient Forest, and Prairies
 - **Perpetual Twilight**: A dimension frozen in time with stunning orange-gold skies
 - **Time Distortion Effect**: Hostile mobs move in slow motion while you move at normal speed
 - **Custom Portal System**: One-way portal travel that can be upgraded to bidirectional

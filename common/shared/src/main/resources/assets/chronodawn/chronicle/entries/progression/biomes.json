@@ -9,14 +9,14 @@
   "pages": [
     {
       "text": {
-        "en_us": "Chrono Dawn contains 8 unique biomes:\n\n1. Chrono Dawn Forest\n   Dense with Time Wood trees\n\n2. Chrono Dawn Desert\n   Sandy terrain\n\n3. Chrono Dawn Mountain\n   High peaks and steep cliffs\n\n4. Chrono Dawn Ocean\n   Deep waters",
-        "ja_jp": "クロノドーンには8つのユニークなバイオームがあります:\n\n1. クロノドーンの森\n   タイムウッドの木が密集\n\n2. クロノドーンの砂漠\n   砂の地形\n\n3. クロノドーンの山岳\n   高い頂上と急な崖\n\n4. クロノドーンの海洋\n   深い水域"
+        "en_us": "Chrono Dawn contains 9 unique biomes:\n\n1. Chrono Dawn Forest\n   Dense with Time Wood trees\n\n2. Chrono Dawn Desert\n   Sandy terrain\n\n3. Chrono Dawn Mountain\n   High peaks and steep cliffs\n\n4. Chrono Dawn Ocean\n   Deep waters",
+        "ja_jp": "クロノドーンには9つのユニークなバイオームがあります:\n\n1. クロノドーンの森\n   タイムウッドの木が密集\n\n2. クロノドーンの砂漠\n   砂の地形\n\n3. クロノドーンの山岳\n   高い頂上と急な崖\n\n4. クロノドーンの海洋\n   深い水域"
       }
     },
     {
       "text": {
-        "en_us": "5. Chrono Dawn Snowy\n   Frozen landscape with Frozen Time Ice\n\n6. Chrono Dawn Swamp\n   Murky waters and unique vegetation\n\n7. Chrono Dawn Dark Forest\n   Dense with Dark Time Wood trees\n\n8. Chrono Dawn Ancient Forest\n   Contains Ancient Time Wood trees\n\nEach biome offers unique resources and challenges!",
-        "ja_jp": "5. クロノドーンの雪原\n   凍結タイム氷のある凍結した風景\n\n6. クロノドーンの湿地\n   濁った水と独特の植生\n\n7. クロノドーンの暗い森\n   ダークタイムウッドの木が密集\n\n8. クロノドーンの古代の森\n   古代タイムウッドの木がある\n\n各バイオームは独自の資源と挑戦を提供します！"
+        "en_us": "5. Chrono Dawn Snowy\n   Frozen landscape with Frozen Time Ice\n\n6. Chrono Dawn Swamp\n   Murky waters and unique vegetation\n\n7. Chrono Dawn Dark Forest\n   Dense with Dark Time Wood trees\n\n8. Chrono Dawn Ancient Forest\n   Contains Ancient Time Wood trees\n\n9. Chrono Dawn Prairies\n   Open grasslands\n\nEach biome offers unique resources and challenges!",
+        "ja_jp": "5. クロノドーンの雪原\n   凍結タイム氷のある凍結した風景\n\n6. クロノドーンの湿地\n   濁った水と独特の植生\n\n7. クロノドーンの暗い森\n   ダークタイムウッドの木が密集\n\n8. クロノドーンの古代の森\n   古代タイムウッドの木がある\n\n9. クロノドーンの草原\n   開けた草地\n\n各バイオームは独自の資源と挑戦を提供します！"
       }
     },
     {
