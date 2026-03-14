@@ -27,6 +27,6 @@
     "show_toast": true,
     "announce_to_chat": false,
     "hidden": false,
-    "background": "chronodawn:block/clockstone_block"
+    "background": "chronodawn:block/clockstone_block_still"
   }
 }
