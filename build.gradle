@@ -4,6 +4,13 @@ plugins {
     id 'com.gradleup.shadow' version '8.3.6' apply false
 }
 
+// Submodule existence check
+if (!file('gradle/shared/multi-version-tasks.gradle').exists()) {
+    throw new GradleException(
+        "Shared Gradle scripts not found. Run: git submodule update --init"
+    )
+}
+
 // Multi-version support: Load version-specific properties
 ext.loadVersionProperties = { String version ->
     def propsFile = file("props/${version}.properties")
@@ -95,7 +102,7 @@ subprojects {
     // Common resource processing and production run for platform modules (fabric, neoforge)
     if (project.name in ['fabric', 'neoforge']) {
         // Production run support (runProd)
-        apply from: "${rootDir}/gradle/prod-run.gradle"
+        apply from: "${rootDir}/gradle/shared/prod-run.gradle"
 
         tasks.withType(ProcessResources).configureEach {
             inputs.property 'pack_format', project.ext.pack_format
@@ -117,8 +124,20 @@ subprojects {
     }
 }
 
-// Multi-version build and run tasks (Phase 5: Build Script Enhancement)
-apply from: 'gradle/multi-version-tasks.gradle'
+// Multi-version build and run tasks
+apply from: 'gradle/shared/multi-version-tasks.gradle'
 
 // Resource validation (JSON syntax and cross-reference checks)
-apply from: 'gradle/resource-validation.gradle'
+apply from: 'gradle/shared/resource-validation.gradle'
+
+// Release tasks
+apply from: 'gradle/shared/release-modrinth.gradle'
+apply from: 'gradle/shared/release-curseforge.gradle'
+
+// Release to all platforms
+tasks.register('releaseAll') {
+    group = (project.findProperty('release_project_name') ?: project.name).toString().toLowerCase() + ' release'
+    description = 'Release to all configured platforms'
+    if (tasks.findByName('releaseModrinth')) dependsOn 'releaseModrinth'
+    if (tasks.findByName('releaseCurseForge')) dependsOn 'releaseCurseForge'
+}
