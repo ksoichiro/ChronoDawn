@@ -70,7 +70,7 @@ tasks.register('convertNbtStructures', Exec) {
 
     def inputDir = rootProject.file('common/shared-1.21.1+/src/main/resources/data/chronodawn/structure')
     def outputDir = file('src/main/resources/data/chronodawn/structures')
-    def scriptPath = rootProject.file('scripts/convert_nbt_1_21_to_1_20.py')
+    def scriptPath = rootProject.file('gradle/shared/convert_nbt_1_21_to_1_20.py')
 
     inputs.dir(inputDir).optional()
     outputs.dir(outputDir)
