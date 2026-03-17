@@ -95,8 +95,11 @@ neoforge/
   1.21.9/             (version-specific NeoForge subproject)
   1.21.10/            (version-specific NeoForge subproject)
   1.21.11/            (version-specific NeoForge subproject)
-gradle/               (build scripts)
+gradle/
+  wrapper/            (Gradle Wrapper)
+  shared/             (git submodule → minecraft-mod-gradle-scripts)
 props/                (version-specific properties)
+scripts/              (project-specific utility scripts)
 ```
 
 ## Commands
@@ -109,6 +112,8 @@ Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.2
 - **Build DSL**: Groovy DSL (not Kotlin DSL) - for compatibility with Architectury Loom 1.13-SNAPSHOT
 - **Mappings**: Mojang mappings (not Yarn) - code uses official Minecraft class names (e.g., `net.minecraft.core.Registry`)
 - **Shadow Plugin**: com.gradleup.shadow 8.3.6 - for bundling common module into platform-specific JARs
+- **Shared Scripts**: `gradle/shared/` is a Git submodule ([minecraft-mod-gradle-scripts](https://github.com/ksoichiro/minecraft-mod-gradle-scripts)). Clone with `git clone --recursive` or run `git submodule update --init` after clone.
+- **Multi-version configuration**: Supported versions and hotfix mappings are defined in `gradle.properties` (`supported_mc_versions`, `hotfix_mc_versions`)
 
 ## Multi-Version Support
 
@@ -171,6 +176,9 @@ Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.2
 **Release**:
 - `./gradlew collectJars` - Collect release JARs from all versions into `build/release/`
 - `./gradlew release` - Full release pipeline: cleanAll → buildAll → collectJars
+- `./gradlew releaseModrinth` - Release all JARs in `build/release/` to Modrinth (requires `MODRINTH_TOKEN`)
+- `./gradlew releaseCurseForge` - Release all JARs in `build/release/` to CurseForge (requires `CURSEFORGE_TOKEN`)
+- `./gradlew releaseAll` - Release to both Modrinth and CurseForge
 
 **Full Verification** (recommended before commits/PRs):
 - `./gradlew checkAll` - Run all verification tasks in sequence:
