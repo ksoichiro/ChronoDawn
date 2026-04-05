@@ -1,0 +1,113 @@
+{
+  "processors": [
+    {
+      "processor_type": "minecraft:rule",
+      "rules": [
+        {
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "block_entity_modifier": {
+            "type": "minecraft:append_loot",
+            "loot_table": "chronodawn:chests/clockwork_depths_archive_vault"
+          },
+          "input_predicate": {
+            "block_state": {
+              "Name": "minecraft:chest",
+              "Properties": {
+              "facing": "north"
+              }
+            },
+            "predicate_type": "minecraft:blockstate_match"
+          },
+          "output_state": {
+            "Name": "minecraft:chest",
+            "Properties": {
+              "facing": "north",
+              "type": "single",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "block_entity_modifier": {
+            "type": "minecraft:append_loot",
+            "loot_table": "chronodawn:chests/clockwork_depths_archive_vault"
+          },
+          "input_predicate": {
+            "block_state": {
+              "Name": "minecraft:chest",
+              "Properties": {
+              "facing": "south"
+              }
+            },
+            "predicate_type": "minecraft:blockstate_match"
+          },
+          "output_state": {
+            "Name": "minecraft:chest",
+            "Properties": {
+              "facing": "south",
+              "type": "single",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "block_entity_modifier": {
+            "type": "minecraft:append_loot",
+            "loot_table": "chronodawn:chests/clockwork_depths_archive_vault"
+          },
+          "input_predicate": {
+            "block_state": {
+              "Name": "minecraft:chest",
+              "Properties": {
+              "facing": "east"
+              }
+            },
+            "predicate_type": "minecraft:blockstate_match"
+          },
+          "output_state": {
+            "Name": "minecraft:chest",
+            "Properties": {
+              "facing": "east",
+              "type": "single",
+              "waterlogged": "false"
+            }
+          }
+        },
+        {
+          "location_predicate": {
+            "predicate_type": "minecraft:always_true"
+          },
+          "block_entity_modifier": {
+            "type": "minecraft:append_loot",
+            "loot_table": "chronodawn:chests/clockwork_depths_archive_vault"
+          },
+          "input_predicate": {
+            "block_state": {
+              "Name": "minecraft:chest",
+              "Properties": {
+              "facing": "west"
+              }
+            },
+            "predicate_type": "minecraft:blockstate_match"
+          },
+          "output_state": {
+            "Name": "minecraft:chest",
+            "Properties": {
+              "facing": "west",
+              "type": "single",
+              "waterlogged": "false"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
