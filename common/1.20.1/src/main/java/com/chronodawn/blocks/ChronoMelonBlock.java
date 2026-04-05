@@ -56,11 +56,14 @@ public class ChronoMelonBlock extends StemGrownBlock {
         BlockPos belowPos = pos.below();
         BlockState belowState = level.getBlockState(belowPos);
 
-        // Check if block below is grass, dirt, podzol, or coarse dirt
+        // Check if block below is grass, dirt, podzol, coarse dirt, or temporal variants
         if (!belowState.is(net.minecraft.world.level.block.Blocks.GRASS_BLOCK) &&
             !belowState.is(net.minecraft.world.level.block.Blocks.DIRT) &&
             !belowState.is(net.minecraft.world.level.block.Blocks.PODZOL) &&
-            !belowState.is(net.minecraft.world.level.block.Blocks.COARSE_DIRT)) {
+            !belowState.is(net.minecraft.world.level.block.Blocks.COARSE_DIRT) &&
+            !belowState.is(ModBlocks.TEMPORAL_GRASS_BLOCK.get()) &&
+            !belowState.is(ModBlocks.TEMPORAL_DIRT.get()) &&
+            !belowState.is(ModBlocks.COARSE_TEMPORAL_DIRT.get())) {
             return false;
         }
 

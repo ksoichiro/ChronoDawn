@@ -15,8 +15,10 @@ import com.chronodawn.registry.ModParticles;
 import com.chronodawn.registry.ModEntities;
 import com.chronodawn.registry.ModItems;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.world.level.FoliageColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -415,6 +417,17 @@ public class ChronoDawnClientNeoForge {
             ModBlocks.ATTACHED_CHRONO_MELON_STEM.get()
         );
 
+        // Register Temporal Grass Block color (biome-dependent foliage tint)
+        event.register(
+            (state, world, pos, tintIndex) -> {
+                if (world != null && pos != null) {
+                    return BiomeColors.getAverageFoliageColor(world, pos);
+                }
+                return FoliageColor.get(0.5, 1.0);
+            },
+            ModBlocks.TEMPORAL_GRASS_BLOCK.get()
+        );
+
         ChronoDawn.LOGGER.debug("Registered block color handlers for NeoForge");
     }
 
@@ -440,6 +453,12 @@ public class ChronoDawnClientNeoForge {
         event.register(
             (stack, tintIndex) -> 0xD4AF37, // Golden-amber
             ModBlocks.ATTACHED_CHRONO_MELON_STEM.get()
+        );
+
+        // Register item color for Temporal Grass Block (use default foliage color)
+        event.register(
+            (stack, tintIndex) -> FoliageColor.get(0.5, 1.0),
+            ModBlocks.TEMPORAL_GRASS_BLOCK.get()
         );
 
         // Register Spawn Egg item colors for NeoForge

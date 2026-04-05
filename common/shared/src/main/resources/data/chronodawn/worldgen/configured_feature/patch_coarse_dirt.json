@@ -11,7 +11,7 @@
       "fallback": {
         "type": "minecraft:simple_state_provider",
         "state": {
-          "Name": "minecraft:coarse_dirt"
+          "Name": "chronodawn:coarse_temporal_dirt"
         }
       },
       "rules": []
@@ -19,7 +19,7 @@
     "target": {
       "type": "minecraft:matching_blocks",
       "blocks": [
-        "minecraft:grass_block"
+        "chronodawn:temporal_grass_block"
       ]
     }
   }

@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:block/grass_block",
+  "textures": {
+    "bottom": "chronodawn:block/temporal_dirt",
+    "top": "chronodawn:block/temporal_grass_block_top",
+    "side": "chronodawn:block/temporal_grass_block_side",
+    "overlay": "chronodawn:block/temporal_grass_block_side_overlay",
+    "particle": "chronodawn:block/temporal_dirt"
+  }
+}

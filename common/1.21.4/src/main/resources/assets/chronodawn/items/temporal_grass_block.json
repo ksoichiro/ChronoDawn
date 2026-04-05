@@ -1,0 +1,12 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "chronodawn:item/temporal_grass_block",
+    "tints": [
+      {
+        "type": "minecraft:constant",
+        "value": 7909594
+      }
+    ]
+  }
+}

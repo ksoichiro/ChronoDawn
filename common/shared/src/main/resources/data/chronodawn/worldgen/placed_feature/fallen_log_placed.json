@@ -24,7 +24,7 @@
           {
             "type": "minecraft:matching_blocks",
             "offset": [0, -1, 0],
-            "blocks": ["minecraft:grass_block", "minecraft:dirt"]
+            "blocks": ["minecraft:grass_block", "minecraft:dirt", "chronodawn:temporal_grass_block", "chronodawn:temporal_dirt"]
           },
           {
             "type": "minecraft:not",

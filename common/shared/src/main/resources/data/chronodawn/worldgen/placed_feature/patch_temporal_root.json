@@ -23,7 +23,10 @@
               "minecraft:grass_block",
               "minecraft:dirt",
               "minecraft:podzol",
-              "minecraft:coarse_dirt"
+              "minecraft:coarse_dirt",
+              "chronodawn:temporal_grass_block",
+              "chronodawn:temporal_dirt",
+              "chronodawn:coarse_temporal_dirt"
             ],
             "offset": [0, -1, 0]
           },

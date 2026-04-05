@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "chronodawn:block/temporal_dirt",
+    "top": "chronodawn:block/temporal_grass_block_top",
+    "side": "minecraft:block/grass_block_snow",
+    "particle": "chronodawn:block/temporal_dirt"
+  }
+}

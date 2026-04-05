@@ -23,7 +23,9 @@
       "blocks": [
         "minecraft:grass_block",
         "minecraft:dirt",
-        "minecraft:gravel"
+        "minecraft:gravel",
+        "chronodawn:temporal_grass_block",
+        "chronodawn:temporal_dirt"
       ]
     }
   }

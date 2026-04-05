@@ -23,7 +23,10 @@
           "minecraft:dirt",
           "minecraft:podzol",
           "minecraft:coarse_dirt",
-          "minecraft:snow_block"
+          "minecraft:snow_block",
+          "chronodawn:temporal_grass_block",
+          "chronodawn:temporal_dirt",
+          "chronodawn:coarse_temporal_dirt"
         ]
       },
       "allowed_search_condition": {

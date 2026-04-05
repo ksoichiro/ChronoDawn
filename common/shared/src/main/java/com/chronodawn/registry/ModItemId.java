@@ -53,6 +53,9 @@ public enum ModItemId {
     FROZEN_TIME_ICE("frozen_time_ice"),
     CLOCKWORK_BLOCK("clockwork_block"),
     TEMPORAL_MOSS("temporal_moss"),
+    TEMPORAL_DIRT("temporal_dirt"),
+    TEMPORAL_GRASS_BLOCK("temporal_grass_block"),
+    COARSE_TEMPORAL_DIRT("coarse_temporal_dirt"),
     TEMPORAL_PARTICLE_EMITTER("temporal_particle_emitter"),
     DECORATIVE_WATER_BUCKET("decorative_water_bucket"),
 

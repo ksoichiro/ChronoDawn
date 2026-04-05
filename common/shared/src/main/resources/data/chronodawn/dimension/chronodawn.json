@@ -127,6 +127,6 @@
         }
       ]
     },
-    "settings": "minecraft:overworld"
+    "settings": "chronodawn:chronodawn"
   }
 }

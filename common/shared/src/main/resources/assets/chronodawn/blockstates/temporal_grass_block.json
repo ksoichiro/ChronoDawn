@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "snowy=false": {
+      "model": "chronodawn:block/temporal_grass_block"
+    },
+    "snowy=true": {
+      "model": "chronodawn:block/temporal_grass_block_snow"
+    }
+  }
+}

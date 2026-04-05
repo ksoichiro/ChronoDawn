@@ -22,6 +22,9 @@ import com.chronodawn.blocks.TemporalBricksSlab;
 import com.chronodawn.blocks.TemporalBricksStairs;
 import com.chronodawn.blocks.TemporalBricksWall;
 import com.chronodawn.blocks.TemporalMossBlock;
+import com.chronodawn.blocks.TemporalDirtBlock;
+import com.chronodawn.blocks.TemporalGrassBlock;
+import com.chronodawn.blocks.CoarseTemporalDirtBlock;
 import com.chronodawn.blocks.TemporalParticleEmitterBlock;
 import com.chronodawn.blocks.TimeCrystalBlock;
 import com.chronodawn.blocks.TimeCrystalOre;
@@ -425,6 +428,21 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> TEMPORAL_MOSS = BLOCKS.register(
         ModBlockId.TEMPORAL_MOSS.id(),
         () -> new TemporalMossBlock(TemporalMossBlock.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> TEMPORAL_DIRT = BLOCKS.register(
+        ModBlockId.TEMPORAL_DIRT.id(),
+        () -> new TemporalDirtBlock(TemporalDirtBlock.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> TEMPORAL_GRASS_BLOCK = BLOCKS.register(
+        ModBlockId.TEMPORAL_GRASS_BLOCK.id(),
+        () -> new TemporalGrassBlock(TemporalGrassBlock.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> COARSE_TEMPORAL_DIRT = BLOCKS.register(
+        ModBlockId.COARSE_TEMPORAL_DIRT.id(),
+        () -> new CoarseTemporalDirtBlock(CoarseTemporalDirtBlock.createProperties())
     );
 
     /**

@@ -31,6 +31,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.client.renderer.BiomeColors;
+import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.Vec3;
@@ -123,6 +125,18 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
         );
 
         // Item color registration removed in 1.21.4 - use item model definitions instead
+
+        // Register Temporal Grass Block color (biome-dependent foliage tint)
+        // Item tints for temporal_grass_block are defined in items/ JSON (1.21.4+)
+        ColorProviderRegistry.BLOCK.register(
+            (state, world, pos, tintIndex) -> {
+                if (world != null && pos != null) {
+                    return BiomeColors.getAverageFoliageColor(world, pos);
+                }
+                return FoliageColor.get(0.5, 1.0);
+            },
+            ModBlocks.TEMPORAL_GRASS_BLOCK.get()
+        );
     }
 
     /**

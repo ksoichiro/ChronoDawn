@@ -12,7 +12,9 @@ import com.chronodawn.neoforge.registry.ModFluidTypes;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModEntities;
 import com.chronodawn.registry.ModParticles;
+import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.FoliageColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -386,6 +388,18 @@ public class ChronoDawnClientNeoForge {
         event.register(
             (state, world, pos, tintIndex) -> 0xD4AF37,
             ModBlocks.ATTACHED_CHRONO_MELON_STEM.get()
+        );
+
+        // Register Temporal Grass Block color (biome-dependent foliage tint)
+        // Item tints for temporal_grass_block are defined in items/ JSON (1.21.4+)
+        event.register(
+            (state, world, pos, tintIndex) -> {
+                if (world != null && pos != null) {
+                    return BiomeColors.getAverageFoliageColor(world, pos);
+                }
+                return FoliageColor.get(0.5, 1.0);
+            },
+            ModBlocks.TEMPORAL_GRASS_BLOCK.get()
         );
 
         ChronoDawn.LOGGER.debug("Registered block color handlers for NeoForge");

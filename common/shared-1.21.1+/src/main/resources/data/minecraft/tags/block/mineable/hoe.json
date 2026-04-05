@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "chronodawn:time_wood_leaves",
-    "chronodawn:temporal_moss"
+    "chronodawn:temporal_moss",
+    "chronodawn:coarse_temporal_dirt"
   ]
 }

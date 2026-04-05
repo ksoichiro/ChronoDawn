@@ -22,7 +22,9 @@
       "type": "minecraft:matching_blocks",
       "blocks": [
         "minecraft:grass_block",
-        "minecraft:dirt"
+        "minecraft:dirt",
+        "chronodawn:temporal_grass_block",
+        "chronodawn:temporal_dirt"
       ]
     }
   }

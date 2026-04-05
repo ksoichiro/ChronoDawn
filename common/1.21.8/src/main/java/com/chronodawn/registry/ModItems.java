@@ -763,6 +763,30 @@ public class ModItems {
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_MOSS.id()))))
     );
 
+    public static final RegistrySupplier<Item> TEMPORAL_DIRT = ITEMS.register(
+        ModItemId.TEMPORAL_DIRT.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_DIRT.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_DIRT.id()))))
+    );
+
+    public static final RegistrySupplier<Item> TEMPORAL_GRASS_BLOCK = ITEMS.register(
+        ModItemId.TEMPORAL_GRASS_BLOCK.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_GRASS_BLOCK.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_GRASS_BLOCK.id()))))
+    );
+
+    public static final RegistrySupplier<Item> COARSE_TEMPORAL_DIRT = ITEMS.register(
+        ModItemId.COARSE_TEMPORAL_DIRT.id(),
+        () -> new BlockItem(ModBlocks.COARSE_TEMPORAL_DIRT.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.COARSE_TEMPORAL_DIRT.id()))))
+    );
+
     /**
      * Frozen Time Ice - Special ice block exclusive to snowy biome.
      */
@@ -2204,6 +2228,9 @@ public class ModItems {
         output.accept(TEMPORAL_BRICKS_SLAB.get());
         output.accept(TEMPORAL_BRICKS_WALL.get());
         output.accept(TEMPORAL_MOSS.get());
+        output.accept(TEMPORAL_DIRT.get());
+        output.accept(TEMPORAL_GRASS_BLOCK.get());
+        output.accept(COARSE_TEMPORAL_DIRT.get());
         output.accept(FROZEN_TIME_ICE.get());
         // Note: TEMPORAL_PARTICLE_EMITTER is not added to creative tab (structure-only block)
 
