@@ -1,0 +1,51 @@
+/*
+ * Copyright (C) 2025 ksoichiro
+ *
+ * This file is part of Chrono Dawn.
+ *
+ * Chrono Dawn is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, version 3 of the License.
+ *
+ * Chrono Dawn is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Chrono Dawn. If not, see <https://www.gnu.org/licenses/>.
+ */
+package com.chronodawn.client.renderer.mobs;
+
+import com.chronodawn.client.model.ParadoxCrawlerModel;
+import com.chronodawn.compat.CompatResourceLocation;
+import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.entity.RenderLayerParent;
+import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.Identifier;
+
+/**
+ * Emissive render layer for Paradox Crawler.
+ * Renders glowing eyes and patterns using RenderTypes.eyes().
+ */
+public class ParadoxCrawlerEmissiveLayer extends RenderLayer<ParadoxCrawlerRenderState, ParadoxCrawlerModel> {
+    private static final Identifier EMISSIVE_TEXTURE = CompatResourceLocation.create(
+        "chronodawn", "textures/entity/mobs/paradox_crawler_emissive.png"
+    );
+    private static final RenderType EMISSIVE = RenderTypes.eyes(EMISSIVE_TEXTURE);
+
+    public ParadoxCrawlerEmissiveLayer(RenderLayerParent<ParadoxCrawlerRenderState, ParadoxCrawlerModel> parent) {
+        super(parent);
+    }
+
+    @Override
+    public void submit(PoseStack poseStack, SubmitNodeCollector collector, int packedLight,
+                       ParadoxCrawlerRenderState state, float yRot, float xRot) {
+        collector.submitModel(this.getParentModel(), state, poseStack, EMISSIVE,
+            15728880, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF, null);
+    }
+}

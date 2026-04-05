@@ -19,6 +19,7 @@ public class ParadoxCrawlerRenderer extends MobRenderer<ParadoxCrawlerEntity, Pa
 
     public ParadoxCrawlerRenderer(EntityRendererProvider.Context context) {
         super(context, new ParadoxCrawlerModel(context.bakeLayer(ParadoxCrawlerModel.LAYER_LOCATION)), 0.8f);
+        this.addLayer(new ParadoxCrawlerEmissiveLayer(this));
     }
 
     @Override
