@@ -19,6 +19,7 @@ public class TimelineStriderRenderer extends MobRenderer<TimelineStriderEntity, 
 
     public TimelineStriderRenderer(EntityRendererProvider.Context context) {
         super(context, new TimelineStriderModel(context.bakeLayer(TimelineStriderModel.LAYER_LOCATION)), 0.5f);
+        this.addLayer(new TimelineStriderEmissiveLayer(this));
     }
 
     @Override
