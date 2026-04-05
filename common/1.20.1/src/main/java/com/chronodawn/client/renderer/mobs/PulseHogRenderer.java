@@ -36,6 +36,7 @@ public class PulseHogRenderer extends MobRenderer<PulseHogEntity, PulseHogModel>
 
     public PulseHogRenderer(EntityRendererProvider.Context context) {
         super(context, new PulseHogModel(context.bakeLayer(PulseHogModel.LAYER_LOCATION)), 0.7f);
+        this.addLayer(new PulseHogEmissiveLayer(this));
     }
 
     @Override
