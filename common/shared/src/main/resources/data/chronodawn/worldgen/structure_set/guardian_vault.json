@@ -9,6 +9,10 @@
     "type": "minecraft:random_spread",
     "spacing": 48,
     "separation": 24,
-    "salt": 928374651
+    "salt": 928374651,
+    "exclusion_zone": {
+      "other_set": "chronodawn:phantom_catacombs",
+      "chunk_count": 10
+    }
   }
 }
