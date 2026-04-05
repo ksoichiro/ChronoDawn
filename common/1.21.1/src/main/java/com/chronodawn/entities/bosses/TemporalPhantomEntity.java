@@ -499,4 +499,14 @@ public class TemporalPhantomEntity extends Monster implements RangedAttackMob {
             BlockProtectionHandler.onBossDefeatedAt(serverLevel, this.blockPosition());
         }
     }
+
+    @Override
+    public boolean isPersistenceRequired() {
+        return true;
+    }
+
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false; // Boss should never despawn
+    }
 }

@@ -480,4 +480,14 @@ public class ChronosWardenEntity extends Monster {
             BlockProtectionHandler.onBossDefeatedAt(serverLevel, this.blockPosition());
         }
     }
+
+    @Override
+    public boolean isPersistenceRequired() {
+        return true;
+    }
+
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false; // Boss should never despawn
+    }
 }
