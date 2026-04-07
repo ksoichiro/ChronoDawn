@@ -3,7 +3,9 @@ package com.chronodawn.events;
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.registry.ModDimensions;
 import dev.architectury.event.events.common.TickEvent;
+import net.minecraft.network.protocol.game.ClientboundSetTimePacket;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 
 import java.util.Map;
@@ -45,6 +47,9 @@ public class TimeDistortionEventHandler {
 
     // How many ticks to add per game tick during sleep skip (gradual advancement)
     private static final long SLEEP_SKIP_TICKS_PER_TICK = 500;
+
+    // Interval for sending time sync packets to clients (in ticks)
+    private static final int TIME_SYNC_INTERVAL = 20;
 
     // Configuration
     private static final float MIN_SPEED = 0.67f; // Slowest: 67% speed (day lasts ~15 minutes)
@@ -134,6 +139,11 @@ public class TimeDistortionEventHandler {
         }
         // If ticksToAdvance == 0, accumulate the fractional part for next tick
 
+        // Sync time to clients periodically
+        // Vanilla may not send per-dimension time packets for custom dimensions,
+        // so we explicitly send the independent time to players in ChronoDawn.
+        syncTimeToClients(level);
+
         // Countdown to next speed change
         timeUntilChange--;
         timeUntilChangeMap.put(dimensionKey, timeUntilChange);
@@ -167,6 +177,28 @@ public class TimeDistortionEventHandler {
      */
     private static int getRandomDuration(RandomSource random) {
         return MIN_DURATION + random.nextInt(MAX_DURATION - MIN_DURATION);
+    }
+
+    /**
+     * Send time sync packet to all players in ChronoDawn dimension.
+     * Vanilla time sync may not send the correct independent time for custom dimensions,
+     * so we explicitly broadcast it here.
+     */
+    private static void syncTimeToClients(ServerLevel level) {
+        if (level.getServer().getTickCount() % TIME_SYNC_INTERVAL != 0) {
+            return;
+        }
+
+        // Always pass true for doDaylightCycle: ChronoDawn manages its own time cycle
+        // via TimeDistortionEventHandler, independent of the vanilla gamerule.
+        ClientboundSetTimePacket packet = new ClientboundSetTimePacket(
+            level.getGameTime(),
+            level.getDayTime(),
+            true
+        );
+        for (ServerPlayer player : level.players()) {
+            player.connection.send(packet);
+        }
     }
 
     /**
