@@ -283,6 +283,11 @@ public class ChronoDawnNeoForge {
             SecondwingFowlEntity.createAttributes().build()
         );
 
+        event.put(
+            ModEntities.TICKING_SHEEP.get(),
+            TickingSheepEntity.createAttributes().build()
+        );
+
         ChronoDawn.LOGGER.debug("Registered entity attributes for NeoForge");
     }
 
