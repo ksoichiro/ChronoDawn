@@ -129,8 +129,10 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
 
         // Register Temporal Grass Block color (biome-dependent foliage tint)
         // Item tints for temporal_grass_block are defined in items/ JSON (1.21.4+)
+        // Only tint faces with tintIndex 0 (top and side overlay in grass_block model).
         ColorProviderRegistry.BLOCK.register(
             (state, world, pos, tintIndex) -> {
+                if (tintIndex != 0) return -1;
                 if (world != null && pos != null) {
                     return BiomeColors.getAverageFoliageColor(world, pos);
                 }

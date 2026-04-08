@@ -1,5 +1,6 @@
 {
   "parent": "minecraft:block/grass_block",
+  "render_type": "minecraft:cutout",
   "textures": {
     "bottom": "chronodawn:block/temporal_dirt",
     "top": "chronodawn:block/temporal_grass_block_top",
