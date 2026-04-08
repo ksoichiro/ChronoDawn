@@ -86,7 +86,7 @@ dependencies {
 }
 
 tasks.named("processResources", ProcessResources).configure {
-    dependsOn project(commonModule).tasks.named('convertNbtStructures')
+    dependsOn project(commonModule).tasks.named('replaceNbtBlocks'), project(commonModule).tasks.named('convertNbtStructures')
 
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     inputs.property "version", project.version

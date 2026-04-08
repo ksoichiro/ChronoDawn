@@ -4,6 +4,7 @@ import com.chronodawn.ChronoDawn;
 import com.chronodawn.data.TimeKeeperVillageData;
 import com.chronodawn.entities.mobs.TimeKeeperEntity;
 import com.chronodawn.registry.ModDimensions;
+import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
@@ -424,8 +425,8 @@ public class TimeKeeperVillagePlacer {
                         break;
                     }
 
-                    // Fill with dirt (or coarse dirt for variety)
-                    level.setBlock(fillPos, Blocks.DIRT.defaultBlockState(), 2);
+                    // Fill with temporal dirt
+                    level.setBlock(fillPos, ModBlocks.TEMPORAL_DIRT.get().defaultBlockState(), 2);
                     filledBlocks++;
                 }
             }

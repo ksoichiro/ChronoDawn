@@ -1,0 +1,59 @@
+import com.chronodawn.build.NbtBlockReplacer
+import groovy.json.JsonSlurper
+
+tasks.register('replaceNbtBlocks') {
+    group = 'chrono dawn build'
+    description = 'Replace vanilla blocks with custom blocks in NBT structure files'
+
+    def inputDir = rootProject.file('common/shared-1.21.1+/src/main/resources/data/chronodawn/structure')
+    def outputDir = file("${buildDir}/generated/nbt-block-replaced/data/chronodawn/structure")
+    def mappingFile = rootProject.file('scripts/nbt_block_mappings.json')
+
+    inputs.dir(inputDir).optional()
+    inputs.file(mappingFile)
+    outputs.dir(outputDir)
+
+    doLast {
+        if (!inputDir.exists()) {
+            logger.lifecycle("NBT block replacement: input directory does not exist, skipping: ${inputDir}")
+            return
+        }
+
+        def config = new JsonSlurper().parse(mappingFile)
+        def mappings = config.mappings as Map<String, String>
+        def excludeFiles = (config.exclude ?: []) as Set<String>
+        def replacer = new NbtBlockReplacer(mappings)
+
+        def nbtFiles = project.fileTree(dir: inputDir, includes: ['**/*.nbt']).files
+        if (nbtFiles.isEmpty()) {
+            logger.lifecycle("NBT block replacement: no .nbt files found in ${inputDir}")
+            return
+        }
+
+        outputDir.mkdirs()
+
+        int replacedCount = 0
+        nbtFiles.each { File nbtFile ->
+            def relativePath = inputDir.toPath().relativize(nbtFile.toPath())
+            def outFile = outputDir.toPath().resolve(relativePath).toFile()
+            outFile.parentFile.mkdirs()
+
+            if (excludeFiles.contains(nbtFile.name)) {
+                // Copy excluded files as-is (needed for 1.20.1 pipeline where convertNbtStructures reads from this output)
+                outFile.bytes = nbtFile.bytes
+                return
+            }
+
+            try {
+                def inputBytes = nbtFile.bytes
+                def outputBytes = replacer.replace(inputBytes)
+                outFile.bytes = outputBytes
+                replacedCount++
+            } catch (Exception e) {
+                throw new GradleException("Failed to replace blocks in ${nbtFile.name}: ${e.message}", e)
+            }
+        }
+
+        logger.lifecycle("NBT block replacement: processed ${replacedCount} file(s)")
+    }
+}

@@ -1,3 +1,5 @@
+apply from: rootProject.file('gradle/nbt-block-replacement.gradle')
+
 architectury {
     common rootProject.enabled_platforms.split(',')
 }
@@ -65,9 +67,11 @@ tasks.register('convertNbtStructures', Exec) {
         project.ext.minecraft_version == '1.20.1'
     }
 
-    def inputDir = rootProject.file('common/shared-1.21.1+/src/main/resources/data/chronodawn/structure')
+    def inputDir = file("${buildDir}/generated/nbt-block-replaced/data/chronodawn/structure")
     def outputDir = file("${buildDir}/generated/nbt-structures/data/chronodawn/structures")
     def scriptPath = rootProject.file('gradle/shared/convert_nbt_1_21_to_1_20.py')
+
+    dependsOn replaceNbtBlocks
 
     inputs.dir(inputDir).optional()
     outputs.dir(outputDir)
@@ -114,7 +118,7 @@ tasks.register('convertNbtStructures', Exec) {
 }
 
 // Run NBT conversion before processing resources
-processResources.dependsOn convertNbtStructures
+processResources.dependsOn replaceNbtBlocks, convertNbtStructures
 
 // Expand pack_format variable in pack.mcmeta
 processResources {
@@ -140,6 +144,6 @@ tasks.test {
 // Set duplicates strategy for sourcesJar to avoid conflicts
 // Also ensure NBT conversion runs before sourcesJar
 tasks.named('sourcesJar') {
-    dependsOn convertNbtStructures
+    dependsOn replaceNbtBlocks, convertNbtStructures
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }

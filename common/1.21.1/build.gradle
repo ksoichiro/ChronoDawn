@@ -1,3 +1,5 @@
+apply from: rootProject.file('gradle/nbt-block-replacement.gradle')
+
 architectury {
     common rootProject.enabled_platforms.split(',')
 }
@@ -35,6 +37,7 @@ sourceSets {
             srcDir '../gametest/src/main/java'
         }
         resources {
+            srcDir "${buildDir}/generated/nbt-block-replaced"
             srcDir '../shared-1.21.1+/src/main/resources'
             srcDir '../shared/src/main/resources'
         }
@@ -114,7 +117,7 @@ tasks.register('convertNbtStructures', Exec) {
 }
 
 // Run NBT conversion before processing resources
-processResources.dependsOn convertNbtStructures
+processResources.dependsOn replaceNbtBlocks, convertNbtStructures
 
 // Expand pack_format variable in pack.mcmeta
 processResources {
@@ -140,6 +143,6 @@ tasks.test {
 // Set duplicates strategy for sourcesJar to avoid conflicts
 // Also ensure NBT conversion runs before sourcesJar
 tasks.named('sourcesJar') {
-    dependsOn convertNbtStructures
+    dependsOn replaceNbtBlocks, convertNbtStructures
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }

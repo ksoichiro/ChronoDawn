@@ -97,7 +97,7 @@ sourceSets {
 }
 
 processResources {
-    dependsOn project(commonModule).tasks.named('convertNbtStructures')
+    dependsOn project(commonModule).tasks.named('replaceNbtBlocks'), project(commonModule).tasks.named('convertNbtStructures')
 
     from(project(commonModule).sourceSets.main.resources) {
         exclude 'chronodawn.mixins.json'
