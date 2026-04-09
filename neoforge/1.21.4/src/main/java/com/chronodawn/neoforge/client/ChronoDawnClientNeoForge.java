@@ -183,6 +183,16 @@ public class ChronoDawnClientNeoForge {
             SecondwingFowlModel::createBodyLayer
         );
 
+        event.registerLayerDefinition(
+            TickingSheepBodyModel.LAYER_LOCATION,
+            TickingSheepBodyModel::createBodyLayer
+        );
+
+        event.registerLayerDefinition(
+            TickingSheepWoolModel.LAYER_LOCATION,
+            TickingSheepWoolModel::createBodyLayer
+        );
+
         // Register boat and chest boat model layers (version-specific)
         VersionSpecificClientHelper.registerBoatModelLayers(event);
 
@@ -335,6 +345,11 @@ public class ChronoDawnClientNeoForge {
         event.registerEntityRenderer(
             ModEntities.SECONDWING_FOWL.get(),
             SecondwingFowlRenderer::new
+        );
+
+        event.registerEntityRenderer(
+            ModEntities.TICKING_SHEEP.get(),
+            TickingSheepRenderer::new
         );
 
         // Register ChronoDawn Boat with custom renderer
