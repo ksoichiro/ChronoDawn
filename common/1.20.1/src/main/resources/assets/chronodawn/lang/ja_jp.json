@@ -406,5 +406,14 @@
   "gui.chronodawn.chronicle.select_category": "カテゴリーを選択して開始",
 
   "entity.chronodawn.ticking_sheep": "ティッキング・シープ",
-  "item.chronodawn.ticking_sheep_spawn_egg": "ティッキング・シープのスポーンエッグ"
+  "item.chronodawn.ticking_sheep_spawn_egg": "ティッキング・シープのスポーンエッグ",
+
+  "block.chronodawn.temporal_stone": "テンポラルストーン",
+  "block.chronodawn.temporal_cobblestone": "テンポラル丸石",
+  "block.chronodawn.temporal_stone_stairs": "テンポラルストーンの階段",
+  "block.chronodawn.temporal_stone_slab": "テンポラルストーンのハーフブロック",
+  "block.chronodawn.temporal_stone_wall": "テンポラルストーンの塀",
+  "block.chronodawn.temporal_cobblestone_stairs": "テンポラル丸石の階段",
+  "block.chronodawn.temporal_cobblestone_slab": "テンポラル丸石のハーフブロック",
+  "block.chronodawn.temporal_cobblestone_wall": "テンポラル丸石の塀"
 }

@@ -59,6 +59,16 @@ public enum ModItemId {
     TEMPORAL_PARTICLE_EMITTER("temporal_particle_emitter"),
     DECORATIVE_WATER_BUCKET("decorative_water_bucket"),
 
+    // Temporal Stone variants
+    TEMPORAL_STONE("temporal_stone"),
+    TEMPORAL_COBBLESTONE("temporal_cobblestone"),
+    TEMPORAL_STONE_STAIRS("temporal_stone_stairs"),
+    TEMPORAL_STONE_SLAB("temporal_stone_slab"),
+    TEMPORAL_STONE_WALL("temporal_stone_wall"),
+    TEMPORAL_COBBLESTONE_STAIRS("temporal_cobblestone_stairs"),
+    TEMPORAL_COBBLESTONE_SLAB("temporal_cobblestone_slab"),
+    TEMPORAL_COBBLESTONE_WALL("temporal_cobblestone_wall"),
+
     // Time Wood (regular)
     TIME_WOOD_LOG("time_wood_log"),
     TIME_WOOD("time_wood"),

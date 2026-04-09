@@ -413,7 +413,16 @@
   "gui.chronodawn.chronicle.select_category": "Select a category to begin",
 
   "entity.chronodawn.ticking_sheep": "Ticking Sheep",
-  "item.chronodawn.ticking_sheep_spawn_egg": "Ticking Sheep Spawn Egg"
+  "item.chronodawn.ticking_sheep_spawn_egg": "Ticking Sheep Spawn Egg",
+
+  "block.chronodawn.temporal_stone": "Temporal Stone",
+  "block.chronodawn.temporal_cobblestone": "Temporal Cobblestone",
+  "block.chronodawn.temporal_stone_stairs": "Temporal Stone Stairs",
+  "block.chronodawn.temporal_stone_slab": "Temporal Stone Slab",
+  "block.chronodawn.temporal_stone_wall": "Temporal Stone Wall",
+  "block.chronodawn.temporal_cobblestone_stairs": "Temporal Cobblestone Stairs",
+  "block.chronodawn.temporal_cobblestone_slab": "Temporal Cobblestone Slab",
+  "block.chronodawn.temporal_cobblestone_wall": "Temporal Cobblestone Wall"
 }
 
 

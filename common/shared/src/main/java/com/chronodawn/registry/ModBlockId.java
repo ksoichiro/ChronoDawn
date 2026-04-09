@@ -62,6 +62,16 @@ public enum ModBlockId {
     TEMPORAL_DIRT(def("temporal_dirt")),
     TEMPORAL_GRASS_BLOCK(def("temporal_grass_block").cutoutMipped()),
     COARSE_TEMPORAL_DIRT(def("coarse_temporal_dirt")),
+
+    // Temporal Stone variants
+    TEMPORAL_STONE(def("temporal_stone")),
+    TEMPORAL_COBBLESTONE(def("temporal_cobblestone")),
+    TEMPORAL_STONE_STAIRS(def("temporal_stone_stairs")),
+    TEMPORAL_STONE_SLAB(def("temporal_stone_slab")),
+    TEMPORAL_STONE_WALL(def("temporal_stone_wall")),
+    TEMPORAL_COBBLESTONE_STAIRS(def("temporal_cobblestone_stairs")),
+    TEMPORAL_COBBLESTONE_SLAB(def("temporal_cobblestone_slab")),
+    TEMPORAL_COBBLESTONE_WALL(def("temporal_cobblestone_wall")),
     TEMPORAL_PARTICLE_EMITTER(def("temporal_particle_emitter")),
     CHRONO_DAWN_PORTAL(def("chrono_dawn_portal").translucent()),
     DECORATIVE_WATER(def("decorative_water")),

@@ -14,6 +14,14 @@
     "chronodawn:temporal_bricks_stairs",
     "chronodawn:temporal_bricks_slab",
     "chronodawn:temporal_bricks_wall",
-    "chronodawn:frozen_time_ice"
+    "chronodawn:frozen_time_ice",
+    "chronodawn:temporal_stone",
+    "chronodawn:temporal_cobblestone",
+    "chronodawn:temporal_stone_stairs",
+    "chronodawn:temporal_stone_slab",
+    "chronodawn:temporal_stone_wall",
+    "chronodawn:temporal_cobblestone_stairs",
+    "chronodawn:temporal_cobblestone_slab",
+    "chronodawn:temporal_cobblestone_wall"
   ]
 }

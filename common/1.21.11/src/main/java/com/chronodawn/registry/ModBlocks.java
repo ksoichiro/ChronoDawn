@@ -22,6 +22,14 @@ import com.chronodawn.blocks.TemporalBricksSlab;
 import com.chronodawn.blocks.TemporalBricksStairs;
 import com.chronodawn.blocks.TemporalBricksWall;
 import com.chronodawn.blocks.CoarseTemporalDirtBlock;
+import com.chronodawn.blocks.TemporalStoneBlock;
+import com.chronodawn.blocks.TemporalCobblestoneBlock;
+import com.chronodawn.blocks.TemporalStoneStairs;
+import com.chronodawn.blocks.TemporalStoneSlab;
+import com.chronodawn.blocks.TemporalStoneWall;
+import com.chronodawn.blocks.TemporalCobblestoneStairs;
+import com.chronodawn.blocks.TemporalCobblestoneSlab;
+import com.chronodawn.blocks.TemporalCobblestoneWall;
 import com.chronodawn.blocks.TemporalDirtBlock;
 import com.chronodawn.blocks.TemporalGrassBlock;
 import com.chronodawn.blocks.TemporalMossBlock;
@@ -453,6 +461,47 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> COARSE_TEMPORAL_DIRT = BLOCKS.register(
         ModBlockId.COARSE_TEMPORAL_DIRT.id(),
         () -> new CoarseTemporalDirtBlock(CoarseTemporalDirtBlock.createProperties())
+    );
+
+    // Temporal Stone variants
+    public static final RegistrySupplier<Block> TEMPORAL_STONE = BLOCKS.register(
+        ModBlockId.TEMPORAL_STONE.id(),
+        () -> new TemporalStoneBlock(TemporalStoneBlock.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> TEMPORAL_COBBLESTONE = BLOCKS.register(
+        ModBlockId.TEMPORAL_COBBLESTONE.id(),
+        () -> new TemporalCobblestoneBlock(TemporalCobblestoneBlock.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> TEMPORAL_STONE_STAIRS = BLOCKS.register(
+        ModBlockId.TEMPORAL_STONE_STAIRS.id(),
+        () -> new TemporalStoneStairs(TemporalStoneStairs.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> TEMPORAL_STONE_SLAB = BLOCKS.register(
+        ModBlockId.TEMPORAL_STONE_SLAB.id(),
+        () -> new TemporalStoneSlab(TemporalStoneSlab.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> TEMPORAL_STONE_WALL = BLOCKS.register(
+        ModBlockId.TEMPORAL_STONE_WALL.id(),
+        () -> new TemporalStoneWall(TemporalStoneWall.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> TEMPORAL_COBBLESTONE_STAIRS = BLOCKS.register(
+        ModBlockId.TEMPORAL_COBBLESTONE_STAIRS.id(),
+        () -> new TemporalCobblestoneStairs(TemporalCobblestoneStairs.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> TEMPORAL_COBBLESTONE_SLAB = BLOCKS.register(
+        ModBlockId.TEMPORAL_COBBLESTONE_SLAB.id(),
+        () -> new TemporalCobblestoneSlab(TemporalCobblestoneSlab.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> TEMPORAL_COBBLESTONE_WALL = BLOCKS.register(
+        ModBlockId.TEMPORAL_COBBLESTONE_WALL.id(),
+        () -> new TemporalCobblestoneWall(TemporalCobblestoneWall.createProperties())
     );
 
     /**

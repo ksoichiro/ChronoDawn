@@ -787,6 +787,71 @@ public class ModItems {
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.COARSE_TEMPORAL_DIRT.id()))))
     );
 
+    // Temporal Stone variants
+    public static final RegistrySupplier<Item> TEMPORAL_STONE = ITEMS.register(
+        ModItemId.TEMPORAL_STONE.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_STONE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_STONE.id()))))
+    );
+
+    public static final RegistrySupplier<Item> TEMPORAL_COBBLESTONE = ITEMS.register(
+        ModItemId.TEMPORAL_COBBLESTONE.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_COBBLESTONE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_COBBLESTONE.id()))))
+    );
+
+    public static final RegistrySupplier<Item> TEMPORAL_STONE_STAIRS = ITEMS.register(
+        ModItemId.TEMPORAL_STONE_STAIRS.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_STONE_STAIRS.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_STONE_STAIRS.id()))))
+    );
+
+    public static final RegistrySupplier<Item> TEMPORAL_STONE_SLAB = ITEMS.register(
+        ModItemId.TEMPORAL_STONE_SLAB.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_STONE_SLAB.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_STONE_SLAB.id()))))
+    );
+
+    public static final RegistrySupplier<Item> TEMPORAL_STONE_WALL = ITEMS.register(
+        ModItemId.TEMPORAL_STONE_WALL.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_STONE_WALL.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_STONE_WALL.id()))))
+    );
+
+    public static final RegistrySupplier<Item> TEMPORAL_COBBLESTONE_STAIRS = ITEMS.register(
+        ModItemId.TEMPORAL_COBBLESTONE_STAIRS.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_COBBLESTONE_STAIRS.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_COBBLESTONE_STAIRS.id()))))
+    );
+
+    public static final RegistrySupplier<Item> TEMPORAL_COBBLESTONE_SLAB = ITEMS.register(
+        ModItemId.TEMPORAL_COBBLESTONE_SLAB.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_COBBLESTONE_SLAB.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_COBBLESTONE_SLAB.id()))))
+    );
+
+    public static final RegistrySupplier<Item> TEMPORAL_COBBLESTONE_WALL = ITEMS.register(
+        ModItemId.TEMPORAL_COBBLESTONE_WALL.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_COBBLESTONE_WALL.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_COBBLESTONE_WALL.id()))))
+    );
+
     /**
      * Frozen Time Ice - Special ice block exclusive to snowy biome.
      */
@@ -2231,6 +2296,14 @@ public class ModItems {
         output.accept(TEMPORAL_DIRT.get());
         output.accept(TEMPORAL_GRASS_BLOCK.get());
         output.accept(COARSE_TEMPORAL_DIRT.get());
+        output.accept(TEMPORAL_STONE.get());
+        output.accept(TEMPORAL_STONE_STAIRS.get());
+        output.accept(TEMPORAL_STONE_SLAB.get());
+        output.accept(TEMPORAL_STONE_WALL.get());
+        output.accept(TEMPORAL_COBBLESTONE.get());
+        output.accept(TEMPORAL_COBBLESTONE_STAIRS.get());
+        output.accept(TEMPORAL_COBBLESTONE_SLAB.get());
+        output.accept(TEMPORAL_COBBLESTONE_WALL.get());
         output.accept(FROZEN_TIME_ICE.get());
         // Note: TEMPORAL_PARTICLE_EMITTER is not added to creative tab (structure-only block)
 
