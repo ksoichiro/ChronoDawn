@@ -415,5 +415,9 @@
   "block.chronodawn.temporal_stone_wall": "テンポラルストーンの塀",
   "block.chronodawn.temporal_cobblestone_stairs": "テンポラル丸石の階段",
   "block.chronodawn.temporal_cobblestone_slab": "テンポラル丸石のハーフブロック",
-  "block.chronodawn.temporal_cobblestone_wall": "テンポラル丸石の塀"
+  "block.chronodawn.temporal_cobblestone_wall": "テンポラル丸石の塀",
+  "block.chronodawn.temporal_coal_ore": "テンポラル石炭鉱石",
+  "block.chronodawn.temporal_gold_ore": "テンポラル金鉱石",
+  "block.chronodawn.temporal_iron_ore": "テンポラル鉄鉱石",
+  "block.chronodawn.temporal_redstone_ore": "テンポラルレッドストーン鉱石"
 }

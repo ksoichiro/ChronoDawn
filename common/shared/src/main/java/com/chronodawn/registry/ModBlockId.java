@@ -41,6 +41,12 @@ public enum ModBlockId {
     CLOCKSTONE_ORE(def("clockstone_ore")),
     TIME_CRYSTAL_ORE(def("time_crystal_ore")),
 
+    // Temporal Ore variants
+    TEMPORAL_COAL_ORE(def("temporal_coal_ore")),
+    TEMPORAL_GOLD_ORE(def("temporal_gold_ore")),
+    TEMPORAL_IRON_ORE(def("temporal_iron_ore")),
+    TEMPORAL_REDSTONE_ORE(def("temporal_redstone_ore")),
+
     // Clockstone variants
     CLOCKSTONE_BLOCK(def("clockstone_block")),
     CLOCKSTONE_STAIRS(def("clockstone_stairs")),

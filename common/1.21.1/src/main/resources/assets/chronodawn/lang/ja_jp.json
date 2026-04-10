@@ -413,5 +413,9 @@
   "gui.chronodawn.chronicle.previous": "前へ",
   "gui.chronodawn.chronicle.next": "次へ",
   "gui.chronodawn.chronicle.page": "ページ %s / %s",
-  "gui.chronodawn.chronicle.select_category": "カテゴリーを選択して開始"
+  "gui.chronodawn.chronicle.select_category": "カテゴリーを選択して開始",
+  "block.chronodawn.temporal_coal_ore": "テンポラル石炭鉱石",
+  "block.chronodawn.temporal_gold_ore": "テンポラル金鉱石",
+  "block.chronodawn.temporal_iron_ore": "テンポラル鉄鉱石",
+  "block.chronodawn.temporal_redstone_ore": "テンポラルレッドストーン鉱石"
 }

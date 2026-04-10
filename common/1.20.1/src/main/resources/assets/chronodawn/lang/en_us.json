@@ -415,7 +415,11 @@
   "block.chronodawn.temporal_stone_wall": "Temporal Stone Wall",
   "block.chronodawn.temporal_cobblestone_stairs": "Temporal Cobblestone Stairs",
   "block.chronodawn.temporal_cobblestone_slab": "Temporal Cobblestone Slab",
-  "block.chronodawn.temporal_cobblestone_wall": "Temporal Cobblestone Wall"
+  "block.chronodawn.temporal_cobblestone_wall": "Temporal Cobblestone Wall",
+  "block.chronodawn.temporal_coal_ore": "Temporal Coal Ore",
+  "block.chronodawn.temporal_gold_ore": "Temporal Gold Ore",
+  "block.chronodawn.temporal_iron_ore": "Temporal Iron Ore",
+  "block.chronodawn.temporal_redstone_ore": "Temporal Redstone Ore"
 }
 
 

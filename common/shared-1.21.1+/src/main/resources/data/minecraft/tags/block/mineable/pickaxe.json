@@ -22,6 +22,10 @@
     "chronodawn:temporal_stone_wall",
     "chronodawn:temporal_cobblestone_stairs",
     "chronodawn:temporal_cobblestone_slab",
-    "chronodawn:temporal_cobblestone_wall"
+    "chronodawn:temporal_cobblestone_wall",
+    "chronodawn:temporal_coal_ore",
+    "chronodawn:temporal_gold_ore",
+    "chronodawn:temporal_iron_ore",
+    "chronodawn:temporal_redstone_ore"
   ]
 }

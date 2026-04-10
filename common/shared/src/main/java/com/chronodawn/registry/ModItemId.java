@@ -35,6 +35,12 @@ public enum ModItemId {
     CLOCKSTONE_ORE("clockstone_ore"),
     TIME_CRYSTAL_ORE("time_crystal_ore"),
 
+    // Temporal Ore variants
+    TEMPORAL_COAL_ORE("temporal_coal_ore"),
+    TEMPORAL_GOLD_ORE("temporal_gold_ore"),
+    TEMPORAL_IRON_ORE("temporal_iron_ore"),
+    TEMPORAL_REDSTONE_ORE("temporal_redstone_ore"),
+
     // Clockstone variants
     CLOCKSTONE_BLOCK("clockstone_block"),
     CLOCKSTONE_STAIRS("clockstone_stairs"),

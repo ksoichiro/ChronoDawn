@@ -88,6 +88,24 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TIME_CRYSTAL_ORE.get(), new Item.Properties())
     );
 
+    // Temporal Ore variants
+    public static final RegistrySupplier<Item> TEMPORAL_COAL_ORE = ITEMS.register(
+        ModItemId.TEMPORAL_COAL_ORE.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_COAL_ORE.get(), new Item.Properties())
+    );
+    public static final RegistrySupplier<Item> TEMPORAL_GOLD_ORE = ITEMS.register(
+        ModItemId.TEMPORAL_GOLD_ORE.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_GOLD_ORE.get(), new Item.Properties())
+    );
+    public static final RegistrySupplier<Item> TEMPORAL_IRON_ORE = ITEMS.register(
+        ModItemId.TEMPORAL_IRON_ORE.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_IRON_ORE.get(), new Item.Properties())
+    );
+    public static final RegistrySupplier<Item> TEMPORAL_REDSTONE_ORE = ITEMS.register(
+        ModItemId.TEMPORAL_REDSTONE_ORE.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_REDSTONE_ORE.get(), new Item.Properties())
+    );
+
     /**
      * Clockstone Block - BlockItem for placing Clockstone Block (portal frame material).
      */
@@ -1930,6 +1948,10 @@ public class ModItems {
         // === Blocks ===
         output.accept(CLOCKSTONE_ORE.get());
         output.accept(TIME_CRYSTAL_ORE.get());
+        output.accept(TEMPORAL_COAL_ORE.get());
+        output.accept(TEMPORAL_GOLD_ORE.get());
+        output.accept(TEMPORAL_IRON_ORE.get());
+        output.accept(TEMPORAL_REDSTONE_ORE.get());
         output.accept(CLOCKSTONE_BLOCK.get());
         output.accept(CLOCKSTONE_STAIRS.get());
         output.accept(CLOCKSTONE_SLAB.get());

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "chronodawn:block/temporal_redstone_ore"
+    },
+    "lit=true": {
+      "model": "chronodawn:block/temporal_redstone_ore"
+    }
+  }
+}

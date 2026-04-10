@@ -5,22 +5,8 @@
     "discard_chance_on_air_exposure": 0.0,
     "targets": [
       {
-        "target": {
-          "predicate_type": "minecraft:block_match",
-          "block": "minecraft:stone"
-        },
-        "state": {
-          "Name": "chronodawn:clockstone_ore"
-        }
-      },
-      {
-        "target": {
-          "predicate_type": "minecraft:block_match",
-          "block": "minecraft:deepslate"
-        },
-        "state": {
-          "Name": "chronodawn:clockstone_ore"
-        }
+        "target": { "predicate_type": "minecraft:block_match", "block": "chronodawn:temporal_stone" },
+        "state": { "Name": "chronodawn:clockstone_ore" }
       }
     ]
   }

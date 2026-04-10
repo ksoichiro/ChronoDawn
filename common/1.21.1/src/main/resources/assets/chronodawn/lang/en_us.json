@@ -413,7 +413,11 @@
   "gui.chronodawn.chronicle.previous": "Previous",
   "gui.chronodawn.chronicle.next": "Next",
   "gui.chronodawn.chronicle.page": "Page %s of %s",
-  "gui.chronodawn.chronicle.select_category": "Select a category to begin"
+  "gui.chronodawn.chronicle.select_category": "Select a category to begin",
+  "block.chronodawn.temporal_coal_ore": "Temporal Coal Ore",
+  "block.chronodawn.temporal_gold_ore": "Temporal Gold Ore",
+  "block.chronodawn.temporal_iron_ore": "Temporal Iron Ore",
+  "block.chronodawn.temporal_redstone_ore": "Temporal Redstone Ore"
 }
 
 

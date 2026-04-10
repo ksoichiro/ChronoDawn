@@ -35,6 +35,10 @@ import com.chronodawn.blocks.TemporalCobblestoneSlab;
 import com.chronodawn.blocks.TemporalCobblestoneWall;
 import com.chronodawn.blocks.TemporalParticleEmitterBlock;
 import com.chronodawn.blocks.TimeCrystalBlock;
+import com.chronodawn.blocks.TemporalCoalOre;
+import com.chronodawn.blocks.TemporalGoldOre;
+import com.chronodawn.blocks.TemporalIronOre;
+import com.chronodawn.blocks.TemporalRedstoneOre;
 import com.chronodawn.blocks.TimeCrystalOre;
 import com.chronodawn.blocks.TimeWoodButton;
 import com.chronodawn.blocks.TimeWoodDoor;
@@ -124,6 +128,27 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> TIME_CRYSTAL_ORE = BLOCKS.register(
         ModBlockId.TIME_CRYSTAL_ORE.id(),
         () -> new TimeCrystalOre(TimeCrystalOre.createProperties())
+    );
+
+    // Temporal Ore variants
+    public static final RegistrySupplier<Block> TEMPORAL_COAL_ORE = BLOCKS.register(
+        ModBlockId.TEMPORAL_COAL_ORE.id(),
+        () -> new TemporalCoalOre(TemporalCoalOre.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> TEMPORAL_GOLD_ORE = BLOCKS.register(
+        ModBlockId.TEMPORAL_GOLD_ORE.id(),
+        () -> new TemporalGoldOre(TemporalGoldOre.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> TEMPORAL_IRON_ORE = BLOCKS.register(
+        ModBlockId.TEMPORAL_IRON_ORE.id(),
+        () -> new TemporalIronOre(TemporalIronOre.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> TEMPORAL_REDSTONE_ORE = BLOCKS.register(
+        ModBlockId.TEMPORAL_REDSTONE_ORE.id(),
+        () -> new TemporalRedstoneOre(TemporalRedstoneOre.createProperties())
     );
 
     /**
