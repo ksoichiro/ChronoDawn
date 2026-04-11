@@ -35,6 +35,7 @@ import com.chronodawn.blocks.TemporalGrassBlock;
 import com.chronodawn.blocks.TemporalMossBlock;
 import com.chronodawn.blocks.TemporalParticleEmitterBlock;
 import com.chronodawn.blocks.TimeCrystalBlock;
+import com.chronodawn.blocks.EntropyCrystalOre;
 import com.chronodawn.blocks.TemporalCoalOre;
 import com.chronodawn.blocks.TemporalGoldOre;
 import com.chronodawn.blocks.TemporalIronOre;
@@ -149,6 +150,11 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> TEMPORAL_REDSTONE_ORE = BLOCKS.register(
         ModBlockId.TEMPORAL_REDSTONE_ORE.id(),
         () -> new TemporalRedstoneOre(TemporalRedstoneOre.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> ENTROPY_CRYSTAL_ORE = BLOCKS.register(
+        ModBlockId.ENTROPY_CRYSTAL_ORE.id(),
+        () -> new EntropyCrystalOre(EntropyCrystalOre.createProperties())
     );
 
     /**
