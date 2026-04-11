@@ -111,6 +111,7 @@ public class EntityEventHandler {
             if (player instanceof ServerPlayer serverPlayer) {
                 TeleporterChargingHandler.tick(serverPlayer);
                 handleChronoAegisClarity(serverPlayer);
+                com.chronodawn.items.equipment.TemporalAmberArmorItem.tryAutoRepair(serverPlayer);
             }
         });
 
