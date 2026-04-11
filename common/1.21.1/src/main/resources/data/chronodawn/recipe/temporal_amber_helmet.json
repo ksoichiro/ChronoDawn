@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "combat",
+  "pattern": [
+    "XXX",
+    "X X"
+  ],
+  "key": {
+    "X": {
+      "item": "chronodawn:raw_temporal_amber"
+    }
+  },
+  "result": {
+    "id": "chronodawn:temporal_amber_helmet",
+    "count": 1
+  }
+}
