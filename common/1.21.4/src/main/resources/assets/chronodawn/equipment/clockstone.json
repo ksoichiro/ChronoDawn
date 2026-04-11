@@ -1,0 +1,14 @@
+{
+  "layers": {
+    "humanoid": [
+      {
+        "texture": "chronodawn:clockstone"
+      }
+    ],
+    "humanoid_leggings": [
+      {
+        "texture": "chronodawn:clockstone"
+      }
+    ]
+  }
+}
