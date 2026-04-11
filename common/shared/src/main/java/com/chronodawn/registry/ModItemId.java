@@ -214,6 +214,10 @@ public enum ModItemId {
     ENHANCED_CLOCKSTONE_CHESTPLATE("enhanced_clockstone_chestplate"),
     ENHANCED_CLOCKSTONE_LEGGINGS("enhanced_clockstone_leggings"),
     ENHANCED_CLOCKSTONE_BOOTS("enhanced_clockstone_boots"),
+    TEMPORAL_AMBER_HELMET("temporal_amber_helmet"),
+    TEMPORAL_AMBER_CHESTPLATE("temporal_amber_chestplate"),
+    TEMPORAL_AMBER_LEGGINGS("temporal_amber_leggings"),
+    TEMPORAL_AMBER_BOOTS("temporal_amber_boots"),
 
     // === Artifacts ===
     CHRONOBLADE("chronoblade"),

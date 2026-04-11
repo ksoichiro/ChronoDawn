@@ -35,6 +35,7 @@ import com.chronodawn.items.equipment.ClockstonePickaxeItem;
 import com.chronodawn.items.equipment.ClockstoneShovelItem;
 import com.chronodawn.items.equipment.ClockstoneSwordItem;
 import com.chronodawn.items.equipment.EnhancedClockstoneArmorItem;
+import com.chronodawn.items.equipment.TemporalAmberArmorItem;
 import com.chronodawn.items.equipment.EnhancedClockstoneAxeItem;
 import com.chronodawn.items.equipment.EnhancedClockstoneHoeItem;
 import com.chronodawn.items.equipment.EnhancedClockstonePickaxeItem;
@@ -1681,6 +1682,54 @@ public class ModItems {
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENHANCED_CLOCKSTONE_BOOTS.id()))))
     );
 
+    /**
+     * Temporal Amber Helmet - Tier 2 helmet from Temporal Amber.
+     * Defense: 3, Durability: 385
+     * Crafted from Temporal Amber Dust.
+     */
+    public static final RegistrySupplier<Item> TEMPORAL_AMBER_HELMET = ITEMS.register(
+        ModItemId.TEMPORAL_AMBER_HELMET.id(),
+        () -> new TemporalAmberArmorItem(TemporalAmberArmorItem.createProperties(ArmorType.HELMET)
+                .setId(ResourceKey.create(Registries.ITEM,
+                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_AMBER_HELMET.id()))))
+    );
+
+    /**
+     * Temporal Amber Chestplate - Tier 2 chestplate from Temporal Amber.
+     * Defense: 7, Durability: 560
+     * Crafted from Temporal Amber Dust.
+     */
+    public static final RegistrySupplier<Item> TEMPORAL_AMBER_CHESTPLATE = ITEMS.register(
+        ModItemId.TEMPORAL_AMBER_CHESTPLATE.id(),
+        () -> new TemporalAmberArmorItem(TemporalAmberArmorItem.createProperties(ArmorType.CHESTPLATE)
+                .setId(ResourceKey.create(Registries.ITEM,
+                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_AMBER_CHESTPLATE.id()))))
+    );
+
+    /**
+     * Temporal Amber Leggings - Tier 2 leggings from Temporal Amber.
+     * Defense: 6, Durability: 525
+     * Crafted from Temporal Amber Dust.
+     */
+    public static final RegistrySupplier<Item> TEMPORAL_AMBER_LEGGINGS = ITEMS.register(
+        ModItemId.TEMPORAL_AMBER_LEGGINGS.id(),
+        () -> new TemporalAmberArmorItem(TemporalAmberArmorItem.createProperties(ArmorType.LEGGINGS)
+                .setId(ResourceKey.create(Registries.ITEM,
+                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_AMBER_LEGGINGS.id()))))
+    );
+
+    /**
+     * Temporal Amber Boots - Tier 2 boots from Temporal Amber.
+     * Defense: 3, Durability: 455
+     * Crafted from Temporal Amber Dust.
+     */
+    public static final RegistrySupplier<Item> TEMPORAL_AMBER_BOOTS = ITEMS.register(
+        ModItemId.TEMPORAL_AMBER_BOOTS.id(),
+        () -> new TemporalAmberArmorItem(TemporalAmberArmorItem.createProperties(ArmorType.BOOTS)
+                .setId(ResourceKey.create(Registries.ITEM,
+                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_AMBER_BOOTS.id()))))
+    );
+
     // === Tools ===
 
     /**
@@ -2470,6 +2519,10 @@ public class ModItems {
         output.accept(ENHANCED_CLOCKSTONE_CHESTPLATE.get());
         output.accept(ENHANCED_CLOCKSTONE_LEGGINGS.get());
         output.accept(ENHANCED_CLOCKSTONE_BOOTS.get());
+        output.accept(TEMPORAL_AMBER_HELMET.get());
+        output.accept(TEMPORAL_AMBER_CHESTPLATE.get());
+        output.accept(TEMPORAL_AMBER_LEGGINGS.get());
+        output.accept(TEMPORAL_AMBER_BOOTS.get());
 
         // === Ultimate Weapons ===
         output.accept(CHRONOBLADE.get());
