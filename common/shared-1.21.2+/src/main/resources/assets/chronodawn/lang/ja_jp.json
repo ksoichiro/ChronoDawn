@@ -430,5 +430,6 @@
   "block.chronodawn.temporal_gold_ore": "テンポラル金鉱石",
   "block.chronodawn.temporal_iron_ore": "テンポラル鉄鉱石",
   "block.chronodawn.temporal_redstone_ore": "テンポラルレッドストーン鉱石",
-  "block.chronodawn.entropy_crystal_ore": "エントロピークリスタル鉱石"
+  "block.chronodawn.entropy_crystal_ore": "エントロピークリスタル鉱石",
+  "block.chronodawn.temporal_amber_ore": "時の琥珀鉱石"
 }
