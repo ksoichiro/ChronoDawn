@@ -16,6 +16,7 @@ public class EntropyCrystalOre extends DropExperienceBlock {
 
     public static BlockBehaviour.Properties createProperties() {
         return BlockBehaviour.Properties.ofFullCopy(Blocks.STONE)
+                .strength(3.0f, 3.0f)
                 .setId(ResourceKey.create(Registries.BLOCK,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, "entropy_crystal_ore")));
     }
