@@ -59,15 +59,17 @@ public class TimeBlastRenderer extends EntityRenderer<TimeBlastEntity, TimeBlast
 
         // 1.21.9: Submit custom geometry via collector (PoseStack, RenderType, CustomGeometryRenderer)
         // CustomGeometryRenderer takes (Pose, VertexConsumer)
+        // Pull packed light from render state — the old render(packedLight) parameter is gone in submit().
+        int packedLight = state.lightCoords;
         collector.submitCustomGeometry(poseStack, RENDER_TYPE, (pose, vertexConsumer) -> {
             Matrix4f matrix4f = pose.pose();
             Matrix3f matrix3f = pose.normal();
             // Render a quad (billboard) with the texture
             // Vertex order: bottom-left, top-left, top-right, bottom-right
-            vertex(vertexConsumer, matrix4f, matrix3f, -0.5f, -0.5f, 0, 0, 1);
-            vertex(vertexConsumer, matrix4f, matrix3f, -0.5f, 0.5f, 0, 0, 0);
-            vertex(vertexConsumer, matrix4f, matrix3f, 0.5f, 0.5f, 0, 1, 0);
-            vertex(vertexConsumer, matrix4f, matrix3f, 0.5f, -0.5f, 0, 1, 1);
+            vertex(vertexConsumer, matrix4f, matrix3f, packedLight, -0.5f, -0.5f, 0, 0, 1);
+            vertex(vertexConsumer, matrix4f, matrix3f, packedLight, -0.5f, 0.5f, 0, 0, 0);
+            vertex(vertexConsumer, matrix4f, matrix3f, packedLight, 0.5f, 0.5f, 0, 1, 0);
+            vertex(vertexConsumer, matrix4f, matrix3f, packedLight, 0.5f, -0.5f, 0, 1, 1);
         });
 
         poseStack.popPose();
@@ -78,12 +80,13 @@ public class TimeBlastRenderer extends EntityRenderer<TimeBlastEntity, TimeBlast
     /**
      * Helper method to add a vertex to the buffer.
      */
-    private void vertex(VertexConsumer consumer, Matrix4f matrix4f, Matrix3f matrix3f,
+    private void vertex(VertexConsumer consumer, Matrix4f matrix4f, Matrix3f matrix3f, int packedLight,
                         float x, float y, float z, float u, float v) {
         consumer.addVertex(matrix4f, x, y, z)
             .setColor(255, 255, 255, 255)
             .setUv(u, v)
             .setOverlay(OverlayTexture.NO_OVERLAY)
+            .setLight(packedLight)
             .setNormal(0.0f, 1.0f, 0.0f);
     }
 
