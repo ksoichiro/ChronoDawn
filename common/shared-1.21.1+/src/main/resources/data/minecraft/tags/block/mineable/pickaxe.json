@@ -27,6 +27,7 @@
     "chronodawn:temporal_gold_ore",
     "chronodawn:temporal_iron_ore",
     "chronodawn:temporal_redstone_ore",
-    "chronodawn:entropy_crystal_ore"
+    "chronodawn:entropy_crystal_ore",
+    "chronodawn:temporal_amber_ore"
   ]
 }
