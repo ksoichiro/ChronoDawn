@@ -1,13 +1,14 @@
 package com.chronodawn.blocks;
 
-import net.minecraft.world.level.block.Block;
+import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.level.block.DropExperienceBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
 
-public class TemporalCoalOre extends Block {
+public class TemporalCoalOre extends DropExperienceBlock {
     public TemporalCoalOre(BlockBehaviour.Properties properties) {
-        super(properties);
+        super(UniformInt.of(0, 2), properties);
     }
 
     public static BlockBehaviour.Properties createProperties() {
