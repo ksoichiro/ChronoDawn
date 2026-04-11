@@ -1032,7 +1032,7 @@ This file contains all completed task sections that have been moved from tasks.m
 
 ---
 
-## Entropy Amber Ores - Tier 2 Equipment (🔄 IN PROGRESS 2026-04-11)
+## Entropy Amber Ores - Tier 2 Equipment (✅ COMPLETED 2026-04-11)
 
 **Purpose**: Add two new Tier 2 ore systems - Entropy Crystal Ore and Temporal Amber Ore, each with unique armor sets and weapons.
 
@@ -1065,7 +1065,7 @@ This file contains all completed task sections that have been moved from tasks.m
     - `common/shared-1.21.2+/src/main/resources/data/chronodawn/recipe/temporal_amber_dust.json`
     - `common/1.20.1/src/main/resources/data/chronodawn/recipes/temporal_amber_dust.json`
 
-### Phase 6: Temporal Amber Armor Material & Items (✅ COMPLETED - Pending Translation/Texture/Recipe)
+### Phase 6: Temporal Amber Armor Material & Items (✅ COMPLETED)
 
 - [x] T304 [P] Create TemporalAmberArmorMaterial for all versions
   - **Completed**: Created armor material with stats
@@ -1084,50 +1084,33 @@ This file contains all completed task sections that have been moved from tasks.m
     - `common/shared/src/main/java/com/chronodawn/registry/ModItemId.java` (added 4 IDs)
     - `common/{version}/src/main/java/com/chronodawn/registry/ModItems.java` (11 versions)
 
-### Phase 6: Temporal Amber Armor - Remaining Tasks (⏳ PENDING)
+### Phase 6: Temporal Amber Armor Resources (✅ COMPLETED)
 
-- [ ] T307 [P] Add translation keys for Temporal Amber armor
-  - **Target Files**:
-    - `common/shared-1.21.2+/src/main/resources/assets/chronodawn/lang/en_us.json`
-    - `common/shared-1.21.2+/src/main/resources/assets/chronodawn/lang/ja_jp.json`
-    - `common/1.20.1/src/main/resources/assets/chronodawn/lang/en_us.json`
-    - `common/1.20.1/src/main/resources/assets/chronodawn/lang/ja_jp.json`
-  - **Keys to add**:
-    - `item.chronodawn.temporal_amber_helmet`
-    - `item.chronodawn.temporal_amber_chestplate`
-    - `item.chronodawn.temporal_amber_leggings`
-    - `item.chronodawn.temporal_amber_boots`
+- [x] T307 [P] Add translation keys for Temporal Amber armor
+  - **Completed**: 4 piece translations added in en_us and ja_jp across all 3 lang buckets
+  - **Files**: `common/{1.20.1,1.21.1,shared-1.21.2+}/src/main/resources/assets/chronodawn/lang/{en_us,ja_jp}.json`
 
-- [ ] T308 [P] Create Temporal Amber armor item models
-  - **Target Files**: `common/*/src/main/resources/assets/chronodawn/models/item/temporal_amber_*.json` (4 pieces × versions)
-  - **Pattern**: Similar to enhanced_clockstone armor models
+- [x] T308 [P] Create Temporal Amber armor item models and client items JSON
+  - **Completed**: 4 generated item models in shared/, plus client items JSON in 1.21.4 and shared-1.21.5+ (both required for 1.21.4+)
+  - **Files**: `common/shared/.../models/item/temporal_amber_*.json`, `common/{1.21.4,shared-1.21.5+}/.../items/temporal_amber_*.json`
 
-- [ ] T309 [P] Create Temporal Amber armor textures
-  - **Target Files**: `common/shared/src/main/resources/assets/chronodawn/textures/item/temporal_amber_*.png` (4 pieces)
-  - **Color Scheme**: Amber/brown tones to match Temporal Amber theme
+- [x] T309 [P] Create Temporal Amber armor textures
+  - **Completed**: Item icons (4 × 16x16), legacy layer_1/layer_2 (1.20.1/1.21.1), humanoid + humanoid_leggings entity equipment textures (1.21.2+). Initial palette derived from Clockstone via ImageMagick channel multiply (R×1.35 G×0.55 B×0.45), refined manually.
+  - **Files**: `common/shared/.../textures/item/temporal_amber_*.png`, `common/shared/.../textures/models/armor/temporal_amber_layer_*.png`, `common/shared-1.21.2+/.../textures/entity/equipment/humanoid{,_leggings}/temporal_amber.png`
 
-- [ ] T310 [P] Create Temporal Amber armor recipes
-  - **Target Files**: `common/*/src/main/resources/data/chronodawn/recipes/temporal_amber_*.json`
-  - **Pattern**: Similar to enhanced_clockstone armor recipes (using Temporal Amber Dust)
+- [x] T310 [P] Create Temporal Amber armor recipes and recipe unlocks
+  - **Completed**: Shaped recipes for 4 pieces × 3 version JSON format buckets, plus recipe unlock advancements triggered on raw_temporal_amber pickup × 2 directory bucket forms
+  - **Files**: 12 recipe JSONs across `common/{1.20.1/recipes,1.21.1/recipe,shared-1.21.2+/recipe}/temporal_amber_*.json`, 8 advancement JSONs across `common/{1.20.1/advancements,shared-1.21.1+/advancement}/recipes/combat/temporal_amber_*.json`
 
-**Current Status**:
-- ✅ Temporal Amber Ore block implemented
-- ✅ Raw Temporal Amber item implemented
-- ✅ Temporal Amber Dust item and recipe implemented
-- ✅ Temporal Amber Armor Material created (all versions)
-- ✅ Temporal Amber Armor Items created (all versions)
-- ✅ Items registered in ModItems (all versions)
-- ✅ Creative tab entries added (all versions)
-- ⏳ Translation keys pending
-- ⏳ Item models pending
-- ⏳ Textures pending
-- ⏳ Recipes pending
+- [x] T311 Equipment asset JSON (1.21.2+) and 1.21.4+ path fix for all armors
+  - **Completed**: `models/equipment/temporal_amber.json` for 1.21.2/1.21.3, plus new-location `equipment/temporal_amber.json` for 1.21.4+ in both 1.21.4 and shared-1.21.5+. Same fix applied to existing clockstone, enhanced_clockstone, and time_tyrant — they were silently invisible when worn on 1.21.4+ since the directory was renamed (`models/` prefix dropped).
+  - **Verification**: 1.21.11 Fabric — all 4 armors render correctly when worn.
 
-**Known Issues**:
-- Items will display as missing texture (purple-black) until textures are added
-- Items will show translation key instead of name until translations are added
-- Items cannot be crafted until recipes are added
-- Armor uses diamond repair tag temporarily (TODO: Create temporal_amber_dust tag)
-
-**Next Steps**: T307 (Translations) → T308 (Models) → T309 (Textures) → T310 (Recipes) → Build Test
+**Final Status**:
+- ✅ Temporal Amber Ore block, raw item, dust item all implemented
+- ✅ Temporal Amber Armor Material + Items + ModItems registration (all 11 versions)
+- ✅ Translations, item models, client items JSON, item textures, worn textures, equipment asset (both old and new path)
+- ✅ Crafting recipes and recipe-unlock advancements
+- ✅ Pre-existing armors (clockstone / enhanced_clockstone / time_tyrant) also fixed for 1.21.4+ equipment asset path
+- ⏳ Self-repair logic (TemporalAmberArmorItem#inventoryTick consume dust + restore durability) — deferred
 
