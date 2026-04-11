@@ -159,6 +159,7 @@ public enum ModItemId {
     CLOCKSTONE("clockstone"),
     ENHANCED_CLOCKSTONE("enhanced_clockstone"),
     TIME_CRYSTAL("time_crystal"),
+    ENTROPY_CRYSTAL("entropy_crystal"),
     COLOSSUS_GEAR("colossus_gear"),
     PHANTOM_ESSENCE("phantom_essence"),
     ENTROPY_CORE("entropy_core"),

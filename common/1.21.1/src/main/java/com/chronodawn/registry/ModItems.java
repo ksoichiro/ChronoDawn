@@ -105,6 +105,10 @@ public class ModItems {
         ModItemId.TEMPORAL_REDSTONE_ORE.id(),
         () -> new BlockItem(ModBlocks.TEMPORAL_REDSTONE_ORE.get(), new Item.Properties())
     );
+    public static final RegistrySupplier<Item> ENTROPY_CRYSTAL_ORE = ITEMS.register(
+        ModItemId.ENTROPY_CRYSTAL_ORE.id(),
+        () -> new BlockItem(ModBlocks.ENTROPY_CRYSTAL_ORE.get(), new Item.Properties())
+    );
 
     /**
      * Clockstone Block - BlockItem for placing Clockstone Block (portal frame material).
@@ -723,6 +727,10 @@ public class ModItems {
     public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE = ITEMS.register(
         ModItemId.ENHANCED_CLOCKSTONE.id(),
         () -> new EnhancedClockstoneItem(EnhancedClockstoneItem.createProperties())
+    );
+    public static final RegistrySupplier<Item> ENTROPY_CRYSTAL = ITEMS.register(
+        ModItemId.ENTROPY_CRYSTAL.id(),
+        () -> new Item(new Item.Properties())
     );
 
     /**
@@ -1958,6 +1966,7 @@ public class ModItems {
         output.accept(TEMPORAL_GOLD_ORE.get());
         output.accept(TEMPORAL_IRON_ORE.get());
         output.accept(TEMPORAL_REDSTONE_ORE.get());
+        output.accept(ENTROPY_CRYSTAL_ORE.get());
         output.accept(CLOCKSTONE_BLOCK.get());
         output.accept(CLOCKSTONE_STAIRS.get());
         output.accept(CLOCKSTONE_SLAB.get());
@@ -2038,6 +2047,7 @@ public class ModItems {
         output.accept(CLOCKSTONE.get());
         output.accept(TIME_CRYSTAL.get());
         output.accept(ENHANCED_CLOCKSTONE.get());
+        output.accept(ENTROPY_CRYSTAL.get());
         output.accept(UNSTABLE_HOURGLASS.get());
         output.accept(FRAGMENT_OF_STASIS_CORE.get());
         output.accept(EYE_OF_CHRONOS.get());
