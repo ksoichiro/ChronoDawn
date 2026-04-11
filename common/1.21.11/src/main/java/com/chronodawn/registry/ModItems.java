@@ -993,6 +993,18 @@ public class ModItems {
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENTROPY_CRYSTAL.id()))))
     );
+    public static final RegistrySupplier<Item> RAW_TEMPORAL_AMBER = ITEMS.register(
+        ModItemId.RAW_TEMPORAL_AMBER.id(),
+        () -> new Item(new Item.Properties()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.RAW_TEMPORAL_AMBER.id()))))
+    );
+    public static final RegistrySupplier<Item> TEMPORAL_AMBER_DUST = ITEMS.register(
+        ModItemId.TEMPORAL_AMBER_DUST.id(),
+        () -> new Item(new Item.Properties()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_AMBER_DUST.id()))))
+    );
 
     /**
      * Unstable Hourglass - Material item with crafting risk.
@@ -2378,6 +2390,8 @@ public class ModItems {
         output.accept(TIME_CRYSTAL.get());
         output.accept(ENHANCED_CLOCKSTONE.get());
         output.accept(ENTROPY_CRYSTAL.get());
+        output.accept(RAW_TEMPORAL_AMBER.get());
+        output.accept(TEMPORAL_AMBER_DUST.get());
         output.accept(UNSTABLE_HOURGLASS.get());
         output.accept(FRAGMENT_OF_STASIS_CORE.get());
         output.accept(EYE_OF_CHRONOS.get());
