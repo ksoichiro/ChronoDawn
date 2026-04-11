@@ -81,6 +81,7 @@
 
   "item.chronodawn.clockstone": "Clockstone",
   "item.chronodawn.time_crystal": "Time Crystal",
+  "item.chronodawn.entropy_crystal": "Entropy Crystal",
   "item.chronodawn.enhanced_clockstone": "Enhanced Clockstone",
   "item.chronodawn.time_hourglass": "Time Hourglass",
   "item.chronodawn.portal_stabilizer": "Portal Stabilizer",
@@ -426,7 +427,8 @@
   "block.chronodawn.temporal_coal_ore": "Temporal Coal Ore",
   "block.chronodawn.temporal_gold_ore": "Temporal Gold Ore",
   "block.chronodawn.temporal_iron_ore": "Temporal Iron Ore",
-  "block.chronodawn.temporal_redstone_ore": "Temporal Redstone Ore"
+  "block.chronodawn.temporal_redstone_ore": "Temporal Redstone Ore",
+  "block.chronodawn.entropy_crystal_ore": "Entropy Crystal Ore"
 }
 
 

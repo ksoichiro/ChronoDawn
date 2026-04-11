@@ -81,6 +81,7 @@
 
   "item.chronodawn.clockstone": "クロックストーン",
   "item.chronodawn.time_crystal": "時間の結晶",
+  "item.chronodawn.entropy_crystal": "エントロピークリスタル",
   "item.chronodawn.enhanced_clockstone": "強化クロックストーン",
   "item.chronodawn.time_hourglass": "時の砂時計",
   "item.chronodawn.portal_stabilizer": "ポータル安定化装置",
@@ -426,5 +427,6 @@
   "block.chronodawn.temporal_coal_ore": "テンポラル石炭鉱石",
   "block.chronodawn.temporal_gold_ore": "テンポラル金鉱石",
   "block.chronodawn.temporal_iron_ore": "テンポラル鉄鉱石",
-  "block.chronodawn.temporal_redstone_ore": "テンポラルレッドストーン鉱石"
+  "block.chronodawn.temporal_redstone_ore": "テンポラルレッドストーン鉱石",
+  "block.chronodawn.entropy_crystal_ore": "エントロピークリスタル鉱石"
 }
