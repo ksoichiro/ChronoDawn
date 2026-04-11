@@ -1030,3 +1030,104 @@ This file contains all completed task sections that have been moved from tasks.m
 - ✅ Multiplayer stability verified on both Fabric and NeoForge
 - ✅ No world freezing or race conditions detected
 
+---
+
+## Entropy Amber Ores - Tier 2 Equipment (🔄 IN PROGRESS 2026-04-11)
+
+**Purpose**: Add two new Tier 2 ore systems - Entropy Crystal Ore and Temporal Amber Ore, each with unique armor sets and weapons.
+
+### Phase 5: Temporal Amber Ore & Basic Items (✅ COMPLETED)
+
+- [x] T301 [P] Create Temporal Amber Ore block
+  - **Completed**: Created TemporalAmberOre block with deep layer generation (Y: -30 to 20)
+  - **Ore size**: 3, **Max count**: 4
+  - **Drop**: Raw Temporal Amber (experience enabled)
+  - **Files**:
+    - `common/shared/src/main/java/com/chronodawn/block/TemporalAmberOre.java`
+    - `common/shared/src/main/resources/assets/chronodawn/textures/block/temporal_amber_ore.png`
+    - `common/1.20.1/src/main/resources/assets/chronodawn/blockstates/temporal_amber_ore.json`
+    - `common/shared-1.21.2+/src/main/resources/assets/chronodawn/blockstates/temporal_amber_ore.json`
+
+- [x] T302 [P] Create Raw Temporal Amber item
+  - **Completed**: Added raw_temporal_amber item with texture
+  - **Files**:
+    - `common/shared/src/main/resources/assets/chronodawn/textures/item/raw_temporal_amber.png`
+    - `common/shared/src/main/resources/assets/chronodawn/models/item/raw_temporal_amber.json`
+    - `common/shared-1.21.2+/src/main/resources/assets/chronodawn/items/raw_temporal_amber.json`
+    - `common/1.21.4/src/main/resources/assets/chronodawn/items/raw_temporal_amber.json`
+
+- [x] T303 [P] Create Temporal Amber Dust item with recipe
+  - **Completed**: Added temporal_amber_dust item (1 Raw Amber → 2 Dust recipe)
+  - **Files**:
+    - `common/shared/src/main/resources/assets/chronodawn/textures/item/temporal_amber_dust.png`
+    - `common/shared/src/main/resources/assets/chronodawn/models/item/temporal_amber_dust.json`
+    - `common/shared/src/main/resources/data/chronodawn/loot_tables/blocks/temporal_amber_ore.json`
+    - `common/shared-1.21.2+/src/main/resources/data/chronodawn/recipe/temporal_amber_dust.json`
+    - `common/1.20.1/src/main/resources/data/chronodawn/recipes/temporal_amber_dust.json`
+
+### Phase 6: Temporal Amber Armor Material & Items (✅ COMPLETED - Pending Translation/Texture/Recipe)
+
+- [x] T304 [P] Create TemporalAmberArmorMaterial for all versions
+  - **Completed**: Created armor material with stats
+  - **Stats**: Durability 35, Defense 19 (H3/C7/L6/B3), Enchantability 10, Toughness 1.5f
+  - **Repair**: Temporal Amber Dust (temporary: using diamond tag)
+  - **Files**: `common/{version}/src/main/java/com/chronodawn/items/equipment/TemporalAmberArmorMaterial.java` (11 versions)
+
+- [x] T305 [P] Create TemporalAmberArmorItem for all versions
+  - **Completed**: Created armor item classes with isWearingFullSet() utility
+  - **Files**: `common/{version}/src/main/java/com/chronodawn/items/equipment/TemporalAmberArmorItem.java` (11 versions)
+
+- [x] T306 [P] Register Temporal Amber armor items in ModItems.java
+  - **Completed**: Added 4 armor pieces (helmet, chestplate, leggings, boots) to all versions
+  - **Creative Tab**: Added all 4 pieces
+  - **Files**: 
+    - `common/shared/src/main/java/com/chronodawn/registry/ModItemId.java` (added 4 IDs)
+    - `common/{version}/src/main/java/com/chronodawn/registry/ModItems.java` (11 versions)
+
+### Phase 6: Temporal Amber Armor - Remaining Tasks (⏳ PENDING)
+
+- [ ] T307 [P] Add translation keys for Temporal Amber armor
+  - **Target Files**:
+    - `common/shared-1.21.2+/src/main/resources/assets/chronodawn/lang/en_us.json`
+    - `common/shared-1.21.2+/src/main/resources/assets/chronodawn/lang/ja_jp.json`
+    - `common/1.20.1/src/main/resources/assets/chronodawn/lang/en_us.json`
+    - `common/1.20.1/src/main/resources/assets/chronodawn/lang/ja_jp.json`
+  - **Keys to add**:
+    - `item.chronodawn.temporal_amber_helmet`
+    - `item.chronodawn.temporal_amber_chestplate`
+    - `item.chronodawn.temporal_amber_leggings`
+    - `item.chronodawn.temporal_amber_boots`
+
+- [ ] T308 [P] Create Temporal Amber armor item models
+  - **Target Files**: `common/*/src/main/resources/assets/chronodawn/models/item/temporal_amber_*.json` (4 pieces × versions)
+  - **Pattern**: Similar to enhanced_clockstone armor models
+
+- [ ] T309 [P] Create Temporal Amber armor textures
+  - **Target Files**: `common/shared/src/main/resources/assets/chronodawn/textures/item/temporal_amber_*.png` (4 pieces)
+  - **Color Scheme**: Amber/brown tones to match Temporal Amber theme
+
+- [ ] T310 [P] Create Temporal Amber armor recipes
+  - **Target Files**: `common/*/src/main/resources/data/chronodawn/recipes/temporal_amber_*.json`
+  - **Pattern**: Similar to enhanced_clockstone armor recipes (using Temporal Amber Dust)
+
+**Current Status**:
+- ✅ Temporal Amber Ore block implemented
+- ✅ Raw Temporal Amber item implemented
+- ✅ Temporal Amber Dust item and recipe implemented
+- ✅ Temporal Amber Armor Material created (all versions)
+- ✅ Temporal Amber Armor Items created (all versions)
+- ✅ Items registered in ModItems (all versions)
+- ✅ Creative tab entries added (all versions)
+- ⏳ Translation keys pending
+- ⏳ Item models pending
+- ⏳ Textures pending
+- ⏳ Recipes pending
+
+**Known Issues**:
+- Items will display as missing texture (purple-black) until textures are added
+- Items will show translation key instead of name until translations are added
+- Items cannot be crafted until recipes are added
+- Armor uses diamond repair tag temporarily (TODO: Create temporal_amber_dust tag)
+
+**Next Steps**: T307 (Translations) → T308 (Models) → T309 (Textures) → T310 (Recipes) → Build Test
+
