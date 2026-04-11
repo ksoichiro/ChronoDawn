@@ -47,6 +47,10 @@ public enum ModBlockId {
     TEMPORAL_IRON_ORE(def("temporal_iron_ore")),
     TEMPORAL_REDSTONE_ORE(def("temporal_redstone_ore")),
 
+    // Specialized Tier 2 ores
+    ENTROPY_CRYSTAL_ORE(def("entropy_crystal_ore")),
+    TEMPORAL_AMBER_ORE(def("temporal_amber_ore")),
+
     // Clockstone variants
     CLOCKSTONE_BLOCK(def("clockstone_block")),
     CLOCKSTONE_STAIRS(def("clockstone_stairs")),
