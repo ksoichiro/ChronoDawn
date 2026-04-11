@@ -40,6 +40,7 @@ import com.chronodawn.items.equipment.EnhancedClockstoneHoeItem;
 import com.chronodawn.items.equipment.EnhancedClockstonePickaxeItem;
 import com.chronodawn.items.equipment.EnhancedClockstoneShovelItem;
 import com.chronodawn.items.equipment.EnhancedClockstoneSwordItem;
+import com.chronodawn.items.equipment.EntropyCrystalSwordItem;
 import com.chronodawn.items.artifacts.ChronobladeItem;
 import com.chronodawn.items.artifacts.TimeTyrantMailItem;
 import com.chronodawn.items.artifacts.EchoingTimeBootsItem;
@@ -1522,6 +1523,15 @@ public class ModItems {
         () -> new EnhancedClockstoneSwordItem(EnhancedClockstoneSwordItem.createProperties())
     );
 
+    /**
+     * Entropy Crystal Sword - Tier 2 specialized weapon with Entropy DoT effect.
+     * Iron-tier damage but applies Entropy (1 dmg/sec for 5s) on every hit.
+     */
+    public static final RegistrySupplier<Item> ENTROPY_CRYSTAL_SWORD = ITEMS.register(
+        ModItemId.ENTROPY_CRYSTAL_SWORD.id(),
+        () -> new EntropyCrystalSwordItem(EntropyCrystalSwordItem.createProperties())
+    );
+
     // === Tier 2 Equipment - Tools ===
 
     /**
@@ -2426,6 +2436,7 @@ public class ModItems {
 
         // === Tier 2 Equipment - Weapons ===
         output.accept(ENHANCED_CLOCKSTONE_SWORD.get());
+        output.accept(ENTROPY_CRYSTAL_SWORD.get());
 
         // === Tier 2 Equipment - Tools ===
         output.accept(ENHANCED_CLOCKSTONE_PICKAXE.get());

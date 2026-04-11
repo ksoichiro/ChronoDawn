@@ -200,6 +200,7 @@ public enum ModItemId {
     ENHANCED_CLOCKSTONE_AXE("enhanced_clockstone_axe"),
     ENHANCED_CLOCKSTONE_SHOVEL("enhanced_clockstone_shovel"),
     ENHANCED_CLOCKSTONE_HOE("enhanced_clockstone_hoe"),
+    ENTROPY_CRYSTAL_SWORD("entropy_crystal_sword"),
     SPATIALLY_LINKED_PICKAXE("spatially_linked_pickaxe"),
 
     // === Armor ===
