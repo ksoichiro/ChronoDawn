@@ -134,6 +134,13 @@ public class ModItems {
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENTROPY_CRYSTAL_ORE.id()))))
     );
+    public static final RegistrySupplier<Item> TEMPORAL_AMBER_ORE = ITEMS.register(
+        ModItemId.TEMPORAL_AMBER_ORE.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_AMBER_ORE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_AMBER_ORE.id()))))
+    );
 
     /**
      * Clockstone Block - BlockItem for placing Clockstone Block (portal frame material).
@@ -2290,6 +2297,7 @@ public class ModItems {
         output.accept(TEMPORAL_IRON_ORE.get());
         output.accept(TEMPORAL_REDSTONE_ORE.get());
         output.accept(ENTROPY_CRYSTAL_ORE.get());
+        output.accept(TEMPORAL_AMBER_ORE.get());
         output.accept(CLOCKSTONE_BLOCK.get());
         output.accept(CLOCKSTONE_STAIRS.get());
         output.accept(CLOCKSTONE_SLAB.get());
