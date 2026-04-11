@@ -982,7 +982,9 @@ public class ModItems {
     );
     public static final RegistrySupplier<Item> ENTROPY_CRYSTAL = ITEMS.register(
         ModItemId.ENTROPY_CRYSTAL.id(),
-        () -> new Item(new Item.Properties())
+        () -> new Item(new Item.Properties()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENTROPY_CRYSTAL.id()))))
     );
 
     /**
