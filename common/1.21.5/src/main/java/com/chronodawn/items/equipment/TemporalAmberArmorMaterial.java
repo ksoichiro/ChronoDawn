@@ -1,22 +1,18 @@
 package com.chronodawn.items.equipment;
 
 import com.chronodawn.ChronoDawn;
-import com.chronodawn.registry.ModItems;
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
-import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.item.ArmorItem;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.equipment.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorType;
+import com.chronodawn.compat.CompatResourceLocation;
 
 import java.util.EnumMap;
-import java.util.List;
-import java.util.function.Supplier;
 
 /**
  * Temporal Amber Armor Material - Tier 2 armor material from Temporal Amber.
@@ -37,57 +33,35 @@ import java.util.function.Supplier;
  * - Toughness: 1.5f (iron: 0.0f, diamond: 2.0f)
  * - Knockback Resistance: 0.0f
  *
- * Repair Material: Temporal Amber Dust
+ * Repair Material: Temporal Amber Dust (temporary: using diamond tag)
  *
  * Reference: T301 - Temporal Amber Armor Material
  */
 public class TemporalAmberArmorMaterial {
-    public static final Holder<ArmorMaterial> TEMPORAL_AMBER = register(
-        "temporal_amber",
-        Util.make(new EnumMap<>(ArmorItem.Type.class), map -> {
-            map.put(ArmorItem.Type.BOOTS, 3);
-            map.put(ArmorItem.Type.LEGGINGS, 6);
-            map.put(ArmorItem.Type.CHESTPLATE, 7);
-            map.put(ArmorItem.Type.HELMET, 3);
-            map.put(ArmorItem.Type.BODY, 7); // For horses/llamas
-        }),
-        10, // Enchantability
-        SoundEvents.ARMOR_EQUIP_DIAMOND,
-        () -> Ingredient.of(ModItems.TEMPORAL_AMBER_DUST.get()),
-        1.5f, // Toughness
-        0.0f  // Knockback Resistance
+    // Base durability multiplier (28 * 1.25 = 35)
+    public static final int BASE_DURABILITY = 35;
+
+    // Temporal Amber Dust repair tag
+    // TEMPORARY: Using vanilla tag to test if tag mechanism works
+    // TODO: Create custom tag for temporal_amber_dust
+    private static final TagKey<Item> TEMPORAL_AMBER_DUST_TAG = ItemTags.REPAIRS_DIAMOND_ARMOR;
+
+    public static final Holder<ArmorMaterial> TEMPORAL_AMBER = Holder.direct(
+        new ArmorMaterial(
+            BASE_DURABILITY,  // durability multiplier
+            Util.make(new EnumMap<>(ArmorType.class), map -> {
+                map.put(ArmorType.BOOTS, 3);
+                map.put(ArmorType.LEGGINGS, 6);
+                map.put(ArmorType.CHESTPLATE, 7);
+                map.put(ArmorType.HELMET, 3);
+                map.put(ArmorType.BODY, 7); // For horses/llamas
+            }),
+            10, // Enchantability
+            SoundEvents.ARMOR_EQUIP_DIAMOND,
+            1.5f, // Toughness
+            0.0f,  // Knockback Resistance
+            TEMPORAL_AMBER_DUST_TAG, // Repair ingredient as TagKey
+            CompatResourceLocation.createEquipmentAssetKey(ChronoDawn.MOD_ID, "temporal_amber")  // Equipment asset key (1.21.4+)
+        )
     );
-
-    private static Holder<ArmorMaterial> register(
-        String name,
-        EnumMap<ArmorItem.Type, Integer> defense,
-        int enchantmentValue,
-        Holder<SoundEvent> equipSound,
-        Supplier<Ingredient> repairIngredient,
-        float toughness,
-        float knockbackResistance
-    ) {
-        EnumMap<ArmorItem.Type, Integer> defenseMap = new EnumMap<>(ArmorItem.Type.class);
-        for (ArmorItem.Type type : ArmorItem.Type.values()) {
-            defenseMap.put(type, defense.get(type));
-        }
-
-        return Registry.registerForHolder(
-            BuiltInRegistries.ARMOR_MATERIAL,
-            CompatResourceLocation.create(ChronoDawn.MOD_ID, name),
-            new ArmorMaterial(
-                defenseMap,  // defense values
-                enchantmentValue,  // enchantment value
-                equipSound,  // equip sound (Holder<SoundEvent>)
-                repairIngredient,  // repair ingredient supplier
-                List.of(
-                    new ArmorMaterial.Layer(
-                        CompatResourceLocation.create(ChronoDawn.MOD_ID, name)
-                    )
-                ),  // layers
-                toughness,  // toughness
-                knockbackResistance  // knockback resistance
-            )
-        );
-    }
 }

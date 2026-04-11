@@ -2,7 +2,7 @@ package com.chronodawn.items.equipment;
 
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.equipment.ArmorType;
 
 /**
@@ -25,9 +25,10 @@ import net.minecraft.world.item.equipment.ArmorType;
  *
  * Reference: T302 - Temporal Amber Armor Items
  */
-public class TemporalAmberArmorItem extends Item {
-    public TemporalAmberArmorItem(Properties properties) {
-        super(properties);
+public class TemporalAmberArmorItem extends ArmorItem {
+    public TemporalAmberArmorItem(ArmorType type, Properties properties) {
+        // In 1.21.2, ArmorItem constructor expects ArmorMaterial value, not Holder<ArmorMaterial>
+        super(TemporalAmberArmorMaterial.TEMPORAL_AMBER.value(), type, properties);
     }
 
     /**
@@ -39,8 +40,7 @@ public class TemporalAmberArmorItem extends Item {
     public static Properties createProperties(ArmorType type) {
         return new Properties()
                 .stacksTo(1)
-                // Use humanoidArmor() to set up armor components
-                .humanoidArmor(TemporalAmberArmorMaterial.TEMPORAL_AMBER.value(), type);
+                .durability(type.getDurability(TemporalAmberArmorMaterial.BASE_DURABILITY));
     }
 
     /**

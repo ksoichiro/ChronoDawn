@@ -61,7 +61,7 @@ public class TemporalAmberArmorMaterial {
             1.5f, // Toughness
             0.0f,  // Knockback Resistance
             TEMPORAL_AMBER_DUST_TAG, // Repair ingredient as TagKey
-            CompatResourceLocation.create(ChronoDawn.MOD_ID, "temporal_amber")  // Equipment asset location
+            CompatResourceLocation.createEquipmentAssetKey(ChronoDawn.MOD_ID, "temporal_amber")  // Equipment asset key (1.21.4+)
         )
     );
 }

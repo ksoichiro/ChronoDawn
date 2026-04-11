@@ -2,8 +2,7 @@ package com.chronodawn.items.equipment;
 
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.world.item.ArmorItem;
 
 /**
  * Temporal Amber Armor Item - Tier 2 armor pieces from Temporal Amber.
@@ -25,9 +24,10 @@ import net.minecraft.world.item.equipment.ArmorType;
  *
  * Reference: T302 - Temporal Amber Armor Items
  */
-public class TemporalAmberArmorItem extends Item {
-    public TemporalAmberArmorItem(Properties properties) {
-        super(properties);
+public class TemporalAmberArmorItem extends ArmorItem {
+    public TemporalAmberArmorItem(Type type, Properties properties) {
+        // 1.21.1: ArmorItem constructor takes Holder<ArmorMaterial>
+        super(TemporalAmberArmorMaterial.TEMPORAL_AMBER, type, properties);
     }
 
     /**
@@ -36,11 +36,10 @@ public class TemporalAmberArmorItem extends Item {
      * @param type Armor type (helmet, chestplate, leggings, boots)
      * @return Item properties with appropriate settings
      */
-    public static Properties createProperties(ArmorType type) {
+    public static Properties createProperties(Type type) {
         return new Properties()
                 .stacksTo(1)
-                // Use humanoidArmor() to set up armor components
-                .humanoidArmor(TemporalAmberArmorMaterial.TEMPORAL_AMBER.value(), type);
+                .durability(type.getDurability(TemporalAmberArmorMaterial.BASE_DURABILITY));
     }
 
     /**
