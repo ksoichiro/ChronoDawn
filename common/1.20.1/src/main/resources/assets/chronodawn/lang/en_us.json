@@ -316,6 +316,15 @@
   "advancements.chronodawn.first_time_crystal_ore.title": "Crystallized Time",
   "advancements.chronodawn.first_time_crystal_ore.description": "Mine your first Time Crystal Ore",
 
+  "advancements.chronodawn.entropy_crystal_obtained.title": "Eroder of Time",
+  "advancements.chronodawn.entropy_crystal_obtained.description": "Obtain an Entropy Crystal",
+  "advancements.chronodawn.temporal_amber_obtained.title": "Sealed in Time",
+  "advancements.chronodawn.temporal_amber_obtained.description": "Obtain Raw Temporal Amber",
+  "advancements.chronodawn.temporal_amber_dust_obtained.title": "Fractured Time",
+  "advancements.chronodawn.temporal_amber_dust_obtained.description": "Obtain Temporal Amber Dust",
+  "advancements.chronodawn.temporal_amber_full_set.title": "Preserved in Amber",
+  "advancements.chronodawn.temporal_amber_full_set.description": "Obtain a full set of Temporal Amber armor",
+
   "advancements.chronodawn.temporal_wraith_defeated.title": "Wraith Hunter",
   "advancements.chronodawn.temporal_wraith_defeated.description": "Defeat your first Temporal Wraith",
   "advancements.chronodawn.clockwork_sentinel_defeated.title": "Mechanism Breaker",

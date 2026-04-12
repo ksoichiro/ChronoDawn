@@ -1,0 +1,32 @@
+{
+  "parent": "chronodawn:story/us1/dimension_entry",
+  "criteria": {
+    "has_entropy_crystal": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "chronodawn:entropy_crystal"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "item": "chronodawn:entropy_crystal"
+    },
+    "title": {
+      "translate": "advancements.chronodawn.entropy_crystal_obtained.title"
+    },
+    "description": {
+      "translate": "advancements.chronodawn.entropy_crystal_obtained.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  }
+}

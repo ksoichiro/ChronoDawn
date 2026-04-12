@@ -325,6 +325,15 @@
   "advancements.chronodawn.first_time_crystal_ore.title": "結晶化した時間",
   "advancements.chronodawn.first_time_crystal_ore.description": "初めて時のクリスタル鉱石を採掘する",
 
+  "advancements.chronodawn.entropy_crystal_obtained.title": "時を削る者",
+  "advancements.chronodawn.entropy_crystal_obtained.description": "エントロピークリスタルを入手する",
+  "advancements.chronodawn.temporal_amber_obtained.title": "時を封じし者",
+  "advancements.chronodawn.temporal_amber_obtained.description": "粗時琥珀を入手する",
+  "advancements.chronodawn.temporal_amber_dust_obtained.title": "砕かれた時",
+  "advancements.chronodawn.temporal_amber_dust_obtained.description": "時琥珀の粉を入手する",
+  "advancements.chronodawn.temporal_amber_full_set.title": "琥珀に守られ",
+  "advancements.chronodawn.temporal_amber_full_set.description": "時琥珀の防具をすべて入手する",
+
   "advancements.chronodawn.temporal_wraith_defeated.title": "亡霊狩り",
   "advancements.chronodawn.temporal_wraith_defeated.description": "初めて時の亡霊を倒す",
   "advancements.chronodawn.clockwork_sentinel_defeated.title": "機構破壊者",

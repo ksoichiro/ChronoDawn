@@ -1,0 +1,32 @@
+{
+  "parent": "chronodawn:exploration/temporal_amber_obtained",
+  "criteria": {
+    "has_temporal_amber_dust": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "chronodawn:temporal_amber_dust"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "chronodawn:temporal_amber_dust"
+    },
+    "title": {
+      "translate": "advancements.chronodawn.temporal_amber_dust_obtained.title"
+    },
+    "description": {
+      "translate": "advancements.chronodawn.temporal_amber_dust_obtained.description"
+    },
+    "frame": "task",
+    "show_toast": true,
+    "announce_to_chat": false,
+    "hidden": false
+  }
+}
