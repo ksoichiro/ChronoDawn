@@ -7,6 +7,50 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-04-13
+
+### Added
+
+#### New Blocks
+- **Temporal Stone** and **Temporal Cobblestone** block sets with stairs, slabs, and walls
+- **Temporal Dirt** and **Temporal Grass Block** as custom terrain in ChronoDawn dimension
+- **Temporal ore blocks** (coal, gold, iron, redstone) replacing vanilla ores in ChronoDawn dimension
+- **Entropy Crystal Ore** — new Tier 2 ore found at Y=40-100 in ChronoDawn dimension
+- **Temporal Amber Ore** — new Tier 2 ore found at Y=-30 to +20 in ChronoDawn dimension
+
+#### New Items & Equipment
+- **Entropy Crystal** — material dropped from Entropy Crystal Ore
+- **Entropy Crystal Sword** — applies Entropy Effect (damage over time) on hit
+- **Raw Temporal Amber** — material dropped from Temporal Amber Ore
+- **Temporal Amber Dust** — crafting material refined from Raw Temporal Amber
+- **Temporal Amber Armor** (full set) — with auto-repair feature that consumes Temporal Amber Dust when out of combat
+
+#### Gameplay Features
+- **Entropy Effect** — new mob effect dealing damage over time, applied by Entropy Crystal Sword
+- **Temporal Amber Armor auto-repair** — 5 durability per piece every 3 seconds while out of combat, consuming 1 Temporal Amber Dust per repair tick
+- 4 new advancements: Eroder of Time, Sealed in Time, Fractured Time, Preserved in Amber
+- Recipe unlock for Entropy Crystal Sword on Entropy Crystal pickup
+- Emissive render layers for Timeline Strider, Paradox Crawler, and Pulse Hog mobs
+- Loot table for Clockwork Depths archive vault chests
+- Experience drops from Temporal Coal Ore
+- TimeKeeper village block replacement pipeline using NBT templates
+
+#### Development & Build
+- Shared Gradle scripts via minecraft-mod-gradle-scripts submodule
+
+### Changed
+- Rebased Time Crystal and Clockstone ore textures onto Temporal Stone base
+
+### Fixed
+- TimeBlastRenderer crash on 1.21.9+ due to missing setLight in submit() API
+- All armors invisible when worn on 1.21.4+ (missing equipment asset path)
+- Boss entities could despawn unexpectedly (added persistence overrides)
+- Underground dungeon overlap (added exclusion zones between structures)
+- Frozen time progression in ChronoDawn dimension
+- Missing Ticking Sheep registrations in NeoForge 1.21.4 and other version modules
+- Missing Client Items JSON for Ticking Sheep spawn egg
+- Removed non-functional Spatially Linked Pickaxe ultimate recipe
+
 ## [0.6.0] - 2026-03-14
 
 ### Added
@@ -263,7 +307,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Architectury API 13.0.8+
 - Custom Portal API 0.0.1-beta66-1.21 (Fabric bundled, NeoForge requires separate installation)
 
-[Unreleased]: https://github.com/ksoichiro/ChronoDawn/compare/v0.6.0+1.21.2...HEAD
+[Unreleased]: https://github.com/ksoichiro/ChronoDawn/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.5.0+1.21.2...v0.6.0+1.21.2
 [0.5.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.4.0+1.21.2...v0.5.0+1.21.2
 [0.4.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.4.0-beta+1.21.1...v0.4.0+1.21.1
