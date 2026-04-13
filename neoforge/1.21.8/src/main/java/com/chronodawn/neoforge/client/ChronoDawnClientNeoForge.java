@@ -14,7 +14,6 @@ import com.chronodawn.registry.ModEntities;
 import com.chronodawn.registry.ModParticles;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.FoliageColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -413,9 +412,9 @@ public class ChronoDawnClientNeoForge {
             (state, world, pos, tintIndex) -> {
                 if (tintIndex != 0) return -1;
                 if (world != null && pos != null) {
-                    return BiomeColors.getAverageFoliageColor(world, pos);
+                    return BiomeColors.getAverageGrassColor(world, pos);
                 }
-                return FoliageColor.get(0.5, 1.0);
+                return 0x5B8AC4; // Chrono Dawn plains grass_color
             },
             ModBlocks.TEMPORAL_GRASS_BLOCK.get()
         );

@@ -1,6 +1,7 @@
 package com.chronodawn.neoforge.client;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.blocks.TemporalGrassBlock;
 import com.chronodawn.gui.ChronicleScreen;
 import com.chronodawn.gui.data.ChronicleData;
 import com.chronodawn.items.ChronicleBookItem;
@@ -18,7 +19,6 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
-import net.minecraft.world.level.FoliageColor;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -417,16 +417,19 @@ public class ChronoDawnClientNeoForge {
             ModBlocks.ATTACHED_CHRONO_MELON_STEM.get()
         );
 
-        // Register Temporal Grass Block color (biome-dependent foliage tint)
+        // Register Temporal Grass Block color (biome-dependent grass tint)
         // Only tint faces with tintIndex 0 (top and side overlay in grass_block model).
         // Side dirt faces have no tintindex and NeoForge may pass -1 for them.
+        // Check that the block at pos is actually TemporalGrassBlock to avoid
+        // item rendering context (which may pass player's world/pos, returning wrong biome color).
         event.register(
             (state, world, pos, tintIndex) -> {
                 if (tintIndex != 0) return -1;
-                if (world != null && pos != null) {
-                    return BiomeColors.getAverageFoliageColor(world, pos);
+                if (world != null && pos != null
+                        && world.getBlockState(pos).getBlock() instanceof TemporalGrassBlock) {
+                    return BiomeColors.getAverageGrassColor(world, pos);
                 }
-                return FoliageColor.get(0.5, 1.0);
+                return 0x5B8AC4; // Chrono Dawn plains grass_color
             },
             ModBlocks.TEMPORAL_GRASS_BLOCK.get()
         );
@@ -458,10 +461,10 @@ public class ChronoDawnClientNeoForge {
             ModBlocks.ATTACHED_CHRONO_MELON_STEM.get()
         );
 
-        // Register item color for Temporal Grass Block (use default foliage color)
+        // Register item color for Temporal Grass Block (Chrono Dawn grass color)
         event.register(
-            (stack, tintIndex) -> tintIndex == 0 ? FoliageColor.get(0.5, 1.0) : -1,
-            ModBlocks.TEMPORAL_GRASS_BLOCK.get()
+            (stack, tintIndex) -> tintIndex == 0 ? 0x5B8AC4 : -1,
+            ModItems.TEMPORAL_GRASS_BLOCK.get()
         );
 
         // Register Spawn Egg item colors for NeoForge

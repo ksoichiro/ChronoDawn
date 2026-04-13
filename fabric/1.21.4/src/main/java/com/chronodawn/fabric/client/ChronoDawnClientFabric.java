@@ -37,7 +37,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.FoliageColor;
 
 import java.util.Optional;
 
@@ -134,9 +133,9 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             (state, world, pos, tintIndex) -> {
                 if (tintIndex != 0) return -1;
                 if (world != null && pos != null) {
-                    return BiomeColors.getAverageFoliageColor(world, pos);
+                    return BiomeColors.getAverageGrassColor(world, pos);
                 }
-                return FoliageColor.get(0.5, 1.0);
+                return 0x5B8AC4; // Chrono Dawn plains grass_color
             },
             ModBlocks.TEMPORAL_GRASS_BLOCK.get()
         );

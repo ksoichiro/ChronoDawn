@@ -1,6 +1,7 @@
 package com.chronodawn.fabric.client;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.blocks.TemporalGrassBlock;
 import com.chronodawn.client.model.*;
 import com.chronodawn.client.particle.ChronoDawnPortalParticle;
 import com.chronodawn.gui.ChronicleScreen;
@@ -38,7 +39,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.FoliageColor;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.Optional;
@@ -144,23 +144,26 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             ModBlocks.ATTACHED_CHRONO_MELON_STEM.get()
         );
 
-        // Register Temporal Grass Block color (biome-dependent foliage tint)
+        // Register Temporal Grass Block color (biome-dependent grass tint)
         // Only tint faces with tintIndex 0 (top and side overlay in grass_block model).
+        // Check that the block at pos is actually TemporalGrassBlock to avoid
+        // item rendering context (which may pass player's world/pos, returning wrong biome color).
         ColorProviderRegistry.BLOCK.register(
             (state, world, pos, tintIndex) -> {
                 if (tintIndex != 0) return -1;
-                if (world != null && pos != null) {
-                    return BiomeColors.getAverageFoliageColor(world, pos);
+                if (world != null && pos != null
+                        && world.getBlockState(pos).getBlock() instanceof TemporalGrassBlock) {
+                    return BiomeColors.getAverageGrassColor(world, pos);
                 }
-                return FoliageColor.get(0.5, 1.0);
+                return 0x5B8AC4; // Chrono Dawn plains grass_color
             },
             ModBlocks.TEMPORAL_GRASS_BLOCK.get()
         );
 
-        // Register item color for Temporal Grass Block (use default foliage color)
+        // Register item color for Temporal Grass Block (Chrono Dawn grass color)
         ColorProviderRegistry.ITEM.register(
-            (stack, tintIndex) -> tintIndex == 0 ? FoliageColor.get(0.5, 1.0) : -1,
-            ModBlocks.TEMPORAL_GRASS_BLOCK.get()
+            (stack, tintIndex) -> tintIndex == 0 ? 0x5B8AC4 : -1,
+            ModItems.TEMPORAL_GRASS_BLOCK.get()
         );
     }
 
