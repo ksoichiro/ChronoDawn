@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "chronodawn:block/mossy_temporal_cobblestone_slab"
+    },
+    "type=double": {
+      "model": "chronodawn:block/mossy_temporal_cobblestone"
+    },
+    "type=top": {
+      "model": "chronodawn:block/mossy_temporal_cobblestone_slab_top"
+    }
+  }
+}

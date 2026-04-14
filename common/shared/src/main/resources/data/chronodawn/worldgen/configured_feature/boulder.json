@@ -2,7 +2,7 @@
   "type": "minecraft:forest_rock",
   "config": {
     "state": {
-      "Name": "minecraft:mossy_cobblestone"
+      "Name": "chronodawn:mossy_temporal_cobblestone"
     }
   }
 }

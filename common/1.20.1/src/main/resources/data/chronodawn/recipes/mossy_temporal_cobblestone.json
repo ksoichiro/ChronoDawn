@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building_blocks",
+  "ingredients": [
+    {
+      "item": "chronodawn:temporal_cobblestone"
+    },
+    {
+      "item": "minecraft:moss_block"
+    }
+  ],
+  "result": {
+    "item": "chronodawn:mossy_temporal_cobblestone",
+    "count": 1
+  }
+}

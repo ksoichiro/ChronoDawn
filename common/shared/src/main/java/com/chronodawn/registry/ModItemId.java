@@ -84,6 +84,10 @@ public enum ModItemId {
     TEMPORAL_COBBLESTONE_STAIRS("temporal_cobblestone_stairs"),
     TEMPORAL_COBBLESTONE_SLAB("temporal_cobblestone_slab"),
     TEMPORAL_COBBLESTONE_WALL("temporal_cobblestone_wall"),
+    MOSSY_TEMPORAL_COBBLESTONE("mossy_temporal_cobblestone"),
+    MOSSY_TEMPORAL_COBBLESTONE_STAIRS("mossy_temporal_cobblestone_stairs"),
+    MOSSY_TEMPORAL_COBBLESTONE_SLAB("mossy_temporal_cobblestone_slab"),
+    MOSSY_TEMPORAL_COBBLESTONE_WALL("mossy_temporal_cobblestone_wall"),
 
     // Deepslate Temporal Stone variants
     DEEPSLATE_TEMPORAL_STONE("deepslate_temporal_stone"),

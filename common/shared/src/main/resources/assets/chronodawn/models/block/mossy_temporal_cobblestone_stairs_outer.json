@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "chronodawn:block/mossy_temporal_cobblestone",
+    "top": "chronodawn:block/mossy_temporal_cobblestone",
+    "side": "chronodawn:block/mossy_temporal_cobblestone"
+  }
+}

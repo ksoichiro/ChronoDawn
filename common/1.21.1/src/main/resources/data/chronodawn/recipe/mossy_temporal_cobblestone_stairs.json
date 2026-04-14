@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building_blocks",
+  "pattern": [
+    "B  ",
+    "BB ",
+    "BBB"
+  ],
+  "key": {
+    "B": {
+      "item": "chronodawn:mossy_temporal_cobblestone"
+    }
+  },
+  "result": {
+    "id": "chronodawn:mossy_temporal_cobblestone_stairs",
+    "count": 4
+  }
+}

@@ -925,6 +925,38 @@ public class ModItems {
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_COBBLESTONE_WALL.id()))))
     );
+
+    public static final RegistrySupplier<Item> MOSSY_TEMPORAL_COBBLESTONE = ITEMS.register(
+        ModItemId.MOSSY_TEMPORAL_COBBLESTONE.id(),
+        () -> new BlockItem(ModBlocks.MOSSY_TEMPORAL_COBBLESTONE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.MOSSY_TEMPORAL_COBBLESTONE.id()))))
+    );
+
+    public static final RegistrySupplier<Item> MOSSY_TEMPORAL_COBBLESTONE_STAIRS = ITEMS.register(
+        ModItemId.MOSSY_TEMPORAL_COBBLESTONE_STAIRS.id(),
+        () -> new BlockItem(ModBlocks.MOSSY_TEMPORAL_COBBLESTONE_STAIRS.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.MOSSY_TEMPORAL_COBBLESTONE_STAIRS.id()))))
+    );
+
+    public static final RegistrySupplier<Item> MOSSY_TEMPORAL_COBBLESTONE_SLAB = ITEMS.register(
+        ModItemId.MOSSY_TEMPORAL_COBBLESTONE_SLAB.id(),
+        () -> new BlockItem(ModBlocks.MOSSY_TEMPORAL_COBBLESTONE_SLAB.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.MOSSY_TEMPORAL_COBBLESTONE_SLAB.id()))))
+    );
+
+    public static final RegistrySupplier<Item> MOSSY_TEMPORAL_COBBLESTONE_WALL = ITEMS.register(
+        ModItemId.MOSSY_TEMPORAL_COBBLESTONE_WALL.id(),
+        () -> new BlockItem(ModBlocks.MOSSY_TEMPORAL_COBBLESTONE_WALL.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.MOSSY_TEMPORAL_COBBLESTONE_WALL.id()))))
+    );
     public static final RegistrySupplier<Item> DEEPSLATE_TEMPORAL_STONE = ITEMS.register(
         ModItemId.DEEPSLATE_TEMPORAL_STONE.id(),
         () -> new BlockItem(ModBlocks.DEEPSLATE_TEMPORAL_STONE.get(), new Item.Properties()
@@ -2491,6 +2523,10 @@ public class ModItems {
         output.accept(TEMPORAL_COBBLESTONE_STAIRS.get());
         output.accept(TEMPORAL_COBBLESTONE_SLAB.get());
         output.accept(TEMPORAL_COBBLESTONE_WALL.get());
+        output.accept(MOSSY_TEMPORAL_COBBLESTONE.get());
+        output.accept(MOSSY_TEMPORAL_COBBLESTONE_STAIRS.get());
+        output.accept(MOSSY_TEMPORAL_COBBLESTONE_SLAB.get());
+        output.accept(MOSSY_TEMPORAL_COBBLESTONE_WALL.get());
         output.accept(DEEPSLATE_TEMPORAL_STONE.get());
         output.accept(DEEPSLATE_TEMPORAL_STONE_STAIRS.get());
         output.accept(DEEPSLATE_TEMPORAL_STONE_SLAB.get());
