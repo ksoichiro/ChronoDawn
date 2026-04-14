@@ -95,6 +95,10 @@ public enum ModItemId {
     COBBLED_DEEPSLATE_TEMPORAL_STONE_STAIRS("cobbled_deepslate_temporal_stone_stairs"),
     COBBLED_DEEPSLATE_TEMPORAL_STONE_SLAB("cobbled_deepslate_temporal_stone_slab"),
     COBBLED_DEEPSLATE_TEMPORAL_STONE_WALL("cobbled_deepslate_temporal_stone_wall"),
+    POLISHED_DEEPSLATE_TEMPORAL_STONE("polished_deepslate_temporal_stone"),
+    POLISHED_DEEPSLATE_TEMPORAL_STONE_STAIRS("polished_deepslate_temporal_stone_stairs"),
+    POLISHED_DEEPSLATE_TEMPORAL_STONE_SLAB("polished_deepslate_temporal_stone_slab"),
+    POLISHED_DEEPSLATE_TEMPORAL_STONE_WALL("polished_deepslate_temporal_stone_wall"),
 
     // Time Wood (regular)
     TIME_WOOD_LOG("time_wood_log"),

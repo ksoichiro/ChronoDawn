@@ -993,6 +993,34 @@ public class ModItems {
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.COBBLED_DEEPSLATE_TEMPORAL_STONE_WALL.id()))))
     );
+    public static final RegistrySupplier<Item> POLISHED_DEEPSLATE_TEMPORAL_STONE = ITEMS.register(
+        ModItemId.POLISHED_DEEPSLATE_TEMPORAL_STONE.id(),
+        () -> new BlockItem(ModBlocks.POLISHED_DEEPSLATE_TEMPORAL_STONE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.POLISHED_DEEPSLATE_TEMPORAL_STONE.id()))))
+    );
+    public static final RegistrySupplier<Item> POLISHED_DEEPSLATE_TEMPORAL_STONE_STAIRS = ITEMS.register(
+        ModItemId.POLISHED_DEEPSLATE_TEMPORAL_STONE_STAIRS.id(),
+        () -> new BlockItem(ModBlocks.POLISHED_DEEPSLATE_TEMPORAL_STONE_STAIRS.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.POLISHED_DEEPSLATE_TEMPORAL_STONE_STAIRS.id()))))
+    );
+    public static final RegistrySupplier<Item> POLISHED_DEEPSLATE_TEMPORAL_STONE_SLAB = ITEMS.register(
+        ModItemId.POLISHED_DEEPSLATE_TEMPORAL_STONE_SLAB.id(),
+        () -> new BlockItem(ModBlocks.POLISHED_DEEPSLATE_TEMPORAL_STONE_SLAB.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.POLISHED_DEEPSLATE_TEMPORAL_STONE_SLAB.id()))))
+    );
+    public static final RegistrySupplier<Item> POLISHED_DEEPSLATE_TEMPORAL_STONE_WALL = ITEMS.register(
+        ModItemId.POLISHED_DEEPSLATE_TEMPORAL_STONE_WALL.id(),
+        () -> new BlockItem(ModBlocks.POLISHED_DEEPSLATE_TEMPORAL_STONE_WALL.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.POLISHED_DEEPSLATE_TEMPORAL_STONE_WALL.id()))))
+    );
 
     /**
      * Frozen Time Ice - Special ice block exclusive to snowy biome.
@@ -2540,6 +2568,10 @@ public class ModItems {
         output.accept(COBBLED_DEEPSLATE_TEMPORAL_STONE_STAIRS.get());
         output.accept(COBBLED_DEEPSLATE_TEMPORAL_STONE_SLAB.get());
         output.accept(COBBLED_DEEPSLATE_TEMPORAL_STONE_WALL.get());
+        output.accept(POLISHED_DEEPSLATE_TEMPORAL_STONE.get());
+        output.accept(POLISHED_DEEPSLATE_TEMPORAL_STONE_STAIRS.get());
+        output.accept(POLISHED_DEEPSLATE_TEMPORAL_STONE_SLAB.get());
+        output.accept(POLISHED_DEEPSLATE_TEMPORAL_STONE_WALL.get());
         output.accept(FROZEN_TIME_ICE.get());
         // Note: TEMPORAL_PARTICLE_EMITTER is not added to creative tab (structure-only block)
 
