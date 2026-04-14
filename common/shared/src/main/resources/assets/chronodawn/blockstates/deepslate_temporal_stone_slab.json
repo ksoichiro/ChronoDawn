@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "type=bottom": { "model": "chronodawn:block/deepslate_temporal_stone_slab" },
+    "type=double": { "model": "chronodawn:block/deepslate_temporal_stone" },
+    "type=top": { "model": "chronodawn:block/deepslate_temporal_stone_slab_top" }
+  }
+}

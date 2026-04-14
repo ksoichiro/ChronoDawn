@@ -7,6 +7,10 @@
       {
         "target": { "predicate_type": "minecraft:block_match", "block": "chronodawn:temporal_stone" },
         "state": { "Name": "chronodawn:temporal_redstone_ore" }
+      },
+      {
+        "target": { "predicate_type": "minecraft:block_match", "block": "chronodawn:deepslate_temporal_stone" },
+        "state": { "Name": "chronodawn:deepslate_temporal_redstone_ore" }
       }
     ]
   }

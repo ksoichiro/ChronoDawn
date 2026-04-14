@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "chronodawn:block/deepslate_temporal_stone"
+  }
+}

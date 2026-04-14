@@ -92,6 +92,14 @@ import com.chronodawn.blocks.TimelessMushroomBlock;
 import com.chronodawn.blocks.TimeBlossomBlock;
 import com.chronodawn.blocks.DawnBellBlock;
 import com.chronodawn.blocks.DuskBellBlock;
+import com.chronodawn.blocks.DeepslateTemporalStoneBlock;
+import com.chronodawn.blocks.DeepslateTemporalStoneStairs;
+import com.chronodawn.blocks.DeepslateTemporalStoneSlab;
+import com.chronodawn.blocks.DeepslateTemporalStoneWall;
+import com.chronodawn.blocks.DeepslateTemporalAmberOre;
+import com.chronodawn.blocks.DeepslateTemporalGoldOre;
+import com.chronodawn.blocks.DeepslateTemporalRedstoneOre;
+import com.chronodawn.blocks.DeepslateClockstoneOre;
 import com.chronodawn.registry.ModFluids;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -161,6 +169,24 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> TEMPORAL_AMBER_ORE = BLOCKS.register(
         ModBlockId.TEMPORAL_AMBER_ORE.id(),
         () -> new TemporalAmberOre(TemporalAmberOre.createProperties())
+    );
+
+    // Deepslate ores
+    public static final RegistrySupplier<Block> DEEPSLATE_TEMPORAL_AMBER_ORE = BLOCKS.register(
+        ModBlockId.DEEPSLATE_TEMPORAL_AMBER_ORE.id(),
+        () -> new DeepslateTemporalAmberOre(DeepslateTemporalAmberOre.createProperties())
+    );
+    public static final RegistrySupplier<Block> DEEPSLATE_TEMPORAL_GOLD_ORE = BLOCKS.register(
+        ModBlockId.DEEPSLATE_TEMPORAL_GOLD_ORE.id(),
+        () -> new DeepslateTemporalGoldOre(DeepslateTemporalGoldOre.createProperties())
+    );
+    public static final RegistrySupplier<Block> DEEPSLATE_TEMPORAL_REDSTONE_ORE = BLOCKS.register(
+        ModBlockId.DEEPSLATE_TEMPORAL_REDSTONE_ORE.id(),
+        () -> new DeepslateTemporalRedstoneOre(DeepslateTemporalRedstoneOre.createProperties())
+    );
+    public static final RegistrySupplier<Block> DEEPSLATE_CLOCKSTONE_ORE = BLOCKS.register(
+        ModBlockId.DEEPSLATE_CLOCKSTONE_ORE.id(),
+        () -> new DeepslateClockstoneOre(DeepslateClockstoneOre.createProperties())
     );
 
     /**
@@ -524,6 +550,24 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> TEMPORAL_STONE_WALL = BLOCKS.register(
         ModBlockId.TEMPORAL_STONE_WALL.id(),
         () -> new TemporalStoneWall(TemporalStoneWall.createProperties())
+    );
+
+    // Deepslate Temporal Stone variants
+    public static final RegistrySupplier<Block> DEEPSLATE_TEMPORAL_STONE = BLOCKS.register(
+        ModBlockId.DEEPSLATE_TEMPORAL_STONE.id(),
+        () -> new DeepslateTemporalStoneBlock(DeepslateTemporalStoneBlock.createProperties())
+    );
+    public static final RegistrySupplier<Block> DEEPSLATE_TEMPORAL_STONE_STAIRS = BLOCKS.register(
+        ModBlockId.DEEPSLATE_TEMPORAL_STONE_STAIRS.id(),
+        () -> new DeepslateTemporalStoneStairs(DeepslateTemporalStoneStairs.createProperties())
+    );
+    public static final RegistrySupplier<Block> DEEPSLATE_TEMPORAL_STONE_SLAB = BLOCKS.register(
+        ModBlockId.DEEPSLATE_TEMPORAL_STONE_SLAB.id(),
+        () -> new DeepslateTemporalStoneSlab(DeepslateTemporalStoneSlab.createProperties())
+    );
+    public static final RegistrySupplier<Block> DEEPSLATE_TEMPORAL_STONE_WALL = BLOCKS.register(
+        ModBlockId.DEEPSLATE_TEMPORAL_STONE_WALL.id(),
+        () -> new DeepslateTemporalStoneWall(DeepslateTemporalStoneWall.createProperties())
     );
 
     public static final RegistrySupplier<Block> TEMPORAL_COBBLESTONE_STAIRS = BLOCKS.register(

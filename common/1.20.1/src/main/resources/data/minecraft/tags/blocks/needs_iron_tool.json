@@ -1,6 +1,10 @@
 {
   "values": [
     "chronodawn:clockstone_ore",
+    "chronodawn:deepslate_temporal_amber_ore",
+    "chronodawn:deepslate_temporal_gold_ore",
+    "chronodawn:deepslate_temporal_redstone_ore",
+    "chronodawn:deepslate_clockstone_ore",
     "chronodawn:time_crystal_ore",
     "chronodawn:temporal_gold_ore",
     "chronodawn:temporal_redstone_ore",

@@ -51,6 +51,12 @@ public enum ModBlockId {
     ENTROPY_CRYSTAL_ORE(def("entropy_crystal_ore")),
     TEMPORAL_AMBER_ORE(def("temporal_amber_ore")),
 
+    // Deepslate ores
+    DEEPSLATE_TEMPORAL_AMBER_ORE(def("deepslate_temporal_amber_ore")),
+    DEEPSLATE_TEMPORAL_GOLD_ORE(def("deepslate_temporal_gold_ore")),
+    DEEPSLATE_TEMPORAL_REDSTONE_ORE(def("deepslate_temporal_redstone_ore")),
+    DEEPSLATE_CLOCKSTONE_ORE(def("deepslate_clockstone_ore")),
+
     // Clockstone variants
     CLOCKSTONE_BLOCK(def("clockstone_block")),
     CLOCKSTONE_STAIRS(def("clockstone_stairs")),
@@ -82,6 +88,12 @@ public enum ModBlockId {
     TEMPORAL_COBBLESTONE_STAIRS(def("temporal_cobblestone_stairs")),
     TEMPORAL_COBBLESTONE_SLAB(def("temporal_cobblestone_slab")),
     TEMPORAL_COBBLESTONE_WALL(def("temporal_cobblestone_wall")),
+
+    // Deepslate Temporal Stone variants
+    DEEPSLATE_TEMPORAL_STONE(def("deepslate_temporal_stone")),
+    DEEPSLATE_TEMPORAL_STONE_STAIRS(def("deepslate_temporal_stone_stairs")),
+    DEEPSLATE_TEMPORAL_STONE_SLAB(def("deepslate_temporal_stone_slab")),
+    DEEPSLATE_TEMPORAL_STONE_WALL(def("deepslate_temporal_stone_wall")),
     TEMPORAL_PARTICLE_EMITTER(def("temporal_particle_emitter")),
     CHRONO_DAWN_PORTAL(def("chrono_dawn_portal").translucent()),
     DECORATIVE_WATER(def("decorative_water")),

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "chronodawn:block/deepslate_temporal_redstone_ore"
+    },
+    "lit=true": {
+      "model": "chronodawn:block/deepslate_temporal_redstone_ore"
+    }
+  }
+}

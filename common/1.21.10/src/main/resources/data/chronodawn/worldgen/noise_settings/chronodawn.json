@@ -2590,10 +2590,7 @@
         "then_run": {
           "type": "minecraft:block",
           "result_state": {
-            "Name": "minecraft:deepslate",
-            "Properties": {
-              "axis": "y"
-            }
+            "Name": "chronodawn:deepslate_temporal_stone"
           }
         }
       }
