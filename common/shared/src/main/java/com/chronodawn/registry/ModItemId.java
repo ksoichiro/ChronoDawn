@@ -45,6 +45,12 @@ public enum ModItemId {
     ENTROPY_CRYSTAL_ORE("entropy_crystal_ore"),
     TEMPORAL_AMBER_ORE("temporal_amber_ore"),
 
+    // Deepslate ores
+    DEEPSLATE_TEMPORAL_AMBER_ORE("deepslate_temporal_amber_ore"),
+    DEEPSLATE_TEMPORAL_GOLD_ORE("deepslate_temporal_gold_ore"),
+    DEEPSLATE_TEMPORAL_REDSTONE_ORE("deepslate_temporal_redstone_ore"),
+    DEEPSLATE_CLOCKSTONE_ORE("deepslate_clockstone_ore"),
+
     // Clockstone variants
     CLOCKSTONE_BLOCK("clockstone_block"),
     CLOCKSTONE_STAIRS("clockstone_stairs"),
@@ -78,6 +84,12 @@ public enum ModItemId {
     TEMPORAL_COBBLESTONE_STAIRS("temporal_cobblestone_stairs"),
     TEMPORAL_COBBLESTONE_SLAB("temporal_cobblestone_slab"),
     TEMPORAL_COBBLESTONE_WALL("temporal_cobblestone_wall"),
+
+    // Deepslate Temporal Stone variants
+    DEEPSLATE_TEMPORAL_STONE("deepslate_temporal_stone"),
+    DEEPSLATE_TEMPORAL_STONE_STAIRS("deepslate_temporal_stone_stairs"),
+    DEEPSLATE_TEMPORAL_STONE_SLAB("deepslate_temporal_stone_slab"),
+    DEEPSLATE_TEMPORAL_STONE_WALL("deepslate_temporal_stone_wall"),
 
     // Time Wood (regular)
     TIME_WOOD_LOG("time_wood_log"),

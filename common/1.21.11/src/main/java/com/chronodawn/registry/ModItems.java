@@ -141,6 +141,34 @@ public class ModItems {
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_AMBER_ORE.id()))))
     );
+    public static final RegistrySupplier<Item> DEEPSLATE_TEMPORAL_AMBER_ORE = ITEMS.register(
+        ModItemId.DEEPSLATE_TEMPORAL_AMBER_ORE.id(),
+        () -> new BlockItem(ModBlocks.DEEPSLATE_TEMPORAL_AMBER_ORE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DEEPSLATE_TEMPORAL_AMBER_ORE.id()))))
+    );
+    public static final RegistrySupplier<Item> DEEPSLATE_TEMPORAL_GOLD_ORE = ITEMS.register(
+        ModItemId.DEEPSLATE_TEMPORAL_GOLD_ORE.id(),
+        () -> new BlockItem(ModBlocks.DEEPSLATE_TEMPORAL_GOLD_ORE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DEEPSLATE_TEMPORAL_GOLD_ORE.id()))))
+    );
+    public static final RegistrySupplier<Item> DEEPSLATE_TEMPORAL_REDSTONE_ORE = ITEMS.register(
+        ModItemId.DEEPSLATE_TEMPORAL_REDSTONE_ORE.id(),
+        () -> new BlockItem(ModBlocks.DEEPSLATE_TEMPORAL_REDSTONE_ORE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DEEPSLATE_TEMPORAL_REDSTONE_ORE.id()))))
+    );
+    public static final RegistrySupplier<Item> DEEPSLATE_CLOCKSTONE_ORE = ITEMS.register(
+        ModItemId.DEEPSLATE_CLOCKSTONE_ORE.id(),
+        () -> new BlockItem(ModBlocks.DEEPSLATE_CLOCKSTONE_ORE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DEEPSLATE_CLOCKSTONE_ORE.id()))))
+    );
 
     /**
      * Clockstone Block - BlockItem for placing Clockstone Block (portal frame material).
@@ -896,6 +924,34 @@ public class ModItems {
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_COBBLESTONE_WALL.id()))))
+    );
+    public static final RegistrySupplier<Item> DEEPSLATE_TEMPORAL_STONE = ITEMS.register(
+        ModItemId.DEEPSLATE_TEMPORAL_STONE.id(),
+        () -> new BlockItem(ModBlocks.DEEPSLATE_TEMPORAL_STONE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DEEPSLATE_TEMPORAL_STONE.id()))))
+    );
+    public static final RegistrySupplier<Item> DEEPSLATE_TEMPORAL_STONE_STAIRS = ITEMS.register(
+        ModItemId.DEEPSLATE_TEMPORAL_STONE_STAIRS.id(),
+        () -> new BlockItem(ModBlocks.DEEPSLATE_TEMPORAL_STONE_STAIRS.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DEEPSLATE_TEMPORAL_STONE_STAIRS.id()))))
+    );
+    public static final RegistrySupplier<Item> DEEPSLATE_TEMPORAL_STONE_SLAB = ITEMS.register(
+        ModItemId.DEEPSLATE_TEMPORAL_STONE_SLAB.id(),
+        () -> new BlockItem(ModBlocks.DEEPSLATE_TEMPORAL_STONE_SLAB.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DEEPSLATE_TEMPORAL_STONE_SLAB.id()))))
+    );
+    public static final RegistrySupplier<Item> DEEPSLATE_TEMPORAL_STONE_WALL = ITEMS.register(
+        ModItemId.DEEPSLATE_TEMPORAL_STONE_WALL.id(),
+        () -> new BlockItem(ModBlocks.DEEPSLATE_TEMPORAL_STONE_WALL.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DEEPSLATE_TEMPORAL_STONE_WALL.id()))))
     );
 
     /**
@@ -2358,6 +2414,10 @@ public class ModItems {
         output.accept(TEMPORAL_REDSTONE_ORE.get());
         output.accept(ENTROPY_CRYSTAL_ORE.get());
         output.accept(TEMPORAL_AMBER_ORE.get());
+        output.accept(DEEPSLATE_TEMPORAL_AMBER_ORE.get());
+        output.accept(DEEPSLATE_TEMPORAL_GOLD_ORE.get());
+        output.accept(DEEPSLATE_TEMPORAL_REDSTONE_ORE.get());
+        output.accept(DEEPSLATE_CLOCKSTONE_ORE.get());
         output.accept(CLOCKSTONE_BLOCK.get());
         output.accept(CLOCKSTONE_STAIRS.get());
         output.accept(CLOCKSTONE_SLAB.get());
@@ -2431,6 +2491,10 @@ public class ModItems {
         output.accept(TEMPORAL_COBBLESTONE_STAIRS.get());
         output.accept(TEMPORAL_COBBLESTONE_SLAB.get());
         output.accept(TEMPORAL_COBBLESTONE_WALL.get());
+        output.accept(DEEPSLATE_TEMPORAL_STONE.get());
+        output.accept(DEEPSLATE_TEMPORAL_STONE_STAIRS.get());
+        output.accept(DEEPSLATE_TEMPORAL_STONE_SLAB.get());
+        output.accept(DEEPSLATE_TEMPORAL_STONE_WALL.get());
         output.accept(FROZEN_TIME_ICE.get());
         // Note: TEMPORAL_PARTICLE_EMITTER is not added to creative tab (structure-only block)
 
