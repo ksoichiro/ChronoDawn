@@ -91,9 +91,10 @@ public enum ModItemId {
 
     // Deepslate Temporal Stone variants
     DEEPSLATE_TEMPORAL_STONE("deepslate_temporal_stone"),
-    DEEPSLATE_TEMPORAL_STONE_STAIRS("deepslate_temporal_stone_stairs"),
-    DEEPSLATE_TEMPORAL_STONE_SLAB("deepslate_temporal_stone_slab"),
-    DEEPSLATE_TEMPORAL_STONE_WALL("deepslate_temporal_stone_wall"),
+    COBBLED_DEEPSLATE_TEMPORAL_STONE("cobbled_deepslate_temporal_stone"),
+    COBBLED_DEEPSLATE_TEMPORAL_STONE_STAIRS("cobbled_deepslate_temporal_stone_stairs"),
+    COBBLED_DEEPSLATE_TEMPORAL_STONE_SLAB("cobbled_deepslate_temporal_stone_slab"),
+    COBBLED_DEEPSLATE_TEMPORAL_STONE_WALL("cobbled_deepslate_temporal_stone_wall"),
 
     // Time Wood (regular)
     TIME_WOOD_LOG("time_wood_log"),

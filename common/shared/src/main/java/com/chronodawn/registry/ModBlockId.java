@@ -95,9 +95,10 @@ public enum ModBlockId {
 
     // Deepslate Temporal Stone variants
     DEEPSLATE_TEMPORAL_STONE(def("deepslate_temporal_stone")),
-    DEEPSLATE_TEMPORAL_STONE_STAIRS(def("deepslate_temporal_stone_stairs")),
-    DEEPSLATE_TEMPORAL_STONE_SLAB(def("deepslate_temporal_stone_slab")),
-    DEEPSLATE_TEMPORAL_STONE_WALL(def("deepslate_temporal_stone_wall")),
+    COBBLED_DEEPSLATE_TEMPORAL_STONE(def("cobbled_deepslate_temporal_stone")),
+    COBBLED_DEEPSLATE_TEMPORAL_STONE_STAIRS(def("cobbled_deepslate_temporal_stone_stairs")),
+    COBBLED_DEEPSLATE_TEMPORAL_STONE_SLAB(def("cobbled_deepslate_temporal_stone_slab")),
+    COBBLED_DEEPSLATE_TEMPORAL_STONE_WALL(def("cobbled_deepslate_temporal_stone_wall")),
     TEMPORAL_PARTICLE_EMITTER(def("temporal_particle_emitter")),
     CHRONO_DAWN_PORTAL(def("chrono_dawn_portal").translucent()),
     DECORATIVE_WATER(def("decorative_water")),

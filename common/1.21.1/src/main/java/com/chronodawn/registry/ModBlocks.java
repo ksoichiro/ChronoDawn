@@ -97,9 +97,10 @@ import com.chronodawn.blocks.TimeBlossomBlock;
 import com.chronodawn.blocks.DawnBellBlock;
 import com.chronodawn.blocks.DuskBellBlock;
 import com.chronodawn.blocks.DeepslateTemporalStoneBlock;
-import com.chronodawn.blocks.DeepslateTemporalStoneStairs;
-import com.chronodawn.blocks.DeepslateTemporalStoneSlab;
-import com.chronodawn.blocks.DeepslateTemporalStoneWall;
+import com.chronodawn.blocks.CobbledDeepslateTemporalStoneBlock;
+import com.chronodawn.blocks.CobbledDeepslateTemporalStoneStairs;
+import com.chronodawn.blocks.CobbledDeepslateTemporalStoneSlab;
+import com.chronodawn.blocks.CobbledDeepslateTemporalStoneWall;
 import com.chronodawn.blocks.DeepslateTemporalAmberOre;
 import com.chronodawn.blocks.DeepslateTemporalGoldOre;
 import com.chronodawn.blocks.DeepslateTemporalRedstoneOre;
@@ -551,17 +552,21 @@ public class ModBlocks {
         ModBlockId.DEEPSLATE_TEMPORAL_STONE.id(),
         () -> new DeepslateTemporalStoneBlock(DeepslateTemporalStoneBlock.createProperties())
     );
-    public static final RegistrySupplier<Block> DEEPSLATE_TEMPORAL_STONE_STAIRS = BLOCKS.register(
-        ModBlockId.DEEPSLATE_TEMPORAL_STONE_STAIRS.id(),
-        () -> new DeepslateTemporalStoneStairs(DeepslateTemporalStoneStairs.createProperties())
+    public static final RegistrySupplier<Block> COBBLED_DEEPSLATE_TEMPORAL_STONE = BLOCKS.register(
+        ModBlockId.COBBLED_DEEPSLATE_TEMPORAL_STONE.id(),
+        () -> new CobbledDeepslateTemporalStoneBlock(CobbledDeepslateTemporalStoneBlock.createProperties())
     );
-    public static final RegistrySupplier<Block> DEEPSLATE_TEMPORAL_STONE_SLAB = BLOCKS.register(
-        ModBlockId.DEEPSLATE_TEMPORAL_STONE_SLAB.id(),
-        () -> new DeepslateTemporalStoneSlab(DeepslateTemporalStoneSlab.createProperties())
+    public static final RegistrySupplier<Block> COBBLED_DEEPSLATE_TEMPORAL_STONE_STAIRS = BLOCKS.register(
+        ModBlockId.COBBLED_DEEPSLATE_TEMPORAL_STONE_STAIRS.id(),
+        () -> new CobbledDeepslateTemporalStoneStairs(CobbledDeepslateTemporalStoneStairs.createProperties())
     );
-    public static final RegistrySupplier<Block> DEEPSLATE_TEMPORAL_STONE_WALL = BLOCKS.register(
-        ModBlockId.DEEPSLATE_TEMPORAL_STONE_WALL.id(),
-        () -> new DeepslateTemporalStoneWall(DeepslateTemporalStoneWall.createProperties())
+    public static final RegistrySupplier<Block> COBBLED_DEEPSLATE_TEMPORAL_STONE_SLAB = BLOCKS.register(
+        ModBlockId.COBBLED_DEEPSLATE_TEMPORAL_STONE_SLAB.id(),
+        () -> new CobbledDeepslateTemporalStoneSlab(CobbledDeepslateTemporalStoneSlab.createProperties())
+    );
+    public static final RegistrySupplier<Block> COBBLED_DEEPSLATE_TEMPORAL_STONE_WALL = BLOCKS.register(
+        ModBlockId.COBBLED_DEEPSLATE_TEMPORAL_STONE_WALL.id(),
+        () -> new CobbledDeepslateTemporalStoneWall(CobbledDeepslateTemporalStoneWall.createProperties())
     );
 
     public static final RegistrySupplier<Block> TEMPORAL_COBBLESTONE_STAIRS = BLOCKS.register(

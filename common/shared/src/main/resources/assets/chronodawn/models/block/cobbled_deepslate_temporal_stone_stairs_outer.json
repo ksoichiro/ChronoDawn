@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "chronodawn:block/cobbled_deepslate_temporal_stone",
+    "top": "chronodawn:block/cobbled_deepslate_temporal_stone",
+    "side": "chronodawn:block/cobbled_deepslate_temporal_stone"
+  }
+}

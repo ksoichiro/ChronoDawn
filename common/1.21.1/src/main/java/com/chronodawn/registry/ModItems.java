@@ -694,17 +694,21 @@ public class ModItems {
         ModItemId.DEEPSLATE_TEMPORAL_STONE.id(),
         () -> new BlockItem(ModBlocks.DEEPSLATE_TEMPORAL_STONE.get(), new Item.Properties())
     );
-    public static final RegistrySupplier<Item> DEEPSLATE_TEMPORAL_STONE_STAIRS = ITEMS.register(
-        ModItemId.DEEPSLATE_TEMPORAL_STONE_STAIRS.id(),
-        () -> new BlockItem(ModBlocks.DEEPSLATE_TEMPORAL_STONE_STAIRS.get(), new Item.Properties())
+    public static final RegistrySupplier<Item> COBBLED_DEEPSLATE_TEMPORAL_STONE = ITEMS.register(
+        ModItemId.COBBLED_DEEPSLATE_TEMPORAL_STONE.id(),
+        () -> new BlockItem(ModBlocks.COBBLED_DEEPSLATE_TEMPORAL_STONE.get(), new Item.Properties())
     );
-    public static final RegistrySupplier<Item> DEEPSLATE_TEMPORAL_STONE_SLAB = ITEMS.register(
-        ModItemId.DEEPSLATE_TEMPORAL_STONE_SLAB.id(),
-        () -> new BlockItem(ModBlocks.DEEPSLATE_TEMPORAL_STONE_SLAB.get(), new Item.Properties())
+    public static final RegistrySupplier<Item> COBBLED_DEEPSLATE_TEMPORAL_STONE_STAIRS = ITEMS.register(
+        ModItemId.COBBLED_DEEPSLATE_TEMPORAL_STONE_STAIRS.id(),
+        () -> new BlockItem(ModBlocks.COBBLED_DEEPSLATE_TEMPORAL_STONE_STAIRS.get(), new Item.Properties())
     );
-    public static final RegistrySupplier<Item> DEEPSLATE_TEMPORAL_STONE_WALL = ITEMS.register(
-        ModItemId.DEEPSLATE_TEMPORAL_STONE_WALL.id(),
-        () -> new BlockItem(ModBlocks.DEEPSLATE_TEMPORAL_STONE_WALL.get(), new Item.Properties())
+    public static final RegistrySupplier<Item> COBBLED_DEEPSLATE_TEMPORAL_STONE_SLAB = ITEMS.register(
+        ModItemId.COBBLED_DEEPSLATE_TEMPORAL_STONE_SLAB.id(),
+        () -> new BlockItem(ModBlocks.COBBLED_DEEPSLATE_TEMPORAL_STONE_SLAB.get(), new Item.Properties())
+    );
+    public static final RegistrySupplier<Item> COBBLED_DEEPSLATE_TEMPORAL_STONE_WALL = ITEMS.register(
+        ModItemId.COBBLED_DEEPSLATE_TEMPORAL_STONE_WALL.id(),
+        () -> new BlockItem(ModBlocks.COBBLED_DEEPSLATE_TEMPORAL_STONE_WALL.get(), new Item.Properties())
     );
 
     /**
@@ -2161,9 +2165,10 @@ public class ModItems {
         output.accept(MOSSY_TEMPORAL_COBBLESTONE_SLAB.get());
         output.accept(MOSSY_TEMPORAL_COBBLESTONE_WALL.get());
         output.accept(DEEPSLATE_TEMPORAL_STONE.get());
-        output.accept(DEEPSLATE_TEMPORAL_STONE_STAIRS.get());
-        output.accept(DEEPSLATE_TEMPORAL_STONE_SLAB.get());
-        output.accept(DEEPSLATE_TEMPORAL_STONE_WALL.get());
+        output.accept(COBBLED_DEEPSLATE_TEMPORAL_STONE.get());
+        output.accept(COBBLED_DEEPSLATE_TEMPORAL_STONE_STAIRS.get());
+        output.accept(COBBLED_DEEPSLATE_TEMPORAL_STONE_SLAB.get());
+        output.accept(COBBLED_DEEPSLATE_TEMPORAL_STONE_WALL.get());
         output.accept(FROZEN_TIME_ICE.get());
         // Note: TEMPORAL_PARTICLE_EMITTER is not added to creative tab (structure-only block)
 

@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:block/slab_top",
-  "textures": {
-    "bottom": "chronodawn:block/deepslate_temporal_stone",
-    "top": "chronodawn:block/deepslate_temporal_stone",
-    "side": "chronodawn:block/deepslate_temporal_stone"
-  }
-}

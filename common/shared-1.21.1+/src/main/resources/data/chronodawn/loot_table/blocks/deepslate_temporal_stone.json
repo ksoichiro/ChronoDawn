@@ -5,8 +5,34 @@
       "rolls": 1,
       "entries": [
         {
-          "type": "minecraft:item",
-          "name": "chronodawn:deepslate_temporal_stone"
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "chronodawn:deepslate_temporal_stone",
+              "conditions": [
+                {
+                  "condition": "minecraft:match_tool",
+                  "predicate": {
+                    "predicates": {
+                      "minecraft:enchantments": [
+                        {
+                          "enchantments": "minecraft:silk_touch",
+                          "levels": {
+                            "min": 1
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              "type": "minecraft:item",
+              "name": "chronodawn:cobbled_deepslate_temporal_stone"
+            }
+          ]
         }
       ],
       "conditions": [

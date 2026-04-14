@@ -1,0 +1,4 @@
+{
+  "parent": "minecraft:block/wall_inventory",
+  "textures": { "wall": "chronodawn:block/cobbled_deepslate_temporal_stone" }
+}

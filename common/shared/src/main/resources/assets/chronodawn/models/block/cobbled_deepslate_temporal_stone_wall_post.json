@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_wall_post",
+  "textures": {
+    "wall": "chronodawn:block/cobbled_deepslate_temporal_stone"
+  }
+}
