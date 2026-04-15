@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/wall_inventory",
+  "textures": {
+    "wall": "chronodawn:block/temporal_stone_bricks"
+  }
+}

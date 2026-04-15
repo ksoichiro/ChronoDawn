@@ -690,6 +690,22 @@ public class ModItems {
         ModItemId.MOSSY_TEMPORAL_COBBLESTONE_WALL.id(),
         () -> new BlockItem(ModBlocks.MOSSY_TEMPORAL_COBBLESTONE_WALL.get(), new Item.Properties())
     );
+    public static final RegistrySupplier<Item> TEMPORAL_STONE_BRICKS = ITEMS.register(
+        ModItemId.TEMPORAL_STONE_BRICKS.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_STONE_BRICKS.get(), new Item.Properties())
+    );
+    public static final RegistrySupplier<Item> TEMPORAL_STONE_BRICKS_STAIRS = ITEMS.register(
+        ModItemId.TEMPORAL_STONE_BRICKS_STAIRS.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_STONE_BRICKS_STAIRS.get(), new Item.Properties())
+    );
+    public static final RegistrySupplier<Item> TEMPORAL_STONE_BRICKS_SLAB = ITEMS.register(
+        ModItemId.TEMPORAL_STONE_BRICKS_SLAB.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_STONE_BRICKS_SLAB.get(), new Item.Properties())
+    );
+    public static final RegistrySupplier<Item> TEMPORAL_STONE_BRICKS_WALL = ITEMS.register(
+        ModItemId.TEMPORAL_STONE_BRICKS_WALL.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_STONE_BRICKS_WALL.get(), new Item.Properties())
+    );
     public static final RegistrySupplier<Item> DEEPSLATE_TEMPORAL_STONE = ITEMS.register(
         ModItemId.DEEPSLATE_TEMPORAL_STONE.id(),
         () -> new BlockItem(ModBlocks.DEEPSLATE_TEMPORAL_STONE.get(), new Item.Properties())
@@ -2174,6 +2190,10 @@ public class ModItems {
         output.accept(MOSSY_TEMPORAL_COBBLESTONE_STAIRS.get());
         output.accept(MOSSY_TEMPORAL_COBBLESTONE_SLAB.get());
         output.accept(MOSSY_TEMPORAL_COBBLESTONE_WALL.get());
+        output.accept(TEMPORAL_STONE_BRICKS.get());
+        output.accept(TEMPORAL_STONE_BRICKS_STAIRS.get());
+        output.accept(TEMPORAL_STONE_BRICKS_SLAB.get());
+        output.accept(TEMPORAL_STONE_BRICKS_WALL.get());
         output.accept(DEEPSLATE_TEMPORAL_STONE.get());
         output.accept(COBBLED_DEEPSLATE_TEMPORAL_STONE.get());
         output.accept(COBBLED_DEEPSLATE_TEMPORAL_STONE_STAIRS.get());

@@ -92,6 +92,10 @@ public enum ModBlockId {
     MOSSY_TEMPORAL_COBBLESTONE_STAIRS(def("mossy_temporal_cobblestone_stairs")),
     MOSSY_TEMPORAL_COBBLESTONE_SLAB(def("mossy_temporal_cobblestone_slab")),
     MOSSY_TEMPORAL_COBBLESTONE_WALL(def("mossy_temporal_cobblestone_wall")),
+    TEMPORAL_STONE_BRICKS(def("temporal_stone_bricks")),
+    TEMPORAL_STONE_BRICKS_STAIRS(def("temporal_stone_bricks_stairs")),
+    TEMPORAL_STONE_BRICKS_SLAB(def("temporal_stone_bricks_slab")),
+    TEMPORAL_STONE_BRICKS_WALL(def("temporal_stone_bricks_wall")),
 
     // Deepslate Temporal Stone variants
     DEEPSLATE_TEMPORAL_STONE(def("deepslate_temporal_stone")),

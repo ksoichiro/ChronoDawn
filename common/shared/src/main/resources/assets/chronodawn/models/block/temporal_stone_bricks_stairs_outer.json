@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "chronodawn:block/temporal_stone_bricks",
+    "top": "chronodawn:block/temporal_stone_bricks",
+    "side": "chronodawn:block/temporal_stone_bricks"
+  }
+}

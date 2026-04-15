@@ -37,6 +37,10 @@ import com.chronodawn.blocks.MossyTemporalCobblestoneBlock;
 import com.chronodawn.blocks.MossyTemporalCobblestoneStairs;
 import com.chronodawn.blocks.MossyTemporalCobblestoneSlab;
 import com.chronodawn.blocks.MossyTemporalCobblestoneWall;
+import com.chronodawn.blocks.TemporalStoneBricksBlock;
+import com.chronodawn.blocks.TemporalStoneBricksStairs;
+import com.chronodawn.blocks.TemporalStoneBricksSlab;
+import com.chronodawn.blocks.TemporalStoneBricksWall;
 import com.chronodawn.blocks.TemporalParticleEmitterBlock;
 import com.chronodawn.blocks.TimeCrystalBlock;
 import com.chronodawn.blocks.EntropyCrystalOre;
@@ -632,6 +636,22 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> MOSSY_TEMPORAL_COBBLESTONE_WALL = BLOCKS.register(
         ModBlockId.MOSSY_TEMPORAL_COBBLESTONE_WALL.id(),
         () -> new MossyTemporalCobblestoneWall(MossyTemporalCobblestoneWall.createProperties())
+    );
+    public static final RegistrySupplier<Block> TEMPORAL_STONE_BRICKS = BLOCKS.register(
+        ModBlockId.TEMPORAL_STONE_BRICKS.id(),
+        () -> new TemporalStoneBricksBlock(TemporalStoneBricksBlock.createProperties())
+    );
+    public static final RegistrySupplier<Block> TEMPORAL_STONE_BRICKS_STAIRS = BLOCKS.register(
+        ModBlockId.TEMPORAL_STONE_BRICKS_STAIRS.id(),
+        () -> new TemporalStoneBricksStairs(TemporalStoneBricksStairs.createProperties())
+    );
+    public static final RegistrySupplier<Block> TEMPORAL_STONE_BRICKS_SLAB = BLOCKS.register(
+        ModBlockId.TEMPORAL_STONE_BRICKS_SLAB.id(),
+        () -> new TemporalStoneBricksSlab(TemporalStoneBricksSlab.createProperties())
+    );
+    public static final RegistrySupplier<Block> TEMPORAL_STONE_BRICKS_WALL = BLOCKS.register(
+        ModBlockId.TEMPORAL_STONE_BRICKS_WALL.id(),
+        () -> new TemporalStoneBricksWall(TemporalStoneBricksWall.createProperties())
     );
 
     /**
