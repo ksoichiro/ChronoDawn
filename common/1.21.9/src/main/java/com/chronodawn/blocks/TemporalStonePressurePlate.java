@@ -19,7 +19,7 @@ public class TemporalStonePressurePlate extends PressurePlateBlock {
     public static BlockBehaviour.Properties createProperties() {
         return BlockBehaviour.Properties.of()
                 .mapColor(MapColor.STONE)
-                .noCollission()
+                .noCollision()
                 .strength(0.5f)
                 .sound(SoundType.STONE)
                 .setId(ResourceKey.create(Registries.BLOCK,
