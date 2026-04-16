@@ -92,6 +92,8 @@ public enum ModItemId {
     TEMPORAL_STONE_BRICKS_STAIRS("temporal_stone_bricks_stairs"),
     TEMPORAL_STONE_BRICKS_SLAB("temporal_stone_bricks_slab"),
     TEMPORAL_STONE_BRICKS_WALL("temporal_stone_bricks_wall"),
+    TEMPORAL_STONE_BUTTON("temporal_stone_button"),
+    TEMPORAL_STONE_PRESSURE_PLATE("temporal_stone_pressure_plate"),
 
     // Deepslate Temporal Stone variants
     DEEPSLATE_TEMPORAL_STONE("deepslate_temporal_stone"),

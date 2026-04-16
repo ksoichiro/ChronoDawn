@@ -986,6 +986,20 @@ public class ModItems {
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_STONE_BRICKS_WALL.id()))))
     );
+    public static final RegistrySupplier<Item> TEMPORAL_STONE_BUTTON = ITEMS.register(
+        ModItemId.TEMPORAL_STONE_BUTTON.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_STONE_BUTTON.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_STONE_BUTTON.id()))))
+    );
+    public static final RegistrySupplier<Item> TEMPORAL_STONE_PRESSURE_PLATE = ITEMS.register(
+        ModItemId.TEMPORAL_STONE_PRESSURE_PLATE.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_STONE_PRESSURE_PLATE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_STONE_PRESSURE_PLATE.id()))))
+    );
     public static final RegistrySupplier<Item> DEEPSLATE_TEMPORAL_STONE = ITEMS.register(
         ModItemId.DEEPSLATE_TEMPORAL_STONE.id(),
         () -> new BlockItem(ModBlocks.DEEPSLATE_TEMPORAL_STONE.get(), new Item.Properties()
@@ -2595,6 +2609,8 @@ public class ModItems {
         output.accept(TEMPORAL_STONE_BRICKS_STAIRS.get());
         output.accept(TEMPORAL_STONE_BRICKS_SLAB.get());
         output.accept(TEMPORAL_STONE_BRICKS_WALL.get());
+        output.accept(TEMPORAL_STONE_BUTTON.get());
+        output.accept(TEMPORAL_STONE_PRESSURE_PLATE.get());
         output.accept(DEEPSLATE_TEMPORAL_STONE.get());
         output.accept(COBBLED_DEEPSLATE_TEMPORAL_STONE.get());
         output.accept(COBBLED_DEEPSLATE_TEMPORAL_STONE_STAIRS.get());
