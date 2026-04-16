@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building_blocks",
+  "pattern": [
+    "BB",
+    "BB"
+  ],
+  "key": {
+    "B": {
+      "item": "chronodawn:cobbled_deepslate_temporal_stone"
+    }
+  },
+  "result": {
+    "id": "chronodawn:polished_deepslate_temporal_stone",
+    "count": 4
+  }
+}

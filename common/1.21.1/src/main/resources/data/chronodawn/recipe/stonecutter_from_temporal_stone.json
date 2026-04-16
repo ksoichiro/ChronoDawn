@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " I ",
+    "SSS"
+  ],
+  "key": {
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "S": {
+      "item": "chronodawn:temporal_stone"
+    }
+  },
+  "result": {
+    "id": "minecraft:stonecutter",
+    "count": 1
+  }
+}

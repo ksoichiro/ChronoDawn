@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "RTR",
+    "SSS"
+  ],
+  "key": {
+    "R": {
+      "item": "minecraft:redstone_torch"
+    },
+    "T": {
+      "item": "minecraft:redstone"
+    },
+    "S": {
+      "item": "chronodawn:temporal_stone"
+    }
+  },
+  "result": {
+    "id": "minecraft:repeater",
+    "count": 1
+  }
+}

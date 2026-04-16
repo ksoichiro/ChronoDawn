@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 1.0,
+  "ingredient": "chronodawn:temporal_cobblestone",
+  "result": {
+    "id": "chronodawn:temporal_stone"
+  }
+}

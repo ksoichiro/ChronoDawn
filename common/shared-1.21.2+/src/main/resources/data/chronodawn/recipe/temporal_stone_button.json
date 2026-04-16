@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "redstone",
+  "ingredients": [
+    "chronodawn:temporal_stone"
+  ],
+  "result": {
+    "id": "chronodawn:temporal_stone_button",
+    "count": 1
+  }
+}

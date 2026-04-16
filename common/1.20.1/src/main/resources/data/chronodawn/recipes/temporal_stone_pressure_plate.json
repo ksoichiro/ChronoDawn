@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "BB"
+  ],
+  "key": {
+    "B": {
+      "item": "chronodawn:temporal_stone"
+    }
+  },
+  "result": {
+    "item": "chronodawn:temporal_stone_pressure_plate",
+    "count": 1
+  }
+}

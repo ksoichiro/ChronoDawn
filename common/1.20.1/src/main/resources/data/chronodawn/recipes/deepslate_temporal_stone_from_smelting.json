@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.1,
+  "ingredient": {
+    "item": "chronodawn:cobbled_deepslate_temporal_stone"
+  },
+  "result": "chronodawn:deepslate_temporal_stone"
+}

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    " T ",
+    "TQT",
+    "SSS"
+  ],
+  "key": {
+    "T": "minecraft:redstone_torch",
+    "Q": "minecraft:quartz",
+    "S": "chronodawn:temporal_stone"
+  },
+  "result": {
+    "id": "minecraft:comparator",
+    "count": 1
+  }
+}

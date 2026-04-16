@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building_blocks",
+  "pattern": [
+    "BB",
+    "BB"
+  ],
+  "key": {
+    "B": "chronodawn:temporal_stone"
+  },
+  "result": {
+    "id": "chronodawn:temporal_stone_bricks",
+    "count": 4
+  }
+}
