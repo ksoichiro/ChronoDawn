@@ -207,6 +207,12 @@ public class ModSounds {
     public static final RegistrySupplier<SoundEvent> TIME_COMPASS_BREAK = registerSound("time_compass_break");
 
     /**
+     * ChronoDawn Dimension Background Music (Eroded Time)
+     * Referenced from biome JSONs via attributes.minecraft:audio/background_music.
+     */
+    public static final RegistrySupplier<SoundEvent> MUSIC_ERODED_TIME = registerSound("music.eroded_time");
+
+    /**
      * Helper method to register a sound event.
      *
      * @param name The sound event name (should match the key in sounds.json)

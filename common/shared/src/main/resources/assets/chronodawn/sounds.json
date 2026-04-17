@@ -241,6 +241,15 @@
       }
     ],
     "subtitle": "subtitles.chronodawn.time_compass_break"
+  },
+  "music.eroded_time": {
+    "category": "music",
+    "sounds": [
+      {
+        "name": "chronodawn:music/eroded_time",
+        "stream": true
+      }
+    ]
   }
 }
 

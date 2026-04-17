@@ -189,6 +189,13 @@
         "block_search_extent": 8,
         "offset": 2.0
       }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "sound": "chronodawn:music.eroded_time",
+        "min_delay": 12000,
+        "max_delay": 24000
+      }
     }
   }
 }
