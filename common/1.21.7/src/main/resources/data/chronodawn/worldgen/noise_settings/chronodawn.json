@@ -760,14 +760,14 @@
                                 "then_run": {
                                   "type": "minecraft:block",
                                   "result_state": {
-                                    "Name": "minecraft:red_sandstone"
+                                    "Name": "chronodawn:temporal_sandstone"
                                   }
                                 }
                               },
                               {
                                 "type": "minecraft:block",
                                 "result_state": {
-                                  "Name": "minecraft:red_sand"
+                                  "Name": "chronodawn:temporal_sand"
                                 }
                               }
                             ]
@@ -825,7 +825,7 @@
                             {
                               "type": "minecraft:block",
                               "result_state": {
-                                "Name": "minecraft:gravel"
+                                "Name": "chronodawn:temporal_gravel"
                               }
                             }
                           ]
@@ -1300,7 +1300,7 @@
                                         {
                                           "type": "minecraft:block",
                                           "result_state": {
-                                            "Name": "minecraft:gravel"
+                                            "Name": "chronodawn:temporal_gravel"
                                           }
                                         }
                                       ]
@@ -1364,14 +1364,14 @@
                                     "then_run": {
                                       "type": "minecraft:block",
                                       "result_state": {
-                                        "Name": "minecraft:sandstone"
+                                        "Name": "chronodawn:temporal_sandstone"
                                       }
                                     }
                                   },
                                   {
                                     "type": "minecraft:block",
                                     "result_state": {
-                                      "Name": "minecraft:sand"
+                                      "Name": "chronodawn:temporal_sand"
                                     }
                                   }
                                 ]
@@ -1401,14 +1401,14 @@
                                     "then_run": {
                                       "type": "minecraft:block",
                                       "result_state": {
-                                        "Name": "minecraft:sandstone"
+                                        "Name": "chronodawn:temporal_sandstone"
                                       }
                                     }
                                   },
                                   {
                                     "type": "minecraft:block",
                                     "result_state": {
-                                      "Name": "minecraft:sand"
+                                      "Name": "chronodawn:temporal_sand"
                                     }
                                   }
                                 ]
@@ -1516,7 +1516,7 @@
                                     {
                                       "type": "minecraft:block",
                                       "result_state": {
-                                        "Name": "minecraft:gravel"
+                                        "Name": "chronodawn:temporal_gravel"
                                       }
                                     }
                                   ]
@@ -1597,7 +1597,7 @@
                                   {
                                     "type": "minecraft:block",
                                     "result_state": {
-                                      "Name": "minecraft:gravel"
+                                      "Name": "chronodawn:temporal_gravel"
                                     }
                                   }
                                 ]
@@ -2077,7 +2077,7 @@
                                         {
                                           "type": "minecraft:block",
                                           "result_state": {
-                                            "Name": "minecraft:gravel"
+                                            "Name": "chronodawn:temporal_gravel"
                                           }
                                         }
                                       ]
@@ -2141,14 +2141,14 @@
                                     "then_run": {
                                       "type": "minecraft:block",
                                       "result_state": {
-                                        "Name": "minecraft:sandstone"
+                                        "Name": "chronodawn:temporal_sandstone"
                                       }
                                     }
                                   },
                                   {
                                     "type": "minecraft:block",
                                     "result_state": {
-                                      "Name": "minecraft:sand"
+                                      "Name": "chronodawn:temporal_sand"
                                     }
                                   }
                                 ]
@@ -2178,14 +2178,14 @@
                                     "then_run": {
                                       "type": "minecraft:block",
                                       "result_state": {
-                                        "Name": "minecraft:sandstone"
+                                        "Name": "chronodawn:temporal_sandstone"
                                       }
                                     }
                                   },
                                   {
                                     "type": "minecraft:block",
                                     "result_state": {
-                                      "Name": "minecraft:sand"
+                                      "Name": "chronodawn:temporal_sand"
                                     }
                                   }
                                 ]
@@ -2273,7 +2273,7 @@
                                     {
                                       "type": "minecraft:block",
                                       "result_state": {
-                                        "Name": "minecraft:gravel"
+                                        "Name": "chronodawn:temporal_gravel"
                                       }
                                     }
                                   ]
@@ -2331,7 +2331,7 @@
                                   {
                                     "type": "minecraft:block",
                                     "result_state": {
-                                      "Name": "minecraft:gravel"
+                                      "Name": "chronodawn:temporal_gravel"
                                     }
                                   }
                                 ]
@@ -2385,7 +2385,7 @@
                       "then_run": {
                         "type": "minecraft:block",
                         "result_state": {
-                          "Name": "minecraft:sandstone"
+                          "Name": "chronodawn:temporal_sandstone"
                         }
                       }
                     }
@@ -2411,7 +2411,7 @@
                       "then_run": {
                         "type": "minecraft:block",
                         "result_state": {
-                          "Name": "minecraft:sandstone"
+                          "Name": "chronodawn:temporal_sandstone"
                         }
                       }
                     }
@@ -2472,14 +2472,14 @@
                           "then_run": {
                             "type": "minecraft:block",
                             "result_state": {
-                              "Name": "minecraft:sandstone"
+                              "Name": "chronodawn:temporal_sandstone"
                             }
                           }
                         },
                         {
                           "type": "minecraft:block",
                           "result_state": {
-                            "Name": "minecraft:sand"
+                            "Name": "chronodawn:temporal_sand"
                           }
                         }
                       ]
@@ -2507,7 +2507,7 @@
                       {
                         "type": "minecraft:block",
                         "result_state": {
-                          "Name": "minecraft:gravel"
+                          "Name": "chronodawn:temporal_gravel"
                         }
                       }
                     ]
