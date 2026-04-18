@@ -11,10 +11,11 @@
 
 # Gradle
 .gradle/
-build/
+/build/
 build-*/
 out/
 bin/
+buildSrc/build/
 
 # IntelliJ IDEA
 .idea/
