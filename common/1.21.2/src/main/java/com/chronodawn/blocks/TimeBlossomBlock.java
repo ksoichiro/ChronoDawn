@@ -61,6 +61,7 @@ public class TimeBlossomBlock extends BushBlock {
             .noOcclusion()
             .instabreak()
             .sound(SoundType.GRASS)
+            .lightLevel(state -> 3)
             .offsetType(BlockBehaviour.OffsetType.XZ)
                 .setId(ResourceKey.create(Registries.BLOCK,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "purple_time_blossom")));

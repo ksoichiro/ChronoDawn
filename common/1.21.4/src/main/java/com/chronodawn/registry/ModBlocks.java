@@ -774,6 +774,7 @@ public class ModBlocks {
         ModBlockId.TIMELESS_MUSHROOM.id(),
         () -> new TimelessMushroomBlock(
             CompatBlockProperties.ofFullCopy(Blocks.BROWN_MUSHROOM)
+                .lightLevel(state -> 6)
                 .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
                     net.minecraft.resources.ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "timeless_mushroom")))
         )

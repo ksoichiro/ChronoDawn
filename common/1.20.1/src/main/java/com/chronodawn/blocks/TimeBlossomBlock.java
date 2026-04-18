@@ -49,6 +49,7 @@ public class TimeBlossomBlock extends BushBlock {
             .noOcclusion()
             .instabreak()
             .sound(SoundType.GRASS)
+            .lightLevel(state -> 3)
             .offsetType(BlockBehaviour.OffsetType.XZ);
     }
 

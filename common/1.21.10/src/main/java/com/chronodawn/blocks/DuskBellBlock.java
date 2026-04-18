@@ -41,6 +41,7 @@ public class DuskBellBlock extends DoublePlantBlock {
             .noOcclusion()
             .instabreak()
             .sound(SoundType.GRASS)
+            .lightLevel(state -> 4)
             .offsetType(BlockBehaviour.OffsetType.XZ)
                 .setId(ResourceKey.create(Registries.BLOCK,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "dusk_bell")));

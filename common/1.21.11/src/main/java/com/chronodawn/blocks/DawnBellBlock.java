@@ -41,6 +41,7 @@ public class DawnBellBlock extends DoublePlantBlock {
             .noOcclusion()
             .instabreak()
             .sound(SoundType.GRASS)
+            .lightLevel(state -> 4)
             .offsetType(BlockBehaviour.OffsetType.XZ)
                 .setId(ResourceKey.create(Registries.BLOCK,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, "dawn_bell")));

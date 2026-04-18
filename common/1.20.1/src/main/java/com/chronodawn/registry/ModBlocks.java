@@ -746,6 +746,7 @@ public class ModBlocks {
         ModBlockId.TIMELESS_MUSHROOM.id(),
         () -> new TimelessMushroomBlock(
             CompatBlockProperties.ofFullCopy(Blocks.BROWN_MUSHROOM)
+                .lightLevel(state -> 6)
         )
     );
 

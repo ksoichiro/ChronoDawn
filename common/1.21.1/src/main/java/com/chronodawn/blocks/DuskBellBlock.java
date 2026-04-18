@@ -36,6 +36,7 @@ public class DuskBellBlock extends DoublePlantBlock {
             .noOcclusion()
             .instabreak()
             .sound(SoundType.GRASS)
+            .lightLevel(state -> 4)
             .offsetType(BlockBehaviour.OffsetType.XZ);
     }
 }
