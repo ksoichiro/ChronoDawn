@@ -13,7 +13,7 @@
       "fallback": {
         "type": "minecraft:simple_state_provider",
         "state": {
-          "Name": "minecraft:sand"
+          "Name": "chronodawn:temporal_sand"
         }
       },
       "rules": []
@@ -23,7 +23,7 @@
       "blocks": [
         "minecraft:grass_block",
         "minecraft:dirt",
-        "minecraft:gravel",
+        "chronodawn:temporal_gravel",
         "chronodawn:temporal_grass_block",
         "chronodawn:temporal_dirt"
       ]
