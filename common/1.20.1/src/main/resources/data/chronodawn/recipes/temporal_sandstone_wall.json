@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building_blocks",
+  "pattern": [
+    "BBB",
+    "BBB"
+  ],
+  "key": {
+    "B": {
+      "item": "chronodawn:temporal_sandstone"
+    }
+  },
+  "result": {
+    "item": "chronodawn:temporal_sandstone_wall",
+    "count": 6
+  }
+}

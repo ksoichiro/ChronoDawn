@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "chronodawn:temporal_sandstone"
+  },
+  "result": "chronodawn:temporal_sandstone_slab",
+  "count": 2
+}
