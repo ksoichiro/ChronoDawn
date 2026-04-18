@@ -7,10 +7,10 @@
         "items": [
           {
             "items": [
-              "chronodawn:time_wood_log",
-              "chronodawn:stripped_time_wood_log",
-              "chronodawn:time_wood",
-              "chronodawn:stripped_time_wood"
+              "chronodawn:dark_time_wood_log",
+              "chronodawn:stripped_dark_time_wood_log",
+              "chronodawn:dark_time_wood",
+              "chronodawn:stripped_dark_time_wood"
             ]
           }
         ]
@@ -19,7 +19,7 @@
     "has_the_recipe": {
       "trigger": "minecraft:recipe_unlocked",
       "conditions": {
-        "recipe": "chronodawn:time_wood_planks"
+        "recipe": "chronodawn:dark_time_wood_planks"
       }
     }
   },
@@ -31,7 +31,7 @@
   ],
   "rewards": {
     "recipes": [
-      "chronodawn:time_wood_planks"
+      "chronodawn:dark_time_wood_planks"
     ]
   }
 }
