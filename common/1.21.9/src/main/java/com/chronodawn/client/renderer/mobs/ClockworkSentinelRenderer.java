@@ -22,6 +22,7 @@ public class ClockworkSentinelRenderer extends MobRenderer<ClockworkSentinelEnti
 
     public ClockworkSentinelRenderer(EntityRendererProvider.Context context) {
         super(context, new ClockworkSentinelModel(context.bakeLayer(ClockworkSentinelModel.LAYER_LOCATION)), 0.5f);
+        this.addLayer(new ClockworkSentinelEmissiveLayer(this));
     }
 
     @Override
