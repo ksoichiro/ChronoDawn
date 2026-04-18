@@ -1,15 +1,15 @@
 {
-  "has_precipitation": true,
-  "temperature": 0.4,
+  "has_precipitation": false,
+  "temperature": 2.0,
   "temperature_modifier": "none",
-  "downfall": 0.8,
+  "downfall": 0.0,
   "effects": {
-    "sky_color": 5263440,
-    "fog_color": 3355443,
-    "water_color": 4012587,
-    "water_fog_color": 1973790,
-    "grass_color": 4478540,
-    "foliage_color": 5531468,
+    "sky_color": 9474192,
+    "fog_color": 12632256,
+    "water_color": 4159204,
+    "water_fog_color": 329011,
+    "grass_color": 9470285,
+    "foliage_color": 10387789,
     "mood_sound": {
       "sound": "minecraft:ambient.cave",
       "tick_delay": 6000,
@@ -27,13 +27,13 @@
     "monster": [
       {
         "type": "chronodawn:epoch_husk",
-        "weight": 95,
+        "weight": 99,
         "minCount": 4,
         "maxCount": 4
       },
       {
         "type": "chronodawn:secondhand_archer",
-        "weight": 95,
+        "weight": 100,
         "minCount": 4,
         "maxCount": 4
       },
@@ -62,48 +62,24 @@
         "maxCount": 1
       },
       {
-        "type": "chronodawn:temporal_wraith",
-        "weight": 100,
-        "minCount": 2,
-        "maxCount": 4
-      },
-      {
         "type": "chronodawn:clockwork_sentinel",
         "weight": 100,
-        "minCount": 1,
-        "maxCount": 2
-      },
-      {
-        "type": "chronodawn:floq",
-        "weight": 100,
         "minCount": 2,
-        "maxCount": 4
+        "maxCount": 3
       },
       {
         "type": "chronodawn:chronal_leech",
         "weight": 15,
         "minCount": 1,
         "maxCount": 2
-      },
-      {
-        "type": "chronodawn:forgotten_minute",
-        "weight": 35,
-        "minCount": 1,
-        "maxCount": 2
       }
     ],
     "creature": [
       {
-        "type": "minecraft:wolf",
-        "weight": 8,
-        "minCount": 4,
-        "maxCount": 4
-      },
-      {
-        "type": "chronodawn:time_keeper",
-        "weight": 10,
-        "minCount": 1,
-        "maxCount": 2
+        "type": "chronodawn:timebound_rabbit",
+        "weight": 4,
+        "minCount": 2,
+        "maxCount": 3
       }
     ],
     "ambient": [
@@ -114,27 +90,11 @@
         "maxCount": 6
       }
     ],
-    "water_creature": [
-      {
-        "type": "chronodawn:glide_fish",
-        "weight": 5,
-        "minCount": 1,
-        "maxCount": 2
-      },
-      {
-        "type": "chronodawn:chrono_turtle",
-        "weight": 4,
-        "minCount": 1,
-        "maxCount": 2
-      }
-    ],
+    "water_creature": [],
     "water_ambient": [],
     "misc": []
   },
   "spawn_costs": {},
-  "carvers": {
-    "air": []
-  },
   "features": [
     [],
     [],
@@ -156,13 +116,11 @@
     [],
     [],
     [
-      "chronodawn:dark_time_wood_tree_dense",
-      "chronodawn:patch_ferns",
-      "chronodawn:patch_brown_mushrooms",
-      "chronodawn:patch_timeless_mushroom",
       "chronodawn:boulder_placed",
-      "chronodawn:cobweb_placed"
+      "chronodawn:gravel_disk_placed",
+      "chronodawn:sand_disk_placed"
     ],
     []
-  ]
+  ],
+  "carvers": []
 }

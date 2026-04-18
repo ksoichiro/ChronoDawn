@@ -132,9 +132,6 @@
     "misc": []
   },
   "spawn_costs": {},
-  "carvers": {
-    "air": []
-  },
   "features": [
     [],
     [],
@@ -164,5 +161,6 @@
       "chronodawn:cobweb_placed"
     ],
     []
-  ]
+  ],
+  "carvers": []
 }
