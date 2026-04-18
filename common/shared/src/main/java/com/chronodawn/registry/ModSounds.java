@@ -207,10 +207,12 @@ public class ModSounds {
     public static final RegistrySupplier<SoundEvent> TIME_COMPASS_BREAK = registerSound("time_compass_break");
 
     /**
-     * ChronoDawn Dimension Background Music (Eroded Time)
+     * ChronoDawn Dimension Background Music
      * Referenced from biome JSONs via biome music / background_music.
+     * sounds.json bundles multiple OGG files under this single event, so each
+     * trigger randomly picks one track (eroded_time / frozen / peace / reversal).
      */
-    public static final RegistrySupplier<SoundEvent> MUSIC_ERODED_TIME = registerSound("music.eroded_time");
+    public static final RegistrySupplier<SoundEvent> MUSIC_CHRONODAWN_DIMENSION = registerSound("music.chronodawn_dimension");
 
     /**
      * Helper method to register a sound event.

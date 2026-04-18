@@ -182,7 +182,7 @@
     },
     "minecraft:audio/background_music": {
       "default": {
-        "sound": "chronodawn:music.eroded_time",
+        "sound": "chronodawn:music.chronodawn_dimension",
         "min_delay": 12000,
         "max_delay": 24000
       }
