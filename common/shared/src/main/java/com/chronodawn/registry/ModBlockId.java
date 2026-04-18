@@ -99,6 +99,14 @@ public enum ModBlockId {
     TEMPORAL_STONE_BUTTON(def("temporal_stone_button")),
     TEMPORAL_STONE_PRESSURE_PLATE(def("temporal_stone_pressure_plate")),
 
+    // Temporal Sand / Gravel / Sandstone variants
+    TEMPORAL_SAND(def("temporal_sand")),
+    TEMPORAL_GRAVEL(def("temporal_gravel")),
+    TEMPORAL_SANDSTONE(def("temporal_sandstone")),
+    TEMPORAL_SANDSTONE_STAIRS(def("temporal_sandstone_stairs")),
+    TEMPORAL_SANDSTONE_SLAB(def("temporal_sandstone_slab")),
+    TEMPORAL_SANDSTONE_WALL(def("temporal_sandstone_wall")),
+
     // Deepslate Temporal Stone variants
     DEEPSLATE_TEMPORAL_STONE(def("deepslate_temporal_stone")),
     COBBLED_DEEPSLATE_TEMPORAL_STONE(def("cobbled_deepslate_temporal_stone")),

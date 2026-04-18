@@ -95,6 +95,14 @@ public enum ModItemId {
     TEMPORAL_STONE_BUTTON("temporal_stone_button"),
     TEMPORAL_STONE_PRESSURE_PLATE("temporal_stone_pressure_plate"),
 
+    // Temporal Sand / Gravel / Sandstone variants
+    TEMPORAL_SAND("temporal_sand"),
+    TEMPORAL_GRAVEL("temporal_gravel"),
+    TEMPORAL_SANDSTONE("temporal_sandstone"),
+    TEMPORAL_SANDSTONE_STAIRS("temporal_sandstone_stairs"),
+    TEMPORAL_SANDSTONE_SLAB("temporal_sandstone_slab"),
+    TEMPORAL_SANDSTONE_WALL("temporal_sandstone_wall"),
+
     // Deepslate Temporal Stone variants
     DEEPSLATE_TEMPORAL_STONE("deepslate_temporal_stone"),
     COBBLED_DEEPSLATE_TEMPORAL_STONE("cobbled_deepslate_temporal_stone"),
