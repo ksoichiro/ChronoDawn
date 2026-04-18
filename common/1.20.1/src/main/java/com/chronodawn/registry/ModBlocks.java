@@ -43,6 +43,12 @@ import com.chronodawn.blocks.TemporalStoneBricksSlab;
 import com.chronodawn.blocks.TemporalStoneBricksWall;
 import com.chronodawn.blocks.TemporalStoneButton;
 import com.chronodawn.blocks.TemporalStonePressurePlate;
+import com.chronodawn.blocks.TemporalSand;
+import com.chronodawn.blocks.TemporalGravel;
+import com.chronodawn.blocks.TemporalSandstone;
+import com.chronodawn.blocks.TemporalSandstoneStairs;
+import com.chronodawn.blocks.TemporalSandstoneSlab;
+import com.chronodawn.blocks.TemporalSandstoneWall;
 import com.chronodawn.blocks.TemporalParticleEmitterBlock;
 import com.chronodawn.blocks.TimeCrystalBlock;
 import com.chronodawn.blocks.EntropyCrystalOre;
@@ -555,6 +561,36 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> TEMPORAL_STONE_WALL = BLOCKS.register(
         ModBlockId.TEMPORAL_STONE_WALL.id(),
         () -> new TemporalStoneWall(TemporalStoneWall.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> TEMPORAL_SAND = BLOCKS.register(
+        ModBlockId.TEMPORAL_SAND.id(),
+        () -> new TemporalSand(TemporalSand.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> TEMPORAL_GRAVEL = BLOCKS.register(
+        ModBlockId.TEMPORAL_GRAVEL.id(),
+        () -> new TemporalGravel(TemporalGravel.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> TEMPORAL_SANDSTONE = BLOCKS.register(
+        ModBlockId.TEMPORAL_SANDSTONE.id(),
+        () -> new TemporalSandstone(TemporalSandstone.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> TEMPORAL_SANDSTONE_STAIRS = BLOCKS.register(
+        ModBlockId.TEMPORAL_SANDSTONE_STAIRS.id(),
+        () -> new TemporalSandstoneStairs(TemporalSandstoneStairs.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> TEMPORAL_SANDSTONE_SLAB = BLOCKS.register(
+        ModBlockId.TEMPORAL_SANDSTONE_SLAB.id(),
+        () -> new TemporalSandstoneSlab(TemporalSandstoneSlab.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> TEMPORAL_SANDSTONE_WALL = BLOCKS.register(
+        ModBlockId.TEMPORAL_SANDSTONE_WALL.id(),
+        () -> new TemporalSandstoneWall(TemporalSandstoneWall.createProperties())
     );
 
     // Deepslate Temporal Stone variants

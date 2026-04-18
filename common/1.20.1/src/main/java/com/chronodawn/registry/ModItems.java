@@ -660,6 +660,36 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TEMPORAL_STONE_WALL.get(), new Item.Properties())
     );
 
+    public static final RegistrySupplier<Item> TEMPORAL_SAND = ITEMS.register(
+        ModItemId.TEMPORAL_SAND.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_SAND.get(), new Item.Properties())
+    );
+
+    public static final RegistrySupplier<Item> TEMPORAL_GRAVEL = ITEMS.register(
+        ModItemId.TEMPORAL_GRAVEL.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_GRAVEL.get(), new Item.Properties())
+    );
+
+    public static final RegistrySupplier<Item> TEMPORAL_SANDSTONE = ITEMS.register(
+        ModItemId.TEMPORAL_SANDSTONE.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_SANDSTONE.get(), new Item.Properties())
+    );
+
+    public static final RegistrySupplier<Item> TEMPORAL_SANDSTONE_STAIRS = ITEMS.register(
+        ModItemId.TEMPORAL_SANDSTONE_STAIRS.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_SANDSTONE_STAIRS.get(), new Item.Properties())
+    );
+
+    public static final RegistrySupplier<Item> TEMPORAL_SANDSTONE_SLAB = ITEMS.register(
+        ModItemId.TEMPORAL_SANDSTONE_SLAB.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_SANDSTONE_SLAB.get(), new Item.Properties())
+    );
+
+    public static final RegistrySupplier<Item> TEMPORAL_SANDSTONE_WALL = ITEMS.register(
+        ModItemId.TEMPORAL_SANDSTONE_WALL.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_SANDSTONE_WALL.get(), new Item.Properties())
+    );
+
     public static final RegistrySupplier<Item> TEMPORAL_COBBLESTONE_STAIRS = ITEMS.register(
         ModItemId.TEMPORAL_COBBLESTONE_STAIRS.id(),
         () -> new BlockItem(ModBlocks.TEMPORAL_COBBLESTONE_STAIRS.get(), new Item.Properties())
@@ -2190,6 +2220,12 @@ public class ModItems {
         output.accept(TEMPORAL_STONE_STAIRS.get());
         output.accept(TEMPORAL_STONE_SLAB.get());
         output.accept(TEMPORAL_STONE_WALL.get());
+        output.accept(TEMPORAL_SAND.get());
+        output.accept(TEMPORAL_GRAVEL.get());
+        output.accept(TEMPORAL_SANDSTONE.get());
+        output.accept(TEMPORAL_SANDSTONE_STAIRS.get());
+        output.accept(TEMPORAL_SANDSTONE_SLAB.get());
+        output.accept(TEMPORAL_SANDSTONE_WALL.get());
         output.accept(TEMPORAL_COBBLESTONE.get());
         output.accept(TEMPORAL_COBBLESTONE_STAIRS.get());
         output.accept(TEMPORAL_COBBLESTONE_SLAB.get());
