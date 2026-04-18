@@ -51,6 +51,10 @@
     "chronodawn:temporal_iron_ore",
     "chronodawn:temporal_redstone_ore",
     "chronodawn:entropy_crystal_ore",
-    "chronodawn:temporal_amber_ore"
+    "chronodawn:temporal_amber_ore",
+    "chronodawn:temporal_sandstone",
+    "chronodawn:temporal_sandstone_stairs",
+    "chronodawn:temporal_sandstone_slab",
+    "chronodawn:temporal_sandstone_wall"
   ]
 }
