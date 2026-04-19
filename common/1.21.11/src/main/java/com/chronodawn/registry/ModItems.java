@@ -56,14 +56,20 @@ import com.chronodawn.entities.boats.ChronoDawnBoatType;
 import com.chronodawn.registry.ModFluids;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.component.BlocksAttacks;
 import net.minecraft.world.item.equipment.ArmorType;
 import com.chronodawn.registry.ModItemId;
 import com.chronodawn.registry.ModBlockId;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Architectury Registry wrapper for custom items.
@@ -1945,10 +1951,28 @@ public class ModItems {
 
     // ========== Shields ==========
 
+    /**
+     * Vanilla shield BLOCKS_ATTACKS configuration (copied exactly from
+     * {@code net.minecraft.world.item.Items#SHIELD} in MC 1.21.11).
+     * Required for the shield to be raisable as a blocking offhand item.
+     */
+    private static BlocksAttacks vanillaShieldBlocksAttacks() {
+        return new BlocksAttacks(
+            0.25F,
+            1.0F,
+            List.of(new BlocksAttacks.DamageReduction(90.0F, Optional.empty(), 0.0F, 1.0F)),
+            new BlocksAttacks.ItemDamageFunction(3.0F, 1.0F, 1.0F),
+            Optional.of(DamageTypeTags.BYPASSES_SHIELD),
+            Optional.of(SoundEvents.SHIELD_BLOCK),
+            Optional.of(SoundEvents.SHIELD_BREAK)
+        );
+    }
+
     public static final RegistrySupplier<Item> CLOCKSTONE_SHIELD = ITEMS.register(
         ModItemId.CLOCKSTONE_SHIELD.id(),
         () -> new com.chronodawn.items.ClockstoneShieldItem(
             new Item.Properties()
+                .component(DataComponents.BLOCKS_ATTACKS, vanillaShieldBlocksAttacks())
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_SHIELD.id())))
         )
@@ -1958,6 +1982,7 @@ public class ModItems {
         ModItemId.ENHANCED_CLOCKSTONE_SHIELD.id(),
         () -> new com.chronodawn.items.EnhancedClockstoneShieldItem(
             new Item.Properties()
+                .component(DataComponents.BLOCKS_ATTACKS, vanillaShieldBlocksAttacks())
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENHANCED_CLOCKSTONE_SHIELD.id())))
         )
@@ -1967,6 +1992,7 @@ public class ModItems {
         ModItemId.ENTROPY_CRYSTAL_SHIELD.id(),
         () -> new com.chronodawn.items.EntropyCrystalShieldItem(
             new Item.Properties()
+                .component(DataComponents.BLOCKS_ATTACKS, vanillaShieldBlocksAttacks())
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENTROPY_CRYSTAL_SHIELD.id())))
         )
