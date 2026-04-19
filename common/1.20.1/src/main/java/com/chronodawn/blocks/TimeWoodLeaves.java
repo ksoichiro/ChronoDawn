@@ -1,8 +1,13 @@
 package com.chronodawn.blocks;
 
+import com.chronodawn.registry.ModBlocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 
@@ -36,6 +41,9 @@ import net.minecraft.world.level.material.PushReaction;
  * Related: FruitOfTimeTreeFeature uses this for tree generation
  */
 public class TimeWoodLeaves extends LeavesBlock {
+    // Chance per random tick to regrow a Fruit of Time below this leaves block
+    private static final float FRUIT_SPAWN_CHANCE = 0.01f;
+
     public TimeWoodLeaves(BlockBehaviour.Properties properties) {
         super(properties);
         // Register default state with DISTANCE=7, PERSISTENT=false, WATERLOGGED=false
@@ -44,6 +52,24 @@ public class TimeWoodLeaves extends LeavesBlock {
             .setValue(DISTANCE, 7)
             .setValue(PERSISTENT, false)
             .setValue(WATERLOGGED, false));
+    }
+
+    @Override
+    public boolean isRandomlyTicking(BlockState state) {
+        return true;
+    }
+
+    @Override
+    public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        super.randomTick(state, level, pos, random);
+        // Only spawn fruit on non-decaying leaves (connected to logs or player-placed)
+        if (state.getValue(DISTANCE) < 7 || state.getValue(PERSISTENT)) {
+            BlockPos belowPos = pos.below();
+            if (level.isEmptyBlock(belowPos) && random.nextFloat() < FRUIT_SPAWN_CHANCE) {
+                level.setBlock(belowPos, ModBlocks.FRUIT_OF_TIME_BLOCK.get().defaultBlockState()
+                    .setValue(FruitOfTimeBlock.AGE, 0), 2);
+            }
+        }
     }
 
     /**
