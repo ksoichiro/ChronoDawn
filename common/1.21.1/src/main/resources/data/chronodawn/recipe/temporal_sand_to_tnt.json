@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "GSG",
+    "SGS",
+    "GSG"
+  ],
+  "key": {
+    "G": {
+      "item": "minecraft:gunpowder"
+    },
+    "S": {
+      "item": "chronodawn:temporal_sand"
+    }
+  },
+  "result": {
+    "id": "minecraft:tnt",
+    "count": 1
+  }
+}
