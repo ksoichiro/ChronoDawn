@@ -46,6 +46,7 @@ import com.chronodawn.items.artifacts.ChronobladeItem;
 import com.chronodawn.items.artifacts.TimeTyrantMailItem;
 import com.chronodawn.items.artifacts.EchoingTimeBootsItem;
 import com.chronodawn.items.artifacts.UnstablePocketWatchItem;
+import com.chronodawn.items.shield.ChronoShieldTier;
 import com.chronodawn.items.tools.TimeClockItem;
 import net.minecraft.world.item.ArmorItem;
 import com.chronodawn.items.KeyToMasterClockItem;
@@ -1335,6 +1336,46 @@ public class ModItems {
             new Item.Properties()
                     .setId(ResourceKey.create(Registries.ITEM,
                         ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CHRONO_AEGIS.id())))
+        )
+    );
+
+    // ========== Shields ==========
+
+    /**
+     * ChronoDawn shield registration (Era B: MC 1.21.4).
+     *
+     * <p>Era B predates the {@code BLOCKS_ATTACKS} DataComponent (introduced in 1.21.5),
+     * so we rely on vanilla {@link net.minecraft.world.item.ShieldItem} built-in
+     * blocking semantics. Effect #1 (3-tick raise) is not achievable on Era B via
+     * the component trick; the shields raise at vanilla's 5-tick delay. The
+     * {@link ChronoShieldTier} durability is configured via {@code .durability(...)}
+     * inside each shield's constructor.</p>
+     */
+
+    public static final RegistrySupplier<Item> CLOCKSTONE_SHIELD = ITEMS.register(
+        ModItemId.CLOCKSTONE_SHIELD.id(),
+        () -> new com.chronodawn.items.ClockstoneShieldItem(
+            new Item.Properties()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_SHIELD.id())))
+        )
+    );
+
+    public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_SHIELD = ITEMS.register(
+        ModItemId.ENHANCED_CLOCKSTONE_SHIELD.id(),
+        () -> new com.chronodawn.items.EnhancedClockstoneShieldItem(
+            new Item.Properties()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENHANCED_CLOCKSTONE_SHIELD.id())))
+        )
+    );
+
+    public static final RegistrySupplier<Item> ENTROPY_CRYSTAL_SHIELD = ITEMS.register(
+        ModItemId.ENTROPY_CRYSTAL_SHIELD.id(),
+        () -> new com.chronodawn.items.EntropyCrystalShieldItem(
+            new Item.Properties()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENTROPY_CRYSTAL_SHIELD.id())))
         )
     );
 
@@ -2796,6 +2837,11 @@ public class ModItems {
 
         // === Ultimate Crafted Items ===
         output.accept(CHRONO_AEGIS.get());
+
+        // === Shields ===
+        output.accept(CLOCKSTONE_SHIELD.get());
+        output.accept(ENHANCED_CLOCKSTONE_SHIELD.get());
+        output.accept(ENTROPY_CRYSTAL_SHIELD.get());
 
         // === Boats ===
         output.accept(TIME_WOOD_BOAT.get());
