@@ -30,9 +30,9 @@ def tint(base: tuple[int, int, int], delta: int) -> tuple[int, int, int, int]:
 
 
 def make_sand() -> Image.Image:
-    """Pale blue sand, noticeably bluer than white while still light."""
+    """Clearly blue sand — lighter than Temporal Dirt, but no longer near-white."""
     rng = random.Random(1001)
-    base = (196, 215, 240)
+    base = (145, 188, 232)
     img = Image.new("RGBA", (16, 16), (*base, 255))
     px = img.load()
     for y in range(16):
@@ -47,9 +47,9 @@ def make_sand() -> Image.Image:
 
 
 def make_gravel() -> Image.Image:
-    """Darker pale-blue with many small 1-2 pixel speckles (no cow-pattern blobs)."""
+    """Darker saturated blue with many small 1-2 pixel speckles (no cow-pattern blobs)."""
     rng = random.Random(2002)
-    base = (178, 198, 222)
+    base = (118, 158, 205)
     img = Image.new("RGBA", (16, 16), (*base, 255))
     px = img.load()
     # Draw ~14 small speckles — mostly 1 pixel, occasional 3-pixel plus-shape
@@ -83,7 +83,7 @@ def make_gravel() -> Image.Image:
 def make_sandstone_side() -> Image.Image:
     """Sand-toned block with two subtle horizontal banding lines."""
     rng = random.Random(3003)
-    base = (200, 218, 240)
+    base = (155, 195, 232)
     img = Image.new("RGBA", (16, 16), (*base, 255))
     px = img.load()
     # Faint horizontal bands at y=4 and y=11
@@ -98,7 +98,7 @@ def make_sandstone_side() -> Image.Image:
 def make_sandstone_top() -> Image.Image:
     """Sand-toned block with a slight inset square frame."""
     rng = random.Random(4004)
-    base = (210, 225, 244)
+    base = (165, 205, 238)
     img = Image.new("RGBA", (16, 16), (*base, 255))
     px = img.load()
     for y in range(16):
@@ -114,7 +114,7 @@ def make_sandstone_top() -> Image.Image:
 def make_sandstone_bottom() -> Image.Image:
     """Uniform sand-toned base with subtle noise."""
     rng = random.Random(5005)
-    base = (186, 208, 234)
+    base = (130, 175, 220)
     img = Image.new("RGBA", (16, 16), (*base, 255))
     px = img.load()
     for y in range(16):
