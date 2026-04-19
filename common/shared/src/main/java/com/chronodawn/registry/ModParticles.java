@@ -21,6 +21,13 @@ public class ModParticles {
         PARTICLE_TYPES.register("chrono_dawn_portal", ModParticles::createSimpleParticleType);
 
     /**
+     * Chrono Shield Echo particle - blue-violet translucent sprite used for
+     * Time Echo visualization (generation burst, active drift, consumption burst).
+     */
+    public static final RegistrySupplier<SimpleParticleType> CHRONO_SHIELD_ECHO =
+        PARTICLE_TYPES.register("chrono_shield_echo", ModParticles::createSimpleParticleType);
+
+    /**
      * Create a simple particle type (helper method to avoid constructor access issues).
      */
     private static SimpleParticleType createSimpleParticleType() {
