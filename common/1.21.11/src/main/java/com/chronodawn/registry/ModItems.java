@@ -46,6 +46,7 @@ import com.chronodawn.items.artifacts.ChronobladeItem;
 import com.chronodawn.items.artifacts.TimeTyrantMailItem;
 import com.chronodawn.items.artifacts.EchoingTimeBootsItem;
 import com.chronodawn.items.artifacts.UnstablePocketWatchItem;
+import com.chronodawn.items.shield.ChronoShieldTier;
 import com.chronodawn.items.tools.TimeClockItem;
 import com.chronodawn.items.KeyToMasterClockItem;
 import com.chronodawn.items.UnstableHourglassItem;
@@ -1952,13 +1953,17 @@ public class ModItems {
     // ========== Shields ==========
 
     /**
-     * Vanilla shield BLOCKS_ATTACKS configuration (copied exactly from
-     * {@code net.minecraft.world.item.Items#SHIELD} in MC 1.21.11).
-     * Required for the shield to be raisable as a blocking offhand item.
+     * ChronoDawn shield BLOCKS_ATTACKS configuration.
+     *
+     * <p>All values mirror the vanilla shield ({@code net.minecraft.world.item.Items#SHIELD}
+     * in MC 1.21.11) except for {@code block_delay_seconds}, which is sourced from
+     * {@link ChronoShieldTier#blockDelaySeconds}. This implements Effect #1
+     * (3-tick raise = 0.15s vs vanilla 5-tick / 0.25s) via the DataComponent itself,
+     * so no Mixin is required on 1.21.5+.
      */
-    private static BlocksAttacks vanillaShieldBlocksAttacks() {
+    private static BlocksAttacks chronoShieldBlocksAttacks(ChronoShieldTier tier) {
         return new BlocksAttacks(
-            0.25F,
+            tier.blockDelaySeconds,
             1.0F,
             List.of(new BlocksAttacks.DamageReduction(90.0F, Optional.empty(), 0.0F, 1.0F)),
             new BlocksAttacks.ItemDamageFunction(3.0F, 1.0F, 1.0F),
@@ -1972,7 +1977,7 @@ public class ModItems {
         ModItemId.CLOCKSTONE_SHIELD.id(),
         () -> new com.chronodawn.items.ClockstoneShieldItem(
             new Item.Properties()
-                .component(DataComponents.BLOCKS_ATTACKS, vanillaShieldBlocksAttacks())
+                .component(DataComponents.BLOCKS_ATTACKS, chronoShieldBlocksAttacks(ChronoShieldTier.T1))
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_SHIELD.id())))
         )
@@ -1982,7 +1987,7 @@ public class ModItems {
         ModItemId.ENHANCED_CLOCKSTONE_SHIELD.id(),
         () -> new com.chronodawn.items.EnhancedClockstoneShieldItem(
             new Item.Properties()
-                .component(DataComponents.BLOCKS_ATTACKS, vanillaShieldBlocksAttacks())
+                .component(DataComponents.BLOCKS_ATTACKS, chronoShieldBlocksAttacks(ChronoShieldTier.T2))
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENHANCED_CLOCKSTONE_SHIELD.id())))
         )
@@ -1992,7 +1997,7 @@ public class ModItems {
         ModItemId.ENTROPY_CRYSTAL_SHIELD.id(),
         () -> new com.chronodawn.items.EntropyCrystalShieldItem(
             new Item.Properties()
-                .component(DataComponents.BLOCKS_ATTACKS, vanillaShieldBlocksAttacks())
+                .component(DataComponents.BLOCKS_ATTACKS, chronoShieldBlocksAttacks(ChronoShieldTier.T3))
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENTROPY_CRYSTAL_SHIELD.id())))
         )

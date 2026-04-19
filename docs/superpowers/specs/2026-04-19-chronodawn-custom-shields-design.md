@@ -48,10 +48,13 @@ While a ChronoDawn shield is held in either hand (main-hand or off-hand; blockin
 
 ### 3.2 Effect #1 — Faster Raise (T1 onward)
 
-Shield activation latency is reduced from the vanilla **5 ticks to 3 ticks**.
+Shield activation latency is reduced from the vanilla **5 ticks (0.25s) to 3 ticks (0.15s)**.
 
-- Trigger: `LivingEntity.isBlocking` evaluation when use-item is a ChronoDawn shield
+- Trigger: shield held in a hand in the raising state (passive; inherent to the item's component)
+- Implementation: `DataComponents.BLOCKS_ATTACKS` on the shield item carries `block_delay_seconds = 0.15F` (vs. vanilla `0.25F`). No Mixin required on 1.21.5+.
 - Applies to all three tiers
+
+**Pre-1.21.5 note**: Versions that predate the `BLOCKS_ATTACKS` data component (1.21.4, 1.21.2, 1.21.1, 1.20.1) will need a Mixin-based approach during Phase 9 porting. Record the approach at port time.
 
 ### 3.3 Effect #7 — Speed on Block (T2 onward)
 
@@ -190,7 +193,7 @@ Per-version duplication is required because `ShieldItem` / `Item.Properties` con
 | Effect | Hook mechanism | Notes |
 |--------|---------------|-------|
 | A | Mixin on `LivingEntity.addEffect` | If target holds a ChronoDawn shield and is blocking, halve incoming `MobEffectInstance` duration for Slowness/Weakness/Mining Fatigue |
-| #1 | Mixin on the 5-tick threshold in the `isBlocking`/useDuration path | Replace literal 5 with 3 when the active use-item is a ChronoDawn shield |
+| #1 | DataComponent value on 1.21.5+; Mixin-based on pre-1.21.5 | `BLOCKS_ATTACKS.block_delay_seconds` = 0.15F (3 ticks) for ChronoDawn shields, set during registration |
 | #7 | Mixin on the shield-block branch of `Player.hurt` / `LivingEntity.blockUsingShield` | On success, call effect handler; handler checks and updates CD in `PlayerProgressData` |
 | #12 | Mixin on `Player.hurt` prologue | If echo is active, auto-block and consume; otherwise pass through |
 
