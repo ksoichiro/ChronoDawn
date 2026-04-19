@@ -47,6 +47,7 @@ import com.chronodawn.blocks.TemporalSandstoneStairs;
 import com.chronodawn.blocks.TemporalSandstoneSlab;
 import com.chronodawn.blocks.TemporalSandstoneWall;
 import com.chronodawn.blocks.TemporalDirtBlock;
+import com.chronodawn.blocks.TemporalFarmlandBlock;
 import com.chronodawn.blocks.TemporalGrassBlock;
 import com.chronodawn.blocks.TemporalMossBlock;
 import com.chronodawn.blocks.TemporalParticleEmitterBlock;
@@ -545,6 +546,11 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> COARSE_TEMPORAL_DIRT = BLOCKS.register(
         ModBlockId.COARSE_TEMPORAL_DIRT.id(),
         () -> new CoarseTemporalDirtBlock(CoarseTemporalDirtBlock.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> TEMPORAL_FARMLAND = BLOCKS.register(
+        ModBlockId.TEMPORAL_FARMLAND.id(),
+        () -> new TemporalFarmlandBlock(TemporalFarmlandBlock.createProperties())
     );
 
     // Temporal Stone variants

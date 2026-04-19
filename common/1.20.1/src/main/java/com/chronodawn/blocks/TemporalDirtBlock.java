@@ -1,6 +1,7 @@
 package com.chronodawn.blocks;
 
 import com.chronodawn.compat.CompatBlockProperties;
+import com.chronodawn.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -35,7 +36,7 @@ public class TemporalDirtBlock extends Block {
         if (player.getItemInHand(hand).getItem() instanceof HoeItem) {
             if (!level.isClientSide()) {
                 level.playSound(null, pos, SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0f, 1.0f);
-                level.setBlockAndUpdate(pos, Blocks.FARMLAND.defaultBlockState());
+                level.setBlockAndUpdate(pos, ModBlocks.TEMPORAL_FARMLAND.get().defaultBlockState());
                 player.getItemInHand(hand).hurtAndBreak(1, player, (p) -> p.broadcastBreakEvent(hand));
             }
             return InteractionResult.SUCCESS;

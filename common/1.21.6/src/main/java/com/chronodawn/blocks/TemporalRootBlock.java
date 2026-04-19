@@ -1,6 +1,7 @@
 package com.chronodawn.blocks;
 
 import com.chronodawn.registry.ModItems;
+import com.chronodawn.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -88,7 +89,8 @@ public class TemporalRootBlock extends CropBlock {
     @Override
     protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
         // Allow placement on farmland (for player planting) or grass/dirt (for worldgen)
-        return state.is(net.minecraft.world.level.block.Blocks.FARMLAND) ||
+        return state.is(ModBlocks.TEMPORAL_FARMLAND.get()) ||
+               state.is(net.minecraft.world.level.block.Blocks.FARMLAND) ||
                state.is(net.minecraft.tags.BlockTags.DIRT);
     }
 

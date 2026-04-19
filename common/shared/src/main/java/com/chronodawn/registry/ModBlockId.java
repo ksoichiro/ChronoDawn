@@ -78,6 +78,7 @@ public enum ModBlockId {
     TEMPORAL_DIRT(def("temporal_dirt")),
     TEMPORAL_GRASS_BLOCK(def("temporal_grass_block").cutoutMipped()),
     COARSE_TEMPORAL_DIRT(def("coarse_temporal_dirt")),
+    TEMPORAL_FARMLAND(def("temporal_farmland")),
 
     // Temporal Stone variants
     TEMPORAL_STONE(def("temporal_stone")),

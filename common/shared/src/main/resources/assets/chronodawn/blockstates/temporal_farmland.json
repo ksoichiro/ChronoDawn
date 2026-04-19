@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "moisture=0": { "model": "chronodawn:block/temporal_farmland" },
+    "moisture=1": { "model": "chronodawn:block/temporal_farmland_moist" },
+    "moisture=2": { "model": "chronodawn:block/temporal_farmland_moist" },
+    "moisture=3": { "model": "chronodawn:block/temporal_farmland_moist" },
+    "moisture=4": { "model": "chronodawn:block/temporal_farmland_moist" },
+    "moisture=5": { "model": "chronodawn:block/temporal_farmland_moist" },
+    "moisture=6": { "model": "chronodawn:block/temporal_farmland_moist" },
+    "moisture=7": { "model": "chronodawn:block/temporal_farmland_moist" }
+  }
+}
