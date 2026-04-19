@@ -6,6 +6,7 @@
   "mixins": [
     "AnvilMenuAccessor",
     "AnvilMenuMixin",
+    "ChronoShieldEffectInterceptorMixin",
     "LevelGetTimeMixin",
     "ServerLevelSetTimeMixin",
     "SleepMixin",
