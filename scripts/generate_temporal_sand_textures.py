@@ -30,9 +30,9 @@ def tint(base: tuple[int, int, int], delta: int) -> tuple[int, int, int, int]:
 
 
 def make_sand() -> Image.Image:
-    """Near-white pale-blue, very fine pixel grain."""
+    """Pale blue sand, noticeably bluer than white while still light."""
     rng = random.Random(1001)
-    base = (234, 240, 247)
+    base = (196, 215, 240)
     img = Image.new("RGBA", (16, 16), (*base, 255))
     px = img.load()
     for y in range(16):
@@ -47,32 +47,32 @@ def make_sand() -> Image.Image:
 
 
 def make_gravel() -> Image.Image:
-    """Slightly darker pale-blue with coarse pebble clumps."""
+    """Darker pale-blue with many small 1-2 pixel speckles (no cow-pattern blobs)."""
     rng = random.Random(2002)
-    base = (208, 220, 234)
+    base = (178, 198, 222)
     img = Image.new("RGBA", (16, 16), (*base, 255))
     px = img.load()
-    # Draw ~6 pebbles: 2-3 pixel blobs with varying brightness
-    for _ in range(6):
-        cx = rng.randint(1, 14)
-        cy = rng.randint(1, 14)
-        brightness = rng.randint(-30, 28)
-        radius = rng.choice([1, 1, 2])
+    # Draw ~14 small speckles — mostly 1 pixel, occasional 3-pixel plus-shape
+    for _ in range(14):
+        cx = rng.randint(0, 15)
+        cy = rng.randint(0, 15)
+        brightness = rng.randint(-32, 26)
+        radius = rng.choice([0, 0, 0, 1])
         for dy in range(-radius, radius + 1):
             for dx in range(-radius, radius + 1):
-                if dx * dx + dy * dy > radius * radius:
+                if abs(dx) + abs(dy) > radius:
                     continue
                 nx, ny = cx + dx, cy + dy
                 if 0 <= nx < 16 and 0 <= ny < 16:
-                    px[nx, ny] = tint(base, brightness + rng.randint(-4, 4))
+                    px[nx, ny] = tint(base, brightness + rng.randint(-3, 3))
     # Fine over-noise so the background isn't flat
     for y in range(16):
         for x in range(16):
             r, g, b, a = px[x, y]
             d = rng.randint(-5, 5)
             px[x, y] = (clamp(r + d), clamp(g + d), clamp(b + d), a)
-    # A few very dark pebble cores for contrast
-    for _ in range(4):
+    # A handful of very dark single-pixel cores for sharp contrast
+    for _ in range(5):
         x = rng.randint(0, 15)
         y = rng.randint(0, 15)
         r, g, b, a = px[x, y]
@@ -83,12 +83,12 @@ def make_gravel() -> Image.Image:
 def make_sandstone_side() -> Image.Image:
     """Sand-toned block with two subtle horizontal banding lines."""
     rng = random.Random(3003)
-    base = (236, 239, 244)
+    base = (200, 218, 240)
     img = Image.new("RGBA", (16, 16), (*base, 255))
     px = img.load()
     # Faint horizontal bands at y=4 and y=11
     for y in range(16):
-        band = -8 if y in (4, 11) else 0
+        band = -10 if y in (4, 11) else 0
         for x in range(16):
             d = rng.randint(-4, 4) + band
             px[x, y] = tint(base, d)
@@ -98,14 +98,14 @@ def make_sandstone_side() -> Image.Image:
 def make_sandstone_top() -> Image.Image:
     """Sand-toned block with a slight inset square frame."""
     rng = random.Random(4004)
-    base = (240, 243, 247)
+    base = (210, 225, 244)
     img = Image.new("RGBA", (16, 16), (*base, 255))
     px = img.load()
     for y in range(16):
         for x in range(16):
             edge = x == 0 or y == 0 or x == 15 or y == 15
             inset = x == 2 or y == 2 or x == 13 or y == 13
-            band = -6 if edge else (-4 if inset else 0)
+            band = -8 if edge else (-5 if inset else 0)
             d = rng.randint(-3, 3) + band
             px[x, y] = tint(base, d)
     return img
@@ -114,7 +114,7 @@ def make_sandstone_top() -> Image.Image:
 def make_sandstone_bottom() -> Image.Image:
     """Uniform sand-toned base with subtle noise."""
     rng = random.Random(5005)
-    base = (226, 232, 241)
+    base = (186, 208, 234)
     img = Image.new("RGBA", (16, 16), (*base, 255))
     px = img.load()
     for y in range(16):
