@@ -1,6 +1,7 @@
 {
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
+  "group": "concrete_powder",
   "ingredients": [
     "chronodawn:temporal_sand",
     "chronodawn:temporal_sand",
