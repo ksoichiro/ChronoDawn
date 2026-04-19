@@ -461,6 +461,38 @@ public class EntityEventHandler {
 - Chronicle data is loaded automatically when screen opens
 - No code changes needed for new entries (data-driven)
 
+### 7. Custom Shields
+
+Three tiered ShieldItem subclasses exist per MC version in `common/<ver>/src/main/java/com/chronodawn/items/` (ClockstoneShieldItem, EnhancedClockstoneShieldItem, EntropyCrystalShieldItem).
+
+Shared tier data and effect helpers live in `common/shared/src/main/java/com/chronodawn/items/shield/`:
+- `ChronoShieldTier` — enum with durability, axe-disable window, block-delay seconds, and per-tier effect flags
+- `ChronoShieldMarker` — marker interface so Mixins can `instanceof`-check our shields regardless of subclass
+- `ChronoShieldEffectHandler` — static helpers: `maybeShortenDebuff`, `onBlockSuccess`, `tryGenerateEcho`, `tryConsumeEcho`
+
+The handler has version-specific copies for APIs that diverged:
+- `common/1.21.11/` — uses `Identifier` and new `MobEffects` names (`SLOWNESS`)
+- `common/1.21.{1,2,4}/` — uses `ResourceLocation` and old `MobEffects` names (`MOVEMENT_SLOWDOWN`)
+- `common/1.20.1/` — adds raw `MobEffect` (not `Holder<MobEffect>`) support
+
+Three Mixins per version implement the effects:
+- `ChronoShieldEffectInterceptorMixin` — halves time-themed debuff durations via `LivingEntity.addEffect` `@ModifyVariable` HEAD
+- `ChronoShieldBlockingMixin` — detects block success. 1.21.5+ targets `LivingEntity.applyItemBlocking`; 1.21.4 and earlier target `LivingEntity.hurtCurrentlyUsedShield`
+- `ChronoShieldDamageMixin` — consumes Time Echo on incoming damage. 1.21.2+ targets `Player.hurtServer`; 1.21.1 and 1.20.1 target `Player.hurt`
+
+Player-bound cooldown state lives in `PlayerProgressData` rather than ItemStack NBT to prevent hot-swap exploits and avoid cross-version NBT↔DataComponent divergence:
+- `shieldSpeedCooldownEndTick` — #7 Speed-on-block CD
+- `shieldEchoActiveUntilTick` — #12 Time Echo active window
+- `shieldEchoCooldownEndTick` — #12 Time Echo CD
+
+Effect #1 (3-tick raise) is implemented via `BLOCKS_ATTACKS.block_delay_seconds = 0.15F` on 1.21.5+. Pre-1.21.5 versions fall back to vanilla's 5-tick raise (no data-component equivalent).
+
+Time Echo visuals (particle + sound, 3 stages) use a custom `ChronoShieldEchoParticle`. The particle class has per-era variants: `SingleQuadParticle`-based for 1.21.9+ and `TextureSheetParticle`-based for 1.21.5 - 1.21.8 and 1.20.1.
+
+Design and implementation plan:
+- Design: `docs/superpowers/specs/2026-04-19-chronodawn-custom-shields-design.md`
+- Plan: `docs/superpowers/plans/2026-04-19-chronodawn-custom-shields.md`
+
 ---
 
 ## Adding New Features

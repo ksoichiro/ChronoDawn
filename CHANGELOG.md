@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Crafting recipes: 4 Temporal Sand → Temporal Sandstone; Temporal Sandstone → stairs/slabs/walls (crafting + stonecutting); Temporal Sand → Glass (furnace smelting); Temporal Sand + Gunpowder → TNT; Temporal Sand + Temporal Gravel + Dye → Concrete Powder (all 16 colors)
 - Recipe advancements unlock the above recipes in the recipe book when the player picks up the relevant ingredient (Temporal Sand / Temporal Gravel / Temporal Sandstone)
 
+#### New Items
+- ChronoDawn Custom Shields: three tiered shields (Clockstone, Enhanced Clockstone, Entropy Crystal) with cumulative time-manipulation effects — passive time-debuff shortening, faster raise on 1.21.5+, Speed on successful block (T2+), and Time Echo auto-block (T3). Crafted via a tier upgrade chain with Time Wood plank variants and dimension materials. Independent from the existing Chrono Aegis artifact.
+
 ### Changed
 - Chrono Dawn dimension surface rules now produce Temporal sand/gravel/sandstone; the `sand_disk` / `gravel_disk` configured features place Temporal variants instead of the vanilla blocks
 

@@ -455,7 +455,7 @@ Harvest three unique wood types:
 
 ### Mid-Bosses (Chrono Aegis Materials)
 
-These four bosses must be defeated to craft the **Chrono Aegis** shield, which provides significant advantages against the Time Tyrant.
+These four bosses must be defeated to craft the **Chrono Aegis** activated buff artifact, which provides significant advantages against the Time Tyrant when used before the fight.
 
 #### Chronos Warden
 
@@ -552,7 +552,7 @@ These four bosses must be defeated to craft the **Chrono Aegis** shield, which p
 
 **Requirements**:
 - **Master Clock Key** (from Time Guardian)
-- **Recommended**: **Chrono Aegis** shield (crafted from 4 mid-boss drops)
+- **Recommended**: **Chrono Aegis** activated buff artifact (crafted from 4 mid-boss drops; right-click before the fight)
 
 **Abilities**:
 
@@ -594,7 +594,6 @@ These four bosses must be defeated to craft the **Chrono Aegis** shield, which p
 - **Temporal Shield**: Reduces damage from Temporal Barrage
 - **Time Reversal Disruption**: Boss cannot heal
 - **Clarity**: Immune to negative time effects
-- **Attack Slowdown**: Attackers receive Slowness II while blocking
 - Makes fight significantly easier!
 
 **Phase Transitions**:
@@ -687,6 +686,22 @@ These four bosses must be defeated to craft the **Chrono Aegis** shield, which p
 #### Time Arrow
 - **Use**: Special arrows with time-based effects
 - **Recipe**: Requires Clockstone
+
+### Custom Shields
+
+Chrono Dawn adds three tiered shields suited to the dimension's time-themed threats. All tiers reduce Slowness / Weakness / Mining Fatigue duration by 50% when held in either hand, and on MC 1.21.5+ they raise to block faster than a vanilla shield.
+
+- **Clockstone Shield** (T1): 400 durability.
+- **Enhanced Clockstone Shield** (T2): 600 durability. Adds Speed I for 1 second on each successful block (3-second internal cooldown).
+- **Entropy Crystal Shield** (T3): 800 durability. Adds **Time Echo** — after a successful block, a ghost shield protects you for 5 seconds. If you take a hit during that window (even with the shield lowered), the echo auto-blocks it. 30-second cooldown after the echo is consumed or expires.
+
+T2 and T3 are crafted by placing the previous-tier shield in the center of a 3×3 ring of the appropriate wood and material:
+
+- T1: Time Wood Planks ring + Clockstone
+- T2: Dark Time Wood Planks + Enhanced Clockstone + T1 shield
+- T3: Ancient Time Wood Planks + Entropy Crystal + T2 shield
+
+The custom shields are independent of the existing Chrono Aegis artifact (which remains a right-click buff item for Time Tyrant preparation).
 
 ### Food and Consumables
 
@@ -793,16 +808,14 @@ All ultimate artifacts require **Fragments of Stasis Core** from the Time Tyrant
 - **Special Ability**: **Temporal Echo** - Spawn decoy afterimage when sprinting (attracts enemy aggro for 3 seconds)
 - **Recipe**: 2 Fragments of Stasis Core + 1 Diamond Boots + 2 Enhanced Clockstone
 
-#### Chrono Aegis (Shield)
-- **Durability**: 672
-- **Defense**: Enhanced blocking
-- **Special Abilities** (when facing Time Tyrant):
+#### Chrono Aegis (Activated Buff Artifact)
+- **Use**: Right-click to activate a 10-minute anti-Time-Tyrant buff on yourself and nearby players (not an equipped shield — keep it in your inventory)
+- **Special Abilities** (while the buff is active against Time Tyrant):
   - **Time Stop Resistance**: Reduces Time Freeze duration
   - **Dimensional Anchor**: Prevents forced teleportation
   - **Temporal Shield**: Reduces damage from Temporal Barrage
   - **Time Reversal Disruption**: Boss cannot heal
   - **Clarity**: Immunity to confusion debuffs
-- **Attack Effect**: Apply Slowness II to attackers while blocking
 - **Crafting Materials**:
   - Guardian Stone (from Chronos Warden)
   - Phantom Essence (from Temporal Phantom)
@@ -1038,7 +1051,6 @@ All three wood types have the same variants:
 
 2. **Time Distortion Stacking**
    - Mobs already have Slowness IV in Chrono Dawn
-   - You can apply additional slowness with Chrono Aegis (when blocking)
    - Makes combat trivially easy!
 
 3. **Ultimate Gear Set**
@@ -1046,7 +1058,8 @@ All three wood types have the same variants:
      - Chronoblade (weapon)
      - Time Tyrant Mail (chest)
      - Echoing Time Boots (feet)
-     - Chrono Aegis (offhand)
+     - Entropy Crystal Shield (offhand, T3 custom shield)
+     - Chrono Aegis (inventory — right-click to activate buff before Time Tyrant)
      - Unstable Pocket Watch (inventory)
 
 4. **Decorative Building**

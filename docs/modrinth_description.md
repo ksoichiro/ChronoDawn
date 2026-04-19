@@ -42,8 +42,16 @@ Defeat bosses to craft legendary time-manipulating gear:
 - **Chronoblade**: A sword that can skip enemy attacks
 - **Time Guardian's Mail**: Armor that can rewind time to avoid death
 - **Echo Boots of Time**: Boots that create decoy afterimages
-- **Chrono Aegis**: A shield crafted from 4 mid-boss drops that provides major advantages against Time Tyrant
+- **Chrono Aegis**: An activated buff artifact crafted from 4 mid-boss drops that provides major advantages against Time Tyrant (right-click to activate)
 - **Unstable Pocket Watch**: Swap speed effects with enemies
+
+### 🛡️ ChronoDawn Custom Shields (3 tiers)
+A tiered line of shields that fit the time-themed dimension — independent from the Chrono Aegis artifact:
+- **Clockstone Shield** (T1): 400 durability, base tier
+- **Enhanced Clockstone Shield** (T2): 600 durability, adds Speed I on each successful block
+- **Entropy Crystal Shield** (T3): 800 durability, adds **Time Echo** that auto-blocks the next hit within 5 seconds after a successful block
+- All tiers halve incoming Slowness / Weakness / Mining Fatigue duration while held, and raise to block faster than a vanilla shield on MC 1.21.5+
+- Crafted via an upgrade chain using Time Wood plank variants (Time Wood → Dark Time Wood → Ancient Time Wood)
 
 ### 📖 Chronicle Guidebook
 - **Chronicle of Chrono Dawn**: An in-game guidebook automatically given when entering the dimension
