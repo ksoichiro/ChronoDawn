@@ -20,6 +20,27 @@ public final class ChronoShieldEffectHandler {
         BuiltInRegistries.MOB_EFFECT.getKey(MobEffects.MINING_FATIGUE.value())
     );
 
+    private static final int SPEED_DURATION_TICKS = 20;   // 1 second
+    private static final int SPEED_COOLDOWN_TICKS = 60;   // 3 seconds
+
+    /**
+     * Effect #7 — grant Speed I to the player after a successful block with a T2+ shield.
+     * Internal 3-second cooldown is stored in PlayerProgressData to prevent shield-swap exploits.
+     * No-op for T1 (tier flag gates it).
+     */
+    public static void onBlockSuccess(net.minecraft.server.level.ServerPlayer player, ChronoShieldTier tier) {
+        if (!tier.hasSpeedOnBlock) return;
+        long now = player.level().getGameTime();
+        com.chronodawn.data.PlayerProgressData data =
+            com.chronodawn.data.PlayerProgressData.get((net.minecraft.server.level.ServerLevel) player.level());
+        long cdEnd = data.getShieldSpeedCooldownEnd(player.getUUID());
+        if (now < cdEnd) return;
+        data.setShieldSpeedCooldownEnd(player.getUUID(), now + SPEED_COOLDOWN_TICKS);
+        player.addEffect(new MobEffectInstance(
+            MobEffects.SPEED,
+            SPEED_DURATION_TICKS, 0, false, false, true));
+    }
+
     /**
      * Effect A — halves duration of time-themed debuffs when the entity is holding a ChronoDawn shield
      * in either hand (main-hand or off-hand). Blocking is not required: the trigger is passive so

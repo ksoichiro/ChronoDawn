@@ -33,10 +33,18 @@ public class PlayerProgressData extends ChronoDawnWorldData {
         public Set<UUID> stabilizedPortals;
         public Set<String> defeatedBosses;
 
+        // Shield state
+        public long shieldSpeedCooldownEndTick;   // effect #7
+        public long shieldEchoActiveUntilTick;    // effect #12
+        public long shieldEchoCooldownEndTick;    // effect #12
+
         public PlayerProgress() {
             this.hasChronosEye = false;
             this.stabilizedPortals = new HashSet<>();
             this.defeatedBosses = new HashSet<>();
+            this.shieldSpeedCooldownEndTick = 0L;
+            this.shieldEchoActiveUntilTick = 0L;
+            this.shieldEchoCooldownEndTick = 0L;
         }
     }
 
@@ -87,6 +95,10 @@ public class PlayerProgressData extends ChronoDawnWorldData {
                 progress.defeatedBosses.add(bossList.getString(i));
             }
 
+            progress.shieldSpeedCooldownEndTick = playerTag.getLong("shield_speed_cd");
+            progress.shieldEchoActiveUntilTick = playerTag.getLong("shield_echo_until");
+            progress.shieldEchoCooldownEndTick = playerTag.getLong("shield_echo_cd");
+
             data.playerData.put(playerId, progress);
 
             ChronoDawn.LOGGER.debug("  Loaded player {}: hasChronosEye={}", playerId, progress.hasChronosEye);
@@ -116,6 +128,10 @@ public class PlayerProgressData extends ChronoDawnWorldData {
                 bossList.add(StringTag.valueOf(bossName));
             }
             playerTag.put("defeated_bosses", bossList);
+
+            playerTag.putLong("shield_speed_cd", progress.shieldSpeedCooldownEndTick);
+            playerTag.putLong("shield_echo_until", progress.shieldEchoActiveUntilTick);
+            playerTag.putLong("shield_echo_cd", progress.shieldEchoCooldownEndTick);
 
             playersTag.put(entry.getKey().toString(), playerTag);
         }
@@ -151,6 +167,10 @@ public class PlayerProgressData extends ChronoDawnWorldData {
             for (int i = 0; i < bossList.size(); i++) {
                 progress.defeatedBosses.add(bossList.getString(i));
             }
+
+            progress.shieldSpeedCooldownEndTick = playerTag.getLong("shield_speed_cd");
+            progress.shieldEchoActiveUntilTick = playerTag.getLong("shield_echo_until");
+            progress.shieldEchoCooldownEndTick = playerTag.getLong("shield_echo_cd");
 
             playerData.put(playerId, progress);
         }
@@ -211,6 +231,35 @@ public class PlayerProgressData extends ChronoDawnWorldData {
     public void addDefeatedBoss(UUID playerId, String bossName) {
         PlayerProgress progress = getProgress(playerId);
         progress.defeatedBosses.add(bossName);
+        setDirty();
+    }
+
+    // --- Shield state accessors ---
+
+    public long getShieldSpeedCooldownEnd(java.util.UUID playerId) {
+        return playerData.getOrDefault(playerId, new PlayerProgress()).shieldSpeedCooldownEndTick;
+    }
+
+    public void setShieldSpeedCooldownEnd(java.util.UUID playerId, long endTick) {
+        playerData.computeIfAbsent(playerId, k -> new PlayerProgress()).shieldSpeedCooldownEndTick = endTick;
+        setDirty();
+    }
+
+    public long getShieldEchoActiveUntil(java.util.UUID playerId) {
+        return playerData.getOrDefault(playerId, new PlayerProgress()).shieldEchoActiveUntilTick;
+    }
+
+    public void setShieldEchoActiveUntil(java.util.UUID playerId, long untilTick) {
+        playerData.computeIfAbsent(playerId, k -> new PlayerProgress()).shieldEchoActiveUntilTick = untilTick;
+        setDirty();
+    }
+
+    public long getShieldEchoCooldownEnd(java.util.UUID playerId) {
+        return playerData.getOrDefault(playerId, new PlayerProgress()).shieldEchoCooldownEndTick;
+    }
+
+    public void setShieldEchoCooldownEnd(java.util.UUID playerId, long endTick) {
+        playerData.computeIfAbsent(playerId, k -> new PlayerProgress()).shieldEchoCooldownEndTick = endTick;
         setDirty();
     }
 }
