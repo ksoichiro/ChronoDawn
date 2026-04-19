@@ -38,11 +38,13 @@ All shields share a base effect A. Each higher tier adds one time-manipulation e
 
 ### 3.1 Effect A — Temporal Debuff Resistance (all tiers)
 
-While the player is raising/blocking with a ChronoDawn shield, any newly-applied Slowness, Weakness, or Mining Fatigue effect has its duration reduced by **50%**.
+While a ChronoDawn shield is held in either hand (main-hand or off-hand; blocking not required), any newly-applied Slowness, Weakness, or Mining Fatigue effect has its duration reduced by **50%**.
 
-- Trigger: during block (`LivingEntity.isBlocking` returning true and using one of our shields)
+- Trigger: ChronoDawn shield present in either hand slot (passive)
 - Scope: applies to MobEffect application path
 - Scaling: uniform 50% across all tiers (no per-tier scaling to keep behavior predictable)
+
+**Rationale**: A raised shield already negates direct attacks (including tipped arrows), so a "while blocking" reduction of those effects is mostly redundant. Effect A's practical value is against sources that bypass the shield — splash potions, lingering potion area clouds, mob auras, environmental debuffs. Making the trigger passive (hand-held) lets the shield fulfill its "time guardian" role against these sources without requiring the player to anticipate every unblockable debuff.
 
 ### 3.2 Effect #1 — Faster Raise (T1 onward)
 

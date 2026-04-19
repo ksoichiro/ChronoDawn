@@ -21,11 +21,14 @@ public final class ChronoShieldEffectHandler {
     );
 
     /**
-     * Effect A — halves duration of time-themed debuffs when entity is blocking with a ChronoDawn shield.
-     * Returns the (possibly modified) instance; a new instance is returned when duration changes.
+     * Effect A — halves duration of time-themed debuffs when the entity is holding a ChronoDawn shield
+     * in either hand (main-hand or off-hand). Blocking is not required: the trigger is passive so
+     * that unblockable sources (splash potions, lingering clouds, mob auras, environmental debuffs)
+     * are mitigated too. Returns the (possibly modified) instance; a new instance is returned when
+     * duration changes.
      */
     public static MobEffectInstance maybeShortenDebuff(LivingEntity target, MobEffectInstance incoming) {
-        if (!isBlockingWithChronoShield(target)) return incoming;
+        if (!isHoldingChronoShield(target)) return incoming;
         Holder<MobEffect> holder = incoming.getEffect();
         Identifier id = BuiltInRegistries.MOB_EFFECT.getKey(holder.value());
         if (!SHORTENED_EFFECTS.contains(id)) return incoming;
@@ -33,6 +36,19 @@ public final class ChronoShieldEffectHandler {
         return new MobEffectInstance(holder, halved, incoming.getAmplifier(), incoming.isAmbient(), incoming.isVisible(), incoming.showIcon());
     }
 
+    /**
+     * True when the entity is holding a ChronoDawn shield in either the main hand or off hand.
+     * Used by Effect A (passive debuff shortening).
+     */
+    public static boolean isHoldingChronoShield(LivingEntity entity) {
+        return entity.getMainHandItem().getItem() instanceof ChronoShieldMarker
+            || entity.getOffhandItem().getItem() instanceof ChronoShieldMarker;
+    }
+
+    /**
+     * True when the entity is actively blocking (use-item active) with a ChronoDawn shield.
+     * Retained for effects whose trigger requires the shield to be raised (e.g. Speed on block, Time Echo).
+     */
     public static boolean isBlockingWithChronoShield(LivingEntity entity) {
         if (!entity.isBlocking()) return false;
         ItemStack useItem = entity.getUseItem();
