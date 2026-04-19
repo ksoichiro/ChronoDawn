@@ -38,6 +38,19 @@ sourceSets {
             srcDir '../shared/src/main/java'
             srcDir '../gametest/src/main/java'
         }
+        // Use filter to exclude files from common/shared that have 1.21.4-specific versions.
+        // Era B (1.21.1/1.21.2/1.21.4) uses the OLD MobEffects constant names
+        // (MOVEMENT_SLOWDOWN / DIG_SLOWDOWN / MOVEMENT_SPEED), while the shared
+        // copy uses the newer SLOWNESS / MINING_FATIGUE / SPEED names.
+        java.filter.exclude { element ->
+            if (!element.file.absolutePath.contains('common/shared')) {
+                return false
+            }
+            def excludedFiles = [
+                'ChronoShieldEffectHandler.java'
+            ]
+            return excludedFiles.contains(element.file.name)
+        }
         resources {
             srcDir "${buildDir}/generated/nbt-block-replaced"
             srcDir '../shared-1.21.2+/src/main/resources'
