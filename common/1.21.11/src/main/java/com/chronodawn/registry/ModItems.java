@@ -1943,6 +1943,35 @@ public class ModItems {
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_AMBER_BOOTS.id()))))
     );
 
+    // ========== Shields ==========
+
+    public static final RegistrySupplier<Item> CLOCKSTONE_SHIELD = ITEMS.register(
+        ModItemId.CLOCKSTONE_SHIELD.id(),
+        () -> new com.chronodawn.items.ClockstoneShieldItem(
+            new Item.Properties()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_SHIELD.id())))
+        )
+    );
+
+    public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_SHIELD = ITEMS.register(
+        ModItemId.ENHANCED_CLOCKSTONE_SHIELD.id(),
+        () -> new com.chronodawn.items.EnhancedClockstoneShieldItem(
+            new Item.Properties()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENHANCED_CLOCKSTONE_SHIELD.id())))
+        )
+    );
+
+    public static final RegistrySupplier<Item> ENTROPY_CRYSTAL_SHIELD = ITEMS.register(
+        ModItemId.ENTROPY_CRYSTAL_SHIELD.id(),
+        () -> new com.chronodawn.items.EntropyCrystalShieldItem(
+            new Item.Properties()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENTROPY_CRYSTAL_SHIELD.id())))
+        )
+    );
+
     // === Tools ===
 
     /**
@@ -2765,6 +2794,11 @@ public class ModItems {
         output.accept(TEMPORAL_AMBER_CHESTPLATE.get());
         output.accept(TEMPORAL_AMBER_LEGGINGS.get());
         output.accept(TEMPORAL_AMBER_BOOTS.get());
+
+        // Shields
+        output.accept(CLOCKSTONE_SHIELD.get());
+        output.accept(ENHANCED_CLOCKSTONE_SHIELD.get());
+        output.accept(ENTROPY_CRYSTAL_SHIELD.get());
 
         // === Ultimate Weapons ===
         output.accept(CHRONOBLADE.get());
