@@ -47,36 +47,42 @@ def make_sand() -> Image.Image:
 
 
 def make_gravel() -> Image.Image:
-    """Darker saturated blue with many small 1-2 pixel speckles (no cow-pattern blobs)."""
+    """Darker saturated blue with evenly-distributed small speckles (jittered grid)."""
     rng = random.Random(2002)
     base = (118, 158, 205)
     img = Image.new("RGBA", (16, 16), (*base, 255))
     px = img.load()
-    # Draw ~14 small speckles — mostly 1 pixel, occasional 3-pixel plus-shape
-    for _ in range(14):
-        cx = rng.randint(0, 15)
-        cy = rng.randint(0, 15)
-        brightness = rng.randint(-32, 26)
-        radius = rng.choice([0, 0, 0, 1])
-        for dy in range(-radius, radius + 1):
-            for dx in range(-radius, radius + 1):
-                if abs(dx) + abs(dy) > radius:
-                    continue
-                nx, ny = cx + dx, cy + dy
-                if 0 <= nx < 16 and 0 <= ny < 16:
-                    px[nx, ny] = tint(base, brightness + rng.randint(-3, 3))
+    # Jittered grid: 16 speckles on a 4x4 cell partition (each cell is 4x4 pixels).
+    # One speckle per cell → uniform coverage, no clustering.
+    for cy in range(4):
+        for cx in range(4):
+            x = cx * 4 + rng.randint(0, 3)
+            y = cy * 4 + rng.randint(0, 3)
+            brightness = rng.randint(-32, 26)
+            radius = rng.choice([0, 0, 0, 1])
+            for dy in range(-radius, radius + 1):
+                for dx in range(-radius, radius + 1):
+                    if abs(dx) + abs(dy) > radius:
+                        continue
+                    nx, ny = x + dx, y + dy
+                    if 0 <= nx < 16 and 0 <= ny < 16:
+                        px[nx, ny] = tint(base, brightness + rng.randint(-3, 3))
     # Fine over-noise so the background isn't flat
     for y in range(16):
         for x in range(16):
             r, g, b, a = px[x, y]
             d = rng.randint(-5, 5)
             px[x, y] = (clamp(r + d), clamp(g + d), clamp(b + d), a)
-    # A handful of very dark single-pixel cores for sharp contrast
-    for _ in range(5):
-        x = rng.randint(0, 15)
-        y = rng.randint(0, 15)
-        r, g, b, a = px[x, y]
-        px[x, y] = (clamp(r - 40), clamp(g - 40), clamp(b - 40), a)
+    # Very dark single-pixel cores — also jittered-grid on a 4x4 partition,
+    # ~40% chance per cell, for sparse but even high-contrast specks.
+    for cy in range(4):
+        for cx in range(4):
+            if rng.random() >= 0.4:
+                continue
+            x = cx * 4 + rng.randint(0, 3)
+            y = cy * 4 + rng.randint(0, 3)
+            r, g, b, a = px[x, y]
+            px[x, y] = (clamp(r - 40), clamp(g - 40), clamp(b - 40), a)
     return img
 
 
