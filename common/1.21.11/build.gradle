@@ -76,6 +76,7 @@ sourceSets {
                 // 1.21.11: ResourceLocation renamed to Identifier
                 'AncientTimeWoodTreeFeature.java',
                 'ChronicleData.java',
+                'ChronoShieldEffectHandler.java',
                 'ChronoDawnBiomeProvider.java',
                 'DarkTimeWoodTreeFeature.java',
                 'DimensionStabilizer.java',
