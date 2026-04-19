@@ -197,6 +197,24 @@
     ],
     "subtitle": "subtitles.chronodawn.chrono_aegis_activate"
   },
+  "shield_echo_generate": {
+    "sounds": [
+      "chronodawn:item/shield/echo_generate"
+    ],
+    "subtitle": "subtitles.chronodawn.shield_echo_generate"
+  },
+  "shield_echo_active_pulse": {
+    "sounds": [
+      "chronodawn:item/shield/echo_active_pulse"
+    ],
+    "subtitle": "subtitles.chronodawn.shield_echo_active_pulse"
+  },
+  "shield_echo_consume": {
+    "sounds": [
+      "chronodawn:item/shield/echo_consume"
+    ],
+    "subtitle": "subtitles.chronodawn.shield_echo_consume"
+  },
   "portal_stabilize_spawn": {
     "sounds": [
       {
