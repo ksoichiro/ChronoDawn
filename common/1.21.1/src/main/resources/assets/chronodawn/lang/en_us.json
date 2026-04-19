@@ -233,6 +233,16 @@
   "item.chronodawn.enhanced_clockstone_leggings": "Enhanced Clockstone Leggings",
   "item.chronodawn.enhanced_clockstone_boots": "Enhanced Clockstone Boots",
 
+  "item.chronodawn.clockstone_shield": "Clockstone Shield",
+  "item.chronodawn.clockstone_shield.tooltip.1": "Reduces Slowness/Weakness/Mining Fatigue duration while held",
+  "item.chronodawn.clockstone_shield.tooltip.2": "Raises to block faster than a vanilla shield",
+  "item.chronodawn.enhanced_clockstone_shield": "Enhanced Clockstone Shield",
+  "item.chronodawn.enhanced_clockstone_shield.tooltip.1": "All Clockstone Shield effects",
+  "item.chronodawn.enhanced_clockstone_shield.tooltip.2": "Grants Speed I on a successful block (3s cooldown)",
+  "item.chronodawn.entropy_crystal_shield": "Entropy Crystal Shield",
+  "item.chronodawn.entropy_crystal_shield.tooltip.1": "All Enhanced Clockstone Shield effects",
+  "item.chronodawn.entropy_crystal_shield.tooltip.2": "Time Echo: auto-blocks the next incoming hit within 5s (30s cooldown)",
+
   "item.chronodawn.temporal_amber_helmet": "Temporal Amber Helmet",
   "item.chronodawn.temporal_amber_chestplate": "Temporal Amber Chestplate",
   "item.chronodawn.temporal_amber_leggings": "Temporal Amber Leggings",
