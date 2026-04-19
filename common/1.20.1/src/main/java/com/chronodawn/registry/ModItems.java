@@ -984,6 +984,30 @@ public class ModItems {
         )
     );
 
+    /*
+     * ChronoDawn shield registration (Era C: MC 1.20.1 — oldest supported).
+     *
+     * <p>1.20.1 predates both the {@code BLOCKS_ATTACKS} DataComponent (1.21.5+) and
+     * {@code Item.Properties.setId(...)} (1.21.2+), so the Properties chain is bare —
+     * durability is applied inside the ShieldItem subclass constructor via the
+     * tier enum.</p>
+     */
+
+    public static final RegistrySupplier<Item> CLOCKSTONE_SHIELD = ITEMS.register(
+        ModItemId.CLOCKSTONE_SHIELD.id(),
+        () -> new com.chronodawn.items.ClockstoneShieldItem(new Item.Properties())
+    );
+
+    public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_SHIELD = ITEMS.register(
+        ModItemId.ENHANCED_CLOCKSTONE_SHIELD.id(),
+        () -> new com.chronodawn.items.EnhancedClockstoneShieldItem(new Item.Properties())
+    );
+
+    public static final RegistrySupplier<Item> ENTROPY_CRYSTAL_SHIELD = ITEMS.register(
+        ModItemId.ENTROPY_CRYSTAL_SHIELD.id(),
+        () -> new com.chronodawn.items.EntropyCrystalShieldItem(new Item.Properties())
+    );
+
     // === Portal Items ===
 
     /**
@@ -2371,6 +2395,11 @@ public class ModItems {
 
         // === Ultimate Crafted Items ===
         output.accept(CHRONO_AEGIS.get());
+
+        // === Shields ===
+        output.accept(CLOCKSTONE_SHIELD.get());
+        output.accept(ENHANCED_CLOCKSTONE_SHIELD.get());
+        output.accept(ENTROPY_CRYSTAL_SHIELD.get());
 
         // === Boats ===
         output.accept(TIME_WOOD_BOAT.get());

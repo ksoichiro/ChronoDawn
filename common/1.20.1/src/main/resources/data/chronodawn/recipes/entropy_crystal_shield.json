@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "combat",
+  "pattern": [
+    "WXW",
+    "XTX",
+    "WXW"
+  ],
+  "key": {
+    "W": {
+      "item": "chronodawn:ancient_time_wood_planks"
+    },
+    "X": {
+      "item": "chronodawn:entropy_crystal"
+    },
+    "T": {
+      "item": "chronodawn:enhanced_clockstone_shield"
+    }
+  },
+  "result": {
+    "item": "chronodawn:entropy_crystal_shield",
+    "count": 1
+  }
+}
