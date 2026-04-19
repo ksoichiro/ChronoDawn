@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "chronodawn:temporal_sand",
+    "chronodawn:temporal_sand",
+    "chronodawn:temporal_sand",
+    "chronodawn:temporal_sand",
+    "chronodawn:temporal_gravel",
+    "chronodawn:temporal_gravel",
+    "chronodawn:temporal_gravel",
+    "chronodawn:temporal_gravel",
+    "minecraft:yellow_dye"
+  ],
+  "result": {
+    "id": "minecraft:yellow_concrete_powder",
+    "count": 8
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "chronodawn:temporal_sand",
+    "chronodawn:temporal_sand",
+    "chronodawn:temporal_sand",
+    "chronodawn:temporal_sand",
+    "chronodawn:temporal_gravel",
+    "chronodawn:temporal_gravel",
+    "chronodawn:temporal_gravel",
+    "chronodawn:temporal_gravel",
+    "minecraft:cyan_dye"
+  ],
+  "result": {
+    "id": "minecraft:cyan_concrete_powder",
+    "count": 8
+  }
+}

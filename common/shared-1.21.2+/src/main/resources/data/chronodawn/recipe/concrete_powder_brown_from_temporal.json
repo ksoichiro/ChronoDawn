@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "chronodawn:temporal_sand",
+    "chronodawn:temporal_sand",
+    "chronodawn:temporal_sand",
+    "chronodawn:temporal_sand",
+    "chronodawn:temporal_gravel",
+    "chronodawn:temporal_gravel",
+    "chronodawn:temporal_gravel",
+    "chronodawn:temporal_gravel",
+    "minecraft:brown_dye"
+  ],
+  "result": {
+    "id": "minecraft:brown_concrete_powder",
+    "count": 8
+  }
+}

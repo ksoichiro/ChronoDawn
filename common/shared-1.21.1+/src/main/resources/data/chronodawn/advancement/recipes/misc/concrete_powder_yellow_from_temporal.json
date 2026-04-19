@@ -1,0 +1,47 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_item_sand": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "chronodawn:temporal_sand"
+            ]
+          }
+        ]
+      }
+    },
+    "has_item_gravel": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "chronodawn:temporal_gravel"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "chronodawn:concrete_powder_yellow_from_temporal"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item_sand",
+      "has_item_gravel",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "chronodawn:concrete_powder_yellow_from_temporal"
+    ]
+  }
+}

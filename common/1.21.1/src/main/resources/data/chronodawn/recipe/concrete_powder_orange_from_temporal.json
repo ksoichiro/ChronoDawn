@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "chronodawn:temporal_sand"
+    },
+    {
+      "item": "chronodawn:temporal_sand"
+    },
+    {
+      "item": "chronodawn:temporal_sand"
+    },
+    {
+      "item": "chronodawn:temporal_sand"
+    },
+    {
+      "item": "chronodawn:temporal_gravel"
+    },
+    {
+      "item": "chronodawn:temporal_gravel"
+    },
+    {
+      "item": "chronodawn:temporal_gravel"
+    },
+    {
+      "item": "chronodawn:temporal_gravel"
+    },
+    {
+      "item": "minecraft:orange_dye"
+    }
+  ],
+  "result": {
+    "id": "minecraft:orange_concrete_powder",
+    "count": 8
+  }
+}
