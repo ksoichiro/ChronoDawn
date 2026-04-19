@@ -195,7 +195,7 @@ All hostile mobs in Chrono Dawn receive **Slowness IV**, making them move extrem
 Chrono Dawn contains **9 unique biomes**:
 
 1. **Chrono Dawn Forest** - Dense with Time Wood trees, moderate difficulty
-2. **Chrono Dawn Desert** - Sandy terrain
+2. **Chrono Dawn Desert** - Sandy terrain covered in pale-blue **Temporal Sand** and **Temporal Sandstone**
 3. **Chrono Dawn Mountain** - High peaks and steep cliffs
 4. **Chrono Dawn Ocean** - Deep waters
 5. **Chrono Dawn Snowy** - Frozen landscape with **Frozen Time Ice**
@@ -874,6 +874,12 @@ All three wood types have the same variants:
 #### Frozen Time Ice
 - **Property**: Special ice block unique to Chrono Dawn Snowy biome
 - **Use**: Chrono Dawn-themed ice
+
+#### Temporal Sand / Gravel / Sandstone
+- **Property**: Pale-blue terrain variants generated throughout the Chrono Dawn dimension in place of vanilla `sand`, `red_sand`, `gravel`, `sandstone`, and `red_sandstone`
+- **Compatibility**: Registered under the vanilla `#minecraft:sand`, `#minecraft:gravel`, and `#minecraft:sandstone_blocks` tags, so they work in vanilla recipes (TNT, concrete powder, glass smelting, sandstone crafting)
+- **Drops**: Temporal Sand falls like vanilla sand; Temporal Gravel drops flint with the same Fortune-boosted chances as vanilla gravel
+- **Variants**: Temporal Sandstone + stairs / slabs / walls, craftable from 4 Temporal Sand or via stonecutting
 
 ---
 
