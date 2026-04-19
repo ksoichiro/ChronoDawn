@@ -12,6 +12,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.HoeItem;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -44,9 +45,7 @@ public class CoarseTemporalDirtBlock extends Block {
     }
 
     @Override
-    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hit) {
-        // useItemOn does not exist in this version; check main hand for a hoe
-        net.minecraft.world.item.ItemStack stack = player.getMainHandItem();
+    protected InteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, net.minecraft.world.InteractionHand hand, BlockHitResult hit) {
         if (stack.getItem() instanceof HoeItem) {
             if (!level.isClientSide()) {
                 level.playSound(null, pos, SoundEvents.HOE_TILL, SoundSource.BLOCKS, 1.0f, 1.0f);
@@ -55,6 +54,6 @@ public class CoarseTemporalDirtBlock extends Block {
             }
             return InteractionResult.SUCCESS;
         }
-        return super.useWithoutItem(state, level, pos, player, hit);
+        return super.useItemOn(stack, state, level, pos, player, hand, hit);
     }
 }
