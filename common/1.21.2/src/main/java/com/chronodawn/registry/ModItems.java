@@ -1338,6 +1338,44 @@ public class ModItems {
         )
     );
 
+    // ========== Shields ==========
+
+    /**
+     * ChronoDawn shield registration (Era B: MC 1.21.2 / 1.21.3).
+     *
+     * <p>Era B predates the {@code BLOCKS_ATTACKS} DataComponent (introduced in 1.21.5),
+     * so shields rely on vanilla {@link net.minecraft.world.item.ShieldItem} built-in
+     * blocking semantics with the {@link com.chronodawn.items.shield.ChronoShieldTier}
+     * durability override.</p>
+     */
+
+    public static final RegistrySupplier<Item> CLOCKSTONE_SHIELD = ITEMS.register(
+        ModItemId.CLOCKSTONE_SHIELD.id(),
+        () -> new com.chronodawn.items.ClockstoneShieldItem(
+            new Item.Properties()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_SHIELD.id())))
+        )
+    );
+
+    public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_SHIELD = ITEMS.register(
+        ModItemId.ENHANCED_CLOCKSTONE_SHIELD.id(),
+        () -> new com.chronodawn.items.EnhancedClockstoneShieldItem(
+            new Item.Properties()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENHANCED_CLOCKSTONE_SHIELD.id())))
+        )
+    );
+
+    public static final RegistrySupplier<Item> ENTROPY_CRYSTAL_SHIELD = ITEMS.register(
+        ModItemId.ENTROPY_CRYSTAL_SHIELD.id(),
+        () -> new com.chronodawn.items.EntropyCrystalShieldItem(
+            new Item.Properties()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENTROPY_CRYSTAL_SHIELD.id())))
+        )
+    );
+
     // === Portal Items ===
 
     /**
@@ -2796,6 +2834,11 @@ public class ModItems {
 
         // === Ultimate Crafted Items ===
         output.accept(CHRONO_AEGIS.get());
+
+        // === Shields ===
+        output.accept(CLOCKSTONE_SHIELD.get());
+        output.accept(ENHANCED_CLOCKSTONE_SHIELD.get());
+        output.accept(ENTROPY_CRYSTAL_SHIELD.get());
 
         // === Boats ===
         output.accept(TIME_WOOD_BOAT.get());

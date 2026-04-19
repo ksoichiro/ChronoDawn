@@ -5,6 +5,7 @@ import com.chronodawn.blocks.TemporalGrassBlock;
 import com.chronodawn.entities.boats.ChronoDawnBoatType;
 import com.chronodawn.client.model.*;
 import com.chronodawn.client.particle.ChronoDawnPortalParticle;
+import com.chronodawn.client.particle.ChronoShieldEchoParticle;
 import com.chronodawn.gui.ChronicleScreen;
 import com.chronodawn.gui.data.ChronicleData;
 import com.chronodawn.items.ChronicleBookItem;
@@ -562,6 +563,12 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
         ParticleFactoryRegistry.getInstance().register(
             ModParticles.CHRONO_DAWN_PORTAL.get(),
             ChronoDawnPortalParticle.Provider::new
+        );
+
+        // Register Chrono Shield Echo particle provider (Time Echo visualization)
+        ParticleFactoryRegistry.getInstance().register(
+            ModParticles.CHRONO_SHIELD_ECHO.get(),
+            ChronoShieldEchoParticle.Provider::new
         );
 
         ChronoDawn.LOGGER.debug("Registered particle providers for Fabric");

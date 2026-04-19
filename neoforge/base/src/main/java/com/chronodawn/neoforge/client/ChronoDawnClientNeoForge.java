@@ -11,6 +11,7 @@ import com.chronodawn.entities.boats.ChronoDawnBoatType;
 import com.chronodawn.client.renderer.mobs.*;
 import com.chronodawn.items.TimeCompassItem;
 import com.chronodawn.client.particle.ChronoDawnPortalParticle;
+import com.chronodawn.client.particle.ChronoShieldEchoParticle;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModParticles;
 import com.chronodawn.registry.ModEntities;
@@ -518,6 +519,12 @@ public class ChronoDawnClientNeoForge {
         event.registerSpriteSet(
             ModParticles.CHRONO_DAWN_PORTAL.get(),
             ChronoDawnPortalParticle.Provider::new
+        );
+
+        // Register Chrono Shield Echo particle provider (Time Echo visualization)
+        event.registerSpriteSet(
+            ModParticles.CHRONO_SHIELD_ECHO.get(),
+            ChronoShieldEchoParticle.Provider::new
         );
 
         ChronoDawn.LOGGER.debug("Registered particle providers for NeoForge");
