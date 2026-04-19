@@ -71,6 +71,7 @@ sourceSets {
                 'PlayerEventHandler.java',
                 // 1.21.9: TextureSheetParticle renamed to SingleQuadParticle
                 'ChronoDawnPortalParticle.java',
+                'ChronoShieldEchoParticle.java',
                 // 1.21.9: getSharedSpawnPos() removed
                 'ChronoDawnDimension.java',
                 // 1.21.11: ResourceLocation renamed to Identifier
