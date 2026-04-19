@@ -254,6 +254,11 @@ public enum ModItemId {
     TEMPORAL_AMBER_LEGGINGS("temporal_amber_leggings"),
     TEMPORAL_AMBER_BOOTS("temporal_amber_boots"),
 
+    // === Shields ===
+    CLOCKSTONE_SHIELD("clockstone_shield"),
+    ENHANCED_CLOCKSTONE_SHIELD("enhanced_clockstone_shield"),
+    ENTROPY_CRYSTAL_SHIELD("entropy_crystal_shield"),
+
     // === Artifacts ===
     CHRONOBLADE("chronoblade"),
     TIME_TYRANT_MAIL("time_tyrant_mail"),
