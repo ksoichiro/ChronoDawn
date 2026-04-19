@@ -119,6 +119,10 @@ public class ClockworkSentinelEntity extends Monster {
         if (level.getDifficulty() == net.minecraft.world.Difficulty.PEACEFUL) {
             return false;
         }
+        // Ensure 3 blocks of vertical clearance so the 2-block-tall entity doesn't get stuck
+        if (!level.getBlockState(pos.above(2)).getCollisionShape(level, pos.above(2)).isEmpty()) {
+            return false;
+        }
         // Check if spawn position is valid (solid block below, etc.)
         return Mob.checkMobSpawnRules(entityType, level, spawnType, pos, random);
     }
