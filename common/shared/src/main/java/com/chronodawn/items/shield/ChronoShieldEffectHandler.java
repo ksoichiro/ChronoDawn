@@ -64,7 +64,38 @@ public final class ChronoShieldEffectHandler {
         long activeUntil = data.getShieldEchoActiveUntil(player.getUUID());
         if (now < activeUntil) return;  // already active — don't refresh
         data.setShieldEchoActiveUntil(player.getUUID(), now + ECHO_ACTIVE_TICKS);
-        // Particle / sound emission is Phase 7; intentionally omitted here.
+
+        // Stage 1: ring burst + sound. Guarded so unit tests with mock levels don't
+        // trip on unpopulated registry suppliers or unstubbed mock methods.
+        emitEchoGenerateFx(player);
+    }
+
+    /**
+     * Stage 1 FX — 8-particle ring burst around the player plus a generate sound.
+     * Extracted and guarded so unit tests with mocked ServerLevel / unregistered
+     * ModParticles / ModSounds suppliers don't fail inside the state-only handler.
+     */
+    private static void emitEchoGenerateFx(net.minecraft.server.level.ServerPlayer player) {
+        try {
+            net.minecraft.server.level.ServerLevel level = (net.minecraft.server.level.ServerLevel) player.level();
+            for (int i = 0; i < 8; i++) {
+                double angle = (Math.PI * 2.0 * i) / 8.0;
+                double dx = Math.cos(angle) * 0.8;
+                double dz = Math.sin(angle) * 0.8;
+                level.sendParticles(
+                    com.chronodawn.registry.ModParticles.CHRONO_SHIELD_ECHO.get(),
+                    player.getX() + dx, player.getY() + 1.2, player.getZ() + dz,
+                    1, 0, 0, 0, 0
+                );
+            }
+            level.playSound(
+                null, player.blockPosition(),
+                com.chronodawn.registry.ModSounds.SHIELD_ECHO_GENERATE.get(),
+                net.minecraft.sounds.SoundSource.PLAYERS, 0.7f, 1.2f
+            );
+        } catch (Throwable ignored) {
+            // FX emission is best-effort; state changes above are authoritative.
+        }
     }
 
     /**
@@ -89,7 +120,60 @@ public final class ChronoShieldEffectHandler {
                 break;
             }
         }
+
+        // Stage 3: consumption burst + sound. Guarded against unit-test mocks.
+        emitEchoConsumeFx(player);
         return true;
+    }
+
+    /**
+     * Stage 3 FX — 12-particle outward burst plus a consume sound.
+     * Guarded so unit tests with mocked ServerLevel don't fail on unstubbed
+     * getRandom() / unregistered ModParticles or ModSounds suppliers.
+     */
+    private static void emitEchoConsumeFx(net.minecraft.server.level.ServerPlayer player) {
+        try {
+            net.minecraft.server.level.ServerLevel level = (net.minecraft.server.level.ServerLevel) player.level();
+            net.minecraft.util.RandomSource random = level.getRandom();
+            for (int i = 0; i < 12; i++) {
+                double dx = (random.nextDouble() - 0.5) * 1.5;
+                double dy = random.nextDouble() * 1.0;
+                double dz = (random.nextDouble() - 0.5) * 1.5;
+                level.sendParticles(
+                    com.chronodawn.registry.ModParticles.CHRONO_SHIELD_ECHO.get(),
+                    player.getX() + dx, player.getY() + dy, player.getZ() + dz,
+                    1, 0, 0.05, 0, 0.02
+                );
+            }
+            level.playSound(
+                null, player.blockPosition(),
+                com.chronodawn.registry.ModSounds.SHIELD_ECHO_CONSUME.get(),
+                net.minecraft.sounds.SoundSource.PLAYERS, 0.8f, 0.9f
+            );
+        } catch (Throwable ignored) {
+            // FX emission is best-effort; state changes above are authoritative.
+        }
+    }
+
+    /**
+     * Stage 2 FX — periodic drift particle while an echo is active.
+     * Called from {@link com.chronodawn.events.ChronoShieldTickHandler} once every
+     * 10 ticks for each player whose echo is still active. Guarded against
+     * mocked ServerLevel calls so test scaffolding stays lightweight.
+     */
+    public static void emitEchoActiveDriftFx(net.minecraft.server.level.ServerPlayer player) {
+        try {
+            net.minecraft.server.level.ServerLevel level = (net.minecraft.server.level.ServerLevel) player.level();
+            level.sendParticles(
+                com.chronodawn.registry.ModParticles.CHRONO_SHIELD_ECHO.get(),
+                player.getX(), player.getY() + 1.0, player.getZ(),
+                1,
+                0.3, 0.3, 0.3,   // offset spread
+                0.01             // velocity
+            );
+        } catch (Throwable ignored) {
+            // FX emission is best-effort.
+        }
     }
 
     /**

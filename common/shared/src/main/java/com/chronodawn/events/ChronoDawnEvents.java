@@ -20,6 +20,7 @@ public class ChronoDawnEvents {
         BlockEventHandler.register();
         PlayerEventHandler.register();
         TimeDistortionEventHandler.register();
+        ChronoShieldTickHandler.register();
 
         ChronoDawn.LOGGER.debug("Registered ChronoDawnEvents");
     }
