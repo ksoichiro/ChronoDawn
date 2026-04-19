@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "chronodawn:clockstone_shield",
+    "chronodawn:enhanced_clockstone_shield",
+    "chronodawn:entropy_crystal_shield"
+  ]
+}

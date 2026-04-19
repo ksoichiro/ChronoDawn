@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "combat",
+  "pattern": [
+    "WCW",
+    "WWW",
+    " W "
+  ],
+  "key": {
+    "W": "chronodawn:time_wood_planks",
+    "C": "chronodawn:clockstone"
+  },
+  "result": {
+    "id": "chronodawn:clockstone_shield",
+    "count": 1
+  }
+}

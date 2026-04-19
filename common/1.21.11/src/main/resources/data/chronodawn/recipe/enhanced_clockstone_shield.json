@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "combat",
+  "pattern": [
+    "WEW",
+    "ETE",
+    "WEW"
+  ],
+  "key": {
+    "W": "chronodawn:dark_time_wood_planks",
+    "E": "chronodawn:enhanced_clockstone",
+    "T": "chronodawn:clockstone_shield"
+  },
+  "result": {
+    "id": "chronodawn:enhanced_clockstone_shield",
+    "count": 1
+  }
+}
