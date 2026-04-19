@@ -201,6 +201,16 @@
   "item.chronodawn.temporal_amber_leggings": "Temporal Amber Leggings",
   "item.chronodawn.temporal_amber_boots": "Temporal Amber Boots",
 
+  "item.chronodawn.clockstone_shield": "Clockstone Shield",
+  "item.chronodawn.clockstone_shield.tooltip.1": "Reduces Slowness/Weakness/Mining Fatigue duration while held",
+  "item.chronodawn.clockstone_shield.tooltip.2": "Raises to block faster than a vanilla shield",
+  "item.chronodawn.enhanced_clockstone_shield": "Enhanced Clockstone Shield",
+  "item.chronodawn.enhanced_clockstone_shield.tooltip.1": "All Clockstone Shield effects",
+  "item.chronodawn.enhanced_clockstone_shield.tooltip.2": "Grants Speed I on a successful block (3s cooldown)",
+  "item.chronodawn.entropy_crystal_shield": "Entropy Crystal Shield",
+  "item.chronodawn.entropy_crystal_shield.tooltip.1": "All Enhanced Clockstone Shield effects",
+  "item.chronodawn.entropy_crystal_shield.tooltip.2": "Time Echo: auto-blocks the next incoming hit within 5s (30s cooldown)",
+
   "item.chronodawn.chronoblade": "Chronoblade",
   "item.chronodawn.time_tyrant_mail": "Time Tyrant's Mail",
   "item.chronodawn.echoing_time_boots": "Echoing Time Boots",
@@ -404,6 +414,9 @@
   "subtitles.chronodawn.time_compass_chime": "Time Compass chimes",
   "subtitles.chronodawn.time_compass_update": "Time Compass updates",
   "subtitles.chronodawn.time_compass_break": "Time Compass breaks",
+  "subtitles.chronodawn.shield_echo_generate": "Shield echo forms",
+  "subtitles.chronodawn.shield_echo_active_pulse": "Shield echo hums",
+  "subtitles.chronodawn.shield_echo_consume": "Shield echo shatters",
 
   "tag.item.chronodawn.time_wood_logs": "Time Wood Logs",
   "tag.item.chronodawn.ancient_time_wood_logs": "Ancient Time Wood Logs",

@@ -201,6 +201,16 @@
   "item.chronodawn.temporal_amber_leggings": "時琥珀のレギンス",
   "item.chronodawn.temporal_amber_boots": "時琥珀のブーツ",
 
+  "item.chronodawn.clockstone_shield": "クロックストーンの盾",
+  "item.chronodawn.clockstone_shield.tooltip.1": "所持中に鈍化・弱化・採掘速度低下の効果時間を短縮",
+  "item.chronodawn.clockstone_shield.tooltip.2": "バニラの盾より素早く構えに入る",
+  "item.chronodawn.enhanced_clockstone_shield": "強化クロックストーンの盾",
+  "item.chronodawn.enhanced_clockstone_shield.tooltip.1": "クロックストーンの盾の全効果",
+  "item.chronodawn.enhanced_clockstone_shield.tooltip.2": "ブロック成功時に移動速度上昇I（クールダウン3秒）",
+  "item.chronodawn.entropy_crystal_shield": "エントロピークリスタルの盾",
+  "item.chronodawn.entropy_crystal_shield.tooltip.1": "強化クロックストーンの盾の全効果",
+  "item.chronodawn.entropy_crystal_shield.tooltip.2": "タイムエコー：5秒以内の次の1撃を自動でブロック（クールダウン30秒）",
+
   "item.chronodawn.chronoblade": "クロノブレード",
   "item.chronodawn.time_tyrant_mail": "時間の暴君のメイル",
   "item.chronodawn.echoing_time_boots": "時間の残響ブーツ",
@@ -404,6 +414,9 @@
   "subtitles.chronodawn.time_compass_chime": "タイムコンパスが鳴る",
   "subtitles.chronodawn.time_compass_update": "タイムコンパスが更新",
   "subtitles.chronodawn.time_compass_break": "タイムコンパスが破損",
+  "subtitles.chronodawn.shield_echo_generate": "盾のエコーが形成される",
+  "subtitles.chronodawn.shield_echo_active_pulse": "盾のエコーが響く",
+  "subtitles.chronodawn.shield_echo_consume": "盾のエコーが砕ける",
 
   "tag.item.chronodawn.time_wood_logs": "時の木の原木",
   "tag.item.chronodawn.ancient_time_wood_logs": "古代の時の木の原木",
