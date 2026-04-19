@@ -12,7 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### New Blocks
 - **Temporal Sand**, **Temporal Gravel**, and **Temporal Sandstone** (plus sandstone stairs/slabs/walls) — pale-blue terrain blocks that replace vanilla `sand`/`red_sand`/`gravel`/`sandstone`/`red_sandstone` wherever they generate in the Chrono Dawn dimension
 - Registered under `#minecraft:sand`, `#minecraft:gravel`, and `#minecraft:sandstone_blocks` so tag-based vanilla recipes accept the Temporal variants
-- Crafting recipes: 4 Temporal Sand → Temporal Sandstone; Temporal Sandstone → stairs/slabs/walls (crafting + stonecutting); Temporal Sand → Glass (furnace smelting)
+- Crafting recipes: 4 Temporal Sand → Temporal Sandstone; Temporal Sandstone → stairs/slabs/walls (crafting + stonecutting); Temporal Sand → Glass (furnace smelting); Temporal Sand + Gunpowder → TNT; Temporal Sand + Temporal Gravel + Dye → Concrete Powder (all 16 colors)
+- Recipe advancements unlock the above recipes in the recipe book when the player picks up the relevant ingredient (Temporal Sand / Temporal Gravel / Temporal Sandstone)
 
 ### Changed
 - Chrono Dawn dimension surface rules now produce Temporal sand/gravel/sandstone; the `sand_disk` / `gravel_disk` configured features place Temporal variants instead of the vanilla blocks
