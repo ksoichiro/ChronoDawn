@@ -543,8 +543,20 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
      *
      * Time Compass uses the "angle" property to rotate the needle
      * based on the target structure's position.
+     *
+     * Custom shields register the "blocking" property so the model override
+     * (overrides.predicate.blocking) fires when the player is actively using
+     * the shield. Vanilla only wires this predicate for Items.SHIELD, so
+     * ShieldItem subclasses (ClockstoneShieldItem, EnhancedClockstoneShieldItem,
+     * EntropyCrystalShieldItem) need it registered explicitly here.
      */
     private void registerItemProperties() {
+        // Register blocking predicate for ChronoDawn custom shields
+        // MC 1.21.4+ uses Client Items JSON (minecraft:using_item) and does not need this.
+        registerBlockingProperty(ModItems.CLOCKSTONE_SHIELD.get());
+        registerBlockingProperty(ModItems.ENHANCED_CLOCKSTONE_SHIELD.get());
+        registerBlockingProperty(ModItems.ENTROPY_CRYSTAL_SHIELD.get());
+
         // Register Time Compass angle property
         // This makes the compass needle point towards the target structure
         net.minecraft.client.renderer.item.ItemProperties.register(
@@ -605,6 +617,21 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
 
         // Normalize to 0.0-1.0 range
         return (float) Mth.positiveModulo(compassAngle, 1.0);
+    }
+
+    /**
+     * Register the vanilla-equivalent "blocking" item property for a custom
+     * shield item. Vanilla registers this predicate only for Items.SHIELD, so
+     * ShieldItem subclasses otherwise always resolve blocking=0 and never show
+     * their blocking-pose model variant on pre-1.21.4 versions.
+     */
+    private static void registerBlockingProperty(net.minecraft.world.item.Item item) {
+        net.minecraft.client.renderer.item.ItemProperties.register(
+            item,
+            new ResourceLocation("blocking"),
+            (ItemStack stack, ClientLevel level, LivingEntity entity, int seed) ->
+                entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F
+        );
     }
 
     /**
