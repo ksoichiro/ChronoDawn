@@ -45,7 +45,11 @@ sourceSets {
                 return false
             }
             def excludedFiles = [
-                'ChronoShieldEffectHandler.java'
+                'ChronoShieldEffectHandler.java',
+                // 1.20.1 predates CustomPacketPayload; networking uses Architectury 9.x
+                // FriendlyByteBuf-based API (see common/1.20.1/.../network/).
+                'S2CShieldCooldownPayload.java',
+                'ModNetworking.java'
             ]
             return excludedFiles.contains(element.file.name)
         }

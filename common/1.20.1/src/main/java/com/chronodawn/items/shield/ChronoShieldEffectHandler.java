@@ -59,6 +59,7 @@ public final class ChronoShieldEffectHandler {
                 player.addEffect(new MobEffectInstance(
                     MobEffects.MOVEMENT_SPEED,
                     SPEED_DURATION_TICKS, 0, false, false, true));
+                com.chronodawn.network.ModNetworking.sendShieldSpeedCooldown(player, SPEED_COOLDOWN_TICKS);
             }
         }
 
@@ -128,6 +129,7 @@ public final class ChronoShieldEffectHandler {
         // Consume: clear active window and start cooldown.
         data.setShieldEchoActiveUntil(player.getUUID(), 0L);
         data.setShieldEchoCooldownEnd(player.getUUID(), now + ECHO_COOLDOWN_TICKS);
+        com.chronodawn.network.ModNetworking.sendShieldEchoCooldown(player, ECHO_COOLDOWN_TICKS);
         // Deduct 1 durability from whichever ChronoDawn shield is held.
         // 1.20.1 uses hurtAndBreak(int, LivingEntity, Consumer<LivingEntity>) — the consumer
         // fires the break event for the appropriate equipment slot.

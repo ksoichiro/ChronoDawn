@@ -35,6 +35,7 @@ public class ChronoDawnFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         ChronoDawn.init();
+        com.chronodawn.network.ModNetworking.register();
 
         // Register entity attributes (Fabric-specific)
         registerEntityAttributes();

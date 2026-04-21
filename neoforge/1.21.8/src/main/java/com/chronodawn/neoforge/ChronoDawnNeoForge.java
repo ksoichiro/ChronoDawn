@@ -54,6 +54,7 @@ public class ChronoDawnNeoForge {
         ModFluidTypes.register(modEventBus);
 
         ChronoDawn.init();
+        com.chronodawn.network.ModNetworking.register();
 
         // Register particle types (NeoForge-specific)
         ModParticles.register(modEventBus);

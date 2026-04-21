@@ -43,6 +43,7 @@ public final class ChronoShieldEffectHandler {
                 player.addEffect(new MobEffectInstance(
                     MobEffects.SPEED,
                     SPEED_DURATION_TICKS, 0, false, false, true));
+                com.chronodawn.network.ModNetworking.sendShieldSpeedCooldown(player, SPEED_COOLDOWN_TICKS);
             }
         }
 
@@ -112,6 +113,7 @@ public final class ChronoShieldEffectHandler {
         // Consume: clear active window and start cooldown.
         data.setShieldEchoActiveUntil(player.getUUID(), 0L);
         data.setShieldEchoCooldownEnd(player.getUUID(), now + ECHO_COOLDOWN_TICKS);
+        com.chronodawn.network.ModNetworking.sendShieldEchoCooldown(player, ECHO_COOLDOWN_TICKS);
         // Deduct 1 durability from whichever ChronoDawn shield is held.
         for (net.minecraft.world.InteractionHand hand : net.minecraft.world.InteractionHand.values()) {
             ItemStack stack = player.getItemInHand(hand);
