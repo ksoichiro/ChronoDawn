@@ -110,6 +110,18 @@ Weak copyleft license that requires source code availability for modifications b
 
 **Used by**: JUnit Jupiter
 
+## Bundled Assets
+
+### Sound Effects
+
+Shield Time Echo sound effects sourced from [Pixabay](https://pixabay.com/sound-effects/):
+
+- `assets/chronodawn/sounds/item/shield/echo_generate.ogg`
+- `assets/chronodawn/sounds/item/shield/echo_active_pulse.ogg`
+- `assets/chronodawn/sounds/item/shield/echo_consume.ogg`
+
+All three use the **Pixabay License** (https://pixabay.com/service/license-summary/), which permits commercial use, modification, and redistribution without requiring attribution. The clips have been trimmed and re-encoded to Ogg Vorbis for this project.
+
 ## Notes
 
 - All dependencies are used in compliance with their respective licenses
@@ -127,4 +139,4 @@ For questions about licensing, please contact the project maintainer.
 
 ---
 
-Last updated: 2025-12-26
+Last updated: 2026-04-21
