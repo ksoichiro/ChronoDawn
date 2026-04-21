@@ -55,6 +55,10 @@ public class ChronoDawnNeoForge {
 
         ChronoDawn.init();
 
+        // Single-call S2C registration: registers the payload type always,
+        // and the client receiver only when env is CLIENT.
+        com.chronodawn.network.ModNetworking.register();
+
         // Register particle types (NeoForge-specific)
         ModParticles.register(modEventBus);
 

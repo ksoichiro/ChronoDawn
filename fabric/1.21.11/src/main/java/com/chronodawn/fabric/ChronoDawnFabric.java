@@ -35,6 +35,10 @@ public class ChronoDawnFabric implements ModInitializer {
     public void onInitialize() {
         ChronoDawn.init();
 
+        // Single-call S2C registration: registers the payload type always,
+        // and the client receiver only when env is CLIENT.
+        com.chronodawn.network.ModNetworking.register();
+
         // Register entity attributes (Fabric-specific)
         registerEntityAttributes();
 

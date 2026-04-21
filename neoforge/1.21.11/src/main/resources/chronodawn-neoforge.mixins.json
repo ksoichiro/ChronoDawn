@@ -16,6 +16,7 @@
   ],
   "client": [
     "client.ClientAdvancementsAccessor",
+    "client.GuiGraphicsShieldCdMixin",
     "client.SkyColorMixin"
   ],
   "injectors": {
