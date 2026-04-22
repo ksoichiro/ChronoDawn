@@ -2787,7 +2787,6 @@ public class ModItems {
 
         // === Tier 2 Equipment - Weapons ===
         output.accept(ENHANCED_CLOCKSTONE_SWORD.get());
-        output.accept(ENTROPY_CRYSTAL_SWORD.get());
 
         // === Tier 2 Equipment - Tools ===
         output.accept(ENHANCED_CLOCKSTONE_PICKAXE.get());
@@ -2804,6 +2803,9 @@ public class ModItems {
         output.accept(TEMPORAL_AMBER_CHESTPLATE.get());
         output.accept(TEMPORAL_AMBER_LEGGINGS.get());
         output.accept(TEMPORAL_AMBER_BOOTS.get());
+
+        // === Special Weapons ===
+        output.accept(ENTROPY_CRYSTAL_SWORD.get());
 
         // === Ultimate Weapons ===
         output.accept(CHRONOBLADE.get());
