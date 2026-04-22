@@ -35,7 +35,6 @@ sourceSets {
     main {
         java {
             srcDir 'src/main/java'
-            srcDir '../shared-1.21.5+/src/main/java'
             srcDir '../shared/src/main/java'
             // Exclude common/gametest entirely for 1.21.5 - helper.fail() API changed
             // TODO: Create 1.21.5-specific gametest files or use compatibility layer
@@ -66,9 +65,7 @@ sourceSets {
                 'LevelGetTimeMixin.java',
                 'ServerLevelSetTimeMixin.java',
                 // 1.21.6: player.server became private, serverLevel() removed
-                'PlayerEventHandler.java',
-                // 1.21.5-1.21.10: fill() needs z=200 to render overlay on top of items
-                'GuiGraphicsShieldCdMixin.java'
+                'PlayerEventHandler.java'
             ]
             return excludedFiles.contains(element.file.name)
         }
