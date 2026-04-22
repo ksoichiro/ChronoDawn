@@ -44,7 +44,7 @@ sourceSets {
         // Use filter to exclude files from common/shared that have 1.21.5-specific versions
         // (1.21.5 has its own versions with different APIs)
         java.filter.exclude { element ->
-            if (!element.file.absolutePath.contains('common/shared')) {
+            if (!element.file.absolutePath.contains('common/shared/')) {
                 return false
             }
             // List of files that have 1.21.5-specific versions
