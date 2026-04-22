@@ -7,21 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-
-#### New Blocks
-- **Temporal Sand**, **Temporal Gravel**, and **Temporal Sandstone** (plus sandstone stairs/slabs/walls) — pale-blue terrain blocks that replace vanilla `sand`/`red_sand`/`gravel`/`sandstone`/`red_sandstone` wherever they generate in the Chrono Dawn dimension
-- Registered under `#minecraft:sand`, `#minecraft:gravel`, and `#minecraft:sandstone_blocks` so tag-based vanilla recipes accept the Temporal variants
-- Crafting recipes: 4 Temporal Sand → Temporal Sandstone; Temporal Sandstone → stairs/slabs/walls (crafting + stonecutting); Temporal Sand → Glass (furnace smelting); Temporal Sand + Gunpowder → TNT; Temporal Sand + Temporal Gravel + Dye → Concrete Powder (all 16 colors)
-- Recipe advancements unlock the above recipes in the recipe book when the player picks up the relevant ingredient (Temporal Sand / Temporal Gravel / Temporal Sandstone)
-
-#### New Items
-- ChronoDawn Custom Shields: three tiered shields (Clockstone, Enhanced Clockstone, Entropy Crystal) with cumulative time-manipulation effects — passive time-debuff shortening, faster raise on 1.21.5+, Speed on successful block (T2+), and Time Echo auto-block (T3). Crafted via a tier upgrade chain with Time Wood plank variants and dimension materials. Independent from the existing Chrono Aegis artifact.
-
-### Changed
-- Chrono Dawn dimension surface rules now produce Temporal sand/gravel/sandstone; the `sand_disk` / `gravel_disk` configured features place Temporal variants instead of the vanilla blocks
-
-## [0.7.0] - 2026-04-13
+## [0.7.0] - 2026-04-22
 
 ### Added
 
@@ -31,6 +17,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Temporal ore blocks** (coal, gold, iron, redstone) replacing vanilla ores in ChronoDawn dimension
 - **Entropy Crystal Ore** — new Tier 2 ore found at Y=40-100 in ChronoDawn dimension
 - **Temporal Amber Ore** — new Tier 2 ore found at Y=-30 to +20 in ChronoDawn dimension
+- **Temporal Sand**, **Temporal Gravel**, and **Temporal Sandstone** (plus sandstone stairs/slabs/walls) — pale-blue terrain blocks that replace vanilla `sand`/`red_sand`/`gravel`/`sandstone`/`red_sandstone` wherever they generate in the Chrono Dawn dimension
+- Registered under `#minecraft:sand`, `#minecraft:gravel`, and `#minecraft:sandstone_blocks` so tag-based vanilla recipes accept the Temporal variants
+- Crafting recipes: 4 Temporal Sand → Temporal Sandstone; Temporal Sandstone → stairs/slabs/walls (crafting + stonecutting); Temporal Sand → Glass (furnace smelting); Temporal Sand + Gunpowder → TNT; Temporal Sand + Temporal Gravel + Dye → Concrete Powder (all 16 colors)
+- Recipe advancements unlock the above recipes in the recipe book when the player picks up the relevant ingredient (Temporal Sand / Temporal Gravel / Temporal Sandstone)
 
 #### New Items & Equipment
 - **Entropy Crystal** — material dropped from Entropy Crystal Ore
@@ -38,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Raw Temporal Amber** — material dropped from Temporal Amber Ore
 - **Temporal Amber Dust** — crafting material refined from Raw Temporal Amber
 - **Temporal Amber Armor** (full set) — with auto-repair feature that consumes Temporal Amber Dust when out of combat
+- ChronoDawn Custom Shields: three tiered shields (Clockstone, Enhanced Clockstone, Entropy Crystal) with cumulative time-manipulation effects — passive time-debuff shortening, faster raise on 1.21.5+, Speed on successful block (T2+), and Time Echo auto-block (T3). Crafted via a tier upgrade chain with Time Wood plank variants and dimension materials. Independent from the existing Chrono Aegis artifact.
 
 #### Gameplay Features
 - **Entropy Effect** — new mob effect dealing damage over time, applied by Entropy Crystal Sword
@@ -54,6 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Rebased Time Crystal and Clockstone ore textures onto Temporal Stone base
+- Chrono Dawn dimension surface rules now produce Temporal sand/gravel/sandstone; the `sand_disk` / `gravel_disk` configured features place Temporal variants instead of the vanilla blocks
 
 ### Fixed
 - TimeBlastRenderer crash on 1.21.9+ due to missing setLight in submit() API
