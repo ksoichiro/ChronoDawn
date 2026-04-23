@@ -63,10 +63,12 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.tags.DamageTypeTags;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.BlocksAttacks;
 import net.minecraft.world.item.equipment.ArmorType;
+import net.minecraft.world.item.equipment.Equippable;
 import com.chronodawn.registry.ModItemId;
 import com.chronodawn.registry.ModBlockId;
 import java.util.List;
@@ -1978,6 +1980,8 @@ public class ModItems {
         () -> new com.chronodawn.items.ClockstoneShieldItem(
             new Item.Properties()
                 .component(DataComponents.BLOCKS_ATTACKS, chronoShieldBlocksAttacks(ChronoShieldTier.T1))
+                .component(DataComponents.EQUIPPABLE,
+                    Equippable.builder(EquipmentSlot.OFFHAND).setSwappable(false).build())
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKSTONE_SHIELD.id())))
         )
@@ -1988,6 +1992,8 @@ public class ModItems {
         () -> new com.chronodawn.items.EnhancedClockstoneShieldItem(
             new Item.Properties()
                 .component(DataComponents.BLOCKS_ATTACKS, chronoShieldBlocksAttacks(ChronoShieldTier.T2))
+                .component(DataComponents.EQUIPPABLE,
+                    Equippable.builder(EquipmentSlot.OFFHAND).setSwappable(false).build())
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENHANCED_CLOCKSTONE_SHIELD.id())))
         )
@@ -1998,6 +2004,8 @@ public class ModItems {
         () -> new com.chronodawn.items.EntropyCrystalShieldItem(
             new Item.Properties()
                 .component(DataComponents.BLOCKS_ATTACKS, chronoShieldBlocksAttacks(ChronoShieldTier.T3))
+                .component(DataComponents.EQUIPPABLE,
+                    Equippable.builder(EquipmentSlot.OFFHAND).setSwappable(false).build())
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ENTROPY_CRYSTAL_SHIELD.id())))
         )
