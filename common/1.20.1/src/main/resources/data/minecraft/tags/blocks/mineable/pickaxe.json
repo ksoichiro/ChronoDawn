@@ -55,6 +55,9 @@
     "chronodawn:temporal_sandstone",
     "chronodawn:temporal_sandstone_stairs",
     "chronodawn:temporal_sandstone_slab",
-    "chronodawn:temporal_sandstone_wall"
+    "chronodawn:temporal_sandstone_wall",
+    "chronodawn:temporal_lantern",
+    "chronodawn:dawn_lantern",
+    "chronodawn:dusk_lantern"
   ]
 }

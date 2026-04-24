@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BIB",
+    "BTB",
+    "BIB"
+  ],
+  "key": {
+    "B": [
+      { "item": "chronodawn:purple_time_blossom" },
+      { "item": "chronodawn:orange_time_blossom" },
+      { "item": "chronodawn:pink_time_blossom" }
+    ],
+    "I": { "item": "minecraft:iron_nugget" },
+    "T": { "item": "minecraft:torch" }
+  },
+  "result": {
+    "id": "chronodawn:temporal_lantern",
+    "count": 1
+  }
+}

@@ -109,6 +109,11 @@ import com.chronodawn.blocks.TimelessMushroomBlock;
 import com.chronodawn.blocks.TimeBlossomBlock;
 import com.chronodawn.blocks.DawnBellBlock;
 import com.chronodawn.blocks.DuskBellBlock;
+import com.chronodawn.blocks.TimeTorchBlock;
+import com.chronodawn.blocks.WallTimeTorchBlock;
+import com.chronodawn.blocks.TemporalLanternBlock;
+import com.chronodawn.blocks.DawnLanternBlock;
+import com.chronodawn.blocks.DuskLanternBlock;
 import com.chronodawn.blocks.DeepslateTemporalStoneBlock;
 import com.chronodawn.blocks.CobbledDeepslateTemporalStoneBlock;
 import com.chronodawn.blocks.CobbledDeepslateTemporalStoneStairs;
@@ -867,6 +872,55 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> DUSK_BELL = BLOCKS.register(
         ModBlockId.DUSK_BELL.id(),
         () -> new DuskBellBlock(DuskBellBlock.createProperties())
+    );
+
+    // === Time Torches ===
+
+    public static final RegistrySupplier<Block> PURPLE_TIME_TORCH = BLOCKS.register(
+        ModBlockId.PURPLE_TIME_TORCH.id(),
+        () -> new TimeTorchBlock(net.minecraft.core.particles.ParticleTypes.FLAME, TimeTorchBlock.createProperties("purple_time_torch"))
+    );
+
+    public static final RegistrySupplier<Block> ORANGE_TIME_TORCH = BLOCKS.register(
+        ModBlockId.ORANGE_TIME_TORCH.id(),
+        () -> new TimeTorchBlock(net.minecraft.core.particles.ParticleTypes.FLAME, TimeTorchBlock.createProperties("orange_time_torch"))
+    );
+
+    public static final RegistrySupplier<Block> PINK_TIME_TORCH = BLOCKS.register(
+        ModBlockId.PINK_TIME_TORCH.id(),
+        () -> new TimeTorchBlock(net.minecraft.core.particles.ParticleTypes.FLAME, TimeTorchBlock.createProperties("pink_time_torch"))
+    );
+
+    public static final RegistrySupplier<Block> WALL_PURPLE_TIME_TORCH = BLOCKS.register(
+        ModBlockId.WALL_PURPLE_TIME_TORCH.id(),
+        () -> new WallTimeTorchBlock(net.minecraft.core.particles.ParticleTypes.FLAME, WallTimeTorchBlock.createProperties("wall_purple_time_torch"))
+    );
+
+    public static final RegistrySupplier<Block> WALL_ORANGE_TIME_TORCH = BLOCKS.register(
+        ModBlockId.WALL_ORANGE_TIME_TORCH.id(),
+        () -> new WallTimeTorchBlock(net.minecraft.core.particles.ParticleTypes.FLAME, WallTimeTorchBlock.createProperties("wall_orange_time_torch"))
+    );
+
+    public static final RegistrySupplier<Block> WALL_PINK_TIME_TORCH = BLOCKS.register(
+        ModBlockId.WALL_PINK_TIME_TORCH.id(),
+        () -> new WallTimeTorchBlock(net.minecraft.core.particles.ParticleTypes.FLAME, WallTimeTorchBlock.createProperties("wall_pink_time_torch"))
+    );
+
+    // === Lanterns ===
+
+    public static final RegistrySupplier<Block> TEMPORAL_LANTERN = BLOCKS.register(
+        ModBlockId.TEMPORAL_LANTERN.id(),
+        () -> new TemporalLanternBlock(TemporalLanternBlock.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> DAWN_LANTERN = BLOCKS.register(
+        ModBlockId.DAWN_LANTERN.id(),
+        () -> new DawnLanternBlock(DawnLanternBlock.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> DUSK_LANTERN = BLOCKS.register(
+        ModBlockId.DUSK_LANTERN.id(),
+        () -> new DuskLanternBlock(DuskLanternBlock.createProperties())
     );
 
     /**

@@ -1,0 +1,30 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_dusk_bell": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": ["chronodawn:dusk_bell"]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "chronodawn:dusk_lantern"
+      }
+    }
+  },
+  "rewards": {
+    "recipes": ["chronodawn:dusk_lantern"]
+  },
+  "requirements": [
+    [
+      "has_dusk_bell",
+      "has_the_recipe"
+    ]
+  ]
+}

@@ -894,6 +894,16 @@ All three wood types have the same variants:
 - **Drops**: Temporal Sand falls like vanilla sand; Temporal Gravel drops flint with the same Fortune-boosted chances as vanilla gravel
 - **Variants**: Temporal Sandstone + stairs / slabs / walls, craftable from 4 Temporal Sand or via stonecutting
 
+#### Time Torches
+- **Variants**: Orange, Pink, and Purple Time Torch, each with a matching wall variant that drops the floor version when broken
+- **Recipe**: Matching Time Blossom + Stick → 4 torches (shaped recipe, same layout as vanilla torch)
+- **Use**: Decorative lighting themed after each Time Blossom color
+
+#### Lanterns (Temporal / Dawn / Dusk)
+- **Property**: Pickaxe-mined light sources with the vanilla lantern shape, animated flame, and both standing and hanging placements
+- **Recipe**: Dawn / Dusk Lantern from the matching Bell flower (+ iron nuggets + torch); Temporal Lantern from any Time Blossom (+ iron nuggets + torch)
+- **Use**: Chrono Dawn-themed illumination for bases and paths
+
 ---
 
 ## Tips and Strategies

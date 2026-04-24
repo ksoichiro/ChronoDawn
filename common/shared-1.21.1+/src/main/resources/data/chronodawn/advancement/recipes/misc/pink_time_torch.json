@@ -1,0 +1,30 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_pink_time_blossom": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": ["chronodawn:pink_time_blossom"]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "chronodawn:pink_time_torch"
+      }
+    }
+  },
+  "rewards": {
+    "recipes": ["chronodawn:pink_time_torch"]
+  },
+  "requirements": [
+    [
+      "has_pink_time_blossom",
+      "has_the_recipe"
+    ]
+  ]
+}

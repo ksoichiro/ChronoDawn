@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=east":  { "model": "chronodawn:block/wall_pink_time_torch" },
+    "facing=south": { "model": "chronodawn:block/wall_pink_time_torch", "y": 90 },
+    "facing=west":  { "model": "chronodawn:block/wall_pink_time_torch", "y": 180 },
+    "facing=north": { "model": "chronodawn:block/wall_pink_time_torch", "y": 270 }
+  }
+}

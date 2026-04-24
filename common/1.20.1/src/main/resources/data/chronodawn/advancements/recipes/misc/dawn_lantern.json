@@ -1,0 +1,30 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_dawn_bell": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": ["chronodawn:dawn_bell"]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "chronodawn:dawn_lantern"
+      }
+    }
+  },
+  "rewards": {
+    "recipes": ["chronodawn:dawn_lantern"]
+  },
+  "requirements": [
+    [
+      "has_dawn_bell",
+      "has_the_recipe"
+    ]
+  ]
+}

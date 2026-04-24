@@ -53,6 +53,7 @@ import com.chronodawn.items.UnstableHourglassItem;
 import com.chronodawn.items.quest.AncientGearItem;
 import com.chronodawn.items.tools.SpatiallyLinkedPickaxeItem;
 import com.chronodawn.items.boats.ChronoDawnBoatItem;
+import com.chronodawn.items.TimeTorchItem;
 import com.chronodawn.entities.boats.ChronoDawnBoatType;
 import com.chronodawn.registry.ModFluids;
 import dev.architectury.registry.registries.DeferredRegister;
@@ -1222,6 +1223,41 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.DUSK_BELL.get(), new Item.Properties())
     );
 
+    // === Lighting Items ===
+
+    public static final RegistrySupplier<Item> PURPLE_TIME_TORCH = ITEMS.register(
+        ModItemId.PURPLE_TIME_TORCH.id(),
+        () -> new TimeTorchItem(ModBlocks.PURPLE_TIME_TORCH.get(), ModBlocks.WALL_PURPLE_TIME_TORCH,
+            new Item.Properties())
+    );
+
+    public static final RegistrySupplier<Item> ORANGE_TIME_TORCH = ITEMS.register(
+        ModItemId.ORANGE_TIME_TORCH.id(),
+        () -> new TimeTorchItem(ModBlocks.ORANGE_TIME_TORCH.get(), ModBlocks.WALL_ORANGE_TIME_TORCH,
+            new Item.Properties())
+    );
+
+    public static final RegistrySupplier<Item> PINK_TIME_TORCH = ITEMS.register(
+        ModItemId.PINK_TIME_TORCH.id(),
+        () -> new TimeTorchItem(ModBlocks.PINK_TIME_TORCH.get(), ModBlocks.WALL_PINK_TIME_TORCH,
+            new Item.Properties())
+    );
+
+    public static final RegistrySupplier<Item> TEMPORAL_LANTERN = ITEMS.register(
+        ModItemId.TEMPORAL_LANTERN.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_LANTERN.get(), new Item.Properties())
+    );
+
+    public static final RegistrySupplier<Item> DAWN_LANTERN = ITEMS.register(
+        ModItemId.DAWN_LANTERN.id(),
+        () -> new BlockItem(ModBlocks.DAWN_LANTERN.get(), new Item.Properties())
+    );
+
+    public static final RegistrySupplier<Item> DUSK_LANTERN = ITEMS.register(
+        ModItemId.DUSK_LANTERN.id(),
+        () -> new BlockItem(ModBlocks.DUSK_LANTERN.get(), new Item.Properties())
+    );
+
     /**
      * Temporal Root Stew - Hearty stew combining Baked Temporal Root and Timeless Mushroom.
      * Restores 8 hunger points with Regeneration II for 10 seconds.
@@ -2324,6 +2360,14 @@ public class ModItems {
         output.accept(PINK_TIME_BLOSSOM.get());
         output.accept(DAWN_BELL.get());
         output.accept(DUSK_BELL.get());
+
+        // === Lighting Items ===
+        output.accept(PURPLE_TIME_TORCH.get());
+        output.accept(ORANGE_TIME_TORCH.get());
+        output.accept(PINK_TIME_TORCH.get());
+        output.accept(TEMPORAL_LANTERN.get());
+        output.accept(DAWN_LANTERN.get());
+        output.accept(DUSK_LANTERN.get());
 
         // === Crafted Foods (T215) ===
         output.accept(TEMPORAL_ROOT_STEW.get());

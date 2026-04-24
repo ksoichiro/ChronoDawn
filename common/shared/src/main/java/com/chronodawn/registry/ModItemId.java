@@ -184,6 +184,14 @@ public enum ModItemId {
     DAWN_BELL("dawn_bell"),
     DUSK_BELL("dusk_bell"),
 
+    // Lighting items
+    PURPLE_TIME_TORCH("purple_time_torch"),
+    ORANGE_TIME_TORCH("orange_time_torch"),
+    PINK_TIME_TORCH("pink_time_torch"),
+    TEMPORAL_LANTERN("temporal_lantern"),
+    DAWN_LANTERN("dawn_lantern"),
+    DUSK_LANTERN("dusk_lantern"),
+
     // Structure blocks
     BOSS_ROOM_BOUNDARY_MARKER("boss_room_boundary_marker"),
     BOSS_ROOM_DOOR("boss_room_door"),

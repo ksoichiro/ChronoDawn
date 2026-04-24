@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+#### New Blocks
+- **Time Torches** (Orange / Pink / Purple) — colored decorative torch variants with floor and wall placement. Crafted from the matching Time Blossom + Stick (4 torches per recipe)
+- **Temporal Lantern**, **Dawn Lantern**, and **Dusk Lantern** — pickaxe-mined light sources using the vanilla lantern shape (3D rendering, animated flame, standing and hanging placement). Dawn/Dusk Lantern crafted from the matching Bell flower (+ iron nuggets + torch); Temporal Lantern crafted from any Time Blossom (+ iron nuggets + torch)
+- Recipe advancements unlock the Time Torch / Lantern recipes when the player picks up the relevant Time Blossom or Bell
+
 ## [0.7.0] - 2026-04-22
 
 ### Added

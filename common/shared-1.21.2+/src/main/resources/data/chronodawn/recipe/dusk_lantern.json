@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "BIB",
+    "BTB",
+    "BIB"
+  ],
+  "key": {
+    "B": "chronodawn:dusk_bell",
+    "I": "minecraft:iron_nugget",
+    "T": "minecraft:torch"
+  },
+  "result": {
+    "id": "chronodawn:dusk_lantern",
+    "count": 1
+  }
+}

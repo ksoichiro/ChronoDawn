@@ -191,6 +191,21 @@ public enum ModBlockId {
     DAWN_BELL(def("dawn_bell").cutout()),
     DUSK_BELL(def("dusk_bell").cutout()),
 
+    // Time Torches (floor variants)
+    PURPLE_TIME_TORCH(def("purple_time_torch").cutout()),
+    ORANGE_TIME_TORCH(def("orange_time_torch").cutout()),
+    PINK_TIME_TORCH(def("pink_time_torch").cutout()),
+
+    // Time Torches (wall variants - no separate item)
+    WALL_PURPLE_TIME_TORCH(def("wall_purple_time_torch").cutout()),
+    WALL_ORANGE_TIME_TORCH(def("wall_orange_time_torch").cutout()),
+    WALL_PINK_TIME_TORCH(def("wall_pink_time_torch").cutout()),
+
+    // Lanterns
+    TEMPORAL_LANTERN(def("temporal_lantern")),
+    DAWN_LANTERN(def("dawn_lantern")),
+    DUSK_LANTERN(def("dusk_lantern")),
+
     // Potted plants
     POTTED_TIME_WOOD_SAPLING(def("potted_time_wood_sapling").cutout()),
     POTTED_DARK_TIME_WOOD_SAPLING(def("potted_dark_time_wood_sapling").cutout()),
