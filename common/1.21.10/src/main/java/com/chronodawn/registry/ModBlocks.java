@@ -835,7 +835,7 @@ public class ModBlocks {
      */
     public static final RegistrySupplier<Block> PURPLE_TIME_BLOSSOM = BLOCKS.register(
         ModBlockId.PURPLE_TIME_BLOSSOM.id(),
-        () -> new TimeBlossomBlock(TimeBlossomBlock.createProperties())
+        () -> new TimeBlossomBlock(TimeBlossomBlock.createProperties(ModBlockId.PURPLE_TIME_BLOSSOM.id()))
     );
 
     /**
@@ -845,7 +845,7 @@ public class ModBlocks {
      */
     public static final RegistrySupplier<Block> ORANGE_TIME_BLOSSOM = BLOCKS.register(
         ModBlockId.ORANGE_TIME_BLOSSOM.id(),
-        () -> new TimeBlossomBlock(TimeBlossomBlock.createProperties())
+        () -> new TimeBlossomBlock(TimeBlossomBlock.createProperties(ModBlockId.ORANGE_TIME_BLOSSOM.id()))
     );
 
     /**
@@ -855,7 +855,7 @@ public class ModBlocks {
      */
     public static final RegistrySupplier<Block> PINK_TIME_BLOSSOM = BLOCKS.register(
         ModBlockId.PINK_TIME_BLOSSOM.id(),
-        () -> new TimeBlossomBlock(TimeBlossomBlock.createProperties())
+        () -> new TimeBlossomBlock(TimeBlossomBlock.createProperties(ModBlockId.PINK_TIME_BLOSSOM.id()))
     );
 
     /**

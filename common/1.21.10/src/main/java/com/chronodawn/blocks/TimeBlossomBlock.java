@@ -57,7 +57,7 @@ public class TimeBlossomBlock extends BushBlock {
      * Factory method for creating block properties.
      * Follows the pattern used by other blocks in the mod.
      */
-    public static BlockBehaviour.Properties createProperties() {
+    public static BlockBehaviour.Properties createProperties(String id) {
         return BlockBehaviour.Properties.of()
             .noCollision()
             .noOcclusion()
@@ -66,7 +66,7 @@ public class TimeBlossomBlock extends BushBlock {
             .lightLevel(state -> 3)
             .offsetType(BlockBehaviour.OffsetType.XZ)
                 .setId(ResourceKey.create(Registries.BLOCK,
-                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, "purple_time_blossom")));
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, id)));
     }
 
     @Override
