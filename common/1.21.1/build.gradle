@@ -45,7 +45,9 @@ sourceSets {
                 return false
             }
             def excludedFiles = [
-                'ChronoShieldEffectHandler.java'
+                'ChronoShieldEffectHandler.java',
+                // 1.20.1, 1.21.1-1.21.4: fill() needs z=200 to render overlay on top of items
+                'GuiGraphicsShieldCdMixin.java'
             ]
             return excludedFiles.contains(element.file.name)
         }
