@@ -32,7 +32,7 @@ public class EpochHuskRenderer extends MobRenderer<EpochHuskEntity, EpochHuskRen
     @Override
     public void extractRenderState(EpochHuskEntity entity, EpochHuskRenderState state, float partialTick) {
         super.extractRenderState(entity, state, partialTick);
-        // No additional state extraction needed for basic rendering
+        state.attackTime = entity.getAttackAnim(partialTick);
     }
 
     @Override

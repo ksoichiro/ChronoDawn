@@ -7,5 +7,5 @@ import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
  * Stores rendering-specific data extracted from EpochHuskEntity.
  */
 public class EpochHuskRenderState extends LivingEntityRenderState {
-    // No additional state needed for basic zombie-like rendering
+    public float attackTime;
 }

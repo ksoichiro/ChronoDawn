@@ -101,6 +101,16 @@ public class EpochHuskModel extends EntityModel<EpochHuskRenderState> {
         this.right_arm2.xRot = rightArmRot;
         this.left_arm.xRot = leftArmRot;
         this.left_arm2.xRot = leftArmRot;
+
+        // Attack animation - raise both arms forward when attacking (zombie-style)
+        if (state.attackTime > 0.0F) {
+            float armRaise = Mth.sin(state.attackTime * (float)Math.PI);
+            float armRot = -(float)Math.PI / 2.0F * armRaise;
+            this.right_arm.xRot = armRot;
+            this.right_arm2.xRot = armRot;
+            this.left_arm.xRot = armRot;
+            this.left_arm2.xRot = armRot;
+        }
     }
 
     // Note: renderToBuffer() is now final in 1.21.2 and automatically renders all child parts.
