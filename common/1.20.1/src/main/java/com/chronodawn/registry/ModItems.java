@@ -782,6 +782,24 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.POLISHED_DEEPSLATE_TEMPORAL_STONE_WALL.get(), new Item.Properties())
     );
 
+    // Temporal Stalactite / Stalagmite (cave decoration)
+    public static final RegistrySupplier<Item> TEMPORAL_STALACTITE_TIP = ITEMS.register(
+        ModItemId.TEMPORAL_STALACTITE_TIP.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_STALACTITE_TIP.get(), new Item.Properties())
+    );
+    public static final RegistrySupplier<Item> TEMPORAL_STALACTITE_FRUSTUM = ITEMS.register(
+        ModItemId.TEMPORAL_STALACTITE_FRUSTUM.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_STALACTITE_FRUSTUM.get(), new Item.Properties())
+    );
+    public static final RegistrySupplier<Item> TEMPORAL_STALAGMITE_TIP = ITEMS.register(
+        ModItemId.TEMPORAL_STALAGMITE_TIP.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_STALAGMITE_TIP.get(), new Item.Properties())
+    );
+    public static final RegistrySupplier<Item> TEMPORAL_STALAGMITE_FRUSTUM = ITEMS.register(
+        ModItemId.TEMPORAL_STALAGMITE_FRUSTUM.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_STALAGMITE_FRUSTUM.get(), new Item.Properties())
+    );
+
     /**
      * Frozen Time Ice - Special ice block exclusive to snowy biome.
      */
@@ -2335,6 +2353,10 @@ public class ModItems {
         output.accept(POLISHED_DEEPSLATE_TEMPORAL_STONE_STAIRS.get());
         output.accept(POLISHED_DEEPSLATE_TEMPORAL_STONE_SLAB.get());
         output.accept(POLISHED_DEEPSLATE_TEMPORAL_STONE_WALL.get());
+        output.accept(TEMPORAL_STALACTITE_TIP.get());
+        output.accept(TEMPORAL_STALACTITE_FRUSTUM.get());
+        output.accept(TEMPORAL_STALAGMITE_TIP.get());
+        output.accept(TEMPORAL_STALAGMITE_FRUSTUM.get());
         output.accept(FROZEN_TIME_ICE.get());
         // Note: TEMPORAL_PARTICLE_EMITTER is not added to creative tab (structure-only block)
 
