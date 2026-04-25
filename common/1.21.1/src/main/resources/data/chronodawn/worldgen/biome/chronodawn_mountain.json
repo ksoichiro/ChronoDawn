@@ -113,7 +113,11 @@
       "chronodawn:ore_clockstone",
       "chronodawn:ore_iron"
     ],
-    [],
+    [
+      "chronodawn:temporal_stalactite_cluster",
+      "chronodawn:temporal_stalagmite_cluster",
+      "chronodawn:temporal_pointed_single"
+    ],
     [],
     [
       "chronodawn:fruit_of_time_tree",
