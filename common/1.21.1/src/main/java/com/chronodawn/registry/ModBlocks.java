@@ -44,6 +44,10 @@ import com.chronodawn.blocks.TemporalStoneBricksSlab;
 import com.chronodawn.blocks.TemporalStoneBricksWall;
 import com.chronodawn.blocks.TemporalStoneButton;
 import com.chronodawn.blocks.TemporalStonePressurePlate;
+import com.chronodawn.blocks.TemporalStalactiteTipBlock;
+import com.chronodawn.blocks.TemporalStalactiteFrustumBlock;
+import com.chronodawn.blocks.TemporalStalagmiteTipBlock;
+import com.chronodawn.blocks.TemporalStalagmiteFrustumBlock;
 import com.chronodawn.blocks.TemporalSand;
 import com.chronodawn.blocks.TemporalGravel;
 import com.chronodawn.blocks.TemporalSandstone;
@@ -640,6 +644,24 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> POLISHED_DEEPSLATE_TEMPORAL_STONE_WALL = BLOCKS.register(
         ModBlockId.POLISHED_DEEPSLATE_TEMPORAL_STONE_WALL.id(),
         () -> new PolishedDeepslateTemporalStoneWall(PolishedDeepslateTemporalStoneWall.createProperties())
+    );
+
+    // Temporal Stalactite / Stalagmite (cave decoration)
+    public static final RegistrySupplier<Block> TEMPORAL_STALACTITE_TIP = BLOCKS.register(
+        ModBlockId.TEMPORAL_STALACTITE_TIP.id(),
+        () -> new TemporalStalactiteTipBlock(TemporalStalactiteTipBlock.createProperties())
+    );
+    public static final RegistrySupplier<Block> TEMPORAL_STALACTITE_FRUSTUM = BLOCKS.register(
+        ModBlockId.TEMPORAL_STALACTITE_FRUSTUM.id(),
+        () -> new TemporalStalactiteFrustumBlock(TemporalStalactiteFrustumBlock.createProperties())
+    );
+    public static final RegistrySupplier<Block> TEMPORAL_STALAGMITE_TIP = BLOCKS.register(
+        ModBlockId.TEMPORAL_STALAGMITE_TIP.id(),
+        () -> new TemporalStalagmiteTipBlock(TemporalStalagmiteTipBlock.createProperties())
+    );
+    public static final RegistrySupplier<Block> TEMPORAL_STALAGMITE_FRUSTUM = BLOCKS.register(
+        ModBlockId.TEMPORAL_STALAGMITE_FRUSTUM.id(),
+        () -> new TemporalStalagmiteFrustumBlock(TemporalStalagmiteFrustumBlock.createProperties())
     );
 
     public static final RegistrySupplier<Block> TEMPORAL_COBBLESTONE_STAIRS = BLOCKS.register(
