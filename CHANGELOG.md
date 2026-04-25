@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Time Torches** (Orange / Pink / Purple) — colored decorative torch variants with floor and wall placement. Crafted from the matching Time Blossom + Stick (4 torches per recipe)
 - **Temporal Lantern**, **Dawn Lantern**, and **Dusk Lantern** — pickaxe-mined light sources using the vanilla lantern shape (3D rendering, animated flame, standing and hanging placement). Dawn/Dusk Lantern crafted from the matching Bell flower (+ iron nuggets + torch); Temporal Lantern crafted from any Time Blossom (+ iron nuggets + torch)
 - Recipe advancements unlock the Time Torch / Lantern recipes when the player picks up the relevant Time Blossom or Bell
+- **Temporal Stalactites** and **Temporal Stalagmites** — decorative pointed cave blocks themed on Temporal Stone, generating across all ChronoDawn dimension biomes. Two sizes per direction (`tip` and `frustum`) form length-1 and length-2 formations on cave ceilings (stalactite) and floors (stalagmite). Pickaxe-mined at stone tier; `tip` blocks self-drop while `frustum` drops the matching `tip` so worldgen-only formations still produce a usable item when broken. Vanilla `pointed_dripstone` and Dripstone Caves remain untouched
 
 ## [0.7.0] - 2026-04-22
 

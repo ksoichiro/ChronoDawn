@@ -230,6 +230,12 @@ Harvest three unique wood types:
 - Ancient variant of Time Wood
 - Same full block set as Time Wood
 
+### Cave Decoration
+
+Caves throughout the Chrono Dawn dimension contain **Temporal Stalactites** and **Temporal Stalagmites** — decorative pointed blocks themed on Temporal Stone. Stalactites hang from cave ceilings, stalagmites rise from cave floors. Both come in two sizes (`tip` and `frustum`); worldgen may place a single tip or stack a frustum + tip pair for a length-2 formation. Mine with a stone-tier (or higher) pickaxe — `tip` blocks self-drop, `frustum` blocks drop the matching tip so you always pick up something usable.
+
+These blocks generate exclusively in the Chrono Dawn dimension; vanilla `pointed_dripstone` and Dripstone Caves are unaffected.
+
 ---
 
 ## Structures and Exploration
