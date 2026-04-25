@@ -150,7 +150,11 @@
       "chronodawn:ore_iron",
       "chronodawn:clockwork_block_cluster"
     ],
-    [],
+    [
+      "chronodawn:temporal_stalactite_cluster",
+      "chronodawn:temporal_stalagmite_cluster",
+      "chronodawn:temporal_pointed_single"
+    ],
     [],
     [
       "chronodawn:dark_time_wood_tree_dense",
