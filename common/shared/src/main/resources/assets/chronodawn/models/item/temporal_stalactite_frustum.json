@@ -1,3 +1,6 @@
 {
-  "parent": "chronodawn:block/temporal_stalactite_frustum"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "chronodawn:block/temporal_stalactite_frustum"
+  }
 }
