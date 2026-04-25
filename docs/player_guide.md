@@ -27,7 +27,7 @@ Welcome to **Chrono Dawn**, a mysterious dimension where time stands still! This
 ### What is Chrono Dawn?
 
 Chrono Dawn is a time-themed dimension mod that adds:
-- A new dimension with **9 unique biomes**
+- A new dimension with **10 unique biomes**
 - Multiple **challenging boss fights**
 - **Time-manipulating items** and equipment
 - **Custom portal mechanics**
@@ -192,17 +192,18 @@ All hostile mobs in Chrono Dawn receive **Slowness IV**, making them move extrem
 
 ### Biomes
 
-Chrono Dawn contains **9 unique biomes**:
+Chrono Dawn contains **10 unique biomes**:
 
 1. **Chrono Dawn Forest** - Dense with Time Wood trees, moderate difficulty
-2. **Chrono Dawn Desert** - Sandy terrain covered in pale-blue **Temporal Sand** and **Temporal Sandstone**
-3. **Chrono Dawn Mountain** - High peaks and steep cliffs
-4. **Chrono Dawn Ocean** - Deep waters
-5. **Chrono Dawn Snowy** - Frozen landscape with **Frozen Time Ice**
-6. **Chrono Dawn Swamp** - Murky waters and unique vegetation
-7. **Chrono Dawn Dark Forest** - Dense with **Dark Time Wood** trees
-8. **Chrono Dawn Ancient Forest** - Contains **Ancient Time Wood** trees
-9. **Chrono Dawn Prairies** - Open grasslands
+2. **Chrono Dawn Plains** - Open flatlands with scattered Time Wood trees
+3. **Chrono Dawn Desert** - Sandy terrain covered in pale-blue **Temporal Sand** and **Temporal Sandstone**
+4. **Chrono Dawn Mountain** - High peaks and steep cliffs
+5. **Chrono Dawn Ocean** - Deep waters
+6. **Chrono Dawn Snowy** - Frozen landscape with **Frozen Time Ice**
+7. **Chrono Dawn Swamp** - Murky waters and unique vegetation
+8. **Chrono Dawn Dark Forest** - Dense with **Dark Time Wood** trees
+9. **Chrono Dawn Ancient Forest** - Contains **Ancient Time Wood** trees
+10. **Chrono Dawn Prairies** - Open grasslands
 
 ### Sky and Atmosphere
 

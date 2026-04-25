@@ -50,7 +50,7 @@ This reduces file size by ~60-65% while maintaining visual quality.
 5. **05-time-guardian-battle.png** - Time Guardian boss battle
 6. **06-temporal-phantom.png** - Temporal Phantom in Phantom Catacombs
 7. **07-time-tyrant-battle.png** - Time Tyrant boss in Master Clock dungeon
-8. **08-ultimate-artifacts.png** - Ultimate artifacts showcase (Chronoblade, Time Guardian's Mail equipped)
+8. **08-ultimate-artifacts.png** - Ultimate artifacts showcase (Chronoblade, Time Tyrant's Mail equipped)
 
 ### Priority 2: Supplementary Screenshots (Optional)
 

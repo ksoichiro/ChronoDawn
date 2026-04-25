@@ -8,17 +8,20 @@ A multi-loader Minecraft mod that adds a mysterious time-themed dimension called
 
 *More screenshots available on [CurseForge](https://www.curseforge.com/minecraft/mc-mods/chrono-dawn) and [Modrinth](https://modrinth.com/mod/chrono-dawn)*
 
-## ⚠️ Important Notice for v0.3.0
+<details>
+<summary>⚠️ Save compatibility (v0.2.0 → v0.3.0+ breaking change)</summary>
 
-**This version is NOT compatible with worlds created in v0.2.0 or earlier.**
+**Worlds created in v0.2.0 or earlier are NOT compatible with v0.3.0+ (including the current release).**
 
-Breaking changes in this release:
-- **Portal System Rewrite**: Existing portals will not function. You must break and rebuild them using Time Hourglass.
-- **Save Data Changes**: Boss defeat progress may be reset.
+Breaking changes were introduced in v0.3.0:
+- **Portal System Rewrite**: Pre-v0.3.0 portals will not function. You must break and rebuild them using Time Hourglass.
+- **Save Data Changes**: Boss defeat progress tracked by the legacy Eye of Chronos format may be reset.
 
-**Recommendation**: Back up your world before updating, or start a new world for v0.3.0.
+**Recommendation**: Back up your world before updating, or start a new world. No further breaking changes have been introduced since v0.3.0.
 
 See [CHANGELOG.md](CHANGELOG.md) for detailed information.
+
+</details>
 
 ## Features
 
@@ -26,13 +29,14 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed information.
 - **Custom Dimension**: Explore Chrono Dawn, a dimension frozen in perpetual twilight
 - **Portal System**: One-way portal travel using Time Hourglass, upgradeable to bidirectional with Portal Stabilizer
 - **Time Distortion**: Hostile mobs move slower in Chrono Dawn dimension
-- **9 Unique Biomes**: Forest, Desert, Mountain, Ocean, Snowy, Swamp, Dark Forest, Ancient Forest, and Prairies
+- **10 Unique Biomes**: Forest, Plains, Desert, Mountain, Ocean, Snowy, Swamp, Dark Forest, Ancient Forest, and Prairies
 
 ### Content
-- **Custom Wood Type**: Time Wood trees with full block set (logs, planks, stairs, slabs, doors, etc.)
+- **Custom Wood Types**: Time Wood, Dark Time Wood, and Ancient Time Wood — each with a full block set (logs, planks, stairs, slabs, doors, trapdoors, fences, buttons, pressure plates, saplings)
 - **Major Structures**:
   - Ancient Ruins (Overworld spawn)
   - Forgotten Library (Chrono Dawn)
+  - Desert Clock Tower (Time Guardian mini-boss; source of Enhanced Clockstone)
   - Guardian Vault (Chronos Warden boss)
   - Clockwork Depths (Clockwork Colossus boss)
   - Phantom Catacombs (Temporal Phantom boss)
@@ -44,8 +48,15 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed information.
   - Clockwork Colossus (mid-boss, drops Colossus Gear)
   - Temporal Phantom (mid-boss, drops Phantom Essence)
   - Entropy Keeper (mid-boss, drops Entropy Core)
-  - Time Tyrant (final boss)
-- **Ultimate Artifacts**: Chronoblade (sword), Time Guardian's Mail (armor), Chrono Aegis (shield)
+  - Time Tyrant (final boss, drops Fragments of Stasis Core)
+- **Ultimate Artifacts**:
+  - Chronoblade (sword) — chance to skip the next enemy attack
+  - Time Tyrant's Mail (chestplate) — chance to rewind time on fatal damage
+  - Echoing Time Boots — spawn a decoy afterimage when sprinting
+  - Unstable Pocket Watch — swap speed effects with enemies
+  - Chrono Aegis — right-click activated buff artifact (10-minute anti-Time-Tyrant buff for the wielder and nearby allies)
+- **ChronoDawn Custom Shields**: Three tiered shields (Clockstone → Enhanced Clockstone → Entropy Crystal) with cumulative time-themed effects (passive debuff shortening, faster raise on 1.21.5+, Speed on block at T2+, Time Echo auto-block at T3)
+- **Chronicle of Chrono Dawn**: In-game guidebook auto-given when entering the dimension, covering biomes, structures, bosses, items, and progression
 
 ### Technical Features
 - **Multi-Loader Architecture**: Supports both Fabric and NeoForge loaders
@@ -308,8 +319,6 @@ gradlew.bat test
    - [ ] Defeat Time Tyrant final boss
 
 ## Installing Pre-built JAR
-
-**⚠️ Important**: Version 0.3.0 is NOT compatible with v0.2.0 worlds. Back up your world or start a new one.
 
 ### For Fabric (Minecraft 1.21.2)
 1. Install Minecraft 1.21.2

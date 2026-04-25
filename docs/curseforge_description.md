@@ -13,7 +13,7 @@ Chrono Dawn adds a brand new dimension to Minecraft, filled with unique biomes, 
 ## ✨ Features
 
 ### 🌍 New Dimension: Chrono Dawn
-- **9 Unique Biomes**: Forest, Desert, Mountain, Ocean, Snowy, Swamp, Dark Forest, Ancient Forest, and Prairies
+- **10 Unique Biomes**: Forest, Plains, Desert, Mountain, Ocean, Snowy, Swamp, Dark Forest, Ancient Forest, and Prairies
 - **Perpetual Twilight**: A dimension frozen in time with stunning orange-gold skies
 - **Time Distortion Effect**: Hostile mobs move in slow motion while you move at normal speed
 - **Custom Portal System**: One-way portal travel that can be upgraded to bidirectional
@@ -40,8 +40,8 @@ Chrono Dawn adds a brand new dimension to Minecraft, filled with unique biomes, 
 ### ⚔️ Ultimate Artifacts
 Defeat bosses to craft legendary time-manipulating gear:
 - **Chronoblade**: A sword that can skip enemy attacks
-- **Time Guardian's Mail**: Armor that can rewind time to avoid death
-- **Echo Boots of Time**: Boots that create decoy afterimages
+- **Time Tyrant's Mail**: Chestplate that can rewind time to avoid fatal damage
+- **Echoing Time Boots**: Boots that create decoy afterimages when sprinting
 - **Chrono Aegis**: An activated buff artifact crafted from 4 mid-boss drops that provides major advantages against Time Tyrant (right-click to activate)
 - **Unstable Pocket Watch**: Swap speed effects with enemies
 
@@ -117,8 +117,8 @@ Craft the **Portal Stabilizer** using **Enhanced Clockstone** from the **Desert 
 - Defeat **Entropy Keeper** in the Entropy Crypt to obtain **Entropy Core**
 
 ### Step 6: Craft Chrono Aegis
-- Use the 4 mid-boss drops to craft **Chrono Aegis**, a powerful shield
-- Chrono Aegis provides significant advantages against the Time Tyrant final boss
+- Use the 4 mid-boss drops to craft **Chrono Aegis**, an activated buff artifact (right-click to activate)
+- Chrono Aegis provides significant advantages against the Time Tyrant final boss for 10 minutes
 
 ### Step 7: Conquer the Final Boss
 - Defeat the **Time Guardian** mini-boss to obtain the Master Clock Key
