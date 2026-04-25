@@ -127,7 +127,7 @@ ChronoDawn dimension only — all biomes. Underground cave layers are shared
 across the dimension regardless of surface biome, so visual variety should
 not depend on which biome is overhead.
 
-The dimension defines 10 biomes (1.20.1 through 1.21.10):
+The dimension defines 10 biomes across all supported versions:
 
 - `chronodawn:chronodawn_ancient_forest`
 - `chronodawn:chronodawn_dark_forest`
@@ -139,9 +139,6 @@ The dimension defines 10 biomes (1.20.1 through 1.21.10):
 - `chronodawn:chronodawn_prairies`
 - `chronodawn:chronodawn_snowy`
 - `chronodawn:chronodawn_swamp`
-
-1.21.11 drops `chronodawn:chronodawn_prairies`, so its biome list contains 9
-entries. All other biomes carry over.
 
 Per `feedback_biome_ore_features_checklist.md`, missing a biome silently
 breaks generation in chunks under that biome with no log output, so the
@@ -272,11 +269,12 @@ overrides:
   these — implementation plan resolves which file is canonical)
 - `common/shared-1.21.2+/.../worldgen/biome/chronodawn_*.json` — 10 biomes
   (covers 1.21.4 through 1.21.10)
-- `common/1.21.11/.../worldgen/biome/chronodawn_*.json` — 9 biomes (per
+- `common/1.21.11/.../worldgen/biome/chronodawn_*.json` — 10 biomes (per
   `feedback_1_21_11_biome_overrides.md` — 1.21.11 has its own biome JSON
-  dir; `chronodawn_prairies` is absent in this version)
+  dir; `chronodawn_prairies` was added back in commit d873fd4e so the count
+  matches the other versions)
 
-Total: 10 + 10 + 10 + 10 + 9 = 49 biome JSON files touched.
+Total: 10 × 5 = 50 biome JSON files touched.
 
 ## Multi-Version Considerations
 

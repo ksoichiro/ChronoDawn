@@ -12,10 +12,9 @@ across all 11 supported Minecraft versions.
 hardcoded VoxelShape and the same hardness/tool requirements as
 `TemporalStoneBlock`. `frustum` blocks drop the matching `tip` so worldgen
 can place length-2 formations without producing awkward standalone-frustum
-inventory items. Worldgen uses three configured features (stalactite cluster,
-stalagmite cluster, single tip) wrapped in one placed feature, added to the
-`UNDERGROUND_DECORATION` step of all ChronoDawn biomes (10 biomes for 1.20.1
-through 1.21.10, 9 biomes for 1.21.11).
+inventory items. Worldgen uses three configured + three placed features
+added to the `UNDERGROUND_DECORATION` step of all 10 ChronoDawn biomes in
+each supported version.
 
 **Tech Stack:** Java 21, NeoForge / Fabric via Architectury 13.x–19.x,
 Mojang mappings, Mixin (not used here), per-version source modules under
@@ -99,13 +98,13 @@ Worldgen (6):
 - `common/shared-1.21.1+/src/main/resources/data/minecraft/tags/block/mineable/pickaxe.json`
 - `common/shared-1.21.1+/src/main/resources/data/minecraft/tags/block/needs_stone_tool.json`
 
-### Modified — biome JSON files (49 total)
+### Modified — biome JSON files (50 total)
 
 - 10 biomes × `common/1.20.1/.../worldgen/biome/`
 - 10 biomes × `common/1.21.1/.../worldgen/biome/`
 - 10 biomes × `common/1.21.2/.../worldgen/biome/` (per-version, music format pre-1.21.4)
 - 10 biomes × `common/shared-1.21.2+/.../worldgen/biome/` (covers 1.21.4–1.21.10)
-- 9 biomes × `common/1.21.11/.../worldgen/biome/` (no `chronodawn_prairies`)
+- 10 biomes × `common/1.21.11/.../worldgen/biome/` (now includes `chronodawn_prairies` after d873fd4e)
 
 ---
 
@@ -1466,14 +1465,12 @@ Same procedure as Task 22, in `common/shared-1.21.2+/src/main/resources/data/chr
 
 ---
 
-### Task 26: Add to all 1.21.11 ChronoDawn biomes (9 files, no prairies)
+### Task 26: Add to all 1.21.11 ChronoDawn biomes (10 files)
 
 Same procedure as Task 22, in `common/1.21.11/src/main/resources/data/chronodawn/worldgen/biome/`.
-Note: `chronodawn_prairies` does NOT exist in this version per
-`feedback_1_21_11_biome_overrides.md`-adjacent observation. Touching only 9
-biomes here is correct.
+Includes `chronodawn_prairies` (added back in commit d873fd4e).
 
-- [ ] **Step 1: Apply to all 9 biome JSONs (skip prairies).**
+- [ ] **Step 1: Apply to all 10 biome JSONs.**
 - [ ] **Step 2: `./gradlew validateResources`.**
 - [ ] **Step 3: Commit:** `git commit -m "feat(worldgen): generate Temporal Stalactites in 1.21.11 ChronoDawn biomes"`.
 
