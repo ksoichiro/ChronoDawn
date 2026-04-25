@@ -58,6 +58,10 @@
     "chronodawn:temporal_sandstone_wall",
     "chronodawn:temporal_lantern",
     "chronodawn:dawn_lantern",
-    "chronodawn:dusk_lantern"
+    "chronodawn:dusk_lantern",
+    "chronodawn:temporal_stalactite_tip",
+    "chronodawn:temporal_stalactite_frustum",
+    "chronodawn:temporal_stalagmite_tip",
+    "chronodawn:temporal_stalagmite_frustum"
   ]
 }
