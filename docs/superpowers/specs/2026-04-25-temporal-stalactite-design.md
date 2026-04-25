@@ -87,7 +87,11 @@ Trade-off accepted: players cannot rebuild a length-2 stalactite as it
 appears in worldgen. They can still chain `tip` blocks side-by-side, matching
 how vanilla `pointed_dripstone` decoration is typically used.
 
-Silk Touch is **not** required for self-drop on tips, matching `TemporalStoneBlock`.
+Silk Touch is **not** required for tip self-drop. This matches vanilla
+`pointed_dripstone` rather than `TemporalStoneBlock` (which drops
+`temporal_cobblestone` without silk touch). The decorative-only scope means
+there is no "cobbled" fallback variant to drop, so a simple self-drop pool
+keeps the loot table small.
 
 ## Class Layout
 
@@ -153,11 +157,20 @@ rather than relying on glob-style edits.
 3. `temporal_pointed_simple.json` — random single tip on whichever surface
    is appropriate (length 1, ceiling or floor selected by environment scan).
 
-### Placed Feature
+### Placed Features
 
-A single `temporal_pointed.json` placed feature wraps the three configured
-features via `random_select` with weights ~ length-2 : length-1 = 1 : 2.
-Placement modifiers:
+Three placed features, one per configured feature. (`minecraft:random_select`
+is a configured-feature type, not a placed-feature modifier, so per-feature
+placed wrappers are required.) Each is referenced directly from the biome
+`features[7]` (UNDERGROUND_DECORATION) list. Density balance:
+
+- `temporal_stalactite_cluster` — `count` ≈ 4 per chunk
+- `temporal_stalagmite_cluster` — `count` ≈ 4 per chunk
+- `temporal_pointed_single` — `count` ≈ 8 per chunk (single tips,
+  achieves the ~ 2 : 1 single-to-cluster visual ratio from earlier
+  brainstorming)
+
+Common placement modifiers:
 
 - `count` ≈ 8–12 attempts per chunk (final value tuned empirically)
 - `in_square` for x/z jitter
@@ -242,7 +255,9 @@ Under `common/shared/...`:
 - `data/chronodawn/worldgen/configured_feature/temporal_stalactite_cluster.json`
 - `data/chronodawn/worldgen/configured_feature/temporal_stalagmite_cluster.json`
 - `data/chronodawn/worldgen/configured_feature/temporal_pointed_simple.json`
-- `data/chronodawn/worldgen/placed_feature/temporal_pointed.json`
+- `data/chronodawn/worldgen/placed_feature/temporal_stalactite_cluster.json`
+- `data/chronodawn/worldgen/placed_feature/temporal_stalagmite_cluster.json`
+- `data/chronodawn/worldgen/placed_feature/temporal_pointed_single.json`
 
 ### Biome JSON Updates
 
@@ -296,11 +311,11 @@ Once implemented:
 1. `./gradlew validateResources` — JSON syntax / cross-reference.
 2. `./gradlew validateTranslations` — both lang files have all four keys.
 3. `./gradlew checkAll` — full multi-version verification.
-4. Manual: enter ChronoDawn dimension, locate caves in each of the three
-   biomes, confirm visual presence of stalactite/stalagmite formations,
-   confirm break drops the correct items (tip self-drop, frustum drops tip),
-   confirm Vanilla `pointed_dripstone` in vanilla Dripstone Caves is
-   unchanged.
+4. Manual: enter ChronoDawn dimension, locate caves under multiple biomes
+   (sample at least one forest, one mountain, one snowy chunk), confirm
+   visual presence of stalactite/stalagmite formations, confirm break drops
+   the correct items (tip self-drop, frustum drops tip), confirm Vanilla
+   `pointed_dripstone` in vanilla Dripstone Caves is unchanged.
 
 ## Open Questions Deferred to Implementation
 
