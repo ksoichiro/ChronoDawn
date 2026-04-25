@@ -1,22 +1,7 @@
 {
-  "parent": "minecraft:block/block",
+  "parent": "minecraft:block/cross",
   "render_type": "minecraft:cutout",
   "textures": {
-    "particle": "chronodawn:block/temporal_stalagmite_tip",
-    "all": "chronodawn:block/temporal_stalagmite_tip"
-  },
-  "elements": [
-    {
-      "from": [5, 0, 5],
-      "to": [11, 11, 11],
-      "faces": {
-        "down":  { "uv": [5, 5, 11, 11], "texture": "#all" },
-        "up":    { "uv": [5, 5, 11, 11], "texture": "#all" },
-        "north": { "uv": [5, 5, 11, 16], "texture": "#all" },
-        "south": { "uv": [5, 5, 11, 16], "texture": "#all" },
-        "west":  { "uv": [5, 5, 11, 16], "texture": "#all" },
-        "east":  { "uv": [5, 5, 11, 16], "texture": "#all" }
-      }
-    }
-  ]
+    "cross": "chronodawn:block/temporal_stalagmite_tip"
+  }
 }
