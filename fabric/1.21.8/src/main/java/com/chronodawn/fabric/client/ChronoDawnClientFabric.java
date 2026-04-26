@@ -2,6 +2,7 @@ package com.chronodawn.fabric.client;
 
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.client.LeafColorProvider;
+import com.chronodawn.client.TemporalPlantColorProvider;
 import com.chronodawn.client.model.*;
 import com.chronodawn.client.particle.ChronoDawnPortalParticle;
 import com.chronodawn.client.particle.ChronoShieldEchoParticle;
@@ -148,6 +149,16 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
                 return 0x5B8AC4; // Chrono Dawn plains grass_color
             },
             ModBlocks.TEMPORAL_GRASS_BLOCK.get()
+        );
+
+        // Register Temporal Tall Grass + Temporal Fern colors.
+        // Plant textures are baked teal (Chrono Dawn plains grass_color);
+        // tint is biased toward the local biome's grass color via 50/50 blend.
+        ColorProviderRegistry.BLOCK.register(
+            (state, world, pos, tintIndex) ->
+                TemporalPlantColorProvider.blockTint(world, pos, tintIndex),
+            ModBlocks.TEMPORAL_TALL_GRASS.get(),
+            ModBlocks.TEMPORAL_FERN.get()
         );
     }
 
