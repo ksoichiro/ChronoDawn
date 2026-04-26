@@ -5,7 +5,7 @@ Scope: `TemporalTallGrassBlock`, `TemporalFernBlock`
 
 ## Background
 
-`TemporalTallGrassBlock` and `TemporalFernBlock` use `minecraft:block/cross` parent models, which expose `tintindex: 0`. However, the codebase does not register any `BlockColor` provider for these blocks, so they render with their texture's raw, baked-in color.
+`TemporalTallGrassBlock` and `TemporalFernBlock` originally inherited from `minecraft:block/cross`, which has no `tintindex` on its element faces (it's the parent vanilla flowers like dandelion / poppy use precisely because they don't tint). To make a `BlockColor` provider effective the model parent must be `minecraft:block/tinted_cross` instead — the same parent vanilla `tall_grass` / `fern` / `short_grass` / `large_fern` use. This rewrite covers both halves: registering a `BlockColor` provider AND migrating the model parent so the provider's return value is actually multiplied into the texel.
 
 The textures (`temporal_fern.png`, `temporal_tall_grass_top.png`, `temporal_tall_grass_bottom.png`) are deep teal — average around `#2C435F`–`#3D5C84`, five unique shades each. This teal happens to match Chrono Dawn's `chronodawn_plains` biome `grass_color` (`#5B8AC4`), so the plants look natural in plains. In other biomes (e.g. `chronodawn_dark_forest` with `grass_color = #44520C`), the surrounding `TemporalGrassBlock` shifts to the biome's color via `BiomeColors.getAverageGrassColor`, but the temporal plants stay teal and visually clash.
 
@@ -23,13 +23,13 @@ Apply a biome-weighted blend of the texture's intended baseline (`#5B8AC4`) and 
 
 Selected approach: **multiplicative biome bias on the existing teal texture, no PNG changes**.
 
-Minecraft's tint pipeline multiplies texel RGB by tint RGB / 255 per channel. We compute a tint that, when multiplied with the texture's `BASELINE = 0x5B8AC4` baseline, lands the result halfway between the baseline and the biome's grass color:
+Minecraft's tint pipeline multiplies texel RGB by tint RGB / 255 per channel. We compute a tint that, when multiplied with the texture's `BASELINE = 0x5B8AC4` baseline, lands the result 80% of the way from the baseline toward the biome's grass color:
 
 ```
 tint_C = lerp(255, biome_C * 255 / BASELINE_C, 0.8)        per channel
 ```
 
-This collapses to `0xFFFFFF` (no tint) when the biome's grass color equals the baseline, so the plains appearance is preserved exactly. In darker or differently-hued biomes, the multiplication produces a colour roughly midway between the baseline teal and the biome tint.
+This collapses to `0xFFFFFF` (no tint) when the biome's grass color equals the baseline, so the plains appearance is preserved exactly. In darker or differently-hued biomes, the multiplication produces a colour about 80% of the way from the baseline teal to the biome tint.
 
 ### Architecture
 
@@ -188,4 +188,6 @@ NeoForge 1.21.4+ moved item tints to Client Items JSON. Since our item tint retu
 - Modified: 11 × `fabric/<ver>/src/main/java/com/chronodawn/fabric/client/ChronoDawnClientFabric.java`
 - Modified: 9 × `neoforge/<ver>/src/main/java/com/chronodawn/neoforge/client/ChronoDawnClientNeoForge.java` (`base` + `1.21.4`–`1.21.11`)
 
-No texture, model, blockstate, datapack, or registry changes.
+- Modified: 3 model JSONs at `common/shared/.../models/block/temporal_fern.json` and `temporal_tall_grass_{top,bottom}.json` — parent migrated from `minecraft:block/cross` to `minecraft:block/tinted_cross` so the inherited element faces declare `tintindex: 0` and the `BlockColor` provider's return is multiplied into the texel.
+
+No texture, blockstate, datapack, or registry changes.

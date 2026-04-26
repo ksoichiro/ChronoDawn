@@ -192,7 +192,7 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
 
         // Register Temporal Tall Grass + Temporal Fern colors.
         // Plant textures are baked teal (Chrono Dawn plains grass_color);
-        // tint is biased toward the local biome's grass color via 50/50 blend.
+        // tint is biased toward the local biome's grass color (biome-weighted; see TemporalPlantColorProvider).
         ColorProviderRegistry.BLOCK.register(
             (state, world, pos, tintIndex) ->
                 TemporalPlantColorProvider.blockTint(world, pos, tintIndex),

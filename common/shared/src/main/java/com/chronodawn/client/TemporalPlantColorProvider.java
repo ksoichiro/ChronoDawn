@@ -13,10 +13,10 @@ import net.minecraft.world.level.BlockAndTintGetter;
  * differs (e.g. {@code chronodawn_dark_forest} = {@code 0x44520C}).
  *
  * <p>This provider returns a tint that, when multiplied with the texel teal,
- * lands the rendered colour halfway between the baseline and the biome's
- * grass color. The math collapses to {@code 0xFFFFFF} (no tint) when the
- * biome's grass color equals the baseline, so plains appearance is preserved
- * exactly.
+ * lands the rendered colour 80% of the way from the baseline toward the
+ * biome's grass color (see {@link #BLEND}). The math collapses to
+ * {@code 0xFFFFFF} (no tint) when the biome's grass color equals the
+ * baseline, so plains appearance is preserved exactly.
  *
  * <p>Inventory and first-person held-item rendering pass {@code world == null},
  * which falls through to {@code 0xFFFFFF} so the icon shows the raw texture.
@@ -26,7 +26,11 @@ public final class TemporalPlantColorProvider {
     /** Chrono Dawn plains {@code grass_color} — the texture's intended baseline tint. */
     public static final int BASELINE = 0x5B8AC4;
 
-    /** Blend factor between baseline and biome color. {@code 0.5} = even split, {@code 1.0} = full biome. */
+    /**
+     * Blend factor toward biome color. Currently {@code 0.8f} (80% biome, 20% baseline);
+     * {@code 0.0f} = baseline only, {@code 1.0f} = full biome match.
+     * Tunable without texture re-bake.
+     */
     private static final float BLEND = 0.8f;
 
     private TemporalPlantColorProvider() {}

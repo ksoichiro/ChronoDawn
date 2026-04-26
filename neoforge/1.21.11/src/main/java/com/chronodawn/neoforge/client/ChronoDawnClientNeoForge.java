@@ -433,7 +433,7 @@ public class ChronoDawnClientNeoForge {
             ModBlocks.TEMPORAL_GRASS_BLOCK.get()
         );
 
-        // Register Temporal Tall Grass + Temporal Fern colors (50/50 baseline-vs-biome blend).
+        // Register Temporal Tall Grass + Temporal Fern colors (biome-weighted blend; see TemporalPlantColorProvider).
         event.register(
             (state, world, pos, tintIndex) ->
                 TemporalPlantColorProvider.blockTint(world, pos, tintIndex),
