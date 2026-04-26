@@ -6,6 +6,7 @@ import com.chronodawn.gui.ChronicleScreen;
 import com.chronodawn.gui.data.ChronicleData;
 import com.chronodawn.items.ChronicleBookItem;
 import com.chronodawn.client.LeafColorProvider;
+import com.chronodawn.client.TemporalPlantColorProvider;
 import com.chronodawn.client.model.*;
 import com.chronodawn.client.renderer.*;
 import com.chronodawn.entities.boats.ChronoDawnBoatType;
@@ -444,6 +445,14 @@ public class ChronoDawnClientNeoForge {
                 return 0x5B8AC4; // Chrono Dawn plains grass_color
             },
             ModBlocks.TEMPORAL_GRASS_BLOCK.get()
+        );
+
+        // Register Temporal Tall Grass + Temporal Fern colors (50/50 baseline-vs-biome blend).
+        event.register(
+            (state, world, pos, tintIndex) ->
+                TemporalPlantColorProvider.blockTint(world, pos, tintIndex),
+            ModBlocks.TEMPORAL_TALL_GRASS.get(),
+            ModBlocks.TEMPORAL_FERN.get()
         );
 
         ChronoDawn.LOGGER.debug("Registered block color handlers for NeoForge");
