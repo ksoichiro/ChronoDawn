@@ -5,6 +5,7 @@ import com.chronodawn.blocks.TemporalGrassBlock;
 import com.chronodawn.gui.ChronicleScreen;
 import com.chronodawn.gui.data.ChronicleData;
 import com.chronodawn.items.ChronicleBookItem;
+import com.chronodawn.client.LeafColorProvider;
 import com.chronodawn.client.model.*;
 import com.chronodawn.client.renderer.*;
 import com.chronodawn.entities.boats.ChronoDawnBoatType;
@@ -383,17 +384,27 @@ public class ChronoDawnClientNeoForge {
     /**
      * Register block color providers for blocks that need tinting.
      *
-     * Time Wood Leaves use a fixed blue color (#78A6DA) regardless of biome.
-     * The texture should be grayscale, and the blue color is applied uniformly.
+     * Time Wood, Dark Time Wood, and Ancient Time Wood leaves use a per-tree
+     * palette (cell-hashed by position) supplied by {@link LeafColorProvider}.
+     * Textures are grayscale; the tint is applied uniformly to each face.
      */
     @SubscribeEvent
     public static void onRegisterBlockColors(RegisterColorHandlersEvent.Block event) {
-        // Register Time Wood Leaves to use fixed blue color (not biome-dependent)
-        // This ensures leaves remain blue even when placed in other biomes
-        // Color: #78A6DA (light blue)
+        // Per-tree color variation for all 3 Time Wood leaf kinds.
         event.register(
-            (state, world, pos, tintIndex) -> 0x78A6DA,
+            (state, world, pos, tintIndex) ->
+                LeafColorProvider.colorAt(LeafColorProvider.LeafKind.TIME_WOOD, pos),
             ModBlocks.TIME_WOOD_LEAVES.get()
+        );
+        event.register(
+            (state, world, pos, tintIndex) ->
+                LeafColorProvider.colorAt(LeafColorProvider.LeafKind.DARK_TIME_WOOD, pos),
+            ModBlocks.DARK_TIME_WOOD_LEAVES.get()
+        );
+        event.register(
+            (state, world, pos, tintIndex) ->
+                LeafColorProvider.colorAt(LeafColorProvider.LeafKind.ANCIENT_TIME_WOOD, pos),
+            ModBlocks.ANCIENT_TIME_WOOD_LEAVES.get()
         );
 
         // Register Chrono Melon Stem color (like vanilla melon/pumpkin stems)
@@ -443,11 +454,18 @@ public class ChronoDawnClientNeoForge {
      */
     @SubscribeEvent
     public static void onRegisterItemColors(RegisterColorHandlersEvent.Item event) {
-        // Register the item color as well (for inventory/hand rendering)
-        // Use the same blue color (0x78A6DA)
+        // Inventory icons use the canonical color for each leaf kind.
         event.register(
-            (stack, tintIndex) -> 0x78A6DA,
+            (stack, tintIndex) -> LeafColorProvider.LeafKind.TIME_WOOD.iconColor(),
             ModBlocks.TIME_WOOD_LEAVES.get()
+        );
+        event.register(
+            (stack, tintIndex) -> LeafColorProvider.LeafKind.DARK_TIME_WOOD.iconColor(),
+            ModBlocks.DARK_TIME_WOOD_LEAVES.get()
+        );
+        event.register(
+            (stack, tintIndex) -> LeafColorProvider.LeafKind.ANCIENT_TIME_WOOD.iconColor(),
+            ModBlocks.ANCIENT_TIME_WOOD_LEAVES.get()
         );
 
         // Register item color for Chrono Melon Stem (use mature color)
