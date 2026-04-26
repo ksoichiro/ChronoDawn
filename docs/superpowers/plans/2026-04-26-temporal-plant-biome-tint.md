@@ -278,6 +278,8 @@ For each of the 11 files, locate the existing `// Register Temporal Grass Block 
 
 The signature `ColorProviderRegistry.BLOCK.register(provider, Block...)` is stable across all 11 Fabric versions — the existing `TEMPORAL_GRASS_BLOCK` registration uses the same form in every file.
 
+The `ITEM.register` call is added only to `fabric/1.20.1`, `fabric/1.21.1`, and `fabric/1.21.2`. Fabric 1.21.4+ uses Client Items JSON for item tints (the existing `assets/chronodawn/items/temporal_tall_grass.json` / `temporal_fern.json` files already render the raw texture), so `ITEM.register` would be dead code in those versions. This mirrors the NeoForge 1.21.4+ convention (spec §"Per-loader registration").
+
 - [ ] **Step 3: Build for one version to confirm compile**
 
 ```

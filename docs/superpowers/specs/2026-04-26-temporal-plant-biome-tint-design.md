@@ -104,6 +104,8 @@ ColorProviderRegistry.ITEM.register(
 );
 ```
 
+Fabric 1.21.4+ no longer uses `ColorProviderRegistry.ITEM` — item tints in those versions are declared in Client Items JSON (`assets/chronodawn/items/<id>.json`). Since our item tint returns `-1` (no tint) and the existing `temporal_tall_grass.json` / `temporal_fern.json` already render the raw texture, no Client Items JSON edits are needed and the `ITEM.register` call is added only to `fabric/1.20.1`, `fabric/1.21.1`, and `fabric/1.21.2`.
+
 **NeoForge** — `neoforge/{base, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, 1.21.11}/src/main/java/com/chronodawn/neoforge/client/ChronoDawnClientNeoForge.java`
 
 Inside existing `onRegisterBlockColors`:
