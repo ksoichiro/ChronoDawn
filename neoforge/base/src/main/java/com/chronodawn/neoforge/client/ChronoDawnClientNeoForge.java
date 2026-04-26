@@ -495,6 +495,13 @@ public class ChronoDawnClientNeoForge {
             ModItems.TEMPORAL_GRASS_BLOCK.get()
         );
 
+        // Item icon for Temporal Tall Grass + Temporal Fern: keep raw texture (no tint).
+        event.register(
+            (stack, tintIndex) -> TemporalPlantColorProvider.itemTint(tintIndex),
+            ModItems.TEMPORAL_TALL_GRASS.get(),
+            ModItems.TEMPORAL_FERN.get()
+        );
+
         // Register Spawn Egg item colors for NeoForge
         // NeoForge requires explicit color handler registration with alpha channel
         event.register(
