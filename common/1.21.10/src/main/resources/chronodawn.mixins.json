@@ -12,6 +12,7 @@
     "StructureStartMixin"
   ],
   "client": [
+    "client.AtmosphericFogEnvironmentMixin",
     "client.ClientAdvancementsAccessor",
     "client.SkyColorMixin"
   ],
