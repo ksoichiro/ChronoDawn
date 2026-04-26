@@ -11,7 +11,7 @@ The textures (`temporal_fern.png`, `temporal_tall_grass_top.png`, `temporal_tall
 
 ## Goal
 
-Apply a biome-weighted blend of the texture's intended baseline (`#5B8AC4`) and the per-position biome grass color, so the plants pick up the surrounding tint while preserving their Chrono Dawn character. The blend factor was tuned to `0.8` (80% biome influence) during in-game playtesting; the original design started from a 50/50 mid-point and was raised after dark_forest plants still felt too blue.
+Apply a biome-weighted blend of the texture's intended baseline (`#5B8AC4`) and the per-position biome grass color, so the plants pick up the surrounding tint while preserving their Chrono Dawn character. The blend factor was tuned to `0.8` (80% biome influence) during in-game playtesting; it started at `0.5` (even split) and was raised after dark_forest plants still felt too blue.
 
 ## Non-Goals
 
