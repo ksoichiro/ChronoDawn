@@ -11,7 +11,7 @@ The textures (`temporal_fern.png`, `temporal_tall_grass_top.png`, `temporal_tall
 
 ## Goal
 
-Apply a 50/50 blend of the texture's intended baseline (`#5B8AC4`) and the per-position biome grass color, so the plants pick up the surrounding tint while preserving their Chrono Dawn character.
+Apply a biome-weighted blend of the texture's intended baseline (`#5B8AC4`) and the per-position biome grass color, so the plants pick up the surrounding tint while preserving their Chrono Dawn character. The blend factor was tuned to `0.8` (80% biome influence) during in-game playtesting; the original design started from a 50/50 mid-point and was raised after dark_forest plants still felt too blue.
 
 ## Non-Goals
 
@@ -26,7 +26,7 @@ Selected approach: **multiplicative biome bias on the existing teal texture, no 
 Minecraft's tint pipeline multiplies texel RGB by tint RGB / 255 per channel. We compute a tint that, when multiplied with the texture's `BASELINE = 0x5B8AC4` baseline, lands the result halfway between the baseline and the biome's grass color:
 
 ```
-tint_C = lerp(255, biome_C * 255 / BASELINE_C, 0.5)        per channel
+tint_C = lerp(255, biome_C * 255 / BASELINE_C, 0.8)        per channel
 ```
 
 This collapses to `0xFFFFFF` (no tint) when the biome's grass color equals the baseline, so the plains appearance is preserved exactly. In darker or differently-hued biomes, the multiplication produces a colour roughly midway between the baseline teal and the biome tint.
@@ -51,7 +51,7 @@ public static int itemTint(int tintIndex); // always -1 (the ColorProvider "no t
 Constants:
 
 - `BASELINE = 0x5B8AC4` — Chrono Dawn plains `grass_color`, the texture's intended baseline tint.
-- `BLEND = 0.5f` — selected by user; tunable later without texture re-bake.
+- `BLEND = 0.8f` — tuned during in-game playtest (started at `0.5f`; raised after dark_forest plants still read as too blue). Tunable later without texture re-bake.
 
 ### Tint formula
 
@@ -69,7 +69,7 @@ return (rTint << 16) | (gTint << 8) | bTint;
 static int blendChannel(int biomeC, int baseC) {
     float ratio  = baseC == 0 ? 1f : (float) biomeC / (float) baseC;
     float scaled = Math.min(ratio * 255f, 255f);
-    float tint   = 255f + 0.5f * (scaled - 255f);
+    float tint   = 255f + 0.8f * (scaled - 255f);
     return Math.max(0, Math.min(255, Math.round(tint)));
 }
 ```
@@ -79,9 +79,9 @@ Worked examples:
 | Biome (Chrono Dawn) | grass_color | Computed tint | Texel `#5B8AC4` × tint result |
 |---------------------|-------------|---------------|-------------------------------|
 | plains              | `#5B8AC4`   | `#FFFFFF`     | `#5B8AC4` (unchanged)         |
-| dark_forest         | `#44520C`   | `~#DFCB88`    | `~#4F6E68` (muted teal-green) |
-| snowy               | `#ABB8AB`   | `~#DDEBEF`    | `~#4F81B6` (slightly cooler)  |
-| swamp (post-modifier) | varies    | varies        | greenish blue                 |
+| dark_forest         | `#44520C`   | `~#CBAC3F`    | `~#485D30` (olive-green)      |
+| snowy               | `#ABB8AB`   | `~#FFFFE5`    | `~#5B8AB0` (slightly cooler)  |
+| swamp (post-modifier) | varies    | varies        | mossy green                   |
 
 ### Per-loader registration
 
@@ -158,7 +158,7 @@ NeoForge 1.21.4+ moved item tints to Client Items JSON. Since our item tint retu
 | `tintIndex = 1` | any | `-1` |
 | `world = null` | — | `0xFFFFFF` |
 | baseline match | biome `= 0x5B8AC4` | `0xFFFFFF` |
-| dark biome spot check | biome `= 0x44520C` | each channel within ±1 of expected `0xDFCB88` |
+| dark biome spot check | biome `= 0x44520C` | each channel within ±1 of expected `0xCBAC3F` |
 | zero-channel guard | biome `= 0x000000` | no exception, deterministic clamp |
 
 `BiomeColors.getAverageGrassColor` is not unit-tested; the formula is exercised by calling `blendChannel` (package-private) directly with synthetic biome and baseline channel values, and by calling `blockTint(null, null, 0)` for the inventory branch.

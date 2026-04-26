@@ -26,8 +26,8 @@ public final class TemporalPlantColorProvider {
     /** Chrono Dawn plains {@code grass_color} — the texture's intended baseline tint. */
     public static final int BASELINE = 0x5B8AC4;
 
-    /** Blend factor between baseline and biome color. {@code 0.5} = even split. */
-    private static final float BLEND = 0.5f;
+    /** Blend factor between baseline and biome color. {@code 0.5} = even split, {@code 1.0} = full biome. */
+    private static final float BLEND = 0.8f;
 
     private TemporalPlantColorProvider() {}
 

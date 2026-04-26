@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Tint Temporal Tall Grass and Temporal Fern blocks with a 50/50 blend of their baked-in teal baseline and the per-position biome grass color, so they pick up local biome character (e.g. dark_forest) while preserving their Chrono Dawn appearance in plains.
+**Goal:** Tint Temporal Tall Grass and Temporal Fern blocks with a biome-weighted blend (80% biome, 20% baseline) of their baked-in teal baseline and the per-position biome grass color, so they pick up local biome character (e.g. dark_forest) while preserving their Chrono Dawn appearance in plains.
 
 **Architecture:** A new shared, loader-agnostic utility class `TemporalPlantColorProvider` in `common/shared/` exposes a pure-math `blockTint(world, pos, tintIndex)` and a constant `itemTint(tintIndex)`. Each per-version Fabric and NeoForge client init file calls into this utility from existing `registerBlockColors` / `onRegisterBlockColors` and (where applicable) item color registration sites. A single JUnit test in `common/1.21.2` exercises the formula.
 
@@ -96,20 +96,20 @@ class TemporalPlantColorProviderTest {
     @Test
     void blendChannel_baselineMatch_returns255() {
         // When biome channel == baseline channel, ratio = 1.0, scaled = 255,
-        // tint = 255 + 0.5 * (255 - 255) = 255.
+        // tint = 255 + 0.8 * (255 - 255) = 255.
         assertEquals(255, TemporalPlantColorProvider.blendChannel(0x5B, 0x5B));
         assertEquals(255, TemporalPlantColorProvider.blendChannel(0xC4, 0xC4));
     }
 
     @Test
     void blendChannel_biomeBelowBaseline_dampensTowardBiome() {
-        // dark_forest R = 0x44 over plains R = 0x5B:
+        // dark_forest R = 0x44 over plains R = 0x5B (with BLEND = 0.8):
         // ratio = 0x44 / 0x5B = 0.7472...
         // scaled = 190.5
-        // tint = 255 + 0.5 * (190.5 - 255) = 222.75 -> 223 (rounded)
+        // tint = 255 + 0.8 * (190.5 - 255) = 203.4 -> 203 (rounded)
         int tint = TemporalPlantColorProvider.blendChannel(0x44, 0x5B);
-        assertTrue(tint >= 222 && tint <= 224,
-            "Expected tint near 223 for biome=0x44 base=0x5B, got " + tint);
+        assertTrue(tint >= 202 && tint <= 204,
+            "Expected tint near 203 for biome=0x44 base=0x5B, got " + tint);
     }
 
     @Test
@@ -127,10 +127,9 @@ class TemporalPlantColorProviderTest {
 
     @Test
     void blendChannel_zeroBiome_neverNegative() {
-        // ratio = 0, scaled = 0, tint = 255 + 0.5 * (-255) = 127.5 -> 128.
+        // ratio = 0, scaled = 0, tint = 255 + 0.8 * (-255) = 51.
         int tint = TemporalPlantColorProvider.blendChannel(0, 0xFF);
-        assertTrue(tint >= 127 && tint <= 128,
-            "Expected tint near 128 for biome=0 base=0xFF, got " + tint);
+        assertEquals(51, tint);
     }
 }
 ```
@@ -176,8 +175,8 @@ public final class TemporalPlantColorProvider {
     /** Chrono Dawn plains {@code grass_color} — the texture's intended baseline tint. */
     public static final int BASELINE = 0x5B8AC4;
 
-    /** Blend factor between baseline and biome color. {@code 0.5} = even split. */
-    private static final float BLEND = 0.5f;
+    /** Blend factor between baseline and biome color. {@code 0.5} = even split, {@code 1.0} = full biome. */
+    private static final float BLEND = 0.8f;
 
     private TemporalPlantColorProvider() {}
 
@@ -261,7 +260,7 @@ For each of the 11 files, locate the existing `// Register Temporal Grass Block 
 ```java
         // Register Temporal Tall Grass + Temporal Fern colors.
         // Plant textures are baked teal (Chrono Dawn plains grass_color);
-        // tint is biased toward the local biome's grass color via 50/50 blend.
+        // tint is biased toward the local biome's grass color via 80/20 biome-weighted blend.
         ColorProviderRegistry.BLOCK.register(
             (state, world, pos, tintIndex) ->
                 TemporalPlantColorProvider.blockTint(world, pos, tintIndex),
@@ -324,7 +323,7 @@ import com.chronodawn.client.TemporalPlantColorProvider;
 For each of the 9 files, locate the `// Register Temporal Grass Block color` block inside `onRegisterBlockColors`, then append:
 
 ```java
-        // Register Temporal Tall Grass + Temporal Fern colors (50/50 baseline-vs-biome blend).
+        // Register Temporal Tall Grass + Temporal Fern colors (80/20 biome-weighted blend).
         event.register(
             (state, world, pos, tintIndex) ->
                 TemporalPlantColorProvider.blockTint(world, pos, tintIndex),
@@ -462,7 +461,7 @@ git commit -m "fix(plants): <describe the tweak>"
 - Fabric registration (11 files) → Task 2
 - NeoForge block registration (9 files) → Task 3
 - NeoForge `base/` item registration → Task 4
-- Edge cases (`tintIndex != 0`, `world == null`, `baseC == 0`, `BLEND` tunable) → Task 1 covers via tests + comments
+- Edge cases (`tintIndex != 0`, `world == null`, `baseC == 0`, `BLEND` tunable from `0.5f` default) → Task 1 covers via tests + comments
 - Cross-version stability note → covered by Task 2 / Task 3 build steps + Task 5 smoke checks
 - Unit test plan (5 cases from spec, expanded to 8 named methods / 8 invocations after merging duplicate-value `itemTint` cases into one method) → Task 1 Step 1
 - Manual in-game checks → Task 5
@@ -474,5 +473,5 @@ git commit -m "fix(plants): <describe the tweak>"
 - `TemporalPlantColorProvider.blockTint(BlockAndTintGetter, BlockPos, int)` — same signature in impl, test, and all registration sites.
 - `TemporalPlantColorProvider.itemTint(int)` — same signature everywhere.
 - `blendChannel(int, int)` — package-private in source; called directly in test (no reflection).
-- `BASELINE = 0x5B8AC4` named constant; `BLEND = 0.5f` named constant.
+- `BASELINE = 0x5B8AC4` named constant; `BLEND = 0.8f` named constant.
 - `ModBlocks.TEMPORAL_TALL_GRASS` / `TEMPORAL_FERN` and `ModItems.TEMPORAL_TALL_GRASS` / `TEMPORAL_FERN` confirmed to exist in `common/<ver>/.../registry/`.

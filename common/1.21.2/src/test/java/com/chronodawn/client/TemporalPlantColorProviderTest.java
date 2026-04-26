@@ -33,20 +33,20 @@ class TemporalPlantColorProviderTest {
     @Test
     void blendChannel_baselineMatch_returns255() {
         // When biome channel == baseline channel, ratio = 1.0, scaled = 255,
-        // tint = 255 + 0.5 * (255 - 255) = 255.
+        // tint = 255 + 0.8 * (255 - 255) = 255.
         assertEquals(255, TemporalPlantColorProvider.blendChannel(0x5B, 0x5B));
         assertEquals(255, TemporalPlantColorProvider.blendChannel(0xC4, 0xC4));
     }
 
     @Test
     void blendChannel_biomeBelowBaseline_dampensTowardBiome() {
-        // dark_forest R = 0x44 over plains R = 0x5B:
+        // dark_forest R = 0x44 over plains R = 0x5B (with BLEND = 0.8):
         // ratio = 0x44 / 0x5B = 0.7472...
         // scaled = 190.5
-        // tint = 255 + 0.5 * (190.5 - 255) = 222.75 -> 223 (rounded)
+        // tint = 255 + 0.8 * (190.5 - 255) = 203.4 -> 203 (rounded)
         int tint = TemporalPlantColorProvider.blendChannel(0x44, 0x5B);
-        assertTrue(tint >= 222 && tint <= 224,
-            "Expected tint near 223 for biome=0x44 base=0x5B, got " + tint);
+        assertTrue(tint >= 202 && tint <= 204,
+            "Expected tint near 203 for biome=0x44 base=0x5B, got " + tint);
     }
 
     @Test
@@ -64,9 +64,8 @@ class TemporalPlantColorProviderTest {
 
     @Test
     void blendChannel_zeroBiome_neverNegative() {
-        // ratio = 0, scaled = 0, tint = 255 + 0.5 * (-255) = 127.5 -> 128.
+        // ratio = 0, scaled = 0, tint = 255 + 0.8 * (-255) = 51.
         int tint = TemporalPlantColorProvider.blendChannel(0, 0xFF);
-        assertTrue(tint >= 127 && tint <= 128,
-            "Expected tint near 128 for biome=0 base=0xFF, got " + tint);
+        assertEquals(51, tint);
     }
 }
