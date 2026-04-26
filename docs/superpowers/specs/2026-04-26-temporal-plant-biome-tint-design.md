@@ -45,7 +45,7 @@ Public surface:
 
 ```java
 public static int blockTint(BlockAndTintGetter world, BlockPos pos, int tintIndex);
-public static int itemTint(int tintIndex); // returns 0xFFFFFFFF for tintIndex 0, else -1
+public static int itemTint(int tintIndex); // always -1 (the ColorProvider "no tint" sentinel)
 ```
 
 Constants:
@@ -127,7 +127,7 @@ event.register(
 );
 ```
 
-NeoForge 1.21.4+ moved item tints to Client Items JSON. Since our item tint is `0xFFFFFFFF` (unchanged from the texture), no Client Items JSON edits are required for these versions.
+NeoForge 1.21.4+ moved item tints to Client Items JSON. Since our item tint returns `-1` (the "no tint" sentinel, texture unchanged), no Client Items JSON edits are required for these versions.
 
 ## Edge cases
 

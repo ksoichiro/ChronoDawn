@@ -16,7 +16,7 @@
 
 **New files:**
 - `common/shared/src/main/java/com/chronodawn/client/TemporalPlantColorProvider.java` — pure utility, block + item tint helpers, package-private `blendChannel` for testing
-- `common/1.21.2/src/test/java/com/chronodawn/unit/TemporalPlantColorProviderTest.java` — JUnit 5 unit test for the formula
+- `common/1.21.2/src/test/java/com/chronodawn/client/TemporalPlantColorProviderTest.java` — JUnit 5 unit test for the formula
 
 **Modified files (block color registration):**
 
@@ -52,18 +52,17 @@ Untouched: textures, blockstates, models, datapacks, ModBlocks, ModItems.
 
 **Files:**
 - Create: `common/shared/src/main/java/com/chronodawn/client/TemporalPlantColorProvider.java`
-- Test: `common/1.21.2/src/test/java/com/chronodawn/unit/TemporalPlantColorProviderTest.java`
+- Test: `common/1.21.2/src/test/java/com/chronodawn/client/TemporalPlantColorProviderTest.java`
 
 The shared utility lives in `common/shared/` (the version-agnostic source root), so the same code is used for every Minecraft version. The test runs only against `common/1.21.2`'s test classpath; that suffices because the source is identical.
 
 - [ ] **Step 1: Write the failing test**
 
-Create `common/1.21.2/src/test/java/com/chronodawn/unit/TemporalPlantColorProviderTest.java`:
+Create `common/1.21.2/src/test/java/com/chronodawn/client/TemporalPlantColorProviderTest.java`:
 
 ```java
-package com.chronodawn.unit;
+package com.chronodawn.client;
 
-import com.chronodawn.client.TemporalPlantColorProvider;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -78,12 +77,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class TemporalPlantColorProviderTest {
 
     @Test
-    void itemTint_zero_returnsWhite() {
-        assertEquals(0xFFFFFFFF, TemporalPlantColorProvider.itemTint(0));
-    }
-
-    @Test
-    void itemTint_nonZero_returnsMinusOne() {
+    void itemTint_returnsNoTintSentinel_forAnyTintIndex() {
+        assertEquals(-1, TemporalPlantColorProvider.itemTint(0));
         assertEquals(-1, TemporalPlantColorProvider.itemTint(1));
         assertEquals(-1, TemporalPlantColorProvider.itemTint(2));
     }
@@ -143,7 +138,7 @@ class TemporalPlantColorProviderTest {
 - [ ] **Step 2: Run the test and verify it fails**
 
 ```
-./gradlew :common-1.21.2:test --tests com.chronodawn.unit.TemporalPlantColorProviderTest -Ptarget_mc_version=1.21.2
+./gradlew :common-1.21.2:test --tests com.chronodawn.client.TemporalPlantColorProviderTest -Ptarget_mc_version=1.21.2
 ```
 
 Expected: compilation failure — `TemporalPlantColorProvider` does not exist.
@@ -199,11 +194,14 @@ public final class TemporalPlantColorProvider {
     }
 
     /**
-     * Item-color callback. Returns ARGB white for {@code tintIndex == 0} so the
-     * inventory icon renders the texture's raw teal; {@code -1} otherwise.
+     * Item-color callback. Always returns {@code -1} so the inventory icon
+     * renders the texture's raw teal — no in-world biome blending is applied
+     * to held items. (The ItemColor contract uses {@code -1} as the
+     * "no tint" sentinel; {@code tintIndex} is unused because Temporal plants
+     * declare only {@code tintindex: 0}.)
      */
     public static int itemTint(int tintIndex) {
-        return tintIndex == 0 ? 0xFFFFFFFF : -1;
+        return -1;
     }
 
     /**
@@ -227,16 +225,16 @@ public final class TemporalPlantColorProvider {
 - [ ] **Step 4: Run the test and verify it passes**
 
 ```
-./gradlew :common-1.21.2:test --tests com.chronodawn.unit.TemporalPlantColorProviderTest -Ptarget_mc_version=1.21.2
+./gradlew :common-1.21.2:test --tests com.chronodawn.client.TemporalPlantColorProviderTest -Ptarget_mc_version=1.21.2
 ```
 
-Expected: 8 tests pass.
+Expected: 8 tests pass (one of them asserts the no-tint sentinel for three tintIndex values).
 
 - [ ] **Step 5: Commit**
 
 ```bash
 git add common/shared/src/main/java/com/chronodawn/client/TemporalPlantColorProvider.java \
-        common/1.21.2/src/test/java/com/chronodawn/unit/TemporalPlantColorProviderTest.java
+        common/1.21.2/src/test/java/com/chronodawn/client/TemporalPlantColorProviderTest.java
 git commit -m "feat(plants): add TemporalPlantColorProvider for biome-blended tint"
 ```
 
@@ -364,7 +362,7 @@ git commit -m "feat(plants): register NeoForge biome tint for Temporal Tall Gras
 
 **Files:** `neoforge/base/src/main/java/com/chronodawn/neoforge/client/ChronoDawnClientNeoForge.java`
 
-NeoForge `base/` covers 1.21.1–1.21.3 and still uses `RegisterColorHandlersEvent.Item`. Per-version NeoForge files for 1.21.4+ removed item color registration in favour of Client Items JSON; since our item tint is `0xFFFFFFFF` (texture unchanged), no Client Items JSON edits are required for those versions.
+NeoForge `base/` covers 1.21.1–1.21.3 and still uses `RegisterColorHandlersEvent.Item`. Per-version NeoForge files for 1.21.4+ removed item color registration in favour of Client Items JSON; since our item tint returns `-1` (the "no tint" sentinel, texture unchanged), no Client Items JSON edits are required for those versions.
 
 - [ ] **Step 1: Add item color registration in `neoforge/base`**
 
@@ -406,9 +404,9 @@ git commit -m "feat(plants): register NeoForge item color for Temporal plants on
 ./gradlew checkAll
 ```
 
-Expected: all phases pass — `cleanAll`, `validateResources`, `validateTranslations`, `buildAll`, `testAll` (8 new unit tests), `gameTestAll`.
+Expected: all phases pass — `cleanAll`, `validateResources`, `validateTranslations`, `buildAll`, `testAll` (8 unit tests for `TemporalPlantColorProvider`), `gameTestAll`.
 
-If `testAll` reports `TemporalPlantColorProviderTest` failures, debug locally with `./gradlew :common-1.21.2:test -Ptarget_mc_version=1.21.2 --tests com.chronodawn.unit.TemporalPlantColorProviderTest`.
+If `testAll` reports `TemporalPlantColorProviderTest` failures, debug locally with `./gradlew :common-1.21.2:test -Ptarget_mc_version=1.21.2 --tests com.chronodawn.client.TemporalPlantColorProviderTest`.
 
 - [ ] **Step 2: Smoke test in Fabric 1.21.2**
 
@@ -464,7 +462,7 @@ git commit -m "fix(plants): <describe the tweak>"
 - NeoForge `base/` item registration → Task 4
 - Edge cases (`tintIndex != 0`, `world == null`, `baseC == 0`, `BLEND` tunable) → Task 1 covers via tests + comments
 - Cross-version stability note → covered by Task 2 / Task 3 build steps + Task 5 smoke checks
-- Unit test plan (5 cases from spec, expanded to 8) → Task 1 Step 1
+- Unit test plan (5 cases from spec, expanded to 8 named methods / 8 invocations after merging duplicate-value `itemTint` cases into one method) → Task 1 Step 1
 - Manual in-game checks → Task 5
 - `checkAll` requirement → Task 5 Step 1
 
