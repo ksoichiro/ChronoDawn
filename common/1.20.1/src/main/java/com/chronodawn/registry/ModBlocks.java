@@ -113,6 +113,8 @@ import com.chronodawn.blocks.TimelessMushroomBlock;
 import com.chronodawn.blocks.TimeBlossomBlock;
 import com.chronodawn.blocks.DawnBellBlock;
 import com.chronodawn.blocks.DuskBellBlock;
+import com.chronodawn.blocks.TemporalTallGrassBlock;
+import com.chronodawn.blocks.TemporalFernBlock;
 import com.chronodawn.blocks.TimeTorchBlock;
 import com.chronodawn.blocks.WallTimeTorchBlock;
 import com.chronodawn.blocks.TemporalLanternBlock;
@@ -894,6 +896,16 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> DUSK_BELL = BLOCKS.register(
         ModBlockId.DUSK_BELL.id(),
         () -> new DuskBellBlock(DuskBellBlock.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> TEMPORAL_TALL_GRASS = BLOCKS.register(
+        ModBlockId.TEMPORAL_TALL_GRASS.id(),
+        () -> new TemporalTallGrassBlock(TemporalTallGrassBlock.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> TEMPORAL_FERN = BLOCKS.register(
+        ModBlockId.TEMPORAL_FERN.id(),
+        () -> new TemporalFernBlock(TemporalFernBlock.createProperties())
     );
 
     // === Time Torches ===

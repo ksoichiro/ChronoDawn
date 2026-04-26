@@ -181,12 +181,14 @@ public enum ModItemId {
     UNSTABLE_FUNGUS("unstable_fungus"),
     FRUIT_OF_TIME("fruit_of_time"),
 
-    // Flowers
+    // Flowers and plants
     ORANGE_TIME_BLOSSOM("orange_time_blossom"),
     PINK_TIME_BLOSSOM("pink_time_blossom"),
     PURPLE_TIME_BLOSSOM("purple_time_blossom"),
     DAWN_BELL("dawn_bell"),
     DUSK_BELL("dusk_bell"),
+    TEMPORAL_TALL_GRASS("temporal_tall_grass"),
+    TEMPORAL_FERN("temporal_fern"),
 
     // Lighting items
     PURPLE_TIME_TORCH("purple_time_torch"),

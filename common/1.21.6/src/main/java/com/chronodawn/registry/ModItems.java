@@ -1609,6 +1609,22 @@ public class ModItems {
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DUSK_BELL.id()))))
     );
 
+    public static final RegistrySupplier<Item> TEMPORAL_TALL_GRASS = ITEMS.register(
+        ModItemId.TEMPORAL_TALL_GRASS.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_TALL_GRASS.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_TALL_GRASS.id()))))
+    );
+
+    public static final RegistrySupplier<Item> TEMPORAL_FERN = ITEMS.register(
+        ModItemId.TEMPORAL_FERN.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_FERN.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_FERN.id()))))
+    );
+
     // === Lighting Items ===
 
     public static final RegistrySupplier<Item> PURPLE_TIME_TORCH = ITEMS.register(
@@ -2872,6 +2888,8 @@ public class ModItems {
         output.accept(PINK_TIME_BLOSSOM.get());
         output.accept(DAWN_BELL.get());
         output.accept(DUSK_BELL.get());
+        output.accept(TEMPORAL_TALL_GRASS.get());
+        output.accept(TEMPORAL_FERN.get());
 
         // === Lighting Items ===
         output.accept(PURPLE_TIME_TORCH.get());

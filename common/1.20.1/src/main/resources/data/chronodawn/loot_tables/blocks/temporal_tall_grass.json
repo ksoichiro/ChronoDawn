@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "conditions": [
+            {
+              "condition": "minecraft:block_state_property",
+              "block": "chronodawn:temporal_tall_grass",
+              "properties": {
+                "half": "lower"
+              }
+            }
+          ],
+          "name": "chronodawn:temporal_tall_grass"
+        }
+      ]
+    }
+  ]
+}

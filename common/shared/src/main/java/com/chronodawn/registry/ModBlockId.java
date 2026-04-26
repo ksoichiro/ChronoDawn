@@ -188,12 +188,14 @@ public enum ModBlockId {
     UNSTABLE_FUNGUS(def("unstable_fungus").cutout()),
     FRUIT_OF_TIME(def("fruit_of_time")),
 
-    // Flowers
+    // Flowers and plants
     ORANGE_TIME_BLOSSOM(def("orange_time_blossom").cutout()),
     PINK_TIME_BLOSSOM(def("pink_time_blossom").cutout()),
     PURPLE_TIME_BLOSSOM(def("purple_time_blossom").cutout()),
     DAWN_BELL(def("dawn_bell").cutout()),
     DUSK_BELL(def("dusk_bell").cutout()),
+    TEMPORAL_TALL_GRASS(def("temporal_tall_grass").cutout()),
+    TEMPORAL_FERN(def("temporal_fern").cutout()),
 
     // Time Torches (floor variants)
     PURPLE_TIME_TORCH(def("purple_time_torch").cutout()),
