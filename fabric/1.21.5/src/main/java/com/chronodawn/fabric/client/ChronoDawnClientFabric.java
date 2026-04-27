@@ -1,8 +1,8 @@
 package com.chronodawn.fabric.client;
 
 import com.chronodawn.ChronoDawn;
-import com.chronodawn.entities.boats.ChronoDawnBoatType;
 import com.chronodawn.client.LeafColorProvider;
+import com.chronodawn.client.TemporalGrassEdgeTint;
 import com.chronodawn.client.TemporalPlantColorProvider;
 import com.chronodawn.client.model.*;
 import com.chronodawn.client.particle.ChronoDawnPortalParticle;
@@ -31,7 +31,6 @@ import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.client.model.BoatModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -139,17 +138,10 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             ModBlocks.ATTACHED_CHRONO_MELON_STEM.get()
         );
 
-        // Register Temporal Grass Block color (biome-dependent foliage tint)
-        // Item tints for temporal_grass_block are defined in items/ JSON (1.21.4+)
-        // Only tint faces with tintIndex 0 (top and side overlay in grass_block model).
+        // Register Temporal Grass Block color: biome grass tint, blended toward a pale
+        // edge color near Temporal Sand / Gravel disks. Logic lives in the shared helper.
         ColorProviderRegistry.BLOCK.register(
-            (state, world, pos, tintIndex) -> {
-                if (tintIndex != 0) return -1;
-                if (world != null && pos != null) {
-                    return BiomeColors.getAverageGrassColor(world, pos);
-                }
-                return 0x5B8AC4; // Chrono Dawn plains grass_color
-            },
+            TemporalGrassEdgeTint::provide,
             ModBlocks.TEMPORAL_GRASS_BLOCK.get()
         );
 
