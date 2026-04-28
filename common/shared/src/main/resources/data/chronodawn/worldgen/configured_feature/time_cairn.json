@@ -1,0 +1,8 @@
+{
+  "type": "chronodawn:nbt_template",
+  "config": {
+    "template": "chronodawn:time_cairn",
+    "random_rotate": true,
+    "y_offset": 0
+  }
+}

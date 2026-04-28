@@ -1,0 +1,8 @@
+{
+  "type": "chronodawn:nbt_template",
+  "config": {
+    "template": "chronodawn:upside_down_tree",
+    "random_rotate": true,
+    "y_offset": 0
+  }
+}

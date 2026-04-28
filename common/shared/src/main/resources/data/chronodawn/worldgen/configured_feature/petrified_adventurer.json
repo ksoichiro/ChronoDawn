@@ -1,0 +1,8 @@
+{
+  "type": "chronodawn:nbt_template",
+  "config": {
+    "template": "chronodawn:petrified_adventurer",
+    "random_rotate": true,
+    "y_offset": 0
+  }
+}
