@@ -124,17 +124,22 @@ pool { rolls: uniform 2..4 }
   Time Wood Log   1..3   weight 3
   Bread           1..2   weight 3
   Iron Ingot      1      weight 2
-  Time Crystal Shard  1..2  weight 2
+  Time Crystal    1..2   weight 2
   Clock           1      weight 1
   Compass         1      weight 1
-  Temporal Amber  1..2   weight 1
+  Raw Temporal Amber  1..2  weight 1
   Fruit of Time   1..2   weight 1
 total weight: 18
 ```
 
-The expected per-chest yield (3 rolls × 18 weight) keeps Time Crystal
-Shard and Temporal Amber visible but not abundant — a player exploring 5–10
-camps gets a useful but non-game-breaking trickle of progression materials.
+(Item IDs reflect actual ChronoDawn registry: `chronodawn:time_crystal` is the
+ore-drop item — there is no separate "shard" form — and the unprocessed amber
+drop is `chronodawn:raw_temporal_amber`. Both forms read naturally as a
+watchmaker's stockpile of raw materials.)
+
+The expected per-chest yield (3 rolls × 18 weight) keeps Time Crystal and
+Raw Temporal Amber visible but not abundant — a player exploring 5–10 camps
+gets a useful but non-game-breaking trickle of progression materials.
 
 ### 5. Old Sundial (`old_sundial`)
 
