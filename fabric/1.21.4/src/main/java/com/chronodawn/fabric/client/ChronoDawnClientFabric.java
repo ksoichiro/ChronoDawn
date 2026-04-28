@@ -1,6 +1,7 @@
 package com.chronodawn.fabric.client;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.entities.boats.ChronoDawnBoatType;
 import com.chronodawn.client.LeafColorProvider;
 import com.chronodawn.client.TemporalGrassEdgeTint;
 import com.chronodawn.client.TemporalPlantColorProvider;
