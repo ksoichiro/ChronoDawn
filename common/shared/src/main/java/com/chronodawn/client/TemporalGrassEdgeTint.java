@@ -30,11 +30,14 @@ public final class TemporalGrassEdgeTint {
 
     /**
      * Color the tint shifts toward at the edge of a sand/gravel disk.
-     * Initial value picked as a midpoint between {@link #DEFAULT_FALLBACK} and
-     * the average pixel color of {@code temporal_sand.png}; refined in Task 5
-     * after sampling the texture exactly.
+     * Derived from the average pixel color of {@code temporal_sand.png}
+     * (= 0x90BBE7) biased 30% toward {@link #DEFAULT_FALLBACK} to retain a
+     * hint of grass at the boundary. Each channel rounded to a multiple of 4
+     * (& 0xFC) so the value doesn't visually pin to a precise digit.
+     * Per-channel: r 0x90→0x80, g 0xBB→0xAC, b 0xE7→0xDC; all already
+     * multiples of 4 after rounding.
      */
-    public static final int EDGE_TINT = 0x9CB6CC;
+    public static final int EDGE_TINT = 0x80ACDC;
 
     /** Chebyshev radius scanned for edge triggers. */
     private static final int RADIUS = 2;
