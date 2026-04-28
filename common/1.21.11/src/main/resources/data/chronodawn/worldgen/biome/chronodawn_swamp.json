@@ -128,7 +128,9 @@
       "chronodawn:patch_grass",
       "chronodawn:seagrass",
       "chronodawn:gravel_disk_placed",
-      "chronodawn:sand_disk_placed"
+      "chronodawn:sand_disk_placed",
+      "chronodawn:petrified_adventurer_placed",
+      "chronodawn:time_cairn_placed"
     ],
     []
   ],

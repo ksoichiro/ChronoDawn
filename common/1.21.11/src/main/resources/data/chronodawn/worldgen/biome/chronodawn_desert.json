@@ -107,7 +107,10 @@
     [
       "chronodawn:boulder_placed",
       "chronodawn:gravel_disk_placed",
-      "chronodawn:sand_disk_placed"
+      "chronodawn:sand_disk_placed",
+      "chronodawn:petrified_adventurer_placed",
+      "chronodawn:time_cairn_placed",
+      "chronodawn:hourglass_monolith_placed"
     ],
     []
   ],

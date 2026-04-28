@@ -182,7 +182,11 @@
       "chronodawn:patch_chrono_melon",
       "chronodawn:patch_timeless_mushroom",
       "chronodawn:boulder_placed",
-      "chronodawn:fallen_log_placed"
+      "chronodawn:fallen_log_placed",
+      "chronodawn:time_well_placed",
+      "chronodawn:petrified_adventurer_placed",
+      "chronodawn:time_cairn_placed",
+      "chronodawn:watchmaker_camp_placed"
     ],
     []
   ],

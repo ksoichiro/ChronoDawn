@@ -107,7 +107,9 @@
       "chronodawn:patch_flowers",
       "chronodawn:boulder_placed",
       "chronodawn:fallen_log_placed",
-      "chronodawn:gravel_disk_placed"
+      "chronodawn:gravel_disk_placed",
+      "chronodawn:petrified_adventurer_placed",
+      "chronodawn:time_cairn_placed"
     ],
     []
   ],

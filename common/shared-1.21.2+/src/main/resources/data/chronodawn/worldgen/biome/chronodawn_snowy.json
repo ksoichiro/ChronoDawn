@@ -130,7 +130,9 @@
     [
       "chronodawn:boulder_placed",
       "chronodawn:gravel_disk_placed",
-      "chronodawn:freeze_top_layer"
+      "chronodawn:freeze_top_layer",
+      "chronodawn:petrified_adventurer_snowy_placed",
+      "chronodawn:time_cairn_placed"
     ],
     [
       "chronodawn:ice_spike_placed"
