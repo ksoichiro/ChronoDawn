@@ -2,6 +2,7 @@ package com.chronodawn.neoforge.client;
 
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.client.LeafColorProvider;
+import com.chronodawn.client.TemporalGrassEdgeTint;
 import com.chronodawn.client.TemporalPlantColorProvider;
 import com.chronodawn.client.model.*;
 import com.chronodawn.client.particle.ChronoDawnPortalParticle;
@@ -15,7 +16,6 @@ import com.chronodawn.neoforge.registry.ModFluidTypes;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModEntities;
 import com.chronodawn.registry.ModParticles;
-import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -418,17 +418,9 @@ public class ChronoDawnClientNeoForge {
             ModBlocks.ATTACHED_CHRONO_MELON_STEM.get()
         );
 
-        // Register Temporal Grass Block color (biome-dependent foliage tint)
-        // Only tint faces with tintIndex 0 (top and side overlay in grass_block model).
-        // Side dirt faces have no tintindex and NeoForge may pass -1 for them.
+        // Register Temporal Grass Block color (biome-dependent grass tint with edge blend)
         event.register(
-            (state, world, pos, tintIndex) -> {
-                if (tintIndex != 0) return -1;
-                if (world != null && pos != null) {
-                    return BiomeColors.getAverageGrassColor(world, pos);
-                }
-                return 0x5B8AC4; // Chrono Dawn plains grass_color
-            },
+            TemporalGrassEdgeTint::provide,
             ModBlocks.TEMPORAL_GRASS_BLOCK.get()
         );
 
