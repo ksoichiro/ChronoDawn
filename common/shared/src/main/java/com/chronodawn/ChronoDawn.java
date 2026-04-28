@@ -27,6 +27,7 @@ import com.chronodawn.registry.ModCreativeTabs;
 import com.chronodawn.registry.ModDimensions;
 import com.chronodawn.registry.ModEffects;
 import com.chronodawn.registry.ModEntities;
+import com.chronodawn.registry.ModFeatures;
 import com.chronodawn.registry.ModFluids;
 import com.chronodawn.registry.ModItems;
 import com.chronodawn.registry.ModParticles;
@@ -64,6 +65,7 @@ public class ChronoDawn {
         ModCreativeTabs.register();
         ModTreeDecoratorTypes.register();
         ModStructureProcessorTypes.register();
+        ModFeatures.register();
 
         // Note: Spawn egg initialization is platform-specific
         // - Fabric: Called immediately in ChronoDawnFabric.onInitialize()
