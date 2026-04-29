@@ -6,9 +6,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
@@ -49,6 +52,34 @@ public class TemporalPointedDripstoneBlock extends Block {
     @Override
     public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return getShapeForState(state);
+    }
+
+    @Override
+    public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, double fallDistance) {
+        if (state.getValue(DIRECTION) == DripstoneDirection.UP && state.getValue(THICKNESS) == Thickness.TIP) {
+            entity.causeFallDamage(fallDistance, 2.0f, level.damageSources().stalagmite());
+        } else {
+            super.fallOn(level, state, pos, entity, fallDistance);
+        }
+    }
+
+    @Override
+    protected void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean movedByPiston) {
+        super.affectNeighborsAfterRemoval(state, level, pos, movedByPiston);
+        if (state.getValue(DIRECTION) == DripstoneDirection.DOWN) {
+            cascadeBreak(level, pos);
+        }
+    }
+
+    private static void cascadeBreak(Level level, BlockPos pos) {
+        BlockPos below = pos.below();
+        BlockState belowState = level.getBlockState(below);
+        if (belowState.getBlock() instanceof TemporalPointedDripstoneBlock
+            && belowState.getValue(DIRECTION) == DripstoneDirection.DOWN) {
+            Block.dropResources(belowState, level, below);
+            level.removeBlock(below, false);
+            cascadeBreak(level, below);
+        }
     }
 
     private static VoxelShape getShapeForState(BlockState state) {
