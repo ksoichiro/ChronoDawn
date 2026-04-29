@@ -70,6 +70,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.component.BlocksAttacks;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.item.equipment.Equippable;
+import net.minecraft.world.food.FoodProperties;
 import com.chronodawn.registry.ModItemId;
 import com.chronodawn.registry.ModBlockId;
 import java.util.List;
@@ -1636,6 +1637,42 @@ public class ModItems {
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_FERN.id()))))
     );
 
+    public static final RegistrySupplier<Item> TEMPORAL_KELP = ITEMS.register(
+        ModItemId.TEMPORAL_KELP.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_KELP.get(), new Item.Properties()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_KELP.id()))))
+    );
+
+    public static final RegistrySupplier<Item> TEMPORAL_SEAGRASS = ITEMS.register(
+        ModItemId.TEMPORAL_SEAGRASS.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_SEAGRASS.get(), new Item.Properties()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_SEAGRASS.id()))))
+    );
+
+    public static final RegistrySupplier<Item> TALL_TEMPORAL_SEAGRASS = ITEMS.register(
+        ModItemId.TALL_TEMPORAL_SEAGRASS.id(),
+        () -> new BlockItem(ModBlocks.TALL_TEMPORAL_SEAGRASS.get(), new Item.Properties()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TALL_TEMPORAL_SEAGRASS.id()))))
+    );
+
+    /**
+     * Dried Temporal Kelp - Smoked product of Temporal Kelp.
+     * Nutrition: 1, Saturation: 0.6 (parity with vanilla dried_kelp).
+     */
+    public static final RegistrySupplier<Item> DRIED_TEMPORAL_KELP = ITEMS.register(
+        ModItemId.DRIED_TEMPORAL_KELP.id(),
+        () -> new Item(new Item.Properties()
+                .food(new FoodProperties.Builder()
+                    .nutrition(1)
+                    .saturationModifier(0.6f)
+                    .build())
+                .setId(ResourceKey.create(Registries.ITEM,
+                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DRIED_TEMPORAL_KELP.id()))))
+    );
+
     // === Lighting Items ===
 
     public static final RegistrySupplier<Item> PURPLE_TIME_TORCH = ITEMS.register(
@@ -2902,6 +2939,9 @@ public class ModItems {
         output.accept(DUSK_BELL.get());
         output.accept(TEMPORAL_TALL_GRASS.get());
         output.accept(TEMPORAL_FERN.get());
+        output.accept(TEMPORAL_KELP.get());
+        output.accept(TEMPORAL_SEAGRASS.get());
+        output.accept(TALL_TEMPORAL_SEAGRASS.get());
 
         // === Lighting Items ===
         output.accept(PURPLE_TIME_TORCH.get());
@@ -2924,6 +2964,7 @@ public class ModItems {
         // === Fish Foods ===
         output.accept(GLIDE_FISH.get());
         output.accept(COOKED_GLIDE_FISH.get());
+        output.accept(DRIED_TEMPORAL_KELP.get());
 
         // === Equipment - Weapons ===
         output.accept(CLOCKSTONE_SWORD.get());
