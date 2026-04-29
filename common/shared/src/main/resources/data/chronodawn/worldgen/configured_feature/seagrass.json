@@ -11,7 +11,8 @@
               "state": { "Name": "chronodawn:temporal_seagrass" }
             }
           }
-        }
+        },
+        "placement": []
       },
       {
         "feature": {
@@ -22,11 +23,10 @@
               "state": { "Name": "chronodawn:temporal_seagrass" }
             }
           }
-        }
+        },
+        "placement": []
       },
-      {
-        "feature": "chronodawn:tall_temporal_seagrass_column"
-      }
+      "chronodawn:tall_temporal_seagrass_column_placed"
     ]
   }
 }
