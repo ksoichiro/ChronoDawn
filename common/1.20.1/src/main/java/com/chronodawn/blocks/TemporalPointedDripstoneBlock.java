@@ -60,19 +60,19 @@ public class TemporalPointedDripstoneBlock extends Block {
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moved) {
         super.onRemove(state, level, pos, newState, moved);
-        if (!level.isClientSide && state.getValue(DIRECTION) == DripstoneDirection.DOWN) {
-            cascadeBreak(level, pos);
+        if (!level.isClientSide) {
+            cascadeBreak(level, pos, state.getValue(DIRECTION));
         }
     }
 
-    private static void cascadeBreak(Level level, BlockPos pos) {
-        BlockPos below = pos.below();
-        BlockState belowState = level.getBlockState(below);
-        if (belowState.getBlock() instanceof TemporalPointedDripstoneBlock
-            && belowState.getValue(DIRECTION) == DripstoneDirection.DOWN) {
-            Block.dropResources(belowState, level, below);
-            level.removeBlock(below, false);
-            cascadeBreak(level, below);
+    private static void cascadeBreak(Level level, BlockPos pos, DripstoneDirection direction) {
+        BlockPos next = direction == DripstoneDirection.UP ? pos.above() : pos.below();
+        BlockState nextState = level.getBlockState(next);
+        if (nextState.getBlock() instanceof TemporalPointedDripstoneBlock
+            && nextState.getValue(DIRECTION) == direction) {
+            Block.dropResources(nextState, level, next);
+            level.removeBlock(next, false);
+            cascadeBreak(level, next, direction);
         }
     }
 
