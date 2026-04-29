@@ -118,6 +118,10 @@ import com.chronodawn.blocks.DuskBellBlock;
 import com.chronodawn.blocks.DuskLanternBlock;
 import com.chronodawn.blocks.TemporalTallGrassBlock;
 import com.chronodawn.blocks.TemporalFernBlock;
+import com.chronodawn.blocks.TemporalKelpBlock;
+import com.chronodawn.blocks.TemporalKelpPlantBlock;
+import com.chronodawn.blocks.TemporalSeagrassBlock;
+import com.chronodawn.blocks.TallTemporalSeagrassBlock;
 import com.chronodawn.blocks.TemporalLanternBlock;
 import com.chronodawn.blocks.TimeTorchBlock;
 import com.chronodawn.blocks.WallTimeTorchBlock;
@@ -952,6 +956,26 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> TEMPORAL_FERN = BLOCKS.register(
         ModBlockId.TEMPORAL_FERN.id(),
         () -> new TemporalFernBlock(TemporalFernBlock.createProperties("temporal_fern"))
+    );
+
+    public static final RegistrySupplier<Block> TEMPORAL_KELP = BLOCKS.register(
+        ModBlockId.TEMPORAL_KELP.id(),
+        () -> new TemporalKelpBlock(TemporalKelpBlock.createProperties(ModBlockId.TEMPORAL_KELP.id()))
+    );
+
+    public static final RegistrySupplier<Block> TEMPORAL_KELP_PLANT = BLOCKS.register(
+        ModBlockId.TEMPORAL_KELP_PLANT.id(),
+        () -> new TemporalKelpPlantBlock(TemporalKelpPlantBlock.createProperties(ModBlockId.TEMPORAL_KELP_PLANT.id()))
+    );
+
+    public static final RegistrySupplier<Block> TEMPORAL_SEAGRASS = BLOCKS.register(
+        ModBlockId.TEMPORAL_SEAGRASS.id(),
+        () -> new TemporalSeagrassBlock(TemporalSeagrassBlock.createProperties(ModBlockId.TEMPORAL_SEAGRASS.id()))
+    );
+
+    public static final RegistrySupplier<Block> TALL_TEMPORAL_SEAGRASS = BLOCKS.register(
+        ModBlockId.TALL_TEMPORAL_SEAGRASS.id(),
+        () -> new TallTemporalSeagrassBlock(TallTemporalSeagrassBlock.createProperties(ModBlockId.TALL_TEMPORAL_SEAGRASS.id()))
     );
 
     // === Time Torches ===
