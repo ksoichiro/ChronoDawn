@@ -202,6 +202,7 @@ public enum ModBlockId {
     TEMPORAL_KELP_PLANT(def("temporal_kelp_plant").cutout()),
     TEMPORAL_SEAGRASS(def("temporal_seagrass").cutout()),
     TALL_TEMPORAL_SEAGRASS(def("tall_temporal_seagrass").cutout()),
+    LUMEN_POLYP(def("lumen_polyp").cutout()),
 
     // Time Torches (floor variants)
     PURPLE_TIME_TORCH(def("purple_time_torch").cutout()),

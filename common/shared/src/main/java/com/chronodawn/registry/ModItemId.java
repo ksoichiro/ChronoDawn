@@ -194,6 +194,7 @@ public enum ModItemId {
     TEMPORAL_KELP("temporal_kelp"),
     TEMPORAL_SEAGRASS("temporal_seagrass"),
     TALL_TEMPORAL_SEAGRASS("tall_temporal_seagrass"),
+    LUMEN_POLYP("lumen_polyp"),
     DRIED_TEMPORAL_KELP("dried_temporal_kelp"),
 
     // Lighting items
