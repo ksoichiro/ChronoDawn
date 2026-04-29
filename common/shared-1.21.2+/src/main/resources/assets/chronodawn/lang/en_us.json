@@ -148,6 +148,13 @@
   "item.chronodawn.temporal_tall_grass": "Temporal Tall Grass",
   "block.chronodawn.temporal_fern": "Temporal Fern",
   "item.chronodawn.temporal_fern": "Temporal Fern",
+  "block.chronodawn.temporal_kelp": "Temporal Kelp",
+  "item.chronodawn.temporal_kelp": "Temporal Kelp",
+  "block.chronodawn.temporal_kelp_plant": "Temporal Kelp Plant",
+  "block.chronodawn.temporal_seagrass": "Temporal Seagrass",
+  "item.chronodawn.temporal_seagrass": "Temporal Seagrass",
+  "block.chronodawn.tall_temporal_seagrass": "Tall Temporal Seagrass",
+  "item.chronodawn.tall_temporal_seagrass": "Tall Temporal Seagrass",
 
   "block.chronodawn.purple_time_torch": "Purple Time Torch",
   "item.chronodawn.purple_time_torch": "Purple Time Torch",
@@ -399,6 +406,7 @@
   "item.chronodawn.secondwing_fowl_spawn_egg": "Secondwing Fowl Spawn Egg",
   "item.chronodawn.glide_fish": "Glide Fish",
   "item.chronodawn.cooked_glide_fish": "Cooked Glide Fish",
+  "item.chronodawn.dried_temporal_kelp": "Dried Temporal Kelp",
 
   "item.chronodawn.time_wood_boat": "Time Wood Boat",
   "item.chronodawn.time_wood_chest_boat": "Time Wood Boat with Chest",
