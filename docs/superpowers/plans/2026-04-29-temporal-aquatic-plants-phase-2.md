@@ -368,10 +368,13 @@ git commit -m "feat(plants): add LumenPolypBlock for 1.21.11"
     public static final RegistrySupplier<Item> LUMEN_POLYP = ITEMS.register(
         ModItemId.LUMEN_POLYP.id(),
         () -> new BlockItem(ModBlocks.LUMEN_POLYP.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.LUMEN_POLYP.id()))))
     );
 ```
+
+> **Pattern note:** every aquatic-plant BlockItem (TEMPORAL_KELP, TEMPORAL_SEAGRASS, TALL_TEMPORAL_SEAGRASS, LUMEN_POLYP, all Chrono Coral block / plant / fan) **must** chain `.useBlockDescriptionPrefix()` on the `Item.Properties()`. This makes `BlockItem.getDescriptionId()` resolve to `block.chronodawn.<id>` (matching the `block.chronodawn.<id>` lang key) instead of `item.chronodawn.<id>`. Omission silently breaks the held-item tooltip — visible only after lang keys are wired up. Apply the same pattern in Tasks 19, 27.\* and the per-version replication tasks 35–39.
 
 - [ ] **Step 4: Add creative-tab entry** — locate `output.accept(TALL_TEMPORAL_SEAGRASS.get());` and append `output.accept(LUMEN_POLYP.get());` on the next line.
 
@@ -1140,12 +1143,13 @@ import com.chronodawn.blocks.ChronoCoralWallFanBlock;
     );
 ```
 
-- [ ] **Step 3: Append 3 BlockItem registrations** in `ModItems.java` (no item for wall_fan — vanilla pattern):
+- [ ] **Step 3: Append 3 BlockItem registrations** in `ModItems.java` (no item for wall_fan — vanilla pattern). Each `Item.Properties()` MUST chain `.useBlockDescriptionPrefix()` per Task 3 step 3's pattern note:
 
 ```java
     public static final RegistrySupplier<Item> DAWN_CHRONO_CORAL_BLOCK = ITEMS.register(
         ModItemId.DAWN_CHRONO_CORAL_BLOCK.id(),
         () -> new BlockItem(ModBlocks.DAWN_CHRONO_CORAL_BLOCK.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DAWN_CHRONO_CORAL_BLOCK.id()))))
     );
@@ -1153,6 +1157,7 @@ import com.chronodawn.blocks.ChronoCoralWallFanBlock;
     public static final RegistrySupplier<Item> DAWN_CHRONO_CORAL = ITEMS.register(
         ModItemId.DAWN_CHRONO_CORAL.id(),
         () -> new BlockItem(ModBlocks.DAWN_CHRONO_CORAL.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DAWN_CHRONO_CORAL.id()))))
     );
@@ -1160,6 +1165,7 @@ import com.chronodawn.blocks.ChronoCoralWallFanBlock;
     public static final RegistrySupplier<Item> DAWN_CHRONO_CORAL_FAN = ITEMS.register(
         ModItemId.DAWN_CHRONO_CORAL_FAN.id(),
         () -> new StandingAndWallBlockItem(ModBlocks.DAWN_CHRONO_CORAL_FAN.get(), ModBlocks.DAWN_CHRONO_CORAL_WALL_FAN.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DAWN_CHRONO_CORAL_FAN.id()))), Direction.DOWN)
     );
