@@ -70,6 +70,13 @@ HUE_SHIFTED = [
      "item/temporal_seagrass.png"),
     ("assets/minecraft/textures/item/dried_kelp.png",
      "item/dried_temporal_kelp.png"),
+    # Lumen Polyp: vanilla sea_pickle has no separate item PNG, so the
+    # block texture is reused for the item icon. Sea pickle is not animated,
+    # hence no .mcmeta entry below.
+    ("assets/minecraft/textures/block/sea_pickle.png",
+     "block/lumen_polyp.png"),
+    ("assets/minecraft/textures/block/sea_pickle.png",
+     "item/lumen_polyp.png"),
 ]
 
 # .mcmeta animation sidecars to copy unchanged.
