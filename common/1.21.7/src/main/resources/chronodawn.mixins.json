@@ -9,7 +9,8 @@
     "LevelGetTimeMixin",
     "ServerLevelSetTimeMixin",
     "SleepMixin",
-    "StructureStartMixin"
+    "StructureStartMixin",
+    "FreezeTopLayerMixin"
   ],
   "client": [
     "client.AtmosphericFogEnvironmentMixin",

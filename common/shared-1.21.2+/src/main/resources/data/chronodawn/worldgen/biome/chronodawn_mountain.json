@@ -130,7 +130,8 @@
       "chronodawn:fallen_log_placed",
       "chronodawn:gravel_disk_placed",
       "chronodawn:lost_adventurer_memorial_placed",
-      "chronodawn:time_cairn_placed"
+      "chronodawn:time_cairn_placed",
+      "chronodawn:freeze_top_layer"
     ],
     []
   ],

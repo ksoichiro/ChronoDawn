@@ -14,7 +14,8 @@
     "ServerLevelSetTimeMixin",
     "SleepMixin",
     "StructureStartMixin",
-    "StructureTemplateBlockAttachedFixMixin"
+    "StructureTemplateBlockAttachedFixMixin",
+    "FreezeTopLayerMixin"
   ],
   "client": [
     "client.ClientAdvancementsAccessor",
