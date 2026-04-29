@@ -56,7 +56,7 @@ public class TemporalPointedDripstoneBlock extends Block {
     @Override
     public void fallOn(Level level, BlockState state, BlockPos pos, Entity entity, float fallDistance) {
         if (state.getValue(DIRECTION) == DripstoneDirection.UP && state.getValue(THICKNESS) == Thickness.TIP) {
-            entity.causeFallDamage(fallDistance, 2.0f, level.damageSources().stalagmite());
+            entity.causeFallDamage(fallDistance + 2.0f, 2.0f, level.damageSources().stalagmite());
         } else {
             super.fallOn(level, state, pos, entity, fallDistance);
         }
