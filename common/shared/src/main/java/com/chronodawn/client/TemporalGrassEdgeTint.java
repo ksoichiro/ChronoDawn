@@ -41,8 +41,14 @@ public final class TemporalGrassEdgeTint {
      */
     public static final int EDGE_TINT = 0x90BBE7;
 
-    /** Chebyshev radius scanned for edge triggers. */
-    private static final int RADIUS = 2;
+    /**
+     * Chebyshev radius scanned for edge triggers. Wider radius = wider, smoother
+     * transition ring. With RADIUS=3 the weights at d=1 / d=2 / d=3 are
+     * 0.75 / 0.50 / 0.25, vs the original RADIUS=2's 0.667 / 0.333 — visual
+     * testing showed RADIUS=2 left sand/gravel circles feeling disjoint even
+     * with EDGE_TINT pulled fully to the sand average.
+     */
+    private static final int RADIUS = 3;
 
     private TemporalGrassEdgeTint() {}
 
