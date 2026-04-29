@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/three_sea_pickles",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "particle": "chronodawn:block/lumen_polyp",
+    "all": "chronodawn:block/lumen_polyp"
+  }
+}
