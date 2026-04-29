@@ -1334,3 +1334,190 @@ The plan was reviewed against the spec on 2026-04-27. Spec coverage:
 | Acceptance criteria — manual world tests | Task 5.5 |
 
 No gaps identified. No placeholder content remains. No TBD/TODO markers in the plan body.
+
+---
+
+## Appendix A: NBT Building Reference
+
+Single source of truth for the 8 small-feature NBT structures (7 features +
+1 snowy variant) that need to be authored in-game with structure blocks.
+The Phase 1 + Phase 2 task `Block plan:` sub-sections summarise; this
+appendix has the full layered detail and is the recommended companion
+while building.
+
+### A.1 Common pitfalls
+
+- **Item Frames are entities, not block entities.** Any structure that
+  contains an Item Frame must be saved with `Include entities: ON` on the
+  structure block. Otherwise the frames disappear from the saved NBT.
+- **Chest LootTable must be set BEFORE saving.** Place the chest, then run
+  `/data merge block <x> <y> <z> {LootTable:"chronodawn:chests/watchmaker_camp"}`,
+  THEN save with the structure block. If you save first the chest will
+  generate empty in-world.
+- **Sand has gravity.** Any `minecraft:sand` block in an NBT must have a
+  solid block directly above it (or be at the very top of its column with
+  no air gap below). Sand placed above air will fall on chunk load and
+  destroy the visual.
+- **Time Wood Leaves should be `persistent=true`.** Otherwise the leaves
+  decay when no log is in range. Place them with the leaves item (which
+  sets persistent automatically) or override via `/setblock`.
+- **Iron Trapdoor orientation.** Right-click the top face of a block to
+  place a closed trapdoor with `half=top, open=false`. That gives the
+  flat upward-facing "clock dial" pose used by `time_cairn`.
+- **Save NBT to `chronodawn:<name>`.** This makes the export land in
+  `<world>/generated/chronodawn/structure/<name>.nbt`. Copy that file to
+  BOTH `common/shared-1.21.1+/.../structure/` and `common/1.20.1/.../structure/`.
+- **Sizes below are `X × Y(height) × Z`** unless otherwise noted.
+
+### A.2 Block plans
+
+#### A.2.1 `time_cairn` — Time Cairn (T1, all land biomes)
+
+Size: **1 × 3 × 1**
+
+```
+Y=2 (top)    : Iron Trapdoor (closed, half=top, horizontal — clock-dial pose)
+Y=1 (middle) : Cobblestone
+Y=0 (base)   : Mossy Cobblestone Slab (top half)
+```
+
+Block count: 3. `Include entities: false`. Save name: `chronodawn:time_cairn`.
+
+#### A.2.2 `petrified_adventurer` — Petrified Adventurer (T2, 8 land biomes excl. snowy)
+
+Size: **3 × 3 × 3**
+
+```
+Y=2 (top)  : all air
+Y=1 (mid)  : center = Temporal Stone (torso/head)
+             one block in front of center = Temporal Stone Stair (forward-leaning posture; orientation
+             rotates with random_rotate)
+Y=0 (base) : center = Polished Temporal Stone Slab (top half) — the "worn legs"
+             one block to the side of center = Stone Bricks (the tool tile)
+```
+
+Item Frame: place on the top face of the Stone Bricks tile, holding 1×
+Iron Pickaxe. `Include entities: ON`.
+
+Block count: 4 + 1 entity. Save name: `chronodawn:petrified_adventurer`.
+
+#### A.2.3 `petrified_adventurer_snowy` — Snowy variant (T2, snowy biome only)
+
+Same as A.2.2, plus 4–6 `minecraft:snow` blocks (`layers=4`) scattered in
+the surrounding 3×3 ring on Y=0 to read as half-buried frostbitten remains.
+
+Size: **3 × 3 × 3**. `Include entities: ON` (Item Frame). Save name:
+`chronodawn:petrified_adventurer_snowy`.
+
+#### A.2.4 `time_well` — Time-Stopped Well (T3, plains/forest/prairies)
+
+Size: **3 × 5 × 3**. Configured-feature `y_offset = -1`, so when saving,
+anchor the structure block so the saved Y=0 lands one block BELOW the
+target ground level (the buried Temporal Amber sits there).
+
+```
+Y=4 (roof)   : Time Wood Slab (top half) bridging the two posts (1 block)
+Y=3 (posts)  : two opposite corners = Time Wood Log (axis=y); other 7 cells = air
+Y=2 (rim)    : 4 corners = Cobblestone Wall; 4 sides = Cobblestone; center = Blue Ice
+Y=1 (shaft)  : 4 corners = Cobblestone; 4 sides = Mossy Cobblestone; center = air
+Y=0 (bottom) : center = Temporal Amber Block (buried reward); 8 surrounding cells unused/air
+```
+
+Item Frame: attach to the side of one Time Wood Log post at Y=3, holding
+1× Bucket. `Include entities: ON`.
+
+Save name: `chronodawn:time_well`.
+
+#### A.2.5 `watchmaker_camp` — Watchmaker's Camp (T4, plains/forest)
+
+Size: **5 × 3 × 5**
+
+```
+Y=2 (roof tip) : optional 1× White Wool Stairs along one edge for a sloped roof end; otherwise air
+Y=1 (tent)     : 3× White Wool spanning between corner fence posts (the tent ceiling)
+                 + 1× Item Frame attached to the side of the Crafting Table holding a Clock
+Y=0 (camp)     : center = Campfire (lit=false) on Coarse Dirt
+                 north = Crafting Table
+                 east  = Lectern
+                 south = Chest (LootTable set per A.1 — chronodawn:chests/watchmaker_camp)
+                 west  = Anvil with the chipped variant block-state
+                 4 corners (5×5) = Time Wood Fence (tent posts)
+                 1 cell next to the campfire = Cobblestone (a stool)
+                 inner 3×3 floor = Coarse Dirt
+```
+
+`Include entities: ON` (Item Frame). Set Chest's `LootTable` NBT before
+saving via `/data merge block`. Save name: `chronodawn:watchmaker_camp`.
+
+#### A.2.6 `old_sundial` — Old Sundial (T2, plains/prairies)
+
+Size: **3 × 3 × 3**
+
+```
+Y=2 (top)  : center = Iron Bars (the gnomon, 1 block tall); other 8 cells = air
+Y=1 (mid)  : center = Stone Bricks (pedestal column)
+             one corner = Cobblestone Stairs (broken-edge detail; orientation
+             rotates with random_rotate); other 7 cells = air
+Y=0 (base) : 3×3 of Polished Stone Slab (top half) = the platform
+```
+
+Block count: 9 + 1 + 1 + 1 = 12. `Include entities: false`. Save name:
+`chronodawn:old_sundial`.
+
+#### A.2.7 `hourglass_monolith` — Hourglass Monolith (T2, desert)
+
+Size: **3 × 5 × 3**
+
+```
+Y=4 (top ring)  : 3×3 ring of Smooth Sandstone Wall (8 blocks); center = air
+Y=3 (upper bulb): 3×3 solid Smooth Sandstone (9 blocks)
+Y=2 (pinch)     : center = Chiseled Sandstone (1 block); 8 surrounding cells = air
+Y=1 (lower bulb): 3×3 solid Smooth Sandstone (9 blocks)
+Y=0 (base ring) : 3×3 ring of Smooth Sandstone Wall (8 blocks); center = 1× Sand
+                  (the "settled" sand that has finished running through)
+```
+
+The single Sand block at Y=0 center is safe — the Y=1 Smooth Sandstone
+above it acts as a lid, so it does not fall on chunk load.
+
+`Include entities: false`. Save name: `chronodawn:hourglass_monolith`.
+
+#### A.2.8 `upside_down_tree` — Upside-Down Tree (T2, ancient_forest)
+
+Size: **4 × 6 × 4** (centered roughly on a 3,3 origin in the bounding box)
+
+```
+Y=5 (root tips)  : 1–2 Time Wood Log blocks placed on the outer ends of Y=4 logs
+                   to imply tapering root tips (axis matches the log they extend)
+Y=4 (root splay) : 5–7 Time Wood Log blocks branching horizontally from the
+                   trunk top — center plus 4 cardinal directions, with axis=x
+                   and axis=z mixed so the splay reads gnarled rather than uniform
+Y=3 (trunk top)  : center = Time Wood Log (axis=y)
+Y=2 (trunk mid)  : center = Time Wood Log (axis=y)
+Y=1 (trunk base) : center = Time Wood Log (axis=y)
+Y=0 (canopy at ground) :
+                   3×3 ring around the trunk base = Time Wood Leaves (persistent=true)
+                   1–2 random leaf cells replaced with Fruit of Time block
+```
+
+`Include entities: false`. Save name: `chronodawn:upside_down_tree`.
+
+### A.3 Recommended build order
+
+Easiest → hardest, so toolchain quirks (entities, chest NBT, gravity)
+are encountered incrementally:
+
+1. `time_cairn` — smallest, validates Iron Trapdoor pose
+2. `old_sundial` — medium, no entities, no special blocks
+3. `hourglass_monolith` — medium, validates the Sand-with-lid trick
+4. `upside_down_tree` — medium, validates `persistent=true` on leaves
+5. `petrified_adventurer` — first one with an Item Frame
+6. `petrified_adventurer_snowy` — clone of #5 with snow layers
+7. `time_well` — buried block + Item Frame on a post
+8. `watchmaker_camp` — largest, requires chest LootTable NBT before save
+
+After each NBT is saved into both `shared-1.21.1+/.../structure/` and
+`1.20.1/.../structure/`, run `./gradlew validateResources`. The validation
+does not check NBT contents directly, so this only catches accidental JSON
+breakage from copy/paste mistakes. In-world verification of all eight
+features should be done in one pass at the end (Phase 5 Task 5.5).
