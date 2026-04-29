@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Temporal Lantern**, **Dawn Lantern**, and **Dusk Lantern** — pickaxe-mined light sources using the vanilla lantern shape (3D rendering, animated flame, standing and hanging placement). Dawn/Dusk Lantern crafted from the matching Bell flower (+ iron nuggets + torch); Temporal Lantern crafted from any Time Blossom (+ iron nuggets + torch)
 - Recipe advancements unlock the Time Torch / Lantern recipes when the player picks up the relevant Time Blossom or Bell
 - **Temporal Stalactites** and **Temporal Stalagmites** — decorative pointed cave blocks themed on Temporal Stone, generating across all ChronoDawn dimension biomes. Two sizes per direction (`tip` and `frustum`) form length-1 and length-2 formations on cave ceilings (stalactite) and floors (stalagmite). Pickaxe-mined at stone tier; `tip` blocks self-drop while `frustum` drops the matching `tip` so worldgen-only formations still produce a usable item when broken. Vanilla `pointed_dripstone` and Dripstone Caves remain untouched
+- **Temporal Aquatic Plants (Phase 1)** — replace vanilla aquatic vegetation in the ChronoDawn dimension. Newly generated chunks of `chronodawn_ocean` and `chronodawn_swamp` now grow:
+  - **Temporal Kelp** — pale-cyan kelp columns (1–25 blocks tall) growing upward from the ocean floor; bone-meal grows the column, shears harvest the block. The Temporal Kelp head and Temporal Kelp Plant stem are climbable like vanilla kelp
+  - **Temporal Seagrass** and **Tall Temporal Seagrass** — short and 2-block-tall variants on the ocean floor; bone-meal on a short seagrass produces the tall variant; shears drop the seagrass item. Temporal Seagrass is registered as turtle food
+  - Pre-existing chunks retain whatever vanilla aquatic blocks they generated; only new chunks switch to the Temporal variants
+- **Dried Temporal Kelp** — food item smoked / smelted / campfire-cooked from Temporal Kelp. Nutrition 1, saturation 0.6, and the same fast-eat animation (0.865 s) as vanilla dried kelp. Cooking times match vanilla: 5 s in a smoker, 10 s in a furnace, 30 s on a campfire
 
 ## [0.7.0] - 2026-04-22
 
