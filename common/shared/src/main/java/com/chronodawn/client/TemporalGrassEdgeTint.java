@@ -4,6 +4,7 @@ import com.chronodawn.blocks.TemporalGrassBlock;
 import com.chronodawn.registry.ModBlocks;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.core.BlockPos;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.Blocks;
@@ -14,11 +15,15 @@ import org.jetbrains.annotations.Nullable;
  * Computes the per-block tint for {@link TemporalGrassBlock}, blending the
  * biome grass color toward a pale "edge" color when the block is near a
  * Temporal Sand / Temporal Gravel disk (or vanilla sand/gravel placed by a
- * player).
+ * player), and toward a dark teal "wet" color when near water.
  *
- * Within 2 blocks (Chebyshev, same Y) of an edge trigger, the grass tint
- * lerps toward {@link #EDGE_TINT} with weight {@code (3 - d) / 3}, so the
- * gradient is strongest at distance 1 and fades out by distance 3.
+ * Edge blend: within {@link #RADIUS} blocks (Chebyshev, same Y) of an edge
+ * trigger, the grass tint lerps toward {@link #EDGE_TINT}.
+ *
+ * Water blend: within {@link #WATER_RADIUS} blocks (Chebyshev, same Y and
+ * one Y below) of water, the grass tint lerps toward {@link #WET_TINT}.
+ *
+ * Both effects stack — a block near both sand and water receives both blends.
  *
  * Pure function — no caching, recomputed on every chunk mesh bake. Cost is
  * comparable to vanilla {@link BiomeColors#getAverageGrassColor}.
@@ -65,6 +70,23 @@ public final class TemporalGrassEdgeTint {
      * with EDGE_TINT pulled fully to the sand average.
      */
     private static final int RADIUS = 3;
+
+    /**
+     * Color the tint shifts toward when the grass block is near water.
+     * Dark blue-green for a wet, saturated look.
+     *
+     * Tuning history:
+     *   - 0x3A6B5D: dark teal — too green
+     *   - 0x3A597F (current): base grass blue (0x5B8AC4) darkened ~35%
+     */
+    public static final int WET_TINT = 0x3A597F;
+
+    /**
+     * Chebyshev radius for water proximity detection. Controls how far
+     * from water the wet tint extends. Also checks one Y below the grass
+     * block to catch water at shore edges.
+     */
+    private static final int WATER_RADIUS = 2;
 
     private TemporalGrassEdgeTint() {}
 
@@ -115,29 +137,52 @@ public final class TemporalGrassEdgeTint {
     }
 
     /**
-     * Pure blend: scan the {@code RADIUS}-block Chebyshev neighborhood at the
-     * same Y as {@code pos} and lerp {@code baseTint} toward {@link #EDGE_TINT}
-     * by the closest edge-trigger distance.
+     * Pure blend: scan the {@code RADIUS}-block Chebyshev neighborhood and
+     * apply up to two tint layers — one for sand/gravel edge proximity
+     * (toward {@link #EDGE_TINT}) and one for water proximity
+     * (toward {@link #WET_TINT}). Both scans share the same loop.
      */
     static int blend(BlockGetter world, BlockPos pos, int baseTint) {
-        int minDist = RADIUS + 1;
+        int minDistEdge = RADIUS + 1;
+        int minDistWater = WATER_RADIUS + 1;
         BlockPos.MutableBlockPos cur = new BlockPos.MutableBlockPos();
         outer:
         for (int dx = -RADIUS; dx <= RADIUS; dx++) {
             for (int dz = -RADIUS; dz <= RADIUS; dz++) {
                 if (dx == 0 && dz == 0) continue;
                 int d = Math.max(Math.abs(dx), Math.abs(dz));
-                if (d >= minDist) continue;
+                boolean canImproveEdge = d < minDistEdge;
+                boolean canImproveWater = d <= WATER_RADIUS && d < minDistWater;
+                if (!canImproveEdge && !canImproveWater) continue;
                 cur.set(pos.getX() + dx, pos.getY(), pos.getZ() + dz);
-                if (isEdgeTrigger(world.getBlockState(cur))) {
-                    minDist = d;
-                    if (d == 1) break outer;
+                BlockState neighbor = world.getBlockState(cur);
+                if (canImproveEdge && isEdgeTrigger(neighbor)) {
+                    minDistEdge = d;
                 }
+                if (canImproveWater) {
+                    if (isWater(neighbor)) {
+                        minDistWater = d;
+                    } else {
+                        cur.setY(pos.getY() - 1);
+                        if (isWater(world.getBlockState(cur))) {
+                            minDistWater = d;
+                        }
+                        cur.setY(pos.getY());
+                    }
+                }
+                if (minDistEdge == 1 && minDistWater == 1) break outer;
             }
         }
-        if (minDist > RADIUS) return baseTint;
-        float t = (RADIUS + 1 - minDist) / (float) (RADIUS + 1);
-        return lerpRgb(baseTint, EDGE_TINT, t);
+        int result = baseTint;
+        if (minDistEdge <= RADIUS) {
+            float t = (RADIUS + 1 - minDistEdge) / (float) (RADIUS + 1);
+            result = lerpRgb(result, EDGE_TINT, t);
+        }
+        if (minDistWater <= WATER_RADIUS) {
+            float t = (WATER_RADIUS + 1 - minDistWater) / (float) (WATER_RADIUS + 1);
+            result = lerpRgb(result, WET_TINT, t);
+        }
+        return result;
     }
 
     static boolean isEdgeTrigger(BlockState state) {
@@ -145,6 +190,10 @@ public final class TemporalGrassEdgeTint {
             || state.is(ModBlocks.TEMPORAL_GRAVEL.get())
             || state.is(Blocks.SAND)
             || state.is(Blocks.GRAVEL);
+    }
+
+    static boolean isWater(BlockState state) {
+        return state.getFluidState().is(FluidTags.WATER);
     }
 
     /** Per-channel linear interpolation. {@code t} is clamped by callers. */
