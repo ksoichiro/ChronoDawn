@@ -4,6 +4,7 @@
   "package": "com.chronodawn.neoforge.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "StructureTemplateBlockAttachedFixMixin"
   ],
   "client": [
     "EntityRenderDispatcherMixin"
