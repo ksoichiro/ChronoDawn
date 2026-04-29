@@ -1259,6 +1259,31 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TEMPORAL_FERN.get(), new Item.Properties())
     );
 
+    public static final RegistrySupplier<Item> TEMPORAL_KELP = ITEMS.register(
+        ModItemId.TEMPORAL_KELP.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_KELP.get(), new Item.Properties())
+    );
+
+    public static final RegistrySupplier<Item> TEMPORAL_SEAGRASS = ITEMS.register(
+        ModItemId.TEMPORAL_SEAGRASS.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_SEAGRASS.get(), new Item.Properties())
+    );
+
+    public static final RegistrySupplier<Item> TALL_TEMPORAL_SEAGRASS = ITEMS.register(
+        ModItemId.TALL_TEMPORAL_SEAGRASS.id(),
+        () -> new BlockItem(ModBlocks.TALL_TEMPORAL_SEAGRASS.get(), new Item.Properties())
+    );
+
+    public static final RegistrySupplier<Item> DRIED_TEMPORAL_KELP = ITEMS.register(
+        ModItemId.DRIED_TEMPORAL_KELP.id(),
+        () -> new Item(new Item.Properties()
+                .food(new net.minecraft.world.food.FoodProperties.Builder()
+                    .nutrition(1)
+                    .saturationModifier(0.6f)
+                    .fast()
+                    .build()))
+    );
+
     // === Lighting Items ===
 
     public static final RegistrySupplier<Item> PURPLE_TIME_TORCH = ITEMS.register(
@@ -2403,6 +2428,10 @@ public class ModItems {
         output.accept(DUSK_BELL.get());
         output.accept(TEMPORAL_TALL_GRASS.get());
         output.accept(TEMPORAL_FERN.get());
+        output.accept(TEMPORAL_KELP.get());
+        output.accept(TEMPORAL_SEAGRASS.get());
+        output.accept(TALL_TEMPORAL_SEAGRASS.get());
+        output.accept(DRIED_TEMPORAL_KELP.get());
 
         // === Lighting Items ===
         output.accept(PURPLE_TIME_TORCH.get());
