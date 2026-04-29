@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "category": "food",
+  "cookingtime": 600,
+  "experience": 0.1,
+  "ingredient": {
+    "item": "chronodawn:temporal_kelp"
+  },
+  "result": {
+    "id": "chronodawn:dried_temporal_kelp"
+  }
+}
