@@ -56,10 +56,12 @@ hangs in mid-air on its rope, captured at the moment time stopped.
   water source. The visual reads as ice-crystallized water, reinforcing the
   time-stopped theme.
 - Bucket: Item Frame attached to the roof post displaying a Bucket item.
-- Embedded reward: one Temporal Amber Block placed at the bottom of the shaft,
-  beneath the Blue Ice. The player must mine through the ice to retrieve it.
+- Embedded reward: one Temporal Amber Ore (`chronodawn:temporal_amber_ore`)
+  placed at the bottom of the shaft, beneath the Blue Ice. The player must
+  mine through the ice to retrieve it (the ore drops `raw_temporal_amber`).
   No loot table — the reward is a single placed block, deterministic per
-  instance.
+  instance. (Note: there is no `temporal_amber_block` in the registry; the
+  ore is the canonical "buried amber" form.)
 - Surroundings: a 1-block-wide ring of tall grass / temporal_root patches
   (decoration optional, NBT-embedded).
 
@@ -67,10 +69,12 @@ hangs in mid-air on its rope, captured at the moment time stopped.
 
 A traveler caught mid-stride and turned to stone, with a discarded tool nearby.
 
-- Body: 2 Temporal Stone blocks vertically stacked, partially buried (bottom
-  block flush with ground, top block forming the "torso/head"). The base block
-  is replaced by Polished Temporal Stone or Temporal Stone Slab to suggest
-  worn legs.
+- Body: 2 blocks stacked vertically — the upper block is plain Temporal
+  Stone (the "torso/head"); the lower block is Temporal Stone Bricks (the
+  "worn legs", reads more weathered). Both are full blocks so the figure
+  sits flush with the ground. (There is no `polished_temporal_stone`
+  block family — only the deepslate variant has polished forms — so
+  `temporal_stone_bricks` carries the "old/carved" look.)
 - Pose hint: one adjacent Temporal Stone Stair to imply a forward-leaning
   body, oriented per random rotation.
 - Discarded tool: Item Frame on a small flat stone tile (1 Stone Bricks block
@@ -110,11 +114,16 @@ in this set with a loot chest.
   - Anvil (slightly damaged variant — `chipped_anvil` block)
 - Tent frame (covers a 3×2 portion of the 5×5):
   - 4 Time Wood Fences as poles at the corners
-  - White Wool blocks forming a roof, sloped using one row of White Wool
-    Stairs.
-- Decoration: 1 Item Frame mounted on the side of the Crafting Table holding
-  a Clock; 1 Cobblestone block as a stool; ground replaced with Coarse Dirt
-  inside the tent footprint.
+  - White Wool blocks forming a flat roof. (Vanilla has no
+    `white_wool_stairs`; the original "sloped roof" idea is dropped —
+    flat ceiling reads fine for an abandoned camp.)
+- Decoration: 1 Item Frame mounted on the side of the Crafting Table
+  holding a Clock; 1 Cobblestone block as a stool. The natural ground
+  (grass / temporal_grass) is left as-is — replacing it with Coarse Dirt
+  at template Y=0 would float per the half-block pitfall (Appendix A.1).
+  If a "tent floor" is desired in a follow-up, switch the configured
+  feature to `y_offset=-1` and place Coarse Dirt at template Y=0 to
+  replace the grass instead of stacking on top of it.
 
 Loot table — `chronodawn:chests/watchmaker_camp`:
 
@@ -146,7 +155,9 @@ gets a useful but non-game-breaking trickle of progression materials.
 A weathered stone pedestal with a vertical metal gnomon. Static (does not tell
 real time).
 
-- Base: 3×3 platform of Polished Stone Slabs (top half).
+- Base: 3×3 platform of Smooth Stone (`minecraft:smooth_stone`, full block).
+  Vanilla has no `polished_stone_slab` block, and a top-half slab placed at
+  template Y=0 would float — see Appendix A.1's "half-block float" pitfall.
 - Pedestal: 1 Stone Bricks block at the center on top of the base.
 - Gnomon: 1 Iron Bars block placed vertically on top of the pedestal.
 - "Cracked" detail: 1–2 Cobblestone Stairs around the base, oriented to read
@@ -157,11 +168,15 @@ real time).
 A tall sandstone monolith carved in the shape of an hourglass — a desert-only
 landmark visible from a distance.
 
-- Lower bulb (layers 1–2): 3×3 Smooth Sandstone Wall ring on layer 1, 3×3
-  solid Smooth Sandstone on layer 2.
-- Pinch (layer 3): 1×1 Chiseled Sandstone at the center, surrounded by air.
-- Upper bulb (layers 4–5): mirror of the lower bulb (3×3 solid, then 3×3
-  Wall ring on the top).
+- Lower bulb (layers 1–2): 3×3 ring of Temporal Sandstone Wall
+  (`chronodawn:temporal_sandstone_wall` — vanilla has no
+  `smooth_sandstone_wall`) on layer 1, 3×3 solid Temporal Sandstone
+  (`chronodawn:temporal_sandstone`) on layer 2. Using the ChronoDawn
+  variant matches the desert biome's `temporal_sand` ground.
+- Pinch (layer 3): 1×1 Chiseled Sandstone (vanilla
+  `minecraft:chiseled_sandstone`) at the center, surrounded by air.
+- Upper bulb (layers 4–5): mirror of the lower bulb (3×3 solid Temporal
+  Sandstone, then 3×3 Temporal Sandstone Wall ring on the top).
 - "Sand has run through" detail: 2–3 Sand blocks settled at the bottom of the
   lower bulb. No falling Sand above the pinch — gravity-affected blocks above
   air would fall on chunk load and disrupt the visual. The empty pinch reads
@@ -264,9 +279,27 @@ common/
     old_sundial.nbt
     hourglass_monolith.nbt
     upside_down_tree.nbt
-  1.20.1/src/main/resources/data/chronodawn/structure/
-    (same .nbt files mirrored for 1.20.1)
 ```
+
+NBT files live in **only one place** — `common/shared-1.21.1+/`. The build
+pipeline propagates them to other versions:
+
+- `gradle/nbt-block-replacement.gradle` (`replaceNbtBlocks` task) reads from
+  `shared-1.21.1+/structure/`, applies vanilla→ChronoDawn block ID
+  rewrites per `scripts/nbt_block_mappings.json` (currently
+  `minecraft:dirt`/`grass_block`/`coarse_dirt` → ChronoDawn temporal
+  variants), and writes the result to `${buildDir}/generated/nbt-block-replaced/`.
+- 1.21.x version modules add that build directory to their resources via
+  `srcDir` in `sourceSets`.
+- 1.20.1 module additionally runs `convertNbtStructures`, which calls
+  `gradle/shared/convert_nbt_1_21_to_1_20.py` to translate the 1.21 NBT
+  format to 1.20.1 and rename the directory from `structure/` (singular)
+  to `structures/` (plural — 1.20.1 data-pack convention).
+
+NBTs therefore must NOT be hand-mirrored to `common/1.20.1/.../structure/`.
+There is also no need to manually translate vanilla `dirt`/`grass_block`/
+`coarse_dirt` to their ChronoDawn variants — the auto-replacement step
+handles that.
 
 ### Biome integration
 
@@ -301,12 +334,16 @@ Numbers are starting points; tuning happens after first playtest.
 
 ## Multi-Version Implementation Strategy
 
-1. NBT templates are 1.20.1-compatible if they avoid blocks introduced in
-   later versions. The proposed block list (Cobblestone, Mossy Cobblestone,
-   Time Wood, Temporal Stone, Iron Trapdoor, Iron Bars, Smooth Sandstone,
-   Chiseled Sandstone, Blue Ice, Wool, Stairs/Slabs, Campfire, Crafting
+1. NBT templates live in `common/shared-1.21.1+/.../structure/` only.
+   `gradle/nbt-block-replacement.gradle` rewrites a small set of vanilla
+   block IDs to ChronoDawn variants (`scripts/nbt_block_mappings.json`),
+   and the 1.20.1 module's `convertNbtStructures` task translates the
+   1.21 NBT format to 1.20.1 (singular `structure/` → plural `structures/`).
+   The author should choose blocks present in 1.20.1 (Cobblestone, Mossy
+   Cobblestone, Time Wood, Temporal Stone variants, Iron Trapdoor, Iron
+   Bars, vanilla Sandstone family, Blue Ice, Wool, Campfire, Crafting
    Table, Lectern, Chest, Anvil, Item Frame, Bucket, Clock, Sand, Coarse
-   Dirt) is fully present in 1.20.1, so the same `.nbt` files mirror cleanly.
+   Dirt) so the converter does not have to drop unknown states.
 2. The Java `NbtTemplateFeature` registration goes through the existing
    ChronoDawn `ModFeatures` (or equivalent) Architectury-compatible registry.
 3. Feature registration must happen in **all** version-specific common

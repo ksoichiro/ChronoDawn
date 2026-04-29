@@ -36,11 +36,10 @@ common/shared/src/test/java/com/chronodawn/worldgen/features/
   NbtTemplateConfigurationCodecTest.java   # Codec round-trip
 ```
 
-### New NBT files (×7) — placed in BOTH locations
+### New NBT files (×8) — single source location
 
 ```
 common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/
-common/1.20.1/src/main/resources/data/chronodawn/structure/
   time_well.nbt
   petrified_adventurer.nbt
   petrified_adventurer_snowy.nbt
@@ -50,6 +49,21 @@ common/1.20.1/src/main/resources/data/chronodawn/structure/
   hourglass_monolith.nbt
   upside_down_tree.nbt
 ```
+
+The build pipeline propagates these to all other versions automatically:
+
+- `gradle/nbt-block-replacement.gradle` (`replaceNbtBlocks`) reads from
+  `shared-1.21.1+/structure/`, applies `scripts/nbt_block_mappings.json`
+  (currently `minecraft:dirt`/`grass_block`/`coarse_dirt` →
+  ChronoDawn temporal variants) and writes to
+  `${buildDir}/generated/nbt-block-replaced/`.
+- 1.21.x version modules add that build directory to their resources.
+- 1.20.1 module additionally runs `convertNbtStructures` to translate
+  the 1.21 NBT format to 1.20.1 and rename the directory to `structures/`
+  (plural — 1.20.1 data-pack convention).
+
+**Do NOT hand-mirror NBTs to `common/1.20.1/.../structure/`.** That
+directory is auto-generated.
 
 ### New configured_feature / placed_feature JSONs (×8 each)
 
@@ -456,21 +470,17 @@ git commit -m "feat(worldgen): wire ModFeatures into ChronoDawn init"
 
 **Files:**
 - Create: `common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/time_cairn.nbt`
-- Create: `common/1.20.1/src/main/resources/data/chronodawn/structure/time_cairn.nbt`
 
-The Time Cairn is a 1×1×3 (or 1×2×3 with foundation) static placement.
+(Single source path. The build pipeline auto-propagates to other versions —
+see "New NBT files (×8) — single source location" earlier in this plan.
+For the corrected block plan, see **Appendix A.2.1**.)
 
 - [ ] **Step 1: Launch a creative test world**
 
-Run: `./gradlew runClientFabric1_21_6` (any version works; we'll save the NBT once and copy to both target dirs).
+Run: `./gradlew runClientFabric1_21_6`.
 
-In-game:
-1. Create a flat creative world.
-2. Place a Mossy Cobblestone Slab (top half) on the ground.
-3. Place a Cobblestone block on top of the slab.
-4. Place an Iron Trapdoor on top of the Cobblestone, oriented HORIZONTAL + CLOSED so the flat face reads upward like a small clock dial. (Right-click placement automatically picks the right axis when you hit the top face.)
-
-The footprint should be exactly 1×1 with 3 blocks vertically (slab counts as half but still 1 block height).
+Build per Appendix A.2.1 (1×3×1: full Mossy Cobblestone, full Cobblestone,
+Iron Trapdoor with `half=bottom, open=false` on top).
 
 - [ ] **Step 2: Capture with structure block**
 
@@ -482,14 +492,11 @@ The footprint should be exactly 1×1 with 3 blocks vertically (slab counts as ha
 
 The exported NBT lives at `<world-dir>/generated/chronodawn/structure/time_cairn.nbt`.
 
-- [ ] **Step 3: Copy the NBT into the repo (both target dirs)**
+- [ ] **Step 3: Copy the NBT into the repo (one path)**
 
 ```bash
 cp <world-dir>/generated/chronodawn/structure/time_cairn.nbt \
    common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/time_cairn.nbt
-
-cp <world-dir>/generated/chronodawn/structure/time_cairn.nbt \
-   common/1.20.1/src/main/resources/data/chronodawn/structure/time_cairn.nbt
 ```
 
 (Replace `<world-dir>` with the actual save directory path printed by the structure block, typically under `fabric/1.21.6/run/saves/<world-name>/`.)
@@ -498,10 +505,9 @@ cp <world-dir>/generated/chronodawn/structure/time_cairn.nbt \
 
 ```bash
 ls -la common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/time_cairn.nbt
-ls -la common/1.20.1/src/main/resources/data/chronodawn/structure/time_cairn.nbt
 ```
 
-Expected: both files exist, between ~100 bytes and ~2 KB. If a file is suspiciously empty (<50 bytes), the structure block save likely captured air; redo Step 2 with the bounding box anchored correctly.
+Expected: file exists, between ~100 bytes and ~2 KB. If suspiciously empty (<50 bytes), the structure block save likely captured air; redo Step 2 with the bounding box anchored correctly.
 
 ### Task 1.2: Create configured_feature and placed_feature JSONs for time_cairn
 
@@ -622,7 +628,6 @@ If they appear floating in air or buried:
 
 ```bash
 git add common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/time_cairn.nbt
-git add common/1.20.1/src/main/resources/data/chronodawn/structure/time_cairn.nbt
 git add common/shared/src/main/resources/data/chronodawn/worldgen/configured_feature/time_cairn.json
 git add common/shared/src/main/resources/data/chronodawn/worldgen/placed_feature/time_cairn_placed.json
 git add common/shared-1.21.2+/src/main/resources/data/chronodawn/worldgen/biome/chronodawn_plains.json
@@ -656,20 +661,15 @@ Tier → rarity_filter chance values (see spec):
 
 ### Task 2.1: Petrified Adventurer (T2, 1×1×2 + Item Frame)
 
-**Block plan:**
-- 1× Polished Temporal Stone or Temporal Stone Slab (top half) at base — "worn legs".
-- 1× Temporal Stone block above — "torso/head".
-- 1× Temporal Stone Stair adjacent on the same level as the bust, oriented forward — "leaning posture".
-- 1× Stone Bricks block on the ground beside the figure — flat tile for tools.
-- 1× Item Frame on the Stone Bricks tile, holding 1× Iron Pickaxe (use Item Frame items inventory before saving).
+**Block plan:** see **Appendix A.2.2** for the full layered plan.
 
 **Files:**
-- Create NBT: `common/shared-1.21.1+/.../structure/petrified_adventurer.nbt` and `common/1.20.1/.../structure/petrified_adventurer.nbt`
+- Create NBT: `common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/petrified_adventurer.nbt` (single source — build pipeline propagates to other versions)
 - Create: `configured_feature/petrified_adventurer.json` (template: `chronodawn:petrified_adventurer`, random_rotate: true, y_offset: 0)
 - Create: `placed_feature/petrified_adventurer_placed.json` (T2: rarity_filter chance 16, biome filter, in_square, heightmap WORLD_SURFACE_WG, matching_blocks ground predicate same as time_cairn)
 
 - [ ] **Step 1:** Build NBT in-game (size `3 3 3` to capture base + bust + adjacent stair + tile).
-- [ ] **Step 2:** Copy NBT to both target dirs.
+- [ ] **Step 2:** Copy NBT to `common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/` (single source path).
 - [ ] **Step 3:** Write configured_feature JSON.
 - [ ] **Step 4:** Write placed_feature JSON.
 
@@ -716,7 +716,6 @@ Path: `common/shared/src/main/resources/data/chronodawn/worldgen/placed_feature/
 - [ ] **Step 6:** Commit (ask user first):
 ```bash
 git add common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/petrified_adventurer.nbt
-git add common/1.20.1/src/main/resources/data/chronodawn/structure/petrified_adventurer.nbt
 git add common/shared/src/main/resources/data/chronodawn/worldgen/configured_feature/petrified_adventurer.json
 git add common/shared/src/main/resources/data/chronodawn/worldgen/placed_feature/petrified_adventurer_placed.json
 git commit -m "feat(worldgen): add Petrified Adventurer small feature"
@@ -724,15 +723,15 @@ git commit -m "feat(worldgen): add Petrified Adventurer small feature"
 
 ### Task 2.2: Petrified Adventurer (snowy variant)
 
-**Block plan:** Same as Task 2.1, with one Snow layer (`minecraft:snow` snow_height ≥ 4) in front of and around the bust to read as frostbitten.
+**Block plan:** see **Appendix A.2.3** for the full layered plan.
 
 **Files:**
-- Create NBT: `petrified_adventurer_snowy.nbt` (both target dirs)
+- Create NBT: `petrified_adventurer_snowy.nbt` (in shared-1.21.1+/structure/ — single source)
 - Create: `configured_feature/petrified_adventurer_snowy.json`
 - Create: `placed_feature/petrified_adventurer_snowy_placed.json`
 
 - [ ] **Step 1:** Build NBT in-game (in a snowy biome with snow layer present).
-- [ ] **Step 2:** Copy NBT to both target dirs.
+- [ ] **Step 2:** Copy NBT to `common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/` (single source path).
 - [ ] **Step 3:** Write configured_feature JSON (template: `chronodawn:petrified_adventurer_snowy`, otherwise identical to Task 2.1's JSON).
 - [ ] **Step 4:** Write placed_feature JSON. Same as Task 2.1's placed_feature except:
   - `feature` is `chronodawn:petrified_adventurer_snowy`.
@@ -742,7 +741,6 @@ git commit -m "feat(worldgen): add Petrified Adventurer small feature"
 - [ ] **Step 6:** Commit (ask user first):
 ```bash
 git add common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/petrified_adventurer_snowy.nbt
-git add common/1.20.1/src/main/resources/data/chronodawn/structure/petrified_adventurer_snowy.nbt
 git add common/shared/src/main/resources/data/chronodawn/worldgen/configured_feature/petrified_adventurer_snowy.json
 git add common/shared/src/main/resources/data/chronodawn/worldgen/placed_feature/petrified_adventurer_snowy_placed.json
 git commit -m "feat(worldgen): add Petrified Adventurer snowy variant"
@@ -750,26 +748,21 @@ git commit -m "feat(worldgen): add Petrified Adventurer snowy variant"
 
 ### Task 2.3: Old Sundial (T2, 3×3×3)
 
-**Block plan:**
-- 3×3 base of Polished Stone Slabs (top half) on the ground.
-- 1× Stone Bricks block at the center on top of the slab base.
-- 1× Iron Bars block on top of the Stone Bricks (the gnomon).
-- 1× Cobblestone Stairs at one corner of the base, oriented to read as a broken edge.
+**Block plan:** see **Appendix A.2.6** for the full layered plan.
 
 **Files:**
-- Create NBT: `old_sundial.nbt` (both target dirs)
+- Create NBT: `old_sundial.nbt` (in shared-1.21.1+/structure/ — single source)
 - Create: `configured_feature/old_sundial.json` (random_rotate: true, y_offset: 0)
 - Create: `placed_feature/old_sundial_placed.json` (T2: chance 16)
 
 - [ ] **Step 1:** Build NBT (size `3 3 3`).
-- [ ] **Step 2:** Copy NBT to both target dirs.
+- [ ] **Step 2:** Copy NBT to `common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/` (single source path).
 - [ ] **Step 3:** Write configured_feature JSON.
 - [ ] **Step 4:** Write placed_feature JSON (template same shape as Task 2.1, replace IDs).
 - [ ] **Step 5:** Run `./gradlew validateResources`.
 - [ ] **Step 6:** Commit (ask user first):
 ```bash
 git add common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/old_sundial.nbt
-git add common/1.20.1/src/main/resources/data/chronodawn/structure/old_sundial.nbt
 git add common/shared/src/main/resources/data/chronodawn/worldgen/configured_feature/old_sundial.json
 git add common/shared/src/main/resources/data/chronodawn/worldgen/placed_feature/old_sundial_placed.json
 git commit -m "feat(worldgen): add Old Sundial small feature"
@@ -777,21 +770,15 @@ git commit -m "feat(worldgen): add Old Sundial small feature"
 
 ### Task 2.4: Hourglass Monolith (T2, 3×3×5, desert-only)
 
-**Block plan:**
-- Layer 1 (ground): 3×3 ring of Smooth Sandstone Wall. Hollow center.
-- Layer 2: 3×3 solid Smooth Sandstone.
-- Layer 3 (pinch): 1× Chiseled Sandstone at center; 8× air around it.
-- Layer 4: 3×3 solid Smooth Sandstone (mirror of layer 2).
-- Layer 5 (top): 3×3 ring of Smooth Sandstone Wall (mirror of layer 1).
-- Floor of layer 1 (inside the ring): 2–3× Sand blocks ("settled sand that's already fallen").
+**Block plan:** see **Appendix A.2.7** for the full layered plan.
 
 **Files:**
-- Create NBT: `hourglass_monolith.nbt` (both target dirs)
+- Create NBT: `hourglass_monolith.nbt` (in shared-1.21.1+/structure/ — single source)
 - Create: `configured_feature/hourglass_monolith.json` (random_rotate: true, y_offset: 0)
 - Create: `placed_feature/hourglass_monolith_placed.json` (T2: chance 16, ground predicate restricted to `chronodawn:temporal_sand`)
 
 - [ ] **Step 1:** Build NBT (size `3 5 3`).
-- [ ] **Step 2:** Copy NBT to both target dirs.
+- [ ] **Step 2:** Copy NBT to `common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/` (single source path).
 - [ ] **Step 3:** Write configured_feature JSON.
 - [ ] **Step 4:** Write placed_feature JSON. Use:
 ```json
@@ -817,7 +804,6 @@ git commit -m "feat(worldgen): add Old Sundial small feature"
 - [ ] **Step 6:** Commit (ask user first):
 ```bash
 git add common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/hourglass_monolith.nbt
-git add common/1.20.1/src/main/resources/data/chronodawn/structure/hourglass_monolith.nbt
 git add common/shared/src/main/resources/data/chronodawn/worldgen/configured_feature/hourglass_monolith.json
 git add common/shared/src/main/resources/data/chronodawn/worldgen/placed_feature/hourglass_monolith_placed.json
 git commit -m "feat(worldgen): add Hourglass Monolith desert landmark"
@@ -825,25 +811,21 @@ git commit -m "feat(worldgen): add Hourglass Monolith desert landmark"
 
 ### Task 2.5: Upside-Down Tree (T2, 4×4×6, ancient_forest only)
 
-**Block plan:**
-- Trunk (Time Wood Log axis=y): 3 blocks vertical at center.
-- Inverted roots: 5–7 Time Wood Log blocks branching horizontally from the top of the trunk in a "splay" pattern (axis=x for some, axis=z for others).
-- Inverted canopy at ground: a 3×3 ring of Time Wood Leaves (`persistent=true`) around the trunk base, with 1–2 Fruit of Time blocks substituted into random leaf positions.
+**Block plan:** see **Appendix A.2.8** for the full layered plan.
 
 **Files:**
-- Create NBT: `upside_down_tree.nbt` (both target dirs)
+- Create NBT: `upside_down_tree.nbt` (in shared-1.21.1+/structure/ — single source)
 - Create: `configured_feature/upside_down_tree.json` (random_rotate: true, y_offset: 0)
 - Create: `placed_feature/upside_down_tree_placed.json` (T2: chance 16, ground predicate same as time_cairn)
 
 - [ ] **Step 1:** Build NBT (size `4 6 4`).
-- [ ] **Step 2:** Copy NBT to both target dirs.
+- [ ] **Step 2:** Copy NBT to `common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/` (single source path).
 - [ ] **Step 3:** Write configured_feature JSON.
 - [ ] **Step 4:** Write placed_feature JSON.
 - [ ] **Step 5:** Run `./gradlew validateResources`.
 - [ ] **Step 6:** Commit (ask user first):
 ```bash
 git add common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/upside_down_tree.nbt
-git add common/1.20.1/src/main/resources/data/chronodawn/structure/upside_down_tree.nbt
 git add common/shared/src/main/resources/data/chronodawn/worldgen/configured_feature/upside_down_tree.json
 git add common/shared/src/main/resources/data/chronodawn/worldgen/placed_feature/upside_down_tree_placed.json
 git commit -m "feat(worldgen): add Upside-Down Tree natural anomaly"
@@ -851,30 +833,26 @@ git commit -m "feat(worldgen): add Upside-Down Tree natural anomaly"
 
 ### Task 2.6: Time-Stopped Well (T3, 3×3×4)
 
-**Block plan:**
-- Frame layer 1: 3×3 ring of blocks. Corners = Cobblestone Wall, sides = Mossy Cobblestone, center = air.
-- Frame layer 2: 3×3 solid ring. Corners = Cobblestone, sides = Mossy Cobblestone, center = Blue Ice (the "frozen water" effect).
-- Frame layer 3: above two opposite corners, place a Time Wood Log (axis=y) on each — the well posts.
-- Frame layer 4: bridge the two posts with a Time Wood Slab (top half) — the small roof.
-- Item Frame: place on one of the posts at layer 2 height, holding a Bucket.
-- Embedded reward: 1× Temporal Amber Block placed at layer 0 (one block below the Blue Ice). Capture this in the structure block bounding box.
+**Block plan:** see **Appendix A.2.4** for the full layered plan (note the
+buried `chronodawn:temporal_amber_ore` at the well bottom — there is no
+`temporal_amber_block` in the registry).
 
-NBT bounding box: start `0 0 0` from a structure block 1 block below ground level so the Temporal Amber Block at the bottom is included. Size `3 5 3`.
+NBT bounding box: start `0 0 0` from a structure block 1 block below ground
+level so the Temporal Amber Ore at the bottom is included. Size `3 5 3`.
 
 **Files:**
-- Create NBT: `time_well.nbt` (both target dirs)
+- Create NBT: `time_well.nbt` (in shared-1.21.1+/structure/ — single source)
 - Create: `configured_feature/time_well.json` (random_rotate: true, y_offset: -1 — sinks the well's bottom 1 block into ground)
 - Create: `placed_feature/time_well_placed.json` (T3: chance 32, ground predicate same as time_cairn)
 
 - [ ] **Step 1:** Build NBT.
-- [ ] **Step 2:** Copy NBT to both target dirs.
+- [ ] **Step 2:** Copy NBT to `common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/` (single source path).
 - [ ] **Step 3:** Write configured_feature JSON. Note `y_offset: -1`.
 - [ ] **Step 4:** Write placed_feature JSON.
 - [ ] **Step 5:** Run `./gradlew validateResources`.
 - [ ] **Step 6:** Commit (ask user first):
 ```bash
 git add common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/time_well.nbt
-git add common/1.20.1/src/main/resources/data/chronodawn/structure/time_well.nbt
 git add common/shared/src/main/resources/data/chronodawn/worldgen/configured_feature/time_well.json
 git add common/shared/src/main/resources/data/chronodawn/worldgen/placed_feature/time_well_placed.json
 git commit -m "feat(worldgen): add Time-Stopped Well rare landmark"
@@ -882,41 +860,30 @@ git commit -m "feat(worldgen): add Time-Stopped Well rare landmark"
 
 ### Task 2.7: Watchmaker's Camp (T4, 5×5×3)
 
-**Block plan:**
-- Center: Campfire (`lit=false`) on Coarse Dirt.
-- Around the campfire (3×3 inside the 5×5 footprint, leaving a 1-block outer ring of grass terrain):
-  - Crafting Table (north of campfire)
-  - Lectern (east)
-  - Chest (south, facing the campfire) — loot table set in NBT to `chronodawn:chests/watchmaker_camp`
-  - Anvil with `chipped_anvil` block-state variant (west)
-- Tent frame (on top of and around the chest area):
-  - 4× Time Wood Fence as corner posts at the 5×5 corners, 1 block tall.
-  - Roof: 3× White Wool spanning between posts at height 2.
-  - 1× White Wool Stairs along one side as a sloped roof edge.
-- Decoration:
-  - 1× Item Frame on the Crafting Table side, holding 1× Clock.
-  - 1× Cobblestone block adjacent to the campfire (a "stool").
-- Ground inside the 3×3 tent area: Coarse Dirt (replace whatever terrain block is there).
+**Block plan:** see **Appendix A.2.5** for the full layered plan. Note
+two corrections from the early draft: (1) `white_wool_stairs` does not
+exist in vanilla, so the roof is flat; (2) the original "Coarse Dirt
+floor" idea is dropped — placing it at template Y=0 would float; the
+natural ground stays as the floor.
 
 NBT bounding box: size `5 3 5`.
 
 **Loot in chest:** the chest's NBT must reference the loot table by string. When saving via the structure block, manually set the chest's `LootTable` NBT tag to `chronodawn:chests/watchmaker_camp` BEFORE saving (use `/data merge block <x> <y> <z> {LootTable:"chronodawn:chests/watchmaker_camp"}`). The loot table itself is created in Phase 3.
 
 **Files:**
-- Create NBT: `watchmaker_camp.nbt` (both target dirs)
+- Create NBT: `watchmaker_camp.nbt` (in shared-1.21.1+/structure/ — single source)
 - Create: `configured_feature/watchmaker_camp.json` (random_rotate: true, y_offset: 0)
 - Create: `placed_feature/watchmaker_camp_placed.json` (T4: chance 48, ground predicate same as time_cairn)
 
 - [ ] **Step 1:** Build NBT.
 - [ ] **Step 2:** Set chest LootTable NBT tag via `/data merge block` BEFORE structure-block save.
-- [ ] **Step 3:** Save structure with structure block, copy NBT to both target dirs.
+- [ ] **Step 3:** Save structure with structure block, copy NBT to `common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/`.
 - [ ] **Step 4:** Write configured_feature JSON.
 - [ ] **Step 5:** Write placed_feature JSON.
 - [ ] **Step 6:** Run `./gradlew validateResources`.
 - [ ] **Step 7:** Commit (ask user first):
 ```bash
 git add common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/watchmaker_camp.nbt
-git add common/1.20.1/src/main/resources/data/chronodawn/structure/watchmaker_camp.nbt
 git add common/shared/src/main/resources/data/chronodawn/worldgen/configured_feature/watchmaker_camp.json
 git add common/shared/src/main/resources/data/chronodawn/worldgen/placed_feature/watchmaker_camp_placed.json
 git commit -m "feat(worldgen): add Watchmaker's Camp rare loot feature"
@@ -1361,12 +1328,34 @@ while building.
 - **Time Wood Leaves should be `persistent=true`.** Otherwise the leaves
   decay when no log is in range. Place them with the leaves item (which
   sets persistent automatically) or override via `/setblock`.
-- **Iron Trapdoor orientation.** Right-click the top face of a block to
-  place a closed trapdoor with `half=top, open=false`. That gives the
-  flat upward-facing "clock dial" pose used by `time_cairn`.
-- **Save NBT to `chronodawn:<name>`.** This makes the export land in
-  `<world>/generated/chronodawn/structure/<name>.nbt`. Copy that file to
-  BOTH `common/shared-1.21.1+/.../structure/` and `common/1.20.1/.../structure/`.
+- **Iron Trapdoor "flat lid on top of stack" trick.** Place an iron
+  trapdoor with `half=bottom, open=false` at the cell *above* the block
+  you want to cap. The trapdoor occupies the bottom 3/16 of that cell,
+  sitting flush with the top face of the block beneath. Right-clicking
+  the top face of a block produces `half=top, open=false`, which leaves
+  a ~13/16 air gap below the trapdoor — looks like a floating disc, not
+  a flat cap. Use `/setblock` or right-click the bottom of a block above
+  to get the `half=bottom` pose.
+- **Top-half slabs and other half-blocks "float" if placed at template
+  Y=0.** The `MOTION_BLOCKING_NO_LEAVES` heightmap returns the first
+  AIR cell above terrain, so template Y=0 is air-above-grass. A
+  top-half slab there occupies the upper half of that cell, leaving a
+  half-block air gap to the grass below. **Use full blocks at Y=0** to
+  sit flush with the ground. Slabs are still safe in the upper layers
+  if there is no full block stacked directly on top of them.
+- **Save NBT to `chronodawn:<name>`.** This makes the export land at
+  `<world>/generated/chronodawn/structure/<name>.nbt`. Copy that file
+  to **only** `common/shared-1.21.1+/.../structure/`. The build pipeline
+  (`gradle/nbt-block-replacement.gradle` → `convertNbtStructures` for
+  1.20.1) propagates and format-converts as needed.
+- **Vanilla dirt/grass/coarse_dirt are auto-replaced** with the
+  ChronoDawn temporal variants per `scripts/nbt_block_mappings.json`
+  during the build. So in NBT authoring you can use `minecraft:dirt`,
+  `minecraft:grass_block`, `minecraft:coarse_dirt` — they are easier
+  to place from the creative inventory and will appear as
+  `chronodawn:temporal_dirt` / `temporal_grass_block` / `coarse_temporal_dirt`
+  in-game. Other blocks are NOT auto-replaced; pick the ChronoDawn
+  variants explicitly when needed.
 - **Sizes below are `X × Y(height) × Z`** unless otherwise noted.
 
 ### A.2 Block plans
@@ -1376,9 +1365,9 @@ while building.
 Size: **1 × 3 × 1**
 
 ```
-Y=2 (top)    : Iron Trapdoor (closed, half=top, horizontal — clock-dial pose)
-Y=1 (middle) : Cobblestone
-Y=0 (base)   : Mossy Cobblestone Slab (top half)
+Y=2 (top)    : Iron Trapdoor (half=bottom, open=false — flat dial cap, sits flush on Y=1)
+Y=1 (middle) : Cobblestone (full block)
+Y=0 (base)   : Mossy Cobblestone (full block — sits flush on grass)
 ```
 
 Block count: 3. `Include entities: false`. Save name: `chronodawn:time_cairn`.
@@ -1390,11 +1379,15 @@ Size: **3 × 3 × 3**
 ```
 Y=2 (top)  : all air
 Y=1 (mid)  : center = Temporal Stone (torso/head)
-             one block in front of center = Temporal Stone Stair (forward-leaning posture; orientation
-             rotates with random_rotate)
-Y=0 (base) : center = Polished Temporal Stone Slab (top half) — the "worn legs"
-             one block to the side of center = Stone Bricks (the tool tile)
+             one block in front of center = Temporal Stone Stair (forward-leaning posture;
+             orientation rotates with random_rotate)
+Y=0 (base) : center = Temporal Stone Bricks (full block — the "worn legs", sits flush on ground)
+             one block to the side of center = Stone Bricks (vanilla, the tool tile)
 ```
+
+(Note: there is no `polished_temporal_stone` block family in ChronoDawn —
+only the deepslate variant is "polished". `temporal_stone_bricks` reads
+similarly weathered/old.)
 
 Item Frame: place on the top face of the Stone Bricks tile, holding 1×
 Iron Pickaxe. `Include entities: ON`.
@@ -1420,7 +1413,8 @@ Y=4 (roof)   : Time Wood Slab (top half) bridging the two posts (1 block)
 Y=3 (posts)  : two opposite corners = Time Wood Log (axis=y); other 7 cells = air
 Y=2 (rim)    : 4 corners = Cobblestone Wall; 4 sides = Cobblestone; center = Blue Ice
 Y=1 (shaft)  : 4 corners = Cobblestone; 4 sides = Mossy Cobblestone; center = air
-Y=0 (bottom) : center = Temporal Amber Block (buried reward); 8 surrounding cells unused/air
+Y=0 (bottom) : center = Temporal Amber Ore (chronodawn:temporal_amber_ore — buried reward,
+                drops raw_temporal_amber when mined); 8 surrounding cells unused/air
 ```
 
 Item Frame: attach to the side of one Time Wood Log post at Y=3, holding
@@ -1433,17 +1427,20 @@ Save name: `chronodawn:time_well`.
 Size: **5 × 3 × 5**
 
 ```
-Y=2 (roof tip) : optional 1× White Wool Stairs along one edge for a sloped roof end; otherwise air
-Y=1 (tent)     : 3× White Wool spanning between corner fence posts (the tent ceiling)
-                 + 1× Item Frame attached to the side of the Crafting Table holding a Clock
-Y=0 (camp)     : center = Campfire (lit=false) on Coarse Dirt
-                 north = Crafting Table
-                 east  = Lectern
-                 south = Chest (LootTable set per A.1 — chronodawn:chests/watchmaker_camp)
-                 west  = Anvil with the chipped variant block-state
-                 4 corners (5×5) = Time Wood Fence (tent posts)
-                 1 cell next to the campfire = Cobblestone (a stool)
-                 inner 3×3 floor = Coarse Dirt
+Y=2 (roof)  : all air (flat roof — no Wool Stairs, those don't exist in vanilla)
+Y=1 (tent)  : 3× White Wool spanning between corner fence posts (the tent ceiling, flat)
+              + 1× Item Frame attached to the side of the Crafting Table holding a Clock
+Y=0 (camp)  : center = Campfire (lit=false)
+              north = Crafting Table
+              east  = Lectern
+              south = Chest (LootTable set per A.1 — chronodawn:chests/watchmaker_camp)
+              west  = minecraft:chipped_anvil (note: separate block ID from minecraft:anvil)
+              4 corners (5×5) = Time Wood Fence (tent posts)
+              1 cell next to the campfire = Cobblestone (a stool)
+              other floor cells: leave the natural ground untouched
+              (do NOT include Coarse Dirt at Y=0; it would float above grass at this
+              configured-feature y_offset=0. If you want a "tent floor" later, add it
+              via y_offset=-1 + Coarse Dirt at template Y=0 to replace the grass.)
 ```
 
 `Include entities: ON` (Item Frame). Set Chest's `LootTable` NBT before
@@ -1458,8 +1455,12 @@ Y=2 (top)  : center = Iron Bars (the gnomon, 1 block tall); other 8 cells = air
 Y=1 (mid)  : center = Stone Bricks (pedestal column)
              one corner = Cobblestone Stairs (broken-edge detail; orientation
              rotates with random_rotate); other 7 cells = air
-Y=0 (base) : 3×3 of Polished Stone Slab (top half) = the platform
+Y=0 (base) : 3×3 of Smooth Stone (vanilla minecraft:smooth_stone, full block) — the platform
 ```
+
+(Vanilla has no `polished_stone_slab` block; `smooth_stone_slab` exists but
+would float at template Y=0 per the half-block pitfall. Use full
+`minecraft:smooth_stone` instead.)
 
 Block count: 9 + 1 + 1 + 1 = 12. `Include entities: false`. Save name:
 `chronodawn:old_sundial`.
@@ -1469,15 +1470,20 @@ Block count: 9 + 1 + 1 + 1 = 12. `Include entities: false`. Save name:
 Size: **3 × 5 × 3**
 
 ```
-Y=4 (top ring)  : 3×3 ring of Smooth Sandstone Wall (8 blocks); center = air
-Y=3 (upper bulb): 3×3 solid Smooth Sandstone (9 blocks)
-Y=2 (pinch)     : center = Chiseled Sandstone (1 block); 8 surrounding cells = air
-Y=1 (lower bulb): 3×3 solid Smooth Sandstone (9 blocks)
-Y=0 (base ring) : 3×3 ring of Smooth Sandstone Wall (8 blocks); center = 1× Sand
-                  (the "settled" sand that has finished running through)
+Y=4 (top ring)  : 3×3 ring of Temporal Sandstone Wall (chronodawn:temporal_sandstone_wall,
+                  8 blocks); center = air
+Y=3 (upper bulb): 3×3 solid Temporal Sandstone (chronodawn:temporal_sandstone, 9 blocks)
+Y=2 (pinch)     : center = Chiseled Sandstone (vanilla minecraft:chiseled_sandstone, 1 block);
+                  8 surrounding cells = air
+Y=1 (lower bulb): 3×3 solid Temporal Sandstone (9 blocks)
+Y=0 (base ring) : 3×3 ring of Temporal Sandstone Wall (8 blocks); center = 1× Sand
+                  (vanilla minecraft:sand — the "settled" sand that has finished running through)
 ```
 
-The single Sand block at Y=0 center is safe — the Y=1 Smooth Sandstone
+(Vanilla has no `smooth_sandstone_wall`; ChronoDawn's `temporal_sandstone_wall`
+exists and matches the desert biome's `temporal_sand` ground.)
+
+The single Sand block at Y=0 center is safe — the Y=1 Temporal Sandstone
 above it acts as a lid, so it does not fall on chunk load.
 
 `Include entities: false`. Save name: `chronodawn:hourglass_monolith`.
@@ -1516,8 +1522,10 @@ are encountered incrementally:
 7. `time_well` — buried block + Item Frame on a post
 8. `watchmaker_camp` — largest, requires chest LootTable NBT before save
 
-After each NBT is saved into both `shared-1.21.1+/.../structure/` and
-`1.20.1/.../structure/`, run `./gradlew validateResources`. The validation
-does not check NBT contents directly, so this only catches accidental JSON
-breakage from copy/paste mistakes. In-world verification of all eight
-features should be done in one pass at the end (Phase 5 Task 5.5).
+After each NBT is saved into `shared-1.21.1+/.../structure/` (the single
+source path), run `./gradlew validateResources`. The validation does not
+check NBT contents directly, so this only catches accidental JSON breakage
+from copy/paste mistakes. In-world verification of all eight features
+should be done in one pass at the end (Phase 5 Task 5.5). The build
+pipeline propagates the NBT to other versions automatically, including
+the 1.20.1 format conversion.
