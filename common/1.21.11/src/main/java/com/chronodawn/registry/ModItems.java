@@ -1640,6 +1640,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> TEMPORAL_KELP = ITEMS.register(
         ModItemId.TEMPORAL_KELP.id(),
         () -> new BlockItem(ModBlocks.TEMPORAL_KELP.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_KELP.id()))))
     );
@@ -1647,6 +1648,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> TEMPORAL_SEAGRASS = ITEMS.register(
         ModItemId.TEMPORAL_SEAGRASS.id(),
         () -> new BlockItem(ModBlocks.TEMPORAL_SEAGRASS.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_SEAGRASS.id()))))
     );
@@ -1654,6 +1656,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> TALL_TEMPORAL_SEAGRASS = ITEMS.register(
         ModItemId.TALL_TEMPORAL_SEAGRASS.id(),
         () -> new BlockItem(ModBlocks.TALL_TEMPORAL_SEAGRASS.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TALL_TEMPORAL_SEAGRASS.id()))))
     );
