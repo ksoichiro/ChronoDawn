@@ -3,8 +3,12 @@ package com.chronodawn.mixin;
 import com.chronodawn.registry.ModDimensions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.QuartPos;
+import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeSource;
+import net.minecraft.world.level.biome.Climate;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -21,6 +25,7 @@ public abstract class FreezeTopLayerMixin {
 
     private static final int TRANSITION_RADIUS = 8;
     private static final int SAMPLE_STEP = 2;
+    private static final int SAMPLE_AREA_SIZE = 16 + TRANSITION_RADIUS * 2;
     private static final float MAX_ADD_PROBABILITY = 0.7f;
     private static final float MAX_REMOVE_PROBABILITY = 0.8f;
 
@@ -37,6 +42,30 @@ public abstract class FreezeTopLayerMixin {
         BlockPos origin = context.origin();
         int startX = origin.getX() & ~0xF;
         int startZ = origin.getZ() & ~0xF;
+        ServerChunkCache chunkSource = level.getLevel().getChunkSource();
+        BiomeSource biomeSource = chunkSource.getGenerator().getBiomeSource();
+        Climate.Sampler climateSampler = chunkSource.randomState().sampler();
+        boolean[][] snowySamples = new boolean[SAMPLE_AREA_SIZE][SAMPLE_AREA_SIZE];
+        boolean[][] precipitationSamples = new boolean[SAMPLE_AREA_SIZE][SAMPLE_AREA_SIZE];
+        boolean hasSnowyBiome = false;
+        boolean hasWarmBiome = false;
+
+        for (int sampleX = 0; sampleX < SAMPLE_AREA_SIZE; sampleX++) {
+            for (int sampleZ = 0; sampleZ < SAMPLE_AREA_SIZE; sampleZ++) {
+                Biome biome = getNoiseBiome(biomeSource, climateSampler,
+                        startX + sampleX - TRANSITION_RADIUS,
+                        startZ + sampleZ - TRANSITION_RADIUS);
+                boolean snowy = biome.getBaseTemperature() < 0.15f;
+                snowySamples[sampleX][sampleZ] = snowy;
+                precipitationSamples[sampleX][sampleZ] = biome.hasPrecipitation();
+                hasSnowyBiome |= snowy;
+                hasWarmBiome |= !snowy;
+            }
+        }
+
+        if (!hasSnowyBiome || !hasWarmBiome) {
+            return;
+        }
 
         BlockPos.MutableBlockPos mutable = new BlockPos.MutableBlockPos();
 
@@ -44,15 +73,14 @@ public abstract class FreezeTopLayerMixin {
             for (int localZ = 0; localZ < 16; localZ++) {
                 int worldX = startX + localX;
                 int worldZ = startZ + localZ;
+                int sampleX = localX + TRANSITION_RADIUS;
+                int sampleZ = localZ + TRANSITION_RADIUS;
 
-                mutable.set(worldX, 0, worldZ);
-                Biome biome = level.getBiome(mutable).value();
-
-                if (biome.getBaseTemperature() < 0.15f) {
+                if (snowySamples[sampleX][sampleZ]) {
                     continue;
                 }
 
-                if (!biome.hasPrecipitation()) {
+                if (!precipitationSamples[sampleX][sampleZ]) {
                     continue;
                 }
 
@@ -61,9 +89,7 @@ public abstract class FreezeTopLayerMixin {
 
                 for (int dx = -TRANSITION_RADIUS; dx <= TRANSITION_RADIUS; dx += SAMPLE_STEP) {
                     for (int dz = -TRANSITION_RADIUS; dz <= TRANSITION_RADIUS; dz += SAMPLE_STEP) {
-                        mutable.set(worldX + dx, 0, worldZ + dz);
-                        Biome sampledBiome = level.getBiome(mutable).value();
-                        if (sampledBiome.getBaseTemperature() < 0.15f) {
+                        if (snowySamples[sampleX + dx][sampleZ + dz]) {
                             snowyCount++;
                             int dist = Math.max(Math.abs(dx), Math.abs(dz));
                             minDist = Math.min(minDist, dist);
@@ -85,13 +111,13 @@ public abstract class FreezeTopLayerMixin {
                     continue;
                 }
 
-                int surfaceY = level.getHeight(Heightmap.Types.MOTION_BLOCKING, worldX, worldZ);
-                mutable.set(worldX, surfaceY + 1, worldZ);
+                int snowY = level.getHeight(Heightmap.Types.MOTION_BLOCKING, worldX, worldZ);
+                mutable.set(worldX, snowY, worldZ);
                 if (level.getBlockState(mutable).isAir()) {
-                    mutable.setY(surfaceY);
+                    mutable.setY(snowY - 1);
                     BlockState belowState = level.getBlockState(mutable);
                     if (belowState.isFaceSturdy(level, mutable, Direction.UP)) {
-                        mutable.setY(surfaceY + 1);
+                        mutable.setY(snowY);
                         level.setBlock(mutable, Blocks.SNOW.defaultBlockState(), 2);
                     }
                 }
@@ -103,11 +129,10 @@ public abstract class FreezeTopLayerMixin {
             for (int localZ = 0; localZ < 16; localZ++) {
                 int worldX = startX + localX;
                 int worldZ = startZ + localZ;
+                int sampleX = localX + TRANSITION_RADIUS;
+                int sampleZ = localZ + TRANSITION_RADIUS;
 
-                mutable.set(worldX, 0, worldZ);
-                Biome biome = level.getBiome(mutable).value();
-
-                if (biome.getBaseTemperature() >= 0.15f) {
+                if (!snowySamples[sampleX][sampleZ]) {
                     continue;
                 }
 
@@ -117,10 +142,7 @@ public abstract class FreezeTopLayerMixin {
                 for (int dx = -TRANSITION_RADIUS; dx <= TRANSITION_RADIUS; dx += SAMPLE_STEP) {
                     for (int dz = -TRANSITION_RADIUS; dz <= TRANSITION_RADIUS; dz += SAMPLE_STEP) {
                         if (dx == 0 && dz == 0) continue;
-                        mutable.set(worldX + dx, 0, worldZ + dz);
-                        Biome sampledBiome = level.getBiome(mutable).value();
-                        if (sampledBiome.getBaseTemperature() >= 0.15f
-                                && sampledBiome.hasPrecipitation()) {
+                        if (!snowySamples[sampleX + dx][sampleZ + dz]) {
                             nonSnowyCount++;
                             int dist = Math.max(Math.abs(dx), Math.abs(dz));
                             minDist = Math.min(minDist, dist);
@@ -143,18 +165,23 @@ public abstract class FreezeTopLayerMixin {
                     continue;
                 }
 
-                int surfaceY = level.getHeight(Heightmap.Types.MOTION_BLOCKING, worldX, worldZ);
-                mutable.set(worldX, surfaceY, worldZ);
+                int snowY = level.getHeight(Heightmap.Types.MOTION_BLOCKING, worldX, worldZ);
+                mutable.set(worldX, snowY, worldZ);
                 if (level.getBlockState(mutable).is(Blocks.SNOW)) {
                     level.setBlock(mutable, Blocks.AIR.defaultBlockState(), 2);
                 } else {
-                    mutable.setY(surfaceY + 1);
+                    mutable.setY(snowY - 1);
                     if (level.getBlockState(mutable).is(Blocks.SNOW)) {
                         level.setBlock(mutable, Blocks.AIR.defaultBlockState(), 2);
                     }
                 }
             }
         }
+    }
+
+    private static Biome getNoiseBiome(BiomeSource biomeSource, Climate.Sampler climateSampler, int x, int z) {
+        return biomeSource.getNoiseBiome(QuartPos.fromBlock(x), QuartPos.fromBlock(0), QuartPos.fromBlock(z),
+                climateSampler).value();
     }
 
     private static float positionHash(int x, int z) {
