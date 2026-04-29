@@ -13,6 +13,7 @@ import com.chronodawn.blocks.ClockstoneStairs;
 import com.chronodawn.blocks.ClockstoneWall;
 import com.chronodawn.blocks.ClockTowerTeleporterBlock;
 import com.chronodawn.blocks.ClockworkBlock;
+import com.chronodawn.blocks.ClockworkDialBlock;
 import com.chronodawn.blocks.DecorativeWaterBlock;
 import com.chronodawn.blocks.FruitOfTimeBlock;
 import com.chronodawn.blocks.FrozenTimeIceBlock;
@@ -412,6 +413,14 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> CLOCKWORK_BLOCK = BLOCKS.register(
         ModBlockId.CLOCKWORK_BLOCK.id(),
         () -> new ClockworkBlock(ClockworkBlock.createProperties())
+    );
+
+    /**
+     * Clockwork Dial - Decorative clock face block for time_cairn structures.
+     */
+    public static final RegistrySupplier<Block> CLOCKWORK_DIAL = BLOCKS.register(
+        ModBlockId.CLOCKWORK_DIAL.id(),
+        () -> new ClockworkDialBlock(ClockworkDialBlock.createProperties())
     );
 
     /**

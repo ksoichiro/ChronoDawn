@@ -68,6 +68,7 @@ public enum ModItemId {
     REVERSING_TIME_SANDSTONE("reversing_time_sandstone"),
     FROZEN_TIME_ICE("frozen_time_ice"),
     CLOCKWORK_BLOCK("clockwork_block"),
+    CLOCKWORK_DIAL("clockwork_dial"),
     TEMPORAL_MOSS("temporal_moss"),
     TEMPORAL_DIRT("temporal_dirt"),
     TEMPORAL_GRASS_BLOCK("temporal_grass_block"),

@@ -74,6 +74,7 @@ public enum ModBlockId {
     REVERSING_TIME_SANDSTONE(def("reversing_time_sandstone")),
     FROZEN_TIME_ICE(def("frozen_time_ice").translucent()),
     CLOCKWORK_BLOCK(def("clockwork_block")),
+    CLOCKWORK_DIAL(def("clockwork_dial")),
     TEMPORAL_MOSS(def("temporal_moss")),
     TEMPORAL_DIRT(def("temporal_dirt")),
     TEMPORAL_GRASS_BLOCK(def("temporal_grass_block").cutoutMipped()),

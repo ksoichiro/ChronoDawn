@@ -689,6 +689,17 @@ public class ModItems {
     );
 
     /**
+     * Clockwork Dial - Decorative clock face block for time_cairn structures.
+     */
+    public static final RegistrySupplier<Item> CLOCKWORK_DIAL = ITEMS.register(
+        ModItemId.CLOCKWORK_DIAL.id(),
+        () -> new BlockItem(ModBlocks.CLOCKWORK_DIAL.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CLOCKWORK_DIAL.id()))))
+    );
+
+    /**
      * Time Crystal Block - Decorative block that emits light level 10.
      */
     public static final RegistrySupplier<Item> TIME_CRYSTAL_BLOCK = ITEMS.register(
@@ -2779,6 +2790,7 @@ public class ModItems {
         output.accept(TIME_WHEAT_BALE.get());
         output.accept(CLOCK_TOWER_TELEPORTER.get());
         output.accept(CLOCKWORK_BLOCK.get());
+        output.accept(CLOCKWORK_DIAL.get());
         output.accept(TIME_CRYSTAL_BLOCK.get());
         output.accept(TEMPORAL_BRICKS.get());
         output.accept(TEMPORAL_BRICKS_STAIRS.get());
