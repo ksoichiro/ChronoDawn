@@ -197,6 +197,10 @@ public enum ModBlockId {
     DUSK_BELL(def("dusk_bell").cutout()),
     TEMPORAL_TALL_GRASS(def("temporal_tall_grass").cutout()),
     TEMPORAL_FERN(def("temporal_fern").cutout()),
+    TEMPORAL_KELP(def("temporal_kelp").cutout()),
+    TEMPORAL_KELP_PLANT(def("temporal_kelp_plant").cutout()),
+    TEMPORAL_SEAGRASS(def("temporal_seagrass").cutout()),
+    TALL_TEMPORAL_SEAGRASS(def("tall_temporal_seagrass").cutout()),
 
     // Time Torches (floor variants)
     PURPLE_TIME_TORCH(def("purple_time_torch").cutout()),

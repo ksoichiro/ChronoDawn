@@ -190,6 +190,10 @@ public enum ModItemId {
     DUSK_BELL("dusk_bell"),
     TEMPORAL_TALL_GRASS("temporal_tall_grass"),
     TEMPORAL_FERN("temporal_fern"),
+    TEMPORAL_KELP("temporal_kelp"),
+    TEMPORAL_SEAGRASS("temporal_seagrass"),
+    TALL_TEMPORAL_SEAGRASS("tall_temporal_seagrass"),
+    DRIED_TEMPORAL_KELP("dried_temporal_kelp"),
 
     // Lighting items
     PURPLE_TIME_TORCH("purple_time_torch"),
