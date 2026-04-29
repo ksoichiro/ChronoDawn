@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:smelting",
+  "category": "food",
+  "cookingtime": 200,
+  "experience": 0.1,
+  "ingredient": { "item": "chronodawn:temporal_kelp" },
+  "result": "chronodawn:dried_temporal_kelp"
+}
