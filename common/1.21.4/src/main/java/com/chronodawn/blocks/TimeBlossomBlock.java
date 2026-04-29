@@ -71,7 +71,6 @@ public class TimeBlossomBlock extends BushBlock {
     protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
         // Allow placement on standard flower-compatible blocks
         return state.is(BlockTags.DIRT) ||
-               state.is(BlockTags.SAND) ||
                state.is(net.minecraft.world.level.block.Blocks.FARMLAND);
     }
 }

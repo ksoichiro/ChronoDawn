@@ -49,7 +49,6 @@ public class TemporalFernBlock extends BushBlock {
     @Override
     protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
         return state.is(BlockTags.DIRT) ||
-               state.is(BlockTags.SAND) ||
                state.is(net.minecraft.world.level.block.Blocks.FARMLAND);
     }
 }
