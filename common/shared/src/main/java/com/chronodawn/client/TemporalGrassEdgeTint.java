@@ -30,16 +30,21 @@ public final class TemporalGrassEdgeTint {
 
     /**
      * Color the tint shifts toward at the edge of a sand/gravel disk.
-     * Set to the average pixel color of {@code temporal_sand.png} (sampled
-     * over 256 opaque pixels) so grass at distance 1 lerps directly toward
-     * the actual sand color rather than a paler mix.
      *
-     * An earlier draft biased this 30% toward {@link #DEFAULT_FALLBACK} to
-     * keep a hint of grass at the boundary, but visual testing showed the
-     * residual color step still made sand/gravel circles look pasted-on.
-     * Using the raw sand average closes that gap.
+     * Computed so that at distance 1 (with {@link #RADIUS} = 3, weight 0.75)
+     * the lerped grass color exactly matches the sand average 0x90BBE7:
+     * {@code EDGE = (4 × sand − grass) / 3} per channel, which gives
+     * {@code 0xA2CBF3}. d=2 and d=3 then provide a smooth fade back to the
+     * biome grass color.
+     *
+     * Earlier values were progressively closer to but never reached sand:
+     *   - 0x9CB6CC (placeholder midpoint)
+     *   - 0x80ACDC (sand_avg biased 30% toward grass — too conservative)
+     *   - 0x90BBE7 (raw sand_avg — d=1 lands at ~0x83AFDE, ~13 RGB units short)
+     * Visual testing showed each step still left a perceptible step at d=1.
+     * The overshoot here closes the gap completely.
      */
-    public static final int EDGE_TINT = 0x90BBE7;
+    public static final int EDGE_TINT = 0xA2CBF3;
 
     /**
      * Chebyshev radius scanned for edge triggers. Wider radius = wider, smoother
