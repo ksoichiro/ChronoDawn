@@ -1,9 +1,6 @@
 {
   "values": [
     "chronodawn:temporal_iron_ore",
-    "chronodawn:temporal_stalactite_tip",
-    "chronodawn:temporal_stalactite_frustum",
-    "chronodawn:temporal_stalagmite_tip",
-    "chronodawn:temporal_stalagmite_frustum"
+    "chronodawn:temporal_pointed_dripstone"
   ]
 }

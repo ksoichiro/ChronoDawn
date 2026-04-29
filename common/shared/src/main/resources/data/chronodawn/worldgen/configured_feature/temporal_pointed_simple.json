@@ -3,7 +3,13 @@
   "config": {
     "to_place": {
       "type": "minecraft:simple_state_provider",
-      "state": { "Name": "chronodawn:temporal_stalactite_tip" }
+      "state": {
+        "Name": "chronodawn:temporal_pointed_dripstone",
+        "Properties": {
+          "direction": "down",
+          "thickness": "tip"
+        }
+      }
     }
   }
 }

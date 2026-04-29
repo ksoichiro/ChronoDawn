@@ -100,10 +100,7 @@ public enum ModBlockId {
     TEMPORAL_STONE_BRICKS_WALL(def("temporal_stone_bricks_wall")),
     TEMPORAL_STONE_BUTTON(def("temporal_stone_button")),
     TEMPORAL_STONE_PRESSURE_PLATE(def("temporal_stone_pressure_plate")),
-    TEMPORAL_STALACTITE_TIP(def("temporal_stalactite_tip")),
-    TEMPORAL_STALACTITE_FRUSTUM(def("temporal_stalactite_frustum")),
-    TEMPORAL_STALAGMITE_TIP(def("temporal_stalagmite_tip")),
-    TEMPORAL_STALAGMITE_FRUSTUM(def("temporal_stalagmite_frustum")),
+    TEMPORAL_POINTED_DRIPSTONE(def("temporal_pointed_dripstone")),
 
     // Temporal Sand / Gravel / Sandstone variants
     TEMPORAL_SAND(def("temporal_sand")),

@@ -1129,34 +1129,13 @@ public class ModItems {
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.POLISHED_DEEPSLATE_TEMPORAL_STONE_WALL.id()))))
     );
 
-    // Temporal Stalactite / Stalagmite (cave decoration)
-    public static final RegistrySupplier<Item> TEMPORAL_STALACTITE_TIP = ITEMS.register(
-        ModItemId.TEMPORAL_STALACTITE_TIP.id(),
-        () -> new BlockItem(ModBlocks.TEMPORAL_STALACTITE_TIP.get(), new Item.Properties()
+    // Temporal Pointed Dripstone - Unified stalactite/stalagmite item (cave decoration)
+    public static final RegistrySupplier<Item> TEMPORAL_POINTED_DRIPSTONE = ITEMS.register(
+        ModItemId.TEMPORAL_POINTED_DRIPSTONE.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_POINTED_DRIPSTONE.get(), new Item.Properties()
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
-                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_STALACTITE_TIP.id()))))
-    );
-    public static final RegistrySupplier<Item> TEMPORAL_STALACTITE_FRUSTUM = ITEMS.register(
-        ModItemId.TEMPORAL_STALACTITE_FRUSTUM.id(),
-        () -> new BlockItem(ModBlocks.TEMPORAL_STALACTITE_FRUSTUM.get(), new Item.Properties()
-                .useBlockDescriptionPrefix()
-                .setId(ResourceKey.create(Registries.ITEM,
-                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_STALACTITE_FRUSTUM.id()))))
-    );
-    public static final RegistrySupplier<Item> TEMPORAL_STALAGMITE_TIP = ITEMS.register(
-        ModItemId.TEMPORAL_STALAGMITE_TIP.id(),
-        () -> new BlockItem(ModBlocks.TEMPORAL_STALAGMITE_TIP.get(), new Item.Properties()
-                .useBlockDescriptionPrefix()
-                .setId(ResourceKey.create(Registries.ITEM,
-                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_STALAGMITE_TIP.id()))))
-    );
-    public static final RegistrySupplier<Item> TEMPORAL_STALAGMITE_FRUSTUM = ITEMS.register(
-        ModItemId.TEMPORAL_STALAGMITE_FRUSTUM.id(),
-        () -> new BlockItem(ModBlocks.TEMPORAL_STALAGMITE_FRUSTUM.get(), new Item.Properties()
-                .useBlockDescriptionPrefix()
-                .setId(ResourceKey.create(Registries.ITEM,
-                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_STALAGMITE_FRUSTUM.id()))))
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_POINTED_DRIPSTONE.id()))))
     );
 
     /**
@@ -2880,10 +2859,7 @@ public class ModItems {
         output.accept(POLISHED_DEEPSLATE_TEMPORAL_STONE_STAIRS.get());
         output.accept(POLISHED_DEEPSLATE_TEMPORAL_STONE_SLAB.get());
         output.accept(POLISHED_DEEPSLATE_TEMPORAL_STONE_WALL.get());
-        output.accept(TEMPORAL_STALACTITE_TIP.get());
-        output.accept(TEMPORAL_STALACTITE_FRUSTUM.get());
-        output.accept(TEMPORAL_STALAGMITE_TIP.get());
-        output.accept(TEMPORAL_STALAGMITE_FRUSTUM.get());
+        output.accept(TEMPORAL_POINTED_DRIPSTONE.get());
         output.accept(FROZEN_TIME_ICE.get());
         // Note: TEMPORAL_PARTICLE_EMITTER is not added to creative tab (structure-only block)
 

@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "direction=down,thickness=tip": {
+      "model": "chronodawn:block/temporal_pointed_dripstone_tip_down"
+    },
+    "direction=down,thickness=frustum": {
+      "model": "chronodawn:block/temporal_pointed_dripstone_frustum_down"
+    },
+    "direction=down,thickness=middle": {
+      "model": "chronodawn:block/temporal_pointed_dripstone_frustum_down"
+    },
+    "direction=down,thickness=base": {
+      "model": "chronodawn:block/temporal_pointed_dripstone_frustum_down"
+    },
+    "direction=up,thickness=tip": {
+      "model": "chronodawn:block/temporal_pointed_dripstone_tip_up"
+    },
+    "direction=up,thickness=frustum": {
+      "model": "chronodawn:block/temporal_pointed_dripstone_frustum_up"
+    },
+    "direction=up,thickness=middle": {
+      "model": "chronodawn:block/temporal_pointed_dripstone_frustum_up"
+    },
+    "direction=up,thickness=base": {
+      "model": "chronodawn:block/temporal_pointed_dripstone_frustum_up"
+    }
+  }
+}
