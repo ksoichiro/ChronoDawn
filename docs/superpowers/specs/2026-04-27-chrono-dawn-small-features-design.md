@@ -35,7 +35,7 @@ NBT template loaded via a shared `NbtTemplateFeature` (see Architecture).
 | 1 | `time_well` | 3×3×4 | T3 (rare landmark) | plains, forest, prairies |
 | 2 | `petrified_adventurer` | 1×1×2 + Item Frame | T2 (standard ambient) | all land biomes (9) |
 | 3 | `time_cairn` | 1×1×3 | T1 (filler) | all land biomes (9) |
-| 4 | `watchmaker_camp` | 5×5×3 | T4 (rare loot) | plains, forest |
+| 4 | `watchmaker_camp` | 5×2×5 | T4 (rare loot) | plains, forest |
 | 5 | `old_sundial` | 3×3×3 | T2 (standard ambient) | plains, prairies |
 | 6 | `hourglass_monolith` | 3×3×5 | T2 (standard ambient) | desert |
 | 7 | `upside_down_tree` | 4×4×6 | T2 (standard ambient) | ancient_forest |

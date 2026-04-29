@@ -858,7 +858,7 @@ git add common/shared/src/main/resources/data/chronodawn/worldgen/placed_feature
 git commit -m "feat(worldgen): add Time-Stopped Well rare landmark"
 ```
 
-### Task 2.7: Watchmaker's Camp (T4, 5×5×3)
+### Task 2.7: Watchmaker's Camp (T4, 5×2×5)
 
 **Block plan:** see **Appendix A.2.5** for the full layered plan. Note
 two corrections from the early draft: (1) `white_wool_stairs` does not
@@ -866,7 +866,7 @@ exist in vanilla, so the roof is flat; (2) the original "Coarse Dirt
 floor" idea is dropped — placing it at template Y=0 would float; the
 natural ground stays as the floor.
 
-NBT bounding box: size `5 3 5`.
+NBT bounding box: size `5 2 5` (Y=0 + Y=1; the original Y=2 layer is unused).
 
 **Loot in chest:** the chest's NBT must reference the loot table by string. When saving via the structure block, manually set the chest's `LootTable` NBT tag to `chronodawn:chests/watchmaker_camp` BEFORE saving (use `/data merge block <x> <y> <z> {LootTable:"chronodawn:chests/watchmaker_camp"}`). The loot table itself is created in Phase 3.
 
@@ -1357,154 +1357,240 @@ while building.
   in-game. Other blocks are NOT auto-replaced; pick the ChronoDawn
   variants explicitly when needed.
 - **Sizes below are `X × Y(height) × Z`** unless otherwise noted.
+- **Diagram convention.** Each Y layer is shown as a top-down grid
+  viewed from above. `X →` runs rightward along each row; `Z ↑` runs
+  upward in the page (rows are listed `Z=high` first so the diagram
+  reads like a map). Cells use a one-letter symbol with a per-NBT
+  legend; `.` always means air. Compass directions in the world don't
+  matter — `random_rotate` rotates the structure on placement.
 
 ### A.2 Block plans
 
 #### A.2.1 `time_cairn` — Time Cairn (T1, all land biomes)
 
-Size: **1 × 3 × 1**
+Size: **1 × 3 × 1** (single column).
 
 ```
-Y=2 (top)    : Iron Trapdoor (half=bottom, open=false — flat dial cap, sits flush on Y=1)
-Y=1 (middle) : Cobblestone (full block)
-Y=0 (base)   : Mossy Cobblestone (full block — sits flush on grass)
+Y=2 (top)    : [T]
+Y=1 (middle) : [#]
+Y=0 (base)   : [M]
 ```
 
-Block count: 3. `Include entities: false`. Save name: `chronodawn:time_cairn`.
+Legend:
+- `T` = Iron Trapdoor (`half=bottom`, `open=false` — flat dial cap, sits flush on Y=1)
+- `#` = Cobblestone (full block)
+- `M` = Mossy Cobblestone (full block — sits flush on the ground)
+
+`Include entities: false`. Save name: `chronodawn:time_cairn`.
 
 #### A.2.2 `petrified_adventurer` — Petrified Adventurer (T2, 8 land biomes excl. snowy)
 
-Size: **3 × 3 × 3**
+Size: **3 × 3 × 3**.
 
 ```
-Y=2 (top)  : all air
-Y=1 (mid)  : center = Temporal Stone (torso/head)
-             one block in front of center = Temporal Stone Stair (forward-leaning posture;
-             orientation rotates with random_rotate)
-Y=0 (base) : center = Temporal Stone Bricks (full block — the "worn legs", sits flush on ground)
-             one block to the side of center = Stone Bricks (vanilla, the tool tile)
+Y=2 (top — all air)         Y=1 (torso + lean)            Y=0 (legs + tool tile)
+  Z=2 [.][.][.]                 Z=2 [.][.][.]                 Z=2 [.][.][.]
+  Z=1 [.][.][.]                 Z=1 [.][T][.]                 Z=1 [.][L][P]
+  Z=0 [.][.][.]                 Z=0 [.][S][.]                 Z=0 [.][.][.]
+       X=0 X=1 X=2                   X=0 X=1 X=2                   X=0 X=1 X=2
 ```
 
-(Note: there is no `polished_temporal_stone` block family in ChronoDawn —
-only the deepslate variant is "polished". `temporal_stone_bricks` reads
-similarly weathered/old.)
+Legend:
+- `T` = Temporal Stone (full block — torso/head)
+- `S` = Temporal Stone Stair (`facing=north`, i.e. high side toward the
+  body — reads as a forward-leaning hip extending toward `Z=0`)
+- `L` = Temporal Stone Bricks (full block — the "worn legs"; there is
+  no `polished_temporal_stone` block in the registry, bricks read
+  similarly weathered)
+- `P` = Stone Bricks (vanilla, the flat tool tile)
 
-Item Frame: place on the top face of the Stone Bricks tile, holding 1×
-Iron Pickaxe. `Include entities: ON`.
+Item Frame: attach to the **top face** of `P` at world Y=0. Frame is
+flat-up, holding 1× Iron Pickaxe (visually a pickaxe lying on the tile).
+`Include entities: ON`.
 
-Block count: 4 + 1 entity. Save name: `chronodawn:petrified_adventurer`.
+Save name: `chronodawn:petrified_adventurer`.
 
 #### A.2.3 `petrified_adventurer_snowy` — Snowy variant (T2, snowy biome only)
 
-Same as A.2.2, plus 4–6 `minecraft:snow` blocks (`layers=4`) scattered in
-the surrounding 3×3 ring on Y=0 to read as half-buried frostbitten remains.
+Same as A.2.2 except Y=0 picks up 4 corner snow blocks:
 
-Size: **3 × 3 × 3**. `Include entities: ON` (Item Frame). Save name:
-`chronodawn:petrified_adventurer_snowy`.
+```
+Y=2 (all air)             Y=1 (torso + lean)           Y=0 (legs + tile + snow corners)
+  Z=2 [.][.][.]               Z=2 [.][.][.]                Z=2 [s][.][s]
+  Z=1 [.][.][.]               Z=1 [.][T][.]                Z=1 [.][L][P]
+  Z=0 [.][.][.]               Z=0 [.][S][.]                Z=0 [s][.][s]
+       X=0 X=1 X=2                  X=0 X=1 X=2                  X=0 X=1 X=2
+```
+
+Legend (additions only):
+- `s` = `minecraft:snow` (`layers=4` — half-buried frostbitten look)
+
+Other symbols match A.2.2. `Include entities: ON` (Item Frame).
+
+Save name: `chronodawn:petrified_adventurer_snowy`.
 
 #### A.2.4 `time_well` — Time-Stopped Well (T3, plains/forest/prairies)
 
-Size: **3 × 5 × 3**. Configured-feature `y_offset = -1`, so when saving,
-anchor the structure block so the saved Y=0 lands one block BELOW the
-target ground level (the buried Temporal Amber sits there).
+Size: **3 × 5 × 3**. Configured-feature has `y_offset = -1`, so the
+saved Y=0 lands ONE BLOCK BELOW the surface in-world (the buried amber
+sits there).
 
 ```
-Y=4 (roof)   : Time Wood Slab (top half) bridging the two posts (1 block)
-Y=3 (posts)  : two opposite corners = Time Wood Log (axis=y); other 7 cells = air
-Y=2 (rim)    : 4 corners = Cobblestone Wall; 4 sides = Cobblestone; center = Blue Ice
-Y=1 (shaft)  : 4 corners = Cobblestone; 4 sides = Mossy Cobblestone; center = air
-Y=0 (bottom) : center = Temporal Amber Ore (chronodawn:temporal_amber_ore — buried reward,
-                drops raw_temporal_amber when mined); 8 surrounding cells unused/air
+Y=4 (roof)              Y=3 (posts)             Y=2 (rim + ice)
+  Z=2 [.][R][.]            Z=2 [P][.][P]           Z=2 [W][C][W]
+  Z=1 [.][.][.]            Z=1 [.][.][.]           Z=1 [C][I][C]
+  Z=0 [.][.][.]            Z=0 [.][.][.]           Z=0 [W][C][W]
+       X=0 X=1 X=2              X=0 X=1 X=2             X=0 X=1 X=2
+
+Y=1 (shaft)             Y=0 (buried bottom — under the ground line)
+  Z=2 [C][M][C]            Z=2 [.][.][.]
+  Z=1 [M][.][M]            Z=1 [.][O][.]
+  Z=0 [C][M][C]            Z=0 [.][.][.]
+       X=0 X=1 X=2              X=0 X=1 X=2
 ```
 
-Item Frame: attach to the side of one Time Wood Log post at Y=3, holding
-1× Bucket. `Include entities: ON`.
+Legend:
+- `R` = Time Wood Slab (`type=top` — small canopy bridging the two posts)
+- `P` = Time Wood Log (`axis=y` — the two opposite-corner roof posts)
+- `W` = Cobblestone Wall (rim corners)
+- `C` = Cobblestone (rim sides + shaft corners)
+- `I` = Blue Ice (frozen water surface)
+- `M` = Mossy Cobblestone (shaft sides)
+- `O` = Temporal Amber Ore (`chronodawn:temporal_amber_ore` — buried
+  reward; mining drops `raw_temporal_amber`)
+- `.` at Y=0 = leave as terrain (only the center cell ships in the NBT)
+
+Item Frame: attach to a side face of one `P` at Y=3 (e.g. inward-facing
+toward the well centre), holding 1× Bucket. `Include entities: ON`.
 
 Save name: `chronodawn:time_well`.
 
 #### A.2.5 `watchmaker_camp` — Watchmaker's Camp (T4, plains/forest)
 
-Size: **5 × 3 × 5**
+Size: **5 × 2 × 5** (the original Y=2 layer is unused — flat roof).
 
 ```
-Y=2 (roof)  : all air (flat roof — no Wool Stairs, those don't exist in vanilla)
-Y=1 (tent)  : 3× White Wool spanning between corner fence posts (the tent ceiling, flat)
-              + 1× Item Frame attached to the side of the Crafting Table holding a Clock
-Y=0 (camp)  : center = Campfire (lit=false)
-              north = Crafting Table
-              east  = Lectern
-              south = Chest (LootTable set per A.1 — chronodawn:chests/watchmaker_camp)
-              west  = minecraft:chipped_anvil (note: separate block ID from minecraft:anvil)
-              4 corners (5×5) = Time Wood Fence (tent posts)
-              1 cell next to the campfire = Cobblestone (a stool)
-              other floor cells: leave the natural ground untouched
-              (do NOT include Coarse Dirt at Y=0; it would float above grass at this
-              configured-feature y_offset=0. If you want a "tent floor" later, add it
-              via y_offset=-1 + Coarse Dirt at template Y=0 to replace the grass.)
+Y=1 (posts continued + wool ridge)         Y=0 (camp ground level)
+  Z=4 [F][.][.][.][F]                         Z=4 [F][.][.][.][F]
+  Z=3 [.][.][w][.][.]                         Z=3 [.][.][T][s][.]
+  Z=2 [.][.][w][.][.]                         Z=2 [.][A][C][L][.]
+  Z=1 [.][.][w][.][.]                         Z=1 [.][.][H][.][.]
+  Z=0 [F][.][.][.][F]                         Z=0 [F][.][.][.][F]
+       X=0 X=1 X=2 X=3 X=4                         X=0 X=1 X=2 X=3 X=4
 ```
 
-`Include entities: ON` (Item Frame). Set Chest's `LootTable` NBT before
-saving via `/data merge block`. Save name: `chronodawn:watchmaker_camp`.
+Legend:
+- `F` = Time Wood Fence (corner tent posts; same cells at Y=0 and Y=1
+  so each post is 2 blocks tall)
+- `w` = White Wool (3-block roof ridge running along Z=1..3 at X=2;
+  vanilla has no `white_wool_stairs`, so the roof is flat)
+- `T` = Crafting Table
+- `s` = Cobblestone (a stool next to the camp work area)
+- `A` = `minecraft:chipped_anvil` (a separate block ID from
+  `minecraft:anvil`; capture this exact variant)
+- `C` = Campfire (`lit=false`)
+- `L` = Lectern
+- `H` = Chest — set its `LootTable` to `chronodawn:chests/watchmaker_camp`
+  via `/data merge block` BEFORE saving the structure
+
+Item Frame: attach to the south face of `T` at Y=0 X=2 Z=3 (i.e. the
+face pointing toward `Z=2`), holding 1× Clock. `Include entities: ON`.
+
+Floor: leave the natural ground (grass / temporal_grass) untouched. Do
+NOT place Coarse Dirt at Y=0 — it would float per the half-block
+pitfall. (If a tent floor is wanted later, switch to `y_offset=-1` and
+place Coarse Dirt at template Y=0 to replace the grass.)
+
+Save name: `chronodawn:watchmaker_camp`.
 
 #### A.2.6 `old_sundial` — Old Sundial (T2, plains/prairies)
 
-Size: **3 × 3 × 3**
+Size: **3 × 3 × 3**.
 
 ```
-Y=2 (top)  : center = Iron Bars (the gnomon, 1 block tall); other 8 cells = air
-Y=1 (mid)  : center = Stone Bricks (pedestal column)
-             one corner = Cobblestone Stairs (broken-edge detail; orientation
-             rotates with random_rotate); other 7 cells = air
-Y=0 (base) : 3×3 of Smooth Stone (vanilla minecraft:smooth_stone, full block) — the platform
+Y=2 (gnomon)           Y=1 (pedestal + chip)       Y=0 (platform — full blocks)
+  Z=2 [.][.][.]           Z=2 [.][.][.]               Z=2 [S][S][S]
+  Z=1 [.][I][.]           Z=1 [.][B][.]               Z=1 [S][S][S]
+  Z=0 [.][.][.]           Z=0 [r][.][.]               Z=0 [S][S][S]
+       X=0 X=1 X=2             X=0 X=1 X=2                 X=0 X=1 X=2
 ```
 
-(Vanilla has no `polished_stone_slab` block; `smooth_stone_slab` exists but
-would float at template Y=0 per the half-block pitfall. Use full
-`minecraft:smooth_stone` instead.)
+Legend:
+- `I` = Iron Bars (1 block tall, the vertical gnomon)
+- `B` = Stone Bricks (the central pedestal column)
+- `r` = Cobblestone Stairs at one corner of Y=1 (the "broken edge"
+  detail; orientation rotates with `random_rotate`)
+- `S` = Smooth Stone (vanilla `minecraft:smooth_stone`, full block —
+  the platform; vanilla has no plain `polished_stone_slab`, and a
+  half-slab platform would float at template Y=0)
 
-Block count: 9 + 1 + 1 + 1 = 12. `Include entities: false`. Save name:
-`chronodawn:old_sundial`.
+`Include entities: false`. Save name: `chronodawn:old_sundial`.
 
 #### A.2.7 `hourglass_monolith` — Hourglass Monolith (T2, desert)
 
-Size: **3 × 5 × 3**
+Size: **3 × 5 × 3**.
 
 ```
-Y=4 (top ring)  : 3×3 ring of Temporal Sandstone Wall (chronodawn:temporal_sandstone_wall,
-                  8 blocks); center = air
-Y=3 (upper bulb): 3×3 solid Temporal Sandstone (chronodawn:temporal_sandstone, 9 blocks)
-Y=2 (pinch)     : center = Chiseled Sandstone (vanilla minecraft:chiseled_sandstone, 1 block);
-                  8 surrounding cells = air
-Y=1 (lower bulb): 3×3 solid Temporal Sandstone (9 blocks)
-Y=0 (base ring) : 3×3 ring of Temporal Sandstone Wall (8 blocks); center = 1× Sand
-                  (vanilla minecraft:sand — the "settled" sand that has finished running through)
+Y=4 (top ring)        Y=3 (upper bulb)        Y=2 (pinch — neck)
+  Z=2 [W][W][W]          Z=2 [T][T][T]           Z=2 [.][.][.]
+  Z=1 [W][.][W]          Z=1 [T][T][T]           Z=1 [.][N][.]
+  Z=0 [W][W][W]          Z=0 [T][T][T]           Z=0 [.][.][.]
+       X=0 X=1 X=2            X=0 X=1 X=2             X=0 X=1 X=2
+
+Y=1 (lower bulb)      Y=0 (base ring + settled sand)
+  Z=2 [T][T][T]          Z=2 [W][W][W]
+  Z=1 [T][T][T]          Z=1 [W][s][W]
+  Z=0 [T][T][T]          Z=0 [W][W][W]
+       X=0 X=1 X=2            X=0 X=1 X=2
 ```
 
-(Vanilla has no `smooth_sandstone_wall`; ChronoDawn's `temporal_sandstone_wall`
-exists and matches the desert biome's `temporal_sand` ground.)
-
-The single Sand block at Y=0 center is safe — the Y=1 Temporal Sandstone
-above it acts as a lid, so it does not fall on chunk load.
+Legend:
+- `W` = Temporal Sandstone Wall (`chronodawn:temporal_sandstone_wall`;
+  vanilla has no `smooth_sandstone_wall`, and the ChronoDawn variant
+  matches the desert biome's `temporal_sand` ground)
+- `T` = Temporal Sandstone (`chronodawn:temporal_sandstone`, full block)
+- `N` = Chiseled Sandstone (vanilla `minecraft:chiseled_sandstone` —
+  the narrow neck that visually marks the pinch)
+- `s` = Sand (vanilla `minecraft:sand` — the settled sand that has
+  finished running through). Safe because the Y=1 Temporal Sandstone
+  above it acts as a lid, so the sand does not fall on chunk load.
 
 `Include entities: false`. Save name: `chronodawn:hourglass_monolith`.
 
 #### A.2.8 `upside_down_tree` — Upside-Down Tree (T2, ancient_forest)
 
-Size: **4 × 6 × 4** (centered roughly on a 3,3 origin in the bounding box)
+Size: **4 × 6 × 4**. Trunk runs vertically at `(X=1, Z=1)`. The
+canopy clusters at the BOTTOM (Y=0); the splayed roots reach UP at the
+top (Y=4–5).
 
 ```
-Y=5 (root tips)  : 1–2 Time Wood Log blocks placed on the outer ends of Y=4 logs
-                   to imply tapering root tips (axis matches the log they extend)
-Y=4 (root splay) : 5–7 Time Wood Log blocks branching horizontally from the
-                   trunk top — center plus 4 cardinal directions, with axis=x
-                   and axis=z mixed so the splay reads gnarled rather than uniform
-Y=3 (trunk top)  : center = Time Wood Log (axis=y)
-Y=2 (trunk mid)  : center = Time Wood Log (axis=y)
-Y=1 (trunk base) : center = Time Wood Log (axis=y)
-Y=0 (canopy at ground) :
-                   3×3 ring around the trunk base = Time Wood Leaves (persistent=true)
-                   1–2 random leaf cells replaced with Fruit of Time block
+Y=5 (root tip)         Y=4 (root splay — 5 logs)     Y=3 / Y=2 / Y=1 (trunk)
+  Z=3 [.][.][.][.]        Z=3 [.][.][.][.]              Z=3 [.][.][.][.]
+  Z=2 [.][.][.][.]        Z=2 [.][N][.][.]              Z=2 [.][.][.][.]
+  Z=1 [.][.][t][.]        Z=1 [W][P][E][.]              Z=1 [.][P][.][.]
+  Z=0 [.][.][.][.]        Z=0 [.][S][.][.]              Z=0 [.][.][.][.]
+       X=0 X=1 X=2 X=3         X=0 X=1 X=2 X=3                X=0 X=1 X=2 X=3
+
+Y=0 (canopy at ground)
+  Z=3 [.][.][.][.]
+  Z=2 [l][l][l][.]
+  Z=1 [l][P][l][.]
+  Z=0 [l][f][l][.]
+       X=0 X=1 X=2 X=3
 ```
+
+Legend:
+- `P` = Time Wood Log (`axis=y` — the vertical trunk; appears at every
+  Y from 0 through 4 at `(X=1, Z=1)`)
+- `N` = Time Wood Log (`axis=z` — north-pointing root branch at Y=4)
+- `S` = Time Wood Log (`axis=z` — south-pointing root branch at Y=4)
+- `E` = Time Wood Log (`axis=x` — east-pointing root branch at Y=4)
+- `W` = Time Wood Log (`axis=x` — west-pointing root branch at Y=4)
+- `t` = Time Wood Log (`axis=x` — east root tip, one cell beyond the
+  Y=4 east branch; you can add a second tip elsewhere for asymmetry)
+- `l` = Time Wood Leaves (`persistent=true` — the inverted canopy ring
+  hugging the ground around the trunk base)
+- `f` = Fruit of Time block (replacing one leaf cell for variety)
 
 `Include entities: false`. Save name: `chronodawn:upside_down_tree`.
 
