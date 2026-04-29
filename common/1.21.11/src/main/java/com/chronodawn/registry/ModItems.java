@@ -59,6 +59,7 @@ import com.chronodawn.registry.ModFluids;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.component.Consumable;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
@@ -1663,7 +1664,7 @@ public class ModItems {
 
     /**
      * Dried Temporal Kelp - Smoked product of Temporal Kelp.
-     * Nutrition: 1, Saturation: 0.6 (parity with vanilla dried_kelp).
+     * Nutrition: 1, Saturation: 0.6, eat duration 0.865s (full parity with vanilla dried_kelp).
      */
     public static final RegistrySupplier<Item> DRIED_TEMPORAL_KELP = ITEMS.register(
         ModItemId.DRIED_TEMPORAL_KELP.id(),
@@ -1672,6 +1673,10 @@ public class ModItems {
                     .nutrition(1)
                     .saturationModifier(0.6f)
                     .build())
+                .component(DataComponents.CONSUMABLE,
+                    Consumable.builder()
+                        .consumeSeconds(0.865f)
+                        .build())
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DRIED_TEMPORAL_KELP.id()))))
     );
