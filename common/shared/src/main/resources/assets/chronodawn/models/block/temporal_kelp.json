@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/template_kelp",
+  "render_type": "minecraft:cutout",
+  "textures": {
+    "kelp": "chronodawn:block/temporal_kelp"
+  }
+}
