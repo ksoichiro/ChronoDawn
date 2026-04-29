@@ -1676,6 +1676,7 @@ public class ModItems {
     public static final RegistrySupplier<Item> LUMEN_POLYP = ITEMS.register(
         ModItemId.LUMEN_POLYP.id(),
         () -> new BlockItem(ModBlocks.LUMEN_POLYP.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.LUMEN_POLYP.id()))))
     );
