@@ -30,21 +30,32 @@ public final class TemporalGrassEdgeTint {
 
     /**
      * Color the tint shifts toward at the edge of a sand/gravel disk.
+     * Set to the average pixel color of {@code temporal_sand.png}; paired
+     * with {@link #provideForSandGravel} so both sides of the boundary blend
+     * symmetrically (grass-side fades toward sand, sand-side at d=1 fades
+     * toward grass).
      *
-     * Computed so that at distance 1 (with {@link #RADIUS} = 3, weight 0.75)
-     * the lerped grass color exactly matches the sand average 0x90BBE7:
-     * {@code EDGE = (4 × sand − grass) / 3} per channel, which gives
-     * {@code 0xA2CBF3}. d=2 and d=3 then provide a smooth fade back to the
-     * biome grass color.
-     *
-     * Earlier values were progressively closer to but never reached sand:
-     *   - 0x9CB6CC (placeholder midpoint)
-     *   - 0x80ACDC (sand_avg biased 30% toward grass — too conservative)
-     *   - 0x90BBE7 (raw sand_avg — d=1 lands at ~0x83AFDE, ~13 RGB units short)
-     * Visual testing showed each step still left a perceptible step at d=1.
-     * The overshoot here closes the gap completely.
+     * Tuning history:
+     *   - 0x9CB6CC: placeholder midpoint
+     *   - 0x80ACDC: sand_avg biased 30% toward grass — too conservative
+     *   - 0xA2CBF3: overshoot to make d=1 grass = sand exactly — felt like the
+     *     circle had widened by 1 block; sand interior still looked floating
+     *   - 0x90BBE7 (current): raw sand_avg, complemented by sand-side tint
      */
-    public static final int EDGE_TINT = 0xA2CBF3;
+    public static final int EDGE_TINT = 0x90BBE7;
+
+    /**
+     * Multiplicative tint applied to Temporal Sand / Temporal Gravel blocks at
+     * Chebyshev distance 1 from a Temporal Grass Block (same Y). Pulls the
+     * baked sand/gravel texture color ~25% toward the grass tint so the d=1
+     * sand row visually meets the grass-side gradient halfway.
+     *
+     * <p>Derivation: target pixel = lerp(SAND_AVG=0x90BBE7, GRASS=0x5B8AC4,
+     * 0.25) = 0x83AFDE — same color the grass-side reaches at d=1 with
+     * RADIUS=3. Multiplicative tint = target / SAND_AVG per channel ≈
+     * (0xE8, 0xEF, 0xF5).
+     */
+    public static final int SAND_NEIGHBOR_TINT = 0xE8EFF5;
 
     /**
      * Chebyshev radius scanned for edge triggers. Wider radius = wider, smoother
@@ -71,6 +82,36 @@ public final class TemporalGrassEdgeTint {
         }
         int base = BiomeColors.getAverageGrassColor(world, pos);
         return blend(world, pos, base);
+    }
+
+    /**
+     * Block-color provider entry point for Temporal Sand / Temporal Gravel.
+     * Returns {@link #SAND_NEIGHBOR_TINT} when the block has a Temporal Grass
+     * Block as a Chebyshev-distance-1 neighbor at the same Y; otherwise
+     * {@code 0xFFFFFF} (no tint, preserving the original baked texture color).
+     *
+     * <p>Mirrors the grass-side gradient: the d=1 ring of sand/gravel pulls
+     * toward grass while the d=1 ring of grass pulls toward sand. They meet
+     * at approximately the same visual color so the boundary has no step.
+     *
+     * <p>Item rendering (null world/pos) returns {@code 0xFFFFFF}, leaving
+     * inventory icons untinted.
+     */
+    public static int provideForSandGravel(BlockState state, @Nullable BlockAndTintGetter world,
+                                           @Nullable BlockPos pos, int tintIndex) {
+        if (tintIndex != 0) return -1;
+        if (world == null || pos == null) return 0xFFFFFF;
+        BlockPos.MutableBlockPos cur = new BlockPos.MutableBlockPos();
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                if (dx == 0 && dz == 0) continue;
+                cur.set(pos.getX() + dx, pos.getY(), pos.getZ() + dz);
+                if (world.getBlockState(cur).getBlock() instanceof TemporalGrassBlock) {
+                    return SAND_NEIGHBOR_TINT;
+                }
+            }
+        }
+        return 0xFFFFFF;
     }
 
     /**

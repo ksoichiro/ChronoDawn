@@ -432,6 +432,15 @@ public class ChronoDawnClientNeoForge {
             ModBlocks.TEMPORAL_FERN.get()
         );
 
+        // Register Temporal Sand / Gravel sand-side gradient: at d=1 from a Temporal
+        // Grass Block, pulls the baked sand/gravel color partway toward grass so the
+        // boundary blends symmetrically with the grass-side gradient.
+        event.register(
+            TemporalGrassEdgeTint::provideForSandGravel,
+            ModBlocks.TEMPORAL_SAND.get(),
+            ModBlocks.TEMPORAL_GRAVEL.get()
+        );
+
         ChronoDawn.LOGGER.debug("Registered block color handlers for NeoForge");
     }
 

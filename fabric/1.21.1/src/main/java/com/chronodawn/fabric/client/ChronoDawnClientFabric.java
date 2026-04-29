@@ -171,6 +171,15 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             ModBlocks.TEMPORAL_GRASS_BLOCK.get()
         );
 
+        // Register Temporal Sand / Gravel sand-side gradient: at d=1 from a Temporal
+        // Grass Block, pulls the baked sand/gravel color partway toward grass so the
+        // boundary blends symmetrically with the grass-side gradient.
+        ColorProviderRegistry.BLOCK.register(
+            TemporalGrassEdgeTint::provideForSandGravel,
+            ModBlocks.TEMPORAL_SAND.get(),
+            ModBlocks.TEMPORAL_GRAVEL.get()
+        );
+
         // Register item color for Temporal Grass Block (Chrono Dawn grass color)
         ColorProviderRegistry.ITEM.register(
             (stack, tintIndex) -> tintIndex == 0 ? 0x5B8AC4 : -1,
