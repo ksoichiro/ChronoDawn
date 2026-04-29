@@ -1,12 +1,52 @@
 {
   "variants": {
-    "pickles=1,waterlogged=false": { "model": "chronodawn:block/lumen_polyp_1" },
-    "pickles=1,waterlogged=true":  { "model": "chronodawn:block/lumen_polyp_1" },
-    "pickles=2,waterlogged=false": { "model": "chronodawn:block/lumen_polyp_2" },
-    "pickles=2,waterlogged=true":  { "model": "chronodawn:block/lumen_polyp_2" },
-    "pickles=3,waterlogged=false": { "model": "chronodawn:block/lumen_polyp_3" },
-    "pickles=3,waterlogged=true":  { "model": "chronodawn:block/lumen_polyp_3" },
-    "pickles=4,waterlogged=false": { "model": "chronodawn:block/lumen_polyp_4" },
-    "pickles=4,waterlogged=true":  { "model": "chronodawn:block/lumen_polyp_4" }
+    "pickles=1,waterlogged=false": [
+      { "model": "chronodawn:block/lumen_polyp_1" },
+      { "model": "chronodawn:block/lumen_polyp_1", "y": 90 },
+      { "model": "chronodawn:block/lumen_polyp_1", "y": 180 },
+      { "model": "chronodawn:block/lumen_polyp_1", "y": 270 }
+    ],
+    "pickles=1,waterlogged=true": [
+      { "model": "chronodawn:block/lumen_polyp_1" },
+      { "model": "chronodawn:block/lumen_polyp_1", "y": 90 },
+      { "model": "chronodawn:block/lumen_polyp_1", "y": 180 },
+      { "model": "chronodawn:block/lumen_polyp_1", "y": 270 }
+    ],
+    "pickles=2,waterlogged=false": [
+      { "model": "chronodawn:block/lumen_polyp_2" },
+      { "model": "chronodawn:block/lumen_polyp_2", "y": 90 },
+      { "model": "chronodawn:block/lumen_polyp_2", "y": 180 },
+      { "model": "chronodawn:block/lumen_polyp_2", "y": 270 }
+    ],
+    "pickles=2,waterlogged=true": [
+      { "model": "chronodawn:block/lumen_polyp_2" },
+      { "model": "chronodawn:block/lumen_polyp_2", "y": 90 },
+      { "model": "chronodawn:block/lumen_polyp_2", "y": 180 },
+      { "model": "chronodawn:block/lumen_polyp_2", "y": 270 }
+    ],
+    "pickles=3,waterlogged=false": [
+      { "model": "chronodawn:block/lumen_polyp_3" },
+      { "model": "chronodawn:block/lumen_polyp_3", "y": 90 },
+      { "model": "chronodawn:block/lumen_polyp_3", "y": 180 },
+      { "model": "chronodawn:block/lumen_polyp_3", "y": 270 }
+    ],
+    "pickles=3,waterlogged=true": [
+      { "model": "chronodawn:block/lumen_polyp_3" },
+      { "model": "chronodawn:block/lumen_polyp_3", "y": 90 },
+      { "model": "chronodawn:block/lumen_polyp_3", "y": 180 },
+      { "model": "chronodawn:block/lumen_polyp_3", "y": 270 }
+    ],
+    "pickles=4,waterlogged=false": [
+      { "model": "chronodawn:block/lumen_polyp_4" },
+      { "model": "chronodawn:block/lumen_polyp_4", "y": 90 },
+      { "model": "chronodawn:block/lumen_polyp_4", "y": 180 },
+      { "model": "chronodawn:block/lumen_polyp_4", "y": 270 }
+    ],
+    "pickles=4,waterlogged=true": [
+      { "model": "chronodawn:block/lumen_polyp_4" },
+      { "model": "chronodawn:block/lumen_polyp_4", "y": 90 },
+      { "model": "chronodawn:block/lumen_polyp_4", "y": 180 },
+      { "model": "chronodawn:block/lumen_polyp_4", "y": 270 }
+    ]
   }
 }
