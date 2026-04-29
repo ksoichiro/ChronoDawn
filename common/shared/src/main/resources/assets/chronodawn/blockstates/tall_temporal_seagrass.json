@@ -1,6 +1,0 @@
-{
-  "variants": {
-    "half=lower": { "model": "chronodawn:block/tall_temporal_seagrass_bottom" },
-    "half=upper": { "model": "chronodawn:block/tall_temporal_seagrass_top" }
-  }
-}
