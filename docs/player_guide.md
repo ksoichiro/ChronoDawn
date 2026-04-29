@@ -236,6 +236,27 @@ Caves throughout the Chrono Dawn dimension contain **Temporal Stalactites** and 
 
 These blocks generate exclusively in the Chrono Dawn dimension; vanilla `pointed_dripstone` and Dripstone Caves are unaffected.
 
+### Aquatic Plants
+
+The water of the Chrono Dawn ocean and swamp biomes grows **Temporal Kelp**, **Temporal Seagrass**, and **Tall Temporal Seagrass** — pale-cyan, frozen-time variants of vanilla aquatic plants. Vanilla `kelp` and `seagrass` no longer generate in newly created Chrono Dawn chunks (existing chunks keep whatever they already have).
+
+- **Temporal Kelp** grows in columns 1–25 blocks tall from the ocean floor. The head block is climbable like vanilla kelp, and bone meal grows the column upward. Shears or any tool drops the kelp item.
+- **Temporal Seagrass** scatters across the ocean floor as 1-block plants. Drop with shears. Apply bone meal to a short Temporal Seagrass to grow it into Tall Temporal Seagrass.
+- **Tall Temporal Seagrass** is the 2-block-tall variant. Shears on the lower half drop 2 Temporal Seagrass items; silk touch yields the tall block itself.
+- Temporal Seagrass is registered as turtle food, so wild turtles will accept it as breeding bait the same way they accept vanilla seagrass.
+
+#### Dried Temporal Kelp (food)
+
+Smelt Temporal Kelp into **Dried Temporal Kelp**:
+
+| Method | Cooking time | Notes |
+|---|---|---|
+| Smoker | 5 seconds | Fastest |
+| Furnace | 10 seconds | Standard |
+| Campfire | 30 seconds | Auto-cooks; no fuel needed once lit |
+
+Dried Temporal Kelp restores 1 hunger point with 0.6 saturation modifier — identical nutrition to vanilla dried kelp — and shares the fast eat animation (about 0.86 seconds per bite, half the speed of regular food). Useful as quick emergency food when farming or exploring.
+
 ---
 
 ## Structures and Exploration
@@ -738,6 +759,7 @@ The custom shields are independent of the existing Chrono Aegis artifact (which 
 - **Enhanced Time Bread**: Improved version of Time Bread
 - **Clockwork Cookie**: Special cookie with mechanical ingredients
 - **Time Wheat Cookie**: Standard cookie made from Time Wheat
+- **Dried Temporal Kelp**: Smoke / smelt / campfire-cook Temporal Kelp from the Chrono Dawn ocean. Restores 1 hunger with 0.6 saturation; eats fast (≈ 0.86 s) like vanilla dried kelp
 
 ### Materials and Resources
 
