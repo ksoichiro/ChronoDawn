@@ -1,7 +1,7 @@
 {
-  "parent": "minecraft:block/template_kelp",
+  "parent": "minecraft:block/cross",
   "render_type": "minecraft:cutout",
   "textures": {
-    "kelp": "chronodawn:block/temporal_kelp"
+    "cross": "chronodawn:block/temporal_kelp"
   }
 }

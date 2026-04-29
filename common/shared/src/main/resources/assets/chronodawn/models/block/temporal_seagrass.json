@@ -1,7 +1,7 @@
 {
-  "parent": "minecraft:block/template_seagrass",
+  "parent": "minecraft:block/cross",
   "render_type": "minecraft:cutout",
   "textures": {
-    "texture": "chronodawn:block/temporal_seagrass"
+    "cross": "chronodawn:block/temporal_seagrass"
   }
 }
