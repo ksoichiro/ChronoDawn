@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Add 7 small placed features (Time-Stopped Well, Petrified Adventurer, Time Cairn, Watchmaker's Camp, Old Sundial, Hourglass Monolith, Upside-Down Tree) to the Chrono Dawn dimension to fill space between dungeon-scale structures.
+**Goal:** Add 7 small placed features (Time-Stopped Well, Lost Adventurer Memorial, Time Cairn, Watchmaker's Camp, Old Sundial, Hourglass Monolith, Upside-Down Tree) to the Chrono Dawn dimension to fill space between dungeon-scale structures.
 
 **Architecture:** A single shared `NbtTemplateFeature` Java class loads NBT templates and places them via `StructureTemplate#placeInWorld`. Each feature is a `configured_feature` JSON pointing this class at a different `.nbt` file plus a `placed_feature` JSON for density. Biome JSONs in all 5 biome-data directories are updated to reference the new placed features.
 
@@ -41,8 +41,8 @@ common/shared/src/test/java/com/chronodawn/worldgen/features/
 ```
 common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/
   time_well.nbt
-  petrified_adventurer.nbt
-  petrified_adventurer_snowy.nbt
+  lost_adventurer_memorial.nbt
+  lost_adventurer_memorial_snowy.nbt
   time_cairn.nbt
   watchmaker_camp.nbt
   old_sundial.nbt
@@ -71,8 +71,8 @@ directory is auto-generated.
 common/shared/src/main/resources/data/chronodawn/worldgen/configured_feature/
 common/shared/src/main/resources/data/chronodawn/worldgen/placed_feature/
   time_well.json / time_well_placed.json
-  petrified_adventurer.json / petrified_adventurer_placed.json
-  petrified_adventurer_snowy.json / petrified_adventurer_snowy_placed.json
+  lost_adventurer_memorial.json / lost_adventurer_memorial_placed.json
+  lost_adventurer_memorial_snowy.json / lost_adventurer_memorial_snowy_placed.json
   time_cairn.json / time_cairn_placed.json
   watchmaker_camp.json / watchmaker_camp_placed.json
   old_sundial.json / old_sundial_placed.json
@@ -98,15 +98,15 @@ common/1.21.1/src/main/resources/data/chronodawn/worldgen/biome/
 common/1.21.2/src/main/resources/data/chronodawn/worldgen/biome/
 common/shared-1.21.2+/src/main/resources/data/chronodawn/worldgen/biome/
 common/1.21.11/src/main/resources/data/chronodawn/worldgen/biome/
-  chronodawn_plains.json         (gets: time_well, petrified_adventurer, time_cairn, watchmaker_camp, old_sundial)
-  chronodawn_forest.json         (gets: time_well, petrified_adventurer, time_cairn, watchmaker_camp)
-  chronodawn_prairies.json       (gets: time_well, petrified_adventurer, time_cairn, old_sundial)
-  chronodawn_ancient_forest.json (gets: petrified_adventurer, time_cairn, upside_down_tree)
-  chronodawn_dark_forest.json    (gets: petrified_adventurer, time_cairn)
-  chronodawn_mountain.json       (gets: petrified_adventurer, time_cairn)
-  chronodawn_desert.json         (gets: petrified_adventurer, time_cairn, hourglass_monolith)
-  chronodawn_snowy.json          (gets: petrified_adventurer_snowy, time_cairn)
-  chronodawn_swamp.json          (gets: petrified_adventurer, time_cairn)
+  chronodawn_plains.json         (gets: time_well, lost_adventurer_memorial, time_cairn, watchmaker_camp, old_sundial)
+  chronodawn_forest.json         (gets: time_well, lost_adventurer_memorial, time_cairn, watchmaker_camp)
+  chronodawn_prairies.json       (gets: time_well, lost_adventurer_memorial, time_cairn, old_sundial)
+  chronodawn_ancient_forest.json (gets: lost_adventurer_memorial, time_cairn, upside_down_tree)
+  chronodawn_dark_forest.json    (gets: lost_adventurer_memorial, time_cairn)
+  chronodawn_mountain.json       (gets: lost_adventurer_memorial, time_cairn)
+  chronodawn_desert.json         (gets: lost_adventurer_memorial, time_cairn, hourglass_monolith)
+  chronodawn_snowy.json          (gets: lost_adventurer_memorial_snowy, time_cairn)
+  chronodawn_swamp.json          (gets: lost_adventurer_memorial, time_cairn)
   # chronodawn_ocean.json — NO changes (out of scope, see spec)
 ```
 
@@ -464,7 +464,7 @@ git commit -m "feat(worldgen): wire ModFeatures into ChronoDawn init"
 
 ---
 
-## Phase 1: Time Cairn — End-to-End PoC (smallest feature)
+## Phase 1: Time Cairn — End-to-End PoC (simplest feature)
 
 ### Task 1.1: Build the time_cairn NBT in-game
 
@@ -479,8 +479,8 @@ For the corrected block plan, see **Appendix A.2.1**.)
 
 Run: `./gradlew runClientFabric1_21_6`.
 
-Build per Appendix A.2.1 (1×3×1: full Mossy Cobblestone, full Cobblestone,
-Iron Trapdoor with `half=bottom, open=false` on top).
+Build per Appendix A.2.1 (3×3×3: central stone column, four stair stones
+around the base, Iron Trapdoor with `half=bottom, open=false` on top).
 
 - [ ] **Step 2: Capture with structure block**
 
@@ -644,7 +644,7 @@ The pattern for every feature task:
 
 1. Build the NBT in-game using a structure block (size noted per feature).
 2. Save with name `chronodawn:<feature_id>`.
-3. Copy the NBT to BOTH `common/shared-1.21.1+/.../structure/` and `common/1.20.1/.../structure/`.
+3. Copy the NBT to `common/shared-1.21.1+/.../structure/` only; the build pipeline propagates it to other versions.
 4. Write `configured_feature/<feature_id>.json` with `"type": "chronodawn:nbt_template"`.
 5. Write `placed_feature/<feature_id>_placed.json` with the tier-appropriate `rarity_filter`.
 6. Run `./gradlew validateResources`.
@@ -659,36 +659,36 @@ Tier → rarity_filter chance values (see spec):
 | T3 (well) | 32 |
 | T4 (loot camp) | 48 |
 
-### Task 2.1: Petrified Adventurer (T2, 1×1×2 + Item Frame)
+### Task 2.1: Lost Adventurer Memorial (T2, 3×3×3)
 
 **Block plan:** see **Appendix A.2.2** for the full layered plan.
 
 **Files:**
-- Create NBT: `common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/petrified_adventurer.nbt` (single source — build pipeline propagates to other versions)
-- Create: `configured_feature/petrified_adventurer.json` (template: `chronodawn:petrified_adventurer`, random_rotate: true, y_offset: 0)
-- Create: `placed_feature/petrified_adventurer_placed.json` (T2: rarity_filter chance 16, biome filter, in_square, heightmap WORLD_SURFACE_WG, matching_blocks ground predicate same as time_cairn)
+- Create NBT: `common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/lost_adventurer_memorial.nbt` (single source — build pipeline propagates to other versions)
+- Create: `configured_feature/lost_adventurer_memorial.json` (template: `chronodawn:lost_adventurer_memorial`, random_rotate: true, y_offset: 0)
+- Create: `placed_feature/lost_adventurer_memorial_placed.json` (T2: rarity_filter chance 16, biome filter, in_square, heightmap WORLD_SURFACE_WG, matching_blocks ground predicate same as time_cairn)
 
-- [ ] **Step 1:** Build NBT in-game (size `3 3 3` to capture base + bust + adjacent stair + tile).
+- [ ] **Step 1:** Build NBT in-game (size `3 3 3` to capture the flat grave slab, rear marker, and front plate).
 - [ ] **Step 2:** Copy NBT to `common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/` (single source path).
 - [ ] **Step 3:** Write configured_feature JSON.
 - [ ] **Step 4:** Write placed_feature JSON.
 
-Path: `common/shared/src/main/resources/data/chronodawn/worldgen/configured_feature/petrified_adventurer.json`
+Path: `common/shared/src/main/resources/data/chronodawn/worldgen/configured_feature/lost_adventurer_memorial.json`
 ```json
 {
   "type": "chronodawn:nbt_template",
   "config": {
-    "template": "chronodawn:petrified_adventurer",
+    "template": "chronodawn:lost_adventurer_memorial",
     "random_rotate": true,
     "y_offset": 0
   }
 }
 ```
 
-Path: `common/shared/src/main/resources/data/chronodawn/worldgen/placed_feature/petrified_adventurer_placed.json`
+Path: `common/shared/src/main/resources/data/chronodawn/worldgen/placed_feature/lost_adventurer_memorial_placed.json`
 ```json
 {
-  "feature": "chronodawn:petrified_adventurer",
+  "feature": "chronodawn:lost_adventurer_memorial",
   "placement": [
     { "type": "minecraft:rarity_filter", "chance": 16 },
     { "type": "minecraft:in_square" },
@@ -715,35 +715,35 @@ Path: `common/shared/src/main/resources/data/chronodawn/worldgen/placed_feature/
 - [ ] **Step 5:** Run `./gradlew validateResources`. Expected: BUILD SUCCESSFUL.
 - [ ] **Step 6:** Commit (ask user first):
 ```bash
-git add common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/petrified_adventurer.nbt
-git add common/shared/src/main/resources/data/chronodawn/worldgen/configured_feature/petrified_adventurer.json
-git add common/shared/src/main/resources/data/chronodawn/worldgen/placed_feature/petrified_adventurer_placed.json
-git commit -m "feat(worldgen): add Petrified Adventurer small feature"
+git add common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/lost_adventurer_memorial.nbt
+git add common/shared/src/main/resources/data/chronodawn/worldgen/configured_feature/lost_adventurer_memorial.json
+git add common/shared/src/main/resources/data/chronodawn/worldgen/placed_feature/lost_adventurer_memorial_placed.json
+git commit -m "feat(worldgen): add Lost Adventurer Memorial small feature"
 ```
 
-### Task 2.2: Petrified Adventurer (snowy variant)
+### Task 2.2: Lost Adventurer Memorial (snowy variant)
 
 **Block plan:** see **Appendix A.2.3** for the full layered plan.
 
 **Files:**
-- Create NBT: `petrified_adventurer_snowy.nbt` (in shared-1.21.1+/structure/ — single source)
-- Create: `configured_feature/petrified_adventurer_snowy.json`
-- Create: `placed_feature/petrified_adventurer_snowy_placed.json`
+- Create NBT: `lost_adventurer_memorial_snowy.nbt` (in shared-1.21.1+/structure/ — single source)
+- Create: `configured_feature/lost_adventurer_memorial_snowy.json`
+- Create: `placed_feature/lost_adventurer_memorial_snowy_placed.json`
 
 - [ ] **Step 1:** Build NBT in-game (in a snowy biome with snow layer present).
 - [ ] **Step 2:** Copy NBT to `common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/` (single source path).
-- [ ] **Step 3:** Write configured_feature JSON (template: `chronodawn:petrified_adventurer_snowy`, otherwise identical to Task 2.1's JSON).
+- [ ] **Step 3:** Write configured_feature JSON (template: `chronodawn:lost_adventurer_memorial_snowy`, otherwise identical to Task 2.1's JSON).
 - [ ] **Step 4:** Write placed_feature JSON. Same as Task 2.1's placed_feature except:
-  - `feature` is `chronodawn:petrified_adventurer_snowy`.
+  - `feature` is `chronodawn:lost_adventurer_memorial_snowy`.
   - `matching_blocks` predicate adds `"minecraft:snow_block"` and `"minecraft:powder_snow"` to the allowed ground blocks.
   - rarity_filter `chance: 16` (T2).
 - [ ] **Step 5:** Run `./gradlew validateResources`.
 - [ ] **Step 6:** Commit (ask user first):
 ```bash
-git add common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/petrified_adventurer_snowy.nbt
-git add common/shared/src/main/resources/data/chronodawn/worldgen/configured_feature/petrified_adventurer_snowy.json
-git add common/shared/src/main/resources/data/chronodawn/worldgen/placed_feature/petrified_adventurer_snowy_placed.json
-git commit -m "feat(worldgen): add Petrified Adventurer snowy variant"
+git add common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/lost_adventurer_memorial_snowy.nbt
+git add common/shared/src/main/resources/data/chronodawn/worldgen/configured_feature/lost_adventurer_memorial_snowy.json
+git add common/shared/src/main/resources/data/chronodawn/worldgen/placed_feature/lost_adventurer_memorial_snowy_placed.json
+git commit -m "feat(worldgen): add Lost Adventurer Memorial snowy variant"
 ```
 
 ### Task 2.3: Old Sundial (T2, 3×3×3)
@@ -1023,15 +1023,15 @@ Use this matrix to track edits. **Each cell is one Edit.** Total ≈ 9 biomes ×
 
 | biome | features added |
 |-------|----------------|
-| chronodawn_plains | time_well, petrified_adventurer, time_cairn (already present in shared-1.21.2+ only — re-check), watchmaker_camp, old_sundial |
-| chronodawn_forest | time_well, petrified_adventurer, time_cairn, watchmaker_camp |
-| chronodawn_prairies | time_well, petrified_adventurer, time_cairn, old_sundial |
-| chronodawn_ancient_forest | petrified_adventurer, time_cairn, upside_down_tree |
-| chronodawn_dark_forest | petrified_adventurer, time_cairn |
-| chronodawn_mountain | petrified_adventurer, time_cairn |
-| chronodawn_desert | petrified_adventurer, time_cairn, hourglass_monolith |
-| chronodawn_snowy | petrified_adventurer_snowy, time_cairn |
-| chronodawn_swamp | petrified_adventurer, time_cairn |
+| chronodawn_plains | time_well, lost_adventurer_memorial, time_cairn (already present in shared-1.21.2+ only — re-check), watchmaker_camp, old_sundial |
+| chronodawn_forest | time_well, lost_adventurer_memorial, time_cairn, watchmaker_camp |
+| chronodawn_prairies | time_well, lost_adventurer_memorial, time_cairn, old_sundial |
+| chronodawn_ancient_forest | lost_adventurer_memorial, time_cairn, upside_down_tree |
+| chronodawn_dark_forest | lost_adventurer_memorial, time_cairn |
+| chronodawn_mountain | lost_adventurer_memorial, time_cairn |
+| chronodawn_desert | lost_adventurer_memorial, time_cairn, hourglass_monolith |
+| chronodawn_snowy | lost_adventurer_memorial_snowy, time_cairn |
+| chronodawn_swamp | lost_adventurer_memorial, time_cairn |
 
 **Per-version-dir scope:** apply the same matrix to all 5 biome directories:
 1. `common/1.20.1/src/main/resources/data/chronodawn/worldgen/biome/`
@@ -1067,7 +1067,7 @@ This is the largest single edit pass. Edit each of the 9 biome JSONs in `common/
 
 - [ ] **Step 1: Edit chronodawn_plains.json**
 
-For chronodawn_plains, the array currently has `chronodawn:time_cairn` (from Phase 1). Now ALSO add: `chronodawn:time_well`, `chronodawn:petrified_adventurer`, `chronodawn:watchmaker_camp`, `chronodawn:old_sundial`.
+For chronodawn_plains, the array currently has `chronodawn:time_cairn` (from Phase 1). Now ALSO add: `chronodawn:time_well`, `chronodawn:lost_adventurer_memorial`, `chronodawn:watchmaker_camp`, `chronodawn:old_sundial`.
 
 After the edit, the trailing portion of that array should look like:
 ```json
@@ -1075,7 +1075,7 @@ After the edit, the trailing portion of that array should look like:
       "chronodawn:sand_disk_placed",
       "chronodawn:time_cairn",
       "chronodawn:time_well",
-      "chronodawn:petrified_adventurer",
+      "chronodawn:lost_adventurer_memorial",
       "chronodawn:watchmaker_camp",
       "chronodawn:old_sundial"
     ],
@@ -1086,38 +1086,38 @@ After the edit, the trailing portion of that array should look like:
 Find the vegetal_decoration array (the one containing `chronodawn:patch_*` entries). Add as a contiguous block:
 ```
 "chronodawn:time_well",
-"chronodawn:petrified_adventurer",
+"chronodawn:lost_adventurer_memorial",
 "chronodawn:time_cairn",
 "chronodawn:watchmaker_camp"
 ```
 
 - [ ] **Step 3: Edit chronodawn_prairies.json**
 
-Add: `time_well`, `petrified_adventurer`, `time_cairn`, `old_sundial`.
+Add: `time_well`, `lost_adventurer_memorial`, `time_cairn`, `old_sundial`.
 
 - [ ] **Step 4: Edit chronodawn_ancient_forest.json**
 
-Add: `petrified_adventurer`, `time_cairn`, `upside_down_tree`.
+Add: `lost_adventurer_memorial`, `time_cairn`, `upside_down_tree`.
 
 - [ ] **Step 5: Edit chronodawn_dark_forest.json**
 
-Add: `petrified_adventurer`, `time_cairn`.
+Add: `lost_adventurer_memorial`, `time_cairn`.
 
 - [ ] **Step 6: Edit chronodawn_mountain.json**
 
-Add: `petrified_adventurer`, `time_cairn`.
+Add: `lost_adventurer_memorial`, `time_cairn`.
 
 - [ ] **Step 7: Edit chronodawn_desert.json**
 
-Add: `petrified_adventurer`, `time_cairn`, `hourglass_monolith`.
+Add: `lost_adventurer_memorial`, `time_cairn`, `hourglass_monolith`.
 
 - [ ] **Step 8: Edit chronodawn_snowy.json**
 
-Add: `petrified_adventurer_snowy`, `time_cairn`. (Note: snowy variant, NOT the plain `petrified_adventurer`.)
+Add: `lost_adventurer_memorial_snowy`, `time_cairn`. (Note: snowy variant, NOT the plain `lost_adventurer_memorial`.)
 
 - [ ] **Step 9: Edit chronodawn_swamp.json**
 
-Add: `petrified_adventurer`, `time_cairn`.
+Add: `lost_adventurer_memorial`, `time_cairn`.
 
 - [ ] **Step 10: Validate**
 
@@ -1239,11 +1239,11 @@ Run: `./gradlew runClientFabric1_21_6`
 In-game checklist:
 1. New world, creative mode.
 2. Enter chronodawn:chrono_dawn dimension.
-3. `/locate biome chronodawn:chronodawn_plains` → walk ~500 blocks. Expect at least one Time-Stopped Well, several Time Cairns, multiple Petrified Adventurers, at least one Watchmaker's Camp, and Old Sundials.
+3. `/locate biome chronodawn:chronodawn_plains` → walk ~500 blocks. Expect at least one Time-Stopped Well, several Time Cairns, multiple Lost Adventurer Memorials, at least one Watchmaker's Camp, and Old Sundials.
 4. Open a Watchmaker's Camp chest. Expect 2–4 stacks from the loot table.
 5. `/locate biome chronodawn:chronodawn_desert` → walk to a Hourglass Monolith.
 6. `/locate biome chronodawn:chronodawn_ancient_forest` → walk to an Upside-Down Tree.
-7. `/locate biome chronodawn:chronodawn_snowy` → confirm Petrified Adventurer Snowy variants.
+7. `/locate biome chronodawn:chronodawn_snowy` → confirm Lost Adventurer Memorial Snowy variants.
 
 - [ ] **Step 2: Test on 1.20.1 (legacy era)**
 
@@ -1368,66 +1368,77 @@ while building.
 
 #### A.2.1 `time_cairn` — Time Cairn (T1, all land biomes)
 
-Size: **1 × 3 × 1** (single column).
+Size: **3 × 3 × 3**.
 
 ```
-Y=2 (top)    : [T]
-Y=1 (middle) : [#]
-Y=0 (base)   : [M]
+Y=2 (dial cap)            Y=1 (center stone)         Y=0 (piled base)
+  Z=2 [.][.][.]              Z=2 [.][.][.]              Z=2 [.][S][.]
+  Z=1 [.][T][.]              Z=1 [.][#][.]              Z=1 [S][M][S]
+  Z=0 [.][.][.]              Z=0 [.][.][.]              Z=0 [.][S][.]
+       X=0 X=1 X=2                X=0 X=1 X=2                X=0 X=1 X=2
 ```
 
 Legend:
-- `T` = Iron Trapdoor (`half=bottom`, `open=false` — flat dial cap, sits flush on Y=1)
-- `#` = Cobblestone (full block)
-- `M` = Mossy Cobblestone (full block — sits flush on the ground)
+- `T` = Iron Trapdoor (`half=bottom`, `open=false` — flat dial cap)
+- `#` = Cobblestone or Mossy Cobblestone (full block — central upper stone)
+- `M` = Mossy Cobblestone (full block — central base stone)
+- `S` = Cobblestone / Mossy Cobblestone Stair (`half=bottom`), one on each
+  cardinal side of the base. Orient each stair so its high/back side rests
+  against the center column, making the base read as loose stacked stones.
 
 `Include entities: false`. Save name: `chronodawn:time_cairn`.
 
-#### A.2.2 `petrified_adventurer` — Petrified Adventurer (T2, 8 land biomes excl. snowy)
+#### A.2.2 `lost_adventurer_memorial` — Lost Adventurer Memorial (T2, 8 land biomes excl. snowy)
 
 Size: **3 × 3 × 3**.
 
 ```
-Y=2 (top — all air)         Y=1 (torso + lean)            Y=0 (legs + tool tile)
-  Z=2 [.][.][.]                 Z=2 [.][.][.]                 Z=2 [.][.][.]
-  Z=1 [.][.][.]                 Z=1 [.][T][.]                 Z=1 [.][L][P]
-  Z=0 [.][.][.]                 Z=0 [.][S][.]                 Z=0 [.][.][.]
-       X=0 X=1 X=2                   X=0 X=1 X=2                   X=0 X=1 X=2
+Y=2 (headstone cap)       Y=1 (upright marker)       Y=0 (grave slab)
+  Z=2 [.][C][.]              Z=2 [.][W][.]              Z=2 [.][B][.]
+  Z=1 [.][.][.]              Z=1 [.][.][.]              Z=1 [s][G][s]
+  Z=0 [.][.][.]              Z=0 [.][.][.]              Z=0 [.][P][.]
+       X=0 X=1 X=2                X=0 X=1 X=2                X=0 X=1 X=2
 ```
 
 Legend:
-- `T` = Temporal Stone (full block — torso/head)
-- `S` = Temporal Stone Stair (`facing=north`, i.e. high side toward the
-  body — reads as a forward-leaning hip extending toward `Z=0`)
-- `L` = Temporal Stone Bricks (full block — the "worn legs"; there is
-  no `polished_temporal_stone` block in the registry, bricks read
-  similarly weathered)
-- `P` = Stone Bricks (vanilla, the flat tool tile)
+- `W` = Temporal Stone Bricks Wall (`chronodawn:temporal_stone_bricks_wall`).
+  This rear marker gives the feature a headstone-like silhouette.
+- `B` = Temporal Stone Bricks (full block — headstone base).
+- `C` = Temporal Stone Bricks Slab (`type=bottom` — headstone cap).
+- `G` = Stone Bricks Slab or Temporal Stone Bricks Slab (`type=bottom` —
+  low grave slab).
+- `s` = Mossy Cobblestone Slab (`type=bottom` — sparse settled stones).
+- `P` = Temporal Stone Pressure Plate, placed flat in front as a worn name
+  plate / shield hint. Use this instead of Item Frames so the structure still
+  reads as an outdoor ruin.
 
-Item Frame: attach to the **top face** of `P` at world Y=0. Frame is
-flat-up, holding 1× Iron Pickaxe (visually a pickaxe lying on the tile).
-`Include entities: ON`.
+This differs from `time_cairn` by silhouette and intent: `time_cairn` is a
+3×3 stacked-stone waymarker with a central column and clock-face cap, while
+this is a flatter grave slab with a rear headstone and front plate. `Include
+entities: false`.
 
-Save name: `chronodawn:petrified_adventurer`.
+Save name: `chronodawn:lost_adventurer_memorial`.
 
-#### A.2.3 `petrified_adventurer_snowy` — Snowy variant (T2, snowy biome only)
+#### A.2.3 `lost_adventurer_memorial_snowy` — Snowy variant (T2, snowy biome only)
 
-Same as A.2.2 except Y=0 picks up 4 corner snow blocks:
+Same as A.2.2 except Y=0 gets snow layers around the stones:
 
 ```
-Y=2 (all air)             Y=1 (torso + lean)           Y=0 (legs + tile + snow corners)
-  Z=2 [.][.][.]               Z=2 [.][.][.]                Z=2 [s][.][s]
-  Z=1 [.][.][.]               Z=1 [.][T][.]                Z=1 [.][L][P]
-  Z=0 [.][.][.]               Z=0 [.][S][.]                Z=0 [s][.][s]
-       X=0 X=1 X=2                  X=0 X=1 X=2                  X=0 X=1 X=2
+Y=2 (headstone cap)       Y=1 (upright marker)       Y=0 (snow-covered grave)
+  Z=2 [.][C][.]              Z=2 [.][W][.]              Z=2 [n][B][n]
+  Z=1 [.][.][.]              Z=1 [.][.][.]              Z=1 [s][G][s]
+  Z=0 [.][.][.]              Z=0 [.][.][.]              Z=0 [n][P][n]
+       X=0 X=1 X=2                X=0 X=1 X=2                X=0 X=1 X=2
 ```
 
 Legend (additions only):
-- `s` = `minecraft:snow` (`layers=4` — half-buried frostbitten look)
+- `n` = `minecraft:snow` (`layers=3` or `layers=4`) placed as drifted snow
+  around the memorial. Avoid covering every visible stone; the rear marker and
+  front plate should still be readable.
 
-Other symbols match A.2.2. `Include entities: ON` (Item Frame).
+Other symbols match A.2.2. `Include entities: false`.
 
-Save name: `chronodawn:petrified_adventurer_snowy`.
+Save name: `chronodawn:lost_adventurer_memorial_snowy`.
 
 #### A.2.4 `time_well` — Time-Stopped Well (T3, plains/forest/prairies)
 
@@ -1599,12 +1610,12 @@ Legend:
 Easiest → hardest, so toolchain quirks (entities, chest NBT, gravity)
 are encountered incrementally:
 
-1. `time_cairn` — smallest, validates Iron Trapdoor pose
+1. `time_cairn` — simplest, validates Iron Trapdoor pose
 2. `old_sundial` — medium, no entities, no special blocks
 3. `hourglass_monolith` — medium, validates the Sand-with-lid trick
 4. `upside_down_tree` — medium, validates `persistent=true` on leaves
-5. `petrified_adventurer` — first one with an Item Frame
-6. `petrified_adventurer_snowy` — clone of #5 with snow layers
+5. `lost_adventurer_memorial` — flat memorial with no entities
+6. `lost_adventurer_memorial_snowy` — clone of #5 with snow layers
 7. `time_well` — buried block + Item Frame on a post
 8. `watchmaker_camp` — largest, requires chest LootTable NBT before save
 

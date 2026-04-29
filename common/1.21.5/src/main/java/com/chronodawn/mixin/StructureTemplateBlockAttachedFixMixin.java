@@ -33,7 +33,7 @@ import java.util.Iterator;
  *
  * leaves its {@code pos} field unset, fails its periodic {@code survives()}
  * tick check, and is silently discarded — losing the contents of any Item Frame
- * placed by Chrono Dawn small features (petrified_adventurer, time_well,
+ * placed by Chrono Dawn small features (lost_adventurer_memorial, time_well,
  * watchmaker_camp).
  *
  * <p>This mixin rewrites {@code block_pos} in the entity NBT to the structure's

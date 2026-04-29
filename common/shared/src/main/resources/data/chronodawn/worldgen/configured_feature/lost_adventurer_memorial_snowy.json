@@ -1,7 +1,7 @@
 {
   "type": "chronodawn:nbt_template",
   "config": {
-    "template": "chronodawn:petrified_adventurer",
+    "template": "chronodawn:lost_adventurer_memorial_snowy",
     "random_rotate": true,
     "y_offset": 0
   }

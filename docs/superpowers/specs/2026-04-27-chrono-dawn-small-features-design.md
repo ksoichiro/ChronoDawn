@@ -8,7 +8,7 @@ Status: Draft (pending user review)
 Add 7 small, naturally-scattered placed features to the Chrono Dawn dimension
 to fill the empty space between existing dungeon-scale structures. The features
 are predominantly decorative — only one of the seven contains a loot chest —
-and reinforce the time theme through "frozen / petrified / abandoned moment"
+and reinforce the time theme through "frozen / memorial / abandoned moment"
 motifs. They cover all five POI patterns (mini-structure, lore ruin, traveler
 camp, themed landmark, natural distortion) catalogued in
 `docs/design/world_variety_patterns.md` Axis 1.
@@ -33,8 +33,8 @@ NBT template loaded via a shared `NbtTemplateFeature` (see Architecture).
 | # | ID | Footprint | Tier | Biomes |
 |---|----|-----------|------|--------|
 | 1 | `time_well` | 3×3×4 | T3 (rare landmark) | plains, forest, prairies |
-| 2 | `petrified_adventurer` | 1×1×2 + Item Frame | T2 (standard ambient) | all land biomes (9) |
-| 3 | `time_cairn` | 1×1×3 | T1 (filler) | all land biomes (9) |
+| 2 | `lost_adventurer_memorial` | 3×3×3 | T2 (standard ambient) | all land biomes (9) |
+| 3 | `time_cairn` | 3×3×3 | T1 (filler) | all land biomes (9) |
 | 4 | `watchmaker_camp` | 5×2×5 | T4 (rare loot) | plains, forest |
 | 5 | `old_sundial` | 3×3×3 | T2 (standard ambient) | plains, prairies |
 | 6 | `hourglass_monolith` | 3×3×5 | T2 (standard ambient) | desert |
@@ -65,36 +65,50 @@ hangs in mid-air on its rope, captured at the moment time stopped.
 - Surroundings: a 1-block-wide ring of tall grass / temporal_root patches
   (decoration optional, NBT-embedded).
 
-### 2. Petrified Adventurer (`petrified_adventurer`)
+### 2. Lost Adventurer Memorial (`lost_adventurer_memorial`)
 
-A traveler caught mid-stride and turned to stone, with a discarded tool nearby.
+A small grave marker marking where an old traveler was lost to Chrono Dawn's
+time distortions. This replaces the earlier "petrified adventurer" figure:
+the original 1×1×2 body was too abstract to read as a person, while a simple
+memorial reads naturally as an outdoor ruin without relying on Item Frames.
 
-- Body: 2 blocks stacked vertically — the upper block is plain Temporal
-  Stone (the "torso/head"); the lower block is Temporal Stone Bricks (the
-  "worn legs", reads more weathered). Both are full blocks so the figure
-  sits flush with the ground. (There is no `polished_temporal_stone`
-  block family — only the deepslate variant has polished forms — so
-  `temporal_stone_bricks` carries the "old/carved" look.)
-- Pose hint: one adjacent Temporal Stone Stair to imply a forward-leaning
-  body, oriented per random rotation.
-- Discarded tool: Item Frame on a small flat stone tile (1 Stone Bricks block
-  on ground) beside the body. Frame holds a randomly weighted item: Iron
-  Pickaxe, Iron Sword, or Iron Shovel (selection lives in the NBT data via
-  multiple variant NBTs, see "Variants" below).
+- Footprint: 3×3×3, matching `time_cairn`'s broad footprint but using a
+  different silhouette: a flat grave slab plus a rear upright marker, not a
+  piled stone stack.
+- Grave slab: Stone Bricks / Temporal Stone Bricks Slabs laid flat through
+  the center front, suggesting a buried or memorialized traveler.
+- Upright marker: one Temporal Stone Bricks Wall or Cobblestone Wall at the
+  back center, capped by a slab. This creates a small headstone silhouette
+  rather than a cairn silhouette.
+- Name plate / shield hint: one Temporal Stone Pressure Plate placed flat at
+  the front of the slab. This suggests an old marker plate without using Item
+  Frames or explicit tool displays.
+- Surroundings: sparse Mossy Cobblestone Slabs or Temporal Root at the corners
+  so the memorial looks settled into the terrain without becoming another
+  piled-stone feature.
 
-Variants (separate NBT files keyed off biome / random):
+Differentiation from `time_cairn`:
 
-- `petrified_adventurer.nbt` — default (any non-snowy land biome).
-- `petrified_adventurer_snowy.nbt` — snowy biome variant. Adds a Snow layer
-  partially covering the figure to read as frostbitten.
+- `time_cairn` is a dense T1 filler waymarker: a 3×3 piled-stone cairn with a
+  central column, stair stones around the base, and a clock-face trapdoor cap.
+- `lost_adventurer_memorial` is a T2 lore ruin: a lower, flatter grave marker
+  with an upright headstone and front plate. It should read as a memorial, not
+  as another stacked cairn.
+
+Variants (separate NBT files keyed off biome):
+
+- `lost_adventurer_memorial.nbt` — default (any non-snowy land biome).
+- `lost_adventurer_memorial_snowy.nbt` — snowy biome variant. Adds snow layers
+  over the ground stones and front plate so the memorial feels half-buried.
 
 ### 3. Time Cairn (`time_cairn`)
 
-A small mossy stone stack with a flat clockwork dial on top — left as a
+A small 3×3 mossy stone stack with a flat clockwork dial on top — left as a
 waymarker by long-vanished travelers.
 
-- Bottom: Mossy Cobblestone Slab (top half) or Mossy Cobblestone block.
-- Middle: Cobblestone block.
+- Base: central Mossy Cobblestone / Cobblestone column, with stairs placed
+  around the four cardinal sides at Y=0 to suggest loose piled stones.
+- Middle: central Cobblestone or Mossy Cobblestone block.
 - Top: Iron Trapdoor placed horizontally and closed, oriented per random
   rotation so it reads as a clock face.
 
@@ -250,8 +264,8 @@ common/
     ModFeatures.java                    (registration)
   shared/src/main/resources/data/chronodawn/worldgen/configured_feature/
     time_well.json
-    petrified_adventurer.json
-    petrified_adventurer_snowy.json
+    lost_adventurer_memorial.json
+    lost_adventurer_memorial_snowy.json
     time_cairn.json
     watchmaker_camp.json
     old_sundial.json
@@ -259,8 +273,8 @@ common/
     upside_down_tree.json
   shared/src/main/resources/data/chronodawn/worldgen/placed_feature/
     time_well_placed.json
-    petrified_adventurer_placed.json
-    petrified_adventurer_snowy_placed.json
+    lost_adventurer_memorial_placed.json
+    lost_adventurer_memorial_snowy_placed.json
     time_cairn_placed.json
     watchmaker_camp_placed.json
     old_sundial_placed.json
@@ -272,8 +286,8 @@ common/
     watchmaker_camp.json                (1.20.1 plural — see Risks)
   shared-1.21.1+/src/main/resources/data/chronodawn/structure/
     time_well.nbt
-    petrified_adventurer.nbt
-    petrified_adventurer_snowy.nbt
+    lost_adventurer_memorial.nbt
+    lost_adventurer_memorial_snowy.nbt
     time_cairn.nbt
     watchmaker_camp.nbt
     old_sundial.nbt
@@ -387,8 +401,8 @@ Drawn from accumulated memory:
 - **Random rotation breaks Item Frame orientations**. Item Frames carry their
   own facing in NBT. If the template is rotated, the NBT-saved facing must
   rotate with it. `StructureTemplate#placeInWorld` handles this for vanilla
-  block entities; verify in a test world that the Bucket / Clock / Iron
-  Pickaxe Item Frames render correctly in all 4 rotations.
+  entities; verify in a test world that the Bucket / Clock Item Frames render
+  correctly in all 4 rotations.
 - **Config feature registry name conflicts**. Eight new IDs under
   `chronodawn:` namespace — check for collisions with existing
   configured/placed features (`temporal_stalactite_cluster`,
@@ -401,9 +415,9 @@ Drawn from accumulated memory:
   source instead of Blue Ice) at low probability? Not in scope for v1; defer
   to a follow-up if play-testing shows the always-frozen version feels too
   static.
-- **Should `petrified_adventurer` rarely include a partial backpack chest**
-  with low-tier loot? Not in scope — keeping pure decoration preserves the
-  T2/T4 tier separation. Re-evaluate after first release.
+- **Should `lost_adventurer_memorial` rarely include a buried keepsake or backpack
+  chest** with low-tier loot? Not in scope — keeping pure decoration preserves
+  the T2/T4 tier separation. Re-evaluate after first release.
 - **Snow biome variant of `time_cairn`**? Probably unnecessary at T1 density
   — players will see them often enough that one biome looking slightly
   different does not justify a second NBT. Skip.
@@ -429,7 +443,7 @@ These were proposed in brainstorming but cut to keep v1 focused. They are
 candidates for follow-up specs:
 
 - Reverse-Flow Fountain (A category)
-- Cracked Tombstone (B category, alternate to Petrified Adventurer)
+- Inscribed Tombstone variant (B category, alternate memorial silhouette)
 - Broken Cart (C category)
 - Floating Gear Ring (mountain-specific D)
 - Sunken Clockface (ocean D — needs water-aware placement)

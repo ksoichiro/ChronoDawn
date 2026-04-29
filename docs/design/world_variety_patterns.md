@@ -21,7 +21,7 @@ For each axis, established design patterns are paired with time-theme adaptation
 | # | Pattern | Characteristics | Time-theme variant |
 |---|---|---|---|
 | 1.1 | Mini structure | 1-3 rooms, light reward, scattered densely | Broken clock towers, abandoned watchmaker workshops |
-| 1.2 | Non-combat lore ruins | Decorative only, hints at a story | Adventurers petrified mid-motion (Pompeii-style) |
+| 1.2 | Non-combat lore ruins | Decorative only, hints at a story | Lost adventurer memorials |
 | 1.3 | Abandoned camp | Campfire + small chest, traces of travelers | Campsite where clockwork mechanisms still run |
 | 1.4 | Natural landmark | Unusual terrain, giant trees, unique rocks | A giant tree grown upside-down due to time distortion |
 | 1.5 | Grave / cenotaph | Death records or short epitaphs | A tombstone frozen at "1999/12/31 23:59:59" |
