@@ -440,7 +440,8 @@ public class ChronoDawnClientNeoForge {
             (state, world, pos, tintIndex) ->
                 TemporalPlantColorProvider.blockTint(world, pos, tintIndex),
             ModBlocks.TEMPORAL_TALL_GRASS.get(),
-            ModBlocks.TEMPORAL_FERN.get()
+            ModBlocks.TEMPORAL_FERN.get(),
+            ModBlocks.TEMPORAL_GRASS.get()
         );
 
         // Register Temporal Sand / Gravel sand-side gradient: at d=1 from a Temporal
@@ -496,7 +497,8 @@ public class ChronoDawnClientNeoForge {
         event.register(
             (stack, tintIndex) -> TemporalPlantColorProvider.itemTint(tintIndex),
             ModItems.TEMPORAL_TALL_GRASS.get(),
-            ModItems.TEMPORAL_FERN.get()
+            ModItems.TEMPORAL_FERN.get(),
+            ModItems.TEMPORAL_GRASS.get()
         );
 
         // Register Spawn Egg item colors for NeoForge

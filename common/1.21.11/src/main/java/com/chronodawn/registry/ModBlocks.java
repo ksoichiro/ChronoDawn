@@ -115,6 +115,7 @@ import com.chronodawn.blocks.DuskBellBlock;
 import com.chronodawn.blocks.DuskLanternBlock;
 import com.chronodawn.blocks.TemporalTallGrassBlock;
 import com.chronodawn.blocks.TemporalFernBlock;
+import com.chronodawn.blocks.TemporalShortGrassBlock;
 import com.chronodawn.blocks.TemporalKelpBlock;
 import com.chronodawn.blocks.TemporalKelpPlantBlock;
 import com.chronodawn.blocks.TemporalSeagrassBlock;
@@ -941,6 +942,11 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> TEMPORAL_FERN = BLOCKS.register(
         ModBlockId.TEMPORAL_FERN.id(),
         () -> new TemporalFernBlock(TemporalFernBlock.createProperties("temporal_fern"))
+    );
+
+    public static final RegistrySupplier<Block> TEMPORAL_GRASS = BLOCKS.register(
+        ModBlockId.TEMPORAL_GRASS.id(),
+        () -> new TemporalShortGrassBlock(TemporalShortGrassBlock.createProperties("temporal_grass"))
     );
 
     public static final RegistrySupplier<Block> TEMPORAL_KELP = BLOCKS.register(

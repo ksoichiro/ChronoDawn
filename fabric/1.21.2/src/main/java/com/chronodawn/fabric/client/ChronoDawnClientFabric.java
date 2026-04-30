@@ -196,13 +196,15 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             (state, world, pos, tintIndex) ->
                 TemporalPlantColorProvider.blockTint(world, pos, tintIndex),
             ModBlocks.TEMPORAL_TALL_GRASS.get(),
-            ModBlocks.TEMPORAL_FERN.get()
+            ModBlocks.TEMPORAL_FERN.get(),
+            ModBlocks.TEMPORAL_GRASS.get()
         );
 
         ColorProviderRegistry.ITEM.register(
             (stack, tintIndex) -> TemporalPlantColorProvider.itemTint(tintIndex),
             ModItems.TEMPORAL_TALL_GRASS.get(),
-            ModItems.TEMPORAL_FERN.get()
+            ModItems.TEMPORAL_FERN.get(),
+            ModItems.TEMPORAL_GRASS.get()
         );
     }
 

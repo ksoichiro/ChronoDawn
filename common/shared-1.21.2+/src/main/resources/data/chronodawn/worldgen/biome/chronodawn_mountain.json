@@ -125,6 +125,7 @@
     [
       "chronodawn:fruit_of_time_tree",
       "chronodawn:patch_grass",
+      "chronodawn:patch_temporal_grass",
       "chronodawn:patch_flowers",
       "chronodawn:boulder_placed",
       "chronodawn:fallen_log_placed",

@@ -430,7 +430,8 @@ public class ChronoDawnClientNeoForge {
             (state, world, pos, tintIndex) ->
                 TemporalPlantColorProvider.blockTint(world, pos, tintIndex),
             ModBlocks.TEMPORAL_TALL_GRASS.get(),
-            ModBlocks.TEMPORAL_FERN.get()
+            ModBlocks.TEMPORAL_FERN.get(),
+            ModBlocks.TEMPORAL_GRASS.get()
         );
 
         // Register Temporal Sand / Gravel sand-side gradient: at d=1 from a Temporal
