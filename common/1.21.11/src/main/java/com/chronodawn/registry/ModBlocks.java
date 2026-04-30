@@ -23,7 +23,6 @@ import com.chronodawn.blocks.TemporalBricksSlab;
 import com.chronodawn.blocks.TemporalBricksStairs;
 import com.chronodawn.blocks.TemporalBricksWall;
 import com.chronodawn.blocks.CoarseTemporalDirtBlock;
-import com.chronodawn.blocks.ParchedTemporalDirtBlock;
 import com.chronodawn.blocks.TemporalStoneBlock;
 import com.chronodawn.blocks.TemporalCobblestoneBlock;
 import com.chronodawn.blocks.TemporalStoneStairs;
@@ -574,7 +573,11 @@ public class ModBlocks {
 
     public static final RegistrySupplier<Block> PARCHED_TEMPORAL_DIRT = BLOCKS.register(
         ModBlockId.PARCHED_TEMPORAL_DIRT.id(),
-        () -> new ParchedTemporalDirtBlock(ParchedTemporalDirtBlock.createProperties())
+        () -> new Block(net.minecraft.world.level.block.state.BlockBehaviour.Properties.ofFullCopy(Blocks.COARSE_DIRT)
+            .strength(0.5f)
+            .sound(SoundType.GRAVEL)
+            .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                net.minecraft.resources.Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModBlockId.PARCHED_TEMPORAL_DIRT.id()))))
     );
 
     public static final RegistrySupplier<Block> TEMPORAL_FARMLAND = BLOCKS.register(
