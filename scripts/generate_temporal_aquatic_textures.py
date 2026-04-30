@@ -70,13 +70,14 @@ HUE_SHIFTED = [
      "item/temporal_seagrass.png"),
     ("assets/minecraft/textures/item/dried_kelp.png",
      "item/dried_temporal_kelp.png"),
-    # Lumen Polyp: vanilla 1.21.11 has separate block and item PNGs for sea_pickle,
-    # but ChronoDawn deliberately reuses the block texture for the item icon so the
-    # inventory icon and the in-world block share a single hue-shifted palette
-    # (avoids drift if the +100 hue-shift is later re-tuned).
+    # Lumen Polyp: extract vanilla 1.21.11's separate block + item sea_pickle PNGs.
+    # The block PNG is a vertical strip used by the cube-faces model; the item PNG
+    # is a pre-rendered sea-pickle silhouette for the inventory icon. Mixing them
+    # produces an unrecognizable item icon, so each destination uses its matching
+    # vanilla source.
     ("assets/minecraft/textures/block/sea_pickle.png",
      "block/lumen_polyp.png"),
-    ("assets/minecraft/textures/block/sea_pickle.png",
+    ("assets/minecraft/textures/item/sea_pickle.png",
      "item/lumen_polyp.png"),
 ]
 
