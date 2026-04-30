@@ -1,0 +1,162 @@
+{
+  "has_precipitation": false,
+  "temperature": 1.0,
+  "temperature_modifier": "none",
+  "downfall": 0.1,
+  "effects": {
+    "water_color": "#6a90a5",
+    "grass_color": "#c5a65b",
+    "foliage_color": "#b89345"
+  },
+  "spawners": {
+    "monster": [
+      {
+        "type": "chronodawn:epoch_husk",
+        "weight": 110,
+        "minCount": 4,
+        "maxCount": 4
+      },
+      {
+        "type": "chronodawn:secondhand_archer",
+        "weight": 95,
+        "minCount": 4,
+        "maxCount": 4
+      },
+      {
+        "type": "chronodawn:moment_creeper",
+        "weight": 100,
+        "minCount": 4,
+        "maxCount": 4
+      },
+      {
+        "type": "chronodawn:paradox_crawler",
+        "weight": 100,
+        "minCount": 4,
+        "maxCount": 4
+      },
+      {
+        "type": "chronodawn:timeline_strider",
+        "weight": 10,
+        "minCount": 1,
+        "maxCount": 4
+      },
+      {
+        "type": "chronodawn:hourglass_golem",
+        "weight": 5,
+        "minCount": 1,
+        "maxCount": 1
+      },
+      {
+        "type": "chronodawn:temporal_wraith",
+        "weight": 110,
+        "minCount": 2,
+        "maxCount": 4
+      },
+      {
+        "type": "chronodawn:clockwork_sentinel",
+        "weight": 100,
+        "minCount": 1,
+        "maxCount": 2
+      },
+      {
+        "type": "chronodawn:floq",
+        "weight": 100,
+        "minCount": 2,
+        "maxCount": 4
+      },
+      {
+        "type": "chronodawn:chronal_leech",
+        "weight": 15,
+        "minCount": 1,
+        "maxCount": 2
+      }
+    ],
+    "creature": [
+      {
+        "type": "chronodawn:timebound_rabbit",
+        "weight": 4,
+        "minCount": 2,
+        "maxCount": 3
+      },
+      {
+        "type": "chronodawn:time_keeper",
+        "weight": 10,
+        "minCount": 1,
+        "maxCount": 2
+      }
+    ],
+    "ambient": [
+      {
+        "type": "minecraft:bat",
+        "weight": 10,
+        "minCount": 4,
+        "maxCount": 6
+      }
+    ],
+    "water_creature": [
+    ],
+    "water_ambient": [],
+    "misc": []
+  },
+  "spawn_costs": {},
+  "features": [
+    [],
+    [],
+    [],
+    [],
+    [],
+    [],
+    [
+      "chronodawn:ore_gold",
+      "chronodawn:ore_redstone",
+      "chronodawn:ore_time_crystal",
+      "chronodawn:ore_entropy_crystal",
+      "chronodawn:ore_temporal_amber",
+      "chronodawn:ore_clockstone",
+      "chronodawn:ore_coal",
+      "chronodawn:ore_iron",
+      "chronodawn:clockwork_block_cluster"
+    ],
+    [
+      "chronodawn:temporal_stalactite_cluster",
+      "chronodawn:temporal_stalagmite_cluster",
+      "chronodawn:temporal_pointed_single"
+    ],
+    [],
+    [
+      "chronodawn:patch_faded_grass",
+      "chronodawn:patch_temporal_dead_bush",
+      "chronodawn:patch_coarse_dirt",
+      "chronodawn:disk_parched_temporal_dirt",
+      "chronodawn:gravel_disk_placed",
+      "chronodawn:boulder_placed",
+      "chronodawn:fallen_log_placed",
+      "chronodawn:dead_snag_placed",
+      "chronodawn:lost_adventurer_memorial_placed",
+      "chronodawn:time_cairn_placed",
+      "chronodawn:old_sundial_placed"
+    ],
+    []
+  ],
+  "carvers": [],
+  "attributes": {
+    "minecraft:visual/sky_color": "#909090",
+    "minecraft:visual/fog_color": "#c0c0c0",
+    "minecraft:visual/water_fog_color": "#3521a9",
+    "minecraft:audio/ambient_sounds": {
+      "mood": {
+        "sound": "minecraft:ambient.cave",
+        "tick_delay": 6000,
+        "block_search_extent": 8,
+        "offset": 2.0
+      }
+    },
+    "minecraft:audio/background_music": {
+      "default": {
+        "sound": "chronodawn:music.chronodawn_dimension",
+        "min_delay": 12000,
+        "max_delay": 24000
+      }
+    }
+  }
+}
