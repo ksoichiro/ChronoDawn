@@ -3,6 +3,7 @@
   "values": [
     "chronodawn:temporal_dirt",
     "chronodawn:temporal_grass_block",
-    "chronodawn:coarse_temporal_dirt"
+    "chronodawn:coarse_temporal_dirt",
+    "chronodawn:parched_temporal_dirt"
   ]
 }

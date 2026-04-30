@@ -23,6 +23,7 @@ import com.chronodawn.blocks.TemporalBricksSlab;
 import com.chronodawn.blocks.TemporalBricksStairs;
 import com.chronodawn.blocks.TemporalBricksWall;
 import com.chronodawn.blocks.CoarseTemporalDirtBlock;
+import com.chronodawn.blocks.ParchedTemporalDirtBlock;
 import com.chronodawn.blocks.TemporalStoneBlock;
 import com.chronodawn.blocks.TemporalCobblestoneBlock;
 import com.chronodawn.blocks.TemporalStoneStairs;
@@ -569,6 +570,11 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> COARSE_TEMPORAL_DIRT = BLOCKS.register(
         ModBlockId.COARSE_TEMPORAL_DIRT.id(),
         () -> new CoarseTemporalDirtBlock(CoarseTemporalDirtBlock.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> PARCHED_TEMPORAL_DIRT = BLOCKS.register(
+        ModBlockId.PARCHED_TEMPORAL_DIRT.id(),
+        () -> new ParchedTemporalDirtBlock(ParchedTemporalDirtBlock.createProperties())
     );
 
     public static final RegistrySupplier<Block> TEMPORAL_FARMLAND = BLOCKS.register(

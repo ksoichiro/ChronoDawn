@@ -150,6 +150,9 @@
   "item.chronodawn.temporal_fern": "時のシダ",
   "block.chronodawn.temporal_grass": "時の草",
   "item.chronodawn.temporal_grass": "時の草",
+  "block.chronodawn.faded_temporal_grass": "色褪せた時の草",
+  "block.chronodawn.parched_temporal_dirt": "干からびた時の土",
+  "block.chronodawn.temporal_dead_bush": "時の枯れ木",
   "block.chronodawn.temporal_kelp": "時のコンブ",
   "item.chronodawn.temporal_kelp": "時のコンブ",
   "block.chronodawn.temporal_kelp_plant": "時のコンブ",
@@ -297,6 +300,7 @@
 
   "biome.chronodawn.chronodawn_plains": "クロノドーン平原",
   "biome.chronodawn.chronodawn_prairies": "クロノドーン草原",
+  "biome.chronodawn.chronodawn_faded_plains": "クロノドーンの色褪せた草原",
   "biome.chronodawn.chronodawn_ocean": "クロノドーン海洋",
   "biome.chronodawn.chronodawn_forest": "クロノドーン森林",
   "biome.chronodawn.chronodawn_dark_forest": "暗い時の森",

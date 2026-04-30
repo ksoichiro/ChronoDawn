@@ -1624,6 +1624,14 @@ public class ModItems {
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_GRASS.id()))))
     );
 
+    public static final RegistrySupplier<Item> PARCHED_TEMPORAL_DIRT = ITEMS.register(
+        ModItemId.PARCHED_TEMPORAL_DIRT.id(),
+        () -> new BlockItem(ModBlocks.PARCHED_TEMPORAL_DIRT.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.PARCHED_TEMPORAL_DIRT.id()))))
+    );
+
     public static final RegistrySupplier<Item> TEMPORAL_KELP = ITEMS.register(
         ModItemId.TEMPORAL_KELP.id(),
         () -> new BlockItem(ModBlocks.TEMPORAL_KELP.get(), new Item.Properties()
@@ -2851,6 +2859,7 @@ public class ModItems {
         output.accept(TEMPORAL_DIRT.get());
         output.accept(TEMPORAL_GRASS_BLOCK.get());
         output.accept(COARSE_TEMPORAL_DIRT.get());
+        output.accept(PARCHED_TEMPORAL_DIRT.get());
         output.accept(TEMPORAL_STONE.get());
         output.accept(TEMPORAL_STONE_STAIRS.get());
         output.accept(TEMPORAL_STONE_SLAB.get());

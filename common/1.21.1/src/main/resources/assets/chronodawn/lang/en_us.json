@@ -188,6 +188,9 @@
   "item.chronodawn.temporal_fern": "Temporal Fern",
   "block.chronodawn.temporal_grass": "Temporal Grass",
   "item.chronodawn.temporal_grass": "Temporal Grass",
+  "block.chronodawn.faded_temporal_grass": "Faded Temporal Grass",
+  "block.chronodawn.parched_temporal_dirt": "Parched Temporal Dirt",
+  "block.chronodawn.temporal_dead_bush": "Temporal Dead Bush",
   "block.chronodawn.temporal_kelp": "Temporal Kelp",
   "item.chronodawn.temporal_kelp": "Temporal Kelp",
   "block.chronodawn.temporal_kelp_plant": "Temporal Kelp Plant",
@@ -336,6 +339,7 @@
 
   "biome.chronodawn.chronodawn_plains": "Chrono Dawn Plains",
   "biome.chronodawn.chronodawn_prairies": "Chrono Dawn Prairies",
+  "biome.chronodawn.chronodawn_faded_plains": "Chrono Dawn Faded Plains",
   "biome.chronodawn.chronodawn_ocean": "Chrono Dawn Ocean",
   "biome.chronodawn.chronodawn_forest": "Chrono Dawn Forest",
   "biome.chronodawn.chronodawn_dark_forest": "Dark Time Forest",
