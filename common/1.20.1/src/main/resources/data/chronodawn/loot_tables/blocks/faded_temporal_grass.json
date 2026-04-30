@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "conditions": [
+                {
+                  "condition": "minecraft:match_tool",
+                  "predicate": {
+                    "items": [
+                      "minecraft:shears"
+                    ]
+                  }
+                }
+              ],
+              "name": "chronodawn:faded_temporal_grass"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

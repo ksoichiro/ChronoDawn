@@ -1257,6 +1257,11 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.PARCHED_TEMPORAL_DIRT.get(), new Item.Properties())
     );
 
+    public static final RegistrySupplier<Item> FADED_TEMPORAL_GRASS = ITEMS.register(
+        ModItemId.FADED_TEMPORAL_GRASS.id(),
+        () -> new BlockItem(ModBlocks.FADED_TEMPORAL_GRASS.get(), new Item.Properties())
+    );
+
     public static final RegistrySupplier<Item> TEMPORAL_KELP = ITEMS.register(
         ModItemId.TEMPORAL_KELP.id(),
         () -> new BlockItem(ModBlocks.TEMPORAL_KELP.get(), new Item.Properties())
@@ -2425,6 +2430,9 @@ public class ModItems {
         output.accept(TEMPORAL_TALL_GRASS.get());
         output.accept(TEMPORAL_FERN.get());
         output.accept(TEMPORAL_GRASS.get());
+    );
+
+        output.accept(FADED_TEMPORAL_GRASS.get());
         output.accept(TEMPORAL_KELP.get());
         output.accept(TEMPORAL_SEAGRASS.get());
         output.accept(TALL_TEMPORAL_SEAGRASS.get());
