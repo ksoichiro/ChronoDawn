@@ -208,6 +208,13 @@ public final class RegistryDrivenTestGenerator {
     }
 
     /**
+     * Generates tests verifying Faded Plains block placement rules.
+     */
+    public static List<NamedTest> generateFadedPlainsTests() {
+        return FadedPlainsTests.generateTests(NamedTest::new);
+    }
+
+    /**
      * Generates tests verifying that all item registry IDs match their field names.
      */
     public static List<NamedTest> generateItemIdTests() {
@@ -442,6 +449,7 @@ public final class RegistryDrivenTestGenerator {
         all.addAll(generateStructureTests());
         all.addAll(generatePortalTests());
         all.addAll(generateBlockProtectionTests());
+        all.addAll(generateFadedPlainsTests());
         // Registry consistency tests (ModItemId/ModBlockId/ModEntityId/ModBlockEntityId enum verification)
         all.addAll(generateItemRegistryConsistencyTests());
         all.addAll(generateBlockRegistryConsistencyTests());
