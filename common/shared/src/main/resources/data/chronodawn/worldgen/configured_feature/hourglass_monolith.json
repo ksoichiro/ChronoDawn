@@ -3,6 +3,7 @@
   "config": {
     "template": "chronodawn:hourglass_monolith",
     "random_rotate": true,
-    "y_offset": 0
+    "y_offset": 0,
+    "min_ground_contact_ratio": 1.0
   }
 }
