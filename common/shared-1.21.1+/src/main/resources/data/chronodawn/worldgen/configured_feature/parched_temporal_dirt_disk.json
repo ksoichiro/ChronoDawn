@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:disk",
+  "config": {
+    "half_height": 1,
+    "radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 2,
+      "max_inclusive": 4
+    },
+    "state_provider": {
+      "fallback": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "chronodawn:parched_temporal_dirt"
+        }
+      },
+      "rules": []
+    },
+    "target": {
+      "type": "minecraft:matching_blocks",
+      "blocks": [
+        "chronodawn:temporal_grass_block",
+        "chronodawn:temporal_dirt",
+        "chronodawn:coarse_temporal_dirt"
+      ]
+    }
+  }
+}
