@@ -1641,6 +1641,14 @@ public class ModItems {
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.FADED_TEMPORAL_GRASS.id()))))
     );
 
+    public static final RegistrySupplier<Item> TEMPORAL_DEAD_BUSH = ITEMS.register(
+        ModItemId.TEMPORAL_DEAD_BUSH.id(),
+        () -> new BlockItem(ModBlocks.TEMPORAL_DEAD_BUSH.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_DEAD_BUSH.id()))))
+    );
+
     public static final RegistrySupplier<Item> TEMPORAL_KELP = ITEMS.register(
         ModItemId.TEMPORAL_KELP.id(),
         () -> new BlockItem(ModBlocks.TEMPORAL_KELP.get(), new Item.Properties()
@@ -2952,6 +2960,7 @@ public class ModItems {
     );
 
         output.accept(FADED_TEMPORAL_GRASS.get());
+        output.accept(TEMPORAL_DEAD_BUSH.get());
         output.accept(TEMPORAL_KELP.get());
         output.accept(TEMPORAL_SEAGRASS.get());
         output.accept(TALL_TEMPORAL_SEAGRASS.get());
