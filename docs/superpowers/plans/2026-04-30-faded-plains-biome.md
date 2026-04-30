@@ -110,15 +110,15 @@ Use `git grep -n 'TEMPORAL_FERN' common/shared/src/main/java/com/chronodawn/regi
 
 - [ ] **Step 2: Add the three new entries after the matching `TEMPORAL_FERN`**
 
-```java
-    TEMPORAL_TALL_GRASS(def("temporal_tall_grass")),
-    TEMPORAL_FERN(def("temporal_fern")),
-    FADED_TEMPORAL_GRASS(def("faded_temporal_grass")),
-    PARCHED_TEMPORAL_DIRT(def("parched_temporal_dirt")),
-    TEMPORAL_DEAD_BUSH(def("temporal_dead_bush")),
-```
+`ModItemId` uses bare string constructors (not `def(...)`). Inspect surrounding entries to confirm. The pattern is:
 
-(`ModItemId.def()` typically does not chain `.cutout()` — confirm by inspecting nearby entries.)
+```java
+    TEMPORAL_TALL_GRASS("temporal_tall_grass"),
+    TEMPORAL_FERN("temporal_fern"),
+    FADED_TEMPORAL_GRASS("faded_temporal_grass"),
+    PARCHED_TEMPORAL_DIRT("parched_temporal_dirt"),
+    TEMPORAL_DEAD_BUSH("temporal_dead_bush"),
+```
 
 - [ ] **Step 3: Commit Task 0.1 and 0.2 together**
 
