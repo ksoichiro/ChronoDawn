@@ -19,6 +19,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **Temporal Seagrass** and **Tall Temporal Seagrass** — short and 2-block-tall variants on the ocean floor; bone-meal on a short seagrass produces the tall variant; shears drop the seagrass item. Temporal Seagrass is registered as turtle food
   - Pre-existing chunks retain whatever vanilla aquatic blocks they generated; only new chunks switch to the Temporal variants
 - **Dried Temporal Kelp** — food item smoked / smelted / campfire-cooked from Temporal Kelp. Nutrition 1, saturation 0.6, and the same fast-eat animation (0.865 s) as vanilla dried kelp. Cooking times match vanilla: 5 s in a smoker, 10 s in a furnace, 30 s on a campfire
+- **Faded Temporal Grass** — short, baked yellow-brown cross-plant. Drops itself with shears. Tagged `replaceable` and `sword_efficient`. Texture is fixed-color (no biome tint).
+- **Parched Temporal Dirt** — cracked dry dirt block. Mineable with shovel; tagged `minecraft:dirt` so vegetation that uses the dirt tag (custom and vanilla) can survive on it.
+- **Temporal Dead Bush** — withered bush cross-plant. Drops itself with shears, otherwise drops 0–2 sticks. Survives on Chrono Dawn dry terrain (Temporal Sand / Temporal Dirt / Coarse Temporal Dirt / Parched Temporal Dirt / Temporal Gravel) plus vanilla Sand and Red Sand. Will not survive on grass blocks.
+
+#### New Biomes
+- **Faded Plains** (`chronodawn:chronodawn_faded_plains`) — a time-worn wasteland in the hot/medium-humidity slot of the Chrono Dawn dimension, adjacent to the desert. Yellow-brown ground tint, sparse withered grass, dead bushes, parched-dirt patches, and bare snags from long-stripped trees. Reduced fauna (only Timebound Rabbit and Time Keeper). No precipitation. Worldgen places `patch_faded_grass`, `patch_temporal_dead_bush`, `disk_parched_temporal_dirt`, and `dead_snag_placed` features on the surface.
 
 ## [0.7.0] - 2026-04-22
 
