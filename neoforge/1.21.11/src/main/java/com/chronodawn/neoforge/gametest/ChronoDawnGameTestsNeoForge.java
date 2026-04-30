@@ -2,6 +2,7 @@ package com.chronodawn.neoforge.gametest;
 
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.gametest.ChronoDawnGameTestLogic;
+import com.chronodawn.gametest.FadedPlainsTests;
 import com.chronodawn.gametest.RegistryDrivenTestGenerator;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -60,6 +61,11 @@ public class ChronoDawnGameTestsNeoForge {
             var holder = TEST_FUNCTIONS.register(sanitizedName, () -> namedTest.test());
             REGISTERED_TESTS.add(new RegisteredTest(holder, namedTest.timeoutTicks()));
         }
+
+        // Faded Plains block tests (not included in RegistryDrivenTestGenerator for 1.21.5+)
+        registerTest("dead_bush_survives_on_parched_dirt", FadedPlainsTests.TEST_DEAD_BUSH_SURVIVES_ON_PARCHED_DIRT, 100);
+        registerTest("dead_bush_breaks_on_grass", FadedPlainsTests.TEST_DEAD_BUSH_BREAKS_ON_GRASS, 100);
+        registerTest("faded_grass_shears_drops_self", FadedPlainsTests.TEST_FADED_GRASS_SHEARS_DROPS_SELF, 100);
 
         // Player input tests
         registerTest("test_mock_player_can_be_created", ChronoDawnGameTestLogic.TEST_MOCK_PLAYER_CAN_BE_CREATED, 100);

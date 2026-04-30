@@ -1,11 +1,7 @@
 package com.chronodawn.gametest;
 
-import com.chronodawn.registry.ModBlocks;
 import net.fabricmc.fabric.api.gametest.v1.GameTest;
-import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * GameTest tests for ChronoDawn mod on Fabric (1.21.8 version).
@@ -19,9 +15,6 @@ import net.minecraft.world.level.block.state.BlockState;
 public class ChronoDawnGameTests {
 
     private static final String STRUCTURE = "chronodawn:empty_test";
-
-    private static final BlockPos BASE_POS = new BlockPos(1, 2, 1);
-    private static final BlockPos TOP_POS = new BlockPos(1, 3, 1);
 
     // ============== Player Input Tests ==============
 
@@ -62,18 +55,7 @@ public class ChronoDawnGameTests {
      */
     @GameTest(structure = STRUCTURE, maxTicks = 100)
     public void testDeadBushSurvivesOnParchedDirt(GameTestHelper helper) {
-        helper.setBlock(BASE_POS, ModBlocks.PARCHED_TEMPORAL_DIRT.get());
-        helper.runAfterDelay(1, () -> {
-            BlockState deadBushState = ModBlocks.TEMPORAL_DEAD_BUSH.get().defaultBlockState();
-            BlockPos absTop = helper.absolutePos(TOP_POS);
-            boolean survives = deadBushState.canSurvive(helper.getLevel(), absTop);
-            if (survives) {
-                helper.succeed();
-            } else {
-                helper.fail(Component.literal(
-                    "TEMPORAL_DEAD_BUSH should survive on PARCHED_TEMPORAL_DIRT but canSurvive() returned false"));
-            }
-        });
+        FadedPlainsTests.TEST_DEAD_BUSH_SURVIVES_ON_PARCHED_DIRT.accept(helper);
     }
 
     /**
@@ -81,17 +63,14 @@ public class ChronoDawnGameTests {
      */
     @GameTest(structure = STRUCTURE, maxTicks = 100)
     public void testDeadBushBreaksOnGrass(GameTestHelper helper) {
-        helper.setBlock(BASE_POS, ModBlocks.TEMPORAL_GRASS_BLOCK.get());
-        helper.runAfterDelay(1, () -> {
-            BlockState deadBushState = ModBlocks.TEMPORAL_DEAD_BUSH.get().defaultBlockState();
-            BlockPos absTop = helper.absolutePos(TOP_POS);
-            boolean survives = deadBushState.canSurvive(helper.getLevel(), absTop);
-            if (!survives) {
-                helper.succeed();
-            } else {
-                helper.fail(Component.literal(
-                    "TEMPORAL_DEAD_BUSH should NOT survive on TEMPORAL_GRASS_BLOCK but canSurvive() returned true"));
-            }
-        });
+        FadedPlainsTests.TEST_DEAD_BUSH_BREAKS_ON_GRASS.accept(helper);
+    }
+
+    /**
+     * Test: FADED_TEMPORAL_GRASS drops itself (1 item) when broken with shears.
+     */
+    @GameTest(structure = STRUCTURE, maxTicks = 100)
+    public void testFadedGrassShearsDropsSelf(GameTestHelper helper) {
+        FadedPlainsTests.TEST_FADED_GRASS_SHEARS_DROPS_SELF.accept(helper);
     }
 }
