@@ -1714,6 +1714,14 @@ public class ModItems {
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TALL_TEMPORAL_SEAGRASS.id()))))
     );
 
+    public static final RegistrySupplier<Item> LUMEN_POLYP = ITEMS.register(
+        ModItemId.LUMEN_POLYP.id(),
+        () -> new BlockItem(ModBlocks.LUMEN_POLYP.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.LUMEN_POLYP.id()))))
+    );
+
     /**
      * Dried Temporal Kelp - Smoked product of Temporal Kelp.
      * Nutrition: 1, Saturation: 0.6, eat duration 0.865s (full parity with vanilla dried_kelp).
@@ -2944,6 +2952,7 @@ public class ModItems {
         output.accept(TEMPORAL_KELP.get());
         output.accept(TEMPORAL_SEAGRASS.get());
         output.accept(TALL_TEMPORAL_SEAGRASS.get());
+        output.accept(LUMEN_POLYP.get());
 
         // === Lighting Items ===
         output.accept(PURPLE_TIME_TORCH.get());
