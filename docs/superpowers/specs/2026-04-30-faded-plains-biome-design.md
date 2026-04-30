@@ -117,8 +117,8 @@ Key fields:
     "fog_color": 12632256,       // dimension-shared
     "water_color": 6983845,      // dimension-shared
     "water_fog_color": 3482025,  // dimension-shared
-    "grass_color": 12953179,     // 0xC4A85B — warm yellow-brown
-    "foliage_color": 12096325,   // 0xB89545 — slightly more amber
+    "grass_color": 12953179,     // 0xC5A65B — warm yellow-brown
+    "foliage_color": 12096325,   // 0xB89345 — slightly more amber
     "mood_sound": { /* same as prairies */ },
     "music": [ /* chronodawn:music.chronodawn_dimension, same as prairies */ ],
     "music_volume": 1.0
