@@ -80,7 +80,7 @@ All three blocks use **fixed-color textures with no biome tint**. Rationale:
 | Field | Value |
 |---|---|
 | Java class | New `TemporalDeadBushBlock` (per version), extends `BushBlock`. Reference: vanilla `DeadBushBlock` and per-version `TemporalFernBlock` for the API form. |
-| Survival surface | `TEMPORAL_SAND`, `TEMPORAL_DIRT`, `COARSE_TEMPORAL_DIRT`, `PARCHED_TEMPORAL_DIRT`, `TEMPORAL_GRAVEL`. **Excludes** `TEMPORAL_GRASS_BLOCK` (a dead bush on living grass is incongruent). |
+| Survival surface | `TEMPORAL_SAND`, `TEMPORAL_DIRT`, `COARSE_TEMPORAL_DIRT`, `PARCHED_TEMPORAL_DIRT`, `TEMPORAL_GRAVEL`, plus vanilla `Blocks.SAND` and `Blocks.RED_SAND` (so players can place the bush on vanilla sand outside the Chrono Dawn dimension). **Excludes** `TEMPORAL_GRASS_BLOCK` and vanilla grass (a dead bush on living grass is incongruent). Worldgen placement is constrained separately via the placed feature's `block_predicate_filter` to keep natural generation Chrono Dawn-only. |
 | Block model | `block/cross` |
 | Item model | `item/generated` |
 | Texture | 16×16, baked-in `#6E5A35`-ish weathered branches |
