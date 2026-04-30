@@ -120,6 +120,7 @@ import com.chronodawn.blocks.TemporalKelpBlock;
 import com.chronodawn.blocks.TemporalKelpPlantBlock;
 import com.chronodawn.blocks.TemporalSeagrassBlock;
 import com.chronodawn.blocks.TallTemporalSeagrassBlock;
+import com.chronodawn.blocks.LumenPolypBlock;
 import com.chronodawn.blocks.TimeTorchBlock;
 import com.chronodawn.blocks.WallTimeTorchBlock;
 import com.chronodawn.blocks.TemporalLanternBlock;
@@ -988,6 +989,11 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> TALL_TEMPORAL_SEAGRASS = BLOCKS.register(
         ModBlockId.TALL_TEMPORAL_SEAGRASS.id(),
         () -> new TallTemporalSeagrassBlock(TallTemporalSeagrassBlock.createProperties(ModBlockId.TALL_TEMPORAL_SEAGRASS.id()))
+    );
+
+    public static final RegistrySupplier<Block> LUMEN_POLYP = BLOCKS.register(
+        ModBlockId.LUMEN_POLYP.id(),
+        () -> new LumenPolypBlock(LumenPolypBlock.createProperties(ModBlockId.LUMEN_POLYP.id()))
     );
 
     // === Time Torches ===
