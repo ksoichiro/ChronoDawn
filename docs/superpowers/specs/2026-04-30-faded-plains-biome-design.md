@@ -53,7 +53,7 @@ All three blocks use **fixed-color textures with no biome tint**. Rationale:
 
 | Field | Value |
 |---|---|
-| Java class | New `FadedTemporalGrassBlock` (per version), extends `BushBlock` (1.20.1/1.21.1) or `VegetationBlock` (1.21.2+). Reference: `TemporalFernBlock` per-version layout. |
+| Java class | New `FadedTemporalGrassBlock` (per version), extends `BushBlock`. Reference: `TemporalFernBlock` per-version layout (codec / setId / noCollision spelling differ per Minecraft version). |
 | Survival surface | `TEMPORAL_DIRT`, `TEMPORAL_GRASS_BLOCK`, `COARSE_TEMPORAL_DIRT`, `PARCHED_TEMPORAL_DIRT` |
 | Block model | `block/cross` (no tintindex) |
 | Item model | `item/generated` parent (per `feedback_item_model_flat_icon_pattern`) |
@@ -79,7 +79,7 @@ All three blocks use **fixed-color textures with no biome tint**. Rationale:
 
 | Field | Value |
 |---|---|
-| Java class | New `TemporalDeadBushBlock` (per version), extends `BushBlock`/`VegetationBlock`. Reference: vanilla `DeadBushBlock`. |
+| Java class | New `TemporalDeadBushBlock` (per version), extends `BushBlock`. Reference: vanilla `DeadBushBlock` and per-version `TemporalFernBlock` for the API form. |
 | Survival surface | `TEMPORAL_SAND`, `TEMPORAL_DIRT`, `COARSE_TEMPORAL_DIRT`, `PARCHED_TEMPORAL_DIRT`, `TEMPORAL_GRAVEL`. **Excludes** `TEMPORAL_GRASS_BLOCK` (a dead bush on living grass is incongruent). |
 | Block model | `block/cross` |
 | Item model | `item/generated` |
