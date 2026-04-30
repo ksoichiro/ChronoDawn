@@ -581,22 +581,28 @@ git commit -m "feat(plants): add Lumen Polyp loot table (1.21.1+)"
 ### Task 9: Add Lumen Polyp en_us translation
 
 **Files:**
-- Modify: `common/shared/src/main/resources/assets/chronodawn/lang/en_us.json`
+- Modify: `common/shared-1.21.2+/src/main/resources/assets/chronodawn/lang/en_us.json`
+
+> **Plan-typo correction:** earlier drafts referenced `common/shared/src/main/resources/assets/chronodawn/lang/en_us.json`, but the lang files are era-split — the only existing locations are `common/shared-1.21.2+/`, `common/1.21.1/`, and `common/1.20.1/`. Use the `shared-1.21.2+` file for 1.21.11 (it covers 1.21.2+); Sub-phases I and J will add the same key to the older lang files.
 
 Per `feedback_lang_json_line_based_edit.md`, use `Edit` with anchors.
 
-- [ ] **Step 1: Insert after `block.chronodawn.tall_temporal_seagrass`**
+- [ ] **Step 1: Insert after the seagrass-family entries**
+
+The file pairs `block.chronodawn.<id>` immediately with `item.chronodawn.<id>` for every double-registered block (`temporal_seagrass`, `tall_temporal_seagrass`, etc.). Use a 2-line anchor covering both lines of `tall_temporal_seagrass` so the new Lumen Polyp entry slots in after the seagrass family without splitting a paired block/item lang group.
 
 `old_string`:
 
 ```
   "block.chronodawn.tall_temporal_seagrass": "Tall Temporal Seagrass",
+  "item.chronodawn.tall_temporal_seagrass": "Tall Temporal Seagrass",
 ```
 
 `new_string`:
 
 ```
   "block.chronodawn.tall_temporal_seagrass": "Tall Temporal Seagrass",
+  "item.chronodawn.tall_temporal_seagrass": "Tall Temporal Seagrass",
   "block.chronodawn.lumen_polyp": "Lumen Polyp",
 ```
 
