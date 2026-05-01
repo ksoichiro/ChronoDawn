@@ -1280,6 +1280,11 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TALL_TEMPORAL_SEAGRASS.get(), new Item.Properties())
     );
 
+    public static final RegistrySupplier<Item> LUMEN_POLYP = ITEMS.register(
+        ModItemId.LUMEN_POLYP.id(),
+        () -> new BlockItem(ModBlocks.LUMEN_POLYP.get(), new Item.Properties())
+    );
+
     public static final RegistrySupplier<Item> DRIED_TEMPORAL_KELP = ITEMS.register(
         ModItemId.DRIED_TEMPORAL_KELP.id(),
         () -> new Item(new Item.Properties()
@@ -2458,6 +2463,7 @@ public class ModItems {
         output.accept(TEMPORAL_KELP.get());
         output.accept(TEMPORAL_SEAGRASS.get());
         output.accept(TALL_TEMPORAL_SEAGRASS.get());
+        output.accept(LUMEN_POLYP.get());
         output.accept(DRIED_TEMPORAL_KELP.get());
 
         // === Lighting Items ===
