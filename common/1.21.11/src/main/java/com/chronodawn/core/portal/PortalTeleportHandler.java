@@ -192,8 +192,12 @@ public class PortalTeleportHandler {
             // Use existing portal (this is a portal block position)
             destPortalPos = existingPortal.get();
         } else {
-            // Generate new portal with same axis as source portal
-            BlockPos framePos = generatePortal(destLevel, destCoords, sourceAxis);
+            // Reignite an existing deactivated frame before generating a new one.
+            Optional<BlockPos> reusableFrame = findReusablePortalFrame(destLevel, destCoords, sourceAxis);
+            BlockPos framePos = reusableFrame.orElse(null);
+            if (framePos == null) {
+                framePos = generatePortal(destLevel, destCoords, sourceAxis);
+            }
             if (framePos == null) {
                 ChronoDawn.LOGGER.error("Failed to generate portal at {} in dimension {}",
                     destCoords, destDimensionKey.identifier());
@@ -457,6 +461,87 @@ public class PortalTeleportHandler {
     }
 
     /**
+     * Find a registered deactivated portal frame that can be reignited in place.
+     *
+     * Unstable ChronoDawn portals remove only portal blocks on arrival, leaving the frame and registry entry behind.
+     * Reusing that frame prevents the heightmap from treating the old frame as terrain and stacking a new portal above it.
+     *
+     * @param level Destination level
+     * @param coords Destination coordinates (expected to be frame bottom-left position)
+     * @param axis Portal axis
+     * @return Frame bottom-left position if a reusable frame exists, empty otherwise
+     */
+    private static Optional<BlockPos> findReusablePortalFrame(ServerLevel level, BlockPos coords, Direction.Axis axis) {
+        Set<UUID> portalsInDimension = PortalRegistry.getInstance().getPortalsInDimension(level.dimension());
+
+        BlockPos nearestFrame = null;
+        double nearestDistance = Double.MAX_VALUE;
+
+        for (UUID portalId : portalsInDimension) {
+            PortalStateMachine portal = PortalRegistry.getInstance().getPortal(portalId);
+            if (portal == null || portal.getCurrentState() == PortalState.STABILIZED) {
+                continue;
+            }
+
+            BlockPos framePos = portal.getPosition();
+            double distance = Math.sqrt(
+                Math.pow(framePos.getX() - coords.getX(), 2) +
+                Math.pow(framePos.getZ() - coords.getZ(), 2)
+            );
+
+            if (distance < 128 && distance < nearestDistance && hasPortalFrame(level, framePos, axis)) {
+                nearestDistance = distance;
+                nearestFrame = framePos;
+            }
+        }
+
+        if (nearestFrame != null) {
+            generatePortalStructure(level, nearestFrame, axis);
+            return Optional.of(nearestFrame);
+        }
+
+        return Optional.empty();
+    }
+
+    /**
+     * Check whether the Clockstone frame is still present at the registered portal position.
+     *
+     * @param level Level
+     * @param pos Bottom-left frame position
+     * @param axis Portal axis
+     * @return true if the 4x5 frame border is present
+     */
+    private static boolean hasPortalFrame(ServerLevel level, BlockPos pos, Direction.Axis axis) {
+        int width = 4;
+        int height = 5;
+
+        Direction horizontal = axis == Direction.Axis.X ? Direction.EAST : Direction.SOUTH;
+        Direction vertical = Direction.UP;
+
+        for (int x = 0; x < width; x++) {
+            if (!level.getBlockState(pos.relative(horizontal, x)).is(ModBlocks.CLOCKSTONE_BLOCK.get())) {
+                return false;
+            }
+            if (!level.getBlockState(pos.relative(horizontal, x).relative(vertical, height - 1))
+                    .is(ModBlocks.CLOCKSTONE_BLOCK.get())) {
+                return false;
+            }
+        }
+
+        for (int y = 0; y < height; y++) {
+            if (!level.getBlockState(pos.relative(vertical, y)).is(ModBlocks.CLOCKSTONE_BLOCK.get())) {
+                return false;
+            }
+            if (!level.getBlockState(pos.relative(horizontal, width - 1).relative(vertical, y))
+                    .is(ModBlocks.CLOCKSTONE_BLOCK.get())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Generate a new portal at destination coordinates.
      *
      * Finds ground level and places portal on solid ground.
@@ -642,15 +727,26 @@ public class PortalTeleportHandler {
             }
         }
 
-        // Register portal in registry
-        UUID portalId = UUID.randomUUID();
-        PortalStateMachine portal = new PortalStateMachine(
-            portalId,
-            level.dimension(),
-            pos
-        );
-        portal.activate();
-        PortalRegistry.getInstance().registerPortal(portal);
+        // Register or reignite portal in registry
+        PortalStateMachine portal = PortalRegistry.getInstance().getPortalAt(pos);
+        if (portal == null) {
+            UUID portalId = UUID.randomUUID();
+            portal = new PortalStateMachine(
+                portalId,
+                level.dimension(),
+                pos
+            );
+            PortalRegistry.getInstance().registerPortal(portal);
+            portal.activate();
+        } else if (portal.getCurrentState() == PortalState.INACTIVE) {
+            portal.activate();
+        } else if (portal.getCurrentState() == PortalState.DEACTIVATED) {
+            // Reigniting the same physical frame after an unstable entry is intentional:
+            // the first ChronoDawn arrival removes portal blocks but keeps the frame and registry entry.
+            // Treat this as restoring that existing portal, not as a normal player-triggered state transition.
+            portal.setState(PortalState.ACTIVATED);
+            PortalRegistry.getInstance().markDirtyForPortal(portal.getPortalId());
+        }
     }
 
     /**
