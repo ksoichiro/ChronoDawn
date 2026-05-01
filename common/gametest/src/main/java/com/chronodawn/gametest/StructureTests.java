@@ -68,6 +68,42 @@ public final class StructureTests {
                 new BlockRequirement("barrel", () -> Blocks.BARREL, 1),
                 new BlockRequirement(ModBlockId.TIME_CRYSTAL_BLOCK.id(), ModBlocks.TIME_CRYSTAL_BLOCK, 1)
             )),
+            new StructureSpec("time_well", 3, 5, 3, List.of(
+                new BlockRequirement(ModBlockId.TEMPORAL_COBBLESTONE.id(), ModBlocks.TEMPORAL_COBBLESTONE, 8),
+                new BlockRequirement(ModBlockId.TEMPORAL_AMBER_ORE.id(), ModBlocks.TEMPORAL_AMBER_ORE, 1)
+            )),
+            new StructureSpec("lost_adventurer_memorial", 3, 3, 3, List.of(
+                new BlockRequirement(ModBlockId.MOSSY_TEMPORAL_COBBLESTONE_SLAB.id(),
+                    ModBlocks.MOSSY_TEMPORAL_COBBLESTONE_SLAB, 2),
+                new BlockRequirement(ModBlockId.TEMPORAL_STONE_PRESSURE_PLATE.id(),
+                    ModBlocks.TEMPORAL_STONE_PRESSURE_PLATE, 1)
+            )),
+            new StructureSpec("lost_adventurer_memorial_snowy", 3, 3, 3, List.of(
+                new BlockRequirement("snow", () -> Blocks.SNOW, 4),
+                new BlockRequirement(ModBlockId.TEMPORAL_STONE_PRESSURE_PLATE.id(),
+                    ModBlocks.TEMPORAL_STONE_PRESSURE_PLATE, 1)
+            )),
+            new StructureSpec("time_cairn", 3, 3, 3, List.of(
+                new BlockRequirement(ModBlockId.CLOCKWORK_DIAL.id(), ModBlocks.CLOCKWORK_DIAL, 1)
+            )),
+            new StructureSpec("watchmaker_camp", 5, 2, 5, List.of(
+                new BlockRequirement(ModBlockId.TIME_WOOD_FENCE.id(), ModBlocks.TIME_WOOD_FENCE, 8),
+                new BlockRequirement("chest", () -> Blocks.CHEST, 1),
+                new BlockRequirement("campfire", () -> Blocks.CAMPFIRE, 1)
+            )),
+            new StructureSpec("old_sundial", 3, 3, 3, List.of(
+                new BlockRequirement("smooth_stone", () -> Blocks.SMOOTH_STONE, 9),
+                new BlockRequirement("iron_bars", () -> Blocks.IRON_BARS, 1)
+            )),
+            new StructureSpec("hourglass_monolith", 3, 5, 3, List.of(
+                new BlockRequirement(ModBlockId.TEMPORAL_SANDSTONE.id(), ModBlocks.TEMPORAL_SANDSTONE, 18),
+                new BlockRequirement(ModBlockId.TEMPORAL_SANDSTONE_WALL.id(), ModBlocks.TEMPORAL_SANDSTONE_WALL, 16),
+                new BlockRequirement("sand", () -> Blocks.SAND, 1)
+            )),
+            new StructureSpec("upside_down_tree", 4, 6, 4, List.of(
+                new BlockRequirement(ModBlockId.TIME_WOOD_LOG.id(), ModBlocks.TIME_WOOD_LOG, 8),
+                new BlockRequirement(ModBlockId.TIME_WOOD_LEAVES.id(), ModBlocks.TIME_WOOD_LEAVES, 7)
+            )),
             new StructureSpec("forgotten_library", 35, 15, 35, List.of(
                 new BlockRequirement("chest", () -> Blocks.CHEST, 7),
                 new BlockRequirement("barrel", () -> Blocks.BARREL, 1),
