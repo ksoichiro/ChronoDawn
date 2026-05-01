@@ -1,0 +1,28 @@
+{
+  "feature": "chronodawn:faded_grass_block",
+  "placement": [
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:all_of",
+        "predicates": [
+          {
+            "type": "minecraft:matching_blocks",
+            "offset": [0, 0, 0],
+            "blocks": ["minecraft:air"]
+          },
+          {
+            "type": "minecraft:matching_blocks",
+            "offset": [0, -1, 0],
+            "blocks": [
+              "chronodawn:temporal_grass_block",
+              "chronodawn:temporal_dirt",
+              "chronodawn:coarse_temporal_dirt",
+              "chronodawn:parched_temporal_dirt"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
