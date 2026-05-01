@@ -29,7 +29,7 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed information.
 - **Custom Dimension**: Explore Chrono Dawn, a dimension frozen in perpetual twilight
 - **Portal System**: One-way portal travel using Time Hourglass, upgradeable to bidirectional with Portal Stabilizer
 - **Time Distortion**: Hostile mobs move slower in Chrono Dawn dimension
-- **10 Unique Biomes**: Forest, Plains, Desert, Mountain, Ocean, Snowy, Swamp, Dark Forest, Ancient Forest, and Prairies
+- **11 Unique Biomes**: Forest, Plains, Desert, Mountain, Ocean, Snowy, Swamp, Dark Forest, Ancient Forest, Prairies, and Faded Plains
 
 ### Content
 - **Custom Wood Types**: Time Wood, Dark Time Wood, and Ancient Time Wood — each with a full block set (logs, planks, stairs, slabs, doors, trapdoors, fences, buttons, pressure plates, saplings)
