@@ -116,8 +116,6 @@ import com.chronodawn.blocks.DuskLanternBlock;
 import com.chronodawn.blocks.TemporalTallGrassBlock;
 import com.chronodawn.blocks.TemporalFernBlock;
 import com.chronodawn.blocks.TemporalShortGrassBlock;
-    );
-
 import com.chronodawn.blocks.FadedTemporalGrassBlock;
 import com.chronodawn.blocks.TemporalDeadBushBlock;
 import com.chronodawn.blocks.TemporalKelpBlock;

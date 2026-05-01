@@ -2435,8 +2435,6 @@ public class ModItems {
         output.accept(TEMPORAL_TALL_GRASS.get());
         output.accept(TEMPORAL_FERN.get());
         output.accept(TEMPORAL_GRASS.get());
-    );
-
         output.accept(FADED_TEMPORAL_GRASS.get());
         output.accept(TEMPORAL_DEAD_BUSH.get());
         output.accept(TEMPORAL_KELP.get());
