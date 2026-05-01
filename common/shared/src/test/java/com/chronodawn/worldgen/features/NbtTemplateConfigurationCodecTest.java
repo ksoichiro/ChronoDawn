@@ -2,6 +2,7 @@ package com.chronodawn.worldgen.features;
 
 import com.mojang.serialization.JsonOps;
 import com.google.gson.JsonElement;
+import com.mojang.serialization.DataResult;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -23,12 +24,9 @@ class NbtTemplateConfigurationCodecTest {
                 """;
         com.google.gson.JsonObject obj = com.google.gson.JsonParser.parseString(json).getAsJsonObject();
 
-        NbtTemplateConfiguration original = NbtTemplateConfiguration.CODEC.parse(JsonOps.INSTANCE, obj)
-                .getOrThrow();
-        JsonElement encoded = NbtTemplateConfiguration.CODEC.encodeStart(JsonOps.INSTANCE, original)
-                .getOrThrow();
-        NbtTemplateConfiguration decoded = NbtTemplateConfiguration.CODEC.parse(JsonOps.INSTANCE, encoded)
-                .getOrThrow();
+        NbtTemplateConfiguration original = getOrThrow(NbtTemplateConfiguration.CODEC.parse(JsonOps.INSTANCE, obj));
+        JsonElement encoded = getOrThrow(NbtTemplateConfiguration.CODEC.encodeStart(JsonOps.INSTANCE, original));
+        NbtTemplateConfiguration decoded = getOrThrow(NbtTemplateConfiguration.CODEC.parse(JsonOps.INSTANCE, encoded));
 
         assertEquals(original.template().toString(), decoded.template().toString());
         assertEquals(original.randomRotate(), decoded.randomRotate());
@@ -43,8 +41,7 @@ class NbtTemplateConfigurationCodecTest {
         String json = "{\"template\":\"chronodawn:time_well\"}";
         com.google.gson.JsonObject obj = com.google.gson.JsonParser.parseString(json).getAsJsonObject();
 
-        NbtTemplateConfiguration decoded = NbtTemplateConfiguration.CODEC.parse(JsonOps.INSTANCE, obj)
-                .getOrThrow();
+        NbtTemplateConfiguration decoded = getOrThrow(NbtTemplateConfiguration.CODEC.parse(JsonOps.INSTANCE, obj));
 
         assertEquals("chronodawn:time_well", decoded.template().toString());
         assertTrue(decoded.randomRotate());
@@ -52,5 +49,9 @@ class NbtTemplateConfigurationCodecTest {
         assertEquals(0.0, decoded.minGroundContactRatio());
         assertEquals(-1, decoded.groundContactYOffset());
         assertTrue(decoded.clearReplaceableBlocks());
+    }
+
+    private static <T> T getOrThrow(DataResult<T> result) {
+        return result.result().orElseThrow(() -> new AssertionError(result.toString()));
     }
 }
