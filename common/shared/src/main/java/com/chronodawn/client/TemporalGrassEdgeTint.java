@@ -107,6 +107,24 @@ public final class TemporalGrassEdgeTint {
     }
 
     /**
+     * Returns true if any block at Chebyshev distance 1 (same Y) from {@code pos}
+     * is a Temporal Grass Block.
+     */
+    static boolean scanForGrassNeighbor(BlockAndTintGetter world, BlockPos pos) {
+        BlockPos.MutableBlockPos cur = new BlockPos.MutableBlockPos();
+        for (int dx = -1; dx <= 1; dx++) {
+            for (int dz = -1; dz <= 1; dz++) {
+                if (dx == 0 && dz == 0) continue;
+                cur.set(pos.getX() + dx, pos.getY(), pos.getZ() + dz);
+                if (world.getBlockState(cur).getBlock() instanceof TemporalGrassBlock) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
      * Block-color provider entry point for Temporal Sand / Temporal Gravel.
      * Returns {@link #SAND_NEIGHBOR_TINT} when the block has a Temporal Grass
      * Block as a Chebyshev-distance-1 neighbor at the same Y; otherwise
@@ -123,17 +141,7 @@ public final class TemporalGrassEdgeTint {
                                            @Nullable BlockPos pos, int tintIndex) {
         if (tintIndex != 0) return -1;
         if (world == null || pos == null) return 0xFFFFFF;
-        BlockPos.MutableBlockPos cur = new BlockPos.MutableBlockPos();
-        for (int dx = -1; dx <= 1; dx++) {
-            for (int dz = -1; dz <= 1; dz++) {
-                if (dx == 0 && dz == 0) continue;
-                cur.set(pos.getX() + dx, pos.getY(), pos.getZ() + dz);
-                if (world.getBlockState(cur).getBlock() instanceof TemporalGrassBlock) {
-                    return SAND_NEIGHBOR_TINT;
-                }
-            }
-        }
-        return 0xFFFFFF;
+        return scanForGrassNeighbor(world, pos) ? SAND_NEIGHBOR_TINT : 0xFFFFFF;
     }
 
     /**
@@ -203,6 +211,17 @@ public final class TemporalGrassEdgeTint {
         int r = Math.round(ar + (br - ar) * t);
         int g = Math.round(ag + (bg - ag) * t);
         int bl = Math.round(ab + (bb - ab) * t);
+        return (r << 16) | (g << 8) | bl;
+    }
+
+    /** Per-channel multiplicative blend: out = a * b / 255 per channel.
+     *  Uses integer truncation; rounding error ≤1 per channel vs. {@link #lerpRgb}. */
+    public static int multiplyRgb(int a, int b) {
+        int ar = (a >> 16) & 0xFF, ag = (a >> 8) & 0xFF, ab = a & 0xFF;
+        int br = (b >> 16) & 0xFF, bg = (b >> 8) & 0xFF, bb = b & 0xFF;
+        int r = (ar * br) / 0xFF;
+        int g = (ag * bg) / 0xFF;
+        int bl = (ab * bb) / 0xFF;
         return (r << 16) | (g << 8) | bl;
     }
 }

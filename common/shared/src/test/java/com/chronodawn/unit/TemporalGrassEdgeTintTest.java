@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Unit tests for {@link TemporalGrassEdgeTint}.
- * Only the pure math (lerpRgb) is testable without a Minecraft runtime.
+ * Only the pure math helpers (lerpRgb, multiplyRgb) are testable without a Minecraft runtime.
  * Neighborhood scan and provider entry are validated by visual smoke test.
  */
 class TemporalGrassEdgeTintTest {
@@ -34,6 +34,26 @@ class TemporalGrassEdgeTintTest {
         int r = Math.round(0x5B + (0x9C - 0x5B) * (1.0f / 3.0f));
         int g = Math.round(0x8A + (0xB6 - 0x8A) * (1.0f / 3.0f));
         int b = Math.round(0xC4 + (0xCC - 0xC4) * (1.0f / 3.0f));
+        int expected = (r << 16) | (g << 8) | b;
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void multiplyRgb_byWhite_isIdentity() {
+        assertEquals(0x123456, TemporalGrassEdgeTint.multiplyRgb(0x123456, 0xFFFFFF));
+    }
+
+    @Test
+    void multiplyRgb_byBlack_isZero() {
+        assertEquals(0x000000, TemporalGrassEdgeTint.multiplyRgb(0x123456, 0x000000));
+    }
+
+    @Test
+    void multiplyRgb_byHalf_halvesEachChannel() {
+        int actual = TemporalGrassEdgeTint.multiplyRgb(0x408060, 0x808080);
+        int r = (0x40 * 0x80) / 0xFF;
+        int g = (0x80 * 0x80) / 0xFF;
+        int b = (0x60 * 0x80) / 0xFF;
         int expected = (r << 16) | (g << 8) | b;
         assertEquals(expected, actual);
     }
