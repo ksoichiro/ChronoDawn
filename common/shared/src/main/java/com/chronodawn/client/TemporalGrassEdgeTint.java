@@ -20,12 +20,19 @@ import org.jetbrains.annotations.Nullable;
  * player), and toward a dark teal "wet" color when near water.
  *
  * Edge blend: within {@link #RADIUS} blocks (Chebyshev, same Y) of an edge
- * trigger, the grass tint lerps toward {@link #EDGE_TINT}.
+ * trigger, the grass tint lerps toward {@link #EDGE_TINT} — or
+ * {@link #EDGE_TINT_FADED} if the grass block is inside the Faded Plains
+ * biome.
  *
  * Water blend: within {@link #WATER_RADIUS} blocks (Chebyshev, same Y and
  * one Y below) of water, the grass tint lerps toward {@link #WET_TINT}.
  *
  * Both effects stack — a block near both sand and water receives both blends.
+ *
+ * Sand/gravel side: outside Faded Plains, applies a subtle pull
+ * ({@link #SAND_NEIGHBOR_TINT}) toward grass at d=1; inside Faded Plains,
+ * applies {@link #BIOME_TINT_FADED} unconditionally and layers
+ * {@link #SAND_NEIGHBOR_TINT_FADED} at d=1.
  *
  * Pure function — no caching, recomputed on every chunk mesh bake. Cost is
  * comparable to vanilla {@link BiomeColors#getAverageGrassColor}.
@@ -63,6 +70,43 @@ public final class TemporalGrassEdgeTint {
      * (0xE8, 0xEF, 0xF5).
      */
     public static final int SAND_NEIGHBOR_TINT = 0xE8EFF5;
+
+    /**
+     * Multiplicative tint applied to Temporal Sand / Temporal Gravel anywhere inside
+     * Faded Plains (chronodawn:chronodawn_faded_plains). Pulls the blue-leaning
+     * texture (~0x90BBE7) toward a warm faded color. Effective rendered color
+     * approx 0x90A460 (warm olive).
+     *
+     * Multiplicative tint cannot raise channel values, so a "true" sandstone
+     * yellow is unreachable without a texture rewrite — see design spec §7.
+     *
+     * Tuning history:
+     *   - 0xFFE06A (current): initial estimate, derived to push blue down to ~0x60
+     */
+    public static final int BIOME_TINT_FADED = 0xFFE06A;
+
+    /**
+     * Color the grass-side blend lerps toward when scanning detects an adjacent
+     * sand/gravel block in Faded Plains. Mirrors prairies, where {@link #EDGE_TINT}
+     * is the raw sand average — here it is the effective tinted-sand color (the
+     * result of applying {@link #BIOME_TINT_FADED} to the sand texture average).
+     *
+     * Tuning history:
+     *   - 0x90A460 (current): initial estimate, matches BIOME_TINT_FADED's effective output
+     */
+    public static final int EDGE_TINT_FADED = 0x90A460;
+
+    /**
+     * Multiplicative tint applied to Temporal Sand / Temporal Gravel at Chebyshev
+     * distance 1 from a Temporal Grass Block, when in Faded Plains. Initial value
+     * 0xFFFFFF (no further pull) on the assumption that warm sand and warm grass
+     * are already close enough at the boundary. Tune to a small darken
+     * (e.g., 0xF8F8F0) only if visual testing reveals a step at d=1.
+     *
+     * Tuning history:
+     *   - 0xFFFFFF (current): initial estimate, no additional darkening
+     */
+    public static final int SAND_NEIGHBOR_TINT_FADED = 0xFFFFFF;
 
     /**
      * Chebyshev radius scanned for edge triggers. Wider radius = wider, smoother
@@ -122,7 +166,8 @@ public final class TemporalGrassEdgeTint {
             return DEFAULT_FALLBACK;
         }
         int base = BiomeColors.getAverageGrassColor(world, pos);
-        return blend(world, pos, base, EDGE_TINT);
+        int edgeTint = isInFadedPlains(world, pos) ? EDGE_TINT_FADED : EDGE_TINT;
+        return blend(world, pos, base, edgeTint);
     }
 
     /**
@@ -160,7 +205,14 @@ public final class TemporalGrassEdgeTint {
                                            @Nullable BlockPos pos, int tintIndex) {
         if (tintIndex != 0) return -1;
         if (world == null || pos == null) return 0xFFFFFF;
-        return scanForGrassNeighbor(world, pos) ? SAND_NEIGHBOR_TINT : 0xFFFFFF;
+        boolean nearGrass = scanForGrassNeighbor(world, pos);
+        if (isInFadedPlains(world, pos)) {
+            int result = BIOME_TINT_FADED;
+            // No-op while SAND_NEIGHBOR_TINT_FADED == 0xFFFFFF; tuning hook — see constant Javadoc.
+            if (nearGrass) result = multiplyRgb(result, SAND_NEIGHBOR_TINT_FADED);
+            return result;
+        }
+        return nearGrass ? SAND_NEIGHBOR_TINT : 0xFFFFFF;
     }
 
     /**
