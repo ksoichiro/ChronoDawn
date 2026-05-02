@@ -1,12 +1,14 @@
 package com.chronodawn.client;
 
 import com.chronodawn.blocks.TemporalGrassBlock;
+import com.chronodawn.core.dimension.ChronoDawnBiomeProvider;
 import com.chronodawn.registry.ModBlocks;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
@@ -91,6 +93,23 @@ public final class TemporalGrassEdgeTint {
     private TemporalGrassEdgeTint() {}
 
     /**
+     * Returns true if the biome at {@code pos} is {@code chronodawn:chronodawn_faded_plains}.
+     *
+     * <p>Uses {@code Holder.is(ResourceKey)} via the per-version
+     * {@link ChronoDawnBiomeProvider#CHRONO_DAWN_FADED_PLAINS} key, which delegates the
+     * 1.21.11 {@code ResourceLocation} → {@code Identifier} rename to the existing
+     * {@code CompatResourceLocation} layer.
+     *
+     * <p>{@code BlockAndTintGetter} does not declare {@code getBiome}; the cast to
+     * {@code LevelReader} is safe at runtime because all real call-sites pass a
+     * {@code Level} subclass. Item rendering passes {@code null}, filtered earlier.
+     */
+    static boolean isInFadedPlains(BlockAndTintGetter world, BlockPos pos) {
+        if (!(world instanceof LevelReader reader)) return false;
+        return reader.getBiome(pos).is(ChronoDawnBiomeProvider.CHRONO_DAWN_FADED_PLAINS);
+    }
+
+    /**
      * Block-color provider entry point. Hand this as a method reference to
      * {@code ColorProviderRegistry.BLOCK.register} (Fabric) or
      * {@code RegisterColorHandlersEvent.Block#register} (NeoForge).
@@ -103,7 +122,7 @@ public final class TemporalGrassEdgeTint {
             return DEFAULT_FALLBACK;
         }
         int base = BiomeColors.getAverageGrassColor(world, pos);
-        return blend(world, pos, base);
+        return blend(world, pos, base, EDGE_TINT);
     }
 
     /**
@@ -147,10 +166,10 @@ public final class TemporalGrassEdgeTint {
     /**
      * Pure blend: scan the {@code RADIUS}-block Chebyshev neighborhood and
      * apply up to two tint layers — one for sand/gravel edge proximity
-     * (toward {@link #EDGE_TINT}) and one for water proximity
+     * (toward {@code edgeTint}) and one for water proximity
      * (toward {@link #WET_TINT}). Both scans share the same loop.
      */
-    static int blend(BlockGetter world, BlockPos pos, int baseTint) {
+    static int blend(BlockGetter world, BlockPos pos, int baseTint, int edgeTint) {
         int minDistEdge = RADIUS + 1;
         int minDistWater = WATER_RADIUS + 1;
         BlockPos.MutableBlockPos cur = new BlockPos.MutableBlockPos();
@@ -184,7 +203,7 @@ public final class TemporalGrassEdgeTint {
         int result = baseTint;
         if (minDistEdge <= RADIUS) {
             float t = (RADIUS + 1 - minDistEdge) / (float) (RADIUS + 1);
-            result = lerpRgb(result, EDGE_TINT, t);
+            result = lerpRgb(result, edgeTint, t);
         }
         if (minDistWater <= WATER_RADIUS) {
             float t = (WATER_RADIUS + 1 - minDistWater) / (float) (WATER_RADIUS + 1);

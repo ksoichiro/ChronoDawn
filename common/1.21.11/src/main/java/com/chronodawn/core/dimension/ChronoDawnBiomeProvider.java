@@ -47,6 +47,15 @@ public class ChronoDawnBiomeProvider {
     );
 
     /**
+     * Resource key for the ChronoDawn Faded Plains biome.
+     * A withered, time-worn variant where Temporal Sand/Gravel adopts a warm faded tint.
+     */
+    public static final ResourceKey<Biome> CHRONO_DAWN_FADED_PLAINS = ResourceKey.create(
+        Registries.BIOME,
+        CompatResourceLocation.create(ChronoDawn.MOD_ID, "chronodawn_faded_plains")
+    );
+
+    /**
      * Initialize biome provider.
      * Called during mod initialization.
      *
