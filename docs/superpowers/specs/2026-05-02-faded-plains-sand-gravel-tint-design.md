@@ -197,3 +197,80 @@ The change is purely visual-aesthetic and depends on rendering. No unit or GameT
 - Whether `world.getBiome(pos).unwrapKey()` lambda compiles cleanly under all 11 versions without a `var` workaround. Verify in Phase B.
 - Final tuning of `BIOME_TINT_FADED`. Record adopted value with rationale in the file's `Tuning history` comment.
 - Whether `SAND_NEIGHBOR_TINT_FADED` needs any value other than `0xFFFFFF`. Decide after Phase C visual review.
+
+---
+
+## 10. Post-Implementation Refinements (Addendum)
+
+Date: 2026-05-03
+
+The shipped implementation deviates from §2–§5 in three substantive ways, each driven by in-game visual review during Phase C. This addendum supersedes the corresponding original sections.
+
+### 10.1 Biome detection: `Minecraft.getInstance().level` instead of `BlockAndTintGetter` cast
+
+**Original (§4):** `world instanceof LevelReader reader; reader.getBiome(pos)...`
+
+**Issue discovered in Phase C:** Color providers receive a `RenderChunkRegion` (a chunk-render wrapper) as the `BlockAndTintGetter`. `RenderChunkRegion` does NOT implement `LevelReader`, so the `instanceof` check always returned `false` and the biome branch never fired.
+
+**Replacement:** `Minecraft.getInstance().level.getBiome(pos)`. Same pattern as `ClientShieldCooldowns` (`common/shared/.../client/shield/`). Class is already client-only (imports `BiomeColors`), so the new `Minecraft` / `ClientLevel` imports are appropriate.
+
+**Side effect:** `isInFadedPlains` lost its `BlockAndTintGetter world` parameter (no longer needed). Both call sites updated.
+
+**Memory entry recommended:** "ColorProvider's BlockAndTintGetter parameter is RenderChunkRegion, not LevelReader → use `Minecraft.getInstance().level` for biome lookup on the render thread."
+
+### 10.2 Sand-side: warm tint applies only to gravel, never to sand
+
+**Original (§5.2):** `provideForSandGravel` applied `BIOME_TINT_FADED` to both Temporal Sand and Temporal Gravel inside Faded Plains.
+
+**Issue:** Faded Plains is climatically adjacent to `chronodawn_desert`, whose untinted blue Temporal Sand created a visible color jump at the biome boundary when sand was warm-tinted.
+
+**Replacement:** Warm `BIOME_TINT_FADED` applies ONLY to gravel (Temporal Gravel + vanilla Gravel). Sand (Temporal Sand + vanilla Sand) keeps the original cool `SAND_NEIGHBOR_TINT` everywhere, regardless of biome.
+
+**Code shape:**
+```java
+boolean isSand = state.is(ModBlocks.TEMPORAL_SAND.get()) || state.is(Blocks.SAND);
+boolean fadedGravel = !isSand && isInFadedPlains(pos);
+if (fadedGravel) {
+    int result = BIOME_TINT_FADED;
+    if (nearGrass) result = multiplyRgb(result, SAND_NEIGHBOR_TINT_FADED);
+    return result;
+}
+return nearGrass ? SAND_NEIGHBOR_TINT : 0xFFFFFF;
+```
+
+### 10.3 Grass-side: type-aware blend, gravel-near-grass in Faded Plains suppresses gradient
+
+**Original (§5.1):** `provide` used a single `edgeTint` chosen by biome — `EDGE_TINT_FADED` (warm) inside Faded Plains, `EDGE_TINT` (cool) outside. `blend` tracked one closest-edge distance regardless of trigger type.
+
+**Issue (a):** When sand from a neighboring desert was within RADIUS, the warm grass-side gradient inside Faded Plains conflicted with the desert's cool sand. The grass-side blend should pull cool when the closest trigger is sand and warm when it is gravel — a type-aware decision.
+
+**Issue (b):** Even with type-awareness, the warm gradient against the warm-tinted gravel itself read as "too dark", standing out unnaturally. User feedback: prefer no gradient at all in that case.
+
+**Replacement:**
+- `blend` signature: `(world, pos, baseTint, sandEdgeTint, gravelEdgeTint)`. Tracks `minDistSand` and `minDistGravel` separately. The closer one wins; sand wins ties so the boundary stays cool against vanilla blue desert sand.
+- `isEdgeTrigger` split into `isSandEdgeTrigger` (Temporal Sand + vanilla Sand) and `isGravelEdgeTrigger` (Temporal Gravel + vanilla Gravel).
+- `provide` passes `(EDGE_TINT, base)` inside Faded Plains and `(EDGE_TINT, EDGE_TINT)` outside. Passing `base` as the gravel tint makes `lerpRgb(base, base, t) = base` (no visible blend) for any `t` — the suppression is achieved without a special-case branch in `blend`.
+- `EDGE_TINT_FADED` constant is **removed** (no longer referenced).
+
+### 10.4 Worldgen: `chronodawn:patch_coarse_dirt` removed from Faded Plains
+
+**Issue:** Visible coarse-dirt patches in Faded Plains looked out of place in the withered theme. User wants only Parched Temporal Dirt as the dried-ground decoration.
+
+**Change:** Removed `"chronodawn:patch_coarse_dirt"` from layer 9 features in 5 biome JSONs (`common/1.20.1/`, `common/1.21.1/`, `common/1.21.2/`, `common/1.21.11/`, `common/shared-1.21.2+/`). `disk_parched_temporal_dirt` and other layer 9 features unchanged. Per `feedback_biome_feature_order_cycle`, removing an entry is invariant-safe.
+
+### 10.5 Final invariants
+
+- **Sand (any context, any biome):** cool original tint. Untinted in inventory; `SAND_NEIGHBOR_TINT` toward grass at d=1.
+- **Gravel inside Faded Plains:** warm `BIOME_TINT_FADED` always; layered with `SAND_NEIGHBOR_TINT_FADED` at d=1 from grass.
+- **Gravel outside Faded Plains:** byte-identical to pre-change behavior.
+- **Grass near sand (any biome):** cool `EDGE_TINT` blend.
+- **Grass near gravel inside Faded Plains:** no blend (gradient suppressed via base==tint).
+- **Grass near gravel outside Faded Plains:** cool `EDGE_TINT` blend (byte-identical to before).
+
+### 10.6 Commits
+
+- `7dcd6f42` — Task 1+2: `multiplyRgb` + `scanForGrassNeighbor`
+- `d721137d` — Task 3+4: `isInFadedPlains` (with the LevelReader bug, fixed below) + `blend` parameterization
+- `e0d9afb7` — Task 5+6: original three constants + biome branching
+- `96753223` — Bug fix (Minecraft.getInstance) + tint retune
+- `4b087d63` — §10.2 + §10.3 + §10.4 (this addendum's substantive content)
