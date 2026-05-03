@@ -3,12 +3,13 @@ package com.chronodawn.client;
 import com.chronodawn.blocks.TemporalGrassBlock;
 import com.chronodawn.core.dimension.ChronoDawnBiomeProvider;
 import com.chronodawn.registry.ModBlocks;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.BiomeColors;
 import net.minecraft.core.BlockPos;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.BlockAndTintGetter;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
@@ -75,15 +76,18 @@ public final class TemporalGrassEdgeTint {
      * Multiplicative tint applied to Temporal Sand / Temporal Gravel anywhere inside
      * Faded Plains (chronodawn:chronodawn_faded_plains). Pulls the blue-leaning
      * texture (~0x90BBE7) toward a warm faded color. Effective rendered color
-     * approx 0x90A460 (warm olive).
+     * approx 0x907438 (yellow-brown).
      *
      * Multiplicative tint cannot raise channel values, so a "true" sandstone
      * yellow is unreachable without a texture rewrite — see design spec §7.
      *
      * Tuning history:
-     *   - 0xFFE06A (current): initial estimate, derived to push blue down to ~0x60
+     *   - 0xFFE06A: initial estimate; in-game looked yellow-green (G > R), too "rich"
+     *     for the withered theme. G=164 > R=144 made it olive rather than tan.
+     *   - 0xFFA040 (current): pulls G below R for a yellow-brown look matching the
+     *     "枯れた" (withered) feel. Effective avg shifts to (144, 116, 56).
      */
-    public static final int BIOME_TINT_FADED = 0xFFE06A;
+    public static final int BIOME_TINT_FADED = 0xFFA040;
 
     /**
      * Color the grass-side blend lerps toward when scanning detects an adjacent
@@ -92,9 +96,11 @@ public final class TemporalGrassEdgeTint {
      * result of applying {@link #BIOME_TINT_FADED} to the sand texture average).
      *
      * Tuning history:
-     *   - 0x90A460 (current): initial estimate, matches BIOME_TINT_FADED's effective output
+     *   - 0x90A460: matched BIOME_TINT_FADED 0xFFE06A — replaced when BIOME_TINT_FADED
+     *     was retuned to 0xFFA040.
+     *   - 0x907438 (current): matches BIOME_TINT_FADED 0xFFA040's effective output
      */
-    public static final int EDGE_TINT_FADED = 0x90A460;
+    public static final int EDGE_TINT_FADED = 0x907438;
 
     /**
      * Multiplicative tint applied to Temporal Sand / Temporal Gravel at Chebyshev
@@ -139,18 +145,22 @@ public final class TemporalGrassEdgeTint {
     /**
      * Returns true if the biome at {@code pos} is {@code chronodawn:chronodawn_faded_plains}.
      *
+     * <p>Uses {@link Minecraft#getInstance()} {@code .level} for biome lookup rather than
+     * the {@code BlockAndTintGetter world} parameter, because color providers receive a
+     * {@code RenderChunkRegion} during chunk mesh bake — that wrapper does not implement
+     * {@link net.minecraft.world.level.LevelReader}, so {@code instanceof LevelReader}
+     * silently returns false there. The client level is the authoritative biome source on
+     * the render thread.
+     *
      * <p>Uses {@code Holder.is(ResourceKey)} via the per-version
      * {@link ChronoDawnBiomeProvider#CHRONO_DAWN_FADED_PLAINS} key, which delegates the
      * 1.21.11 {@code ResourceLocation} → {@code Identifier} rename to the existing
      * {@code CompatResourceLocation} layer.
-     *
-     * <p>{@code BlockAndTintGetter} does not declare {@code getBiome}; the cast to
-     * {@code LevelReader} is safe at runtime because all real call-sites pass a
-     * {@code Level} subclass. Item rendering passes {@code null}, filtered earlier.
      */
-    static boolean isInFadedPlains(BlockAndTintGetter world, BlockPos pos) {
-        if (!(world instanceof LevelReader reader)) return false;
-        return reader.getBiome(pos).is(ChronoDawnBiomeProvider.CHRONO_DAWN_FADED_PLAINS);
+    static boolean isInFadedPlains(BlockPos pos) {
+        ClientLevel level = Minecraft.getInstance().level;
+        if (level == null) return false;
+        return level.getBiome(pos).is(ChronoDawnBiomeProvider.CHRONO_DAWN_FADED_PLAINS);
     }
 
     /**
@@ -166,7 +176,7 @@ public final class TemporalGrassEdgeTint {
             return DEFAULT_FALLBACK;
         }
         int base = BiomeColors.getAverageGrassColor(world, pos);
-        int edgeTint = isInFadedPlains(world, pos) ? EDGE_TINT_FADED : EDGE_TINT;
+        int edgeTint = isInFadedPlains(pos) ? EDGE_TINT_FADED : EDGE_TINT;
         return blend(world, pos, base, edgeTint);
     }
 
@@ -206,7 +216,7 @@ public final class TemporalGrassEdgeTint {
         if (tintIndex != 0) return -1;
         if (world == null || pos == null) return 0xFFFFFF;
         boolean nearGrass = scanForGrassNeighbor(world, pos);
-        if (isInFadedPlains(world, pos)) {
+        if (isInFadedPlains(pos)) {
             int result = BIOME_TINT_FADED;
             // No-op while SAND_NEIGHBOR_TINT_FADED == 0xFFFFFF; tuning hook — see constant Javadoc.
             if (nearGrass) result = multiplyRgb(result, SAND_NEIGHBOR_TINT_FADED);
