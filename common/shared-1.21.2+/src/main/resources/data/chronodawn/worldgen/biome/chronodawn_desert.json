@@ -133,7 +133,9 @@
       "chronodawn:time_cairn_placed",
       "chronodawn:hourglass_monolith_placed"
     ],
-    []
+    [
+      "chronodawn:freeze_top_layer"
+    ]
   ],
   "carvers": []
 }

@@ -189,7 +189,9 @@
       "chronodawn:time_cairn_placed",
       "chronodawn:watchmaker_camp_placed"
     ],
-    []
+    [
+      "chronodawn:freeze_top_layer"
+    ]
   ],
   "carvers": []
 }

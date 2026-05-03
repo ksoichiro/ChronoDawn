@@ -181,7 +181,9 @@
       "chronodawn:ocean_land_patch_temporal_grass",
       "chronodawn:ocean_land_patch_flowers"
     ],
-    []
+    [
+      "chronodawn:freeze_top_layer"
+    ]
   ],
   "carvers": [],
   "attributes": {

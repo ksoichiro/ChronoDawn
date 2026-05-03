@@ -186,7 +186,9 @@
       "chronodawn:time_cairn_placed",
       "chronodawn:upside_down_tree_placed"
     ],
-    []
+    [
+      "chronodawn:freeze_top_layer"
+    ]
   ],
   "carvers": []
 }

@@ -185,7 +185,9 @@
       "chronodawn:time_cairn_placed",
       "chronodawn:old_sundial_placed"
     ],
-    []
+    [
+      "chronodawn:freeze_top_layer"
+    ]
   ],
   "carvers": []
 }

@@ -127,12 +127,12 @@
     [
       "chronodawn:boulder_placed",
       "chronodawn:gravel_disk_placed",
-      "chronodawn:freeze_top_layer",
       "chronodawn:lost_adventurer_memorial_snowy_placed",
       "chronodawn:time_cairn_placed"
     ],
     [
-      "chronodawn:ice_spike_placed"
+      "chronodawn:ice_spike_placed",
+      "chronodawn:freeze_top_layer"
     ]
   ]
 }
