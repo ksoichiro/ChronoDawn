@@ -21,19 +21,28 @@ import org.jetbrains.annotations.Nullable;
  * player), and toward a dark teal "wet" color when near water.
  *
  * Edge blend: within {@link #RADIUS} blocks (Chebyshev, same Y) of an edge
- * trigger, the grass tint lerps toward {@link #EDGE_TINT} — or
- * {@link #EDGE_TINT_FADED} if the grass block is inside the Faded Plains
- * biome.
+ * trigger, the grass tint lerps toward {@link #EDGE_TINT} when the closest
+ * trigger is sand. When the closest trigger is gravel: outside Faded Plains
+ * it also lerps toward {@link #EDGE_TINT}; inside Faded Plains the gradient
+ * is suppressed (the lerp target equals the base grass color so the visible
+ * result is unchanged). Sand wins ties so the gradient stays continuous with
+ * vanilla blue desert sand at biome boundaries.
  *
  * Water blend: within {@link #WATER_RADIUS} blocks (Chebyshev, same Y and
  * one Y below) of water, the grass tint lerps toward {@link #WET_TINT}.
  *
  * Both effects stack — a block near both sand and water receives both blends.
  *
- * Sand/gravel side: outside Faded Plains, applies a subtle pull
- * ({@link #SAND_NEIGHBOR_TINT}) toward grass at d=1; inside Faded Plains,
- * applies {@link #BIOME_TINT_FADED} unconditionally and layers
- * {@link #SAND_NEIGHBOR_TINT_FADED} at d=1.
+ * Sand/gravel side:
+ * <ul>
+ *   <li>Temporal Sand: always uses the cool {@link #SAND_NEIGHBOR_TINT} pull
+ *       toward grass at d=1 (no Faded Plains override). Sand stays visually
+ *       continuous with neighboring desert sand.</li>
+ *   <li>Temporal Gravel: in Faded Plains applies {@link #BIOME_TINT_FADED}
+ *       (warm yellow-brown) unconditionally and layers
+ *       {@link #SAND_NEIGHBOR_TINT_FADED} at d=1; outside Faded Plains uses
+ *       {@link #SAND_NEIGHBOR_TINT}.</li>
+ * </ul>
  *
  * Pure function — no caching, recomputed on every chunk mesh bake. Cost is
  * comparable to vanilla {@link BiomeColors#getAverageGrassColor}.
@@ -88,19 +97,6 @@ public final class TemporalGrassEdgeTint {
      *     "枯れた" (withered) feel. Effective avg shifts to (144, 116, 56).
      */
     public static final int BIOME_TINT_FADED = 0xFFA040;
-
-    /**
-     * Color the grass-side blend lerps toward when scanning detects an adjacent
-     * sand/gravel block in Faded Plains. Mirrors prairies, where {@link #EDGE_TINT}
-     * is the raw sand average — here it is the effective tinted-sand color (the
-     * result of applying {@link #BIOME_TINT_FADED} to the sand texture average).
-     *
-     * Tuning history:
-     *   - 0x90A460: matched BIOME_TINT_FADED 0xFFE06A — replaced when BIOME_TINT_FADED
-     *     was retuned to 0xFFA040.
-     *   - 0x907438 (current): matches BIOME_TINT_FADED 0xFFA040's effective output
-     */
-    public static final int EDGE_TINT_FADED = 0x907438;
 
     /**
      * Multiplicative tint applied to Temporal Sand / Temporal Gravel at Chebyshev
@@ -176,8 +172,13 @@ public final class TemporalGrassEdgeTint {
             return DEFAULT_FALLBACK;
         }
         int base = BiomeColors.getAverageGrassColor(world, pos);
-        int edgeTint = isInFadedPlains(pos) ? EDGE_TINT_FADED : EDGE_TINT;
-        return blend(world, pos, base, edgeTint);
+        // Sand-adjacent grass always uses the cool EDGE_TINT so it matches vanilla
+        // blue desert sand at the biome boundary. In Faded Plains, gravel-adjacent
+        // grass suppresses the gradient (passes baseTint as the lerp target so the
+        // result is unchanged) — the warm gradient otherwise reads as too dark
+        // against the warm-tinted gravel itself.
+        int gravelEdge = isInFadedPlains(pos) ? base : EDGE_TINT;
+        return blend(world, pos, base, EDGE_TINT, gravelEdge);
     }
 
     /**
@@ -216,7 +217,12 @@ public final class TemporalGrassEdgeTint {
         if (tintIndex != 0) return -1;
         if (world == null || pos == null) return 0xFFFFFF;
         boolean nearGrass = scanForGrassNeighbor(world, pos);
-        if (isInFadedPlains(pos)) {
+        // Faded Plains warm tint applies to Temporal Gravel only. Sand (Temporal or vanilla)
+        // keeps the cool original tint so it stays continuous with vanilla blue desert sand
+        // at biome boundaries (Faded Plains is climatically adjacent to desert).
+        boolean isSand = state.is(ModBlocks.TEMPORAL_SAND.get()) || state.is(Blocks.SAND);
+        boolean fadedGravel = !isSand && isInFadedPlains(pos);
+        if (fadedGravel) {
             int result = BIOME_TINT_FADED;
             // No-op while SAND_NEIGHBOR_TINT_FADED == 0xFFFFFF; tuning hook — see constant Javadoc.
             if (nearGrass) result = multiplyRgb(result, SAND_NEIGHBOR_TINT_FADED);
@@ -227,12 +233,15 @@ public final class TemporalGrassEdgeTint {
 
     /**
      * Pure blend: scan the {@code RADIUS}-block Chebyshev neighborhood and
-     * apply up to two tint layers — one for sand/gravel edge proximity
-     * (toward {@code edgeTint}) and one for water proximity
-     * (toward {@link #WET_TINT}). Both scans share the same loop.
+     * apply up to two tint layers — one for sand/gravel edge proximity (toward
+     * {@code sandEdgeTint} or {@code gravelEdgeTint} depending on which trigger
+     * type is closest, with sand winning ties) and one for water proximity
+     * (toward {@link #WET_TINT}). All scans share the same loop.
      */
-    static int blend(BlockGetter world, BlockPos pos, int baseTint, int edgeTint) {
-        int minDistEdge = RADIUS + 1;
+    static int blend(BlockGetter world, BlockPos pos, int baseTint,
+                     int sandEdgeTint, int gravelEdgeTint) {
+        int minDistSand = RADIUS + 1;
+        int minDistGravel = RADIUS + 1;
         int minDistWater = WATER_RADIUS + 1;
         BlockPos.MutableBlockPos cur = new BlockPos.MutableBlockPos();
         outer:
@@ -240,13 +249,17 @@ public final class TemporalGrassEdgeTint {
             for (int dz = -RADIUS; dz <= RADIUS; dz++) {
                 if (dx == 0 && dz == 0) continue;
                 int d = Math.max(Math.abs(dx), Math.abs(dz));
-                boolean canImproveEdge = d < minDistEdge;
+                boolean canImproveSand = d < minDistSand;
+                boolean canImproveGravel = d < minDistGravel;
                 boolean canImproveWater = d <= WATER_RADIUS && d < minDistWater;
-                if (!canImproveEdge && !canImproveWater) continue;
+                if (!canImproveSand && !canImproveGravel && !canImproveWater) continue;
                 cur.set(pos.getX() + dx, pos.getY(), pos.getZ() + dz);
                 BlockState neighbor = world.getBlockState(cur);
-                if (canImproveEdge && isEdgeTrigger(neighbor)) {
-                    minDistEdge = d;
+                if (canImproveSand && isSandEdgeTrigger(neighbor)) {
+                    minDistSand = d;
+                }
+                if (canImproveGravel && isGravelEdgeTrigger(neighbor)) {
+                    minDistGravel = d;
                 }
                 if (canImproveWater) {
                     if (isWater(neighbor)) {
@@ -259,12 +272,15 @@ public final class TemporalGrassEdgeTint {
                         cur.setY(pos.getY());
                     }
                 }
-                if (minDistEdge == 1 && minDistWater == 1) break outer;
+                if (minDistSand == 1 && minDistGravel == 1 && minDistWater == 1) break outer;
             }
         }
         int result = baseTint;
+        int minDistEdge = Math.min(minDistSand, minDistGravel);
         if (minDistEdge <= RADIUS) {
             float t = (RADIUS + 1 - minDistEdge) / (float) (RADIUS + 1);
+            // Sand wins ties so the gradient stays continuous with neighboring desert sand.
+            int edgeTint = (minDistSand <= minDistGravel) ? sandEdgeTint : gravelEdgeTint;
             result = lerpRgb(result, edgeTint, t);
         }
         if (minDistWater <= WATER_RADIUS) {
@@ -274,10 +290,13 @@ public final class TemporalGrassEdgeTint {
         return result;
     }
 
-    static boolean isEdgeTrigger(BlockState state) {
+    static boolean isSandEdgeTrigger(BlockState state) {
         return state.is(ModBlocks.TEMPORAL_SAND.get())
-            || state.is(ModBlocks.TEMPORAL_GRAVEL.get())
-            || state.is(Blocks.SAND)
+            || state.is(Blocks.SAND);
+    }
+
+    static boolean isGravelEdgeTrigger(BlockState state) {
+        return state.is(ModBlocks.TEMPORAL_GRAVEL.get())
             || state.is(Blocks.GRAVEL);
     }
 
