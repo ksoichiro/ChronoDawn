@@ -3,12 +3,20 @@
   "config": {
     "features": [
       {
+        "feature": "chronodawn:dark_time_wood_tree_short_placed",
+        "chance": 0.35
+      },
+      {
+        "feature": "chronodawn:dark_time_wood_tree_medium_placed",
+        "chance": 0.45
+      },
+      {
         "feature": "chronodawn:dark_time_wood_tree_tall_placed",
-        "chance": 0.25
+        "chance": 0.15
       },
       {
         "feature": "chronodawn:dark_time_wood_tree_wide_placed",
-        "chance": 0.25
+        "chance": 0.15
       }
     ],
     "default": "chronodawn:dark_time_wood_tree_standard_placed"
