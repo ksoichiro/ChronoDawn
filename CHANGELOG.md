@@ -27,7 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Pre-existing chunks retain whatever they generated; only newly generated chunks place Lumen Polyp
 
 #### New Biomes
-- **Faded Plains** (`chronodawn:chronodawn_faded_plains`) — a time-worn wasteland in the hot/medium-humidity slot of the Chrono Dawn dimension, adjacent to the desert. Yellow-brown ground tint, sparse withered grass, dead bushes, parched-dirt patches, and bare snags from long-stripped trees. Reduced fauna (only Timebound Rabbit and Time Keeper). No precipitation. Worldgen places `patch_faded_grass`, `patch_temporal_dead_bush`, `disk_parched_temporal_dirt`, and `dead_snag_placed` features on the surface.
+- **Faded Plains** (`chronodawn:chronodawn_faded_plains`) — a time-worn wasteland in the hot/medium-humidity slot of the Chrono Dawn dimension, adjacent to the desert. Yellow-brown ground tint, sparse withered grass, dead bushes, parched-dirt patches, and bare snags from long-stripped trees. Reduced fauna (only Timebound Rabbit and Time Keeper). No precipitation. Worldgen places `patch_faded_grass`, `patch_temporal_dead_bush`, `disk_parched_temporal_dirt`, and `dead_snag_placed` features on the surface. Temporal Gravel patches generated in this biome adopt a warm yellow-brown tint to fit the withered theme; Temporal Sand keeps its original cool color so it stays visually continuous with neighboring desert sand. The grass-edge gradient pulls cool near sand and is suppressed near gravel inside the biome (no overcrowded brown-on-brown bands).
 
 ## [0.7.0] - 2026-04-22
 
