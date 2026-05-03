@@ -2,6 +2,7 @@ package com.chronodawn.fabric.client;
 
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.entities.boats.ChronoDawnBoatType;
+import com.chronodawn.client.CobwebColorProvider;
 import com.chronodawn.client.LeafColorProvider;
 import com.chronodawn.client.TemporalGrassEdgeTint;
 import com.chronodawn.client.TemporalPlantColorProvider;
@@ -155,6 +156,12 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             ModBlocks.TEMPORAL_TALL_GRASS.get(),
             ModBlocks.TEMPORAL_FERN.get(),
             ModBlocks.TEMPORAL_GRASS.get()
+        );
+
+        ColorProviderRegistry.BLOCK.register(
+            (state, world, pos, tintIndex) ->
+                CobwebColorProvider.blockTint(world, pos, tintIndex),
+            ModBlocks.CHRONO_COBWEB.get()
         );
 
         // Register Temporal Sand / Gravel sand-side gradient: at d=1 from a Temporal

@@ -907,6 +907,13 @@ public class ModBlocks {
         () -> new DuskBellBlock(DuskBellBlock.createProperties())
     );
 
+    public static final RegistrySupplier<Block> CHRONO_COBWEB = BLOCKS.register(
+        ModBlockId.CHRONO_COBWEB.id(),
+        () -> new net.minecraft.world.level.block.WebBlock(CompatBlockProperties.ofFullCopy(Blocks.COBWEB)
+            .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                com.chronodawn.compat.CompatResourceLocation.create(ChronoDawn.MOD_ID, ModBlockId.CHRONO_COBWEB.id()))))
+    );
+
     public static final RegistrySupplier<Block> TEMPORAL_TALL_GRASS = BLOCKS.register(
         ModBlockId.TEMPORAL_TALL_GRASS.id(),
         () -> new TemporalTallGrassBlock(TemporalTallGrassBlock.createProperties())

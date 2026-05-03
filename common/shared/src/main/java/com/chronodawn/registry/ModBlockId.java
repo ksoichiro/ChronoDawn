@@ -192,6 +192,7 @@ public enum ModBlockId {
     PURPLE_TIME_BLOSSOM(def("purple_time_blossom").cutout()),
     DAWN_BELL(def("dawn_bell").cutout()),
     DUSK_BELL(def("dusk_bell").cutout()),
+    CHRONO_COBWEB(def("chrono_cobweb").cutout()),
     TEMPORAL_TALL_GRASS(def("temporal_tall_grass").cutout()),
     TEMPORAL_FERN(def("temporal_fern").cutout()),
     TEMPORAL_GRASS(def("temporal_grass").cutout()),

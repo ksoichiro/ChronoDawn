@@ -5,6 +5,7 @@ import com.chronodawn.client.TemporalGrassEdgeTint;
 import com.chronodawn.gui.ChronicleScreen;
 import com.chronodawn.gui.data.ChronicleData;
 import com.chronodawn.items.ChronicleBookItem;
+import com.chronodawn.client.CobwebColorProvider;
 import com.chronodawn.client.LeafColorProvider;
 import com.chronodawn.client.TemporalPlantColorProvider;
 import com.chronodawn.client.model.*;
@@ -442,6 +443,12 @@ public class ChronoDawnClientNeoForge {
             ModBlocks.TEMPORAL_TALL_GRASS.get(),
             ModBlocks.TEMPORAL_FERN.get(),
             ModBlocks.TEMPORAL_GRASS.get()
+        );
+
+        event.register(
+            (state, world, pos, tintIndex) ->
+                CobwebColorProvider.blockTint(world, pos, tintIndex),
+            ModBlocks.CHRONO_COBWEB.get()
         );
 
         // Register Temporal Sand / Gravel sand-side gradient: at d=1 from a Temporal
