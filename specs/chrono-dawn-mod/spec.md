@@ -364,7 +364,7 @@ The player uses the Master Clock Key to reach the deepest chamber and battles th
 
 ### Measurable Outcomes
 
-- **SC-001**: Players can discover Ancient Ruins in the Overworld and obtain materials and blueprints necessary for entering Chrono Dawn within 10 minutes
+- **SC-001**: Players can discover Ancient Ruins in the Overworld and obtain materials and blueprints necessary for entering Chrono Dawn within 30 minutes of deliberate exploration
 - **SC-002**: After entering Chrono Dawn, players can create Portal Stabilizer and secure return path to Overworld within 30 minutes
 - **SC-003**: Mobs in Chrono Dawn show 50% or more speed reduction compared to normal mobs, allowing players to engage in strategic combat
 - **SC-004**: Players can explore Desert Clock Tower and obtain Enhanced Clockstone and time manipulation items within 20 minutes
