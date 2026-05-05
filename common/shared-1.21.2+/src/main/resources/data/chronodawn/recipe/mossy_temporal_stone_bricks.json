@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "building_blocks",
+  "ingredients": [
+    "chronodawn:temporal_stone_bricks",
+    "minecraft:moss_block"
+  ],
+  "result": {
+    "id": "chronodawn:mossy_temporal_stone_bricks",
+    "count": 1
+  }
+}

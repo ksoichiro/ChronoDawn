@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building_blocks",
+  "pattern": [
+    "BBB"
+  ],
+  "key": {
+    "B": "chronodawn:mossy_temporal_stone_bricks"
+  },
+  "result": {
+    "id": "chronodawn:mossy_temporal_stone_bricks_slab",
+    "count": 6
+  }
+}

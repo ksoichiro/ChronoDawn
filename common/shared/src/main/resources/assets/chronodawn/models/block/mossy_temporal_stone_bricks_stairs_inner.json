@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "chronodawn:block/mossy_temporal_stone_bricks",
+    "top": "chronodawn:block/mossy_temporal_stone_bricks",
+    "side": "chronodawn:block/mossy_temporal_stone_bricks"
+  }
+}
