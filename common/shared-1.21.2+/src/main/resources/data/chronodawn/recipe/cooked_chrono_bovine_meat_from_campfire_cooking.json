@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:campfire_cooking",
+  "category": "food",
+  "cookingtime": 600,
+  "experience": 0.35,
+  "ingredient": "chronodawn:chrono_bovine_meat",
+  "result": {
+    "id": "chronodawn:cooked_chrono_bovine_meat"
+  }
+}

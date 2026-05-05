@@ -2500,6 +2500,36 @@ public class ModItems {
     // === GlideFish Items ===
 
     /**
+     * Chrono Bovine Meat - Food item dropped by Chrono Bovine.
+     * Nutrition: 3, Saturation: 0.3 (equivalent to beef).
+     */
+    public static final RegistrySupplier<Item> CHRONO_BOVINE_MEAT = ITEMS.register(
+        ModItemId.CHRONO_BOVINE_MEAT.id(),
+        () -> new Item(new Item.Properties()
+                .food(new net.minecraft.world.food.FoodProperties.Builder()
+                    .nutrition(3)
+                    .saturationModifier(0.3f)
+                    .build())
+                .setId(ResourceKey.create(Registries.ITEM,
+                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CHRONO_BOVINE_MEAT.id()))))
+    );
+
+    /**
+     * Cooked Chrono Bovine Meat - Cooked version of Chrono Bovine Meat.
+     * Nutrition: 8, Saturation: 0.8 (equivalent to steak).
+     */
+    public static final RegistrySupplier<Item> COOKED_CHRONO_BOVINE_MEAT = ITEMS.register(
+        ModItemId.COOKED_CHRONO_BOVINE_MEAT.id(),
+        () -> new Item(new Item.Properties()
+                .food(new net.minecraft.world.food.FoodProperties.Builder()
+                    .nutrition(8)
+                    .saturationModifier(0.8f)
+                    .build())
+                .setId(ResourceKey.create(Registries.ITEM,
+                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.COOKED_CHRONO_BOVINE_MEAT.id()))))
+    );
+
+    /**
      * Glide Fish - Food item dropped by GlideFish.
      * Restores 2 hunger points (raw fish equivalent).
      */
@@ -3044,6 +3074,8 @@ public class ModItems {
         output.accept(GOLDEN_TIME_WHEAT.get());
 
         // === Fish Foods ===
+        output.accept(CHRONO_BOVINE_MEAT.get());
+        output.accept(COOKED_CHRONO_BOVINE_MEAT.get());
         output.accept(GLIDE_FISH.get());
         output.accept(COOKED_GLIDE_FISH.get());
         output.accept(DRIED_TEMPORAL_KELP.get());

@@ -33,7 +33,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:beef",
+          "name": "chronodawn:chrono_bovine_meat",
           "functions": [
             {
               "function": "minecraft:set_count",

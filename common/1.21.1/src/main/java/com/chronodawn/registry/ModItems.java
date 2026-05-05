@@ -1756,6 +1756,34 @@ public class ModItems {
     // === Mob Drops ===
 
     /**
+     * Chrono Bovine Meat - Food item dropped by Chrono Bovine.
+     * Nutrition: 3, Saturation: 0.3 (equivalent to beef).
+     */
+    public static final RegistrySupplier<Item> CHRONO_BOVINE_MEAT = ITEMS.register(
+        ModItemId.CHRONO_BOVINE_MEAT.id(),
+        () -> new Item(new Item.Properties().food(
+            new net.minecraft.world.food.FoodProperties.Builder()
+                .nutrition(3)
+                .saturationModifier(0.3f)
+                .build()
+        ))
+    );
+
+    /**
+     * Cooked Chrono Bovine Meat - Cooked version of Chrono Bovine Meat.
+     * Nutrition: 8, Saturation: 0.8 (equivalent to steak).
+     */
+    public static final RegistrySupplier<Item> COOKED_CHRONO_BOVINE_MEAT = ITEMS.register(
+        ModItemId.COOKED_CHRONO_BOVINE_MEAT.id(),
+        () -> new Item(new Item.Properties().food(
+            new net.minecraft.world.food.FoodProperties.Builder()
+                .nutrition(8)
+                .saturationModifier(0.8f)
+                .build()
+        ))
+    );
+
+    /**
      * Glide Fish - Food item dropped by Glide Fish.
      * Nutrition: 2, Saturation: 0.1
      */
@@ -2507,6 +2535,8 @@ public class ModItems {
         output.accept(GOLDEN_TIME_WHEAT.get());
 
         // === Fish Foods ===
+        output.accept(CHRONO_BOVINE_MEAT.get());
+        output.accept(COOKED_CHRONO_BOVINE_MEAT.get());
         output.accept(GLIDE_FISH.get());
         output.accept(COOKED_GLIDE_FISH.get());
 

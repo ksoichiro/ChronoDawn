@@ -248,6 +248,8 @@ public enum ModItemId {
     CHRONO_MELON_JUICE("chrono_melon_juice"),
     TIMELESS_MUSHROOM("timeless_mushroom"),
     TIMELESS_MUSHROOM_SOUP("timeless_mushroom_soup"),
+    CHRONO_BOVINE_MEAT("chrono_bovine_meat"),
+    COOKED_CHRONO_BOVINE_MEAT("cooked_chrono_bovine_meat"),
     GLIDE_FISH("glide_fish"),
     COOKED_GLIDE_FISH("cooked_glide_fish"),
 
