@@ -6,4 +6,5 @@ import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
  * Render state for Hourglass Golem entity.
  */
 public class HourglassGolemRenderState extends LivingEntityRenderState {
+    public float attackTime;
 }

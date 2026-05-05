@@ -27,6 +27,12 @@ public class HourglassGolemRenderer extends MobRenderer<HourglassGolemEntity, Ho
     }
 
     @Override
+    public void extractRenderState(HourglassGolemEntity entity, HourglassGolemRenderState state, float partialTick) {
+        super.extractRenderState(entity, state, partialTick);
+        state.attackTime = entity.getAttackAnim(partialTick);
+    }
+
+    @Override
     public ResourceLocation getTextureLocation(HourglassGolemRenderState state) {
         return TEXTURE;
     }

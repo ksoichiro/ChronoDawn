@@ -105,6 +105,14 @@ public class HourglassGolemModel extends EntityModel<HourglassGolemEntity> {
         // Head look direction
         this.head.yRot = netHeadYaw * ((float) Math.PI / 180F);
         this.head.xRot = headPitch * ((float) Math.PI / 180F);
+
+        // Attack animation - Iron Golem-style overhead slam (both arms straight up at peak)
+        if (entity.attackAnim > 0.0F) {
+            float armRaise = Mth.sin(entity.attackAnim * (float)Math.PI);
+            float armRot = -(float)Math.PI * armRaise;
+            this.leftArm.xRot = armRot;
+            this.rightArm.xRot = armRot;
+        }
     }
 
     @Override
