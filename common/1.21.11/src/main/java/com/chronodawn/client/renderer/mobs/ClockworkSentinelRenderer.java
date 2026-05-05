@@ -31,6 +31,12 @@ public class ClockworkSentinelRenderer extends MobRenderer<ClockworkSentinelEnti
     }
 
     @Override
+    public void extractRenderState(ClockworkSentinelEntity entity, ClockworkSentinelRenderState state, float partialTick) {
+        super.extractRenderState(entity, state, partialTick);
+        state.attackTime = entity.getAttackAnim(partialTick);
+    }
+
+    @Override
     public Identifier getTextureLocation(ClockworkSentinelRenderState state) {
         return TEXTURE;
     }

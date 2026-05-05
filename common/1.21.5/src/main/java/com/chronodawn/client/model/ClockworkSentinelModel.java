@@ -80,5 +80,13 @@ public class ClockworkSentinelModel extends EntityModel<ClockworkSentinelRenderS
         // Arm animation (walking)
         this.right_arm.xRot = Mth.cos(state.walkAnimationPos * 0.6662F + (float)Math.PI) * 2.0F * state.walkAnimationSpeed * 0.5F;
         this.left_arm.xRot = Mth.cos(state.walkAnimationPos * 0.6662F) * 2.0F * state.walkAnimationSpeed * 0.5F;
+
+        // Attack animation - Iron Golem-style overhead slam (both arms straight up at peak)
+        if (state.attackTime > 0.0F) {
+            float armRaise = Mth.sin(state.attackTime * (float)Math.PI);
+            float armRot = -(float)Math.PI * armRaise;
+            this.left_arm.xRot = armRot;
+            this.right_arm.xRot = armRot;
+        }
     }
 }
