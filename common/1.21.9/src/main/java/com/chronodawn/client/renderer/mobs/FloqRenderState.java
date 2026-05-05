@@ -10,4 +10,5 @@ public class FloqRenderState extends LivingEntityRenderState {
     public float squish;
     public float oSquish;
     public boolean onGround;
+    public float attackTime;
 }

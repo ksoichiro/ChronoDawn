@@ -38,6 +38,7 @@ public class FloqRenderer extends MobRenderer<FloqEntity, FloqRenderState, FloqM
         state.squish = Mth.lerp(partialTick, entity.oSquish, entity.squish);
         state.oSquish = entity.oSquish; // Keep for reference
         state.onGround = entity.onGround();
+        state.attackTime = entity.getAttackAnim(partialTick);
     }
 
     @Override

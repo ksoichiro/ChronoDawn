@@ -9,6 +9,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import com.chronodawn.compat.CompatResourceLocation;
 
 /**
@@ -54,6 +55,13 @@ public class FloqModel extends EntityModel<FloqEntity> {
     public void setupAnim(FloqEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         // Animation is handled by FloqRenderer.scale() method
         // No per-frame setup needed here
+
+        // Attack animation - jaw gapes and body tilts forward (Slime/Ghast-style lunge)
+        if (entity.attackAnim > 0.0F) {
+            float progress = Mth.sin(entity.attackAnim * (float)Math.PI);
+            this.mouth.xRot += 0.5F * progress;
+            this.body.xRot += 0.2F * progress;
+        }
     }
 
     @Override

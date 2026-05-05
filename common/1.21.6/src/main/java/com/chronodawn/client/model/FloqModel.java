@@ -9,6 +9,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import com.chronodawn.compat.CompatResourceLocation;
 
 /**
@@ -56,6 +57,13 @@ public class FloqModel extends EntityModel<FloqRenderState> {
         super.setupAnim(state);
         // Animation is handled by FloqRenderer.scale() method
         // No per-frame setup needed here
+
+        // Attack animation - jaw gapes and body tilts forward (Slime/Ghast-style lunge)
+        if (state.attackTime > 0.0F) {
+            float progress = Mth.sin(state.attackTime * (float)Math.PI);
+            this.mouth.xRot += 0.5F * progress;
+            this.body.xRot += 0.2F * progress;
+        }
     }
 
     // Note: renderToBuffer() is now final in 1.21.2 and automatically renders all child parts.
