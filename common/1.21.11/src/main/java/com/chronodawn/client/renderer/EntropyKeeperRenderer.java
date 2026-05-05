@@ -38,6 +38,12 @@ public class EntropyKeeperRenderer extends MobRenderer<EntropyKeeperEntity, Entr
     }
 
     @Override
+    public void extractRenderState(EntropyKeeperEntity entity, EntropyKeeperRenderState state, float partialTick) {
+        super.extractRenderState(entity, state, partialTick);
+        state.attackTime = entity.getAttackAnim(partialTick);
+    }
+
+    @Override
     public Identifier getTextureLocation(EntropyKeeperRenderState state) {
         return TEXTURE;
     }

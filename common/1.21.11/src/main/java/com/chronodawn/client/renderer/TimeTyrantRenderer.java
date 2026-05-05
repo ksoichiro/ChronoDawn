@@ -40,6 +40,12 @@ public class TimeTyrantRenderer extends MobRenderer<TimeTyrantEntity, TimeTyrant
     }
 
     @Override
+    public void extractRenderState(TimeTyrantEntity entity, TimeTyrantRenderState state, float partialTick) {
+        super.extractRenderState(entity, state, partialTick);
+        state.attackTime = entity.getAttackAnim(partialTick);
+    }
+
+    @Override
     public Identifier getTextureLocation(TimeTyrantRenderState state) {
         return TEXTURE;
     }

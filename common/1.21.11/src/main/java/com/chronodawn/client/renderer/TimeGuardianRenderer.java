@@ -40,6 +40,12 @@ public class TimeGuardianRenderer extends MobRenderer<TimeGuardianEntity, TimeGu
     }
 
     @Override
+    public void extractRenderState(TimeGuardianEntity entity, TimeGuardianRenderState state, float partialTick) {
+        super.extractRenderState(entity, state, partialTick);
+        state.attackTime = entity.getAttackAnim(partialTick);
+    }
+
+    @Override
     public Identifier getTextureLocation(TimeGuardianRenderState state) {
         return TEXTURE;
     }

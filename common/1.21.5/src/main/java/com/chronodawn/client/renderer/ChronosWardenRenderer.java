@@ -33,6 +33,12 @@ public class ChronosWardenRenderer extends MobRenderer<ChronosWardenEntity, Chro
     }
 
     @Override
+    public void extractRenderState(ChronosWardenEntity entity, ChronosWardenRenderState state, float partialTick) {
+        super.extractRenderState(entity, state, partialTick);
+        state.attackTime = entity.getAttackAnim(partialTick);
+    }
+
+    @Override
     public ResourceLocation getTextureLocation(ChronosWardenRenderState state) {
         return TEXTURE;
     }

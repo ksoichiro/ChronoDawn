@@ -46,6 +46,7 @@ public class TemporalPhantomRenderer extends MobRenderer<TemporalPhantomEntity, 
     public void extractRenderState(TemporalPhantomEntity entity, TemporalPhantomRenderState state, float partialTick) {
         super.extractRenderState(entity, state, partialTick);
         state.phaseShiftActive = entity.isPhaseShiftActive();
+        state.attackTime = entity.getAttackAnim(partialTick);
     }
 
     @Override
