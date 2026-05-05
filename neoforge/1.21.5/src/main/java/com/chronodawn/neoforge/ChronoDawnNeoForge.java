@@ -289,6 +289,11 @@ public class ChronoDawnNeoForge {
             TickingSheepEntity.createAttributes().build()
         );
 
+        event.put(
+            ModEntities.CHRONO_BOVINE.get(),
+            ChronoBovineEntity.createAttributes().build()
+        );
+
         ChronoDawn.LOGGER.debug("Registered entity attributes for NeoForge");
     }
 
@@ -470,6 +475,15 @@ public class ChronoDawnNeoForge {
             SpawnPlacementTypes.ON_GROUND,
             Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             TickingSheepEntity::checkTickingSheepSpawnRules,
+            RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+
+        // Chrono Bovine - spawns on ground like animals
+        event.register(
+            ModEntities.CHRONO_BOVINE.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            ChronoBovineEntity::checkChronoBovineSpawnRules,
             RegisterSpawnPlacementsEvent.Operation.REPLACE
         );
 

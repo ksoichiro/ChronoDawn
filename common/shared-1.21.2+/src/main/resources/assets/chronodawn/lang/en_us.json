@@ -483,6 +483,8 @@
 
   "entity.chronodawn.ticking_sheep": "Ticking Sheep",
   "item.chronodawn.ticking_sheep_spawn_egg": "Ticking Sheep Spawn Egg",
+  "entity.chronodawn.chrono_bovine": "Chrono Bovine",
+  "item.chronodawn.chrono_bovine_spawn_egg": "Chrono Bovine Spawn Egg",
 
   "block.chronodawn.temporal_stone": "Temporal Stone",
   "block.chronodawn.temporal_cobblestone": "Temporal Cobblestone",

@@ -338,6 +338,7 @@
   "entity.chronodawn.pulse_hog": "Pulse Hog",
   "entity.chronodawn.secondwing_fowl": "Secondwing Fowl",
   "entity.chronodawn.ticking_sheep": "Ticking Sheep",
+  "entity.chronodawn.chrono_bovine": "Chrono Bovine",
 
   "biome.chronodawn.chronodawn_plains": "Chrono Dawn Plains",
   "biome.chronodawn.chronodawn_prairies": "Chrono Dawn Prairies",
@@ -452,6 +453,7 @@
   "item.chronodawn.pulse_hog_spawn_egg": "Pulse Hog Spawn Egg",
   "item.chronodawn.secondwing_fowl_spawn_egg": "Secondwing Fowl Spawn Egg",
   "item.chronodawn.ticking_sheep_spawn_egg": "Ticking Sheep Spawn Egg",
+  "item.chronodawn.chrono_bovine_spawn_egg": "Chrono Bovine Spawn Egg",
   "item.chronodawn.glide_fish": "Glide Fish",
   "item.chronodawn.cooked_glide_fish": "Cooked Glide Fish",
   "item.chronodawn.dried_temporal_kelp": "Dried Temporal Kelp",

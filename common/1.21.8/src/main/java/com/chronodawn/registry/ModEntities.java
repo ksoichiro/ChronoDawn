@@ -447,6 +447,21 @@ public class ModEntities {
             .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.TICKING_SHEEP.id())))
     );
 
+    /**
+     * Chrono Bovine - Friendly creature similar to vanilla Cow
+     *
+     * Spawns in ChronoDawn dimension biomes, replacing vanilla cows.
+     * Drops beef and leather, can be milked with an empty bucket.
+     */
+    public static final RegistrySupplier<EntityType<ChronoBovineEntity>> CHRONO_BOVINE = ENTITIES.register(
+        ModEntityId.CHRONO_BOVINE.id(),
+        () -> EntityType.Builder.of(ChronoBovineEntity::new, MobCategory.CREATURE)
+            .sized(0.9f, 1.4f)  // Same as vanilla cow
+            .clientTrackingRange(10)
+            .updateInterval(3)
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.CHRONO_BOVINE.id())))
+    );
+
     // === Boat Entities ===
 
     /**

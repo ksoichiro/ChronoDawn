@@ -79,7 +79,7 @@
     ],
     "creature": [
       {
-        "type": "minecraft:cow",
+        "type": "chronodawn:chrono_bovine",
         "weight": 8,
         "minCount": 4,
         "maxCount": 4

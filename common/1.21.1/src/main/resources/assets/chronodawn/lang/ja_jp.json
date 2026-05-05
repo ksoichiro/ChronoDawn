@@ -338,6 +338,7 @@
   "entity.chronodawn.pulse_hog": "パルス・ホッグ",
   "entity.chronodawn.secondwing_fowl": "セカンドウィング・ファウル",
   "entity.chronodawn.ticking_sheep": "ティッキング・シープ",
+  "entity.chronodawn.chrono_bovine": "クロノバヴァイン",
 
   "biome.chronodawn.chronodawn_plains": "クロノドーン平原",
   "biome.chronodawn.chronodawn_prairies": "クロノドーン草原",
@@ -452,6 +453,7 @@
   "item.chronodawn.pulse_hog_spawn_egg": "パルス・ホッグのスポーンエッグ",
   "item.chronodawn.secondwing_fowl_spawn_egg": "セカンドウィング・ファウルのスポーンエッグ",
   "item.chronodawn.ticking_sheep_spawn_egg": "ティッキング・シープのスポーンエッグ",
+  "item.chronodawn.chrono_bovine_spawn_egg": "クロノバヴァインのスポーンエッグ",
   "item.chronodawn.glide_fish": "グライドフィッシュ",
   "item.chronodawn.cooked_glide_fish": "焼きグライドフィッシュ",
   "item.chronodawn.dried_temporal_kelp": "時の乾燥コンブ",

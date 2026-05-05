@@ -204,6 +204,11 @@ public class ChronoDawnFabric implements ModInitializer {
             TickingSheepEntity.createAttributes()
         );
 
+        FabricDefaultAttributeRegistry.register(
+            ModEntities.CHRONO_BOVINE.get(),
+            ChronoBovineEntity.createAttributes()
+        );
+
         ChronoDawn.LOGGER.debug("Registered entity attributes for Fabric");
     }
 
@@ -354,6 +359,14 @@ public class ChronoDawnFabric implements ModInitializer {
             SpawnPlacementTypes.ON_GROUND,
             Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             TickingSheepEntity::checkTickingSheepSpawnRules
+        );
+
+        // Chrono Bovine - spawns on ground like animals
+        SpawnPlacements.register(
+            ModEntities.CHRONO_BOVINE.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            ChronoBovineEntity::checkChronoBovineSpawnRules
         );
 
         ChronoDawn.LOGGER.debug("Registered spawn placements for custom mobs");

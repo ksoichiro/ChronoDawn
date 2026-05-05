@@ -358,6 +358,12 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             TickingSheepWoolModel.LAYER_LOCATION,
             TickingSheepWoolModel::createBodyLayer
         );
+
+        // Register Chrono Bovine model layer
+        EntityModelLayerRegistry.registerModelLayer(
+            ChronoBovineModel.LAYER_LOCATION,
+            ChronoBovineModel::createBodyLayer
+        );
     }
 
     /**
@@ -537,6 +543,12 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
         EntityRendererRegistry.register(
             ModEntities.TICKING_SHEEP.get(),
             TickingSheepRenderer::new
+        );
+
+        // Register Chrono Bovine renderer
+        EntityRendererRegistry.register(
+            ModEntities.CHRONO_BOVINE.get(),
+            ChronoBovineRenderer::new
         );
 
         // Register ChronoDawn Boat with custom renderer

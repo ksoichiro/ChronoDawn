@@ -2101,6 +2101,22 @@ public class ModItems {
         )
     );
 
+    /**
+     * Chrono Bovine Spawn Egg
+     *
+     * Primary color: Dark navy (0x1A2A4A) - Background
+     * Secondary color: Gold (0xD4AF37) - Spots
+     */
+    public static final RegistrySupplier<Item> CHRONO_BOVINE_SPAWN_EGG = ITEMS.register(
+        ModItemId.CHRONO_BOVINE_SPAWN_EGG.id(),
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.CHRONO_BOVINE,
+            0x1A2A4A, // Background: Dark navy
+            0xD4AF37, // Spots: Gold
+            new Item.Properties()
+        )
+    );
+
     // === Boats ===
 
     /**
@@ -2268,6 +2284,10 @@ public class ModItems {
 
         if (TICKING_SHEEP_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
             ((com.chronodawn.items.DeferredSpawnEggItem) TICKING_SHEEP_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (CHRONO_BOVINE_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) CHRONO_BOVINE_SPAWN_EGG.get()).initializeSpawnEgg();
         }
 
         ChronoDawn.LOGGER.debug("Spawn eggs initialized");
@@ -2605,6 +2625,9 @@ public class ModItems {
         }
         if (TICKING_SHEEP_SPAWN_EGG.isPresent()) {
             output.accept(TICKING_SHEEP_SPAWN_EGG.get());
+        }
+        if (CHRONO_BOVINE_SPAWN_EGG.isPresent()) {
+            output.accept(CHRONO_BOVINE_SPAWN_EGG.get());
         }
     }
 }
