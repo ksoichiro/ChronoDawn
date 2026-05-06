@@ -27,6 +27,14 @@ public final class TemporalPlantColorProvider {
     public static final int BASELINE = 0x5B8AC4;
 
     /**
+     * Faded Plains override for blue-baked Temporal plants. Multiplicative
+     * tinting cannot add red to the teal source texture, so this keeps red
+     * open while lowering green and blue to read as a muted dry brown instead
+     * of living olive.
+     */
+    public static final int FADED_PLAINS_TINT = 0xFFA850;
+
+    /**
      * Blend factor toward biome color. Currently {@code 0.8f} (80% biome, 20% baseline);
      * {@code 0.0f} = baseline only, {@code 1.0f} = full biome match.
      * Tunable without texture re-bake.
@@ -39,6 +47,8 @@ public final class TemporalPlantColorProvider {
     public static int blockTint(BlockAndTintGetter world, BlockPos pos, int tintIndex) {
         if (tintIndex != 0) return -1;
         if (world == null || pos == null) return 0xFFFFFF;
+
+        if (TemporalGrassEdgeTint.isInFadedPlains(pos)) return FADED_PLAINS_TINT;
 
         int biome = BiomeColors.getAverageGrassColor(world, pos);
         int rTint = blendChannel((biome >> 16) & 0xFF, (BASELINE >> 16) & 0xFF);
