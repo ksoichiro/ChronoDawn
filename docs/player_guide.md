@@ -200,7 +200,7 @@ Chrono Dawn contains **11 unique biomes**:
 4. **Chrono Dawn Mountain** - High peaks and steep cliffs
 5. **Chrono Dawn Ocean** - Deep waters
 6. **Chrono Dawn Snowy** - Frozen landscape with **Frozen Time Ice**
-7. **Chrono Dawn Swamp** - Murky waters and unique vegetation
+7. **Chrono Dawn Swamp** - Murky shallow ponds, mud patches, and unique vegetation
 8. **Chrono Dawn Dark Forest** - Dense with **Dark Time Wood** trees
 9. **Chrono Dawn Ancient Forest** - Contains **Ancient Time Wood** trees
 10. **Chrono Dawn Prairies** - Open grasslands
