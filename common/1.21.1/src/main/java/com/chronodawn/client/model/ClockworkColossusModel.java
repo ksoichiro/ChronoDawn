@@ -129,6 +129,15 @@ public class ClockworkColossusModel extends EntityModel<ClockworkColossusEntity>
         // Add slight arm swing for idle animation
         this.right_arm.zRot = 0.0F;
         this.left_arm.zRot = 0.0F;
+
+        // Attack animation - boss-scale Iron Golem slam (arms overhead, slight forward lean)
+        if (entity.attackAnim > 0.0F) {
+            float armRaise = Mth.sin(entity.attackAnim * (float)Math.PI);
+            float armRot = -(float)Math.PI * armRaise;
+            this.left_arm.xRot = armRot;
+            this.right_arm.xRot = armRot;
+            this.body.xRot += 0.15F * armRaise;
+        }
     }
 
     @Override
