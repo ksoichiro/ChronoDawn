@@ -400,6 +400,10 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             ChronoBovineModel.LAYER_LOCATION,
             ChronoBovineModel::createBodyLayer
         );
+        EntityModelLayerRegistry.registerModelLayer(
+            TemporalCapridModel.LAYER_LOCATION,
+            TemporalCapridModel::createBodyLayer
+        );
     }
 
     /**
@@ -573,6 +577,11 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
         EntityRendererRegistry.register(
             ModEntities.CHRONO_BOVINE.get(),
             ChronoBovineRenderer::new
+        );
+
+        EntityRendererRegistry.register(
+            ModEntities.TEMPORAL_CAPRID.get(),
+            TemporalCapridRenderer::new
         );
     }
 

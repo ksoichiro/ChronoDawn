@@ -76,7 +76,7 @@
     ],
     "creature": [
       {
-        "type": "minecraft:goat",
+        "type": "chronodawn:temporal_caprid",
         "weight": 5,
         "minCount": 1,
         "maxCount": 3

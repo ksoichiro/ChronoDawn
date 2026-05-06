@@ -487,6 +487,8 @@
   "item.chronodawn.ticking_sheep_spawn_egg": "ティッキング・シープのスポーンエッグ",
   "entity.chronodawn.chrono_bovine": "クロノバヴァイン",
   "item.chronodawn.chrono_bovine_spawn_egg": "クロノバヴァインのスポーンエッグ",
+  "entity.chronodawn.temporal_caprid": "テンポラル・カプリッド",
+  "item.chronodawn.temporal_caprid_spawn_egg": "テンポラル・カプリッドのスポーンエッグ",
 
   "block.chronodawn.temporal_stone": "テンポラルストーン",
   "block.chronodawn.temporal_cobblestone": "テンポラル丸石",

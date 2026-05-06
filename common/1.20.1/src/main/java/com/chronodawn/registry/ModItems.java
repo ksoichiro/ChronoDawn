@@ -2176,6 +2176,21 @@ public class ModItems {
         )
     );
 
+    /**
+     * Temporal Caprid Spawn Egg
+     * Primary color: Purple-blue (0x5B5BD6) - Background
+     * Secondary color: Pale gold (0xE6D37A) - Spots
+     */
+    public static final RegistrySupplier<Item> TEMPORAL_CAPRID_SPAWN_EGG = ITEMS.register(
+        ModItemId.TEMPORAL_CAPRID_SPAWN_EGG.id(),
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.TEMPORAL_CAPRID,
+            0x5B5BD6, // Background: Purple-blue
+            0xE6D37A, // Spots: Pale gold
+            new Item.Properties()
+        )
+    );
+
     // === Boats ===
 
     /**
@@ -2347,6 +2362,10 @@ public class ModItems {
 
         if (CHRONO_BOVINE_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
             ((com.chronodawn.items.DeferredSpawnEggItem) CHRONO_BOVINE_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (TEMPORAL_CAPRID_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) TEMPORAL_CAPRID_SPAWN_EGG.get()).initializeSpawnEgg();
         }
 
         ChronoDawn.LOGGER.debug("Spawn eggs initialized");
@@ -2693,6 +2712,9 @@ public class ModItems {
         }
         if (CHRONO_BOVINE_SPAWN_EGG.isPresent()) {
             output.accept(CHRONO_BOVINE_SPAWN_EGG.get());
+        }
+        if (TEMPORAL_CAPRID_SPAWN_EGG.isPresent()) {
+            output.accept(TEMPORAL_CAPRID_SPAWN_EGG.get());
         }
     }
 }

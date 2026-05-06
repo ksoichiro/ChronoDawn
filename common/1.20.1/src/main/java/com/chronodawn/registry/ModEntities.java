@@ -399,6 +399,21 @@ public class ModEntities {
     );
 
     /**
+     * Temporal Caprid - Friendly creature similar to vanilla Goat
+     *
+     * Spawns in ChronoDawn mountain biomes, replacing vanilla goats.
+     * Uses an empty kill loot table like vanilla goats.
+     */
+    public static final RegistrySupplier<EntityType<TemporalCapridEntity>> TEMPORAL_CAPRID = ENTITIES.register(
+        ModEntityId.TEMPORAL_CAPRID.id(),
+        () -> EntityType.Builder.of(TemporalCapridEntity::new, MobCategory.CREATURE)
+            .sized(0.9f, 1.3f)
+            .clientTrackingRange(10)
+            .updateInterval(3)
+            .build("temporal_caprid")
+    );
+
+    /**
      * Paradox Crawler - Spider-like hostile mob that climbs walls.
      *
      * A temporal arachnid creature that crawls on surfaces.
@@ -502,4 +517,3 @@ public class ModEntities {
         ChronoDawn.LOGGER.debug("Registered ModEntities");
     }
 }
-

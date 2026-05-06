@@ -201,6 +201,10 @@ public class ChronoDawnClientNeoForge {
             ChronoBovineModel.LAYER_LOCATION,
             ChronoBovineModel::createBodyLayer
         );
+        event.registerLayerDefinition(
+            TemporalCapridModel.LAYER_LOCATION,
+            TemporalCapridModel::createBodyLayer
+        );
 
         // Register boat and chest boat model layers (version-specific)
         VersionSpecificClientHelper.registerBoatModelLayers(event);
@@ -366,6 +370,12 @@ public class ChronoDawnClientNeoForge {
         event.registerEntityRenderer(
             ModEntities.CHRONO_BOVINE.get(),
             ChronoBovineRenderer::new
+        );
+
+        // Register Temporal Caprid renderer
+        event.registerEntityRenderer(
+            ModEntities.TEMPORAL_CAPRID.get(),
+            TemporalCapridRenderer::new
         );
 
         // Register ChronoDawn Boat with custom renderer

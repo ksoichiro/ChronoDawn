@@ -199,6 +199,11 @@ public class ChronoDawnFabric implements ModInitializer {
             ChronoBovineEntity.createAttributes()
         );
 
+        FabricDefaultAttributeRegistry.register(
+            ModEntities.TEMPORAL_CAPRID.get(),
+            TemporalCapridEntity.createAttributes()
+        );
+
         ChronoDawn.LOGGER.debug("Registered entity attributes for Fabric");
     }
 
@@ -357,6 +362,14 @@ public class ChronoDawnFabric implements ModInitializer {
             SpawnPlacements.Type.ON_GROUND,
             Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             ChronoBovineEntity::checkChronoBovineSpawnRules
+        );
+
+        // Temporal Caprid - spawns on ground like goats
+        SpawnPlacements.register(
+            ModEntities.TEMPORAL_CAPRID.get(),
+            SpawnPlacements.Type.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            TemporalCapridEntity::checkTemporalCapridSpawnRules
         );
 
         ChronoDawn.LOGGER.debug("Registered spawn placements for custom mobs");

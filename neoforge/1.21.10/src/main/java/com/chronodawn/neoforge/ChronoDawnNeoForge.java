@@ -294,6 +294,11 @@ public class ChronoDawnNeoForge {
             ChronoBovineEntity.createAttributes().build()
         );
 
+        event.put(
+            ModEntities.TEMPORAL_CAPRID.get(),
+            TemporalCapridEntity.createAttributes().build()
+        );
+
         ChronoDawn.LOGGER.debug("Registered entity attributes for NeoForge");
     }
 
@@ -484,6 +489,15 @@ public class ChronoDawnNeoForge {
             SpawnPlacementTypes.ON_GROUND,
             Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             ChronoBovineEntity::checkChronoBovineSpawnRules,
+            RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+
+        // Temporal Caprid - spawns on ground like goats
+        event.register(
+            ModEntities.TEMPORAL_CAPRID.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            TemporalCapridEntity::checkTemporalCapridSpawnRules,
             RegisterSpawnPlacementsEvent.Operation.REPLACE
         );
 
