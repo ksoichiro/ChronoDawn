@@ -95,15 +95,15 @@ public class ChronalLeechModel extends EntityModel<ChronalLeechRenderState> {
         this.wing4.zRot = Mth.cos(state.ageInTicks * 1.3F + 1.0F) * 0.3F;
         this.wing5.zRot = Mth.cos(state.ageInTicks * 1.3F + 2.0F) * 0.3F;
 
-        // Attack animation - S-curve strike (head bends forward, tail counter-bends back)
+        // Attack animation - snake-bite strike (head dives forward and down, tail rears up)
         if (state.attackTime > 0.0F) {
             float strike = Mth.sin(state.attackTime * (float)Math.PI);
-            this.body1.xRot += 0.6F * strike;
-            this.body2.xRot += 0.4F * strike;
-            this.body3.xRot += 0.2F * strike;
-            this.body5.xRot -= 0.2F * strike;
-            this.body6.xRot -= 0.3F * strike;
-            this.body7.xRot -= 0.4F * strike;
+            this.body1.xRot -= 1.2F * strike;
+            this.body2.xRot -= 0.7F * strike;
+            this.body3.xRot -= 0.3F * strike;
+            this.body5.xRot += 0.3F * strike;
+            this.body6.xRot += 0.5F * strike;
+            this.body7.xRot += 0.7F * strike;
         }
     }
 
