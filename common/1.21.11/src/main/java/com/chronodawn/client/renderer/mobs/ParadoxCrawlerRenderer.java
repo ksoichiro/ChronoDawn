@@ -28,6 +28,12 @@ public class ParadoxCrawlerRenderer extends MobRenderer<ParadoxCrawlerEntity, Pa
     }
 
     @Override
+    public void extractRenderState(ParadoxCrawlerEntity entity, ParadoxCrawlerRenderState state, float partialTick) {
+        super.extractRenderState(entity, state, partialTick);
+        state.attackTime = entity.getAttackAnim(partialTick);
+    }
+
+    @Override
     public Identifier getTextureLocation(ParadoxCrawlerRenderState state) {
         return TEXTURE;
     }

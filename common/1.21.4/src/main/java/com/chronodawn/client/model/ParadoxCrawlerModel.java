@@ -147,5 +147,13 @@ public class ParadoxCrawlerModel extends EntityModel<ParadoxCrawlerRenderState> 
         this.leftMiddleHindLeg.yRot = -legSwing3;
         this.rightHindLeg.yRot = legSwing4;
         this.leftHindLeg.yRot = -legSwing4;
+
+        // Attack animation - Spider-style rear up (front legs lift, body arches back)
+        if (state.attackTime > 0.0F) {
+            float progress = Mth.sin(state.attackTime * (float)Math.PI);
+            this.rightFrontLeg.xRot -= 1.0F * progress;
+            this.leftFrontLeg.xRot -= 1.0F * progress;
+            this.body.xRot -= 0.2F * progress;
+        }
     }
 }
