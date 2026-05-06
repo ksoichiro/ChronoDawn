@@ -78,6 +78,14 @@ public class ForgottenMinuteModel extends EntityModel<ForgottenMinuteRenderState
         // Wing animation (flapping)
         this.left_wing.yRot = Mth.cos(state.ageInTicks * 0.5F) * 0.4F;
         this.right_wing.yRot = -Mth.cos(state.ageInTicks * 0.5F) * 0.4F;
+
+        // Attack animation - Husk-style forward arm thrust (Vex-like)
+        if (state.attackTime > 0.0F) {
+            float armRaise = Mth.sin(state.attackTime * (float)Math.PI);
+            float armRot = -(float)Math.PI / 2.0F * armRaise;
+            this.right_arm.xRot = armRot;
+            this.left_arm.xRot = armRot;
+        }
     }
 
     // Note: renderToBuffer() is now final in 1.21.2 and automatically renders all child parts.

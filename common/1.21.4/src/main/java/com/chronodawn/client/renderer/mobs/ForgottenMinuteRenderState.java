@@ -7,5 +7,5 @@ import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
  * Stores rendering-specific data extracted from ForgottenMinuteEntity.
  */
 public class ForgottenMinuteRenderState extends LivingEntityRenderState {
-    // No additional state needed for basic flying creature rendering
+    public float attackTime;
 }

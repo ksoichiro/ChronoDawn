@@ -77,6 +77,14 @@ public class ForgottenMinuteModel extends EntityModel<ForgottenMinuteEntity> {
         // Wing animation (flapping)
         this.left_wing.yRot = Mth.cos(ageInTicks * 0.5F) * 0.4F;
         this.right_wing.yRot = -Mth.cos(ageInTicks * 0.5F) * 0.4F;
+
+        // Attack animation - Husk-style forward arm thrust (Vex-like)
+        if (entity.attackAnim > 0.0F) {
+            float armRaise = Mth.sin(entity.attackAnim * (float)Math.PI);
+            float armRot = -(float)Math.PI / 2.0F * armRaise;
+            this.right_arm.xRot = armRot;
+            this.left_arm.xRot = armRot;
+        }
     }
 
     @Override

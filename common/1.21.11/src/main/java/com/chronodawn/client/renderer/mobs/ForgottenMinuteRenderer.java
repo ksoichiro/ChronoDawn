@@ -32,7 +32,7 @@ public class ForgottenMinuteRenderer extends MobRenderer<ForgottenMinuteEntity, 
     @Override
     public void extractRenderState(ForgottenMinuteEntity entity, ForgottenMinuteRenderState state, float partialTick) {
         super.extractRenderState(entity, state, partialTick);
-        // No additional state extraction needed for basic rendering
+        state.attackTime = entity.getAttackAnim(partialTick);
     }
 
     @Override
