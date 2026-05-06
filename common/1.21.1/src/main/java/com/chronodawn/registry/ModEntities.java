@@ -474,6 +474,22 @@ public class ModEntities {
             .build("temporal_caprid")
     );
 
+    /**
+     * Chrono Ursid - Polar-bear-equivalent neutral mob
+     *
+     * Spawns in ChronoDawn dimension snowy biomes, replacing vanilla polar bears.
+     * Inherits all polar bear behavior (standing-up animation, cub protection,
+     * neutral aggression, attack damage 6, max health 30).
+     */
+    public static final RegistrySupplier<EntityType<ChronoUrsidEntity>> CHRONO_URSID = ENTITIES.register(
+        ModEntityId.CHRONO_URSID.id(),
+        () -> EntityType.Builder.of(ChronoUrsidEntity::new, MobCategory.CREATURE)
+            .sized(1.4f, 1.4f)  // Same as vanilla polar bear
+            .clientTrackingRange(10)
+            .updateInterval(3)
+            .build("chrono_ursid")
+    );
+
     // === Boat Entities ===
 
     /**

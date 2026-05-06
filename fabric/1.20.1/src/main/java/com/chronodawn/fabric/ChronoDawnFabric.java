@@ -204,6 +204,11 @@ public class ChronoDawnFabric implements ModInitializer {
             TemporalCapridEntity.createAttributes()
         );
 
+        FabricDefaultAttributeRegistry.register(
+            ModEntities.CHRONO_URSID.get(),
+            ChronoUrsidEntity.createAttributes()
+        );
+
         ChronoDawn.LOGGER.debug("Registered entity attributes for Fabric");
     }
 
@@ -370,6 +375,14 @@ public class ChronoDawnFabric implements ModInitializer {
             SpawnPlacements.Type.ON_GROUND,
             Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             TemporalCapridEntity::checkTemporalCapridSpawnRules
+        );
+
+        // Chrono Ursid - spawns on ground like animals (snowy biomes)
+        SpawnPlacements.register(
+            ModEntities.CHRONO_URSID.get(),
+            SpawnPlacements.Type.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            ChronoUrsidEntity::checkChronoUrsidSpawnRules
         );
 
         ChronoDawn.LOGGER.debug("Registered spawn placements for custom mobs");

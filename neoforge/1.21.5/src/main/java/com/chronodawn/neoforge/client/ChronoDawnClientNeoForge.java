@@ -206,6 +206,12 @@ public class ChronoDawnClientNeoForge {
             TemporalCapridModel::createBodyLayer
         );
 
+        // Register Chrono Ursid model layer
+        event.registerLayerDefinition(
+            ChronoUrsidModel.LAYER_LOCATION,
+            ChronoUrsidModel::createBodyLayer
+        );
+
         // Register boat and chest boat model layers (version-specific)
         VersionSpecificClientHelper.registerBoatModelLayers(event);
 
@@ -376,6 +382,12 @@ public class ChronoDawnClientNeoForge {
         event.registerEntityRenderer(
             ModEntities.TEMPORAL_CAPRID.get(),
             TemporalCapridRenderer::new
+        );
+
+        // Register Chrono Ursid renderer
+        event.registerEntityRenderer(
+            ModEntities.CHRONO_URSID.get(),
+            ChronoUrsidRenderer::new
         );
 
         // Register ChronoDawn Boat with custom renderer

@@ -487,7 +487,9 @@
   "entity.chronodawn.chrono_bovine": "Chrono Bovine",
   "item.chronodawn.chrono_bovine_spawn_egg": "Chrono Bovine Spawn Egg",
   "entity.chronodawn.temporal_caprid": "Temporal Caprid",
+  "entity.chronodawn.chrono_ursid": "Chrono Ursid",
   "item.chronodawn.temporal_caprid_spawn_egg": "Temporal Caprid Spawn Egg",
+  "item.chronodawn.chrono_ursid_spawn_egg": "Chrono Ursid Spawn Egg",
 
   "block.chronodawn.temporal_stone": "Temporal Stone",
   "block.chronodawn.temporal_cobblestone": "Temporal Cobblestone",

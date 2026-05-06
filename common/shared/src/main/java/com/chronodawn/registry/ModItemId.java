@@ -335,6 +335,7 @@ public enum ModItemId {
     TICKING_SHEEP_SPAWN_EGG("ticking_sheep_spawn_egg"),
     CHRONO_BOVINE_SPAWN_EGG("chrono_bovine_spawn_egg"),
     TEMPORAL_CAPRID_SPAWN_EGG("temporal_caprid_spawn_egg"),
+    CHRONO_URSID_SPAWN_EGG("chrono_ursid_spawn_egg"),
     ;
 
     private final String id;

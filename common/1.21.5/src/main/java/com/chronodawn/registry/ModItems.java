@@ -2749,6 +2749,23 @@ public class ModItems {
         )
     );
 
+    /**
+     * Chrono Ursid Spawn Egg
+     * Primary color: Off-white (0xE8E8E8) - Polar bear fur
+     * Secondary color: Brass (0xB89048) - Clockwork accent
+     */
+    public static final RegistrySupplier<Item> CHRONO_URSID_SPAWN_EGG = ITEMS.register(
+        ModItemId.CHRONO_URSID_SPAWN_EGG.id(),
+        () -> new com.chronodawn.items.DeferredSpawnEggItem(
+            ModEntities.CHRONO_URSID,
+            0xE8E8E8, // Background: Off-white
+            0xB89048, // Spots: Brass
+            new Item.Properties()
+                    .setId(ResourceKey.create(Registries.ITEM,
+                        ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CHRONO_URSID_SPAWN_EGG.id())))
+        )
+    );
+
     // === Boats ===
 
     /**
@@ -2924,6 +2941,10 @@ public class ModItems {
 
         if (TEMPORAL_CAPRID_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
             ((com.chronodawn.items.DeferredSpawnEggItem) TEMPORAL_CAPRID_SPAWN_EGG.get()).initializeSpawnEgg();
+        }
+
+        if (CHRONO_URSID_SPAWN_EGG.get() instanceof com.chronodawn.items.DeferredSpawnEggItem) {
+            ((com.chronodawn.items.DeferredSpawnEggItem) CHRONO_URSID_SPAWN_EGG.get()).initializeSpawnEgg();
         }
 
         ChronoDawn.LOGGER.debug("Spawn eggs initialized");
@@ -3277,6 +3298,9 @@ public class ModItems {
         }
         if (TEMPORAL_CAPRID_SPAWN_EGG.isPresent()) {
             output.accept(TEMPORAL_CAPRID_SPAWN_EGG.get());
+        }
+        if (CHRONO_URSID_SPAWN_EGG.isPresent()) {
+            output.accept(CHRONO_URSID_SPAWN_EGG.get());
         }
     }
 }

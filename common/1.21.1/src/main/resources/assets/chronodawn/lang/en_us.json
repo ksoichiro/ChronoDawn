@@ -352,6 +352,7 @@
   "entity.chronodawn.ticking_sheep": "Ticking Sheep",
   "entity.chronodawn.chrono_bovine": "Chrono Bovine",
   "entity.chronodawn.temporal_caprid": "Temporal Caprid",
+  "entity.chronodawn.chrono_ursid": "Chrono Ursid",
 
   "biome.chronodawn.chronodawn_plains": "Chrono Dawn Plains",
   "biome.chronodawn.chronodawn_prairies": "Chrono Dawn Prairies",
@@ -468,6 +469,7 @@
   "item.chronodawn.ticking_sheep_spawn_egg": "Ticking Sheep Spawn Egg",
   "item.chronodawn.chrono_bovine_spawn_egg": "Chrono Bovine Spawn Egg",
   "item.chronodawn.temporal_caprid_spawn_egg": "Temporal Caprid Spawn Egg",
+  "item.chronodawn.chrono_ursid_spawn_egg": "Chrono Ursid Spawn Egg",
   "item.chronodawn.glide_fish": "Glide Fish",
   "item.chronodawn.cooked_glide_fish": "Cooked Glide Fish",
   "item.chronodawn.chrono_bovine_meat": "Chrono Bovine Meat",

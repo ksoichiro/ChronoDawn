@@ -368,6 +368,10 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             TemporalCapridModel.LAYER_LOCATION,
             TemporalCapridModel::createBodyLayer
         );
+        EntityModelLayerRegistry.registerModelLayer(
+            ChronoUrsidModel.LAYER_LOCATION,
+            ChronoUrsidModel::createBodyLayer
+        );
     }
 
     /**
@@ -558,6 +562,11 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
         EntityRendererRegistry.register(
             ModEntities.TEMPORAL_CAPRID.get(),
             TemporalCapridRenderer::new
+        );
+
+        EntityRendererRegistry.register(
+            ModEntities.CHRONO_URSID.get(),
+            ChronoUrsidRenderer::new
         );
 
         // Register ChronoDawn Boat with custom renderer

@@ -60,6 +60,7 @@ public enum ModEntityId {
     TICKING_SHEEP("ticking_sheep"),
     CHRONO_BOVINE("chrono_bovine"),
     TEMPORAL_CAPRID("temporal_caprid"),
+    CHRONO_URSID("chrono_ursid"),
 
     // === Projectiles ===
     GEAR_PROJECTILE("gear_projectile"),

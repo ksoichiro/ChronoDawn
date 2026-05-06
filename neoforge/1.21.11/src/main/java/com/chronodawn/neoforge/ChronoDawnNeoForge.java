@@ -302,6 +302,11 @@ public class ChronoDawnNeoForge {
             TemporalCapridEntity.createAttributes().build()
         );
 
+        event.put(
+            ModEntities.CHRONO_URSID.get(),
+            ChronoUrsidEntity.createAttributes().build()
+        );
+
         ChronoDawn.LOGGER.debug("Registered entity attributes for NeoForge");
     }
 
@@ -501,6 +506,15 @@ public class ChronoDawnNeoForge {
             SpawnPlacementTypes.ON_GROUND,
             Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
             TemporalCapridEntity::checkTemporalCapridSpawnRules,
+            RegisterSpawnPlacementsEvent.Operation.REPLACE
+        );
+
+        // Chrono Ursid - spawns on ground like animals (snowy biomes)
+        event.register(
+            ModEntities.CHRONO_URSID.get(),
+            SpawnPlacementTypes.ON_GROUND,
+            Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+            ChronoUrsidEntity::checkChronoUrsidSpawnRules,
             RegisterSpawnPlacementsEvent.Operation.REPLACE
         );
 

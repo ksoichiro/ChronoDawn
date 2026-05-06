@@ -488,7 +488,9 @@
   "entity.chronodawn.chrono_bovine": "クロノバヴァイン",
   "item.chronodawn.chrono_bovine_spawn_egg": "クロノバヴァインのスポーンエッグ",
   "entity.chronodawn.temporal_caprid": "テンポラル・カプリッド",
+  "entity.chronodawn.chrono_ursid": "クロノアーシド",
   "item.chronodawn.temporal_caprid_spawn_egg": "テンポラル・カプリッドのスポーンエッグ",
+  "item.chronodawn.chrono_ursid_spawn_egg": "クロノアーシドのスポーンエッグ",
 
   "block.chronodawn.temporal_stone": "テンポラルストーン",
   "block.chronodawn.temporal_cobblestone": "テンポラル丸石",
