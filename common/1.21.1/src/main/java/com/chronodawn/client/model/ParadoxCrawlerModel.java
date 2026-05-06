@@ -139,11 +139,14 @@ public class ParadoxCrawlerModel extends EntityModel<ParadoxCrawlerEntity> {
         this.rightHindLeg.yRot = legSwing4;
         this.leftHindLeg.yRot = -legSwing4;
 
-        // Attack animation - Spider-style rear up (front legs lift via zRot, body arches back)
+        // Attack animation - Spider-style rear up
+        // Note: model field names are inverted relative to body geometry
+        // (leg7/leg8 named "Hind*" sit near the head at z=-5 — these are
+        // the actual front legs that should rear up).
         if (entity.attackAnim > 0.0F) {
             float progress = Mth.sin(entity.attackAnim * (float)Math.PI);
-            this.rightFrontLeg.zRot += 1.0F * progress;
-            this.leftFrontLeg.zRot -= 1.0F * progress;
+            this.rightHindLeg.zRot += 1.0F * progress;
+            this.leftHindLeg.zRot -= 1.0F * progress;
             this.body.xRot -= 0.2F * progress;
         }
     }
