@@ -78,12 +78,11 @@ public class TemporalWraithModel extends EntityModel<TemporalWraithRenderState> 
 
         // Legs do not animate - floating ghost
 
-        // Attack animation - Husk-style forward arm thrust
+        // Attack animation - windup-and-strike (arms swing up from forward rest pose)
         if (state.attackTime > 0.0F) {
             float armRaise = Mth.sin(state.attackTime * (float)Math.PI);
-            float armRot = -(float)Math.PI / 2.0F * armRaise;
-            this.left_arm.xRot = armRot;
-            this.right_arm.xRot = armRot;
+            this.left_arm.xRot -= 1.2F * armRaise;
+            this.right_arm.xRot -= 1.2F * armRaise;
         }
     }
 }
