@@ -30,6 +30,12 @@ public class TemporalWraithRenderer extends MobRenderer<TemporalWraithEntity, Te
     }
 
     @Override
+    public void extractRenderState(TemporalWraithEntity entity, TemporalWraithRenderState state, float partialTick) {
+        super.extractRenderState(entity, state, partialTick);
+        state.attackTime = entity.getAttackAnim(partialTick);
+    }
+
+    @Override
     public ResourceLocation getTextureLocation(TemporalWraithRenderState state) {
         return TEXTURE;
     }

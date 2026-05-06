@@ -7,6 +7,7 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.util.Mth;
 
 /**
  * Custom model for Temporal Wraith.
@@ -76,6 +77,14 @@ public class TemporalWraithModel extends EntityModel<TemporalWraithRenderState> 
         this.left_arm.xRot = -1.5F;
 
         // Legs do not animate - floating ghost
+
+        // Attack animation - Husk-style forward arm thrust
+        if (state.attackTime > 0.0F) {
+            float armRaise = Mth.sin(state.attackTime * (float)Math.PI);
+            float armRot = -(float)Math.PI / 2.0F * armRaise;
+            this.left_arm.xRot = armRot;
+            this.right_arm.xRot = armRot;
+        }
     }
 }
 
