@@ -112,5 +112,13 @@ public class TimelineStriderModel extends EntityModel<TimelineStriderRenderState
         this.head.xRot = state.xRot * ((float) Math.PI / 180F);
         this.headwear.yRot = this.head.yRot;
         this.headwear.xRot = this.head.xRot;
+
+        // Attack animation - Husk-style forward arm thrust
+        if (state.attackTime > 0.0F) {
+            float armRaise = Mth.sin(state.attackTime * (float)Math.PI);
+            float armRot = -(float)Math.PI / 2.0F * armRaise;
+            this.leftArm.xRot = armRot;
+            this.rightArm.xRot = armRot;
+        }
     }
 }

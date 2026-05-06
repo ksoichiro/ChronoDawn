@@ -28,6 +28,12 @@ public class TimelineStriderRenderer extends MobRenderer<TimelineStriderEntity, 
     }
 
     @Override
+    public void extractRenderState(TimelineStriderEntity entity, TimelineStriderRenderState state, float partialTick) {
+        super.extractRenderState(entity, state, partialTick);
+        state.attackTime = entity.getAttackAnim(partialTick);
+    }
+
+    @Override
     public Identifier getTextureLocation(TimelineStriderRenderState state) {
         return TEXTURE;
     }
