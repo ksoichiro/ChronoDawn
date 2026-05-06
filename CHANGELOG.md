@@ -32,6 +32,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - **Ancient Ruins spawn rate** reduced. Placement spacing increased from 24 to 56 chunks (separation 8 → 20), and the eligible biome tag narrowed from "all forests + all taigas" to taiga variants + dark forest. Existing worlds keep already-generated ruins; only newly explored chunks reflect the change.
 
+### Fixed
+- **Custom mob attack animations** — Hostile mobs now show visible attack animations during melee strikes. Previously the model stayed in its idle pose with no visual cue that the strike happened. Affected mobs: Epoch Husk, Clockwork Sentinel, Hourglass Golem, Floq, Forgotten Minute, Paradox Crawler, Temporal Wraith, Timeline Strider, Chronal Leech, and the bosses Time Guardian, Time Tyrant, Entropy Keeper, Chronos Warden, Temporal Phantom, and Clockwork Colossus. The boss attack animations specifically were dead code on Minecraft 1.21.2+ because the renderer never extracted `attackTime` from the entity. Animations match each mob's closest vanilla analog: Iron Golem-style overhead slam for golems, Husk-style arm thrust for zombie-likes, Spider-style rear-up for Paradox Crawler, segmented snake-bite for Chronal Leech, jaw-gape for Floq.
+
 ## [0.7.0] - 2026-04-22
 
 ### Added
