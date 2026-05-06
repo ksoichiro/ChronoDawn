@@ -95,16 +95,15 @@ public class ChronalLeechModel extends EntityModel<ChronalLeechRenderState> {
         this.wing4.zRot = Mth.cos(state.ageInTicks * 1.3F + 1.0F) * 0.3F;
         this.wing5.zRot = Mth.cos(state.ageInTicks * 1.3F + 2.0F) * 0.3F;
 
-        // Attack animation - segmented wave traveling head-to-tail (Silverfish-style)
+        // Attack animation - S-curve strike (head bends forward, tail counter-bends back)
         if (state.attackTime > 0.0F) {
-            float a = state.attackTime;
-            this.body1.xRot += 0.3F * Mth.sin((a - 0.00F) * (float)Math.PI);
-            this.body2.xRot += 0.3F * Mth.sin((a - 0.15F) * (float)Math.PI);
-            this.body3.xRot += 0.3F * Mth.sin((a - 0.30F) * (float)Math.PI);
-            this.body4.xRot += 0.3F * Mth.sin((a - 0.45F) * (float)Math.PI);
-            this.body5.xRot += 0.3F * Mth.sin((a - 0.60F) * (float)Math.PI);
-            this.body6.xRot += 0.3F * Mth.sin((a - 0.75F) * (float)Math.PI);
-            this.body7.xRot += 0.3F * Mth.sin((a - 0.90F) * (float)Math.PI);
+            float strike = Mth.sin(state.attackTime * (float)Math.PI);
+            this.body1.xRot += 0.6F * strike;
+            this.body2.xRot += 0.4F * strike;
+            this.body3.xRot += 0.2F * strike;
+            this.body5.xRot -= 0.2F * strike;
+            this.body6.xRot -= 0.3F * strike;
+            this.body7.xRot -= 0.4F * strike;
         }
     }
 
