@@ -1747,6 +1747,38 @@ public class ModItems {
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.LUMEN_POLYP.id()))))
     );
 
+    public static final RegistrySupplier<Item> DAWN_CHRONO_CORAL = ITEMS.register(
+        ModItemId.DAWN_CHRONO_CORAL.id(),
+        () -> new BlockItem(ModBlocks.DAWN_CHRONO_CORAL.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DAWN_CHRONO_CORAL.id()))))
+    );
+
+    public static final RegistrySupplier<Item> DUSK_CHRONO_CORAL = ITEMS.register(
+        ModItemId.DUSK_CHRONO_CORAL.id(),
+        () -> new BlockItem(ModBlocks.DUSK_CHRONO_CORAL.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DUSK_CHRONO_CORAL.id()))))
+    );
+
+    public static final RegistrySupplier<Item> TWILIGHT_CHRONO_CORAL = ITEMS.register(
+        ModItemId.TWILIGHT_CHRONO_CORAL.id(),
+        () -> new BlockItem(ModBlocks.TWILIGHT_CHRONO_CORAL.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TWILIGHT_CHRONO_CORAL.id()))))
+    );
+
+    public static final RegistrySupplier<Item> ETERNAL_CHRONO_CORAL = ITEMS.register(
+        ModItemId.ETERNAL_CHRONO_CORAL.id(),
+        () -> new BlockItem(ModBlocks.ETERNAL_CHRONO_CORAL.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ETERNAL_CHRONO_CORAL.id()))))
+    );
+
     /**
      * Dried Temporal Kelp - Smoked product of Temporal Kelp.
      * Nutrition: 1, Saturation: 0.6, eat duration 0.865s (full parity with vanilla dried_kelp).
@@ -3054,6 +3086,10 @@ public class ModItems {
         output.accept(TEMPORAL_SEAGRASS.get());
         output.accept(TALL_TEMPORAL_SEAGRASS.get());
         output.accept(LUMEN_POLYP.get());
+        output.accept(DAWN_CHRONO_CORAL.get());
+        output.accept(DUSK_CHRONO_CORAL.get());
+        output.accept(TWILIGHT_CHRONO_CORAL.get());
+        output.accept(ETERNAL_CHRONO_CORAL.get());
         output.accept(DRIED_TEMPORAL_KELP.get());
 
         // === Lighting Items ===

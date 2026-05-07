@@ -208,6 +208,10 @@ public enum ModBlockId {
     TEMPORAL_SEAGRASS(def("temporal_seagrass").cutout()),
     TALL_TEMPORAL_SEAGRASS(def("tall_temporal_seagrass").cutout()),
     LUMEN_POLYP(def("lumen_polyp").cutout()),
+    DAWN_CHRONO_CORAL(def("dawn_chrono_coral").cutout()),
+    DUSK_CHRONO_CORAL(def("dusk_chrono_coral").cutout()),
+    TWILIGHT_CHRONO_CORAL(def("twilight_chrono_coral").cutout()),
+    ETERNAL_CHRONO_CORAL(def("eternal_chrono_coral").cutout()),
 
     // Time Torches (floor variants)
     PURPLE_TIME_TORCH(def("purple_time_torch").cutout()),

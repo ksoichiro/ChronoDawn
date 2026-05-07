@@ -199,6 +199,10 @@ public enum ModItemId {
     TEMPORAL_SEAGRASS("temporal_seagrass"),
     TALL_TEMPORAL_SEAGRASS("tall_temporal_seagrass"),
     LUMEN_POLYP("lumen_polyp"),
+    DAWN_CHRONO_CORAL("dawn_chrono_coral"),
+    DUSK_CHRONO_CORAL("dusk_chrono_coral"),
+    TWILIGHT_CHRONO_CORAL("twilight_chrono_coral"),
+    ETERNAL_CHRONO_CORAL("eternal_chrono_coral"),
     DRIED_TEMPORAL_KELP("dried_temporal_kelp"),
 
     // Lighting items

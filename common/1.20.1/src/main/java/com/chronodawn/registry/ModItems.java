@@ -1301,6 +1301,30 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.LUMEN_POLYP.get(), new Item.Properties())
     );
 
+    public static final RegistrySupplier<Item> DAWN_CHRONO_CORAL = ITEMS.register(
+        ModItemId.DAWN_CHRONO_CORAL.id(),
+        () -> new BlockItem(ModBlocks.DAWN_CHRONO_CORAL.get(), new Item.Properties())
+    );
+
+    public static final RegistrySupplier<Item> DUSK_CHRONO_CORAL = ITEMS.register(
+        ModItemId.DUSK_CHRONO_CORAL.id(),
+        () -> new BlockItem(ModBlocks.DUSK_CHRONO_CORAL.get(), new Item.Properties())
+    );
+
+    public static final RegistrySupplier<Item> TWILIGHT_CHRONO_CORAL = ITEMS.register(
+        ModItemId.TWILIGHT_CHRONO_CORAL.id(),
+        () -> new BlockItem(ModBlocks.TWILIGHT_CHRONO_CORAL.get(), new Item.Properties())
+    );
+
+    public static final RegistrySupplier<Item> ETERNAL_CHRONO_CORAL = ITEMS.register(
+        ModItemId.ETERNAL_CHRONO_CORAL.id(),
+        () -> new BlockItem(ModBlocks.ETERNAL_CHRONO_CORAL.get(), new Item.Properties())
+    );
+
+    /**
+     * Dried Temporal Kelp - Smoked product of Temporal Kelp.
+     * Nutrition: 1, Saturation: 0.6, fast eating (parity with vanilla dried_kelp).
+     */
     public static final RegistrySupplier<Item> DRIED_TEMPORAL_KELP = ITEMS.register(
         ModItemId.DRIED_TEMPORAL_KELP.id(),
         () -> new Item(new Item.Properties()
@@ -2548,6 +2572,10 @@ public class ModItems {
         output.accept(TEMPORAL_SEAGRASS.get());
         output.accept(TALL_TEMPORAL_SEAGRASS.get());
         output.accept(LUMEN_POLYP.get());
+        output.accept(DAWN_CHRONO_CORAL.get());
+        output.accept(DUSK_CHRONO_CORAL.get());
+        output.accept(TWILIGHT_CHRONO_CORAL.get());
+        output.accept(ETERNAL_CHRONO_CORAL.get());
         output.accept(DRIED_TEMPORAL_KELP.get());
 
         // === Lighting Items ===

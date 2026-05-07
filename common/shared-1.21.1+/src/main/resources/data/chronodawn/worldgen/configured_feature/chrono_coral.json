@@ -1,0 +1,34 @@
+{
+  "type": "minecraft:simple_block",
+  "config": {
+    "to_place": {
+      "type": "minecraft:weighted_state_provider",
+      "entries": [
+        {
+          "weight": 1,
+          "data": {
+            "Name": "chronodawn:dawn_chrono_coral"
+          }
+        },
+        {
+          "weight": 1,
+          "data": {
+            "Name": "chronodawn:dusk_chrono_coral"
+          }
+        },
+        {
+          "weight": 1,
+          "data": {
+            "Name": "chronodawn:twilight_chrono_coral"
+          }
+        },
+        {
+          "weight": 1,
+          "data": {
+            "Name": "chronodawn:eternal_chrono_coral"
+          }
+        }
+      ]
+    }
+  }
+}

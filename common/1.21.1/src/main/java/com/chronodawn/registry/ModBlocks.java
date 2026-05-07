@@ -6,6 +6,7 @@ import com.chronodawn.blocks.BossRoomBoundaryMarkerBlock;
 import com.chronodawn.blocks.BossRoomDoorBlock;
 import com.chronodawn.blocks.EntropyCryptTrapdoorBlock;
 import com.chronodawn.blocks.ChronoDawnPortalBlock;
+import com.chronodawn.blocks.ChronoCoralBlock;
 import com.chronodawn.blocks.ClockstoneBlock;
 import com.chronodawn.blocks.ClockstoneOre;
 import com.chronodawn.blocks.ClockstoneSlab;
@@ -980,6 +981,26 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> LUMEN_POLYP = BLOCKS.register(
         ModBlockId.LUMEN_POLYP.id(),
         () -> new LumenPolypBlock(LumenPolypBlock.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> DAWN_CHRONO_CORAL = BLOCKS.register(
+        ModBlockId.DAWN_CHRONO_CORAL.id(),
+        () -> new ChronoCoralBlock(ChronoCoralBlock.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> DUSK_CHRONO_CORAL = BLOCKS.register(
+        ModBlockId.DUSK_CHRONO_CORAL.id(),
+        () -> new ChronoCoralBlock(ChronoCoralBlock.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> TWILIGHT_CHRONO_CORAL = BLOCKS.register(
+        ModBlockId.TWILIGHT_CHRONO_CORAL.id(),
+        () -> new ChronoCoralBlock(ChronoCoralBlock.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> ETERNAL_CHRONO_CORAL = BLOCKS.register(
+        ModBlockId.ETERNAL_CHRONO_CORAL.id(),
+        () -> new ChronoCoralBlock(ChronoCoralBlock.createProperties())
     );
 
     // === Time Torches ===
