@@ -9,7 +9,8 @@ Thank you for your interest in contributing to Chrono Dawn! This guide will help
 3. [Development Workflow](#development-workflow)
 4. [Coding Standards](#coding-standards)
 5. [Submitting Changes](#submitting-changes)
-6. [License](#license)
+6. [Translations](#translations)
+7. [License](#license)
 
 ---
 
@@ -199,6 +200,60 @@ Your PR will be reviewed for:
 - ✅ No breaking changes to existing features
 - ✅ Adherence to coding standards
 - ✅ Proper license compliance
+
+---
+
+## Translations
+
+Translations into any language are very welcome — they let players in other regions enjoy Chrono Dawn and make the mod more attractive for modpack creators in those regions. You do **not** need to be a Java developer to contribute a translation.
+
+### Where translations live
+
+Translation files are plain JSON in three source directories:
+
+| Directory | Applies to |
+| --- | --- |
+| `common/1.20.1/src/main/resources/assets/chronodawn/lang/` | Minecraft 1.20.1 |
+| `common/1.21.1/src/main/resources/assets/chronodawn/lang/` | Minecraft 1.21.1 |
+| `common/shared-1.21.2+/src/main/resources/assets/chronodawn/lang/` | Minecraft 1.21.2 – 1.21.11 (shared) |
+
+Each directory currently contains `en_us.json` (the reference) and `ja_jp.json` (Japanese). To add a new language, copy `en_us.json` to `<locale>.json` (e.g. `zh_cn.json`, `de_de.json`, `ru_ru.json`) **in all three directories** and translate the values, keeping every key intact.
+
+The full list of valid locale codes is in the [Minecraft Wiki – Language reference](https://minecraft.wiki/w/Language).
+
+### Translation key parity
+
+A small Python script verifies that every locale file shares the same keys as `en_us.json`:
+
+```bash
+python3 scripts/check_lang_parity.py
+```
+
+It exits with code `1` and prints any missing or extra keys per locale per directory. Run it before opening a PR; PRs that fail this check will be asked for fixes. The script uses only the Python standard library (Python 3.8+).
+
+### Style guidelines
+
+- **Encoding**: UTF-8, no BOM. Do not change line endings (LF).
+- **Indentation**: 2 spaces, matching the existing JSON files.
+- **Order**: Keep the key order identical to `en_us.json`. This makes diffs reviewable.
+- **Blank-line groupers**: The reference file uses blank lines to separate logical sections (blocks, items, entities, etc.). Please preserve them — JSON allows blank lines outside the object body, and translators following en_us key-by-key get them automatically.
+- **Proper nouns**: See [`docs/translation-glossary.md`](docs/translation-glossary.md) for guidance on which terms to translate, transliterate, or keep as-is.
+- **Format strings**: Preserve `%s`, `%d`, `%1$s`, and similar placeholders exactly. The order may be rearranged using positional indices (`%1$s`, `%2$s`).
+- **Don't translate keys** — only the values to the right of the colon.
+
+### Submitting a translation PR
+
+1. Fork the repository and create a branch (e.g. `i18n/zh-cn`).
+2. Add or update locale files in **all three** directories listed above. If you only have time for one or two of them, that is still welcome — just say so in the PR description so reviewers can flag the missing files.
+3. Run `python3 scripts/check_lang_parity.py` and confirm it exits cleanly.
+4. Open a PR. Title format: `i18n: add <Language Name> translation` or `i18n: update <Language Name> translation`.
+5. In the PR description, mention which Minecraft versions you have tested, if any. Visual confirmation in-game is appreciated but not required.
+
+### Reviewing and ongoing maintenance
+
+The maintainers cannot personally vet quality in every language, so accepted translations are the responsibility of the contributing community. If you are a native or fluent speaker of an existing translation and notice issues, PRs that improve translations are welcome under the same flow.
+
+When new English keys are added by code changes, existing translations will start failing the parity check until updated. The maintainers may merge code changes with stale translations rather than blocking — translators are then encouraged to follow up with PRs filling the new keys.
 
 ---
 
