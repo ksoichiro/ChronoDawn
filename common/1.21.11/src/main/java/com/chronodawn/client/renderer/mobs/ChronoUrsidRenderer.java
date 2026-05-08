@@ -20,6 +20,7 @@ package com.chronodawn.client.renderer.mobs;
 import com.chronodawn.client.model.ChronoUrsidModel;
 import com.chronodawn.compat.CompatResourceLocation;
 import com.chronodawn.entities.mobs.ChronoUrsidEntity;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.Identifier;
@@ -52,5 +53,22 @@ public class ChronoUrsidRenderer extends MobRenderer<ChronoUrsidEntity, ChronoUr
     @Override
     public Identifier getTextureLocation(ChronoUrsidRenderState state) {
         return TEXTURE;
+    }
+
+    /**
+     * Match vanilla polar bear's overall size and the half-scale baby in one step.
+     *
+     * Vanilla 1.21.2+ PolarBearModel bakes a 1.2x mesh transform into its body
+     * layer, so the rendered model ends up 1.2x its bbmodel-native size. Our
+     * model is left at native 1.0x, so we apply the 1.2x here at render time.
+     *
+     * Babies render at 0.6x (= 0.5 * 1.2). Vanilla achieves the smaller cub via
+     * AgeableMobRenderer swapping to a separately-baked baby layer; we use a
+     * single model and scale uniformly in this method instead.
+     */
+    @Override
+    protected void scale(ChronoUrsidRenderState state, PoseStack poseStack) {
+        float scale = state.isBaby ? 0.6F : 1.2F;
+        poseStack.scale(scale, scale, scale);
     }
 }
