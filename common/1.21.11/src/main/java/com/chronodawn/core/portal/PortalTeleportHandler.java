@@ -13,6 +13,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -581,10 +582,10 @@ public class PortalTeleportHandler {
         BlockState surfaceBlock = level.getBlockState(pos);
 
         // If surface is not solid (e.g., water, air), search downward for solid ground
-        if (!surfaceBlock.isSolid() || surfaceBlock.isAir()) {
+        if (!isSuitablePortalGround(surfaceBlock)) {
             while (pos.getY() > level.getMinY()) {
                 BlockState currentBlock = level.getBlockState(pos);
-                if (currentBlock.isSolid() && !currentBlock.isAir()) {
+                if (isSuitablePortalGround(currentBlock)) {
                     // Found solid ground
                     break;
                 }
@@ -635,6 +636,10 @@ public class PortalTeleportHandler {
         return pos.above().immutable();
     }
 
+    private static boolean isSuitablePortalGround(BlockState state) {
+        return state.isSolid() && !state.isAir() && !state.canBeReplaced() && !state.is(BlockTags.LEAVES);
+    }
+
     /**
      * Generate a portal structure at given position.
      *
@@ -661,7 +666,7 @@ public class PortalTeleportHandler {
             BlockState blockBelow = level.getBlockState(framePos.below());
 
             // If any bottom frame position doesn't have solid ground below, we need to adjust
-            if (!blockBelow.isSolid() || blockBelow.canBeReplaced()) {
+            if (!isSuitablePortalGround(blockBelow)) {
                 needsAdjustment = true;
                 break;
             }
@@ -677,7 +682,7 @@ public class PortalTeleportHandler {
                     BlockPos checkPos = adjustedPos.relative(horizontal, x);
                     BlockState blockBelow = level.getBlockState(checkPos.below());
 
-                    if (!blockBelow.isSolid() || blockBelow.canBeReplaced()) {
+                    if (!isSuitablePortalGround(blockBelow)) {
                         allSolid = false;
                         break;
                     }
