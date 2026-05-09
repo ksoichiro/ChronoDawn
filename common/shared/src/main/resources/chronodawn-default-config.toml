@@ -1,0 +1,27 @@
+# Chrono Dawn configuration.
+#
+# This file is read once at mod startup. Changes require a server (or
+# single-player world) restart to take effect; /reload does NOT re-read
+# this file. Already-generated chunks are not retroactively updated;
+# new values apply only to chunks generated after the change.
+#
+# Invalid values fall back to defaults for that field. Unknown keys are
+# ignored (with a warning in the log). To restore defaults for any
+# field, delete the line; this file is overwritten only when missing.
+
+schema_version = 1
+
+[world.structures.ancient_ruins]
+# Whether Ancient Ruins generate at all in the Overworld.
+enabled = true
+
+# Average distance (in chunks) between Ancient Ruins placement attempts.
+# Lower = denser, higher = rarer. Must be > separation. Vanilla limit: 4096.
+spacing = 56
+
+# Minimum guaranteed distance (in chunks) between two Ancient Ruins.
+# Must be < spacing.
+separation = 20
+
+# Random seed offset for placement; usually no reason to change this.
+salt = 20005897
