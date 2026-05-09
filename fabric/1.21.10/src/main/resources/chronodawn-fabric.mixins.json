@@ -10,12 +10,13 @@
     "ChronoShieldBlockingMixin",
     "ChronoShieldDamageMixin",
     "ChronoShieldEffectInterceptorMixin",
+    "FreezeTopLayerMixin",
     "LevelGetTimeMixin",
+    "PackRepositoryOverlayMixin",
     "ServerLevelSetTimeMixin",
     "SleepMixin",
     "StructureStartMixin",
-    "StructureTemplateBlockAttachedFixMixin",
-    "FreezeTopLayerMixin"
+    "StructureTemplateBlockAttachedFixMixin"
   ],
   "client": [
     "client.AtmosphericFogEnvironmentMixin",

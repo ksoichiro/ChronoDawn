@@ -34,6 +34,12 @@ dependencies {
     modApi "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
     modApi "dev.architectury:architectury-fabric:$rootProject.architectury_api_version"
 
+    // night-config (TOML config parser used by ChronoDawnConfig).
+    // NeoForge bundles this transitively; on Fabric we declare it explicitly and
+    // JAR-in-JAR it via Loom's `include` so end users don't need to install it separately.
+    modImplementation include("com.electronwill.night-config:core:3.8.3")
+    modImplementation include("com.electronwill.night-config:toml:3.8.3")
+
     common(project(path: commonModule, configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: commonModule, configuration: 'transformProductionFabric')
 }

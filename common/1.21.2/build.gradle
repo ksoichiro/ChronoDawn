@@ -25,6 +25,16 @@ dependencies {
     // Architectury API. This is optional, and you can comment it out if you don't need it.
     modImplementation "dev.architectury:architectury:$rootProject.architectury_api_version"
 
+    // night-config (TOML config parser used by ChronoDawnConfig in common code).
+    // Compile-only here; runtime is provided by NeoForge (transitively) and by
+    // fabric/<version>/build.gradle's `include(...)` JAR-in-JAR for Fabric.
+    compileOnly "com.electronwill.night-config:core:3.8.3"
+    compileOnly "com.electronwill.night-config:toml:3.8.3"
+    // Tests (run outside the loader environments) need night-config on the
+    // runtime classpath since neither NeoForge nor Fabric is present.
+    testImplementation "com.electronwill.night-config:core:3.8.3"
+    testImplementation "com.electronwill.night-config:toml:3.8.3"
+
     // Testing dependencies
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'

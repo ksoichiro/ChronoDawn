@@ -21,6 +21,7 @@ import com.chronodawn.ChronoDawn;
 import com.chronodawn.entities.bosses.*;
 import com.chronodawn.entities.mobs.*;
 import com.chronodawn.neoforge.gametest.ChronoDawnGameTestsNeoForge;
+import com.chronodawn.neoforge.event.OverlayPackFinder;
 import com.chronodawn.neoforge.registry.ModFluidTypes;
 import com.chronodawn.neoforge.registry.ModLootModifiers;
 import com.chronodawn.neoforge.registry.ModParticles;
@@ -35,6 +36,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.AddPackFindersEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
@@ -73,6 +75,11 @@ public class ChronoDawnNeoForge {
 
         // Common setup - initialize spawn eggs after entities are registered
         modEventBus.addListener(this::commonSetup);
+
+        // Register the runtime config overlay datapack with the server pack repository.
+        // OverlayPackBootstrap.writeOverlay() ran during ChronoDawn.init() above; this
+        // event fires later (when PackRepository is constructed for a world load).
+        modEventBus.addListener((AddPackFindersEvent event) -> OverlayPackFinder.onAddPackFinders(event));
 
         // Register server tick event for pending boss room protections
         NeoForge.EVENT_BUS.addListener(this::onServerTick);
