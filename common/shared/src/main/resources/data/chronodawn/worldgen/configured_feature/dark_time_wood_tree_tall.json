@@ -11,7 +11,7 @@
       }
     },
     "trunk_placer": {
-      "type": "minecraft:straight_trunk_placer",
+      "type": "minecraft:mega_jungle_trunk_placer",
       "base_height": 16,
       "height_rand_a": 5,
       "height_rand_b": 3
@@ -23,17 +23,21 @@
       }
     },
     "foliage_placer": {
-      "type": "minecraft:blob_foliage_placer",
-      "radius": 2,
+      "type": "minecraft:mega_pine_foliage_placer",
+      "radius": 0,
       "offset": 0,
-      "height": 6
+      "crown_height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": 12,
+        "max_inclusive": 16
+      }
     },
     "force_dirt": false,
     "ignore_vines": true,
     "minimum_size": {
       "type": "minecraft:two_layers_feature_size",
       "limit": 1,
-      "lower_size": 0,
+      "lower_size": 1,
       "upper_limit": 2
     },
     "dirt_provider": {
