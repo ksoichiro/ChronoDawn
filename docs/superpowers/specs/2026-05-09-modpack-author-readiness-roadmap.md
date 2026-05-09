@@ -22,7 +22,7 @@ This roadmap exists to:
 
 ### A. Config system
 
-**Status**: 🚧 In progress — first PR scoped to Ancient Ruins (`2026-05-09-config-foundation-design.md`).
+**Status**: 🚧 First PR shipped (Ancient Ruins). See design [`2026-05-09-config-foundation-design.md`](./2026-05-09-config-foundation-design.md) and plan [`../plans/2026-05-09-config-foundation.md`](../plans/2026-05-09-config-foundation.md). Continuing with follow-up tunables.
 
 Cross-loader config infrastructure with per-feature toggles and numeric tuning. The first slice responds to a real user request (Ancient Ruins density), and the infrastructure built here is reusable by every later tunable.
 
@@ -68,7 +68,7 @@ Targeted integrations with flagship mods commonly bundled in packs: Curios / Tri
 
 | Sub-project | Status | First spec |
 | --- | --- | --- |
-| A. Config system | 🚧 In progress | [2026-05-09-config-foundation-design.md](./2026-05-09-config-foundation-design.md) |
+| A. Config system | 🚧 First PR shipped (Ancient Ruins) | [2026-05-09-config-foundation-design.md](./2026-05-09-config-foundation-design.md) |
 | B. Datapack / tag externalization | ⏸ Deferred | — |
 | C. Scripting events | ⏸ Deferred | — |
 | D. Cross-mod compatibility | ⏸ Deferred | — |
