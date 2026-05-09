@@ -31,7 +31,7 @@
           "functions": [
             {
               "function": "minecraft:set_nbt",
-              "tag": "{Recipes:[\"chronodawn:time_hourglass\"],display:{Name:\"{\\\"text\\\":\\\"Time Hourglass Blueprint\\\",\\\"color\\\":\\\"gold\\\",\\\"italic\\\":false}\",Lore:[\"{\\\"text\\\":\\\"Ancient instructions for crafting\\\",\\\"color\\\":\\\"gray\\\",\\\"italic\\\":true}\",\"{\\\"text\\\":\\\"a device to activate portals.\\\",\\\"color\\\":\\\"gray\\\",\\\"italic\\\":true}\"]}}"
+              "tag": "{Recipes:[\"chronodawn:time_hourglass\"],display:{Name:\"{\\\"translate\\\":\\\"item.chronodawn.time_hourglass.blueprint\\\",\\\"color\\\":\\\"gold\\\",\\\"italic\\\":false}\",Lore:[\"{\\\"translate\\\":\\\"item.chronodawn.time_hourglass.blueprint.lore.1\\\",\\\"color\\\":\\\"gray\\\",\\\"italic\\\":true}\",\"{\\\"translate\\\":\\\"item.chronodawn.time_hourglass.blueprint.lore.2\\\",\\\"color\\\":\\\"gray\\\",\\\"italic\\\":true}\"]}}"
             }
           ]
         }

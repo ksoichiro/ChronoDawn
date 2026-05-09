@@ -88,6 +88,9 @@
   "item.chronodawn.temporal_amber_dust": "Temporal Amber Dust",
   "item.chronodawn.enhanced_clockstone": "Enhanced Clockstone",
   "item.chronodawn.time_hourglass": "Time Hourglass",
+  "item.chronodawn.time_hourglass.blueprint": "Time Hourglass Blueprint",
+  "item.chronodawn.time_hourglass.blueprint.lore.1": "Ancient instructions for crafting",
+  "item.chronodawn.time_hourglass.blueprint.lore.2": "a device to activate portals.",
   "item.chronodawn.portal_stabilizer": "Portal Stabilizer",
   "item.chronodawn.time_compass": "Time Compass",
   "item.chronodawn.time_compass.tooltip.target": "Points to:",
@@ -551,5 +554,4 @@
   "block.chronodawn.temporal_amber_ore": "Temporal Amber Ore",
   "block.chronodawn.chrono_cobweb": "Chrono Cobweb"
 }
-
 
