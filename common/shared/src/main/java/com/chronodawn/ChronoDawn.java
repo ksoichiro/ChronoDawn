@@ -17,10 +17,13 @@
  */
 package com.chronodawn;
 
+import com.chronodawn.config.ChronoDawnConfig;
+import com.chronodawn.config.ConfigLoader;
 import com.chronodawn.core.dimension.ChronoDawnBiomeProvider;
 import com.chronodawn.core.dimension.ChronoDawnDimension;
 import com.chronodawn.core.portal.PortalPersistenceManager;
 import com.chronodawn.events.ChronoDawnEvents;
+import com.chronodawn.platform.ChronoDawnPlatform;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModBlockEntities;
 import com.chronodawn.registry.ModCreativeTabs;
@@ -34,6 +37,7 @@ import com.chronodawn.registry.ModParticles;
 import com.chronodawn.registry.ModSounds;
 import com.chronodawn.registry.ModStructureProcessorTypes;
 import com.chronodawn.registry.ModTreeDecoratorTypes;
+import com.chronodawn.worldgen.runtime.OverlayPackBootstrap;
 import com.chronodawn.worldgen.spawning.ChronosWardenSpawner;
 import com.chronodawn.worldgen.spawning.ClockworkColossusSpawner;
 import com.chronodawn.worldgen.spawning.EntropyKeeperSpawner;
@@ -51,6 +55,12 @@ public class ChronoDawn {
 
     public static void init() {
         LOGGER.info("ChronoDawn Mod (common) initialized");
+
+        // Load TOML config and materialise the runtime overlay datapack to disk.
+        // Loader-specific code reads the path back via OverlayPackBootstrap.getOverlayPath()
+        // when constructing its pack source.
+        ChronoDawnConfig config = ConfigLoader.load(ChronoDawnPlatform.getConfigDirectory());
+        OverlayPackBootstrap.writeOverlay(ChronoDawnPlatform.getConfigDirectory(), config);
 
         // Initialize registries (Phase 2 - Foundational)
         ModFluids.register();

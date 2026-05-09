@@ -39,6 +39,7 @@ public final class OverlayPackBootstrap {
     private static final Logger LOGGER = LoggerFactory.getLogger(OverlayPackBootstrap.class);
 
     public static final String OVERLAY_DIR_NAME = "chronodawn-runtime-overlay";
+    public static final String PACK_ID = "chronodawn-runtime-overlay";
 
     /** Pack metadata content written at the root of the overlay directory. */
     private static final byte[] PACK_MCMETA_BYTES = (
@@ -50,7 +51,24 @@ public final class OverlayPackBootstrap {
         "}\n"
     ).getBytes(java.nio.charset.StandardCharsets.UTF_8);
 
+    /**
+     * Set by {@link #writeOverlay(Path, ChronoDawnConfig)} after the overlay is
+     * materialised on disk. Read by loader-specific pack registration code (the
+     * NeoForge {@code AddPackFindersEvent} listener and the Fabric Mixin into
+     * {@code PackRepository}). {@code null} until {@code writeOverlay} succeeds.
+     */
+    private static volatile Path overlayPath;
+
     private OverlayPackBootstrap() {}
+
+    /**
+     * @return the on-disk overlay root once {@link #writeOverlay} has been called,
+     *         or {@code null} if it has not run / failed. Loader-side registration
+     *         code must check for {@code null} and skip registration when so.
+     */
+    public static Path getOverlayPath() {
+        return overlayPath;
+    }
 
     /**
      * Write the overlay datapack to disk and return its root path.
@@ -73,6 +91,9 @@ public final class OverlayPackBootstrap {
                 Files.write(target, entry.getValue());
             }
             LOGGER.info("Wrote runtime config overlay datapack to {}", overlayRoot);
+            // Only publish the path if write succeeded; loader-side registration
+            // depends on a usable directory.
+            overlayPath = overlayRoot;
         } catch (IOException e) {
             LOGGER.error("Failed to write runtime config overlay to {}; config-driven worldgen will be inactive", overlayRoot, e);
         }

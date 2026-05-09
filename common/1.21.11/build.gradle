@@ -30,6 +30,10 @@ dependencies {
     // fabric/<version>/build.gradle's `include(...)` JAR-in-JAR for Fabric.
     compileOnly "com.electronwill.night-config:core:3.8.3"
     compileOnly "com.electronwill.night-config:toml:3.8.3"
+    // Tests (run outside the loader environments) need night-config on the
+    // runtime classpath since neither NeoForge nor Fabric is present.
+    testImplementation "com.electronwill.night-config:core:3.8.3"
+    testImplementation "com.electronwill.night-config:toml:3.8.3"
 
     // Testing dependencies
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
