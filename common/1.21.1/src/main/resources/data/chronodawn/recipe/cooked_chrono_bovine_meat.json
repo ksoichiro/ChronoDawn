@@ -3,7 +3,9 @@
   "category": "food",
   "cookingtime": 200,
   "experience": 0.35,
-  "ingredient": "chronodawn:chrono_bovine_meat",
+  "ingredient": {
+    "item": "chronodawn:chrono_bovine_meat"
+  },
   "result": {
     "id": "chronodawn:cooked_chrono_bovine_meat"
   }
