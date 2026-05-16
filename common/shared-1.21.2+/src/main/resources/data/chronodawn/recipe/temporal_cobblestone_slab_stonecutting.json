@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "chronodawn:temporal_cobblestone",
+  "result": {
+    "id": "chronodawn:temporal_cobblestone_slab",
+    "count": 2
+  }
+}

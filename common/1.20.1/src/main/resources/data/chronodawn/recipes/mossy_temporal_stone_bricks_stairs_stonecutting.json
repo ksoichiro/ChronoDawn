@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "chronodawn:mossy_temporal_stone_bricks"
+  },
+  "result": "chronodawn:mossy_temporal_stone_bricks_stairs",
+  "count": 1
+}

@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "chronodawn:mossy_temporal_cobblestone"
+  },
+  "result": {
+    "id": "chronodawn:mossy_temporal_cobblestone_stairs",
+    "count": 1
+  }
+}

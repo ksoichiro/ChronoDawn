@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "chronodawn:temporal_stone"
+  },
+  "result": "chronodawn:temporal_stone_bricks_stairs",
+  "count": 1
+}

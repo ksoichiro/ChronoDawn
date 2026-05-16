@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "chronodawn:temporal_stone",
+  "result": {
+    "id": "chronodawn:temporal_stone_wall",
+    "count": 1
+  }
+}

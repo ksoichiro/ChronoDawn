@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "chronodawn:cobbled_deepslate_temporal_stone"
+  },
+  "result": {
+    "id": "chronodawn:cobbled_deepslate_temporal_stone_slab",
+    "count": 2
+  }
+}

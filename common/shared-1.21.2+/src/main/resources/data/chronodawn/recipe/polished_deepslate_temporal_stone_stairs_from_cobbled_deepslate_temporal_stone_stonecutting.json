@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "chronodawn:cobbled_deepslate_temporal_stone",
+  "result": {
+    "id": "chronodawn:polished_deepslate_temporal_stone_stairs",
+    "count": 1
+  }
+}

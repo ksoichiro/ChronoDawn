@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "chronodawn:temporal_cobblestone"
+  },
+  "result": "chronodawn:temporal_cobblestone_stairs",
+  "count": 1
+}
