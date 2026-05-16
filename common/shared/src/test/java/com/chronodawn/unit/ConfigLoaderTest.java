@@ -191,4 +191,95 @@ class ConfigLoaderTest {
         assertEquals(returned, ChronoDawnConfig.get(),
             "ConfigLoader.load() must publish the result via ChronoDawnConfig.get()");
     }
+
+    @Test
+    void oresDefault_allFieldsMatchDefaults(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"), "schema_version = 1\n");
+        ChronoDawnConfig config = ConfigLoader.load(tmp);
+        com.chronodawn.config.OresConfig ores = config.world().ores();
+        assertEquals(ConfigDefaults.TIME_CRYSTAL_DEFAULTS, ores.timeCrystal());
+        assertEquals(ConfigDefaults.ENTROPY_CRYSTAL_DEFAULTS, ores.entropyCrystal());
+        assertEquals(ConfigDefaults.TEMPORAL_AMBER_DEFAULTS, ores.temporalAmber());
+    }
+
+    @Test
+    void validOreCustom_isReturnedVerbatim(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[world.ores.time_crystal]\n" +
+            "enabled = false\n" +
+            "count = 7\n" +
+            "y_min = -10\n" +
+            "y_max = 20\n");
+        ChronoDawnConfig config = ConfigLoader.load(tmp);
+        com.chronodawn.config.OreSettings tc = config.world().ores().timeCrystal();
+        assertEquals(false, tc.enabled());
+        assertEquals(7, tc.count());
+        assertEquals(-10, tc.yMin());
+        assertEquals(20, tc.yMax());
+        // Other ores are untouched
+        assertEquals(ConfigDefaults.ENTROPY_CRYSTAL_DEFAULTS, config.world().ores().entropyCrystal());
+    }
+
+    @Test
+    void invalidOreCount_negative_revertsCountOnly(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[world.ores.time_crystal]\n" +
+            "count = -5\n" +
+            "y_min = 5\n" +
+            "y_max = 40\n");
+        ChronoDawnConfig config = ConfigLoader.load(tmp);
+        com.chronodawn.config.OreSettings tc = config.world().ores().timeCrystal();
+        assertEquals(ConfigDefaults.TIME_CRYSTAL_DEFAULTS.count(), tc.count(),
+            "Invalid count reverts to default");
+        assertEquals(5, tc.yMin(), "Valid yMin survives a sibling field's revert");
+        assertEquals(40, tc.yMax(), "Valid yMax survives a sibling field's revert");
+    }
+
+    @Test
+    void invalidOreCount_overMax_revertsCount(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[world.ores.entropy_crystal]\n" +
+            "count = 100\n");
+        ChronoDawnConfig config = ConfigLoader.load(tmp);
+        assertEquals(ConfigDefaults.ENTROPY_CRYSTAL_DEFAULTS.count(),
+            config.world().ores().entropyCrystal().count());
+    }
+
+    @Test
+    void invertedYRange_revertsBothYFieldsOnly(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[world.ores.entropy_crystal]\n" +
+            "count = 6\n" +
+            "y_min = 50\n" +
+            "y_max = 40\n");
+        ChronoDawnConfig config = ConfigLoader.load(tmp);
+        com.chronodawn.config.OreSettings ec = config.world().ores().entropyCrystal();
+        assertEquals(6, ec.count(), "Valid count survives an inverted-Y revert");
+        assertEquals(ConfigDefaults.ENTROPY_CRYSTAL_DEFAULTS.yMin(), ec.yMin());
+        assertEquals(ConfigDefaults.ENTROPY_CRYSTAL_DEFAULTS.yMax(), ec.yMax());
+    }
+
+    @Test
+    void yOutOfRange_belowMin_revertsBothY(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[world.ores.temporal_amber]\n" +
+            "y_min = -100\n" +
+            "y_max = 10\n");
+        ChronoDawnConfig config = ConfigLoader.load(tmp);
+        com.chronodawn.config.OreSettings ta = config.world().ores().temporalAmber();
+        assertEquals(ConfigDefaults.TEMPORAL_AMBER_DEFAULTS.yMin(), ta.yMin());
+        assertEquals(ConfigDefaults.TEMPORAL_AMBER_DEFAULTS.yMax(), ta.yMax());
+    }
+
+    @Test
+    void unknownOreSection_isIgnored(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[world.ores.nonexistent]\n" +
+            "count = 5\n" +
+            "[world.ores.time_crystal]\n" +
+            "count = 9\n");
+        ChronoDawnConfig config = ConfigLoader.load(tmp);
+        assertEquals(9, config.world().ores().timeCrystal().count(),
+            "Known ore section still loads despite an unknown sibling");
+    }
 }

@@ -58,6 +58,20 @@ public final class ConfigLoader {
     private static final String K_AR_SEPARATION = "separation";
     private static final String K_AR_SALT = "salt";
 
+    private static final String K_ORES = "ores";
+    private static final String K_TIME_CRYSTAL = "time_crystal";
+    private static final String K_ENTROPY_CRYSTAL = "entropy_crystal";
+    private static final String K_TEMPORAL_AMBER = "temporal_amber";
+    private static final String K_ORE_ENABLED = "enabled";
+    private static final String K_ORE_COUNT = "count";
+    private static final String K_ORE_Y_MIN = "y_min";
+    private static final String K_ORE_Y_MAX = "y_max";
+
+    private static final int MIN_ORE_COUNT = 0;
+    private static final int MAX_ORE_COUNT = 64;
+    private static final int MIN_ORE_Y = -64;
+    private static final int MAX_ORE_Y = 320;
+
     private ConfigLoader() {}
 
     /**
@@ -118,6 +132,7 @@ public final class ConfigLoader {
         }
 
         ChronoDawnConfig.AncientRuins ancientRuins = parseAncientRuins(parsed);
+        com.chronodawn.config.OresConfig ores = parseOres(parsed);
 
         // Surface unknown top-level keys at WARN. Nested-table walking would be nice but
         // would balloon this method; the most common mistake is misspelling at top level.
@@ -132,7 +147,7 @@ public final class ConfigLoader {
             schemaVersion,
             new ChronoDawnConfig.World(
                 new ChronoDawnConfig.Structures(ancientRuins),
-                ConfigDefaults.defaults().world().ores()
+                ores
             )
         );
     }
@@ -177,5 +192,53 @@ public final class ConfigLoader {
         }
 
         return new ChronoDawnConfig.AncientRuins(enabled, spacing, separation, salt);
+    }
+
+    private static com.chronodawn.config.OresConfig parseOres(CommentedConfig parsed) {
+        return new com.chronodawn.config.OresConfig(
+            parseOre(parsed, K_TIME_CRYSTAL, ConfigDefaults.TIME_CRYSTAL_DEFAULTS),
+            parseOre(parsed, K_ENTROPY_CRYSTAL, ConfigDefaults.ENTROPY_CRYSTAL_DEFAULTS),
+            parseOre(parsed, K_TEMPORAL_AMBER, ConfigDefaults.TEMPORAL_AMBER_DEFAULTS)
+        );
+    }
+
+    private static com.chronodawn.config.OreSettings parseOre(
+        CommentedConfig parsed, String oreKey, com.chronodawn.config.OreSettings defaults
+    ) {
+        String path = K_WORLD + "." + K_ORES + "." + oreKey;
+
+        boolean enabled = parsed.<Boolean>getOptional(path + "." + K_ORE_ENABLED)
+            .orElse(defaults.enabled());
+
+        int count = parsed.<Number>getOptional(path + "." + K_ORE_COUNT)
+            .map(Number::intValue)
+            .orElse(defaults.count());
+
+        int yMin = parsed.<Number>getOptional(path + "." + K_ORE_Y_MIN)
+            .map(Number::intValue)
+            .orElse(defaults.yMin());
+
+        int yMax = parsed.<Number>getOptional(path + "." + K_ORE_Y_MAX)
+            .map(Number::intValue)
+            .orElse(defaults.yMax());
+
+        // Validation: each field reverts independently so one bad value doesn't reset the others.
+        if (count < MIN_ORE_COUNT || count > MAX_ORE_COUNT) {
+            LOGGER.error(
+                "Invalid {}.{} = {} (must be in [{}, {}]); using default {}",
+                path, K_ORE_COUNT, count, MIN_ORE_COUNT, MAX_ORE_COUNT, defaults.count()
+            );
+            count = defaults.count();
+        }
+        if (yMin < MIN_ORE_Y || yMax > MAX_ORE_Y || yMin > yMax) {
+            LOGGER.error(
+                "Invalid {}.{{y_min,y_max}} = ({}, {}) (must satisfy {} <= y_min <= y_max <= {}); using defaults ({}, {})",
+                path, yMin, yMax, MIN_ORE_Y, MAX_ORE_Y, defaults.yMin(), defaults.yMax()
+            );
+            yMin = defaults.yMin();
+            yMax = defaults.yMax();
+        }
+
+        return new com.chronodawn.config.OreSettings(enabled, count, yMin, yMax);
     }
 }
