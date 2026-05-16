@@ -1104,12 +1104,20 @@ Expected: `BUILD SUCCESSFUL`.
 Run: `./gradlew :common-1.21.11:test -Ptarget_mc_version=1.21.11`
 Expected: `BUILD SUCCESSFUL`.
 
-- [ ] **Step 2: Run `./gradlew checkAll` for the full matrix**
+- [ ] **Step 2: Run the build + test matrix (gameTestAll skipped)**
 
-Run: `./gradlew checkAll`
-Expected: `BUILD SUCCESSFUL` covering cleanAll → validateResources → validateTranslations → buildAll → testAll → gameTestAll.
+Per the spec ("`gameTestAll` is skipped — this PR does not touch GameTest sources, matching the precedent set by the Ancient Ruins PR"), run only the build + unit-test layers of the matrix, not the wrapper `checkAll`:
 
-Per existing project memory, `buildAll`/`gameTestAll` wrappers occasionally report spurious failures from RemapSourcesJarTask races; if a failure surfaces only in the aggregate wrapper, re-run the affected per-version build directly (e.g. `./gradlew build1_21_4 -Ptarget_mc_version=1.21.4`) to confirm whether it is real before investigating.
+```
+./gradlew cleanAll validateResources validateTranslations buildAll testAll
+```
+
+Expected: `BUILD SUCCESSFUL`. The 11 versions × 2 loaders compile cleanly and `:common-X:test` is green on every version.
+
+Per existing project memory, the `buildAll` wrapper occasionally reports spurious failures from RemapSourcesJarTask races; if a failure surfaces only in the aggregate wrapper, re-run the affected per-version build directly (e.g. `./gradlew build1_21_4 -Ptarget_mc_version=1.21.4`) to confirm whether it is real before investigating.
+
+> [!NOTE]
+> Running `./gradlew checkAll` (which wraps the above plus `gameTestAll`) is acceptable but the `gameTestAll` step may surface unrelated pre-existing failures on this branch (e.g. 1.20.1 mega-tree configured_feature parse errors introduced by earlier commits). Treat any `gameTestAll` failure that does not touch ore generation or config files as out of scope for this PR and file it as separate tech debt.
 
 - [ ] **Step 3: If verification is fully green, no commit needed (verification only).**
 
@@ -1171,7 +1179,7 @@ Use the same edit sequence. Expected: identical behavior to 1.21.11. If 1.21.1 d
 
 - All files in the spec's "Files / New + Modified" section exist or are updated.
 - `./gradlew testAll` passes on every supported version.
-- `./gradlew checkAll` succeeds.
+- `./gradlew cleanAll validateResources validateTranslations buildAll testAll` succeeds (per the spec; `gameTestAll` is skipped for this PR).
 - Manual verification (Task 11 steps 1–4) passes on both 1.21.1 and 1.21.11.
 - `docs/configuration.md` "Ore generation" section reviewed for clarity.
 - CHANGELOG entry written under `[Unreleased]` `### Added`.
