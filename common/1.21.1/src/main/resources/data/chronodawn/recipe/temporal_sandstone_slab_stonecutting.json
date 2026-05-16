@@ -3,6 +3,8 @@
   "ingredient": {
     "item": "chronodawn:temporal_sandstone"
   },
-  "result": "chronodawn:temporal_sandstone_slab",
-  "count": 2
+  "result": {
+    "id": "chronodawn:temporal_sandstone_slab",
+    "count": 2
+  }
 }
