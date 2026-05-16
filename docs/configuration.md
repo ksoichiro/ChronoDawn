@@ -109,6 +109,85 @@ worlds only.
 
 ---
 
+### `[world.ores.*]`
+
+Per-ore generation tuning for the three ChronoDawn-specific ores in the
+Chrono dimension: **Time Crystal**, **Entropy Crystal**, and **Temporal
+Amber**. Each ore has its own table; missing sections fall back to the
+defaults listed below.
+
+> [!NOTE]
+> `ore_clockstone` and the vanilla-overlay ores (`iron` / `gold` / `coal`
+> / `redstone`) are intentionally not exposed yet — see the design spec
+> for context.
+
+```toml
+[world.ores.time_crystal]
+enabled = true
+count = 3
+y_min = 0
+y_max = 48
+
+[world.ores.entropy_crystal]
+enabled = true
+count = 4
+y_min = 40
+y_max = 100
+
+[world.ores.temporal_amber]
+enabled = true
+count = 4
+y_min = -30
+y_max = 20
+```
+
+| Field | Type | Default (TC / EC / TA) | Range | Notes |
+| --- | --- | --- | --- | --- |
+| `enabled` | boolean | `true` for all three | — | When `false`, the placed feature stays registered but emits `count = 0` so nothing generates. Your other values are preserved verbatim and restored on re-enable. |
+| `count` | integer | `3` / `4` / `4` | `0..=64` | Number of placement attempts per chunk. Lower = rarer. Cluster size (blocks per attempt) is not exposed here. |
+| `y_min` | integer | `0` / `40` / `-30` | `-64..=y_max` | Absolute minimum Y for placement. |
+| `y_max` | integer | `48` / `100` / `20` | `y_min..=320` | Absolute maximum Y for placement. |
+
+Distribution shape between `y_min` and `y_max` is **fixed per ore** and
+not configurable:
+
+- Time Crystal and Entropy Crystal use `minecraft:trapezoid` (concentrated
+  in the middle of the range).
+- Temporal Amber uses `minecraft:uniform` (flat probability across the
+  range).
+
+Authors who need a different distribution can ship a full datapack
+override at `data/chronodawn/worldgen/placed_feature/ore_<id>.json`; the
+runtime overlay sits below user datapacks, so your file wins.
+
+#### Example: make Entropy Crystal rare
+
+```toml
+[world.ores.entropy_crystal]
+count = 1
+```
+
+#### Example: push Temporal Amber deeper
+
+```toml
+[world.ores.temporal_amber]
+y_min = -60
+y_max = -10
+```
+
+#### Example: disable Time Crystal entirely
+
+```toml
+[world.ores.time_crystal]
+enabled = false
+```
+
+The placed feature is still registered (biome references resolve) but
+zero attempts are made per chunk. **New chunks only** — existing chunks
+keep whatever already generated.
+
+---
+
 ## Adding more configuration
 
 This file is the canonical reference. Future Chrono Dawn versions will add
