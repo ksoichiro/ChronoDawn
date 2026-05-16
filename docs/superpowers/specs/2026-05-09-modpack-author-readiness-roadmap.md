@@ -22,14 +22,14 @@ This roadmap exists to:
 
 ### A. Config system
 
-**Status**: 🚧 First PR shipped (Ancient Ruins). See design [`2026-05-09-config-foundation-design.md`](./2026-05-09-config-foundation-design.md) and plan [`../plans/2026-05-09-config-foundation.md`](../plans/2026-05-09-config-foundation.md). Continuing with follow-up tunables.
+**Status**: 🚧 Two PRs shipped: Ancient Ruins ([design](./2026-05-09-config-foundation-design.md), [plan](../plans/2026-05-09-config-foundation.md)) and Ore generation tuning for Time Crystal / Entropy Crystal / Temporal Amber ([design](./2026-05-16-ore-generation-tuning-design.md), [plan](../plans/2026-05-16-ore-generation-tuning.md)). Continuing with follow-up tunables.
 
 Cross-loader config infrastructure with per-feature toggles and numeric tuning. The first slice responds to a real user request (Ancient Ruins density), and the infrastructure built here is reusable by every later tunable.
 
 Planned follow-up tunables (each is a separate PR):
 
 - Boss HP / damage multipliers
-- Ore generation rates and Y ranges
+- Ore generation rates and Y ranges — *partial: Time Crystal / Entropy Crystal / Temporal Amber shipped. `ore_clockstone` deferred (needs version-aware defaults; bundled count differs across MC versions). Vanilla-overlay ores in the Chrono dimension also deferred.*
 - Time Distortion (Slowness) strength and scope
 - Portal behavior (one-way enforcement, re-ignition rules)
 - Dimension-level toggles (per-biome / per-structure enable flags)
@@ -68,7 +68,7 @@ Targeted integrations with flagship mods commonly bundled in packs: Curios / Tri
 
 | Sub-project | Status | First spec |
 | --- | --- | --- |
-| A. Config system | 🚧 First PR shipped (Ancient Ruins) | [2026-05-09-config-foundation-design.md](./2026-05-09-config-foundation-design.md) |
+| A. Config system | 🚧 Two PRs shipped (Ancient Ruins, Ore tuning) | [2026-05-09-config-foundation-design.md](./2026-05-09-config-foundation-design.md) |
 | B. Datapack / tag externalization | ⏸ Deferred | — |
 | C. Scripting events | ⏸ Deferred | — |
 | D. Cross-mod compatibility | ⏸ Deferred | — |

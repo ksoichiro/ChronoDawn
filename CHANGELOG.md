@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 #### Translation Infrastructure
 - **Translation contribution guide** added to `CONTRIBUTING.md`, plus a translator-facing glossary at `docs/translation-glossary.md` and a `scripts/check_lang_parity.py` Python script that verifies non-English lang files share keys with `en_us.json`. Aimed at lowering the barrier for community translators to submit `<locale>.json` PRs.
+- **Ore generation tuning** for Time Crystal, Entropy Crystal, and Temporal Amber — exposes `enabled`, `count`, `y_min`, `y_max` per ore via `config/chronodawn.toml`. See [docs/configuration.md](docs/configuration.md#worldores).
 
 ### Changed
 - **Ancient Ruins spawn rate** reduced. Placement spacing increased from 24 to 56 chunks (separation 8 → 20), and the eligible biome tag narrowed from "all forests + all taigas" to taiga variants + dark forest. Existing worlds keep already-generated ruins; only newly explored chunks reflect the change.

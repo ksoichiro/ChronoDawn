@@ -30,11 +30,27 @@ default. Players can still edit it, and unknown keys / invalid values fall
 back individually so a future Chrono Dawn version with new fields will not
 break your bundled file.
 
+### Example: rebalance a single ore
+
+```toml
+# Make Entropy Crystal one-third as common; deeper-only.
+[world.ores.entropy_crystal]
+count = 1
+y_min = 5
+y_max = 50
+```
+
+Bundle this file via `overrides/config/chronodawn.toml` and the runtime
+overlay applies it on first launch. The other two ores stay at their
+defaults. See [`docs/configuration.md`](configuration.md) for the full
+schema.
+
 ### Restart and existing-world caveats
 
 | Setting type | Restart needed? | Affects existing chunks? |
 | --- | --- | --- |
 | `world.structures.*` | yes (server / world reload) | no — only new chunks |
+| `world.ores.*` | yes (server / world reload) | no — only new chunks |
 
 These are vanilla Minecraft constraints; the mod cannot work around them.
 Document them in your pack notes if you expect players to retune values
