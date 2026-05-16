@@ -69,7 +69,8 @@ class RuntimeStructureOverlayTest {
             new ChronoDawnConfig.World(
                 new ChronoDawnConfig.Structures(
                     new ChronoDawnConfig.AncientRuins(true, 16, 4, 999)
-                )
+                ),
+                ConfigDefaults.defaults().world().ores()
             )
         );
 
@@ -90,7 +91,8 @@ class RuntimeStructureOverlayTest {
             new ChronoDawnConfig.World(
                 new ChronoDawnConfig.Structures(
                     new ChronoDawnConfig.AncientRuins(false, 56, 20, 20005897)
-                )
+                ),
+                ConfigDefaults.defaults().world().ores()
             )
         );
 

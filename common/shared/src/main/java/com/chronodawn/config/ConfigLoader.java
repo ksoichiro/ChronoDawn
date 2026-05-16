@@ -131,7 +131,8 @@ public final class ConfigLoader {
         return new ChronoDawnConfig(
             schemaVersion,
             new ChronoDawnConfig.World(
-                new ChronoDawnConfig.Structures(ancientRuins)
+                new ChronoDawnConfig.Structures(ancientRuins),
+                ConfigDefaults.defaults().world().ores()
             )
         );
     }

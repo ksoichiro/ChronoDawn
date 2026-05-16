@@ -32,6 +32,12 @@ public final class ConfigDefaults {
     public static final int ANCIENT_RUINS_SEPARATION = 20;
     public static final int ANCIENT_RUINS_SALT = 20005897;
 
+    // Defaults mirror common/shared/src/main/resources/data/chronodawn/worldgen/placed_feature/ore_*.json
+    // Asserted by RuntimePlacedFeatureOverlayTest (round-trip parsed-tree equality against the bundled JSONs).
+    public static final OreSettings TIME_CRYSTAL_DEFAULTS = new OreSettings(true, 3, 0, 48);
+    public static final OreSettings ENTROPY_CRYSTAL_DEFAULTS = new OreSettings(true, 4, 40, 100);
+    public static final OreSettings TEMPORAL_AMBER_DEFAULTS = new OreSettings(true, 4, -30, 20);
+
     public static ChronoDawnConfig defaults() {
         return new ChronoDawnConfig(
             ChronoDawnConfig.CURRENT_SCHEMA_VERSION,
@@ -43,6 +49,11 @@ public final class ConfigDefaults {
                         ANCIENT_RUINS_SEPARATION,
                         ANCIENT_RUINS_SALT
                     )
+                ),
+                new OresConfig(
+                    TIME_CRYSTAL_DEFAULTS,
+                    ENTROPY_CRYSTAL_DEFAULTS,
+                    TEMPORAL_AMBER_DEFAULTS
                 )
             )
         );

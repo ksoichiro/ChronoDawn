@@ -51,7 +51,7 @@ public record ChronoDawnConfig(
         INSTANCE = config;
     }
 
-    public record World(Structures structures) {}
+    public record World(Structures structures, OresConfig ores) {}
 
     public record Structures(AncientRuins ancientRuins) {}
 
