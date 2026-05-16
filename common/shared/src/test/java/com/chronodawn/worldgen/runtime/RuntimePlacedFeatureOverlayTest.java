@@ -19,6 +19,7 @@ package com.chronodawn.worldgen.runtime;
 
 import com.chronodawn.config.ChronoDawnConfig;
 import com.chronodawn.config.ConfigDefaults;
+import com.chronodawn.config.OreSettings;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -71,6 +72,90 @@ class RuntimePlacedFeatureOverlayTest {
         JsonElement generated = JsonParser.parseString(new String(bytes, StandardCharsets.UTF_8));
         JsonElement bundled = loadBundled("data/chronodawn/worldgen/placed_feature/ore_temporal_amber.json");
         assertEquals(bundled, generated);
+    }
+
+    @Test
+    void timeCrystalCountOverride_changesCountStepOnly() {
+        ChronoDawnConfig custom = withOres(
+            new OreSettings(true, 10, 0, 48),
+            ConfigDefaults.ENTROPY_CRYSTAL_DEFAULTS,
+            ConfigDefaults.TEMPORAL_AMBER_DEFAULTS
+        );
+        JsonObject json = parseObject(RuntimePlacedFeatureOverlay.generate(custom)
+            .get(RuntimePlacedFeatureOverlay.TIME_CRYSTAL_PATH));
+        assertEquals(10, countStep(json).get("count").getAsInt());
+    }
+
+    @Test
+    void entropyCrystalDisabled_emitsCountZeroAndPreservesOtherValues() {
+        // Disabled state: forced count=0 in the emitted JSON, but user's count / yMin / yMax
+        // round-trip verbatim so re-enabling restores their last numbers.
+        OreSettings disabled = new OreSettings(false, 7, 30, 90);
+        ChronoDawnConfig custom = withOres(
+            ConfigDefaults.TIME_CRYSTAL_DEFAULTS, disabled, ConfigDefaults.TEMPORAL_AMBER_DEFAULTS
+        );
+        JsonObject json = parseObject(RuntimePlacedFeatureOverlay.generate(custom)
+            .get(RuntimePlacedFeatureOverlay.ENTROPY_CRYSTAL_PATH));
+        assertEquals(0, countStep(json).get("count").getAsInt(),
+            "enabled=false must force the count step to 0");
+        JsonObject heightRange = json.getAsJsonArray("placement").get(2).getAsJsonObject();
+        assertEquals(30,
+            heightRange.getAsJsonObject("height").getAsJsonObject("min_inclusive").get("absolute").getAsInt(),
+            "yMin must be preserved verbatim when disabled");
+        assertEquals(90,
+            heightRange.getAsJsonObject("height").getAsJsonObject("max_inclusive").get("absolute").getAsInt(),
+            "yMax must be preserved verbatim when disabled");
+    }
+
+    @Test
+    void temporalAmberCustomYRange_changesHeightBoundsAndKeepsUniform() {
+        OreSettings amber = new OreSettings(true, 4, -20, 30);
+        ChronoDawnConfig custom = withOres(
+            ConfigDefaults.TIME_CRYSTAL_DEFAULTS, ConfigDefaults.ENTROPY_CRYSTAL_DEFAULTS, amber
+        );
+        JsonObject json = parseObject(RuntimePlacedFeatureOverlay.generate(custom)
+            .get(RuntimePlacedFeatureOverlay.TEMPORAL_AMBER_PATH));
+        JsonObject height = json.getAsJsonArray("placement").get(2).getAsJsonObject().getAsJsonObject("height");
+        assertEquals(-20, height.getAsJsonObject("min_inclusive").get("absolute").getAsInt());
+        assertEquals(30, height.getAsJsonObject("max_inclusive").get("absolute").getAsInt());
+        assertEquals("minecraft:uniform", height.get("type").getAsString());
+    }
+
+    @Test
+    void perOreDistributionType_isFixed() {
+        Map<String, byte[]> overlay = RuntimePlacedFeatureOverlay.generate(ConfigDefaults.defaults());
+        assertEquals("minecraft:trapezoid",
+            heightType(overlay.get(RuntimePlacedFeatureOverlay.TIME_CRYSTAL_PATH)));
+        assertEquals("minecraft:trapezoid",
+            heightType(overlay.get(RuntimePlacedFeatureOverlay.ENTROPY_CRYSTAL_PATH)));
+        assertEquals("minecraft:uniform",
+            heightType(overlay.get(RuntimePlacedFeatureOverlay.TEMPORAL_AMBER_PATH)));
+    }
+
+    // --- helpers ---
+
+    private static ChronoDawnConfig withOres(OreSettings tc, OreSettings ec, OreSettings ta) {
+        ChronoDawnConfig defaults = ConfigDefaults.defaults();
+        return new ChronoDawnConfig(
+            defaults.schemaVersion(),
+            new ChronoDawnConfig.World(
+                defaults.world().structures(),
+                new com.chronodawn.config.OresConfig(tc, ec, ta)
+            )
+        );
+    }
+
+    private static JsonObject parseObject(byte[] bytes) {
+        return JsonParser.parseString(new String(bytes, StandardCharsets.UTF_8)).getAsJsonObject();
+    }
+
+    private static JsonObject countStep(JsonObject placedFeature) {
+        return placedFeature.getAsJsonArray("placement").get(0).getAsJsonObject();
+    }
+
+    private static String heightType(byte[] bytes) {
+        return parseObject(bytes).getAsJsonArray("placement").get(2).getAsJsonObject()
+            .getAsJsonObject("height").get("type").getAsString();
     }
 
     private static JsonElement loadBundled(String classpathRelative) {
