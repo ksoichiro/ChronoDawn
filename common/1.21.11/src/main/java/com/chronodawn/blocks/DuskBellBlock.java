@@ -37,6 +37,7 @@ public class DuskBellBlock extends DoublePlantBlock {
      */
     public static BlockBehaviour.Properties createProperties() {
         return BlockBehaviour.Properties.of()
+            .replaceable()
             .noCollision()
             .noOcclusion()
             .instabreak()

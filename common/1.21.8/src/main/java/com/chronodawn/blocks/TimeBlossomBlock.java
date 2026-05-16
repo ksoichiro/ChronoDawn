@@ -59,6 +59,7 @@ public class TimeBlossomBlock extends BushBlock {
      */
     public static BlockBehaviour.Properties createProperties(String id) {
         return BlockBehaviour.Properties.of()
+            .replaceable()
             .noCollission()
             .noOcclusion()
             .instabreak()

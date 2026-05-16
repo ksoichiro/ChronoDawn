@@ -35,6 +35,7 @@ public class TemporalTallGrassBlock extends DoublePlantBlock {
      */
     public static BlockBehaviour.Properties createProperties(String id) {
         return BlockBehaviour.Properties.of()
+            .replaceable()
             .noCollision()
             .noOcclusion()
             .instabreak()

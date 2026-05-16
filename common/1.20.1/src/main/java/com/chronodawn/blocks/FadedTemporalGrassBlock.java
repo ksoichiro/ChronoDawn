@@ -25,6 +25,7 @@ public class FadedTemporalGrassBlock extends BushBlock {
 
     public static BlockBehaviour.Properties createProperties() {
         return BlockBehaviour.Properties.of()
+            .replaceable()
             .noCollission()
             .noOcclusion()
             .instabreak()
