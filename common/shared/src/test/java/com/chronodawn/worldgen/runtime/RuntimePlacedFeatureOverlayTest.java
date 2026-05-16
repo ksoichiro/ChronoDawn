@@ -53,6 +53,26 @@ class RuntimePlacedFeatureOverlayTest {
             "Runtime overlay output for default config must be tree-equal to the bundled placed_feature JSON");
     }
 
+    @Test
+    void defaultConfig_reproducesBundledEntropyCrystalJson() {
+        Map<String, byte[]> overlay = RuntimePlacedFeatureOverlay.generate(ConfigDefaults.defaults());
+        byte[] bytes = overlay.get(RuntimePlacedFeatureOverlay.ENTROPY_CRYSTAL_PATH);
+        assertNotNull(bytes, "Overlay must contain ore_entropy_crystal.json under expected path");
+        JsonElement generated = JsonParser.parseString(new String(bytes, StandardCharsets.UTF_8));
+        JsonElement bundled = loadBundled("data/chronodawn/worldgen/placed_feature/ore_entropy_crystal.json");
+        assertEquals(bundled, generated);
+    }
+
+    @Test
+    void defaultConfig_reproducesBundledTemporalAmberJson() {
+        Map<String, byte[]> overlay = RuntimePlacedFeatureOverlay.generate(ConfigDefaults.defaults());
+        byte[] bytes = overlay.get(RuntimePlacedFeatureOverlay.TEMPORAL_AMBER_PATH);
+        assertNotNull(bytes, "Overlay must contain ore_temporal_amber.json under expected path");
+        JsonElement generated = JsonParser.parseString(new String(bytes, StandardCharsets.UTF_8));
+        JsonElement bundled = loadBundled("data/chronodawn/worldgen/placed_feature/ore_temporal_amber.json");
+        assertEquals(bundled, generated);
+    }
+
     private static JsonElement loadBundled(String classpathRelative) {
         try (InputStream in = RuntimePlacedFeatureOverlayTest.class.getClassLoader()
             .getResourceAsStream(classpathRelative)) {

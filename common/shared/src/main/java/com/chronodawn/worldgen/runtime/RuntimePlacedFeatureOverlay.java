@@ -44,6 +44,10 @@ import java.util.Map;
 public final class RuntimePlacedFeatureOverlay {
     public static final String TIME_CRYSTAL_PATH =
         "data/" + ChronoDawn.MOD_ID + "/worldgen/placed_feature/ore_time_crystal.json";
+    public static final String ENTROPY_CRYSTAL_PATH =
+        "data/" + ChronoDawn.MOD_ID + "/worldgen/placed_feature/ore_entropy_crystal.json";
+    public static final String TEMPORAL_AMBER_PATH =
+        "data/" + ChronoDawn.MOD_ID + "/worldgen/placed_feature/ore_temporal_amber.json";
 
     private RuntimePlacedFeatureOverlay() {}
 
@@ -51,6 +55,10 @@ public final class RuntimePlacedFeatureOverlay {
         Map<String, byte[]> out = new LinkedHashMap<>();
         out.put(TIME_CRYSTAL_PATH, generateOre(
             "ore_time_crystal", "minecraft:trapezoid", config.world().ores().timeCrystal()));
+        out.put(ENTROPY_CRYSTAL_PATH, generateOre(
+            "ore_entropy_crystal", "minecraft:trapezoid", config.world().ores().entropyCrystal()));
+        out.put(TEMPORAL_AMBER_PATH, generateOre(
+            "ore_temporal_amber", "minecraft:uniform", config.world().ores().temporalAmber()));
         return out;
     }
 
