@@ -56,12 +56,6 @@
         "maxCount": 4
       },
       {
-        "type": "minecraft:witch",
-        "weight": 5,
-        "minCount": 1,
-        "maxCount": 1
-      },
-      {
         "type": "chronodawn:chronal_leech",
         "weight": 15,
         "minCount": 1,

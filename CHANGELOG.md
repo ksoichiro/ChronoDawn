@@ -63,6 +63,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - **Ancient Ruins spawn rate** reduced. Placement spacing increased from 24 to 56 chunks (separation 8 → 20), and the eligible biome tag narrowed from "all forests + all taigas" to taiga variants + dark forest. Existing worlds keep already-generated ruins; only newly explored chunks reflect the change.
 - **Vanilla ore veins disabled in Chrono Dawn** — vanilla copper/iron ore veins no longer generate inside the Chrono Dawn dimension; use the Temporal ore variants instead.
+- **Vanilla land monsters removed from Chrono Dawn biomes** — Witches no longer spawn in mountain/desert/dark forest/snowy/swamp biomes, Strays no longer spawn in snowy, Slimes no longer spawn in swamp, and Drowned no longer spawn in ocean. Ambient/creature mobs (Bat, Wolf, Frog) and ocean water mobs (Squid, Cod, Salmon, Dolphin, Pufferfish, Tropical Fish) remain for atmosphere. Existing chunks keep their spawned mobs; only newly generated chunks reflect the change.
 - **Chrono Dawn water palette** — water surface and fog colors tuned to be visually consistent across biomes.
 - **Refined item textures** for Time Crystal, Clockstone, Entropy Crystal, and Mossy Temporal Cobblestone.
 - **Temporal Walls** now tagged under `#minecraft:walls`, enabling tag-based vanilla interactions.

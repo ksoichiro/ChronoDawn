@@ -26,12 +26,6 @@
   "spawners": {
     "monster": [
       {
-        "type": "minecraft:drowned",
-        "weight": 100,
-        "minCount": 1,
-        "maxCount": 4
-      },
-      {
         "type": "chronodawn:epoch_husk",
         "weight": 95,
         "minCount": 4,
