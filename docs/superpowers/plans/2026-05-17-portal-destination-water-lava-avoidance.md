@@ -109,25 +109,32 @@ private static BlockPos findGroundLevel(ServerLevel level, BlockPos start) {
 
 Delete the existing `isSuitablePortalGround` line that lived as a separate method declaration (it is now defined inside the helper block from step A).
 
-### Recipe step C: drop the downward-adjustment loop in `generatePortalStructure` and force the footing
+### Recipe step C: drop the downward-adjustment loop in `generatePortalStructure`, write the footing only in `generatePortal`
 
-Inside `generatePortalStructure(ServerLevel level, BlockPos pos, Direction.Axis axis)`:
+Two edits, in two different methods:
 
-1. Delete the entire `needsAdjustment` / `while (adjustedPos.getY() > level.getMinBuildHeight())` (or `getMinY()`) block that searches downward for solid ground. `findGroundLevel` is now authoritative.
-2. After the frame and portal blocks are written (i.e., after the four edge loops and the interior fill, just before the registry update), add:
+**C.1 — In `generatePortalStructure(ServerLevel level, BlockPos pos, Direction.Axis axis)`:**
+
+Delete the entire `needsAdjustment` / `while (adjustedPos.getY() > level.getMinBuildHeight())` (or `getMinY()`) block that searches downward for solid ground. `findGroundLevel` is now authoritative. Do **not** add a footing loop here — this method is also called from `findReusablePortalFrame` to re-light an existing returning frame, and we must not overwrite player-placed blocks under a reused frame.
+
+**C.2 — In `generatePortal(ServerLevel level, BlockPos coords, Direction.Axis axis)`:**
+
+After the existing `generatePortalStructure(level, groundPos, axis);` call and before `return groundPos;`, add the forced footing:
 
 ```java
-// Always write a Clockstone footing directly under the frame's bottom row.
-// Guarantees a walkable step-out surface even when the portal floats above
-// water/lava or sits on weak terrain (leaves, snow layers, etc.).
+// Write the 4-block Clockstone footing under the frame's bottom row, but only
+// on the new-portal path (this method). The reused-frame path
+// (findReusablePortalFrame -> generatePortalStructure) must not touch what the
+// player has placed below an existing returning frame.
 BlockState footingState = ModBlocks.CLOCKSTONE_BLOCK.get().defaultBlockState();
-for (int x = 0; x < width; x++) {
-    BlockPos footing = pos.relative(horizontal, x).below();
+Direction horizontal = axis == Direction.Axis.X ? Direction.EAST : Direction.SOUTH;
+for (int x = 0; x < 4; x++) {
+    BlockPos footing = groundPos.relative(horizontal, x).below();
     level.setBlock(footing, footingState, 3);
 }
 ```
 
-The constant `3` matches `Block.UPDATE_ALL` and is used elsewhere in the same method.
+The literal `4` matches the existing `width = 4` in `generatePortalStructure`; the literal `3` matches `Block.UPDATE_ALL` used elsewhere in the same file.
 
 ---
 
@@ -150,7 +157,7 @@ Skim it so you know exactly where `findGroundLevel`, `isSuitablePortalGround`, a
 
 - [ ] **Step 3: Apply Recipe step B** — replace the entire body of `findGroundLevel`.
 
-- [ ] **Step 4: Apply Recipe step C** — inside `generatePortalStructure`, remove the downward-adjustment block (uses `level.getMinY()` on this version) and add the forced-footing loop just before the registry update.
+- [ ] **Step 4: Apply Recipe step C** — see the two-part instruction in the shared recipe above. C.1 removes the downward-adjustment block from `generatePortalStructure` (uses `level.getMinY()` on this version). C.2 inserts the forced-footing loop at the end of `generatePortal`, **not** inside `generatePortalStructure`, so the reused-frame relight path does not overwrite player-placed blocks.
 
 - [ ] **Step 5: Make the two new helpers package-private for testing**
 
