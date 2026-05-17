@@ -558,6 +558,17 @@ public class PortalTeleportHandler {
 
         // Generate a 4x5 portal at ground level with specified axis
         generatePortalStructure(level, groundPos, axis);
+
+        // Write the 4-block Clockstone footing under the frame's bottom row, but only
+        // on the new-portal path (this method). The reused-frame path
+        // (findReusablePortalFrame -> generatePortalStructure) must not touch what the
+        // player has placed below an existing returning frame.
+        BlockState footingState = ModBlocks.CLOCKSTONE_BLOCK.get().defaultBlockState();
+        Direction horizontal = axis == Direction.Axis.X ? Direction.EAST : Direction.SOUTH;
+        for (int x = 0; x < 4; x++) {
+            BlockPos footing = groundPos.relative(horizontal, x).below();
+            level.setBlock(footing, footingState, 3);
+        }
         return groundPos;
     }
 
@@ -676,15 +687,6 @@ public class PortalTeleportHandler {
             for (int y = 1; y < height - 1; y++) {
                 level.setBlock(pos.relative(horizontal, x).relative(vertical, y), portalState, 3);
             }
-        }
-
-        // Always write a Clockstone footing directly under the frame's bottom row.
-        // Guarantees a walkable step-out surface even when the portal floats above
-        // water/lava or sits on weak terrain (leaves, snow layers, etc.).
-        BlockState footingState = ModBlocks.CLOCKSTONE_BLOCK.get().defaultBlockState();
-        for (int x = 0; x < width; x++) {
-            BlockPos footing = pos.relative(horizontal, x).below();
-            level.setBlock(footing, footingState, 3);
         }
 
         // Register or reignite portal in registry
