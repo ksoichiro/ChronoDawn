@@ -17,7 +17,7 @@ import net.minecraft.world.item.Rarity;
  * Wields the power of time itself to disrupt enemy attack patterns.
  *
  * Properties:
- * - Attack Damage: 8.0 (base 1.0 + 7.0 bonus, stronger than netherite)
+ * - Attack Damage: 8.5 (player base 1.0 + tier bonus 4.0 + sword bonus 3.5, slightly above netherite)
  * - Attack Speed: -2.4 (standard sword speed)
  * - Durability: 2000 uses (superior to diamond/netherite)
  * - Enchantability: 18
@@ -50,9 +50,9 @@ public class ChronobladeItem extends Item {
      */
     public static final float AI_SKIP_CHANCE = 0.25f;
 
-    // Attack damage: 8.0 total (1.0 base + 7.0 bonus)
+    // Sword damage param; total in-game: 1.0 (player) + 4.0 (tier) + 3.5 = 8.5
     // Netherite sword: 8.0
-    private static final float ATTACK_DAMAGE_BONUS = 7.0f;
+    private static final float ATTACK_DAMAGE_BONUS = 3.5f;
 
     // Attack speed: 1.6 (base 4.0 - 2.4 modifier)
     private static final float ATTACK_SPEED_MODIFIER = -2.4f;

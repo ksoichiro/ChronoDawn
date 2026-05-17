@@ -14,7 +14,7 @@ import net.minecraft.world.item.Item;
  *
  * Properties:
  * - Mining Speed: 6.5f (ClockstoneTier)
- * - Attack Damage: 1.0 (base) + 2.5 (tier bonus) = 3.5
+ * - Attack Damage: 4.5 (player base 1.0 + tier bonus 2.5 + pickaxe bonus 1.0)
  * - Attack Speed: -2.8 (standard pickaxe speed)
  * - Durability: 450 uses (ClockstoneTier)
  * - Enchantability: 14
@@ -30,8 +30,8 @@ import net.minecraft.world.item.Item;
  * and Item.Properties helper methods instead of inheritance.
  */
 public class ClockstonePickaxeItem extends Item {
-    // Attack damage: 3.5 total (1.0 base + 2.5 bonus)
-    private static final float ATTACK_DAMAGE_BONUS = 2.5f;
+    // Pickaxe damage param; total in-game: 1.0 (player) + 2.5 (tier) + 1.0 = 4.5
+    private static final float ATTACK_DAMAGE_BONUS = 1.0f;
 
     // Attack speed: 1.2 (base 4.0 - 2.8 modifier)
     private static final float ATTACK_SPEED_MODIFIER = -2.8f;

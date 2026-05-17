@@ -17,7 +17,7 @@ import net.minecraft.world.item.ItemStack;
  * Provides diamond-equivalent performance with special time-manipulation ability.
  *
  * Properties:
- * - Attack Damage: 7.0 (base 1.0 + 6.0 bonus, same as diamond sword)
+ * - Attack Damage: 7.0 (player base 1.0 + tier bonus 3.0 + sword bonus 3.0)
  * - Attack Speed: -2.4 (standard sword speed)
  * - Durability: 1200 uses (EnhancedClockstoneTier)
  * - Enchantability: 16
@@ -37,9 +37,9 @@ import net.minecraft.world.item.ItemStack;
  * and Item.Properties helper methods instead of inheritance.
  */
 public class EnhancedClockstoneSwordItem extends Item {
-    // Attack damage: 7.0 total (1.0 base + 6.0 bonus)
+    // Sword damage param; total in-game: 1.0 (player) + 3.0 (tier) + 3.0 = 7.0
     // Diamond sword: 7.0
-    private static final float ATTACK_DAMAGE_BONUS = 6.0f;
+    private static final float ATTACK_DAMAGE_BONUS = 3.0f;
 
     // Attack speed: 1.6 (base 4.0 - 2.4 modifier)
     private static final float ATTACK_SPEED_MODIFIER = -2.4f;

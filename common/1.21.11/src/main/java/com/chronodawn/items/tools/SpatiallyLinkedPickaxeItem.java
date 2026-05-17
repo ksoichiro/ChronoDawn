@@ -38,9 +38,9 @@ import net.minecraft.world.item.Item;
  * and Item.Properties helper methods instead of inheritance.
  */
 public class SpatiallyLinkedPickaxeItem extends Item {
-    // Attack damage: 5.0 total (1.0 base + 4.0 bonus)
+    // Pickaxe damage param; total in-game: 1.0 (player) + 3.0 (tier) + 1.0 = 5.0
     // Diamond pickaxe: 5.0
-    private static final float ATTACK_DAMAGE_BONUS = 4.0f;
+    private static final float ATTACK_DAMAGE_BONUS = 1.0f;
 
     // Attack speed: 1.2 (base 4.0 - 2.8 modifier)
     private static final float ATTACK_SPEED_MODIFIER = -2.8f;

@@ -13,7 +13,7 @@ import net.minecraft.world.item.Item;
  * Provides better performance than iron equipment but below diamond tier.
  *
  * Properties:
- * - Attack Damage: 6.0 (base 3.0 + tier bonus 2.5, same as iron sword damage)
+ * - Attack Damage: 6.5 (player base 1.0 + tier bonus 2.5 + sword bonus 3.0)
  * - Attack Speed: -2.4 (standard sword speed)
  * - Durability: 450 uses (ClockstoneTier)
  * - Enchantability: 14
@@ -29,9 +29,9 @@ import net.minecraft.world.item.Item;
  * and Item.Properties helper methods instead of inheritance.
  */
 public class ClockstoneSwordItem extends Item {
-    // Attack damage: 6.0 total (1.0 base + 5.0 bonus)
+    // Sword damage param; total in-game: 1.0 (player) + 2.5 (tier) + 3.0 = 6.5
     // Iron sword: 6.0, Diamond sword: 7.0
-    private static final float ATTACK_DAMAGE_BONUS = 5.0f;
+    private static final float ATTACK_DAMAGE_BONUS = 3.0f;
 
     // Attack speed: 1.6 (base 4.0 - 2.4 modifier)
     private static final float ATTACK_SPEED_MODIFIER = -2.4f;

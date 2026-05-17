@@ -23,7 +23,7 @@ import net.minecraft.world.item.ItemStack;
  * data-component helper. hurtEnemy returns void.
  */
 public class EntropyCrystalSwordItem extends Item {
-    private static final float ATTACK_DAMAGE_BONUS = 5.0f; // total 6.0 with 1.0 base, parity with iron/Clockstone
+    private static final float ATTACK_DAMAGE_BONUS = 3.0f; // total 6.5 with 1.0 base + 2.5 tier, parity with ClockstoneSword
     private static final float ATTACK_SPEED_MODIFIER = -2.4f;
     private static final int ENTROPY_DURATION_TICKS = 100; // 5 seconds
     private static final int ENTROPY_AMPLIFIER = 0;
