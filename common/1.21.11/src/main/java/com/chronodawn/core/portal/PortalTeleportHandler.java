@@ -614,13 +614,13 @@ public class PortalTeleportHandler {
             }
             if (columnClear) {
                 // Clear column but no solid floor — the platform forced by
-                // generatePortalStructure() will provide footing.
+                // generatePortal() will provide footing.
                 return new BlockPos(start.getX(), y, start.getZ());
             }
         }
 
         // Last-resort fallback: float at Y=120. The forced Clockstone footing
-        // in generatePortalStructure() still guarantees a step-out surface.
+        // in generatePortal() still guarantees a step-out surface.
         return new BlockPos(start.getX(), 120, start.getZ());
     }
 
