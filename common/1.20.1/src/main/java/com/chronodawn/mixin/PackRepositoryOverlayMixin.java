@@ -19,6 +19,7 @@ package com.chronodawn.mixin;
 
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.worldgen.runtime.OverlayPackBootstrap;
+import com.chronodawn.worldgen.runtime.OverlayPackInjection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.PathPackResources;
@@ -26,7 +27,6 @@ import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackRepository;
 import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.server.packs.repository.RepositorySource;
-import net.minecraft.server.packs.repository.ServerPacksSource;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -53,7 +53,7 @@ public abstract class PackRepositoryOverlayMixin {
         argsOnly = true
     )
     private static RepositorySource[] chronodawn$injectOverlaySource(RepositorySource[] sources) {
-        if (!isServerDataRepository(sources)) {
+        if (!OverlayPackInjection.isServerDataRepository(sources)) {
             return sources;
         }
         Path overlayPath = OverlayPackBootstrap.getOverlayPath();
@@ -91,14 +91,5 @@ public abstract class PackRepositoryOverlayMixin {
         extended[sources.length] = overlaySource;
         ChronoDawn.LOGGER.info("Registered runtime config overlay datapack with Fabric (PackRepository mixin)");
         return extended;
-    }
-
-    private static boolean isServerDataRepository(RepositorySource[] sources) {
-        for (RepositorySource s : sources) {
-            if (s instanceof ServerPacksSource) {
-                return true;
-            }
-        }
-        return false;
     }
 }

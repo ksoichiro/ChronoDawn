@@ -19,6 +19,7 @@ package com.chronodawn.mixin;
 
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.worldgen.runtime.OverlayPackBootstrap;
+import com.chronodawn.worldgen.runtime.OverlayPackInjection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackLocationInfo;
 import net.minecraft.server.packs.PackSelectionConfig;
@@ -28,7 +29,6 @@ import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackRepository;
 import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.server.packs.repository.RepositorySource;
-import net.minecraft.server.packs.repository.ServerPacksSource;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
@@ -45,10 +45,10 @@ import java.util.Optional;
  * and this is the established pattern for runtime-built data packs whose path
  * isn't known until mod init.
  *
- * <p>Detection of "this is a server data PackRepository" is by source-array
- * instanceof check: vanilla constructs the server data repo with a
- * {@link ServerPacksSource} as one of its sources. Resource pack repositories
- * never include one, so this Mixin keeps quiet for them.
+ * <p>Detection of "this is a server data PackRepository" is delegated to
+ * {@link OverlayPackInjection#isServerDataRepository}; the resource (client)
+ * repository never carries a {@code ServerPacksSource} so the Mixin stays
+ * quiet for it.
  */
 @Mixin(PackRepository.class)
 public abstract class PackRepositoryOverlayMixin {
@@ -59,7 +59,7 @@ public abstract class PackRepositoryOverlayMixin {
         argsOnly = true
     )
     private static RepositorySource[] chronodawn$injectOverlaySource(RepositorySource[] sources) {
-        if (!isServerDataRepository(sources)) {
+        if (!OverlayPackInjection.isServerDataRepository(sources)) {
             return sources;
         }
         Path overlayPath = OverlayPackBootstrap.getOverlayPath();
@@ -98,14 +98,5 @@ public abstract class PackRepositoryOverlayMixin {
         extended[sources.length] = overlaySource;
         ChronoDawn.LOGGER.info("Registered runtime config overlay datapack with Fabric (PackRepository mixin)");
         return extended;
-    }
-
-    private static boolean isServerDataRepository(RepositorySource[] sources) {
-        for (RepositorySource s : sources) {
-            if (s instanceof ServerPacksSource) {
-                return true;
-            }
-        }
-        return false;
     }
 }
