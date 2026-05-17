@@ -572,72 +572,60 @@ public class PortalTeleportHandler {
      * @return Ground position suitable for portal placement (one block above solid ground)
      */
     private static BlockPos findGroundLevel(ServerLevel level, BlockPos start) {
-        // Use Heightmap to find true surface level (avoids underground caves)
+        // Server-time heightmap (not the *_WG worldgen variant).
         int surfaceY = level.getHeight(Heightmap.Types.WORLD_SURFACE, start.getX(), start.getZ());
 
-        // Start checking from surface level
-        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(start.getX(), surfaceY, start.getZ());
+        // Cap upward search at a fixed safe ceiling instead of probing
+        // version-specific Level max-Y APIs. Worlds always go higher than 250.
+        final int upwardCeiling = 250;
+        final int requiredAir = 6;            // 1 stand-on + 5 portal height
 
-        // Check if there's a solid block at surface level
-        BlockState surfaceBlock = level.getBlockState(pos);
+        BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos(start.getX(), surfaceY, start.getZ());
 
-        // If surface is not solid (e.g., water, air), search downward for solid ground
-        if (!isSuitablePortalGround(surfaceBlock)) {
-            while (pos.getY() > level.getMinY()) {
-                BlockState currentBlock = level.getBlockState(pos);
-                if (isSuitablePortalGround(currentBlock)) {
-                    // Found solid ground
-                    break;
-                }
-                pos.move(Direction.DOWN);
-            }
-        }
+        for (int y = surfaceY; y <= upwardCeiling; y++) {
+            cursor.setY(y);
+            BlockState below = level.getBlockState(cursor.below());
+            boolean groundIsSolid = isSuitablePortalGround(below);
 
-        // Now pos is at solid ground level, check if there's enough air above
-        BlockPos.MutableBlockPos airPos = pos.mutable().move(Direction.UP);
-
-        // Check if there's enough air above (6 blocks: 1 spawn + 5 for portal)
-        // Allow air or replaceable blocks (snow, grass, carpet, etc.)
-        boolean hasEnoughAir = true;
-        for (int i = 0; i < 6; i++) {
-            BlockState airState = level.getBlockState(airPos);
-            if (!airState.isAir() && !airState.canBeReplaced()) {
-                hasEnoughAir = false;
-                break;
-            }
-            airPos.move(Direction.UP);
-        }
-
-        if (hasEnoughAir) {
-            // Found suitable surface, return position one block above solid ground
-            return pos.above().immutable();
-        }
-
-        // If not enough air at surface (e.g., dense forest), try a few blocks higher
-        for (int offset = 1; offset <= 5; offset++) {
-            BlockPos testPos = pos.above(offset);
-            boolean canPlaceHere = true;
-
-            // Check if this position and 5 blocks above are all air or replaceable
-            for (int i = 0; i < 6; i++) {
-                BlockState state = level.getBlockState(testPos.above(i));
-                if (!state.isAir() && !state.canBeReplaced()) {
-                    canPlaceHere = false;
+            // Check 6-block clear column at y..y+5.
+            boolean columnClear = true;
+            for (int dy = 0; dy < requiredAir; dy++) {
+                cursor.setY(y + dy);
+                if (!isClearForPortalSpace(level.getBlockState(cursor))) {
+                    columnClear = false;
                     break;
                 }
             }
 
-            if (canPlaceHere) {
-                return testPos;
+            if (columnClear && groundIsSolid) {
+                // Natural land with clear space above.
+                return new BlockPos(start.getX(), y, start.getZ());
+            }
+            if (columnClear) {
+                // Clear column but no solid floor — the platform forced by
+                // generatePortalStructure() will provide footing.
+                return new BlockPos(start.getX(), y, start.getZ());
             }
         }
 
-        // Fallback: return surface + 1 (may clip through trees, but at least on surface)
-        return pos.above().immutable();
+        // Last-resort fallback: float at Y=120. The forced Clockstone footing
+        // in generatePortalStructure() still guarantees a step-out surface.
+        return new BlockPos(start.getX(), 120, start.getZ());
     }
 
-    private static boolean isSuitablePortalGround(BlockState state) {
-        return state.isSolid() && !state.isAir() && !state.canBeReplaced() && !state.is(BlockTags.LEAVES);
+    static boolean isClearForPortalSpace(BlockState state) {
+        // Air or replaceable (e.g., grass/snow), but NOT a fluid.
+        // Water/lava are intentionally excluded so the upward search never
+        // treats a water column as usable air space.
+        return (state.isAir() || state.canBeReplaced()) && state.getFluidState().isEmpty();
+    }
+
+    static boolean isSuitablePortalGround(BlockState state) {
+        return state.isSolid()
+            && !state.isAir()
+            && !state.canBeReplaced()
+            && state.getFluidState().isEmpty()
+            && !state.is(BlockTags.LEAVES);
     }
 
     /**
@@ -655,48 +643,6 @@ public class PortalTeleportHandler {
 
         Direction horizontal = axis == Direction.Axis.X ? Direction.EAST : Direction.SOUTH;
         Direction vertical = Direction.UP;
-
-        // Ensure portal is placed on solid ground
-        // Check all positions where the bottom frame will be placed
-        BlockPos.MutableBlockPos adjustedPos = pos.mutable();
-        boolean needsAdjustment = false;
-
-        for (int x = 0; x < width; x++) {
-            BlockPos framePos = pos.relative(horizontal, x);
-            BlockState blockBelow = level.getBlockState(framePos.below());
-
-            // If any bottom frame position doesn't have solid ground below, we need to adjust
-            if (!isSuitablePortalGround(blockBelow)) {
-                needsAdjustment = true;
-                break;
-            }
-        }
-
-        if (needsAdjustment) {
-            // Search downward for solid ground
-            while (adjustedPos.getY() > level.getMinY()) {
-                boolean allSolid = true;
-
-                // Check if all bottom frame positions have solid ground below at this level
-                for (int x = 0; x < width; x++) {
-                    BlockPos checkPos = adjustedPos.relative(horizontal, x);
-                    BlockState blockBelow = level.getBlockState(checkPos.below());
-
-                    if (!isSuitablePortalGround(blockBelow)) {
-                        allSolid = false;
-                        break;
-                    }
-                }
-
-                if (allSolid) {
-                    // Found solid ground for all frame positions
-                    pos = adjustedPos.immutable();
-                    break;
-                }
-
-                adjustedPos.move(Direction.DOWN);
-            }
-        }
 
         // Generate Clockstone frame
         BlockState clockstoneState = ModBlocks.CLOCKSTONE_BLOCK.get().defaultBlockState();
@@ -730,6 +676,15 @@ public class PortalTeleportHandler {
             for (int y = 1; y < height - 1; y++) {
                 level.setBlock(pos.relative(horizontal, x).relative(vertical, y), portalState, 3);
             }
+        }
+
+        // Always write a Clockstone footing directly under the frame's bottom row.
+        // Guarantees a walkable step-out surface even when the portal floats above
+        // water/lava or sits on weak terrain (leaves, snow layers, etc.).
+        BlockState footingState = ModBlocks.CLOCKSTONE_BLOCK.get().defaultBlockState();
+        for (int x = 0; x < width; x++) {
+            BlockPos footing = pos.relative(horizontal, x).below();
+            level.setBlock(footing, footingState, 3);
         }
 
         // Register or reignite portal in registry
