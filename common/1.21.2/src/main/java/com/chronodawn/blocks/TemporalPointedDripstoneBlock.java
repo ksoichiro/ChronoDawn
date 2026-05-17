@@ -92,8 +92,29 @@ public class TemporalPointedDripstoneBlock extends Block {
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         DripstoneDirection direction = context.getClickedFace() == Direction.DOWN
             ? DripstoneDirection.DOWN : DripstoneDirection.UP;
+        Thickness thickness = calculateThickness(context.getLevel(), context.getClickedPos(), direction);
+        return defaultBlockState().setValue(DIRECTION, direction).setValue(THICKNESS, thickness);
+    }
 
-        return defaultBlockState().setValue(DIRECTION, direction).setValue(THICKNESS, Thickness.TIP);
+    @Override
+    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
+        super.onPlace(state, level, pos, oldState, movedByPiston);
+        if (level.isClientSide) {
+            return;
+        }
+        // Belt-and-suspenders: explicitly update the existing dripstone we're connecting to.
+        // On 1.20.1/1.21.1 the updateShape propagation does not promote the previous TIP to
+        // FRUSTUM when a same-direction dripstone is placed adjacent in the growth direction,
+        // so we force the neighbor update here to match vanilla 1.21.2+ behavior.
+        DripstoneDirection direction = state.getValue(DIRECTION);
+        BlockPos rootPos = direction == DripstoneDirection.UP ? pos.below() : pos.above();
+        BlockState rootState = level.getBlockState(rootPos);
+        if (isSameDripstoneWithDirection(rootState, direction)) {
+            Thickness rootThickness = calculateThickness(level, rootPos, direction);
+            if (rootState.getValue(THICKNESS) != rootThickness) {
+                level.setBlock(rootPos, rootState.setValue(THICKNESS, rootThickness), Block.UPDATE_ALL);
+            }
+        }
     }
 
     @Override

@@ -60,7 +60,12 @@ public class TemporalPointedDripstoneBlock extends Block {
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moved) {
         super.onRemove(state, level, pos, newState, moved);
-        if (!level.isClientSide) {
+        // Only cascade-break when the block is actually destroyed (block class changes),
+        // not when our own onPlace/updateShape causes a THICKNESS state update on this same block.
+        // Without this guard, promoting a TIP to FRUSTUM would cascadeBreak the dripstone above,
+        // which was the root cause of the "drops on connect" bug on 1.21.1/1.20.1.
+        // (1.21.2+ uses affectNeighborsAfterRemoval which is already destroy-only.)
+        if (!level.isClientSide && !state.is(newState.getBlock())) {
             cascadeBreak(level, pos, state.getValue(DIRECTION));
         }
     }
@@ -87,8 +92,29 @@ public class TemporalPointedDripstoneBlock extends Block {
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         DripstoneDirection direction = context.getClickedFace() == Direction.DOWN
             ? DripstoneDirection.DOWN : DripstoneDirection.UP;
+        Thickness thickness = calculateThickness(context.getLevel(), context.getClickedPos(), direction);
+        return defaultBlockState().setValue(DIRECTION, direction).setValue(THICKNESS, thickness);
+    }
 
-        return defaultBlockState().setValue(DIRECTION, direction).setValue(THICKNESS, Thickness.TIP);
+    @Override
+    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
+        super.onPlace(state, level, pos, oldState, movedByPiston);
+        if (level.isClientSide) {
+            return;
+        }
+        // Belt-and-suspenders: explicitly update the existing dripstone we're connecting to.
+        // On 1.20.1/1.21.1 the updateShape propagation does not promote the previous TIP to
+        // FRUSTUM when a same-direction dripstone is placed adjacent in the growth direction,
+        // so we force the neighbor update here to match vanilla 1.21.2+ behavior.
+        DripstoneDirection direction = state.getValue(DIRECTION);
+        BlockPos rootPos = direction == DripstoneDirection.UP ? pos.below() : pos.above();
+        BlockState rootState = level.getBlockState(rootPos);
+        if (isSameDripstoneWithDirection(rootState, direction)) {
+            Thickness rootThickness = calculateThickness(level, rootPos, direction);
+            if (rootState.getValue(THICKNESS) != rootThickness) {
+                level.setBlock(rootPos, rootState.setValue(THICKNESS, rootThickness), Block.UPDATE_ALL);
+            }
+        }
     }
 
     @Override
