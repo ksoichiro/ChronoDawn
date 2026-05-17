@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 #### Configuration
 - **Configuration system** (`config/chronodawn.toml`) — first cross-loader configuration slice. Currently exposes Ancient Ruins generation parameters (`enabled`, `spacing`, `separation`, `salt`); the file is hand-edited TOML, regenerated with documented defaults on first run, and hot-reload-immune (changes require a server / world restart). Modpack creators can ship a pre-configured file via pack overrides. See [docs/configuration.md](docs/configuration.md) and [docs/modpack-integration.md](docs/modpack-integration.md).
 - **Ore generation tuning** for Time Crystal, Entropy Crystal, and Temporal Amber — exposes `enabled`, `count`, `y_min`, `y_max` per ore via `config/chronodawn.toml`. See [docs/configuration.md](docs/configuration.md#worldores).
+- **Clockstone ore generation tuning** — exposes `enabled`, `count`, `y_min`, `y_max` for `chronodawn:ore_clockstone` via `config/chronodawn.toml`, completing the per-ore tuning surface for the four ChronoDawn-specific ores. See [docs/configuration.md](docs/configuration.md#worldores).
 
 #### New Blocks
 - **Time Torches** (Orange / Pink / Purple) — colored decorative torch variants with floor and wall placement. Crafted from the matching Time Blossom + Stick (4 torches per recipe)
@@ -85,6 +86,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **TimeKeeper village** template updated to use Temporal blocks consistently and adds defensive trapdoors at the perimeter.
 - **Chrono Turtle** now spawns again on 1.20.1 (missing `IN_WATER` spawn placement registration).
 - **Glide Fish cooking recipes** now unlock in the recipe book when the player picks up a Glide Fish.
+- **`ore_clockstone` count on 1.21.1+ corrected from 16 to 8** to match the 2026-01 frequency reduction (`90413a2e`) that was originally applied only to the 1.20.1 placed_feature. Brings 1.21.1+ in line with the documented design intent (clockstone density comparable to vanilla iron). Existing worlds keep their already-generated chunks; only newly-generated chunks reflect the change.
 
 ## [0.7.0] - 2026-04-22
 
