@@ -438,3 +438,248 @@ If `checkAll` is green, this task closes without a commit.
 - Regenerating existing underwater portals from saved worlds
 - Reused / reignited frames (`findReusablePortalFrame`)
 - Lifting helpers into `common/shared/` (per existing pattern, intentionally kept per-version)
+
+---
+
+## Revision 2 (2026-05-17 — post-manual-test amendments)
+
+After the original 4 tasks landed, in-game smoke testing surfaced two issues:
+
+1. **Over-correction on water surface.** Source portal built with frame
+   bottom row 1 block submerged and interior just above the water surface
+   produced a destination portal placed 1 block HIGHER than the equivalent
+   natural position — the destination's frame floated above the water with
+   nothing touching the fluid. The user's hand-built convention is the
+   reference behaviour; the destination should match.
+2. **Re-ignition failure due to forced footing.** With an extra row of
+   Clockstone directly beneath the bottom-frame row (the forced footing
+   introduced by Recipe step C.2 of the original plan), `PortalFrameValidator`
+   rejected the shape during re-ignition. A user trying to relight an
+   extinguished generated portal could not do so. The validator quirk is
+   technically a separate issue; we sidestep it by not creating the
+   non-canonical shape.
+
+The spec at
+`docs/superpowers/specs/2026-05-17-portal-destination-water-lava-avoidance-design.md`
+has been amended (Goals section and Approach sections 1–4). The recipe and
+tasks below replace the corresponding sections of the original plan above.
+
+### Revised recipe
+
+#### R-A — `isClearForPortalSpace` only
+
+Keep `isClearForPortalSpace` exactly as introduced in original Recipe A.
+**Delete** the `isSuitablePortalGround` method entirely. It has no remaining
+callers after R-B (below).
+
+```java
+private static boolean isClearForPortalSpace(BlockState state) {
+    // Air or replaceable (e.g., snow layer / grass), but NOT a fluid.
+    // Water/lava are intentionally excluded so the upward search never
+    // treats a water column as usable air space.
+    return (state.isAir() || state.canBeReplaced()) && state.getFluidState().isEmpty();
+}
+```
+
+#### R-B — `findGroundLevel` simplified (interior-only check, fluid-surface awareness)
+
+Replace the entire `findGroundLevel` body (the one introduced in the
+original Recipe B) with:
+
+```java
+private static BlockPos findGroundLevel(ServerLevel level, BlockPos start) {
+    // Server-time heightmap (not the *_WG worldgen variant).
+    int surfaceY = level.getHeight(Heightmap.Types.WORLD_SURFACE, start.getX(), start.getZ());
+
+    final int upwardCeiling = 250;
+    final int interiorHeight = 3;   // portal blocks at y+1, y+2, y+3
+
+    BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos(start.getX(), 0, start.getZ());
+
+    // Default: frame's bottom row sits ABOVE the natural surface (normal land
+    // placement, identical to a player-built portal).
+    int frameY = surfaceY;
+
+    // Exception: if the topmost natural block is a fluid (open water / lava),
+    // let the bottom-frame row occupy that fluid block — when the frame is
+    // written, the fluid block is overwritten with Clockstone and the
+    // interior 3-block column ends up right at the fluid surface, dry.
+    cursor.setY(surfaceY - 1);
+    if (!level.getBlockState(cursor).getFluidState().isEmpty()) {
+        frameY = surfaceY - 1;
+    }
+
+    // Push frameY upward only if the portal interior would still be in fluid
+    // (or any non-clear block) at the chosen frameY.
+    for (int y = frameY; y <= upwardCeiling; y++) {
+        boolean interiorClear = true;
+        for (int dy = 1; dy <= interiorHeight; dy++) {
+            cursor.setY(y + dy);
+            if (!isClearForPortalSpace(level.getBlockState(cursor))) {
+                interiorClear = false;
+                break;
+            }
+        }
+        if (interiorClear) {
+            return new BlockPos(start.getX(), y, start.getZ());
+        }
+    }
+
+    // Last-resort fallback: float at Y=120.
+    return new BlockPos(start.getX(), 120, start.getZ());
+}
+```
+
+Notes:
+
+- The bottom-frame row at `frameY` is intentionally NOT checked. It is
+  always overwritten by `generatePortalStructure` and is allowed to coincide
+  with a fluid block (intended for the open-water case) or with a solid
+  surface block (the player-built convention is to set portals down on solid
+  ground, replacing the topsoil; vanilla Nether does the same with its
+  obsidian platform).
+- `requiredAir = 6` and the dual-branch "natural land vs. forced footing"
+  return logic from the original Recipe B are both gone. The new method has
+  a single return path.
+
+#### R-C — drop the forced footing entirely
+
+The original Recipe C had two parts. R-C keeps part C.1 (delete the
+downward-adjustment block from `generatePortalStructure`) and **reverts**
+part C.2 — `generatePortal` reverts to its short pre-footing form:
+
+```java
+private static BlockPos generatePortal(ServerLevel level, BlockPos coords, Direction.Axis axis) {
+    BlockPos groundPos = findGroundLevel(level, coords);
+    generatePortalStructure(level, groundPos, axis);
+    return groundPos;
+}
+```
+
+No `BlockState footingState`, no footing loop, no `Direction horizontal`
+local. With R-B placing the frame at a Y where the interior is already
+clear (and the bottom-frame row replacing whatever is below), no extra
+Clockstone is needed.
+
+#### R-D — predicate test cleanup
+
+In `common/1.21.11/src/test/java/com/chronodawn/core/portal/PortalGroundPredicatesTest.java`,
+delete the three `ground_*_*` tests:
+
+- `ground_stone_isSuitable`
+- `ground_water_isNotSuitable`
+- `ground_lava_isNotSuitable`
+
+These tested `isSuitablePortalGround`, which is now removed. The 4 remaining
+`clearSpace_*` tests cover `isClearForPortalSpace` exactly as before.
+
+If `Blocks` is no longer referenced by the surviving imports after the
+delete, also remove the unused `import net.minecraft.world.level.block.Blocks;`
+line (it should still be needed for the surviving water / lava / snow / air
+tests, so likely unchanged).
+
+### Revision-2 task list
+
+#### Task 5: Apply R-A, R-B, R-C, R-D to 1.21.11 (reference)
+
+**Files:**
+- Modify: `common/1.21.11/src/main/java/com/chronodawn/core/portal/PortalTeleportHandler.java`
+- Modify: `common/1.21.11/src/test/java/com/chronodawn/core/portal/PortalGroundPredicatesTest.java`
+
+- [ ] **Step 1:** Apply R-A (delete `isSuitablePortalGround`).
+- [ ] **Step 2:** Apply R-B (replace `findGroundLevel` body with the simplified version).
+- [ ] **Step 3:** Apply R-C (revert `generatePortal` to the short form, no footing loop).
+- [ ] **Step 4:** Apply R-D (delete the three `ground_*` tests in `PortalGroundPredicatesTest`).
+- [ ] **Step 5:** Run the predicate-only test:
+      `./gradlew :common-1.21.11:test --tests com.chronodawn.core.portal.PortalGroundPredicatesTest -Ptarget_mc_version=1.21.11` — expect 4 tests, BUILD SUCCESSFUL.
+- [ ] **Step 6:** Run the full 1.21.11 test suite. BUILD SUCCESSFUL.
+- [ ] **Step 7:** Build 1.21.11. BUILD SUCCESSFUL.
+- [ ] **Step 8:** Commit:
+
+```bash
+git add common/1.21.11/src/main/java/com/chronodawn/core/portal/PortalTeleportHandler.java \
+        common/1.21.11/src/test/java/com/chronodawn/core/portal/PortalGroundPredicatesTest.java
+git commit -m "$(cat <<'EOF'
+fix(portal): drop forced footing, only correct Y when interior in fluid (1.21.11)
+
+Manual smoke test surfaced two issues with the previous fix:
+- destination over-corrected by 1 block when source frame had its bottom
+  row 1 block submerged with interior just above water;
+- the extra Clockstone footing below the bottom-frame row created a
+  non-canonical shape that PortalFrameValidator rejects on re-ignition.
+
+Drop isSuitablePortalGround and the forced footing entirely. New
+findGroundLevel keeps the frame at surfaceY by default, lowers it to
+surfaceY-1 only when the topmost natural block is a fluid (open water /
+lava surface), and only pushes upward if the portal interior would still
+be in fluid. The bottom-frame row is the player's step-out surface,
+identical to vanilla Nether portal placement.
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+EOF
+)"
+```
+
+#### Task 6: Replicate R-A, R-B, R-C to 1.21.4 — 1.21.10
+
+Identical mechanical change to 7 sister versions. No test changes (the test
+file only lives in 1.21.11). Helpers stay `private static` in these versions
+(as in the original plan).
+
+**Files:** the seven `common/1.21.{4..10}/src/main/java/com/chronodawn/core/portal/PortalTeleportHandler.java`.
+
+- [ ] For each of the 7 files: apply R-A, R-B, R-C.
+- [ ] Build & test each: `build1_21_X` + `:common-1.21.X:test -Ptarget_mc_version=1.21.X`.
+- [ ] Single commit with all 7 files staged:
+
+```bash
+git commit -m "$(cat <<'EOF'
+fix(portal): drop forced footing, only correct Y when interior in fluid (1.21.4-1.21.10)
+
+Mechanical propagation of the 1.21.11 revision to seven sister versions
+sharing the same Java sources for PortalTeleportHandler.
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+EOF
+)"
+```
+
+#### Task 7: Replicate R-A, R-B, R-C to 1.20.1 / 1.21.1 / 1.21.2
+
+Same change to the three oldest versions. Identical mechanical edit.
+
+**Files:** the three `common/{1.20.1, 1.21.1, 1.21.2}/src/main/java/com/chronodawn/core/portal/PortalTeleportHandler.java`.
+
+- [ ] For each of the 3 files: apply R-A, R-B, R-C.
+- [ ] Build & test each.
+- [ ] Single commit with all 3 files staged:
+
+```bash
+git commit -m "$(cat <<'EOF'
+fix(portal): drop forced footing, only correct Y when interior in fluid (1.20.1/1.21.1/1.21.2)
+
+Mechanical propagation of the revision to the three older versions.
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>
+EOF
+)"
+```
+
+#### Task 8: Hand back to user for manual re-test
+
+The same two scenarios that surfaced the issues, plus a re-ignite check:
+
+1. Build a source portal with the bottom-frame row 1 block submerged in the
+   ocean; interior just above water. Activate, travel, return. The
+   destination portal should sit at the same relative Y — bottom-frame row
+   at the water surface (replacing the top water block); interior dry.
+2. Same on flat grass. Destination frame sits AT or ABOVE the surface
+   (depends on which is more natural for the spawn point); no extra
+   Clockstone below.
+3. Re-ignite test: break a portal block of a freshly-generated destination
+   portal, then re-light it with a Time Hourglass. Frame must be recognised
+   by `PortalFrameValidator` and the portal re-ignite cleanly.
+
+If 1 or 2 still misbehave: re-open R-B logic. If 3 fails despite no extra
+Clockstone below the frame, the `PortalFrameValidator` itself has a
+pre-existing bug — file a separate issue.

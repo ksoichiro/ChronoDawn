@@ -33,18 +33,23 @@ block to step out onto."
 
 ## Goals
 
-1. Never place the destination portal so that any part of its frame interior
-   or its bottom-row platform is inside a fluid (water, lava, or any block
-   whose `BlockState.getFluidState()` is non-empty).
-2. When the natural surface at the destination X/Z is over water or lava,
-   pick an air position **higher up** in the same column and place the
-   portal there with a forced Clockstone platform underneath, rather than
-   diving below the fluid.
-3. Guarantee a walkable Clockstone footing directly underneath the frame's
-   bottom row (4 blocks) on every generated portal — including those placed
-   on natural land, since the existing "search down for solid ground"
-   adjustment can still pick a position with weak ground (e.g., leaves
-   replaced by `canBeReplaced`).
+1. Never place the destination portal so that its **interior** (the 2x3 portal
+   blocks at frame rows 1–3) is inside a fluid (water, lava, or any block
+   whose `BlockState.getFluidState()` is non-empty). The bottom-frame row
+   itself is allowed to occupy a fluid position — it is replaced by Clockstone
+   when written, and players don't stand inside the frame ring anyway.
+2. Match a player's typical hand-built water portal: when the natural surface
+   at the destination X/Z is water (or lava), the destination frame's bottom
+   row should sit AT the fluid surface (replacing the top fluid block), not
+   one block above it. The interior 3-block column stays above the fluid
+   surface, so the player teleports onto solid frame Clockstone with no
+   submersion or drowning.
+3. Do NOT generate any extra Clockstone footing beneath the frame. The 4x5
+   frame on its own is the canonical ignitable shape; an extra row of
+   Clockstone below the bottom-frame row creates a non-vanilla shape that
+   the frame validator can reject (observed: re-ignition fails on such
+   shapes). Sidestepping the validator quirk by not creating the shape is
+   simpler than relaxing the validator.
 4. Apply the fix to all 11 supported Minecraft versions (1.20.1, 1.21.1,
    1.21.2, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10,
    1.21.11). 1.21.3 reuses 1.21.2 modules and inherits the fix automatically.
@@ -69,9 +74,9 @@ block to step out onto."
 
 ## Approach
 
-### 1. Fluid-aware position predicate
+### 1. Fluid-aware "clear space" predicate
 
-Introduce a small helper in `PortalTeleportHandler`:
+`PortalTeleportHandler` keeps a single small helper:
 
 ```java
 private static boolean isClearForPortalSpace(BlockState state) {
@@ -79,81 +84,76 @@ private static boolean isClearForPortalSpace(BlockState state) {
     // BUT NOT a fluid — water and lava are excluded.
     return (state.isAir() || state.canBeReplaced()) && state.getFluidState().isEmpty();
 }
-
-private static boolean isSuitablePortalGround(BlockState state) {
-    return state.isSolid()
-        && !state.isAir()
-        && !state.canBeReplaced()
-        && state.getFluidState().isEmpty()
-        && !state.is(BlockTags.LEAVES);
-}
 ```
 
 `getFluidState().isEmpty()` covers vanilla water/lava and any modded fluid
-that follows the standard waterlogging contract.
+that follows the standard waterlogging contract. The earlier draft of this
+design also introduced `isSuitablePortalGround` to gate the frame on solid
+ground; that gating is now removed (see section 2), so the second predicate
+is dropped.
 
 ### 2. `findGroundLevel()` redesign
 
 Replace the current "find surface → search down for solid ground → check air
-above" flow with a position search that prefers staying at-or-above the
-heightmap surface:
+above" flow with a minimal placement rule:
 
-1. Start at `surfaceY = level.getHeight(WORLD_SURFACE, x, z)` (server-time
+1. Read `surfaceY = level.getHeight(WORLD_SURFACE, x, z)` (server-time
    heightmap; not the `_WG` worldgen variant).
-2. If the block at `surfaceY` is non-fluid solid ground AND the 6 blocks
-   above are all `isClearForPortalSpace`, place the portal one block above
-   `surfaceY`.
-3. Otherwise (water/lava at surface, or insufficient air clearance), move
-   the candidate Y **upwards**, one block at a time, until either:
-   - A solid non-fluid block is found directly below a 6-block clear column
-     (natural land somewhere higher), OR
-   - A position is found where the candidate block and the 6 blocks above
-     are all clear (`isClearForPortalSpace`) — the portal will float on a
-     generated Clockstone platform (step 3 of generation handles the
-     platform).
-4. Hard cap the upward search at `level.getMaxBuildHeight() - 10` (or the
-   version-equivalent ceiling). If still nothing, fall back to Y=120 as a
-   last resort and still generate with the forced platform — the player must
-   never end up with a half-broken portal.
+2. Probe the topmost natural block at `surfaceY - 1`. If it is a fluid
+   (`getFluidState().isEmpty() == false`) — i.e., the column ends in water
+   or lava — start the candidate `frameY` at `surfaceY - 1`. Otherwise start
+   `frameY` at `surfaceY` (above the natural surface, as a normal land-built
+   portal would).
+3. From the candidate `frameY`, walk upward one block at a time until the
+   portal **interior** at rows `frameY+1 … frameY+3` (the three 2x3 portal
+   blocks vertically) is `isClearForPortalSpace` everywhere. The bottom-frame
+   row at `frameY` itself is NOT checked — it is overwritten by Clockstone
+   on placement and is allowed to coincide with the top fluid block.
+4. Cap the upward walk at a fixed Y=250 ceiling and fall back to Y=120 if no
+   clear interior is found. (Avoids version-specific `getMaxBuildHeight()` /
+   `getMaxY()` API differences.)
 
-The **downward** search through fluids is removed entirely. This is the core
-behavioural change: we never descend below a water/lava column to find
-"ground."
+The downward-through-fluid search is removed entirely (unchanged from the
+previous draft). The new behaviour for the two common cases:
 
-### 3. Forced footing under the frame
+- **Open ocean / lake**: top water block at `surfaceY - 1`. Start at
+  `frameY = surfaceY - 1`. Interior at `surfaceY … surfaceY+2` is air. Return
+  `frameY`. The frame's bottom row replaces the top water block; interior
+  sits exactly at the water surface, dry. Matches what a player typically
+  hand-builds when raising a portal from open water.
+- **Natural land**: top of grass / dirt at `surfaceY - 1`. Topmost block is
+  non-fluid. Start at `frameY = surfaceY`. Interior is 3 air blocks. Return
+  `frameY`. The frame sits ABOVE the ground; the topsoil is untouched.
 
-In `generatePortalStructure()`, after the frame position is finalised, always
-write a Clockstone block at each of the 4 positions directly below the
-frame's bottom row, regardless of what is currently there:
+The "1 block higher than necessary" over-correction on water that motivated
+this revision is gone: when the surface is fluid, the frame can occupy the
+fluid block instead of being pushed above it.
 
-```java
-for (int x = 0; x < width; x++) {
-    BlockPos footing = pos.relative(horizontal, x).below();
-    level.setBlock(footing, clockstoneState, Block.UPDATE_ALL);
-}
-```
+### 3. No forced footing
 
-This guarantees:
+The earlier draft wrote 4 extra Clockstone blocks below the frame's bottom
+row. This is dropped. Two reasons:
 
-- If the portal is placed on natural land, the footing overwrites the
-  topsoil block under the frame (cosmetic only — invisible to the player
-  since it is buried under the frame's bottom row).
-- If the portal is floating above a previously-fluid column, this row is
-  the actual platform that supports both the frame and the player stepping
-  out.
+- A frame with an extra Clockstone row directly beneath its bottom edge is
+  outside the canonical 4x5 shape, and `PortalFrameValidator` rejects it
+  during re-ignition checks (observed failure: an extinguished generated
+  portal cannot be re-lit by the player because the validator can no longer
+  identify the frame).
+- With `findGroundLevel` now placing `frameY` so that the interior is always
+  clear (either above ground or at the fluid surface), the footing was never
+  load-bearing. The bottom-frame row itself is the player's step-out
+  surface, identical to vanilla Nether portal behaviour.
 
-Forcing 4 blocks instead of detecting "do we need a platform?" simplifies
-the logic considerably and is consistent with the answered scope. The
-landscape cost is minimal (4 blocks per generated destination).
+`generatePortal` ends with just the `generatePortalStructure` call — no
+auxiliary block writes.
 
 ### 4. Failure mode
 
 `generatePortal()` continues to return the frame bottom-left position. With
-the fallback in step 2, it can no longer return `null` for fluid-related
-reasons. The signature stays nullable to preserve existing call-site
-handling for genuinely impossible cases (e.g., dimension chunk loading
-failure), but the teleport flow is now guaranteed to land the player on
-solid Clockstone in air.
+the Y=120 fallback in step 2.4, it can no longer return `null` for
+fluid-related reasons. The signature stays nullable to preserve existing
+call-site handling for genuinely impossible cases (e.g., dimension chunk
+loading failure).
 
 ## Files affected
 
@@ -185,10 +185,10 @@ but it does not currently exercise `PortalTeleportHandler` directly — it
 covers `PortalState`). Adding a `PortalTeleportHandlerTest` would require a
 non-trivial `ServerLevel` stub; given the cost, we instead rely on:
 
-- A focused unit test for the new `isClearForPortalSpace` /
-  `isSuitablePortalGround` predicates, asserting that water and lava
-  `BlockState`s return `false` for "clear space" and `false` for "ground".
-  These are pure functions of `BlockState` and need no level stub.
+- A focused unit test for the `isClearForPortalSpace` predicate, asserting
+  that water and lava `BlockState`s return `false` and that air / snow-layer
+  return `true`. The earlier draft also tested `isSuitablePortalGround`;
+  that predicate is removed alongside the redesign, and its tests with it.
 
 **Manual verification** (must pass before merge, on at least one version,
 ideally 1.21.11):
@@ -196,20 +196,30 @@ ideally 1.21.11):
 1. Build a ChronoDawn portal on a small island in an ocean biome with the
    surrounding water deeper than 5 blocks.
 2. Activate and travel to ChronoDawn, then return.
-3. Confirm: destination portal in the Overworld does **not** appear inside
-   the water column, and the frame sits on visible Clockstone.
-4. Repeat in a lava lake (ChronoDawn → Overworld return targeting a known
-   lava-pool X/Z).
-5. Repeat on flat land — confirm no visible change to the player (the
-   buried Clockstone row is under the frame's bottom edge).
+3. Confirm: destination portal interior is NOT submerged. The frame's bottom
+   row may sit at water level (water lapping at its sides) — that is the
+   intended look. The 2x3 interior column is dry.
+4. Repeat in a lava lake. Same acceptance: interior dry, bottom-frame row
+   can occupy the surface lava block.
+5. Repeat on flat land — frame sits ABOVE the natural surface, identical to
+   a player-built portal (no terrain overwrite, no extra Clockstone below
+   the frame).
+6. Re-ignite test: break a portal block of a freshly-generated destination
+   portal, then re-light it with a Time Hourglass. Confirm the frame is
+   recognised by `PortalFrameValidator` and re-ignites cleanly. (This was
+   the symptom that motivated dropping the forced footing.)
 
 ## Open risks / follow-ups
 
 - Modded fluids that do not implement the standard waterlogging contract
   may still slip through `getFluidState().isEmpty()`. Acceptable: this is
   consistent with vanilla's own assumption.
-- The forced-platform approach means a destination portal can appear
-  floating above water with no path back to land. The player can still
-  re-enter the portal (it is on Clockstone), so this is a navigability
-  inconvenience rather than a soft-lock. Mitigation (e.g., generating a
-  small approach bridge) is deferred.
+- A destination portal placed on the water surface has no visible
+  walkway back to dry land. The player can still re-enter the portal (the
+  frame's bottom row is solid Clockstone at the water surface), so this is
+  a navigability inconvenience rather than a soft-lock. Approach-bridge
+  generation is deferred.
+- `PortalFrameValidator` rejecting frames with extra Clockstone immediately
+  beneath the bottom row is, strictly speaking, a separate validator
+  issue. We avoid the symptom by not creating such shapes; the validator
+  itself is left as-is for now.
