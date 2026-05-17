@@ -62,6 +62,7 @@ public final class ConfigLoader {
     private static final String K_TIME_CRYSTAL = "time_crystal";
     private static final String K_ENTROPY_CRYSTAL = "entropy_crystal";
     private static final String K_TEMPORAL_AMBER = "temporal_amber";
+    private static final String K_CLOCKSTONE = "clockstone";
     private static final String K_ORE_ENABLED = "enabled";
     private static final String K_ORE_COUNT = "count";
     private static final String K_ORE_Y_MIN = "y_min";
@@ -198,7 +199,8 @@ public final class ConfigLoader {
         return new com.chronodawn.config.OresConfig(
             parseOre(parsed, K_TIME_CRYSTAL, ConfigDefaults.TIME_CRYSTAL_DEFAULTS),
             parseOre(parsed, K_ENTROPY_CRYSTAL, ConfigDefaults.ENTROPY_CRYSTAL_DEFAULTS),
-            parseOre(parsed, K_TEMPORAL_AMBER, ConfigDefaults.TEMPORAL_AMBER_DEFAULTS)
+            parseOre(parsed, K_TEMPORAL_AMBER, ConfigDefaults.TEMPORAL_AMBER_DEFAULTS),
+            parseOre(parsed, K_CLOCKSTONE, ConfigDefaults.CLOCKSTONE_DEFAULTS)
         );
     }
 

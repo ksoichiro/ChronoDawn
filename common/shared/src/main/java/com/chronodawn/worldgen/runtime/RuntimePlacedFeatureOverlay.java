@@ -48,6 +48,8 @@ public final class RuntimePlacedFeatureOverlay {
         "data/" + ChronoDawn.MOD_ID + "/worldgen/placed_feature/ore_entropy_crystal.json";
     public static final String TEMPORAL_AMBER_PATH =
         "data/" + ChronoDawn.MOD_ID + "/worldgen/placed_feature/ore_temporal_amber.json";
+    public static final String CLOCKSTONE_PATH =
+        "data/" + ChronoDawn.MOD_ID + "/worldgen/placed_feature/ore_clockstone.json";
 
     private RuntimePlacedFeatureOverlay() {}
 
@@ -59,6 +61,8 @@ public final class RuntimePlacedFeatureOverlay {
             "ore_entropy_crystal", "minecraft:trapezoid", config.world().ores().entropyCrystal()));
         out.put(TEMPORAL_AMBER_PATH, generateOre(
             "ore_temporal_amber", "minecraft:uniform", config.world().ores().temporalAmber()));
+        out.put(CLOCKSTONE_PATH, generateOre(
+            "ore_clockstone", "minecraft:trapezoid", config.world().ores().clockstone()));
         return out;
     }
 

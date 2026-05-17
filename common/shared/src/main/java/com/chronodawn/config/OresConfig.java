@@ -18,14 +18,15 @@
 package com.chronodawn.config;
 
 /**
- * Container for the three ChronoDawn-specific ores currently exposed via
- * {@code config/chronodawn.toml}: Time Crystal, Entropy Crystal, and
- * Temporal Amber. {@code ore_clockstone} and the vanilla-overlay ores
- * (iron/gold/coal/redstone) are deliberately not exposed here — see the
- * design spec for the rationale.
+ * Container for the ChronoDawn-specific ores currently exposed via
+ * {@code config/chronodawn.toml}: Time Crystal, Entropy Crystal,
+ * Temporal Amber, and Clockstone. The vanilla-overlay ores
+ * (iron/gold/coal/redstone) are deliberately not exposed here — see
+ * the design spec for the rationale.
  */
 public record OresConfig(
     OreSettings timeCrystal,
     OreSettings entropyCrystal,
-    OreSettings temporalAmber
+    OreSettings temporalAmber,
+    OreSettings clockstone
 ) {}

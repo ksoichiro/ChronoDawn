@@ -79,7 +79,8 @@ class RuntimePlacedFeatureOverlayTest {
         ChronoDawnConfig custom = withOres(
             new OreSettings(true, 10, 0, 48),
             ConfigDefaults.ENTROPY_CRYSTAL_DEFAULTS,
-            ConfigDefaults.TEMPORAL_AMBER_DEFAULTS
+            ConfigDefaults.TEMPORAL_AMBER_DEFAULTS,
+            ConfigDefaults.CLOCKSTONE_DEFAULTS
         );
         JsonObject json = parseObject(RuntimePlacedFeatureOverlay.generate(custom)
             .get(RuntimePlacedFeatureOverlay.TIME_CRYSTAL_PATH));
@@ -92,7 +93,8 @@ class RuntimePlacedFeatureOverlayTest {
         // round-trip verbatim so re-enabling restores their last numbers.
         OreSettings disabled = new OreSettings(false, 7, 30, 90);
         ChronoDawnConfig custom = withOres(
-            ConfigDefaults.TIME_CRYSTAL_DEFAULTS, disabled, ConfigDefaults.TEMPORAL_AMBER_DEFAULTS
+            ConfigDefaults.TIME_CRYSTAL_DEFAULTS, disabled, ConfigDefaults.TEMPORAL_AMBER_DEFAULTS,
+            ConfigDefaults.CLOCKSTONE_DEFAULTS
         );
         JsonObject json = parseObject(RuntimePlacedFeatureOverlay.generate(custom)
             .get(RuntimePlacedFeatureOverlay.ENTROPY_CRYSTAL_PATH));
@@ -111,7 +113,8 @@ class RuntimePlacedFeatureOverlayTest {
     void temporalAmberCustomYRange_changesHeightBoundsAndKeepsUniform() {
         OreSettings amber = new OreSettings(true, 4, -20, 30);
         ChronoDawnConfig custom = withOres(
-            ConfigDefaults.TIME_CRYSTAL_DEFAULTS, ConfigDefaults.ENTROPY_CRYSTAL_DEFAULTS, amber
+            ConfigDefaults.TIME_CRYSTAL_DEFAULTS, ConfigDefaults.ENTROPY_CRYSTAL_DEFAULTS, amber,
+            ConfigDefaults.CLOCKSTONE_DEFAULTS
         );
         JsonObject json = parseObject(RuntimePlacedFeatureOverlay.generate(custom)
             .get(RuntimePlacedFeatureOverlay.TEMPORAL_AMBER_PATH));
@@ -134,13 +137,13 @@ class RuntimePlacedFeatureOverlayTest {
 
     // --- helpers ---
 
-    private static ChronoDawnConfig withOres(OreSettings tc, OreSettings ec, OreSettings ta) {
+    private static ChronoDawnConfig withOres(OreSettings tc, OreSettings ec, OreSettings ta, OreSettings clk) {
         ChronoDawnConfig defaults = ConfigDefaults.defaults();
         return new ChronoDawnConfig(
             defaults.schemaVersion(),
             new ChronoDawnConfig.World(
                 defaults.world().structures(),
-                new com.chronodawn.config.OresConfig(tc, ec, ta)
+                new com.chronodawn.config.OresConfig(tc, ec, ta, clk)
             )
         );
     }
