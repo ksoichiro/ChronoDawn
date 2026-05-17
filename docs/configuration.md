@@ -111,15 +111,15 @@ worlds only.
 
 ### `[world.ores.*]`
 
-Per-ore generation tuning for the three ChronoDawn-specific ores in the
-Chrono dimension: **Time Crystal**, **Entropy Crystal**, and **Temporal
-Amber**. Each ore has its own table; missing sections fall back to the
-defaults listed below.
+Per-ore generation tuning for the four ChronoDawn-specific ores in the
+Chrono dimension: **Time Crystal**, **Entropy Crystal**, **Temporal
+Amber**, and **Clockstone**. Each ore has its own table; missing
+sections fall back to the defaults listed below.
 
 > [!NOTE]
-> `ore_clockstone` and the vanilla-overlay ores (`iron` / `gold` / `coal`
-> / `redstone`) are intentionally not exposed yet — see the design spec
-> for context.
+> The vanilla-overlay ores (`iron` / `gold` / `coal` / `redstone`) in the
+> Chrono dimension are intentionally not exposed yet — see the design
+> spec for context.
 
 ```toml
 [world.ores.time_crystal]
@@ -139,20 +139,26 @@ enabled = true
 count = 4
 y_min = -30
 y_max = 20
+
+[world.ores.clockstone]
+enabled = true
+count = 8
+y_min = -16
+y_max = 80
 ```
 
-| Field | Type | Default (TC / EC / TA) | Range | Notes |
+| Field | Type | Default (TC / EC / TA / CS) | Range | Notes |
 | --- | --- | --- | --- | --- |
-| `enabled` | boolean | `true` for all three | — | When `false`, the placed feature stays registered but emits `count = 0` so nothing generates. Your other values are preserved verbatim and restored on re-enable. |
-| `count` | integer | `3` / `4` / `4` | `0..=64` | Number of placement attempts per chunk. Lower = rarer. Cluster size (blocks per attempt) is not exposed here. |
-| `y_min` | integer | `0` / `40` / `-30` | `-64..=y_max` | Absolute minimum Y for placement. |
-| `y_max` | integer | `48` / `100` / `20` | `y_min..=320` | Absolute maximum Y for placement. |
+| `enabled` | boolean | `true` for all four | — | When `false`, the placed feature stays registered but emits `count = 0` so nothing generates. Your other values are preserved verbatim and restored on re-enable. |
+| `count` | integer | `3` / `4` / `4` / `8` | `0..=64` | Number of placement attempts per chunk. Lower = rarer. Cluster size (blocks per attempt) is not exposed here. |
+| `y_min` | integer | `0` / `40` / `-30` / `-16` | `-64..=y_max` | Absolute minimum Y for placement. |
+| `y_max` | integer | `48` / `100` / `20` / `80` | `y_min..=320` | Absolute maximum Y for placement. |
 
 Distribution shape between `y_min` and `y_max` is **fixed per ore** and
 not configurable:
 
-- Time Crystal and Entropy Crystal use `minecraft:trapezoid` (concentrated
-  in the middle of the range).
+- Time Crystal, Entropy Crystal, and Clockstone use `minecraft:trapezoid`
+  (concentrated in the middle of the range).
 - Temporal Amber uses `minecraft:uniform` (flat probability across the
   range).
 
@@ -174,6 +180,15 @@ count = 1
 y_min = -60
 y_max = -10
 ```
+
+#### Example: make Clockstone rare
+
+```toml
+[world.ores.clockstone]
+count = 2
+```
+
+This roughly quarters tier-1 abundance versus the default `count = 8`.
 
 #### Example: disable Time Crystal entirely
 
