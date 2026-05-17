@@ -56,3 +56,16 @@ enabled = true
 count = 4
 y_min = -30
 y_max = 20
+
+[world.ores.clockstone]
+# Whether Clockstone Ore generates in the Chrono dimension.
+enabled = true
+
+# Number of placement attempts per chunk. Lower = rarer, higher = denser.
+# Each attempt generates one cluster (cluster size is fixed at the data-pack level).
+count = 8
+
+# Minimum and maximum Y level (absolute) where Clockstone Ore can spawn.
+# Distribution between min and max is biased toward the middle (trapezoid).
+y_min = -16
+y_max = 80
