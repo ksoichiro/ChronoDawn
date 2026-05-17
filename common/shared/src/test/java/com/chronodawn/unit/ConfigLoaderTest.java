@@ -200,6 +200,7 @@ class ConfigLoaderTest {
         assertEquals(ConfigDefaults.TIME_CRYSTAL_DEFAULTS, ores.timeCrystal());
         assertEquals(ConfigDefaults.ENTROPY_CRYSTAL_DEFAULTS, ores.entropyCrystal());
         assertEquals(ConfigDefaults.TEMPORAL_AMBER_DEFAULTS, ores.temporalAmber());
+        assertEquals(ConfigDefaults.CLOCKSTONE_DEFAULTS, ores.clockstone());
     }
 
     @Test
@@ -218,6 +219,50 @@ class ConfigLoaderTest {
         assertEquals(20, tc.yMax());
         // Other ores are untouched
         assertEquals(ConfigDefaults.ENTROPY_CRYSTAL_DEFAULTS, config.world().ores().entropyCrystal());
+    }
+
+    @Test
+    void validClockstoneCustom_isReturnedVerbatim(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[world.ores.clockstone]\n" +
+            "enabled = false\n" +
+            "count = 12\n" +
+            "y_min = -8\n" +
+            "y_max = 64\n");
+        ChronoDawnConfig config = ConfigLoader.load(tmp);
+        com.chronodawn.config.OreSettings clk = config.world().ores().clockstone();
+        assertEquals(false, clk.enabled());
+        assertEquals(12, clk.count());
+        assertEquals(-8, clk.yMin());
+        assertEquals(64, clk.yMax());
+        // Other ores untouched
+        assertEquals(ConfigDefaults.TIME_CRYSTAL_DEFAULTS, config.world().ores().timeCrystal());
+        assertEquals(ConfigDefaults.ENTROPY_CRYSTAL_DEFAULTS, config.world().ores().entropyCrystal());
+        assertEquals(ConfigDefaults.TEMPORAL_AMBER_DEFAULTS, config.world().ores().temporalAmber());
+    }
+
+    @Test
+    void invalidClockstoneCount_overMax_revertsCount(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[world.ores.clockstone]\n" +
+            "count = 999\n");
+        ChronoDawnConfig config = ConfigLoader.load(tmp);
+        assertEquals(ConfigDefaults.CLOCKSTONE_DEFAULTS.count(),
+            config.world().ores().clockstone().count());
+    }
+
+    @Test
+    void clockstoneInvertedYRange_revertsBothYFieldsOnly(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[world.ores.clockstone]\n" +
+            "count = 11\n" +
+            "y_min = 100\n" +
+            "y_max = 50\n");
+        ChronoDawnConfig config = ConfigLoader.load(tmp);
+        com.chronodawn.config.OreSettings clk = config.world().ores().clockstone();
+        assertEquals(11, clk.count(), "Valid count survives an inverted-Y revert");
+        assertEquals(ConfigDefaults.CLOCKSTONE_DEFAULTS.yMin(), clk.yMin());
+        assertEquals(ConfigDefaults.CLOCKSTONE_DEFAULTS.yMax(), clk.yMax());
     }
 
     @Test
