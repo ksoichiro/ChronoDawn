@@ -123,6 +123,13 @@ class ModIdEnumTest {
         assertEquals(ModBlockId.RenderLayer.CUTOUT, ModBlockId.ANCIENT_TIME_WOOD_TRAPDOOR.renderLayer());
     }
 
+    @Test
+    void modBlockId_renderLayer_lanternsCutout() {
+        assertEquals(ModBlockId.RenderLayer.CUTOUT, ModBlockId.TEMPORAL_LANTERN.renderLayer());
+        assertEquals(ModBlockId.RenderLayer.CUTOUT, ModBlockId.DAWN_LANTERN.renderLayer());
+        assertEquals(ModBlockId.RenderLayer.CUTOUT, ModBlockId.DUSK_LANTERN.renderLayer());
+    }
+
     // === ModItemId ===
 
     @Test

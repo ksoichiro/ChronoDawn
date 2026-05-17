@@ -224,9 +224,9 @@ public enum ModBlockId {
     WALL_PINK_TIME_TORCH(def("wall_pink_time_torch").cutout()),
 
     // Lanterns
-    TEMPORAL_LANTERN(def("temporal_lantern")),
-    DAWN_LANTERN(def("dawn_lantern")),
-    DUSK_LANTERN(def("dusk_lantern")),
+    TEMPORAL_LANTERN(def("temporal_lantern").cutout()),
+    DAWN_LANTERN(def("dawn_lantern").cutout()),
+    DUSK_LANTERN(def("dusk_lantern").cutout()),
 
     // Potted plants
     POTTED_TIME_WOOD_SAPLING(def("potted_time_wood_sapling").cutout()),
