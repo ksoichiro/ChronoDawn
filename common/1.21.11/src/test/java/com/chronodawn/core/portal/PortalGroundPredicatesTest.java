@@ -49,23 +49,4 @@ class PortalGroundPredicatesTest {
         assertTrue(PortalTeleportHandler.isClearForPortalSpace(snow),
             "Replaceable non-fluid blocks (snow layer) should still count as clear (vanilla parity).");
     }
-
-    @Test
-    void ground_stone_isSuitable() {
-        BlockState stone = Blocks.STONE.defaultBlockState();
-        assertTrue(PortalTeleportHandler.isSuitablePortalGround(stone));
-    }
-
-    @Test
-    void ground_water_isNotSuitable() {
-        BlockState water = Blocks.WATER.defaultBlockState();
-        assertFalse(PortalTeleportHandler.isSuitablePortalGround(water),
-            "Water must not count as solid ground; otherwise portals settle on the seabed.");
-    }
-
-    @Test
-    void ground_lava_isNotSuitable() {
-        BlockState lava = Blocks.LAVA.defaultBlockState();
-        assertFalse(PortalTeleportHandler.isSuitablePortalGround(lava));
-    }
 }

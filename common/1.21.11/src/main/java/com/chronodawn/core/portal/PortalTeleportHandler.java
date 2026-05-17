@@ -13,7 +13,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -558,17 +557,6 @@ public class PortalTeleportHandler {
 
         // Generate a 4x5 portal at ground level with specified axis
         generatePortalStructure(level, groundPos, axis);
-
-        // Write the 4-block Clockstone footing under the frame's bottom row, but only
-        // on the new-portal path (this method). The reused-frame path
-        // (findReusablePortalFrame -> generatePortalStructure) must not touch what the
-        // player has placed below an existing returning frame.
-        BlockState footingState = ModBlocks.CLOCKSTONE_BLOCK.get().defaultBlockState();
-        Direction horizontal = axis == Direction.Axis.X ? Direction.EAST : Direction.SOUTH;
-        for (int x = 0; x < 4; x++) {
-            BlockPos footing = groundPos.relative(horizontal, x).below();
-            level.setBlock(footing, footingState, 3);
-        }
         return groundPos;
     }
 
@@ -586,41 +574,41 @@ public class PortalTeleportHandler {
         // Server-time heightmap (not the *_WG worldgen variant).
         int surfaceY = level.getHeight(Heightmap.Types.WORLD_SURFACE, start.getX(), start.getZ());
 
-        // Cap upward search at a fixed safe ceiling instead of probing
-        // version-specific Level max-Y APIs. Worlds always go higher than 250.
         final int upwardCeiling = 250;
-        final int requiredAir = 6;            // 1 stand-on + 5 portal height
+        final int interiorHeight = 3;   // portal blocks at y+1, y+2, y+3
 
-        BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos(start.getX(), surfaceY, start.getZ());
+        BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos(start.getX(), 0, start.getZ());
 
-        for (int y = surfaceY; y <= upwardCeiling; y++) {
-            cursor.setY(y);
-            BlockState below = level.getBlockState(cursor.below());
-            boolean groundIsSolid = isSuitablePortalGround(below);
+        // Default: frame's bottom row sits ABOVE the natural surface (normal land
+        // placement, identical to a player-built portal).
+        int frameY = surfaceY;
 
-            // Check 6-block clear column at y..y+5.
-            boolean columnClear = true;
-            for (int dy = 0; dy < requiredAir; dy++) {
+        // Exception: if the topmost natural block is a fluid (open water / lava),
+        // let the bottom-frame row occupy that fluid block — when the frame is
+        // written, the fluid block is overwritten with Clockstone and the
+        // interior 3-block column ends up right at the fluid surface, dry.
+        cursor.setY(surfaceY - 1);
+        if (!level.getBlockState(cursor).getFluidState().isEmpty()) {
+            frameY = surfaceY - 1;
+        }
+
+        // Push frameY upward only if the portal interior would still be in fluid
+        // (or any non-clear block) at the chosen frameY.
+        for (int y = frameY; y <= upwardCeiling; y++) {
+            boolean interiorClear = true;
+            for (int dy = 1; dy <= interiorHeight; dy++) {
                 cursor.setY(y + dy);
                 if (!isClearForPortalSpace(level.getBlockState(cursor))) {
-                    columnClear = false;
+                    interiorClear = false;
                     break;
                 }
             }
-
-            if (columnClear && groundIsSolid) {
-                // Natural land with clear space above.
-                return new BlockPos(start.getX(), y, start.getZ());
-            }
-            if (columnClear) {
-                // Clear column but no solid floor — the platform forced by
-                // generatePortal() will provide footing.
+            if (interiorClear) {
                 return new BlockPos(start.getX(), y, start.getZ());
             }
         }
 
-        // Last-resort fallback: float at Y=120. The forced Clockstone footing
-        // in generatePortal() still guarantees a step-out surface.
+        // Last-resort fallback: float at Y=120.
         return new BlockPos(start.getX(), 120, start.getZ());
     }
 
@@ -629,14 +617,6 @@ public class PortalTeleportHandler {
         // Water/lava are intentionally excluded so the upward search never
         // treats a water column as usable air space.
         return (state.isAir() || state.canBeReplaced()) && state.getFluidState().isEmpty();
-    }
-
-    static boolean isSuitablePortalGround(BlockState state) {
-        return state.isSolid()
-            && !state.isAir()
-            && !state.canBeReplaced()
-            && state.getFluidState().isEmpty()
-            && !state.is(BlockTags.LEAVES);
     }
 
     /**
