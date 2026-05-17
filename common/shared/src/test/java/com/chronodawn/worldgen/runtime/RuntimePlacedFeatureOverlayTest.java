@@ -75,6 +75,68 @@ class RuntimePlacedFeatureOverlayTest {
     }
 
     @Test
+    void defaultConfig_reproducesBundledClockstoneJson() {
+        Map<String, byte[]> overlay = RuntimePlacedFeatureOverlay.generate(ConfigDefaults.defaults());
+        byte[] bytes = overlay.get(RuntimePlacedFeatureOverlay.CLOCKSTONE_PATH);
+        assertNotNull(bytes, "Overlay must contain ore_clockstone.json under expected path");
+        JsonElement generated = JsonParser.parseString(new String(bytes, StandardCharsets.UTF_8));
+        JsonElement bundled = loadBundled("data/chronodawn/worldgen/placed_feature/ore_clockstone.json");
+        assertEquals(bundled, generated);
+    }
+
+    @Test
+    void clockstoneCountOverride_changesCountStepOnly() {
+        ChronoDawnConfig custom = withOres(
+            ConfigDefaults.TIME_CRYSTAL_DEFAULTS,
+            ConfigDefaults.ENTROPY_CRYSTAL_DEFAULTS,
+            ConfigDefaults.TEMPORAL_AMBER_DEFAULTS,
+            new OreSettings(true, 20, -16, 80)
+        );
+        JsonObject json = parseObject(RuntimePlacedFeatureOverlay.generate(custom)
+            .get(RuntimePlacedFeatureOverlay.CLOCKSTONE_PATH));
+        assertEquals(20, countStep(json).get("count").getAsInt());
+    }
+
+    @Test
+    void clockstoneDisabled_emitsCountZeroAndPreservesOtherValues() {
+        OreSettings disabled = new OreSettings(false, 12, -32, 60);
+        ChronoDawnConfig custom = withOres(
+            ConfigDefaults.TIME_CRYSTAL_DEFAULTS,
+            ConfigDefaults.ENTROPY_CRYSTAL_DEFAULTS,
+            ConfigDefaults.TEMPORAL_AMBER_DEFAULTS,
+            disabled
+        );
+        JsonObject json = parseObject(RuntimePlacedFeatureOverlay.generate(custom)
+            .get(RuntimePlacedFeatureOverlay.CLOCKSTONE_PATH));
+        assertEquals(0, countStep(json).get("count").getAsInt(),
+            "enabled=false must force the count step to 0");
+        JsonObject heightRange = json.getAsJsonArray("placement").get(2).getAsJsonObject();
+        assertEquals(-32,
+            heightRange.getAsJsonObject("height").getAsJsonObject("min_inclusive").get("absolute").getAsInt(),
+            "yMin must be preserved verbatim when disabled");
+        assertEquals(60,
+            heightRange.getAsJsonObject("height").getAsJsonObject("max_inclusive").get("absolute").getAsInt(),
+            "yMax must be preserved verbatim when disabled");
+    }
+
+    @Test
+    void clockstoneCustomYRange_changesHeightBoundsAndKeepsTrapezoid() {
+        OreSettings clk = new OreSettings(true, 8, -50, 30);
+        ChronoDawnConfig custom = withOres(
+            ConfigDefaults.TIME_CRYSTAL_DEFAULTS,
+            ConfigDefaults.ENTROPY_CRYSTAL_DEFAULTS,
+            ConfigDefaults.TEMPORAL_AMBER_DEFAULTS,
+            clk
+        );
+        JsonObject json = parseObject(RuntimePlacedFeatureOverlay.generate(custom)
+            .get(RuntimePlacedFeatureOverlay.CLOCKSTONE_PATH));
+        JsonObject height = json.getAsJsonArray("placement").get(2).getAsJsonObject().getAsJsonObject("height");
+        assertEquals(-50, height.getAsJsonObject("min_inclusive").get("absolute").getAsInt());
+        assertEquals(30, height.getAsJsonObject("max_inclusive").get("absolute").getAsInt());
+        assertEquals("minecraft:trapezoid", height.get("type").getAsString());
+    }
+
+    @Test
     void timeCrystalCountOverride_changesCountStepOnly() {
         ChronoDawnConfig custom = withOres(
             new OreSettings(true, 10, 0, 48),
@@ -133,6 +195,8 @@ class RuntimePlacedFeatureOverlayTest {
             heightType(overlay.get(RuntimePlacedFeatureOverlay.ENTROPY_CRYSTAL_PATH)));
         assertEquals("minecraft:uniform",
             heightType(overlay.get(RuntimePlacedFeatureOverlay.TEMPORAL_AMBER_PATH)));
+        assertEquals("minecraft:trapezoid",
+            heightType(overlay.get(RuntimePlacedFeatureOverlay.CLOCKSTONE_PATH)));
     }
 
     // --- helpers ---
