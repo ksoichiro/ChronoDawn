@@ -40,8 +40,17 @@ y_min = 5
 y_max = 50
 ```
 
+### Example: lower Clockstone tier-1 abundance
+
+```toml
+# Halve Clockstone density. Tier-1 progression slows; pairs well with
+# raising the bundled Time Crystal / Entropy Crystal counts elsewhere.
+[world.ores.clockstone]
+count = 4
+```
+
 Bundle this file via `overrides/config/chronodawn.toml` and the runtime
-overlay applies it on first launch. The other two ores stay at their
+overlay applies it on first launch. The other ores stay at their
 defaults. See [`docs/configuration.md`](configuration.md) for the full
 schema.
 
