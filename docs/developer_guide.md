@@ -396,7 +396,7 @@ public class EntityEventHandler {
 ### 4. Worldgen System
 
 **Biomes**: `common/1.21.11/src/main/resources/data/chronodawn/worldgen/biome/`
-- 8 custom biomes with unique features
+- 11 custom biomes with unique features
 
 **Structures**: `common/1.21.11/src/main/java/com/chronodawn/worldgen/structures/`
 - Ancient Ruins (Overworld)
