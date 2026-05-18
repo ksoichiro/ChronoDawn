@@ -15,27 +15,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Clockstone ore generation tuning** — exposes `enabled`, `count`, `y_min`, `y_max` for `chronodawn:ore_clockstone` via `config/chronodawn.toml`, completing the per-ore tuning surface for the four ChronoDawn-specific ores. See [docs/configuration.md](docs/configuration.md#worldores).
 
 #### New Blocks
-- **Time Torches** (Orange / Pink / Purple) — colored decorative torch variants with floor and wall placement. Crafted from the matching Time Blossom + Stick (4 torches per recipe)
-- **Temporal Lantern**, **Dawn Lantern**, and **Dusk Lantern** — pickaxe-mined light sources using the vanilla lantern shape (3D rendering, animated flame, standing and hanging placement). Dawn/Dusk Lantern crafted from the matching Bell flower (+ iron nuggets + torch); Temporal Lantern crafted from any Time Blossom (+ iron nuggets + torch)
-- Recipe advancements unlock the Time Torch / Lantern recipes when the player picks up the relevant Time Blossom or Bell
+- **Temporal Aquatic Plants** — replace vanilla aquatic vegetation in the ChronoDawn dimension. Pre-existing chunks retain whatever vanilla aquatic blocks they generated; only newly generated chunks place the Temporal variants below.
+  - **Phase 1 — Vegetation** in `chronodawn_ocean` and `chronodawn_swamp`:
+    - **Temporal Kelp** — pale-cyan kelp columns (1–25 blocks tall) growing upward from the ocean floor; bone-meal grows the column, shears harvest the block. The Temporal Kelp head and Temporal Kelp Plant stem are climbable like vanilla kelp
+    - **Temporal Seagrass** and **Tall Temporal Seagrass** — short and 2-block-tall variants on the ocean floor; bone-meal on a short seagrass produces the tall variant; shears drop the seagrass item. Temporal Seagrass is registered as turtle food
+    - **Dried Temporal Kelp** — food item smoked / smelted / campfire-cooked from Temporal Kelp. Nutrition 1, saturation 0.6, and the same fast-eat animation (0.865 s) as vanilla dried kelp. Cooking times match vanilla: 5 s in a smoker, 10 s in a furnace, 30 s on a campfire
+  - **Phase 2 — Light** in `chronodawn_ocean`:
+    - **Lumen Polyp** — bioluminescent sea-pickle-like cluster (1–4 polyps per block) generated naturally on the `chronodawn_ocean` floor, biased toward 1–2 polyp clusters. Emits light underwater scaling with the polyp count (6 / 9 / 12 / 15 light level for 1 / 2 / 3 / 4 polyps respectively, matching vanilla SeaPickleBlock); emits 0 light above water. Bone-meal underwater grows the polyp count up to 4. Drops 1–4 Lumen Polyp items matching the count when broken (no tool requirement). Available across all 11 supported Minecraft versions
+  - **Phase 2 — Color** in `chronodawn_ocean`:
+    - **Dawn / Dusk / Twilight / Eternal Chrono Coral** — decorative single-block aquatic plants using the Time Wood palette. They do not emit light; Lumen Polyp remains the dedicated underwater light source. Drops require shears, matching seagrass-style harvesting
+- **Faded Plains terrain blocks** — dry-themed surface blocks introduced together with the new Faded Plains biome (see *New Biomes* below):
+  - **Faded Temporal Grass** — short, baked yellow-brown cross-plant. Drops itself with shears. Tagged `replaceable` and `sword_efficient`. Texture is fixed-color (no biome tint).
+  - **Parched Temporal Dirt** — cracked dry dirt block. Mineable with shovel; tagged `minecraft:dirt` so vegetation that uses the dirt tag (custom and vanilla) can survive on it.
+  - **Temporal Dead Bush** — withered bush cross-plant. Drops itself with shears, otherwise drops 0–2 sticks. Survives on Chrono Dawn dry terrain (Temporal Sand / Temporal Dirt / Coarse Temporal Dirt / Parched Temporal Dirt / Temporal Gravel) plus vanilla Sand and Red Sand. Will not survive on grass blocks.
+- **Lighting blocks**:
+  - **Time Torches** (Orange / Pink / Purple) — colored decorative torch variants with floor and wall placement. Crafted from the matching Time Blossom + Stick (4 torches per recipe)
+  - **Temporal Lantern**, **Dawn Lantern**, and **Dusk Lantern** — pickaxe-mined light sources using the vanilla lantern shape (3D rendering, animated flame, standing and hanging placement). Dawn/Dusk Lantern crafted from the matching Bell flower (+ iron nuggets + torch); Temporal Lantern crafted from any Time Blossom (+ iron nuggets + torch)
+  - Recipe advancements unlock the Time Torch / Lantern recipes when the player picks up the relevant Time Blossom or Bell
 - **Temporal Stalactites** and **Temporal Stalagmites** — decorative pointed cave blocks themed on Temporal Stone, generating across all ChronoDawn dimension biomes. Two sizes per direction (`tip` and `frustum`) form length-1 and length-2 formations on cave ceilings (stalactite) and floors (stalagmite). Pickaxe-mined at stone tier; `tip` blocks self-drop while `frustum` drops the matching `tip` so worldgen-only formations still produce a usable item when broken. Landing on an upward-facing tip deals enhanced fall damage matching vanilla `pointed_dripstone`. Breaking the root of a column (the stalactite block attached to the ceiling, or the stalagmite block attached to the floor) cascades and drops every connected dripstone block in the same direction. Vanilla `pointed_dripstone` and Dripstone Caves remain untouched
-- **Temporal Aquatic Plants (Phase 1)** — replace vanilla aquatic vegetation in the ChronoDawn dimension. Newly generated chunks of `chronodawn_ocean` and `chronodawn_swamp` now grow:
-  - **Temporal Kelp** — pale-cyan kelp columns (1–25 blocks tall) growing upward from the ocean floor; bone-meal grows the column, shears harvest the block. The Temporal Kelp head and Temporal Kelp Plant stem are climbable like vanilla kelp
-  - **Temporal Seagrass** and **Tall Temporal Seagrass** — short and 2-block-tall variants on the ocean floor; bone-meal on a short seagrass produces the tall variant; shears drop the seagrass item. Temporal Seagrass is registered as turtle food
-  - Pre-existing chunks retain whatever vanilla aquatic blocks they generated; only new chunks switch to the Temporal variants
-- **Dried Temporal Kelp** — food item smoked / smelted / campfire-cooked from Temporal Kelp. Nutrition 1, saturation 0.6, and the same fast-eat animation (0.865 s) as vanilla dried kelp. Cooking times match vanilla: 5 s in a smoker, 10 s in a furnace, 30 s on a campfire
-- **Faded Temporal Grass** — short, baked yellow-brown cross-plant. Drops itself with shears. Tagged `replaceable` and `sword_efficient`. Texture is fixed-color (no biome tint).
-- **Parched Temporal Dirt** — cracked dry dirt block. Mineable with shovel; tagged `minecraft:dirt` so vegetation that uses the dirt tag (custom and vanilla) can survive on it.
-- **Temporal Dead Bush** — withered bush cross-plant. Drops itself with shears, otherwise drops 0–2 sticks. Survives on Chrono Dawn dry terrain (Temporal Sand / Temporal Dirt / Coarse Temporal Dirt / Parched Temporal Dirt / Temporal Gravel) plus vanilla Sand and Red Sand. Will not survive on grass blocks.
-- **Temporal Aquatic Plants (Phase 2 — Light)** — adds an underwater light source to the ChronoDawn ocean:
-  - **Lumen Polyp** — bioluminescent sea-pickle-like cluster (1–4 polyps per block) generated naturally on the `chronodawn_ocean` floor, biased toward 1–2 polyp clusters. Emits light underwater scaling with the polyp count (6 / 9 / 12 / 15 light level for 1 / 2 / 3 / 4 polyps respectively, matching vanilla SeaPickleBlock); emits 0 light above water. Bone-meal underwater grows the polyp count up to 4. Drops 1–4 Lumen Polyp items matching the count when broken (no tool requirement). Available across all 11 supported Minecraft versions
-- **Temporal Aquatic Plants (Phase 2 — Color)** — adds four Chrono Coral plants to newly generated `chronodawn_ocean` floors:
-  - **Dawn / Dusk / Twilight / Eternal Chrono Coral** — decorative single-block aquatic plants using the Time Wood palette. They do not emit light; Lumen Polyp remains the dedicated underwater light source. Drops require shears, matching seagrass-style harvesting
-  - Pre-existing chunks retain whatever they generated; only newly generated chunks place Lumen Polyp and Chrono Coral
 - **Temporal Grass**, **Temporal Tall Grass**, and **Temporal Fern** — decorative cross-plants that replace `minecraft:short_grass`, `minecraft:tall_grass`, and `minecraft:fern` in newly generated Chrono Dawn chunks. Biome-tinted, drop wheat seeds on harvest (parity with vanilla grass), and accept bone-meal for the tall variant.
-- **Mossy Temporal Stone Bricks** — additional brick variant for the Temporal Stone family.
-- **Chrono Cobwebs** — biome-tinted cobweb variant generated in Chrono Dawn caves.
-- **Clockwork Dial** — thin decorative block with custom collision and model.
+- **Other decorative blocks**:
+  - **Mossy Temporal Stone Bricks** — additional brick variant for the Temporal Stone family.
+  - **Chrono Cobwebs** — biome-tinted cobweb variant generated in Chrono Dawn caves.
+  - **Clockwork Dial** — thin decorative block with custom collision and model.
 
 #### New Mobs
 - **Chrono Bovine** — friendly cow-equivalent that drops **Chrono Bovine Meat**, a raw food item smeltable/smokable/campfire-cookable into Cooked Chrono Bovine Meat (recipe unlocks on pickup).
@@ -73,22 +75,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - **Custom mob attack animations** — Hostile mobs now show visible attack animations during melee strikes. Previously the model stayed in its idle pose with no visual cue that the strike happened. Affected mobs: Epoch Husk, Clockwork Sentinel, Hourglass Golem, Floq, Forgotten Minute, Paradox Crawler, Temporal Wraith, Timeline Strider, Chronal Leech, and the bosses Time Guardian, Time Tyrant, Entropy Keeper, Chronos Warden, Temporal Phantom, and Clockwork Colossus. The boss attack animations specifically were dead code on Minecraft 1.21.2+ because the renderer never extracted `attackTime` from the entity. Animations match each mob's closest vanilla analog: Iron Golem-style overhead slam for golems, Husk-style arm thrust for zombie-likes, Spider-style rear-up for Paradox Crawler, segmented snake-bite for Chronal Leech, jaw-gape for Floq.
-- **ChronoDawn portal** — re-entering a portal whose destination frame was previously deactivated now reuses the existing frame instead of generating a duplicate.
-- **ChronoDawn portal destination generation** no longer overwrites water, lava, or leaf blocks at the arrival site. The arrival Y is now corrected only when the interior would land in fluid, and the previous "forced footing block" behavior is removed (no more stray Temporal Stone block dropped at the destination).
 - **ChronoDawn Custom Shields** (introduced in 0.7.0) — shift-click in inventory now equips them to the off-hand on 1.21.2+ (added `EQUIPPABLE` component); the cooldown overlay now renders on top of the held item icon instead of behind it; blocking mixin now targets `Player` so the predicate fires for player characters on 1.20.1 / 1.21.1 / 1.21.2.
+- **ChronoDawn portal**:
+  - Re-entering a portal whose destination frame was previously deactivated now reuses the existing frame instead of generating a duplicate.
+  - Destination generation no longer overwrites water, lava, or leaf blocks at the arrival site. The arrival Y is now corrected only when the interior would land in fluid, and the previous "forced footing block" behavior is removed (no more stray Temporal Stone block dropped at the destination).
 - **Dark Forest dense fog** restored in Chrono Dawn on 1.21.2+ (regression from the post-1.21.2 fog API migration).
-- **Silk Touch / Shears loot conditions** now drop reliably on 1.21.1+ — the enchantment predicate format was wrong in many block loot tables, silently skipping the silk-touch / shears branch.
-- **Time Hourglass blueprint text** is now properly localized (was hardcoded English).
 - **Key to Master Clock held model** — first/third-person hand display transforms added so the key is held at a natural angle (previously rendered flat without `display` transforms).
-- **Chronicle in-game entries refreshed to match current content** — the Welcome and Biome Progression pages now list the current 11 Chrono Dawn biomes (the old wording was missing Plains and Faded Plains); the Ancient Ruins entry no longer says "plains, forests, deserts, and more" (which never matched the implementation) and instead points players at old taigas and dark forests. Both `en_us` and `ja_jp` updated.
 - **Item Frames placed inside NBT-defined structures** are now preserved at runtime (the `block_pos` / `TileX-Y-Z` attachment was not being rewritten, so the entities silently despawned on load).
-- **Chrono Dawn Prairies biome** restored on 1.21.11 (was missing during the 1.21.11 port).
-- **Time Blossom harvest** now drops the matching color (1.21.2+; previously could drop a different color variant).
-- **Time Blossoms no longer generate on top of sand patches** in Chrono Dawn worldgen.
 - **TimeKeeper village** template updated to use Temporal blocks consistently and adds defensive trapdoors at the perimeter.
-- **Chrono Turtle** now spawns again on 1.20.1 (missing `IN_WATER` spawn placement registration).
+- **Time Blossoms**:
+  - Harvest now drops the matching color (1.21.2+; previously could drop a different color variant).
+  - No longer generate on top of sand patches in Chrono Dawn worldgen.
+- **Silk Touch / Shears loot conditions** now drop reliably on 1.21.1+ — the enchantment predicate format was wrong in many block loot tables, silently skipping the silk-touch / shears branch.
 - **Glide Fish cooking recipes** now unlock in the recipe book when the player picks up a Glide Fish.
+- **Time Hourglass blueprint text** is now properly localized (was hardcoded English).
+- **Chronicle in-game entries refreshed to match current content** — the Welcome and Biome Progression pages now list the current 11 Chrono Dawn biomes (the old wording was missing Plains and Faded Plains); the Ancient Ruins entry no longer says "plains, forests, deserts, and more" (which never matched the implementation) and instead points players at old taigas and dark forests. Both `en_us` and `ja_jp` updated.
 - **`ore_clockstone` count on 1.21.1+ corrected from 16 to 8** to match the 2026-01 frequency reduction (`90413a2e`) that was originally applied only to the 1.20.1 placed_feature. Brings 1.21.1+ in line with the documented design intent (clockstone density comparable to vanilla iron). Existing worlds keep their already-generated chunks; only newly-generated chunks reflect the change.
+- **Chrono Dawn Prairies biome** restored on 1.21.11 (was missing during the 1.21.11 port).
+- **Chrono Turtle** now spawns again on 1.20.1 (missing `IN_WATER` spawn placement registration).
 
 ## [0.7.0] - 2026-04-22
 
