@@ -79,6 +79,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Dark Forest dense fog** restored in Chrono Dawn on 1.21.2+ (regression from the post-1.21.2 fog API migration).
 - **Silk Touch / Shears loot conditions** now drop reliably on 1.21.1+ — the enchantment predicate format was wrong in many block loot tables, silently skipping the silk-touch / shears branch.
 - **Time Hourglass blueprint text** is now properly localized (was hardcoded English).
+- **Key to Master Clock held model** — first/third-person hand display transforms added so the key is held at a natural angle (previously rendered flat without `display` transforms).
+- **Chronicle in-game entries refreshed to match current content** — the Welcome and Biome Progression pages now list the current 11 Chrono Dawn biomes (the old wording was missing Plains and Faded Plains); the Ancient Ruins entry no longer says "plains, forests, deserts, and more" (which never matched the implementation) and instead points players at old taigas and dark forests. Both `en_us` and `ja_jp` updated.
 - **Item Frames placed inside NBT-defined structures** are now preserved at runtime (the `block_pos` / `TileX-Y-Z` attachment was not being rewritten, so the entities silently despawned on load).
 - **Chrono Dawn Prairies biome** restored on 1.21.11 (was missing during the 1.21.11 port).
 - **Time Blossom harvest** now drops the matching color (1.21.2+; previously could drop a different color variant).
