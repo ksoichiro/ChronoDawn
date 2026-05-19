@@ -2,6 +2,9 @@
   "replace": false,
   "values": [
     "chronodawn:faded_temporal_grass",
-    "chronodawn:temporal_dead_bush"
+    "chronodawn:temporal_dead_bush",
+    "chronodawn:temporal_grass",
+    "chronodawn:temporal_tall_grass",
+    "chronodawn:temporal_fern"
   ]
 }
