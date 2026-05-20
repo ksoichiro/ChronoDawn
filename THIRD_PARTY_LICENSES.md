@@ -55,7 +55,7 @@ This document lists all third-party dependencies used in Chrono Dawn and their r
 
 #### Architectury Loom
 - **Project**: Architectury Loom (Gradle Plugin)
-- **Version**: 1.11-SNAPSHOT
+- **Version**: 1.13-SNAPSHOT
 - **Organization**: Architectury
 - **License**: MIT License
 - **URL**: https://github.com/architectury/architectury-loom
@@ -131,12 +131,12 @@ All three use the **Pixabay License** (https://pixabay.com/service/license-summa
 
 ## License Compliance
 
-Chrono Dawn is licensed under the MIT License. All dependencies are compatible with this license:
+Chrono Dawn is licensed under the LGPL-3.0 (GNU Lesser General Public License v3.0). All dependencies are compatible with this license:
 - **Permissive licenses** (Apache 2.0, MIT, EPL 2.0): Fully compatible
-- **LGPL licenses** (LGPL-2.1, LGPL-3.0): Compatible due to dynamic linking (no license propagation)
+- **LGPL licenses** (LGPL-2.1, LGPL-3.0): Compatible — LGPL-2.1 via dynamic linking exception; LGPL-3.0 (Architectury API) is the same family as Chrono Dawn's license.
 
 For questions about licensing, please contact the project maintainer.
 
 ---
 
-Last updated: 2026-04-21
+Last updated: 2026-05-20
