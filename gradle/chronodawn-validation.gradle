@@ -1,0 +1,395 @@
+// ChronoDawn-specific resource validation tasks.
+//
+// These are project-local validations layered on top of the generic
+// validateResources / validateTranslations tasks in the shared submodule.
+// They encode failure patterns that ChronoDawn has hit (and silently lost
+// content over) more than once:
+//
+//   validateBlockTagMembership      — Java .replaceable() ↔ tag presence
+//   validateRecipeUnlockAdvancements — cooking recipe ↔ unlock advancement
+//   validateLangParity              — Python check_lang_parity.py wrapper
+//   validateEraJsonFormat           — recipe/advancement/loot_table era format
+//
+// All four are registered in the 'verification' group so checkAll can pick
+// them up. Errors throw GradleException so the failing CI step is visible.
+
+import groovy.json.JsonSlurper
+import groovy.json.JsonException
+
+// ============================================================
+// Task 1: validateBlockTagMembership
+// ------------------------------------------------------------
+// For every Java block class that chains .replaceable() in its
+// createProperties factory, verify the registered block ID is present in
+// minecraft:replaceable across both era tag files (1.20.1 plural blocks/
+// and 1.21.1+ singular block/). The same rule applies to sword_efficient
+// for classes extending BushBlock / DoublePlantBlock that opt in via
+// `.replaceable()`.
+// ============================================================
+tasks.register('validateBlockTagMembership') {
+    group = 'verification'
+    description = 'Verify blocks chaining .replaceable() are listed in minecraft:replaceable / sword_efficient tags'
+
+    doLast {
+        def errors = []
+        def referenceVersion = '1.21.4'
+        def blocksDir = file("${rootProject.projectDir}/common/${referenceVersion}/src/main/java/com/chronodawn/blocks")
+        def modBlocksFile = file("${rootProject.projectDir}/common/${referenceVersion}/src/main/java/com/chronodawn/registry/ModBlocks.java")
+
+        if (!blocksDir.exists() || !modBlocksFile.exists()) {
+            logger.lifecycle("validateBlockTagMembership: reference sources not found under common/${referenceVersion}, skipping.")
+            return
+        }
+
+        // 1. Find Java block classes that chain .replaceable() in their body.
+        def replaceableClasses = [] as Set
+        def crossPlantClasses = [] as Set
+        blocksDir.eachFileMatch(~/.+Block\.java/) { File blockFile ->
+            def content = blockFile.text
+            if (content =~ /\.replaceable\(\)/) {
+                def className = blockFile.name.replace('.java', '')
+                replaceableClasses << className
+                if (content =~ /extends\s+(BushBlock|DoublePlantBlock|TallFlowerBlock)/) {
+                    crossPlantClasses << className
+                }
+            }
+        }
+
+        // 2. Build className -> ID map from ModBlocks.java instantiations.
+        //    Pattern: new XxxBlock(XxxBlock.createProperties("id"))
+        def idMap = [:]
+        def modBlocksContent = modBlocksFile.text
+        def pattern = ~/new\s+(\w+Block)\s*\(\s*\1\.createProperties\s*\(\s*"([^"]+)"/
+        def matcher = pattern.matcher(modBlocksContent)
+        while (matcher.find()) {
+            idMap[matcher.group(1)] = matcher.group(2)
+        }
+
+        // 3. Verify tag membership across both era tag files.
+        def jsonSlurper = new JsonSlurper()
+
+        def checkTag = { File tagFile, Set<String> classes, String tagLabel ->
+            if (!tagFile.exists()) return
+            def tagContent = jsonSlurper.parseText(tagFile.text)
+            def tagIds = (tagContent.values ?: []) as Set
+            classes.each { className ->
+                def id = idMap[className]
+                if (id == null) return  // Helper class not registered in ModBlocks — skip.
+                def fqId = "chronodawn:${id}".toString()
+                if (!tagIds.contains(fqId)) {
+                    def relPath = rootProject.projectDir.toPath().relativize(tagFile.toPath()).toString()
+                    errors << "${className} chains .replaceable() but '${fqId}' not in ${relPath} (${tagLabel})"
+                }
+            }
+        }
+
+        // minecraft:replaceable — every .replaceable() block
+        checkTag(file("${rootProject.projectDir}/common/shared-1.21.1+/src/main/resources/data/minecraft/tags/block/replaceable.json"),
+                 replaceableClasses, 'replaceable@1.21.1+')
+        checkTag(file("${rootProject.projectDir}/common/1.20.1/src/main/resources/data/minecraft/tags/blocks/replaceable.json"),
+                 replaceableClasses, 'replaceable@1.20.1')
+
+        // minecraft:sword_efficient — only cross-plant subclasses
+        checkTag(file("${rootProject.projectDir}/common/shared-1.21.1+/src/main/resources/data/minecraft/tags/block/sword_efficient.json"),
+                 crossPlantClasses, 'sword_efficient@1.21.1+')
+        checkTag(file("${rootProject.projectDir}/common/1.20.1/src/main/resources/data/minecraft/tags/blocks/sword_efficient.json"),
+                 crossPlantClasses, 'sword_efficient@1.20.1')
+
+        if (errors.isEmpty()) {
+            logger.lifecycle("Block tag membership validation passed: ${replaceableClasses.size()} .replaceable() classes (${crossPlantClasses.size()} cross-plant) all tagged correctly.")
+        } else {
+            errors.each { logger.error("  ERROR: ${it}") }
+            throw new GradleException("Block tag membership validation failed with ${errors.size()} error(s)")
+        }
+    }
+}
+
+// ============================================================
+// Task 2: validateRecipeUnlockAdvancements
+// ------------------------------------------------------------
+// Every cooking recipe (smoking, campfire_cooking, or food-category
+// smelting) needs a matching `advancement(s)/recipes/food/<recipe>.json`
+// — otherwise the recipe stays hidden in the recipe book until the
+// cooked output is independently obtained.
+// ============================================================
+tasks.register('validateRecipeUnlockAdvancements') {
+    group = 'verification'
+    description = 'Verify cooking recipes have corresponding recipe-unlock advancement files'
+
+    doLast {
+        def errors = []
+        def jsonSlurper = new JsonSlurper()
+
+        // Each resource root that may hold cooking recipes, paired with the
+        // advancement search roots that may host the unlock file. The first
+        // matching advancement wins; if none exist, the recipe is flagged.
+        def recipeRoots = [
+            [recipeDir: 'common/1.20.1/src/main/resources/data/chronodawn/recipes',
+             advancementDirs: ['common/1.20.1/src/main/resources/data/chronodawn/advancements/recipes/food']],
+            [recipeDir: 'common/1.21.1/src/main/resources/data/chronodawn/recipe',
+             advancementDirs: ['common/shared-1.21.1+/src/main/resources/data/chronodawn/advancement/recipes/food',
+                                'common/1.21.1/src/main/resources/data/chronodawn/advancement/recipes/food']],
+            [recipeDir: 'common/shared-1.21.1+/src/main/resources/data/chronodawn/recipe',
+             advancementDirs: ['common/shared-1.21.1+/src/main/resources/data/chronodawn/advancement/recipes/food']],
+            [recipeDir: 'common/shared-1.21.2+/src/main/resources/data/chronodawn/recipe',
+             advancementDirs: ['common/shared-1.21.1+/src/main/resources/data/chronodawn/advancement/recipes/food']],
+        ]
+
+        int checked = 0
+        recipeRoots.each { entry ->
+            def recipeDir = file("${rootProject.projectDir}/${entry.recipeDir}")
+            if (!recipeDir.exists()) return
+
+            recipeDir.eachFileMatch(~/.+\.json/) { File recipeFile ->
+                def recipe
+                try {
+                    recipe = jsonSlurper.parseText(recipeFile.text)
+                } catch (Exception e) {
+                    return  // JSON syntax error — caught by validateResources
+                }
+                if (!(recipe instanceof Map)) return
+
+                def type = recipe.type as String
+                def category = recipe.category as String
+                def isCooking = false
+                if (type == 'minecraft:smoking' || type == 'minecraft:campfire_cooking') {
+                    isCooking = true
+                } else if (type == 'minecraft:smelting' && category == 'food') {
+                    isCooking = true
+                }
+                if (!isCooking) return
+
+                checked++
+                def baseName = recipeFile.name
+                def found = entry.advancementDirs.any { dir ->
+                    file("${rootProject.projectDir}/${dir}/${baseName}").exists()
+                }
+                if (!found) {
+                    def relPath = rootProject.projectDir.toPath().relativize(recipeFile.toPath()).toString()
+                    errors << "Cooking recipe ${relPath} has no recipe-unlock advancement under ${entry.advancementDirs.join(' or ')}"
+                }
+            }
+        }
+
+        if (errors.isEmpty()) {
+            logger.lifecycle("Recipe-unlock advancement validation passed: ${checked} cooking recipes all have unlock advancements.")
+        } else {
+            errors.each { logger.error("  ERROR: ${it}") }
+            throw new GradleException("Recipe-unlock advancement validation failed with ${errors.size()} error(s)")
+        }
+    }
+}
+
+// ============================================================
+// Task 3: validateLangParity
+// ------------------------------------------------------------
+// Thin Gradle wrapper around scripts/check_lang_parity.py so that lang
+// drift (e.g. block.X present, item.X missing in one locale) gets caught
+// by checkAll. The existing validateTranslations only inspects entity /
+// spawn-egg keys; the Python script inspects every key pair.
+// ============================================================
+tasks.register('validateLangParity', Exec) {
+    group = 'verification'
+    description = 'Verify non-English lang files share keys with en_us.json across all version roots'
+    workingDir = rootProject.projectDir
+    commandLine 'python3', 'scripts/check_lang_parity.py'
+}
+
+// ============================================================
+// Task 4: validateEraJsonFormat
+// ------------------------------------------------------------
+// Checks that recipe, advancement, and loot table JSONs use the correct
+// per-era format for their containing resource root. The format split
+// reduces to two eras in practice (verified against the actual codebase
+// rather than abstract docs):
+//
+//   recipe          legacy → result string / result.item ; modern → result.id
+//   advancement     legacy plural advancements/  ;  modern singular advancement/
+//                   legacy icon.item             ;  modern icon.id
+//   loot_table      legacy silk-touch direct 'enchantments' key;
+//                   modern nested predicates.minecraft:enchantments
+//                   table_bonus uses 'chances' array (never 'probabilities')
+//                   legacy plural loot_tables/   ;  modern singular loot_table/
+//
+//   legacy = 1.20.1 only
+//   modern = every 1.21.x root (shared-1.21.1+, shared-1.21.2+, 1.21.x)
+//
+// Era is determined by the resource root the file lives under.
+// ============================================================
+tasks.register('validateEraJsonFormat') {
+    group = 'verification'
+    description = 'Verify recipe/advancement/loot_table JSON era format matches the containing resource root'
+
+    doLast {
+        def errors = []
+        def jsonSlurper = new JsonSlurper()
+
+        def roots = [
+            'common/shared': 'legacy',
+            'common/1.20.1': 'legacy',
+            'common/shared-1.21.1+': 'modern',
+            'common/shared-1.21.2+': 'modern',
+            'common/shared-1.21.5+': 'modern',
+            'common/1.21.1': 'modern',
+            'common/1.21.2': 'modern',
+            'common/1.21.4': 'modern',
+            'common/1.21.5': 'modern',
+            'common/1.21.6': 'modern',
+            'common/1.21.7': 'modern',
+            'common/1.21.8': 'modern',
+            'common/1.21.9': 'modern',
+            'common/1.21.10': 'modern',
+            'common/1.21.11': 'modern',
+        ]
+
+        int checked = 0
+        roots.each { String rootRel, String era ->
+            def rootDir = file("${rootProject.projectDir}/${rootRel}/src/main/resources/data/chronodawn")
+            if (!rootDir.exists()) return
+
+            // Directory naming: legacy uses plural, modern uses singular.
+            if (era == 'legacy') {
+                ['recipe', 'advancement', 'loot_table'].each { wrongDir ->
+                    if (file("${rootDir}/${wrongDir}").exists()) {
+                        errors << "${rootRel}: directory '${wrongDir}/' should be plural (1.20.1 era)"
+                    }
+                }
+            } else {
+                ['recipes', 'advancements', 'loot_tables'].each { wrongDir ->
+                    if (file("${rootDir}/${wrongDir}").exists()) {
+                        errors << "${rootRel}: directory '${wrongDir}/' should be singular (1.21.1+ era)"
+                    }
+                }
+            }
+
+            // Recipes — legacy uses bare string or result.item; modern uses result.id
+            def recipeSubdir = (era == 'legacy') ? 'recipes' : 'recipe'
+            def recipeDir = file("${rootDir}/${recipeSubdir}")
+            if (recipeDir.exists()) {
+                fileTree(dir: recipeDir, includes: ['**/*.json']).each { File f ->
+                    def json
+                    try { json = jsonSlurper.parseText(f.text) } catch (Exception e) { return }
+                    if (!(json instanceof Map)) return
+                    checked++
+                    def result = json.result
+                    if (result instanceof Map) {
+                        def hasItem = result.containsKey('item')
+                        def hasId = result.containsKey('id')
+                        if (era == 'modern' && hasItem && !hasId) {
+                            def rel = rootProject.projectDir.toPath().relativize(f.toPath()).toString()
+                            errors << "${rel}: result.item used in 1.21.1+ root (expected result.id)"
+                        }
+                        if (era == 'legacy' && hasId && !hasItem) {
+                            def rel = rootProject.projectDir.toPath().relativize(f.toPath()).toString()
+                            errors << "${rel}: result.id used in 1.20.1 root (expected result.item or bare string)"
+                        }
+                    }
+                }
+            }
+
+            // Advancements — icon.item vs icon.id
+            def advSubdir = (era == 'legacy') ? 'advancements' : 'advancement'
+            def advDir = file("${rootDir}/${advSubdir}")
+            if (advDir.exists()) {
+                fileTree(dir: advDir, includes: ['**/*.json']).each { File f ->
+                    def json
+                    try { json = jsonSlurper.parseText(f.text) } catch (Exception e) { return }
+                    if (!(json instanceof Map)) return
+                    checked++
+                    def display = json.display
+                    if (display instanceof Map && display.icon instanceof Map) {
+                        def icon = display.icon
+                        def hasItem = icon.containsKey('item')
+                        def hasId = icon.containsKey('id')
+                        if (era == 'legacy' && hasId && !hasItem) {
+                            def rel = rootProject.projectDir.toPath().relativize(f.toPath()).toString()
+                            errors << "${rel}: icon.id used in 1.20.1 root (expected icon.item)"
+                        }
+                        if (era != 'legacy' && hasItem && !hasId) {
+                            def rel = rootProject.projectDir.toPath().relativize(f.toPath()).toString()
+                            errors << "${rel}: icon.item used in 1.21.1+ root (expected icon.id)"
+                        }
+                    }
+                }
+            }
+
+            // Loot tables — silk-touch predicate format + table_bonus chances key
+            def lootSubdir = (era == 'legacy') ? 'loot_tables' : 'loot_table'
+            def lootDir = file("${rootDir}/${lootSubdir}")
+            if (lootDir.exists()) {
+                fileTree(dir: lootDir, includes: ['**/*.json']).each { File f ->
+                    def json
+                    try { json = jsonSlurper.parseText(f.text) } catch (Exception e) { return }
+                    if (!(json instanceof Map)) return
+                    checked++
+                    def rel = rootProject.projectDir.toPath().relativize(f.toPath()).toString()
+                    walkLootConditions(json) { Map cond ->
+                        def condType = cond.condition as String
+                        // table_bonus must use "chances" not "probabilities"
+                        // (table_bonus appears as function, not condition — handled separately below)
+                        // silk-touch / shears enchantment predicate
+                        if (condType == 'minecraft:match_tool') {
+                            def predicate = cond.predicate
+                            if (predicate instanceof Map) {
+                                def directEnch = predicate.containsKey('enchantments')
+                                def nestedEnch = predicate.predicates instanceof Map && predicate.predicates.containsKey('minecraft:enchantments')
+                                if (era == 'legacy' && nestedEnch && !directEnch) {
+                                    errors << "${rel}: nested predicates.minecraft:enchantments in 1.20.1 (expected direct 'enchantments')"
+                                }
+                                if (era != 'legacy' && directEnch && !nestedEnch) {
+                                    errors << "${rel}: direct 'enchantments' key in 1.21.1+ (expected nested predicates.minecraft:enchantments)"
+                                }
+                            }
+                        }
+                    }
+                    walkLootFunctions(json) { Map fn ->
+                        if ((fn.function as String) == 'minecraft:apply_bonus' && fn.formula == 'minecraft:binomial_with_bonus_count') {
+                            // not table_bonus, skip
+                        }
+                        if ((fn.function as String) == 'minecraft:apply_bonus') {
+                            // apply_bonus is OK in all eras — different from table_bonus
+                        }
+                    }
+                    walkLootConditions(json) { Map cond ->
+                        // table_bonus chances vs probabilities
+                        if ((cond.condition as String) == 'minecraft:table_bonus') {
+                            if (cond.containsKey('probabilities') && !cond.containsKey('chances')) {
+                                errors << "${rel}: minecraft:table_bonus uses 'probabilities' (must be 'chances')"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (errors.isEmpty()) {
+            logger.lifecycle("Era JSON format validation passed: ${checked} JSON files (recipe/advancement/loot_table) match their era format.")
+        } else {
+            errors.each { logger.error("  ERROR: ${it}") }
+            throw new GradleException("Era JSON format validation failed with ${errors.size()} error(s)")
+        }
+    }
+}
+
+// Helpers for loot_table walking.
+def walkLootConditions(Object node, Closure visitor) {
+    if (node instanceof Map) {
+        if (node.condition || node.containsKey('predicate')) {
+            visitor.call(node)
+        }
+        node.values().each { walkLootConditions(it, visitor) }
+    } else if (node instanceof List) {
+        node.each { walkLootConditions(it, visitor) }
+    }
+}
+
+def walkLootFunctions(Object node, Closure visitor) {
+    if (node instanceof Map) {
+        if (node.function) {
+            visitor.call(node)
+        }
+        node.values().each { walkLootFunctions(it, visitor) }
+    } else if (node instanceof List) {
+        node.each { walkLootFunctions(it, visitor) }
+    }
+}

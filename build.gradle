@@ -130,6 +130,9 @@ apply from: 'gradle/shared/multi-version-tasks.gradle'
 // Resource validation (JSON syntax and cross-reference checks)
 apply from: 'gradle/shared/resource-validation.gradle'
 
+// ChronoDawn-specific validation (tag membership, recipe-unlock, lang parity, era JSON format)
+apply from: 'gradle/chronodawn-validation.gradle'
+
 // Release tasks
 apply from: 'gradle/shared/release-modrinth.gradle'
 apply from: 'gradle/shared/release-curseforge.gradle'
