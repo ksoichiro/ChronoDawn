@@ -69,28 +69,26 @@ Chrono Dawn features unique mobs that replace vanilla spawns in the dimension:
 - **Forgotten Minute**: Flying hostile mob with unique AI
 - **Chronal Leech**: Hostile mob that drains time energy
 - **Ticking Sheep**: Replaces Sheep - shearable for light blue wool, wool regrows after eating grass
+- **Chrono Bovine**: Friendly cow-equivalent that drops cookable Chrono Bovine Meat
+- **Chrono Ursid**: Neutral polar-bear-equivalent sized to match vanilla polar bears
+- **Temporal Caprid**: Goat-equivalent mob
+- **Timebound Rabbit**: Small wildlife found in Plains and Faded Plains
+- **Pulse Hog**: Hostile boar-like mob
+- **Secondwing Fowl**: Chicken-based mob
 - **Chrono Turtle**: Friendly water creature
 - **Glide Fish**: Water creature with cookable food items
 
-### 🌲 New Content
-- **Time Wood**: A unique wood type with full block set (logs, planks, stairs, slabs, doors, trapdoors)
-- **Custom Items**: Time Hourglass, Portal Stabilizer, Time Clock, and more
-- **Special Blocks**: Reversing Time Sandstone (regenerates after breaking), Unstable Fungus (random speed effects)
-- **New Food**: Fruit of Time (grants Haste effect), Glide Fish (raw and cooked)
-
----
-
-## ⚠️ Important Notice for v0.3.0
-
-**This version is NOT compatible with worlds created in v0.2.0 or earlier.**
-
-Breaking changes in this release:
-- **Portal System Rewrite**: Existing portals will not function. You must break and rebuild them using Time Hourglass.
-- **Save Data Changes**: Boss defeat progress may be reset.
-
-**Recommendation**: Back up your world before updating, or start a new world for v0.3.0.
-
-See [CHANGELOG.md on GitHub](https://github.com/ksoichiro/ChronoDawn/blob/main/CHANGELOG.md) for detailed information.
+### 🌲 New Content (highlights)
+- **Custom Wood Types**: Time Wood, Dark Time Wood, and Ancient Time Wood — full block sets; tall variants now generate as 2×2 mega trunks
+- **Small Ambient Structures**: Watchmaker's Camp, Hourglass Monolith, Old Sundial, Petrified Adventurer (snowy variant), Time Cairn, Time Well, and Upside-Down Tree scattered across Chrono Dawn biomes
+- **Cave Decoration**: Temporal Stalactites and Stalagmites with tip + frustum variants, enhanced fall damage, and cascading column breaks
+- **Aquatic Plants**: Temporal Kelp, Temporal Seagrass + Tall variant, Lumen Polyp (underwater light source), and Dawn / Dusk / Twilight / Eternal Chrono Coral in the Chrono Dawn ocean and swamp
+- **Lighting Blocks**: Time Torches in 3 colors (Orange / Pink / Purple) and Temporal / Dawn / Dusk Lanterns
+- **Faded Plains terrain**: Faded Temporal Grass, Parched Temporal Dirt, and Temporal Dead Bush surface flora
+- **Custom Foods**: Fruit of Time (Haste), Glide Fish (raw / cooked), Chrono Bovine Meat (raw / cooked), Dried Temporal Kelp (vanilla-parity quick food)
+- **Time Hourglass, Portal Stabilizer, Time Clock**, ChronoDawn Custom Shields (3 tiers), and more
+- **Special Blocks**: Reversing Time Sandstone, Unstable Fungus, Mossy Temporal Stone Bricks (with stairs/slab/wall), Clockwork Dial, Chrono Cobweb
+- **Tunable Worldgen**: Per-ore generation parameters and Ancient Ruins placement exposed via `config/chronodawn.toml` — see [Configuration Guide](https://github.com/ksoichiro/ChronoDawn/blob/main/docs/configuration.md)
 
 ---
 

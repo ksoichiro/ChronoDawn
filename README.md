@@ -32,7 +32,7 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed information.
 - **11 Unique Biomes**: Forest, Plains, Desert, Mountain, Ocean, Snowy, Swamp, Dark Forest, Ancient Forest, Prairies, and Faded Plains
 
 ### Content
-- **Custom Wood Types**: Time Wood, Dark Time Wood, and Ancient Time Wood — each with a full block set (logs, planks, stairs, slabs, doors, trapdoors, fences, buttons, pressure plates, saplings)
+- **Custom Wood Types**: Time Wood, Dark Time Wood, and Ancient Time Wood — each with a full block set (logs, planks, stairs, slabs, doors, trapdoors, fences, buttons, pressure plates, saplings). Tall tree variants now generate as 2×2 mega trunks.
 - **Major Structures**:
   - Ancient Ruins (Overworld spawn)
   - Forgotten Library (Chrono Dawn)
@@ -42,6 +42,12 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed information.
   - Phantom Catacombs (Temporal Phantom boss)
   - Entropy Crypt (Entropy Keeper boss)
   - Master Clock (final dungeon with Time Tyrant boss)
+- **Small Ambient Structures** (scattered across Chrono Dawn biomes): Watchmaker's Camp (chest loot), Hourglass Monolith, Old Sundial, Petrified Adventurer (with snowy variant), Time Cairn, Time Well, and Upside-Down Tree
+- **Friendly Mobs in Chrono Dawn**: Chrono Bovine (cow-equivalent; drops Chrono Bovine Meat), Chrono Ursid (polar-bear-equivalent), Temporal Caprid (goat-equivalent)
+- **Cave Decoration**: Temporal Stalactites and Temporal Stalagmites with tip + frustum variants, enhanced fall damage on tips, and cascading column breaks
+- **Aquatic Plants** (Chrono Dawn ocean/swamp): Temporal Kelp, Temporal Seagrass + Tall variant, Lumen Polyp (underwater light source), and Dawn / Dusk / Twilight / Eternal Chrono Coral
+- **Lighting Blocks**: Time Torches (Orange / Pink / Purple) crafted from Time Blossoms, and Temporal / Dawn / Dusk Lanterns
+- **Faded Plains Biome Content**: Faded Temporal Grass, Parched Temporal Dirt, and Temporal Dead Bush surface flora for the new dry biome
 - **Boss Enemies**:
   - Time Guardian (mini-boss, drops Master Clock Key)
   - Chronos Warden (mid-boss, drops Guardian Stone)
@@ -57,7 +63,7 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed information.
   - Chrono Aegis — right-click activated buff artifact (10-minute anti-Time-Tyrant buff for the wielder and nearby allies)
 - **ChronoDawn Custom Shields**: Three tiered shields (Clockstone → Enhanced Clockstone → Entropy Crystal) with cumulative time-themed effects (passive debuff shortening, faster raise on 1.21.5+, Speed on block at T2+, Time Echo auto-block at T3)
 - **Chronicle of Chrono Dawn**: In-game guidebook auto-given when entering the dimension, covering biomes, structures, bosses, items, and progression
-- **Configurable**: Tune select gameplay values (currently Ancient Ruins generation) via `config/chronodawn.toml`. See [docs/configuration.md](docs/configuration.md). Modpack creators see [docs/modpack-integration.md](docs/modpack-integration.md).
+- **Configurable**: Tune select gameplay values via `config/chronodawn.toml` — currently Ancient Ruins generation (`spacing`, `separation`, `salt`) and per-ore generation tuning for Time Crystal, Entropy Crystal, Temporal Amber, and Clockstone (`enabled`, `count`, `y_min`, `y_max`). See [docs/configuration.md](docs/configuration.md). Modpack creators see [docs/modpack-integration.md](docs/modpack-integration.md).
 
 ### Technical Features
 - **Multi-Loader Architecture**: Supports both Fabric and NeoForge loaders

@@ -262,9 +262,38 @@ Smelt Temporal Kelp into **Dried Temporal Kelp**:
 
 Dried Temporal Kelp restores 1 hunger point with 0.6 saturation modifier — identical nutrition to vanilla dried kelp — and shares the fast eat animation (about 0.86 seconds per bite, half the speed of regular food). Useful as quick emergency food when farming or exploring.
 
+### Friendly Wildlife
+
+Chrono Dawn hosts several friendly and neutral mobs unique to the dimension. These spawn alongside the hostile residents and provide renewable food and resources:
+
+- **Chrono Bovine** — cow-equivalent. Drops **Chrono Bovine Meat** (raw), which smelts / smokes / campfire-cooks into Cooked Chrono Bovine Meat. The cooking recipe unlocks when you first pick up Chrono Bovine Meat.
+- **Chrono Ursid** — polar-bear-equivalent neutral mob. Same size and behavior as a vanilla polar bear; provoke at your own risk.
+- **Temporal Caprid** — goat-equivalent. Pairs naturally with the mountainous biomes.
+- **Timebound Rabbit** — small wildlife that grazes in Plains, Prairies, and the new Faded Plains biome.
+- **Pulse Hog** — hostile boar-style mob; charges when provoked.
+- **Secondwing Fowl** — chicken-based mob; same egg/feather mechanics as vanilla chicken.
+
+Underwater you'll also encounter the friendly **Chrono Turtle** and the harvestable **Glide Fish**.
+
 ---
 
 ## Structures and Exploration
+
+### Small Ambient Structures (Chrono Dawn)
+
+Seven small NBT-defined micro-structures scatter across the Chrono Dawn biomes. They have no boss content but tell ambient lore about the frozen dimension; one of them carries usable loot:
+
+- **Watchmaker's Camp** — the only ambient structure with a chest. Worth detouring to whenever you spot the tent.
+- **Hourglass Monolith** — a single-block monument that breaks up open biomes.
+- **Old Sundial** — a flat brick ring marking long-abandoned timekeeping.
+- **Petrified Adventurer** — a frozen explorer pose, with a snowy variant in the Snowy biome.
+- **Time Cairn** — a small rock pile; placement reduced in frequency to keep it rare.
+- **Time Well** — a shallow stone well.
+- **Upside-Down Tree** — a tree growing roots-up, hinting at the dimension's broken physics.
+
+These structures generate exclusively in the Chrono Dawn dimension. They share the surface noise budget with bigger structures, so you'll encounter them often while exploring on foot.
+
+---
 
 ### Forgotten Library (Chrono Dawn)
 
