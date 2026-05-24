@@ -21,14 +21,14 @@
     },
     {
       "text": {
-        "en_us": "Required Materials:\n\n• 1 Glass Bottle - Craft from glass\n• 4 Clockstone - Smelt Clockstone Ore from Ancient Ruins\n• 2 Time Crystals - Found in Ancient Ruins loot chests (rare)\n• 2 Redstone Dust - Mine from Overworld caves\n\nTime Crystals are the rarest ingredient, so explore multiple Ancient Ruins to gather enough materials.",
-        "ja_jp": "必要な材料:\n\n• ガラス瓶 1個 - ガラスから作成\n• クロックストーン 4個 - 古代遺跡のクロックストーン鉱石を精錬\n• タイムクリスタル 2個 - 古代遺跡の戦利品チェストで発見（レア）\n• レッドストーンダスト 2個 - オーバーワールドの洞窟で採掘\n\nタイムクリスタルが最もレアな材料なので、十分な材料を集めるために複数の古代遺跡を探索してください。"
+        "en_us": "Required Materials:\n\n• 4 Glass - Smelt Sand or Temporal Sand in a furnace\n• 2 Clockstone - Smelt Clockstone Ore from Ancient Ruins\n• 1 Sand (or Temporal Sand) - Common in Overworld deserts and Chrono Dawn sand patches\n\nThe recipe accepts vanilla Sand and ChronoDawn's Temporal Sand interchangeably, so the Hourglass can be crafted on either side of the portal.",
+        "ja_jp": "必要な材料:\n\n• ガラス 4個 - 砂またはテンポラルサンドをかまどで精錬\n• クロックストーン 2個 - 古代遺跡のクロックストーン鉱石を精錬\n• 砂 または テンポラルサンド 1個 - オーバーワールドの砂漠やクロノドーン次元の砂パッチで採取\n\nこのレシピはバニラの砂とクロノドーンのテンポラルサンドを互換素材として受け付けるため、ポータルのどちら側でもアワーグラスをクラフトできます。"
       }
     },
     {
       "text": {
-        "en_us": "Crafting Tips:\n\n• Gather extra Clockstone Ore while exploring Ancient Ruins - you'll need Clockstone Blocks for the portal frame (9 Clockstone per block)\n\n• Time Crystals are also used for advanced crafting later, so collect extras if you find them\n\n• Consider building your first portal near your base for easy access\n\nNext Step: Learn how to build the portal frame!",
-        "ja_jp": "クラフトのヒント:\n\n• 古代遺跡を探索する際に追加のクロックストーン鉱石を集める - ポータルフレームにクロックストーンブロックが必要（ブロック1個につきクロックストーン9個）\n\n• タイムクリスタルは後で高度なクラフトにも使用されるため、見つけた場合は余分に集める\n\n• 簡単にアクセスできるよう、最初のポータルは拠点の近くに建設することを検討\n\n次のステップ: ポータルフレームの建設方法を学びましょう！"
+        "en_us": "Crafting Tips:\n\n• Gather extra Clockstone Ore while exploring Ancient Ruins - you'll need Clockstone Blocks for the portal frame (9 Clockstone per block)\n\n• Sand and Temporal Sand are fully interchangeable in this recipe - no need to carry vanilla Sand into the Chrono Dawn dimension, or vice versa\n\n• Consider building your first portal near your base for easy access\n\nNext Step: Learn how to build the portal frame!",
+        "ja_jp": "クラフトのヒント:\n\n• 古代遺跡を探索する際に追加のクロックストーン鉱石を集める - ポータルフレームにクロックストーンブロックが必要（ブロック1個につきクロックストーン9個）\n\n• 砂とテンポラルサンドは完全に互換素材なので、バニラの砂をクロノドーン次元に持ち込んだり、その逆を行う必要はありません\n\n• 簡単にアクセスできるよう、最初のポータルは拠点の近くに建設することを検討\n\n次のステップ: ポータルフレームの建設方法を学びましょう！"
       }
     }
   ]
