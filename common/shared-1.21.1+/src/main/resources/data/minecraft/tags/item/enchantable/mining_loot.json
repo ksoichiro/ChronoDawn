@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "chronodawn:clockstone_pickaxe",
+    "chronodawn:enhanced_clockstone_pickaxe",
+    "chronodawn:spatially_linked_pickaxe",
+    "chronodawn:clockstone_axe",
+    "chronodawn:enhanced_clockstone_axe",
+    "chronodawn:clockstone_shovel",
+    "chronodawn:enhanced_clockstone_shovel",
+    "chronodawn:clockstone_hoe",
+    "chronodawn:enhanced_clockstone_hoe"
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "chronodawn:clockstone_chestplate",
+    "chronodawn:enhanced_clockstone_chestplate",
+    "chronodawn:temporal_amber_chestplate",
+    "chronodawn:time_tyrant_mail"
+  ]
+}

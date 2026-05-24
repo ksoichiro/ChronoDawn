@@ -1,0 +1,19 @@
+{
+  "replace": false,
+  "values": [
+    "chronodawn:clockstone_helmet",
+    "chronodawn:clockstone_chestplate",
+    "chronodawn:clockstone_leggings",
+    "chronodawn:clockstone_boots",
+    "chronodawn:enhanced_clockstone_helmet",
+    "chronodawn:enhanced_clockstone_chestplate",
+    "chronodawn:enhanced_clockstone_leggings",
+    "chronodawn:enhanced_clockstone_boots",
+    "chronodawn:temporal_amber_helmet",
+    "chronodawn:temporal_amber_chestplate",
+    "chronodawn:temporal_amber_leggings",
+    "chronodawn:temporal_amber_boots",
+    "chronodawn:time_tyrant_mail",
+    "chronodawn:echoing_time_boots"
+  ]
+}
