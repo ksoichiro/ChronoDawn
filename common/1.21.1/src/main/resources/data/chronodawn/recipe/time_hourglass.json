@@ -14,7 +14,7 @@
       "item": "chronodawn:clockstone"
     },
     "S": {
-      "item": "minecraft:sand"
+      "tag": "chronodawn:sand"
     }
   },
   "result": {

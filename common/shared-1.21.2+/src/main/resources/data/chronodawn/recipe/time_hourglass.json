@@ -9,7 +9,7 @@
   "key": {
     "G": "minecraft:glass",
     "C": "chronodawn:clockstone",
-    "S": "minecraft:sand"
+    "S": "#chronodawn:sand"
   },
   "result": {
     "id": "chronodawn:time_hourglass",
