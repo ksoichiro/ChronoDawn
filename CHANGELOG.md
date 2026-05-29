@@ -80,6 +80,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **ChronoDawn portal**:
   - Re-entering a portal whose destination frame was previously deactivated now reuses the existing frame instead of generating a duplicate.
   - Destination generation no longer overwrites water, lava, or leaf blocks at the arrival site. The arrival Y is now corrected only when the interior would land in fluid, and the previous "forced footing block" behavior is removed (no more stray Temporal Stone block dropped at the destination).
+  - Destination frame no longer floats above replaceable surface decorations (flowers, tall grass, snow layers). The bottom frame row now overwrites these the same way it already did for water and lava, matching player-built portal placement.
 - **Dark Forest dense fog** restored in Chrono Dawn on 1.21.2+ (regression from the post-1.21.2 fog API migration).
 - **Key to Master Clock held model** — first/third-person hand display transforms added so the key is held at a natural angle (previously rendered flat without `display` transforms).
 - **Item Frames placed inside NBT-defined structures** are now preserved at runtime (the `block_pos` / `TileX-Y-Z` attachment was not being rewritten, so the entities silently despawned on load).

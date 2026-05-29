@@ -583,12 +583,15 @@ public class PortalTeleportHandler {
         // placement, identical to a player-built portal).
         int frameY = surfaceY;
 
-        // Exception: if the topmost natural block is a fluid (open water / lava),
-        // let the bottom-frame row occupy that fluid block — when the frame is
-        // written, the fluid block is overwritten with Clockstone and the
-        // interior 3-block column ends up right at the fluid surface, dry.
+        // Exception: if the topmost natural block is a fluid (open water / lava)
+        // or a replaceable decoration (flower, tall grass, snow layer), let the
+        // bottom-frame row occupy that block — the frame write overwrites it,
+        // matching how a player-built portal replaces these on placement.
+        // Without the replaceable case, WORLD_SURFACE points one Y above a
+        // flower and the frame ends up "floating" with the flower preserved.
         cursor.setY(surfaceY - 1);
-        if (!level.getBlockState(cursor).getFluidState().isEmpty()) {
+        BlockState topBlock = level.getBlockState(cursor);
+        if (!topBlock.getFluidState().isEmpty() || topBlock.canBeReplaced()) {
             frameY = surfaceY - 1;
         }
 
