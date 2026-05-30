@@ -9,14 +9,14 @@
   "pages": [
     {
       "text": {
-        "en_us": "Clockwork Colossus is a mid-boss found in the Clockwork Depths. One of four bosses required for crafting Chrono Aegis.\n\nDifficulty: ★★★☆☆ (Moderate-Hard)\n\nLocation: Clockwork Depths (underground)\n\nAbilities:\n• Overcharge - Temporarily increases attack speed and damage\n• Repair Protocol - Regenerates health slowly when not in combat\n• Gear Throw - Ranged projectile attack",
-        "ja_jp": "時計仕掛けの巨像は、歯車の深淵に出現する中ボスです。クロノイージスの作成に必要な4体のボスのうちの1体です。\n\n難易度: ★★★☆☆（中〜難）\n\n場所: 歯車の深淵（地下）\n\n能力:\n• オーバーチャージ - 一時的に攻撃速度とダメージを増加\n• リペアプロトコル - 戦闘していない時ゆっくり体力を回復\n• ギアスロー - 遠距離発射物攻撃"
+        "en_us": "Clockwork Colossus is a mid-boss found in the Clockwork Depths. One of four bosses required for crafting Chrono Aegis.\n\nDifficulty: ★★★☆☆ (Moderate-Hard)\n\nLocation: Clockwork Depths (underground)\n\nAbilities:\n• Overcharge - Temporarily boosts its movement speed (Speed II)\n• Repair Protocol - Recovers a burst of health once when it drops to about 40% HP\n• Gear Throw - Ranged projectile attack",
+        "ja_jp": "時計仕掛けの巨像は、歯車の深淵に出現する中ボスです。クロノスの盾の作成に必要な4体のボスのうちの1体です。\n\n難易度: ★★★☆☆（中〜難）\n\n場所: 歯車の深淵（地下）\n\n能力:\n• オーバーチャージ - 一時的に移動速度を上昇（スピードII）\n• リペアプロトコル - HPが約40%まで減ると一度だけまとまった体力を回復\n• ギアスロー - 遠距離発射物攻撃"
       }
     },
     {
       "text": {
-        "en_us": "Drops:\n• Colossus Gear (1/4 Chrono Aegis material) - ESSENTIAL\n• Clockwork-themed items\n• Experience and loot\n\nCombat Strategy:\n• Maintain continuous pressure to prevent Repair Protocol\n• Retreat during Overcharge phase (increased danger)\n• Dodge gear projectiles\n• Deal burst damage during vulnerable moments\n• Use ranged weapons when boss uses Gear Throw",
-        "ja_jp": "ドロップ:\n• コロッサスギア（クロノイージス材料1/4） - 必須\n• 時計仕掛けのアイテム\n• 経験値と戦利品\n\n戦闘戦略:\n• リペアプロトコルを防ぐため継続的な圧力を維持\n• オーバーチャージフェーズ中は後退（危険度増加）\n• 歯車の発射物を避ける\n• 脆弱な瞬間にバーストダメージを与える\n• ボスがギアスローを使う時は遠距離武器を使用"
+        "en_us": "Drops:\n• Colossus Gear (1/4 Chrono Aegis material) - ESSENTIAL\n• Clockwork-themed items\n• Experience and loot\n\nCombat Strategy:\n• Expect a one-time heal around 40% HP — push through it\n• Keep your distance during Overcharge (it moves faster)\n• Dodge gear projectiles\n• Deal burst damage during vulnerable moments\n• Use ranged weapons when boss uses Gear Throw",
+        "ja_jp": "ドロップ:\n• 巨像の歯車（クロノスの盾材料1/4） - 必須\n• 時計仕掛けのアイテム\n• 経験値と戦利品\n\n戦闘戦略:\n• HPが約40%になると一度だけ回復するので押し切る\n• オーバーチャージ中は移動が速くなるので距離を取る\n• 歯車の発射物を避ける\n• 脆弱な瞬間にバーストダメージを与える\n• ボスがギアスローを使う時は遠距離武器を使用"
       }
     }
   ]

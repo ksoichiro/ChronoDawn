@@ -2,7 +2,7 @@
   "category": "basics",
   "title": {
     "en_us": "Crafting the Time Hourglass",
-    "ja_jp": "タイムアワーグラスの作成"
+    "ja_jp": "時の砂時計の作成"
   },
   "icon": "chronodawn:time_hourglass",
   "sortnum": 3,
@@ -10,19 +10,19 @@
     {
       "text": {
         "en_us": "The Time Hourglass is a mysterious artifact used to activate portals to the Chrono Dawn dimension. This single-use item contains crystallized time essence that resonates with Clockstone portal frames, creating a dimensional gateway.\n\nIMPORTANT: The Time Hourglass is consumed when you activate a portal, so craft multiple copies if you plan to build more than one portal!",
-        "ja_jp": "タイムアワーグラスは、クロノドーン次元へのポータルを起動するために使用される神秘的なアーティファクトです。この使い捨てアイテムには結晶化された時間のエッセンスが含まれており、クロックストーンのポータルフレームと共鳴して次元ゲートウェイを作り出します。\n\n重要: タイムアワーグラスはポータルを起動すると消費されるため、複数のポータルを作る予定であれば複数作成してください！"
+        "ja_jp": "時の砂時計は、クロノドーン次元へのポータルを起動するために使用される神秘的なアーティファクトです。この使い捨てアイテムには結晶化された時間のエッセンスが含まれており、クロックストーンのポータルフレームと共鳴して次元ゲートウェイを作り出します。\n\n重要: 時の砂時計はポータルを起動すると消費されるため、複数のポータルを作る予定であれば複数作成してください！"
       }
     },
     {
       "text": {
         "en_us": "Unlocking the Recipe:\n\n1. Explore the Overworld to find Ancient Ruins\n\n2. Search the ruins thoroughly for loot chests\n\n3. Find the Time Hourglass Blueprint (a Knowledge Book)\n\n4. Right-click the blueprint to unlock the crafting recipe\n\nOnce unlocked, the recipe will appear in your crafting book permanently.",
-        "ja_jp": "レシピのアンロック:\n\n1. オーバーワールドを探索して古代遺跡を見つける\n\n2. 遺跡を徹底的に探索して戦利品チェストを見つける\n\n3. タイムアワーグラスの設計図（知識の本）を見つける\n\n4. 設計図を右クリックしてクラフトレシピをアンロック\n\nアンロックすると、レシピがクラフトブックに永久に表示されます。"
+        "ja_jp": "レシピのアンロック:\n\n1. オーバーワールドを探索して古代遺跡を見つける\n\n2. 遺跡を徹底的に探索して戦利品チェストを見つける\n\n3. 時の砂時計の設計図（知識の本）を見つける\n\n4. 設計図を右クリックしてクラフトレシピをアンロック\n\nアンロックすると、レシピがクラフトブックに永久に表示されます。"
       }
     },
     {
       "text": {
-        "en_us": "Required Materials:\n\n• 4 Glass - Smelt Sand or Temporal Sand in a furnace\n• 2 Clockstone - Smelt Clockstone Ore from Ancient Ruins\n• 1 Sand (or Temporal Sand) - Common in Overworld deserts and Chrono Dawn sand patches\n\nThe recipe accepts vanilla Sand and ChronoDawn's Temporal Sand interchangeably, so the Hourglass can be crafted on either side of the portal.",
-        "ja_jp": "必要な材料:\n\n• ガラス 4個 - 砂またはテンポラルサンドをかまどで精錬\n• クロックストーン 2個 - 古代遺跡のクロックストーン鉱石を精錬\n• 砂 または テンポラルサンド 1個 - オーバーワールドの砂漠やクロノドーン次元の砂パッチで採取\n\nこのレシピはバニラの砂とクロノドーンのテンポラルサンドを互換素材として受け付けるため、ポータルのどちら側でもアワーグラスをクラフトできます。"
+        "en_us": "Required Materials:\n\n• 4 Glass - Smelt Sand or Temporal Sand in a furnace\n• 2 Clockstone - Mine Clockstone Ore from Ancient Ruins (drops Clockstone directly)\n• 1 Sand (or Temporal Sand) - Common in Overworld deserts and Chrono Dawn sand patches\n\nThe recipe accepts vanilla Sand and ChronoDawn's Temporal Sand interchangeably, so the Hourglass can be crafted on either side of the portal.",
+        "ja_jp": "必要な材料:\n\n• ガラス 4個 - 砂またはテンポラルサンドをかまどで精錬\n• クロックストーン 2個 - 古代遺跡のクロックストーン鉱石を採掘（クロックストーンが直接ドロップ）\n• 砂 または テンポラルサンド 1個 - オーバーワールドの砂漠やクロノドーン次元の砂パッチで採取\n\nこのレシピはバニラの砂とクロノドーンのテンポラルサンドを互換素材として受け付けるため、ポータルのどちら側でもアワーグラスをクラフトできます。"
       }
     },
     {

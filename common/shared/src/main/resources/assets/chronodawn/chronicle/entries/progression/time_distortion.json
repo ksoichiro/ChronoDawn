@@ -9,8 +9,8 @@
   "pages": [
     {
       "text": {
-        "en_us": "All hostile mobs in Chrono Dawn receive Slowness IV, making them move extremely slowly. You move at normal speed, giving you a significant advantage!\n\nBenefits:\n• Safer exploration\n• Easier combat encounters\n• Time to strategize during fights\n• Reduced threat from ambushes\n\nNote: Passive animals are not affected by Time Distortion.",
-        "ja_jp": "クロノドーンのすべての敵対的なモブは鈍化IVを受け、非常にゆっくり動きます。あなたは通常速度で動くため、大きな優位性があります！\n\n利点:\n• より安全な探索\n• 戦闘が簡単になる\n• 戦闘中に戦略を立てる時間がある\n• 奇襲からの脅威が減少\n\n注意: 平和的な動物は時間歪曲の影響を受けません。"
+        "en_us": "All hostile mobs in Chrono Dawn receive Slowness IV, making them move extremely slowly. Once you obtain the Eye of Chronos, the effect deepens to Slowness V. You move at normal speed, giving you a significant advantage!\n\nBenefits:\n• Safer exploration\n• Easier combat encounters\n• Time to strategize during fights\n• Reduced threat from ambushes\n\nNote: Passive animals are not affected by Time Distortion.",
+        "ja_jp": "クロノドーンのすべての敵対的なモブは鈍化IVを受け、非常にゆっくり動きます。クロノスの瞳を入手すると、この効果は鈍化Vに強化されます。あなたは通常速度で動くため、大きな優位性があります！\n\n利点:\n• より安全な探索\n• 戦闘が簡単になる\n• 戦闘中に戦略を立てる時間がある\n• 奇襲からの脅威が減少\n\n注意: 平和的な動物は時間歪曲の影響を受けません。"
       }
     },
     {
