@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-05-30
+
 ### Added
 
 #### Configuration
@@ -406,7 +408,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Architectury API 13.0.8+
 - Custom Portal API 0.0.1-beta66-1.21 (Fabric bundled, NeoForge requires separate installation)
 
-[Unreleased]: https://github.com/ksoichiro/ChronoDawn/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/ksoichiro/ChronoDawn/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.5.0+1.21.2...v0.6.0+1.21.2
 [0.5.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.4.0+1.21.2...v0.5.0+1.21.2
