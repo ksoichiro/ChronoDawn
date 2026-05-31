@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Time Jam recipe** — replaced sugar with Chrono Melon Slice as the sweetener so the recipe can be crafted using only ingredients obtainable inside the Chrono Dawn dimension (sugar cane is not available there).
+
 ## [0.8.0] - 2026-05-30
 
 ### Added
