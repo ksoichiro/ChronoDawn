@@ -3,7 +3,7 @@
   "category": "food",
   "key": {
     "F": "chronodawn:fruit_of_time",
-    "S": "minecraft:sugar"
+    "S": "chronodawn:chrono_melon_slice"
   },
   "pattern": [
     "FFF",
