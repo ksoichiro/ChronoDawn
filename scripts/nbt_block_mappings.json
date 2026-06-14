@@ -2,7 +2,8 @@
   "mappings": {
     "minecraft:dirt": "chronodawn:temporal_dirt",
     "minecraft:grass_block": "chronodawn:temporal_grass_block",
-    "minecraft:coarse_dirt": "chronodawn:coarse_temporal_dirt"
+    "minecraft:coarse_dirt": "chronodawn:coarse_temporal_dirt",
+    "minecraft:smooth_stone": "chronodawn:smooth_temporal_stone"
   },
   "exclude": [
     "ancient_ruins.nbt"

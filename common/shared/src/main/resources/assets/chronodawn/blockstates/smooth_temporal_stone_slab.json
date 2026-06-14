@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "chronodawn:block/smooth_temporal_stone_slab"
+    },
+    "type=double": {
+      "model": "chronodawn:block/smooth_temporal_stone_slab_double"
+    },
+    "type=top": {
+      "model": "chronodawn:block/smooth_temporal_stone_slab_top"
+    }
+  }
+}

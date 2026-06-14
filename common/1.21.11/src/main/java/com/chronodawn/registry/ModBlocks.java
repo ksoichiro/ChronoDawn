@@ -29,6 +29,8 @@ import com.chronodawn.blocks.TemporalCobblestoneBlock;
 import com.chronodawn.blocks.TemporalStoneStairs;
 import com.chronodawn.blocks.TemporalStoneSlab;
 import com.chronodawn.blocks.TemporalStoneWall;
+import com.chronodawn.blocks.SmoothTemporalStoneBlock;
+import com.chronodawn.blocks.SmoothTemporalStoneSlab;
 import com.chronodawn.blocks.TemporalCobblestoneStairs;
 import com.chronodawn.blocks.TemporalCobblestoneSlab;
 import com.chronodawn.blocks.TemporalCobblestoneWall;
@@ -612,6 +614,16 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> TEMPORAL_STONE_SLAB = BLOCKS.register(
         ModBlockId.TEMPORAL_STONE_SLAB.id(),
         () -> new TemporalStoneSlab(TemporalStoneSlab.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> SMOOTH_TEMPORAL_STONE = BLOCKS.register(
+        ModBlockId.SMOOTH_TEMPORAL_STONE.id(),
+        () -> new SmoothTemporalStoneBlock(SmoothTemporalStoneBlock.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> SMOOTH_TEMPORAL_STONE_SLAB = BLOCKS.register(
+        ModBlockId.SMOOTH_TEMPORAL_STONE_SLAB.id(),
+        () -> new SmoothTemporalStoneSlab(SmoothTemporalStoneSlab.createProperties())
     );
 
     public static final RegistrySupplier<Block> TEMPORAL_STONE_WALL = BLOCKS.register(

@@ -322,7 +322,10 @@ output.accept(TEMPORAL_STONE.get());
 }
 ```
 
-### Blockstate: Slab
+### Blockstate: Slab (uniform texture)
+
+For a slab whose side texture matches its top/bottom, `type=double` reuses the
+plain full-block model:
 
 ```json
 {
@@ -330,6 +333,25 @@ output.accept(TEMPORAL_STONE.get());
     "type=bottom": { "model": "chronodawn:block/temporal_stone_slab" },
     "type=double": { "model": "chronodawn:block/temporal_stone" },
     "type=top": { "model": "chronodawn:block/temporal_stone_slab_top" }
+  }
+}
+```
+
+### Blockstate: Slab (DISTINCT side texture — needs `_slab_double` model)
+
+🔴 If the slab's SIDE texture differs from top/bottom (smooth_stone / sandstone /
+quartz style — e.g. `smooth_temporal_stone`), `type=double` must point at a
+**dedicated `<name>_slab_double` model**, NOT the plain full block. Reusing the
+`cube_all` full block makes the double slab render with plain sides (looks like a
+full block). `validateResources` will NOT catch this — only an in-game visual check
+does. See "Block model: Slab" below.
+
+```json
+{
+  "variants": {
+    "type=bottom": { "model": "chronodawn:block/smooth_temporal_stone_slab" },
+    "type=double": { "model": "chronodawn:block/smooth_temporal_stone_slab_double" },
+    "type=top": { "model": "chronodawn:block/smooth_temporal_stone_slab_top" }
   }
 }
 ```
@@ -373,7 +395,7 @@ Copy exact structure from `clockstone_stairs.json` / `clockstone_wall.json` and 
 
 Same pattern with `inner_stairs` / `outer_stairs` parent.
 
-### Block model: Slab (2 files: slab, slab_top)
+### Block model: Slab (2 files: slab, slab_top — uniform texture)
 
 ```json
 {
@@ -385,6 +407,27 @@ Same pattern with `inner_stairs` / `outer_stairs` parent.
   }
 }
 ```
+
+### Block model: Slab with DISTINCT side texture (3 files: slab, slab_top, slab_double)
+
+When the side texture differs from top/bottom, the single-slab models use the
+slab-side texture, and you ALSO need a third `<name>_slab_double` model for the
+`type=double` blockstate variant (mirrors vanilla `smooth_stone_slab_double`):
+
+```json
+// smooth_temporal_stone_slab_double.json — for type=double
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end":  "chronodawn:block/smooth_temporal_stone",            // top/bottom = full-block tex
+    "side": "chronodawn:block/smooth_temporal_stone_slab_side"   // sides = banded slab-side tex
+  }
+}
+```
+
+Vanilla intentional quirk: the FULL block (`cube_all`) has plain sides while the
+DOUBLE slab (`cube_column`) has banded sides — a deliberate visual distinction. Do
+NOT change the full block; only the double slab needs this dedicated model.
 
 ### Block model: Wall (3 files: post, side, side_tall)
 
@@ -635,6 +678,7 @@ git diff --name-only -- '*.java'
 | Subagent modified existing file | `buildAll` fails with unrelated compilation errors | `git checkout --` the unrelated files |
 | Wrong ModItems pattern per version | Build fails in 1.21.11 only | Use `Identifier` not `ResourceLocation` for 1.21.11 |
 | Wrong `setId` on variant | Registration conflict | Each variant's `createProperties()` must have its OWN `.setId(variant_id)` |
+| Distinct-side slab double = plain | Double slab looks like a full block (plain sides) | Point `type=double` at a dedicated `<name>_slab_double` model (`cube_column`, side=slab_side tex), not the cube_all full block |
 
 ---
 

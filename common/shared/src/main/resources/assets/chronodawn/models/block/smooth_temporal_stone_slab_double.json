@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "chronodawn:block/smooth_temporal_stone",
+    "side": "chronodawn:block/smooth_temporal_stone_slab_side"
+  }
+}

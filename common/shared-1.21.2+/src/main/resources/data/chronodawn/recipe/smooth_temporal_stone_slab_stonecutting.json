@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "chronodawn:smooth_temporal_stone",
+  "result": {
+    "id": "chronodawn:smooth_temporal_stone_slab",
+    "count": 2
+  }
+}

@@ -99,6 +99,8 @@ public enum ModItemId {
     MOSSY_TEMPORAL_STONE_BRICKS_WALL("mossy_temporal_stone_bricks_wall"),
     TEMPORAL_STONE_BUTTON("temporal_stone_button"),
     TEMPORAL_STONE_PRESSURE_PLATE("temporal_stone_pressure_plate"),
+    SMOOTH_TEMPORAL_STONE("smooth_temporal_stone"),
+    SMOOTH_TEMPORAL_STONE_SLAB("smooth_temporal_stone_slab"),
     TEMPORAL_POINTED_DRIPSTONE("temporal_pointed_dripstone"),
 
     // Temporal Sand / Gravel / Sandstone variants

@@ -664,6 +664,16 @@ public class ModItems {
         () -> new BlockItem(ModBlocks.TEMPORAL_STONE_SLAB.get(), new Item.Properties())
     );
 
+    public static final RegistrySupplier<Item> SMOOTH_TEMPORAL_STONE = ITEMS.register(
+        ModItemId.SMOOTH_TEMPORAL_STONE.id(),
+        () -> new BlockItem(ModBlocks.SMOOTH_TEMPORAL_STONE.get(), new Item.Properties())
+    );
+
+    public static final RegistrySupplier<Item> SMOOTH_TEMPORAL_STONE_SLAB = ITEMS.register(
+        ModItemId.SMOOTH_TEMPORAL_STONE_SLAB.id(),
+        () -> new BlockItem(ModBlocks.SMOOTH_TEMPORAL_STONE_SLAB.get(), new Item.Properties())
+    );
+
     public static final RegistrySupplier<Item> TEMPORAL_STONE_WALL = ITEMS.register(
         ModItemId.TEMPORAL_STONE_WALL.id(),
         () -> new BlockItem(ModBlocks.TEMPORAL_STONE_WALL.get(), new Item.Properties())
@@ -2505,6 +2515,8 @@ public class ModItems {
         output.accept(TEMPORAL_STONE_STAIRS.get());
         output.accept(TEMPORAL_STONE_SLAB.get());
         output.accept(TEMPORAL_STONE_WALL.get());
+        output.accept(SMOOTH_TEMPORAL_STONE.get());
+        output.accept(SMOOTH_TEMPORAL_STONE_SLAB.get());
         output.accept(TEMPORAL_SAND.get());
         output.accept(TEMPORAL_GRAVEL.get());
         output.accept(TEMPORAL_SANDSTONE.get());

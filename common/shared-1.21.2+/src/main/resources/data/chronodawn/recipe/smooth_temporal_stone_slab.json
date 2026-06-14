@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building_blocks",
+  "pattern": [
+    "BBB"
+  ],
+  "key": {
+    "B": "chronodawn:smooth_temporal_stone"
+  },
+  "result": {
+    "id": "chronodawn:smooth_temporal_stone_slab",
+    "count": 6
+  }
+}

@@ -104,6 +104,8 @@ public enum ModBlockId {
     MOSSY_TEMPORAL_STONE_BRICKS_WALL(def("mossy_temporal_stone_bricks_wall")),
     TEMPORAL_STONE_BUTTON(def("temporal_stone_button")),
     TEMPORAL_STONE_PRESSURE_PLATE(def("temporal_stone_pressure_plate")),
+    SMOOTH_TEMPORAL_STONE(def("smooth_temporal_stone")),
+    SMOOTH_TEMPORAL_STONE_SLAB(def("smooth_temporal_stone_slab")),
     TEMPORAL_POINTED_DRIPSTONE(def("temporal_pointed_dripstone").cutout()),
 
     // Temporal Sand / Gravel / Sandstone variants

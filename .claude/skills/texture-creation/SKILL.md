@@ -75,6 +75,9 @@ magick input.png \
 **Time Wood** (from Jungle): R×0.95, G×1.17, B×0.85 - produces yellowish-olive tone
 - Applied to: Door, Trapdoor textures (T080v-T080aa)
 
+**Temporal Stone family** (vanilla stone → temporal_stone): R×0.871, G×0.984, B×1.129 - produces the blue-gray temporal tone. Derived from mean-RGB ratio of `temporal_stone.png` (109,124,142) over vanilla grayscale `stone.png` (~125.6). Apply to any vanilla grayscale stone-family texture to make its Temporal variant. Note vanilla stone textures are single-channel grayscale, so convert to RGB first: `magick in.png -colorspace sRGB -type TrueColor -channel R -evaluate multiply 0.871 +channel -channel G -evaluate multiply 0.984 +channel -channel B -evaluate multiply 1.129 +channel -depth 8 PNG32:out.png`
+- Applied to: `smooth_temporal_stone.png` (from vanilla `smooth_stone.png`)
+
 ---
 
 ## Benefits

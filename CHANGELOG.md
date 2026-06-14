@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Smooth Temporal Stone** and **Smooth Temporal Stone Slab** — the smooth variant of the Temporal Stone family, mirroring vanilla Smooth Stone. Smelt Temporal Stone in a furnace to obtain Smooth Temporal Stone; the slab is crafted (3 → 6) or cut on a stonecutter (1 → 2). These do not generate naturally. Small structures that used vanilla Smooth Stone now place Smooth Temporal Stone instead.
+
 ### Fixed
 
 - **Time Jam recipe** — replaced sugar with Chrono Melon Slice as the sweetener so the recipe can be crafted using only ingredients obtainable inside the Chrono Dawn dimension (sugar cane is not available there).

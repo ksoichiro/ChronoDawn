@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "chronodawn:block/smooth_temporal_stone",
+    "top": "chronodawn:block/smooth_temporal_stone",
+    "side": "chronodawn:block/smooth_temporal_stone_slab_side"
+  }
+}
