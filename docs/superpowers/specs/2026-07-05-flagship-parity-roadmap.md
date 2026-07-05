@@ -1,7 +1,7 @@
 # Roadmap: Toward Flagship-Mod Parity
 
 **Created**: 2026-07-05
-**Status**: Analysis — no implementation started
+**Status**: Active — analysis complete; first P3-1/P6-1 slices shipped 2026-07-05, other pillars not started
 **Type**: Living document (umbrella strategy; sub-initiatives link out)
 
 ---

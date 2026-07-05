@@ -216,8 +216,8 @@ rule in `validateEraJsonFormat`, and re-armed `validateTranslations`
 Direction list: loot-table/advancement references, sounds/subtitle
 parity, GameTest runtime assertions.
 
-**First slice.** The `validateResources` extensions — immediately useful and
-a dependency of the P1-1 tag work.
+**Next slice.** Loot-table / advancement reference validation and
+sounds/subtitle parity, then the GameTest runtime assertions.
 
 **Risks.** GameTest runtime cost across versions — keep runtime assertions in
 the shared gametest sources so they multiply across versions for free.
