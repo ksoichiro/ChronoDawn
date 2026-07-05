@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - **Time Jam recipe** — replaced sugar with Chrono Melon Slice as the sweetener so the recipe can be crafted using only ingredients obtainable inside the Chrono Dawn dimension (sugar cane is not available there).
+- **Chrono Bovine Meat inventory icons on Minecraft 1.21.4** — Chrono Bovine Meat and Cooked Chrono Bovine Meat were missing their client item definitions in the 1.21.4 resources, so both items rendered as purple-black squares in the inventory on that version only. Found by the new build-time data validation (`validateData`), which now guards tag entries, recipe references, and 1.21.4+ client item coverage against this class of silent breakage.
 
 ## [0.8.0] - 2026-05-30
 
