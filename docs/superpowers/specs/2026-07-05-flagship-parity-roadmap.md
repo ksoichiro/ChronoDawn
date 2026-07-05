@@ -97,13 +97,21 @@ whichever initiative moves first.
 
 ### P3. Trust and delivery infrastructure
 
-Goal: the engineering quality that already exists becomes externally visible and mechanically enforced.
+Goal: the engineering quality that already exists becomes mechanically enforced — locally first.
+
+> **Decision (2026-07-05)**: contribution-oriented infrastructure (CI, PR
+> templates) is deprioritized — solo project, no external contribution flow,
+> and standing infrastructure has operating cost. The prerequisite is broad
+> **local** test coverage; CI, if ever revisited, then only orchestrates
+> existing Gradle tasks. See the
+> [approach outlines](./2026-07-05-flagship-parity-approach-outlines.md).
 
 | Work item | Notes | Size |
 | --- | --- | --- |
-| GitHub Actions CI: `validateResources` + `validateTranslations` + build + unit tests on every PR; scheduled `checkAll` (GameTest is too heavy per-PR) | Immediate credibility (badge) + protects the 22-JAR matrix from silent breakage | M |
-| Automated release workflow: tag → `release` pipeline → Modrinth + CurseForge publish + GitHub Release with changelog extraction | Converts new-MC-version support from a day of manual work into an hour; day-N version support is the single biggest organic-download event | M |
-| Issue/PR templates + crash-report template; label taxonomy | Low effort; reduces triage cost and signals maintenance | S |
+| **Local verification coverage expansion**: extend `validateResources` (tag/recipe/loot/advancement/sound cross-references, subtitle coverage) and the GameTest suite (runtime recipe/advancement/feature registration assertions, portal/boss/migration flows) | The repo's history shows silent cross-version breakage is the dominant defect class; local coverage protects the 22-JAR matrix with no standing infrastructure | M |
+| GitHub Actions CI (**deferred**) — revisit when external contributions or release cadence demand it | By then it only runs existing tasks; `.gitmodules` already points at GitHub so enabling later is cheap | M |
+| Automated release workflow (**deferred**): manual-trigger `release` pipeline → Modrinth + CurseForge publish + GitHub Release with changelog extraction | Automates the maintainer's own toil, not contribution flow — adopt when manual releases across 22 JARs actually hurt (e.g., day-N MC-version updates) | M |
+| Bug-report issue template (player crash intake); other templates deferred until external contributions exist | Serves players, not contributors; structured reports cut triage cost even at low volume | S |
 | **Save-compatibility policy** document + migration harness (versioned save-data with explicit upgrade paths; never repeat the v0.3.0 hard break) | Policy doc is S; a minimal migration framework for boss-progress/portal data is M | S+M |
 | Multiplayer boss scaling (HP/damage per nearby player count, config-gated) | Rides on P2's config infrastructure | M |
 | Performance budget: tick-cost profiling of entity handlers/portals under spark; document and fix hotspots | An `audit-performance-thread-safety` skill already exists in-repo to drive this | M |
@@ -138,7 +146,7 @@ Goal: locale count stops being a visible gap.
 
 | Work item | Notes | Size |
 | --- | --- | --- |
-| CI parity gate: run `check_lang_parity.py` in Actions so community locale PRs self-validate | Rides on P3 CI | S |
+| Parity gate in the local pipeline: wire `check_lang_parity.py` into `validateTranslations` / `checkAll` | CI wiring only if/when CI exists (P3 deferral) | S |
 | Key-stability policy: never rename lang keys within a major version (translators' work survives updates); document in CONTRIBUTING | Policy only | S |
 | Seed 2–3 high-population locales (zh_cn, de_de, pt_br) at "good enough" quality to signal that PRs improving them are welcome | Machine-assisted first pass is acceptable as scaffolding if clearly marked | M |
 
@@ -164,11 +172,13 @@ a promise, and breaking it costs the trust this roadmap is trying to build.
 
 ## 5. Sequencing
 
-**Phase 1 — "Visible trust + pack-native" (next ~2–3 months)**
-P3 CI/CD + templates first (small, unblocks everything, immediately visible), then
-P1 `c:` tags → Jade → JEI/EMI info pages → Curios/Trinkets, interleaved with
-P2 config expansion already in flight. Include the P1 Sodium/Iris audit early —
-if something is broken there, it is silently costing installs today.
+**Phase 1 — "Verified locally + pack-native" (next ~2–3 months)**
+P3 local verification coverage first (the `validateResources` extensions are
+a dependency of the tag work), then P1 `c:` tags → Jade → JEI/EMI info pages
+→ Curios/Trinkets, interleaved with P2 config expansion already in flight.
+Include the P1 Sodium/Iris audit early — if something is broken there, it is
+silently costing installs today. The bug-report issue form ships whenever
+convenient; CI and other repo templates stay deferred per the P3 decision.
 
 Rationale: these are the items a pack author checks in a 15-minute evaluation.
 They are also mostly S/M-sized with no design risk.
