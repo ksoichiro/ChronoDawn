@@ -247,9 +247,9 @@ tasks.register('validateEraJsonFormat') {
         // uses plain strings ("ns:id" / "#ns:tag"). result.item vs result.id
         // already splits at 1.21.1 and stays as-is below.
         def modernIngredientRoots = [
-            'common/shared-1.21.2+', 'common/1.21.2', 'common/1.21.4',
-            'common/1.21.5', 'common/1.21.6', 'common/1.21.7', 'common/1.21.8',
-            'common/1.21.9', 'common/1.21.10', 'common/1.21.11',
+            'common/shared-1.21.2+', 'common/shared-1.21.5+', 'common/1.21.2',
+            'common/1.21.4', 'common/1.21.5', 'common/1.21.6', 'common/1.21.7',
+            'common/1.21.8', 'common/1.21.9', 'common/1.21.10', 'common/1.21.11',
         ] as Set
 
         int checked = 0

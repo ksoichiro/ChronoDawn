@@ -134,7 +134,12 @@ legacy/modern mapping):
 | --- | --- | --- | --- |
 | legacy | `common/shared`, `common/1.20.1` | object (`{"item": ...}` / `{"tag": ...}`) | `item` (existing check) |
 | mid | `common/1.21.1`, `common/shared-1.21.1+` | object | `id` (existing check) |
-| modern | `common/shared-1.21.2+`, `common/1.21.2` … `common/1.21.11` | plain string (or array of strings) | `id` (existing check) |
+| modern | `common/shared-1.21.2+`, `common/shared-1.21.5+`, `common/1.21.2` … `common/1.21.11` | plain string (or array of strings) | `id` (existing check) |
+
+> Errata (final review, 2026-07-05): the original table omitted
+> `common/shared-1.21.5+` from the modern tier. That root serves 1.21.5+
+> only, so string ingredients are unambiguously correct there; the
+> implementation includes it.
 
 New assertions on `crafting_shaped` `key.*` values, `crafting_shapeless`
 `ingredients[]` entries, and cooking-type `ingredient` fields:
