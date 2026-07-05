@@ -206,6 +206,16 @@ hit into local build/test failures:
 - Gameplay GameTests for the flows that guard releases: portal round trip,
   boss progression flags, artifact procs, and (with P3-4) save migrations.
 
+**Status (2026-07-05).** Discovery: `gradle/chronodawn-validation.gradle`
+already provided `validateEraJsonFormat`, `validateBlockTagMembership`,
+`validateRecipeUnlockAdvancements`, and `validateLangParity`. The first
+slice shipped as the submodule `validateData` task (tag entries → IDs,
+recipe references → IDs, client items coverage) plus an ingredient era
+rule in `validateEraJsonFormat`, and re-armed `validateTranslations`
+(its ID-file properties had never been set). Remaining from the
+Direction list: loot-table/advancement references, sounds/subtitle
+parity, GameTest runtime assertions.
+
 **First slice.** The `validateResources` extensions — immediately useful and
 a dependency of the P1-1 tag work.
 
@@ -381,10 +391,10 @@ accepts throwaway work.
 
 ### P6-1. Parity gate in the local pipeline
 
-**Direction.** Wire `scripts/check_lang_parity.py` into the local aggregate
-verification (e.g., as part of `validateTranslations` / `checkAll`) so parity
-failures surface in the normal pre-commit pipeline. CI wiring only if/when
-CI exists (see P3-1 deferral).
+**Status (2026-07-05).** Already shipped before this roadmap was written:
+`validateLangParity` (in `gradle/chronodawn-validation.gradle`) wraps
+`scripts/check_lang_parity.py` and runs in `checkAll` via
+`checkall_extra_tasks`. No further work needed.
 
 ### P6-2. Key-stability policy
 

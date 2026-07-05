@@ -108,7 +108,7 @@ Goal: the engineering quality that already exists becomes mechanically enforced 
 
 | Work item | Notes | Size |
 | --- | --- | --- |
-| **Local verification coverage expansion**: extend `validateResources` (tag/recipe/loot/advancement/sound cross-references, subtitle coverage) and the GameTest suite (runtime recipe/advancement/feature registration assertions, portal/boss/migration flows) | The repo's history shows silent cross-version breakage is the dominant defect class; local coverage protects the 22-JAR matrix with no standing infrastructure | M |
+| **Local verification coverage expansion**: extend `validateResources` (tag/recipe/loot/advancement/sound cross-references, subtitle coverage) and the GameTest suite (runtime recipe/advancement/feature registration assertions, portal/boss/migration flows) | The repo's history shows silent cross-version breakage is the dominant defect class; local coverage protects the 22-JAR matrix with no standing infrastructure. First slice shipped 2026-07-05 (validateData + ingredient era rule; see the data-validation design spec). | M |
 | GitHub Actions CI (**deferred**) — revisit when external contributions or release cadence demand it | By then it only runs existing tasks; `.gitmodules` already points at GitHub so enabling later is cheap | M |
 | Automated release workflow (**deferred**): manual-trigger `release` pipeline → Modrinth + CurseForge publish + GitHub Release with changelog extraction | Automates the maintainer's own toil, not contribution flow — adopt when manual releases across 22 JARs actually hurt (e.g., day-N MC-version updates) | M |
 | Bug-report issue template (player crash intake); other templates deferred until external contributions exist | Serves players, not contributors; structured reports cut triage cost even at low volume | S |
@@ -146,7 +146,7 @@ Goal: locale count stops being a visible gap.
 
 | Work item | Notes | Size |
 | --- | --- | --- |
-| Parity gate in the local pipeline: wire `check_lang_parity.py` into `validateTranslations` / `checkAll` | CI wiring only if/when CI exists (P3 deferral) | S |
+| Parity gate in the local pipeline: wire `check_lang_parity.py` into `validateTranslations` / `checkAll` | Already shipped: validateLangParity task runs in checkAll (discovered 2026-07-05). | S |
 | Key-stability policy: never rename lang keys within a major version (translators' work survives updates); document in CONTRIBUTING | Policy only | S |
 | Seed 2–3 high-population locales (zh_cn, de_de, pt_br) at "good enough" quality to signal that PRs improving them are welcome | Machine-assisted first pass is acceptable as scaffolding if clearly marked | M |
 
