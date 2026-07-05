@@ -305,8 +305,19 @@ neoforge_version=21.2.0-beta
 ./gradlew :fabric:runGameTest -Ptarget_mc_version=1.20.1
 ./gradlew gameTestAll   # All versions and loaders (fully parallel)
 
-# Validate resource files (JSON syntax + cross-references)
+# Validate asset files (JSON syntax + blockstate/model/texture cross-references)
 ./gradlew validateResources
+
+# Validate data-pack cross-references (tag entries → registered IDs,
+# recipe references, 1.21.4+ client item coverage)
+./gradlew validateData
+
+# Validate translation keys across versions (entities, spawn eggs)
+./gradlew validateTranslations
+
+# Project-specific validations (lang parity, block tag membership,
+# recipe-unlock advancements, per-era JSON format)
+./gradlew validateLangParity validateBlockTagMembership validateRecipeUnlockAdvancements validateEraJsonFormat
 
 # Collect release JARs into build/release/
 ./gradlew collectJars
@@ -316,7 +327,9 @@ neoforge_version=21.2.0-beta
 
 # Run ALL verification tasks (recommended before commits/PRs)
 ./gradlew checkAll
-# Runs in sequence: cleanAll → validateResources → buildAll → testAll → gameTestAll
+# Runs in sequence: cleanAll → validateResources → validateTranslations
+#   → project-specific validations + validateData (checkall_extra_tasks)
+#   → buildAll → testAll → gameTestAll
 
 # Clean build artifacts
 ./gradlew clean
