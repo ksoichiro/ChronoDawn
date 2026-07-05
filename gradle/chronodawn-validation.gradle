@@ -242,6 +242,16 @@ tasks.register('validateEraJsonFormat') {
             'common/1.21.11': 'modern',
         ]
 
+        // Recipe ingredient shape has three tiers, not two: 1.20.1 and 1.21.1
+        // both use object ingredients ({"item": ...} / {"tag": ...}); 1.21.2+
+        // uses plain strings ("ns:id" / "#ns:tag"). result.item vs result.id
+        // already splits at 1.21.1 and stays as-is below.
+        def modernIngredientRoots = [
+            'common/shared-1.21.2+', 'common/1.21.2', 'common/1.21.4',
+            'common/1.21.5', 'common/1.21.6', 'common/1.21.7', 'common/1.21.8',
+            'common/1.21.9', 'common/1.21.10', 'common/1.21.11',
+        ] as Set
+
         int checked = 0
         roots.each { String rootRel, String era ->
             def rootDir = file("${rootProject.projectDir}/${rootRel}/src/main/resources/data/chronodawn")
@@ -282,6 +292,30 @@ tasks.register('validateEraJsonFormat') {
                         if (era == 'legacy' && hasId && !hasItem) {
                             def rel = rootProject.projectDir.toPath().relativize(f.toPath()).toString()
                             errors << "${rel}: result.id used in 1.20.1 root (expected result.item or bare string)"
+                        }
+                    }
+
+                    // Ingredient shape: object (1.20.1 / 1.21.1) vs string (1.21.2+).
+                    def stringIngredients = modernIngredientRoots.contains(rootRel)
+                    def ingredientNodes = []
+                    if (json.key instanceof Map) ingredientNodes.addAll(json.key.values())
+                    ['ingredients', 'ingredient', 'base', 'addition', 'template'].each { k ->
+                        if (json.containsKey(k)) ingredientNodes << json[k]
+                    }
+                    def flatIngredients = []
+                    ingredientNodes.each { n ->
+                        (n instanceof List) ? flatIngredients.addAll(n) : (flatIngredients << n)
+                    }
+                    flatIngredients.each { entry ->
+                        def relIng = rootProject.projectDir.toPath().relativize(f.toPath()).toString()
+                        if (stringIngredients) {
+                            if (entry instanceof Map && (entry.containsKey('item') || entry.containsKey('tag'))) {
+                                errors << "${relIng}: object ingredient in 1.21.2+ root (expected plain string): ${entry}"
+                            }
+                        } else {
+                            if (entry instanceof String) {
+                                errors << "${relIng}: string ingredient '${entry}' in pre-1.21.2 root (expected object with item/tag)"
+                            }
                         }
                     }
                 }
