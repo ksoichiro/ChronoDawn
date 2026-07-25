@@ -94,8 +94,8 @@ public class EntropyKeeperEntity extends Monster {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-            .add(Attributes.MAX_HEALTH, 160.0)
-            .add(Attributes.ATTACK_DAMAGE, 10.0)
+            .add(Attributes.MAX_HEALTH, BossScaling.health(BossKind.ENTROPY_KEEPER))
+            .add(Attributes.ATTACK_DAMAGE, BossScaling.attackDamage(BossKind.ENTROPY_KEEPER))
             .add(Attributes.ARMOR, 6.0)
             .add(Attributes.MOVEMENT_SPEED, 0.20)
             .add(Attributes.KNOCKBACK_RESISTANCE, 0.5)

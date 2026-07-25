@@ -123,9 +123,9 @@ public class ChronosWardenEntity extends Monster {
      */
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-            .add(Attributes.MAX_HEALTH, 180.0) // 90 hearts
+            .add(Attributes.MAX_HEALTH, BossScaling.health(BossKind.CHRONOS_WARDEN))
             .add(Attributes.ARMOR, 12.0) // High defense
-            .add(Attributes.ATTACK_DAMAGE, 9.0) // 4.5 hearts
+            .add(Attributes.ATTACK_DAMAGE, BossScaling.attackDamage(BossKind.CHRONOS_WARDEN))
             .add(Attributes.ATTACK_KNOCKBACK, 1.0)
             .add(Attributes.MOVEMENT_SPEED, 0.20) // Standard boss speed (same as Time Guardian, Entropy Keeper)
             .add(Attributes.FOLLOW_RANGE, 32.0)

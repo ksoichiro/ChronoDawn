@@ -118,9 +118,9 @@ public class ClockworkColossusEntity extends Monster implements RangedAttackMob 
      */
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-            .add(Attributes.MAX_HEALTH, 200.0) // 100 hearts
+            .add(Attributes.MAX_HEALTH, BossScaling.health(BossKind.CLOCKWORK_COLOSSUS))
             .add(Attributes.ARMOR, 8.0)
-            .add(Attributes.ATTACK_DAMAGE, 12.0) // 6 hearts
+            .add(Attributes.ATTACK_DAMAGE, BossScaling.attackDamage(BossKind.CLOCKWORK_COLOSSUS))
             .add(Attributes.ATTACK_KNOCKBACK, 1.5)
             .add(Attributes.MOVEMENT_SPEED, 0.18)
             .add(Attributes.FOLLOW_RANGE, 32.0)

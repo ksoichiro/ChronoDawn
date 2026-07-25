@@ -153,9 +153,9 @@ public class TimeTyrantEntity extends Monster {
      */
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-            .add(Attributes.MAX_HEALTH, 500.0) // 250 hearts
+            .add(Attributes.MAX_HEALTH, BossScaling.health(BossKind.TIME_TYRANT))
             .add(Attributes.ARMOR, 15.0)
-            .add(Attributes.ATTACK_DAMAGE, 18.0) // 9 hearts
+            .add(Attributes.ATTACK_DAMAGE, BossScaling.attackDamage(BossKind.TIME_TYRANT))
             .add(Attributes.ATTACK_KNOCKBACK, 1.5)
             .add(Attributes.MOVEMENT_SPEED, 0.25)
             .add(Attributes.FOLLOW_RANGE, 32.0)

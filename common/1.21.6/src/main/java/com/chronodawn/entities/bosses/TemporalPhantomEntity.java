@@ -93,8 +93,8 @@ public class TemporalPhantomEntity extends Monster implements RangedAttackMob {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-            .add(Attributes.MAX_HEALTH, 150.0)
-            .add(Attributes.ATTACK_DAMAGE, 8.0)
+            .add(Attributes.MAX_HEALTH, BossScaling.health(BossKind.TEMPORAL_PHANTOM))
+            .add(Attributes.ATTACK_DAMAGE, BossScaling.attackDamage(BossKind.TEMPORAL_PHANTOM))
             .add(Attributes.ARMOR, 5.0)
             .add(Attributes.MOVEMENT_SPEED, 0.3)  // Increased from 0.25 for better mobility
             .add(Attributes.KNOCKBACK_RESISTANCE, 0.3)

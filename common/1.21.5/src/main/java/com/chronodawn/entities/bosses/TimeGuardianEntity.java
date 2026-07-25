@@ -118,9 +118,9 @@ public class TimeGuardianEntity extends Monster implements RangedAttackMob {
      */
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-            .add(Attributes.MAX_HEALTH, 200.0) // 100 hearts
+            .add(Attributes.MAX_HEALTH, BossScaling.health(BossKind.TIME_GUARDIAN))
             .add(Attributes.ARMOR, 10.0)
-            .add(Attributes.ATTACK_DAMAGE, 10.0) // 5 hearts - balanced for iron armor gameplay
+            .add(Attributes.ATTACK_DAMAGE, BossScaling.attackDamage(BossKind.TIME_GUARDIAN))
             .add(Attributes.ATTACK_KNOCKBACK, 1.0) // Knockback when attacking
             .add(Attributes.MOVEMENT_SPEED, 0.2)
             .add(Attributes.FOLLOW_RANGE, 32.0)
