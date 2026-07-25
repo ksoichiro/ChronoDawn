@@ -1,5 +1,6 @@
 package com.chronodawn.gametest.boss;
 
+import com.chronodawn.entities.bosses.BossKind;
 import com.chronodawn.entities.bosses.TimeGuardianEntity;
 import com.chronodawn.entities.bosses.TimeTyrantEntity;
 import com.chronodawn.gametest.RegistryDrivenTestGenerator.NamedTest;
@@ -153,6 +154,23 @@ public final class BossFightTestLogic {
             });
         }, BOSS_TIMEOUT));
 
+        // Default config must leave the shipped balance untouched. This is the
+        // runtime half of BossScalingTest: it proves the value survives the
+        // loader's attribute-registration path, not just the arithmetic.
+        tests.add(new NamedTest("boss_time_guardian_base_max_health", helper -> {
+            var guardian = helper.spawn(ModEntities.TIME_GUARDIAN.get(), TEST_POS);
+
+            helper.runAfterDelay(2, () -> {
+                float expected = (float) BossKind.TIME_GUARDIAN.baseMaxHealth();
+                if (guardian.getMaxHealth() == expected) {
+                    helper.succeed();
+                } else {
+                    helper.fail(Component.literal("Time Guardian max health should be " +
+                        expected + " under default config, was " + guardian.getMaxHealth()));
+                }
+            });
+        }, BOSS_TIMEOUT));
+
         return tests;
     }
 
@@ -265,6 +283,20 @@ public final class BossFightTestLogic {
                     helper.succeed(); // Complete knockback immunity
                 } else {
                     helper.fail(Component.literal("Time Tyrant knockback resistance was " + kbResistance + ", expected 1.0"));
+                }
+            });
+        }, BOSS_TIMEOUT));
+
+        tests.add(new NamedTest("boss_time_tyrant_base_max_health", helper -> {
+            var tyrant = helper.spawn(ModEntities.TIME_TYRANT.get(), TEST_POS);
+
+            helper.runAfterDelay(2, () -> {
+                float expected = (float) BossKind.TIME_TYRANT.baseMaxHealth();
+                if (tyrant.getMaxHealth() == expected) {
+                    helper.succeed();
+                } else {
+                    helper.fail(Component.literal("Time Tyrant max health should be " +
+                        expected + " under default config, was " + tyrant.getMaxHealth()));
                 }
             });
         }, BOSS_TIMEOUT));
