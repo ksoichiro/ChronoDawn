@@ -1025,17 +1025,21 @@ git commit -m "feat(bosses): scale boss health and melee damage by config"
 
 Routes the five non-projectile ability damage sources through `BossScaling`. Each is currently a `static final` constant or an inline literal.
 
+It also closes a gap Task 3's review surfaced: `EntropyKeeperEntity.applyDegradation()` writes an unscaled value straight into the `ATTACK_DAMAGE` attribute at runtime, which would discard `damage_multiplier` on the boss's first degradation tick.
+
 **Files:**
+- Modify: `common/shared/src/main/java/com/chronodawn/entities/bosses/BossScaling.java`
 - Modify, for each of the eleven `<v>` values:
   - `common/<v>/src/main/java/com/chronodawn/entities/bosses/TimeGuardianEntity.java`
   - `common/<v>/src/main/java/com/chronodawn/entities/bosses/TimeTyrantEntity.java`
   - `common/<v>/src/main/java/com/chronodawn/entities/bosses/ChronosWardenEntity.java`
   - `common/<v>/src/main/java/com/chronodawn/entities/bosses/ClockworkColossusEntity.java`
   - `common/<v>/src/main/java/com/chronodawn/entities/bosses/EntropyKeeperEntity.java`
+- Test: `common/shared/src/test/java/com/chronodawn/unit/BossScalingTest.java`
 
 **Interfaces:**
-- Consumes: `BossScaling.ability(BossAbility)` (Task 2).
-- Produces: nothing new.
+- Consumes: `BossScaling.ability(BossAbility)`, `BossScaling.attackDamage(BossKind)` (Task 2).
+- Produces: `BossScaling.scaledDamage(BossKind, double base)` → `double`.
 
 **Line numbers differ between versions** (by up to two lines). Locate each site by its code text, not by line number.
 
@@ -1157,6 +1161,71 @@ with:
                 BossScaling.ability(BossAbility.ENTROPY_KEEPER_SLAM));
 ```
 
+- [ ] **Step 6b: Add `BossScaling.scaledDamage` and fix the degradation write**
+
+`EntropyKeeperEntity.applyDegradation()` — the Phase 2 mechanic that adds +2 attack damage every 60 seconds, up to 3 stacks — overwrites the `ATTACK_DAMAGE` base value with a hardcoded formula. Now that `createAttributes()` scales that attribute, the first degradation tick would throw the multiplier away and every later stack would compound off the wrong baseline.
+
+First add this method to `common/shared/src/main/java/com/chronodawn/entities/bosses/BossScaling.java`, after `attackDamage`:
+
+```java
+    /**
+     * Scales an arbitrary damage value by a boss's multiplier.
+     *
+     * <p>For damage that is computed at runtime rather than declared as a
+     * {@link BossAbility} — Entropy Keeper's degradation stacks, for one.
+     */
+    public static double scaledDamage(BossKind kind, double baseDamage) {
+        return baseDamage * kind.settings().damageMultiplier();
+    }
+```
+
+Then in each version's `EntropyKeeperEntity.applyDegradation()`, replace:
+
+```java
+            // Increase attack damage
+            this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
+                10.0 + (currentStacks + 1) * 2.0
+            );
+```
+
+with:
+
+```java
+            // Increase attack damage. Both the baseline and the per-stack step
+            // scale with damage_multiplier, so the degradation curve keeps its
+            // shape at any configured multiplier.
+            this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
+                BossScaling.attackDamage(BossKind.ENTROPY_KEEPER)
+                    + BossScaling.scaledDamage(BossKind.ENTROPY_KEEPER, (currentStacks + 1) * 2.0)
+            );
+```
+
+This also removes the duplicated `10.0` — the baseline now comes from `BossKind.ENTROPY_KEEPER` rather than being restated here.
+
+Add this test to `common/shared/src/test/java/com/chronodawn/unit/BossScalingTest.java`:
+
+```java
+    @Test
+    void scaledDamage_scalesRuntimeComputedDamage(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[gameplay.bosses.entropy_keeper]\n" +
+            "damage_multiplier = 3.0\n");
+        com.chronodawn.config.ConfigLoader.load(tmp);
+
+        // Entropy Keeper's degradation: base 10.0 melee plus 2.0 per stack.
+        // At 3x, the third stack must land on (10 + 6) * 3, not 10 * 3 + 6.
+        assertEquals(30.0, BossScaling.attackDamage(BossKind.ENTROPY_KEEPER), 0.0);
+        assertEquals(18.0, BossScaling.scaledDamage(BossKind.ENTROPY_KEEPER, 6.0), 0.0);
+    }
+
+    @Test
+    void scaledDamage_atDefaultMultiplier_isIdentity() {
+        ChronoDawnConfig.set(ConfigDefaults.defaults());
+
+        assertEquals(6.0, BossScaling.scaledDamage(BossKind.ENTROPY_KEEPER, 6.0), 0.0);
+    }
+```
+
 - [ ] **Step 7: Verify no ability literal survives**
 
 ```bash
@@ -1171,7 +1240,27 @@ grep -rc "BossScaling.ability" common/*/src/main/java/com/chronodawn/entities/bo
 
 Expected: **no output** — each of the five affected files has exactly one `BossScaling.ability` call, and `TemporalPhantomEntity` has none (its only extra damage source is the Time Blast projectile, handled in Task 5).
 
-- [ ] **Step 8: Build both ends of the matrix**
+Then confirm the degradation write no longer restates the baseline:
+
+```bash
+grep -rn "10.0 + (currentStacks" common/*/src/main/java/com/chronodawn/entities/bosses/
+```
+
+Expected: **no output**.
+
+```bash
+grep -rc "BossScaling.scaledDamage" common/*/src/main/java/com/chronodawn/entities/bosses/EntropyKeeperEntity.java | grep -v ":1$"
+```
+
+Expected: **no output** — all eleven Entropy Keeper files call it exactly once.
+
+- [ ] **Step 8: Run the unit tests and build both ends of the matrix**
+
+```bash
+./gradlew :common-1.21.11:test -Ptarget_mc_version=1.21.11 --tests '*BossScalingTest*'
+```
+
+Expected: PASS, including the two new `scaledDamage` tests.
 
 ```bash
 ./gradlew build1_20_1
@@ -1185,7 +1274,9 @@ Expected: BUILD SUCCESSFUL for both.
 - [ ] **Step 9: Commit**
 
 ```bash
-git add common/*/src/main/java/com/chronodawn/entities/bosses/
+git add common/shared/src/main/java/com/chronodawn/entities/bosses/BossScaling.java \
+        common/shared/src/test/java/com/chronodawn/unit/BossScalingTest.java \
+        common/*/src/main/java/com/chronodawn/entities/bosses/
 git commit -m "feat(bosses): scale boss ability damage by config"
 ```
 

@@ -46,10 +46,18 @@ no option at all. The non-attribute damage sources are:
 | `EntropyKeeperEntity` inline slam damage | 10.0 | Entropy Keeper |
 | `GearProjectileEntity.DAMAGE` | 8.0 | Clockwork Colossus |
 | `TimeBlastEntity` impact damage | 4.0 | Time Guardian **and** Temporal Phantom |
+| `EntropyKeeperEntity.applyDegradation()` runtime `ATTACK_DAMAGE` write | 10.0 baseline + 2.0 per stack | Entropy Keeper |
 
 The table above was read from the 1.21.11 module. The implementation plan must
 confirm the same set exists — with the same values — in every version module
 before assuming the edit is uniform.
+
+The last row was found during implementation, not during design: Entropy
+Keeper's Phase 2 degradation mechanic overwrites the `ATTACK_DAMAGE` base value
+at runtime with a hardcoded formula. Any damage source that *writes* an
+attribute rather than reading one has to be scaled too, or the multiplier is
+silently discarded the moment the mechanic fires. Both the baseline and the
+per-stack step scale, so the degradation curve keeps its shape.
 
 ## Config schema
 
@@ -248,7 +256,7 @@ not sufficient for a change that touches all eleven modules.
 - Config parses, validates, and defaults correctly; unit tests pass
 - All eleven version modules route boss statistics through `BossKind`, with
   no numeric literals left in `createAttributes()` for the six bosses
-- All seven non-attribute damage sources scale with `damage_multiplier`
+- All eight non-attribute damage sources scale with `damage_multiplier`
 - Existing-world behavior measured and documented
 - `./gradlew checkAll` passes
 - Documentation and CHANGELOG updated
