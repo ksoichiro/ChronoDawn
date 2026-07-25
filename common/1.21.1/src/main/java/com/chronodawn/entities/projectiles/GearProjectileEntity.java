@@ -27,7 +27,7 @@ import net.minecraft.world.phys.Vec3;
  * Similar to Arrow/Trident but with unique visual (rotating gear).
  *
  * Properties:
- * - Damage: 8 (4 hearts)
+ * - Damage: scaled by Clockwork Colossus's configured damage multiplier
  * - Speed: 1.5
  * - Range: 16 blocks
  * - Knockback: Medium

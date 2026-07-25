@@ -1,7 +1,9 @@
 # Design: Boss HP / Damage Multipliers
 
 **Created**: 2026-07-25
-**Status**: Design approved — implementation plan pending
+**Status**: Implemented — pending one manual measurement (whether an
+already-spawned boss picks up a changed multiplier) and the
+`modpack-integration.md` caveats row that records its answer
 **Initiative**: [Modpack-Author Readiness](./2026-05-09-modpack-author-readiness-roadmap.md), sub-project A (config system)
 **Builds on**: [Config foundation](./2026-05-09-config-foundation-design.md)
 

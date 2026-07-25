@@ -244,9 +244,8 @@ existing-world caveats.
 
 ## Adding more configuration
 
-This file is the canonical reference. Future Chrono Dawn versions will add
-sections for boss tuning, ore generation, and more — every new tunable will
-appear in this document with its default and validation rules.
+This file is the canonical reference. As new tunables ship, they will
+appear in this document with their default and validation rules.
 
 For modpack creators who want to bundle a `chronodawn.toml` with their pack,
 see [`docs/modpack-integration.md`](modpack-integration.md).

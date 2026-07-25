@@ -438,7 +438,7 @@ public class TimeGuardianEntity extends Monster implements RangedAttackMob {
         AABB aoeBox = this.getBoundingBox().inflate(AOE_RANGE);
 
         this.level().getEntitiesOfClass(Player.class, aoeBox).forEach(player -> {
-            // Physical damage (6.0 = 3 hearts, balanced for iron armor gameplay)
+            // Physical damage, scaled by the boss's configured damage multiplier
             player.hurt(this.damageSources().mobAttack(this),
                 BossScaling.ability(BossAbility.TIME_GUARDIAN_AOE));
 

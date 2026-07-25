@@ -54,6 +54,26 @@ overlay applies it on first launch. The other ores stay at their
 defaults. See [`docs/configuration.md`](configuration.md) for the full
 schema.
 
+### Example: place the bosses later in your progression
+
+```toml
+# Chrono Dawn's bosses sit mid-game by default. If your pack gates the
+# Chrono dimension behind endgame gear, scale them up.
+[gameplay.bosses.time_guardian]
+health_multiplier = 2.0
+damage_multiplier = 1.5
+
+[gameplay.bosses.time_tyrant]
+health_multiplier = 2.5
+damage_multiplier = 1.5
+```
+
+`damage_multiplier` covers melee, area attacks and projectiles together,
+so the encounter stays internally consistent. Setting it to `0.0` leaves
+the boss present but harmless — useful for cinematic or story-driven
+packs. See [`configuration.md`](configuration.md) for the full base-stat
+table.
+
 ### Restart and existing-world caveats
 
 | Setting type | Restart needed? | Affects existing chunks? |

@@ -22,13 +22,14 @@ This roadmap exists to:
 
 ### A. Config system
 
-**Status**: 🚧 Three PRs shipped: Ancient Ruins ([design](./2026-05-09-config-foundation-design.md), [plan](../plans/2026-05-09-config-foundation.md)), Ore generation tuning for Time Crystal / Entropy Crystal / Temporal Amber ([design](./2026-05-16-ore-generation-tuning-design.md), [plan](../plans/2026-05-16-ore-generation-tuning.md)), and Clockstone tuning ([design](./2026-05-17-ore-clockstone-config-tuning-design.md), [plan](../plans/2026-05-17-ore-clockstone-config-tuning.md)). Continuing with follow-up tunables.
+**Status**: 🚧 Four PRs shipped: Ancient Ruins ([design](./2026-05-09-config-foundation-design.md), [plan](../plans/2026-05-09-config-foundation.md)), Ore generation tuning for Time Crystal / Entropy Crystal / Temporal Amber ([design](./2026-05-16-ore-generation-tuning-design.md), [plan](../plans/2026-05-16-ore-generation-tuning.md)), Clockstone tuning ([design](./2026-05-17-ore-clockstone-config-tuning-design.md), [plan](../plans/2026-05-17-ore-clockstone-config-tuning.md)), and Boss multipliers ([design](./2026-07-25-boss-stat-multipliers-design.md)). Continuing with follow-up tunables.
 
 Cross-loader config infrastructure with per-feature toggles and numeric tuning. The first slice responds to a real user request (Ancient Ruins density), and the infrastructure built here is reusable by every later tunable.
 
 Planned follow-up tunables (each is a separate PR):
 
-- Boss HP / damage multipliers
+- Boss HP / damage multipliers — *shipped: per-boss `health_multiplier` /
+  `damage_multiplier` for all six bosses ([design](./2026-07-25-boss-stat-multipliers-design.md))*
 - Ore generation rates and Y ranges — *partial: Time Crystal / Entropy Crystal / Temporal Amber / Clockstone shipped. Vanilla-overlay ores in the Chrono dimension (`iron` / `gold` / `coal` / `redstone`) remain deferred — will be reconsidered if a request surfaces.*
 - Time Distortion (Slowness) strength and scope
 - Portal behavior (one-way enforcement, re-ignition rules)
@@ -68,7 +69,7 @@ Targeted integrations with flagship mods commonly bundled in packs: Curios / Tri
 
 | Sub-project | Status | First spec |
 | --- | --- | --- |
-| A. Config system | 🚧 Three PRs shipped (Ancient Ruins, Ore tuning, Clockstone tuning) | [2026-05-09-config-foundation-design.md](./2026-05-09-config-foundation-design.md) |
+| A. Config system | 🚧 Four PRs shipped (Ancient Ruins, Ore tuning, Clockstone tuning, Boss multipliers) | [2026-05-09-config-foundation-design.md](./2026-05-09-config-foundation-design.md), [2026-07-25-boss-stat-multipliers-design.md](./2026-07-25-boss-stat-multipliers-design.md) |
 | B. Datapack / tag externalization | ⏸ Deferred | — |
 | C. Scripting events | ⏸ Deferred | — |
 | D. Cross-mod compatibility | ⏸ Deferred | — |
