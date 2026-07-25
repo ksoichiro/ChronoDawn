@@ -69,3 +69,32 @@ count = 8
 # Distribution between min and max is biased toward the middle (trapezoid).
 y_min = -16
 y_max = 80
+
+[gameplay.bosses.time_guardian]
+# Scales the boss's maximum health. 2.0 = double health. Range: 0.1 to 10.0.
+health_multiplier = 1.0
+
+# Scales every damage source this boss deals: melee, its area-of-effect
+# attack, and the Time Blast projectile it fires. 0.0 makes the boss
+# harmless. Range: 0.0 to 10.0.
+damage_multiplier = 1.0
+
+[gameplay.bosses.chronos_warden]
+health_multiplier = 1.0
+damage_multiplier = 1.0
+
+[gameplay.bosses.clockwork_colossus]
+health_multiplier = 1.0
+damage_multiplier = 1.0
+
+[gameplay.bosses.entropy_keeper]
+health_multiplier = 1.0
+damage_multiplier = 1.0
+
+[gameplay.bosses.temporal_phantom]
+health_multiplier = 1.0
+damage_multiplier = 1.0
+
+[gameplay.bosses.time_tyrant]
+health_multiplier = 1.0
+damage_multiplier = 1.0

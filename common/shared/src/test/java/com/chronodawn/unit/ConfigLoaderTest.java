@@ -17,6 +17,8 @@
  */
 package com.chronodawn.unit;
 
+import com.chronodawn.config.BossesConfig;
+import com.chronodawn.config.BossSettings;
 import com.chronodawn.config.ChronoDawnConfig;
 import com.chronodawn.config.ConfigDefaults;
 import com.chronodawn.config.ConfigLoader;
@@ -326,5 +328,127 @@ class ConfigLoaderTest {
         ChronoDawnConfig config = ConfigLoader.load(tmp);
         assertEquals(9, config.world().ores().timeCrystal().count(),
             "Known ore section still loads despite an unknown sibling");
+    }
+
+    @Test
+    void bosses_missingSection_fallsBackToDefaults(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[world.structures.ancient_ruins]\n" +
+            "spacing = 32\n");
+
+        ChronoDawnConfig config = ConfigLoader.load(tmp);
+
+        assertEquals(ConfigDefaults.BOSS_DEFAULTS, config.gameplay().bosses().timeGuardian());
+        assertEquals(ConfigDefaults.BOSS_DEFAULTS, config.gameplay().bosses().timeTyrant());
+    }
+
+    @Test
+    void bosses_allSixParse(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[gameplay.bosses.time_guardian]\n" +
+            "health_multiplier = 2.0\n" +
+            "damage_multiplier = 0.5\n" +
+            "[gameplay.bosses.chronos_warden]\n" +
+            "health_multiplier = 1.5\n" +
+            "[gameplay.bosses.clockwork_colossus]\n" +
+            "damage_multiplier = 3.0\n" +
+            "[gameplay.bosses.entropy_keeper]\n" +
+            "health_multiplier = 0.5\n" +
+            "[gameplay.bosses.temporal_phantom]\n" +
+            "damage_multiplier = 0.0\n" +
+            "[gameplay.bosses.time_tyrant]\n" +
+            "health_multiplier = 10.0\n" +
+            "damage_multiplier = 10.0\n");
+
+        ChronoDawnConfig config = ConfigLoader.load(tmp);
+        BossesConfig bosses = config.gameplay().bosses();
+
+        assertEquals(new BossSettings(2.0, 0.5), bosses.timeGuardian());
+        // Unspecified field within a present table still falls back
+        assertEquals(new BossSettings(1.5, 1.0), bosses.chronosWarden());
+        assertEquals(new BossSettings(1.0, 3.0), bosses.clockworkColossus());
+        assertEquals(new BossSettings(0.5, 1.0), bosses.entropyKeeper());
+        assertEquals(new BossSettings(1.0, 0.0), bosses.temporalPhantom());
+        assertEquals(new BossSettings(10.0, 10.0), bosses.timeTyrant());
+    }
+
+    @Test
+    void bosses_healthMultiplierZero_revertsToDefault(@TempDir Path tmp) throws IOException {
+        // Zero health would mean a max health of 0 — rejected. damage_multiplier
+        // on the same table is valid and must survive independently.
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[gameplay.bosses.time_guardian]\n" +
+            "health_multiplier = 0.0\n" +
+            "damage_multiplier = 2.0\n");
+
+        ChronoDawnConfig config = ConfigLoader.load(tmp);
+
+        assertEquals(ConfigDefaults.BOSS_DEFAULTS.healthMultiplier(),
+            config.gameplay().bosses().timeGuardian().healthMultiplier());
+        assertEquals(2.0, config.gameplay().bosses().timeGuardian().damageMultiplier(),
+            "A valid field must not be reset by an invalid sibling");
+    }
+
+    @Test
+    void bosses_damageMultiplierZero_isAccepted(@TempDir Path tmp) throws IOException {
+        // Zero damage is deliberately allowed: story-focused packs keep the
+        // encounter as spectacle without lethality.
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[gameplay.bosses.time_tyrant]\n" +
+            "damage_multiplier = 0.0\n");
+
+        ChronoDawnConfig config = ConfigLoader.load(tmp);
+
+        assertEquals(0.0, config.gameplay().bosses().timeTyrant().damageMultiplier());
+    }
+
+    @Test
+    void bosses_multiplierOverMax_revertsToDefault(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[gameplay.bosses.time_tyrant]\n" +
+            "health_multiplier = 11.0\n" +
+            "damage_multiplier = 50.0\n");
+
+        ChronoDawnConfig config = ConfigLoader.load(tmp);
+
+        assertEquals(ConfigDefaults.BOSS_DEFAULTS, config.gameplay().bosses().timeTyrant());
+    }
+
+    @Test
+    void bosses_multiplierNegative_revertsToDefault(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[gameplay.bosses.entropy_keeper]\n" +
+            "health_multiplier = -1.0\n" +
+            "damage_multiplier = -0.5\n");
+
+        ChronoDawnConfig config = ConfigLoader.load(tmp);
+
+        assertEquals(ConfigDefaults.BOSS_DEFAULTS, config.gameplay().bosses().entropyKeeper());
+    }
+
+    @Test
+    void bosses_nonFiniteMultiplier_revertsToDefault(@TempDir Path tmp) throws IOException {
+        // TOML spells these nan / inf; night-config parses them as Double.
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[gameplay.bosses.temporal_phantom]\n" +
+            "health_multiplier = nan\n" +
+            "damage_multiplier = inf\n");
+
+        ChronoDawnConfig config = ConfigLoader.load(tmp);
+
+        assertEquals(ConfigDefaults.BOSS_DEFAULTS, config.gameplay().bosses().temporalPhantom());
+    }
+
+    @Test
+    void bosses_integerLiteralIsAccepted(@TempDir Path tmp) throws IOException {
+        // TOML distinguishes 2 (integer) from 2.0 (float); the loader reads via
+        // Number so both must work.
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[gameplay.bosses.clockwork_colossus]\n" +
+            "health_multiplier = 2\n");
+
+        ChronoDawnConfig config = ConfigLoader.load(tmp);
+
+        assertEquals(2.0, config.gameplay().bosses().clockworkColossus().healthMultiplier());
     }
 }

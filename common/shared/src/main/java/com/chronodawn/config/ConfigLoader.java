@@ -73,6 +73,17 @@ public final class ConfigLoader {
     private static final int MIN_ORE_Y = -64;
     private static final int MAX_ORE_Y = 320;
 
+    private static final String K_GAMEPLAY = "gameplay";
+    private static final String K_BOSSES = "bosses";
+    private static final String K_HEALTH_MULTIPLIER = "health_multiplier";
+    private static final String K_DAMAGE_MULTIPLIER = "damage_multiplier";
+
+    // Health may not be zeroed: a max health of 0 kills the entity on spawn.
+    // Damage may be zeroed: a harmless boss is a legitimate pack choice.
+    private static final double MIN_HEALTH_MULTIPLIER = 0.1;
+    private static final double MIN_DAMAGE_MULTIPLIER = 0.0;
+    private static final double MAX_MULTIPLIER = 10.0;
+
     private ConfigLoader() {}
 
     /**
@@ -134,12 +145,13 @@ public final class ConfigLoader {
 
         ChronoDawnConfig.AncientRuins ancientRuins = parseAncientRuins(parsed);
         com.chronodawn.config.OresConfig ores = parseOres(parsed);
+        ChronoDawnConfig.Gameplay gameplay = parseGameplay(parsed);
 
         // Surface unknown top-level keys at WARN. Nested-table walking would be nice but
         // would balloon this method; the most common mistake is misspelling at top level.
         for (CommentedConfig.Entry entry : parsed.entrySet()) {
             String key = entry.getKey();
-            if (!key.equals(K_SCHEMA_VERSION) && !key.equals(K_WORLD)) {
+            if (!key.equals(K_SCHEMA_VERSION) && !key.equals(K_WORLD) && !key.equals(K_GAMEPLAY)) {
                 LOGGER.warn("Unknown top-level key in {}: {}", CONFIG_FILE_NAME, key);
             }
         }
@@ -149,7 +161,8 @@ public final class ConfigLoader {
             new ChronoDawnConfig.World(
                 new ChronoDawnConfig.Structures(ancientRuins),
                 ores
-            )
+            ),
+            gameplay
         );
     }
 
@@ -242,5 +255,52 @@ public final class ConfigLoader {
         }
 
         return new com.chronodawn.config.OreSettings(enabled, count, yMin, yMax);
+    }
+
+    private static ChronoDawnConfig.Gameplay parseGameplay(CommentedConfig parsed) {
+        return new ChronoDawnConfig.Gameplay(
+            new BossesConfig(
+                parseBoss(parsed, "time_guardian"),
+                parseBoss(parsed, "chronos_warden"),
+                parseBoss(parsed, "clockwork_colossus"),
+                parseBoss(parsed, "entropy_keeper"),
+                parseBoss(parsed, "temporal_phantom"),
+                parseBoss(parsed, "time_tyrant")
+            )
+        );
+    }
+
+    private static BossSettings parseBoss(CommentedConfig parsed, String bossKey) {
+        String path = K_GAMEPLAY + "." + K_BOSSES + "." + bossKey;
+        BossSettings defaults = ConfigDefaults.BOSS_DEFAULTS;
+
+        double health = parsed.<Number>getOptional(path + "." + K_HEALTH_MULTIPLIER)
+            .map(Number::doubleValue)
+            .orElse(defaults.healthMultiplier());
+
+        double damage = parsed.<Number>getOptional(path + "." + K_DAMAGE_MULTIPLIER)
+            .map(Number::doubleValue)
+            .orElse(defaults.damageMultiplier());
+
+        // Validation: each field reverts independently so one bad value doesn't
+        // reset the other. isFinite also rejects nan / inf.
+        if (!Double.isFinite(health) || health < MIN_HEALTH_MULTIPLIER || health > MAX_MULTIPLIER) {
+            LOGGER.error(
+                "Invalid {}.{} = {} (must be in [{}, {}]); using default {}",
+                path, K_HEALTH_MULTIPLIER, health, MIN_HEALTH_MULTIPLIER, MAX_MULTIPLIER,
+                defaults.healthMultiplier()
+            );
+            health = defaults.healthMultiplier();
+        }
+        if (!Double.isFinite(damage) || damage < MIN_DAMAGE_MULTIPLIER || damage > MAX_MULTIPLIER) {
+            LOGGER.error(
+                "Invalid {}.{} = {} (must be in [{}, {}]); using default {}",
+                path, K_DAMAGE_MULTIPLIER, damage, MIN_DAMAGE_MULTIPLIER, MAX_MULTIPLIER,
+                defaults.damageMultiplier()
+            );
+            damage = defaults.damageMultiplier();
+        }
+
+        return new BossSettings(health, damage);
     }
 }

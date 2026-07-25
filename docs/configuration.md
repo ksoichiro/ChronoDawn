@@ -203,6 +203,45 @@ keep whatever already generated.
 
 ---
 
+### `[gameplay.bosses.*]`
+
+Per-boss health and damage scaling for the six Chrono Dawn bosses. Each
+boss has its own table; missing sections fall back to `1.0`, which
+reproduces the shipped balance exactly.
+
+Table keys are the entity IDs: `time_guardian`, `chronos_warden`,
+`clockwork_colossus`, `entropy_keeper`, `temporal_phantom`,
+`time_tyrant`.
+
+```toml
+[gameplay.bosses.time_guardian]
+health_multiplier = 1.0
+damage_multiplier = 1.0
+```
+
+| Field | Type | Default | Range | Notes |
+| --- | --- | --- | --- | --- |
+| `health_multiplier` | float | `1.0` | `0.1..=10.0` | Scales the `MAX_HEALTH` attribute. Zero is rejected — a maximum health of 0 kills the entity on spawn. |
+| `damage_multiplier` | float | `1.0` | `0.0..=10.0` | Scales **every** damage source the boss deals: the melee `ATTACK_DAMAGE` attribute, area-of-effect and ground-slam abilities, and the projectiles it fires. `0.0` is allowed and makes the boss harmless. |
+
+Unscaled base statistics, for reference when picking a multiplier:
+
+| Boss | Max health | Melee damage | Other damage |
+| --- | --- | --- | --- |
+| Time Guardian | 200 | 10 | AoE 6, Time Blast 4 |
+| Chronos Warden | 180 | 9 | Ground slam 2 |
+| Clockwork Colossus | 200 | 12 | Ground slam 6, Gear projectile 8 |
+| Entropy Keeper | 160 | 10 | Slam 10 |
+| Temporal Phantom | 150 | 8 | Time Blast 4 |
+| Time Tyrant | 500 | 18 | AoE 12 |
+
+Armor, knockback resistance and movement speed are not configurable.
+Multipliers apply to bosses spawned after the change; see
+[`modpack-integration.md`](modpack-integration.md) for the
+existing-world caveats.
+
+---
+
 ## Adding more configuration
 
 This file is the canonical reference. Future Chrono Dawn versions will add

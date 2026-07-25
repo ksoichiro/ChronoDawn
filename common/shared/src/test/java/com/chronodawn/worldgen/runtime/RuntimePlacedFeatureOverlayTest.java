@@ -208,7 +208,8 @@ class RuntimePlacedFeatureOverlayTest {
             new ChronoDawnConfig.World(
                 defaults.world().structures(),
                 new com.chronodawn.config.OresConfig(tc, ec, ta, clk)
-            )
+            ),
+            defaults.gameplay()
         );
     }
 

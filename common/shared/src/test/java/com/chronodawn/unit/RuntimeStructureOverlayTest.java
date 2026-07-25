@@ -71,7 +71,8 @@ class RuntimeStructureOverlayTest {
                     new ChronoDawnConfig.AncientRuins(true, 16, 4, 999)
                 ),
                 ConfigDefaults.defaults().world().ores()
-            )
+            ),
+            ConfigDefaults.defaults().gameplay()
         );
 
         JsonObject json = parse(RuntimeStructureOverlay.generate(custom)
@@ -93,7 +94,8 @@ class RuntimeStructureOverlayTest {
                     new ChronoDawnConfig.AncientRuins(false, 56, 20, 20005897)
                 ),
                 ConfigDefaults.defaults().world().ores()
-            )
+            ),
+            ConfigDefaults.defaults().gameplay()
         );
 
         JsonObject json = parse(RuntimeStructureOverlay.generate(disabled)

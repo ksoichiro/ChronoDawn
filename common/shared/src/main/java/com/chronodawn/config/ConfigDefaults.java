@@ -39,6 +39,10 @@ public final class ConfigDefaults {
     public static final OreSettings TEMPORAL_AMBER_DEFAULTS = new OreSettings(true, 4, -30, 20);
     public static final OreSettings CLOCKSTONE_DEFAULTS = new OreSettings(true, 8, -16, 80);
 
+    // All six bosses default to unmodified statistics. A single shared constant
+    // keeps "the default is a no-op" impossible to break for one boss only.
+    public static final BossSettings BOSS_DEFAULTS = new BossSettings(1.0, 1.0);
+
     public static ChronoDawnConfig defaults() {
         return new ChronoDawnConfig(
             ChronoDawnConfig.CURRENT_SCHEMA_VERSION,
@@ -56,6 +60,16 @@ public final class ConfigDefaults {
                     ENTROPY_CRYSTAL_DEFAULTS,
                     TEMPORAL_AMBER_DEFAULTS,
                     CLOCKSTONE_DEFAULTS
+                )
+            ),
+            new ChronoDawnConfig.Gameplay(
+                new BossesConfig(
+                    BOSS_DEFAULTS,
+                    BOSS_DEFAULTS,
+                    BOSS_DEFAULTS,
+                    BOSS_DEFAULTS,
+                    BOSS_DEFAULTS,
+                    BOSS_DEFAULTS
                 )
             )
         );

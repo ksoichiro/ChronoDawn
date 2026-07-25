@@ -30,7 +30,8 @@ package com.chronodawn.config;
  */
 public record ChronoDawnConfig(
     int schemaVersion,
-    World world
+    World world,
+    Gameplay gameplay
 ) {
     /** Latest known schema version this build understands. */
     public static final int CURRENT_SCHEMA_VERSION = 1;
@@ -56,4 +57,6 @@ public record ChronoDawnConfig(
     public record Structures(AncientRuins ancientRuins) {}
 
     public record AncientRuins(boolean enabled, int spacing, int separation, int salt) {}
+
+    public record Gameplay(BossesConfig bosses) {}
 }
