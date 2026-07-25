@@ -1,5 +1,6 @@
 package com.chronodawn.entities.projectiles;
 
+import com.chronodawn.entities.bosses.BossProjectileDamage;
 import com.chronodawn.registry.ModEntities;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -126,9 +127,11 @@ public class TimeBlastEntity extends ThrowableProjectile {
 
         // Apply effects to living entities (typically players)
         if (result.getEntity() instanceof LivingEntity target) {
-            // Damage the target (4.0 = 2 hearts)
             // In 1.21.2, hurt() returns void
-            target.hurt(this.damageSources().mobProjectile(this, (LivingEntity) this.getOwner()), 4.0f);
+            target.hurt(
+                this.damageSources().mobProjectile(this, (LivingEntity) this.getOwner()),
+                BossProjectileDamage.timeBlast(this.getOwner())
+            );
 
             // Apply Slowness II for 5 seconds
             target.addEffect(new MobEffectInstance(

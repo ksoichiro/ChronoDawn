@@ -1,5 +1,6 @@
 package com.chronodawn.entities.projectiles;
 
+import com.chronodawn.entities.bosses.BossProjectileDamage;
 import com.chronodawn.registry.ModSounds;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -40,7 +41,6 @@ public class GearProjectileEntity extends ThrowableProjectile {
     private static final EntityDataAccessor<Float> ROTATION =
         SynchedEntityData.defineId(GearProjectileEntity.class, EntityDataSerializers.FLOAT);
 
-    private static final float DAMAGE = 8.0f;
     private static final float KNOCKBACK = 0.5f;
 
     private int ticksInAir = 0;
@@ -126,7 +126,7 @@ public class GearProjectileEntity extends ThrowableProjectile {
         // Damage the hit entity
         DamageSource damageSource = this.damageSources().mobProjectile(this, owner instanceof LivingEntity living ? living : null);
 
-        if (entity.hurt(damageSource, DAMAGE)) {
+        if (entity.hurt(damageSource, BossProjectileDamage.gearProjectile(owner))) {
             // Apply knockback
             if (entity instanceof LivingEntity livingEntity) {
                 Vec3 movement = this.getDeltaMovement();
