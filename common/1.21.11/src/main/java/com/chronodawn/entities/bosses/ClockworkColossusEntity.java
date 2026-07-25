@@ -95,7 +95,6 @@ public class ClockworkColossusEntity extends Monster implements RangedAttackMob 
     private static final int GROUND_SLAM_COOLDOWN_TICKS = 200; // 10 seconds
     private static final int GROUND_SLAM_RANGE = 10; // blocks
     private static final int GROUND_SLAM_WIDTH = 3; // blocks
-    private static final float GROUND_SLAM_DAMAGE = 6.0f;
 
     // Repair Protocol
     private static final float REPAIR_PROTOCOL_THRESHOLD = 0.4f; // 40% HP
@@ -373,7 +372,8 @@ public class ClockworkColossusEntity extends Monster implements RangedAttackMob 
                         checkX + 0.5, this.getY() + 3, checkZ + 0.5
                     )
                 ).forEach(player -> {
-                    player.hurt(this.damageSources().mobAttack(this), GROUND_SLAM_DAMAGE);
+                    player.hurt(this.damageSources().mobAttack(this),
+                        BossScaling.ability(BossAbility.CLOCKWORK_COLOSSUS_GROUND_SLAM));
                     // Small knockback
                     player.knockback(0.3, -dirX, -dirZ);
                 });

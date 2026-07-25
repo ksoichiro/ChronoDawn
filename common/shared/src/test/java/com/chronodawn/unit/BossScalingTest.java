@@ -135,4 +135,24 @@ class BossScalingTest {
         assertEquals("temporal_phantom", BossKind.TEMPORAL_PHANTOM.configKey());
         assertEquals("time_tyrant", BossKind.TIME_TYRANT.configKey());
     }
+
+    @Test
+    void scaledDamage_scalesRuntimeComputedDamage(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[gameplay.bosses.entropy_keeper]\n" +
+            "damage_multiplier = 3.0\n");
+        com.chronodawn.config.ConfigLoader.load(tmp);
+
+        // Entropy Keeper's degradation: base 10.0 melee plus 2.0 per stack.
+        // At 3x, the third stack must land on (10 + 6) * 3, not 10 * 3 + 6.
+        assertEquals(30.0, BossScaling.attackDamage(BossKind.ENTROPY_KEEPER), 0.0);
+        assertEquals(18.0, BossScaling.scaledDamage(BossKind.ENTROPY_KEEPER, 6.0), 0.0);
+    }
+
+    @Test
+    void scaledDamage_atDefaultMultiplier_isIdentity() {
+        ChronoDawnConfig.set(ConfigDefaults.defaults());
+
+        assertEquals(6.0, BossScaling.scaledDamage(BossKind.ENTROPY_KEEPER, 6.0), 0.0);
+    }
 }

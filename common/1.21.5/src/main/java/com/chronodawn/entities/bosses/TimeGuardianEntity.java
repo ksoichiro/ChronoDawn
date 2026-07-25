@@ -99,7 +99,6 @@ public class TimeGuardianEntity extends Monster implements RangedAttackMob {
     // AoE timing (Phase 2) - public for testing
     public static final int AOE_COOLDOWN_TICKS = 80; // 4 seconds
     public static final double AOE_RANGE = 4.0; // Reduced from 5.0 for balance
-    public static final float AOE_DAMAGE = 6.0f; // 3 hearts - balanced for iron armor gameplay
 
     public TimeGuardianEntity(EntityType<? extends TimeGuardianEntity> entityType, Level level) {
         super(entityType, level);
@@ -439,7 +438,8 @@ public class TimeGuardianEntity extends Monster implements RangedAttackMob {
 
         this.level().getEntitiesOfClass(Player.class, aoeBox).forEach(player -> {
             // Physical damage (6.0 = 3 hearts, balanced for iron armor gameplay)
-            player.hurt(this.damageSources().mobAttack(this), AOE_DAMAGE);
+            player.hurt(this.damageSources().mobAttack(this),
+                BossScaling.ability(BossAbility.TIME_GUARDIAN_AOE));
 
             // Time distortion effects: Slowness II (severe slowdown) + Mining Fatigue (cannot break blocks quickly)
             player.addEffect(new MobEffectInstance(

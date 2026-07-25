@@ -99,7 +99,6 @@ public class ChronosWardenEntity extends Monster {
     private static final int GROUND_SLAM_COOLDOWN_PHASE1 = 200; // 10 seconds
     private static final int GROUND_SLAM_COOLDOWN_PHASE2 = 140; // 7 seconds
     private static final double GROUND_SLAM_RANGE = 4.0;
-    private static final float GROUND_SLAM_DAMAGE = 2.0f; // 1 heart
 
     // Stone Stance timing (Phase 2)
     private static final int STONE_STANCE_COOLDOWN_TICKS = 400; // 20 seconds
@@ -381,7 +380,8 @@ public class ChronosWardenEntity extends Monster {
         this.level().getEntitiesOfClass(LivingEntity.class, area).forEach(entity -> {
             if (entity != this && entity instanceof Player) {
                 // Apply damage
-                entity.hurt(this.damageSources().mobAttack(this), GROUND_SLAM_DAMAGE);
+                entity.hurt(this.damageSources().mobAttack(this),
+                    BossScaling.ability(BossAbility.CHRONOS_WARDEN_GROUND_SLAM));
 
                 // Apply knockback
                 Vec3 direction = entity.position().subtract(this.position()).normalize();

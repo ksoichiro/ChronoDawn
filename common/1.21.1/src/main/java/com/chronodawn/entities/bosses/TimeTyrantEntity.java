@@ -131,7 +131,6 @@ public class TimeTyrantEntity extends Monster {
 
     // Ability parameters (public for testing)
     public static final double AOE_RANGE = 5.0; // 5-block radius
-    public static final float AOE_DAMAGE = 12.0f; // 6 hearts
     public static final float TIME_REVERSAL_HP_PERCENT = 0.1f; // 10% of max HP
     public static final float TIME_REVERSAL_TRIGGER_THRESHOLD = 0.2f; // Trigger at 20% HP
 
@@ -668,7 +667,7 @@ public class TimeTyrantEntity extends Monster {
         for (Player player : this.level().getEntitiesOfClass(Player.class, aoeBox)) {
             if (player.isAlive()) {
                 // Damage (Chrono Aegis: Temporal Shield - 50% reduction)
-                float damage = AOE_DAMAGE;
+                float damage = BossScaling.ability(BossAbility.TIME_TYRANT_AOE);
                 Holder<net.minecraft.world.effect.MobEffect> aegisEffect =
                     BuiltInRegistries.MOB_EFFECT.wrapAsHolder(ModEffects.CHRONO_AEGIS_BUFF.get());
                 if (player.hasEffect(aegisEffect)) {

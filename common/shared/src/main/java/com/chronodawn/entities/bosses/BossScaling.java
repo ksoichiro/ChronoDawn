@@ -39,6 +39,16 @@ public final class BossScaling {
         return kind.baseAttackDamage() * kind.settings().damageMultiplier();
     }
 
+    /**
+     * Scales an arbitrary damage value by a boss's multiplier.
+     *
+     * <p>For damage that is computed at runtime rather than declared as a
+     * {@link BossAbility} — Entropy Keeper's degradation stacks, for one.
+     */
+    public static double scaledDamage(BossKind kind, double baseDamage) {
+        return baseDamage * kind.settings().damageMultiplier();
+    }
+
     /** Damage for a non-attribute ability, scaled by its owner's multiplier. */
     public static float ability(BossAbility ability) {
         return (float) (ability.baseDamage() * ability.owner().settings().damageMultiplier());

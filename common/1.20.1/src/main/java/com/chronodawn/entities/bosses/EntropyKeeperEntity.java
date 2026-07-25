@@ -295,9 +295,12 @@ public class EntropyKeeperEntity extends Monster {
         if (currentStacks < MAX_DEGRADATION_STACKS) {
             this.entityData.set(DEGRADATION_STACKS, currentStacks + 1);
 
-            // Increase attack damage
+            // Increase attack damage. Both the baseline and the per-stack step
+            // scale with damage_multiplier, so the degradation curve keeps its
+            // shape at any configured multiplier.
             this.getAttribute(Attributes.ATTACK_DAMAGE).setBaseValue(
-                10.0 + (currentStacks + 1) * 2.0
+                BossScaling.attackDamage(BossKind.ENTROPY_KEEPER)
+                    + BossScaling.scaledDamage(BossKind.ENTROPY_KEEPER, (currentStacks + 1) * 2.0)
             );
 
             // Play sound
@@ -323,7 +326,8 @@ public class EntropyKeeperEntity extends Monster {
             if (entity == this) continue;
 
             // Deal damage
-            entity.hurt(this.damageSources().mobAttack(this), 10.0f);
+            entity.hurt(this.damageSources().mobAttack(this),
+                BossScaling.ability(BossAbility.ENTROPY_KEEPER_SLAM));
 
             // Apply Wither II
             entity.addEffect(new MobEffectInstance(MobEffects.WITHER, 200, 1)); // 10 seconds, Wither II
