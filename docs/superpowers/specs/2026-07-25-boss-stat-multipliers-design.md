@@ -1,9 +1,7 @@
 # Design: Boss HP / Damage Multipliers
 
 **Created**: 2026-07-25
-**Status**: Implemented — pending one manual measurement (whether an
-already-spawned boss picks up a changed multiplier) and the
-`modpack-integration.md` caveats row that records its answer
+**Status**: Implemented
 **Initiative**: [Modpack-Author Readiness](./2026-05-09-modpack-author-readiness-roadmap.md), sub-project A (config system)
 **Builds on**: [Config foundation](./2026-05-09-config-foundation-design.md)
 
@@ -182,14 +180,28 @@ the same path, so the two projectiles do not diverge.
 
 ## Behavior boundaries
 
-**Existing worlds.** The multiplier changes the attribute supplier's default, so
-it applies to bosses spawned after the change. Bosses already present in a world
-are expected to keep their previous statistics, because attribute base values
-are persisted in entity NBT. This expectation must be confirmed empirically
-during implementation, and whatever the measured behavior is gets recorded in
-the "Restart and existing-world caveats" table in
-`docs/modpack-integration.md` — an unverified claim in that table is worse than
-no row.
+**Existing worlds.** Measured on 1.21.11 Fabric, 2026-07-26 — and the
+measurement contradicted this spec's original expectation, which was that
+already-spawned bosses would keep their old statistics because attribute base
+values persist in entity NBT.
+
+They do not. Raising `health_multiplier` from `2.0` to `4.0` and reloading the
+same save took an existing Time Guardian's max health from 400 to 800. **Current
+health is preserved; only the maximum changes.** Damage scaling was confirmed at
+the same time: max health and area-of-effect damage both doubled at `2.0`.
+
+That combination has a consequence worth stating plainly, because it is not
+obvious from the option's name: **every boss phase is a health *ratio***
+(`getHealth() / getMaxHealth()` — Time Guardian flips at 50%, Time Tyrant at
+66% and 33%, with Time Reversal at 20%). Doubling the maximum while preserving
+current health halves the ratio, so an existing boss can jump straight into a
+later phase the moment the save reloads. Lowering the multiplier does the
+reverse, and Minecraft clamps current health down if it now exceeds the new
+maximum.
+
+This is why the spec required the measurement instead of accepting the
+expectation: the guessed answer would have produced a caveats row that was not
+merely incomplete but backwards.
 
 **Restart required.** The config is read once at startup, as with every existing
 option.

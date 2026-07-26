@@ -76,14 +76,34 @@ table.
 
 ### Restart and existing-world caveats
 
-| Setting type | Restart needed? | Affects existing chunks? |
+| Setting type | Restart needed? | Affects what already exists in a save? |
 | --- | --- | --- |
 | `world.structures.*` | yes (server / world reload) | no — only new chunks |
 | `world.ores.*` | yes (server / world reload) | no — only new chunks |
+| `gameplay.bosses.*` | yes (server / world reload) | **yes** — bosses already spawned are rescaled on load |
 
-These are vanilla Minecraft constraints; the mod cannot work around them.
-Document them in your pack notes if you expect players to retune values
-mid-game.
+The worldgen rows are vanilla Minecraft constraints; the mod cannot work
+around them. Document them in your pack notes if you expect players to
+retune values mid-game.
+
+#### Retuning bosses mid-save
+
+`gameplay.bosses.*` behaves differently from the worldgen options, and the
+difference can surprise players: a boss already standing in a loaded save
+picks up the new multiplier the next time the world loads. Its **current
+health is preserved while its maximum changes**.
+
+That matters because every boss phase is a health *ratio*, not an absolute
+value — Time Guardian switches phase at 50%, Time Tyrant at 66% and 33%,
+with its Time Reversal ability triggering at 20%. Doubling
+`health_multiplier` on an existing boss halves its health ratio, so a boss
+sitting at full health in the previous session can reload directly into a
+later phase. Lowering the multiplier does the reverse, and Minecraft clamps
+current health down if it now exceeds the new maximum.
+
+If your pack ships a boss retune as a mid-season update, either apply it
+before players reach the boss, or say so in your changelog — a player who
+left a boss fight half-finished will come back to a different one.
 
 ### Pack precedence
 
