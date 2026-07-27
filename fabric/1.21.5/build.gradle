@@ -98,6 +98,8 @@ sourceSets {
     gametest {
         java {
             srcDir 'src/gametest/java'
+            // Registry-driven test registration shared by every 1.21.5+ Fabric module.
+            srcDir '../base-1.21.5+/src/gametest/java'
         }
         resources {
             srcDir 'src/gametest/resources'
@@ -105,9 +107,10 @@ sourceSets {
     }
 }
 
-// Exclude base gametest sources (uses old FabricGameTest interface incompatible with 1.21.5)
+// Exclude base gametest sources (uses old FabricGameTest interface incompatible with 1.21.5).
+// Must not match 'fabric/base-1.21.5+', which is the shared 1.21.5+ source dir added above.
 tasks.named('compileGametestJava') {
-    source = source.filter { !it.path.contains('fabric/base') }
+    source = source.filter { !it.path.contains('fabric/base/') }
 }
 tasks.named('processGametestResources') {
     // Ensure 1.21.5-specific fabric.mod.json takes priority

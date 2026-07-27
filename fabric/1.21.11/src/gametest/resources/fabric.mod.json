@@ -9,12 +9,16 @@
   "license": "All Rights Reserved",
   "environment": "*",
   "entrypoints": {
+    "main": [
+      "com.chronodawn.gametest.ChronoDawnFabricTestRegistrar"
+    ],
     "fabric-gametest": [
       "com.chronodawn.gametest.ChronoDawnGameTests"
     ]
   },
   "depends": {
     "chronodawn": "*",
-    "fabric-gametest-api-v1": "*"
+    "fabric-gametest-api-v1": "*",
+    "fabric-registry-sync-v0": "*"
   }
 }
