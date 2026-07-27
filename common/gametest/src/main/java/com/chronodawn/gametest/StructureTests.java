@@ -50,6 +50,33 @@ public final class StructureTests {
     ) {}
 
     /**
+     * Structure ids the build-time replacement pipeline leaves untouched.
+     * Must match the "exclude" list in scripts/nbt_block_mappings.json.
+     */
+    private static final Set<String> REPLACEMENT_EXCLUDED_IDS = Set.of("ancient_ruins");
+
+    /**
+     * Vanilla blocks that scripts/nbt_block_mappings.json rewrites into ChronoDawn blocks
+     * when structure NBTs are processed at build time. Must match that file's "mappings" keys.
+     *
+     * A structure that still places one of these at runtime means the replacement did not
+     * reach it, so specs above must never require these blocks — silently expecting a
+     * replaced vanilla block is what broke old_sundial when smooth_stone was added.
+     *
+     * Names are kept fully qualified (unlike the specs above, where they become test names)
+     * so a failure message can be grepped straight against the mapping file. The minCount
+     * field is unused here: the guard asserts zero occurrences, not a minimum.
+     */
+    private static List<BlockRequirement> replacedVanillaBlocks() {
+        return List.of(
+            new BlockRequirement("minecraft:dirt", () -> Blocks.DIRT, 0),
+            new BlockRequirement("minecraft:grass_block", () -> Blocks.GRASS_BLOCK, 0),
+            new BlockRequirement("minecraft:coarse_dirt", () -> Blocks.COARSE_DIRT, 0),
+            new BlockRequirement("minecraft:smooth_stone", () -> Blocks.SMOOTH_STONE, 0)
+        );
+    }
+
+    /**
      * Shared structure specs for all versions.
      */
     public static List<StructureSpec> getStructureSpecs() {
@@ -92,7 +119,9 @@ public final class StructureTests {
                 new BlockRequirement("campfire", () -> Blocks.CAMPFIRE, 1)
             )),
             new StructureSpec("old_sundial", 3, 3, 3, List.of(
-                new BlockRequirement("smooth_stone", () -> Blocks.SMOOTH_STONE, 9),
+                // Authored as minecraft:smooth_stone; rewritten to the ChronoDawn block by
+                // the build-time replacement pipeline (scripts/nbt_block_mappings.json).
+                new BlockRequirement(ModBlockId.SMOOTH_TEMPORAL_STONE.id(), ModBlocks.SMOOTH_TEMPORAL_STONE, 9),
                 new BlockRequirement("iron_bars", () -> Blocks.IRON_BARS, 1)
             )),
             new StructureSpec("hourglass_monolith", 3, 5, 3, List.of(
@@ -275,7 +304,59 @@ public final class StructureTests {
         // Coverage test: verify all .nbt files have corresponding specs
         tests.add(generateStructureCoverageTest(specs, factory));
 
+        // Guard: verify the build-time NBT block replacement actually reached every structure
+        tests.add(generateNbtReplacementTest(specs, factory));
+
         return tests;
+    }
+
+    /**
+     * Generates a test that verifies no structure template still places a vanilla block that
+     * scripts/nbt_block_mappings.json is supposed to replace.
+     *
+     * Catches both a replacement pipeline that silently stopped running and a newly added
+     * .nbt whose vanilla blocks were never meant to survive into the shipped structure.
+     */
+    static <T> T generateNbtReplacementTest(
+            List<StructureSpec> specs,
+            MobBehaviorTests.TestFactory<T> factory) {
+        return factory.create("structure_no_unreplaced_vanilla_blocks", helper -> {
+            helper.runAfterDelay(1, () -> {
+                var templateManager = helper.getLevel().getStructureManager();
+                var vanillaBlocks = replacedVanillaBlocks();
+                List<String> leftovers = new ArrayList<>();
+
+                for (var spec : specs) {
+                    if (REPLACEMENT_EXCLUDED_IDS.contains(spec.id())) {
+                        continue;
+                    }
+                    ResourceLocation templateId = CompatResourceLocation.create(ChronoDawn.MOD_ID, spec.id());
+                    var templateOpt = templateManager.get(templateId);
+                    if (templateOpt.isEmpty()) {
+                        helper.fail("Structure template '" + spec.id() + "' could not be loaded");
+                        return;
+                    }
+                    StructureTemplate template = templateOpt.get();
+                    for (var vanilla : vanillaBlocks) {
+                        var blocks = template.filterBlocks(
+                            BlockPos.ZERO,
+                            new StructurePlaceSettings(),
+                            vanilla.blockSupplier().get()
+                        );
+                        if (!blocks.isEmpty()) {
+                            leftovers.add(spec.id() + " has " + blocks.size() + " " + vanilla.name());
+                        }
+                    }
+                }
+
+                if (!leftovers.isEmpty()) {
+                    helper.fail("Build-time NBT block replacement did not apply: "
+                        + String.join(", ", leftovers));
+                    return;
+                }
+                helper.succeed();
+            });
+        });
     }
 
     /**
