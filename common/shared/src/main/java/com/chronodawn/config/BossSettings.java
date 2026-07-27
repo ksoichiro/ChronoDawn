@@ -21,9 +21,13 @@ package com.chronodawn.config;
  * Multipliers applied to a single boss's statistics.
  *
  * <p>{@code healthMultiplier} scales the boss's {@code MAX_HEALTH} attribute.
- * {@code damageMultiplier} scales every damage source the boss deals: its
- * {@code ATTACK_DAMAGE} attribute, its area-of-effect and slam abilities, and
- * the projectiles it fires. Both default to {@code 1.0}, which reproduces the
- * hardcoded values exactly.
+ * {@code damageMultiplier} scales the boss's direct damage: its
+ * {@code ATTACK_DAMAGE} attribute, its area-of-effect and ground-slam
+ * abilities, the projectiles it fires, and Entropy Keeper's degradation. It
+ * does <b>not</b> scale status effects a boss applies (Wither, Poison,
+ * Slowness, Mining Fatigue) — a {@code MobEffect} amplifier is an integer and
+ * cannot express a fractional multiplier, so those continue at full strength
+ * even at {@code 0.0}. Both fields default to {@code 1.0}, which reproduces
+ * the hardcoded values exactly.
  */
 public record BossSettings(double healthMultiplier, double damageMultiplier) {}

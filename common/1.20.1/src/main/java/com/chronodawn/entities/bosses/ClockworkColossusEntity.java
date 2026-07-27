@@ -97,7 +97,7 @@ public class ClockworkColossusEntity extends Monster implements RangedAttackMob 
 
     // Repair Protocol
     private static final float REPAIR_PROTOCOL_THRESHOLD = 0.4f; // 40% HP
-    private static final float REPAIR_PROTOCOL_HEAL = 30.0f; // 15% of max HP
+    private static final float REPAIR_PROTOCOL_HEAL_FRACTION = 0.15f; // scales with health_multiplier
     private static final int REPAIR_PROTOCOL_COOLDOWN = 3600; // 180 seconds (prevents re-trigger)
 
     public ClockworkColossusEntity(EntityType<? extends ClockworkColossusEntity> entityType, Level level) {
@@ -277,10 +277,10 @@ public class ClockworkColossusEntity extends Monster implements RangedAttackMob 
     }
 
     /**
-     * Repair Protocol: Recover 15% HP (30 HP) once at 40% HP.
+     * Repair Protocol: Recover a fraction of max HP once at 40% HP.
      */
     private void performRepairProtocol() {
-        this.heal(REPAIR_PROTOCOL_HEAL);
+        this.heal(this.getMaxHealth() * REPAIR_PROTOCOL_HEAL_FRACTION);
 
         // Sound effect
         this.level().playSound(

@@ -68,11 +68,16 @@ health_multiplier = 2.5
 damage_multiplier = 1.5
 ```
 
-`damage_multiplier` covers melee, area attacks and projectiles together,
-so the encounter stays internally consistent. Setting it to `0.0` leaves
-the boss present but harmless — useful for cinematic or story-driven
-packs. See [`configuration.md`](configuration.md) for the full base-stat
-table.
+`damage_multiplier` scales the boss's direct damage — melee, area-of-effect
+and ground-slam abilities, projectiles, and Entropy Keeper's degradation —
+together, so the encounter stays internally consistent. It does **not**
+scale status effects a boss applies (Entropy Keeper's Wither and Poison;
+the Slowness / Mining Fatigue debuffs other bosses apply) — a
+`MobEffect` amplifier is an integer and cannot express a fractional
+multiplier. Setting it to `0.0` removes direct damage, but a boss that
+applies status effects keeps applying them at full strength — it is not
+fully harmless. See [`configuration.md`](configuration.md) for the full
+base-stat table.
 
 ### Restart and existing-world caveats
 

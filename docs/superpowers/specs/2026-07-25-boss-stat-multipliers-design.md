@@ -32,10 +32,12 @@ Six boss entities, all under `com.chronodawn.entities.bosses`:
 | Temporal Phantom | `temporal_phantom` | 150.0 | 8.0 |
 | Time Tyrant | `time_tyrant` | 500.0 | 18.0 |
 
-`damage_multiplier` covers **every** damage source a boss deals, not only the
-melee attribute. Partial coverage would be actively misleading: halving a boss's
-damage while its area-of-effect attack still one-shots the player is worse than
-no option at all. The non-attribute damage sources are:
+`damage_multiplier` covers every *direct* damage source a boss deals, not only
+the melee attribute — melee, area-of-effect and ground-slam abilities, and
+projectiles. It does not cover status effects (see "Out of scope"). Partial
+coverage of the direct-damage sources would be actively misleading: halving a
+boss's melee damage while its area-of-effect attack still one-shots the player
+is worse than no option at all. The non-attribute direct-damage sources are:
 
 | Source | Base | Owner |
 | --- | --- | --- |
@@ -43,7 +45,7 @@ no option at all. The non-attribute damage sources are:
 | `TimeTyrantEntity.AOE_DAMAGE` | 12.0 | Time Tyrant |
 | `ClockworkColossusEntity.GROUND_SLAM_DAMAGE` | 6.0 | Clockwork Colossus |
 | `ChronosWardenEntity.GROUND_SLAM_DAMAGE` | 2.0 | Chronos Warden |
-| `EntropyKeeperEntity` inline slam damage | 10.0 | Entropy Keeper |
+| `EntropyKeeperEntity` inline Entropy Burst damage | 10.0 | Entropy Keeper |
 | `GearProjectileEntity.DAMAGE` | 8.0 | Clockwork Colossus |
 | `TimeBlastEntity` impact damage | 4.0 | Time Guardian **and** Temporal Phantom |
 | `EntropyKeeperEntity.applyDegradation()` runtime `ATTACK_DAMAGE` write | 10.0 baseline + 2.0 per stack | Entropy Keeper |
@@ -242,6 +244,11 @@ not sufficient for a change that touches all eleven modules.
 
 ## Out of scope
 
+- Status effects a boss applies (Entropy Keeper's Wither and Poison; the
+  Slowness / Mining Fatigue debuffs other bosses apply) — a `MobEffect`
+  amplifier is an integer, so it cannot express a fractional multiplier. This
+  is a deliberate limitation of `damage_multiplier`, not an oversight: those
+  effects continue at full strength at every multiplier, including `0.0`.
 - Multipliers for `ARMOR`, `KNOCKBACK_RESISTANCE`, `MOVEMENT_SPEED` — the
   roadmap entry is HP and damage; add on request
 - A per-boss disable toggle — bosses gate progression (portals, advancements),

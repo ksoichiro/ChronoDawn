@@ -222,7 +222,7 @@ damage_multiplier = 1.0
 | Field | Type | Default | Range | Notes |
 | --- | --- | --- | --- | --- |
 | `health_multiplier` | float | `1.0` | `0.1..=10.0` | Scales the `MAX_HEALTH` attribute. Zero is rejected — a maximum health of 0 kills the entity on spawn. |
-| `damage_multiplier` | float | `1.0` | `0.0..=10.0` | Scales **every** damage source the boss deals: the melee `ATTACK_DAMAGE` attribute, area-of-effect and ground-slam abilities, and the projectiles it fires. `0.0` is allowed and makes the boss harmless. |
+| `damage_multiplier` | float | `1.0` | `0.0..=10.0` | Scales the boss's direct damage: the melee `ATTACK_DAMAGE` attribute, area-of-effect and ground-slam abilities, projectiles, and Entropy Keeper's degradation. It does **not** scale status effects a boss applies (Entropy Keeper's Wither and Poison; the Slowness / Mining Fatigue debuffs other bosses apply) — a `MobEffect` amplifier is an integer and cannot express a fractional multiplier, so those continue at full strength even at `0.0`. |
 
 Unscaled base statistics, for reference when picking a multiplier:
 
@@ -231,14 +231,16 @@ Unscaled base statistics, for reference when picking a multiplier:
 | Time Guardian | 200 | 10 | AoE 6, Time Blast 4 |
 | Chronos Warden | 180 | 9 | Ground slam 2 |
 | Clockwork Colossus | 200 | 12 | Ground slam 6, Gear projectile 8 |
-| Entropy Keeper | 160 | 10 | Slam 10 |
+| Entropy Keeper | 160 | 10 (Phase 2 Degradation raises this to 16 over 3 stacks; scales with `damage_multiplier`) | Entropy Burst 10 (one-time at 30% HP, not a recurring attack) |
 | Temporal Phantom | 150 | 8 | Time Blast 4 |
 | Time Tyrant | 500 | 18 | AoE 12 |
 
 Armor, knockback resistance and movement speed are not configurable.
-Multipliers apply to bosses spawned after the change; see
-[`modpack-integration.md`](modpack-integration.md) for the
-existing-world caveats.
+Multipliers also apply to bosses already spawned in an existing save:
+the next time the world (or server) reloads, an already-spawned boss's
+current health is preserved but its maximum is rescaled. See
+[`modpack-integration.md`](modpack-integration.md#retuning-bosses-mid-save)
+for the phase-ratio consequence of retuning a boss mid-fight.
 
 ---
 

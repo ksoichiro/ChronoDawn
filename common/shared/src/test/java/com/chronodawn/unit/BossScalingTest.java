@@ -83,7 +83,7 @@ class BossScalingTest {
         assertEquals(2.0f, BossAbility.CHRONOS_WARDEN_GROUND_SLAM.baseDamage(), 0.0f);
         assertEquals(6.0f, BossAbility.CLOCKWORK_COLOSSUS_GROUND_SLAM.baseDamage(), 0.0f);
         assertEquals(8.0f, BossAbility.CLOCKWORK_COLOSSUS_GEAR_PROJECTILE.baseDamage(), 0.0f);
-        assertEquals(10.0f, BossAbility.ENTROPY_KEEPER_SLAM.baseDamage(), 0.0f);
+        assertEquals(10.0f, BossAbility.ENTROPY_KEEPER_ENTROPY_BURST.baseDamage(), 0.0f);
         assertEquals(4.0f, BossAbility.TEMPORAL_PHANTOM_TIME_BLAST.baseDamage(), 0.0f);
         assertEquals(12.0f, BossAbility.TIME_TYRANT_AOE.baseDamage(), 0.0f);
     }

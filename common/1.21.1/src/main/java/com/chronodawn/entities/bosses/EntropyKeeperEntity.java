@@ -325,7 +325,7 @@ public class EntropyKeeperEntity extends Monster {
 
             // Deal damage
             entity.hurt(this.damageSources().mobAttack(this),
-                BossScaling.ability(BossAbility.ENTROPY_KEEPER_SLAM));
+                BossScaling.ability(BossAbility.ENTROPY_KEEPER_ENTROPY_BURST));
 
             // Apply Wither II
             entity.addEffect(new MobEffectInstance(MobEffects.WITHER, 200, 1)); // 10 seconds, Wither II
