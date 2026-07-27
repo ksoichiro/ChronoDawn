@@ -14,6 +14,15 @@ import net.querz.nbt.tag.StringTag
  */
 class NbtBlockReplacer {
 
+    /**
+     * Block entity string fields that name a block placed into the world, but live outside
+     * the palette so `replacePaletteBlocks` never sees them:
+     * - `final_state`: what a vanilla jigsaw block turns into once the structure resolves.
+     * - `ReplaceWith`: ChronoDawn's own field on `boss_room_boundary_marker`, holding the
+     *   block the marker becomes after it has served its purpose.
+     */
+    private static final List<String> BLOCK_ID_FIELDS = ['final_state', 'ReplaceWith']
+
     final Map<String, String> blockMappings
 
     NbtBlockReplacer(Map<String, String> blockMappings) {
@@ -26,6 +35,7 @@ class NbtBlockReplacer {
      * etc.) using the same mapping. Structure NBT keeps block entity data inline
      * as `blocks[].nbt`, and item stacks carry `id` at the stack root (with
      * nested `item.id` in Data Components layouts); both locations are handled.
+     * Block entity fields that name a block placed later (see BLOCK_ID_FIELDS) are rewritten too.
      * The 1.20.1 format conversion runs downstream and will see the replaced IDs.
      *
      * @param input gzip-compressed NBT bytes
@@ -36,7 +46,7 @@ class NbtBlockReplacer {
         def root = namedTag.getTag() as CompoundTag
 
         replacePaletteBlocks(root)
-        replaceContainerItems(root)
+        replaceBlockEntityData(root)
 
         return serializeToBytes(namedTag)
     }
@@ -57,7 +67,7 @@ class NbtBlockReplacer {
         }
     }
 
-    private void replaceContainerItems(CompoundTag root) {
+    private void replaceBlockEntityData(CompoundTag root) {
         // Structure NBT: blocks[].nbt holds the block entity payload inline.
         if (root.containsKey("blocks")) {
             def blocks = root.getListTag("blocks")
@@ -68,6 +78,7 @@ class NbtBlockReplacer {
                     def be = block.get("nbt")
                     if (be instanceof CompoundTag) {
                         replaceItemsList(be as CompoundTag)
+                        replaceBlockIdFields(be as CompoundTag)
                     }
                 }
             }
@@ -79,7 +90,27 @@ class NbtBlockReplacer {
                 for (int i = 0; i < blockEntities.size(); i++) {
                     def be = blockEntities.get(i) as CompoundTag
                     replaceItemsList(be)
+                    replaceBlockIdFields(be)
                 }
+            }
+        }
+    }
+
+    private void replaceBlockIdFields(CompoundTag blockEntity) {
+        for (String field : BLOCK_ID_FIELDS) {
+            if (!blockEntity.containsKey(field)) continue
+            def tag = blockEntity.get(field)
+            if (!(tag instanceof StringTag)) continue
+
+            // Values may carry block state properties, e.g. "minecraft:oak_stairs[facing=north]".
+            // Only the id is mapped; the property suffix is preserved verbatim.
+            def value = (tag as StringTag).getValue()
+            int bracket = value.indexOf('[')
+            def id = bracket >= 0 ? value.substring(0, bracket) : value
+            def replacement = blockMappings.get(id)
+            if (replacement != null) {
+                def suffix = bracket >= 0 ? value.substring(bracket) : ''
+                blockEntity.put(field, new StringTag(replacement + suffix))
             }
         }
     }
