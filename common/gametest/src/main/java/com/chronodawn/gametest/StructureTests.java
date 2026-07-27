@@ -1,13 +1,13 @@
 package com.chronodawn.gametest;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.compat.CompatGameTestHelper;
 import com.chronodawn.compat.CompatResourceLocation;
 import com.chronodawn.registry.ModBlockId;
 import com.chronodawn.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
@@ -246,7 +246,7 @@ public final class StructureTests {
             MobBehaviorTests.TestFactory<T> factory) {
         List<T> tests = new ArrayList<>();
         for (var spec : specs) {
-            ResourceLocation templateId = CompatResourceLocation.create(ChronoDawn.MOD_ID, spec.id());
+            var templateId = CompatResourceLocation.create(ChronoDawn.MOD_ID, spec.id());
 
             // Template load + size test
             tests.add(factory.create("structure_load_" + spec.id(), helper -> {
@@ -254,13 +254,13 @@ public final class StructureTests {
                     var templateManager = helper.getLevel().getStructureManager();
                     var templateOpt = templateManager.get(templateId);
                     if (templateOpt.isEmpty()) {
-                        helper.fail("Structure template '" + spec.id() + "' could not be loaded");
+                        CompatGameTestHelper.fail(helper, "Structure template '" + spec.id() + "' could not be loaded");
                         return;
                     }
                     StructureTemplate template = templateOpt.get();
                     var size = template.getSize();
                     if (size.getX() < spec.minWidth() || size.getY() < spec.minHeight() || size.getZ() < spec.minDepth()) {
-                        helper.fail("Structure '" + spec.id() + "' size " +
+                        CompatGameTestHelper.fail(helper, "Structure '" + spec.id() + "' size " +
                             size.getX() + "x" + size.getY() + "x" + size.getZ() +
                             " is smaller than minimum " +
                             spec.minWidth() + "x" + spec.minHeight() + "x" + spec.minDepth());
@@ -281,7 +281,7 @@ public final class StructureTests {
                         var templateManager = helper.getLevel().getStructureManager();
                         var templateOpt = templateManager.get(templateId);
                         if (templateOpt.isEmpty()) {
-                            helper.fail("Structure template '" + spec.id() + "' could not be loaded");
+                            CompatGameTestHelper.fail(helper, "Structure template '" + spec.id() + "' could not be loaded");
                             return;
                         }
                         StructureTemplate template = templateOpt.get();
@@ -291,7 +291,7 @@ public final class StructureTests {
                             block
                         );
                         if (blocks.size() < req.minCount()) {
-                            helper.fail("Structure '" + spec.id() + "' contains " +
+                            CompatGameTestHelper.fail(helper, "Structure '" + spec.id() + "' contains " +
                                 blocks.size() + " " + req.name() + ", expected at least " + req.minCount());
                             return;
                         }
@@ -330,10 +330,10 @@ public final class StructureTests {
                     if (REPLACEMENT_EXCLUDED_IDS.contains(spec.id())) {
                         continue;
                     }
-                    ResourceLocation templateId = CompatResourceLocation.create(ChronoDawn.MOD_ID, spec.id());
+                    var templateId = CompatResourceLocation.create(ChronoDawn.MOD_ID, spec.id());
                     var templateOpt = templateManager.get(templateId);
                     if (templateOpt.isEmpty()) {
-                        helper.fail("Structure template '" + spec.id() + "' could not be loaded");
+                        CompatGameTestHelper.fail(helper, "Structure template '" + spec.id() + "' could not be loaded");
                         return;
                     }
                     StructureTemplate template = templateOpt.get();
@@ -350,7 +350,7 @@ public final class StructureTests {
                 }
 
                 if (!leftovers.isEmpty()) {
-                    helper.fail("Build-time NBT block replacement did not apply: "
+                    CompatGameTestHelper.fail(helper, "Build-time NBT block replacement did not apply: "
                         + String.join(", ", leftovers));
                     return;
                 }
@@ -391,7 +391,7 @@ public final class StructureTests {
                 }
 
                 if (!untestedIds.isEmpty()) {
-                    helper.fail("Structure templates without test specs: " + String.join(", ", untestedIds));
+                    CompatGameTestHelper.fail(helper, "Structure templates without test specs: " + String.join(", ", untestedIds));
                     return;
                 }
                 helper.succeed();

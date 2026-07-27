@@ -73,15 +73,15 @@ public final class PortalTests {
                 PortalFrameValidator.PortalFrameData frameData =
                     PortalFrameValidator.validateFrame(helper.getLevel(), absBottomLeft, FRAME_AXIS);
                 if (frameData == null) {
-                    helper.fail("PortalFrameValidator did not recognize the constructed frame");
+                    CompatGameTestHelper.fail(helper, "PortalFrameValidator did not recognize the constructed frame");
                     return;
                 }
                 if (frameData.getWidth() != FRAME_WIDTH) {
-                    helper.fail("Frame width was " + frameData.getWidth() + ", expected " + FRAME_WIDTH);
+                    CompatGameTestHelper.fail(helper, "Frame width was " + frameData.getWidth() + ", expected " + FRAME_WIDTH);
                     return;
                 }
                 if (frameData.getHeight() != FRAME_HEIGHT) {
-                    helper.fail("Frame height was " + frameData.getHeight() + ", expected " + FRAME_HEIGHT);
+                    CompatGameTestHelper.fail(helper, "Frame height was " + frameData.getHeight() + ", expected " + FRAME_HEIGHT);
                     return;
                 }
                 helper.succeed();
@@ -106,7 +106,7 @@ public final class PortalTests {
                         BlockPos absPos = helper.absolutePos(interiorPos);
                         BlockState state = helper.getLevel().getBlockState(absPos);
                         if (!state.is(ModBlocks.CHRONO_DAWN_PORTAL.get())) {
-                            helper.fail("Expected portal block at relative " + interiorPos +
+                            CompatGameTestHelper.fail(helper, "Expected portal block at relative " + interiorPos +
                                 " (absolute " + absPos + "), found " + state.getBlock());
                             return;
                         }
@@ -150,7 +150,7 @@ public final class PortalTests {
                 PortalFrameValidator.PortalFrameData frameData =
                     PortalFrameValidator.validateFrame(helper.getLevel(), absBottomLeft, FRAME_AXIS);
                 if (frameData != null) {
-                    helper.fail("PortalFrameValidator should reject incomplete frame, but returned valid data");
+                    CompatGameTestHelper.fail(helper, "PortalFrameValidator should reject incomplete frame, but returned valid data");
                     return;
                 }
                 helper.succeed();
@@ -204,7 +204,7 @@ public final class PortalTests {
                 // Create mock player
                 ServerPlayer player = CompatGameTestHelper.makeMockServerPlayer(helper);
                 if (player == null) {
-                    helper.fail("Could not create mock ServerPlayer");
+                    CompatGameTestHelper.fail(helper, "Could not create mock ServerPlayer");
                     return;
                 }
 
@@ -240,7 +240,7 @@ public final class PortalTests {
                         helper.succeed();
                     }
                 } catch (Exception e) {
-                    helper.fail("teleportThroughPortal threw exception: " + e.getMessage());
+                    CompatGameTestHelper.fail(helper, "teleportThroughPortal threw exception: " + e.getMessage());
                 }
             });
         });

@@ -1,6 +1,7 @@
 package com.chronodawn.gametest;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.compat.CompatGameTestHelper;
 import com.chronodawn.compat.CompatResourceLocation;
 import com.chronodawn.registry.ModBlockEntityId;
 import com.chronodawn.registry.ModBlockId;
@@ -8,7 +9,6 @@ import com.chronodawn.registry.ModEntityId;
 import com.chronodawn.registry.ModItemId;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
-import net.minecraft.resources.ResourceLocation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -45,11 +45,11 @@ public final class RegistryConsistencyTests {
             String testName = "registry_item_" + itemId.id();
             tests.add(factory.create(testName, helper -> {
                 helper.runAfterDelay(1, () -> {
-                    ResourceLocation rl = CompatResourceLocation.create(
+                    var rl = CompatResourceLocation.create(
                             ChronoDawn.MOD_ID, itemId.id());
 
                     if (!BuiltInRegistries.ITEM.containsKey(rl)) {
-                        helper.fail("Item not registered: " + itemId.id() +
+                        CompatGameTestHelper.fail(helper, "Item not registered: " + itemId.id() +
                                 " (enum: " + itemId.name() + ")");
                         return;
                     }
@@ -76,11 +76,11 @@ public final class RegistryConsistencyTests {
             String testName = "registry_block_" + blockId.id();
             tests.add(factory.create(testName, helper -> {
                 helper.runAfterDelay(1, () -> {
-                    ResourceLocation rl = CompatResourceLocation.create(
+                    var rl = CompatResourceLocation.create(
                             ChronoDawn.MOD_ID, blockId.id());
 
                     if (!BuiltInRegistries.BLOCK.containsKey(rl)) {
-                        helper.fail("Block not registered: " + blockId.id() +
+                        CompatGameTestHelper.fail(helper, "Block not registered: " + blockId.id() +
                                 " (enum: " + blockId.name() + ")");
                         return;
                     }
@@ -107,11 +107,11 @@ public final class RegistryConsistencyTests {
             String testName = "registry_entity_" + entityId.id();
             tests.add(factory.create(testName, helper -> {
                 helper.runAfterDelay(1, () -> {
-                    ResourceLocation rl = CompatResourceLocation.create(
+                    var rl = CompatResourceLocation.create(
                             ChronoDawn.MOD_ID, entityId.id());
 
                     if (!BuiltInRegistries.ENTITY_TYPE.containsKey(rl)) {
-                        helper.fail("Entity not registered: " + entityId.id() +
+                        CompatGameTestHelper.fail(helper, "Entity not registered: " + entityId.id() +
                                 " (enum: " + entityId.name() + ")");
                         return;
                     }
@@ -138,11 +138,11 @@ public final class RegistryConsistencyTests {
             String testName = "registry_block_entity_" + blockEntityId.id();
             tests.add(factory.create(testName, helper -> {
                 helper.runAfterDelay(1, () -> {
-                    ResourceLocation rl = CompatResourceLocation.create(
+                    var rl = CompatResourceLocation.create(
                             ChronoDawn.MOD_ID, blockEntityId.id());
 
                     if (!BuiltInRegistries.BLOCK_ENTITY_TYPE.containsKey(rl)) {
-                        helper.fail("BlockEntity not registered: " + blockEntityId.id() +
+                        CompatGameTestHelper.fail(helper, "BlockEntity not registered: " + blockEntityId.id() +
                                 " (enum: " + blockEntityId.name() + ")");
                         return;
                     }
@@ -174,7 +174,7 @@ public final class RegistryConsistencyTests {
 
                 // Check all items
                 for (ModItemId itemId : ModItemId.availableForCurrent()) {
-                    ResourceLocation rl = CompatResourceLocation.create(
+                    var rl = CompatResourceLocation.create(
                             ChronoDawn.MOD_ID, itemId.id());
                     if (!BuiltInRegistries.ITEM.containsKey(rl)) {
                         missingItems.add(itemId.id());
@@ -183,7 +183,7 @@ public final class RegistryConsistencyTests {
 
                 // Check all blocks
                 for (ModBlockId blockId : ModBlockId.availableForCurrent()) {
-                    ResourceLocation rl = CompatResourceLocation.create(
+                    var rl = CompatResourceLocation.create(
                             ChronoDawn.MOD_ID, blockId.id());
                     if (!BuiltInRegistries.BLOCK.containsKey(rl)) {
                         missingBlocks.add(blockId.id());
@@ -192,7 +192,7 @@ public final class RegistryConsistencyTests {
 
                 // Check all entities
                 for (ModEntityId entityId : ModEntityId.availableForCurrent()) {
-                    ResourceLocation rl = CompatResourceLocation.create(
+                    var rl = CompatResourceLocation.create(
                             ChronoDawn.MOD_ID, entityId.id());
                     if (!BuiltInRegistries.ENTITY_TYPE.containsKey(rl)) {
                         missingEntities.add(entityId.id());
@@ -201,7 +201,7 @@ public final class RegistryConsistencyTests {
 
                 // Check all block entities
                 for (ModBlockEntityId blockEntityId : ModBlockEntityId.availableForCurrent()) {
-                    ResourceLocation rl = CompatResourceLocation.create(
+                    var rl = CompatResourceLocation.create(
                             ChronoDawn.MOD_ID, blockEntityId.id());
                     if (!BuiltInRegistries.BLOCK_ENTITY_TYPE.containsKey(rl)) {
                         missingBlockEntities.add(blockEntityId.id());
@@ -233,7 +233,7 @@ public final class RegistryConsistencyTests {
                         sb.append("Missing block entities (").append(missingBlockEntities.size()).append("): ")
                                 .append(String.join(", ", missingBlockEntities));
                     }
-                    helper.fail(sb.toString());
+                    CompatGameTestHelper.fail(helper, sb.toString());
                 }
             });
         }));

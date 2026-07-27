@@ -1,5 +1,6 @@
 package com.chronodawn.gametest;
 
+import com.chronodawn.compat.CompatGameTestHelper;
 import com.chronodawn.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
@@ -56,7 +57,7 @@ public final class FadedPlainsTests {
             if (survives) {
                 helper.succeed();
             } else {
-                helper.fail("TEMPORAL_DEAD_BUSH should survive on PARCHED_TEMPORAL_DIRT but canSurvive() returned false");
+                CompatGameTestHelper.fail(helper, "TEMPORAL_DEAD_BUSH should survive on PARCHED_TEMPORAL_DIRT but canSurvive() returned false");
             }
         });
     }
@@ -76,7 +77,7 @@ public final class FadedPlainsTests {
             if (!survives) {
                 helper.succeed();
             } else {
-                helper.fail("TEMPORAL_DEAD_BUSH should NOT survive on TEMPORAL_GRASS_BLOCK but canSurvive() returned true");
+                CompatGameTestHelper.fail(helper, "TEMPORAL_DEAD_BUSH should NOT survive on TEMPORAL_GRASS_BLOCK but canSurvive() returned true");
             }
         });
     }
@@ -101,7 +102,7 @@ public final class FadedPlainsTests {
             if (drops.size() == 1 && drops.get(0).is(ModBlocks.FADED_TEMPORAL_GRASS.get().asItem())) {
                 helper.succeed();
             } else {
-                helper.fail("FADED_TEMPORAL_GRASS with shears should drop exactly 1 faded_temporal_grass item, got: " + drops);
+                CompatGameTestHelper.fail(helper, "FADED_TEMPORAL_GRASS with shears should drop exactly 1 faded_temporal_grass item, got: " + drops);
             }
         });
     }

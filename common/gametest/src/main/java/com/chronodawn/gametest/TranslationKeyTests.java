@@ -1,5 +1,6 @@
 package com.chronodawn.gametest;
 
+import com.chronodawn.compat.CompatGameTestHelper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -79,11 +80,11 @@ public final class TranslationKeyTests {
                         if (langMap.containsKey(descriptionId)) {
                             helper.succeed();
                         } else {
-                            helper.fail(fieldName + " has descriptionId \"" + descriptionId +
+                            CompatGameTestHelper.fail(helper, fieldName + " has descriptionId \"" + descriptionId +
                                 "\" which is not in " + langCode + ".json");
                         }
                     } catch (Exception e) {
-                        helper.fail("Failed to check translation for " + fieldName +
+                        CompatGameTestHelper.fail(helper, "Failed to check translation for " + fieldName +
                             ": " + e.getMessage());
                     }
                 });

@@ -22,6 +22,14 @@ public class CompatGameTestHelper {
         return null;
     }
 
+    /**
+     * Fail the running test with a plain message.
+     * Before 1.21.5, GameTestHelper.fail() takes the String directly.
+     */
+    public static void fail(GameTestHelper helper, String message) {
+        helper.fail(message);
+    }
+
     private CompatGameTestHelper() {
         // Utility class
     }

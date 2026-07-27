@@ -47,14 +47,20 @@ sourceSets {
             srcDir 'src/main/java'
             srcDir '../shared-1.21.5+/src/main/java'
             srcDir '../shared/src/main/java'
-            // Exclude common/gametest entirely for 1.21.5 - helper.fail() API changed
-            // TODO: Create 1.21.5-specific gametest files or use compatibility layer
-            // srcDir '../gametest/src/main/java'
+            // common/gametest compiles here via CompatGameTestHelper.fail(), which absorbs the
+            // 1.21.5 GameTestHelper.fail(String) -> fail(Component) change.
+            srcDir '../gametest/src/main/java'
         }
         // Use filter to exclude files from common/shared that have 1.21.5-specific versions
         // (1.21.5 has its own versions with different APIs)
         java.filter.exclude { element ->
-            if (!element.file.absolutePath.contains('common/shared/')) {
+            def path = element.file.absolutePath
+            if (path.contains('common/gametest/')) {
+                // FadedPlains tests are registered as @GameTest methods (Fabric) or Consumer
+                // constants (NeoForge) from 1.21.5 on, so this version keeps its own copy.
+                return element.file.name == 'FadedPlainsTests.java'
+            }
+            if (!path.contains('common/shared/')) {
                 return false
             }
             // List of files that have 1.21.5-specific versions

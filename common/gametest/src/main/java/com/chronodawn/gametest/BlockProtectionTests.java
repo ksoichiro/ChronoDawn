@@ -1,5 +1,6 @@
 package com.chronodawn.gametest;
 
+import com.chronodawn.compat.CompatGameTestHelper;
 import com.chronodawn.worldgen.protection.BlockProtectionHandler;
 import com.chronodawn.worldgen.protection.PermanentProtectionHandler;
 import net.minecraft.core.BlockPos;
@@ -74,7 +75,7 @@ public final class BlockProtectionTests {
             if (BlockProtectionHandler.isProtected(level, center)) {
                 helper.succeed();
             } else {
-                helper.fail("Block at center should be protected after registration");
+                CompatGameTestHelper.fail(helper, "Block at center should be protected after registration");
             }
         });
     }
@@ -103,7 +104,7 @@ public final class BlockProtectionTests {
             if (!BlockProtectionHandler.isProtected(level, outside)) {
                 helper.succeed();
             } else {
-                helper.fail("Block outside protected area should not be protected");
+                CompatGameTestHelper.fail(helper, "Block outside protected area should not be protected");
             }
         });
     }
@@ -131,7 +132,7 @@ public final class BlockProtectionTests {
 
             // Verify it's protected initially
             if (!BlockProtectionHandler.isProtected(level, center)) {
-                helper.fail("Area should be protected before boss defeat");
+                CompatGameTestHelper.fail(helper, "Area should be protected before boss defeat");
                 return;
             }
 
@@ -142,7 +143,7 @@ public final class BlockProtectionTests {
             if (!BlockProtectionHandler.isProtected(level, center)) {
                 helper.succeed();
             } else {
-                helper.fail("Block should be unprotected after boss defeat");
+                CompatGameTestHelper.fail(helper, "Block should be unprotected after boss defeat");
             }
         });
     }
@@ -168,14 +169,14 @@ public final class BlockProtectionTests {
 
             // Verify it's protected initially
             if (!BlockProtectionHandler.isProtected(level, center)) {
-                helper.fail("Area should be protected before boss defeat");
+                CompatGameTestHelper.fail(helper, "Area should be protected before boss defeat");
                 return;
             }
 
             // Defeat boss at position (finds and unprotects area automatically)
             boolean found = BlockProtectionHandler.onBossDefeatedAt(level, center);
             if (!found) {
-                helper.fail("onBossDefeatedAt() should find the protected area");
+                CompatGameTestHelper.fail(helper, "onBossDefeatedAt() should find the protected area");
                 return;
             }
 
@@ -183,7 +184,7 @@ public final class BlockProtectionTests {
             if (!BlockProtectionHandler.isProtected(level, center)) {
                 helper.succeed();
             } else {
-                helper.fail("Block should be unprotected after boss defeat at position");
+                CompatGameTestHelper.fail(helper, "Block should be unprotected after boss defeat at position");
             }
         });
     }
@@ -211,7 +212,7 @@ public final class BlockProtectionTests {
 
             // Verify it's protected
             if (!PermanentProtectionHandler.isProtected(level, center)) {
-                helper.fail("Permanent area should be protected after registration");
+                CompatGameTestHelper.fail(helper, "Permanent area should be protected after registration");
                 return;
             }
 
@@ -223,7 +224,7 @@ public final class BlockProtectionTests {
             if (PermanentProtectionHandler.isProtected(level, center)) {
                 helper.succeed();
             } else {
-                helper.fail("Permanent protection should remain after any boss-related events");
+                CompatGameTestHelper.fail(helper, "Permanent protection should remain after any boss-related events");
             }
         });
     }
@@ -261,11 +262,11 @@ public final class BlockProtectionTests {
 
             // Verify both are protected
             if (!BlockProtectionHandler.isProtected(level, center1)) {
-                helper.fail("Area 1 should be protected");
+                CompatGameTestHelper.fail(helper, "Area 1 should be protected");
                 return;
             }
             if (!BlockProtectionHandler.isProtected(level, center2)) {
-                helper.fail("Area 2 should be protected");
+                CompatGameTestHelper.fail(helper, "Area 2 should be protected");
                 return;
             }
 
@@ -274,11 +275,11 @@ public final class BlockProtectionTests {
 
             // Area 1 should be unprotected, area 2 should still be protected
             if (BlockProtectionHandler.isProtected(level, center1)) {
-                helper.fail("Area 1 should be unprotected after boss defeat");
+                CompatGameTestHelper.fail(helper, "Area 1 should be unprotected after boss defeat");
                 return;
             }
             if (!BlockProtectionHandler.isProtected(level, center2)) {
-                helper.fail("Area 2 should still be protected (independent)");
+                CompatGameTestHelper.fail(helper, "Area 2 should still be protected (independent)");
                 return;
             }
 
@@ -308,11 +309,11 @@ public final class BlockProtectionTests {
 
             // Verify both are protected
             if (!BlockProtectionHandler.isProtected(level, center)) {
-                helper.fail("Block protection should be active before reset");
+                CompatGameTestHelper.fail(helper, "Block protection should be active before reset");
                 return;
             }
             if (!PermanentProtectionHandler.isProtected(level, center)) {
-                helper.fail("Permanent protection should be active before reset");
+                CompatGameTestHelper.fail(helper, "Permanent protection should be active before reset");
                 return;
             }
 
@@ -322,11 +323,11 @@ public final class BlockProtectionTests {
 
             // Verify both are cleared
             if (BlockProtectionHandler.isProtected(level, center)) {
-                helper.fail("Block protection should be cleared after reset");
+                CompatGameTestHelper.fail(helper, "Block protection should be cleared after reset");
                 return;
             }
             if (PermanentProtectionHandler.isProtected(level, center)) {
-                helper.fail("Permanent protection should be cleared after reset");
+                CompatGameTestHelper.fail(helper, "Permanent protection should be cleared after reset");
                 return;
             }
 

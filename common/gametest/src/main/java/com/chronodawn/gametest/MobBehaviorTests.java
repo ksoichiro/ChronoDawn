@@ -1,5 +1,6 @@
 package com.chronodawn.gametest;
 
+import com.chronodawn.compat.CompatGameTestHelper;
 import com.chronodawn.items.DeferredSpawnEggItem;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.BlockPos;
@@ -71,18 +72,18 @@ public final class MobBehaviorTests {
                 helper.runAfterDelay(1, () -> {
                     Item eggItem = spec.spawnEgg().get();
                     if (!(eggItem instanceof DeferredSpawnEggItem spawnEgg)) {
-                        helper.fail(entityName + " spawn egg is not a DeferredSpawnEggItem");
+                        CompatGameTestHelper.fail(helper, entityName + " spawn egg is not a DeferredSpawnEggItem");
                         return;
                     }
                     ItemStack eggStack = new ItemStack(eggItem);
                     EntityType<?> entityType = spawnEgg.getType(eggStack);
                     if (entityType == null) {
-                        helper.fail(entityName + " spawn egg returned null entity type");
+                        CompatGameTestHelper.fail(helper, entityName + " spawn egg returned null entity type");
                         return;
                     }
                     EntityType<?> expectedType = spec.expectedEntity().get();
                     if (entityType != expectedType) {
-                        helper.fail(entityName + " spawn egg returned wrong entity type: " +
+                        CompatGameTestHelper.fail(helper, entityName + " spawn egg returned wrong entity type: " +
                             BuiltInRegistries.ENTITY_TYPE.getKey(entityType) +
                             ", expected: " + BuiltInRegistries.ENTITY_TYPE.getKey(expectedType));
                         return;
@@ -91,7 +92,7 @@ public final class MobBehaviorTests {
                     if (entity != null) {
                         helper.succeed();
                     } else {
-                        helper.fail(entityName + " could not be spawned from spawn egg entity type");
+                        CompatGameTestHelper.fail(helper, entityName + " could not be spawned from spawn egg entity type");
                     }
                 });
             }));
@@ -116,7 +117,7 @@ public final class MobBehaviorTests {
                     if (actualCategory == spec.expectedCategory()) {
                         helper.succeed();
                     } else {
-                        helper.fail(entityName + " has category " + actualCategory.getName() +
+                        CompatGameTestHelper.fail(helper, entityName + " has category " + actualCategory.getName() +
                             ", expected " + spec.expectedCategory().getName());
                     }
                 });
@@ -141,15 +142,15 @@ public final class MobBehaviorTests {
                 var entity = helper.spawn(entitySupplier.get(), TEST_POS);
                 helper.runAfterDelay(1, () -> {
                     if (!(entity instanceof Mob mob)) {
-                        helper.fail(entityName + " is not a Mob");
+                        CompatGameTestHelper.fail(helper, entityName + " is not a Mob");
                         return;
                     }
                     if (!mob.requiresCustomPersistence()) {
-                        helper.fail(entityName + " should return true for requiresCustomPersistence()");
+                        CompatGameTestHelper.fail(helper, entityName + " should return true for requiresCustomPersistence()");
                         return;
                     }
                     if (mob.removeWhenFarAway(100.0)) {
-                        helper.fail(entityName + " should return false for removeWhenFarAway()");
+                        CompatGameTestHelper.fail(helper, entityName + " should return false for removeWhenFarAway()");
                         return;
                     }
                     helper.succeed();
@@ -172,11 +173,11 @@ public final class MobBehaviorTests {
                 var entity = helper.spawn(entitySupplier.get(), TEST_POS);
                 helper.runAfterDelay(1, () -> {
                     if (!(entity instanceof Mob mob)) {
-                        helper.fail(entityName + " is not a Mob");
+                        CompatGameTestHelper.fail(helper, entityName + " is not a Mob");
                         return;
                     }
                     if (!(mob.getMoveControl() instanceof FlyingMoveControl)) {
-                        helper.fail(entityName + " should use FlyingMoveControl but uses " +
+                        CompatGameTestHelper.fail(helper, entityName + " should use FlyingMoveControl but uses " +
                             mob.getMoveControl().getClass().getSimpleName());
                         return;
                     }
