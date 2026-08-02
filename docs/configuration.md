@@ -244,6 +244,47 @@ for the phase-ratio consequence of retuning a boss mid-fight.
 
 ---
 
+### `[gameplay.time_distortion]`
+
+Controls the ambient Slowness effect in the Chrono Dawn dimension. The effect
+is applied to eligible mobs every tick; setting `enabled = false` stops new
+applications. Players and Chrono Dawn bosses are never affected.
+
+```toml
+[gameplay.time_distortion]
+enabled = true
+normal_slowness_level = 4
+enhanced_slowness_level = 5
+scope = "hostile_mobs"
+```
+
+| Field | Type | Default | Range | Notes |
+| --- | --- | --- | --- | --- |
+| `enabled` | boolean | `true` | — | Turns the ambient effect on or off. |
+| `normal_slowness_level` | integer | `4` | `1..=5` | Potion level before the Eye of Chronos enhancement. |
+| `enhanced_slowness_level` | integer | `5` | `1..=5` | Potion level after the Eye of Chronos enhancement. |
+| `scope` | string | `"hostile_mobs"` | `"hostile_mobs"`, `"all_mobs"` | `hostile_mobs` preserves shipped behavior. `all_mobs` also affects passive and friendly mobs. Players and Chrono Dawn bosses remain excluded. |
+
+#### Example: remove ambient Slowness
+
+```toml
+[gameplay.time_distortion]
+enabled = false
+```
+
+This does not affect Slowness applied by individual attacks, items, blocks, or
+boss abilities. Those mechanics retain their own balance.
+
+#### Example: make the Chrono dimension less restrictive
+
+```toml
+[gameplay.time_distortion]
+normal_slowness_level = 2
+enhanced_slowness_level = 3
+```
+
+---
+
 ## Adding more configuration
 
 This file is the canonical reference. As new tunables ship, they will

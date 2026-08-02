@@ -77,13 +77,19 @@ public class TimeDistortionEffect {
      * @param entity The living entity to potentially apply the effect to
      */
     public static void applyTimeDistortion(LivingEntity entity) {
+        com.chronodawn.config.TimeDistortionSettings settings =
+            com.chronodawn.config.ChronoDawnConfig.get().gameplay().timeDistortion();
+        if (!settings.enabled()) {
+            return;
+        }
+
         // Check if entity is in ChronoDawn dimension
         if (!isInChronoDawnDimension(entity)) {
             return;
         }
 
         // Check if entity is a hostile mob (not a player)
-        if (!isHostileMob(entity)) {
+        if (!isAffectedMob(entity, settings.scope())) {
             return;
         }
 
@@ -91,7 +97,7 @@ public class TimeDistortionEffect {
         boolean isEnhanced = isDimensionEnhanced(entity);
 
         // Apply Slowness effect (IV or V depending on dimension enhancement state)
-        int amplifier = isEnhanced ? ENHANCED_SLOWNESS_AMPLIFIER : SLOWNESS_AMPLIFIER;
+        int amplifier = settings.slownessAmplifier(isEnhanced);
         entity.addEffect(new MobEffectInstance(
                 MobEffects.MOVEMENT_SLOWDOWN, // Slowness effect
                 EFFECT_DURATION,               // Duration in ticks
@@ -118,7 +124,9 @@ public class TimeDistortionEffect {
      * @param entity The entity to check
      * @return true if entity is a hostile mob
      */
-    private static boolean isHostileMob(LivingEntity entity) {
+    private static boolean isAffectedMob(
+        LivingEntity entity, com.chronodawn.config.TimeDistortionSettings.Scope scope
+    ) {
         // Exclude players
         if (entity instanceof Player player) {
             // Special case: If player is wearing full Enhanced Clockstone armor, they are immune
@@ -147,18 +155,9 @@ public class TimeDistortionEffect {
             return false;
         }
 
-        // Exclude Time Keeper (friendly trader NPC)
-        if (entity instanceof TimeKeeperEntity) {
-            return false;
-        }
-
-        // Exclude Floq (should move fast like slimes)
-        if (entity instanceof FloqEntity) {
-            return false;
-        }
-
-        // Include hostile mobs (Monster class and subclasses)
-        return entity instanceof Monster;
+        return scope == com.chronodawn.config.TimeDistortionSettings.Scope.HOSTILE_MOBS
+            ? entity instanceof Monster
+            : entity instanceof net.minecraft.world.entity.Mob;
     }
 
     /**

@@ -70,6 +70,18 @@ count = 8
 y_min = -16
 y_max = 80
 
+[gameplay.time_distortion]
+# Whether the Chrono Dawn dimension applies ambient Slowness to mobs.
+enabled = true
+
+# Slowness level before and after the Eye of Chronos enhancement. Range: 1 to 5.
+normal_slowness_level = 4
+enhanced_slowness_level = 5
+
+# "hostile_mobs" affects only hostile mobs. "all_mobs" also affects passive
+# and friendly mobs. Players and Chrono Dawn bosses are never affected.
+scope = "hostile_mobs"
+
 [gameplay.bosses.time_guardian]
 # Scales the boss's maximum health. 2.0 = double health. Range: 0.1 to 10.0.
 health_multiplier = 1.0

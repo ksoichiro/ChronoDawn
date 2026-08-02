@@ -27,6 +27,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
 
 /**
  * Loads {@code chronodawn.toml} from the loader-provided config directory.
@@ -74,6 +75,11 @@ public final class ConfigLoader {
     private static final int MAX_ORE_Y = 320;
 
     private static final String K_GAMEPLAY = "gameplay";
+    private static final String K_TIME_DISTORTION = "time_distortion";
+    private static final String K_TD_ENABLED = "enabled";
+    private static final String K_TD_NORMAL_SLOWNESS_LEVEL = "normal_slowness_level";
+    private static final String K_TD_ENHANCED_SLOWNESS_LEVEL = "enhanced_slowness_level";
+    private static final String K_TD_SCOPE = "scope";
     private static final String K_BOSSES = "bosses";
     private static final String K_HEALTH_MULTIPLIER = "health_multiplier";
     private static final String K_DAMAGE_MULTIPLIER = "damage_multiplier";
@@ -83,6 +89,9 @@ public final class ConfigLoader {
     private static final double MIN_HEALTH_MULTIPLIER = 0.1;
     private static final double MIN_DAMAGE_MULTIPLIER = 0.0;
     private static final double MAX_MULTIPLIER = 10.0;
+
+    private static final int MIN_SLOWNESS_LEVEL = 1;
+    private static final int MAX_SLOWNESS_LEVEL = 5;
 
     private ConfigLoader() {}
 
@@ -259,6 +268,7 @@ public final class ConfigLoader {
 
     private static ChronoDawnConfig.Gameplay parseGameplay(CommentedConfig parsed) {
         return new ChronoDawnConfig.Gameplay(
+            parseTimeDistortion(parsed),
             new BossesConfig(
                 parseBoss(parsed, "time_guardian"),
                 parseBoss(parsed, "chronos_warden"),
@@ -268,6 +278,50 @@ public final class ConfigLoader {
                 parseBoss(parsed, "time_tyrant")
             )
         );
+    }
+
+    private static TimeDistortionSettings parseTimeDistortion(CommentedConfig parsed) {
+        String path = K_GAMEPLAY + "." + K_TIME_DISTORTION;
+        TimeDistortionSettings defaults = ConfigDefaults.TIME_DISTORTION_DEFAULTS;
+
+        boolean enabled = parsed.<Boolean>getOptional(path + "." + K_TD_ENABLED)
+            .orElse(defaults.enabled());
+        int normalLevel = parsed.<Number>getOptional(path + "." + K_TD_NORMAL_SLOWNESS_LEVEL)
+            .map(Number::intValue)
+            .orElse(defaults.normalSlownessLevel());
+        int enhancedLevel = parsed.<Number>getOptional(path + "." + K_TD_ENHANCED_SLOWNESS_LEVEL)
+            .map(Number::intValue)
+            .orElse(defaults.enhancedSlownessLevel());
+        String scopeValue = parsed.<String>getOptional(path + "." + K_TD_SCOPE)
+            .orElse(defaults.scope().configValue());
+        TimeDistortionSettings.Scope scope = TimeDistortionSettings.Scope.fromConfigValue(scopeValue)
+            .orElse(defaults.scope());
+
+        if (normalLevel < MIN_SLOWNESS_LEVEL || normalLevel > MAX_SLOWNESS_LEVEL) {
+            LOGGER.error(
+                "Invalid {}.{} = {} (must be in [{}, {}]); using default {}",
+                path, K_TD_NORMAL_SLOWNESS_LEVEL, normalLevel, MIN_SLOWNESS_LEVEL, MAX_SLOWNESS_LEVEL,
+                defaults.normalSlownessLevel()
+            );
+            normalLevel = defaults.normalSlownessLevel();
+        }
+        if (enhancedLevel < MIN_SLOWNESS_LEVEL || enhancedLevel > MAX_SLOWNESS_LEVEL) {
+            LOGGER.error(
+                "Invalid {}.{} = {} (must be in [{}, {}]); using default {}",
+                path, K_TD_ENHANCED_SLOWNESS_LEVEL, enhancedLevel, MIN_SLOWNESS_LEVEL, MAX_SLOWNESS_LEVEL,
+                defaults.enhancedSlownessLevel()
+            );
+            enhancedLevel = defaults.enhancedSlownessLevel();
+        }
+        if (TimeDistortionSettings.Scope.fromConfigValue(scopeValue).isEmpty()) {
+            LOGGER.error(
+                "Invalid {}.{} = {} (must be one of {}); using default {}",
+                path, K_TD_SCOPE, scopeValue,
+                Arrays.toString(TimeDistortionSettings.Scope.values()), defaults.scope().configValue()
+            );
+        }
+
+        return new TimeDistortionSettings(enabled, normalLevel, enhancedLevel, scope);
     }
 
     private static BossSettings parseBoss(CommentedConfig parsed, String bossKey) {

@@ -43,6 +43,14 @@ public final class ConfigDefaults {
     // keeps "the default is a no-op" impossible to break for one boss only.
     public static final BossSettings BOSS_DEFAULTS = new BossSettings(1.0, 1.0);
 
+    // Defaults mirror the existing ambient Time Distortion behavior exactly.
+    public static final TimeDistortionSettings TIME_DISTORTION_DEFAULTS = new TimeDistortionSettings(
+        true,
+        4,
+        5,
+        TimeDistortionSettings.Scope.HOSTILE_MOBS
+    );
+
     public static ChronoDawnConfig defaults() {
         return new ChronoDawnConfig(
             ChronoDawnConfig.CURRENT_SCHEMA_VERSION,
@@ -63,6 +71,7 @@ public final class ConfigDefaults {
                 )
             ),
             new ChronoDawnConfig.Gameplay(
+                TIME_DISTORTION_DEFAULTS,
                 new BossesConfig(
                     BOSS_DEFAULTS,
                     BOSS_DEFAULTS,

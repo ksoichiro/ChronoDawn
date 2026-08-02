@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   under `[gameplay.bosses.*]` for all six bosses. `damage_multiplier` covers
   melee, ability and projectile damage. Defaults reproduce the existing
   balance exactly.
+- Added `[gameplay.time_distortion]` config options for the ambient Slowness
+  effect in the Chrono Dawn dimension: `enabled`, normal/enhanced strength,
+  and hostile-only or all-non-boss-mob scope. Defaults reproduce the existing
+  balance exactly.
 
 ### Fixed
 

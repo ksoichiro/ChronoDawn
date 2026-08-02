@@ -54,6 +54,21 @@ overlay applies it on first launch. The other ores stay at their
 defaults. See [`docs/configuration.md`](configuration.md) for the full
 schema.
 
+### Example: soften ambient Time Distortion
+
+```toml
+[gameplay.time_distortion]
+# Keep the dimension's identity, but reduce its ambient movement penalty.
+normal_slowness_level = 2
+enhanced_slowness_level = 3
+```
+
+Set `enabled = false` to remove only the dimension-wide effect. This does not
+remove Slowness from individual mobs, boss abilities, items, or blocks. The
+default `scope = "hostile_mobs"` matches the shipped behavior; use
+`"all_mobs"` only when the pack should also slow passive and friendly
+mobs. Players and Chrono Dawn bosses remain excluded in both scopes.
+
 ### Example: place the bosses later in your progression
 
 ```toml
@@ -85,6 +100,7 @@ base-stat table.
 | --- | --- | --- |
 | `world.structures.*` | yes (server / world reload) | no — only new chunks |
 | `world.ores.*` | yes (server / world reload) | no — only new chunks |
+| `gameplay.time_distortion` | yes (server / world reload) | yes — applies to eligible mobs as they tick after restart |
 | `gameplay.bosses.*` | yes (server / world reload) | **yes** — bosses already spawned are rescaled on load |
 
 The worldgen rows are vanilla Minecraft constraints; the mod cannot work

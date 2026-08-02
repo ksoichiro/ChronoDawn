@@ -22,6 +22,7 @@ import com.chronodawn.config.BossSettings;
 import com.chronodawn.config.ChronoDawnConfig;
 import com.chronodawn.config.ConfigDefaults;
 import com.chronodawn.config.ConfigLoader;
+import com.chronodawn.config.TimeDistortionSettings;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -450,5 +451,47 @@ class ConfigLoaderTest {
         ChronoDawnConfig config = ConfigLoader.load(tmp);
 
         assertEquals(2.0, config.gameplay().bosses().clockworkColossus().healthMultiplier());
+    }
+
+    @Test
+    void timeDistortion_missingSection_fallsBackToDefaults(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"), "schema_version = 1\n");
+
+        ChronoDawnConfig config = ConfigLoader.load(tmp);
+
+        assertEquals(ConfigDefaults.TIME_DISTORTION_DEFAULTS, config.gameplay().timeDistortion());
+        assertEquals(3, config.gameplay().timeDistortion().slownessAmplifier(false));
+        assertEquals(4, config.gameplay().timeDistortion().slownessAmplifier(true));
+    }
+
+    @Test
+    void timeDistortion_validCustomValues_areReturnedVerbatim(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[gameplay.time_distortion]\n" +
+            "enabled = false\n" +
+            "normal_slowness_level = 2\n" +
+            "enhanced_slowness_level = 3\n" +
+            "scope = \"all_mobs\"\n");
+
+        ChronoDawnConfig config = ConfigLoader.load(tmp);
+
+        assertEquals(new TimeDistortionSettings(
+            false, 2, 3, TimeDistortionSettings.Scope.ALL_MOBS
+        ), config.gameplay().timeDistortion());
+    }
+
+    @Test
+    void timeDistortion_invalidFields_fallBackIndependently(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[gameplay.time_distortion]\n" +
+            "normal_slowness_level = 0\n" +
+            "enhanced_slowness_level = 2\n" +
+            "scope = \"unknown\"\n");
+
+        TimeDistortionSettings settings = ConfigLoader.load(tmp).gameplay().timeDistortion();
+
+        assertEquals(ConfigDefaults.TIME_DISTORTION_DEFAULTS.normalSlownessLevel(), settings.normalSlownessLevel());
+        assertEquals(2, settings.enhancedSlownessLevel());
+        assertEquals(ConfigDefaults.TIME_DISTORTION_DEFAULTS.scope(), settings.scope());
     }
 }
