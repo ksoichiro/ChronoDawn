@@ -70,10 +70,32 @@
       "require_all": ["block/ores_in_ground/deepslate"]
     },
     {
-      "name": "material items join their category subtag",
+      "name": "ingot materials join ingots",
       "id_source": "item",
-      "ids": ["clockstone", "enhanced_clockstone", "time_crystal", "entropy_crystal", "raw_temporal_amber", "temporal_amber_dust"],
-      "require_any": ["item/ingots/*", "item/gems/*", "item/raw_materials/*", "item/dusts/*"]
+      "ids": ["clockstone", "enhanced_clockstone"],
+      "require_any": ["item/ingots/*"],
+      "require_all": ["item/ingots"]
+    },
+    {
+      "name": "gem materials join gems",
+      "id_source": "item",
+      "ids": ["time_crystal", "entropy_crystal"],
+      "require_any": ["item/gems/*"],
+      "require_all": ["item/gems"]
+    },
+    {
+      "name": "raw materials join raw_materials",
+      "id_source": "item",
+      "ids": ["raw_temporal_amber"],
+      "require_any": ["item/raw_materials/*"],
+      "require_all": ["item/raw_materials"]
+    },
+    {
+      "name": "dust materials join dusts",
+      "id_source": "item",
+      "ids": ["temporal_amber_dust"],
+      "require_any": ["item/dusts/*"],
+      "require_all": ["item/dusts"]
     },
     {
       "name": "storage blocks join storage_blocks",
