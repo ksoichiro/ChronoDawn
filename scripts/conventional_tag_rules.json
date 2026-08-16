@@ -1,0 +1,57 @@
+{
+  "v2_roots": [
+    "common/shared-1.21.1+/src/main/resources/data/c/tags"
+  ],
+  "v1_root": "common/1.20.1/src/main/resources/data/c/tags",
+  "v2_allowed_tags": [
+    "block/ores",
+    "block/ores/coal",
+    "block/ores/iron",
+    "block/ores/gold",
+    "block/ores/redstone",
+    "block/ores/clockstone",
+    "block/ores/time_crystal",
+    "block/ores/entropy_crystal",
+    "block/ores/temporal_amber",
+    "block/ores_in_ground/stone",
+    "block/ores_in_ground/deepslate",
+    "block/ore_bearing_ground/stone",
+    "block/ore_bearing_ground/deepslate",
+    "item/ores",
+    "item/ores/coal",
+    "item/ores/iron",
+    "item/ores/gold",
+    "item/ores/redstone",
+    "item/ores/clockstone",
+    "item/ores/time_crystal",
+    "item/ores/entropy_crystal",
+    "item/ores/temporal_amber"
+  ],
+  "v1_allowed_tags": [],
+  "rules": [
+    {
+      "name": "ore blocks join an ores subtag",
+      "id_source": "block",
+      "pattern": ".*_ore",
+      "require_any": ["block/ores/*"]
+    },
+    {
+      "name": "ore items join an ores subtag",
+      "id_source": "item",
+      "pattern": ".*_ore",
+      "require_any": ["item/ores/*"]
+    },
+    {
+      "name": "stone-hosted ore blocks join ores_in_ground/stone",
+      "id_source": "block",
+      "pattern": "(?!deepslate_).*_ore",
+      "require_all": ["block/ores_in_ground/stone"]
+    },
+    {
+      "name": "deepslate ore blocks join ores_in_ground/deepslate",
+      "id_source": "block",
+      "pattern": "deepslate_.*_ore",
+      "require_all": ["block/ores_in_ground/deepslate"]
+    }
+  ]
+}

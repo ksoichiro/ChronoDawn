@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "chronodawn:temporal_redstone_ore",
+    "chronodawn:deepslate_temporal_redstone_ore"
+  ]
+}

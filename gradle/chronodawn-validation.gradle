@@ -405,6 +405,164 @@ tasks.register('validateEraJsonFormat') {
     }
 }
 
+// ============================================================
+// Task 5: validateConventionalTags
+// ------------------------------------------------------------
+// Verifies conventional (c:) tag coverage for materials. Three checks:
+//
+//   1. Coverage   — every registered ID matching a rule in
+//                   scripts/conventional_tag_rules.json is present in the
+//                   tags that rule requires. Rules are pattern-driven, so a
+//                   newly added material inherits the requirement and a
+//                   missing tag fails the build instead of silently making
+//                   the material invisible to other mods.
+//   2. Tag names  — every emitted tag name is on the allowlist for its
+//                   convention era. Catches typos and the deprecated plural
+//                   food/tool aliases, which no mod reads.
+//   3. Consistency — when more than one 1.21.1+ resource root carries
+//                   data/c/, their tag name sets must agree.
+//
+// Membership resolution follows '#c:' tag references transitively, so an
+// ID counts as a member of c:ores when it sits in c:ores/coal and
+// c:ores/coal is referenced from c:ores.
+// ============================================================
+tasks.register('validateConventionalTags') {
+    group = 'verification'
+    description = 'Verify conventional (c:) tag coverage, tag-name validity and cross-root consistency'
+
+    doLast {
+        def jsonSlurper = new JsonSlurper()
+        def errors = []
+        def rulesFile = file("${rootProject.projectDir}/scripts/conventional_tag_rules.json")
+        if (!rulesFile.exists()) {
+            throw new GradleException("validateConventionalTags: ${rulesFile} not found")
+        }
+        def config = jsonSlurper.parseText(rulesFile.text)
+
+        def idsFrom = { String propName ->
+            def f = file("${rootProject.projectDir}/${project.property(propName)}")
+            def ids = [] as Set
+            (f.text =~ /(\w+)\s*\(\s*"([^"]+)"\s*\)/).each { ids << it[2] }
+            ids
+        }
+        def idSets = ['block': idsFrom('block_id_file'), 'item': idsFrom('item_id_file')]
+
+        // Load every tag file under a c: tag root into 'type/path' -> raw values.
+        def loadRoot = { String rootRel ->
+            def tags = [:]
+            def rootDir = file("${rootProject.projectDir}/${rootRel}")
+            if (!rootDir.exists()) return tags
+            fileTree(dir: rootDir, includes: ['**/*.json']).each { File f ->
+                def name = rootDir.toPath().relativize(f.toPath()).toString()
+                        .replace(File.separator, '/').replaceAll(/\.json$/, '')
+                def json
+                try {
+                    json = jsonSlurper.parseText(f.text)
+                } catch (Exception e) {
+                    errors << "Conventional tags: ${name}.json is not valid JSON"
+                    return
+                }
+                tags[name] = (json instanceof Map && json.values instanceof List) ? json.values : []
+            }
+            tags
+        }
+
+        // Resolve members of a tag, following '#c:' references transitively.
+        def resolveMembers
+        resolveMembers = { Map tags, String tagName, Set seen ->
+            if (!tags.containsKey(tagName) || seen.contains(tagName)) return [] as Set
+            seen << tagName
+            def out = [] as Set
+            def type = tagName.split('/')[0]
+            tags[tagName].each { entry ->
+                def raw = (entry instanceof Map) ? entry.id : entry
+                if (!(raw instanceof String)) return
+                if (raw.startsWith('#c:')) {
+                    out.addAll(resolveMembers(tags, "${type}/${raw.substring(3)}".toString(), seen))
+                } else {
+                    out << raw
+                }
+            }
+            out
+        }
+
+        def v2Roots = config.v2_roots as List
+        def rootTags = [:]
+        v2Roots.each { rootTags[it] = loadRoot(it as String) }
+
+        // --- Check 1: coverage ---------------------------------------------
+        int coverageChecked = 0
+        v2Roots.each { String rootRel ->
+            def tags = rootTags[rootRel]
+            // Deliberately not skipping an empty root: "no tags yet" must fail
+            // the coverage check, not pass it vacuously.
+            config.rules.each { rule ->
+                def candidates = rule.ids != null
+                        ? (rule.ids as Set)
+                        : idSets[rule.id_source as String].findAll { it ==~ (rule.pattern as String) }
+                candidates.each { String id ->
+                    def fqId = "chronodawn:${id}".toString()
+                    coverageChecked++
+                    (rule.require_all ?: []).each { String required ->
+                        if (!resolveMembers(tags, required, [] as Set).contains(fqId)) {
+                            errors << "${rootRel}: '${fqId}' missing from c:${required.split('/', 2)[1]} (rule: ${rule.name})"
+                        }
+                    }
+                    def anyGlobs = rule.require_any ?: []
+                    if (!anyGlobs.isEmpty()) {
+                        def matched = anyGlobs.any { String glob ->
+                            def re = glob.replace('*', '[^/]+')
+                            tags.keySet().findAll { it ==~ re }.any { String t ->
+                                resolveMembers(tags, t, [] as Set).contains(fqId)
+                            }
+                        }
+                        if (!matched) {
+                            errors << "${rootRel}: '${fqId}' is in none of ${anyGlobs.collect { 'c:' + it.split('/', 2)[1] }} (rule: ${rule.name})"
+                        }
+                    }
+                }
+            }
+        }
+
+        // --- Check 2: tag names on the era allowlist ------------------------
+        def v2Allowed = (config.v2_allowed_tags ?: []) as Set
+        v2Roots.each { String rootRel ->
+            rootTags[rootRel].keySet().each { String name ->
+                if (!v2Allowed.contains(name)) {
+                    errors << "${rootRel}: tag '${name}' is not in v2_allowed_tags (typo, or a deprecated alias no mod reads?)"
+                }
+            }
+        }
+        def v1Root = config.v1_root as String
+        def v1Tags = loadRoot(v1Root)
+        def v1Allowed = (config.v1_allowed_tags ?: []) as Set
+        v1Tags.keySet().each { String name ->
+            if (!v1Allowed.contains(name)) {
+                errors << "${v1Root}: tag '${name}' is not in v1_allowed_tags (conventional tags v1 has no such tag)"
+            }
+        }
+
+        // --- Check 3: cross-root consistency among 1.21.1+ roots ------------
+        def populated = v2Roots.findAll { !rootTags[it].isEmpty() }
+        if (populated.size() > 1) {
+            def reference = populated[0] as String
+            def referenceNames = rootTags[reference].keySet() as Set
+            populated.tail().each { String other ->
+                def otherNames = rootTags[other].keySet() as Set
+                (referenceNames - otherNames).each { errors << "${other}: missing tag '${it}' present in ${reference}" }
+                (otherNames - referenceNames).each { errors << "${other}: extra tag '${it}' absent from ${reference}" }
+            }
+        }
+
+        if (errors.isEmpty()) {
+            logger.lifecycle("Conventional tag validation passed: ${coverageChecked} ID/rule checks across ${v2Roots.size()} 1.21.1+ root(s) and ${v1Tags.size()} v1 tag file(s).")
+        } else {
+            errors.each { logger.error("  ERROR: ${it}") }
+            throw new GradleException("Conventional tag validation failed with ${errors.size()} error(s)")
+        }
+    }
+}
+
 // Helpers for loot_table walking.
 def walkLootConditions(Object node, Closure visitor) {
     if (node instanceof Map) {
