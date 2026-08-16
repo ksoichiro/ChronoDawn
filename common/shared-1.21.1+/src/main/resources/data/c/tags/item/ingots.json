@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "#c:ingots/clockstone",
+    "#c:ingots/enhanced_clockstone"
+  ]
+}

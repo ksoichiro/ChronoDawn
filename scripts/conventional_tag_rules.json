@@ -25,7 +25,23 @@
     "item/ores/clockstone",
     "item/ores/time_crystal",
     "item/ores/entropy_crystal",
-    "item/ores/temporal_amber"
+    "item/ores/temporal_amber",
+    "item/ingots",
+    "item/ingots/clockstone",
+    "item/ingots/enhanced_clockstone",
+    "item/gems",
+    "item/gems/time_crystal",
+    "item/gems/entropy_crystal",
+    "item/raw_materials",
+    "item/raw_materials/temporal_amber",
+    "item/dusts",
+    "item/dusts/temporal_amber",
+    "block/storage_blocks",
+    "block/storage_blocks/clockstone",
+    "block/storage_blocks/time_crystal",
+    "item/storage_blocks",
+    "item/storage_blocks/clockstone",
+    "item/storage_blocks/time_crystal"
   ],
   "v1_allowed_tags": [],
   "rules": [
@@ -52,6 +68,24 @@
       "id_source": "block",
       "pattern": "deepslate_.*_ore",
       "require_all": ["block/ores_in_ground/deepslate"]
+    },
+    {
+      "name": "material items join their category subtag",
+      "id_source": "item",
+      "ids": ["clockstone", "enhanced_clockstone", "time_crystal", "entropy_crystal", "raw_temporal_amber", "temporal_amber_dust"],
+      "require_any": ["item/ingots/*", "item/gems/*", "item/raw_materials/*", "item/dusts/*"]
+    },
+    {
+      "name": "storage blocks join storage_blocks",
+      "id_source": "block",
+      "ids": ["clockstone_block", "time_crystal_block"],
+      "require_all": ["block/storage_blocks"]
+    },
+    {
+      "name": "storage block items join storage_blocks",
+      "id_source": "item",
+      "ids": ["clockstone_block", "time_crystal_block"],
+      "require_all": ["item/storage_blocks"]
     }
   ]
 }

@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "#c:gems/time_crystal",
+    "#c:gems/entropy_crystal"
+  ]
+}
