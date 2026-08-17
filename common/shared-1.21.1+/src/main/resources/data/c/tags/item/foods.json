@@ -1,0 +1,16 @@
+{
+  "replace": false,
+  "values": [
+    "#c:foods/bread",
+    "#c:foods/cookie",
+    "#c:foods/pie",
+    "#c:foods/fruit",
+    "#c:foods/vegetable",
+    "#c:foods/soup",
+    "#c:foods/raw_meat",
+    "#c:foods/cooked_meat",
+    "#c:foods/raw_fish",
+    "#c:foods/cooked_fish",
+    "#c:foods/golden"
+  ]
+}

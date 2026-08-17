@@ -73,7 +73,28 @@
     "item/fences",
     "item/fences/wooden",
     "item/fence_gates",
-    "item/fence_gates/wooden"
+    "item/fence_gates/wooden",
+    "item/foods",
+    "item/foods/bread",
+    "item/foods/cookie",
+    "item/foods/pie",
+    "item/foods/fruit",
+    "item/foods/vegetable",
+    "item/foods/soup",
+    "item/foods/raw_meat",
+    "item/foods/cooked_meat",
+    "item/foods/raw_fish",
+    "item/foods/cooked_fish",
+    "item/foods/golden",
+    "item/drinks",
+    "item/drinks/juice",
+    "item/mushrooms",
+    "item/crops",
+    "item/crops/time_wheat",
+    "item/crops/chrono_melon",
+    "item/seeds",
+    "item/seeds/time_wheat",
+    "item/seeds/chrono_melon"
   ],
   "v1_allowed_tags": [],
   "rules": [
@@ -188,6 +209,25 @@
       "id_source": "block",
       "pattern": ".*_fence_gate",
       "require_all": ["block/fence_gates/wooden"]
+    },
+    {
+      "name": "food items join a foods subtag",
+      "id_source": "item",
+      "ids": ["time_bread", "enhanced_time_bread", "time_wheat_cookie", "clockwork_cookie", "time_fruit_pie", "fruit_of_time", "chrono_melon_slice", "temporal_root", "baked_temporal_root", "temporal_root_stew", "timeless_mushroom_soup", "chrono_bovine_meat", "cooked_chrono_bovine_meat", "glide_fish", "cooked_glide_fish", "golden_time_wheat", "glistening_chrono_melon"],
+      "require_any": ["item/foods/*"],
+      "require_all": ["item/foods"]
+    },
+    {
+      "name": "crops join a crops subtag",
+      "id_source": "item",
+      "ids": ["time_wheat", "chrono_melon"],
+      "require_any": ["item/crops/*"]
+    },
+    {
+      "name": "seeds join a seeds subtag",
+      "id_source": "item",
+      "ids": ["time_wheat_seeds", "chrono_melon_seeds"],
+      "require_any": ["item/seeds/*"]
     }
   ]
 }

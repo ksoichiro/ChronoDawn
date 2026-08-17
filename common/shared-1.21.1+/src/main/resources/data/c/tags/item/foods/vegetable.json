@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "chronodawn:temporal_root",
+    "chronodawn:baked_temporal_root"
+  ]
+}
