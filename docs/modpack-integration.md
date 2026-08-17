@@ -164,6 +164,106 @@ mod-specific syntax is required.
 
 ---
 
+## Conventional (`c:`) tags
+
+Chrono Dawn's ores, materials, storage blocks, stone/sand/gravel/sandstone,
+wood sets, foods, crops and seeds are exposed through the Fabric/NeoForge
+conventional tag namespace (`c:`), so unification recipes, JEI/EMI
+recipe-viewer plugins, and other mods that consume materials by tag pick up
+Chrono Dawn's items and blocks automatically. No loader-specific files are
+needed: NeoForge reads the same `c:` namespace as Fabric.
+
+The convention itself changed shape between the Minecraft versions this mod
+supports, so the published tag set differs by era.
+
+### 1.21.1–1.21.11
+
+This range uses conventional tags v2, which has per-material subtags under
+each umbrella (`c:ores/coal`, `c:gems/amethyst`, and so on). Every tag below
+is stable across all ten 1.21.x versions this mod supports.
+
+| Members | Tags |
+| --- | --- |
+| `temporal_coal_ore` | `c:ores/coal`, `c:ores`, `c:ores_in_ground/stone` |
+| `temporal_iron_ore` | `c:ores/iron`, `c:ores`, `c:ores_in_ground/stone` |
+| `temporal_gold_ore`, `deepslate_temporal_gold_ore` | `c:ores/gold`, `c:ores`, `c:ores_in_ground/stone` or `/deepslate` |
+| `temporal_redstone_ore`, `deepslate_temporal_redstone_ore` | `c:ores/redstone`, `c:ores`, `c:ores_in_ground/stone` or `/deepslate` |
+| `clockstone_ore`, `deepslate_clockstone_ore` | `c:ores/clockstone`, `c:ores`, `c:ores_in_ground/stone` or `/deepslate` |
+| `time_crystal_ore` | `c:ores/time_crystal`, `c:ores`, `c:ores_in_ground/stone` |
+| `entropy_crystal_ore` | `c:ores/entropy_crystal`, `c:ores`, `c:ores_in_ground/stone` |
+| `temporal_amber_ore`, `deepslate_temporal_amber_ore` | `c:ores/temporal_amber`, `c:ores`, `c:ores_in_ground/stone` or `/deepslate` |
+| `temporal_stone` | `c:ore_bearing_ground/stone` |
+| `deepslate_temporal_stone` | `c:ore_bearing_ground/deepslate` |
+| `clockstone` | `c:ingots/clockstone`, `c:ingots` |
+| `enhanced_clockstone` | `c:ingots/enhanced_clockstone`, `c:ingots` |
+| `time_crystal` | `c:gems/time_crystal`, `c:gems` |
+| `entropy_crystal` | `c:gems/entropy_crystal`, `c:gems` |
+| `raw_temporal_amber` | `c:raw_materials/temporal_amber`, `c:raw_materials` |
+| `temporal_amber_dust` | `c:dusts/temporal_amber`, `c:dusts` |
+| `clockstone_block` | `c:storage_blocks/clockstone`, `c:storage_blocks` |
+| `time_crystal_block` | `c:storage_blocks/time_crystal`, `c:storage_blocks` |
+| `temporal_stone` | `c:stones` |
+| `temporal_cobblestone` | `c:cobblestones/normal`, `c:cobblestones` |
+| `mossy_temporal_cobblestone` | `c:cobblestones/mossy`, `c:cobblestones` |
+| `cobbled_deepslate_temporal_stone` | `c:cobblestones/deepslate`, `c:cobblestones` |
+| `temporal_sand` | `c:sands` |
+| `temporal_gravel` | `c:gravels` |
+| `temporal_sandstone` | `c:sandstone/blocks` |
+| `temporal_sandstone_slab` | `c:sandstone/slabs` |
+| `temporal_sandstone_stairs` | `c:sandstone/stairs` |
+| `stripped_*_log` (time_wood, dark_time_wood, ancient_time_wood) | `c:stripped_logs` |
+| `stripped_*_wood` (time_wood, dark_time_wood, ancient_time_wood) | `c:stripped_woods` |
+| `*_fence` (time_wood, dark_time_wood, ancient_time_wood) | `c:fences/wooden`, `c:fences` |
+| `*_fence_gate` (time_wood, dark_time_wood, ancient_time_wood) | `c:fence_gates/wooden`, `c:fence_gates` |
+| `time_bread`, `enhanced_time_bread` | `c:foods/bread`, `c:foods` |
+| `time_wheat_cookie`, `clockwork_cookie` | `c:foods/cookie`, `c:foods` |
+| `time_fruit_pie` | `c:foods/pie`, `c:foods` |
+| `fruit_of_time`, `chrono_melon_slice` | `c:foods/fruit`, `c:foods` |
+| `temporal_root`, `baked_temporal_root` | `c:foods/vegetable`, `c:foods` |
+| `temporal_root_stew`, `timeless_mushroom_soup` | `c:foods/soup`, `c:foods` |
+| `chrono_bovine_meat` | `c:foods/raw_meat`, `c:foods` |
+| `cooked_chrono_bovine_meat` | `c:foods/cooked_meat`, `c:foods` |
+| `glide_fish` | `c:foods/raw_fish`, `c:foods` |
+| `cooked_glide_fish` | `c:foods/cooked_fish`, `c:foods` |
+| `golden_time_wheat`, `glistening_chrono_melon` | `c:foods/golden`, `c:foods` |
+| `chrono_melon_juice` | `c:drinks/juice`, `c:drinks` |
+| `timeless_mushroom` | `c:mushrooms` |
+| `time_wheat` | `c:crops/time_wheat`, `c:crops` |
+| `time_wheat_seeds` | `c:seeds/time_wheat`, `c:seeds` |
+| `chrono_melon` | `c:crops/chrono_melon`, `c:crops` |
+| `chrono_melon_seeds` | `c:seeds/chrono_melon`, `c:seeds` |
+
+Ore tags apply to both the block and its item form. `temporal_sand`
+deliberately joins only the `c:sands` umbrella — its tint matches neither
+`c:sands/colorless` nor `c:sands/red`. `chrono_melon_juice` and
+`timeless_mushroom` are not foods in the tag sense and join only the tags
+listed for them.
+
+### 1.20.1
+
+1.20.1 uses conventional tags v1, which has **no per-material subtags** —
+only flat plural umbrella tags. This means 1.20.1 carries a reduced set
+compared to 1.21.1+: roughly a third of the coverage, and materials cannot
+be targeted individually by tag on this version, only by category.
+
+| Tag | Members |
+| --- | --- |
+| `c:ores` | all eight ore families (blocks and items) |
+| `c:ingots` | `clockstone`, `enhanced_clockstone` |
+| `c:gems` | `time_crystal`, `entropy_crystal` |
+| `c:raw_ores` | `raw_temporal_amber` |
+| `c:dusts` | `temporal_amber_dust` |
+| `c:foods` | every food item listed in the 1.21.1+ table above |
+| `c:sandstone_blocks` / `c:sandstone_slabs` / `c:sandstone_stairs` | temporal sandstone set |
+
+Categories that exist in v2 but not v1 — `stones`, `gravels`, `cobblestones`,
+`storage_blocks`, `crops`, `seeds`, `mushrooms`, `fences/wooden`,
+`stripped_logs`, `stripped_woods`, `drinks` — are not emitted on 1.20.1,
+because inventing tag names outside the convention would produce files no
+other mod reads.
+
+---
+
 ## Future integrations *(not yet shipped)*
 
 The following sections will land in subsequent releases. They are listed

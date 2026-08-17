@@ -319,6 +319,10 @@ neoforge_version=21.2.0-beta
 # recipe-unlock advancements, per-era JSON format)
 ./gradlew validateLangParity validateBlockTagMembership validateRecipeUnlockAdvancements validateEraJsonFormat
 
+# Verify conventional (c:) tag coverage, tag-name validity and
+# cross-root consistency
+./gradlew validateConventionalTags
+
 # Collect release JARs into build/release/
 ./gradlew collectJars
 
@@ -328,7 +332,8 @@ neoforge_version=21.2.0-beta
 # Run ALL verification tasks (recommended before commits/PRs)
 ./gradlew checkAll
 # Runs in sequence: cleanAll → validateResources → validateTranslations
-#   → project-specific validations + validateData (checkall_extra_tasks)
+#   → project-specific validations + validateData + validateConventionalTags
+#     (checkall_extra_tasks)
 #   → buildAll → testAll → gameTestAll
 
 # Clean build artifacts

@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   effect in the Chrono Dawn dimension: `enabled`, normal/enhanced strength,
   and hostile-only or all-non-boss-mob scope. Defaults reproduce the existing
   balance exactly.
+- Conventional (`c:`) tags for ores, materials, storage blocks, stone/sand/gravel/sandstone, wood sets, foods, crops and seeds, so other mods and modpack recipes can consume Chrono Dawn materials by tag
 
 ### Fixed
 
