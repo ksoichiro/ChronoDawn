@@ -554,6 +554,25 @@
   "block.chronodawn.temporal_redstone_ore": "Temporal Redstone Ore",
   "block.chronodawn.entropy_crystal_ore": "Entropy Crystal Ore",
   "block.chronodawn.temporal_amber_ore": "Temporal Amber Ore",
-  "block.chronodawn.chrono_cobweb": "Chrono Cobweb"
+  "block.chronodawn.chrono_cobweb": "Chrono Cobweb",
+
+  "tag.item.chronodawn.sand": "Sand",
+
+  "tag.item.c.ores.clockstone": "Clockstone Ores",
+  "tag.item.c.ores.time_crystal": "Time Crystal Ores",
+  "tag.item.c.ores.entropy_crystal": "Entropy Crystal Ores",
+  "tag.item.c.ores.temporal_amber": "Temporal Amber Ores",
+  "tag.item.c.ingots.clockstone": "Clockstone Ingots",
+  "tag.item.c.ingots.enhanced_clockstone": "Enhanced Clockstone Ingots",
+  "tag.item.c.gems.time_crystal": "Time Crystals",
+  "tag.item.c.gems.entropy_crystal": "Entropy Crystals",
+  "tag.item.c.raw_materials.temporal_amber": "Raw Temporal Amber",
+  "tag.item.c.dusts.temporal_amber": "Temporal Amber Dusts",
+  "tag.item.c.storage_blocks.clockstone": "Clockstone Blocks",
+  "tag.item.c.storage_blocks.time_crystal": "Time Crystal Blocks",
+  "tag.item.c.crops.time_wheat": "Time Wheat Crops",
+  "tag.item.c.crops.chrono_melon": "Chrono Melon Crops",
+  "tag.item.c.seeds.time_wheat": "Time Wheat Seeds",
+  "tag.item.c.seeds.chrono_melon": "Chrono Melon Seeds"
 }
 

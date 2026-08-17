@@ -542,5 +542,24 @@
   "block.chronodawn.temporal_redstone_ore": "テンポラルレッドストーン鉱石",
   "block.chronodawn.entropy_crystal_ore": "エントロピークリスタル鉱石",
   "block.chronodawn.temporal_amber_ore": "時の琥珀鉱石",
-  "block.chronodawn.chrono_cobweb": "時のクモの巣"
+  "block.chronodawn.chrono_cobweb": "時のクモの巣",
+
+  "tag.item.chronodawn.sand": "砂",
+
+  "tag.item.c.ores.clockstone": "クロックストーン鉱石",
+  "tag.item.c.ores.time_crystal": "時間の結晶鉱石",
+  "tag.item.c.ores.entropy_crystal": "エントロピークリスタル鉱石",
+  "tag.item.c.ores.temporal_amber": "時の琥珀鉱石",
+  "tag.item.c.ingots.clockstone": "クロックストーンインゴット",
+  "tag.item.c.ingots.enhanced_clockstone": "強化クロックストーンインゴット",
+  "tag.item.c.gems.time_crystal": "時間の結晶",
+  "tag.item.c.gems.entropy_crystal": "エントロピークリスタル",
+  "tag.item.c.raw_materials.temporal_amber": "粗時琥珀",
+  "tag.item.c.dusts.temporal_amber": "時琥珀の粉",
+  "tag.item.c.storage_blocks.clockstone": "クロックストーンブロック",
+  "tag.item.c.storage_blocks.time_crystal": "時間の結晶ブロック",
+  "tag.item.c.crops.time_wheat": "時の小麦作物",
+  "tag.item.c.crops.chrono_melon": "時のメロン作物",
+  "tag.item.c.seeds.time_wheat": "時の小麦の種",
+  "tag.item.c.seeds.chrono_melon": "時のメロンの種"
 }

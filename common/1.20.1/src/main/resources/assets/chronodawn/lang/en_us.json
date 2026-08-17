@@ -544,6 +544,8 @@
   "block.chronodawn.temporal_redstone_ore": "Temporal Redstone Ore",
   "block.chronodawn.entropy_crystal_ore": "Entropy Crystal Ore",
   "block.chronodawn.temporal_amber_ore": "Temporal Amber Ore",
-  "block.chronodawn.chrono_cobweb": "Chrono Cobweb"
+  "block.chronodawn.chrono_cobweb": "Chrono Cobweb",
+
+  "tag.item.chronodawn.sand": "Sand"
 }
 

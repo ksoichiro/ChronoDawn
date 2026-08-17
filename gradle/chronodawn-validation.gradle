@@ -611,8 +611,49 @@ tasks.register('validateConventionalTags') {
             }
         }
 
+        // --- Check 4: mod-owned c: item tags carry a display name -----------
+        // Fabric's TranslationConventionLogWarnings warns at world load for any
+        // non-minecraft item tag with no 'tag.item.<namespace>.<path>' key, and
+        // recipe viewers then show the raw id instead of a name. Tag paths that
+        // Fabric itself defines (c:ores/coal, c:foods/bread, the umbrellas, ...)
+        // are translated upstream and are listed as exempt; anything else is a
+        // path this mod coined, so it defaults to requiring a translation.
+        def exemptTags = (config.translation_exempt_tags ?: []) as Set
+        def langKeysByFile = [:]
+        (config.lang_roots ?: []).each { String langRel ->
+            ['en_us', 'ja_jp'].each { String locale ->
+                def langFile = file("${rootProject.projectDir}/${langRel}/${locale}.json")
+                if (!langFile.exists()) {
+                    errors << "Conventional tags: lang file ${langRel}/${locale}.json not found"
+                    return
+                }
+                def langJson
+                try {
+                    langJson = jsonSlurper.parseText(langFile.text)
+                } catch (Exception e) {
+                    errors << "Conventional tags: lang file ${langRel}/${locale}.json is not valid JSON"
+                    return
+                }
+                langKeysByFile["${langRel}/${locale}".toString()] = (langJson instanceof Map ? langJson.keySet() : []) as Set
+            }
+        }
+        int translationsChecked = 0
+        v2Roots.each { String rootRel ->
+            rootTags[rootRel].keySet()
+                    .findAll { String name -> name.startsWith('item/') && !exemptTags.contains(name) }
+                    .each { String name ->
+                        def translationKey = 'tag.item.c.' + name.substring('item/'.length()).replace('/', '.')
+                        langKeysByFile.each { String langId, Set<String> keys ->
+                            translationsChecked++
+                            if (!keys.contains(translationKey)) {
+                                errors << "${rootRel}: tag '${name}' has no '${translationKey}' in ${langId}.json (recipe viewers would show the raw id)"
+                            }
+                        }
+                    }
+        }
+
         if (errors.isEmpty()) {
-            logger.lifecycle("Conventional tag validation passed: ${coverageChecked} ID/rule checks across ${v2Roots.size()} 1.21.1+ root(s) and ${v1Tags.size()} v1 tag file(s).")
+            logger.lifecycle("Conventional tag validation passed: ${coverageChecked} ID/rule checks across ${v2Roots.size()} 1.21.1+ root(s), ${v1Tags.size()} v1 tag file(s), ${translationsChecked} tag translation check(s).")
         } else {
             errors.each { logger.error("  ERROR: ${it}") }
             throw new GradleException("Conventional tag validation failed with ${errors.size()} error(s)")
