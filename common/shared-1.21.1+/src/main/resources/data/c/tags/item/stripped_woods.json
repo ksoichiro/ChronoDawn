@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "chronodawn:stripped_time_wood",
+    "chronodawn:stripped_dark_time_wood",
+    "chronodawn:stripped_ancient_time_wood"
+  ]
+}

@@ -41,7 +41,39 @@
     "block/storage_blocks/time_crystal",
     "item/storage_blocks",
     "item/storage_blocks/clockstone",
-    "item/storage_blocks/time_crystal"
+    "item/storage_blocks/time_crystal",
+    "block/stones",
+    "block/sands",
+    "block/gravels",
+    "block/cobblestones",
+    "block/cobblestones/normal",
+    "block/cobblestones/mossy",
+    "block/cobblestones/deepslate",
+    "block/sandstone/blocks",
+    "block/sandstone/slabs",
+    "block/sandstone/stairs",
+    "block/stripped_logs",
+    "block/stripped_woods",
+    "block/fences",
+    "block/fences/wooden",
+    "block/fence_gates",
+    "block/fence_gates/wooden",
+    "item/stones",
+    "item/sands",
+    "item/gravels",
+    "item/cobblestones",
+    "item/cobblestones/normal",
+    "item/cobblestones/mossy",
+    "item/cobblestones/deepslate",
+    "item/sandstone/blocks",
+    "item/sandstone/slabs",
+    "item/sandstone/stairs",
+    "item/stripped_logs",
+    "item/stripped_woods",
+    "item/fences",
+    "item/fences/wooden",
+    "item/fence_gates",
+    "item/fence_gates/wooden"
   ],
   "v1_allowed_tags": [],
   "rules": [
@@ -108,6 +140,54 @@
       "id_source": "item",
       "ids": ["clockstone_block", "time_crystal_block"],
       "require_all": ["item/storage_blocks"]
+    },
+    {
+      "name": "cobblestone variants join a cobblestones subtag",
+      "id_source": "block",
+      "ids": ["temporal_cobblestone", "mossy_temporal_cobblestone", "cobbled_deepslate_temporal_stone"],
+      "require_any": ["block/cobblestones/*"]
+    },
+    {
+      "name": "stone, sand and gravel join their umbrella",
+      "id_source": "block",
+      "ids": ["temporal_stone"],
+      "require_all": ["block/stones"]
+    },
+    {
+      "name": "temporal sand joins sands",
+      "id_source": "block",
+      "ids": ["temporal_sand"],
+      "require_all": ["block/sands"]
+    },
+    {
+      "name": "temporal gravel joins gravels",
+      "id_source": "block",
+      "ids": ["temporal_gravel"],
+      "require_all": ["block/gravels"]
+    },
+    {
+      "name": "stripped logs join stripped_logs",
+      "id_source": "block",
+      "pattern": "stripped_.*_log",
+      "require_all": ["block/stripped_logs"]
+    },
+    {
+      "name": "stripped woods join stripped_woods",
+      "id_source": "block",
+      "pattern": "stripped_(?!.*_log$).*_wood",
+      "require_all": ["block/stripped_woods"]
+    },
+    {
+      "name": "wooden fences join fences/wooden",
+      "id_source": "block",
+      "pattern": ".*_fence",
+      "require_all": ["block/fences/wooden"]
+    },
+    {
+      "name": "wooden fence gates join fence_gates/wooden",
+      "id_source": "block",
+      "pattern": ".*_fence_gate",
+      "require_all": ["block/fence_gates/wooden"]
     }
   ]
 }
