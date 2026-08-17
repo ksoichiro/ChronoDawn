@@ -1,0 +1,22 @@
+{
+  "replace": false,
+  "values": [
+    "chronodawn:time_bread",
+    "chronodawn:enhanced_time_bread",
+    "chronodawn:time_wheat_cookie",
+    "chronodawn:clockwork_cookie",
+    "chronodawn:time_fruit_pie",
+    "chronodawn:fruit_of_time",
+    "chronodawn:chrono_melon_slice",
+    "chronodawn:temporal_root",
+    "chronodawn:baked_temporal_root",
+    "chronodawn:temporal_root_stew",
+    "chronodawn:timeless_mushroom_soup",
+    "chronodawn:chrono_bovine_meat",
+    "chronodawn:cooked_chrono_bovine_meat",
+    "chronodawn:glide_fish",
+    "chronodawn:cooked_glide_fish",
+    "chronodawn:golden_time_wheat",
+    "chronodawn:glistening_chrono_melon"
+  ]
+}

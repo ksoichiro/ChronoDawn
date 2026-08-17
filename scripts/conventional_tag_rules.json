@@ -96,7 +96,21 @@
     "item/seeds/time_wheat",
     "item/seeds/chrono_melon"
   ],
-  "v1_allowed_tags": [],
+  "v1_allowed_tags": [
+    "blocks/ores",
+    "blocks/sandstone_blocks",
+    "blocks/sandstone_slabs",
+    "blocks/sandstone_stairs",
+    "items/ores",
+    "items/ingots",
+    "items/gems",
+    "items/raw_ores",
+    "items/dusts",
+    "items/foods",
+    "items/sandstone_blocks",
+    "items/sandstone_slabs",
+    "items/sandstone_stairs"
+  ],
   "rules": [
     {
       "name": "ore blocks join an ores subtag",
