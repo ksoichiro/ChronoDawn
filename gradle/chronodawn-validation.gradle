@@ -408,17 +408,25 @@ tasks.register('validateEraJsonFormat') {
 // ============================================================
 // Task 5: validateConventionalTags
 // ------------------------------------------------------------
-// Verifies conventional (c:) tag coverage for materials. Three checks:
+// Verifies conventional (c:) tag coverage for materials. Checks:
 //
 //   1. Coverage   — every registered ID matching a rule in
 //                   scripts/conventional_tag_rules.json is present in the
 //                   tags that rule requires. Rules are pattern-driven, so a
 //                   newly added material inherits the requirement and a
 //                   missing tag fails the build instead of silently making
-//                   the material invisible to other mods.
+//                   the material invisible to other mods. Rules carry an
+//                   'era' field ('v2' by default, or 'v1'); v1 rules run
+//                   against v1_root's flat umbrella tags instead of the
+//                   v2_roots path-form subtags (design §5).
+//   1b. Mutual exclusion — an ore block must be in exactly one of
+//                   block/ores_in_ground/stone and .../deepslate (design §7).
 //   2. Tag names  — every emitted tag name is on the allowlist for its
-//                   convention era. Catches typos and the deprecated plural
-//                   food/tool aliases, which no mod reads.
+//                   convention era, and vice versa: every allowlisted name
+//                   must have a backing file, so a deleted/never-shipped tag
+//                   fails loudly instead of the allowlist just going stale.
+//                   Also catches typos and the deprecated plural food/tool
+//                   aliases, which no mod reads.
 //   3. Consistency — when more than one 1.21.1+ resource root carries
 //                   data/c/, their tag name sets must agree.
 //
@@ -446,6 +454,18 @@ tasks.register('validateConventionalTags') {
             ids
         }
         def idSets = ['block': idsFrom('block_id_file'), 'item': idsFrom('item_id_file')]
+
+        // Sanity check: if ModBlockId / ModItemId change shape (e.g. the enum
+        // constant pattern no longer matches), idsFrom silently returns an
+        // empty (or near-empty) set. Every 'pattern' rule below would then
+        // check zero IDs and still log PASS. Fail loudly instead — the real
+        // counts are in the hundreds, so a low threshold with margin is safe.
+        idSets.each { String source, Set ids ->
+            if (ids.size() < 50) {
+                throw new GradleException("validateConventionalTags: idsFrom produced only ${ids.size()} '${source}' IDs " +
+                        "— ModBlockId/ModItemId may have changed shape and broken the extraction regex")
+            }
+        }
 
         // Load every tag file under a c: tag root into 'type/path' -> raw values.
         def loadRoot = { String rootRel ->
@@ -489,14 +509,22 @@ tasks.register('validateConventionalTags') {
         def v2Roots = config.v2_roots as List
         def rootTags = [:]
         v2Roots.each { rootTags[it] = loadRoot(it as String) }
+        def v1Root = config.v1_root as String
+        def v1Tags = loadRoot(v1Root)
+
+        // Rules carry an optional 'era' field ('v2' by default). v2 rules run
+        // against every v2_roots entry; v1 rules run against v1_root only —
+        // the two eras have different tag shapes (path-form subtags vs flat
+        // umbrellas) and different available categories (design §5).
+        def v2Rules = config.rules.findAll { (it.era ?: 'v2') == 'v2' }
+        def v1Rules = config.rules.findAll { (it.era ?: 'v2') == 'v1' }
 
         // --- Check 1: coverage ---------------------------------------------
         int coverageChecked = 0
-        v2Roots.each { String rootRel ->
-            def tags = rootTags[rootRel]
+        def runCoverage = { String rootRel, Map tags, List rules ->
             // Deliberately not skipping an empty root: "no tags yet" must fail
             // the coverage check, not pass it vacuously.
-            config.rules.each { rule ->
+            rules.each { rule ->
                 def candidates = rule.ids != null
                         ? (rule.ids as Set)
                         : idSets[rule.id_source as String].findAll { it ==~ (rule.pattern as String) }
@@ -523,27 +551,56 @@ tasks.register('validateConventionalTags') {
                 }
             }
         }
+        v2Roots.each { String rootRel -> runCoverage(rootRel, rootTags[rootRel] as Map, v2Rules) }
+        runCoverage(v1Root, v1Tags, v1Rules)
+
+        // --- Check 1b: ores_in_ground mutual exclusion (block, v2 only) ----
+        // Spec §7: an ore block belongs to exactly one of ores_in_ground/stone
+        // and ores_in_ground/deepslate. Membership in both silently passes the
+        // require_all checks above (each is checked independently), so it
+        // needs its own explicit check.
+        v2Roots.each { String rootRel ->
+            def tags = rootTags[rootRel] as Map
+            def stoneMembers = resolveMembers(tags, 'block/ores_in_ground/stone', [] as Set)
+            def deepslateMembers = resolveMembers(tags, 'block/ores_in_ground/deepslate', [] as Set)
+            (stoneMembers.intersect(deepslateMembers)).each { String fqId ->
+                errors << "${rootRel}: '${fqId}' is in both block/ores_in_ground/stone and block/ores_in_ground/deepslate (must be exactly one)"
+            }
+        }
 
         // --- Check 2: tag names on the era allowlist ------------------------
         def v2Allowed = (config.v2_allowed_tags ?: []) as Set
         v2Roots.each { String rootRel ->
-            rootTags[rootRel].keySet().each { String name ->
+            def actual = rootTags[rootRel].keySet() as Set
+            actual.each { String name ->
                 if (!v2Allowed.contains(name)) {
                     errors << "${rootRel}: tag '${name}' is not in v2_allowed_tags (typo, or a deprecated alias no mod reads?)"
                 }
             }
+            // Reverse direction: an allowlist entry with no backing file means
+            // a shipped tag was deleted (or never created) without anyone
+            // noticing, since the forward check above can't catch an absence.
+            (v2Allowed - actual).each { String name ->
+                errors << "${rootRel}: allowlisted tag '${name}' has no corresponding file (deleted or never created?)"
+            }
         }
-        def v1Root = config.v1_root as String
-        def v1Tags = loadRoot(v1Root)
         def v1Allowed = (config.v1_allowed_tags ?: []) as Set
-        v1Tags.keySet().each { String name ->
+        def v1Actual = v1Tags.keySet() as Set
+        v1Actual.each { String name ->
             if (!v1Allowed.contains(name)) {
                 errors << "${v1Root}: tag '${name}' is not in v1_allowed_tags (conventional tags v1 has no such tag)"
             }
         }
+        (v1Allowed - v1Actual).each { String name ->
+            errors << "${v1Root}: allowlisted tag '${name}' has no corresponding file (deleted or never created?)"
+        }
 
         // --- Check 3: cross-root consistency among 1.21.1+ roots ------------
-        def populated = v2Roots.findAll { !rootTags[it].isEmpty() }
+        // Currently inert: v2_roots has a single entry, so 'populated.size() >
+        // 1' never holds. This only activates once a second, narrower shared
+        // root (e.g. shared-1.21.5+) also gains a data/c/ tree — keep the
+        // logic in place for that day rather than deleting it as dead code.
+        def populated = v2Roots.findAll { !(rootTags[it] as Map).isEmpty() }
         if (populated.size() > 1) {
             def reference = populated[0] as String
             def referenceNames = rootTags[reference].keySet() as Set

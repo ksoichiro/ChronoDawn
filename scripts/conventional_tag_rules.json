@@ -125,6 +125,18 @@
       "require_any": ["item/ores/*"]
     },
     {
+      "name": "mod-owned ore subtags (clockstone/time_crystal/entropy_crystal/temporal_amber) are reachable from the ores umbrella (block)",
+      "id_source": "block",
+      "ids": ["clockstone_ore", "deepslate_clockstone_ore", "time_crystal_ore", "entropy_crystal_ore", "temporal_amber_ore", "deepslate_temporal_amber_ore"],
+      "require_all": ["block/ores"]
+    },
+    {
+      "name": "mod-owned ore subtags (clockstone/time_crystal/entropy_crystal/temporal_amber) are reachable from the ores umbrella (item)",
+      "id_source": "item",
+      "ids": ["clockstone_ore", "deepslate_clockstone_ore", "time_crystal_ore", "entropy_crystal_ore", "temporal_amber_ore", "deepslate_temporal_amber_ore"],
+      "require_all": ["item/ores"]
+    },
+    {
       "name": "stone-hosted ore blocks join ores_in_ground/stone",
       "id_source": "block",
       "pattern": "(?!deepslate_).*_ore",
@@ -168,61 +180,149 @@
       "name": "storage blocks join storage_blocks",
       "id_source": "block",
       "ids": ["clockstone_block", "time_crystal_block"],
+      "require_any": ["block/storage_blocks/*"],
       "require_all": ["block/storage_blocks"]
     },
     {
       "name": "storage block items join storage_blocks",
       "id_source": "item",
       "ids": ["clockstone_block", "time_crystal_block"],
+      "require_any": ["item/storage_blocks/*"],
       "require_all": ["item/storage_blocks"]
     },
     {
-      "name": "cobblestone variants join a cobblestones subtag",
+      "name": "cobblestone variant blocks join a cobblestones subtag and umbrella",
       "id_source": "block",
       "ids": ["temporal_cobblestone", "mossy_temporal_cobblestone", "cobbled_deepslate_temporal_stone"],
-      "require_any": ["block/cobblestones/*"]
+      "require_any": ["block/cobblestones/*"],
+      "require_all": ["block/cobblestones"]
     },
     {
-      "name": "stone, sand and gravel join their umbrella",
+      "name": "cobblestone variant items join a cobblestones subtag and umbrella",
+      "id_source": "item",
+      "ids": ["temporal_cobblestone", "mossy_temporal_cobblestone", "cobbled_deepslate_temporal_stone"],
+      "require_any": ["item/cobblestones/*"],
+      "require_all": ["item/cobblestones"]
+    },
+    {
+      "name": "stone, sand and gravel blocks join their umbrella",
       "id_source": "block",
       "ids": ["temporal_stone"],
       "require_all": ["block/stones"]
     },
     {
-      "name": "temporal sand joins sands",
+      "name": "stone, sand and gravel items join their umbrella",
+      "id_source": "item",
+      "ids": ["temporal_stone"],
+      "require_all": ["item/stones"]
+    },
+    {
+      "name": "temporal sand block joins sands",
       "id_source": "block",
       "ids": ["temporal_sand"],
       "require_all": ["block/sands"]
     },
     {
-      "name": "temporal gravel joins gravels",
+      "name": "temporal sand item joins sands",
+      "id_source": "item",
+      "ids": ["temporal_sand"],
+      "require_all": ["item/sands"]
+    },
+    {
+      "name": "temporal gravel block joins gravels",
       "id_source": "block",
       "ids": ["temporal_gravel"],
       "require_all": ["block/gravels"]
     },
     {
-      "name": "stripped logs join stripped_logs",
+      "name": "temporal gravel item joins gravels",
+      "id_source": "item",
+      "ids": ["temporal_gravel"],
+      "require_all": ["item/gravels"]
+    },
+    {
+      "name": "stripped log blocks join stripped_logs",
       "id_source": "block",
       "pattern": "stripped_.*_log",
       "require_all": ["block/stripped_logs"]
     },
     {
-      "name": "stripped woods join stripped_woods",
+      "name": "stripped log items join stripped_logs",
+      "id_source": "item",
+      "pattern": "stripped_.*_log",
+      "require_all": ["item/stripped_logs"]
+    },
+    {
+      "name": "stripped wood blocks join stripped_woods",
       "id_source": "block",
       "pattern": "stripped_(?!.*_log$).*_wood",
       "require_all": ["block/stripped_woods"]
     },
     {
-      "name": "wooden fences join fences/wooden",
-      "id_source": "block",
-      "pattern": ".*_fence",
-      "require_all": ["block/fences/wooden"]
+      "name": "stripped wood items join stripped_woods",
+      "id_source": "item",
+      "pattern": "stripped_(?!.*_log$).*_wood",
+      "require_all": ["item/stripped_woods"]
     },
     {
-      "name": "wooden fence gates join fence_gates/wooden",
+      "name": "wooden fence blocks join fences/wooden and the fences umbrella",
+      "id_source": "block",
+      "pattern": ".*_fence",
+      "require_all": ["block/fences/wooden", "block/fences"]
+    },
+    {
+      "name": "wooden fence items join fences/wooden and the fences umbrella",
+      "id_source": "item",
+      "pattern": ".*_fence",
+      "require_all": ["item/fences/wooden", "item/fences"]
+    },
+    {
+      "name": "wooden fence gate blocks join fence_gates/wooden and the fence_gates umbrella",
       "id_source": "block",
       "pattern": ".*_fence_gate",
-      "require_all": ["block/fence_gates/wooden"]
+      "require_all": ["block/fence_gates/wooden", "block/fence_gates"]
+    },
+    {
+      "name": "wooden fence gate items join fence_gates/wooden and the fence_gates umbrella",
+      "id_source": "item",
+      "pattern": ".*_fence_gate",
+      "require_all": ["item/fence_gates/wooden", "item/fence_gates"]
+    },
+    {
+      "name": "temporal sandstone block joins sandstone/blocks",
+      "id_source": "block",
+      "ids": ["temporal_sandstone"],
+      "require_all": ["block/sandstone/blocks"]
+    },
+    {
+      "name": "temporal sandstone item joins sandstone/blocks",
+      "id_source": "item",
+      "ids": ["temporal_sandstone"],
+      "require_all": ["item/sandstone/blocks"]
+    },
+    {
+      "name": "temporal sandstone slab block joins sandstone/slabs",
+      "id_source": "block",
+      "ids": ["temporal_sandstone_slab"],
+      "require_all": ["block/sandstone/slabs"]
+    },
+    {
+      "name": "temporal sandstone slab item joins sandstone/slabs",
+      "id_source": "item",
+      "ids": ["temporal_sandstone_slab"],
+      "require_all": ["item/sandstone/slabs"]
+    },
+    {
+      "name": "temporal sandstone stairs block joins sandstone/stairs",
+      "id_source": "block",
+      "ids": ["temporal_sandstone_stairs"],
+      "require_all": ["block/sandstone/stairs"]
+    },
+    {
+      "name": "temporal sandstone stairs item joins sandstone/stairs",
+      "id_source": "item",
+      "ids": ["temporal_sandstone_stairs"],
+      "require_all": ["item/sandstone/stairs"]
     },
     {
       "name": "food items join a foods subtag",
@@ -230,6 +330,18 @@
       "ids": ["time_bread", "enhanced_time_bread", "time_wheat_cookie", "clockwork_cookie", "time_fruit_pie", "fruit_of_time", "chrono_melon_slice", "temporal_root", "baked_temporal_root", "temporal_root_stew", "timeless_mushroom_soup", "chrono_bovine_meat", "cooked_chrono_bovine_meat", "glide_fish", "cooked_glide_fish", "golden_time_wheat", "glistening_chrono_melon"],
       "require_any": ["item/foods/*"],
       "require_all": ["item/foods"]
+    },
+    {
+      "name": "chrono melon juice joins drinks/juice and the drinks umbrella",
+      "id_source": "item",
+      "ids": ["chrono_melon_juice"],
+      "require_all": ["item/drinks/juice", "item/drinks"]
+    },
+    {
+      "name": "timeless mushroom joins mushrooms",
+      "id_source": "item",
+      "ids": ["timeless_mushroom"],
+      "require_all": ["item/mushrooms"]
     },
     {
       "name": "crops join a crops subtag",
@@ -242,6 +354,27 @@
       "id_source": "item",
       "ids": ["time_wheat_seeds", "chrono_melon_seeds"],
       "require_any": ["item/seeds/*"]
+    },
+    {
+      "name": "ore blocks join blocks/ores (v1)",
+      "era": "v1",
+      "id_source": "block",
+      "pattern": ".*_ore",
+      "require_all": ["blocks/ores"]
+    },
+    {
+      "name": "ore items join items/ores (v1)",
+      "era": "v1",
+      "id_source": "item",
+      "pattern": ".*_ore",
+      "require_all": ["items/ores"]
+    },
+    {
+      "name": "food items join items/foods (v1)",
+      "era": "v1",
+      "id_source": "item",
+      "ids": ["time_bread", "enhanced_time_bread", "time_wheat_cookie", "clockwork_cookie", "time_fruit_pie", "fruit_of_time", "chrono_melon_slice", "temporal_root", "baked_temporal_root", "temporal_root_stew", "timeless_mushroom_soup", "chrono_bovine_meat", "cooked_chrono_bovine_meat", "glide_fish", "cooked_glide_fish", "golden_time_wheat", "glistening_chrono_melon"],
+      "require_all": ["items/foods"]
     }
   ]
 }
