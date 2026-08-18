@@ -25,15 +25,18 @@ import java.util.function.Consumer;
  * The build-time validateConventionalTags task only inspects the JSON files:
  * it cannot tell whether the data pack was loaded, whether the c: namespace
  * resolved, or whether our entries merged into a tag the platform defines.
- * That last case is the one that matters most — an ore reaches c:ores only
- * through the platform's own reference to c:ores/coal, so asserting it here
- * proves the cross-mod contract other mods rely on.
+ * That last case is the one that matters most - c:ores/coal is a tag the
+ * platform also writes to, so asserting our ore is in it proves the cross-mod
+ * contract other mods rely on.
  *
- * Only umbrella tags are asserted, because they exist under both tag
- * conventions: on 1.20.1 they list members directly (conventional tags v1),
- * and from 1.21.1 they reach the same members transitively through the
- * per-material subtags (v2). The per-era member lists still differ, so the
- * caller passes the spec list for its own era.
+ * Umbrella tags carry most of the assertions, because they exist under both
+ * tag conventions: on 1.20.1 they list members directly (conventional tags
+ * v1), and from 1.21.1 they reach the same members transitively through the
+ * per-material subtags (v2). The one deliberate exception is the ores named
+ * after a vanilla material — see {@link #VANILLA_NAMED_ORE_IDS} for why
+ * those are asserted against their subtag instead, and do not move them back
+ * under the umbrella. The per-era member lists differ, so the caller passes
+ * the spec list for its own era.
  */
 public final class ConventionalTagTests {
 
@@ -46,10 +49,14 @@ public final class ConventionalTagTests {
         T create(String name, Consumer<GameTestHelper> test);
     }
 
-    /** One umbrella tag and the mod IDs that must be reachable from it. */
+    /** One tag and the mod IDs that must be reachable from it. */
     public record TagSpec(String tagPath, List<String> memberIds) {
     }
 
+    /**
+     * Every ore. The v1 specs use it as-is; the v2 specs split it into
+     * {@link #VANILLA_NAMED_ORE_IDS} and {@link #CUSTOM_MATERIAL_ORE_IDS}.
+     */
     private static final List<String> ORE_IDS = List.of(
             "temporal_coal_ore",
             "temporal_iron_ore",
@@ -63,6 +70,31 @@ public final class ConventionalTagTests {
             "entropy_crystal_ore",
             "temporal_amber_ore",
             "deepslate_temporal_amber_ore");
+
+    /**
+     * Ores named after a material the platform also knows. Their subtags
+     * (c:ores/coal and friends) reach the c:ores umbrella only when the
+     * platform's data references them, which 1.21.2 through 1.21.5 do not.
+     * They are asserted against the subtag itself instead — the tag other
+     * mods read for that material.
+     */
+    private static final List<String> VANILLA_NAMED_ORE_IDS = List.of(
+            "temporal_coal_ore",
+            "temporal_iron_ore",
+            "temporal_gold_ore",
+            "deepslate_temporal_gold_ore",
+            "temporal_redstone_ore",
+            "deepslate_temporal_redstone_ore");
+
+    /**
+     * Ores named after a material this mod coined, derived so that a newly
+     * added ore joins the umbrella assertions by default rather than silently
+     * losing v2 coverage. Their subtags are referenced from this mod's own
+     * ores.json, so the umbrella reaches them on every version.
+     */
+    private static final List<String> CUSTOM_MATERIAL_ORE_IDS = ORE_IDS.stream()
+            .filter(id -> !VANILLA_NAMED_ORE_IDS.contains(id))
+            .toList();
 
     private static final List<String> FOOD_IDS = List.of(
             "time_bread",
@@ -102,7 +134,11 @@ public final class ConventionalTagTests {
     /** Item-tag expectations for conventional tags v2 (Minecraft 1.21.1+). */
     public static List<TagSpec> v2ItemSpecs() {
         return List.of(
-                new TagSpec("ores", ORE_IDS),
+                new TagSpec("ores/coal", List.of("temporal_coal_ore")),
+                new TagSpec("ores/iron", List.of("temporal_iron_ore")),
+                new TagSpec("ores/gold", List.of("temporal_gold_ore", "deepslate_temporal_gold_ore")),
+                new TagSpec("ores/redstone", List.of("temporal_redstone_ore", "deepslate_temporal_redstone_ore")),
+                new TagSpec("ores", CUSTOM_MATERIAL_ORE_IDS),
                 new TagSpec("ingots", List.of("clockstone", "enhanced_clockstone")),
                 new TagSpec("gems", List.of("time_crystal", "entropy_crystal")),
                 new TagSpec("raw_materials", List.of("raw_temporal_amber")),
@@ -114,7 +150,11 @@ public final class ConventionalTagTests {
     /** Block-tag expectations for conventional tags v2 (Minecraft 1.21.1+). */
     public static List<TagSpec> v2BlockSpecs() {
         return List.of(
-                new TagSpec("ores", ORE_IDS),
+                new TagSpec("ores/coal", List.of("temporal_coal_ore")),
+                new TagSpec("ores/iron", List.of("temporal_iron_ore")),
+                new TagSpec("ores/gold", List.of("temporal_gold_ore", "deepslate_temporal_gold_ore")),
+                new TagSpec("ores/redstone", List.of("temporal_redstone_ore", "deepslate_temporal_redstone_ore")),
+                new TagSpec("ores", CUSTOM_MATERIAL_ORE_IDS),
                 new TagSpec("storage_blocks", List.of("clockstone_block", "time_crystal_block")));
     }
 
