@@ -184,10 +184,10 @@ is stable across all ten 1.21.x versions this mod supports.
 
 | Members | Tags |
 | --- | --- |
-| `temporal_coal_ore` | `c:ores/coal`, `c:ores`, `c:ores_in_ground/stone` |
-| `temporal_iron_ore` | `c:ores/iron`, `c:ores`, `c:ores_in_ground/stone` |
-| `temporal_gold_ore`, `deepslate_temporal_gold_ore` | `c:ores/gold`, `c:ores`, `c:ores_in_ground/stone` or `/deepslate` |
-| `temporal_redstone_ore`, `deepslate_temporal_redstone_ore` | `c:ores/redstone`, `c:ores`, `c:ores_in_ground/stone` or `/deepslate` |
+| `temporal_coal_ore` | `c:ores/coal`, `c:ores`¹, `c:ores_in_ground/stone` |
+| `temporal_iron_ore` | `c:ores/iron`, `c:ores`¹, `c:ores_in_ground/stone` |
+| `temporal_gold_ore`, `deepslate_temporal_gold_ore` | `c:ores/gold`, `c:ores`¹, `c:ores_in_ground/stone` or `/deepslate` |
+| `temporal_redstone_ore`, `deepslate_temporal_redstone_ore` | `c:ores/redstone`, `c:ores`¹, `c:ores_in_ground/stone` or `/deepslate` |
 | `clockstone_ore`, `deepslate_clockstone_ore` | `c:ores/clockstone`, `c:ores`, `c:ores_in_ground/stone` or `/deepslate` |
 | `time_crystal_ore` | `c:ores/time_crystal`, `c:ores`, `c:ores_in_ground/stone` |
 | `entropy_crystal_ore` | `c:ores/entropy_crystal`, `c:ores`, `c:ores_in_ground/stone` |
@@ -238,6 +238,19 @@ deliberately joins only the `c:sands` umbrella — its tint matches neither
 `c:sands/colorless` nor `c:sands/red`. `chrono_melon_juice` and
 `timeless_mushroom` are not foods in the tag sense and join only the tags
 listed for them.
+
+¹ On 1.21.2, 1.21.3, 1.21.4 and 1.21.5 the loaders' own data does not
+reference `#c:ores/coal` (or `/iron`, `/gold`, `/redstone`) from the `c:ores`
+umbrella, so on those four versions Chrono Dawn's ores of vanilla materials
+are reachable through their own subtag but not through `c:ores`. 1.21.1 and
+1.21.6+ reference them, and the mod-coined subtags (`c:ores/clockstone` and
+friends) are referenced from this mod's own `c:ores` file on every version.
+Target the per-material subtag when you need a specific material — that is
+the tag mods read anyway.
+
+Every tag path this mod coined carries a display name (`tag.item.c.*`) in
+`en_us` and `ja_jp`, so recipe viewers show a readable name rather than the
+raw id. A build-time check keeps that true for tags added later.
 
 ### 1.20.1
 

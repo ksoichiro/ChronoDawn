@@ -319,8 +319,9 @@ neoforge_version=21.2.0-beta
 # recipe-unlock advancements, per-era JSON format)
 ./gradlew validateLangParity validateBlockTagMembership validateRecipeUnlockAdvancements validateEraJsonFormat
 
-# Verify conventional (c:) tag coverage, tag-name validity and
-# cross-root consistency
+# Verify conventional (c:) tags: coverage of every material the rules match,
+# tag-name validity per era, cross-root consistency, and that every tag path
+# this mod coined has a tag.item.* display name in en_us and ja_jp
 ./gradlew validateConventionalTags
 
 # Collect release JARs into build/release/
@@ -636,6 +637,12 @@ public static final RegistrySupplier<EntityType<MyEntity>> MY_ENTITY = ENTITIES.
 - **Registry ID consistency** — Field names match registry IDs
 - **Food properties / Equipment stack size** — Property validation
 - **Boss fight tests** — Boss encounter mechanics
+- **Conventional (`c:`) tag membership** — Verifies the published `c:` tags
+  resolve at runtime and carry their members, which the build-time
+  `validateConventionalTags` cannot know. Vanilla-material ores are asserted
+  against their own subtag (`c:ores/coal`) rather than the `c:ores` umbrella:
+  the loaders do not reference those subtags from the umbrella on 1.21.2
+  through 1.21.5. See `common/gametest/.../ConventionalTagTests.java`
 
 > **Note**: Blockstate/model/translation existence tests have been migrated to JUnit (see Unit Testing above).
 

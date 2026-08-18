@@ -18,7 +18,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   effect in the Chrono Dawn dimension: `enabled`, normal/enhanced strength,
   and hostile-only or all-non-boss-mob scope. Defaults reproduce the existing
   balance exactly.
-- Conventional (`c:`) tags for ores, materials, storage blocks, stone/sand/gravel/sandstone, wood sets, foods, crops and seeds, so other mods and modpack recipes can consume Chrono Dawn materials by tag
+- **Conventional (`c:`) tags** for ores, materials, storage blocks,
+  stone/sand/gravel/sandstone, wood sets, foods, crops and seeds, so other mods
+  and modpack recipes can consume Chrono Dawn materials by tag. Ores of vanilla
+  materials join the matching vanilla tag (`c:ores/coal`, `/iron`, `/gold`,
+  `/redstone`), so existing pack recipes pick them up with no extra
+  configuration. 1.20.1 carries the reduced set that conventional tags v1
+  defines. Tag names have display names in `en_us` and `ja_jp`, so recipe
+  viewers show a readable name instead of the raw id. See
+  [docs/modpack-integration.md](docs/modpack-integration.md#conventional-c-tags)
+  for the published tag list.
 
 ### Fixed
 

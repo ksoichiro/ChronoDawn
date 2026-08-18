@@ -436,7 +436,7 @@ tasks.register('validateEraJsonFormat') {
 // ============================================================
 tasks.register('validateConventionalTags') {
     group = 'verification'
-    description = 'Verify conventional (c:) tag coverage, tag-name validity and cross-root consistency'
+    description = 'Verify conventional (c:) tag coverage, tag-name validity, cross-root consistency and tag display names'
 
     doLast {
         def jsonSlurper = new JsonSlurper()
