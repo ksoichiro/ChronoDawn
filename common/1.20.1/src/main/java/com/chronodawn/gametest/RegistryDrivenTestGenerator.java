@@ -439,6 +439,10 @@ public final class RegistryDrivenTestGenerator {
         all.addAll(generateBlockRegistryConsistencyTests());
         all.addAll(generateEntityRegistryConsistencyTests());
         all.addAll(generateBlockEntityRegistryConsistencyTests());
+        // Conventional (c:) tag membership verified at runtime. 1.20.1 follows
+        // conventional tags v1, whose umbrella tags have no per-material subtags.
+        all.addAll(ConventionalTagTests.generate(ModItems.class, ModBlocks.class,
+                ConventionalTagTests.v1ItemSpecs(), ConventionalTagTests.v1BlockSpecs(), NamedTest::new));
         all.addAll(generateRegistryConsistencySummaryTest());
         return all;
     }
