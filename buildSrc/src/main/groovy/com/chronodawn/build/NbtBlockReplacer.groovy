@@ -2,6 +2,8 @@ package com.chronodawn.build
 
 import net.querz.nbt.io.NBTDeserializer
 import net.querz.nbt.io.NBTSerializer
+
+import java.util.zip.GZIPOutputStream
 import net.querz.nbt.io.NamedTag
 import net.querz.nbt.tag.CompoundTag
 import net.querz.nbt.tag.ListTag
@@ -156,10 +158,18 @@ class NbtBlockReplacer {
     /**
      * Serialize a NamedTag to gzip-compressed bytes.
      * Matches the pattern used by DefaultNbtConverter in minecraft-mod-gradle-scripts.
+     *
+     * The gzip stream is owned and closed here rather than left to
+     * NBTSerializer(true): that constructor wraps the output in a
+     * GZIPOutputStream and only flushes it, so the deflate trailer is never
+     * written. Minecraft and Querz both read the truncated result, but gunzip
+     * and the JDK's GZIPInputStream reject it.
      */
     private static byte[] serializeToBytes(NamedTag namedTag) {
         def bos = new ByteArrayOutputStream()
-        new NBTSerializer(true).toStream(namedTag, bos)
+        new GZIPOutputStream(bos).withCloseable { gzip ->
+            new NBTSerializer(false).toStream(namedTag, gzip)
+        }
         return bos.toByteArray()
     }
 }

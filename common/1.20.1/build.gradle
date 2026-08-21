@@ -1,3 +1,7 @@
+plugins {
+    id 'com.github.ksoichiro.mcmod'
+}
+
 apply from: rootProject.file('gradle/nbt-block-replacement.gradle')
 
 architectury {
@@ -87,68 +91,43 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 // NBT Structure Multi-Version Conversion
-// Converts 1.21.1 NBT structure files to 1.20.1 format when building for 1.20.1
-tasks.register('convertNbtStructures', Exec) {
-    group = 'chrono dawn build'
-    description = 'Convert NBT structure files from 1.21.1 to 1.20.1 format'
+// Converts 1.21.1 NBT structure files to 1.20.1 format. The conversion runs on
+// the JVM inside the shared mcmod plugin; only nbtConversion is enabled here
+// because multiVersion and resourceValidation already come from the script
+// plugins applied in the root build, and both default to enabled.
+mcmod {
+    multiVersion {
+        enabled = false
+    }
+    resourceValidation {
+        enabled = false
+    }
+    nbtConversion {
+        enabled = true
+        sourceVersion = '1.21.1'
+        targetVersion = '1.20.1'
+        inputDir = "${buildDir}/generated/nbt-block-replaced/data/chronodawn/structure"
+        outputDir = "${buildDir}/generated/nbt-structures/data/chronodawn/structures"
+    }
+}
 
-    // Only run when target version is 1.20.1
-    onlyIf {
-        project.ext.minecraft_version == '1.20.1'
+// convertNbt is registered lazily by the mcmod plugin inside its own
+// project.afterEvaluate block, so it does not exist in the task container yet
+// at this point in script evaluation. Deferring to our own afterEvaluate (which
+// Gradle runs after the plugin's, since afterEvaluate blocks fire in
+// registration order) lets us reference it safely.
+project.afterEvaluate {
+    tasks.named('convertNbt') {
+        dependsOn 'replaceNbtBlocks'
     }
 
-    def inputDir = file("${buildDir}/generated/nbt-block-replaced/data/chronodawn/structure")
-    def outputDir = file("${buildDir}/generated/nbt-structures/data/chronodawn/structures")
-    def scriptPath = rootProject.file('gradle/shared/convert_nbt_1_21_to_1_20.py')
-
-    dependsOn replaceNbtBlocks
-
-    inputs.dir(inputDir).optional()
-    outputs.dir(outputDir)
-
-    doFirst {
-        // Check if Python 3 and nbtlib are available
-        try {
-            exec {
-                commandLine 'python3', '-c', 'import nbtlib'
-                standardOutput = new ByteArrayOutputStream()
-                errorOutput = new ByteArrayOutputStream()
-            }
-        } catch (Exception e) {
-            throw new GradleException(
-                'Python 3 with nbtlib is required for NBT conversion. ' +
-                'Install with: pip3 install nbtlib'
-            )
-        }
-
-        if (!inputDir.exists()) {
-            logger.warn("Input directory does not exist: ${inputDir}")
-            logger.warn("Skipping NBT conversion")
-            return
-        }
-
-        if (!scriptPath.exists()) {
-            throw new GradleException("NBT conversion script not found: ${scriptPath}")
-        }
-
-        logger.lifecycle('')
-        logger.lifecycle('Converting NBT structures from 1.21.1 to 1.20.1 format...')
-        logger.lifecycle("  Input:  ${inputDir}")
-        logger.lifecycle("  Output: ${outputDir}")
-        logger.lifecycle('')
-    }
-
-    commandLine 'python3', scriptPath.absolutePath, '--batch', inputDir.absolutePath, outputDir.absolutePath
-
-    doLast {
-        logger.lifecycle('')
-        logger.lifecycle('✅ NBT structure conversion complete')
-        logger.lifecycle('')
+    tasks.named('nbtStructures') {
+        dependsOn 'convertNbt'
     }
 }
 
 // Run NBT conversion before processing resources
-processResources.dependsOn replaceNbtBlocks, convertNbtStructures
+processResources.dependsOn nbtStructures
 
 // Expand pack_format variable in pack.mcmeta
 processResources {
@@ -174,6 +153,6 @@ tasks.test {
 // Set duplicates strategy for sourcesJar to avoid conflicts
 // Also ensure NBT conversion runs before sourcesJar
 tasks.named('sourcesJar') {
-    dependsOn replaceNbtBlocks, convertNbtStructures
+    dependsOn nbtStructures
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }

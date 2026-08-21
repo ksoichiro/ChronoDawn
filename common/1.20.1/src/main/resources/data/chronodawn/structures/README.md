@@ -1,7 +1,7 @@
 # Structure NBT Files
 
 **Note**: The `.nbt` files for 1.20.1 are auto-generated into `build/generated/nbt-structures/` at build time
-by the `convertNbtStructures` Gradle task. The master source files are in
+by the `convertNbt` Gradle task (part of the `nbtStructures` lifecycle task). The master source files are in
 `common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/`
 and are converted from 1.21.1 Data Components format to 1.20.1 NBT tag format.
 

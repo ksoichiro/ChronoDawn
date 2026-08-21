@@ -39,7 +39,7 @@ tasks.register('replaceNbtBlocks') {
             outFile.parentFile.mkdirs()
 
             if (excludeFiles.contains(nbtFile.name)) {
-                // Copy excluded files as-is (needed for 1.20.1 pipeline where convertNbtStructures reads from this output)
+                // Copy excluded files as-is (needed for 1.20.1 pipeline where convertNbt reads from this output)
                 outFile.bytes = nbtFile.bytes
                 return
             }
@@ -56,4 +56,13 @@ tasks.register('replaceNbtBlocks') {
 
         logger.lifecycle("NBT block replacement: processed ${replacedCount} file(s)")
     }
+}
+
+// Stable name for "structure .nbt files are generated and ready to consume".
+// Loader modules depend on this across the project boundary, so it must exist
+// in every common module; only 1.20.1 adds a conversion step to it.
+tasks.register('nbtStructures') {
+    group = 'chrono dawn build'
+    description = 'Structure .nbt files are generated and ready to be consumed'
+    dependsOn 'replaceNbtBlocks'
 }
