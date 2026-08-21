@@ -124,6 +124,19 @@ project.afterEvaluate {
     tasks.named('nbtStructures') {
         dependsOn 'convertNbt'
     }
+
+    // The plugin adds its outputDir as a resource root from a SECOND
+    // afterEvaluate block nested inside its own (registered while the first
+    // one is executing), so it actually runs after this block. Nest one more
+    // level so we run after that, and can remove the extra root: it registers
+    // its own outputDir as a resource root of its own. Ours is the parent
+    // directory, which is what gives the files their
+    // data/chronodawn/structures/ path; leaving both registered puts a
+    // second, unnamespaced copy of every structure at the JAR root.
+    project.afterEvaluate {
+        sourceSets.main.resources.srcDirs = sourceSets.main.resources.srcDirs -
+            file("${buildDir}/generated/nbt-structures/data/chronodawn/structures")
+    }
 }
 
 // Run NBT conversion before processing resources
