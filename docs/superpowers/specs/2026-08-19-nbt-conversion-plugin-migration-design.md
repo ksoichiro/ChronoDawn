@@ -52,6 +52,9 @@ In scope:
 - Delete the copy-pasted `convertNbtStructures` definition from the other ten
   `common/<version>/build.gradle` files, where it is dead code (each is guarded
   by `onlyIf { minecraft_version == '1.20.1' }` and can never run).
+- Give every common module one stable task name for "structures are ready", so
+  the loader modules stop naming a task that exists in only one of them. See
+  §5.1.
 
 Out of scope:
 
@@ -162,13 +165,64 @@ Two behavioural differences to watch:
    deduplicates source directories, and `processResources` already sets
    `duplicatesStrategy = EXCLUDE` — but the implementation must confirm the JAR
    contains exactly one copy of each structure file rather than assume it.
-2. **Task rename.** `convertNbtStructures` becomes `convertNbt`. Every
-   reference must be updated, including `processResources.dependsOn` and the
-   `dependsOn` at `common/1.21.1/build.gradle:171`. Grep for both names across
-   the repository before finishing.
+2. **Task rename.** `convertNbtStructures` disappears; the plugin's task is
+   `convertNbt`, and cross-module consumers use `nbtStructures` (§5.1). Grep for
+   `convertNbtStructures` across the repository before finishing — the only
+   remaining hits should be historical design documents, which are left alone.
+
+### 5.1 The loader modules depend on this task by name
+
+Deleting the dead definitions is not free. Every loader module names the task
+across the project boundary:
+
+```groovy
+// fabric/<version>/build.gradle, neoforge/<version>/build.gradle
+dependsOn project(commonModule).tasks.named('replaceNbtBlocks'),
+          project(commonModule).tasks.named('convertNbtStructures')
+```
+
+Eleven Fabric and ten NeoForge build files do this, and `tasks.named` fails
+eagerly when the task is absent. Removing the definition from ten common
+modules would break every loader build except 1.20.1's. The loaders genuinely
+need the dependency — they copy from the common module's *source* directories,
+not from its `processResources` output, so the converted files must already
+exist on disk.
+
+Rather than make twenty-one files version-aware, introduce one lifecycle task
+that exists everywhere. `gradle/nbt-block-replacement.gradle` is applied by all
+eleven common modules, so it is the natural home:
+
+```groovy
+// gradle/nbt-block-replacement.gradle
+tasks.register('nbtStructures') {
+    group = 'chrono dawn build'
+    description = 'Structure .nbt files are generated and ready to be consumed'
+    dependsOn 'replaceNbtBlocks'
+}
+```
+
+`common/1.20.1/build.gradle` adds the version-specific step to it:
+
+```groovy
+tasks.named('nbtStructures') { dependsOn 'convertNbt' }
+```
+
+Every loader module then depends on the single stable name:
+
+```groovy
+dependsOn project(commonModule).tasks.named('nbtStructures')
+```
+
+This removes the current oddity where all twenty-one loader files depend on a
+task that is a no-op on ten of the eleven versions, and it keeps the
+version-specific knowledge in the one module that has it.
+
+The same substitution applies to the `sourcesJar` dependency inside each common
+module (`common/<version>/build.gradle`, `tasks.named('sourcesJar')`), which
+today lists `replaceNbtBlocks, convertNbtStructures`.
 
 The other ten modules lose the task definition entirely, and their
-`processResources.dependsOn` lines shrink to `replaceNbtBlocks`.
+`processResources.dependsOn` lines shrink to `nbtStructures`.
 
 ## 6. Verification
 
@@ -213,3 +267,4 @@ pack-facing effect.
 | `includeBuild` interacts badly with the Loom / Architectury plugin resolution already in `pluginManagement` | Detected immediately — every Gradle invocation would fail at settings evaluation |
 | Uninitialised submodule produces a confusing failure | Existence check added to `settings.gradle` |
 | Duplicate resource registration puts structure files in the JAR twice | Verified by inspecting the built 1.20.1 JAR, not assumed |
+| A loader module still names a task that no longer exists | `buildAll` covers all eleven versions on both loaders and fails eagerly on a missing task name |
