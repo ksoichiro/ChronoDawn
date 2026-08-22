@@ -58,20 +58,34 @@ field renames or removals; you should not need to change it manually.
 
 ---
 
-### `[world.structures.ancient_ruins]`
+### `[world.structures.*]`
 
-Generation parameters for the Overworld **Ancient Ruins** structure.
+Generation parameters for all eight of Chrono Dawn's structures. Every
+structure — the Overworld's Ancient Ruins and the seven Chrono-dimension
+structures that carry the main progression — shares the same four fields:
+`enabled`, `spacing`, `separation` and `salt`.
+
+| Structure | Config key | `enabled` | `spacing` | `separation` | `salt` | Progression role |
+| --- | --- | --- | --- | --- | --- | --- |
+| Ancient Ruins | `world.structures.ancient_ruins` | `true` | `56` | `20` | `20005897` | Overworld flavour; gates nothing. |
+| Forgotten Library | `world.structures.forgotten_library` | `true` | `30` | `15` | `8735421890` | Gates the Portal Stabilizer recipe. |
+| Desert Clock Tower | `world.structures.desert_clock_tower` | `true` | `30` | `10` | `1663542342` | Gates Time Guardian, the Master Clock Key and Enhanced Clockstone. |
+| Guardian Vault | `world.structures.guardian_vault` | `true` | `48` | `24` | `928374651` | Gates Chronos Warden and the Guardian Stone. |
+| Clockwork Depths | `world.structures.clockwork_depths` | `true` | `56` | `28` | `837465129` | Gates Clockwork Colossus and the Colossus Gear. |
+| Phantom Catacombs | `world.structures.phantom_catacombs` | `true` | `20` | `8` | `745182936` | Gates Temporal Phantom and the Phantom Essence. |
+| Entropy Crypt | `world.structures.entropy_crypt` | `true` | `50` | `25` | `738291456` | Gates Entropy Keeper and the Entropy Core. |
+| Master Clock | `world.structures.master_clock` | `true` | `60` | `20` | `1234567890` | Gates Time Tyrant, the final boss. |
 
 ```toml
 [world.structures.ancient_ruins]
-# Whether Ancient Ruins generate at all in the Overworld.
+# Whether this structure generates at all.
 enabled = true
 
-# Average distance (in chunks) between Ancient Ruins placement attempts.
+# Average distance (in chunks) between placement attempts.
 # Lower = denser, higher = rarer. Must be > separation. Vanilla limit: 4096.
 spacing = 56
 
-# Minimum guaranteed distance (in chunks) between two Ancient Ruins.
+# Minimum guaranteed distance (in chunks) between two placements.
 # Must be < spacing.
 separation = 20
 
@@ -79,12 +93,18 @@ separation = 20
 salt = 20005897
 ```
 
-| Field | Type | Default | Range | Notes |
-| --- | --- | --- | --- | --- |
-| `enabled` | boolean | `true` | — | When `false`, the structure set is registered but contains no variants, so nothing generates. |
-| `spacing` | integer (chunks) | `56` | `1..=4096` | Average distance between placements. |
-| `separation` | integer (chunks) | `20` | `0..spacing` | Minimum distance between any two placements. |
-| `salt` | integer | `20005897` | any 32-bit int | Random seed offset. Different salts produce different placement patterns even with the same world seed. |
+| Field | Type | Range | Notes |
+| --- | --- | --- | --- |
+| `enabled` | boolean | — | When `false`, the structure set is registered but contains no variants, so nothing generates. |
+| `spacing` | integer (chunks) | `1..=4096` | Average distance between placements. |
+| `separation` | integer (chunks) | `0..spacing` | Minimum distance between any two placements. |
+| `salt` | integer | any 32-bit int | Random seed offset. Different salts produce different placement patterns even with the same world seed. |
+
+> **Disabling any structure other than Ancient Ruins breaks the main
+> progression chain.** The mod logs a startup warning naming exactly what
+> becomes unobtainable (see the table above), but it does not stop you —
+> your pack is responsible for providing another source of that
+> progression step if you disable one of these seven.
 
 #### Example: denser ruins
 
@@ -106,6 +126,18 @@ enabled = false
 The placement is still registered (so other systems referencing the ID still
 find it) but no structure variants are emitted, so nothing generates. New
 worlds only.
+
+#### Example: disable a dungeon
+
+```toml
+# Remove the Clockwork Depths dungeon. Colossus Gear must come from your pack.
+[world.structures.clockwork_depths]
+enabled = false
+```
+
+Unlike Ancient Ruins, this removes a progression-gating structure — expect
+the startup warning described above, and plan a substitute source for
+Colossus Gear. New worlds only.
 
 ---
 

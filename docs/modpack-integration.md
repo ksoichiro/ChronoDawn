@@ -54,6 +54,29 @@ overlay applies it on first launch. The other ores stay at their
 defaults. See [`docs/configuration.md`](configuration.md) for the full
 schema.
 
+### Example: retune a dungeon's density
+
+```toml
+# Make the Entropy Crypt denser for a shorter progression loop.
+[world.structures.entropy_crypt]
+spacing = 30
+separation = 12
+```
+
+### Example: disable a structure
+
+```toml
+# Remove the Guardian Vault. Chronos Warden and the Guardian Stone must
+# come from your pack instead.
+[world.structures.guardian_vault]
+enabled = false
+```
+
+Disabling any structure other than Ancient Ruins gates progression — Chrono
+Dawn logs a startup warning naming what becomes unobtainable. See
+[`configuration.md`](configuration.md) for the full per-structure table
+and the progression-warning behavior.
+
 ### Example: soften ambient Time Distortion
 
 ```toml
