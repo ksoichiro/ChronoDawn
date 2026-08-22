@@ -19,15 +19,22 @@ package com.chronodawn.unit;
 
 import com.chronodawn.config.ChronoDawnConfig;
 import com.chronodawn.config.ConfigDefaults;
+import com.chronodawn.config.ManagedStructure;
 import com.chronodawn.config.StructureSettings;
 import com.chronodawn.worldgen.runtime.RuntimeStructureOverlay;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.junit.jupiter.api.Test;
 
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -122,7 +129,76 @@ class RuntimeStructureOverlayTest {
         );
     }
 
+    @Test
+    void defaultConfig_reproducesEveryBundledStructureSet() {
+        Map<String, byte[]> overlay = RuntimeStructureOverlay.generate(ConfigDefaults.defaults());
+
+        for (ManagedStructure structure : ManagedStructure.values()) {
+            byte[] bytes = overlay.get(structure.packPath());
+            assertNotNull(bytes, "Overlay must contain " + structure.packPath());
+
+            JsonElement generated = JsonParser.parseString(new String(bytes, StandardCharsets.UTF_8));
+            JsonElement bundled = loadBundled(structure.packPath());
+            assertEquals(bundled, generated,
+                structure.name() + ": default overlay output must be tree-equal to the bundled JSON");
+        }
+    }
+
+    @Test
+    void overlay_containsExactlyTheManagedStructures() {
+        Map<String, byte[]> overlay = RuntimeStructureOverlay.generate(ConfigDefaults.defaults());
+
+        Set<String> expected = Arrays.stream(ManagedStructure.values())
+            .map(ManagedStructure::packPath)
+            .collect(Collectors.toCollection(TreeSet::new));
+        assertEquals(expected, new TreeSet<>(overlay.keySet()));
+    }
+
+    @Test
+    void disablingMasterClock_emptiesOnlyItsStructuresArray() {
+        ChronoDawnConfig defaults = ConfigDefaults.defaults();
+        ChronoDawnConfig.Structures s = defaults.world().structures();
+        ChronoDawnConfig config = new ChronoDawnConfig(
+            defaults.schemaVersion(),
+            new ChronoDawnConfig.World(
+                new ChronoDawnConfig.Structures(
+                    s.ancientRuins(), s.forgottenLibrary(), s.desertClockTower(), s.guardianVault(),
+                    s.clockworkDepths(), s.phantomCatacombs(), s.entropyCrypt(),
+                    new StructureSettings(false, 60, 20, 1234567890L)
+                ),
+                defaults.world().ores()
+            ),
+            defaults.gameplay()
+        );
+
+        Map<String, byte[]> overlay = RuntimeStructureOverlay.generate(config);
+
+        JsonObject masterClock = parseObject(overlay.get(ManagedStructure.MASTER_CLOCK.packPath()));
+        assertEquals(0, masterClock.getAsJsonArray("structures").size(),
+            "Disabled structure must emit an empty structures array");
+        assertEquals(60, masterClock.getAsJsonObject("placement").get("spacing").getAsInt(),
+            "Disabled structure keeps its placement block");
+
+        JsonObject entropyCrypt = parseObject(overlay.get(ManagedStructure.ENTROPY_CRYPT.packPath()));
+        assertEquals(1, entropyCrypt.getAsJsonArray("structures").size(),
+            "Disabling one structure must not affect its siblings");
+    }
+
     private static JsonObject parse(byte[] bytes) {
         return JsonParser.parseString(new String(bytes, StandardCharsets.UTF_8)).getAsJsonObject();
+    }
+
+    private static JsonObject parseObject(byte[] bytes) {
+        return JsonParser.parseString(new String(bytes, StandardCharsets.UTF_8)).getAsJsonObject();
+    }
+
+    private static JsonElement loadBundled(String classpathRelative) {
+        try (InputStream in = RuntimeStructureOverlayTest.class.getClassLoader()
+            .getResourceAsStream(classpathRelative)) {
+            assertNotNull(in, "Bundled resource not found on test classpath: " + classpathRelative);
+            return JsonParser.parseReader(new java.io.InputStreamReader(in, StandardCharsets.UTF_8));
+        } catch (java.io.IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

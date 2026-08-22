@@ -17,8 +17,8 @@
  */
 package com.chronodawn.worldgen.runtime;
 
-import com.chronodawn.ChronoDawn;
 import com.chronodawn.config.ChronoDawnConfig;
+import com.chronodawn.config.ManagedStructure;
 import com.chronodawn.config.StructureSettings;
 
 import java.nio.charset.StandardCharsets;
@@ -38,8 +38,7 @@ import java.util.Map;
  * is fixed and all field values are primitives.
  */
 public final class RuntimeStructureOverlay {
-    public static final String ANCIENT_RUINS_PATH =
-        "data/" + ChronoDawn.MOD_ID + "/worldgen/structure_set/ancient_ruins.json";
+    public static final String ANCIENT_RUINS_PATH = ManagedStructure.ANCIENT_RUINS.packPath();
 
     private RuntimeStructureOverlay() {}
 
@@ -51,26 +50,49 @@ public final class RuntimeStructureOverlay {
      */
     public static Map<String, byte[]> generate(ChronoDawnConfig config) {
         Map<String, byte[]> out = new LinkedHashMap<>();
-        out.put(ANCIENT_RUINS_PATH, generateAncientRuins(config.world().structures().ancientRuins()));
+        for (ManagedStructure structure : ManagedStructure.values()) {
+            out.put(
+                structure.packPath(),
+                generateStructureSet(structure, structure.settingsOf(config.world().structures()))
+            );
+        }
         return out;
     }
 
-    static byte[] generateAncientRuins(StructureSettings ar) {
+    static byte[] generateStructureSet(ManagedStructure structure, StructureSettings settings) {
         // Disabled state: keep placement registered (so other systems referencing
         // the ID still find it) but emit no structure variants, so nothing generates.
-        String structuresArray = ar.enabled()
-            ? "{\n      \"structure\": \"" + ChronoDawn.MOD_ID + ":ancient_ruins\",\n      \"weight\": 1\n    }"
+        String structuresArray = settings.enabled()
+            ? "{\n      \"structure\": \"" + structure.structureId() + "\",\n      \"weight\": 1\n    }"
             : "";
+        String exclusionZone = exclusionZoneJson(structure);
         String json =
             "{\n" +
             "  \"structures\": [" + (structuresArray.isEmpty() ? "" : "\n    " + structuresArray + "\n  ") + "],\n" +
             "  \"placement\": {\n" +
             "    \"type\": \"minecraft:random_spread\",\n" +
-            "    \"salt\": " + ar.salt() + ",\n" +
-            "    \"spacing\": " + ar.spacing() + ",\n" +
-            "    \"separation\": " + ar.separation() + "\n" +
+            "    \"salt\": " + settings.salt() + ",\n" +
+            "    \"spacing\": " + settings.spacing() + ",\n" +
+            "    \"separation\": " + settings.separation() + (exclusionZone.isEmpty() ? "\n" : ",\n" + exclusionZone) +
             "  }\n" +
             "}\n";
         return json.getBytes(StandardCharsets.UTF_8);
+    }
+
+    /**
+     * Some structure sets keep a fixed distance from another structure set (e.g. so
+     * Phantom Catacombs doesn't overlap the other deep structures). This spacing is
+     * not user-configurable, so it is hardcoded here rather than modeled in
+     * {@link StructureSettings}.
+     */
+    private static String exclusionZoneJson(ManagedStructure structure) {
+        return switch (structure) {
+            case CLOCKWORK_DEPTHS, GUARDIAN_VAULT, ENTROPY_CRYPT ->
+                "    \"exclusion_zone\": {\n" +
+                "      \"other_set\": \"" + ManagedStructure.PHANTOM_CATACOMBS.structureId() + "\",\n" +
+                "      \"chunk_count\": 10\n" +
+                "    }\n";
+            default -> "";
+        };
     }
 }
