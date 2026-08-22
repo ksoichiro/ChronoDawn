@@ -19,6 +19,7 @@ package com.chronodawn.worldgen.runtime;
 
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.config.ChronoDawnConfig;
+import com.chronodawn.config.StructureSettings;
 
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
@@ -54,7 +55,7 @@ public final class RuntimeStructureOverlay {
         return out;
     }
 
-    static byte[] generateAncientRuins(ChronoDawnConfig.AncientRuins ar) {
+    static byte[] generateAncientRuins(StructureSettings ar) {
         // Disabled state: keep placement registered (so other systems referencing
         // the ID still find it) but emit no structure variants, so nothing generates.
         String structuresArray = ar.enabled()

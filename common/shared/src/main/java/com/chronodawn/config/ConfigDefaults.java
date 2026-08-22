@@ -26,11 +26,16 @@ package com.chronodawn.config;
 public final class ConfigDefaults {
     private ConfigDefaults() {}
 
-    // Defaults mirror common/shared/src/main/resources/data/chronodawn/worldgen/structure_set/ancient_ruins.json
-    public static final boolean ANCIENT_RUINS_ENABLED = true;
-    public static final int ANCIENT_RUINS_SPACING = 56;
-    public static final int ANCIENT_RUINS_SEPARATION = 20;
-    public static final int ANCIENT_RUINS_SALT = 20005897;
+    // Defaults mirror common/shared/src/main/resources/data/chronodawn/worldgen/structure_set/*.json
+    // Asserted by RuntimeStructureOverlayTest (tree equality against the bundled JSONs).
+    public static final StructureSettings ANCIENT_RUINS_DEFAULTS = new StructureSettings(true, 56, 20, 20005897L);
+    public static final StructureSettings FORGOTTEN_LIBRARY_DEFAULTS = new StructureSettings(true, 30, 15, 8735421890L);
+    public static final StructureSettings DESERT_CLOCK_TOWER_DEFAULTS = new StructureSettings(true, 30, 10, 1663542342L);
+    public static final StructureSettings GUARDIAN_VAULT_DEFAULTS = new StructureSettings(true, 48, 24, 928374651L);
+    public static final StructureSettings CLOCKWORK_DEPTHS_DEFAULTS = new StructureSettings(true, 56, 28, 837465129L);
+    public static final StructureSettings PHANTOM_CATACOMBS_DEFAULTS = new StructureSettings(true, 20, 8, 745182936L);
+    public static final StructureSettings ENTROPY_CRYPT_DEFAULTS = new StructureSettings(true, 50, 25, 738291456L);
+    public static final StructureSettings MASTER_CLOCK_DEFAULTS = new StructureSettings(true, 60, 20, 1234567890L);
 
     // Defaults mirror common/shared/src/main/resources/data/chronodawn/worldgen/placed_feature/ore_*.json
     // Asserted by RuntimePlacedFeatureOverlayTest (round-trip parsed-tree equality against the bundled JSONs).
@@ -60,12 +65,14 @@ public final class ConfigDefaults {
             ChronoDawnConfig.CURRENT_SCHEMA_VERSION,
             new ChronoDawnConfig.World(
                 new ChronoDawnConfig.Structures(
-                    new ChronoDawnConfig.AncientRuins(
-                        ANCIENT_RUINS_ENABLED,
-                        ANCIENT_RUINS_SPACING,
-                        ANCIENT_RUINS_SEPARATION,
-                        ANCIENT_RUINS_SALT
-                    )
+                    ANCIENT_RUINS_DEFAULTS,
+                    FORGOTTEN_LIBRARY_DEFAULTS,
+                    DESERT_CLOCK_TOWER_DEFAULTS,
+                    GUARDIAN_VAULT_DEFAULTS,
+                    CLOCKWORK_DEPTHS_DEFAULTS,
+                    PHANTOM_CATACOMBS_DEFAULTS,
+                    ENTROPY_CRYPT_DEFAULTS,
+                    MASTER_CLOCK_DEFAULTS
                 ),
                 new OresConfig(
                     TIME_CRYSTAL_DEFAULTS,

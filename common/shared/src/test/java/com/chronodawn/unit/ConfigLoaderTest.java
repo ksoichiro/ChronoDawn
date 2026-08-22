@@ -23,6 +23,7 @@ import com.chronodawn.config.ChronoDawnConfig;
 import com.chronodawn.config.ConfigDefaults;
 import com.chronodawn.config.ConfigLoader;
 import com.chronodawn.config.PortalSettings;
+import com.chronodawn.config.StructureSettings;
 import com.chronodawn.config.TimeDistortionSettings;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -63,12 +64,12 @@ class ConfigLoaderTest {
             "spacing = 32\n");
 
         ChronoDawnConfig config = ConfigLoader.load(tmp);
-        ChronoDawnConfig.AncientRuins ar = config.world().structures().ancientRuins();
+        StructureSettings ar = config.world().structures().ancientRuins();
 
         assertEquals(32, ar.spacing());
-        assertEquals(ConfigDefaults.ANCIENT_RUINS_ENABLED, ar.enabled());
-        assertEquals(ConfigDefaults.ANCIENT_RUINS_SEPARATION, ar.separation());
-        assertEquals(ConfigDefaults.ANCIENT_RUINS_SALT, ar.salt());
+        assertEquals(ConfigDefaults.ANCIENT_RUINS_DEFAULTS.enabled(), ar.enabled());
+        assertEquals(ConfigDefaults.ANCIENT_RUINS_DEFAULTS.separation(), ar.separation());
+        assertEquals(ConfigDefaults.ANCIENT_RUINS_DEFAULTS.salt(), ar.salt());
         assertEquals(ChronoDawnConfig.CURRENT_SCHEMA_VERSION, config.schemaVersion());
     }
 
@@ -81,7 +82,7 @@ class ConfigLoaderTest {
 
         ChronoDawnConfig config = ConfigLoader.load(tmp);
         // spacing=0 fails validation → default 56; separation=5 is still valid (< 56) → kept
-        assertEquals(ConfigDefaults.ANCIENT_RUINS_SPACING, config.world().structures().ancientRuins().spacing());
+        assertEquals(ConfigDefaults.ANCIENT_RUINS_DEFAULTS.spacing(), config.world().structures().ancientRuins().spacing());
         assertEquals(5, config.world().structures().ancientRuins().separation());
     }
 
@@ -92,7 +93,7 @@ class ConfigLoaderTest {
             "spacing = -10\n");
 
         ChronoDawnConfig config = ConfigLoader.load(tmp);
-        assertEquals(ConfigDefaults.ANCIENT_RUINS_SPACING, config.world().structures().ancientRuins().spacing());
+        assertEquals(ConfigDefaults.ANCIENT_RUINS_DEFAULTS.spacing(), config.world().structures().ancientRuins().spacing());
     }
 
     @Test
@@ -103,7 +104,7 @@ class ConfigLoaderTest {
             "spacing = 5000\n");
 
         ChronoDawnConfig config = ConfigLoader.load(tmp);
-        assertEquals(ConfigDefaults.ANCIENT_RUINS_SPACING, config.world().structures().ancientRuins().spacing());
+        assertEquals(ConfigDefaults.ANCIENT_RUINS_DEFAULTS.spacing(), config.world().structures().ancientRuins().spacing());
     }
 
     @Test
@@ -115,9 +116,9 @@ class ConfigLoaderTest {
             "separation = 40\n");
 
         ChronoDawnConfig config = ConfigLoader.load(tmp);
-        ChronoDawnConfig.AncientRuins ar = config.world().structures().ancientRuins();
+        StructureSettings ar = config.world().structures().ancientRuins();
         assertEquals(30, ar.spacing(), "Valid spacing should be kept");
-        assertEquals(ConfigDefaults.ANCIENT_RUINS_SEPARATION, ar.separation(), "Invalid separation should fall back");
+        assertEquals(ConfigDefaults.ANCIENT_RUINS_DEFAULTS.separation(), ar.separation(), "Invalid separation should fall back");
     }
 
     @Test
@@ -127,7 +128,7 @@ class ConfigLoaderTest {
             "separation = -5\n");
 
         ChronoDawnConfig config = ConfigLoader.load(tmp);
-        assertEquals(ConfigDefaults.ANCIENT_RUINS_SEPARATION, config.world().structures().ancientRuins().separation());
+        assertEquals(ConfigDefaults.ANCIENT_RUINS_DEFAULTS.separation(), config.world().structures().ancientRuins().separation());
     }
 
     @Test
@@ -178,7 +179,7 @@ class ConfigLoaderTest {
             "salt = 12345\n");
 
         ChronoDawnConfig config = ConfigLoader.load(tmp);
-        ChronoDawnConfig.AncientRuins ar = config.world().structures().ancientRuins();
+        StructureSettings ar = config.world().structures().ancientRuins();
         assertEquals(false, ar.enabled());
         assertEquals(16, ar.spacing());
         assertEquals(4, ar.separation());
@@ -511,5 +512,19 @@ class ConfigLoaderTest {
             "allow_reignition_before_stabilization = true\n");
 
         assertEquals(new PortalSettings(false, true), ConfigLoader.load(tmp).gameplay().portals());
+    }
+
+    @Test
+    void structures_defaults_carryEveryShippedStructure() {
+        ChronoDawnConfig.Structures structures = ConfigDefaults.defaults().world().structures();
+
+        assertEquals(new StructureSettings(true, 56, 20, 20005897L), structures.ancientRuins());
+        assertEquals(new StructureSettings(true, 30, 15, 8735421890L), structures.forgottenLibrary());
+        assertEquals(new StructureSettings(true, 30, 10, 1663542342L), structures.desertClockTower());
+        assertEquals(new StructureSettings(true, 48, 24, 928374651L), structures.guardianVault());
+        assertEquals(new StructureSettings(true, 56, 28, 837465129L), structures.clockworkDepths());
+        assertEquals(new StructureSettings(true, 20, 8, 745182936L), structures.phantomCatacombs());
+        assertEquals(new StructureSettings(true, 50, 25, 738291456L), structures.entropyCrypt());
+        assertEquals(new StructureSettings(true, 60, 20, 1234567890L), structures.masterClock());
     }
 }

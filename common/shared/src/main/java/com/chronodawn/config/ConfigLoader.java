@@ -156,7 +156,7 @@ public final class ConfigLoader {
             );
         }
 
-        ChronoDawnConfig.AncientRuins ancientRuins = parseAncientRuins(parsed);
+        StructureSettings ancientRuins = parseAncientRuins(parsed);
         com.chronodawn.config.OresConfig ores = parseOres(parsed);
         ChronoDawnConfig.Gameplay gameplay = parseGameplay(parsed);
 
@@ -179,46 +179,47 @@ public final class ConfigLoader {
         );
     }
 
-    private static ChronoDawnConfig.AncientRuins parseAncientRuins(CommentedConfig parsed) {
+    private static StructureSettings parseAncientRuins(CommentedConfig parsed) {
         String path = K_WORLD + "." + K_STRUCTURES + "." + K_ANCIENT_RUINS;
 
         boolean enabled = parsed.<Boolean>getOptional(path + "." + K_AR_ENABLED)
-            .orElse(ConfigDefaults.ANCIENT_RUINS_ENABLED);
+            .orElse(ConfigDefaults.ANCIENT_RUINS_DEFAULTS.enabled());
 
         int spacing = parsed.<Number>getOptional(path + "." + K_AR_SPACING)
             .map(Number::intValue)
-            .orElse(ConfigDefaults.ANCIENT_RUINS_SPACING);
+            .orElse(ConfigDefaults.ANCIENT_RUINS_DEFAULTS.spacing());
 
         int separation = parsed.<Number>getOptional(path + "." + K_AR_SEPARATION)
             .map(Number::intValue)
-            .orElse(ConfigDefaults.ANCIENT_RUINS_SEPARATION);
+            .orElse(ConfigDefaults.ANCIENT_RUINS_DEFAULTS.separation());
 
-        int salt = parsed.<Number>getOptional(path + "." + K_AR_SALT)
-            .map(Number::intValue)
-            .orElse(ConfigDefaults.ANCIENT_RUINS_SALT);
+        long salt = parsed.<Number>getOptional(path + "." + K_AR_SALT)
+            .map(Number::longValue)
+            .orElse(ConfigDefaults.ANCIENT_RUINS_DEFAULTS.salt());
 
         // Validation: spacing must be in vanilla range, separation must be in [0, spacing).
         // Each field is validated independently so one bad value doesn't reset the others.
         if (spacing < MIN_SPACING || spacing > MAX_SPACING) {
             LOGGER.error(
                 "Invalid {}.{} = {} (must be in [{}, {}]); using default {}",
-                path, K_AR_SPACING, spacing, MIN_SPACING, MAX_SPACING, ConfigDefaults.ANCIENT_RUINS_SPACING
+                path, K_AR_SPACING, spacing, MIN_SPACING, MAX_SPACING, ConfigDefaults.ANCIENT_RUINS_DEFAULTS.spacing()
             );
-            spacing = ConfigDefaults.ANCIENT_RUINS_SPACING;
+            spacing = ConfigDefaults.ANCIENT_RUINS_DEFAULTS.spacing();
         }
         if (separation < MIN_SEPARATION || separation >= spacing) {
             LOGGER.error(
                 "Invalid {}.{} = {} (must be in [{}, spacing={})); using default {}",
-                path, K_AR_SEPARATION, separation, MIN_SEPARATION, spacing, ConfigDefaults.ANCIENT_RUINS_SEPARATION
+                path, K_AR_SEPARATION, separation, MIN_SEPARATION, spacing,
+                ConfigDefaults.ANCIENT_RUINS_DEFAULTS.separation()
             );
-            separation = ConfigDefaults.ANCIENT_RUINS_SEPARATION;
+            separation = ConfigDefaults.ANCIENT_RUINS_DEFAULTS.separation();
             // If even the default exceeds the (now-validated) spacing, fall back to the safer half-spacing rule.
             if (separation >= spacing) {
                 separation = Math.max(0, spacing - 1);
             }
         }
 
-        return new ChronoDawnConfig.AncientRuins(enabled, spacing, separation, salt);
+        return new StructureSettings(enabled, spacing, separation, salt);
     }
 
     private static com.chronodawn.config.OresConfig parseOres(CommentedConfig parsed) {

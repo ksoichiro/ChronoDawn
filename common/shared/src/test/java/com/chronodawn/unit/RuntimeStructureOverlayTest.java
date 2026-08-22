@@ -19,6 +19,7 @@ package com.chronodawn.unit;
 
 import com.chronodawn.config.ChronoDawnConfig;
 import com.chronodawn.config.ConfigDefaults;
+import com.chronodawn.config.StructureSettings;
 import com.chronodawn.worldgen.runtime.RuntimeStructureOverlay;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -57,9 +58,9 @@ class RuntimeStructureOverlayTest {
 
         JsonObject placement = json.getAsJsonObject("placement");
         assertEquals("minecraft:random_spread", placement.get("type").getAsString());
-        assertEquals(ConfigDefaults.ANCIENT_RUINS_SALT, placement.get("salt").getAsInt());
-        assertEquals(ConfigDefaults.ANCIENT_RUINS_SPACING, placement.get("spacing").getAsInt());
-        assertEquals(ConfigDefaults.ANCIENT_RUINS_SEPARATION, placement.get("separation").getAsInt());
+        assertEquals(ConfigDefaults.ANCIENT_RUINS_DEFAULTS.salt(), placement.get("salt").getAsLong());
+        assertEquals(ConfigDefaults.ANCIENT_RUINS_DEFAULTS.spacing(), placement.get("spacing").getAsInt());
+        assertEquals(ConfigDefaults.ANCIENT_RUINS_DEFAULTS.separation(), placement.get("separation").getAsInt());
     }
 
     @Test
@@ -68,7 +69,7 @@ class RuntimeStructureOverlayTest {
             ChronoDawnConfig.CURRENT_SCHEMA_VERSION,
             new ChronoDawnConfig.World(
                 new ChronoDawnConfig.Structures(
-                    new ChronoDawnConfig.AncientRuins(true, 16, 4, 999)
+                    new StructureSettings(true, 16, 4, 999L)
                 ),
                 ConfigDefaults.defaults().world().ores()
             ),
@@ -91,7 +92,7 @@ class RuntimeStructureOverlayTest {
             ChronoDawnConfig.CURRENT_SCHEMA_VERSION,
             new ChronoDawnConfig.World(
                 new ChronoDawnConfig.Structures(
-                    new ChronoDawnConfig.AncientRuins(false, 56, 20, 20005897)
+                    new StructureSettings(false, 56, 20, 20005897L)
                 ),
                 ConfigDefaults.defaults().world().ores()
             ),

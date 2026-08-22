@@ -54,9 +54,30 @@ public record ChronoDawnConfig(
 
     public record World(Structures structures, OresConfig ores) {}
 
-    public record Structures(AncientRuins ancientRuins) {}
-
-    public record AncientRuins(boolean enabled, int spacing, int separation, int salt) {}
+    public record Structures(
+        StructureSettings ancientRuins,
+        StructureSettings forgottenLibrary,
+        StructureSettings desertClockTower,
+        StructureSettings guardianVault,
+        StructureSettings clockworkDepths,
+        StructureSettings phantomCatacombs,
+        StructureSettings entropyCrypt,
+        StructureSettings masterClock
+    ) {
+        /** Preserve the existing construction pattern for callers that only configure Ancient Ruins. */
+        public Structures(StructureSettings ancientRuins) {
+            this(
+                ancientRuins,
+                ConfigDefaults.FORGOTTEN_LIBRARY_DEFAULTS,
+                ConfigDefaults.DESERT_CLOCK_TOWER_DEFAULTS,
+                ConfigDefaults.GUARDIAN_VAULT_DEFAULTS,
+                ConfigDefaults.CLOCKWORK_DEPTHS_DEFAULTS,
+                ConfigDefaults.PHANTOM_CATACOMBS_DEFAULTS,
+                ConfigDefaults.ENTROPY_CRYPT_DEFAULTS,
+                ConfigDefaults.MASTER_CLOCK_DEFAULTS
+            );
+        }
+    }
 
     public record Gameplay(TimeDistortionSettings timeDistortion, PortalSettings portals, BossesConfig bosses) {
         /** Preserve the existing construction pattern for callers that only configure bosses. */
