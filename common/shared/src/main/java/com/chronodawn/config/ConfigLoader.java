@@ -116,6 +116,9 @@ public final class ConfigLoader {
         }
 
         ChronoDawnConfig config = parseOrDefaults(configFile);
+        for (String warning : ProgressionWarnings.forDisabledStructures(config.world().structures())) {
+            LOGGER.warn(warning);
+        }
         ChronoDawnConfig.set(config);
         return config;
     }
