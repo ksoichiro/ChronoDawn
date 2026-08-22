@@ -258,6 +258,8 @@ public class PortalTeleportHandler {
             // Destroy unstable portal (if portals are unstable)
             // IMPORTANT: Schedule for next tick to avoid ConcurrentModificationException
             // (player is still in Entity.checkInsideBlocks() when this runs)
+            // Not enforcesInstabilityGate(): under one-way entry the arrival portal is
+            // always destroyed, and re-ignition is the recovery path, not an exemption.
             if (com.chronodawn.config.ChronoDawnConfig.get().gameplay().portals().oneWayUntilStabilized()
                 && globalState.arePortalsUnstable()) {
                 BlockPos finalDestPortalPos = destPortalPos;

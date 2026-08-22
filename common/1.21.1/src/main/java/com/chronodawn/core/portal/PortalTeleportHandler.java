@@ -254,6 +254,8 @@ public class PortalTeleportHandler {
             globalState.markChronoDawnEntered();
 
             // Destroy unstable portal (if portals are unstable)
+            // Not enforcesInstabilityGate(): under one-way entry the arrival portal is
+            // always destroyed, and re-ignition is the recovery path, not an exemption.
             if (com.chronodawn.config.ChronoDawnConfig.get().gameplay().portals().oneWayUntilStabilized()
                 && globalState.arePortalsUnstable()) {
                 destroyUnstablePortal(destLevel, destPortalPos);

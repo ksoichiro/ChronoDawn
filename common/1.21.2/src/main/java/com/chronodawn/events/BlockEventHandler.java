@@ -100,13 +100,8 @@ public class BlockEventHandler {
         TickEvent.SERVER_POST.register(server -> {
             // Check global state
             ChronoDawnGlobalState globalState = ChronoDawnGlobalState.get(server);
-            com.chronodawn.config.PortalSettings portalSettings =
-                com.chronodawn.config.ChronoDawnConfig.get().gameplay().portals();
-            // Re-ignition permitted before stabilization means a deliberately crafted
-            // portal must survive this sweep, so skip it entirely in that case.
-            if (!portalSettings.oneWayUntilStabilized()
-                || portalSettings.allowReignitionBeforeStabilization()
-                || !globalState.arePortalsUnstable()) {
+            if (!com.chronodawn.config.ChronoDawnConfig.get().gameplay().portals()
+                    .enforcesInstabilityGate(globalState.arePortalsUnstable())) {
                 return; // Portals are stable or player-restorable, allow normal operation
             }
 

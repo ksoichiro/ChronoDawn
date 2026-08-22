@@ -21,4 +21,26 @@ package com.chronodawn.config;
 public record PortalSettings(
     boolean oneWayUntilStabilized,
     boolean allowReignitionBeforeStabilization
-) {}
+) {
+
+    /**
+     * Whether the pre-stabilization portal gate is currently in force.
+     *
+     * <p>Two behaviors hang off this: the per-tick sweep that removes portal blocks in
+     * Chrono Dawn, and the Time Hourglass refusing to ignite a portal there. They must
+     * agree — permitting re-ignition while the sweep still runs would remove a
+     * deliberately lit portal on the tick after its blocks are placed, making
+     * {@link #allowReignitionBeforeStabilization()} a no-op.
+     *
+     * <p>Arrival-side portal destruction is deliberately not routed through this
+     * predicate: under one-way entry the arrival portal is always destroyed. Where
+     * re-ignition is permitted it is the recovery path from that destruction, not a
+     * way to avoid it.
+     *
+     * @param portalsUnstable whether the dimension is still awaiting the Portal Stabilizer
+     * @return {@code true} when portal blocks must be swept and re-ignition refused
+     */
+    public boolean enforcesInstabilityGate(boolean portalsUnstable) {
+        return portalsUnstable && oneWayUntilStabilized && !allowReignitionBeforeStabilization;
+    }
+}

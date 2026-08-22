@@ -84,10 +84,8 @@ public class TimeHourglassItem extends Item {
         // Check if portals are unstable in ChronoDawn dimension
         if (level.dimension().equals(ModDimensions.CHRONO_DAWN_DIMENSION)) {
             ChronoDawnGlobalState globalState = ChronoDawnGlobalState.get(server);
-            if (globalState.arePortalsUnstable()
-                && com.chronodawn.config.ChronoDawnConfig.get().gameplay().portals().oneWayUntilStabilized()
-                && !com.chronodawn.config.ChronoDawnConfig.get().gameplay().portals()
-                    .allowReignitionBeforeStabilization()) {
+            if (com.chronodawn.config.ChronoDawnConfig.get().gameplay().portals()
+                    .enforcesInstabilityGate(globalState.arePortalsUnstable())) {
                 if (player != null) {
                     player.displayClientMessage(
                         Component.translatable("message.chronodawn.portal.unstable"),
