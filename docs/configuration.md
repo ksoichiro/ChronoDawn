@@ -285,6 +285,44 @@ enhanced_slowness_level = 3
 
 ---
 
+### `[gameplay.portals]`
+
+Controls the portal progression gate. Both defaults preserve the shipped
+experience: the first entry is one-way, and a Portal Stabilizer is required
+before a portal can be ignited within Chrono Dawn.
+
+```toml
+[gameplay.portals]
+one_way_until_stabilized = true
+allow_reignition_before_stabilization = false
+```
+
+| Field | Type | Default | Notes |
+| --- | --- | --- | --- |
+| `one_way_until_stabilized` | boolean | `true` | When `true`, entering Chrono Dawn deactivates the departure portal and destroys the arrival portal until the Portal Stabilizer has been used. Set to `false` to keep both portals active for immediate return travel. |
+| `allow_reignition_before_stabilization` | boolean | `false` | When `one_way_until_stabilized` is `true`, allows the Time Hourglass to ignite a portal in Chrono Dawn before the Portal Stabilizer is used. Enabling this also suspends the sweep that removes unstable portal blocks, so the crafted portal survives the tick after it is lit. |
+
+#### Example: allow immediate round trips
+
+```toml
+[gameplay.portals]
+one_way_until_stabilized = false
+```
+
+#### Example: retain one-way entry but permit a crafted return portal
+
+```toml
+[gameplay.portals]
+allow_reignition_before_stabilization = true
+```
+
+One-way entry still applies to every trip: travelling back to the Overworld
+deactivates the Chrono Dawn portal and destroys the Overworld arrival portal.
+The return trip therefore costs one Time Hourglass each time, until the Portal
+Stabilizer is used.
+
+---
+
 ## Adding more configuration
 
 This file is the canonical reference. As new tunables ship, they will

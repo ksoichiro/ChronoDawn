@@ -101,6 +101,7 @@ base-stat table.
 | `world.structures.*` | yes (server / world reload) | no — only new chunks |
 | `world.ores.*` | yes (server / world reload) | no — only new chunks |
 | `gameplay.time_distortion` | yes (server / world reload) | yes — applies to eligible mobs as they tick after restart |
+| `gameplay.portals` | yes (server / world reload) | yes — controls the next portal use or portal transit after restart |
 | `gameplay.bosses.*` | yes (server / world reload) | **yes** — bosses already spawned are rescaled on load |
 
 The worldgen rows are vanilla Minecraft constraints; the mod cannot work

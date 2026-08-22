@@ -244,7 +244,8 @@ public class PortalTeleportHandler {
 
         // Update portal state (ACTIVATED → DEACTIVATED)
         PortalStateMachine sourcePortal = PortalRegistry.getInstance().getPortalAt(sourcePortalPos);
-        if (sourcePortal != null && sourcePortal.getCurrentState() == PortalState.ACTIVATED) {
+        if (com.chronodawn.config.ChronoDawnConfig.get().gameplay().portals().oneWayUntilStabilized()
+            && sourcePortal != null && sourcePortal.getCurrentState() == PortalState.ACTIVATED) {
             sourcePortal.deactivate();
         }
 
@@ -257,7 +258,8 @@ public class PortalTeleportHandler {
             // Destroy unstable portal (if portals are unstable)
             // IMPORTANT: Schedule for next tick to avoid ConcurrentModificationException
             // (player is still in Entity.checkInsideBlocks() when this runs)
-            if (globalState.arePortalsUnstable()) {
+            if (com.chronodawn.config.ChronoDawnConfig.get().gameplay().portals().oneWayUntilStabilized()
+                && globalState.arePortalsUnstable()) {
                 BlockPos finalDestPortalPos = destPortalPos;
                 server.execute(() -> destroyUnstablePortal(destLevel, finalDestPortalPos));
                 portalWasDestroyed = true;

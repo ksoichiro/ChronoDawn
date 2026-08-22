@@ -80,6 +80,10 @@ public final class ConfigLoader {
     private static final String K_TD_NORMAL_SLOWNESS_LEVEL = "normal_slowness_level";
     private static final String K_TD_ENHANCED_SLOWNESS_LEVEL = "enhanced_slowness_level";
     private static final String K_TD_SCOPE = "scope";
+    private static final String K_PORTALS = "portals";
+    private static final String K_PORTAL_ONE_WAY_UNTIL_STABILIZED = "one_way_until_stabilized";
+    private static final String K_PORTAL_ALLOW_REIGNITION_BEFORE_STABILIZATION =
+        "allow_reignition_before_stabilization";
     private static final String K_BOSSES = "bosses";
     private static final String K_HEALTH_MULTIPLIER = "health_multiplier";
     private static final String K_DAMAGE_MULTIPLIER = "damage_multiplier";
@@ -269,6 +273,7 @@ public final class ConfigLoader {
     private static ChronoDawnConfig.Gameplay parseGameplay(CommentedConfig parsed) {
         return new ChronoDawnConfig.Gameplay(
             parseTimeDistortion(parsed),
+            parsePortals(parsed),
             new BossesConfig(
                 parseBoss(parsed, "time_guardian"),
                 parseBoss(parsed, "chronos_warden"),
@@ -322,6 +327,19 @@ public final class ConfigLoader {
         }
 
         return new TimeDistortionSettings(enabled, normalLevel, enhancedLevel, scope);
+    }
+
+    private static PortalSettings parsePortals(CommentedConfig parsed) {
+        String path = K_GAMEPLAY + "." + K_PORTALS;
+        PortalSettings defaults = ConfigDefaults.PORTAL_DEFAULTS;
+
+        boolean oneWayUntilStabilized = parsed.<Boolean>getOptional(path + "." + K_PORTAL_ONE_WAY_UNTIL_STABILIZED)
+            .orElse(defaults.oneWayUntilStabilized());
+        boolean allowReignitionBeforeStabilization = parsed
+            .<Boolean>getOptional(path + "." + K_PORTAL_ALLOW_REIGNITION_BEFORE_STABILIZATION)
+            .orElse(defaults.allowReignitionBeforeStabilization());
+
+        return new PortalSettings(oneWayUntilStabilized, allowReignitionBeforeStabilization);
     }
 
     private static BossSettings parseBoss(CommentedConfig parsed, String bossKey) {

@@ -51,6 +51,10 @@ public final class ConfigDefaults {
         TimeDistortionSettings.Scope.HOSTILE_MOBS
     );
 
+    // Defaults preserve the shipped one-way portal progression and its
+    // Portal Stabilizer requirement for re-ignition in Chrono Dawn.
+    public static final PortalSettings PORTAL_DEFAULTS = new PortalSettings(true, false);
+
     public static ChronoDawnConfig defaults() {
         return new ChronoDawnConfig(
             ChronoDawnConfig.CURRENT_SCHEMA_VERSION,
@@ -72,6 +76,7 @@ public final class ConfigDefaults {
             ),
             new ChronoDawnConfig.Gameplay(
                 TIME_DISTORTION_DEFAULTS,
+                PORTAL_DEFAULTS,
                 new BossesConfig(
                     BOSS_DEFAULTS,
                     BOSS_DEFAULTS,

@@ -166,6 +166,12 @@ public class PlayerEventHandler {
         ChronoDawnGlobalState globalState = ChronoDawnGlobalState.get(((net.minecraft.server.level.ServerLevel) player.level()).getServer());
         globalState.markChronoDawnEntered();
 
+        if (!com.chronodawn.config.ChronoDawnConfig.get().gameplay().portals().oneWayUntilStabilized()) {
+            ChronoDawn.LOGGER.debug("One-way portals are disabled, skipping deactivation for player {}",
+                player.getName().getString());
+            return;
+        }
+
         // If portals are stable, do not deactivate portal
         // This allows free bidirectional travel after stabilization
         if (!globalState.arePortalsUnstable()) {

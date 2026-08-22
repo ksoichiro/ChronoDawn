@@ -82,6 +82,15 @@ enhanced_slowness_level = 5
 # and friendly mobs. Players and Chrono Dawn bosses are never affected.
 scope = "hostile_mobs"
 
+[gameplay.portals]
+# Whether entering Chrono Dawn deactivates the departure portal and destroys
+# the arrival portal until the Portal Stabilizer has been used.
+one_way_until_stabilized = true
+
+# When one_way_until_stabilized is true, whether Time Hourglass may ignite a
+# portal in Chrono Dawn before the Portal Stabilizer is used.
+allow_reignition_before_stabilization = false
+
 [gameplay.bosses.time_guardian]
 # Scales the boss's maximum health. 2.0 = double health. Range: 0.1 to 10.0.
 health_multiplier = 1.0

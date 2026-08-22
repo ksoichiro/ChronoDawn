@@ -22,6 +22,7 @@ import com.chronodawn.config.BossSettings;
 import com.chronodawn.config.ChronoDawnConfig;
 import com.chronodawn.config.ConfigDefaults;
 import com.chronodawn.config.ConfigLoader;
+import com.chronodawn.config.PortalSettings;
 import com.chronodawn.config.TimeDistortionSettings;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -493,5 +494,22 @@ class ConfigLoaderTest {
         assertEquals(ConfigDefaults.TIME_DISTORTION_DEFAULTS.normalSlownessLevel(), settings.normalSlownessLevel());
         assertEquals(2, settings.enhancedSlownessLevel());
         assertEquals(ConfigDefaults.TIME_DISTORTION_DEFAULTS.scope(), settings.scope());
+    }
+
+    @Test
+    void portals_missingSection_fallsBackToDefaults(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"), "schema_version = 1\n");
+
+        assertEquals(ConfigDefaults.PORTAL_DEFAULTS, ConfigLoader.load(tmp).gameplay().portals());
+    }
+
+    @Test
+    void portals_validCustomValues_areReturnedVerbatim(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[gameplay.portals]\n" +
+            "one_way_until_stabilized = false\n" +
+            "allow_reignition_before_stabilization = true\n");
+
+        assertEquals(new PortalSettings(false, true), ConfigLoader.load(tmp).gameplay().portals());
     }
 }

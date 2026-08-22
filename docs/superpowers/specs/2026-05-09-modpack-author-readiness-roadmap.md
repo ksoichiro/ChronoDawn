@@ -22,7 +22,7 @@ This roadmap exists to:
 
 ### A. Config system
 
-**Status**: 🚧 Five PRs shipped: Ancient Ruins ([design](./2026-05-09-config-foundation-design.md), [plan](../plans/2026-05-09-config-foundation.md)), Ore generation tuning for Time Crystal / Entropy Crystal / Temporal Amber ([design](./2026-05-16-ore-generation-tuning-design.md), [plan](../plans/2026-05-16-ore-generation-tuning.md)), Clockstone tuning ([design](./2026-05-17-ore-clockstone-config-tuning-design.md), [plan](../plans/2026-05-17-ore-clockstone-config-tuning.md)), Boss multipliers ([design](./2026-07-25-boss-stat-multipliers-design.md)), and Time Distortion tuning ([design](./2026-08-02-time-distortion-config-design.md)). Continuing with follow-up tunables.
+**Status**: 🚧 Six PRs shipped: Ancient Ruins ([design](./2026-05-09-config-foundation-design.md), [plan](../plans/2026-05-09-config-foundation.md)), Ore generation tuning for Time Crystal / Entropy Crystal / Temporal Amber ([design](./2026-05-16-ore-generation-tuning-design.md), [plan](../plans/2026-05-16-ore-generation-tuning.md)), Clockstone tuning ([design](./2026-05-17-ore-clockstone-config-tuning-design.md), [plan](../plans/2026-05-17-ore-clockstone-config-tuning.md)), Boss multipliers ([design](./2026-07-25-boss-stat-multipliers-design.md)), Time Distortion tuning ([design](./2026-08-02-time-distortion-config-design.md)), and portal behavior ([design](./2026-08-04-portal-behavior-config-design.md)). Continuing with follow-up tunables.
 
 Cross-loader config infrastructure with per-feature toggles and numeric tuning. The first slice responds to a real user request (Ancient Ruins density), and the infrastructure built here is reusable by every later tunable.
 
@@ -34,7 +34,9 @@ Planned follow-up tunables (each is a separate PR):
 - Time Distortion (Slowness) strength and scope — *shipped: `enabled`, normal /
   enhanced Slowness levels, and `hostile_mobs` / `all_mobs` scope
   ([design](./2026-08-02-time-distortion-config-design.md))*
-- Portal behavior (one-way enforcement, re-ignition rules)
+- Portal behavior (one-way enforcement, re-ignition rules) — *shipped:
+  `one_way_until_stabilized` and `allow_reignition_before_stabilization`
+  ([design](./2026-08-04-portal-behavior-config-design.md))*
 - Dimension-level toggles (per-biome / per-structure enable flags)
 
 ### B. Datapack and tag externalization
@@ -75,7 +77,7 @@ Targeted integrations with flagship mods commonly bundled in packs: Curios / Tri
 
 | Sub-project | Status | First spec |
 | --- | --- | --- |
-| A. Config system | 🚧 Five PRs shipped (Ancient Ruins, Ore tuning, Clockstone tuning, Boss multipliers, Time Distortion tuning) | [2026-05-09-config-foundation-design.md](./2026-05-09-config-foundation-design.md), [2026-07-25-boss-stat-multipliers-design.md](./2026-07-25-boss-stat-multipliers-design.md), [2026-08-02-time-distortion-config-design.md](./2026-08-02-time-distortion-config-design.md) |
+| A. Config system | 🚧 Six PRs shipped (Ancient Ruins, Ore tuning, Clockstone tuning, Boss multipliers, Time Distortion tuning, Portal behavior) | [2026-05-09-config-foundation-design.md](./2026-05-09-config-foundation-design.md), [2026-07-25-boss-stat-multipliers-design.md](./2026-07-25-boss-stat-multipliers-design.md), [2026-08-02-time-distortion-config-design.md](./2026-08-02-time-distortion-config-design.md), [2026-08-04-portal-behavior-config-design.md](./2026-08-04-portal-behavior-config-design.md) |
 | B. Datapack / tag externalization | 🚧 Conventional (`c:`) material tags shipped; tool / armor tags, biome / structure tags and the tag-lookup half remain | [2026-08-17-conventional-tags-design.md](./2026-08-17-conventional-tags-design.md) |
 | C. Scripting events | ⏸ Deferred | — |
 | D. Cross-mod compatibility | ⏸ Deferred | — |

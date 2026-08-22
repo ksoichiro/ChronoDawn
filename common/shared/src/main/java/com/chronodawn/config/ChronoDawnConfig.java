@@ -58,10 +58,15 @@ public record ChronoDawnConfig(
 
     public record AncientRuins(boolean enabled, int spacing, int separation, int salt) {}
 
-    public record Gameplay(TimeDistortionSettings timeDistortion, BossesConfig bosses) {
+    public record Gameplay(TimeDistortionSettings timeDistortion, PortalSettings portals, BossesConfig bosses) {
         /** Preserve the existing construction pattern for callers that only configure bosses. */
         public Gameplay(BossesConfig bosses) {
-            this(ConfigDefaults.TIME_DISTORTION_DEFAULTS, bosses);
+            this(ConfigDefaults.TIME_DISTORTION_DEFAULTS, ConfigDefaults.PORTAL_DEFAULTS, bosses);
+        }
+
+        /** Preserve the existing construction pattern for callers that configure Time Distortion. */
+        public Gameplay(TimeDistortionSettings timeDistortion, BossesConfig bosses) {
+            this(timeDistortion, ConfigDefaults.PORTAL_DEFAULTS, bosses);
         }
     }
 }
