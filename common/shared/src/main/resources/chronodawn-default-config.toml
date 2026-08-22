@@ -26,6 +26,118 @@ separation = 20
 # Random seed offset for placement; usually no reason to change this.
 salt = 20005897
 
+[world.structures.forgotten_library]
+# Whether the Forgotten Library generates in Chrono Dawn.
+# Disabling it removes the Portal Stabilizer recipe from world generation.
+enabled = true
+
+# Average distance (in chunks) between placement attempts.
+# Lower = denser, higher = rarer. Must be > separation. Vanilla limit: 4096.
+spacing = 30
+
+# Minimum guaranteed distance (in chunks) between two placements.
+# Must be < spacing.
+separation = 15
+
+# Random seed offset for placement; usually no reason to change this.
+salt = 8735421890
+
+[world.structures.desert_clock_tower]
+# Whether the Desert Clock Tower generates in Chrono Dawn.
+# Disabling it removes access to the Time Guardian, the Master Clock Key and Enhanced Clockstone from world generation.
+enabled = true
+
+# Average distance (in chunks) between placement attempts.
+# Lower = denser, higher = rarer. Must be > separation. Vanilla limit: 4096.
+spacing = 30
+
+# Minimum guaranteed distance (in chunks) between two placements.
+# Must be < spacing.
+separation = 10
+
+# Random seed offset for placement; usually no reason to change this.
+salt = 1663542342
+
+[world.structures.guardian_vault]
+# Whether the Guardian Vault generates in Chrono Dawn.
+# Disabling it removes access to Chronos Warden and the Guardian Stone from world generation.
+enabled = true
+
+# Average distance (in chunks) between placement attempts.
+# Lower = denser, higher = rarer. Must be > separation. Vanilla limit: 4096.
+spacing = 48
+
+# Minimum guaranteed distance (in chunks) between two placements.
+# Must be < spacing.
+separation = 24
+
+# Random seed offset for placement; usually no reason to change this.
+salt = 928374651
+
+[world.structures.clockwork_depths]
+# Whether the Clockwork Depths generates in Chrono Dawn.
+# Disabling it removes access to Clockwork Colossus and the Colossus Gear from world generation.
+enabled = true
+
+# Average distance (in chunks) between placement attempts.
+# Lower = denser, higher = rarer. Must be > separation. Vanilla limit: 4096.
+spacing = 56
+
+# Minimum guaranteed distance (in chunks) between two placements.
+# Must be < spacing.
+separation = 28
+
+# Random seed offset for placement; usually no reason to change this.
+salt = 837465129
+
+[world.structures.phantom_catacombs]
+# Whether the Phantom Catacombs generates in Chrono Dawn.
+# Disabling it removes access to Temporal Phantom and the Phantom Essence from world generation.
+enabled = true
+
+# Average distance (in chunks) between placement attempts.
+# Lower = denser, higher = rarer. Must be > separation. Vanilla limit: 4096.
+spacing = 20
+
+# Minimum guaranteed distance (in chunks) between two placements.
+# Must be < spacing.
+separation = 8
+
+# Random seed offset for placement; usually no reason to change this.
+salt = 745182936
+
+[world.structures.entropy_crypt]
+# Whether the Entropy Crypt generates in Chrono Dawn.
+# Disabling it removes access to Entropy Keeper and the Entropy Core from world generation.
+enabled = true
+
+# Average distance (in chunks) between placement attempts.
+# Lower = denser, higher = rarer. Must be > separation. Vanilla limit: 4096.
+spacing = 50
+
+# Minimum guaranteed distance (in chunks) between two placements.
+# Must be < spacing.
+separation = 25
+
+# Random seed offset for placement; usually no reason to change this.
+salt = 738291456
+
+[world.structures.master_clock]
+# Whether the Master Clock generates in Chrono Dawn.
+# Disabling it removes access to Time Tyrant, the final boss from world generation.
+enabled = true
+
+# Average distance (in chunks) between placement attempts.
+# Lower = denser, higher = rarer. Must be > separation. Vanilla limit: 4096.
+spacing = 60
+
+# Minimum guaranteed distance (in chunks) between two placements.
+# Must be < spacing.
+separation = 20
+
+# Random seed offset for placement; usually no reason to change this.
+salt = 1234567890
+
 [world.ores.time_crystal]
 # Whether Time Crystal ore generates in the Chrono dimension.
 enabled = true

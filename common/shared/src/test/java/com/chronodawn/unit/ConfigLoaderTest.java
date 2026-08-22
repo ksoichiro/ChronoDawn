@@ -22,6 +22,7 @@ import com.chronodawn.config.BossSettings;
 import com.chronodawn.config.ChronoDawnConfig;
 import com.chronodawn.config.ConfigDefaults;
 import com.chronodawn.config.ConfigLoader;
+import com.chronodawn.config.ManagedStructure;
 import com.chronodawn.config.PortalSettings;
 import com.chronodawn.config.StructureSettings;
 import com.chronodawn.config.TimeDistortionSettings;
@@ -526,5 +527,57 @@ class ConfigLoaderTest {
         assertEquals(new StructureSettings(true, 20, 8, 745182936L), structures.phantomCatacombs());
         assertEquals(new StructureSettings(true, 50, 25, 738291456L), structures.entropyCrypt());
         assertEquals(new StructureSettings(true, 60, 20, 1234567890L), structures.masterClock());
+    }
+
+    @Test
+    void structures_missingSections_fallBackToDefaults(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"), "schema_version = 1\n");
+
+        ChronoDawnConfig.Structures structures = ConfigLoader.load(tmp).world().structures();
+        for (ManagedStructure structure : ManagedStructure.values()) {
+            assertEquals(structure.defaults(), structure.settingsOf(structures), structure.name());
+        }
+    }
+
+    @Test
+    void structures_customValues_areReturnedVerbatim(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[world.structures.master_clock]\n" +
+            "enabled = false\n" +
+            "spacing = 120\n" +
+            "separation = 40\n" +
+            "salt = 42\n");
+
+        ChronoDawnConfig.Structures structures = ConfigLoader.load(tmp).world().structures();
+
+        assertEquals(new StructureSettings(false, 120, 40, 42L), structures.masterClock());
+        assertEquals(ConfigDefaults.ENTROPY_CRYPT_DEFAULTS, structures.entropyCrypt(),
+            "One structure's section must not disturb another's");
+    }
+
+    @Test
+    void structures_invalidSpacing_revertsOnlyThatKey(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[world.structures.guardian_vault]\n" +
+            "spacing = 0\n" +
+            "separation = 5\n");
+
+        StructureSettings settings = ConfigLoader.load(tmp).world().structures().guardianVault();
+
+        assertEquals(ConfigDefaults.GUARDIAN_VAULT_DEFAULTS.spacing(), settings.spacing());
+        assertEquals(5, settings.separation(), "A valid separation must survive an invalid spacing");
+    }
+
+    @Test
+    void structures_separationAtOrAboveSpacing_revertsSeparation(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[world.structures.phantom_catacombs]\n" +
+            "spacing = 10\n" +
+            "separation = 10\n");
+
+        StructureSettings settings = ConfigLoader.load(tmp).world().structures().phantomCatacombs();
+
+        assertEquals(10, settings.spacing());
+        assertEquals(ConfigDefaults.PHANTOM_CATACOMBS_DEFAULTS.separation(), settings.separation());
     }
 }

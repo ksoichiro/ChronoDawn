@@ -53,11 +53,10 @@ public final class ConfigLoader {
     private static final String K_SCHEMA_VERSION = "schema_version";
     private static final String K_WORLD = "world";
     private static final String K_STRUCTURES = "structures";
-    private static final String K_ANCIENT_RUINS = "ancient_ruins";
-    private static final String K_AR_ENABLED = "enabled";
-    private static final String K_AR_SPACING = "spacing";
-    private static final String K_AR_SEPARATION = "separation";
-    private static final String K_AR_SALT = "salt";
+    private static final String K_STRUCTURE_ENABLED = "enabled";
+    private static final String K_STRUCTURE_SPACING = "spacing";
+    private static final String K_STRUCTURE_SEPARATION = "separation";
+    private static final String K_STRUCTURE_SALT = "salt";
 
     private static final String K_ORES = "ores";
     private static final String K_TIME_CRYSTAL = "time_crystal";
@@ -156,7 +155,7 @@ public final class ConfigLoader {
             );
         }
 
-        StructureSettings ancientRuins = parseAncientRuins(parsed);
+        ChronoDawnConfig.Structures structures = parseStructures(parsed);
         com.chronodawn.config.OresConfig ores = parseOres(parsed);
         ChronoDawnConfig.Gameplay gameplay = parseGameplay(parsed);
 
@@ -172,47 +171,60 @@ public final class ConfigLoader {
         return new ChronoDawnConfig(
             schemaVersion,
             new ChronoDawnConfig.World(
-                new ChronoDawnConfig.Structures(ancientRuins),
+                structures,
                 ores
             ),
             gameplay
         );
     }
 
-    private static StructureSettings parseAncientRuins(CommentedConfig parsed) {
-        String path = K_WORLD + "." + K_STRUCTURES + "." + K_ANCIENT_RUINS;
+    private static ChronoDawnConfig.Structures parseStructures(CommentedConfig parsed) {
+        return new ChronoDawnConfig.Structures(
+            parseStructure(parsed, ManagedStructure.ANCIENT_RUINS),
+            parseStructure(parsed, ManagedStructure.FORGOTTEN_LIBRARY),
+            parseStructure(parsed, ManagedStructure.DESERT_CLOCK_TOWER),
+            parseStructure(parsed, ManagedStructure.GUARDIAN_VAULT),
+            parseStructure(parsed, ManagedStructure.CLOCKWORK_DEPTHS),
+            parseStructure(parsed, ManagedStructure.PHANTOM_CATACOMBS),
+            parseStructure(parsed, ManagedStructure.ENTROPY_CRYPT),
+            parseStructure(parsed, ManagedStructure.MASTER_CLOCK)
+        );
+    }
 
-        boolean enabled = parsed.<Boolean>getOptional(path + "." + K_AR_ENABLED)
-            .orElse(ConfigDefaults.ANCIENT_RUINS_DEFAULTS.enabled());
+    private static StructureSettings parseStructure(CommentedConfig parsed, ManagedStructure structure) {
+        String path = K_WORLD + "." + K_STRUCTURES + "." + structure.configKey();
+        StructureSettings defaults = structure.defaults();
 
-        int spacing = parsed.<Number>getOptional(path + "." + K_AR_SPACING)
+        boolean enabled = parsed.<Boolean>getOptional(path + "." + K_STRUCTURE_ENABLED)
+            .orElse(defaults.enabled());
+
+        int spacing = parsed.<Number>getOptional(path + "." + K_STRUCTURE_SPACING)
             .map(Number::intValue)
-            .orElse(ConfigDefaults.ANCIENT_RUINS_DEFAULTS.spacing());
+            .orElse(defaults.spacing());
 
-        int separation = parsed.<Number>getOptional(path + "." + K_AR_SEPARATION)
+        int separation = parsed.<Number>getOptional(path + "." + K_STRUCTURE_SEPARATION)
             .map(Number::intValue)
-            .orElse(ConfigDefaults.ANCIENT_RUINS_DEFAULTS.separation());
+            .orElse(defaults.separation());
 
-        long salt = parsed.<Number>getOptional(path + "." + K_AR_SALT)
+        long salt = parsed.<Number>getOptional(path + "." + K_STRUCTURE_SALT)
             .map(Number::longValue)
-            .orElse(ConfigDefaults.ANCIENT_RUINS_DEFAULTS.salt());
+            .orElse(defaults.salt());
 
         // Validation: spacing must be in vanilla range, separation must be in [0, spacing).
         // Each field is validated independently so one bad value doesn't reset the others.
         if (spacing < MIN_SPACING || spacing > MAX_SPACING) {
             LOGGER.error(
                 "Invalid {}.{} = {} (must be in [{}, {}]); using default {}",
-                path, K_AR_SPACING, spacing, MIN_SPACING, MAX_SPACING, ConfigDefaults.ANCIENT_RUINS_DEFAULTS.spacing()
+                path, K_STRUCTURE_SPACING, spacing, MIN_SPACING, MAX_SPACING, defaults.spacing()
             );
-            spacing = ConfigDefaults.ANCIENT_RUINS_DEFAULTS.spacing();
+            spacing = defaults.spacing();
         }
         if (separation < MIN_SEPARATION || separation >= spacing) {
             LOGGER.error(
                 "Invalid {}.{} = {} (must be in [{}, spacing={})); using default {}",
-                path, K_AR_SEPARATION, separation, MIN_SEPARATION, spacing,
-                ConfigDefaults.ANCIENT_RUINS_DEFAULTS.separation()
+                path, K_STRUCTURE_SEPARATION, separation, MIN_SEPARATION, spacing, defaults.separation()
             );
-            separation = ConfigDefaults.ANCIENT_RUINS_DEFAULTS.separation();
+            separation = defaults.separation();
             // If even the default exceeds the (now-validated) spacing, fall back to the safer half-spacing rule.
             if (separation >= spacing) {
                 separation = Math.max(0, spacing - 1);
