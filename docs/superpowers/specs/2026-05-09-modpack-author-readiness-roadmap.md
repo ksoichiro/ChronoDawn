@@ -39,9 +39,13 @@ Planned follow-up tunables (each is a separate PR):
 
 ### B. Datapack and tag externalization
 
-**Status**: ⏸ Deferred.
+**Status**: 🚧 Publishing half shipped: conventional (`c:`) tags for materials — ores, raw materials, ingots and gems, storage blocks, stone / sand / gravel / sandstone, wood sets, foods, crops and seeds — across all supported versions, with a coverage guard and en_us / ja_jp names ([design](./2026-08-17-conventional-tags-design.md), [plan](../plans/2026-08-17-conventional-tags.md)). Documented in [`docs/modpack-integration.md`](../../modpack-integration.md).
 
-Replace hardcoded `Block` / `Item` references with tag lookups where appropriate (recipe ingredients, biome structure lists, etc.) so pack creators can swap materials without source patches. Mostly mechanical work once the tag set is designed; produces small targeted PRs that fit between larger sub-projects.
+Remaining slices:
+
+- Tools / weapons / armor / shield tags (`c:tools/*`, `c:armors/*`) — deferred; tier semantics need their own decisions.
+- Mod-owned biome and structure tags.
+- The consuming half: replace hardcoded `Block` / `Item` references with tag lookups where appropriate (recipe ingredients, biome structure lists, etc.) so pack creators can swap materials without source patches. Mostly mechanical work now that the tag set exists; produces small targeted PRs that fit between larger sub-projects.
 
 ### C. Scripting events
 
@@ -72,7 +76,7 @@ Targeted integrations with flagship mods commonly bundled in packs: Curios / Tri
 | Sub-project | Status | First spec |
 | --- | --- | --- |
 | A. Config system | 🚧 Five PRs shipped (Ancient Ruins, Ore tuning, Clockstone tuning, Boss multipliers, Time Distortion tuning) | [2026-05-09-config-foundation-design.md](./2026-05-09-config-foundation-design.md), [2026-07-25-boss-stat-multipliers-design.md](./2026-07-25-boss-stat-multipliers-design.md), [2026-08-02-time-distortion-config-design.md](./2026-08-02-time-distortion-config-design.md) |
-| B. Datapack / tag externalization | ⏸ Deferred | — |
+| B. Datapack / tag externalization | 🚧 Conventional (`c:`) material tags shipped; tool / armor tags, biome / structure tags and the tag-lookup half remain | [2026-08-17-conventional-tags-design.md](./2026-08-17-conventional-tags-design.md) |
 | C. Scripting events | ⏸ Deferred | — |
 | D. Cross-mod compatibility | ⏸ Deferred | — |
 
