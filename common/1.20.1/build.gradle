@@ -151,6 +151,30 @@ processResources {
     filesMatching('pack.mcmeta') {
         expand 'pack_format': project.ext.pack_format
     }
+
+    // Guard the duplicate-resource-root removal above. If a future plugin
+    // version changes how or when it registers its outputDir, that removal
+    // silently stops matching and every structure is packaged twice: once
+    // under data/chronodawn/structures/, once unnamespaced at the archive
+    // root. Nothing else notices - Minecraft ignores the stray copies - so
+    // check the packaged layout here instead.
+    doLast {
+        def stray = fileTree(dir: destinationDir, includes: ['*.nbt']).files
+        if (!stray.isEmpty()) {
+            throw new GradleException(
+                "${stray.size()} structure file(s) landed at the resource root " +
+                "(${destinationDir}): the duplicate resource root removal in this " +
+                "file no longer matches what the mcmod plugin registers")
+        }
+        def packaged = fileTree(dir: destinationDir,
+                includes: ['data/chronodawn/structures/*.nbt']).files
+        if (packaged.isEmpty()) {
+            throw new GradleException(
+                "No converted structures under data/chronodawn/structures/ in " +
+                "${destinationDir}: the conversion output is missing from resources")
+        }
+        logger.lifecycle("Structure resources verified: ${packaged.size()} file(s), none at the resource root")
+    }
 }
 
 tasks.test {
