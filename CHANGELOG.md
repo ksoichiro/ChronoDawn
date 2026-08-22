@@ -18,6 +18,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   effect in the Chrono Dawn dimension: `enabled`, normal/enhanced strength,
   and hostile-only or all-non-boss-mob scope. Defaults reproduce the existing
   balance exactly.
+- Added `[gameplay.portals]` config options for the one-way portal
+  progression gate: `one_way_until_stabilized` and
+  `allow_reignition_before_stabilization`. Packs can keep the shipped one-way
+  entry, allow a deliberately crafted return portal before the Portal
+  Stabilizer, or remove the gate entirely. Defaults reproduce the existing
+  progression exactly.
+- Added `[world.structures.*]` config options for every Chrono Dawn structure,
+  not just Ancient Ruins: `enabled`, `spacing`, `separation` and `salt` for
+  Forgotten Library, Desert Clock Tower, Guardian Vault, Clockwork Depths,
+  Phantom Catacombs, Entropy Crypt and Master Clock. Seven of the eight gate
+  the main progression chain, so disabling one logs a startup warning naming
+  what becomes unobtainable. Defaults reproduce the existing generation
+  exactly. See [docs/configuration.md](docs/configuration.md) for the full
+  table.
 - **Conventional (`c:`) tags** for ores, materials, storage blocks,
   stone/sand/gravel/sandstone, wood sets, foods, crops and seeds, so other mods
   and modpack recipes can consume Chrono Dawn materials by tag. Ores of vanilla
