@@ -27,6 +27,7 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -97,6 +98,26 @@ class ManagedStructureTest {
             } else {
                 assertFalse(structure.progressionNote().isEmpty(),
                     structure.name() + " gates progression and must explain what disabling it costs");
+            }
+        }
+    }
+
+    @Test
+    void exclusionZonesTargetPhantomCatacombsWithExpectedChunkCount() {
+        Set<ManagedStructure> expectedWithZone =
+            EnumSet.of(ManagedStructure.CLOCKWORK_DEPTHS, ManagedStructure.GUARDIAN_VAULT, ManagedStructure.ENTROPY_CRYPT);
+
+        for (ManagedStructure structure : ManagedStructure.values()) {
+            if (expectedWithZone.contains(structure)) {
+                ManagedStructure.ExclusionZone zone = structure.exclusionZone().orElseThrow(
+                    () -> new AssertionError(structure.name() + " must declare an exclusion zone"));
+                assertEquals(ManagedStructure.PHANTOM_CATACOMBS, zone.target(),
+                    structure.name() + ": exclusion zone must target Phantom Catacombs");
+                assertEquals(10, zone.chunkCount(),
+                    structure.name() + ": exclusion zone chunk count");
+            } else {
+                assertTrue(structure.exclusionZone().isEmpty(),
+                    structure.name() + " must not declare an exclusion zone");
             }
         }
     }

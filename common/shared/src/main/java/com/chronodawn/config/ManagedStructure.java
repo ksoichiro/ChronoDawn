@@ -19,6 +19,7 @@ package com.chronodawn.config;
 
 import com.chronodawn.ChronoDawn;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 /**
@@ -39,26 +40,46 @@ public enum ManagedStructure {
     DESERT_CLOCK_TOWER("desert_clock_tower", ConfigDefaults.DESERT_CLOCK_TOWER_DEFAULTS,
         ChronoDawnConfig.Structures::desertClockTower,
         "Time Guardian, the Master Clock Key and Enhanced Clockstone"),
+    // Forward references to PHANTOM_CATACOMBS (declared below) can't be passed
+    // directly as constructor arguments — the JLS forbids referencing a later enum
+    // constant from an earlier one's initializer, even through a lambda. Passing its
+    // name as a String and resolving it lazily via valueOf() in exclusionZone() sidesteps
+    // the restriction entirely, since a String literal isn't a reference to the constant.
     GUARDIAN_VAULT("guardian_vault", ConfigDefaults.GUARDIAN_VAULT_DEFAULTS,
         ChronoDawnConfig.Structures::guardianVault,
-        "Chronos Warden and the Guardian Stone"),
+        "Chronos Warden and the Guardian Stone",
+        "PHANTOM_CATACOMBS", 10),
     CLOCKWORK_DEPTHS("clockwork_depths", ConfigDefaults.CLOCKWORK_DEPTHS_DEFAULTS,
         ChronoDawnConfig.Structures::clockworkDepths,
-        "Clockwork Colossus and the Colossus Gear"),
+        "Clockwork Colossus and the Colossus Gear",
+        "PHANTOM_CATACOMBS", 10),
     PHANTOM_CATACOMBS("phantom_catacombs", ConfigDefaults.PHANTOM_CATACOMBS_DEFAULTS,
         ChronoDawnConfig.Structures::phantomCatacombs,
         "Temporal Phantom and the Phantom Essence"),
     ENTROPY_CRYPT("entropy_crypt", ConfigDefaults.ENTROPY_CRYPT_DEFAULTS,
         ChronoDawnConfig.Structures::entropyCrypt,
-        "Entropy Keeper and the Entropy Core"),
+        "Entropy Keeper and the Entropy Core",
+        "PHANTOM_CATACOMBS", 10),
     MASTER_CLOCK("master_clock", ConfigDefaults.MASTER_CLOCK_DEFAULTS,
         ChronoDawnConfig.Structures::masterClock,
         "Time Tyrant, the final boss");
+
+    /**
+     * A fixed distance a structure set must keep from another set's placements.
+     * Not user-configurable, hence modeled here rather than in {@link StructureSettings}.
+     *
+     * @param target the other structure set this one must stay clear of
+     * @param chunkCount the exclusion radius, in chunks
+     */
+    public record ExclusionZone(ManagedStructure target, int chunkCount) {
+    }
 
     private final String configKey;
     private final StructureSettings defaults;
     private final Function<ChronoDawnConfig.Structures, StructureSettings> accessor;
     private final String progressionNote;
+    private final String exclusionZoneTargetName;
+    private final int exclusionZoneChunkCount;
 
     ManagedStructure(
         String configKey,
@@ -66,10 +87,23 @@ public enum ManagedStructure {
         Function<ChronoDawnConfig.Structures, StructureSettings> accessor,
         String progressionNote
     ) {
+        this(configKey, defaults, accessor, progressionNote, null, 0);
+    }
+
+    ManagedStructure(
+        String configKey,
+        StructureSettings defaults,
+        Function<ChronoDawnConfig.Structures, StructureSettings> accessor,
+        String progressionNote,
+        String exclusionZoneTargetName,
+        int exclusionZoneChunkCount
+    ) {
         this.configKey = configKey;
         this.defaults = defaults;
         this.accessor = accessor;
         this.progressionNote = progressionNote;
+        this.exclusionZoneTargetName = exclusionZoneTargetName;
+        this.exclusionZoneChunkCount = exclusionZoneChunkCount;
     }
 
     /** The TOML table name under {@code [world.structures]}. */
@@ -79,6 +113,17 @@ public enum ManagedStructure {
 
     /** The registry ID of the structure this set places. */
     public String structureId() {
+        return ChronoDawn.MOD_ID + ":" + configKey;
+    }
+
+    /**
+     * The ID of this structure_set itself, as referenced by other structure sets'
+     * exclusion zones. Distinct from {@link #structureId()} in concept — one names a
+     * structure, the other names the set that places it — even though the two
+     * strings coincide today because every set here places exactly one structure
+     * sharing its name.
+     */
+    public String structureSetId() {
         return ChronoDawn.MOD_ID + ":" + configKey;
     }
 
@@ -100,5 +145,12 @@ public enum ManagedStructure {
     /** Reads this structure's settings out of a parsed config. */
     public StructureSettings settingsOf(ChronoDawnConfig.Structures structures) {
         return accessor.apply(structures);
+    }
+
+    /** The exclusion zone this structure set's placement must respect, if any. */
+    public Optional<ExclusionZone> exclusionZone() {
+        return exclusionZoneTargetName == null
+            ? Optional.empty()
+            : Optional.of(new ExclusionZone(ManagedStructure.valueOf(exclusionZoneTargetName), exclusionZoneChunkCount));
     }
 }

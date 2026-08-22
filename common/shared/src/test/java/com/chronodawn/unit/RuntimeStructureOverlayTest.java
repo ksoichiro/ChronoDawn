@@ -173,22 +173,18 @@ class RuntimeStructureOverlayTest {
 
         Map<String, byte[]> overlay = RuntimeStructureOverlay.generate(config);
 
-        JsonObject masterClock = parseObject(overlay.get(ManagedStructure.MASTER_CLOCK.packPath()));
+        JsonObject masterClock = parse(overlay.get(ManagedStructure.MASTER_CLOCK.packPath()));
         assertEquals(0, masterClock.getAsJsonArray("structures").size(),
             "Disabled structure must emit an empty structures array");
         assertEquals(60, masterClock.getAsJsonObject("placement").get("spacing").getAsInt(),
             "Disabled structure keeps its placement block");
 
-        JsonObject entropyCrypt = parseObject(overlay.get(ManagedStructure.ENTROPY_CRYPT.packPath()));
+        JsonObject entropyCrypt = parse(overlay.get(ManagedStructure.ENTROPY_CRYPT.packPath()));
         assertEquals(1, entropyCrypt.getAsJsonArray("structures").size(),
             "Disabling one structure must not affect its siblings");
     }
 
     private static JsonObject parse(byte[] bytes) {
-        return JsonParser.parseString(new String(bytes, StandardCharsets.UTF_8)).getAsJsonObject();
-    }
-
-    private static JsonObject parseObject(byte[] bytes) {
         return JsonParser.parseString(new String(bytes, StandardCharsets.UTF_8)).getAsJsonObject();
     }
 

@@ -65,7 +65,13 @@ public final class RuntimeStructureOverlay {
         String structuresArray = settings.enabled()
             ? "{\n      \"structure\": \"" + structure.structureId() + "\",\n      \"weight\": 1\n    }"
             : "";
-        String exclusionZone = exclusionZoneJson(structure);
+        String exclusionZone = structure.exclusionZone()
+            .map(zone ->
+                "    \"exclusion_zone\": {\n" +
+                "      \"other_set\": \"" + zone.target().structureSetId() + "\",\n" +
+                "      \"chunk_count\": " + zone.chunkCount() + "\n" +
+                "    }\n")
+            .orElse("");
         String json =
             "{\n" +
             "  \"structures\": [" + (structuresArray.isEmpty() ? "" : "\n    " + structuresArray + "\n  ") + "],\n" +
@@ -77,22 +83,5 @@ public final class RuntimeStructureOverlay {
             "  }\n" +
             "}\n";
         return json.getBytes(StandardCharsets.UTF_8);
-    }
-
-    /**
-     * Some structure sets keep a fixed distance from another structure set (e.g. so
-     * Phantom Catacombs doesn't overlap the other deep structures). This spacing is
-     * not user-configurable, so it is hardcoded here rather than modeled in
-     * {@link StructureSettings}.
-     */
-    private static String exclusionZoneJson(ManagedStructure structure) {
-        return switch (structure) {
-            case CLOCKWORK_DEPTHS, GUARDIAN_VAULT, ENTROPY_CRYPT ->
-                "    \"exclusion_zone\": {\n" +
-                "      \"other_set\": \"" + ManagedStructure.PHANTOM_CATACOMBS.structureId() + "\",\n" +
-                "      \"chunk_count\": 10\n" +
-                "    }\n";
-            default -> "";
-        };
     }
 }
