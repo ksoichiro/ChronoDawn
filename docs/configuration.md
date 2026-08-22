@@ -98,7 +98,7 @@ salt = 20005897
 | `enabled` | boolean | — | When `false`, the structure set is registered but contains no variants, so nothing generates. |
 | `spacing` | integer (chunks) | `1..=4096` | Average distance between placements. |
 | `separation` | integer (chunks) | `0..spacing` | Minimum distance between any two placements. |
-| `salt` | integer (64-bit) | not range-checked | Random seed offset, passed through as written — the shipped Forgotten Library default (`8735421890`) is itself larger than a 32-bit integer. Different salts produce different placement patterns even with the same world seed. |
+| `salt` | integer (64-bit) | not range-checked | Random seed offset, passed through as written — the shipped Forgotten Library default (`8735421890`) is itself larger than a 32-bit integer. Different salts produce different placement patterns even with the same world seed. Vanilla stores this as a 32-bit int internally, so a value above `2147483647` (`Integer.MAX_VALUE`) truncates to a negative number and can fail world loading; there is normally no reason to change salt from its shipped default. |
 
 > **Disabling any structure other than Ancient Ruins breaks the main
 > progression chain.** The mod logs a startup warning naming exactly what

@@ -23,6 +23,9 @@ package com.chronodawn.config;
  * <p>{@code salt} is a {@code long} because one shipped structure set
  * ({@code forgotten_library}) uses a value above {@link Integer#MAX_VALUE}.
  * Vanilla reads salt as an int and truncates; keeping the full value here lets
- * the runtime overlay reproduce the bundled JSON byte-for-byte.
+ * the runtime overlay reproduce the bundled JSON's placement values exactly
+ * (as JSON tree equality, not byte-for-byte — the generator always emits
+ * {@code salt}, {@code spacing}, {@code separation} in that key order, which
+ * differs from some of the bundled files).
  */
 public record StructureSettings(boolean enabled, int spacing, int separation, long salt) {}

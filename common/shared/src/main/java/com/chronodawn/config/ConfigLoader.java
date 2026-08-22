@@ -228,7 +228,8 @@ public final class ConfigLoader {
                 path, K_STRUCTURE_SEPARATION, separation, MIN_SEPARATION, spacing, defaults.separation()
             );
             separation = defaults.separation();
-            // If even the default exceeds the (now-validated) spacing, fall back to the safer half-spacing rule.
+            // If even the default exceeds the (now-validated) spacing, fall back to spacing - 1,
+            // the largest separation vanilla's [0, spacing) constraint allows.
             if (separation >= spacing) {
                 separation = Math.max(0, spacing - 1);
             }

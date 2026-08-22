@@ -30,8 +30,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -579,5 +581,43 @@ class ConfigLoaderTest {
 
         assertEquals(10, settings.spacing());
         assertEquals(ConfigDefaults.PHANTOM_CATACOMBS_DEFAULTS.separation(), settings.separation());
+    }
+
+    @Test
+    void structures_defaultSeparationAlsoExceedsSpacing_clampsToSpacingMinusOne(@TempDir Path tmp) throws IOException {
+        // phantom_catacombs defaults to separation=8, so a spacing of 5 makes both the
+        // configured separation (absent here) AND the default fail the [0, spacing) check,
+        // forcing the final fallback: spacing - 1.
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[world.structures.phantom_catacombs]\n" +
+            "spacing = 5\n");
+
+        StructureSettings settings = ConfigLoader.load(tmp).world().structures().phantomCatacombs();
+
+        assertEquals(5, settings.spacing());
+        assertEquals(4, settings.separation(), "Falls back to spacing - 1 when even the default separation is invalid");
+    }
+
+    /**
+     * Guards against the bundled template drifting from {@link ConfigDefaults}: the TOML
+     * hardcodes every structure's four values a second time, so re-tuning a default in Java
+     * without updating this resource would silently ship a template that overrides fresh
+     * installs back to the old value while existing installs pick up the new one.
+     *
+     * <p>Loads the bundled resource through {@link ConfigLoader#load(Path)} itself (not a
+     * hand-rolled TOML reader) so this exercises the exact code path a fresh install hits.
+     */
+    @Test
+    void bundledDefaultTemplate_matchesConfigDefaultsForEveryStructure(@TempDir Path tmp) throws IOException {
+        try (InputStream in = ConfigLoader.class.getResourceAsStream("/chronodawn-default-config.toml")) {
+            assertTrue(in != null, "Bundled default config resource not found");
+            Files.copy(in, tmp.resolve("chronodawn.toml"), StandardCopyOption.REPLACE_EXISTING);
+        }
+
+        ChronoDawnConfig.Structures structures = ConfigLoader.load(tmp).world().structures();
+        for (ManagedStructure structure : ManagedStructure.values()) {
+            assertEquals(structure.defaults(), structure.settingsOf(structures),
+                structure.name() + ": bundled chronodawn-default-config.toml must match ConfigDefaults");
+        }
     }
 }
