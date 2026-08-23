@@ -140,6 +140,7 @@
   "item.chronodawn.time_compass.tooltip.target": "Points to:",
   "item.chronodawn.time_compass.tooltip.no_target": "No target set",
   "item.chronodawn.time_compass.target.ancient_ruins": "Ancient Ruins",
+  "item.chronodawn.time_compass.target.forgotten_library": "Forgotten Library",
   "item.chronodawn.time_compass.target.desert_clock_tower": "Desert Clock Tower",
   "item.chronodawn.time_compass.target.master_clock": "Master Clock",
   "item.chronodawn.time_compass.target.phantom_catacombs": "Phantom Catacombs",
@@ -150,6 +151,7 @@
   "item.chronodawn.time_compass.located": "%s located at (%d, %d) - %d blocks %s",
   "item.chronodawn.time_compass.current_location": "%s: (%d, %d) | You: (%d, %d) - %d blocks %s",
   "item.chronodawn.time_compass.not_found": "%s not found within search range",
+  "item.chronodawn.time_compass.disabled": "%s does not generate in this world",
   "item.chronodawn.time_compass.no_target": "No target structure set",
 
   "direction.north": "North",

@@ -106,6 +106,13 @@ salt = 20005897
 > your pack is responsible for providing another source of that
 > progression step if you disable one of these seven.
 
+Disabling a structure also removes the Time Keeper trade that sells the Time
+Compass for it, and a compass targeting it reports that the structure does not
+generate in this world instead of searching for it forever. Trade lineups are
+built once per Time Keeper, so a villager that already offered the trade keeps
+it; and a compass that already recorded coordinates still reports them, since
+disabling a structure does not remove the ones a world already generated.
+
 #### Example: denser ruins
 
 ```toml

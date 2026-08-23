@@ -28,6 +28,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -120,5 +121,34 @@ class ManagedStructureTest {
                     structure.name() + " must not declare an exclusion zone");
             }
         }
+    }
+
+    @Test
+    void compassTargetKeysHaveTranslations() {
+        Map<String, String> lang = TestUtils.loadLangFile();
+        for (ManagedStructure structure : ManagedStructure.values()) {
+            assertTrue(lang.containsKey(structure.compassTargetKey()),
+                structure.name() + ": the Time Compass would show a raw key for "
+                    + structure.compassTargetKey());
+        }
+    }
+
+    @Test
+    void onlyAncientRuinsGeneratesInTheOverworld() {
+        for (ManagedStructure structure : ManagedStructure.values()) {
+            ManagedStructure.Dimension expected = structure == ManagedStructure.ANCIENT_RUINS
+                ? ManagedStructure.Dimension.OVERWORLD
+                : ManagedStructure.Dimension.CHRONO_DAWN;
+            assertEquals(expected, structure.dimension(), structure.name());
+        }
+    }
+
+    @Test
+    void byConfigKeyRoundTripsEveryConstantAndRejectsUnknownKeys() {
+        for (ManagedStructure structure : ManagedStructure.values()) {
+            assertEquals(structure, ManagedStructure.byConfigKey(structure.configKey()).orElse(null),
+                structure.name());
+        }
+        assertTrue(ManagedStructure.byConfigKey("not_a_structure").isEmpty());
     }
 }

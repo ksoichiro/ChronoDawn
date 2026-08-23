@@ -96,6 +96,7 @@
   "item.chronodawn.time_compass.tooltip.target": "指す対象:",
   "item.chronodawn.time_compass.tooltip.no_target": "対象が設定されていません",
   "item.chronodawn.time_compass.target.ancient_ruins": "古代の遺跡",
+  "item.chronodawn.time_compass.target.forgotten_library": "忘れられた図書館",
   "item.chronodawn.time_compass.target.desert_clock_tower": "砂漠の時計塔",
   "item.chronodawn.time_compass.target.master_clock": "マスタークロック",
   "item.chronodawn.time_compass.target.phantom_catacombs": "幻影のカタコンベ",
@@ -106,6 +107,7 @@
   "item.chronodawn.time_compass.located": "%s を座標 (%d, %d) に発見！- %dブロック先 %s",
   "item.chronodawn.time_compass.current_location": "%s: (%d, %d) | 現在地: (%d, %d) - %dブロック先 %s",
   "item.chronodawn.time_compass.not_found": "%s が検索範囲内で見つかりませんでした",
+  "item.chronodawn.time_compass.disabled": "%s はこのワールドでは生成されません",
   "item.chronodawn.time_compass.no_target": "対象構造物が設定されていません",
 
   "direction.north": "北",

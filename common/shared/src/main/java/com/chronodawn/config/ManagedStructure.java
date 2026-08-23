@@ -31,13 +31,13 @@ import java.util.function.Function;
  * all of them — so a structure cannot be half-wired.
  */
 public enum ManagedStructure {
-    ANCIENT_RUINS("ancient_ruins", ConfigDefaults.ANCIENT_RUINS_DEFAULTS,
+    ANCIENT_RUINS("ancient_ruins", Dimension.OVERWORLD, ConfigDefaults.ANCIENT_RUINS_DEFAULTS,
         ChronoDawnConfig.Structures::ancientRuins,
         ""),
-    FORGOTTEN_LIBRARY("forgotten_library", ConfigDefaults.FORGOTTEN_LIBRARY_DEFAULTS,
+    FORGOTTEN_LIBRARY("forgotten_library", Dimension.CHRONO_DAWN, ConfigDefaults.FORGOTTEN_LIBRARY_DEFAULTS,
         ChronoDawnConfig.Structures::forgottenLibrary,
         "the Portal Stabilizer recipe"),
-    DESERT_CLOCK_TOWER("desert_clock_tower", ConfigDefaults.DESERT_CLOCK_TOWER_DEFAULTS,
+    DESERT_CLOCK_TOWER("desert_clock_tower", Dimension.CHRONO_DAWN, ConfigDefaults.DESERT_CLOCK_TOWER_DEFAULTS,
         ChronoDawnConfig.Structures::desertClockTower,
         "Time Guardian, the Master Clock Key and Enhanced Clockstone"),
     // Forward references to PHANTOM_CATACOMBS (declared below) can't be passed
@@ -45,22 +45,22 @@ public enum ManagedStructure {
     // constant from an earlier one's initializer, even through a lambda. Passing its
     // name as a String and resolving it lazily via valueOf() in exclusionZone() sidesteps
     // the restriction entirely, since a String literal isn't a reference to the constant.
-    GUARDIAN_VAULT("guardian_vault", ConfigDefaults.GUARDIAN_VAULT_DEFAULTS,
+    GUARDIAN_VAULT("guardian_vault", Dimension.CHRONO_DAWN, ConfigDefaults.GUARDIAN_VAULT_DEFAULTS,
         ChronoDawnConfig.Structures::guardianVault,
         "Chronos Warden and the Guardian Stone",
         "PHANTOM_CATACOMBS", 10),
-    CLOCKWORK_DEPTHS("clockwork_depths", ConfigDefaults.CLOCKWORK_DEPTHS_DEFAULTS,
+    CLOCKWORK_DEPTHS("clockwork_depths", Dimension.CHRONO_DAWN, ConfigDefaults.CLOCKWORK_DEPTHS_DEFAULTS,
         ChronoDawnConfig.Structures::clockworkDepths,
         "Clockwork Colossus and the Colossus Gear",
         "PHANTOM_CATACOMBS", 10),
-    PHANTOM_CATACOMBS("phantom_catacombs", ConfigDefaults.PHANTOM_CATACOMBS_DEFAULTS,
+    PHANTOM_CATACOMBS("phantom_catacombs", Dimension.CHRONO_DAWN, ConfigDefaults.PHANTOM_CATACOMBS_DEFAULTS,
         ChronoDawnConfig.Structures::phantomCatacombs,
         "Temporal Phantom and the Phantom Essence"),
-    ENTROPY_CRYPT("entropy_crypt", ConfigDefaults.ENTROPY_CRYPT_DEFAULTS,
+    ENTROPY_CRYPT("entropy_crypt", Dimension.CHRONO_DAWN, ConfigDefaults.ENTROPY_CRYPT_DEFAULTS,
         ChronoDawnConfig.Structures::entropyCrypt,
         "Entropy Keeper and the Entropy Core",
         "PHANTOM_CATACOMBS", 10),
-    MASTER_CLOCK("master_clock", ConfigDefaults.MASTER_CLOCK_DEFAULTS,
+    MASTER_CLOCK("master_clock", Dimension.CHRONO_DAWN, ConfigDefaults.MASTER_CLOCK_DEFAULTS,
         ChronoDawnConfig.Structures::masterClock,
         "Time Tyrant, the final boss");
 
@@ -74,7 +74,25 @@ public enum ManagedStructure {
     public record ExclusionZone(ManagedStructure target, int chunkCount) {
     }
 
+    /** The dimension a structure generates in; the Time Compass searches there. */
+    public enum Dimension {
+        OVERWORLD("minecraft:overworld"),
+        CHRONO_DAWN("chronodawn:chronodawn");
+
+        private final String id;
+
+        Dimension(String id) {
+            this.id = id;
+        }
+
+        /** The dimension's registry ID, as {@code namespace:path}. */
+        public String id() {
+            return id;
+        }
+    }
+
     private final String configKey;
+    private final Dimension dimension;
     private final StructureSettings defaults;
     private final Function<ChronoDawnConfig.Structures, StructureSettings> accessor;
     private final String progressionNote;
@@ -83,15 +101,17 @@ public enum ManagedStructure {
 
     ManagedStructure(
         String configKey,
+        Dimension dimension,
         StructureSettings defaults,
         Function<ChronoDawnConfig.Structures, StructureSettings> accessor,
         String progressionNote
     ) {
-        this(configKey, defaults, accessor, progressionNote, null, 0);
+        this(configKey, dimension, defaults, accessor, progressionNote, null, 0);
     }
 
     ManagedStructure(
         String configKey,
+        Dimension dimension,
         StructureSettings defaults,
         Function<ChronoDawnConfig.Structures, StructureSettings> accessor,
         String progressionNote,
@@ -99,6 +119,7 @@ public enum ManagedStructure {
         int exclusionZoneChunkCount
     ) {
         this.configKey = configKey;
+        this.dimension = dimension;
         this.defaults = defaults;
         this.accessor = accessor;
         this.progressionNote = progressionNote;
@@ -109,6 +130,32 @@ public enum ManagedStructure {
     /** The TOML table name under {@code [world.structures]}. */
     public String configKey() {
         return configKey;
+    }
+
+    /** The dimension this structure generates in. */
+    public Dimension dimension() {
+        return dimension;
+    }
+
+    /** The translation key the Time Compass shows for this structure. */
+    public String compassTargetKey() {
+        return "item.chronodawn.time_compass.target." + configKey;
+    }
+
+    /**
+     * Looks up a structure by its {@link #configKey()}.
+     *
+     * @param configKey the TOML table name, which is also the Time Compass target value
+     *                  persisted in item NBT
+     * @return the matching structure, or empty for an unknown key
+     */
+    public static java.util.Optional<ManagedStructure> byConfigKey(String configKey) {
+        for (ManagedStructure structure : values()) {
+            if (structure.configKey.equals(configKey)) {
+                return java.util.Optional.of(structure);
+            }
+        }
+        return java.util.Optional.empty();
     }
 
     /** The registry ID of the structure this set places. */

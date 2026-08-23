@@ -1,5 +1,6 @@
 package com.chronodawn.items;
 
+import com.chronodawn.ChronoDawn;
 import com.chronodawn.compat.CompatHandlers;
 import com.chronodawn.registry.ModSounds;
 import net.minecraft.ChatFormatting;
@@ -31,15 +32,16 @@ import java.util.Optional;
 /**
  * Time Compass - Points to nearest key structures in ChronoDawn.
  *
- * This compass helps players locate important structures:
- * - Ancient Ruins (Overworld)
- * - Desert Clock Tower (ChronoDawn)
- * - Master Clock Tower (ChronoDawn)
+ * This compass helps players locate important structures. The set it can target is
+ * whatever ManagedStructure registers, so it stays in step with the structures the
+ * configuration exposes; Ancient Ruins is searched in the Overworld, the rest in
+ * ChronoDawn.
  *
  * Structure Type Storage:
  * - Stored in NBT custom data component
  * - Key: "TargetStructure"
- * - Values: "ancient_ruins", "desert_clock_tower", "master_clock_tower"
+ * - Values: a ManagedStructure config key, e.g. "ancient_ruins", "desert_clock_tower",
+ *   "master_clock". ManagedStructure is the single source of truth for the set.
  *
  * Obtaining:
  * - Trade with Time Keeper (each type sold separately)
@@ -66,6 +68,8 @@ public class TimeCompassItem extends Item {
     public static final String NBT_TARGET_DIMENSION = "TargetDimension";
 
     // Structure type constants
+    // Convenience constants for wiring trades and creative-tab samples. The set of
+    // targets the compass can resolve comes from ManagedStructure, not from this list.
     public static final String STRUCTURE_ANCIENT_RUINS = "ancient_ruins";
     public static final String STRUCTURE_DESERT_CLOCK_TOWER = "desert_clock_tower";
     public static final String STRUCTURE_MASTER_CLOCK = "master_clock";
@@ -154,22 +158,29 @@ public class TimeCompassItem extends Item {
     }
 
     /**
+     * Whether this compass points at a structure the pack has switched off.
+     *
+     * @param structureType the stored target structure key
+     * @return true when the target is a known structure that config has disabled
+     */
+    private static boolean isTargetDisabled(String structureType) {
+        return com.chronodawn.config.ManagedStructure.byConfigKey(structureType)
+            .map(structure -> !structure
+                .settingsOf(com.chronodawn.config.ChronoDawnConfig.get().world().structures())
+                .enabled())
+            .orElse(false);
+    }
+
+    /**
      * Get localized name for structure type.
      *
      * @param structureType Structure type constant
      * @return Localized structure name
      */
     private static String getStructureDisplayName(String structureType) {
-        return switch (structureType) {
-            case STRUCTURE_ANCIENT_RUINS -> "item.chronodawn.time_compass.target.ancient_ruins";
-            case STRUCTURE_DESERT_CLOCK_TOWER -> "item.chronodawn.time_compass.target.desert_clock_tower";
-            case STRUCTURE_MASTER_CLOCK -> "item.chronodawn.time_compass.target.master_clock";
-            case STRUCTURE_PHANTOM_CATACOMBS -> "item.chronodawn.time_compass.target.phantom_catacombs";
-            case STRUCTURE_GUARDIAN_VAULT -> "item.chronodawn.time_compass.target.guardian_vault";
-            case STRUCTURE_CLOCKWORK_DEPTHS -> "item.chronodawn.time_compass.target.clockwork_depths";
-            case STRUCTURE_ENTROPY_CRYPT -> "item.chronodawn.time_compass.target.entropy_crypt";
-            default -> "item.chronodawn.time_compass.target.unknown";
-        };
+        return com.chronodawn.config.ManagedStructure.byConfigKey(structureType)
+            .map(com.chronodawn.config.ManagedStructure::compassTargetKey)
+            .orElse("item.chronodawn.time_compass.target.unknown");
     }
 
     @Override
@@ -251,6 +262,19 @@ public class TimeCompassItem extends Item {
                 return InteractionResultHolder.success(stack);
             }
 
+            // A pack can disable a structure through config. Structures already generated
+            // in this world survive, so a compass that recorded one above still
+            // reports it; only a fresh search would run forever without finding one.
+            if (isTargetDisabled(targetStructure)) {
+                player.displayClientMessage(
+                    Component.translatable("item.chronodawn.time_compass.disabled",
+                        Component.translatable(getStructureDisplayName(targetStructure)))
+                        .withStyle(ChatFormatting.RED),
+                    false
+                );
+                return InteractionResultHolder.fail(stack);
+            }
+
             // Search for structure
             ServerLevel serverLevel = (ServerLevel) level;
             boolean success = locateAndSetStructure(serverLevel, stack, targetStructure, serverPlayer);
@@ -307,60 +331,25 @@ public class TimeCompassItem extends Item {
      */
     private static boolean locateAndSetStructure(ServerLevel serverLevel, ItemStack stack, String structureType, ServerPlayer player) {
         // Determine which dimension to search in
-        ServerLevel searchLevel = serverLevel;
+        ServerLevel searchLevel;
         ResourceLocation structureId;
 
-        switch (structureType) {
-            case STRUCTURE_ANCIENT_RUINS:
-                // Ancient Ruins are in the Overworld
-                searchLevel = serverLevel.getServer().getLevel(Level.OVERWORLD);
-                structureId = CompatResourceLocation.create("chronodawn", "ancient_ruins");
-                break;
-            case STRUCTURE_DESERT_CLOCK_TOWER:
-                // Desert Clock Tower is in ChronoDawn dimension
-                searchLevel = serverLevel.getServer().getLevel(
-                    ResourceKey.create(Registries.DIMENSION, CompatResourceLocation.create("chronodawn", "chronodawn"))
-                );
-                structureId = CompatResourceLocation.create("chronodawn", "desert_clock_tower");
-                break;
-            case STRUCTURE_MASTER_CLOCK:
-                // Master Clock is in ChronoDawn dimension
-                searchLevel = serverLevel.getServer().getLevel(
-                    ResourceKey.create(Registries.DIMENSION, CompatResourceLocation.create("chronodawn", "chronodawn"))
-                );
-                structureId = CompatResourceLocation.create("chronodawn", "master_clock");
-                break;
-            case STRUCTURE_PHANTOM_CATACOMBS:
-                // Phantom Catacombs is in ChronoDawn dimension
-                searchLevel = serverLevel.getServer().getLevel(
-                    ResourceKey.create(Registries.DIMENSION, CompatResourceLocation.create("chronodawn", "chronodawn"))
-                );
-                structureId = CompatResourceLocation.create("chronodawn", "phantom_catacombs");
-                break;
-            case STRUCTURE_GUARDIAN_VAULT:
-                // Guardian Vault is in ChronoDawn dimension
-                searchLevel = serverLevel.getServer().getLevel(
-                    ResourceKey.create(Registries.DIMENSION, CompatResourceLocation.create("chronodawn", "chronodawn"))
-                );
-                structureId = CompatResourceLocation.create("chronodawn", "guardian_vault");
-                break;
-            case STRUCTURE_CLOCKWORK_DEPTHS:
-                // Clockwork Depths is in ChronoDawn dimension
-                searchLevel = serverLevel.getServer().getLevel(
-                    ResourceKey.create(Registries.DIMENSION, CompatResourceLocation.create("chronodawn", "chronodawn"))
-                );
-                structureId = CompatResourceLocation.create("chronodawn", "clockwork_depths");
-                break;
-            case STRUCTURE_ENTROPY_CRYPT:
-                // Entropy Crypt is in ChronoDawn dimension
-                searchLevel = serverLevel.getServer().getLevel(
-                    ResourceKey.create(Registries.DIMENSION, CompatResourceLocation.create("chronodawn", "chronodawn"))
-                );
-                structureId = CompatResourceLocation.create("chronodawn", "entropy_crypt");
-                break;
-            default:
-                return false;
+        com.chronodawn.config.ManagedStructure structure =
+            com.chronodawn.config.ManagedStructure.byConfigKey(structureType).orElse(null);
+        if (structure == null) {
+            return false;
         }
+        // Every target's dimension and ID come from ManagedStructure, so a structure added
+        // there is locatable here without a second edit.
+        if (structure.dimension() == com.chronodawn.config.ManagedStructure.Dimension.OVERWORLD) {
+            searchLevel = serverLevel.getServer().getLevel(Level.OVERWORLD);
+        } else {
+            String[] parts = structure.dimension().id().split(":", 2);
+            searchLevel = serverLevel.getServer().getLevel(
+                ResourceKey.create(Registries.DIMENSION, CompatResourceLocation.create(parts[0], parts[1]))
+            );
+        }
+        structureId = CompatResourceLocation.create(ChronoDawn.MOD_ID, structure.configKey());
 
         if (searchLevel == null) {
             return false;

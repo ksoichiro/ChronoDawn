@@ -2,16 +2,10 @@ package com.chronodawn.entities.mobs;
 
 import com.chronodawn.items.TimeCompassItem;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.GlobalPos;
-import net.minecraft.core.HolderSet;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
-import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -38,7 +32,6 @@ import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.item.trading.MerchantOffers;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraft.world.level.levelgen.structure.Structure;
 import org.jetbrains.annotations.Nullable;
 import com.chronodawn.registry.ModItems;
 
@@ -246,82 +239,111 @@ public class TimeKeeperEntity extends AbstractVillager {
             // Points to nearest Desert Clock Tower in ChronoDawn
             // Early-game guidance item (accessible right after entering ChronoDawn)
             // Recommended visit order: 1st
-            ItemStack desertTowerCompass = createCompassWithPosition(TimeCompassItem.STRUCTURE_DESERT_CLOCK_TOWER);
-            offers.add(new MerchantOffer(
-                new ItemCost(ModItems.CLOCKSTONE.get(), 12),
-                Optional.of(new ItemCost(ModItems.TIME_CRYSTAL.get(), 4)),
-                desertTowerCompass,
-                3, // Max uses (can buy multiple for party members)
-                10, // XP reward
-                0.05f
-            ));
+            if (isStructureEnabled(TimeCompassItem.STRUCTURE_DESERT_CLOCK_TOWER)) {
+                ItemStack desertTowerCompass = createCompassWithPosition(TimeCompassItem.STRUCTURE_DESERT_CLOCK_TOWER);
+                offers.add(new MerchantOffer(
+                    new ItemCost(ModItems.CLOCKSTONE.get(), 12),
+                    Optional.of(new ItemCost(ModItems.TIME_CRYSTAL.get(), 4)),
+                    desertTowerCompass,
+                    3, // Max uses (can buy multiple for party members)
+                    10, // XP reward
+                    0.05f
+                ));
+            }
 
             // Trade 7: 12 Clockstone + 6 Time Crystal → Time Compass (Phantom Catacombs)
             // Points to Phantom Catacombs mid-boss dungeon
             // Recommended visit order: 2nd (after Desert Clock Tower)
-            ItemStack phantomCatacombsCompass = createCompassWithPosition(TimeCompassItem.STRUCTURE_PHANTOM_CATACOMBS);
-            offers.add(new MerchantOffer(
-                new ItemCost(ModItems.CLOCKSTONE.get(), 12),
-                Optional.of(new ItemCost(ModItems.TIME_CRYSTAL.get(), 6)),
-                phantomCatacombsCompass,
-                2, // Max uses (mid-boss dungeon compass)
-                12, // XP reward
-                0.05f
-            ));
+            if (isStructureEnabled(TimeCompassItem.STRUCTURE_PHANTOM_CATACOMBS)) {
+                ItemStack phantomCatacombsCompass = createCompassWithPosition(TimeCompassItem.STRUCTURE_PHANTOM_CATACOMBS);
+                offers.add(new MerchantOffer(
+                    new ItemCost(ModItems.CLOCKSTONE.get(), 12),
+                    Optional.of(new ItemCost(ModItems.TIME_CRYSTAL.get(), 6)),
+                    phantomCatacombsCompass,
+                    2, // Max uses (mid-boss dungeon compass)
+                    12, // XP reward
+                    0.05f
+                ));
+            }
 
             // Trade 8: 12 Clockstone + 6 Time Crystal → Time Compass (Guardian Vault)
             // Points to Guardian Vault mid-boss dungeon
             // Recommended visit order: 3rd
-            ItemStack guardianVaultCompass = createCompassWithPosition(TimeCompassItem.STRUCTURE_GUARDIAN_VAULT);
-            offers.add(new MerchantOffer(
-                new ItemCost(ModItems.CLOCKSTONE.get(), 12),
-                Optional.of(new ItemCost(ModItems.TIME_CRYSTAL.get(), 6)),
-                guardianVaultCompass,
-                2, // Max uses (mid-boss dungeon compass)
-                12, // XP reward
-                0.05f
-            ));
+            if (isStructureEnabled(TimeCompassItem.STRUCTURE_GUARDIAN_VAULT)) {
+                ItemStack guardianVaultCompass = createCompassWithPosition(TimeCompassItem.STRUCTURE_GUARDIAN_VAULT);
+                offers.add(new MerchantOffer(
+                    new ItemCost(ModItems.CLOCKSTONE.get(), 12),
+                    Optional.of(new ItemCost(ModItems.TIME_CRYSTAL.get(), 6)),
+                    guardianVaultCompass,
+                    2, // Max uses (mid-boss dungeon compass)
+                    12, // XP reward
+                    0.05f
+                ));
+            }
 
             // Trade 9: 12 Clockstone + 6 Time Crystal → Time Compass (Clockwork Depths)
             // Points to Clockwork Depths mid-boss dungeon
             // Recommended visit order: 4th
-            ItemStack clockworkDepthsCompass = createCompassWithPosition(TimeCompassItem.STRUCTURE_CLOCKWORK_DEPTHS);
-            offers.add(new MerchantOffer(
-                new ItemCost(ModItems.CLOCKSTONE.get(), 12),
-                Optional.of(new ItemCost(ModItems.TIME_CRYSTAL.get(), 6)),
-                clockworkDepthsCompass,
-                2, // Max uses (mid-boss dungeon compass)
-                12, // XP reward
-                0.05f
-            ));
+            if (isStructureEnabled(TimeCompassItem.STRUCTURE_CLOCKWORK_DEPTHS)) {
+                ItemStack clockworkDepthsCompass = createCompassWithPosition(TimeCompassItem.STRUCTURE_CLOCKWORK_DEPTHS);
+                offers.add(new MerchantOffer(
+                    new ItemCost(ModItems.CLOCKSTONE.get(), 12),
+                    Optional.of(new ItemCost(ModItems.TIME_CRYSTAL.get(), 6)),
+                    clockworkDepthsCompass,
+                    2, // Max uses (mid-boss dungeon compass)
+                    12, // XP reward
+                    0.05f
+                ));
+            }
 
             // Trade 10: 12 Clockstone + 6 Time Crystal → Time Compass (Entropy Crypt)
             // Points to Entropy Crypt mid-boss dungeon
             // Recommended visit order: 5th
-            ItemStack entropyCryptCompass = createCompassWithPosition(TimeCompassItem.STRUCTURE_ENTROPY_CRYPT);
-            offers.add(new MerchantOffer(
-                new ItemCost(ModItems.CLOCKSTONE.get(), 12),
-                Optional.of(new ItemCost(ModItems.TIME_CRYSTAL.get(), 6)),
-                entropyCryptCompass,
-                2, // Max uses (mid-boss dungeon compass)
-                12, // XP reward
-                0.05f
-            ));
+            if (isStructureEnabled(TimeCompassItem.STRUCTURE_ENTROPY_CRYPT)) {
+                ItemStack entropyCryptCompass = createCompassWithPosition(TimeCompassItem.STRUCTURE_ENTROPY_CRYPT);
+                offers.add(new MerchantOffer(
+                    new ItemCost(ModItems.CLOCKSTONE.get(), 12),
+                    Optional.of(new ItemCost(ModItems.TIME_CRYSTAL.get(), 6)),
+                    entropyCryptCompass,
+                    2, // Max uses (mid-boss dungeon compass)
+                    12, // XP reward
+                    0.05f
+                ));
+            }
 
             // Trade 11: 16 Clockstone + 8 Time Crystal → Time Compass (Master Clock)
             // Points to nearest Master Clock Tower in ChronoDawn
             // End-game guidance item (after 4 mid-boss dungeons)
             // Recommended visit order: 6th (final destination)
-            ItemStack masterClockCompass = createCompassWithPosition(TimeCompassItem.STRUCTURE_MASTER_CLOCK);
-            offers.add(new MerchantOffer(
-                new ItemCost(ModItems.CLOCKSTONE.get(), 16),
-                Optional.of(new ItemCost(ModItems.TIME_CRYSTAL.get(), 8)),
-                masterClockCompass,
-                1, // Max uses (rare, powerful item)
-                15, // Higher XP reward
-                0.05f
-            ));
+            if (isStructureEnabled(TimeCompassItem.STRUCTURE_MASTER_CLOCK)) {
+                ItemStack masterClockCompass = createCompassWithPosition(TimeCompassItem.STRUCTURE_MASTER_CLOCK);
+                offers.add(new MerchantOffer(
+                    new ItemCost(ModItems.CLOCKSTONE.get(), 16),
+                    Optional.of(new ItemCost(ModItems.TIME_CRYSTAL.get(), 8)),
+                    masterClockCompass,
+                    1, // Max uses (rare, powerful item)
+                    15, // Higher XP reward
+                    0.05f
+                ));
+            }
         }
+    }
+
+    /**
+     * Whether config still generates the structure a compass would point at.
+     *
+     * <p>Offering a compass for a structure the pack disabled would sell the player an
+     * item that can never resolve, so the trade is withheld instead.
+     *
+     * @param structureType the compass target key, matching a ManagedStructure config key
+     * @return true when the structure generates in this world
+     */
+    private static boolean isStructureEnabled(String structureType) {
+        return com.chronodawn.config.ManagedStructure.byConfigKey(structureType)
+            .map(structure -> structure
+                .settingsOf(com.chronodawn.config.ChronoDawnConfig.get().world().structures())
+                .enabled())
+            .orElse(true);
     }
 
     /**
@@ -345,116 +367,6 @@ public class TimeKeeperEntity extends AbstractVillager {
     public void notifyTrade(MerchantOffer offer) {
         super.notifyTrade(offer);
         // No post-processing needed - compass coordinates are set when player uses the item
-    }
-
-    /**
-     * Locate a structure and set its position in the Time Compass.
-     *
-     * @param serverLevel Server level to search in
-     * @param compassStack Time Compass ItemStack
-     * @param structureType Structure type to locate
-     */
-    private void locateAndSetStructurePosition(ServerLevel serverLevel, ItemStack compassStack, String structureType) {
-        com.chronodawn.ChronoDawn.LOGGER.debug("Time Keeper: Locating structure for compass - type: {}", structureType);
-
-        // Determine which dimension to search in
-        ServerLevel searchLevel = serverLevel;
-        ResourceLocation structureId;
-
-        switch (structureType) {
-            case TimeCompassItem.STRUCTURE_ANCIENT_RUINS:
-                // Ancient Ruins are in the Overworld
-                searchLevel = serverLevel.getServer().getLevel(Level.OVERWORLD);
-                structureId = CompatResourceLocation.create("chronodawn", "ancient_ruins");
-                break;
-            case TimeCompassItem.STRUCTURE_DESERT_CLOCK_TOWER:
-                // Desert Clock Tower is in ChronoDawn dimension
-                searchLevel = serverLevel.getServer().getLevel(
-                    ResourceKey.create(Registries.DIMENSION, CompatResourceLocation.create("chronodawn", "chronodawn"))
-                );
-                structureId = CompatResourceLocation.create("chronodawn", "desert_clock_tower");
-                break;
-            case TimeCompassItem.STRUCTURE_MASTER_CLOCK:
-                // Master Clock is in ChronoDawn dimension
-                searchLevel = serverLevel.getServer().getLevel(
-                    ResourceKey.create(Registries.DIMENSION, CompatResourceLocation.create("chronodawn", "chronodawn"))
-                );
-                structureId = CompatResourceLocation.create("chronodawn", "master_clock");
-                break;
-            case TimeCompassItem.STRUCTURE_PHANTOM_CATACOMBS:
-                // Phantom Catacombs is in ChronoDawn dimension
-                searchLevel = serverLevel.getServer().getLevel(
-                    ResourceKey.create(Registries.DIMENSION, CompatResourceLocation.create("chronodawn", "chronodawn"))
-                );
-                structureId = CompatResourceLocation.create("chronodawn", "phantom_catacombs");
-                break;
-            case TimeCompassItem.STRUCTURE_GUARDIAN_VAULT:
-                // Guardian Vault is in ChronoDawn dimension
-                searchLevel = serverLevel.getServer().getLevel(
-                    ResourceKey.create(Registries.DIMENSION, CompatResourceLocation.create("chronodawn", "chronodawn"))
-                );
-                structureId = CompatResourceLocation.create("chronodawn", "guardian_vault");
-                break;
-            case TimeCompassItem.STRUCTURE_CLOCKWORK_DEPTHS:
-                // Clockwork Depths is in ChronoDawn dimension
-                searchLevel = serverLevel.getServer().getLevel(
-                    ResourceKey.create(Registries.DIMENSION, CompatResourceLocation.create("chronodawn", "chronodawn"))
-                );
-                structureId = CompatResourceLocation.create("chronodawn", "clockwork_depths");
-                break;
-            case TimeCompassItem.STRUCTURE_ENTROPY_CRYPT:
-                // Entropy Crypt is in ChronoDawn dimension
-                searchLevel = serverLevel.getServer().getLevel(
-                    ResourceKey.create(Registries.DIMENSION, CompatResourceLocation.create("chronodawn", "chronodawn"))
-                );
-                structureId = CompatResourceLocation.create("chronodawn", "entropy_crypt");
-                break;
-            default:
-                com.chronodawn.ChronoDawn.LOGGER.warn("Time Keeper: Unknown structure type: {}", structureType);
-                return;
-        }
-
-        if (searchLevel == null) {
-            com.chronodawn.ChronoDawn.LOGGER.warn("Time Keeper: Search level is null for structure: {}", structureType);
-            return;
-        }
-
-        // Get trading player's position as search origin
-        Player tradingPlayer = this.getTradingPlayer();
-        BlockPos searchOrigin = tradingPlayer != null ? tradingPlayer.blockPosition() : this.blockPosition();
-        com.chronodawn.ChronoDawn.LOGGER.debug("Time Keeper: Searching from position: {}", searchOrigin);
-
-        // Get structure registry
-        // In 1.21.2, get() returns Optional<Holder.Reference<T>>
-        var structureRegistry = searchLevel.registryAccess().lookupOrThrow(Registries.STRUCTURE);
-        var structureHolderOpt = structureRegistry.get(structureId);
-
-        if (structureHolderOpt.isPresent()) {
-            com.chronodawn.ChronoDawn.LOGGER.debug("Time Keeper: Structure found in registry: {}", structureId);
-
-            // Create HolderSet for the single structure
-            HolderSet<Structure> structureSet = HolderSet.direct(structureHolderOpt.get());
-
-            // Locate nearest structure
-            var structurePair = searchLevel.getChunkSource().getGenerator().findNearestMapStructure(
-                searchLevel,
-                structureSet,
-                searchOrigin,
-                100, // Search radius in chunks
-                false // Skip known structures
-            );
-
-            if (structurePair != null) {
-                BlockPos structurePos = structurePair.getFirst();
-                GlobalPos globalPos = GlobalPos.of(searchLevel.dimension(), structurePos);
-                TimeCompassItem.setTargetPosition(compassStack, globalPos);
-                com.chronodawn.ChronoDawn.LOGGER.debug("Time Keeper: Successfully set compass target to: {}", structurePos);
-            } else {
-                com.chronodawn.ChronoDawn.LOGGER.warn("Time Keeper: No structure found within 100 chunks of {}", searchOrigin);
-            }
-        } else {
-            com.chronodawn.ChronoDawn.LOGGER.warn("Time Keeper: Structure not found in registry: {}", structureId);
-        }
     }
 
     @Override
