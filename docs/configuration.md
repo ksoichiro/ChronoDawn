@@ -194,9 +194,14 @@ at the edge of the explored area, the same as when changing structure spacing.
 Disabled biomes stay registered, so existing chunks containing them keep loading
 normally.
 
-**Structures are unaffected.** Every Chrono Dawn structure can generate in
-`plains`, so no combination of biome toggles can make a structure ungenerable. Use
-[`[world.structures.*]`](#worldstructures) to control structures.
+**Structures are unaffected.** These toggles only remap biomes of the Chrono
+dimension. Every Chrono-dimension structure that restricts itself to specific
+biomes lists `chronodawn:chronodawn_plains` among them, and `plains` cannot be
+disabled, so no combination of biome toggles can leave one of those structures
+with nowhere to generate. Ancient Ruins is unaffected for a different reason: it
+generates in the Overworld, in vanilla biomes, and never references a Chrono
+biome at all. Use [`[world.structures.*]`](#worldstructures) to control
+structures.
 
 ---
 
