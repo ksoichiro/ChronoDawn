@@ -14,8 +14,8 @@
 
 - **Worktree:** all work happens in `.claude/worktrees/biome-toggles` on branch `biome-toggles`. Run `pwd` before the first command of every task and confirm it ends in `/.claude/worktrees/biome-toggles`.
 - **JAVA_HOME is unset in agent shells and there is no system JDK.** Prefix every Gradle command with:
-  `export JAVA_HOME="$(echo ~/.local/share/mise/installs/java/temurin-21*/ | tr -d '\n')"; export PATH="$JAVA_HOME/bin:$PATH";`
-  The installed directory carries a full version suffix (e.g. `temurin-21.0.3+9.0.LTS`) and that suffix changes between sessions, so glob it rather than hardcoding it.
+  `export JAVA_HOME=~/.local/share/mise/installs/java/temurin-21; export PATH="$JAVA_HOME/bin:$PATH";`
+  `temurin-21` is a symlink to the versioned directory and is the right thing to use. Under the default sandbox it can read as missing — that is a permission error, not a missing JDK. Re-run the command with the sandbox disabled rather than globbing for the versioned path (a glob matches three sibling entries and produces an invalid `JAVA_HOME`).
 - **Never run two Gradle builds against this worktree at once.** A concurrent build produces bogus failures.
 - **Never run a foreground Gradle build while a background one is active in the same repo.**
 - All source files are shared across every supported Minecraft version. `common/shared/` is **not** a Gradle subproject — its sources compile into each `common-<version>` module. Unit tests run per version module.
@@ -375,7 +375,7 @@ Add `import static org.junit.jupiter.api.Assertions.assertNotNull;` to the file.
 
 ```bash
 cd /Users/ksoichiro/src/github.com/ksoichiro/ChronoDawn/.claude/worktrees/biome-toggles
-export JAVA_HOME="$(echo ~/.local/share/mise/installs/java/temurin-21*/ | tr -d '\n')"; export PATH="$JAVA_HOME/bin:$PATH"
+export JAVA_HOME=~/.local/share/mise/installs/java/temurin-21; export PATH="$JAVA_HOME/bin:$PATH"
 ./gradlew :common-1.21.11:test -Ptarget_mc_version=1.21.11 --tests '*ManagedBiomeTest*'
 ```
 
@@ -544,7 +544,7 @@ Fill in the `contentNote` for `FOREST`, `DARK_FOREST`, `ANCIENT_FOREST`, `SWAMP`
 
 ```bash
 cd /Users/ksoichiro/src/github.com/ksoichiro/ChronoDawn/.claude/worktrees/biome-toggles
-export JAVA_HOME="$(echo ~/.local/share/mise/installs/java/temurin-21*/ | tr -d '\n')"; export PATH="$JAVA_HOME/bin:$PATH"
+export JAVA_HOME=~/.local/share/mise/installs/java/temurin-21; export PATH="$JAVA_HOME/bin:$PATH"
 ./gradlew :common-1.21.11:test -Ptarget_mc_version=1.21.11 --tests '*ManagedBiomeTest*'
 ```
 
@@ -686,7 +686,7 @@ Append to `ProgressionWarningsTest.java`, inside the class:
 
 ```bash
 cd /Users/ksoichiro/src/github.com/ksoichiro/ChronoDawn/.claude/worktrees/biome-toggles
-export JAVA_HOME="$(echo ~/.local/share/mise/installs/java/temurin-21*/ | tr -d '\n')"; export PATH="$JAVA_HOME/bin:$PATH"
+export JAVA_HOME=~/.local/share/mise/installs/java/temurin-21; export PATH="$JAVA_HOME/bin:$PATH"
 ./gradlew :common-1.21.11:test -Ptarget_mc_version=1.21.11 --tests '*ConfigLoaderTest*' --tests '*ProgressionWarningsTest*'
 ```
 
@@ -845,7 +845,7 @@ Add the "Disabling it stops ... from generating" line only for biomes whose `con
 
 ```bash
 cd /Users/ksoichiro/src/github.com/ksoichiro/ChronoDawn/.claude/worktrees/biome-toggles
-export JAVA_HOME="$(echo ~/.local/share/mise/installs/java/temurin-21*/ | tr -d '\n')"; export PATH="$JAVA_HOME/bin:$PATH"
+export JAVA_HOME=~/.local/share/mise/installs/java/temurin-21; export PATH="$JAVA_HOME/bin:$PATH"
 ./gradlew :common-1.21.11:test -Ptarget_mc_version=1.21.11 --tests '*ConfigLoaderTest*' --tests '*ProgressionWarningsTest*' --tests '*ManagedBiomeTest*'
 ```
 
@@ -1025,7 +1025,7 @@ class RuntimeBiomeOverlayTest {
 
 ```bash
 cd /Users/ksoichiro/src/github.com/ksoichiro/ChronoDawn/.claude/worktrees/biome-toggles
-export JAVA_HOME="$(echo ~/.local/share/mise/installs/java/temurin-21*/ | tr -d '\n')"; export PATH="$JAVA_HOME/bin:$PATH"
+export JAVA_HOME=~/.local/share/mise/installs/java/temurin-21; export PATH="$JAVA_HOME/bin:$PATH"
 ./gradlew :common-1.21.11:test -Ptarget_mc_version=1.21.11 --tests '*RuntimeBiomeOverlayTest*'
 ```
 
@@ -1149,7 +1149,7 @@ In `OverlayPackBootstrap.java`, after the existing `overlay.putAll(RuntimePlaced
 
 ```bash
 cd /Users/ksoichiro/src/github.com/ksoichiro/ChronoDawn/.claude/worktrees/biome-toggles
-export JAVA_HOME="$(echo ~/.local/share/mise/installs/java/temurin-21*/ | tr -d '\n')"; export PATH="$JAVA_HOME/bin:$PATH"
+export JAVA_HOME=~/.local/share/mise/installs/java/temurin-21; export PATH="$JAVA_HOME/bin:$PATH"
 ./gradlew :common-1.21.11:test -Ptarget_mc_version=1.21.11 --tests '*RuntimeBiomeOverlayTest*' --tests '*OverlayPackBootstrapTest*'
 ```
 
@@ -1253,7 +1253,7 @@ Add the imports `com.chronodawn.config.ManagedStructure`, `java.util.LinkedHashM
 
 ```bash
 cd /Users/ksoichiro/src/github.com/ksoichiro/ChronoDawn/.claude/worktrees/biome-toggles
-export JAVA_HOME="$(echo ~/.local/share/mise/installs/java/temurin-21*/ | tr -d '\n')"; export PATH="$JAVA_HOME/bin:$PATH"
+export JAVA_HOME=~/.local/share/mise/installs/java/temurin-21; export PATH="$JAVA_HOME/bin:$PATH"
 ./gradlew :common-1.21.11:test -Ptarget_mc_version=1.21.11 --tests '*ManagedBiomeTest*'
 ```
 
@@ -1362,7 +1362,7 @@ This is the gate before the branch is considered done. It takes a long time; do 
 
 ```bash
 cd /Users/ksoichiro/src/github.com/ksoichiro/ChronoDawn/.claude/worktrees/biome-toggles
-export JAVA_HOME="$(echo ~/.local/share/mise/installs/java/temurin-21*/ | tr -d '\n')"; export PATH="$JAVA_HOME/bin:$PATH"
+export JAVA_HOME=~/.local/share/mise/installs/java/temurin-21; export PATH="$JAVA_HOME/bin:$PATH"
 mkdir -p build/logs
 ./gradlew checkAll > build/logs/checkAll.log 2>&1; echo "exit=$?"
 ```
@@ -1381,7 +1381,7 @@ Unit tests confirm the JSON this code produces; only a running game confirms Min
 
 ```bash
 cd /Users/ksoichiro/src/github.com/ksoichiro/ChronoDawn/.claude/worktrees/biome-toggles
-export JAVA_HOME="$(echo ~/.local/share/mise/installs/java/temurin-21*/ | tr -d '\n')"; export PATH="$JAVA_HOME/bin:$PATH"
+export JAVA_HOME=~/.local/share/mise/installs/java/temurin-21; export PATH="$JAVA_HOME/bin:$PATH"
 ./gradlew runClientFabric1_21_11
 ```
 
