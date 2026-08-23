@@ -268,11 +268,22 @@ is worth having as a *measured* guarantee rather than an implicit dependency on
 today's tag contents: if `plains` is ever dropped from a `has_*` tag, or the set
 of core biomes changes, this test catches it. Exhausting 512 cases is instant.
 
-### GameTest
+### In-game verification
 
-Boot a server with one biome disabled and confirm the dimension loads. Unit tests
-verify the JSON this code produces; only a running game verifies that Minecraft
-accepts it.
+Unit tests verify the JSON this code produces; only a running game verifies that
+Minecraft accepts it. That splits in two.
+
+**Automatic, once the overlay is wired.** Every server boot writes and loads the
+overlay's dimension JSON, so the existing `gameTestAll` stage covers "Minecraft
+accepts our generated dimension JSON" across all eleven versions and both loaders
+without a new test class: malformed JSON or a reference to an unregistered biome
+would fail world load and take every GameTest down with it.
+
+**Manual, for the disabled case.** The GameTest harness boots with the default
+config and offers no hook for supplying a modified `chronodawn.toml`, so the
+disabled-biome path cannot be automated within it. It is verified by hand: confirm
+the startup warning, that the dimension loads, that `/locate biome` fails for the
+disabled biome, and that it still succeeds for a core one.
 
 ### Guard verification
 
