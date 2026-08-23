@@ -72,7 +72,7 @@ Expected: path ends with `/.claude/worktrees/biome-toggles`.
 
 - [ ] **Step 2: Collect each biome's feature and mob set**
 
-The nine non-core biomes are: `desert`, `plains` is core, `prairies`, `forest`, `dark_forest`, `ancient_forest`, `snowy`, `mountain`, `swamp`, `faded_plains`.
+The nine non-core biomes to audit are: `desert`, `prairies`, `forest`, `dark_forest`, `ancient_forest`, `snowy`, `mountain`, `swamp`, `faded_plains`. (`plains` and `ocean` are core — they cannot be disabled, so they need no audit.)
 
 ```bash
 cd /Users/ksoichiro/src/github.com/ksoichiro/ChronoDawn/.claude/worktrees/biome-toggles
@@ -464,7 +464,13 @@ public enum ManagedBiome {
         this.contentNote = contentNote;
     }
 
-    /** The TOML table name under {@code [world.biomes]}; empty for core biomes. */
+    /**
+     * The TOML table name under {@code [world.biomes]}.
+     *
+     * <p>Core biomes have one too — it names them in logs and guard tests — but no
+     * table is written for them, which is how the config states that they cannot be
+     * disabled.
+     */
     public String configKey() {
         return configKey;
     }
@@ -1279,9 +1285,9 @@ git commit -m "test(worldgen): prove no biome toggle combination can orphan a st
 
 - [ ] **Step 1: Write the `docs/configuration.md` section**
 
-Insert after the `[world.structures.*]` section, matching that section's structure (intro, table, example, notes):
+Insert after the `[world.structures.*]` section, matching that section's structure (intro, table, example, notes). The outer fence below is four backticks so the inner TOML block survives; write the inner content into the doc as a normal three-backtick block:
 
-```markdown
+````markdown
 ### `[world.biomes.*]`
 
 Controls which biomes generate in the Chrono dimension. One table per biome:
@@ -1331,7 +1337,7 @@ normally.
 **Structures are unaffected.** Every Chrono Dawn structure can generate in
 `plains`, so no combination of biome toggles can make a structure ungenerable. Use
 [`[world.structures.*]`](#worldstructures) to control structures.
-```
+````
 
 - [ ] **Step 2: Add the CHANGELOG entry**
 
