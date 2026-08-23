@@ -196,7 +196,7 @@ biome definitions on 2026-08-23.
 
 | Biome | `contentNote` | Basis |
 | --- | --- | --- |
-| `snowy` | `the Chrono Ursid` | only biome the mob spawns in |
+| `snowy` | `the Chrono Ursid and Frozen Time Ice` | only biome the mob spawns in; frozen_time_ice is placed only by snowy's ice pillars and has no recipe |
 | `mountain` | `the Temporal Caprid` | only biome the mob spawns in |
 | ... | ... | ... |
 
@@ -445,7 +445,7 @@ public enum ManagedBiome {
     FADED_PLAINS("faded_plains", "chronodawn_faded_plains", "PLAINS", ""),
     DESERT("desert", "chronodawn_desert", "FADED_PLAINS", ""),
     PRAIRIES("prairies", "chronodawn_prairies", "PLAINS", ""),
-    SNOWY("snowy", "chronodawn_snowy", "PLAINS", "the Chrono Ursid"),
+    SNOWY("snowy", "chronodawn_snowy", "PLAINS", "the Chrono Ursid and Frozen Time Ice"),
     MOUNTAIN("mountain", "chronodawn_mountain", "PLAINS", "the Temporal Caprid");
 
     /** The data-pack-relative path of the dimension JSON the overlay replaces. */
@@ -833,7 +833,7 @@ enabled = true
 # Whether the Chrono Snowy biome generates in Chrono Dawn.
 # When disabled, its area of the biome distribution is taken over by
 # chronodawn:chronodawn_plains instead of being left empty.
-# Disabling it stops the Chrono Ursid from generating.
+# Disabling it stops the Chrono Ursid and Frozen Time Ice from generating.
 # Only affects newly generated chunks; existing terrain is unchanged.
 enabled = true
 ```
@@ -1388,7 +1388,7 @@ export JAVA_HOME=~/.local/share/mise/installs/java/temurin-21; export PATH="$JAV
 
 1. Launch once to materialise `run/config/chronodawn.toml`, then quit.
 2. Set `[world.biomes.snowy] enabled = false`.
-3. Relaunch and confirm the startup log contains the `world.biomes.snowy is disabled: the Chrono Ursid ...` warning.
+3. Relaunch and confirm the startup log contains the `world.biomes.snowy is disabled: the Chrono Ursid and Frozen Time Ice will no longer generate ...` warning.
 4. Create a new world, enter the Chrono dimension, and confirm it loads with no error.
 5. `/locate biome chronodawn:chronodawn_snowy` — expect it to fail to find one.
 6. `/locate biome chronodawn:chronodawn_plains` — expect success, confirming the dimension is still generating normally.
