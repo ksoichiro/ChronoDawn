@@ -58,6 +58,9 @@ public final class ConfigLoader {
     private static final String K_STRUCTURE_SEPARATION = "separation";
     private static final String K_STRUCTURE_SALT = "salt";
 
+    private static final String K_BIOMES = "biomes";
+    private static final String K_BIOME_ENABLED = "enabled";
+
     private static final String K_ORES = "ores";
     private static final String K_TIME_CRYSTAL = "time_crystal";
     private static final String K_ENTROPY_CRYSTAL = "entropy_crystal";
@@ -119,6 +122,9 @@ public final class ConfigLoader {
         for (String warning : ProgressionWarnings.forDisabledStructures(config.world().structures())) {
             LOGGER.warn(warning);
         }
+        for (String warning : ProgressionWarnings.forDisabledBiomes(config.world().biomes())) {
+            LOGGER.warn(warning);
+        }
         ChronoDawnConfig.set(config);
         return config;
     }
@@ -160,6 +166,7 @@ public final class ConfigLoader {
 
         ChronoDawnConfig.Structures structures = parseStructures(parsed);
         com.chronodawn.config.OresConfig ores = parseOres(parsed);
+        ChronoDawnConfig.Biomes biomes = parseBiomes(parsed);
         ChronoDawnConfig.Gameplay gameplay = parseGameplay(parsed);
 
         // Surface unknown top-level keys at WARN. Nested-table walking would be nice but
@@ -175,7 +182,8 @@ public final class ConfigLoader {
             schemaVersion,
             new ChronoDawnConfig.World(
                 structures,
-                ores
+                ores,
+                biomes
             ),
             gameplay
         );
@@ -236,6 +244,28 @@ public final class ConfigLoader {
         }
 
         return new StructureSettings(enabled, spacing, separation, salt);
+    }
+
+    private static ChronoDawnConfig.Biomes parseBiomes(CommentedConfig parsed) {
+        return new ChronoDawnConfig.Biomes(
+            parseBiome(parsed, ManagedBiome.DESERT),
+            parseBiome(parsed, ManagedBiome.PRAIRIES),
+            parseBiome(parsed, ManagedBiome.FOREST),
+            parseBiome(parsed, ManagedBiome.DARK_FOREST),
+            parseBiome(parsed, ManagedBiome.ANCIENT_FOREST),
+            parseBiome(parsed, ManagedBiome.SNOWY),
+            parseBiome(parsed, ManagedBiome.MOUNTAIN),
+            parseBiome(parsed, ManagedBiome.SWAMP),
+            parseBiome(parsed, ManagedBiome.FADED_PLAINS)
+        );
+    }
+
+    // No validation beyond the type: a biome has a single boolean and no interacting
+    // fields, so there is nothing to clamp the way parseStructure clamps separation.
+    private static BiomeSettings parseBiome(CommentedConfig parsed, ManagedBiome biome) {
+        String path = K_WORLD + "." + K_BIOMES + "." + biome.configKey();
+        boolean enabled = parsed.<Boolean>getOptional(path + "." + K_BIOME_ENABLED).orElse(true);
+        return new BiomeSettings(enabled);
     }
 
     private static com.chronodawn.config.OresConfig parseOres(CommentedConfig parsed) {

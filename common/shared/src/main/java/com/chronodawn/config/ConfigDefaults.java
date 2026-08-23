@@ -60,6 +60,13 @@ public final class ConfigDefaults {
     // Portal Stabilizer requirement for re-ignition in Chrono Dawn.
     public static final PortalSettings PORTAL_DEFAULTS = new PortalSettings(true, false);
 
+    /** Every biome generates by default. */
+    public static final ChronoDawnConfig.Biomes BIOME_DEFAULTS = new ChronoDawnConfig.Biomes(
+        new BiomeSettings(true), new BiomeSettings(true), new BiomeSettings(true),
+        new BiomeSettings(true), new BiomeSettings(true), new BiomeSettings(true),
+        new BiomeSettings(true), new BiomeSettings(true), new BiomeSettings(true)
+    );
+
     public static ChronoDawnConfig defaults() {
         return new ChronoDawnConfig(
             ChronoDawnConfig.CURRENT_SCHEMA_VERSION,
@@ -79,7 +86,8 @@ public final class ConfigDefaults {
                     ENTROPY_CRYSTAL_DEFAULTS,
                     TEMPORAL_AMBER_DEFAULTS,
                     CLOCKSTONE_DEFAULTS
-                )
+                ),
+                BIOME_DEFAULTS
             ),
             new ChronoDawnConfig.Gameplay(
                 TIME_DISTORTION_DEFAULTS,

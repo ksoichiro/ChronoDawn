@@ -17,11 +17,13 @@
  */
 package com.chronodawn.unit;
 
+import com.chronodawn.config.BiomeSettings;
 import com.chronodawn.config.BossesConfig;
 import com.chronodawn.config.BossSettings;
 import com.chronodawn.config.ChronoDawnConfig;
 import com.chronodawn.config.ConfigDefaults;
 import com.chronodawn.config.ConfigLoader;
+import com.chronodawn.config.ManagedBiome;
 import com.chronodawn.config.ManagedStructure;
 import com.chronodawn.config.PortalSettings;
 import com.chronodawn.config.StructureSettings;
@@ -36,6 +38,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -619,5 +622,53 @@ class ConfigLoaderTest {
             assertEquals(structure.defaults(), structure.settingsOf(structures),
                 structure.name() + ": bundled chronodawn-default-config.toml must match ConfigDefaults");
         }
+    }
+
+    @Test
+    void biomes_defaultToEnabledWhenAbsentFromConfig(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"), "schema_version = 1\n");
+
+        ChronoDawnConfig.Biomes biomes = ConfigLoader.load(tmp).world().biomes();
+
+        for (ManagedBiome biome : ManagedBiome.configurable()) {
+            assertTrue(biome.settingsOf(biomes).enabled(), biome.name() + " must default to enabled");
+        }
+    }
+
+    @Test
+    void biomes_readExplicitDisable(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"), """
+            schema_version = 1
+
+            [world.biomes.snowy]
+            enabled = false
+            """);
+
+        ChronoDawnConfig.Biomes biomes = ConfigLoader.load(tmp).world().biomes();
+
+        assertFalse(ManagedBiome.SNOWY.settingsOf(biomes).enabled(), "snowy was explicitly disabled");
+        assertTrue(ManagedBiome.MOUNTAIN.settingsOf(biomes).enabled(), "siblings are unaffected");
+    }
+
+    @Test
+    void bundledDefaultTemplate_hasATableForEveryConfigurableBiome(@TempDir Path tmp) throws IOException {
+        try (InputStream in = ConfigLoader.class.getResourceAsStream("/chronodawn-default-config.toml")) {
+            assertTrue(in != null, "Bundled default config resource not found");
+            Files.copy(in, tmp.resolve("chronodawn.toml"), StandardCopyOption.REPLACE_EXISTING);
+        }
+        String toml = Files.readString(tmp.resolve("chronodawn.toml"));
+
+        for (ManagedBiome biome : ManagedBiome.configurable()) {
+            assertTrue(toml.contains("[world.biomes." + biome.configKey() + "]"),
+                biome.name() + ": bundled chronodawn-default-config.toml must declare its table");
+        }
+        for (ManagedBiome biome : ManagedBiome.values()) {
+            if (!biome.isCore()) continue;
+            assertFalse(toml.contains("[world.biomes." + biome.configKey() + "]"),
+                biome.name() + " is core and must not appear in the bundled config");
+        }
+
+        assertEquals(ConfigDefaults.BIOME_DEFAULTS, ConfigLoader.load(tmp).world().biomes(),
+            "bundled template must load to exactly ConfigDefaults.BIOME_DEFAULTS");
     }
 }

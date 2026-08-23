@@ -17,8 +17,10 @@
  */
 package com.chronodawn.unit;
 
+import com.chronodawn.config.BiomeSettings;
 import com.chronodawn.config.ChronoDawnConfig;
 import com.chronodawn.config.ConfigDefaults;
+import com.chronodawn.config.ManagedBiome;
 import com.chronodawn.config.ProgressionWarnings;
 import com.chronodawn.config.StructureSettings;
 import org.junit.jupiter.api.Test;
@@ -70,5 +72,38 @@ class ProgressionWarningsTest {
         assertTrue(warnings.get(0).contains("Entropy Keeper and the Entropy Core"), warnings.get(0));
         assertTrue(warnings.get(1).contains("world.structures.master_clock"), warnings.get(1));
         assertTrue(warnings.get(1).contains("Time Tyrant, the final boss"), warnings.get(1));
+    }
+
+    @Test
+    void disabledBiomeWithContentNote_producesAWarning() {
+        ChronoDawnConfig.Biomes biomes = disable(ManagedBiome.SNOWY);
+
+        List<String> warnings = ProgressionWarnings.forDisabledBiomes(biomes);
+
+        assertEquals(1, warnings.size(), "Only snowy was disabled");
+        assertTrue(warnings.get(0).contains("world.biomes.snowy"), warnings.get(0));
+        assertTrue(warnings.get(0).contains("the Chrono Ursid"), warnings.get(0));
+    }
+
+    @Test
+    void allBiomesEnabled_producesNoWarnings() {
+        assertTrue(ProgressionWarnings.forDisabledBiomes(ConfigDefaults.BIOME_DEFAULTS).isEmpty());
+    }
+
+    /** Builds a Biomes record with exactly the given biome disabled. */
+    private static ChronoDawnConfig.Biomes disable(ManagedBiome target) {
+        java.util.function.Function<ManagedBiome, BiomeSettings> s =
+            b -> new BiomeSettings(b != target);
+        return new ChronoDawnConfig.Biomes(
+            s.apply(ManagedBiome.DESERT),
+            s.apply(ManagedBiome.PRAIRIES),
+            s.apply(ManagedBiome.FOREST),
+            s.apply(ManagedBiome.DARK_FOREST),
+            s.apply(ManagedBiome.ANCIENT_FOREST),
+            s.apply(ManagedBiome.SNOWY),
+            s.apply(ManagedBiome.MOUNTAIN),
+            s.apply(ManagedBiome.SWAMP),
+            s.apply(ManagedBiome.FADED_PLAINS)
+        );
     }
 }

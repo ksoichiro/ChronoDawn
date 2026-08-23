@@ -52,7 +52,24 @@ public record ChronoDawnConfig(
         INSTANCE = config;
     }
 
-    public record World(Structures structures, OresConfig ores) {}
+    public record World(Structures structures, OresConfig ores, Biomes biomes) {
+        /** Preserve the existing construction pattern for callers that don't configure biomes. */
+        public World(Structures structures, OresConfig ores) {
+            this(structures, ores, ConfigDefaults.BIOME_DEFAULTS);
+        }
+    }
+
+    public record Biomes(
+        BiomeSettings desert,
+        BiomeSettings prairies,
+        BiomeSettings forest,
+        BiomeSettings darkForest,
+        BiomeSettings ancientForest,
+        BiomeSettings snowy,
+        BiomeSettings mountain,
+        BiomeSettings swamp,
+        BiomeSettings fadedPlains
+    ) {}
 
     public record Structures(
         StructureSettings ancientRuins,

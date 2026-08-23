@@ -51,4 +51,26 @@ public final class ProgressionWarnings {
         }
         return warnings;
     }
+
+    /**
+     * @param biomes the parsed biome settings
+     * @return one message per disabled biome that takes exclusive content with it, in enum order
+     */
+    public static List<String> forDisabledBiomes(ChronoDawnConfig.Biomes biomes) {
+        List<String> warnings = new ArrayList<>();
+        for (ManagedBiome biome : ManagedBiome.configurable()) {
+            if (biome.contentNote().isEmpty()) {
+                continue;
+            }
+            if (biome.settingsOf(biomes).enabled()) {
+                continue;
+            }
+            warnings.add(
+                "world.biomes." + biome.configKey() + " is disabled: "
+                    + biome.contentNote()
+                    + " will no longer generate unless your pack provides another source."
+            );
+        }
+        return warnings;
+    }
 }

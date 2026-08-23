@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -49,19 +50,25 @@ public enum ManagedBiome {
     // enum constant's initializer from referencing a later-declared sibling, even
     // through a lambda, and these chains point forward. A String literal is not a
     // reference to the constant, so valueOf() in fallback() sidesteps the restriction.
-    PLAINS("plains", "chronodawn_plains", null, ""),
-    OCEAN("ocean", "chronodawn_ocean", null, ""),
-    FOREST("forest", "chronodawn_forest", "PLAINS", ""),
-    DARK_FOREST("dark_forest", "chronodawn_dark_forest", "FOREST", "Dark Time Wood trees"),
-    ANCIENT_FOREST("ancient_forest", "chronodawn_ancient_forest", "DARK_FOREST", ""),
-    SWAMP("swamp", "chronodawn_swamp", "FOREST", ""),
+    PLAINS("plains", "chronodawn_plains", null, "", null),
+    OCEAN("ocean", "chronodawn_ocean", null, "", null),
+    FOREST("forest", "chronodawn_forest", "PLAINS", "", ChronoDawnConfig.Biomes::forest),
+    DARK_FOREST("dark_forest", "chronodawn_dark_forest", "FOREST", "Dark Time Wood trees",
+        ChronoDawnConfig.Biomes::darkForest),
+    ANCIENT_FOREST("ancient_forest", "chronodawn_ancient_forest", "DARK_FOREST", "",
+        ChronoDawnConfig.Biomes::ancientForest),
+    SWAMP("swamp", "chronodawn_swamp", "FOREST", "", ChronoDawnConfig.Biomes::swamp),
     FADED_PLAINS("faded_plains", "chronodawn_faded_plains", "PLAINS",
-        "the Parched Temporal Dirt, Faded Grass, and Temporal Dead Bush blocks"),
-    DESERT("desert", "chronodawn_desert", "FADED_PLAINS", "the Hourglass Monolith landmark"),
+        "the Parched Temporal Dirt, Faded Grass, and Temporal Dead Bush blocks",
+        ChronoDawnConfig.Biomes::fadedPlains),
+    DESERT("desert", "chronodawn_desert", "FADED_PLAINS", "the Hourglass Monolith landmark",
+        ChronoDawnConfig.Biomes::desert),
     PRAIRIES("prairies", "chronodawn_prairies", "PLAINS",
-        "the Coarse Temporal Dirt and Tall Grass blocks"),
-    SNOWY("snowy", "chronodawn_snowy", "PLAINS", "the Chrono Ursid and Frozen Time Ice"),
-    MOUNTAIN("mountain", "chronodawn_mountain", "PLAINS", "the Temporal Caprid");
+        "the Coarse Temporal Dirt and Tall Grass blocks", ChronoDawnConfig.Biomes::prairies),
+    SNOWY("snowy", "chronodawn_snowy", "PLAINS", "the Chrono Ursid and Frozen Time Ice",
+        ChronoDawnConfig.Biomes::snowy),
+    MOUNTAIN("mountain", "chronodawn_mountain", "PLAINS", "the Temporal Caprid",
+        ChronoDawnConfig.Biomes::mountain);
 
     /** The data-pack-relative path of the dimension JSON the overlay replaces. */
     public static final String DIMENSION_PACK_PATH =
@@ -71,12 +78,17 @@ public enum ManagedBiome {
     private final String biomePath;
     private final String fallbackName;
     private final String contentNote;
+    private final Function<ChronoDawnConfig.Biomes, BiomeSettings> accessor;
 
-    ManagedBiome(String configKey, String biomePath, String fallbackName, String contentNote) {
+    ManagedBiome(
+        String configKey, String biomePath, String fallbackName, String contentNote,
+        Function<ChronoDawnConfig.Biomes, BiomeSettings> accessor
+    ) {
         this.configKey = configKey;
         this.biomePath = biomePath;
         this.fallbackName = fallbackName;
         this.contentNote = contentNote;
+        this.accessor = accessor;
     }
 
     /**
@@ -133,6 +145,11 @@ public enum ManagedBiome {
                     "Core biome reported as disabled: " + disabled));
         }
         return current;
+    }
+
+    /** Reads this biome's settings out of a parsed config. Core biomes are always enabled. */
+    public BiomeSettings settingsOf(ChronoDawnConfig.Biomes biomes) {
+        return accessor == null ? new BiomeSettings(true) : accessor.apply(biomes);
     }
 
     /** The biomes a pack can toggle — every biome except the core ones, in enum order. */

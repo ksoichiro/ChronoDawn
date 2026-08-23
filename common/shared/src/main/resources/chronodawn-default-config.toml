@@ -182,6 +182,76 @@ count = 8
 y_min = -16
 y_max = 80
 
+[world.biomes.forest]
+# Whether the Chrono Forest biome generates in Chrono Dawn.
+# When disabled, its area of the biome distribution is taken over by
+# chronodawn:chronodawn_plains instead of being left empty.
+# Only affects newly generated chunks; existing terrain is unchanged.
+enabled = true
+
+[world.biomes.dark_forest]
+# Whether the Chrono Dark Forest biome generates in Chrono Dawn.
+# When disabled, its area of the biome distribution is taken over by
+# chronodawn:chronodawn_forest instead of being left empty.
+# Disabling it stops the Dark Time Wood trees from generating.
+# Only affects newly generated chunks; existing terrain is unchanged.
+enabled = true
+
+[world.biomes.ancient_forest]
+# Whether the Chrono Ancient Forest biome generates in Chrono Dawn.
+# When disabled, its area of the biome distribution is taken over by
+# chronodawn:chronodawn_dark_forest instead of being left empty.
+# Only affects newly generated chunks; existing terrain is unchanged.
+enabled = true
+
+[world.biomes.swamp]
+# Whether the Chrono Swamp biome generates in Chrono Dawn.
+# When disabled, its area of the biome distribution is taken over by
+# chronodawn:chronodawn_forest instead of being left empty.
+# Only affects newly generated chunks; existing terrain is unchanged.
+enabled = true
+
+[world.biomes.faded_plains]
+# Whether the Chrono Faded Plains biome generates in Chrono Dawn.
+# When disabled, its area of the biome distribution is taken over by
+# chronodawn:chronodawn_plains instead of being left empty.
+# Disabling it stops the Parched Temporal Dirt, Faded Grass, and Temporal Dead Bush blocks
+# from generating.
+# Only affects newly generated chunks; existing terrain is unchanged.
+enabled = true
+
+[world.biomes.desert]
+# Whether the Chrono Desert biome generates in Chrono Dawn.
+# When disabled, its area of the biome distribution is taken over by
+# chronodawn:chronodawn_faded_plains instead of being left empty.
+# Disabling it stops the Hourglass Monolith landmark from generating.
+# Only affects newly generated chunks; existing terrain is unchanged.
+enabled = true
+
+[world.biomes.prairies]
+# Whether the Chrono Prairies biome generates in Chrono Dawn.
+# When disabled, its area of the biome distribution is taken over by
+# chronodawn:chronodawn_plains instead of being left empty.
+# Disabling it stops the Coarse Temporal Dirt and Tall Grass blocks from generating.
+# Only affects newly generated chunks; existing terrain is unchanged.
+enabled = true
+
+[world.biomes.snowy]
+# Whether the Chrono Snowy biome generates in Chrono Dawn.
+# When disabled, its area of the biome distribution is taken over by
+# chronodawn:chronodawn_plains instead of being left empty.
+# Disabling it stops the Chrono Ursid and Frozen Time Ice from generating.
+# Only affects newly generated chunks; existing terrain is unchanged.
+enabled = true
+
+[world.biomes.mountain]
+# Whether the Chrono Mountain biome generates in Chrono Dawn.
+# When disabled, its area of the biome distribution is taken over by
+# chronodawn:chronodawn_plains instead of being left empty.
+# Disabling it stops the Temporal Caprid from generating.
+# Only affects newly generated chunks; existing terrain is unchanged.
+enabled = true
+
 [gameplay.time_distortion]
 # Whether the Chrono Dawn dimension applies ambient Slowness to mobs.
 enabled = true
