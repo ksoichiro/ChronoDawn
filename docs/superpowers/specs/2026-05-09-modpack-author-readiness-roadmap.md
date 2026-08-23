@@ -37,12 +37,15 @@ Planned follow-up tunables (each is a separate PR):
 - Portal behavior (one-way enforcement, re-ignition rules) — *shipped:
   `one_way_until_stabilized` and `allow_reignition_before_stabilization`
   ([design](./2026-08-04-portal-behavior-config-design.md))*
-- Dimension-level toggles (per-biome / per-structure enable flags) — *partial:
+- Dimension-level toggles (per-biome / per-structure enable flags) — *shipped:
   per-structure `enabled` / `spacing` / `separation` / `salt` shipped for all
   eight structures, with a startup warning naming what a disabled
   progression-gating structure removes
-  ([design](./2026-08-22-structure-toggles-design.md)). Per-biome flags
-  remain open.*
+  ([design](./2026-08-22-structure-toggles-design.md)). Per-biome `enabled`
+  flags shipped for all nine non-core Chrono dimension biomes, with a
+  documented fallback biome absorbing a disabled biome's region of the biome
+  distribution and a startup warning naming what becomes unobtainable
+  ([design](./2026-08-23-biome-toggles-design.md)).*
 
 ### B. Datapack and tag externalization
 
@@ -82,7 +85,7 @@ Targeted integrations with flagship mods commonly bundled in packs: Curios / Tri
 
 | Sub-project | Status | First spec |
 | --- | --- | --- |
-| A. Config system | 🚧 Seven PRs shipped (Ancient Ruins, Ore tuning, Clockstone tuning, Boss multipliers, Time Distortion tuning, Portal behavior, Structure toggles) | [2026-05-09-config-foundation-design.md](./2026-05-09-config-foundation-design.md), [2026-07-25-boss-stat-multipliers-design.md](./2026-07-25-boss-stat-multipliers-design.md), [2026-08-02-time-distortion-config-design.md](./2026-08-02-time-distortion-config-design.md), [2026-08-04-portal-behavior-config-design.md](./2026-08-04-portal-behavior-config-design.md), [2026-08-22-structure-toggles-design.md](./2026-08-22-structure-toggles-design.md) |
+| A. Config system | 🚧 Eight PRs shipped (Ancient Ruins, Ore tuning, Clockstone tuning, Boss multipliers, Time Distortion tuning, Portal behavior, Structure toggles, Biome toggles) | [2026-05-09-config-foundation-design.md](./2026-05-09-config-foundation-design.md), [2026-07-25-boss-stat-multipliers-design.md](./2026-07-25-boss-stat-multipliers-design.md), [2026-08-02-time-distortion-config-design.md](./2026-08-02-time-distortion-config-design.md), [2026-08-04-portal-behavior-config-design.md](./2026-08-04-portal-behavior-config-design.md), [2026-08-22-structure-toggles-design.md](./2026-08-22-structure-toggles-design.md), [2026-08-23-biome-toggles-design.md](./2026-08-23-biome-toggles-design.md) |
 | B. Datapack / tag externalization | 🚧 Conventional (`c:`) material tags shipped; tool / armor tags, biome / structure tags and the tag-lookup half remain | [2026-08-17-conventional-tags-design.md](./2026-08-17-conventional-tags-design.md) |
 | C. Scripting events | ⏸ Deferred | — |
 | D. Cross-mod compatibility | ⏸ Deferred | — |
