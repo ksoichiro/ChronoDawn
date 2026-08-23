@@ -148,6 +148,58 @@ Colossus Gear. New worlds only.
 
 ---
 
+### `[world.biomes.*]`
+
+Controls which biomes generate in the Chrono dimension. One table per biome:
+`desert`, `prairies`, `forest`, `dark_forest`, `ancient_forest`, `snowy`,
+`mountain`, `swamp`, `faded_plains`.
+
+| Key | Type | Default | Meaning |
+| --- | --- | --- | --- |
+| `enabled` | boolean | `true` | Whether the biome generates |
+
+```toml
+[world.biomes.dark_forest]
+enabled = false
+```
+
+**A disabled biome is replaced, not removed.** The dimension places biomes by
+sampling a multi-noise parameter space; a disabled biome's region of that space is
+handed to a fallback biome rather than left empty, so the result is predictable:
+
+| Biome | Replaced by |
+| --- | --- |
+| `ancient_forest` | `dark_forest` |
+| `dark_forest` | `forest` |
+| `forest` | `plains` |
+| `swamp` | `forest` |
+| `desert` | `faded_plains` |
+| `faded_plains` | `plains` |
+| `prairies` | `plains` |
+| `snowy` | `plains` |
+| `mountain` | `plains` |
+
+Fallbacks chain: with both `forest` and `dark_forest` disabled, `ancient_forest`
+becomes `plains`.
+
+**`plains` and `ocean` cannot be disabled** and have no table. They terminate the
+fallback chains. `ocean` additionally owns the whole low-continentalness band of
+the parameter space, so replacing it with a land biome would put grassland under
+every ocean in the dimension.
+
+**Effect on an existing world.** Biomes are written into a chunk when it is
+generated, so changing these settings mid-world leaves already-explored terrain
+exactly as it is and applies only to newly generated chunks. Expect a visible seam
+at the edge of the explored area, the same as when changing structure spacing.
+Disabled biomes stay registered, so existing chunks containing them keep loading
+normally.
+
+**Structures are unaffected.** Every Chrono Dawn structure can generate in
+`plains`, so no combination of biome toggles can make a structure ungenerable. Use
+[`[world.structures.*]`](#worldstructures) to control structures.
+
+---
+
 ### `[world.ores.*]`
 
 Per-ore generation tuning for the four ChronoDawn-specific ores in the

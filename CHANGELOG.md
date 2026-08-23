@@ -32,6 +32,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   what becomes unobtainable. Defaults reproduce the existing generation
   exactly. See [docs/configuration.md](docs/configuration.md) for the full
   table.
+- Per-biome generation toggles: `[world.biomes.*]` in `chronodawn.toml` disables any of
+  the nine non-core Chrono dimension biomes. A disabled biome's region of the biome
+  distribution is taken over by a documented fallback biome rather than left empty.
+  `plains` and `ocean` are always generated. Existing terrain is unaffected; only newly
+  generated chunks change.
 - **Conventional (`c:`) tags** for ores, materials, storage blocks,
   stone/sand/gravel/sandstone, wood sets, foods, crops and seeds, so other mods
   and modpack recipes can consume Chrono Dawn materials by tag. Ores of vanilla

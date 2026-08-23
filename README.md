@@ -63,7 +63,7 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed information.
   - Chrono Aegis — right-click activated buff artifact (10-minute anti-Time-Tyrant buff for the wielder and nearby allies)
 - **ChronoDawn Custom Shields**: Three tiered shields (Clockstone → Enhanced Clockstone → Entropy Crystal) with cumulative time-themed effects (passive debuff shortening, faster raise on 1.21.5+, Speed on block at T2+, Time Echo auto-block at T3)
 - **Chronicle of Chrono Dawn**: In-game guidebook auto-given when entering the dimension, covering biomes, structures, bosses, items, and progression
-- **Configurable**: Tune select gameplay values via `config/chronodawn.toml` — generation of every structure the mod adds, the four Chrono-specific ore rates and Y ranges, per-boss health/damage multipliers, the Chrono dimension's ambient Time Distortion strength and scope, and the one-way portal progression gate. See [docs/configuration.md](docs/configuration.md). Modpack creators see [docs/modpack-integration.md](docs/modpack-integration.md).
+- **Configurable**: Tune select gameplay values via `config/chronodawn.toml` — generation of every structure the mod adds, which of the nine non-core Chrono dimension biomes generate, the four Chrono-specific ore rates and Y ranges, per-boss health/damage multipliers, the Chrono dimension's ambient Time Distortion strength and scope, and the one-way portal progression gate. See [docs/configuration.md](docs/configuration.md). Modpack creators see [docs/modpack-integration.md](docs/modpack-integration.md).
 
 ### Technical Features
 - **Multi-Loader Architecture**: Supports both Fabric and NeoForge loaders
