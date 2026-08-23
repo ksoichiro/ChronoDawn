@@ -316,3 +316,28 @@ warning; that is a legitimate outcome, not a gap.
   disabled biomes, for a degree of control no request has asked for.
 - Per-biome feature or mob toggles. A finer granularity than this spec, and
   independent of it.
+
+## Audit results
+
+Produced by the method in "Implementation notes", run against the 1.21.11
+biome definitions on 2026-08-23. The exclusive-feature list was expanded to
+`placed_feature` -> `configured_feature` chains (including `nbt_template`
+structures and `random_selector`/`random_patch` wrappers), each candidate
+block was checked against every other biome's placed features, and any
+survivor was cross-checked against `common/*/recipe/*.json` for a crafting
+path that would make it obtainable without the biome.
+
+| Biome | `contentNote` | Basis |
+| --- | --- | --- |
+| `desert` | `the Hourglass Monolith landmark` | `chronodawn:hourglass_monolith` is placed only via `hourglass_monolith_placed` in `chronodawn_desert`; no other biome references the template, and it has no recipe |
+| `prairies` | (empty) | Exclusive blocks are `chronodawn:coarse_temporal_dirt` and `chronodawn:tall_grass_block` — terrain-palette variants with no recipe and no use as a crafting ingredient anywhere; decoration only |
+| `forest` | (empty) | Only exclusive feature is `fruit_of_time_tree_dense`; the underlying `fruit_of_time_tree` (log/leaves/fruit) also generates in `mountain`, `prairies`, `swamp`, and the core `plains`/`ocean` biomes, so nothing is actually lost |
+| `dark_forest` | `Dark Time Wood trees` | `chronodawn:dark_time_wood_log`/`dark_time_wood_leaves` generate only via the `dark_time_wood_tree_*` variants in `chronodawn_dark_forest`; the log has planks/stripped/charcoal recipes that consume it but none that produce it, so it is not obtainable elsewhere |
+| `ancient_forest` | (empty) | Exclusive features (`ancient_time_wood_tree_dense`, `upside_down_tree`) reuse `chronodawn:ancient_time_wood_log`/leaves, which also generate via the core `chronodawn_plains` biome's `ancient_time_wood_tree`; the upside-down variant is a decorative reskin, not a new block |
+| `snowy` | `the Chrono Ursid` | only biome the mob spawns in |
+| `mountain` | `the Temporal Caprid` | only biome the mob spawns in |
+| `swamp` | (empty) | `swamp_mud_disk`/`swamp_pond` place vanilla `minecraft:mud` and `minecraft:water`, both obtainable everywhere |
+| `faded_plains` | (empty) | Exclusive blocks are `chronodawn:parched_temporal_dirt`, `chronodawn:faded_grass_block`, `chronodawn:temporal_dead_bush_block` — terrain-palette variants with no recipe and no use as a crafting ingredient anywhere; `ancient_fallen_log`/`dead_snag` reuse the non-exclusive `ancient_time_wood_log`; decoration only |
+
+Biomes with an empty `contentNote` place nothing that is unobtainable
+elsewhere; disabling them costs decoration and scenery only.
