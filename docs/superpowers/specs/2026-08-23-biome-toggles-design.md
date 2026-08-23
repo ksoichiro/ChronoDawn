@@ -262,11 +262,22 @@ expansion. See "Implementation notes" below.
 For all 2⁹ = 512 enabled/disabled combinations of the non-core biomes, every
 `has_*` biome tag still contains at least one enabled biome.
 
-Every Chrono structure's biome tag currently includes `chronodawn_plains`, which
-is a core biome, so no combination of biome toggles can orphan a structure. That
-is worth having as a *measured* guarantee rather than an implicit dependency on
-today's tag contents: if `plains` is ever dropped from a `has_*` tag, or the set
-of core biomes changes, this test catches it. Exhausting 512 cases is instant.
+This property is scoped to structures that generate *in the Chrono dimension*;
+`ancient_ruins` generates in the Overworld and its `has_ancient_ruins` tag names
+vanilla biomes (`#minecraft:is_taiga`, `minecraft:dark_forest`), so Chrono biome
+toggles cannot affect it and it is out of scope for this test entirely. Of the
+remaining seven `ManagedStructure` entries, six have a `has_*` biome tag
+(`clockwork_depths`, `desert_clock_tower`, `entropy_crypt`, `guardian_vault`,
+`master_clock`, `phantom_catacombs`), and every one of those six currently
+includes `chronodawn:chronodawn_plains`, a core biome — verified by reading each
+`has_*.json` in `common/shared/.../tags/worldgen/biome/`. `forgotten_library` has
+no `has_*` tag file at all, so the guard skips it rather than overlooking it: a
+structure with no biome tag isn't placed via biome membership, so it has nothing
+for a biome toggle to orphan. So no combination of biome toggles can orphan a
+Chrono-dimension structure. That is worth having as a *measured* guarantee rather
+than an implicit dependency on today's tag contents: if `plains` is ever dropped
+from a `has_*` tag, or the set of core biomes changes, this test catches it.
+Exhausting 512 cases is instant.
 
 ### In-game verification
 
