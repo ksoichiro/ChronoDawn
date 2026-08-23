@@ -810,7 +810,7 @@ In `ProgressionWarnings.java`, add:
             warnings.add(
                 "world.biomes." + biome.configKey() + " is disabled: "
                     + biome.contentNote()
-                    + " no longer generates unless your pack provides another source."
+                    + " will no longer generate unless your pack provides another source."
             );
         }
         return warnings;
@@ -838,7 +838,7 @@ enabled = true
 enabled = true
 ```
 
-Add the "Disabling it stops ... from generating" line only for biomes whose `contentNote` is non-empty, and keep its wording aligned with `forDisabledBiomes`. Do **not** add tables for `plains` or `ocean`.
+Add the "Disabling it stops ... from generating" line only for biomes whose `contentNote` is non-empty, and keep its wording aligned with `forDisabledBiomes`. Note the warning tail is "will no longer generate", which reads correctly for both singular and plural notes. Do **not** add tables for `plains` or `ocean`.
 
 - [ ] **Step 9: Run the tests to verify they pass**
 
