@@ -123,7 +123,7 @@ stay in the bundled JSON (see "Overlay" below).
 | `configKey` | `dark_forest` | TOML table name under `[world.biomes]` |
 | `biomeId` | `chronodawn:chronodawn_dark_forest` | matches the `biome` field in the dimension JSON |
 | `fallbackName` | `"FOREST"` | the biome to remap to when disabled; `null` marks a core biome |
-| `contentNote` | `"the Chrono Ursid"` | what a pack loses by disabling it; empty means no warning |
+| `contentNote` | `"the Chrono Ursid and Frozen Time Ice"` | what a pack loses by disabling it; empty means no warning |
 
 `fallbackName` is stored as a `String` and resolved lazily through `valueOf()`,
 the same workaround `ManagedStructure.exclusionZone()` uses: the JLS forbids an
@@ -208,7 +208,7 @@ consequence rather than refusing the setting.
 Two `contentNote` values are certain, being the only mobs that spawn in exactly
 one biome:
 
-- `chronodawn_snowy` — the Chrono Ursid
+- `chronodawn_snowy` — the Chrono Ursid and Frozen Time Ice
 - `chronodawn_mountain` — the Temporal Caprid
 
 The remaining notes are **not fixed by this design**. Twenty-five

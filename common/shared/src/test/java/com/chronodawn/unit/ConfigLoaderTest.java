@@ -650,6 +650,37 @@ class ConfigLoaderTest {
         assertTrue(ManagedBiome.MOUNTAIN.settingsOf(biomes).enabled(), "siblings are unaffected");
     }
 
+    /**
+     * Guards the config-key to record-slot seam in {@link ConfigLoader#parseBiomes}: that
+     * method builds a 9-component record positionally, so a swapped pair of arguments would
+     * silently attribute one biome's disable to another. Every other biome default is
+     * identical ({@code enabled = true}), so only a test that disables each key in isolation
+     * and checks every sibling stays enabled can catch a transposition.
+     */
+    @Test
+    void biomes_disablingOneKeyAffectsOnlyThatBiome(@TempDir Path tmp) throws IOException {
+        for (ManagedBiome target : ManagedBiome.configurable()) {
+            Files.writeString(tmp.resolve("chronodawn.toml"), """
+                schema_version = 1
+
+                [world.biomes.%s]
+                enabled = false
+                """.formatted(target.configKey()));
+
+            ChronoDawnConfig.Biomes biomes = ConfigLoader.load(tmp).world().biomes();
+
+            assertFalse(target.settingsOf(biomes).enabled(),
+                target.name() + " was explicitly disabled");
+            for (ManagedBiome sibling : ManagedBiome.configurable()) {
+                if (sibling == target) {
+                    continue;
+                }
+                assertTrue(sibling.settingsOf(biomes).enabled(),
+                    "Disabling " + target.name() + " must not affect " + sibling.name());
+            }
+        }
+    }
+
     @Test
     void bundledDefaultTemplate_hasATableForEveryConfigurableBiome(@TempDir Path tmp) throws IOException {
         try (InputStream in = ConfigLoader.class.getResourceAsStream("/chronodawn-default-config.toml")) {

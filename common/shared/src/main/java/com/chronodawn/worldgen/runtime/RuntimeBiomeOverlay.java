@@ -58,7 +58,12 @@ public final class RuntimeBiomeOverlay {
      *
      * @param config the active configuration
      * @return a single-entry map, or an empty map if the bundled resource could not be
-     *         read or parsed — in which case the bundled JSON stays in effect
+     *         read or parsed — in which case this run writes no dimension file, so the
+     *         bundled JSON applies only if no overlay file was left behind by an earlier
+     *         run. {@code OverlayPackBootstrap.writeOverlay} never deletes files it did
+     *         not write this run, so a stale overlay from a previous successful run can
+     *         survive a later failure and stay active while this failure is logged as
+     *         "biome toggles will be inactive". Known limitation; not fixed by this class.
      */
     public static Map<String, byte[]> generate(ChronoDawnConfig config) {
         JsonObject dimension;
