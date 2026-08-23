@@ -327,17 +327,38 @@ block was checked against every other biome's placed features, and any
 survivor was cross-checked against `common/*/recipe/*.json` for a crafting
 path that would make it obtainable without the biome.
 
+Criterion (revised after review — applied literally, with no third
+"decorative" filter): a block earns a `contentNote` iff (1) it is exclusive —
+placed by no other biome's expansion — and (2) it is not craftable — no
+recipe anywhere produces it. Exclusive-but-craftable is empty with the
+recipe as basis. Exclusive-and-uncraftable is a note regardless of how
+minor or purely cosmetic the block looks; a player who can never obtain it
+again has lost it either way. Notes are phrased to read correctly inside
+`"world.biomes.<key> is disabled: " + contentNote + " no longer generates
+unless your pack provides another source."`
+
 | Biome | `contentNote` | Basis |
 | --- | --- | --- |
 | `desert` | `the Hourglass Monolith landmark` | `chronodawn:hourglass_monolith` is placed only via `hourglass_monolith_placed` in `chronodawn_desert`; no other biome references the template, and it has no recipe |
-| `prairies` | (empty) | Exclusive blocks are `chronodawn:coarse_temporal_dirt` and `chronodawn:tall_grass_block` — terrain-palette variants with no recipe and no use as a crafting ingredient anywhere; decoration only |
-| `forest` | (empty) | Only exclusive feature is `fruit_of_time_tree_dense`; the underlying `fruit_of_time_tree` (log/leaves/fruit) also generates in `mountain`, `prairies`, `swamp`, and the core `plains`/`ocean` biomes, so nothing is actually lost |
+| `prairies` | `the Coarse Temporal Dirt and Tall Grass blocks` | `chronodawn:coarse_temporal_dirt` (`patch_coarse_dirt`) and `chronodawn:tall_grass_block` (`patch_tall_grass`) generate only in `chronodawn_prairies`; neither has a recipe that produces it, so disabling the biome makes them permanently unobtainable |
+| `forest` | (empty) | Only exclusive feature is `fruit_of_time_tree_dense`; the underlying `fruit_of_time_tree` (log/leaves/fruit) also generates in `mountain`, `prairies`, `swamp`, and the core `plains`/`ocean` biomes — fails test 1 (not exclusive), so nothing is lost. Re-confirmed under the corrected criterion; no other candidate block found for this biome |
 | `dark_forest` | `Dark Time Wood trees` | `chronodawn:dark_time_wood_log`/`dark_time_wood_leaves` generate only via the `dark_time_wood_tree_*` variants in `chronodawn_dark_forest`; the log has planks/stripped/charcoal recipes that consume it but none that produce it, so it is not obtainable elsewhere |
-| `ancient_forest` | (empty) | Exclusive features (`ancient_time_wood_tree_dense`, `upside_down_tree`) reuse `chronodawn:ancient_time_wood_log`/leaves, which also generate via the core `chronodawn_plains` biome's `ancient_time_wood_tree`; the upside-down variant is a decorative reskin, not a new block |
-| `snowy` | `the Chrono Ursid` | only biome the mob spawns in |
-| `mountain` | `the Temporal Caprid` | only biome the mob spawns in |
-| `swamp` | (empty) | `swamp_mud_disk`/`swamp_pond` place vanilla `minecraft:mud` and `minecraft:water`, both obtainable everywhere |
-| `faded_plains` | (empty) | Exclusive blocks are `chronodawn:parched_temporal_dirt`, `chronodawn:faded_grass_block`, `chronodawn:temporal_dead_bush_block` — terrain-palette variants with no recipe and no use as a crafting ingredient anywhere; `ancient_fallen_log`/`dead_snag` reuse the non-exclusive `ancient_time_wood_log`; decoration only |
+| `ancient_forest` | (empty) | Exclusive features (`ancient_time_wood_tree_dense`, `upside_down_tree`) reuse `chronodawn:ancient_time_wood_log`/leaves, which also generate via the core `chronodawn_plains` biome's `ancient_time_wood_tree` — fails test 1 (not exclusive). Re-confirmed under the corrected criterion; no other candidate block found for this biome |
+| `snowy` | `the Chrono Ursid and Frozen Time Ice` | the mob spawns only in `chronodawn_snowy`; `chronodawn:frozen_time_ice` (the 1-block cap layer of `ice_pillar`, via `ice_spike_placed`) also generates only in `chronodawn_snowy` and has no recipe — exclusive and uncraftable, so it is a note under the corrected criterion even though it is a small decorative cap. `minecraft:packed_ice`/`minecraft:blue_ice`, the rest of the same pillar, are vanilla and excluded |
+| `mountain` | `the Temporal Caprid` | only biome the mob spawns in; the block-exclusivity sweep found zero exclusive `chronodawn:` blocks for `mountain`, so no block-based note applies |
+| `swamp` | (empty) | `swamp_mud_disk`/`swamp_pond` place vanilla `minecraft:mud` and `minecraft:water`, both obtainable everywhere — fails test 1 (not chronodawn-exclusive content). Re-confirmed under the corrected criterion; no other candidate block found for this biome |
+| `faded_plains` | `the Parched Temporal Dirt, Faded Grass, and Temporal Dead Bush blocks` | `chronodawn:parched_temporal_dirt` (`disk_parched_temporal_dirt`), `chronodawn:faded_grass_block` (`patch_faded_grass`), and `chronodawn:temporal_dead_bush_block` (`patch_temporal_dead_bush`) generate only in `chronodawn_faded_plains`; none has a recipe that produces it. (`ancient_fallen_log`/`dead_snag` reuse the non-exclusive `ancient_time_wood_log` and contribute nothing extra.) |
 
-Biomes with an empty `contentNote` place nothing that is unobtainable
-elsewhere; disabling them costs decoration and scenery only.
+`lost_adventurer_memorial_snowy` was checked and resolved rather than left
+uncertain: its NBT palette (`chronodawn:mossy_temporal_cobblestone_slab`,
+`chronodawn:temporal_stone_bricks`, `_slab`, `_wall`,
+`chronodawn:temporal_stone_pressure_plate`, `minecraft:air`, `minecraft:snow`)
+is identical to the generic `lost_adventurer_memorial` palette (referenced
+from all 11 biomes) plus vanilla `minecraft:snow` as a cosmetic cap. No block
+in the snowy variant is exclusive to it, so it contributes nothing to
+`snowy`'s note.
+
+Biomes with an empty `contentNote` place nothing that fails the two-part
+exclusive-and-uncraftable test; disabling them costs decoration and scenery
+that remains obtainable elsewhere (or, for `forest`/`ancient_forest`/`swamp`,
+costs nothing chronodawn-exclusive at all).
