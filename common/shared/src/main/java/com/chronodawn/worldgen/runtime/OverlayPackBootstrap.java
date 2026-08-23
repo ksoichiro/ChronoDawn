@@ -88,6 +88,7 @@ public final class OverlayPackBootstrap {
             Map<String, byte[]> overlay = new LinkedHashMap<>();
             overlay.putAll(RuntimeStructureOverlay.generate(config));
             overlay.putAll(RuntimePlacedFeatureOverlay.generate(config));
+            overlay.putAll(RuntimeBiomeOverlay.generate(config));
             for (Map.Entry<String, byte[]> entry : overlay.entrySet()) {
                 Path target = overlayRoot.resolve(entry.getKey());
                 Files.createDirectories(target.getParent());
