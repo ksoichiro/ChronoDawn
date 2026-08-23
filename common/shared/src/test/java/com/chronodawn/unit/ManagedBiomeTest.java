@@ -18,10 +18,13 @@
 package com.chronodawn.unit;
 
 import com.chronodawn.config.ManagedBiome;
+import com.chronodawn.config.ManagedStructure;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -145,5 +148,70 @@ class ManagedBiomeTest {
 
         assertEquals(inJson, declared,
             "ManagedBiome must declare exactly the biomes the bundled dimension JSON references");
+    }
+
+    /**
+     * No combination of biome toggles may leave a Chrono structure with no biome to
+     * generate in. This holds today because every {@code has_*} tag lists
+     * chronodawn_plains, which is core — but that is a property of the tag files, not
+     * something the toggle code enforces, so it is measured rather than assumed.
+     *
+     * <p>Exhausts all 2^9 combinations of the configurable biomes.
+     */
+    @Test
+    void noCombinationOfBiomeTogglesCanOrphanAStructure() {
+        List<ManagedBiome> configurable = ManagedBiome.configurable();
+        int combinations = 1 << configurable.size();
+
+        Map<ManagedStructure, Set<String>> tags = new LinkedHashMap<>();
+        for (ManagedStructure structure : ManagedStructure.values()) {
+            if (structure.dimension() != ManagedStructure.Dimension.CHRONO_DAWN) {
+                continue; // Ancient Ruins is placed in Overworld biomes, out of scope here.
+            }
+            readBiomeTag(structure.configKey()).ifPresent(values -> tags.put(structure, values));
+        }
+        assertFalse(tags.isEmpty(), "Expected at least one has_* biome tag on the test classpath");
+
+        for (int mask = 0; mask < combinations; mask++) {
+            Set<String> enabledIds = new HashSet<>();
+            for (ManagedBiome biome : ManagedBiome.values()) {
+                if (biome.isCore()) {
+                    enabledIds.add(biome.biomeId());
+                }
+            }
+            for (int i = 0; i < configurable.size(); i++) {
+                if ((mask & (1 << i)) == 0) {
+                    enabledIds.add(configurable.get(i).biomeId());
+                }
+            }
+            for (Map.Entry<ManagedStructure, Set<String>> entry : tags.entrySet()) {
+                boolean anyEnabled = entry.getValue().stream().anyMatch(enabledIds::contains);
+                assertTrue(anyEnabled,
+                    entry.getKey().name() + " has no enabled biome for combination mask " + mask);
+            }
+        }
+    }
+
+    /** Reads the chronodawn: biome IDs out of a has_&lt;key&gt; biome tag, if the tag exists. */
+    private static Optional<Set<String>> readBiomeTag(String configKey) {
+        String path = "data/chronodawn/tags/worldgen/biome/has_" + configKey + ".json";
+        try (java.io.InputStream in = ManagedBiomeTest.class.getClassLoader().getResourceAsStream(path)) {
+            if (in == null) {
+                return Optional.empty(); // e.g. forgotten_library, which is placed without a tag.
+            }
+            com.google.gson.JsonObject tag = com.google.gson.JsonParser
+                .parseReader(new java.io.InputStreamReader(in, java.nio.charset.StandardCharsets.UTF_8))
+                .getAsJsonObject();
+            Set<String> values = new HashSet<>();
+            for (com.google.gson.JsonElement value : tag.getAsJsonArray("values")) {
+                String id = value.getAsString();
+                if (id.startsWith("chronodawn:")) {
+                    values.add(id);
+                }
+            }
+            return values.isEmpty() ? Optional.empty() : Optional.of(values);
+        } catch (java.io.IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
