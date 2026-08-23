@@ -333,9 +333,16 @@ placed by no other biome's expansion — and (2) it is not craftable — no
 recipe anywhere produces it. Exclusive-but-craftable is empty with the
 recipe as basis. Exclusive-and-uncraftable is a note regardless of how
 minor or purely cosmetic the block looks; a player who can never obtain it
-again has lost it either way. Notes are phrased to read correctly inside
-`"world.biomes.<key> is disabled: " + contentNote + " no longer generates
-unless your pack provides another source."`
+again has lost it either way.
+
+Each note is spliced into
+`world.biomes.<key> is disabled: <note> will no longer generate unless your
+pack provides another source.`, so a note must read as a noun phrase that
+agrees with "will no longer generate" — this holds for singular and plural
+notes alike, so `the Coarse Temporal Dirt and Tall Grass blocks will no
+longer generate...` and `the Hourglass Monolith landmark will no longer
+generate...` both read correctly without forcing every note into the
+singular.
 
 | Biome | `contentNote` | Basis |
 | --- | --- | --- |
