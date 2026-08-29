@@ -276,6 +276,22 @@ Every tag path this mod coined carries a display name (`tag.item.c.*`) in
 `en_us` and `ja_jp`, so recipe viewers show a readable name rather than the
 raw id. A build-time check keeps that true for tags added later.
 
+### Equipment repair materials
+
+On 1.21.1 and newer, Chrono Dawn equipment consumes the following per-material
+tags for its repair ingredient. This lets a unification addon or pack datapack
+add compatible items without replacing Chrono Dawn's Java classes:
+
+| Equipment | Repair tag |
+| --- | --- |
+| Clockstone and Enhanced Clockstone equipment | `c:gems/time_crystal` |
+| Entropy Crystal equipment | `c:gems/entropy_crystal` |
+| Temporal Amber armor | `c:dusts/temporal_amber` |
+| Chronoblade and Time Tyrant Mail | `c:gems/time_crystal` |
+
+Minecraft 1.20.1 retains exact-item repair ingredients because its conventional
+`c:gems` tag has no per-material subtags and includes both crystal types.
+
 ### 1.20.1
 
 1.20.1 uses conventional tags v1, which has **no per-material subtags** —

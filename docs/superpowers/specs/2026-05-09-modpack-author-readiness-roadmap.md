@@ -49,7 +49,7 @@ Planned follow-up tunables (each is a separate PR):
 
 ### B. Datapack and tag externalization
 
-**Status**: 🚧 Publishing half shipped: conventional (`c:`) tags for materials — ores, raw materials, ingots and gems, storage blocks, stone / sand / gravel / sandstone, wood sets, foods, crops and seeds — across all supported versions, with a coverage guard and en_us / ja_jp names ([design](./2026-08-17-conventional-tags-design.md), [plan](../plans/2026-08-17-conventional-tags.md)). Documented in [`docs/modpack-integration.md`](../../modpack-integration.md).
+**Status**: 🚧 Publishing half shipped: conventional (`c:`) tags for materials — ores, raw materials, ingots and gems, storage blocks, stone / sand / gravel / sandstone, wood sets, foods, crops and seeds — across all supported versions, with a coverage guard and en_us / ja_jp names ([design](./2026-08-17-conventional-tags-design.md), [plan](../plans/2026-08-17-conventional-tags.md)). Equipment repair consumers now use the per-material tags on 1.21.1+ ([design](./2026-08-29-tag-consumers-design.md)); recipe and other consuming-side work remains. Documented in [`docs/modpack-integration.md`](../../modpack-integration.md).
 
 Remaining slices:
 
@@ -91,7 +91,7 @@ Targeted integrations with flagship mods commonly bundled in packs: Curios / Tri
 | Sub-project | Status | First spec |
 | --- | --- | --- |
 | A. Config system | 🚧 Eight PRs shipped (Ancient Ruins, Ore tuning, Clockstone tuning, Boss multipliers, Time Distortion tuning, Portal behavior, Structure toggles, Biome toggles) | [2026-05-09-config-foundation-design.md](./2026-05-09-config-foundation-design.md), [2026-07-25-boss-stat-multipliers-design.md](./2026-07-25-boss-stat-multipliers-design.md), [2026-08-02-time-distortion-config-design.md](./2026-08-02-time-distortion-config-design.md), [2026-08-04-portal-behavior-config-design.md](./2026-08-04-portal-behavior-config-design.md), [2026-08-22-structure-toggles-design.md](./2026-08-22-structure-toggles-design.md), [2026-08-23-biome-toggles-design.md](./2026-08-23-biome-toggles-design.md) |
-| B. Datapack / tag externalization | 🚧 Conventional (`c:`) material tags shipped; tool / armor tags, biome / structure tags and the tag-lookup half remain | [2026-08-17-conventional-tags-design.md](./2026-08-17-conventional-tags-design.md) |
+| B. Datapack / tag externalization | 🚧 Conventional (`c:`) material tags shipped; equipment repair consumers shipped for 1.21.1+; tool / armor tags, biome / structure tags and broader tag-lookup work remain | [2026-08-17-conventional-tags-design.md](./2026-08-17-conventional-tags-design.md), [2026-08-29-tag-consumers-design.md](./2026-08-29-tag-consumers-design.md) |
 | C. Scripting events | 🚧 Boss-defeated Java event shipped; direct bindings and more progression events remain | [2026-08-29-boss-defeated-event-design.md](./2026-08-29-boss-defeated-event-design.md) |
 | D. Cross-mod compatibility | ⏸ Deferred | — |
 

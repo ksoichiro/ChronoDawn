@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Chrono Dawn equipment repair ingredients now consume per-material conventional
+  `c:` tags on Minecraft 1.21.1+ (`c:gems/time_crystal`,
+  `c:gems/entropy_crystal` and `c:dusts/temporal_amber`), allowing compatible
+  pack-provided materials without Java replacements.
 - Added a loader-neutral Java boss-defeated event API for all six Chrono Dawn
   bosses. Addons can register through `BossDefeatedEvents` and receive a stable
   boss ID plus the defeated entity, server level, position, damage source and
