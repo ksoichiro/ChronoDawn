@@ -1,5 +1,7 @@
 package com.chronodawn.items.equipment;
 
+import com.chronodawn.tags.ConventionalItemTags;
+
 import com.chronodawn.registry.ModItems;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
@@ -57,6 +59,6 @@ public class EntropyCrystalTier implements Tier {
 
     @Override
     public Ingredient getRepairIngredient() {
-        return Ingredient.of(ModItems.ENTROPY_CRYSTAL.get());
+        return Ingredient.of(ConventionalItemTags.ENTROPY_CRYSTAL);
     }
 }

@@ -1,7 +1,8 @@
 package com.chronodawn.items.artifacts;
 
+import com.chronodawn.tags.ConventionalItemTags;
+
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ToolMaterial;
@@ -22,13 +23,13 @@ import net.minecraft.world.item.ToolMaterial;
  * Special Ability:
  * - 25% chance to skip enemy's next attack AI on successful hit
  *
- * Repair Material: Enhanced Time Crystal (using netherite tag temporarily)
+ * Repair Material: Time Crystal
  *
  * Reference: T148-T152 - Create Chronoblade with AI skip ability
  */
 public class ChronobladeTier {
-    // Repair ingredient tag (temporary: using netherite until custom tag is implemented)
-    private static final TagKey<Item> REPAIR_TAG = ItemTags.NETHERITE_TOOL_MATERIALS;
+    // Repair ingredient tag.
+    private static final TagKey<Item> REPAIR_TAG = ConventionalItemTags.TIME_CRYSTAL;
 
     public static final ToolMaterial INSTANCE = new ToolMaterial(
         BlockTags.INCORRECT_FOR_NETHERITE_TOOL, // Netherite mining level

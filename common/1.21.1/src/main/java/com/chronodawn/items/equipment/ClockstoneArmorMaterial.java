@@ -1,5 +1,7 @@
 package com.chronodawn.items.equipment;
 
+import com.chronodawn.tags.ConventionalItemTags;
+
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.registry.ModItems;
 import net.minecraft.Util;
@@ -53,7 +55,7 @@ public class ClockstoneArmorMaterial {
         }),
         14, // Enchantability (same as iron)
         SoundEvents.ARMOR_EQUIP_IRON,
-        () -> Ingredient.of(ModItems.TIME_CRYSTAL.get()),
+        () -> Ingredient.of(ConventionalItemTags.TIME_CRYSTAL),
         1.0f, // Toughness (between iron 0.0f and diamond 2.0f)
         0.0f  // Knockback Resistance
     );

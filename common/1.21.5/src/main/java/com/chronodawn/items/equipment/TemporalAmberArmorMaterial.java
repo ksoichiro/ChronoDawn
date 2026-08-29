@@ -1,11 +1,12 @@
 package com.chronodawn.items.equipment;
 
+import com.chronodawn.tags.ConventionalItemTags;
+
 import com.chronodawn.ChronoDawn;
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.equipment.ArmorMaterial;
@@ -33,7 +34,7 @@ import java.util.EnumMap;
  * - Toughness: 1.5f (iron: 0.0f, diamond: 2.0f)
  * - Knockback Resistance: 0.0f
  *
- * Repair Material: Temporal Amber Dust (temporary: using diamond tag)
+ * Repair Material: Temporal Amber Dust
  *
  * Reference: T301 - Temporal Amber Armor Material
  */
@@ -42,9 +43,7 @@ public class TemporalAmberArmorMaterial {
     public static final int BASE_DURABILITY = 35;
 
     // Temporal Amber Dust repair tag
-    // TEMPORARY: Using vanilla tag to test if tag mechanism works
-    // TODO: Create custom tag for temporal_amber_dust
-    private static final TagKey<Item> TEMPORAL_AMBER_DUST_TAG = ItemTags.REPAIRS_DIAMOND_ARMOR;
+    private static final TagKey<Item> TEMPORAL_AMBER_DUST_TAG = ConventionalItemTags.TEMPORAL_AMBER_DUST;
 
     public static final Holder<ArmorMaterial> TEMPORAL_AMBER = Holder.direct(
         new ArmorMaterial(

@@ -1,5 +1,7 @@
 package com.chronodawn.items.artifacts;
 
+import com.chronodawn.tags.ConventionalItemTags;
+
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.registry.ModItems;
 import net.minecraft.Util;
@@ -34,7 +36,7 @@ public class TimeTyrantArmorMaterial {
             DEFENSE_VALUES,  // defense values
             18,  // enchantment value
             SoundEvents.ARMOR_EQUIP_NETHERITE,  // equip sound (now Holder<SoundEvent>)
-            () -> Ingredient.of(ModItems.TIME_CRYSTAL.get()),  // repair ingredient supplier
+            () -> Ingredient.of(ConventionalItemTags.TIME_CRYSTAL),  // repair ingredient supplier
             List.of(
                 new ArmorMaterial.Layer(
                     CompatResourceLocation.create(ChronoDawn.MOD_ID, "time_tyrant")

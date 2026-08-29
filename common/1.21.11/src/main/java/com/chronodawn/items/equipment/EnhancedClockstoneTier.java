@@ -1,11 +1,12 @@
 package com.chronodawn.items.equipment;
 
+import com.chronodawn.tags.ConventionalItemTags;
+
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.compat.CompatResourceLocation;
 import com.chronodawn.registry.ModItems;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ToolMaterial;
@@ -34,9 +35,7 @@ import net.minecraft.world.level.block.Block;
  */
 public class EnhancedClockstoneTier {
     // Time Crystal repair tag
-    // TEMPORARY: Using vanilla tag to test if tag mechanism works
-    // TODO: Find proper solution for custom mod tags in NeoForge 1.21.2
-    private static final TagKey<Item> TIME_CRYSTAL_TAG = ItemTags.DIAMOND_TOOL_MATERIALS;
+    private static final TagKey<Item> TIME_CRYSTAL_TAG = ConventionalItemTags.TIME_CRYSTAL;
 
     // In 1.21.2, ToolMaterial constructor signature:
     // (TagKey<Block> incorrectBlocksForDrops, int uses, float speed, float attackDamageBonus,

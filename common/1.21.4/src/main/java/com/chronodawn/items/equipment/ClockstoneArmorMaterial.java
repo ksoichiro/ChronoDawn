@@ -1,5 +1,7 @@
 package com.chronodawn.items.equipment;
 
+import com.chronodawn.tags.ConventionalItemTags;
+
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.registry.ModItems;
 import net.minecraft.Util;
@@ -9,7 +11,6 @@ import net.minecraft.resources.ResourceLocation;
 import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
@@ -50,9 +51,7 @@ public class ClockstoneArmorMaterial {
     public static final int BASE_DURABILITY = 20;
 
     // Time Crystal repair tag
-    // TEMPORARY: Using vanilla tag to test if tag mechanism works
-    // TODO: Find proper solution for custom mod tags in NeoForge 1.21.2
-    private static final TagKey<Item> TIME_CRYSTAL_TAG = ItemTags.REPAIRS_IRON_ARMOR;
+    private static final TagKey<Item> TIME_CRYSTAL_TAG = ConventionalItemTags.TIME_CRYSTAL;
 
     public static final Holder<ArmorMaterial> CLOCKSTONE = Holder.direct(
         new ArmorMaterial(

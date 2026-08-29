@@ -1,7 +1,8 @@
 package com.chronodawn.items.equipment;
 
+import com.chronodawn.tags.ConventionalItemTags;
+
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ToolMaterial;
@@ -21,11 +22,10 @@ import net.minecraft.world.item.ToolMaterial;
  *
  * 1.21.2+ version: ToolMaterial record constructor takes
  * (incorrectBlocksForDrops, uses, speed, attackDamageBonus, enchantmentValue, repairItems).
- * Repair tag mirrors ClockstoneTier's placeholder of IRON_TOOL_MATERIALS; a dedicated
- * chronodawn:entropy_crystal repair tag is deferred until the Clockstone placeholder is replaced.
+ * Repair tag: c:gems/entropy_crystal.
  */
 public final class EntropyCrystalTier {
-    private static final TagKey<Item> REPAIR_TAG = ItemTags.IRON_TOOL_MATERIALS;
+    private static final TagKey<Item> REPAIR_TAG = ConventionalItemTags.ENTROPY_CRYSTAL;
 
     public static final ToolMaterial INSTANCE = new ToolMaterial(
         BlockTags.INCORRECT_FOR_IRON_TOOL,

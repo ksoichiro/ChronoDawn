@@ -1,5 +1,7 @@
 package com.chronodawn.items.equipment;
 
+import com.chronodawn.tags.ConventionalItemTags;
+
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.registry.ModItems;
 import net.minecraft.Util;
@@ -55,7 +57,7 @@ public class TemporalAmberArmorMaterial {
         }),
         10, // Enchantability
         SoundEvents.ARMOR_EQUIP_DIAMOND,
-        () -> Ingredient.of(ModItems.TEMPORAL_AMBER_DUST.get()),
+        () -> Ingredient.of(ConventionalItemTags.TEMPORAL_AMBER_DUST),
         1.5f, // Toughness
         0.0f  // Knockback Resistance
     );
