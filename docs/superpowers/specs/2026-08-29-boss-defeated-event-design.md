@@ -1,7 +1,7 @@
 # Design: Boss Defeated Event API
 
 **Created**: 2026-08-29
-**Status**: Approved — implementation pending
+**Status**: Implemented
 **Initiative**: [Modpack-Author Readiness](./2026-05-09-modpack-author-readiness-roadmap.md), sub-project C
 
 ---

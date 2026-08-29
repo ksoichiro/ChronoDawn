@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added a loader-neutral Java boss-defeated event API for all six Chrono Dawn
+  bosses. Addons can register through `BossDefeatedEvents` and receive a stable
+  boss ID plus the defeated entity, server level, position, damage source and
+  attributed player after built-in defeat consequences complete. Listener
+  failures are isolated so they cannot interrupt boss death or later listeners.
+  See [docs/modpack-integration.md](docs/modpack-integration.md#boss-defeated-event-api).
 - **Smooth Temporal Stone** and **Smooth Temporal Stone Slab** — the smooth variant of the Temporal Stone family, mirroring vanilla Smooth Stone. Smelt Temporal Stone in a furnace to obtain Smooth Temporal Stone; the slab is crafted (3 → 6) or cut on a stonecutter (1 → 2). These do not generate naturally. Small structures that used vanilla Smooth Stone now place Smooth Temporal Stone instead.
 - Added per-boss `health_multiplier` and `damage_multiplier` config options
   under `[gameplay.bosses.*]` for all six bosses. `damage_multiplier` covers

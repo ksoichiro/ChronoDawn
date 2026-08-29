@@ -59,9 +59,14 @@ Remaining slices:
 
 ### C. Scripting events
 
-**Status**: ⏸ Deferred.
+**Status**: 🚧 Boss-defeated Java event shipped
+([design](./2026-08-29-boss-defeated-event-design.md)); direct scripting
+bindings and additional progression events remain.
 
-Public API exposing events that KubeJS / FTB Quests / CraftTweaker can subscribe to: boss defeated, portal opened, Chronicle entry unlocked, etc. Requires a semver-stable contract — once published, breaking it costs trust with pack creators. Designed only after sub-project A has shaped the configuration patterns these events may reference.
+The first semver-stable public contract exposes server-side defeat notifications
+for all six bosses through a loader-neutral Java API. KubeJS / FTB Quests /
+CraftTweaker bridges, portal-opened events and Chronicle-entry-unlocked events
+remain independent follow-up slices.
 
 ### D. Cross-mod compatibility
 
@@ -77,7 +82,7 @@ Targeted integrations with flagship mods commonly bundled in packs: Curios / Tri
 - The runtime-overlay infrastructure built here generalises beyond Ancient Ruins.
 - Each subsequent sub-project benefits from being able to gate behavior on config (B's tag swaps may be config-driven; C's events may need feature flags; D's compat layers may need toggles).
 
-**C second** because it is the largest differentiator for quest-driven modpacks (the dominant pack format). Bosses already exist; exposing their defeat as a pubic event makes Chrono Dawn an obvious choice for questline backbones.
+**C second** because it is the largest differentiator for quest-driven modpacks (the dominant pack format). Bosses already exist; exposing their defeat as a public event makes Chrono Dawn an obvious choice for questline backbones.
 
 **B and D in parallel / opportunistic** — both are valuable but lower-leverage and can ship as small PRs interleaved with the larger sub-projects.
 
@@ -87,7 +92,7 @@ Targeted integrations with flagship mods commonly bundled in packs: Curios / Tri
 | --- | --- | --- |
 | A. Config system | 🚧 Eight PRs shipped (Ancient Ruins, Ore tuning, Clockstone tuning, Boss multipliers, Time Distortion tuning, Portal behavior, Structure toggles, Biome toggles) | [2026-05-09-config-foundation-design.md](./2026-05-09-config-foundation-design.md), [2026-07-25-boss-stat-multipliers-design.md](./2026-07-25-boss-stat-multipliers-design.md), [2026-08-02-time-distortion-config-design.md](./2026-08-02-time-distortion-config-design.md), [2026-08-04-portal-behavior-config-design.md](./2026-08-04-portal-behavior-config-design.md), [2026-08-22-structure-toggles-design.md](./2026-08-22-structure-toggles-design.md), [2026-08-23-biome-toggles-design.md](./2026-08-23-biome-toggles-design.md) |
 | B. Datapack / tag externalization | 🚧 Conventional (`c:`) material tags shipped; tool / armor tags, biome / structure tags and the tag-lookup half remain | [2026-08-17-conventional-tags-design.md](./2026-08-17-conventional-tags-design.md) |
-| C. Scripting events | ⏸ Deferred | — |
+| C. Scripting events | 🚧 Boss-defeated Java event shipped; direct bindings and more progression events remain | [2026-08-29-boss-defeated-event-design.md](./2026-08-29-boss-defeated-event-design.md) |
 | D. Cross-mod compatibility | ⏸ Deferred | — |
 
 Each sub-project will produce multiple PRs over time. As work completes, this table is updated to reflect which slices have shipped.

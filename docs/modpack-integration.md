@@ -301,17 +301,78 @@ other mod reads.
 
 ---
 
+## Boss defeated event API
+
+Java addons can subscribe to a loader-neutral event for all six Chrono Dawn
+bosses. The same API is present in Fabric and NeoForge builds for every
+supported Minecraft version.
+
+```java
+import com.chronodawn.api.event.BossDefeatedEvents;
+import com.chronodawn.api.event.BossDefeatedListener;
+
+public final class MyChronoDawnIntegration {
+    private static final BossDefeatedListener BOSS_LISTENER = context -> {
+        String bossId = context.bossId();
+        if (context.defeatingPlayer() != null) {
+            // Advance your quest or pack progression for this player.
+        }
+    };
+
+    public static void register() {
+        BossDefeatedEvents.register(BOSS_LISTENER);
+    }
+
+    public static void unregister() {
+        BossDefeatedEvents.unregister(BOSS_LISTENER);
+    }
+}
+```
+
+Keep the listener instance if your addon supports reload or shutdown; passing a
+new lambda to `unregister` does not remove the original registration.
+
+The `BossDefeatedContext` accessors are:
+
+| Accessor | Value |
+| --- | --- |
+| `bossId()` | Stable namespaced boss ID. |
+| `boss()` | Defeated `LivingEntity`, valid during the synchronous callback. |
+| `level()` | Server level where the boss was defeated. |
+| `position()` | Immutable block-position snapshot at dispatch. |
+| `damageSource()` | Minecraft damage source that caused the death. |
+| `defeatingPlayer()` | Attributed `ServerPlayer`, or `null` for environmental or otherwise unattributed damage. |
+
+Stable boss IDs:
+
+| Boss | ID |
+| --- | --- |
+| Time Guardian | `chronodawn:time_guardian` |
+| Chronos Warden | `chronodawn:chronos_warden` |
+| Clockwork Colossus | `chronodawn:clockwork_colossus` |
+| Entropy Keeper | `chronodawn:entropy_keeper` |
+| Temporal Phantom | `chronodawn:temporal_phantom` |
+| Time Tyrant | `chronodawn:time_tyrant` |
+
+Callbacks run synchronously on the logical server after the boss's built-in
+defeat consequences. For example, a Time Tyrant listener observes the dimension
+as already stabilized. Listeners run in registration order. If one listener
+throws a runtime exception, Chrono Dawn logs it and continues with the remaining
+listeners without interrupting the boss death.
+
+The Java event is the foundation for scripting integrations. Direct KubeJS,
+CraftTweaker and FTB Quests bindings are not shipped yet; a pack cannot register
+this event from those scripting systems without an addon bridge.
+
+---
+
 ## Future integrations *(not yet shipped)*
 
-The following sections will land in subsequent releases. They are listed
-here so this document stays the canonical entry point for pack creators.
+### Additional scripting events and bindings
 
-### Scripting events (planned)
-
-A public Java API and KubeJS / FTB-Quests / CraftTweaker bindings will let
-pack creators react to in-game events such as boss defeats, portal openings,
-and Chronicle entry unlocks. These will respect a semver-stable contract and
-will be designed to integrate with the configuration system documented above.
+Portal-opened and Chronicle-entry-unlocked events, plus direct KubeJS,
+FTB Quests and CraftTweaker bindings, are planned as independent follow-up
+slices built on the stability rules established by the boss event.
 
 ### Cross-mod compatibility (planned)
 

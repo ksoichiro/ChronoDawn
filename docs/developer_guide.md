@@ -902,6 +902,15 @@ public class ChronoDawnEvents {
 }
 ```
 
+### Public addon events
+
+Public integration events live under `com.chronodawn.api.event` and must keep
+their documented semantic-versioning contract. Addons register boss defeat
+listeners through `BossDefeatedEvents`; the event is dispatched server-side
+after the boss's built-in defeat consequences. See the
+[modpack integration guide](modpack-integration.md#boss-defeated-event-api) for
+the public accessors, stable IDs and registration example.
+
 ---
 
 ## Advanced Topics
