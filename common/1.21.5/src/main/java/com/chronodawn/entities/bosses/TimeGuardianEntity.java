@@ -1,5 +1,6 @@
 package com.chronodawn.entities.bosses;
 
+import com.chronodawn.api.event.BossDefeatedEvents;
 import com.chronodawn.core.time.MobAICanceller;
 import com.chronodawn.entities.ai.TimeGuardianRangedAttackGoal;
 import com.chronodawn.entities.projectiles.TimeBlastEntity;
@@ -642,6 +643,7 @@ public class TimeGuardianEntity extends Monster implements RangedAttackMob {
             // Unprotect Desert Clock Tower boss room when defeated
             if (this.level() instanceof ServerLevel serverLevel) {
                 BlockProtectionHandler.onBossDefeatedAt(serverLevel, this.blockPosition());
+                BossDefeatedEvents.fire(BossKind.TIME_GUARDIAN, this, cause);
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.chronodawn.entities.bosses;
 
+import com.chronodawn.api.event.BossDefeatedEvents;
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.registry.ModSounds;
 import com.chronodawn.worldgen.protection.BlockProtectionHandler;
@@ -524,6 +525,7 @@ public class ClockworkColossusEntity extends Monster implements RangedAttackMob 
         // Unprotect Clockwork Depths boss room when defeated
         if (!this.level().isClientSide() && this.level() instanceof ServerLevel serverLevel) {
             BlockProtectionHandler.onBossDefeatedAt(serverLevel, this.blockPosition());
+            BossDefeatedEvents.fire(BossKind.CLOCKWORK_COLOSSUS, this, cause);
         }
     }
 }

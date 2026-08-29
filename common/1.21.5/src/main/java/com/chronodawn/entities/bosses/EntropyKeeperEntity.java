@@ -1,5 +1,6 @@
 package com.chronodawn.entities.bosses;
 
+import com.chronodawn.api.event.BossDefeatedEvents;
 import com.chronodawn.registry.ModSounds;
 import com.chronodawn.worldgen.protection.BlockProtectionHandler;
 import net.minecraft.core.BlockPos;
@@ -414,6 +415,7 @@ public class EntropyKeeperEntity extends Monster {
         // Unprotect Entropy Crypt boss room when defeated
         if (!this.level().isClientSide && this.level() instanceof net.minecraft.server.level.ServerLevel serverLevel) {
             BlockProtectionHandler.onBossDefeatedAt(serverLevel, this.blockPosition());
+            BossDefeatedEvents.fire(BossKind.ENTROPY_KEEPER, this, cause);
         }
     }
 }

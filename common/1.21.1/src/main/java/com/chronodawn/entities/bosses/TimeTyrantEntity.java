@@ -1,5 +1,6 @@
 package com.chronodawn.entities.bosses;
 
+import com.chronodawn.api.event.BossDefeatedEvents;
 import com.chronodawn.core.time.MobAICanceller;
 import com.chronodawn.entities.bosses.ExtendedMeleeAttackGoal;
 import com.chronodawn.registry.ModEffects;
@@ -1069,6 +1070,7 @@ public class TimeTyrantEntity extends Monster {
             com.chronodawn.data.DimensionStateData dimensionState =
                 com.chronodawn.data.DimensionStateData.get(serverLevel);
             dimensionState.enhanceTimeDistortion();
+            BossDefeatedEvents.fire(BossKind.TIME_TYRANT, this, cause);
         }
     }
 

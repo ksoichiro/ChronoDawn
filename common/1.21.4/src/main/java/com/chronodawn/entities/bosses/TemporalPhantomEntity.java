@@ -1,5 +1,6 @@
 package com.chronodawn.entities.bosses;
 
+import com.chronodawn.api.event.BossDefeatedEvents;
 import com.chronodawn.entities.projectiles.TimeBlastEntity;
 import com.chronodawn.registry.ModSounds;
 import com.chronodawn.worldgen.protection.BlockProtectionHandler;
@@ -496,6 +497,7 @@ public class TemporalPhantomEntity extends Monster implements RangedAttackMob {
         // Unprotect Phantom Catacombs boss room when defeated
         if (!this.level().isClientSide && this.level() instanceof net.minecraft.server.level.ServerLevel serverLevel) {
             BlockProtectionHandler.onBossDefeatedAt(serverLevel, this.blockPosition());
+            BossDefeatedEvents.fire(BossKind.TEMPORAL_PHANTOM, this, cause);
         }
     }
 }

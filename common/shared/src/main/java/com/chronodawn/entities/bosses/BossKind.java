@@ -65,6 +65,11 @@ public enum BossKind {
         return entityId.id();
     }
 
+    /** Stable namespaced ID exposed by the boss defeated event API. */
+    public String eventId() {
+        return "chronodawn:" + entityId.id();
+    }
+
     public double baseMaxHealth() {
         return baseMaxHealth;
     }

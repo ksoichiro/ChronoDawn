@@ -1,5 +1,6 @@
 package com.chronodawn.entities.bosses;
 
+import com.chronodawn.api.event.BossDefeatedEvents;
 import com.chronodawn.entities.ai.GroundSlamGoal;
 import com.chronodawn.registry.ModItems;
 import com.chronodawn.registry.ModSounds;
@@ -478,6 +479,7 @@ public class ChronosWardenEntity extends Monster {
         if (!this.level().isClientSide && this.level() instanceof ServerLevel serverLevel) {
             // Use position-based detection to find and unprotect the boss room
             BlockProtectionHandler.onBossDefeatedAt(serverLevel, this.blockPosition());
+            BossDefeatedEvents.fire(BossKind.CHRONOS_WARDEN, this, source);
         }
     }
 }
