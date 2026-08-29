@@ -1,5 +1,6 @@
 package com.chronodawn.unit;
 
+import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -9,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -16,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /** Guards modern recipes against regressing to exact Chrono Dawn material inputs. */
 class ConventionalRecipeTagSourceTest {
+    private static final Gson GSON = new Gson();
     private static final Map<String, String> MATERIAL_TAGS = Map.of(
         "clockstone", "c:ingots/clockstone",
         "clockstone_block", "c:storage_blocks/clockstone",
@@ -51,6 +54,63 @@ class ConventionalRecipeTagSourceTest {
                 "Modern recipes do not use conventional tag: " + material.getValue()
             );
         }
+    }
+
+    @Test
+    void newerRecipeFormatUsesConventionalTagsForMaterialInputs() throws IOException {
+        Path recipeDirectory = Paths.get(
+            TestUtils.getProjectRoot(),
+            "common", "shared-1.21.2+", "src", "main", "resources", "data", "chronodawn", "recipe"
+        );
+
+        List<String> recipes;
+        try (Stream<Path> paths = Files.walk(recipeDirectory)) {
+            recipes = paths.filter(path -> path.toString().endsWith(".json"))
+                .map(ConventionalRecipeTagSourceTest::read)
+                .toList();
+        }
+
+        for (Map.Entry<String, String> material : MATERIAL_TAGS.entrySet()) {
+            assertFalse(
+                recipes.stream().anyMatch(recipe -> containsExactIngredient(
+                    GSON.fromJson(recipe, Object.class), "chronodawn:" + material.getKey()
+                )),
+                "Newer recipe format still uses exact material ingredient: " + material.getKey()
+            );
+            assertTrue(
+                recipes.stream().anyMatch(recipe -> recipe.contains("#" + material.getValue())),
+                "Newer recipe format does not use conventional tag: " + material.getValue()
+            );
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    private static boolean containsExactIngredient(Object recipe, String exactItem) {
+        if (!(recipe instanceof Map<?, ?> map)) {
+            return false;
+        }
+        for (Map.Entry<?, ?> entry : map.entrySet()) {
+            if (Set.of("key", "ingredients", "ingredient").contains(entry.getKey())) {
+                if (containsExactIngredientValue(entry.getValue(), exactItem)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @SuppressWarnings("unchecked")
+    private static boolean containsExactIngredientValue(Object value, String exactItem) {
+        if (value instanceof String string) {
+            return string.equals(exactItem);
+        }
+        if (value instanceof Map<?, ?> map) {
+            return map.values().stream().anyMatch(child -> containsExactIngredientValue(child, exactItem));
+        }
+        if (value instanceof List<?> list) {
+            return list.stream().anyMatch(child -> containsExactIngredientValue(child, exactItem));
+        }
+        return false;
     }
 
     private static String read(Path path) {

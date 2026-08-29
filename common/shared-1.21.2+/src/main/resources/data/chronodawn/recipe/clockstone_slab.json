@@ -5,7 +5,7 @@
     "CCC"
   ],
   "key": {
-    "C": "chronodawn:clockstone_block"
+    "C": "#c:storage_blocks/clockstone"
   },
   "result": {
     "id": "chronodawn:clockstone_slab",

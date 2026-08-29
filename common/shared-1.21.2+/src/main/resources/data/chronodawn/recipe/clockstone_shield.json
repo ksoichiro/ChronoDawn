@@ -8,7 +8,7 @@
   ],
   "key": {
     "W": "chronodawn:time_wood_planks",
-    "C": "chronodawn:clockstone"
+    "C": "#c:ingots/clockstone"
   },
   "result": {
     "id": "chronodawn:clockstone_shield",

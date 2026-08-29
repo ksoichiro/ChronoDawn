@@ -6,7 +6,7 @@
     "E E"
   ],
   "key": {
-    "E": "chronodawn:enhanced_clockstone"
+    "E": "#c:ingots/enhanced_clockstone"
   },
   "result": {
     "id": "chronodawn:enhanced_clockstone_helmet",

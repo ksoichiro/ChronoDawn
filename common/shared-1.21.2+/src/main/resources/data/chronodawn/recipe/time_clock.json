@@ -8,8 +8,8 @@
   ],
   "key": {
     "G": "minecraft:gold_ingot",
-    "E": "chronodawn:enhanced_clockstone",
-    "C": "chronodawn:clockstone_block",
+    "E": "#c:ingots/enhanced_clockstone",
+    "C": "#c:storage_blocks/clockstone",
     "R": "minecraft:redstone"
   },
   "result": {

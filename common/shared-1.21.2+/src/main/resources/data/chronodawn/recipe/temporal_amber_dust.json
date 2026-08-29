@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    "chronodawn:raw_temporal_amber"
+    "#c:raw_materials/temporal_amber"
   ],
   "result": {
     "id": "chronodawn:temporal_amber_dust",

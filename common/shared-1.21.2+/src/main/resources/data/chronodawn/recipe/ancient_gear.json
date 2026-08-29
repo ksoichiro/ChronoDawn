@@ -8,8 +8,8 @@
   ],
   "key": {
     "I": "minecraft:iron_ingot",
-    "C": "chronodawn:time_crystal",
-    "E": "chronodawn:enhanced_clockstone"
+    "C": "#c:gems/time_crystal",
+    "E": "#c:ingots/enhanced_clockstone"
   },
   "result": {
     "id": "chronodawn:ancient_gear",

@@ -7,7 +7,7 @@
   ],
   "key": {
     "F": "chronodawn:fragment_of_stasis_core",
-    "E": "chronodawn:enhanced_clockstone"
+    "E": "#c:ingots/enhanced_clockstone"
   },
   "result": {
     "id": "chronodawn:echoing_time_boots",

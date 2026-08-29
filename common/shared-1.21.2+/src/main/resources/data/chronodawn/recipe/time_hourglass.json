@@ -8,7 +8,7 @@
   ],
   "key": {
     "G": "minecraft:glass",
-    "C": "chronodawn:clockstone",
+    "C": "#c:ingots/clockstone",
     "S": "#chronodawn:sand"
   },
   "result": {

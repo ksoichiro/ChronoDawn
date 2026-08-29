@@ -8,7 +8,7 @@
   ],
   "key": {
     "W": "chronodawn:ancient_time_wood_planks",
-    "X": "chronodawn:entropy_crystal",
+    "X": "#c:gems/entropy_crystal",
     "T": "chronodawn:enhanced_clockstone_shield"
   },
   "result": {

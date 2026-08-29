@@ -7,10 +7,10 @@
     "CHC"
   ],
   "key": {
-    "C": "chronodawn:clockstone",
+    "C": "#c:ingots/clockstone",
     "H": "chronodawn:time_hourglass",
     "F": "chronodawn:fruit_of_time",
-    "B": "chronodawn:clockstone_block"
+    "B": "#c:storage_blocks/clockstone"
   },
   "result": {
     "id": "chronodawn:portal_stabilizer",

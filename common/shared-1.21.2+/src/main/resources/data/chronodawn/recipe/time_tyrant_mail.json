@@ -8,7 +8,7 @@
   ],
   "key": {
     "F": "chronodawn:fragment_of_stasis_core",
-    "E": "chronodawn:enhanced_clockstone",
+    "E": "#c:ingots/enhanced_clockstone",
     "U": "chronodawn:unstable_hourglass"
   },
   "result": {

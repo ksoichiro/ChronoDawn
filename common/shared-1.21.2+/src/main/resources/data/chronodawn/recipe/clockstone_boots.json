@@ -6,7 +6,7 @@
     "C C"
   ],
   "key": {
-    "C": "chronodawn:clockstone"
+    "C": "#c:ingots/clockstone"
   },
   "result": {
     "id": "chronodawn:clockstone_boots",

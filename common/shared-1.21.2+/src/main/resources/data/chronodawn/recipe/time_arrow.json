@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    "chronodawn:clockstone",
+    "#c:ingots/clockstone",
     "chronodawn:fruit_of_time",
     "minecraft:arrow",
     "minecraft:arrow",

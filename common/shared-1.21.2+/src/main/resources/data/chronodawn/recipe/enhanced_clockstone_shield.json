@@ -8,7 +8,7 @@
   ],
   "key": {
     "W": "chronodawn:dark_time_wood_planks",
-    "E": "chronodawn:enhanced_clockstone",
+    "E": "#c:ingots/enhanced_clockstone",
     "T": "chronodawn:clockstone_shield"
   },
   "result": {

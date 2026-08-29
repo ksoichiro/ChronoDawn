@@ -7,10 +7,10 @@
     "CCC"
   ],
   "key": {
-    "C": "chronodawn:clockstone"
+    "C": "#c:ingots/clockstone"
   },
   "result": {
-    "id": "chronodawn:clockstone_block",
+    "id": "#c:storage_blocks/clockstone",
     "count": 1
   }
 }

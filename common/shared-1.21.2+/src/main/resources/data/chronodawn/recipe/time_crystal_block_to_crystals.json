@@ -2,10 +2,10 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    "chronodawn:time_crystal_block"
+    "#c:storage_blocks/time_crystal"
   ],
   "result": {
-    "id": "chronodawn:time_crystal",
+    "id": "#c:gems/time_crystal",
     "count": 9
   }
 }

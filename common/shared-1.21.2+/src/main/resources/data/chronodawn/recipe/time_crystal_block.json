@@ -7,10 +7,10 @@
     "TTT"
   ],
   "key": {
-    "T": "chronodawn:time_crystal"
+    "T": "#c:gems/time_crystal"
   },
   "result": {
-    "id": "chronodawn:time_crystal_block",
+    "id": "#c:storage_blocks/time_crystal",
     "count": 1
   }
 }
