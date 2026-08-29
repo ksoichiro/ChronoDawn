@@ -11,10 +11,10 @@
       "item": "minecraft:glass"
     },
     "E": {
-      "item": "chronodawn:enhanced_clockstone"
+      "tag": "c:ingots/enhanced_clockstone"
     },
     "C": {
-      "item": "chronodawn:clockstone_block"
+      "tag": "c:storage_blocks/clockstone"
     }
   },
   "result": {

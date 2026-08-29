@@ -11,10 +11,10 @@
       "item": "minecraft:iron_ingot"
     },
     "C": {
-      "item": "chronodawn:time_crystal"
+      "tag": "c:gems/time_crystal"
     },
     "E": {
-      "item": "chronodawn:enhanced_clockstone"
+      "tag": "c:ingots/enhanced_clockstone"
     }
   },
   "result": {

@@ -3,7 +3,7 @@
   "category": "misc",
   "ingredients": [
     {
-      "item": "chronodawn:clockstone"
+      "tag": "c:ingots/clockstone"
     },
     {
       "item": "chronodawn:fruit_of_time"

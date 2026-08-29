@@ -11,7 +11,7 @@
       "item": "minecraft:glass"
     },
     "C": {
-      "item": "chronodawn:clockstone"
+      "tag": "c:ingots/clockstone"
     },
     "S": {
       "tag": "chronodawn:sand"

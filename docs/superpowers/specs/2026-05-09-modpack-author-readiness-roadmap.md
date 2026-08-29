@@ -42,7 +42,8 @@ Remaining slices:
 - The consuming half: replace hardcoded `Block` / `Item` references with tag
   lookups where appropriate (recipe ingredients, biome structure lists, etc.)
   so pack creators can swap materials without source patches. Produce small,
-  targeted PRs as each consumer is selected.
+  targeted PRs as each consumer is selected. The first recipe consumer slice
+  (modern material inputs) is now shipped; biome and structure consumers remain.
 
 ### C. Scripting events
 

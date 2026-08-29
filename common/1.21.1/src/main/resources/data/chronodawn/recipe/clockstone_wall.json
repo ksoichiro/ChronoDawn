@@ -7,7 +7,7 @@
   ],
   "key": {
     "C": {
-      "item": "chronodawn:clockstone_block"
+      "tag": "c:storage_blocks/clockstone"
     }
   },
   "result": {

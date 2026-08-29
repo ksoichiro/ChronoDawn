@@ -8,7 +8,7 @@
   ],
   "key": {
     "C": {
-      "item": "chronodawn:entropy_crystal"
+      "tag": "c:gems/entropy_crystal"
     },
     "S": {
       "item": "minecraft:stick"

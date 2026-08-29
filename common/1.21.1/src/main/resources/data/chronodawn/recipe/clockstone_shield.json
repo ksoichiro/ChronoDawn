@@ -11,7 +11,7 @@
       "item": "chronodawn:time_wood_planks"
     },
     "C": {
-      "item": "chronodawn:clockstone"
+      "tag": "c:ingots/clockstone"
     }
   },
   "result": {

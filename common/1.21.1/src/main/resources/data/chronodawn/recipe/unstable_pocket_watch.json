@@ -14,7 +14,7 @@
       "item": "chronodawn:unstable_hourglass"
     },
     "E": {
-      "item": "chronodawn:enhanced_clockstone"
+      "tag": "c:ingots/enhanced_clockstone"
     }
   },
   "result": {

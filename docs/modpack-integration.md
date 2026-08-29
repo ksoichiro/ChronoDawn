@@ -292,6 +292,27 @@ add compatible items without replacing Chrono Dawn's Java classes:
 Minecraft 1.20.1 retains exact-item repair ingredients because its conventional
 `c:gems` tag has no per-material subtags and includes both crystal types.
 
+### Recipe material inputs
+
+On 1.21.1 and newer, recipes that consume Chrono Dawn's material items use the
+same conventional tags. A unification addon or datapack can therefore provide
+compatible members without replacing the recipes:
+
+| Recipe input | Tag |
+| --- | --- |
+| Clockstone | `c:ingots/clockstone` |
+| Clockstone Block | `c:storage_blocks/clockstone` |
+| Enhanced Clockstone | `c:ingots/enhanced_clockstone` |
+| Time Crystal | `c:gems/time_crystal` |
+| Time Crystal Block | `c:storage_blocks/time_crystal` |
+| Entropy Crystal | `c:gems/entropy_crystal` |
+| Raw Temporal Amber | `c:raw_materials/temporal_amber` |
+
+This conversion covers material-bearing recipes only. Recipes whose inputs do
+not have a clear conventional equivalent remain unchanged. Minecraft 1.20.1
+keeps the original exact-item recipe inputs because its conventional tags do
+not provide the required per-material distinction.
+
 ### 1.20.1
 
 1.20.1 uses conventional tags v1, which has **no per-material subtags** —

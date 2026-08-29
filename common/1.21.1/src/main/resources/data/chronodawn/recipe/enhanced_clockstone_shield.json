@@ -11,7 +11,7 @@
       "item": "chronodawn:dark_time_wood_planks"
     },
     "E": {
-      "item": "chronodawn:enhanced_clockstone"
+      "tag": "c:ingots/enhanced_clockstone"
     },
     "T": {
       "item": "chronodawn:clockstone_shield"

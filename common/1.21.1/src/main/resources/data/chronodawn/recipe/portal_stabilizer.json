@@ -8,7 +8,7 @@
   ],
   "key": {
     "C": {
-      "item": "chronodawn:clockstone"
+      "tag": "c:ingots/clockstone"
     },
     "H": {
       "item": "chronodawn:time_hourglass"
@@ -17,7 +17,7 @@
       "item": "chronodawn:fruit_of_time"
     },
     "B": {
-      "item": "chronodawn:clockstone_block"
+      "tag": "c:storage_blocks/clockstone"
     }
   },
   "result": {

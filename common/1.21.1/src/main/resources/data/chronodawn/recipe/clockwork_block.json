@@ -8,7 +8,7 @@
   ],
   "key": {
     "C": {
-      "item": "chronodawn:clockstone"
+      "tag": "c:ingots/clockstone"
     },
     "I": {
       "item": "minecraft:iron_ingot"

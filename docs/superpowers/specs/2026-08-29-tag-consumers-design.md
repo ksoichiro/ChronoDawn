@@ -1,7 +1,7 @@
 # Design: Conventional Tags for Equipment Repair Materials
 
 **Created**: 2026-08-29
-**Status**: Implemented
+**Status**: Implemented for repair materials and modern recipe consumers
 **Initiative**: [Modpack-Author Readiness](./2026-05-09-modpack-author-readiness-roadmap.md), sub-project B
 
 ---
@@ -66,3 +66,23 @@ or repair amounts change for the items currently shipped by Chrono Dawn.
 - Custom anvil amount/experience rules.
 - Tool, armor, weapon, or shield category tags (`c:tools/*`, `c:armors/*`).
 - Recipe ingredient conversion beyond repair materials.
+
+## Follow-up: conventional recipe ingredients
+
+The next consumer slice converts exact Chrono Dawn material inputs in the
+1.21.1 recipe bucket to the already-published per-material conventional tags.
+The bucket is shared by the supported 1.21.x builds, so no duplicate recipe
+files are needed for 1.21.2 through 1.21.11.
+
+| Exact input | Conventional tag |
+| --- | --- |
+| `clockstone` | `c:ingots/clockstone` |
+| `clockstone_block` | `c:storage_blocks/clockstone` |
+| `enhanced_clockstone` | `c:ingots/enhanced_clockstone` |
+| `time_crystal` | `c:gems/time_crystal` |
+| `time_crystal_block` | `c:storage_blocks/time_crystal` |
+| `entropy_crystal` | `c:gems/entropy_crystal` |
+| `raw_temporal_amber` | `c:raw_materials/temporal_amber` |
+
+The recipe outputs and the 1.20.1 recipes remain unchanged. Inputs without a
+clear conventional material equivalent are intentionally excluded.

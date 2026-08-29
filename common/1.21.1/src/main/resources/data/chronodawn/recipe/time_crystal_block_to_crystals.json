@@ -3,7 +3,7 @@
   "category": "misc",
   "ingredients": [
     {
-      "item": "chronodawn:time_crystal_block"
+      "tag": "c:storage_blocks/time_crystal"
     }
   ],
   "result": {

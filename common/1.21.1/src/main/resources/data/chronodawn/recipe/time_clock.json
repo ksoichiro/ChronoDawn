@@ -11,10 +11,10 @@
       "item": "minecraft:gold_ingot"
     },
     "E": {
-      "item": "chronodawn:enhanced_clockstone"
+      "tag": "c:ingots/enhanced_clockstone"
     },
     "C": {
-      "item": "chronodawn:clockstone_block"
+      "tag": "c:storage_blocks/clockstone"
     },
     "R": {
       "item": "minecraft:redstone"

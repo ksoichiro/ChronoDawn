@@ -10,7 +10,7 @@
       "item": "chronodawn:fragment_of_stasis_core"
     },
     "E": {
-      "item": "chronodawn:enhanced_clockstone"
+      "tag": "c:ingots/enhanced_clockstone"
     }
   },
   "result": {

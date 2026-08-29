@@ -8,7 +8,7 @@
   ],
   "key": {
     "E": {
-      "item": "chronodawn:enhanced_clockstone"
+      "tag": "c:ingots/enhanced_clockstone"
     },
     "S": {
       "item": "minecraft:stick"
