@@ -53,7 +53,11 @@ class ConventionalRepairTagSourceTest {
         String tagReference = "ConventionalItemTags." + tagField;
 
         assertEquals(1, count(source, tagReference), version + " " + relativePath);
-        assertTrue(!source.contains("ItemTags."), version + " still uses a vanilla item tag: " + relativePath);
+        String withoutConventionalTagName = source.replace("ConventionalItemTags.", "");
+        assertTrue(
+            !withoutConventionalTagName.contains("ItemTags."),
+            version + " still uses a vanilla item tag: " + relativePath
+        );
         assertTrue(!source.contains("Ingredient.of(ModItems."), version + " still uses an exact repair ingredient: " + relativePath);
     }
 
