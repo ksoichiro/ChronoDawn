@@ -10,7 +10,7 @@
     "T": "#c:gems/time_crystal"
   },
   "result": {
-    "id": "#c:storage_blocks/time_crystal",
+    "id": "chronodawn:time_crystal_block",
     "count": 1
   }
 }

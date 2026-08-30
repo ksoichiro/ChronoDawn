@@ -5,7 +5,7 @@
     "#c:storage_blocks/clockstone"
   ],
   "result": {
-    "id": "#c:ingots/clockstone",
+    "id": "chronodawn:clockstone",
     "count": 9
   }
 }
