@@ -76,7 +76,7 @@ Targeted integrations with flagship mods commonly bundled in packs: Curios / Tri
 | Sub-project | Status | First spec |
 | --- | --- | --- |
 | A. Config system | 🚧 Core configuration shipped; deferred vanilla-overlay ore tuning remains optional | [2026-05-09-config-foundation-design.md](./2026-05-09-config-foundation-design.md) |
-| B. Datapack / tag externalization | 🚧 Tool / armor tags, biome / structure tags and broader tag-lookup work remain | [2026-08-17-conventional-tags-design.md](./2026-08-17-conventional-tags-design.md) |
+| B. Datapack / tag externalization | 🚧 Tool / armor tags, biome / structure tags and broader tag-lookup work remain; modern material recipe inputs shipped | [2026-08-17-conventional-tags-design.md](./2026-08-17-conventional-tags-design.md), [2026-08-29-tag-consumers-design.md](./2026-08-29-tag-consumers-design.md) |
 | C. Scripting events | 🚧 Direct bindings and additional progression events remain | [2026-08-29-boss-defeated-event-design.md](./2026-08-29-boss-defeated-event-design.md) |
 | D. Cross-mod compatibility | ⏸ Deferred | — |
 

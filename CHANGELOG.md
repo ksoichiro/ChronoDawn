@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Chrono Dawn recipe material inputs now consume per-material conventional
+  `c:` tags on Minecraft 1.21.1+, allowing compatible pack-provided materials
+  to be used without replacing recipe JSONs. The covered inputs include
+  Clockstone, Enhanced Clockstone, Time Crystal, Entropy Crystal, and Raw
+  Temporal Amber, along with their storage blocks.
 - Chrono Dawn equipment repair ingredients now consume per-material conventional
   `c:` tags on Minecraft 1.21.1+ (`c:gems/time_crystal`,
   `c:gems/entropy_crystal` and `c:dusts/temporal_amber`), allowing compatible

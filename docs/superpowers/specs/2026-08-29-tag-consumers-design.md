@@ -65,7 +65,7 @@ or repair amounts change for the items currently shipped by Chrono Dawn.
 - Spatially Linked Pickaxe's Diamond repair behavior.
 - Custom anvil amount/experience rules.
 - Tool, armor, weapon, or shield category tags (`c:tools/*`, `c:armors/*`).
-- Recipe ingredient conversion beyond repair materials.
+- Recipe ingredient conversion beyond the material-input slice documented below.
 
 ## Follow-up: conventional recipe ingredients
 
