@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "chronodawn:clockwork_depths",
+    "chronodawn:desert_clock_tower",
+    "chronodawn:entropy_crypt",
+    "chronodawn:guardian_vault",
+    "chronodawn:master_clock",
+    "chronodawn:phantom_catacombs"
+  ]
+}

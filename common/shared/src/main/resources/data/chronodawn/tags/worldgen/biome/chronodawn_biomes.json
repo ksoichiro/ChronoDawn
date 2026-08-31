@@ -1,0 +1,16 @@
+{
+  "replace": false,
+  "values": [
+    "chronodawn:chronodawn_ancient_forest",
+    "chronodawn:chronodawn_dark_forest",
+    "chronodawn:chronodawn_desert",
+    "chronodawn:chronodawn_faded_plains",
+    "chronodawn:chronodawn_forest",
+    "chronodawn:chronodawn_mountain",
+    "chronodawn:chronodawn_ocean",
+    "chronodawn:chronodawn_plains",
+    "chronodawn:chronodawn_prairies",
+    "chronodawn:chronodawn_snowy",
+    "chronodawn:chronodawn_swamp"
+  ]
+}

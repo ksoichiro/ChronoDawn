@@ -186,6 +186,23 @@ namespace is `chronodawn`. The most commonly customized resources:
 The mod follows vanilla data pack conventions throughout, so no
 mod-specific syntax is required.
 
+### Chrono Dawn biome and structure tags
+
+The following mod-owned worldgen tags are stable integration points for
+datapacks. They select groups of Chrono Dawn registry entries without requiring
+your pack to repeat individual IDs:
+
+| Tag | Contents |
+| --- | --- |
+| `#chronodawn:chronodawn_biomes` | All eleven Chrono Dawn biomes. |
+| `#chronodawn:chronodawn_structures` | All eight Chrono Dawn structures. |
+| `#chronodawn:boss_structures` | Desert Clock Tower, Guardian Vault, Clockwork Depths, Phantom Catacombs, Entropy Crypt, and Master Clock. |
+
+For example, a biome selector that accepts biome tags can use
+`#chronodawn:chronodawn_biomes` to target the whole dimension. The existing
+`#chronodawn:has_*` biome tags control individual structure placement and are
+not part of this public grouping API.
+
 ---
 
 ## Conventional (`c:`) tags

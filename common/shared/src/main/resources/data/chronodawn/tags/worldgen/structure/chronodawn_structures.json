@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "chronodawn:ancient_ruins",
+    "chronodawn:clockwork_depths",
+    "chronodawn:desert_clock_tower",
+    "chronodawn:entropy_crypt",
+    "chronodawn:forgotten_library",
+    "chronodawn:guardian_vault",
+    "chronodawn:master_clock",
+    "chronodawn:phantom_catacombs"
+  ]
+}

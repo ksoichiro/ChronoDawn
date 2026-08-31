@@ -61,6 +61,8 @@ the build model changes.
   avoid reverting unrelated files.
 - Prefer existing patterns in nearby version modules before introducing new
   abstractions.
+- Do not use zsh's reserved `path` variable as a loop or script variable; it
+  controls command lookup for the rest of that shell invocation.
 - Put common gameplay behavior in `common/` where possible. Use `fabric/` or
   `neoforge/` only for loader APIs, entry points, events, or platform bridges.
 - Use Mojang class names such as `Level`, `BlockPos`, and `Registry`; do not use

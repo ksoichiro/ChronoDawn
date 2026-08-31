@@ -32,13 +32,13 @@ dimension) should only be scheduled if a concrete need surfaces.
 
 ### B. Datapack and tag externalization
 
-**Status**: 🚧 Conventional material tags and equipment repair consumers are
-shipped. Broader tag consumption and additional tag families remain.
+**Status**: 🚧 Conventional material tags, mod-owned biome / structure tags,
+and equipment repair consumers are shipped. Broader tag consumption and
+additional tag families remain.
 
 Remaining slices:
 
 - Tools / weapons / armor / shield tags (`c:tools/*`, `c:armors/*`) — deferred; tier semantics need their own decisions.
-- Mod-owned biome and structure tags.
 - The consuming half: replace hardcoded `Block` / `Item` references with tag
   lookups where appropriate (recipe ingredients, biome structure lists, etc.)
   so pack creators can swap materials without source patches. Produce small,
@@ -76,7 +76,7 @@ Targeted integrations with flagship mods commonly bundled in packs: Curios / Tri
 | Sub-project | Status | First spec |
 | --- | --- | --- |
 | A. Config system | 🚧 Core configuration shipped; deferred vanilla-overlay ore tuning remains optional | [2026-05-09-config-foundation-design.md](./2026-05-09-config-foundation-design.md) |
-| B. Datapack / tag externalization | 🚧 Tool / armor tags, biome / structure tags and broader tag-lookup work remain; modern material recipe inputs shipped | [2026-08-17-conventional-tags-design.md](./2026-08-17-conventional-tags-design.md), [2026-08-29-tag-consumers-design.md](./2026-08-29-tag-consumers-design.md) |
+| B. Datapack / tag externalization | 🚧 Tool / armor tags and broader tag-lookup work remain; modern material recipe inputs and biome / structure tags shipped | [2026-08-17-conventional-tags-design.md](./2026-08-17-conventional-tags-design.md), [2026-08-29-tag-consumers-design.md](./2026-08-29-tag-consumers-design.md), [2026-08-31-biome-structure-tags-design.md](./2026-08-31-biome-structure-tags-design.md) |
 | C. Scripting events | 🚧 Direct bindings and additional progression events remain | [2026-08-29-boss-defeated-event-design.md](./2026-08-29-boss-defeated-event-design.md) |
 | D. Cross-mod compatibility | ⏸ Deferred | — |
 
