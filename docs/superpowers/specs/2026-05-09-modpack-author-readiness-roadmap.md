@@ -43,7 +43,20 @@ Remaining slices:
   lookups where appropriate (recipe ingredients, biome structure lists, etc.)
   so pack creators can swap materials without source patches. Produce small,
   targeted PRs as each consumer is selected. The first recipe consumer slice
-  (modern material inputs) is now shipped; biome and structure consumers remain.
+  (modern material inputs) is now shipped.
+
+**Biome / structure material references — reviewed, no conversion
+warranted (2026-08-31).** Every hardcoded `Block`/`Item` reference in
+worldgen Java is either a structural marker block intrinsic to a placement
+algorithm (`Blocks.JIGSAW`, `AMETHYST_BLOCK`, `CRYING_OBSIDIAN`, `DROPPER` in
+`MasterClockBossRoomPlacer`, `PhantomCatacombsBossRoomPlacer`,
+`EntropyKeeperSpawner` — changing these breaks placement logic, not a
+material swap) or already covered by the existing build-time
+`scripts/nbt_block_mappings.json` NBT block-swap mechanism for actual
+terrain materials. Biome definitions have no Java-level block hardcodes;
+they are fully data-driven via `ManagedBiome`/`RuntimeBiomeOverlay` JSON. No
+further action is planned for this slice unless a concrete modpack-author
+need surfaces.
 
 ### C. Scripting events
 
@@ -76,7 +89,7 @@ Targeted integrations with flagship mods commonly bundled in packs: Curios / Tri
 | Sub-project | Status | First spec |
 | --- | --- | --- |
 | A. Config system | 🚧 Core configuration shipped; deferred vanilla-overlay ore tuning remains optional | [2026-05-09-config-foundation-design.md](./2026-05-09-config-foundation-design.md) |
-| B. Datapack / tag externalization | 🚧 Tool / armor tags and broader tag-lookup work remain; modern material recipe inputs and biome / structure tags shipped | [2026-08-17-conventional-tags-design.md](./2026-08-17-conventional-tags-design.md), [2026-08-29-tag-consumers-design.md](./2026-08-29-tag-consumers-design.md), [2026-08-31-biome-structure-tags-design.md](./2026-08-31-biome-structure-tags-design.md) |
+| B. Datapack / tag externalization | 🚧 Tool / armor tag semantics remain undecided; modern material recipe inputs and biome / structure tags shipped; biome / structure Java material references reviewed with no conversion warranted | [2026-08-17-conventional-tags-design.md](./2026-08-17-conventional-tags-design.md), [2026-08-29-tag-consumers-design.md](./2026-08-29-tag-consumers-design.md), [2026-08-31-biome-structure-tags-design.md](./2026-08-31-biome-structure-tags-design.md) |
 | C. Scripting events | 🚧 Direct bindings and additional progression events remain | [2026-08-29-boss-defeated-event-design.md](./2026-08-29-boss-defeated-event-design.md) |
 | D. Cross-mod compatibility | ⏸ Deferred | — |
 
