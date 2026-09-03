@@ -38,7 +38,11 @@ additional tag families remain.
 
 Remaining slices:
 
-- Tools / weapons / armor / shield tags (`c:tools/*`, `c:armors/*`) — deferred; tier semantics need their own decisions.
+- Tools / weapons / armor / shield tags (`c:tools/*`, `c:armors/*`) —
+  shipped 2026-09-03. The convention needed no tier decision: it offers
+  only functional categories, with no shovel/hoe category and no
+  per-material armor subtags below 1.21.11. See
+  [2026-09-03-tools-armors-shield-tags-design.md](./2026-09-03-tools-armors-shield-tags-design.md).
 - The consuming half: replace hardcoded `Block` / `Item` references with tag
   lookups where appropriate (recipe ingredients, biome structure lists, etc.)
   so pack creators can swap materials without source patches. Produce small,
@@ -89,7 +93,7 @@ Targeted integrations with flagship mods commonly bundled in packs: Curios / Tri
 | Sub-project | Status | First spec |
 | --- | --- | --- |
 | A. Config system | 🚧 Core configuration shipped; deferred vanilla-overlay ore tuning remains optional | [2026-05-09-config-foundation-design.md](./2026-05-09-config-foundation-design.md) |
-| B. Datapack / tag externalization | 🚧 Tool / armor tag semantics remain undecided; modern material recipe inputs and biome / structure tags shipped; biome / structure Java material references reviewed with no conversion warranted | [2026-08-17-conventional-tags-design.md](./2026-08-17-conventional-tags-design.md), [2026-08-29-tag-consumers-design.md](./2026-08-29-tag-consumers-design.md), [2026-08-31-biome-structure-tags-design.md](./2026-08-31-biome-structure-tags-design.md) |
+| B. Datapack / tag externalization | 🚧 Tool/armor/shield tags shipped; remaining work is opportunistic consumer conversion (recipes or Java code still hardcoding a tool/armor `Item` reference) | [2026-08-17-conventional-tags-design.md](./2026-08-17-conventional-tags-design.md), [2026-08-29-tag-consumers-design.md](./2026-08-29-tag-consumers-design.md), [2026-08-31-biome-structure-tags-design.md](./2026-08-31-biome-structure-tags-design.md), [2026-09-03-tools-armors-shield-tags-design.md](./2026-09-03-tools-armors-shield-tags-design.md) |
 | C. Scripting events | 🚧 Direct bindings and additional progression events remain | [2026-08-29-boss-defeated-event-design.md](./2026-08-29-boss-defeated-event-design.md) |
 | D. Cross-mod compatibility | ⏸ Deferred | — |
 

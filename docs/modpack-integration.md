@@ -353,6 +353,41 @@ Categories that exist in v2 but not v1 — `stones`, `gravels`, `cobblestones`,
 because inventing tag names outside the convention would produce files no
 other mod reads.
 
+### Tools, weapons, armor, and shields
+
+Chrono Dawn's tool, weapon, armor, and shield items — including boss-drop
+and artifact gear — join the conventional tag categories the Fabric/NeoForge
+convention actually provides. Unlike the material tags above, this
+convention has no per-material subtags for equipment: only functional
+categories.
+
+On 1.21.1+:
+
+| Chrono Dawn items | Tag |
+| --- | --- |
+| Clockstone, Enhanced Clockstone, and Entropy Crystal swords; Chronoblade; Clockstone and Enhanced Clockstone axes | `c:tools/melee_weapon` |
+| Clockstone, Enhanced Clockstone, and Spatially Linked pickaxes | `c:tools/mining_tool` |
+| Clockstone, Enhanced Clockstone, and Entropy Crystal shields | `c:tools/shield` |
+| Clockstone, Enhanced Clockstone, and Temporal Amber armor (all 4 pieces each); Time Tyrant's Mail | `c:armors` |
+
+Clockstone and Enhanced Clockstone shovels and hoes join no `c:` tag — the
+convention has no category for them on this range. `c:armors/humanoid` and
+its sibling subtags (`horse`, `nautilus`, `wolf`) exist only from 1.21.11
+and are not yet published; the bare `c:armors` umbrella already means
+humanoid armor across the whole 1.21.1–1.21.11 range.
+
+On 1.20.1, which uses conventional tags v1's flat per-tool-type tags and has
+no armor tag in any form:
+
+| Chrono Dawn items | Tag |
+| --- | --- |
+| Swords (as above) | `c:swords` |
+| Pickaxes (as above) | `c:pickaxes` |
+| Axes | `c:axes` |
+| Shovels | `c:shovels` |
+| Hoes | `c:hoes` |
+| Shields | `c:shields` |
+
 ---
 
 ## Boss defeated event API

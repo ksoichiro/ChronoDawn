@@ -9,6 +9,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Chrono Dawn tool, weapon, armor, and shield items — including boss-drop
+  and artifact gear — now join Fabric/NeoForge conventional (`c:`) tags by
+  function: `c:tools/melee_weapon`, `c:tools/mining_tool`, `c:tools/shield`,
+  and `c:armors` on Minecraft 1.21.1+, and the matching flat `c:swords` /
+  `c:pickaxes` / `c:axes` / `c:shovels` / `c:hoes` / `c:shields` tags on
+  1.20.1. See
+  [docs/modpack-integration.md](docs/modpack-integration.md#tools-weapons-armor-and-shields).
 - Chrono Dawn recipe material inputs now consume per-material conventional
   `c:` tags on Minecraft 1.21.1+, allowing compatible pack-provided materials
   to be used without replacing recipe JSONs. The covered inputs include
