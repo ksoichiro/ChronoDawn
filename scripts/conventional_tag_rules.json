@@ -50,7 +50,10 @@
     "item/stones",
     "item/storage_blocks",
     "item/stripped_logs",
-    "item/stripped_woods"
+    "item/stripped_woods",
+    "item/tools/melee_weapon",
+    "item/tools/mining_tool",
+    "item/tools/shield"
   ],
   "v2_allowed_tags": [
     "block/ores",
@@ -143,7 +146,10 @@
     "item/crops/chrono_melon",
     "item/seeds",
     "item/seeds/time_wheat",
-    "item/seeds/chrono_melon"
+    "item/seeds/chrono_melon",
+    "item/tools/melee_weapon",
+    "item/tools/mining_tool",
+    "item/tools/shield"
   ],
   "v1_allowed_tags": [
     "blocks/ores",
@@ -409,6 +415,45 @@
       "id_source": "item",
       "ids": ["time_wheat_seeds", "chrono_melon_seeds"],
       "require_any": ["item/seeds/*"]
+    },
+    {
+      "name": "sword and axe items join c:tools/melee_weapon",
+      "id_source": "item",
+      "ids": [
+        "clockstone_sword",
+        "enhanced_clockstone_sword",
+        "entropy_crystal_sword",
+        "chronoblade",
+        "clockstone_axe",
+        "enhanced_clockstone_axe"
+      ],
+      "require_all": [
+        "tools/melee_weapon"
+      ]
+    },
+    {
+      "name": "pickaxe items join c:tools/mining_tool",
+      "id_source": "item",
+      "ids": [
+        "clockstone_pickaxe",
+        "enhanced_clockstone_pickaxe",
+        "spatially_linked_pickaxe"
+      ],
+      "require_all": [
+        "tools/mining_tool"
+      ]
+    },
+    {
+      "name": "shield items join c:tools/shield",
+      "id_source": "item",
+      "ids": [
+        "clockstone_shield",
+        "enhanced_clockstone_shield",
+        "entropy_crystal_shield"
+      ],
+      "require_all": [
+        "tools/shield"
+      ]
     },
     {
       "name": "ore blocks join blocks/ores (v1)",
