@@ -53,7 +53,8 @@
     "item/stripped_woods",
     "item/tools/melee_weapon",
     "item/tools/mining_tool",
-    "item/tools/shield"
+    "item/tools/shield",
+    "item/armors"
   ],
   "v2_allowed_tags": [
     "block/ores",
@@ -149,7 +150,8 @@
     "item/seeds/chrono_melon",
     "item/tools/melee_weapon",
     "item/tools/mining_tool",
-    "item/tools/shield"
+    "item/tools/shield",
+    "item/armors"
   ],
   "v1_allowed_tags": [
     "blocks/ores",
@@ -453,6 +455,28 @@
       ],
       "require_all": [
         "item/tools/shield"
+      ]
+    },
+    {
+      "name": "armor items join c:armors",
+      "id_source": "item",
+      "ids": [
+        "clockstone_helmet",
+        "clockstone_chestplate",
+        "clockstone_leggings",
+        "clockstone_boots",
+        "enhanced_clockstone_helmet",
+        "enhanced_clockstone_chestplate",
+        "enhanced_clockstone_leggings",
+        "enhanced_clockstone_boots",
+        "temporal_amber_helmet",
+        "temporal_amber_chestplate",
+        "temporal_amber_leggings",
+        "temporal_amber_boots",
+        "time_tyrant_mail"
+      ],
+      "require_all": [
+        "item/armors"
       ]
     },
     {
