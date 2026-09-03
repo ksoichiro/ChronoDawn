@@ -368,7 +368,7 @@ On 1.21.1+:
 | Clockstone, Enhanced Clockstone, and Entropy Crystal swords; Chronoblade; Clockstone and Enhanced Clockstone axes | `c:tools/melee_weapon` |
 | Clockstone, Enhanced Clockstone, and Spatially Linked pickaxes | `c:tools/mining_tool` |
 | Clockstone, Enhanced Clockstone, and Entropy Crystal shields | `c:tools/shield` |
-| Clockstone, Enhanced Clockstone, and Temporal Amber armor (all 4 pieces each); Time Tyrant's Mail | `c:armors` |
+| Clockstone, Enhanced Clockstone, and Temporal Amber armor (all 4 pieces each); Time Tyrant's Mail and Echoing Time Boots | `c:armors` |
 
 Clockstone and Enhanced Clockstone shovels and hoes join no `c:` tag — the
 convention has no category for them on this range. `c:armors/humanoid` and

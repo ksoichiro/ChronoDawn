@@ -473,7 +473,8 @@
         "temporal_amber_chestplate",
         "temporal_amber_leggings",
         "temporal_amber_boots",
-        "time_tyrant_mail"
+        "time_tyrant_mail",
+        "echoing_time_boots"
       ],
       "require_all": [
         "item/armors"
