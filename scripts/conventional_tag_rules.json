@@ -428,7 +428,7 @@
         "enhanced_clockstone_axe"
       ],
       "require_all": [
-        "tools/melee_weapon"
+        "item/tools/melee_weapon"
       ]
     },
     {
@@ -440,7 +440,7 @@
         "spatially_linked_pickaxe"
       ],
       "require_all": [
-        "tools/mining_tool"
+        "item/tools/mining_tool"
       ]
     },
     {
@@ -452,7 +452,7 @@
         "entropy_crystal_shield"
       ],
       "require_all": [
-        "tools/shield"
+        "item/tools/shield"
       ]
     },
     {
