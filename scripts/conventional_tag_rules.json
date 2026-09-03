@@ -158,7 +158,13 @@
     "items/foods",
     "items/sandstone_blocks",
     "items/sandstone_slabs",
-    "items/sandstone_stairs"
+    "items/sandstone_stairs",
+    "items/swords",
+    "items/pickaxes",
+    "items/axes",
+    "items/shovels",
+    "items/hoes",
+    "items/shields"
   ],
   "rules": [
     {
@@ -417,6 +423,82 @@
       "id_source": "item",
       "pattern": ".*_ore",
       "require_all": ["items/ores"]
+    },
+    {
+      "name": "sword items join items/swords (v1)",
+      "era": "v1",
+      "id_source": "item",
+      "ids": [
+        "clockstone_sword",
+        "enhanced_clockstone_sword",
+        "entropy_crystal_sword",
+        "chronoblade"
+      ],
+      "require_all": [
+        "items/swords"
+      ]
+    },
+    {
+      "name": "pickaxe items join items/pickaxes (v1)",
+      "era": "v1",
+      "id_source": "item",
+      "ids": [
+        "clockstone_pickaxe",
+        "enhanced_clockstone_pickaxe",
+        "spatially_linked_pickaxe"
+      ],
+      "require_all": [
+        "items/pickaxes"
+      ]
+    },
+    {
+      "name": "axe items join items/axes (v1)",
+      "era": "v1",
+      "id_source": "item",
+      "ids": [
+        "clockstone_axe",
+        "enhanced_clockstone_axe"
+      ],
+      "require_all": [
+        "items/axes"
+      ]
+    },
+    {
+      "name": "shovel items join items/shovels (v1)",
+      "era": "v1",
+      "id_source": "item",
+      "ids": [
+        "clockstone_shovel",
+        "enhanced_clockstone_shovel"
+      ],
+      "require_all": [
+        "items/shovels"
+      ]
+    },
+    {
+      "name": "hoe items join items/hoes (v1)",
+      "era": "v1",
+      "id_source": "item",
+      "ids": [
+        "clockstone_hoe",
+        "enhanced_clockstone_hoe"
+      ],
+      "require_all": [
+        "items/hoes"
+      ]
+    },
+    {
+      "name": "shield items join items/shields (v1)",
+      "era": "v1",
+      "id_source": "item",
+      "ids": [
+        "clockstone_shield",
+        "enhanced_clockstone_shield",
+        "entropy_crystal_shield"
+      ],
+      "require_all": [
+        "items/shields"
+      ]
     },
     {
       "name": "food items join items/foods (v1)",

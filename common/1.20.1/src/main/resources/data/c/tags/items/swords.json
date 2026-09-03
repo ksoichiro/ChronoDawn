@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "chronodawn:clockstone_sword",
+    "chronodawn:enhanced_clockstone_sword",
+    "chronodawn:entropy_crystal_sword",
+    "chronodawn:chronoblade"
+  ]
+}
