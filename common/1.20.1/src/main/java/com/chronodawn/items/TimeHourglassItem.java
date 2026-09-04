@@ -1,6 +1,8 @@
 package com.chronodawn.items;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.api.event.PortalOpenCause;
+import com.chronodawn.api.event.PortalOpenedEvents;
 import com.chronodawn.core.portal.PortalFrameValidator;
 import com.chronodawn.core.portal.PortalRegistry;
 import com.chronodawn.core.portal.PortalStateMachine;
@@ -116,6 +118,7 @@ public class TimeHourglassItem extends Item {
         );
         portal.activate();
         PortalRegistry.getInstance().registerPortal(portal);
+        PortalOpenedEvents.fire(portal.getPortalId(), level, frameData.getBottomLeft(), PortalOpenCause.IGNITION, player);
 
         // Play ignition sound (fire charge use - similar to flint and steel)
         level.playSound(

@@ -17,12 +17,17 @@
  */
 package com.chronodawn.api.event;
 
+import com.chronodawn.unit.TestUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -34,6 +39,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class PortalOpenedEventsTest {
 
     private static final UUID PORTAL_ID = UUID.fromString("11111111-1111-1111-1111-111111111111");
+
+    private static final String[] VERSION_DIRS = {
+        "1.20.1", "1.21.1", "1.21.2", "1.21.4", "1.21.5", "1.21.6",
+        "1.21.7", "1.21.8", "1.21.9", "1.21.10", "1.21.11"
+    };
+
+    private static final String IGNITION_DISPATCH = "PortalOpenedEvents.fire(portal.getPortalId(), level, ";
 
     private static final PortalOpenedContext CONTEXT = new PortalOpenedContext() {
         @Override
@@ -130,8 +142,32 @@ class PortalOpenedEventsTest {
         assertEquals(List.of(PortalOpenCause.IGNITION, PortalOpenCause.REIGNITION), List.of(PortalOpenCause.values()));
     }
 
+    @Test
+    void everyVersionDispatchesIgnitionExactlyOnce() throws IOException {
+        Path projectRoot = Path.of(TestUtils.getProjectRoot());
+
+        for (String version : VERSION_DIRS) {
+            Path file = projectRoot.resolve("common").resolve(version)
+                .resolve("src/main/java/com/chronodawn/items/TimeHourglassItem.java");
+            String source = Files.readString(file, StandardCharsets.UTF_8);
+
+            assertEquals(1, countOccurrences(source, IGNITION_DISPATCH),
+                version + " TimeHourglassItem.java must dispatch the ignition portal-opened event exactly once");
+        }
+    }
+
     private void register(PortalOpenedListener listener) {
         PortalOpenedEvents.register(listener);
         registrations.add(listener);
+    }
+
+    private static int countOccurrences(String source, String target) {
+        int count = 0;
+        int offset = 0;
+        while ((offset = source.indexOf(target, offset)) >= 0) {
+            count++;
+            offset += target.length();
+        }
+        return count;
     }
 }
