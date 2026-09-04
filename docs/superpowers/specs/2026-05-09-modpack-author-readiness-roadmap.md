@@ -64,11 +64,12 @@ need surfaces.
 
 ### C. Scripting events
 
-**Status**: 🚧 Direct scripting bindings and additional progression events
-remain.
+**Status**: 🚧 Direct scripting bindings and the Chronicle-entry-unlocked
+event remain.
 
-KubeJS / FTB Quests / CraftTweaker bridges, portal-opened events and
-Chronicle-entry-unlocked events are independent follow-up slices.
+Boss-defeated and portal-opened events are shipped. KubeJS / FTB Quests /
+CraftTweaker bridges and a Chronicle-entry-unlocked event are independent
+follow-up slices.
 
 ### D. Cross-mod compatibility
 
@@ -94,7 +95,7 @@ Targeted integrations with flagship mods commonly bundled in packs: Curios / Tri
 | --- | --- | --- |
 | A. Config system | 🚧 Core configuration shipped; deferred vanilla-overlay ore tuning remains optional | [2026-05-09-config-foundation-design.md](./2026-05-09-config-foundation-design.md) |
 | B. Datapack / tag externalization | 🚧 Tool/armor/shield tags shipped; remaining work is opportunistic consumer conversion (recipes or Java code still hardcoding a tool/armor `Item` reference) | [2026-08-17-conventional-tags-design.md](./2026-08-17-conventional-tags-design.md), [2026-08-29-tag-consumers-design.md](./2026-08-29-tag-consumers-design.md), [2026-08-31-biome-structure-tags-design.md](./2026-08-31-biome-structure-tags-design.md), [2026-09-03-tools-armors-shield-tags-design.md](./2026-09-03-tools-armors-shield-tags-design.md) |
-| C. Scripting events | 🚧 Direct bindings and additional progression events remain | [2026-08-29-boss-defeated-event-design.md](./2026-08-29-boss-defeated-event-design.md) |
+| C. Scripting events | 🚧 Direct bindings and the Chronicle-entry-unlocked event remain | [2026-08-29-boss-defeated-event-design.md](./2026-08-29-boss-defeated-event-design.md), [2026-09-04-portal-opened-event-design.md](./2026-09-04-portal-opened-event-design.md) |
 | D. Cross-mod compatibility | ⏸ Deferred | — |
 
 Each sub-project will produce multiple PRs over time. As work completes, this table is updated to reflect which slices have shipped.

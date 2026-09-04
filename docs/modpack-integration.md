@@ -455,13 +455,69 @@ this event from those scripting systems without an addon bridge.
 
 ---
 
+## Portal opened event API
+
+Java addons can subscribe to a loader-neutral event that fires whenever a
+Chrono Dawn portal transitions into the active state, whether a player
+ignites a fresh frame with a Time Hourglass or the mod generates or reuses a
+return portal while teleporting someone through an already-active one.
+
+```java
+import com.chronodawn.api.event.PortalOpenedEvents;
+import com.chronodawn.api.event.PortalOpenedListener;
+
+public final class MyChronoDawnIntegration {
+    private static final PortalOpenedListener PORTAL_LISTENER = context -> {
+        if (context.cause() == com.chronodawn.api.event.PortalOpenCause.IGNITION
+                && context.igniter() != null) {
+            // Advance your quest or pack progression for this player.
+        }
+    };
+
+    public static void register() {
+        PortalOpenedEvents.register(PORTAL_LISTENER);
+    }
+
+    public static void unregister() {
+        PortalOpenedEvents.unregister(PORTAL_LISTENER);
+    }
+}
+```
+
+Keep the listener instance if your addon supports reload or shutdown; passing a
+new lambda to `unregister` does not remove the original registration.
+
+The `PortalOpenedContext` accessors are:
+
+| Accessor | Value |
+| --- | --- |
+| `portalId()` | Stable `UUID` of the physical portal in the internal registry. |
+| `level()` | Server level containing the portal frame. |
+| `position()` | Frame's bottom-left block position. |
+| `cause()` | `PortalOpenCause.IGNITION` (Time Hourglass) or `PortalOpenCause.REIGNITION` (teleport-time generation or reuse). |
+| `igniter()` | Credited `ServerPlayer`, or `null` when none is known. |
+
+Callbacks run synchronously on the logical server after the portal's blocks
+are placed and its state has already transitioned to active; a listener
+never observes a `STABILIZED` portal's routine block regeneration, only an
+actual activation. Listeners run in registration order. If one listener
+throws a runtime exception, Chrono Dawn logs it and continues with the
+remaining listeners without interrupting portal activation.
+
+The Java event is the foundation for scripting integrations. Direct KubeJS,
+CraftTweaker and FTB Quests bindings are not shipped yet; a pack cannot register
+this event from those scripting systems without an addon bridge.
+
+---
+
 ## Future integrations *(not yet shipped)*
 
 ### Additional scripting events and bindings
 
-Portal-opened and Chronicle-entry-unlocked events, plus direct KubeJS,
-FTB Quests and CraftTweaker bindings, are planned as independent follow-up
-slices built on the stability rules established by the boss event.
+The Chronicle-entry-unlocked event, plus direct KubeJS, FTB Quests and
+CraftTweaker bindings for the boss-defeated and portal-opened events, are
+planned as independent follow-up slices built on the stability rules
+established by those two events.
 
 ### Cross-mod compatibility (planned)
 
