@@ -47,6 +47,9 @@ class PortalOpenedEventsTest {
 
     private static final String IGNITION_DISPATCH = "PortalOpenedEvents.fire(portal.getPortalId(), level, ";
 
+    private static final String REIGNITION_DISPATCH =
+        "PortalOpenedEvents.fire(portal.getPortalId(), level, pos, PortalOpenCause.REIGNITION";
+
     private static final PortalOpenedContext CONTEXT = new PortalOpenedContext() {
         @Override
         public UUID portalId() {
@@ -153,6 +156,20 @@ class PortalOpenedEventsTest {
 
             assertEquals(1, countOccurrences(source, IGNITION_DISPATCH),
                 version + " TimeHourglassItem.java must dispatch the ignition portal-opened event exactly once");
+        }
+    }
+
+    @Test
+    void everyVersionDispatchesReignitionExactlyOnce() throws IOException {
+        Path projectRoot = Path.of(TestUtils.getProjectRoot());
+
+        for (String version : VERSION_DIRS) {
+            Path file = projectRoot.resolve("common").resolve(version)
+                .resolve("src/main/java/com/chronodawn/core/portal/PortalTeleportHandler.java");
+            String source = Files.readString(file, StandardCharsets.UTF_8);
+
+            assertEquals(1, countOccurrences(source, REIGNITION_DISPATCH),
+                version + " PortalTeleportHandler.java must dispatch the reignition portal-opened event exactly once");
         }
     }
 

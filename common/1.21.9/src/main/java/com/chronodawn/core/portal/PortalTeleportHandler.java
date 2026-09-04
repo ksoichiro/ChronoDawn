@@ -1,6 +1,8 @@
 package com.chronodawn.core.portal;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.api.event.PortalOpenCause;
+import com.chronodawn.api.event.PortalOpenedEvents;
 import com.chronodawn.data.ChronoDawnGlobalState;
 import com.chronodawn.items.TimeHourglassItem;
 import com.chronodawn.registry.ModBlocks;
@@ -18,6 +20,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -193,10 +196,10 @@ public class PortalTeleportHandler {
             destPortalPos = existingPortal.get();
         } else {
             // Reignite an existing deactivated frame before generating a new one.
-            Optional<BlockPos> reusableFrame = findReusablePortalFrame(destLevel, destCoords, sourceAxis);
+            Optional<BlockPos> reusableFrame = findReusablePortalFrame(destLevel, destCoords, sourceAxis, player);
             BlockPos framePos = reusableFrame.orElse(null);
             if (framePos == null) {
-                framePos = generatePortal(destLevel, destCoords, sourceAxis);
+                framePos = generatePortal(destLevel, destCoords, sourceAxis, player);
             }
             if (framePos == null) {
                 ChronoDawn.LOGGER.error("Failed to generate portal at {} in dimension {}",
@@ -475,7 +478,8 @@ public class PortalTeleportHandler {
      * @param axis Portal axis
      * @return Frame bottom-left position if a reusable frame exists, empty otherwise
      */
-    private static Optional<BlockPos> findReusablePortalFrame(ServerLevel level, BlockPos coords, Direction.Axis axis) {
+    private static Optional<BlockPos> findReusablePortalFrame(
+            ServerLevel level, BlockPos coords, Direction.Axis axis, @Nullable ServerPlayer igniter) {
         Set<UUID> portalsInDimension = PortalRegistry.getInstance().getPortalsInDimension(level.dimension());
 
         BlockPos nearestFrame = null;
@@ -500,7 +504,7 @@ public class PortalTeleportHandler {
         }
 
         if (nearestFrame != null) {
-            generatePortalStructure(level, nearestFrame, axis);
+            generatePortalStructure(level, nearestFrame, axis, igniter);
             return Optional.of(nearestFrame);
         }
 
@@ -555,12 +559,12 @@ public class PortalTeleportHandler {
      * @param axis Portal axis (X or Z) - should match source portal axis
      * @return Portal frame bottom-left position if generated, null if failed
      */
-    private static BlockPos generatePortal(ServerLevel level, BlockPos coords, Direction.Axis axis) {
+    private static BlockPos generatePortal(ServerLevel level, BlockPos coords, Direction.Axis axis, @Nullable ServerPlayer igniter) {
         // Find ground level starting from coords.y
         BlockPos groundPos = findGroundLevel(level, coords);
 
         // Generate a 4x5 portal at ground level with specified axis
-        generatePortalStructure(level, groundPos, axis);
+        generatePortalStructure(level, groundPos, axis, igniter);
         return groundPos;
     }
 
@@ -635,7 +639,7 @@ public class PortalTeleportHandler {
      * @param pos Bottom-left corner position
      * @param axis Portal axis
      */
-    private static void generatePortalStructure(ServerLevel level, BlockPos pos, Direction.Axis axis) {
+    private static void generatePortalStructure(ServerLevel level, BlockPos pos, Direction.Axis axis, @Nullable ServerPlayer igniter) {
         int width = 4;
         int height = 5;
 
@@ -678,6 +682,7 @@ public class PortalTeleportHandler {
 
         // Register or reignite portal in registry
         PortalStateMachine portal = PortalRegistry.getInstance().getPortalAt(pos);
+        boolean justOpened = false;
         if (portal == null) {
             UUID portalId = UUID.randomUUID();
             portal = new PortalStateMachine(
@@ -687,14 +692,21 @@ public class PortalTeleportHandler {
             );
             PortalRegistry.getInstance().registerPortal(portal);
             portal.activate();
+            justOpened = true;
         } else if (portal.getCurrentState() == PortalState.INACTIVE) {
             portal.activate();
+            justOpened = true;
         } else if (portal.getCurrentState() == PortalState.DEACTIVATED) {
             // Reigniting the same physical frame after an unstable entry is intentional:
             // the first ChronoDawn arrival removes portal blocks but keeps the frame and registry entry.
             // Treat this as restoring that existing portal, not as a normal player-triggered state transition.
             portal.setState(PortalState.ACTIVATED);
             PortalRegistry.getInstance().markDirtyForPortal(portal.getPortalId());
+            justOpened = true;
+        }
+
+        if (justOpened) {
+            PortalOpenedEvents.fire(portal.getPortalId(), level, pos, PortalOpenCause.REIGNITION, igniter);
         }
     }
 
