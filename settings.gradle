@@ -50,17 +50,23 @@ project(":${commonProject}").projectDir = file("common/${moduleVersion}")
 logger.lifecycle("Common module: ${commonProject} -> common/${moduleVersion}")
 
 // Platform-specific projects
-// Each version uses a separate directory (fabric/X.XX.X, neoforge/X.XX.X)
+// Each version uses a separate directory (fabric/X.XX.X, neoforge/X.XX.X, forge/X.XX.X)
 // so that .gradle/architectury/ paths don't conflict, enabling full parallel gameTest.
-// Project names remain 'fabric'/'neoforge' as required by Architectury Plugin.
-include 'fabric'
-project(':fabric').projectDir = file("fabric/${moduleVersion}")
-logger.lifecycle("Fabric module: fabric/${moduleVersion}")
-
-if (moduleVersion != '1.20.1') {
-    include 'neoforge'
-    project(':neoforge').projectDir = file("neoforge/${moduleVersion}")
-    logger.lifecycle("NeoForge module: neoforge/${moduleVersion}")
-} else {
-    logger.lifecycle("NeoForge module disabled for Minecraft 1.20.1 (not supported)")
+// Project names remain 'fabric'/'neoforge'/'forge' as required by Architectury Plugin.
+// Enabled platforms come from props/<version>.properties' enabled_platforms key when
+// present; versions that don't declare it keep today's fabric+neoforge behavior.
+def platformsPropsFile = file("props/${targetMcVersion}.properties")
+def enabledPlatforms = ['fabric', 'neoforge']
+if (platformsPropsFile.exists()) {
+    def platformProps = new Properties()
+    platformsPropsFile.withInputStream { platformProps.load(it) }
+    def declared = platformProps.getProperty('enabled_platforms')
+    if (declared != null && !declared.trim().isEmpty()) {
+        enabledPlatforms = declared.split(',').collect { it.trim() }.findAll { it }
+    }
+}
+enabledPlatforms.each { platform ->
+    include platform
+    project(":${platform}").projectDir = file("${platform}/${moduleVersion}")
+    logger.lifecycle("${platform.capitalize()} module: ${platform}/${moduleVersion}")
 }
