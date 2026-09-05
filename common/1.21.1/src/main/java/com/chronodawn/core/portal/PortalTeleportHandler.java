@@ -463,10 +463,11 @@ public class PortalTeleportHandler {
     }
 
     /**
-     * Find a registered deactivated portal frame that can be reignited in place.
+     * Find a registered portal frame that can be restored in place.
      *
-     * Unstable ChronoDawn portals remove only portal blocks on arrival, leaving the frame and registry entry behind.
-     * Reusing that frame prevents the heightmap from treating the old frame as terrain and stacking a new portal above it.
+     * This includes stabilized portals whose frame was damaged after activation. Reusing the
+     * registered position prevents the heightmap from treating the remaining frame as terrain
+     * and stacking a new portal above it.
      *
      * @param level Destination level
      * @param coords Destination coordinates (expected to be frame bottom-left position)
@@ -482,24 +483,29 @@ public class PortalTeleportHandler {
 
         for (UUID portalId : portalsInDimension) {
             PortalStateMachine portal = PortalRegistry.getInstance().getPortal(portalId);
-            if (portal == null || portal.getCurrentState() == PortalState.STABILIZED) {
+            if (portal == null) {
                 continue;
             }
 
             BlockPos framePos = portal.getPosition();
+            // A stabilized portal can only restore its own mapped destination, never a nearby one.
+            if (portal.getCurrentState() == PortalState.STABILIZED
+                    && (framePos.getX() != coords.getX() || framePos.getZ() != coords.getZ())) {
+                continue;
+            }
             double distance = Math.sqrt(
                 Math.pow(framePos.getX() - coords.getX(), 2) +
                 Math.pow(framePos.getZ() - coords.getZ(), 2)
             );
 
-            if (distance < 128 && distance < nearestDistance && hasPortalFrame(level, framePos, axis)) {
+            if (distance < 128 && distance < nearestDistance && canRestorePortalFrame(level, framePos, axis)) {
                 nearestDistance = distance;
                 nearestFrame = framePos;
             }
         }
 
         if (nearestFrame != null) {
-            generatePortalStructure(level, nearestFrame, axis, igniter);
+            generatePortalStructure(level, nearestFrame, axis, igniter, true);
             return Optional.of(nearestFrame);
         }
 
@@ -507,41 +513,55 @@ public class PortalTeleportHandler {
     }
 
     /**
-     * Check whether the Clockstone frame is still present at the registered portal position.
+     * Check whether the registered portal can be restored without overwriting player blocks.
+     *
+     * Corners are optional portal-frame blocks, so they are intentionally excluded from this
+     * check and are not restored. Required frame blocks may be Clockstone or replaceable,
+     * while the interior must be clear for portal blocks.
      *
      * @param level Level
      * @param pos Bottom-left frame position
      * @param axis Portal axis
-     * @return true if the 4x5 frame border is present
+     * @return true if all required blocks can be safely restored
      */
-    private static boolean hasPortalFrame(ServerLevel level, BlockPos pos, Direction.Axis axis) {
+    private static boolean canRestorePortalFrame(ServerLevel level, BlockPos pos, Direction.Axis axis) {
         int width = 4;
         int height = 5;
 
         Direction horizontal = axis == Direction.Axis.X ? Direction.EAST : Direction.SOUTH;
         Direction vertical = Direction.UP;
 
-        for (int x = 0; x < width; x++) {
-            if (!level.getBlockState(pos.relative(horizontal, x)).is(ModBlocks.CLOCKSTONE_BLOCK.get())) {
+        for (int x = 1; x < width - 1; x++) {
+            if (!isRestorableFrameBlock(level.getBlockState(pos.relative(horizontal, x)))) {
                 return false;
             }
-            if (!level.getBlockState(pos.relative(horizontal, x).relative(vertical, height - 1))
-                    .is(ModBlocks.CLOCKSTONE_BLOCK.get())) {
+            if (!isRestorableFrameBlock(level.getBlockState(pos.relative(horizontal, x).relative(vertical, height - 1)))) {
                 return false;
             }
         }
 
-        for (int y = 0; y < height; y++) {
-            if (!level.getBlockState(pos.relative(vertical, y)).is(ModBlocks.CLOCKSTONE_BLOCK.get())) {
+        for (int y = 1; y < height - 1; y++) {
+            if (!isRestorableFrameBlock(level.getBlockState(pos.relative(vertical, y)))) {
                 return false;
             }
-            if (!level.getBlockState(pos.relative(horizontal, width - 1).relative(vertical, y))
-                    .is(ModBlocks.CLOCKSTONE_BLOCK.get())) {
+            if (!isRestorableFrameBlock(level.getBlockState(pos.relative(horizontal, width - 1).relative(vertical, y)))) {
                 return false;
+            }
+        }
+
+        for (int x = 1; x < width - 1; x++) {
+            for (int y = 1; y < height - 1; y++) {
+                if (!isClearForPortalSpace(level.getBlockState(pos.relative(horizontal, x).relative(vertical, y)))) {
+                    return false;
+                }
             }
         }
 
         return true;
+    }
+
+    private static boolean isRestorableFrameBlock(BlockState state) {
+        return state.is(ModBlocks.CLOCKSTONE_BLOCK.get()) || state.canBeReplaced();
     }
 
     /**
@@ -559,7 +579,7 @@ public class PortalTeleportHandler {
         BlockPos groundPos = findGroundLevel(level, coords);
 
         // Generate a 4x5 portal at ground level with specified axis
-        generatePortalStructure(level, groundPos, axis, igniter);
+        generatePortalStructure(level, groundPos, axis, igniter, false);
         return groundPos;
     }
 
@@ -634,7 +654,8 @@ public class PortalTeleportHandler {
      * @param pos Bottom-left corner position
      * @param axis Portal axis
      */
-    private static void generatePortalStructure(ServerLevel level, BlockPos pos, Direction.Axis axis, @Nullable ServerPlayer igniter) {
+    private static void generatePortalStructure(
+            ServerLevel level, BlockPos pos, Direction.Axis axis, @Nullable ServerPlayer igniter, boolean restoringFrame) {
         int width = 4;
         int height = 5;
 
@@ -644,23 +665,27 @@ public class PortalTeleportHandler {
         // Generate Clockstone frame
         BlockState clockstoneState = ModBlocks.CLOCKSTONE_BLOCK.get().defaultBlockState();
 
+        // Fresh portals include corners. Restorations leave optional corners untouched.
+        int edgeStart = restoringFrame ? 1 : 0;
+        int edgeEnd = restoringFrame ? width - 1 : width;
+
         // Bottom edge
-        for (int x = 0; x < width; x++) {
+        for (int x = edgeStart; x < edgeEnd; x++) {
             level.setBlock(pos.relative(horizontal, x), clockstoneState, 3);
         }
 
         // Top edge
-        for (int x = 0; x < width; x++) {
+        for (int x = edgeStart; x < edgeEnd; x++) {
             level.setBlock(pos.relative(horizontal, x).relative(vertical, height - 1), clockstoneState, 3);
         }
 
         // Left edge
-        for (int y = 0; y < height; y++) {
+        for (int y = restoringFrame ? 1 : 0; y < (restoringFrame ? height - 1 : height); y++) {
             level.setBlock(pos.relative(vertical, y), clockstoneState, 3);
         }
 
         // Right edge
-        for (int y = 0; y < height; y++) {
+        for (int y = restoringFrame ? 1 : 0; y < (restoringFrame ? height - 1 : height); y++) {
             level.setBlock(pos.relative(horizontal, width - 1).relative(vertical, y), clockstoneState, 3);
         }
 

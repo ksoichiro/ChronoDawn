@@ -91,6 +91,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Damaged return portals no longer stack vertically.** When returning from Chrono Dawn, a registered Overworld portal now restores missing required Clockstone frame blocks and its portal interior at the original position. Optional corners remain untouched, recovery never overwrites non-replaceable player blocks, and stabilized portal recovery is limited to its exact mapped X/Z position.
 - **Time Compass could not target the Forgotten Library.** The compass resolved
   seven of the mod's eight structures; the Forgotten Library — the source of the
   Portal Stabilizer recipe — was missing, so it could not be targeted at all.
