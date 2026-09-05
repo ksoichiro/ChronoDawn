@@ -10,11 +10,9 @@
     "ChronoShieldDamageMixin",
     "ChronoShieldEffectInterceptorMixin",
     "LevelGetTimeMixin",
-    "PackRepositoryOverlayMixin",
     "ServerLevelSetTimeMixin",
     "SleepMixin",
     "StructureStartMixin",
-    "StructureTemplateBlockAttachedFixMixin",
     "FreezeTopLayerMixin"
   ],
   "client": [

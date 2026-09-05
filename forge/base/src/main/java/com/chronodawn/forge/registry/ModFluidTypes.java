@@ -1,6 +1,7 @@
 package com.chronodawn.forge.registry;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
@@ -56,17 +57,17 @@ public class ModFluidTypes {
                 consumer.accept(new IClientFluidTypeExtensions() {
                     @Override
                     public ResourceLocation getStillTexture() {
-                        return new ResourceLocation("minecraft", "block/water_still");
+                        return CompatResourceLocation.create("minecraft", "block/water_still");
                     }
 
                     @Override
                     public ResourceLocation getFlowingTexture() {
-                        return new ResourceLocation("minecraft", "block/water_flow");
+                        return CompatResourceLocation.create("minecraft", "block/water_flow");
                     }
 
                     @Override
                     public ResourceLocation getOverlayTexture() {
-                        return new ResourceLocation("minecraft", "block/water_overlay");
+                        return CompatResourceLocation.create("minecraft", "block/water_overlay");
                     }
 
                     @Override

@@ -44,7 +44,7 @@ Chrono Dawn uses the **Architectury** framework to support Fabric and NeoForge l
 
 ### Key Technologies
 
-- **Java 21**: Target language version
+- **Java 21**: Target language version (Java 17 for 1.20.1)
 - **Minecraft**: Java Edition 1.20.1 (legacy) / 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.21.6 / 1.21.7 / 1.21.8 / 1.21.9 / 1.21.10 / 1.21.11
 - **Fabric Loader**: 0.15.11+ (for 1.20.1) / 0.17.3+ (for 1.21.1+)
 - **Forge**: 47.3.5+ (for 1.20.1 only)
@@ -959,7 +959,7 @@ the public accessors, stable IDs and registration example.
 }
 ```
 
-**Forge** (1.20.1 only): `chronodawn-forge.mixins.json` (without refMap, like NeoForge, since Forge also uses Mojang mappings under Architectury Loom)
+**Forge** (1.20.1 only): `chronodawn-forge.mixins.json` (without refMap, like NeoForge; Architectury Loom remaps mixin targets to SRG names in bytecode at build time, unlike Fabric which requires an explicit refmap for its intermediary-to-named remapping)
 
 See `CLAUDE.md` → "Mixin Configuration" for full details.
 

@@ -512,7 +512,7 @@ ChronoDawn/
 - Fabric, NeoForge, and Forge use **separate** Mixin configuration files
 - **Fabric**: `chronodawn-fabric.mixins.json` (with refMap for Intermediary mappings)
 - **NeoForge**: `chronodawn-neoforge.mixins.json` (without refMap for Mojang mappings)
-- **Forge** (1.20.1 only): `chronodawn-forge.mixins.json` (without refMap for Mojang mappings, like NeoForge)
+- **Forge** (1.20.1 only): `chronodawn-forge.mixins.json` (without refMap, like NeoForge; Architectury Loom remaps mixin targets to SRG names in bytecode at build time, unlike Fabric which requires an explicit refmap for its intermediary-to-named remapping)
 
 See `CLAUDE.md` → "Mixin Configuration" section for details.
 
