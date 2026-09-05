@@ -1,0 +1,29 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.chronodawn.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "mixins": [
+    "AnvilMenuAccessor",
+    "AnvilMenuMixin",
+    "ChronoShieldBlockingMixin",
+    "ChronoShieldDamageMixin",
+    "ChronoShieldEffectInterceptorMixin",
+    "LevelGetTimeMixin",
+    "PackRepositoryOverlayMixin",
+    "ServerLevelSetTimeMixin",
+    "SleepMixin",
+    "StructureStartMixin",
+    "StructureTemplateBlockAttachedFixMixin",
+    "FreezeTopLayerMixin"
+  ],
+  "client": [
+    "client.ClientAdvancementsAccessor",
+    "client.FogRendererMixin",
+    "client.GuiGraphicsShieldCdMixin",
+    "client.SkyColorMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
