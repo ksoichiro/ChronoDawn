@@ -152,12 +152,12 @@ Use **Fragments of Stasis Core** (dropped by the Time Tyrant) to create legendar
 ## 🛠️ Technical Details
 
 ### Multi-Loader Support
-This mod is built with **Architectury** and supports **both Fabric and NeoForge**!
+This mod is built with **Architectury** and supports **Fabric and NeoForge** (plus **Forge** for legacy Minecraft 1.20.1)!
 - Download the correct version for your mod loader
 - Shared codebase ensures consistent experience across loaders
 
 ### Requirements
-- **Minecraft**: Java Edition 1.21.1, 1.21.2, 1.21.3, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, or 1.21.11
+- **Minecraft**: Java Edition 1.21.1, 1.21.2, 1.21.3, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, or 1.21.11 (legacy Minecraft 1.20.1 is also supported)
 - **Mod Loader** (version depends on Minecraft version):
   - **For 1.21.1**: Fabric Loader 0.17.3+ with Fabric API 0.116.7+, OR NeoForge 21.1.209+
   - **For 1.21.2/1.21.3**: Fabric Loader 0.17.3+ with Fabric API, OR NeoForge 21.2.0-beta+/21.3.0-beta+
@@ -169,8 +169,9 @@ This mod is built with **Architectury** and supports **both Fabric and NeoForge*
   - **For 1.21.9**: Fabric Loader 0.17.3+ with Fabric API 0.134.1+, OR NeoForge 21.9.16-beta+
   - **For 1.21.10**: Fabric Loader 0.17.3+ with Fabric API 0.138.4+, OR NeoForge 21.10.64+
   - **For 1.21.11**: Fabric Loader 0.17.3+ with Fabric API 0.141.3+, OR NeoForge 21.11.38-beta+
+  - **For 1.20.1** *(legacy)*: Fabric Loader 0.15.11+ with Fabric API 0.92.2+1.20.1, OR Forge 47.3.5+ (NeoForge is not available on 1.20.1; it requires Minecraft 1.20.5+)
 - **Dependencies**:
-  - **Architectury API** 13.0.8+ (for 1.21.1), 14.0.4+ (for 1.21.2/1.21.3), 15.0.1+ (for 1.21.4), 16.1.4+ (for 1.21.5), 17.0.6+ (for 1.21.6), 17.0.8+ (for 1.21.7/1.21.8), 18.0.3+ (for 1.21.9), 18.0.8+ (for 1.21.10), or 19.0.1+ (for 1.21.11)
+  - **Architectury API** 9.2.14+ (for 1.20.1, legacy), 13.0.8+ (for 1.21.1), 14.0.4+ (for 1.21.2/1.21.3), 15.0.1+ (for 1.21.4), 16.1.4+ (for 1.21.5), 17.0.6+ (for 1.21.6), 17.0.8+ (for 1.21.7/1.21.8), 18.0.3+ (for 1.21.9), 18.0.8+ (for 1.21.10), or 19.0.1+ (for 1.21.11)
 
 ### Compatibility
 - Works with most dimension and world generation mods

@@ -13,6 +13,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   short plants, aquatic plants, Lumen Polyp, crops, fungi, baked foods, and
   Time Wheat Bale — can now be placed into a vanilla Composter, mirroring
   the chance tiers of their closest vanilla analogues.
+- Added Forge 47.3.5 support for legacy Minecraft 1.20.1, alongside the
+  existing Fabric support. Chrono Dawn's dimension, blocks, items, bosses,
+  worldgen, and events all behave the same as on Fabric; block loot that
+  Fabric injects via a data-driven loot table override is instead applied
+  through a Forge Global Loot Modifier, since Forge lacks that Fabric API.
+  Build and run with `./gradlew :forge:build -Ptarget_mc_version=1.20.1` or
+  `./gradlew runClientForge1_20_1`. NeoForge remains unavailable on 1.20.1
+  (NeoForge requires Minecraft 1.20.5+).
 - Chrono Dawn tool, weapon, armor, and shield items — including boss-drop
   and artifact gear — now join Fabric/NeoForge conventional (`c:`) tags by
   function: `c:tools/melee_weapon`, `c:tools/mining_tool`, `c:tools/shield`,

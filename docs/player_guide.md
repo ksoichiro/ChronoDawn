@@ -48,7 +48,7 @@ Chrono Dawn is a time-themed dimension mod that adds:
 
 ### Prerequisites
 
-- **Minecraft**: Java Edition 1.21.1, 1.21.2, 1.21.3, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, or 1.21.11
+- **Minecraft**: Java Edition 1.21.1, 1.21.2, 1.21.3, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, or 1.21.11 (legacy Minecraft 1.20.1 is also supported)
 - **Mod Loader**: Choose ONE of the following:
   - **For 1.21.11**: Fabric Loader 0.17.3+ with Fabric API 0.141.3+, OR NeoForge 21.11.38-beta+
   - **For 1.21.10**: Fabric Loader 0.17.3+ with Fabric API 0.138.4+, OR NeoForge 21.10.64+
@@ -60,6 +60,7 @@ Chrono Dawn is a time-themed dimension mod that adds:
   - **For 1.21.4**: Fabric Loader 0.17.3+ with Fabric API 0.110.5+, OR NeoForge 21.4.0-beta+
   - **For 1.21.2/1.21.3**: Fabric Loader 0.17.3+ with Fabric API, OR NeoForge 21.2.0-beta+/21.3.0-beta+
   - **For 1.21.1**: Fabric Loader 0.17.3+ with Fabric API 0.116.7+, OR NeoForge 21.1.209+
+  - **For 1.20.1** *(legacy)*: Fabric Loader 0.15.11+ with Fabric API 0.92.2+1.20.1, OR Forge 47.3.5+ (NeoForge is not available on 1.20.1; it requires Minecraft 1.20.5+)
 
 ### Required Dependencies
 
@@ -75,13 +76,14 @@ Download and install these mods alongside Chrono Dawn:
    - Version 15.0.1+ for Minecraft 1.21.4
    - Version 14.0.4+ for Minecraft 1.21.2/1.21.3
    - Version 13.0.8+ for Minecraft 1.21.1
+   - Version 9.2.14+ for Minecraft 1.20.1 (legacy)
    - [CurseForge](https://www.curseforge.com/minecraft/mc-mods/architectury-api)
    - [Modrinth](https://modrinth.com/mod/architectury-api)
 
 ### Installation Steps
 
-1. Install Minecraft 1.21.9 (or 1.21.1, 1.21.2, 1.21.3, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.10, or 1.21.11)
-2. Install your chosen mod loader (Fabric or NeoForge)
+1. Install Minecraft 1.21.9 (or 1.21.1, 1.21.2, 1.21.3, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.10, or 1.21.11; legacy 1.20.1 is also supported)
+2. Install your chosen mod loader (Fabric or NeoForge — or, for legacy Minecraft 1.20.1, Fabric or Forge)
 3. Download required dependencies:
    - **Architectury API** (required for both loaders)
 4. Download **Chrono Dawn Mod** (choose the version matching your Minecraft and loader):
@@ -89,6 +91,8 @@ Download and install these mods alongside Chrono Dawn:
    - `chronodawn-0.8.0+1.21.2-neoforge.jar` for NeoForge (1.21.2)
    - `chronodawn-0.8.0+1.21.1-fabric.jar` for Fabric (1.21.1)
    - `chronodawn-0.8.0+1.21.1-neoforge.jar` for NeoForge (1.21.1)
+   - `chronodawn-0.8.0+1.20.1-fabric.jar` for Fabric (1.20.1, legacy)
+   - `chronodawn-0.8.0+1.20.1-forge.jar` for Forge (1.20.1, legacy)
 5. Place all JAR files in your `.minecraft/mods/` folder
 6. Launch Minecraft with your chosen mod loader profile
 7. Verify "Chrono Dawn" appears in the mod list

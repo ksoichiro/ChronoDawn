@@ -67,7 +67,7 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed information.
 - **Addon API**: Loader-neutral Java event for all six boss defeats, with stable IDs and player, level, position, entity, and damage-source context. See [docs/modpack-integration.md](docs/modpack-integration.md#boss-defeated-event-api).
 
 ### Technical Features
-- **Multi-Loader Architecture**: Supports both Fabric and NeoForge loaders
+- **Multi-Loader Architecture**: Supports Fabric and NeoForge loaders, plus Forge for legacy Minecraft 1.20.1 support
 - **Architectury Framework**: Shared common code (80%) with loader-specific implementations (20%)
 - **Custom Portal System**: Advanced portal mechanics with independent implementation
 - **Performance Optimized**: Efficient entity tick handling and caching systems
@@ -107,7 +107,7 @@ cd ChronoDawn
 ### Multi-Version Build Support
 
 Chrono Dawn supports multiple Minecraft versions from the same codebase:
-- **1.20.1**: Fabric only (legacy support) - *NeoForge requires Minecraft 1.20.5+*
+- **1.20.1**: Fabric/Forge (legacy support) - *NeoForge requires Minecraft 1.20.5+*
 - **1.21.1**: NeoForge/Fabric (stable)
 - **1.21.2**: NeoForge/Fabric (stable)
 - **1.21.3**: NeoForge/Fabric (uses 1.21.2 modules - hotfix release)
@@ -217,6 +217,9 @@ Chrono Dawn supports multiple Minecraft versions from the same codebase:
 - `fabric/1.21.2/build/libs/chronodawn-0.8.0+1.21.2-fabric.jar` - Fabric loader JAR
 - `neoforge/1.21.2/build/libs/chronodawn-0.8.0+1.21.2-neoforge.jar` - NeoForge loader JAR
 
+**Output File** (Forge, 1.20.1 only):
+- `forge/1.20.1/build/libs/chronodawn-0.8.0+1.20.1-forge.jar` - Forge loader JAR
+
 ### Build Specific Loader
 
 #### Fabric Only
@@ -227,6 +230,11 @@ Chrono Dawn supports multiple Minecraft versions from the same codebase:
 #### NeoForge Only
 ```bash
 ./gradlew :neoforge:build -Ptarget_mc_version=1.21.2
+```
+
+#### Forge Only (Minecraft 1.20.1 only)
+```bash
+./gradlew :forge:build -Ptarget_mc_version=1.20.1
 ```
 
 ## Development Setup
@@ -263,6 +271,18 @@ gradlew.bat :neoforge:runClient
 
 # macOS/Linux
 ./gradlew :neoforge:runClient
+```
+
+#### Forge Development Client (Minecraft 1.20.1 only)
+```bash
+# Windows
+gradlew.bat :forge:runClient -Ptarget_mc_version=1.20.1
+
+# macOS/Linux
+./gradlew :forge:runClient -Ptarget_mc_version=1.20.1
+
+# Or shortcut command
+./gradlew runClientForge1_20_1
 ```
 
 #### Development Server
@@ -464,6 +484,9 @@ ChronoDawn/
 │   ├── 1.21.9/                      # NeoForge subproject for MC 1.21.9
 │   ├── 1.21.10/                     # NeoForge subproject for MC 1.21.10
 │   └── 1.21.11/                     # NeoForge subproject for MC 1.21.11
+├── forge/
+│   ├── base/                        # Shared Forge sources
+│   └── 1.20.1/                      # Forge subproject for MC 1.20.1 (legacy loader)
 ├── specs/chrono-dawn-mod/           # Design documents
 ├── build.gradle                     # Root build configuration (Groovy DSL)
 ├── settings.gradle                  # Multi-module settings
@@ -486,9 +509,10 @@ ChronoDawn/
 - **Shadow Plugin**: Bundles common module into loader-specific JARs
 
 ### Mixin Configuration
-- Fabric and NeoForge use **separate** Mixin configuration files
+- Fabric, NeoForge, and Forge use **separate** Mixin configuration files
 - **Fabric**: `chronodawn-fabric.mixins.json` (with refMap for Intermediary mappings)
 - **NeoForge**: `chronodawn-neoforge.mixins.json` (without refMap for Mojang mappings)
+- **Forge** (1.20.1 only): `chronodawn-forge.mixins.json` (without refMap for Mojang mappings, like NeoForge)
 
 See `CLAUDE.md` → "Mixin Configuration" section for details.
 

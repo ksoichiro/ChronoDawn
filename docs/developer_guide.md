@@ -23,7 +23,7 @@ This guide provides technical documentation for developers who want to contribut
 
 ### Multi-Loader Architecture (Architectury)
 
-Chrono Dawn uses the **Architectury** framework to support both Fabric and NeoForge loaders with a shared codebase.
+Chrono Dawn uses the **Architectury** framework to support Fabric and NeoForge loaders with a shared codebase, plus a Forge loader for legacy Minecraft 1.20.1 (NeoForge only supports Minecraft 1.20.5+).
 
 **Design Principle**: **80% Common, 20% Loader-Specific**
 
@@ -45,14 +45,15 @@ Chrono Dawn uses the **Architectury** framework to support both Fabric and NeoFo
 ### Key Technologies
 
 - **Java 21**: Target language version
-- **Minecraft**: Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.21.6 / 1.21.7 / 1.21.8 / 1.21.9 / 1.21.10 / 1.21.11
-- **Fabric Loader**: 0.17.3+
+- **Minecraft**: Java Edition 1.20.1 (legacy) / 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.21.6 / 1.21.7 / 1.21.8 / 1.21.9 / 1.21.10 / 1.21.11
+- **Fabric Loader**: 0.15.11+ (for 1.20.1) / 0.17.3+ (for 1.21.1+)
+- **Forge**: 47.3.5+ (for 1.20.1 only)
 - **NeoForge**: 21.1.209+ (for 1.21.1) / 21.2.0-beta+ (for 1.21.2) / 21.3.0-beta+ (for 1.21.3) / 21.4.0-beta+ (for 1.21.4) / 21.5.96+ (for 1.21.5) / 21.6.20-beta+ (for 1.21.6) / 21.7.25-beta+ (for 1.21.7) / 21.8.0-beta+ (for 1.21.8) / 21.9.16-beta+ (for 1.21.9) / 21.10.64+ (for 1.21.10) / 21.11.38-beta+ (for 1.21.11)
-- **Architectury API**: 13.0.8+ (for 1.21.1) / 14.0.4+ (for 1.21.2/1.21.3) / 15.0.1+ (for 1.21.4) / 16.1.4+ (for 1.21.5) / 17.0.6+ (for 1.21.6) / 17.0.8+ (for 1.21.7/1.21.8) / 18.0.3+ (for 1.21.9) / 18.0.8+ (for 1.21.10) / 19.0.1+ (for 1.21.11)
+- **Architectury API**: 9.2.14+ (for 1.20.1) / 13.0.8+ (for 1.21.1) / 14.0.4+ (for 1.21.2/1.21.3) / 15.0.1+ (for 1.21.4) / 16.1.4+ (for 1.21.5) / 17.0.6+ (for 1.21.6) / 17.0.8+ (for 1.21.7/1.21.8) / 18.0.3+ (for 1.21.9) / 18.0.8+ (for 1.21.10) / 19.0.1+ (for 1.21.11)
 - **Gradle**: Build automation (Groovy DSL)
 - **Mojang Mappings**: Official Minecraft class names
 
-*Note: 1.21.3 is a hotfix release that shares code modules with 1.21.2.*
+*Note: 1.21.3 is a hotfix release that shares code modules with 1.21.2. Minecraft 1.20.1 is a legacy target that predates NeoForge (which requires 1.20.5+), so it uses Forge instead; it has no GameTest coverage since Forge has no standard GameTest integration in this project.*
 
 ---
 
@@ -203,6 +204,17 @@ ChronoDawn/
 │       │   └── mixin/                      # Version-specific mixins
 │       └── src/main/resources/
 │           └── META-INF/neoforge.mods.toml # NeoForge mod metadata
+├── forge/
+│   ├── base/                               # Shared Forge sources (NOT a Gradle subproject)
+│   │   └── src/main/java/com/chronodawn/forge/
+│   │       ├── ChronoDawnForge.java        # Forge entry point
+│   │       ├── client/                     # Client-side initialization
+│   │       └── platform/                   # Platform implementations
+│   └── 1.20.1/                             # Forge 1.20.1 subproject (legacy loader, no NeoForge < 1.20.5)
+│       ├── src/main/java/com/chronodawn/forge/
+│       │   └── mixin/                      # Version-specific mixins
+│       └── src/main/resources/
+│           └── META-INF/mods.toml          # Forge mod metadata
 ├── specs/chrono-dawn-mod/                  # Design documents
 │   ├── spec.md                             # Feature specification
 │   ├── plan.md                             # Implementation plan
@@ -278,6 +290,7 @@ neoforge_version=21.2.0-beta
 # Build specific module
 ./gradlew :fabric:build -Ptarget_mc_version=1.21.11
 ./gradlew :neoforge:build -Ptarget_mc_version=1.21.11
+./gradlew :forge:build -Ptarget_mc_version=1.20.1
 
 # Run development client (version-specific)
 ./gradlew :fabric:runClient -Ptarget_mc_version=1.21.11
@@ -288,6 +301,9 @@ neoforge_version=21.2.0-beta
 ./gradlew :neoforge:runClient -Ptarget_mc_version=1.21.11
 ./gradlew :neoforge:runClient -Ptarget_mc_version=1.21.5
 ./gradlew :neoforge:runClient -Ptarget_mc_version=1.21.1
+./gradlew :forge:runClient -Ptarget_mc_version=1.20.1
+# Or shortcut command:
+./gradlew runClientForge1_20_1
 
 # Run development server
 ./gradlew :fabric:runServer -Ptarget_mc_version=1.21.11
@@ -347,6 +363,7 @@ After building:
 - **Fabric JAR**: `fabric/1.21.11/build/libs/chronodawn-0.8.0+1.21.11-fabric.jar`
 - **NeoForge JAR**: `neoforge/1.21.11/build/libs/chronodawn-0.8.0+1.21.11-neoforge.jar`
 - **Common JAR**: `common/1.21.11/build/libs/common-1.21.11-0.8.0.jar` (bundled into loader JARs)
+- **Forge JAR** (1.20.1 only): `forge/1.20.1/build/libs/chronodawn-0.8.0+1.20.1-forge.jar`
 
 ---
 
@@ -941,6 +958,8 @@ the public accessors, stable IDs and registration example.
   ]
 }
 ```
+
+**Forge** (1.20.1 only): `chronodawn-forge.mixins.json` (without refMap, like NeoForge, since Forge also uses Mojang mappings under Architectury Loom)
 
 See `CLAUDE.md` → "Mixin Configuration" for full details.
 
