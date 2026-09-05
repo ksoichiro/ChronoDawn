@@ -1,0 +1,774 @@
+package com.chronodawn.forge.client;
+
+import com.chronodawn.ChronoDawn;
+import com.chronodawn.client.TemporalGrassEdgeTint;
+import com.chronodawn.compat.CompatResourceLocation;
+import com.chronodawn.gui.ChronicleScreen;
+import com.chronodawn.gui.data.ChronicleData;
+import com.chronodawn.items.ChronicleBookItem;
+import com.chronodawn.client.CobwebColorProvider;
+import com.chronodawn.client.LeafColorProvider;
+import com.chronodawn.client.TemporalPlantColorProvider;
+import com.chronodawn.client.model.*;
+import com.chronodawn.client.renderer.*;
+import com.chronodawn.client.renderer.mobs.*;
+import com.chronodawn.items.TimeCompassItem;
+import com.chronodawn.client.particle.ChronoDawnPortalParticle;
+import com.chronodawn.client.particle.ChronoShieldEchoParticle;
+import com.chronodawn.registry.ModBlocks;
+import com.chronodawn.registry.ModParticles;
+import com.chronodawn.registry.ModEntities;
+import com.chronodawn.registry.ModItems;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
+import net.minecraftforge.client.event.RegisterColorHandlersEvent;
+import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
+import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+
+import java.util.Optional;
+
+/**
+ * Forge client-side initialization for ChronoDawn mod.
+ *
+ * Handles client-only registrations such as:
+ * - Block render layers (for transparent/cutout blocks)
+ * - Block color providers (for tinted blocks like leaves)
+ * - Entity renderers
+ * - Particle effects
+ *
+ * This class is only loaded on the client side (Dist.CLIENT).
+ *
+ * Note: unlike NeoForge 1.21.2+, Forge 1.20.1 still has FluidType.initializeClient()
+ * (see ModFluidTypes.DECORATIVE_WATER_TYPE), so there is no fluid client-extensions
+ * registration handler here - that event class does not exist on Forge 1.20.1.
+ */
+@Mod.EventBusSubscriber(modid = ChronoDawn.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+public class ChronoDawnClientForge {
+
+    /**
+     * Client setup event handler.
+     * Called during FML client setup phase.
+     *
+     * @param event The client setup event
+     */
+    @SubscribeEvent
+    public static void onClientSetup(FMLClientSetupEvent event) {
+        event.enqueueWork(() -> {
+            registerBlockColors();
+            registerItemProperties();
+        });
+    }
+
+    /**
+     * Register entity model layers for custom entity models.
+     * Called during entity model layer registration phase.
+     *
+     * @param event The layer definitions registration event
+     */
+    @SubscribeEvent
+    public static void onRegisterLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
+        // Register Time Guardian model layer
+        event.registerLayerDefinition(
+            TimeGuardianRenderer.LAYER_LOCATION,
+            TimeGuardianModel::createBodyLayer
+        );
+
+        // Register Chronos Warden model layer
+        event.registerLayerDefinition(
+            ChronosWardenModel.LAYER_LOCATION,
+            ChronosWardenModel::createBodyLayer
+        );
+
+        // Register Time Tyrant model layer
+        event.registerLayerDefinition(
+            TimeTyrantRenderer.LAYER_LOCATION,
+            TimeTyrantModel::createBodyLayer
+        );
+
+        // Register custom mob model layers
+        event.registerLayerDefinition(
+            TemporalWraithModel.LAYER_LOCATION,
+            TemporalWraithModel::createBodyLayer
+        );
+
+        event.registerLayerDefinition(
+            ClockworkSentinelModel.LAYER_LOCATION,
+            ClockworkSentinelModel::createBodyLayer
+        );
+
+        event.registerLayerDefinition(
+            TimeKeeperModel.LAYER_LOCATION,
+            TimeKeeperModel::createBodyLayer
+        );
+
+        event.registerLayerDefinition(
+            FloqModel.LAYER_LOCATION,
+            FloqModel::createBodyLayer
+        );
+
+        event.registerLayerDefinition(
+            ClockworkColossusRenderer.LAYER_LOCATION,
+            ClockworkColossusModel::createBodyLayer
+        );
+
+        event.registerLayerDefinition(
+            TemporalPhantomRenderer.LAYER_LOCATION,
+            TemporalPhantomModel::createBodyLayer
+        );
+
+        event.registerLayerDefinition(
+            EntropyKeeperRenderer.LAYER_LOCATION,
+            EntropyKeeperModel::createBodyLayer
+        );
+
+        event.registerLayerDefinition(
+            EpochHuskModel.LAYER_LOCATION,
+            EpochHuskModel::createBodyLayer
+        );
+
+        event.registerLayerDefinition(
+            ForgottenMinuteModel.LAYER_LOCATION,
+            ForgottenMinuteModel::createBodyLayer
+        );
+
+        event.registerLayerDefinition(
+            ChronalLeechModel.LAYER_LOCATION,
+            ChronalLeechModel::createBodyLayer
+        );
+
+        event.registerLayerDefinition(
+            MomentCreeperModel.LAYER_LOCATION,
+            MomentCreeperModel::createBodyLayer
+        );
+
+        event.registerLayerDefinition(
+            GlideFishModel.LAYER_LOCATION,
+            GlideFishModel::createBodyLayer
+        );
+
+        event.registerLayerDefinition(
+            TimelineStriderModel.LAYER_LOCATION,
+            TimelineStriderModel::createBodyLayer
+        );
+
+        event.registerLayerDefinition(
+            HourglassGolemModel.LAYER_LOCATION,
+            HourglassGolemModel::createBodyLayer
+        );
+
+        event.registerLayerDefinition(
+            SecondhandArcherModel.LAYER_LOCATION,
+            SecondhandArcherModel::createBodyLayer
+        );
+
+        event.registerLayerDefinition(
+            ParadoxCrawlerModel.LAYER_LOCATION,
+            ParadoxCrawlerModel::createBodyLayer
+        );
+
+        event.registerLayerDefinition(
+            ChronoTurtleModel.LAYER_LOCATION,
+            ChronoTurtleModel::createBodyLayer
+        );
+
+        event.registerLayerDefinition(
+            TimeboundRabbitModel.LAYER_LOCATION,
+            TimeboundRabbitModel::createBodyLayer
+        );
+
+        event.registerLayerDefinition(
+            PulseHogModel.LAYER_LOCATION,
+            PulseHogModel::createBodyLayer
+        );
+
+        event.registerLayerDefinition(
+            SecondwingFowlModel.LAYER_LOCATION,
+            SecondwingFowlModel::createBodyLayer
+        );
+
+        // Register Ticking Sheep model layers (body + wool)
+        event.registerLayerDefinition(
+            TickingSheepBodyModel.LAYER_LOCATION,
+            TickingSheepBodyModel::createBodyLayer
+        );
+        event.registerLayerDefinition(
+            TickingSheepWoolModel.LAYER_LOCATION,
+            TickingSheepWoolModel::createBodyLayer
+        );
+
+        // Register Chrono Bovine model layer
+        event.registerLayerDefinition(
+            ChronoBovineModel.LAYER_LOCATION,
+            ChronoBovineModel::createBodyLayer
+        );
+        event.registerLayerDefinition(
+            TemporalCapridModel.LAYER_LOCATION,
+            TemporalCapridModel::createBodyLayer
+        );
+
+        // Register Chrono Ursid model layer
+        event.registerLayerDefinition(
+            ChronoUrsidModel.LAYER_LOCATION,
+            ChronoUrsidModel::createBodyLayer
+        );
+
+        // Register boat and chest boat model layers (version-specific)
+        VersionSpecificClientHelper.registerBoatModelLayers(event);
+
+        ChronoDawn.LOGGER.debug("Registered entity model layers for Forge");
+    }
+
+    /**
+     * Register entity renderers for custom entities.
+     * Called during entity renderer registration phase.
+     *
+     * @param event The entity renderers registration event
+     */
+    @SubscribeEvent
+    public static void onRegisterEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        // Register Time Guardian with custom renderer
+        event.registerEntityRenderer(
+            ModEntities.TIME_GUARDIAN.get(),
+            TimeGuardianRenderer::new
+        );
+
+        // Register Chronos Warden with custom renderer
+        event.registerEntityRenderer(
+            ModEntities.CHRONOS_WARDEN.get(),
+            ChronosWardenRenderer::new
+        );
+
+        // Register Time Tyrant with custom renderer
+        event.registerEntityRenderer(
+            ModEntities.TIME_TYRANT.get(),
+            TimeTyrantRenderer::new
+        );
+
+        // Register Time Arrow with custom renderer
+        event.registerEntityRenderer(
+            ModEntities.TIME_ARROW.get(),
+            TimeArrowRenderer::new
+        );
+
+        // Register Time Blast with custom renderer
+        event.registerEntityRenderer(
+            ModEntities.TIME_BLAST.get(),
+            TimeBlastRenderer::new
+        );
+
+        // Register Gear Projectile with custom renderer
+        event.registerEntityRenderer(
+            ModEntities.GEAR_PROJECTILE.get(),
+            GearProjectileRenderer::new
+        );
+
+        // Register Clockwork Colossus with custom renderer
+        event.registerEntityRenderer(
+            ModEntities.CLOCKWORK_COLOSSUS.get(),
+            ClockworkColossusRenderer::new
+        );
+
+        // Register Temporal Phantom with custom renderer
+        event.registerEntityRenderer(
+            ModEntities.TEMPORAL_PHANTOM.get(),
+            TemporalPhantomRenderer::new
+        );
+
+        // Register Entropy Keeper with custom renderer
+        event.registerEntityRenderer(
+            ModEntities.ENTROPY_KEEPER.get(),
+            EntropyKeeperRenderer::new
+        );
+
+        // Register custom mobs with renderers
+        event.registerEntityRenderer(
+            ModEntities.TEMPORAL_WRAITH.get(),
+            TemporalWraithRenderer::new
+        );
+
+        event.registerEntityRenderer(
+            ModEntities.CLOCKWORK_SENTINEL.get(),
+            ClockworkSentinelRenderer::new
+        );
+
+        event.registerEntityRenderer(
+            ModEntities.TIME_KEEPER.get(),
+            TimeKeeperRenderer::new
+        );
+
+        event.registerEntityRenderer(
+            ModEntities.FLOQ.get(),
+            FloqRenderer::new
+        );
+
+        event.registerEntityRenderer(
+            ModEntities.EPOCH_HUSK.get(),
+            EpochHuskRenderer::new
+        );
+
+        event.registerEntityRenderer(
+            ModEntities.FORGOTTEN_MINUTE.get(),
+            ForgottenMinuteRenderer::new
+        );
+
+        event.registerEntityRenderer(
+            ModEntities.CHRONAL_LEECH.get(),
+            ChronalLeechRenderer::new
+        );
+
+        event.registerEntityRenderer(
+            ModEntities.MOMENT_CREEPER.get(),
+            MomentCreeperRenderer::new
+        );
+
+        event.registerEntityRenderer(
+            ModEntities.GLIDE_FISH.get(),
+            GlideFishRenderer::new
+        );
+
+        event.registerEntityRenderer(
+            ModEntities.TIMELINE_STRIDER.get(),
+            TimelineStriderRenderer::new
+        );
+
+        event.registerEntityRenderer(
+            ModEntities.HOURGLASS_GOLEM.get(),
+            HourglassGolemRenderer::new
+        );
+
+        event.registerEntityRenderer(
+            ModEntities.SECONDHAND_ARCHER.get(),
+            SecondhandArcherRenderer::new
+        );
+
+        event.registerEntityRenderer(
+            ModEntities.PARADOX_CRAWLER.get(),
+            ParadoxCrawlerRenderer::new
+        );
+
+        event.registerEntityRenderer(
+            ModEntities.CHRONO_TURTLE.get(),
+            ChronoTurtleRenderer::new
+        );
+
+        event.registerEntityRenderer(
+            ModEntities.TIMEBOUND_RABBIT.get(),
+            TimeboundRabbitRenderer::new
+        );
+
+        event.registerEntityRenderer(
+            ModEntities.PULSE_HOG.get(),
+            PulseHogRenderer::new
+        );
+
+        event.registerEntityRenderer(
+            ModEntities.SECONDWING_FOWL.get(),
+            SecondwingFowlRenderer::new
+        );
+
+        // Register Ticking Sheep renderer
+        event.registerEntityRenderer(
+            ModEntities.TICKING_SHEEP.get(),
+            TickingSheepRenderer::new
+        );
+
+        // Register Chrono Bovine renderer
+        event.registerEntityRenderer(
+            ModEntities.CHRONO_BOVINE.get(),
+            ChronoBovineRenderer::new
+        );
+
+        // Register Temporal Caprid renderer
+        event.registerEntityRenderer(
+            ModEntities.TEMPORAL_CAPRID.get(),
+            TemporalCapridRenderer::new
+        );
+
+        // Register Chrono Ursid renderer
+        event.registerEntityRenderer(
+            ModEntities.CHRONO_URSID.get(),
+            ChronoUrsidRenderer::new
+        );
+
+        // Register ChronoDawn Boat with custom renderer
+        event.registerEntityRenderer(
+            ModEntities.CHRONO_DAWN_BOAT.get(),
+            ChronoDawnBoatRenderer::new
+        );
+
+        // Register ChronoDawn Chest Boat with custom renderer
+        event.registerEntityRenderer(
+            ModEntities.CHRONO_DAWN_CHEST_BOAT.get(),
+            ChronoDawnChestBoatRenderer::new
+        );
+
+        ChronoDawn.LOGGER.debug("Registered entity renderers for Forge");
+    }
+
+    /**
+     * Register block color providers for blocks that need tinting.
+     *
+     * Time Wood, Dark Time Wood, and Ancient Time Wood leaves use a per-tree
+     * palette (cell-hashed by position) supplied by {@link LeafColorProvider}.
+     * Textures are grayscale; the tint is applied uniformly to each face.
+     */
+    @SubscribeEvent
+    public static void onRegisterBlockColors(RegisterColorHandlersEvent.Block event) {
+        // Per-tree color variation for all 3 Time Wood leaf kinds.
+        event.register(
+            (state, world, pos, tintIndex) ->
+                LeafColorProvider.colorAt(LeafColorProvider.LeafKind.TIME_WOOD, pos),
+            ModBlocks.TIME_WOOD_LEAVES.get()
+        );
+        event.register(
+            (state, world, pos, tintIndex) ->
+                LeafColorProvider.colorAt(LeafColorProvider.LeafKind.DARK_TIME_WOOD, pos),
+            ModBlocks.DARK_TIME_WOOD_LEAVES.get()
+        );
+        event.register(
+            (state, world, pos, tintIndex) ->
+                LeafColorProvider.colorAt(LeafColorProvider.LeafKind.ANCIENT_TIME_WOOD, pos),
+            ModBlocks.ANCIENT_TIME_WOOD_LEAVES.get()
+        );
+
+        // Register Chrono Melon Stem color (like vanilla melon/pumpkin stems)
+        // Color transitions from green (young) to golden-amber (mature)
+        event.register(
+            (state, world, pos, tintIndex) -> {
+                int age = state.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.AGE_7);
+                // Calculate color based on age (0-7)
+                // Young (0): Green (0x5DBF41)
+                // Mature (7): Golden-Amber (0xD4AF37)
+                int r = (int) (93 + (212 - 93) * age / 7.0);  // 93 -> 212
+                int g = (int) (191 + (175 - 191) * age / 7.0); // 191 -> 175
+                int b = (int) (65 + (55 - 65) * age / 7.0);   // 65 -> 55
+                return (r << 16) | (g << 8) | b;
+            },
+            ModBlocks.CHRONO_MELON_STEM.get()
+        );
+
+        // Register Attached Chrono Melon Stem color (use mature color - golden-amber)
+        event.register(
+            (state, world, pos, tintIndex) -> 0xD4AF37,
+            ModBlocks.ATTACHED_CHRONO_MELON_STEM.get()
+        );
+
+        // Register Temporal Grass Block color (biome-dependent grass tint with edge blend)
+        event.register(
+            TemporalGrassEdgeTint::provide,
+            ModBlocks.TEMPORAL_GRASS_BLOCK.get()
+        );
+
+        // Register Temporal Tall Grass + Temporal Fern colors (biome-weighted blend; see TemporalPlantColorProvider).
+        event.register(
+            (state, world, pos, tintIndex) ->
+                TemporalPlantColorProvider.blockTint(world, pos, tintIndex),
+            ModBlocks.TEMPORAL_TALL_GRASS.get(),
+            ModBlocks.TEMPORAL_FERN.get(),
+            ModBlocks.TEMPORAL_GRASS.get()
+        );
+
+        event.register(
+            (state, world, pos, tintIndex) ->
+                CobwebColorProvider.blockTint(world, pos, tintIndex),
+            ModBlocks.CHRONO_COBWEB.get()
+        );
+
+        // Register Temporal Sand / Gravel sand-side gradient: at d=1 from a Temporal
+        // Grass Block, pulls the baked sand/gravel color partway toward grass so the
+        // boundary blends symmetrically with the grass-side gradient.
+        event.register(
+            TemporalGrassEdgeTint::provideForSandGravel,
+            ModBlocks.TEMPORAL_SAND.get(),
+            ModBlocks.TEMPORAL_GRAVEL.get()
+        );
+
+        ChronoDawn.LOGGER.debug("Registered block color handlers for Forge");
+    }
+
+    /**
+     * Register item color providers for items that need tinting.
+     */
+    @SubscribeEvent
+    public static void onRegisterItemColors(RegisterColorHandlersEvent.Item event) {
+        // Inventory icons use the canonical color for each leaf kind.
+        event.register(
+            (stack, tintIndex) -> LeafColorProvider.LeafKind.TIME_WOOD.iconColor(),
+            ModBlocks.TIME_WOOD_LEAVES.get()
+        );
+        event.register(
+            (stack, tintIndex) -> LeafColorProvider.LeafKind.DARK_TIME_WOOD.iconColor(),
+            ModBlocks.DARK_TIME_WOOD_LEAVES.get()
+        );
+        event.register(
+            (stack, tintIndex) -> LeafColorProvider.LeafKind.ANCIENT_TIME_WOOD.iconColor(),
+            ModBlocks.ANCIENT_TIME_WOOD_LEAVES.get()
+        );
+
+        // Register item color for Chrono Melon Stem (use mature color)
+        event.register(
+            (stack, tintIndex) -> 0xD4AF37, // Golden-amber
+            ModBlocks.CHRONO_MELON_STEM.get()
+        );
+
+        // Register item color for Attached Chrono Melon Stem (use mature color)
+        event.register(
+            (stack, tintIndex) -> 0xD4AF37, // Golden-amber
+            ModBlocks.ATTACHED_CHRONO_MELON_STEM.get()
+        );
+
+        // Register item color for Temporal Grass Block (Chrono Dawn grass color)
+        event.register(
+            (stack, tintIndex) -> tintIndex == 0 ? 0x5B8AC4 : -1,
+            ModItems.TEMPORAL_GRASS_BLOCK.get()
+        );
+
+        // Item icon for Temporal Tall Grass + Temporal Fern: keep raw texture (no tint).
+        event.register(
+            (stack, tintIndex) -> TemporalPlantColorProvider.itemTint(tintIndex),
+            ModItems.TEMPORAL_TALL_GRASS.get(),
+            ModItems.TEMPORAL_FERN.get(),
+            ModItems.TEMPORAL_GRASS.get()
+        );
+
+        // Register Spawn Egg item colors for Forge
+        // Forge requires explicit color handler registration with alpha channel
+        event.register(
+            (stack, tintIndex) -> {
+                if (stack.getItem() instanceof com.chronodawn.items.DeferredSpawnEggItem egg) {
+                    int color = egg.getColor(tintIndex);
+                    // Add full alpha channel (0xFF) to ensure color is fully opaque
+                    return 0xFF000000 | color;
+                }
+                return 0xFFFFFFFF; // White with alpha
+            },
+            ModItems.TEMPORAL_WRAITH_SPAWN_EGG.get(),
+            ModItems.CLOCKWORK_SENTINEL_SPAWN_EGG.get(),
+            ModItems.TIME_KEEPER_SPAWN_EGG.get(),
+            ModItems.FLOQ_SPAWN_EGG.get(),
+            ModItems.TIME_GUARDIAN_SPAWN_EGG.get(),
+            ModItems.TIME_TYRANT_SPAWN_EGG.get(),
+            ModItems.CHRONOS_WARDEN_SPAWN_EGG.get(),
+            ModItems.CLOCKWORK_COLOSSUS_SPAWN_EGG.get(),
+            ModItems.ENTROPY_KEEPER_SPAWN_EGG.get(),
+            ModItems.TEMPORAL_PHANTOM_SPAWN_EGG.get(),
+            ModItems.EPOCH_HUSK_SPAWN_EGG.get(),
+            ModItems.FORGOTTEN_MINUTE_SPAWN_EGG.get(),
+            ModItems.CHRONAL_LEECH_SPAWN_EGG.get(),
+            ModItems.MOMENT_CREEPER_SPAWN_EGG.get(),
+            ModItems.GLIDE_FISH_SPAWN_EGG.get(),
+            ModItems.TIMELINE_STRIDER_SPAWN_EGG.get(),
+            ModItems.HOURGLASS_GOLEM_SPAWN_EGG.get(),
+            ModItems.SECONDHAND_ARCHER_SPAWN_EGG.get(),
+            ModItems.PARADOX_CRAWLER_SPAWN_EGG.get(),
+            ModItems.CHRONO_TURTLE_SPAWN_EGG.get(),
+            ModItems.TIMEBOUND_RABBIT_SPAWN_EGG.get(),
+            ModItems.PULSE_HOG_SPAWN_EGG.get(),
+            ModItems.SECONDWING_FOWL_SPAWN_EGG.get(),
+            ModItems.TICKING_SHEEP_SPAWN_EGG.get(),
+            ModItems.CHRONO_BOVINE_SPAWN_EGG.get()
+        );
+
+        ChronoDawn.LOGGER.debug("Registered item color handlers for Forge");
+    }
+
+    /**
+     * Register particle providers for custom particles.
+     *
+     * @param event The particle providers registration event
+     */
+    @SubscribeEvent
+    public static void onRegisterParticleProviders(RegisterParticleProvidersEvent event) {
+        // Register ChronoDawn portal particle provider
+        event.registerSpriteSet(
+            ModParticles.CHRONO_DAWN_PORTAL.get(),
+            ChronoDawnPortalParticle.Provider::new
+        );
+
+        // Register Chrono Shield Echo particle provider (Time Echo visualization)
+        event.registerSpriteSet(
+            ModParticles.CHRONO_SHIELD_ECHO.get(),
+            ChronoShieldEchoParticle.Provider::new
+        );
+
+        ChronoDawn.LOGGER.debug("Registered particle providers for Forge");
+    }
+
+    /**
+     * Legacy method - now replaced by event-based registration.
+     * Kept for compatibility with existing code structure.
+     */
+    private static void registerBlockColors() {
+        // Note: Block color registration is now handled by RegisterColorHandlersEvent
+    }
+
+    /**
+     * Register item properties for dynamic item rendering.
+     *
+     * Time Compass uses the "angle" property to rotate the needle
+     * based on the target structure's position.
+     *
+     * Custom shields register the "blocking" property so the model override
+     * (overrides.predicate.blocking) fires when the player is actively using
+     * the shield. Vanilla only wires this predicate for Items.SHIELD, so
+     * ShieldItem subclasses (ClockstoneShieldItem, EnhancedClockstoneShieldItem,
+     * EntropyCrystalShieldItem) need it registered explicitly here.
+     */
+    private static void registerItemProperties() {
+        // Register blocking predicate for ChronoDawn custom shields
+        registerBlockingProperty(ModItems.CLOCKSTONE_SHIELD.get());
+        registerBlockingProperty(ModItems.ENHANCED_CLOCKSTONE_SHIELD.get());
+        registerBlockingProperty(ModItems.ENTROPY_CRYSTAL_SHIELD.get());
+
+        // Register Time Compass angle property
+        // This makes the compass needle point towards the target structure
+        net.minecraft.client.renderer.item.ItemProperties.register(
+            ModItems.TIME_COMPASS.get(),
+            CompatResourceLocation.create("minecraft", "angle"),
+            (stack, level, entity, seed) -> {
+                // Get target position from compass NBT
+                Optional<GlobalPos> targetPos = TimeCompassItem.getTargetPosition(stack);
+                if (targetPos.isEmpty() || level == null) {
+                    // No target or no level - return random angle
+                    return (float) Math.random();
+                }
+
+                GlobalPos target = targetPos.get();
+
+                // Check if we're in the correct dimension
+                if (!level.dimension().equals(target.dimension())) {
+                    // Wrong dimension - spin randomly
+                    return (float) Math.random();
+                }
+
+                // Calculate angle to target
+                Entity holder = entity != null ? entity : null;
+                if (holder == null) {
+                    return 0.0f;
+                }
+
+                return calculateCompassAngle(holder, target.pos());
+            }
+        );
+    }
+
+    /**
+     * Register the vanilla-equivalent "blocking" item property for a custom
+     * shield item. Vanilla registers this predicate only for Items.SHIELD, so
+     * ShieldItem subclasses otherwise always resolve blocking=0 and never show
+     * their blocking-pose model variant.
+     */
+    private static void registerBlockingProperty(net.minecraft.world.item.Item item) {
+        net.minecraft.client.renderer.item.ItemProperties.register(
+            item,
+            CompatResourceLocation.parse("blocking"),
+            (net.minecraft.world.item.ItemStack stack,
+             net.minecraft.client.multiplayer.ClientLevel level,
+             net.minecraft.world.entity.LivingEntity entity,
+             int seed) ->
+                entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F
+        );
+    }
+
+    /**
+     * Calculate the compass needle angle towards a target position.
+     * Returns a value between 0.0 and 1.0, where 0.0 is north.
+     *
+     * @param entity Entity holding the compass
+     * @param targetPos Target block position
+     * @return Compass angle (0.0 to 1.0)
+     */
+    private static float calculateCompassAngle(Entity entity, BlockPos targetPos) {
+        // Get entity position
+        Vec3 entityPos = entity.position();
+
+        // Calculate direction vector to target
+        double dx = targetPos.getX() + 0.5 - entityPos.x;
+        double dz = targetPos.getZ() + 0.5 - entityPos.z;
+
+        // Calculate angle in radians
+        double angleRadians = Math.atan2(dz, dx);
+
+        // Get entity's yaw (body rotation)
+        float yaw = entity.getYRot();
+
+        // Convert to compass angle (0.0 = north, clockwise)
+        // atan2 returns angle from east axis, so we need to adjust
+        double compassAngle = (angleRadians - Math.toRadians(yaw) + Math.PI) / (Math.PI * 2.0);
+
+        // Normalize to 0.0-1.0 range
+        return (float) Mth.positiveModulo(compassAngle, 1.0);
+    }
+
+    /**
+     * Register Chronicle Data resource reload listener.
+     * Loads guidebook data from JSON files when resources are loaded/reloaded.
+     *
+     * @param event The reload listeners registration event
+     */
+    @SubscribeEvent
+    public static void onRegisterClientReloadListeners(RegisterClientReloadListenersEvent event) {
+        event.registerReloadListener(new net.minecraft.server.packs.resources.SimplePreparableReloadListener<Void>() {
+            @Override
+            protected Void prepare(net.minecraft.server.packs.resources.ResourceManager resourceManager, net.minecraft.util.profiling.ProfilerFiller profiler) {
+                return null;
+            }
+
+            @Override
+            protected void apply(Void object, net.minecraft.server.packs.resources.ResourceManager resourceManager, net.minecraft.util.profiling.ProfilerFiller profiler) {
+                ChronicleData.getInstance().load(resourceManager);
+                ChronoDawn.LOGGER.debug("Chronicle data loaded/reloaded");
+            }
+        });
+    }
+
+    /**
+     * Event subscriber for FORGE bus events (game events, not mod events).
+     * Handles runtime client events like tick events and player interactions.
+     */
+    @Mod.EventBusSubscriber(modid = ChronoDawn.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
+    public static class ForgeEventHandlers {
+        /**
+         * Handle client tick events for portal effects.
+         * Called every client tick after all other tick logic completes.
+         *
+         * @param event The client tick event
+         */
+        @SubscribeEvent
+        public static void onClientTickEnd(TickEvent.ClientTickEvent event) {
+            if (event.phase != TickEvent.Phase.END) {
+                return;
+            }
+            // Call portal effect handler (version-specific path)
+            VersionSpecificClientHelper.onClientTick();
+        }
+
+        /**
+         * Handle Chronicle Book item usage.
+         * Opens Chronicle GUI when player right-clicks with Chronicle Book.
+         *
+         * @param event The right-click item event
+         */
+        @SubscribeEvent
+        public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
+            var stack = event.getItemStack();
+            if (stack.getItem() instanceof ChronicleBookItem) {
+                if (event.getLevel().isClientSide()) {
+                    net.minecraft.client.Minecraft.getInstance().setScreen(new ChronicleScreen());
+                }
+                event.setCancellationResult(net.minecraft.world.InteractionResult.SUCCESS);
+                event.setCanceled(true);
+            }
+        }
+    }
+}
