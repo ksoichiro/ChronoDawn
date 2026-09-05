@@ -51,6 +51,7 @@ Thumbs.db
 common/*/build/
 fabric/*/build/
 neoforge/*/build/
+forge/*/build/
 
 # Blockbench
 assets/*.java
