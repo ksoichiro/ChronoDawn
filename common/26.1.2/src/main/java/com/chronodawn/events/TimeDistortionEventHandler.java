@@ -1,0 +1,248 @@
+package com.chronodawn.events;
+
+import com.chronodawn.ChronoDawn;
+import com.chronodawn.registry.ModDimensions;
+import dev.architectury.event.events.common.TickEvent;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.protocol.game.ClientboundSetTimePacket;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.clock.WorldClock;
+import net.minecraft.world.clock.WorldClocks;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import net.minecraft.resources.ResourceKey;
+
+/**
+ * Time Distortion Event Handler
+ *
+ * Implements variable day/night cycle speed for ChronoDawn dimension.
+ * The time flow speed changes randomly to create "time distortion" effect.
+ *
+ * Design Philosophy:
+ * - Day/night cycle exists (enables hostile mob spawning)
+ * - Cycle speed varies randomly (0.5x to 2.0x normal speed)
+ * - Creates unpredictable time flow matching "time manipulation" theme
+ * - Players experience time speeding up, slowing down, or moving normally
+ *
+ * Reference: research.md (Decision 14: Variable Time Cycle)
+ * Task: T200 [US1] Implement variable time cycle for ChronoDawn
+ */
+public class TimeDistortionEventHandler {
+
+    // Time speed multiplier per dimension
+    // Thread-safe: ConcurrentHashMap prevents time corruption in multiplayer
+    private static final Map<ResourceKey<net.minecraft.world.level.Level>, Float> timeSpeedMap = new ConcurrentHashMap<>();
+
+    // Current time until next speed change per dimension
+    // Thread-safe: ConcurrentHashMap prevents race conditions in multiplayer
+    private static final Map<ResourceKey<net.minecraft.world.level.Level>, Integer> timeUntilChangeMap = new ConcurrentHashMap<>();
+
+    // Target time for sleep skip (null = no sleep skip in progress)
+    // Thread-safe: ConcurrentHashMap prevents sleep skip failures in multiplayer
+    private static final Map<ResourceKey<net.minecraft.world.level.Level>, Long> sleepSkipTargetTimeMap = new ConcurrentHashMap<>();
+
+    // Accumulated fractional ticks per dimension (for sub-tick time advancement)
+    // Thread-safe: ConcurrentHashMap prevents lost time advancement in multiplayer
+    private static final Map<ResourceKey<net.minecraft.world.level.Level>, Float> accumulatedTicksMap = new ConcurrentHashMap<>();
+
+    // How many ticks to add per game tick during sleep skip (gradual advancement)
+    private static final long SLEEP_SKIP_TICKS_PER_TICK = 500;
+
+    // Interval for sending time sync packets to clients (in ticks)
+    private static final int TIME_SYNC_INTERVAL = 20;
+
+    // Configuration
+    private static final float MIN_SPEED = 0.67f; // Slowest: 67% speed (day lasts ~15 minutes)
+    private static final float MAX_SPEED = 5.0f;  // Fastest: 5x speed (day lasts 2 minutes)
+    private static final int MIN_DURATION = 1200; // Minimum duration: 60 seconds (1200 ticks)
+    private static final int MAX_DURATION = 6000; // Maximum duration: 5 minutes (6000 ticks)
+
+    // 26.1.2: ServerLevel#getDayTime()/setDayTime() were removed in favor of the new
+    // world clock system. We use the dimension's configured default clock if present,
+    // falling back to the built-in overworld clock definition otherwise.
+    private static long getDayTime(ServerLevel level) {
+        return level.clockManager().getTotalTicks(getClockHolder(level));
+    }
+
+    private static void setDayTime(ServerLevel level, long time) {
+        level.clockManager().setTotalTicks(getClockHolder(level), time);
+    }
+
+    private static Holder<WorldClock> getClockHolder(ServerLevel level) {
+        return level.dimensionType().defaultClock().orElseGet(() ->
+            level.registryAccess().lookupOrThrow(Registries.WORLD_CLOCK).getOrThrow(WorldClocks.OVERWORLD));
+    }
+
+    /**
+     * Register time distortion event
+     * Called from mod initialization
+     */
+    public static void register() {
+        TickEvent.SERVER_LEVEL_POST.register(TimeDistortionEventHandler::onServerLevelTick);
+        ChronoDawn.LOGGER.debug("Registered TimeDistortionEventHandler");
+    }
+
+    /**
+     * Server level tick event handler
+     * Adjusts time flow speed for ChronoDawn dimension
+     */
+    private static void onServerLevelTick(ServerLevel level) {
+        // Only process ChronoDawn dimension
+        if (!level.dimension().equals(ModDimensions.CHRONO_DAWN_DIMENSION)) {
+            return;
+        }
+
+        ResourceKey<net.minecraft.world.level.Level> dimensionKey = level.dimension();
+
+        // Initialize if first tick
+        if (!timeSpeedMap.containsKey(dimensionKey)) {
+            timeSpeedMap.put(dimensionKey, 1.0f); // Start at normal speed
+            timeUntilChangeMap.put(dimensionKey, getRandomDuration(level.getRandom()));
+            // 26.1.2: pause ChronoDawn's own clock (dedicated via dimension_type's
+            // "default_clock") so vanilla's automatic per-tick advance doesn't run
+            // alongside the manual advancement below - this handler is now the sole
+            // driver of ChronoDawn's time, same as the old cancelling mixin did.
+            level.clockManager().setPaused(getClockHolder(level), true);
+            ChronoDawn.LOGGER.debug("TimeDistortionEventHandler: Initialized for ChronoDawn with speed 1.0x");
+        }
+
+        // Get current values
+        float currentSpeed = timeSpeedMap.get(dimensionKey);
+        int timeUntilChange = timeUntilChangeMap.get(dimensionKey);
+
+        // Check if we should advance time for sleep skip
+        Long targetTime = sleepSkipTargetTimeMap.get(dimensionKey);
+        if (targetTime != null) {
+            // Sleep skip in progress - advance time gradually
+            long currentTime = getDayTime(level);
+            long remainingTicks = targetTime - currentTime;
+
+            if (remainingTicks > 0) {
+                // Advance time by a small increment
+                long ticksThisTick = Math.min(remainingTicks, SLEEP_SKIP_TICKS_PER_TICK);
+                long newDayTime = currentTime + ticksThisTick;
+                setDayTime(level, newDayTime);
+
+                ChronoDawn.LOGGER.debug("TimeDistortionEventHandler: Sleep skip advancing... {} / {} remaining",
+                    remainingTicks - ticksThisTick, remainingTicks);
+            } else {
+                // Target reached!
+                sleepSkipTargetTimeMap.remove(dimensionKey);
+                ChronoDawn.LOGGER.debug("TimeDistortionEventHandler: Sleep skip complete! Final time: {}", currentTime);
+            }
+
+            return; // Skip normal time adjustment this tick
+        }
+
+        // Apply time speed adjustment (normal operation)
+        // Note: Mixin cancels automatic time advancement, so we handle ALL time progression here
+        long currentDayTime = getDayTime(level);
+
+        // Get accumulated fractional ticks
+        float accumulatedTicks = accumulatedTicksMap.getOrDefault(dimensionKey, 0.0f);
+
+        // Add current speed to accumulated ticks
+        // currentSpeed = 2.0 means add 2 ticks per game tick
+        // currentSpeed = 0.67 means add 0.67 ticks per game tick (3 game ticks = 2 time ticks)
+        accumulatedTicks += currentSpeed;
+
+        // Extract whole ticks to advance
+        long ticksToAdvance = (long) accumulatedTicks;
+
+        // Keep fractional remainder for next tick
+        accumulatedTicks -= ticksToAdvance;
+        accumulatedTicksMap.put(dimensionKey, accumulatedTicks);
+
+        // Advance time by the calculated amount
+        if (ticksToAdvance > 0) {
+            long newDayTime = currentDayTime + ticksToAdvance;
+            setDayTime(level, newDayTime);
+        }
+        // If ticksToAdvance == 0, accumulate the fractional part for next tick
+
+        // Sync time to clients periodically
+        // Vanilla may not send per-dimension time packets for custom dimensions,
+        // so we explicitly send the independent time to players in ChronoDawn.
+        syncTimeToClients(level);
+
+        // Countdown to next speed change
+        timeUntilChange--;
+        timeUntilChangeMap.put(dimensionKey, timeUntilChange);
+
+        // Time to change speed?
+        if (timeUntilChange <= 0) {
+            float newSpeed = getRandomSpeed(level.getRandom());
+            int newDuration = getRandomDuration(level.getRandom());
+
+            ChronoDawn.LOGGER.debug("TimeDistortionEventHandler: Speed changed from {}x to {}x (duration: {} ticks)",
+                currentSpeed, newSpeed, newDuration);
+
+            timeSpeedMap.put(dimensionKey, newSpeed);
+            timeUntilChangeMap.put(dimensionKey, newDuration);
+        }
+    }
+
+    /**
+     * Get random time speed multiplier
+     * @param random Random source
+     * @return Speed multiplier between MIN_SPEED and MAX_SPEED
+     */
+    private static float getRandomSpeed(RandomSource random) {
+        return MIN_SPEED + random.nextFloat() * (MAX_SPEED - MIN_SPEED);
+    }
+
+    /**
+     * Get random duration until next speed change
+     * @param random Random source
+     * @return Duration in ticks between MIN_DURATION and MAX_DURATION
+     */
+    private static int getRandomDuration(RandomSource random) {
+        return MIN_DURATION + random.nextInt(MAX_DURATION - MIN_DURATION);
+    }
+
+    /**
+     * Send time sync packet to all players in ChronoDawn dimension.
+     * Vanilla time sync may not send the correct independent time for custom dimensions,
+     * so we explicitly broadcast it here.
+     */
+    private static void syncTimeToClients(ServerLevel level) {
+        if (level.getServer().getTickCount() % TIME_SYNC_INTERVAL != 0) {
+            return;
+        }
+
+        // 26.1.2: ClientboundSetTimePacket now carries a Map<Holder<WorldClock>, ClockNetworkState>
+        // instead of (gameTime, dayTime, doDaylightCycle). ServerClockManager already builds this
+        // packet from the level's current clock states, so we use that instead of constructing it
+        // by hand.
+        ClientboundSetTimePacket packet = level.clockManager().createFullSyncPacket();
+        for (ServerPlayer player : level.players()) {
+            player.connection.send(packet);
+        }
+    }
+
+    /**
+     * Get current time speed for dimension (for debugging/display)
+     * @param level Server level
+     * @return Current time speed multiplier
+     */
+    public static float getCurrentSpeed(ServerLevel level) {
+        ResourceKey<net.minecraft.world.level.Level> dimensionKey = level.dimension();
+        return timeSpeedMap.getOrDefault(dimensionKey, 1.0f);
+    }
+
+    /**
+     * Request sleep skip to target time.
+     * TimeDistortionEventHandler will set the time on next tick.
+     * @param level Server level
+     * @param targetTime Target day time (e.g., 1000 for morning)
+     */
+    public static void requestSleepSkip(ServerLevel level, long targetTime) {
+        ResourceKey<net.minecraft.world.level.Level> dimensionKey = level.dimension();
+        sleepSkipTargetTimeMap.put(dimensionKey, targetTime);
+        ChronoDawn.LOGGER.debug("Sleep skip requested: target time = {}", targetTime);
+    }
+}

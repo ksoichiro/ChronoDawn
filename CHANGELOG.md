@@ -89,6 +89,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   [docs/modpack-integration.md](docs/modpack-integration.md#conventional-c-tags)
   for the published tag list.
 
+#### Minecraft Version Support
+
+- Minecraft 26.1.2 support
+- Minecraft 26.2 support
+
 ### Fixed
 
 - **Damaged return portals no longer stack vertically.** When returning from Chrono Dawn, a registered Overworld portal now restores missing required Clockstone frame blocks and its portal interior at the original position. Optional corners remain untouched, recovery never overwrites non-replaceable player blocks, and stabilized portal recovery is limited to its exact mapped X/Z position.

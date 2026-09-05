@@ -55,14 +55,14 @@ This document lists all third-party dependencies used in Chrono Dawn and their r
 
 #### Architectury Loom
 - **Project**: Architectury Loom (Gradle Plugin)
-- **Version**: 1.13-SNAPSHOT
+- **Version**: 1.17.491
 - **Organization**: Architectury
 - **License**: MIT License
 - **URL**: https://github.com/architectury/architectury-loom
 
 #### Architectury Plugin
 - **Project**: Architectury Plugin (Gradle Plugin)
-- **Version**: 3.4-SNAPSHOT
+- **Version**: 3.5-SNAPSHOT
 - **Organization**: Architectury
 - **License**: MIT License
 - **URL**: https://github.com/architectury/architectury-plugin

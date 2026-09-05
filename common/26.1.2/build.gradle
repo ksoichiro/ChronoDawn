@@ -1,0 +1,183 @@
+apply from: rootProject.file('gradle/nbt-block-replacement.gradle')
+
+architectury {
+    common rootProject.enabled_platforms.split(',')
+}
+
+loom {
+    accessWidenerPath = file("src/main/resources/chronodawn.accesswidener")
+
+    mixin {
+        defaultRefmapName = "common-common-refmap.json"
+    }
+}
+
+repositories {
+    maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
+}
+
+dependencies {
+    // We depend on Fabric Loader here to use the Fabric @Environment annotations,
+    // which get remapped to the correct annotations on each platform.
+    // Do NOT use other classes from Fabric Loader.
+    implementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+
+    // Architectury API. This is optional, and you can comment it out if you don't need it.
+    implementation "dev.architectury:architectury:$rootProject.architectury_api_version"
+
+    // night-config (TOML config parser used by ChronoDawnConfig in common code).
+    // Compile-only here; runtime is provided by NeoForge (transitively) and by
+    // fabric/<version>/build.gradle's `include(...)` JAR-in-JAR for Fabric.
+    compileOnly "com.electronwill.night-config:core:3.8.3"
+    compileOnly "com.electronwill.night-config:toml:3.8.3"
+    // Tests (run outside the loader environments) need night-config on the
+    // runtime classpath since neither NeoForge nor Fabric is present.
+    testImplementation "com.electronwill.night-config:core:3.8.3"
+    testImplementation "com.electronwill.night-config:toml:3.8.3"
+
+    // Testing dependencies
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+    testImplementation 'com.google.code.gson:gson:2.10.1'
+    // Mockito is used by ShieldEffectHandlerTest to stub LivingEntity without registry bootstrap
+    // 26.1.2: Java 25 class files require a newer Byte Buddy than Mockito 5.11.0
+    // bundles (5.11.0's Byte Buddy tops out at Java 22); 5.23.0 supports Java 25.
+    testImplementation 'org.mockito:mockito-core:5.23.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.23.0'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+            srcDir '../shared/src/main/java'
+            // common/gametest compiles here via CompatGameTestHelper.fail(), which absorbs the
+            // 1.21.5 GameTestHelper.fail(String) -> fail(Component) change.
+            srcDir '../gametest/src/main/java'
+        }
+        // Use filter to exclude files from common/shared that have 1.21.5-specific versions
+        // (1.21.5 has its own versions with different APIs)
+        java.filter.exclude { element ->
+            def path = element.file.absolutePath
+            if (path.contains('common/gametest/')) {
+                // FadedPlains tests are registered as @GameTest methods (Fabric) or Consumer
+                // constants (NeoForge) from 1.21.5 on, so this version keeps its own copy.
+                return element.file.name == 'FadedPlainsTests.java'
+            }
+            if (!path.contains('common/shared')) {
+                return false
+            }
+            // List of files that have 1.21.5-specific versions
+            def excludedFiles = [
+                'BossSpawnData.java',
+                'ClockTowerTeleporterBlockEntity.java',
+                'BossRoomDoorBlockEntity.java',
+                'TimeWheatBaleBlock.java',
+                'TimeDistortionEffect.java',
+                'ReversedResonance.java',
+                'PortalRegistry.java',
+                'PortalRegistryData.java',
+                'ChronoDawnGlobalState.java',
+                'DimensionStateData.java',
+                'TimeKeeperVillageData.java',
+                'ChronoDawnTimeData.java',
+                'PlayerProgressData.java',
+                // Mixins with 1.21.5-specific versions (isDay() method removed)
+                'LevelGetTimeMixin.java',
+                'ServerLevelSetTimeMixin.java',
+                // 1.21.6: player.server became private, serverLevel() removed
+                'PlayerEventHandler.java',
+                // 1.21.9: TextureSheetParticle renamed to SingleQuadParticle
+                'ChronoDawnPortalParticle.java',
+                'ChronoShieldEchoParticle.java',
+                // 1.21.9: getSharedSpawnPos() removed
+                'ChronoDawnDimension.java',
+                // 1.21.11: ResourceLocation renamed to Identifier
+                'AncientTimeWoodTreeFeature.java',
+                'ChronicleData.java',
+                'NbtTemplateConfiguration.java',
+                'NbtTemplateFeature.java',
+                'ChronoShieldEffectHandler.java',
+                'ChronoDawnBiomeProvider.java',
+                'DarkTimeWoodTreeFeature.java',
+                'DimensionStabilizer.java',
+                'FruitOfTimeTreeFeature.java',
+                'ModDimensions.java',
+                'ModSounds.java',
+                'PortalStateMachine.java',
+                'BlockProtectionHandler.java',
+                'PermanentProtectionHandler.java',
+                // 26.1.2: SnowyDirtBlock renamed to SnowyBlock
+                'FreezeTopLayerMixin.java',
+                // 26.1.2: GuiGraphics renamed to GuiGraphicsExtractor
+                'GuiGraphicsShieldCdMixin.java',
+                // 26.1.2: BlockAndTintGetter moved from net.minecraft.world.level to
+                // net.minecraft.client.renderer.block
+                'TemporalGrassEdgeTint.java',
+                'CobwebColorProvider.java',
+                'TemporalPlantColorProvider.java',
+                // 26.1.2: ServerLevel#getDayTime()/setDayTime() removed in favor of the
+                // new world clock system (Level#clockManager() + Holder<WorldClock>)
+                'SleepMixin.java',
+                'TimeDistortionEventHandler.java'
+            ]
+            return excludedFiles.contains(element.file.name)
+        }
+        resources {
+            srcDir "${buildDir}/generated/nbt-block-replaced"
+            srcDir '../shared-1.21.5+/src/main/resources'
+            srcDir '../shared-1.21.2+/src/main/resources'
+            srcDir '../shared-1.21.1+/src/main/resources'
+            srcDir '../shared/src/main/resources'
+        }
+    }
+    test {
+        java {
+            srcDir '../shared/src/test/java'
+        }
+    }
+}
+
+// Set version info as Java system property at runtime (for compat handlers)
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += ["-Achronodawn.minecraft.version=${project.ext.minecraft_version}"]
+    doFirst {
+        System.setProperty('chronodawn.minecraft.version', project.ext.minecraft_version as String)
+    }
+}
+
+// Run NBT conversion before processing resources
+processResources.dependsOn nbtStructures
+
+// Expand pack_format variables in pack.mcmeta
+processResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    inputs.property 'pack_format', project.ext.pack_format
+    inputs.property 'pack_format_min', project.ext.pack_format_min
+    inputs.property 'pack_format_max', project.ext.pack_format_max
+
+    filesMatching('pack.mcmeta') {
+        expand 'pack_format': project.ext.pack_format,
+               'pack_format_min': project.ext.pack_format_min,
+               'pack_format_max': project.ext.pack_format_max
+    }
+}
+
+tasks.test {
+    useJUnitPlatform()
+
+    // Pass Minecraft version to tests for multi-version resource path resolution
+    systemProperty 'chronodawn.minecraft.version', project.ext.minecraft_version
+    // Pass source directory for source-parsing based resource validation tests
+    systemProperty 'chronodawn.source.dir', file('src/main/java').absolutePath
+    systemProperty 'chronodawn.project.root', rootProject.projectDir.absolutePath
+}
+
+// Set duplicates strategy for sourcesJar to avoid conflicts
+// Also ensure NBT conversion runs before sourcesJar
+tasks.named('sourcesJar') {
+    dependsOn nbtStructures
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}

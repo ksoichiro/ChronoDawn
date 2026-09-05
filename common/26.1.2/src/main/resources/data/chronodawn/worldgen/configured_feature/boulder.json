@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:block_blob",
+  "config": {
+    "state": {
+      "Name": "chronodawn:mossy_temporal_cobblestone"
+    },
+    "can_place_on": {
+      "type": "minecraft:true"
+    }
+  }
+}

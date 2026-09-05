@@ -131,8 +131,13 @@ public class WorldgenValidationTest {
             Map<String, Object> pf = TestUtils.loadJsonResource(pfPath);
             if (pf == null) continue;
 
-            String feature = (String) pf.get("feature");
-            if (feature != null && feature.startsWith("chronodawn:")) {
+            // "feature" is usually a string reference to a configured_feature ID, but
+            // Minecraft also allows an inline anonymous configured feature object here
+            // (e.g. fallen_log_placed.json on 26.1.2+) - nothing to cross-reference in
+            // that case, so skip it rather than crash on the cast.
+            Object featureValue = pf.get("feature");
+            if (!(featureValue instanceof String feature)) continue;
+            if (feature.startsWith("chronodawn:")) {
                 tests.add(DynamicTest.dynamicTest(
                     "placed_feature_ref_" + pfName,
                     () -> assertTrue(

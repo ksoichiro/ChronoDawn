@@ -1,0 +1,199 @@
+plugins {
+    id 'com.gradleup.shadow'
+}
+
+architectury {
+    platformSetupLoomIde()
+    fabric()
+}
+
+configurations {
+    common {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentFabric.extendsFrom common
+
+    shadowBundle {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+}
+
+repositories {
+    maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
+}
+
+def commonModule = ':common-26.1.2'
+
+dependencies {
+    implementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+    api "net.fabricmc.fabric-api:fabric-api:$rootProject.fabric_api_version"
+    api "dev.architectury:architectury-fabric:$rootProject.architectury_api_version"
+
+    // night-config (TOML config parser used by ChronoDawnConfig).
+    // NeoForge bundles this transitively; on Fabric we declare it explicitly and
+    // JAR-in-JAR it via Loom's `include` so end users don't need to install it separately.
+    implementation include("com.electronwill.night-config:core:3.8.3")
+    implementation include("com.electronwill.night-config:toml:3.8.3")
+
+    // Minecraft 26.1.2 is unobfuscated: there's no "named"/"transformProduction*"
+    // remap-namespace variant to depend on, just the plain project output.
+    common(project(path: commonModule)) { transitive false }
+    shadowBundle project(path: commonModule)
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir '../base/src/main/java'
+            srcDir 'src/main/java'
+            // Use filter to exclude fabric/base files that have 26.1.2-specific
+            // versions under src/main/java (same mechanism as common/26.1.2/build.gradle).
+            filter.exclude { element ->
+                if (!element.file.absolutePath.contains('fabric/base/')) {
+                    return false
+                }
+                def excludedFiles = [
+                    // 26.1.2: Player#displayClientMessage(Component, boolean) removed;
+                    // action-bar case is now Player#sendOverlayMessage(Component).
+                    'BlockProtectionEventHandler.java'
+                ]
+                return excludedFiles.contains(element.file.name)
+            }
+        }
+        resources {
+            srcDir 'src/main/resources'
+            srcDir '../base/src/main/resources'
+        }
+    }
+}
+
+def log4j2DevConfig = rootProject.file('fabric/base/log4j2-dev.xml').absolutePath
+
+loom {
+    if (project(commonModule).loom.accessWidenerPath != null) {
+        accessWidenerPath = project(commonModule).loom.accessWidenerPath
+    }
+
+    runs {
+        client {
+            client()
+            runDir("run")
+            vmArg("-Dfabric.log.disableAnsi=false")
+            vmArg("-Dlog4j2.configurationFile=${log4j2DevConfig}")
+        }
+        server {
+            server()
+            runDir("run")
+            vmArg("-Dlog4j2.configurationFile=${log4j2DevConfig}")
+        }
+    }
+}
+
+// GameTest Framework configuration
+// In 1.21.5, Fabric API provides its own @GameTest annotation that replaces
+// FabricGameTest interface and @GameTestGenerator. Test methods take GameTestHelper.
+fabricApi {
+    configureTests {
+        createSourceSet = true
+        modId = "chronodawn-test"
+        enableGameTests = true
+        enableClientGameTests = false
+        eula = true
+    }
+}
+
+// Include 1.21.5-specific gametest sources (not base, which uses old API)
+// fabricApi.configureTests creates the gametest source set; we add our sources to it.
+sourceSets {
+    gametest {
+        java {
+            srcDir 'src/gametest/java'
+            // Registry-driven test registration shared by every 1.21.5+ Fabric module.
+            srcDir '../base-1.21.5+/src/gametest/java'
+        }
+        resources {
+            srcDir 'src/gametest/resources'
+        }
+    }
+}
+
+// Exclude base gametest sources (uses old FabricGameTest interface incompatible with 1.21.5).
+// Must not match 'fabric/base-1.21.5+', which is the shared 1.21.5+ source dir added above.
+//
+// Also exclude ChronoDawnFabricTestRegistrar.java from base-1.21.5+: Minecraft 26.1.2 made
+// TestEnvironmentDefinition generic (TestEnvironmentDefinition<SavedDataType>), so the shared
+// 1.21.5+ copy (which uses the now-raw type) no longer matches FunctionGameTestInstance's
+// TestData<Holder<TestEnvironmentDefinition<?>>> constructor parameter. fabric/26.1.2's own
+// src/gametest/java has a 26.1.2-specific copy with the generic parameter added.
+tasks.named('compileGametestJava') {
+    source = source.filter { element ->
+        if (element.path.contains('fabric/base/')) return false
+        // Only drop the shared base-1.21.5+ copy of ChronoDawnFabricTestRegistrar.java
+        // (the older, now-incompatible raw-typed version) - keep this version's own copy
+        // under fabric/26.1.2/src/gametest.
+        if (element.path.contains('fabric/base-1.21.5+/') && element.name == 'ChronoDawnFabricTestRegistrar.java') {
+            return false
+        }
+        return true
+    }
+}
+tasks.named('processGametestResources') {
+    // Ensure 1.21.5-specific fabric.mod.json takes priority
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+processResources {
+    dependsOn project(commonModule).tasks.named('nbtStructures')
+
+    from(project(commonModule).sourceSets.main.resources) {
+        exclude 'chronodawn.mixins.json'
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    inputs.property 'version', project.version
+
+    filesMatching('fabric.mod.json') {
+        expand 'version': project.version
+    }
+}
+
+// Minecraft 26.1.2 ships unobfuscated, so there is no remap step: shadowJar's
+// output directly IS the final artifact (see gradle.properties'
+// unobfuscated_mc_versions / root build.gradle's loom-no-remap plugin choice).
+shadowJar {
+    configurations = [project.configurations.shadowBundle]
+    archiveBaseName = rootProject.archives_name
+    archiveVersion = "${rootProject.mod_version}+${rootProject.minecraft_version}-fabric"
+    archiveClassifier = null
+    exclude 'chronodawn.mixins.json'
+}
+
+tasks.named('assemble').configure {
+    dependsOn shadowJar
+}
+
+java {
+    withSourcesJar()
+}
+
+tasks.named('sourcesJar').configure {
+    archiveBaseName = rootProject.archives_name
+    archiveVersion = "${rootProject.mod_version}+${rootProject.minecraft_version}-fabric"
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            artifactId = "${rootProject.archives_name}-fabric"
+            from components.java
+        }
+    }
+
+    repositories {
+    }
+}

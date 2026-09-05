@@ -48,8 +48,10 @@ Chrono Dawn is a time-themed dimension mod that adds:
 
 ### Prerequisites
 
-- **Minecraft**: Java Edition 1.21.1, 1.21.2, 1.21.3, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, or 1.21.11 (legacy Minecraft 1.20.1 is also supported)
+- **Minecraft**: Java Edition 1.21.1, 1.21.2, 1.21.3, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, 1.21.11, 26.1.2, or 26.2 (legacy Minecraft 1.20.1 is also supported)
 - **Mod Loader**: Choose ONE of the following:
+  - **For 26.2**: Fabric Loader 0.19.5+ with Fabric API 0.159.0+26.2+, OR NeoForge 26.2.0.76+
+  - **For 26.1.2**: Fabric Loader 0.19.5+ with Fabric API 0.155.2+26.1.2+, OR NeoForge 26.1.2.103+
   - **For 1.21.11**: Fabric Loader 0.17.3+ with Fabric API 0.141.3+, OR NeoForge 21.11.38-beta+
   - **For 1.21.10**: Fabric Loader 0.17.3+ with Fabric API 0.138.4+, OR NeoForge 21.10.64+
   - **For 1.21.9**: Fabric Loader 0.17.3+ with Fabric API 0.134.1+, OR NeoForge 21.9.16-beta+
@@ -67,6 +69,8 @@ Chrono Dawn is a time-themed dimension mod that adds:
 Download and install these mods alongside Chrono Dawn:
 
 1. **Architectury API** - Required for both loaders
+   - Version 21.0.7+ for Minecraft 26.2
+   - Version 20.0.12+ for Minecraft 26.1.2
    - Version 19.0.1+ for Minecraft 1.21.11
    - Version 18.0.8+ for Minecraft 1.21.10
    - Version 18.0.3+ for Minecraft 1.21.9
@@ -82,7 +86,7 @@ Download and install these mods alongside Chrono Dawn:
 
 ### Installation Steps
 
-1. Install Minecraft 1.21.9 (or 1.21.1, 1.21.2, 1.21.3, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.10, or 1.21.11; legacy 1.20.1 is also supported)
+1. Install Minecraft 1.21.9 (or 1.21.1, 1.21.2, 1.21.3, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.10, 1.21.11, 26.1.2, or 26.2; legacy 1.20.1 is also supported)
 2. Install your chosen mod loader (Fabric or NeoForge — or, for legacy Minecraft 1.20.1, Fabric or Forge)
 3. Download required dependencies:
    - **Architectury API** (required for both loaders)

@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:simple_block",
+  "config": {
+    "to_place": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "chronodawn:chrono_cobweb"
+      }
+    },
+    "place_on": [
+      "minecraft:grass_block",
+      "minecraft:dirt",
+      "minecraft:podzol",
+      "minecraft:coarse_dirt",
+      "minecraft:mycelium",
+      "minecraft:moss_block",
+      "minecraft:snow_block",
+      "chronodawn:temporal_grass_block",
+      "chronodawn:temporal_dirt",
+      "chronodawn:coarse_temporal_dirt"
+    ],
+    "place_in": [
+      "minecraft:air"
+    ]
+  }
+}

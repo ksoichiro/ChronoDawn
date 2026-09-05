@@ -1,0 +1,177 @@
+plugins {
+    id 'com.gradleup.shadow'
+}
+
+architectury {
+    platformSetupLoomIde()
+    neoForge()
+}
+
+// Note: 1.21.4 requires significant API changes (Client Items system, removed ItemColors API)
+// Version-specific client sources override base client sources
+sourceSets {
+    main {
+        java {
+            // Version-specific sources (includes 1.21.4-specific client code)
+            srcDir 'src/main/java'
+        }
+        resources {
+            srcDirs = []
+            // Version-specific resources FIRST (higher priority)
+            srcDir 'src/main/resources'
+            // Shared resources SECOND (lower priority)
+            srcDir '../base/src/main/resources'
+        }
+    }
+}
+
+// Add base sources excluding packages that have 1.21.5-specific versions
+tasks.named('compileJava') {
+    source fileTree('../base/src/main/java') {
+        exclude 'com/chronodawn/neoforge/ChronoDawnNeoForge.java'  // Main class with GameTest registration
+        exclude 'com/chronodawn/neoforge/client/**'
+        exclude 'com/chronodawn/neoforge/gametest/**'  // GameTest API completely changed in 1.21.5
+        exclude 'com/chronodawn/neoforge/anvil/**'     // AnvilUpdateEvent.setCost() removed in 1.21.5
+        exclude 'com/chronodawn/neoforge/platform/**' // 1.21.9: FMLLoader.isProduction() no longer static
+        exclude 'com/chronodawn/neoforge/loot/GrassTimeWheatSeedModifier.java'  // 1.21.11: ResourceLocation renamed to Identifier
+        exclude 'com/chronodawn/neoforge/event/FuelEventHandler.java'           // 1.21.11: ResourceLocation renamed to Identifier
+        exclude 'com/chronodawn/neoforge/event/BlockProtectionEventHandler.java' // 26.1.2: BlockEvent.BreakEvent removed (use BreakBlockEvent); displayClientMessage removed (use sendOverlayMessage)
+    }
+}
+
+def commonModule = ':common-26.1.2'
+def log4j2DevConfig = rootProject.file('neoforge/base/log4j2-dev.xml').absolutePath
+
+loom {
+    accessWidenerPath = project(commonModule).loom.accessWidenerPath
+
+    runs {
+        client {
+            client()
+            setConfigName("NeoForge Client")
+            ideConfigGenerated(true)
+            runDir("run")
+            vmArg("-Dfabric.log.disableAnsi=false")
+            vmArg("-Dlog4j2.configurationFile=${log4j2DevConfig}")
+        }
+        server {
+            server()
+            setConfigName("NeoForge Server")
+            ideConfigGenerated(true)
+            runDir("run")
+        }
+        gameTestServer {
+            server()
+            setConfigName("NeoForge GameTest Server")
+            ideConfigGenerated(true)
+            runDir("run")
+            // NeoForge 21.9+ uses separate main classes instead of --launchTarget.
+            // Architectury Loom doesn't automatically set the correct main class,
+            // so we override it explicitly.
+            environment("gametestserver")
+            mainClass.set("net.neoforged.fml.startup.GameTestServer")
+            property("neoforge.enabledGameTestNamespaces", "chronodawn")
+            property("neoforge.enableGameTest", "true")
+            programArgs("--nogui")
+        }
+    }
+}
+
+configurations {
+    common
+    shadowCommon
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentNeoForge.extendsFrom common
+}
+
+repositories {
+    maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
+}
+
+dependencies {
+    neoForge "net.neoforged:neoforge:${neoforge_version}"
+    api "dev.architectury:architectury-neoforge:${architectury_api_version}"
+
+    // 26.1.2: no-remap Loom variant doesn't expose Loom's remap-namespace
+    // configurations (namedElements / transformProductionNeoForge). A plain
+    // project dependency resolves to the default Gradle Java variant, which
+    // is all that's needed since nothing needs remapping.
+    common(project(path: commonModule)) { transitive false }
+    shadowCommon(project(path: commonModule)) { transitive false }
+}
+
+tasks.named("processResources", ProcessResources).configure {
+    dependsOn project(commonModule).tasks.named('nbtStructures')
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    inputs.property "version", project.version
+
+    filesMatching("META-INF/neoforge.mods.toml") {
+        expand "version": project.version
+    }
+
+    from(project(commonModule).sourceSets.main.resources) {
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        exclude "fabric.mod.json"
+        exclude "chronodawn.mixins.json"
+        exclude "architectury.common.json"
+    }
+}
+
+// Minecraft 26.1.2 ships unobfuscated, so there is no remap step: shadowJar's
+// output directly IS the final artifact (see gradle.properties'
+// unobfuscated_mc_versions / root build.gradle's loom-no-remap plugin choice).
+tasks.named("shadowJar", com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar).configure {
+    exclude "fabric.mod.json"
+    exclude "architectury.common.json"
+
+    configurations = [project.configurations.shadowCommon]
+    archiveBaseName = rootProject.archives_name
+    archiveVersion = "${rootProject.mod_version}+${rootProject.minecraft_version}-neoforge"
+    archiveClassifier = null
+}
+
+tasks.named('assemble').configure {
+    dependsOn tasks.named('shadowJar')
+}
+
+// 26.1.2: the normal dev.architectury.loom plugin converts the AccessWidener into
+// NeoForge's AccessTransformer format automatically as part of its remapJar
+// pipeline. There is no remapJar under the no-remap plugin variant, so we call
+// architectury-loom's own public Aw2At.addToTask helper directly on shadowJar
+// instead (the same conversion, just invoked manually).
+dev.architectury.loom.accesstransformer.Aw2At.addToTask(project, tasks.named('shadowJar')) { settings ->
+    settings.accessWideners.add(loom.accessWidenerPath.get().asFile.name)
+}
+
+tasks.named("jar").configure {
+    archiveClassifier = "dev"
+}
+
+tasks.named("sourcesJar").configure {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    def commonSources = project(commonModule).tasks.named("sourcesJar")
+    dependsOn commonSources
+    from commonSources.flatMap { it.archiveFile }.map { zipTree(it) }
+    archiveBaseName = rootProject.archives_name
+    archiveVersion = "${rootProject.mod_version}+${rootProject.minecraft_version}-neoforge"
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
+}
+
+publishing {
+    publications {
+        mavenNeoForge(MavenPublication) {
+            artifactId = "${archives_name}-neoforge"
+            from components.java
+        }
+    }
+
+    repositories {
+    }
+}

@@ -44,12 +44,12 @@ Chrono Dawn uses the **Architectury** framework to support Fabric and NeoForge l
 
 ### Key Technologies
 
-- **Java 21**: Target language version (Java 17 for 1.20.1)
-- **Minecraft**: Java Edition 1.20.1 (legacy) / 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.21.6 / 1.21.7 / 1.21.8 / 1.21.9 / 1.21.10 / 1.21.11
-- **Fabric Loader**: 0.15.11+ (for 1.20.1) / 0.17.3+ (for 1.21.1+)
+- **Java 21**: Target language version (Java 17 for 1.20.1, Java 25 for 26.1.2/26.2)
+- **Minecraft**: Java Edition 1.20.1 (legacy) / 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.21.6 / 1.21.7 / 1.21.8 / 1.21.9 / 1.21.10 / 1.21.11 / 26.1.2 / 26.2
+- **Fabric Loader**: 0.15.11+ (for 1.20.1) / 0.17.3+ (for 1.21.1+) / 0.19.5+ (for 26.1.2/26.2)
 - **Forge**: 47.3.5+ (for 1.20.1 only)
-- **NeoForge**: 21.1.209+ (for 1.21.1) / 21.2.0-beta+ (for 1.21.2) / 21.3.0-beta+ (for 1.21.3) / 21.4.0-beta+ (for 1.21.4) / 21.5.96+ (for 1.21.5) / 21.6.20-beta+ (for 1.21.6) / 21.7.25-beta+ (for 1.21.7) / 21.8.0-beta+ (for 1.21.8) / 21.9.16-beta+ (for 1.21.9) / 21.10.64+ (for 1.21.10) / 21.11.38-beta+ (for 1.21.11)
-- **Architectury API**: 9.2.14+ (for 1.20.1) / 13.0.8+ (for 1.21.1) / 14.0.4+ (for 1.21.2/1.21.3) / 15.0.1+ (for 1.21.4) / 16.1.4+ (for 1.21.5) / 17.0.6+ (for 1.21.6) / 17.0.8+ (for 1.21.7/1.21.8) / 18.0.3+ (for 1.21.9) / 18.0.8+ (for 1.21.10) / 19.0.1+ (for 1.21.11)
+- **NeoForge**: 21.1.209+ (for 1.21.1) / 21.2.0-beta+ (for 1.21.2) / 21.3.0-beta+ (for 1.21.3) / 21.4.0-beta+ (for 1.21.4) / 21.5.96+ (for 1.21.5) / 21.6.20-beta+ (for 1.21.6) / 21.7.25-beta+ (for 1.21.7) / 21.8.0-beta+ (for 1.21.8) / 21.9.16-beta+ (for 1.21.9) / 21.10.64+ (for 1.21.10) / 21.11.38-beta+ (for 1.21.11) / 26.1.2.103+ (for 26.1.2) / 26.2.0.76+ (for 26.2)
+- **Architectury API**: 9.2.14+ (for 1.20.1) / 13.0.8+ (for 1.21.1) / 14.0.4+ (for 1.21.2/1.21.3) / 15.0.1+ (for 1.21.4) / 16.1.4+ (for 1.21.5) / 17.0.6+ (for 1.21.6) / 17.0.8+ (for 1.21.7/1.21.8) / 18.0.3+ (for 1.21.9) / 18.0.8+ (for 1.21.10) / 19.0.1+ (for 1.21.11) / 20.0.12+ (for 26.1.2) / 21.0.7+ (for 26.2)
 - **Gradle**: Build automation (Groovy DSL)
 - **Mojang Mappings**: Official Minecraft class names
 
@@ -126,12 +126,14 @@ cd ChronoDawn
 ChronoDawn/
 ├── common/
 │   ├── shared/                             # Shared version-agnostic sources (included via srcDir)
-│   ├── shared-1.21.1+/                    # Shared resources for 1.21.1~1.21.11
-│   ├── shared-1.21.2+/                    # Shared resources for 1.21.2~1.21.11
-│   ├── shared-1.21.5+/                    # Shared resources for 1.21.5~1.21.11
+│   ├── shared-1.21.1+/                    # Shared resources for 1.21.1~26.2
+│   ├── shared-1.21.2+/                    # Shared resources for 1.21.2~26.2
+│   ├── shared-1.21.5+/                    # Shared resources for 1.21.5~26.2
 │   ├── gametest/                           # Shared gametest sources (included via srcDir)
 │   ├── 1.21.2/                             # Common module for MC 1.21.2
-│   ├── 1.21.11/                            # Common module for MC 1.21.11 (~80% of code)
+│   ├── 1.21.11/                            # Common module for MC 1.21.11
+│   ├── 26.1.2/                             # Common module for MC 26.1.2
+│   ├── 26.2/                               # Common module for MC 26.2 (~80% of code)
 │   │   ├── src/main/java/com/chronodawn/
 │   │   │   ├── ChronoDawn.java             # Common entry point
 │   │   │   ├── blocks/                     # Custom blocks
@@ -236,14 +238,14 @@ ChronoDawn/
 
 ### Gradle Configuration (Groovy DSL)
 
-**Important**: This project uses **Groovy DSL**, not Kotlin DSL, for Architectury Loom 1.13-SNAPSHOT compatibility.
+**Important**: This project uses **Groovy DSL**, not Kotlin DSL, for Architectury Loom 1.17.491 compatibility.
 
 #### Root `build.gradle`
 
 ```groovy
 plugins {
-    id 'dev.architectury.loom' version '1.13-SNAPSHOT' apply false
-    id 'architectury-plugin' version '3.4-SNAPSHOT'
+    id 'dev.architectury.loom' version '1.17.491' apply false
+    id 'architectury-plugin' version '3.5-SNAPSHOT'
     id 'com.gradleup.shadow' version '8.3.6' apply false
 }
 
@@ -268,10 +270,12 @@ neoforge_version=21.2.0-beta
 ### Build Commands
 
 ```bash
-# Build for default version (1.21.11)
+# Build for default version (26.2)
 ./gradlew build
 
 # Build for a specific Minecraft version
+./gradlew build -Ptarget_mc_version=26.2
+./gradlew build -Ptarget_mc_version=26.1.2
 ./gradlew build -Ptarget_mc_version=1.21.11
 ./gradlew build -Ptarget_mc_version=1.21.5
 ./gradlew build -Ptarget_mc_version=1.21.2
@@ -286,19 +290,23 @@ neoforge_version=21.2.0-beta
 ./gradlew build1_21_1
 ./gradlew build1_21_5
 ./gradlew build1_21_11
+./gradlew build26_1_2
+./gradlew build26_2
 
 # Build specific module
+./gradlew :fabric:build -Ptarget_mc_version=26.2
+./gradlew :neoforge:build -Ptarget_mc_version=26.2
 ./gradlew :fabric:build -Ptarget_mc_version=1.21.11
 ./gradlew :neoforge:build -Ptarget_mc_version=1.21.11
 ./gradlew :forge:build -Ptarget_mc_version=1.20.1
 
 # Run development client (version-specific)
-./gradlew :fabric:runClient -Ptarget_mc_version=1.21.11
+./gradlew :fabric:runClient -Ptarget_mc_version=26.2
 ./gradlew :fabric:runClient -Ptarget_mc_version=1.21.5
 ./gradlew :fabric:runClient -Ptarget_mc_version=1.21.2
 ./gradlew :fabric:runClient -Ptarget_mc_version=1.21.1
 ./gradlew :fabric:runClient -Ptarget_mc_version=1.20.1
-./gradlew :neoforge:runClient -Ptarget_mc_version=1.21.11
+./gradlew :neoforge:runClient -Ptarget_mc_version=26.2
 ./gradlew :neoforge:runClient -Ptarget_mc_version=1.21.5
 ./gradlew :neoforge:runClient -Ptarget_mc_version=1.21.1
 ./gradlew :forge:runClient -Ptarget_mc_version=1.20.1
@@ -306,15 +314,15 @@ neoforge_version=21.2.0-beta
 ./gradlew runClientForge1_20_1
 
 # Run development server
-./gradlew :fabric:runServer -Ptarget_mc_version=1.21.11
-./gradlew :neoforge:runServer -Ptarget_mc_version=1.21.11
+./gradlew :fabric:runServer -Ptarget_mc_version=26.2
+./gradlew :neoforge:runServer -Ptarget_mc_version=26.2
 
 # Run unit tests
 ./gradlew test
-./gradlew :common-1.21.11:test -Ptarget_mc_version=1.21.11
+./gradlew :common-26.2:test -Ptarget_mc_version=26.2
 
 # Run GameTests (in-game integration tests)
-./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.11
+./gradlew :fabric:runGameTest -Ptarget_mc_version=26.2
 ./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.5
 ./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.2
 ./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.1
@@ -360,9 +368,9 @@ neoforge_version=21.2.0-beta
 ### Output Files
 
 After building:
-- **Fabric JAR**: `fabric/1.21.11/build/libs/chronodawn-0.8.0+1.21.11-fabric.jar`
-- **NeoForge JAR**: `neoforge/1.21.11/build/libs/chronodawn-0.8.0+1.21.11-neoforge.jar`
-- **Common JAR**: `common/1.21.11/build/libs/common-1.21.11-0.8.0.jar` (bundled into loader JARs)
+- **Fabric JAR**: `fabric/26.2/build/libs/chronodawn-0.8.0+26.2-fabric.jar`
+- **NeoForge JAR**: `neoforge/26.2/build/libs/chronodawn-0.8.0+26.2-neoforge.jar`
+- **Common JAR**: `common/26.2/build/libs/common-26.2-0.8.0.jar` (bundled into loader JARs)
 - **Forge JAR** (1.20.1 only): `forge/1.20.1/build/libs/chronodawn-0.8.0+1.20.1-forge.jar`
 
 ---

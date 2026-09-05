@@ -1,0 +1,40 @@
+package com.chronodawn.client.renderer.mobs;
+
+import com.chronodawn.client.model.ParadoxCrawlerModel;
+import com.chronodawn.entities.mobs.ParadoxCrawlerEntity;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.resources.Identifier;
+import com.chronodawn.compat.CompatResourceLocation;
+
+/**
+ * Renderer for Paradox Crawler entity.
+ * Texture location: assets/chronodawn/textures/entity/mobs/paradox_crawler.png
+ */
+public class ParadoxCrawlerRenderer extends MobRenderer<ParadoxCrawlerEntity, ParadoxCrawlerRenderState, ParadoxCrawlerModel> {
+    private static final Identifier TEXTURE = CompatResourceLocation.create(
+        "chronodawn",
+        "textures/entity/mobs/paradox_crawler.png"
+    );
+
+    public ParadoxCrawlerRenderer(EntityRendererProvider.Context context) {
+        super(context, new ParadoxCrawlerModel(context.bakeLayer(ParadoxCrawlerModel.LAYER_LOCATION)), 0.8f);
+        this.addLayer(new ParadoxCrawlerEmissiveLayer(this));
+    }
+
+    @Override
+    public ParadoxCrawlerRenderState createRenderState() {
+        return new ParadoxCrawlerRenderState();
+    }
+
+    @Override
+    public void extractRenderState(ParadoxCrawlerEntity entity, ParadoxCrawlerRenderState state, float partialTick) {
+        super.extractRenderState(entity, state, partialTick);
+        state.attackTime = entity.getAttackAnim(partialTick);
+    }
+
+    @Override
+    public Identifier getTextureLocation(ParadoxCrawlerRenderState state) {
+        return TEXTURE;
+    }
+}

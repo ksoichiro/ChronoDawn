@@ -1,6 +1,11 @@
 plugins {
-    id 'dev.architectury.loom' version '1.13-SNAPSHOT' apply false
-    id 'architectury-plugin' version '3.4-SNAPSHOT'
+    id 'dev.architectury.loom' version '1.17.491' apply false
+    // Minecraft 26.1.2/26.2 ship unobfuscated (no Mojang mappings published);
+    // architectury-loom has no official support for this yet (tracked in
+    // https://github.com/architectury/architectury-loom/issues/328), so those
+    // two versions use the no-remap plugin variant instead (see subprojects block).
+    id 'dev.architectury.loom-no-remap' version '1.17.491' apply false
+    id 'architectury-plugin' version '3.5-SNAPSHOT'
     id 'com.gradleup.shadow' version '8.3.6' apply false
 }
 
@@ -47,7 +52,13 @@ allprojects {
 }
 
 subprojects {
-    apply plugin: 'dev.architectury.loom'
+    // Minecraft 26.1.2/26.2 are unobfuscated (no Mojang mappings published);
+    // use architectury-loom's no-remap plugin variant for those versions.
+    def unobfuscatedVersions = (rootProject.ext.has('unobfuscated_mc_versions') ? rootProject.ext.unobfuscated_mc_versions : '')
+        .toString().split(',').collect { it.trim() }
+    def noRemap = unobfuscatedVersions.contains(rootProject.ext.minecraft_version.toString())
+    ext.noRemap = noRemap
+    apply plugin: noRemap ? 'dev.architectury.loom-no-remap' : 'dev.architectury.loom'
     apply plugin: 'architectury-plugin'
     apply plugin: 'maven-publish'
 
@@ -87,7 +98,9 @@ subprojects {
 
     dependencies {
         minecraft "com.mojang:minecraft:$rootProject.ext.minecraft_version"
-        mappings loom.officialMojangMappings()
+        if (!noRemap) {
+            mappings loom.officialMojangMappings()
+        }
     }
 
     java {

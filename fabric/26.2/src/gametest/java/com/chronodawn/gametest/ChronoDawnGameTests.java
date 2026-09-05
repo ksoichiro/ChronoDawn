@@ -1,0 +1,76 @@
+package com.chronodawn.gametest;
+
+import net.fabricmc.fabric.api.gametest.v1.GameTest;
+import net.minecraft.gametest.framework.GameTestHelper;
+
+/**
+ * GameTest tests for ChronoDawn mod on Fabric (26.2 version).
+ *
+ * In 1.21.5+, Fabric API provides its own @GameTest annotation that replaces
+ * the old FabricGameTest interface and @GameTestGenerator.
+ *
+ * Manual player input tests and Faded Plains block tests use @GameTest annotation directly.
+ * Registry-driven tests are handled separately (test function registry + test instance JSON).
+ */
+public class ChronoDawnGameTests {
+
+    private static final String STRUCTURE = "chronodawn:empty_test";
+
+    // ============== Player Input Tests ==============
+
+    @GameTest(structure = STRUCTURE, maxTicks = 100)
+    public void testMockPlayerCanBeCreated(GameTestHelper helper) {
+        ChronoDawnGameTestLogic.TEST_MOCK_PLAYER_CAN_BE_CREATED.accept(helper);
+    }
+
+    @GameTest(structure = STRUCTURE, maxTicks = 100)
+    public void testPlayerCanEquipChestplate(GameTestHelper helper) {
+        ChronoDawnGameTestLogic.TEST_PLAYER_CAN_EQUIP_CHESTPLATE.accept(helper);
+    }
+
+    @GameTest(structure = STRUCTURE, maxTicks = 100)
+    public void testTimeTyrantMailCanBeEquipped(GameTestHelper helper) {
+        ChronoDawnGameTestLogic.TEST_TIME_TYRANT_MAIL_CAN_BE_EQUIPPED.accept(helper);
+    }
+
+    @GameTest(structure = STRUCTURE, maxTicks = 100)
+    public void testPlayerCanHoldChronoblade(GameTestHelper helper) {
+        ChronoDawnGameTestLogic.TEST_PLAYER_CAN_HOLD_CHRONOBLADE.accept(helper);
+    }
+
+    @GameTest(structure = STRUCTURE, maxTicks = 100)
+    public void testPlayerCanEquipFullArmorSet(GameTestHelper helper) {
+        ChronoDawnGameTestLogic.TEST_PLAYER_CAN_EQUIP_FULL_ARMOR_SET.accept(helper);
+    }
+
+    @GameTest(structure = STRUCTURE, maxTicks = 100)
+    public void testPlayerInventoryCanReceiveItems(GameTestHelper helper) {
+        ChronoDawnGameTestLogic.TEST_PLAYER_INVENTORY_CAN_RECEIVE_ITEMS.accept(helper);
+    }
+
+    // ============== Faded Plains Block Tests ==============
+
+    /**
+     * Test: TEMPORAL_DEAD_BUSH canSurvive() returns true when the block below is PARCHED_TEMPORAL_DIRT.
+     */
+    @GameTest(structure = STRUCTURE, maxTicks = 100)
+    public void testDeadBushSurvivesOnParchedDirt(GameTestHelper helper) {
+        FadedPlainsTests.TEST_DEAD_BUSH_SURVIVES_ON_PARCHED_DIRT.accept(helper);
+    }
+
+    /**
+     * Test: TEMPORAL_DEAD_BUSH canSurvive() returns false when the block below is TEMPORAL_GRASS_BLOCK.
+     */
+    @GameTest(structure = STRUCTURE, maxTicks = 100)
+    public void testDeadBushBreaksOnGrass(GameTestHelper helper) {
+        FadedPlainsTests.TEST_DEAD_BUSH_BREAKS_ON_GRASS.accept(helper);
+    }
+
+    /**
+     * Test: FADED_TEMPORAL_GRASS drops itself (1 item) when broken with shears.
+     */
+    @GameTest(structure = STRUCTURE, maxTicks = 100)
+    public void testFadedGrassShearsDropsSelf(GameTestHelper helper) {
+        FadedPlainsTests.TEST_FADED_GRASS_SHEARS_DROPS_SELF.accept(helper);
+    }
+}

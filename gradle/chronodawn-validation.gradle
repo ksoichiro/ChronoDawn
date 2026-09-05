@@ -240,6 +240,8 @@ tasks.register('validateEraJsonFormat') {
             'common/1.21.9': 'modern',
             'common/1.21.10': 'modern',
             'common/1.21.11': 'modern',
+            'common/26.1.2': 'modern',
+            'common/26.2': 'modern',
         ]
 
         // Recipe ingredient shape has three tiers, not two: 1.20.1 and 1.21.1
@@ -250,6 +252,7 @@ tasks.register('validateEraJsonFormat') {
             'common/shared-1.21.2+', 'common/shared-1.21.5+', 'common/1.21.2',
             'common/1.21.4', 'common/1.21.5', 'common/1.21.6', 'common/1.21.7',
             'common/1.21.8', 'common/1.21.9', 'common/1.21.10', 'common/1.21.11',
+            'common/26.1.2', 'common/26.2',
         ] as Set
 
         int checked = 0
