@@ -68,6 +68,18 @@ public class ChronoDawnClientNeoForge {
     }
 
     /**
+     * 26.2: Gui's render pipeline no longer hands a drawable GuiGraphicsExtractor to a
+     * plain Mixin injection (see PortalOverlayGuiLayer), so the portal overlay/fade
+     * effect is registered through NeoForge's GuiLayer system instead.
+     *
+     * @param event The GUI layer registration event
+     */
+    @SubscribeEvent
+    public static void onRegisterGuiLayers(RegisterGuiLayersEvent event) {
+        event.registerAboveAll(Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, "portal_overlay"), new PortalOverlayGuiLayer());
+    }
+
+    /**
      * Register entity model layers for custom entity models.
      * Called during entity model layer registration phase.
      *

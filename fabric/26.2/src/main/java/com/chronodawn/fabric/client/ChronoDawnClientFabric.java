@@ -3,6 +3,7 @@ package com.chronodawn.fabric.client;
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.client.CobwebColorProvider;
 import com.chronodawn.client.LeafColorProvider;
+import com.chronodawn.client.PortalOverlayHudElement;
 import com.chronodawn.client.TemporalGrassEdgeTint;
 import com.chronodawn.client.TemporalPlantColorProvider;
 import com.chronodawn.client.model.*;
@@ -24,6 +25,7 @@ import net.fabricmc.fabric.api.client.rendering.v1.BlockColorRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockTintsFactory;
 import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
@@ -65,6 +67,7 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
         registerChronicleDataLoader();
         registerChronicleBookHandler();
         registerPortalEffects();
+        registerPortalOverlay();
     }
 
     /**
@@ -664,5 +667,12 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             com.chronodawn.client.PortalEffectHandler.onClientTick();
         });
+    }
+
+    // 26.2: Gui's render pipeline no longer hands a drawable GuiGraphicsExtractor to a
+    // plain Mixin injection (see PortalOverlayHudElement), so the portal overlay/fade
+    // effect is registered through Fabric API's HudElement system instead.
+    private void registerPortalOverlay() {
+        HudElementRegistry.addLast(Identifier.fromNamespaceAndPath("chronodawn", "portal_overlay"), new PortalOverlayHudElement());
     }
 }
