@@ -78,6 +78,20 @@ sourceSets {
             srcDir '../shared/src/main/resources'
             srcDir "${buildDir}/generated/nbt-structures"
         }
+        // Use filter to exclude resources from common/shared that have 1.20.1-specific
+        // overrides in this module's own src/main/resources. 1.20.1 predates the
+        // "grass" -> "short_grass" block rename (1.20.3+), so the shared Global Loot
+        // Modifier condition JSON (which targets minecraft:short_grass) is replaced by
+        // a 1.20.1-specific copy targeting minecraft:grass.
+        resources.filter.exclude { element ->
+            if (!element.file.absolutePath.contains('common/shared')) {
+                return false
+            }
+            def excludedFiles = [
+                'grass_time_wheat_seed.json'
+            ]
+            return excludedFiles.contains(element.file.name)
+        }
     }
     test {
         java {
