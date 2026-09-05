@@ -50,6 +50,14 @@ public class ChronoDawnForge {
     public ChronoDawnForge() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
+        // Architectury's cross-loader DeferredRegister/RegistrarManager (used throughout
+        // common/shared, e.g. ModFluids, ModItems, ModBlocks) looks up each mod's event bus
+        // via dev.architectury.platform.forge.EventBuses, which is populated only by this
+        // explicit call. Unlike NeoForge (where Architectury hooks in automatically), Forge
+        // requires this to be the first thing the mod constructor does, before anything that
+        // touches an Architectury-wrapped registry (including ChronoDawn.init() below).
+        dev.architectury.platform.forge.EventBuses.registerModEventBus(ChronoDawn.MOD_ID, modEventBus);
+
         // Register FluidTypes (Forge-specific, must be registered before ChronoDawn.init())
         ModFluidTypes.register(modEventBus);
 
