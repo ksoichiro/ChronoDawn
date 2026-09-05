@@ -25,6 +25,7 @@ import com.chronodawn.neoforge.event.OverlayPackFinder;
 import com.chronodawn.neoforge.registry.ModFluidTypes;
 import com.chronodawn.neoforge.registry.ModLootModifiers;
 import com.chronodawn.neoforge.registry.ModParticles;
+import com.chronodawn.registry.ModComposting;
 import com.chronodawn.registry.ModEntities;
 import com.chronodawn.registry.ModItems;
 import com.chronodawn.worldgen.processors.BossRoomProtectionProcessor;
@@ -323,6 +324,9 @@ public class ChronoDawnNeoForge {
             // Initialize spawn eggs - must be done after entities are registered
             ModItems.initializeSpawnEggs();
             ChronoDawn.LOGGER.debug("Initialized spawn eggs for NeoForge");
+
+            ModComposting.register();
+            ChronoDawn.LOGGER.debug("Initialized composting entries for NeoForge");
         });
     }
 

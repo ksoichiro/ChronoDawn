@@ -49,6 +49,10 @@ public class ChronoDawnFabric implements ModInitializer {
         com.chronodawn.registry.ModItems.initializeSpawnEggs();
         ChronoDawn.LOGGER.debug("Initialized spawn eggs for Fabric");
 
+        // Register composting entries (must run after spawn eggs, same timing constraint)
+        com.chronodawn.registry.ModComposting.register();
+        ChronoDawn.LOGGER.debug("Initialized composting entries for Fabric");
+
         // Register fuel items
         ChronoDawnFuelRegistry.register();
 

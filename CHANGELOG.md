@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Chrono Dawn's plant and food items — saplings, leaves, seeds, flowers,
+  short plants, aquatic plants, Lumen Polyp, crops, fungi, baked foods, and
+  Time Wheat Bale — can now be placed into a vanilla Composter, mirroring
+  the chance tiers of their closest vanilla analogues.
 - Chrono Dawn tool, weapon, armor, and shield items — including boss-drop
   and artifact gear — now join Fabric/NeoForge conventional (`c:`) tags by
   function: `c:tools/melee_weapon`, `c:tools/mining_tool`, `c:tools/shield`,
