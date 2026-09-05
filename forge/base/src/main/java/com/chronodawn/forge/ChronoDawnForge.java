@@ -24,6 +24,7 @@ import com.chronodawn.forge.event.OverlayPackFinder;
 import com.chronodawn.forge.registry.ModFluidTypes;
 import com.chronodawn.forge.registry.ModLootModifiers;
 import com.chronodawn.forge.registry.ModParticles;
+import com.chronodawn.registry.ModComposting;
 import com.chronodawn.registry.ModEntities;
 import com.chronodawn.registry.ModItems;
 import com.chronodawn.worldgen.processors.BossRoomProtectionProcessor;
@@ -321,6 +322,9 @@ public class ChronoDawnForge {
             // Initialize spawn eggs - must be done after entities are registered
             ModItems.initializeSpawnEggs();
             ChronoDawn.LOGGER.debug("Initialized spawn eggs for Forge");
+
+            ModComposting.register();
+            ChronoDawn.LOGGER.debug("Initialized composting entries for Forge");
         });
     }
 
