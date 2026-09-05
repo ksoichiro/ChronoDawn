@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "food",
   "key": {
     "W": "chronodawn:time_wheat",
     "J": "chronodawn:time_jam",

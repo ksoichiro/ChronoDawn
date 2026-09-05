@@ -1,6 +1,6 @@
 {
   "type": "minecraft:crafting_shapeless",
-  "category": "building_blocks",
+  "category": "building",
   "ingredients": [
     "chronodawn:temporal_stone_bricks",
     "minecraft:moss_block"

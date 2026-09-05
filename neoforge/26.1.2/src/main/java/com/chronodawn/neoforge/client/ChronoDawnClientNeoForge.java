@@ -513,12 +513,17 @@ public class ChronoDawnClientNeoForge {
             @Override
             public int color(BlockState state) {
                 // Item/inventory rendering has no world context.
-                return fn.color(state, null, BlockPos.ZERO, 0);
+                // 26.1.2's tint compositing (net.minecraft.util.ARGB#multiply) multiplies
+                // the alpha channel too, not just RGB. Our providers return plain
+                // 0xRRGGBB (alpha byte 0), which zeroes the block's alpha and makes it
+                // fully invisible - force full opacity since none of our tints are
+                // meant to be translucent.
+                return 0xFF000000 | fn.color(state, null, BlockPos.ZERO, 0);
             }
 
             @Override
             public int colorInWorld(BlockState state, BlockAndTintGetter world, BlockPos pos) {
-                return fn.color(state, world, pos, 0);
+                return 0xFF000000 | fn.color(state, world, pos, 0);
             }
         };
     }

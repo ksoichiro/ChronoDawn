@@ -99,7 +99,11 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
     }
 
     private static BlockTintsFactory adaptColor(LegacyBlockColor legacy) {
-        return (state, world, pos, tints) -> tints.add(legacy.getColor(state, world, pos, 0));
+        // 26.1.2's tint compositing (net.minecraft.util.ARGB#multiply) multiplies the
+        // alpha channel too, not just RGB. Our providers return plain 0xRRGGBB (alpha
+        // byte 0), which zeroes the block's alpha and makes it fully invisible - force
+        // full opacity here since none of our tints are meant to be translucent.
+        return (state, world, pos, tints) -> tints.add(0xFF000000 | legacy.getColor(state, world, pos, 0));
     }
 
     /**
