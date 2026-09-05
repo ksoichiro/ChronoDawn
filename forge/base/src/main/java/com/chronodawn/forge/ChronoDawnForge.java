@@ -18,6 +18,9 @@
 package com.chronodawn.forge;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.forge.registry.ModFluidTypes;
+import com.chronodawn.forge.registry.ModLootModifiers;
+import com.chronodawn.forge.registry.ModParticles;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -25,14 +28,24 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 /**
  * Forge-specific mod entry point.
  *
- * This is a minimal stub: full event registration (fluids, particles, loot
- * modifiers, entity attributes, spawn placements, block/tick events) is
- * added in a later task, mirroring {@code ChronoDawnNeoForge}'s constructor.
+ * This is a minimal stub: full event registration (entity attributes, spawn
+ * placements, block/tick events) is added in a later task, mirroring
+ * {@code ChronoDawnNeoForge}'s constructor.
  */
 @Mod(ChronoDawn.MOD_ID)
 public class ChronoDawnForge {
     public ChronoDawnForge() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+
+        // Register FluidTypes (Forge-specific, must be registered before ChronoDawn.init())
+        ModFluidTypes.register(modEventBus);
+
         ChronoDawn.init();
+
+        // Register particle types (Forge-specific)
+        ModParticles.register(modEventBus);
+
+        // Register loot modifiers (Forge-specific)
+        ModLootModifiers.register(modEventBus);
     }
 }
