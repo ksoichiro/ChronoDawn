@@ -244,7 +244,7 @@ public class PortalTeleportHandler {
         );
 
         // Update portal state (ACTIVATED → DEACTIVATED)
-        PortalStateMachine sourcePortal = PortalRegistry.getInstance().getPortalAt(sourcePortalPos);
+        PortalStateMachine sourcePortal = PortalRegistry.getInstance().getPortalAt(sourceLevel.dimension(), sourcePortalPos);
         if (com.chronodawn.config.ChronoDawnConfig.get().gameplay().portals().oneWayUntilStabilized()
             && sourcePortal != null && sourcePortal.getCurrentState() == PortalState.ACTIVATED) {
             sourcePortal.deactivate();
@@ -701,7 +701,7 @@ public class PortalTeleportHandler {
         }
 
         // Register or reignite portal in registry
-        PortalStateMachine portal = PortalRegistry.getInstance().getPortalAt(pos);
+        PortalStateMachine portal = PortalRegistry.getInstance().getPortalAt(level.dimension(), pos);
         boolean justOpened = false;
         if (portal == null) {
             UUID portalId = UUID.randomUUID();

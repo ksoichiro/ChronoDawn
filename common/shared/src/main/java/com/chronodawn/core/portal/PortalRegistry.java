@@ -50,7 +50,7 @@ public class PortalRegistry {
 
     private final Map<UUID, PortalStateMachine> portals;
     private final Map<ResourceKey<Level>, Set<UUID>> portalsByDimension;
-    private final Map<BlockPos, UUID> portalsByPosition;
+    private final Map<ResourceKey<Level>, Map<BlockPos, UUID>> portalsByPosition;
 
     // T179: Cache unmodifiable views of dimension portal sets for performance
     private final Map<ResourceKey<Level>, Set<UUID>> unmodifiableDimensionPortalCache;
@@ -124,7 +124,9 @@ public class PortalRegistry {
             .add(portalId);
 
         // Add to position index
-        portalsByPosition.put(position, portalId);
+        portalsByPosition
+            .computeIfAbsent(dimension, k -> new ConcurrentHashMap<>())
+            .put(position, portalId);
 
         // T179: Invalidate cache for this dimension
         unmodifiableDimensionPortalCache.remove(dimension);
@@ -156,7 +158,10 @@ public class PortalRegistry {
         }
 
         // Remove from position index
-        portalsByPosition.remove(portal.getPosition());
+        Map<BlockPos, UUID> dimensionPortalPositions = portalsByPosition.get(dimension);
+        if (dimensionPortalPositions != null) {
+            dimensionPortalPositions.remove(portal.getPosition());
+        }
 
         // T179: Invalidate cache for this dimension
         unmodifiableDimensionPortalCache.remove(dimension);
@@ -179,13 +184,18 @@ public class PortalRegistry {
     }
 
     /**
-     * Get a portal by position.
+     * Get a portal by dimension and position.
      *
+     * @param dimension Dimension key
      * @param position Portal position
      * @return Portal state machine, or null if not found
      */
-    public PortalStateMachine getPortalAt(BlockPos position) {
-        UUID portalId = portalsByPosition.get(position);
+    public PortalStateMachine getPortalAt(ResourceKey<Level> dimension, BlockPos position) {
+        Map<BlockPos, UUID> dimensionPositions = portalsByPosition.get(dimension);
+        if (dimensionPositions == null) {
+            return null;
+        }
+        UUID portalId = dimensionPositions.get(position);
         return portalId != null ? portals.get(portalId) : null;
     }
 

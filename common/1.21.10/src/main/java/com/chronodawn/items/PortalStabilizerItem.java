@@ -156,7 +156,7 @@ public class PortalStabilizerItem extends Item {
             for (int y = -5; y <= 5; y++) {
                 for (int z = -5; z <= 5; z++) {
                     BlockPos searchPos = pos.offset(x, y, z);
-                    PortalStateMachine portal = registry.getPortalAt(searchPos);
+                    PortalStateMachine portal = registry.getPortalAt(level.dimension(), searchPos);
                     if (portal != null) {
                         return portal;
                     }
