@@ -939,7 +939,11 @@ the public accessors, stable IDs and registration example. The
 allows KubeJS scripts to reach these classes directly with `Java.loadClass`;
 see the
 [KubeJS scripting bridge](modpack-integration.md#kubejs-scripting-bridge)
-section for the script-side pattern.
+section for the script-side pattern, and
+[FTB Quests integration](modpack-integration.md#ftb-quests-integration) for
+how to combine it with FTB Quests' own KubeJS support (via FTB XMod
+Compat) to drive quest progress from these events without any
+ChronoDawn-specific Java addon.
 
 ---
 

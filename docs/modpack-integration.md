@@ -450,9 +450,9 @@ throws a runtime exception, Chrono Dawn logs it and continues with the remaining
 listeners without interrupting the boss death.
 
 The Java event is the foundation for scripting integrations. See
-[KubeJS scripting bridge](#kubejs-scripting-bridge) below for a direct
-script-side binding; CraftTweaker and FTB Quests bindings are not shipped
-yet.
+[KubeJS scripting bridge](#kubejs-scripting-bridge) and
+[FTB Quests integration](#ftb-quests-integration) below for script-side
+bindings; a CraftTweaker binding is not shipped yet.
 
 ---
 
@@ -506,9 +506,9 @@ throws a runtime exception, Chrono Dawn logs it and continues with the
 remaining listeners without interrupting portal activation.
 
 The Java event is the foundation for scripting integrations. See
-[KubeJS scripting bridge](#kubejs-scripting-bridge) below for a direct
-script-side binding; CraftTweaker and FTB Quests bindings are not shipped
-yet.
+[KubeJS scripting bridge](#kubejs-scripting-bridge) and
+[FTB Quests integration](#ftb-quests-integration) below for script-side
+bindings; a CraftTweaker binding is not shipped yet.
 
 ---
 
@@ -579,14 +579,73 @@ calls.
 
 ---
 
+## FTB Quests integration
+
+Chrono Dawn does not ship a dedicated FTB Quests addon, and none is
+needed: FTB Quests' own KubeJS scripting support (via the
+[FTB XMod Compat](https://www.curseforge.com/minecraft/mc-mods/ftb-xmod-compat)
+addon) already exposes a way to drive a quest task's progress from
+arbitrary script code. Combined with the
+[KubeJS scripting bridge](#kubejs-scripting-bridge) above, a pack author can
+gate an FTB Quests task on a Chrono Dawn boss-defeated or portal-opened
+event with script alone — no Java code, no separate ChronoDawn-specific
+addon.
+
+**Requirements**: KubeJS, FTB Quests, and FTB XMod Compat all installed.
+FTB Quests does not fire KubeJS events without FTB XMod Compat present.
+
+1. In the FTB Quests editor, add a task to the relevant quest and set its
+   task type to **Custom Task**, with a unique ID such as
+   `chronodawn:boss_defeated`.
+2. In a KubeJS script, define that custom task's progress logic and, in
+   the same script, register the Chrono Dawn listener that drives it:
+
+```js
+// kubejs/server_scripts/chronodawn_ftbquests.js
+// event.maxProgress / event.setCheckTimer(...) reflect FTB XMod Compat's
+// custom-task API at time of writing; confirm against its current docs
+// before relying on this shape, the same caveat as the lookup call below.
+onEvent('ftbquests.custom_task.chronodawn:boss_defeated', event => {
+  event.maxProgress = 1
+  event.setCheckTimer(20) // FTB Quests still polls this task every second;
+                          // the Chrono Dawn listener below drives its
+                          // progress directly instead of waiting on it.
+})
+
+StartupEvents.init(() => {
+  let BossDefeatedEvents = Java.loadClass('com.chronodawn.api.event.BossDefeatedEvents')
+
+  BossDefeatedEvents.register(context => {
+    let player = context.defeatingPlayer()
+    if (player === null) return
+
+    // Look up this player's instance of the custom task and complete it.
+    // The exact lookup call depends on your FTB Quests/XMod Compat version;
+    // see the FTB Quests KubeJS documentation for the current task/quest
+    // file API (`player.getData(...)`, `task.progress++`, etc).
+  })
+})
+```
+
+FTB Quests' own KubeJS documentation covers the task/quest file lookup API
+in more depth than Chrono Dawn's docs should duplicate here; see the
+[FTB Quests Integration](https://mods.latvian.dev/books/kubejs/page/ftb-quests-integration)
+and [FTB XMod Compat](https://kubejs.com/wiki/addons/ftb-xmod-compat) pages.
+The Chrono Dawn side of the integration is exactly the
+`BossDefeatedEvents`/`PortalOpenedEvents` registration already documented
+above — nothing FTB-Quests-specific is needed from Chrono Dawn itself.
+
+---
+
 ## Future integrations *(not yet shipped)*
 
 ### Additional scripting events and bindings
 
-CraftTweaker and FTB Quests bindings for the boss-defeated and portal-opened
-events are planned as independent follow-up slices. A purpose-built
-`KubeJSPlugin` (native KubeJS event names instead of `Java.loadClass`) may
-also follow if pack authors ask for it.
+A CraftTweaker binding for the boss-defeated and portal-opened events is
+planned as an independent follow-up slice; unlike FTB Quests, CraftTweaker
+does not offer an equivalent script-driven progress hook today, so it needs
+its own design. A purpose-built `KubeJSPlugin` (native KubeJS event names
+instead of `Java.loadClass`) may also follow if pack authors ask for it.
 
 The Chronicle-entry-unlocked event is deferred indefinitely: the Chronicle
 guidebook has no per-player "unlocked" concept today (every entry is always
