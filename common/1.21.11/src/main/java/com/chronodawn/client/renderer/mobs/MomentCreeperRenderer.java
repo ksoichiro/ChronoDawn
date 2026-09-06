@@ -22,6 +22,7 @@ public class MomentCreeperRenderer extends MobRenderer<MomentCreeperEntity, Mome
 
     public MomentCreeperRenderer(EntityRendererProvider.Context context) {
         super(context, new MomentCreeperModel(context.bakeLayer(MomentCreeperModel.LAYER_LOCATION)), 0.5f);
+        this.addLayer(new MomentCreeperWhiteFlashLayer(this));
     }
 
     @Override
@@ -40,7 +41,4 @@ public class MomentCreeperRenderer extends MobRenderer<MomentCreeperEntity, Mome
     public Identifier getTextureLocation(MomentCreeperRenderState state) {
         return TEXTURE;
     }
-
-    // Note: getWhiteOverlayProgress was removed in 1.21.2
-    // White overlay effect for explosion will need to be implemented via RenderLayer in the future
 }

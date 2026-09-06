@@ -52,6 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Time Compass no longer sends players after structures a pack disabled.** A Time Keeper building its trade lineup skips the compass for a disabled structure, and a compass already carrying one as its target now says so instead of searching forever. A compass that already recorded coordinates keeps reporting them, since disabling a structure does not remove the ones a world already generated.
 - **Time Jam recipe** — replaced sugar with Chrono Melon Slice as the sweetener so the recipe can be crafted using only ingredients obtainable inside the Chrono Dawn dimension (sugar cane is not available there).
 - **Chrono Bovine Meat inventory icons on Minecraft 1.21.4** — Chrono Bovine Meat and Cooked Chrono Bovine Meat were missing their client item definitions in the 1.21.4 resources, so both items rendered as purple-black squares in the inventory on that version only. Found by the new build-time data validation (`validateData`), which now guards tag entries, recipe references, and 1.21.4+ client item coverage against this class of silent breakage.
+- **Moment Creeper's pre-explosion white flash was missing on Minecraft 1.21.2 and later.** The flash relied on a renderer hook removed when Minecraft switched to render-state-based mob rendering; it now fades in as the creeper swells and blinks rapidly right before exploding, matching vanilla Creeper's cue, on every supported version from 1.21.2 through 26.2.
 
 ## [0.8.0] - 2026-05-30
 
