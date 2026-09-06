@@ -9,105 +9,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Chrono Dawn's plant and food items — saplings, leaves, seeds, flowers,
-  short plants, aquatic plants, Lumen Polyp, crops, fungi, baked foods, and
-  Time Wheat Bale — can now be placed into a vanilla Composter, mirroring
-  the chance tiers of their closest vanilla analogues.
-- Added Forge 47.3.5 support for legacy Minecraft 1.20.1, alongside the
-  existing Fabric support. Chrono Dawn's dimension, blocks, items, bosses,
-  worldgen, and events all behave the same as on Fabric; block loot that
-  Fabric injects via a data-driven loot table override is instead applied
-  through a Forge Global Loot Modifier, since Forge lacks that Fabric API.
-  Build and run with `./gradlew :forge:build -Ptarget_mc_version=1.20.1` or
-  `./gradlew runClientForge1_20_1`. NeoForge remains unavailable on 1.20.1
-  (NeoForge requires Minecraft 1.20.5+).
-- Chrono Dawn tool, weapon, armor, and shield items — including boss-drop
-  and artifact gear — now join Fabric/NeoForge conventional (`c:`) tags by
-  function: `c:tools/melee_weapon`, `c:tools/mining_tool`, `c:tools/shield`,
-  and `c:armors` on Minecraft 1.21.1+, and the matching flat `c:swords` /
-  `c:pickaxes` / `c:axes` / `c:shovels` / `c:hoes` / `c:shields` tags on
-  1.20.1. See
-  [docs/modpack-integration.md](docs/modpack-integration.md#tools-weapons-armor-and-shields).
-- Chrono Dawn recipe material inputs now consume per-material conventional
-  `c:` tags on Minecraft 1.21.1+, allowing compatible pack-provided materials
-  to be used without replacing recipe JSONs. The covered inputs include
-  Clockstone, Enhanced Clockstone, Time Crystal, Entropy Crystal, and Raw
-  Temporal Amber, along with their storage blocks.
-- Chrono Dawn equipment repair ingredients now consume per-material conventional
-  `c:` tags on Minecraft 1.21.1+ (`c:gems/time_crystal`,
-  `c:gems/entropy_crystal` and `c:dusts/temporal_amber`), allowing compatible
-  pack-provided materials without Java replacements.
-- Added a loader-neutral Java boss-defeated event API for all six Chrono Dawn
-  bosses. Addons can register through `BossDefeatedEvents` and receive a stable
-  boss ID plus the defeated entity, server level, position, damage source and
-  attributed player after built-in defeat consequences complete. Listener
-  failures are isolated so they cannot interrupt boss death or later listeners.
-  See [docs/modpack-integration.md](docs/modpack-integration.md#boss-defeated-event-api).
-- Added a loader-neutral Java portal-opened event API. Addons can register
-  through `PortalOpenedEvents` and receive the portal's stable ID, server
-  level, frame position, activation cause (Time Hourglass ignition or
-  teleport-time reignition) and credited player after the portal's blocks
-  are placed. Listener failures are isolated so they cannot interrupt portal
-  activation or later listeners.
-  See [docs/modpack-integration.md](docs/modpack-integration.md#portal-opened-event-api).
-- **Smooth Temporal Stone** and **Smooth Temporal Stone Slab** — the smooth variant of the Temporal Stone family, mirroring vanilla Smooth Stone. Smelt Temporal Stone in a furnace to obtain Smooth Temporal Stone; the slab is crafted (3 → 6) or cut on a stonecutter (1 → 2). These do not generate naturally. Small structures that used vanilla Smooth Stone now place Smooth Temporal Stone instead.
-- Added per-boss `health_multiplier` and `damage_multiplier` config options
-  under `[gameplay.bosses.*]` for all six bosses. `damage_multiplier` covers
-  melee, ability and projectile damage. Defaults reproduce the existing
-  balance exactly.
-- Added `[gameplay.time_distortion]` config options for the ambient Slowness
-  effect in the Chrono Dawn dimension: `enabled`, normal/enhanced strength,
-  and hostile-only or all-non-boss-mob scope. Defaults reproduce the existing
-  balance exactly.
-- Added `[gameplay.portals]` config options for the one-way portal
-  progression gate: `one_way_until_stabilized` and
-  `allow_reignition_before_stabilization`. Packs can keep the shipped one-way
-  entry, allow a deliberately crafted return portal before the Portal
-  Stabilizer, or remove the gate entirely. Defaults reproduce the existing
-  progression exactly.
-- Added `[world.structures.*]` config options for every Chrono Dawn structure,
-  not just Ancient Ruins: `enabled`, `spacing`, `separation` and `salt` for
-  Forgotten Library, Desert Clock Tower, Guardian Vault, Clockwork Depths,
-  Phantom Catacombs, Entropy Crypt and Master Clock. Seven of the eight gate
-  the main progression chain, so disabling one logs a startup warning naming
-  what becomes unobtainable. Defaults reproduce the existing generation
-  exactly. See [docs/configuration.md](docs/configuration.md) for the full
-  table.
-- Per-biome generation toggles: `[world.biomes.*]` in `chronodawn.toml` disables any of
-  the nine non-core Chrono dimension biomes. A disabled biome's region of the biome
-  distribution is taken over by a documented fallback biome rather than left empty.
-  `plains` and `ocean` are always generated. Existing terrain is unaffected; only newly
-  generated chunks change.
-- **Conventional (`c:`) tags** for ores, materials, storage blocks,
-  stone/sand/gravel/sandstone, wood sets, foods, crops and seeds, so other mods
-  and modpack recipes can consume Chrono Dawn materials by tag. Ores of vanilla
-  materials join the matching vanilla tag (`c:ores/coal`, `/iron`, `/gold`,
-  `/redstone`), so existing pack recipes pick them up with no extra
-  configuration. 1.20.1 carries the reduced set that conventional tags v1
-  defines. Tag names have display names in `en_us` and `ja_jp`, so recipe
-  viewers show a readable name instead of the raw id. See
-  [docs/modpack-integration.md](docs/modpack-integration.md#conventional-c-tags)
-  for the published tag list.
-
 #### Minecraft Version Support
 
+- **Minecraft 1.20.1 (Forge)** — Forge 47.3.5 support alongside the existing Fabric support, with full feature parity (block loot is applied through a Forge Global Loot Modifier in place of Fabric's data-driven loot table override, since Forge lacks that API). NeoForge remains unavailable on 1.20.1 (it requires Minecraft 1.20.5+).
 - Minecraft 26.1.2 support
 - Minecraft 26.2 support
+
+#### Configuration
+
+- **`[gameplay.bosses.*]` health/damage multipliers** — per-boss `health_multiplier` and `damage_multiplier` (the latter covering melee, ability and projectile damage) for all six bosses. Defaults reproduce the existing balance exactly.
+- **`[gameplay.time_distortion]`** — tunes the ambient Slowness effect in the Chrono Dawn dimension: `enabled`, normal/enhanced strength, and hostile-only or all-non-boss-mob scope. Defaults reproduce the existing balance exactly.
+- **`[gameplay.portals]`** — controls the one-way portal progression gate via `one_way_until_stabilized` and `allow_reignition_before_stabilization`, so packs can allow an early return portal or remove the gate entirely. Defaults reproduce the existing progression exactly.
+- **`[world.structures.*]`** — `enabled`, `spacing`, `separation` and `salt` for every Chrono Dawn structure, not just Ancient Ruins. Disabling one of the seven progression-gating structures logs a startup warning naming what becomes unobtainable. Defaults reproduce the existing generation exactly. See [docs/configuration.md](docs/configuration.md) for the full table.
+- **`[world.biomes.*]`** — per-biome generation toggles for the nine non-core Chrono dimension biomes (`plains` and `ocean` always generate). A disabled biome's region is taken over by a documented fallback biome rather than left empty. Existing terrain is unaffected.
+
+#### Conventional (`c:`) Tags
+
+- **Conventional (`c:`) tags** — ores, materials, storage blocks, stone/sand/gravel/sandstone, wood sets, foods, crops and seeds now carry `c:` tags, so other mods and modpack recipes can consume Chrono Dawn materials by tag. Ores of vanilla materials also join the matching vanilla tag (`c:ores/coal`, `/iron`, `/gold`, `/redstone`). Tag names have `en_us` and `ja_jp` display names for recipe viewers. See [docs/modpack-integration.md](docs/modpack-integration.md#conventional-c-tags) for the published tag list.
+- **`c:tools/*`, `c:armors`, `c:shields`** — tool, weapon, armor, and shield items, including boss-drop and artifact gear, join Fabric/NeoForge conventional tags by function (`c:tools/melee_weapon`, `c:tools/mining_tool`, `c:tools/shield`, `c:armors`) on Minecraft 1.21.1+, and flat `c:swords` / `c:pickaxes` / `c:axes` / `c:shovels` / `c:hoes` / `c:shields` on 1.20.1. See [docs/modpack-integration.md](docs/modpack-integration.md#tools-weapons-armor-and-shields).
+- **Recipe material `c:` tags** — recipe material inputs (Clockstone, Enhanced Clockstone, Time Crystal, Entropy Crystal, Raw Temporal Amber, and their storage blocks) consume per-material conventional tags on Minecraft 1.21.1+, so pack-provided materials work without replacing recipe JSONs.
+- **Repair ingredient `c:` tags** — equipment repair now accepts `c:gems/time_crystal`, `c:gems/entropy_crystal` and `c:dusts/temporal_amber` on Minecraft 1.21.1+, so compatible pack-provided materials work without Java replacements.
+
+#### Addon Event API
+
+- **`BossDefeatedEvents`** — loader-neutral Java event fired for all six bosses. Addons receive a stable boss ID plus the defeated entity, server level, position, damage source and attributed player after built-in defeat consequences complete. Listener failures are isolated so they cannot interrupt boss death or later listeners. See [docs/modpack-integration.md](docs/modpack-integration.md#boss-defeated-event-api).
+- **`PortalOpenedEvents`** — loader-neutral Java event fired after a portal's blocks are placed. Addons receive the portal's stable ID, server level, frame position, activation cause (Time Hourglass ignition or teleport-time reignition) and credited player. Listener failures are isolated so they cannot interrupt portal activation or later listeners. See [docs/modpack-integration.md](docs/modpack-integration.md#portal-opened-event-api).
+
+#### New Blocks
+
+- **Smooth Temporal Stone** and **Smooth Temporal Stone Slab** — the smooth variant of the Temporal Stone family, mirroring vanilla Smooth Stone. Smelt Temporal Stone in a furnace to obtain Smooth Temporal Stone; the slab is crafted (3 → 6) or cut on a stonecutter (1 → 2). These do not generate naturally. Small structures that used vanilla Smooth Stone now place Smooth Temporal Stone instead.
+
+#### Gameplay Features
+
+- **Composter support** — Chrono Dawn's plant and food items (saplings, leaves, seeds, flowers, short plants, aquatic plants, Lumen Polyp, crops, fungi, baked foods, and Time Wheat Bale) can now be placed into a vanilla Composter, mirroring the chance tiers of their closest vanilla analogues.
 
 ### Fixed
 
 - **Damaged return portals no longer stack vertically.** When returning from Chrono Dawn, a registered Overworld portal now restores missing required Clockstone frame blocks and its portal interior at the original position. Optional corners remain untouched, recovery never overwrites non-replaceable player blocks, and stabilized portal recovery is limited to its exact mapped X/Z position.
-- **Time Compass could not target the Forgotten Library.** The compass resolved
-  seven of the mod's eight structures; the Forgotten Library — the source of the
-  Portal Stabilizer recipe — was missing, so it could not be targeted at all.
-  Compass targets now come from the same registry the configuration uses, so the
-  two cannot drift apart again. Time Keeper's trade lineup is unchanged.
-- **Time Compass no longer sends players after structures a pack disabled.**
-  A Time Keeper building its trade lineup skips the compass for a disabled
-  structure, and a compass already carrying one as its target now says so
-  instead of searching forever. A compass that already recorded coordinates
-  keeps reporting them, since disabling a structure does not remove the ones a
-  world already generated.
+- **Time Compass could not target the Forgotten Library.** The compass resolved seven of the mod's eight structures; the Forgotten Library — the source of the Portal Stabilizer recipe — was missing, so it could not be targeted at all. Compass targets now come from the same registry the configuration uses, so the two cannot drift apart again. Time Keeper's trade lineup is unchanged.
+- **Time Compass no longer sends players after structures a pack disabled.** A Time Keeper building its trade lineup skips the compass for a disabled structure, and a compass already carrying one as its target now says so instead of searching forever. A compass that already recorded coordinates keeps reporting them, since disabling a structure does not remove the ones a world already generated.
 - **Time Jam recipe** — replaced sugar with Chrono Melon Slice as the sweetener so the recipe can be crafted using only ingredients obtainable inside the Chrono Dawn dimension (sugar cane is not available there).
 - **Chrono Bovine Meat inventory icons on Minecraft 1.21.4** — Chrono Bovine Meat and Cooked Chrono Bovine Meat were missing their client item definitions in the 1.21.4 resources, so both items rendered as purple-black squares in the inventory on that version only. Found by the new build-time data validation (`validateData`), which now guards tag entries, recipe references, and 1.21.4+ client item coverage against this class of silent breakage.
 
