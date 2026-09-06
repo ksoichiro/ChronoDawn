@@ -520,8 +520,29 @@ pack does not need a separate addon mod to react to the boss-defeated or
 portal-opened events from a script. No additional installation step is
 required beyond having KubeJS itself installed.
 
+This depends entirely on KubeJS's own loader and version support, which
+Chrono Dawn does not control and which has real gaps across Chrono Dawn's
+own supported versions (confirmed against KubeJS's Modrinth releases as of
+2026-09-06):
+
+| Minecraft version | KubeJS available? |
+| --- | --- |
+| 1.20.1 | Yes — Fabric, Forge |
+| 1.21.1 | Yes — NeoForge, Forge (Chrono Dawn ships NeoForge for this version) |
+| 1.21.2, 1.21.4–1.21.11 | **No KubeJS release exists for these versions on any loader.** This bridge has nothing to attach to. |
+| 26.1.2 | Yes — NeoForge |
+| 26.2 | Not yet — no KubeJS release exists at time of writing |
+
+Fabric users are additionally limited beyond 1.20.1: upstream KubeJS ships
+no Fabric (or Quilt) build for Minecraft 1.21+ at all, only NeoForge/Forge,
+regardless of the version gaps above. A third-party KubeJS fork with Fabric
+support exists, but Chrono Dawn's `kubejs.classfilter.txt` has not been
+tested against it. Check KubeJS's own release page for the current
+loader/version combination your pack targets before relying on this
+bridge.
+
 ```js
-// kubejs/server_scripts/chronodawn_integration.js
+// kubejs/startup_scripts/chronodawn_integration.js
 StartupEvents.init(() => {
   let PortalOpenedEvents = Java.loadClass('com.chronodawn.api.event.PortalOpenedEvents')
   let PortalOpenCause = Java.loadClass('com.chronodawn.api.event.PortalOpenCause')
