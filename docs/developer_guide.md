@@ -934,7 +934,12 @@ their documented semantic-versioning contract. Addons register boss defeat
 listeners through `BossDefeatedEvents`; the event is dispatched server-side
 after the boss's built-in defeat consequences. See the
 [modpack integration guide](modpack-integration.md#boss-defeated-event-api) for
-the public accessors, stable IDs and registration example.
+the public accessors, stable IDs and registration example. The
+`kubejs.classfilter.txt` shipped in `common/shared/src/main/resources`
+allows KubeJS scripts to reach these classes directly with `Java.loadClass`;
+see the
+[KubeJS scripting bridge](modpack-integration.md#kubejs-scripting-bridge)
+section for the script-side pattern.
 
 ---
 

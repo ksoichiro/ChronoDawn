@@ -449,9 +449,10 @@ as already stabilized. Listeners run in registration order. If one listener
 throws a runtime exception, Chrono Dawn logs it and continues with the remaining
 listeners without interrupting the boss death.
 
-The Java event is the foundation for scripting integrations. Direct KubeJS,
-CraftTweaker and FTB Quests bindings are not shipped yet; a pack cannot register
-this event from those scripting systems without an addon bridge.
+The Java event is the foundation for scripting integrations. See
+[KubeJS scripting bridge](#kubejs-scripting-bridge) below for a direct
+script-side binding; CraftTweaker and FTB Quests bindings are not shipped
+yet.
 
 ---
 
@@ -504,9 +505,56 @@ actual activation. Listeners run in registration order. If one listener
 throws a runtime exception, Chrono Dawn logs it and continues with the
 remaining listeners without interrupting portal activation.
 
-The Java event is the foundation for scripting integrations. Direct KubeJS,
-CraftTweaker and FTB Quests bindings are not shipped yet; a pack cannot register
-this event from those scripting systems without an addon bridge.
+The Java event is the foundation for scripting integrations. See
+[KubeJS scripting bridge](#kubejs-scripting-bridge) below for a direct
+script-side binding; CraftTweaker and FTB Quests bindings are not shipped
+yet.
+
+---
+
+## KubeJS scripting bridge
+
+Chrono Dawn ships a `kubejs.classfilter.txt` that allows KubeJS scripts to
+load `com.chronodawn.api.event` classes directly with `Java.loadClass`, so a
+pack does not need a separate addon mod to react to the boss-defeated or
+portal-opened events from a script. No additional installation step is
+required beyond having KubeJS itself installed.
+
+```js
+// kubejs/server_scripts/chronodawn_integration.js
+StartupEvents.init(() => {
+  let PortalOpenedEvents = Java.loadClass('com.chronodawn.api.event.PortalOpenedEvents')
+  let PortalOpenCause = Java.loadClass('com.chronodawn.api.event.PortalOpenCause')
+
+  PortalOpenedEvents.register(context => {
+    if (context.cause() === PortalOpenCause.IGNITION && context.igniter() !== null) {
+      // Advance your quest or pack progression for this player.
+    }
+  })
+
+  let BossDefeatedEvents = Java.loadClass('com.chronodawn.api.event.BossDefeatedEvents')
+
+  BossDefeatedEvents.register(context => {
+    let bossId = context.bossId()
+    if (context.defeatingPlayer() !== null) {
+      // Advance your quest or pack progression for this player.
+    }
+  })
+})
+```
+
+This calls the same `register`/`unregister` methods and `Context` accessors
+documented above for the Java API. Chrono Dawn does not deduplicate
+identical listeners: if your script setup re-executes this registration
+more than once per server session (for example via a script reload
+command), guard it so `register` only runs once, the same caveat that
+applies to Java addons re-registering a listener.
+
+This bridge only covers the two events already shipped as stable Java APIs
+(boss-defeated, portal-opened). A dedicated `KubeJSPlugin` with
+purpose-built KubeJS event names is a possible future enhancement if pack
+authors need more ergonomic script syntax than direct `Java.loadClass`
+calls.
 
 ---
 
@@ -514,10 +562,16 @@ this event from those scripting systems without an addon bridge.
 
 ### Additional scripting events and bindings
 
-The Chronicle-entry-unlocked event, plus direct KubeJS, FTB Quests and
-CraftTweaker bindings for the boss-defeated and portal-opened events, are
-planned as independent follow-up slices built on the stability rules
-established by those two events.
+CraftTweaker and FTB Quests bindings for the boss-defeated and portal-opened
+events are planned as independent follow-up slices. A purpose-built
+`KubeJSPlugin` (native KubeJS event names instead of `Java.loadClass`) may
+also follow if pack authors ask for it.
+
+The Chronicle-entry-unlocked event is deferred indefinitely: the Chronicle
+guidebook has no per-player "unlocked" concept today (every entry is always
+visible), so there is nothing yet for such an event to fire on. It would
+require a separate Chronicle gameplay/UX design decision before an event
+API makes sense.
 
 ### Cross-mod compatibility (planned)
 

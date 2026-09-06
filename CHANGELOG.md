@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **`BossDefeatedEvents`** — loader-neutral Java event fired for all six bosses. Addons receive a stable boss ID plus the defeated entity, server level, position, damage source and attributed player after built-in defeat consequences complete. Listener failures are isolated so they cannot interrupt boss death or later listeners. See [docs/modpack-integration.md](docs/modpack-integration.md#boss-defeated-event-api).
 - **`PortalOpenedEvents`** — loader-neutral Java event fired after a portal's blocks are placed. Addons receive the portal's stable ID, server level, frame position, activation cause (Time Hourglass ignition or teleport-time reignition) and credited player. Listener failures are isolated so they cannot interrupt portal activation or later listeners. See [docs/modpack-integration.md](docs/modpack-integration.md#portal-opened-event-api).
+- **KubeJS scripting bridge** — a shipped `kubejs.classfilter.txt` allows KubeJS scripts to call `BossDefeatedEvents`/`PortalOpenedEvents` directly via `Java.loadClass`, with no addon mod required. See [docs/modpack-integration.md](docs/modpack-integration.md#kubejs-scripting-bridge).
 
 #### New Blocks
 
