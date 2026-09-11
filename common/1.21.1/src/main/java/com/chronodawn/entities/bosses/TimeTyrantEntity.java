@@ -128,6 +128,7 @@ public class TimeTyrantEntity extends Monster {
     public static final int TELEPORT_COOLDOWN_TICKS = 100; // 5 seconds
     public static final int TIME_ACCELERATION_COOLDOWN_TICKS = 160; // 8 seconds
     public static final int AOE_COOLDOWN_TICKS = 120; // 6 seconds
+    public static final int AOE_COOLDOWN_TICKS_MULTIPLAYER = 84; // 4.2 seconds, 2+ players
     public static final int POST_TELEPORT_DELAY_TICKS = 15; // 0.75 seconds
 
     // Ability parameters (public for testing)
@@ -737,7 +738,9 @@ public class TimeTyrantEntity extends Monster {
                 0.8f
             );
 
-            aoeCooldown = AOE_COOLDOWN_TICKS;
+            aoeCooldown = BossMultiplayer.isMultiplayerEncounter(this.bossEvent.getPlayers().size())
+                ? AOE_COOLDOWN_TICKS_MULTIPLAYER
+                : AOE_COOLDOWN_TICKS;
         }
     }
 
