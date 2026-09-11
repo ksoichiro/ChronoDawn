@@ -25,8 +25,8 @@ across a group.
 ## Scope
 
 Six boss entities under `com.chronodawn.entities.bosses`, all twelve version
-modules (1.21.1 through 26.2; 1.20.1 does not have bosses and is excluded, see
-"Version coverage" below).
+modules (1.20.1, 1.21.1 through 1.21.11, 26.1.2, 26.2 — see "Version
+coverage" below).
 
 ## Components
 
@@ -139,27 +139,32 @@ In singleplayer, this component never fires.
 
 ## Version coverage
 
-`1.20.1` has no boss entities (bosses were added starting at `1.21.1`) and is
-excluded from this design's scope. All other eleven modules
-(1.21.1–1.21.11, 26.1.2, 26.2) get all four components. `1.21.3` shares
-`1.21.2`'s common module, so no separate edit is needed there.
+All twelve boss-bearing modules (1.20.1, 1.21.1–1.21.11, 26.1.2, 26.2) get
+all four components. `1.21.3` shares `1.21.2`'s common module, so no
+separate edit is needed there.
 
 ## Testing
 
 - **Unit tests** (`common/shared/src/test`): `BossMultiplayer.isMultiplayerEncounter()`
-  boundary cases (0, 1, 2, 3+ players).
-- **GameTest**: summon a boss with one fake player, hit it, confirm target
-  does not change (baseline); summon with two, have the second hit it,
-  confirm target switches to the second immediately. For Time Tyrant, force a
-  phase transition with two players present and assert three
-  `ChronalLeechEntity` instances exist nearby afterward; repeat with one
-  player and assert none spawn.
-- **Manual verification**: two-client multiplayer session against each boss,
+  boundary cases (0, 1, 2, 3+ players). This is the only component here that
+  is pure logic with no Minecraft bootstrap dependency, so it is the only
+  piece covered by an automated test with real assertions.
+- **No GameTest coverage for target-switching or the summon trigger.** This
+  project's GameTest suite (`common/gametest`) has no fake-player
+  infrastructure — every existing GameTest exercises mobs, blocks, or
+  structures, never simulated players initiating combat. Building that
+  infrastructure to test a two-player aggro scenario is a separate,
+  nontrivial piece of work and is not part of this slice. Correctness here
+  rests on manual verification instead.
+- **Manual verification** (required, not optional, given the lack of
+  automated coverage): two-client multiplayer session against each boss,
   confirm attacking a boss that is chasing another player pulls aggro
   immediately, and that AoE/Ground Slam/Entropy Burst fire noticeably more
-  often than in a solo fight.
-- **Full matrix**: `./gradlew checkAll` must pass — this touches all eleven
-  boss-bearing version modules.
+  often than in a solo fight; confirm Time Tyrant spawns 3 Chronal Leeches at
+  each phase transition with 2+ players present and none with 1.
+- **Full matrix**: `./gradlew checkAll` must pass — this touches all twelve
+  boss-bearing version modules. This catches compile errors and the existing
+  regression suite, but not the new behavior itself.
 
 ## Out of scope
 
