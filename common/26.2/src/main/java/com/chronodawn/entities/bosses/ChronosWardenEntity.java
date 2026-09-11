@@ -100,6 +100,8 @@ public class ChronosWardenEntity extends Monster {
     // Ground Slam timing
     private static final int GROUND_SLAM_COOLDOWN_PHASE1 = 200; // 10 seconds
     private static final int GROUND_SLAM_COOLDOWN_PHASE2 = 140; // 7 seconds
+    private static final int GROUND_SLAM_COOLDOWN_PHASE1_MULTIPLAYER = 140; // 7 seconds, 2+ players
+    private static final int GROUND_SLAM_COOLDOWN_PHASE2_MULTIPLAYER = 100; // 5 seconds, 2+ players
     private static final double GROUND_SLAM_RANGE = 4.0;
 
     // Stone Stance timing (Phase 2)
@@ -411,7 +413,13 @@ public class ChronosWardenEntity extends Monster {
         });
 
         // Set cooldown
-        int cooldown = getPhase() == PHASE_1 ? GROUND_SLAM_COOLDOWN_PHASE1 : GROUND_SLAM_COOLDOWN_PHASE2;
+        boolean multiplayer = BossMultiplayer.isMultiplayerEncounter(this.bossEvent.getPlayers().size());
+        int cooldown;
+        if (getPhase() == PHASE_1) {
+            cooldown = multiplayer ? GROUND_SLAM_COOLDOWN_PHASE1_MULTIPLAYER : GROUND_SLAM_COOLDOWN_PHASE1;
+        } else {
+            cooldown = multiplayer ? GROUND_SLAM_COOLDOWN_PHASE2_MULTIPLAYER : GROUND_SLAM_COOLDOWN_PHASE2;
+        }
         this.groundSlamCooldown = cooldown;
     }
 
