@@ -12,7 +12,7 @@
 
 ## Global Constraints
 
-- Twelve version modules besides `1.21.3` (which shares `1.21.2`'s common module) must all receive every applicable edit: `1.20.1, 1.21.1, 1.21.2, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, 1.21.11, 26.1.2, 26.2` — thirteen `common/<version>` modules in total.
+- `1.21.3` shares `1.21.2`'s common module and needs no separate edit. Every other version module must receive every applicable edit: `1.20.1, 1.21.1, 1.21.2, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, 1.21.11, 26.1.2, 26.2` — thirteen `common/<version>` modules in total.
 - No new Minecraft entity types. Time Tyrant's summon reuses the existing `ChronalLeechEntity`.
 - No new config surface (`chronodawn.toml` is untouched by this plan). All new constants are internal balance values.
 - Every multiplayer-only behavior change must be a strict no-op in singleplayer (1 participant). Verify this by inspection at each task, not just at the end.
