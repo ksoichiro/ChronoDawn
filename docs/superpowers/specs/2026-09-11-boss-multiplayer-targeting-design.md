@@ -24,7 +24,7 @@ across a group.
 
 ## Scope
 
-Six boss entities under `com.chronodawn.entities.bosses`, all twelve version
+Six boss entities under `com.chronodawn.entities.bosses`, all thirteen version
 modules (1.20.1, 1.21.1 through 1.21.11, 26.1.2, 26.2 — see "Version
 coverage" below).
 
@@ -53,7 +53,7 @@ change there); this override only concerns player-initiated switches.
 **Why not centralize this in a shared base class**: none of the six boss
 classes currently share a common abstract superclass — they each extend
 `Monster` (or implement `RangedAttackMob`) directly, and introducing a shared
-base now would be a much larger refactor across 6 classes × 12 version
+base now would be a much larger refactor across 6 classes × 13 version
 modules for a 4-line method. The duplication is accepted, matching how
 `createAttributes()` was duplicated before `BossKind` centralized the
 *numbers* (not the code) in the 2026-07-25 multiplier design. `Mob` and
@@ -71,19 +71,22 @@ New shared class `common/shared/.../entities/bosses/BossMultiplayer`:
 public final class BossMultiplayer {
     private BossMultiplayer() {}
 
-    public static boolean isMultiplayerEncounter(ServerBossEvent bossEvent) {
-        return bossEvent.getPlayers().size() >= 2;
+    public static boolean isMultiplayerEncounter(int participantCount) {
+        return participantCount >= 2;
     }
 }
 ```
 
+The helper takes a plain `int` rather than `ServerBossEvent` so it stays free
+of any Minecraft type, matching the numeric-only philosophy `BossScaling`
+established — no `compat/` layer needed, and it is trivially unit-testable.
+Each call site passes `bossEvent.getPlayers().size()` directly:
+`BossMultiplayer.isMultiplayerEncounter(this.bossEvent.getPlayers().size())`.
 `ServerBossEvent.getPlayers()` already tracks every player currently viewing
 the boss bar (i.e., participating in the fight) and is stable across the
-supported version range — it needs no version-specific handling, so unlike
-`BossScaling` this helper is usable as-is without a `compat/` layer. Each
-boss's `serverAiStep()` (or equivalent tick method) calls this once per check
-rather than caching a value at spawn, so a player joining or leaving mid-fight
-takes effect immediately.
+supported version range. Each boss's tick method calls this fresh at the
+point of use rather than caching a value at spawn, so a player joining or
+leaving mid-fight takes effect immediately.
 
 ### 3. AoE cooldown reduction (multiplayer only, existing AoE abilities only)
 
@@ -139,7 +142,7 @@ In singleplayer, this component never fires.
 
 ## Version coverage
 
-All twelve boss-bearing modules (1.20.1, 1.21.1–1.21.11, 26.1.2, 26.2) get
+All thirteen boss-bearing modules (1.20.1, 1.21.1–1.21.11, 26.1.2, 26.2) get
 all four components. `1.21.3` shares `1.21.2`'s common module, so no
 separate edit is needed there.
 
@@ -162,7 +165,7 @@ separate edit is needed there.
   immediately, and that AoE/Ground Slam/Entropy Burst fire noticeably more
   often than in a solo fight; confirm Time Tyrant spawns 3 Chronal Leeches at
   each phase transition with 2+ players present and none with 1.
-- **Full matrix**: `./gradlew checkAll` must pass — this touches all twelve
+- **Full matrix**: `./gradlew checkAll` must pass — this touches all thirteen
   boss-bearing version modules. This catches compile errors and the existing
   regression suite, but not the new behavior itself.
 
