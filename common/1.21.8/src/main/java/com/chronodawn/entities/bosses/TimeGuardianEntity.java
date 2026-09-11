@@ -100,6 +100,7 @@ public class TimeGuardianEntity extends Monster implements RangedAttackMob {
 
     // AoE timing (Phase 2) - public for testing
     public static final int AOE_COOLDOWN_TICKS = 80; // 4 seconds
+    public static final int AOE_COOLDOWN_TICKS_MULTIPLAYER = 56; // 2.8 seconds, 2+ players
     public static final double AOE_RANGE = 4.0; // Reduced from 5.0 for balance
 
     public TimeGuardianEntity(EntityType<? extends TimeGuardianEntity> entityType, Level level) {
@@ -290,7 +291,9 @@ public class TimeGuardianEntity extends Monster implements RangedAttackMob {
         // AoE ability (only when not in post-teleport delay)
         if (aoeCooldown <= 0 && this.getTarget() != null && postTeleportDelay <= 0) {
             performAoEAttack();
-            aoeCooldown = AOE_COOLDOWN_TICKS;
+            aoeCooldown = BossMultiplayer.isMultiplayerEncounter(this.bossEvent.getPlayers().size())
+                ? AOE_COOLDOWN_TICKS_MULTIPLAYER
+                : AOE_COOLDOWN_TICKS;
         }
     }
 
