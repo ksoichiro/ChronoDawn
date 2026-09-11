@@ -3,6 +3,8 @@ package com.chronodawn.entities.bosses;
 import com.chronodawn.api.event.BossDefeatedEvents;
 import com.chronodawn.core.time.MobAICanceller;
 import com.chronodawn.entities.bosses.ExtendedMeleeAttackGoal;
+import com.chronodawn.entities.mobs.ChronalLeechEntity;
+import com.chronodawn.registry.ModEntities;
 import com.chronodawn.registry.ModEffects;
 import com.chronodawn.registry.ModItems;
 import com.chronodawn.registry.ModSounds;
@@ -131,6 +133,7 @@ public class TimeTyrantEntity extends Monster {
     public static final int TIME_ACCELERATION_COOLDOWN_TICKS = 160; // 8 seconds
     public static final int AOE_COOLDOWN_TICKS = 120; // 6 seconds
     public static final int AOE_COOLDOWN_TICKS_MULTIPLAYER = 84; // 4.2 seconds, 2+ players
+    private static final int CHRONAL_LEECH_SUMMON_COUNT = 3;
     public static final int POST_TELEPORT_DELAY_TICKS = 15; // 0.75 seconds
 
     // Ability parameters (public for testing)
@@ -287,6 +290,48 @@ public class TimeTyrantEntity extends Monster {
                 0.5,
                 0.1
             );
+
+            // Reinforcements: only with 2+ players in the fight
+            if (BossMultiplayer.isMultiplayerEncounter(this.bossEvent.getPlayers().size())) {
+                summonChronalLeeches(serverLevel);
+            }
+        }
+    }
+
+    /**
+     * Summon Chronal Leeches near this boss to split player attention.
+     * Multiplayer-only; called from onPhaseTransition. Summoned leeches are
+     * ordinary Monsters with no persistence override or explicit cleanup —
+     * they follow standard despawn rules like any other Chrono Dawn mob.
+     */
+    private void summonChronalLeeches(ServerLevel serverLevel) {
+        for (int i = 0; i < CHRONAL_LEECH_SUMMON_COUNT; i++) {
+            ChronalLeechEntity leech = ModEntities.CHRONAL_LEECH.get().create(
+                serverLevel,
+                net.minecraft.world.entity.EntitySpawnReason.TRIGGERED
+            );
+            if (leech == null) {
+                continue;
+            }
+
+            double angle = this.random.nextDouble() * Math.PI * 2;
+            double distance = 2.0 + this.random.nextDouble() * 2.0;
+            leech.setPos(
+                this.getX() + Math.cos(angle) * distance,
+                this.getY(),
+                this.getZ() + Math.sin(angle) * distance
+            );
+            leech.setYRot(this.random.nextFloat() * 360.0f);
+            leech.setXRot(0.0f);
+
+            leech.finalizeSpawn(
+                serverLevel,
+                serverLevel.getCurrentDifficultyAt(leech.blockPosition()),
+                net.minecraft.world.entity.EntitySpawnReason.TRIGGERED,
+                null
+            );
+
+            serverLevel.addFreshEntity(leech);
         }
     }
 
