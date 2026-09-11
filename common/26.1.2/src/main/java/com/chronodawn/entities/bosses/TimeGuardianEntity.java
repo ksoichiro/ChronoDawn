@@ -170,6 +170,7 @@ public class TimeGuardianEntity extends Monster implements RangedAttackMob {
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
+
     /**
      * Switch target to whoever just hit us, even if we already had a
      * different target. Vanilla's HurtByTargetGoal only takes effect while
