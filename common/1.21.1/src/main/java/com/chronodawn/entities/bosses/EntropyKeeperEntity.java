@@ -71,6 +71,7 @@ public class EntropyKeeperEntity extends Monster {
 
     private static final float PHASE_2_THRESHOLD = 0.5f;
     private static final float ENTROPY_BURST_THRESHOLD = 0.3f;
+    private static final int ENTROPY_BURST_RETRIGGER_TICKS = 1200; // 60 seconds, 2+ players only
     private static final float DECAY_AURA_RADIUS = 4.0f;
     private static final int DECAY_AURA_INTERVAL = 40; // 2 seconds
     private static final int TEMPORAL_ROT_COOLDOWN = 160; // 8 seconds
@@ -82,6 +83,7 @@ public class EntropyKeeperEntity extends Monster {
     private int temporalRotCooldown = 0;
     private int degradationTimer = 0;
     private boolean entropyBurstTriggered = false;
+    private int entropyBurstCooldown = 0;
 
     public EntropyKeeperEntity(EntityType<? extends EntropyKeeperEntity> entityType, Level level) {
         super(entityType, level);
@@ -168,11 +170,19 @@ public class EntropyKeeperEntity extends Monster {
                     degradationTimer = 0;
                 }
 
-                // Entropy Burst: ONE-TIME at 30% HP
+                // Entropy Burst: at 30% HP. Singleplayer: fires once. Multiplayer
+                // (2+ players): re-fires every 60s after the first trigger.
                 float healthRatio = this.getHealth() / this.getMaxHealth();
-                if (!entropyBurstTriggered && healthRatio <= ENTROPY_BURST_THRESHOLD) {
+                if (entropyBurstCooldown > 0) {
+                    entropyBurstCooldown--;
+                }
+                boolean canRetrigger = entropyBurstTriggered
+                    && entropyBurstCooldown <= 0
+                    && BossMultiplayer.isMultiplayerEncounter(this.bossEvent.getPlayers().size());
+                if ((!entropyBurstTriggered || canRetrigger) && healthRatio <= ENTROPY_BURST_THRESHOLD) {
                     performEntropyBurst();
                     entropyBurstTriggered = true;
+                    entropyBurstCooldown = ENTROPY_BURST_RETRIGGER_TICKS;
                 }
             }
 
