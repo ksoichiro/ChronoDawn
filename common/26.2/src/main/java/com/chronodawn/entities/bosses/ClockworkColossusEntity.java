@@ -159,6 +159,20 @@ public class ClockworkColossusEntity extends Monster implements RangedAttackMob 
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
 
+    /**
+     * Switch target to whoever just hit us, even if we already had a
+     * different target. Vanilla's HurtByTargetGoal only takes effect while
+     * the boss has no target, so without this override the boss keeps
+     * chasing the first player it saw while everyone else hits it for free.
+     */
+    @Override
+    public void setLastHurtByMob(LivingEntity entity) {
+        super.setLastHurtByMob(entity);
+        if (entity instanceof Player) {
+            this.setTarget(entity);
+        }
+    }
+
     @Override
     public void tick() {
         super.tick();
