@@ -129,6 +129,14 @@ sourceSets {
             srcDir '../shared-1.21.2+/src/main/resources'
             srcDir '../shared-1.21.1+/src/main/resources'
             srcDir '../shared/src/main/resources'
+            // 26.1.2+: NeoForge's LootModifierManager no longer reads a replace/entries
+            // manifest; it folder-scans every JSON under data/*/loot_modifiers/ and decodes
+            // each directly via a "type"-dispatch codec. The old manifest file has no "type"
+            // key and gets swept into that scan, so it now fails to parse. The mod's actual
+            // modifier (data/chronodawn/loot_modifiers/grass_time_wheat_seed.json) is already
+            // discovered by the folder scan on its own, so the manifest is obsolete here.
+            exclude 'data/forge/loot_modifiers/global_loot_modifiers.json'
+            exclude 'data/neoforge/loot_modifiers/global_loot_modifiers.json'
         }
     }
     test {
