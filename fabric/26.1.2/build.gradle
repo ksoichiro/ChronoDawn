@@ -42,7 +42,16 @@ dependencies {
     // Minecraft 26.1.2 is unobfuscated: there's no "named"/"transformProduction*"
     // remap-namespace variant to depend on, just the plain project output.
     common(project(path: commonModule)) { transitive false }
-    shadowBundle project(path: commonModule)
+    // The standalone common JAR supplies Chrono Dawn classes. Its dependencies
+    // must remain external mods, otherwise Shadow embeds Fabric Loader itself.
+    shadowBundle(project(path: commonModule)) { transitive false }
+}
+
+// runProd uses a standalone Fabric instance, so it needs the required loader
+// mods declared in fabric.mod.json.
+afterEvaluate {
+    dependencies.add('prodMods', "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}")
+    dependencies.add('prodMods', "dev.architectury:architectury-fabric:${architectury_api_version}")
 }
 
 sourceSets {
@@ -161,19 +170,57 @@ processResources {
     }
 }
 
-// Minecraft 26.1.2 ships unobfuscated, so there is no remap step: shadowJar's
-// output directly IS the final artifact (see gradle.properties'
-// unobfuscated_mc_versions / root build.gradle's loom-no-remap plugin choice).
+// Minecraft 26.1.2 ships unobfuscated, so there is no remap step. Keep the
+// shaded JAR as an intermediate input for Architectury's production
+// transformer, which still has to replace @ExpectPlatform methods.
 shadowJar {
     configurations = [project.configurations.shadowBundle]
     archiveBaseName = rootProject.archives_name
     archiveVersion = "${rootProject.mod_version}+${rootProject.minecraft_version}-fabric"
-    archiveClassifier = null
+    archiveClassifier = 'untransformed'
     exclude 'chronodawn.mixins.json'
 }
 
+// ShadowJar intentionally treats JAR dependencies as inputs to unpack rather
+// than files to nest. Repackage its output with Loom's prepared JAR-in-JAR
+// files before applying the Architectury production transformer.
+tasks.register('prepareTransformJar', Jar) {
+    dependsOn tasks.named('shadowJar')
+    dependsOn tasks.named('jar')
+    dependsOn tasks.named('processIncludeJars')
+    from({ zipTree(tasks.named('shadowJar').get().archiveFile.get().asFile) }) {
+        // Loom adds the nested-JAR list to this file during the ordinary jar task.
+        exclude 'fabric.mod.json'
+    }
+    from({ zipTree(tasks.named('jar').get().archiveFile.get().asFile) }) {
+        include 'fabric.mod.json'
+    }
+    from(layout.buildDirectory.dir('processIncludeJars')) {
+        into 'META-INF/jars'
+    }
+    archiveBaseName = rootProject.archives_name
+    archiveVersion = "${rootProject.mod_version}+${rootProject.minecraft_version}-fabric"
+    archiveClassifier = 'pretransform'
+    destinationDirectory = layout.buildDirectory.dir('libs')
+}
+
 tasks.named('assemble').configure {
-    dependsOn shadowJar
+    dependsOn tasks.named('transformShadowJar')
+}
+
+// loom-no-remap deliberately does not create remapJar, so Architectury Plugin
+// cannot create its usual transformProductionFabric task. Run the required
+// production transformer explicitly after shading instead.
+tasks.register('transformShadowJar', dev.architectury.plugin.TransformingTask) {
+    group = 'Architectury'
+    platform = 'fabric'
+    input.set(tasks.named('prepareTransformJar').flatMap { it.archiveFile })
+    archiveBaseName = rootProject.archives_name
+    archiveVersion = "${rootProject.mod_version}+${rootProject.minecraft_version}-fabric"
+    archiveClassifier = null
+    destinationDirectory = layout.buildDirectory.dir('libs')
+    plusAssign(new dev.architectury.transformer.transformers.TransformExpectPlatform())
+    dependsOn tasks.named('prepareTransformJar')
 }
 
 java {

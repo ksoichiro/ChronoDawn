@@ -101,6 +101,12 @@ dependencies {
     shadowCommon(project(path: commonModule)) { transitive false }
 }
 
+// runProd uses a standalone NeoForge instance, so it needs the same required
+// Architectury API mod that is declared in neoforge.mods.toml.
+afterEvaluate {
+    dependencies.add('prodMods', "dev.architectury:architectury-neoforge:${architectury_api_version}")
+}
+
 tasks.named("processResources", ProcessResources).configure {
     dependsOn project(commonModule).tasks.named('nbtStructures')
 
@@ -119,9 +125,9 @@ tasks.named("processResources", ProcessResources).configure {
     }
 }
 
-// Minecraft 26.1.2 ships unobfuscated, so there is no remap step: shadowJar's
-// output directly IS the final artifact (see gradle.properties'
-// unobfuscated_mc_versions / root build.gradle's loom-no-remap plugin choice).
+// Minecraft 26.1.2 ships unobfuscated, so there is no remap step. Keep the
+// shaded JAR as an intermediate input for Architectury's production
+// transformer, which still has to replace @ExpectPlatform methods.
 tasks.named("shadowJar", com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar).configure {
     exclude "fabric.mod.json"
     exclude "architectury.common.json"
@@ -129,10 +135,25 @@ tasks.named("shadowJar", com.github.jengelman.gradle.plugins.shadow.tasks.Shadow
     configurations = [project.configurations.shadowCommon]
     archiveBaseName = rootProject.archives_name
     archiveVersion = "${rootProject.mod_version}+${rootProject.minecraft_version}-neoforge"
-    archiveClassifier = null
+    archiveClassifier = "untransformed"
 }
 
 tasks.named('assemble').configure {
+    dependsOn tasks.named('transformShadowJar')
+}
+
+// loom-no-remap deliberately does not create remapJar, so Architectury Plugin
+// cannot create its usual transformProductionNeoForge task. Run the required
+// production transformer explicitly after shading instead.
+tasks.register('transformShadowJar', dev.architectury.plugin.TransformingTask) {
+    group = 'Architectury'
+    platform = 'neoforge'
+    input.set(tasks.named('shadowJar').flatMap { it.archiveFile })
+    archiveBaseName = rootProject.archives_name
+    archiveVersion = "${rootProject.mod_version}+${rootProject.minecraft_version}-neoforge"
+    archiveClassifier = null
+    destinationDirectory = layout.buildDirectory.dir('libs')
+    plusAssign(new dev.architectury.transformer.transformers.TransformExpectPlatform())
     dependsOn tasks.named('shadowJar')
 }
 
