@@ -1,7 +1,5 @@
 package com.chronodawn.items.artifacts;
 
-import com.chronodawn.tags.ConventionalItemTags;
-
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.registry.ModItems;
 import net.minecraft.Util;
@@ -9,6 +7,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
 import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
@@ -22,7 +21,12 @@ public class TimeTyrantArmorMaterial {
     public static final int BASE_DURABILITY = 37;
 
     // Time Crystal repair tag
-    private static final TagKey<Item> TIME_CRYSTAL_TAG = ConventionalItemTags.TIME_CRYSTAL;
+    // NeoForge 1.21.2/1.21.3 crashes at startup ("Unbound tags in registry ...
+    // c:gems/...", "c:dusts/...") when a custom-namespace TagKey is used as
+    // repairItems here. No fixed NeoForge release exists for 1.21.2 (upstream fix
+    // neoforged/NeoForge#1651 landed at 21.3.7-beta, MC 1.21.3 only); kept on this
+    // vanilla tag for both loaders on 1.21.2 until that changes.
+    private static final TagKey<Item> TIME_CRYSTAL_TAG = ItemTags.REPAIRS_NETHERITE_ARMOR;
 
     public static final Holder<ArmorMaterial> MATERIAL = Holder.direct(
         new ArmorMaterial(

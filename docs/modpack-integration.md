@@ -295,7 +295,7 @@ raw id. A build-time check keeps that true for tags added later.
 
 ### Equipment repair materials
 
-On 1.21.1 and newer, Chrono Dawn equipment consumes the following per-material
+On 1.21.1 and newer², Chrono Dawn equipment consumes the following per-material
 tags for its repair ingredient. This lets a unification addon or pack datapack
 add compatible items without replacing Chrono Dawn's Java classes:
 
@@ -308,6 +308,21 @@ add compatible items without replacing Chrono Dawn's Java classes:
 
 Minecraft 1.20.1 retains exact-item repair ingredients because its conventional
 `c:gems` tag has no per-material subtags and includes both crystal types.
+
+² **Minecraft 1.21.2 is excluded and keeps vanilla repair tags instead**
+(`ItemTags.IRON_TOOL_MATERIALS`, `DIAMOND_TOOL_MATERIALS`,
+`NETHERITE_TOOL_MATERIALS`, and the matching `REPAIRS_*_ARMOR` tags,
+loader-independent), on both Fabric and NeoForge. Using any custom-namespace
+tag as a `ToolMaterial`/`ArmorMaterial` repair ingredient on this version
+crashes NeoForge 1.21.2 at startup with `Unbound tags in registry`, a known
+upstream bug ([neoforged/NeoForge#1651](https://github.com/neoforged/NeoForge/issues/1651))
+fixed in NeoForge `21.3.7-beta` — but NeoForge never published a fixed
+release for MC 1.21.2 itself (it stopped at `21.2.1-beta` before moving on to
+1.21.3). Because Fabric and NeoForge 1.21.2 share the same Java sources,
+Fabric 1.21.2 loses the custom repair tags too, even though only NeoForge is
+actually affected by the crash. A pack datapack cannot restore per-material
+repair tags on 1.21.2 by itself; this is a version-specific limitation, not a
+configuration option.
 
 ### Recipe material inputs
 

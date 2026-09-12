@@ -1,8 +1,7 @@
 package com.chronodawn.items.equipment;
 
-import com.chronodawn.tags.ConventionalItemTags;
-
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ToolMaterial;
@@ -22,10 +21,14 @@ import net.minecraft.world.item.ToolMaterial;
  *
  * 1.21.2+ version: ToolMaterial record constructor takes
  * (incorrectBlocksForDrops, uses, speed, attackDamageBonus, enchantmentValue, repairItems).
- * Repair tag: c:gems/entropy_crystal.
+ * NeoForge 1.21.2/1.21.3 crashes at startup ("Unbound tags in registry ...
+ * c:gems/...", "c:dusts/...") when a custom-namespace TagKey is used as
+ * repairItems here. No fixed NeoForge release exists for 1.21.2 (upstream fix
+ * neoforged/NeoForge#1651 landed at 21.3.7-beta, MC 1.21.3 only); kept on this
+ * vanilla tag for both loaders on 1.21.2 until that changes.
  */
 public final class EntropyCrystalTier {
-    private static final TagKey<Item> REPAIR_TAG = ConventionalItemTags.ENTROPY_CRYSTAL;
+    private static final TagKey<Item> REPAIR_TAG = ItemTags.IRON_TOOL_MATERIALS;
 
     public static final ToolMaterial INSTANCE = new ToolMaterial(
         BlockTags.INCORRECT_FOR_IRON_TOOL,

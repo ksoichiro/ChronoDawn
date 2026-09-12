@@ -1,12 +1,11 @@
 package com.chronodawn.items.equipment;
 
-import com.chronodawn.tags.ConventionalItemTags;
-
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.compat.CompatResourceLocation;
 import com.chronodawn.registry.ModItems;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ToolMaterial;
@@ -35,7 +34,12 @@ import net.minecraft.world.level.block.Block;
  */
 public class EnhancedClockstoneTier {
     // Time Crystal repair tag
-    private static final TagKey<Item> TIME_CRYSTAL_TAG = ConventionalItemTags.TIME_CRYSTAL;
+    // NeoForge 1.21.2/1.21.3 crashes at startup ("Unbound tags in registry ...
+    // c:gems/...", "c:dusts/...") when a custom-namespace TagKey is used as
+    // repairItems here. No fixed NeoForge release exists for 1.21.2 (upstream fix
+    // neoforged/NeoForge#1651 landed at 21.3.7-beta, MC 1.21.3 only); kept on this
+    // vanilla tag for both loaders on 1.21.2 until that changes.
+    private static final TagKey<Item> TIME_CRYSTAL_TAG = ItemTags.DIAMOND_TOOL_MATERIALS;
 
     // In 1.21.2, ToolMaterial constructor signature:
     // (TagKey<Block> incorrectBlocksForDrops, int uses, float speed, float attackDamageBonus,

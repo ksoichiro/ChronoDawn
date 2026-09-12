@@ -1,7 +1,5 @@
 package com.chronodawn.items.artifacts;
 
-import com.chronodawn.tags.ConventionalItemTags;
-
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 
@@ -10,6 +8,7 @@ import com.chronodawn.compat.CompatResourceLocation;
 import com.chronodawn.registry.ModItems;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
@@ -57,9 +56,13 @@ public class ChronobladeItem extends SwordItem {
 
     /**
      * Time Crystal repair tag for Chronoblade
-     * TODO: Find proper solution for custom mod tags in NeoForge 1.21.2
+     * NeoForge 1.21.2/1.21.3 crashes at startup ("Unbound tags in registry ...
+     * c:gems/...", "c:dusts/...") when a custom-namespace TagKey is used as
+     * repairItems here. No fixed NeoForge release exists for 1.21.2 (upstream fix
+     * neoforged/NeoForge#1651 landed at 21.3.7-beta, MC 1.21.3 only); kept on this
+     * vanilla tag for both loaders on 1.21.2 until that changes.
      */
-    private static final TagKey<Item> TIME_CRYSTAL_TAG = ConventionalItemTags.TIME_CRYSTAL;
+    private static final TagKey<Item> TIME_CRYSTAL_TAG = ItemTags.NETHERITE_TOOL_MATERIALS;
 
     /**
      * Custom tier for Chronoblade (netherite+).
