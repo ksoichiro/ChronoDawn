@@ -57,8 +57,14 @@ public class BossMultiplayerFeatureConsistencyTest {
         {"TimeTyrantEntity.java", "true"},
     };
 
-    private static final String TARGET_SWITCH_SIGNATURE =
-        "public void setLastHurtByMob(LivingEntity entity)";
+    private static final String OLD_ERA_ENTRY_POINT_SIGNATURE =
+        "public boolean hurt(DamageSource source, float amount)";
+    private static final String NEW_ERA_ENTRY_POINT_SIGNATURE =
+        "public boolean hurtServer(ServerLevel serverLevel, DamageSource source, float amount)";
+    private static final java.util.Set<String> OLD_ERA_VERSIONS =
+        java.util.Set.of("1.20.1", "1.21.1");
+    private static final String TARGET_SWITCH_BODY =
+        "this.setLastHurtByMob(player);";
     private static final String MULTIPLAYER_GATE_SIGNATURE =
         "BossMultiplayer.isMultiplayerEncounter(";
 
@@ -87,10 +93,22 @@ public class BossMultiplayerFeatureConsistencyTest {
                         }
                         String content = Files.readString(filePath, StandardCharsets.UTF_8);
 
+                        boolean isOldEra = OLD_ERA_VERSIONS.contains(version);
+                        String expectedEntryPoint = isOldEra
+                            ? OLD_ERA_ENTRY_POINT_SIGNATURE
+                            : NEW_ERA_ENTRY_POINT_SIGNATURE;
+
                         assertTrue(
-                            content.contains(TARGET_SWITCH_SIGNATURE),
-                            fileName + " (" + version + ") is missing the setLastHurtByMob "
-                                + "immediate target-switch override"
+                            content.contains(expectedEntryPoint),
+                            fileName + " (" + version + ") is missing the "
+                                + (isOldEra ? "hurt(...)" : "hurtServer(...)")
+                                + " damage-entry-point override"
+                        );
+                        assertTrue(
+                            content.contains(TARGET_SWITCH_BODY),
+                            fileName + " (" + version + ") is missing the setLastHurtByMob(player) "
+                                + "call inside its damage-entry-point override "
+                                + "(immediate target-switch)"
                         );
 
                         if (expectMultiplayerGate) {

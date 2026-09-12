@@ -187,9 +187,14 @@ public class TemporalPhantomEntity extends Monster implements RangedAttackMob {
     @Override
     public boolean hurtServer(ServerLevel serverLevel, DamageSource source, float amount) {
         // Switch target to whoever just hit us, regardless of damage amount
-        // or post-hit invulnerability (see class-level note on setLastHurtByMob's
-        // unreliability -- this method is called on every hit attempt).
+        // or post-hit invulnerability. setLastHurtByMob alone is not
+        // reliable here (vanilla skips it when damage doesn't exceed the
+        // most recent hit within the invulnerability window -- the first
+        // ~0.5s of a hit's ~1s invulnerableTime), so this entry point
+        // handles the switch directly and also calls setLastHurtByMob so
+        // HurtByTargetGoal keeps the new attacker beyond this tick.
         if (source.getEntity() instanceof Player player) {
+            this.setLastHurtByMob(player);
             this.setTarget(player);
         }
 

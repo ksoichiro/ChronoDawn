@@ -161,15 +161,19 @@ public class ClockworkColossusEntity extends Monster implements RangedAttackMob 
     /**
      * Switch target to whoever just hit us, even if we already had a
      * different target and even if the damage amount is fully absorbed by
-     * post-hit invulnerability. setLastHurtByMob is not reliable for this:
-     * vanilla only calls it when the incoming damage exceeds the most
-     * recent hit within the ~1-second invulnerability window, so a lighter
-     * second attacker can be silently ignored. Overriding the damage entry
-     * point itself fires on every hit attempt regardless of amount.
+     * post-hit invulnerability. setLastHurtByMob alone is not reliable for
+     * this: vanilla only calls it when the incoming damage exceeds the most
+     * recent hit within the invulnerability window (the first ~0.5s of a
+     * hit's ~1s invulnerableTime), so a lighter second attacker can be
+     * silently ignored. Overriding the damage entry point fires on every hit
+     * attempt regardless of amount; calling setLastHurtByMob explicitly
+     * keeps HurtByTargetGoal's re-arm logic in sync so the switch survives
+     * beyond this tick (e.g. if the new target later leaves follow range).
      */
     @Override
     public boolean hurtServer(ServerLevel serverLevel, DamageSource source, float amount) {
         if (source.getEntity() instanceof Player player) {
+            this.setLastHurtByMob(player);
             this.setTarget(player);
         }
         return super.hurtServer(serverLevel, source, amount);
