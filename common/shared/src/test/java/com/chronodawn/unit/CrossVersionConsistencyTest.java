@@ -30,7 +30,8 @@ public class CrossVersionConsistencyTest {
     // All version directories that contain registry source files
     private static final String[] VERSION_DIRS = {
         "1.20.1", "1.21.1", "1.21.2", "1.21.4", "1.21.5",
-        "1.21.6", "1.21.7", "1.21.8", "1.21.9", "1.21.10", "1.21.11"
+        "1.21.6", "1.21.7", "1.21.8", "1.21.9", "1.21.10", "1.21.11",
+        "26.1.2", "26.2"
     };
 
     @TestFactory
