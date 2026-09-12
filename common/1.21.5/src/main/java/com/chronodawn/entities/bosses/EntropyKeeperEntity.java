@@ -121,16 +121,19 @@ public class EntropyKeeperEntity extends Monster {
 
     /**
      * Switch target to whoever just hit us, even if we already had a
-     * different target. Vanilla's HurtByTargetGoal only takes effect while
-     * the boss has no target, so without this override the boss keeps
-     * chasing the first player it saw while everyone else hits it for free.
+     * different target and even if the damage amount is fully absorbed by
+     * post-hit invulnerability. setLastHurtByMob is not reliable for this:
+     * vanilla only calls it when the incoming damage exceeds the most
+     * recent hit within the ~1-second invulnerability window, so a lighter
+     * second attacker can be silently ignored. Overriding the damage entry
+     * point itself fires on every hit attempt regardless of amount.
      */
     @Override
-    public void setLastHurtByMob(LivingEntity entity) {
-        super.setLastHurtByMob(entity);
-        if (entity instanceof Player) {
-            this.setTarget(entity);
+    public boolean hurtServer(ServerLevel serverLevel, DamageSource source, float amount) {
+        if (source.getEntity() instanceof Player player) {
+            this.setTarget(player);
         }
+        return super.hurtServer(serverLevel, source, amount);
     }
 
     @Override

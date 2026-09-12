@@ -165,20 +165,6 @@ public class ChronosWardenEntity extends Monster {
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
     }
 
-    /**
-     * Switch target to whoever just hit us, even if we already had a
-     * different target. Vanilla's HurtByTargetGoal only takes effect while
-     * the boss has no target, so without this override the boss keeps
-     * chasing the first player it saw while everyone else hits it for free.
-     */
-    @Override
-    public void setLastHurtByMob(LivingEntity entity) {
-        super.setLastHurtByMob(entity);
-        if (entity instanceof Player) {
-            this.setTarget(entity);
-        }
-    }
-
     @Override
     public void tick() {
         super.tick();
@@ -336,6 +322,13 @@ public class ChronosWardenEntity extends Monster {
 
     @Override
     public boolean hurtServer(ServerLevel serverLevel, DamageSource source, float amount) {
+        // Switch target to whoever just hit us, regardless of damage amount
+        // or post-hit invulnerability (see class-level note on setLastHurtByMob's
+        // unreliability -- this method is called on every hit attempt).
+        if (source.getEntity() instanceof Player player) {
+            this.setTarget(player);
+        }
+
         // During Stone Stance: 80% damage reduction
         if (isInStoneStance()) {
             // Check if damage is from behind (weak spot)
