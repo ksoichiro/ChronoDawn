@@ -4,6 +4,8 @@ import com.chronodawn.ChronoDawn;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntitySpawnReason;
@@ -12,6 +14,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.item.component.TypedEntityData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -49,7 +52,13 @@ public class DeferredSpawnEggItem extends SpawnEggItem {
         // We need to pass a valid EntityType, but it may not be available yet
         // Use a placeholder and override getDefaultInstance() to resolve later
         // 1.21.9: SpawnEggItem constructor no longer takes EntityType
-        super(properties);
+        // 26.1.2: SpawnEggItem#getType(ItemStack) is static and reads DataComponents.ENTITY_DATA
+        // from the item's own default component map (baked from Properties at construction).
+        // ModItems.register() runs before ModEntities.register() (see ChronoDawn.init()), so
+        // entityTypeSupplier.get() would fail if resolved eagerly here. delayedComponent() defers
+        // resolution until all registries (including modded entity types) are frozen.
+        super(properties.delayedComponent(DataComponents.ENTITY_DATA,
+            provider -> TypedEntityData.of(entityTypeSupplier.get(), new CompoundTag())));
         this.entityTypeSupplier = entityTypeSupplier;
         this.backgroundColor = backgroundColor;
         this.highlightColor = highlightColor;
