@@ -44,6 +44,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Composter support** — Chrono Dawn's plant and food items (saplings, leaves, seeds, flowers, short plants, aquatic plants, Lumen Polyp, crops, fungi, baked foods, and Time Wheat Bale) can now be placed into a vanilla Composter, mirroring the chance tiers of their closest vanilla analogues.
 
+#### Boss Multiplayer Behavior
+
+- **Immediate target switching** — all six bosses now switch their attack target to whichever player just hit them, even mid-fight. Previously a boss kept chasing the first player it targeted while everyone else in the group hit it for free.
+- **Multiplayer-only aggro distribution** — with 2 or more players in the fight, Time Guardian's and Time Tyrant's AoE attacks and Chronos Warden's Ground Slam recharge faster, Entropy Keeper's Entropy Burst repeats instead of firing once, and Time Tyrant summons 3 Chronal Leeches at each phase transition. Singleplayer fights are unaffected.
+
 ### Fixed
 
 - **Damaged return portals no longer stack vertically.** When returning from Chrono Dawn, a registered Overworld portal now restores missing required Clockstone frame blocks and its portal interior at the original position. Optional corners remain untouched, recovery never overwrites non-replaceable player blocks, and stabilized portal recovery is limited to its exact mapped X/Z position.
