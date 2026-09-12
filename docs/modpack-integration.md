@@ -466,8 +466,9 @@ listeners without interrupting the boss death.
 
 The Java event is the foundation for scripting integrations. See
 [KubeJS scripting bridge](#kubejs-scripting-bridge) and
-[FTB Quests integration](#ftb-quests-integration) below for script-side
-bindings; a CraftTweaker binding is not shipped yet.
+[CraftTweaker scripting bridge](#crafttweaker-scripting-bridge) below for
+script-side bindings. [FTB Quests integration](#ftb-quests-integration)
+builds on the KubeJS bridge where the required versions are available.
 
 ---
 
@@ -522,8 +523,9 @@ remaining listeners without interrupting portal activation.
 
 The Java event is the foundation for scripting integrations. See
 [KubeJS scripting bridge](#kubejs-scripting-bridge) and
-[FTB Quests integration](#ftb-quests-integration) below for script-side
-bindings; a CraftTweaker binding is not shipped yet.
+[CraftTweaker scripting bridge](#crafttweaker-scripting-bridge) below for
+script-side bindings. [FTB Quests integration](#ftb-quests-integration)
+builds on the KubeJS bridge where the required versions are available.
 
 ---
 
@@ -652,15 +654,75 @@ above — nothing FTB-Quests-specific is needed from Chrono Dawn itself.
 
 ---
 
+## CraftTweaker scripting bridge
+
+When CraftTweaker is installed, Chrono Dawn exposes its boss-defeated and
+portal-opened notifications as native ZenScript events. No addon or Java
+bridge is required. The events are notifications only: scripts cannot cancel
+the boss defeat or portal activation, which has already completed before the
+event is dispatched.
+
+CraftTweaker currently publishes builds for Chrono Dawn's 1.20.1 and 1.21.1
+targets only. The bridge is therefore available on these combinations:
+
+| Minecraft version | Loader | CraftTweaker bridge |
+| --- | --- | --- |
+| 1.20.1 | Fabric, Forge | Yes |
+| 1.21.1 | Fabric, NeoForge | Yes |
+| 1.21.2+, 26.1.2, 26.2 | Any | No CraftTweaker build exists for these Minecraft versions. |
+
+CraftTweaker itself must be installed on both the client and dedicated server,
+using matching loader and Minecraft versions.
+
+Register a boss listener from a script under `scripts/`, for example
+`scripts/chronodawn.zs`:
+
+```zenscript
+import mods.chronodawn.event.BossDefeatedEvent;
+
+events.register<BossDefeatedEvent>(event => {
+    if event.defeatingPlayer != null {
+        // event.bossId is a stable ID such as "chronodawn:time_guardian".
+        // Advance a quest or grant a pack-specific reward here.
+    }
+});
+```
+
+`BossDefeatedEvent` has these read-only properties:
+
+| Property | Type | Value |
+| --- | --- | --- |
+| `bossId` | string | Stable namespaced boss ID. |
+| `boss` | `LivingEntity` | The defeated boss, valid during the callback. |
+| `level` | `ServerLevel` | Server level where the boss was defeated. |
+| `position` | `BlockPos` | Immutable position snapshot. |
+| `damageSource` | `DamageSource` | Source that caused the death. |
+| `defeatingPlayer` | `ServerPlayer` or `null` | Player attributed by Minecraft, when any. |
+
+Register portal activation in the same way:
+
+```zenscript
+import mods.chronodawn.event.PortalOpenedEvent;
+
+events.register<PortalOpenedEvent>(event => {
+    if event.cause == "IGNITION" && event.igniter != null {
+        // A player opened a frame with a Time Hourglass.
+    }
+});
+```
+
+`PortalOpenedEvent` provides `portalId` as a UUID string, `level`,
+`position`, `cause` (`"IGNITION"` or `"REIGNITION"`), and the nullable
+`igniter`. It fires after portal blocks are placed and the portal is active.
+
+---
+
 ## Future integrations *(not yet shipped)*
 
 ### Additional scripting events and bindings
 
-A CraftTweaker binding for the boss-defeated and portal-opened events is
-planned as an independent follow-up slice; unlike FTB Quests, CraftTweaker
-does not offer an equivalent script-driven progress hook today, so it needs
-its own design. A purpose-built `KubeJSPlugin` (native KubeJS event names
-instead of `Java.loadClass`) may also follow if pack authors ask for it.
+A purpose-built `KubeJSPlugin` (native KubeJS event names instead of
+`Java.loadClass`) may follow if pack authors ask for it.
 
 The Chronicle-entry-unlocked event is deferred indefinitely: the Chronicle
 guidebook has no per-player "unlocked" concept today (every entry is always

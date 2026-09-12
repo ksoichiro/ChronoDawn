@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **CraftTweaker scripting bridge** — CraftTweaker packs can now subscribe to
+  Chrono Dawn's native `BossDefeatedEvent` and `PortalOpenedEvent` from
+  ZenScript on the supported 1.20.1 and 1.21.1 loader combinations. The
+  events expose the same stable IDs and server-side context as the Java API,
+  without a separate addon. See `docs/modpack-integration.md`.
+
 ## [0.9.2] - 2026-09-13
 
 ### Fixed
