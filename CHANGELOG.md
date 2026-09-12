@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.1] - 2026-09-13
+
+### Fixed
+
+- **Minecraft 26.1.2 and 26.2 production startup** — Fabric and NeoForge release JARs now apply Architectury platform implementations correctly. Fabric release JARs also retain their required embedded NightConfig libraries. This fixes startup failures affecting all four 26.1.2 / 26.2 loader builds.
+
 ## [0.9.0] - 2026-09-12
 
 ### Added
@@ -462,7 +468,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Architectury API 13.0.8+
 - Custom Portal API 0.0.1-beta66-1.21 (Fabric bundled, NeoForge requires separate installation)
 
-[Unreleased]: https://github.com/ksoichiro/ChronoDawn/compare/v0.9.0...HEAD
+[Unreleased]: https://github.com/ksoichiro/ChronoDawn/compare/v0.9.1...HEAD
+[0.9.1]: https://github.com/ksoichiro/ChronoDawn/compare/v0.9.0...v0.9.1
 [0.9.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.6.0...v0.7.0
