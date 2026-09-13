@@ -225,13 +225,23 @@ public class TimeCompassItem extends Item {
             String targetStructure = getTargetStructure(stack);
 
             if (targetStructure == null) {
-                // No target structure set (shouldn't happen in normal gameplay)
-                player.displayClientMessage(
-                    Component.translatable("item.chronodawn.time_compass.no_target")
-                        .withStyle(ChatFormatting.RED),
-                    true
-                );
-                return InteractionResultHolder.fail(stack);
+                // An untargeted compass used in the Overworld resolves to Ancient Ruins.
+                // This is the only Overworld-obtainable Time Compass target, and it is what
+                // lets the crafting recipe stay plain: baking a preset target into a recipe
+                // result would mean NBT on 1.20.1 and components from 1.21.2 onward.
+                // Dimension structures stay trade-only, so Time Keeper trades are unaffected.
+                if (level.dimension().equals(Level.OVERWORLD)) {
+                    targetStructure = STRUCTURE_ANCIENT_RUINS;
+                    CompatHandlers.ITEM_DATA.setString(stack, NBT_TARGET_STRUCTURE, targetStructure);
+                } else {
+                    // No target structure set (shouldn't happen in normal gameplay)
+                    player.displayClientMessage(
+                        Component.translatable("item.chronodawn.time_compass.no_target")
+                            .withStyle(ChatFormatting.RED),
+                        true
+                    );
+                    return InteractionResultHolder.fail(stack);
+                }
             }
 
             // Check if already has position

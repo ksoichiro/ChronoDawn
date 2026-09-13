@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " S ",
+    "SCS",
+    " K "
+  ],
+  "key": {
+    "S": {
+      "item": "chronodawn:chronite_shard"
+    },
+    "C": {
+      "item": "minecraft:compass"
+    },
+    "K": {
+      "item": "minecraft:clock"
+    }
+  },
+  "result": {
+    "id": "chronodawn:time_compass",
+    "count": 1
+  }
+}
