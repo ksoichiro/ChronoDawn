@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " S ",
+    "SRS",
+    " S "
+  ],
+  "key": {
+    "S": "chronodawn:chronite_shard",
+    "R": "minecraft:redstone"
+  },
+  "result": {
+    "id": "minecraft:clock",
+    "count": 1
+  }
+}
