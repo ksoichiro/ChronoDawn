@@ -676,6 +676,8 @@ These four bosses must be defeated to craft the **Chrono Aegis** activated buff 
 - **Without Chrono Aegis**: ★★★★★ (Extremely Hard)
 - **With Chrono Aegis**: ★★★☆☆ (Moderate-Hard)
 
+**Motion Sickness Note**: Slowness effects from Time Tyrant's attacks narrow the game's FOV (a vanilla Minecraft behavior tied to movement speed), which can feel jarring during a fight with frequent Slowness applications. If this causes discomfort, disable **FOV Effects** in Minecraft's video/accessibility settings.
+
 ---
 
 ## Progression Path
