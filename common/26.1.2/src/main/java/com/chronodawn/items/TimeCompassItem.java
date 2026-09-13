@@ -160,6 +160,21 @@ public class TimeCompassItem extends Item {
     }
 
     /**
+     * Clear the target position so the compass performs a fresh search on next use.
+     * The target structure type itself is left untouched.
+     *
+     * @param stack Time Compass ItemStack
+     */
+    public static void clearTargetPosition(ItemStack stack) {
+        CompatHandlers.ITEM_DATA.updateCustomData(stack, tag -> {
+            tag.remove(NBT_TARGET_POS_X);
+            tag.remove(NBT_TARGET_POS_Y);
+            tag.remove(NBT_TARGET_POS_Z);
+            tag.remove(NBT_TARGET_DIMENSION);
+        });
+    }
+
+    /**
      * Whether this compass points at a structure the pack has switched off.
      *
      * @param structureType the stored target structure key
@@ -206,6 +221,10 @@ public class TimeCompassItem extends Item {
                     .append(Component.literal(String.format("(%d, %d)", pos.getX(), pos.getZ())))
                     .withStyle(ChatFormatting.DARK_GRAY));
             }
+
+            // Hint at the sneak-to-re-search escape hatch for a stale or unlucky lock
+            tooltipAdder.accept(Component.translatable("item.chronodawn.time_compass.tooltip.resync_hint")
+                .withStyle(ChatFormatting.DARK_GRAY, ChatFormatting.ITALIC));
         } else {
             // No target set (shouldn't happen in normal gameplay)
             tooltipAdder.accept(Component.translatable("item.chronodawn.time_compass.tooltip.no_target")
@@ -248,6 +267,18 @@ public class TimeCompassItem extends Item {
 
             // Check if already has position
             Optional<GlobalPos> existingPos = getTargetPosition(stack);
+
+            // Sneaking on a located compass forces a fresh search. This is the escape
+            // hatch for the rare case where findNearestMapStructure returns a theoretical
+            // position that turns out to have no structure there, an inherent Minecraft
+            // engine limitation for narrowly biome-restricted structures like Ancient
+            // Ruins, not a bug in this mod. The target structure type is left unchanged.
+            boolean forceResearch = existingPos.isPresent() && player.isShiftKeyDown();
+            if (forceResearch) {
+                clearTargetPosition(stack);
+                existingPos = Optional.empty();
+            }
+
             if (existingPos.isPresent()) {
                 // Already located - show current target and player position
                 BlockPos targetPos = existingPos.get().pos();

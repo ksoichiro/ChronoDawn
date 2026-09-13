@@ -142,6 +142,7 @@
   "item.chronodawn.portal_stabilizer": "ポータル安定化装置",
   "item.chronodawn.time_compass": "タイムコンパス",
   "item.chronodawn.time_compass.tooltip.target": "指す対象:",
+  "item.chronodawn.time_compass.tooltip.resync_hint": "スニーク+使用: 再検索",
   "item.chronodawn.time_compass.tooltip.no_target": "対象が設定されていません",
   "item.chronodawn.time_compass.target.ancient_ruins": "古代の遺跡",
   "item.chronodawn.time_compass.target.forgotten_library": "忘れられた図書館",

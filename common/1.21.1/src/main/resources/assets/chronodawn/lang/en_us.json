@@ -142,6 +142,7 @@
   "item.chronodawn.portal_stabilizer": "Portal Stabilizer",
   "item.chronodawn.time_compass": "Time Compass",
   "item.chronodawn.time_compass.tooltip.target": "Points to:",
+  "item.chronodawn.time_compass.tooltip.resync_hint": "Sneak + Use: search again",
   "item.chronodawn.time_compass.tooltip.no_target": "No target set",
   "item.chronodawn.time_compass.target.ancient_ruins": "Ancient Ruins",
   "item.chronodawn.time_compass.target.forgotten_library": "Forgotten Library",

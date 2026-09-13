@@ -744,6 +744,7 @@ These four bosses must be defeated to craft the **Chrono Aegis** activated buff 
 - **Recipe**: Crafted from a compass, a clock, and Chronite Shards
 - **Ancient Ruins fallback**: An untargeted Time Compass used in the Overworld locks onto the nearest Ancient Ruins and reports direction and distance
 - **Note**: This lock is permanent for that compass. Once it targets Ancient Ruins, it keeps pointing there even if you later use it in Chrono Dawn, so craft a fresh compass if you need a different target
+- **Re-search**: Sneak (hold shift) and use a located compass to clear its lock and search again, without crafting a new one. This also covers the rare case where the compass locks onto a position that turns out to have no structure there, an inherent limitation of Minecraft's structure search for narrowly biome-restricted structures like Ancient Ruins
 
 #### Master Clock Key
 - **Use**: Unlocks Master Clock dungeon entrance
