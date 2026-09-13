@@ -3,12 +3,12 @@ package com.chronodawn.forge.mixin;
 import com.chronodawn.client.PortalFadeHandler;
 import com.chronodawn.registry.ModBlocks;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.client.gui.overlay.ForgeGui;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -18,18 +18,23 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 /**
  * Mixin to render portal overlay and fade effects on the player's screen (Minecraft 1.20.1).
  *
- * This mixin injects into the Gui.render method to add two visual effects:
+ * This mixin injects into ForgeGui.render rather than the vanilla Gui.render, because
+ * Forge replaces the runtime Gui instance with ForgeGui, whose render() override fully
+ * replaces the vanilla method body (via GuiOverlayManager) without calling super.render().
+ * A mixin targeting the vanilla Gui class never fires on Forge as a result.
+ *
+ * This mixin adds two visual effects:
  * 1. Portal overlay: Orange/gold gradient from screen edges when inside ChronoDawn Portal
  * 2. Fade effect: Black fade-in when teleporting between dimensions
  */
-@Mixin(Gui.class)
+@Mixin(ForgeGui.class)
 public class GuiPortalOverlayMixin {
 
     @Unique
     private float chronodawn$partialTick;
 
     /**
-     * Inject at the end of Gui.render to add our custom portal effects.
+     * Inject at the end of ForgeGui.render to add our custom portal effects.
      * Uses TAIL to ensure we render on top of all other GUI elements.
      * This version uses float partialTick parameter for 1.20.1 compatibility.
      */
