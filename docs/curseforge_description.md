@@ -97,6 +97,17 @@ Chrono Dawn features unique mobs that replace vanilla spawns in the dimension:
 ### Step 1: Find Ancient Ruins
 Explore the Overworld to discover **Ancient Ruins**. Mine **Clockstone Ore** and craft the **Time Hourglass**.
 
+<details>
+<summary>Spoiler: how to find Ancient Ruins</summary>
+
+Ancient Ruins generate on the surface of taiga biomes and dark forests only, and they are rare.
+
+The reliable route is Chronite Ore. It generates in ordinary Overworld stone and deepslate in every biome and needs only a stone pickaxe. Craft a Time Compass from a compass, a clock, and Chronite Shards, then use it anywhere in the Overworld. It locks onto the nearest Ancient Ruins and reports direction and distance.
+
+You can also raise the ruins' density with `spacing` under `[world.structures.ancient_ruins]` in `config/chronodawn.toml`.
+
+</details>
+
 ### Step 2: Enter Chrono Dawn
 Build a portal frame using **Clockstone Blocks** (minimum 4×5, maximum 23×23). Activate it with the **Time Hourglass** to enter the dimension.
 

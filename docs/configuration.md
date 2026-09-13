@@ -67,7 +67,7 @@ structures that carry the main progression — shares the same four fields:
 
 | Structure | Config key | `enabled` | `spacing` | `separation` | `salt` | Progression role |
 | --- | --- | --- | --- | --- | --- | --- |
-| Ancient Ruins | `world.structures.ancient_ruins` | `true` | `56` | `20` | `20005897` | Overworld flavour; gates nothing. |
+| Ancient Ruins | `world.structures.ancient_ruins` | `true` | `56` | `20` | `20005897` | Gates entry to the dimension: the sole Overworld source of Clockstone Ore and the only chest that drops the Time Hourglass Blueprint. |
 | Forgotten Library | `world.structures.forgotten_library` | `true` | `30` | `15` | `8735421890` | Gates the Portal Stabilizer recipe. |
 | Desert Clock Tower | `world.structures.desert_clock_tower` | `true` | `30` | `10` | `1663542342` | Gates Time Guardian, the Master Clock Key and Enhanced Clockstone. |
 | Guardian Vault | `world.structures.guardian_vault` | `true` | `48` | `24` | `928374651` | Gates Chronos Warden and the Guardian Stone. |
@@ -100,11 +100,14 @@ salt = 20005897
 | `separation` | integer (chunks) | `0..spacing` | Minimum distance between any two placements. |
 | `salt` | integer (64-bit) | not range-checked | Random seed offset, passed through as written — the shipped Forgotten Library default (`8735421890`) is itself larger than a 32-bit integer. Different salts produce different placement patterns even with the same world seed. Vanilla stores this as a 32-bit int internally, so a value above `2147483647` (`Integer.MAX_VALUE`) truncates to a negative number and can fail world loading; there is normally no reason to change salt from its shipped default. |
 
-> **Disabling any structure other than Ancient Ruins breaks the main
-> progression chain.** The mod logs a startup warning naming exactly what
-> becomes unobtainable (see the table above), but it does not stop you —
-> your pack is responsible for providing another source of that
-> progression step if you disable one of these seven.
+> **Disabling any of these eight structures breaks the main progression
+> chain.** Ancient Ruins is not exempt, since it is the only Overworld
+> source of Clockstone Ore and the Time Hourglass Blueprint, so disabling
+> it also blocks progress unless the player already holds both. The mod
+> logs a startup warning naming exactly what becomes unobtainable (see
+> the table above), but it does not stop you. Your pack is responsible
+> for providing another source of that progression step if you disable
+> one of these eight.
 
 Disabling a structure also removes the Time Keeper trade that sells the Time
 Compass for it, and a compass targeting it reports that the structure does not
@@ -207,10 +210,10 @@ structures.
 
 ### `[world.ores.*]`
 
-Per-ore generation tuning for the four ChronoDawn-specific ores in the
-Chrono dimension: **Time Crystal**, **Entropy Crystal**, **Temporal
-Amber**, and **Clockstone**. Each ore has its own table; missing
-sections fall back to the defaults listed below.
+Per-ore generation tuning for ChronoDawn's five custom ores: **Time
+Crystal**, **Entropy Crystal**, **Temporal Amber**, and **Clockstone** in
+the Chrono dimension, plus **Chronite** in the Overworld. Each ore has
+its own table. Missing sections fall back to the defaults listed below.
 
 > [!NOTE]
 > The vanilla-overlay ores (`iron` / `gold` / `coal` / `redstone`) in the
@@ -241,14 +244,20 @@ enabled = true
 count = 8
 y_min = -16
 y_max = 80
+
+[world.ores.chronite]
+enabled = true
+count = 6
+y_min = -48
+y_max = 112
 ```
 
-| Field | Type | Default (TC / EC / TA / CS) | Range | Notes |
+| Field | Type | Default (TC / EC / TA / CS / Chronite) | Range | Notes |
 | --- | --- | --- | --- | --- |
-| `enabled` | boolean | `true` for all four | — | When `false`, the placed feature stays registered but emits `count = 0` so nothing generates. Your other values are preserved verbatim and restored on re-enable. |
-| `count` | integer | `3` / `4` / `4` / `8` | `0..=64` | Number of placement attempts per chunk. Lower = rarer. Cluster size (blocks per attempt) is not exposed here. |
-| `y_min` | integer | `0` / `40` / `-30` / `-16` | `-64..=y_max` | Absolute minimum Y for placement. |
-| `y_max` | integer | `48` / `100` / `20` / `80` | `y_min..=320` | Absolute maximum Y for placement. |
+| `enabled` | boolean | `true` for all five | n/a | When `false`, the placed feature stays registered but emits `count = 0` so nothing generates. Your other values are preserved verbatim and restored on re-enable. |
+| `count` | integer | `3` / `4` / `4` / `8` / `6` | `0..=64` | Number of placement attempts per chunk. Lower = rarer. Cluster size (blocks per attempt) is not exposed here. |
+| `y_min` | integer | `0` / `40` / `-30` / `-16` / `-48` | `-64..=y_max` | Absolute minimum Y for placement. |
+| `y_max` | integer | `48` / `100` / `20` / `80` / `112` | `y_min..=320` | Absolute maximum Y for placement. |
 
 Distribution shape between `y_min` and `y_max` is **fixed per ore** and
 not configurable:

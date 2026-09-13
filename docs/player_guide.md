@@ -113,11 +113,10 @@ Ancient Ruins generate naturally in the **Overworld**. These structures contain:
 - First clues about Chrono Dawn dimension
 
 **How to find Ancient Ruins**:
-- Explore the Overworld surface in various biomes
-- Look for distinctive ancient stone structures above ground
+- The reliable route: mine Chronite Ore (any biome, ordinary stone and deepslate, stone pickaxe), craft a Time Compass from a compass, a clock, and Chronite Shards, and use it in the Overworld. It locks onto the nearest Ancient Ruins and reports direction and distance.
+- By exploration: ruins generate only in taiga biomes and dark forests, on the surface. They are rare, and forest canopy hides them, so look from high ground.
 - Use `/locate structure chronodawn:ancient_ruins` (if cheats enabled)
-
-**Tip**: Ancient Ruins are surface structures that spawn in various biomes. Keep exploring the landscape until you find one!
+- If ruins are still too sparse for your taste, lower `spacing` under `[world.structures.ancient_ruins]` in `config/chronodawn.toml`. See the Configuration Guide.
 
 ### Step 2: Unlock the Time Hourglass Recipe
 
