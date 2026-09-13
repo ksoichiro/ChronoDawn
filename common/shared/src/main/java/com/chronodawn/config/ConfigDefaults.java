@@ -43,6 +43,7 @@ public final class ConfigDefaults {
     public static final OreSettings ENTROPY_CRYSTAL_DEFAULTS = new OreSettings(true, 4, 40, 100);
     public static final OreSettings TEMPORAL_AMBER_DEFAULTS = new OreSettings(true, 4, -30, 20);
     public static final OreSettings CLOCKSTONE_DEFAULTS = new OreSettings(true, 8, -16, 80);
+    public static final OreSettings CHRONITE_DEFAULTS = new OreSettings(true, 6, -48, 112);
 
     // All six bosses default to unmodified statistics. A single shared constant
     // keeps "the default is a no-op" impossible to break for one boss only.
@@ -85,7 +86,8 @@ public final class ConfigDefaults {
                     TIME_CRYSTAL_DEFAULTS,
                     ENTROPY_CRYSTAL_DEFAULTS,
                     TEMPORAL_AMBER_DEFAULTS,
-                    CLOCKSTONE_DEFAULTS
+                    CLOCKSTONE_DEFAULTS,
+                    CHRONITE_DEFAULTS
                 ),
                 BIOME_DEFAULTS
             ),

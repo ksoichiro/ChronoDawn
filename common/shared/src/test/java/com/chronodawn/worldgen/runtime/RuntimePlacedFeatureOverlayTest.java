@@ -85,12 +85,24 @@ class RuntimePlacedFeatureOverlayTest {
     }
 
     @Test
+    void defaultConfig_reproducesBundledChroniteJson() {
+        Map<String, byte[]> overlay = RuntimePlacedFeatureOverlay.generate(ConfigDefaults.defaults());
+        byte[] bytes = overlay.get(RuntimePlacedFeatureOverlay.ORE_CHRONITE_PATH);
+        assertNotNull(bytes, "Overlay must contain ore_chronite.json under expected path");
+        JsonElement generated = JsonParser.parseString(new String(bytes, StandardCharsets.UTF_8));
+        JsonElement bundled = loadBundled("data/chronodawn/worldgen/placed_feature/ore_chronite.json");
+        assertEquals(bundled, generated,
+            "Runtime overlay output for default config must be tree-equal to the bundled placed_feature JSON");
+    }
+
+    @Test
     void clockstoneCountOverride_changesCountStepOnly() {
         ChronoDawnConfig custom = withOres(
             ConfigDefaults.TIME_CRYSTAL_DEFAULTS,
             ConfigDefaults.ENTROPY_CRYSTAL_DEFAULTS,
             ConfigDefaults.TEMPORAL_AMBER_DEFAULTS,
-            new OreSettings(true, 20, -16, 80)
+            new OreSettings(true, 20, -16, 80),
+            ConfigDefaults.CHRONITE_DEFAULTS
         );
         JsonObject json = parseObject(RuntimePlacedFeatureOverlay.generate(custom)
             .get(RuntimePlacedFeatureOverlay.CLOCKSTONE_PATH));
@@ -104,7 +116,8 @@ class RuntimePlacedFeatureOverlayTest {
             ConfigDefaults.TIME_CRYSTAL_DEFAULTS,
             ConfigDefaults.ENTROPY_CRYSTAL_DEFAULTS,
             ConfigDefaults.TEMPORAL_AMBER_DEFAULTS,
-            disabled
+            disabled,
+            ConfigDefaults.CHRONITE_DEFAULTS
         );
         JsonObject json = parseObject(RuntimePlacedFeatureOverlay.generate(custom)
             .get(RuntimePlacedFeatureOverlay.CLOCKSTONE_PATH));
@@ -126,7 +139,8 @@ class RuntimePlacedFeatureOverlayTest {
             ConfigDefaults.TIME_CRYSTAL_DEFAULTS,
             ConfigDefaults.ENTROPY_CRYSTAL_DEFAULTS,
             ConfigDefaults.TEMPORAL_AMBER_DEFAULTS,
-            clk
+            clk,
+            ConfigDefaults.CHRONITE_DEFAULTS
         );
         JsonObject json = parseObject(RuntimePlacedFeatureOverlay.generate(custom)
             .get(RuntimePlacedFeatureOverlay.CLOCKSTONE_PATH));
@@ -142,7 +156,8 @@ class RuntimePlacedFeatureOverlayTest {
             new OreSettings(true, 10, 0, 48),
             ConfigDefaults.ENTROPY_CRYSTAL_DEFAULTS,
             ConfigDefaults.TEMPORAL_AMBER_DEFAULTS,
-            ConfigDefaults.CLOCKSTONE_DEFAULTS
+            ConfigDefaults.CLOCKSTONE_DEFAULTS,
+            ConfigDefaults.CHRONITE_DEFAULTS
         );
         JsonObject json = parseObject(RuntimePlacedFeatureOverlay.generate(custom)
             .get(RuntimePlacedFeatureOverlay.TIME_CRYSTAL_PATH));
@@ -156,7 +171,7 @@ class RuntimePlacedFeatureOverlayTest {
         OreSettings disabled = new OreSettings(false, 7, 30, 90);
         ChronoDawnConfig custom = withOres(
             ConfigDefaults.TIME_CRYSTAL_DEFAULTS, disabled, ConfigDefaults.TEMPORAL_AMBER_DEFAULTS,
-            ConfigDefaults.CLOCKSTONE_DEFAULTS
+            ConfigDefaults.CLOCKSTONE_DEFAULTS, ConfigDefaults.CHRONITE_DEFAULTS
         );
         JsonObject json = parseObject(RuntimePlacedFeatureOverlay.generate(custom)
             .get(RuntimePlacedFeatureOverlay.ENTROPY_CRYSTAL_PATH));
@@ -176,7 +191,7 @@ class RuntimePlacedFeatureOverlayTest {
         OreSettings amber = new OreSettings(true, 4, -20, 30);
         ChronoDawnConfig custom = withOres(
             ConfigDefaults.TIME_CRYSTAL_DEFAULTS, ConfigDefaults.ENTROPY_CRYSTAL_DEFAULTS, amber,
-            ConfigDefaults.CLOCKSTONE_DEFAULTS
+            ConfigDefaults.CLOCKSTONE_DEFAULTS, ConfigDefaults.CHRONITE_DEFAULTS
         );
         JsonObject json = parseObject(RuntimePlacedFeatureOverlay.generate(custom)
             .get(RuntimePlacedFeatureOverlay.TEMPORAL_AMBER_PATH));
@@ -184,6 +199,61 @@ class RuntimePlacedFeatureOverlayTest {
         assertEquals(-20, height.getAsJsonObject("min_inclusive").get("absolute").getAsInt());
         assertEquals(30, height.getAsJsonObject("max_inclusive").get("absolute").getAsInt());
         assertEquals("minecraft:uniform", height.get("type").getAsString());
+    }
+
+    @Test
+    void chroniteCountOverride_changesCountStepOnly() {
+        ChronoDawnConfig custom = withOres(
+            ConfigDefaults.TIME_CRYSTAL_DEFAULTS,
+            ConfigDefaults.ENTROPY_CRYSTAL_DEFAULTS,
+            ConfigDefaults.TEMPORAL_AMBER_DEFAULTS,
+            ConfigDefaults.CLOCKSTONE_DEFAULTS,
+            new OreSettings(true, 15, -48, 112)
+        );
+        JsonObject json = parseObject(RuntimePlacedFeatureOverlay.generate(custom)
+            .get(RuntimePlacedFeatureOverlay.ORE_CHRONITE_PATH));
+        assertEquals(15, countStep(json).get("count").getAsInt());
+    }
+
+    @Test
+    void chroniteDisabled_emitsCountZeroAndPreservesOtherValues() {
+        OreSettings disabled = new OreSettings(false, 6, -48, 112);
+        ChronoDawnConfig custom = withOres(
+            ConfigDefaults.TIME_CRYSTAL_DEFAULTS,
+            ConfigDefaults.ENTROPY_CRYSTAL_DEFAULTS,
+            ConfigDefaults.TEMPORAL_AMBER_DEFAULTS,
+            ConfigDefaults.CLOCKSTONE_DEFAULTS,
+            disabled
+        );
+        JsonObject json = parseObject(RuntimePlacedFeatureOverlay.generate(custom)
+            .get(RuntimePlacedFeatureOverlay.ORE_CHRONITE_PATH));
+        assertEquals(0, countStep(json).get("count").getAsInt(),
+            "enabled=false must force the count step to 0");
+        JsonObject heightRange = json.getAsJsonArray("placement").get(2).getAsJsonObject();
+        assertEquals(-48,
+            heightRange.getAsJsonObject("height").getAsJsonObject("min_inclusive").get("absolute").getAsInt(),
+            "yMin must be preserved verbatim when disabled");
+        assertEquals(112,
+            heightRange.getAsJsonObject("height").getAsJsonObject("max_inclusive").get("absolute").getAsInt(),
+            "yMax must be preserved verbatim when disabled");
+    }
+
+    @Test
+    void chroniteCustomYRange_changesHeightBoundsAndKeepsTrapezoid() {
+        OreSettings chr = new OreSettings(true, 6, -64, 90);
+        ChronoDawnConfig custom = withOres(
+            ConfigDefaults.TIME_CRYSTAL_DEFAULTS,
+            ConfigDefaults.ENTROPY_CRYSTAL_DEFAULTS,
+            ConfigDefaults.TEMPORAL_AMBER_DEFAULTS,
+            ConfigDefaults.CLOCKSTONE_DEFAULTS,
+            chr
+        );
+        JsonObject json = parseObject(RuntimePlacedFeatureOverlay.generate(custom)
+            .get(RuntimePlacedFeatureOverlay.ORE_CHRONITE_PATH));
+        JsonObject height = json.getAsJsonArray("placement").get(2).getAsJsonObject().getAsJsonObject("height");
+        assertEquals(-64, height.getAsJsonObject("min_inclusive").get("absolute").getAsInt());
+        assertEquals(90, height.getAsJsonObject("max_inclusive").get("absolute").getAsInt());
+        assertEquals("minecraft:trapezoid", height.get("type").getAsString());
     }
 
     @Test
@@ -197,17 +267,21 @@ class RuntimePlacedFeatureOverlayTest {
             heightType(overlay.get(RuntimePlacedFeatureOverlay.TEMPORAL_AMBER_PATH)));
         assertEquals("minecraft:trapezoid",
             heightType(overlay.get(RuntimePlacedFeatureOverlay.CLOCKSTONE_PATH)));
+        assertEquals("minecraft:trapezoid",
+            heightType(overlay.get(RuntimePlacedFeatureOverlay.ORE_CHRONITE_PATH)));
     }
 
     // --- helpers ---
 
-    private static ChronoDawnConfig withOres(OreSettings tc, OreSettings ec, OreSettings ta, OreSettings clk) {
+    private static ChronoDawnConfig withOres(
+        OreSettings tc, OreSettings ec, OreSettings ta, OreSettings clk, OreSettings chr
+    ) {
         ChronoDawnConfig defaults = ConfigDefaults.defaults();
         return new ChronoDawnConfig(
             defaults.schemaVersion(),
             new ChronoDawnConfig.World(
                 defaults.world().structures(),
-                new com.chronodawn.config.OresConfig(tc, ec, ta, clk)
+                new com.chronodawn.config.OresConfig(tc, ec, ta, clk, chr)
             ),
             defaults.gameplay()
         );
