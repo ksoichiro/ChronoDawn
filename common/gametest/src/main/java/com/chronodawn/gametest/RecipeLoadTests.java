@@ -1,6 +1,7 @@
 package com.chronodawn.gametest;
 
 import com.chronodawn.compat.CompatGameTestHelper;
+import com.chronodawn.compat.CompatRecipeManager;
 import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.gametest.framework.GameTestHelper;
 
@@ -45,8 +46,15 @@ public final class RecipeLoadTests {
             tests.add(factory.create(testName, helper -> {
                 helper.runAfterDelay(1, () -> {
                     var id = CompatResourceLocation.create("chronodawn", recipeId);
-                    var recipeManager = helper.getLevel().getRecipeManager();
-                    if (recipeManager.byKey(id).isPresent()) {
+                    // Level.getRecipeManager() was removed starting in 1.21.2.
+                    // MinecraftServer.getRecipeManager() is stable across every
+                    // supported version (verified via javap on 1.21.2 and 26.2
+                    // merged jars), so go through the server instead.
+                    var recipeManager = helper.getLevel().getServer().getRecipeManager();
+                    // RecipeManager.byKey() also changed shape in 1.21.2 (plain id
+                    // -> ResourceKey<Recipe<?>> built from the RECIPE registry),
+                    // so route the lookup through the era-split compat helper.
+                    if (CompatRecipeManager.isRecipeLoaded(recipeManager, id)) {
                         helper.succeed();
                     } else {
                         CompatGameTestHelper.fail(helper, "Recipe not loaded: chronodawn:" + recipeId);
