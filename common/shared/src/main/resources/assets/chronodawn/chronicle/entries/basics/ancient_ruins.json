@@ -30,6 +30,12 @@
         "en_us": "How to Find Ancient Ruins:\n\n1. Search old taigas and dark forests — the kind of woods where time itself seems to slow\n\n2. Look for distinctive weathered stone structures rising from the ground\n\n3. Ruins spawn on the surface, making them visible from a distance\n\n4. Use /locate structure chronodawn:ancient_ruins if cheats are enabled\n\nRecommendation: Bring a map and explore deliberately — ruins are rare, but a determined journey will always find one.",
         "ja_jp": "古代遺跡の見つけ方:\n\n1. 古いタイガと闇の森を探索 — 時の流れがゆっくりに感じられるような森が狙い目\n\n2. 地面から立ち上がる特徴的な風化した石造構造物を探す\n\n3. 遺跡は地表に生成されるため、遠くからでも見える\n\n4. チートが有効な場合は /locate structure chronodawn:ancient_ruins を使用\n\n推奨: 地図を持って計画的に探索しましょう。遺跡は希少ですが、根気強い旅であれば必ず見つかります。"
       }
+    },
+    {
+      "text": {
+        "en_us": "The Reliable Route:\n\nMine Chronite Ore. It appears in ordinary Overworld stone and deepslate, in every biome, and a stone pickaxe is enough.\n\nCraft a Time Compass from a compass, a clock, and Chronite Shards. Use it anywhere in the Overworld and it will lock onto the nearest Ancient Ruins, then report the direction and distance whenever you use it again.\n\nYou no longer have to search. You only have to walk.",
+        "ja_jp": "確実な方法:\n\nクロナイト鉱石を採掘しましょう。オーバーワールドの普通の石と深層岩に、どのバイオームでも生成され、石のツルハシがあれば採れます。\n\nコンパスと時計とクロナイトの欠片でタイムコンパスを作ります。オーバーワールドのどこで使っても最寄りの古代遺跡を捕捉し、以降は使うたびに方角と距離を知らせます。\n\nもう探す必要はありません。歩くだけです。"
+      }
     }
   ]
 }

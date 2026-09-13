@@ -1,0 +1,23 @@
+{
+  "category": "items",
+  "title": {
+    "en_us": "Chronite",
+    "ja_jp": "クロナイト"
+  },
+  "icon": "chronodawn:chronite_shard",
+  "sortnum": 0,
+  "pages": [
+    {
+      "text": {
+        "en_us": "Chronite is the Chrono Dawn's temporal field bleeding into Overworld bedrock and crystallising there. It is the only trace of the frozen dimension that reaches your world on its own.\n\nBecause it carries that trace, a compass built from Chronite Shards can sense the place where the two worlds once touched.",
+        "ja_jp": "クロナイトは、クロノドーンの時間場がオーバーワールドの岩盤に染み出して結晶化したものです。凍結した次元の痕跡のうち、自力でこちらの世界に届く唯一のものです。\n\nその痕跡を帯びているため、クロナイトの欠片で作った羅針盤は、2つの世界がかつて接触した場所を感知できます。"
+      }
+    },
+    {
+      "text": {
+        "en_us": "Where to Find It:\n\n• Ordinary Overworld stone and deepslate\n• Every biome, no exceptions\n• Y -48 to 112, most common in the middle of that band\n• A stone pickaxe is enough\n\nUses:\n\n• Time Compass\n• Time Arrows, one shard per arrow\n• Clocks, without gold\n• Blocks of Chronite for storage\n\nChronite makes no armour, tools, or weapons. It is a reagent, not a metal.",
+        "ja_jp": "見つかる場所:\n\n• オーバーワールドの普通の石と深層岩\n• 例外なくすべてのバイオーム\n• Y -48〜112、帯の中央付近が最も多い\n• 石のツルハシで採掘可能\n\n用途:\n\n• タイムコンパス\n• 時の矢、矢1本につき欠片1個\n• 時計、金を使わずに作成\n• クロナイトブロックで保管\n\nクロナイトからは防具・道具・武器は作れません。金属ではなく試薬です。"
+      }
+    }
+  ]
+}
