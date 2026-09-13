@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Chronite Ore, a common Overworld ore that drops Chronite Shards. Craft a Time Compass from a compass, a clock, and Chronite Shards to locate the nearest Ancient Ruins from anywhere in the Overworld. Chronite also crafts Time Arrows, clocks without gold, and Blocks of Chronite. It makes no armour, tools, or weapons.
-- **Time Compass re-search** — sneak and use a Time Compass that already has a locked target to clear that lock and search again, without crafting a new compass. Covers the rare case where Minecraft's structure search locks onto a position that turns out to have no structure there.
+- **Time Compass re-search**: sneak and use a Time Compass that already has a locked target to clear that lock and search again, without crafting a new compass. Covers the rare case where Minecraft's structure search locks onto a position that turns out to have no structure there.
 - **CraftTweaker scripting bridge** — CraftTweaker packs can now subscribe to
   Chrono Dawn's native `BossDefeatedEvent` and `PortalOpenedEvent` from
   ZenScript on the supported 1.20.1 and 1.21.1 loader combinations. The
