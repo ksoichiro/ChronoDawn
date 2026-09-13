@@ -21,6 +21,7 @@ import com.chronodawn.ChronoDawn;
 import com.chronodawn.entities.bosses.*;
 import com.chronodawn.entities.mobs.*;
 import com.chronodawn.fabric.event.BlockProtectionEventHandler;
+import com.chronodawn.fabric.worldgen.ChroniteBiomeModifications;
 import com.chronodawn.registry.ModEntities;
 import com.chronodawn.worldgen.processors.BossRoomProtectionProcessor;
 import net.fabricmc.api.ModInitializer;
@@ -55,6 +56,9 @@ public class ChronoDawnFabric implements ModInitializer {
 
         // Register fuel items
         ChronoDawnFuelRegistry.register();
+
+        // Register Chronite Ore biome injection (Fabric-specific; NeoForge uses biome_modifier JSON)
+        ChroniteBiomeModifications.register();
 
         // Register block protection event handler
         BlockProtectionEventHandler.register();
