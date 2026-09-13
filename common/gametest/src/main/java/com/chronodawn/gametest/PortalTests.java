@@ -286,9 +286,17 @@ public final class PortalTests {
             .setValue(ChronoDawnPortalBlock.AXIS, FRAME_AXIS);
         Direction horizontal = getHorizontalDirection();
 
+        // helper.setBlock(BlockPos, BlockState) hardcodes flag 3 (UPDATE_NEIGHBORS |
+        // UPDATE_CLIENTS), which triggers the neighbor shape-update cascade on every
+        // block placed. With ChronoDawnPortalBlock's frame check now requiring all 4
+        // sides valid, filling one block at a time with that cascade enabled makes each
+        // block see its not-yet-placed neighbors as a broken frame and self-destroy
+        // mid-fill. Flag 18 (UPDATE_CLIENTS | UPDATE_KNOWN_SHAPE) skips that cascade,
+        // matching the fix already applied to TimeHourglassItem and PortalTeleportHandler.
         for (int x = 1; x < FRAME_WIDTH - 1; x++) {
             for (int y = 1; y < FRAME_HEIGHT - 1; y++) {
-                helper.setBlock(FRAME_BOTTOM_LEFT.relative(horizontal, x).relative(Direction.UP, y), portalState);
+                BlockPos pos = helper.absolutePos(FRAME_BOTTOM_LEFT.relative(horizontal, x).relative(Direction.UP, y));
+                helper.getLevel().setBlock(pos, portalState, 18);
             }
         }
     }
