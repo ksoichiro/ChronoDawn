@@ -249,8 +249,9 @@ public class ChronoDawnPortalBlock extends Block {
     /**
      * Check if this portal block has a valid frame.
      *
-     * A portal block is valid if it has at least one frame block or portal block
-     * in any of the 4 cardinal directions (up, down, left, right relative to portal plane).
+     * A portal block is valid only if all 4 cardinal directions around it
+     * (left/right along the portal's own axis, and up/down) are bounded by
+     * either a frame block or another portal block continuing the same axis.
      *
      * @param level The level accessor
      * @param pos Portal block position
@@ -258,10 +259,9 @@ public class ChronoDawnPortalBlock extends Block {
      * @return true if portal frame is valid
      */
     private boolean isValidPortalPosition(BlockGetter level, BlockPos pos, Direction.Axis axis) {
-        // Check horizontal adjacent blocks (perpendicular to portal axis)
-        Direction.Axis otherAxis = axis == Direction.Axis.X ? Direction.Axis.Z : Direction.Axis.X;
-        Direction horizontalNeg = Direction.get(Direction.AxisDirection.NEGATIVE, otherAxis);
-        Direction horizontalPos = Direction.get(Direction.AxisDirection.POSITIVE, otherAxis);
+        // Check adjacent blocks along the portal's own axis (left/right frame)
+        Direction horizontalNeg = Direction.get(Direction.AxisDirection.NEGATIVE, axis);
+        Direction horizontalPos = Direction.get(Direction.AxisDirection.POSITIVE, axis);
 
         // Check vertical adjacent blocks
         Direction up = Direction.UP;
@@ -273,7 +273,7 @@ public class ChronoDawnPortalBlock extends Block {
         BlockState stateUp = level.getBlockState(pos.relative(up));
         BlockState stateDown = level.getBlockState(pos.relative(down));
 
-        // Valid if any adjacent block is a frame block or portal block
+        // Valid only if every side is a frame block or a portal block continuing the same axis
         boolean validHorizontalNeg = isFrameBlock(stateHorizontalNeg) ||
                                      (stateHorizontalNeg.is(this) && stateHorizontalNeg.getValue(AXIS) == axis);
         boolean validHorizontalPos = isFrameBlock(stateHorizontalPos) ||
@@ -283,8 +283,8 @@ public class ChronoDawnPortalBlock extends Block {
         boolean validDown = isFrameBlock(stateDown) ||
                            (stateDown.is(this) && stateDown.getValue(AXIS) == axis);
 
-        // Portal is valid if at least one adjacent block is a frame or portal block
-        return validHorizontalNeg || validHorizontalPos || validUp || validDown;
+        // Portal is valid only if all 4 sides are properly bounded by frame or portal blocks
+        return validHorizontalNeg && validHorizontalPos && validUp && validDown;
     }
 
     /**
@@ -593,8 +593,10 @@ public class ChronoDawnPortalBlock extends Block {
         Direction.Axis axis = state.getValue(AXIS);
         Direction.Axis directionAxis = direction.getAxis();
 
-        // Check if the changed neighbor is relevant (perpendicular to portal axis or vertical)
-        boolean isRelevantDirection = directionAxis != axis;
+        // Check if the changed neighbor is relevant (same axis as portal = left/right frame,
+        // or vertical = up/down frame). The axis perpendicular to the portal's own axis is its
+        // thickness direction and never holds frame blocks, so it must not trigger validation.
+        boolean isRelevantDirection = directionAxis == axis || directionAxis == Direction.Axis.Y;
 
         // If a relevant neighbor changed, validate portal frame integrity
         // This ensures portal only breaks when frame blocks are destroyed,

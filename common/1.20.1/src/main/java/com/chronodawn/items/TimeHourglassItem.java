@@ -204,8 +204,14 @@ public class TimeHourglassItem extends Item {
                 frameData.getAxis()
             );
 
+        // Flag 18 (UPDATE_CLIENTS | UPDATE_KNOWN_SHAPE): placing blocks one by one otherwise
+        // triggers Level#setBlock's neighbor shape-update cascade (independent of
+        // UPDATE_NEIGHBORS) before every interior block is placed, so ChronoDawnPortalBlock's
+        // updateShape sees not-yet-placed neighbors as missing frame and destroys the portal
+        // mid-construction. UPDATE_KNOWN_SHAPE skips that cascade, matching how vanilla places
+        // multi-block structures in bulk.
         for (BlockPos pos : interiorPositions) {
-            level.setBlock(pos, portalState, 3);
+            level.setBlock(pos, portalState, 18);
         }
 
         ChronoDawn.LOGGER.debug("Filled {} portal blocks in frame at {}",

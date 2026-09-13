@@ -699,9 +699,14 @@ public class PortalTeleportHandler {
             .defaultBlockState()
             .setValue(com.chronodawn.blocks.ChronoDawnPortalBlock.AXIS, axis);
 
+        // Flag 18 (UPDATE_CLIENTS | UPDATE_KNOWN_SHAPE): see TimeHourglassItem.fillPortalBlocks
+        // for why UPDATE_NEIGHBORS(1) alone isn't enough. Placing interior blocks one at a time
+        // with the neighbor shape-update cascade enabled would let ChronoDawnPortalBlock's
+        // updateShape see not-yet-placed neighbors as missing frame and self-destroy mid-fill,
+        // pre-empting the intentional "unstable portal shatters" effect scheduled right after.
         for (int x = 1; x < width - 1; x++) {
             for (int y = 1; y < height - 1; y++) {
-                level.setBlock(pos.relative(horizontal, x).relative(vertical, y), portalState, 3);
+                level.setBlock(pos.relative(horizontal, x).relative(vertical, y), portalState, 18);
             }
         }
 

@@ -25,6 +25,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   0.160.0+26.2, since Architectury API 21.1.9 needs that version or newer.
   Older Fabric API releases caused Fabric Loader to reject the mod set at
   launch.
+- **Portal frame integrity check** — breaking a Clockstone frame block no
+  longer silently removed the portal without the glass-break sound and
+  particles. The frame validation checked the wrong axis and only required
+  one of four neighbors to be valid, so most frame breaks (including the
+  common case of breaking a side frame block) went undetected. All 13
+  supported versions are fixed.
 
 ## [0.9.2] - 2026-09-13
 
