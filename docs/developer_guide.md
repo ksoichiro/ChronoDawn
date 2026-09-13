@@ -48,7 +48,7 @@ Chrono Dawn uses the **Architectury** framework to support Fabric and NeoForge l
 - **Minecraft**: Java Edition 1.20.1 (legacy) / 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.21.6 / 1.21.7 / 1.21.8 / 1.21.9 / 1.21.10 / 1.21.11 / 26.1.2 / 26.2
 - **Fabric Loader**: 0.15.11+ (for 1.20.1) / 0.17.3+ (for 1.21.1+) / 0.19.5+ (for 26.1.2/26.2)
 - **Forge**: 47.3.5+ (for 1.20.1 only)
-- **NeoForge**: 21.1.209+ (for 1.21.1) / 21.2.0-beta+ (for 1.21.2) / 21.3.0-beta+ (for 1.21.3) / 21.4.0-beta+ (for 1.21.4) / 21.5.96+ (for 1.21.5) / 21.6.20-beta+ (for 1.21.6) / 21.7.25-beta+ (for 1.21.7) / 21.8.0-beta+ (for 1.21.8) / 21.9.16-beta+ (for 1.21.9) / 21.10.64+ (for 1.21.10) / 21.11.38-beta+ (for 1.21.11) / 26.1.2.103+ (for 26.1.2) / 26.2.0.76+ (for 26.2)
+- **NeoForge**: 21.1.209+ (for 1.21.1) / 21.2.0-beta+ (for 1.21.2) / 21.3.0-beta+ (for 1.21.3) / 21.4.0-beta+ (for 1.21.4) / 21.5.96+ (for 1.21.5) / 21.6.20-beta+ (for 1.21.6) / 21.7.25-beta+ (for 1.21.7) / 21.8.0-beta+ (for 1.21.8) / 21.9.16-beta+ (for 1.21.9) / 21.10.64+ (for 1.21.10) / 21.11.38-beta+ (for 1.21.11) / 26.1.2.103+ (for 26.1.2) / 26.2.0.82+ (for 26.2)
 - **Architectury API**: 9.2.14+ (for 1.20.1) / 13.0.8+ (for 1.21.1) / 14.0.4+ (for 1.21.2/1.21.3) / 15.0.1+ (for 1.21.4) / 16.1.4+ (for 1.21.5) / 17.0.6+ (for 1.21.6) / 17.0.8+ (for 1.21.7/1.21.8) / 18.0.3+ (for 1.21.9) / 18.0.8+ (for 1.21.10) / 19.0.1+ (for 1.21.11) / 20.0.12+ (for 26.1.2) / 21.0.7+ (for 26.2)
 - **Gradle**: Build automation (Groovy DSL)
 - **Mojang Mappings**: Official Minecraft class names

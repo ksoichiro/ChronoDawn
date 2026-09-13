@@ -21,6 +21,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   in-game Mods list, and a `logoFile` deprecation warning appeared on
   startup. NeoForge 26.2 now uses `bannerFile`/`iconFile` instead of the
   deprecated `logoFile` (still used as-is on 26.1.2 and earlier).
+- **Fabric 26.2 startup** — the Fabric build now requires Fabric API
+  0.160.0+26.2, since Architectury API 21.1.9 needs that version or newer.
+  Older Fabric API releases caused Fabric Loader to reject the mod set at
+  launch.
 
 ## [0.9.2] - 2026-09-13
 

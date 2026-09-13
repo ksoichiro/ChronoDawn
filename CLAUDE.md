@@ -30,7 +30,7 @@ Auto-generated from all feature plans. Last updated: 2026-09-05
 - For 1.21.10: Fabric Loader 0.17.3+ | Fabric API 0.138.4+ | NeoForge 21.10.64+ | Architectury API 18.0.8+
 - For 1.21.11: Fabric Loader 0.17.3+ | Fabric API 0.141.3+ | NeoForge 21.11.38-beta+ | Architectury API 19.0.1+
 - For 26.1.2: Fabric Loader 0.19.5+ | Fabric API 0.155.2+26.1.2+ | NeoForge 26.1.2.103+ | Architectury API 20.0.12+
-- For 26.2: Fabric Loader 0.19.5+ | Fabric API 0.159.0+26.2+ | NeoForge 26.2.0.76+ | Architectury API 21.0.7+
+- For 26.2: Fabric Loader 0.19.5+ | Fabric API 0.160.0+26.2+ | NeoForge 26.2.0.82+ | Architectury API 21.0.7+
 - **Note**: 1.21.3 is a hotfix release that shares modules with 1.21.2
 - **Note**: Minecraft switched to year-based (CalVer) versioning in 2026; 26.1.2/26.2 require JDK 25 and Architectury Loom 1.17.491 / Gradle 9.5.1 (bumped from Loom 1.13-SNAPSHOT / Gradle 8.14 to support them)
 

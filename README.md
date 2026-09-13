@@ -88,7 +88,7 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed information.
   - **For 1.21.10**: Fabric Loader 0.17.3+ with Fabric API 0.138.4+, OR NeoForge 21.10.64+
   - **For 1.21.11**: Fabric Loader 0.17.3+ with Fabric API 0.141.3+, OR NeoForge 21.11.38-beta+
   - **For 26.1.2**: Fabric Loader 0.19.5+ with Fabric API 0.155.2+26.1.2+, OR NeoForge 26.1.2.103+
-  - **For 26.2**: Fabric Loader 0.19.5+ with Fabric API 0.159.0+26.2+, OR NeoForge 26.2.0.76+
+  - **For 26.2**: Fabric Loader 0.19.5+ with Fabric API 0.160.0+26.2+, OR NeoForge 26.2.0.82+
 - **Dependencies**:
   - **Architectury API** 13.0.8+ (for 1.21.1), 14.0.4+ (for 1.21.2/1.21.3), 15.0.1+ (for 1.21.4), 16.1.4+ (for 1.21.5), 17.0.6+ (for 1.21.6), 17.0.8+ (for 1.21.7/1.21.8), 18.0.3+ (for 1.21.9), 18.0.8+ (for 1.21.10), 19.0.1+ (for 1.21.11), 20.0.12+ (for 26.1.2), or 21.0.7+ (for 26.2)
 
@@ -453,7 +453,7 @@ Use the same steps above, but with:
 ### For Minecraft 26.2
 Use the same steps above, but with:
 - Minecraft 26.2
-- NeoForge 26.2.0.76+ or Fabric Loader 0.19.5+ with Fabric API 0.159.0+26.2+
+- NeoForge 26.2.0.82+ or Fabric Loader 0.19.5+ with Fabric API 0.160.0+26.2+
 - Architectury API 21.0.7+
 - JAR files with `+26.2` in the filename
 
