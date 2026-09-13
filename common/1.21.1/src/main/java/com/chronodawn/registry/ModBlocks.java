@@ -9,6 +9,7 @@ import com.chronodawn.blocks.ChronoDawnPortalBlock;
 import com.chronodawn.blocks.ChronoCoralBlock;
 import com.chronodawn.blocks.ClockstoneBlock;
 import com.chronodawn.blocks.ClockstoneOre;
+import com.chronodawn.blocks.ChroniteOre;
 import com.chronodawn.blocks.ClockstoneSlab;
 import com.chronodawn.blocks.ClockstoneStairs;
 import com.chronodawn.blocks.ClockstoneWall;
@@ -146,6 +147,7 @@ import com.chronodawn.blocks.DeepslateTemporalAmberOre;
 import com.chronodawn.blocks.DeepslateTemporalGoldOre;
 import com.chronodawn.blocks.DeepslateTemporalRedstoneOre;
 import com.chronodawn.blocks.DeepslateClockstoneOre;
+import com.chronodawn.blocks.DeepslateChroniteOre;
 import com.chronodawn.registry.ModFluids;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -233,6 +235,22 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> DEEPSLATE_CLOCKSTONE_ORE = BLOCKS.register(
         ModBlockId.DEEPSLATE_CLOCKSTONE_ORE.id(),
         () -> new DeepslateClockstoneOre(DeepslateClockstoneOre.createProperties())
+    );
+
+    /**
+     * Chronite Ore - Overworld ore that drops Chronite Shards.
+     */
+    public static final RegistrySupplier<Block> CHRONITE_ORE = BLOCKS.register(
+        ModBlockId.CHRONITE_ORE.id(),
+        () -> new ChroniteOre(ChroniteOre.createProperties())
+    );
+
+    /**
+     * Deepslate Chronite Ore - deepslate variant of Chronite Ore.
+     */
+    public static final RegistrySupplier<Block> DEEPSLATE_CHRONITE_ORE = BLOCKS.register(
+        ModBlockId.DEEPSLATE_CHRONITE_ORE.id(),
+        () -> new DeepslateChroniteOre(DeepslateChroniteOre.createProperties())
     );
 
     /**

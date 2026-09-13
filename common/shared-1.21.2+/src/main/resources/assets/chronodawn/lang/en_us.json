@@ -2,6 +2,7 @@
   "itemGroup.chronodawn.chronodawn": "Chrono Dawn",
 
   "block.chronodawn.clockstone_ore": "Clockstone Ore",
+  "block.chronodawn.chronite_ore": "Chronite Ore",
   "block.chronodawn.time_crystal_ore": "Time Crystal Ore",
   "block.chronodawn.clockstone_block": "Clockstone Block",
   "block.chronodawn.clockstone_stairs": "Clockstone Stairs",
@@ -551,6 +552,7 @@
   "block.chronodawn.deepslate_temporal_gold_ore": "Deepslate Temporal Gold Ore",
   "block.chronodawn.deepslate_temporal_redstone_ore": "Deepslate Temporal Redstone Ore",
   "block.chronodawn.deepslate_clockstone_ore": "Deepslate Clockstone Ore",
+  "block.chronodawn.deepslate_chronite_ore": "Deepslate Chronite Ore",
   "block.chronodawn.temporal_coal_ore": "Temporal Coal Ore",
   "block.chronodawn.temporal_gold_ore": "Temporal Gold Ore",
   "block.chronodawn.temporal_iron_ore": "Temporal Iron Ore",

@@ -66,6 +66,8 @@
     "chronodawn:temporal_lantern",
     "chronodawn:dawn_lantern",
     "chronodawn:dusk_lantern",
-    "chronodawn:temporal_pointed_dripstone"
+    "chronodawn:temporal_pointed_dripstone",
+    "chronodawn:chronite_ore",
+    "chronodawn:deepslate_chronite_ore"
   ]
 }

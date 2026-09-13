@@ -2,6 +2,7 @@
   "itemGroup.chronodawn.chronodawn": "クロノドーン",
 
   "block.chronodawn.clockstone_ore": "クロックストーン鉱石",
+  "block.chronodawn.chronite_ore": "クロナイト鉱石",
   "block.chronodawn.time_crystal_ore": "時間の結晶鉱石",
   "block.chronodawn.clockstone_block": "クロックストーンブロック",
   "block.chronodawn.clockstone_stairs": "クロックストーンの階段",
@@ -541,6 +542,7 @@
   "block.chronodawn.deepslate_temporal_gold_ore": "深層テンポラル金鉱石",
   "block.chronodawn.deepslate_temporal_redstone_ore": "深層テンポラルレッドストーン鉱石",
   "block.chronodawn.deepslate_clockstone_ore": "深層クロックストーン鉱石",
+  "block.chronodawn.deepslate_chronite_ore": "深層クロナイト鉱石",
   "block.chronodawn.temporal_coal_ore": "テンポラル石炭鉱石",
   "block.chronodawn.temporal_gold_ore": "テンポラル金鉱石",
   "block.chronodawn.temporal_iron_ore": "テンポラル鉄鉱石",

@@ -33,6 +33,7 @@ public enum ModItemId {
 
     // Ores
     CLOCKSTONE_ORE("clockstone_ore"),
+    CHRONITE_ORE("chronite_ore"),
     TIME_CRYSTAL_ORE("time_crystal_ore"),
 
     // Temporal Ore variants
@@ -50,6 +51,7 @@ public enum ModItemId {
     DEEPSLATE_TEMPORAL_GOLD_ORE("deepslate_temporal_gold_ore"),
     DEEPSLATE_TEMPORAL_REDSTONE_ORE("deepslate_temporal_redstone_ore"),
     DEEPSLATE_CLOCKSTONE_ORE("deepslate_clockstone_ore"),
+    DEEPSLATE_CHRONITE_ORE("deepslate_chronite_ore"),
 
     // Clockstone variants
     CLOCKSTONE_BLOCK("clockstone_block"),

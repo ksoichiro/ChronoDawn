@@ -183,6 +183,20 @@ public class ModItems {
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DEEPSLATE_CLOCKSTONE_ORE.id()))))
     );
+    public static final RegistrySupplier<Item> CHRONITE_ORE = ITEMS.register(
+        ModItemId.CHRONITE_ORE.id(),
+        () -> new BlockItem(ModBlocks.CHRONITE_ORE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CHRONITE_ORE.id()))))
+    );
+    public static final RegistrySupplier<Item> DEEPSLATE_CHRONITE_ORE = ITEMS.register(
+        ModItemId.DEEPSLATE_CHRONITE_ORE.id(),
+        () -> new BlockItem(ModBlocks.DEEPSLATE_CHRONITE_ORE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DEEPSLATE_CHRONITE_ORE.id()))))
+    );
 
     /**
      * Clockstone Block - BlockItem for placing Clockstone Block (portal frame material).
@@ -2992,6 +3006,8 @@ public class ModItems {
             net.minecraft.world.item.CreativeModeTab.Output output) {
         // === Blocks ===
         output.accept(CLOCKSTONE_ORE.get());
+        output.accept(CHRONITE_ORE.get());
+        output.accept(DEEPSLATE_CHRONITE_ORE.get());
         output.accept(TIME_CRYSTAL_ORE.get());
         output.accept(TEMPORAL_COAL_ORE.get());
         output.accept(TEMPORAL_GOLD_ORE.get());

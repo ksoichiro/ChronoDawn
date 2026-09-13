@@ -135,6 +135,22 @@ public class ModItems {
     );
 
     /**
+     * Chronite Ore - BlockItem for placing Chronite Ore block.
+     */
+    public static final RegistrySupplier<Item> CHRONITE_ORE = ITEMS.register(
+        ModItemId.CHRONITE_ORE.id(),
+        () -> new BlockItem(ModBlocks.CHRONITE_ORE.get(), new Item.Properties())
+    );
+
+    /**
+     * Deepslate Chronite Ore - BlockItem for placing Deepslate Chronite Ore block.
+     */
+    public static final RegistrySupplier<Item> DEEPSLATE_CHRONITE_ORE = ITEMS.register(
+        ModItemId.DEEPSLATE_CHRONITE_ORE.id(),
+        () -> new BlockItem(ModBlocks.DEEPSLATE_CHRONITE_ORE.get(), new Item.Properties())
+    );
+
+    /**
      * Clockstone Block - BlockItem for placing Clockstone Block (portal frame material).
      */
     public static final RegistrySupplier<Item> CLOCKSTONE_BLOCK = ITEMS.register(
@@ -2443,6 +2459,8 @@ public class ModItems {
             net.minecraft.world.item.CreativeModeTab.Output output) {
         // === Blocks ===
         output.accept(CLOCKSTONE_ORE.get());
+        output.accept(CHRONITE_ORE.get());
+        output.accept(DEEPSLATE_CHRONITE_ORE.get());
         output.accept(TIME_CRYSTAL_ORE.get());
         output.accept(TEMPORAL_COAL_ORE.get());
         output.accept(TEMPORAL_GOLD_ORE.get());

@@ -1,6 +1,8 @@
 {
   "values": [
     "chronodawn:temporal_iron_ore",
-    "chronodawn:temporal_pointed_dripstone"
+    "chronodawn:temporal_pointed_dripstone",
+    "chronodawn:chronite_ore",
+    "chronodawn:deepslate_chronite_ore"
   ]
 }

@@ -39,6 +39,7 @@ import java.util.List;
 public enum ModBlockId {
     // Ores
     CLOCKSTONE_ORE(def("clockstone_ore")),
+    CHRONITE_ORE(def("chronite_ore")),
     TIME_CRYSTAL_ORE(def("time_crystal_ore")),
 
     // Temporal Ore variants
@@ -56,6 +57,7 @@ public enum ModBlockId {
     DEEPSLATE_TEMPORAL_GOLD_ORE(def("deepslate_temporal_gold_ore")),
     DEEPSLATE_TEMPORAL_REDSTONE_ORE(def("deepslate_temporal_redstone_ore")),
     DEEPSLATE_CLOCKSTONE_ORE(def("deepslate_clockstone_ore")),
+    DEEPSLATE_CHRONITE_ORE(def("deepslate_chronite_ore")),
 
     // Clockstone variants
     CLOCKSTONE_BLOCK(def("clockstone_block")),
