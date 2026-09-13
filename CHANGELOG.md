@@ -15,6 +15,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   events expose the same stable IDs and server-side context as the Java API,
   without a separate addon. See `docs/modpack-integration.md`.
 
+### Fixed
+
+- **NeoForge 26.2 mods list icon** — Chrono Dawn's icon was missing from the
+  in-game Mods list, and a `logoFile` deprecation warning appeared on
+  startup. NeoForge 26.2 now uses `bannerFile`/`iconFile` instead of the
+  deprecated `logoFile` (still used as-is on 26.1.2 and earlier).
+
 ## [0.9.2] - 2026-09-13
 
 ### Fixed
