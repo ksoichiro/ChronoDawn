@@ -228,6 +228,7 @@ public enum ModItemId {
     ENTROPY_CRYSTAL("entropy_crystal"),
     RAW_TEMPORAL_AMBER("raw_temporal_amber"),
     TEMPORAL_AMBER_DUST("temporal_amber_dust"),
+    CHRONITE_SHARD("chronite_shard"),
     COLOSSUS_GEAR("colossus_gear"),
     PHANTOM_ESSENCE("phantom_essence"),
     ENTROPY_CORE("entropy_core"),

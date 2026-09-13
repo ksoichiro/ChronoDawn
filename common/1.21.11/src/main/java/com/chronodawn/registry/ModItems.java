@@ -6,6 +6,7 @@ import com.chronodawn.items.DecorativeWaterBucketItem;
 import com.chronodawn.items.PortalStabilizerItem;
 import com.chronodawn.items.TimeHourglassItem;
 import com.chronodawn.items.base.ClockstoneItem;
+import com.chronodawn.items.base.ChroniteShardItem;
 import com.chronodawn.items.base.EnhancedClockstoneItem;
 import com.chronodawn.items.base.TimeCrystalItem;
 import com.chronodawn.items.combat.TimeArrowItem;
@@ -1257,6 +1258,15 @@ public class ModItems {
     public static final RegistrySupplier<Item> CLOCKSTONE = ITEMS.register(
         ModItemId.CLOCKSTONE.id(),
         () -> new ClockstoneItem(ClockstoneItem.createProperties())
+    );
+
+    /**
+     * Chronite Shard - Overworld reagent used to craft the Time Compass,
+     * an alternate Time Arrow recipe, and Chronite Blocks.
+     */
+    public static final RegistrySupplier<Item> CHRONITE_SHARD = ITEMS.register(
+        ModItemId.CHRONITE_SHARD.id(),
+        () -> new ChroniteShardItem(ChroniteShardItem.createProperties())
     );
 
     /**
@@ -3099,6 +3109,7 @@ public class ModItems {
 
         // === Base Materials ===
         output.accept(CLOCKSTONE.get());
+        output.accept(CHRONITE_SHARD.get());
         output.accept(TIME_CRYSTAL.get());
         output.accept(ENHANCED_CLOCKSTONE.get());
         output.accept(ENTROPY_CRYSTAL.get());
