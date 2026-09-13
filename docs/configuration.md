@@ -262,8 +262,8 @@ y_max = 112
 Distribution shape between `y_min` and `y_max` is **fixed per ore** and
 not configurable:
 
-- Time Crystal, Entropy Crystal, and Clockstone use `minecraft:trapezoid`
-  (concentrated in the middle of the range).
+- Time Crystal, Entropy Crystal, Clockstone, and Chronite use
+  `minecraft:trapezoid` (concentrated in the middle of the range).
 - Temporal Amber uses `minecraft:uniform` (flat probability across the
   range).
 

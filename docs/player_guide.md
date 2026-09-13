@@ -741,6 +741,8 @@ These four bosses must be defeated to craft the **Chrono Aegis** activated buff 
 
 #### Time Compass
 - **Use**: Points toward time-related structures in Chrono Dawn
+- **Recipe**: Crafted from a compass, a clock, and Chronite Shards
+- **Ancient Ruins fallback**: An untargeted Time Compass used in the Overworld locks onto the nearest Ancient Ruins and reports direction and distance
 
 #### Master Clock Key
 - **Use**: Unlocks Master Clock dungeon entrance
@@ -756,7 +758,7 @@ These four bosses must be defeated to craft the **Chrono Aegis** activated buff 
 
 #### Time Arrow
 - **Use**: Special arrows with time-based effects
-- **Recipe**: Requires Clockstone
+- **Recipe**: Requires Clockstone, or a Chronite Shard and a vanilla arrow
 
 ### Custom Shields
 
@@ -826,6 +828,10 @@ The custom shields are independent of the existing Chrono Aegis artifact (which 
 #### Time Crystal Block
 - **Properties**: Emits light level 10
 - **Use**: Decorative lighting block
+
+#### Chronite
+- **Source**: Mine Chronite Ore (ordinary Overworld stone and deepslate, any biome, Y -48 to 112, stone pickaxe or better)
+- **Use**: Time Compass, Time Arrows, Clocks (no gold needed), and Blocks of Chronite for storage. It is a reagent, not a metal, so it does not make armor, tools, or weapons.
 
 ### Boss Drop Materials
 
