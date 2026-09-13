@@ -2,7 +2,9 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    "chronodawn:chronite_block"
+    {
+      "item": "chronodawn:chronite_block"
+    }
   ],
   "result": {
     "id": "chronodawn:chronite_shard",

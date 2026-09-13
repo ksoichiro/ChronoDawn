@@ -1,13 +1,15 @@
 {
   "type": "minecraft:crafting_shaped",
-  "category": "misc",
+  "category": "building",
   "pattern": [
     "XXX",
     "XXX",
     "XXX"
   ],
   "key": {
-    "X": "chronodawn:chronite_shard"
+    "X": {
+      "item": "chronodawn:chronite_shard"
+    }
   },
   "result": {
     "id": "chronodawn:chronite_block",

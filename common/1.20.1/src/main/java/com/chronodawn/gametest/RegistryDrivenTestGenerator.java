@@ -405,6 +405,13 @@ public final class RegistryDrivenTestGenerator {
     }
 
     /**
+     * Generates tests verifying Chronite-related recipes are loaded by the server's RecipeManager.
+     */
+    public static List<NamedTest> generateChroniteRecipeLoadTests() {
+        return RecipeLoadTests.generateChroniteRecipeLoadTests(NamedTest::new);
+    }
+
+    /**
      * Generate all tests from all categories.
      */
     public static List<NamedTest> generateAllTests() {
@@ -443,6 +450,7 @@ public final class RegistryDrivenTestGenerator {
         // conventional tags v1, whose umbrella tags have no per-material subtags.
         all.addAll(ConventionalTagTests.generate(ModItems.class, ModBlocks.class,
                 ConventionalTagTests.v1ItemSpecs(), ConventionalTagTests.v1BlockSpecs(), NamedTest::new));
+        all.addAll(generateChroniteRecipeLoadTests());
         all.addAll(generateRegistryConsistencySummaryTest());
         return all;
     }

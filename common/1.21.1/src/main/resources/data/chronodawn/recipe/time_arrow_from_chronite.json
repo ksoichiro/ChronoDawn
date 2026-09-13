@@ -2,8 +2,12 @@
   "type": "minecraft:crafting_shapeless",
   "category": "misc",
   "ingredients": [
-    "chronodawn:chronite_shard",
-    "minecraft:arrow"
+    {
+      "item": "chronodawn:chronite_shard"
+    },
+    {
+      "item": "minecraft:arrow"
+    }
   ],
   "result": {
     "id": "chronodawn:time_arrow",

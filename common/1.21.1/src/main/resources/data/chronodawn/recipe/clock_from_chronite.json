@@ -7,8 +7,12 @@
     " S "
   ],
   "key": {
-    "S": "chronodawn:chronite_shard",
-    "R": "minecraft:redstone"
+    "S": {
+      "item": "chronodawn:chronite_shard"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
   },
   "result": {
     "id": "minecraft:clock",
