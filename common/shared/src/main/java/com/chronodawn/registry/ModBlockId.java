@@ -59,6 +59,9 @@ public enum ModBlockId {
     DEEPSLATE_CLOCKSTONE_ORE(def("deepslate_clockstone_ore")),
     DEEPSLATE_CHRONITE_ORE(def("deepslate_chronite_ore")),
 
+    // Chronite variants
+    CHRONITE_BLOCK(def("chronite_block")),
+
     // Clockstone variants
     CLOCKSTONE_BLOCK(def("clockstone_block")),
     CLOCKSTONE_STAIRS(def("clockstone_stairs")),

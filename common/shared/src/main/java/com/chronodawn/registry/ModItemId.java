@@ -53,6 +53,9 @@ public enum ModItemId {
     DEEPSLATE_CLOCKSTONE_ORE("deepslate_clockstone_ore"),
     DEEPSLATE_CHRONITE_ORE("deepslate_chronite_ore"),
 
+    // Chronite variants
+    CHRONITE_BLOCK("chronite_block"),
+
     // Clockstone variants
     CLOCKSTONE_BLOCK("clockstone_block"),
     CLOCKSTONE_STAIRS("clockstone_stairs"),

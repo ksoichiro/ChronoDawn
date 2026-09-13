@@ -151,6 +151,14 @@ public class ModItems {
     );
 
     /**
+     * Chronite Block - BlockItem for placing Chronite Block (storage block for Chronite Shards).
+     */
+    public static final RegistrySupplier<Item> CHRONITE_BLOCK = ITEMS.register(
+        ModItemId.CHRONITE_BLOCK.id(),
+        () -> new BlockItem(ModBlocks.CHRONITE_BLOCK.get(), new Item.Properties())
+    );
+
+    /**
      * Clockstone Block - BlockItem for placing Clockstone Block (portal frame material).
      */
     public static final RegistrySupplier<Item> CLOCKSTONE_BLOCK = ITEMS.register(
@@ -2457,6 +2465,7 @@ public class ModItems {
         output.accept(DEEPSLATE_TEMPORAL_GOLD_ORE.get());
         output.accept(DEEPSLATE_TEMPORAL_REDSTONE_ORE.get());
         output.accept(DEEPSLATE_CLOCKSTONE_ORE.get());
+        output.accept(CHRONITE_BLOCK.get());
         output.accept(CLOCKSTONE_BLOCK.get());
         output.accept(CLOCKSTONE_STAIRS.get());
         output.accept(CLOCKSTONE_SLAB.get());

@@ -10,6 +10,7 @@ import com.chronodawn.blocks.ChronoCoralBlock;
 import com.chronodawn.blocks.ClockstoneBlock;
 import com.chronodawn.blocks.ClockstoneOre;
 import com.chronodawn.blocks.ChroniteOre;
+import com.chronodawn.blocks.ChroniteBlock;
 import com.chronodawn.blocks.ClockstoneSlab;
 import com.chronodawn.blocks.ClockstoneStairs;
 import com.chronodawn.blocks.ClockstoneWall;
@@ -251,6 +252,15 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> DEEPSLATE_CHRONITE_ORE = BLOCKS.register(
         ModBlockId.DEEPSLATE_CHRONITE_ORE.id(),
         () -> new DeepslateChroniteOre(DeepslateChroniteOre.createProperties())
+    );
+
+    /**
+     * Chronite Block - Storage block for Chronite Shards.
+     * Crafted from 9x Chronite Shard items, and can be uncrafted back into shards.
+     */
+    public static final RegistrySupplier<Block> CHRONITE_BLOCK = BLOCKS.register(
+        ModBlockId.CHRONITE_BLOCK.id(),
+        () -> new ChroniteBlock(ChroniteBlock.createProperties())
     );
 
     /**
