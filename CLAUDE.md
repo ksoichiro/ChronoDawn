@@ -1,6 +1,6 @@
 # Chrono Dawn Development Guidelines
 
-Auto-generated from all feature plans. Last updated: 2026-09-05
+Auto-generated from all feature plans. Last updated: 2026-09-22
 
 ---
 
@@ -12,27 +12,22 @@ Auto-generated from all feature plans. Last updated: 2026-09-05
 - `README.md` - Project overview and installation
 - `docs/player_guide.md` - Player guide
 - `docs/developer_guide.md` - Developer guide
+- `docs/release_process.md` - Versioning, changelog, verification, and release procedure
 - `docs/curseforge_description.md` - CurseForge page
 - `docs/modrinth_description.md` - Modrinth page
 - `gradle.properties` - Version definitions
-- `fabric.mod.json` / `neoforge.mods.toml` - Mod metadata
+- Versioned Fabric, Forge, and NeoForge metadata - Mod and dependency metadata
 
-**Current Versions** (as of 2026-09-05):
-- Minecraft: 1.21.1, 1.21.2, 1.21.3, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, 1.21.11, 26.1.2, or 26.2
-- For 1.21.1: Fabric Loader 0.17.3+ | Fabric API 0.116.7+ | NeoForge 21.1.209+ | Architectury API 13.0.8+
-- For 1.21.2/1.21.3: Fabric Loader 0.17.3+ | Fabric API | NeoForge 21.2.0-beta+ / 21.3.0-beta+ | Architectury API 14.0.4+
-- For 1.21.4: Fabric Loader 0.17.3+ | Fabric API 0.110.5+ | NeoForge 21.4.0-beta+ | Architectury API 15.0.1+
-- For 1.21.5: Fabric Loader 0.17.3+ | Fabric API 0.121.0+ | NeoForge 21.5.96+ | Architectury API 16.1.4+
-- For 1.21.6: Fabric Loader 0.17.3+ | Fabric API 0.128.2+ | NeoForge 21.6.20-beta+ | Architectury API 17.0.6+
-- For 1.21.7: Fabric Loader 0.17.3+ | Fabric API 0.129.0+ | NeoForge 21.7.25-beta+ | Architectury API 17.0.8+
-- For 1.21.8: Fabric Loader 0.17.3+ | Fabric API 0.129.0+ | NeoForge 21.8.0-beta+ | Architectury API 17.0.8+
-- For 1.21.9: Fabric Loader 0.17.3+ | Fabric API 0.134.1+ | NeoForge 21.9.16-beta+ | Architectury API 18.0.3+
-- For 1.21.10: Fabric Loader 0.17.3+ | Fabric API 0.138.4+ | NeoForge 21.10.64+ | Architectury API 18.0.8+
-- For 1.21.11: Fabric Loader 0.17.3+ | Fabric API 0.141.3+ | NeoForge 21.11.38-beta+ | Architectury API 19.0.1+
-- For 26.1.2: Fabric Loader 0.19.5+ | Fabric API 0.155.2+26.1.2+ | NeoForge 26.1.2.103+ | Architectury API 20.0.12+
-- For 26.2: Fabric Loader 0.19.5+ | Fabric API 0.160.0+26.2+ | NeoForge 26.2.0.82+ | Architectury API 21.0.7+
-- **Note**: 1.21.3 is a hotfix release that shares modules with 1.21.2
-- **Note**: Minecraft switched to year-based (CalVer) versioning in 2026; 26.1.2/26.2 require JDK 25 and Architectury Loom 1.17.491 / Gradle 9.5.1 (bumped from Loom 1.13-SNAPSHOT / Gradle 8.14 to support them)
+**Current version sources**:
+- `gradle.properties` defines the supported versions, hotfix mappings, default
+  target, and mod version.
+- `props/<version>.properties` defines the Java, loader, and dependency versions
+  for each target. Read these files instead of maintaining a duplicate table
+  here.
+- Minecraft 1.20.1 uses Java 17 and supports Fabric and Forge. Minecraft 1.21.x
+  uses Java 21 and supports Fabric and NeoForge. Minecraft 26.x uses Java 25 and
+  supports Fabric and NeoForge.
+- Minecraft 1.21.3 is a hotfix runtime target that shares modules with 1.21.2.
 
 ---
 
@@ -52,7 +47,9 @@ Auto-generated from all feature plans. Last updated: 2026-09-05
 ---
 
 ## Active Technologies
-- Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.21.6 / 1.21.7 / 1.21.8 / 1.21.9 / 1.21.10 / 1.21.11), Java 25 (26.1.2 / 26.2) + NeoForge 21.1.x / 21.2.x / 21.3.x / 21.4.x / 21.5.x / 21.6.x / 21.7.x / 21.8.x / 21.9.x / 21.10.x / 21.11.x / 26.1.2.x / 26.2.0.x, Fabric Loader, mcjunitlib
+- Java 17 (Minecraft 1.20.1), Java 21 (Minecraft 1.21.x), Java 25
+  (Minecraft 26.x), Fabric Loader, Forge 47.x, NeoForge, Architectury, and
+  mcjunitlib. Read exact versions from `props/<version>.properties`.
 
 ## Project Structure
 ```
@@ -90,6 +87,9 @@ fabric/
   1.21.11/            (version-specific Fabric subproject)
   26.1.2/             (version-specific Fabric subproject)
   26.2/               (version-specific Fabric subproject)
+forge/
+  base/               (shared Forge sources, NOT a Gradle subproject)
+  1.20.1/             (version-specific Forge subproject)
 neoforge/
   base/               (shared NeoForge sources, NOT a Gradle subproject)
   1.21.1/             (version-specific NeoForge subproject)
@@ -110,9 +110,6 @@ gradle/
 props/                (version-specific properties)
 scripts/              (project-specific utility scripts)
 ```
-
-## Commands
-# Add commands for Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3)
 
 ## Code Style
 Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.21.6 / 1.21.7 / 1.21.8 / 1.21.9 / 1.21.10 / 1.21.11): Follow standard conventions
@@ -215,24 +212,24 @@ Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.2
 
 ## Support Priority
 
-**CurseForge download data (as of 2026-09-22)** shows 1.21.1 accounts for the majority of cumulative downloads (~57%), with NeoForge outpacing Fabric roughly 5:1 on that version. This pattern (a sharp jump from 0.7.0→0.8.0 on 1.21.1 NeoForge specifically) is consistent with modpack bundling driving adoption, not organic single-mod installs.
+**CurseForge download data supplied on 2026-09-22** shows that 1.21.1 files account for about 185.6K of 195.3K cumulative downloads, roughly 95%. Across all listed 1.21.1 files, NeoForge has about 124.5K downloads and Fabric about 61.1K, roughly 2:1. The approximately 5.7:1 ratio applies only to the 0.8.0 NeoForge and Fabric files, not to 1.21.1 as a whole. Matching pack manifests and release timing indicate that a few modpacks drive the largest spikes, so these figures should not be read as standalone loader demand.
 
 **Implications for development priority**:
-- Treat 1.21.1 NeoForge as the primary regression target. When a change risks behavior differences across versions, verify 1.21.1 NeoForge first
-- Prioritize compatibility work (config flexibility, avoiding resource/registry collisions with other mods, KubeJS/FTB Quests integration) over chasing newest-version parity
-- Don't rush to drop 1.21.1 support or deprioritize it in favor of newer versions; keep its maintenance window long
-- Keep Fabric support alive even though NeoForge currently leads — historical data (0.5.0) shows Fabric has led before, so the balance isn't fixed
-- Re-derive this priority from fresh CurseForge stats periodically; this is a snapshot, not a permanent ranking
+- Treat 1.21.1 as the modpack/LTS regression target while keeping 26.2 as the default development target
+- Verify pack-facing changes on both 1.21.1 loaders: NeoForge covers Tensura and MineColonies usage, while Fabric covers Fantasy MC usage
+- Prioritize optional compatibility, configuration, quest-author support, and safe upgrades over generic content growth when the work serves modpacks
+- Do not drop or deprioritize 1.21.1 solely because newer Minecraft versions exist
+- Re-derive priorities from current pack manifests and download data; the detailed 2026-09-22 analysis is in `.claude/tasks.local.md` and is not a permanent ranking
 
 ## Mixin Configuration
 
-**CRITICAL**: Fabric and NeoForge require **different** Mixin configurations due to mapping differences.
+**CRITICAL**: Fabric and the Mojang-mapped loaders require **different** Mixin configurations due to mapping differences.
 
 **Key Points**:
 - **Fabric**: Must include `"refmap": "common-common-refmap.json"` in `chronodawn-fabric.mixins.json`
-- **NeoForge**: Must NOT include refMap property in `chronodawn-neoforge.mixins.json`
+- **Forge / NeoForge**: Must NOT include a refMap property in their loader-specific mixin configs
 - **Common**: `chronodawn.mixins.json` excluded from builds (reference only)
-- When adding Mixins: Update BOTH loader-specific configs
+- When adding Mixins: Update every affected loader-specific config
 
 <!-- MANUAL ADDITIONS START -->
 

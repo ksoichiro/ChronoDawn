@@ -7,21 +7,25 @@ docs for details.
 ## Project Overview
 
 Chrono Dawn is a multi-loader Minecraft mod built with Architectury. It supports
-Fabric and NeoForge from one codebase, with most gameplay logic in common
-modules and loader-specific code kept small.
+Fabric and NeoForge, plus Forge on Minecraft 1.20.1, from one codebase. Most
+gameplay logic lives in common modules and loader-specific code stays small.
 
-- Language: Java 21
+- Language: Java 17 for Minecraft 1.20.1, Java 21 for 1.21.x, Java 25 for
+  26.x
 - Build: Gradle Groovy DSL
 - Mappings: Mojang mappings, not Yarn
 - License: LGPL-3.0
-- Current default target: Minecraft 1.21.11
+- Current default development target: Minecraft 26.2
+- Modpack/LTS target: Minecraft 1.21.1 on both Fabric and NeoForge
 - Supported versions: 1.20.1, 1.21.1, 1.21.2, 1.21.3, 1.21.4, 1.21.5,
-  1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, 1.21.11
+  1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, 1.21.11, 26.1.2, 26.2
 
 Reference docs:
 
 - `README.md`: user-facing overview and build examples
 - `docs/developer_guide.md`: architecture and development details
+- `docs/release_process.md`: versioning, changelog, verification, and release
+  procedure
 - `CONTRIBUTING.md`: coding standards and contribution process
 - `CLAUDE.md`: older AI-agent guidance; keep it consistent when changing
   shared project instructions
@@ -41,6 +45,9 @@ fabric/
   base/               Shared Fabric code
   1.20.1/             Fabric legacy module
   1.21.x/             Version-specific Fabric modules
+forge/
+  base/               Shared Forge code
+  1.20.1/             Forge 1.20.1 module
 neoforge/
   base/               Shared NeoForge code
   1.21.x/             Version-specific NeoForge modules
@@ -63,8 +70,9 @@ the build model changes.
   abstractions.
 - Do not use zsh's reserved `path` variable as a loop or script variable; it
   controls command lookup for the rest of that shell invocation.
-- Put common gameplay behavior in `common/` where possible. Use `fabric/` or
-  `neoforge/` only for loader APIs, entry points, events, or platform bridges.
+- Put common gameplay behavior in `common/` where possible. Use `fabric/`,
+  `forge/`, or `neoforge/` only for loader APIs, entry points, events, or
+  platform bridges.
 - Use Mojang class names such as `Level`, `BlockPos`, and `Registry`; do not use
   Yarn names.
 - Build files are Groovy DSL. Use syntax like `maven { url 'https://...' }`.
@@ -76,6 +84,10 @@ the build model changes.
 - Research that affects future implementation should be written to an
   appropriate file, usually under `specs/chrono-dawn-mod/` or `docs/`, and
   linked from follow-up tasks when applicable.
+- Treat Minecraft 1.21.1 as the long-term modpack compatibility target. For
+  pack-facing changes, verify both Fabric and NeoForge 1.21.1 even when 26.2 is
+  the default development target. The detailed, time-sensitive pack research is
+  kept in `.claude/tasks.local.md` when that local file is present.
 
 ## Coding Standards
 
@@ -100,6 +112,8 @@ git submodule update --init
 Build one Minecraft version:
 
 ```bash
+./gradlew build26_2
+./gradlew build26_1_2
 ./gradlew build1_21_11
 ./gradlew build1_21_10
 ./gradlew build1_21_9
@@ -142,10 +156,11 @@ Run resource validation:
 Run clients:
 
 ```bash
-./gradlew runClientFabric1_21_11
-./gradlew runClientNeoForge1_21_11
-./gradlew runClientFabric1_21_3
-./gradlew runClientNeoForge1_21_3
+./gradlew runClientFabric26_2
+./gradlew runClientNeoForge26_2
+./gradlew runClientFabric1_21_1
+./gradlew runClientNeoForge1_21_1
+./gradlew runClientForge1_20_1
 ```
 
 Run GameTests:
@@ -168,7 +183,8 @@ validation command that covers the affected version and loader.
 ## Multi-Version Notes
 
 - Supported versions and hotfix mappings are defined in `gradle.properties`.
-- 1.20.1 is Fabric-only.
+- 1.20.1 supports Fabric and Forge. NeoForge starts at 1.21.1.
+- 1.20.1 requires Java 17, 1.21.x requires Java 21, and 26.x requires Java 25.
 - Shared sources/resources are included via source sets; directories named
   `shared*` and `gametest` are not Gradle subprojects.
 - When adding a feature, inspect the nearest existing implementation across
@@ -179,16 +195,17 @@ validation command that covers the affected version and loader.
 
 ## Mixin Configuration
 
-Fabric and NeoForge need different Mixin configuration because of mapping and
-loader differences.
+Fabric and the Mojang-mapped loaders need different Mixin configuration because
+of mapping and loader differences.
 
 - Fabric loader-specific mixin configs must include
   `"refmap": "common-common-refmap.json"`.
-- NeoForge loader-specific mixin configs must not include a `refMap` property.
+- Forge and NeoForge loader-specific mixin configs must not include a `refMap`
+  property.
 - `chronodawn.mixins.json` is a common/reference config and is excluded from
   builds.
 - When adding or changing Mixins, update both loader-specific configs when the
-  behavior applies to both loaders.
+  behavior applies to their loaders.
 
 ## License and Dependencies
 
