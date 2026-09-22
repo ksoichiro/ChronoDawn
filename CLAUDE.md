@@ -213,6 +213,17 @@ Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.2
 - Common module code is bundled into Fabric JAR using Shadow plugin
 - **Parallel GameTest**: `gameTestAll` groups configurations by Minecraft version. 1.20.1 and 1.21.1 run in parallel, while 1.21.2 and 1.21.3 run sequentially in the same thread (they share modules). Within each version, fabric and neoforge run in a single Gradle process to avoid common module build conflicts. Each version uses a separate directory (fabric/1.20.1, fabric/1.21.1, etc.) with its own `.gradle/architectury/` path.
 
+## Support Priority
+
+**CurseForge download data (as of 2026-09-22)** shows 1.21.1 accounts for the majority of cumulative downloads (~57%), with NeoForge outpacing Fabric roughly 5:1 on that version. This pattern (a sharp jump from 0.7.0→0.8.0 on 1.21.1 NeoForge specifically) is consistent with modpack bundling driving adoption, not organic single-mod installs.
+
+**Implications for development priority**:
+- Treat 1.21.1 NeoForge as the primary regression target. When a change risks behavior differences across versions, verify 1.21.1 NeoForge first
+- Prioritize compatibility work (config flexibility, avoiding resource/registry collisions with other mods, KubeJS/FTB Quests integration) over chasing newest-version parity
+- Don't rush to drop 1.21.1 support or deprioritize it in favor of newer versions; keep its maintenance window long
+- Keep Fabric support alive even though NeoForge currently leads — historical data (0.5.0) shows Fabric has led before, so the balance isn't fixed
+- Re-derive this priority from fresh CurseForge stats periodically; this is a snapshot, not a permanent ranking
+
 ## Mixin Configuration
 
 **CRITICAL**: Fabric and NeoForge require **different** Mixin configurations due to mapping differences.
