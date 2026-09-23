@@ -83,6 +83,12 @@ public final class ConfigLoader {
     private static final String K_TD_NORMAL_SLOWNESS_LEVEL = "normal_slowness_level";
     private static final String K_TD_ENHANCED_SLOWNESS_LEVEL = "enhanced_slowness_level";
     private static final String K_TD_SCOPE = "scope";
+    private static final String K_TIME_FLOW = "time_flow";
+    private static final String K_TF_ENABLED = "enabled";
+    private static final String K_TF_MIN_SPEED = "min_speed";
+    private static final String K_TF_MAX_SPEED = "max_speed";
+    private static final String K_TF_MIN_DURATION_TICKS = "min_duration_ticks";
+    private static final String K_TF_MAX_DURATION_TICKS = "max_duration_ticks";
     private static final String K_PORTALS = "portals";
     private static final String K_PORTAL_ONE_WAY_UNTIL_STABILIZED = "one_way_until_stabilized";
     private static final String K_PORTAL_ALLOW_REIGNITION_BEFORE_STABILIZATION =
@@ -99,6 +105,14 @@ public final class ConfigLoader {
 
     private static final int MIN_SLOWNESS_LEVEL = 1;
     private static final int MAX_SLOWNESS_LEVEL = 5;
+
+    // Slowest allowed: 5% speed (a day would last roughly 3-4 hours).
+    // Fastest allowed: 20x speed (a day lasts 60 seconds).
+    private static final float MIN_TIME_SPEED = 0.05f;
+    private static final float MAX_TIME_SPEED = 20.0f;
+    // 1 second to 1 hour between speed changes.
+    private static final int MIN_TIME_FLOW_DURATION_TICKS = 20;
+    private static final int MAX_TIME_FLOW_DURATION_TICKS = 72000;
 
     private ConfigLoader() {}
 
@@ -322,6 +336,7 @@ public final class ConfigLoader {
     private static ChronoDawnConfig.Gameplay parseGameplay(CommentedConfig parsed) {
         return new ChronoDawnConfig.Gameplay(
             parseTimeDistortion(parsed),
+            parseTimeFlow(parsed),
             parsePortals(parsed),
             new BossesConfig(
                 parseBoss(parsed, "time_guardian"),
@@ -376,6 +391,50 @@ public final class ConfigLoader {
         }
 
         return new TimeDistortionSettings(enabled, normalLevel, enhancedLevel, scope);
+    }
+
+    private static TimeFlowSettings parseTimeFlow(CommentedConfig parsed) {
+        String path = K_GAMEPLAY + "." + K_TIME_FLOW;
+        TimeFlowSettings defaults = ConfigDefaults.TIME_FLOW_DEFAULTS;
+
+        boolean enabled = parsed.<Boolean>getOptional(path + "." + K_TF_ENABLED)
+            .orElse(defaults.enabled());
+        float minSpeed = parsed.<Number>getOptional(path + "." + K_TF_MIN_SPEED)
+            .map(Number::floatValue)
+            .orElse(defaults.minSpeed());
+        float maxSpeed = parsed.<Number>getOptional(path + "." + K_TF_MAX_SPEED)
+            .map(Number::floatValue)
+            .orElse(defaults.maxSpeed());
+        int minDuration = parsed.<Number>getOptional(path + "." + K_TF_MIN_DURATION_TICKS)
+            .map(Number::intValue)
+            .orElse(defaults.minDurationTicks());
+        int maxDuration = parsed.<Number>getOptional(path + "." + K_TF_MAX_DURATION_TICKS)
+            .map(Number::intValue)
+            .orElse(defaults.maxDurationTicks());
+
+        // Validation: each field pair reverts independently so one bad value doesn't reset the others.
+        if (minSpeed < MIN_TIME_SPEED || maxSpeed > MAX_TIME_SPEED || minSpeed > maxSpeed) {
+            LOGGER.error(
+                "Invalid {}.{{min_speed,max_speed}} = ({}, {}) (must satisfy {} <= min_speed <= max_speed <= {}); "
+                    + "using defaults ({}, {})",
+                path, minSpeed, maxSpeed, MIN_TIME_SPEED, MAX_TIME_SPEED, defaults.minSpeed(), defaults.maxSpeed()
+            );
+            minSpeed = defaults.minSpeed();
+            maxSpeed = defaults.maxSpeed();
+        }
+        if (minDuration < MIN_TIME_FLOW_DURATION_TICKS || maxDuration > MAX_TIME_FLOW_DURATION_TICKS
+            || minDuration > maxDuration) {
+            LOGGER.error(
+                "Invalid {}.{{min_duration_ticks,max_duration_ticks}} = ({}, {}) "
+                    + "(must satisfy {} <= min_duration_ticks <= max_duration_ticks <= {}); using defaults ({}, {})",
+                path, minDuration, maxDuration, MIN_TIME_FLOW_DURATION_TICKS, MAX_TIME_FLOW_DURATION_TICKS,
+                defaults.minDurationTicks(), defaults.maxDurationTicks()
+            );
+            minDuration = defaults.minDurationTicks();
+            maxDuration = defaults.maxDurationTicks();
+        }
+
+        return new TimeFlowSettings(enabled, minSpeed, maxSpeed, minDuration, maxDuration);
     }
 
     private static PortalSettings parsePortals(CommentedConfig parsed) {

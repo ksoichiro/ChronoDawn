@@ -390,6 +390,49 @@ enhanced_slowness_level = 3
 
 ---
 
+### `[gameplay.time_flow]`
+
+Controls the Chrono Dawn dimension's variable day/night cycle speed. While
+enabled, the cycle speed randomly picks a new multiplier every
+`min_duration_ticks`..`max_duration_ticks` and holds it until the next
+change. Setting `enabled = false` locks the cycle at normal (1.0x) speed.
+
+```toml
+[gameplay.time_flow]
+enabled = true
+min_speed = 0.67
+max_speed = 5.0
+min_duration_ticks = 1200
+max_duration_ticks = 6000
+```
+
+| Field | Type | Default | Range | Notes |
+| --- | --- | --- | --- | --- |
+| `enabled` | boolean | `true` | — | Turns the speed variation on or off. |
+| `min_speed` | float | `0.67` | `0.05..=20.0` | Slowest multiplier the cycle can pick. Must be `<= max_speed`. |
+| `max_speed` | float | `5.0` | `0.05..=20.0` | Fastest multiplier the cycle can pick. Must be `>= min_speed`. |
+| `min_duration_ticks` | integer | `1200` | `20..=72000` | Shortest time (in ticks, 20 ticks = 1 second) a chosen speed lasts. Must be `<= max_duration_ticks`. |
+| `max_duration_ticks` | integer | `6000` | `20..=72000` | Longest time a chosen speed lasts. Must be `>= min_duration_ticks`. |
+
+#### Example: freeze the cycle at normal speed
+
+```toml
+[gameplay.time_flow]
+enabled = false
+```
+
+#### Example: milder, slower-changing distortion
+
+```toml
+[gameplay.time_flow]
+min_speed = 0.8
+max_speed = 2.0
+min_duration_ticks = 3000
+max_duration_ticks = 12000
+```
+
+---
+
 ### `[gameplay.portals]`
 
 Controls the portal progression gate. Both defaults preserve the shipped

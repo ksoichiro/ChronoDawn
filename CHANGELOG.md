@@ -24,6 +24,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   item and entity_type tags instead of hardcoded Java checks, so a pack
   datapack can add compatible items, bosses, or seed drops without replacing
   Chrono Dawn's classes. See `docs/modpack-integration.md`.
+- **Configurable Chrono Dawn time flow** — the dimension's variable day/night
+  cycle speed (min/max speed, how long each speed lasts, and an on/off
+  toggle) is now controlled by `[gameplay.time_flow]` in `chronodawn.toml`
+  instead of being hardcoded. See `docs/configuration.md`.
 
 ### Fixed
 

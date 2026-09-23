@@ -277,6 +277,21 @@ enhanced_slowness_level = 5
 # and friendly mobs. Players and Chrono Dawn bosses are never affected.
 scope = "hostile_mobs"
 
+[gameplay.time_flow]
+# Whether the Chrono Dawn dimension's day/night cycle randomly speeds up and
+# slows down. When disabled, time always advances at normal (1.0x) speed.
+enabled = true
+
+# The day/night cycle speed randomly picks a new multiplier in this range.
+# Range: 0.05 to 20.0.
+min_speed = 0.67
+max_speed = 5.0
+
+# How long (in ticks, 20 ticks = 1 second) a chosen speed lasts before a new
+# one is picked. Range: 20 to 72000.
+min_duration_ticks = 1200
+max_duration_ticks = 6000
+
 [gameplay.portals]
 # Whether entering Chrono Dawn deactivates the departure portal and destroys
 # the arrival portal until the Portal Stabilizer has been used.

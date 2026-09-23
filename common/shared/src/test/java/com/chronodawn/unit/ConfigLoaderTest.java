@@ -28,6 +28,7 @@ import com.chronodawn.config.ManagedStructure;
 import com.chronodawn.config.PortalSettings;
 import com.chronodawn.config.StructureSettings;
 import com.chronodawn.config.TimeDistortionSettings;
+import com.chronodawn.config.TimeFlowSettings;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -501,6 +502,56 @@ class ConfigLoaderTest {
         assertEquals(ConfigDefaults.TIME_DISTORTION_DEFAULTS.normalSlownessLevel(), settings.normalSlownessLevel());
         assertEquals(2, settings.enhancedSlownessLevel());
         assertEquals(ConfigDefaults.TIME_DISTORTION_DEFAULTS.scope(), settings.scope());
+    }
+
+    @Test
+    void timeFlow_missingSection_fallsBackToDefaults(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"), "schema_version = 1\n");
+
+        ChronoDawnConfig config = ConfigLoader.load(tmp);
+
+        assertEquals(ConfigDefaults.TIME_FLOW_DEFAULTS, config.gameplay().timeFlow());
+    }
+
+    @Test
+    void timeFlow_validCustomValues_areReturnedVerbatim(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[gameplay.time_flow]\n" +
+            "enabled = false\n" +
+            "min_speed = 0.8\n" +
+            "max_speed = 2.0\n" +
+            "min_duration_ticks = 3000\n" +
+            "max_duration_ticks = 12000\n");
+
+        ChronoDawnConfig config = ConfigLoader.load(tmp);
+
+        assertEquals(new TimeFlowSettings(false, 0.8f, 2.0f, 3000, 12000), config.gameplay().timeFlow());
+    }
+
+    @Test
+    void timeFlow_invalidSpeedRange_fallsBackToDefaults(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[gameplay.time_flow]\n" +
+            "min_speed = 3.0\n" +
+            "max_speed = 1.0\n");
+
+        TimeFlowSettings settings = ConfigLoader.load(tmp).gameplay().timeFlow();
+
+        assertEquals(ConfigDefaults.TIME_FLOW_DEFAULTS.minSpeed(), settings.minSpeed());
+        assertEquals(ConfigDefaults.TIME_FLOW_DEFAULTS.maxSpeed(), settings.maxSpeed());
+    }
+
+    @Test
+    void timeFlow_invalidDurationRange_fallsBackToDefaults(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[gameplay.time_flow]\n" +
+            "min_duration_ticks = 8000\n" +
+            "max_duration_ticks = 100\n");
+
+        TimeFlowSettings settings = ConfigLoader.load(tmp).gameplay().timeFlow();
+
+        assertEquals(ConfigDefaults.TIME_FLOW_DEFAULTS.minDurationTicks(), settings.minDurationTicks());
+        assertEquals(ConfigDefaults.TIME_FLOW_DEFAULTS.maxDurationTicks(), settings.maxDurationTicks());
     }
 
     @Test

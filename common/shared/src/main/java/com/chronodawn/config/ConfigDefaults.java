@@ -57,6 +57,15 @@ public final class ConfigDefaults {
         TimeDistortionSettings.Scope.HOSTILE_MOBS
     );
 
+    // Defaults mirror the existing variable day/night cycle speed exactly.
+    public static final TimeFlowSettings TIME_FLOW_DEFAULTS = new TimeFlowSettings(
+        true,
+        0.67f,
+        5.0f,
+        1200,
+        6000
+    );
+
     // Defaults preserve the shipped one-way portal progression and its
     // Portal Stabilizer requirement for re-ignition in Chrono Dawn.
     public static final PortalSettings PORTAL_DEFAULTS = new PortalSettings(true, false);
@@ -93,6 +102,7 @@ public final class ConfigDefaults {
             ),
             new ChronoDawnConfig.Gameplay(
                 TIME_DISTORTION_DEFAULTS,
+                TIME_FLOW_DEFAULTS,
                 PORTAL_DEFAULTS,
                 new BossesConfig(
                     BOSS_DEFAULTS,

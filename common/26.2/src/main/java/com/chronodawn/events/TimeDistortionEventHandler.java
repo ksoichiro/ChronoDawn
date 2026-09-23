@@ -1,6 +1,8 @@
 package com.chronodawn.events;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.config.ChronoDawnConfig;
+import com.chronodawn.config.TimeFlowSettings;
 import com.chronodawn.registry.ModDimensions;
 import dev.architectury.event.events.common.TickEvent;
 import net.minecraft.core.Holder;
@@ -55,12 +57,6 @@ public class TimeDistortionEventHandler {
     // Interval for sending time sync packets to clients (in ticks)
     private static final int TIME_SYNC_INTERVAL = 20;
 
-    // Configuration
-    private static final float MIN_SPEED = 0.67f; // Slowest: 67% speed (day lasts ~15 minutes)
-    private static final float MAX_SPEED = 5.0f;  // Fastest: 5x speed (day lasts 2 minutes)
-    private static final int MIN_DURATION = 1200; // Minimum duration: 60 seconds (1200 ticks)
-    private static final int MAX_DURATION = 6000; // Maximum duration: 5 minutes (6000 ticks)
-
     // 26.1.2: ServerLevel#getDayTime()/setDayTime() were removed in favor of the new
     // world clock system. We use the dimension's configured default clock if present,
     // falling back to the built-in overworld clock definition otherwise.
@@ -97,11 +93,12 @@ public class TimeDistortionEventHandler {
         }
 
         ResourceKey<net.minecraft.world.level.Level> dimensionKey = level.dimension();
+        TimeFlowSettings timeFlow = ChronoDawnConfig.get().gameplay().timeFlow();
 
         // Initialize if first tick
         if (!timeSpeedMap.containsKey(dimensionKey)) {
             timeSpeedMap.put(dimensionKey, 1.0f); // Start at normal speed
-            timeUntilChangeMap.put(dimensionKey, getRandomDuration(level.getRandom()));
+            timeUntilChangeMap.put(dimensionKey, getRandomDuration(level.getRandom(), timeFlow));
             // 26.2: pause ChronoDawn's own clock (dedicated via dimension_type's
             // "default_clock") so vanilla's automatic per-tick advance doesn't run
             // alongside the manual advancement below - this handler is now the sole
@@ -110,8 +107,9 @@ public class TimeDistortionEventHandler {
             ChronoDawn.LOGGER.debug("TimeDistortionEventHandler: Initialized for ChronoDawn with speed 1.0x");
         }
 
-        // Get current values
-        float currentSpeed = timeSpeedMap.get(dimensionKey);
+        // Get current values. When time flow variation is disabled, time always
+        // advances at normal speed regardless of what was last stored.
+        float currentSpeed = timeFlow.enabled() ? timeSpeedMap.get(dimensionKey) : 1.0f;
         int timeUntilChange = timeUntilChangeMap.get(dimensionKey);
 
         // Check if we should advance time for sleep skip
@@ -173,10 +171,10 @@ public class TimeDistortionEventHandler {
         timeUntilChange--;
         timeUntilChangeMap.put(dimensionKey, timeUntilChange);
 
-        // Time to change speed?
-        if (timeUntilChange <= 0) {
-            float newSpeed = getRandomSpeed(level.getRandom());
-            int newDuration = getRandomDuration(level.getRandom());
+        // Time to change speed? (skipped entirely when time flow variation is disabled)
+        if (timeFlow.enabled() && timeUntilChange <= 0) {
+            float newSpeed = getRandomSpeed(level.getRandom(), timeFlow);
+            int newDuration = getRandomDuration(level.getRandom(), timeFlow);
 
             ChronoDawn.LOGGER.debug("TimeDistortionEventHandler: Speed changed from {}x to {}x (duration: {} ticks)",
                 currentSpeed, newSpeed, newDuration);
@@ -189,19 +187,22 @@ public class TimeDistortionEventHandler {
     /**
      * Get random time speed multiplier
      * @param random Random source
-     * @return Speed multiplier between MIN_SPEED and MAX_SPEED
+     * @param timeFlow Configured speed range
+     * @return Speed multiplier between the configured min and max speed
      */
-    private static float getRandomSpeed(RandomSource random) {
-        return MIN_SPEED + random.nextFloat() * (MAX_SPEED - MIN_SPEED);
+    private static float getRandomSpeed(RandomSource random, TimeFlowSettings timeFlow) {
+        return timeFlow.minSpeed() + random.nextFloat() * (timeFlow.maxSpeed() - timeFlow.minSpeed());
     }
 
     /**
      * Get random duration until next speed change
      * @param random Random source
-     * @return Duration in ticks between MIN_DURATION and MAX_DURATION
+     * @param timeFlow Configured duration range
+     * @return Duration in ticks between the configured min and max duration
      */
-    private static int getRandomDuration(RandomSource random) {
-        return MIN_DURATION + random.nextInt(MAX_DURATION - MIN_DURATION);
+    private static int getRandomDuration(RandomSource random, TimeFlowSettings timeFlow) {
+        int range = timeFlow.maxDurationTicks() - timeFlow.minDurationTicks();
+        return range <= 0 ? timeFlow.minDurationTicks() : timeFlow.minDurationTicks() + random.nextInt(range);
     }
 
     /**
