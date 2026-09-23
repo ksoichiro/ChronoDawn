@@ -28,6 +28,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   cycle speed (min/max speed, how long each speed lasts, and an on/off
   toggle) is now controlled by `[gameplay.time_flow]` in `chronodawn.toml`
   instead of being hardcoded. See `docs/configuration.md`.
+- **Modpack-extensible portal ignition** — the item that ignites a Chrono
+  Dawn portal on a valid Clockstone frame is now gated by the
+  `chronodawn:portal_igniters` item tag (default: Time Hourglass) instead of
+  being tied to the Time Hourglass item class, so a pack datapack can add
+  other ignition items without replacing Chrono Dawn's classes. See
+  `docs/modpack-integration.md`.
 
 ### Fixed
 

@@ -5,10 +5,12 @@ import com.chronodawn.core.portal.PortalRegistry;
 import com.chronodawn.core.portal.PortalState;
 import com.chronodawn.core.portal.PortalStateMachine;
 import com.chronodawn.data.ChronoDawnGlobalState;
+import com.chronodawn.items.PortalIgnitionHandler;
 import com.chronodawn.items.tools.SpatiallyLinkedPickaxeItem;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModDimensions;
 import com.chronodawn.registry.ModItems;
+import com.chronodawn.tags.ModItemTags;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.BlockEvent;
 import dev.architectury.event.events.common.InteractionEvent;
@@ -17,6 +19,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -186,6 +190,30 @@ public class BlockEventHandler {
             }
 
             return EventResult.pass();
+        });
+
+        // Register block interaction event for portal ignition (tag-based, modpack-extensible)
+        InteractionEvent.RIGHT_CLICK_BLOCK.register((player, hand, pos, face) -> {
+            // Only process main hand interactions on server side
+            if (player.level().isClientSide() || hand != InteractionHand.MAIN_HAND) {
+                return EventResult.pass();
+            }
+
+            // Only engage on Clockstone blocks, so holding a tagged item doesn't
+            // interrupt normal interactions with unrelated blocks
+            if (!player.level().getBlockState(pos).is(ModBlocks.CLOCKSTONE_BLOCK.get())) {
+                return EventResult.pass();
+            }
+
+            ItemStack heldItem = player.getItemInHand(hand);
+            if (!heldItem.is(ModItemTags.PORTAL_IGNITERS)) {
+                return EventResult.pass();
+            }
+
+            InteractionResult result = PortalIgnitionHandler.tryIgnite(player.level(), pos, player, heldItem);
+            return result == InteractionResult.CONSUME || result == InteractionResult.SUCCESS
+                ? EventResult.interruptTrue()
+                : EventResult.interruptFalse();
         });
 
         // Register block interaction event for Master Clock door unlocking

@@ -151,11 +151,11 @@ class PortalOpenedEventsTest {
 
         for (String version : VERSION_DIRS) {
             Path file = projectRoot.resolve("common").resolve(version)
-                .resolve("src/main/java/com/chronodawn/items/TimeHourglassItem.java");
+                .resolve("src/main/java/com/chronodawn/items/PortalIgnitionHandler.java");
             String source = Files.readString(file, StandardCharsets.UTF_8);
 
             assertEquals(1, countOccurrences(source, IGNITION_DISPATCH),
-                version + " TimeHourglassItem.java must dispatch the ignition portal-opened event exactly once");
+                version + " PortalIgnitionHandler.java must dispatch the ignition portal-opened event exactly once");
         }
     }
 

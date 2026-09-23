@@ -16,6 +16,7 @@ public final class ModItemTags {
     public static final TagKey<Item> TICKING_SHEEP_SHEARS = itemTag("ticking_sheep_shears");
     public static final TagKey<Item> CHRONO_BOVINE_MILKING_BUCKETS = itemTag("chrono_bovine_milking_buckets");
     public static final TagKey<Item> GRASS_SEED_REPLACEMENTS = itemTag("grass_seed_replacements");
+    public static final TagKey<Item> PORTAL_IGNITERS = itemTag("portal_igniters");
 
     private ModItemTags() {
     }

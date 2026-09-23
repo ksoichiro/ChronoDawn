@@ -220,6 +220,7 @@ needed.
 | `#chronodawn:chrono_bovine_milking_buckets` | item | `minecraft:bucket` | Buckets that milk Chrono Bovine |
 | `#chronodawn:time_distortion_immune` | entity_type | Chrono Dawn's six boss entity types | Entities exempt from the Time Distortion Slowness aura |
 | `#chronodawn:grass_seed_replacements` | item | `minecraft:wheat_seeds` | Items swapped for Time Wheat Seeds when grass/ferns are broken in the Chrono Dawn dimension (Forge/NeoForge global loot modifier) |
+| `#chronodawn:portal_igniters` | item | `chronodawn:time_hourglass` | Items that ignite a Chrono Dawn portal when used on a valid Clockstone frame |
 
 On 1.20.1 the item and entity type tag directories are `data/chronodawn/tags/items/...`
 and `data/chronodawn/tags/entity_types/...` (vanilla rename, same as the
