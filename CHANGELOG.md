@@ -27,6 +27,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Chrono Melon fruit/stem swapped on regrowth** — on 1.21.1+, breaking a
+  grown Chrono Melon turned the stem next to it into another Chrono Melon
+  instead of a bare stem, so the plant couldn't regrow. `AttachedChronoMelonStemBlock`
+  passed its fruit and stem block references to vanilla's
+  `AttachedStemBlock` constructor in the wrong order (vanilla takes
+  `(stem, fruit, ...)`, not `(fruit, stem, ...)` — the constructor parameter
+  order doesn't match the class's own field declaration order).
 - **Chrono Melon fruit placement on `parched_temporal_dirt`** — a mature
   Chrono Melon Stem can now grow its fruit onto
   `chronodawn:parched_temporal_dirt`, the one Chrono Dawn dirt-like block

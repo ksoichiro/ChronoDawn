@@ -31,8 +31,8 @@ public class AttachedChronoMelonStemBlock extends AttachedStemBlock {
 
     public AttachedChronoMelonStemBlock(Properties properties) {
         super(
-            ModBlocks.CHRONO_MELON.getKey(),          // Fruit block (first parameter)
-            ModBlocks.CHRONO_MELON_STEM.getKey(),     // Growing stem block (second parameter)
+            ModBlocks.CHRONO_MELON_STEM.getKey(),     // Growing stem block (first parameter: vanilla AttachedStemBlock's ctor is (stem, fruit, ...), despite the fruit field being declared first)
+            ModBlocks.CHRONO_MELON.getKey(),          // Fruit block (second parameter)
             ModItems.CHRONO_MELON_SEEDS.getKey(),     // Seed item (third parameter)
             properties
         );
