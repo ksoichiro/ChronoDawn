@@ -212,10 +212,10 @@ needed.
 
 | Tag | Type | Default members | Behavior |
 | --- | --- | --- | --- |
-| `#chronodawn:pulse_hog_food` | item | `minecraft:carrot`, `minecraft:potato`, `minecraft:beetroot` | Pulse Hog taming/breeding food |
+| `#chronodawn:pulse_hog_food` | item | `minecraft:carrot`, `minecraft:potato`, `minecraft:beetroot`, `chronodawn:temporal_root` | Pulse Hog taming/breeding food |
 | `#chronodawn:secondwing_fowl_food` | item | vanilla seed items plus `chronodawn:time_wheat_seeds`, `chronodawn:chrono_melon_seeds` | Secondwing Fowl taming/breeding food |
-| `#chronodawn:timebound_rabbit_food` | item | `minecraft:carrot`, `minecraft:golden_carrot`, `minecraft:dandelion` | Timebound Rabbit taming/breeding food |
-| `#chronodawn:temporal_caprid_food` | item | `minecraft:wheat` | Temporal Caprid taming/breeding food |
+| `#chronodawn:timebound_rabbit_food` | item | `minecraft:carrot`, `minecraft:golden_carrot`, `minecraft:dandelion`, `chronodawn:temporal_root` | Timebound Rabbit taming/breeding food |
+| `#chronodawn:temporal_caprid_food` | item | `minecraft:wheat`, `chronodawn:time_wheat` | Temporal Caprid taming/breeding food |
 | `#chronodawn:ticking_sheep_shears` | item | `minecraft:shears` | Tools that shear Ticking Sheep |
 | `#chronodawn:chrono_bovine_milking_buckets` | item | `minecraft:bucket` | Buckets that milk Chrono Bovine |
 | `#chronodawn:time_distortion_immune` | entity_type | Chrono Dawn's six boss entity types | Entities exempt from the Time Distortion Slowness aura |
