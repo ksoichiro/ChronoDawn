@@ -2,6 +2,7 @@ package com.chronodawn.neoforge.loot;
 
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.registry.ModItems;
+import com.chronodawn.tags.ModItemTags;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
@@ -9,7 +10,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -65,7 +65,7 @@ public class GrassTimeWheatSeedModifier extends LootModifier {
         // Replace Wheat Seeds with Time Wheat Seeds
         ObjectArrayList<ItemStack> modifiedLoot = new ObjectArrayList<>();
         for (ItemStack stack : generatedLoot) {
-            if (stack.is(Items.WHEAT_SEEDS)) {
+            if (stack.is(ModItemTags.GRASS_SEED_REPLACEMENTS)) {
                 // Replace with Time Wheat Seeds, keeping the same count
                 ItemStack timeWheatSeeds = new ItemStack(ModItems.TIME_WHEAT_SEEDS.get(), stack.getCount());
                 modifiedLoot.add(timeWheatSeeds);

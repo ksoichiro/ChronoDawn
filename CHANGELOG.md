@@ -16,16 +16,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   ZenScript on the supported 1.20.1 and 1.21.1 loader combinations. The
   events expose the same stable IDs and server-side context as the Java API,
   without a separate addon. See `docs/modpack-integration.md`.
-- **Modpack-extensible mob behavior and boss immunity tags** — Pulse Hog,
+- **Modpack-extensible mob and world behavior tags** — Pulse Hog,
   Secondwing Fowl, Timebound Rabbit, and Temporal Caprid taming/breeding
-  food, Ticking Sheep shears, Chrono Bovine milking buckets, and the Time
-  Distortion boss-immunity list now read from `chronodawn:` item and
-  entity_type tags instead of hardcoded Java checks, so a pack datapack can
-  add compatible items or bosses without replacing Chrono Dawn's classes.
-  See `docs/modpack-integration.md`.
+  food, Ticking Sheep shears, Chrono Bovine milking buckets, the Time
+  Distortion boss-immunity list, and the grass/fern seed drop swapped for
+  Time Wheat Seeds in the Chrono Dawn dimension now read from `chronodawn:`
+  item and entity_type tags instead of hardcoded Java checks, so a pack
+  datapack can add compatible items, bosses, or seed drops without replacing
+  Chrono Dawn's classes. See `docs/modpack-integration.md`.
 
 ### Fixed
 
+- **Chrono Melon fruit placement on `parched_temporal_dirt`** — a mature
+  Chrono Melon Stem can now grow its fruit onto
+  `chronodawn:parched_temporal_dirt`, the one Chrono Dawn dirt-like block
+  that a hardcoded soil list left out; on 26.1.2+ the fruit previously never
+  appeared there at all (`#minecraft:supports_melon_stem_fruit` didn't cover
+  it), and on 1.21.1–1.21.11 it could grow but immediately popped back off.
+  The seed/stem itself still requires tilled farmland, unaffected by this
+  fix.
 - **NeoForge 26.2 mods list icon** — Chrono Dawn's icon was missing from the
   in-game Mods list, and a `logoFile` deprecation warning appeared on
   startup. NeoForge 26.2 now uses `bannerFile`/`iconFile` instead of the

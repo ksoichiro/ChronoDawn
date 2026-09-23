@@ -203,10 +203,10 @@ For example, a biome selector that accepts biome tags can use
 `#chronodawn:has_*` biome tags control individual structure placement and are
 not part of this public grouping API.
 
-### Custom mob behavior tags
+### Custom mob and world behavior tags
 
-The following `chronodawn:` tags gate custom mob behavior that used to be
-hardcoded in Java. Add items or entity types to them from a datapack
+The following `chronodawn:` tags gate custom mob and world behavior that used
+to be hardcoded in Java. Add items or entity types to them from a datapack
 (`"replace": false`) to extend the behavior — no Chrono Dawn code change
 needed.
 
@@ -219,6 +219,7 @@ needed.
 | `#chronodawn:ticking_sheep_shears` | item | `minecraft:shears` | Tools that shear Ticking Sheep |
 | `#chronodawn:chrono_bovine_milking_buckets` | item | `minecraft:bucket` | Buckets that milk Chrono Bovine |
 | `#chronodawn:time_distortion_immune` | entity_type | Chrono Dawn's six boss entity types | Entities exempt from the Time Distortion Slowness aura |
+| `#chronodawn:grass_seed_replacements` | item | `minecraft:wheat_seeds` | Items swapped for Time Wheat Seeds when grass/ferns are broken in the Chrono Dawn dimension (Forge/NeoForge global loot modifier) |
 
 On 1.20.1 the item and entity type tag directories are `data/chronodawn/tags/items/...`
 and `data/chronodawn/tags/entity_types/...` (vanilla rename, same as the
