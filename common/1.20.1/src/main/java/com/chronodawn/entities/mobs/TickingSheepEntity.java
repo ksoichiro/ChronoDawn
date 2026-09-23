@@ -18,6 +18,7 @@
 package com.chronodawn.entities.mobs;
 
 import com.chronodawn.registry.ModItems;
+import com.chronodawn.tags.ModItemTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -148,7 +149,7 @@ public class TickingSheepEntity extends Animal implements Shearable {
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack itemStack = player.getItemInHand(hand);
-        if (itemStack.is(Items.SHEARS)) {
+        if (itemStack.is(ModItemTags.TICKING_SHEEP_SHEARS)) {
             if (!this.level().isClientSide && this.readyForShearing()) {
                 this.shear(SoundSource.PLAYERS);
                 this.gameEvent(GameEvent.SHEAR, player);

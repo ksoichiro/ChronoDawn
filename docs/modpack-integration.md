@@ -203,6 +203,28 @@ For example, a biome selector that accepts biome tags can use
 `#chronodawn:has_*` biome tags control individual structure placement and are
 not part of this public grouping API.
 
+### Custom mob behavior tags
+
+The following `chronodawn:` tags gate custom mob behavior that used to be
+hardcoded in Java. Add items or entity types to them from a datapack
+(`"replace": false`) to extend the behavior — no Chrono Dawn code change
+needed.
+
+| Tag | Type | Default members | Behavior |
+| --- | --- | --- | --- |
+| `#chronodawn:pulse_hog_food` | item | `minecraft:carrot`, `minecraft:potato`, `minecraft:beetroot` | Pulse Hog taming/breeding food |
+| `#chronodawn:secondwing_fowl_food` | item | vanilla seed items plus `chronodawn:time_wheat_seeds`, `chronodawn:chrono_melon_seeds` | Secondwing Fowl taming/breeding food |
+| `#chronodawn:timebound_rabbit_food` | item | `minecraft:carrot`, `minecraft:golden_carrot`, `minecraft:dandelion` | Timebound Rabbit taming/breeding food |
+| `#chronodawn:temporal_caprid_food` | item | `minecraft:wheat` | Temporal Caprid taming/breeding food |
+| `#chronodawn:ticking_sheep_shears` | item | `minecraft:shears` | Tools that shear Ticking Sheep |
+| `#chronodawn:chrono_bovine_milking_buckets` | item | `minecraft:bucket` | Buckets that milk Chrono Bovine |
+| `#chronodawn:time_distortion_immune` | entity_type | Chrono Dawn's six boss entity types | Entities exempt from the Time Distortion Slowness aura |
+
+On 1.20.1 the item and entity type tag directories are `data/chronodawn/tags/items/...`
+and `data/chronodawn/tags/entity_types/...` (vanilla rename, same as the
+`loot_tables` directory noted above); 1.21.1+ use the singular
+`data/chronodawn/tags/item/...` and `data/chronodawn/tags/entity_type/...`.
+
 ---
 
 ## Conventional (`c:`) tags

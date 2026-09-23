@@ -17,6 +17,7 @@
  */
 package com.chronodawn.entities.mobs;
 
+import com.chronodawn.tags.ModItemTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -43,7 +44,6 @@ import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -57,7 +57,7 @@ import org.jetbrains.annotations.Nullable;
  * Drops rabbit meat and rabbit hide like vanilla rabbits.
  */
 public class TimeboundRabbitEntity extends Animal {
-    private static final Ingredient FOOD_ITEMS = Ingredient.of(Items.CARROT, Items.GOLDEN_CARROT, Items.DANDELION);
+    private static final Ingredient FOOD_ITEMS = Ingredient.of(ModItemTags.TIMEBOUND_RABBIT_FOOD);
     private int jumpTicks;
     private int jumpDuration;
     private boolean wasOnGround;

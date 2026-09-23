@@ -17,6 +17,7 @@
  */
 package com.chronodawn.entities.mobs;
 
+import com.chronodawn.tags.ModItemTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -40,7 +41,6 @@ import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -52,7 +52,7 @@ import org.jetbrains.annotations.Nullable;
  * Drops porkchop like vanilla pigs.
  */
 public class PulseHogEntity extends Animal {
-    private static final Ingredient FOOD_ITEMS = Ingredient.of(Items.CARROT, Items.POTATO, Items.BEETROOT);
+    private static final Ingredient FOOD_ITEMS = Ingredient.of(ModItemTags.PULSE_HOG_FOOD);
 
     public PulseHogEntity(EntityType<? extends PulseHogEntity> entityType, Level level) {
         super(entityType, level);

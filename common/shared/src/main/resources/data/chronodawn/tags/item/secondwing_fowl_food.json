@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:wheat_seeds",
+    "minecraft:beetroot_seeds",
+    "minecraft:melon_seeds",
+    "minecraft:pumpkin_seeds",
+    "minecraft:torchflower_seeds",
+    "minecraft:pitcher_pod",
+    "chronodawn:time_wheat_seeds",
+    "chronodawn:chrono_melon_seeds"
+  ]
+}

@@ -17,6 +17,7 @@
  */
 package com.chronodawn.entities.mobs;
 
+import com.chronodawn.tags.ModItemTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -40,7 +41,6 @@ import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -51,7 +51,7 @@ import org.jetbrains.annotations.Nullable;
  * Spawns in ChronoDawn mountain biomes, replacing vanilla goats.
  */
 public class TemporalCapridEntity extends Animal {
-    private static final Ingredient FOOD_ITEMS = Ingredient.of(Items.WHEAT);
+    private static final Ingredient FOOD_ITEMS = Ingredient.of(ModItemTags.TEMPORAL_CAPRID_FOOD);
 
     public TemporalCapridEntity(EntityType<? extends TemporalCapridEntity> entityType, Level level) {
         super(entityType, level);

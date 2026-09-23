@@ -17,6 +17,7 @@
  */
 package com.chronodawn.entities.mobs;
 
+import com.chronodawn.tags.ModItemTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -43,7 +44,6 @@ import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.pathfinder.Path;
@@ -100,7 +100,7 @@ public class TimeboundRabbitEntity extends Animal {
 
     @Override
     public boolean isFood(ItemStack stack) {
-        return stack.is(Items.CARROT) || stack.is(Items.GOLDEN_CARROT) || stack.is(Items.DANDELION);
+        return stack.is(ModItemTags.TIMEBOUND_RABBIT_FOOD);
     }
 
     @Nullable

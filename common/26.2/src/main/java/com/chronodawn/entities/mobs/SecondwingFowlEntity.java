@@ -18,7 +18,7 @@
 package com.chronodawn.entities.mobs;
 
 import com.chronodawn.registry.ModEntities;
-import com.chronodawn.registry.ModItems;
+import com.chronodawn.tags.ModItemTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
@@ -37,7 +37,6 @@ import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import org.jetbrains.annotations.Nullable;
@@ -87,7 +86,7 @@ public class SecondwingFowlEntity extends Animal {
     @Override
     public boolean isFood(ItemStack stack) {
         // 26.2: Architectury 21.0.7's RegistrySupplier no longer implements Holder<T> directly
-        return stack.is(Items.WHEAT_SEEDS) || stack.is(Items.BEETROOT_SEEDS) || stack.is(Items.MELON_SEEDS) || stack.is(Items.PUMPKIN_SEEDS) || stack.is(Items.TORCHFLOWER_SEEDS) || stack.is(Items.PITCHER_POD) || stack.is(ModItems.TIME_WHEAT_SEEDS.get()) || stack.is(ModItems.CHRONO_MELON_SEEDS.get());
+        return stack.is(ModItemTags.SECONDWING_FOWL_FOOD);
     }
 
     @Nullable

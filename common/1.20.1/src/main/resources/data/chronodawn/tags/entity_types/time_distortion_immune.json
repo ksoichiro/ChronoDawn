@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "chronodawn:time_guardian",
+    "chronodawn:time_tyrant",
+    "chronodawn:chronos_warden",
+    "chronodawn:clockwork_colossus",
+    "chronodawn:entropy_keeper",
+    "chronodawn:temporal_phantom"
+  ]
+}

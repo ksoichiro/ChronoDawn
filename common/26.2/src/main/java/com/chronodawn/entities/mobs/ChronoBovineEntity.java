@@ -18,6 +18,7 @@
 package com.chronodawn.entities.mobs;
 
 import com.chronodawn.registry.ModItems;
+import com.chronodawn.tags.ModItemTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
@@ -101,7 +102,7 @@ public class ChronoBovineEntity extends Animal {
     @Override
     public InteractionResult mobInteract(Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (stack.is(Items.BUCKET) && !this.isBaby()) {
+        if (stack.is(ModItemTags.CHRONO_BOVINE_MILKING_BUCKETS) && !this.isBaby()) {
             player.playSound(SoundEvents.COW_MILK, 1.0F, 1.0F);
             ItemStack milkResult = ItemUtils.createFilledResult(stack, player, Items.MILK_BUCKET.getDefaultInstance());
             player.setItemInHand(hand, milkResult);

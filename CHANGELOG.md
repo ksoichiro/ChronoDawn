@@ -16,6 +16,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   ZenScript on the supported 1.20.1 and 1.21.1 loader combinations. The
   events expose the same stable IDs and server-side context as the Java API,
   without a separate addon. See `docs/modpack-integration.md`.
+- **Modpack-extensible mob behavior and boss immunity tags** — Pulse Hog,
+  Secondwing Fowl, Timebound Rabbit, and Temporal Caprid taming/breeding
+  food, Ticking Sheep shears, Chrono Bovine milking buckets, and the Time
+  Distortion boss-immunity list now read from `chronodawn:` item and
+  entity_type tags instead of hardcoded Java checks, so a pack datapack can
+  add compatible items or bosses without replacing Chrono Dawn's classes.
+  See `docs/modpack-integration.md`.
 
 ### Fixed
 

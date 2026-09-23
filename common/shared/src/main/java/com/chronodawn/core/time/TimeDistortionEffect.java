@@ -2,16 +2,12 @@ package com.chronodawn.core.time;
 
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.data.DimensionStateData;
-import com.chronodawn.entities.bosses.ChronosWardenEntity;
-import com.chronodawn.entities.bosses.ClockworkColossusEntity;
-import com.chronodawn.entities.bosses.EntropyKeeperEntity;
-import com.chronodawn.entities.bosses.TemporalPhantomEntity;
-import com.chronodawn.entities.bosses.TimeGuardianEntity;
 import com.chronodawn.entities.mobs.FloqEntity;
 import com.chronodawn.entities.mobs.TimeKeeperEntity;
 import com.chronodawn.items.equipment.EnhancedClockstoneArmorItem;
 import com.chronodawn.registry.ModDimensions;
 import com.chronodawn.registry.ModItems;
+import com.chronodawn.tags.ModEntityTypeTags;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -136,22 +132,7 @@ public class TimeDistortionEffect {
         }
 
         // Exclude all boss entities (bosses should move at normal speed)
-        if (entity instanceof TimeGuardianEntity) {
-            return false;
-        }
-        if (entity instanceof com.chronodawn.entities.bosses.TimeTyrantEntity) {
-            return false;
-        }
-        if (entity instanceof ChronosWardenEntity) {
-            return false;
-        }
-        if (entity instanceof ClockworkColossusEntity) {
-            return false;
-        }
-        if (entity instanceof EntropyKeeperEntity) {
-            return false;
-        }
-        if (entity instanceof TemporalPhantomEntity) {
+        if (entity.getType().is(ModEntityTypeTags.TIME_DISTORTION_IMMUNE)) {
             return false;
         }
 
