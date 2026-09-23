@@ -181,6 +181,13 @@ Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.2
 - `./gradlew :neoforge:runGameTestServer -Ptarget_mc_version=1.21.2` - Run NeoForge GameTests
 - `./gradlew gameTestAll` - Run GameTests including 1.21.3 runtime verification (1.21.2+1.21.3 sequential)
 
+**Production Smoke Test** (headless, no display required; recommended after Mixin config changes or when adding a new Minecraft version):
+- `./gradlew :fabric:prodSmokeTest -Ptarget_mc_version=1.21.2` - Boot a real Fabric dedicated server with the built mod and confirm a fresh world is created without crashing
+- `./gradlew :neoforge:prodSmokeTest -Ptarget_mc_version=1.21.2` - Same for NeoForge
+- Not supported for Forge (1.20.1) - `runProd`'s underlying installer path is unsupported for Forge < 50, see `gradle/shared/prod-run.gradle`
+- Unlike `runGameTest`/`runGameTestServer` (dev/mapped Loom environment), this launches an installer-provisioned production server, so it also catches Mixin refmap issues that only surface outside the dev environment
+- Uses `build/prod-smoke/<loader>-<version>/`, separate from the manually-verified `run-prod/` used by `runProd` - cleaned up by `clean<version>`/`cleanAll`
+
 **Resource Validation**:
 - `./gradlew validateResources` - Check JSON syntax and cross-references (blockstate→model, model→texture)
 - `./gradlew validateData` - Check data-pack cross-references (tag entries → registered IDs, recipe references, 1.21.4+ client items coverage)
@@ -230,6 +237,7 @@ Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.2
 - **Forge / NeoForge**: Must NOT include a refMap property in their loader-specific mixin configs
 - **Common**: `chronodawn.mixins.json` excluded from builds (reference only)
 - When adding Mixins: Update every affected loader-specific config
+- After changing Mixin config, run `./gradlew :fabric:prodSmokeTest -Ptarget_mc_version=<v>` and `:neoforge:prodSmokeTest` - `runGameTest`'s dev/mapped Loom environment can mask refmap injection failures that only appear in a production server (see "Production Smoke Test" above)
 
 <!-- MANUAL ADDITIONS START -->
 

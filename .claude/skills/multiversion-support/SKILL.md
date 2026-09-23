@@ -125,6 +125,14 @@ Auto-generated from `gradle/subproject-run-tasks.gradle`:
 
 Edit `supportedVersions` list in `gradle/subproject-run-tasks.gradle`
 
+After the new version builds and passes GameTest, also run
+`./gradlew :fabric:prodSmokeTest -Ptarget_mc_version=<v>` and
+`:neoforge:prodSmokeTest -Ptarget_mc_version=<v>` (headless, no display
+required) to confirm the mod actually boots and creates a world under a real
+production server for that version - GameTest runs in Loom's dev/mapped
+environment and can miss production-only failures (Mixin refmap issues,
+installer/loader incompatibilities). See CLAUDE.md "Production Smoke Test".
+
 ---
 
 ## Output JARs
@@ -147,6 +155,7 @@ Edit `supportedVersions` list in `gradle/subproject-run-tasks.gradle`
 2. **Use Compat Layer**: Add version-specific logic to `compat/` package
 3. **Avoid Direct Version Checks**: Use abstraction instead of `if (version == "1.20.1")`
 4. **Test Both Versions**: Run `./gradlew buildAll` before committing
+5. **New Version or Mixin Change**: Also run `prodSmokeTest` (Fabric/NeoForge) - see "Adding New Versions" above
 
 ### Common Pitfalls
 

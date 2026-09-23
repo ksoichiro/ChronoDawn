@@ -47,6 +47,7 @@ When adding new Mixin classes:
    - Add to `chronodawn-fabric.mixins.json` (with refMap)
    - Add to `chronodawn-neoforge.mixins.json` (without refMap)
 3. Do NOT modify `chronodawn.mixins.json` (excluded from builds)
+4. Verify the injection actually works in production: `./gradlew :fabric:prodSmokeTest -Ptarget_mc_version=<v>` and `:neoforge:prodSmokeTest -Ptarget_mc_version=<v>` (headless, no display required). `runGameTest`/`runGameTestServer` run in Loom's dev/mapped environment, where refmap resolution differs from production and can mask injection failures that only surface in a real server - see CLAUDE.md "Production Smoke Test"
 
 ### Build Configuration
 

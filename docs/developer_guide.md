@@ -740,6 +740,22 @@ Validates data/asset file integrity at build time without launching the game:
 
 3. **Test Checklist**: See `specs/chrono-dawn-mod/quickstart.md`
 
+### Production Smoke Test (headless)
+
+Recommended after Mixin config changes or when adding a new Minecraft
+version. Boots a real, installer-provisioned dedicated server (not Loom's
+dev/mapped environment) with the built mod and fails if it doesn't create a
+world within 5 minutes. No display required.
+
+```bash
+./gradlew :fabric:prodSmokeTest -Ptarget_mc_version=1.21.11
+./gradlew :neoforge:prodSmokeTest -Ptarget_mc_version=1.21.11
+```
+
+Not supported for Forge (1.20.1) — see "Mixin Configuration" below. Uses
+`build/prod-smoke/<loader>-<version>/`, separate from the manually-verified
+`run-prod/` used by `runProd`.
+
 ---
 
 ## Debugging
@@ -852,6 +868,7 @@ Additional manual checks:
 - [ ] Manual testing completed (launch game, test feature)
 - [ ] No new warnings or errors in logs
 - [ ] Documentation updated (if applicable)
+- [ ] If this PR changes Mixin config or adds a new Minecraft version: `prodSmokeTest` passes for Fabric and NeoForge (see "Production Smoke Test" above)
 
 ---
 
@@ -978,7 +995,11 @@ ChronoDawn-specific Java addon.
 
 **Forge** (1.20.1 only): `chronodawn-forge.mixins.json` (without refMap, like NeoForge; Architectury Loom remaps mixin targets to SRG names in bytecode at build time, unlike Fabric which requires an explicit refmap for its intermediary-to-named remapping)
 
-See `CLAUDE.md` → "Mixin Configuration" for full details.
+See `CLAUDE.md` → "Mixin Configuration" for full details. After changing Mixin
+config, run the headless `prodSmokeTest` (Fabric/NeoForge, see "Production
+Smoke Test" above) — `runGameTest`/`runGameTestServer` run in Loom's
+dev/mapped environment, where refmap resolution differs from production and
+can mask injection failures.
 
 ### Structure Waterlogging Prevention
 
