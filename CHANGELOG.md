@@ -34,6 +34,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   being tied to the Time Hourglass item class, so a pack datapack can add
   other ignition items without replacing Chrono Dawn's classes. See
   `docs/modpack-integration.md`.
+- **Modpack-extensible portal stabilization** — the item that stabilizes a
+  deactivated Chrono Dawn portal for bidirectional travel is now gated by the
+  `chronodawn:portal_stabilizers` item tag (default: Portal Stabilizer)
+  instead of being tied to the Portal Stabilizer item class, so a pack
+  datapack can add other stabilization items without replacing Chrono Dawn's
+  classes. See `docs/modpack-integration.md`.
 
 ### Fixed
 

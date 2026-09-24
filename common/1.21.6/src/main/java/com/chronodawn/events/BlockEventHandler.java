@@ -6,6 +6,7 @@ import com.chronodawn.core.portal.PortalState;
 import com.chronodawn.core.portal.PortalStateMachine;
 import com.chronodawn.data.ChronoDawnGlobalState;
 import com.chronodawn.items.PortalIgnitionHandler;
+import com.chronodawn.items.PortalStabilizationHandler;
 import com.chronodawn.items.tools.SpatiallyLinkedPickaxeItem;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModDimensions;
@@ -217,6 +218,36 @@ public class BlockEventHandler {
 
             if (!player.level().isClientSide()) {
                 PortalIgnitionHandler.tryIgnite(player.level(), pos, player, heldItem);
+            }
+
+            // Both client and server: trigger arm swing animation
+            // Client side needs this for the visual swing; returning interruptTrue
+            // prevents vanilla item useOn() dispatch for the held tagged item
+            player.swing(hand);
+
+            return EventResult.interruptTrue().asMinecraft();
+        });
+
+        // Register block interaction event for portal stabilization (tag-based, modpack-extensible)
+        InteractionEvent.RIGHT_CLICK_BLOCK.register((player, hand, pos, face) -> {
+            // Only process main hand interactions
+            if (hand != net.minecraft.world.InteractionHand.MAIN_HAND) {
+                return EventResult.pass().asMinecraft();
+            }
+
+            // Only engage on Clockstone blocks, so holding a tagged item doesn't
+            // interrupt normal interactions with unrelated blocks
+            if (!player.level().getBlockState(pos).is(ModBlocks.CLOCKSTONE_BLOCK.get())) {
+                return EventResult.pass().asMinecraft();
+            }
+
+            ItemStack heldItem = player.getItemInHand(hand);
+            if (!heldItem.is(ModItemTags.PORTAL_STABILIZERS)) {
+                return EventResult.pass().asMinecraft();
+            }
+
+            if (!player.level().isClientSide()) {
+                PortalStabilizationHandler.tryStabilize(player.level(), pos, player, heldItem);
             }
 
             // Both client and server: trigger arm swing animation

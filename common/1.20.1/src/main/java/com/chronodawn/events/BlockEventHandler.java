@@ -6,6 +6,7 @@ import com.chronodawn.core.portal.PortalState;
 import com.chronodawn.core.portal.PortalStateMachine;
 import com.chronodawn.data.ChronoDawnGlobalState;
 import com.chronodawn.items.PortalIgnitionHandler;
+import com.chronodawn.items.PortalStabilizationHandler;
 import com.chronodawn.items.tools.SpatiallyLinkedPickaxeItem;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModDimensions;
@@ -211,6 +212,30 @@ public class BlockEventHandler {
             }
 
             InteractionResult result = PortalIgnitionHandler.tryIgnite(player.level(), pos, player, heldItem);
+            return result == InteractionResult.CONSUME || result == InteractionResult.SUCCESS
+                ? EventResult.interruptTrue()
+                : EventResult.interruptFalse();
+        });
+
+        // Register block interaction event for portal stabilization (tag-based, modpack-extensible)
+        InteractionEvent.RIGHT_CLICK_BLOCK.register((player, hand, pos, face) -> {
+            // Only process main hand interactions on server side
+            if (player.level().isClientSide() || hand != InteractionHand.MAIN_HAND) {
+                return EventResult.pass();
+            }
+
+            // Only engage on Clockstone blocks, so holding a tagged item doesn't
+            // interrupt normal interactions with unrelated blocks
+            if (!player.level().getBlockState(pos).is(ModBlocks.CLOCKSTONE_BLOCK.get())) {
+                return EventResult.pass();
+            }
+
+            ItemStack heldItem = player.getItemInHand(hand);
+            if (!heldItem.is(ModItemTags.PORTAL_STABILIZERS)) {
+                return EventResult.pass();
+            }
+
+            InteractionResult result = PortalStabilizationHandler.tryStabilize(player.level(), pos, player, heldItem);
             return result == InteractionResult.CONSUME || result == InteractionResult.SUCCESS
                 ? EventResult.interruptTrue()
                 : EventResult.interruptFalse();
