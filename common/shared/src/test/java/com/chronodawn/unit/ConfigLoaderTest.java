@@ -81,6 +81,45 @@ class ConfigLoaderTest {
     }
 
     @Test
+    void timeKeeperVillage_readsPackCustomization(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"), """
+            [world.time_keeper_village]
+            enabled = false
+            preferred_min_distance = 48
+            preferred_max_distance = 96
+            max_distance = 320
+            time_keeper_count = 4
+            template_id = "examplepack:trader_hut"
+            loot_table_id = "examplepack:chests/trader_hut"
+            """);
+
+        var settings = ConfigLoader.load(tmp).world().timeKeeperVillage();
+        assertFalse(settings.enabled());
+        assertEquals(48, settings.preferredMinDistance());
+        assertEquals(96, settings.preferredMaxDistance());
+        assertEquals(320, settings.maxDistance());
+        assertEquals(4, settings.timeKeeperCount());
+        assertEquals("examplepack:trader_hut", settings.templateId());
+        assertEquals("examplepack:chests/trader_hut", settings.lootTableId());
+    }
+
+    @Test
+    void timeKeeperVillage_invalidValuesFallBackToDefaults(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"), """
+            [world.time_keeper_village]
+            preferred_min_distance = 96
+            preferred_max_distance = 64
+            max_distance = 32
+            time_keeper_count = 17
+            template_id = "not a resource id"
+            loot_table_id = "also invalid"
+            """);
+
+        var settings = ConfigLoader.load(tmp).world().timeKeeperVillage();
+        assertEquals(ConfigDefaults.TIME_KEEPER_VILLAGE_DEFAULTS, settings);
+    }
+
+    @Test
     void invalidSpacing_zero_revertsToDefault(@TempDir Path tmp) throws IOException {
         Files.writeString(tmp.resolve("chronodawn.toml"),
             "[world.structures.ancient_ruins]\n" +

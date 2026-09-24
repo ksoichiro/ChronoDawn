@@ -70,6 +70,11 @@ public final class ConfigDefaults {
     // Portal Stabilizer requirement for re-ignition in Chrono Dawn.
     public static final PortalSettings PORTAL_DEFAULTS = new PortalSettings(true, false);
 
+    // Defaults preserve the original runtime placement behavior exactly.
+    public static final TimeKeeperVillageSettings TIME_KEEPER_VILLAGE_DEFAULTS = new TimeKeeperVillageSettings(
+        true, 32, 64, 256, 2, "chronodawn:time_keeper_village", "chronodawn:chests/time_keeper_village"
+    );
+
     /** Every biome generates by default. */
     public static final ChronoDawnConfig.Biomes BIOME_DEFAULTS = new ChronoDawnConfig.Biomes(
         new BiomeSettings(true), new BiomeSettings(true), new BiomeSettings(true),
@@ -98,7 +103,8 @@ public final class ConfigDefaults {
                     CLOCKSTONE_DEFAULTS,
                     CHRONITE_DEFAULTS
                 ),
-                BIOME_DEFAULTS
+                BIOME_DEFAULTS,
+                TIME_KEEPER_VILLAGE_DEFAULTS
             ),
             new ChronoDawnConfig.Gameplay(
                 TIME_DISTORTION_DEFAULTS,

@@ -52,10 +52,15 @@ public record ChronoDawnConfig(
         INSTANCE = config;
     }
 
-    public record World(Structures structures, OresConfig ores, Biomes biomes) {
+    public record World(Structures structures, OresConfig ores, Biomes biomes, TimeKeeperVillageSettings timeKeeperVillage) {
         /** Preserve the existing construction pattern for callers that don't configure biomes. */
         public World(Structures structures, OresConfig ores) {
-            this(structures, ores, ConfigDefaults.BIOME_DEFAULTS);
+            this(structures, ores, ConfigDefaults.BIOME_DEFAULTS, ConfigDefaults.TIME_KEEPER_VILLAGE_DEFAULTS);
+        }
+
+        /** Preserve the existing construction pattern for callers that configure biomes. */
+        public World(Structures structures, OresConfig ores, Biomes biomes) {
+            this(structures, ores, biomes, ConfigDefaults.TIME_KEEPER_VILLAGE_DEFAULTS);
         }
     }
 

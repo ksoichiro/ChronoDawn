@@ -11,6 +11,25 @@
 
 schema_version = 1
 
+[world.time_keeper_village]
+# Place one village near the first player's Chrono Dawn entry point.
+enabled = true
+
+# The preferred distance range in blocks. If no valid terrain is found, the
+# search expands in stages up to max_distance.
+preferred_min_distance = 32
+preferred_max_distance = 64
+max_distance = 256
+
+# Number of persistent Time Keepers created after the template is placed.
+# Zero keeps the building but creates no traders. Maximum: 16.
+time_keeper_count = 2
+
+# Resource IDs supplied by the mod or a data pack. The template is read from
+# data/<namespace>/structure/<path>.nbt.
+template_id = "chronodawn:time_keeper_village"
+loot_table_id = "chronodawn:chests/time_keeper_village"
+
 [world.structures.ancient_ruins]
 # Whether Ancient Ruins generate at all in the Overworld.
 enabled = true

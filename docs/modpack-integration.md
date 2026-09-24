@@ -40,6 +40,22 @@ y_min = 5
 y_max = 50
 ```
 
+### Example: replace the Time Keeper Village
+
+```toml
+[world.time_keeper_village]
+preferred_min_distance = 48
+preferred_max_distance = 96
+max_distance = 320
+time_keeper_count = 4
+template_id = "examplepack:trader_hut"
+loot_table_id = "examplepack:chests/trader_hut"
+```
+
+Ship `data/examplepack/structure/trader_hut.nbt` and its loot table in a pack
+datapack. The village remains a one-per-world runtime placement, so this does
+not create a `/locate structure` target.
+
 ### Example: lower Clockstone tier-1 abundance
 
 ```toml

@@ -1,6 +1,8 @@
 package com.chronodawn.worldgen.spawning;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.config.ChronoDawnConfig;
+import com.chronodawn.config.TimeKeeperVillageSettings;
 import com.chronodawn.data.TimeKeeperVillageData;
 import com.chronodawn.entities.mobs.TimeKeeperEntity;
 import com.chronodawn.registry.ModDimensions;
@@ -42,31 +44,10 @@ import net.minecraft.world.level.storage.loot.LootTable;
  * Task: T276 [US2] Implement TimeKeeperVillagePlacer.java
  */
 public class TimeKeeperVillagePlacer {
-    private static final Identifier VILLAGE_TEMPLATE = CompatResourceLocation.create(
-        ChronoDawn.MOD_ID,
-        "time_keeper_village"
-    );
-
-    private static final ResourceKey<LootTable> VILLAGE_LOOT_TABLE = ResourceKey.create(
-        Registries.LOOT_TABLE,
-        CompatResourceLocation.create(ChronoDawn.MOD_ID, "chests/time_keeper_village")
-    );
-
-    // Placement distance constraints (will expand if no suitable location found)
-    private static final int[][] DISTANCE_RANGES = {
-        {32, 64},    // Phase 1: 32-64 blocks (ideal)
-        {64, 128},   // Phase 2: 64-128 blocks (fallback)
-        {128, 256},  // Phase 3: 128-256 blocks (last resort)
-    };
-
-    // Structure dimensions (from design)
-    private static final int STRUCTURE_WIDTH = 11;  // X dimension
-    private static final int STRUCTURE_DEPTH = 11;  // Z dimension
-
     // Terrain flatness tolerance
     private static final int MAX_HEIGHT_VARIATION = 3;
 
-    // Maximum placement attempts
+    // Maximum placement attempts per search range
     private static final int MAX_ATTEMPTS = 100;
 
     /**
@@ -83,20 +64,26 @@ public class TimeKeeperVillagePlacer {
             return;
         }
 
-        // Check if village is already placed
+        TimeKeeperVillageSettings settings = ChronoDawnConfig.get().world().timeKeeperVillage();
+        if (!settings.enabled()) return;
+
         TimeKeeperVillageData data = TimeKeeperVillageData.get(level);
         if (data.isPlaced()) {
             ChronoDawn.LOGGER.debug("Time Keeper Village already placed at {}", data.getPosition());
             return;
         }
 
-        // Find suitable position near player's entry point (not world spawn)
-        // This ensures the village is near where the player actually enters ChronoDawn
+        var templateOptional = level.getStructureManager().get(CompatResourceLocation.parse(settings.templateId()));
+        if (templateOptional.isEmpty()) {
+            ChronoDawn.LOGGER.error("Failed to load Time Keeper Village template: {}", settings.templateId());
+            return;
+        }
+        StructureTemplate template = templateOptional.get();
         BlockPos playerEntryPos = player.blockPosition();
-        BlockPos villagePos = findSuitablePosition(level, playerEntryPos);
+        BlockPos villagePos = findSuitablePosition(level, playerEntryPos, template.getSize().getX(), template.getSize().getZ(), settings);
 
         if (villagePos != null) {
-            boolean success = placeVillage(level, villagePos);
+            boolean success = placeVillage(level, villagePos, template, settings);
             if (success) {
                 data.setPlaced(villagePos);
                 ChronoDawn.LOGGER.debug("Successfully placed Time Keeper Village at {} for player {}",
@@ -122,74 +109,46 @@ public class TimeKeeperVillagePlacer {
      * @param center Center position (player entry point)
      * @return Suitable position, or null if none found
      */
-    private static BlockPos findSuitablePosition(ServerLevel level, BlockPos center) {
-        // Try each distance range, expanding if no suitable location found
-        for (int phase = 0; phase < DISTANCE_RANGES.length; phase++) {
-            int minDistance = DISTANCE_RANGES[phase][0];
-            int maxDistance = DISTANCE_RANGES[phase][1];
-
-            ChronoDawn.LOGGER.debug("Searching for Time Keeper Village location (phase {}: {}-{} blocks)",
-                phase + 1, minDistance, maxDistance);
-
-            BlockPos result = searchInRange(level, center, minDistance, maxDistance);
-            if (result != null) {
-                return result;
-            }
+    private static BlockPos findSuitablePosition(
+        ServerLevel level, BlockPos center, int structureWidth, int structureDepth, TimeKeeperVillageSettings settings
+    ) {
+        int minDistance = settings.preferredMinDistance();
+        int maxDistance = settings.preferredMaxDistance();
+        int phase = 1;
+        while (true) {
+            ChronoDawn.LOGGER.debug("Searching for Time Keeper Village location (phase {}: {}-{} blocks)", phase, minDistance, maxDistance);
+            BlockPos result = searchInRange(level, center, minDistance, maxDistance, structureWidth, structureDepth);
+            if (result != null) return result;
+            if (maxDistance >= settings.maxDistance()) break;
+            minDistance = maxDistance;
+            maxDistance = Math.min(settings.maxDistance(), maxDistance * 2);
+            phase++;
         }
-
-        ChronoDawn.LOGGER.warn("No suitable position found after searching all distance ranges");
+        ChronoDawn.LOGGER.warn("No suitable position found after searching all configured distance ranges");
         return null;
     }
 
-    /**
-     * Search for a suitable position within a specific distance range.
-     *
-     * @param level ServerLevel
-     * @param center Center position
-     * @param minDistance Minimum distance from center
-     * @param maxDistance Maximum distance from center
-     * @return Suitable position, or null if none found in this range
-     */
-    private static BlockPos searchInRange(ServerLevel level, BlockPos center, int minDistance, int maxDistance) {
+    private static BlockPos searchInRange(
+        ServerLevel level, BlockPos center, int minDistance, int maxDistance, int structureWidth, int structureDepth
+    ) {
         for (int attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
-            // Generate random position within distance range
             int range = maxDistance - minDistance;
             int dx = level.getRandom().nextInt(range + 1) + minDistance;
             int dz = level.getRandom().nextInt(range + 1) + minDistance;
-
-            // Randomize direction
             if (level.getRandom().nextBoolean()) dx = -dx;
             if (level.getRandom().nextBoolean()) dz = -dz;
-
             int x = center.getX() + dx;
             int z = center.getZ() + dz;
-
-            // Force chunk generation before querying heightmap
-            // Without this, heightmap returns -64 for ungenerated chunks
             level.getChunk(x >> 4, z >> 4);
-
-            // Get surface height at center (MOTION_BLOCKING for runtime)
             int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z);
-
-            // Sanity check: if Y is still at minimum world height, skip this position
-            if (y <= level.getMinY()) {
-                ChronoDawn.LOGGER.debug("Skipping position ({}, {}) - heightmap returned minimum height {}", x, z, y);
-                continue;
-            }
-
+            if (y <= level.getMinY()) continue;
             BlockPos candidate = new BlockPos(x, y, z);
-
-            // Check if terrain is flat enough
-            if (isTerrainFlat(level, candidate, STRUCTURE_WIDTH, STRUCTURE_DEPTH, MAX_HEIGHT_VARIATION)) {
-                // Check if surface is suitable (not water, not lava)
-                if (isSurfaceSuitable(level, candidate)) {
-                    ChronoDawn.LOGGER.debug("Found suitable position for Time Keeper Village at {} (attempt {})",
-                        candidate, attempt + 1);
-                    return candidate;
-                }
+            if (isTerrainFlat(level, candidate, structureWidth, structureDepth, MAX_HEIGHT_VARIATION)
+                && isSurfaceSuitable(level, candidate, structureWidth, structureDepth)) {
+                ChronoDawn.LOGGER.debug("Found suitable position for Time Keeper Village at {} (attempt {})", candidate, attempt + 1);
+                return candidate;
             }
         }
-
         return null;
     }
 
@@ -229,14 +188,14 @@ public class TimeKeeperVillagePlacer {
      * @param pos Surface position
      * @return true if surface is suitable
      */
-    private static boolean isSurfaceSuitable(ServerLevel level, BlockPos pos) {
+    private static boolean isSurfaceSuitable(ServerLevel level, BlockPos pos, int structureWidth, int structureDepth) {
         // Check center and corners
         BlockPos[] checkPositions = {
             pos,
-            pos.offset(STRUCTURE_WIDTH / 2, 0, STRUCTURE_DEPTH / 2),
-            pos.offset(-STRUCTURE_WIDTH / 2, 0, STRUCTURE_DEPTH / 2),
-            pos.offset(STRUCTURE_WIDTH / 2, 0, -STRUCTURE_DEPTH / 2),
-            pos.offset(-STRUCTURE_WIDTH / 2, 0, -STRUCTURE_DEPTH / 2)
+            pos.offset(structureWidth / 2, 0, structureDepth / 2),
+            pos.offset(-structureWidth / 2, 0, structureDepth / 2),
+            pos.offset(structureWidth / 2, 0, -structureDepth / 2),
+            pos.offset(-structureWidth / 2, 0, -structureDepth / 2)
         };
 
         for (BlockPos checkPos : checkPositions) {
@@ -269,18 +228,9 @@ public class TimeKeeperVillagePlacer {
      * @param pos Placement position
      * @return true if placement succeeded
      */
-    private static boolean placeVillage(ServerLevel level, BlockPos pos) {
-        var structureTemplateManager = level.getStructureManager();
-
-        // Load template
-        var templateOptional = structureTemplateManager.get(VILLAGE_TEMPLATE);
-        if (templateOptional.isEmpty()) {
-            ChronoDawn.LOGGER.error("Failed to load Time Keeper Village template: {}", VILLAGE_TEMPLATE);
-            ChronoDawn.LOGGER.error("Make sure the NBT file exists at: data/chronodawn/structure/time_keeper_village.nbt");
-            return false;
-        }
-
-        StructureTemplate template = templateOptional.get();
+    private static boolean placeVillage(
+        ServerLevel level, BlockPos pos, StructureTemplate template, TimeKeeperVillageSettings villageSettings
+    ) {
 
         // Get template size
         var templateSize = template.getSize();
@@ -306,10 +256,10 @@ public class TimeKeeperVillagePlacer {
             pos, placementPos);
 
         // Spawn Time Keepers programmatically
-        spawnTimeKeepers(level, pos);
+        spawnTimeKeepers(level, pos, villageSettings);
 
         // Set loot table for chests in the structure
-        setChestLootTables(level, placementPos, templateSize);
+        setChestLootTables(level, placementPos, templateSize, villageSettings);
 
         return true;
     }
@@ -322,15 +272,12 @@ public class TimeKeeperVillagePlacer {
      * @param level ServerLevel
      * @param villageCenter Center position of the village
      */
-    private static void spawnTimeKeepers(ServerLevel level, BlockPos villageCenter) {
-        // Spawn positions relative to village center (Y+1 to be on floor level)
-        BlockPos[] spawnPositions = {
-            villageCenter.offset(-2, 1, 0),  // First Time Keeper
-            villageCenter.offset(2, 1, 0)    // Second Time Keeper
-        };
-
+    private static void spawnTimeKeepers(
+        ServerLevel level, BlockPos villageCenter, TimeKeeperVillageSettings villageSettings
+    ) {
         int spawnedCount = 0;
-        for (BlockPos spawnPos : spawnPositions) {
+        for (int index = 0; index < villageSettings.timeKeeperCount(); index++) {
+            BlockPos spawnPos = getTimeKeeperSpawnPosition(villageCenter, index, villageSettings.timeKeeperCount());
             TimeKeeperEntity timeKeeper = ModEntities.TIME_KEEPER.get().create(level, net.minecraft.world.entity.EntitySpawnReason.STRUCTURE);
             if (timeKeeper != null) {
                 // In 1.21.5, use setPos + setYRot/setXRot instead of moveTo
@@ -358,6 +305,14 @@ public class TimeKeeperVillagePlacer {
         ChronoDawn.LOGGER.debug("Spawned {} Time Keepers at Time Keeper Village", spawnedCount);
     }
 
+    private static BlockPos getTimeKeeperSpawnPosition(BlockPos center, int index, int count) {
+        if (count == 2) return center.offset(index == 0 ? -2 : 2, 1, 0);
+        int columns = (int) Math.ceil(Math.sqrt(count));
+        int row = index / columns;
+        int column = index % columns;
+        return center.offset((column * 2) - (columns - 1), 1, (row * 2) - (columns - 1));
+    }
+
     /**
      * Set loot tables for all chests in the placed structure.
      *
@@ -365,7 +320,9 @@ public class TimeKeeperVillagePlacer {
      * @param placementPos Structure placement origin
      * @param templateSize Structure size (from template)
      */
-    private static void setChestLootTables(ServerLevel level, BlockPos placementPos, net.minecraft.core.Vec3i templateSize) {
+    private static void setChestLootTables(
+        ServerLevel level, BlockPos placementPos, net.minecraft.core.Vec3i templateSize, TimeKeeperVillageSettings villageSettings
+    ) {
         int chestsFound = 0;
 
         // Scan the entire structure volume for chests
@@ -380,7 +337,7 @@ public class TimeKeeperVillagePlacer {
                         var blockEntity = level.getBlockEntity(checkPos);
                         if (blockEntity instanceof ChestBlockEntity chestBlockEntity) {
                             // Set the loot table
-                            chestBlockEntity.setLootTable(VILLAGE_LOOT_TABLE, level.getRandom().nextLong());
+                            chestBlockEntity.setLootTable(ResourceKey.create(Registries.LOOT_TABLE, CompatResourceLocation.parse(villageSettings.lootTableId())), level.getRandom().nextLong());
                             chestsFound++;
                             ChronoDawn.LOGGER.debug("Set loot table for chest at {}", checkPos);
                         }
@@ -437,4 +394,3 @@ public class TimeKeeperVillagePlacer {
         }
     }
 }
-

@@ -61,6 +61,20 @@ public final class ConfigLoader {
     private static final String K_BIOMES = "biomes";
     private static final String K_BIOME_ENABLED = "enabled";
 
+    private static final String K_TIME_KEEPER_VILLAGE = "time_keeper_village";
+    private static final String K_TKV_ENABLED = "enabled";
+    private static final String K_TKV_PREFERRED_MIN_DISTANCE = "preferred_min_distance";
+    private static final String K_TKV_PREFERRED_MAX_DISTANCE = "preferred_max_distance";
+    private static final String K_TKV_MAX_DISTANCE = "max_distance";
+    private static final String K_TKV_TIME_KEEPER_COUNT = "time_keeper_count";
+    private static final String K_TKV_TEMPLATE_ID = "template_id";
+    private static final String K_TKV_LOOT_TABLE_ID = "loot_table_id";
+
+    private static final int MIN_VILLAGE_DISTANCE = 1;
+    private static final int MAX_VILLAGE_DISTANCE = 4096;
+    private static final int MIN_TIME_KEEPER_COUNT = 0;
+    private static final int MAX_TIME_KEEPER_COUNT = 16;
+
     private static final String K_ORES = "ores";
     private static final String K_TIME_CRYSTAL = "time_crystal";
     private static final String K_ENTROPY_CRYSTAL = "entropy_crystal";
@@ -182,6 +196,7 @@ public final class ConfigLoader {
         ChronoDawnConfig.Structures structures = parseStructures(parsed);
         com.chronodawn.config.OresConfig ores = parseOres(parsed);
         ChronoDawnConfig.Biomes biomes = parseBiomes(parsed);
+        TimeKeeperVillageSettings timeKeeperVillage = parseTimeKeeperVillage(parsed);
         ChronoDawnConfig.Gameplay gameplay = parseGameplay(parsed);
 
         // Surface unknown top-level keys at WARN. Nested-table walking would be nice but
@@ -198,7 +213,8 @@ public final class ConfigLoader {
             new ChronoDawnConfig.World(
                 structures,
                 ores,
-                biomes
+                biomes,
+                timeKeeperVillage
             ),
             gameplay
         );
@@ -273,6 +289,52 @@ public final class ConfigLoader {
             parseBiome(parsed, ManagedBiome.SWAMP),
             parseBiome(parsed, ManagedBiome.FADED_PLAINS)
         );
+    }
+
+    private static TimeKeeperVillageSettings parseTimeKeeperVillage(CommentedConfig parsed) {
+        String path = K_WORLD + "." + K_TIME_KEEPER_VILLAGE;
+        TimeKeeperVillageSettings defaults = ConfigDefaults.TIME_KEEPER_VILLAGE_DEFAULTS;
+        boolean enabled = parsed.<Boolean>getOptional(path + "." + K_TKV_ENABLED).orElse(defaults.enabled());
+        int preferredMinDistance = parsed.<Number>getOptional(path + "." + K_TKV_PREFERRED_MIN_DISTANCE)
+            .map(Number::intValue).orElse(defaults.preferredMinDistance());
+        int preferredMaxDistance = parsed.<Number>getOptional(path + "." + K_TKV_PREFERRED_MAX_DISTANCE)
+            .map(Number::intValue).orElse(defaults.preferredMaxDistance());
+        int maxDistance = parsed.<Number>getOptional(path + "." + K_TKV_MAX_DISTANCE)
+            .map(Number::intValue).orElse(defaults.maxDistance());
+        int timeKeeperCount = parsed.<Number>getOptional(path + "." + K_TKV_TIME_KEEPER_COUNT)
+            .map(Number::intValue).orElse(defaults.timeKeeperCount());
+        String templateId = parsed.<String>getOptional(path + "." + K_TKV_TEMPLATE_ID).orElse(defaults.templateId());
+        String lootTableId = parsed.<String>getOptional(path + "." + K_TKV_LOOT_TABLE_ID).orElse(defaults.lootTableId());
+
+        if (preferredMinDistance < MIN_VILLAGE_DISTANCE || preferredMaxDistance < preferredMinDistance
+            || maxDistance < preferredMaxDistance || maxDistance > MAX_VILLAGE_DISTANCE) {
+            LOGGER.error("Invalid {} distance range ({}, {}, {}); using defaults ({}, {}, {})", path,
+                preferredMinDistance, preferredMaxDistance, maxDistance, defaults.preferredMinDistance(),
+                defaults.preferredMaxDistance(), defaults.maxDistance());
+            preferredMinDistance = defaults.preferredMinDistance();
+            preferredMaxDistance = defaults.preferredMaxDistance();
+            maxDistance = defaults.maxDistance();
+        }
+        if (timeKeeperCount < MIN_TIME_KEEPER_COUNT || timeKeeperCount > MAX_TIME_KEEPER_COUNT) {
+            LOGGER.error("Invalid {}.{} = {} (must be in [{}, {}]); using default {}", path,
+                K_TKV_TIME_KEEPER_COUNT, timeKeeperCount, MIN_TIME_KEEPER_COUNT, MAX_TIME_KEEPER_COUNT,
+                defaults.timeKeeperCount());
+            timeKeeperCount = defaults.timeKeeperCount();
+        }
+        if (!isResourceId(templateId)) {
+            LOGGER.error("Invalid {}.{} = {}; using default {}", path, K_TKV_TEMPLATE_ID, templateId, defaults.templateId());
+            templateId = defaults.templateId();
+        }
+        if (!isResourceId(lootTableId)) {
+            LOGGER.error("Invalid {}.{} = {}; using default {}", path, K_TKV_LOOT_TABLE_ID, lootTableId, defaults.lootTableId());
+            lootTableId = defaults.lootTableId();
+        }
+        return new TimeKeeperVillageSettings(enabled, preferredMinDistance, preferredMaxDistance, maxDistance,
+            timeKeeperCount, templateId, lootTableId);
+    }
+
+    private static boolean isResourceId(String value) {
+        return value.matches("[a-z0-9_.-]+:[a-z0-9/._-]+");
     }
 
     // No validation beyond the type: a biome has a single boolean and no interacting

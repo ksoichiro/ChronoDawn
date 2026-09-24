@@ -151,6 +151,43 @@ Colossus Gear. New worlds only.
 
 ---
 
+### `[world.time_keeper_village]`
+
+Controls the one Time Keeper Village placed after the first player enters the
+Chrono Dawn dimension. This is runtime placement, not a vanilla structure set,
+so it remains limited to one village per world and cannot be found with
+`/locate structure`.
+
+```toml
+[world.time_keeper_village]
+enabled = true
+preferred_min_distance = 32
+preferred_max_distance = 64
+max_distance = 256
+time_keeper_count = 2
+template_id = "chronodawn:time_keeper_village"
+loot_table_id = "chronodawn:chests/time_keeper_village"
+```
+
+| Field | Range | Meaning |
+| --- | --- | --- |
+| `enabled` | boolean | When `false`, no village is placed. The mod retries on a later entry if the setting is re-enabled before placement. |
+| `preferred_min_distance` | `1..=preferred_max_distance` | Minimum preferred distance from the first entry point, in blocks. |
+| `preferred_max_distance` | `preferred_min_distance..=max_distance` | Maximum preferred distance. Failed terrain searches expand outward from here. |
+| `max_distance` | `preferred_max_distance..=4096` | Farthest search distance, in blocks. |
+| `time_keeper_count` | `0..=16` | Persistent Time Keepers spawned after placement. The default two retain their original positions. |
+| `template_id` | resource ID | Structure template at `data/<namespace>/structure/<path>.nbt`; the template's actual X/Z dimensions determine terrain checks and foundation size. |
+| `loot_table_id` | resource ID | Loot table assigned to every chest in the template. |
+
+Pack authors can provide both resource IDs in their own namespace. Templates
+with more than two Time Keepers should leave clear floor space near the center,
+because additional traders are arranged in a two-block grid around it.
+
+These options affect the first successful placement only. They do not move or
+replace a village already recorded in the world save.
+
+---
+
 ### `[world.biomes.*]`
 
 Controls which biomes generate in the Chrono dimension. One table per biome:
