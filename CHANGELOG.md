@@ -73,6 +73,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   one of four neighbors to be valid, so most frame breaks (including the
   common case of breaking a side frame block) went undetected. All 13
   supported versions are fixed.
+- **Missing Shield Echo subtitles on 1.20.1 and 1.21.1** — using a
+  Chronoblock Shield logged "Missing subtitle translation" for
+  `subtitles.chronodawn.shield_echo_generate`,
+  `shield_echo_active_pulse`, and `shield_echo_consume`. These versions
+  keep their own lang files instead of sharing `common/shared-1.21.2+`,
+  and were missing the three keys.
+- **Chrono Dawn portals could generate on unsafe terrain** — a new
+  outgoing portal could land in a cave, over a cliff, or in water/lava
+  instead of open, dry ground, because portal generation fell back to an
+  unsafe height when it failed to find clear terrain nearby. Portal
+  generation now searches nearby terrain for clear, dry space, and the
+  arrival portal's lifecycle handling was tightened to avoid
+  cross-dimension exit detection. Fixed on all 13 supported versions.
+- **Chrono Melon Seeds recipe didn't unlock in the recipe book** — the
+  Chrono Melon Slice → Chrono Melon Seeds recipe worked but never
+  appeared as known, unlike its sibling Chrono Melon Juice recipe,
+  because it had no recipe-unlock advancement.
+- **Pulse Hog, Timebound Rabbit, and Temporal Caprid couldn't be bred
+  with Chrono Dawn-native food** — despite living in the Chrono Dawn
+  dimension, these mobs only accepted Overworld food (carrot, potato,
+  beetroot, golden carrot, dandelion, wheat), unlike Ticking Sheep and
+  Chrono Bovine, which already ate Time Wheat. Pulse Hog and Timebound
+  Rabbit now also accept Temporal Root, and Temporal Caprid now also
+  accepts Time Wheat.
 
 ## [0.9.2] - 2026-09-13
 
