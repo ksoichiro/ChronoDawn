@@ -141,7 +141,7 @@ public class TimeKeeperVillagePlacer {
             int z = center.getZ() + dz;
             level.getChunk(x >> 4, z >> 4);
             int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z);
-            if (y <= level.getMinBuildHeight()) continue;
+            if (y <= level.getMinY()) continue;
             BlockPos candidate = new BlockPos(x, y, z);
             if (isTerrainFlat(level, candidate, structureWidth, structureDepth, MAX_HEIGHT_VARIATION)
                 && isSurfaceSuitable(level, candidate, structureWidth, structureDepth)) {
