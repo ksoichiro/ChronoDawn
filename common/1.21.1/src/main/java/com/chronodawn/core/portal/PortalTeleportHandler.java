@@ -69,6 +69,12 @@ public class PortalTeleportHandler {
     private static final int MAX_PORTAL_Y = 100;
 
     /**
+     * Maximum horizontal distance from the mapped coordinates used when the exact
+     * destination cannot fit a portal on level ground.
+     */
+    private static final int PORTAL_PLACEMENT_SEARCH_RADIUS = 8;
+
+    /**
      * Check if entity can teleport from the current dimension.
      * Prevents re-teleportation while still in the dimension they just arrived in.
      *
@@ -191,9 +197,11 @@ public class PortalTeleportHandler {
         Optional<BlockPos> existingPortal = findNearbyPortal(destLevel, destCoords);
 
         BlockPos destPortalPos;
+        BlockPos destFramePos = null;
         if (existingPortal.isPresent()) {
             // Use existing portal (this is a portal block position)
             destPortalPos = existingPortal.get();
+            destFramePos = findSourcePortalFrame(destLevel, destPortalPos);
         } else {
             // Reignite an existing deactivated frame before generating a new one.
             Optional<BlockPos> reusableFrame = findReusablePortalFrame(destLevel, destCoords, sourceAxis, player);
@@ -201,6 +209,8 @@ public class PortalTeleportHandler {
             if (framePos == null) {
                 framePos = generatePortal(destLevel, destCoords, sourceAxis, player);
             }
+
+            destFramePos = framePos;
             if (framePos == null) {
                 ChronoDawn.LOGGER.error("Failed to generate portal at {} in dimension {}",
                     destCoords, destDimensionKey.location());
@@ -261,6 +271,7 @@ public class PortalTeleportHandler {
             // always destroyed, and re-ignition is the recovery path, not an exemption.
             if (com.chronodawn.config.ChronoDawnConfig.get().gameplay().portals().oneWayUntilStabilized()
                 && globalState.arePortalsUnstable()) {
+                PortalArrivalHelper.deactivate(destLevel, destFramePos, destPortalPos);
                 destroyUnstablePortal(destLevel, destPortalPos);
                 portalWasDestroyed = true;
             }
@@ -385,7 +396,7 @@ public class PortalTeleportHandler {
     private static BlockPos calculateDestinationCoords(BlockPos sourceFramePos) {
         // 1:1 coordinate mapping for X and Z (no scaling like Nether Portal)
         // Use frame bottom-left position to ensure consistent portal alignment
-        // Y coordinate will be determined by findGroundLevel() when generating portal
+        // Y coordinate will be resolved by the safe portal placement search
         // Start search from high position (Y=150) to find surface, not underground caves
         return new BlockPos(sourceFramePos.getX(), 150, sourceFramePos.getZ());
     }
@@ -574,68 +585,20 @@ public class PortalTeleportHandler {
      * @param axis Portal axis (X or Z) - should match source portal axis
      * @return Portal frame bottom-left position if generated, null if failed
      */
-    private static BlockPos generatePortal(ServerLevel level, BlockPos coords, Direction.Axis axis, @Nullable ServerPlayer igniter) {
-        // Find ground level starting from coords.y
-        BlockPos groundPos = findGroundLevel(level, coords);
+    @Nullable
+    private static BlockPos generatePortal(
+            ServerLevel level, BlockPos coords, Direction.Axis axis, @Nullable ServerPlayer igniter) {
+        BlockPos groundPos = PortalPlacementHelper.findSafeFramePosition(
+            level, coords, axis, PORTAL_PLACEMENT_SEARCH_RADIUS);
+        if (groundPos == null) {
+            ChronoDawn.LOGGER.warn(
+                "No safe terrain found for portal near {} in dimension {}", coords, level.dimension().location());
+            return null;
+        }
 
         // Generate a 4x5 portal at ground level with specified axis
         generatePortalStructure(level, groundPos, axis, igniter, false);
         return groundPos;
-    }
-
-    /**
-     * Find ground level for portal placement using Heightmap.
-     *
-     * Uses WORLD_SURFACE heightmap to find the true surface level,
-     * avoiding underground caves. Ensures there's enough air space above for the portal.
-     *
-     * @param level Level
-     * @param start Starting search position (X/Z coordinates, Y is ignored)
-     * @return Ground position suitable for portal placement (one block above solid ground)
-     */
-    private static BlockPos findGroundLevel(ServerLevel level, BlockPos start) {
-        // Server-time heightmap (not the *_WG worldgen variant).
-        int surfaceY = level.getHeight(Heightmap.Types.WORLD_SURFACE, start.getX(), start.getZ());
-
-        final int upwardCeiling = 250;
-        final int interiorHeight = 3;   // portal blocks at y+1, y+2, y+3
-
-        BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos(start.getX(), 0, start.getZ());
-
-        // Default: frame's bottom row sits ABOVE the natural surface (normal land
-        // placement, identical to a player-built portal).
-        int frameY = surfaceY;
-
-        // Exception: if the topmost natural block is a fluid (open water / lava)
-        // or a replaceable decoration (flower, tall grass, snow layer), let the
-        // bottom-frame row occupy that block — the frame write overwrites it,
-        // matching how a player-built portal replaces these on placement.
-        // Without the replaceable case, WORLD_SURFACE points one Y above a
-        // flower and the frame ends up "floating" with the flower preserved.
-        cursor.setY(surfaceY - 1);
-        BlockState topBlock = level.getBlockState(cursor);
-        if (!topBlock.getFluidState().isEmpty() || topBlock.canBeReplaced()) {
-            frameY = surfaceY - 1;
-        }
-
-        // Push frameY upward only if the portal interior would still be in fluid
-        // (or any non-clear block) at the chosen frameY.
-        for (int y = frameY; y <= upwardCeiling; y++) {
-            boolean interiorClear = true;
-            for (int dy = 1; dy <= interiorHeight; dy++) {
-                cursor.setY(y + dy);
-                if (!isClearForPortalSpace(level.getBlockState(cursor))) {
-                    interiorClear = false;
-                    break;
-                }
-            }
-            if (interiorClear) {
-                return new BlockPos(start.getX(), y, start.getZ());
-            }
-        }
-
-        // Last-resort fallback: float at Y=120.
-        return new BlockPos(start.getX(), 120, start.getZ());
     }
 
     private static boolean isClearForPortalSpace(BlockState state) {

@@ -69,6 +69,12 @@ public class PortalTeleportHandler {
     private static final int MAX_PORTAL_Y = 100;
 
     /**
+     * Maximum horizontal distance from the mapped coordinates used when the exact
+     * destination cannot fit a portal on level ground.
+     */
+    private static final int PORTAL_PLACEMENT_SEARCH_RADIUS = 8;
+
+    /**
      * Check if entity can teleport from the current dimension.
      * Prevents re-teleportation while still in the dimension they just arrived in.
      *
@@ -191,9 +197,11 @@ public class PortalTeleportHandler {
         Optional<BlockPos> existingPortal = findNearbyPortal(destLevel, destCoords);
 
         BlockPos destPortalPos;
+        BlockPos destFramePos = null;
         if (existingPortal.isPresent()) {
             // Use existing portal (this is a portal block position)
             destPortalPos = existingPortal.get();
+            destFramePos = findSourcePortalFrame(destLevel, destPortalPos);
         } else {
             // Reignite an existing deactivated frame before generating a new one.
             Optional<BlockPos> reusableFrame = findReusablePortalFrame(destLevel, destCoords, sourceAxis, player);
@@ -201,6 +209,7 @@ public class PortalTeleportHandler {
             if (framePos == null) {
                 framePos = generatePortal(destLevel, destCoords, sourceAxis, player);
             }
+            destFramePos = framePos;
             if (framePos == null) {
                 ChronoDawn.LOGGER.error("Failed to generate portal at {} in dimension {}",
                     destCoords, destDimensionKey.location());
@@ -261,6 +270,7 @@ public class PortalTeleportHandler {
             // always destroyed, and re-ignition is the recovery path, not an exemption.
             if (com.chronodawn.config.ChronoDawnConfig.get().gameplay().portals().oneWayUntilStabilized()
                 && globalState.arePortalsUnstable()) {
+                PortalArrivalHelper.deactivate(destLevel, destFramePos, destPortalPos);
                 destroyUnstablePortal(destLevel, destPortalPos);
                 portalWasDestroyed = true;
             }
@@ -385,7 +395,7 @@ public class PortalTeleportHandler {
     private static BlockPos calculateDestinationCoords(BlockPos sourceFramePos) {
         // 1:1 coordinate mapping for X and Z (no scaling like Nether Portal)
         // Use frame bottom-left position to ensure consistent portal alignment
-        // Y coordinate will be determined by findGroundLevel() when generating portal
+        // Y coordinate will be resolved by the safe portal placement search
         // Start search from high position (Y=150) to find surface, not underground caves
         return new BlockPos(sourceFramePos.getX(), 150, sourceFramePos.getZ());
     }
@@ -575,8 +585,13 @@ public class PortalTeleportHandler {
      * @return Portal frame bottom-left position if generated, null if failed
      */
     private static BlockPos generatePortal(ServerLevel level, BlockPos coords, Direction.Axis axis, @Nullable ServerPlayer igniter) {
-        // Find ground level starting from coords.y
-        BlockPos groundPos = findGroundLevel(level, coords);
+        BlockPos groundPos = PortalPlacementHelper.findSafeFramePosition(
+            level, coords, axis, PORTAL_PLACEMENT_SEARCH_RADIUS);
+        if (groundPos == null) {
+            ChronoDawn.LOGGER.warn(
+                "No safe terrain found for portal near {} in dimension {}", coords, level.dimension().location());
+            return null;
+        }
 
         // Generate a 4x5 portal at ground level with specified axis
         generatePortalStructure(level, groundPos, axis, igniter, false);
