@@ -471,6 +471,9 @@
   "subtitles.chronodawn.time_compass_chime": "Time Compass chimes",
   "subtitles.chronodawn.time_compass_update": "Time Compass updates",
   "subtitles.chronodawn.time_compass_break": "Time Compass breaks",
+  "subtitles.chronodawn.shield_echo_generate": "Shield echo forms",
+  "subtitles.chronodawn.shield_echo_active_pulse": "Shield echo hums",
+  "subtitles.chronodawn.shield_echo_consume": "Shield echo shatters",
 
   "tag.item.chronodawn.time_wood_logs": "Time Wood Logs",
   "tag.item.chronodawn.ancient_time_wood_logs": "Ancient Time Wood Logs",
