@@ -9,9 +9,11 @@
 //   validateRecipeUnlockAdvancements — cooking recipe ↔ unlock advancement
 //   validateLangParity              — Python check_lang_parity.py wrapper
 //   validateEraJsonFormat           — recipe/advancement/loot_table era format
+//   validateConventionalTags        — c: tag coverage, names, cross-root parity
+//   validateSoundSubtitles          — sounds.json subtitle key ↔ per-version lang
 //
-// All four are registered in the 'verification' group so checkAll can pick
-// them up. Errors throw GradleException so the failing CI step is visible.
+// All are registered in the 'verification' group so checkAll can pick them
+// up. Errors throw GradleException so the failing CI step is visible.
 
 import groovy.json.JsonSlurper
 import groovy.json.JsonException
@@ -660,6 +662,101 @@ tasks.register('validateConventionalTags') {
         } else {
             errors.each { logger.error("  ERROR: ${it}") }
             throw new GradleException("Conventional tag validation failed with ${errors.size()} error(s)")
+        }
+    }
+}
+
+// ============================================================
+// Task 6: validateSoundSubtitles
+// ------------------------------------------------------------
+// sounds.json is a single shared file (common/shared/.../sounds.json)
+// used by every Minecraft version, but each version resolves its own
+// lang file independently — version-specific dir first, falling back to
+// the newest matching shared-* dir (same resolution order used by the
+// existing validateTranslations task in gradle/shared). A subtitle key
+// can therefore exist in one era's lang file and silently be missing
+// from another, producing a runtime "Missing subtitle translation"
+// SoundManager warning that no existing check catches:
+// validateTranslations only covers entity/spawn-egg keys, and
+// validateLangParity only compares locales within a single version's
+// own lang file (it doesn't know about sounds.json at all).
+// ============================================================
+tasks.register('validateSoundSubtitles') {
+    group = 'verification'
+    description = "Verify every sounds.json subtitle key has a translation in every version's lang files"
+
+    doLast {
+        def errors = []
+        def jsonSlurper = new JsonSlurper()
+
+        def soundsFile = file("${rootProject.projectDir}/common/shared/src/main/resources/assets/chronodawn/sounds.json")
+        if (!soundsFile.exists()) {
+            throw new GradleException("validateSoundSubtitles: ${soundsFile} not found")
+        }
+        def sounds = jsonSlurper.parseText(soundsFile.text)
+        def subtitleKeys = (sounds.values().findAll { it instanceof Map && it.subtitle instanceof String }
+                .collect { it.subtitle as String }) as Set
+
+        // Sanity check: if sounds.json changes shape (e.g. subtitle moves
+        // under a nested key), the extraction above would silently return
+        // an empty set and this task would vacuously pass. The real count
+        // is in the dozens, so a low threshold with margin is safe.
+        if (subtitleKeys.size() < 10) {
+            throw new GradleException("validateSoundSubtitles: only found ${subtitleKeys.size()} subtitle keys in sounds.json " +
+                    "— sounds.json may have changed shape and broken the extraction")
+        }
+
+        def versions = (project.property('supported_mc_versions').toString().split(',') as List)*.trim()
+        def hotfixPairs = [:]
+        if (project.hasProperty('hotfix_mc_versions')) {
+            project.property('hotfix_mc_versions').toString().split(',').each {
+                def parts = it.split('=')
+                if (parts.length == 2) hotfixPairs[parts[0].trim()] = parts[1].trim()
+            }
+        }
+
+        // Resolve a version's lang file for the given locale: version-specific
+        // dir first, then the newest matching shared-* dir — mirrors
+        // validateTranslations' resolution order in gradle/shared.
+        def resolveLangFile = { String version, String locale ->
+            def moduleVersion = hotfixPairs.getOrDefault(version, version)
+            def candidate = file("${rootProject.projectDir}/common/${moduleVersion}/src/main/resources/assets/chronodawn/lang/${locale}.json")
+            if (candidate.exists()) return candidate
+            def sharedDirs = []
+            file("${rootProject.projectDir}/common").listFiles()?.findAll {
+                it.isDirectory() && it.name.startsWith('shared')
+            }?.sort()?.reverse()?.each { sharedDirs << it.name }
+            for (sharedDir in sharedDirs) {
+                def sharedCandidate = file("${rootProject.projectDir}/common/${sharedDir}/src/main/resources/assets/chronodawn/lang/${locale}.json")
+                if (sharedCandidate.exists()) return sharedCandidate
+            }
+            return null
+        }
+
+        int checked = 0
+        versions.each { String version ->
+            ['en_us', 'ja_jp'].each { String locale ->
+                def langFile = resolveLangFile(version, locale)
+                if (langFile == null) {
+                    errors << "[${version}] No ${locale}.json found in any version-specific or shared lang directory"
+                    return
+                }
+                def langMap = jsonSlurper.parseText(langFile.text)
+                subtitleKeys.each { String key ->
+                    checked++
+                    if (!(langMap instanceof Map) || !langMap.containsKey(key)) {
+                        def relPath = rootProject.projectDir.toPath().relativize(langFile.toPath()).toString()
+                        errors << "[${version}/${locale}] Missing subtitle translation '${key}' in ${relPath}"
+                    }
+                }
+            }
+        }
+
+        if (errors.isEmpty()) {
+            logger.lifecycle("Sound subtitle validation passed: ${subtitleKeys.size()} subtitle keys checked across ${versions.size()} version(s) x 2 locale(s) (${checked} checks).")
+        } else {
+            errors.each { logger.error("  ERROR: ${it}") }
+            throw new GradleException("Sound subtitle validation failed with ${errors.size()} error(s)")
         }
     }
 }
