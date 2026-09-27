@@ -18,7 +18,8 @@
     },
     "minecraft:gameplay/can_start_raid": false,
     "minecraft:gameplay/nether_portal_spawns_piglin": false,
-    "minecraft:gameplay/respawn_anchor_works": false
+    "minecraft:gameplay/respawn_anchor_works": false,
+    "minecraft:visual/ambient_light_color": "#0a0a0a"
   },
   "coordinate_scale": 1.0,
   "default_clock": "chronodawn:chronodawn",
