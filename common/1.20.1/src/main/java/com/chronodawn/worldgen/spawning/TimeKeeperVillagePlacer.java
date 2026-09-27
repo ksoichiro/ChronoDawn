@@ -15,9 +15,13 @@ import net.minecraft.resources.ResourceLocation;
 import com.chronodawn.compat.CompatResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.BushBlock;
 import net.minecraft.world.level.block.ChestBlock;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.Heightmap;
@@ -49,6 +53,15 @@ public class TimeKeeperVillagePlacer {
 
     // Maximum placement attempts per search range
     private static final int MAX_ATTEMPTS = 100;
+
+    // Tallest vanilla plant is bamboo, which can grow 16 blocks high.
+    private static final int MAX_PLANT_CLEAR_HEIGHT = 32;
+
+    // Must match the depth used when filling the village foundation.
+    private static final int MAX_FOUNDATION_DEPTH = 10;
+
+    // Covers plants affected by shape updates from blocks at the structure boundary.
+    private static final int VEGETATION_CLEAR_MARGIN = 1;
 
     /**
      * Called when a player enters ChronoDawn dimension.
@@ -242,6 +255,9 @@ public class TimeKeeperVillagePlacer {
         int offsetZ = templateSize.getZ() / 2;
         BlockPos placementPos = pos.offset(-offsetX, 0, -offsetZ);
 
+        // Clear plants before changing their supporting blocks so they do not break into dropped items.
+        clearVegetation(level, placementPos, templateSize.getX(), templateSize.getZ());
+
         // Fill foundation below structure to prevent floating/gaps
         fillFoundation(level, placementPos, templateSize.getX(), templateSize.getZ());
 
@@ -262,6 +278,29 @@ public class TimeKeeperVillagePlacer {
         setChestLootTables(level, placementPos, templateSize, villageSettings);
 
         return true;
+    }
+
+    private static void clearVegetation(ServerLevel level, BlockPos placementPos, int width, int depth) {
+        for (int dx = -VEGETATION_CLEAR_MARGIN; dx < width + VEGETATION_CLEAR_MARGIN; dx++) {
+            for (int dz = -VEGETATION_CLEAR_MARGIN; dz < depth + VEGETATION_CLEAR_MARGIN; dz++) {
+                for (int dy = -MAX_FOUNDATION_DEPTH; dy < MAX_PLANT_CLEAR_HEIGHT; dy++) {
+                    BlockPos plantPos = placementPos.offset(dx, dy, dz);
+                    BlockState state = level.getBlockState(plantPos);
+                    if (isVegetation(state)) {
+                        // UPDATE_KNOWN_SHAPE avoids support updates that would drop the remaining plant blocks.
+                        level.setBlock(plantPos, Blocks.AIR.defaultBlockState(), 2 | 16);
+                    }
+                }
+            }
+        }
+    }
+
+    private static boolean isVegetation(BlockState state) {
+        return state.is(BlockTags.REPLACEABLE_BY_TREES)
+            || state.is(BlockTags.FLOWERS)
+            || state.getBlock() instanceof BushBlock
+            || state.getBlock() instanceof CropBlock
+            || state.getBlock() instanceof DoublePlantBlock;
     }
 
     /**
@@ -365,7 +404,6 @@ public class TimeKeeperVillagePlacer {
      */
     private static void fillFoundation(ServerLevel level, BlockPos placementPos, int width, int depth) {
         int filledBlocks = 0;
-        int maxDepth = 10;  // Maximum depth to fill
 
         for (int dx = 0; dx < width; dx++) {
             for (int dz = 0; dz < depth; dz++) {
@@ -374,7 +412,7 @@ public class TimeKeeperVillagePlacer {
                 int surfaceY = placementPos.getY();
 
                 // Fill downward from structure base until hitting solid ground
-                for (int dy = 1; dy <= maxDepth; dy++) {
+                for (int dy = 1; dy <= MAX_FOUNDATION_DEPTH; dy++) {
                     BlockPos fillPos = new BlockPos(x, surfaceY - dy, z);
                     BlockState existingBlock = level.getBlockState(fillPos);
 

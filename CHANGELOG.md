@@ -44,6 +44,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Time Keeper Village vegetation drops** — placing the runtime Time Keeper Village now clears
+  vegetation in and immediately around its footprint, including crops and Time Blossoms, without
+  leaving dropped items behind when the foundation or structure replaces their supporting blocks.
 - **Chrono Melon fruit/stem swapped on regrowth** — on 1.21.1+, breaking a
   grown Chrono Melon turned the stem next to it into another Chrono Melon
   instead of a bare stem, so the plant couldn't regrow. `AttachedChronoMelonStemBlock`
