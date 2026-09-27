@@ -1,0 +1,401 @@
+package com.chronodawn.gametest;
+
+import com.chronodawn.ChronoDawn;
+import com.chronodawn.compat.CompatGameTestHelper;
+import com.chronodawn.compat.CompatResourceLocation;
+import com.chronodawn.registry.ModBlockId;
+import com.chronodawn.registry.ModBlocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+
+/**
+ * Shared structure template test generator used across all Minecraft versions.
+ *
+ * Generates tests for:
+ * - Template loading and minimum size validation
+ * - Required block presence and minimum count verification
+ */
+public final class StructureTests {
+
+    private StructureTests() {
+        // Utility class
+    }
+
+    /**
+     * Block requirement: name + block supplier + minimum count.
+     * Uses Supplier to defer registry resolution until test execution time.
+     */
+    public record BlockRequirement(String name, Supplier<Block> blockSupplier, int minCount) {}
+
+    /**
+     * Structure template specification: template ID + minimum dimensions + block requirements.
+     */
+    public record StructureSpec(
+        String id,
+        int minWidth,
+        int minHeight,
+        int minDepth,
+        List<BlockRequirement> blockRequirements
+    ) {}
+
+    /**
+     * Structure ids the build-time replacement pipeline leaves untouched.
+     * Must match the "exclude" list in scripts/nbt_block_mappings.json.
+     */
+    private static final Set<String> REPLACEMENT_EXCLUDED_IDS = Set.of("ancient_ruins");
+
+    /**
+     * Vanilla blocks that scripts/nbt_block_mappings.json rewrites into ChronoDawn blocks
+     * when structure NBTs are processed at build time. Must match that file's "mappings" keys.
+     *
+     * A structure that still places one of these at runtime means the replacement did not
+     * reach it, so specs above must never require these blocks — silently expecting a
+     * replaced vanilla block is what broke old_sundial when smooth_stone was added.
+     *
+     * Names are kept fully qualified (unlike the specs above, where they become test names)
+     * so a failure message can be grepped straight against the mapping file. The minCount
+     * field is unused here: the guard asserts zero occurrences, not a minimum.
+     */
+    private static List<BlockRequirement> replacedVanillaBlocks() {
+        return List.of(
+            new BlockRequirement("minecraft:dirt", () -> Blocks.DIRT, 0),
+            new BlockRequirement("minecraft:grass_block", () -> Blocks.GRASS_BLOCK, 0),
+            new BlockRequirement("minecraft:coarse_dirt", () -> Blocks.COARSE_DIRT, 0),
+            new BlockRequirement("minecraft:smooth_stone", () -> Blocks.SMOOTH_STONE, 0)
+        );
+    }
+
+    /**
+     * Shared structure specs for all versions.
+     */
+    public static List<StructureSpec> getStructureSpecs() {
+        return List.of(
+            new StructureSpec("ancient_ruins", 5, 3, 5, List.of(
+                new BlockRequirement("chest", () -> Blocks.CHEST, 2),
+                new BlockRequirement(ModBlockId.TEMPORAL_PARTICLE_EMITTER.id(), ModBlocks.TEMPORAL_PARTICLE_EMITTER, 20),
+                new BlockRequirement(ModBlockId.CLOCKSTONE_ORE.id(), ModBlocks.CLOCKSTONE_ORE, 30)
+            )),
+            new StructureSpec("desert_clock_tower", 21, 48, 21, List.of(
+                new BlockRequirement("chest", () -> Blocks.CHEST, 3),
+                new BlockRequirement(ModBlockId.CLOCK_TOWER_TELEPORTER.id(), ModBlocks.CLOCK_TOWER_TELEPORTER, 1)
+            )),
+            new StructureSpec("time_keeper_village", 11, 8, 11, List.of(
+                new BlockRequirement("chest", () -> Blocks.CHEST, 2),
+                new BlockRequirement("barrel", () -> Blocks.BARREL, 1),
+                new BlockRequirement(ModBlockId.TIME_CRYSTAL_BLOCK.id(), ModBlocks.TIME_CRYSTAL_BLOCK, 1)
+            )),
+            new StructureSpec("time_well", 3, 5, 3, List.of(
+                new BlockRequirement(ModBlockId.TEMPORAL_COBBLESTONE.id(), ModBlocks.TEMPORAL_COBBLESTONE, 8),
+                new BlockRequirement(ModBlockId.TEMPORAL_AMBER_ORE.id(), ModBlocks.TEMPORAL_AMBER_ORE, 1)
+            )),
+            new StructureSpec("lost_adventurer_memorial", 3, 3, 3, List.of(
+                new BlockRequirement(ModBlockId.MOSSY_TEMPORAL_COBBLESTONE_SLAB.id(),
+                    ModBlocks.MOSSY_TEMPORAL_COBBLESTONE_SLAB, 2),
+                new BlockRequirement(ModBlockId.TEMPORAL_STONE_PRESSURE_PLATE.id(),
+                    ModBlocks.TEMPORAL_STONE_PRESSURE_PLATE, 1)
+            )),
+            new StructureSpec("lost_adventurer_memorial_snowy", 3, 3, 3, List.of(
+                new BlockRequirement("snow", () -> Blocks.SNOW, 4),
+                new BlockRequirement(ModBlockId.TEMPORAL_STONE_PRESSURE_PLATE.id(),
+                    ModBlocks.TEMPORAL_STONE_PRESSURE_PLATE, 1)
+            )),
+            new StructureSpec("time_cairn", 3, 3, 3, List.of(
+                new BlockRequirement(ModBlockId.CLOCKWORK_DIAL.id(), ModBlocks.CLOCKWORK_DIAL, 1)
+            )),
+            new StructureSpec("watchmaker_camp", 5, 2, 5, List.of(
+                new BlockRequirement(ModBlockId.TIME_WOOD_FENCE.id(), ModBlocks.TIME_WOOD_FENCE, 8),
+                new BlockRequirement("chest", () -> Blocks.CHEST, 1),
+                new BlockRequirement("campfire", () -> Blocks.CAMPFIRE, 1)
+            )),
+            new StructureSpec("old_sundial", 3, 3, 3, List.of(
+                // Authored as minecraft:smooth_stone; rewritten to the ChronoDawn block by
+                // the build-time replacement pipeline (scripts/nbt_block_mappings.json).
+                new BlockRequirement(ModBlockId.SMOOTH_TEMPORAL_STONE.id(), ModBlocks.SMOOTH_TEMPORAL_STONE, 9),
+                new BlockRequirement("iron_bars", () -> Blocks.IRON_BARS, 1)
+            )),
+            new StructureSpec("hourglass_monolith", 3, 5, 3, List.of(
+                new BlockRequirement(ModBlockId.TEMPORAL_SANDSTONE.id(), ModBlocks.TEMPORAL_SANDSTONE, 18),
+                new BlockRequirement(ModBlockId.TEMPORAL_SANDSTONE_WALL.id(), ModBlocks.TEMPORAL_SANDSTONE_WALL, 16),
+                new BlockRequirement("sand", () -> Blocks.SAND, 1)
+            )),
+            new StructureSpec("upside_down_tree", 4, 6, 4, List.of(
+                new BlockRequirement(ModBlockId.TIME_WOOD_LOG.id(), ModBlocks.TIME_WOOD_LOG, 8),
+                new BlockRequirement(ModBlockId.TIME_WOOD_LEAVES.id(), ModBlocks.TIME_WOOD_LEAVES, 7)
+            )),
+            new StructureSpec("forgotten_library", 35, 15, 35, List.of(
+                new BlockRequirement("chest", () -> Blocks.CHEST, 7),
+                new BlockRequirement("barrel", () -> Blocks.BARREL, 1),
+                new BlockRequirement("enchanting_table", () -> Blocks.ENCHANTING_TABLE, 1)
+            )),
+            new StructureSpec("master_clock_surface", 15, 10, 15, List.of(
+                new BlockRequirement(ModBlockId.BOSS_ROOM_BOUNDARY_MARKER.id(), ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
+                new BlockRequirement(ModBlockId.BOSS_ROOM_DOOR.id(), ModBlocks.BOSS_ROOM_DOOR, 1),
+                new BlockRequirement("dropper", () -> Blocks.DROPPER, 1)
+            )),
+            new StructureSpec("master_clock_stairs", 15, 8, 15, List.of(
+                new BlockRequirement(ModBlockId.BOSS_ROOM_BOUNDARY_MARKER.id(), ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 2)
+            )),
+            new StructureSpec("master_clock_stairs_bottom", 15, 12, 15, List.of(
+                new BlockRequirement(ModBlockId.BOSS_ROOM_BOUNDARY_MARKER.id(), ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 2)
+            )),
+            new StructureSpec("master_clock_corridor", 15, 15, 15, List.of(
+                new BlockRequirement(ModBlockId.BOSS_ROOM_BOUNDARY_MARKER.id(), ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 2)
+            )),
+            new StructureSpec("master_clock_boss_room", 35, 20, 35, List.of(
+                new BlockRequirement(ModBlockId.BOSS_ROOM_DOOR.id(), ModBlocks.BOSS_ROOM_DOOR, 1),
+                new BlockRequirement(ModBlockId.BOSS_ROOM_BOUNDARY_MARKER.id(), ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1)
+            )),
+            new StructureSpec("guardian_vault_entrance", 7, 6, 7, List.of(
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1)
+            )),
+            new StructureSpec("guardian_vault_main", 30, 20, 25, List.of(
+                new BlockRequirement(ModBlockId.BOSS_ROOM_BOUNDARY_MARKER.id(), ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
+                new BlockRequirement(ModBlockId.BOSS_ROOM_DOOR.id(), ModBlocks.BOSS_ROOM_DOOR, 1),
+                new BlockRequirement("chest", () -> Blocks.CHEST, 1),
+                new BlockRequirement("barrel", () -> Blocks.BARREL, 9),
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1)
+            )),
+            new StructureSpec("entropy_crypt_entrance", 7, 6, 7, List.of(
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1)
+            )),
+            new StructureSpec("entropy_crypt_main", 26, 20, 25, List.of(
+                new BlockRequirement(ModBlockId.BOSS_ROOM_BOUNDARY_MARKER.id(), ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
+                new BlockRequirement(ModBlockId.ENTROPY_CRYPT_TRAPDOOR.id(), ModBlocks.ENTROPY_CRYPT_TRAPDOOR, 1),
+                new BlockRequirement("chest", () -> Blocks.CHEST, 3),
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1)
+            )),
+            new StructureSpec("entropy_crypt_stairs", 5, 20, 5, List.of(
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 2)
+            )),
+            new StructureSpec("clockwork_depths_tower", 11, 15, 11, List.of(
+                new BlockRequirement("campfire", () -> Blocks.CAMPFIRE, 4),
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1)
+            )),
+            new StructureSpec("clockwork_depths_gearshaft", 13, 21, 13, List.of(
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 2)
+            )),
+            new StructureSpec("clockwork_depths_engine_room", 30, 17, 30, List.of(
+                new BlockRequirement(ModBlockId.BOSS_ROOM_BOUNDARY_MARKER.id(), ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 2),
+                new BlockRequirement("crimson_wall_sign", () -> Blocks.CRIMSON_WALL_SIGN, 4)
+            )),
+            new StructureSpec("clockwork_depths_archive_vault", 7, 9, 7, List.of(
+                new BlockRequirement("chest", () -> Blocks.CHEST, 1),
+                new BlockRequirement("barrel", () -> Blocks.BARREL, 4),
+                new BlockRequirement("anvil", () -> Blocks.ANVIL, 1),
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1)
+            )),
+            new StructureSpec("phantom_catacombs_entrance", 9, 7, 9, List.of(
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1)
+            )),
+            new StructureSpec("phantom_catacombs_corridor", 5, 40, 5, List.of(
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 2)
+            )),
+            new StructureSpec("phantom_catacombs_boss_room", 21, 9, 21, List.of(
+                new BlockRequirement(ModBlockId.BOSS_ROOM_BOUNDARY_MARKER.id(), ModBlocks.BOSS_ROOM_BOUNDARY_MARKER, 2),
+                new BlockRequirement("amethyst_block", () -> Blocks.AMETHYST_BLOCK, 1)
+            )),
+            new StructureSpec("phantom_catacombs_room_dead_end", 7, 9, 7, List.of(
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1),
+                new BlockRequirement("crying_obsidian", () -> Blocks.CRYING_OBSIDIAN, 1)
+            )),
+            new StructureSpec("phantom_catacombs_room_1", 7, 9, 7, List.of(
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 2)
+            )),
+            new StructureSpec("phantom_catacombs_room_2", 7, 9, 7, List.of(
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 4)
+            )),
+            new StructureSpec("phantom_catacombs_room_3", 7, 9, 7, List.of(
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 4)
+            )),
+            new StructureSpec("phantom_catacombs_room_4", 7, 9, 7, List.of(
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 3)
+            )),
+            new StructureSpec("phantom_catacombs_room_5", 7, 9, 7, List.of(
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 3)
+            )),
+            new StructureSpec("phantom_catacombs_room_6", 7, 9, 7, List.of(
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 2)
+            )),
+            new StructureSpec("phantom_catacombs_room_7", 7, 9, 7, List.of(
+                new BlockRequirement("crying_obsidian", () -> Blocks.CRYING_OBSIDIAN, 1)
+            ))
+        );
+    }
+
+    /**
+     * Generates tests verifying structure template loading, minimum size, and required blocks.
+     */
+    public static <T> List<T> generateStructureTests(
+            List<StructureSpec> specs,
+            MobBehaviorTests.TestFactory<T> factory) {
+        List<T> tests = new ArrayList<>();
+        for (var spec : specs) {
+            var templateId = CompatResourceLocation.create(ChronoDawn.MOD_ID, spec.id());
+
+            // Template load + size test
+            tests.add(factory.create("structure_load_" + spec.id(), helper -> {
+                helper.runAfterDelay(1, () -> {
+                    var templateManager = helper.getLevel().getStructureTemplateManager();
+                    var templateOpt = templateManager.get(templateId);
+                    if (templateOpt.isEmpty()) {
+                        CompatGameTestHelper.fail(helper, "Structure template '" + spec.id() + "' could not be loaded");
+                        return;
+                    }
+                    StructureTemplate template = templateOpt.get();
+                    var size = template.getSize();
+                    if (size.getX() < spec.minWidth() || size.getY() < spec.minHeight() || size.getZ() < spec.minDepth()) {
+                        CompatGameTestHelper.fail(helper, "Structure '" + spec.id() + "' size " +
+                            size.getX() + "x" + size.getY() + "x" + size.getZ() +
+                            " is smaller than minimum " +
+                            spec.minWidth() + "x" + spec.minHeight() + "x" + spec.minDepth());
+                        return;
+                    }
+                    helper.succeed();
+                });
+            }));
+
+            // Block requirement tests
+            for (var req : spec.blockRequirements()) {
+                String testName = req.minCount() > 1
+                    ? "structure_contains_" + req.minCount() + "_" + req.name() + "_" + spec.id()
+                    : "structure_contains_" + req.name() + "_" + spec.id();
+                tests.add(factory.create(testName, helper -> {
+                    helper.runAfterDelay(1, () -> {
+                        Block block = req.blockSupplier().get();
+                        var templateManager = helper.getLevel().getStructureTemplateManager();
+                        var templateOpt = templateManager.get(templateId);
+                        if (templateOpt.isEmpty()) {
+                            CompatGameTestHelper.fail(helper, "Structure template '" + spec.id() + "' could not be loaded");
+                            return;
+                        }
+                        StructureTemplate template = templateOpt.get();
+                        var blocks = template.filterBlocks(
+                            BlockPos.ZERO,
+                            new StructurePlaceSettings(),
+                            block
+                        );
+                        if (blocks.size() < req.minCount()) {
+                            CompatGameTestHelper.fail(helper, "Structure '" + spec.id() + "' contains " +
+                                blocks.size() + " " + req.name() + ", expected at least " + req.minCount());
+                            return;
+                        }
+                        helper.succeed();
+                    });
+                }));
+            }
+        }
+
+        // Coverage test: verify all .nbt files have corresponding specs
+        tests.add(generateStructureCoverageTest(specs, factory));
+
+        // Guard: verify the build-time NBT block replacement actually reached every structure
+        tests.add(generateNbtReplacementTest(specs, factory));
+
+        return tests;
+    }
+
+    /**
+     * Generates a test that verifies no structure template still places a vanilla block that
+     * scripts/nbt_block_mappings.json is supposed to replace.
+     *
+     * Catches both a replacement pipeline that silently stopped running and a newly added
+     * .nbt whose vanilla blocks were never meant to survive into the shipped structure.
+     */
+    static <T> T generateNbtReplacementTest(
+            List<StructureSpec> specs,
+            MobBehaviorTests.TestFactory<T> factory) {
+        return factory.create("structure_no_unreplaced_vanilla_blocks", helper -> {
+            helper.runAfterDelay(1, () -> {
+                var templateManager = helper.getLevel().getStructureTemplateManager();
+                var vanillaBlocks = replacedVanillaBlocks();
+                List<String> leftovers = new ArrayList<>();
+
+                for (var spec : specs) {
+                    if (REPLACEMENT_EXCLUDED_IDS.contains(spec.id())) {
+                        continue;
+                    }
+                    var templateId = CompatResourceLocation.create(ChronoDawn.MOD_ID, spec.id());
+                    var templateOpt = templateManager.get(templateId);
+                    if (templateOpt.isEmpty()) {
+                        CompatGameTestHelper.fail(helper, "Structure template '" + spec.id() + "' could not be loaded");
+                        return;
+                    }
+                    StructureTemplate template = templateOpt.get();
+                    for (var vanilla : vanillaBlocks) {
+                        var blocks = template.filterBlocks(
+                            BlockPos.ZERO,
+                            new StructurePlaceSettings(),
+                            vanilla.blockSupplier().get()
+                        );
+                        if (!blocks.isEmpty()) {
+                            leftovers.add(spec.id() + " has " + blocks.size() + " " + vanilla.name());
+                        }
+                    }
+                }
+
+                if (!leftovers.isEmpty()) {
+                    CompatGameTestHelper.fail(helper, "Build-time NBT block replacement did not apply: "
+                        + String.join(", ", leftovers));
+                    return;
+                }
+                helper.succeed();
+            });
+        });
+    }
+
+    /**
+     * Generates a test that verifies all .nbt structure files in the mod's resources
+     * have a corresponding StructureSpec in getStructureSpecs().
+     * Fails if any structure template exists without a test spec.
+     */
+    static <T> T generateStructureCoverageTest(
+            List<StructureSpec> specs,
+            MobBehaviorTests.TestFactory<T> factory) {
+        return factory.create("structure_coverage_all_nbt_have_specs", helper -> {
+            helper.runAfterDelay(1, () -> {
+                var resourceManager = helper.getLevel().getServer().getResourceManager();
+                var resources = resourceManager.listResources("structure",
+                    id -> id.getNamespace().equals(ChronoDawn.MOD_ID) && id.getPath().endsWith(".nbt"));
+
+                Set<String> testedIds = specs.stream()
+                    .map(StructureSpec::id)
+                    .collect(Collectors.toSet());
+
+                // Test utility structures that are not game structures
+                Set<String> excludedIds = Set.of("empty_test");
+
+                List<String> untestedIds = new ArrayList<>();
+                for (var entry : resources.keySet()) {
+                    String path = entry.getPath();
+                    // path is "structure/<id>.nbt"
+                    String id = path.substring("structure/".length(), path.length() - ".nbt".length());
+                    if (!testedIds.contains(id) && !excludedIds.contains(id)) {
+                        untestedIds.add(id);
+                    }
+                }
+
+                if (!untestedIds.isEmpty()) {
+                    CompatGameTestHelper.fail(helper, "Structure templates without test specs: " + String.join(", ", untestedIds));
+                    return;
+                }
+                helper.succeed();
+            });
+        });
+    }
+}

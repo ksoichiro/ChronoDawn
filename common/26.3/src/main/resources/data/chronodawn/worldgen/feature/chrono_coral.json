@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:simple_block",
+  "to_place": {
+    "type": "minecraft:weighted",
+    "entries": [
+      {
+        "weight": 1,
+        "data": "chronodawn:dawn_chrono_coral"
+      },
+      {
+        "weight": 1,
+        "data": "chronodawn:dusk_chrono_coral"
+      },
+      {
+        "weight": 1,
+        "data": "chronodawn:twilight_chrono_coral"
+      },
+      {
+        "weight": 1,
+        "data": "chronodawn:eternal_chrono_coral"
+      }
+    ]
+  }
+}

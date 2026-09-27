@@ -1,0 +1,38 @@
+{
+  "type": "minecraft:simple_block",
+  "to_place": {
+    "type": "minecraft:weighted",
+    "entries": [
+      {
+        "weight": 3,
+        "data": "chronodawn:purple_time_blossom"
+      },
+      {
+        "weight": 3,
+        "data": "chronodawn:orange_time_blossom"
+      },
+      {
+        "weight": 2,
+        "data": "chronodawn:pink_time_blossom"
+      },
+      {
+        "weight": 2,
+        "data": {
+          "id": "chronodawn:dawn_bell",
+          "properties": {
+            "half": "lower"
+          }
+        }
+      },
+      {
+        "weight": 2,
+        "data": {
+          "id": "chronodawn:dusk_bell",
+          "properties": {
+            "half": "lower"
+          }
+        }
+      }
+    ]
+  }
+}

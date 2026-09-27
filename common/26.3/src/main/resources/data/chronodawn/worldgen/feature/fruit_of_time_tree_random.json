@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:random_selector",
+  "features": [
+    {
+      "feature": "chronodawn:fruit_of_time_tree_tall_placed",
+      "chance": 0.25
+    },
+    {
+      "feature": "chronodawn:fruit_of_time_tree_wide_placed",
+      "chance": 0.25
+    }
+  ],
+  "default": "chronodawn:fruit_of_time_tree_standard_placed"
+}

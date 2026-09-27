@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:ore",
+  "size": 9,
+  "discard_chance_on_air_exposure": 0.0,
+  "targets": [
+    {
+      "target": {
+        "predicate_type": "minecraft:block_match",
+        "block": "chronodawn:temporal_stone"
+      },
+      "state": "chronodawn:clockstone_ore"
+    },
+    {
+      "target": {
+        "predicate_type": "minecraft:block_match",
+        "block": "chronodawn:deepslate_temporal_stone"
+      },
+      "state": "chronodawn:deepslate_clockstone_ore"
+    }
+  ]
+}

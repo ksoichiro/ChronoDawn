@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:random_selector",
+  "features": [
+    {
+      "feature": "chronodawn:ice_pillar_cluster_placed",
+      "chance": 0.25
+    }
+  ],
+  "default": "chronodawn:ice_pillar_single_placed"
+}

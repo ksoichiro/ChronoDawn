@@ -1,0 +1,44 @@
+package com.chronodawn.client.renderer.mobs;
+
+import com.chronodawn.client.model.MomentCreeperModel;
+import com.chronodawn.entities.mobs.MomentCreeperEntity;
+import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.MobRenderer;
+import net.minecraft.resources.Identifier;
+import com.chronodawn.compat.CompatResourceLocation;
+
+/**
+ * Renderer for Moment Creeper entity.
+ * Uses a custom creeper-like model with glass-like body containing frozen explosion effect.
+ *
+ * Texture location: assets/chronodawn/textures/entity/mobs/moment_creeper.png
+ * Model: Custom model created with Blockbench
+ */
+public class MomentCreeperRenderer extends MobRenderer<MomentCreeperEntity, MomentCreeperRenderState, MomentCreeperModel> {
+    private static final Identifier TEXTURE = CompatResourceLocation.create(
+        "chronodawn",
+        "textures/entity/mobs/moment_creeper.png"
+    );
+
+    public MomentCreeperRenderer(EntityRendererProvider.Context context) {
+        super(context, new MomentCreeperModel(context.bakeLayer(MomentCreeperModel.LAYER_LOCATION)), 0.5f);
+        this.addLayer(new MomentCreeperWhiteFlashLayer(this));
+    }
+
+    @Override
+    public MomentCreeperRenderState createRenderState() {
+        return new MomentCreeperRenderState();
+    }
+
+    @Override
+    public void extractRenderState(MomentCreeperEntity entity, MomentCreeperRenderState state, float partialTick) {
+        super.extractRenderState(entity, state, partialTick);
+        // Extract swelling value for model animation (pre-interpolated)
+        state.swelling = entity.getSwelling(partialTick);
+    }
+
+    @Override
+    public Identifier getTextureLocation(MomentCreeperRenderState state) {
+        return TEXTURE;
+    }
+}

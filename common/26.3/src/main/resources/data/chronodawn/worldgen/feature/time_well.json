@@ -1,0 +1,8 @@
+{
+  "type": "chronodawn:nbt_template",
+  "template": "chronodawn:time_well",
+  "random_rotate": true,
+  "y_offset": -1,
+  "min_ground_contact_ratio": 1.0,
+  "ground_contact_y_offset": 0
+}

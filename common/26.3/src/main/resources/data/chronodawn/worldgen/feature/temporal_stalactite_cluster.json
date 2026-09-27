@@ -1,0 +1,46 @@
+{
+  "type": "minecraft:block_column",
+  "direction": "down",
+  "allowed_placement": {
+    "type": "minecraft:matching_blocks",
+    "blocks": [
+      "minecraft:cave_air",
+      "minecraft:air"
+    ]
+  },
+  "prioritize_tip": false,
+  "layers": [
+    {
+      "height": {
+        "type": "minecraft:constant",
+        "value": 1
+      },
+      "provider": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "chronodawn:temporal_pointed_dripstone",
+          "properties": {
+            "direction": "down",
+            "thickness": "frustum"
+          }
+        }
+      }
+    },
+    {
+      "height": {
+        "type": "minecraft:constant",
+        "value": 1
+      },
+      "provider": {
+        "type": "minecraft:simple",
+        "state": {
+          "id": "chronodawn:temporal_pointed_dripstone",
+          "properties": {
+            "direction": "down",
+            "thickness": "tip"
+          }
+        }
+      }
+    }
+  ]
+}

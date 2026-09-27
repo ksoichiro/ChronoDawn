@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:simple_block",
+  "to_place": {
+    "type": "minecraft:weighted",
+    "entries": [
+      {
+        "weight": 2,
+        "data": {
+          "id": "chronodawn:temporal_root",
+          "properties": {
+            "age": "6"
+          }
+        }
+      },
+      {
+        "weight": 3,
+        "data": {
+          "id": "chronodawn:temporal_root",
+          "properties": {
+            "age": "7"
+          }
+        }
+      }
+    ]
+  }
+}

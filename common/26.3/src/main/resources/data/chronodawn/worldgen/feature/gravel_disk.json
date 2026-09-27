@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:disk",
+  "half_height": 2,
+  "radius": {
+    "type": "minecraft:uniform",
+    "min_inclusive": 2,
+    "max_inclusive": 5
+  },
+  "state_provider": {
+    "type": "minecraft:rule_based",
+    "fallback": {
+      "type": "minecraft:simple",
+      "state": "chronodawn:temporal_gravel"
+    },
+    "rules": []
+  },
+  "target": {
+    "type": "minecraft:matching_blocks",
+    "blocks": [
+      "minecraft:grass_block",
+      "minecraft:dirt",
+      "chronodawn:temporal_grass_block",
+      "chronodawn:temporal_dirt"
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:simple_block",
+  "to_place": {
+    "type": "minecraft:simple",
+    "state": {
+      "id": "chronodawn:temporal_pointed_dripstone",
+      "properties": {
+        "direction": "down",
+        "thickness": "tip"
+      }
+    }
+  }
+}

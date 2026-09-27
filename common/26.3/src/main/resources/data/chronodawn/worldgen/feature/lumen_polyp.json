@@ -1,0 +1,48 @@
+{
+  "type": "minecraft:simple_block",
+  "to_place": {
+    "type": "minecraft:weighted",
+    "entries": [
+      {
+        "weight": 4,
+        "data": {
+          "id": "chronodawn:lumen_polyp",
+          "properties": {
+            "pickles": "1",
+            "waterlogged": "true"
+          }
+        }
+      },
+      {
+        "weight": 2,
+        "data": {
+          "id": "chronodawn:lumen_polyp",
+          "properties": {
+            "pickles": "2",
+            "waterlogged": "true"
+          }
+        }
+      },
+      {
+        "weight": 1,
+        "data": {
+          "id": "chronodawn:lumen_polyp",
+          "properties": {
+            "pickles": "3",
+            "waterlogged": "true"
+          }
+        }
+      },
+      {
+        "weight": 1,
+        "data": {
+          "id": "chronodawn:lumen_polyp",
+          "properties": {
+            "pickles": "4",
+            "waterlogged": "true"
+          }
+        }
+      }
+    ]
+  }
+}
