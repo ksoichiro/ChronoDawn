@@ -44,6 +44,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Missing Chrono Dawn Portal block name** — the `block.chronodawn.chrono_dawn_portal`
+  translation key had no `en_us`/`ja_jp` value, so mods that display block
+  names (e.g. Jade) showed the raw key instead of "Chrono Dawn Portal".
 - **Time Keeper Village vegetation drops** — placing the runtime Time Keeper Village now clears
   vegetation in and immediately around its footprint, including crops and Time Blossoms, without
   leaving dropped items behind when the foundation or structure replaces their supporting blocks.
