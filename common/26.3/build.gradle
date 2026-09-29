@@ -169,6 +169,16 @@ sourceSets {
                     || path.contains('data/minecraft/loot_table/')
                 )
             }
+            // 26.3 renamed the model element key "shade": false to "shade_direction_override": "up".
+            // The old key is silently ignored, so these three models keep their own copies.
+            filter.exclude { element ->
+                def path = element.file.absolutePath
+                path.contains('common/shared/') && path.contains('assets/chronodawn/models/block/') && (
+                    element.file.name == 'time_crystal_block.json'
+                    || element.file.name == 'tinted_cross.json'
+                    || element.file.name == 'frozen_time_ice.json'
+                )
+            }
         }
     }
     test {
