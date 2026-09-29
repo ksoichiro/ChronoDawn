@@ -75,7 +75,7 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed information.
 ## Requirements
 
 ### For Players
-- **Minecraft**: Java Edition 1.21.1, 1.21.2, 1.21.3, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, 1.21.11, 26.1.2, or 26.2
+- **Minecraft**: Java Edition 1.21.1, 1.21.2, 1.21.3, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, 1.21.11, 26.1.2, 26.2, or 26.3
 - **Mod Loader** (version depends on Minecraft version):
   - **For 1.21.1**: Fabric Loader 0.17.3+ with Fabric API 0.116.7+, OR NeoForge 21.1.209+
   - **For 1.21.2/1.21.3**: Fabric Loader 0.17.3+ with Fabric API, OR NeoForge 21.2.0-beta+/21.3.0-beta+
@@ -89,11 +89,12 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed information.
   - **For 1.21.11**: Fabric Loader 0.17.3+ with Fabric API 0.141.3+, OR NeoForge 21.11.38-beta+
   - **For 26.1.2**: Fabric Loader 0.19.5+ with Fabric API 0.155.2+26.1.2+, OR NeoForge 26.1.2.103+
   - **For 26.2**: Fabric Loader 0.19.5+ with Fabric API 0.160.0+26.2+, OR NeoForge 26.2.0.82+
+  - **For 26.3**: Fabric Loader 0.19.5+ with Fabric API 0.161.0+26.3+, OR NeoForge 26.3.0.34-beta+ (NeoForge 26.3 is still a beta build)
 - **Dependencies**:
-  - **Architectury API** 13.0.8+ (for 1.21.1), 14.0.4+ (for 1.21.2/1.21.3), 15.0.1+ (for 1.21.4), 16.1.4+ (for 1.21.5), 17.0.6+ (for 1.21.6), 17.0.8+ (for 1.21.7/1.21.8), 18.0.3+ (for 1.21.9), 18.0.8+ (for 1.21.10), 19.0.1+ (for 1.21.11), 20.0.12+ (for 26.1.2), or 21.0.7+ (for 26.2)
+  - **Architectury API** 13.0.8+ (for 1.21.1), 14.0.4+ (for 1.21.2/1.21.3), 15.0.1+ (for 1.21.4), 16.1.4+ (for 1.21.5), 17.0.6+ (for 1.21.6), 17.0.8+ (for 1.21.7/1.21.8), 18.0.3+ (for 1.21.9), 18.0.8+ (for 1.21.10), 19.0.1+ (for 1.21.11), 20.0.12+ (for 26.1.2), 21.0.7+ (for 26.2), or 22.0.2+ (for 26.3)
 
 ### For Developers
-- **Java Development Kit (JDK)**: 21 or higher (25+ required for 26.1.2/26.2)
+- **Java Development Kit (JDK)**: 21 or higher (25+ required for 26.1.2/26.2/26.3)
 - **IDE**: IntelliJ IDEA (recommended) or Eclipse
 - **Git**: For version control
 
@@ -123,6 +124,7 @@ Chrono Dawn supports multiple Minecraft versions from the same codebase:
 - **1.21.11**: NeoForge/Fabric (stable)
 - **26.1.2**: NeoForge/Fabric (stable)
 - **26.2**: NeoForge/Fabric (current version, default)
+- **26.3**: NeoForge/Fabric (NeoForge 26.3 is still a beta build)
 
 ### Build for Specific Minecraft Version
 
@@ -218,7 +220,7 @@ Chrono Dawn supports multiple Minecraft versions from the same codebase:
 
 #### Build for All Versions (Release)
 ```bash
-# Build all release versions (1.20.1, 1.21.1, 1.21.2, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, 1.21.11, 26.1.2, 26.2)
+# Build all release versions (1.20.1, 1.21.1, 1.21.2, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, 1.21.11, 26.1.2, 26.2, 26.3)
 # Note: 1.21.3 is excluded - the 1.21.2 JAR is compatible with 1.21.3
 ./gradlew buildAll
 
@@ -457,6 +459,13 @@ Use the same steps above, but with:
 - Architectury API 21.0.7+
 - JAR files with `+26.2` in the filename
 
+### For Minecraft 26.3
+Use the same steps above, but with:
+- Minecraft 26.3
+- NeoForge 26.3.0.34-beta+ (a beta build) or Fabric Loader 0.19.5+ with Fabric API 0.161.0+26.3+
+- Architectury API 22.0.2+
+- JAR files with `+26.3` in the filename
+
 **Note**: Download the correct version for your mod loader (Fabric or NeoForge).
 
 ## Project Structure
@@ -478,7 +487,7 @@ ChronoDawn/
 │   ├── 1.21.10/                     # Common module for MC 1.21.10
 │   ├── 1.21.11/                     # Common module for MC 1.21.11
 │   ├── 26.1.2/                      # Common module for MC 26.1.2
-│   └── 26.2/                        # Common module for MC 26.2 (~80% of code)
+│   ├── 26.2/                        # Common module for MC 26.2 (~80% of code)
 │       ├── src/main/java/com/chronodawn/
 │       │   ├── ChronoDawn.java      # Common entry point
 │       │   ├── blocks/              # Custom blocks
@@ -489,6 +498,7 @@ ChronoDawn/
 │       └── src/main/resources/
 │           ├── data/chronodawn/     # Data packs (recipes, worldgen, structures)
 │           └── assets/chronodawn/   # Assets (textures, models, sounds)
+│   └── 26.3/                        # Common module for MC 26.3
 ├── fabric/
 │   ├── base/                        # Shared Fabric sources
 │   ├── 1.20.1/                      # Fabric subproject for MC 1.20.1
@@ -503,7 +513,8 @@ ChronoDawn/
 │   ├── 1.21.10/                     # Fabric subproject for MC 1.21.10
 │   ├── 1.21.11/                     # Fabric subproject for MC 1.21.11
 │   ├── 26.1.2/                      # Fabric subproject for MC 26.1.2
-│   └── 26.2/                        # Fabric subproject for MC 26.2
+│   ├── 26.2/                        # Fabric subproject for MC 26.2
+│   └── 26.3/                        # Fabric subproject for MC 26.3
 ├── neoforge/
 │   ├── base/                        # Shared NeoForge sources
 │   ├── 1.21.1/                      # NeoForge subproject for MC 1.21.1
@@ -517,7 +528,8 @@ ChronoDawn/
 │   ├── 1.21.10/                     # NeoForge subproject for MC 1.21.10
 │   ├── 1.21.11/                     # NeoForge subproject for MC 1.21.11
 │   ├── 26.1.2/                      # NeoForge subproject for MC 26.1.2
-│   └── 26.2/                        # NeoForge subproject for MC 26.2
+│   ├── 26.2/                        # NeoForge subproject for MC 26.2
+│   └── 26.3/                        # NeoForge subproject for MC 26.3
 ├── forge/
 │   ├── base/                        # Shared Forge sources
 │   └── 1.20.1/                      # Forge subproject for MC 1.20.1 (legacy loader)
@@ -582,4 +594,4 @@ For issues, feature requests, or questions:
 
 ---
 
-**Developed for Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.21.6 / 1.21.7 / 1.21.8 / 1.21.9 / 1.21.10 / 1.21.11 / 26.1.2 / 26.2**
+**Developed for Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.21.6 / 1.21.7 / 1.21.8 / 1.21.9 / 1.21.10 / 1.21.11 / 26.1.2 / 26.2 / 26.3**

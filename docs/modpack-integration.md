@@ -591,6 +591,7 @@ own supported versions (confirmed against KubeJS's Modrinth releases as of
 | 1.21.2, 1.21.4–1.21.11 | **No KubeJS release exists for these versions on any loader.** This bridge has nothing to attach to. |
 | 26.1.2 | Yes — NeoForge |
 | 26.2 | Not yet — no KubeJS release exists at time of writing |
+| 26.3 | Not yet, no KubeJS release exists at time of writing |
 
 Fabric users are additionally limited beyond 1.20.1: upstream KubeJS ships
 no Fabric (or Quilt) build for Minecraft 1.21+ at all, only NeoForge/Forge,
@@ -711,7 +712,7 @@ targets only. The bridge is therefore available on these combinations:
 | --- | --- | --- |
 | 1.20.1 | Fabric, Forge | Yes |
 | 1.21.1 | Fabric, NeoForge | Yes |
-| 1.21.2+, 26.1.2, 26.2 | Any | No CraftTweaker build exists for these Minecraft versions. |
+| 1.21.2+, 26.1.2, 26.2, 26.3 | Any | No CraftTweaker build exists for these Minecraft versions. |
 
 CraftTweaker itself must be installed on both the client and dedicated server,
 using matching loader and Minecraft versions.

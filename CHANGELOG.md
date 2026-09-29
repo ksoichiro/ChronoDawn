@@ -9,6 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Minecraft 26.3 support**: Chrono Dawn now runs on Minecraft 26.3 with
+  Fabric (Loader 0.19.5+ and Fabric API 0.161.0+26.3) and NeoForge
+  (26.3.0.34-beta or newer). NeoForge 26.3 is still a beta build, so expect
+  loader changes between betas. Both loaders need Architectury API 22.0.2 or
+  newer. Modpack authors should know two differences on 26.3. Minecraft 26.3
+  removed the tag-based furnace fuel and the central composter registry, so
+  Chrono Dawn's own wooden items burn and its plants compost with the same
+  values as on other versions, but items a pack adds to the vanilla wood tags
+  no longer get a burn time automatically. KubeJS and CraftTweaker have no
+  26.3 builds yet, so the scripting bridges are not available there.
 - **Configurable Time Keeper Village**: modpacks can now control the one-per-world runtime village through `[world.time_keeper_village]`: enable or disable it, tune its preferred and maximum distance from the first Chrono Dawn entry point, choose how many Time Keepers appear, and replace its structure template and chest loot table with data pack resources. The placement still occurs at runtime, so it is not a `/locate structure` target.
 - Chronite Ore, a common Overworld ore that drops Chronite Shards. Craft a Time Compass from a compass, a clock, and Chronite Shards to locate the nearest Ancient Ruins from anywhere in the Overworld. Chronite also crafts Time Arrows, clocks without gold, and Blocks of Chronite. It makes no armour, tools, or weapons. Chronite Ore and its deepslate variant are tagged `c:ores/chronite`, `c:ores`, and `c:ores_in_ground/stone` or `/deepslate`, so packs can target them like the other Chrono Dawn ores.
 - **Time Compass re-search**: sneak and use a Time Compass that already has a locked target to clear that lock and search again, without crafting a new compass. Covers the rare case where Minecraft's structure search locks onto a position that turns out to have no structure there.
