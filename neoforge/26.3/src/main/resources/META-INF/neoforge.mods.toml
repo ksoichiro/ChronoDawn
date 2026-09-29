@@ -25,7 +25,7 @@ config="chronodawn-neoforge-26.3.mixins.json"
 [[dependencies.chronodawn]]
 modId="neoforge"
 type="required"
-versionRange="[26.3.0.34-beta,26.3.0.35-beta)"
+versionRange="[26.3.0.34-beta,)"
 ordering="NONE"
 side="BOTH"
 
