@@ -140,3 +140,9 @@ publishing {
     repositories {
     }
 }
+
+// runProd and prodSmokeTest use a standalone NeoForge instance, so they need the
+// same required Architectury API mod that is declared in neoforge.mods.toml.
+afterEvaluate {
+    dependencies.add('prodMods', "dev.architectury:architectury-neoforge:${architectury_api_version}")
+}

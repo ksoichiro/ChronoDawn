@@ -172,3 +172,11 @@ publishing {
     repositories {
     }
 }
+
+// runProd and prodSmokeTest use a standalone Fabric instance, so they need the
+// required loader mods declared in fabric.mod.json. The published jars are
+// already in production (intermediary) names, so no remapping is involved.
+afterEvaluate {
+    dependencies.add('prodMods', "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}")
+    dependencies.add('prodMods', "dev.architectury:architectury-fabric:${architectury_api_version}")
+}
