@@ -191,8 +191,9 @@ public class PlayerEventHandler {
                 return;
             }
 
-            // Deactivate portal
-            if (portal.deactivate()) {
+            // PortalTeleportHandler may have already deactivated the exact arrival
+            // portal before this delayed dimension-change observer runs.
+            if (portal.getCurrentState() == PortalState.ACTIVATED && portal.deactivate()) {
                 // Remove portal blocks
                 extinguishPortal(level, playerPos);
                 ChronoDawn.LOGGER.debug("Deactivated portal {} after player entry", portal.getPortalId());
@@ -377,4 +378,3 @@ public class PlayerEventHandler {
         }
     }
 }
-

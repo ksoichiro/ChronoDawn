@@ -23,6 +23,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -115,6 +116,13 @@ public class ChronoDawnPortalBlock extends Block {
     private static final Map<UUID, BlockPos> LAST_PORTAL_POSITION = new HashMap<>();
 
     /**
+     * Tracks the dimension of each entity's last portal position. Position
+     * distance alone cannot distinguish a different portal from a paired portal
+     * at a different terrain height in another dimension.
+     */
+    private static final Map<UUID, ResourceKey<Level>> LAST_PORTAL_DIMENSION = new HashMap<>();
+
+    /**
      * Tracks the last game tick when entityInside() was called for each entity.
      * Used to detect when entities exit and re-enter portals (tick gap > 20).
      * Map: Entity UUID -> Last tick time
@@ -202,6 +210,7 @@ public class ChronoDawnPortalBlock extends Block {
             if (entity == null) {
                 // Entity no longer exists, clear all records
                 LAST_PORTAL_POSITION.remove(entityId);
+                LAST_PORTAL_DIMENSION.remove(entityId);
                 LAST_INSIDE_TICK.remove(entityId);
                 LAST_COUNTER_INCREMENT_TICK.remove(entityId);
                 com.chronodawn.core.portal.PortalTeleportHandler.clearArrivalDimension(entityId);
@@ -212,6 +221,11 @@ public class ChronoDawnPortalBlock extends Block {
 
         // Also clean up LAST_PORTAL_POSITION, LAST_INSIDE_TICK, and LAST_COUNTER_INCREMENT_TICK for entities that no longer exist
         LAST_PORTAL_POSITION.entrySet().removeIf(entry -> {
+            Entity entity = findEntityInAllDimensions(level.getServer(), entry.getKey());
+            return entity == null;
+        });
+
+        LAST_PORTAL_DIMENSION.entrySet().removeIf(entry -> {
             Entity entity = findEntityInAllDimensions(level.getServer(), entry.getKey());
             return entity == null;
         });
@@ -324,7 +338,10 @@ public class ChronoDawnPortalBlock extends Block {
         // Get current game time for re-entry detection
         long currentTick = level.getGameTime();
         BlockPos lastPortalPos = LAST_PORTAL_POSITION.get(entityId);
+        ResourceKey<Level> lastPortalDimension = LAST_PORTAL_DIMENSION.get(entityId);
         Long lastTick = LAST_INSIDE_TICK.get(entityId);
+        boolean arrivedFromAnotherDimension = lastPortalDimension != null
+            && !lastPortalDimension.equals(level.dimension());
 
         // Get current state to check if entity just teleported
         int currentState = ENTITY_PORTAL_STATES.getOrDefault(entityId, 0);
@@ -351,7 +368,7 @@ public class ChronoDawnPortalBlock extends Block {
         // Use distance > 25 (5+ blocks) to distinguish between:
         // - Same portal movement (player moving within 2x3 portal interior)
         // - Different portal (player teleported or walked to another portal)
-        if (lastPortalPos != null && lastPortalPos.distSqr(pos) > 25) {
+        if (!arrivedFromAnotherDimension && lastPortalPos != null && lastPortalPos.distSqr(pos) > 25) {
             // Different portal - clear records and reset state
             com.chronodawn.core.portal.PortalTeleportHandler.clearArrivalDimension(entityId);
             int oldState = ENTITY_PORTAL_STATES.getOrDefault(entityId, 0);
@@ -365,7 +382,8 @@ public class ChronoDawnPortalBlock extends Block {
         }
         // Case 2: Same portal area, but tick gap > 20 (1 second)
         // This means player exited portal and re-entered
-        else if (lastPortalPos != null && lastTick != null && currentTick - lastTick > 20) {
+        else if (!arrivedFromAnotherDimension && lastPortalPos != null && lastTick != null
+                && currentTick - lastTick > 20) {
             // Exited and re-entered same portal - clear records and reset state
             com.chronodawn.core.portal.PortalTeleportHandler.clearArrivalDimension(entityId);
             int oldState = ENTITY_PORTAL_STATES.getOrDefault(entityId, 0);
@@ -380,6 +398,7 @@ public class ChronoDawnPortalBlock extends Block {
 
         // Update tracking maps
         LAST_PORTAL_POSITION.put(entityId, pos.immutable());
+        LAST_PORTAL_DIMENSION.put(entityId, level.dimension());
         LAST_INSIDE_TICK.put(entityId, currentTick);
 
         // Check if entity can teleport from current dimension
