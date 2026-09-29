@@ -274,6 +274,7 @@ is stable across all ten 1.21.x versions this mod supports.
 | `time_crystal_ore` | `c:ores/time_crystal`, `c:ores`, `c:ores_in_ground/stone` |
 | `entropy_crystal_ore` | `c:ores/entropy_crystal`, `c:ores`, `c:ores_in_ground/stone` |
 | `temporal_amber_ore`, `deepslate_temporal_amber_ore` | `c:ores/temporal_amber`, `c:ores`, `c:ores_in_ground/stone` or `/deepslate` |
+| `chronite_ore`, `deepslate_chronite_ore` | `c:ores/chronite`, `c:ores`, `c:ores_in_ground/stone` or `/deepslate` |
 | `temporal_stone` | `c:ore_bearing_ground/stone` |
 | `deepslate_temporal_stone` | `c:ore_bearing_ground/deepslate` |
 | `clockstone` | `c:ingots/clockstone`, `c:ingots` |
@@ -395,7 +396,7 @@ be targeted individually by tag on this version, only by category.
 
 | Tag | Members |
 | --- | --- |
-| `c:ores` | all eight ore families (blocks and items) |
+| `c:ores` | all nine ore families (blocks and items) |
 | `c:ingots` | `clockstone`, `enhanced_clockstone` |
 | `c:gems` | `time_crystal`, `entropy_crystal` |
 | `c:raw_ores` | `raw_temporal_amber` |

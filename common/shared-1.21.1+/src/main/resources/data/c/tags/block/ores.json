@@ -4,6 +4,7 @@
     "#c:ores/clockstone",
     "#c:ores/time_crystal",
     "#c:ores/entropy_crystal",
-    "#c:ores/temporal_amber"
+    "#c:ores/temporal_amber",
+    "#c:ores/chronite"
   ]
 }
