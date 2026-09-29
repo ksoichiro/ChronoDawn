@@ -74,6 +74,7 @@ import net.minecraft.world.item.component.BlocksAttacks;
 import net.minecraft.world.item.equipment.ArmorType;
 import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.food.FoodProperties;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 import com.chronodawn.registry.ModItemId;
 import com.chronodawn.registry.ModBlockId;
 import java.util.List;
@@ -269,7 +270,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> UNSTABLE_FUNGUS = ITEMS.register(
         ModItemId.UNSTABLE_FUNGUS.id(),
-        () -> new BlockItem(ModBlocks.UNSTABLE_FUNGUS.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.UNSTABLE_FUNGUS.get(), new Item.Properties().compostable(ContextIntProviders.COMPOSTABLE_MEDIUM)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.UNSTABLE_FUNGUS.id()))))
@@ -280,7 +281,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> TIME_WOOD_LOG = ITEMS.register(
         ModItemId.TIME_WOOD_LOG.id(),
-        () -> new BlockItem(ModBlocks.TIME_WOOD_LOG.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.TIME_WOOD_LOG.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_LOG.id()))))
@@ -324,7 +325,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> TIME_WOOD_LEAVES = ITEMS.register(
         ModItemId.TIME_WOOD_LEAVES.id(),
-        () -> new BlockItem(ModBlocks.TIME_WOOD_LEAVES.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.TIME_WOOD_LEAVES.get(), new Item.Properties().compostable(ContextIntProviders.COMPOSTABLE_LOW)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_LEAVES.id()))))
@@ -335,7 +336,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> TIME_WOOD_PLANKS = ITEMS.register(
         ModItemId.TIME_WOOD_PLANKS.id(),
-        () -> new BlockItem(ModBlocks.TIME_WOOD_PLANKS.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.TIME_WOOD_PLANKS.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_PLANKS.id()))))
@@ -346,7 +347,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> TIME_WOOD_SAPLING = ITEMS.register(
         ModItemId.TIME_WOOD_SAPLING.id(),
-        () -> new BlockItem(ModBlocks.TIME_WOOD_SAPLING.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.TIME_WOOD_SAPLING.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_EXTRA_SMALL).compostable(ContextIntProviders.COMPOSTABLE_LOW)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_SAPLING.id()))))
@@ -359,7 +360,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> DARK_TIME_WOOD_LOG = ITEMS.register(
         ModItemId.DARK_TIME_WOOD_LOG.id(),
-        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_LOG.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_LOG.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_LOG.id()))))
@@ -403,7 +404,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> DARK_TIME_WOOD_LEAVES = ITEMS.register(
         ModItemId.DARK_TIME_WOOD_LEAVES.id(),
-        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_LEAVES.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_LEAVES.get(), new Item.Properties().compostable(ContextIntProviders.COMPOSTABLE_LOW)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_LEAVES.id()))))
@@ -414,7 +415,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> DARK_TIME_WOOD_PLANKS = ITEMS.register(
         ModItemId.DARK_TIME_WOOD_PLANKS.id(),
-        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_PLANKS.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_PLANKS.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_PLANKS.id()))))
@@ -425,7 +426,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> DARK_TIME_WOOD_STAIRS = ITEMS.register(
         ModItemId.DARK_TIME_WOOD_STAIRS.id(),
-        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_STAIRS.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_STAIRS.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_STAIRS.id()))))
@@ -436,7 +437,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> DARK_TIME_WOOD_SLAB = ITEMS.register(
         ModItemId.DARK_TIME_WOOD_SLAB.id(),
-        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_SLAB.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_SLAB.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_SLABS)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_SLAB.id()))))
@@ -447,7 +448,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> DARK_TIME_WOOD_FENCE = ITEMS.register(
         ModItemId.DARK_TIME_WOOD_FENCE.id(),
-        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_FENCE.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_FENCE.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_FENCE.id()))))
@@ -458,7 +459,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> DARK_TIME_WOOD_DOOR = ITEMS.register(
         ModItemId.DARK_TIME_WOOD_DOOR.id(),
-        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_DOOR.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_DOOR.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_LARGE)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_DOOR.id()))))
@@ -469,7 +470,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> DARK_TIME_WOOD_TRAPDOOR = ITEMS.register(
         ModItemId.DARK_TIME_WOOD_TRAPDOOR.id(),
-        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_TRAPDOOR.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_TRAPDOOR.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_TRAPDOOR.id()))))
@@ -480,7 +481,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> DARK_TIME_WOOD_FENCE_GATE = ITEMS.register(
         ModItemId.DARK_TIME_WOOD_FENCE_GATE.id(),
-        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_FENCE_GATE.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_FENCE_GATE.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_FENCE_GATE.id()))))
@@ -491,7 +492,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> DARK_TIME_WOOD_BUTTON = ITEMS.register(
         ModItemId.DARK_TIME_WOOD_BUTTON.id(),
-        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_BUTTON.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_BUTTON.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_EXTRA_SMALL)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_BUTTON.id()))))
@@ -502,7 +503,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> DARK_TIME_WOOD_PRESSURE_PLATE = ITEMS.register(
         ModItemId.DARK_TIME_WOOD_PRESSURE_PLATE.id(),
-        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_PRESSURE_PLATE.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_PRESSURE_PLATE.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_PRESSURE_PLATE.id()))))
@@ -513,7 +514,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> DARK_TIME_WOOD_SAPLING = ITEMS.register(
         ModItemId.DARK_TIME_WOOD_SAPLING.id(),
-        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_SAPLING.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.DARK_TIME_WOOD_SAPLING.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_EXTRA_SMALL).compostable(ContextIntProviders.COMPOSTABLE_LOW)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DARK_TIME_WOOD_SAPLING.id()))))
@@ -526,7 +527,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_LOG = ITEMS.register(
         ModItemId.ANCIENT_TIME_WOOD_LOG.id(),
-        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_LOG.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_LOG.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_LOG.id()))))
@@ -570,7 +571,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_LEAVES = ITEMS.register(
         ModItemId.ANCIENT_TIME_WOOD_LEAVES.id(),
-        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_LEAVES.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_LEAVES.get(), new Item.Properties().compostable(ContextIntProviders.COMPOSTABLE_LOW)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_LEAVES.id()))))
@@ -581,7 +582,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_PLANKS = ITEMS.register(
         ModItemId.ANCIENT_TIME_WOOD_PLANKS.id(),
-        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_PLANKS.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_PLANKS.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_PLANKS.id()))))
@@ -592,7 +593,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_STAIRS = ITEMS.register(
         ModItemId.ANCIENT_TIME_WOOD_STAIRS.id(),
-        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_STAIRS.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_STAIRS.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_STAIRS.id()))))
@@ -603,7 +604,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_SLAB = ITEMS.register(
         ModItemId.ANCIENT_TIME_WOOD_SLAB.id(),
-        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_SLAB.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_SLAB.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_SLABS)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_SLAB.id()))))
@@ -614,7 +615,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_FENCE = ITEMS.register(
         ModItemId.ANCIENT_TIME_WOOD_FENCE.id(),
-        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_FENCE.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_FENCE.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_FENCE.id()))))
@@ -625,7 +626,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_DOOR = ITEMS.register(
         ModItemId.ANCIENT_TIME_WOOD_DOOR.id(),
-        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_DOOR.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_DOOR.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_LARGE)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_DOOR.id()))))
@@ -636,7 +637,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_TRAPDOOR = ITEMS.register(
         ModItemId.ANCIENT_TIME_WOOD_TRAPDOOR.id(),
-        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_TRAPDOOR.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_TRAPDOOR.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_TRAPDOOR.id()))))
@@ -647,7 +648,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_FENCE_GATE = ITEMS.register(
         ModItemId.ANCIENT_TIME_WOOD_FENCE_GATE.id(),
-        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_FENCE_GATE.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_FENCE_GATE.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_FENCE_GATE.id()))))
@@ -658,7 +659,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_BUTTON = ITEMS.register(
         ModItemId.ANCIENT_TIME_WOOD_BUTTON.id(),
-        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_BUTTON.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_BUTTON.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_EXTRA_SMALL)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_BUTTON.id()))))
@@ -669,7 +670,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_PRESSURE_PLATE = ITEMS.register(
         ModItemId.ANCIENT_TIME_WOOD_PRESSURE_PLATE.id(),
-        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_PRESSURE_PLATE.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_PRESSURE_PLATE.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_PRESSURE_PLATE.id()))))
@@ -680,7 +681,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_SAPLING = ITEMS.register(
         ModItemId.ANCIENT_TIME_WOOD_SAPLING.id(),
-        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_SAPLING.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.ANCIENT_TIME_WOOD_SAPLING.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_EXTRA_SMALL).compostable(ContextIntProviders.COMPOSTABLE_LOW)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ANCIENT_TIME_WOOD_SAPLING.id()))))
@@ -691,7 +692,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> TIME_WHEAT_BALE = ITEMS.register(
         ModItemId.TIME_WHEAT_BALE.id(),
-        () -> new BlockItem(ModBlocks.TIME_WHEAT_BALE.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.TIME_WHEAT_BALE.get(), new Item.Properties().compostable(ContextIntProviders.COMPOSTABLE_ALWAYS_ADD_ONE)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WHEAT_BALE.id()))))
@@ -793,7 +794,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> TIME_WOOD_STAIRS = ITEMS.register(
         ModItemId.TIME_WOOD_STAIRS.id(),
-        () -> new BlockItem(ModBlocks.TIME_WOOD_STAIRS.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.TIME_WOOD_STAIRS.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_STAIRS.id()))))
@@ -804,7 +805,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> TIME_WOOD_SLAB = ITEMS.register(
         ModItemId.TIME_WOOD_SLAB.id(),
-        () -> new BlockItem(ModBlocks.TIME_WOOD_SLAB.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.TIME_WOOD_SLAB.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_SLABS)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_SLAB.id()))))
@@ -815,7 +816,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> TIME_WOOD_FENCE = ITEMS.register(
         ModItemId.TIME_WOOD_FENCE.id(),
-        () -> new BlockItem(ModBlocks.TIME_WOOD_FENCE.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.TIME_WOOD_FENCE.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_FENCE.id()))))
@@ -826,7 +827,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> TIME_WOOD_DOOR = ITEMS.register(
         ModItemId.TIME_WOOD_DOOR.id(),
-        () -> new BlockItem(ModBlocks.TIME_WOOD_DOOR.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.TIME_WOOD_DOOR.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_LARGE)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_DOOR.id()))))
@@ -837,7 +838,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> TIME_WOOD_TRAPDOOR = ITEMS.register(
         ModItemId.TIME_WOOD_TRAPDOOR.id(),
-        () -> new BlockItem(ModBlocks.TIME_WOOD_TRAPDOOR.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.TIME_WOOD_TRAPDOOR.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_TRAPDOOR.id()))))
@@ -848,7 +849,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> TIME_WOOD_FENCE_GATE = ITEMS.register(
         ModItemId.TIME_WOOD_FENCE_GATE.id(),
-        () -> new BlockItem(ModBlocks.TIME_WOOD_FENCE_GATE.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.TIME_WOOD_FENCE_GATE.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_FENCE_GATE.id()))))
@@ -859,7 +860,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> TIME_WOOD_BUTTON = ITEMS.register(
         ModItemId.TIME_WOOD_BUTTON.id(),
-        () -> new BlockItem(ModBlocks.TIME_WOOD_BUTTON.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.TIME_WOOD_BUTTON.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_ITEMS_EXTRA_SMALL)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_BUTTON.id()))))
@@ -870,7 +871,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> TIME_WOOD_PRESSURE_PLATE = ITEMS.register(
         ModItemId.TIME_WOOD_PRESSURE_PLATE.id(),
-        () -> new BlockItem(ModBlocks.TIME_WOOD_PRESSURE_PLATE.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.TIME_WOOD_PRESSURE_PLATE.get(), new Item.Properties().cookingFuel(ContextIntProviders.COOKING_TIME_WOOD_BLOCKS)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TIME_WOOD_PRESSURE_PLATE.id()))))
@@ -1539,7 +1540,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> TIME_WHEAT_SEEDS = ITEMS.register(
         ModItemId.TIME_WHEAT_SEEDS.id(),
-        () -> new TimeWheatSeedsItem(TimeWheatSeedsItem.createProperties())
+        () -> new TimeWheatSeedsItem(TimeWheatSeedsItem.createProperties().compostable(ContextIntProviders.COMPOSTABLE_LOW))
     );
 
     /**
@@ -1548,7 +1549,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> TIME_WHEAT = ITEMS.register(
         ModItemId.TIME_WHEAT.id(),
-        () -> new TimeWheatItem(TimeWheatItem.createProperties())
+        () -> new TimeWheatItem(TimeWheatItem.createProperties().compostable(ContextIntProviders.COMPOSTABLE_MEDIUM))
     );
 
     /**
@@ -1567,7 +1568,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> TEMPORAL_ROOT = ITEMS.register(
         ModItemId.TEMPORAL_ROOT.id(),
-        () -> new TemporalRootItem(TemporalRootItem.createProperties())
+        () -> new TemporalRootItem(TemporalRootItem.createProperties().compostable(ContextIntProviders.COMPOSTABLE_MEDIUM))
     );
 
     /**
@@ -1577,7 +1578,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> BAKED_TEMPORAL_ROOT = ITEMS.register(
         ModItemId.BAKED_TEMPORAL_ROOT.id(),
-        () -> new BakedTemporalRootItem(BakedTemporalRootItem.createProperties())
+        () -> new BakedTemporalRootItem(BakedTemporalRootItem.createProperties().compostable(ContextIntProviders.COMPOSTABLE_MEDIUM_HIGH))
     );
 
     /**
@@ -1587,7 +1588,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> CHRONO_MELON_SLICE = ITEMS.register(
         ModItemId.CHRONO_MELON_SLICE.id(),
-        () -> new ChronoMelonSliceItem(ChronoMelonSliceItem.createProperties())
+        () -> new ChronoMelonSliceItem(ChronoMelonSliceItem.createProperties().compostable(ContextIntProviders.COMPOSTABLE_MEDIUM))
     );
 
     /**
@@ -1596,7 +1597,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> CHRONO_MELON_SEEDS = ITEMS.register(
         ModItemId.CHRONO_MELON_SEEDS.id(),
-        () -> new ChronoMelonSeedsItem(ChronoMelonSeedsItem.createProperties())
+        () -> new ChronoMelonSeedsItem(ChronoMelonSeedsItem.createProperties().compostable(ContextIntProviders.COMPOSTABLE_LOW))
     );
 
     /**
@@ -1618,7 +1619,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> TIMELESS_MUSHROOM = ITEMS.register(
         ModItemId.TIMELESS_MUSHROOM.id(),
-        () -> new TimelessMushroomItem(TimelessMushroomItem.createProperties())
+        () -> new TimelessMushroomItem(TimelessMushroomItem.createProperties().compostable(ContextIntProviders.COMPOSTABLE_MEDIUM))
     );
 
     /**
@@ -1627,7 +1628,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> PURPLE_TIME_BLOSSOM = ITEMS.register(
         ModItemId.PURPLE_TIME_BLOSSOM.id(),
-        () -> new BlockItem(ModBlocks.PURPLE_TIME_BLOSSOM.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.PURPLE_TIME_BLOSSOM.get(), new Item.Properties().compostable(ContextIntProviders.COMPOSTABLE_MEDIUM)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.PURPLE_TIME_BLOSSOM.id()))))
@@ -1639,7 +1640,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ORANGE_TIME_BLOSSOM = ITEMS.register(
         ModItemId.ORANGE_TIME_BLOSSOM.id(),
-        () -> new BlockItem(ModBlocks.ORANGE_TIME_BLOSSOM.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.ORANGE_TIME_BLOSSOM.get(), new Item.Properties().compostable(ContextIntProviders.COMPOSTABLE_MEDIUM)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.ORANGE_TIME_BLOSSOM.id()))))
@@ -1651,7 +1652,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> PINK_TIME_BLOSSOM = ITEMS.register(
         ModItemId.PINK_TIME_BLOSSOM.id(),
-        () -> new BlockItem(ModBlocks.PINK_TIME_BLOSSOM.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.PINK_TIME_BLOSSOM.get(), new Item.Properties().compostable(ContextIntProviders.COMPOSTABLE_MEDIUM)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.PINK_TIME_BLOSSOM.id()))))
@@ -1663,7 +1664,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> DAWN_BELL = ITEMS.register(
         ModItemId.DAWN_BELL.id(),
-        () -> new BlockItem(ModBlocks.DAWN_BELL.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.DAWN_BELL.get(), new Item.Properties().compostable(ContextIntProviders.COMPOSTABLE_MEDIUM)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DAWN_BELL.id()))))
@@ -1675,7 +1676,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> DUSK_BELL = ITEMS.register(
         ModItemId.DUSK_BELL.id(),
-        () -> new BlockItem(ModBlocks.DUSK_BELL.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.DUSK_BELL.get(), new Item.Properties().compostable(ContextIntProviders.COMPOSTABLE_MEDIUM)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DUSK_BELL.id()))))
@@ -1683,7 +1684,7 @@ public class ModItems {
 
     public static final RegistrySupplier<Item> TEMPORAL_TALL_GRASS = ITEMS.register(
         ModItemId.TEMPORAL_TALL_GRASS.id(),
-        () -> new BlockItem(ModBlocks.TEMPORAL_TALL_GRASS.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.TEMPORAL_TALL_GRASS.get(), new Item.Properties().compostable(ContextIntProviders.COMPOSTABLE_LOW)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_TALL_GRASS.id()))))
@@ -1691,7 +1692,7 @@ public class ModItems {
 
     public static final RegistrySupplier<Item> TEMPORAL_FERN = ITEMS.register(
         ModItemId.TEMPORAL_FERN.id(),
-        () -> new BlockItem(ModBlocks.TEMPORAL_FERN.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.TEMPORAL_FERN.get(), new Item.Properties().compostable(ContextIntProviders.COMPOSTABLE_LOW)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_FERN.id()))))
@@ -1699,7 +1700,7 @@ public class ModItems {
 
     public static final RegistrySupplier<Item> TEMPORAL_GRASS = ITEMS.register(
         ModItemId.TEMPORAL_GRASS.id(),
-        () -> new BlockItem(ModBlocks.TEMPORAL_GRASS.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.TEMPORAL_GRASS.get(), new Item.Properties().compostable(ContextIntProviders.COMPOSTABLE_LOW)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_GRASS.id()))))
@@ -1715,7 +1716,7 @@ public class ModItems {
 
     public static final RegistrySupplier<Item> FADED_TEMPORAL_GRASS = ITEMS.register(
         ModItemId.FADED_TEMPORAL_GRASS.id(),
-        () -> new BlockItem(ModBlocks.FADED_TEMPORAL_GRASS.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.FADED_TEMPORAL_GRASS.get(), new Item.Properties().compostable(ContextIntProviders.COMPOSTABLE_LOW)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.FADED_TEMPORAL_GRASS.id()))))
@@ -1731,7 +1732,7 @@ public class ModItems {
 
     public static final RegistrySupplier<Item> TEMPORAL_KELP = ITEMS.register(
         ModItemId.TEMPORAL_KELP.id(),
-        () -> new BlockItem(ModBlocks.TEMPORAL_KELP.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.TEMPORAL_KELP.get(), new Item.Properties().compostable(ContextIntProviders.COMPOSTABLE_LOW)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_KELP.id()))))
@@ -1739,7 +1740,7 @@ public class ModItems {
 
     public static final RegistrySupplier<Item> TEMPORAL_SEAGRASS = ITEMS.register(
         ModItemId.TEMPORAL_SEAGRASS.id(),
-        () -> new BlockItem(ModBlocks.TEMPORAL_SEAGRASS.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.TEMPORAL_SEAGRASS.get(), new Item.Properties().compostable(ContextIntProviders.COMPOSTABLE_LOW)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TEMPORAL_SEAGRASS.id()))))
@@ -1747,7 +1748,7 @@ public class ModItems {
 
     public static final RegistrySupplier<Item> TALL_TEMPORAL_SEAGRASS = ITEMS.register(
         ModItemId.TALL_TEMPORAL_SEAGRASS.id(),
-        () -> new BlockItem(ModBlocks.TALL_TEMPORAL_SEAGRASS.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.TALL_TEMPORAL_SEAGRASS.get(), new Item.Properties().compostable(ContextIntProviders.COMPOSTABLE_LOW)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.TALL_TEMPORAL_SEAGRASS.id()))))
@@ -1755,7 +1756,7 @@ public class ModItems {
 
     public static final RegistrySupplier<Item> LUMEN_POLYP = ITEMS.register(
         ModItemId.LUMEN_POLYP.id(),
-        () -> new BlockItem(ModBlocks.LUMEN_POLYP.get(), new Item.Properties()
+        () -> new BlockItem(ModBlocks.LUMEN_POLYP.get(), new Item.Properties().compostable(ContextIntProviders.COMPOSTABLE_MEDIUM)
                 .useBlockDescriptionPrefix()
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.LUMEN_POLYP.id()))))
@@ -1799,7 +1800,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> DRIED_TEMPORAL_KELP = ITEMS.register(
         ModItemId.DRIED_TEMPORAL_KELP.id(),
-        () -> new Item(new Item.Properties()
+        () -> new Item(new Item.Properties().compostable(ContextIntProviders.COMPOSTABLE_LOW)
                 .food(new FoodProperties.Builder()
                     .nutrition(1)
                     .saturationModifier(0.6f)
@@ -1922,7 +1923,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> TIME_WHEAT_COOKIE = ITEMS.register(
         ModItemId.TIME_WHEAT_COOKIE.id(),
-        () -> new TimeWheatCookieItem(TimeWheatCookieItem.createProperties())
+        () -> new TimeWheatCookieItem(TimeWheatCookieItem.createProperties().compostable(ContextIntProviders.COMPOSTABLE_MEDIUM_HIGH))
     );
 
     /**
@@ -2832,7 +2833,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> TIME_WOOD_BOAT = ITEMS.register(
         ModItemId.TIME_WOOD_BOAT.id(),
-        () -> new ChronoDawnBoatItem(ChronoDawnBoatType.TIME_WOOD, false, ChronoDawnBoatItem.createProperties("time_wood_boat"))
+        () -> new ChronoDawnBoatItem(ChronoDawnBoatType.TIME_WOOD, false, ChronoDawnBoatItem.createProperties("time_wood_boat").cookingFuel(ContextIntProviders.COOKING_TIME_BOATS))
     );
 
     /**
@@ -2841,7 +2842,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> TIME_WOOD_CHEST_BOAT = ITEMS.register(
         ModItemId.TIME_WOOD_CHEST_BOAT.id(),
-        () -> new ChronoDawnBoatItem(ChronoDawnBoatType.TIME_WOOD, true, ChronoDawnBoatItem.createProperties("time_wood_chest_boat"))
+        () -> new ChronoDawnBoatItem(ChronoDawnBoatType.TIME_WOOD, true, ChronoDawnBoatItem.createProperties("time_wood_chest_boat").cookingFuel(ContextIntProviders.COOKING_TIME_BOATS))
     );
 
     /**
@@ -2850,7 +2851,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> DARK_TIME_WOOD_BOAT = ITEMS.register(
         ModItemId.DARK_TIME_WOOD_BOAT.id(),
-        () -> new ChronoDawnBoatItem(ChronoDawnBoatType.DARK_TIME_WOOD, false, ChronoDawnBoatItem.createProperties("dark_time_wood_boat"))
+        () -> new ChronoDawnBoatItem(ChronoDawnBoatType.DARK_TIME_WOOD, false, ChronoDawnBoatItem.createProperties("dark_time_wood_boat").cookingFuel(ContextIntProviders.COOKING_TIME_BOATS))
     );
 
     /**
@@ -2859,7 +2860,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> DARK_TIME_WOOD_CHEST_BOAT = ITEMS.register(
         ModItemId.DARK_TIME_WOOD_CHEST_BOAT.id(),
-        () -> new ChronoDawnBoatItem(ChronoDawnBoatType.DARK_TIME_WOOD, true, ChronoDawnBoatItem.createProperties("dark_time_wood_chest_boat"))
+        () -> new ChronoDawnBoatItem(ChronoDawnBoatType.DARK_TIME_WOOD, true, ChronoDawnBoatItem.createProperties("dark_time_wood_chest_boat").cookingFuel(ContextIntProviders.COOKING_TIME_BOATS))
     );
 
     /**
@@ -2868,7 +2869,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_BOAT = ITEMS.register(
         ModItemId.ANCIENT_TIME_WOOD_BOAT.id(),
-        () -> new ChronoDawnBoatItem(ChronoDawnBoatType.ANCIENT_TIME_WOOD, false, ChronoDawnBoatItem.createProperties("ancient_time_wood_boat"))
+        () -> new ChronoDawnBoatItem(ChronoDawnBoatType.ANCIENT_TIME_WOOD, false, ChronoDawnBoatItem.createProperties("ancient_time_wood_boat").cookingFuel(ContextIntProviders.COOKING_TIME_BOATS))
     );
 
     /**
@@ -2877,7 +2878,7 @@ public class ModItems {
      */
     public static final RegistrySupplier<Item> ANCIENT_TIME_WOOD_CHEST_BOAT = ITEMS.register(
         ModItemId.ANCIENT_TIME_WOOD_CHEST_BOAT.id(),
-        () -> new ChronoDawnBoatItem(ChronoDawnBoatType.ANCIENT_TIME_WOOD, true, ChronoDawnBoatItem.createProperties("ancient_time_wood_chest_boat"))
+        () -> new ChronoDawnBoatItem(ChronoDawnBoatType.ANCIENT_TIME_WOOD, true, ChronoDawnBoatItem.createProperties("ancient_time_wood_chest_boat").cookingFuel(ContextIntProviders.COOKING_TIME_BOATS))
     );
 
     /**
