@@ -1,0 +1,44 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "rolls": 1.0,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "chronodawn:temporal_dead_bush",
+              "condition": {
+                "type": "minecraft:match_tool",
+                "predicate": {
+                  "items": "minecraft:shears"
+                }
+              }
+            },
+            {
+              "type": "minecraft:item",
+              "name": "minecraft:stick",
+              "modifier": [
+                {
+                  "type": "minecraft:set_count",
+                  "count": {
+                    "type": "minecraft:uniform",
+                    "min": 0.0,
+                    "max": 2.0
+                  }
+                },
+                {
+                  "type": "minecraft:explosion_decay"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "random_sequence": "chronodawn:blocks/temporal_dead_bush"
+}

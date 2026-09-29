@@ -19,7 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public class EntityRenderDispatcherMixin {
 
     @Inject(method = "shouldRender", at = @At("HEAD"), cancellable = true)
-    private <E extends Entity> void onShouldRender(E entity, Frustum frustum, double camX, double camY, double camZ, CallbackInfoReturnable<Boolean> cir) {
+    private <E extends Entity> void onShouldRender(E entity, Frustum frustum, double camX, double camY, double camZ, float partialTick, CallbackInfoReturnable<Boolean> cir) {
         EntityRenderDispatcher self = (EntityRenderDispatcher) (Object) this;
         EntityRenderer<? super E, ?> renderer = self.getRenderer(entity);
 

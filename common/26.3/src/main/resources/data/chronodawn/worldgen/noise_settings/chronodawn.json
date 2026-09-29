@@ -27,50 +27,46 @@
   "sea_level": 63,
   "spawn_target": [
     {
-      "continentalness": [
+      "minecraft:overworld/continents": [
         -0.11,
         1.0
       ],
-      "depth": 0.0,
-      "erosion": [
+      "minecraft:overworld/erosion": [
         -1.0,
         1.0
       ],
-      "humidity": [
-        -1.0,
-        1.0
-      ],
-      "offset": 0.0,
-      "temperature": [
-        -1.0,
-        1.0
-      ],
-      "weirdness": [
+      "minecraft:overworld/ridges": [
         -1.0,
         -0.16
+      ],
+      "minecraft:overworld/temperature": [
+        -1.0,
+        1.0
+      ],
+      "minecraft:overworld/vegetation": [
+        -1.0,
+        1.0
       ]
     },
     {
-      "continentalness": [
+      "minecraft:overworld/continents": [
         -0.11,
         1.0
       ],
-      "depth": 0.0,
-      "erosion": [
+      "minecraft:overworld/erosion": [
         -1.0,
         1.0
       ],
-      "humidity": [
-        -1.0,
-        1.0
-      ],
-      "offset": 0.0,
-      "temperature": [
-        -1.0,
-        1.0
-      ],
-      "weirdness": [
+      "minecraft:overworld/ridges": [
         0.16,
+        1.0
+      ],
+      "minecraft:overworld/temperature": [
+        -1.0,
+        1.0
+      ],
+      "minecraft:overworld/vegetation": [
+        -1.0,
         1.0
       ]
     }

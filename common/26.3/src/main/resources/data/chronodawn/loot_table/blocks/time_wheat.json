@@ -1,0 +1,61 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "chronodawn:time_wheat",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "chronodawn:time_wheat",
+                "state": {
+                  "age": "7"
+                }
+              }
+            },
+            {
+              "type": "minecraft:item",
+              "name": "chronodawn:time_wheat_seeds"
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "chronodawn:time_wheat_seeds",
+          "modifier": {
+            "type": "minecraft:apply_bonus",
+            "enchantment": "minecraft:fortune",
+            "formula": "minecraft:binomial_with_bonus_count",
+            "parameters": {
+              "extra": 3,
+              "probability": 0.5714286
+            }
+          }
+        }
+      ],
+      "rolls": 1.0,
+      "condition": {
+        "type": "minecraft:match_block",
+        "blocks": "chronodawn:time_wheat",
+        "state": {
+          "age": "7"
+        }
+      }
+    }
+  ],
+  "random_sequence": "chronodawn:blocks/time_wheat",
+  "modifier": {
+    "type": "minecraft:explosion_decay"
+  }
+}

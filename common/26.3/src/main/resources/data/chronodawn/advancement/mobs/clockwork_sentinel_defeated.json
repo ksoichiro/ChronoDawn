@@ -4,15 +4,13 @@
     "killed_clockwork_sentinel": {
       "trigger": "minecraft:player_killed_entity",
       "conditions": {
-        "entity": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "minecraft:entity_type": "chronodawn:clockwork_sentinel"
-            }
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "chronodawn:clockwork_sentinel"
           }
-        ]
+        }
       }
     }
   },

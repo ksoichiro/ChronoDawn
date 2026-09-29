@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "chronodawn:dusk_bell",
+          "condition": {
+            "type": "minecraft:match_block",
+            "blocks": "chronodawn:dusk_bell",
+            "state": {
+              "half": "lower"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -151,13 +151,22 @@ sourceSets {
             // "_provider" suffix. This version keeps its own fixed copies of the shared
             // processor_list and configured_feature files. Only exclude the shared copies
             // (not this version's own src/main/resources copies).
+            // 26.3 also renamed the recipe_unlocked criterion's "recipe" key to "recipes", so
+            // the shared advancement/recipes files are replaced by this version's own copies.
+            // Loot tables likewise: 26.3 drops the plural "conditions"/"functions" keys (silently
+            // ignored, which made every conditional drop unconditional) in favor of a single
+            // "condition" and "modifier", and renames the "condition"/"function" type keys to "type".
             filter.exclude { element ->
                 def path = element.file.absolutePath
-                def isWorldgenPack = path.contains('common/shared/') || path.contains('common/shared-1.21.1+/')
+                def isWorldgenPack = path.contains('common/shared/') || path.contains('common/shared-1.21.1+/') || path.contains('common/shared-1.21.5+/')
                 isWorldgenPack && (
                     path.contains('data/chronodawn/worldgen/processor_list/')
                     || path.contains('data/chronodawn/worldgen/configured_feature/')
                     || path.contains('data/chronodawn/worldgen/placed_feature/')
+                    || path.contains('data/chronodawn/advancement/recipes/')
+                    || path.contains('data/chronodawn/loot_table/')
+                    || path.contains('data/chronodawn/loot_modifiers/')
+                    || path.contains('data/minecraft/loot_table/')
                 )
             }
         }

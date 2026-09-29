@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "chronodawn:frozen_time_ice"
+        }
+      ],
+      "rolls": 1.0,
+      "condition": "minecraft:tool/can_silk_touch"
+    }
+  ],
+  "random_sequence": "chronodawn:blocks/frozen_time_ice"
+}

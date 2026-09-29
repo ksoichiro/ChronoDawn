@@ -8,139 +8,6 @@
     "grass_color": "#5b8ac4",
     "foliage_color": "#78b0da"
   },
-  "spawners": {
-    "monster": [
-      {
-        "type": "chronodawn:epoch_husk",
-        "weight": 95,
-        "minCount": 4,
-        "maxCount": 4
-      },
-      {
-        "type": "chronodawn:secondhand_archer",
-        "weight": 95,
-        "minCount": 4,
-        "maxCount": 4
-      },
-      {
-        "type": "chronodawn:moment_creeper",
-        "weight": 100,
-        "minCount": 4,
-        "maxCount": 4
-      },
-      {
-        "type": "chronodawn:paradox_crawler",
-        "weight": 100,
-        "minCount": 4,
-        "maxCount": 4
-      },
-      {
-        "type": "chronodawn:timeline_strider",
-        "weight": 10,
-        "minCount": 1,
-        "maxCount": 4
-      },
-      {
-        "type": "chronodawn:hourglass_golem",
-        "weight": 5,
-        "minCount": 1,
-        "maxCount": 1
-      },
-      {
-        "type": "chronodawn:temporal_wraith",
-        "weight": 100,
-        "minCount": 2,
-        "maxCount": 4
-      },
-      {
-        "type": "chronodawn:clockwork_sentinel",
-        "weight": 100,
-        "minCount": 1,
-        "maxCount": 2
-      },
-      {
-        "type": "chronodawn:floq",
-        "weight": 100,
-        "minCount": 2,
-        "maxCount": 4
-      },
-      {
-        "type": "chronodawn:chronal_leech",
-        "weight": 15,
-        "minCount": 1,
-        "maxCount": 2
-      }
-    ],
-    "creature": [
-      {
-        "type": "chronodawn:chrono_bovine",
-        "weight": 8,
-        "minCount": 2,
-        "maxCount": 4
-      },
-      {
-        "type": "chronodawn:ticking_sheep",
-        "weight": 12,
-        "minCount": 2,
-        "maxCount": 4
-      }
-    ],
-    "ambient": [],
-    "water_creature": [
-      {
-        "type": "minecraft:squid",
-        "weight": 10,
-        "minCount": 1,
-        "maxCount": 4
-      },
-      {
-        "type": "minecraft:cod",
-        "weight": 15,
-        "minCount": 3,
-        "maxCount": 6
-      },
-      {
-        "type": "minecraft:salmon",
-        "weight": 15,
-        "minCount": 1,
-        "maxCount": 5
-      },
-      {
-        "type": "minecraft:dolphin",
-        "weight": 5,
-        "minCount": 1,
-        "maxCount": 2
-      },
-      {
-        "type": "chronodawn:glide_fish",
-        "weight": 15,
-        "minCount": 2,
-        "maxCount": 4
-      },
-      {
-        "type": "chronodawn:chrono_turtle",
-        "weight": 8,
-        "minCount": 1,
-        "maxCount": 3
-      }
-    ],
-    "water_ambient": [
-      {
-        "type": "minecraft:tropical_fish",
-        "weight": 25,
-        "minCount": 4,
-        "maxCount": 8
-      },
-      {
-        "type": "minecraft:pufferfish",
-        "weight": 5,
-        "minCount": 1,
-        "maxCount": 3
-      }
-    ],
-    "misc": []
-  },
-  "spawn_costs": {},
   "features": [
     [],
     [],
@@ -199,6 +66,182 @@
         "min_delay": 12000,
         "max_delay": 24000
       }
+    },
+    "minecraft:gameplay/natural_mob_spawns": {
+      "argument": {
+        "spawn_costs": {},
+        "spawns_by_category": {
+          "monster": [
+            {
+              "type": "chronodawn:epoch_husk",
+              "count": 4,
+              "weight": 95
+            },
+            {
+              "type": "chronodawn:secondhand_archer",
+              "count": 4,
+              "weight": 95
+            },
+            {
+              "type": "chronodawn:moment_creeper",
+              "count": 4,
+              "weight": 100
+            },
+            {
+              "type": "chronodawn:paradox_crawler",
+              "count": 4,
+              "weight": 100
+            },
+            {
+              "type": "chronodawn:timeline_strider",
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 1,
+                "max_inclusive": 4
+              },
+              "weight": 10
+            },
+            {
+              "type": "chronodawn:hourglass_golem",
+              "count": 1,
+              "weight": 5
+            },
+            {
+              "type": "chronodawn:temporal_wraith",
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 2,
+                "max_inclusive": 4
+              },
+              "weight": 100
+            },
+            {
+              "type": "chronodawn:clockwork_sentinel",
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 1,
+                "max_inclusive": 2
+              },
+              "weight": 100
+            },
+            {
+              "type": "chronodawn:floq",
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 2,
+                "max_inclusive": 4
+              },
+              "weight": 100
+            },
+            {
+              "type": "chronodawn:chronal_leech",
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 1,
+                "max_inclusive": 2
+              },
+              "weight": 15
+            }
+          ],
+          "creature": [
+            {
+              "type": "chronodawn:chrono_bovine",
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 2,
+                "max_inclusive": 4
+              },
+              "weight": 8
+            },
+            {
+              "type": "chronodawn:ticking_sheep",
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 2,
+                "max_inclusive": 4
+              },
+              "weight": 12
+            }
+          ],
+          "water_creature": [
+            {
+              "type": "minecraft:squid",
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 1,
+                "max_inclusive": 4
+              },
+              "weight": 10
+            },
+            {
+              "type": "minecraft:cod",
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 3,
+                "max_inclusive": 6
+              },
+              "weight": 15
+            },
+            {
+              "type": "minecraft:salmon",
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 1,
+                "max_inclusive": 5
+              },
+              "weight": 15
+            },
+            {
+              "type": "minecraft:dolphin",
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 1,
+                "max_inclusive": 2
+              },
+              "weight": 5
+            },
+            {
+              "type": "chronodawn:glide_fish",
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 2,
+                "max_inclusive": 4
+              },
+              "weight": 15
+            },
+            {
+              "type": "chronodawn:chrono_turtle",
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 1,
+                "max_inclusive": 3
+              },
+              "weight": 8
+            }
+          ],
+          "water_ambient": [
+            {
+              "type": "minecraft:tropical_fish",
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 4,
+                "max_inclusive": 8
+              },
+              "weight": 25
+            },
+            {
+              "type": "minecraft:pufferfish",
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 1,
+                "max_inclusive": 3
+              },
+              "weight": 5
+            }
+          ]
+        }
+      },
+      "modifier": "overlay"
     }
   }
 }

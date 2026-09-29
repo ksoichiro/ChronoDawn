@@ -1,0 +1,53 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "chronodawn:temporal_tall_grass",
+              "condition": "minecraft:tool/can_silk_touch"
+            },
+            {
+              "type": "minecraft:item",
+              "name": "chronodawn:temporal_tall_grass",
+              "condition": {
+                "type": "minecraft:match_tool",
+                "predicate": {
+                  "items": "minecraft:shears"
+                }
+              }
+            },
+            {
+              "type": "minecraft:item",
+              "name": "chronodawn:time_wheat_seeds",
+              "condition": {
+                "type": "minecraft:random_chance",
+                "chance": 0.125
+              },
+              "modifier": [
+                {
+                  "type": "minecraft:apply_bonus",
+                  "enchantment": "minecraft:fortune",
+                  "formula": "minecraft:uniform_bonus_count",
+                  "parameters": {
+                    "bonusMultiplier": 2
+                  }
+                },
+                {
+                  "type": "minecraft:explosion_decay"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "chronodawn:blocks/temporal_tall_grass"
+}

@@ -1,0 +1,57 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "chronodawn:lumen_polyp",
+          "modifier": [
+            {
+              "type": "minecraft:set_count",
+              "add": false,
+              "count": 2.0,
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "chronodawn:lumen_polyp",
+                "state": {
+                  "pickles": "2"
+                }
+              }
+            },
+            {
+              "type": "minecraft:set_count",
+              "add": false,
+              "count": 3.0,
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "chronodawn:lumen_polyp",
+                "state": {
+                  "pickles": "3"
+                }
+              }
+            },
+            {
+              "type": "minecraft:set_count",
+              "add": false,
+              "count": 4.0,
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "chronodawn:lumen_polyp",
+                "state": {
+                  "pickles": "4"
+                }
+              }
+            },
+            {
+              "type": "minecraft:explosion_decay"
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "chronodawn:blocks/lumen_polyp"
+}

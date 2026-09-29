@@ -1,0 +1,20 @@
+{
+  "type": "chronodawn:grass_time_wheat_seed",
+  "condition": {
+    "type": "minecraft:any_of",
+    "terms": [
+      {
+        "type": "minecraft:match_block",
+        "blocks": "minecraft:short_grass"
+      },
+      {
+        "type": "minecraft:match_block",
+        "blocks": "minecraft:fern"
+      },
+      {
+        "type": "minecraft:match_block",
+        "blocks": "minecraft:tall_grass"
+      }
+    ]
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:alternatives",
+          "children": [
+            {
+              "type": "minecraft:item",
+              "name": "chronodawn:fruit_of_time",
+              "condition": {
+                "type": "minecraft:match_block",
+                "blocks": "chronodawn:fruit_of_time",
+                "state": {
+                  "age": "2"
+                }
+              },
+              "modifier": {
+                "type": "minecraft:set_count",
+                "add": false,
+                "count": {
+                  "type": "minecraft:uniform",
+                  "max": 3.0,
+                  "min": 2.0
+                }
+              }
+            },
+            {
+              "type": "minecraft:item",
+              "name": "chronodawn:fruit_of_time"
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "chronodawn:blocks/fruit_of_time"
+}

@@ -4,15 +4,13 @@
     "killed_clockwork_colossus": {
       "trigger": "minecraft:player_killed_entity",
       "conditions": {
-        "entity": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "minecraft:entity_type": "chronodawn:clockwork_colossus"
-            }
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "chronodawn:clockwork_colossus"
           }
-        ]
+        }
       }
     }
   },
