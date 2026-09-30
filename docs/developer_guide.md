@@ -271,7 +271,7 @@ neoforge_version=21.2.0-beta
 ### Build Commands
 
 ```bash
-# Build for default version (26.2)
+# Build for default version (26.3)
 ./gradlew build
 
 # Build for a specific Minecraft version

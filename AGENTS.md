@@ -15,7 +15,7 @@ gameplay logic lives in common modules and loader-specific code stays small.
 - Build: Gradle Groovy DSL
 - Mappings: Mojang mappings, not Yarn
 - License: LGPL-3.0
-- Current default development target: Minecraft 26.2
+- Current default development target: Minecraft 26.3
 - Modpack/LTS target: Minecraft 1.21.1 on both Fabric and NeoForge
 - Supported versions: 1.20.1, 1.21.1, 1.21.2, 1.21.3, 1.21.4, 1.21.5,
   1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, 1.21.11, 26.1.2, 26.2, 26.3
@@ -85,7 +85,7 @@ the build model changes.
   appropriate file, usually under `specs/chrono-dawn-mod/` or `docs/`, and
   linked from follow-up tasks when applicable.
 - Treat Minecraft 1.21.1 as the long-term modpack compatibility target. For
-  pack-facing changes, verify both Fabric and NeoForge 1.21.1 even when 26.2 is
+  pack-facing changes, verify both Fabric and NeoForge 1.21.1 even when 26.3 is
   the default development target. The detailed, time-sensitive pack research is
   kept in `.claude/tasks.local.md` when that local file is present.
 

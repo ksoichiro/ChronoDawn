@@ -161,8 +161,8 @@ Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.2
 - `./gradlew build1_21_10` - Build for 1.21.10
 - `./gradlew build1_21_11` - Build for 1.21.11
 - `./gradlew build26_1_2` - Build for 26.1.2
-- `./gradlew build26_2` - Build for 26.2 (default)
-- `./gradlew build26_3` - Build for 26.3 (NeoForge 26.3 is a beta build)
+- `./gradlew build26_2` - Build for 26.2
+- `./gradlew build26_3` - Build for 26.3 (default, NeoForge 26.3 is a beta build)
 - `./gradlew buildAll` - Build for release (1.20.1, 1.21.1, 1.21.2, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, 1.21.11, 26.1.2, 26.2, 26.3 - excludes 1.21.3)
 
 **Run Client**:
@@ -228,7 +228,7 @@ Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.2
 **CurseForge download data supplied on 2026-09-22** shows that 1.21.1 files account for about 185.6K of 195.3K cumulative downloads, roughly 95%. Across all listed 1.21.1 files, NeoForge has about 124.5K downloads and Fabric about 61.1K, roughly 2:1. The approximately 5.7:1 ratio applies only to the 0.8.0 NeoForge and Fabric files, not to 1.21.1 as a whole. Matching pack manifests and release timing indicate that a few modpacks drive the largest spikes, so these figures should not be read as standalone loader demand.
 
 **Implications for development priority**:
-- Treat 1.21.1 as the modpack/LTS regression target while keeping 26.2 as the default development target
+- Treat 1.21.1 as the modpack/LTS regression target while keeping 26.3 as the default development target
 - Verify pack-facing changes on both 1.21.1 loaders: NeoForge covers Tensura and MineColonies usage, while Fabric covers Fantasy MC usage
 - Prioritize optional compatibility, configuration, quest-author support, and safe upgrades over generic content growth when the work serves modpacks
 - Do not drop or deprioritize 1.21.1 solely because newer Minecraft versions exist

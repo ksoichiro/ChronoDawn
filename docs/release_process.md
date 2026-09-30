@@ -7,7 +7,7 @@ those actions only when the user explicitly requests them.
 
 ## Release targets
 
-- `target_mc_version=26.2` is the default development target.
+- `target_mc_version=26.3` is the default development target.
 - Minecraft 1.21.1 is the long-term modpack compatibility target on both
   Fabric and NeoForge.
 - Supported versions, hotfix mappings, and per-version loader sets come from

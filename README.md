@@ -123,12 +123,21 @@ Chrono Dawn supports multiple Minecraft versions from the same codebase:
 - **1.21.10**: NeoForge/Fabric (stable)
 - **1.21.11**: NeoForge/Fabric (stable)
 - **26.1.2**: NeoForge/Fabric (stable)
-- **26.2**: NeoForge/Fabric (current version, default)
-- **26.3**: NeoForge/Fabric (NeoForge 26.3 is still a beta build)
+- **26.2**: NeoForge/Fabric (stable)
+- **26.3**: NeoForge/Fabric (current version, default. NeoForge 26.3 is still a beta build)
 
 ### Build for Specific Minecraft Version
 
-#### Build for Minecraft 26.2 (Default)
+#### Build for Minecraft 26.3 (Default)
+```bash
+# Shortcut command (recommended)
+./gradlew build26_3
+
+# Or explicit version
+./gradlew build -Ptarget_mc_version=26.3
+```
+
+#### Build for Minecraft 26.2
 ```bash
 # Shortcut command (recommended)
 ./gradlew build26_2
