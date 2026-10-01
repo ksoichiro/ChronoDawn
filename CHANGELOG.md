@@ -20,7 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   no longer get a burn time automatically. KubeJS and CraftTweaker have no
   26.3 builds yet, so the scripting bridges are not available there.
 - **Configurable Time Keeper Village**: modpacks can now control the one-per-world runtime village through `[world.time_keeper_village]`: enable or disable it, tune its preferred and maximum distance from the first Chrono Dawn entry point, choose how many Time Keepers appear, and replace its structure template and chest loot table with data pack resources. The placement still occurs at runtime, so it is not a `/locate structure` target.
-- Chronite Ore, a common Overworld ore that drops Chronite Shards. Craft a Time Compass from a compass, a clock, and Chronite Shards to locate the nearest Ancient Ruins from anywhere in the Overworld. Chronite also crafts Time Arrows, clocks without gold, and Blocks of Chronite. It makes no armour, tools, or weapons. Chronite Ore and its deepslate variant are tagged `c:ores/chronite`, `c:ores`, and `c:ores_in_ground/stone` or `/deepslate`, so packs can target them like the other Chrono Dawn ores.
+- Chronite Ore, a common Overworld ore that drops Chronite Shards. Craft a Time Compass from a compass, a clock, and Chronite Shards to locate the nearest Ancient Ruins from anywhere in the Overworld. Chronite also crafts Time Arrows, clocks without gold, and Blocks of Chronite. It makes no armour, tools, or weapons. Chronite Ore and its deepslate variant are tagged `c:ores/chronite`, `c:ores`, and `c:ores_in_ground/stone` or `/deepslate`, so packs can target them like the other Chrono Dawn ores. Generation can be tuned or disabled through `[world.ores.chronite]` in `chronodawn.toml`.
 - **Time Compass re-search**: sneak and use a Time Compass that already has a locked target to clear that lock and search again, without crafting a new compass. Covers the rare case where Minecraft's structure search locks onto a position that turns out to have no structure there.
 - **CraftTweaker scripting bridge** — CraftTweaker packs can now subscribe to
   Chrono Dawn's native `BossDefeatedEvent` and `PortalOpenedEvent` from
@@ -62,6 +62,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   fish and pufferfish share. NeoForge also logged a mob category mismatch
   warning at startup. They now spawn under `water_ambient`
   ([#2](https://github.com/ksoichiro/ChronoDawn/issues/2)).
+- **Pure-black caves in Chrono Dawn on 26.1.2 and later**: the Chrono Dawn
+  dimension type had no ambient light color, so Minecraft defaulted it to
+  pure black. Areas at light level 0 stayed completely dark no matter how
+  high the gamma or brightness setting was. The dimension now uses the same
+  `#0a0a0a` ambient light color as the vanilla Overworld. Minecraft 1.21.11
+  and earlier have no such setting and are unchanged.
+- **Portal overlay missing on Forge 1.20.1**: the orange overlay shown while
+  standing in a Chrono Dawn portal never appeared on Forge, although the
+  portal particles did. Forge replaces the vanilla in-game GUI class, so the
+  overlay hook never ran. It now targets the Forge GUI class.
 - **Missing Chrono Dawn Portal block name** — the `block.chronodawn.chrono_dawn_portal`
   translation key had no `en_us`/`ja_jp` value, so mods that display block
   names (e.g. Jade) showed the raw key instead of "Chrono Dawn Portal".
@@ -95,7 +105,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   longer silently removed the portal without the glass-break sound and
   particles. The frame validation checked the wrong axis and only required
   one of four neighbors to be valid, so most frame breaks (including the
-  common case of breaking a side frame block) went undetected. All 13
+  common case of breaking a side frame block) went undetected. All 14
   supported versions are fixed.
 - **Missing Shield Echo subtitles on 1.20.1 and 1.21.1** — using a
   Chronoblock Shield logged "Missing subtitle translation" for
@@ -109,7 +119,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   unsafe height when it failed to find clear terrain nearby. Portal
   generation now searches nearby terrain for clear, dry space, and the
   arrival portal's lifecycle handling was tightened to avoid
-  cross-dimension exit detection. Fixed on all 13 supported versions.
+  cross-dimension exit detection. Fixed on all 14 supported versions.
 - **Chrono Melon Seeds recipe didn't unlock in the recipe book** — the
   Chrono Melon Slice → Chrono Melon Seeds recipe worked but never
   appeared as known, unlike its sibling Chrono Melon Juice recipe,
