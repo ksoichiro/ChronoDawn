@@ -54,6 +54,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Cod and salmon spawn category in Chrono Dawn Ocean**: the
+  `chronodawn:chronodawn_ocean` biome listed cod and salmon under
+  `water_creature`, but Minecraft registers both as `water_ambient`. Once
+  spawned they were counted as `water_ambient`, so the `water_creature` cap
+  never limited them. They could keep spawning and fill the cap that tropical
+  fish and pufferfish share. NeoForge also logged a mob category mismatch
+  warning at startup. They now spawn under `water_ambient`
+  ([#2](https://github.com/ksoichiro/ChronoDawn/issues/2)).
 - **Missing Chrono Dawn Portal block name** — the `block.chronodawn.chrono_dawn_portal`
   translation key had no `en_us`/`ja_jp` value, so mods that display block
   names (e.g. Jade) showed the raw key instead of "Chrono Dawn Portal".

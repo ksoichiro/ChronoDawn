@@ -174,24 +174,6 @@
               "weight": 10
             },
             {
-              "type": "minecraft:cod",
-              "count": {
-                "type": "minecraft:uniform",
-                "min_inclusive": 3,
-                "max_inclusive": 6
-              },
-              "weight": 15
-            },
-            {
-              "type": "minecraft:salmon",
-              "count": {
-                "type": "minecraft:uniform",
-                "min_inclusive": 1,
-                "max_inclusive": 5
-              },
-              "weight": 15
-            },
-            {
               "type": "minecraft:dolphin",
               "count": {
                 "type": "minecraft:uniform",
@@ -220,6 +202,24 @@
             }
           ],
           "water_ambient": [
+            {
+              "type": "minecraft:cod",
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 3,
+                "max_inclusive": 6
+              },
+              "weight": 15
+            },
+            {
+              "type": "minecraft:salmon",
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 1,
+                "max_inclusive": 5
+              },
+              "weight": 15
+            },
             {
               "type": "minecraft:tropical_fish",
               "count": {

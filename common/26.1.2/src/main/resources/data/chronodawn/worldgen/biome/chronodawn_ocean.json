@@ -94,18 +94,6 @@
         "maxCount": 4
       },
       {
-        "type": "minecraft:cod",
-        "weight": 15,
-        "minCount": 3,
-        "maxCount": 6
-      },
-      {
-        "type": "minecraft:salmon",
-        "weight": 15,
-        "minCount": 1,
-        "maxCount": 5
-      },
-      {
         "type": "minecraft:dolphin",
         "weight": 5,
         "minCount": 1,
@@ -125,6 +113,18 @@
       }
     ],
     "water_ambient": [
+      {
+        "type": "minecraft:cod",
+        "weight": 15,
+        "minCount": 3,
+        "maxCount": 6
+      },
+      {
+        "type": "minecraft:salmon",
+        "weight": 15,
+        "minCount": 1,
+        "maxCount": 5
+      },
       {
         "type": "minecraft:tropical_fish",
         "weight": 25,
