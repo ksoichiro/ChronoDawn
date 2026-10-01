@@ -757,6 +757,14 @@ Not supported for Forge (1.20.1) — see "Mixin Configuration" below. Uses
 `build/prod-smoke/<loader>-<version>/`, separate from the manually-verified
 `run-prod/` used by `runProd`.
 
+The test also fails when the server log has a WARN, ERROR, or FATAL line
+that no pattern in `prod-smoke-log-ignore.txt` matches
+(`prod_smoke_log_check=true` in `gradle.properties`). This catches problems
+that only show up as log warnings, such as NeoForge's biome mob category
+mismatch. Fix the cause where you can. Add a commented regex to the ignore
+file only for known issues, and remove it together with the fix. Pass
+`-Pprod_smoke_log_check=false` to skip the check for a single run.
+
 ---
 
 ## Debugging

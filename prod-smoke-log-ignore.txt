@@ -1,0 +1,23 @@
+# WARN/ERROR/FATAL server log lines that prodSmokeTest tolerates when
+# prod_smoke_log_check=true (see gradle.properties).
+#
+# Format: one Java regex per line, matched anywhere in the log line.
+# Noise caused by the smoke-test harness itself (offline mode banner, etc.)
+# is ignored by gradle/shared/prod-run.gradle and does not belong here.
+#
+# Every entry below is a known issue that still needs investigation. Remove
+# the entry together with the fix.
+
+# Fabric/NeoForge 1.21.10 and 1.21.11: pack.mcmeta declares a
+# supported_formats range above 81 without the min_format/max_format fields
+# that newer pack formats require.
+Couldn't load (mod/)?chronodawn pack metadata
+
+# NeoForge 1.21.4: vanilla chest-based recipes (trapped_chest, hopper,
+# *_chest_boat, ...) report empty ingredients. Not yet known whether
+# Chrono Dawn or NeoForge causes it.
+RecipeManager.*can't be placed due to empty ingredients
+
+# Fabric (all versions): the production server cannot read the Mixin
+# refmaps. Mixins still apply, but confirm that this is harmless.
+Reference map '.*refmap\.json' for chronodawn.*could not be read

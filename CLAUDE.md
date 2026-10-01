@@ -193,6 +193,7 @@ Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.2
 - Not supported for Forge (1.20.1) - `runProd`'s underlying installer path is unsupported for Forge < 50, see `gradle/shared/prod-run.gradle`
 - Unlike `runGameTest`/`runGameTestServer` (dev/mapped Loom environment), this launches an installer-provisioned production server, so it also catches Mixin refmap issues that only surface outside the dev environment
 - Uses `build/prod-smoke/<loader>-<version>/`, separate from the manually-verified `run-prod/` used by `runProd` - cleaned up by `clean<version>`/`cleanAll`
+- Also fails on server log WARN/ERROR/FATAL lines not matched by `prod-smoke-log-ignore.txt` (`prod_smoke_log_check=true`). Fix the cause rather than adding an ignore entry; entries there are known issues pending a fix
 
 **Resource Validation**:
 - `./gradlew validateResources` - Check JSON syntax and cross-references (blockstate→model, model→texture)
