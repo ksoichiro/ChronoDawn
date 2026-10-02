@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-10-01
+
 ### Added
 
 - **Minecraft 26.3 support**: Chrono Dawn now runs on Minecraft 26.3 with
@@ -606,7 +608,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Architectury API 13.0.8+
 - Custom Portal API 0.0.1-beta66-1.21 (Fabric bundled, NeoForge requires separate installation)
 
-[Unreleased]: https://github.com/ksoichiro/ChronoDawn/compare/v0.9.2...HEAD
+[Unreleased]: https://github.com/ksoichiro/ChronoDawn/compare/v0.10.0...HEAD
+[0.10.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.9.2...v0.10.0
 [0.9.2]: https://github.com/ksoichiro/ChronoDawn/compare/v0.9.1...v0.9.2
 [0.9.1]: https://github.com/ksoichiro/ChronoDawn/compare/v0.9.0...v0.9.1
 [0.9.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.8.0...v0.9.0
