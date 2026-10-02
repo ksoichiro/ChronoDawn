@@ -89,9 +89,11 @@ public class TemporalRootBlock extends CropBlock {
     @Override
     protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
         // Allow placement on farmland (for player planting) or grass/dirt (for worldgen)
+        // 26.1.2+: minecraft:dirt no longer contains grass_block; substrate_overworld
+        // is the umbrella tag equivalent to the pre-26 minecraft:dirt.
         return state.is(ModBlocks.TEMPORAL_FARMLAND.get()) ||
                state.is(net.minecraft.world.level.block.Blocks.FARMLAND) ||
-               state.is(net.minecraft.tags.BlockTags.DIRT);
+               state.is(net.minecraft.tags.BlockTags.SUBSTRATE_OVERWORLD);
     }
 
     @Override

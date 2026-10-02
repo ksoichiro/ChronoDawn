@@ -67,6 +67,22 @@ public class ChronoDawnGameTests {
     }
 
     /**
+     * Test: CHRONO_MELON canSurvive() returns true on vanilla GRASS_BLOCK.
+     */
+    @GameTest(structure = STRUCTURE, maxTicks = 100)
+    public void testChronoMelonSurvivesOnVanillaGrass(GameTestHelper helper) {
+        FadedPlainsTests.TEST_CHRONO_MELON_SURVIVES_ON_VANILLA_GRASS.accept(helper);
+    }
+
+    /**
+     * Test: dirt-planted Chrono Dawn plants canSurvive() on vanilla GRASS_BLOCK.
+     */
+    @GameTest(structure = STRUCTURE, maxTicks = 100)
+    public void testPlantsSurviveOnVanillaGrass(GameTestHelper helper) {
+        FadedPlainsTests.TEST_PLANTS_SURVIVE_ON_VANILLA_GRASS.accept(helper);
+    }
+
+    /**
      * Test: FADED_TEMPORAL_GRASS drops itself (1 item) when broken with shears.
      */
     @GameTest(structure = STRUCTURE, maxTicks = 100)

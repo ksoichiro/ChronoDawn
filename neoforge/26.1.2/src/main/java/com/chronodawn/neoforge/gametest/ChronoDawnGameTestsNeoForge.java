@@ -65,6 +65,8 @@ public class ChronoDawnGameTestsNeoForge {
         // Faded Plains block tests (not included in RegistryDrivenTestGenerator for 1.21.5+)
         registerTest("dead_bush_survives_on_parched_dirt", FadedPlainsTests.TEST_DEAD_BUSH_SURVIVES_ON_PARCHED_DIRT, 100);
         registerTest("dead_bush_breaks_on_grass", FadedPlainsTests.TEST_DEAD_BUSH_BREAKS_ON_GRASS, 100);
+        registerTest("chrono_melon_survives_on_vanilla_grass", FadedPlainsTests.TEST_CHRONO_MELON_SURVIVES_ON_VANILLA_GRASS, 100);
+        registerTest("plants_survive_on_vanilla_grass", FadedPlainsTests.TEST_PLANTS_SURVIVE_ON_VANILLA_GRASS, 100);
         registerTest("faded_grass_shears_drops_self", FadedPlainsTests.TEST_FADED_GRASS_SHEARS_DROPS_SELF, 100);
 
         // Player input tests

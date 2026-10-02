@@ -17,6 +17,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   reference maps that current Architectury Loom does not generate. Loom already
   remaps Mixin targets directly in production JARs, so Mixin behavior is
   unchanged and the misleading startup warning is gone.
+- **Chrono Melon on vanilla grass**: on Minecraft 26.1.2, 26.2, and 26.3,
+  Chrono Melon blocks can be placed on vanilla grass blocks and podzol again.
+  Mycelium, moss blocks, and mud are also accepted now, matching the other
+  Minecraft versions.
+- **Plants on vanilla grass**: on Minecraft 26.1.2, 26.2, and 26.3, Temporal
+  Root, Time Blossoms, Temporal Fern, Temporal Grass, Faded Temporal Grass,
+  and Timeless Mushroom can now be planted on vanilla grass blocks, as on the
+  other Minecraft versions.
 
 ## [0.10.0] - 2026-10-01
 

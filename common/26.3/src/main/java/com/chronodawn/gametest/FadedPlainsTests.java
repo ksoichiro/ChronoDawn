@@ -71,6 +71,57 @@ public final class FadedPlainsTests {
     };
 
     /**
+     * Test: CHRONO_MELON canSurvive() returns true when the block below is vanilla GRASS_BLOCK.
+     *
+     * Regression guard: since 26.1.2, minecraft:dirt no longer contains grass_block,
+     * so a #minecraft:dirt soil check rejects vanilla grass.
+     */
+    public static final Consumer<GameTestHelper> TEST_CHRONO_MELON_SURVIVES_ON_VANILLA_GRASS = helper -> {
+        helper.setBlock(BASE_POS, net.minecraft.world.level.block.Blocks.GRASS_BLOCK);
+        helper.runAfterDelay(1, () -> {
+            BlockState melonState = ModBlocks.CHRONO_MELON.get().defaultBlockState();
+            BlockPos absTop = helper.absolutePos(TOP_POS);
+            boolean survives = melonState.canSurvive(helper.getLevel(), absTop);
+            if (survives) {
+                helper.succeed();
+            } else {
+                helper.fail(Component.literal(
+                    "CHRONO_MELON should survive on vanilla GRASS_BLOCK but canSurvive() returned false"));
+            }
+        });
+    };
+
+    /**
+     * Test: dirt-planted Chrono Dawn plants canSurvive() on vanilla GRASS_BLOCK.
+     *
+     * Same regression guard as the Chrono Melon test. TIMELESS_MUSHROOM is excluded
+     * because its canSurvive() also requires light level 12 or less.
+     */
+    public static final Consumer<GameTestHelper> TEST_PLANTS_SURVIVE_ON_VANILLA_GRASS = helper -> {
+        helper.setBlock(BASE_POS, net.minecraft.world.level.block.Blocks.GRASS_BLOCK);
+        helper.runAfterDelay(1, () -> {
+            BlockPos absTop = helper.absolutePos(TOP_POS);
+            List<String> failures = new ArrayList<>();
+            for (var block : List.of(
+                    ModBlocks.TEMPORAL_ROOT.get(),
+                    ModBlocks.PURPLE_TIME_BLOSSOM.get(),
+                    ModBlocks.TEMPORAL_FERN.get(),
+                    ModBlocks.TEMPORAL_GRASS.get(),
+                    ModBlocks.FADED_TEMPORAL_GRASS.get())) {
+                if (!block.defaultBlockState().canSurvive(helper.getLevel(), absTop)) {
+                    failures.add(block.getDescriptionId());
+                }
+            }
+            if (failures.isEmpty()) {
+                helper.succeed();
+            } else {
+                helper.fail(Component.literal(
+                    "Plants should survive on vanilla GRASS_BLOCK but canSurvive() returned false: " + failures));
+            }
+        });
+    };
+
+    /**
      * Test: FADED_TEMPORAL_GRASS drops itself (1 item) when broken with shears.
      *
      * The loot table for faded_temporal_grass specifies a shears match_tool condition,

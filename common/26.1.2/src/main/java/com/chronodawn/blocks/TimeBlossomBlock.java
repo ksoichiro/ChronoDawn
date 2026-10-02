@@ -73,7 +73,9 @@ public class TimeBlossomBlock extends BushBlock {
     @Override
     protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
         // Allow placement on standard flower-compatible blocks
-        return state.is(BlockTags.DIRT) ||
+        // 26.1.2+: minecraft:dirt no longer contains grass_block; substrate_overworld
+        // is the umbrella tag equivalent to the pre-26 minecraft:dirt.
+        return state.is(BlockTags.SUBSTRATE_OVERWORLD) ||
                state.is(net.minecraft.world.level.block.Blocks.FARMLAND);
     }
 }

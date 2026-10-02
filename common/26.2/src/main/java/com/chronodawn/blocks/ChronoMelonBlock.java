@@ -53,8 +53,11 @@ public class ChronoMelonBlock extends net.minecraft.world.level.block.Block {
         BlockState belowState = level.getBlockState(belowPos);
 
         // Dirt-like blocks (grass, podzol, coarse dirt, and any modded/temporal
-        // dirt already tagged into minecraft:dirt) can host Chrono Melon
-        if (!belowState.is(BlockTags.DIRT)) {
+        // dirt already tagged into minecraft:dirt) can host Chrono Melon.
+        // 26.1.2+: minecraft:dirt no longer contains grass_block/podzol/mycelium
+        // (moved to minecraft:grass_blocks); substrate_overworld is the umbrella
+        // tag equivalent to the pre-26 minecraft:dirt.
+        if (!belowState.is(BlockTags.SUBSTRATE_OVERWORLD)) {
             return false;
         }
 

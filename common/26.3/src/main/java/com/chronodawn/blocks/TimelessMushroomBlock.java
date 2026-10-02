@@ -58,7 +58,9 @@ public class TimelessMushroomBlock extends BushBlock implements BonemealableBloc
     @Override
     protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
         // Can be placed on dirt, grass, mycelium, podzol (like vanilla mushrooms)
-        return state.is(BlockTags.DIRT) ||
+        // 26.1.2+: minecraft:dirt no longer contains grass_block; substrate_overworld
+        // is the umbrella tag equivalent to the pre-26 minecraft:dirt.
+        return state.is(BlockTags.SUBSTRATE_OVERWORLD) ||
                state.is(Blocks.MYCELIUM) ||
                state.is(Blocks.PODZOL) ||
                state.is(Blocks.MOSS_BLOCK);
