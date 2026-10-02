@@ -193,6 +193,12 @@ validation command that covers the affected version and loader.
 - When adding a feature, inspect the nearest existing implementation across
   versioned modules and copy only the version-specific differences that are
   actually required.
+- For 1.21.9+ `pack.mcmeta`, do not combine the resource-pack and data-pack
+  versions into one `min_format`/`max_format` range. Minecraft validates the
+  same mod metadata with different legacy cutoffs for client resources and
+  server data. Follow the loader's bundled mod-pack metadata, preserve minor
+  versions such as `[94, 1]`, and verify both resource reload and server data
+  loading.
 - If an API differs between Minecraft versions, prefer the existing compatibility
   layer or platform helper pattern over scattering conditionals.
 

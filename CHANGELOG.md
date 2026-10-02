@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Minecraft 1.21.10 and 1.21.11 pack metadata errors**: Fabric and NeoForge
+  no longer log errors while loading Chrono Dawn's resource and data pack
+  metadata during startup or world creation. This fix does not change gameplay
+  or require world or configuration migration.
+
 ## [0.10.0] - 2026-10-01
 
 ### Added

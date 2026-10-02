@@ -8,11 +8,6 @@
 # Every entry below is a known issue that still needs investigation. Remove
 # the entry together with the fix.
 
-# Fabric/NeoForge 1.21.10 and 1.21.11: pack.mcmeta declares a
-# supported_formats range above 81 without the min_format/max_format fields
-# that newer pack formats require.
-Couldn't load (mod/)?chronodawn pack metadata
-
 # NeoForge 1.21.4: vanilla chest-based recipes (trapped_chest, hopper,
 # *_chest_boat, ...) report empty ingredients. Not yet known whether
 # Chrono Dawn or NeoForge causes it.

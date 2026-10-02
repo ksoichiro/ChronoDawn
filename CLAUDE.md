@@ -130,6 +130,12 @@ Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.2
 
 **Note**: 1.21.3 is a hotfix release that reuses 1.21.2 modules (no separate common/1.21.3, fabric/1.21.3, neoforge/1.21.3 directories needed).
 
+For 1.21.9+ `pack.mcmeta`, do not combine the resource-pack and data-pack
+versions into one `min_format`/`max_format` range. Minecraft validates the same
+mod metadata with different legacy cutoffs for client resources and server
+data. Follow the loader's bundled mod-pack metadata, preserve minor versions
+such as `[94, 1]`, and verify both resource reload and server data loading.
+
 **Clean Commands**:
 - `./gradlew clean1_20_1` - Clean for 1.20.1
 - `./gradlew clean1_21_1` - Clean for 1.21.1
