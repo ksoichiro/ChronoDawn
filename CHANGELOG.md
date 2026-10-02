@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   no longer log errors while loading Chrono Dawn's resource and data pack
   metadata during startup or world creation. This fix does not change gameplay
   or require world or configuration migration.
+- **Fabric startup refmap warning**: Fabric no longer tries to load Mixin
+  reference maps that current Architectury Loom does not generate. Loom already
+  remaps Mixin targets directly in production JARs, so Mixin behavior is
+  unchanged and the misleading startup warning is gone.
 
 ## [0.10.0] - 2026-10-01
 

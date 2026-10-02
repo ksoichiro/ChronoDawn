@@ -194,7 +194,7 @@ ChronoDawn/
 │       │   └── client/                     # Client-side initialization
 │       └── src/main/resources/
 │           ├── fabric.mod.json             # Fabric mod metadata
-│           └── chronodawn-fabric.mixins.json # Fabric Mixin config (with refMap)
+│           └── chronodawn-fabric.mixins.json # Fabric Mixin config
 ├── neoforge/
 │   ├── base/                               # Shared NeoForge sources (NOT a Gradle subproject)
 │   │   └── src/main/java/com/chronodawn/neoforge/
@@ -977,21 +977,9 @@ ChronoDawn-specific Java addon.
 
 ### Mixin Configuration
 
-**Critical**: Fabric and NeoForge require **separate** Mixin configs due to mapping differences.
+Fabric, NeoForge, and Forge use separate loader-specific Mixin configs.
 
-**Fabric**: `chronodawn-fabric.mixins.json` (with refMap)
-```json
-{
-  "required": true,
-  "package": "com.chronodawn.mixin",
-  "refmap": "common-common-refmap.json",
-  "mixins": [
-    "StructureStartMixin"
-  ]
-}
-```
-
-**NeoForge**: `chronodawn-neoforge.mixins.json` (without refMap)
+**Fabric**: `chronodawn-fabric.mixins.json`
 ```json
 {
   "required": true,
@@ -1002,13 +990,28 @@ ChronoDawn-specific Java addon.
 }
 ```
 
-**Forge** (1.20.1 only): `chronodawn-forge.mixins.json` (without refMap, like NeoForge; Architectury Loom remaps mixin targets to SRG names in bytecode at build time, unlike Fabric which requires an explicit refmap for its intermediary-to-named remapping)
+**NeoForge**: `chronodawn-neoforge.mixins.json`
+```json
+{
+  "required": true,
+  "package": "com.chronodawn.mixin",
+  "mixins": [
+    "StructureStartMixin"
+  ]
+}
+```
+
+**Forge** (1.20.1 only): `chronodawn-forge.mixins.json`
+
+Do not add a `refmap` property or configure `loom.mixin.defaultRefmapName`.
+Architectury Loom remaps Mixin targets directly in production JARs. Its legacy
+Mixin annotation processor is disabled, so a configured refmap name would point
+to a file that is not generated.
 
 See `CLAUDE.md` → "Mixin Configuration" for full details. After changing Mixin
 config, run the headless `prodSmokeTest` (Fabric/NeoForge, see "Production
-Smoke Test" above) — `runGameTest`/`runGameTestServer` run in Loom's
-dev/mapped environment, where refmap resolution differs from production and
-can mask injection failures.
+Smoke Test" above). `runGameTest`/`runGameTestServer` run in Loom's
+dev/mapped environment and can mask production remapping or injection failures.
 
 ### Structure Waterlogging Prevention
 

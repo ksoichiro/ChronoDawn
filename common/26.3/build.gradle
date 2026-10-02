@@ -6,10 +6,6 @@ architectury {
 
 loom {
     accessWidenerPath = file("src/main/resources/chronodawn.accesswidener")
-
-    mixin {
-        defaultRefmapName = "common-common-refmap.json"
-    }
 }
 
 repositories {

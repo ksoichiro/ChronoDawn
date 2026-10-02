@@ -204,17 +204,20 @@ validation command that covers the affected version and loader.
 
 ## Mixin Configuration
 
-Fabric and the Mojang-mapped loaders need different Mixin configuration because
-of mapping and loader differences.
+Fabric, Forge, and NeoForge use separate loader-specific Mixin configs.
 
-- Fabric loader-specific mixin configs must include
-  `"refmap": "common-common-refmap.json"`.
-- Forge and NeoForge loader-specific mixin configs must not include a `refMap`
-  property.
+- Loader-specific Mixin configs must not include a `refmap` property. Loom
+  remaps Mixin targets directly in the production JAR, and its legacy Mixin
+  annotation processor is disabled.
+- Do not add `loom.mixin.defaultRefmapName`. It creates a reference to a refmap
+  that current Loom does not generate unless the legacy annotation processor is
+  explicitly re-enabled.
 - `chronodawn.mixins.json` is a common/reference config and is excluded from
   builds.
 - When adding or changing Mixins, update both loader-specific configs when the
   behavior applies to their loaders.
+- After changing a Mixin or its config, run the affected loader's
+  `prodSmokeTest`. A dev run can hide production remapping failures.
 
 ## License and Dependencies
 

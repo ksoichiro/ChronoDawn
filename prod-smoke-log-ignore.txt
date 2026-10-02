@@ -12,7 +12,3 @@
 # *_chest_boat, ...) report empty ingredients. Not yet known whether
 # Chrono Dawn or NeoForge causes it.
 RecipeManager.*can't be placed due to empty ingredients
-
-# Fabric (all versions): the production server cannot read the Mixin
-# refmaps. Mixins still apply, but confirm that this is harmless.
-Reference map '.*refmap\.json' for chronodawn.*could not be read
