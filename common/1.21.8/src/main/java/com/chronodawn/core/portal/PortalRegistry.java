@@ -29,6 +29,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class PortalRegistry {
     private static final PortalRegistry INSTANCE = new PortalRegistry();
 
+    /** Saved data format. 2 added the version tag and the per-portal legacy counterpart flag. */
+    private static final int DATA_VERSION = 2;
+
     private final Map<UUID, PortalStateMachine> portals;
     private final Map<ResourceKey<Level>, Set<UUID>> portalsByDimension;
     private final Map<ResourceKey<Level>, Map<BlockPos, UUID>> portalsByPosition;
@@ -165,6 +168,35 @@ public class PortalRegistry {
     }
 
     /**
+     * Find a deactivated portal in another dimension whose counterpart in
+     * {@code currentDimension} was never registered, because it was saved before registry
+     * lookups were scoped by dimension. Lets a player stabilize from the arrival frame in
+     * a world that was upgraded from 0.8.0. Portals created by this version are never
+     * returned.
+     *
+     * @param currentDimension Dimension the player is in
+     * @param pos Clicked frame position
+     * @param radius Half-width of the cube searched around {@code pos}
+     * @return The legacy portal, or null if none is near
+     */
+    public PortalStateMachine findLegacyPortalNear(ResourceKey<Level> currentDimension, BlockPos pos, int radius) {
+        for (PortalStateMachine portal : portals.values()) {
+            if (!portal.isLegacyCounterpartPending()
+                    || portal.getCurrentState() != PortalState.DEACTIVATED
+                    || portal.getSourceDimension().equals(currentDimension)) {
+                continue;
+            }
+            BlockPos portalPos = portal.getPosition();
+            if (Math.abs(portalPos.getX() - pos.getX()) <= radius
+                    && Math.abs(portalPos.getY() - pos.getY()) <= radius
+                    && Math.abs(portalPos.getZ() - pos.getZ()) <= radius) {
+                return portal;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Get all portals in a dimension.
      *
      * @param dimension Dimension key
@@ -217,10 +249,14 @@ public class PortalRegistry {
             portalTag.putString("Dimension", portal.getSourceDimension().location().toString());
             portalTag.putLong("Position", portal.getPosition().asLong());
             portalTag.putString("State", portal.getCurrentState().name());
+            if (portal.isLegacyCounterpartPending()) {
+                portalTag.putBoolean("LegacyCounterpart", true);
+            }
             portalList.add(portalTag);
         }
 
         tag.put("Portals", portalList);
+        tag.putInt("Version", DATA_VERSION);
         ChronoDawn.LOGGER.debug("Saved {} portals to NBT", portals.size());
     }
 
@@ -232,6 +268,11 @@ public class PortalRegistry {
      */
     public void loadFromNBT(CompoundTag tag) {
         clear();
+
+        // Data without a version was written by 0.9.x or earlier. Up to 0.8.0 the position
+        // index ignored the dimension, so the arrival portal in the other dimension was
+        // never registered when its coordinates matched an existing portal.
+        boolean unversioned = !tag.contains("Version");
 
         ListTag portalList = tag.getListOrEmpty("Portals");
         for (int i = 0; i < portalList.size(); i++) {
@@ -276,6 +317,9 @@ public class PortalRegistry {
 
             PortalStateMachine portal = new PortalStateMachine(portalId, dimension, position);
             portal.setState(state);
+            portal.setLegacyCounterpartPending(unversioned
+                ? state == PortalState.DEACTIVATED
+                : portalTag.getBooleanOr("LegacyCounterpart", false));
             registerPortal(portal);
         }
 

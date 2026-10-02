@@ -32,6 +32,7 @@ public class PortalStateMachine {
     private final ResourceKey<Level> sourceDimension;
     private final BlockPos position;
     private PortalState currentState;
+    private boolean legacyCounterpartPending;
 
     /**
      * Create a new portal state machine.
@@ -97,6 +98,7 @@ public class PortalStateMachine {
         }
 
         currentState = PortalState.STABILIZED;
+        legacyCounterpartPending = false;
         // Notify registry to persist state change
         PortalRegistry.getInstance().markDirtyForPortal(portalId);
         ChronoDawn.LOGGER.debug("Portal {} stabilized at {} in dimension {}",
@@ -120,6 +122,21 @@ public class PortalStateMachine {
      */
     public void setState(PortalState state) {
         this.currentState = state;
+    }
+
+    /**
+     * Whether this portal comes from a world saved before registry data was versioned and
+     * may lack a registered counterpart in the other dimension. See
+     * {@link PortalRegistry#findLegacyPortalNear}.
+     *
+     * @return true if the legacy fallback may still apply to this portal
+     */
+    public boolean isLegacyCounterpartPending() {
+        return legacyCounterpartPending;
+    }
+
+    public void setLegacyCounterpartPending(boolean legacyCounterpartPending) {
+        this.legacyCounterpartPending = legacyCounterpartPending;
     }
 
     /**

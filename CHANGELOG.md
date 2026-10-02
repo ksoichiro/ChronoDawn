@@ -72,6 +72,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   standing in a Chrono Dawn portal never appeared on Forge, although the
   portal particles did. Forge replaces the vanilla in-game GUI class, so the
   overlay hook never ran. It now targets the Forge GUI class.
+- **Portal Stabilizer in worlds upgraded from 0.8.0**: in a world where a
+  player entered Chrono Dawn on 0.8.0 and has not stabilized the portal yet,
+  using the Portal Stabilizer on the arrival frame in Chrono Dawn failed with
+  "No deactivated portal found nearby". 0.8.0 never registered that arrival
+  portal, because it matched the Overworld portal at the same coordinates.
+  The stabilizer now also finds the Overworld portal saved by those older
+  versions. Portals created after this fix are not affected by this fallback.
 - **Missing Chrono Dawn Portal block name** — the `block.chronodawn.chrono_dawn_portal`
   translation key had no `en_us`/`ja_jp` value, so mods that display block
   names (e.g. Jade) showed the raw key instead of "Chrono Dawn Portal".

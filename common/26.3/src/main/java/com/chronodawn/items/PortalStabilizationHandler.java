@@ -53,6 +53,11 @@ public final class PortalStabilizationHandler {
 
         // Search for nearby portal in registry
         PortalStateMachine portal = findNearbyPortal(level, clickedPos);
+        if (portal == null) {
+            // Worlds saved before registry data was versioned (0.9.x and earlier) may lack the
+            // arrival portal's own registry entry
+            portal = PortalRegistry.getInstance().findLegacyPortalNear(level.dimension(), clickedPos, 5);
+        }
 
         if (portal == null) {
             if (player != null) {
