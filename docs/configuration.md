@@ -28,7 +28,10 @@ start it again.
 The mod also writes `<configDir>/chronodawn-runtime-overlay/`, an internal
 data pack regenerated on every startup from the values in the TOML. It is
 safe to delete; it will be recreated on next launch. Do not edit it by hand —
-your edits will be overwritten.
+your edits will be overwritten. Existing files are overwritten but never
+removed, so delete this directory before switching to an older Chrono Dawn
+version. Otherwise the older version can fail to start because the directory
+still refers to worldgen data that only the newer version defines.
 
 ---
 
