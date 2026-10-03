@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Temporal Moss spreading**: natural and bonemeal-assisted spreading now
   affects only exposed dirt, grass, and natural stone. It no longer spreads
   through enclosed terrain or replaces ores and constructed stone blocks.
+- **Structure materials**: dungeons, landmarks, and the Time Keeper Village
+  now use Chrono Dawn stonework, terrain, wood, and lighting blocks in place of
+  the matching vanilla blocks. Layouts are unchanged. Only newly generated
+  structures are affected.
 
 ### Fixed
 
@@ -40,6 +44,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   floor now generate on all supported Minecraft versions. Underground
   waterlogging prevention was removing their water during placement. Only
   newly generated Guardian Vaults are affected.
+- **Structure water at chunk edges on Minecraft 26.2 and 26.3**: intentional
+  waterlogging in structures, such as the Guardian Vault floor pools, no longer
+  drains where a structure crosses a chunk boundary. Vanilla 26.2 skips blocks
+  outside the chunk being generated, which left those edge blocks dry. Only
+  newly generated structures are affected.
 - **Time Torch block names**: wall-mounted Purple, Orange, and Pink Time
   Torches now report their matching item names instead of `air` to block
   information displays and item lookup actions.
