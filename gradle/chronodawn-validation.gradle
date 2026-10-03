@@ -625,22 +625,30 @@ tasks.register('validateConventionalTags') {
         // are translated upstream and are listed as exempt; anything else is a
         // path this mod coined, so it defaults to requiring a translation.
         def exemptTags = (config.translation_exempt_tags ?: []) as Set
+        // Returns the key set of a lang file, or null after recording an error.
+        def loadLangKeys = { String langId ->
+            def langFile = file("${rootProject.projectDir}/${langId}.json")
+            if (!langFile.exists()) {
+                errors << "Conventional tags: lang file ${langId}.json not found"
+                return null
+            }
+            def langJson
+            try {
+                langJson = jsonSlurper.parseText(langFile.text)
+            } catch (Exception e) {
+                errors << "Conventional tags: lang file ${langId}.json is not valid JSON"
+                return null
+            }
+            (langJson instanceof Map ? langJson.keySet() : []) as Set
+        }
         def langKeysByFile = [:]
         (config.lang_roots ?: []).each { String langRel ->
             ['en_us', 'ja_jp'].each { String locale ->
-                def langFile = file("${rootProject.projectDir}/${langRel}/${locale}.json")
-                if (!langFile.exists()) {
-                    errors << "Conventional tags: lang file ${langRel}/${locale}.json not found"
-                    return
+                def langId = "${langRel}/${locale}".toString()
+                def keys = loadLangKeys(langId)
+                if (keys != null) {
+                    langKeysByFile[langId] = keys
                 }
-                def langJson
-                try {
-                    langJson = jsonSlurper.parseText(langFile.text)
-                } catch (Exception e) {
-                    errors << "Conventional tags: lang file ${langRel}/${locale}.json is not valid JSON"
-                    return
-                }
-                langKeysByFile["${langRel}/${locale}".toString()] = (langJson instanceof Map ? langJson.keySet() : []) as Set
             }
         }
         int translationsChecked = 0
@@ -656,6 +664,42 @@ tasks.register('validateConventionalTags') {
                             }
                         }
                     }
+        }
+
+        // --- Check 5: chronodawn: item tags carry a display name ------------
+        // The same Fabric warning covers the mod's own namespace, so the
+        // data-driven chronodawn: item tags (mob food, portal items, ...) need
+        // keys too. Each tag root lists the lang roots of the versions that
+        // ship it, because shared-1.21.2+ tags never reach the 1.21.1 lang.
+        // 1.20.1 has no such warning but is checked for recipe viewer names.
+        def modLangKeysByFile = [:]
+        (config.mod_item_tag_roots ?: []).each { entry ->
+            def tagRoot = entry.tag_root as String
+            def tagDir = file("${rootProject.projectDir}/${tagRoot}")
+            if (!tagDir.exists()) {
+                errors << "Conventional tags: mod item tag root ${tagRoot} not found"
+                return
+            }
+            def namespace = tagRoot.replaceAll(/^.*\/data\/([^\/]+)\/tags\/items?$/, '$1')
+            fileTree(dir: tagDir, includes: ['**/*.json']).each { File f ->
+                def path = tagDir.toPath().relativize(f.toPath()).toString()
+                        .replace(File.separator, '/').replaceAll(/\.json$/, '')
+                def translationKey = "tag.item.${namespace}.${path.replace('/', '.')}".toString()
+                (entry.lang_roots as List).each { String langRel ->
+                    ['en_us', 'ja_jp'].each { String locale ->
+                        def langId = "${langRel}/${locale}".toString()
+                        if (!modLangKeysByFile.containsKey(langId)) {
+                            modLangKeysByFile[langId] = loadLangKeys(langId)
+                        }
+                        def keys = modLangKeysByFile[langId]
+                        if (keys == null) return
+                        translationsChecked++
+                        if (!keys.contains(translationKey)) {
+                            errors << "${tagRoot}: tag '${namespace}:${path}' has no '${translationKey}' in ${langId}.json (recipe viewers would show the raw id)"
+                        }
+                    }
+                }
+            }
         }
 
         if (errors.isEmpty()) {

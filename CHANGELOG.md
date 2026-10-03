@@ -70,6 +70,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   followed Chrono Dawn's own time. Mobs could spawn and then burn under a sky
   that looked like daytime. The sky, sunlight, monster burning, and moon phase
   now all follow Chrono Dawn's time.
+- **Untranslated Chrono Dawn item tags**: the item tags for custom mob food,
+  Ticking Sheep shears, Chrono Bovine milking buckets, grass seed replacement,
+  and portal ignition and stabilization items now have English and Japanese
+  names. Recipe viewers show these names instead of raw tag IDs. On Minecraft
+  1.21.1 and newer, Fabric also no longer logs an untranslated item tag warning
+  for them in development environments.
 
 ## [0.10.0] - 2026-10-01
 

@@ -565,6 +565,15 @@
   "block.chronodawn.chrono_cobweb": "Chrono Cobweb",
 
   "tag.item.chronodawn.sand": "Sand",
+  "tag.item.chronodawn.pulse_hog_food": "Pulse Hog Food",
+  "tag.item.chronodawn.secondwing_fowl_food": "Secondwing Fowl Food",
+  "tag.item.chronodawn.timebound_rabbit_food": "Timebound Rabbit Food",
+  "tag.item.chronodawn.temporal_caprid_food": "Temporal Caprid Food",
+  "tag.item.chronodawn.ticking_sheep_shears": "Ticking Sheep Shears",
+  "tag.item.chronodawn.chrono_bovine_milking_buckets": "Chrono Bovine Milking Buckets",
+  "tag.item.chronodawn.grass_seed_replacements": "Grass Seeds Replaced by Time Wheat Seeds",
+  "tag.item.chronodawn.portal_igniters": "Portal Igniters",
+  "tag.item.chronodawn.portal_stabilizers": "Portal Stabilizers",
 
   "tag.item.c.ores.clockstone": "Clockstone Ores",
   "tag.item.c.ores.time_crystal": "Time Crystal Ores",

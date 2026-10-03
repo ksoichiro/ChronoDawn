@@ -7,6 +7,27 @@
     "common/1.21.1/src/main/resources/assets/chronodawn/lang",
     "common/shared-1.21.2+/src/main/resources/assets/chronodawn/lang"
   ],
+  "mod_item_tag_roots": [
+    {
+      "tag_root": "common/1.20.1/src/main/resources/data/chronodawn/tags/items",
+      "lang_roots": [
+        "common/1.20.1/src/main/resources/assets/chronodawn/lang"
+      ]
+    },
+    {
+      "tag_root": "common/shared/src/main/resources/data/chronodawn/tags/item",
+      "lang_roots": [
+        "common/1.21.1/src/main/resources/assets/chronodawn/lang",
+        "common/shared-1.21.2+/src/main/resources/assets/chronodawn/lang"
+      ]
+    },
+    {
+      "tag_root": "common/shared-1.21.2+/src/main/resources/data/chronodawn/tags/item",
+      "lang_roots": [
+        "common/shared-1.21.2+/src/main/resources/assets/chronodawn/lang"
+      ]
+    }
+  ],
   "translation_exempt_tags": [
     "item/cobblestones",
     "item/cobblestones/deepslate",

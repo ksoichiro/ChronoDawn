@@ -565,6 +565,15 @@
   "block.chronodawn.chrono_cobweb": "時のクモの巣",
 
   "tag.item.chronodawn.sand": "砂",
+  "tag.item.chronodawn.pulse_hog_food": "パルス・ホッグの餌",
+  "tag.item.chronodawn.secondwing_fowl_food": "セカンドウィング・ファウルの餌",
+  "tag.item.chronodawn.timebound_rabbit_food": "タイムバウンド・ラビットの餌",
+  "tag.item.chronodawn.temporal_caprid_food": "テンポラル・カプリッドの餌",
+  "tag.item.chronodawn.ticking_sheep_shears": "ティッキング・シープ用のハサミ",
+  "tag.item.chronodawn.chrono_bovine_milking_buckets": "クロノバヴァインの搾乳用バケツ",
+  "tag.item.chronodawn.grass_seed_replacements": "時の小麦の種に置き換わる草の種",
+  "tag.item.chronodawn.portal_igniters": "ポータル点火アイテム",
+  "tag.item.chronodawn.portal_stabilizers": "ポータル安定化アイテム",
 
   "tag.item.c.ores.clockstone": "クロックストーン鉱石",
   "tag.item.c.ores.time_crystal": "時間の結晶鉱石",
