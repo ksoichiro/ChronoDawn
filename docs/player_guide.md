@@ -70,7 +70,7 @@ Chrono Dawn is a time-themed dimension mod that adds:
 Download and install these mods alongside Chrono Dawn:
 
 1. **Architectury API** - Required for both loaders
-   - Version 21.0.7+ for Minecraft 26.2
+   - Version 21.1.9+ for Minecraft 26.2
    - Version 20.0.12+ for Minecraft 26.1.2
    - Version 19.0.1+ for Minecraft 1.21.11
    - Version 18.0.8+ for Minecraft 1.21.10
