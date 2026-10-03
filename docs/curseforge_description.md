@@ -21,15 +21,16 @@ Chrono Dawn adds a brand new dimension to Minecraft, filled with unique biomes, 
 ### 🏛️ Epic Structures
 - **Ancient Ruins** (Overworld): Discover the secrets to enter Chrono Dawn
 - **Forgotten Library** (Chrono Dawn): Find the blueprints to stabilize the dimension
-- **Desert Clock Tower** (Chrono Dawn): Obtain rare Enhanced Clockstone
+- **Desert Clock Tower** (Chrono Dawn): Obtain Enhanced Clockstone and the Key to Master Clock
 - **Guardian Vault** (Chrono Dawn): Face the Chronos Warden boss
 - **Clockwork Depths** (Chrono Dawn): Challenge the Clockwork Colossus boss
 - **Phantom Catacombs** (Chrono Dawn): Navigate a maze to find the Temporal Phantom boss
 - **Entropy Crypt** (Chrono Dawn): Confront the Entropy Keeper boss
 - **Master Clock** (Final Dungeon): Face the ultimate challenge
+- **Time Keeper Village** (Chrono Dawn): A small settlement placed near where you first arrive, home to Time Keeper traders
 
 ### 👹 Powerful Boss Battles
-- **Time Guardian**: A mini-boss guarding the path to the Master Clock (drops Master Clock Key)
+- **Time Guardian**: A mini-boss guarding the path to the Master Clock (drops Key to Master Clock)
 - **4 Mid-Bosses** (required for Chrono Aegis crafting):
   - **Chronos Warden**: Stone guardian in the Guardian Vault
   - **Clockwork Colossus**: Mechanical giant in the Clockwork Depths
@@ -73,10 +74,15 @@ Chrono Dawn features unique mobs that replace vanilla spawns in the dimension:
 - **Chrono Ursid**: Neutral polar-bear-equivalent sized to match vanilla polar bears
 - **Temporal Caprid**: Goat-equivalent mob
 - **Timebound Rabbit**: Small wildlife found in Plains and Faded Plains
-- **Pulse Hog**: Hostile boar-like mob
+- **Pulse Hog**: Passive boar-like mob that can be bred
 - **Secondwing Fowl**: Chicken-based mob
 - **Chrono Turtle**: Friendly water creature
 - **Glide Fish**: Water creature with cookable food items
+- **Clockwork Sentinel**: Armored construct that shrugs off Time Distortion. Drops Ancient Gears and sometimes Enhanced Clockstone
+- **Temporal Wraith**: Hostile spirit whose hits apply Slowness II
+- **Floq**: Slime-like hopper that lurks in the dark
+- **Hourglass Golem**: Rare heavy hitter that attacks when stared at or provoked, teleports when hurt, and drops Time Hourglasses
+- **Time Keeper**: Peaceful trader. Sells Time Compasses tuned to each dungeon for Clockstone and Time Crystals, plus Ender Pearls and saplings for Enhanced Clockstone
 
 ### 🌲 New Content (highlights)
 - **Custom Wood Types**: Time Wood, Dark Time Wood, and Ancient Time Wood — full block sets; tall variants now generate as 2×2 mega trunks
@@ -87,6 +93,8 @@ Chrono Dawn features unique mobs that replace vanilla spawns in the dimension:
 - **Faded Plains terrain**: Faded Temporal Grass, Parched Temporal Dirt, and Temporal Dead Bush surface flora
 - **Custom Foods**: Fruit of Time (Haste), Glide Fish (raw / cooked), Chrono Bovine Meat (raw / cooked), Dried Temporal Kelp (vanilla-parity quick food)
 - **Time Hourglass, Portal Stabilizer, Time Clock**, ChronoDawn Custom Shields (3 tiers), and more
+- **Equipment beyond the artifacts**: Clockstone and Enhanced Clockstone tools and armor, Temporal Amber armor that repairs itself from Temporal Amber Dust while you are out of combat, the Entropy Crystal Sword (inflicts the Entropy damage-over-time effect), and the Spatially Linked Pickaxe (33% chance of double drops)
+- **Chrono Dawn Ores**: Clockstone, Time Crystal, Entropy Crystal, and Temporal Amber, plus Chronite in the Overworld
 - **Special Blocks**: Reversing Time Sandstone, Unstable Fungus, Mossy Temporal Stone Bricks (with stairs/slab/wall), Smooth Temporal Stone (with slab), Clockwork Dial, Chrono Cobweb
 - **Tunable Worldgen**: Per-ore generation parameters and Ancient Ruins placement exposed via `config/chronodawn.toml` — see [Configuration Guide](https://github.com/ksoichiro/ChronoDawn/blob/main/docs/configuration.md)
 
@@ -117,7 +125,7 @@ Build a portal frame using **Clockstone Blocks** (minimum 4×5, maximum 23×23).
 Explore Chrono Dawn to locate the **Forgotten Library**. Discover the **Portal Stabilizer** recipe to unlock bidirectional travel.
 
 ### Step 4: Stabilize the Portal
-Craft the **Portal Stabilizer** using **Enhanced Clockstone** from the **Desert Clock Tower**. Use it on your portal to enable free travel between dimensions.
+Craft the **Portal Stabilizer** from Clockstone, a Clockstone Block, Fruit of Time, and two Time Hourglasses. Use it on your portal to enable free travel between dimensions.
 
 ### Step 5: Defeat the Mid-Bosses
 - Defeat **Chronos Warden** in the Guardian Vault to obtain **Guardian Stone**
@@ -130,8 +138,8 @@ Craft the **Portal Stabilizer** using **Enhanced Clockstone** from the **Desert 
 - Chrono Aegis provides significant advantages against the Time Tyrant final boss for 10 minutes
 
 ### Step 7: Conquer the Final Boss
-- Defeat the **Time Guardian** mini-boss to obtain the Master Clock Key
-- Use the Master Clock Key to access the **Master Clock** dungeon
+- Defeat the **Time Guardian** mini-boss in the **Desert Clock Tower** to obtain the Key to Master Clock
+- Use the key to enter the **Master Clock**, then carry 3 **Ancient Gears** (dropped by Clockwork Sentinels and Secondhand Archers, or crafted) to open its boss room
 - Face the **Time Tyrant** and claim ultimate power over time
 
 ### Step 8: Craft Ultimate Artifacts
@@ -154,8 +162,9 @@ Use **Fragments of Stasis Core** (dropped by the Time Tyrant) to create legendar
 
 ### Boss Mechanics
 - **Dynamic AI**: Each boss has unique attack patterns and abilities
-- **Phase Transitions**: Time Tyrant becomes more powerful below 50% health
+- **Phase Transitions**: Time Tyrant enters a stronger phase at 66% and again at 33% health
 - **Proximity Spawning**: Temporal Phantom spawns when you enter the boss room
+- **One Fight per Dungeon**: Each boss dungeon generates many times per world, and every copy holds its own boss. Time Tyrant is the exception and can be defeated once per world
 - **Loot Rewards**: Defeat bosses to obtain crafting materials for ultimate artifacts
 
 ---
@@ -198,7 +207,6 @@ This mod is built with **Architectury** and supports **Fabric and NeoForge** (pl
 
 - **Player Guide**: Detailed walkthrough and tips ([View on GitHub](https://github.com/ksoichiro/ChronoDawn/blob/main/docs/player_guide.md))
 - **Developer Guide**: For developers and contributors ([View on GitHub](https://github.com/ksoichiro/ChronoDawn/blob/main/docs/developer_guide.md))
-- **Wiki**: Coming soon!
 
 ---
 
@@ -242,8 +250,7 @@ Check out the **Gallery** tab above for screenshots showcasing:
 ## 🔗 Links
 
 - **GitHub Repository**: [https://github.com/ksoichiro/ChronoDawn](https://github.com/ksoichiro/ChronoDawn)
-- **Discord**: [Coming soon]
-- **Modrinth**: [Link to Modrinth page]
+- **Modrinth**: [https://modrinth.com/mod/chrono-dawn](https://modrinth.com/mod/chrono-dawn)
 
 ---
 

@@ -70,6 +70,7 @@ Chrono Dawn is a time-themed dimension mod that adds:
 Download and install these mods alongside Chrono Dawn:
 
 1. **Architectury API** - Required for both loaders
+   - Version 22.0.2+ for Minecraft 26.3
    - Version 21.1.9+ for Minecraft 26.2
    - Version 20.0.12+ for Minecraft 26.1.2
    - Version 19.0.1+ for Minecraft 1.21.11
@@ -87,17 +88,14 @@ Download and install these mods alongside Chrono Dawn:
 
 ### Installation Steps
 
-1. Install Minecraft 1.21.9 (or 1.21.1, 1.21.2, 1.21.3, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.10, 1.21.11, 26.1.2, or 26.2; legacy 1.20.1 is also supported)
+1. Install a supported Minecraft version (1.21.1 through 1.21.11, 26.1.2, 26.2, or 26.3, plus legacy 1.20.1)
 2. Install your chosen mod loader (Fabric or NeoForge — or, for legacy Minecraft 1.20.1, Fabric or Forge)
 3. Download required dependencies:
    - **Architectury API** (required for both loaders)
-4. Download **Chrono Dawn Mod** (choose the version matching your Minecraft and loader):
-   - `chronodawn-0.9.0+1.21.2-fabric.jar` for Fabric (1.21.2)
-   - `chronodawn-0.9.0+1.21.2-neoforge.jar` for NeoForge (1.21.2)
-   - `chronodawn-0.9.0+1.21.1-fabric.jar` for Fabric (1.21.1)
-   - `chronodawn-0.9.0+1.21.1-neoforge.jar` for NeoForge (1.21.1)
-   - `chronodawn-0.9.0+1.20.1-fabric.jar` for Fabric (1.20.1, legacy)
-   - `chronodawn-0.9.0+1.20.1-forge.jar` for Forge (1.20.1, legacy)
+4. Download **Chrono Dawn Mod** for your Minecraft version and loader. Files are named `chronodawn-<mod version>+<Minecraft version>-<loader>.jar`, for example:
+   - `chronodawn-0.10.0+1.21.1-neoforge.jar` for NeoForge (1.21.1)
+   - `chronodawn-0.10.0+1.21.1-fabric.jar` for Fabric (1.21.1)
+   - `chronodawn-0.10.0+1.20.1-forge.jar` for Forge (1.20.1, legacy)
 5. Place all JAR files in your `.minecraft/mods/` folder
 6. Launch Minecraft with your chosen mod loader profile
 7. Verify "Chrono Dawn" appears in the mod list
@@ -110,7 +108,7 @@ Download and install these mods alongside Chrono Dawn:
 
 Ancient Ruins generate naturally in the **Overworld**. These structures contain:
 - **Loot chests** with "Time Hourglass Blueprint" and other resources
-- **Clockstone Ore** - Mine with a stone pickaxe or better
+- **Clockstone Ore** - Mine with an iron pickaxe or better
 - First clues about Chrono Dawn dimension
 
 **How to find Ancient Ruins**:
@@ -127,8 +125,8 @@ Ancient Ruins generate naturally in the **Overworld**. These structures contain:
 
 ### Step 3: Gather Materials and Build
 
-1. Mine **Clockstone Ore** in Ancient Ruins
-2. Smelt Clockstone Ore in a furnace to obtain **Clockstone**
+1. Mine **Clockstone Ore** in Ancient Ruins with an iron pickaxe. Each ore drops 3-4 **Clockstone** (more with Fortune)
+2. If you mine it with Silk Touch, smelt the ore block to get Clockstone
 3. Gather other materials needed (check your Recipe Book)
 4. Craft **Time Hourglass** and **Clockstone Blocks** for the portal frame
 5. Build a portal frame (minimum 4×5, same as Nether portals)
@@ -189,7 +187,9 @@ C = Clockstone Block (corners are optional, like Nether portals)
 
 ### Time Distortion Effect
 
-All hostile mobs in Chrono Dawn receive **Slowness IV**, making them move extremely slowly. You move at normal speed, giving you a significant advantage!
+All hostile mobs in Chrono Dawn receive **Slowness IV**, making them move extremely slowly. You move at normal speed, giving you a significant advantage! Once the Time Tyrant is defeated, the effect strengthens to **Slowness V** by default.
+
+Bosses and the Clockwork Sentinel are immune.
 
 **Benefits**:
 - Safer exploration
@@ -282,10 +282,44 @@ Chrono Dawn hosts several friendly and neutral mobs unique to the dimension. The
 - **Chrono Ursid** — polar-bear-equivalent neutral mob. Same size and behavior as a vanilla polar bear; provoke at your own risk.
 - **Temporal Caprid** — goat-equivalent. Pairs naturally with the mountainous biomes.
 - **Timebound Rabbit** — small wildlife that grazes in Plains, Prairies, and the new Faded Plains biome.
-- **Pulse Hog** — hostile boar-style mob; charges when provoked.
+- **Pulse Hog** is a passive boar-like animal. It flees when hurt and can be bred with carrots, potatoes, beetroot, or Temporal Root.
 - **Secondwing Fowl** — chicken-based mob; same egg/feather mechanics as vanilla chicken.
 
 Underwater you'll also encounter the friendly **Chrono Turtle** and the harvestable **Glide Fish**.
+
+### Hostile Creatures
+
+Chrono Dawn replaces the vanilla hostile mobs with its own residents:
+
+| Mob | Replaces / role | Notes |
+|---|---|---|
+| **Epoch Husk** | Zombie | Time-worn undead |
+| **Secondhand Archer** | Skeleton | Can drop Ancient Gears |
+| **Paradox Crawler** | Spider | Spider-like predator |
+| **Moment Creeper** | Creeper | Explosive time anomaly |
+| **Timeline Strider** | Enderman | Can drop Time Crystals |
+| **Forgotten Minute** | Flying mob | Can drop Time Crystals |
+| **Chronal Leech** | Hostile | Small time-themed pest |
+| **Temporal Wraith** | Hostile | Its hits apply Slowness II for 10 seconds. Drops Clockstone |
+| **Floq** | Hostile, slime-like | Spawns in the dark. Drops slime balls and sometimes Clockstone |
+| **Clockwork Sentinel** | Hostile construct | 30 HP, armored, and immune to Time Distortion, so it moves at full speed. Drops an Ancient Gear and sometimes Enhanced Clockstone |
+| **Hourglass Golem** | Rare, neutral until provoked | 80 HP and 12 attack damage. It attacks if you stare at it or hit it, and teleports up to 16 blocks away each time it is hurt. Drops 1-3 Time Hourglasses |
+
+### Time Keeper
+
+The **Time Keeper** is a peaceful trader. Two of them live in the Time Keeper Village (see below), and more wander the forests, plains, and prairies. They flee from monsters and do not despawn. Trades do not restock.
+
+| You give | You get |
+|---|---|
+| 16 Clockstone | 4 Glowstone Dust |
+| 8 Clockstone | 3 Fruit of Time |
+| 4 Fruit of Time | 8 String |
+| 1 Enhanced Clockstone + 16 Clockstone | 1 Ender Pearl |
+| 2 Enhanced Clockstone | 4 Time Wood Saplings |
+| 12 Clockstone + 4-6 Time Crystals | A Time Compass for the Desert Clock Tower, Phantom Catacombs, Guardian Vault, Clockwork Depths, or Entropy Crypt |
+| 16 Clockstone + 8 Time Crystals | A Time Compass for the Master Clock |
+
+Right-click a purchased Time Compass to search for its structure. Compass trades for structures disabled in the config are not offered.
 
 ---
 
@@ -304,6 +338,10 @@ Seven small NBT-defined micro-structures scatter across the Chrono Dawn biomes. 
 - **Upside-Down Tree** — a tree growing roots-up, hinting at the dimension's broken physics.
 
 These structures generate exclusively in the Chrono Dawn dimension. They share the surface noise budget with bigger structures, so you'll encounter them often while exploring on foot.
+
+### Time Keeper Village (Chrono Dawn)
+
+The first time a player enters Chrono Dawn, a small village is placed on flat ground near the arrival point (usually 32-64 blocks away). It holds two Time Keepers and loot chests. Each world gets one.
 
 ---
 
@@ -345,8 +383,8 @@ These structures generate exclusively in the Chrono Dawn dimension. They share t
 - **DOWN direction**: 5th floor → 4th floor (appears after defeating Time Guardian)
 
 **Loot**:
-- **Enhanced Clockstone** (from boss or chests) - required for Portal Stabilizer
-- **Master Clock Key** (from Time Guardian boss) - unlocks Master Clock dungeon
+- **Enhanced Clockstone** (from boss or chests) - used for advanced gear and artifacts
+- **Key to Master Clock** (from Time Guardian boss) - unlocks Master Clock dungeon
 - Time Crystals
 - Other valuable items
 
@@ -472,7 +510,8 @@ These structures generate exclusively in the Chrono Dawn dimension. They share t
 **Structure Type**: Final dungeon
 
 **Requirements**:
-- **Master Clock Key** (dropped by Time Guardian in Desert Clock Tower)
+- **Key to Master Clock** (dropped by Time Guardian in Desert Clock Tower)
+- **3 Ancient Gears** (dropped by Clockwork Sentinels and Secondhand Archers, found in chests, or crafted)
 
 **Location**: Various biomes in Chrono Dawn
 
@@ -483,10 +522,11 @@ These structures generate exclusively in the Chrono Dawn dimension. They share t
 - Multiple rooms and traps
 
 **Accessing the Dungeon**:
-1. Obtain Master Clock Key from Time Guardian
+1. Obtain Key to Master Clock from Time Guardian
 2. Locate Master Clock structure
-3. Use Master Clock Key at entrance
-4. Navigate through dungeon to boss room
+3. Open the entrance door with the key
+4. Navigate through the dungeon to the boss room
+5. Open the boss room door with the key and 3 Ancient Gears in your inventory (the gears are not consumed)
 
 **Drops**:
 - **Eye of Chronos**
@@ -512,13 +552,13 @@ These structures generate exclusively in the Chrono Dawn dimension. They share t
 - **Time Warp**: Teleports short distances around the arena
 
 **Drops**:
-- **Master Clock Key** (unlocks Master Clock dungeon) - **Essential Item**
+- **Key to Master Clock** (unlocks Master Clock dungeon) - **Essential Item**
 - **Enhanced Clockstone**
 - Experience points
 
 **Strategy**:
 - Use hit-and-run tactics
-- Exploit Time Distortion (boss is slowed)
+- Bosses are immune to Time Distortion, so expect them at full speed
 - Watch for teleportation patterns
 - Bring ranged weapons for when boss teleports away
 - Bring healing potions and food
@@ -625,7 +665,7 @@ These four bosses must be defeated to craft the **Chrono Aegis** activated buff 
 **Location**: Master Clock dungeon
 
 **Requirements**:
-- **Master Clock Key** (from Time Guardian)
+- **Key to Master Clock** (from Time Guardian) and **3 Ancient Gears**
 - **Recommended**: **Chrono Aegis** activated buff artifact (crafted from 4 mid-boss drops; right-click before the fight)
 
 **Abilities**:
@@ -701,10 +741,10 @@ These four bosses must be defeated to craft the **Chrono Aegis** activated buff 
 
 9. **Explore Chrono Dawn** to find Forgotten Library
 10. **Discover Portal Stabilizer recipe** in Forgotten Library
-11. **Locate Desert Clock Tower** (spawns in various biomes)
-12. **Defeat Time Guardian** to obtain Enhanced Clockstone and Master Clock Key
-13. **Craft Portal Stabilizer** using Enhanced Clockstone
-14. **Stabilize your portal** for bidirectional travel
+11. **Craft Portal Stabilizer** (Clockstone, a Clockstone Block, Fruit of Time, and 2 Time Hourglasses)
+12. **Stabilize your portal** for bidirectional travel
+13. **Locate Desert Clock Tower** (spawns in various biomes)
+14. **Defeat Time Guardian** to obtain Enhanced Clockstone and Key to Master Clock
 
 ### Late Game (Mid-Bosses)
 
@@ -717,7 +757,7 @@ These four bosses must be defeated to craft the **Chrono Aegis** activated buff 
 
 ### End Game
 
-17. **Enter Master Clock** using Master Clock Key
+17. **Enter Master Clock** using the Key to Master Clock and 3 Ancient Gears
 18. **Defeat Time Tyrant** (highly recommended to have Chrono Aegis!)
 19. **Collect Fragments of Stasis Core**
 20. **Craft ultimate artifacts** (Chronoblade, Time Tyrant Mail, Echoing Time Boots, Unstable Pocket Watch)
@@ -736,7 +776,7 @@ These four bosses must be defeated to craft the **Chrono Aegis** activated buff 
 #### Portal Stabilizer
 - **Use**: Makes one-way portals bidirectional
 - **Durability**: Single-use (consumed on activation)
-- **Recipe**: Enhanced Clockstone + 2 Ender Pearls + 1 Diamond + 1 Clockstone Block (recipe found in Forgotten Library)
+- **Recipe**: 4 Clockstone + 2 Time Hourglasses + 2 Fruit of Time + 1 Clockstone Block (recipe found in Forgotten Library)
 - **How to Use**: Right-click on an active portal frame
 
 #### Unstable Hourglass
@@ -747,13 +787,18 @@ These four bosses must be defeated to craft the **Chrono Aegis** activated buff 
 #### Time Compass
 - **Use**: Points toward time-related structures in Chrono Dawn
 - **Recipe**: Crafted from a compass, a clock, and Chronite Shards
+- **Targeted compasses**: Time Keepers sell compasses tuned to each Chrono Dawn dungeon
 - **Ancient Ruins fallback**: An untargeted Time Compass used in the Overworld locks onto the nearest Ancient Ruins and reports direction and distance
 - **Note**: This lock is permanent for that compass. Once it targets Ancient Ruins, it keeps pointing there even if you later use it in Chrono Dawn, so craft a fresh compass if you need a different target
 - **Re-search**: Sneak (hold shift) and use a located compass to clear its lock and search again, without crafting a new one. This also covers the rare case where the compass locks onto a position that turns out to have no structure there, an inherent limitation of Minecraft's structure search for narrowly biome-restricted structures like Ancient Ruins
 
-#### Master Clock Key
-- **Use**: Unlocks Master Clock dungeon entrance
+#### Key to Master Clock
+- **Use**: Opens the Master Clock entrance door. The boss room door also needs 3 Ancient Gears in your inventory
 - **Obtained**: Dropped by Time Guardian mini-boss (Desert Clock Tower)
+
+#### Ancient Gear
+- **Use**: Carry 3 with the key to open the Master Clock boss room door. They are not consumed
+- **Obtained**: Clockwork Sentinel and Secondhand Archer drops, chest loot, or crafted from 4 Iron Ingots + 4 Time Crystals + 1 Enhanced Clockstone
 
 ### Combat Items
 
@@ -766,6 +811,25 @@ These four bosses must be defeated to craft the **Chrono Aegis** activated buff 
 #### Time Arrow
 - **Use**: Special arrows with time-based effects
 - **Recipe**: Requires Clockstone, or a Chronite Shard and a vanilla arrow
+
+#### Entropy Crystal Sword
+- **Stats**: 450 durability, enchantability 14
+- **Effect**: Each hit inflicts **Entropy** for 5 seconds (1 magic damage per second)
+- **Recipe**: 2 Entropy Crystals + 1 Stick (sword shape)
+
+#### Spatially Linked Pickaxe
+- **Stats**: 1561 durability, diamond mining level, repaired with Time Crystals
+- **Effect**: 33% chance to drop an extra copy of the mined block's drops
+- **Recipe**: 3 Enhanced Clockstone + 2 Sticks (pickaxe shape)
+
+### Temporal Amber Armor
+
+Crafted from **Raw Temporal Amber** in the vanilla armor shapes.
+
+- **Defense**: Helmet 3, Chestplate 7, Leggings 6, Boots 3, toughness 1.5
+- **Durability**: 385 / 560 / 525 / 455
+- **Set bonus**: While you wear all four pieces and have not been hurt by a mob for 10 seconds, the set repairs 5 durability on each piece every 3 seconds, consuming 1 **Temporal Amber Dust** from your inventory per repair
+- Repaired with Temporal Amber Dust in an anvil
 
 ### Custom Shields
 
@@ -816,7 +880,7 @@ The custom shields are independent of the existing Chrono Aegis artifact (which 
 ### Materials and Resources
 
 #### Clockstone
-- **Source**: Smelt Clockstone Ore (found in Ancient Ruins)
+- **Source**: Clockstone Ore (inside Ancient Ruins in the Overworld, and underground throughout Chrono Dawn at Y -16 to 80). Needs an iron pickaxe and drops 3-4 Clockstone. Temporal Wraiths and Floqs also drop it
 - **Use**: Basic crafting material, portal activation
 
 #### Clockstone Block
@@ -825,11 +889,11 @@ The custom shields are independent of the existing Chrono Aegis artifact (which 
 - **Variants**: Stairs, Slabs, Walls
 
 #### Enhanced Clockstone
-- **Source**: Desert Clock Tower loot/Time Guardian drops
-- **Use**: Portal Stabilizer crafting, advanced recipes, better equipment
+- **Source**: Desert Clock Tower loot, Time Guardian drops, and a 25% drop from Clockwork Sentinels
+- **Use**: Advanced recipes, better equipment, artifacts, and Time Keeper trades
 
 #### Time Crystal
-- **Source**: Time Crystal Ore (found in Chrono Dawn)
+- **Source**: Time Crystal Ore (Chrono Dawn, Y 0 to 48, iron pickaxe, absent from Mountain, Snowy, and Swamp biomes). Timeline Striders and Forgotten Minutes also drop it
 - **Use**: Advanced crafting material
 
 #### Time Crystal Block
@@ -839,6 +903,14 @@ The custom shields are independent of the existing Chrono Aegis artifact (which 
 #### Chronite
 - **Source**: Mine Chronite Ore (ordinary Overworld stone and deepslate, any biome, Y -48 to 112, stone pickaxe or better)
 - **Use**: Time Compass, Time Arrows, Clocks (no gold needed), and Blocks of Chronite for storage. It is a reagent, not a metal, so it does not make armor, tools, or weapons.
+
+#### Entropy Crystal
+- **Source**: Entropy Crystal Ore (all Chrono Dawn biomes, Y 40 to 100, iron pickaxe)
+- **Use**: Entropy Crystal Sword, Entropy Crystal Shield
+
+#### Temporal Amber
+- **Source**: Temporal Amber Ore and Deepslate Temporal Amber Ore (all Chrono Dawn biomes, Y -30 to 20, iron pickaxe) drop Raw Temporal Amber. Watchmaker's Camp chests also contain it
+- **Use**: Temporal Amber Armor. 1 Raw Temporal Amber crafts into 2 Temporal Amber Dust, which fuels the armor's self-repair
 
 ### Boss Drop Materials
 
@@ -875,23 +947,23 @@ The custom shields are independent of the existing Chrono Aegis artifact (which 
 All ultimate artifacts require **Fragments of Stasis Core** from the Time Tyrant final boss.
 
 #### Chronoblade (Sword)
-- **Attack Damage**: 9
+- **Attack Damage**: 8.5
 - **Attack Speed**: 1.6
-- **Durability**: 2031
+- **Durability**: 2000
 - **Special Ability**: **Temporal Strike** - 25% chance to skip enemy's next attack AI
-- **Recipe**: 2 Fragments of Stasis Core + 1 Diamond Sword + 2 Enhanced Clockstone
+- **Recipe**: 4 Fragments of Stasis Core + 1 Eye of Chronos + 1 Enhanced Clockstone + 1 Unstable Hourglass
 
 #### Time Tyrant Mail (Chestplate)
 - **Armor Points**: 8
-- **Durability**: 528
+- **Durability**: 600
 - **Special Ability**: **Temporal Rollback** - 20% chance to rewind time on fatal damage (avoid death, restores HP and position to 3 seconds ago, 60s cooldown)
-- **Recipe**: 5 Fragments of Stasis Core + 1 Diamond Chestplate + 2 Enhanced Clockstone
+- **Recipe**: 6 Fragments of Stasis Core + 1 Enhanced Clockstone + 1 Unstable Hourglass
 
 #### Echoing Time Boots (Boots)
 - **Armor Points**: 3
-- **Durability**: 429
+- **Durability**: 500
 - **Special Ability**: **Temporal Echo** - Spawn decoy afterimage when sprinting (attracts enemy aggro for 3 seconds)
-- **Recipe**: 2 Fragments of Stasis Core + 1 Diamond Boots + 2 Enhanced Clockstone
+- **Recipe**: 2 Fragments of Stasis Core + 2 Enhanced Clockstone
 
 #### Chrono Aegis (Activated Buff Artifact)
 - **Use**: Right-click to activate a 10-minute anti-Time-Tyrant buff on yourself and nearby players (not an equipped shield — keep it in your inventory)
@@ -910,7 +982,7 @@ All ultimate artifacts require **Fragments of Stasis Core** from the Time Tyrant
 #### Unstable Pocket Watch (Utility)
 - **Special Ability**: **Status Reversal** - Swap speed effects between you and nearby mobs (10 block radius, 30s cooldown)
 - **⚠️ Risk**: Can backfire if mobs have beneficial speed effects
-- **Recipe**: 3 Fragments of Stasis Core + 1 Clock + 2 Enhanced Clockstone
+- **Recipe**: 3 Fragments of Stasis Core + 1 Unstable Hourglass + 1 Enhanced Clockstone
 
 ### Clockstone Equipment
 
@@ -1053,7 +1125,7 @@ All three wood types have the same variants:
 3. **Structure Locations**
    - Use the Time Compass to locate structures
    - Mark coordinates of important locations (F3 menu)
-   - Bosses don't respawn - plan accordingly!
+   - Each dungeon's boss fights you once. Other copies of the same dungeon have their own boss
    - Create a map or notes
 
 4. **Navigation**
@@ -1079,8 +1151,8 @@ All three wood types have the same variants:
 3. **Chrono Aegis Priority**
    - **Defeat all 4 mid-bosses before Time Tyrant**
    - Chrono Aegis makes final boss **much easier**
-   - Each mid-boss can only be fought once!
-   - Plan your route to find all 4 structures
+   - Each dungeon's boss fights you once, but every boss dungeon generates many times per world
+   - Plan your route to find all 4 structures (Time Keepers sell compasses for each)
 
 4. **Time Tyrant Strategy**
    - **Without Chrono Aegis**: Very difficult, bring lots of healing
@@ -1091,21 +1163,20 @@ All three wood types have the same variants:
 ### Resource Farming
 
 1. **Clockstone**
-   - Mine in Ancient Ruins (Overworld)
-   - Limited supply per structure
-   - Explore multiple Ancient Ruins if needed
-   - Also found underground in Chrono Dawn
+   - Mine in Ancient Ruins (Overworld) to get started
+   - Clockstone Ore is common underground in Chrono Dawn
+   - Temporal Wraiths and Floqs also drop it
 
 2. **Enhanced Clockstone**
    - Desert Clock Tower loot chests
    - Time Guardian boss drops
-   - Required for Portal Stabilizer
-   - Limited quantity - use wisely
+   - Clockwork Sentinels drop it 25% of the time
+   - Used for advanced gear, the Spatially Linked Pickaxe, and artifacts
 
 3. **Time Crystal**
    - Mine Time Crystal Ore in Chrono Dawn
-   - Used for advanced recipes
-   - Renewable resource (ore respawns)
+   - Used for advanced recipes and Time Keeper trades
+   - Timeline Striders and Forgotten Minutes also drop it
 
 4. **Wood Resources**
    - All three wood types (Time, Dark Time, Ancient Time Wood) are abundant
@@ -1177,7 +1248,7 @@ All three wood types have the same variants:
 
 **Can't return to Overworld**:
 - Find Forgotten Library for Portal Stabilizer recipe
-- Craft Portal Stabilizer using Enhanced Clockstone from Desert Clock Tower
+- Craft Portal Stabilizer from Clockstone, a Clockstone Block, Fruit of Time, and 2 Time Hourglasses
 - Right-click portal frame with Portal Stabilizer
 - Re-ignite portal with Time Hourglass after stabilization
 
@@ -1198,7 +1269,7 @@ All three wood types have the same variants:
 - **Temporal Phantom**: Navigate maze and enter the boss room
 - **Entropy Keeper**: Activate specific trapdoor in Entropy Crypt
 - **Time Guardian**: Reach 5th floor of Desert Clock Tower
-- **Time Tyrant**: Use Master Clock Key at Master Clock entrance
+- **Time Tyrant**: Open the Master Clock boss room door with the Key to Master Clock and 3 Ancient Gears. Time Tyrant can be defeated once per world
 
 **Boss too difficult**:
 - Upgrade armor and weapons
@@ -1219,7 +1290,7 @@ All three wood types have the same variants:
 
 ### Item Issues
 
-**Lost Master Clock Key**:
+**Lost Key to Master Clock**:
 - Find another Desert Clock Tower - multiple spawn per world
 - Defeat Time Guardian again to obtain another key
 - Store important items safely in chests to avoid searching again
@@ -1228,6 +1299,7 @@ All three wood types have the same variants:
 - Explore all floors of Desert Clock Tower
 - Defeat Time Guardian for additional drops
 - Check all loot chests thoroughly
+- Hunt Clockwork Sentinels (25% drop chance)
 
 ---
 
@@ -1246,7 +1318,7 @@ All three wood types have the same variants:
 
 ### Q: Can I fight bosses multiple times?
 
-**A**: No. Each boss spawns only once per world. Plan your fights carefully and ensure you collect all drops!
+**A**: Each boss dungeon generates many times per world, and each copy holds its own boss, so you can fight the Time Guardian and the four mid-bosses again by finding another copy of their dungeon. The Time Tyrant is the exception. It can be defeated only once per world.
 
 ### Q: Do I need to defeat all mid-bosses?
 
@@ -1255,7 +1327,7 @@ All three wood types have the same variants:
 ### Q: What's the best order to fight bosses?
 
 **A**:
-1. **Time Guardian** (Desert Clock Tower) - for Master Clock Key and Enhanced Clockstone
+1. **Time Guardian** (Desert Clock Tower) - for Key to Master Clock and Enhanced Clockstone
 2. **All 4 mid-bosses** (any order) - for Chrono Aegis materials
    - Chronos Warden
    - Clockwork Colossus
@@ -1267,15 +1339,16 @@ All three wood types have the same variants:
 
 **A**: Yes! After stabilizing the portal with the Portal Stabilizer, you can freely travel between dimensions with items.
 
-### Q: What if I lose my Master Clock Key?
+### Q: What if I lose my Key to Master Clock?
 
 **A**: You can find another Desert Clock Tower and defeat another Time Guardian to obtain a new key. Multiple Desert Clock Towers spawn in Chrono Dawn, so you're not locked out permanently. Store important items safely to avoid the hassle of searching again!
 
 ### Q: Are there any renewable resources?
 
 **A**: Yes!
-- **Renewable**: All three wood types (via saplings), Time Wheat, Chrono Melons, Time Crystals, Reversing Time Sandstone, mushrooms, crops
-- **Non-renewable** (limited per world): Clockstone (Ancient Ruins), Enhanced Clockstone (Desert Clock Tower + Time Guardian), boss drops
+- **Renewable**: All three wood types (via saplings), Time Wheat, Chrono Melons, Reversing Time Sandstone, mushrooms, crops, and mob drops such as Clockstone (Temporal Wraith, Floq), Time Crystals (Timeline Strider, Forgotten Minute), and Enhanced Clockstone (Clockwork Sentinel)
+- **Finite but plentiful**: Ores, including Clockstone Ore, which generates throughout Chrono Dawn
+- **Once per world**: Time Tyrant drops (Eye of Chronos, Fragments of Stasis Core). Other boss drops come from each copy of their dungeon
 
 ### Q: Can I create multiple portals?
 
@@ -1300,8 +1373,8 @@ You're now ready to explore Chrono Dawn! Remember the key steps:
 
 1. **Prepare Before Entry**: Gather resources, craft extras, set respawn
 2. **Find Forgotten Library**: Get Portal Stabilizer recipe
-3. **Defeat Time Guardian**: Obtain Enhanced Clockstone and Master Clock Key
-4. **Stabilize the Portal**: Craft and use Portal Stabilizer for bidirectional travel
+3. **Stabilize the Portal**: Craft and use Portal Stabilizer for bidirectional travel
+4. **Defeat Time Guardian**: Obtain Enhanced Clockstone and Key to Master Clock
 5. **Defeat All 4 Mid-Bosses**: Collect materials for Chrono Aegis
 6. **Craft Chrono Aegis**: Essential for Time Tyrant fight
 7. **Conquer Time Tyrant**: Defeat final boss with Chrono Aegis

@@ -72,7 +72,7 @@ structures that carry the main progression — shares the same four fields:
 | --- | --- | --- | --- | --- | --- | --- |
 | Ancient Ruins | `world.structures.ancient_ruins` | `true` | `56` | `20` | `20005897` | Gates entry to the dimension: the sole Overworld source of Clockstone Ore and the only chest that drops the Time Hourglass Blueprint. |
 | Forgotten Library | `world.structures.forgotten_library` | `true` | `30` | `15` | `8735421890` | Gates the Portal Stabilizer recipe. |
-| Desert Clock Tower | `world.structures.desert_clock_tower` | `true` | `30` | `10` | `1663542342` | Gates Time Guardian, the Master Clock Key and Enhanced Clockstone. |
+| Desert Clock Tower | `world.structures.desert_clock_tower` | `true` | `30` | `10` | `1663542342` | Gates Time Guardian, the Key to Master Clock and Enhanced Clockstone. |
 | Guardian Vault | `world.structures.guardian_vault` | `true` | `48` | `24` | `928374651` | Gates Chronos Warden and the Guardian Stone. |
 | Clockwork Depths | `world.structures.clockwork_depths` | `true` | `56` | `28` | `837465129` | Gates Clockwork Colossus and the Colossus Gear. |
 | Phantom Catacombs | `world.structures.phantom_catacombs` | `true` | `20` | `8` | `745182936` | Gates Temporal Phantom and the Phantom Essence. |
