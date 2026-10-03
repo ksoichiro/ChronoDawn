@@ -107,6 +107,19 @@ public class CopyFluidLevelProcessor implements StructureProcessor {
     }
 
     /**
+     * 26.2: StructureTemplate.processBlockInfos skips blocks outside the current chunk unless a
+     * processor evaluates the entire piece. StructureStartMixin also scans a 1-block border into
+     * adjacent chunks and un-waterlogs anything missing from INTENTIONAL_WATERLOGGING, so a
+     * waterlogged block on a chunk edge that was already restored (and removed from the set) by
+     * its own chunk would lose its water when the neighbor chunk is placed later. Processing the
+     * whole piece re-records every intentional position on each chunk pass, as before 26.2.
+     */
+    @Override
+    public boolean evaluatesEntirePieceState() {
+        return true;
+    }
+
+    /**
      * Track intentional waterlogging and remove unintentional waterlogging.
      * Intentional waterlogging (from NBT) will be recorded and preserved by Mixin.
      *
