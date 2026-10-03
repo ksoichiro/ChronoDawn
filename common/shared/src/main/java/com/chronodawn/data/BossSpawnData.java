@@ -41,6 +41,13 @@ public class BossSpawnData extends CompatSavedData {
     // Clockwork Colossus data
     private final Set<BlockPos> clockworkColossusSpawnedStructures = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
+    // Temporal Phantom data
+    // The catacombs placer removes its markers after placing the boss_room, so processed
+    // structures must persist or a restart re-processes them and places a second room
+    private final Set<BlockPos> temporalPhantomProcessedStructures = Collections.newSetFromMap(new ConcurrentHashMap<>());
+    private final Set<BlockPos> temporalPhantomBossRooms = Collections.newSetFromMap(new ConcurrentHashMap<>());
+    private final Set<BlockPos> temporalPhantomSpawnedRooms = Collections.newSetFromMap(new ConcurrentHashMap<>());
+
     public BossSpawnData() {
         super();
     }
@@ -117,6 +124,26 @@ public class BossSpawnData extends CompatSavedData {
             }
         }
 
+        // Load Temporal Phantom data
+        if (tag.contains("TemporalPhantom")) {
+            CompoundTag phantomTag = tag.getCompound("TemporalPhantom");
+            ListTag processedStructuresList = phantomTag.getList("ProcessedStructures", Tag.TAG_COMPOUND);
+            for (int i = 0; i < processedStructuresList.size(); i++) {
+                CompoundTag structureTag = processedStructuresList.getCompound(i);
+                this.temporalPhantomProcessedStructures.add(BlockPos.of(structureTag.getLong("Pos")));
+            }
+            ListTag bossRoomsList = phantomTag.getList("BossRooms", Tag.TAG_COMPOUND);
+            for (int i = 0; i < bossRoomsList.size(); i++) {
+                CompoundTag roomTag = bossRoomsList.getCompound(i);
+                this.temporalPhantomBossRooms.add(BlockPos.of(roomTag.getLong("Pos")));
+            }
+            ListTag spawnedRoomsList = phantomTag.getList("SpawnedRooms", Tag.TAG_COMPOUND);
+            for (int i = 0; i < spawnedRoomsList.size(); i++) {
+                CompoundTag roomTag = spawnedRoomsList.getCompound(i);
+                this.temporalPhantomSpawnedRooms.add(BlockPos.of(roomTag.getLong("Pos")));
+            }
+        }
+
         // Load Clockwork Colossus data
         if (tag.contains("ClockworkColossus")) {
             CompoundTag colossusTag = tag.getCompound("ClockworkColossus");
@@ -187,6 +214,31 @@ public class BossSpawnData extends CompatSavedData {
         }
         keeperTag.put("SpawnedMarkers", markersList);
         tag.put("EntropyKeeper", keeperTag);
+
+        // Save Temporal Phantom data
+        CompoundTag phantomTag = new CompoundTag();
+        ListTag phantomProcessedStructuresList = new ListTag();
+        for (BlockPos pos : temporalPhantomProcessedStructures) {
+            CompoundTag structureTag = new CompoundTag();
+            structureTag.putLong("Pos", pos.asLong());
+            phantomProcessedStructuresList.add(structureTag);
+        }
+        phantomTag.put("ProcessedStructures", phantomProcessedStructuresList);
+        ListTag phantomBossRoomsList = new ListTag();
+        for (BlockPos pos : temporalPhantomBossRooms) {
+            CompoundTag roomTag = new CompoundTag();
+            roomTag.putLong("Pos", pos.asLong());
+            phantomBossRoomsList.add(roomTag);
+        }
+        phantomTag.put("BossRooms", phantomBossRoomsList);
+        ListTag phantomSpawnedRoomsList = new ListTag();
+        for (BlockPos pos : temporalPhantomSpawnedRooms) {
+            CompoundTag roomTag = new CompoundTag();
+            roomTag.putLong("Pos", pos.asLong());
+            phantomSpawnedRoomsList.add(roomTag);
+        }
+        phantomTag.put("SpawnedRooms", phantomSpawnedRoomsList);
+        tag.put("TemporalPhantom", phantomTag);
 
         // Save Clockwork Colossus data
         CompoundTag colossusTag = new CompoundTag();
@@ -286,6 +338,40 @@ public class BossSpawnData extends CompatSavedData {
     }
 
     // ========================================
+    // Temporal Phantom methods
+    // ========================================
+
+    public boolean isTemporalPhantomStructureProcessed(BlockPos pos) {
+        return temporalPhantomProcessedStructures.contains(pos);
+    }
+
+    public void markTemporalPhantomStructureProcessed(BlockPos pos) {
+        if (temporalPhantomProcessedStructures.add(pos.immutable())) {
+            setDirty();
+        }
+    }
+
+    public Set<BlockPos> getTemporalPhantomBossRooms() {
+        return Collections.unmodifiableSet(temporalPhantomBossRooms);
+    }
+
+    public void registerTemporalPhantomBossRoom(BlockPos pos) {
+        if (temporalPhantomBossRooms.add(pos.immutable())) {
+            setDirty();
+        }
+    }
+
+    public boolean hasTemporalPhantomRoomSpawned(BlockPos pos) {
+        return temporalPhantomSpawnedRooms.contains(pos);
+    }
+
+    public void markTemporalPhantomRoomSpawned(BlockPos pos) {
+        if (temporalPhantomSpawnedRooms.add(pos.immutable())) {
+            setDirty();
+        }
+    }
+
+    // ========================================
     // Reset methods (for testing/debugging)
     // ========================================
 
@@ -316,12 +402,20 @@ public class BossSpawnData extends CompatSavedData {
         setDirty();
     }
 
+    public void resetTemporalPhantom() {
+        temporalPhantomProcessedStructures.clear();
+        temporalPhantomBossRooms.clear();
+        temporalPhantomSpawnedRooms.clear();
+        setDirty();
+    }
+
     public void resetAll() {
         resetTimeTyrant();
         resetTimeGuardian();
         resetChronosWarden();
         resetEntropyKeeper();
         resetClockworkColossus();
+        resetTemporalPhantom();
         setDirty();
     }
 }

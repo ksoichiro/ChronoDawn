@@ -1145,6 +1145,12 @@ public class PhantomCatacombsBossRoomPlacer {
             return;
         }
 
+        // Only the persisted record knows about structures processed before a restart
+        if (TemporalPhantomSpawner.getSpawnData(level).isTemporalPhantomStructureProcessed(structureOrigin)) {
+            dimensionProcessed.add(structureOrigin);
+            return;
+        }
+
         // Get structure bounding box for accurate Y range search
         net.minecraft.world.level.levelgen.structure.BoundingBox boundingBox = getStructureBoundingBox(level, chunkPos);
 
@@ -1311,6 +1317,7 @@ public class PhantomCatacombsBossRoomPlacer {
                 case COMPLETED -> {
                     // Remove from processing states
                     processingStates.remove(state.structureOrigin);
+                    TemporalPhantomSpawner.getSpawnData(level).markTemporalPhantomStructureProcessed(state.structureOrigin);
                     // Add to processed structures
                     // Use ConcurrentHashMap.newKeySet() for thread-safe Set
                     processedStructures.computeIfAbsent(state.dimensionId, k -> java.util.concurrent.ConcurrentHashMap.newKeySet())
@@ -1322,6 +1329,11 @@ public class PhantomCatacombsBossRoomPlacer {
                 state.structureOrigin, state.phase, e.getMessage(), e);
             // Clean up on error
             processingStates.remove(state.structureOrigin);
+            // Once placement has started, markers may already be gone or a room may already be
+            // registered, so retrying after a restart could add a second boss_room
+            if (state.phase == ProcessingPhase.PLACING_ROOMS) {
+                TemporalPhantomSpawner.getSpawnData(level).markTemporalPhantomStructureProcessed(state.structureOrigin);
+            }
             // Use ConcurrentHashMap.newKeySet() for thread-safe Set
             processedStructures.computeIfAbsent(state.dimensionId, k -> java.util.concurrent.ConcurrentHashMap.newKeySet())
                 .add(state.structureOrigin);
@@ -1340,13 +1352,16 @@ public class PhantomCatacombsBossRoomPlacer {
                 // No markers found
                 state.retryCount++;
                 if (state.retryCount >= 5) {
+                    // Markers are removed once a boss_room is placed, so a catacombs without any
+                    // was most likely processed before its state was persisted. A fallback room here
+                    // would add a second boss_room to that catacombs. A newly generated one can also
+                    // lack markers if every dead end resolved to an empty piece, so this is logged.
                     ChronoDawn.LOGGER.warn(
-                        "No Crying Obsidian markers found after {} retries for structure {}. Using fallback placement.",
+                        "No Crying Obsidian markers found after {} retries for structure {}. Treating it as already processed.",
                         state.retryCount,
                         state.structureOrigin
                     );
-                    // Move to placement with null selected (triggers fallback)
-                    state.phase = ProcessingPhase.PLACING_ROOMS;
+                    state.phase = ProcessingPhase.COMPLETED;
                 } else {
                     // Reset and retry
                     state.currentChunkIndex = 0;

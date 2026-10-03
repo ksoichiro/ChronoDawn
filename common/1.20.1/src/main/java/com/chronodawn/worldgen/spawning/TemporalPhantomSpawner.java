@@ -1,6 +1,8 @@
 package com.chronodawn.worldgen.spawning;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.compat.CompatSavedData;
+import com.chronodawn.data.BossSpawnData;
 import com.chronodawn.entities.bosses.TemporalPhantomEntity;
 import com.chronodawn.registry.ModEntities;
 import dev.architectury.event.events.common.LifecycleEvent;
@@ -44,15 +46,6 @@ public class TemporalPhantomSpawner {
         "phantom_catacombs"
     );
 
-    // Track boss_room positions (per dimension)
-    // Key: dimension ID, Value: Set of boss_room center positions
-    // T430: Thread-safe ConcurrentHashMap prevents race conditions in multiplayer
-    private static final Map<ResourceLocation, Set<BlockPos>> bossRoomPositions = new ConcurrentHashMap<>();
-
-    // Track boss_rooms where Temporal Phantom has already spawned (per dimension)
-    // T430: Thread-safe ConcurrentHashMap prevents race conditions in multiplayer
-    private static final Map<ResourceLocation, Set<BlockPos>> spawnedBossRooms = new ConcurrentHashMap<>();
-
     // Check interval (in ticks) - check every 1 second
     private static final int CHECK_INTERVAL = 20;
     // T430: Thread-safe ConcurrentHashMap prevents race conditions in multiplayer
@@ -67,14 +60,26 @@ public class TemporalPhantomSpawner {
      */
     public static void registerBossRoom(ServerLevel level, BlockPos bossRoomCenter) {
         ResourceLocation dimensionId = level.dimension().location();
-        // T430: Use ConcurrentHashMap.newKeySet() for thread-safe Set
-        bossRoomPositions.putIfAbsent(dimensionId, ConcurrentHashMap.newKeySet());
-        bossRoomPositions.get(dimensionId).add(bossRoomCenter.immutable());
+        getSpawnData(level).registerTemporalPhantomBossRoom(bossRoomCenter);
 
         ChronoDawn.LOGGER.debug(
             "Registered Phantom Catacombs boss_room at {} in dimension {} for Temporal Phantom spawning",
             bossRoomCenter,
             dimensionId
+        );
+    }
+
+    /**
+     * Boss_room positions and spawn state are persisted so they survive a restart.
+     * The placer removes its markers after placing a room, so a lost registration
+     * cannot be rebuilt from the world.
+     */
+    static BossSpawnData getSpawnData(ServerLevel level) {
+        return CompatSavedData.computeIfAbsent(
+            level.getDataStorage(),
+            BossSpawnData::new,
+            BossSpawnData::load,
+            BossSpawnData.getDataName()
         );
     }
 
@@ -119,8 +124,11 @@ public class TemporalPhantomSpawner {
         }
         tickCounters.put(dimensionId, 0);
 
+        BossSpawnData data = getSpawnData(level);
+        Set<BlockPos> bossRooms = data.getTemporalPhantomBossRooms();
+
         // No boss_rooms registered in this dimension
-        if (!bossRoomPositions.containsKey(dimensionId)) {
+        if (bossRooms.isEmpty()) {
             return;
         }
 
@@ -128,12 +136,6 @@ public class TemporalPhantomSpawner {
         if (level.players().isEmpty()) {
             return;
         }
-
-        // Initialize spawned tracking for this dimension
-        // T430: Use ConcurrentHashMap.newKeySet() for thread-safe Set
-        spawnedBossRooms.putIfAbsent(dimensionId, ConcurrentHashMap.newKeySet());
-        Set<BlockPos> spawned = spawnedBossRooms.get(dimensionId);
-        Set<BlockPos> bossRooms = bossRoomPositions.get(dimensionId);
 
         ChronoDawn.LOGGER.debug(
             "Checking Temporal Phantom spawn conditions in dimension {}: {} boss_rooms registered, {} players present",
@@ -145,7 +147,7 @@ public class TemporalPhantomSpawner {
         // Check each boss_room
         for (BlockPos bossRoomCenter : bossRooms) {
             // Skip if already spawned
-            if (spawned.contains(bossRoomCenter)) {
+            if (data.hasTemporalPhantomRoomSpawned(bossRoomCenter)) {
                 continue;
             }
 
@@ -172,7 +174,7 @@ public class TemporalPhantomSpawner {
                 );
                 // Spawn Temporal Phantom at boss_room center
                 spawnTemporalPhantom(level, bossRoomCenter);
-                spawned.add(bossRoomCenter);
+                data.markTemporalPhantomRoomSpawned(bossRoomCenter);
             }
         }
     }
@@ -273,8 +275,6 @@ public class TemporalPhantomSpawner {
      * @param dimensionId Dimension resource location
      */
     public static void clearDimension(ResourceLocation dimensionId) {
-        bossRoomPositions.remove(dimensionId);
-        spawnedBossRooms.remove(dimensionId);
         tickCounters.remove(dimensionId);
     }
 
@@ -282,8 +282,6 @@ public class TemporalPhantomSpawner {
      * Reset all tracking data (useful for world reload).
      */
     public static void reset() {
-        bossRoomPositions.clear();
-        spawnedBossRooms.clear();
         tickCounters.clear();
     }
 }

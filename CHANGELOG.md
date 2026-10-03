@@ -89,6 +89,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   names. Recipe viewers show these names instead of raw tag IDs. On Minecraft
   1.21.1 and newer, Fabric also no longer logs an untranslated item tag warning
   for them in development environments.
+- **Temporal Phantom after a server restart**: a Phantom Catacombs boss room
+  now keeps its Temporal Phantom across restarts. Before, a restart lost track
+  of the room, so the Phantom never appeared in the maze-connected room, and a
+  second boss room was added as a separate hidden chamber where it spawned
+  instead. Phantom Catacombs that were already handled in an earlier version
+  get no further chambers, but none of their boss rooms will spawn the
+  Phantom. If you have not defeated it yet, find a Phantom Catacombs you have
+  not visited before. Those work normally.
 
 ## [0.10.0] - 2026-10-01
 
