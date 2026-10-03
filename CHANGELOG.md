@@ -25,6 +25,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   registry initialization on these NeoForge builds. The NeoForge 26.2 build
   previously required exactly NeoForge 26.2.0.82 and now accepts any newer
   26.2 build as well.
+- **Newer Architectury API on NeoForge 26.2 and 26.3**: Chrono Dawn
+  previously required exactly Architectury API 21.1.9 on NeoForge 26.2 and
+  22.0.2 on NeoForge 26.3. It now also loads with newer Architectury API
+  releases for those Minecraft versions.
 - **Chrono Dawn plants in flower pots**: on Minecraft 1.21.2 through 26.2,
   Time Blossoms, Chrono Dawn saplings, and Unstable Fungus can be placed in
   flower pots again. Emptying or pick-blocking an already potted one no longer

@@ -39,6 +39,6 @@ side="BOTH"
 [[dependencies.chronodawn]]
 modId="architectury"
 type="required"
-versionRange="[21.1.9,21.1.10)"
+versionRange="[21.1.9,)"
 ordering="AFTER"
 side="BOTH"
