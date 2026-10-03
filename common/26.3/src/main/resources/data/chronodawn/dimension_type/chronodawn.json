@@ -36,5 +36,5 @@
     "max_inclusive": 15,
     "min_inclusive": 0
   },
-  "timelines": "#minecraft:in_overworld"
+  "timelines": "#chronodawn:in_chronodawn"
 }

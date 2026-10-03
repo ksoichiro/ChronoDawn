@@ -25,6 +25,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Root, Time Blossoms, Temporal Fern, Temporal Grass, Faded Temporal Grass,
   and Timeless Mushroom can now be planted on vanilla grass blocks, as on the
   other Minecraft versions.
+- **Chrono Dawn day and night out of sync**: on Minecraft 26.1.2, 26.2, and
+  26.3, the Chrono Dawn sky followed the Overworld's time while mob spawning
+  followed Chrono Dawn's own time. Mobs could spawn and then burn under a sky
+  that looked like daytime. The sky, sunlight, monster burning, and moon phase
+  now all follow Chrono Dawn's time.
 
 ## [0.10.0] - 2026-10-01
 

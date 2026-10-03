@@ -80,6 +80,7 @@ sourceSets {
                 'TimeKeeperVillageData.java',
                 'PlayerProgressData.java',
                 // Mixins with 1.21.5-specific versions (isDay() method removed)
+                // 26.x: no replacement, sky darkness comes from the ChronoDawn timelines
                 'LevelGetTimeMixin.java',
                 'ServerLevelSetTimeMixin.java',
                 // 1.21.6: player.server became private, serverLevel() removed

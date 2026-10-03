@@ -9,7 +9,6 @@
     "ChronoShieldBlockingMixin",
     "ChronoShieldDamageMixin",
     "ChronoShieldEffectInterceptorMixin",
-    "LevelGetTimeMixin",
     "SleepMixin",
     "StructureStartMixin",
     "FreezeTopLayerMixin"
