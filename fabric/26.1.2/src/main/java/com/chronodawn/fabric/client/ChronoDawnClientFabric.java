@@ -54,6 +54,7 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        DevShutdownWorkaround.register();
         registerBlockColors();
         // 26.1.2: block render layer registration removed. Minecraft now automatically
         // derives the ChunkSectionLayer from the assigned sprite's properties, so the
