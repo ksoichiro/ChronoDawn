@@ -1,5 +1,6 @@
 package com.chronodawn.blocks;
 
+import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.ChronoDawn;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -11,6 +12,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -80,7 +82,7 @@ public class TemporalMossBlock extends Block implements BonemealableBlock {
             BlockState targetState = level.getBlockState(targetPos);
 
             // Can spread to dirt, stone, or similar natural blocks
-            if (canSpreadTo(targetState)) {
+            if (canSpreadTo(level, targetPos, targetState)) {
                 level.setBlockAndUpdate(targetPos, this.defaultBlockState());
             }
         }
@@ -89,14 +91,29 @@ public class TemporalMossBlock extends Block implements BonemealableBlock {
     /**
      * Check if moss can spread to the target block.
      */
-    private boolean canSpreadTo(BlockState state) {
-        // Can spread to dirt, stone, and similar natural blocks
-        Block block = state.getBlock();
-        String blockId = block.toString();
+    private boolean canSpreadTo(LevelReader level, BlockPos pos, BlockState state) {
+        boolean isSpreadable = state.is(Blocks.DIRT) ||
+                               state.is(Blocks.COARSE_DIRT) ||
+                               state.is(Blocks.GRASS_BLOCK) ||
+                               state.is(Blocks.STONE) ||
+                               state.is(Blocks.DEEPSLATE) ||
+                               state.is(ModBlocks.TEMPORAL_DIRT.get()) ||
+                               state.is(ModBlocks.COARSE_TEMPORAL_DIRT.get()) ||
+                               state.is(ModBlocks.TEMPORAL_GRASS_BLOCK.get()) ||
+                               state.is(ModBlocks.PARCHED_TEMPORAL_DIRT.get()) ||
+                               state.is(ModBlocks.TEMPORAL_STONE.get()) ||
+                               state.is(ModBlocks.DEEPSLATE_TEMPORAL_STONE.get());
+        if (!isSpreadable) {
+            return false;
+        }
 
-        return blockId.contains("dirt") ||
-               blockId.contains("stone") ||
-               blockId.contains("grass_block");
+        // Keep moss on visible surfaces instead of letting it consume enclosed terrain.
+        for (Direction direction : Direction.values()) {
+            if (level.getBlockState(pos.relative(direction)).isAir()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -119,7 +136,7 @@ public class TemporalMossBlock extends Block implements BonemealableBlock {
             BlockPos targetPos = pos.relative(direction);
             BlockState targetState = level.getBlockState(targetPos);
 
-            if (canSpreadTo(targetState) && random.nextBoolean()) {
+            if (canSpreadTo(level, targetPos, targetState) && random.nextBoolean()) {
                 level.setBlockAndUpdate(targetPos, this.defaultBlockState());
             }
         }

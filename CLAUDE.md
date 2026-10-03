@@ -228,6 +228,10 @@ such as `[94, 1]`, and verify both resource reload and server data loading.
 - When writing code, use Mojang mapping names (e.g., `net.minecraft.world.level.Level`, not Yarn's `class_XXXX`)
 - Build files use Groovy syntax (e.g., `maven { url 'https://...' }`, not `maven { url = "https://..." }`)
 - Common module code is bundled into Fabric JAR using Shadow plugin
+- Minecraft 1.20.1 encodes a uniform `IntProvider` inside worldgen feature
+  configurations with a nested `value` object. Newer versions put
+  `min_inclusive` and `max_inclusive` beside `type`, so keep a 1.20.1 resource
+  override for configured features that use one.
 - **Parallel GameTest**: `gameTestAll` groups configurations by Minecraft version. 1.20.1 and 1.21.1 run in parallel, while 1.21.2 and 1.21.3 run sequentially in the same thread (they share modules). Within each version, fabric and neoforge run in a single Gradle process to avoid common module build conflicts. Each version uses a separate directory (fabric/1.20.1, fabric/1.21.1, etc.) with its own `.gradle/architectury/` path.
 
 ## Support Priority

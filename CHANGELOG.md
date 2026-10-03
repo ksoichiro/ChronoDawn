@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Temporal Moss Grottos**: small patches of Temporal Moss and occasional
+  Timeless Mushrooms now generate on cave floors throughout the Chrono Dawn
+  dimension on all supported Minecraft versions.
+
+### Changed
+
+- **Temporal Moss spreading**: natural and bonemeal-assisted spreading now
+  affects only exposed dirt, grass, and natural stone. It no longer spreads
+  through enclosed terrain or replaces ores and constructed stone blocks.
+
 ### Fixed
 
 - **Minecraft 1.21.10 and 1.21.11 pack metadata errors**: Fabric and NeoForge

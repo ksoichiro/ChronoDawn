@@ -28,7 +28,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * - Slow natural spread rate
  *
  * Placement:
- * - Can be placed on dirt, grass, mycelium, podzol
+ * - Can be placed on dirt, grass, mycelium, podzol, and temporal moss
  * - Requires low light level to survive and spread
  *
  * Drops:
@@ -63,11 +63,12 @@ public class TimelessMushroomBlock extends BushBlock implements BonemealableBloc
 
     @Override
     protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
-        // Can be placed on dirt, grass, mycelium, podzol (like vanilla mushrooms)
+        // Can be placed on natural ground, including temporal moss in underground grottos.
         return state.is(BlockTags.DIRT) ||
                state.is(Blocks.MYCELIUM) ||
                state.is(Blocks.PODZOL) ||
-               state.is(Blocks.MOSS_BLOCK);
+               state.is(Blocks.MOSS_BLOCK) ||
+               state.is(ModBlocks.TEMPORAL_MOSS.get());
     }
 
     @Override

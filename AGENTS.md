@@ -199,6 +199,10 @@ validation command that covers the affected version and loader.
   server data. Follow the loader's bundled mod-pack metadata, preserve minor
   versions such as `[94, 1]`, and verify both resource reload and server data
   loading.
+- Minecraft 1.20.1 encodes a uniform `IntProvider` inside worldgen feature
+  configurations as `{"type":"minecraft:uniform","value":{...}}`. Newer
+  versions place `min_inclusive` and `max_inclusive` directly beside `type`, so
+  keep a 1.20.1 resource override when a configured feature uses one.
 - If an API differs between Minecraft versions, prefer the existing compatibility
   layer or platform helper pattern over scattering conditionals.
 

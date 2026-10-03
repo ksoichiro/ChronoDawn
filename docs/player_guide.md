@@ -247,6 +247,8 @@ Watch your step around stalagmite tips: landing on an upward-facing tip deals en
 
 These blocks generate exclusively in the Chrono Dawn dimension; vanilla `pointed_dripstone` and Dripstone Caves are unaffected.
 
+Small **Temporal Moss Grottos** can also appear on cave floors throughout Chrono Dawn. These patches contain Temporal Moss and occasional Timeless Mushrooms. Temporal Moss spreads only onto natural blocks with a face exposed to air, so it remains on visible cave and surface terrain instead of consuming enclosed stone.
+
 ### Aquatic Plants
 
 The water of the Chrono Dawn ocean and swamp biomes grows **Temporal Kelp**, **Temporal Seagrass**, and **Tall Temporal Seagrass** — pale-cyan, frozen-time variants of vanilla aquatic plants. Vanilla `kelp` and `seagrass` no longer generate in newly created Chrono Dawn chunks (existing chunks keep whatever they already have).
