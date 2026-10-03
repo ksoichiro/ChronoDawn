@@ -21,6 +21,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **NeoForge 26.2.0.83 and newer**: Chrono Dawn no longer crashes during
+  registry initialization on these NeoForge builds. The NeoForge 26.2 build
+  previously required exactly NeoForge 26.2.0.82 and now accepts any newer
+  26.2 build as well.
+- **Chrono Dawn plants in flower pots**: on Minecraft 1.21.2 through 26.2,
+  Time Blossoms, Chrono Dawn saplings, and Unstable Fungus can be placed in
+  flower pots again. Emptying or pick-blocking an already potted one no longer
+  causes an error.
 - **Missing vanilla chest recipes on NeoForge 1.21.4**: Chrono Dawn now
   requires NeoForge 21.4.4-beta or newer. Earlier NeoForge builds incorrectly
   treated patched chest ingredients as empty, which caused chest boats, chest
