@@ -7,8 +7,3 @@
 #
 # Every entry below is a known issue that still needs investigation. Remove
 # the entry together with the fix.
-
-# NeoForge 1.21.4: vanilla chest-based recipes (trapped_chest, hopper,
-# *_chest_boat, ...) report empty ingredients. Not yet known whether
-# Chrono Dawn or NeoForge causes it.
-RecipeManager.*can't be placed due to empty ingredients

@@ -174,6 +174,10 @@ Run GameTests:
 ./gradlew gameTestAll
 ```
 
+When changing a NeoForge version, run the affected project's `clean` task
+before `prodSmokeTest`. The installed server cache is keyed by Minecraft
+version and can otherwise reuse the previous NeoForge runtime.
+
 Full verification before larger changes or release work:
 
 ```bash

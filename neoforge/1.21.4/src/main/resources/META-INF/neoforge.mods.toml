@@ -27,7 +27,7 @@ config="chronodawn-neoforge-1.21.4.mixins.json"
 [[dependencies.chronodawn]]
 modId="neoforge"
 type="required"
-versionRange="[21.4.0-beta,)"
+versionRange="[21.4.4-beta,)"
 ordering="NONE"
 side="BOTH"
 

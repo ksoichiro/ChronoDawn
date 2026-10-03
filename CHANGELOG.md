@@ -21,6 +21,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Missing vanilla chest recipes on NeoForge 1.21.4**: Chrono Dawn now
+  requires NeoForge 21.4.4-beta or newer. Earlier NeoForge builds incorrectly
+  treated patched chest ingredients as empty, which caused chest boats, chest
+  minecarts, hoppers, shulker boxes, and trapped chests to be ignored.
 - **Minecraft 1.21.10 and 1.21.11 pack metadata errors**: Fabric and NeoForge
   no longer log errors while loading Chrono Dawn's resource and data pack
   metadata during startup or world creation. This fix does not change gameplay

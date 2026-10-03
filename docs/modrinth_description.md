@@ -171,7 +171,7 @@ This mod is built with **Architectury** and supports **Fabric and NeoForge** (pl
 - **Mod Loader** (version depends on Minecraft version):
   - **For 1.21.1**: Fabric Loader 0.17.3+ with Fabric API 0.116.7+, OR NeoForge 21.1.209+
   - **For 1.21.2/1.21.3**: Fabric Loader 0.17.3+ with Fabric API, OR NeoForge 21.2.0-beta+/21.3.0-beta+
-  - **For 1.21.4**: Fabric Loader 0.17.3+ with Fabric API 0.110.5+, OR NeoForge 21.4.0-beta+
+  - **For 1.21.4**: Fabric Loader 0.17.3+ with Fabric API 0.110.5+, OR NeoForge 21.4.4-beta+
   - **For 1.21.5**: Fabric Loader 0.17.3+ with Fabric API 0.121.0+, OR NeoForge 21.5.96+
   - **For 1.21.6**: Fabric Loader 0.17.3+ with Fabric API 0.128.2+, OR NeoForge 21.6.20-beta+
   - **For 1.21.7**: Fabric Loader 0.17.3+ with Fabric API 0.129.0+, OR NeoForge 21.7.25-beta+

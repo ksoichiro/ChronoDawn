@@ -60,7 +60,7 @@ Chrono Dawn is a time-themed dimension mod that adds:
   - **For 1.21.7**: Fabric Loader 0.17.3+ with Fabric API 0.129.0+, OR NeoForge 21.7.25-beta+
   - **For 1.21.6**: Fabric Loader 0.17.3+ with Fabric API 0.128.2+, OR NeoForge 21.6.20-beta+
   - **For 1.21.5**: Fabric Loader 0.17.3+ with Fabric API 0.121.0+, OR NeoForge 21.5.96+
-  - **For 1.21.4**: Fabric Loader 0.17.3+ with Fabric API 0.110.5+, OR NeoForge 21.4.0-beta+
+  - **For 1.21.4**: Fabric Loader 0.17.3+ with Fabric API 0.110.5+, OR NeoForge 21.4.4-beta+
   - **For 1.21.2/1.21.3**: Fabric Loader 0.17.3+ with Fabric API, OR NeoForge 21.2.0-beta+/21.3.0-beta+
   - **For 1.21.1**: Fabric Loader 0.17.3+ with Fabric API 0.116.7+, OR NeoForge 21.1.209+
   - **For 1.20.1** *(legacy)*: Fabric Loader 0.15.11+ with Fabric API 0.92.2+1.20.1, OR Forge 47.3.5+ (NeoForge is not available on 1.20.1; it requires Minecraft 1.20.5+)
