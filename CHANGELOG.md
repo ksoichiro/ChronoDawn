@@ -33,6 +33,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Time Blossoms, Chrono Dawn saplings, and Unstable Fungus can be placed in
   flower pots again. Emptying or pick-blocking an already potted one no longer
   causes an error.
+- **Clockwork Colossus attack pose on Minecraft 1.20.1 and 1.21.1**: attacks
+  no longer leave its upper body increasingly tilted away from its legs. This
+  affected Fabric and Forge on 1.20.1, and Fabric and NeoForge on 1.21.1.
 - **Missing vanilla chest recipes on NeoForge 1.21.4**: Chrono Dawn now
   requires NeoForge 21.4.4-beta or newer. Earlier NeoForge builds incorrectly
   treated patched chest ingredients as empty, which caused chest boats, chest

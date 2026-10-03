@@ -214,6 +214,10 @@ validation command that covers the affected version and loader.
   keep a 1.20.1 resource override when a configured feature uses one.
 - If an API differs between Minecraft versions, prefer the existing compatibility
   layer or platform helper pattern over scattering conditionals.
+- In pre-1.21.2 entity models, reset model-part poses at the start of
+  `setupAnim` before applying additive rotations. The legacy `EntityModel`
+  setup does not reset poses automatically, so `+=` animations otherwise
+  accumulate across rendered frames.
 
 ## Mixin Configuration
 

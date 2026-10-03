@@ -114,6 +114,8 @@ public class ClockworkColossusModel extends EntityModel<ClockworkColossusEntity>
 
     @Override
     public void setupAnim(ClockworkColossusEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        this.root.getAllParts().forEach(ModelPart::resetPose);
+
         // Head rotation
         this.head.yRot = netHeadYaw * ((float)Math.PI / 180F);
         this.head.xRot = headPitch * ((float)Math.PI / 180F);

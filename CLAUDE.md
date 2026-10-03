@@ -232,6 +232,10 @@ such as `[94, 1]`, and verify both resource reload and server data loading.
   configurations with a nested `value` object. Newer versions put
   `min_inclusive` and `max_inclusive` beside `type`, so keep a 1.20.1 resource
   override for configured features that use one.
+- In pre-1.21.2 entity models, reset model-part poses at the start of
+  `setupAnim` before applying additive rotations. The legacy `EntityModel`
+  setup does not reset poses automatically, so `+=` animations otherwise
+  accumulate across rendered frames.
 - **Parallel GameTest**: `gameTestAll` groups configurations by Minecraft version. 1.20.1 and 1.21.1 run in parallel, while 1.21.2 and 1.21.3 run sequentially in the same thread (they share modules). Within each version, fabric and neoforge run in a single Gradle process to avoid common module build conflicts. Each version uses a separate directory (fabric/1.20.1, fabric/1.21.1, etc.) with its own `.gradle/architectury/` path.
 
 ## Support Priority
