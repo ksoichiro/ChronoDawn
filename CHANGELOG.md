@@ -36,6 +36,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Clockwork Colossus attack pose on Minecraft 1.20.1 and 1.21.1**: attacks
   no longer leave its upper body increasingly tilted away from its legs. This
   affected Fabric and Forge on 1.20.1, and Fabric and NeoForge on 1.21.1.
+- **Guardian Vault floor water**: the shallow water pools on the Guardian Vault
+  floor now generate on all supported Minecraft versions. Underground
+  waterlogging prevention was removing their water during placement. Only
+  newly generated Guardian Vaults are affected.
 - **Missing vanilla chest recipes on NeoForge 1.21.4**: Chrono Dawn now
   requires NeoForge 21.4.4-beta or newer. Earlier NeoForge builds incorrectly
   treated patched chest ingredients as empty, which caused chest boats, chest

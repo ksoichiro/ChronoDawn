@@ -1,6 +1,9 @@
 {
   "processors": [
     {
+      "processor_type": "chronodawn:copy_fluid_level"
+    },
+    {
       "processor_type": "minecraft:rule",
       "rules": [
         {
