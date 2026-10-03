@@ -124,7 +124,7 @@ Build a portal frame using **Clockstone Blocks** (minimum 4×5, maximum 23×23).
 Explore Chrono Dawn to locate the **Forgotten Library**. Discover the **Portal Stabilizer** recipe to unlock bidirectional travel.
 
 ### Step 4: Stabilize the Portal
-Craft the **Portal Stabilizer** from Clockstone, a Clockstone Block, Fruit of Time, and two Time Hourglasses. Use it on your portal to enable free travel between dimensions.
+Craft the **Portal Stabilizer** from 4 Clockstone, 2 Time Hourglasses, 2 Fruit of Time, and a Clockstone Block. Use it on your portal to enable free travel between dimensions.
 
 ### Step 5: Defeat the Mid-Bosses
 - Defeat **Chronos Warden** in the Guardian Vault to obtain **Guardian Stone**
@@ -142,7 +142,7 @@ Craft the **Portal Stabilizer** from Clockstone, a Clockstone Block, Fruit of Ti
 - Face the **Time Tyrant** and claim ultimate power over time
 
 ### Step 8: Craft Ultimate Artifacts
-Use **Fragments of Stasis Core** (dropped by the Time Tyrant) to create legendary artifacts with time-manipulating abilities.
+Use **Fragments of Stasis Core** (dropped by the Time Tyrant) and Enhanced Clockstone to create legendary artifacts with time-manipulating abilities. Most of them also need an **Unstable Hourglass**, and the Chronoblade needs the **Eye of Chronos**, another Time Tyrant drop.
 
 ---
 

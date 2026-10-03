@@ -780,8 +780,9 @@ These four bosses must be defeated to craft the **Chrono Aegis** activated buff 
 - **How to Use**: Right-click on an active portal frame
 
 #### Unstable Hourglass
-- **Use**: Experimental variant of Time Hourglass
-- **Effect**: May trigger **Resonance Reversal** (you get Slowness IV, mobs get Speed II for 30-60 seconds)
+- **Use**: Crafting material for the Chronoblade, Time Tyrant Mail, and Unstable Pocket Watch
+- **Recipe**: 4 Glass + 2 Enhanced Clockstone + 1 Clockstone Block
+- **Effect**: Crafting it triggers **Resonance Reversal** (you get Slowness IV, and mobs within 16 blocks get Speed II, for 45 seconds)
 - **⚠️ Warning**: High risk - only craft when safe!
 
 #### Time Compass
