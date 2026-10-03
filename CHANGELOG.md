@@ -43,6 +43,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Time Torch block names**: wall-mounted Purple, Orange, and Pink Time
   Torches now report their matching item names instead of `air` to block
   information displays and item lookup actions.
+- **Time Torch flame color**: Purple, Orange, and Pink Time Torches now emit
+  flame particles in their own colors instead of the vanilla torch flame.
 - **Missing vanilla chest recipes on NeoForge 1.21.4**: Chrono Dawn now
   requires NeoForge 21.4.4-beta or newer. Earlier NeoForge builds incorrectly
   treated patched chest ingredients as empty, which caused chest boats, chest

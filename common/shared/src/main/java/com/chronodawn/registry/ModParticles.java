@@ -28,6 +28,19 @@ public class ModParticles {
         PARTICLE_TYPES.register("chrono_shield_echo", ModParticles::createSimpleParticleType);
 
     /**
+     * Time Torch flame particles - vanilla flame behavior with sprites recolored
+     * to match each Time Torch variant.
+     */
+    public static final RegistrySupplier<SimpleParticleType> PURPLE_TIME_TORCH_FLAME =
+        PARTICLE_TYPES.register("purple_time_torch_flame", ModParticles::createSimpleParticleType);
+
+    public static final RegistrySupplier<SimpleParticleType> ORANGE_TIME_TORCH_FLAME =
+        PARTICLE_TYPES.register("orange_time_torch_flame", ModParticles::createSimpleParticleType);
+
+    public static final RegistrySupplier<SimpleParticleType> PINK_TIME_TORCH_FLAME =
+        PARTICLE_TYPES.register("pink_time_torch_flame", ModParticles::createSimpleParticleType);
+
+    /**
      * Create a simple particle type (helper method to avoid constructor access issues).
      */
     private static SimpleParticleType createSimpleParticleType() {

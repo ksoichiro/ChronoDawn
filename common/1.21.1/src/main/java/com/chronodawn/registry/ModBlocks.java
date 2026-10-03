@@ -1047,32 +1047,32 @@ public class ModBlocks {
 
     public static final RegistrySupplier<Block> PURPLE_TIME_TORCH = BLOCKS.register(
         ModBlockId.PURPLE_TIME_TORCH.id(),
-        () -> new TimeTorchBlock(net.minecraft.core.particles.ParticleTypes.FLAME, TimeTorchBlock.createProperties("purple_time_torch"))
+        () -> new TimeTorchBlock(ModParticles.PURPLE_TIME_TORCH_FLAME, TimeTorchBlock.createProperties("purple_time_torch"))
     );
 
     public static final RegistrySupplier<Block> ORANGE_TIME_TORCH = BLOCKS.register(
         ModBlockId.ORANGE_TIME_TORCH.id(),
-        () -> new TimeTorchBlock(net.minecraft.core.particles.ParticleTypes.FLAME, TimeTorchBlock.createProperties("orange_time_torch"))
+        () -> new TimeTorchBlock(ModParticles.ORANGE_TIME_TORCH_FLAME, TimeTorchBlock.createProperties("orange_time_torch"))
     );
 
     public static final RegistrySupplier<Block> PINK_TIME_TORCH = BLOCKS.register(
         ModBlockId.PINK_TIME_TORCH.id(),
-        () -> new TimeTorchBlock(net.minecraft.core.particles.ParticleTypes.FLAME, TimeTorchBlock.createProperties("pink_time_torch"))
+        () -> new TimeTorchBlock(ModParticles.PINK_TIME_TORCH_FLAME, TimeTorchBlock.createProperties("pink_time_torch"))
     );
 
     public static final RegistrySupplier<Block> WALL_PURPLE_TIME_TORCH = BLOCKS.register(
         ModBlockId.WALL_PURPLE_TIME_TORCH.id(),
-        () -> new WallTimeTorchBlock(net.minecraft.core.particles.ParticleTypes.FLAME, WallTimeTorchBlock.createProperties("wall_purple_time_torch"))
+        () -> new WallTimeTorchBlock(ModParticles.PURPLE_TIME_TORCH_FLAME, WallTimeTorchBlock.createProperties("wall_purple_time_torch"))
     );
 
     public static final RegistrySupplier<Block> WALL_ORANGE_TIME_TORCH = BLOCKS.register(
         ModBlockId.WALL_ORANGE_TIME_TORCH.id(),
-        () -> new WallTimeTorchBlock(net.minecraft.core.particles.ParticleTypes.FLAME, WallTimeTorchBlock.createProperties("wall_orange_time_torch"))
+        () -> new WallTimeTorchBlock(ModParticles.ORANGE_TIME_TORCH_FLAME, WallTimeTorchBlock.createProperties("wall_orange_time_torch"))
     );
 
     public static final RegistrySupplier<Block> WALL_PINK_TIME_TORCH = BLOCKS.register(
         ModBlockId.WALL_PINK_TIME_TORCH.id(),
-        () -> new WallTimeTorchBlock(net.minecraft.core.particles.ParticleTypes.FLAME, WallTimeTorchBlock.createProperties("wall_pink_time_torch"))
+        () -> new WallTimeTorchBlock(ModParticles.PINK_TIME_TORCH_FLAME, WallTimeTorchBlock.createProperties("wall_pink_time_torch"))
     );
 
     // === Lanterns ===

@@ -17,6 +17,7 @@ import com.chronodawn.neoforge.registry.ModFluidTypes;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModEntities;
 import com.chronodawn.registry.ModParticles;
+import net.minecraft.client.particle.FlameParticle;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -485,6 +486,20 @@ public class ChronoDawnClientNeoForge {
         event.registerSpriteSet(
             ModParticles.CHRONO_SHIELD_ECHO.get(),
             ChronoShieldEchoParticle.Provider::new
+        );
+
+        // Register Time Torch flame particle providers (vanilla flame behavior, recolored sprites)
+        event.registerSpriteSet(
+            ModParticles.PURPLE_TIME_TORCH_FLAME.get(),
+            FlameParticle.Provider::new
+        );
+        event.registerSpriteSet(
+            ModParticles.ORANGE_TIME_TORCH_FLAME.get(),
+            FlameParticle.Provider::new
+        );
+        event.registerSpriteSet(
+            ModParticles.PINK_TIME_TORCH_FLAME.get(),
+            FlameParticle.Provider::new
         );
 
         ChronoDawn.LOGGER.debug("Registered particle providers for NeoForge");

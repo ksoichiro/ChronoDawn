@@ -4,6 +4,14 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.WallTorchBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+
+import java.util.function.Supplier;
 
 /**
  * Wall Time Torch - Wall-mounted torch with colored variants.
@@ -20,8 +28,24 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
  */
 public class WallTimeTorchBlock extends WallTorchBlock {
 
-    public WallTimeTorchBlock(SimpleParticleType particle, BlockBehaviour.Properties properties) {
-        super(properties, particle);
+    // TorchBlock requires its flame particle at construction time, but mod particle
+    // types are not registered yet when blocks are created (NeoForge fires the BLOCK
+    // RegisterEvent before PARTICLE_TYPE), so the colored flame is resolved lazily here.
+    private final Supplier<? extends SimpleParticleType> flame;
+
+    public WallTimeTorchBlock(Supplier<? extends SimpleParticleType> flame, BlockBehaviour.Properties properties) {
+        super(properties, ParticleTypes.FLAME);
+        this.flame = flame;
+    }
+
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        Direction opposite = state.getValue(FACING).getOpposite();
+        double x = pos.getX() + 0.5 + 0.27 * opposite.getStepX();
+        double y = pos.getY() + 0.7 + 0.22;
+        double z = pos.getZ() + 0.5 + 0.27 * opposite.getStepZ();
+        level.addParticle(ParticleTypes.SMOKE, x, y, z, 0.0, 0.0, 0.0);
+        level.addParticle(flame.get(), x, y, z, 0.0, 0.0, 0.0);
     }
 
     /**

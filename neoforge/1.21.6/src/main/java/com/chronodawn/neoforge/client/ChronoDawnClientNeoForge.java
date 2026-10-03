@@ -8,6 +8,7 @@ import com.chronodawn.client.TemporalPlantColorProvider;
 import com.chronodawn.client.model.*;
 import com.chronodawn.client.particle.ChronoDawnPortalParticle;
 import com.chronodawn.client.particle.ChronoShieldEchoParticle;
+import net.minecraft.client.particle.FlameParticle;
 import com.chronodawn.client.renderer.*;
 import com.chronodawn.client.renderer.mobs.*;
 import com.chronodawn.gui.ChronicleScreen;
@@ -508,6 +509,20 @@ public class ChronoDawnClientNeoForge {
         event.registerSpriteSet(
             ModParticles.CHRONO_SHIELD_ECHO.get(),
             ChronoShieldEchoParticle.Provider::new
+        );
+
+        // Register Time Torch flame particle providers (vanilla flame behavior, recolored sprites)
+        event.registerSpriteSet(
+            ModParticles.PURPLE_TIME_TORCH_FLAME.get(),
+            FlameParticle.Provider::new
+        );
+        event.registerSpriteSet(
+            ModParticles.ORANGE_TIME_TORCH_FLAME.get(),
+            FlameParticle.Provider::new
+        );
+        event.registerSpriteSet(
+            ModParticles.PINK_TIME_TORCH_FLAME.get(),
+            FlameParticle.Provider::new
         );
 
         ChronoDawn.LOGGER.debug("Registered particle providers for NeoForge");

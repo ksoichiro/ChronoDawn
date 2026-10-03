@@ -29,6 +29,7 @@ import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.client.model.object.boat.BoatModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
+import net.minecraft.client.particle.FlameParticle;
 import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.Identifier;
@@ -590,6 +591,20 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
         ParticleProviderRegistry.getInstance().register(
             ModParticles.CHRONO_SHIELD_ECHO.get(),
             ChronoShieldEchoParticle.Provider::new
+        );
+
+        // Register Time Torch flame particle providers (vanilla flame behavior, recolored sprites)
+        ParticleProviderRegistry.getInstance().register(
+            ModParticles.PURPLE_TIME_TORCH_FLAME.get(),
+            FlameParticle.Provider::new
+        );
+        ParticleProviderRegistry.getInstance().register(
+            ModParticles.ORANGE_TIME_TORCH_FLAME.get(),
+            FlameParticle.Provider::new
+        );
+        ParticleProviderRegistry.getInstance().register(
+            ModParticles.PINK_TIME_TORCH_FLAME.get(),
+            FlameParticle.Provider::new
         );
 
         ChronoDawn.LOGGER.debug("Registered particle providers for Fabric");
