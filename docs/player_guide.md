@@ -249,6 +249,8 @@ These blocks generate exclusively in the Chrono Dawn dimension; vanilla `pointed
 
 Small **Temporal Moss Grottos** can also appear on cave floors throughout Chrono Dawn. These patches contain Temporal Moss and occasional Timeless Mushrooms. Temporal Moss spreads only onto natural blocks with a face exposed to air, so it remains on visible cave and surface terrain instead of consuming enclosed stone.
 
+Rarer **Glowing Pools** form in cave floor hollows. These shallow pools are edged with Temporal Moss and hold submerged Lumen Polyps, whose light makes them visible from across a dark cave.
+
 ### Aquatic Plants
 
 The water of the Chrono Dawn ocean and swamp biomes grows **Temporal Kelp**, **Temporal Seagrass**, and **Tall Temporal Seagrass** — pale-cyan, frozen-time variants of vanilla aquatic plants. Vanilla `kelp` and `seagrass` no longer generate in newly created Chrono Dawn chunks (existing chunks keep whatever they already have).
@@ -257,7 +259,7 @@ The water of the Chrono Dawn ocean and swamp biomes grows **Temporal Kelp**, **T
 - **Temporal Seagrass** scatters across the ocean floor as 1-block plants. Drop with shears. Apply bone meal to a short Temporal Seagrass to grow it into Tall Temporal Seagrass.
 - **Tall Temporal Seagrass** is the 2-block-tall variant. Shears on the lower half drop 2 Temporal Seagrass items; silk touch yields the tall block itself.
 - Temporal Seagrass is registered as turtle food, so wild turtles will accept it as breeding bait the same way they accept vanilla seagrass.
-- **Lumen Polyp** grows on newly generated Chrono Dawn ocean floors as a 1–4 cluster underwater light source.
+- **Lumen Polyp** grows on newly generated Chrono Dawn ocean floors and in Glowing Pools as a 1–4 cluster underwater light source.
 - **Dawn / Dusk / Twilight / Eternal Chrono Coral** are decorative, single-block aquatic plants that add Time Wood colors to newly generated Chrono Dawn ocean floors. They do not emit light and drop only when harvested with shears.
 
 #### Dried Temporal Kelp (food)

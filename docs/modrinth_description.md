@@ -81,7 +81,7 @@ Chrono Dawn features unique mobs that replace vanilla spawns in the dimension:
 ### 🌲 New Content (highlights)
 - **Custom Wood Types**: Time Wood, Dark Time Wood, and Ancient Time Wood — full block sets; tall variants now generate as 2×2 mega trunks
 - **Small Ambient Structures**: Watchmaker's Camp, Hourglass Monolith, Old Sundial, Petrified Adventurer (snowy variant), Time Cairn, Time Well, and Upside-Down Tree scattered across Chrono Dawn biomes
-- **Cave Decoration**: Temporal Stalactites and Stalagmites with tip + frustum variants, enhanced fall damage, cascading column breaks, and small Temporal Moss Grottos with Timeless Mushrooms
+- **Cave Decoration**: Temporal Stalactites and Stalagmites with tip + frustum variants, enhanced fall damage, cascading column breaks, small Temporal Moss Grottos with Timeless Mushrooms, and Glowing Pools lit by Lumen Polyps
 - **Aquatic Plants**: Temporal Kelp, Temporal Seagrass + Tall variant, Lumen Polyp (underwater light source), and Dawn / Dusk / Twilight / Eternal Chrono Coral in the Chrono Dawn ocean and swamp
 - **Lighting Blocks**: Time Torches in 3 colors (Orange / Pink / Purple) and Temporal / Dawn / Dusk Lanterns
 - **Faded Plains terrain**: Faded Temporal Grass, Parched Temporal Dirt, and Temporal Dead Bush surface flora

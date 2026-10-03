@@ -44,7 +44,7 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed information.
   - Master Clock (final dungeon with Time Tyrant boss)
 - **Small Ambient Structures** (scattered across Chrono Dawn biomes): Watchmaker's Camp (chest loot), Hourglass Monolith, Old Sundial, Petrified Adventurer (with snowy variant), Time Cairn, Time Well, and Upside-Down Tree
 - **Friendly Mobs in Chrono Dawn**: Chrono Bovine (cow-equivalent; drops Chrono Bovine Meat), Chrono Ursid (polar-bear-equivalent), Temporal Caprid (goat-equivalent)
-- **Cave Decoration**: Temporal Stalactites and Temporal Stalagmites with tip + frustum variants, enhanced fall damage on tips, cascading column breaks, and small Temporal Moss Grottos with Timeless Mushrooms
+- **Cave Decoration**: Temporal Stalactites and Temporal Stalagmites with tip + frustum variants, enhanced fall damage on tips, cascading column breaks, small Temporal Moss Grottos with Timeless Mushrooms, and Glowing Pools lit by Lumen Polyps
 - **Aquatic Plants** (Chrono Dawn ocean/swamp): Temporal Kelp, Temporal Seagrass + Tall variant, Lumen Polyp (underwater light source), and Dawn / Dusk / Twilight / Eternal Chrono Coral
 - **Lighting Blocks**: Time Torches (Orange / Pink / Purple) crafted from Time Blossoms, and Temporal / Dawn / Dusk Lanterns
 - **Faded Plains Biome Content**: Faded Temporal Grass, Parched Temporal Dirt, and Temporal Dead Bush surface flora for the new dry biome

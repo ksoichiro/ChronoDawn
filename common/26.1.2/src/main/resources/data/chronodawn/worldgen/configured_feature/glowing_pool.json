@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:waterlogged_vegetation_patch",
+  "config": {
+    "depth": 2,
+    "extra_bottom_block_chance": 0.5,
+    "extra_edge_column_chance": 0.5,
+    "ground_state": {
+      "type": "minecraft:simple_state_provider",
+      "state": {
+        "Name": "chronodawn:temporal_moss"
+      }
+    },
+    "replaceable": "#chronodawn:temporal_moss_grotto_replaceable",
+    "surface": "floor",
+    "vegetation_chance": 0.4,
+    "vegetation_feature": {
+      "feature": "chronodawn:lumen_polyp",
+      "placement": []
+    },
+    "vertical_range": 3,
+    "xz_radius": {
+      "type": "minecraft:uniform",
+      "min_inclusive": 1,
+      "max_inclusive": 3
+    }
+  }
+}

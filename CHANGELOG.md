@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Temporal Moss Grottos**: small patches of Temporal Moss and occasional
   Timeless Mushrooms now generate on cave floors throughout the Chrono Dawn
   dimension on all supported Minecraft versions.
+- **Glowing Pools**: rare shallow pools edged with Temporal Moss now generate
+  on cave floors throughout the Chrono Dawn dimension on all supported
+  Minecraft versions. Submerged Lumen Polyps light them, so they stand out in
+  dark caves.
 
 ### Changed
 
