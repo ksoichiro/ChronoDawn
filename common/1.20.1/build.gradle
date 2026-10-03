@@ -2,7 +2,7 @@ plugins {
     id 'com.github.ksoichiro.mcmod'
 }
 
-apply from: rootProject.file('gradle/nbt-block-replacement.gradle')
+apply from: rootProject.file('gradle/nbt-structures.gradle')
 
 architectury {
     common rootProject.enabled_platforms.split(',')
@@ -124,7 +124,7 @@ mcmod {
         enabled = true
         sourceVersion = '1.21.1'
         targetVersion = '1.20.1'
-        inputDir = "${buildDir}/generated/nbt-block-replaced/data/chronodawn/structure"
+        inputDir = rootProject.file('common/shared-1.21.1+/src/main/resources/data/chronodawn/structure').absolutePath
         outputDir = "${buildDir}/generated/nbt-structures/data/chronodawn/structures"
     }
 }
@@ -135,10 +135,6 @@ mcmod {
 // Gradle runs after the plugin's, since afterEvaluate blocks fire in
 // registration order) lets us reference it safely.
 project.afterEvaluate {
-    tasks.named('convertNbt') {
-        dependsOn 'replaceNbtBlocks'
-    }
-
     tasks.named('nbtStructures') {
         dependsOn 'convertNbt'
     }

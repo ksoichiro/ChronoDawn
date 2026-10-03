@@ -1,0 +1,8 @@
+// Stable lifecycle task for structure .nbt resources.
+//
+// Modern versions package the shared source files directly. Minecraft 1.20.1
+// adds its format-conversion task as a dependency in common/1.20.1/build.gradle.
+tasks.register('nbtStructures') {
+    group = 'chrono dawn build'
+    description = 'Prepare structure .nbt files for resource processing'
+}
