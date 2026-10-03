@@ -1,5 +1,7 @@
 package com.chronodawn.items;
 
+import java.util.Map;
+
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.BlockItem;
@@ -22,6 +24,12 @@ public class TimeTorchItem extends BlockItem {
     public TimeTorchItem(Block floorBlock, RegistrySupplier<Block> wallBlock, Item.Properties properties) {
         super(floorBlock, properties);
         this.wallBlock = wallBlock;
+    }
+
+    @Override
+    public void registerBlocks(Map<Block, Item> blockToItemMap, Item item) {
+        super.registerBlocks(blockToItemMap, item);
+        blockToItemMap.put(wallBlock.get(), item);
     }
 
     @Nullable
