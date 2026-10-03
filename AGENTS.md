@@ -178,6 +178,11 @@ When changing a NeoForge version, run the affected project's `clean` task
 before `prodSmokeTest`. The installed server cache is keyed by Minecraft
 version and can otherwise reuse the previous NeoForge runtime.
 
+Minecraft 26.x development clients can outlive the game main method because
+launcher threads remain active. Shutdown workarounds that wait for the main
+thread must capture it from a runtime client event, not a parallel mod-loading
+event, and must be enabled only by the development run configuration.
+
 Full verification before larger changes or release work:
 
 ```bash

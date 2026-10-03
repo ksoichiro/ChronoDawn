@@ -702,6 +702,7 @@ public class ChronoDawnClientNeoForge {
          */
         @SubscribeEvent
         public static void onClientTickEnd(ClientTickEvent.Post event) {
+            DevShutdownWorkaround.register();
             // Call portal effect handler (version-specific path)
             VersionSpecificClientHelper.onClientTick();
         }

@@ -37,6 +37,7 @@ tasks.named('compileJava') {
         exclude 'com/chronodawn/neoforge/event/FuelEventHandler.java'           // 1.21.11: ResourceLocation renamed to Identifier
         exclude 'com/chronodawn/neoforge/event/BlockProtectionEventHandler.java' // 26.2: BlockEvent.BreakEvent removed (use BreakBlockEvent); displayClientMessage removed (use sendOverlayMessage)
     }
+    source file('../base/src/main/java/com/chronodawn/neoforge/client/DevShutdownWorkaround.java')
 }
 
 def commonModule = ':common-26.3'
@@ -53,6 +54,7 @@ loom {
             runDir("run")
             vmArg("-Dfabric.log.disableAnsi=false")
             vmArg("-Dlog4j2.configurationFile=${log4j2DevConfig}")
+            vmArg("-Dchronodawn.dev.shutdownWorkaround=true")
         }
         server {
             server()
