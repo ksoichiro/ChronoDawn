@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -29,7 +30,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  *
  * Placement:
  * - Can be placed on dirt, grass, mycelium, podzol, and temporal moss
- * - Requires low light level to survive and spread
+ * - Requires low light level to be placed and to spread (an existing mushroom
+ *   is not broken when the light later rises)
  *
  * Drops:
  * - Breaks instantly and drops 1x Timeless Mushroom item
@@ -99,7 +101,24 @@ public class TimelessMushroomBlock extends BushBlock implements BonemealableBloc
             return false;
         }
 
-        // Check light level (must be 12 or less to survive)
+        // Light is deliberately not checked here. Worldgen places mushrooms before
+        // light is calculated, so some generate in bright spots; a light check here
+        // would break them on the next neighbor update (e.g. bone meal growing grass).
+        return true;
+    }
+
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        if (!isDarkEnough(context.getLevel(), context.getClickedPos())) {
+            return null;
+        }
+        return super.getStateForPlacement(context);
+    }
+
+    /**
+     * Light requirement for placing and spreading (must be 12 or less).
+     */
+    private static boolean isDarkEnough(LevelReader level, BlockPos pos) {
         return level.getRawBrightness(pos, 0) <= 12;
     }
 
@@ -134,7 +153,8 @@ public class TimelessMushroomBlock extends BushBlock implements BonemealableBloc
 
             // Check if target position is valid for mushroom placement
             if (level.getBlockState(targetPos).isAir() &&
-                this.canSurvive(this.defaultBlockState(), level, targetPos)) {
+                this.canSurvive(this.defaultBlockState(), level, targetPos) &&
+                isDarkEnough(level, targetPos)) {
                 level.setBlock(targetPos, this.defaultBlockState(), 2);
             }
         }

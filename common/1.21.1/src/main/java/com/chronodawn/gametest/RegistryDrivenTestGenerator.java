@@ -442,6 +442,7 @@ public final class RegistryDrivenTestGenerator {
         all.addAll(generateStructureTests());
         all.addAll(generateBlockProtectionTests());
         all.addAll(generateFadedPlainsTests());
+        all.addAll(TimelessMushroomTests.generateTests(NamedTest::new));
         // Registry consistency tests (ModItemId/ModBlockId/ModEntityId/ModBlockEntityId enum verification)
         all.addAll(generateItemRegistryConsistencyTests());
         all.addAll(generateBlockRegistryConsistencyTests());

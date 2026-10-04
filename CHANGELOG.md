@@ -37,6 +37,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Time Blossom selection outline**: the outline shown when looking at a Time
   Blossom now lines up with the flower, which is drawn slightly off-center in
   its block.
+- **Timeless Mushrooms popping off**: naturally generated Timeless Mushrooms in
+  bright spots no longer break and drop when a block next to them changes, for
+  example when bone meal grows grass beside them. Placing and spreading still
+  require light level 12 or less.
 
 ## [0.11.0] - 2026-10-04
 
