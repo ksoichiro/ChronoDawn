@@ -50,7 +50,7 @@ public class TimeBlossomBlock extends BushBlock {
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return SHAPE;
+        return SHAPE.move(state.getOffset(pos));
     }
 
     /**
