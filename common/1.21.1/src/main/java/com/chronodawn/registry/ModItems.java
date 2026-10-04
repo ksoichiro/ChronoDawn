@@ -800,6 +800,10 @@ public class ModItems {
         ModItemId.CRACKED_TEMPORAL_STONE_BRICKS.id(),
         () -> new BlockItem(ModBlocks.CRACKED_TEMPORAL_STONE_BRICKS.get(), new Item.Properties())
     );
+    public static final RegistrySupplier<Item> CHISELED_TEMPORAL_STONE_BRICKS = ITEMS.register(
+        ModItemId.CHISELED_TEMPORAL_STONE_BRICKS.id(),
+        () -> new BlockItem(ModBlocks.CHISELED_TEMPORAL_STONE_BRICKS.get(), new Item.Properties())
+    );
     public static final RegistrySupplier<Item> TEMPORAL_STONE_BUTTON = ITEMS.register(
         ModItemId.TEMPORAL_STONE_BUTTON.id(),
         () -> new BlockItem(ModBlocks.TEMPORAL_STONE_BUTTON.get(), new Item.Properties())
@@ -2562,6 +2566,7 @@ public class ModItems {
         output.accept(TEMPORAL_STONE_BRICKS_STAIRS.get());
         output.accept(TEMPORAL_STONE_BRICKS_SLAB.get());
         output.accept(TEMPORAL_STONE_BRICKS_WALL.get());
+        output.accept(CHISELED_TEMPORAL_STONE_BRICKS.get());
         output.accept(MOSSY_TEMPORAL_STONE_BRICKS.get());
         output.accept(MOSSY_TEMPORAL_STONE_BRICKS_STAIRS.get());
         output.accept(MOSSY_TEMPORAL_STONE_BRICKS_SLAB.get());

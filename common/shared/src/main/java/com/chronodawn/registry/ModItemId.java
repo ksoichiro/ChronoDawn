@@ -103,6 +103,7 @@ public enum ModItemId {
     MOSSY_TEMPORAL_STONE_BRICKS_SLAB("mossy_temporal_stone_bricks_slab"),
     MOSSY_TEMPORAL_STONE_BRICKS_WALL("mossy_temporal_stone_bricks_wall"),
     CRACKED_TEMPORAL_STONE_BRICKS("cracked_temporal_stone_bricks"),
+    CHISELED_TEMPORAL_STONE_BRICKS("chiseled_temporal_stone_bricks"),
     TEMPORAL_STONE_BUTTON("temporal_stone_button"),
     TEMPORAL_STONE_PRESSURE_PLATE("temporal_stone_pressure_plate"),
     SMOOTH_TEMPORAL_STONE("smooth_temporal_stone"),

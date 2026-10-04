@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Chiseled Temporal Stone Bricks**: a new building block, crafted from two
+  Temporal Stone Brick Slabs or cut from Temporal Stone or Temporal Stone
+  Bricks on a stonecutter.
+
+### Changed
+
+- **Structure materials**: the Desert Clock Tower, Master Clock, Clockwork
+  Depths Engine Room, and Phantom Catacombs entrance use Chiseled Temporal
+  Stone Bricks in place of vanilla chiseled stone bricks. Only newly generated
+  structures are affected.
+
 ## [0.11.0] - 2026-10-04
 
 ### Added

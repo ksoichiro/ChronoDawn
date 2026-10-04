@@ -64,7 +64,8 @@ public final class StructureTests {
             new BlockRequirement("minecraft:grass_block", () -> Blocks.GRASS_BLOCK, 0),
             new BlockRequirement("minecraft:coarse_dirt", () -> Blocks.COARSE_DIRT, 0),
             new BlockRequirement("minecraft:smooth_stone", () -> Blocks.SMOOTH_STONE, 0),
-            new BlockRequirement("minecraft:cracked_stone_bricks", () -> Blocks.CRACKED_STONE_BRICKS, 0)
+            new BlockRequirement("minecraft:cracked_stone_bricks", () -> Blocks.CRACKED_STONE_BRICKS, 0),
+            new BlockRequirement("minecraft:chiseled_stone_bricks", () -> Blocks.CHISELED_STONE_BRICKS, 0)
         );
     }
 

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "S",
+    "S"
+  ],
+  "key": {
+    "S": "chronodawn:temporal_stone_bricks_slab"
+  },
+  "result": {
+    "id": "chronodawn:chiseled_temporal_stone_bricks",
+    "count": 1
+  }
+}
