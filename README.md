@@ -49,7 +49,7 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed information.
 - **Time Keeper**: Peaceful trader that sells Time Compasses for each Chrono Dawn dungeon
 - **Equipment**: Clockstone and Enhanced Clockstone tools and armor, self-repairing Temporal Amber armor, the Entropy Crystal Sword, and the Spatially Linked Pickaxe (chance of double drops)
 - **Cave Decoration**: Temporal Stalactites and Temporal Stalagmites with tip + frustum variants, enhanced fall damage on tips, cascading column breaks, small Temporal Moss Grottos with Timeless Mushrooms, and Glowing Pools lit by Lumen Polyps
-- **Aquatic Plants** (Chrono Dawn ocean/swamp): Temporal Kelp, Temporal Seagrass + Tall variant, Lumen Polyp (underwater light source), and Dawn / Dusk / Twilight / Eternal Chrono Coral
+- **Aquatic Plants** (Chrono Dawn ocean, with Temporal Seagrass in inland waters too): Temporal Kelp, Temporal Seagrass + Tall variant, Lumen Polyp (underwater light source), and Dawn / Dusk / Twilight / Eternal Chrono Coral
 - **Lighting Blocks**: Time Torches (Orange / Pink / Purple) crafted from Time Blossoms, and Temporal / Dawn / Dusk Lanterns
 - **Faded Plains Biome Content**: Faded Temporal Grass, Parched Temporal Dirt, and Temporal Dead Bush surface flora for the new dry biome
 - **Boss Enemies**:

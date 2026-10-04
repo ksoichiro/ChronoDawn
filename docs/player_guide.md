@@ -257,10 +257,10 @@ Rarer **Glowing Pools** form in cave floor hollows. These shallow pools are edge
 
 ### Aquatic Plants
 
-The water of the Chrono Dawn ocean and swamp biomes grows **Temporal Kelp**, **Temporal Seagrass**, and **Tall Temporal Seagrass** — pale-cyan, frozen-time variants of vanilla aquatic plants. Vanilla `kelp` and `seagrass` no longer generate in newly created Chrono Dawn chunks (existing chunks keep whatever they already have).
+The water of the Chrono Dawn ocean grows **Temporal Kelp**, **Temporal Seagrass**, and **Tall Temporal Seagrass**, and the seagrass also grows in the rivers, lakes, and ponds of every land biome — pale-cyan, frozen-time variants of vanilla aquatic plants. Vanilla `kelp` and `seagrass` no longer generate in newly created Chrono Dawn chunks (existing chunks keep whatever they already have).
 
 - **Temporal Kelp** grows in columns 1–25 blocks tall from the ocean floor. The head block is climbable like vanilla kelp, and bone meal grows the column upward. Shears or any tool drops the kelp item.
-- **Temporal Seagrass** scatters across the ocean floor as 1-block plants. Drop with shears. Apply bone meal to a short Temporal Seagrass to grow it into Tall Temporal Seagrass.
+- **Temporal Seagrass** scatters across the ocean floor and inland waterbeds as 1-block plants. Drop with shears. Apply bone meal to a short Temporal Seagrass to grow it into Tall Temporal Seagrass.
 - **Tall Temporal Seagrass** is the 2-block-tall variant. Shears on the lower half drop 2 Temporal Seagrass items; silk touch yields the tall block itself.
 - Temporal Seagrass is registered as turtle food, so wild turtles will accept it as breeding bait the same way they accept vanilla seagrass.
 - **Lumen Polyp** grows on newly generated Chrono Dawn ocean floors and in Glowing Pools as a 1–4 cluster underwater light source.
@@ -289,7 +289,7 @@ Chrono Dawn hosts several friendly and neutral mobs unique to the dimension. The
 - **Pulse Hog** is a passive boar-like animal. It flees when hurt and can be bred with carrots, potatoes, beetroot, or Temporal Root.
 - **Secondwing Fowl** — chicken-based mob; same egg/feather mechanics as vanilla chicken.
 
-Underwater you'll also encounter the friendly **Chrono Turtle** and the harvestable **Glide Fish**.
+Underwater you'll also encounter the friendly **Chrono Turtle** and the harvestable **Glide Fish**. Both live in any open-sky water at least two blocks deep, so inland rivers and ponds have them too.
 
 ### Hostile Creatures
 

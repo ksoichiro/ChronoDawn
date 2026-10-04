@@ -16,6 +16,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Clockwork Cookies, and the Time Keeper sells 4 of them for 8 Clockstone.
   In existing worlds, this applies to chests that have not been opened yet and
   to Time Keepers you have not traded with yet.
+- **Inland water life**: Temporal Seagrass now grows in rivers, lakes, and
+  ponds of every Chrono Dawn land biome, not only the ocean and swamp. Glide
+  Fish and Chrono Turtles now spawn in any open-sky or ice-covered water at
+  least two blocks deep, including water above sea level and at any depth in
+  the ocean, and the desert, faded plains, mountain, and snowy biomes gained
+  water spawns of their own (Glide Fish only in the snowy biome). Only newly
+  generated chunks get the new seagrass.
 
 ### Changed
 

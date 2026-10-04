@@ -299,7 +299,7 @@ public class ChronoDawnFabric implements ModInitializer {
             ModEntities.GLIDE_FISH.get(),
             SpawnPlacements.Type.IN_WATER,
             Heightmap.Types.OCEAN_FLOOR,
-            net.minecraft.world.entity.animal.WaterAnimal::checkSurfaceWaterAnimalSpawnRules
+            GlideFishEntity::checkGlideFishSpawnRules
         );
 
         // Chrono Turtle - spawns in water
@@ -307,7 +307,7 @@ public class ChronoDawnFabric implements ModInitializer {
             ModEntities.CHRONO_TURTLE.get(),
             SpawnPlacements.Type.IN_WATER,
             Heightmap.Types.OCEAN_FLOOR,
-            net.minecraft.world.entity.animal.WaterAnimal::checkSurfaceWaterAnimalSpawnRules
+            ChronoTurtleEntity::checkChronoTurtleSpawnRules
         );
 
         // Timeline Strider - spawns on ground

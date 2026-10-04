@@ -425,7 +425,7 @@ public class ChronoDawnNeoForge {
             ModEntities.GLIDE_FISH.get(),
             SpawnPlacementTypes.IN_WATER,
             Heightmap.Types.OCEAN_FLOOR,
-            net.minecraft.world.entity.animal.fish.WaterAnimal::checkSurfaceWaterAnimalSpawnRules,
+            GlideFishEntity::checkGlideFishSpawnRules,
             RegisterSpawnPlacementsEvent.Operation.REPLACE
         );
 
@@ -470,7 +470,7 @@ public class ChronoDawnNeoForge {
             ModEntities.CHRONO_TURTLE.get(),
             SpawnPlacementTypes.IN_WATER,
             Heightmap.Types.OCEAN_FLOOR,
-            net.minecraft.world.entity.animal.fish.WaterAnimal::checkSurfaceWaterAnimalSpawnRules,
+            ChronoTurtleEntity::checkChronoTurtleSpawnRules,
             RegisterSpawnPlacementsEvent.Operation.REPLACE
         );
 

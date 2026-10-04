@@ -38,6 +38,7 @@
       "chronodawn:dead_snag_placed",
       "chronodawn:patch_faded_grass",
       "chronodawn:patch_temporal_dead_bush",
+      "chronodawn:seagrass",
       "chronodawn:boulder_placed",
       "chronodawn:ancient_fallen_log_placed",
       "chronodawn:disk_parched_temporal_dirt",
@@ -171,6 +172,26 @@
                 "max_inclusive": 6
               },
               "weight": 10
+            }
+          ],
+          "water_creature": [
+            {
+              "type": "chronodawn:glide_fish",
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 1,
+                "max_inclusive": 2
+              },
+              "weight": 4
+            },
+            {
+              "type": "chronodawn:chrono_turtle",
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 1,
+                "max_inclusive": 2
+              },
+              "weight": 3
             }
           ]
         }

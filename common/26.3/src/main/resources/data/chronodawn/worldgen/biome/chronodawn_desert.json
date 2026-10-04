@@ -35,6 +35,7 @@
     ],
     [],
     [
+      "chronodawn:seagrass",
       "chronodawn:boulder_placed",
       "chronodawn:gravel_disk_placed",
       "chronodawn:sand_disk_placed",
@@ -139,6 +140,26 @@
                 "max_inclusive": 6
               },
               "weight": 10
+            }
+          ],
+          "water_creature": [
+            {
+              "type": "chronodawn:glide_fish",
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 1,
+                "max_inclusive": 2
+              },
+              "weight": 4
+            },
+            {
+              "type": "chronodawn:chrono_turtle",
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 1,
+                "max_inclusive": 2
+              },
+              "weight": 3
             }
           ]
         }

@@ -108,7 +108,20 @@
         "maxCount": 6
       }
     ],
-    "water_creature": [],
+    "water_creature": [
+      {
+        "type": "chronodawn:glide_fish",
+        "weight": 4,
+        "minCount": 1,
+        "maxCount": 2
+      },
+      {
+        "type": "chronodawn:chrono_turtle",
+        "weight": 3,
+        "minCount": 1,
+        "maxCount": 2
+      }
+    ],
     "water_ambient": [],
     "misc": []
   },
@@ -143,6 +156,7 @@
       "chronodawn:dead_snag_placed",
       "chronodawn:patch_faded_grass",
       "chronodawn:patch_temporal_dead_bush",
+      "chronodawn:seagrass",
       "chronodawn:boulder_placed",
       "chronodawn:ancient_fallen_log_placed",
       "chronodawn:disk_parched_temporal_dirt",

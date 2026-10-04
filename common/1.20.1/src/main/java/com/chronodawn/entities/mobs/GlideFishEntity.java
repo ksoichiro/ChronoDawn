@@ -1,7 +1,10 @@
 package com.chronodawn.entities.mobs;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.control.SmoothSwimmingLookControl;
@@ -13,6 +16,7 @@ import net.minecraft.world.entity.ai.goal.TryFindWaterGoal;
 import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 
 /**
  * GlideFish - A water creature that spawns in ChronoDawn dimension waters.
@@ -32,6 +36,16 @@ public class GlideFishEntity extends WaterAnimal {
         this.goalSelector.addGoal(1, new PanicGoal(this, 1.25));
         this.goalSelector.addGoal(2, new AvoidEntityGoal<>(this, Player.class, 8.0F, 1.6, 1.4));
         this.goalSelector.addGoal(3, new RandomSwimmingGoal(this, 1.0, 40));
+    }
+
+    public static boolean checkGlideFishSpawnRules(
+        EntityType<GlideFishEntity> entityType,
+        ServerLevelAccessor level,
+        MobSpawnType spawnType,
+        BlockPos pos,
+        RandomSource random
+    ) {
+        return InlandWaterSpawnRules.isOpenSkyWater(level, pos);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
