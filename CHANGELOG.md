@@ -41,6 +41,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   bright spots no longer break and drop when a block next to them changes, for
   example when bone meal grows grass beside them. Placing and spreading still
   require light level 12 or less.
+- **Chrono Cobweb background**: Chrono Cobwebs no longer show a black or gray
+  background on Forge 1.20.1 and on NeoForge for Minecraft 1.21.1 through
+  1.21.11.
 
 ## [0.11.0] - 2026-10-04
 
