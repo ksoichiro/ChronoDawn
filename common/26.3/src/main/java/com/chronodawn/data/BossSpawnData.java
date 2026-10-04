@@ -42,6 +42,8 @@ public class BossSpawnData extends CompatSavedData {
 
     // Clockwork Colossus data
     private final Set<BlockPos> clockworkColossusSpawnedStructures = Collections.newSetFromMap(new ConcurrentHashMap<>());
+    // Engine-room bounds must survive a restart so unspawned Colossi can still be discovered.
+    private final Set<EngineRoomBounds> clockworkColossusEngineRooms = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
     // Temporal Phantom data
     // The catacombs placer removes its markers after placing the boss_room, so processed
@@ -155,6 +157,14 @@ public class BossSpawnData extends CompatSavedData {
                 BlockPos pos = BlockPos.of(structureTag.getLongOr("Pos", 0L));
                 this.clockworkColossusSpawnedStructures.add(pos);
             }
+            ListTag engineRoomsList = colossusTag.getListOrEmpty("EngineRooms");
+            for (int i = 0; i < engineRoomsList.size(); i++) {
+                CompoundTag roomTag = engineRoomsList.getCompound(i).orElse(new CompoundTag());
+                this.clockworkColossusEngineRooms.add(new EngineRoomBounds(
+                    roomTag.getIntOr("MinX", 0), roomTag.getIntOr("MinY", 0), roomTag.getIntOr("MinZ", 0),
+                    roomTag.getIntOr("MaxX", 0), roomTag.getIntOr("MaxY", 0), roomTag.getIntOr("MaxZ", 0)
+                ));
+            }
         }
     }
 
@@ -251,6 +261,18 @@ public class BossSpawnData extends CompatSavedData {
             colossusStructuresList.add(structureTag);
         }
         colossusTag.put("SpawnedStructures", colossusStructuresList);
+        ListTag engineRoomsList = new ListTag();
+        for (EngineRoomBounds room : clockworkColossusEngineRooms) {
+            CompoundTag roomTag = new CompoundTag();
+            roomTag.putInt("MinX", room.minX());
+            roomTag.putInt("MinY", room.minY());
+            roomTag.putInt("MinZ", room.minZ());
+            roomTag.putInt("MaxX", room.maxX());
+            roomTag.putInt("MaxY", room.maxY());
+            roomTag.putInt("MaxZ", room.maxZ());
+            engineRoomsList.add(roomTag);
+        }
+        colossusTag.put("EngineRooms", engineRoomsList);
         tag.put("ClockworkColossus", colossusTag);
 
         return tag;
@@ -339,6 +361,18 @@ public class BossSpawnData extends CompatSavedData {
         setDirty();
     }
 
+    public Set<EngineRoomBounds> getClockworkColossusEngineRooms() {
+        return Collections.unmodifiableSet(clockworkColossusEngineRooms);
+    }
+
+    public void registerClockworkColossusEngineRoom(net.minecraft.world.level.levelgen.structure.BoundingBox room) {
+        if (clockworkColossusEngineRooms.add(new EngineRoomBounds(
+            room.minX(), room.minY(), room.minZ(), room.maxX(), room.maxY(), room.maxZ()
+        ))) {
+            setDirty();
+        }
+    }
+
     // ========================================
     // Temporal Phantom methods
     // ========================================
@@ -401,7 +435,11 @@ public class BossSpawnData extends CompatSavedData {
 
     public void resetClockworkColossus() {
         clockworkColossusSpawnedStructures.clear();
+        clockworkColossusEngineRooms.clear();
         setDirty();
+    }
+
+    public record EngineRoomBounds(int minX, int minY, int minZ, int maxX, int maxY, int maxZ) {
     }
 
     public void resetTemporalPhantom() {

@@ -1,6 +1,8 @@
 package com.chronodawn.worldgen.spawning;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.compat.CompatSavedData;
+import com.chronodawn.data.BossSpawnData;
 import com.chronodawn.entities.bosses.ClockworkColossusEntity;
 import com.chronodawn.registry.ModEntities;
 import dev.architectury.event.events.common.LifecycleEvent;
@@ -33,9 +35,6 @@ import java.util.concurrent.ConcurrentHashMap;
  * Reference: T235 - Clockwork Colossus implementation
  */
 public class ClockworkColossusSpawner {
-    // Track structure positions where we've already spawned Clockwork Colossus
-    private static final Set<BlockPos> spawnedStructures = new HashSet<>();
-
     // Track registered engine rooms (bounding boxes from BossRoomProtectionProcessor) (per-server runtime cache)
     // Key: dimension ID, Value: Set of bounding boxes
     private static final Map<ResourceLocation, Set<BoundingBox>> engineRooms = new ConcurrentHashMap<>();
@@ -62,6 +61,7 @@ public class ClockworkColossusSpawner {
         LifecycleEvent.SERVER_LEVEL_LOAD.register(level -> {
             if (level instanceof ServerLevel) {
                 ServerLevel serverLevel = (ServerLevel) level;
+                restoreEngineRooms(serverLevel);
                 ChronoDawn.LOGGER.debug("Clockwork Colossus Spawner initialized for dimension: {}", serverLevel.dimension().location());
             }
         });
@@ -82,6 +82,7 @@ public class ClockworkColossusSpawner {
         }
 
         ResourceLocation dimensionId = level.dimension().location();
+        BossSpawnData data = getSpawnData(level);
 
         // Increment tick counter
         tickCounter++;
@@ -116,7 +117,7 @@ public class ClockworkColossusSpawner {
                     );
 
                     // Check if we've already spawned in this room
-                    if (spawnedStructures.contains(roomCenter)) {
+                    if (data.hasClockworkColossusStructureSpawned(roomCenter)) {
                         continue;
                     }
 
@@ -142,7 +143,7 @@ public class ClockworkColossusSpawner {
                     }
 
                     // Mark this room as spawned
-                    spawnedStructures.add(roomCenter);
+                    data.markClockworkColossusStructureSpawned(roomCenter);
                     ChronoDawn.LOGGER.debug("Spawning Clockwork Colossus in engine room at {}", roomCenter);
 
                     // Spawn Clockwork Colossus
@@ -308,9 +309,26 @@ public class ClockworkColossusSpawner {
         ResourceLocation dimensionId = level.dimension().location();
         engineRooms.putIfAbsent(dimensionId, new HashSet<>());
         engineRooms.get(dimensionId).add(boundingBox);
+        getSpawnData(level).registerClockworkColossusEngineRoom(boundingBox);
 
         ChronoDawn.LOGGER.debug("Registered Clockwork Depths engine room in dimension {}: {}",
             dimensionId, boundingBox);
+    }
+
+    private static BossSpawnData getSpawnData(ServerLevel level) {
+        return CompatSavedData.computeIfAbsent(
+            level.getDataStorage(),
+            BossSpawnData::new,
+            BossSpawnData::load,
+            BossSpawnData.getDataName()
+        );
+    }
+
+    private static void restoreEngineRooms(ServerLevel level) {
+        Set<BoundingBox> rooms = engineRooms.computeIfAbsent(level.dimension().location(), ignored -> new HashSet<>());
+        for (BossSpawnData.EngineRoomBounds room : getSpawnData(level).getClockworkColossusEngineRooms()) {
+            rooms.add(new BoundingBox(room.minX(), room.minY(), room.minZ(), room.maxX(), room.maxY(), room.maxZ()));
+        }
     }
 
     /**
@@ -320,7 +338,7 @@ public class ClockworkColossusSpawner {
      */
     public static void reset(ServerLevel level) {
         ResourceLocation dimensionId = level.dimension().location();
-        spawnedStructures.clear();
+        getSpawnData(level).resetClockworkColossus();
         engineRooms.remove(dimensionId);
         tickCounter = 0;
         ChronoDawn.LOGGER.debug("Clockwork Colossus Spawner reset for dimension: {}", dimensionId);

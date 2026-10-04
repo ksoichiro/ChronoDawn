@@ -87,6 +87,7 @@ public class ClockworkColossusSpawner {
 
         LifecycleEvent.SERVER_LEVEL_LOAD.register(level -> {
             if (level instanceof ServerLevel serverLevel) {
+                restoreEngineRooms(serverLevel);
                 ChronoDawn.LOGGER.debug("Clockwork Colossus Spawner initialized for dimension: {}", serverLevel.dimension().identifier());
             }
         });
@@ -131,7 +132,11 @@ public class ClockworkColossusSpawner {
         // Check if any player is inside a registered engine room
         Set<net.minecraft.world.level.levelgen.structure.BoundingBox> rooms = engineRooms.get(dimensionId);
         if (rooms == null || rooms.isEmpty()) {
-            return;
+            restoreLegacyEngineRooms(level);
+            rooms = engineRooms.get(dimensionId);
+            if (rooms == null || rooms.isEmpty()) {
+                return;
+            }
         }
 
         for (var player : level.players()) {
@@ -515,8 +520,105 @@ public class ClockworkColossusSpawner {
         Set<net.minecraft.world.level.levelgen.structure.BoundingBox> rooms = engineRooms.get(dimensionId);
         rooms.add(boundingBox);
 
+        BossSpawnData data = CompatSavedData.computeIfAbsent(
+            level.getDataStorage(),
+            BossSpawnData::new,
+            BossSpawnData::load,
+            BossSpawnData.getDataName()
+        );
+        data.registerClockworkColossusEngineRoom(boundingBox);
+
         ChronoDawn.LOGGER.debug("Registered Clockwork Depths engine room in dimension {}: {}",
             dimensionId, boundingBox);
+    }
+
+    private static void restoreEngineRooms(ServerLevel level) {
+        BossSpawnData data = CompatSavedData.computeIfAbsent(
+            level.getDataStorage(),
+            BossSpawnData::new,
+            BossSpawnData::load,
+            BossSpawnData.getDataName()
+        );
+        Identifier dimensionId = level.dimension().identifier();
+        Set<net.minecraft.world.level.levelgen.structure.BoundingBox> rooms =
+            engineRooms.computeIfAbsent(dimensionId, ignored -> ConcurrentHashMap.newKeySet());
+
+        for (BossSpawnData.EngineRoomBounds room : data.getClockworkColossusEngineRooms()) {
+            rooms.add(new net.minecraft.world.level.levelgen.structure.BoundingBox(
+                room.minX(), room.minY(), room.minZ(), room.maxX(), room.maxY(), room.maxZ()
+            ));
+        }
+    }
+
+    /**
+     * Migrates rooms created before their bounds were persisted. Once a player visits a legacy
+     * Clockwork Depths structure, its structure bounds become a conservative spawn-search area.
+     */
+    private static void restoreLegacyEngineRooms(ServerLevel level) {
+        for (var player : level.players()) {
+            for (var entry : level.structureManager().getAllStructuresAt(player.blockPosition()).entrySet()) {
+                Structure structure = entry.getKey();
+                Identifier structureId = level.registryAccess()
+                    .lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
+                    .getKey(structure);
+                if (CLOCKWORK_DEPTHS_ID.equals(structureId)) {
+                    for (long chunkLong : entry.getValue()) {
+                        var structureStart = level.structureManager()
+                            .getStructureAt(ChunkPos.unpack(chunkLong).getWorldPosition(), structure);
+                        if (structureStart != null && structureStart.isValid()) {
+                            registerEngineRoom(level, structureStart.getBoundingBox());
+                            break;
+                        }
+                    }
+                }
+            }
+
+            Set<net.minecraft.world.level.levelgen.structure.BoundingBox> rooms =
+                engineRooms.get(level.dimension().identifier());
+            if (rooms == null || rooms.isEmpty()) {
+                registerLegacyEngineRoomFromMarker(level, player.blockPosition());
+            }
+        }
+    }
+
+    /**
+     * Structure metadata does not always include the separately placed engine room on Fabric.
+     * Its persistent DANGER!! signs provide a reliable migration marker for worlds created
+     * before engine-room bounds were saved.
+     */
+    private static void registerLegacyEngineRoomFromMarker(ServerLevel level, BlockPos playerPos) {
+        final int horizontalRadius = 24;
+        final int verticalRadius = 12;
+        List<BlockPos> markers = new ArrayList<>();
+
+        for (BlockPos pos : BlockPos.betweenClosed(
+            playerPos.offset(-horizontalRadius, -verticalRadius, -horizontalRadius),
+            playerPos.offset(horizontalRadius, verticalRadius, horizontalRadius)
+        )) {
+            var blockEntity = level.getBlockEntity(pos);
+            if (blockEntity instanceof net.minecraft.world.level.block.entity.SignBlockEntity sign) {
+                for (int line = 0; line < 4; line++) {
+                    if (sign.getText(SignTextSlot.FRONT).getMessages(false).get(line).getString().contains("DANGER!!")) {
+                        markers.add(pos.immutable());
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (markers.isEmpty()) {
+            return;
+        }
+
+        int minX = markers.stream().mapToInt(BlockPos::getX).min().orElse(playerPos.getX()) - 20;
+        int minY = markers.stream().mapToInt(BlockPos::getY).min().orElse(playerPos.getY()) - 8;
+        int minZ = markers.stream().mapToInt(BlockPos::getZ).min().orElse(playerPos.getZ()) - 20;
+        int maxX = markers.stream().mapToInt(BlockPos::getX).max().orElse(playerPos.getX()) + 20;
+        int maxY = markers.stream().mapToInt(BlockPos::getY).max().orElse(playerPos.getY()) + 12;
+        int maxZ = markers.stream().mapToInt(BlockPos::getZ).max().orElse(playerPos.getZ()) + 20;
+        registerEngineRoom(level, new net.minecraft.world.level.levelgen.structure.BoundingBox(
+            minX, minY, minZ, maxX, maxY, maxZ
+        ));
     }
 
     /**

@@ -37,6 +37,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Clockwork Colossus after a server restart**: unspawned Engine Rooms now
+  retain their spawn registration across restarts on all supported Minecraft
+  versions and loaders. Existing Minecraft 26.3 worlds can also rediscover an
+  Engine Room from its `DANGER!!` signs when the earlier runtime-only
+  registration was lost.
 - **NeoForge 26.2.0.83 and newer**: Chrono Dawn no longer crashes during
   registry initialization on these NeoForge builds. The NeoForge 26.2 build
   previously required exactly NeoForge 26.2.0.82 and now accepts any newer

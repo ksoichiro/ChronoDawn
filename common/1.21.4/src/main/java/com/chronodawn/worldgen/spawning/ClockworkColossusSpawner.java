@@ -85,6 +85,7 @@ public class ClockworkColossusSpawner {
 
         LifecycleEvent.SERVER_LEVEL_LOAD.register(level -> {
             if (level instanceof ServerLevel serverLevel) {
+                restoreEngineRooms(serverLevel);
                 ChronoDawn.LOGGER.debug("Clockwork Colossus Spawner initialized for dimension: {}", serverLevel.dimension().location());
             }
         });
@@ -510,9 +511,26 @@ public class ClockworkColossusSpawner {
         engineRooms.putIfAbsent(dimensionId, ConcurrentHashMap.newKeySet());
         Set<net.minecraft.world.level.levelgen.structure.BoundingBox> rooms = engineRooms.get(dimensionId);
         rooms.add(boundingBox);
+        BossSpawnData data = CompatSavedData.computeIfAbsent(
+            level.getDataStorage(), BossSpawnData::new, BossSpawnData::load, BossSpawnData.getDataName()
+        );
+        data.registerClockworkColossusEngineRoom(boundingBox);
 
         ChronoDawn.LOGGER.debug("Registered Clockwork Depths engine room in dimension {}: {}",
             dimensionId, boundingBox);
+    }
+
+    private static void restoreEngineRooms(ServerLevel level) {
+        BossSpawnData data = CompatSavedData.computeIfAbsent(
+            level.getDataStorage(), BossSpawnData::new, BossSpawnData::load, BossSpawnData.getDataName()
+        );
+        Set<net.minecraft.world.level.levelgen.structure.BoundingBox> rooms =
+            engineRooms.computeIfAbsent(level.dimension().location(), ignored -> ConcurrentHashMap.newKeySet());
+        for (BossSpawnData.EngineRoomBounds room : data.getClockworkColossusEngineRooms()) {
+            rooms.add(new net.minecraft.world.level.levelgen.structure.BoundingBox(
+                room.minX(), room.minY(), room.minZ(), room.maxX(), room.maxY(), room.maxZ()
+            ));
+        }
     }
 
     /**
