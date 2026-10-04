@@ -20,6 +20,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Stone Bricks in place of vanilla chiseled stone bricks. Only newly generated
   structures are affected.
 
+### Fixed
+
+- **Bone meal on Temporal Grass Blocks**: bone meal now grows biome-appropriate
+  Chrono Dawn flowers and ground cover on Temporal Grass Blocks across all
+  supported Minecraft versions and loaders.
+
 ## [0.11.0] - 2026-10-04
 
 ### Added
@@ -60,9 +66,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- **Bone meal on Temporal Grass Blocks**: bone meal now grows biome-appropriate
-  Chrono Dawn flowers and ground cover on Temporal Grass Blocks across all
-  supported Minecraft versions and loaders.
 - **Clockwork Colossus after a server restart**: unspawned Engine Rooms now
   retain their spawn registration across restarts on all supported Minecraft
   versions and loaders. Existing Minecraft 26.3 worlds can also rediscover an
