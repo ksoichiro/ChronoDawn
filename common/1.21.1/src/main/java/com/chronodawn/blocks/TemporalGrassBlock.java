@@ -2,8 +2,13 @@ package com.chronodawn.blocks;
 
 import com.chronodawn.compat.CompatBlockProperties;
 import com.chronodawn.registry.ModBlocks;
+import com.chronodawn.worldgen.TemporalBonemealFeatures;
 import com.mojang.serialization.MapCodec;
+import java.util.List;
+import java.util.Optional;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -15,11 +20,15 @@ import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.SpreadingSnowyDirtBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.phys.BlockHitResult;
 
 /**
@@ -29,7 +38,7 @@ import net.minecraft.world.phys.BlockHitResult;
  * Spreads between TemporalDirt blocks and reverts to TemporalDirt (not vanilla
  * dirt) when light is blocked.
  */
-public class TemporalGrassBlock extends SpreadingSnowyDirtBlock {
+public class TemporalGrassBlock extends SpreadingSnowyDirtBlock implements BonemealableBlock {
     public static final MapCodec<TemporalGrassBlock> CODEC = simpleCodec(TemporalGrassBlock::new);
 
     public TemporalGrassBlock(BlockBehaviour.Properties properties) {
@@ -103,5 +112,69 @@ public class TemporalGrassBlock extends SpreadingSnowyDirtBlock {
                 }
             }
         }
+    }
+
+    @Override
+    public boolean isValidBonemealTarget(LevelReader level, BlockPos pos, BlockState state) {
+        return level.getBlockState(pos.above()).isAir();
+    }
+
+    @Override
+    public boolean isBonemealSuccess(Level level, RandomSource random, BlockPos pos, BlockState state) {
+        return true;
+    }
+
+    @Override
+    public void performBonemeal(ServerLevel level, RandomSource random, BlockPos pos, BlockState state) {
+        BlockPos above = pos.above();
+        BlockState grass = Blocks.SHORT_GRASS.defaultBlockState();
+        bonemealAttempts:
+        for (int attempt = 0; attempt < 128; attempt++) {
+            BlockPos testPos = above;
+            for (int i = 0; i < attempt / 16; i++) {
+                testPos = testPos.offset(random.nextInt(3) - 1,
+                        (random.nextInt(3) - 1) * random.nextInt(3) / 2,
+                        random.nextInt(3) - 1);
+                if (!level.getBlockState(testPos.below()).is(this)
+                        || level.getBlockState(testPos).isCollisionShapeFullBlock(level, testPos)) {
+                    continue bonemealAttempts;
+                }
+            }
+
+            BlockState testState = level.getBlockState(testPos);
+            if (testState.is(grass.getBlock()) && random.nextInt(10) == 0) {
+                BonemealableBlock bonemealable = (BonemealableBlock) grass.getBlock();
+                if (bonemealable.isValidBonemealTarget(level, testPos, testState)) {
+                    bonemealable.performBonemeal(level, random, testPos, testState);
+                }
+            }
+
+            if (testState.isAir()) {
+                Holder<PlacedFeature> feature;
+                if (random.nextInt(8) == 0) {
+                    List<ConfiguredFeature<?, ?>> features = level.getBiome(testPos).value()
+                            .getGenerationSettings().getFlowerFeatures();
+                    if (features.isEmpty()) {
+                        continue;
+                    }
+                    feature = ((RandomPatchConfiguration) features.get(0).config()).feature();
+                } else {
+                    Optional<Holder.Reference<PlacedFeature>> groundCoverFeature = level.registryAccess()
+                            .registryOrThrow(Registries.PLACED_FEATURE)
+                            .getHolder(TemporalBonemealFeatures.select(level.getBiome(testPos), random));
+                    if (groundCoverFeature.isEmpty()) {
+                        continue;
+                    }
+                    feature = groundCoverFeature.get();
+                }
+
+                feature.value().place(level, level.getChunkSource().getGenerator(), random, testPos);
+            }
+        }
+    }
+
+    @Override
+    public BonemealableBlock.Type getType() {
+        return BonemealableBlock.Type.NEIGHBOR_SPREADER;
     }
 }
