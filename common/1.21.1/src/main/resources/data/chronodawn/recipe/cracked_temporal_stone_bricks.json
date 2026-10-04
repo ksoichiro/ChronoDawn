@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.1,
+  "ingredient": {
+    "item": "chronodawn:temporal_stone_bricks"
+  },
+  "result": {
+    "id": "chronodawn:cracked_temporal_stone_bricks"
+  }
+}

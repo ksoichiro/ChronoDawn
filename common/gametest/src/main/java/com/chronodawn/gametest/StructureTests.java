@@ -63,7 +63,8 @@ public final class StructureTests {
             new BlockRequirement("minecraft:dirt", () -> Blocks.DIRT, 0),
             new BlockRequirement("minecraft:grass_block", () -> Blocks.GRASS_BLOCK, 0),
             new BlockRequirement("minecraft:coarse_dirt", () -> Blocks.COARSE_DIRT, 0),
-            new BlockRequirement("minecraft:smooth_stone", () -> Blocks.SMOOTH_STONE, 0)
+            new BlockRequirement("minecraft:smooth_stone", () -> Blocks.SMOOTH_STONE, 0),
+            new BlockRequirement("minecraft:cracked_stone_bricks", () -> Blocks.CRACKED_STONE_BRICKS, 0)
         );
     }
 
@@ -157,7 +158,9 @@ public final class StructureTests {
                 new BlockRequirement(ModBlockId.BOSS_ROOM_DOOR.id(), ModBlocks.BOSS_ROOM_DOOR, 1),
                 new BlockRequirement("chest", () -> Blocks.CHEST, 1),
                 new BlockRequirement("barrel", () -> Blocks.BARREL, 9),
-                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1)
+                new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1),
+                new BlockRequirement(ModBlockId.CRACKED_TEMPORAL_STONE_BRICKS.id(),
+                    ModBlocks.CRACKED_TEMPORAL_STONE_BRICKS, 6)
             )),
             new StructureSpec("entropy_crypt_entrance", 7, 6, 7, List.of(
                 new BlockRequirement("jigsaw", () -> Blocks.JIGSAW, 1)

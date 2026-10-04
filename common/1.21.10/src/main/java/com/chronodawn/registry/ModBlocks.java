@@ -49,6 +49,7 @@ import com.chronodawn.blocks.TemporalStoneBricksStairs;
 import com.chronodawn.blocks.TemporalStoneBricksSlab;
 import com.chronodawn.blocks.TemporalStoneBricksWall;
 import com.chronodawn.blocks.MossyTemporalStoneBricksBlock;
+import com.chronodawn.blocks.CrackedTemporalStoneBricksBlock;
 import com.chronodawn.blocks.MossyTemporalStoneBricksStairs;
 import com.chronodawn.blocks.MossyTemporalStoneBricksSlab;
 import com.chronodawn.blocks.MossyTemporalStoneBricksWall;
@@ -797,6 +798,10 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> MOSSY_TEMPORAL_STONE_BRICKS_WALL = BLOCKS.register(
         ModBlockId.MOSSY_TEMPORAL_STONE_BRICKS_WALL.id(),
         () -> new MossyTemporalStoneBricksWall(MossyTemporalStoneBricksWall.createProperties())
+    );
+    public static final RegistrySupplier<Block> CRACKED_TEMPORAL_STONE_BRICKS = BLOCKS.register(
+        ModBlockId.CRACKED_TEMPORAL_STONE_BRICKS.id(),
+        () -> new CrackedTemporalStoneBricksBlock(CrackedTemporalStoneBricksBlock.createProperties())
     );
     public static final RegistrySupplier<Block> TEMPORAL_STONE_BUTTON = BLOCKS.register(
         ModBlockId.TEMPORAL_STONE_BUTTON.id(),

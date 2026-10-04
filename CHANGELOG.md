@@ -29,6 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Clockstone, and iron, with a small chance of a Time Crystal. The hidden vault
   under the boss room still has the better loot. Only newly generated
   structures are affected.
+- **Cracked Temporal Stone Bricks**: a new building block, made by smelting
+  Temporal Stone Bricks.
 
 ### Changed
 
@@ -38,7 +40,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Structure materials**: dungeons, landmarks, and the Time Keeper Village
   now use Chrono Dawn stonework, terrain, wood, and lighting blocks in place of
   the matching vanilla blocks. Layouts are unchanged. Only newly generated
-  structures are affected.
+  structures are affected. The Guardian Vault's hidden-room wall uses Cracked
+  Temporal Stone Bricks, so it no longer stands out as plain gray stone.
 
 ### Fixed
 
