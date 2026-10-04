@@ -95,6 +95,11 @@ public class ChronoDawnPortalBlock extends Block {
     private static final int PORTAL_TIME_THRESHOLD = 80;
 
     /**
+     * Vanilla non-player entities enter Nether portals without the player's wait time.
+     */
+    private static final int NON_PLAYER_PORTAL_TIME_THRESHOLD = 1;
+
+    /**
      * Tracks entity portal states and teleportation progress.
      * Map: Entity UUID -> State value
      *
@@ -497,8 +502,8 @@ public class ChronoDawnPortalBlock extends Block {
                 }
             }
         } else {
-            // Non-player entities: use threshold
-            shouldTeleport = stateValue >= PORTAL_TIME_THRESHOLD;
+            // Match vanilla Nether portals: non-player entities transfer as soon as they enter.
+            shouldTeleport = stateValue >= NON_PLAYER_PORTAL_TIME_THRESHOLD;
         }
 
         // Only teleport after entity has been inside portal for threshold time

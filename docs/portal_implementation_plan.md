@@ -131,19 +131,22 @@ This document describes the plan to replace Custom Portal API dependency with an
 
 ### Phase 3: Teleportation Logic
 
-**Goal**: Implement player teleportation through portals
+**Goal**: Implement entity teleportation through portals
 
 **Tasks**:
 1. Implement `ChronoDawnPortalBlock.entityInside()`
-   - Detect player collision with portal
+   - Detect player and non-player entity collision with portal
    - Manage teleport cooldown (prevent instant re-teleport)
+   - Match Nether portal timing: players wait, non-player entities transfer immediately
+   - Preserve entity data through Minecraft's standard cross-dimension transfer
+   - Allow non-player travel only after stabilization so the initial one-way portal cannot be consumed accidentally
    - Call teleportation handler
 
 2. Create `PortalTeleportHandler` class
    - Calculate destination coordinates
    - Search for existing portal at destination
    - Generate portal if none exists (Y=70-100 range)
-   - Execute player teleportation
+   - Execute player and non-player entity teleportation
    - Update portal state (ACTIVATED → DEACTIVATED)
 
 3. Handle edge cases

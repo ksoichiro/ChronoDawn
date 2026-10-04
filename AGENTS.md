@@ -174,6 +174,11 @@ Run GameTests:
 ./gradlew gameTestAll
 ```
 
+GameTest servers may omit custom dimensions even when the normal game loads
+them. Do not count a dimension-dependent test that skips on a missing dimension
+as runtime verification. Use a normal client or production server for the final
+cross-dimension behavior check.
+
 When changing a NeoForge version, run the affected project's `clean` task
 before `prodSmokeTest`. The installed server cache is keyed by Minecraft
 version and can otherwise reuse the previous NeoForge runtime.

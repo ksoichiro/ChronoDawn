@@ -25,7 +25,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 /**
- * Portal Teleport Handler - Handles player teleportation through ChronoDawn portals.
+ * Portal Teleport Handler - Handles entity teleportation through ChronoDawn portals.
  *
  * This class manages the teleportation process:
  * - Determines destination dimension (Overworld ↔ ChronoDawn)
@@ -35,11 +35,11 @@ import java.util.*;
  * - Updates portal states after teleportation
  *
  * Teleportation Flow:
- * 1. Player enters portal (collision with portal block)
+ * 1. Entity enters portal (collision with portal block)
  * 2. Calculate destination dimension and coordinates
  * 3. Search for existing portal at destination
  * 4. If no portal found, generate new portal (Y=70-100)
- * 5. Teleport player to destination
+ * 5. Teleport entity to destination
  * 6. Update portal state (ACTIVATED → DEACTIVATED)
  * 7. Mark ChronoDawn entered (if entering ChronoDawn for first time)
  *
@@ -157,13 +157,20 @@ public class PortalTeleportHandler {
      * @return true if teleportation succeeded
      */
     public static boolean teleportThroughPortal(Entity entity, BlockPos sourcePortalPos) {
-        if (!(entity instanceof ServerPlayer player)) {
-            // Only players can teleport for now
+        if (!(entity.level() instanceof ServerLevel sourceLevel)) {
             return false;
         }
-
-        ServerLevel sourceLevel = (ServerLevel) player.level();
+        ServerPlayer player = entity instanceof ServerPlayer serverPlayer ? serverPlayer : null;
         MinecraftServer server = sourceLevel.getServer();
+
+        // Do not let a stray mob or item consume the one-way entry portal before the player uses it.
+        ChronoDawnGlobalState progressionState = ChronoDawnGlobalState.get(server);
+        if (player == null
+            && com.chronodawn.config.ChronoDawnConfig.get().gameplay().portals().oneWayUntilStabilized()
+            && !progressionState.isPortalStabilized()
+            && !progressionState.isTyrantDefeated()) {
+            return false;
+        }
 
         // Read source portal axis for consistent orientation
         BlockState sourcePortalState = sourceLevel.getBlockState(sourcePortalPos);
@@ -234,15 +241,18 @@ public class PortalTeleportHandler {
         );
 
         // Calculate safe teleport position
-        // Portal interior is 2x3 (width 2, height 3), place player at center
+        // Portal interior is 2x3 (width 2, height 3), place the entity at center
         Vec3 destPosition = calculateSafeTeleportPosition(destPortalPos, sourceAxis);
 
-        // Calculate player rotation (face away from portal)
+        // Calculate entity rotation (face away from portal)
         float destYRot = calculateTeleportRotation(sourceAxis);
 
         // 1.21.2: teleportTo() signature changed - requires Set<RelativeMovement> and boolean parameters
-        player.teleportTo(destLevel, destPosition.x, destPosition.y, destPosition.z,
-            Set.of(), destYRot, player.getXRot(), false);
+        boolean teleported = entity.teleportTo(destLevel, destPosition.x, destPosition.y, destPosition.z,
+            Set.of(), destYRot, entity.getXRot(), false);
+        if (!teleported) {
+            return false;
+        }
 
         // Play arrival sound at destination (same as Nether portal)
         destLevel.playSound(
@@ -286,9 +296,9 @@ public class PortalTeleportHandler {
 
         // Record arrival dimension to prevent immediate re-teleportation to same dimension
         // CRITICAL: Only record if portal was NOT destroyed
-        // If portal is destroyed, player is no longer "in portal" so no need to prevent re-entry
+        // If the portal is destroyed, the entity is no longer inside it, so no arrival guard is needed.
         if (!portalWasDestroyed) {
-            recordArrivalDimension(player.getUUID(), destDimensionKey);
+            recordArrivalDimension(entity.getUUID(), destDimensionKey);
         }
 
         return true;
@@ -326,8 +336,8 @@ public class PortalTeleportHandler {
     }
 
     /**
-     * Calculate player rotation when exiting portal.
-     * Player should face away from portal plane.
+     * Calculate entity rotation when exiting portal.
+     * The entity should face away from the portal plane.
      *
      * @param axis Portal axis
      * @return Y rotation (degrees)

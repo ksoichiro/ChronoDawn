@@ -192,6 +192,7 @@ such as `[94, 1]`, and verify both resource reload and server data loading.
 - `./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.2` - Run GameTests for specific version
 - `./gradlew :neoforge:runGameTestServer -Ptarget_mc_version=1.21.2` - Run NeoForge GameTests
 - `./gradlew gameTestAll` - Run GameTests including 1.21.3 runtime verification (1.21.2+1.21.3 sequential)
+- GameTest servers may omit custom dimensions even when normal game servers load them. A dimension-dependent test that skips because its dimension is absent is not runtime verification; use a normal client or production server for the final cross-dimension behavior check
 
 **Production Smoke Test** (headless, no display required; recommended after Mixin config changes or when adding a new Minecraft version):
 - `./gradlew :fabric:prodSmokeTest -Ptarget_mc_version=1.21.2` - Boot a real Fabric dedicated server with the built mod and confirm a fresh world is created without crashing

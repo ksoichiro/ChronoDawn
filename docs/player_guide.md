@@ -171,6 +171,10 @@ C = Clockstone Block (corners are optional, like Nether portals)
 2. The portal activates with an orange/gold glow
 3. Walk through to enter Chrono Dawn
 
+Once stabilized, a Chrono Dawn portal transports mobs and dropped items like a
+Nether portal. Non-player entities cannot use the initial one-way portal, which
+prevents a stray mob or item from consuming it before you enter Chrono Dawn.
+
 **⚠️ CRITICAL WARNING**: The portal becomes **one-way** after you enter! You cannot return until you find the **Portal Stabilizer**!
 
 **Preparation Checklist** (before entering):
