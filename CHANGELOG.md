@@ -16,6 +16,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   on cave floors throughout the Chrono Dawn dimension on all supported
   Minecraft versions. Submerged Lumen Polyps light them, so they stand out in
   dark caves.
+- **Time Tyrant's Mail**: the Temporal Rollback ability now works. When a
+  hit would kill the wearer, there is a 20% chance to return to the health
+  and position from about 3 seconds earlier instead, with a 60-second
+  cooldown. Like the Totem of Undying, it does not save the wearer from
+  `/kill` or the void.
+- **Echoing Time Boots**: the Temporal Echo ability now works. Sprinting
+  while mobs are chasing the wearer leaves an afterimage behind, and those
+  mobs target it for 3 seconds. The ability has a 15-second cooldown.
 
 ### Changed
 

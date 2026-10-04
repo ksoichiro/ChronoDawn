@@ -255,6 +255,22 @@ public class ModEntities {
     );
 
     /**
+     * Temporal Echo Decoy - afterimage left by Echoing Time Boots
+     *
+     * Invisible, short-lived lure that nearby mobs target instead of the wearer.
+     * noSave() keeps it from persisting across restarts.
+     */
+    public static final RegistrySupplier<EntityType<com.chronodawn.entities.misc.TemporalEchoDecoyEntity>> TEMPORAL_ECHO_DECOY = ENTITIES.register(
+        ModEntityId.TEMPORAL_ECHO_DECOY.id(),
+        () -> EntityType.Builder.<com.chronodawn.entities.misc.TemporalEchoDecoyEntity>of(com.chronodawn.entities.misc.TemporalEchoDecoyEntity::new, MobCategory.MISC)
+            .sized(0.6f, 1.8f) // Player-sized
+            .noSave()
+            .fireImmune()
+            .clientTrackingRange(8)
+            .build(ResourceKey.create(Registries.ENTITY_TYPE, CompatResourceLocation.create(ChronoDawn.MOD_ID, ModEntityId.TEMPORAL_ECHO_DECOY.id())))
+    );
+
+    /**
      * Temporal Phantom - Phase 2 Mini-Boss
      *
      * A spectral mage trapped between time, uses teleportation and phantom clones.

@@ -67,6 +67,9 @@ public enum ModEntityId {
     TIME_ARROW("time_arrow"),
     TIME_BLAST("time_blast"),
 
+    // === Misc ===
+    TEMPORAL_ECHO_DECOY("temporal_echo_decoy"),
+
     // === Vehicles ===
     CHRONO_DAWN_BOAT("chronodawn_boat"),
     CHRONO_DAWN_CHEST_BOAT("chronodawn_chest_boat"),

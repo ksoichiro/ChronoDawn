@@ -957,13 +957,13 @@ All ultimate artifacts require **Fragments of Stasis Core** from the Time Tyrant
 #### Time Tyrant Mail (Chestplate)
 - **Armor Points**: 8
 - **Durability**: 600
-- **Special Ability**: **Temporal Rollback** - 20% chance to rewind time on fatal damage (avoid death, restores HP and position to 3 seconds ago, 60s cooldown)
+- **Special Ability**: **Temporal Rollback** - 20% chance to rewind time on fatal damage (avoid death, restores HP and position to 3 seconds ago, 60s cooldown). Like the Totem of Undying, it does not protect against `/kill` or the void
 - **Recipe**: 6 Fragments of Stasis Core + 1 Enhanced Clockstone + 1 Unstable Hourglass
 
 #### Echoing Time Boots (Boots)
 - **Armor Points**: 3
 - **Durability**: 500
-- **Special Ability**: **Temporal Echo** - Spawn decoy afterimage when sprinting (attracts enemy aggro for 3 seconds)
+- **Special Ability**: **Temporal Echo** - Spawn decoy afterimage when sprinting while mobs are chasing you (those mobs target it for 3 seconds, 15s cooldown)
 - **Recipe**: 2 Fragments of Stasis Core + 2 Enhanced Clockstone
 
 #### Chrono Aegis (Activated Buff Artifact)

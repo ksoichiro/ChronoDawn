@@ -17,9 +17,10 @@ import net.minecraft.world.item.equipment.ArmorType;
  * - Rarity: Epic
  *
  * Special Ability - Temporal Echo:
- * - Summons decoy entity when sprinting
- * - Decoy attracts enemy attention for 10 seconds
+ * - Summons decoy entity when sprinting while mobs are targeting the wearer
+ * - Decoy attracts enemy attention for 3 seconds
  * - 15 second cooldown
+ * - Implemented in TimeTyrantArmorAbilityHandler
  *
  * Reference: T158-164
  */

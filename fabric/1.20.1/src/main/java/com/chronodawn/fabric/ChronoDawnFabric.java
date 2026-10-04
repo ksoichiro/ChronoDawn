@@ -133,6 +133,11 @@ public class ChronoDawnFabric implements ModInitializer {
         );
 
         FabricDefaultAttributeRegistry.register(
+            ModEntities.TEMPORAL_ECHO_DECOY.get(),
+            com.chronodawn.entities.misc.TemporalEchoDecoyEntity.createAttributes()
+        );
+
+        FabricDefaultAttributeRegistry.register(
             ModEntities.EPOCH_HUSK.get(),
             EpochHuskEntity.createAttributes()
         );

@@ -267,6 +267,12 @@ public class ChronoDawnClientForge {
             TimeBlastRenderer::new
         );
 
+        // Temporal Echo Decoy is invisible; its visual is server-side particles
+        event.registerEntityRenderer(
+            ModEntities.TEMPORAL_ECHO_DECOY.get(),
+            net.minecraft.client.renderer.entity.NoopRenderer::new
+        );
+
         // Register Gear Projectile with custom renderer
         event.registerEntityRenderer(
             ModEntities.GEAR_PROJECTILE.get(),

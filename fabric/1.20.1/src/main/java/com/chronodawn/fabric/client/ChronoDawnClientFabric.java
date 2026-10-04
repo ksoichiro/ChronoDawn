@@ -445,6 +445,12 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
             TimeBlastRenderer::new
         );
 
+        // Temporal Echo Decoy is invisible; its visual is server-side particles
+        EntityRendererRegistry.register(
+            ModEntities.TEMPORAL_ECHO_DECOY.get(),
+            net.minecraft.client.renderer.entity.NoopRenderer::new
+        );
+
         // Register Gear Projectile with custom renderer
         EntityRendererRegistry.register(
             ModEntities.GEAR_PROJECTILE.get(),

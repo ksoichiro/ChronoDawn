@@ -22,6 +22,7 @@ public class SpawnEggConsistencyTest {
         "GEAR_PROJECTILE",   // Projectile, not a spawnable mob
         "TIME_ARROW",        // Projectile
         "TIME_BLAST",        // Projectile
+        "TEMPORAL_ECHO_DECOY", // Summoned by Echoing Time Boots
         "CHRONO_DAWN_BOAT",  // Vehicle, spawned via boat item
         "CHRONO_DAWN_CHEST_BOAT"  // Vehicle, spawned via chest boat item
     );

@@ -219,6 +219,11 @@ public class ChronoDawnNeoForge {
         );
 
         event.put(
+            ModEntities.TEMPORAL_ECHO_DECOY.get(),
+            com.chronodawn.entities.misc.TemporalEchoDecoyEntity.createAttributes().build()
+        );
+
+        event.put(
             ModEntities.EPOCH_HUSK.get(),
             EpochHuskEntity.createAttributes().build()
         );

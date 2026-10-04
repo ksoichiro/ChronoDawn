@@ -21,6 +21,7 @@ public class ChronoDawnEvents {
         PlayerEventHandler.register();
         TimeDistortionEventHandler.register();
         ChronoShieldTickHandler.register();
+        com.chronodawn.items.artifacts.TimeTyrantArmorAbilityHandler.register();
 
         ChronoDawn.LOGGER.debug("Registered ChronoDawnEvents");
     }

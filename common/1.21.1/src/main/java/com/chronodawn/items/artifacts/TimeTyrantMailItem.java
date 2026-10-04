@@ -14,6 +14,7 @@ import net.minecraft.world.item.ArmorItem;
  * - 20% chance to rollback to previous state when receiving lethal damage
  * - Restores HP and position from 3 seconds ago
  * - 60 second cooldown
+ * - Implemented in TimeTyrantArmorAbilityHandler
  *
  * Reference: T153-157
  */

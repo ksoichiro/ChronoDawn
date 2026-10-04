@@ -52,7 +52,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * TODO: Implement in future phases:
  * - Unstable Hourglass crafting trigger (reversed resonance effect)
- * - Item cooldown management (Time Clock, Time Guardian's Mail rollback)
+ * - Item cooldown management (Time Clock)
  *
  * Thread Safety (T429):
  * - Uses ConcurrentHashMap for player dimension tracking to prevent race conditions
