@@ -24,6 +24,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Echoing Time Boots**: the Temporal Echo ability now works. Sprinting
   while mobs are chasing the wearer leaves an afterimage behind, and those
   mobs target it for 3 seconds. The ability has a 15-second cooldown.
+- **Entropy Crypt antechamber chests**: the two chests in the room before the
+  Entropy Keeper's boss room now hold supplies such as arrows, Fruit of Time,
+  Clockstone, and iron, with a small chance of a Time Crystal. The hidden vault
+  under the boss room still has the better loot. Only newly generated
+  structures are affected.
 
 ### Changed
 
