@@ -25,6 +25,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Bone meal on Temporal Grass Blocks**: bone meal now grows biome-appropriate
   Chrono Dawn flowers and ground cover on Temporal Grass Blocks across all
   supported Minecraft versions and loaders.
+- **Time Blossom selection outline**: the outline shown when looking at a Time
+  Blossom now lines up with the flower, which is drawn slightly off-center in
+  its block.
 
 ## [0.11.0] - 2026-10-04
 
