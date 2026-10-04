@@ -204,6 +204,8 @@
   "item.chronodawn.enhanced_time_bread": "Enhanced Time Bread",
   "item.chronodawn.time_wheat_cookie": "Time Wheat Cookie",
   "item.chronodawn.clockwork_cookie": "Clockwork Cookie",
+  "item.chronodawn.clockwork_cookie.tooltip": "Each cookie winds up 30s of Resistance I",
+  "item.chronodawn.clockwork_cookie.tooltip.cap": "Stacks up to 3 minutes",
   "item.chronodawn.golden_time_wheat": "Golden Time Wheat",
 
   "item.chronodawn.time_clock": "Time Clock",

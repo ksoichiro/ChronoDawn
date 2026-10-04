@@ -1,0 +1,54 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "chronodawn:clockwork_cookie"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_time_jam": {
+      "conditions": {
+        "items": [
+          {
+            "items": "chronodawn:time_jam"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_clockwork_block": {
+      "conditions": {
+        "items": [
+          {
+            "items": "chronodawn:clockwork_block"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_clockwork_cookie": {
+      "conditions": {
+        "items": [
+          {
+            "items": "chronodawn:clockwork_cookie"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_time_jam",
+      "has_clockwork_block",
+      "has_clockwork_cookie"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "chronodawn:clockwork_cookie"
+    ]
+  }
+}

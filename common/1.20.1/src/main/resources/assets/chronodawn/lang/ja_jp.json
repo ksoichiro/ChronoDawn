@@ -204,6 +204,8 @@
   "item.chronodawn.enhanced_time_bread": "強化された時のパン",
   "item.chronodawn.time_wheat_cookie": "時の小麦クッキー",
   "item.chronodawn.clockwork_cookie": "歯車クッキー",
+  "item.chronodawn.clockwork_cookie.tooltip": "1枚ごとに耐性Iを30秒巻き足す",
+  "item.chronodawn.clockwork_cookie.tooltip.cap": "最大3分まで蓄積",
   "item.chronodawn.golden_time_wheat": "黄金の時の小麦",
 
   "item.chronodawn.time_clock": "タイムクロック",

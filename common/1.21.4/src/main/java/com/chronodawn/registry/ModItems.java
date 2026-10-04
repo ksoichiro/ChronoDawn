@@ -1,6 +1,7 @@
 package com.chronodawn.registry;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.mixin.ItemCraftRemainderAccessor;
 import com.chronodawn.items.ChronicleBookItem;
 import com.chronodawn.items.DecorativeWaterBucketItem;
 import com.chronodawn.items.PortalStabilizerItem;
@@ -1980,9 +1981,9 @@ public class ModItems {
     );
 
     /**
-     * Clockwork Cookie - Time-themed cookie with defensive effects.
-     * Restores 2 hunger points with Resistance I (30s) and Fire Resistance (30s).
-     * Recipe: 2x Time Wheat + 1x Time Jam + 2x Clockwork Block → 4x Clockwork Cookie
+     * Clockwork Cookie - Time-themed cookie that winds up Resistance I.
+     * Restores 2 hunger points; each cookie adds 30s of Resistance I (up to 3 minutes).
+     * Recipe: 2x Time Wheat + 1x Time Jam + 1x Clockwork Block (mold, not consumed) → 4x Clockwork Cookie
      */
     public static final RegistrySupplier<Item> CLOCKWORK_COOKIE = ITEMS.register(
         ModItemId.CLOCKWORK_COOKIE.id(),
@@ -2876,6 +2877,10 @@ public class ModItems {
      */
     public static void register() {
         ITEMS.register();
+        // The Clockwork Block is the Clockwork Cookie's mold and stays in the crafting grid.
+        // Its remainder is the item itself, which only exists once it is registered.
+        CLOCKWORK_BLOCK.listen(item ->
+            ((ItemCraftRemainderAccessor) item).chronodawn$setCraftingRemainingItem(item));
         ChronoDawn.LOGGER.debug("Registered ModItems");
     }
 

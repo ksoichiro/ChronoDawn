@@ -318,6 +318,7 @@ The **Time Keeper** is a peaceful trader. Two of them live in the Time Keeper Vi
 | 2 Enhanced Clockstone | 4 Time Wood Saplings |
 | 12 Clockstone + 4-6 Time Crystals | A Time Compass for the Desert Clock Tower, Phantom Catacombs, Guardian Vault, Clockwork Depths, or Entropy Crypt |
 | 16 Clockstone + 8 Time Crystals | A Time Compass for the Master Clock |
+| 8 Clockstone | 4 Clockwork Cookies |
 
 Right-click a purchased Time Compass to search for its structure. Compass trades for structures disabled in the config are not offered.
 
@@ -874,7 +875,7 @@ The custom shields are independent of the existing Chrono Aegis artifact (which 
 - **Time Jam**: Sweet spread made from Fruit of Time
 - **Time Fruit Pie**: Baked dessert
 - **Enhanced Time Bread**: Improved version of Time Bread
-- **Clockwork Cookie**: Special cookie with mechanical ingredients
+- **Clockwork Cookie**: Craft 2 Time Wheat, 1 Time Jam, and 1 Clockwork Block into 4 cookies. The Clockwork Block is used as a mold and stays in the crafting grid. Each cookie adds 30 seconds of Resistance I to whatever time is left, up to 3 minutes, so eating a few before a fight winds it up. Also found in Watchmaker's Camp chests and sold by the Time Keeper
 - **Time Wheat Cookie**: Standard cookie made from Time Wheat
 - **Dried Temporal Kelp**: Smoke / smelt / campfire-cook Temporal Kelp from the Chrono Dawn ocean. Restores 1 hunger with 0.6 saturation; eats fast (≈ 0.86 s) like vanilla dried kelp
 
@@ -1040,7 +1041,7 @@ All three wood types have the same variants:
 
 #### Clockwork Block
 - **Property**: Animated rotating gears texture
-- **Use**: Decorative mechanical-themed block
+- **Use**: Decorative mechanical-themed block, and the mold for Clockwork Cookies (not consumed by the recipe)
 
 #### Frozen Time Ice
 - **Property**: Special ice block unique to Chrono Dawn Snowy biome

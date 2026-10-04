@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Chiseled Temporal Stone Bricks**: a new building block, crafted from two
   Temporal Stone Brick Slabs or cut from Temporal Stone or Temporal Stone
   Bricks on a stonecutter.
+- **Clockwork Cookie sources**: Watchmaker's Camp chests can now contain
+  Clockwork Cookies, and the Time Keeper sells 4 of them for 8 Clockstone.
+  In existing worlds, this applies to chests that have not been opened yet and
+  to Time Keepers you have not traded with yet.
 
 ### Changed
 
@@ -19,6 +23,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Depths Engine Room, and Phantom Catacombs entrance use Chiseled Temporal
   Stone Bricks in place of vanilla chiseled stone bricks. Only newly generated
   structures are affected.
+- **Clockwork Cookie**: the recipe now uses 1 Clockwork Block instead of 2, and
+  the block is a mold that stays in the crafting grid. The recipe also shows up
+  in the recipe book once you pick up Time Jam, a Clockwork Block, or a cookie.
+  Each cookie now adds 30 seconds of Resistance I to the time left, up to
+  3 minutes, instead of giving 30 seconds of Resistance I and Fire Resistance.
 
 ### Fixed
 

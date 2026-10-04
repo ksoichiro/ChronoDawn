@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "AnvilMenuAccessor",
+    "ItemCraftRemainderAccessor",
     "AnvilMenuMixin",
     "LevelGetTimeMixin",
     "ServerLevelSetTimeMixin",

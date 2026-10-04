@@ -325,6 +325,16 @@ public class TimeKeeperEntity extends AbstractVillager {
                     0.05f
                 ));
             }
+
+            // Trade 12: 8 Clockstone → 4 Clockwork Cookie
+            // Lets players try the cookie before they can craft a Clockwork Block mold
+            offers.add(new MerchantOffer(
+                new ItemStack(ModItems.CLOCKSTONE.get(), 8),
+                new ItemStack(ModItems.CLOCKWORK_COOKIE.get(), 4),
+                6, // Max uses
+                2, // XP reward
+                0.05f
+            ));
         }
     }
 
