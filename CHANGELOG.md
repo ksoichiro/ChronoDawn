@@ -21,8 +21,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Fish and Chrono Turtles now spawn in any open-sky or ice-covered water at
   least two blocks deep, including water above sea level and at any depth in
   the ocean, and the desert, faded plains, mountain, and snowy biomes gained
-  water spawns of their own (Glide Fish only in the snowy biome). Only newly
-  generated chunks get the new seagrass.
+  water spawns of their own (Glide Fish only in the snowy biome). Glide Fish
+  now count as water ambient mobs like vanilla fish instead of water creatures,
+  so they no longer share the small water creature cap with Chrono Turtles.
+  Only newly generated chunks get the new seagrass.
 
 ### Changed
 

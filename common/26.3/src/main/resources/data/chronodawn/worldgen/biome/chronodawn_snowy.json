@@ -137,7 +137,7 @@
               "weight": 10
             }
           ],
-          "water_creature": [
+          "water_ambient": [
             {
               "type": "chronodawn:glide_fish",
               "count": {

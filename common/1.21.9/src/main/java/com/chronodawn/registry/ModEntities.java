@@ -313,14 +313,14 @@ public class ModEntities {
     );
 
     /**
-     * GlideFish - Water Creature
+     * GlideFish - Water Ambient (fish category, like vanilla Cod/Salmon)
      *
      * A small fish that spawns in ChronoDawn dimension waters.
      * Behaves similarly to vanilla Cod/Salmon.
      */
     public static final RegistrySupplier<EntityType<GlideFishEntity>> GLIDE_FISH = ENTITIES.register(
         ModEntityId.GLIDE_FISH.id(),
-        () -> EntityType.Builder.of(GlideFishEntity::new, MobCategory.WATER_CREATURE)
+        () -> EntityType.Builder.of(GlideFishEntity::new, MobCategory.WATER_AMBIENT)
             .sized(0.5f, 0.3f)
             .clientTrackingRange(8)
             .updateInterval(3)

@@ -311,14 +311,14 @@ public class ModEntities {
     );
 
     /**
-     * Glide Fish (グライドフィッシュ) - Passive Water Creature
+     * Glide Fish (グライドフィッシュ) - Passive fish (WATER_AMBIENT, like vanilla fish)
      *
      * A small fish with wide pectoral fins that glides through water.
-     * Found in ocean, swamp, forest, and plains biomes.
+     * Found in the ocean and in open-sky inland water of every land biome.
      */
     public static final RegistrySupplier<EntityType<GlideFishEntity>> GLIDE_FISH = ENTITIES.register(
         ModEntityId.GLIDE_FISH.id(),
-        () -> EntityType.Builder.of(GlideFishEntity::new, MobCategory.WATER_CREATURE)
+        () -> EntityType.Builder.of(GlideFishEntity::new, MobCategory.WATER_AMBIENT)
             .sized(0.5f, 0.3f)
             .clientTrackingRange(8)
             .updateInterval(3)

@@ -144,15 +144,6 @@
           ],
           "water_creature": [
             {
-              "type": "chronodawn:glide_fish",
-              "count": {
-                "type": "minecraft:uniform",
-                "min_inclusive": 1,
-                "max_inclusive": 2
-              },
-              "weight": 4
-            },
-            {
               "type": "chronodawn:chrono_turtle",
               "count": {
                 "type": "minecraft:uniform",
@@ -160,6 +151,17 @@
                 "max_inclusive": 2
               },
               "weight": 3
+            }
+          ],
+          "water_ambient": [
+            {
+              "type": "chronodawn:glide_fish",
+              "count": {
+                "type": "minecraft:uniform",
+                "min_inclusive": 1,
+                "max_inclusive": 2
+              },
+              "weight": 4
             }
           ]
         }

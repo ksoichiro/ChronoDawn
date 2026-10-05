@@ -115,12 +115,6 @@
         "maxCount": 2
       },
       {
-        "type": "chronodawn:glide_fish",
-        "weight": 15,
-        "minCount": 2,
-        "maxCount": 4
-      },
-      {
         "type": "chronodawn:chrono_turtle",
         "weight": 8,
         "minCount": 1,
@@ -151,6 +145,12 @@
         "weight": 5,
         "minCount": 1,
         "maxCount": 3
+      },
+      {
+        "type": "chronodawn:glide_fish",
+        "weight": 15,
+        "minCount": 2,
+        "maxCount": 4
       }
     ],
     "misc": []

@@ -89,7 +89,8 @@
         "maxCount": 6
       }
     ],
-    "water_creature": [
+    "water_creature": [],
+    "water_ambient": [
       {
         "type": "chronodawn:glide_fish",
         "weight": 4,
@@ -97,7 +98,6 @@
         "maxCount": 2
       }
     ],
-    "water_ambient": [],
     "misc": []
   },
   "spawn_costs": {},
