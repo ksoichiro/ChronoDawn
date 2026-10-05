@@ -362,7 +362,7 @@ gradlew.bat test
 
 2. **Dimension Features**:
    - [ ] Explore different biomes (Forest, Desert, Mountain, etc.)
-   - [ ] Verify hostile mobs have Slowness IV effect
+   - [ ] Verify hostile mobs have Slowness III effect (default config, Normal band)
    - [ ] Find Forgotten Library structure
 
 3. **Portal Stabilizer**:

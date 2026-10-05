@@ -48,6 +48,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   its exact recipe with the Enhanced Clockstone Pickaxe, so the crafting grid
   could give you either one. The recipe book now shows it once you pick up a
   Time Crystal, as on 1.20.1.
+- **Time Distortion rebalance**: the ambient effect in Chrono Dawn now follows
+  the day/night cycle speed. Mobs are slowed more when time runs slowly and
+  less when it speeds up. When time races, mobs get Speed I instead, and a
+  distant bell warns players in the dimension. The default Normal level is
+  Slowness III (IV after the Eye of Chronos), down from IV (V). New config
+  keys: `link_to_time_flow`, `slow_below`, `fast_above`, `very_fast_above`,
+  and `very_fast_speed_level`.
+  Existing `chronodawn.toml` files keep their written levels (4 and 5). Set
+  `normal_slowness_level = 3` and `enhanced_slowness_level = 4` to adopt the
+  new balance.
+- **Time Distortion resistance**: Temporal Wraith, Timeline Strider, and
+  Forgotten Minute now resist the distortion (two Slowness levels weaker),
+  listed in the new `chronodawn:time_distortion_resistant` entity type tag.
+  Clockwork Sentinel is now in `chronodawn:time_distortion_immune`, and
+  removing it from that tag makes it affected by Slowness again.
 
 ### Fixed
 
@@ -89,6 +104,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Recipe book tabs on 1.20.1 and 1.21.1**: building blocks now appear under
   the Building tab, and weapons, armor, and tools under the Equipment tab,
   instead of Misc, as they already did on later versions.
+- **Time Distortion immune tag on Minecraft 1.21.5 and later**: datapack
+  changes to `chronodawn:time_distortion_immune` were ignored on these
+  versions because the boss list was hardcoded. The tag is now honored on
+  every version.
 
 ## [0.11.0] - 2026-10-04
 

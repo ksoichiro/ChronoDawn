@@ -391,24 +391,62 @@ for the phase-ratio consequence of retuning a boss mid-fight.
 
 ### `[gameplay.time_distortion]`
 
-Controls the ambient Slowness effect in the Chrono Dawn dimension. The effect
-is applied to eligible mobs every tick; setting `enabled = false` stops new
+Controls the ambient effect on mobs in the Chrono Dawn dimension. The effect
+is applied to eligible mobs every tick. Setting `enabled = false` stops new
 applications. Players and Chrono Dawn bosses are never affected.
+
+The effect follows the day/night cycle speed from `[gameplay.time_flow]`. The
+current speed falls into one of four bands:
+
+| Band | Speed multiplier | Effect |
+| --- | --- | --- |
+| Slow | below `slow_below` | Slowness, Normal level + 1 (at most V) |
+| Normal | `slow_below` to `fast_above` | Slowness at the Normal level |
+| Fast | `fast_above` to `very_fast_above` | Slowness, Normal level - 1 (none below I) |
+| Very fast | `very_fast_above` and above | Speed at `very_fast_speed_level` |
+
+The Normal level is `normal_slowness_level`, or `enhanced_slowness_level`
+after the Eye of Chronos enhancement. A speed equal to a bound belongs to the
+higher band. A distant bell sounds for players in the dimension when the speed
+enters the Very fast band.
+
+Mobs in the `chronodawn:time_distortion_immune` entity type tag are not
+affected. Mobs in `chronodawn:time_distortion_resistant` take Slowness two
+levels weaker and Speed unchanged. Clockwork Sentinel also rejects Slowness
+from any other source while it is in the immune tag.
 
 ```toml
 [gameplay.time_distortion]
 enabled = true
-normal_slowness_level = 4
-enhanced_slowness_level = 5
+normal_slowness_level = 3
+enhanced_slowness_level = 4
 scope = "hostile_mobs"
+link_to_time_flow = true
+slow_below = 1.0
+fast_above = 3.0
+very_fast_above = 4.5
+very_fast_speed_level = 1
 ```
 
 | Field | Type | Default | Range | Notes |
 | --- | --- | --- | --- | --- |
-| `enabled` | boolean | `true` | — | Turns the ambient effect on or off. |
-| `normal_slowness_level` | integer | `4` | `1..=5` | Potion level before the Eye of Chronos enhancement. |
-| `enhanced_slowness_level` | integer | `5` | `1..=5` | Potion level after the Eye of Chronos enhancement. |
-| `scope` | string | `"hostile_mobs"` | `"hostile_mobs"`, `"all_mobs"` | `hostile_mobs` preserves shipped behavior. `all_mobs` also affects passive and friendly mobs. Players and Chrono Dawn bosses remain excluded. |
+| `enabled` | boolean | `true` | n/a | Turns the ambient effect on or off. |
+| `normal_slowness_level` | integer | `3` | `1..=5` | Normal band Slowness level before the Eye of Chronos enhancement. |
+| `enhanced_slowness_level` | integer | `4` | `1..=5` | Normal band Slowness level after the Eye of Chronos enhancement. |
+| `scope` | string | `"hostile_mobs"` | `"hostile_mobs"`, `"all_mobs"` | `all_mobs` also affects passive and friendly mobs, including Speed in the Very fast band. Players and Chrono Dawn bosses remain excluded. |
+| `link_to_time_flow` | boolean | `true` | n/a | When `false`, or when `[gameplay.time_flow]` is disabled, the Normal band always applies and no bell sounds. |
+| `slow_below` | float | `1.0` | `0.05..=20.0` | Upper bound of the Slow band. |
+| `fast_above` | float | `3.0` | `0.05..=20.0` | Lower bound of the Fast band. |
+| `very_fast_above` | float | `4.5` | `0.05..=20.0` | Lower bound of the Very fast band. The three bounds must be strictly increasing, otherwise all three revert to their defaults. |
+| `very_fast_speed_level` | integer | `1` | `0..=2` | Speed level in the Very fast band. `0` disables the band, so the Fast band applies instead and no bell sounds. |
+
+#### Existing installs
+
+Chrono Dawn writes `chronodawn.toml` once and never rewrites it. A file
+created before this change keeps `normal_slowness_level = 4` and
+`enhanced_slowness_level = 5`, so mobs stay one level slower than the new
+defaults in every Slowness band. To adopt the new balance, set them to `3`
+and `4`.
 
 #### Example: remove ambient Slowness
 
@@ -419,6 +457,13 @@ enabled = false
 
 This does not affect Slowness applied by individual attacks, items, blocks, or
 boss abilities. Those mechanics retain their own balance.
+
+#### Example: a constant effect without time-flow bands
+
+```toml
+[gameplay.time_distortion]
+link_to_time_flow = false
+```
 
 #### Example: make the Chrono dimension less restrictive
 

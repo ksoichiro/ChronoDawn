@@ -36,7 +36,7 @@ Chrono Dawn is a time-themed dimension mod that adds:
 
 ### Key Features
 
-- **Time Distortion Effect**: Hostile mobs move in slow motion (Slowness IV) while you move at normal speed
+- **Time Distortion Effect**: Hostile mobs are slowed while you move at normal speed. The effect follows the flow of time, and when time races, mobs briefly become faster instead
 - **Independent Portal System**: One-way entry that can be upgraded to bidirectional travel
 - **Epic Boss Battles**: Time Guardian, 4 mid-bosses, and Time Tyrant final boss
 - **Ultimate Artifacts**: Time-manipulating weapons, armor, and tools
@@ -191,7 +191,7 @@ prevents a stray mob or item from consuming it before you enter Chrono Dawn.
 
 ### Time Distortion Effect
 
-All hostile mobs in Chrono Dawn receive **Slowness IV**, making them move extremely slowly. You move at normal speed, giving you a significant advantage! Once the Time Tyrant is defeated, the effect strengthens to **Slowness V** by default.
+Hostile mobs in Chrono Dawn are slowed by distorted time, while you move at normal speed. With default settings they usually have **Slowness III**. When time flows slowly they are slowed more, and when it speeds up they are slowed less. When time races, the distortion flips and mobs get **Speed I**. A distant bell, a racing sky, and swirling particles around mobs are the signs. Some creatures resist the distortion, and Clockwork Sentinel ignores it. After the Eye of Chronos enhancement, every Slowness band becomes one level stronger.
 
 Bosses and the Clockwork Sentinel are immune.
 
@@ -1099,7 +1099,7 @@ All three wood types have the same variants:
    - Torches for lighting
 
 3. **Exploit Time Distortion**
-   - Hostile mobs have Slowness IV
+   - Hostile mobs are usually slowed (Slowness III by default)
    - Use this to safely explore and gather resources
    - Combat becomes much easier!
    - You can outrun any hostile mob
@@ -1235,8 +1235,8 @@ All three wood types have the same variants:
    - You can always escape by breaking bed and dying (last resort!)
 
 2. **Time Distortion Stacking**
-   - Mobs already have Slowness IV in Chrono Dawn
-   - Makes combat trivially easy!
+   - Mobs are already slowed in Chrono Dawn
+   - Makes combat much easier while time is not racing
 
 3. **Ultimate Gear Set**
    - Combine all artifacts for maximum power:

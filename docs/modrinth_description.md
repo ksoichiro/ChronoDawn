@@ -149,7 +149,7 @@ Use **Fragments of Stasis Core** (dropped by the Time Tyrant) and Enhanced Clock
 ## 🎮 Gameplay Features
 
 ### Time Manipulation Mechanics
-- **Time Distortion**: Hostile mobs in Chrono Dawn move extremely slowly
+- **Time Distortion**: Hostile mobs in Chrono Dawn are slowed, more or less depending on the flow of time, and briefly speed up when time races
 - **Reversing Time Sandstone**: Blocks that regenerate after being broken
 - **Unstable Fungus**: Blocks that apply random speed effects when stepped on
 - **Time Clock**: Cancel enemy attacks with a cooldown-based utility item
