@@ -48,7 +48,8 @@ class TimeDistortionEffectTest {
     @Test
     void disabledSetting_doesNotInspectOrModifyEntities() {
         TimeDistortionSettings disabled = new TimeDistortionSettings(
-            false, 4, 5, TimeDistortionSettings.Scope.HOSTILE_MOBS
+            false, 3, 4, TimeDistortionSettings.Scope.HOSTILE_MOBS,
+            true, 1.0f, 3.0f, 4.5f, 1
         );
         ChronoDawnConfig defaults = ConfigDefaults.defaults();
         ChronoDawnConfig.set(new ChronoDawnConfig(

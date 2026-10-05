@@ -288,13 +288,32 @@ enabled = true
 # Whether the Chrono Dawn dimension applies ambient Slowness to mobs.
 enabled = true
 
-# Slowness level before and after the Eye of Chronos enhancement. Range: 1 to 5.
-normal_slowness_level = 4
-enhanced_slowness_level = 5
+# Slowness level in the Normal band, before and after the Eye of Chronos
+# enhancement. Range: 1 to 5. Other bands are relative to this level.
+normal_slowness_level = 3
+enhanced_slowness_level = 4
 
 # "hostile_mobs" affects only hostile mobs. "all_mobs" also affects passive
 # and friendly mobs. Players and Chrono Dawn bosses are never affected.
 scope = "hostile_mobs"
+
+# Whether the effect follows the day/night cycle speed from [gameplay.time_flow].
+# When false, or when time flow is disabled, the Normal band always applies.
+link_to_time_flow = true
+
+# Band bounds as day/night cycle speed multipliers. Must satisfy
+# 0.05 <= slow_below < fast_above < very_fast_above <= 20.0.
+#   below slow_below:                 Slowness, Normal level + 1
+#   slow_below to fast_above:         Slowness, Normal level
+#   fast_above to very_fast_above:    Slowness, Normal level - 1
+#   very_fast_above and above:        Speed at very_fast_speed_level
+slow_below = 1.0
+fast_above = 3.0
+very_fast_above = 4.5
+
+# Speed level given to mobs while time races. Range: 0 to 2. 0 disables the
+# Very fast band, so the Fast band applies instead and no bell sounds.
+very_fast_speed_level = 1
 
 [gameplay.time_flow]
 # Whether the Chrono Dawn dimension's day/night cycle randomly speeds up and

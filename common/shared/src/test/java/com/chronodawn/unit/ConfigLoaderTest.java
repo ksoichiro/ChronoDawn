@@ -505,11 +505,13 @@ class ConfigLoaderTest {
     void timeDistortion_missingSection_fallsBackToDefaults(@TempDir Path tmp) throws IOException {
         Files.writeString(tmp.resolve("chronodawn.toml"), "schema_version = 1\n");
 
-        ChronoDawnConfig config = ConfigLoader.load(tmp);
+        TimeDistortionSettings settings = ConfigLoader.load(tmp).gameplay().timeDistortion();
 
-        assertEquals(ConfigDefaults.TIME_DISTORTION_DEFAULTS, config.gameplay().timeDistortion());
-        assertEquals(3, config.gameplay().timeDistortion().slownessAmplifier(false));
-        assertEquals(4, config.gameplay().timeDistortion().slownessAmplifier(true));
+        assertEquals(ConfigDefaults.TIME_DISTORTION_DEFAULTS, settings);
+        assertEquals(new TimeDistortionSettings(
+            true, 3, 4, TimeDistortionSettings.Scope.HOSTILE_MOBS,
+            true, 1.0f, 3.0f, 4.5f, 1
+        ), settings);
     }
 
     @Test
@@ -519,12 +521,18 @@ class ConfigLoaderTest {
             "enabled = false\n" +
             "normal_slowness_level = 2\n" +
             "enhanced_slowness_level = 3\n" +
-            "scope = \"all_mobs\"\n");
+            "scope = \"all_mobs\"\n" +
+            "link_to_time_flow = false\n" +
+            "slow_below = 0.8\n" +
+            "fast_above = 2.0\n" +
+            "very_fast_above = 6.0\n" +
+            "very_fast_speed_level = 2\n");
 
         ChronoDawnConfig config = ConfigLoader.load(tmp);
 
         assertEquals(new TimeDistortionSettings(
-            false, 2, 3, TimeDistortionSettings.Scope.ALL_MOBS
+            false, 2, 3, TimeDistortionSettings.Scope.ALL_MOBS,
+            false, 0.8f, 2.0f, 6.0f, 2
         ), config.gameplay().timeDistortion());
     }
 
@@ -541,6 +549,56 @@ class ConfigLoaderTest {
         assertEquals(ConfigDefaults.TIME_DISTORTION_DEFAULTS.normalSlownessLevel(), settings.normalSlownessLevel());
         assertEquals(2, settings.enhancedSlownessLevel());
         assertEquals(ConfigDefaults.TIME_DISTORTION_DEFAULTS.scope(), settings.scope());
+    }
+
+    @Test
+    void timeDistortion_legacyFile_keepsLevelsAndGetsBandDefaults(@TempDir Path tmp) throws IOException {
+        // A file written by an older release has the old explicit levels and no band keys.
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[gameplay.time_distortion]\n" +
+            "enabled = true\n" +
+            "normal_slowness_level = 4\n" +
+            "enhanced_slowness_level = 5\n" +
+            "scope = \"hostile_mobs\"\n");
+
+        TimeDistortionSettings settings = ConfigLoader.load(tmp).gameplay().timeDistortion();
+
+        assertEquals(new TimeDistortionSettings(
+            true, 4, 5, TimeDistortionSettings.Scope.HOSTILE_MOBS,
+            true, 1.0f, 3.0f, 4.5f, 1
+        ), settings);
+    }
+
+    @Test
+    void timeDistortion_nonIncreasingBounds_fallBackTogether(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[gameplay.time_distortion]\n" +
+            "normal_slowness_level = 2\n" +
+            "slow_below = 2.0\n" +
+            "fast_above = 2.0\n" +
+            "very_fast_above = 5.0\n");
+
+        TimeDistortionSettings settings = ConfigLoader.load(tmp).gameplay().timeDistortion();
+        TimeDistortionSettings defaults = ConfigDefaults.TIME_DISTORTION_DEFAULTS;
+
+        assertEquals(defaults.slowBelow(), settings.slowBelow());
+        assertEquals(defaults.fastAbove(), settings.fastAbove());
+        assertEquals(defaults.veryFastAbove(), settings.veryFastAbove());
+        assertEquals(2, settings.normalSlownessLevel());
+    }
+
+    @Test
+    void timeDistortion_outOfRangeBandValues_fallBack(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[gameplay.time_distortion]\n" +
+            "very_fast_above = 25.0\n" +
+            "very_fast_speed_level = 3\n");
+
+        TimeDistortionSettings settings = ConfigLoader.load(tmp).gameplay().timeDistortion();
+        TimeDistortionSettings defaults = ConfigDefaults.TIME_DISTORTION_DEFAULTS;
+
+        assertEquals(defaults.veryFastAbove(), settings.veryFastAbove());
+        assertEquals(defaults.veryFastSpeedLevel(), settings.veryFastSpeedLevel());
     }
 
     @Test

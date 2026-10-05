@@ -97,6 +97,11 @@ public final class ConfigLoader {
     private static final String K_TD_NORMAL_SLOWNESS_LEVEL = "normal_slowness_level";
     private static final String K_TD_ENHANCED_SLOWNESS_LEVEL = "enhanced_slowness_level";
     private static final String K_TD_SCOPE = "scope";
+    private static final String K_TD_LINK_TO_TIME_FLOW = "link_to_time_flow";
+    private static final String K_TD_SLOW_BELOW = "slow_below";
+    private static final String K_TD_FAST_ABOVE = "fast_above";
+    private static final String K_TD_VERY_FAST_ABOVE = "very_fast_above";
+    private static final String K_TD_VERY_FAST_SPEED_LEVEL = "very_fast_speed_level";
     private static final String K_TIME_FLOW = "time_flow";
     private static final String K_TF_ENABLED = "enabled";
     private static final String K_TF_MIN_SPEED = "min_speed";
@@ -119,6 +124,9 @@ public final class ConfigLoader {
 
     private static final int MIN_SLOWNESS_LEVEL = 1;
     private static final int MAX_SLOWNESS_LEVEL = 5;
+    // 0 disables the Very fast band. Speed III and above makes melee mobs unavoidable.
+    private static final int MIN_VERY_FAST_SPEED_LEVEL = 0;
+    private static final int MAX_VERY_FAST_SPEED_LEVEL = 2;
 
     // Slowest allowed: 5% speed (a day would last roughly 3-4 hours).
     // Fastest allowed: 20x speed (a day lasts 60 seconds).
@@ -427,6 +435,20 @@ public final class ConfigLoader {
             .orElse(defaults.scope().configValue());
         TimeDistortionSettings.Scope scope = TimeDistortionSettings.Scope.fromConfigValue(scopeValue)
             .orElse(defaults.scope());
+        boolean linkToTimeFlow = parsed.<Boolean>getOptional(path + "." + K_TD_LINK_TO_TIME_FLOW)
+            .orElse(defaults.linkToTimeFlow());
+        float slowBelow = parsed.<Number>getOptional(path + "." + K_TD_SLOW_BELOW)
+            .map(Number::floatValue)
+            .orElse(defaults.slowBelow());
+        float fastAbove = parsed.<Number>getOptional(path + "." + K_TD_FAST_ABOVE)
+            .map(Number::floatValue)
+            .orElse(defaults.fastAbove());
+        float veryFastAbove = parsed.<Number>getOptional(path + "." + K_TD_VERY_FAST_ABOVE)
+            .map(Number::floatValue)
+            .orElse(defaults.veryFastAbove());
+        int veryFastSpeedLevel = parsed.<Number>getOptional(path + "." + K_TD_VERY_FAST_SPEED_LEVEL)
+            .map(Number::intValue)
+            .orElse(defaults.veryFastSpeedLevel());
 
         if (normalLevel < MIN_SLOWNESS_LEVEL || normalLevel > MAX_SLOWNESS_LEVEL) {
             LOGGER.error(
@@ -451,8 +473,33 @@ public final class ConfigLoader {
                 Arrays.toString(TimeDistortionSettings.Scope.values()), defaults.scope().configValue()
             );
         }
+        // The three bounds only make sense together, so any violation resets all of them.
+        if (slowBelow < MIN_TIME_SPEED || veryFastAbove > MAX_TIME_SPEED
+            || slowBelow >= fastAbove || fastAbove >= veryFastAbove) {
+            LOGGER.error(
+                "Invalid {}.{{slow_below,fast_above,very_fast_above}} = ({}, {}, {}) "
+                    + "(must satisfy {} <= slow_below < fast_above < very_fast_above <= {}); "
+                    + "using defaults ({}, {}, {})",
+                path, slowBelow, fastAbove, veryFastAbove, MIN_TIME_SPEED, MAX_TIME_SPEED,
+                defaults.slowBelow(), defaults.fastAbove(), defaults.veryFastAbove()
+            );
+            slowBelow = defaults.slowBelow();
+            fastAbove = defaults.fastAbove();
+            veryFastAbove = defaults.veryFastAbove();
+        }
+        if (veryFastSpeedLevel < MIN_VERY_FAST_SPEED_LEVEL || veryFastSpeedLevel > MAX_VERY_FAST_SPEED_LEVEL) {
+            LOGGER.error(
+                "Invalid {}.{} = {} (must be in [{}, {}]); using default {}",
+                path, K_TD_VERY_FAST_SPEED_LEVEL, veryFastSpeedLevel,
+                MIN_VERY_FAST_SPEED_LEVEL, MAX_VERY_FAST_SPEED_LEVEL, defaults.veryFastSpeedLevel()
+            );
+            veryFastSpeedLevel = defaults.veryFastSpeedLevel();
+        }
 
-        return new TimeDistortionSettings(enabled, normalLevel, enhancedLevel, scope);
+        return new TimeDistortionSettings(
+            enabled, normalLevel, enhancedLevel, scope,
+            linkToTimeFlow, slowBelow, fastAbove, veryFastAbove, veryFastSpeedLevel
+        );
     }
 
     private static TimeFlowSettings parseTimeFlow(CommentedConfig parsed) {

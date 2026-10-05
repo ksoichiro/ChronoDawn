@@ -49,12 +49,18 @@ public final class ConfigDefaults {
     // keeps "the default is a no-op" impossible to break for one boss only.
     public static final BossSettings BOSS_DEFAULTS = new BossSettings(1.0, 1.0);
 
-    // Defaults mirror the existing ambient Time Distortion behavior exactly.
+    // Normal band Slowness III (IV after the Eye of Chronos). Existing config files keep
+    // their written levels because the loader never rewrites them.
     public static final TimeDistortionSettings TIME_DISTORTION_DEFAULTS = new TimeDistortionSettings(
         true,
+        3,
         4,
-        5,
-        TimeDistortionSettings.Scope.HOSTILE_MOBS
+        TimeDistortionSettings.Scope.HOSTILE_MOBS,
+        true,
+        1.0f,
+        3.0f,
+        4.5f,
+        1
     );
 
     // Defaults mirror the existing variable day/night cycle speed exactly.

@@ -25,7 +25,12 @@ public record TimeDistortionSettings(
     boolean enabled,
     int normalSlownessLevel,
     int enhancedSlownessLevel,
-    Scope scope
+    Scope scope,
+    boolean linkToTimeFlow,
+    float slowBelow,
+    float fastAbove,
+    float veryFastAbove,
+    int veryFastSpeedLevel
 ) {
     /** The supported entity scopes, using stable lowercase TOML values. */
     public enum Scope {
