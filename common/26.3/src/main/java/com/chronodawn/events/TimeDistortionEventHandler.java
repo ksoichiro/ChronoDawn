@@ -2,7 +2,9 @@ package com.chronodawn.events;
 
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.config.ChronoDawnConfig;
+import com.chronodawn.config.TimeDistortionSettings;
 import com.chronodawn.config.TimeFlowSettings;
+import com.chronodawn.core.time.TimeDistortionPolicy;
 import com.chronodawn.registry.ModDimensions;
 import dev.architectury.event.events.common.TickEvent;
 import net.minecraft.core.Holder;
@@ -10,6 +12,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.game.ClientboundSetTimePacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.clock.WorldClock;
 import net.minecraft.world.clock.WorldClocks;
@@ -56,6 +60,11 @@ public class TimeDistortionEventHandler {
 
     // Interval for sending time sync packets to clients (in ticks)
     private static final int TIME_SYNC_INTERVAL = 20;
+
+    // A distant bell is the only hint that mobs just sped up. Players who read the
+    // Chronicle learn to take cover, others just hear ambience.
+    private static final float VERY_FAST_CUE_VOLUME = 0.6f;
+    private static final float VERY_FAST_CUE_PITCH = 0.8f;
 
     // 26.1.2: ServerLevel#getDayTime()/setDayTime() were removed in favor of the new
     // world clock system. We use the dimension's configured default clock if present,
@@ -175,6 +184,10 @@ public class TimeDistortionEventHandler {
         if (timeFlow.enabled() && timeUntilChange <= 0) {
             float newSpeed = getRandomSpeed(level.getRandom(), timeFlow);
             int newDuration = getRandomDuration(level.getRandom(), timeFlow);
+            TimeDistortionSettings distortion = ChronoDawnConfig.get().gameplay().timeDistortion();
+            if (distortion.enabled() && TimeDistortionPolicy.entersVeryFast(currentSpeed, newSpeed, distortion)) {
+                playVeryFastCue(level);
+            }
 
             ChronoDawn.LOGGER.debug("TimeDistortionEventHandler: Speed changed from {}x to {}x (duration: {} ticks)",
                 currentSpeed, newSpeed, newDuration);
@@ -222,6 +235,13 @@ public class TimeDistortionEventHandler {
         ClientboundSetTimePacket packet = level.clockManager().createFullSyncPacket();
         for (ServerPlayer player : level.players()) {
             player.connection.send(packet);
+        }
+    }
+
+    private static void playVeryFastCue(ServerLevel level) {
+        for (ServerPlayer player : level.players()) {
+            level.playSound(null, player.getX(), player.getY(), player.getZ(),
+                SoundEvents.BELL_RESONATE, SoundSource.AMBIENT, VERY_FAST_CUE_VOLUME, VERY_FAST_CUE_PITCH);
         }
     }
 
