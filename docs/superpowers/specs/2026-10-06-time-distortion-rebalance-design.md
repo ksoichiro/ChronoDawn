@@ -73,8 +73,10 @@ The Normal band is used whenever the multiplier is not meaningful:
 
 - `link_to_time_flow = false`
 - `[gameplay.time_flow] enabled = false` (time always runs at 1.0x)
-- before the first speed is chosen after a server start (the handler starts at
-  1.0x)
+
+After a server start, the time-flow handler runs at 1.0x until it picks its
+first random speed. The band for that period is whatever band 1.0x falls in,
+which is Normal with the default bounds.
 
 ## 2. Resistance tiers
 
@@ -173,10 +175,12 @@ holds both languages and is shared by all versions.
 | `very_fast_above` | float | `4.5` | `0.05..=20.0` | new |
 | `very_fast_speed_level` | int | `1` | `0..=2` | new, `0` disables the Very fast band and its cue |
 
-Validation follows the existing ConfigLoader pattern: an out-of-range value
-logs a warning and falls back to its default. If the three bounds are not
-strictly increasing (`slow_below < fast_above < very_fast_above`), log one
-warning and use the default bounds for all three. When `very_fast_speed_level`
+Validation follows the existing ConfigLoader pattern, which logs at error
+level. An out-of-range `very_fast_speed_level` falls back to its default. The
+three bounds are validated together, like `min_speed` and `max_speed` in
+`[gameplay.time_flow]`: if any is outside `0.05..=20.0`, or they are not
+strictly increasing (`slow_below < fast_above < very_fast_above`), all three
+fall back to their defaults. When `very_fast_speed_level`
 is `0`, the Very fast band is treated as the Fast band.
 
 ### Existing installs
@@ -207,7 +211,7 @@ tell users to set the two levels to 3 and 4 to adopt the new balance.
   only if callers still need it.
 - **`ConfigDefaults`, `ConfigLoader`, `chronodawn-default-config.toml`**: new
   keys, defaults, and validation.
-- **`TimeDistortionEffect`** (shared copy and the eleven 1.21.5+ copies): get
+- **`TimeDistortionEffect`** (shared copy and the ten 1.21.5+ copies): get
   the multiplier from `TimeDistortionEventHandler.getCurrentSpeed`, the tier
   from the tags, ask the policy, then apply as in section 3. The 1.21.5+ copies
   replace their `instanceof` boss chain with the tag check. The copies keep
