@@ -6,10 +6,15 @@ import com.chronodawn.config.TimeDistortionSettings;
 import com.chronodawn.config.TimeFlowSettings;
 import com.chronodawn.core.time.TimeDistortionPolicy;
 import com.chronodawn.registry.ModDimensions;
+import dev.architectury.event.events.common.LifecycleEvent;
 import dev.architectury.event.events.common.TickEvent;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.game.ClientboundSetTimePacket;
+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -68,6 +73,8 @@ public class TimeDistortionEventHandler {
      */
     public static void register() {
         TickEvent.SERVER_LEVEL_POST.register(TimeDistortionEventHandler::onServerLevelTick);
+        // Single-player worlds share this JVM, so stale speeds would leak into the next world.
+        LifecycleEvent.SERVER_STOPPING.register(server -> clearState());
         ChronoDawn.LOGGER.debug("Registered TimeDistortionEventHandler");
     }
 
@@ -216,11 +223,21 @@ public class TimeDistortionEventHandler {
     }
 
     private static void playVeryFastCue(ServerLevel level) {
+        Holder<SoundEvent> sound = BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.BELL_RESONATE);
         for (ServerPlayer player : level.players()) {
-            player.playNotifySound(
-                SoundEvents.BELL_RESONATE, SoundSource.AMBIENT, VERY_FAST_CUE_VOLUME, VERY_FAST_CUE_PITCH
-            );
+            // A packet per player, so players standing together do not hear stacked bells.
+            player.connection.send(new ClientboundSoundPacket(
+                sound, SoundSource.AMBIENT, player.getX(), player.getY(), player.getZ(),
+                VERY_FAST_CUE_VOLUME, VERY_FAST_CUE_PITCH, level.getRandom().nextLong()
+            ));
         }
+    }
+
+    private static void clearState() {
+        timeSpeedMap.clear();
+        timeUntilChangeMap.clear();
+        sleepSkipTargetTimeMap.clear();
+        accumulatedTicksMap.clear();
     }
 
     /**

@@ -57,7 +57,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   and `very_fast_speed_level`.
   Existing `chronodawn.toml` files keep their written levels (4 and 5). Set
   `normal_slowness_level = 3` and `enhanced_slowness_level = 4` to adopt the
-  new balance.
+  new balance. Existing worlds also follow the new time-flow bands, including
+  short Speed I periods. To keep the previous constant effect, set
+  `link_to_time_flow = false`.
 - **Time Distortion resistance**: Temporal Wraith, Timeline Strider, and
   Forgotten Minute now resist the distortion (two Slowness levels weaker),
   listed in the new `chronodawn:time_distortion_resistant` entity type tag.

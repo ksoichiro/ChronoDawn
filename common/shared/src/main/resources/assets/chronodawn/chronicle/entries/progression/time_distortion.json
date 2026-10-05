@@ -9,8 +9,8 @@
   "pages": [
     {
       "text": {
-        "en_us": "Time in Chrono Dawn is distorted. Hostile mobs move slower than they should, while you keep your normal speed.\n\nThe strength follows the flow of time:\n• When time runs slowly, mobs are slowed the most\n• When time races, mobs are barely slowed\n• Some creatures resist the distortion, and a few ignore it\n\nObtaining the Eye of Chronos deepens the distortion.",
-        "ja_jp": "クロノドーンでは時間が歪んでいます。敵対的なモブは本来より遅く動き、あなたは通常の速さで動けます。\n\n歪みの強さは時の流れに従います:\n• 時の流れが遅いとき、モブは最も遅くなる\n• 時の流れが速いとき、モブはあまり遅くならない\n• 歪みに抵抗する生物や、まったく影響を受けない生物もいる\n\nクロノスの瞳を入手すると、歪みはさらに深まります。"
+        "en_us": "Time in Chrono Dawn is distorted. Hostile mobs move slower than they should, while you keep your normal speed.\n\nThe strength follows the flow of time:\n• When time runs slowly, mobs are slowed the most\n• When time speeds up, mobs are barely slowed\n• Some creatures resist the distortion, and a few ignore it\n\nObtaining the Eye of Chronos deepens the distortion.",
+        "ja_jp": "クロノドーンでは時間が歪んでいます。敵対的なモブは本来より遅く動き、あなたは通常の速さで動けます。\n\n歪みの強さは時の流れに従います:\n• 時の流れが遅いとき、モブは最も遅くなる\n• 時の流れが速まると、モブはあまり遅くならない\n• 歪みに抵抗する生物や、まったく影響を受けない生物もいる\n\nクロノスの瞳を入手すると、歪みはさらに深まります。"
       }
     },
     {

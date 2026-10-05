@@ -116,6 +116,12 @@ class TimeDistortionPolicyTest {
     }
 
     @Test
+    void outcome_resistant_isTwoBelowClampedNormalLevel() {
+        TimeDistortionSettings legacy = with(4, 5, true, 1.0f, 3.0f, 4.5f, 1);
+        assertEquals(slowness(3), TimeDistortionPolicy.outcome(Band.SLOW, true, Tier.RESISTANT, legacy));
+    }
+
+    @Test
     void outcome_resistant_dropsTwoSlownessLevels() {
         assertEquals(slowness(2), TimeDistortionPolicy.outcome(Band.SLOW, false, Tier.RESISTANT, DEFAULTS));
         assertEquals(slowness(1), TimeDistortionPolicy.outcome(Band.NORMAL, false, Tier.RESISTANT, DEFAULTS));

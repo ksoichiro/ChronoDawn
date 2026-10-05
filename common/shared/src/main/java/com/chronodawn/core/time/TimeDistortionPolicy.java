@@ -84,10 +84,10 @@ public final class TimeDistortionPolicy {
             case FAST -> base - 1;
             default -> base;
         };
+        level = Math.min(level, MAX_SLOWNESS_LEVEL);
         if (tier == Tier.RESISTANT) {
             level -= RESISTANT_LEVEL_REDUCTION;
         }
-        level = Math.min(level, MAX_SLOWNESS_LEVEL);
         return level < 1 ? Outcome.NONE : new Outcome(Kind.SLOWNESS, level);
     }
 

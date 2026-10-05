@@ -445,8 +445,13 @@ very_fast_speed_level = 1
 Chrono Dawn writes `chronodawn.toml` once and never rewrites it. A file
 created before this change keeps `normal_slowness_level = 4` and
 `enhanced_slowness_level = 5`, so mobs stay one level slower than the new
-defaults in every Slowness band. To adopt the new balance, set them to `3`
-and `4`.
+defaults in most Slowness bands (both reach the Slowness V cap in the Slow
+band after the Eye of Chronos enhancement). To adopt the new balance, set them
+to `3` and `4`.
+
+Existing installs also follow the time-flow bands, including short Speed I
+periods while time races. To keep the previous constant effect, set
+`link_to_time_flow = false`.
 
 #### Example: remove ambient Slowness
 
@@ -464,6 +469,9 @@ boss abilities. Those mechanics retain their own balance.
 [gameplay.time_distortion]
 link_to_time_flow = false
 ```
+
+With the levels left at 4 and 5, this reproduces the behavior before the
+time-flow bands were added.
 
 #### Example: make the Chrono dimension less restrictive
 

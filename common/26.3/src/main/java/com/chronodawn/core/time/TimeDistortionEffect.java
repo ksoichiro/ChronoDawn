@@ -87,6 +87,7 @@ public class TimeDistortionEffect {
     }
 
     private static Tier tierOf(LivingEntity entity) {
+        // EntityType#is(TagKey) is gone on 26.x. The holder form works on 1.21.11 and 26.x alike.
         if (BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(entity.getType()).is(ModEntityTypeTags.TIME_DISTORTION_IMMUNE)) {
             return Tier.IMMUNE;
         }
