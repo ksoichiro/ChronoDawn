@@ -51,9 +51,4 @@ public record TimeDistortionSettings(
             return Arrays.stream(values()).filter(scope -> scope.configValue.equals(value)).findFirst();
         }
     }
-
-    /** Convert the player-visible potion level to Minecraft's zero-based amplifier. */
-    public int slownessAmplifier(boolean enhanced) {
-        return (enhanced ? enhancedSlownessLevel : normalSlownessLevel) - 1;
-    }
 }

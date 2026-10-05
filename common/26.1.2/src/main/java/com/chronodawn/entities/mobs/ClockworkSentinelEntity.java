@@ -96,7 +96,7 @@ public class ClockworkSentinelEntity extends Monster {
     @Override
     public boolean canBeAffected(net.minecraft.world.effect.MobEffectInstance effect) {
         if (effect.getEffect() == net.minecraft.world.effect.MobEffects.SLOWNESS
-            && this.getType().is(com.chronodawn.tags.ModEntityTypeTags.TIME_DISTORTION_IMMUNE)) {
+            && this.is(com.chronodawn.tags.ModEntityTypeTags.TIME_DISTORTION_IMMUNE)) {
             return false;
         }
 

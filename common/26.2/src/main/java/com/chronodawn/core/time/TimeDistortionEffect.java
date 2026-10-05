@@ -1,16 +1,15 @@
 package com.chronodawn.core.time;
 
-import com.chronodawn.ChronoDawn;
+import com.chronodawn.config.ChronoDawnConfig;
+import com.chronodawn.config.TimeDistortionSettings;
+import com.chronodawn.core.time.TimeDistortionPolicy.Kind;
+import com.chronodawn.core.time.TimeDistortionPolicy.Outcome;
+import com.chronodawn.core.time.TimeDistortionPolicy.Tier;
 import com.chronodawn.data.DimensionStateData;
-import com.chronodawn.entities.bosses.ChronosWardenEntity;
-import com.chronodawn.entities.bosses.ClockworkColossusEntity;
-import com.chronodawn.entities.bosses.EntropyKeeperEntity;
-import com.chronodawn.entities.bosses.TemporalPhantomEntity;
-import com.chronodawn.entities.bosses.TimeGuardianEntity;
-import com.chronodawn.entities.mobs.FloqEntity;
-import com.chronodawn.entities.mobs.TimeKeeperEntity;
+import com.chronodawn.events.TimeDistortionEventHandler;
 import com.chronodawn.registry.ModDimensions;
-import com.chronodawn.registry.ModItems;
+import com.chronodawn.tags.ModEntityTypeTags;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -19,119 +18,99 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 
 /**
- * Time Distortion Effect logic for ChronoDawn dimension (1.21.5 version).
+ * Applies the ambient Time Distortion effect to mobs in the Chrono Dawn dimension.
  *
- * Applies Slowness IV effect to hostile mobs in the ChronoDawn dimension,
- * creating a time-distorted environment where mobs move extremely slowly
- * while players maintain normal speed.
- *
- * Note: In 1.21.5, MobEffects.MOVEMENT_SLOWDOWN was renamed to MobEffects.SLOWNESS.
+ * <p>Which effect and level apply is decided by {@link TimeDistortionPolicy} from the
+ * current day/night cycle speed, the Eye of Chronos enhancement, and the mob's tier
+ * ({@code time_distortion_immune} / {@code time_distortion_resistant} tags). Instances
+ * are ambient and short, and are reapplied every tick.
  */
 public class TimeDistortionEffect {
-    /**
-     * Duration of time distortion effect in ticks (100 ticks = 5 seconds).
-     */
-    private static final int EFFECT_DURATION = 100;
+    private static final int NO_EFFECT = -1;
 
-    /**
-     * Slowness effect amplifier (IV = level 3 in code).
-     */
-    private static final int SLOWNESS_AMPLIFIER = 3; // Slowness IV
-
-    /**
-     * Enhanced slowness effect amplifier with Eye of Chronos (V = level 4).
-     */
-    private static final int ENHANCED_SLOWNESS_AMPLIFIER = 4; // Slowness V
-
-    /**
-     * Apply time distortion effect to a living entity if applicable.
-     *
-     * @param entity The living entity to potentially apply the effect to
-     */
     public static void applyTimeDistortion(LivingEntity entity) {
-        com.chronodawn.config.TimeDistortionSettings settings =
-            com.chronodawn.config.ChronoDawnConfig.get().gameplay().timeDistortion();
+        TimeDistortionSettings settings = ChronoDawnConfig.get().gameplay().timeDistortion();
         if (!settings.enabled()) {
             return;
         }
-
-        // Check if entity is in ChronoDawn dimension
-        if (!isInChronoDawnDimension(entity)) {
+        if (!(entity.level() instanceof ServerLevel serverLevel)) {
+            return;
+        }
+        if (!isInChronoDawnDimension(entity) || !isAffectedMob(entity, settings.scope())) {
+            return;
+        }
+        Tier tier = tierOf(entity);
+        if (tier == Tier.IMMUNE) {
             return;
         }
 
-        // Check if entity is a hostile mob (not a player)
-        if (!isAffectedMob(entity, settings.scope())) {
-            return;
-        }
+        boolean timeFlowEnabled = ChronoDawnConfig.get().gameplay().timeFlow().enabled();
+        float timeSpeed = TimeDistortionEventHandler.getCurrentSpeed(serverLevel);
+        Outcome outcome = TimeDistortionPolicy.outcome(
+            TimeDistortionPolicy.band(timeFlowEnabled, timeSpeed, settings),
+            isDimensionEnhanced(serverLevel),
+            tier,
+            settings
+        );
 
-        // Check dimension state for Eye of Chronos enhancement
-        boolean isEnhanced = isDimensionEnhanced(entity);
-
-        // Apply Slowness effect (IV or V depending on dimension enhancement state)
-        // In 1.21.5, MobEffects.SLOWNESS is the correct constant (renamed from MOVEMENT_SLOWDOWN)
-        int amplifier = settings.slownessAmplifier(isEnhanced);
-        entity.addEffect(new MobEffectInstance(
-                MobEffects.SLOWNESS,    // Slowness effect (renamed in 1.21.5)
-                EFFECT_DURATION,         // Duration in ticks
-                amplifier,               // Amplifier (Slowness IV or V)
-                false,                   // Ambient
-                false                    // Show particles
-        ));
+        syncSlowness(entity, outcome.kind() == Kind.SLOWNESS ? outcome.amplifier() : NO_EFFECT);
+        syncSpeed(entity, outcome.kind() == Kind.SPEED ? outcome.amplifier() : NO_EFFECT);
     }
 
-    /**
-     * Check if entity is in ChronoDawn dimension.
-     */
+    // Slowness and Speed need separate methods because the effect handle type differs
+    // between Minecraft eras (MobEffect vs Holder<MobEffect>) and this file is shared.
+    private static void syncSlowness(LivingEntity entity, int amplifier) {
+        MobEffectInstance current = entity.getEffect(MobEffects.SLOWNESS);
+        if (current != null && TimeDistortionPolicy.isReplaceableAmbient(
+            current.isAmbient(), current.getDuration(), current.getAmplifier(), amplifier)) {
+            entity.removeEffect(MobEffects.SLOWNESS);
+        }
+        if (amplifier != NO_EFFECT) {
+            entity.addEffect(new MobEffectInstance(
+                MobEffects.SLOWNESS, TimeDistortionPolicy.AMBIENT_DURATION_TICKS, amplifier, true, false
+            ));
+        }
+    }
+
+    private static void syncSpeed(LivingEntity entity, int amplifier) {
+        MobEffectInstance current = entity.getEffect(MobEffects.SPEED);
+        if (current != null && TimeDistortionPolicy.isReplaceableAmbient(
+            current.isAmbient(), current.getDuration(), current.getAmplifier(), amplifier)) {
+            entity.removeEffect(MobEffects.SPEED);
+        }
+        if (amplifier != NO_EFFECT) {
+            // Visible particles are one of the cues that mobs have sped up.
+            entity.addEffect(new MobEffectInstance(
+                MobEffects.SPEED, TimeDistortionPolicy.AMBIENT_DURATION_TICKS, amplifier, true, true
+            ));
+        }
+    }
+
+    private static Tier tierOf(LivingEntity entity) {
+        if (BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(entity.getType()).is(ModEntityTypeTags.TIME_DISTORTION_IMMUNE)) {
+            return Tier.IMMUNE;
+        }
+        if (BuiltInRegistries.ENTITY_TYPE.wrapAsHolder(entity.getType()).is(ModEntityTypeTags.TIME_DISTORTION_RESISTANT)) {
+            return Tier.RESISTANT;
+        }
+        return Tier.NORMAL;
+    }
+
     private static boolean isInChronoDawnDimension(LivingEntity entity) {
         return entity.level().dimension().identifier().equals(ModDimensions.CHRONO_DAWN_DIMENSION.identifier());
     }
 
-    /**
-     * Check if entity is a hostile mob (not a player, boss, or friendly NPC).
-     */
-    private static boolean isAffectedMob(
-        LivingEntity entity, com.chronodawn.config.TimeDistortionSettings.Scope scope
-    ) {
-        // Exclude players
+    private static boolean isAffectedMob(LivingEntity entity, TimeDistortionSettings.Scope scope) {
         if (entity instanceof Player) {
             return false;
         }
-
-        // Exclude all boss entities
-        if (entity instanceof TimeGuardianEntity) {
-            return false;
-        }
-        if (entity instanceof com.chronodawn.entities.bosses.TimeTyrantEntity) {
-            return false;
-        }
-        if (entity instanceof ChronosWardenEntity) {
-            return false;
-        }
-        if (entity instanceof ClockworkColossusEntity) {
-            return false;
-        }
-        if (entity instanceof EntropyKeeperEntity) {
-            return false;
-        }
-        if (entity instanceof TemporalPhantomEntity) {
-            return false;
-        }
-
-        return scope == com.chronodawn.config.TimeDistortionSettings.Scope.HOSTILE_MOBS
+        return scope == TimeDistortionSettings.Scope.HOSTILE_MOBS
             ? entity instanceof Monster
             : entity instanceof net.minecraft.world.entity.Mob;
     }
 
-    /**
-     * Check if ChronoDawn dimension has been enhanced with Eye of Chronos.
-     */
-    private static boolean isDimensionEnhanced(LivingEntity entity) {
-        if (!(entity.level() instanceof ServerLevel serverLevel)) {
-            return false;
-        }
-
-        DimensionStateData dimensionState = DimensionStateData.get(serverLevel);
-        return dimensionState.getTimeDistortionLevel() == DimensionStateData.TimeDistortionLevel.SLOWNESS_V;
+    private static boolean isDimensionEnhanced(ServerLevel level) {
+        return DimensionStateData.get(level).getTimeDistortionLevel()
+            == DimensionStateData.TimeDistortionLevel.SLOWNESS_V;
     }
 }
