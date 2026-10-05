@@ -88,15 +88,15 @@ public class ClockworkSentinelEntity extends Monster {
     }
 
     /**
-     * Override canBeAffected to grant immunity to time distortion (Slowness IV)
-     *
-     * This makes Clockwork Sentinel a unique threat in ChronoDawn, as it moves at normal speed
-     * while other mobs are slowed down by the dimension's time distortion effect.
+     * Rejects Slowness from every source while this type is in
+     * {@code chronodawn:time_distortion_immune}, so the Sentinel keeps full speed in a
+     * slowed dimension. Removing it from the tag through a datapack restores normal
+     * Slowness, ambient or otherwise.
      */
     @Override
     public boolean canBeAffected(net.minecraft.world.effect.MobEffectInstance effect) {
-        // Immune to Slowness effect (time distortion immunity)
-        if (effect.getEffect() == net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN) {
+        if (effect.getEffect() == net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN
+            && this.getType().is(com.chronodawn.tags.ModEntityTypeTags.TIME_DISTORTION_IMMUNE)) {
             return false;
         }
 

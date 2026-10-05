@@ -9,7 +9,14 @@ import com.chronodawn.compat.CompatResourceLocation;
 
 /** Chrono Dawn's own entity type tags, used to keep custom boss/mob rules modpack-extensible. */
 public final class ModEntityTypeTags {
+    /**
+     * Mobs that ignore ambient Time Distortion, both Slowness and Speed. For bosses this
+     * covers only the ambient effect. Clockwork Sentinel also rejects Slowness from every
+     * other source while it is in this tag (see {@code ClockworkSentinelEntity#canBeAffected}).
+     */
     public static final TagKey<EntityType<?>> TIME_DISTORTION_IMMUNE = entityTypeTag("time_distortion_immune");
+    /** Mobs that take ambient Slowness two levels weaker. Speed applies unchanged. */
+    public static final TagKey<EntityType<?>> TIME_DISTORTION_RESISTANT = entityTypeTag("time_distortion_resistant");
 
     private ModEntityTypeTags() {
     }
