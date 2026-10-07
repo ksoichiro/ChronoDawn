@@ -771,6 +771,22 @@ These four bosses must be defeated to craft the **Chrono Aegis** activated buff 
 
 ## Items and Equipment
 
+### Equipment Overview
+
+Chrono Dawn gear keeps its raw stats at or below the vanilla gear you can reach at the same point in progression. Its value comes from abilities instead. Use this table to place each set next to vanilla gear.
+
+| Gear | Vanilla equivalent | Stats | Special ability | How to get |
+|---|---|---|---|---|
+| Clockstone tools and armor | Iron (slightly better) | Iron mining level, 450 durability, 6.5 mining speed, 6.5 sword damage. Armor 15 defense, toughness 1.0 | None | Clockstone from Ancient Ruins in the Overworld, or Clockstone Ore in Chrono Dawn |
+| Entropy Crystal Sword | Iron (slightly better) | Same stats as the Clockstone Sword | Inflicts Entropy (damage over time) on every hit | Entropy Crystal Ore in Chrono Dawn |
+| Enhanced Clockstone tools and armor | Diamond (slightly below) | Diamond mining level, 1200 durability, 7.5 mining speed, 7 sword damage, enchantability 16. Armor 19 defense, toughness 2.0 | Sword: 25% chance to freeze the target | Enhanced Clockstone from Desert Clock Tower, Time Guardian, and Clockwork Sentinels |
+| Temporal Amber Armor | Diamond (slightly below) | 19 defense, toughness 1.5, more durability than diamond | Full set repairs itself | Temporal Amber Ore in Chrono Dawn |
+| Spatially Linked Pickaxe | Diamond | Diamond mining level, 1561 durability, 8.0 mining speed | 33% chance of extra drops | Upgraded from a Diamond Pickaxe with Enhanced Clockstone and Time Crystals |
+| Custom Shields (T1 to T3) | Shield | 400 / 600 / 800 durability | Shorter debuffs while held. T2 and T3 add effects on block | Clockstone, then Enhanced Clockstone, then Entropy Crystal |
+| Ultimate Artifacts | Netherite | Chronoblade 8.5 damage, 2000 durability. Time Tyrant Mail 8 defense, toughness 2.5 | Strong active or passive abilities | Fragments of Stasis Core from the Time Tyrant |
+
+Vanilla reference: iron armor totals 15 defense, diamond totals 20 with toughness 2.0, and netherite totals 20 with toughness 3.0. Iron, diamond, and netherite swords deal 6, 7, and 8 damage.
+
 ### Portal and Utility Items
 
 #### Time Hourglass
@@ -992,25 +1008,20 @@ All ultimate artifacts require **Fragments of Stasis Core** from the Time Tyrant
 
 ### Clockstone Equipment
 
-Basic equipment crafted from **Clockstone**:
+Basic equipment crafted from **Clockstone** in the vanilla tool and armor shapes. It sits slightly above iron:
 
-- **Clockstone Sword**: Basic combat weapon
-- **Clockstone Pickaxe**: Mining tool
-- **Clockstone Axe**: Woodcutting tool
-- **Clockstone Shovel**: Digging tool
-- **Clockstone Hoe**: Farming tool
-- **Clockstone Armor** (Helmet, Chestplate, Leggings, Boots): Basic protection
+- **Tools** (Sword, Pickaxe, Axe, Shovel, Hoe): iron mining level, 450 durability, 6.5 mining speed, enchantability 14. The sword deals 6.5 damage
+- **Armor** (Helmet, Chestplate, Leggings, Boots): Defense 2 / 6 / 5 / 2 (15 total), toughness 1.0, enchantability 14
+- Repaired with Time Crystals
 
 ### Enhanced Clockstone Equipment
 
-Upgraded equipment crafted from **Enhanced Clockstone**:
+Upgraded equipment crafted from **Enhanced Clockstone** in the vanilla tool and armor shapes. It sits slightly below diamond:
 
-- **Enhanced Clockstone Sword**: Improved combat weapon
-- **Enhanced Clockstone Pickaxe**: Faster mining
-- **Enhanced Clockstone Axe**: Faster woodcutting
-- **Enhanced Clockstone Shovel**: Faster digging
-- **Enhanced Clockstone Hoe**: Improved farming
-- **Enhanced Clockstone Armor** (Helmet, Chestplate, Leggings, Boots): Better protection
+- **Tools** (Sword, Pickaxe, Axe, Shovel, Hoe): diamond mining level, 1200 durability, 7.5 mining speed, enchantability 16. The sword deals 7 damage
+- **Sword ability**: Each hit has a 25% chance to freeze the target (Slowness X for 2 seconds)
+- **Armor** (Helmet, Chestplate, Leggings, Boots): Defense 3 / 7 / 6 / 3 (19 total), toughness 2.0, enchantability 16
+- Repaired with Time Crystals
 
 ### Wood Type Blocks
 
