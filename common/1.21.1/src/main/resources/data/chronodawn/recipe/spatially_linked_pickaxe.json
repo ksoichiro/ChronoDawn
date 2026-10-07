@@ -2,16 +2,19 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "pattern": [
-    "EEE",
-    " S ",
-    " S "
+    "TET",
+    "EPE",
+    " T "
   ],
   "key": {
+    "T": {
+      "tag": "c:gems/time_crystal"
+    },
     "E": {
       "tag": "c:ingots/enhanced_clockstone"
     },
-    "S": {
-      "item": "minecraft:stick"
+    "P": {
+      "item": "minecraft:diamond_pickaxe"
     }
   },
   "result": {

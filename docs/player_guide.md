@@ -842,7 +842,7 @@ Vanilla reference: iron armor totals 15 defense, diamond totals 20 with toughnes
 #### Spatially Linked Pickaxe
 - **Stats**: 1561 durability, diamond mining level, repaired with Time Crystals
 - **Effect**: 33% chance to drop an extra copy of the mined block's drops
-- **Recipe**: 3 Enhanced Clockstone + 2 Sticks (pickaxe shape)
+- **Recipe**: 1 Diamond Pickaxe + 3 Enhanced Clockstone + 3 Time Crystals
 
 ### Temporal Amber Armor
 

@@ -37,6 +37,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   in the recipe book once you pick up Time Jam, a Clockwork Block, or a cookie.
   Each cookie now adds 30 seconds of Resistance I to the time left, up to
   3 minutes, instead of giving 30 seconds of Resistance I and Fire Resistance.
+- **Spatially Linked Pickaxe recipe**: on Minecraft 1.21.1 and later, the
+  pickaxe is now upgraded from a Diamond Pickaxe with 3 Enhanced Clockstone and
+  3 Time Crystals, the same recipe 1.20.1 already used. It previously shared
+  its exact recipe with the Enhanced Clockstone Pickaxe, so the crafting grid
+  could give you either one.
 
 ### Fixed
 

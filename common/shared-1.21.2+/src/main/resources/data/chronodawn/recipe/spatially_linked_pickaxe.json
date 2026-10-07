@@ -2,13 +2,14 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "pattern": [
-    "EEE",
-    " S ",
-    " S "
+    "TET",
+    "EPE",
+    " T "
   ],
   "key": {
+    "T": "#c:gems/time_crystal",
     "E": "#c:ingots/enhanced_clockstone",
-    "S": "minecraft:stick"
+    "P": "minecraft:diamond_pickaxe"
   },
   "result": {
     "id": "chronodawn:spatially_linked_pickaxe",
