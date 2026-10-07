@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.Block;
  * Clockstone Tier - Material tier for basic ChronoDawn equipment.
  *
  * Tier 1 equipment tier, slightly better than iron but below diamond.
- * Crafted from Clockstone + Time Crystal for enhanced durability and performance.
+ * Crafted from Clockstone for enhanced durability and performance.
  *
  * Stats:
  * - Durability: 450 uses (iron: 250, diamond: 1561)

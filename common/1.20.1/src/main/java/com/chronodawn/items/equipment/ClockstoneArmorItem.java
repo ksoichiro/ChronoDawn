@@ -5,14 +5,14 @@ import net.minecraft.world.item.ArmorItem;
 /**
  * Clockstone Armor Item - Tier 1 time-themed armor pieces.
  *
- * Basic tier armor crafted from Clockstone and Time Crystal.
+ * Basic tier armor crafted from Clockstone.
  * Provides better protection than iron equipment but below diamond tier.
  *
  * Armor Set:
- * - Helmet: Defense 2, Durability 165
- * - Chestplate: Defense 6, Durability 240
- * - Leggings: Defense 5, Durability 225
- * - Boots: Defense 2, Durability 195
+ * - Helmet: Defense 2, Durability 220
+ * - Chestplate: Defense 6, Durability 320
+ * - Leggings: Defense 5, Durability 300
+ * - Boots: Defense 2, Durability 260
  *
  * Total Set Defense: 15 (same as iron)
  * Toughness: 1.0f (better than iron's 0.0f)
@@ -23,7 +23,6 @@ import net.minecraft.world.item.ArmorItem;
  * - Chestplate: Clockstone x8
  * - Leggings: Clockstone x7
  * - Boots: Clockstone x4
- * - All pieces require Time Crystal x1 for enhanced durability
  *
  * Reference: tasks.md (T215)
  */
@@ -41,10 +40,10 @@ public class ClockstoneArmorItem extends ArmorItem {
     public static Properties createProperties(Type type) {
         // 1.20.1: ArmorItem.Type.getDurability() does not exist, use fixed values
         int durability = switch (type) {
-            case HELMET -> 165;   // Base 11 * multiplier 15 (vanilla) or 13 * 13 ≈ 165
-            case CHESTPLATE -> 240;  // Base 16 * 15
-            case LEGGINGS -> 225;    // Base 15 * 15
-            case BOOTS -> 195;       // Base 13 * 15
+            case HELMET -> 220;      // Base 11 * multiplier 20
+            case CHESTPLATE -> 320;  // Base 16 * multiplier 20
+            case LEGGINGS -> 300;    // Base 15 * multiplier 20
+            case BOOTS -> 260;       // Base 13 * multiplier 20
         };
 
         return new Properties()

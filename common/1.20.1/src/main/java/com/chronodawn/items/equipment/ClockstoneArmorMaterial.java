@@ -22,7 +22,7 @@ import java.util.function.Supplier;
  * Clockstone Armor Material - Tier 1 armor material for basic ChronoDawn equipment.
  *
  * Tier 1 armor material, slightly better than iron but below diamond.
- * Crafted from Clockstone + Time Crystal for enhanced protection.
+ * Crafted from Clockstone for enhanced protection.
  *
  * Defense Values:
  * - Helmet: 2 (iron: 2, diamond: 3)

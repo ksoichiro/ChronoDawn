@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.Block;
  * Enhanced Clockstone Tier - Material tier for advanced ChronoDawn equipment.
  *
  * Tier 2 equipment tier, comparable to diamond but with special time-manipulation abilities.
- * Crafted from Enhanced Clockstone + Time Crystal for superior performance.
+ * Crafted from Enhanced Clockstone for superior performance.
  *
  * Stats:
  * - Durability: 1200 uses (iron: 250, diamond: 1561, clockstone: 450)

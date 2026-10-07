@@ -5,7 +5,7 @@ import net.minecraft.world.item.ShovelItem;
 /**
  * Clockstone Shovel - Tier 1 time-themed digging tool.
  *
- * Basic tier tool crafted from Clockstone and Time Crystal.
+ * Basic tier tool crafted from Clockstone.
  * Provides better digging performance than iron equipment but below diamond tier.
  *
  * Properties:
@@ -17,7 +17,6 @@ import net.minecraft.world.item.ShovelItem;
  *
  * Crafting Recipe:
  * - Clockstone x1
- * - Time Crystal x1
  * - Stick x2
  *
  * Reference: tasks.md (T214)

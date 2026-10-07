@@ -15,9 +15,9 @@ import com.chronodawn.compat.CompatResourceLocation;
 import java.util.EnumMap;
 
 /**
- * Temporal Amber Armor Material - Tier 2 armor material from Temporal Amber.
+ * Temporal Amber Armor Material - Diamond-comparable armor material from Raw Temporal Amber.
  *
- * Tier 2 armor material, comparable to diamond with enhanced durability.
+ * Diamond-comparable armor material with enhanced durability.
  * Crafted from Temporal Amber for superior protection.
  *
  * Defense Values:

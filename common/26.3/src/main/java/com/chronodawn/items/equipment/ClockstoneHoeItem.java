@@ -10,7 +10,7 @@ import net.minecraft.world.item.Item;
 /**
  * Clockstone Hoe - Tier 1 time-themed farming tool.
  *
- * Basic tier tool crafted from Clockstone and Time Crystal.
+ * Basic tier tool crafted from Clockstone.
  * Provides better farming performance than iron equipment but below diamond tier.
  *
  * Properties:
@@ -22,7 +22,6 @@ import net.minecraft.world.item.Item;
  *
  * Crafting Recipe:
  * - Clockstone x2
- * - Time Crystal x1
  * - Stick x2
  *
  * Reference: tasks.md (T214)

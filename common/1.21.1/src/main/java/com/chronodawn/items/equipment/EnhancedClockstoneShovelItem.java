@@ -5,7 +5,7 @@ import net.minecraft.world.item.ShovelItem;
 /**
  * Enhanced Clockstone Shovel - Tier 2 time-themed digging tool.
  *
- * Advanced tier tool crafted from Enhanced Clockstone and Time Crystal.
+ * Advanced tier tool crafted from Enhanced Clockstone.
  * Provides diamond-equivalent digging performance with faster mining speed.
  *
  * Properties:
@@ -17,7 +17,6 @@ import net.minecraft.world.item.ShovelItem;
  *
  * Crafting Recipe:
  * - Enhanced Clockstone x1
- * - Time Crystal x1
  * - Stick x2
  *
  * Reference: T251 - Create Enhanced Clockstone Shovel (Tier 2 tool)

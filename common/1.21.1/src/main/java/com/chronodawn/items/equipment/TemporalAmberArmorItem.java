@@ -7,9 +7,9 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 
 /**
- * Temporal Amber Armor Item - Tier 2 armor pieces from Temporal Amber.
+ * Temporal Amber Armor Item - Diamond-comparable armor pieces from Raw Temporal Amber.
  *
- * Tier 2 armor crafted from Temporal Amber.
+ * Diamond-comparable armor crafted from Raw Temporal Amber.
  * Provides diamond-comparable protection with enhanced durability.
  *
  * Armor Set:

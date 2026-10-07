@@ -10,7 +10,7 @@ import net.minecraft.world.item.Item;
 /**
  * Clockstone Axe - Tier 1 time-themed woodcutting tool.
  *
- * Basic tier tool crafted from Clockstone and Time Crystal.
+ * Basic tier tool crafted from Clockstone.
  * Provides better chopping performance than iron equipment but below diamond tier.
  *
  * Properties:
@@ -22,7 +22,6 @@ import net.minecraft.world.item.Item;
  *
  * Crafting Recipe:
  * - Clockstone x3
- * - Time Crystal x1
  * - Stick x2
  *
  * Reference: tasks.md (T214)

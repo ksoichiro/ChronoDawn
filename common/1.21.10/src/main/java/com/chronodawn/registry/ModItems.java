@@ -2011,7 +2011,7 @@ public class ModItems {
 
     /**
      * Clockstone Helmet - Tier 1 time-themed helmet.
-     * Defense: 2, Durability: 165
+     * Defense: 2, Durability: 220
      */
     public static final RegistrySupplier<Item> CLOCKSTONE_HELMET = ITEMS.register(
         ModItemId.CLOCKSTONE_HELMET.id(),
@@ -2022,7 +2022,7 @@ public class ModItems {
 
     /**
      * Clockstone Chestplate - Tier 1 time-themed chestplate.
-     * Defense: 6, Durability: 240
+     * Defense: 6, Durability: 320
      */
     public static final RegistrySupplier<Item> CLOCKSTONE_CHESTPLATE = ITEMS.register(
         ModItemId.CLOCKSTONE_CHESTPLATE.id(),
@@ -2033,7 +2033,7 @@ public class ModItems {
 
     /**
      * Clockstone Leggings - Tier 1 time-themed leggings.
-     * Defense: 5, Durability: 225
+     * Defense: 5, Durability: 300
      */
     public static final RegistrySupplier<Item> CLOCKSTONE_LEGGINGS = ITEMS.register(
         ModItemId.CLOCKSTONE_LEGGINGS.id(),
@@ -2044,7 +2044,7 @@ public class ModItems {
 
     /**
      * Clockstone Boots - Tier 1 time-themed boots.
-     * Defense: 2, Durability: 195
+     * Defense: 2, Durability: 260
      */
     public static final RegistrySupplier<Item> CLOCKSTONE_BOOTS = ITEMS.register(
         ModItemId.CLOCKSTONE_BOOTS.id(),
@@ -2065,7 +2065,7 @@ public class ModItems {
     );
 
     /**
-     * Entropy Crystal Sword - Tier 2 specialized weapon with Entropy DoT effect.
+     * Entropy Crystal Sword - Iron-tier specialized weapon with Entropy DoT effect.
      * Iron-tier damage but applies Entropy (1 dmg/sec for 5s) on every hit.
      */
     public static final RegistrySupplier<Item> ENTROPY_CRYSTAL_SWORD = ITEMS.register(
@@ -2205,7 +2205,7 @@ public class ModItems {
     );
 
     /**
-     * Temporal Amber Helmet - Tier 2 helmet from Temporal Amber.
+     * Temporal Amber Helmet - Diamond-comparable helmet crafted from Raw Temporal Amber.
      * Defense: 3, Durability: 385
      * Crafted from Temporal Amber Dust.
      */
@@ -2217,7 +2217,7 @@ public class ModItems {
     );
 
     /**
-     * Temporal Amber Chestplate - Tier 2 chestplate from Temporal Amber.
+     * Temporal Amber Chestplate - Diamond-comparable chestplate crafted from Raw Temporal Amber.
      * Defense: 7, Durability: 560
      * Crafted from Temporal Amber Dust.
      */
@@ -2229,7 +2229,7 @@ public class ModItems {
     );
 
     /**
-     * Temporal Amber Leggings - Tier 2 leggings from Temporal Amber.
+     * Temporal Amber Leggings - Diamond-comparable leggings crafted from Raw Temporal Amber.
      * Defense: 6, Durability: 525
      * Crafted from Temporal Amber Dust.
      */
@@ -2241,7 +2241,7 @@ public class ModItems {
     );
 
     /**
-     * Temporal Amber Boots - Tier 2 boots from Temporal Amber.
+     * Temporal Amber Boots - Diamond-comparable boots crafted from Raw Temporal Amber.
      * Defense: 3, Durability: 455
      * Crafted from Temporal Amber Dust.
      */

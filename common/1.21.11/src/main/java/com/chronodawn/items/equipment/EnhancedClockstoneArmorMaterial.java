@@ -26,7 +26,7 @@ import java.util.function.Supplier;
  * Enhanced Clockstone Armor Material - Tier 2 armor material for advanced ChronoDawn equipment.
  *
  * Tier 2 armor material, comparable to diamond with superior enchantability.
- * Crafted from Enhanced Clockstone + Time Crystal for maximum protection.
+ * Crafted from Enhanced Clockstone for maximum protection.
  *
  * Defense Values:
  * - Helmet: 3 (iron: 2, diamond: 3, clockstone: 2)

@@ -10,7 +10,7 @@ import net.minecraft.world.item.HoeItem;
 /**
  * Enhanced Clockstone Hoe - Tier 2 time-themed farming tool.
  *
- * Advanced tier tool crafted from Enhanced Clockstone and Time Crystal.
+ * Advanced tier tool crafted from Enhanced Clockstone.
  * Provides diamond-equivalent farming performance with faster tilling speed.
  *
  * Properties:
@@ -22,7 +22,6 @@ import net.minecraft.world.item.HoeItem;
  *
  * Crafting Recipe:
  * - Enhanced Clockstone x2
- * - Time Crystal x1
  * - Stick x2
  *
  * Reference: T251 - Create Enhanced Clockstone Hoe (Tier 2 tool)

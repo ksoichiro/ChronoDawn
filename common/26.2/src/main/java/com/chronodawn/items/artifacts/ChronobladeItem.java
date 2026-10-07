@@ -29,9 +29,9 @@ import net.minecraft.world.item.Rarity;
  * - Extremely powerful in combat, allowing players to chain attacks safely
  *
  * Crafting Recipe:
- * - Fragment of Stasis Core x3
+ * - Fragment of Stasis Core x4
  * - Eye of Chronos x1
- * - Enhanced Clockstone x2
+ * - Enhanced Clockstone x1
  * - Unstable Hourglass x1
  *
  * Lore:

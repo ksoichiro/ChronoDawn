@@ -5,7 +5,7 @@ import net.minecraft.world.item.ArmorItem;
 /**
  * Enhanced Clockstone Armor Item - Tier 2 time-themed armor pieces.
  *
- * Advanced tier armor crafted from Enhanced Clockstone and Time Crystal.
+ * Advanced tier armor crafted from Enhanced Clockstone.
  * Provides diamond-comparable protection with superior enchantability.
  *
  * Armor Set:
@@ -24,10 +24,10 @@ import net.minecraft.world.item.ArmorItem;
  * - Implemented in TimeDistortionEffect.java
  *
  * Crafting Recipes:
- * - Helmet: Enhanced Clockstone x5 + Time Crystal x1
- * - Chestplate: Enhanced Clockstone x8 + Time Crystal x1
- * - Leggings: Enhanced Clockstone x7 + Time Crystal x1
- * - Boots: Enhanced Clockstone x4 + Time Crystal x1
+ * - Helmet: Enhanced Clockstone x5
+ * - Chestplate: Enhanced Clockstone x8
+ * - Leggings: Enhanced Clockstone x7
+ * - Boots: Enhanced Clockstone x4
  *
  * Reference: T252, T254 - Create Enhanced Clockstone Armor with time distortion immunity
  */

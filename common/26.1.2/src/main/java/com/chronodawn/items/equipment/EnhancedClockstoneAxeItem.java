@@ -10,7 +10,7 @@ import net.minecraft.world.item.AxeItem;
 /**
  * Enhanced Clockstone Axe - Tier 2 time-themed woodcutting tool.
  *
- * Advanced tier tool crafted from Enhanced Clockstone and Time Crystal.
+ * Advanced tier tool crafted from Enhanced Clockstone.
  * Provides diamond-equivalent chopping performance with faster mining speed.
  *
  * Properties:
@@ -22,7 +22,6 @@ import net.minecraft.world.item.AxeItem;
  *
  * Crafting Recipe:
  * - Enhanced Clockstone x3
- * - Time Crystal x1
  * - Stick x2
  *
  * Reference: T251 - Create Enhanced Clockstone Axe (Tier 2 tool)

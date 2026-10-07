@@ -9,7 +9,7 @@ import net.minecraft.world.item.Item;
 /**
  * Clockstone Sword - Tier 1 time-themed weapon.
  *
- * Basic tier weapon crafted from Clockstone and Time Crystal.
+ * Basic tier weapon crafted from Clockstone.
  * Provides better performance than iron equipment but below diamond tier.
  *
  * Properties:
@@ -20,7 +20,6 @@ import net.minecraft.world.item.Item;
  *
  * Crafting Recipe:
  * - Clockstone x2
- * - Time Crystal x1
  * - Stick x1
  *
  * Reference: tasks.md (T213)

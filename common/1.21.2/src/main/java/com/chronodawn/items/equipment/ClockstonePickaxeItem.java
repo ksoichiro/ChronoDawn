@@ -10,7 +10,7 @@ import net.minecraft.world.item.PickaxeItem;
 /**
  * Clockstone Pickaxe - Tier 1 time-themed mining tool.
  *
- * Basic tier tool crafted from Clockstone and Time Crystal.
+ * Basic tier tool crafted from Clockstone.
  * Provides better mining performance than iron equipment but below diamond tier.
  *
  * Properties:
@@ -22,7 +22,6 @@ import net.minecraft.world.item.PickaxeItem;
  *
  * Crafting Recipe:
  * - Clockstone x3
- * - Time Crystal x1
  * - Stick x2
  *
  * Reference: tasks.md (T214)

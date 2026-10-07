@@ -14,7 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 
 /**
- * Entropy Crystal Sword - Tier 2 specialized weapon.
+ * Entropy Crystal Sword - Iron-tier specialized weapon.
  *
  * Stats parity with Clockstone Sword (iron-tier total damage), but applies
  * Entropy (DoT) on every successful hit for 5 seconds.

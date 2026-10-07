@@ -24,7 +24,7 @@ import net.minecraft.world.item.crafting.Ingredient;
  * Wields the power of time itself to disrupt enemy attack patterns.
  *
  * Properties:
- * - Attack Damage: 8.0 (base 4.0 + tier bonus 3.5, stronger than netherite)
+ * - Attack Damage: 8.5 (1.0 player base + 4.0 + tier bonus 3.5, stronger than netherite)
  * - Attack Speed: -2.4 (standard sword speed)
  * - Durability: 2000 uses (superior to diamond/netherite)
  * - Enchantability: 18
@@ -36,9 +36,9 @@ import net.minecraft.world.item.crafting.Ingredient;
  * - Extremely powerful in combat, allowing players to chain attacks safely
  *
  * Crafting Recipe:
- * - Fragment of Stasis Core x3
+ * - Fragment of Stasis Core x4
  * - Eye of Chronos x1
- * - Enhanced Clockstone x2
+ * - Enhanced Clockstone x1
  * - Unstable Hourglass x1
  *
  * Lore:
@@ -74,7 +74,7 @@ public class ChronobladeItem extends SwordItem {
         BlockTags.INCORRECT_FOR_NETHERITE_TOOL, // Netherite mining level
         2000, // More durable than netherite (2031)
         9.0f, // Faster than netherite (9.0f)
-        3.5f, // Slightly stronger than netherite (4.0 base = 8.0 total damage)
+        3.5f, // Slightly stronger than netherite (1.0 player base + 4.0 + 3.5 = 8.5 total damage)
         18, // Better than netherite (15)
         TIME_CRYSTAL_TAG // Can be repaired with Time Crystal
     );

@@ -58,6 +58,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Chrono Cobweb background**: Chrono Cobwebs no longer show a black or gray
   background on Forge 1.20.1 and on NeoForge for Minecraft 1.21.1 through
   1.21.11.
+- **Clockstone Armor durability on 1.20.1**: Clockstone Armor on Minecraft
+  1.20.1 now has the same durability as on later versions (220, 320, 300, and
+  260 for the helmet, chestplate, leggings, and boots) instead of iron armor's
+  values.
 
 ## [0.11.0] - 2026-10-04
 

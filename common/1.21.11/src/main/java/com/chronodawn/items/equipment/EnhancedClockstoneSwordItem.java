@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemStack;
 /**
  * Enhanced Clockstone Sword - Tier 2 time-themed weapon with freeze effect.
  *
- * Advanced tier weapon crafted from Enhanced Clockstone and Time Crystal.
+ * Advanced tier weapon crafted from Enhanced Clockstone.
  * Provides diamond-equivalent performance with special time-manipulation ability.
  *
  * Properties:
@@ -28,7 +28,6 @@ import net.minecraft.world.item.ItemStack;
  *
  * Crafting Recipe:
  * - Enhanced Clockstone x2
- * - Time Crystal x1
  * - Stick x1
  *
  * Reference: T250, T254 - Create Enhanced Clockstone Sword with freeze effect

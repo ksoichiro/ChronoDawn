@@ -6,14 +6,14 @@ import net.minecraft.world.item.equipment.ArmorType;
 /**
  * Clockstone Armor Item - Tier 1 time-themed armor pieces.
  *
- * Basic tier armor crafted from Clockstone and Time Crystal.
+ * Basic tier armor crafted from Clockstone.
  * Provides better protection than iron equipment but below diamond tier.
  *
  * Armor Set:
- * - Helmet: Defense 2, Durability 165
- * - Chestplate: Defense 6, Durability 240
- * - Leggings: Defense 5, Durability 225
- * - Boots: Defense 2, Durability 195
+ * - Helmet: Defense 2, Durability 220
+ * - Chestplate: Defense 6, Durability 320
+ * - Leggings: Defense 5, Durability 300
+ * - Boots: Defense 2, Durability 260
  *
  * Total Set Defense: 15 (same as iron)
  * Toughness: 1.0f (better than iron's 0.0f)
@@ -24,7 +24,6 @@ import net.minecraft.world.item.equipment.ArmorType;
  * - Chestplate: Clockstone x8
  * - Leggings: Clockstone x7
  * - Boots: Clockstone x4
- * - All pieces require Time Crystal x1 for enhanced durability
  *
  * Reference: tasks.md (T215)
  *

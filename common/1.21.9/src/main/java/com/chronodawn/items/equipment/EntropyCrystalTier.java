@@ -10,7 +10,7 @@ import net.minecraft.world.item.ToolMaterial;
 /**
  * Entropy Crystal Tier - Material tier for the Entropy Crystal Sword.
  *
- * Stats parity with Clockstone Tier (Tier 2 equipment, between iron and diamond).
+ * Stats parity with Clockstone Tier (iron-tier, slightly above iron).
  * The specialization lives on the sword itself (Entropy DoT on hit), not the tier stats.
  *
  * 1.21.2+ version: ToolMaterial record constructor takes

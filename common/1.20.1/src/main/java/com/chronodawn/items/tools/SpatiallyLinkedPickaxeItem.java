@@ -23,8 +23,9 @@ import net.minecraft.world.level.block.Block;
  * - Compatible with Fortune enchantment (effects stack)
  *
  * Crafting Recipe:
+ * - Diamond Pickaxe x1 (upgraded)
  * - Enhanced Clockstone x3
- * - Diamond Pickaxe x1 (or sticks, depending on recipe design)
+ * - Time Crystal x3
  *
  * Drop Doubling Mechanic:
  * - Implemented in BlockEventHandler.java
