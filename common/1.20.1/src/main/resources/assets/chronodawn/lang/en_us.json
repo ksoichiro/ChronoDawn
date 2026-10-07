@@ -240,6 +240,7 @@
   "item.chronodawn.clockstone_chestplate": "Clockstone Chestplate",
   "item.chronodawn.clockstone_leggings": "Clockstone Leggings",
   "item.chronodawn.clockstone_boots": "Clockstone Boots",
+  "item.chronodawn.clockstone_armor.tooltip": "Full set: shortens Slowness by 25%",
 
   "item.chronodawn.enhanced_clockstone_sword": "Enhanced Clockstone Sword",
   "item.chronodawn.entropy_crystal_sword": "Entropy Crystal Sword",
@@ -251,6 +252,7 @@
   "item.chronodawn.enhanced_clockstone_chestplate": "Enhanced Clockstone Chestplate",
   "item.chronodawn.enhanced_clockstone_leggings": "Enhanced Clockstone Leggings",
   "item.chronodawn.enhanced_clockstone_boots": "Enhanced Clockstone Boots",
+  "item.chronodawn.enhanced_clockstone_armor.tooltip": "Full set: shortens Slowness/Weakness/Mining Fatigue by 50%",
 
   "item.chronodawn.clockstone_shield": "Clockstone Shield",
   "item.chronodawn.clockstone_shield.tooltip.1": "Reduces Slowness/Weakness/Mining Fatigue duration while held",

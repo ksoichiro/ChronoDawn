@@ -93,7 +93,7 @@ Chrono Dawn features unique mobs that replace vanilla spawns in the dimension:
 - **Faded Plains terrain**: Faded Temporal Grass, Parched Temporal Dirt, and Temporal Dead Bush surface flora
 - **Custom Foods**: Fruit of Time (Haste), Glide Fish (raw / cooked), Chrono Bovine Meat (raw / cooked), Dried Temporal Kelp (vanilla-parity quick food)
 - **Time Hourglass, Portal Stabilizer, Time Clock**, ChronoDawn Custom Shields (3 tiers), and more
-- **Equipment beyond the artifacts**: Clockstone and Enhanced Clockstone tools and armor, Temporal Amber armor that repairs itself from Temporal Amber Dust while you are out of combat, the Entropy Crystal Sword (inflicts the Entropy damage-over-time effect), and the Spatially Linked Pickaxe (33% chance of double drops)
+- **Equipment beyond the artifacts**: Clockstone and Enhanced Clockstone tools and armor (full armor sets shorten Slowness, and Enhanced Clockstone also Weakness and Mining Fatigue), Temporal Amber armor that repairs itself from Temporal Amber Dust while you are out of combat, the Entropy Crystal Sword (inflicts the Entropy damage-over-time effect), and the Spatially Linked Pickaxe (33% chance of double drops)
 - **Chrono Dawn Ores**: Clockstone, Time Crystal, Entropy Crystal, and Temporal Amber, plus Chronite in the Overworld
 - **Special Blocks**: Reversing Time Sandstone, Unstable Fungus, Mossy Temporal Stone Bricks (with stairs/slab/wall), Cracked Temporal Stone Bricks, Chiseled Temporal Stone Bricks, Smooth Temporal Stone (with slab), Clockwork Dial, Chrono Cobweb
 - **Tunable Worldgen**: Per-ore generation parameters and Ancient Ruins placement exposed via `config/chronodawn.toml` — see [Configuration Guide](https://github.com/ksoichiro/ChronoDawn/blob/main/docs/configuration.md)

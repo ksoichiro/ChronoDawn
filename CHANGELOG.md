@@ -25,6 +25,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   now count as water ambient mobs like vanilla fish instead of water creatures,
   so they no longer share the small water creature cap with Chrono Turtles.
   Only newly generated chunks get the new seagrass.
+- **Clockstone armor set bonuses**: wearing a full set of Clockstone Armor
+  makes Slowness last 25% shorter, and a full set of Enhanced Clockstone Armor
+  makes Slowness, Weakness, and Mining Fatigue last 50% shorter. Both stack
+  with the Chrono Dawn shields, and each armor piece shows its set bonus in
+  the tooltip.
 
 ### Changed
 

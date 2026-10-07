@@ -2159,7 +2159,7 @@ public class ModItems {
     /**
      * Enhanced Clockstone Helmet - Tier 2 time-themed helmet.
      * Defense: 3, Durability: 308
-     * Full set grants immunity to time distortion effects.
+     * Full set shortens Slowness, Weakness, and Mining Fatigue by 50%.
      */
     public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_HELMET = ITEMS.register(
         ModItemId.ENHANCED_CLOCKSTONE_HELMET.id(),
@@ -2171,7 +2171,7 @@ public class ModItems {
     /**
      * Enhanced Clockstone Chestplate - Tier 2 time-themed chestplate.
      * Defense: 7, Durability: 448
-     * Full set grants immunity to time distortion effects.
+     * Full set shortens Slowness, Weakness, and Mining Fatigue by 50%.
      */
     public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_CHESTPLATE = ITEMS.register(
         ModItemId.ENHANCED_CLOCKSTONE_CHESTPLATE.id(),
@@ -2183,7 +2183,7 @@ public class ModItems {
     /**
      * Enhanced Clockstone Leggings - Tier 2 time-themed leggings.
      * Defense: 6, Durability: 420
-     * Full set grants immunity to time distortion effects.
+     * Full set shortens Slowness, Weakness, and Mining Fatigue by 50%.
      */
     public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_LEGGINGS = ITEMS.register(
         ModItemId.ENHANCED_CLOCKSTONE_LEGGINGS.id(),
@@ -2195,7 +2195,7 @@ public class ModItems {
     /**
      * Enhanced Clockstone Boots - Tier 2 time-themed boots.
      * Defense: 3, Durability: 364
-     * Full set grants immunity to time distortion effects.
+     * Full set shortens Slowness, Weakness, and Mining Fatigue by 50%.
      */
     public static final RegistrySupplier<Item> ENHANCED_CLOCKSTONE_BOOTS = ITEMS.register(
         ModItemId.ENHANCED_CLOCKSTONE_BOOTS.id(),

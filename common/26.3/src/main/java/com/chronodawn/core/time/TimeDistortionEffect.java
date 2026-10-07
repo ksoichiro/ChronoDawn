@@ -9,7 +9,6 @@ import com.chronodawn.entities.bosses.TemporalPhantomEntity;
 import com.chronodawn.entities.bosses.TimeGuardianEntity;
 import com.chronodawn.entities.mobs.FloqEntity;
 import com.chronodawn.entities.mobs.TimeKeeperEntity;
-import com.chronodawn.items.equipment.EnhancedClockstoneArmorItem;
 import com.chronodawn.registry.ModDimensions;
 import com.chronodawn.registry.ModItems;
 import net.minecraft.server.level.ServerLevel;

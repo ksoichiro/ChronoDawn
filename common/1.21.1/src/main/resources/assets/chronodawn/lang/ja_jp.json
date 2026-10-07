@@ -287,6 +287,7 @@
   "item.chronodawn.clockstone_chestplate": "クロックストーンのチェストプレート",
   "item.chronodawn.clockstone_leggings": "クロックストーンのレギンス",
   "item.chronodawn.clockstone_boots": "クロックストーンのブーツ",
+  "item.chronodawn.clockstone_armor.tooltip": "フルセット着用時、鈍化の効果時間を25%短縮",
 
   "item.chronodawn.enhanced_clockstone_sword": "強化クロックストーンの剣",
   "item.chronodawn.entropy_crystal_sword": "エントロピークリスタルソード",
@@ -298,6 +299,7 @@
   "item.chronodawn.enhanced_clockstone_chestplate": "強化クロックストーンのチェストプレート",
   "item.chronodawn.enhanced_clockstone_leggings": "強化クロックストーンのレギンス",
   "item.chronodawn.enhanced_clockstone_boots": "強化クロックストーンのブーツ",
+  "item.chronodawn.enhanced_clockstone_armor.tooltip": "フルセット着用時、鈍化・弱化・採掘速度低下の効果時間を50%短縮",
 
   "item.chronodawn.clockstone_shield": "クロックストーンの盾",
   "item.chronodawn.clockstone_shield.tooltip.1": "所持中に鈍化・弱化・採掘速度低下の効果時間を短縮",

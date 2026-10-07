@@ -1,9 +1,14 @@
 package com.chronodawn.items.equipment;
 
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.equipment.ArmorType;
+
+import java.util.function.Consumer;
 
 /**
  * Enhanced Clockstone Armor Item - Tier 2 time-themed armor pieces.
@@ -21,10 +26,8 @@ import net.minecraft.world.item.equipment.ArmorType;
  * Toughness: 2.0f (same as diamond)
  * Enchantability: 16 (better than iron/clockstone/diamond)
  *
- * Special Ability (Full Set Bonus):
- * - Complete immunity to ChronoDawn time distortion effects (Slowness IV/V)
- * - Players wearing full Enhanced Clockstone armor are not affected by time distortion
- * - Implemented in TimeDistortionEffect.java
+ * Full Set Bonus: shortens Slowness, Weakness, and Mining Fatigue by 50%
+ * (stacks with ChronoDawn shields), see TimeDebuffResistance.
  *
  * Crafting Recipes:
  * - Helmet: Enhanced Clockstone x5
@@ -32,7 +35,7 @@ import net.minecraft.world.item.equipment.ArmorType;
  * - Leggings: Enhanced Clockstone x7
  * - Boots: Enhanced Clockstone x4
  *
- * Reference: T252, T254 - Create Enhanced Clockstone Armor with time distortion immunity
+ * Reference: T252, T254 - Create Enhanced Clockstone Armor with a time debuff resistance set bonus
  *
  * Note: In 1.21.5, ArmorItem has been removed. Items now use data components
  * and Item.Properties#humanoidArmor() instead of inheritance.
@@ -55,17 +58,10 @@ public class EnhancedClockstoneArmorItem extends Item {
                 .humanoidArmor(EnhancedClockstoneArmorMaterial.ENHANCED_CLOCKSTONE.value(), type);
     }
 
-    /**
-     * Check if player is wearing full Enhanced Clockstone armor set.
-     * Used by TimeDistortionEffect to grant immunity to time distortion.
-     *
-     * @param player The player to check
-     * @return true if player is wearing full Enhanced Clockstone armor set
-     */
-    public static boolean isWearingFullSet(Player player) {
-        return player.getItemBySlot(EquipmentSlot.HEAD).getItem() instanceof EnhancedClockstoneArmorItem &&
-               player.getItemBySlot(EquipmentSlot.CHEST).getItem() instanceof EnhancedClockstoneArmorItem &&
-               player.getItemBySlot(EquipmentSlot.LEGS).getItem() instanceof EnhancedClockstoneArmorItem &&
-               player.getItemBySlot(EquipmentSlot.FEET).getItem() instanceof EnhancedClockstoneArmorItem;
+    @Override
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay tooltipDisplay,
+                               Consumer<Component> tooltipAdder, TooltipFlag tooltipFlag) {
+        super.appendHoverText(stack, context, tooltipDisplay, tooltipAdder, tooltipFlag);
+        tooltipAdder.accept(Component.translatable("item.chronodawn.enhanced_clockstone_armor.tooltip").withStyle(ChatFormatting.GRAY));
     }
 }

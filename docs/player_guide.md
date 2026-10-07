@@ -777,9 +777,9 @@ Chrono Dawn gear keeps its raw stats at or below the vanilla gear you can reach 
 
 | Gear | Vanilla equivalent | Stats | Special ability | How to get |
 |---|---|---|---|---|
-| Clockstone tools and armor | Iron (slightly better) | Iron mining level, 450 durability, 6.5 mining speed, 6.5 sword damage. Armor 15 defense, toughness 1.0 | None | Clockstone from Ancient Ruins in the Overworld, or Clockstone Ore in Chrono Dawn |
+| Clockstone tools and armor | Iron (slightly better) | Iron mining level, 450 durability, 6.5 mining speed, 6.5 sword damage. Armor 15 defense, toughness 1.0 | Full armor set: Slowness lasts 25% shorter | Clockstone from Ancient Ruins in the Overworld, or Clockstone Ore in Chrono Dawn |
 | Entropy Crystal Sword | Iron (slightly better) | Same stats as the Clockstone Sword | Inflicts Entropy (damage over time) on every hit | Entropy Crystal Ore in Chrono Dawn |
-| Enhanced Clockstone tools and armor | Diamond (slightly below) | Diamond mining level, 1200 durability, 7.5 mining speed, 7 sword damage, enchantability 16. Armor 19 defense, toughness 2.0 | Sword: 25% chance to freeze the target | Enhanced Clockstone from Desert Clock Tower, Time Guardian, and Clockwork Sentinels |
+| Enhanced Clockstone tools and armor | Diamond (slightly below) | Diamond mining level, 1200 durability, 7.5 mining speed, 7 sword damage, enchantability 16. Armor 19 defense, toughness 2.0 | Full armor set: Slowness, Weakness, and Mining Fatigue last 50% shorter. Sword: 25% chance to freeze the target | Enhanced Clockstone from Desert Clock Tower, Time Guardian, and Clockwork Sentinels |
 | Temporal Amber Armor | Diamond (slightly below) | 19 defense, toughness 1.5, more durability than diamond | Full set repairs itself | Temporal Amber Ore in Chrono Dawn |
 | Spatially Linked Pickaxe | Diamond | Diamond mining level, 1561 durability, 8.0 mining speed | 33% chance of extra drops | Upgraded from a Diamond Pickaxe with Enhanced Clockstone and Time Crystals |
 | Custom Shields (T1 to T3) | Shield | 400 / 600 / 800 durability | Shorter debuffs while held. T2 and T3 add effects on block | Clockstone, then Enhanced Clockstone, then Entropy Crystal |
@@ -855,7 +855,7 @@ Crafted from **Raw Temporal Amber** in the vanilla armor shapes.
 
 ### Custom Shields
 
-Chrono Dawn adds three tiered shields suited to the dimension's time-themed threats. All tiers reduce Slowness / Weakness / Mining Fatigue duration by 50% when held in either hand, and on MC 1.21.5+ they raise to block faster than a vanilla shield.
+Chrono Dawn adds three tiered shields suited to the dimension's time-themed threats. All tiers reduce Slowness / Weakness / Mining Fatigue duration by 50% when held in either hand, and this stacks with the Clockstone and Enhanced Clockstone armor set bonuses. On MC 1.21.5+ they raise to block faster than a vanilla shield.
 
 - **Clockstone Shield** (T1): 400 durability.
 - **Enhanced Clockstone Shield** (T2): 600 durability. Adds Speed I for 1 second on each successful block (3-second internal cooldown).
@@ -1012,6 +1012,7 @@ Basic equipment crafted from **Clockstone** in the vanilla tool and armor shapes
 
 - **Tools** (Sword, Pickaxe, Axe, Shovel, Hoe): iron mining level, 450 durability, 6.5 mining speed, enchantability 14. The sword deals 6.5 damage
 - **Armor** (Helmet, Chestplate, Leggings, Boots): Defense 2 / 6 / 5 / 2 (15 total), toughness 1.0, enchantability 14
+- **Armor set bonus**: Wearing all four pieces makes Slowness last 25% shorter
 - Repaired with Time Crystals
 
 ### Enhanced Clockstone Equipment
@@ -1021,6 +1022,7 @@ Upgraded equipment crafted from **Enhanced Clockstone** in the vanilla tool and 
 - **Tools** (Sword, Pickaxe, Axe, Shovel, Hoe): diamond mining level, 1200 durability, 7.5 mining speed, enchantability 16. The sword deals 7 damage
 - **Sword ability**: Each hit has a 25% chance to freeze the target (Slowness X for 2 seconds)
 - **Armor** (Helmet, Chestplate, Leggings, Boots): Defense 3 / 7 / 6 / 3 (19 total), toughness 2.0, enchantability 16
+- **Armor set bonus**: Wearing all four pieces makes Slowness, Weakness, and Mining Fatigue last 50% shorter
 - Repaired with Time Crystals
 
 ### Wood Type Blocks

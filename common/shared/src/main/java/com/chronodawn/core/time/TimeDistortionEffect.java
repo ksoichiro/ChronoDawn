@@ -4,7 +4,6 @@ import com.chronodawn.ChronoDawn;
 import com.chronodawn.data.DimensionStateData;
 import com.chronodawn.entities.mobs.FloqEntity;
 import com.chronodawn.entities.mobs.TimeKeeperEntity;
-import com.chronodawn.items.equipment.EnhancedClockstoneArmorItem;
 import com.chronodawn.registry.ModDimensions;
 import com.chronodawn.registry.ModItems;
 import com.chronodawn.tags.ModEntityTypeTags;
@@ -28,7 +27,6 @@ import net.minecraft.world.entity.player.Player;
  * - Duration: 100 ticks (5 seconds, reapplied continuously)
  * - Target: Hostile mobs (Monster class) in ChronoDawn dimension
  * - Exclusion: Players are not affected
- * - Exclusion: Players wearing full Enhanced Clockstone armor are immune (T254)
  * - Exclusion: All boss entities (Time Guardian, Time Tyrant, Chronos Warden, Clockwork Colossus, Entropy Keeper, Temporal Phantom)
  * - Exclusion: Time Keeper (friendly trader NPC)
  *
@@ -43,7 +41,6 @@ import net.minecraft.world.entity.player.Player;
  * Task: T073 [US1] Implement time distortion effect logic
  * Task: T147 [US3] Implement enhanced time distortion effect (Slowness V) when Eye of Chronos is obtained
  * Task: T229a [US3] Exclude Time Tyrant from time distortion effect to allow boss abilities to function
- * Task: T254 [US2] Implement time-manipulation effects for Tier 2 equipment (Enhanced Clockstone armor immunity)
  * Task: T714 [Playtest Feedback] Exclude all boss entities from Time Distortion Effect
  */
 public class TimeDistortionEffect {
@@ -125,9 +122,6 @@ public class TimeDistortionEffect {
     ) {
         // Exclude players
         if (entity instanceof Player player) {
-            // Special case: If player is wearing full Enhanced Clockstone armor, they are immune
-            // This is for the future implementation where players might be affected
-            // Currently players are excluded entirely, but this check is ready for potential changes
             return false;
         }
 

@@ -39,13 +39,12 @@ import java.util.function.Supplier;
  * - Toughness: 2.0f (iron: 0.0f, diamond: 2.0f, clockstone: 1.0f)
  * - Knockback Resistance: 0.0f
  *
- * Special Ability (Full Set Bonus):
- * - Complete immunity to ChronoDawn time distortion effects (Slowness IV/V)
- * - Implemented in TimeDistortionEffect.java
+ * Full Set Bonus: shortens Slowness, Weakness, and Mining Fatigue by 50%
+ * (stacks with ChronoDawn shields), see TimeDebuffResistance.
  *
  * Repair Material: Time Crystal
  *
- * Reference: T252 - Create Enhanced Clockstone Armor Set with immunity to time distortion
+ * Reference: T252 - Create Enhanced Clockstone Armor Set with a time debuff resistance set bonus
  */
 public class EnhancedClockstoneArmorMaterial {
     public static final Holder<ArmorMaterial> ENHANCED_CLOCKSTONE = register(

@@ -1,5 +1,6 @@
 package com.chronodawn.items.shield;
 
+import com.chronodawn.items.equipment.TimeDebuffResistance;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
@@ -197,20 +198,23 @@ public final class ChronoShieldEffectHandler {
     }
 
     /**
-     * Effect A — halves duration of time-themed debuffs when the entity is holding a ChronoDawn shield
-     * in either hand (main-hand or off-hand). Blocking is not required: the trigger is passive so
-     * that unblockable sources (splash potions, lingering clouds, mob auras, environmental debuffs)
+     * Effect A — shortens time-themed debuffs when the entity is holding a ChronoDawn shield
+     * in either hand (main-hand or off-hand) or wears a full Clockstone / Enhanced Clockstone
+     * armor set. See {@link TimeDebuffResistance} for the multipliers. Blocking is not required:
+     * the trigger is passive so that unblockable sources (splash potions, lingering clouds, mob
+     * auras, environmental debuffs)
      * are mitigated too. Returns the (possibly modified) instance; a new instance is returned when
      * duration changes.
      */
     public static MobEffectInstance maybeShortenDebuff(LivingEntity target, MobEffectInstance incoming) {
-        if (!isHoldingChronoShield(target)) return incoming;
         // 1.20.1: getEffect() returns raw MobEffect (not Holder<MobEffect>).
         MobEffect effect = incoming.getEffect();
         ResourceLocation id = BuiltInRegistries.MOB_EFFECT.getKey(effect);
         if (!SHORTENED_EFFECTS.contains(id)) return incoming;
-        int halved = Math.max(1, incoming.getDuration() / 2);
-        return new MobEffectInstance(effect, halved, incoming.getAmplifier(), incoming.isAmbient(), incoming.isVisible(), incoming.showIcon());
+        float multiplier = TimeDebuffResistance.durationMultiplier(target, effect == MobEffects.MOVEMENT_SLOWDOWN);
+        int shortened = TimeDebuffResistance.shortenDuration(incoming.getDuration(), multiplier, incoming.isInfiniteDuration());
+        if (shortened == incoming.getDuration()) return incoming;
+        return new MobEffectInstance(effect, shortened, incoming.getAmplifier(), incoming.isAmbient(), incoming.isVisible(), incoming.showIcon());
     }
 
     /**

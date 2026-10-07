@@ -1,7 +1,14 @@
 package com.chronodawn.items.equipment;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.item.equipment.ArmorType;
+
+import java.util.function.Consumer;
 
 /**
  * Clockstone Armor Item - Tier 1 time-themed armor pieces.
@@ -18,6 +25,9 @@ import net.minecraft.world.item.equipment.ArmorType;
  * Total Set Defense: 15 (same as iron)
  * Toughness: 1.0f (better than iron's 0.0f)
  * Enchantability: 14 (same as iron)
+ *
+ * Full Set Bonus: shortens Slowness by 25% (stacks with ChronoDawn shields),
+ * see TimeDebuffResistance.
  *
  * Crafting Recipes:
  * - Helmet: Clockstone x5
@@ -46,5 +56,12 @@ public class ClockstoneArmorItem extends Item {
                 .stacksTo(1)
                 // Use humanoidArmor() to set up armor components
                 .humanoidArmor(ClockstoneArmorMaterial.CLOCKSTONE.value(), type);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay tooltipDisplay,
+                               Consumer<Component> tooltipAdder, TooltipFlag tooltipFlag) {
+        super.appendHoverText(stack, context, tooltipDisplay, tooltipAdder, tooltipFlag);
+        tooltipAdder.accept(Component.translatable("item.chronodawn.clockstone_armor.tooltip").withStyle(ChatFormatting.GRAY));
     }
 }

@@ -1,7 +1,13 @@
 package com.chronodawn.items.equipment;
 
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.equipment.ArmorType;
+
+import java.util.List;
 
 /**
  * Enhanced Clockstone Armor Item - Tier 2 time-themed armor pieces.
@@ -19,10 +25,8 @@ import net.minecraft.world.item.equipment.ArmorType;
  * Toughness: 2.0f (same as diamond)
  * Enchantability: 16 (better than iron/clockstone/diamond)
  *
- * Special Ability (Full Set Bonus):
- * - Complete immunity to ChronoDawn time distortion effects (Slowness IV/V)
- * - Players wearing full Enhanced Clockstone armor are not affected by time distortion
- * - Implemented in TimeDistortionEffect.java
+ * Full Set Bonus: shortens Slowness, Weakness, and Mining Fatigue by 50%
+ * (stacks with ChronoDawn shields), see TimeDebuffResistance.
  *
  * Crafting Recipes:
  * - Helmet: Enhanced Clockstone x5
@@ -30,7 +34,7 @@ import net.minecraft.world.item.equipment.ArmorType;
  * - Leggings: Enhanced Clockstone x7
  * - Boots: Enhanced Clockstone x4
  *
- * Reference: T252, T254 - Create Enhanced Clockstone Armor with time distortion immunity
+ * Reference: T252, T254 - Create Enhanced Clockstone Armor with a time debuff resistance set bonus
  */
 public class EnhancedClockstoneArmorItem extends ArmorItem {
     public EnhancedClockstoneArmorItem(ArmorType type, Properties properties) {
@@ -50,17 +54,9 @@ public class EnhancedClockstoneArmorItem extends ArmorItem {
                 .durability(type.getDurability(EnhancedClockstoneArmorMaterial.BASE_DURABILITY));
     }
 
-    /**
-     * Check if player is wearing full Enhanced Clockstone armor set.
-     * Used by TimeDistortionEffect to grant immunity to time distortion.
-     *
-     * @param player The player to check
-     * @return true if player is wearing full Enhanced Clockstone armor set
-     */
-    public static boolean isWearingFullSet(net.minecraft.world.entity.player.Player player) {
-        return player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.HEAD).getItem() instanceof EnhancedClockstoneArmorItem &&
-               player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.CHEST).getItem() instanceof EnhancedClockstoneArmorItem &&
-               player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.LEGS).getItem() instanceof EnhancedClockstoneArmorItem &&
-               player.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.FEET).getItem() instanceof EnhancedClockstoneArmorItem;
+    @Override
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
+        super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
+        tooltipComponents.add(Component.translatable("item.chronodawn.enhanced_clockstone_armor.tooltip").withStyle(ChatFormatting.GRAY));
     }
 }
