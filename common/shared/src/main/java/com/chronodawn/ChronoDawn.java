@@ -40,7 +40,6 @@ import com.chronodawn.worldgen.runtime.OverlayPackBootstrap;
 import com.chronodawn.worldgen.runtime.OverlayPackPlatform;
 import com.chronodawn.worldgen.spawning.ChronosWardenSpawner;
 import com.chronodawn.worldgen.spawning.ClockworkColossusSpawner;
-import com.chronodawn.worldgen.spawning.EntropyKeeperSpawner;
 import com.chronodawn.worldgen.spawning.MasterClockBossRoomPlacer;
 import com.chronodawn.worldgen.spawning.PhantomCatacombsBossRoomPlacer;
 import com.chronodawn.worldgen.spawning.TemporalPhantomSpawner;
@@ -102,8 +101,6 @@ public class ChronoDawn {
         MasterClockBossRoomPlacer.register();
         PhantomCatacombsBossRoomPlacer.register();
         TemporalPhantomSpawner.register();
-        // EntropyKeeperSpawner disabled - Entropy Keeper now spawns via EntropyCryptTrapdoorBlock
-        // EntropyKeeperSpawner.register();
     }
 }
 
