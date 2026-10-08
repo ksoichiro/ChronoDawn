@@ -67,6 +67,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   1.20.1 now has the same durability as on later versions (220, 320, 300, and
   260 for the helmet, chestplate, leggings, and boots) instead of iron armor's
   values.
+- **Time Wood logs tag**: on Minecraft 1.21.1 and later, stripped Time Wood
+  logs and all Time Wood and Stripped Time Wood blocks now count as logs
+  (`minecraft:logs`), as they already did on 1.20.1. Leaves next to them no
+  longer decay, and recipes or mods that accept any log now accept them.
 
 ## [0.11.0] - 2026-10-04
 
