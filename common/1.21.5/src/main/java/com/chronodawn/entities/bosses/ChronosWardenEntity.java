@@ -502,4 +502,14 @@ public class ChronosWardenEntity extends Monster {
             BossDefeatedEvents.fire(BossKind.CHRONOS_WARDEN, this, source);
         }
     }
+
+    @Override
+    public boolean isPersistenceRequired() {
+        return true;
+    }
+
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false; // Boss should never despawn
+    }
 }

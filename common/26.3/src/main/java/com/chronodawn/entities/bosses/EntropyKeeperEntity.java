@@ -451,4 +451,14 @@ public class EntropyKeeperEntity extends Monster {
             BossDefeatedEvents.fire(BossKind.ENTROPY_KEEPER, this, cause);
         }
     }
+
+    @Override
+    public boolean isPersistenceRequired() {
+        return true;
+    }
+
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false; // Boss should never despawn
+    }
 }

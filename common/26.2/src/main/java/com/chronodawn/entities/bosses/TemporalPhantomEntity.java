@@ -514,4 +514,14 @@ public class TemporalPhantomEntity extends Monster implements RangedAttackMob {
             BossDefeatedEvents.fire(BossKind.TEMPORAL_PHANTOM, this, cause);
         }
     }
+
+    @Override
+    public boolean isPersistenceRequired() {
+        return true;
+    }
+
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false; // Boss should never despawn
+    }
 }

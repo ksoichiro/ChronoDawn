@@ -72,6 +72,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   logs and all Time Wood and Stripped Time Wood blocks now count as logs
   (`minecraft:logs`), as they already did on 1.20.1. Leaves next to them no
   longer decay, and recipes or mods that accept any log now accept them.
+- **Bosses despawning**: on Minecraft 1.20.1 and on 1.21.2 and later, the
+  Chronos Warden, Entropy Keeper, and Temporal Phantom no longer despawn when
+  every player moves away from them.
 
 ## [0.11.0] - 2026-10-04
 

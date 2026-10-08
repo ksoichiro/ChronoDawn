@@ -1096,6 +1096,11 @@ public class TimeTyrantEntity extends Monster {
     }
 
     @Override
+    public boolean isPersistenceRequired() {
+        return true;
+    }
+
+    @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
         return false; // Boss never despawns
     }
