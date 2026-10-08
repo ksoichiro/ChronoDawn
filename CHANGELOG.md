@@ -46,7 +46,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   pickaxe is now upgraded from a Diamond Pickaxe with 3 Enhanced Clockstone and
   3 Time Crystals, the same recipe 1.20.1 already used. It previously shared
   its exact recipe with the Enhanced Clockstone Pickaxe, so the crafting grid
-  could give you either one.
+  could give you either one. The recipe book now shows it once you pick up a
+  Time Crystal, as on 1.20.1.
 
 ### Fixed
 
