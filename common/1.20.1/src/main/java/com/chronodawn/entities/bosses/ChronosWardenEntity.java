@@ -47,7 +47,7 @@ import net.minecraft.world.phys.Vec3;
  * - Health: 180 (90 hearts)
  * - Armor: 12 (high defense)
  * - Attack Damage: 9
- * - Movement Speed: 0.15 (slow but tanky)
+ * - Movement Speed: 0.20 (standard boss speed)
  * - Knockback Resistance: 0.8
  *
  * AI Phases:
@@ -129,7 +129,7 @@ public class ChronosWardenEntity extends Monster {
             .add(Attributes.ARMOR, 12.0) // High defense
             .add(Attributes.ATTACK_DAMAGE, BossScaling.attackDamage(BossKind.CHRONOS_WARDEN))
             .add(Attributes.ATTACK_KNOCKBACK, 1.0)
-            .add(Attributes.MOVEMENT_SPEED, 0.15) // Slow
+            .add(Attributes.MOVEMENT_SPEED, 0.20) // Standard boss speed (same as Time Guardian, Entropy Keeper)
             .add(Attributes.FOLLOW_RANGE, 32.0)
             .add(Attributes.KNOCKBACK_RESISTANCE, 0.8);
     }

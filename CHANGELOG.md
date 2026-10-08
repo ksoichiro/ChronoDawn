@@ -75,6 +75,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Bosses despawning**: on Minecraft 1.20.1 and on 1.21.2 and later, the
   Chronos Warden, Entropy Keeper, and Temporal Phantom no longer despawn when
   every player moves away from them.
+- **Bosses on 1.20.1**: several boss fixes that later versions already had now
+  apply to Minecraft 1.20.1 too.
+  - The Time Guardian, Chronos Warden, and Time Tyrant remember where they
+    have spawned across server restarts. A defeated boss no longer comes
+    back after a restart, and reopening a boss room door no longer spawns a
+    second one.
+  - Every Desert Clock Tower now gets its own Time Guardian, instead of at
+    most 3 per world. Finding the tower's boss room no longer causes server
+    lag spikes.
+  - The Chronos Warden moves at the same speed as on later versions.
+  - Chrono Aegis also buffs other players within 32 blocks.
 
 ## [0.11.0] - 2026-10-04
 

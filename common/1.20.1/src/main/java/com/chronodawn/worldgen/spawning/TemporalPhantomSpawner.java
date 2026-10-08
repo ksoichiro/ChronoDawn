@@ -5,6 +5,7 @@ import com.chronodawn.compat.CompatSavedData;
 import com.chronodawn.data.BossSpawnData;
 import com.chronodawn.entities.bosses.TemporalPhantomEntity;
 import com.chronodawn.registry.ModEntities;
+import com.chronodawn.registry.ModDimensions;
 import dev.architectury.event.events.common.LifecycleEvent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -111,6 +112,11 @@ public class TemporalPhantomSpawner {
      * @param level The ServerLevel to check
      */
     public static void checkAndSpawnPhantom(ServerLevel level) {
+        // Only process Chrono Dawn dimension (Temporal Phantom only spawns there)
+        if (!level.dimension().equals(ModDimensions.CHRONO_DAWN_DIMENSION)) {
+            return;
+        }
+
         ResourceLocation dimensionId = level.dimension().location();
 
         // Initialize tick counter for this dimension
