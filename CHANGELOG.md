@@ -86,6 +86,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     lag spikes.
   - The Chronos Warden moves at the same speed as on later versions.
   - Chrono Aegis also buffs other players within 32 blocks.
+- **Recipe book tabs on 1.20.1 and 1.21.1**: building blocks now appear under
+  the Building tab, and weapons, armor, and tools under the Equipment tab,
+  instead of Misc, as they already did on later versions.
 
 ## [0.11.0] - 2026-10-04
 
