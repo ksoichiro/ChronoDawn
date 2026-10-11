@@ -68,29 +68,29 @@ public class TemporalCapridModel extends EntityModel<TemporalCapridEntity> {
         PartDefinition partdefinition = meshdefinition.getRoot();
 
         PartDefinition head = partdefinition.addOrReplaceChild("head", CubeListBuilder.create()
-            .texOffs(50, 13).addBox(-0.5F, -3.0F, -14.0F, 0.0F, 7.0F, 5.0F, new CubeDeformation(0.0F))
-            .texOffs(60, 17).addBox(-6.0F, -11.0F, -10.0F, 3.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)),
-            PartPose.offset(0.5F, 14.0F, 0.0F));
+            .texOffs(50, 13).addBox(-0.5F, 5.0F, -6.0F, 0.0F, 7.0F, 5.0F, new CubeDeformation(0.0F))
+            .texOffs(60, 17).addBox(-6.0F, -3.0F, -2.0F, 3.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)),
+            PartPose.offset(0.5F, 6.0F, -8.0F));
 
         head.addOrReplaceChild("mirror", CubeListBuilder.create()
             .texOffs(60, 20).addBox(2.5F, -21.0F, -10.0F, 3.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)),
-            PartPose.offset(-0.5F, 10.0F, 0.0F));
+            PartPose.offset(-0.5F, 18.0F, 8.0F));
 
         head.addOrReplaceChild("nose", CubeListBuilder.create()
             .texOffs(44, 27).addBox(-3.0F, -4.0F, -8.0F, 5.0F, 7.0F, 10.0F, new CubeDeformation(0.0F)),
-            PartPose.offsetAndRotation(0.0F, -8.0F, -8.0F, 0.9599F, 0.0F, 0.0F));
+            PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.9599F, 0.0F, 0.0F));
 
         head.addOrReplaceChild("left_horn", CubeListBuilder.create()
             .texOffs(24, 52).addBox(-0.01F, -15.0F, -10.0F, 2.0F, 6.0F, 2.0F, new CubeDeformation(0.0F))
             .texOffs(56, 44).addBox(-0.01F, -20.7F, -10.0F, 2.0F, 6.0F, 2.0F, new CubeDeformation(-0.3F))
             .texOffs(40, 57).addBox(1.49F, -15.0F, -10.0F, 3.0F, 2.0F, 2.0F, new CubeDeformation(-0.4F)),
-            PartPose.offset(0.0F, 0.0F, 0.0F));
+            PartPose.offset(0.0F, 8.0F, 8.0F));
 
         head.addOrReplaceChild("right_horn", CubeListBuilder.create()
             .texOffs(32, 52).addBox(-2.99F, -15.0F, -10.0F, 2.0F, 6.0F, 2.0F, new CubeDeformation(0.0F))
             .texOffs(56, 52).addBox(-2.99F, -20.7F, -10.0F, 2.0F, 6.0F, 2.0F, new CubeDeformation(-0.3F))
             .texOffs(60, 13).addBox(-5.49F, -15.0F, -10.0F, 3.0F, 2.0F, 2.0F, new CubeDeformation(-0.4F)),
-            PartPose.offset(0.0F, 0.0F, 0.0F));
+            PartPose.offset(0.0F, 8.0F, 8.0F));
 
         partdefinition.addOrReplaceChild("body", CubeListBuilder.create()
             .texOffs(0, 0).addBox(-4.0F, -17.0F, -7.0F, 9.0F, 11.0F, 16.0F, new CubeDeformation(0.0F))

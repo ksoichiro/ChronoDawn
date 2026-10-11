@@ -112,6 +112,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   every version.
 - **Glide Fish and Chrono Turtles stuck in place**: Glide Fish and Chrono
   Turtles now swim around in the water instead of staying in one spot.
+- **Time Tyrant and Temporal Caprid heads**: their heads now turn at the neck
+  when they look up or down, instead of sliding across the shoulders.
 
 ## [0.11.0] - 2026-10-04
 

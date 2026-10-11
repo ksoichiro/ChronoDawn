@@ -104,13 +104,13 @@ public class TimeTyrantModel extends EntityModel<TimeTyrantRenderState> {
         .texOffs(126, 48).addBox(-4.5F, -11.0F, -1.5F, 2.0F, 3.0F, 3.0F, new CubeDeformation(0.0F))
         .texOffs(126, 54).addBox(-4.0F, -12.0F, -1.0F, 1.0F, 5.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-        PartDefinition head = body.addOrReplaceChild("head", CubeListBuilder.create(), PartPose.offset(0.0F, -32.0F, 0.0F));
+        PartDefinition head = body.addOrReplaceChild("head", CubeListBuilder.create(), PartPose.offset(0.0F, -45.0F, 0.0F));
 
         PartDefinition head_r1 = head.addOrReplaceChild("head_r1", CubeListBuilder.create().texOffs(114, 0).addBox(-8.0F, -25.0F, -3.0F, 2.0F, 8.0F, 2.0F, new CubeDeformation(0.0F))
-        .texOffs(110, 13).addBox(6.0F, -25.0F, -3.0F, 2.0F, 8.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -2.0F, 0.0F, -0.1309F, 0.0F, 0.0F));
+        .texOffs(110, 13).addBox(6.0F, -25.0F, -3.0F, 2.0F, 8.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 11.0F, 0.0F, -0.1309F, 0.0F, 0.0F));
 
         PartDefinition head_r2 = head.addOrReplaceChild("head_r2", CubeListBuilder.create().texOffs(0, 88).addBox(-6.0F, -22.0F, -8.0F, 12.0F, 3.0F, 1.0F, new CubeDeformation(0.0F))
-        .texOffs(54, 28).addBox(-6.0F, -22.0F, -7.0F, 12.0F, 11.0F, 9.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -2.0F, 0.0F, 0.0873F, 0.0F, 0.0F));
+        .texOffs(54, 28).addBox(-6.0F, -22.0F, -7.0F, 12.0F, 11.0F, 9.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, 11.0F, 0.0F, 0.0873F, 0.0F, 0.0F));
 
         PartDefinition left_leg = root.addOrReplaceChild("left_leg", CubeListBuilder.create().texOffs(84, 48).addBox(1.0F, 19.0F, -10.0F, 8.0F, 2.0F, 12.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, -16.0F, 0.0F));
 
