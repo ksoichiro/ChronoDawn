@@ -110,6 +110,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   changes to `chronodawn:time_distortion_immune` were ignored on these
   versions because the boss list was hardcoded. The tag is now honored on
   every version.
+- **Glide Fish and Chrono Turtles stuck in place**: Glide Fish and Chrono
+  Turtles now swim around in the water instead of staying in one spot.
 
 ## [0.11.0] - 2026-10-04
 

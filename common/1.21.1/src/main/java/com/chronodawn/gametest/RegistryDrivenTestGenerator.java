@@ -435,6 +435,7 @@ public final class RegistryDrivenTestGenerator {
         all.addAll(MobBehaviorTests.generateMobCategoryTests(RegistryDrivenTestData.getMobCategorySpecs(), NamedTest::new));
         all.addAll(MobBehaviorTests.generateMobPersistenceTests(RegistryDrivenTestData.getPersistentEntities(), NamedTest::new));
         all.addAll(MobBehaviorTests.generateFlyingMobTests(RegistryDrivenTestData.getFlyingEntities(), NamedTest::new));
+        all.addAll(MobBehaviorTests.generateAquaticMobTests(RegistryDrivenTestData.getAquaticEntities(), NamedTest::new));
         all.addAll(generateAdvancementLoadedTests());
         all.addAll(generateAdvancementGrantTests());
         all.addAll(generateAdvancementParentTests());

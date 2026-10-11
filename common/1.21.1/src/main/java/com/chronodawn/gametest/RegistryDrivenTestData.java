@@ -297,6 +297,17 @@ public final class RegistryDrivenTestData {
     }
 
     /**
+     * Entities that should swim (use WaterBoundPathNavigation).
+     */
+    @SuppressWarnings("unchecked")
+    public static List<RegistrySupplier<EntityType<?>>> getAquaticEntities() {
+        return List.of(
+            (RegistrySupplier<EntityType<?>>) (RegistrySupplier<?>) ModEntities.GLIDE_FISH,
+            (RegistrySupplier<EntityType<?>>) (RegistrySupplier<?>) ModEntities.CHRONO_TURTLE
+        );
+    }
+
+    /**
      * Advancement specifications: advancement ID + expected parent ID.
      * Tests verify advancement loading, parent validity, grant/check, and isolation.
      */

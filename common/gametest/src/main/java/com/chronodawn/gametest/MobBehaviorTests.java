@@ -10,6 +10,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.control.FlyingMoveControl;
+import net.minecraft.world.entity.ai.navigation.WaterBoundPathNavigation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 
@@ -25,6 +26,7 @@ import java.util.function.Consumer;
  * - Mob category (verifies entities are in correct MobCategory)
  * - Mob persistence (verifies persistent entities don't despawn)
  * - Flying mob behavior (verifies flying mobs use FlyingMoveControl)
+ * - Aquatic mob behavior (verifies swimming mobs use WaterBoundPathNavigation)
  */
 public final class MobBehaviorTests {
 
@@ -179,6 +181,37 @@ public final class MobBehaviorTests {
                     if (!(mob.getMoveControl() instanceof FlyingMoveControl)) {
                         CompatGameTestHelper.fail(helper, entityName + " should use FlyingMoveControl but uses " +
                             mob.getMoveControl().getClass().getSimpleName());
+                        return;
+                    }
+                    helper.succeed();
+                });
+            }));
+        }
+        return tests;
+    }
+
+    /**
+     * Generates tests verifying swimming mobs use WaterBoundPathNavigation.
+     *
+     * WaterAnimal does not set one up itself, and the default ground navigation
+     * cannot path through water, so RandomSwimmingGoal never moves the mob.
+     */
+    public static <T> List<T> generateAquaticMobTests(
+            List<RegistrySupplier<EntityType<?>>> entities,
+            TestFactory<T> factory) {
+        List<T> tests = new ArrayList<>();
+        for (var entitySupplier : entities) {
+            String entityName = entitySupplier.getId().getPath();
+            tests.add(factory.create("mob_aquatic_" + entityName, helper -> {
+                var entity = helper.spawn(entitySupplier.get(), TEST_POS);
+                helper.runAfterDelay(1, () -> {
+                    if (!(entity instanceof Mob mob)) {
+                        CompatGameTestHelper.fail(helper, entityName + " is not a Mob");
+                        return;
+                    }
+                    if (!(mob.getNavigation() instanceof WaterBoundPathNavigation)) {
+                        CompatGameTestHelper.fail(helper, entityName + " should use WaterBoundPathNavigation but uses " +
+                            mob.getNavigation().getClass().getSimpleName());
                         return;
                     }
                     helper.succeed();
