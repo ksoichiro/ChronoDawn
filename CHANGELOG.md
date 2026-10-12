@@ -120,6 +120,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Turtles now swim around in the water instead of staying in one spot.
 - **Time Tyrant and Temporal Caprid heads**: their heads now turn at the neck
   when they look up or down, instead of sliding across the shoulders.
+- **Crash on Lunar Client**: on Fabric, the game no longer crashes before the
+  title screen with "Failed to parse chronodawn:chronodawn from pack
+  chronodawn-runtime-overlay" when a launcher such as Lunar Client loads data
+  packs outside a world.
 
 ## [0.11.0] - 2026-10-04
 

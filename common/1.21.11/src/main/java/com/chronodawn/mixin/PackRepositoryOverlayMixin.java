@@ -45,10 +45,9 @@ import java.util.Optional;
  * and this is the established pattern for runtime-built data packs whose path
  * isn't known until mod init.
  *
- * <p>Detection of "this is a server data PackRepository" is delegated to
- * {@link OverlayPackInjection#isServerDataRepository}; the resource (client)
- * repository never carries a {@code ServerPacksSource} so the Mixin stays
- * quiet for it.
+ * <p>Injection is limited to repositories that Fabric API also adds mod data
+ * packs to (see {@link OverlayPackInjection#hasWorldOrServerFolderSource}),
+ * because the overlay references the mod's own worldgen data.
  */
 @Mixin(PackRepository.class)
 public abstract class PackRepositoryOverlayMixin {
@@ -59,7 +58,8 @@ public abstract class PackRepositoryOverlayMixin {
         argsOnly = true
     )
     private static RepositorySource[] chronodawn$injectOverlaySource(RepositorySource[] sources) {
-        if (!OverlayPackInjection.isServerDataRepository(sources)) {
+        if (!OverlayPackInjection.hasWorldOrServerFolderSource(
+                sources, folder -> ((FolderRepositorySourceAccessor) folder).chronodawn$getPackSource())) {
             return sources;
         }
         Path overlayPath = OverlayPackBootstrap.getOverlayPath();

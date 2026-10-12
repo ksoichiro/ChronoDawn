@@ -14,7 +14,8 @@
     "SleepMixin",
     "StructureStartMixin",
     "StructureTemplateBlockAttachedFixMixin",
-    "FreezeTopLayerMixin"
+    "FreezeTopLayerMixin",
+    "FolderRepositorySourceAccessor"
   ],
   "client": [
     "client.AtmosphericFogEnvironmentMixin",

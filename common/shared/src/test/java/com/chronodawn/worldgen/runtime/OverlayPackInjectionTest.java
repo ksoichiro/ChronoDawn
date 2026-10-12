@@ -18,6 +18,8 @@
 package com.chronodawn.worldgen.runtime;
 
 import net.minecraft.SharedConstants;
+import net.minecraft.server.packs.repository.FolderRepositorySource;
+import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.server.packs.repository.RepositorySource;
 import net.minecraft.server.packs.repository.ServerPacksSource;
 import org.junit.jupiter.api.BeforeAll;
@@ -25,22 +27,23 @@ import org.junit.jupiter.api.Test;
 import sun.misc.Unsafe;
 
 import java.lang.reflect.Field;
+import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Tests for {@link OverlayPackInjection#isServerDataRepository}. The Fabric
- * Mixin relies on this predicate to skip injection into the client resource
- * repository; a future Mojang refactor that routes ServerPacksSource into
- * both repos (or removes it from the server one) would silently flip the
- * outcome, hence the explicit regression coverage.
+ * Tests for {@link OverlayPackInjection#hasWorldOrServerFolderSource}. The
+ * Fabric Mixin relies on this predicate to inject the runtime overlay only
+ * where Fabric API also adds mod data packs; injecting it anywhere else makes
+ * registry loading fail on the overlay's references to the mod's worldgen data.
  *
- * <p>Instances of {@link ServerPacksSource} are built via {@link Unsafe#allocateInstance}
- * because (a) its constructor signature changes across Minecraft versions
- * (this test runs against all 11 versions sharing {@code common/shared/src/test})
- * and (b) the test only needs an object whose {@code instanceof} answer is
- * {@code true}; it never calls any method on the instance.
+ * <p>Source instances are built via {@link Unsafe#allocateInstance}
+ * because (a) their constructor signatures change across Minecraft versions
+ * (this test runs against every version sharing {@code common/shared/src/test})
+ * and (b) the test only needs objects whose {@code instanceof} answer is
+ * {@code true}; it never calls any method on them. The pack source of a
+ * folder is supplied by a stub instead of the Mixin accessor.
  */
 class OverlayPackInjectionTest {
 
@@ -58,27 +61,50 @@ class OverlayPackInjectionTest {
     }
 
     @Test
-    void emptySources_isNotServerData() {
-        assertFalse(OverlayPackInjection.isServerDataRepository(new RepositorySource[0]));
+    void emptySources_hasNoWorldOrServerFolder() {
+        assertFalse(OverlayPackInjection.hasWorldOrServerFolderSource(
+            new RepositorySource[0], packSourceOf(PackSource.WORLD)));
     }
 
     @Test
-    void sourcesWithoutServerPacksSource_isNotServerData() {
+    void sourcesWithoutFolderSource_hasNoWorldOrServerFolder() {
         RepositorySource other = consumer -> { /* no-op */ };
-        assertFalse(OverlayPackInjection.isServerDataRepository(new RepositorySource[] { other }));
+        assertFalse(OverlayPackInjection.hasWorldOrServerFolderSource(
+            new RepositorySource[] { other }, packSourceOf(PackSource.WORLD)));
     }
 
     @Test
-    void singleServerPacksSource_isServerData() throws InstantiationException {
+    void vanillaOnlySources_hasNoWorldOrServerFolder() throws InstantiationException {
+        // Lunar Client loads registries from a repository like this at startup.
+        // Fabric API adds no mod data packs to it, so the overlay must stay out.
         ServerPacksSource serverPacks = (ServerPacksSource) unsafe.allocateInstance(ServerPacksSource.class);
-        assertTrue(OverlayPackInjection.isServerDataRepository(new RepositorySource[] { serverPacks }));
+        assertFalse(OverlayPackInjection.hasWorldOrServerFolderSource(
+            new RepositorySource[] { serverPacks }, packSourceOf(PackSource.WORLD)));
     }
 
     @Test
-    void mixedSourcesContainingServerPacksSource_isServerData() throws InstantiationException {
-        RepositorySource other = consumer -> {};
+    void worldFolderSource_hasWorldOrServerFolder() throws InstantiationException {
         ServerPacksSource serverPacks = (ServerPacksSource) unsafe.allocateInstance(ServerPacksSource.class);
-        assertTrue(OverlayPackInjection.isServerDataRepository(
-            new RepositorySource[] { other, serverPacks, other }));
+        FolderRepositorySource folder = (FolderRepositorySource) unsafe.allocateInstance(FolderRepositorySource.class);
+        assertTrue(OverlayPackInjection.hasWorldOrServerFolderSource(
+            new RepositorySource[] { serverPacks, folder }, packSourceOf(PackSource.WORLD)));
+    }
+
+    @Test
+    void serverFolderSource_hasWorldOrServerFolder() throws InstantiationException {
+        FolderRepositorySource folder = (FolderRepositorySource) unsafe.allocateInstance(FolderRepositorySource.class);
+        assertTrue(OverlayPackInjection.hasWorldOrServerFolderSource(
+            new RepositorySource[] { folder }, packSourceOf(PackSource.SERVER)));
+    }
+
+    @Test
+    void otherFolderSource_hasNoWorldOrServerFolder() throws InstantiationException {
+        FolderRepositorySource folder = (FolderRepositorySource) unsafe.allocateInstance(FolderRepositorySource.class);
+        assertFalse(OverlayPackInjection.hasWorldOrServerFolderSource(
+            new RepositorySource[] { folder }, packSourceOf(PackSource.DEFAULT)));
+    }
+
+    private static Function<FolderRepositorySource, PackSource> packSourceOf(PackSource packSource) {
+        return folder -> packSource;
     }
 }

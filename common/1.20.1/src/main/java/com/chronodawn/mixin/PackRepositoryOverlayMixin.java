@@ -43,6 +43,10 @@ import java.nio.file.Path;
  * {@code Pack.readMetaAndCreate(name, title, alwaysActive, resources, type, position, source)}
  * overload and constructs {@link PathPackResources} directly with
  * {@code (name, path, isBuiltIn)}.
+ *
+ * <p>Injection is limited to repositories that Fabric API also adds mod data
+ * packs to (see {@link OverlayPackInjection#hasWorldOrServerFolderSource}),
+ * because the overlay references the mod's own worldgen data.
  */
 @Mixin(PackRepository.class)
 public abstract class PackRepositoryOverlayMixin {
@@ -53,7 +57,8 @@ public abstract class PackRepositoryOverlayMixin {
         argsOnly = true
     )
     private static RepositorySource[] chronodawn$injectOverlaySource(RepositorySource[] sources) {
-        if (!OverlayPackInjection.isServerDataRepository(sources)) {
+        if (!OverlayPackInjection.hasWorldOrServerFolderSource(
+                sources, folder -> ((FolderRepositorySourceAccessor) folder).chronodawn$getPackSource())) {
             return sources;
         }
         Path overlayPath = OverlayPackBootstrap.getOverlayPath();
