@@ -64,6 +64,7 @@ import com.chronodawn.blocks.TemporalSandstoneStairs;
 import com.chronodawn.blocks.TemporalSandstoneSlab;
 import com.chronodawn.blocks.TemporalSandstoneWall;
 import com.chronodawn.blocks.TemporalParticleEmitterBlock;
+import com.chronodawn.blocks.SundialGnomonBlock;
 import com.chronodawn.blocks.TimeCrystalBlock;
 import com.chronodawn.blocks.EntropyCrystalOre;
 import com.chronodawn.blocks.TemporalAmberOre;
@@ -444,6 +445,19 @@ public class ModBlocks {
         () -> new ClockTowerTeleporterBlock(
             CompatBlockProperties.ofFullCopy(Blocks.GLOWSTONE)
                 .lightLevel(state -> 15)
+                .noOcclusion()
+        )
+    );
+
+    /**
+     * Sundial Gnomon - interactive post of the Old Sundial wayside feature.
+     * No item: it only appears through worldgen, and breaking it drops iron bars.
+     */
+    public static final RegistrySupplier<Block> SUNDIAL_GNOMON = BLOCKS.register(
+        ModBlockId.SUNDIAL_GNOMON.id(),
+        () -> new SundialGnomonBlock(
+            CompatBlockProperties.ofFullCopy(Blocks.IRON_BARS)
+                .strength(5.0f, 6.0f)
                 .noOcclusion()
         )
     );

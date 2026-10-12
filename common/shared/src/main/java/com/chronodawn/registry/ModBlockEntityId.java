@@ -32,6 +32,7 @@ public enum ModBlockEntityId {
     CLOCK_TOWER_TELEPORTER("clock_tower_teleporter"),
     BOSS_ROOM_DOOR("boss_room_door"),
     BOSS_ROOM_BOUNDARY_MARKER("boss_room_boundary_marker"),
+    SUNDIAL_GNOMON("sundial_gnomon"),
     ;
 
     private final String id;

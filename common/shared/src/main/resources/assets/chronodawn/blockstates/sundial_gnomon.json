@@ -1,0 +1,6 @@
+{
+  "multipart": [
+    { "apply": { "model": "chronodawn:block/sundial_gnomon_post_ends" } },
+    { "apply": { "model": "chronodawn:block/sundial_gnomon_post" } }
+  ]
+}

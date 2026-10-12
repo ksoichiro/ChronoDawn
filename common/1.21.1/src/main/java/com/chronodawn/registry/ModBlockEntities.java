@@ -4,6 +4,7 @@ import com.chronodawn.ChronoDawn;
 import com.chronodawn.blocks.BossRoomBoundaryMarkerBlockEntity;
 import com.chronodawn.blocks.BossRoomDoorBlockEntity;
 import com.chronodawn.blocks.ClockTowerTeleporterBlockEntity;
+import com.chronodawn.blocks.SundialGnomonBlockEntity;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
@@ -25,6 +26,17 @@ public class ModBlockEntities {
             BlockEntityType.Builder.of(
                 ClockTowerTeleporterBlockEntity::new,
                 ModBlocks.CLOCK_TOWER_TELEPORTER.get()
+            ).build(null)
+        );
+
+    /**
+     * Sundial Gnomon BlockEntity - stores per-player cooldowns.
+     */
+    public static final RegistrySupplier<BlockEntityType<SundialGnomonBlockEntity>> SUNDIAL_GNOMON =
+        BLOCK_ENTITIES.register(ModBlockEntityId.SUNDIAL_GNOMON.id(), () ->
+            BlockEntityType.Builder.of(
+                SundialGnomonBlockEntity::new,
+                ModBlocks.SUNDIAL_GNOMON.get()
             ).build(null)
         );
 
