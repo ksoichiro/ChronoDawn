@@ -4,6 +4,7 @@ import com.chronodawn.core.wayside.SundialBlessing;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SundialBlessingTest {
 
@@ -58,5 +59,59 @@ class SundialBlessingTest {
         assertEquals("message.chronodawn.sundial_gnomon.day", SundialBlessing.DAY.messageKey());
         assertEquals("message.chronodawn.sundial_gnomon.noon", SundialBlessing.NOON.messageKey());
         assertEquals("message.chronodawn.sundial_gnomon.night", SundialBlessing.NIGHT.messageKey());
+    }
+
+    @Test
+    void particleOffsetsStayOutsideThePedestal() {
+        for (int count : new int[] {12, 24}) {
+            for (long t = 0; t < 13000; t += 50) {
+                double[][] offsets = SundialBlessing.shadowParticleOffsets(t, count);
+                assertEquals(count, offsets.length);
+                for (double[] o : offsets) {
+                    assertTrue(Math.hypot(o[0], o[1]) >= 0.6 - 1e-9, "dayTime " + t);
+                }
+            }
+        }
+    }
+
+    @Test
+    void nightHasNoParticleOffsets() {
+        assertEquals(0, SundialBlessing.shadowParticleOffsets(13000, 8).length);
+        assertEquals(0, SundialBlessing.shadowParticleOffsets(18000, 8).length);
+        assertEquals(0, SundialBlessing.shadowParticleOffsets(23999, 8).length);
+    }
+
+    @Test
+    void noonParticlesFormARing() {
+        for (long t : new long[] {5000, 6000, 6999}) {
+            double[][] offsets = SundialBlessing.shadowParticleOffsets(t, 24);
+            assertEquals(24, offsets.length);
+            for (double[] o : offsets) {
+                assertEquals(0.8, Math.hypot(o[0], o[1]), 1e-9);
+            }
+        }
+    }
+
+    @Test
+    void particleLineFollowsTheShadowDirection() {
+        for (double[] o : SundialBlessing.shadowParticleOffsets(1000, 12)) {
+            assertTrue(o[0] < 0);
+        }
+        for (double[] o : SundialBlessing.shadowParticleOffsets(11000, 12)) {
+            assertTrue(o[0] > 0);
+        }
+    }
+
+    @Test
+    void particleOffsetsEdgeCounts() {
+        assertEquals(0, SundialBlessing.shadowParticleOffsets(1000, 0).length);
+        double[][] single = SundialBlessing.shadowParticleOffsets(1000, 1);
+        assertEquals(1, single.length);
+        assertEquals(-0.6, single[0][0], 1e-9);
+    }
+
+    @Test
+    void nightChimeIsSofter() {
+        assertTrue(SundialBlessing.NIGHT.soundVolume() < SundialBlessing.DAY.soundVolume());
     }
 }

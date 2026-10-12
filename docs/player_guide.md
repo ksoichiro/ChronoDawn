@@ -336,7 +336,7 @@ Seven small NBT-defined micro-structures scatter across the Chrono Dawn biomes. 
 
 - **Watchmaker's Camp** — the only ambient structure with a chest. Worth detouring to whenever you spot the tent.
 - **Hourglass Monolith** — a single-block monument that breaks up open biomes.
-- **Old Sundial** — a flat brick ring marking long-abandoned timekeeping. In newly generated chunks its post can be right-clicked for a three-minute blessing: Speed in daylight, Speed II around noon, or Night Vision at night. Each player can use each sundial once per Minecraft day (about 20 minutes of game time), and breaking the post drops Iron Bars. The cooldown and effect length are configurable.
+- **Old Sundial** — a flat brick ring marking long-abandoned timekeeping. In newly generated chunks its post can be right-clicked for a three-minute blessing: Speed in daylight, Speed II around noon, or Night Vision at night. Each player can use each sundial about once every 20 minutes of game time by default, and breaking the post drops Iron Bars. The cooldown and effect length are configurable.
 - **Petrified Adventurer** — a frozen explorer pose, with a snowy variant in the Snowy biome.
 - **Time Cairn** — a small rock pile; placement reduced in frequency to keep it rare.
 - **Time Well** — a shallow stone well.

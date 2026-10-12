@@ -57,7 +57,6 @@ public class SundialGnomonBlock extends BaseEntityBlock {
     private static final VoxelShape SHAPE = Block.box(7.0, 0.0, 7.0, 9.0, 16.0, 9.0);
     // The gnomon stands on a center block, so the dial face is one block below its base.
     private static final double DIAL_FACE_OFFSET_Y = -0.9;
-    private static final double SHADOW_LENGTH = 1.5;
 
     public SundialGnomonBlock(Properties properties) {
         super(properties);
@@ -111,7 +110,7 @@ public class SundialGnomonBlock extends BaseEntityBlock {
             blessing.amplifier()
         ));
         spawnParticles(level, pos, blessing, dayTime);
-        level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.BLOCKS, 1.0f, blessing.soundPitch());
+        level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.BLOCKS, blessing.soundVolume(), blessing.soundPitch());
         player.sendOverlayMessage(Component.translatable(blessing.messageKey()));
     }
 
@@ -132,13 +131,10 @@ public class SundialGnomonBlock extends BaseEntityBlock {
                 blessing.particleCount(), 0.3, 0.4, 0.3, 0.01);
             return;
         }
-        double shadowX = SundialBlessing.shadowOffsetX(dayTime);
         double faceY = pos.getY() + DIAL_FACE_OFFSET_Y;
-        int count = blessing.particleCount();
-        for (int i = 0; i < count; i++) {
-            double t = (double) i / count;
+        for (double[] offset : SundialBlessing.shadowParticleOffsets(dayTime, blessing.particleCount())) {
             level.sendParticles(ParticleTypes.END_ROD,
-                centerX + shadowX * SHADOW_LENGTH * t, faceY, centerZ,
+                centerX + offset[0], faceY, centerZ + offset[1],
                 1, 0.0, 0.0, 0.0, 0.0);
         }
     }
