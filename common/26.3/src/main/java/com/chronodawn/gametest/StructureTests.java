@@ -113,7 +113,7 @@ public final class StructureTests {
             )),
             new StructureSpec("old_sundial", 3, 3, 3, List.of(
                 new BlockRequirement(ModBlockId.SMOOTH_TEMPORAL_STONE.id(), ModBlocks.SMOOTH_TEMPORAL_STONE, 9),
-                new BlockRequirement("iron_bars", () -> Blocks.IRON_BARS, 1)
+                new BlockRequirement(ModBlockId.SUNDIAL_GNOMON.id(), ModBlocks.SUNDIAL_GNOMON, 1)
             )),
             new StructureSpec("hourglass_monolith", 3, 5, 3, List.of(
                 new BlockRequirement(ModBlockId.TEMPORAL_SANDSTONE.id(), ModBlocks.TEMPORAL_SANDSTONE, 18),
