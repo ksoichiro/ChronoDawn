@@ -30,6 +30,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   makes Slowness, Weakness, and Mining Fatigue last 50% shorter. Both stack
   with the Chrono Dawn shields, and each armor piece shows its set bonus in
   the tooltip.
+- **Mobs and items through portals**: once stabilized, a Chrono Dawn portal
+  sends mobs and dropped items through like a Nether portal. Mobs and items
+  cannot use the one-way entry portal, so they cannot consume it before you
+  enter Chrono Dawn.
 
 ### Changed
 

@@ -77,7 +77,7 @@ Chrono Dawn features unique mobs that replace vanilla spawns in the dimension:
 - **Pulse Hog**: Passive boar-like mob that can be bred
 - **Secondwing Fowl**: Chicken-based mob
 - **Chrono Turtle**: Friendly water creature
-- **Glide Fish**: Water creature with cookable food items
+- **Glide Fish**: Fish with cookable food items
 - **Clockwork Sentinel**: Armored construct that shrugs off Time Distortion. Drops Ancient Gears and sometimes Enhanced Clockstone
 - **Temporal Wraith**: Hostile spirit whose hits apply Slowness II
 - **Floq**: Slime-like hopper that lurks in the dark
