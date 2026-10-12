@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Old Sundial blessings**: right-click the post of an Old Sundial to gain
+  Speed in daylight, Speed II around noon, or Night Vision at night, for
+  three minutes. Each player can use each sundial once per Minecraft day
+  (about 20 minutes, counted in game time). Breaking the post drops Iron
+  Bars. The cooldown and effect length are configurable under
+  `[gameplay.wayside]`. Only Old Sundials in newly generated chunks have the
+  interactive post.
+
 ### Fixed
 
 - **Bone meal on Dawn Bells and Dusk Bells**: using bone meal on either tall
