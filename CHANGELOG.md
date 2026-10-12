@@ -9,9 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **Chiseled Temporal Stone Bricks**: a new building block, crafted from two
-  Temporal Stone Brick Slabs or cut from Temporal Stone or Temporal Stone
-  Bricks on a stonecutter.
+- **Chiseled Temporal Stone Bricks**: a new building block with a spiral
+  pattern, crafted from two Temporal Stone Brick Slabs or cut from Temporal
+  Stone or Temporal Stone Bricks on a stonecutter.
 - **Clockwork Cookie sources**: Watchmaker's Camp chests can now contain
   Clockwork Cookies, and the Time Keeper sells 4 of them for 8 Clockstone.
   In existing worlds, this applies to chests that have not been opened yet and
