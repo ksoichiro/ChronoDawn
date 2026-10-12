@@ -121,8 +121,8 @@ public final class StructureTests {
                 new BlockRequirement("sand", () -> Blocks.SAND, 1)
             )),
             new StructureSpec("upside_down_tree", 4, 6, 4, List.of(
-                new BlockRequirement(ModBlockId.TIME_WOOD_LOG.id(), ModBlocks.TIME_WOOD_LOG, 8),
-                new BlockRequirement(ModBlockId.TIME_WOOD_LEAVES.id(), ModBlocks.TIME_WOOD_LEAVES, 7)
+                new BlockRequirement(ModBlockId.ANCIENT_TIME_WOOD_LOG.id(), ModBlocks.ANCIENT_TIME_WOOD_LOG, 8),
+                new BlockRequirement(ModBlockId.ANCIENT_TIME_WOOD_LEAVES.id(), ModBlocks.ANCIENT_TIME_WOOD_LEAVES, 7)
             )),
             new StructureSpec("forgotten_library", 35, 15, 35, List.of(
                 new BlockRequirement("chest", () -> Blocks.CHEST, 7),

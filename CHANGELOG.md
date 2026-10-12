@@ -65,6 +65,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   listed in the new `chronodawn:time_distortion_resistant` entity type tag.
   Clockwork Sentinel is now in `chronodawn:time_distortion_immune`, and
   removing it from that tag makes it affected by Slowness again.
+- **Ancient Forest distribution**: Ancient Forests now generate across a wider
+  range of temperate humidity, making them easier to find. Only newly generated
+  chunks use the new biome distribution.
+- **Upside-Down Trees**: these Ancient Forest features now use Ancient Time Wood
+  logs, wood, and leaves to match their surroundings. Only newly generated
+  chunks receive the updated structure.
 
 ### Fixed
 

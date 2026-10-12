@@ -147,6 +147,10 @@ Run unit tests:
 ./gradlew :common-1.21.8:test -Ptarget_mc_version=1.21.8
 ```
 
+Each Gradle invocation selects one target version. Do not combine tasks from
+different versioned projects in one invocation. Run a separate command with
+the matching `-Ptarget_mc_version` for each version.
+
 Run resource validation:
 
 ```bash

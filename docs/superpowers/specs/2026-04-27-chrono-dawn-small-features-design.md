@@ -198,13 +198,13 @@ landmark visible from a distance.
 
 ### 7. Upside-Down Tree (`upside_down_tree`)
 
-A Time Wood tree caught in a localized time inversion — its roots reach up
+An Ancient Time Wood tree caught in a localized time inversion. Its roots reach up
 into the air and its canopy is buried at ground level.
 
-- Trunk: 3 Time Wood Log blocks vertical, axis=y.
-- Inverted roots (top): 5–7 Time Wood Log blocks branching horizontally from
+- Trunk: 3 Ancient Time Wood Log blocks vertical, axis=y.
+- Inverted roots (top): 5–7 Ancient Time Wood Log blocks branching horizontally from
   the trunk top, axis=x or axis=z, reading as gnarled roots in the air.
-- Inverted canopy (base): one ground-level layer of Time Wood Leaves
+- Inverted canopy (base): one ground-level layer of Ancient Time Wood Leaves
   surrounding the trunk in a 3×3 ring, with 1–2 Fruit of Time blocks
   optionally embedded in the leaves.
 - The trunk's bottom block sits on terrain; no underground excavation. The
