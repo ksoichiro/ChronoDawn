@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Bone meal on Dawn Bells and Dusk Bells**: using bone meal on either tall
+  flower now drops its matching flower item, like vanilla tall flowers, across
+  all supported Minecraft versions and loaders.
 - **Dawn Bell and Dusk Bell outlines**: the selection outline now follows the
   flower's randomly shifted position instead of staying centered on the block.
 
@@ -85,9 +88,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- **Bone meal on Dawn Bells and Dusk Bells**: using bone meal on either tall
-  flower now drops its matching flower item, like vanilla tall flowers, across
-  all supported Minecraft versions and loaders.
 - **Boss-room block protection**: protected boss-room walls remain protected
   after restarting the server until the boss is defeated. The defeated state
   also remains after later restarts on every supported Minecraft version.
