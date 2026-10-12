@@ -74,6 +74,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Boss-room block protection**: protected boss-room walls remain protected
+  after restarting the server until the boss is defeated. The defeated state
+  also remains after later restarts on every supported Minecraft version.
 - **Bone meal on Temporal Grass Blocks**: bone meal now grows biome-appropriate
   Chrono Dawn flowers and ground cover on Temporal Grass Blocks across all
   supported Minecraft versions and loaders.

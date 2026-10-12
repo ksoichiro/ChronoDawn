@@ -64,6 +64,7 @@ sourceSets {
             // List of files that have 1.21.5-specific versions
             def excludedFiles = [
                 'BossSpawnData.java',
+                'BlockProtectionData.java',
                 'ClockTowerTeleporterBlockEntity.java',
                 'BossRoomDoorBlockEntity.java',
                 'TimeWheatBaleBlock.java',
