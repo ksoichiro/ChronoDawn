@@ -70,6 +70,9 @@ the build model changes.
   abstractions.
 - Do not use zsh's reserved `path` variable as a loop or script variable; it
   controls command lookup for the rest of that shell invocation.
+- When applying a command to `rg` results in zsh, prefer NUL-delimited output
+  with `rg -0` and `xargs -0`; command substitution can collapse multiple file
+  names into one argument.
 - Put common gameplay behavior in `common/` where possible. Use `fabric/`,
   `forge/`, or `neoforge/` only for loader APIs, entry points, events, or
   platform bridges.

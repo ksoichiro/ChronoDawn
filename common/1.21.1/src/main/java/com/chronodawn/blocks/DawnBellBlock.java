@@ -1,7 +1,7 @@
 package com.chronodawn.blocks;
 
-import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.TallFlowerBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
 /**
@@ -21,7 +21,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
  * Drops:
  * - Drops 1x Dawn Bell item when either block is broken
  */
-public class DawnBellBlock extends DoublePlantBlock {
+public class DawnBellBlock extends TallFlowerBlock {
     public DawnBellBlock(BlockBehaviour.Properties properties) {
         super(properties);
     }

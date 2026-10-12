@@ -5,8 +5,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
 
-import net.minecraft.world.level.block.DoublePlantBlock;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.TallFlowerBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 
 /**
@@ -26,7 +26,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
  * Drops:
  * - Drops 1x Dusk Bell item when either block is broken
  */
-public class DuskBellBlock extends DoublePlantBlock {
+public class DuskBellBlock extends TallFlowerBlock {
     public DuskBellBlock(BlockBehaviour.Properties properties) {
         super(properties);
     }
