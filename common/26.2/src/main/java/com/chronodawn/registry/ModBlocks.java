@@ -15,6 +15,7 @@ import com.chronodawn.blocks.ClockstoneSlab;
 import com.chronodawn.blocks.ClockstoneStairs;
 import com.chronodawn.blocks.ClockstoneWall;
 import com.chronodawn.blocks.ClockTowerTeleporterBlock;
+import com.chronodawn.blocks.SundialGnomonBlock;
 import com.chronodawn.blocks.ClockworkBlock;
 import com.chronodawn.blocks.ClockworkDialBlock;
 import com.chronodawn.blocks.DecorativeWaterBlock;
@@ -455,6 +456,21 @@ public class ModBlocks {
                 .noOcclusion()
                 .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
                     net.minecraft.resources.Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, "clock_tower_teleporter")))
+        )
+    );
+
+    /**
+     * Sundial Gnomon - interactive post of the Old Sundial wayside feature.
+     * No item: it only appears through worldgen, and breaking it drops iron bars.
+     */
+    public static final RegistrySupplier<Block> SUNDIAL_GNOMON = BLOCKS.register(
+        ModBlockId.SUNDIAL_GNOMON.id(),
+        () -> new SundialGnomonBlock(
+            CompatBlockProperties.ofFullCopy(Blocks.IRON_BARS)
+                .strength(5.0f, 6.0f)
+                .noOcclusion()
+                .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                    net.minecraft.resources.Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, "sundial_gnomon")))
         )
     );
 

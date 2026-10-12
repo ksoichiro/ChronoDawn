@@ -64,6 +64,7 @@ sourceSets {
                 'BossSpawnData.java',
                 'BlockProtectionData.java',
                 'ClockTowerTeleporterBlockEntity.java',
+                'CooldownActivatorBlockEntity.java',
                 'BossRoomDoorBlockEntity.java',
                 'TimeWheatBaleBlock.java',
                 'TimeDistortionEffect.java',
