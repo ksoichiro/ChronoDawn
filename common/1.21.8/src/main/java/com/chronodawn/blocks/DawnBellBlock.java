@@ -5,9 +5,15 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.TallFlowerBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
  * Dawn Bell - Tall decorative flower found in the ChronoDawn dimension.
@@ -27,8 +33,17 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
  * - Drops 1x Dawn Bell item when either block is broken
  */
 public class DawnBellBlock extends TallFlowerBlock {
+    private static final VoxelShape SHAPE = Block.box(4.0D, 0.0D, 4.0D, 12.0D, 16.0D, 12.0D);
+
     public DawnBellBlock(BlockBehaviour.Properties properties) {
         super(properties);
+    }
+
+    // OffsetType.XZ shifts the model randomly, so the outline must follow the
+    // same offset or it stays centered while the flower is drawn off-center.
+    @Override
+    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return SHAPE.move(state.getOffset(pos));
     }
 
     /**

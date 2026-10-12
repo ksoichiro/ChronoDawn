@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Dawn Bell and Dusk Bell outlines**: the selection outline now follows the
+  flower's randomly shifted position instead of staying centered on the block.
+
 ## [0.12.0] - 2026-10-12
 
 ### Added
