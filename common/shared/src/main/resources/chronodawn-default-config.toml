@@ -330,6 +330,16 @@ max_speed = 5.0
 min_duration_ticks = 1200
 max_duration_ticks = 6000
 
+[gameplay.wayside]
+# Old Sundial: how long (in ticks, 20 ticks = 1 second) each player must wait
+# before using the same sundial again. Counted in game time, so sleeping does
+# not shorten it. Range: 20 to 1728000.
+sundial_cooldown_ticks = 24000
+
+# Old Sundial: how long the granted Speed or Night Vision lasts, in ticks.
+# Range: 20 to 72000.
+sundial_effect_duration_ticks = 3600
+
 [gameplay.portals]
 # Whether entering Chrono Dawn deactivates the departure portal and destroys
 # the arrival portal until the Portal Stabilizer has been used.

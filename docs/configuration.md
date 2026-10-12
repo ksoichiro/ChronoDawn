@@ -526,6 +526,26 @@ max_duration_ticks = 12000
 
 ---
 
+### `[gameplay.wayside]`
+
+Controls interactive wayside features. Old Sundials generated after this
+update grant Speed in daylight (Speed II around noon) and Night Vision at
+night when a player right-clicks the gnomon. Each player has a separate
+cooldown for each sundial.
+
+```toml
+[gameplay.wayside]
+sundial_cooldown_ticks = 24000
+sundial_effect_duration_ticks = 3600
+```
+
+| Field | Type | Default | Range | Notes |
+| --- | --- | --- | --- | --- |
+| `sundial_cooldown_ticks` | integer | `24000` | `20..=1728000` | Ticks (20 ticks = 1 second) before the same player can use the same sundial again. Counted in game time, so sleeping does not shorten it. |
+| `sundial_effect_duration_ticks` | integer | `3600` | `20..=72000` | How long the granted effect lasts. |
+
+---
+
 ### `[gameplay.portals]`
 
 Controls the portal progression gate. Both defaults preserve the shipped

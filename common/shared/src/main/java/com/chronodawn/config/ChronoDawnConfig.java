@@ -105,6 +105,7 @@ public record ChronoDawnConfig(
         TimeDistortionSettings timeDistortion,
         TimeFlowSettings timeFlow,
         PortalSettings portals,
+        WaysideSettings wayside,
         BossesConfig bosses
     ) {
         /** Preserve the existing construction pattern for callers that only configure bosses. */
@@ -113,13 +114,15 @@ public record ChronoDawnConfig(
                 ConfigDefaults.TIME_DISTORTION_DEFAULTS,
                 ConfigDefaults.TIME_FLOW_DEFAULTS,
                 ConfigDefaults.PORTAL_DEFAULTS,
+                ConfigDefaults.WAYSIDE_DEFAULTS,
                 bosses
             );
         }
 
         /** Preserve the existing construction pattern for callers that configure Time Distortion. */
         public Gameplay(TimeDistortionSettings timeDistortion, BossesConfig bosses) {
-            this(timeDistortion, ConfigDefaults.TIME_FLOW_DEFAULTS, ConfigDefaults.PORTAL_DEFAULTS, bosses);
+            this(timeDistortion, ConfigDefaults.TIME_FLOW_DEFAULTS, ConfigDefaults.PORTAL_DEFAULTS,
+                ConfigDefaults.WAYSIDE_DEFAULTS, bosses);
         }
     }
 }

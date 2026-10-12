@@ -112,6 +112,12 @@ public final class ConfigLoader {
     private static final String K_PORTAL_ONE_WAY_UNTIL_STABILIZED = "one_way_until_stabilized";
     private static final String K_PORTAL_ALLOW_REIGNITION_BEFORE_STABILIZATION =
         "allow_reignition_before_stabilization";
+    private static final String K_WAYSIDE = "wayside";
+    private static final String K_WS_SUNDIAL_COOLDOWN_TICKS = "sundial_cooldown_ticks";
+    private static final String K_WS_SUNDIAL_EFFECT_DURATION_TICKS = "sundial_effect_duration_ticks";
+    private static final int MIN_WAYSIDE_TICKS = 20;
+    private static final int MAX_SUNDIAL_COOLDOWN_TICKS = 1_728_000;
+    private static final int MAX_SUNDIAL_EFFECT_DURATION_TICKS = 72_000;
     private static final String K_BOSSES = "bosses";
     private static final String K_HEALTH_MULTIPLIER = "health_multiplier";
     private static final String K_DAMAGE_MULTIPLIER = "damage_multiplier";
@@ -408,6 +414,7 @@ public final class ConfigLoader {
             parseTimeDistortion(parsed),
             parseTimeFlow(parsed),
             parsePortals(parsed),
+            parseWayside(parsed),
             new BossesConfig(
                 parseBoss(parsed, "time_guardian"),
                 parseBoss(parsed, "chronos_warden"),
@@ -557,6 +564,38 @@ public final class ConfigLoader {
             .orElse(defaults.allowReignitionBeforeStabilization());
 
         return new PortalSettings(oneWayUntilStabilized, allowReignitionBeforeStabilization);
+    }
+
+    private static WaysideSettings parseWayside(CommentedConfig parsed) {
+        String path = K_GAMEPLAY + "." + K_WAYSIDE;
+        WaysideSettings defaults = ConfigDefaults.WAYSIDE_DEFAULTS;
+
+        int cooldown = parsed.<Number>getOptional(path + "." + K_WS_SUNDIAL_COOLDOWN_TICKS)
+            .map(Number::intValue)
+            .orElse(defaults.sundialCooldownTicks());
+        int duration = parsed.<Number>getOptional(path + "." + K_WS_SUNDIAL_EFFECT_DURATION_TICKS)
+            .map(Number::intValue)
+            .orElse(defaults.sundialEffectDurationTicks());
+
+        // Validation: each field reverts independently so one bad value doesn't reset the other.
+        if (cooldown < MIN_WAYSIDE_TICKS || cooldown > MAX_SUNDIAL_COOLDOWN_TICKS) {
+            LOGGER.error(
+                "Invalid {}.{} = {} (must be in [{}, {}]); using default {}",
+                path, K_WS_SUNDIAL_COOLDOWN_TICKS, cooldown, MIN_WAYSIDE_TICKS, MAX_SUNDIAL_COOLDOWN_TICKS,
+                defaults.sundialCooldownTicks()
+            );
+            cooldown = defaults.sundialCooldownTicks();
+        }
+        if (duration < MIN_WAYSIDE_TICKS || duration > MAX_SUNDIAL_EFFECT_DURATION_TICKS) {
+            LOGGER.error(
+                "Invalid {}.{} = {} (must be in [{}, {}]); using default {}",
+                path, K_WS_SUNDIAL_EFFECT_DURATION_TICKS, duration, MIN_WAYSIDE_TICKS,
+                MAX_SUNDIAL_EFFECT_DURATION_TICKS, defaults.sundialEffectDurationTicks()
+            );
+            duration = defaults.sundialEffectDurationTicks();
+        }
+
+        return new WaysideSettings(cooldown, duration);
     }
 
     private static BossSettings parseBoss(CommentedConfig parsed, String bossKey) {

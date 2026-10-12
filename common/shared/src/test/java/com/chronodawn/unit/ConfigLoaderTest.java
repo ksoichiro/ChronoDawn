@@ -29,6 +29,7 @@ import com.chronodawn.config.PortalSettings;
 import com.chronodawn.config.StructureSettings;
 import com.chronodawn.config.TimeDistortionSettings;
 import com.chronodawn.config.TimeFlowSettings;
+import com.chronodawn.config.WaysideSettings;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -666,6 +667,44 @@ class ConfigLoaderTest {
             "allow_reignition_before_stabilization = true\n");
 
         assertEquals(new PortalSettings(false, true), ConfigLoader.load(tmp).gameplay().portals());
+    }
+
+    @Test
+    void wayside_missingSection_fallsBackToDefaults(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"), "schema_version = 1\n");
+        ChronoDawnConfig config = ConfigLoader.load(tmp);
+        assertEquals(ConfigDefaults.WAYSIDE_DEFAULTS, config.gameplay().wayside());
+    }
+
+    @Test
+    void wayside_validCustomValues_areReturnedVerbatim(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[gameplay.wayside]\n" +
+            "sundial_cooldown_ticks = 6000\n" +
+            "sundial_effect_duration_ticks = 1200\n");
+        ChronoDawnConfig config = ConfigLoader.load(tmp);
+        assertEquals(new WaysideSettings(6000, 1200), config.gameplay().wayside());
+    }
+
+    @Test
+    void wayside_outOfRangeValues_fallBackPerKey(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[gameplay.wayside]\n" +
+            "sundial_cooldown_ticks = 0\n" +
+            "sundial_effect_duration_ticks = 2400\n");
+        WaysideSettings settings = ConfigLoader.load(tmp).gameplay().wayside();
+        assertEquals(ConfigDefaults.WAYSIDE_DEFAULTS.sundialCooldownTicks(), settings.sundialCooldownTicks());
+        assertEquals(2400, settings.sundialEffectDurationTicks());
+    }
+
+    @Test
+    void wayside_tooLongEffect_fallsBack(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[gameplay.wayside]\n" +
+            "sundial_effect_duration_ticks = 72001\n");
+        WaysideSettings settings = ConfigLoader.load(tmp).gameplay().wayside();
+        assertEquals(ConfigDefaults.WAYSIDE_DEFAULTS.sundialEffectDurationTicks(),
+            settings.sundialEffectDurationTicks());
     }
 
     @Test
