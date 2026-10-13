@@ -107,7 +107,7 @@ public class SundialGnomonBlock extends BaseEntityBlock {
             blessing.amplifier()
         ));
         spawnParticles(level, pos, blessing, dayTime);
-        level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_CHIME, SoundSource.BLOCKS, blessing.soundVolume(), blessing.soundPitch());
+        level.playSound(null, pos, SoundEvents.NOTE_BLOCK_CHIME.value(), SoundSource.BLOCKS, blessing.soundVolume(), blessing.soundPitch());
         player.displayClientMessage(Component.translatable(blessing.messageKey()), true);
     }
 
