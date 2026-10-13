@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   all supported Minecraft versions and loaders.
 - **Dawn Bell and Dusk Bell outlines**: the selection outline now follows the
   flower's randomly shifted position instead of staying centered on the block.
+- **Clockwork Dial mining on Minecraft 1.20.1**: the block now mines at
+  pickaxe speed and drops itself when broken with a pickaxe, matching newer
+  Minecraft versions.
 
 ## [0.12.0] - 2026-10-12
 
