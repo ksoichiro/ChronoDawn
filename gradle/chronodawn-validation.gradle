@@ -11,6 +11,7 @@
 //   validateEraJsonFormat           — recipe/advancement/loot_table era format
 //   validateConventionalTags        — c: tag coverage, names, cross-root parity
 //   validateSoundSubtitles          — sounds.json subtitle key ↔ per-version lang
+//   validateEraTagParity            — minecraft: tags match across 1.20.1 / 1.21.1+
 //
 // All are registered in the 'verification' group so checkAll can pick them
 // up. Errors throw GradleException so the failing CI step is visible.
@@ -802,6 +803,88 @@ tasks.register('validateSoundSubtitles') {
         } else {
             errors.each { logger.error("  ERROR: ${it}") }
             throw new GradleException("Sound subtitle validation failed with ${errors.size()} error(s)")
+        }
+    }
+}
+
+// ============================================================
+// Task 7: validateEraTagParity
+// ------------------------------------------------------------
+// minecraft: tags are maintained twice: common/1.20.1 (plural tags/blocks/)
+// and common/shared-1.21.1+ (singular tags/block/). Adding a block to one
+// root and forgetting the other is silent: validateData only checks that
+// entries resolve, and the block still loads. The 1.20.1 Clockwork Dial
+// was missing from mineable/pickaxe this way, so it never dropped.
+//
+// Each tag file must exist in both roots with identical values, unless the
+// tag does not exist in 1.20.1 vanilla (MODERN_ONLY below). c: tags are
+// excluded on purpose: they differ by design and validateConventionalTags
+// owns them.
+// ============================================================
+tasks.register('validateEraTagParity') {
+    group = 'verification'
+    description = 'Verify minecraft: tags match between the 1.20.1 and 1.21.1+ resource roots'
+
+    doLast {
+        def errors = []
+        def jsonSlurper = new JsonSlurper()
+        def legacyRoot = file("${rootProject.projectDir}/common/1.20.1/src/main/resources/data/minecraft/tags")
+        def modernRoot = file("${rootProject.projectDir}/common/shared-1.21.1+/src/main/resources/data/minecraft/tags")
+        def pluralToSingular = [blocks: 'block', items: 'item', entity_types: 'entity_type', fluids: 'fluid', game_events: 'game_event']
+        // Tag paths (or path prefixes ending in '/') introduced after 1.20.1.
+        def MODERN_ONLY = ['item/enchantable/', 'block/supports_melon_stem_fruit.json']
+
+        def collect = { File root, boolean normalize ->
+            def result = [:]
+            root.eachFileRecurse(groovy.io.FileType.FILES) { File f ->
+                if (!f.name.endsWith('.json')) return
+                def rel = root.toPath().relativize(f.toPath()).toString().replace('\\', '/')
+                if (normalize) {
+                    def head = rel.substring(0, rel.indexOf('/'))
+                    rel = pluralToSingular.getOrDefault(head, head) + rel.substring(head.length())
+                }
+                result[rel] = f
+            }
+            return result
+        }
+        def legacy = collect(legacyRoot, true)
+        def modern = collect(modernRoot, false)
+
+        // Guard against a vacuous pass if either root moves.
+        if (legacy.size() < 10 || modern.size() < 10) {
+            throw new GradleException("validateEraTagParity: found only ${legacy.size()} legacy / ${modern.size()} modern tag files " +
+                    "— the tag roots may have moved")
+        }
+
+        def valuesOf = { File f -> ((jsonSlurper.parseText(f.text).values ?: []).collect { it.toString() }) as Set }
+        def relPath = { File f -> rootProject.projectDir.toPath().relativize(f.toPath()).toString() }
+
+        int compared = 0
+        (legacy.keySet() + modern.keySet()).sort().each { String tag ->
+            def legacyFile = legacy[tag]
+            def modernFile = modern[tag]
+            if (legacyFile == null) {
+                if (!MODERN_ONLY.any { tag == it || (it.endsWith('/') && tag.startsWith(it)) }) {
+                    errors << "${relPath(modernFile)} has no 1.20.1 counterpart (add it under ${relPath(legacyRoot)}, or to MODERN_ONLY if the tag does not exist in 1.20.1)"
+                }
+                return
+            }
+            if (modernFile == null) {
+                errors << "${relPath(legacyFile)} has no 1.21.1+ counterpart under ${relPath(modernRoot)}"
+                return
+            }
+            compared++
+            def a = valuesOf(legacyFile)
+            def b = valuesOf(modernFile)
+            (b - a).each { errors << "minecraft:${tag - '.json'}: '${it}' missing from 1.20.1 (${relPath(legacyFile)})" }
+            (a - b).each { errors << "minecraft:${tag - '.json'}: '${it}' missing from 1.21.1+ (${relPath(modernFile)})" }
+        }
+
+        if (errors.isEmpty()) {
+            logger.lifecycle("Era tag parity validation passed: ${compared} minecraft: tag file pairs match between 1.20.1 and 1.21.1+.")
+        } else {
+            errors.each { logger.error("  ERROR: ${it}") }
+            throw new GradleException("Era tag parity validation failed with ${errors.size()} error(s)")
         }
     }
 }
