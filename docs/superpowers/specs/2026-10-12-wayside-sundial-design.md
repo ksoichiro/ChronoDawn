@@ -50,7 +50,9 @@ Decisions that apply to all six:
   in new chunks after the update are interactive.
 - **Major structure placement is unchanged.**
 
-This document covers order 1 only.
+This document covers order 1 only. The decisions for all six parts, the
+status of each, and lessons from part 1 are kept in the
+[roadmap](./2026-10-14-wayside-features-roadmap.md).
 
 ## Scope of part 1
 
