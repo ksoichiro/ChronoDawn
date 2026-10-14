@@ -2,6 +2,7 @@ package com.chronodawn.compat;
 
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 /**
  * Compatibility helper for GameTestHelper API differences (Minecraft 1.20.1).
@@ -27,6 +28,14 @@ public class CompatGameTestHelper {
      */
     public static void fail(GameTestHelper helper, String message) {
         helper.fail(message);
+    }
+
+    /**
+     * Save one block entity and load the result into another, as a chunk save and reload would.
+     * In 1.20.1, block entity NBT needs no registry access.
+     */
+    public static void copyBlockEntityData(GameTestHelper helper, BlockEntity from, BlockEntity to) {
+        to.load(from.saveWithoutMetadata());
     }
 
     private CompatGameTestHelper() {

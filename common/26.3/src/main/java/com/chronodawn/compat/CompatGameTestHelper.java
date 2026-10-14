@@ -1,9 +1,13 @@
 package com.chronodawn.compat;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.level.GameType;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.storage.TagValueInput;
 
 /**
  * Compatibility helper for GameTestHelper API differences (Minecraft 1.21.2).
@@ -29,6 +33,16 @@ public class CompatGameTestHelper {
      */
     public static void fail(GameTestHelper helper, String message) {
         helper.fail(Component.literal(message));
+    }
+
+    /**
+     * Save one block entity and load the result into another, as a chunk save and reload would.
+     * From 1.21.6, block entities load from a ValueInput, so the saved tag is wrapped in one.
+     */
+    public static void copyBlockEntityData(GameTestHelper helper, BlockEntity from, BlockEntity to) {
+        HolderLookup.Provider registries = helper.getLevel().registryAccess();
+        to.loadWithComponents(TagValueInput.create(ProblemReporter.DISCARDING, registries,
+            from.saveWithoutMetadata(registries)));
     }
 
     private CompatGameTestHelper() {
