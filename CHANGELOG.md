@@ -15,6 +15,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   minutes of game time by default. Breaking the post drops Iron Bars. The cooldown and effect length are configurable under
   `[gameplay.wayside]`. Only Old Sundials in newly generated chunks have the
   interactive post.
+- **Clockwork Mechanism**: craft one from 4 Ancient Gears, 1 Enhanced
+  Clockstone and 4 Time Crystals. Each ultimate artifact has an alternative
+  recipe that takes 1 Fragment of Stasis Core plus Clockwork Mechanisms
+  (Chronoblade 3, Time Tyrant Mail 5, Echoing Time Boots 1, Unstable Pocket
+  Watch 2). The original recipes still work.
+
+### Changed
+
+- **Time Tyrant**: drops 4-6 Fragments of Stasis Core instead of 3-5, so a
+  single kill without Looting covers all four alternative artifact recipes.
+  Worlds where the Time Tyrant is already defeated keep the Fragments they got.
 
 ### Changed
 

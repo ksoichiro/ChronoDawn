@@ -535,7 +535,7 @@ The first time a player enters Chrono Dawn, a small village is placed on flat gr
 
 **Drops**:
 - **Eye of Chronos**
-- **Fragments of Stasis Core** (multiple pieces, used to craft ultimate artifacts)
+- **Fragments of Stasis Core** (4-6, used to craft ultimate artifacts)
 - Rare loot and experience
 
 **Tips**:
@@ -694,7 +694,7 @@ These four bosses must be defeated to craft the **Chrono Aegis** activated buff 
 
 **Drops**:
 - **Eye of Chronos** - Enhances time distortion
-- **Fragments of Stasis Core** (multiple pieces, used to craft ultimate artifacts)
+- **Fragments of Stasis Core** (4-6, used to craft ultimate artifacts)
 - Rare loot and experience points
 
 **Strategy**:
@@ -819,8 +819,12 @@ Vanilla reference: iron armor totals 15 defense, diamond totals 20 with toughnes
 - **Obtained**: Dropped by Time Guardian mini-boss (Desert Clock Tower)
 
 #### Ancient Gear
-- **Use**: Carry 3 with the key to open the Master Clock boss room door. They are not consumed
+- **Use**: Carry 3 with the key to open the Master Clock boss room door (they are not consumed). Spare gears craft Clockwork Mechanisms
 - **Obtained**: Clockwork Sentinel and Secondhand Archer drops, chest loot, or crafted from 4 Iron Ingots + 4 Time Crystals + 1 Enhanced Clockstone
+
+#### Clockwork Mechanism
+- **Use**: Replaces Fragments of Stasis Core in the alternative ultimate artifact recipes
+- **Recipe**: 4 Ancient Gears + 1 Enhanced Clockstone + 4 Time Crystals
 
 ### Combat Items
 
@@ -957,7 +961,7 @@ The custom shields are independent of the existing Chrono Aegis artifact (which 
 - **Use**: Ultimate artifact crafting
 
 #### Fragments of Stasis Core
-- **Source**: Time Tyrant final boss (drops multiple)
+- **Source**: Time Tyrant final boss (4-6, more with Looting)
 - **Use**: Ultimate artifact crafting
 
 ---
@@ -968,24 +972,29 @@ The custom shields are independent of the existing Chrono Aegis artifact (which 
 
 All ultimate artifacts require **Fragments of Stasis Core** from the Time Tyrant final boss.
 
+Each artifact also has an alternative recipe that takes only 1 Fragment of Stasis Core and uses Clockwork Mechanisms for the rest. One Time Tyrant kill always drops enough Fragments to make all four this way.
+
 #### Chronoblade (Sword)
 - **Attack Damage**: 8.5
 - **Attack Speed**: 1.6
 - **Durability**: 2000
 - **Special Ability**: **Temporal Strike** - 25% chance to skip enemy's next attack AI
 - **Recipe**: 4 Fragments of Stasis Core + 1 Eye of Chronos + 1 Enhanced Clockstone + 1 Unstable Hourglass
+- **Alternative recipe**: 1 Fragment of Stasis Core + 3 Clockwork Mechanisms + 1 Eye of Chronos + 1 Enhanced Clockstone + 1 Unstable Hourglass
 
 #### Time Tyrant Mail (Chestplate)
 - **Armor Points**: 8
 - **Durability**: 600
 - **Special Ability**: **Temporal Rollback** - 20% chance to rewind time on fatal damage (avoid death, restores HP and position to 3 seconds ago, 60s cooldown). Like the Totem of Undying, it does not protect against `/kill` or the void
 - **Recipe**: 6 Fragments of Stasis Core + 1 Enhanced Clockstone + 1 Unstable Hourglass
+- **Alternative recipe**: 1 Fragment of Stasis Core + 5 Clockwork Mechanisms + 1 Enhanced Clockstone + 1 Unstable Hourglass
 
 #### Echoing Time Boots (Boots)
 - **Armor Points**: 3
 - **Durability**: 500
 - **Special Ability**: **Temporal Echo** - Spawn decoy afterimage when sprinting while mobs are chasing you (those mobs target it for 3 seconds, 15s cooldown)
 - **Recipe**: 2 Fragments of Stasis Core + 2 Enhanced Clockstone
+- **Alternative recipe**: 1 Fragment of Stasis Core + 1 Clockwork Mechanism + 2 Enhanced Clockstone
 
 #### Chrono Aegis (Activated Buff Artifact)
 - **Use**: Right-click to activate a 10-minute anti-Time-Tyrant buff on yourself and nearby players (not an equipped shield — keep it in your inventory)
@@ -1005,6 +1014,7 @@ All ultimate artifacts require **Fragments of Stasis Core** from the Time Tyrant
 - **Special Ability**: **Status Reversal** - Swap speed effects between you and nearby mobs (10 block radius, 30s cooldown)
 - **⚠️ Risk**: Can backfire if mobs have beneficial speed effects
 - **Recipe**: 3 Fragments of Stasis Core + 1 Unstable Hourglass + 1 Enhanced Clockstone
+- **Alternative recipe**: 1 Fragment of Stasis Core + 2 Clockwork Mechanisms + 1 Unstable Hourglass + 1 Enhanced Clockstone
 
 ### Clockstone Equipment
 
