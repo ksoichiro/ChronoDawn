@@ -15,6 +15,7 @@ import com.chronodawn.blocks.ClockstoneSlab;
 import com.chronodawn.blocks.ClockstoneStairs;
 import com.chronodawn.blocks.ClockstoneWall;
 import com.chronodawn.blocks.ClockTowerTeleporterBlock;
+import com.chronodawn.blocks.MemorialPlateBlock;
 import com.chronodawn.blocks.SundialGnomonBlock;
 import com.chronodawn.blocks.ClockworkBlock;
 import com.chronodawn.blocks.ClockworkDialBlock;
@@ -460,6 +461,15 @@ public class ModBlocks {
                 .strength(5.0f, 6.0f)
                 .noOcclusion()
         )
+    );
+
+    /**
+     * Memorial Plate - interactive plate of the Lost Adventurer Memorial wayside feature.
+     * No item: it only appears through worldgen, and breaking it drops the plain pressure plate.
+     */
+    public static final RegistrySupplier<Block> MEMORIAL_PLATE = BLOCKS.register(
+        ModBlockId.MEMORIAL_PLATE.id(),
+        () -> new MemorialPlateBlock(MemorialPlateBlock.createProperties())
     );
 
     /**

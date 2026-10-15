@@ -4,6 +4,7 @@ import com.chronodawn.ChronoDawn;
 import com.chronodawn.blocks.BossRoomBoundaryMarkerBlockEntity;
 import com.chronodawn.blocks.BossRoomDoorBlockEntity;
 import com.chronodawn.blocks.ClockTowerTeleporterBlockEntity;
+import com.chronodawn.blocks.MemorialPlateBlockEntity;
 import com.chronodawn.blocks.SundialGnomonBlockEntity;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -41,6 +42,17 @@ public class ModBlockEntities {
             new BlockEntityType<>(
                 SundialGnomonBlockEntity::new,
                 Set.<Block>of(ModBlocks.SUNDIAL_GNOMON.get())
+            )
+        );
+
+    /**
+     * Memorial Plate BlockEntity - stores per-player cooldowns.
+     */
+    public static final RegistrySupplier<BlockEntityType<MemorialPlateBlockEntity>> MEMORIAL_PLATE =
+        BLOCK_ENTITIES.register(ModBlockEntityId.MEMORIAL_PLATE.id(), () ->
+            new BlockEntityType<>(
+                MemorialPlateBlockEntity::new,
+                Set.<Block>of(ModBlocks.MEMORIAL_PLATE.get())
             )
         );
 
