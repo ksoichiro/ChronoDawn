@@ -681,9 +681,10 @@ class ConfigLoaderTest {
         Files.writeString(tmp.resolve("chronodawn.toml"),
             "[gameplay.wayside]\n" +
             "sundial_cooldown_ticks = 6000\n" +
-            "sundial_effect_duration_ticks = 1200\n");
+            "sundial_effect_duration_ticks = 1200\n" +
+            "memorial_cooldown_ticks = 12000\n");
         ChronoDawnConfig config = ConfigLoader.load(tmp);
-        assertEquals(new WaysideSettings(6000, 1200), config.gameplay().wayside());
+        assertEquals(new WaysideSettings(6000, 1200, 12000), config.gameplay().wayside());
     }
 
     @Test
@@ -705,6 +706,17 @@ class ConfigLoaderTest {
         WaysideSettings settings = ConfigLoader.load(tmp).gameplay().wayside();
         assertEquals(ConfigDefaults.WAYSIDE_DEFAULTS.sundialEffectDurationTicks(),
             settings.sundialEffectDurationTicks());
+    }
+
+    @Test
+    void wayside_badMemorialCooldown_fallsBackAlone(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[gameplay.wayside]\n" +
+            "sundial_cooldown_ticks = 6000\n" +
+            "memorial_cooldown_ticks = 1728001\n");
+        WaysideSettings settings = ConfigLoader.load(tmp).gameplay().wayside();
+        assertEquals(6000, settings.sundialCooldownTicks());
+        assertEquals(ConfigDefaults.WAYSIDE_DEFAULTS.memorialCooldownTicks(), settings.memorialCooldownTicks());
     }
 
     @Test

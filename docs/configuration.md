@@ -530,19 +530,23 @@ max_duration_ticks = 12000
 
 Controls interactive wayside features. Old Sundials generated after this
 update grant Speed in daylight (Speed II around noon) and Night Vision at
-night when a player right-clicks the gnomon. Each player has a separate
-cooldown for each sundial.
+night when a player right-clicks the gnomon. Lost Adventurer Memorials
+generated after this update drop a journal page and a few supplies when a
+player steps onto the plate in front of the grave. Each player has a
+separate cooldown for each sundial and each memorial.
 
 ```toml
 [gameplay.wayside]
 sundial_cooldown_ticks = 24000
 sundial_effect_duration_ticks = 3600
+memorial_cooldown_ticks = 24000
 ```
 
 | Field | Type | Default | Range | Notes |
 | --- | --- | --- | --- | --- |
 | `sundial_cooldown_ticks` | integer | `24000` | `20..=1728000` | Ticks (20 ticks = 1 second) before the same player can use the same sundial again. Counted in game time, so sleeping does not shorten it. |
 | `sundial_effect_duration_ticks` | integer | `3600` | `20..=72000` | How long the granted effect lasts. |
+| `memorial_cooldown_ticks` | integer | `24000` | `20..=1728000` | Ticks before the same player can pray at the same memorial again. Counted in game time. |
 
 ---
 

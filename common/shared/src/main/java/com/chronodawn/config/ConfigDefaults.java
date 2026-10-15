@@ -76,8 +76,8 @@ public final class ConfigDefaults {
     // Portal Stabilizer requirement for re-ignition in Chrono Dawn.
     public static final PortalSettings PORTAL_DEFAULTS = new PortalSettings(true, false);
 
-    // One Minecraft day of cooldown and a three-minute buff, from the wayside design spec.
-    public static final WaysideSettings WAYSIDE_DEFAULTS = new WaysideSettings(24000, 3600);
+    // One Minecraft day of cooldown and a three-minute buff, from the wayside design specs.
+    public static final WaysideSettings WAYSIDE_DEFAULTS = new WaysideSettings(24000, 3600, 24000);
 
     // Defaults preserve the original runtime placement behavior exactly.
     public static final TimeKeeperVillageSettings TIME_KEEPER_VILLAGE_DEFAULTS = new TimeKeeperVillageSettings(
