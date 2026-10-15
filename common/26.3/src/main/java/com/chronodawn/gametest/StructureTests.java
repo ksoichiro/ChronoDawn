@@ -95,13 +95,13 @@ public final class StructureTests {
             new StructureSpec("lost_adventurer_memorial", 3, 3, 3, List.of(
                 new BlockRequirement(ModBlockId.MOSSY_TEMPORAL_COBBLESTONE_SLAB.id(),
                     ModBlocks.MOSSY_TEMPORAL_COBBLESTONE_SLAB, 2),
-                new BlockRequirement(ModBlockId.TEMPORAL_STONE_PRESSURE_PLATE.id(),
-                    ModBlocks.TEMPORAL_STONE_PRESSURE_PLATE, 1)
+                new BlockRequirement(ModBlockId.MEMORIAL_PLATE.id(),
+                    ModBlocks.MEMORIAL_PLATE, 1)
             )),
             new StructureSpec("lost_adventurer_memorial_snowy", 3, 3, 3, List.of(
                 new BlockRequirement("snow", () -> Blocks.SNOW, 4),
-                new BlockRequirement(ModBlockId.TEMPORAL_STONE_PRESSURE_PLATE.id(),
-                    ModBlocks.TEMPORAL_STONE_PRESSURE_PLATE, 1)
+                new BlockRequirement(ModBlockId.MEMORIAL_PLATE.id(),
+                    ModBlocks.MEMORIAL_PLATE, 1)
             )),
             new StructureSpec("time_cairn", 3, 3, 3, List.of(
                 new BlockRequirement(ModBlockId.CLOCKWORK_DIAL.id(), ModBlocks.CLOCKWORK_DIAL, 1)
