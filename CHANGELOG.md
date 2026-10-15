@@ -16,6 +16,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `[gameplay.wayside]`. Only Old Sundials in newly generated chunks have the
   interactive post.
 
+### Changed
+
+- **Clockwork Cookie texture**: the cookie now looks like a gear-shaped
+  cookie with a Time Jam center, cut with a Clockwork Block mold, instead of
+  a flat orange icon.
+
 ### Fixed
 
 - **Bone meal on Dawn Bells and Dusk Bells**: using bone meal on either tall
