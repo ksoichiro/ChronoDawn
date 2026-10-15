@@ -81,9 +81,10 @@ When the player is not on cooldown for this plate:
   differs from the Old Sundial (note block chime) and the Time Distortion
   bell. To be confirmed in play-testing.
 - **Reward.** The reward loot table is rolled and the stacks spawn as item
-  entities about 1.5 blocks above the plate center with zero velocity, so
-  they fall onto the player with the light and are picked up. They do not
-  spawn above the headstone because the plate cannot tell which way the
+  entities about 1.5 blocks above the plate at the praying player's x/z
+  (not the plate center) with zero velocity, so they fall onto the player
+  with the light and are picked up. Two players on the plate each catch
+  their own offering. They do not spawn above the headstone because the plate cannot tell which way the
   structure was rotated.
 - **Message.** An action-bar line such as "Your prayer is answered".
 
@@ -107,7 +108,8 @@ Each prayer rolls `chronodawn:gameplay/lost_adventurer_memorial`:
 
 Pages are chosen at random. Duplicates are allowed, so no per-player record
 of owned pages is needed. Modpack authors can replace the table with a
-datapack.
+datapack. The praying player is passed to the loot context (`this` entity
+and luck), so datapacks can condition on them.
 
 ### Journal pages
 
@@ -292,6 +294,8 @@ One key in `[gameplay.wayside]`, following the sundial keys in
     minimum counts, so the NBT edit script asserts that no plain pressure
     plate is left
   - a missing reward loot table yields an empty offering
+  - stepping onto the plate drops one offering, and standing on it or
+    stepping back on within the cooldown drops nothing more
   - the advancement loads, through an `AdvancementSpec` entry in each
     version's `RegistryDrivenTestData`
 - **Validation**: `validateResources validateTranslations validateData
@@ -310,6 +314,8 @@ One key in `[gameplay.wayside]`, following the sundial keys in
   edge triggers it. Accepted.
 - Duplicate pages are possible. Finding all six takes more prayers than a
   no-duplicate scheme would. Accepted to avoid a per-player record.
+- A player riding a mount does not trigger the plate, because only the mount
+  touches it. Praying means stepping down at the grave. Accepted.
 
 ## Documentation
 

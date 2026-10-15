@@ -3,16 +3,20 @@ package com.chronodawn.gametest;
 import com.chronodawn.blocks.MemorialPlateBlock;
 import com.chronodawn.blocks.MemorialPlateBlockEntity;
 import com.chronodawn.compat.CompatGameTestHelper;
+import com.chronodawn.core.wayside.StepOnTracker;
 import com.chronodawn.items.JournalPageItem;
 import com.chronodawn.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
@@ -34,6 +38,8 @@ public final class MemorialPlateTests {
         List<T> tests = new ArrayList<>();
         tests.add(factory.create("memorial_plate_refuses_same_player_within_cooldown",
             MemorialPlateTests::testCooldownPerPlayer));
+        tests.add(factory.create("memorial_plate_rewards_once_per_visit",
+            MemorialPlateTests::testRewardsOncePerVisit));
         tests.add(factory.create("memorial_offering_has_one_page_and_supplies",
             MemorialPlateTests::testOffering));
         tests.add(factory.create("memorial_offering_from_missing_table_is_empty",
@@ -69,6 +75,44 @@ public final class MemorialPlateTests {
             return;
         }
         helper.succeed();
+    }
+
+    /**
+     * Test: stepping onto the plate drops an offering once. Standing on it, and stepping off
+     * and back on within the cooldown, drop nothing more.
+     */
+    private static void testRewardsOncePerVisit(GameTestHelper helper) {
+        helper.setBlock(PLATE_POS, ModBlocks.MEMORIAL_PLATE.get());
+        ServerLevel level = helper.getLevel();
+        BlockPos pos = helper.absolutePos(PLATE_POS);
+        Player player = CompatGameTestHelper.makeMockPlayer(helper);
+        player.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
+
+        MemorialPlateBlock.onPlayerInside(level, pos, player);
+        int afterFirstStep = countDroppedItems(level, pos);
+        if (afterFirstStep < 2) {
+            CompatGameTestHelper.fail(helper, "First step should drop a page and supplies, found " + afterFirstStep);
+            return;
+        }
+        MemorialPlateBlock.onPlayerInside(level, pos, player);
+        if (countDroppedItems(level, pos) > afterFirstStep) {
+            CompatGameTestHelper.fail(helper, "Standing on the plate prayed again");
+            return;
+        }
+        // Wait past the step-off window so the next call is a new visit, which the cooldown must refuse.
+        helper.runAfterDelay(StepOnTracker.STEP_OFF_TICKS + 2, () -> {
+            MemorialPlateBlock.onPlayerInside(level, pos, player);
+            // The mock player may pick items up in the meantime, so only an increase is a failure.
+            if (countDroppedItems(level, pos) > afterFirstStep) {
+                CompatGameTestHelper.fail(helper, "Stepping back on within the cooldown prayed again");
+                return;
+            }
+            helper.succeed();
+        });
+    }
+
+    private static int countDroppedItems(ServerLevel level, BlockPos pos) {
+        return level.getEntitiesOfClass(ItemEntity.class, new AABB(pos).inflate(3)).size();
     }
 
     /**

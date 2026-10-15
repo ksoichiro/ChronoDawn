@@ -30,7 +30,7 @@
 ## Review Focus
 
 1. A player standing still on the plate for minutes: no second prayer, no cooldown message spam. Test in Task 1 (`standingStillNeverRetriggers`).
-2. The same player stepping off and back on during the cooldown: only the cooldown message, never a second reward. Test in Task 5 (`memorial_plate_refuses_same_player_within_cooldown`).
+2. The same player stepping off and back on during the cooldown: only the cooldown message, never a second reward. Test `memorial_plate_rewards_once_per_visit` (added in the final review fix wave).
 3. A datapack that removes or empties the reward loot table: the prayer must not throw, it just drops nothing. Test in Task 5 (`memorial_offering_from_missing_table_is_empty`).
 4. Two players on the plate at the same time: each gets their own visit and cooldown. Tests in Task 1 (`playersAreIndependent`) and Task 5 (`memorial_plate_refuses_same_player_within_cooldown` also accepts a second player).
 5. A bad `memorial_cooldown_ticks` value must not reset the sundial keys. Test in Task 2 (`wayside_badMemorialCooldown_fallsBackAlone`).

@@ -28,6 +28,14 @@ public class CompatGameTestHelper {
     }
 
     /**
+     * Create a mock player without requiring it to be a ServerPlayer. Vanilla's mock player is a
+     * plain Player, so makeMockServerPlayer returns null for it.
+     */
+    public static net.minecraft.world.entity.player.Player makeMockPlayer(GameTestHelper helper) {
+        return helper.makeMockPlayer(GameType.SURVIVAL);
+    }
+
+    /**
      * Fail the running test with a plain message.
      * From 1.21.5, GameTestHelper.fail() takes a Component instead of a String.
      */

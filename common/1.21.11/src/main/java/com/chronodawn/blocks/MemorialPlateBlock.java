@@ -61,7 +61,9 @@ public class MemorialPlateBlock extends TemporalStonePressurePlate implements En
     private static final int PILLAR_PARTICLES = 40;
     private static final double PILLAR_SPREAD = 0.4;
     private static final double FALL_SPEED = 0.3;
-    // Above the player's head at the plate, so the items fall onto them with the light.
+    private static final int GLOW_RING_PARTICLES = 16;
+    private static final double GLOW_RING_RADIUS = 0.6;
+    // Above the praying player's head, so the items fall onto them with the light.
     // The plate cannot tell which way the structure was rotated, so it does not aim at the headstone.
     private static final double OFFERING_DROP_HEIGHT = 1.5;
 
@@ -88,10 +90,20 @@ public class MemorialPlateBlock extends TemporalStonePressurePlate implements En
     protected void entityInside(BlockState state, Level level, BlockPos pos, Entity entity,
                                 InsideBlockEffectApplier effectApplier, boolean colliding) {
         super.entityInside(state, level, pos, entity, effectApplier, colliding);
-        if (!level.isClientSide() && entity instanceof Player player && level instanceof ServerLevel serverLevel
-                && serverLevel.getBlockEntity(pos) instanceof MemorialPlateBlockEntity plate
-                && plate.markStep(player.getUUID(), serverLevel.getGameTime())) {
-            pray(serverLevel, pos, player, plate);
+        if (!level.isClientSide() && entity instanceof Player player && level instanceof ServerLevel serverLevel) {
+            onPlayerInside(serverLevel, pos, player);
+        }
+    }
+
+    /**
+     * Handles a player inside the plate's block cell. Vanilla calls this every tick while the
+     * player stays there. The whole cell counts, not only the pressed area, so brushing the
+     * plate's edge also prays, which the design accepts.
+     */
+    public static void onPlayerInside(ServerLevel level, BlockPos pos, Player player) {
+        if (level.getBlockEntity(pos) instanceof MemorialPlateBlockEntity plate
+                && plate.markStep(player.getUUID(), level.getGameTime())) {
+            pray(level, pos, player, plate);
         }
     }
 
@@ -108,33 +120,43 @@ public class MemorialPlateBlock extends TemporalStonePressurePlate implements En
         }
         spawnLightPillar(level, pos);
         level.playSound(null, pos, SoundEvents.BEACON_ACTIVATE, SoundSource.BLOCKS, 1.0f, 1.2f);
-        dropOffering(level, pos);
+        dropOffering(level, pos, player);
         player.displayClientMessage(Component.translatable("message.chronodawn.memorial_plate.answered"), true);
     }
 
     public static List<ItemStack> rollOffering(ServerLevel level, BlockPos pos) {
-        return rollOffering(level, pos, OFFERING_LOOT_TABLE);
+        return rollOffering(level, pos, OFFERING_LOOT_TABLE, null);
     }
 
     /**
      * Rolls a chronodawn loot table at the plate. A missing table yields an empty list.
      */
     public static List<ItemStack> rollOffering(ServerLevel level, BlockPos pos, String lootTablePath) {
-        LootTable table = level.getServer().reloadableRegistries().getLootTable(
-            ResourceKey.create(Registries.LOOT_TABLE, CompatResourceLocation.create(ChronoDawn.MOD_ID, lootTablePath)));
-        LootParams params = new LootParams.Builder(level)
-            .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
-            .create(LootContextParamSets.CHEST);
-        return table.getRandomItems(params);
+        return rollOffering(level, pos, lootTablePath, null);
     }
 
-    private static void dropOffering(ServerLevel level, BlockPos pos) {
-        for (ItemStack stack : rollOffering(level, pos)) {
+    // The player is optional so GameTests can roll without one. When present, datapacks can
+    // condition on the praying player and luck applies, as with vanilla chest loot.
+    private static List<ItemStack> rollOffering(ServerLevel level, BlockPos pos, String lootTablePath, Player player) {
+        LootTable table = level.getServer().reloadableRegistries().getLootTable(
+            ResourceKey.create(Registries.LOOT_TABLE, CompatResourceLocation.create(ChronoDawn.MOD_ID, lootTablePath)));
+        LootParams.Builder builder = new LootParams.Builder(level)
+            .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos));
+        if (player != null) {
+            builder.withParameter(LootContextParams.THIS_ENTITY, player).withLuck(player.getLuck());
+        }
+        return table.getRandomItems(builder.create(LootContextParamSets.CHEST));
+    }
+
+    private static void dropOffering(ServerLevel level, BlockPos pos, Player player) {
+        for (ItemStack stack : rollOffering(level, pos, OFFERING_LOOT_TABLE, player)) {
             if (stack.isEmpty()) {
                 continue;
             }
+            // Above the praying player rather than the plate center, so two players sharing
+            // the plate each catch their own offering.
             ItemEntity item = new ItemEntity(level,
-                pos.getX() + 0.5, pos.getY() + OFFERING_DROP_HEIGHT, pos.getZ() + 0.5, stack);
+                player.getX(), pos.getY() + OFFERING_DROP_HEIGHT, player.getZ(), stack);
             item.setDeltaMovement(Vec3.ZERO);
             item.setDefaultPickUpDelay();
             level.addFreshEntity(item);
@@ -152,6 +174,12 @@ public class MemorialPlateBlock extends TemporalStonePressurePlate implements En
             // so each mote falls toward the plate instead of scattering.
             level.sendParticles(ParticleTypes.END_ROD, x, y, z, 0, 0.0, -1.0, 0.0, FALL_SPEED);
         }
-        level.sendParticles(ParticleTypes.GLOW, centerX, pos.getY() + 0.1, centerZ, 16, 0.4, 0.05, 0.4, 0.0);
+        for (int i = 0; i < GLOW_RING_PARTICLES; i++) {
+            double angle = 2 * Math.PI * i / GLOW_RING_PARTICLES;
+            level.sendParticles(ParticleTypes.GLOW,
+                centerX + Math.cos(angle) * GLOW_RING_RADIUS, pos.getY() + 0.1,
+                centerZ + Math.sin(angle) * GLOW_RING_RADIUS,
+                1, 0.0, 0.0, 0.0, 0.0);
+        }
     }
 }
