@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "F M",
+    "E E"
+  ],
+  "key": {
+    "F": "chronodawn:fragment_of_stasis_core",
+    "E": "#c:ingots/enhanced_clockstone",
+    "M": "chronodawn:clockwork_mechanism"
+  },
+  "result": {
+    "id": "chronodawn:echoing_time_boots",
+    "count": 1
+  }
+}

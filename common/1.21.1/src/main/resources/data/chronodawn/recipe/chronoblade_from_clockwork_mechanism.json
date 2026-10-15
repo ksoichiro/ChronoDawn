@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "MCM",
+    "FEM",
+    " U "
+  ],
+  "key": {
+    "F": {
+      "item": "chronodawn:fragment_of_stasis_core"
+    },
+    "C": {
+      "item": "chronodawn:eye_of_chronos"
+    },
+    "E": {
+      "tag": "c:ingots/enhanced_clockstone"
+    },
+    "U": {
+      "item": "chronodawn:unstable_hourglass"
+    },
+    "M": {
+      "item": "chronodawn:clockwork_mechanism"
+    }
+  },
+  "result": {
+    "id": "chronodawn:chronoblade",
+    "count": 1
+  }
+}

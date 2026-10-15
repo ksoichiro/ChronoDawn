@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    "M M",
+    "MEM",
+    "FUM"
+  ],
+  "key": {
+    "F": {
+      "item": "chronodawn:fragment_of_stasis_core"
+    },
+    "E": {
+      "item": "chronodawn:enhanced_clockstone"
+    },
+    "U": {
+      "item": "chronodawn:unstable_hourglass"
+    },
+    "M": {
+      "item": "chronodawn:clockwork_mechanism"
+    }
+  },
+  "result": {
+    "item": "chronodawn:time_tyrant_mail",
+    "count": 1
+  }
+}

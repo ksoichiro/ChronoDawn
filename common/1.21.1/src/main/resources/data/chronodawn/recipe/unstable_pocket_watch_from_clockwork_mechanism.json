@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "pattern": [
+    " F ",
+    "MUM",
+    " E "
+  ],
+  "key": {
+    "F": {
+      "item": "chronodawn:fragment_of_stasis_core"
+    },
+    "U": {
+      "item": "chronodawn:unstable_hourglass"
+    },
+    "E": {
+      "tag": "c:ingots/enhanced_clockstone"
+    },
+    "M": {
+      "item": "chronodawn:clockwork_mechanism"
+    }
+  },
+  "result": {
+    "id": "chronodawn:unstable_pocket_watch",
+    "count": 1
+  }
+}

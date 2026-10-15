@@ -1,7 +1,11 @@
 package com.chronodawn.unit;
 
+import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestFactory;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +32,51 @@ public class FragmentSavingTest {
         assertNotNull(count, "No set_count function on the Fragment entry");
         assertEquals(4.0, ((Number) count.get("min")).doubleValue(), "Fragment min");
         assertEquals(6.0, ((Number) count.get("max")).doubleValue(), "Fragment max");
+    }
+
+    private static final String MECHANISM = "chronodawn:clockwork_mechanism";
+
+    private record Alternative(String recipe, String result, int mechanisms) {}
+
+    private static final List<Alternative> ALTERNATIVES = List.of(
+        new Alternative("chronoblade_from_clockwork_mechanism", "chronodawn:chronoblade", 3),
+        new Alternative("time_tyrant_mail_from_clockwork_mechanism", "chronodawn:time_tyrant_mail", 5),
+        new Alternative("echoing_time_boots_from_clockwork_mechanism", "chronodawn:echoing_time_boots", 1),
+        new Alternative("unstable_pocket_watch_from_clockwork_mechanism", "chronodawn:unstable_pocket_watch", 2)
+    );
+
+    @TestFactory
+    Collection<DynamicTest> alternativeRecipesUseOneFragment() {
+        Collection<DynamicTest> tests = new ArrayList<>();
+        for (Alternative alt : ALTERNATIVES) {
+            tests.add(DynamicTest.dynamicTest(alt.recipe(), () -> {
+                Map<String, Object> recipe = loadData(
+                    "recipe/" + alt.recipe() + ".json", "recipes/" + alt.recipe() + ".json");
+                assertNotNull(recipe, "Missing recipe " + alt.recipe());
+                assertEquals(alt.result(), resultId(recipe), "result");
+                assertEquals(1, countIngredient(recipe, FRAGMENT), "Fragments");
+                assertEquals(alt.mechanisms(), countIngredient(recipe, MECHANISM), "Mechanisms");
+            }));
+        }
+        return tests;
+    }
+
+    @Test
+    @SuppressWarnings("unchecked")
+    void mechanismRecipeUsesFourGearsOneClockstoneFourCrystals() {
+        Map<String, Object> recipe = loadData("recipe/clockwork_mechanism.json", "recipes/clockwork_mechanism.json");
+        assertNotNull(recipe, "Missing recipe clockwork_mechanism");
+        assertEquals(MECHANISM, resultId(recipe), "result");
+        assertEquals(1.0, ((Number) ((Map<String, Object>) recipe.get("result")).get("count")).doubleValue(), "count");
+        assertEquals(4, countIngredient(recipe, "chronodawn:ancient_gear"), "Ancient Gears");
+
+        // 1.20.1 names the item directly, 1.21.1+ uses the c: tag.
+        int clockstone = countIngredient(recipe, "chronodawn:enhanced_clockstone")
+            + countIngredient(recipe, "#c:ingots/enhanced_clockstone");
+        int crystal = countIngredient(recipe, "chronodawn:time_crystal")
+            + countIngredient(recipe, "#c:gems/time_crystal");
+        assertEquals(1, clockstone, "Enhanced Clockstone");
+        assertEquals(4, crystal, "Time Crystals");
     }
 
     // 1.20.1 uses plural data directories, 1.21.1+ uses singular ones.

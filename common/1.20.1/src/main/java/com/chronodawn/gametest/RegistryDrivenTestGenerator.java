@@ -412,6 +412,13 @@ public final class RegistryDrivenTestGenerator {
     }
 
     /**
+     * Generates tests verifying Clockwork Mechanism recipes are loaded by the server's RecipeManager.
+     */
+    public static List<NamedTest> generateClockworkMechanismRecipeLoadTests() {
+        return RecipeLoadTests.generateClockworkMechanismRecipeLoadTests(NamedTest::new);
+    }
+
+    /**
      * Generate all tests from all categories.
      */
     public static List<NamedTest> generateAllTests() {
@@ -454,6 +461,7 @@ public final class RegistryDrivenTestGenerator {
         all.addAll(ConventionalTagTests.generate(ModItems.class, ModBlocks.class,
                 ConventionalTagTests.v1ItemSpecs(), ConventionalTagTests.v1BlockSpecs(), NamedTest::new));
         all.addAll(generateChroniteRecipeLoadTests());
+        all.addAll(generateClockworkMechanismRecipeLoadTests());
         all.addAll(generateRegistryConsistencySummaryTest());
         return all;
     }

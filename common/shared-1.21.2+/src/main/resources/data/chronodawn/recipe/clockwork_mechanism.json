@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "CGC",
+    "GEG",
+    "CGC"
+  ],
+  "key": {
+    "G": "chronodawn:ancient_gear",
+    "E": "#c:ingots/enhanced_clockstone",
+    "C": "#c:gems/time_crystal"
+  },
+  "result": {
+    "id": "chronodawn:clockwork_mechanism",
+    "count": 1
+  }
+}
