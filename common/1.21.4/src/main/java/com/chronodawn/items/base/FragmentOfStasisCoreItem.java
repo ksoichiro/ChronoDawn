@@ -10,7 +10,7 @@ import net.minecraft.world.item.Item;
  * Fragment of Stasis Core - Boss Material Item
  *
  * Crafting Material:
- * - Dropped by Time Tyrant (3-5 fragments per kill, affected by Looting)
+ * - Dropped by Time Tyrant (4-6 fragments per kill, affected by Looting)
  * - Used for crafting ultimate artifacts (Chronoblade, Time Guardian's Mail, etc.)
  *
  * Properties:

@@ -1352,7 +1352,7 @@ public class ModItems {
 
     /**
      * Fragment of Stasis Core - Boss material item.
-     * Dropped by Time Tyrant (3-5 per kill, affected by Looting).
+     * Dropped by Time Tyrant (4-6 per kill, affected by Looting).
      * Used for crafting ultimate artifacts (Chronoblade, Time Guardian's Mail, etc.).
      */
     public static final RegistrySupplier<Item> FRAGMENT_OF_STASIS_CORE = ITEMS.register(
