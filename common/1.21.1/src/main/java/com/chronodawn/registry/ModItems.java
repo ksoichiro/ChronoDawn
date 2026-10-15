@@ -1830,6 +1830,16 @@ public class ModItems {
         () -> new AncientGearItem(AncientGearItem.createProperties())
     );
 
+    /**
+     * Clockwork Mechanism - Crafting material.
+     * Crafted from 4 Ancient Gears, 1 Enhanced Clockstone and 4 Time Crystals.
+     * Replaces Fragments of Stasis Core in the alternative ultimate artifact recipes.
+     */
+    public static final RegistrySupplier<Item> CLOCKWORK_MECHANISM = ITEMS.register(
+        ModItemId.CLOCKWORK_MECHANISM.id(),
+        () -> new Item(new Item.Properties())
+    );
+
     // === Mob Drops ===
 
     /**
@@ -2728,6 +2738,7 @@ public class ModItems {
         // === Key Items ===
         output.accept(KEY_TO_MASTER_CLOCK.get());
         output.accept(ANCIENT_GEAR.get());
+        output.accept(CLOCKWORK_MECHANISM.get());
 
         // === Boss Drops ===
         output.accept(GUARDIAN_STONE.get());

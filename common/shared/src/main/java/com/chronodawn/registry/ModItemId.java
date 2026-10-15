@@ -317,6 +317,7 @@ public enum ModItemId {
     TIME_ARROW("time_arrow"),
     KEY_TO_MASTER_CLOCK("key_to_master_clock"),
     ANCIENT_GEAR("ancient_gear"),
+    CLOCKWORK_MECHANISM("clockwork_mechanism"),
 
     // === Spawn Eggs ===
     TIME_GUARDIAN_SPAWN_EGG("time_guardian_spawn_egg"),
