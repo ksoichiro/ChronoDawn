@@ -3,6 +3,7 @@ package com.chronodawn.registry;
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.mixin.ItemCraftRemainderAccessor;
 import com.chronodawn.items.ChronicleBookItem;
+import com.chronodawn.items.JournalPageItem;
 import com.chronodawn.items.DecorativeWaterBucketItem;
 import com.chronodawn.items.PortalStabilizerItem;
 import com.chronodawn.items.TimeHourglassItem;
@@ -1146,6 +1147,21 @@ public class ModItems {
         ModItemId.CHRONICLE_BOOK.id(),
         () -> new ChronicleBookItem(ChronicleBookItem.createProperties())
     );
+
+    /**
+     * Faded Journal Pages - the Lost Adventurer's story, one item per page.
+     * Dropped by the Lost Adventurer Memorial wayside feature.
+     */
+    public static final RegistrySupplier<Item> FADED_JOURNAL_PAGE_1 = registerJournalPage(ModItemId.FADED_JOURNAL_PAGE_1, 1);
+    public static final RegistrySupplier<Item> FADED_JOURNAL_PAGE_2 = registerJournalPage(ModItemId.FADED_JOURNAL_PAGE_2, 2);
+    public static final RegistrySupplier<Item> FADED_JOURNAL_PAGE_3 = registerJournalPage(ModItemId.FADED_JOURNAL_PAGE_3, 3);
+    public static final RegistrySupplier<Item> FADED_JOURNAL_PAGE_4 = registerJournalPage(ModItemId.FADED_JOURNAL_PAGE_4, 4);
+    public static final RegistrySupplier<Item> FADED_JOURNAL_PAGE_5 = registerJournalPage(ModItemId.FADED_JOURNAL_PAGE_5, 5);
+    public static final RegistrySupplier<Item> FADED_JOURNAL_PAGE_6 = registerJournalPage(ModItemId.FADED_JOURNAL_PAGE_6, 6);
+
+    private static RegistrySupplier<Item> registerJournalPage(ModItemId id, int page) {
+        return ITEMS.register(id.id(), () -> new JournalPageItem(new Item.Properties().stacksTo(16), page));
+    }
 
     // === Consumables ===
 
@@ -2618,6 +2634,12 @@ public class ModItems {
         output.accept(PORTAL_STABILIZER.get());
         // Decorative Water Bucket is intentionally excluded from creative tab (admin/command only)
         output.accept(CHRONICLE_BOOK.get());
+        output.accept(FADED_JOURNAL_PAGE_1.get());
+        output.accept(FADED_JOURNAL_PAGE_2.get());
+        output.accept(FADED_JOURNAL_PAGE_3.get());
+        output.accept(FADED_JOURNAL_PAGE_4.get());
+        output.accept(FADED_JOURNAL_PAGE_5.get());
+        output.accept(FADED_JOURNAL_PAGE_6.get());
         // Add example Time Compass (targets Desert Clock Tower by default)
         output.accept(com.chronodawn.items.TimeCompassItem.createCompass(
             com.chronodawn.items.TimeCompassItem.STRUCTURE_DESERT_CLOCK_TOWER));
