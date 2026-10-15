@@ -251,6 +251,7 @@ public enum ModBlockId {
     BOSS_ROOM_DOOR(def("boss_room_door").cutout()),
     CLOCK_TOWER_TELEPORTER(def("clock_tower_teleporter")),
     SUNDIAL_GNOMON(def("sundial_gnomon").cutout()),
+    MEMORIAL_PLATE(def("memorial_plate")),
     ENTROPY_CRYPT_TRAPDOOR(def("entropy_crypt_trapdoor").cutout()),
     ;
 

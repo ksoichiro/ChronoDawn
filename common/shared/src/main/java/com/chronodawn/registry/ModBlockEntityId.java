@@ -33,6 +33,7 @@ public enum ModBlockEntityId {
     BOSS_ROOM_DOOR("boss_room_door"),
     BOSS_ROOM_BOUNDARY_MARKER("boss_room_boundary_marker"),
     SUNDIAL_GNOMON("sundial_gnomon"),
+    MEMORIAL_PLATE("memorial_plate"),
     ;
 
     private final String id;
