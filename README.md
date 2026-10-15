@@ -43,7 +43,7 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed information.
   - Entropy Crypt (Entropy Keeper boss)
   - Master Clock (final dungeon with Time Tyrant boss)
   - Time Keeper Village (placed near your first arrival, with Time Keeper traders)
-- **Small Ambient Structures** (scattered across Chrono Dawn biomes): Watchmaker's Camp (chest loot), Hourglass Monolith, Old Sundial, Petrified Adventurer (with snowy variant), Time Cairn, Time Well, and Upside-Down Tree
+- **Small Ambient Structures** (scattered across Chrono Dawn biomes): Watchmaker's Camp (chest loot), Hourglass Monolith, Old Sundial, Lost Adventurer Memorial (with snowy variant), Time Cairn, Time Well, and Upside-Down Tree
 - **Friendly Mobs in Chrono Dawn**: Chrono Bovine (cow-equivalent; drops Chrono Bovine Meat), Chrono Ursid (polar-bear-equivalent), Temporal Caprid (goat-equivalent)
 - **Hostile Mobs in Chrono Dawn**: Epoch Husk, Secondhand Archer, Paradox Crawler, Moment Creeper, and Timeline Strider replace their vanilla counterparts. Forgotten Minute, Chronal Leech, Temporal Wraith, Floq, Clockwork Sentinel (immune to Time Distortion), and the rare Hourglass Golem are unique to the dimension
 - **Time Keeper**: Peaceful trader that sells Time Compasses for each Chrono Dawn dungeon

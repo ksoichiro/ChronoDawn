@@ -20,6 +20,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   recipe that takes 1 Fragment of Stasis Core plus Clockwork Mechanisms
   (Chronoblade 3, Time Tyrant Mail 5, Echoing Time Boots 1, Unstable Pocket
   Watch 2). The original recipes still work.
+- **Lost Adventurer Memorial prayers**: step onto the plate in front of a
+  Lost Adventurer Memorial and light falls from above, leaving one of six
+  Faded Journal Pages and a little bread, arrows or torches. Each player can
+  pray at each memorial about once every 20 minutes of game time by default
+  (`memorial_cooldown_ticks` under `[gameplay.wayside]`). The pages tell the
+  story of the adventurer buried there, and collecting all six grants an
+  advancement. Breaking the plate drops a plain Temporal Stone Pressure
+  Plate. Only memorials in newly generated chunks have the interactive plate.
 
 ### Changed
 
