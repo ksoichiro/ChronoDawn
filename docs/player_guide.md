@@ -972,7 +972,7 @@ The custom shields are independent of the existing Chrono Aegis artifact (which 
 
 All ultimate artifacts require **Fragments of Stasis Core** from the Time Tyrant final boss.
 
-Each artifact also has an alternative recipe that takes only 1 Fragment of Stasis Core and uses Clockwork Mechanisms for the rest. One Time Tyrant kill always drops enough Fragments to make all four this way.
+The Chronoblade, Time Tyrant Mail, Echoing Time Boots and Unstable Pocket Watch also have an alternative recipe that takes only 1 Fragment of Stasis Core and uses Clockwork Mechanisms for the rest. One Time Tyrant kill always drops enough Fragments to make all four this way.
 
 #### Chronoblade (Sword)
 - **Attack Damage**: 8.5
