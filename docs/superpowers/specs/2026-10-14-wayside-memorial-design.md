@@ -111,7 +111,8 @@ datapack.
 
 ### Journal pages
 
-Six items, `faded_journal_page_1` to `faded_journal_page_6`. Each page's
+Six items, `faded_journal_page_1` to `faded_journal_page_6`, named "Faded
+Journal Page (1/6)" and so on. Each page's
 text is shown as its tooltip in gray italics. Read in order they tell the
 story of the adventurer buried at the memorials. Draft text (lines are the
 tooltip lines):
@@ -207,9 +208,10 @@ version module, everything else in `common/shared`.
   - On success it spawns the particles, plays the sound, drops the reward
     and sends the message. On refusal it sends the cooldown message.
   - `rollOffering(ServerLevel, BlockPos)` returns the reward stacks. It is
-    public static so the GameTest can roll the table without a player. The
-    loot table lookup differs by era (`getLootData` on 1.20.1,
-    `reloadableRegistries` later).
+    public static so the GameTest can roll the table without a player. An
+    overload takes the loot table path, so a GameTest can check that a
+    missing table yields an empty list. The loot table lookup differs by era
+    (`getLootData` on 1.20.1, `reloadableRegistries` later).
   - The `entityInside` signature and the plate's superclass constructor
     follow each version's existing `TemporalStonePressurePlate`.
 
@@ -238,9 +240,10 @@ version module, everything else in `common/shared`.
 - Reward loot table `gameplay/lost_adventurer_memorial.json`.
 - Advancement `exploration/lost_adventurer_journal.json` with six
   `inventory_changed` criteria, all required.
-- Loot tables and the advancement exist in three places: `common/1.20.1`
-  (`loot_tables`, `advancements`), `common/shared-1.21.1+`, and
-  `common/26.3` in the 26.3 schema.
+- Loot tables exist in three places: `common/1.20.1` (`loot_tables`),
+  `common/shared-1.21.1+`, and `common/26.3` in the 26.3 schema. The
+  advancement exists in `common/1.20.1` (`advancements`) and
+  `common/shared-1.21.1+`. 26.3 reads the shared advancement.
 - One item texture shared by all six pages, six item models pointing at
   it, and client item JSON for 1.21.4 and later.
 - Translation keys in `en_us` and `ja_jp` for the six page names, their
@@ -285,9 +288,12 @@ One key in `[gameplay.wayside]`, following the sundial keys in
   - `memorial_plate` drops one `temporal_stone_pressure_plate`
     (`BlockState#getDrops`, as `FadedPlainsTests` does)
   - `StructureTests` in `common/gametest` and its 26.3 copy expect
-    `memorial_plate` in both memorial NBTs and no plain pressure plate
-  - the advancement loads, through the existing `AdvancementTests` if it
-    covers new files, otherwise a new check
+    `memorial_plate` in both memorial NBTs. `BlockRequirement` only checks
+    minimum counts, so the NBT edit script asserts that no plain pressure
+    plate is left
+  - a missing reward loot table yields an empty offering
+  - the advancement loads, through an `AdvancementSpec` entry in each
+    version's `RegistryDrivenTestData`
 - **Validation**: `validateResources validateTranslations validateData
   validateEraTagParity`, then `buildAll`, `testAll` and `gameTestAll` run
   separately.
@@ -308,5 +314,7 @@ One key in `[gameplay.wayside]`, following the sundial keys in
 ## Documentation
 
 - `docs/player_guide.md`: describe the memorial, the pages and the
-  advancement.
+  advancement. The guide, README and store pages call this structure
+  "Petrified Adventurer", which does not match its NBT. Rename it to "Lost
+  Adventurer Memorial" there.
 - Roadmap status table: mark part 2 when it ships.
