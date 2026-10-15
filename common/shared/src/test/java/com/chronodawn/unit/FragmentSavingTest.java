@@ -61,6 +61,27 @@ public class FragmentSavingTest {
         return tests;
     }
 
+    // A shared group makes the recipe book show the Fragment and Mechanism
+    // recipes as one entry, like vanilla beds, instead of two identical icons.
+    @TestFactory
+    Collection<DynamicTest> alternativeRecipesShareGroupWithOriginal() {
+        Collection<DynamicTest> tests = new ArrayList<>();
+        for (Alternative alt : ALTERNATIVES) {
+            String original = alt.result().substring("chronodawn:".length());
+            tests.add(DynamicTest.dynamicTest(alt.recipe() + "_group", () -> {
+                Map<String, Object> originalRecipe = loadData(
+                    "recipe/" + original + ".json", "recipes/" + original + ".json");
+                Map<String, Object> altRecipe = loadData(
+                    "recipe/" + alt.recipe() + ".json", "recipes/" + alt.recipe() + ".json");
+                assertNotNull(originalRecipe, "Missing recipe " + original);
+                assertNotNull(altRecipe, "Missing recipe " + alt.recipe());
+                assertEquals(original, originalRecipe.get("group"), "group of " + original);
+                assertEquals(original, altRecipe.get("group"), "group of " + alt.recipe());
+            }));
+        }
+        return tests;
+    }
+
     @Test
     @SuppressWarnings("unchecked")
     void mechanismRecipeUsesFourGearsOneClockstoneFourCrystals() {

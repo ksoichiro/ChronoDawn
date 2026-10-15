@@ -1,6 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
+  "group": "time_tyrant_mail",
   "pattern": [
     "F F",
     "FEF",

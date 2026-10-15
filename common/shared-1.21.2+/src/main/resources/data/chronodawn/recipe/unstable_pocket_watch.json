@@ -1,6 +1,7 @@
 {
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
+  "group": "unstable_pocket_watch",
   "pattern": [
     " F ",
     "FUF",
