@@ -26,9 +26,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Time Tyrant**: drops 4-6 Fragments of Stasis Core instead of 3-5, so a
   single kill without Looting covers all four alternative artifact recipes.
   Worlds where the Time Tyrant is already defeated keep the Fragments they got.
-
-### Changed
-
 - **Clockwork Cookie texture**: the cookie now looks like a gear-shaped
   cookie with a Time Jam center, cut with a Clockwork Block mold, instead of
   a flat orange icon.
