@@ -535,7 +535,7 @@ The first time a player enters Chrono Dawn, a small village is placed on flat gr
 
 **Drops**:
 - **Eye of Chronos**
-- **Fragments of Stasis Core** (4-6, used to craft ultimate artifacts)
+- **Fragments of Stasis Core** (4-6, more with Looting, used to craft ultimate artifacts)
 - Rare loot and experience
 
 **Tips**:
@@ -694,7 +694,7 @@ These four bosses must be defeated to craft the **Chrono Aegis** activated buff 
 
 **Drops**:
 - **Eye of Chronos** - Enhances time distortion
-- **Fragments of Stasis Core** (4-6, used to craft ultimate artifacts)
+- **Fragments of Stasis Core** (4-6, more with Looting, used to craft ultimate artifacts)
 - Rare loot and experience points
 
 **Strategy**:
