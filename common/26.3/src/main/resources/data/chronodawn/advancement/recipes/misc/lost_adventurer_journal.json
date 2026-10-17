@@ -1,0 +1,39 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "chronodawn:faded_journal_page_1",
+              "chronodawn:faded_journal_page_2",
+              "chronodawn:faded_journal_page_3",
+              "chronodawn:faded_journal_page_4",
+              "chronodawn:faded_journal_page_5",
+              "chronodawn:faded_journal_page_6"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipes": "chronodawn:lost_adventurer_journal"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "chronodawn:lost_adventurer_journal"
+    ]
+  }
+}

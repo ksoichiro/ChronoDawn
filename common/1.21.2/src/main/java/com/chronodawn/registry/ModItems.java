@@ -4,6 +4,7 @@ import com.chronodawn.ChronoDawn;
 import com.chronodawn.mixin.ItemCraftRemainderAccessor;
 import com.chronodawn.items.ChronicleBookItem;
 import com.chronodawn.items.JournalPageItem;
+import com.chronodawn.items.LostAdventurerJournalItem;
 import com.chronodawn.items.DecorativeWaterBucketItem;
 import com.chronodawn.items.PortalStabilizerItem;
 import com.chronodawn.items.TimeHourglassItem;
@@ -1567,6 +1568,18 @@ public class ModItems {
     public static final RegistrySupplier<Item> FADED_JOURNAL_PAGE_4 = registerJournalPage(ModItemId.FADED_JOURNAL_PAGE_4, 4);
     public static final RegistrySupplier<Item> FADED_JOURNAL_PAGE_5 = registerJournalPage(ModItemId.FADED_JOURNAL_PAGE_5, 5);
     public static final RegistrySupplier<Item> FADED_JOURNAL_PAGE_6 = registerJournalPage(ModItemId.FADED_JOURNAL_PAGE_6, 6);
+
+    /**
+     * Lost Adventurer's Journal - all six pages bound together. Holding it at a memorial
+     * swaps the page for a small offering.
+     */
+    public static final RegistrySupplier<Item> LOST_ADVENTURER_JOURNAL = ITEMS.register(
+        ModItemId.LOST_ADVENTURER_JOURNAL.id(),
+        () -> new LostAdventurerJournalItem(new Item.Properties()
+                .stacksTo(1)
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.LOST_ADVENTURER_JOURNAL.id()))))
+    );
 
     private static RegistrySupplier<Item> registerJournalPage(ModItemId id, int page) {
         return ITEMS.register(id.id(), () -> new JournalPageItem(new Item.Properties()
@@ -3189,6 +3202,7 @@ public class ModItems {
         output.accept(FADED_JOURNAL_PAGE_4.get());
         output.accept(FADED_JOURNAL_PAGE_5.get());
         output.accept(FADED_JOURNAL_PAGE_6.get());
+        output.accept(LOST_ADVENTURER_JOURNAL.get());
         // Add example Time Compass (targets Desert Clock Tower by default)
         output.accept(com.chronodawn.items.TimeCompassItem.createCompass(
             com.chronodawn.items.TimeCompassItem.STRUCTURE_DESERT_CLOCK_TOWER));

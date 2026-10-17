@@ -318,6 +318,7 @@ public enum ModItemId {
     FADED_JOURNAL_PAGE_4("faded_journal_page_4"),
     FADED_JOURNAL_PAGE_5("faded_journal_page_5"),
     FADED_JOURNAL_PAGE_6("faded_journal_page_6"),
+    LOST_ADVENTURER_JOURNAL("lost_adventurer_journal"),
     TIME_CLOCK("time_clock"),
     TIME_COMPASS("time_compass"),
     TIME_ARROW("time_arrow"),

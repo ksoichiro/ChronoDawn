@@ -3,6 +3,8 @@ package com.chronodawn.gametest;
 import com.chronodawn.blocks.MemorialPlateBlock;
 import com.chronodawn.blocks.MemorialPlateBlockEntity;
 import com.chronodawn.compat.CompatGameTestHelper;
+import com.chronodawn.compat.CompatRecipeManager;
+import com.chronodawn.compat.CompatResourceLocation;
 import com.chronodawn.core.wayside.StepOnTracker;
 import com.chronodawn.items.JournalPageItem;
 import com.chronodawn.registry.ModBlocks;
@@ -46,6 +48,8 @@ public final class MemorialPlateTests {
             MemorialPlateTests::testMissingTable));
         tests.add(factory.create("memorial_plate_drops_plain_pressure_plate",
             MemorialPlateTests::testDrops));
+        tests.add(factory.create("recipe_loaded_lost_adventurer_journal",
+            MemorialPlateTests::testJournalRecipeLoaded));
         return tests;
     }
 
@@ -172,5 +176,21 @@ public final class MemorialPlateTests {
         } else {
             CompatGameTestHelper.fail(helper, "memorial_plate should drop one temporal_stone_pressure_plate, got " + drops);
         }
+    }
+
+    /**
+     * Test: the journal recipe loads on this version. The three recipe roots use different
+     * ingredient formats, so a format slip would drop the recipe silently.
+     */
+    private static void testJournalRecipeLoaded(GameTestHelper helper) {
+        helper.runAfterDelay(1, () -> {
+            var id = CompatResourceLocation.create("chronodawn", "lost_adventurer_journal");
+            var recipeManager = helper.getLevel().getServer().getRecipeManager();
+            if (CompatRecipeManager.isRecipeLoaded(recipeManager, id)) {
+                helper.succeed();
+            } else {
+                CompatGameTestHelper.fail(helper, "Recipe not loaded: chronodawn:lost_adventurer_journal");
+            }
+        });
     }
 }

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    "chronodawn:faded_journal_page_1",
+    "chronodawn:faded_journal_page_2",
+    "chronodawn:faded_journal_page_3",
+    "chronodawn:faded_journal_page_4",
+    "chronodawn:faded_journal_page_5",
+    "chronodawn:faded_journal_page_6",
+    "minecraft:book"
+  ],
+  "result": {
+    "id": "chronodawn:lost_adventurer_journal",
+    "count": 1
+  }
+}
