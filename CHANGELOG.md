@@ -26,8 +26,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   pray at each memorial about once every 20 minutes of game time by default
   (`memorial_cooldown_ticks` under `[gameplay.wayside]`). The pages tell the
   story of the adventurer buried there, and collecting all six grants an
-  advancement. Breaking the plate drops a plain Temporal Stone Pressure
-  Plate. Only memorials in newly generated chunks have the interactive plate.
+  advancement. The six pages and a book craft into the Lost Adventurer's
+  Journal, which holds the end of the story. Pray while holding it in either
+  hand and the page is replaced by a small offering of Clockstone, Raw
+  Temporal Amber or cooked food. The journal is never used up. Breaking the
+  plate drops a plain Temporal Stone Pressure Plate. Only memorials in newly
+  generated chunks have the interactive plate.
 
 ### Changed
 
