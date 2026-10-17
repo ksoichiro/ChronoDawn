@@ -52,6 +52,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Clockwork Dial mining on Minecraft 1.20.1**: the block now mines at
   pickaxe speed and drops itself when broken with a pickaxe, matching newer
   Minecraft versions.
+- **Chronite Ore on Forge 1.20.1**: the ore never generated on Forge, so
+  Chronite Shards and the Time Compass could not be obtained by mining. It now
+  generates in Overworld biomes like on the other loaders. It only appears in
+  newly generated chunks.
 
 ## [0.12.0] - 2026-10-12
 
