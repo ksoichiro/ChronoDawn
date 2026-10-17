@@ -285,9 +285,12 @@ version module, everything else in `common/shared`.
   `temporal_stone_pressure_plate` models (up and down).
 - Block loot table dropping `temporal_stone_pressure_plate`, and the
   `minecraft:mineable/pickaxe` tag entry, matching the plain plate.
-- Reward loot tables `gameplay/lost_adventurer_memorial.json` and
-  `gameplay/lost_adventurer_memorial_blessed.json` (same supplies pool, the
-  page pool replaced by the blessed offering pool).
+- Reward loot tables `gameplay/lost_adventurer_memorial.json` (page pool)
+  and `gameplay/lost_adventurer_memorial_blessed.json` (blessed offering
+  pool). Both pull their supplies from
+  `gameplay/lost_adventurer_memorial_supplies.json` through a
+  `minecraft:loot_table` entry, so a datapack changes supplies in one place.
+  The entry names the table with `"name"` on 1.20.1 and `"value"` from 1.21.1.
 - Shapeless recipe `lost_adventurer_journal` (six pages and a `minecraft:book`)
   in every recipe root (`common/1.20.1/.../recipes`, `common/1.21.1/.../recipe`,
   `common/shared-1.21.2+/.../recipe`), each in that era's recipe format, plus
