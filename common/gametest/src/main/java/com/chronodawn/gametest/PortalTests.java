@@ -213,7 +213,9 @@ public final class PortalTests {
                 BlockPos portalBlockAbsolute = helper.absolutePos(portalBlockRelative);
                 player.setPos(portalBlockAbsolute.getX() + 0.5, portalBlockAbsolute.getY(), portalBlockAbsolute.getZ() + 0.5);
 
-                // Attempt teleportation
+                // Attempt teleportation. The joined mock player is logged out when the test ends,
+                // either here or after the delayed dimension check.
+                boolean delayedCheck = false;
                 try {
                     boolean result = PortalTeleportHandler.teleportThroughPortal(player, portalBlockAbsolute);
 
@@ -224,8 +226,11 @@ public final class PortalTests {
                         } else {
                             // Player may not have moved yet due to async processing
                             // Schedule check for next tick
+                            delayedCheck = true;
                             helper.runAfterDelay(5, () -> {
-                                if (player.level().dimension().equals(ModDimensions.CHRONO_DAWN_DIMENSION)) {
+                                boolean arrived = player.level().dimension().equals(ModDimensions.CHRONO_DAWN_DIMENSION);
+                                CompatGameTestHelper.removeMockServerPlayer(helper, player);
+                                if (arrived) {
                                     helper.succeed();
                                 } else {
                                     // Mock player may not fully support teleportTo()
@@ -241,6 +246,10 @@ public final class PortalTests {
                     }
                 } catch (Exception e) {
                     CompatGameTestHelper.fail(helper, "teleportThroughPortal threw exception: " + e.getMessage());
+                } finally {
+                    if (!delayedCheck) {
+                        CompatGameTestHelper.removeMockServerPlayer(helper, player);
+                    }
                 }
             });
         });

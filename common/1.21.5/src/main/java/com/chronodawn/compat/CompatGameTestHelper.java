@@ -12,22 +12,25 @@ import net.minecraft.world.level.block.entity.BlockEntity;
  */
 public class CompatGameTestHelper {
     /**
-     * Create a mock ServerPlayer in the test environment.
-     * In 1.21.2, makeMockPlayer() requires a GameType argument.
-     *
-     * @return ServerPlayer or null if mock player cannot be cast to ServerPlayer
+     * Create a real ServerPlayer that has joined the test server.
+     * makeMockPlayer() returns a plain Player, so code that needs a ServerPlayer (advancements,
+     * teleports) must use this. Call {@link #removeMockServerPlayer} when the test is done,
+     * otherwise the player stays logged in for every later test.
      */
     public static ServerPlayer makeMockServerPlayer(GameTestHelper helper) {
-        var player = helper.makeMockPlayer(GameType.SURVIVAL);
-        if (player instanceof ServerPlayer serverPlayer) {
-            return serverPlayer;
-        }
-        return null;
+        return helper.makeMockServerPlayerInLevel();
     }
 
     /**
-     * Create a mock player without requiring it to be a ServerPlayer. Vanilla's mock player is a
-     * plain Player, so makeMockServerPlayer returns null for it.
+     * Log out a player created by {@link #makeMockServerPlayer}.
+     */
+    public static void removeMockServerPlayer(GameTestHelper helper, ServerPlayer player) {
+        helper.getLevel().getServer().getPlayerList().remove(player);
+    }
+
+    /**
+     * Create a lightweight mock player that never joins the server. Use it when a plain Player
+     * is enough, and {@link #makeMockServerPlayer} when the code needs a ServerPlayer.
      */
     public static net.minecraft.world.entity.player.Player makeMockPlayer(GameTestHelper helper) {
         return helper.makeMockPlayer(GameType.SURVIVAL);

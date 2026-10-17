@@ -75,41 +75,49 @@ public final class AdvancementTests {
                     MinecraftServer server = helper.getLevel().getServer();
                     ServerPlayer player = CompatGameTestHelper.makeMockServerPlayer(helper);
                     if (player == null) {
-                        // MockPlayer is not a ServerPlayer; skip test
-                        helper.succeed();
+                        CompatGameTestHelper.fail(helper, "Could not create a mock ServerPlayer");
                         return;
                     }
-                    var advId = CompatResourceLocation.create("chronodawn", spec.id());
-
-                    // Verify advancement exists first
-                    if (!CompatAdvancementHelper.advancementExists(server, advId)) {
-                        CompatGameTestHelper.fail(helper, "Advancement not found: chronodawn:" + spec.id());
-                        return;
-                    }
-
-                    // Verify player doesn't have it yet
-                    if (CompatAdvancementHelper.hasAdvancement(server, player, advId)) {
-                        CompatGameTestHelper.fail(helper, "Player already has advancement before grant: " + spec.id());
-                        return;
-                    }
-
-                    // Grant the advancement
-                    boolean granted = CompatAdvancementHelper.grantAdvancement(server, player, advId);
-                    if (!granted) {
-                        CompatGameTestHelper.fail(helper, "Failed to grant advancement: " + spec.id());
-                        return;
-                    }
-
-                    // Verify player now has it
-                    if (CompatAdvancementHelper.hasAdvancement(server, player, advId)) {
-                        helper.succeed();
-                    } else {
-                        CompatGameTestHelper.fail(helper, "Advancement was granted but hasAdvancement returned false: " + spec.id());
+                    try {
+                        verifyGrant(helper, server, player, spec);
+                    } finally {
+                        CompatGameTestHelper.removeMockServerPlayer(helper, player);
                     }
                 });
             }));
         }
         return tests;
+    }
+
+    private static void verifyGrant(GameTestHelper helper, MinecraftServer server, ServerPlayer player,
+            AdvancementSpec spec) {
+        var advId = CompatResourceLocation.create("chronodawn", spec.id());
+
+        // Verify advancement exists first
+        if (!CompatAdvancementHelper.advancementExists(server, advId)) {
+            CompatGameTestHelper.fail(helper, "Advancement not found: chronodawn:" + spec.id());
+            return;
+        }
+
+        // Verify player doesn't have it yet
+        if (CompatAdvancementHelper.hasAdvancement(server, player, advId)) {
+            CompatGameTestHelper.fail(helper, "Player already has advancement before grant: " + spec.id());
+            return;
+        }
+
+        // Grant the advancement
+        boolean granted = CompatAdvancementHelper.grantAdvancement(server, player, advId);
+        if (!granted) {
+            CompatGameTestHelper.fail(helper, "Failed to grant advancement: " + spec.id());
+            return;
+        }
+
+        // Verify player now has it
+        if (CompatAdvancementHelper.hasAdvancement(server, player, advId)) {
+            helper.succeed();
+        } else {
+            CompatGameTestHelper.fail(helper, "Advancement was granted but hasAdvancement returned false: " + spec.id());
+        }
     }
 
     /**
@@ -167,36 +175,44 @@ public final class AdvancementTests {
                     MinecraftServer server = helper.getLevel().getServer();
                     ServerPlayer player = CompatGameTestHelper.makeMockServerPlayer(helper);
                     if (player == null) {
-                        // MockPlayer is not a ServerPlayer; skip test
-                        helper.succeed();
+                        CompatGameTestHelper.fail(helper, "Could not create a mock ServerPlayer");
                         return;
                     }
-                    var advId = CompatResourceLocation.create("chronodawn", spec.id());
-                    var parentAdvId = CompatResourceLocation.create("chronodawn", spec.parentId());
-
-                    // Verify both advancements exist
-                    if (!CompatAdvancementHelper.advancementExists(server, advId)) {
-                        CompatGameTestHelper.fail(helper, "Advancement not found: chronodawn:" + spec.id());
-                        return;
-                    }
-                    if (!CompatAdvancementHelper.advancementExists(server, parentAdvId)) {
-                        CompatGameTestHelper.fail(helper, "Parent advancement not found: chronodawn:" + spec.parentId());
-                        return;
-                    }
-
-                    // Grant the child advancement
-                    CompatAdvancementHelper.grantAdvancement(server, player, advId);
-
-                    // Verify parent is NOT automatically granted
-                    if (CompatAdvancementHelper.hasAdvancement(server, player, parentAdvId)) {
-                        CompatGameTestHelper.fail(helper, "Granting child advancement " + spec.id() +
-                            " should not grant parent " + spec.parentId());
-                    } else {
-                        helper.succeed();
+                    try {
+                        verifyIsolation(helper, server, player, spec);
+                    } finally {
+                        CompatGameTestHelper.removeMockServerPlayer(helper, player);
                     }
                 });
             }));
         }
         return tests;
+    }
+
+    private static void verifyIsolation(GameTestHelper helper, MinecraftServer server, ServerPlayer player,
+            AdvancementSpec spec) {
+        var advId = CompatResourceLocation.create("chronodawn", spec.id());
+        var parentAdvId = CompatResourceLocation.create("chronodawn", spec.parentId());
+
+        // Verify both advancements exist
+        if (!CompatAdvancementHelper.advancementExists(server, advId)) {
+            CompatGameTestHelper.fail(helper, "Advancement not found: chronodawn:" + spec.id());
+            return;
+        }
+        if (!CompatAdvancementHelper.advancementExists(server, parentAdvId)) {
+            CompatGameTestHelper.fail(helper, "Parent advancement not found: chronodawn:" + spec.parentId());
+            return;
+        }
+
+        // Grant the child advancement
+        CompatAdvancementHelper.grantAdvancement(server, player, advId);
+
+        // Verify parent is NOT automatically granted
+        if (CompatAdvancementHelper.hasAdvancement(server, player, parentAdvId)) {
+            CompatGameTestHelper.fail(helper, "Granting child advancement " + spec.id() +
+                " should not grant parent " + spec.parentId());
+        } else {
+            helper.succeed();
+        }
     }
 }
