@@ -1,7 +1,7 @@
 # Roadmap: Wayside Features (Parts 1 to 6)
 
 **Created**: 2026-10-14
-**Status**: Part 1 shipped to main (2026-10-14). Parts 2 to 6 not started.
+**Status**: Parts 1 and 2 shipped to main (2026-10-14, 2026-10-17). Parts 3 to 6 not started.
 **Related**: [Part 1 design](./2026-10-12-wayside-sundial-design.md),
 [Part 1 plan](../plans/2026-10-12-wayside-sundial.md)
 
@@ -55,7 +55,7 @@ discover. Several biomes pass by, yet nothing invites a detour.
 | Part | Feature | Role | Status |
 |---|---|---|---|
 | 1 | Shared foundation + `old_sundial` | Travel buff by time of day | Shipped (main `db7246186`) |
-| 2 | `lost_adventurer_memorial` | Lore fragment and supplies, light-pillar effect | Implemented on branch, manual check pending |
+| 2 | `lost_adventurer_memorial` | Lore fragment and supplies, light-pillar effect | Shipped (2026-10-17), with the Lost Adventurer's Journal |
 | 3 | `time_well` | Wishing well, exchange a thrown item | Not started |
 | 4 | `watchmaker_camp` | Per-player chest that refills over time | Not started |
 | 5 | `time_cairn` | Collect time-of-day cairn stones, rare midnight echo | Not started |
