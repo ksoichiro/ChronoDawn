@@ -166,12 +166,52 @@ pages 4 and 5 at Clockwork Depths, the Forgotten Library and the Master
 Clock, so the journal also hints at what is out there. The final wording
 can change during review without affecting the design.
 
-### Collection
+### Collection and the journal
 
 Holding all six pages grants the advancement
 `chronodawn:exploration/lost_adventurer_journal` ("The Lost Adventurer's
-Journal"). There is no other collection reward. Reading the full story is
-the reward, which keeps rewards modest as the roadmap requires.
+Journal").
+
+The six pages and a book craft (shapeless) into the item
+`chronodawn:lost_adventurer_journal` ("Lost Adventurer's Journal"). The
+recipe is unlocked when the player picks up any page. The journal's tooltip
+holds the closing passage, which reveals what became of the adventurer:
+
+- en: "I reached the great clock and heard it strike." / "Time folded, and I
+  woke at the roadside," / "under a stone with my own name on it." / "Pray
+  for the next traveler, not for me."
+- ja: 「大時計にたどり着き、その鐘を聞いた。」 / 「時が折り重なり、気づけば道ばたにいた。」 /
+  「自分の名が刻まれた石の下で。」 / 「私ではなく、次の旅人のために祈ってくれ。」
+
+The passage explains why every memorial belongs to the same adventurer.
+
+The journal is never consumed. A player holding it in the main hand or the
+off hand when stepping onto the plate makes a blessed prayer: the page pool
+is replaced by one roll from a modest offering pool, and the supplies pool
+is unchanged. Without the journal in hand, the prayer is the normal one and
+drops a page, so players still missing pages keep collecting, and a player
+with the journal stops receiving duplicate pages simply by holding it.
+
+Blessed offering pool (one roll, equal weight):
+
+| Item | Count | Why |
+|---|---|---|
+| `clockstone` | 1 to 2 | Common Chrono Dawn ore, not rare |
+| `raw_temporal_amber` | 1 to 2 | Same |
+| `time_fruit_pie` | 1 | Food that needs crafting from several ingredients |
+| `temporal_root_stew` | 1 | Same |
+| `baked_temporal_root` | 2 to 3 | Food that needs a furnace |
+
+`time_bread` is left out because it is crafted from wheat alone, which is
+too close to food found everywhere on the surface. Amounts stay small
+because a player who waits near a group of memorials can pray at each one
+once per cooldown.
+
+The blessed offering is a separate loot table,
+`chronodawn:gameplay/lost_adventurer_memorial_blessed`, so modpack authors
+can change it independently. The block chooses the table from the praying
+player's hands. Loot tables cannot see the held item, so the choice is made
+in code.
 
 ### Farming prevention
 
@@ -225,6 +265,12 @@ version module, everything else in `common/shared`.
   `TimeCompassItem`.
 - Registered six times in each `ModItems`, with `ModItemId` entries, added
   to the creative tab after the other exploration items.
+- **`LostAdventurerJournalItem`** shows the four closing lines
+  (`item.chronodawn.lost_adventurer_journal.line<k>`) the same way, stacks
+  to 1, and is registered once in each `ModItems` after the pages.
+- `MemorialPlateBlock` picks `gameplay/lost_adventurer_memorial_blessed`
+  when either hand holds the journal, otherwise
+  `gameplay/lost_adventurer_memorial`.
 
 ### Registration
 
@@ -239,7 +285,16 @@ version module, everything else in `common/shared`.
   `temporal_stone_pressure_plate` models (up and down).
 - Block loot table dropping `temporal_stone_pressure_plate`, and the
   `minecraft:mineable/pickaxe` tag entry, matching the plain plate.
-- Reward loot table `gameplay/lost_adventurer_memorial.json`.
+- Reward loot tables `gameplay/lost_adventurer_memorial.json` and
+  `gameplay/lost_adventurer_memorial_blessed.json` (same supplies pool, the
+  page pool replaced by the blessed offering pool).
+- Shapeless recipe `lost_adventurer_journal` (six pages and a `minecraft:book`)
+  in every recipe root (`common/1.20.1/.../recipes`, `common/1.21.1/.../recipe`,
+  `common/shared-1.21.2+/.../recipe`), each in that era's recipe format, plus
+  a recipe-unlock advancement under `recipes/misc` triggered by picking up
+  any page.
+- Journal item model and texture (an aged copy of vanilla `writable_book`),
+  and client item JSON for 1.21.4 and later.
 - Advancement `exploration/lost_adventurer_journal.json` with six
   `inventory_changed` criteria, all required.
 - Loot tables exist in three places: `common/1.20.1` (`loot_tables`),
@@ -249,7 +304,7 @@ version module, everything else in `common/shared`.
 - One item texture shared by all six pages, six item models pointing at
   it, and client item JSON for 1.21.4 and later.
 - Translation keys in `en_us` and `ja_jp` for the six page names, their
-  tooltip lines, the block name, the two action-bar messages and the
+  tooltip lines, the journal name and its four lines, the block name, the two action-bar messages and the
   advancement, in all three lang sets (1.20.1, 1.21.1, `shared-1.21.2+`).
 - Both memorial NBTs in `common/shared-1.21.1+`: replace the
   `temporal_stone_pressure_plate` palette entry with
@@ -298,6 +353,11 @@ One key in `[gameplay.wayside]`, following the sundial keys in
     stepping back on within the cooldown drops nothing more
   - the advancement loads, through an `AdvancementSpec` entry in each
     version's `RegistryDrivenTestData`
+  - the blessed table yields no page, exactly one offering from its pool and
+    one or two supply stacks
+  - a player holding the journal in either hand rolls the blessed table, a
+    player without it rolls the normal table
+  - the journal recipe loads and produces one journal
 - **Validation**: `validateResources validateTranslations validateData
   validateEraTagParity`, then `buildAll`, `testAll` and `gameTestAll` run
   separately.
@@ -309,6 +369,10 @@ One key in `[gameplay.wayside]`, following the sundial keys in
   a normal client.
 
 ## Known trade-offs
+
+- The blessed offering repeats for every memorial a player reaches, so its
+  pool holds only common ores and processed food. Rarer rewards are left to
+  parts 3 to 6 and the endgame work.
 
 - The plate has no collision box, like any pressure plate, so brushing its
   edge triggers it. Accepted.
