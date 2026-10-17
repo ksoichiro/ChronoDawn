@@ -357,7 +357,8 @@ One key in `[gameplay.wayside]`, following the sundial keys in
     one or two supply stacks
   - a player holding the journal in either hand rolls the blessed table, a
     player without it rolls the normal table
-  - the journal recipe loads and produces one journal
+  - the journal recipe loads on every version (the crafted result is checked
+    by hand)
 - **Validation**: `validateResources validateTranslations validateData
   validateEraTagParity`, then `buildAll`, `testAll` and `gameTestAll` run
   separately.
