@@ -103,6 +103,9 @@ Every ChronoDawn ore feature is written directly into a `chronodawn_*` biome
 JSON.
 
 - NeoForge: a `data/neoforge/biome_modifier/*.json`. No Java.
+- Forge 1.20.1: a `data/<modid>/forge/biome_modifier/*.json` using
+  `forge:add_features`, placed in `common/1.20.1`. No Java. This was missed
+  at first and the ore did not generate on Forge until it was added.
 - Fabric: `BiomeModifications.addFeature(...)` in `fabric/base/`, which is
   shared across all versions, so one file rather than thirteen. If the API
   signature turns out to differ on 26.x, the guard goes in that one file.

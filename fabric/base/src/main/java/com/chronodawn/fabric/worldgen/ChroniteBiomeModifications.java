@@ -12,9 +12,10 @@ import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 /**
  * Injects Chronite Ore into every Overworld biome.
  *
- * NeoForge does this from data via data/neoforge/biome_modifier/add_chronite_ore.json.
+ * NeoForge does this from data via data/neoforge/biome_modifier/add_chronite_ore.json,
+ * and Forge 1.20.1 via data/chronodawn/forge/biome_modifier/add_chronite_ore.json.
  * Fabric has no data-driven equivalent, so the same injection is expressed here.
- * Keep the two in sync: same placed feature, same generation step, same biome set.
+ * Keep them in sync: same placed feature, same generation step, same biome set.
  */
 public final class ChroniteBiomeModifications {
     private ChroniteBiomeModifications() {
