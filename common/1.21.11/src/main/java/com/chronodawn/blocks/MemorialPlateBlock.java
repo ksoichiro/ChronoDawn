@@ -21,6 +21,7 @@ import com.chronodawn.ChronoDawn;
 import com.chronodawn.compat.CompatResourceLocation;
 import com.chronodawn.config.ChronoDawnConfig;
 import com.chronodawn.core.wayside.PlayerCooldownTracker;
+import com.chronodawn.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -34,6 +35,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.EntityBlock;
@@ -57,6 +59,7 @@ import java.util.List;
  */
 public class MemorialPlateBlock extends TemporalStonePressurePlate implements EntityBlock {
     private static final String OFFERING_LOOT_TABLE = "gameplay/lost_adventurer_memorial";
+    private static final String BLESSED_OFFERING_LOOT_TABLE = "gameplay/lost_adventurer_memorial_blessed";
     private static final double PILLAR_HEIGHT = 8.0;
     private static final int PILLAR_PARTICLES = 40;
     private static final double PILLAR_SPREAD = 0.4;
@@ -135,6 +138,18 @@ public class MemorialPlateBlock extends TemporalStonePressurePlate implements En
         return rollOffering(level, pos, lootTablePath, null);
     }
 
+    /**
+     * Holding the journal in either hand blesses the prayer: a small offering replaces the page,
+     * so a player who finished the journal stops collecting duplicates. Loot tables cannot see
+     * the held item, so the choice is made here.
+     */
+    public static String offeringTableFor(Player player) {
+        Item journal = ModItems.LOST_ADVENTURER_JOURNAL.get();
+        return player.getMainHandItem().is(journal) || player.getOffhandItem().is(journal)
+            ? BLESSED_OFFERING_LOOT_TABLE
+            : OFFERING_LOOT_TABLE;
+    }
+
     // The player is optional so GameTests can roll without one. When present, datapacks can
     // condition on the praying player and luck applies, as with vanilla chest loot.
     private static List<ItemStack> rollOffering(ServerLevel level, BlockPos pos, String lootTablePath, Player player) {
@@ -149,7 +164,7 @@ public class MemorialPlateBlock extends TemporalStonePressurePlate implements En
     }
 
     private static void dropOffering(ServerLevel level, BlockPos pos, Player player) {
-        for (ItemStack stack : rollOffering(level, pos, OFFERING_LOOT_TABLE, player)) {
+        for (ItemStack stack : rollOffering(level, pos, offeringTableFor(player), player)) {
             if (stack.isEmpty()) {
                 continue;
             }

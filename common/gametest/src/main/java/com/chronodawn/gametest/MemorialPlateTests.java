@@ -8,9 +8,11 @@ import com.chronodawn.compat.CompatResourceLocation;
 import com.chronodawn.core.wayside.StepOnTracker;
 import com.chronodawn.items.JournalPageItem;
 import com.chronodawn.registry.ModBlocks;
+import com.chronodawn.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -31,6 +33,8 @@ public final class MemorialPlateTests {
     private static final long COOLDOWN = 24000;
     // Rolls per check. The supplies pool is random, so one roll could miss a bad entry.
     private static final int ROLLS = 30;
+    private static final String NORMAL_TABLE = "gameplay/lost_adventurer_memorial";
+    private static final String BLESSED_TABLE = "gameplay/lost_adventurer_memorial_blessed";
 
     private MemorialPlateTests() {
         // Utility class
@@ -50,6 +54,10 @@ public final class MemorialPlateTests {
             MemorialPlateTests::testDrops));
         tests.add(factory.create("recipe_loaded_lost_adventurer_journal",
             MemorialPlateTests::testJournalRecipeLoaded));
+        tests.add(factory.create("memorial_blessed_offering_has_no_page",
+            MemorialPlateTests::testBlessedOffering));
+        tests.add(factory.create("memorial_journal_in_either_hand_blesses",
+            MemorialPlateTests::testJournalInEitherHand));
         return tests;
     }
 
@@ -192,5 +200,67 @@ public final class MemorialPlateTests {
                 CompatGameTestHelper.fail(helper, "Recipe not loaded: chronodawn:lost_adventurer_journal");
             }
         });
+    }
+
+    /**
+     * Test: the blessed offering never contains a page, and holds exactly one item from the
+     * blessed pool plus one or two supply stacks.
+     */
+    private static void testBlessedOffering(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        BlockPos pos = helper.absolutePos(PLATE_POS);
+        for (int roll = 0; roll < ROLLS; roll++) {
+            List<ItemStack> offering = MemorialPlateBlock.rollOffering(level, pos, BLESSED_TABLE);
+            int blessed = 0;
+            int supplies = 0;
+            for (ItemStack stack : offering) {
+                if (stack.getItem() instanceof JournalPageItem) {
+                    CompatGameTestHelper.fail(helper, "Blessed offering contained a page: " + offering);
+                    return;
+                } else if (stack.is(ModItems.CLOCKSTONE.get()) || stack.is(ModItems.RAW_TEMPORAL_AMBER.get())
+                        || stack.is(ModItems.TIME_FRUIT_PIE.get()) || stack.is(ModItems.TEMPORAL_ROOT_STEW.get())
+                        || stack.is(ModItems.BAKED_TEMPORAL_ROOT.get())) {
+                    blessed++;
+                } else if (stack.is(Items.BREAD) || stack.is(Items.ARROW) || stack.is(Items.TORCH)) {
+                    supplies++;
+                } else {
+                    CompatGameTestHelper.fail(helper, "Unexpected blessed offering item: " + stack);
+                    return;
+                }
+            }
+            if (blessed != 1 || supplies < 1 || supplies > 2) {
+                CompatGameTestHelper.fail(helper, "Expected 1 blessed item and 1-2 supplies, got " + offering);
+                return;
+            }
+        }
+        helper.succeed();
+    }
+
+    /**
+     * Test: the journal in the main hand or the off hand picks the blessed table. An empty hand
+     * or a page in hand keeps the normal table, so players still missing pages keep collecting.
+     */
+    private static void testJournalInEitherHand(GameTestHelper helper) {
+        Player player = CompatGameTestHelper.makeMockPlayer(helper);
+        if (player == null) {
+            CompatGameTestHelper.fail(helper, "Could not create a mock player");
+            return;
+        }
+        ItemStack journal = new ItemStack(ModItems.LOST_ADVENTURER_JOURNAL.get());
+        String empty = MemorialPlateBlock.offeringTableFor(player);
+        player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(ModItems.FADED_JOURNAL_PAGE_1.get()));
+        String page = MemorialPlateBlock.offeringTableFor(player);
+        player.setItemInHand(InteractionHand.MAIN_HAND, journal.copy());
+        String mainHand = MemorialPlateBlock.offeringTableFor(player);
+        player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.IRON_SWORD));
+        player.setItemInHand(InteractionHand.OFF_HAND, journal.copy());
+        String offHand = MemorialPlateBlock.offeringTableFor(player);
+        if (!NORMAL_TABLE.equals(empty) || !NORMAL_TABLE.equals(page)
+                || !BLESSED_TABLE.equals(mainHand) || !BLESSED_TABLE.equals(offHand)) {
+            CompatGameTestHelper.fail(helper, "Table choice wrong: empty=" + empty + " page=" + page
+                + " main=" + mainHand + " off=" + offHand);
+            return;
+        }
+        helper.succeed();
     }
 }

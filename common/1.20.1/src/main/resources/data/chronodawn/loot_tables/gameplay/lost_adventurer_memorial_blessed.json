@@ -1,0 +1,59 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "chronodawn:clockstone",
+          "functions": [
+            { "function": "minecraft:set_count", "count": { "type": "minecraft:uniform", "min": 1, "max": 2 } }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "chronodawn:raw_temporal_amber",
+          "functions": [
+            { "function": "minecraft:set_count", "count": { "type": "minecraft:uniform", "min": 1, "max": 2 } }
+          ]
+        },
+        { "type": "minecraft:item", "name": "chronodawn:time_fruit_pie" },
+        { "type": "minecraft:item", "name": "chronodawn:temporal_root_stew" },
+        {
+          "type": "minecraft:item",
+          "name": "chronodawn:baked_temporal_root",
+          "functions": [
+            { "function": "minecraft:set_count", "count": { "type": "minecraft:uniform", "min": 2, "max": 3 } }
+          ]
+        }
+      ]
+    },
+    {
+      "rolls": { "type": "minecraft:uniform", "min": 1, "max": 2 },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:bread",
+          "functions": [
+            { "function": "minecraft:set_count", "count": { "type": "minecraft:uniform", "min": 2, "max": 4 } }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:arrow",
+          "functions": [
+            { "function": "minecraft:set_count", "count": { "type": "minecraft:uniform", "min": 4, "max": 8 } }
+          ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:torch",
+          "functions": [
+            { "function": "minecraft:set_count", "count": { "type": "minecraft:uniform", "min": 4, "max": 8 } }
+          ]
+        }
+      ]
+    }
+  ]
+}
