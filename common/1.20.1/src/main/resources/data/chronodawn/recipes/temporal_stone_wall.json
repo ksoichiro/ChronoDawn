@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "BBB",
+    "BBB"
+  ],
+  "key": {
+    "B": {
+      "item": "chronodawn:temporal_stone"
+    }
+  },
+  "result": {
+    "item": "chronodawn:temporal_stone_wall",
+    "count": 6
+  }
+}

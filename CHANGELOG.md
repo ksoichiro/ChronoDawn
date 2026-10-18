@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Crafting recipes for stone stairs, slabs and walls**: Temporal
+  Cobblestone, Temporal Stone, Temporal Stone Bricks, Cobbled Deepslate
+  Temporal Stone and Polished Deepslate Temporal Stone stairs, slabs and walls
+  can now be crafted at a crafting table like their vanilla counterparts,
+  not only cut with a stonecutter.
+
 ## [0.13.0] - 2026-10-18
 
 ### Added

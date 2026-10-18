@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "BBB"
+  ],
+  "key": {
+    "B": "chronodawn:temporal_cobblestone"
+  },
+  "result": {
+    "id": "chronodawn:temporal_cobblestone_slab",
+    "count": 6
+  }
+}
