@@ -90,7 +90,9 @@ public final class StructureTests {
             )),
             new StructureSpec("time_well", 3, 5, 3, List.of(
                 new BlockRequirement(ModBlockId.TEMPORAL_COBBLESTONE.id(), ModBlocks.TEMPORAL_COBBLESTONE, 8),
-                new BlockRequirement(ModBlockId.TEMPORAL_AMBER_ORE.id(), ModBlocks.TEMPORAL_AMBER_ORE, 1)
+                new BlockRequirement(ModBlockId.TEMPORAL_AMBER_ORE.id(), ModBlocks.TEMPORAL_AMBER_ORE, 1),
+                new BlockRequirement(ModBlockId.TIME_WELL_STONE.id(), ModBlocks.TIME_WELL_STONE, 1),
+                new BlockRequirement("water", () -> Blocks.WATER, 1)
             )),
             new StructureSpec("lost_adventurer_memorial", 3, 3, 3, List.of(
                 new BlockRequirement(ModBlockId.MOSSY_TEMPORAL_COBBLESTONE_SLAB.id(),
