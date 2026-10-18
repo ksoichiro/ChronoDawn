@@ -56,7 +56,7 @@ discover. Several biomes pass by, yet nothing invites a detour.
 |---|---|---|---|
 | 1 | Shared foundation + `old_sundial` | Travel buff by time of day | Shipped (main `db7246186`) |
 | 2 | `lost_adventurer_memorial` | Lore fragment and supplies, light-pillar effect | Shipped (2026-10-17), with the Lost Adventurer's Journal |
-| 3 | `time_well` | Wishing well, exchange a thrown item | Not started |
+| 3 | `time_well` | Wishing well, exchange a thrown item | Implemented on branch, manual check pending |
 | 4 | `watchmaker_camp` | Per-player chest that refills over time | Not started |
 | 5 | `time_cairn` | Collect time-of-day cairn stones, rare midnight echo | Not started |
 | 6 | `hourglass_monolith` | Small wave fight with a reward | Not started |
@@ -97,6 +97,11 @@ need new UI, entities or event state machines.
   round trip), `makeMockPlayer` (plain `Player`, never joins),
   `makeMockServerPlayer` / `removeMockServerPlayer` (a real joined
   `ServerPlayer`, always removed in a `finally` block).
+- Thrown-item activator pattern (part 3): `WellQueue` and `TimeWellOutcome`
+  decide and queue wishes. The `TimeWellStoneBlock` ticker scans for items in
+  the water and re-queues while the waiting tag `chronodawn.time_well_waiting`
+  is set. Items are released when the stone or water is removed, through
+  `onRemove` up to 1.21.4 and `BlockEntity#preRemoveSideEffects` from 1.21.5.
 
 ## Per-feature design notes
 
@@ -225,6 +230,9 @@ The notes below are the starting point it was designed from.
 - **Mock players.** Vanilla `makeMockPlayer` is a plain `Player`. Anything
   that needs a `ServerPlayer` (advancements, teleports) must use
   `makeMockServerPlayer` and remove the player afterwards.
+- **The 1.20.1 GameTest world is reused across runs.** Tests that search an
+  area for items must ignore entities older than the test. `TimeWellTests`
+  filters by spawn time.
 - **Runtime checks that were accepted as sufficient:** 1.21.1 NeoForge and
   Fabric, 1.20.1 Forge, 26.3 NeoForge, 26.2 Fabric. Other versions differ only
   in renamed constants and are covered by compile and tests.
