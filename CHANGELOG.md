@@ -20,6 +20,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Chronicle stacking**: the Chronicle of Chrono Dawn now stacks up to 64.
   A new copy is still given each time you enter Chrono Dawn without one, and
   the spare copies left at your base can now be stored in a single slot.
+- **Snowy biome coverage**: narrowed the cold climate ranges used by Chrono
+  Dawn Snowy and extended plains and forests into colder regions, reducing
+  snowy coverage in newly generated chunks. Existing chunks keep their biomes.
 
 ## [0.13.0] - 2026-10-18
 

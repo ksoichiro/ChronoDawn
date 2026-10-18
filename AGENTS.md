@@ -231,6 +231,11 @@ validation command that covers the affected version and loader.
   setup does not reset poses automatically, so `+=` animations otherwise
   accumulate across rendered frames.
 
+When tuning biome coverage, adjust neighboring climate ranges as well as the
+target biome in the shared dimension JSON. Climate intervals do not directly
+measure world area or cap biome size. Verify the result in newly generated chunks
+across multiple seeds.
+
 ## Mixin Configuration
 
 Fabric, Forge, and NeoForge use separate loader-specific Mixin configs.

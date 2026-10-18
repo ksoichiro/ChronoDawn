@@ -441,6 +441,14 @@ public class EntityEventHandler {
 
 ### 4. Worldgen System
 
+Biome placement is shared across versions in
+`common/shared/src/main/resources/data/chronodawn/dimension/chronodawn.json`.
+Snowy regions use temperature ranges `[-1.0, -0.55]` for dry climates and
+`[-1.0, -0.4]` for wet climates. Plains, prairies, and forests extend down to
+`-0.4` to reduce the area occupied by snow. These climate ranges are not area
+percentages or biome size limits. Check several seeds in newly generated terrain
+when evaluating their visual balance.
+
 **Biomes**: `common/1.21.11/src/main/resources/data/chronodawn/worldgen/biome/`
 - 11 custom biomes with unique features
 
