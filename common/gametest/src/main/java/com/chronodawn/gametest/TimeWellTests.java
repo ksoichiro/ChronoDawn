@@ -116,12 +116,11 @@ public final class TimeWellTests {
     }
 
     /**
-     * Collects the items that rose out of the well, other than the thrown one, and removes them
-     * so the next step of the test starts from an empty well.
+     * Collects the items that rose out of the well since the throw, other than the thrown one,
+     * and removes them so the next step of the test starts from an empty well.
      */
-    private static List<ItemStack> takeRisen(GameTestHelper helper, ItemEntity original) {
-        List<ItemEntity> found = helper.getLevel().getEntitiesOfClass(ItemEntity.class,
-            new AABB(helper.absolutePos(WATER_POS)).inflate(3), e -> e != original && e.isAlive());
+    private static List<ItemStack> takeRisen(GameTestHelper helper, ItemEntity original, long thrownAt) {
+        List<ItemEntity> found = findRisen(helper, original, 3, thrownAt);
         List<ItemStack> stacks = new ArrayList<>();
         for (ItemEntity entity : found) {
             stacks.add(entity.getItem().copy());
@@ -130,9 +129,17 @@ public final class TimeWellTests {
         return stacks;
     }
 
-    private static List<ItemEntity> findRisen(GameTestHelper helper, ItemEntity original, int range) {
-        return helper.getLevel().getEntitiesOfClass(ItemEntity.class,
-            new AABB(helper.absolutePos(WATER_POS)).inflate(range), e -> e != original && e.isAlive());
+    /**
+     * Finds the items that rose out of the well since the throw, other than the thrown one.
+     * Older items are skipped: the GameTest world is reused across runs, so items left by an
+     * earlier run, or popped out by a neighbouring test, can already lie in the search area.
+     */
+    private static List<ItemEntity> findRisen(GameTestHelper helper, ItemEntity original, int range,
+                                              long thrownAt) {
+        ServerLevel level = helper.getLevel();
+        return level.getEntitiesOfClass(ItemEntity.class,
+            new AABB(helper.absolutePos(WATER_POS)).inflate(range),
+            e -> e != original && e.isAlive() && level.getGameTime() - e.getAge() >= thrownAt);
     }
 
     private static boolean isSingleStack(List<ItemStack> stacks, Item item, int count) {
@@ -145,6 +152,7 @@ public final class TimeWellTests {
      */
     private static boolean expectReturned(GameTestHelper helper, ItemStack stack, Player thrower,
                                           TimeWellOutcome expected) {
+        long thrownAt = helper.getLevel().getGameTime();
         ItemEntity item = spawnInWater(helper, stack.copy());
         TimeWellOutcome outcome = TimeWellStoneBlock.answer(
             helper.getLevel(), helper.absolutePos(STONE_POS), item, thrower);
@@ -152,7 +160,7 @@ public final class TimeWellTests {
             CompatGameTestHelper.fail(helper, "Expected " + expected + " for " + stack + ", got " + outcome);
             return false;
         }
-        List<ItemStack> risen = takeRisen(helper, item);
+        List<ItemStack> risen = takeRisen(helper, item, thrownAt);
         if (!isSingleStack(risen, stack.getItem(), stack.getCount())) {
             CompatGameTestHelper.fail(helper, "Expected " + stack + " to rise back unchanged, got " + risen);
             return false;
@@ -165,10 +173,11 @@ public final class TimeWellTests {
      * Returns false after failing the test.
      */
     private static boolean expectExchanged(GameTestHelper helper, Player thrower, String context) {
+        long thrownAt = helper.getLevel().getGameTime();
         ItemEntity item = spawnInWater(helper, new ItemStack(ModItems.CLOCKSTONE.get()));
         TimeWellOutcome outcome = TimeWellStoneBlock.answer(
             helper.getLevel(), helper.absolutePos(STONE_POS), item, thrower);
-        takeRisen(helper, item);
+        takeRisen(helper, item, thrownAt);
         if (outcome != TimeWellOutcome.EXCHANGED) {
             CompatGameTestHelper.fail(helper, context + ": expected EXCHANGED, got " + outcome);
             return false;
@@ -229,6 +238,7 @@ public final class TimeWellTests {
             return;
         }
         Player player = CompatGameTestHelper.makeMockPlayer(helper);
+        long thrownAt = helper.getLevel().getGameTime();
         ItemEntity item = spawnInWater(helper, new ItemStack(ModItems.CLOCKSTONE.get(), 64));
         TimeWellOutcome outcome = TimeWellStoneBlock.answer(
             helper.getLevel(), helper.absolutePos(STONE_POS), item, player);
@@ -240,7 +250,7 @@ public final class TimeWellTests {
             CompatGameTestHelper.fail(helper, "The thrown item entity was not removed");
             return;
         }
-        List<ItemStack> risen = takeRisen(helper, item);
+        List<ItemStack> risen = takeRisen(helper, item, thrownAt);
         Item clockstone = ModItems.CLOCKSTONE.get();
         int rest = 0;
         int results = 0;
@@ -409,6 +419,7 @@ public final class TimeWellTests {
         }
         ServerLevel level = helper.getLevel();
         BlockPos stone = helper.absolutePos(STONE_POS);
+        long thrownAt = level.getGameTime();
         ItemEntity item = spawnInWater(helper, new ItemStack(ModItems.CLOCKSTONE.get()));
         item.addTag(TimeWellStoneBlock.WAITING_TAG);
         TimeWellStoneBlock.tick(level, stone, well);
@@ -421,7 +432,7 @@ public final class TimeWellTests {
             CompatGameTestHelper.fail(helper, "Expected THROWER_GONE for the orphan, got " + outcome);
             return;
         }
-        List<ItemEntity> risen = findRisen(helper, item, 3);
+        List<ItemEntity> risen = findRisen(helper, item, 3, thrownAt);
         if (!item.isRemoved() || risen.size() != 1 || !risen.get(0).getItem().is(ModItems.CLOCKSTONE.get())
                 || risen.get(0).getItem().getCount() != 1) {
             CompatGameTestHelper.fail(helper, "Expected the orphan to rise back as 1 clockstone, original removed="
@@ -451,16 +462,16 @@ public final class TimeWellTests {
         if (well == null) {
             return;
         }
+        long thrownAt = helper.getLevel().getGameTime();
         ItemEntity waiting = spawnInWater(helper, new ItemStack(ModItems.CLOCKSTONE.get()));
-        TimeWellStoneBlock.markWaiting(well, waiting, CompatGameTestHelper.makeMockPlayer(helper),
-            helper.getLevel().getGameTime());
+        TimeWellStoneBlock.markWaiting(well, waiting, CompatGameTestHelper.makeMockPlayer(helper), thrownAt);
         helper.setBlock(WATER_POS, Blocks.AIR);
         helper.runAfterDelay(ANSWER_WAIT_TICKS, () -> {
             if (!waiting.isRemoved()) {
                 CompatGameTestHelper.fail(helper, "The waiting item was not answered after the water was removed");
                 return;
             }
-            List<ItemEntity> risen = findRisen(helper, waiting, 4);
+            List<ItemEntity> risen = findRisen(helper, waiting, 4, thrownAt);
             if (risen.size() != 1 || !risen.get(0).getItem().is(ModItems.CLOCKSTONE.get())
                     || TimeWellStoneBlock.isWaiting(risen.get(0))) {
                 CompatGameTestHelper.fail(helper, "Expected 1 plain clockstone to rise back, found " + risen.size());
