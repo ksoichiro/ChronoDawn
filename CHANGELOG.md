@@ -41,6 +41,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Clockwork Cookie texture**: the cookie now looks like a gear-shaped
   cookie with a Time Jam center, cut with a Clockwork Block mold, instead of
   a flat orange icon.
+- **Armor textures**: Clockstone and Enhanced Clockstone have a redrawn
+  helmet icon, chestplate icon and worn armor texture, and Temporal Amber got
+  the same treatment with a brighter worn leggings texture that matches the
+  rest of the set. Time Tyrant Mail and Echoing Time Boots have redrawn icons,
+  and the Time Tyrant worn armor texture was redrawn as well.
 
 ### Fixed
 
