@@ -41,18 +41,21 @@ def new_uuid():
 def part(name, pivot, frm, to, uv, mirror=False):
     return dict(name=name, pivot=pivot, frm=frm, to=to, uv=uv, mirror=mirror)
 
+# Blockbench's x axis is the reverse of the Java model space the vanilla
+# armor UV layout comes from, so the right (unmirrored) parts sit at +x here.
+# Placing them at -x showed the left and right feet swapped against the game.
 LAYER1 = [
     ("head", [0, 24, 0], [part("helmet", [0, 24, 0], [-4, 24, -4], [4, 32, 4], [0, 0])]),
     ("body", [0, 24, 0], [part("chestplate", [0, 24, 0], [-4, 12, -2], [4, 24, 2], [16, 16])]),
-    ("right_arm", [-5, 22, 0], [part("right_sleeve", [-5, 22, 0], [-8, 12, -2], [-4, 24, 2], [40, 16])]),
-    ("left_arm", [5, 22, 0], [part("left_sleeve", [5, 22, 0], [4, 12, -2], [8, 24, 2], [40, 16], True)]),
-    ("right_leg", [-1.9, 12, 0], [part("right_boot", [-1.9, 12, 0], [-4, 0, -2], [0, 12, 2], [0, 16])]),
-    ("left_leg", [1.9, 12, 0], [part("left_boot", [1.9, 12, 0], [0, 0, -2], [4, 12, 2], [0, 16], True)]),
+    ("right_arm", [5, 22, 0], [part("right_sleeve", [5, 22, 0], [4, 12, -2], [8, 24, 2], [40, 16])]),
+    ("left_arm", [-5, 22, 0], [part("left_sleeve", [-5, 22, 0], [-8, 12, -2], [-4, 24, 2], [40, 16], True)]),
+    ("right_leg", [1.9, 12, 0], [part("right_boot", [1.9, 12, 0], [0, 0, -2], [4, 12, 2], [0, 16])]),
+    ("left_leg", [-1.9, 12, 0], [part("left_boot", [-1.9, 12, 0], [-4, 0, -2], [0, 12, 2], [0, 16], True)]),
 ]
 LAYER2 = [
     ("body", [0, 24, 0], [part("belt", [0, 24, 0], [-4, 12, -2], [4, 24, 2], [16, 16])]),
-    ("right_leg", [-1.9, 12, 0], [part("right_legging", [-1.9, 12, 0], [-4, 0, -2], [0, 12, 2], [0, 16])]),
-    ("left_leg", [1.9, 12, 0], [part("left_legging", [1.9, 12, 0], [0, 0, -2], [4, 12, 2], [0, 16], True)]),
+    ("right_leg", [1.9, 12, 0], [part("right_legging", [1.9, 12, 0], [0, 0, -2], [4, 12, 2], [0, 16])]),
+    ("left_leg", [-1.9, 12, 0], [part("left_legging", [-1.9, 12, 0], [-4, 0, -2], [0, 12, 2], [0, 16], True)]),
 ]
 
 

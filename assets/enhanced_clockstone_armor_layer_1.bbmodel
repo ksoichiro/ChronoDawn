@@ -206,12 +206,12 @@
       "locked": false,
       "allow_mirror_modeling": true,
       "from": [
-        -8,
+        4,
         12,
         -2
       ],
       "to": [
-        -4,
+        8,
         24,
         2
       ],
@@ -294,12 +294,12 @@
       "locked": false,
       "allow_mirror_modeling": true,
       "from": [
-        4,
+        -8,
         12,
         -2
       ],
       "to": [
-        8,
+        -4,
         24,
         2
       ],
@@ -382,12 +382,12 @@
       "locked": false,
       "allow_mirror_modeling": true,
       "from": [
-        -4,
+        0,
         0,
         -2
       ],
       "to": [
-        0,
+        4,
         12,
         2
       ],
@@ -470,12 +470,12 @@
       "locked": false,
       "allow_mirror_modeling": true,
       "from": [
-        0,
+        -4,
         0,
         -2
       ],
       "to": [
-        4,
+        0,
         12,
         2
       ],
@@ -608,7 +608,7 @@
       "export": true,
       "locked": false,
       "origin": [
-        -5,
+        5,
         22,
         0
       ],
@@ -633,7 +633,7 @@
       "export": true,
       "locked": false,
       "origin": [
-        5,
+        -5,
         22,
         0
       ],
@@ -658,7 +658,7 @@
       "export": true,
       "locked": false,
       "origin": [
-        -1.9,
+        1.9,
         12,
         0
       ],
@@ -683,7 +683,7 @@
       "export": true,
       "locked": false,
       "origin": [
-        1.9,
+        -1.9,
         12,
         0
       ],
