@@ -55,7 +55,7 @@ sourceSets {
         // Use filter to exclude files from common/shared that have 1.21.5-specific versions
         // (1.21.5 has its own versions with different APIs)
         java.filter.exclude { element ->
-            def path = element.file.absolutePath
+            def path = element.file.absolutePath.replace('\\', '/')
             if (path.contains('common/gametest/')) {
                 // FadedPlains tests are registered as @GameTest methods (Fabric) or Consumer
                 // constants (NeoForge) from 1.21.5 on, so this version keeps its own copy.
@@ -155,7 +155,7 @@ sourceSets {
             // ignored, which made every conditional drop unconditional) in favor of a single
             // "condition" and "modifier", and renames the "condition"/"function" type keys to "type".
             filter.exclude { element ->
-                def path = element.file.absolutePath
+                def path = element.file.absolutePath.replace('\\', '/')
                 def isWorldgenPack = path.contains('common/shared/') || path.contains('common/shared-1.21.1+/') || path.contains('common/shared-1.21.5+/')
                 isWorldgenPack && (
                     path.contains('data/chronodawn/worldgen/processor_list/')
@@ -170,7 +170,7 @@ sourceSets {
             // 26.3 renamed the model element key "shade": false to "shade_direction_override": "up".
             // The old key is silently ignored, so these three models keep their own copies.
             filter.exclude { element ->
-                def path = element.file.absolutePath
+                def path = element.file.absolutePath.replace('\\', '/')
                 path.contains('common/shared/') && path.contains('assets/chronodawn/models/block/') && (
                     element.file.name == 'time_crystal_block.json'
                     || element.file.name == 'tinted_cross.json'
@@ -185,7 +185,7 @@ sourceSets {
             // 26.3: NbtTemplateConfiguration was folded into the NbtTemplateFeature record, so
             // this version keeps its own equivalent test (src/test/java/.../NbtTemplateFeatureCodecTest).
             filter.exclude { element ->
-                element.file.absolutePath.contains('common/shared/')
+                element.file.absolutePath.replace('\\', '/').contains('common/shared/')
                     && element.file.name == 'NbtTemplateConfigurationCodecTest.java'
             }
         }
