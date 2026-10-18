@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "chronodawn:chrono_melon_juice",
+          "weight": 9
+        },
+        {
+          "type": "minecraft:item",
+          "name": "chronodawn:glistening_chrono_melon",
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

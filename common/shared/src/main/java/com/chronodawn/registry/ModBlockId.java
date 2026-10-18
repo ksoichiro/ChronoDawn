@@ -254,6 +254,7 @@ public enum ModBlockId {
     CLOCK_TOWER_TELEPORTER(def("clock_tower_teleporter")),
     SUNDIAL_GNOMON(def("sundial_gnomon").cutout()),
     MEMORIAL_PLATE(def("memorial_plate")),
+    TIME_WELL_STONE(def("time_well_stone")),
     ENTROPY_CRYPT_TRAPDOOR(def("entropy_crypt_trapdoor").cutout()),
     ;
 

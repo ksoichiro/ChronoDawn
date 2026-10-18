@@ -65,6 +65,7 @@ import com.chronodawn.blocks.TemporalSandstoneSlab;
 import com.chronodawn.blocks.TemporalSandstoneWall;
 import com.chronodawn.blocks.TemporalParticleEmitterBlock;
 import com.chronodawn.blocks.MemorialPlateBlock;
+import com.chronodawn.blocks.TimeWellStoneBlock;
 import com.chronodawn.blocks.SundialGnomonBlock;
 import com.chronodawn.blocks.TimeCrystalBlock;
 import com.chronodawn.blocks.EntropyCrystalOre;
@@ -472,6 +473,15 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> MEMORIAL_PLATE = BLOCKS.register(
         ModBlockId.MEMORIAL_PLATE.id(),
         () -> new MemorialPlateBlock(MemorialPlateBlock.createProperties())
+    );
+
+    /**
+     * Time Well Stone - activator of the Time Well wayside feature.
+     * No item: it only appears through worldgen, and breaking it drops the plain mossy temporal cobblestone.
+     */
+    public static final RegistrySupplier<Block> TIME_WELL_STONE = BLOCKS.register(
+        ModBlockId.TIME_WELL_STONE.id(),
+        () -> new TimeWellStoneBlock(TimeWellStoneBlock.createProperties())
     );
 
     /**
