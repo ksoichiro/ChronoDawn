@@ -32,7 +32,7 @@ public class ChronicleBookItem extends Item {
 
     public static Properties createProperties() {
         return new Item.Properties()
-            .stacksTo(1) // Chronicle book is unique, only 1 per stack
+            .stacksTo(64) // Stackable like vanilla books, since a copy is granted on each entry without one
             .setId(ResourceKey.create(Registries.ITEM,
                 Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, "chronicle_book")));
     }

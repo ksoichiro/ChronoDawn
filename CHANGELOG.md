@@ -15,6 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   can now be crafted at a crafting table like their vanilla counterparts,
   not only cut with a stonecutter.
 
+### Changed
+
+- **Chronicle stacking**: the Chronicle of Chrono Dawn now stacks up to 64.
+  A new copy is still given each time you enter Chrono Dawn without one, and
+  the spare copies left at your base can now be stored in a single slot.
+
 ## [0.13.0] - 2026-10-18
 
 ### Added
