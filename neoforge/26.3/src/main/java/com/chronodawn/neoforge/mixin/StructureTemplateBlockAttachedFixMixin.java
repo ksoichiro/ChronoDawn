@@ -7,6 +7,9 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.Vec3;
@@ -19,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import java.util.Iterator;
 
 /**
- * Vanilla bug fix (NeoForge variant): {@code StructureTemplate#addEntitiesToWorld}
+ * Vanilla bug fix (NeoForge variant): {@code StructureTemplate#placeEntities}
  * rewrites the entity's {@code Pos} in the per-entity NBT before construction so
  * the entity is placed at the correct new world location, but does <b>not</b>
  * rewrite {@code block_pos}, the attachment-block coordinates used by
@@ -39,18 +42,18 @@ import java.util.Iterator;
  * already-transformed attachment block ({@code blockpos} local) just before
  * the entity is constructed.
  *
- * <p><b>Era:</b> NeoForge 1.21.6 — 1.21.11 where {@code addEntitiesToWorld}
- * gains a trailing {@link ProblemReporter} parameter and {@code
- * createEntityIgnoreException} accepts a leading {@link ProblemReporter}.
- * NeoForge 1.21.5 has the same overall structure but without {@code
- * ProblemReporter} and uses its own variant. Pre-1.21.5 versions still use
- * {@code TileX/TileY/TileZ} and need a separate mixin (Phase 2).
+ * <p><b>Era:</b> NeoForge 26.3 (stable, 26.3.0.89+), where vanilla's
+ * {@code placeEntities} survives and NeoForge appends a trailing
+ * {@link StructurePlaceSettings} parameter. The 26.3 betas named this method
+ * {@code addEntitiesToWorld(level, origin, settings, reporter)}; that method
+ * no longer exists on stable NeoForge, so targeting it fails the required
+ * mixin at world creation.
  */
 @Mixin(StructureTemplate.class)
 public class StructureTemplateBlockAttachedFixMixin {
 
     @Inject(
-        method = "addEntitiesToWorld",
+        method = "placeEntities",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/world/level/levelgen/structure/templatesystem/StructureTemplate;createEntityIgnoreException(Lnet/minecraft/util/ProblemReporter;Lnet/minecraft/world/level/ServerLevelAccessor;Lnet/minecraft/nbt/CompoundTag;)Ljava/util/Optional;"
@@ -60,8 +63,13 @@ public class StructureTemplateBlockAttachedFixMixin {
     private void chronodawn$rewriteBlockPosForAttachedEntity(
             ServerLevelAccessor level,
             BlockPos origin,
-            StructurePlaceSettings settings,
+            Mirror mirror,
+            Rotation rotation,
+            BlockPos pivot,
+            BoundingBox boundingBox,
+            boolean finalizeEntities,
             ProblemReporter reporter,
+            StructurePlaceSettings settings,
             CallbackInfo ci,
             Iterator<StructureTemplate.StructureEntityInfo> iter,
             StructureTemplate.StructureEntityInfo info,
