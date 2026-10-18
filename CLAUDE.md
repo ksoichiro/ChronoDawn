@@ -168,7 +168,7 @@ such as `[94, 1]`, and verify both resource reload and server data loading.
 - `./gradlew build1_21_11` - Build for 1.21.11
 - `./gradlew build26_1_2` - Build for 26.1.2
 - `./gradlew build26_2` - Build for 26.2
-- `./gradlew build26_3` - Build for 26.3 (default, NeoForge 26.3 is a beta build)
+- `./gradlew build26_3` - Build for 26.3 (default)
 - `./gradlew buildAll` - Build for release (1.20.1, 1.21.1, 1.21.2, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, 1.21.11, 26.1.2, 26.2, 26.3 - excludes 1.21.3)
 
 **Run Client**:
