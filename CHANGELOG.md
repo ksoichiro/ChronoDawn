@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.13.0] - 2026-10-18
+
 ### Added
 
 - **Old Sundial blessings**: right-click the post of an Old Sundial to gain
@@ -61,6 +63,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Chronite Shards and the Time Compass could not be obtained by mining. It now
   generates in Overworld biomes like on the other loaders. It only appears in
   newly generated chunks.
+- **Stable NeoForge 26.3**: Chrono Dawn no longer crashes when creating a
+  world on NeoForge 26.3.0.89. The NeoForge 26.3 build now requires NeoForge
+  26.3.0.89 or newer, since it no longer supports the 26.3 beta builds. It
+  also requires Architectury API 22.0.4 or newer, because earlier
+  Architectury API releases fail to start on stable NeoForge 26.3.
 
 ## [0.12.0] - 2026-10-12
 
@@ -238,11 +245,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   registry initialization on these NeoForge builds. The NeoForge 26.2 build
   previously required exactly NeoForge 26.2.0.82 and now accepts any newer
   26.2 build as well.
-- **Stable NeoForge 26.3**: Chrono Dawn no longer crashes when creating a
-  world on NeoForge 26.3.0.89. The NeoForge 26.3 build now requires NeoForge
-  26.3.0.89 or newer, since it no longer supports the 26.3 beta builds. It
-  also requires Architectury API 22.0.4 or newer, because earlier
-  Architectury API releases fail to start on stable NeoForge 26.3.
 - **Newer Architectury API on NeoForge 26.2 and 26.3**: Chrono Dawn
   previously required exactly Architectury API 21.1.9 on NeoForge 26.2 and
   22.0.2 on NeoForge 26.3. It now also loads with newer Architectury API
@@ -909,7 +911,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Architectury API 13.0.8+
 - Custom Portal API 0.0.1-beta66-1.21 (Fabric bundled, NeoForge requires separate installation)
 
-[Unreleased]: https://github.com/ksoichiro/ChronoDawn/compare/v0.12.0...HEAD
+[Unreleased]: https://github.com/ksoichiro/ChronoDawn/compare/v0.13.0...HEAD
+[0.13.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.11.0...v0.12.0
 [0.11.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.9.2...v0.10.0
