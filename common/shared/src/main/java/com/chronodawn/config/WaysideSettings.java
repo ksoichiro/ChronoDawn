@@ -18,12 +18,13 @@
 package com.chronodawn.config;
 
 /**
- * Settings for interactive wayside features such as the Old Sundial and the Lost Adventurer Memorial.
+ * Settings for interactive wayside features such as the Old Sundial, the Lost Adventurer Memorial and the Time Well.
  *
  * <p>Cooldowns are per player and per feature instance, measured in game ticks.
  */
 public record WaysideSettings(
     int sundialCooldownTicks,
     int sundialEffectDurationTicks,
-    int memorialCooldownTicks
+    int memorialCooldownTicks,
+    int timeWellCooldownTicks
 ) {}

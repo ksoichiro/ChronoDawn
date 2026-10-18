@@ -345,6 +345,11 @@ sundial_effect_duration_ticks = 3600
 # sleeping does not shorten it. Range: 20 to 1728000.
 memorial_cooldown_ticks = 24000
 
+# Time Well: how long (in ticks, 20 ticks = 1 second) each player must wait
+# before the same well grants another wish. Counted in game time, so sleeping
+# does not shorten it. Range: 20 to 1728000.
+time_well_cooldown_ticks = 24000
+
 [gameplay.portals]
 # Whether entering Chrono Dawn deactivates the departure portal and destroys
 # the arrival portal until the Portal Stabilizer has been used.

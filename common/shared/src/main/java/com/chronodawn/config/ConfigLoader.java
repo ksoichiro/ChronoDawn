@@ -116,10 +116,12 @@ public final class ConfigLoader {
     private static final String K_WS_SUNDIAL_COOLDOWN_TICKS = "sundial_cooldown_ticks";
     private static final String K_WS_SUNDIAL_EFFECT_DURATION_TICKS = "sundial_effect_duration_ticks";
     private static final String K_WS_MEMORIAL_COOLDOWN_TICKS = "memorial_cooldown_ticks";
+    private static final String K_WS_TIME_WELL_COOLDOWN_TICKS = "time_well_cooldown_ticks";
     private static final int MIN_WAYSIDE_TICKS = 20;
     private static final int MAX_SUNDIAL_COOLDOWN_TICKS = 1_728_000;
     private static final int MAX_SUNDIAL_EFFECT_DURATION_TICKS = 72_000;
     private static final int MAX_MEMORIAL_COOLDOWN_TICKS = 1_728_000;
+    private static final int MAX_TIME_WELL_COOLDOWN_TICKS = 1_728_000;
     private static final String K_BOSSES = "bosses";
     private static final String K_HEALTH_MULTIPLIER = "health_multiplier";
     private static final String K_DAMAGE_MULTIPLIER = "damage_multiplier";
@@ -581,6 +583,9 @@ public final class ConfigLoader {
         int memorialCooldown = parsed.<Number>getOptional(path + "." + K_WS_MEMORIAL_COOLDOWN_TICKS)
             .map(Number::intValue)
             .orElse(defaults.memorialCooldownTicks());
+        int timeWellCooldown = parsed.<Number>getOptional(path + "." + K_WS_TIME_WELL_COOLDOWN_TICKS)
+            .map(Number::intValue)
+            .orElse(defaults.timeWellCooldownTicks());
 
         // Validation: each field reverts independently so one bad value doesn't reset the other.
         if (cooldown < MIN_WAYSIDE_TICKS || cooldown > MAX_SUNDIAL_COOLDOWN_TICKS) {
@@ -607,8 +612,16 @@ public final class ConfigLoader {
             );
             memorialCooldown = defaults.memorialCooldownTicks();
         }
+        if (timeWellCooldown < MIN_WAYSIDE_TICKS || timeWellCooldown > MAX_TIME_WELL_COOLDOWN_TICKS) {
+            LOGGER.error(
+                "Invalid {}.{} = {} (must be in [{}, {}]); using default {}",
+                path, K_WS_TIME_WELL_COOLDOWN_TICKS, timeWellCooldown, MIN_WAYSIDE_TICKS,
+                MAX_TIME_WELL_COOLDOWN_TICKS, defaults.timeWellCooldownTicks()
+            );
+            timeWellCooldown = defaults.timeWellCooldownTicks();
+        }
 
-        return new WaysideSettings(cooldown, duration, memorialCooldown);
+        return new WaysideSettings(cooldown, duration, memorialCooldown, timeWellCooldown);
     }
 
     private static BossSettings parseBoss(CommentedConfig parsed, String bossKey) {
