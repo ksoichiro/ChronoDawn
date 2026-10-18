@@ -115,6 +115,30 @@ public class TimeWellStoneBlock extends MossyTemporalCobblestoneBlock implements
         };
     }
 
+    @Override
+    protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
+        // Read the queue before super.onRemove removes the block entity with it.
+        if (!state.is(newState.getBlock()) && level instanceof ServerLevel serverLevel
+                && level.getBlockEntity(pos) instanceof TimeWellStoneBlockEntity well) {
+            releaseWaiting(serverLevel, well);
+        }
+        super.onRemove(state, level, pos, newState, movedByPiston);
+    }
+
+    /**
+     * Turns the waiting items back into plain items when the well can no longer answer them,
+     * so they can be picked up instead of being stranded until they despawn.
+     */
+    private static void releaseWaiting(ServerLevel level, TimeWellStoneBlockEntity well) {
+        // Long.MAX_VALUE makes every entry due, which drains the whole queue.
+        for (WellQueue.Entry entry : well.queue().due(Long.MAX_VALUE)) {
+            if (level.getEntity(entry.item()) instanceof ItemEntity item && item.isAlive()) {
+                item.setDefaultPickUpDelay();
+                item.removeTag(WAITING_TAG);
+            }
+        }
+    }
+
     /**
      * @return the first horizontal neighbour of the stone holding a water source, or null
      */
@@ -142,22 +166,23 @@ public class TimeWellStoneBlock extends MossyTemporalCobblestoneBlock implements
             water = findWater(level, pos);
             well.cacheWater(water);
         }
-        if (water == null) {
-            return;
-        }
         long gameTime = level.getGameTime();
         WellQueue queue = well.queue();
-        for (ItemEntity item : level.getEntitiesOfClass(ItemEntity.class, new AABB(water))) {
-            if (queue.contains(item.getUUID())) {
-                continue;
-            }
-            // Items dropped by mobs, hoppers or dispensers have no player owner and are left alone.
-            if (item.getOwner() instanceof Player thrower) {
-                markWaiting(well, item, thrower, gameTime);
-            } else if (item.getTags().contains(WAITING_TAG)) {
-                // Left over from a wait the well lost on a chunk reload. It cannot be picked up,
-                // so it must be answered again, as returned to a thrower who is gone.
-                markWaiting(well, item, UNKNOWN_THROWER, gameTime);
+        // Without water no new wish is taken, but items already waiting are still answered, so
+        // scooping the water out during the wait does not strand them.
+        if (water != null) {
+            for (ItemEntity item : level.getEntitiesOfClass(ItemEntity.class, new AABB(water))) {
+                if (queue.contains(item.getUUID())) {
+                    continue;
+                }
+                // Items dropped by mobs, hoppers or dispensers have no player owner and are left alone.
+                if (item.getOwner() instanceof Player thrower) {
+                    markWaiting(well, item, thrower, gameTime);
+                } else if (item.getTags().contains(WAITING_TAG)) {
+                    // Left over from a wait the well lost on a chunk reload. It cannot be picked up,
+                    // so it must be answered again, as returned to a thrower who is gone.
+                    markWaiting(well, item, UNKNOWN_THROWER, gameTime);
+                }
             }
         }
         List<WellQueue.Entry> due = queue.due(gameTime);

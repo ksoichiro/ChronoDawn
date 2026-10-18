@@ -4,6 +4,7 @@ import com.chronodawn.blocks.TimeWellStoneBlock;
 import com.chronodawn.blocks.TimeWellStoneBlockEntity;
 import com.chronodawn.compat.CompatGameTestHelper;
 import com.chronodawn.core.wayside.TimeWellOutcome;
+import com.chronodawn.core.wayside.WellQueue;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModItems;
 import net.minecraft.core.BlockPos;
@@ -32,6 +33,10 @@ public final class TimeWellTests {
     // Rolls per table. The rare result has weight 1 of 10 or 20, so one roll could miss a bad entry.
     private static final int ROLLS = 30;
     private static final int MERGE_WAIT_TICKS = 10;
+    // Longer than the default pickup delay of 10 ticks, so a normal delay has run out by then.
+    private static final int PICKUP_DELAY_WAIT_TICKS = 12;
+    // A few ticks past the answer delay, so the ticker has answered the waiting item.
+    private static final int ANSWER_WAIT_TICKS = (int) WellQueue.ANSWER_DELAY_TICKS + 5;
 
     private TimeWellTests() {
         // Utility class
@@ -77,6 +82,12 @@ public final class TimeWellTests {
             TimeWellTests::testWaitingItemDoesNotMerge));
         tests.add(factory.create("time_well_requeues_orphaned_waiting_item",
             TimeWellTests::testRequeuesOrphanedWaitingItem));
+        tests.add(factory.create("time_well_returns_requeued_orphan_as_plain_item",
+            TimeWellTests::testReturnsRequeuedOrphan));
+        tests.add(factory.create("time_well_answers_waiting_item_after_water_removed",
+            TimeWellTests::testAnswersAfterWaterRemoved));
+        tests.add(factory.create("time_well_stone_removal_releases_waiting_item",
+            TimeWellTests::testStoneRemovalReleasesWaitingItem));
         tests.add(factory.create("time_well_stone_drops_mossy_cobblestone",
             TimeWellTests::testDrops));
         return tests;
@@ -117,6 +128,11 @@ public final class TimeWellTests {
             entity.discard();
         }
         return stacks;
+    }
+
+    private static List<ItemEntity> findRisen(GameTestHelper helper, ItemEntity original, int range) {
+        return helper.getLevel().getEntitiesOfClass(ItemEntity.class,
+            new AABB(helper.absolutePos(WATER_POS)).inflate(range), e -> e != original && e.isAlive());
     }
 
     private static boolean isSingleStack(List<ItemStack> stacks, Item item, int count) {
@@ -380,6 +396,108 @@ public final class TimeWellTests {
             return;
         }
         helper.succeed();
+    }
+
+    /**
+     * Test: a requeued orphan is answered as returned to a thrower who is gone. It rises as a
+     * plain item: no waiting tag, and a normal pickup delay that runs out.
+     */
+    private static void testReturnsRequeuedOrphan(GameTestHelper helper) {
+        TimeWellStoneBlockEntity well = placeWell(helper);
+        if (well == null) {
+            return;
+        }
+        ServerLevel level = helper.getLevel();
+        BlockPos stone = helper.absolutePos(STONE_POS);
+        ItemEntity item = spawnInWater(helper, new ItemStack(ModItems.CLOCKSTONE.get()));
+        item.addTag(TimeWellStoneBlock.WAITING_TAG);
+        TimeWellStoneBlock.tick(level, stone, well);
+        if (!well.queue().contains(item.getUUID())) {
+            CompatGameTestHelper.fail(helper, "The orphaned waiting item was not queued again");
+            return;
+        }
+        TimeWellOutcome outcome = TimeWellStoneBlock.answer(level, stone, item, null);
+        if (outcome != TimeWellOutcome.THROWER_GONE) {
+            CompatGameTestHelper.fail(helper, "Expected THROWER_GONE for the orphan, got " + outcome);
+            return;
+        }
+        List<ItemEntity> risen = findRisen(helper, item, 3);
+        if (!item.isRemoved() || risen.size() != 1 || !risen.get(0).getItem().is(ModItems.CLOCKSTONE.get())
+                || risen.get(0).getItem().getCount() != 1) {
+            CompatGameTestHelper.fail(helper, "Expected the orphan to rise back as 1 clockstone, original removed="
+                + item.isRemoved() + ", risen=" + risen.size());
+            return;
+        }
+        ItemEntity returned = risen.get(0);
+        if (returned.getTags().contains(TimeWellStoneBlock.WAITING_TAG)) {
+            CompatGameTestHelper.fail(helper, "The returned item still carries the waiting tag");
+            return;
+        }
+        helper.runAfterDelay(PICKUP_DELAY_WAIT_TICKS, () -> {
+            if (returned.hasPickUpDelay()) {
+                CompatGameTestHelper.fail(helper, "The returned item still cannot be picked up");
+                return;
+            }
+            helper.succeed();
+        });
+    }
+
+    /**
+     * Test: removing the water during the wait does not strand the waiting item. It is still
+     * answered and rises back out.
+     */
+    private static void testAnswersAfterWaterRemoved(GameTestHelper helper) {
+        TimeWellStoneBlockEntity well = placeWell(helper);
+        if (well == null) {
+            return;
+        }
+        ItemEntity waiting = spawnInWater(helper, new ItemStack(ModItems.CLOCKSTONE.get()));
+        TimeWellStoneBlock.markWaiting(well, waiting, CompatGameTestHelper.makeMockPlayer(helper),
+            helper.getLevel().getGameTime());
+        helper.setBlock(WATER_POS, Blocks.AIR);
+        helper.runAfterDelay(ANSWER_WAIT_TICKS, () -> {
+            if (!waiting.isRemoved()) {
+                CompatGameTestHelper.fail(helper, "The waiting item was not answered after the water was removed");
+                return;
+            }
+            List<ItemEntity> risen = findRisen(helper, waiting, 4);
+            if (risen.size() != 1 || !risen.get(0).getItem().is(ModItems.CLOCKSTONE.get())
+                    || risen.get(0).getTags().contains(TimeWellStoneBlock.WAITING_TAG)) {
+                CompatGameTestHelper.fail(helper, "Expected 1 plain clockstone to rise back, found " + risen.size());
+                return;
+            }
+            helper.succeed();
+        });
+    }
+
+    /**
+     * Test: breaking the stone during the wait releases the waiting item. It loses the tag at
+     * once and can be picked up after a normal pickup delay.
+     */
+    private static void testStoneRemovalReleasesWaitingItem(GameTestHelper helper) {
+        TimeWellStoneBlockEntity well = placeWell(helper);
+        if (well == null) {
+            return;
+        }
+        ItemEntity waiting = spawnInWater(helper, new ItemStack(ModItems.CLOCKSTONE.get()));
+        TimeWellStoneBlock.markWaiting(well, waiting, CompatGameTestHelper.makeMockPlayer(helper),
+            helper.getLevel().getGameTime());
+        helper.setBlock(STONE_POS, Blocks.AIR);
+        if (waiting.getTags().contains(TimeWellStoneBlock.WAITING_TAG)) {
+            CompatGameTestHelper.fail(helper, "The waiting item kept its tag after the stone was removed");
+            return;
+        }
+        helper.runAfterDelay(PICKUP_DELAY_WAIT_TICKS, () -> {
+            if (!waiting.isAlive()) {
+                CompatGameTestHelper.fail(helper, "The released item disappeared");
+                return;
+            }
+            if (waiting.hasPickUpDelay()) {
+                CompatGameTestHelper.fail(helper, "The released item still cannot be picked up");
+                return;
+            }
+            helper.succeed();
+        });
     }
 
     /**
