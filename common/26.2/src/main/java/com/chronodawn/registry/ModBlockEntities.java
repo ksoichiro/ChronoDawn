@@ -5,6 +5,7 @@ import com.chronodawn.blocks.BossRoomBoundaryMarkerBlockEntity;
 import com.chronodawn.blocks.BossRoomDoorBlockEntity;
 import com.chronodawn.blocks.ClockTowerTeleporterBlockEntity;
 import com.chronodawn.blocks.MemorialPlateBlockEntity;
+import com.chronodawn.blocks.TimeWellStoneBlockEntity;
 import com.chronodawn.blocks.SundialGnomonBlockEntity;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -53,6 +54,17 @@ public class ModBlockEntities {
             new BlockEntityType<>(
                 MemorialPlateBlockEntity::new,
                 Set.<Block>of(ModBlocks.MEMORIAL_PLATE.get())
+            )
+        );
+
+    /**
+     * Time Well Stone BlockEntity - stores per-player cooldowns and the items waiting in the well.
+     */
+    public static final RegistrySupplier<BlockEntityType<TimeWellStoneBlockEntity>> TIME_WELL_STONE =
+        BLOCK_ENTITIES.register(ModBlockEntityId.TIME_WELL_STONE.id(), () ->
+            new BlockEntityType<>(
+                TimeWellStoneBlockEntity::new,
+                Set.<Block>of(ModBlocks.TIME_WELL_STONE.get())
             )
         );
 

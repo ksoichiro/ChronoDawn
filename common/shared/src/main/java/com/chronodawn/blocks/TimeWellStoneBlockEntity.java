@@ -19,6 +19,7 @@ package com.chronodawn.blocks;
 
 import com.chronodawn.core.wayside.WellQueue;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
@@ -48,5 +49,19 @@ public class TimeWellStoneBlockEntity extends CooldownActivatorBlockEntity {
 
     public void cacheWater(BlockPos water) {
         cachedWater = water;
+    }
+
+    /**
+     * Releases the waiting items when the stone is removed. From 1.21.5 on this is the last
+     * removal hook that still sees the block entity: the block's affectNeighborsAfterRemoval
+     * runs after it is gone. Older versions have no such method, so this one is never called
+     * there and the block's onRemove releases the items instead.
+     */
+    // No @Override, so this file compiles for versions before 1.21.5 too. No super call either,
+    // as the vanilla default only drops the contents of a Container, which this is not.
+    public void preRemoveSideEffects(BlockPos pos, BlockState state) {
+        if (level instanceof ServerLevel serverLevel) {
+            TimeWellStoneBlock.releaseWaiting(serverLevel, this);
+        }
     }
 }

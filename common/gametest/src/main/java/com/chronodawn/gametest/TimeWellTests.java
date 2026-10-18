@@ -429,7 +429,7 @@ public final class TimeWellTests {
             return;
         }
         ItemEntity returned = risen.get(0);
-        if (returned.getTags().contains(TimeWellStoneBlock.WAITING_TAG)) {
+        if (TimeWellStoneBlock.isWaiting(returned)) {
             CompatGameTestHelper.fail(helper, "The returned item still carries the waiting tag");
             return;
         }
@@ -462,7 +462,7 @@ public final class TimeWellTests {
             }
             List<ItemEntity> risen = findRisen(helper, waiting, 4);
             if (risen.size() != 1 || !risen.get(0).getItem().is(ModItems.CLOCKSTONE.get())
-                    || risen.get(0).getTags().contains(TimeWellStoneBlock.WAITING_TAG)) {
+                    || TimeWellStoneBlock.isWaiting(risen.get(0))) {
                 CompatGameTestHelper.fail(helper, "Expected 1 plain clockstone to rise back, found " + risen.size());
                 return;
             }
@@ -483,7 +483,7 @@ public final class TimeWellTests {
         TimeWellStoneBlock.markWaiting(well, waiting, CompatGameTestHelper.makeMockPlayer(helper),
             helper.getLevel().getGameTime());
         helper.setBlock(STONE_POS, Blocks.AIR);
-        if (waiting.getTags().contains(TimeWellStoneBlock.WAITING_TAG)) {
+        if (TimeWellStoneBlock.isWaiting(waiting)) {
             CompatGameTestHelper.fail(helper, "The waiting item kept its tag after the stone was removed");
             return;
         }

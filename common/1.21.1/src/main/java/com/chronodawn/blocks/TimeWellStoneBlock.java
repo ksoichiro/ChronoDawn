@@ -129,7 +129,7 @@ public class TimeWellStoneBlock extends MossyTemporalCobblestoneBlock implements
      * Turns the waiting items back into plain items when the well can no longer answer them,
      * so they can be picked up instead of being stranded until they despawn.
      */
-    private static void releaseWaiting(ServerLevel level, TimeWellStoneBlockEntity well) {
+    static void releaseWaiting(ServerLevel level, TimeWellStoneBlockEntity well) {
         // Long.MAX_VALUE makes every entry due, which drains the whole queue.
         for (WellQueue.Entry entry : well.queue().due(Long.MAX_VALUE)) {
             if (level.getEntity(entry.item()) instanceof ItemEntity item && item.isAlive()) {
@@ -178,7 +178,7 @@ public class TimeWellStoneBlock extends MossyTemporalCobblestoneBlock implements
                 // Items dropped by mobs, hoppers or dispensers have no player owner and are left alone.
                 if (item.getOwner() instanceof Player thrower) {
                     markWaiting(well, item, thrower, gameTime);
-                } else if (item.getTags().contains(WAITING_TAG)) {
+                } else if (isWaiting(item)) {
                     // Left over from a wait the well lost on a chunk reload. It cannot be picked up,
                     // so it must be answered again, as returned to a thrower who is gone.
                     markWaiting(well, item, UNKNOWN_THROWER, gameTime);
@@ -233,6 +233,13 @@ public class TimeWellStoneBlock extends MossyTemporalCobblestoneBlock implements
         item.setNeverPickUp();
         item.addTag(WAITING_TAG);
         well.queue().offer(item.getUUID(), thrower, gameTime);
+    }
+
+    /**
+     * @return whether the item carries {@link #WAITING_TAG}, set while it waits for an answer
+     */
+    public static boolean isWaiting(ItemEntity item) {
+        return item.getTags().contains(WAITING_TAG);
     }
 
     /**
