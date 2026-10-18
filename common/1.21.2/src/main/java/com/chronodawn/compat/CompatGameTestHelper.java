@@ -36,6 +36,15 @@ public class CompatGameTestHelper {
     }
 
     /**
+     * Set who threw an item, as a player's drop or toss would.
+     * From 1.21.1, ItemEntity#setThrower takes the entity itself.
+     */
+    public static void setThrower(net.minecraft.world.entity.item.ItemEntity item,
+                                  net.minecraft.world.entity.Entity thrower) {
+        item.setThrower(thrower);
+    }
+
+    /**
      * Fail the running test with a plain message.
      * Before 1.21.5, GameTestHelper.fail() takes the String directly.
      */

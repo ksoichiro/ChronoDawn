@@ -34,6 +34,15 @@ public class CompatGameTestHelper {
     }
 
     /**
+     * Set who threw an item, as a player's drop or toss would.
+     * In 1.20.1, ItemEntity stores only the thrower's UUID and resolves it when asked.
+     */
+    public static void setThrower(net.minecraft.world.entity.item.ItemEntity item,
+                                  net.minecraft.world.entity.Entity thrower) {
+        item.setThrower(thrower.getUUID());
+    }
+
+    /**
      * Fail the running test with a plain message.
      * Before 1.21.5, GameTestHelper.fail() takes the String directly.
      */

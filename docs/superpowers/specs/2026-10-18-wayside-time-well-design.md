@@ -337,6 +337,9 @@ config keys instead.)
 - Only `chronodawn` items can be added by datapack under the lookup path.
 - Two identical stacks thrown in the same tick can still merge before the
   well first sees them (one tick). Accepted as negligible.
+- A player's stack can merge into an ownerless item already lying in the
+  water before the well first sees it. That wish is then ignored. Emptying
+  the shaft recovers the items. Accepted as rare.
 
 ## Documentation
 

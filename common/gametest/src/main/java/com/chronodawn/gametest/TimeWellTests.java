@@ -10,6 +10,8 @@ import com.chronodawn.registry.ModItems;
 import net.minecraft.core.BlockPos;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -37,6 +39,14 @@ public final class TimeWellTests {
     private static final int PICKUP_DELAY_WAIT_TICKS = 12;
     // A few ticks past the answer delay, so the ticker has answered the waiting item.
     private static final int ANSWER_WAIT_TICKS = (int) WellQueue.ANSWER_DELAY_TICKS + 5;
+    // Away from the shaft, so the risen items land short of the player and are not picked up.
+    private static final BlockPos PLAYER_POS = new BlockPos(8, 2, 8);
+    private static final BlockPos ARMOR_STAND_POS = new BlockPos(4, 2, 4);
+    // A second well for the findWater test, clear of the shared layout above. Stray water lies
+    // north of the stone, which findWater checks first, and the shaft lies south of it.
+    private static final BlockPos ENCLOSED_STONE_POS = new BlockPos(5, 2, 5);
+    private static final BlockPos STRAY_WATER_POS = new BlockPos(5, 2, 4);
+    private static final BlockPos ENCLOSED_SHAFT_POS = new BlockPos(5, 2, 6);
 
     private TimeWellTests() {
         // Utility class
@@ -66,6 +76,8 @@ public final class TimeWellTests {
         List<T> tests = new ArrayList<>();
         tests.add(factory.create("time_well_stone_has_block_entity",
             TimeWellTests::testHasBlockEntity));
+        tests.add(factory.create("time_well_find_water_prefers_shaft",
+            TimeWellTests::testFindWaterPrefersShaft));
         tests.add(factory.create("time_well_exchange_tables_roll_expected_items",
             TimeWellTests::testExchangeTables));
         tests.add(factory.create("time_well_exchanges_one_and_returns_rest",
@@ -78,6 +90,10 @@ public final class TimeWellTests {
             TimeWellTests::testReturnsWhenThrowerGone));
         tests.add(factory.create("time_well_ignores_item_without_thrower",
             TimeWellTests::testIgnoresItemWithoutThrower));
+        tests.add(factory.create("time_well_tick_exchanges_for_joined_player",
+            TimeWellTests::testTickExchangesForJoinedPlayer));
+        tests.add(factory.create("time_well_tick_ignores_non_player_thrower",
+            TimeWellTests::testTickIgnoresNonPlayerThrower));
         tests.add(factory.create("time_well_waiting_item_does_not_merge",
             TimeWellTests::testWaitingItemDoesNotMerge));
         tests.add(factory.create("time_well_requeues_orphaned_waiting_item",
@@ -147,6 +163,64 @@ public final class TimeWellTests {
     }
 
     /**
+     * @return whether the stacks are what one exchanged clockstone gives: 2 clockstone or
+     *         1 time crystal, with nothing left of the thrown stack
+     */
+    private static boolean isClockstoneExchangeResult(List<ItemStack> stacks) {
+        return isSingleStack(stacks, ModItems.CLOCKSTONE.get(), 2)
+            || isSingleStack(stacks, ModItems.TIME_CRYSTAL.get(), 1);
+    }
+
+    /**
+     * Creates a player who has joined the server, so the well can resolve them by UUID as it
+     * does in a real game, and stands them away from the shaft. Call
+     * {@link CompatGameTestHelper#removeMockServerPlayer} when the test ends.
+     */
+    private static ServerPlayer joinPlayer(GameTestHelper helper) {
+        ServerPlayer player = CompatGameTestHelper.makeMockServerPlayer(helper);
+        Vec3 pos = Vec3.atBottomCenterOf(helper.absolutePos(PLAYER_POS));
+        player.setPos(pos.x, pos.y, pos.z);
+        return player;
+    }
+
+    /**
+     * After the answer delay, checks that the waiting clockstone is gone, that one exchange
+     * result rose in its place, and that the exchange used up the player's cooldown.
+     * Logs the player out whatever the result.
+     */
+    private static void expectTickExchangeAfterDelay(GameTestHelper helper, ServerPlayer player,
+                                                     ItemEntity thrown, long thrownAt, String context) {
+        helper.runAfterDelay(ANSWER_WAIT_TICKS, () -> {
+            try {
+                if (!thrown.isRemoved()) {
+                    CompatGameTestHelper.fail(helper, context + ": the thrown item was not answered");
+                    return;
+                }
+                // Only clockstone and time crystal can come out of this wish. Other items, such as a
+                // button popped off a neighbouring test structure during the wait, are not counted.
+                List<ItemStack> risen = new ArrayList<>();
+                for (ItemStack stack : takeRisen(helper, thrown, thrownAt)) {
+                    if (stack.is(ModItems.CLOCKSTONE.get()) || stack.is(ModItems.TIME_CRYSTAL.get())) {
+                        risen.add(stack);
+                    }
+                }
+                if (!isClockstoneExchangeResult(risen)) {
+                    CompatGameTestHelper.fail(helper, context + ": expected 2 clockstone or 1 time crystal to rise, got "
+                        + risen);
+                    return;
+                }
+                if (!expectReturned(helper, new ItemStack(ModItems.CLOCKSTONE.get()), player,
+                        TimeWellOutcome.COOLDOWN)) {
+                    return;
+                }
+                helper.succeed();
+            } finally {
+                CompatGameTestHelper.removeMockServerPlayer(helper, player);
+            }
+        });
+    }
+
+    /**
      * Throws one stack in for the player, answers it at once, and checks the outcome and that
      * the same stack rose back unchanged. Returns false after failing the test.
      */
@@ -196,6 +270,26 @@ public final class TimeWellTests {
         if (!helper.absolutePos(WATER_POS).equals(water)) {
             CompatGameTestHelper.fail(helper, "findWater returned " + water + ", expected "
                 + helper.absolutePos(WATER_POS));
+            return;
+        }
+        helper.succeed();
+    }
+
+    /**
+     * Test: water outside the rim that touches the stone, and comes first in the scan order,
+     * does not hide the shaft, which is walled in on its other three sides.
+     */
+    private static void testFindWaterPrefersShaft(GameTestHelper helper) {
+        helper.setBlock(STRAY_WATER_POS, Blocks.WATER);
+        helper.setBlock(ENCLOSED_SHAFT_POS, Blocks.WATER);
+        helper.setBlock(ENCLOSED_SHAFT_POS.west(), Blocks.COBBLESTONE);
+        helper.setBlock(ENCLOSED_SHAFT_POS.east(), Blocks.COBBLESTONE);
+        helper.setBlock(ENCLOSED_SHAFT_POS.south(), Blocks.COBBLESTONE);
+        helper.setBlock(ENCLOSED_STONE_POS, ModBlocks.TIME_WELL_STONE.get());
+        BlockPos water = TimeWellStoneBlock.findWater(helper.getLevel(), helper.absolutePos(ENCLOSED_STONE_POS));
+        if (!helper.absolutePos(ENCLOSED_SHAFT_POS).equals(water)) {
+            CompatGameTestHelper.fail(helper, "findWater returned " + water + ", expected the shaft at "
+                + helper.absolutePos(ENCLOSED_SHAFT_POS));
             return;
         }
         helper.succeed();
@@ -358,6 +452,63 @@ public final class TimeWellTests {
     }
 
     /**
+     * Test: the production path. The stone's own ticker sees a clockstone thrown by a joined
+     * player, answers it after the delay by looking the player up in the level, and exchanges it.
+     */
+    private static void testTickExchangesForJoinedPlayer(GameTestHelper helper) {
+        if (placeWell(helper) == null) {
+            return;
+        }
+        ServerPlayer player = joinPlayer(helper);
+        boolean handedOver = false;
+        try {
+            long thrownAt = helper.getLevel().getGameTime();
+            ItemEntity thrown = spawnInWater(helper, new ItemStack(ModItems.CLOCKSTONE.get()));
+            CompatGameTestHelper.setThrower(thrown, player);
+            expectTickExchangeAfterDelay(helper, player, thrown, thrownAt, "Thrown by a joined player");
+            handedOver = true;
+        } finally {
+            if (!handedOver) {
+                CompatGameTestHelper.removeMockServerPlayer(helper, player);
+            }
+        }
+    }
+
+    /**
+     * Test: an item whose thrower is an entity in the level but not a player is left alone.
+     */
+    private static void testTickIgnoresNonPlayerThrower(GameTestHelper helper) {
+        TimeWellStoneBlockEntity well = placeWell(helper);
+        if (well == null) {
+            return;
+        }
+        // Built with its constructor, which every version has, because 26.2 moved the vanilla
+        // EntityType constants out of EntityType.
+        BlockPos standPos = helper.absolutePos(ARMOR_STAND_POS);
+        ArmorStand stand = new ArmorStand(helper.getLevel(), standPos.getX() + 0.5, standPos.getY(),
+            standPos.getZ() + 0.5);
+        helper.getLevel().addFreshEntity(stand);
+        ItemEntity item = spawnInWater(helper, new ItemStack(ModItems.CLOCKSTONE.get()));
+        CompatGameTestHelper.setThrower(item, stand);
+        if (item.getOwner() != stand) {
+            CompatGameTestHelper.fail(helper, "The item's owner did not resolve to the armor stand, got "
+                + item.getOwner());
+            return;
+        }
+        TimeWellStoneBlock.tick(helper.getLevel(), helper.absolutePos(STONE_POS), well);
+        if (well.queue().contains(item.getUUID()) || TimeWellStoneBlock.isWaiting(item)) {
+            CompatGameTestHelper.fail(helper, "An item thrown by an armor stand was queued");
+            return;
+        }
+        if (!item.isAlive() || item.hasPickUpDelay()) {
+            CompatGameTestHelper.fail(helper, "An item thrown by an armor stand was changed: alive="
+                + item.isAlive() + ", pickup delay=" + item.hasPickUpDelay());
+            return;
+        }
+        helper.succeed();
+    }
+
+    /**
      * Test: a waiting item cannot be picked up and does not merge with a matching stack
      * next to it, so the well still finds the same entity when the answer is due.
      */
@@ -454,31 +605,28 @@ public final class TimeWellTests {
     }
 
     /**
-     * Test: removing the water during the wait does not strand the waiting item. It is still
-     * answered and rises back out.
+     * Test: removing the water during the wait does not strand the waiting item. The thrower
+     * is still in the level, so the wish is granted, and the result rises where the stone is.
      */
     private static void testAnswersAfterWaterRemoved(GameTestHelper helper) {
         TimeWellStoneBlockEntity well = placeWell(helper);
         if (well == null) {
             return;
         }
-        long thrownAt = helper.getLevel().getGameTime();
-        ItemEntity waiting = spawnInWater(helper, new ItemStack(ModItems.CLOCKSTONE.get()));
-        TimeWellStoneBlock.markWaiting(well, waiting, CompatGameTestHelper.makeMockPlayer(helper), thrownAt);
-        helper.setBlock(WATER_POS, Blocks.AIR);
-        helper.runAfterDelay(ANSWER_WAIT_TICKS, () -> {
-            if (!waiting.isRemoved()) {
-                CompatGameTestHelper.fail(helper, "The waiting item was not answered after the water was removed");
-                return;
+        ServerPlayer player = joinPlayer(helper);
+        boolean handedOver = false;
+        try {
+            long thrownAt = helper.getLevel().getGameTime();
+            ItemEntity waiting = spawnInWater(helper, new ItemStack(ModItems.CLOCKSTONE.get()));
+            TimeWellStoneBlock.markWaiting(well, waiting, player, thrownAt);
+            helper.setBlock(WATER_POS, Blocks.AIR);
+            expectTickExchangeAfterDelay(helper, player, waiting, thrownAt, "Water removed during the wait");
+            handedOver = true;
+        } finally {
+            if (!handedOver) {
+                CompatGameTestHelper.removeMockServerPlayer(helper, player);
             }
-            List<ItemEntity> risen = findRisen(helper, waiting, 4, thrownAt);
-            if (risen.size() != 1 || !risen.get(0).getItem().is(ModItems.CLOCKSTONE.get())
-                    || TimeWellStoneBlock.isWaiting(risen.get(0))) {
-                CompatGameTestHelper.fail(helper, "Expected 1 plain clockstone to rise back, found " + risen.size());
-                return;
-            }
-            helper.succeed();
-        });
+        }
     }
 
     /**

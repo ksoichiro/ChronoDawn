@@ -84,7 +84,12 @@ public class TimeWellStoneBlock extends MossyTemporalCobblestoneBlock implements
     private static final double AIM_RANGE = 16.0;
     private static final int GLOW_PARTICLES = 12;
     private static final int END_ROD_PARTICLES = 10;
-    private static final double END_ROD_SPEED = 0.05;
+    // With the END_ROD friction of 0.91 and its small gravity, 0.2 lifts a spark about 2 blocks,
+    // so it clears the rim and can be seen from beside the well.
+    private static final double END_ROD_SPEED = 0.2;
+    private static final int RIM_GLOW_PARTICLES = 6;
+    // Just above the rim top, so a player standing beside the well sees the glow.
+    private static final double RIM_GLOW_HEIGHT = 2.1;
     private static final int BUBBLE_PARTICLES = 6;
 
     /** One answer and the cooldown left when it was refused, so the message can show it. */
@@ -143,16 +148,44 @@ public class TimeWellStoneBlock extends MossyTemporalCobblestoneBlock implements
     }
 
     /**
-     * @return the first horizontal neighbour of the stone holding a water source, or null
+     * Finds the shaft water beside the stone. The stone sits in the rim, so its outer side can
+     * touch a pond or a player's water. The shaft is walled in by the rim on its other three
+     * sides, so a water source enclosed like that is preferred over the first one found.
+     *
+     * @return the enclosed water source beside the stone, else the first one, or null
      */
     public static BlockPos findWater(Level level, BlockPos stonePos) {
+        BlockPos firstWater = null;
         for (Direction direction : Direction.Plane.HORIZONTAL) {
             BlockPos candidate = stonePos.relative(direction);
-            if (isWaterSource(level, candidate)) {
+            if (!isWaterSource(level, candidate)) {
+                continue;
+            }
+            if (isWalledIn(level, candidate, direction.getOpposite())) {
                 return candidate;
             }
+            if (firstWater == null) {
+                firstWater = candidate;
+            }
         }
-        return null;
+        return firstWater;
+    }
+
+    /**
+     * @return whether every horizontal side of the water except the one facing the stone is a
+     *         sturdy block face, as the rim of a well is
+     */
+    private static boolean isWalledIn(Level level, BlockPos water, Direction towardStone) {
+        for (Direction side : Direction.Plane.HORIZONTAL) {
+            if (side == towardStone) {
+                continue;
+            }
+            BlockPos wall = water.relative(side);
+            if (!level.getBlockState(wall).isFaceSturdy(level, wall, side.getOpposite())) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private static boolean isWaterSource(Level level, BlockPos pos) {
@@ -362,6 +395,9 @@ public class TimeWellStoneBlock extends MossyTemporalCobblestoneBlock implements
         double surface = water.getY() + 0.9;
         double z = water.getZ() + 0.5;
         level.sendParticles(ParticleTypes.GLOW, x, surface, z, GLOW_PARTICLES, 0.3, 0.05, 0.3, 0.0);
+        // The water lies below eye level, so a burst over the rim shows the exchange to the thrower.
+        level.sendParticles(ParticleTypes.GLOW, x, water.getY() + RIM_GLOW_HEIGHT, z, RIM_GLOW_PARTICLES,
+            0.3, 0.05, 0.3, 0.0);
         // With a count of 0 the client reads the offsets as a direction scaled by the speed,
         // so each mote rises straight out of the shaft.
         for (int i = 0; i < END_ROD_PARTICLES; i++) {
