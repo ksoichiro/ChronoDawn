@@ -2496,6 +2496,14 @@ Surface rules control which blocks are placed at the surface and subsurface. The
 
 **Why**: Complete reimplementation is complex (2500+ lines). Vanilla overriding allows targeted changes while preserving all vanilla mechanics.
 
+> **Superseded (2026-04-06, commit 86c625316)**: The Chrono Dawn dimension now uses its own
+> `chronodawn:chronodawn` noise settings (`data/chronodawn/worldgen/noise_settings/chronodawn.json`,
+> plus `material_rule/chronodawn.json` on 26.3), which already contain the `chronodawn_desert`
+> rules. The vanilla `minecraft:overworld` override was removed in 2026-10 because it no longer
+> affected Chrono Dawn and replaced the surface rules of other overworld worldgen mods such as
+> Terralith. Do not override vanilla `minecraft:` noise settings or material rules for
+> dimension-specific changes.
+
 #### Desert Surface Structure (Vanilla Reference)
 
 ```
@@ -2612,8 +2620,8 @@ Structure placement uses `structure_set` JSON files with two key parameters:
 
 #### 3. Surface Rules Implementation
 - Don't recreate vanilla noise_settings from scratch (2500+ lines, complex spline functions)
-- Override vanilla settings via datapack for surgical changes
-- Extract vanilla files from `minecraft-merged.jar` in Gradle cache
+- Start from a vanilla file extracted from `minecraft-merged.jar` in Gradle cache
+- Save it under the mod namespace (`chronodawn:chronodawn`) and reference it from the dimension. Overriding `minecraft:overworld` replaces the overworld for every mod and breaks other worldgen mods (see the superseded note above)
 
 #### 4. Testing Strategy
 - Use `/locatebiome` to verify biome generates within reasonable distance
@@ -2659,8 +2667,8 @@ Structure placement uses `structure_set` JSON files with two key parameters:
 **Dimension Configuration**:
 - `common/src/main/resources/data/chronodawn/dimension/chronodawn.json`
 
-**Surface Rules** (overrides vanilla):
-- `common/src/main/resources/data/minecraft/worldgen/noise_settings/overworld.json`
+**Surface Rules**:
+- `common/<ver>/src/main/resources/data/chronodawn/worldgen/noise_settings/chronodawn.json` (26.3: `material_rule/chronodawn.json`)
 
 **Structure Configuration**:
 - `common/src/main/resources/data/chronodawn/worldgen/structure/desert_clock_tower.json`

@@ -24,6 +24,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Dawn Snowy and extended plains and forests into colder regions, reducing
   snowy coverage in newly generated chunks. Existing chunks keep their biomes.
 
+### Fixed
+
+- **Compatibility with overworld worldgen mods**: Chrono Dawn no longer
+  replaces the vanilla overworld noise settings. The replacement was left
+  over from an older version of the mod and had no effect on Chrono Dawn, but
+  it could override the surface rules of mods such as Terralith and leave
+  their biomes covered in grass blocks. Chunks that were already generated
+  keep their current blocks.
+
 ## [0.13.0] - 2026-10-18
 
 ### Added
