@@ -249,10 +249,10 @@ Time Wood and Dark Time Wood leaves shed slow falling leaves. Ancient Time Wood 
 
 ### Chrono Bloom
 
-**Chrono Bloom** is a flower that opens and closes with the time of day. It is closed at night, opens at dawn, stays fully open through the day, and closes again at dusk. It works in any dimension and follows that dimension's time. Meadows of Chrono Bloom grow in Chrono Dawn Plains (prairies).
+**Chrono Bloom** is a flower that follows the time of day. It is closed at night, opens at dawn, stays fully open through the day, and closes again at dusk. It opens and closes with the time of the dimension it is in. Meadows of Chrono Bloom grow in Chrono Dawn Prairies.
 
 - Bonemeal on a Chrono Bloom drops one more Chrono Bloom
-- Bonemeal on Temporal Grass in the prairies can grow a new Chrono Bloom
+- Bonemeal on Temporal Grass in Chrono Dawn Prairies can grow a new Chrono Bloom
 - Craft it into yellow dye
 - Plant it in a flower pot. The potted flower also opens and closes
 

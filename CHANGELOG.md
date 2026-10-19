@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   crafted into yellow dye. A potted version also opens and closes. Existing
   Time Blossoms are unchanged.
 - **Chrono Bloom meadow**: Chrono Bloom meadows now grow in Chrono Dawn
-  Plains, and bonemeal on Temporal Grass there can grow them. Existing chunks
+  Prairies, and bonemeal on Temporal Grass there can grow them. Existing chunks
   are unchanged.
 - **Leaf particles**: Time Wood and Dark Time Wood leaves shed falling leaf
   particles, Ancient Time Wood leaves release rising ones, and Dark Time Wood
