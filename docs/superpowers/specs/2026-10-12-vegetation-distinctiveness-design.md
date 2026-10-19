@@ -145,6 +145,22 @@ forest density and adjust after visual checks.
 Biome feature ordering must stay consistent across biomes. Prairies is the
 only biome that gets this feature, so it does not create an ordering cycle.
 
+The feature goes directly into the `chronodawn_prairies` biome JSON. No
+loader-level biome modifier (NeoForge, Fabric `BiomeModifications`, or Forge
+1.20.1 `forge:add_features`) is involved, because those only apply to
+injection into biomes that Chrono Dawn does not own.
+
+`chronodawn_prairies.json` exists in eight places, and each needs the
+feature:
+
+- `common/1.20.1`, `common/1.21.1`, `common/1.21.2`
+- `common/shared-1.21.2+` (used by 1.21.4 to 1.21.10)
+- `common/1.21.11`, `common/26.1.2`, `common/26.2`, `common/26.3`
+
+26.3 stores configured features under `worldgen/feature/` instead of
+`worldgen/configured_feature/`. Follow the existing `patch_flowers` files in
+each module for the directory and JSON format.
+
 ## Leaf Particles
 
 ### Particle Types
