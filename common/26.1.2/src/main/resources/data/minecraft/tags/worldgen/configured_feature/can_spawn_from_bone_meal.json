@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "chronodawn:flower_block"
+    "chronodawn:flower_block",
+    "chronodawn:chrono_bloom_block"
   ]
 }
