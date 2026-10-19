@@ -644,6 +644,10 @@
   "tag.item.c.crops.time_wheat": "Time Wheat Crops",
   "tag.item.c.crops.chrono_melon": "Chrono Melon Crops",
   "tag.item.c.seeds.time_wheat": "Time Wheat Seeds",
-  "tag.item.c.seeds.chrono_melon": "Chrono Melon Seeds"
+  "tag.item.c.seeds.chrono_melon": "Chrono Melon Seeds",
+  "block.chronodawn.potted_orange_time_blossom": "Potted Orange Time Blossom",
+  "block.chronodawn.potted_pink_time_blossom": "Potted Pink Time Blossom",
+  "block.chronodawn.potted_purple_time_blossom": "Potted Purple Time Blossom",
+  "entity.chronodawn.gear_projectile": "Gear Projectile",
+  "entity.chronodawn.time_arrow": "Time Arrow"
 }
-
