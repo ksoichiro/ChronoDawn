@@ -88,12 +88,12 @@ handles negative values and values above 24000.
 - 1.20.1 to 1.21.11: `level.getDayTime()`. `LevelGetTimeMixin` already
   returns Chrono Dawn's independent time inside the dimension, and vanilla
   time elsewhere.
-- 26.1.2, 26.2, 26.3: `Level.getDayTime()` no longer exists. Read the time
-  from the level's clock manager, as `TimeDistortionEventHandler` does on the
-  server (`level.clockManager().getInstance(clockHolder).totalTicks()`).
-  The particle code runs on the client. Whether `ClientLevel` exposes the same
-  clock data must be confirmed during implementation. If it does not, use the
-  client-side value that drives the sky brightness.
+- 26.1.2, 26.2, 26.3: `Level.getDayTime()` no longer exists. Use
+  `Level.getDefaultClockTime()`, which reads the dimension's default clock
+  (`chronodawn:chronodawn` inside the dimension). It is declared on `Level`,
+  so it exists on both `ServerLevel` and `ClientLevel` (confirmed with
+  `javap` on the 26.1.2, 26.2, and 26.3 merged jars). Whether the client
+  value tracks Chrono Dawn's time must still be checked in game.
 
 The time lookup goes behind a small per-version helper so the shared block
 code does not branch on version.
@@ -129,7 +129,7 @@ Follow the existing Time Blossom files for each item below:
 - Client Items JSON for 1.21.4 and later.
 - Blockstate JSON with one model per stage, for both blocks.
 - Composting chance in `ModComposting`, at 0.65 like Time Blossom.
-- Flower tags that Time Blossom belongs to.
+- No flower tags. Time Blossom belongs to none, so Chrono Bloom matches it.
 - A recipe for yellow dye from Chrono Bloom, plus its recipe-unlock
   advancement, following `purple_dye_from_purple_time_blossom`.
 - Creative tab entry next to Time Blossom.
@@ -181,10 +181,14 @@ registration pattern as the Time Torch flame particles.
   `FALLING_LEAVES_PARTICLE_CHANCE` constant.
 - Falling particles spawn only when the block below is not a full solid face.
 - Rising particles spawn only when the block above is not a full solid face.
-- 1.21.5 and later: implement the existing empty
-  `spawnFallingLeavesParticle` override in each leaf class.
-- 1.20.1 to 1.21.4: these versions have no such hook. Override
-  `animateTick`, call `super`, then apply the same chance and conditions.
+- 1.21.5 to 26.2: implement the existing empty
+  `spawnFallingLeavesParticle` override in each leaf class. Vanilla
+  `LeavesBlock.animateTick` already applies the spawn chance before calling
+  it.
+- 1.20.1 to 1.21.4, and 26.3: these versions have no such hook. 26.3's
+  `LeavesBlock` takes an `AmbientLeavesBlockSoundPlayer` instead of a
+  particle chance and only drips water in `animateTick`. Override
+  `animateTick`, call `super`, then apply the chance and conditions.
 - The night petal check runs inside the same client-side tick and uses
   `ChronoBloomStage.stageFor(time) == 0`.
 
@@ -193,10 +197,15 @@ no block states.
 
 ### Textures
 
-- The three leaf particles are derived from each leaf texture's colors,
-  following the `texture-creation` skill.
-- The night petal is a new pale texture, pale blue or pale violet, chosen to
-  contrast with Dark Time Wood's dark foliage.
+- All new textures (Chrono Bloom stages, leaf particles, night petal) are
+  drawn as original pixel art. Do not recolor vanilla textures, because a
+  recolor of a vanilla pixel layout is still a derivative work.
+- The three leaf particles take their palette from Chrono Dawn's own leaf
+  textures.
+- The night petal is pale blue or pale violet, chosen to contrast with Dark
+  Time Wood's dark foliage.
+- The first versions are drafts. The user reviews them in game and may
+  hand-edit them.
 
 ## Version Coverage
 
@@ -206,9 +215,10 @@ modules.
 
 Known era splits to account for:
 
-- Leaf particle hook: `spawnFallingLeavesParticle` from 1.21.5, `animateTick`
-  before that.
-- Time reading: `getDayTime()` up to 1.21.11, clock manager in 26.x.
+- Leaf particle hook: `spawnFallingLeavesParticle` in 1.21.5 to 26.2,
+  `animateTick` in 1.20.1 to 1.21.4 and 26.3.
+- Time reading: `getDayTime()` up to 1.21.11, `getDefaultClockTime()` in
+  26.x.
 - Block registration factories, `setId`, and `BushBlock` changes follow the
   existing patterns for Time Blossom in each version module.
 - Data pack directory names, recipe JSON, and advancement JSON formats follow
