@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Chrono Bloom**: a new flower that is closed at night, opens at dawn,
+  stays open through the day and closes at dusk. It follows the time of the
+  dimension it is in. Bonemeal on it drops another Chrono Bloom, and it can be
+  crafted into yellow dye. A potted version also opens and closes. Existing
+  Time Blossoms are unchanged.
+- **Chrono Bloom meadow**: Chrono Bloom meadows now grow in Chrono Dawn
+  Plains, and bonemeal on Temporal Grass there can grow them. Existing chunks
+  are unchanged.
+- **Leaf particles**: Time Wood and Dark Time Wood leaves shed falling leaf
+  particles, Ancient Time Wood leaves release rising ones, and Dark Time Wood
+  leaves let fall glowing petals at night.
 - **Crafting recipes for stone stairs, slabs and walls**: Temporal
   Cobblestone, Temporal Stone, Temporal Stone Bricks, Cobbled Deepslate
   Temporal Stone and Polished Deepslate Temporal Stone stairs, slabs and walls

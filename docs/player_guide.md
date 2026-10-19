@@ -245,6 +245,17 @@ Harvest three unique wood types:
 - Ancient variant of Time Wood
 - Same full block set as Time Wood
 
+Time Wood and Dark Time Wood leaves shed slow falling leaves. Ancient Time Wood leaves drift upward instead. At night, Dark Time Wood leaves also let fall glowing petals.
+
+### Chrono Bloom
+
+**Chrono Bloom** is a flower that opens and closes with the time of day. It is closed at night, opens at dawn, stays fully open through the day, and closes again at dusk. It works in any dimension and follows that dimension's time. Meadows of Chrono Bloom grow in Chrono Dawn Plains (prairies).
+
+- Bonemeal on a Chrono Bloom drops one more Chrono Bloom
+- Bonemeal on Temporal Grass in the prairies can grow a new Chrono Bloom
+- Craft it into yellow dye
+- Plant it in a flower pot. The potted flower also opens and closes
+
 ### Cave Decoration
 
 Caves throughout the Chrono Dawn dimension contain **Temporal Stalactites** and **Temporal Stalagmites** — decorative pointed blocks themed on Temporal Stone. Stalactites hang from cave ceilings, stalagmites rise from cave floors. Both come in two sizes (`tip` and `frustum`); worldgen may place a single tip or stack a frustum + tip pair for a length-2 formation. Mine with a stone-tier (or higher) pickaxe — `tip` blocks self-drop, `frustum` blocks drop the matching tip so you always pick up something usable.
