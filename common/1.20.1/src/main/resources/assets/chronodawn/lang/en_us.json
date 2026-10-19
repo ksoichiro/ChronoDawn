@@ -619,6 +619,10 @@
   "tag.item.chronodawn.chrono_bovine_milking_buckets": "Chrono Bovine Milking Buckets",
   "tag.item.chronodawn.grass_seed_replacements": "Grass Seeds Replaced by Time Wheat Seeds",
   "tag.item.chronodawn.portal_igniters": "Portal Igniters",
-  "tag.item.chronodawn.portal_stabilizers": "Portal Stabilizers"
+  "tag.item.chronodawn.portal_stabilizers": "Portal Stabilizers",
+  "block.chronodawn.potted_orange_time_blossom": "Potted Orange Time Blossom",
+  "block.chronodawn.potted_pink_time_blossom": "Potted Pink Time Blossom",
+  "block.chronodawn.potted_purple_time_blossom": "Potted Purple Time Blossom",
+  "entity.chronodawn.gear_projectile": "Gear Projectile",
+  "entity.chronodawn.time_arrow": "Time Arrow"
 }
-

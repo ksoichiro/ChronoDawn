@@ -32,6 +32,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   it could override the surface rules of mods such as Terralith and leave
   their biomes covered in grass blocks. Chunks that were already generated
   keep their current blocks.
+- **Missing names**: the potted Orange, Pink and Purple Time Blossoms, the
+  Clockwork Colossus's gear projectile and the in-flight Time Arrow now have
+  English and Japanese names. EMI, Jade and death messages showed their raw
+  translation keys before.
 
 ## [0.13.0] - 2026-10-18
 

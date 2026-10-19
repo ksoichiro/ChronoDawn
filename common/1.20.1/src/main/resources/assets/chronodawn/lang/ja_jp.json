@@ -619,5 +619,10 @@
   "tag.item.chronodawn.chrono_bovine_milking_buckets": "クロノバヴァインの搾乳用バケツ",
   "tag.item.chronodawn.grass_seed_replacements": "時の小麦の種に置き換わる草の種",
   "tag.item.chronodawn.portal_igniters": "ポータル点火アイテム",
-  "tag.item.chronodawn.portal_stabilizers": "ポータル安定化アイテム"
+  "tag.item.chronodawn.portal_stabilizers": "ポータル安定化アイテム",
+  "block.chronodawn.potted_orange_time_blossom": "橙の時の花の鉢植え",
+  "block.chronodawn.potted_pink_time_blossom": "桃の時の花の鉢植え",
+  "block.chronodawn.potted_purple_time_blossom": "紫の時の花の鉢植え",
+  "entity.chronodawn.gear_projectile": "歯車弾",
+  "entity.chronodawn.time_arrow": "タイムアロー"
 }
