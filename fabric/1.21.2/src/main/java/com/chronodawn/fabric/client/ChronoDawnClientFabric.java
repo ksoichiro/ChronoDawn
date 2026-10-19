@@ -9,6 +9,7 @@ import com.chronodawn.client.TemporalPlantColorProvider;
 import com.chronodawn.client.model.*;
 import com.chronodawn.client.particle.ChronoDawnPortalParticle;
 import com.chronodawn.client.particle.ChronoShieldEchoParticle;
+import com.chronodawn.client.particle.TimeLeafParticle;
 import com.chronodawn.gui.ChronicleScreen;
 import com.chronodawn.gui.data.ChronicleData;
 import com.chronodawn.items.ChronicleBookItem;
@@ -663,6 +664,24 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
         ParticleFactoryRegistry.getInstance().register(
             ModParticles.PINK_TIME_TORCH_FLAME.get(),
             FlameParticle.Provider::new
+        );
+
+        // Register leaf particle providers (falling, rising, and night-only glowing petals)
+        ParticleFactoryRegistry.getInstance().register(
+            ModParticles.TIME_WOOD_LEAF.get(),
+            sprites -> new TimeLeafParticle.Provider(sprites, TimeLeafParticle.Motion.FALLING)
+        );
+        ParticleFactoryRegistry.getInstance().register(
+            ModParticles.ANCIENT_TIME_WOOD_LEAF.get(),
+            sprites -> new TimeLeafParticle.Provider(sprites, TimeLeafParticle.Motion.RISING)
+        );
+        ParticleFactoryRegistry.getInstance().register(
+            ModParticles.DARK_TIME_WOOD_LEAF.get(),
+            sprites -> new TimeLeafParticle.Provider(sprites, TimeLeafParticle.Motion.FALLING)
+        );
+        ParticleFactoryRegistry.getInstance().register(
+            ModParticles.NIGHT_BLOSSOM_PETAL.get(),
+            sprites -> new TimeLeafParticle.Provider(sprites, TimeLeafParticle.Motion.GLOWING_FALLING)
         );
 
         ChronoDawn.LOGGER.debug("Registered particle providers for Fabric");

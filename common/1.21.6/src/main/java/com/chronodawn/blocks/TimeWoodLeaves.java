@@ -72,12 +72,12 @@ public class TimeWoodLeaves extends LeavesBlock {
     }
 
     /**
-     * Spawns falling leaf particles. In 1.21.5, this became an abstract method.
+     * Spawns falling leaf particles. Vanilla animateTick has already rolled the
+     * leaf particle chance and checked that the block below has no full top face.
      */
     @Override
     public void spawnFallingLeavesParticle(Level level, BlockPos pos, RandomSource random) {
-        // Use vanilla cherry leaves particle for now (or custom particle in future)
-        // Spawns nothing by default - subclasses can override for custom effects
+        LeafParticleEffects.spawn(LeafParticleEffects.Kind.TIME_WOOD, level, pos, random);
     }
 
     @Override

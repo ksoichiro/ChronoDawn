@@ -49,11 +49,12 @@ public class DarkTimeWoodLeaves extends LeavesBlock {
     }
 
     /**
-     * Spawns falling leaf particles. In 1.21.5, this became an abstract method.
+     * Spawns falling leaf particles. Vanilla animateTick has already rolled the
+     * leaf particle chance and checked that the block below has no full top face.
      */
     @Override
     public void spawnFallingLeavesParticle(Level level, BlockPos pos, RandomSource random) {
-        // Empty implementation - no special particles
+        LeafParticleEffects.spawn(LeafParticleEffects.Kind.DARK_TIME_WOOD, level, pos, random);
     }
 
     /**

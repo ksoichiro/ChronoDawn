@@ -15,6 +15,7 @@ import com.chronodawn.client.renderer.mobs.*;
 import com.chronodawn.items.TimeCompassItem;
 import com.chronodawn.client.particle.ChronoDawnPortalParticle;
 import com.chronodawn.client.particle.ChronoShieldEchoParticle;
+import com.chronodawn.client.particle.TimeLeafParticle;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModParticles;
 import com.chronodawn.registry.ModEntities;
@@ -620,6 +621,24 @@ public class ChronoDawnClientForge {
         event.registerSpriteSet(
             ModParticles.PINK_TIME_TORCH_FLAME.get(),
             FlameParticle.Provider::new
+        );
+
+        // Register leaf particle providers (falling, rising, and night-only glowing petals)
+        event.registerSpriteSet(
+            ModParticles.TIME_WOOD_LEAF.get(),
+            sprites -> new TimeLeafParticle.Provider(sprites, TimeLeafParticle.Motion.FALLING)
+        );
+        event.registerSpriteSet(
+            ModParticles.ANCIENT_TIME_WOOD_LEAF.get(),
+            sprites -> new TimeLeafParticle.Provider(sprites, TimeLeafParticle.Motion.RISING)
+        );
+        event.registerSpriteSet(
+            ModParticles.DARK_TIME_WOOD_LEAF.get(),
+            sprites -> new TimeLeafParticle.Provider(sprites, TimeLeafParticle.Motion.FALLING)
+        );
+        event.registerSpriteSet(
+            ModParticles.NIGHT_BLOSSOM_PETAL.get(),
+            sprites -> new TimeLeafParticle.Provider(sprites, TimeLeafParticle.Motion.GLOWING_FALLING)
         );
 
         ChronoDawn.LOGGER.debug("Registered particle providers for Forge");

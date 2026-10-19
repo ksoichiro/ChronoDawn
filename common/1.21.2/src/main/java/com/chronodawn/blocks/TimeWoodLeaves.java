@@ -8,6 +8,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -74,6 +75,12 @@ public class TimeWoodLeaves extends LeavesBlock {
                     .setValue(FruitOfTimeBlock.AGE, 0), 2);
             }
         }
+    }
+
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        super.animateTick(state, level, pos, random);
+        LeafParticleEffects.trySpawn(LeafParticleEffects.Kind.TIME_WOOD, level, pos, random);
     }
 
     /**

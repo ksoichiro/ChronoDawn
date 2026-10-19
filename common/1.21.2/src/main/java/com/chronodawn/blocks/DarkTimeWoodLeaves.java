@@ -5,9 +5,13 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 
@@ -32,6 +36,12 @@ public class DarkTimeWoodLeaves extends LeavesBlock {
             .setValue(DISTANCE, 7)
             .setValue(PERSISTENT, false)
             .setValue(WATERLOGGED, false));
+    }
+
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        super.animateTick(state, level, pos, random);
+        LeafParticleEffects.trySpawn(LeafParticleEffects.Kind.DARK_TIME_WOOD, level, pos, random);
     }
 
     /**

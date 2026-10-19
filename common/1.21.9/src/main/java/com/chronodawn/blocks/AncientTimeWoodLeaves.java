@@ -11,6 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 
@@ -49,11 +50,21 @@ public class AncientTimeWoodLeaves extends LeavesBlock {
     }
 
     /**
-     * Spawns falling leaf particles. In 1.21.5, this became an abstract method.
+     * Spawns falling leaf particles. Abstract since 1.21.5. Ancient Time Wood leaves
+     * rise instead of falling, so they are spawned from animateTick below.
      */
     @Override
     public void spawnFallingLeavesParticle(Level level, BlockPos pos, RandomSource random) {
-        // Empty implementation - no special particles
+        // Intentionally empty, see animateTick
+    }
+
+    @Override
+    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+        super.animateTick(state, level, pos, random);
+        // Not spawned from spawnFallingLeavesParticle: vanilla only calls that hook when
+        // the block BELOW has no full top face, which would suppress rising leaves inside
+        // the canopy. The rising effect checks the block above itself.
+        LeafParticleEffects.trySpawn(LeafParticleEffects.Kind.ANCIENT_TIME_WOOD, level, pos, random);
     }
 
     /**
