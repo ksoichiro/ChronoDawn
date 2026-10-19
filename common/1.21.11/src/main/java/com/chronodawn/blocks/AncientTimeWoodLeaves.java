@@ -62,8 +62,8 @@ public class AncientTimeWoodLeaves extends LeavesBlock {
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         super.animateTick(state, level, pos, random);
         // Not spawned from spawnFallingLeavesParticle: vanilla only calls that hook when
-        // the block BELOW has no full top face, which would suppress rising leaves inside
-        // the canopy. The rising effect checks the block above itself.
+        // the block BELOW has no full top face, which says nothing
+        // about rising leaves. The rising effect checks the block above itself.
         LeafParticleEffects.trySpawn(LeafParticleEffects.Kind.ANCIENT_TIME_WOOD, level, pos, random);
     }
 

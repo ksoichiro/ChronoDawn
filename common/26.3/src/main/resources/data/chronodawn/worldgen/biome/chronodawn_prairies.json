@@ -36,6 +36,7 @@
     [],
     [
       "chronodawn:fruit_of_time_tree",
+      "chronodawn:patch_chrono_bloom",
       "chronodawn:patch_grass_dense",
       "chronodawn:patch_tall_grass",
       "chronodawn:patch_ferns",
@@ -50,8 +51,7 @@
       "chronodawn:time_well_placed",
       "chronodawn:lost_adventurer_memorial_placed",
       "chronodawn:time_cairn_placed",
-      "chronodawn:old_sundial_placed",
-      "chronodawn:patch_chrono_bloom"
+      "chronodawn:old_sundial_placed"
     ],
     [
       "chronodawn:freeze_top_layer"

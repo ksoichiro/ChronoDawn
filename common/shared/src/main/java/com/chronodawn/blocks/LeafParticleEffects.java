@@ -7,6 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 
 /**
  * Client-side ambient particles for the Time Wood leaf blocks.
@@ -54,8 +55,9 @@ public final class LeafParticleEffects {
 
     private static void spawnBelow(ParticleOptions particle, Level level, BlockPos pos, RandomSource random) {
         BlockPos below = pos.below();
-        // A solid top face would hide the particle inside the block
-        if (level.getBlockState(below).isFaceSturdy(level, below, Direction.UP)) {
+        // Same check as vanilla falling leaves: only the underside of the canopy emits, since leaf
+        // blocks have no sturdy faces and a sturdy test would let interior leaves emit too
+        if (Block.isFaceFull(level.getBlockState(below).getCollisionShape(level, below), Direction.UP)) {
             return;
         }
         level.addParticle(particle,
@@ -65,7 +67,8 @@ public final class LeafParticleEffects {
 
     private static void spawnAbove(ParticleOptions particle, Level level, BlockPos pos, RandomSource random) {
         BlockPos above = pos.above();
-        if (level.getBlockState(above).isFaceSturdy(level, above, Direction.DOWN)) {
+        // Mirror of the falling check: only the top of the canopy emits rising leaves
+        if (Block.isFaceFull(level.getBlockState(above).getCollisionShape(level, above), Direction.DOWN)) {
             return;
         }
         level.addParticle(particle,

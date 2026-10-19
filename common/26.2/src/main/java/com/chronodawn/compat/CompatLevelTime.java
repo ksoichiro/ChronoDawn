@@ -20,15 +20,20 @@ public final class CompatLevelTime {
      * Get the current day time of the level.
      */
     public static long dayTime(Level level) {
-        return level.getDefaultClockTime();
+        return level.clockManager().getTotalTicks(clockOf(level));
     }
 
     /**
      * Set the day time of the level (used by GameTests).
      */
     public static void setDayTime(ServerLevel level, long time) {
-        Holder<WorldClock> clock = level.dimensionType().defaultClock().orElseGet(() ->
+        level.clockManager().setTotalTicks(clockOf(level), time);
+    }
+
+    // Level#getDefaultClockTime() returns 0 in dimensions without a default clock (e.g. the Nether),
+    // so both directions use the dimension's default clock, else the overworld clock.
+    private static Holder<WorldClock> clockOf(Level level) {
+        return level.dimensionType().defaultClock().orElseGet(() ->
             level.registryAccess().lookupOrThrow(Registries.WORLD_CLOCK).getOrThrow(WorldClocks.OVERWORLD));
-        level.clockManager().setTotalTicks(clock, time);
     }
 }
