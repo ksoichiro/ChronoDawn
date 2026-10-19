@@ -41,6 +41,22 @@ public class ModParticles {
         PARTICLE_TYPES.register("pink_time_torch_flame", ModParticles::createSimpleParticleType);
 
     /**
+     * Leaf particles - ambient client-only particles spawned by the Time Wood
+     * leaf blocks (falling, rising, and night-only glowing petals).
+     */
+    public static final RegistrySupplier<SimpleParticleType> TIME_WOOD_LEAF =
+        PARTICLE_TYPES.register("time_wood_leaf", ModParticles::createSimpleParticleType);
+
+    public static final RegistrySupplier<SimpleParticleType> ANCIENT_TIME_WOOD_LEAF =
+        PARTICLE_TYPES.register("ancient_time_wood_leaf", ModParticles::createSimpleParticleType);
+
+    public static final RegistrySupplier<SimpleParticleType> DARK_TIME_WOOD_LEAF =
+        PARTICLE_TYPES.register("dark_time_wood_leaf", ModParticles::createSimpleParticleType);
+
+    public static final RegistrySupplier<SimpleParticleType> NIGHT_BLOSSOM_PETAL =
+        PARTICLE_TYPES.register("night_blossom_petal", ModParticles::createSimpleParticleType);
+
+    /**
      * Create a simple particle type (helper method to avoid constructor access issues).
      */
     private static SimpleParticleType createSimpleParticleType() {
