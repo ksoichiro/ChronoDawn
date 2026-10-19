@@ -12,6 +12,7 @@
 //   validateConventionalTags        — c: tag coverage, names, cross-root parity
 //   validateSoundSubtitles          — sounds.json subtitle key ↔ per-version lang
 //   validateEraTagParity            — minecraft: tags match across 1.20.1 / 1.21.1+
+//   validateRegistryLangCoverage    — block/item ID ↔ en_us display name
 //
 // All are registered in the 'verification' group so checkAll can pick them
 // up. Errors throw GradleException so the failing CI step is visible.
@@ -885,6 +886,83 @@ tasks.register('validateEraTagParity') {
         } else {
             errors.each { logger.error("  ERROR: ${it}") }
             throw new GradleException("Era tag parity validation failed with ${errors.size()} error(s)")
+        }
+    }
+}
+
+// ============================================================
+// Task 8: validateRegistryLangCoverage
+// ------------------------------------------------------------
+// validateTranslations only covers entity and spawn-egg keys, so a
+// registered block or item with no display name passes every check and
+// shows its raw key in EMI, Jade and similar tooltips. The potted time
+// blossoms shipped that way in every version.
+//
+// Every ID in ModBlockId must have block.chronodawn.<id>, and every ID in
+// ModItemId must have item.chronodawn.<id> or block.chronodawn.<id> (block
+// items use the block key), in each lang root's en_us.json. Other locales
+// are held to en_us by validateLangParity.
+//
+// ID minVersion is ignored on purpose: an ID added for newer versions only
+// fails on the older roots. Adding the key there is harmless (unused lang
+// keys are never read), so no exemption list is needed.
+// ============================================================
+tasks.register('validateRegistryLangCoverage') {
+    group = 'verification'
+    description = 'Verify every registered block and item ID has a display name in each en_us.json'
+
+    doLast {
+        def errors = []
+        def jsonSlurper = new JsonSlurper()
+
+        def idsFrom = { String propertyName ->
+            def idFile = file("${rootProject.projectDir}/${project.property(propertyName)}")
+            if (!idFile.exists()) {
+                throw new GradleException("validateRegistryLangCoverage: ${idFile} not found")
+            }
+            // Same enum-constant pattern as extractEnumValues in gradle/shared
+            (idFile.text =~ /(\w+)\s*\(\s*"([^"]+)"\s*\)/).collect { it[2] as String }
+        }
+        def blockIds = idsFrom('block_id_file')
+        def itemIds = idsFrom('item_id_file')
+
+        // Sanity check: if the enum shape changes, the regex above would
+        // return nothing and this task would vacuously pass. Both enums hold
+        // well over a hundred entries.
+        if (blockIds.size() < 50 || itemIds.size() < 50) {
+            throw new GradleException("validateRegistryLangCoverage: only found ${blockIds.size()} block and ${itemIds.size()} item IDs " +
+                    "— the ID enum files may have changed shape and broken the extraction")
+        }
+
+        def langFiles = file("${rootProject.projectDir}/common").listFiles()
+                ?.collect { new File(it, 'src/main/resources/assets/chronodawn/lang/en_us.json') }
+                ?.findAll { it.exists() }
+                ?.sort { it.path } ?: []
+        if (langFiles.isEmpty()) {
+            throw new GradleException('validateRegistryLangCoverage: no en_us.json found under common/*/')
+        }
+
+        langFiles.each { File langFile ->
+            def relPath = rootProject.projectDir.toPath().relativize(langFile.toPath()).toString()
+            def langMap = jsonSlurper.parseText(langFile.text) as Map
+            blockIds.each { String id ->
+                if (!langMap.containsKey("block.chronodawn.${id}".toString())) {
+                    errors << "${relPath}: missing block.chronodawn.${id}"
+                }
+            }
+            itemIds.each { String id ->
+                if (!langMap.containsKey("item.chronodawn.${id}".toString())
+                        && !langMap.containsKey("block.chronodawn.${id}".toString())) {
+                    errors << "${relPath}: missing item.chronodawn.${id} (or block.chronodawn.${id})"
+                }
+            }
+        }
+
+        if (errors.isEmpty()) {
+            logger.lifecycle("Registry lang coverage passed: ${blockIds.size()} block and ${itemIds.size()} item IDs checked in ${langFiles.size()} en_us.json file(s).")
+        } else {
+            errors.each { logger.error("  ERROR: ${it}") }
+            throw new GradleException("Registry lang coverage validation failed with ${errors.size()} error(s)")
         }
     }
 }
