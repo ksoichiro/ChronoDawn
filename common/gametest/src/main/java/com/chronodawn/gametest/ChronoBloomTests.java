@@ -26,12 +26,15 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * GameTests for the Chrono Bloom, whose STAGE follows the time of day.
  *
- * The tests set the level time to noon (6000), where the expected stage is OPEN (2),
- * which differs from the default CLOSED (0) state.
+ * Each test runs at noon (6000), where the expected stage is OPEN (2), which differs from
+ * the default CLOSED (0) state. GameTests share one level, so {@link #atNoon} restores the
+ * original time as soon as the synchronous test body returns or throws, before any other
+ * test runs.
  */
 public final class ChronoBloomTests {
 
@@ -46,24 +49,37 @@ public final class ChronoBloomTests {
     public static <T> List<T> generateTests(MobBehaviorTests.TestFactory<T> factory) {
         List<T> tests = new ArrayList<>();
         tests.add(factory.create("chrono_bloom_placed_at_noon_is_open",
-            ChronoBloomTests::testPlacedAtNoonIsOpen));
+            helper -> atNoon(helper, ChronoBloomTests::testPlacedAtNoonIsOpen)));
         tests.add(factory.create("chrono_bloom_random_tick_updates_stage",
-            ChronoBloomTests::testRandomTickUpdatesStage));
+            helper -> atNoon(helper, ChronoBloomTests::testRandomTickUpdatesStage)));
         tests.add(factory.create("chrono_bloom_potting_at_noon_shows_open_stage",
-            ChronoBloomTests::testPottingAtNoonShowsOpenStage));
+            helper -> atNoon(helper, ChronoBloomTests::testPottingAtNoonShowsOpenStage)));
         tests.add(factory.create("chrono_bloom_potted_drops_flower_and_pot",
-            ChronoBloomTests::testPottedDropsFlowerAndPot));
+            helper -> atNoon(helper, ChronoBloomTests::testPottedDropsFlowerAndPot)));
         tests.add(factory.create("chrono_bloom_bonemeal_drops_one_bloom",
-            ChronoBloomTests::testBonemealDropsOneBloom));
+            helper -> atNoon(helper, ChronoBloomTests::testBonemealDropsOneBloom)));
         return tests;
+    }
+
+    /**
+     * Run a synchronous test body at noon and put the level time back afterwards,
+     * on success and on failure (GameTest failures are thrown as exceptions).
+     */
+    private static void atNoon(GameTestHelper helper, Consumer<GameTestHelper> body) {
+        ServerLevel level = helper.getLevel();
+        long originalTime = CompatLevelTime.dayTime(level);
+        CompatLevelTime.setDayTime(level, NOON);
+        try {
+            body.accept(helper);
+        } finally {
+            CompatLevelTime.setDayTime(level, originalTime);
+        }
     }
 
     /**
      * Test: the placement state takes its stage from the current time of day.
      */
     private static void testPlacedAtNoonIsOpen(GameTestHelper helper) {
-        ServerLevel level = helper.getLevel();
-        CompatLevelTime.setDayTime(level, NOON);
         helper.setBlock(GROUND_POS, Blocks.GRASS_BLOCK);
         BlockPos absGround = helper.absolutePos(GROUND_POS);
         BlockHitResult hit = new BlockHitResult(Vec3.atCenterOf(absGround), Direction.UP, absGround, false);
@@ -89,7 +105,6 @@ public final class ChronoBloomTests {
      */
     private static void testRandomTickUpdatesStage(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
-        CompatLevelTime.setDayTime(level, NOON);
         helper.setBlock(GROUND_POS, Blocks.GRASS_BLOCK);
         helper.setBlock(FLOWER_POS, ModBlocks.CHRONO_BLOOM.get().defaultBlockState()
             .setValue(ChronoBloomBlock.STAGE, ChronoBloomStage.CLOSED));
@@ -108,7 +123,6 @@ public final class ChronoBloomTests {
      * Chrono Bloom, already showing the stage for the current time.
      */
     private static void testPottingAtNoonShowsOpenStage(GameTestHelper helper) {
-        CompatLevelTime.setDayTime(helper.getLevel(), NOON);
         helper.setBlock(GROUND_POS, Blocks.STONE);
         helper.setBlock(FLOWER_POS, Blocks.FLOWER_POT);
         Player player = CompatGameTestHelper.makeMockPlayer(helper);

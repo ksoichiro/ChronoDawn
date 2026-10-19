@@ -58,7 +58,7 @@ class ModItemsFuelAndCompostTest {
         Map.entry("DAWN_BELL", "MEDIUM"), Map.entry("DUSK_BELL", "MEDIUM"),
         Map.entry("TIME_WHEAT", "MEDIUM"), Map.entry("TEMPORAL_ROOT", "MEDIUM"),
         Map.entry("CHRONO_MELON_SLICE", "MEDIUM"), Map.entry("TIMELESS_MUSHROOM", "MEDIUM"),
-        Map.entry("UNSTABLE_FUNGUS", "MEDIUM"),
+        Map.entry("UNSTABLE_FUNGUS", "MEDIUM"), Map.entry("CHRONO_BLOOM", "MEDIUM"),
         // 0.85
         Map.entry("BAKED_TEMPORAL_ROOT", "MEDIUM_HIGH"), Map.entry("TIME_WHEAT_COOKIE", "MEDIUM_HIGH"),
         // 1.0
@@ -81,7 +81,7 @@ class ModItemsFuelAndCompostTest {
     @Test
     void compostableItemsDeclareTheirTier() throws IOException {
         String source = readModItems();
-        assertEquals(30, COMPOST_TIERS.size());
+        assertEquals(31, COMPOST_TIERS.size());
         for (Map.Entry<String, String> e : COMPOST_TIERS.entrySet()) {
             assertTrue(registration(source, e.getKey())
                     .contains(".compostable(ContextIntProviders.COMPOSTABLE_" + e.getValue() + ")"),

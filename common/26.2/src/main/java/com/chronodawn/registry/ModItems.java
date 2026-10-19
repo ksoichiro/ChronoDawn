@@ -1706,6 +1706,18 @@ public class ModItems {
     );
 
     /**
+     * Chrono Bloom - Flower that opens and closes with the time of day.
+     * Can be placed as a block or in flower pots.
+     */
+    public static final RegistrySupplier<Item> CHRONO_BLOOM = ITEMS.register(
+        ModItemId.CHRONO_BLOOM.id(),
+        () -> new BlockItem(ModBlocks.CHRONO_BLOOM.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CHRONO_BLOOM.id()))))
+    );
+
+    /**
      * Dawn Bell - Tall blue flower representing dawn/morning in the time cycle.
      * 2 blocks high, cannot be potted.
      */
@@ -3253,6 +3265,7 @@ public class ModItems {
         output.accept(PURPLE_TIME_BLOSSOM.get());
         output.accept(ORANGE_TIME_BLOSSOM.get());
         output.accept(PINK_TIME_BLOSSOM.get());
+        output.accept(CHRONO_BLOOM.get());
         output.accept(DAWN_BELL.get());
         output.accept(DUSK_BELL.get());
         output.accept(TEMPORAL_TALL_GRASS.get());

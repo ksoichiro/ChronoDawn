@@ -122,6 +122,8 @@ import com.chronodawn.blocks.AttachedChronoMelonStemBlock;
 import com.chronodawn.blocks.ChronoMelonBlock;
 import com.chronodawn.blocks.TimelessMushroomBlock;
 import com.chronodawn.blocks.TimeBlossomBlock;
+import com.chronodawn.blocks.ChronoBloomBlock;
+import com.chronodawn.blocks.PottedChronoBloomBlock;
 import com.chronodawn.blocks.DawnBellBlock;
 import com.chronodawn.blocks.DawnLanternBlock;
 import com.chronodawn.blocks.DuskBellBlock;
@@ -1020,6 +1022,26 @@ public class ModBlocks {
         () -> new FlowerPotBlock(PINK_TIME_BLOSSOM.get(), CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT)
                 .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
                     net.minecraft.resources.Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, "potted_pink_time_blossom"))))
+    );
+
+    /**
+     * Chrono Bloom - Flower that opens and closes with the time of day.
+     * Can be placed in flower pots.
+     */
+    public static final RegistrySupplier<Block> CHRONO_BLOOM = BLOCKS.register(
+        ModBlockId.CHRONO_BLOOM.id(),
+        () -> new ChronoBloomBlock(ChronoBloomBlock.createProperties(ModBlockId.CHRONO_BLOOM.id()))
+    );
+
+    /**
+     * Potted Chrono Bloom - Potted version of Chrono Bloom that keeps following the time of day.
+     * Can be created by using Chrono Bloom on a flower pot.
+     */
+    public static final RegistrySupplier<Block> POTTED_CHRONO_BLOOM = BLOCKS.register(
+        ModBlockId.POTTED_CHRONO_BLOOM.id(),
+        () -> new PottedChronoBloomBlock(CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT).randomTicks()
+                .setId(net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.BLOCK,
+                    net.minecraft.resources.Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, "potted_chrono_bloom"))))
     );
 
     /**

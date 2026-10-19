@@ -122,6 +122,8 @@ import com.chronodawn.blocks.AttachedChronoMelonStemBlock;
 import com.chronodawn.blocks.ChronoMelonBlock;
 import com.chronodawn.blocks.TimelessMushroomBlock;
 import com.chronodawn.blocks.TimeBlossomBlock;
+import com.chronodawn.blocks.ChronoBloomBlock;
+import com.chronodawn.blocks.PottedChronoBloomBlock;
 import com.chronodawn.blocks.DawnBellBlock;
 import com.chronodawn.blocks.DuskBellBlock;
 import com.chronodawn.blocks.TemporalTallGrassBlock;
@@ -980,6 +982,24 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> POTTED_PINK_TIME_BLOSSOM = BLOCKS.register(
         ModBlockId.POTTED_PINK_TIME_BLOSSOM.id(),
         () -> new FlowerPotBlock(PINK_TIME_BLOSSOM.get(), CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT))
+    );
+
+    /**
+     * Chrono Bloom - Flower that opens and closes with the time of day.
+     * Can be placed in flower pots.
+     */
+    public static final RegistrySupplier<Block> CHRONO_BLOOM = BLOCKS.register(
+        ModBlockId.CHRONO_BLOOM.id(),
+        () -> new ChronoBloomBlock(ChronoBloomBlock.createProperties())
+    );
+
+    /**
+     * Potted Chrono Bloom - Potted version of Chrono Bloom that keeps following the time of day.
+     * Can be created by using Chrono Bloom on a flower pot.
+     */
+    public static final RegistrySupplier<Block> POTTED_CHRONO_BLOOM = BLOCKS.register(
+        ModBlockId.POTTED_CHRONO_BLOOM.id(),
+        () -> new PottedChronoBloomBlock(CompatBlockProperties.ofFullCopy(Blocks.FLOWER_POT).randomTicks())
     );
 
     /**

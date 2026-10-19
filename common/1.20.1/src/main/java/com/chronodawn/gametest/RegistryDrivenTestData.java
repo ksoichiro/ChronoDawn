@@ -93,6 +93,7 @@ public final class RegistryDrivenTestData {
             ModBlocks.PURPLE_TIME_BLOSSOM,
             ModBlocks.ORANGE_TIME_BLOSSOM,
             ModBlocks.PINK_TIME_BLOSSOM,
+            ModBlocks.CHRONO_BLOOM,
             ModBlocks.DAWN_BELL,
             ModBlocks.DUSK_BELL,
             ModBlocks.UNSTABLE_FUNGUS,
