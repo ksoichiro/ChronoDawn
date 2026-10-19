@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "chronodawn:block/chrono_bloom_stage2"
+  }
+}

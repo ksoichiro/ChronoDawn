@@ -196,6 +196,7 @@ public enum ModItemId {
     ORANGE_TIME_BLOSSOM("orange_time_blossom"),
     PINK_TIME_BLOSSOM("pink_time_blossom"),
     PURPLE_TIME_BLOSSOM("purple_time_blossom"),
+    CHRONO_BLOOM("chrono_bloom"),
     DAWN_BELL("dawn_bell"),
     DUSK_BELL("dusk_bell"),
     TEMPORAL_TALL_GRASS("temporal_tall_grass"),

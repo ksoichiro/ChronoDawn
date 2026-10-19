@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "stage=0": { "model": "chronodawn:block/chrono_bloom_stage0" },
+    "stage=1": { "model": "chronodawn:block/chrono_bloom_stage1" },
+    "stage=2": { "model": "chronodawn:block/chrono_bloom_stage2" },
+    "stage=3": { "model": "chronodawn:block/chrono_bloom_stage3" }
+  }
+}

@@ -49,6 +49,7 @@ public class ModComposting {
         ComposterBlock.COMPOSTABLES.put(ModItems.PURPLE_TIME_BLOSSOM.get(), 0.65F);
         ComposterBlock.COMPOSTABLES.put(ModItems.ORANGE_TIME_BLOSSOM.get(), 0.65F);
         ComposterBlock.COMPOSTABLES.put(ModItems.PINK_TIME_BLOSSOM.get(), 0.65F);
+        ComposterBlock.COMPOSTABLES.put(ModItems.CHRONO_BLOOM.get(), 0.65F);
         ComposterBlock.COMPOSTABLES.put(ModItems.DAWN_BELL.get(), 0.65F);
         ComposterBlock.COMPOSTABLES.put(ModItems.DUSK_BELL.get(), 0.65F);
 

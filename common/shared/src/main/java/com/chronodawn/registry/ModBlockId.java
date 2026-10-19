@@ -203,6 +203,7 @@ public enum ModBlockId {
     ORANGE_TIME_BLOSSOM(def("orange_time_blossom").cutout()),
     PINK_TIME_BLOSSOM(def("pink_time_blossom").cutout()),
     PURPLE_TIME_BLOSSOM(def("purple_time_blossom").cutout()),
+    CHRONO_BLOOM(def("chrono_bloom").cutout()),
     DAWN_BELL(def("dawn_bell").cutout()),
     DUSK_BELL(def("dusk_bell").cutout()),
     CHRONO_COBWEB(def("chrono_cobweb").cutout()),
@@ -244,6 +245,7 @@ public enum ModBlockId {
     POTTED_ORANGE_TIME_BLOSSOM(def("potted_orange_time_blossom").cutout()),
     POTTED_PINK_TIME_BLOSSOM(def("potted_pink_time_blossom").cutout()),
     POTTED_PURPLE_TIME_BLOSSOM(def("potted_purple_time_blossom").cutout()),
+    POTTED_CHRONO_BLOOM(def("potted_chrono_bloom").cutout()),
     POTTED_UNSTABLE_FUNGUS(def("potted_unstable_fungus").cutout()),
 
     // Structure blocks
