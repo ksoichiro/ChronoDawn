@@ -1,7 +1,7 @@
 # Roadmap: Wayside Features (Parts 1 to 6)
 
 **Created**: 2026-10-14
-**Status**: Parts 1 and 2 shipped to main (2026-10-14, 2026-10-17). Parts 3 to 6 not started.
+**Status**: Parts 1 to 3 shipped to main (2026-10-14, 2026-10-17, 2026-10-21). Parts 4 to 6 not started.
 **Related**: [Part 1 design](./2026-10-12-wayside-sundial-design.md),
 [Part 1 plan](../plans/2026-10-12-wayside-sundial.md)
 
@@ -56,7 +56,7 @@ discover. Several biomes pass by, yet nothing invites a detour.
 |---|---|---|---|
 | 1 | Shared foundation + `old_sundial` | Travel buff by time of day | Shipped (main `db7246186`) |
 | 2 | `lost_adventurer_memorial` | Lore fragment and supplies, light-pillar effect | Shipped (2026-10-17), with the Lost Adventurer's Journal |
-| 3 | `time_well` | Wishing well, exchange a thrown item | Implemented on branch, manual check pending |
+| 3 | `time_well` | Wishing well, exchange a thrown item | Shipped (2026-10-21) |
 | 4 | `watchmaker_camp` | Per-player chest that refills over time | Not started |
 | 5 | `time_cairn` | Collect time-of-day cairn stones, rare midnight echo | Not started |
 | 6 | `hourglass_monolith` | Small wave fight with a reward | Not started |
@@ -129,7 +129,10 @@ The notes below are the starting point it was designed from.
   activator (pressure plate or a new block), cooldown length (initial idea
   one Minecraft day), both NBT variants must get the activator.
 
-### Part 3: `time_well` (decided role)
+### Part 3: `time_well` (shipped)
+
+Shipped design: [part 3 design](./2026-10-18-wayside-time-well-design.md).
+The notes below are the starting point it was designed from.
 
 - Today: dry 3x5x3 well, a two-block shaft with one `temporal_amber_ore` at
   the bottom (`y_offset: -1`). There is **no water** in the NBT. Rarity 1 in
