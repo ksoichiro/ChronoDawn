@@ -89,10 +89,12 @@ public class TimeWellStoneBlock extends MossyTemporalCobblestoneBlock implements
     private static final double ITEM_HALF_WIDTH = 0.125;
     // The rim, and anything standing on it such as the roof, is within one block of the shaft.
     private static final int RIM_REACH = 1;
-    // The blocks above the water that a toss passes through over the rim: from just above the
-    // rim top (the rim is at water + 1) up to one block above the highest point of the arc.
+    // The blocks above the water that can stop a toss over the rim. Over a neighbouring column the
+    // item's bottom is at least water + 2.77 and its top at most water + 3.69, so only blocks at
+    // water + 2 and + 3 can stop it. Checking higher (leaves, an extra roof layer) would report
+    // false blocks, which could make every side look blocked.
     private static final int TOSS_PATH_LOWEST = 2;
-    private static final int TOSS_PATH_HIGHEST = 4;
+    private static final int TOSS_PATH_HIGHEST = 3;
     private static final double TOSS_PATH_STEP = 0.05;
     private static final int GLOW_PARTICLES = 12;
     private static final int END_ROD_PARTICLES = 10;

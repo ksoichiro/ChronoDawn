@@ -118,7 +118,7 @@ answers:
   pop straight up and land beside the well. Before the toss the well
   checks the blocks the arc passes over the rim. If something with a
   collision shape is in the way, like the roof slab or the log posts, the
-  items go to the clear side closest to the thrower instead. The template
+  items go to the clear side closest to the intended direction (the thrower, or the random direction when there is none) instead. The template
   is placed rotated, so this is a geometric check, not a fixed side.
 - **Message.** An action-bar line to the thrower:
   - exchange: "The well answers your wish"
@@ -346,7 +346,7 @@ config keys instead.)
   five minutes. Only non-player sources produce them. Accepted. Items the
   well raised are the exception: they carry a tag, so one that falls back
   is raised again. If every side of the rim is built over, it keeps rising
-  and falling back every two seconds or so until a player takes it.
+  and falling back about every three seconds until a player takes it.
 - Chunk unload during the 2-second wait delays the answer until the chunk
   is loaded again. Nothing is lost.
 - Only `chronodawn` items can be added by datapack under the lookup path.

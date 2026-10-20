@@ -66,6 +66,7 @@ public final class TimeWellTests {
     private static final Direction TEMPLATE_ROOF_SIDE = Direction.SOUTH;
     private static final int ROOF_HEIGHT_ABOVE_WATER = 3;
     private static final int ROOF_THROWER_DISTANCE = 3;
+    private static final int ABOVE_TOSS_HEIGHT = 4;
     // A risen item lands about 20 ticks after it is tossed. Twice that leaves time to settle.
     private static final int LANDING_WAIT_TICKS = 40;
     // The toss lands about 4.7 blocks from the shaft's centre, possibly just past the floor's
@@ -137,8 +138,10 @@ public final class TimeWellTests {
         for (Rotation rotation : Rotation.values()) {
             tests.add(factory.create("time_well_roof_side_return_lands_outside_"
                     + rotation.name().toLowerCase(Locale.ROOT),
-                helper -> testRoofSideReturnLandsOutside(helper, rotation)));
+                helper -> testRoofSideReturnLandsOutside(helper, rotation, false)));
         }
+        tests.add(factory.create("time_well_block_above_toss_path_keeps_launch_direction",
+            helper -> testRoofSideReturnLandsOutside(helper, Rotation.NONE, true)));
         return tests;
     }
 
@@ -808,7 +811,8 @@ public final class TimeWellTests {
      * still lands outside the well. Tossed straight at the thrower it would hit the roof slab
      * and fall back into the shaft. Runs once for each rotation the feature can place.
      */
-    private static void testRoofSideReturnLandsOutside(GameTestHelper helper, Rotation rotation) {
+    private static void testRoofSideReturnLandsOutside(GameTestHelper helper, Rotation rotation,
+                                                        boolean blockAboveOpenSide) {
         ServerLevel level = helper.getLevel();
         // Ground level with the top of the template's lowest layer, as the feature's y_offset
         // of -1 places it.
@@ -832,6 +836,14 @@ public final class TimeWellTests {
         BlockPos stone = water.relative(rotation.rotate(TEMPLATE_STONE_SIDE));
         Direction roofSide = rotation.rotate(TEMPLATE_ROOF_SIDE);
         BlockPos roof = water.relative(roofSide).above(ROOF_HEIGHT_ABOVE_WATER);
+        // With blockAboveOpenSide the thrower stands on a side that is open, with a solid block
+        // at water + 4. That is above the toss (its top is at most water + 3.69), so the launch
+        // must still go toward the thrower rather than to another side. The test runs unrotated
+        // on the east side because a toss to the west would land past the edge of the floor.
+        Direction throwSide = blockAboveOpenSide ? roofSide.getCounterClockWise() : roofSide;
+        if (blockAboveOpenSide) {
+            level.setBlock(water.relative(throwSide).above(ABOVE_TOSS_HEIGHT), Blocks.STONE.defaultBlockState(), 2);
+        }
         if (!level.getBlockState(roof).is(ModBlocks.TIME_WOOD_SLAB.get())
                 || !(level.getBlockEntity(stone) instanceof TimeWellStoneBlockEntity)) {
             CompatGameTestHelper.fail(helper, rotation + ": expected the roof slab at " + roof + " and the stone at "
@@ -841,7 +853,7 @@ public final class TimeWellTests {
         ServerPlayer player = CompatGameTestHelper.makeMockServerPlayer(helper);
         boolean handedOver = false;
         try {
-            Vec3 standAt = Vec3.atBottomCenterOf(water.relative(roofSide, ROOF_THROWER_DISTANCE));
+            Vec3 standAt = Vec3.atBottomCenterOf(water.relative(throwSide, ROOF_THROWER_DISTANCE));
             player.setPos(standAt.x, standAt.y, standAt.z);
             long thrownAt = level.getGameTime();
             ItemEntity thrown = new ItemEntity(level, water.getX() + 0.5, water.getY() + 0.5, water.getZ() + 0.5,
@@ -856,7 +868,8 @@ public final class TimeWellTests {
             handedOver = true;
             helper.runAfterDelay(LANDING_WAIT_TICKS, () -> {
                 try {
-                    expectLandedOutside(helper, water, thrownAt, rotation);
+                    expectLandedOutside(helper, water, thrownAt, rotation,
+                        blockAboveOpenSide ? throwSide : null);
                 } finally {
                     CompatGameTestHelper.removeMockServerPlayer(helper, player);
                 }
@@ -873,7 +886,7 @@ public final class TimeWellTests {
      * it so it is not left in the reused GameTest world.
      */
     private static void expectLandedOutside(GameTestHelper helper, BlockPos water, long thrownAt,
-                                            Rotation rotation) {
+                                            Rotation rotation, Direction expectedSide) {
         ServerLevel level = helper.getLevel();
         List<ItemEntity> returned = level.getEntitiesOfClass(ItemEntity.class,
             new AABB(water).inflate(LANDING_SEARCH_RANGE),
@@ -892,6 +905,15 @@ public final class TimeWellTests {
                     + item.position().subtract(water.getX() + 0.5, water.getY(), water.getZ() + 0.5)
                     + " from the water surface centre");
                 return;
+            }
+            if (expectedSide != null) {
+                double along = (item.getX() - (water.getX() + 0.5)) * expectedSide.getStepX()
+                    + (item.getZ() - (water.getZ() + 0.5)) * expectedSide.getStepZ();
+                if (along < RIM_OUTER_HALF_WIDTH) {
+                    CompatGameTestHelper.fail(helper, rotation + ": the item should land outside the " + expectedSide
+                        + " side but is " + along + " blocks along it from the centre");
+                    return;
+                }
             }
             helper.succeed();
         } finally {
