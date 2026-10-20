@@ -64,7 +64,7 @@ discover. Several biomes pass by, yet nothing invites a detour.
 Order rationale: simplest first to prove the foundation, then features that
 need new UI, entities or event state machines.
 
-## Foundation available after parts 1 and 2
+## Foundation available after parts 1 to 3
 
 - `com.chronodawn.core.wayside.PlayerCooldownTracker` (pure Java):
   `tryUse(UUID, gameTime, cooldownTicks)` returns 0 when accepted, prunes
@@ -74,9 +74,9 @@ need new UI, entities or event state machines.
   `common/shared` (CompoundTag, 1.20.1 to 1.21.4), `common/1.21.5`
   (`getStringOr`), `common/1.21.6` to `common/26.3` (ValueInput/ValueOutput).
   The 1.21.5+ `build.gradle` files exclude the shared copy.
-- Config section `[gameplay.wayside]` in `WaysideSettings` (sundial keys
-  only). Later parts add their keys there unless the part's design decides
-  otherwise.
+- Config section `[gameplay.wayside]` in `WaysideSettings`: sundial keys,
+  `memorial_cooldown_ticks` and `time_well_cooldown_ticks`. Later parts add
+  their keys there unless the part's design decides otherwise.
 - Pattern for an activator block: `SundialGnomonBlock` per version module
   (14 copies), block entity class shared in `common/shared`, registration in
   each `ModBlocks` / `ModBlockEntities`, `ModBlockId` / `ModBlockEntityId`
@@ -102,6 +102,15 @@ need new UI, entities or event state machines.
   the water and re-queues while the waiting tag `chronodawn.time_well_waiting`
   is set. Items are released when the stone or water is removed, through
   `onRemove` up to 1.21.4 and `BlockEntity#preRemoveSideEffects` from 1.21.5.
+  Items the well raises carry `chronodawn.time_well_risen`, so one that falls
+  back into the water is raised again. `raise()` checks the toss path with
+  collision shapes (`isTossPathClear`, `closestClearSide`) because the
+  template rotates.
+- More GameTest helpers (part 3): `CompatGameTestHelper.setThrower` (the
+  parameter is a UUID on 1.20.1 and an Entity later) and
+  `loadModStructureTemplate` (26.3 renamed the structure manager accessor), so
+  shared tests can throw items as a joined player and place real templates in
+  each rotation.
 
 ## Per-feature design notes
 
@@ -199,7 +208,7 @@ The notes below are the starting point it was designed from.
   participation, cooldown (initial idea two to three Minecraft days), link to
   the endgame reward shortage.
 
-## Lessons from parts 1 and 2 (apply to every part)
+## Lessons from parts 1 to 3 (apply to every part)
 
 - **Render layers.** `ModBlockId.cutout()` only applies on Fabric. NeoForge
   and Forge take the layer from `"render_type"` in the model JSON. Vanilla
@@ -233,6 +242,18 @@ The notes below are the starting point it was designed from.
 - **Mock players.** Vanilla `makeMockPlayer` is a plain `Player`. Anything
   that needs a `ServerPlayer` (advancements, teleports) must use
   `makeMockServerPlayer` and remove the player afterwards.
+- **Never lose a player's item.** In part 3 most review findings were ways
+  an item could be stranded: a chunk reload, a removed water source or
+  activator, an item falling back. Anything an activator holds or emits needs
+  a persisted entity tag so it can be picked up again after reload. An
+  in-memory queue alone is not enough.
+- **Look-alike activators confuse manual checks.** After breaking the Time
+  Well Stone, spilled water carried items out and the maintainer read it as
+  the well still working. State in the check steps what a broken activator
+  does, and how to tell the feature's effect from vanilla physics.
+- **Vanilla sound events can hide variants.** `entity.generic.splash`
+  randomly plays a file with a second splash two seconds in. Let the
+  maintainer compare candidates with `/playsound` before changing a sound.
 - **The 1.20.1 GameTest world is reused across runs.** Tests that search an
   area for items must ignore entities older than the test. `TimeWellTests`
   filters by spawn time.
@@ -242,7 +263,8 @@ The notes below are the starting point it was designed from.
 - **Verification commands:** `checkAll` exceeds the 10-minute foreground limit
   in agent sessions, so run `validateResources validateTranslations
   validateData validateEraTagParity`, `buildAll`, `testAll` and `gameTestAll`
-  separately, then read `build/gametest-*.log`.
+  separately, then read `build/gametest-*.log`. `buildAll` needs several GB of
+  free disk space and failed once with "No space left on device".
 
 ## Ideas parked for later
 
