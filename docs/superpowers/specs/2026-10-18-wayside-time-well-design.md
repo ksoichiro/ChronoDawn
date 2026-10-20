@@ -111,7 +111,9 @@ answers:
   is my call and to be confirmed in play-testing; it avoids the sundial's
   note block chime, the memorial's beacon sound and the Time Distortion
   bell). A plain return only plays a small splash
-  (`GENERIC_SPLASH`) with a few bubbles.
+  (`FISHING_BOBBER_SPLASH`, volume 0.1, chosen in play-testing) with a few
+  bubbles. `GENERIC_SPLASH` was dropped because one of its two sound files
+  holds a second splash two seconds in.
 - **Rising items.** Items spawn just above the rim and are tossed toward
   the thrower, landing outside the well, so they do not fall back in
   (decided). If the thrower is not online or not within 16 blocks, they

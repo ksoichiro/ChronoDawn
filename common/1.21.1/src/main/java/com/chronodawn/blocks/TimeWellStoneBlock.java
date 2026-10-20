@@ -508,7 +508,9 @@ public class TimeWellStoneBlock extends MossyTemporalCobblestoneBlock implements
     }
 
     private static void playReturnEffects(ServerLevel level, BlockPos water) {
-        level.playSound(null, water, SoundEvents.GENERIC_SPLASH, SoundSource.BLOCKS, 0.5f, 1.0f);
+        // Not GENERIC_SPLASH: one of its two sound files holds a second splash two seconds in,
+        // which players heard as a stray splash after the item had already landed.
+        level.playSound(null, water, SoundEvents.FISHING_BOBBER_SPLASH, SoundSource.BLOCKS, 0.1f, 1.0f);
         level.sendParticles(ParticleTypes.BUBBLE, water.getX() + 0.5, water.getY() + 0.7, water.getZ() + 0.5,
             BUBBLE_PARTICLES, 0.25, 0.1, 0.25, 0.0);
     }
