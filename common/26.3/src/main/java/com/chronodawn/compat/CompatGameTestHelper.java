@@ -65,6 +65,16 @@ public class CompatGameTestHelper {
             from.saveWithoutMetadata(registries)));
     }
 
+    /**
+     * Load one of the mod's structure templates, as worldgen does.
+     * ServerLevel#getStructureManager was renamed getStructureTemplateManager in 26.3.
+     */
+    public static java.util.Optional<net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate>
+            loadModStructureTemplate(GameTestHelper helper, String path) {
+        return helper.getLevel().getStructureTemplateManager().get(
+            CompatResourceLocation.create(com.chronodawn.ChronoDawn.MOD_ID, path));
+    }
+
     private CompatGameTestHelper() {
         // Utility class
     }

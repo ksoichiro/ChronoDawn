@@ -8,6 +8,7 @@ import com.chronodawn.core.wayside.WellQueue;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModItems;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,7 +19,10 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
@@ -26,6 +30,8 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 public final class TimeWellTests {
@@ -47,6 +53,26 @@ public final class TimeWellTests {
     private static final BlockPos ENCLOSED_STONE_POS = new BlockPos(5, 2, 5);
     private static final BlockPos STRAY_WATER_POS = new BlockPos(5, 2, 4);
     private static final BlockPos ENCLOSED_SHAFT_POS = new BlockPos(5, 2, 6);
+    // The full well from time_well.nbt, in the middle of the test area so the risen items land
+    // on its floor. The template's shaft column (1, y, 1) is its rotation pivot, as in
+    // NbtTemplateFeature, so the water stays at FULL_WELL_WATER_POS for every rotation.
+    private static final BlockPos FULL_WELL_ORIGIN = new BlockPos(3, 1, 3);
+    private static final BlockPos FULL_WELL_WATER_POS = new BlockPos(4, 2, 4);
+    private static final BlockPos TEMPLATE_PIVOT = new BlockPos(1, 0, 1);
+    private static final int FLOOR_SIZE = 10;
+    // Before rotation the stone is north of the shaft and the roof slab south of it, one block
+    // above the log posts.
+    private static final Direction TEMPLATE_STONE_SIDE = Direction.NORTH;
+    private static final Direction TEMPLATE_ROOF_SIDE = Direction.SOUTH;
+    private static final int ROOF_HEIGHT_ABOVE_WATER = 3;
+    private static final int ROOF_THROWER_DISTANCE = 3;
+    // A risen item lands about 20 ticks after it is tossed. Twice that leaves time to settle.
+    private static final int LANDING_WAIT_TICKS = 40;
+    // The toss lands about 4.7 blocks from the shaft's centre, possibly just past the floor's
+    // edge. Neighbouring tests' items land more than 8 blocks away, so they are not counted.
+    private static final int LANDING_SEARCH_RANGE = 6;
+    // Half the width of the shaft and its rim, from the shaft's centre.
+    private static final double RIM_OUTER_HALF_WIDTH = 1.5;
 
     private TimeWellTests() {
         // Utility class
@@ -106,6 +132,13 @@ public final class TimeWellTests {
             TimeWellTests::testStoneRemovalReleasesWaitingItem));
         tests.add(factory.create("time_well_stone_drops_mossy_cobblestone",
             TimeWellTests::testDrops));
+        tests.add(factory.create("time_well_raises_again_risen_item_fallen_back",
+            TimeWellTests::testRaisesAgainRisenItemFallenBack));
+        for (Rotation rotation : Rotation.values()) {
+            tests.add(factory.create("time_well_roof_side_return_lands_outside_"
+                    + rotation.name().toLowerCase(Locale.ROOT),
+                helper -> testRoofSideReturnLandsOutside(helper, rotation)));
+        }
         return tests;
     }
 
@@ -675,6 +708,194 @@ public final class TimeWellTests {
             helper.succeed();
         } else {
             CompatGameTestHelper.fail(helper, "time_well_stone should drop one mossy_temporal_cobblestone, got " + drops);
+        }
+    }
+
+    /**
+     * Test: a risen item that falls back into the shaft is queued again as returned to a
+     * thrower who is gone, and is raised again after the answer delay. That answer uses nobody's
+     * cooldown, so the original thrower can still wish afterwards.
+     */
+    private static void testRaisesAgainRisenItemFallenBack(GameTestHelper helper) {
+        TimeWellStoneBlockEntity well = placeWell(helper);
+        if (well == null) {
+            return;
+        }
+        ServerLevel level = helper.getLevel();
+        BlockPos stone = helper.absolutePos(STONE_POS);
+        ServerPlayer player = joinPlayer(helper);
+        boolean handedOver = false;
+        try {
+            long thrownAt = level.getGameTime();
+            ItemEntity thrown = spawnInWater(helper, new ItemStack(Items.DIRT, 5));
+            CompatGameTestHelper.setThrower(thrown, player);
+            TimeWellOutcome outcome = TimeWellStoneBlock.answer(level, stone, thrown, player);
+            if (outcome != TimeWellOutcome.NOT_ACCEPTED) {
+                CompatGameTestHelper.fail(helper, "Expected NOT_ACCEPTED, got " + outcome);
+                return;
+            }
+            List<ItemEntity> risen = findRisen(helper, thrown, 3, thrownAt);
+            if (risen.size() != 1 || !TimeWellStoneBlock.isRisen(risen.get(0))) {
+                CompatGameTestHelper.fail(helper, "Expected one risen stack with the risen tag, got " + risen.size()
+                    + (risen.isEmpty() ? "" : ", tagged=" + TimeWellStoneBlock.isRisen(risen.get(0))));
+                return;
+            }
+            ItemEntity fallen = risen.get(0);
+            BlockPos water = helper.absolutePos(WATER_POS);
+            fallen.setPos(water.getX() + 0.5, water.getY() + 0.5, water.getZ() + 0.5);
+            fallen.setDeltaMovement(Vec3.ZERO);
+            long fellAt = level.getGameTime();
+            TimeWellStoneBlock.tick(level, stone, well);
+            if (!well.queue().contains(fallen.getUUID()) || !TimeWellStoneBlock.isWaiting(fallen)
+                    || TimeWellStoneBlock.isRisen(fallen)) {
+                CompatGameTestHelper.fail(helper, "The fallen item was not queued again: queued="
+                    + well.queue().contains(fallen.getUUID()) + ", waiting=" + TimeWellStoneBlock.isWaiting(fallen)
+                    + ", still tagged risen=" + TimeWellStoneBlock.isRisen(fallen));
+                return;
+            }
+            handedOver = true;
+            helper.runAfterDelay(ANSWER_WAIT_TICKS, () -> {
+                try {
+                    expectRaisedAgain(helper, player, fallen, fellAt);
+                } finally {
+                    CompatGameTestHelper.removeMockServerPlayer(helper, player);
+                }
+            });
+        } finally {
+            if (!handedOver) {
+                CompatGameTestHelper.removeMockServerPlayer(helper, player);
+            }
+        }
+    }
+
+    /**
+     * Checks that the fallen item was answered once, no sooner than the answer delay, by a
+     * fresh tagged stack, and that the thrower's cooldown is still free.
+     */
+    private static void expectRaisedAgain(GameTestHelper helper, Player player, ItemEntity fallen, long fellAt) {
+        ServerLevel level = helper.getLevel();
+        if (!fallen.isRemoved()) {
+            CompatGameTestHelper.fail(helper, "The fallen item was not raised again");
+            return;
+        }
+        List<ItemEntity> again = new ArrayList<>(findRisen(helper, fallen, 3, fellAt));
+        again.removeIf(e -> !e.getItem().is(Items.DIRT));
+        if (again.size() != 1 || again.get(0).getItem().getCount() != 5) {
+            CompatGameTestHelper.fail(helper, "Expected 5 dirt to rise again, got " + again.size() + " stacks");
+            return;
+        }
+        ItemEntity raised = again.get(0);
+        long raisedAt = level.getGameTime() - raised.getAge();
+        if (raisedAt - fellAt < WellQueue.ANSWER_DELAY_TICKS) {
+            CompatGameTestHelper.fail(helper, "The fallen item was raised again after " + (raisedAt - fellAt)
+                + " ticks, before the answer delay");
+            return;
+        }
+        if (!TimeWellStoneBlock.isRisen(raised) || TimeWellStoneBlock.isWaiting(raised)) {
+            CompatGameTestHelper.fail(helper, "The stack raised again should carry only the risen tag: risen="
+                + TimeWellStoneBlock.isRisen(raised) + ", waiting=" + TimeWellStoneBlock.isWaiting(raised));
+            return;
+        }
+        raised.discard();
+        if (!expectExchanged(helper, player, "Wish after the item was raised again")) {
+            return;
+        }
+        helper.succeed();
+    }
+
+    /**
+     * Test: in the real template, with the thrower standing on the roofed side, a returned item
+     * still lands outside the well. Tossed straight at the thrower it would hit the roof slab
+     * and fall back into the shaft. Runs once for each rotation the feature can place.
+     */
+    private static void testRoofSideReturnLandsOutside(GameTestHelper helper, Rotation rotation) {
+        ServerLevel level = helper.getLevel();
+        // Ground level with the top of the template's lowest layer, as the feature's y_offset
+        // of -1 places it.
+        for (int x = 0; x < FLOOR_SIZE; x++) {
+            for (int z = 0; z < FLOOR_SIZE; z++) {
+                helper.setBlock(new BlockPos(x, 1, z), Blocks.DIRT);
+            }
+        }
+        Optional<StructureTemplate> template = CompatGameTestHelper.loadModStructureTemplate(helper, "time_well");
+        if (template.isEmpty()) {
+            CompatGameTestHelper.fail(helper, "Structure template 'time_well' could not be loaded");
+            return;
+        }
+        StructurePlaceSettings settings = new StructurePlaceSettings()
+            .setRotation(rotation)
+            .setRotationPivot(TEMPLATE_PIVOT);
+        BlockPos origin = helper.absolutePos(FULL_WELL_ORIGIN);
+        template.get().placeInWorld(level, origin, origin, settings, level.getRandom(), 2);
+
+        BlockPos water = helper.absolutePos(FULL_WELL_WATER_POS);
+        BlockPos stone = water.relative(rotation.rotate(TEMPLATE_STONE_SIDE));
+        Direction roofSide = rotation.rotate(TEMPLATE_ROOF_SIDE);
+        BlockPos roof = water.relative(roofSide).above(ROOF_HEIGHT_ABOVE_WATER);
+        if (!level.getBlockState(roof).is(ModBlocks.TIME_WOOD_SLAB.get())
+                || !(level.getBlockEntity(stone) instanceof TimeWellStoneBlockEntity)) {
+            CompatGameTestHelper.fail(helper, rotation + ": expected the roof slab at " + roof + " and the stone at "
+                + stone + ", got " + level.getBlockState(roof) + " and " + level.getBlockState(stone));
+            return;
+        }
+        ServerPlayer player = CompatGameTestHelper.makeMockServerPlayer(helper);
+        boolean handedOver = false;
+        try {
+            Vec3 standAt = Vec3.atBottomCenterOf(water.relative(roofSide, ROOF_THROWER_DISTANCE));
+            player.setPos(standAt.x, standAt.y, standAt.z);
+            long thrownAt = level.getGameTime();
+            ItemEntity thrown = new ItemEntity(level, water.getX() + 0.5, water.getY() + 0.5, water.getZ() + 0.5,
+                new ItemStack(Items.DIRT, 5));
+            level.addFreshEntity(thrown);
+            CompatGameTestHelper.setThrower(thrown, player);
+            TimeWellOutcome outcome = TimeWellStoneBlock.answer(level, stone, thrown, player);
+            if (outcome != TimeWellOutcome.NOT_ACCEPTED) {
+                CompatGameTestHelper.fail(helper, rotation + ": expected NOT_ACCEPTED, got " + outcome);
+                return;
+            }
+            handedOver = true;
+            helper.runAfterDelay(LANDING_WAIT_TICKS, () -> {
+                try {
+                    expectLandedOutside(helper, water, thrownAt, rotation);
+                } finally {
+                    CompatGameTestHelper.removeMockServerPlayer(helper, player);
+                }
+            });
+        } finally {
+            if (!handedOver) {
+                CompatGameTestHelper.removeMockServerPlayer(helper, player);
+            }
+        }
+    }
+
+    /**
+     * Checks that the dirt returned since the throw lies outside the well's rim, then removes
+     * it so it is not left in the reused GameTest world.
+     */
+    private static void expectLandedOutside(GameTestHelper helper, BlockPos water, long thrownAt,
+                                            Rotation rotation) {
+        ServerLevel level = helper.getLevel();
+        List<ItemEntity> returned = level.getEntitiesOfClass(ItemEntity.class,
+            new AABB(water).inflate(LANDING_SEARCH_RANGE),
+            e -> e.isAlive() && e.getItem().is(Items.DIRT) && level.getGameTime() - e.getAge() >= thrownAt);
+        try {
+            if (returned.size() != 1) {
+                CompatGameTestHelper.fail(helper, rotation + ": expected one returned stack, got " + returned.size());
+                return;
+            }
+            ItemEntity item = returned.get(0);
+            double fromCentreX = Math.abs(item.getX() - (water.getX() + 0.5));
+            double fromCentreZ = Math.abs(item.getZ() - (water.getZ() + 0.5));
+            if (item.blockPosition().equals(water)
+                    || (fromCentreX < RIM_OUTER_HALF_WIDTH && fromCentreZ < RIM_OUTER_HALF_WIDTH)) {
+                CompatGameTestHelper.fail(helper, rotation + ": the returned item fell back into the well, at "
+                    + item.position().subtract(water.getX() + 0.5, water.getY(), water.getZ() + 0.5)
+                    + " from the water surface centre");
+                return;
+            }
+            helper.succeed();
+        } finally {
+            returned.forEach(ItemEntity::discard);
         }
     }
 }

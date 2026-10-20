@@ -74,6 +74,12 @@ public class TimeWellStoneBlock extends MossyTemporalCobblestoneBlock implements
      * after a chunk reload the well can still find and return items it was holding.
      */
     public static final String WAITING_TAG = "chronodawn.time_well_waiting";
+    /**
+     * Entity tag on every stack the well raises. A risen item has no thrower, so if it falls
+     * back into the shaft this tag is what lets the well raise it again instead of ignoring it.
+     * Saved with the entity, so it holds across a chunk reload too.
+     */
+    public static final String RISEN_TAG = "chronodawn.time_well_risen";
     // Thrower of an orphaned waiting item whose player cannot be resolved. No player has this
     // UUID, so the answer finds no thrower and returns the item.
     private static final UUID UNKNOWN_THROWER = new UUID(0L, 0L);
@@ -82,6 +88,15 @@ public class TimeWellStoneBlock extends MossyTemporalCobblestoneBlock implements
     private static final double RISE_HORIZONTAL_SPEED = 0.25;
     private static final double RISE_VERTICAL_SPEED = 0.35;
     private static final double AIM_RANGE = 16.0;
+    // Half the width of an item entity's 0.25-block bounding box.
+    private static final double ITEM_HALF_WIDTH = 0.125;
+    // The rim, and anything standing on it such as the roof, is within one block of the shaft.
+    private static final int RIM_REACH = 1;
+    // The blocks above the water that a toss passes through over the rim: from just above the
+    // rim top (the rim is at water + 1) up to one block above the highest point of the arc.
+    private static final int TOSS_PATH_LOWEST = 2;
+    private static final int TOSS_PATH_HIGHEST = 4;
+    private static final double TOSS_PATH_STEP = 0.05;
     private static final int GLOW_PARTICLES = 12;
     private static final int END_ROD_PARTICLES = 10;
     // With the END_ROD friction of 0.91 and its small gravity, 0.2 lifts a spark about 2 blocks,
@@ -206,9 +221,11 @@ public class TimeWellStoneBlock extends MossyTemporalCobblestoneBlock implements
                 // Items dropped by mobs, hoppers or dispensers have no player owner and are left alone.
                 if (item.getOwner() instanceof Player thrower) {
                     markWaiting(well, item, thrower, gameTime);
-                } else if (isWaiting(item)) {
-                    // Left over from a wait the well lost on a chunk reload. It cannot be picked up,
-                    // so it must be answered again, as returned to a thrower who is gone.
+                } else if (isWaiting(item) || isRisen(item)) {
+                    // A waiting item left over from a wait the well lost on a chunk reload cannot be
+                    // picked up, and a risen item that fell back into the shaft has no thrower.
+                    // Both are answered again, as returned to a thrower who is gone, so neither is
+                    // lost. The answer delay limits this to one raise per item every 40 ticks.
                     markWaiting(well, item, UNKNOWN_THROWER, gameTime);
                 }
             }
@@ -260,6 +277,8 @@ public class TimeWellStoneBlock extends MossyTemporalCobblestoneBlock implements
         // Never-pick-up items do not merge either, so the queued entity keeps its UUID.
         item.setNeverPickUp();
         item.addTag(WAITING_TAG);
+        // The answer discards this entity and raises a fresh one with its own tag.
+        item.removeTag(RISEN_TAG);
         well.queue().offer(item.getUUID(), thrower, gameTime);
     }
 
@@ -268,6 +287,13 @@ public class TimeWellStoneBlock extends MossyTemporalCobblestoneBlock implements
      */
     public static boolean isWaiting(ItemEntity item) {
         return item.getTags().contains(WAITING_TAG);
+    }
+
+    /**
+     * @return whether the item carries {@link #RISEN_TAG}, set on every stack the well raises
+     */
+    public static boolean isRisen(ItemEntity item) {
+        return item.getTags().contains(RISEN_TAG);
     }
 
     /**
@@ -352,7 +378,9 @@ public class TimeWellStoneBlock extends MossyTemporalCobblestoneBlock implements
 
     /**
      * Lifts a stack out of the shaft and tosses it over the rim, toward the thrower when they
-     * are near so the items land at their feet rather than back in the water.
+     * are near so the items land at their feet rather than back in the water. When something
+     * on the rim, such as the roof, is in the way, the stack is tossed to the clear side
+     * closest to that direction instead.
      */
     private static void raise(ServerLevel level, BlockPos water, ItemStack stack, Player thrower) {
         if (stack.isEmpty()) {
@@ -374,11 +402,84 @@ public class TimeWellStoneBlock extends MossyTemporalCobblestoneBlock implements
             dz = Math.sin(angle);
         }
         double length = Math.sqrt(dx * dx + dz * dz);
+        double towardX = dx / length;
+        double towardZ = dz / length;
+        if (!isTossPathClear(level, water, towardX, towardZ)) {
+            Direction side = closestClearSide(level, water, towardX, towardZ);
+            // With every side blocked the stack is still tossed the first way. If it falls back,
+            // its tag gets it raised again.
+            if (side != null) {
+                towardX = side.getStepX();
+                towardZ = side.getStepZ();
+            }
+        }
         ItemEntity risen = new ItemEntity(level, x, y, z, stack);
-        risen.setDeltaMovement(dx / length * RISE_HORIZONTAL_SPEED, RISE_VERTICAL_SPEED,
-            dz / length * RISE_HORIZONTAL_SPEED);
+        risen.setDeltaMovement(towardX * RISE_HORIZONTAL_SPEED, RISE_VERTICAL_SPEED,
+            towardZ * RISE_HORIZONTAL_SPEED);
         risen.setDefaultPickUpDelay();
+        risen.addTag(RISEN_TAG);
         level.addFreshEntity(risen);
+    }
+
+    /**
+     * @return the horizontal side with a clear toss path that is closest to the given
+     *         direction, or null when every side is blocked
+     */
+    private static Direction closestClearSide(Level level, BlockPos water, double towardX, double towardZ) {
+        Direction best = null;
+        double bestAlignment = Double.NEGATIVE_INFINITY;
+        for (Direction side : Direction.Plane.HORIZONTAL) {
+            double alignment = side.getStepX() * towardX + side.getStepZ() * towardZ;
+            if (alignment > bestAlignment && isTossPathClear(level, water, side.getStepX(), side.getStepZ())) {
+                best = side;
+                bestAlignment = alignment;
+            }
+        }
+        return best;
+    }
+
+    /**
+     * Checks that nothing stops a stack tossed along the given unit direction before it is
+     * past the rim. Raised from water + 2.2 at the rise speeds, the item is between water + 2.77
+     * (its bottom) and water + 3.69 (its top) over the rim, so a block with a collision shape
+     * at water + 2 or + 3 in a column it crosses stops it, as the roof slab does, and it drops
+     * back into the shaft. The rim itself, even a wall 1.5 blocks tall, stays below the item.
+     * Collision shapes are checked rather than block ids because the template is placed
+     * rotated and players can build on the rim.
+     */
+    private static boolean isTossPathClear(Level level, BlockPos water, double towardX, double towardZ) {
+        // Columns around the shaft that the item's footprint crosses, indexed from -RIM_REACH.
+        int span = 2 * RIM_REACH + 1;
+        boolean[][] crossed = new boolean[span][span];
+        // Far enough along the direction for the whole footprint to have left the rim's columns.
+        double pathLength = (RIM_REACH + 0.5 + ITEM_HALF_WIDTH) / Math.max(Math.abs(towardX), Math.abs(towardZ));
+        int steps = (int) Math.ceil(pathLength / TOSS_PATH_STEP);
+        for (int step = 0; step <= steps; step++) {
+            double distance = pathLength * step / steps;
+            for (double cornerX : new double[] {-ITEM_HALF_WIDTH, ITEM_HALF_WIDTH}) {
+                for (double cornerZ : new double[] {-ITEM_HALF_WIDTH, ITEM_HALF_WIDTH}) {
+                    int offsetX = (int) Math.floor(0.5 + distance * towardX + cornerX);
+                    int offsetZ = (int) Math.floor(0.5 + distance * towardZ + cornerZ);
+                    if (Math.abs(offsetX) <= RIM_REACH && Math.abs(offsetZ) <= RIM_REACH) {
+                        crossed[offsetX + RIM_REACH][offsetZ + RIM_REACH] = true;
+                    }
+                }
+            }
+        }
+        for (int offsetX = -RIM_REACH; offsetX <= RIM_REACH; offsetX++) {
+            for (int offsetZ = -RIM_REACH; offsetZ <= RIM_REACH; offsetZ++) {
+                if (!crossed[offsetX + RIM_REACH][offsetZ + RIM_REACH] || (offsetX == 0 && offsetZ == 0)) {
+                    continue;
+                }
+                for (int height = TOSS_PATH_LOWEST; height <= TOSS_PATH_HIGHEST; height++) {
+                    BlockPos pos = water.offset(offsetX, height, offsetZ);
+                    if (!level.getBlockState(pos).getCollisionShape(level, pos).isEmpty()) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 
     private static void playExchangeEffects(ServerLevel level, BlockPos water) {

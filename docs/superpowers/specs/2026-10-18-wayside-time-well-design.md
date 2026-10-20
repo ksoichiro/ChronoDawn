@@ -115,7 +115,11 @@ answers:
 - **Rising items.** Items spawn just above the rim and are tossed toward
   the thrower, landing outside the well, so they do not fall back in
   (decided). If the thrower is not online or not within 16 blocks, they
-  pop straight up and land beside the well.
+  pop straight up and land beside the well. Before the toss the well
+  checks the blocks the arc passes over the rim. If something with a
+  collision shape is in the way, like the roof slab or the log posts, the
+  items go to the clear side closest to the thrower instead. The template
+  is placed rotated, so this is a geometric check, not a fixed side.
 - **Message.** An action-bar line to the thrower:
   - exchange: "The well answers your wish"
   - not accepted: "The well has no use for this"
@@ -145,9 +149,17 @@ returns them. This covers dispensers, droppers, broken containers, mob
 drops, and mobs that set themselves as thrower (allays delivering items,
 piglin bartering and villager gifts go through `BehaviorUtils.throwItem`,
 which calls `setThrower`). Otherwise a row of allays would automate the
-well. Items the well itself returns have no thrower, so they can never
-loop. (My call. A player can still fish an ignored item out by emptying the
+well. (My call. A player can still fish an ignored item out by emptying the
 well.)
+
+Items the well itself raises have no thrower either, but they are not
+ignored. Each one carries a saved entity tag. If such an item falls back
+into the shaft anyway, for example because a player built over the rim on
+every side, the well queues it again as returned to a thrower who is gone.
+It is raised again after the usual delay, with no message and no
+cooldown. The new stack gets a fresh tag. This repeats at most once every
+40 ticks per item, so it cannot spin, and nothing a player threw is lost.
+Items with neither this tag nor a player thrower stay ignored.
 
 If the thrower was a player when the item entered but has left the level by
 the time the well answers, the item is returned straight up without an
@@ -331,7 +343,10 @@ config keys instead.)
 - A player who wants a result again must find another well or wait a day.
   Intended.
 - Items without a thrower stay in the water and can despawn there after
-  five minutes. Only non-player sources produce them. Accepted.
+  five minutes. Only non-player sources produce them. Accepted. Items the
+  well raised are the exception: they carry a tag, so one that falls back
+  is raised again. If every side of the rim is built over, it keeps rising
+  and falling back every two seconds or so until a player takes it.
 - Chunk unload during the 2-second wait delays the answer until the chunk
   is loaded again. Nothing is lost.
 - Only `chronodawn` items can be added by datapack under the lookup path.
