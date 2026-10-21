@@ -25,6 +25,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Temporal Stone and Polished Deepslate Temporal Stone stairs, slabs and walls
   can now be crafted at a crafting table like their vanilla counterparts,
   not only cut with a stonecutter.
+- **Time Well wishes**: Time Wells now hold water. Drop Time Wheat, Time
+  Bread, a Chrono Melon Slice, Raw Temporal Amber, a Clockstone or a Time
+  Crystal into the water and the well glows, then exchanges one of them for a
+  slightly better item, with a small chance of something rarer. The rest of
+  the stack and anything the well does not accept rises back out, so nothing
+  thrown in is lost. Each player can make a wish at each well about once every
+  20 minutes of game time by default (`time_well_cooldown_ticks` under
+  `[gameplay.wayside]`). Breaking the Time Well Stone drops Mossy Temporal
+  Cobblestone. Only wells in newly generated chunks grant wishes.
 
 ### Changed
 
@@ -75,15 +84,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Temporal Amber or cooked food. The journal is never used up. Breaking the
   plate drops a plain Temporal Stone Pressure Plate. Only memorials in newly
   generated chunks have the interactive plate.
-- **Time Well wishes**: Time Wells now hold water. Drop Time Wheat, Time
-  Bread, a Chrono Melon Slice, Raw Temporal Amber, a Clockstone or a Time
-  Crystal into the water and the well glows, then exchanges one of them for a
-  slightly better item, with a small chance of something rarer. The rest of
-  the stack and anything the well does not accept rises back out, so nothing
-  thrown in is lost. Each player can make a wish at each well about once every
-  20 minutes of game time by default (`time_well_cooldown_ticks` under
-  `[gameplay.wayside]`). Breaking the Time Well Stone drops Mossy Temporal
-  Cobblestone. Only wells in newly generated chunks grant wishes.
 
 ### Changed
 
