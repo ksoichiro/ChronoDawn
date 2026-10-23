@@ -1,0 +1,17 @@
+# WARN/ERROR/FATAL log lines that upgradeTest tolerates in the server and
+# client logs of the post-upgrade run (see scripts/upgrade_test/).
+#
+# Format: one Python regex per line, matched anywhere in the log line.
+# Noise caused by the test harness itself (offline mode banner, RCON, etc.)
+# is ignored by scripts/upgrade_test/logcheck.py and does not belong here.
+#
+# Every entry below is a known issue that still needs investigation. Remove
+# the entry together with the fix.
+
+# Fabric client only. 1.21.1 ships pack.mcmeta with pack_format 48 (the data
+# pack format; the 1.21.1 resource format is 34), so the client drops the mod
+# pack from the selected list when options.txt has no saved selection yet,
+# which is every launch of the test's fresh client. The mod's resources are
+# still loaded (it stays in the "Reloading ResourceManager" list). Present in
+# old releases too. Remove this entry together with a pack.mcmeta fix.
+Removed resource pack chronodawn from options because it is no longer compatible

@@ -1,0 +1,16 @@
+{
+  "introduced": "0.11.0",
+  "description": "Cracked Temporal Stone Bricks.",
+  "setup": [
+    "fill 1600 199 1623 1610 199 1623 minecraft:stone",
+    "setblock 1602 200 1623 chronodawn:cracked_temporal_stone_bricks"
+  ],
+  "checks": [
+    {
+      "id": "v0.11.0_block_cracked_temporal_stone_bricks",
+      "kind": "command",
+      "command": "execute if block 1602 200 1623 chronodawn:cracked_temporal_stone_bricks"
+    }
+  ],
+  "not_covered": []
+}

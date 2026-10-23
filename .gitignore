@@ -58,3 +58,6 @@ assets/*.java
 texture-preview/
 
 *.bak
+
+# Python bytecode (scripts/upgrade_test and other helper scripts)
+__pycache__/

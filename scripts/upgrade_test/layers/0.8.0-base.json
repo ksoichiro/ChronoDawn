@@ -1,0 +1,373 @@
+{
+  "introduced": "0.8.0",
+  "description": "Content present in 0.8.0 (the pinned baseline): containers, blocks, block entities, entities, player inventory, advancements, config, SavedData, generated terrain.",
+  "setup": [
+    "gamerule randomTickSpeed 0",
+    "gamerule mobGriefing false",
+    "gamerule doFireTick false",
+    "forceload add 1600 1600 1631 1631",
+    {
+      "await": "execute if loaded 1600 200 1600",
+      "match": "Test passed"
+    },
+    {
+      "await": "execute if loaded 1631 200 1631",
+      "match": "Test passed"
+    },
+    "fill 1600 199 1600 1615 199 1615 minecraft:stone",
+    "setblock 1600 200 1600 minecraft:chest",
+    "item replace block 1600 200 1600 container.0 with chronodawn:clockstone 32",
+    "item replace block 1600 200 1600 container.1 with chronodawn:time_crystal 7",
+    "item replace block 1600 200 1600 container.2 with chronodawn:clockstone_pickaxe[minecraft:damage=37] 1",
+    "item replace block 1600 200 1600 container.3 with chronodawn:clockstone_helmet 1",
+    "item replace block 1600 200 1600 container.4 with chronodawn:time_wood_boat 1",
+    "item replace block 1600 200 1600 container.5 with chronodawn:time_bread 12",
+    "item replace block 1600 200 1600 container.6 with chronodawn:chronoblade 1",
+    "item replace block 1600 200 1600 container.7 with chronodawn:portal_stabilizer 1",
+    "setblock 1602 200 1600 chronodawn:clockstone_block",
+    "setblock 1603 200 1600 chronodawn:time_crystal_block",
+    "setblock 1604 200 1600 chronodawn:temporal_stone_bricks",
+    "setblock 1605 200 1600 chronodawn:time_wood_planks",
+    "setblock 1606 200 1600 chronodawn:time_wood_log",
+    "setblock 1607 200 1600 chronodawn:dark_time_wood_planks",
+    "setblock 1608 200 1600 chronodawn:temporal_bricks",
+    "setblock 1609 200 1600 chronodawn:clockwork_block",
+    "setblock 1610 200 1600 chronodawn:time_wheat_bale",
+    "setblock 1611 200 1600 chronodawn:temporal_sandstone",
+    "setblock 1602 200 1604 chronodawn:boss_room_door",
+    "setblock 1604 200 1604 chronodawn:clock_tower_teleporter",
+    "setblock 1606 200 1604 chronodawn:boss_room_boundary_marker",
+    "execute in chronodawn:chronodawn run forceload add 1600 1600 1631 1631",
+    {
+      "await": "execute in chronodawn:chronodawn run execute if loaded 1600 200 1600",
+      "match": "Test passed"
+    },
+    {
+      "await": "execute in chronodawn:chronodawn run execute if loaded 1631 200 1631",
+      "match": "Test passed"
+    },
+    "execute in chronodawn:chronodawn run fill 1600 199 1600 1615 199 1615 minecraft:stone",
+    "execute in chronodawn:chronodawn run setblock 1600 200 1600 minecraft:chest",
+    "execute in chronodawn:chronodawn run item replace block 1600 200 1600 container.0 with chronodawn:clockstone 32",
+    "execute in chronodawn:chronodawn run item replace block 1600 200 1600 container.1 with chronodawn:time_crystal 7",
+    "execute in chronodawn:chronodawn run item replace block 1600 200 1600 container.2 with chronodawn:clockstone_pickaxe[minecraft:damage=37] 1",
+    "execute in chronodawn:chronodawn run item replace block 1600 200 1600 container.3 with chronodawn:clockstone_helmet 1",
+    "execute in chronodawn:chronodawn run item replace block 1600 200 1600 container.4 with chronodawn:time_wood_boat 1",
+    "execute in chronodawn:chronodawn run item replace block 1600 200 1600 container.5 with chronodawn:time_bread 12",
+    "execute in chronodawn:chronodawn run item replace block 1600 200 1600 container.6 with chronodawn:chronoblade 1",
+    "execute in chronodawn:chronodawn run item replace block 1600 200 1600 container.7 with chronodawn:portal_stabilizer 1",
+    "execute in chronodawn:chronodawn run setblock 1602 200 1600 chronodawn:clockstone_block",
+    "execute in chronodawn:chronodawn run setblock 1603 200 1600 chronodawn:time_crystal_block",
+    "execute in chronodawn:chronodawn run setblock 1604 200 1600 chronodawn:temporal_stone_bricks",
+    "execute in chronodawn:chronodawn run setblock 1605 200 1600 chronodawn:time_wood_planks",
+    "execute in chronodawn:chronodawn run setblock 1606 200 1600 chronodawn:time_wood_log",
+    "execute in chronodawn:chronodawn run setblock 1607 200 1600 chronodawn:dark_time_wood_planks",
+    "execute in chronodawn:chronodawn run setblock 1608 200 1600 chronodawn:temporal_bricks",
+    "execute in chronodawn:chronodawn run setblock 1609 200 1600 chronodawn:clockwork_block",
+    "execute in chronodawn:chronodawn run setblock 1610 200 1600 chronodawn:time_wheat_bale",
+    "execute in chronodawn:chronodawn run setblock 1611 200 1600 chronodawn:temporal_sandstone",
+    "execute in chronodawn:chronodawn run setblock 1602 200 1604 chronodawn:boss_room_door",
+    "execute in chronodawn:chronodawn run setblock 1604 200 1604 chronodawn:clock_tower_teleporter",
+    "execute in chronodawn:chronodawn run setblock 1606 200 1604 chronodawn:boss_room_boundary_marker",
+    "summon chronodawn:ticking_sheep 1602 200 1608 {NoAI:1b,PersistenceRequired:1b,Tags:[\"upgrade_test\"],Sheared:1b}",
+    "summon chronodawn:time_keeper 1604 200 1608 {NoAI:1b,PersistenceRequired:1b,Tags:[\"upgrade_test\"],TradeCooldown:1234}",
+    "summon chronodawn:moment_creeper 1606 200 1608 {NoAI:1b,PersistenceRequired:1b,Tags:[\"upgrade_test\"],Fuse:0s}",
+    "summon chronodawn:chronodawn_boat 1608 200 1608 {NoAI:1b,PersistenceRequired:1b,Tags:[\"upgrade_test\"]}",
+    "execute in chronodawn:chronodawn run tp Dev 1608 200 1612",
+    "execute in chronodawn:chronodawn run summon chronodawn:time_guardian 1612 200 1612 {Tags:[\"upgrade_test_boss\"]}",
+    "damage @e[tag=upgrade_test_boss,limit=1] 100000 minecraft:player_attack by Dev",
+    "advancement grant Dev everything",
+    "give Dev chronodawn:clockstone 32",
+    "give Dev chronodawn:time_crystal 7",
+    "give Dev chronodawn:clockstone_pickaxe[minecraft:damage=37] 1",
+    "give Dev chronodawn:clockstone_helmet 1",
+    "give Dev chronodawn:time_wood_boat 1",
+    "give Dev chronodawn:time_bread 12",
+    "give Dev chronodawn:chronoblade 1",
+    "give Dev chronodawn:portal_stabilizer 1"
+  ],
+  "checks": [
+    {
+      "id": "ow_chest",
+      "kind": "command",
+      "command": "data get block 1600 200 1600 Items"
+    },
+    {
+      "id": "ow_block_clockstone_block",
+      "kind": "command",
+      "command": "execute if block 1602 200 1600 chronodawn:clockstone_block"
+    },
+    {
+      "id": "ow_block_time_crystal_block",
+      "kind": "command",
+      "command": "execute if block 1603 200 1600 chronodawn:time_crystal_block"
+    },
+    {
+      "id": "ow_block_temporal_stone_bricks",
+      "kind": "command",
+      "command": "execute if block 1604 200 1600 chronodawn:temporal_stone_bricks"
+    },
+    {
+      "id": "ow_block_time_wood_planks",
+      "kind": "command",
+      "command": "execute if block 1605 200 1600 chronodawn:time_wood_planks"
+    },
+    {
+      "id": "ow_block_time_wood_log",
+      "kind": "command",
+      "command": "execute if block 1606 200 1600 chronodawn:time_wood_log"
+    },
+    {
+      "id": "ow_block_dark_time_wood_planks",
+      "kind": "command",
+      "command": "execute if block 1607 200 1600 chronodawn:dark_time_wood_planks"
+    },
+    {
+      "id": "ow_block_temporal_bricks",
+      "kind": "command",
+      "command": "execute if block 1608 200 1600 chronodawn:temporal_bricks"
+    },
+    {
+      "id": "ow_block_clockwork_block",
+      "kind": "command",
+      "command": "execute if block 1609 200 1600 chronodawn:clockwork_block"
+    },
+    {
+      "id": "ow_block_time_wheat_bale",
+      "kind": "command",
+      "command": "execute if block 1610 200 1600 chronodawn:time_wheat_bale"
+    },
+    {
+      "id": "ow_block_temporal_sandstone",
+      "kind": "command",
+      "command": "execute if block 1611 200 1600 chronodawn:temporal_sandstone"
+    },
+    {
+      "id": "ow_block_entity_boss_room_door",
+      "kind": "command",
+      "command": "data get block 1602 200 1604"
+    },
+    {
+      "id": "ow_block_entity_clock_tower_teleporter",
+      "kind": "command",
+      "command": "data get block 1604 200 1604"
+    },
+    {
+      "id": "ow_block_entity_boss_room_boundary_marker",
+      "kind": "command",
+      "command": "data get block 1606 200 1604"
+    },
+    {
+      "id": "cd_chest",
+      "kind": "command",
+      "command": "execute in chronodawn:chronodawn run data get block 1600 200 1600 Items"
+    },
+    {
+      "id": "cd_block_clockstone_block",
+      "kind": "command",
+      "command": "execute in chronodawn:chronodawn run execute if block 1602 200 1600 chronodawn:clockstone_block"
+    },
+    {
+      "id": "cd_block_time_crystal_block",
+      "kind": "command",
+      "command": "execute in chronodawn:chronodawn run execute if block 1603 200 1600 chronodawn:time_crystal_block"
+    },
+    {
+      "id": "cd_block_temporal_stone_bricks",
+      "kind": "command",
+      "command": "execute in chronodawn:chronodawn run execute if block 1604 200 1600 chronodawn:temporal_stone_bricks"
+    },
+    {
+      "id": "cd_block_time_wood_planks",
+      "kind": "command",
+      "command": "execute in chronodawn:chronodawn run execute if block 1605 200 1600 chronodawn:time_wood_planks"
+    },
+    {
+      "id": "cd_block_time_wood_log",
+      "kind": "command",
+      "command": "execute in chronodawn:chronodawn run execute if block 1606 200 1600 chronodawn:time_wood_log"
+    },
+    {
+      "id": "cd_block_dark_time_wood_planks",
+      "kind": "command",
+      "command": "execute in chronodawn:chronodawn run execute if block 1607 200 1600 chronodawn:dark_time_wood_planks"
+    },
+    {
+      "id": "cd_block_temporal_bricks",
+      "kind": "command",
+      "command": "execute in chronodawn:chronodawn run execute if block 1608 200 1600 chronodawn:temporal_bricks"
+    },
+    {
+      "id": "cd_block_clockwork_block",
+      "kind": "command",
+      "command": "execute in chronodawn:chronodawn run execute if block 1609 200 1600 chronodawn:clockwork_block"
+    },
+    {
+      "id": "cd_block_time_wheat_bale",
+      "kind": "command",
+      "command": "execute in chronodawn:chronodawn run execute if block 1610 200 1600 chronodawn:time_wheat_bale"
+    },
+    {
+      "id": "cd_block_temporal_sandstone",
+      "kind": "command",
+      "command": "execute in chronodawn:chronodawn run execute if block 1611 200 1600 chronodawn:temporal_sandstone"
+    },
+    {
+      "id": "cd_block_entity_boss_room_door",
+      "kind": "command",
+      "command": "execute in chronodawn:chronodawn run data get block 1602 200 1604"
+    },
+    {
+      "id": "cd_block_entity_clock_tower_teleporter",
+      "kind": "command",
+      "command": "execute in chronodawn:chronodawn run data get block 1604 200 1604"
+    },
+    {
+      "id": "cd_block_entity_boss_room_boundary_marker",
+      "kind": "command",
+      "command": "execute in chronodawn:chronodawn run data get block 1606 200 1604"
+    },
+    {
+      "id": "entity_ticking_sheep",
+      "kind": "command",
+      "command": "data get entity @e[type=chronodawn:ticking_sheep,tag=upgrade_test,limit=1] Sheared"
+    },
+    {
+      "id": "entity_time_keeper",
+      "kind": "command",
+      "command": "data get entity @e[type=chronodawn:time_keeper,tag=upgrade_test,limit=1] TradeCooldown"
+    },
+    {
+      "id": "entity_moment_creeper",
+      "kind": "command",
+      "command": "data get entity @e[type=chronodawn:moment_creeper,tag=upgrade_test,limit=1] Fuse"
+    },
+    {
+      "id": "entity_chronodawn_boat",
+      "kind": "command",
+      "command": "data get entity @e[type=chronodawn:chronodawn_boat,tag=upgrade_test,limit=1] ChronoDawnType"
+    },
+    {
+      "id": "player_inventory",
+      "kind": "command",
+      "command": "data get entity Dev Inventory"
+    },
+    {
+      "id": "game_time",
+      "kind": "command",
+      "command": "time query gametime",
+      "compare": "int_gte"
+    },
+    {
+      "id": "advancements",
+      "kind": "advancements"
+    },
+    {
+      "id": "config",
+      "kind": "file_identical",
+      "path": "config/chronodawn.toml"
+    },
+    {
+      "id": "global_state",
+      "kind": "saved_data",
+      "file": "chronodawn_global_state.dat"
+    },
+    {
+      "id": "portal_registry",
+      "kind": "saved_data",
+      "file": "chronodawn_portal_registry.dat"
+    },
+    {
+      "id": "dimension_time",
+      "kind": "saved_data",
+      "file": "chronodawn_time.dat",
+      "dimension": "chronodawn:chronodawn",
+      "monotonic": [
+        "data.IndependentTime"
+      ]
+    },
+    {
+      "id": "time_keeper_village",
+      "kind": "saved_data",
+      "file": "chronodawn_time_keeper_village.dat",
+      "dimension": "chronodawn:chronodawn",
+      "optional": "the Time Keeper Village is placed asynchronously after the first dimension entry and may not be saved yet"
+    },
+    {
+      "id": "overworld_blocks",
+      "kind": "block_counts",
+      "dimension": "overworld",
+      "ignore": [
+        "minecraft:water",
+        "minecraft:lava",
+        "minecraft:cobblestone",
+        "minecraft:obsidian",
+        "minecraft:stone",
+        "minecraft:air",
+        "minecraft:cave_air",
+        "minecraft:kelp",
+        "minecraft:kelp_plant",
+        "minecraft:seagrass",
+        "minecraft:tall_seagrass",
+        "chronodawn:temporal_kelp",
+        "chronodawn:temporal_kelp_plant",
+        "chronodawn:temporal_seagrass",
+        "chronodawn:tall_temporal_seagrass"
+      ]
+    },
+    {
+      "id": "chronodawn_blocks",
+      "kind": "block_counts",
+      "dimension": "chronodawn:chronodawn",
+      "ignore": [
+        "minecraft:water",
+        "minecraft:lava",
+        "minecraft:cobblestone",
+        "minecraft:obsidian",
+        "minecraft:stone",
+        "minecraft:air",
+        "minecraft:cave_air",
+        "minecraft:kelp",
+        "minecraft:kelp_plant",
+        "minecraft:seagrass",
+        "minecraft:tall_seagrass",
+        "chronodawn:temporal_kelp",
+        "chronodawn:temporal_kelp_plant",
+        "chronodawn:temporal_seagrass",
+        "chronodawn:tall_temporal_seagrass"
+      ]
+    }
+  ],
+  "not_covered": [
+    {
+      "item": "player progress (chronodawn_player_progress)",
+      "reason": "Unused per-player data left from early development. Only Chrono shield cooldowns write it, which commands cannot trigger. Boss defeat and portal stabilization are recorded in chronodawn_global_state, which is checked."
+    },
+    {
+      "item": "boss room protection (chronodawn_block_protection)",
+      "reason": "Created only when a boss-room structure generates; the test's forceloaded area has none, and placing one by command does not register its protected area."
+    },
+    {
+      "item": "boss spawn data",
+      "reason": "Written by boss-room structure spawning, which the test does not trigger."
+    },
+    {
+      "item": "boss entity save data",
+      "reason": "The setup kills its boss so the kill path runs; a living boss would attack the test player and leave the forceloaded area."
+    }
+  ],
+  "offline_patches": [
+    {
+      "file": "chronodawn_global_state.dat",
+      "path": "data.IsTyrantDefeated",
+      "value": 1,
+      "type": "byte"
+    },
+    {
+      "file": "chronodawn_global_state.dat",
+      "path": "data.IsPortalStabilized",
+      "value": 1,
+      "type": "byte"
+    }
+  ]
+}

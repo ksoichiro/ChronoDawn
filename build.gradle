@@ -124,6 +124,8 @@ subprojects {
     if (project.name in ['fabric', 'neoforge', 'forge']) {
         // Production run support (runProd)
         apply from: "${rootDir}/gradle/shared/prod-run.gradle"
+        // Old-release-to-candidate world upgrade test (fabric/neoforge, 1.21.1)
+        apply from: "${rootDir}/gradle/upgrade-test.gradle"
 
         tasks.withType(ProcessResources).configureEach {
             inputs.property 'pack_format', project.ext.pack_format
@@ -154,6 +156,9 @@ apply from: 'gradle/shared/data-validation.gradle'
 
 // ChronoDawn-specific validation (tag membership, recipe-unlock, lang parity, era JSON format)
 apply from: 'gradle/chronodawn-validation.gradle'
+
+// Upgrade test driver venv and unit tests (platform tasks are applied per subproject)
+apply from: 'gradle/upgrade-test.gradle'
 
 // Release tasks
 apply from: 'gradle/shared/release-modrinth.gradle'

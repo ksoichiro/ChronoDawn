@@ -1,0 +1,16 @@
+{
+  "introduced": "0.12.0",
+  "description": "Chiseled Temporal Stone Bricks.",
+  "setup": [
+    "fill 1600 199 1626 1610 199 1626 minecraft:stone",
+    "setblock 1602 200 1626 chronodawn:chiseled_temporal_stone_bricks"
+  ],
+  "checks": [
+    {
+      "id": "v0.12.0_block_chiseled_temporal_stone_bricks",
+      "kind": "command",
+      "command": "execute if block 1602 200 1626 chronodawn:chiseled_temporal_stone_bricks"
+    }
+  ],
+  "not_covered": []
+}

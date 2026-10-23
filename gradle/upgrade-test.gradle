@@ -1,0 +1,134 @@
+// Upgrade test: generate a world with old releases, upgrade it to the
+// release candidate on production server/client runtimes, and fail if
+// anything crashes or any pre-upgrade data is lost or changed.
+//
+// Usage (Minecraft 1.21.1 only, needs network, JVM forks and local ports,
+// so run outside the sandbox):
+//   ./gradlew :fabric:upgradeTest :neoforge:upgradeTest -Ptarget_mc_version=1.21.1
+//
+// Optional project properties:
+//   upgrade_test_sources       - comma-separated old versions (default: baseline + previous release)
+//   upgrade_test_candidate_jar - mod JAR to upgrade to (default: the freshly built one)
+//
+// The driver lives in scripts/upgrade_test/. Not part of checkAll: run it
+// before a release that touches registries, worldgen, configs, portals,
+// advancements, equipment, or progression (docs/release_process.md).
+
+def upgradeTestCacheDir = file("${project.findProperty('prod_base_dir') ?: "${rootDir}/run-prod"}/cache/upgrade-test")
+def upgradeTestPython = new File(upgradeTestCacheDir, 'venv/bin/python')
+def upgradeTestRequirements = file("${rootDir}/scripts/upgrade_test/requirements.txt")
+
+if (project == rootProject) {
+    tasks.register('upgradeTestVenv', Exec) {
+        group = 'verification'
+        description = 'Create the Python venv used by the upgrade test driver'
+        def stamp = new File(upgradeTestCacheDir, 'venv/requirements.stamp')
+        onlyIf { !upgradeTestPython.exists() || !stamp.exists() || stamp.text != upgradeTestRequirements.text }
+        workingDir = rootDir
+        commandLine 'sh', '-c',
+            "python3 -m venv '${upgradeTestCacheDir}/venv' && " +
+            "'${upgradeTestPython}' -m pip install -q -r '${upgradeTestRequirements}' && " +
+            "cp '${upgradeTestRequirements}' '${stamp}'"
+    }
+
+    tasks.register('testUpgradeTestScripts', Exec) {
+        group = 'verification'
+        description = 'Unit tests for scripts/upgrade_test (some bind local ports)'
+        dependsOn 'upgradeTestVenv'
+        workingDir = rootDir
+        commandLine upgradeTestPython.absolutePath, '-m', 'unittest', 'discover',
+            '-s', 'scripts/upgrade_test/tests', '-t', '.'
+    }
+    return
+}
+
+if (!(project.name in ['fabric', 'neoforge'])) {
+    return
+}
+
+def upgradeTestOutDir = layout.buildDirectory.dir('upgrade-test').get().asFile
+def envFile = new File(upgradeTestOutDir, 'env.json')
+def clientCommandFile = new File(upgradeTestOutDir, 'client-command.json')
+def loaderName = project.name
+def ports = loaderName == 'fabric' ? [25611, 25612] : [25621, 25622]
+
+tasks.register('prepareUpgradeTest') {
+    group = 'verification'
+    description = "Provision runtimes and write env.json for the upgrade test (${loaderName})"
+    def modJarTaskName = tasks.findByName('transformShadowJar') ? 'transformShadowJar'
+        : tasks.findByName('remapJar') ? 'remapJar'
+        : tasks.findByName('shadowJar') ? 'shadowJar' : 'jar'
+    dependsOn(loaderName == 'fabric' ? 'installFabricServerSmoke' : 'installNeoForgeServerSmoke', modJarTaskName, 'runProd')
+
+    doLast {
+        def mcVersion = project.findProperty('minecraft_version')
+        if (mcVersion != '1.21.1') {
+            throw new GradleException("upgradeTest supports Minecraft 1.21.1 only (got ${mcVersion})")
+        }
+        def templateDir = prodSmokeTestDir(loaderName)
+        def launcher = javaToolchains.launcherFor {
+            languageVersion = JavaLanguageVersion.of(project.findProperty('java_version'))
+        }.get()
+        def java = launcher.executablePath.asFile.absolutePath
+        // Paths are relative to the server directory, which the driver copies the runtime into.
+        def serverCommand
+        if (loaderName == 'fabric') {
+            serverCommand = [java, '-Xmx2G', '-Xms512M', '-jar', 'fabric-server-launch.jar', 'nogui']
+        } else {
+            def unixArgs = fileTree(new File(templateDir, 'libraries/net/neoforged/neoforge')) {
+                include '*/unix_args.txt'
+            }.files
+            if (unixArgs.size() != 1) {
+                throw new GradleException("Expected one NeoForge unix_args.txt under ${templateDir}, found ${unixArgs}")
+            }
+            def relative = templateDir.toPath().relativize(unixArgs.first().toPath()).toString()
+            serverCommand = [java, '-Xmx2G', '-Xms512M', '@user_jvm_args.txt', "@${relative}".toString(), 'nogui']
+        }
+        def modJar = tasks.named(modJarTaskName).get().archiveFile.get().asFile
+        def env = [
+            loader           : loaderName,
+            mcVersion        : mcVersion,
+            repoRoot         : rootDir.absolutePath,
+            cacheDir         : upgradeTestCacheDir.absolutePath,
+            outDir           : upgradeTestOutDir.absolutePath,
+            baseline         : project.findProperty('upgrade_test_baseline_version').toString(),
+            candidateJar     : modJar.absolutePath,
+            prodMods         : configurations.prodMods.files.collect { it.absolutePath },
+            ports            : ports,
+            logIgnoreFile    : file("${rootDir}/upgrade-test-log-ignore.txt").absolutePath,
+            serverTemplateDir: templateDir.absolutePath,
+            serverCommand    : serverCommand,
+            client           : new groovy.json.JsonSlurper().parse(clientCommandFile),
+        ]
+        envFile.parentFile.mkdirs()
+        envFile.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(env)) + "\n"
+        logger.lifecycle("  Upgrade test env: ${envFile}")
+    }
+}
+
+tasks.register('upgradeTest', Exec) {
+    group = 'verification'
+    description = "Upgrade worlds from old releases to the candidate and check nothing is lost (${loaderName})"
+    dependsOn 'prepareUpgradeTest', ':upgradeTestVenv'
+    workingDir = rootDir
+    def cmd = [upgradeTestPython.absolutePath, '-m', 'scripts.upgrade_test.run', '--env', envFile.absolutePath]
+    if (project.findProperty('upgrade_test_sources')) {
+        cmd += ['--sources', project.findProperty('upgrade_test_sources').toString()]
+    }
+    if (project.findProperty('upgrade_test_candidate_jar')) {
+        cmd += ['--candidate-jar', file(project.findProperty('upgrade_test_candidate_jar').toString()).absolutePath]
+    }
+    commandLine cmd
+}
+
+if (loaderName == 'neoforge') {
+    tasks.named('upgradeTest') { mustRunAfter ':fabric:upgradeTest' }
+}
+
+// runProd only exports its client command (instead of launching a client)
+// when the upgrade test is what asked for it.
+gradle.taskGraph.whenReady { graph ->
+    if (graph.hasTask(tasks.named('prepareUpgradeTest').get())) {
+        project.ext.prod_client_command_out = clientCommandFile.absolutePath
+    }
+}

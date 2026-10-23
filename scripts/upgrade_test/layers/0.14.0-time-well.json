@@ -1,0 +1,29 @@
+{
+  "introduced": "0.14.0",
+  "description": "Time Well stone (block entity), Chrono Bloom and its potted form.",
+  "setup": [
+    "fill 1600 199 1612 1610 199 1614 minecraft:stone",
+    "setblock 1602 199 1612 minecraft:grass_block",
+    "setblock 1602 200 1612 chronodawn:chrono_bloom",
+    "setblock 1603 200 1612 chronodawn:potted_chrono_bloom",
+    "setblock 1602 200 1614 chronodawn:time_well_stone"
+  ],
+  "checks": [
+    {
+      "id": "v0.14.0_block_chrono_bloom",
+      "kind": "command",
+      "command": "execute if block 1602 200 1612 chronodawn:chrono_bloom"
+    },
+    {
+      "id": "v0.14.0_block_potted_chrono_bloom",
+      "kind": "command",
+      "command": "execute if block 1603 200 1612 chronodawn:potted_chrono_bloom"
+    },
+    {
+      "id": "v0.14.0_block_entity_time_well_stone",
+      "kind": "command",
+      "command": "data get block 1602 200 1614"
+    }
+  ],
+  "not_covered": []
+}

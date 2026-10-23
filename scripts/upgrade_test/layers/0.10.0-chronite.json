@@ -1,0 +1,36 @@
+{
+  "introduced": "0.10.0",
+  "description": "Chronite ore, block and shard.",
+  "setup": [
+    "fill 1600 199 1620 1610 199 1620 minecraft:stone",
+    "setblock 1600 200 1620 minecraft:chest",
+    "item replace block 1600 200 1620 container.0 with chronodawn:chronite_shard 9",
+    "give Dev chronodawn:chronite_shard 9",
+    "setblock 1602 200 1620 chronodawn:chronite_ore",
+    "setblock 1603 200 1620 chronodawn:deepslate_chronite_ore",
+    "setblock 1604 200 1620 chronodawn:chronite_block"
+  ],
+  "checks": [
+    {
+      "id": "v0.10.0_chest",
+      "kind": "command",
+      "command": "data get block 1600 200 1620 Items"
+    },
+    {
+      "id": "v0.10.0_block_chronite_ore",
+      "kind": "command",
+      "command": "execute if block 1602 200 1620 chronodawn:chronite_ore"
+    },
+    {
+      "id": "v0.10.0_block_deepslate_chronite_ore",
+      "kind": "command",
+      "command": "execute if block 1603 200 1620 chronodawn:deepslate_chronite_ore"
+    },
+    {
+      "id": "v0.10.0_block_chronite_block",
+      "kind": "command",
+      "command": "execute if block 1604 200 1620 chronodawn:chronite_block"
+    }
+  ],
+  "not_covered": []
+}

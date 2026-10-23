@@ -202,6 +202,12 @@ such as `[94, 1]`, and verify both resource reload and server data loading.
 - Uses `build/prod-smoke/<loader>-<version>/`, separate from the manually-verified `run-prod/` used by `runProd` - cleaned up by `clean<version>`/`cleanAll`
 - Also fails on server log WARN/ERROR/FATAL lines not matched by `prod-smoke-log-ignore.txt` (`prod_smoke_log_check=true`). Fix the cause rather than adding an ignore entry; entries there are known issues pending a fix
 
+**Upgrade Test** (1.21.1 only; opens a game window; not part of `checkAll`; run before a release that touches registries, worldgen, configs, portals, advancements, equipment, or progression, see `docs/release_process.md`):
+- `./gradlew :fabric:upgradeTest :neoforge:upgradeTest -Ptarget_mc_version=1.21.1` - Build a world with `upgrade_test_baseline_version` and the latest release tag reachable from HEAD, upgrade it to the built JAR on production server+client runtimes, and fail on crashes or lost/changed data. Report: `<loader>/1.21.1/build/upgrade-test/report.txt`
+- Run outside the sandbox (network, JVM forks, local ports). `-Pupgrade_test_sources=0.8.0,0.13.0` and `-Pupgrade_test_candidate_jar=<jar>` override the defaults
+- Driver and setup layers live in `scripts/upgrade_test/`. New persisted content needs a layer named after the version that introduces it. Log ignores go in `upgrade-test-log-ignore.txt` (known issues only)
+- `./gradlew testUpgradeTestScripts` - Unit tests for the driver (bind local ports, so also unsandboxed)
+
 **Resource Validation**:
 - `./gradlew validateResources` - Check JSON syntax and cross-references (blockstate→model, model→texture)
 - `./gradlew validateData` - Check data-pack cross-references (tag entries → registered IDs, recipe references, 1.21.4+ client items coverage)

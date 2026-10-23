@@ -112,10 +112,30 @@ no stale artifacts from another version remain.
 
 For changes intended to improve modpack adoption, also verify Minecraft 1.21.1
 on both Fabric and NeoForge. If the release changes registries, worldgen,
-configs, portals, advancements, equipment, or progression, test an in-place
-upgrade from the currently adopted pack version, especially 0.8.0, using both
-a client world and a dedicated server where applicable. Record expected
-worldgen differences separately from data loss or startup failures.
+configs, portals, advancements, equipment, or progression, run the upgrade
+test outside the sandbox (it needs network, JVM forks, and local ports):
+
+```bash
+./gradlew :fabric:upgradeTest :neoforge:upgradeTest -Ptarget_mc_version=1.21.1
+```
+
+It generates a world with each old release, upgrades it to the freshly built
+JAR on a production server and client (a game window opens briefly), and
+fails if anything crashes or any pre-upgrade data is lost or changed. The old
+releases are `upgrade_test_baseline_version` in `gradle.properties` (the
+version adopted by the largest modpack, currently 0.8.0) and the latest
+release tag reachable from HEAD. Read `<loader>/1.21.1/build/upgrade-test/report.txt`.
+`NOT COVERED` lines name state the test cannot create.
+
+- A failure caused by an intentional change, such as a removed or renamed ID,
+  means the change needs migration or a CHANGELOG note. Update the layer only
+  after deciding which.
+- Content that persists new data (blocks, items, block entities, entities,
+  SavedData) needs a new layer in `scripts/upgrade_test/layers/`, named after
+  the version that introduces it.
+- Move `upgrade_test_baseline_version` when modpack adoption moves.
+- If worldgen changed, also look at an upgraded world on a client for seams
+  where old and new chunks meet. The test does not judge visuals.
 
 If full verification is skipped or fails, report the exact missing command,
 failure, and release risk. Do not disable checks or publish around a failure.

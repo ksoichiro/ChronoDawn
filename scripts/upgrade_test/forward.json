@@ -1,0 +1,8 @@
+{
+  "description": "Generate never-seen chunks in the candidate and confirm its worldgen places Chrono Bloom (meadows, 0.14.0+) there. radius_chunks 8 gives 16x16 = 256 chunks, the forceload limit.",
+  "dimension": "chronodawn:chronodawn",
+  "biome": "chronodawn:chronodawn_prairies",
+  "block": "chronodawn:chrono_bloom",
+  "radius_chunks": 8,
+  "min_count": 1
+}

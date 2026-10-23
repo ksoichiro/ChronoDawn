@@ -1,0 +1,30 @@
+{
+  "introduced": "0.13.0",
+  "description": "Clockwork Mechanism, and the Old Sundial gnomon and memorial plate block entities.",
+  "setup": [
+    "fill 1600 199 1629 1610 199 1631 minecraft:stone",
+    "setblock 1600 200 1629 minecraft:chest",
+    "item replace block 1600 200 1629 container.0 with chronodawn:clockwork_mechanism 3",
+    "give Dev chronodawn:clockwork_mechanism 3",
+    "setblock 1602 200 1631 chronodawn:sundial_gnomon",
+    "setblock 1604 200 1631 chronodawn:memorial_plate"
+  ],
+  "checks": [
+    {
+      "id": "v0.13.0_chest",
+      "kind": "command",
+      "command": "data get block 1600 200 1629 Items"
+    },
+    {
+      "id": "v0.13.0_block_entity_sundial_gnomon",
+      "kind": "command",
+      "command": "data get block 1602 200 1631"
+    },
+    {
+      "id": "v0.13.0_block_entity_memorial_plate",
+      "kind": "command",
+      "command": "data get block 1604 200 1631"
+    }
+  ],
+  "not_covered": []
+}
