@@ -8,6 +8,7 @@ import com.chronodawn.registry.ModBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
@@ -108,8 +109,9 @@ public final class StructureTests {
             new StructureSpec("time_cairn", 3, 3, 3, List.of(
                 new BlockRequirement(ModBlockId.CLOCKWORK_DIAL.id(), ModBlocks.CLOCKWORK_DIAL, 1)
             )),
-            new StructureSpec("watchmaker_camp", 5, 2, 5, List.of(
-                new BlockRequirement(ModBlockId.TIME_WOOD_FENCE.id(), ModBlocks.TIME_WOOD_FENCE, 8),
+            new StructureSpec("watchmaker_camp", 5, 3, 5, List.of(
+                new BlockRequirement(ModBlockId.TIME_WOOD_FENCE.id(), ModBlocks.TIME_WOOD_FENCE, 12),
+                new BlockRequirement("white_wool", () -> Blocks.WOOL.pick(DyeColor.WHITE), 3),
                 new BlockRequirement("chest", () -> Blocks.CHEST, 1),
                 new BlockRequirement("campfire", () -> Blocks.CAMPFIRE, 1)
             )),
@@ -296,6 +298,9 @@ public final class StructureTests {
             }
         }
 
+        // A vanilla chest cannot open under an opaque block
+        tests.add(generateCampChestHeadroomTest(specs, factory));
+
         // Coverage test: verify all .nbt files have corresponding specs
         tests.add(generateStructureCoverageTest(specs, factory));
 
@@ -303,6 +308,49 @@ public final class StructureTests {
         tests.add(generateDirectBlockUsageTest(specs, factory));
 
         return tests;
+    }
+
+    /**
+     * Verifies that the block directly above the Watchmaker's Camp chest is not one of the
+     * structure's other required blocks (wool roof, fences), so the chest can be opened.
+     */
+    static <T> T generateCampChestHeadroomTest(
+            List<StructureSpec> specs,
+            MobBehaviorTests.TestFactory<T> factory) {
+        return factory.create("watchmaker_camp_chest_has_headroom", helper -> {
+            helper.runAfterDelay(1, () -> {
+                var templateId = CompatResourceLocation.create(ChronoDawn.MOD_ID, "watchmaker_camp");
+                var templateOpt = helper.getLevel().getStructureTemplateManager().get(templateId);
+                if (templateOpt.isEmpty()) {
+                    CompatGameTestHelper.fail(helper, "Structure template 'watchmaker_camp' could not be loaded");
+                    return;
+                }
+                StructureTemplate template = templateOpt.get();
+                var chests = template.filterBlocks(BlockPos.ZERO, new StructurePlaceSettings(), Blocks.CHEST);
+                if (chests.isEmpty()) {
+                    CompatGameTestHelper.fail(helper, "Structure 'watchmaker_camp' has no chest");
+                    return;
+                }
+                var spec = specs.stream().filter(s -> s.id().equals("watchmaker_camp")).findFirst().orElseThrow();
+                for (var chest : chests) {
+                    BlockPos above = chest.pos().above();
+                    for (var req : spec.blockRequirements()) {
+                        Block block = req.blockSupplier().get();
+                        if (block == Blocks.CHEST) {
+                            continue;
+                        }
+                        for (var info : template.filterBlocks(BlockPos.ZERO, new StructurePlaceSettings(), block)) {
+                            if (info.pos().equals(above)) {
+                                CompatGameTestHelper.fail(helper, "Block above the camp chest is " + req.name()
+                                    + ", the chest cannot open");
+                                return;
+                            }
+                        }
+                    }
+                }
+                helper.succeed();
+            });
+        });
     }
 
     /**
