@@ -35,6 +35,7 @@ public enum ModBlockEntityId {
     SUNDIAL_GNOMON("sundial_gnomon"),
     MEMORIAL_PLATE("memorial_plate"),
     TIME_WELL_STONE("time_well_stone"),
+    WATCHMAKER_CHEST("watchmaker_chest"),
     ;
 
     private final String id;

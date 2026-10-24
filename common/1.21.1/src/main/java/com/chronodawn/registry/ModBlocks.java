@@ -66,6 +66,7 @@ import com.chronodawn.blocks.TemporalSandstoneWall;
 import com.chronodawn.blocks.TemporalParticleEmitterBlock;
 import com.chronodawn.blocks.MemorialPlateBlock;
 import com.chronodawn.blocks.TimeWellStoneBlock;
+import com.chronodawn.blocks.WatchmakerChestBlock;
 import com.chronodawn.blocks.SundialGnomonBlock;
 import com.chronodawn.blocks.TimeCrystalBlock;
 import com.chronodawn.blocks.EntropyCrystalOre;
@@ -482,6 +483,15 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> TIME_WELL_STONE = BLOCKS.register(
         ModBlockId.TIME_WELL_STONE.id(),
         () -> new TimeWellStoneBlock(TimeWellStoneBlock.createProperties())
+    );
+
+    /**
+     * Watchmaker's Chest - per-player, take-only chest of the Watchmaker's Camp.
+     * No item: it only appears through worldgen when Lootr is not installed, and breaking it drops a plain chest.
+     */
+    public static final RegistrySupplier<Block> WATCHMAKER_CHEST = BLOCKS.register(
+        ModBlockId.WATCHMAKER_CHEST.id(),
+        () -> new WatchmakerChestBlock(WatchmakerChestBlock.createProperties())
     );
 
     /**

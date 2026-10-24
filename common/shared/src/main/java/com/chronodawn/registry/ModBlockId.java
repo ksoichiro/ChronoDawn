@@ -255,6 +255,7 @@ public enum ModBlockId {
     SUNDIAL_GNOMON(def("sundial_gnomon").cutout()),
     MEMORIAL_PLATE(def("memorial_plate")),
     TIME_WELL_STONE(def("time_well_stone")),
+    WATCHMAKER_CHEST(def("watchmaker_chest")),
     ENTROPY_CRYPT_TRAPDOOR(def("entropy_crypt_trapdoor").cutout()),
     ;
 

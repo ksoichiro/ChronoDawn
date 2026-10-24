@@ -6,6 +6,7 @@ import com.chronodawn.blocks.BossRoomDoorBlockEntity;
 import com.chronodawn.blocks.ClockTowerTeleporterBlockEntity;
 import com.chronodawn.blocks.MemorialPlateBlockEntity;
 import com.chronodawn.blocks.TimeWellStoneBlockEntity;
+import com.chronodawn.blocks.WatchmakerChestBlockEntity;
 import com.chronodawn.blocks.SundialGnomonBlockEntity;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
@@ -61,6 +62,17 @@ public class ModBlockEntities {
             BlockEntityType.Builder.of(
                 TimeWellStoneBlockEntity::new,
                 ModBlocks.TIME_WELL_STONE.get()
+            ).build(null)
+        );
+
+    /**
+     * Watchmaker's Chest BlockEntity - stores per-player slots and cooldowns.
+     */
+    public static final RegistrySupplier<BlockEntityType<WatchmakerChestBlockEntity>> WATCHMAKER_CHEST =
+        BLOCK_ENTITIES.register(ModBlockEntityId.WATCHMAKER_CHEST.id(), () ->
+            BlockEntityType.Builder.of(
+                WatchmakerChestBlockEntity::new,
+                ModBlocks.WATCHMAKER_CHEST.get()
             ).build(null)
         );
 
