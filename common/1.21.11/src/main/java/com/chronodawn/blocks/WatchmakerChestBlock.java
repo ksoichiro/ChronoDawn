@@ -179,7 +179,7 @@ public class WatchmakerChestBlock extends AbstractChestBlock<WatchmakerChestBloc
     /**
      * Opens the chest for a player. Slots that still hold items open unchanged. Empty slots are
      * filled and opened when the cooldown allows, otherwise the player is told to wait. A
-     * spectator's slots open unchanged.
+     * spectator, who only gets here through a direct call, sees their slots unchanged.
      */
     public static CampChestOutcome use(ServerLevel level, BlockPos pos, ServerPlayer player, long gameTime,
                                        long cooldownTicks) {
@@ -187,10 +187,11 @@ public class WatchmakerChestBlock extends AbstractChestBlock<WatchmakerChestBloc
             return CampChestOutcome.WAITING;
         }
         UUID id = player.getUUID();
-        // A spectator looks in as at a vanilla chest: nothing is filled and no cooldown is used.
-        // ServerPlayer#isSpectator reads this same game mode. It is read from the game mode
-        // manager because the GameTest mock player overrides isSpectator or gameMode() with a
-        // fixed value.
+        // Vanilla never routes a spectator's click here: it asks getMenuProvider, which this block
+        // does not provide, so spectators cannot open the chest. This guard defends direct callers,
+        // so a spectator never triggers a fill or uses the cooldown. ServerPlayer#isSpectator reads
+        // this same game mode. It is read from the game mode manager because the GameTest mock
+        // player overrides isSpectator or gameMode() with a fixed value.
         if (player.gameMode.getGameModeForPlayer() == GameType.SPECTATOR || !chest.isEmptyFor(id)) {
             openMenu(player, chest);
             return CampChestOutcome.OPENED;

@@ -292,8 +292,10 @@ public final class WatchmakerChestTests {
     }
 
     /**
-     * Test: a spectator's open fills nothing and leaves the cooldown, so the player's first open
-     * in survival still fills.
+     * Test: calling use directly for a spectator fills nothing and leaves the cooldown, so the
+     * player's first open in survival still fills. In game a spectator's click never reaches use
+     * (vanilla asks getMenuProvider, which the block does not provide), so this covers the guard
+     * for direct callers, not in-game spectator interaction.
      */
     private static void testSpectatorDoesNotFill(GameTestHelper helper) {
         WatchmakerChestBlockEntity chest = placeChest(helper, CHEST_POS);
