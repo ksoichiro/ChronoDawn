@@ -70,7 +70,11 @@ sourceSets {
                 'S2CShieldCooldownPayload.java',
                 'ModNetworking.java',
                 // 1.20.1, 1.21.1-1.21.4: fill() needs z=200 to render overlay on top of items
-                'GuiGraphicsShieldCdMixin.java'
+                'GuiGraphicsShieldCdMixin.java',
+                // 1.20.1 saves block entity items without registries
+                'WatchmakerChestBlockEntity.java',
+                // 1.20.1 predates the RandomizableContainer interface (1.20.3+)
+                'WatchmakerCampChests.java'
             ]
             return excludedFiles.contains(element.file.name)
         }

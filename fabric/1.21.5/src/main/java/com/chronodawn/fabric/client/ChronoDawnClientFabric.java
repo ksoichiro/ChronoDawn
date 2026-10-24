@@ -16,6 +16,7 @@ import com.chronodawn.items.ChronicleBookItem;
 import com.chronodawn.client.renderer.*;
 import com.chronodawn.client.renderer.mobs.*;
 import com.chronodawn.registry.ModBlockId;
+import com.chronodawn.registry.ModBlockEntities;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModEntities;
 import com.chronodawn.registry.ModItems;
@@ -23,6 +24,7 @@ import com.chronodawn.registry.ModParticles;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockEntityRendererRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.ColorProviderRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
@@ -36,6 +38,7 @@ import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.FlameParticle;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.blockentity.ChestRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -410,6 +413,12 @@ public class ChronoDawnClientFabric implements ClientModInitializer {
      * Register entity renderers for custom entities.
      */
     private void registerEntityRenderers() {
+        // Watchmaker's Chest draws as a plain vanilla chest
+        BlockEntityRendererRegistry.register(
+            ModBlockEntities.WATCHMAKER_CHEST.get(),
+            ChestRenderer::new
+        );
+
         // Register Time Guardian with custom renderer
         EntityRendererRegistry.register(
             ModEntities.TIME_GUARDIAN.get(),

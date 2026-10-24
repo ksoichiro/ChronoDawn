@@ -83,10 +83,11 @@ public class WatchmakerChestBlockEntity extends CooldownActivatorBlockEntity imp
 
     /**
      * Counts a screen opened on this chest. Every player sees the lid open, so the sound plays
-     * for everyone nearby.
+     * for everyone nearby. As with the vanilla chest, a spectator neither moves the lid nor makes
+     * a sound.
      */
     public void startOpen(Player player) {
-        if (level == null) {
+        if (level == null || player.isSpectator()) {
             return;
         }
         openCount++;
@@ -101,7 +102,7 @@ public class WatchmakerChestBlockEntity extends CooldownActivatorBlockEntity imp
      */
     public void stopOpen(Player player) {
         // A screen opened before a chunk reload is not counted, so do not go below zero.
-        if (level == null || openCount == 0) {
+        if (level == null || player.isSpectator() || openCount == 0) {
             return;
         }
         openCount--;

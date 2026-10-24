@@ -15,9 +15,7 @@ import net.minecraft.gametest.framework.GameTestHelper;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Container;
-import net.minecraft.world.RandomizableContainer;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.GameType;
@@ -69,6 +67,8 @@ public final class WatchmakerChestTests {
             WatchmakerChestTests::testRefillsWhenEmptyAfterCooldown));
         tests.add(factory.create("watchmaker_chest_leftover_blocks_refill",
             WatchmakerChestTests::testLeftoverBlocksRefill));
+        tests.add(factory.create("watchmaker_chest_spectator_does_not_fill",
+            WatchmakerChestTests::testSpectatorDoesNotFill));
         tests.add(factory.create("watchmaker_chest_is_per_player",
             WatchmakerChestTests::testIsPerPlayer));
         tests.add(factory.create("watchmaker_chest_is_take_only",
@@ -292,6 +292,38 @@ public final class WatchmakerChestTests {
     }
 
     /**
+     * Test: a spectator's open fills nothing and leaves the cooldown, so the player's first open
+     * in survival still fills.
+     */
+    private static void testSpectatorDoesNotFill(GameTestHelper helper) {
+        WatchmakerChestBlockEntity chest = placeChest(helper, CHEST_POS);
+        if (chest == null) {
+            return;
+        }
+        ServerPlayer player = joinPlayer(helper, PLAYER_POS);
+        try {
+            player.setGameMode(GameType.SPECTATOR);
+            CampChestOutcome outcome = useAndClose(helper, player, T0);
+            if (outcome == CampChestOutcome.FILLED || !chest.isEmptyFor(player.getUUID())) {
+                CompatGameTestHelper.fail(helper, "A spectator's open filled the chest: " + outcome + ", "
+                    + describeSorted(stored(chest, player.getUUID())));
+                return;
+            }
+            player.setGameMode(GameType.SURVIVAL);
+            outcome = useAndClose(helper, player, T0);
+            if (outcome != CampChestOutcome.FILLED) {
+                CompatGameTestHelper.fail(helper, "Expected FILLED on the first survival open, got " + outcome
+                    + ". The spectator's open must not use the cooldown");
+                return;
+            }
+            helper.succeed();
+        } finally {
+            player.setGameMode(GameType.SURVIVAL);
+            CompatGameTestHelper.removeMockServerPlayer(helper, player);
+        }
+    }
+
+    /**
      * Test: each player has their own slots and cooldown.
      */
     private static void testIsPerPlayer(GameTestHelper helper) {
@@ -388,7 +420,7 @@ public final class WatchmakerChestTests {
                 return;
             }
             menu.setCarried(dirt.copy());
-            menu.clicked(emptyIndex, 0, ClickType.PICKUP, player);
+            CompatGameTestHelper.clickPickup(menu, emptyIndex, player);
             ItemStack carried = menu.getCarried();
             menu.setCarried(ItemStack.EMPTY);
             if (!menu.getSlot(emptyIndex).getItem().isEmpty()) {
@@ -401,7 +433,7 @@ public final class WatchmakerChestTests {
             }
             // Number-key swap with hotbar slot 0.
             player.getInventory().setItem(0, dirt.copy());
-            menu.clicked(emptyIndex, 0, ClickType.SWAP, player);
+            CompatGameTestHelper.clickSwap(menu, emptyIndex, 0, player);
             if (!menu.getSlot(emptyIndex).getItem().isEmpty() || !player.getInventory().getItem(0).is(Items.DIRT)) {
                 CompatGameTestHelper.fail(helper, "A number-key swap put the dirt into the chest");
                 return;
@@ -631,12 +663,9 @@ public final class WatchmakerChestTests {
             BlockPos chestPos = template.filterBlocks(origin, settings, Blocks.CHEST).get(0).pos();
             int swapped = WatchmakerCampChests.swapChests(level, template, origin, settings, true);
             BlockState state = level.getBlockState(chestPos);
-            boolean hasLootTable = level.getBlockEntity(chestPos) instanceof RandomizableContainer container
-                && container.getLootTable() != null;
+            boolean hasLootTable = CompatGameTestHelper.hasLootTable(level.getBlockEntity(chestPos));
             // Clear the loot table so placing the next rotation over this chest spills nothing.
-            if (level.getBlockEntity(chestPos) instanceof RandomizableContainer container) {
-                container.setLootTable(null);
-            }
+            CompatGameTestHelper.clearLootTable(level.getBlockEntity(chestPos));
             if (swapped != 0 || !state.is(Blocks.CHEST) || !hasLootTable) {
                 CompatGameTestHelper.fail(helper, rotation + ": with Lootr expected no swap and a vanilla chest with "
                     + "its loot table, got " + swapped + ", " + state + ", loot table " + hasLootTable);

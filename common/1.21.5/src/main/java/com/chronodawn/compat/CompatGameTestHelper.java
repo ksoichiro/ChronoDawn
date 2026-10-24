@@ -101,6 +101,39 @@ public class CompatGameTestHelper {
         return result;
     }
 
+    /**
+     * @return whether the block entity is a container whose loot table has not been rolled yet
+     */
+    public static boolean hasLootTable(BlockEntity blockEntity) {
+        return blockEntity instanceof net.minecraft.world.RandomizableContainer container
+            && container.getLootTable() != null;
+    }
+
+    /**
+     * Remove a container's loot table without rolling it. Other block entities are left alone.
+     */
+    public static void clearLootTable(BlockEntity blockEntity) {
+        if (blockEntity instanceof net.minecraft.world.RandomizableContainer container) {
+            container.setLootTable(null);
+        }
+    }
+
+    /**
+     * Click a menu slot with the left mouse button, as a player picking up or placing a stack.
+     */
+    public static void clickPickup(net.minecraft.world.inventory.AbstractContainerMenu menu, int slot,
+                                   net.minecraft.world.entity.player.Player player) {
+        menu.clicked(slot, 0, net.minecraft.world.inventory.ClickType.PICKUP, player);
+    }
+
+    /**
+     * Swap a menu slot with a hotbar slot, as a player pressing a number key over it.
+     */
+    public static void clickSwap(net.minecraft.world.inventory.AbstractContainerMenu menu, int slot, int hotbarSlot,
+                                 net.minecraft.world.entity.player.Player player) {
+        menu.clicked(slot, hotbarSlot, net.minecraft.world.inventory.ClickType.SWAP, player);
+    }
+
     private CompatGameTestHelper() {
         // Utility class
     }

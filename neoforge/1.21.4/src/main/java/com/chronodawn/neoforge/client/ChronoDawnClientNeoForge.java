@@ -15,10 +15,12 @@ import com.chronodawn.gui.ChronicleScreen;
 import com.chronodawn.gui.data.ChronicleData;
 import com.chronodawn.items.ChronicleBookItem;
 import com.chronodawn.neoforge.registry.ModFluidTypes;
+import com.chronodawn.registry.ModBlockEntities;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModEntities;
 import com.chronodawn.registry.ModParticles;
 import net.minecraft.client.particle.FlameParticle;
+import net.minecraft.client.renderer.blockentity.ChestRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -218,6 +220,12 @@ public class ChronoDawnClientNeoForge {
      */
     @SubscribeEvent
     public static void onRegisterEntityRenderers(EntityRenderersEvent.RegisterRenderers event) {
+        // Watchmaker's Chest draws as a plain vanilla chest
+        event.registerBlockEntityRenderer(
+            ModBlockEntities.WATCHMAKER_CHEST.get(),
+            ChestRenderer::new
+        );
+
         // Register Time Guardian with custom renderer
         event.registerEntityRenderer(
             ModEntities.TIME_GUARDIAN.get(),

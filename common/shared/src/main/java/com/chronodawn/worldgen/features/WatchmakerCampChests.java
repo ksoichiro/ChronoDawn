@@ -59,7 +59,10 @@ public final class WatchmakerCampChests {
             if (blockEntity instanceof RandomizableContainer container) {
                 container.setLootTable(null);
             }
-            Clearable.tryClear(blockEntity);
+            // Clearable#tryClear is gone from 1.21.5, so the check is spelled out.
+            if (blockEntity instanceof Clearable clearable) {
+                clearable.clearContent();
+            }
             // As vanilla template placement does when it replaces a block entity: a block
             // without one in between removes the old block entity. Without it, a chunk still in
             // generation would keep the chest's block entity at the new block's position.

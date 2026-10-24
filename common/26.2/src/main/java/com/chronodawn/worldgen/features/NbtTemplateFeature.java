@@ -35,6 +35,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
  * NBT.</p>
  */
 public class NbtTemplateFeature extends Feature<NbtTemplateConfiguration> {
+    private static final String WATCHMAKER_CAMP_TEMPLATE = "watchmaker_camp";
 
     public NbtTemplateFeature() {
         super(NbtTemplateConfiguration.CODEC);
@@ -86,7 +87,14 @@ public class NbtTemplateFeature extends Feature<NbtTemplateConfiguration> {
             clearReplaceableBlocks(level, placePos, size, settings);
         }
 
-        return template.placeInWorld(level, placePos, placePos, settings, random, 2);
+        boolean placed = template.placeInWorld(level, placePos, placePos, settings, random, 2);
+        if (placed && config.template().getPath().equals(WATCHMAKER_CAMP_TEMPLATE)) {
+            // The swap runs after placement instead of the NBT holding the Watchmaker's Chest:
+            // Lootr converts chests only once the chunk is live, so the camp NBT must keep the
+            // vanilla loot chest for the Lootr case.
+            WatchmakerCampChests.swapChests(level, template, placePos, settings, WatchmakerCampChests.lootrLoaded());
+        }
+        return placed;
     }
 
     private static boolean hasEnoughGroundContact(

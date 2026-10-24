@@ -40,6 +40,7 @@ import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.AbstractChestBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DoubleBlockCombiner;
@@ -180,7 +181,8 @@ public class WatchmakerChestBlock extends AbstractChestBlock<WatchmakerChestBloc
 
     /**
      * Opens the chest for a player. Slots that still hold items open unchanged. Empty slots are
-     * filled and opened when the cooldown allows, otherwise the player is told to wait.
+     * filled and opened when the cooldown allows, otherwise the player is told to wait. A
+     * spectator's slots open unchanged.
      */
     public static CampChestOutcome use(ServerLevel level, BlockPos pos, ServerPlayer player, long gameTime,
                                        long cooldownTicks) {
@@ -188,7 +190,11 @@ public class WatchmakerChestBlock extends AbstractChestBlock<WatchmakerChestBloc
             return CampChestOutcome.WAITING;
         }
         UUID id = player.getUUID();
-        if (!chest.isEmptyFor(id)) {
+        // A spectator looks in as at a vanilla chest: nothing is filled and no cooldown is used.
+        // ServerPlayer#isSpectator reads this same game mode. It is read from the game mode
+        // manager because the GameTest mock player overrides isSpectator or gameMode() with a
+        // fixed value.
+        if (player.gameMode.getGameModeForPlayer() == GameType.SPECTATOR || !chest.isEmptyFor(id)) {
             openMenu(player, chest);
             return CampChestOutcome.OPENED;
         }

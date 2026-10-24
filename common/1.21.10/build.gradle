@@ -65,6 +65,7 @@ sourceSets {
                 'BlockProtectionData.java',
                 'ClockTowerTeleporterBlockEntity.java',
                 'CooldownActivatorBlockEntity.java',
+                'WatchmakerChestBlockEntity.java',
                 'BossRoomDoorBlockEntity.java',
                 'TimeWheatBaleBlock.java',
                 'TimeDistortionEffect.java',

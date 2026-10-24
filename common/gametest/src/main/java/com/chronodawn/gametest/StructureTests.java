@@ -110,7 +110,9 @@ public final class StructureTests {
             )),
             new StructureSpec("watchmaker_camp", 5, 3, 5, List.of(
                 new BlockRequirement(ModBlockId.TIME_WOOD_FENCE.id(), ModBlocks.TIME_WOOD_FENCE, 12),
-                new BlockRequirement("white_wool", () -> Blocks.WHITE_WOOL, 3),
+                // Looked up by id: 26.2 has no Blocks.WHITE_WOOL, only the Blocks.WOOL collection.
+                new BlockRequirement("white_wool", () -> BuiltInRegistries.BLOCK.getOptional(
+                    CompatResourceLocation.create("minecraft", "white_wool")).orElseThrow(), 3),
                 new BlockRequirement("chest", () -> Blocks.CHEST, 1),
                 new BlockRequirement("campfire", () -> Blocks.CAMPFIRE, 1)
             )),
