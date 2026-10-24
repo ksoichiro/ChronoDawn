@@ -894,7 +894,7 @@ The custom shields are independent of the existing Chrono Aegis artifact (which 
 
 #### Time Wheat
 - **Use**: Crop that grows in Chrono Dawn
-- **Products**: Time Bread, Time Wheat Cookies, Golden Time Wheat
+- **Products**: Time Bread, Time Wheat Cookies, Golden Time Wheat, Paper (three Time Wheat stacked vertically make three Paper. The horizontal row makes Time Bread)
 
 #### Chrono Melon
 - **Effect**: Restores hunger
@@ -1047,6 +1047,16 @@ Upgraded equipment crafted from **Enhanced Clockstone** in the vanilla tool and 
 - **Armor** (Helmet, Chestplate, Leggings, Boots): Defense 3 / 7 / 6 / 3 (19 total), toughness 2.0, enchantability 16
 - **Armor set bonus**: Wearing all four pieces makes Slowness, Weakness, and Mining Fatigue last 50% shorter
 - Repaired with Time Crystals
+
+### Chronicle and Paper
+
+#### Chronicle of Chrono Dawn
+- **First copy**: Given once per player, as the reward of the "Entering the Frozen World" advancement the first time you enter Chrono Dawn
+- **Recipe**: Book + Time Crystal → 1 Chronicle (shapeless). Unlocks in the recipe book when you pick up a Time Crystal
+
+#### Paper
+- **Recipe**: 3 Time Wheat stacked vertically → 3 Paper. Three in a horizontal row still make Time Bread. Unlocks in the recipe book when you pick up Time Wheat
+- **Use**: With leather from Chrono Bovine, make Books (and from them bookshelves, enchanting tables and the Lost Adventurer Journal) without leaving Chrono Dawn
 
 ### Wood Type Blocks
 
@@ -1405,7 +1415,7 @@ All three wood types have the same variants:
 
 ### Q: How do I get the in-game guide book?
 
-**A**: You'll receive the "Chronicle of Chrono Dawn" guide book automatically when entering the Chrono Dawn dimension. Use this guide to learn about progression, structures, bosses, and items in the frozen world.
+**A**: You receive the "Chronicle of Chrono Dawn" guide book once, the first time you enter the Chrono Dawn dimension. Use this guide to learn about progression, structures, bosses, and items in the frozen world. If you lose it, craft a new one from a Book and a Time Crystal. Inside Chrono Dawn, make Paper from three Time Wheat stacked vertically and get leather from Chrono Bovine.
 
 ---
 

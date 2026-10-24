@@ -7,6 +7,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Chronicle recipe**: craft a Chronicle of Chrono Dawn from a Book and a
+  Time Crystal, so a lost copy can always be replaced. The recipe unlocks when
+  you pick up a Time Crystal.
+- **Paper from Time Wheat**: three Time Wheat stacked vertically make three
+  Paper. Together with leather from Chrono Bovine, books can now be made
+  without leaving Chrono Dawn. The horizontal row is still Time Bread.
+- **Chronicle texture**: the Chronicle has its own item texture instead of
+  the vanilla book.
+
+### Changed
+
+- **Chronicle grant**: the Chronicle is now given once per player, as the
+  reward of the "Entering the Frozen World" advancement
+  (`chronodawn:story/us1/dimension_entry`), instead of every time you enter
+  Chrono Dawn without one in your inventory. Storing it in a chest no longer
+  gives you another copy. Players who already earned the advancement get no
+  new copy. Modpacks that disable or replace Chrono Dawn advancements should
+  hand the book out themselves, for example as a quest reward. The reward
+  loot table is `chronodawn:advancement_reward/chronicle_book`.
+
 ### Fixed
 
 - **Recipe book unlocks**: picking up an ingredient now unlocks its recipe in

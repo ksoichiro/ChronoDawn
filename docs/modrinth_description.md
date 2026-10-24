@@ -55,7 +55,7 @@ A tiered line of shields that fit the time-themed dimension — independent from
 - Crafted via an upgrade chain using Time Wood plank variants (Time Wood → Dark Time Wood → Ancient Time Wood)
 
 ### 📖 Chronicle Guidebook
-- **Chronicle of Chrono Dawn**: An in-game guidebook automatically given when entering the dimension
+- **Chronicle of Chrono Dawn**: An in-game guidebook given the first time you enter the dimension, and craftable from a Book and a Time Crystal if lost
 - **Custom UI**: Browse categories, entries, and detailed information about the mod
 - **Progressive Discovery**: Learn about biomes, structures, bosses, items, and progression steps
 - **Built-in System**: Fully integrated custom guidebook with no external dependencies

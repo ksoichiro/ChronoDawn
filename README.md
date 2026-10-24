@@ -66,7 +66,7 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed information.
   - Unstable Pocket Watch — swap speed effects with enemies
   - Chrono Aegis — right-click activated buff artifact (10-minute anti-Time-Tyrant buff for the wielder and nearby allies)
 - **ChronoDawn Custom Shields**: Three tiered shields (Clockstone → Enhanced Clockstone → Entropy Crystal) with cumulative time-themed effects (passive debuff shortening, faster raise on 1.21.5+, Speed on block at T2+, Time Echo auto-block at T3)
-- **Chronicle of Chrono Dawn**: In-game guidebook auto-given when entering the dimension, covering biomes, structures, bosses, items, and progression
+- **Chronicle of Chrono Dawn**: In-game guidebook given the first time you enter the dimension and craftable if lost, covering biomes, structures, bosses, items, and progression
 - **Configurable**: Tune select gameplay values via `config/chronodawn.toml` — generation of every structure the mod adds, which of the nine non-core Chrono dimension biomes generate, the four Chrono-specific ore rates and Y ranges, per-boss health/damage multipliers, the Chrono dimension's ambient Time Distortion strength and scope, and the one-way portal progression gate. See [docs/configuration.md](docs/configuration.md). Modpack creators see [docs/modpack-integration.md](docs/modpack-integration.md).
 - **Addon API**: Loader-neutral Java event for all six boss defeats, with stable IDs and player, level, position, entity, and damage-source context. See [docs/modpack-integration.md](docs/modpack-integration.md#boss-defeated-event-api).
 
