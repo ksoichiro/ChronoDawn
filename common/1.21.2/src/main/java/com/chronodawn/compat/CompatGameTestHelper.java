@@ -74,6 +74,32 @@ public class CompatGameTestHelper {
             CompatResourceLocation.create(com.chronodawn.ChronoDawn.MOD_ID, path));
     }
 
+    /**
+     * Roll one of the mod's loot tables with chest parameters and no player. Rolling directly keeps
+     * each result as its own stack, whereas filling a container splits and shuffles the stacks.
+     * From 1.21, loot tables load from the server's reloadable registries.
+     *
+     * @param path the table path under data/chronodawn/loot_table(s), such as "chests/watchmaker_camp"
+     */
+    public static java.util.List<net.minecraft.world.item.ItemStack> rollModLootTable(
+            net.minecraft.server.level.ServerLevel level, String path) {
+        net.minecraft.world.level.storage.loot.LootTable table = level.getServer().reloadableRegistries().getLootTable(
+            net.minecraft.resources.ResourceKey.create(net.minecraft.core.registries.Registries.LOOT_TABLE,
+                CompatResourceLocation.create(com.chronodawn.ChronoDawn.MOD_ID, path)));
+        net.minecraft.world.level.storage.loot.LootParams params =
+            new net.minecraft.world.level.storage.loot.LootParams.Builder(level)
+                .withParameter(net.minecraft.world.level.storage.loot.parameters.LootContextParams.ORIGIN,
+                    net.minecraft.world.phys.Vec3.ZERO)
+                .create(net.minecraft.world.level.storage.loot.parameters.LootContextParamSets.CHEST);
+        java.util.List<net.minecraft.world.item.ItemStack> result = new java.util.ArrayList<>();
+        for (net.minecraft.world.item.ItemStack stack : table.getRandomItems(params)) {
+            if (!stack.isEmpty()) {
+                result.add(stack);
+            }
+        }
+        return result;
+    }
+
     private CompatGameTestHelper() {
         // Utility class
     }

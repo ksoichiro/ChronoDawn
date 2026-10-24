@@ -2,42 +2,12 @@
   "type": "minecraft:chest",
   "pools": [
     {
-      "rolls": {
-        "type": "minecraft:uniform",
-        "min": 2,
-        "max": 4
-      },
+      "rolls": 1,
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "minecraft:copper_ingot",
-          "weight": 4,
-          "modifier": {
-            "type": "minecraft:set_count",
-            "count": {
-              "type": "minecraft:uniform",
-              "min": 1,
-              "max": 3
-            }
-          }
-        },
-        {
-          "type": "minecraft:item",
-          "name": "chronodawn:time_wood_log",
-          "weight": 3,
-          "modifier": {
-            "type": "minecraft:set_count",
-            "count": {
-              "type": "minecraft:uniform",
-              "min": 1,
-              "max": 3
-            }
-          }
-        },
-        {
-          "type": "minecraft:item",
-          "name": "minecraft:bread",
-          "weight": 3,
+          "name": "chronodawn:entropy_crystal",
+          "weight": 6,
           "modifier": {
             "type": "minecraft:set_count",
             "count": {
@@ -49,8 +19,8 @@
         },
         {
           "type": "minecraft:item",
-          "name": "chronodawn:clockwork_cookie",
-          "weight": 2,
+          "name": "chronodawn:dark_time_wood_log",
+          "weight": 6,
           "modifier": {
             "type": "minecraft:set_count",
             "count": {
@@ -62,12 +32,62 @@
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:iron_ingot",
-          "weight": 2
+          "name": "chronodawn:time_crystal",
+          "weight": 4,
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 1,
+              "max": 2
+            }
+          }
         },
         {
           "type": "minecraft:item",
-          "name": "chronodawn:time_crystal",
+          "name": "chronodawn:enhanced_clockstone",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "chronodawn:ancient_gear",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "chronodawn:dark_time_wood_sapling",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "chronodawn:ancient_time_wood_sapling",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "rolls": {
+        "type": "minecraft:uniform",
+        "min": 1,
+        "max": 2
+      },
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:copper_ingot",
+          "weight": 3,
+          "modifier": {
+            "type": "minecraft:set_count",
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 1,
+              "max": 3
+            }
+          }
+        },
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:iron_ingot",
           "weight": 2,
           "modifier": {
             "type": "minecraft:set_count",
@@ -85,32 +105,14 @@
         },
         {
           "type": "minecraft:item",
-          "name": "minecraft:compass",
-          "weight": 1
-        },
-        {
-          "type": "minecraft:item",
-          "name": "chronodawn:raw_temporal_amber",
-          "weight": 1,
+          "name": "chronodawn:clockwork_cookie",
+          "weight": 2,
           "modifier": {
             "type": "minecraft:set_count",
             "count": {
               "type": "minecraft:uniform",
-              "min": 1,
-              "max": 2
-            }
-          }
-        },
-        {
-          "type": "minecraft:item",
-          "name": "chronodawn:fruit_of_time",
-          "weight": 1,
-          "modifier": {
-            "type": "minecraft:set_count",
-            "count": {
-              "type": "minecraft:uniform",
-              "min": 1,
-              "max": 2
+              "min": 2,
+              "max": 4
             }
           }
         }
