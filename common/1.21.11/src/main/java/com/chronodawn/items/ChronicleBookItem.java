@@ -32,7 +32,7 @@ public class ChronicleBookItem extends Item {
 
     public static Properties createProperties() {
         return new Item.Properties()
-            .stacksTo(64) // Stackable like vanilla books, since a copy is granted on each entry without one
+            .stacksTo(64) // Stackable like vanilla books
             .setId(ResourceKey.create(Registries.ITEM,
                 Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, "chronicle_book")));
     }

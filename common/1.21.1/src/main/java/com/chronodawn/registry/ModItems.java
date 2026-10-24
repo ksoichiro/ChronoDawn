@@ -1142,7 +1142,7 @@ public class ModItems {
     /**
      * Chronicle Book - Custom guidebook item.
      * Opens the Chronicle GUI when used, replacing Patchouli dependency.
-     * Distributed via advancement grant_chronicle_book when entering ChronoDawn.
+     * Granted once by the dimension_entry advancement reward, and craftable from a book and a Time Crystal.
      */
     public static final RegistrySupplier<Item> CHRONICLE_BOOK = ITEMS.register(
         ModItemId.CHRONICLE_BOOK.id(),

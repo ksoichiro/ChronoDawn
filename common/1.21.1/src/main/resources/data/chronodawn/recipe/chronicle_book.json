@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "minecraft:book"
+    },
+    {
+      "tag": "c:gems/time_crystal"
+    }
+  ],
+  "result": {
+    "id": "chronodawn:chronicle_book",
+    "count": 1
+  }
+}

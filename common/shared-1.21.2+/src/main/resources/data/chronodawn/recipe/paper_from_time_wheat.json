@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "W": "chronodawn:time_wheat"
+  },
+  "pattern": [
+    "W",
+    "W",
+    "W"
+  ],
+  "result": {
+    "id": "minecraft:paper",
+    "count": 3
+  }
+}
