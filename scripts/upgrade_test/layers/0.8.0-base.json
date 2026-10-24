@@ -341,7 +341,7 @@
   "not_covered": [
     {
       "item": "player progress (chronodawn_player_progress)",
-      "reason": "Unused per-player data left from early development. Only Chrono shield cooldowns write it, which commands cannot trigger. Boss defeat and portal stabilization are recorded in chronodawn_global_state, which is checked."
+      "reason": "Holds only Chrono Shield cooldowns, which commands cannot trigger. Boss defeat and portal stabilization are recorded in chronodawn_global_state, which is checked."
     },
     {
       "item": "boss room protection (chronodawn_block_protection)",

@@ -4,9 +4,6 @@ import com.chronodawn.ChronoDawn;
 import com.chronodawn.compat.CompatSavedData;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
 
@@ -15,10 +12,8 @@ import java.util.*;
 /**
  * World saved data for player progress.
  *
- * This class manages the persistent state of player-specific progress:
- * - Whether the player has obtained the Eye of Chronos
- * - List of stabilized portal IDs
- * - List of defeated bosses
+ * This class manages the persistent per-player Chrono Shield effect state
+ * (cooldowns and active windows).
  *
  * Reference: data-model.md (Data Persistence - Player Progress)
  */
@@ -29,19 +24,12 @@ public class PlayerProgressData extends ChronoDawnWorldData {
      * Player progress entry.
      */
     public static class PlayerProgress {
-        public boolean hasChronosEye;
-        public Set<UUID> stabilizedPortals;
-        public Set<String> defeatedBosses;
-
         // Shield state
         public long shieldSpeedCooldownEndTick;   // effect #7
         public long shieldEchoActiveUntilTick;    // effect #12
         public long shieldEchoCooldownEndTick;    // effect #12
 
         public PlayerProgress() {
-            this.hasChronosEye = false;
-            this.stabilizedPortals = new HashSet<>();
-            this.defeatedBosses = new HashSet<>();
             this.shieldSpeedCooldownEndTick = 0L;
             this.shieldEchoActiveUntilTick = 0L;
             this.shieldEchoCooldownEndTick = 0L;
@@ -83,25 +71,11 @@ public class PlayerProgressData extends ChronoDawnWorldData {
             CompoundTag playerTag = playersTag.getCompound(key);
 
             PlayerProgress progress = new PlayerProgress();
-            progress.hasChronosEye = playerTag.getBoolean("has_chronos_eye");
-
-            ListTag portalList = playerTag.getList("stabilized_portals", Tag.TAG_STRING);
-            for (int i = 0; i < portalList.size(); i++) {
-                progress.stabilizedPortals.add(UUID.fromString(portalList.getString(i)));
-            }
-
-            ListTag bossList = playerTag.getList("defeated_bosses", Tag.TAG_STRING);
-            for (int i = 0; i < bossList.size(); i++) {
-                progress.defeatedBosses.add(bossList.getString(i));
-            }
-
             progress.shieldSpeedCooldownEndTick = playerTag.getLong("shield_speed_cd");
             progress.shieldEchoActiveUntilTick = playerTag.getLong("shield_echo_until");
             progress.shieldEchoCooldownEndTick = playerTag.getLong("shield_echo_cd");
 
             data.playerData.put(playerId, progress);
-
-            ChronoDawn.LOGGER.debug("  Loaded player {}: hasChronosEye={}", playerId, progress.hasChronosEye);
         }
 
         return data;
@@ -115,20 +89,6 @@ public class PlayerProgressData extends ChronoDawnWorldData {
             CompoundTag playerTag = new CompoundTag();
             PlayerProgress progress = entry.getValue();
 
-            playerTag.putBoolean("has_chronos_eye", progress.hasChronosEye);
-
-            ListTag portalList = new ListTag();
-            for (UUID portalId : progress.stabilizedPortals) {
-                portalList.add(StringTag.valueOf(portalId.toString()));
-            }
-            playerTag.put("stabilized_portals", portalList);
-
-            ListTag bossList = new ListTag();
-            for (String bossName : progress.defeatedBosses) {
-                bossList.add(StringTag.valueOf(bossName));
-            }
-            playerTag.put("defeated_bosses", bossList);
-
             playerTag.putLong("shield_speed_cd", progress.shieldSpeedCooldownEndTick);
             playerTag.putLong("shield_echo_until", progress.shieldEchoActiveUntilTick);
             playerTag.putLong("shield_echo_cd", progress.shieldEchoCooldownEndTick);
@@ -139,10 +99,6 @@ public class PlayerProgressData extends ChronoDawnWorldData {
         tag.put("players", playersTag);
 
         ChronoDawn.LOGGER.debug("PlayerProgressData saved: {} players", playerData.size());
-        for (Map.Entry<UUID, PlayerProgress> entry : playerData.entrySet()) {
-            ChronoDawn.LOGGER.debug("  Player {}: hasChronosEye={}",
-                entry.getKey(), entry.getValue().hasChronosEye);
-        }
 
         return tag;
     }
@@ -156,82 +112,12 @@ public class PlayerProgressData extends ChronoDawnWorldData {
             CompoundTag playerTag = playersTag.getCompound(key);
 
             PlayerProgress progress = new PlayerProgress();
-            progress.hasChronosEye = playerTag.getBoolean("has_chronos_eye");
-
-            ListTag portalList = playerTag.getList("stabilized_portals", Tag.TAG_STRING);
-            for (int i = 0; i < portalList.size(); i++) {
-                progress.stabilizedPortals.add(UUID.fromString(portalList.getString(i)));
-            }
-
-            ListTag bossList = playerTag.getList("defeated_bosses", Tag.TAG_STRING);
-            for (int i = 0; i < bossList.size(); i++) {
-                progress.defeatedBosses.add(bossList.getString(i));
-            }
-
             progress.shieldSpeedCooldownEndTick = playerTag.getLong("shield_speed_cd");
             progress.shieldEchoActiveUntilTick = playerTag.getLong("shield_echo_until");
             progress.shieldEchoCooldownEndTick = playerTag.getLong("shield_echo_cd");
 
             playerData.put(playerId, progress);
         }
-    }
-
-    /**
-     * Get player progress for the given player ID.
-     * Creates a new progress entry if it doesn't exist.
-     *
-     * @param playerId Player UUID
-     * @return Player progress data
-     */
-    public PlayerProgress getProgress(UUID playerId) {
-        return playerData.computeIfAbsent(playerId, k -> new PlayerProgress());
-    }
-
-    /**
-     * Check if the player has any stabilized portals.
-     *
-     * @param playerId Player UUID
-     * @return True if the player has stabilized at least one portal
-     */
-    public boolean hasStabilizedPortals(UUID playerId) {
-        PlayerProgress progress = playerData.get(playerId);
-        return progress != null && !progress.stabilizedPortals.isEmpty();
-    }
-
-    /**
-     * Set whether the player has obtained the Eye of Chronos.
-     *
-     * @param playerId Player UUID
-     * @param hasEye Whether the player has the Eye of Chronos
-     */
-    public void setChronosEye(UUID playerId, boolean hasEye) {
-        PlayerProgress progress = getProgress(playerId);
-        progress.hasChronosEye = hasEye;
-        setDirty();
-    }
-
-    /**
-     * Add a stabilized portal to the player's progress.
-     *
-     * @param playerId Player UUID
-     * @param portalId Portal UUID
-     */
-    public void addStabilizedPortal(UUID playerId, UUID portalId) {
-        PlayerProgress progress = getProgress(playerId);
-        progress.stabilizedPortals.add(portalId);
-        setDirty();
-    }
-
-    /**
-     * Add a defeated boss to the player's progress.
-     *
-     * @param playerId Player UUID
-     * @param bossName Boss name
-     */
-    public void addDefeatedBoss(UUID playerId, String bossName) {
-        PlayerProgress progress = getProgress(playerId);
-        progress.defeatedBosses.add(bossName);
-        setDirty();
     }
 
     // --- Shield state accessors ---

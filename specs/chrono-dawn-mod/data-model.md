@@ -529,9 +529,8 @@
 - `linked_portal_id`: リンク先のポータルID（双方向転送用）
 
 **Player Progress**:
-- `has_chronos_eye`: クロノスの瞳を獲得済みか
-- `stabilized_portals`: 安定化済みのポータルIDリスト
-- `defeated_bosses`: 撃破済みのボスリスト
+- `shield_speed_cd`, `shield_echo_until`, `shield_echo_cd`: クロノシールド効果のクールダウンと有効期限（tick）
+- ボス撃破とポータル安定化は `chronodawn_global_state` と `chronodawn_block_protection` に記録する
 
 **Dimension State**:
 - `is_stabilized`: クロノドーンが安定化されているか（時間の暴君撃破後）

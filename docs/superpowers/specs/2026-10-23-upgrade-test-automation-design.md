@@ -98,7 +98,7 @@ re-scan for anything added since.
 | Boss room protection areas and their defeated flags | `chronodawn_block_protection` SavedData |
 | Time Keeper village placement | `chronodawn_time_keeper_village` SavedData |
 | Boss spawn data | `BossSpawnData` |
-| Per-player progress: defeated bosses, Chronos Eye, stabilized portals, shield cooldowns | `PlayerProgressData` (`*_player_progress`) |
+| Per-player Chrono Shield cooldowns | `PlayerProgressData` (`*_player_progress`) |
 | Block entities: Time Well stone, boss room door, boundary marker, Clock Tower teleporter, cooldown activator | `CompatBlockEntity` subclasses |
 | Custom entity save data: bosses, Moment Creeper, Ticking Sheep, Time Keeper, boats | `addAdditionalSaveData` overrides |
 | Player inventory with mod items, including a damaged tool and stacked items | player data |
