@@ -552,7 +552,7 @@ watchmaker_camp_cooldown_ticks = 72000
 | `sundial_effect_duration_ticks` | integer | `3600` | `20..=72000` | How long the granted effect lasts. |
 | `memorial_cooldown_ticks` | integer | `24000` | `20..=1728000` | Ticks before the same player can pray at the same memorial again. Counted in game time. |
 | `time_well_cooldown_ticks` | integer | `24000` | `20..=1728000` | Ticks (20 ticks = 1 second) before the same player can make another wish at the same well. Counted in game time, so sleeping does not shorten it. |
-| `watchmaker_camp_cooldown_ticks` | integer | `72000` | `20..=1728000` | Ticks (20 ticks = 1 second) before the camp chest can refill for the same player. It refills only once the player has emptied it. Counted in game time, so sleeping does not shorten it. Has no effect when Lootr is installed. |
+| `watchmaker_camp_cooldown_ticks` | integer | `72000` | `20..=1728000` | Ticks (20 ticks = 1 second) before the camp chest can refill for the same player. It refills only once the player has emptied it. Counted in game time, so sleeping does not shorten it. Has no effect on camps generated while Lootr is installed. |
 
 ---
 

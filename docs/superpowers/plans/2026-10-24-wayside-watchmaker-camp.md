@@ -369,13 +369,15 @@ Expected: every step passes. No Mixin changed, so `prodSmokeTest` is not require
 Present to the user. Accepted runtime checks: 1.21.1 NeoForge and Fabric, 1.20.1 Forge, 26.3 NeoForge, 26.2 Fabric.
 1. Before the check, let the maintainer compare fill sounds with `/playsound`: `minecraft:item.crossbow.loading_middle` (pitch 0.8), `minecraft:block.comparator.click`, `minecraft:item.lodestone_compass.lock`. Change the constant if another is chosen.
 2. New world, enter Chrono Dawn, `/place feature chronodawn:watchmaker_camp`.
-3. The tent roof is one block above the chest, and the chest looks and animates like a vanilla chest.
-4. Open it: the fill sound and reverse portal particles appear, the contents include one rare material, and putting an item in (click, shift-click, number key) does nothing.
-5. Take everything, close, open again: the action bar shows the waiting message and no screen opens.
-6. Leave one item in the chest. `/time` changes day time, not game time, so for the refill check temporarily set `watchmaker_camp_cooldown_ticks = 200` in the config and restart. Wait 10 seconds and open: only the one item is there. Take it, wait 10 seconds, open: it refills.
-7. A second account (or `/op` in LAN) sees its own contents.
-8. Break the chest with an axe in survival: a plain chest drops along with your remaining items.
-9. On 1.21.1 NeoForge with Lootr added, a new camp's chest is a Lootr chest, opens, and shows no Chrono Dawn message or effect.
+   Note that `/place feature` only exercises the live-chunk path.
+3. On 1.21.1 (NeoForge and Fabric) and 26.3, travel into freshly generated Chrono Dawn forest or plains chunks until a naturally generated camp is found. Alternatively, confirm with a region-file scan that camp positions hold `chronodawn:watchmaker_chest` blocks with a matching block entity and no leftover `minecraft:chest` block entity. Open the chest, then grep the server log for "Tried to access a block entity before it was created" and invalid block entity warnings. Expected: none.
+4. The tent roof is one block above the chest, and the chest looks and animates like a vanilla chest.
+5. Open it: the fill sound and reverse portal particles appear, the contents include one rare material, and putting an item in (click, shift-click, number key) does nothing.
+6. Take everything, close, open again: the action bar shows the waiting message and no screen opens.
+7. Leave one item in the chest. `/time` changes day time, not game time, so for the refill check temporarily set `watchmaker_camp_cooldown_ticks = 200` in the config and restart. Wait 10 seconds and open: only the one item is there. Take it, wait 10 seconds, open: it refills.
+8. A second account (or `/op` in LAN) sees its own contents.
+9. Break the chest with an axe in survival: a plain chest drops along with your remaining items.
+10. On 1.21.1 NeoForge with Lootr added, a naturally generated new camp (not `/place`) has a Lootr chest, opens, and shows no Chrono Dawn message or effect.
 
 Expected: all of the above. GameTest servers may omit Chrono Dawn dimensions, so this needs a normal client.
 

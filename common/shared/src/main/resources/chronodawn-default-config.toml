@@ -353,7 +353,7 @@ time_well_cooldown_ticks = 24000
 # Watchmaker's Camp: how long (in ticks, 20 ticks = 1 second) before the camp
 # chest can refill for the same player. It refills only once the player has
 # emptied it. Counted in game time, so sleeping does not shorten it. Has no
-# effect when Lootr is installed. Range: 20 to 1728000.
+# effect on camps generated while Lootr is installed. Range: 20 to 1728000.
 watchmaker_camp_cooldown_ticks = 72000
 
 [gameplay.portals]

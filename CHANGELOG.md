@@ -58,7 +58,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   book. Merging them would mean overriding the vanilla recipes, which could
   conflict with other mods.
 - **Watchmaker's Camp chest**: the old camp chest could not be opened because
-  the tent roof sat on top of it.
+  the tent roof sat on top of it. This applies to newly generated camps
+  only. Camps in already generated chunks keep the old roof.
 
 ## [0.14.0] - 2026-10-21
 

@@ -84,7 +84,8 @@ public class NbtTemplateFeature extends Feature<NbtTemplateConfiguration> {
         }
 
         boolean placed = template.placeInWorld(level, placePos, placePos, settings, random, 2);
-        if (placed && config.template().getPath().equals(WATCHMAKER_CAMP_TEMPLATE)) {
+        if (placed && config.template().getNamespace().equals(ChronoDawn.MOD_ID)
+                && config.template().getPath().equals(WATCHMAKER_CAMP_TEMPLATE)) {
             // The swap runs after placement instead of the NBT holding the Watchmaker's Chest:
             // Lootr converts chests only once the chunk is live, so the camp NBT must keep the
             // vanilla loot chest for the Lootr case.
