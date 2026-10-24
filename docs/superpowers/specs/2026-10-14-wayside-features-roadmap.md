@@ -1,7 +1,7 @@
 # Roadmap: Wayside Features (Parts 1 to 6)
 
 **Created**: 2026-10-14
-**Status**: Parts 1 to 3 shipped to main (2026-10-14, 2026-10-17, 2026-10-21). Parts 4 to 6 not started.
+**Status**: Parts 1 to 3 shipped to main (2026-10-14, 2026-10-17, 2026-10-21). Part 4 implemented on branch, manual check pending. Parts 5 and 6 not started.
 **Related**: [Part 1 design](./2026-10-12-wayside-sundial-design.md),
 [Part 1 plan](../plans/2026-10-12-wayside-sundial.md)
 
@@ -57,14 +57,14 @@ discover. Several biomes pass by, yet nothing invites a detour.
 | 1 | Shared foundation + `old_sundial` | Travel buff by time of day | Shipped (main `db7246186`) |
 | 2 | `lost_adventurer_memorial` | Lore fragment and supplies, light-pillar effect | Shipped (2026-10-17), with the Lost Adventurer's Journal |
 | 3 | `time_well` | Wishing well, exchange a thrown item | Shipped (2026-10-21) |
-| 4 | `watchmaker_camp` | Per-player chest that refills over time | Not started |
+| 4 | `watchmaker_camp` | Per-player chest that refills over time | Implemented on branch, manual check pending |
 | 5 | `time_cairn` | Collect time-of-day cairn stones, rare midnight echo | Not started |
 | 6 | `hourglass_monolith` | Small wave fight with a reward | Not started |
 
 Order rationale: simplest first to prove the foundation, then features that
 need new UI, entities or event state machines.
 
-## Foundation available after parts 1 to 3
+## Foundation available after parts 1 to 4
 
 - `com.chronodawn.core.wayside.PlayerCooldownTracker` (pure Java):
   `tryUse(UUID, gameTime, cooldownTicks)` returns 0 when accepted, prunes
@@ -111,6 +111,23 @@ need new UI, entities or event state machines.
   `loadModStructureTemplate` (26.3 renamed the structure manager accessor), so
   shared tests can throw items as a joined player and place real templates in
   each rotation.
+
+- Post-placement swap (part 4): `WatchmakerCampChests` replaces the camp's
+  vanilla loot chest with the `watchmaker_chest` block after the template is
+  placed, unless Lootr is present (`Platform.isModLoaded("lootr")`, no Lootr
+  classes). Rotation does not matter because the swap works on the placed
+  block.
+- Per-player slots (part 4): `WatchmakerChestBlockEntity` keeps 27 slots per
+  player UUID plus the cooldown. It is not a `Container`, so hoppers cannot
+  touch it. A fill happens only when the player's slots are empty and
+  `tryActivate` accepts.
+- Take-only menu (part 4): `WatchmakerChestMenu` is a vanilla `GENERIC_9x3`
+  menu whose slots accept no item, so the client needs no custom screen. The
+  block uses `ChestRenderer` through a registered block entity renderer.
+- More GameTest helpers (part 4): `CompatGameTestHelper.rollModLootTable`
+  (rolls a chronodawn loot table), `hasLootTable` and `clearLootTable` (for
+  `RandomizableContainer` block entities), and `clickPickup` / `clickSwap`
+  (drive menu clicks).
 
 ## Per-feature design notes
 

@@ -17,6 +17,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   without leaving Chrono Dawn. The horizontal row is still Time Bread.
 - **Chronicle texture**: the Chronicle has its own item texture instead of
   the vanilla book.
+- **Watchmaker's Chest**: newly generated Watchmaker's Camps have a taller
+  tent and a Watchmaker's Chest. Each player gets their own contents: Entropy
+  Crystal, Dark Time Wood, Time Crystal, rarely Enhanced Clockstone, an Ancient
+  Gear or a Dark or Ancient Time Wood sapling, plus a few supplies. Once a
+  player has emptied it, it refills for them after about three Minecraft days
+  by default (`watchmaker_camp_cooldown_ticks` under `[gameplay.wayside]`).
+  Items cannot be stored in it, and breaking it drops a plain chest. With
+  Lootr installed the camp keeps a normal loot chest that Lootr handles. Only
+  camps in newly generated chunks have the new chest.
 
 ### Changed
 
@@ -48,6 +57,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   recipes are still listed separately from their vanilla recipes in the recipe
   book. Merging them would mean overriding the vanilla recipes, which could
   conflict with other mods.
+- **Watchmaker's Camp chest**: the old camp chest could not be opened because
+  the tent roof sat on top of it.
 
 ## [0.14.0] - 2026-10-21
 

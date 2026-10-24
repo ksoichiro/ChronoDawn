@@ -347,7 +347,7 @@ Right-click a purchased Time Compass to search for its structure. Compass trades
 
 Seven small NBT-defined micro-structures scatter across the Chrono Dawn biomes. They have no boss content but tell ambient lore about the frozen dimension, and a few of them reward a visit:
 
-- **Watchmaker's Camp** — the only ambient structure with a chest. Worth detouring to whenever you spot the tent.
+- **Watchmaker's Camp**: a small tent with a Watchmaker's Chest under it. The watchmaker is long gone, but their clockwork keeps turning the camp's time back. In newly generated chunks, each player gets their own contents: Entropy Crystal, Dark Time Wood, Time Crystal, rarely Enhanced Clockstone, an Ancient Gear or a Dark or Ancient Time Wood sapling, plus a few supplies such as ingots, a Clock or a Clockwork Cookie. Once you have emptied the chest, it refills for you after about three Minecraft days by default, and a chest you left partly full never refills. Items cannot be stored in it, and breaking it drops a plain chest and whatever is still inside for you. The wait is configurable. Modpack authors: with Lootr installed the chest follows Lootr's rules, and adding `chronodawn:chests/watchmaker_camp` to Lootr's `refresh_loot_tables` makes it refill.
 - **Hourglass Monolith** — a single-block monument that breaks up open biomes.
 - **Old Sundial** — a flat brick ring marking long-abandoned timekeeping. In newly generated chunks its post can be right-clicked for a three-minute blessing: Speed in daylight, Speed II around noon, or Night Vision at night. Each player can use each sundial about once every 20 minutes of game time by default, and breaking the post drops Iron Bars. The cooldown and effect length are configurable.
 - **Lost Adventurer Memorial**: a small grave with a headstone, with a snowy variant in the Snowy biome. In newly generated chunks, stepping onto the plate in front of the grave answers a prayer: light falls from above and leaves one of six Faded Journal Pages plus a little bread, arrows or torches. Each player can pray at each memorial about once every 20 minutes of game time by default. Read the pages in order for the adventurer's story, and collect all six for an advancement. Craft the six pages with a book into the Lost Adventurer's Journal for the ending. Holding the journal in either hand while praying replaces the page with a small offering of Clockstone, Raw Temporal Amber or cooked food, and the journal is never used up.
@@ -948,7 +948,7 @@ The custom shields are independent of the existing Chrono Aegis artifact (which 
 - **Use**: Entropy Crystal Sword, Entropy Crystal Shield
 
 #### Temporal Amber
-- **Source**: Temporal Amber Ore and Deepslate Temporal Amber Ore (all Chrono Dawn biomes, Y -30 to 20, iron pickaxe) drop Raw Temporal Amber. Watchmaker's Camp chests also contain it
+- **Source**: Temporal Amber Ore and Deepslate Temporal Amber Ore (all Chrono Dawn biomes, Y -30 to 20, iron pickaxe) drop Raw Temporal Amber
 - **Use**: Temporal Amber Armor. 1 Raw Temporal Amber crafts into 2 Temporal Amber Dust, which fuels the armor's self-repair
 
 ### Boss Drop Materials
