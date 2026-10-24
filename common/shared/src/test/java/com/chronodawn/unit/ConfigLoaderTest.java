@@ -683,9 +683,10 @@ class ConfigLoaderTest {
             "sundial_cooldown_ticks = 6000\n" +
             "sundial_effect_duration_ticks = 1200\n" +
             "memorial_cooldown_ticks = 12000\n" +
-            "time_well_cooldown_ticks = 6000\n");
+            "time_well_cooldown_ticks = 6000\n" +
+            "watchmaker_camp_cooldown_ticks = 9000\n");
         ChronoDawnConfig config = ConfigLoader.load(tmp);
-        assertEquals(new WaysideSettings(6000, 1200, 12000, 6000), config.gameplay().wayside());
+        assertEquals(new WaysideSettings(6000, 1200, 12000, 6000, 9000), config.gameplay().wayside());
     }
 
     @Test
@@ -733,6 +734,24 @@ class ConfigLoaderTest {
         assertEquals(1200, settings.sundialEffectDurationTicks());
         assertEquals(12000, settings.memorialCooldownTicks());
         assertEquals(ConfigDefaults.WAYSIDE_DEFAULTS.timeWellCooldownTicks(), settings.timeWellCooldownTicks());
+    }
+
+    @Test
+    void wayside_badWatchmakerCampCooldown_fallsBackAlone(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[gameplay.wayside]\n" +
+            "sundial_cooldown_ticks = 6000\n" +
+            "sundial_effect_duration_ticks = 1200\n" +
+            "memorial_cooldown_ticks = 12000\n" +
+            "time_well_cooldown_ticks = 6000\n" +
+            "watchmaker_camp_cooldown_ticks = 1728001\n");
+        WaysideSettings settings = ConfigLoader.load(tmp).gameplay().wayside();
+        assertEquals(6000, settings.sundialCooldownTicks());
+        assertEquals(1200, settings.sundialEffectDurationTicks());
+        assertEquals(12000, settings.memorialCooldownTicks());
+        assertEquals(6000, settings.timeWellCooldownTicks());
+        assertEquals(ConfigDefaults.WAYSIDE_DEFAULTS.watchmakerCampCooldownTicks(),
+            settings.watchmakerCampCooldownTicks());
     }
 
     @Test

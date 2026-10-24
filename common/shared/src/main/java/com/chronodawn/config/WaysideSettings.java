@@ -18,7 +18,7 @@
 package com.chronodawn.config;
 
 /**
- * Settings for interactive wayside features such as the Old Sundial, the Lost Adventurer Memorial and the Time Well.
+ * Settings for interactive wayside features such as the Old Sundial, the Lost Adventurer Memorial, the Time Well and the Watchmaker's Camp.
  *
  * <p>Cooldowns are per player and per feature instance, measured in game ticks.
  */
@@ -26,5 +26,6 @@ public record WaysideSettings(
     int sundialCooldownTicks,
     int sundialEffectDurationTicks,
     int memorialCooldownTicks,
-    int timeWellCooldownTicks
+    int timeWellCooldownTicks,
+    int watchmakerCampCooldownTicks
 ) {}
