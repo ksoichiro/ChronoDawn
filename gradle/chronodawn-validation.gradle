@@ -6,7 +6,7 @@
 // content over) more than once:
 //
 //   validateBlockTagMembership      — Java .replaceable() ↔ tag presence
-//   validateRecipeUnlockAdvancements — cooking recipe ↔ unlock advancement
+//   validateRecipeUnlockAdvancements — recipe ↔ unlock advancement
 //   validateLangParity              — Python check_lang_parity.py wrapper
 //   validateEraJsonFormat           — recipe/advancement/loot_table era format
 //   validateConventionalTags        — c: tag coverage, names, cross-root parity
@@ -111,32 +111,35 @@ tasks.register('validateBlockTagMembership') {
 // ============================================================
 // Task 2: validateRecipeUnlockAdvancements
 // ------------------------------------------------------------
-// Every cooking recipe (smoking, campfire_cooking, or food-category
-// smelting) needs a matching `advancement(s)/recipes/food/<recipe>.json`
-// — otherwise the recipe stays hidden in the recipe book until the
-// cooked output is independently obtained.
+// Every recipe needs a matching `advancement(s)/recipes/<category>/<recipe>.json`
+// — otherwise the recipe stays hidden in the recipe book until its output
+// is independently obtained. Hand-written recipes skip the advancement that
+// vanilla datagen always produces, so alternative recipes such as
+// stonecutter_from_temporal_stone shipped without one.
 // ============================================================
 tasks.register('validateRecipeUnlockAdvancements') {
     group = 'verification'
-    description = 'Verify cooking recipes have corresponding recipe-unlock advancement files'
+    description = 'Verify recipes have corresponding recipe-unlock advancement files'
 
     doLast {
         def errors = []
-        def jsonSlurper = new JsonSlurper()
 
-        // Each resource root that may hold cooking recipes, paired with the
-        // advancement search roots that may host the unlock file. The first
-        // matching advancement wins; if none exist, the recipe is flagged.
+        // Each resource root that holds recipes, paired with the advancement
+        // roots that may host the unlock file. 26.3 keeps its own full copy of
+        // the advancements in its data schema, so the shared 1.21.2+ recipes
+        // are checked against it separately.
         def recipeRoots = [
             [recipeDir: 'common/1.20.1/src/main/resources/data/chronodawn/recipes',
-             advancementDirs: ['common/1.20.1/src/main/resources/data/chronodawn/advancements/recipes/food']],
+             advancementDirs: ['common/1.20.1/src/main/resources/data/chronodawn/advancements/recipes']],
             [recipeDir: 'common/1.21.1/src/main/resources/data/chronodawn/recipe',
-             advancementDirs: ['common/shared-1.21.1+/src/main/resources/data/chronodawn/advancement/recipes/food',
-                                'common/1.21.1/src/main/resources/data/chronodawn/advancement/recipes/food']],
+             advancementDirs: ['common/shared-1.21.1+/src/main/resources/data/chronodawn/advancement/recipes',
+                                'common/1.21.1/src/main/resources/data/chronodawn/advancement/recipes']],
             [recipeDir: 'common/shared-1.21.1+/src/main/resources/data/chronodawn/recipe',
-             advancementDirs: ['common/shared-1.21.1+/src/main/resources/data/chronodawn/advancement/recipes/food']],
+             advancementDirs: ['common/shared-1.21.1+/src/main/resources/data/chronodawn/advancement/recipes']],
             [recipeDir: 'common/shared-1.21.2+/src/main/resources/data/chronodawn/recipe',
-             advancementDirs: ['common/shared-1.21.1+/src/main/resources/data/chronodawn/advancement/recipes/food']],
+             advancementDirs: ['common/shared-1.21.1+/src/main/resources/data/chronodawn/advancement/recipes']],
+            [recipeDir: 'common/shared-1.21.2+/src/main/resources/data/chronodawn/recipe',
+             advancementDirs: ['common/26.3/src/main/resources/data/chronodawn/advancement/recipes']],
         ]
 
         int checked = 0
@@ -144,39 +147,28 @@ tasks.register('validateRecipeUnlockAdvancements') {
             def recipeDir = file("${rootProject.projectDir}/${entry.recipeDir}")
             if (!recipeDir.exists()) return
 
+            // Unlock advancements are grouped by recipe-book category subdirectory
+            // (misc/, food/, building_blocks/, ...), so search every subdirectory.
+            def advancementNames = [] as Set
+            entry.advancementDirs.each { dir ->
+                def advDir = file("${rootProject.projectDir}/${dir}")
+                if (!advDir.exists()) return
+                advDir.eachFileRecurse(groovy.io.FileType.FILES) { File f ->
+                    if (f.name.endsWith('.json')) advancementNames << f.name
+                }
+            }
+
             recipeDir.eachFileMatch(~/.+\.json/) { File recipeFile ->
-                def recipe
-                try {
-                    recipe = jsonSlurper.parseText(recipeFile.text)
-                } catch (Exception e) {
-                    return  // JSON syntax error — caught by validateResources
-                }
-                if (!(recipe instanceof Map)) return
-
-                def type = recipe.type as String
-                def category = recipe.category as String
-                def isCooking = false
-                if (type == 'minecraft:smoking' || type == 'minecraft:campfire_cooking') {
-                    isCooking = true
-                } else if (type == 'minecraft:smelting' && category == 'food') {
-                    isCooking = true
-                }
-                if (!isCooking) return
-
                 checked++
-                def baseName = recipeFile.name
-                def found = entry.advancementDirs.any { dir ->
-                    file("${rootProject.projectDir}/${dir}/${baseName}").exists()
-                }
-                if (!found) {
+                if (!advancementNames.contains(recipeFile.name)) {
                     def relPath = rootProject.projectDir.toPath().relativize(recipeFile.toPath()).toString()
-                    errors << "Cooking recipe ${relPath} has no recipe-unlock advancement under ${entry.advancementDirs.join(' or ')}"
+                    errors << "Recipe ${relPath} has no recipe-unlock advancement under ${entry.advancementDirs.join(' or ')}"
                 }
             }
         }
 
         if (errors.isEmpty()) {
-            logger.lifecycle("Recipe-unlock advancement validation passed: ${checked} cooking recipes all have unlock advancements.")
+            logger.lifecycle("Recipe-unlock advancement validation passed: ${checked} recipes all have unlock advancements.")
         } else {
             errors.each { logger.error("  ERROR: ${it}") }
             throw new GradleException("Recipe-unlock advancement validation failed with ${errors.size()} error(s)")

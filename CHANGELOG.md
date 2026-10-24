@@ -7,6 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Recipe book unlocks**: picking up an ingredient now unlocks its recipe in
+  the recipe book, as it does for vanilla recipes. Before, 33 recipes (27 on
+  Minecraft 1.20.1) stayed hidden until the output was obtained some other
+  way. They include the Temporal Stone versions of the Stonecutter, Repeater
+  and Comparator, the Temporal Cobblestone Lever, wood and stripped wood
+  blocks, charcoal from Chrono Dawn logs, Temporal Stone Bricks, Cracked
+  Temporal Stone Bricks, Polished Deepslate Temporal Stone, the Temporal Stone
+  Button and Pressure Plate, smelting into Temporal Stone, Smooth Temporal
+  Stone and Deepslate Temporal Stone, Ancient Gear, and the Chrono Melon
+  block. On Minecraft 1.21.1 and later this also covers dyes made from Chrono
+  Dawn flowers. The Temporal Stone Stonecutter, Repeater, Comparator and Lever
+  recipes are still listed separately from their vanilla recipes in the recipe
+  book. Merging them would mean overriding the vanilla recipes, which could
+  conflict with other mods.
+
 ## [0.14.0] - 2026-10-21
 
 ### Added
