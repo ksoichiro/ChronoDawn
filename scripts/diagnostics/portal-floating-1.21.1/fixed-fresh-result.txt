@@ -1,0 +1,10 @@
+[2410月2026 14:25:12.353] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE PASS previous server entries cleared before level load
+[2410月2026 14:25:12.353] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE PASS previous SavedData detached before level load
+[2410月2026 14:25:16.916] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE PASS stale midair entry absent
+[2410月2026 14:25:16.916] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE PASS fresh world starts with empty registry
+[2410月2026 14:25:17.756] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE PASS stale midair portal cannot be restored in new world
+[2410月2026 14:25:17.769] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE PASS actual portal generated at natural placement BlockPos{x=-1, y=80, z=33}
+[2410月2026 14:25:17.769] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE PASS generated portal has support
+[2410月2026 14:25:17.776] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE PASS portal retained until final save
+[2410月2026 14:25:18.501] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE PASS registry empty after final save
+[2410月2026 14:25:18.501] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE PASS SavedData detached after final save

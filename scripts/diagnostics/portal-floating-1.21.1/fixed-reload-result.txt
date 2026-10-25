@@ -1,0 +1,8 @@
+[2410月2026 14:25:47.803] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE PASS previous server entries cleared before level load
+[2410月2026 14:25:47.803] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE PASS previous SavedData detached before level load
+[2410月2026 14:25:48.835] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE PASS stale midair entry absent
+[2410月2026 14:25:48.835] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE PASS saved portal UUID and position loaded from disk
+[2410月2026 14:25:48.835] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE PASS saved registry has no extra stale entries
+[2410月2026 14:25:48.840] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE PASS portal retained until final save
+[2410月2026 14:25:49.026] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE PASS registry empty after final save
+[2410月2026 14:25:49.026] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE PASS SavedData detached after final save

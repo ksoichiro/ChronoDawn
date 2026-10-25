@@ -87,6 +87,10 @@ the build model changes.
 - Research that affects future implementation should be written to an
   appropriate file, usually under `specs/chrono-dawn-mod/` or `docs/`, and
   linked from follow-up tasks when applicable.
+- When investigating seed-dependent portal inconsistencies, compare a fresh
+  Minecraft process with consecutive worlds in one process. Check both new-data
+  construction and saved-data loading, since static registries can survive an
+  integrated-server shutdown. See `docs/portal-floating-investigation-1.21.1.md`.
 - Treat Minecraft 1.21.1 as the long-term modpack compatibility target. For
   pack-facing changes, verify both Fabric and NeoForge 1.21.1 even when 26.3 is
   the default development target. The detailed, time-sensitive pack research is
@@ -153,6 +157,19 @@ Run unit tests:
 Each Gradle invocation selects one target version. Do not combine tasks from
 different versioned projects in one invocation. Run a separate command with
 the matching `-Ptarget_mc_version` for each version.
+
+Diagnostic Gradle init scripts also run for included builds, so guard project
+lookups. Keep injected sources opt-in, use disposable run directories, and
+recompile without the script afterward to remove diagnostic classes. Portal
+placement probes must load destination chunks in the same order as a real
+transfer before reading heightmaps.
+Clear portal singleton state before server world loading and after the final
+save, never at the start of shutdown. Detach the old SavedData reference as well
+as clearing portal entries, and verify both fresh-world isolation and reload of
+an existing saved registry.
+If a disposable diagnostic JVM needs an explicit exit, wait for the server
+thread from another thread first. Exiting on the server thread can deadlock
+with shutdown hooks that join it.
 
 Run resource validation:
 

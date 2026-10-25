@@ -1,0 +1,30 @@
+// Opt-in diagnostic sources. Never included by the normal build.
+gradle.projectsEvaluated {
+    def neo = gradle.rootProject.findProject(':neoforge')
+    if (neo == null) return
+    if (gradle.rootProject.property('target_mc_version') != '1.21.1') {
+        throw new GradleException('The portal diagnostic supports Minecraft 1.21.1 only')
+    }
+    def runDir = gradle.rootProject.findProperty('portal_probe_dir')
+    if (runDir == null || !new File(runDir.toString()).isAbsolute()) {
+        throw new GradleException('Set -Pportal_probe_dir to an absolute disposable directory')
+    }
+    def probeDir = new File(runDir.toString())
+    if (new File(probeDir, 'world').exists() &&
+        gradle.rootProject.findProperty('portal_probe_resume') != 'true') {
+        throw new GradleException('Use a fresh directory or set -Pportal_probe_resume=true for the persistence check')
+    }
+    probeDir.mkdirs()
+    new File(probeDir, 'eula.txt').text = 'eula=true\n'
+    new File(probeDir, 'server.properties').text = '''level-seed=1991166212585861250
+server-ip=127.0.0.1
+server-port=25639
+online-mode=false
+view-distance=2
+simulation-distance=2
+spawn-protection=0
+'''
+    neo.sourceSets.main.java.srcDir(gradle.rootProject.file('scripts/diagnostics/portal-floating-1.21.1/java'))
+    neo.loom.runs.server.runDir(probeDir.absolutePath)
+    neo.loom.runs.server.programArgs('--nogui')
+}

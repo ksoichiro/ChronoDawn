@@ -23,10 +23,22 @@ public class PortalPersistenceManager {
      * Registers event listeners for server lifecycle events.
      */
     public static void initialize() {
+        // New worlds have no NBT to load, so they must not inherit the previous server's singleton state.
+        LifecycleEvent.SERVER_BEFORE_START.register(server -> resetRegistry());
+
         // Load portal data when overworld loads
         LifecycleEvent.SERVER_LEVEL_LOAD.register(PortalPersistenceManager::onServerLevelLoad);
 
+        // Wait until the final world save has completed before clearing the data it serializes.
+        LifecycleEvent.SERVER_STOPPED.register(server -> resetRegistry());
+
         ChronoDawn.LOGGER.debug("Portal Persistence Manager initialized");
+    }
+
+    private static void resetRegistry() {
+        PortalRegistry registry = PortalRegistry.getInstance();
+        registry.setSavedData(null);
+        registry.clear();
     }
 
     /**

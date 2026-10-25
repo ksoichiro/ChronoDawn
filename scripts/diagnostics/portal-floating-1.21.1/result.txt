@@ -1,0 +1,16 @@
+[2410月2026 13:59:42.600] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE seed=1991166212585861250
+[2410月2026 13:59:43.519] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE natural axis=x result=BlockPos{x=-1, y=80, z=33}
+[2410月2026 13:59:43.519] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE support pos=BlockPos{x=-1, y=80, z=33} surface=81 block=Block{chronodawn:temporal_grass_block}[snowy=false] below=Block{chronodawn:temporal_dirt}
+[2410月2026 13:59:43.519] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE support pos=BlockPos{x=0, y=80, z=33} surface=80 block=Block{chronodawn:temporal_grass_block}[snowy=false] below=Block{chronodawn:temporal_dirt}
+[2410月2026 13:59:43.519] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE support pos=BlockPos{x=1, y=80, z=33} surface=80 block=Block{chronodawn:temporal_grass_block}[snowy=false] below=Block{chronodawn:temporal_dirt}
+[2410月2026 13:59:43.519] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE support pos=BlockPos{x=2, y=80, z=33} surface=80 block=Block{chronodawn:temporal_grass_block}[snowy=false] below=Block{chronodawn:temporal_dirt}
+[2410月2026 13:59:43.520] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE natural axis=z result=BlockPos{x=-1, y=80, z=33}
+[2410月2026 13:59:43.520] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE support pos=BlockPos{x=-1, y=80, z=33} surface=81 block=Block{chronodawn:temporal_grass_block}[snowy=false] below=Block{chronodawn:temporal_dirt}
+[2410月2026 13:59:43.520] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE support pos=BlockPos{x=-1, y=80, z=34} surface=80 block=Block{chronodawn:temporal_grass_block}[snowy=false] below=Block{chronodawn:temporal_dirt}
+[2410月2026 13:59:43.520] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE support pos=BlockPos{x=-1, y=80, z=35} surface=80 block=Block{chronodawn:temporal_grass_block}[snowy=false] below=Block{chronodawn:temporal_dirt}
+[2410月2026 13:59:43.520] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE support pos=BlockPos{x=-1, y=80, z=36} surface=80 block=Block{chronodawn:temporal_grass_block}[snowy=false] below=Block{chronodawn:temporal_dirt}
+[2410月2026 13:59:43.524] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE CONFIRMED stale entry survives fresh PortalRegistryData
+[2410月2026 13:59:43.532] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE CONFIRMED restored unsupported frame at BlockPos{x=0, y=220, z=32}
+[2410月2026 13:59:43.533] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE CONFIRMED leaf canopy accepted at BlockPos{x=0, y=241, z=32}
+[2410月2026 13:59:43.533] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE ALL CHECKS COMPLETED
+[2410月2026 13:59:44.187] [Server thread/INFO] [com.chronodawn.ChronoDawn/]: PORTAL_PROBE CONFIRMED registry entry present at ServerStoppedEvent
