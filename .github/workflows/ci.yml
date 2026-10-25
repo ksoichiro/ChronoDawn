@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  # Keep every main run so that each pushed commit gets a result.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate resources and data
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '25'
+      # setup-gradle saves its cache only on main, and pull requests read it.
+      - uses: gradle/actions/setup-gradle@v6
+      # Only English is required here. Missing translations in other
+      # locales are reported as warnings, and checkAll keeps them required.
+      - run: ./gradlew validateAll -Plang_required_locales=en_us
+
+  build:
+    name: Build and unit test (${{ matrix.mc }})
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        # 1.21.1 carries most players and modpacks, 26.3 is the default target.
+        mc: ['1.21.1', '26.3']
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: |
+            21
+            25
+      - uses: gradle/actions/setup-gradle@v6
+      - run: ./gradlew build -Ptarget_mc_version=${{ matrix.mc }}

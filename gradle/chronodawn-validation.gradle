@@ -7,7 +7,7 @@
 //
 //   validateBlockTagMembership      — Java .replaceable() ↔ tag presence
 //   validateRecipeUnlockAdvancements — recipe ↔ unlock advancement
-//   validateLangParity              — Python check_lang_parity.py wrapper
+//   validateLangParity              — every locale shares keys with en_us
 //   validateEraJsonFormat           — recipe/advancement/loot_table era format
 //   validateConventionalTags        — c: tag coverage, names, cross-root parity
 //   validateSoundSubtitles          — sounds.json subtitle key ↔ per-version lang
@@ -16,9 +16,29 @@
 //
 // All are registered in the 'verification' group so checkAll can pick them
 // up. Errors throw GradleException so the failing CI step is visible.
+// validateAll runs them together with the shared validations.
 
 import groovy.json.JsonSlurper
 import groovy.json.JsonException
+
+// Locales whose lang files must translate every en_us key. A missing key in
+// any other locale is only a warning: Minecraft falls back to en_us at
+// runtime, and failing on it would block contributors who cannot write that
+// language. CI passes -Plang_required_locales=en_us, while the
+// gradle.properties default keeps checkAll and releases strict.
+def requiredLangLocales = ((project.findProperty('lang_required_locales') ?: 'en_us').toString()
+        .split(',')*.trim().findAll { it } as Set) + ['en_us']
+
+// Logs missing-translation warnings. On GitHub Actions it also emits one
+// workflow annotation per task, so the warnings show up on the PR without
+// one annotation per key.
+def reportLangWarnings = { String taskName, Collection<String> warnings ->
+    if (warnings.isEmpty()) return
+    warnings.each { logger.warn("  WARNING: ${it}") }
+    if (System.getenv('GITHUB_ACTIONS') == 'true') {
+        println "::warning title=${taskName}::${warnings.size()} missing translation(s) in optional locales. See the job log for the keys."
+    }
+}
 
 // ============================================================
 // Task 1: validateBlockTagMembership
@@ -179,16 +199,63 @@ tasks.register('validateRecipeUnlockAdvancements') {
 // ============================================================
 // Task 3: validateLangParity
 // ------------------------------------------------------------
-// Thin Gradle wrapper around scripts/check_lang_parity.py so that lang
-// drift (e.g. block.X present, item.X missing in one locale) gets caught
-// by checkAll. The existing validateTranslations only inspects entity /
-// spawn-egg keys; the Python script inspects every key pair.
+// Catches lang drift (e.g. block.X present, item.X missing in one locale)
+// in every common/*/ lang directory, with en_us.json as the reference. The
+// existing validateTranslations only inspects entity / spawn-egg keys; this
+// task inspects every key pair. A key missing from a locale outside
+// lang_required_locales is a warning. An extra key is always an error,
+// because it means en_us lacks the key or the locale kept a removed one.
 // ============================================================
-tasks.register('validateLangParity', Exec) {
+tasks.register('validateLangParity') {
     group = 'verification'
-    description = 'Verify non-English lang files share keys with en_us.json across all version roots'
-    workingDir = rootProject.projectDir
-    commandLine 'python3', 'scripts/check_lang_parity.py'
+    description = 'Verify every lang file shares keys with en_us.json across all version roots'
+
+    doLast {
+        def jsonSlurper = new JsonSlurper()
+        def errors = []
+        def warnings = []
+        def relPath = { File f -> rootProject.projectDir.toPath().relativize(f.toPath()).toString() }
+
+        def langDirs = (file("${rootProject.projectDir}/common").listFiles() ?: [])
+                .collect { new File(it, 'src/main/resources/assets/chronodawn/lang') }
+                .findAll { it.isDirectory() }
+                .sort { it.path }
+        if (langDirs.isEmpty()) {
+            throw new GradleException('validateLangParity: no lang directory found under common/*/')
+        }
+
+        int localeFiles = 0
+        langDirs.each { File dir ->
+            def reference = new File(dir, 'en_us.json')
+            if (!reference.exists()) {
+                logger.lifecycle("  ${relPath(dir)}: no en_us.json, skipping")
+                return
+            }
+            def referenceKeys = (jsonSlurper.parseText(reference.text) as Map).keySet()
+            dir.listFiles().findAll { it.name.endsWith('.json') && it.name != 'en_us.json' }
+                    .sort { it.name }
+                    .each { File localeFile ->
+                        localeFiles++
+                        def locale = localeFile.name - '.json'
+                        def keys = (jsonSlurper.parseText(localeFile.text) as Map).keySet()
+                        def missingTarget = requiredLangLocales.contains(locale) ? errors : warnings
+                        (referenceKeys - keys).sort().each {
+                            missingTarget << "${relPath(localeFile)}: missing key '${it}' present in en_us.json"
+                        }
+                        (keys - referenceKeys).sort().each {
+                            errors << "${relPath(localeFile)}: extra key '${it}' absent from en_us.json"
+                        }
+                    }
+        }
+
+        reportLangWarnings('validateLangParity', warnings)
+        if (errors.isEmpty()) {
+            logger.lifecycle("Lang parity validation passed: ${localeFiles} locale file(s) across ${langDirs.size()} lang director(ies) checked against en_us.json (required locales: ${requiredLangLocales.sort().join(', ')}).")
+        } else {
+            errors.each { logger.error("  ERROR: ${it}") }
+            throw new GradleException("Lang parity validation failed with ${errors.size()} error(s)")
+        }
+    }
 }
 
 // ============================================================
@@ -441,6 +508,7 @@ tasks.register('validateConventionalTags') {
     doLast {
         def jsonSlurper = new JsonSlurper()
         def errors = []
+        def warnings = []
         def rulesFile = file("${rootProject.projectDir}/scripts/conventional_tag_rules.json")
         if (!rulesFile.exists()) {
             throw new GradleException("validateConventionalTags: ${rulesFile} not found")
@@ -654,7 +722,8 @@ tasks.register('validateConventionalTags') {
                         langKeysByFile.each { String langId, Set<String> keys ->
                             translationsChecked++
                             if (!keys.contains(translationKey)) {
-                                errors << "${rootRel}: tag '${name}' has no '${translationKey}' in ${langId}.json (recipe viewers would show the raw id)"
+                                def target = requiredLangLocales.contains(langId.tokenize('/').last()) ? errors : warnings
+                                target << "${rootRel}: tag '${name}' has no '${translationKey}' in ${langId}.json (recipe viewers would show the raw id)"
                             }
                         }
                     }
@@ -689,13 +758,15 @@ tasks.register('validateConventionalTags') {
                         if (keys == null) return
                         translationsChecked++
                         if (!keys.contains(translationKey)) {
-                            errors << "${tagRoot}: tag '${namespace}:${path}' has no '${translationKey}' in ${langId}.json (recipe viewers would show the raw id)"
+                            def target = requiredLangLocales.contains(locale) ? errors : warnings
+                            target << "${tagRoot}: tag '${namespace}:${path}' has no '${translationKey}' in ${langId}.json (recipe viewers would show the raw id)"
                         }
                     }
                 }
             }
         }
 
+        reportLangWarnings('validateConventionalTags', warnings)
         if (errors.isEmpty()) {
             logger.lifecycle("Conventional tag validation passed: ${coverageChecked} ID/rule checks across ${v2Roots.size()} 1.21.1+ root(s), ${v1Tags.size()} v1 tag file(s), ${translationsChecked} tag translation check(s).")
         } else {
@@ -726,6 +797,8 @@ tasks.register('validateSoundSubtitles') {
 
     doLast {
         def errors = []
+        // A Set because versions that share a lang file would repeat a warning.
+        def warnings = [] as LinkedHashSet
         def jsonSlurper = new JsonSlurper()
 
         def soundsFile = file("${rootProject.projectDir}/common/shared/src/main/resources/assets/chronodawn/sounds.json")
@@ -785,12 +858,17 @@ tasks.register('validateSoundSubtitles') {
                     checked++
                     if (!(langMap instanceof Map) || !langMap.containsKey(key)) {
                         def relPath = rootProject.projectDir.toPath().relativize(langFile.toPath()).toString()
-                        errors << "[${version}/${locale}] Missing subtitle translation '${key}' in ${relPath}"
+                        if (requiredLangLocales.contains(locale)) {
+                            errors << "[${version}/${locale}] Missing subtitle translation '${key}' in ${relPath}"
+                        } else {
+                            warnings << "Missing subtitle translation '${key}' in ${relPath}"
+                        }
                     }
                 }
             }
         }
 
+        reportLangWarnings('validateSoundSubtitles', warnings)
         if (errors.isEmpty()) {
             logger.lifecycle("Sound subtitle validation passed: ${subtitleKeys.size()} subtitle keys checked across ${versions.size()} version(s) x 2 locale(s) (${checked} checks).")
         } else {
@@ -957,6 +1035,20 @@ tasks.register('validateRegistryLangCoverage') {
             throw new GradleException("Registry lang coverage validation failed with ${errors.size()} error(s)")
         }
     }
+}
+
+// ============================================================
+// validateAll
+// ------------------------------------------------------------
+// Runs the file-only validations of checkAll in one Gradle invocation, for
+// CI and quick local checks. The task list comes from checkall_extra_tasks
+// so that CI and checkAll cannot drift apart.
+// ============================================================
+tasks.register('validateAll') {
+    group = 'verification'
+    description = 'Run validateResources, validateTranslations and every checkall_extra_tasks validation'
+    dependsOn 'validateResources', 'validateTranslations'
+    dependsOn project.property('checkall_extra_tasks').toString().split(',')*.trim().findAll { it }
 }
 
 // Helpers for loot_table walking.
