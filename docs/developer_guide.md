@@ -359,6 +359,10 @@ neoforge_version=21.2.0-beta
 # which is what checkAll and releases use (lang_required_locales in gradle.properties)
 ./gradlew validateAll -Plang_required_locales=en_us
 
+# Skip the version subprojects (no Loom or Minecraft setup). Only the
+# root-project validation tasks work in this mode
+./gradlew validateAll -Pvalidation_only=true
+
 # Collect release JARs into build/release/
 ./gradlew collectJars
 

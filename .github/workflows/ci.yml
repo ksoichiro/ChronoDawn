@@ -31,7 +31,9 @@ jobs:
       - uses: gradle/actions/setup-gradle@v6
       # Only English is required here. Missing translations in other
       # locales are reported as warnings, and checkAll keeps them required.
-      - run: ./gradlew validateAll -Plang_required_locales=en_us
+      # validation_only skips the version subprojects, so Loom does not set
+      # up Minecraft for checks that only read files.
+      - run: ./gradlew validateAll -Plang_required_locales=en_us -Pvalidation_only=true
 
   build:
     name: Build and unit test (${{ matrix.mc }})
