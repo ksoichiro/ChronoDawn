@@ -84,6 +84,8 @@ the build model changes.
   `README.md`, `docs/player_guide.md`, `docs/developer_guide.md`,
   `docs/curseforge_description.md`, `docs/modrinth_description.md`,
   `gradle.properties`, and loader metadata as needed.
+- Add player-visible fixes to `CHANGELOG.md` under `Unreleased` before reporting
+  completion, even when the release version stays unchanged.
 - Research that affects future implementation should be written to an
   appropriate file, usually under `specs/chrono-dawn-mod/` or `docs/`, and
   linked from follow-up tasks when applicable.

@@ -31,6 +31,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Floating arrival portals**: opening a new world without restarting Minecraft
+  no longer reuses portal locations from the previous world, which could create
+  a Chrono Dawn arrival portal in midair. Existing floating frames are not moved.
 - **Recipe book unlocks**: picking up an ingredient now unlocks its recipe in
   the recipe book, as it does for vanilla recipes. Before, 33 recipes (27 on
   Minecraft 1.20.1) stayed hidden until the output was obtained some other
