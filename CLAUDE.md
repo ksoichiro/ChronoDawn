@@ -237,6 +237,7 @@ such as `[94, 1]`, and verify both resource reload and server data loading.
 - When writing code, use Mojang mapping names (e.g., `net.minecraft.world.level.Level`, not Yarn's `class_XXXX`)
 - Build files use Groovy DSL. Assign properties with `=` (e.g., `maven { url = 'https://...' }`, `{ transitive = false }`). The `url 'https://...'` form is deprecated in Gradle 9 and removed in Gradle 10
 - Common module code is bundled into Fabric JAR using Shadow plugin
+- GitHub Actions: pin every `uses:` to a full commit SHA with the version as a trailing comment, and pin `runs-on` to a fixed image (`ubuntu-24.04`), never `@vN` or `ubuntu-latest`. Update the actions with `GITHUB_TOKEN=$(gh auth token) mise exec pinact@5.0.1 -- pinact run -u` (run unsandboxed), then check that CI passes
 - Minecraft 1.20.1 encodes a uniform `IntProvider` inside worldgen feature
   configurations with a nested `value` object. Newer versions put
   `min_inclusive` and `max_inclusive` beside `type`, so keep a 1.20.1 resource
