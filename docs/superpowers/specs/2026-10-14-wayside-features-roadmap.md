@@ -1,7 +1,7 @@
 # Roadmap: Wayside Features (Parts 1 to 6)
 
 **Created**: 2026-10-14
-**Status**: Parts 1 to 3 shipped to main (2026-10-14, 2026-10-17, 2026-10-21). Part 4 implemented on branch, manual check pending. Parts 5 and 6 not started.
+**Status**: Parts 1 to 4 shipped to main (2026-10-14, 2026-10-17, 2026-10-21, 2026-10-25). Parts 5 and 6 not started.
 **Related**: [Part 1 design](./2026-10-12-wayside-sundial-design.md),
 [Part 1 plan](../plans/2026-10-12-wayside-sundial.md)
 
@@ -57,7 +57,7 @@ discover. Several biomes pass by, yet nothing invites a detour.
 | 1 | Shared foundation + `old_sundial` | Travel buff by time of day | Shipped (main `db7246186`) |
 | 2 | `lost_adventurer_memorial` | Lore fragment and supplies, light-pillar effect | Shipped (2026-10-17), with the Lost Adventurer's Journal |
 | 3 | `time_well` | Wishing well, exchange a thrown item | Shipped (2026-10-21) |
-| 4 | `watchmaker_camp` | Per-player chest that refills over time | Implemented on branch, manual check pending |
+| 4 | `watchmaker_camp` | Per-player chest that refills over time | Shipped (2026-10-25) |
 | 5 | `time_cairn` | Collect time-of-day cairn stones, rare midnight echo | Not started |
 | 6 | `hourglass_monolith` | Small wave fight with a reward | Not started |
 
@@ -225,7 +225,7 @@ The notes below are the starting point it was designed from.
   participation, cooldown (initial idea two to three Minecraft days), link to
   the endgame reward shortage.
 
-## Lessons from parts 1 to 3 (apply to every part)
+## Lessons from parts 1 to 4 (apply to every part)
 
 - **Render layers.** `ModBlockId.cutout()` only applies on Fabric. NeoForge
   and Forge take the layer from `"render_type"` in the model JSON. Vanilla
@@ -282,6 +282,26 @@ The notes below are the starting point it was designed from.
   validateData validateEraTagParity`, `buildAll`, `testAll` and `gameTestAll`
   separately, then read `build/gametest-*.log`. `buildAll` needs several GB of
   free disk space and failed once with "No space left on device".
+- **Check that a template's containers can open.** The original camp NBT
+  put the wool roof directly on the chest, and a vanilla chest under an
+  opaque block never opens. Nobody noticed until part 4 decoded the NBT.
+- **Swapping a block entity block during worldgen needs an intermediate
+  block.** `WorldGenRegion.setBlock` only queues a pending entry when the new
+  state also has a block entity, so the old chest block entity survives.
+  Setting `BARRIER` first removes it. `/place feature` and GameTests run on a
+  live chunk and never take this path, so check natural generation by hand.
+- **Lootr converts chests after the chunk is live,** not during worldgen. A
+  feature that leaves a plain `minecraft:chest` with a loot table is enough
+  for Lootr, and a custom block that is not a `Container` is never touched.
+- **GameTest mock players always report "not a spectator".** Check
+  `gameMode.getGameModeForPlayer()` when a test needs a spectator. Real
+  spectators never reach a block's use method anyway, vanilla asks
+  `getMenuProvider` instead.
+- **Forge 1.20.1 has no GameTest task.** Run the 1.20.1 GameTests through
+  `:fabric:runGameTest -Ptarget_mc_version=1.20.1`.
+- **Show structure changes in play before polishing.** The raised camp roof
+  passed every test but looked like floating wool. The maintainer's screenshot
+  led to the canopy hooked onto the poles.
 
 ## Ideas parked for later
 
