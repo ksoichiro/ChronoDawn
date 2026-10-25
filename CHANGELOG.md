@@ -60,8 +60,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Watchmaker's Camp chest**: the old camp chest could not be opened because
   the tent roof sat on top of it. This applies to newly generated camps
   only. Camps in already generated chunks keep the old roof.
-- **Boat crash on Minecraft 26.x**: placing a Time Wood boat or chest boat in
-  water no longer crashes the game on Minecraft 26.1.2, 26.2 and 26.3. Before,
+- **Boat crash on Minecraft 1.21.9 and later**: placing a Time Wood boat or
+  chest boat in water no longer crashes the game on Minecraft 1.21.9, 1.21.10,
+  1.21.11, 26.1.2, 26.2 and 26.3. Before,
   every player who came near the boat crashed, including after rejoining the
   world.
 

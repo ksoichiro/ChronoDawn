@@ -19,6 +19,7 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.state.CameraRenderState;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.Unit;
 import com.chronodawn.compat.CompatResourceLocation;
 
 import java.util.Map;
@@ -114,7 +115,8 @@ public class ChronoDawnBoatRenderer extends EntityRenderer<ChronoDawnBoat, Chron
 
         // Render water patch to mask water inside boat (only when not fully submerged)
         if (!state.isUnderWater) {
-            collector.submitModel(this.waterPatchModel, state, poseStack, RenderTypes.waterMask(), 0xF000F0, net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY, 0xFFFFFFFF, null);
+            // The water patch is a Model<Unit>. The submitted state reaches its setupAnim, so it must be Unit.
+            collector.submitModel(this.waterPatchModel, Unit.INSTANCE, poseStack, RenderTypes.waterMask(), 0xF000F0, net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY, 0xFFFFFFFF, null);
         }
 
         poseStack.popPose();
