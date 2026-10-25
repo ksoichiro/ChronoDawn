@@ -110,13 +110,13 @@ public class ChronoDawnChestBoatRenderer extends EntityRenderer<ChronoDawnChestB
 
         model.setupAnim(state);
 
-        // 1.21.9: renderToBuffer replaced with submitModel(Model, S state, PoseStack, RenderType, int light, int overlay, int color, CrumblingOverlay)
-        collector.submitModel(model, state, poseStack, model.renderType(texture), 0xF000F0, net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY, 0xFFFFFFFF, null);
+        // 1.21.9: renderToBuffer replaced with submitModel(Model, S state, PoseStack, RenderType, int light, int overlay, int outlineColor, CrumblingOverlay)
+        collector.submitModel(model, state, poseStack, model.renderType(texture), state.lightCoords, net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY, state.outlineColor, null);
 
         // Render water patch to mask water inside boat (only when not fully submerged)
         if (!state.isUnderWater) {
             // The water patch is a Model<Unit>. The submitted state reaches its setupAnim, so it must be Unit.
-            collector.submitModel(this.waterPatchModel, Unit.INSTANCE, poseStack, RenderTypes.waterMask(), 0xF000F0, net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY, 0xFFFFFFFF, null);
+            collector.submitModel(this.waterPatchModel, Unit.INSTANCE, poseStack, RenderTypes.waterMask(), state.lightCoords, net.minecraft.client.renderer.texture.OverlayTexture.NO_OVERLAY, state.outlineColor, null);
         }
 
         poseStack.popPose();
