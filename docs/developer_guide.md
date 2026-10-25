@@ -350,6 +350,15 @@ neoforge_version=21.2.0-beta
 # this mod coined has a tag.item.* display name in en_us and ja_jp
 ./gradlew validateConventionalTags
 
+# Run every validation above, plus validateSoundSubtitles, in one invocation.
+# This is the first CI job (.github/workflows/ci.yml)
+./gradlew validateAll
+
+# CI passes this flag so that only en_us is required. Missing keys in other
+# locales (ja_jp included) become warnings. Without it, ja_jp is required too,
+# which is what checkAll and releases use (lang_required_locales in gradle.properties)
+./gradlew validateAll -Plang_required_locales=en_us
+
 # Collect release JARs into build/release/
 ./gradlew collectJars
 

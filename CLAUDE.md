@@ -212,6 +212,7 @@ such as `[94, 1]`, and verify both resource reload and server data loading.
 - `./gradlew validateResources` - Check JSON syntax and cross-references (blockstate→model, model→texture)
 - `./gradlew validateData` - Check data-pack cross-references (tag entries → registered IDs, recipe references, 1.21.4+ client items coverage)
 - `./gradlew validateTranslations` - Cross-version translation key validation (entities, spawn eggs)
+- `./gradlew validateAll` - Every file-only validation that `checkAll` runs (`checkall_extra_tasks`). CI (`.github/workflows/ci.yml`) runs it with `-Plang_required_locales=en_us`, which turns missing non-English keys into warnings. The default in `gradle.properties` keeps `ja_jp` required for `checkAll` and releases
 
 **Release**:
 - `./gradlew collectJars` - Collect release JARs from all versions into `build/release/`

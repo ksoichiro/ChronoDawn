@@ -106,6 +106,11 @@ For a normal release, run:
 GameTests. `collectJars` gathers the verified release artifacts into
 `build/release/` without publishing them.
 
+`checkAll` requires every locale in `lang_required_locales` (`en_us` and
+`ja_jp`) to translate every key. CI only requires `en_us`, so a merged pull
+request can leave Japanese keys missing. Its CI run shows them as warnings.
+Add the Japanese text before the release when `checkAll` fails on them.
+
 Inspect `build/release/` and confirm that every intended Minecraft
 version/loader pair is present, filenames contain the target mod version, and
 no stale artifacts from another version remain.

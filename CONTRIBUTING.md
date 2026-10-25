@@ -24,7 +24,7 @@ By participating in this project, you agree to be respectful and constructive in
 
 ### Prerequisites
 
-- **Java Development Kit (JDK) 21**
+- **Java Development Kit (JDK) 21 or higher** (25 or higher for Minecraft 26.x, the default build target)
 - **Git**
 - **IntelliJ IDEA** (recommended) or Eclipse
 
@@ -186,7 +186,12 @@ git commit -m "docs: update README installation steps"
      - Screenshots (if UI changes)
      - Testing notes
 
-4. **Address Review Feedback**:
+4. **Check the CI Result**:
+   - CI validates resources and data, then builds and runs unit tests for Minecraft 1.21.1 and 26.3
+   - English text is required for new keys. Japanese text may be left out, and the maintainers will add it
+   - GameTests and in-game checks for other versions are run by the maintainers before release
+
+5. **Address Review Feedback**:
    - Respond to code review comments
    - Make requested changes
    - Push additional commits to the same branch
@@ -223,13 +228,18 @@ The full list of valid locale codes is in the [Minecraft Wiki – Language refer
 
 ### Translation key parity
 
-A small Python script verifies that every locale file shares the same keys as `en_us.json`:
+CI runs `validateLangParity` on every pull request. It compares each locale file with `en_us.json` in the same directory:
+
+- A key missing from a locale file is a warning. Minecraft shows the English text for that key, so a partial translation can still be merged.
+- A key that exists in a locale file but not in `en_us.json` is an error. Remove it, or add it to `en_us.json` if the English text is missing.
+
+To run the same check locally (requires the JDK, see [Prerequisites](#prerequisites)):
 
 ```bash
-python3 scripts/check_lang_parity.py
+./gradlew validateLangParity -Plang_required_locales=en_us
 ```
 
-It exits with code `1` and prints any missing or extra keys per locale per directory. Run it before opening a PR; PRs that fail this check will be asked for fixes. The script uses only the Python standard library (Python 3.8+).
+Without `-Plang_required_locales=en_us`, missing Japanese keys are errors. The maintainers use that stricter mode before a release and fill in the Japanese text themselves.
 
 ### Style guidelines
 
@@ -245,7 +255,7 @@ It exits with code `1` and prints any missing or extra keys per locale per direc
 
 1. Fork the repository and create a branch (e.g. `i18n/zh-cn`).
 2. Add or update locale files in **all three** directories listed above. If you only have time for one or two of them, that is still welcome — just say so in the PR description so reviewers can flag the missing files.
-3. Run `python3 scripts/check_lang_parity.py` and confirm it exits cleanly.
+3. Open the PR and check the CI result. Warnings about missing keys are fine if you only translated part of the file.
 4. Open a PR. Title format: `i18n: add <Language Name> translation` or `i18n: update <Language Name> translation`.
 5. In the PR description, mention which Minecraft versions you have tested, if any. Visual confirmation in-game is appreciated but not required.
 
@@ -253,7 +263,7 @@ It exits with code `1` and prints any missing or extra keys per locale per direc
 
 The maintainers cannot personally vet quality in every language, so accepted translations are the responsibility of the contributing community. If you are a native or fluent speaker of an existing translation and notice issues, PRs that improve translations are welcome under the same flow.
 
-When new English keys are added by code changes, existing translations will start failing the parity check until updated. The maintainers may merge code changes with stale translations rather than blocking — translators are then encouraged to follow up with PRs filling the new keys.
+When new English keys are added by code changes, the parity check reports them as missing in existing translations until those are updated. The maintainers may merge code changes with stale translations rather than blocking — translators are then encouraged to follow up with PRs filling the new keys.
 
 ---
 
