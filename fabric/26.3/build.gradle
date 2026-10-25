@@ -23,7 +23,7 @@ configurations {
 }
 
 repositories {
-    maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
+    maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
 }
 
 def commonModule = ':common-26.3'
@@ -41,10 +41,10 @@ dependencies {
 
     // Minecraft 26.3 is unobfuscated: there's no "named"/"transformProduction*"
     // remap-namespace variant to depend on, just the plain project output.
-    common(project(path: commonModule)) { transitive false }
+    common(project(path: commonModule)) { transitive = false }
     // The standalone common JAR supplies Chrono Dawn classes. Its dependencies
     // must remain external mods, otherwise Shadow embeds Fabric Loader itself.
-    shadowBundle(project(path: commonModule)) { transitive false }
+    shadowBundle(project(path: commonModule)) { transitive = false }
 }
 
 // runProd uses a standalone Fabric instance, so it needs the required loader

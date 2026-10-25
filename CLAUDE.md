@@ -235,7 +235,7 @@ such as `[94, 1]`, and verify both resource reload and server data loading.
 
 ## Development Notes
 - When writing code, use Mojang mapping names (e.g., `net.minecraft.world.level.Level`, not Yarn's `class_XXXX`)
-- Build files use Groovy syntax (e.g., `maven { url 'https://...' }`, not `maven { url = "https://..." }`)
+- Build files use Groovy DSL. Assign properties with `=` (e.g., `maven { url = 'https://...' }`, `{ transitive = false }`). The `url 'https://...'` form is deprecated in Gradle 9 and removed in Gradle 10
 - Common module code is bundled into Fabric JAR using Shadow plugin
 - Minecraft 1.20.1 encodes a uniform `IntProvider` inside worldgen feature
   configurations with a nested `value` object. Newer versions put

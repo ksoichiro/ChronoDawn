@@ -85,15 +85,15 @@ configurations {
 }
 
 repositories {
-    maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
+    maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
 }
 
 dependencies {
     neoForge "net.neoforged:neoforge:${neoforge_version}"
     modApi "dev.architectury:architectury-neoforge:${architectury_api_version}"
 
-    common(project(path: commonModule, configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: commonModule, configuration: "transformProductionNeoForge")) { transitive false }
+    common(project(path: commonModule, configuration: "namedElements")) { transitive = false }
+    shadowCommon(project(path: commonModule, configuration: "transformProductionNeoForge")) { transitive = false }
 }
 
 // runProd and prodSmokeTest use a standalone NeoForge instance, so they need the

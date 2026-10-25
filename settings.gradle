@@ -8,16 +8,16 @@ pluginManagement {
     }
     includeBuild 'gradle/shared'
     repositories {
-        maven { url 'https://maven.fabricmc.net/' }
-        maven { url 'https://maven.architectury.dev/' }
-        maven { url 'https://maven.neoforged.net/releases/' }
-        maven { url 'https://maven.minecraftforge.net/' }
-        maven { url 'https://maven.parchmentmc.org/' }
+        maven { url = 'https://maven.fabricmc.net/' }
+        maven { url = 'https://maven.architectury.dev/' }
+        maven { url = 'https://maven.neoforged.net/releases/' }
+        maven { url = 'https://maven.minecraftforge.net/' }
+        maven { url = 'https://maven.parchmentmc.org/' }
         // gradle/shared's mcmod plugin depends on com.github.Querz:NBT, which is
         // only published on JitPack (see MEMORY: Querz NBT requires JitPack).
         // Plugin classpath resolution for an includeBuild uses this repositories
         // block, not gradle/shared's own, so it must be listed here too.
-        maven { url 'https://jitpack.io' }
+        maven { url = 'https://jitpack.io' }
         gradlePluginPortal()
     }
 }

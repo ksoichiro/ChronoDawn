@@ -60,7 +60,7 @@ configurations {
 }
 
 repositories {
-    maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
+    maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
 }
 
 dependencies {
@@ -73,8 +73,8 @@ dependencies {
     compileOnly "com.electronwill.night-config:core:3.8.3"
     compileOnly "com.electronwill.night-config:toml:3.8.3"
 
-    common(project(path: commonModule, configuration: "namedElements")) { transitive false }
-    shadowCommon(project(path: commonModule, configuration: "transformProductionForge")) { transitive false }
+    common(project(path: commonModule, configuration: "namedElements")) { transitive = false }
+    shadowCommon(project(path: commonModule, configuration: "transformProductionForge")) { transitive = false }
 }
 
 tasks.named("processResources", ProcessResources).configure {

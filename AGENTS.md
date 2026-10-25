@@ -78,7 +78,7 @@ the build model changes.
   platform bridges.
 - Use Mojang class names such as `Level`, `BlockPos`, and `Registry`; do not use
   Yarn names.
-- Build files are Groovy DSL. Use syntax like `maven { url 'https://...' }`.
+- Build files are Groovy DSL. Assign properties with `=`, as in `maven { url = 'https://...' }` and `{ transitive = false }`. Gradle 9 deprecates the `url 'https://...'` form, and Gradle 10 removes it.
 - Keep documentation consistent when changing versions, dependencies, features,
   commands, metadata, or release behavior. Update related files such as
   `README.md`, `docs/player_guide.md`, `docs/developer_guide.md`,

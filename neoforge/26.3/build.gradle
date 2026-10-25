@@ -88,7 +88,7 @@ configurations {
 }
 
 repositories {
-    maven { url 'https://repo.spongepowered.org/repository/maven-public/' }
+    maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
 }
 
 dependencies {
@@ -99,8 +99,8 @@ dependencies {
     // configurations (namedElements / transformProductionNeoForge). A plain
     // project dependency resolves to the default Gradle Java variant, which
     // is all that's needed since nothing needs remapping.
-    common(project(path: commonModule)) { transitive false }
-    shadowCommon(project(path: commonModule)) { transitive false }
+    common(project(path: commonModule)) { transitive = false }
+    shadowCommon(project(path: commonModule)) { transitive = false }
 }
 
 // runProd uses a standalone NeoForge instance, so it needs the same required
