@@ -112,7 +112,7 @@ public final class StructureTests {
                 new BlockRequirement(ModBlockId.TIME_WOOD_FENCE.id(), ModBlocks.TIME_WOOD_FENCE, 12),
                 // Looked up by id: 26.2 has no Blocks.WHITE_WOOL, only the Blocks.WOOL collection.
                 new BlockRequirement("white_wool", () -> BuiltInRegistries.BLOCK.getOptional(
-                    CompatResourceLocation.create("minecraft", "white_wool")).orElseThrow(), 3),
+                    CompatResourceLocation.create("minecraft", "white_wool")).orElseThrow(), 15),
                 new BlockRequirement("chest", () -> Blocks.CHEST, 1),
                 new BlockRequirement("campfire", () -> Blocks.CAMPFIRE, 1)
             )),

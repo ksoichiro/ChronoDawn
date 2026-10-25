@@ -91,7 +91,7 @@ public class WatchmakerChestBlock extends AbstractChestBlock<WatchmakerChestBloc
     private static final double FILL_PARTICLE_SPREAD = 0.3;
     private static final double FILL_PARTICLE_SPEED = 0.05;
     private static final float FILL_SOUND_VOLUME = 1.0f;
-    private static final float FILL_SOUND_PITCH = 0.8f;
+    private static final float FILL_SOUND_PITCH = 1.0f;
 
     public WatchmakerChestBlock(Properties properties) {
         super(properties, () -> ModBlockEntities.WATCHMAKER_CHEST.get());
@@ -226,7 +226,7 @@ public class WatchmakerChestBlock extends AbstractChestBlock<WatchmakerChestBloc
      * players do not hear a fill they did not get.
      */
     private static void playFillEffects(ServerLevel level, BlockPos pos, ServerPlayer player) {
-        player.playNotifySound(SoundEvents.CROSSBOW_LOADING_MIDDLE.value(), SoundSource.BLOCKS,
+        player.playNotifySound(SoundEvents.LODESTONE_COMPASS_LOCK, SoundSource.BLOCKS,
             FILL_SOUND_VOLUME, FILL_SOUND_PITCH);
         level.sendParticles(player, ParticleTypes.REVERSE_PORTAL, false,
             pos.getX() + 0.5, pos.getY() + FILL_PARTICLE_HEIGHT, pos.getZ() + 0.5, FILL_PARTICLES,

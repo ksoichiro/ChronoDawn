@@ -20,7 +20,7 @@
 - Take-only: no slot of the chest accepts an item from a player, by click, drag, number-key swap or shift-click.
 - Breaking by a player drops the plain chest and that player's current slots, regardless of game mode. Removal without a player drops the plain chest only. Other players' slots are discarded.
 - Hoppers, droppers and other automation cannot insert or extract (the block entity is not a `Container`).
-- Fill effects, sent only to the opening player: sound `SoundEvents.ITEM_CROSSBOW_LOADING_MIDDLE` (volume 1.0, pitch 0.8) as the default candidate, and 12 `ParticleTypes.REVERSE_PORTAL` above the chest. The maintainer picks the final sound in Task 6.
+- Fill effects, sent only to the opening player: sound `SoundEvents.LODESTONE_COMPASS_LOCK` (`minecraft:item.lodestone_compass.lock`, volume 1.0, pitch 1.0), chosen by the maintainer after the manual check, and 12 `ParticleTypes.REVERSE_PORTAL` above the chest.
 - Waiting message (action bar, only when the slots are empty and the cooldown refused): key `message.chronodawn.watchmaker_chest.waiting`, en "The camp's time has not turned back yet.", ja 「キャンプの時はまだ巻き戻っていない。」. No message in any other case.
 - Container title: `block.chronodawn.watchmaker_chest`, en "Watchmaker's Chest", ja 「時計職人のチェスト」.
 - Cooldown default 72000 ticks, counted with `Level#getGameTime`. Config key `watchmaker_camp_cooldown_ticks` in `[gameplay.wayside]`, range 20 to 1728000, out-of-range falls back per key.
@@ -367,7 +367,7 @@ Expected: every step passes. No Mixin changed, so `prodSmokeTest` is not require
 - [ ] **Step 3: Manual check (user)**
 
 Present to the user. Accepted runtime checks: 1.21.1 NeoForge and Fabric, 1.20.1 Forge, 26.3 NeoForge, 26.2 Fabric.
-1. Before the check, let the maintainer compare fill sounds with `/playsound`: `minecraft:item.crossbow.loading_middle` (pitch 0.8), `minecraft:block.comparator.click`, `minecraft:item.lodestone_compass.lock`. Change the constant if another is chosen.
+1. The maintainer compared fill sounds with `/playsound` and chose `minecraft:item.lodestone_compass.lock` (pitch 1.0), so the fill sound constant is `LODESTONE_COMPASS_LOCK`.
 2. New world, enter Chrono Dawn, `/place feature chronodawn:watchmaker_camp`.
    Note that `/place feature` only exercises the live-chunk path.
 3. On 1.21.1 (NeoForge and Fabric) and 26.3, travel into freshly generated Chrono Dawn forest or plains chunks until a naturally generated camp is found. Alternatively, confirm with a region-file scan that camp positions hold `chronodawn:watchmaker_chest` blocks with a matching block entity and no leftover `minecraft:chest` block entity. Open the chest, then grep the server log for "Tried to access a block entity before it was created" and invalid block entity warnings. Expected: none.

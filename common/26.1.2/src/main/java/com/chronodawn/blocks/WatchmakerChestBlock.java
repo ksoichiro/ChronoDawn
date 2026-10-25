@@ -25,6 +25,7 @@ import com.chronodawn.registry.ModBlockEntities;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -92,7 +93,7 @@ public class WatchmakerChestBlock extends AbstractChestBlock<WatchmakerChestBloc
     private static final double FILL_PARTICLE_SPREAD = 0.3;
     private static final double FILL_PARTICLE_SPEED = 0.05;
     private static final float FILL_SOUND_VOLUME = 1.0f;
-    private static final float FILL_SOUND_PITCH = 0.8f;
+    private static final float FILL_SOUND_PITCH = 1.0f;
 
     public WatchmakerChestBlock(Properties properties) {
         super(properties, () -> ModBlockEntities.WATCHMAKER_CHEST.get());
@@ -224,7 +225,7 @@ public class WatchmakerChestBlock extends AbstractChestBlock<WatchmakerChestBloc
      */
     private static void playFillEffects(ServerLevel level, BlockPos pos, ServerPlayer player) {
         // ServerPlayer#playNotifySound is gone from 1.21.11, so its packet is sent directly.
-        player.connection.send(new ClientboundSoundPacket(SoundEvents.CROSSBOW_LOADING_MIDDLE, SoundSource.BLOCKS,
+        player.connection.send(new ClientboundSoundPacket(Holder.direct(SoundEvents.LODESTONE_COMPASS_LOCK), SoundSource.BLOCKS,
             player.getX(), player.getY(), player.getZ(), FILL_SOUND_VOLUME, FILL_SOUND_PITCH,
             level.getRandom().nextLong()));
         level.sendParticles(player, ParticleTypes.REVERSE_PORTAL, false, false,

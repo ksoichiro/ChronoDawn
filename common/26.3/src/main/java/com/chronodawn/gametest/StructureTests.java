@@ -111,7 +111,7 @@ public final class StructureTests {
             )),
             new StructureSpec("watchmaker_camp", 5, 3, 5, List.of(
                 new BlockRequirement(ModBlockId.TIME_WOOD_FENCE.id(), ModBlocks.TIME_WOOD_FENCE, 12),
-                new BlockRequirement("white_wool", () -> Blocks.WOOL.pick(DyeColor.WHITE), 3),
+                new BlockRequirement("white_wool", () -> Blocks.WOOL.pick(DyeColor.WHITE), 15),
                 new BlockRequirement("chest", () -> Blocks.CHEST, 1),
                 new BlockRequirement("campfire", () -> Blocks.CAMPFIRE, 1)
             )),
