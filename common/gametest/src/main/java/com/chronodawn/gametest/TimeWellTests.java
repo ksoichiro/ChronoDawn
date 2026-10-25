@@ -558,13 +558,22 @@ public final class TimeWellTests {
         TimeWellStoneBlock.markWaiting(well, waiting, player, helper.getLevel().getGameTime());
         ItemEntity other = spawnInWater(helper, new ItemStack(ModItems.CLOCKSTONE.get()));
         helper.runAfterDelay(MERGE_WAIT_TICKS, () -> {
-            if (!waiting.hasPickUpDelay()) {
+            // Judge the merge by the waiting item alone. The GameTest world is reused across runs,
+            // and entities of a chunk can load after the structure area was cleared, so the other
+            // stack may merge into a clockstone left by an earlier run instead.
+            boolean alive = waiting.isAlive();
+            boolean pickUpDelay = waiting.hasPickUpDelay();
+            int count = waiting.getItem().getCount();
+            // Remove both items so they are not left behind for the next run.
+            waiting.discard();
+            other.discard();
+            if (!pickUpDelay) {
                 CompatGameTestHelper.fail(helper, "The waiting item can be picked up");
                 return;
             }
-            if (!waiting.isAlive() || !other.isAlive()) {
-                CompatGameTestHelper.fail(helper, "The waiting item merged: waiting alive=" + waiting.isAlive()
-                    + ", other alive=" + other.isAlive());
+            if (!alive || count != 1) {
+                CompatGameTestHelper.fail(helper, "The waiting item merged: waiting alive=" + alive
+                    + ", count=" + count);
                 return;
             }
             helper.succeed();

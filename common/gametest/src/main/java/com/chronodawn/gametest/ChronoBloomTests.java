@@ -150,9 +150,10 @@ public final class ChronoBloomTests {
         helper.setBlock(FLOWER_POS, ModBlocks.POTTED_CHRONO_BLOOM.get());
         BlockPos absPos = helper.absolutePos(FLOWER_POS);
         Player player = CompatGameTestHelper.makeMockPlayer(helper);
+        long since = level.getGameTime();
         level.destroyBlock(absPos, true, player);
-        int blooms = countDropped(level, absPos, ModItems.CHRONO_BLOOM.get());
-        int pots = countDropped(level, absPos, Items.FLOWER_POT);
+        int blooms = countDropped(level, absPos, ModItems.CHRONO_BLOOM.get(), since);
+        int pots = countDropped(level, absPos, Items.FLOWER_POT, since);
         if (blooms == 1 && pots == 1) {
             helper.succeed();
         } else {
@@ -170,11 +171,12 @@ public final class ChronoBloomTests {
         helper.setBlock(FLOWER_POS, ModBlocks.CHRONO_BLOOM.get());
         BlockPos absPos = helper.absolutePos(FLOWER_POS);
         BlockState before = level.getBlockState(absPos);
+        long since = level.getGameTime();
         if (!BoneMealItem.growCrop(new ItemStack(Items.BONE_MEAL), level, absPos)) {
             CompatGameTestHelper.fail(helper, "Bone meal was not applied to the Chrono Bloom");
             return;
         }
-        int blooms = countDropped(level, absPos, ModItems.CHRONO_BLOOM.get());
+        int blooms = countDropped(level, absPos, ModItems.CHRONO_BLOOM.get(), since);
         BlockState after = level.getBlockState(absPos);
         if (blooms == 1 && after == before) {
             helper.succeed();
@@ -184,9 +186,15 @@ public final class ChronoBloomTests {
         }
     }
 
-    private static int countDropped(ServerLevel level, BlockPos pos, Item item) {
+    /**
+     * Counts the given item dropped around the position since the given game time. Older items
+     * are skipped because the GameTest world is reused across runs, so drops left by an earlier
+     * run can already lie in the search area.
+     */
+    private static int countDropped(ServerLevel level, BlockPos pos, Item item, long since) {
         int count = 0;
-        for (ItemEntity entity : level.getEntitiesOfClass(ItemEntity.class, new AABB(pos).inflate(1))) {
+        for (ItemEntity entity : level.getEntitiesOfClass(ItemEntity.class, new AABB(pos).inflate(1),
+                e -> e.isAlive() && level.getGameTime() - e.getAge() >= since)) {
             if (entity.getItem().is(item)) {
                 count += entity.getItem().getCount();
             }
