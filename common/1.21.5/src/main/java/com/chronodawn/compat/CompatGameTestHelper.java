@@ -17,6 +17,9 @@ public class CompatGameTestHelper {
      * teleports) must use this. Call {@link #removeMockServerPlayer} when the test is done,
      * otherwise the player stays logged in for every later test.
      */
+    // Vanilla marks makeMockServerPlayerInLevel for removal but still ships it, and it is the
+    // only GameTestHelper method that returns a player who has joined the server.
+    @SuppressWarnings("removal")
     public static ServerPlayer makeMockServerPlayer(GameTestHelper helper) {
         return helper.makeMockServerPlayerInLevel();
     }

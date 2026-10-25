@@ -24,9 +24,9 @@ import net.minecraft.server.packs.repository.RepositorySource;
 import net.minecraft.server.packs.repository.ServerPacksSource;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import sun.misc.Unsafe;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -38,16 +38,20 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * where Fabric API also adds mod data packs; injecting it anywhere else makes
  * registry loading fail on the overlay's references to the mod's worldgen data.
  *
- * <p>Source instances are built via {@link Unsafe#allocateInstance}
+ * <p>Source instances are built via {@code sun.misc.Unsafe#allocateInstance}
  * because (a) their constructor signatures change across Minecraft versions
  * (this test runs against every version sharing {@code common/shared/src/test})
  * and (b) the test only needs objects whose {@code instanceof} answer is
  * {@code true}; it never calls any method on them. The pack source of a
- * folder is supplied by a stub instead of the Mixin accessor.
+ * folder is supplied by a stub instead of the Mixin accessor. Unsafe is
+ * looked up by name because javac reports any compile-time reference to it
+ * as an internal proprietary API, and {@code @SuppressWarnings} cannot
+ * silence that warning.
  */
 class OverlayPackInjectionTest {
 
-    private static Unsafe unsafe;
+    private static Object unsafe;
+    private static Method allocateInstance;
 
     @BeforeAll
     static void bootstrap() throws ReflectiveOperationException {
@@ -55,9 +59,11 @@ class OverlayPackInjectionTest {
         // version manifest; allocating an instance triggers that init even
         // though we never invoke any vanilla method on the object.
         SharedConstants.tryDetectVersion();
-        Field f = Unsafe.class.getDeclaredField("theUnsafe");
+        Class<?> unsafeClass = Class.forName("sun.misc.Unsafe");
+        Field f = unsafeClass.getDeclaredField("theUnsafe");
         f.setAccessible(true);
-        unsafe = (Unsafe) f.get(null);
+        unsafe = f.get(null);
+        allocateInstance = unsafeClass.getMethod("allocateInstance", Class.class);
     }
 
     @Test
@@ -74,34 +80,38 @@ class OverlayPackInjectionTest {
     }
 
     @Test
-    void vanillaOnlySources_hasNoWorldOrServerFolder() throws InstantiationException {
+    void vanillaOnlySources_hasNoWorldOrServerFolder() throws ReflectiveOperationException {
         // Lunar Client loads registries from a repository like this at startup.
         // Fabric API adds no mod data packs to it, so the overlay must stay out.
-        ServerPacksSource serverPacks = (ServerPacksSource) unsafe.allocateInstance(ServerPacksSource.class);
+        ServerPacksSource serverPacks = allocate(ServerPacksSource.class);
         assertFalse(OverlayPackInjection.hasWorldOrServerFolderSource(
             new RepositorySource[] { serverPacks }, packSourceOf(PackSource.WORLD)));
     }
 
     @Test
-    void worldFolderSource_hasWorldOrServerFolder() throws InstantiationException {
-        ServerPacksSource serverPacks = (ServerPacksSource) unsafe.allocateInstance(ServerPacksSource.class);
-        FolderRepositorySource folder = (FolderRepositorySource) unsafe.allocateInstance(FolderRepositorySource.class);
+    void worldFolderSource_hasWorldOrServerFolder() throws ReflectiveOperationException {
+        ServerPacksSource serverPacks = allocate(ServerPacksSource.class);
+        FolderRepositorySource folder = allocate(FolderRepositorySource.class);
         assertTrue(OverlayPackInjection.hasWorldOrServerFolderSource(
             new RepositorySource[] { serverPacks, folder }, packSourceOf(PackSource.WORLD)));
     }
 
     @Test
-    void serverFolderSource_hasWorldOrServerFolder() throws InstantiationException {
-        FolderRepositorySource folder = (FolderRepositorySource) unsafe.allocateInstance(FolderRepositorySource.class);
+    void serverFolderSource_hasWorldOrServerFolder() throws ReflectiveOperationException {
+        FolderRepositorySource folder = allocate(FolderRepositorySource.class);
         assertTrue(OverlayPackInjection.hasWorldOrServerFolderSource(
             new RepositorySource[] { folder }, packSourceOf(PackSource.SERVER)));
     }
 
     @Test
-    void otherFolderSource_hasNoWorldOrServerFolder() throws InstantiationException {
-        FolderRepositorySource folder = (FolderRepositorySource) unsafe.allocateInstance(FolderRepositorySource.class);
+    void otherFolderSource_hasNoWorldOrServerFolder() throws ReflectiveOperationException {
+        FolderRepositorySource folder = allocate(FolderRepositorySource.class);
         assertFalse(OverlayPackInjection.hasWorldOrServerFolderSource(
             new RepositorySource[] { folder }, packSourceOf(PackSource.DEFAULT)));
+    }
+
+    private static <T> T allocate(Class<T> type) throws ReflectiveOperationException {
+        return type.cast(allocateInstance.invoke(unsafe, type));
     }
 
     private static Function<FolderRepositorySource, PackSource> packSourceOf(PackSource packSource) {

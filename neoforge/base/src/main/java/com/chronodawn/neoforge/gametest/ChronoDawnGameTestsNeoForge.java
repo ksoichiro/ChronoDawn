@@ -24,6 +24,10 @@ import net.minecraft.gametest.framework.GameTestHelper;
  *
  * Reference: T173 [P] Run all GameTests on NeoForge loader
  */
+// This file is shared by 1.21.1 and 1.21.2. NeoForge 21.1 deprecates bus and routes each
+// event by its type, but the FML in NeoForge 21.2 still reads bus and defaults to GAME,
+// so dropping it would stop mod-bus events on 1.21.2.
+@SuppressWarnings("removal")
 @EventBusSubscriber(modid = ChronoDawn.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class ChronoDawnGameTestsNeoForge {
 

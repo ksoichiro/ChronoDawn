@@ -139,7 +139,7 @@ public class ChronoDawnGameTestsNeoForge {
                 0,     // setupTicks
                 true   // required
             );
-            var instance = new FunctionGameTestInstance(holder.getKey(), testData);
+            var instance = new FunctionGameTestInstance(holder.keyOrNull(), testData);
             event.registerTest(holder.getId(), instance);
             registered++;
         }

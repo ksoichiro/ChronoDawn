@@ -55,6 +55,10 @@ import java.util.Optional;
  *
  * This class is only loaded on the client side (Dist.CLIENT).
  */
+// This file is shared by 1.21.1 and 1.21.2. NeoForge 21.1 deprecates bus and routes each
+// event by its type, but the FML in NeoForge 21.2 still reads bus and defaults to GAME,
+// so dropping it would stop mod-bus events on 1.21.2.
+@SuppressWarnings("removal")
 @EventBusSubscriber(modid = ChronoDawn.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public class ChronoDawnClientNeoForge {
 
