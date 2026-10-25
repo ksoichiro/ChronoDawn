@@ -14,6 +14,11 @@ concurrency:
 permissions:
   contents: read
 
+env:
+  # On JDK 25 the Gradle launcher prints restricted-method warnings when its
+  # native-platform library calls System.load, unless native access is enabled.
+  JAVA_OPTS: --enable-native-access=ALL-UNNAMED
+
 jobs:
   validate:
     name: Validate resources and data
