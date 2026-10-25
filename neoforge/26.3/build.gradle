@@ -115,8 +115,10 @@ tasks.named("processResources", ProcessResources).configure {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     inputs.property "version", project.version
 
+    // Read at configuration time: Task.project is deprecated during execution.
+    def modVersion = project.version
     filesMatching("META-INF/neoforge.mods.toml") {
-        expand "version": project.version
+        expand "version": modVersion
     }
 
     from(project(commonModule).sourceSets.main.resources) {

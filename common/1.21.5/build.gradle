@@ -103,8 +103,10 @@ sourceSets {
 // Set version info as Java system property at runtime (for compat handlers)
 tasks.withType(JavaCompile).configureEach {
     options.compilerArgs += ["-Achronodawn.minecraft.version=${project.ext.minecraft_version}"]
+    // Read at configuration time: Task.project is deprecated during execution.
+    def minecraftVersion = project.ext.minecraft_version
     doFirst {
-        System.setProperty('chronodawn.minecraft.version', project.ext.minecraft_version as String)
+        System.setProperty('chronodawn.minecraft.version', minecraftVersion as String)
     }
 }
 
@@ -117,8 +119,10 @@ processResources {
 
     inputs.property 'pack_format', project.ext.pack_format
 
+    // Read at configuration time: Task.project is deprecated during execution.
+    def packFormat = project.ext.pack_format
     filesMatching('pack.mcmeta') {
-        expand 'pack_format': project.ext.pack_format
+        expand 'pack_format': packFormat
     }
 }
 
