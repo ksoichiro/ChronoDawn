@@ -30,6 +30,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.ChestLidController;
 import net.minecraft.world.level.block.entity.LidBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 
@@ -81,8 +82,8 @@ public class WatchmakerChestBlockEntity extends CooldownActivatorBlockEntity imp
 
     /**
      * Counts a screen opened on this chest. Every player sees the lid open, so the sound plays
-     * for everyone nearby. As with the vanilla chest, a spectator neither moves the lid nor makes
-     * a sound.
+     * for everyone nearby, and sculk sensors detect it. As with the vanilla chest, a spectator
+     * neither moves the lid nor makes a sound.
      */
     public void startOpen(Player player) {
         if (level == null || player.isSpectator()) {
@@ -91,6 +92,7 @@ public class WatchmakerChestBlockEntity extends CooldownActivatorBlockEntity imp
         openCount++;
         if (openCount == 1) {
             playSound(level, SoundEvents.CHEST_OPEN);
+            level.gameEvent(player, GameEvent.CONTAINER_OPEN, worldPosition);
         }
         signalOpenCount(level);
     }
@@ -106,6 +108,7 @@ public class WatchmakerChestBlockEntity extends CooldownActivatorBlockEntity imp
         openCount--;
         if (openCount == 0) {
             playSound(level, SoundEvents.CHEST_CLOSE);
+            level.gameEvent(player, GameEvent.CONTAINER_CLOSE, worldPosition);
         }
         signalOpenCount(level);
     }

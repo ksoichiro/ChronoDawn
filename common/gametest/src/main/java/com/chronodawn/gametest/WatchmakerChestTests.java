@@ -22,8 +22,13 @@ import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.SculkSensorBlock;
 import net.minecraft.world.level.block.entity.HopperBlockEntity;
+import net.minecraft.world.level.block.entity.SculkSensorBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.SculkSensorPhase;
+import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.gameevent.vibrations.VibrationSystem;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.AABB;
@@ -42,6 +47,12 @@ public final class WatchmakerChestTests {
     // Beside the chest, well within reach, so an open menu stays valid.
     private static final BlockPos PLAYER_POS = new BlockPos(1, 2, 2);
     private static final BlockPos SECOND_PLAYER_POS = new BlockPos(2, 2, 1);
+    // Two blocks from the chest, so a vibration reaches it within a few ticks.
+    private static final BlockPos SENSOR_POS = new BlockPos(3, 2, 1);
+    // Enough for the vibration to travel and the sensor to switch to active.
+    private static final int VIBRATION_TICKS = 5;
+    // A sensor stays active for 30 ticks and then cools down for 10 before it listens again.
+    private static final int SENSOR_RESET_TICKS = 50;
     // The camp is 5x3x5 and rotates around its centre column, so it stays inside the 10x10 area.
     private static final BlockPos CAMP_ORIGIN = new BlockPos(2, 1, 2);
     private static final long T0 = 1000L;
@@ -81,6 +92,8 @@ public final class WatchmakerChestTests {
             WatchmakerChestTests::testRemovalWithoutPlayerDropsChestOnly));
         tests.add(factory.create("watchmaker_chest_is_not_a_container",
             WatchmakerChestTests::testIsNotAContainer));
+        tests.add(factory.create("watchmaker_chest_open_and_close_trigger_sculk_sensor",
+            WatchmakerChestTests::testOpenAndCloseTriggerSculkSensor));
         tests.add(factory.create("watchmaker_camp_swaps_chest_without_lootr",
             WatchmakerChestTests::testCampSwapsChestWithoutLootr));
         return tests;
@@ -596,6 +609,61 @@ public final class WatchmakerChestTests {
         } finally {
             CompatGameTestHelper.removeMockServerPlayer(helper, player);
         }
+    }
+
+    /**
+     * @return a failure message unless the sensor is active from a vibration of the given event
+     */
+    private static String sensorCheck(GameTestHelper helper, String action, int expectedFrequency) {
+        BlockPos pos = helper.absolutePos(SENSOR_POS);
+        BlockState state = helper.getLevel().getBlockState(pos);
+        if (SculkSensorBlock.getPhase(state) != SculkSensorPhase.ACTIVE) {
+            return "The sculk sensor did not react to the chest " + action + ": " + state;
+        }
+        if (!(helper.getLevel().getBlockEntity(pos) instanceof SculkSensorBlockEntity sensor)) {
+            return "The sculk sensor has no block entity";
+        }
+        if (sensor.getLastVibrationFrequency() != expectedFrequency) {
+            return "Expected the chest " + action + " frequency " + expectedFrequency + ", got "
+                + sensor.getLastVibrationFrequency();
+        }
+        return null;
+    }
+
+    /**
+     * Test: as with the vanilla chest, opening and closing the chest is a vibration a sculk
+     * sensor detects.
+     */
+    private static void testOpenAndCloseTriggerSculkSensor(GameTestHelper helper) {
+        WatchmakerChestBlockEntity chest = placeChest(helper, CHEST_POS);
+        if (chest == null) {
+            return;
+        }
+        helper.setBlock(SENSOR_POS, Blocks.SCULK_SENSOR);
+        ServerPlayer player = joinPlayer(helper, PLAYER_POS);
+        use(helper, player, T0);
+        helper.runAfterDelay(VIBRATION_TICKS, () -> {
+            String failure = sensorCheck(helper, "opening",
+                VibrationSystem.getGameEventFrequency(GameEvent.CONTAINER_OPEN));
+            if (failure != null) {
+                CompatGameTestHelper.removeMockServerPlayer(helper, player);
+                CompatGameTestHelper.fail(helper, failure);
+                return;
+            }
+            helper.runAfterDelay(SENSOR_RESET_TICKS, () -> {
+                player.closeContainer();
+                helper.runAfterDelay(VIBRATION_TICKS, () -> {
+                    CompatGameTestHelper.removeMockServerPlayer(helper, player);
+                    String closeFailure = sensorCheck(helper, "closing",
+                        VibrationSystem.getGameEventFrequency(GameEvent.CONTAINER_CLOSE));
+                    if (closeFailure != null) {
+                        CompatGameTestHelper.fail(helper, closeFailure);
+                        return;
+                    }
+                    helper.succeed();
+                });
+            });
+        });
     }
 
     private static StructurePlaceSettings campSettings(StructureTemplate template, Rotation rotation) {
