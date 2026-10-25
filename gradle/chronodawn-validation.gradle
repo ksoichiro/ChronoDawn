@@ -504,6 +504,8 @@ tasks.register('validateEraJsonFormat') {
 tasks.register('validateConventionalTags') {
     group = 'verification'
     description = 'Verify conventional (c:) tag coverage, tag-name validity, cross-root consistency and tag display names'
+    // Read at configuration time: Task.project is deprecated inside doLast.
+    def idFileProps = ['block_id_file', 'item_id_file'].collectEntries { [it, project.property(it).toString()] }
 
     doLast {
         def jsonSlurper = new JsonSlurper()
@@ -516,7 +518,7 @@ tasks.register('validateConventionalTags') {
         def config = jsonSlurper.parseText(rulesFile.text)
 
         def idsFrom = { String propName ->
-            def f = file("${rootProject.projectDir}/${project.property(propName)}")
+            def f = file("${rootProject.projectDir}/${idFileProps[propName]}")
             def ids = [] as Set
             (f.text =~ /(\w+)\s*\(\s*"([^"]+)"\s*\)/).each { ids << it[2] }
             ids
@@ -794,6 +796,9 @@ tasks.register('validateConventionalTags') {
 tasks.register('validateSoundSubtitles') {
     group = 'verification'
     description = "Verify every sounds.json subtitle key has a translation in every version's lang files"
+    // Read at configuration time: Task.project is deprecated inside doLast.
+    def supportedVersions = project.property('supported_mc_versions').toString()
+    def hotfixVersions = project.findProperty('hotfix_mc_versions')?.toString()
 
     doLast {
         def errors = []
@@ -818,10 +823,10 @@ tasks.register('validateSoundSubtitles') {
                     "— sounds.json may have changed shape and broken the extraction")
         }
 
-        def versions = (project.property('supported_mc_versions').toString().split(',') as List)*.trim()
+        def versions = (supportedVersions.split(',') as List)*.trim()
         def hotfixPairs = [:]
-        if (project.hasProperty('hotfix_mc_versions')) {
-            project.property('hotfix_mc_versions').toString().split(',').each {
+        if (hotfixVersions != null) {
+            hotfixVersions.split(',').each {
                 def parts = it.split('=')
                 if (parts.length == 2) hotfixPairs[parts[0].trim()] = parts[1].trim()
             }
@@ -980,13 +985,15 @@ tasks.register('validateEraTagParity') {
 tasks.register('validateRegistryLangCoverage') {
     group = 'verification'
     description = 'Verify every registered block and item ID has a display name in each en_us.json'
+    // Read at configuration time: Task.project is deprecated inside doLast.
+    def idFileProps = ['block_id_file', 'item_id_file'].collectEntries { [it, project.property(it).toString()] }
 
     doLast {
         def errors = []
         def jsonSlurper = new JsonSlurper()
 
         def idsFrom = { String propertyName ->
-            def idFile = file("${rootProject.projectDir}/${project.property(propertyName)}")
+            def idFile = file("${rootProject.projectDir}/${idFileProps[propertyName]}")
             if (!idFile.exists()) {
                 throw new GradleException("validateRegistryLangCoverage: ${idFile} not found")
             }
