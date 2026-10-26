@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.15.0] - 2026-10-26
+
 ### Added
 
 - **Chronicle recipe**: craft a Chronicle of Chrono Dawn from a Book and a
@@ -63,7 +65,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Boat crash on Minecraft 1.21.9 and later**: a Time Wood boat or chest boat
   no longer crashes the game on Minecraft 1.21.9, 1.21.10, 1.21.11, 26.1.2,
   26.2 and 26.3, whether it is in water or on land. Before, every player who
-  came near the boat crashed, including after rejoining the world.
+  came near the boat crashed, including after rejoining the world. The boats
+  now also darken in dim places like vanilla boats and show an outline only
+  while glowing.
 
 ## [0.14.0] - 2026-10-21
 
@@ -1021,7 +1025,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Architectury API 13.0.8+
 - Custom Portal API 0.0.1-beta66-1.21 (Fabric bundled, NeoForge requires separate installation)
 
-[Unreleased]: https://github.com/ksoichiro/ChronoDawn/compare/v0.14.0...HEAD
+[Unreleased]: https://github.com/ksoichiro/ChronoDawn/compare/v0.15.0...HEAD
+[0.15.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.14.0...v0.15.0
 [0.14.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.11.0...v0.12.0
