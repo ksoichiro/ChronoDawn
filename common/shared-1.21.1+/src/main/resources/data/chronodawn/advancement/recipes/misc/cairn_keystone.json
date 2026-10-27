@@ -1,0 +1,37 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_item": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "chronodawn:cairn_stone_dawn",
+              "chronodawn:cairn_stone_noon",
+              "chronodawn:cairn_stone_dusk",
+              "chronodawn:cairn_stone_midnight"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "chronodawn:cairn_keystone"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_item",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "chronodawn:cairn_keystone"
+    ]
+  }
+}

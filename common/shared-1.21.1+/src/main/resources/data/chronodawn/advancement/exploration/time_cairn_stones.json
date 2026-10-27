@@ -1,0 +1,68 @@
+{
+  "parent": "chronodawn:story/us1/dimension_entry",
+  "criteria": {
+    "has_dawn": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "chronodawn:cairn_stone_dawn"
+            ]
+          }
+        ]
+      }
+    },
+    "has_noon": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "chronodawn:cairn_stone_noon"
+            ]
+          }
+        ]
+      }
+    },
+    "has_dusk": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "chronodawn:cairn_stone_dusk"
+            ]
+          }
+        ]
+      }
+    },
+    "has_midnight": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "chronodawn:cairn_stone_midnight"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "display": {
+    "icon": {
+      "id": "chronodawn:cairn_keystone"
+    },
+    "title": {
+      "translate": "advancements.chronodawn.time_cairn_stones.title"
+    },
+    "description": {
+      "translate": "advancements.chronodawn.time_cairn_stones.description"
+    },
+    "frame": "goal",
+    "show_toast": true,
+    "announce_to_chat": true,
+    "hidden": false
+  }
+}

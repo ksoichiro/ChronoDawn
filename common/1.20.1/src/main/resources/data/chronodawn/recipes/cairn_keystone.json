@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    { "item": "chronodawn:cairn_stone_dawn" },
+    { "item": "chronodawn:cairn_stone_noon" },
+    { "item": "chronodawn:cairn_stone_dusk" },
+    { "item": "chronodawn:cairn_stone_midnight" }
+  ],
+  "result": {
+    "item": "chronodawn:cairn_keystone",
+    "count": 1
+  }
+}
