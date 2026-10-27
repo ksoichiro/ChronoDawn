@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:grass_block",
+    "minecraft:dirt",
+    "minecraft:podzol",
+    "minecraft:coarse_dirt",
+    "minecraft:snow_block",
+    "chronodawn:temporal_grass_block",
+    "chronodawn:temporal_dirt",
+    "chronodawn:coarse_temporal_dirt",
+    "chronodawn:temporal_sand"
+  ]
+}
