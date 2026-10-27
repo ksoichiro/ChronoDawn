@@ -41,6 +41,7 @@ public class TimeCairnDialTests {
     private static final long COOLDOWN = 24000;
     // Rolls per check. The reward pools are random, so one roll could miss a bad entry.
     private static final int ROLLS = 30;
+    private static final int EXCHANGE_ROLLS = 20;
     private static final int MAIN_INVENTORY_SLOTS = 36;
     // Day times that fall in the middle of each hour, in CairnHour order.
     private static final long[] HOUR_DAY_TIMES = {0L, 6000L, 12000L, 18000L};
@@ -89,6 +90,8 @@ public class TimeCairnDialTests {
             TimeCairnDialTests::testMidnightTurnRollsEcho));
         tests.add(factory.create("time_cairn_echo_finishes_and_clears",
             TimeCairnDialTests::testEchoFinishesAndClears));
+        tests.add(factory.create("time_cairn_stones_exchange_in_time_well",
+            TimeCairnDialTests::testStonesExchangeInTimeWell));
         return tests;
     }
 
@@ -720,6 +723,31 @@ public class TimeCairnDialTests {
         } finally {
             CompatGameTestHelper.removeMockServerPlayer(helper, player);
         }
+    }
+
+    /**
+     * Test: the Time Well exchanges each Cairn Stone for a clockstone or one of the other three
+     * stones, never for the stone that was thrown in.
+     */
+    private static void testStonesExchangeInTimeWell(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        for (CairnHour thrown : CairnHour.values()) {
+            String path = "gameplay/time_well/" + thrown.stonePath();
+            for (int roll = 0; roll < EXCHANGE_ROLLS; roll++) {
+                List<ItemStack> result = CompatGameTestHelper.rollModLootTable(level, path);
+                if (result.size() != 1) {
+                    CompatGameTestHelper.fail(helper, path + ": expected one stack, got " + result);
+                    return;
+                }
+                ItemStack stack = result.get(0);
+                boolean otherStone = isCairnStone(stack) && !stack.is(ModItems.cairnStone(thrown));
+                if (!stack.is(ModItems.CLOCKSTONE.get()) && !otherStone) {
+                    CompatGameTestHelper.fail(helper, path + ": unexpected exchange result " + stack);
+                    return;
+                }
+            }
+        }
+        helper.succeed();
     }
 
     /**

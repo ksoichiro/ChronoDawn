@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "chronodawn:clockstone",
+          "weight": 9
+        },
+        {
+          "type": "minecraft:item",
+          "name": "chronodawn:cairn_stone_dawn",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "chronodawn:cairn_stone_noon",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "chronodawn:cairn_stone_dusk",
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}
