@@ -7,6 +7,7 @@ import com.chronodawn.compat.CompatGameTestHelper;
 import com.chronodawn.compat.CompatRecipeManager;
 import com.chronodawn.compat.CompatResourceLocation;
 import com.chronodawn.core.wayside.CairnHour;
+import com.chronodawn.core.wayside.EchoWalk;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModItems;
 import net.minecraft.core.BlockPos;
@@ -18,6 +19,8 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
@@ -26,6 +29,7 @@ import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -40,6 +44,18 @@ public class TimeCairnDialTests {
     private static final int MAIN_INVENTORY_SLOTS = 36;
     // Day times that fall in the middle of each hour, in CairnHour order.
     private static final long[] HOUR_DAY_TIMES = {0L, 6000L, 12000L, 18000L};
+
+    // The echo tests build a 9x9 platform at local y = 0 and 1 and put the dial on top of it.
+    private static final BlockPos ECHO_DIAL_POS = new BlockPos(4, 2, 4);
+    private static final int PLATFORM_SIZE = 9;
+    private static final int TEMPLATE_SIZE = 10;
+    // Small distances keep the cache inside the template, which is 10 blocks wide.
+    private static final int TEST_MIN_DISTANCE = 3;
+    private static final int TEST_MAX_DISTANCE = 4;
+    // Offsets are rounded to whole blocks, so the real distance strays by up to about 0.7 from
+    // the rolled one.
+    private static final double MIN_ECHO_DISTANCE = 2.25;
+    private static final double MAX_ECHO_DISTANCE = 4.5;
 
     public static <T> List<T> generateTests(MobBehaviorTests.TestFactory<T> factory) {
         List<T> tests = new ArrayList<>();
@@ -61,6 +77,18 @@ public class TimeCairnDialTests {
             TimeCairnDialTests::testKeystoneRewardRolls));
         tests.add(factory.create("time_cairn_dial_drops_clockwork_dial",
             TimeCairnDialTests::testDrops));
+        tests.add(factory.create("time_cairn_echo_places_cache_before_walking",
+            TimeCairnDialTests::testEchoPlacesCacheBeforeWalking));
+        tests.add(factory.create("time_cairn_echo_finds_no_spot_over_water",
+            TimeCairnDialTests::testEchoFindsNoSpotOverWater));
+        tests.add(factory.create("time_cairn_echo_cache_under_snow_layer",
+            TimeCairnDialTests::testEchoCacheUnderSnowLayer));
+        tests.add(factory.create("time_cairn_echo_marker_matches_ground",
+            TimeCairnDialTests::testEchoMarkerMatchesGround));
+        tests.add(factory.create("time_cairn_midnight_turn_rolls_echo",
+            TimeCairnDialTests::testMidnightTurnRollsEcho));
+        tests.add(factory.create("time_cairn_echo_finishes_and_clears",
+            TimeCairnDialTests::testEchoFinishesAndClears));
         return tests;
     }
 
@@ -384,6 +412,310 @@ public class TimeCairnDialTests {
             helper.succeed();
         } else {
             CompatGameTestHelper.fail(helper, "time_cairn_dial should drop one clockwork_dial, got " + drops);
+        }
+    }
+
+    /**
+     * Builds the echo test platform: temporal dirt at y = 0 and the given ground at y = 1.
+     * The template closes its top layer with barriers, which the heightmap would take for the
+     * surface, so that layer is cleared first.
+     */
+    private static void buildPlatform(GameTestHelper helper, Block ground) {
+        for (int x = 0; x < TEMPLATE_SIZE; x++) {
+            for (int z = 0; z < TEMPLATE_SIZE; z++) {
+                helper.setBlock(new BlockPos(x, TEMPLATE_SIZE - 1, z), Blocks.AIR);
+            }
+        }
+        for (int x = 0; x < PLATFORM_SIZE; x++) {
+            for (int z = 0; z < PLATFORM_SIZE; z++) {
+                helper.setBlock(new BlockPos(x, 0, z), ModBlocks.TEMPORAL_DIRT.get());
+                helper.setBlock(new BlockPos(x, 1, z), ground);
+            }
+        }
+    }
+
+    /**
+     * Places the dial on the echo platform and returns its block entity, or null after failing
+     * the test.
+     */
+    private static TimeCairnDialBlockEntity placeEchoDial(GameTestHelper helper) {
+        helper.setBlock(ECHO_DIAL_POS, ModBlocks.TIME_CAIRN_DIAL.get());
+        if (helper.getLevel().getBlockEntity(helper.absolutePos(ECHO_DIAL_POS)) instanceof TimeCairnDialBlockEntity dial) {
+            return dial;
+        }
+        CompatGameTestHelper.fail(helper, "time_cairn_dial has no TimeCairnDialBlockEntity");
+        return null;
+    }
+
+    private static Optional<BlockPos> summonTestEcho(GameTestHelper helper, ServerPlayer player) {
+        ServerLevel level = helper.getLevel();
+        return TimeCairnDialBlock.summonEcho(level, helper.absolutePos(ECHO_DIAL_POS), player, level.random,
+            TEST_MIN_DISTANCE, TEST_MAX_DISTANCE);
+    }
+
+    private static boolean templateHasChest(GameTestHelper helper) {
+        for (int x = 0; x < TEMPLATE_SIZE; x++) {
+            for (int y = 0; y < TEMPLATE_SIZE; y++) {
+                for (int z = 0; z < TEMPLATE_SIZE; z++) {
+                    if (helper.getLevel().getBlockState(helper.absolutePos(new BlockPos(x, y, z))).is(Blocks.CHEST)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Test: the cache is already in the world when summonEcho returns, so it exists even if the
+     * server stops on the next tick.
+     */
+    private static void testEchoPlacesCacheBeforeWalking(GameTestHelper helper) {
+        buildPlatform(helper, ModBlocks.TEMPORAL_GRASS_BLOCK.get());
+        TimeCairnDialBlockEntity dial = placeEchoDial(helper);
+        if (dial == null) {
+            return;
+        }
+        ServerLevel level = helper.getLevel();
+        BlockPos dialPos = helper.absolutePos(ECHO_DIAL_POS);
+        ServerPlayer player = CompatGameTestHelper.makeMockServerPlayer(helper);
+        try {
+            Optional<BlockPos> chest = summonTestEcho(helper, player);
+            if (chest.isEmpty()) {
+                CompatGameTestHelper.fail(helper, "summonEcho found no spot on a grass platform");
+                return;
+            }
+            BlockPos chestPos = chest.get();
+            double distance = Math.hypot(chestPos.getX() - dialPos.getX(), chestPos.getZ() - dialPos.getZ());
+            if (distance < MIN_ECHO_DISTANCE || distance > MAX_ECHO_DISTANCE) {
+                CompatGameTestHelper.fail(helper, "Cache is " + distance + " blocks from the dial");
+                return;
+            }
+            if (!level.getBlockState(chestPos).is(Blocks.CHEST)
+                    || !CompatGameTestHelper.hasLootTable(level.getBlockEntity(chestPos))) {
+                CompatGameTestHelper.fail(helper, "Expected a chest with a loot table at " + chestPos + ", got "
+                    + level.getBlockState(chestPos));
+                return;
+            }
+            if (!level.getBlockState(chestPos.above()).is(ModBlocks.COARSE_TEMPORAL_DIRT.get())) {
+                CompatGameTestHelper.fail(helper, "Expected coarse_temporal_dirt over the chest, got "
+                    + level.getBlockState(chestPos.above()));
+                return;
+            }
+            if (!dial.echoActive()) {
+                CompatGameTestHelper.fail(helper, "The dial does not report an active echo");
+                return;
+            }
+            helper.succeed();
+        } finally {
+            CompatGameTestHelper.removeMockServerPlayer(helper, player);
+        }
+    }
+
+    /**
+     * Test: with only water around the dial there is no ground to bury the cache in, so no echo
+     * rises and nothing is placed.
+     */
+    private static void testEchoFindsNoSpotOverWater(GameTestHelper helper) {
+        buildPlatform(helper, Blocks.WATER);
+        helper.setBlock(new BlockPos(4, 1, 4), ModBlocks.TEMPORAL_COBBLESTONE.get());
+        TimeCairnDialBlockEntity dial = placeEchoDial(helper);
+        if (dial == null) {
+            return;
+        }
+        ServerPlayer player = CompatGameTestHelper.makeMockServerPlayer(helper);
+        try {
+            Optional<BlockPos> chest = summonTestEcho(helper, player);
+            if (chest.isPresent()) {
+                CompatGameTestHelper.fail(helper, "summonEcho found a spot over water: " + chest.get());
+                return;
+            }
+            if (templateHasChest(helper)) {
+                CompatGameTestHelper.fail(helper, "A chest was placed although no spot was found");
+                return;
+            }
+            if (dial.echoActive()) {
+                CompatGameTestHelper.fail(helper, "An echo started although no spot was found");
+                return;
+            }
+            helper.succeed();
+        } finally {
+            CompatGameTestHelper.removeMockServerPlayer(helper, player);
+        }
+    }
+
+    /**
+     * Test: on snow the cache goes under the snow block, and the snow layer on top is removed
+     * so it does not float over the marker.
+     */
+    private static void testEchoCacheUnderSnowLayer(GameTestHelper helper) {
+        buildPlatform(helper, Blocks.SNOW_BLOCK);
+        for (int x = 0; x < PLATFORM_SIZE; x++) {
+            for (int z = 0; z < PLATFORM_SIZE; z++) {
+                helper.setBlock(new BlockPos(x, 2, z), Blocks.SNOW);
+            }
+        }
+        if (placeEchoDial(helper) == null) {
+            return;
+        }
+        ServerLevel level = helper.getLevel();
+        ServerPlayer player = CompatGameTestHelper.makeMockServerPlayer(helper);
+        try {
+            Optional<BlockPos> chest = summonTestEcho(helper, player);
+            if (chest.isEmpty()) {
+                CompatGameTestHelper.fail(helper, "summonEcho found no spot on a snow platform");
+                return;
+            }
+            BlockPos marker = chest.get().above();
+            if (!level.getBlockState(marker).is(ModBlocks.COARSE_TEMPORAL_DIRT.get())) {
+                CompatGameTestHelper.fail(helper, "Expected coarse_temporal_dirt at the snow block position, got "
+                    + level.getBlockState(marker));
+                return;
+            }
+            if (!level.getBlockState(marker.above()).isAir()) {
+                CompatGameTestHelper.fail(helper, "The snow layer above the marker was not removed, got "
+                    + level.getBlockState(marker.above()));
+                return;
+            }
+            if (!level.getBlockState(chest.get()).is(Blocks.CHEST)) {
+                CompatGameTestHelper.fail(helper, "Expected the chest below the marker, got "
+                    + level.getBlockState(chest.get()));
+                return;
+            }
+            helper.succeed();
+        } finally {
+            CompatGameTestHelper.removeMockServerPlayer(helper, player);
+        }
+    }
+
+    /**
+     * Test: the marker over the cache is a coarse variant of the ground it replaced, so it blends
+     * in on the vanilla ground and on the temporal sand.
+     */
+    private static void testEchoMarkerMatchesGround(GameTestHelper helper) {
+        ServerLevel level = helper.getLevel();
+        Block[] grounds = {Blocks.GRASS_BLOCK, ModBlocks.TEMPORAL_SAND.get()};
+        Block[] markers = {Blocks.COARSE_DIRT, ModBlocks.TEMPORAL_GRAVEL.get()};
+        ServerPlayer player = CompatGameTestHelper.makeMockServerPlayer(helper);
+        try {
+            for (int i = 0; i < grounds.length; i++) {
+                buildPlatform(helper, grounds[i]);
+                if (placeEchoDial(helper) == null) {
+                    return;
+                }
+                Optional<BlockPos> chest = summonTestEcho(helper, player);
+                if (chest.isEmpty()) {
+                    CompatGameTestHelper.fail(helper, "summonEcho found no spot on " + grounds[i]);
+                    return;
+                }
+                BlockState marker = level.getBlockState(chest.get().above());
+                if (!marker.is(markers[i])) {
+                    CompatGameTestHelper.fail(helper, "Expected " + markers[i] + " over " + grounds[i] + ", got " + marker);
+                    return;
+                }
+            }
+            helper.succeed();
+        } finally {
+            CompatGameTestHelper.removeMockServerPlayer(helper, player);
+        }
+    }
+
+    /**
+     * Test: a midnight turn rolls the echo chance, and only at midnight. The turn's search
+     * range is pinned to the test distances, because the production range of 16 to 24 blocks
+     * reaches into the neighboring test areas, whose barrier ceilings hide the ground. The cache
+     * position is read back from the dial.
+     */
+    private static void testMidnightTurnRollsEcho(GameTestHelper helper) {
+        buildPlatform(helper, ModBlocks.TEMPORAL_GRASS_BLOCK.get());
+        TimeCairnDialBlockEntity dial = placeEchoDial(helper);
+        if (dial == null) {
+            return;
+        }
+        ServerLevel level = helper.getLevel();
+        BlockPos pos = helper.absolutePos(ECHO_DIAL_POS);
+        ServerPlayer player = CompatGameTestHelper.makeMockServerPlayer(helper);
+        try {
+            TimeCairnDialBlock.forceEchoDistances(new int[] {TEST_MIN_DISTANCE, TEST_MAX_DISTANCE});
+            // Chance 0 at midnight: the stone is given and nothing rises.
+            TimeCairnDialBlock.forceEchoChance(0.0f);
+            TurnResult never = TimeCairnDialBlock.turn(level, pos, player, 18000L);
+            if (never != TurnResult.GIVEN || dial.echoActive()) {
+                CompatGameTestHelper.fail(helper, "Chance 0: expected GIVEN and no echo, got " + never
+                    + ", echoActive=" + dial.echoActive());
+                return;
+            }
+            // Chance 1 away from midnight: the roll is not made.
+            TimeCairnDialBlock.forceEchoChance(1.0f);
+            ServerPlayer noon = CompatGameTestHelper.makeMockServerPlayer(helper);
+            try {
+                TurnResult day = TimeCairnDialBlock.turn(level, pos, noon, 6000L);
+                if (day != TurnResult.GIVEN || dial.echoActive()) {
+                    CompatGameTestHelper.fail(helper, "Noon with chance 1: expected GIVEN and no echo, got " + day
+                        + ", echoActive=" + dial.echoActive());
+                    return;
+                }
+            } finally {
+                CompatGameTestHelper.removeMockServerPlayer(helper, noon);
+            }
+            // Chance 1 at midnight: an echo rises and its cache is in the world.
+            ServerPlayer midnight = CompatGameTestHelper.makeMockServerPlayer(helper);
+            try {
+                TurnResult always = TimeCairnDialBlock.turn(level, pos, midnight, 18000L);
+                BlockPos cache = dial.cachePos();
+                if (always != TurnResult.GIVEN_WITH_ECHO || cache == null || !dial.echoActive()) {
+                    CompatGameTestHelper.fail(helper, "Midnight with chance 1: expected GIVEN_WITH_ECHO, got " + always
+                        + ", cachePos=" + cache);
+                    return;
+                }
+                if (!level.getBlockState(cache).is(Blocks.CHEST)) {
+                    CompatGameTestHelper.fail(helper, "Expected a chest at " + cache + ", got " + level.getBlockState(cache));
+                    return;
+                }
+            } finally {
+                CompatGameTestHelper.removeMockServerPlayer(helper, midnight);
+            }
+            helper.succeed();
+        } finally {
+            TimeCairnDialBlock.forceEchoChance(null);
+            TimeCairnDialBlock.forceEchoDistances(null);
+            CompatGameTestHelper.removeMockServerPlayer(helper, player);
+        }
+    }
+
+    /**
+     * Test: the echo is still walking right after it starts, and clears itself once it has
+     * arrived and lingered. Game time is passed in, so the test does not wait.
+     */
+    private static void testEchoFinishesAndClears(GameTestHelper helper) {
+        buildPlatform(helper, ModBlocks.TEMPORAL_GRASS_BLOCK.get());
+        TimeCairnDialBlockEntity dial = placeEchoDial(helper);
+        if (dial == null) {
+            return;
+        }
+        ServerLevel level = helper.getLevel();
+        BlockPos pos = helper.absolutePos(ECHO_DIAL_POS);
+        ServerPlayer player = CompatGameTestHelper.makeMockServerPlayer(helper);
+        try {
+            long start = level.getGameTime();
+            if (summonTestEcho(helper, player).isEmpty()) {
+                CompatGameTestHelper.fail(helper, "summonEcho found no spot on a grass platform");
+                return;
+            }
+            TimeCairnDialBlock.tickEcho(level, pos, dial, start + 1);
+            if (!dial.echoActive()) {
+                CompatGameTestHelper.fail(helper, "The echo ended one tick after it started");
+                return;
+            }
+            // The walk is a few blocks long, so 400 ticks past the linger is well after the end.
+            TimeCairnDialBlock.tickEcho(level, pos, dial, start + EchoWalk.LINGER_TICKS + 400);
+            if (dial.echoActive()) {
+                CompatGameTestHelper.fail(helper, "The echo did not clear after its linger time");
+                return;
+            }
+            helper.succeed();
+        } finally {
+            CompatGameTestHelper.removeMockServerPlayer(helper, player);
         }
     }
 

@@ -22,11 +22,16 @@ import com.chronodawn.compat.CompatLevelTime;
 import com.chronodawn.compat.CompatResourceLocation;
 import com.chronodawn.config.ChronoDawnConfig;
 import com.chronodawn.config.WaysideSettings;
+import com.chronodawn.core.wayside.CachePlacement;
 import com.chronodawn.core.wayside.CairnHour;
+import com.chronodawn.core.wayside.EchoWalk;
 import com.chronodawn.core.wayside.PlayerCooldownTracker;
+import com.chronodawn.registry.ModBlockEntities;
+import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModItems;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
@@ -35,6 +40,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -45,11 +51,17 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.ChestBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -91,9 +103,37 @@ public class TimeCairnDialBlock extends BaseEntityBlock {
     private static final float KEYSTONE_SOUND_VOLUME = 0.7f;
     private static final float KEYSTONE_SOUND_PITCH = 1.0f;
 
-    // Test-only override of the echo chance, see forceEchoChance.
+    private static final TagKey<Block> CACHE_GROUND = TagKey.create(Registries.BLOCK,
+        CompatResourceLocation.create(ChronoDawn.MOD_ID, "time_cairn_cache_ground"));
+    private static final String CACHE_LOOT_TABLE = "chests/time_cairn_echo_cache";
+
+    private static final int ECHO_START_SOULS = 16;
+    private static final int ECHO_START_SPARKS = 4;
+    // The start column runs from 1.0 to 2.8 blocks above the dial block's base.
+    private static final double ECHO_START_CENTER_HEIGHT = 1.9;
+    private static final double ECHO_START_SPREAD_Y = 0.9;
+    private static final double ECHO_START_SPREAD_XZ = 0.15;
+    private static final float ECHO_START_SOUND_VOLUME = 1.0f;
+    private static final float ECHO_START_SOUND_PITCH = 0.8f;
+    private static final int ECHO_WALK_SOULS = 6;
+    private static final int ECHO_WALK_SPARKS = 1;
+    // The walker is drawn at about waist height over the ground.
+    private static final double ECHO_WALK_HEIGHT = 0.9;
+    private static final double ECHO_WALK_SPREAD_XZ = 0.25;
+    private static final double ECHO_WALK_SPREAD_Y = 0.5;
+    private static final int ECHO_ARRIVAL_SOULS = 20;
+    private static final double ECHO_ARRIVAL_SINK_SPEED = -0.1;
+    private static final double ECHO_ARRIVAL_SPREAD = 0.3;
+    private static final int ECHO_LINGER_PERIOD = 40;
+    private static final int ECHO_LINGER_SOULS = 2;
+    // The marker block sits right over the chest, so this is the top surface of the cache.
+    private static final int ECHO_CACHE_MARKER_HEIGHT = 2;
+
+    // Test-only overrides, see forceEchoChance and forceEchoDistances.
     @Nullable
     private static Float forcedEchoChance;
+    @Nullable
+    private static int[] forcedEchoDistances;
 
     /** What a turn of the dial did. */
     public enum TurnResult {
@@ -157,6 +197,15 @@ public class TimeCairnDialBlock extends BaseEntityBlock {
      */
     public static void forceEchoChance(@Nullable Float chance) {
         forcedEchoChance = chance;
+    }
+
+    /**
+     * Test-only override of the distance range the turn's echo searches, so a GameTest can keep
+     * the cache inside its template instead of on whatever lies 16 to 24 blocks away. Pass null
+     * to restore the production range, and always do so when the test ends.
+     */
+    public static void forceEchoDistances(@Nullable int[] minAndMax) {
+        forcedEchoDistances = minAndMax;
     }
 
     private static float echoChance(WaysideSettings settings) {
@@ -259,13 +308,167 @@ public class TimeCairnDialBlock extends BaseEntityBlock {
         level.addFreshEntity(item);
     }
 
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+        if (level.isClientSide || type != ModBlockEntities.TIME_CAIRN_DIAL.get()) {
+            return null;
+        }
+        return (tickLevel, pos, tickState, blockEntity) -> {
+            if (tickLevel instanceof ServerLevel serverLevel && blockEntity instanceof TimeCairnDialBlockEntity dial) {
+                tickEcho(serverLevel, pos, dial, serverLevel.getGameTime());
+            }
+        };
+    }
+
     /**
-     * Placeholder for the midnight echo, which is added with the echo itself.
-     *
-     * @return the cache position when an echo rose, else empty
+     * Raises the midnight echo at the production distance, unless a test forced another range. See the six-argument overload.
      */
-    private static Optional<BlockPos> summonEcho(ServerLevel level, BlockPos pos, Player player, RandomSource random) {
+    public static Optional<BlockPos> summonEcho(ServerLevel level, BlockPos dialPos, Player player, RandomSource random) {
+        int[] forced = forcedEchoDistances;
+        return forced != null
+            ? summonEcho(level, dialPos, player, random, forced[0], forced[1])
+            : summonEcho(level, dialPos, player, random, CachePlacement.MIN_DISTANCE, CachePlacement.MAX_DISTANCE);
+    }
+
+    /**
+     * Buries a cache and starts the echo that walks to it. The cache is placed before the walk
+     * starts, so it exists even if the server stops right after.
+     *
+     * @return the chest position when an echo rose, else empty because no ground fit
+     */
+    public static Optional<BlockPos> summonEcho(ServerLevel level, BlockPos dialPos, Player player, RandomSource random,
+                                                int minDistance, int maxDistance) {
+        if (!(level.getBlockEntity(dialPos) instanceof TimeCairnDialBlockEntity dial)) {
+            return Optional.empty();
+        }
+        Optional<BlockPos> spot = findCacheSpot(level, dialPos, random, minDistance, maxDistance);
+        if (spot.isEmpty()) {
+            return Optional.empty();
+        }
+        BlockPos chestPos = spot.get().below();
+        placeCache(level, spot.get());
+        dial.startEcho(new EchoWalk(dialPos.getX() + 0.5, dialPos.getZ() + 0.5,
+            chestPos.getX() + 0.5, chestPos.getZ() + 0.5, level.getGameTime()), chestPos);
+
+        double x = dialPos.getX() + 0.5;
+        double y = dialPos.getY() + ECHO_START_CENTER_HEIGHT;
+        double z = dialPos.getZ() + 0.5;
+        level.sendParticles(ParticleTypes.SOUL, x, y, z, ECHO_START_SOULS,
+            ECHO_START_SPREAD_XZ, ECHO_START_SPREAD_Y, ECHO_START_SPREAD_XZ, 0.0);
+        level.sendParticles(ParticleTypes.END_ROD, x, y, z, ECHO_START_SPARKS,
+            ECHO_START_SPREAD_XZ, ECHO_START_SPREAD_Y, ECHO_START_SPREAD_XZ, 0.0);
+        level.playSound(null, dialPos, SoundEvents.SOUL_ESCAPE.value(), SoundSource.BLOCKS,
+            ECHO_START_SOUND_VOLUME, ECHO_START_SOUND_PITCH);
+        player.displayClientMessage(Component.translatable("message.chronodawn.time_cairn.echo"), true);
+        return Optional.of(chestPos);
+    }
+
+    /**
+     * Looks for ground to bury the cache in, trying the candidate directions in order.
+     *
+     * @return the marker position, the ground block that stays visible over the chest, or empty
+     *         when no candidate has loaded, solid ground
+     */
+    public static Optional<BlockPos> findCacheSpot(ServerLevel level, BlockPos dialPos, RandomSource random,
+                                                   int minDistance, int maxDistance) {
+        for (int[] offset : CachePlacement.candidateOffsets(random.nextLong(), minDistance, maxDistance)) {
+            int x = dialPos.getX() + offset[0];
+            int z = dialPos.getZ() + offset[1];
+            if (!level.hasChunkAt(new BlockPos(x, dialPos.getY(), z))) {
+                continue;
+            }
+            // The heightmap counts fluids, so over water this lands on a water block, which is
+            // not cache ground.
+            BlockPos marker = new BlockPos(x, level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, x, z) - 1, z);
+            if (level.getBlockState(marker).is(Blocks.SNOW)) {
+                marker = marker.below();
+            }
+            if (level.getBlockState(marker).is(CACHE_GROUND) && canHoldChest(level, marker.below())) {
+                return Optional.of(marker);
+            }
+        }
         return Optional.empty();
+    }
+
+    private static boolean canHoldChest(ServerLevel level, BlockPos pos) {
+        BlockState state = level.getBlockState(pos);
+        return state.isSolidRender(level, pos) && !state.hasBlockEntity() && state.getFluidState().isEmpty();
+    }
+
+    /**
+     * Buries the cache chest right under the marker position and covers it with the coarse
+     * variant of the ground that was there.
+     */
+    public static void placeCache(ServerLevel level, BlockPos markerPos) {
+        BlockPos above = markerPos.above();
+        if (level.getBlockState(above).is(Blocks.SNOW)) {
+            level.setBlock(above, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
+        }
+        Block marker = markerFor(level.getBlockState(markerPos));
+        BlockPos chestPos = markerPos.below();
+        level.setBlock(chestPos, Blocks.CHEST.defaultBlockState()
+            .setValue(ChestBlock.FACING, Direction.Plane.HORIZONTAL.getRandomDirection(level.random)), Block.UPDATE_ALL);
+        if (level.getBlockEntity(chestPos) instanceof ChestBlockEntity chest) {
+            chest.setLootTable(ResourceKey.create(Registries.LOOT_TABLE,
+                CompatResourceLocation.create(ChronoDawn.MOD_ID, CACHE_LOOT_TABLE)), level.random.nextLong());
+        }
+        level.setBlock(markerPos, marker.defaultBlockState(), Block.UPDATE_ALL);
+    }
+
+    /** The disturbed-ground block that marks a cache dug into the given ground. */
+    public static Block markerFor(BlockState ground) {
+        if (ground.is(ModBlocks.TEMPORAL_SAND.get())) {
+            return ModBlocks.TEMPORAL_GRAVEL.get();
+        }
+        if (ground.is(Blocks.GRASS_BLOCK) || ground.is(Blocks.DIRT) || ground.is(Blocks.PODZOL)
+                || ground.is(Blocks.COARSE_DIRT)) {
+            return Blocks.COARSE_DIRT;
+        }
+        return ModBlocks.COARSE_TEMPORAL_DIRT.get();
+    }
+
+    /**
+     * Moves the echo along its walk and draws it. Does nothing when no echo is active. The game
+     * time is passed in so a GameTest can step through the walk without waiting.
+     */
+    public static void tickEcho(ServerLevel level, BlockPos pos, TimeCairnDialBlockEntity dial, long gameTime) {
+        EchoWalk walk = dial.echo;
+        BlockPos cache = dial.cachePos;
+        if (walk == null || cache == null) {
+            return;
+        }
+        if (walk.finished(gameTime)) {
+            dial.clearEcho();
+            return;
+        }
+        if (!walk.arrived(gameTime)) {
+            double[] at = walk.positionAt(gameTime);
+            int surface = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                (int) Math.floor(at[0]), (int) Math.floor(at[1]));
+            double y = surface + ECHO_WALK_HEIGHT;
+            level.sendParticles(ParticleTypes.SOUL, at[0], y, at[1], ECHO_WALK_SOULS,
+                ECHO_WALK_SPREAD_XZ, ECHO_WALK_SPREAD_Y, ECHO_WALK_SPREAD_XZ, 0.0);
+            level.sendParticles(ParticleTypes.END_ROD, at[0], y, at[1], ECHO_WALK_SPARKS,
+                ECHO_WALK_SPREAD_XZ, ECHO_WALK_SPREAD_Y, ECHO_WALK_SPREAD_XZ, 0.0);
+            return;
+        }
+        // The flag, not an exact tick match, so a skipped tick still sends the burst once.
+        if (!dial.arrivalBurstSent) {
+            dial.arrivalBurstSent = true;
+            // One call per particle with a zero count: the offset then is a velocity, so the souls
+            // sink into the marker instead of scattering.
+            for (int i = 0; i < ECHO_ARRIVAL_SOULS; i++) {
+                level.sendParticles(ParticleTypes.SOUL,
+                    cache.getX() + 0.5 + (level.random.nextDouble() - 0.5) * 2 * ECHO_ARRIVAL_SPREAD,
+                    cache.getY() + ECHO_CACHE_MARKER_HEIGHT,
+                    cache.getZ() + 0.5 + (level.random.nextDouble() - 0.5) * 2 * ECHO_ARRIVAL_SPREAD,
+                    0, 0.0, 1.0, 0.0, ECHO_ARRIVAL_SINK_SPEED);
+            }
+        }
+        if (gameTime % ECHO_LINGER_PERIOD == 0) {
+            level.sendParticles(ParticleTypes.SOUL, cache.getX() + 0.5, cache.getY() + ECHO_CACHE_MARKER_HEIGHT, cache.getZ() + 0.5,
+                ECHO_LINGER_SOULS, 0.1, 0.2, 0.1, 0.0);
+        }
     }
 
     private static DustParticleOptions dust(CairnHour hour) {

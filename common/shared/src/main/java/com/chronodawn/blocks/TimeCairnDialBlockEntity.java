@@ -31,6 +31,8 @@ public class TimeCairnDialBlockEntity extends CooldownActivatorBlockEntity {
     EchoWalk echo;
     @Nullable
     BlockPos cachePos;
+    // Set once the arrival burst has been sent, so a skipped tick cannot send it twice or never.
+    boolean arrivalBurstSent;
 
     public TimeCairnDialBlockEntity(BlockPos pos, BlockState state) {
         super(com.chronodawn.registry.ModBlockEntities.TIME_CAIRN_DIAL.get(), pos, state);
@@ -39,6 +41,13 @@ public class TimeCairnDialBlockEntity extends CooldownActivatorBlockEntity {
     public void startEcho(EchoWalk walk, BlockPos cache) {
         this.echo = walk;
         this.cachePos = cache;
+        this.arrivalBurstSent = false;
+    }
+
+    /** The chest position of the cache the echo is walking to, or null when no echo is active. */
+    @Nullable
+    public BlockPos cachePos() {
+        return cachePos;
     }
 
     public boolean echoActive() {
@@ -48,5 +57,6 @@ public class TimeCairnDialBlockEntity extends CooldownActivatorBlockEntity {
     public void clearEcho() {
         this.echo = null;
         this.cachePos = null;
+        this.arrivalBurstSent = false;
     }
 }
