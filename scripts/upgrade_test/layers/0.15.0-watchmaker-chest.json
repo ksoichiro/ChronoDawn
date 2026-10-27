@@ -1,0 +1,22 @@
+{
+  "introduced": "0.15.0",
+  "description": "Watchmaker's Chest per-player slots and cooldowns (block entity). RCON cannot make Dev open the chest, so the state an opened chest saves is written with setblock: one chest Dev took part of the camp loot from (with another player's untouched roll), and one Dev emptied that is still on cooldown. Dev's UUID is the offline-mode UUID of the test player.",
+  "setup": [
+    "fill 1600 199 1617 1610 199 1617 minecraft:stone",
+    "setblock 1602 200 1617 chronodawn:watchmaker_chest{PlayerSlots:[{Player:\"380df991-f603-344c-a090-369bad2a924a\",Items:[{Slot:3b,id:\"chronodawn:time_crystal\",count:2},{Slot:11b,id:\"chronodawn:ancient_gear\",count:1},{Slot:20b,id:\"minecraft:iron_ingot\",count:4}]},{Player:\"5b1c7d9e-2f4a-4c8b-9e1d-0a3f6b7c8d90\",Items:[{Slot:0b,id:\"chronodawn:clockwork_cookie\",count:6}]}],PlayerCooldowns:\"380df991-f603-344c-a090-369bad2a924a=1200,5b1c7d9e-2f4a-4c8b-9e1d-0a3f6b7c8d90=2400\"}",
+    "setblock 1604 200 1617 chronodawn:watchmaker_chest{PlayerSlots:[],PlayerCooldowns:\"380df991-f603-344c-a090-369bad2a924a=3600\"}"
+  ],
+  "checks": [
+    {
+      "id": "v0.15.0_block_entity_watchmaker_chest_partly_taken",
+      "kind": "command",
+      "command": "data get block 1602 200 1617"
+    },
+    {
+      "id": "v0.15.0_block_entity_watchmaker_chest_emptied",
+      "kind": "command",
+      "command": "data get block 1604 200 1617"
+    }
+  ],
+  "not_covered": []
+}
