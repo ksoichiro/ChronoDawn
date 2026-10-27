@@ -16,6 +16,7 @@ import com.chronodawn.blocks.ClockstoneStairs;
 import com.chronodawn.blocks.ClockstoneWall;
 import com.chronodawn.blocks.ClockTowerTeleporterBlock;
 import com.chronodawn.blocks.MemorialPlateBlock;
+import com.chronodawn.blocks.TimeCairnDialBlock;
 import com.chronodawn.blocks.TimeWellStoneBlock;
 import com.chronodawn.blocks.WatchmakerChestBlock;
 import com.chronodawn.blocks.SundialGnomonBlock;
@@ -504,6 +505,15 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> WATCHMAKER_CHEST = BLOCKS.register(
         ModBlockId.WATCHMAKER_CHEST.id(),
         () -> new WatchmakerChestBlock(WatchmakerChestBlock.createProperties())
+    );
+
+    /**
+     * Time Cairn Dial - activator of the Time Cairn wayside feature.
+     * No item: it only appears through worldgen, and breaking it drops the plain clockwork dial.
+     */
+    public static final RegistrySupplier<Block> TIME_CAIRN_DIAL = BLOCKS.register(
+        ModBlockId.TIME_CAIRN_DIAL.id(),
+        () -> new TimeCairnDialBlock(TimeCairnDialBlock.createProperties())
     );
 
     /**

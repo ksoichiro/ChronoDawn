@@ -417,13 +417,16 @@ public class TimeCairnDialTests {
 
     /**
      * Builds the echo test platform: temporal dirt at y = 0 and the given ground at y = 1.
-     * The template closes its top layer with barriers, which the heightmap would take for the
-     * surface, so that layer is cleared first.
+     * The test area is closed on top with barriers, which the heightmap would take for the
+     * surface, so that layer is cleared first. Newer versions put the barrier ceiling one layer
+     * higher than older ones, so the top two layers are cleared.
      */
     private static void buildPlatform(GameTestHelper helper, Block ground) {
-        for (int x = 0; x < TEMPLATE_SIZE; x++) {
-            for (int z = 0; z < TEMPLATE_SIZE; z++) {
-                helper.setBlock(new BlockPos(x, TEMPLATE_SIZE - 1, z), Blocks.AIR);
+        for (int y = TEMPLATE_SIZE - 1; y <= TEMPLATE_SIZE; y++) {
+            for (int x = 0; x < TEMPLATE_SIZE; x++) {
+                for (int z = 0; z < TEMPLATE_SIZE; z++) {
+                    helper.setBlock(new BlockPos(x, y, z), Blocks.AIR);
+                }
             }
         }
         for (int x = 0; x < PLATFORM_SIZE; x++) {
@@ -449,7 +452,7 @@ public class TimeCairnDialTests {
 
     private static Optional<BlockPos> summonTestEcho(GameTestHelper helper, ServerPlayer player) {
         ServerLevel level = helper.getLevel();
-        return TimeCairnDialBlock.summonEcho(level, helper.absolutePos(ECHO_DIAL_POS), player, level.random,
+        return TimeCairnDialBlock.summonEcho(level, helper.absolutePos(ECHO_DIAL_POS), player, level.getRandom(),
             TEST_MIN_DISTANCE, TEST_MAX_DISTANCE);
     }
 

@@ -3,6 +3,9 @@ package com.chronodawn.registry;
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.mixin.ItemCraftRemainderAccessor;
 import com.chronodawn.items.ChronicleBookItem;
+import com.chronodawn.core.wayside.CairnHour;
+import com.chronodawn.items.CairnKeystoneItem;
+import com.chronodawn.items.CairnStoneItem;
 import com.chronodawn.items.JournalPageItem;
 import com.chronodawn.items.LostAdventurerJournalItem;
 import com.chronodawn.items.DecorativeWaterBucketItem;
@@ -1548,6 +1551,45 @@ public class ModItems {
                 .stacksTo(16)
                 .setId(ResourceKey.create(Registries.ITEM,
                     Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, id.id()))), page));
+    }
+
+    /**
+     * Cairn Stones - one per hour of the day, given by a Time Cairn dial. Four of them craft
+     * into a Cairn Keystone.
+     */
+    public static final RegistrySupplier<Item> CAIRN_STONE_DAWN = registerCairnStone(ModItemId.CAIRN_STONE_DAWN, CairnHour.DAWN);
+    public static final RegistrySupplier<Item> CAIRN_STONE_NOON = registerCairnStone(ModItemId.CAIRN_STONE_NOON, CairnHour.NOON);
+    public static final RegistrySupplier<Item> CAIRN_STONE_DUSK = registerCairnStone(ModItemId.CAIRN_STONE_DUSK, CairnHour.DUSK);
+    public static final RegistrySupplier<Item> CAIRN_STONE_MIDNIGHT = registerCairnStone(ModItemId.CAIRN_STONE_MIDNIGHT, CairnHour.MIDNIGHT);
+
+    /**
+     * Cairn Keystone - the four hours bound in one stone. Set into a Time Cairn.
+     */
+    public static final RegistrySupplier<Item> CAIRN_KEYSTONE = ITEMS.register(
+        ModItemId.CAIRN_KEYSTONE.id(),
+        () -> new CairnKeystoneItem(new Item.Properties()
+                .stacksTo(16)
+                .setId(ResourceKey.create(Registries.ITEM,
+                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.CAIRN_KEYSTONE.id()))))
+    );
+
+    private static RegistrySupplier<Item> registerCairnStone(ModItemId id, CairnHour hour) {
+        return ITEMS.register(id.id(), () -> new CairnStoneItem(new Item.Properties()
+                .stacksTo(64)
+                .setId(ResourceKey.create(Registries.ITEM,
+                    Identifier.fromNamespaceAndPath(ChronoDawn.MOD_ID, id.id()))), hour));
+    }
+
+    /**
+     * Returns the cairn stone engraved with the given hour.
+     */
+    public static Item cairnStone(CairnHour hour) {
+        return switch (hour) {
+            case DAWN -> CAIRN_STONE_DAWN.get();
+            case NOON -> CAIRN_STONE_NOON.get();
+            case DUSK -> CAIRN_STONE_DUSK.get();
+            case MIDNIGHT -> CAIRN_STONE_MIDNIGHT.get();
+        };
     }
 
     // === Consumables ===
@@ -3236,6 +3278,11 @@ public class ModItems {
         output.accept(FADED_JOURNAL_PAGE_5.get());
         output.accept(FADED_JOURNAL_PAGE_6.get());
         output.accept(LOST_ADVENTURER_JOURNAL.get());
+        output.accept(CAIRN_STONE_DAWN.get());
+        output.accept(CAIRN_STONE_NOON.get());
+        output.accept(CAIRN_STONE_DUSK.get());
+        output.accept(CAIRN_STONE_MIDNIGHT.get());
+        output.accept(CAIRN_KEYSTONE.get());
         // Add example Time Compass (targets Desert Clock Tower by default)
         output.accept(com.chronodawn.items.TimeCompassItem.createCompass(
             com.chronodawn.items.TimeCompassItem.STRUCTURE_DESERT_CLOCK_TOWER));

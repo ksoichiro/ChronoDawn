@@ -356,6 +356,7 @@ public final class RegistryDrivenTestData {
             // Exploration
             new AdvancementTests.AdvancementSpec("exploration/first_time_crystal_ore", "story/us1/dimension_entry"),
             new AdvancementTests.AdvancementSpec("exploration/lost_adventurer_journal", "story/us1/dimension_entry"),
+            new AdvancementTests.AdvancementSpec("exploration/time_cairn_stones", "story/us1/dimension_entry"),
             // Mobs
             new AdvancementTests.AdvancementSpec("mobs/chronos_warden_defeated", "story/us2/time_guardian_defeat"),
             new AdvancementTests.AdvancementSpec("mobs/clockwork_colossus_defeated", "story/us2/time_guardian_defeat"),
