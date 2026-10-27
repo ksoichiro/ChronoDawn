@@ -356,6 +356,15 @@ time_well_cooldown_ticks = 24000
 # effect on camps generated while Lootr is installed. Range: 20 to 1728000.
 watchmaker_camp_cooldown_ticks = 72000
 
+# Time Cairn: how long (in ticks, 20 ticks = 1 second) before the same player
+# can turn the same cairn dial again. Counted in game time, so sleeping does not
+# shorten it. Range: 20 to 1728000.
+time_cairn_cooldown_ticks = 24000
+
+# Time Cairn: chance, from 0.0 to 1.0, that turning a dial at midnight summons
+# the echo that leads to a buried cache. 0 disables the echo.
+time_cairn_echo_chance = 0.2
+
 [gameplay.portals]
 # Whether entering Chrono Dawn deactivates the departure portal and destroys
 # the arrival portal until the Portal Stabilizer has been used.

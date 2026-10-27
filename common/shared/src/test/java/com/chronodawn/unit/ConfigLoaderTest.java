@@ -684,9 +684,11 @@ class ConfigLoaderTest {
             "sundial_effect_duration_ticks = 1200\n" +
             "memorial_cooldown_ticks = 12000\n" +
             "time_well_cooldown_ticks = 6000\n" +
-            "watchmaker_camp_cooldown_ticks = 9000\n");
+            "watchmaker_camp_cooldown_ticks = 9000\n" +
+            "time_cairn_cooldown_ticks = 7000\n" +
+            "time_cairn_echo_chance = 0.5\n");
         ChronoDawnConfig config = ConfigLoader.load(tmp);
-        assertEquals(new WaysideSettings(6000, 1200, 12000, 6000, 9000), config.gameplay().wayside());
+        assertEquals(new WaysideSettings(6000, 1200, 12000, 6000, 9000, 7000, 0.5f), config.gameplay().wayside());
     }
 
     @Test
@@ -752,6 +754,48 @@ class ConfigLoaderTest {
         assertEquals(6000, settings.timeWellCooldownTicks());
         assertEquals(ConfigDefaults.WAYSIDE_DEFAULTS.watchmakerCampCooldownTicks(),
             settings.watchmakerCampCooldownTicks());
+    }
+
+    @Test
+    void wayside_badTimeCairnCooldown_fallsBackAlone(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[gameplay.wayside]\n" +
+            "sundial_cooldown_ticks = 6000\n" +
+            "sundial_effect_duration_ticks = 1200\n" +
+            "memorial_cooldown_ticks = 12000\n" +
+            "time_well_cooldown_ticks = 6000\n" +
+            "watchmaker_camp_cooldown_ticks = 9000\n" +
+            "time_cairn_cooldown_ticks = 1728001\n" +
+            "time_cairn_echo_chance = 0.5\n");
+        WaysideSettings settings = ConfigLoader.load(tmp).gameplay().wayside();
+        assertEquals(6000, settings.sundialCooldownTicks());
+        assertEquals(1200, settings.sundialEffectDurationTicks());
+        assertEquals(12000, settings.memorialCooldownTicks());
+        assertEquals(6000, settings.timeWellCooldownTicks());
+        assertEquals(9000, settings.watchmakerCampCooldownTicks());
+        assertEquals(ConfigDefaults.WAYSIDE_DEFAULTS.timeCairnCooldownTicks(), settings.timeCairnCooldownTicks());
+        assertEquals(0.5f, settings.timeCairnEchoChance());
+    }
+
+    @Test
+    void wayside_badTimeCairnEchoChance_fallsBackAlone(@TempDir Path tmp) throws IOException {
+        Files.writeString(tmp.resolve("chronodawn.toml"),
+            "[gameplay.wayside]\n" +
+            "sundial_cooldown_ticks = 6000\n" +
+            "sundial_effect_duration_ticks = 1200\n" +
+            "memorial_cooldown_ticks = 12000\n" +
+            "time_well_cooldown_ticks = 6000\n" +
+            "watchmaker_camp_cooldown_ticks = 9000\n" +
+            "time_cairn_cooldown_ticks = 7000\n" +
+            "time_cairn_echo_chance = 1.5\n");
+        WaysideSettings settings = ConfigLoader.load(tmp).gameplay().wayside();
+        assertEquals(6000, settings.sundialCooldownTicks());
+        assertEquals(1200, settings.sundialEffectDurationTicks());
+        assertEquals(12000, settings.memorialCooldownTicks());
+        assertEquals(6000, settings.timeWellCooldownTicks());
+        assertEquals(9000, settings.watchmakerCampCooldownTicks());
+        assertEquals(7000, settings.timeCairnCooldownTicks());
+        assertEquals(ConfigDefaults.WAYSIDE_DEFAULTS.timeCairnEchoChance(), settings.timeCairnEchoChance());
     }
 
     @Test

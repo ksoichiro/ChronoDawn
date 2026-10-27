@@ -534,8 +534,10 @@ night when a player right-clicks the gnomon. Lost Adventurer Memorials
 generated after this update drop a journal page and a few supplies when a
 player steps onto the plate in front of the grave. Time Wells answer a
 wish with a small gift. Watchmaker's Camps hold a chest that refills for each
-player after they have emptied it. Each player has a separate cooldown for each
-sundial, each memorial, each well and each camp.
+player after they have emptied it. Time Cairns have a dial that a player can turn
+for a small effect, and at midnight a turn may summon an echo that leads to a
+buried cache. Each player has a separate cooldown for each sundial, each
+memorial, each well, each camp and each cairn.
 
 ```toml
 [gameplay.wayside]
@@ -544,6 +546,8 @@ sundial_effect_duration_ticks = 3600
 memorial_cooldown_ticks = 24000
 time_well_cooldown_ticks = 24000
 watchmaker_camp_cooldown_ticks = 72000
+time_cairn_cooldown_ticks = 24000
+time_cairn_echo_chance = 0.2
 ```
 
 | Field | Type | Default | Range | Notes |
@@ -553,6 +557,8 @@ watchmaker_camp_cooldown_ticks = 72000
 | `memorial_cooldown_ticks` | integer | `24000` | `20..=1728000` | Ticks before the same player can pray at the same memorial again. Counted in game time. |
 | `time_well_cooldown_ticks` | integer | `24000` | `20..=1728000` | Ticks (20 ticks = 1 second) before the same player can make another wish at the same well. Counted in game time, so sleeping does not shorten it. |
 | `watchmaker_camp_cooldown_ticks` | integer | `72000` | `20..=1728000` | Ticks (20 ticks = 1 second) before the camp chest can refill for the same player. It refills only once the player has emptied it. Counted in game time, so sleeping does not shorten it. Has no effect on camps generated while Lootr is installed. |
+| `time_cairn_cooldown_ticks` | integer | `24000` | `20..=1728000` | Ticks (20 ticks = 1 second) before the same player can turn the same cairn dial again. Counted in game time, so sleeping does not shorten it. |
+| `time_cairn_echo_chance` | float | `0.2` | `0.0..=1.0` | Chance that turning a dial at midnight summons the echo that leads to a buried cache. `0` disables the echo. |
 
 ---
 

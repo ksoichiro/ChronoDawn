@@ -118,12 +118,15 @@ public final class ConfigLoader {
     private static final String K_WS_MEMORIAL_COOLDOWN_TICKS = "memorial_cooldown_ticks";
     private static final String K_WS_TIME_WELL_COOLDOWN_TICKS = "time_well_cooldown_ticks";
     private static final String K_WS_WATCHMAKER_CAMP_COOLDOWN_TICKS = "watchmaker_camp_cooldown_ticks";
+    private static final String K_WS_TIME_CAIRN_COOLDOWN_TICKS = "time_cairn_cooldown_ticks";
+    private static final String K_WS_TIME_CAIRN_ECHO_CHANCE = "time_cairn_echo_chance";
     private static final int MIN_WAYSIDE_TICKS = 20;
     private static final int MAX_SUNDIAL_COOLDOWN_TICKS = 1_728_000;
     private static final int MAX_SUNDIAL_EFFECT_DURATION_TICKS = 72_000;
     private static final int MAX_MEMORIAL_COOLDOWN_TICKS = 1_728_000;
     private static final int MAX_TIME_WELL_COOLDOWN_TICKS = 1_728_000;
     private static final int MAX_WATCHMAKER_CAMP_COOLDOWN_TICKS = 1_728_000;
+    private static final int MAX_TIME_CAIRN_COOLDOWN_TICKS = 1_728_000;
     private static final String K_BOSSES = "bosses";
     private static final String K_HEALTH_MULTIPLIER = "health_multiplier";
     private static final String K_DAMAGE_MULTIPLIER = "damage_multiplier";
@@ -591,6 +594,12 @@ public final class ConfigLoader {
         int watchmakerCampCooldown = parsed.<Number>getOptional(path + "." + K_WS_WATCHMAKER_CAMP_COOLDOWN_TICKS)
             .map(Number::intValue)
             .orElse(defaults.watchmakerCampCooldownTicks());
+        int timeCairnCooldown = parsed.<Number>getOptional(path + "." + K_WS_TIME_CAIRN_COOLDOWN_TICKS)
+            .map(Number::intValue)
+            .orElse(defaults.timeCairnCooldownTicks());
+        float timeCairnEchoChance = parsed.<Number>getOptional(path + "." + K_WS_TIME_CAIRN_ECHO_CHANCE)
+            .map(Number::floatValue)
+            .orElse(defaults.timeCairnEchoChance());
 
         // Validation: each field reverts independently so one bad value doesn't reset the other.
         if (cooldown < MIN_WAYSIDE_TICKS || cooldown > MAX_SUNDIAL_COOLDOWN_TICKS) {
@@ -634,9 +643,26 @@ public final class ConfigLoader {
             );
             watchmakerCampCooldown = defaults.watchmakerCampCooldownTicks();
         }
+        if (timeCairnCooldown < MIN_WAYSIDE_TICKS || timeCairnCooldown > MAX_TIME_CAIRN_COOLDOWN_TICKS) {
+            LOGGER.error(
+                "Invalid {}.{} = {} (must be in [{}, {}]); using default {}",
+                path, K_WS_TIME_CAIRN_COOLDOWN_TICKS, timeCairnCooldown, MIN_WAYSIDE_TICKS,
+                MAX_TIME_CAIRN_COOLDOWN_TICKS, defaults.timeCairnCooldownTicks()
+            );
+            timeCairnCooldown = defaults.timeCairnCooldownTicks();
+        }
+        // The negated range check also rejects nan.
+        if (!(timeCairnEchoChance >= 0.0f && timeCairnEchoChance <= 1.0f)) {
+            LOGGER.error(
+                "Invalid {}.{} = {} (must be in [{}, {}]); using default {}",
+                path, K_WS_TIME_CAIRN_ECHO_CHANCE, timeCairnEchoChance, 0.0f, 1.0f,
+                defaults.timeCairnEchoChance()
+            );
+            timeCairnEchoChance = defaults.timeCairnEchoChance();
+        }
 
         return new WaysideSettings(cooldown, duration, memorialCooldown, timeWellCooldown,
-            watchmakerCampCooldown);
+            watchmakerCampCooldown, timeCairnCooldown, timeCairnEchoChance);
     }
 
     private static BossSettings parseBoss(CommentedConfig parsed, String bossKey) {

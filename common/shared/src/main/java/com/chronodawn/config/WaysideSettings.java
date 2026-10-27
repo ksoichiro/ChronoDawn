@@ -18,14 +18,19 @@
 package com.chronodawn.config;
 
 /**
- * Settings for interactive wayside features such as the Old Sundial, the Lost Adventurer Memorial, the Time Well and the Watchmaker's Camp.
+ * Settings for interactive wayside features such as the Old Sundial, the Lost Adventurer Memorial, the Time Well, the Watchmaker's Camp and the Time Cairn.
  *
  * <p>Cooldowns are per player and per feature instance, measured in game ticks.
+ *
+ * @param timeCairnCooldownTicks ticks before the same player can turn the same Time Cairn dial again
+ * @param timeCairnEchoChance chance, from 0.0 to 1.0, that a midnight dial turn summons the echo
  */
 public record WaysideSettings(
     int sundialCooldownTicks,
     int sundialEffectDurationTicks,
     int memorialCooldownTicks,
     int timeWellCooldownTicks,
-    int watchmakerCampCooldownTicks
+    int watchmakerCampCooldownTicks,
+    int timeCairnCooldownTicks,
+    float timeCairnEchoChance
 ) {}
