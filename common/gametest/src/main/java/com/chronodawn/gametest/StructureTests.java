@@ -106,7 +106,7 @@ public final class StructureTests {
                     ModBlocks.MEMORIAL_PLATE, 1)
             )),
             new StructureSpec("time_cairn", 3, 3, 3, List.of(
-                new BlockRequirement(ModBlockId.CLOCKWORK_DIAL.id(), ModBlocks.CLOCKWORK_DIAL, 1)
+                new BlockRequirement(ModBlockId.TIME_CAIRN_DIAL.id(), ModBlocks.TIME_CAIRN_DIAL, 1)
             )),
             new StructureSpec("watchmaker_camp", 5, 3, 5, List.of(
                 new BlockRequirement(ModBlockId.TIME_WOOD_FENCE.id(), ModBlocks.TIME_WOOD_FENCE, 12),

@@ -5,6 +5,7 @@ import com.chronodawn.blocks.BossRoomBoundaryMarkerBlockEntity;
 import com.chronodawn.blocks.BossRoomDoorBlockEntity;
 import com.chronodawn.blocks.ClockTowerTeleporterBlockEntity;
 import com.chronodawn.blocks.MemorialPlateBlockEntity;
+import com.chronodawn.blocks.TimeCairnDialBlockEntity;
 import com.chronodawn.blocks.TimeWellStoneBlockEntity;
 import com.chronodawn.blocks.WatchmakerChestBlockEntity;
 import com.chronodawn.blocks.SundialGnomonBlockEntity;
@@ -73,6 +74,17 @@ public class ModBlockEntities {
             BlockEntityType.Builder.of(
                 WatchmakerChestBlockEntity::new,
                 ModBlocks.WATCHMAKER_CHEST.get()
+            ).build(null)
+        );
+
+    /**
+     * Time Cairn Dial BlockEntity - stores per-player cooldowns.
+     */
+    public static final RegistrySupplier<BlockEntityType<TimeCairnDialBlockEntity>> TIME_CAIRN_DIAL =
+        BLOCK_ENTITIES.register(ModBlockEntityId.TIME_CAIRN_DIAL.id(), () ->
+            BlockEntityType.Builder.of(
+                TimeCairnDialBlockEntity::new,
+                ModBlocks.TIME_CAIRN_DIAL.get()
             ).build(null)
         );
 

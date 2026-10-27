@@ -256,6 +256,7 @@ public enum ModBlockId {
     MEMORIAL_PLATE(def("memorial_plate")),
     TIME_WELL_STONE(def("time_well_stone")),
     WATCHMAKER_CHEST(def("watchmaker_chest")),
+    TIME_CAIRN_DIAL(def("time_cairn_dial")),
     ENTROPY_CRYPT_TRAPDOOR(def("entropy_crypt_trapdoor").cutout()),
     ;
 

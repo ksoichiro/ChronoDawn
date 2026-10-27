@@ -36,6 +36,7 @@ public enum ModBlockEntityId {
     MEMORIAL_PLATE("memorial_plate"),
     TIME_WELL_STONE("time_well_stone"),
     WATCHMAKER_CHEST("watchmaker_chest"),
+    TIME_CAIRN_DIAL("time_cairn_dial"),
     ;
 
     private final String id;
