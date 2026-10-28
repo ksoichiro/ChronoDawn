@@ -239,7 +239,9 @@ public class TimeCairnDialBlock extends BaseEntityBlock {
             TURN_SOUND_VOLUME, hour.soundPitch());
         player.sendOverlayMessage(Component.translatable(hour.messageKey()));
 
-        if (hour == CairnHour.MIDNIGHT && level.getRandom().nextFloat() < echoChance(settings)
+        // A second echo would replace the first player's walker mid-walk.
+        if (hour == CairnHour.MIDNIGHT && !dial.echoActive()
+                && level.getRandom().nextFloat() < echoChance(settings)
                 && summonEcho(level, pos, player, level.getRandom()).isPresent()) {
             return TurnResult.GIVEN_WITH_ECHO;
         }

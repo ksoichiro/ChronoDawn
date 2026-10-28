@@ -90,6 +90,8 @@ public class TimeCairnDialTests {
             TimeCairnDialTests::testEchoMarkerMatchesGround));
         tests.add(factory.create("time_cairn_midnight_turn_rolls_echo",
             TimeCairnDialTests::testMidnightTurnRollsEcho));
+        tests.add(factory.create("time_cairn_midnight_turn_skips_echo_while_active",
+            TimeCairnDialTests::testMidnightTurnSkipsEchoWhileActive));
         tests.add(factory.create("time_cairn_echo_finishes_and_clears",
             TimeCairnDialTests::testEchoFinishesAndClears));
         tests.add(factory.create("time_cairn_stones_exchange_in_time_well",
@@ -475,6 +477,20 @@ public class TimeCairnDialTests {
         return false;
     }
 
+    private static int countTemplateChests(GameTestHelper helper) {
+        int count = 0;
+        for (int x = 0; x < TEMPLATE_SIZE; x++) {
+            for (int y = 0; y < TEMPLATE_SIZE; y++) {
+                for (int z = 0; z < TEMPLATE_SIZE; z++) {
+                    if (helper.getLevel().getBlockState(helper.absolutePos(new BlockPos(x, y, z))).is(Blocks.CHEST)) {
+                        count++;
+                    }
+                }
+            }
+        }
+        return count;
+    }
+
     /**
      * Test: the cache is already in the world when summonEcho returns, so it exists even if the
      * server stops on the next tick.
@@ -689,6 +705,53 @@ public class TimeCairnDialTests {
             TimeCairnDialBlock.forceEchoChance(null);
             TimeCairnDialBlock.forceEchoDistances(null);
             CompatGameTestHelper.removeMockServerPlayer(helper, player);
+        }
+    }
+
+    /**
+     * Test: while an echo is still walking or lingering, a second midnight turn by another
+     * player gives its stone but rolls no new echo, so the first walker and its cache stay.
+     */
+    private static void testMidnightTurnSkipsEchoWhileActive(GameTestHelper helper) {
+        buildPlatform(helper, ModBlocks.TEMPORAL_GRASS_BLOCK.get());
+        TimeCairnDialBlockEntity dial = placeEchoDial(helper);
+        if (dial == null) {
+            return;
+        }
+        ServerLevel level = helper.getLevel();
+        BlockPos pos = helper.absolutePos(ECHO_DIAL_POS);
+        ServerPlayer first = CompatGameTestHelper.makeMockServerPlayer(helper);
+        ServerPlayer second = CompatGameTestHelper.makeMockServerPlayer(helper);
+        try {
+            TimeCairnDialBlock.forceEchoDistances(new int[] {TEST_MIN_DISTANCE, TEST_MAX_DISTANCE});
+            TimeCairnDialBlock.forceEchoChance(1.0f);
+            TurnResult firstTurn = TimeCairnDialBlock.turn(level, pos, first, 18000L);
+            if (firstTurn != TurnResult.GIVEN_WITH_ECHO || !dial.echoActive()) {
+                CompatGameTestHelper.fail(helper, "First midnight turn: expected GIVEN_WITH_ECHO and an active echo, got "
+                    + firstTurn + ", echoActive=" + dial.echoActive());
+                return;
+            }
+            TurnResult secondTurn = TimeCairnDialBlock.turn(level, pos, second, 18000L);
+            if (secondTurn != TurnResult.GIVEN) {
+                CompatGameTestHelper.fail(helper, "Second midnight turn while the echo is active: expected GIVEN, got "
+                    + secondTurn);
+                return;
+            }
+            if (!dial.echoActive()) {
+                CompatGameTestHelper.fail(helper, "The first echo ended after the second turn");
+                return;
+            }
+            int chests = countTemplateChests(helper);
+            if (chests != 1) {
+                CompatGameTestHelper.fail(helper, "Expected exactly one cache chest, found " + chests);
+                return;
+            }
+            helper.succeed();
+        } finally {
+            TimeCairnDialBlock.forceEchoChance(null);
+            TimeCairnDialBlock.forceEchoDistances(null);
+            CompatGameTestHelper.removeMockServerPlayer(helper, first);
+            CompatGameTestHelper.removeMockServerPlayer(helper, second);
         }
     }
 
