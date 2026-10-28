@@ -535,9 +535,9 @@ generated after this update drop a journal page and a few supplies when a
 player steps onto the plate in front of the grave. Time Wells answer a
 wish with a small gift. Watchmaker's Camps hold a chest that refills for each
 player after they have emptied it. Time Cairns have a dial that a player can turn
-for a small effect, and at midnight a turn may summon an echo that leads to a
-buried cache. Each player has a separate cooldown for each sundial, each
-memorial, each well, each camp and each cairn.
+for a Cairn Stone of the current hour, and at midnight a turn may summon an
+echo that leads to a buried cache. Each player has a separate cooldown for each
+sundial, each memorial, each well, each camp and each cairn.
 
 ```toml
 [gameplay.wayside]
