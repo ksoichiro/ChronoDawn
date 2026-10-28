@@ -1,7 +1,7 @@
 # Roadmap: Wayside Features (Parts 1 to 6)
 
 **Created**: 2026-10-14
-**Status**: Parts 1 to 4 shipped to main (2026-10-14, 2026-10-17, 2026-10-21, 2026-10-25). Parts 5 and 6 not started.
+**Status**: Parts 1 to 4 shipped to main (2026-10-14, 2026-10-17, 2026-10-21, 2026-10-25). Part 5 shipped (2026-10-28). Part 6 not started.
 **Related**: [Part 1 design](./2026-10-12-wayside-sundial-design.md),
 [Part 1 plan](../plans/2026-10-12-wayside-sundial.md)
 
@@ -58,13 +58,13 @@ discover. Several biomes pass by, yet nothing invites a detour.
 | 2 | `lost_adventurer_memorial` | Lore fragment and supplies, light-pillar effect | Shipped (2026-10-17), with the Lost Adventurer's Journal |
 | 3 | `time_well` | Wishing well, exchange a thrown item | Shipped (2026-10-21) |
 | 4 | `watchmaker_camp` | Per-player chest that refills over time | Shipped (2026-10-25) |
-| 5 | `time_cairn` | Collect time-of-day cairn stones, rare midnight echo | Not started |
+| 5 | `time_cairn` | Collect time-of-day cairn stones, rare midnight echo | Shipped (2026-10-28) |
 | 6 | `hourglass_monolith` | Small wave fight with a reward | Not started |
 
 Order rationale: simplest first to prove the foundation, then features that
 need new UI, entities or event state machines.
 
-## Foundation available after parts 1 to 4
+## Foundation available after parts 1 to 5
 
 - `com.chronodawn.core.wayside.PlayerCooldownTracker` (pure Java):
   `tryUse(UUID, gameTime, cooldownTicks)` returns 0 when accepted, prunes
@@ -128,6 +128,19 @@ need new UI, entities or event state machines.
   (rolls a chronodawn loot table), `hasLootTable` and `clearLootTable` (for
   `RandomizableContainer` block entities), and `clickPickup` / `clickSwap`
   (drive menu clicks).
+- Time of day quarters (part 5): `com.chronodawn.core.wayside.CairnHour`
+  (pure Java) maps a time of day to dawn, noon, dusk or midnight, in four
+  equal quarters centered on sunrise, noon, sunset and midnight.
+- Echo path and cache spot (part 5): `EchoWalk` and `CachePlacement` (pure
+  Java, `core/wayside`) choose the walk direction and the buried cache
+  position from a random source, so they are unit tested without a world.
+- Particle-only echo (part 5): the echo is driven by the dial's block entity
+  with transient state. There is no entity and no renderer, so nothing is
+  saved and nothing can be stranded. The cache chest is placed before the
+  walk starts.
+- Test-only hooks (part 5): `TimeCairnDialBlock.forceEchoChance` and
+  `forceEchoDistances` let GameTests force the echo and keep the cache inside
+  the test template. Cache distances are parameterized for the same reason.
 
 ## Per-feature design notes
 
@@ -188,7 +201,22 @@ The notes below are the starting point it was designed from.
   chests in structures, normally one fill per player, refill depends on its
   config). Decide whether to defer to Lootr when present.
 
-### Part 5: `time_cairn` (decided role, after several rounds)
+### Part 5: `time_cairn` (shipped)
+
+Shipped design: [part 5 design](./2026-10-27-wayside-time-cairn-design.md).
+Decisions made there:
+
+- Hours are four equal quarters of the day centered on sunrise, noon, sunset
+  and midnight.
+- The per-player cooldown is the per-cairn limit on stones, about one
+  Minecraft day by default, so one cairn cannot give all four stones by
+  waiting.
+- The keystone is set at a cairn dial and gives the reward there.
+- The echo is particles only. There is no entity and no renderer.
+- The cache chest is placed before the echo walks, so it is never lost.
+- The optional Time Well exchange tables for Cairn Stones shipped.
+
+The notes below are the starting point it was designed from.
 
 - Today: 3x3x3 cairn with `chronodawn:clockwork_dial` on top and a
   `time_crystal_ore` below. Rarity 1 in 16 chunks.
@@ -225,7 +253,7 @@ The notes below are the starting point it was designed from.
   participation, cooldown (initial idea two to three Minecraft days), link to
   the endgame reward shortage.
 
-## Lessons from parts 1 to 4 (apply to every part)
+## Lessons from parts 1 to 5 (apply to every part)
 
 - **Render layers.** `ModBlockId.cutout()` only applies on Fabric. NeoForge
   and Forge take the layer from `"render_type"` in the model JSON. Vanilla
@@ -302,6 +330,28 @@ The notes below are the starting point it was designed from.
 - **Show structure changes in play before polishing.** The raised camp roof
   passed every test but looked like floating wool. The maintainer's screenshot
   led to the canopy hooked onto the poles.
+- **The `empty_test` template has a barrier ceiling.** It sits at local
+  y = 9 on 1.20.1, y = 8 (in a smaller template) on 1.21.2 to 1.21.4, y = 10
+  on 1.21.5 and y = 11 on NeoForge 1.21.1. Heightmap-based code under test
+  must clear everything above its platform, or the heightmap reports the
+  ceiling.
+- **Keep GameTest distances inside the template.** Production distances that
+  leave the 10x10x10 template land in neighbouring test areas. Parameterize
+  distances and keep the tests inside the template.
+- **Small API differences bit shared code.** `SoundEvents.SOUL_ESCAPE` is a
+  plain `SoundEvent` on 1.20.1 (no `.value()`). `BlockState#isSolidRender`
+  takes no arguments from 1.21.2. `Level#random` is protected on 26.x, so
+  shared GameTests use `getRandom()`.
+- **Block tags for 1.21.1+ live in `common/shared/.../tags/block/`.** There
+  is no chronodawn tag directory under `shared-1.21.1+`.
+- **`BlockProtectionTests` is flaky.** `protection_boss_defeated_*` fails
+  about one GameTest run in three. It predates part 5 and is unrelated.
+- **The Cairn Stone textures are drafts.** They were drawn with a Pillow
+  script (`scripts/draw_cairn_stone_textures.py`) and need the maintainer's
+  review or redraw.
+- **The sounds are candidates.** `STONE_BUTTON_CLICK_ON`,
+  `BEACON_POWER_SELECT` and `SOUL_ESCAPE` come from the design and await the
+  maintainer's `/playsound` comparison in the manual check.
 
 ## Ideas parked for later
 

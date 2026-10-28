@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **Time Cairn**: in newly generated chunks, the Clockwork Dial on top of a
+  Time Cairn can be turned with a right-click. It drops a Dawn, Noon, Dusk or
+  Midnight Stone for the current hour of the day. Each player can turn each
+  cairn about once per Minecraft day by default
+  (`time_cairn_cooldown_ticks` under `[gameplay.wayside]`). The four stones
+  craft into a Cairn Keystone, and setting it at a cairn dial gives a reward
+  of Time Crystal, Clockstone, sometimes Entropy Crystal, rarely Enhanced
+  Clockstone or an Ancient Gear, plus a few supplies. Holding all four stones
+  earns the "A Full Day" advancement. At midnight a turn rarely wakes a
+  traveler's echo that walks to a marked spot where a chest is buried
+  (`time_cairn_echo_chance`, 0 turns it off). Duplicate stones can be thrown
+  into a Time Well. Breaking the dial drops a plain Clockwork Dial. Only
+  cairns in newly generated chunks have the new dial.
+
 ## [0.15.0] - 2026-10-26
 
 ### Added
