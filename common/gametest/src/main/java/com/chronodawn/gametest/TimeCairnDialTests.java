@@ -50,6 +50,8 @@ public class TimeCairnDialTests {
     private static final BlockPos ECHO_DIAL_POS = new BlockPos(4, 2, 4);
     private static final int PLATFORM_SIZE = 9;
     private static final int TEMPLATE_SIZE = 10;
+    // Layers above the template that the platform clears, for barrier ceilings that sit higher.
+    private static final int CEILING_CLEARANCE = 4;
     // Small distances keep the cache inside the template, which is 10 blocks wide.
     private static final int TEST_MIN_DISTANCE = 3;
     private static final int TEST_MAX_DISTANCE = 4;
@@ -421,11 +423,12 @@ public class TimeCairnDialTests {
     /**
      * Builds the echo test platform: temporal dirt at y = 0 and the given ground at y = 1.
      * The test area is closed on top with barriers, which the heightmap would take for the
-     * surface, so that layer is cleared first. Newer versions put the barrier ceiling one layer
-     * higher than older ones, so the top two layers are cleared.
+     * surface, so everything above the platform is cleared first. The ceiling sits at local
+     * y = 8 on 1.21.2 to 1.21.4 (a smaller template whose walls the platform overlaps), at 9 on
+     * 1.20.1, at 10 on 1.21.5 and at 11 on NeoForge 1.21.1, so a fixed layer cannot be cleared.
      */
     private static void buildPlatform(GameTestHelper helper, Block ground) {
-        for (int y = TEMPLATE_SIZE - 1; y <= TEMPLATE_SIZE; y++) {
+        for (int y = 2; y <= TEMPLATE_SIZE + CEILING_CLEARANCE; y++) {
             for (int x = 0; x < TEMPLATE_SIZE; x++) {
                 for (int z = 0; z < TEMPLATE_SIZE; z++) {
                     helper.setBlock(new BlockPos(x, y, z), Blocks.AIR);
