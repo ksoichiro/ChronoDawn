@@ -28,9 +28,12 @@ import net.minecraft.world.item.component.TooltipDisplay;
 import java.util.function.Consumer;
 
 /**
- * A stone engraved with one hour of the day, given by a Time Cairn dial. Its text is the tooltip.
+ * A stone engraved with one hour of the day, given by a Time Cairn dial. Its text is the tooltip, and the last
+ * line is a hint that four different stones make a Cairn Keystone.
  */
 public class CairnStoneItem extends Item {
+    private static final int LINE_COUNT = 2;
+
     private final CairnHour hour;
 
     public CairnStoneItem(Properties properties, CairnHour hour) {
@@ -46,7 +49,9 @@ public class CairnStoneItem extends Item {
     public void appendHoverText(ItemStack stack, TooltipContext context, TooltipDisplay tooltipDisplay,
                                 Consumer<Component> tooltipAdder, TooltipFlag tooltipFlag) {
         super.appendHoverText(stack, context, tooltipDisplay, tooltipAdder, tooltipFlag);
-        tooltipAdder.accept(Component.translatable("item.chronodawn." + hour.stonePath() + ".line1")
-            .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+        for (int line = 1; line <= LINE_COUNT; line++) {
+            tooltipAdder.accept(Component.translatable("item.chronodawn." + hour.stonePath() + ".line" + line)
+                .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+        }
     }
 }

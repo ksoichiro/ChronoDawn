@@ -1,0 +1,59 @@
+{
+  "category": "structures",
+  "title": {
+    "en_us": "Wayside Features",
+    "ja_jp": "道ばたの遺構"
+  },
+  "icon": "chronodawn:clockwork_dial",
+  "sortnum": 7,
+  "pages": [
+    {
+      "text": {
+        "en_us": "Between the great structures, small landmarks dot the land: an old sundial, a traveler's grave, a well, a watchmaker's camp and stone cairns.\n\nIn newly generated chunks each of them does something when you stop. Every player can use each one again after a while, so none of them is ever spent.",
+        "ja_jp": "大きな構造物のあいだには、小さな遺構が点在しています。古い日時計、旅人の墓、井戸、時計職人のキャンプ、そして石を積んだケルンです。\n\n新しく生成されたチャンクでは、立ち寄るとそれぞれ何かが起こります。どれも各プレイヤーがしばらく経てばまた使えるので、使い切ってしまうことはありません。"
+      }
+    },
+    {
+      "text": {
+        "en_us": "Old Sundial\n\nRight-click the post in the middle of the dial. The sundial grants a three-minute blessing that follows the sky: Speed in daylight, Speed II around noon, and Night Vision at night.\n\nEach sundial answers each player about once a day.",
+        "ja_jp": "古い日時計\n\n文字盤の中央に立つ針を右クリックします。空の様子に応じた三分間の加護が得られます。昼は移動速度上昇、正午前後は移動速度上昇 II、夜は暗視です。\n\nひとつの日時計は、各プレイヤーにおよそ一日に一度応えます。"
+      }
+    },
+    {
+      "text": {
+        "en_us": "Lost Adventurer Memorial\n\nStep onto the plate in front of the grave. Light falls from above and leaves one of six Faded Journal Pages with a few supplies.\n\nSix pages and a book craft into the Lost Adventurer's Journal. Pray while holding it and the grave gives a small offering instead of another page.",
+        "ja_jp": "失われた冒険者の慰霊碑\n\n墓の前の感圧板に乗ります。天から光が降り、六枚ある色褪せた日誌のページのうち一枚と、わずかな物資が残されます。\n\n六枚のページと本を合わせると、失われた冒険者の日誌になります。日誌を手に祈ると、ページの代わりにささやかな供物が得られます。"
+      }
+    },
+    {
+      "text": {
+        "en_us": "Time Well\n\nDrop Time Wheat, Time Bread, a Chrono Melon Slice, Raw Temporal Amber, Clockstone or a Time Crystal into the water. One of them is exchanged for something a little better, rarely for something rarer. Everything else floats back out, so nothing is lost.\n\nSpare Cairn Stones are accepted too.",
+        "ja_jp": "時の井戸\n\n時の小麦、時のパン、時のメロンの切れ端、粗時琥珀、クロックストーン、時間の結晶のどれかを水に落とします。ひとつが少し良いものに、まれにもっと珍しいものに変わります。残りはすべて浮かび上がってくるので、失うものはありません。\n\n余ったケルンの石も受け付けます。"
+      }
+    },
+    {
+      "text": {
+        "en_us": "Watchmaker's Camp\n\nThe chest under the tent keeps a separate stock for every player: Entropy Crystal, Dark Time Wood, Time Crystal and now and then something rarer.\n\nEmpty it, and after about three days the camp's time turns back and the chest is full again for you.",
+        "ja_jp": "時計職人のキャンプ\n\nテントの下のチェストは、プレイヤーごとに別々の中身を持っています。エントロピークリスタル、暗い時の木、時間の結晶、ときにはもっと珍しいものです。\n\n空にしてからおよそ三日経つと、キャンプの時が巻き戻り、チェストはあなたのためにまた満たされます。"
+      }
+    },
+    {
+      "text": {
+        "en_us": "Time Cairn\n\nRight-click the dial on top of the stones. It turns and gives up a Cairn Stone engraved with the hour: a Dawn Stone, a Noon Stone, a Dusk Stone or a Midnight Stone.\n\nEach cairn gives each player one stone a day, so pass different cairns at different hours and collect all four.",
+        "ja_jp": "時のケルン\n\n石の山の上にある文字盤を右クリックします。文字盤が回り、その刻が刻まれたケルンの石がこぼれ落ちます。暁の石、正午の石、黄昏の石、真夜中の石のどれかです。\n\nひとつのケルンが各プレイヤーに渡す石は一日に一個なので、別の時間帯に別のケルンを回して、四種類をそろえましょう。"
+      }
+    },
+    {
+      "text": {
+        "en_us": "The Cairn Keystone\n\nCraft the four stones together. They fit the small crafting grid in your inventory and become a Cairn Keystone.\n\nRight-click any cairn dial while holding the keystone. The cairn remembers a whole day and gives Time Crystal or Clockstone, sometimes Entropy Crystal, and rarely Enhanced Clockstone or an Ancient Gear.",
+        "ja_jp": "ケルンの要石\n\n四種類の石を合わせてクラフトします。インベントリの小さなクラフト枠に収まり、ケルンの要石になります。\n\n要石を手に持って、どのケルンの文字盤でも右クリックします。ケルンが一日のすべてを思い出し、時間の結晶かクロックストーン、ときにエントロピークリスタル、まれに強化クロックストーンや古代の歯車を渡してくれます。"
+      }
+    },
+    {
+      "text": {
+        "en_us": "The Midnight Echo\n\nTurn a dial at midnight and, once in a while, a traveler's echo wakes. A pale column of light rises from the cairn and walks away.\n\nFollow it. Where it sinks into the ground, dig under the disturbed earth. Someone buried a chest there long ago.",
+        "ja_jp": "真夜中の残響\n\n真夜中に文字盤を回すと、ときおり旅人の残響が目を覚まします。淡い光の柱がケルンから立ち上がり、歩き去っていきます。\n\n追いかけましょう。光が地面に沈んだ場所で、掘り返された土の下を掘ります。昔、誰かがそこにチェストを埋めたのです。"
+      }
+    }
+  ]
+}

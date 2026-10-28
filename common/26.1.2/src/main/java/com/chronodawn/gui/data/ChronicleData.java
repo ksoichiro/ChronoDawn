@@ -123,7 +123,8 @@ public class ChronicleData {
         // Structures category
         categoryEntries.put("structures", new String[]{
             "desert_clock_tower", "guardian_vault", "clockwork_depths",
-            "phantom_catacombs", "entropy_crypt", "master_clock"
+            "phantom_catacombs", "entropy_crypt", "master_clock",
+            "wayside_features"
         });
 
         // Boss Battles category
