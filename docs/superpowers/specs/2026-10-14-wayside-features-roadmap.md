@@ -352,6 +352,13 @@ The notes below are the starting point it was designed from.
 - **The sounds are candidates.** `STONE_BUTTON_CLICK_ON`,
   `BEACON_POWER_SELECT` and `SOUL_ESCAPE` come from the design and await the
   maintainer's `/playsound` comparison in the manual check.
+- **Collectibles need an in-game explanation.** The maintainer play-tested
+  the Time Cairn and did not see why four stones should be collected, because
+  nothing in the game said so. The Chronicle now has a "Wayside Features"
+  entry covering all five features, and the stones carry a hint tooltip. When
+  a feature hands out a collectible, decide the explanation surface up front,
+  such as a Chronicle entry or an item tooltip, instead of leaving it to
+  wiki-style discovery.
 
 ## Ideas parked for later
 

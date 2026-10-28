@@ -22,6 +22,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (`time_cairn_echo_chance`, 0 turns it off). Duplicate stones can be thrown
   into a Time Well. Breaking the dial drops a plain Clockwork Dial. Only
   cairns in newly generated chunks have the new dial.
+- **Chronicle entry for wayside features**: the Chronicle's Structures
+  category now has a "Wayside Features" entry explaining the Old Sundial, the
+  Lost Adventurer Memorial, the Time Well, the Watchmaker's Camp and the Time
+  Cairn, including how the four Cairn Stones become a Cairn Keystone. The
+  stones also carry a hint in their tooltip.
 
 ## [0.15.0] - 2026-10-26
 
