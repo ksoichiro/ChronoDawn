@@ -346,9 +346,11 @@ The notes below are the starting point it was designed from.
   is no chronodawn tag directory under `shared-1.21.1+`.
 - **`BlockProtectionTests` is flaky.** `protection_boss_defeated_*` fails
   about one GameTest run in three. It predates part 5 and is unrelated.
-- **The Cairn Stone textures are drafts.** They were drawn with a Pillow
-  script (`scripts/draw_cairn_stone_textures.py`) and need the maintainer's
-  review or redraw.
+- **Script-drawn textures are placeholders only.** The Cairn Stone and
+  Keystone drafts were drawn with a throwaway Pillow script so the feature
+  could be play-tested, and the maintainer redrew all five by hand before
+  the merge. Budget the redraw from the start rather than polishing the
+  script.
 - **The sounds are candidates.** `STONE_BUTTON_CLICK_ON`,
   `BEACON_POWER_SELECT` and `SOUL_ESCAPE` come from the design and await the
   maintainer's `/playsound` comparison in the manual check.
