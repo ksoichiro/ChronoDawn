@@ -453,6 +453,7 @@ public final class RegistryDrivenTestGenerator {
         all.addAll(SundialGnomonTests.generateTests(NamedTest::new));
         all.addAll(MemorialPlateTests.generateTests(NamedTest::new));
         all.addAll(ChronoBloomTests.generateTests(NamedTest::new));
+        all.addAll(LumenPolypTests.generateTests(NamedTest::new));
         all.addAll(TimeWellTests.generateTests(NamedTest::new));
         all.addAll(TimeCairnDialTests.generateTests(NamedTest::new));
         all.addAll(WatchmakerCampLootTests.generateTests(NamedTest::new));

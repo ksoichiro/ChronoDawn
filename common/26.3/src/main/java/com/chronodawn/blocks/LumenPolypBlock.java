@@ -14,6 +14,31 @@ public class LumenPolypBlock extends SeaPickleBlock {
         super(properties);
     }
 
+    // Vanilla SeaPickleBlock only spreads on top of coral blocks and does nothing elsewhere
+    // while still consuming the bone meal, so grow the count in place on any supporting block.
+    @Override
+    public boolean isValidBonemealTarget(net.minecraft.world.level.LevelReader level,
+            net.minecraft.core.BlockPos pos, net.minecraft.world.level.block.state.BlockState state,
+            net.minecraft.world.level.block.BonemealSource source) {
+        return state.getValue(WATERLOGGED) && state.getValue(PICKLES) < 4;
+    }
+
+    @Override
+    public boolean isBonemealSuccess(net.minecraft.world.level.Level level,
+            net.minecraft.util.RandomSource random, net.minecraft.core.BlockPos pos,
+            net.minecraft.world.level.block.state.BlockState state,
+            net.minecraft.world.level.block.BonemealSource source) {
+        return true;
+    }
+
+    @Override
+    public void performBonemeal(net.minecraft.server.level.ServerLevel level,
+            net.minecraft.util.RandomSource random, net.minecraft.core.BlockPos pos,
+            net.minecraft.world.level.block.state.BlockState state,
+            net.minecraft.world.level.block.BonemealSource source) {
+        level.setBlock(pos, state.setValue(PICKLES, state.getValue(PICKLES) + 1), 2);
+    }
+
     public static BlockBehaviour.Properties createProperties(String id) {
         return BlockBehaviour.Properties.of()
             .lightLevel(state -> {

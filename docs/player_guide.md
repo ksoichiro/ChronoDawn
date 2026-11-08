@@ -276,7 +276,7 @@ The water of the Chrono Dawn ocean grows **Temporal Kelp**, **Temporal Seagrass*
 - **Temporal Seagrass** scatters across the ocean floor and inland waterbeds as 1-block plants. Drop with shears. Apply bone meal to a short Temporal Seagrass to grow it into Tall Temporal Seagrass.
 - **Tall Temporal Seagrass** is the 2-block-tall variant. Shears on the lower half drop 2 Temporal Seagrass items; silk touch yields the tall block itself.
 - Temporal Seagrass is registered as turtle food, so wild turtles will accept it as breeding bait the same way they accept vanilla seagrass.
-- **Lumen Polyp** grows on newly generated Chrono Dawn ocean floors and in Glowing Pools as a 1–4 cluster underwater light source.
+- **Lumen Polyp** grows on newly generated Chrono Dawn ocean floors and in Glowing Pools as a 1–4 cluster underwater light source. Bone meal grows a cluster by one (up to 4) on any block, not only on coral blocks.
 - **Dawn / Dusk / Twilight / Eternal Chrono Coral** are decorative, single-block aquatic plants that add Time Wood colors to newly generated Chrono Dawn ocean floors. They do not emit light and drop only when harvested with shears.
 
 #### Dried Temporal Kelp (food)
