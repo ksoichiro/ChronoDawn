@@ -57,7 +57,7 @@
 
 **Pack Format**:
 - 1.20.1: `pack_format: 18`
-- 1.21.1: `pack_format: 48`
+- 1.21.1: `pack_format: 34`
 
 **Current State**: Only 1.21.1 format (singular) exists
 
@@ -122,7 +122,7 @@ ChronoDawn/
 │       │       ├── loot_tables/     # Plural
 │       │       └── recipes/         # Plural
 │       └── resources-1.21.1/        # 1.21.1-specific (NEW)
-│           ├── pack.mcmeta          # pack_format: 48
+│           ├── pack.mcmeta          # pack_format: 34
 │           └── data/chronodawn/
 │               ├── advancement/     # Singular
 │               ├── loot_table/      # Singular
@@ -218,7 +218,7 @@ compat_package=v1_20_1
 **props/1.21.1.properties**:
 ```properties
 minecraft_version=1.21.1
-pack_format=48
+pack_format=34
 architectury_api_version=13.0.8
 fabric_api_version=0.116.7+1.21.1
 neoforge_version=21.1.209
@@ -736,7 +736,7 @@ If implementation becomes difficult in Phase 3-4:
 | Term | Description |
 |------|-------------|
 | **Data Pack** | Minecraft's data-driven content (advancements, loot_tables, recipes, etc.) |
-| **pack_format** | Data Pack version number (1.20.1=18, 1.21.1=48) |
+| **pack_format** | Resource pack format number (1.20.1=15, 1.21.1=34) |
 | **NBT** | Named Binary Tag, Minecraft's data storage format (used for ItemStack until 1.20.1) |
 | **DataComponents** | New ItemStack data storage system introduced in 1.20.5+ |
 | **SavedData** | World data persistence API (saved to `data/<mod_id>_<name>.dat`) |

@@ -365,7 +365,7 @@
 
 **Documentation**: See `docs/multiversion_migration_plan.md` for detailed implementation plan
 
-**Target Versions**: Minecraft 1.20.1 (pack_format: 15, NBT-based APIs) + 1.21.1 (pack_format: 48, Component-based APIs)
+**Target Versions**: Minecraft 1.20.1 (pack_format: 15, NBT-based APIs) + 1.21.1 (pack_format: 34, Component-based APIs)
 
 **Status**: All phases (1-6) completed as of 2026-01-13
 
