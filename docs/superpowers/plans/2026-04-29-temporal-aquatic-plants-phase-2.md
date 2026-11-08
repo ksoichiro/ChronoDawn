@@ -2108,7 +2108,7 @@ Reference: any existing GameTest under `gametest/src/main/java/com/chronodawn/ga
 
 - [ ] **Step 1: Author the GameTest** — place a Lumen Polyp at fixed pos, call `BoneMealItem.applyBonemeal` (or equivalent), assert pickle count incremented.
 
-- [ ] **Step 2: Author structure NBT** at `gametest/src/main/resources/data/chronodawn/structures/aquatic/lumen_polyp_grow.nbt` — single sand block underwater.
+- [ ] **Step 2: Author structure NBT** at `gametest/src/main/resources/data/chronodawn/structures/aquatic/lumen_polyp_grow.nbt` — single sand block underwater. (Superseded: the GameTest is `LumenPolypTests`, which sets up dirt and sand grounds in code, so no structure NBT is needed. Bone meal works on any supporting block, not only coral blocks.)
 
 - [ ] **Step 3: Run gametest for 1.21.11**: `./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.11`
 

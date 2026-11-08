@@ -61,7 +61,7 @@ Cow / turtle vanilla food tag handling: the new `temporal_seagrass` is added to 
 
 | Block | Aesthetic | Mechanics |
 |---|---|---|
-| `lumen_polyp` (count 1–4) | Bioluminescent | SeaPickleBlock-like — light level 6/12/15 underwater, 9 max above water, bone-meal grows count; fully vanilla-equivalent |
+| `lumen_polyp` (count 1–4) | Bioluminescent | SeaPickleBlock-like — light level 6/12/15 underwater, 9 max above water, bone-meal grows count in place (up to 4, while waterlogged) on any supporting block, unlike vanilla which only spreads on coral blocks |
 | `dawn_chrono_coral_block` / `dusk_*` / `twilight_*` / `eternal_*` (4 colors) | Mixed (Time Wood palette) | Vanilla coral block parity — but **no dying behavior out of water** (frozen-time fiction) |
 | `dawn_chrono_coral` / `dusk_*` / `twilight_*` / `eternal_*` (plant form, 4 colors) | Same | Vanilla coral plant parity except no death |
 | `dawn_chrono_coral_fan` / etc. (4 colors) | Same | Vanilla coral fan parity except no death |
