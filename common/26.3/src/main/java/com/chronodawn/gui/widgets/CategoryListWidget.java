@@ -13,6 +13,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.core.registries.BuiltInRegistries;
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.resources.Identifier;
 
@@ -181,7 +182,8 @@ public class CategoryListWidget extends AbstractWidget {
         double mouseX = event.x();
         double mouseY = event.y();
         int button = event.buttonInfo().button();
-        if (button != 0) {
+        // 26.3 renumbered mouse buttons (left is 1, no longer 0), so compare with the constant
+        if (button != InputConstants.MOUSE_BUTTON_LEFT) {
             return false; // Only handle left clicks
         }
 

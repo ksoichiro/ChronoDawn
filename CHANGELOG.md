@@ -28,6 +28,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Cairn, including how the four Cairn Stones become a Cairn Keystone. The
   stones also carry a hint in their tooltip.
 
+### Fixed
+
+- **Chronicle clicks on Minecraft 26.3**: clicking a category or entry in the
+  Chronicle did nothing, so no page could be opened. Minecraft 26.3 renumbered
+  the mouse buttons and the Chronicle still treated button 0 as the left
+  click. Hovering, scrolling and Esc already worked.
+
 ## [0.15.0] - 2026-10-26
 
 ### Added
