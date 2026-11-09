@@ -1,0 +1,31 @@
+{
+  "introduced": "0.16.0",
+  "description": "Time Cairn Dial per-player cooldowns (block entity), plus the four Cairn Stones and the Cairn Keystone as items in a chest and in the test player's inventory. Dev's UUID is the offline-mode UUID of the test player.",
+  "setup": [
+    "fill 1600 199 1627 1610 199 1627 minecraft:stone",
+    "setblock 1602 200 1627 chronodawn:time_cairn_dial{PlayerCooldowns:\"380df991-f603-344c-a090-369bad2a924a=1200,5b1c7d9e-2f4a-4c8b-9e1d-0a3f6b7c8d90=2400\"}",
+    "setblock 1604 200 1627 minecraft:chest",
+    "item replace block 1604 200 1627 container.0 with chronodawn:cairn_stone_dawn 2",
+    "item replace block 1604 200 1627 container.1 with chronodawn:cairn_stone_noon 2",
+    "item replace block 1604 200 1627 container.2 with chronodawn:cairn_stone_dusk 2",
+    "item replace block 1604 200 1627 container.3 with chronodawn:cairn_stone_midnight 2",
+    "item replace block 1604 200 1627 container.4 with chronodawn:cairn_keystone 1",
+    "give Dev chronodawn:cairn_stone_dawn 1",
+    "give Dev chronodawn:cairn_keystone 1"
+  ],
+  "checks": [
+    {
+      "id": "v0.16.0_block_entity_time_cairn_dial",
+      "kind": "command",
+      "command": "data get block 1602 200 1627"
+    },
+    {
+      "id": "v0.16.0_chest",
+      "kind": "command",
+      "command": "data get block 1604 200 1627 Items"
+    }
+  ],
+  "not_covered": [
+    "The Time Cairn structure, the echo walk and the buried cache are not created."
+  ]
+}
