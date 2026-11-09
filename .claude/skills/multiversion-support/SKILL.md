@@ -43,7 +43,7 @@ Version-specific directories (`resources-1.20.1/`, `resources-1.21.1/`) switched
 
 **1.21.1**:
 - Singular folders: `advancement/`, `loot_table/`, `recipe/`
-- pack_format: 48
+- pack_format: 34
 
 ### 2. Java Code Compatibility Layer
 
@@ -184,7 +184,7 @@ installer/loader incompatibilities). See CLAUDE.md "Production Smoke Test".
 **Symptom**: Resources not loading in-game
 
 **Checklist**:
-1. Verify `pack_format` matches Minecraft version (18 for 1.20.1, 48 for 1.21.1)
+1. Verify `pack_format` matches Minecraft version (18 for 1.20.1, 34 for 1.21.1)
 2. Check folder names (plural vs singular)
 3. Confirm Gradle switched correct resource directory
 
