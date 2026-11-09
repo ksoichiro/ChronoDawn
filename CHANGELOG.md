@@ -34,6 +34,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Chronicle did nothing, so no page could be opened. Minecraft 26.3 renumbered
   the mouse buttons and the Chronicle still treated button 0 as the left
   click. Hovering, scrolling and Esc already worked.
+- **Lumen Polyp bone meal**: bone meal now grows a Lumen Polyp cluster by one
+  polyp (up to four) on any supporting block. It used the vanilla sea pickle
+  rule, which only spread on coral blocks, so bone meal was consumed with no
+  effect on the usual sand and dirt. Applies to every supported Minecraft
+  version.
+- **Mod resource pack on Minecraft 1.21.1**: `pack.mcmeta` declared 48, which
+  is the data pack format, instead of the 1.21.1 resource pack format 34. The
+  Fabric client dropped the mod's resource pack on a fresh launch.
 
 ## [0.15.0] - 2026-10-26
 
