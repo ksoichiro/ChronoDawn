@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Resource pack on Minecraft 1.21.5**: the mod's built-in resource pack
+  declared pack format 48, which is not the 1.21.5 format (55). It now
+  declares 55, so the pack is no longer treated as incompatible.
+- **Resource pack on Minecraft 1.21.10 with Fabric**: the mod's built-in
+  resource pack declared format 88, the data pack format, so Fabric removed it
+  from the selected resource packs at startup. The Fabric build now leaves
+  `pack.mcmeta` out so that Fabric generates the correct format for resource
+  packs and data packs itself.
+
 ## [0.16.0] - 2026-11-09
 
 ### Added
