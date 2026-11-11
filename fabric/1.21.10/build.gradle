@@ -122,6 +122,11 @@ processResources {
 
     from(project(commonModule).sourceSets.main.resources) {
         exclude 'chronodawn.mixins.json'
+        // Fabric generates pack.mcmeta per pack type when the mod has none. A single
+        // file cannot satisfy both: the client needs a range containing resource
+        // format 69, while the server needs min_format >= 82 or supported_formats,
+        // which is deprecated for resource packs from format 65.
+        exclude 'pack.mcmeta'
     }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 
@@ -138,6 +143,7 @@ shadowJar {
     configurations = [project.configurations.shadowBundle]
     archiveClassifier = 'dev-shadow'
     exclude 'chronodawn.mixins.json'
+    exclude 'pack.mcmeta'
 }
 
 remapJar {
