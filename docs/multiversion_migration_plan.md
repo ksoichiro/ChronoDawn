@@ -56,7 +56,7 @@
 | **Tags** | `tags/item`**s** | `tags/item` | ~20 files |
 
 **Pack Format**:
-- 1.20.1: `pack_format: 18`
+- 1.20.1: `pack_format: 15`
 - 1.21.1: `pack_format: 34`
 
 **Current State**: Only 1.21.1 format (singular) exists
@@ -116,7 +116,7 @@ ChronoDawn/
 │       │   └── ...
 │       ├── resources/               # Common resources (assets, structure NBTs, etc.)
 │       ├── resources-1.20.1/        # 1.20.1-specific (NEW)
-│       │   ├── pack.mcmeta          # pack_format: 18
+│       │   ├── pack.mcmeta          # pack_format: 15
 │       │   └── data/chronodawn/
 │       │       ├── advancements/    # Plural
 │       │       ├── loot_tables/     # Plural
@@ -207,7 +207,7 @@ public interface SavedDataHandler {
 **props/1.20.1.properties**:
 ```properties
 minecraft_version=1.20.1
-pack_format=18
+pack_format=15
 architectury_api_version=12.1.4
 fabric_api_version=0.100.4+1.20.1
 neoforge_version=20.6.145
@@ -315,7 +315,7 @@ processResources {
   - [ ] T1-4b: Rename `loot_table/` → `loot_tables/`
   - [ ] T1-4c: Rename `recipe/` → `recipes/`
   - [ ] T1-4d: Rename `tags/item/` → `tags/items/`
-  - [ ] T1-4e: Change `pack_format` to 18 in `pack.mcmeta`
+  - [ ] T1-4e: Change `pack_format` to 15 in `pack.mcmeta`
 - [ ] **T1-5**: Add `sourceSets.main.resources` configuration to `common/build.gradle`
 - [ ] **T1-6**: Verification
   - [ ] T1-6a: Verify singular folders used with `./gradlew :common:processResources -Ptarget_mc_version=1.21.1`

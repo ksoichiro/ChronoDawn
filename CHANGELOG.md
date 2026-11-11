@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Resource pack on Minecraft 1.21.5**: the mod's built-in resource pack
+  declared pack format 48, which is not the 1.21.5 format (55). It now
+  declares 55, so the pack is no longer treated as incompatible.
+
 ## [0.16.0] - 2026-11-09
 
 ### Added
