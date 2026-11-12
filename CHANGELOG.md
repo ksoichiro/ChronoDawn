@@ -17,6 +17,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   from the selected resource packs at startup. The Fabric build now leaves
   `pack.mcmeta` out so that Fabric generates the correct format for resource
   packs and data packs itself.
+- **Hollow pockets around underground structures**: when an underground
+  structure such as the Guardian Vault generated inside an underground water
+  body, the water in the area around the structure was removed, leaving
+  box-shaped empty spaces, for example above the boss room. The water now
+  stays outside the structure. Only newly generated chunks are affected.
 
 ## [0.16.0] - 2026-11-09
 

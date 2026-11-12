@@ -1042,7 +1042,7 @@ dev/mapped environment and can mask production remapping or injection failures.
 **Solution**: Three-component system:
 1. **Decorative Water Fluid**: Custom fluid for intended water features
 2. **Structure Processor**: Records intentional waterlogging, removes all waterlogging during placement
-3. **Mixin**: Removes Aquifer water before placement, restores intentional waterlogging after
+3. **Mixin**: Replaces Aquifer water with a placeholder before placement, then puts the water back where the template left the placeholder (structure_void) and restores intentional waterlogging
 
 **Reference**: `CLAUDE.md` → "Structure Worldgen Guidelines" → "Advanced Solution"
 

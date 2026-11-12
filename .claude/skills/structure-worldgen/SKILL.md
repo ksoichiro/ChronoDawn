@@ -106,10 +106,11 @@ public StructureBlockInfo processBlock(...) {
 @Inject(method = "placeInChunk", at = @At("HEAD"))
 private void removeWaterBeforePlacement(...) {
     // Phase 2a: Before structure placement
-    // Remove ONLY minecraft:water (Aquifer), preserve chronodawn:decorative_water
+    // Replace ONLY minecraft:water (Aquifer) with a structure_void placeholder,
+    // preserve chronodawn:decorative_water
     for (BlockPos pos : structurePieceBoundingBox) {
         if (state.is(Blocks.WATER) && !state.is(ModBlocks.DECORATIVE_WATER)) {
-            level.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
+            level.setBlock(pos, Blocks.STRUCTURE_VOID.defaultBlockState(), 2);
         }
     }
 }
@@ -117,6 +118,14 @@ private void removeWaterBeforePlacement(...) {
 @Inject(method = "placeInChunk", at = @At("RETURN"))
 private void finalizeWaterlogging(...) {
     // Phase 2b: After structure placement
+    // Placeholders the template did not overwrite are structure_void positions:
+    // put the Aquifer water back (current chunk only)
+    for (BlockPos pos : pieceBox ∩ chunkBox) {
+        if (level.getBlockState(pos).is(Blocks.STRUCTURE_VOID)) {
+            level.setBlock(pos, Blocks.WATER.defaultBlockState(), 2);
+        }
+    }
+
     // Process current chunk + 1-block border (fixes multi-chunk timing issues)
     for (BlockPos pos : chunkBox.expanded(1, 0, 1)) {
         BlockPos immutablePos = pos.immutable();
@@ -141,7 +150,7 @@ private void finalizeWaterlogging(...) {
 ### Processing Flow
 
 ```
-1. Mixin HEAD: Remove Aquifer water (minecraft:water only)
+1. Mixin HEAD: Replace Aquifer water (minecraft:water only) with a structure_void placeholder
 2. Structure Placement:
    - NBT blocks placed
    - Processor runs for each block:
@@ -149,6 +158,7 @@ private void finalizeWaterlogging(...) {
      * Removes all waterlogging (prevents spread during placement)
      * Converts decorative_water → minecraft:water
 3. Mixin RETURN:
+   - Restores Aquifer water where the placeholder survived (template structure_void)
    - Restores intentional waterlogging (from recorded positions)
    - Removes unintentional waterlogging (Aquifer or water spread)
    - Processes chunk + 1-block border (fixes multi-chunk structures)
@@ -195,6 +205,8 @@ private void finalizeWaterlogging(...) {
 - ✅ Supports intentional waterlogging (waterlogged slabs for pools)
 - ✅ Works with multi-chunk structures
 - ✅ Compatible with Jigsaw structures
+- ✅ Keeps Aquifer water at structure_void positions. Replacing it with plain air
+  left box-shaped hollows wherever a piece bounding box cut through an aquifer
 
 ### Files
 
@@ -514,7 +526,7 @@ When combining programmatic placement with waterlogging prevention:
    ```
 
 2. **Mixin Coordination**: StructureStartMixin processes both Jigsaw pieces and programmatic placements
-   - HEAD injection: Remove Aquifer water before all placements
+   - HEAD injection: Replace Aquifer water with a placeholder before all placements
    - RETURN injection: Finalize waterlogging after all placements
 
 **Reference**: Phantom Catacombs (T236m-r) - complete implementation example
