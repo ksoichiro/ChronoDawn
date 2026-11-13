@@ -1,6 +1,7 @@
 package com.chronodawn.gametest;
 
 import com.chronodawn.compat.CompatGameTestHelper;
+import com.chronodawn.data.BlockProtectionData;
 import com.chronodawn.worldgen.protection.BlockProtectionHandler;
 import com.chronodawn.worldgen.protection.PermanentProtectionHandler;
 import net.minecraft.core.BlockPos;
@@ -52,14 +53,19 @@ public final class BlockProtectionTests {
         return tests;
     }
 
+    private static void resetProtection(GameTestHelper helper) {
+        // Saved data must be loaded before reset can clear state from an earlier test run.
+        BlockProtectionData.get(helper.getLevel());
+        BlockProtectionHandler.reset();
+        PermanentProtectionHandler.reset();
+    }
+
     /**
      * Test: After registering a protected area, blocks inside are protected.
      */
     private static void testAreaRegistration(GameTestHelper helper) {
         helper.runAfterDelay(1, () -> {
-            // Reset state before test
-            BlockProtectionHandler.reset();
-            PermanentProtectionHandler.reset();
+            resetProtection(helper);
 
             ServerLevel level = helper.getLevel();
             BlockPos center = helper.absolutePos(new BlockPos(5, 5, 5));
@@ -85,9 +91,7 @@ public final class BlockProtectionTests {
      */
     private static void testOutsideAreaNotProtected(GameTestHelper helper) {
         helper.runAfterDelay(1, () -> {
-            // Reset state before test
-            BlockProtectionHandler.reset();
-            PermanentProtectionHandler.reset();
+            resetProtection(helper);
 
             ServerLevel level = helper.getLevel();
             BlockPos center = helper.absolutePos(new BlockPos(5, 5, 5));
@@ -114,9 +118,7 @@ public final class BlockProtectionTests {
      */
     private static void testBossDefeatedUnprotects(GameTestHelper helper) {
         helper.runAfterDelay(1, () -> {
-            // Reset state before test
-            BlockProtectionHandler.reset();
-            PermanentProtectionHandler.reset();
+            resetProtection(helper);
 
             ServerLevel level = helper.getLevel();
             BlockPos center = helper.absolutePos(new BlockPos(5, 5, 5));
@@ -153,9 +155,7 @@ public final class BlockProtectionTests {
      */
     private static void testBossDefeatedAtUnprotects(GameTestHelper helper) {
         helper.runAfterDelay(1, () -> {
-            // Reset state before test
-            BlockProtectionHandler.reset();
-            PermanentProtectionHandler.reset();
+            resetProtection(helper);
 
             ServerLevel level = helper.getLevel();
             BlockPos center = helper.absolutePos(new BlockPos(5, 5, 5));
@@ -194,9 +194,7 @@ public final class BlockProtectionTests {
      */
     private static void testPermanentNotUnprotected(GameTestHelper helper) {
         helper.runAfterDelay(1, () -> {
-            // Reset state before test
-            BlockProtectionHandler.reset();
-            PermanentProtectionHandler.reset();
+            resetProtection(helper);
 
             ServerLevel level = helper.getLevel();
             BlockPos center = helper.absolutePos(new BlockPos(5, 5, 5));
@@ -234,9 +232,7 @@ public final class BlockProtectionTests {
      */
     private static void testMultipleAreasIndependent(GameTestHelper helper) {
         helper.runAfterDelay(1, () -> {
-            // Reset state before test
-            BlockProtectionHandler.reset();
-            PermanentProtectionHandler.reset();
+            resetProtection(helper);
 
             ServerLevel level = helper.getLevel();
 
@@ -292,9 +288,7 @@ public final class BlockProtectionTests {
      */
     private static void testResetClearsState(GameTestHelper helper) {
         helper.runAfterDelay(1, () -> {
-            // Reset state before test
-            BlockProtectionHandler.reset();
-            PermanentProtectionHandler.reset();
+            resetProtection(helper);
 
             ServerLevel level = helper.getLevel();
             BlockPos center = helper.absolutePos(new BlockPos(5, 5, 5));
