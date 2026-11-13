@@ -18,7 +18,7 @@ import net.minecraft.world.item.Item;
  * - Max Stack Size: 64 (consumable item)
  * - Consumed on use: 1 item per portal ignition (except in creative mode)
  *
- * Reference: docs/portal_implementation_plan.md (Phase 2)
+ * Reference: docs/archive/portal_implementation_plan.md (Phase 2)
  */
 public class TimeHourglassItem extends Item {
     public TimeHourglassItem(Properties properties) {

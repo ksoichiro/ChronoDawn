@@ -1259,7 +1259,7 @@ public class ModBlocks {
      * Invisible, indestructible, no collision - intended for structure placement only.
      *
      * Task: T115m [US2]
-     * Reference: specs/chrono-dawn-mod/lore.md
+     * Reference: docs/archive/chrono-dawn-mod/lore.md
      */
     public static final RegistrySupplier<Block> TEMPORAL_PARTICLE_EMITTER = BLOCKS.register(
         ModBlockId.TEMPORAL_PARTICLE_EMITTER.id(),

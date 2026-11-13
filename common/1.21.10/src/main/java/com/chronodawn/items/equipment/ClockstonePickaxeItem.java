@@ -23,7 +23,6 @@ import net.minecraft.world.item.Item;
  * - Clockstone x3
  * - Stick x2
  *
- * Reference: tasks.md (T214)
  *
  * Note: In 1.21.5, PickaxeItem has been removed. Items now use data components
  * and Item.Properties helper methods instead of inheritance.

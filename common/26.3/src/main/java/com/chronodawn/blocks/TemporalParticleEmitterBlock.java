@@ -39,7 +39,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * - Only appears in Ancient Ruins (Overworld)
  *
  * Task: T115m [US2] Implement time distortion particle effects for Ancient Ruins
- * Reference: specs/chrono-dawn-mod/lore.md
+ * Reference: docs/archive/chrono-dawn-mod/lore.md
  */
 public class TemporalParticleEmitterBlock extends Block {
     // Empty shape - no collision

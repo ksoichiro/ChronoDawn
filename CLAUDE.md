@@ -275,9 +275,8 @@ Fabric, Forge, and NeoForge use separate loader-specific Mixin configurations.
 ## Workflow Guidelines
 
 ### Research and Investigation
-- **Document Research Results**: When conducting research or investigation for future tasks, always save findings to appropriate files (e.g., `specs/chrono-dawn-mod/research.md`) rather than keeping them only in session conversation
-- **Add Related Tasks**: After completing research, add corresponding tasks to `tasks.md` with clear implementation steps
-- **Cross-Reference**: Link research decisions to related task IDs for traceability
+- **Document Research Results**: Save findings for future work in an appropriate document under `docs/`, rather than keeping them only in session conversation.
+- **Add Related Tasks**: Track follow-up work in fuda, with links to the relevant research document.
 
 ### Pre-Commit Verification
 - **Verification Check**: Before committing changes, determine if the changes are testable/verifiable

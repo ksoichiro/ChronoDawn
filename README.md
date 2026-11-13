@@ -547,7 +547,7 @@ ChronoDawn/
 ├── forge/
 │   ├── base/                        # Shared Forge sources
 │   └── 1.20.1/                      # Forge subproject for MC 1.20.1 (legacy loader)
-├── specs/chrono-dawn-mod/           # Design documents
+├── docs/                            # Guides and historical design documents
 ├── build.gradle                     # Root build configuration (Groovy DSL)
 ├── settings.gradle                  # Multi-module settings
 └── gradle.properties                # Version configuration
@@ -555,11 +555,10 @@ ChronoDawn/
 
 ## Documentation
 
-- **Feature Specification**: `specs/chrono-dawn-mod/spec.md`
-- **Implementation Plan**: `specs/chrono-dawn-mod/plan.md`
-- **Development Guide**: `specs/chrono-dawn-mod/quickstart.md`
-- **Data Model**: `specs/chrono-dawn-mod/data-model.md`
-- **Research Notes**: `specs/chrono-dawn-mod/research.md`
+- **Player guide**: `docs/player_guide.md`
+- **Developer guide**: `docs/developer_guide.md`
+- **Configuration**: `docs/configuration.md`
+- **Historical designs and research**: `docs/archive/README.md`
 
 ## Technical Notes
 
@@ -605,7 +604,7 @@ See the [LICENSE](LICENSE) file for full license text.
 
 For issues, feature requests, or questions:
 - Open an issue on [GitHub Issues](https://github.com/ksoichiro/ChronoDawn/issues)
-- Check existing documentation in `specs/chrono-dawn-mod/`
+- Check the guides in `docs/`
 
 ---
 

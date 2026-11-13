@@ -1,7 +1,7 @@
 """Upgrade test driver: build a world with an old release, upgrade it, and check nothing was lost.
 
 Invoked by the upgradeTest Gradle task with the env.json that prepareUpgradeTest
-writes. See docs/superpowers/specs/2026-10-23-upgrade-test-automation-design.md.
+writes. See docs/archive/superpowers/2026-10-23-upgrade-test-automation-design.md.
 """
 
 import argparse

@@ -18,7 +18,6 @@ import net.minecraft.world.item.SwordItem;
  * - Clockstone x2
  * - Stick x1
  *
- * Reference: tasks.md (T213)
  */
 public class ClockstoneSwordItem extends SwordItem {
     public ClockstoneSwordItem(Properties properties) {

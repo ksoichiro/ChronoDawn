@@ -312,7 +312,7 @@ See [LICENSE](LICENSE) for the complete license text.
 
 - **Developer Guide**: [docs/developer_guide.md](docs/developer_guide.md) - Comprehensive technical documentation
 - **Player Guide**: [docs/player_guide.md](docs/player_guide.md) - Gameplay information
-- **Design Spec**: [specs/chrono-dawn-mod/spec.md](specs/chrono-dawn-mod/spec.md) - Feature specifications
+- **Historical Designs**: [docs/archive/README.md](docs/archive/README.md) - Earlier designs and research
 - **GitHub Issues**: [Issue Tracker](https://github.com/ksoichiro/ChronoDawn/issues)
 
 ---

@@ -24,7 +24,6 @@ import net.minecraft.world.item.AxeItem;
  * - Clockstone x3
  * - Stick x2
  *
- * Reference: tasks.md (T214)
  */
 public class ClockstoneAxeItem extends AxeItem {
     public ClockstoneAxeItem(Properties properties) {

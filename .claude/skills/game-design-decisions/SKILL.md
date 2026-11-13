@@ -187,9 +187,12 @@ if (hasPortalStabilizer) {
 
 ## Related Specifications
 
-**Full Game Design Philosophy**: See `specs/chrono-dawn-mod/spec.md` → "Game Design Philosophy" section
+The documents below are historical designs. Check the current implementation
+and player guide before relying on implementation details.
 
-**Portal Stabilizer Mechanics**: See `specs/chrono-dawn-mod/data-model.md` → "Portal Stabilizer" item
+**Full Game Design Philosophy**: See `docs/archive/chrono-dawn-mod/spec.md` → "Game Design Philosophy" section
+
+**Portal Stabilizer Mechanics**: See `docs/archive/chrono-dawn-mod/data-model.md` → "Portal Stabilizer" item
 
 **Dimension Configuration**: See `common/src/main/resources/data/chronodawn/dimension/chrono_dawn.json`
 

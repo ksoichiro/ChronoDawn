@@ -22,7 +22,6 @@ import net.minecraft.world.item.Item;
  * - Clockstone x2
  * - Stick x1
  *
- * Reference: tasks.md (T213)
  *
  * Note: In 1.21.5, SwordItem has been removed. Items now use data components
  * and Item.Properties helper methods instead of inheritance.

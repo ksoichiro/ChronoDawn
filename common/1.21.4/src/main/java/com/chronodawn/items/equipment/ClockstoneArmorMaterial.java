@@ -44,7 +44,6 @@ import java.util.function.Supplier;
  *
  * Repair Material: Time Crystal
  *
- * Reference: tasks.md (T215)
  */
 public class ClockstoneArmorMaterial {
     // Base durability multiplier

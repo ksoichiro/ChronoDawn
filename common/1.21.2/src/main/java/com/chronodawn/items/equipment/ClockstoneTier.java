@@ -27,7 +27,6 @@ import net.minecraft.world.level.block.Block;
  *
  * Repair Material: Time Crystal
  *
- * Reference: tasks.md (T213-215)
  */
 public class ClockstoneTier {
     // Time Crystal repair tag

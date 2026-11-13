@@ -54,7 +54,6 @@ neoforge/
 gradle/shared/        Git submodule with shared Gradle scripts
 props/                Version-specific dependency properties
 scripts/              Project utility scripts
-specs/                Design specs, plans, tasks, research notes
 docs/                 Player/developer/release documentation
 ```
 
@@ -87,7 +86,7 @@ the build model changes.
 - Add player-visible fixes to `CHANGELOG.md` under `Unreleased` before reporting
   completion, even when the release version stays unchanged.
 - Research that affects future implementation should be written to an
-  appropriate file, usually under `specs/chrono-dawn-mod/` or `docs/`, and
+  appropriate file under `docs/`, and
   linked from follow-up tasks when applicable.
 - When investigating seed-dependent portal inconsistencies, compare a fresh
   Minecraft process with consecutive worlds in one process. Check both new-data

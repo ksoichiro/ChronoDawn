@@ -24,7 +24,6 @@ import net.minecraft.world.item.PickaxeItem;
  * - Clockstone x3
  * - Stick x2
  *
- * Reference: tasks.md (T214)
  */
 public class ClockstonePickaxeItem extends PickaxeItem {
     public ClockstonePickaxeItem(Properties properties) {

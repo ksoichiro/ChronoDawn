@@ -14,7 +14,6 @@ import net.minecraft.world.item.Item;
  * - Max Stack Size: 64
  * - Rarer than Clockstone (smaller vein size: 3-5)
  *
- * Reference: tasks.md (T211)
  */
 public class TimeCrystalItem extends Item {
     public TimeCrystalItem(Properties properties) {

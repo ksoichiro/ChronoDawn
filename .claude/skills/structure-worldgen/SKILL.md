@@ -42,7 +42,7 @@ Simply describe what you want to do, and Claude will reference the appropriate g
 
 **Best Practice**: For structures with significant underground portions (Y < 40), use only full blocks for decoration and avoid waterloggable blocks entirely.
 
-**Reference**: See `specs/chrono-dawn-mod/research.md` → "Structure Waterlogging Research" for detailed analysis
+**Reference**: See `docs/archive/chrono-dawn-mod/research.md` → "Structure Waterlogging Research" for detailed analysis
 
 ---
 

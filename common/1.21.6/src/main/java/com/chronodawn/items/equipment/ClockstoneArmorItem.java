@@ -35,7 +35,6 @@ import java.util.function.Consumer;
  * - Leggings: Clockstone x7
  * - Boots: Clockstone x4
  *
- * Reference: tasks.md (T215)
  *
  * Note: In 1.21.5, ArmorItem has been removed. Items now use data components
  * and Item.Properties#humanoidArmor() instead of inheritance.
