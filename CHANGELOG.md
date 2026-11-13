@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Documentation**: historical designs and research now live under
   `docs/archive/`, and obsolete implementation plans have been removed.
+- **Chronicle screen**: the book's frame and binding now use deep teal to
+  match the Chronicle's item texture.
 
 ### Fixed
 
