@@ -134,6 +134,16 @@ public class CompatGameTestHelper {
         menu.clicked(slot, hotbarSlot, net.minecraft.world.inventory.ClickType.SWAP, player);
     }
 
+    /**
+     * Sends one packet of a drag (QUICK_CRAFT click) to the menu. The button packs the drag stage
+     * (0 start, 1 add slot, 2 end) with the drag type (0 split evenly, 1 one each), and start and
+     * end go to slot -999, outside the window.
+     */
+    public static void clickQuickCraft(net.minecraft.world.inventory.AbstractContainerMenu menu, int slot,
+                                       int stage, int type, net.minecraft.world.entity.player.Player player) {
+        menu.clicked(slot, (stage & 3) | ((type & 3) << 2), net.minecraft.world.inventory.ClickType.QUICK_CRAFT, player);
+    }
+
     private CompatGameTestHelper() {
         // Utility class
     }

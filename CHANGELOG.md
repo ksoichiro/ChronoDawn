@@ -29,6 +29,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   body, the water in the area around the structure was removed, leaving
   box-shaped empty spaces, for example above the boss room. The water now
   stays outside the structure. Only newly generated chunks are affected.
+- **Watchmaker's Chest lid**: the lid could stay open when a screen closed
+  without the chest being told, for example when its player was removed. The
+  chest now counts the screens really open every few ticks and closes the lid
+  when none is left.
+- **Watchmaker's Chest and `/data merge`**: changing a chest's data while a
+  player had it open could leave the screen showing old items, so an item taken
+  from it could be duplicated. An open screen now follows the new data.
 
 ## [0.16.0] - 2026-11-09
 

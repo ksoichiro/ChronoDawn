@@ -63,6 +63,15 @@ public final class WatchmakerChestTests {
     // Menu indices after the 27 chest slots: 27 main inventory slots, then the 9 hotbar slots.
     private static final int INVENTORY_START = CHEST_SLOTS;
     private static final int MENU_END = CHEST_SLOTS + 36;
+    // QUICK_CRAFT drag packets: slot -999 is outside the window, and the stages and types are the
+    // vanilla ones. The drag covers 3 slots.
+    private static final int OUTSIDE_SLOT = -999;
+    private static final int DRAG_START = 0;
+    private static final int DRAG_ADD_SLOT = 1;
+    private static final int DRAG_END = 2;
+    private static final int DRAG_SPLIT = 0;
+    private static final int DRAG_ONE_EACH = 1;
+    private static final int DRAG_SLOTS = 3;
 
     private WatchmakerChestTests() {
         // Utility class
@@ -84,6 +93,14 @@ public final class WatchmakerChestTests {
             WatchmakerChestTests::testIsPerPlayer));
         tests.add(factory.create("watchmaker_chest_is_take_only",
             WatchmakerChestTests::testIsTakeOnly));
+        tests.add(factory.create("watchmaker_chest_refuses_drag",
+            WatchmakerChestTests::testRefusesDrag));
+        tests.add(factory.create("watchmaker_chest_rechecks_open_count",
+            WatchmakerChestTests::testRechecksOpenCount));
+        tests.add(factory.create("watchmaker_chest_load_updates_open_menu_in_place",
+            WatchmakerChestTests::testLoadUpdatesOpenMenuInPlace));
+        tests.add(factory.create("watchmaker_chest_use_without_block_entity_is_missing",
+            WatchmakerChestTests::testUseWithoutBlockEntityIsMissing));
         tests.add(factory.create("watchmaker_chest_persists_slots_and_cooldown",
             WatchmakerChestTests::testPersistsSlotsAndCooldown));
         tests.add(factory.create("watchmaker_chest_breaking_drops_own_slots",
@@ -466,6 +483,170 @@ public final class WatchmakerChestTests {
             helper.succeed();
         } finally {
             player.getInventory().clearContent();
+            CompatGameTestHelper.removeMockServerPlayer(helper, player);
+        }
+    }
+
+    /**
+     * Test: dragging an item stack over the chest slots puts nothing into them and leaves the
+     * stack on the cursor, for both the even split and the one-each drag.
+     */
+    private static void testRefusesDrag(GameTestHelper helper) {
+        WatchmakerChestBlockEntity chest = placeChest(helper, CHEST_POS);
+        if (chest == null) {
+            return;
+        }
+        ServerPlayer player = joinPlayer(helper, PLAYER_POS);
+        try {
+            player.setGameMode(GameType.SURVIVAL);
+            use(helper, player, T0);
+            if (!(player.containerMenu instanceof WatchmakerChestMenu menu)) {
+                CompatGameTestHelper.fail(helper, "Expected an open WatchmakerChestMenu, got " + player.containerMenu);
+                return;
+            }
+            List<Integer> emptySlots = new ArrayList<>();
+            for (int i = 0; i < CHEST_SLOTS && emptySlots.size() < DRAG_SLOTS; i++) {
+                if (menu.getSlot(i).getItem().isEmpty()) {
+                    emptySlots.add(i);
+                }
+            }
+            if (emptySlots.size() < DRAG_SLOTS) {
+                CompatGameTestHelper.fail(helper, "Expected " + DRAG_SLOTS + " empty chest slots to drag over");
+                return;
+            }
+            for (int type = DRAG_SPLIT; type <= DRAG_ONE_EACH; type++) {
+                menu.setCarried(new ItemStack(Items.DIRT, DIRT_COUNT));
+                CompatGameTestHelper.clickQuickCraft(menu, OUTSIDE_SLOT, DRAG_START, type, player);
+                for (int slot : emptySlots) {
+                    CompatGameTestHelper.clickQuickCraft(menu, slot, DRAG_ADD_SLOT, type, player);
+                }
+                CompatGameTestHelper.clickQuickCraft(menu, OUTSIDE_SLOT, DRAG_END, type, player);
+                for (int slot : emptySlots) {
+                    if (!menu.getSlot(slot).getItem().isEmpty()) {
+                        CompatGameTestHelper.fail(helper, "Dragging (type " + type + ") put "
+                            + describe(menu.getSlot(slot).getItem()) + " into chest slot " + slot);
+                        return;
+                    }
+                }
+                ItemStack carried = menu.getCarried();
+                if (!carried.is(Items.DIRT) || carried.getCount() != DIRT_COUNT) {
+                    CompatGameTestHelper.fail(helper, "Dragging (type " + type + ") changed the cursor to "
+                        + describe(carried));
+                    return;
+                }
+            }
+            helper.succeed();
+        } finally {
+            player.containerMenu.setCarried(ItemStack.EMPTY);
+            CompatGameTestHelper.removeMockServerPlayer(helper, player);
+        }
+    }
+
+    /**
+     * Test: a screen that closes without the menu's removed call, as when its player is removed,
+     * no longer counts as open after a recheck, while a screen still open keeps counting.
+     */
+    private static void testRechecksOpenCount(GameTestHelper helper) {
+        WatchmakerChestBlockEntity chest = placeChest(helper, CHEST_POS);
+        if (chest == null) {
+            return;
+        }
+        ServerPlayer player = joinPlayer(helper, PLAYER_POS);
+        try {
+            use(helper, player, T0);
+            if (chest.getOpenCount() != 1) {
+                CompatGameTestHelper.fail(helper, "Expected 1 open screen after opening, got " + chest.getOpenCount());
+                return;
+            }
+            chest.recheckOpen();
+            if (chest.getOpenCount() != 1) {
+                CompatGameTestHelper.fail(helper, "A recheck with the screen open changed the count to "
+                    + chest.getOpenCount());
+                return;
+            }
+            // Swapped out without WatchmakerChestMenu#removed, which would stop the count itself.
+            player.containerMenu = player.inventoryMenu;
+            chest.recheckOpen();
+            if (chest.getOpenCount() != 0) {
+                CompatGameTestHelper.fail(helper, "A recheck left " + chest.getOpenCount()
+                    + " open screens after the screen closed without a removed call");
+                return;
+            }
+            helper.succeed();
+        } finally {
+            CompatGameTestHelper.removeMockServerPlayer(helper, player);
+        }
+    }
+
+    /**
+     * Test: loading new data into a chest with a screen open, as /data merge does, shows in that
+     * screen, and an item taken from it afterwards is not duplicated by the old list.
+     */
+    private static void testLoadUpdatesOpenMenuInPlace(GameTestHelper helper) {
+        WatchmakerChestBlockEntity chest = placeChest(helper, CHEST_POS);
+        WatchmakerChestBlockEntity source = placeChest(helper, COPY_POS);
+        if (chest == null || source == null) {
+            return;
+        }
+        ServerPlayer player = joinPlayer(helper, PLAYER_POS);
+        try {
+            UUID id = player.getUUID();
+            use(helper, player, T0);
+            if (!(player.containerMenu instanceof WatchmakerChestMenu menu) || chest.isEmptyFor(id)) {
+                CompatGameTestHelper.fail(helper, "Expected an open menu over a filled chest");
+                return;
+            }
+            // The source holds one diamond for the player and nothing else.
+            source.slotsFor(id).setItem(0, new ItemStack(Items.DIAMOND));
+            CompatGameTestHelper.copyBlockEntityData(helper, source, chest);
+            List<String> expected = List.of(describe(new ItemStack(Items.DIAMOND)));
+            List<String> stored = describeSorted(stored(chest, id));
+            if (!stored.equals(expected)) {
+                CompatGameTestHelper.fail(helper, "Expected the chest to hold " + expected + ", got " + stored);
+                return;
+            }
+            List<String> shown = new ArrayList<>();
+            for (int i = 0; i < CHEST_SLOTS; i++) {
+                if (!menu.getSlot(i).getItem().isEmpty()) {
+                    shown.add(describe(menu.getSlot(i).getItem()));
+                }
+            }
+            if (!shown.equals(expected)) {
+                CompatGameTestHelper.fail(helper, "The open menu shows " + shown + ", expected " + expected);
+                return;
+            }
+            menu.quickMoveStack(player, 0);
+            if (!chest.isEmptyFor(id)) {
+                CompatGameTestHelper.fail(helper, "Taking the diamond from the open menu left "
+                    + describeSorted(stored(chest, id)) + " in the chest");
+                return;
+            }
+            helper.succeed();
+        } finally {
+            player.getInventory().clearContent();
+            CompatGameTestHelper.removeMockServerPlayer(helper, player);
+        }
+    }
+
+    /**
+     * Test: using a position without a chest block entity reports MISSING and opens no menu,
+     * instead of the WAITING that tells a player to wait out a cooldown.
+     */
+    private static void testUseWithoutBlockEntityIsMissing(GameTestHelper helper) {
+        helper.setBlock(CHEST_POS, Blocks.AIR);
+        ServerPlayer player = joinPlayer(helper, PLAYER_POS);
+        try {
+            CampChestOutcome outcome = use(helper, player, T0);
+            if (outcome != CampChestOutcome.MISSING) {
+                CompatGameTestHelper.fail(helper, "Expected MISSING without a block entity, got " + outcome);
+                return;
+            }
+            if (player.containerMenu instanceof WatchmakerChestMenu) {
+                CompatGameTestHelper.fail(helper, "A missing chest opened a menu");
+                return;
+            }
+            helper.succeed();
+        } finally {
             CompatGameTestHelper.removeMockServerPlayer(helper, player);
         }
     }

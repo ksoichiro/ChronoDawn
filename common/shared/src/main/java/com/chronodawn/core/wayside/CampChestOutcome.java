@@ -26,7 +26,9 @@ public enum CampChestOutcome {
     /** The player's slots still held items, so they were opened unchanged. */
     OPENED(null),
     /** The player's slots were empty but the cooldown refused a fill, so nothing opened. */
-    WAITING("message.chronodawn.watchmaker_chest.waiting");
+    WAITING("message.chronodawn.watchmaker_chest.waiting"),
+    /** There was no chest block entity at the position, so nothing happened and nothing is shown. */
+    MISSING(null);
 
     private final String messageKey;
 

@@ -30,12 +30,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.ChestLidController;
 import net.minecraft.world.level.block.entity.LidBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.entity.EntityTypeTest;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
@@ -54,6 +55,10 @@ public class WatchmakerChestBlockEntity extends CooldownActivatorBlockEntity imp
     private static final String PLAYER_KEY = "Player";
     // Same block event id as the vanilla chest, carrying the number of open screens.
     private static final int OPEN_COUNT_EVENT = 1;
+    // As the vanilla chest: how far from the chest a player with its screen open is looked for,
+    // and how many ticks pass between looks.
+    private static final int RECHECK_RANGE = 5;
+    private static final int RECHECK_DELAY_TICKS = 5;
 
     private final Map<UUID, NonNullList<ItemStack>> playerSlots = new HashMap<>();
     private final ChestLidController lidController = new ChestLidController();
@@ -81,6 +86,13 @@ public class WatchmakerChestBlockEntity extends CooldownActivatorBlockEntity imp
     }
 
     /**
+     * @return the number of screens counted as open on this chest
+     */
+    public int getOpenCount() {
+        return openCount;
+    }
+
+    /**
      * Counts a screen opened on this chest. Every player sees the lid open, so the sound plays
      * for everyone nearby, and sculk sensors detect it. As with the vanilla chest, a spectator
      * neither moves the lid nor makes a sound.
@@ -95,6 +107,7 @@ public class WatchmakerChestBlockEntity extends CooldownActivatorBlockEntity imp
             level.gameEvent(player, GameEvent.CONTAINER_OPEN, worldPosition);
         }
         signalOpenCount(level);
+        scheduleRecheck(level);
     }
 
     /**
@@ -109,8 +122,59 @@ public class WatchmakerChestBlockEntity extends CooldownActivatorBlockEntity imp
         if (openCount == 0) {
             playSound(level, SoundEvents.CHEST_CLOSE);
             level.gameEvent(player, GameEvent.CONTAINER_CLOSE, worldPosition);
+            pruneEmptySlots();
         }
         signalOpenCount(level);
+    }
+
+    /**
+     * Counts the screens that are really open on this chest and corrects the open count. A screen
+     * can close without {@link WatchmakerChestMenu#removed}, for example when its player is
+     * removed or teleported, which would leave the lid open for good. Like the vanilla chest, a
+     * scheduled tick calls this while the lid is open.
+     */
+    public void recheckOpen() {
+        if (level == null) {
+            return;
+        }
+        int actual = countOpenScreens(level);
+        if (actual != openCount) {
+            boolean closing = actual == 0;
+            openCount = actual;
+            if (closing) {
+                playSound(level, SoundEvents.CHEST_CLOSE);
+                level.gameEvent(null, GameEvent.CONTAINER_CLOSE, worldPosition);
+                pruneEmptySlots();
+            }
+            signalOpenCount(level);
+        }
+        if (openCount > 0) {
+            scheduleRecheck(level);
+        }
+    }
+
+    private int countOpenScreens(Level level) {
+        // As the vanilla chest, only players near the chest are looked at: a screen stays valid
+        // only within reach of its block.
+        AABB area = new AABB(worldPosition).inflate(RECHECK_RANGE);
+        return level.getEntities(EntityTypeTest.forClass(Player.class), area,
+            player -> !player.isSpectator() && player.containerMenu instanceof WatchmakerChestMenu menu
+                && menu.isFor(this)).size();
+    }
+
+    private void scheduleRecheck(Level level) {
+        level.scheduleTick(worldPosition, getBlockState().getBlock(), RECHECK_DELAY_TICKS);
+    }
+
+    /**
+     * Drops the lists of players who hold nothing, so the map does not grow with every player who
+     * ever opened the chest. The cooldown is kept separately. Only done while no screen is open,
+     * because an open screen holds its player's list.
+     */
+    private void pruneEmptySlots() {
+        if (openCount == 0) {
+            playerSlots.values().removeIf(items -> items.stream().allMatch(ItemStack::isEmpty));
+        }
     }
 
     private void signalOpenCount(Level level) {
@@ -148,13 +212,10 @@ public class WatchmakerChestBlockEntity extends CooldownActivatorBlockEntity imp
         // super saves the cooldowns.
         super.saveData(output);
         ValueOutput.ValueOutputList list = output.childrenList(PLAYER_SLOTS_KEY);
-        Iterator<Map.Entry<UUID, NonNullList<ItemStack>>> entries = playerSlots.entrySet().iterator();
-        while (entries.hasNext()) {
-            Map.Entry<UUID, NonNullList<ItemStack>> entry = entries.next();
-            // An emptied entry holds nothing to keep, so it is dropped to stop the map growing
-            // with every player who ever opened the chest. The cooldown is kept separately.
+        for (Map.Entry<UUID, NonNullList<ItemStack>> entry : playerSlots.entrySet()) {
+            // An emptied entry holds nothing to keep. It is skipped, not removed, so that saving
+            // has no side effect. The cooldown is kept separately.
             if (entry.getValue().stream().allMatch(ItemStack::isEmpty)) {
-                entries.remove();
                 continue;
             }
             ValueOutput playerOutput = list.addChild();
@@ -167,7 +228,7 @@ public class WatchmakerChestBlockEntity extends CooldownActivatorBlockEntity imp
     public void loadData(ValueInput input) {
         // super loads the cooldowns.
         super.loadData(input);
-        playerSlots.clear();
+        Map<UUID, NonNullList<ItemStack>> loaded = new HashMap<>();
         for (ValueInput playerInput : input.childrenListOrEmpty(PLAYER_SLOTS_KEY)) {
             UUID player;
             try {
@@ -177,8 +238,27 @@ public class WatchmakerChestBlockEntity extends CooldownActivatorBlockEntity imp
             }
             NonNullList<ItemStack> items = NonNullList.withSize(SLOTS, ItemStack.EMPTY);
             ContainerHelper.loadAllItems(playerInput, items);
-            playerSlots.put(player, items);
+            loaded.put(player, items);
         }
+        applyLoaded(loaded);
+    }
+
+    /**
+     * Replaces the contents with the loaded ones. Each existing list is updated in place and not
+     * replaced: an open screen holds its player's list, so a replaced list would leave the screen
+     * on items the chest no longer has, and an item taken from it would be duplicated. This runs
+     * for a chunk load and also for an operator's /data merge on a chest with screens open.
+     */
+    private void applyLoaded(Map<UUID, NonNullList<ItemStack>> loaded) {
+        for (Map.Entry<UUID, NonNullList<ItemStack>> entry : playerSlots.entrySet()) {
+            NonNullList<ItemStack> source = loaded.remove(entry.getKey());
+            NonNullList<ItemStack> target = entry.getValue();
+            for (int i = 0; i < SLOTS; i++) {
+                target.set(i, source == null ? ItemStack.EMPTY : source.get(i));
+            }
+        }
+        playerSlots.putAll(loaded);
+        pruneEmptySlots();
     }
 
     /**
