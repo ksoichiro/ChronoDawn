@@ -488,14 +488,8 @@ public static void testPortalTravel(GameTestHelper helper) {
    - ポータルシステム
    - 時間の歪み効果
 
-3. **Follow-up Commands**:
-   ```bash
-   # Generate task list for implementation
-   /speckit.tasks
-
-   # Start implementation
-   /speckit.implement
-   ```
+3. **Follow-up**: Design specs and plans for new work items go under
+   `docs/superpowers/` (see `docs/superpowers/specs/`).
 
 ## Support
 

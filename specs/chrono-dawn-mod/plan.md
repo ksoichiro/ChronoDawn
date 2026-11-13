@@ -3,8 +3,6 @@
 **Branch**: `main` | **Date**: 2025-10-19 | **Spec**: [spec.md](spec.md)
 **Input**: Feature specification from `/specs/chrono-dawn-mod/spec.md`
 
-**Note**: This template is filled in by the `/speckit.plan` command. See `.specify/templates/commands/plan.md` for the execution workflow.
-
 ## Summary
 
 時間操作をテーマにしたMinecraft Mod「クロノドーンの残響」の実装。プレイヤーは時間が停止したディメンション「クロノドーン」を探索し、時間操作アイテムを駆使してラスボス「時間の暴君」を撃破する。サーバー負荷を抑えつつ、既存のMinecraftシステム(ステータス効果、イベントフック)を活用して時間の歪みを表現する。
@@ -96,12 +94,12 @@
 
 ```
 specs/[###-feature]/
-├── plan.md              # This file (/speckit.plan command output)
-├── research.md          # Phase 0 output (/speckit.plan command)
-├── data-model.md        # Phase 1 output (/speckit.plan command)
-├── quickstart.md        # Phase 1 output (/speckit.plan command)
-├── contracts/           # Phase 1 output (/speckit.plan command)
-└── tasks.md             # Phase 2 output (/speckit.tasks command - NOT created by /speckit.plan)
+├── plan.md              # This file
+├── research.md          # Phase 0 output
+├── data-model.md        # Phase 1 output
+├── quickstart.md        # Phase 1 output
+├── contracts/           # Phase 1 output
+└── tasks.md             # Phase 2 output
 ```
 
 ### Source Code (repository root) - Architectury Multi-Loader Structure
