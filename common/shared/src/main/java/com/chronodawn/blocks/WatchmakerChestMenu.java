@@ -97,6 +97,13 @@ public class WatchmakerChestMenu extends AbstractContainerMenu {
         return Container.stillValidBlockEntity(chest, player);
     }
 
+    /**
+     * @return whether this menu shows slots of the given chest
+     */
+    public boolean isFor(WatchmakerChestBlockEntity other) {
+        return chest == other;
+    }
+
     @Override
     public void removed(Player player) {
         super.removed(player);

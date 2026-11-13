@@ -36,6 +36,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionResult;
@@ -158,6 +159,17 @@ public class WatchmakerChestBlock extends AbstractChestBlock<WatchmakerChestBloc
         return state.rotate(mirror.getRotation(state.getValue(FACING)));
     }
 
+    /**
+     * Counts the screens really open on the chest, so a lid left open by a screen that closed
+     * without telling the chest closes again. Scheduled while the lid is open.
+     */
+    @Override
+    public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        if (level.getBlockEntity(pos) instanceof WatchmakerChestBlockEntity chest) {
+            chest.recheckOpen();
+        }
+    }
+
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         // Only the lid moves, and only on the client.
@@ -185,7 +197,8 @@ public class WatchmakerChestBlock extends AbstractChestBlock<WatchmakerChestBloc
     public static CampChestOutcome use(ServerLevel level, BlockPos pos, ServerPlayer player, long gameTime,
                                        long cooldownTicks) {
         if (!(level.getBlockEntity(pos) instanceof WatchmakerChestBlockEntity chest)) {
-            return CampChestOutcome.WAITING;
+            // Not WAITING: that outcome tells the player to wait out a cooldown, which is not the case.
+            return CampChestOutcome.MISSING;
         }
         UUID id = player.getUUID();
         // Vanilla never routes a spectator's click here: it asks getMenuProvider, which this block

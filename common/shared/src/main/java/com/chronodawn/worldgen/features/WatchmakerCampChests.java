@@ -5,7 +5,6 @@ import com.chronodawn.registry.ModBlocks;
 import dev.architectury.platform.Platform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Clearable;
-import net.minecraft.world.RandomizableContainer;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -56,9 +55,7 @@ public final class WatchmakerCampChests {
             BlockEntity blockEntity = level.getBlockEntity(pos);
             // Removing a chest drops its contents, and reading the contents of a chest with a
             // loot table rolls it first. Clearing the table keeps its loot from spilling.
-            if (blockEntity instanceof RandomizableContainer container) {
-                container.setLootTable(null);
-            }
+            LootTableClearer.clear(blockEntity);
             // Clearable#tryClear is gone from 1.21.5, so the check is spelled out.
             if (blockEntity instanceof Clearable clearable) {
                 clearable.clearContent();
