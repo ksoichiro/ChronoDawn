@@ -70,7 +70,7 @@ import java.util.*;
  * - Phase 2: Portal ignition (Time Hourglass)
  * - Phase 3: Teleportation logic (entityInside implementation)
  *
- * Reference: docs/portal_implementation_plan.md
+ * Reference: docs/archive/portal_implementation_plan.md
  * Based on: vanilla NetherPortalBlock structure
  */
 public class ChronoDawnPortalBlock extends Block {

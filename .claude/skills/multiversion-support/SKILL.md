@@ -20,7 +20,7 @@ Simply describe what you want to do, and Claude will reference the appropriate g
 
 ## Overview
 
-**Documentation**: Detailed migration plan is available in `docs/multiversion_migration_plan.md`.
+**Documentation**: See `docs/developer_guide.md` for the current module layout and build workflow.
 
 **Supported Versions**: Minecraft 1.20.1 + 1.21.1 (single codebase)
 

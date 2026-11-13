@@ -19,7 +19,6 @@ import net.minecraft.world.item.ShovelItem;
  * - Clockstone x1
  * - Stick x2
  *
- * Reference: tasks.md (T214)
  */
 public class ClockstoneShovelItem extends ShovelItem {
     public ClockstoneShovelItem(Properties properties) {

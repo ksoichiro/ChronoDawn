@@ -34,6 +34,13 @@ properties files so the checklist does not become stale.
 - `docs/configuration.md`: configuration keys, defaults, and effects
 - `docs/modpack-integration.md`: tags, scripting, events, stable IDs, and pack
   examples
+- `docs/release_process.md`: release boundaries and verification
+- `docs/translation-glossary.md`: translation terminology guidance
+- `docs/UPLOAD_GUIDE.md` and `docs/screenshots/README.md`: gallery assets and
+  upload guidance
+- `docs/design/`: open design questions and content-planning references
+- `docs/portal-floating-investigation-1.21.1.md`: portal placement investigation
+- `docs/archive/README.md`: historical designs and investigations
 - `docs/curseforge_description.md`: CurseForge listing
 - `docs/modrinth_description.md`: Modrinth listing
 - `CHANGELOG.md`: released and pending user-visible changes

@@ -43,7 +43,7 @@ import java.util.*;
  * 6. Update portal state (ACTIVATED → DEACTIVATED)
  * 7. Mark ChronoDawn entered (if entering ChronoDawn for first time)
  *
- * Reference: docs/portal_implementation_plan.md (Phase 3)
+ * Reference: docs/archive/portal_implementation_plan.md (Phase 3)
  */
 public class PortalTeleportHandler {
     /**

@@ -23,7 +23,6 @@ import net.minecraft.world.level.material.MapColor;
  * - Fortune enchantment compatible
  * - Spawns at Y: 0-48, vein size 3-5
  *
- * Reference: tasks.md (T210)
  */
 public class TimeCrystalOre extends Block {
     public TimeCrystalOre(BlockBehaviour.Properties properties) {

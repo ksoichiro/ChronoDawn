@@ -24,7 +24,6 @@ import net.minecraft.world.item.Item;
  * - Clockstone x2
  * - Stick x2
  *
- * Reference: tasks.md (T214)
  */
 public class ClockstoneHoeItem extends Item {
     public ClockstoneHoeItem(Properties properties) {

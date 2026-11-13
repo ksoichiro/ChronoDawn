@@ -25,7 +25,7 @@ package com.chronodawn.config;
  * has been called from {@code ChronoDawn.init()}.
  *
  * <p>To extend this record with a new tunable, follow the recipe in the
- * design spec ({@code docs/superpowers/specs/2026-05-09-config-foundation-design.md},
+ * design spec ({@code docs/archive/superpowers/2026-05-09-config-foundation-design.md},
  * "Extension pattern" section).
  */
 public record ChronoDawnConfig(

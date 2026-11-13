@@ -39,7 +39,6 @@ import java.util.function.Supplier;
  *
  * Repair Material: Time Crystal
  *
- * Reference: tasks.md (T215)
  */
 public class ClockstoneArmorMaterial {
     // 1.20.1: ArmorItem.Type.BODY does not exist

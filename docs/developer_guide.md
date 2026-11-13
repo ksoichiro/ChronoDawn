@@ -218,15 +218,10 @@ ChronoDawn/
 │       │   └── mixin/                      # Version-specific mixins
 │       └── src/main/resources/
 │           └── META-INF/mods.toml          # Forge mod metadata
-├── specs/chrono-dawn-mod/                  # Design documents
-│   ├── spec.md                             # Feature specification
-│   ├── plan.md                             # Implementation plan
-│   ├── tasks.md                            # Task tracking
-│   ├── data-model.md                       # Data model
-│   └── research.md                         # Research notes
 ├── docs/                                   # Documentation
 │   ├── player_guide.md                     # Player guide
-│   └── developer_guide.md                  # This file
+│   ├── developer_guide.md                  # This file
+│   └── archive/                            # Historical designs and research
 ├── build.gradle                            # Root build configuration
 ├── settings.gradle                         # Multi-module settings
 ├── gradle.properties                       # Version configuration
@@ -556,9 +551,8 @@ Effect #1 (3-tick raise) is implemented via `BLOCKS_ATTACKS.block_delay_seconds 
 
 Time Echo visuals (particle + sound, 3 stages) use a custom `ChronoShieldEchoParticle`. The particle class has per-era variants: `SingleQuadParticle`-based for 1.21.9+ and `TextureSheetParticle`-based for 1.21.5 - 1.21.8 and 1.20.1.
 
-Design and implementation plan:
-- Design: `docs/superpowers/specs/2026-04-19-chronodawn-custom-shields-design.md`
-- Plan: `docs/superpowers/plans/2026-04-19-chronodawn-custom-shields.md`
+Historical design:
+- Design: `docs/archive/superpowers/2026-04-19-chronodawn-custom-shields-design.md`
 
 ---
 
@@ -761,7 +755,7 @@ Validates data/asset file integrity at build time without launching the game:
 
 2. **Create Test World**: Creative mode recommended
 
-3. **Test Checklist**: See `specs/chrono-dawn-mod/quickstart.md`
+3. **Test the changed behavior** in the test world and check the client log.
 
 ### Production Smoke Test (headless)
 
@@ -1066,9 +1060,9 @@ dev/mapped environment and can mask production remapping or injection failures.
 
 ### Documentation
 
-- **Project Docs**: `specs/chrono-dawn-mod/`
+- **Project Docs**: `docs/`
 - **Design Guidelines**: `CLAUDE.md`
-- **Quickstart Guide**: `specs/chrono-dawn-mod/quickstart.md`
+- **Historical Designs**: `docs/archive/README.md`
 
 ### External Resources
 

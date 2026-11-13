@@ -223,7 +223,7 @@ All files are within limits for both platforms.
 
 ## Completion Checklist
 
-### CurseForge (T516)
+### CurseForge
 - [ ] Project icon uploaded and visible
 - [ ] Featured image (00) uploaded and set as hero
 - [ ] Gallery images (01-08) uploaded in correct order
@@ -231,44 +231,13 @@ All files are within limits for both platforms.
 - [ ] Description updated (if needed)
 - [ ] Public page verified
 
-### Modrinth (T517)
+### Modrinth
 - [ ] Project icon uploaded and visible
 - [ ] Featured image (00) uploaded and marked as featured
 - [ ] Gallery images (01-08) uploaded in correct order
 - [ ] Optional: Titles/descriptions added to gallery images
 - [ ] Description updated (if needed)
 - [ ] Public page verified
-
----
-
-## Post-Upload Tasks (T518)
-
-After uploading to both platforms:
-
-### Update Repository Documentation
-
-1. Update `README.md`:
-   - Add actual CurseForge and Modrinth URLs
-   - Update download links
-   - Add badges (optional)
-
-2. Update `docs/curseforge_description.md`:
-   - Update Modrinth link (line 192)
-
-3. Update `docs/modrinth_description.md`:
-   - Update CurseForge link (if needed)
-
-### Update tasks.md
-
-Mark the following tasks as completed:
-- T511: Set up screenshot infrastructure ✅
-- T512: Create project icon ✅
-- T513: Capture essential screenshots ✅
-- T514: Capture supplementary screenshots ✅ (partial - featured image only)
-- T515: Optimize and organize screenshots ✅
-- T516: Upload to CurseForge gallery
-- T517: Upload to Modrinth gallery
-- T518: Update documentation with screenshots
 
 ---
 
@@ -283,5 +252,3 @@ Mark the following tasks as completed:
 ---
 
 **Estimated Time**: 30-45 minutes total (15-20 minutes per platform)
-
-**Priority**: High - Required for initial release approval on both platforms

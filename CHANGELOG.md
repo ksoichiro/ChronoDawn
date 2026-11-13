@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Documentation**: historical designs and research now live under
+  `docs/archive/`, and obsolete implementation plans have been removed.
+
 ### Fixed
 
 - **Resource pack on Minecraft 1.21.5**: the mod's built-in resource pack

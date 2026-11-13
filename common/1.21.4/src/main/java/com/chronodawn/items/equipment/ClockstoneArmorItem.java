@@ -34,7 +34,6 @@ import java.util.List;
  * - Leggings: Clockstone x7
  * - Boots: Clockstone x4
  *
- * Reference: tasks.md (T215)
  */
 public class ClockstoneArmorItem extends ArmorItem {
     public ClockstoneArmorItem(ArmorType type, Properties properties) {
