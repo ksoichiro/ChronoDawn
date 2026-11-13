@@ -16,6 +16,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Master Clock after a server restart**: the Master Clock's hidden stairs,
+  corridor, and boss room are no longer re-scanned after a server restart.
+  Before, a restart lost track of which Master Clocks were already processed,
+  so each one was searched again for its removed surface marker, costing
+  server time and logging a "no surface marker found" warning. The processed
+  state is now saved in the world. A Master Clock whose placement was
+  interrupted by a restart is not repaired.
 - **Resource pack on Minecraft 1.21.5**: the mod's built-in resource pack
   declared pack format 48, which is not the 1.21.5 format (55). It now
   declares 55, so the pack is no longer treated as incompatible.
