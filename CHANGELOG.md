@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Chronicle screen**: the book's frame and binding now use deep teal to
+  match the Chronicle's item texture.
+
 ### Fixed
 
 - **Resource pack on Minecraft 1.21.5**: the mod's built-in resource pack
