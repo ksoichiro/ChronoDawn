@@ -31,22 +31,25 @@ import java.util.Set;
  * Strategy:
  * 1. Before structure placement (@At("HEAD")):
  *    - Process each chunk separately (within chunkBox only)
- *    - Remove ONLY minecraft:water (Aquifer water)
+ *    - Replace ONLY minecraft:water (Aquifer water) with a structure_void placeholder
  *    - Preserve chronodawn:decorative_water (custom fluid)
  *    - Decorative water is converted to minecraft:water by processor after placement
  *
  * 2. After structure placement (@At("RETURN")):
- *    - Log completion (no water restoration)
  *    - Positions after placement:
- *      a) Air/cave_air → Water successfully prevented waterlogging or NBT placed air
- *      b) Solid block → Structure placed block (waterlogging prevented!) or structure_void preserved terrain
- *      c) Water → Decorative water from NBT (already placed)
+ *      a) Placeholder → The template left the position untouched (structure_void),
+ *         so the Aquifer water is restored
+ *      b) Air/cave_air → NBT placed air
+ *      c) Solid block → Structure placed block (waterlogging prevented!) or structure_void preserved terrain
+ *      d) Water → Decorative water from NBT (already placed)
  *
  * This approach ensures:
  * - ✅ Waterloggable blocks are NOT waterlogged (water removed before placement)
  * - ✅ Decorative water from NBT is preserved (placed after water removal)
  * - ✅ Structure_void areas with solid blocks are preserved (stone, dirt, etc. remain)
- * - ⚠️ Structure_void areas with water become air (unavoidable limitation)
+ * - ✅ Structure_void areas with water keep their water. Removing it to plain air
+ *   left box-shaped hollows next to the structure wherever the piece bounding box
+ *   cut through an aquifer
  *
  * Important: Uses individual StructurePiece bounding boxes, not the entire structure
  * bounding box. This prevents affecting water in empty space between Jigsaw pieces.
@@ -147,8 +150,12 @@ public abstract class StructureStartMixin {
                     state.getBlock() == Blocks.WATER &&
                     !state.is(com.chronodawn.registry.ModBlocks.DECORATIVE_WATER.get())) {
                     waterPositionsBeforePlacement.add(pos.immutable());
-                    // Remove water temporarily to prevent waterlogging
-                    level.setBlock(pos, Blocks.AIR.defaultBlockState(), 2);
+                    // Remove water temporarily to prevent waterlogging. A placeholder
+                    // instead of air lets the RETURN hook tell positions the template
+                    // left untouched (structure_void) from positions where it placed air.
+                    // Templates never contain structure_void blocks, so any placeholder
+                    // left after placement marks an untouched position.
+                    level.setBlock(pos, Blocks.STRUCTURE_VOID.defaultBlockState(), 2);
                     totalWaterRemoved++;
                 }
             }
@@ -179,10 +186,11 @@ public abstract class StructureStartMixin {
      * 3. Some blocks may have been re-waterlogged by water placement in this or adjacent chunks
      *
      * This method:
-     * 1. Restores intentional waterlogging (from NBT)
-     * 2. Removes unintentional waterlogging (from Aquifer water or water spread)
-     * 3. Converts any remaining decorative water to vanilla water
-     * 4. Re-processes adjacent chunk borders to fix waterlogging from this chunk's water
+     * 1. Restores Aquifer water where the template left the HEAD placeholder (current chunk only)
+     * 2. Restores intentional waterlogging (from NBT)
+     * 3. Removes unintentional waterlogging (from Aquifer water or water spread)
+     * 4. Converts any remaining decorative water to vanilla water
+     * 5. Re-processes adjacent chunk borders to fix waterlogging from this chunk's water
      */
     @Inject(
         method = "placeInChunk",
@@ -216,6 +224,7 @@ public abstract class StructureStartMixin {
         int totalDecorativeWaterConverted = 0;
         int totalWaterloggedRestored = 0;
         int totalWaterloggedRemoved = 0;
+        int totalWaterRestored = 0;
 
         // Process each structure piece within current chunk
         for (net.minecraft.world.level.levelgen.structure.StructurePiece piece : pieces) {
@@ -224,6 +233,22 @@ public abstract class StructureStartMixin {
             // Only process the intersection between piece and current chunk
             if (!pieceBox.intersects(chunkBox)) {
                 continue;
+            }
+
+            // Restore Aquifer water where the template left the placeholder from the
+            // HEAD hook. Limited to the current chunk because adjacent chunks restore
+            // their own placeholders after their own placement.
+            int restoreMinX = Math.max(pieceBox.minX(), chunkBox.minX());
+            int restoreMinY = Math.max(pieceBox.minY(), chunkBox.minY());
+            int restoreMinZ = Math.max(pieceBox.minZ(), chunkBox.minZ());
+            int restoreMaxX = Math.min(pieceBox.maxX(), chunkBox.maxX());
+            int restoreMaxY = Math.min(pieceBox.maxY(), chunkBox.maxY());
+            int restoreMaxZ = Math.min(pieceBox.maxZ(), chunkBox.maxZ());
+            for (BlockPos pos : BlockPos.betweenClosed(restoreMinX, restoreMinY, restoreMinZ, restoreMaxX, restoreMaxY, restoreMaxZ)) {
+                if (level.getBlockState(pos).is(Blocks.STRUCTURE_VOID)) {
+                    level.setBlock(pos, Blocks.WATER.defaultBlockState(), 2);
+                    totalWaterRestored++;
+                }
             }
 
             // Calculate intersection area
@@ -304,6 +329,15 @@ public abstract class StructureStartMixin {
                 remainingPositions
             );
             com.chronodawn.worldgen.processors.CopyFluidLevelProcessor.INTENTIONAL_WATERLOGGING.clear();
+        }
+
+        if (totalWaterRestored > 0) {
+            ChronoDawn.LOGGER.debug(
+                "Restored {} Aquifer water blocks outside the template in chunk {} for {}",
+                totalWaterRestored,
+                chunkPos,
+                structureLocation.getPath()
+            );
         }
 
         if (totalDecorativeWaterConverted > 0) {
