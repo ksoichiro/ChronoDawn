@@ -44,4 +44,4 @@ All checklist items have been validated and passed. The specification is ready f
 
 ## Notes
 
-Specification is ready for `/speckit.clarify` or `/speckit.plan`
+Specification is ready for clarification or planning
