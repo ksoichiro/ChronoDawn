@@ -326,7 +326,6 @@ public final class RegistryDrivenTestGenerator {
         all.addAll(generateFoodPropertyTests());
         all.addAll(generateBlockItemConsistencyTests());
         all.addAll(generateEquipmentStackSizeTests());
-        all.addAll(TranslationKeyTests.generate(ModItems.class, ID_OVERRIDES, NamedTest::new));
         all.addAll(generateBossFightTests());
         all.addAll(MobBehaviorTests.generateSpawnEggUsageTests(RegistryDrivenTestData.getSpawnEggSpecs(), NamedTest::new));
         all.addAll(MobBehaviorTests.generateMobCategoryTests(RegistryDrivenTestData.getMobCategorySpecs(), NamedTest::new));

@@ -973,10 +973,9 @@ tasks.register('validateEraTagParity') {
 // shows its raw key in EMI, Jade and similar tooltips. The potted time
 // blossoms shipped that way in every version.
 //
-// Every ID in ModBlockId must have block.chronodawn.<id>, and every ID in
-// ModItemId must have item.chronodawn.<id> or block.chronodawn.<id> (block
-// items use the block key), in each lang root's en_us.json. Other locales
-// are held to en_us by validateLangParity.
+// Every ID in ModBlockId must have block.chronodawn.<id>, and every
+// registered item must have its actual item or block description key in each
+// lang root's en_us.json. Other locales are held to en_us by validateLangParity.
 //
 // ID minVersion is ignored on purpose: an ID added for newer versions only
 // fails on the older roots. Adding the key there is harmless (unused lang
@@ -998,9 +997,15 @@ tasks.register('validateRegistryLangCoverage') {
                 throw new GradleException("validateRegistryLangCoverage: ${idFile} not found")
             }
             // Same enum-constant pattern as extractEnumValues in gradle/shared
-            (idFile.text =~ /(\w+)\s*\(\s*"([^"]+)"\s*\)/).collect { it[2] as String }
+            (idFile.text =~ /(\w+)\s*\(\s*"([^"]+)"\s*\)/)
+                    .collect { [(it[1] as String), (it[2] as String)] }
+                    .collectEntries { [(it[0]): it[1]] }
         }
-        def blockIds = idsFrom('block_id_file')
+        def blockFile = file("${rootProject.projectDir}/${idFileProps['block_id_file']}")
+        if (!blockFile.exists()) {
+            throw new GradleException("validateRegistryLangCoverage: ${blockFile} not found")
+        }
+        def blockIds = (blockFile.text =~ /(\w+)\s*\(\s*"([^"]+)"\s*\)/).collect { it[2] as String }
         def itemIds = idsFrom('item_id_file')
 
         // Sanity check: if the enum shape changes, the regex above would
@@ -1009,6 +1014,50 @@ tasks.register('validateRegistryLangCoverage') {
         if (blockIds.size() < 50 || itemIds.size() < 50) {
             throw new GradleException("validateRegistryLangCoverage: only found ${blockIds.size()} block and ${itemIds.size()} item IDs " +
                     "— the ID enum files may have changed shape and broken the extraction")
+        }
+
+        // Inspect every version: old BlockItem implementations inherit the block
+        // key, while newer versions choose it through Item.Properties.
+        def itemKeys = [:].withDefault { [] as Set }
+        def commonDirs = file("${rootProject.projectDir}/common").listFiles() ?: []
+        def registryFiles = commonDirs.collect { new File(it, 'src/main/java/com/chronodawn/registry/ModItems.java') }
+                .findAll { it.exists() }
+        if (registryFiles.isEmpty()) {
+            throw new GradleException('validateRegistryLangCoverage: no ModItems.java found')
+        }
+        registryFiles.each { File registryFile ->
+            def source = registryFile.text
+            def seen = [] as Set
+            def modern = source.contains('useBlockDescriptionPrefix()')
+            def registrations = source =~ /(?s)ITEMS\.register\(\s*ModItemId\.(\w+)\.id\(\),\s*\(\) -> new ([\w.]+)(.*?)\n\s*\);/
+            registrations.each { match ->
+                def name = match[1] as String
+                def id = itemIds[name]
+                if (id == null || !seen.add(name)) {
+                    throw new GradleException("${registryFile}: unknown or duplicate item ID ${name}")
+                }
+                def blockItem = modern ? match[3].contains('useBlockDescriptionPrefix()') :
+                        match[2] in ['BlockItem', 'TimeTorchItem']
+                if (blockItem && !modern) {
+                    def blockReference = match[3] =~ /ModBlocks\.(\w+)\.get\(\)/
+                    if (!blockReference.find() || blockReference.group(1) != name) {
+                        throw new GradleException("${registryFile}: cannot determine block key for ${name}")
+                    }
+                }
+                itemKeys[name] << "${blockItem ? 'block' : 'item'}.chronodawn.${id}".toString()
+            }
+            def helpers = source =~ /=\s*register(?:JournalPage|CairnStone)\(ModItemId\.(\w+)/
+            helpers.each { match ->
+                def name = match[1] as String
+                if (!itemIds.containsKey(name) || !seen.add(name)) {
+                    throw new GradleException("${registryFile}: unknown or duplicate item ID ${name}")
+                }
+                itemKeys[name] << "item.chronodawn.${itemIds[name]}".toString()
+            }
+            def missing = itemIds.keySet() - seen
+            if (!missing.isEmpty()) {
+                throw new GradleException("${registryFile}: could not classify item registrations: ${missing}")
+            }
         }
 
         def langFiles = file("${rootProject.projectDir}/common").listFiles()
@@ -1027,10 +1076,9 @@ tasks.register('validateRegistryLangCoverage') {
                     errors << "${relPath}: missing block.chronodawn.${id}"
                 }
             }
-            itemIds.each { String id ->
-                if (!langMap.containsKey("item.chronodawn.${id}".toString())
-                        && !langMap.containsKey("block.chronodawn.${id}".toString())) {
-                    errors << "${relPath}: missing item.chronodawn.${id} (or block.chronodawn.${id})"
+            itemKeys.values().flatten().toSet().each { String key ->
+                if (!langMap.containsKey(key)) {
+                    errors << "${relPath}: missing ${key}"
                 }
             }
         }
