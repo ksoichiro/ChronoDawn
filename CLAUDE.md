@@ -177,7 +177,7 @@ such as `[94, 1]`, and verify both resource reload and server data loading.
 
 **Unit Test** (JUnit only, not GameTest):
 - `./gradlew :common-1.21.2:test -Ptarget_mc_version=1.21.2` - Run unit tests for specific version
-- `./gradlew testAll` - Run unit tests for all versions (excludes 1.21.3 - shares 1.21.2 modules)
+- Unit tests for all versions run inside `checkAll`'s `buildAll` step (`./gradlew buildAll -Pbuildall_run_tests=true`); plain `buildAll` and `build<version>` skip them. There is no `testAll` task
 - `./gradlew :common-1.21.6:test -Ptarget_mc_version=1.21.6` - Run unit tests for 1.21.6
 - `./gradlew :common-1.21.7:test -Ptarget_mc_version=1.21.7` - Run unit tests for 1.21.7
 - `./gradlew :common-1.21.8:test -Ptarget_mc_version=1.21.8` - Run unit tests for 1.21.8
@@ -226,9 +226,8 @@ such as `[94, 1]`, and verify both resource reload and server data loading.
   1. cleanAll - Clean all build outputs and IDE directories
   2. validateResources - JSON syntax and cross-reference checks
   3. validateTranslations - Cross-version translation key validation
-  4. buildAll - Build for release (1.20.1, 1.21.1, 1.21.2, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, 1.21.11, 26.1.2, 26.2, 26.3)
-  5. testAll - Run unit tests (1.20.1, 1.21.1, 1.21.2, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, 1.21.11, 26.1.2, 26.2, 26.3)
-  6. gameTestAll - Run GameTests including 1.21.3, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, 1.21.11, 26.1.2, 26.2, and 26.3 runtime verification
+  4. buildAll - Build for release and run unit tests in the same parallel per-version builds (1.20.1, 1.21.1, 1.21.2, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, 1.21.11, 26.1.2, 26.2, 26.3)
+  5. gameTestAll - Run GameTests including 1.21.3, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, 1.21.11, 26.1.2, 26.2, and 26.3 runtime verification
 - When capturing checkAll (or any long Gradle run) output, redirect it to `<checkout>/build/checkall.log` using the absolute path of the current checkout (the worktree root when working in a worktree). Do not use a fixed filename under `$TMPDIR` or `/private/tmp/claude-501/`. Every session shares that directory, so concurrent runs overwrite each other's logs. Sandboxed and unsandboxed commands also resolve `$TMPDIR` to different directories, so a log written by one may not be visible to the other. The root `build/` is gitignored and survives `cleanAll`
 
 **Key Strategy**: Custom Gradle scripts + abstraction layer (`compat/` package) for API differences

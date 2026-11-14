@@ -370,7 +370,7 @@ neoforge_version=21.2.0-beta
 # Runs in sequence: cleanAll → validateResources → validateTranslations
 #   → project-specific validations + validateData + validateConventionalTags
 #     (checkall_extra_tasks)
-#   → buildAll → testAll → gameTestAll
+#   → buildAll (with unit tests) → gameTestAll
 
 # Clean build artifacts
 ./gradlew clean
@@ -893,8 +893,7 @@ Before submitting PR, run full verification:
 This single command runs all automated checks in sequence:
 - [ ] Clean all build outputs (cleanAll)
 - [ ] Resource validation passes (validateResources)
-- [ ] All versions build successfully (buildAll)
-- [ ] All unit tests pass (testAll)
+- [ ] All versions build successfully and all unit tests pass (buildAll with -Pbuildall_run_tests=true)
 - [ ] All GameTests pass (gameTestAll)
 
 Additional manual checks:

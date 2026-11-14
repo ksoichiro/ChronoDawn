@@ -148,7 +148,7 @@ Build release artifacts:
 Run unit tests:
 
 ```bash
-./gradlew testAll
+./gradlew buildAll -Pbuildall_run_tests=true   # builds all versions and runs their unit tests
 ./gradlew :common-1.21.11:test -Ptarget_mc_version=1.21.11
 ./gradlew :common-1.21.10:test -Ptarget_mc_version=1.21.10
 ./gradlew :common-1.21.9:test -Ptarget_mc_version=1.21.9
