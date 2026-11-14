@@ -321,6 +321,7 @@ public final class RegistryDrivenTestGenerator {
         all.addAll(TimeCairnDialTests.generateTests(NamedTest::new));
         all.addAll(WatchmakerCampLootTests.generateTests(NamedTest::new));
         all.addAll(WatchmakerChestTests.generateTests(NamedTest::new));
+        all.addAll(BlockBreakProtectionTests.generateTests(NamedTest::new));
         // Conventional (c:) tag membership verified at runtime. 1.20.1 follows
         // conventional tags v1, whose umbrella tags have no per-material subtags.
         all.addAll(ConventionalTagTests.generate(ModItems.class, ModBlocks.class,

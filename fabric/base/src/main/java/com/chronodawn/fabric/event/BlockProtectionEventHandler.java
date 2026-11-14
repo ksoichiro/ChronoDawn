@@ -1,5 +1,6 @@
 package com.chronodawn.fabric.event;
 
+import com.chronodawn.worldgen.protection.BlockBreakGuard;
 import com.chronodawn.worldgen.protection.BlockProtectionHandler;
 import com.chronodawn.worldgen.protection.PermanentProtectionHandler;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
@@ -30,14 +31,9 @@ public class BlockProtectionEventHandler {
     public static void register() {
         // Prevent block breaking in protected areas
         PlayerBlockBreakEvents.BEFORE.register((level, player, pos, state, blockEntity) -> {
-            // Allow creative mode players to break anything
-            if (player.isCreative()) {
-                return true;
-            }
-
-            // Check if this block is protected (boss room or permanent)
-            boolean isPermanentlyProtected = PermanentProtectionHandler.isProtected(level, pos);
-            boolean isBossRoomProtected = BlockProtectionHandler.isProtected(level, pos);
+            BlockBreakGuard.Verdict verdict = BlockBreakGuard.check(level, pos, player.isCreative());
+            boolean isPermanentlyProtected = verdict == BlockBreakGuard.Verdict.PERMANENTLY_PROTECTED;
+            boolean isBossRoomProtected = verdict == BlockBreakGuard.Verdict.BOSS_ROOM_PROTECTED;
 
             if (isPermanentlyProtected) {
                 // Display warning message for permanent protection
