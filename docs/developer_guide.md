@@ -656,6 +656,10 @@ public static final RegistrySupplier<EntityType<MyEntity>> MY_ENTITY = ENTITIES.
 
   Parses source files to extract `RegistrySupplier` field names and validates resource existence via `ClassLoader.getResource()` (~0.1s for 402 tests).
 
+- **StructureTemplateTest** — Checks structure NBT dimensions, required block counts, camp chest headroom,
+  disallowed placeholders and specification coverage. Minecraft 1.20.1 uses its converted resources.
+  GameTest separately verifies that the server loads each template.
+
 **Run Tests**:
 ```bash
 ./gradlew :common-1.21.11:test
