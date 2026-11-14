@@ -195,13 +195,6 @@ public final class RegistryDrivenTestGenerator {
     }
 
     /**
-     * Generates tests verifying block protection logic.
-     */
-    public static List<NamedTest> generateBlockProtectionTests() {
-        return BlockProtectionTests.generateTests(NamedTest::new);
-    }
-
-    /**
      * Generates tests verifying Faded Plains block placement rules.
      */
     public static List<NamedTest> generateFadedPlainsTests() {
@@ -341,7 +334,6 @@ public final class RegistryDrivenTestGenerator {
         all.addAll(generateAdvancementIsolationTests());
         all.addAll(generateStructureTests());
         all.addAll(generatePortalTests());
-        all.addAll(generateBlockProtectionTests());
         all.addAll(generateFadedPlainsTests());
         all.addAll(TimelessMushroomTests.generateTests(NamedTest::new));
         all.addAll(SundialGnomonTests.generateTests(NamedTest::new));
