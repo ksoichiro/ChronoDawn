@@ -16,8 +16,10 @@ import java.util.List;
  * Generates tests for:
  * - Advancement loaded (verifies advancement JSON is loaded by server)
  * - Advancement grant (verifies granting and checking advancement via CompatAdvancementHelper)
- * - Advancement parent (verifies parent advancement references are valid)
- * - Advancement isolation (verifies granting child does not grant parent)
+ *
+ * Parent references are validated against the JSON files by AdvancementValidationTest (JUnit).
+ * A "granting a child does not grant its parent" test is intentionally absent: it only exercises
+ * vanilla's grant behavior and does not depend on any ChronoDawn data.
  */
 public final class AdvancementTests {
 
@@ -26,15 +28,9 @@ public final class AdvancementTests {
     }
 
     /**
-     * Advancement specification: advancement ID + expected parent ID.
+     * Advancement specification: advancement ID (path under the chronodawn namespace).
      */
-    public record AdvancementSpec(
-        String id,
-        String parentId
-    ) {
-        public AdvancementSpec(String id) {
-            this(id, null);
-        }
+    public record AdvancementSpec(String id) {
     }
 
     /**
@@ -117,102 +113,6 @@ public final class AdvancementTests {
             helper.succeed();
         } else {
             CompatGameTestHelper.fail(helper, "Advancement was granted but hasAdvancement returned false: " + spec.id());
-        }
-    }
-
-    /**
-     * Generates tests verifying advancement parent references are valid.
-     * Only tests advancements that have a non-null parent.
-     */
-    public static <T> List<T> generateAdvancementParentTests(
-            List<AdvancementSpec> specs,
-            MobBehaviorTests.TestFactory<T> factory) {
-        List<T> tests = new ArrayList<>();
-        for (var spec : specs) {
-            if (spec.parentId() == null) {
-                continue;
-            }
-            String testName = "advancement_parent_" + spec.id().replace('/', '_');
-            tests.add(factory.create(testName, helper -> {
-                helper.runAfterDelay(1, () -> {
-                    MinecraftServer server = helper.getLevel().getServer();
-                    var advId = CompatResourceLocation.create("chronodawn", spec.id());
-                    var parentAdvId = CompatResourceLocation.create("chronodawn", spec.parentId());
-
-                    // Verify the advancement itself exists
-                    if (!CompatAdvancementHelper.advancementExists(server, advId)) {
-                        CompatGameTestHelper.fail(helper, "Advancement not found: chronodawn:" + spec.id());
-                        return;
-                    }
-
-                    // Verify the parent advancement exists
-                    if (CompatAdvancementHelper.advancementExists(server, parentAdvId)) {
-                        helper.succeed();
-                    } else {
-                        CompatGameTestHelper.fail(helper, "Parent advancement not found: chronodawn:" + spec.parentId() +
-                            " (referenced by: chronodawn:" + spec.id() + ")");
-                    }
-                });
-            }));
-        }
-        return tests;
-    }
-
-    /**
-     * Generates tests verifying granting a child does not grant its parent.
-     */
-    public static <T> List<T> generateAdvancementIsolationTests(
-            List<AdvancementSpec> specs,
-            MobBehaviorTests.TestFactory<T> factory) {
-        List<T> tests = new ArrayList<>();
-        for (var spec : specs) {
-            if (spec.parentId() == null) {
-                continue;
-            }
-            String testName = "advancement_isolation_" + spec.id().replace('/', '_');
-            tests.add(factory.create(testName, helper -> {
-                helper.runAfterDelay(1, () -> {
-                    MinecraftServer server = helper.getLevel().getServer();
-                    ServerPlayer player = CompatGameTestHelper.makeMockServerPlayer(helper);
-                    if (player == null) {
-                        CompatGameTestHelper.fail(helper, "Could not create a mock ServerPlayer");
-                        return;
-                    }
-                    try {
-                        verifyIsolation(helper, server, player, spec);
-                    } finally {
-                        CompatGameTestHelper.removeMockServerPlayer(helper, player);
-                    }
-                });
-            }));
-        }
-        return tests;
-    }
-
-    private static void verifyIsolation(GameTestHelper helper, MinecraftServer server, ServerPlayer player,
-            AdvancementSpec spec) {
-        var advId = CompatResourceLocation.create("chronodawn", spec.id());
-        var parentAdvId = CompatResourceLocation.create("chronodawn", spec.parentId());
-
-        // Verify both advancements exist
-        if (!CompatAdvancementHelper.advancementExists(server, advId)) {
-            CompatGameTestHelper.fail(helper, "Advancement not found: chronodawn:" + spec.id());
-            return;
-        }
-        if (!CompatAdvancementHelper.advancementExists(server, parentAdvId)) {
-            CompatGameTestHelper.fail(helper, "Parent advancement not found: chronodawn:" + spec.parentId());
-            return;
-        }
-
-        // Grant the child advancement
-        CompatAdvancementHelper.grantAdvancement(server, player, advId);
-
-        // Verify parent is NOT automatically granted
-        if (CompatAdvancementHelper.hasAdvancement(server, player, parentAdvId)) {
-            CompatGameTestHelper.fail(helper, "Granting child advancement " + spec.id() +
-                " should not grant parent " + spec.parentId());
-        } else {
-            helper.succeed();
         }
     }
 }

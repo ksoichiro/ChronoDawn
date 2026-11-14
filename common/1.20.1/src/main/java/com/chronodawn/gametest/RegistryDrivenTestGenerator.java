@@ -168,22 +168,6 @@ public final class RegistryDrivenTestGenerator {
     }
 
     /**
-     * Generates tests verifying advancement parent references are valid.
-     */
-    public static List<NamedTest> generateAdvancementParentTests() {
-        return AdvancementTests.generateAdvancementParentTests(
-            RegistryDrivenTestData.getAdvancementSpecs(), NamedTest::new);
-    }
-
-    /**
-     * Generates tests verifying granting a child advancement does not grant its parent.
-     */
-    public static List<NamedTest> generateAdvancementIsolationTests() {
-        return AdvancementTests.generateAdvancementIsolationTests(
-            RegistryDrivenTestData.getAdvancementSpecs(), NamedTest::new);
-    }
-
-    /**
      * Generates a test verifying server-side structure template loading.
      */
     public static List<NamedTest> generateStructureTests() {
@@ -326,8 +310,6 @@ public final class RegistryDrivenTestGenerator {
         all.addAll(MobBehaviorTests.generateAquaticMobTests(RegistryDrivenTestData.getAquaticEntities(), NamedTest::new));
         all.addAll(generateAdvancementLoadedTests());
         all.addAll(generateAdvancementGrantTests());
-        all.addAll(generateAdvancementParentTests());
-        all.addAll(generateAdvancementIsolationTests());
         all.addAll(generateStructureTests());
         all.addAll(generateFadedPlainsTests());
         all.addAll(TimelessMushroomTests.generateTests(NamedTest::new));

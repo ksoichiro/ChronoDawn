@@ -339,29 +339,29 @@ public final class RegistryDrivenTestData {
             // Root advancement (no parent)
             new AdvancementTests.AdvancementSpec("root"),
             // Story US1
-            new AdvancementTests.AdvancementSpec("story/us1/portal_creation", "root"),
-            new AdvancementTests.AdvancementSpec("story/us1/dimension_entry", "story/us1/portal_creation"),
+            new AdvancementTests.AdvancementSpec("story/us1/portal_creation"),
+            new AdvancementTests.AdvancementSpec("story/us1/dimension_entry"),
             // Story US2
-            new AdvancementTests.AdvancementSpec("story/us2/time_guardian_defeat", "story/us1/dimension_entry"),
-            new AdvancementTests.AdvancementSpec("story/us2/desert_clock_tower", "story/us1/dimension_entry"),
-            new AdvancementTests.AdvancementSpec("story/us2/time_manipulation_tools", "story/us2/desert_clock_tower"),
-            new AdvancementTests.AdvancementSpec("story/us2/chrono_aegis_obtained", "story/us2/time_guardian_defeat"),
+            new AdvancementTests.AdvancementSpec("story/us2/time_guardian_defeat"),
+            new AdvancementTests.AdvancementSpec("story/us2/desert_clock_tower"),
+            new AdvancementTests.AdvancementSpec("story/us2/time_manipulation_tools"),
+            new AdvancementTests.AdvancementSpec("story/us2/chrono_aegis_obtained"),
             // Story US3
-            new AdvancementTests.AdvancementSpec("story/us3/master_clock_access", "story/us2/time_guardian_defeat"),
-            new AdvancementTests.AdvancementSpec("story/us3/time_tyrant_defeat", "story/us3/master_clock_access"),
-            new AdvancementTests.AdvancementSpec("story/us3/ultimate_artifacts", "story/us3/time_tyrant_defeat"),
+            new AdvancementTests.AdvancementSpec("story/us3/master_clock_access"),
+            new AdvancementTests.AdvancementSpec("story/us3/time_tyrant_defeat"),
+            new AdvancementTests.AdvancementSpec("story/us3/ultimate_artifacts"),
             // Equipment
-            new AdvancementTests.AdvancementSpec("equipment/tier1_full_set", "story/us1/dimension_entry"),
-            new AdvancementTests.AdvancementSpec("equipment/tier2_full_set", "story/us2/desert_clock_tower"),
+            new AdvancementTests.AdvancementSpec("equipment/tier1_full_set"),
+            new AdvancementTests.AdvancementSpec("equipment/tier2_full_set"),
             // Exploration
-            new AdvancementTests.AdvancementSpec("exploration/first_time_crystal_ore", "story/us1/dimension_entry"),
-            new AdvancementTests.AdvancementSpec("exploration/lost_adventurer_journal", "story/us1/dimension_entry"),
-            new AdvancementTests.AdvancementSpec("exploration/time_cairn_stones", "story/us1/dimension_entry"),
+            new AdvancementTests.AdvancementSpec("exploration/first_time_crystal_ore"),
+            new AdvancementTests.AdvancementSpec("exploration/lost_adventurer_journal"),
+            new AdvancementTests.AdvancementSpec("exploration/time_cairn_stones"),
             // Mobs
-            new AdvancementTests.AdvancementSpec("mobs/chronos_warden_defeated", "story/us2/time_guardian_defeat"),
-            new AdvancementTests.AdvancementSpec("mobs/clockwork_colossus_defeated", "story/us2/time_guardian_defeat"),
-            new AdvancementTests.AdvancementSpec("mobs/temporal_phantom_defeated", "story/us2/time_guardian_defeat"),
-            new AdvancementTests.AdvancementSpec("mobs/entropy_keeper_defeated", "story/us2/time_guardian_defeat")
+            new AdvancementTests.AdvancementSpec("mobs/chronos_warden_defeated"),
+            new AdvancementTests.AdvancementSpec("mobs/clockwork_colossus_defeated"),
+            new AdvancementTests.AdvancementSpec("mobs/temporal_phantom_defeated"),
+            new AdvancementTests.AdvancementSpec("mobs/entropy_keeper_defeated")
         );
     }
 }

@@ -14,7 +14,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Validates advancement JSON resources for item and entity reference consistency.
  * Checks that display icons, criteria items, and entity references point to
- * valid registered entries.
+ * valid registered entries. Also checks that every "parent" points to an existing
+ * advancement file (replaces the former parent GameTest, which only checked a hardcoded list).
  */
 public class AdvancementValidationTest {
 
@@ -75,6 +76,47 @@ public class AdvancementValidationTest {
         }
 
         return tests;
+    }
+
+    @TestFactory
+    Collection<DynamicTest> advancementParentReferenceTests() {
+        List<String> advFiles = TestUtils.findJsonResources("data/chronodawn/advancement/");
+        advFiles.addAll(TestUtils.findJsonResources("data/chronodawn/advancements/"));
+        if (advFiles.isEmpty()) return List.of();
+
+        Set<String> existingIds = new java.util.HashSet<>();
+        for (String advPath : advFiles) {
+            existingIds.add("chronodawn:" + extractAdvancementPath(advPath));
+        }
+
+        Collection<DynamicTest> tests = new ArrayList<>();
+        for (String advPath : advFiles) {
+            Map<String, Object> adv = TestUtils.loadJsonResource(advPath);
+            if (adv == null) continue;
+            Object parent = adv.get("parent");
+            if (!(parent instanceof String)) continue;
+            String parentId = (String) parent;
+            // Only chronodawn parents can be resolved from this mod's data
+            if (!parentId.startsWith("chronodawn:")) continue;
+
+            String advName = extractAdvancementName(advPath);
+            tests.add(DynamicTest.dynamicTest(
+                "advancement_parent_" + advName,
+                () -> assertTrue(
+                    existingIds.contains(parentId),
+                    "Advancement '" + advName + "' references unknown parent: " + parentId
+                )
+            ));
+        }
+
+        return tests;
+    }
+
+    private String extractAdvancementPath(String path) {
+        return path
+            .replace("data/chronodawn/advancement/", "")
+            .replace("data/chronodawn/advancements/", "")
+            .replace(".json", "");
     }
 
     private String extractAdvancementName(String path) {
