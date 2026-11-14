@@ -34,11 +34,14 @@ public class FruitOfTimeTreeFeature {
     /**
      * Resource key for the configured feature.
      * Used by TreeGrower/AbstractTreeGrower to reference the tree configuration defined in JSON.
+     * Points at the *_sapling variant, which places vanilla dirt under the trunk so that
+     * saplings grown on vanilla ground do not leak Temporal Dirt. Natural generation uses
+     * the non-sapling feature through placed features.
      */
     public static final ResourceKey<Feature> FRUIT_OF_TIME_TREE =
         ResourceKey.create(
             Registries.FEATURE,
-            CompatResourceLocation.create("chronodawn", "fruit_of_time_tree")
+            CompatResourceLocation.create("chronodawn", "fruit_of_time_tree_sapling")
         );
 
     /**
