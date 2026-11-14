@@ -124,6 +124,14 @@ subprojects {
     if (project.name in ['fabric', 'neoforge', 'forge']) {
         // Production run support (runProd)
         apply from: "${rootDir}/gradle/shared/prod-run.gradle"
+        if (project.name in ['fabric', 'neoforge']) {
+            def writeSmokeConfig = project.ext.prodWriteServerConfig
+            def smokePort = project.name == 'fabric' ? 25601 : 25602
+            project.ext.prodWriteServerConfig = { File installDir ->
+                writeSmokeConfig(installDir)
+                new File(installDir, 'server.properties').append("server-port=${smokePort}\n")
+            }
+        }
         // Old-release-to-candidate world upgrade test (fabric/neoforge, 1.21.1)
         apply from: "${rootDir}/gradle/upgrade-test.gradle"
 

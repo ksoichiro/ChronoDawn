@@ -769,6 +769,9 @@ world within 5 minutes. No display required.
 ./gradlew :neoforge:prodSmokeTest -Ptarget_mc_version=1.21.11
 ```
 
+The Fabric and NeoForge smoke tests use ports 25601 and 25602 respectively,
+so both tasks can run in the same Gradle invocation.
+
 Not supported for Forge (1.20.1) — see "Mixin Configuration" below. Uses
 `build/prod-smoke/<loader>-<version>/`, separate from the manually-verified
 `run-prod/` used by `runProd`.
