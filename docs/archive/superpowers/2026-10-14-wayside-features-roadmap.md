@@ -3,7 +3,7 @@
 > Historical document. Details and plans may have changed. Check the current guides and implementation before relying on them.
 
 **Created**: 2026-10-14
-**Status**: Parts 1 to 4 shipped to main (2026-10-14, 2026-10-17, 2026-10-21, 2026-10-25). Part 5 shipped (2026-10-28). Part 6 not started.
+**Status**: Parts 1 to 4 shipped to main (2026-10-14, 2026-10-17, 2026-10-21, 2026-10-25). Part 5 shipped (2026-10-28). Part 6 design drafted (2026-11-15), not implemented.
 **Related**: [Part 1 design](2026-10-12-wayside-sundial-design.md)
 
 This document records everything decided so far for the whole effort, so a
@@ -60,7 +60,7 @@ discover. Several biomes pass by, yet nothing invites a detour.
 | 3 | `time_well` | Wishing well, exchange a thrown item | Shipped (2026-10-21) |
 | 4 | `watchmaker_camp` | Per-player chest that refills over time | Shipped (2026-10-25) |
 | 5 | `time_cairn` | Collect time-of-day cairn stones, rare midnight echo | Shipped (2026-10-28) |
-| 6 | `hourglass_monolith` | Small wave fight with a reward | Not started |
+| 6 | `hourglass_monolith` | Small wave fight with a reward | Design drafted (2026-11-15) |
 
 Order rationale: simplest first to prove the foundation, then features that
 need new UI, entities or event state machines.
@@ -243,6 +243,11 @@ The notes below are the starting point it was designed from.
   path, cache placement, Chrono Dawn's variable day length interplay.
 
 ### Part 6: `hourglass_monolith` (decided role)
+
+Design draft: [part 6 design](../../design/wayside_hourglass_monolith.md).
+It settles the open points below (existing mobs only, fixed counts, cooldown
+only on clear, resume from the stored wave, participants rewarded, 72000-tick
+cooldown, rare Fragment of Stasis Core in the reward table).
 
 - Today: 3x5x3 temporal sandstone monolith in the desert. Rarity 1 in 16
   chunks.
