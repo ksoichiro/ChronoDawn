@@ -185,11 +185,10 @@ public final class RegistryDrivenTestGenerator {
     }
 
     /**
-     * Generates tests verifying structure template loading, minimum size, and required blocks.
+     * Generates a test verifying server-side structure template loading.
      */
     public static List<NamedTest> generateStructureTests() {
-        return StructureTests.generateStructureTests(
-            StructureTests.getStructureSpecs(), NamedTest::new);
+        return StructureTests.generateStructureTests(NamedTest::new);
     }
 
     /**

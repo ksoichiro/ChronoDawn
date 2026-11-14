@@ -158,6 +158,8 @@ Run unit tests:
 Each Gradle invocation selects one target version. Do not combine tasks from
 different versioned projects in one invocation. Run a separate command with
 the matching `-Ptarget_mc_version` for each version.
+Do not run Gradle invocations for the same version concurrently: their resource
+processing tasks share output directories and can interfere with each other.
 
 Diagnostic Gradle init scripts also run for included builds, so guard project
 lookups. Keep injected sources opt-in, use disposable run directories, and
