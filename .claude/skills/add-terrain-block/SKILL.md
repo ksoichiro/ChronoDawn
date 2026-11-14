@@ -656,7 +656,7 @@ Update biome JSON `features` array at index 6 (ore generation step) in **all 3 l
 ./gradlew validateTranslations   # translation key parity
 ./gradlew build1_21_11           # spot build latest version
 ./gradlew buildAll               # all 11 versions
-./gradlew testAll                # including CreativeTabCompletenessTest
+./gradlew buildAll -Pbuildall_run_tests=true  # unit tests too, incl. CreativeTabCompletenessTest
 ```
 
 If `buildAll` fails, check for unintended Java file modifications:
