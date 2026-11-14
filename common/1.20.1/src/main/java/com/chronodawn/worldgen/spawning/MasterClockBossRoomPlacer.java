@@ -1518,6 +1518,12 @@ public class MasterClockBossRoomPlacer {
             return;
         }
 
+        // Only the persisted record knows about structures processed before a restart
+        if (TemporalPhantomSpawner.getSpawnData(level).isMasterClockStructureProcessed(structureOrigin)) {
+            dimensionProcessed.add(structureOrigin);
+            return;
+        }
+
         // Already processing
         if (processingStates.containsKey(structureOrigin)) {
             return;
@@ -1620,6 +1626,7 @@ public class MasterClockBossRoomPlacer {
             if (dimensionProcessed != null) {
                 dimensionProcessed.add(structureOrigin);
             }
+            TemporalPhantomSpawner.getSpawnData(level).markMasterClockStructureProcessed(structureOrigin);
             ChronoDawn.LOGGER.debug("Completed boss_room placement for Master Clock at {}", structureOrigin);
         }
     }
@@ -1712,6 +1719,10 @@ public class MasterClockBossRoomPlacer {
         // Remove dropper marker
         level.setBlock(state.surfaceMarkerPos, Blocks.AIR.defaultBlockState(), 3);
         ChronoDawn.LOGGER.debug("Removed dropper marker at {}", state.surfaceMarkerPos);
+
+        // The marker is gone, so a restart mid-placement could never resume. Record the structure
+        // now so it is not processed again (and no second boss_room is placed)
+        TemporalPhantomSpawner.getSpawnData(level).markMasterClockStructureProcessed(state.structureOrigin);
 
         // Initialize stairs placement (will be done in next phase)
         state.phase = ProcessingPhase.PLACING_STAIRS;
@@ -1844,6 +1855,13 @@ public class MasterClockBossRoomPlacer {
                 // Check if already processed or processing
                 if (dimensionProcessed.contains(structureOrigin)) {
                     ChronoDawn.LOGGER.debug("Master Clock at {} already processed, skipping", structureOrigin);
+                    return;
+                }
+
+                // Only the persisted record knows about structures processed before a restart
+                if (TemporalPhantomSpawner.getSpawnData(level).isMasterClockStructureProcessed(structureOrigin)) {
+                    dimensionProcessed.add(structureOrigin);
+                    ChronoDawn.LOGGER.debug("Master Clock at {} already processed (persisted), skipping", structureOrigin);
                     return;
                 }
 

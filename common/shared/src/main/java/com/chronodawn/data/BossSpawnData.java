@@ -50,6 +50,11 @@ public class BossSpawnData extends CompatSavedData {
     private final Set<BlockPos> temporalPhantomBossRooms = Collections.newSetFromMap(new ConcurrentHashMap<>());
     private final Set<BlockPos> temporalPhantomSpawnedRooms = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
+    // Master Clock data
+    // The Master Clock placer removes its surface marker before placing the stairs, corridor
+    // and boss_room, so processed structures must persist or a restart re-scans them
+    private final Set<BlockPos> masterClockProcessedStructures = Collections.newSetFromMap(new ConcurrentHashMap<>());
+
     public BossSpawnData() {
         super();
     }
@@ -143,6 +148,15 @@ public class BossSpawnData extends CompatSavedData {
             for (int i = 0; i < spawnedRoomsList.size(); i++) {
                 CompoundTag roomTag = spawnedRoomsList.getCompound(i);
                 this.temporalPhantomSpawnedRooms.add(BlockPos.of(roomTag.getLong("Pos")));
+            }
+        }
+
+        // Load Master Clock data
+        if (tag.contains("MasterClock")) {
+            CompoundTag masterClockTag = tag.getCompound("MasterClock");
+            ListTag processedList = masterClockTag.getList("ProcessedStructures", Tag.TAG_COMPOUND);
+            for (int i = 0; i < processedList.size(); i++) {
+                this.masterClockProcessedStructures.add(BlockPos.of(processedList.getCompound(i).getLong("Pos")));
             }
         }
 
@@ -249,6 +263,17 @@ public class BossSpawnData extends CompatSavedData {
         }
         phantomTag.put("SpawnedRooms", phantomSpawnedRoomsList);
         tag.put("TemporalPhantom", phantomTag);
+
+        // Save Master Clock data
+        CompoundTag masterClockTag = new CompoundTag();
+        ListTag masterClockProcessedList = new ListTag();
+        for (BlockPos pos : masterClockProcessedStructures) {
+            CompoundTag structureTag = new CompoundTag();
+            structureTag.putLong("Pos", pos.asLong());
+            masterClockProcessedList.add(structureTag);
+        }
+        masterClockTag.put("ProcessedStructures", masterClockProcessedList);
+        tag.put("MasterClock", masterClockTag);
 
         // Save Clockwork Colossus data
         CompoundTag colossusTag = new CompoundTag();
@@ -406,6 +431,20 @@ public class BossSpawnData extends CompatSavedData {
     }
 
     // ========================================
+    // Master Clock methods
+    // ========================================
+
+    public boolean isMasterClockStructureProcessed(BlockPos pos) {
+        return masterClockProcessedStructures.contains(pos);
+    }
+
+    public void markMasterClockStructureProcessed(BlockPos pos) {
+        if (masterClockProcessedStructures.add(pos.immutable())) {
+            setDirty();
+        }
+    }
+
+    // ========================================
     // Reset methods (for testing/debugging)
     // ========================================
 
@@ -447,6 +486,11 @@ public class BossSpawnData extends CompatSavedData {
         setDirty();
     }
 
+    public void resetMasterClock() {
+        masterClockProcessedStructures.clear();
+        setDirty();
+    }
+
     public void resetAll() {
         resetTimeTyrant();
         resetTimeGuardian();
@@ -454,6 +498,7 @@ public class BossSpawnData extends CompatSavedData {
         resetEntropyKeeper();
         resetClockworkColossus();
         resetTemporalPhantom();
+        resetMasterClock();
         setDirty();
     }
 }
