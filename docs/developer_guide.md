@@ -729,7 +729,7 @@ Within each version group, fabric and neoforge share the same common module buil
 
 Each version uses a separate directory (e.g., `fabric/1.21.2/`) via `project(':fabric').projectDir = file("fabric/1.21.2")` in settings.gradle. This gives each version its own `.gradle/architectury/` directory and build output.
 
-Each subprocess uses `--project-cache-dir .gradle/gametest-<version>` to avoid lock conflicts with the outer Gradle process and other subprocesses.
+Each subprocess uses `--project-cache-dir .gradle/gametest-<version>` to avoid lock conflicts with the outer Gradle process and other subprocesses. Because the task history is isolated per cache directory, `org.gradle.caching=true` (set in `gradle.properties`) lets each phase restore `compileJava` output from the Gradle build cache (`FROM-CACHE`) instead of recompiling the same version.
 
 Shared sources are included via `srcDir` references to `fabric/base/` and `neoforge/base/` directories (which are source directories, not Gradle subprojects).
 
