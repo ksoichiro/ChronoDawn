@@ -327,6 +327,7 @@ public final class RegistryDrivenTestGenerator {
         all.addAll(TimeCairnDialTests.generateTests(NamedTest::new));
         all.addAll(WatchmakerCampLootTests.generateTests(NamedTest::new));
         all.addAll(WatchmakerChestTests.generateTests(NamedTest::new));
+        all.addAll(BlockBreakProtectionTests.generateTests(NamedTest::new));
         // Conventional (c:) tag membership verified at runtime, including entries
         // that reach an umbrella tag only through a platform-defined subtag.
         all.addAll(ConventionalTagTests.generate(ModItems.class, ModBlocks.class,

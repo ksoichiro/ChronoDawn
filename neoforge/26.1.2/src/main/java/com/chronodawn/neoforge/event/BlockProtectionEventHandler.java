@@ -1,6 +1,7 @@
 package com.chronodawn.neoforge.event;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.worldgen.protection.BlockBreakGuard;
 import com.chronodawn.worldgen.protection.BlockProtectionHandler;
 import com.chronodawn.worldgen.protection.PermanentProtectionHandler;
 import net.minecraft.network.chat.Component;
@@ -45,14 +46,9 @@ public class BlockProtectionEventHandler {
         Player player = event.getPlayer();
         Level level = (Level) event.getLevel();
 
-        // Allow creative mode players to break anything
-        if (player.isCreative()) {
-            return;
-        }
-
-        // Check if this block is protected (boss room or permanent)
-        boolean isPermanentlyProtected = PermanentProtectionHandler.isProtected(level, event.getPos());
-        boolean isBossRoomProtected = BlockProtectionHandler.isProtected(level, event.getPos());
+        BlockBreakGuard.Verdict verdict = BlockBreakGuard.check(level, event.getPos(), player.isCreative());
+        boolean isPermanentlyProtected = verdict == BlockBreakGuard.Verdict.PERMANENTLY_PROTECTED;
+        boolean isBossRoomProtected = verdict == BlockBreakGuard.Verdict.BOSS_ROOM_PROTECTED;
 
         if (isPermanentlyProtected) {
             // Display warning message for permanent protection
