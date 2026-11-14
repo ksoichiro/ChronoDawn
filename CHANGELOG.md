@@ -41,6 +41,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   body, the water in the area around the structure was removed, leaving
   box-shaped empty spaces, for example above the boss room. The water now
   stays outside the structure. Only newly generated chunks are affected.
+- **Hollows under structures on slopes**: when a surface structure such as the
+  Forgotten Library, Ancient Ruins, or Desert Clock Tower generated on a
+  slope, a large empty space was left under its floor on the low side. The
+  space under the floor is now filled with Temporal Dirt down to the ground,
+  or with sand where the ground is sand. This also applies to the surface
+  entrances of the Guardian Vault, Entropy Crypt, and Clockwork Depths. Only
+  newly generated chunks are affected.
 - **Watchmaker's Chest lid**: the lid could stay open when a screen closed
   without the chest being told, for example when its player was removed. The
   chest now counts the screens really open every few ticks and closes the lid

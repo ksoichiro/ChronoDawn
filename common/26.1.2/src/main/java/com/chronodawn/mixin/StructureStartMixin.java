@@ -370,4 +370,53 @@ public abstract class StructureStartMixin {
         // Clear the set to free memory
         waterPositionsBeforePlacement.clear();
     }
+
+    /**
+     * Inject after structure placement to fill the hollow under a surface structure's floor.
+     *
+     * Runs once per chunk, like the placement itself, and writes only inside chunkBox.
+     */
+    @Inject(
+        method = "placeInChunk",
+        at = @At("RETURN")
+    )
+    private void fillFoundationAfterPlacement(
+        WorldGenLevel level,
+        StructureManager structureManager,
+        ChunkGenerator chunkGenerator,
+        RandomSource random,
+        BoundingBox chunkBox,
+        ChunkPos chunkPos,
+        CallbackInfo ci
+    ) {
+        java.util.List<net.minecraft.world.level.levelgen.structure.StructurePiece> pieces = this.getPieces();
+        if (pieces.isEmpty()) {
+            return;
+        }
+
+        net.minecraft.resources.Identifier structureLocation =
+            level.registryAccess()
+                .lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
+                .getKey(structure);
+        if (structureLocation == null ||
+            !com.chronodawn.worldgen.StructureFoundationFiller.appliesTo(
+                structureLocation.getNamespace(), structureLocation.getPath())) {
+            return;
+        }
+
+        java.util.List<BoundingBox> pieceBoxes = new java.util.ArrayList<>(pieces.size());
+        for (net.minecraft.world.level.levelgen.structure.StructurePiece piece : pieces) {
+            pieceBoxes.add(piece.getBoundingBox());
+        }
+        int filled = com.chronodawn.worldgen.StructureFoundationFiller.fill(
+            level, chunkBox, pieces.get(0).getBoundingBox(), pieceBoxes);
+        if (filled > 0) {
+            ChronoDawn.LOGGER.debug(
+                "Filled {} foundation blocks in chunk {} for {}",
+                filled,
+                chunkPos,
+                structureLocation.getPath()
+            );
+        }
+    }
 }
