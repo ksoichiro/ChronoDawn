@@ -42,7 +42,10 @@ public final class RegistryDrivenTestGenerator {
 
     public static final BlockPos TEST_POS = new BlockPos(1, 2, 1);
 
-    // Known cases where field name doesn't match registry ID (intentional naming differences)
+    // Known cases where field name doesn't match registry ID. These apply to
+    // ModBlocks (FRUIT_OF_TIME_BLOCK) and ModEntities (CHRONO_DAWN_BOAT,
+    // CHRONO_DAWN_CHEST_BOAT) fields. ModItems has no such field, so they are
+    // a no-op for item checks.
     private static final Map<String, String> ID_OVERRIDES = Map.of(
         "FRUIT_OF_TIME_BLOCK", "fruit_of_time",
         "CHRONO_DAWN_BOAT", "chronodawn_boat",
