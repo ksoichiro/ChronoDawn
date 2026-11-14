@@ -83,46 +83,41 @@ public final class RegistryDrivenTestGenerator {
         return tests;
     }
 
+    /**
+     * Generates one test verifying tool durability values, listing every mismatch.
+     */
     public static List<NamedTest> generateToolDurabilityTests() {
-        List<NamedTest> tests = new ArrayList<>();
-        for (var spec : RegistryDrivenTestData.getToolSpecs()) {
-            String registryName = spec.item().getId().getPath();
-            String testName = "tool_durability_" + registryName;
-            tests.add(new NamedTest(testName, helper -> {
-                ItemStack stack = new ItemStack(spec.item().get());
-                helper.runAfterDelay(1, () -> {
-                    int actual = stack.getMaxDamage();
-                    if (actual == spec.expectedDurability()) {
-                        helper.succeed();
-                    } else {
-                        helper.fail(Component.literal(registryName + " durability was " + actual +
-                            ", expected " + spec.expectedDurability()));
+        return RegistryConsistencyTests.generateAggregated(NamedTest::new,
+            "tool_durability_check", "Tool durability mismatches", () -> {
+                List<String> failures = new ArrayList<>();
+                for (var spec : RegistryDrivenTestData.getToolSpecs()) {
+                    int actual = new ItemStack(spec.item().get()).getMaxDamage();
+                    if (actual != spec.expectedDurability()) {
+                        failures.add(spec.item().getId().getPath() + " durability was " + actual +
+                            ", expected " + spec.expectedDurability());
                     }
-                });
-            }));
-        }
-        return tests;
+                }
+                return failures;
+            });
     }
 
+    /**
+     * Generates one test verifying armor defense values, listing every mismatch.
+     */
     public static List<NamedTest> generateArmorDefenseTests() {
-        List<NamedTest> tests = new ArrayList<>();
-        for (var spec : RegistryDrivenTestData.getArmorSpecs()) {
-            String registryName = spec.item().getId().getPath();
-            String testName = "armor_defense_" + registryName;
-            tests.add(new NamedTest(testName, helper -> {
-                ItemStack stack = new ItemStack(spec.item().get());
-                helper.runAfterDelay(1, () -> {
+        return RegistryConsistencyTests.generateAggregated(NamedTest::new,
+            "armor_defense_check", "Armor defense mismatches", () -> {
+                List<String> failures = new ArrayList<>();
+                for (var spec : RegistryDrivenTestData.getArmorSpecs()) {
+                    ItemStack stack = new ItemStack(spec.item().get());
                     int actual = getArmorDefenseFromItemStack(stack, spec.slot());
-                    if (actual == spec.expectedDefense()) {
-                        helper.succeed();
-                    } else {
-                        helper.fail(Component.literal(registryName + " defense was " + actual +
-                            ", expected " + spec.expectedDefense()));
+                    if (actual != spec.expectedDefense()) {
+                        failures.add(spec.item().getId().getPath() + " defense was " + actual +
+                            ", expected " + spec.expectedDefense());
                     }
-                });
-            }));
-        }
-        return tests;
+                }
+                return failures;
+            });
     }
 
     public static List<NamedTest> generateEntityAttributeTests() {
@@ -216,201 +211,86 @@ public final class RegistryDrivenTestGenerator {
     }
 
     /**
-     * Generates tests verifying that all item registry IDs match their field names.
+     * Generates one test verifying that all item registry IDs match their field names.
      */
     public static List<NamedTest> generateItemIdTests() {
-        return generateRegistryIdTests(ModItems.class, "item_id_");
+        return RegistryConsistencyTests.generateRegistryIdTest(NamedTest::new, "item_id_check", ModItems.class, ID_OVERRIDES);
     }
 
     /**
-     * Generates tests verifying that all block registry IDs match their field names.
+     * Generates one test verifying that all block registry IDs match their field names.
      */
     public static List<NamedTest> generateBlockIdTests() {
-        return generateRegistryIdTests(ModBlocks.class, "block_id_");
+        return RegistryConsistencyTests.generateRegistryIdTest(NamedTest::new, "block_id_check", ModBlocks.class, ID_OVERRIDES);
     }
 
     /**
-     * Generates tests verifying that all entity registry IDs match their field names.
+     * Generates one test verifying that all entity registry IDs match their field names.
      */
     public static List<NamedTest> generateEntityIdTests() {
-        return generateRegistryIdTests(ModEntities.class, "entity_id_");
+        return RegistryConsistencyTests.generateRegistryIdTest(NamedTest::new, "entity_id_check", ModEntities.class, ID_OVERRIDES);
     }
 
     /**
-     * Generates tests verifying spawn egg items reference the correct entity.
-     *
-     * Convention: field TEMPORAL_WRAITH_SPAWN_EGG should have ID "temporal_wraith_spawn_egg"
-     * and entity "temporal_wraith" must exist in the entity registry.
+     * Generates one test verifying spawn egg items reference registered entities.
      */
     public static List<NamedTest> generateSpawnEggEntityTests() {
-        List<NamedTest> tests = new ArrayList<>();
-        for (Field field : ModItems.class.getDeclaredFields()) {
-            if (!isRegistrySupplierField(field)) continue;
-            String fieldName = field.getName();
-            if (!fieldName.endsWith("_SPAWN_EGG")) continue;
-
-            String expectedEntityId = fieldName.substring(0, fieldName.length() - "_SPAWN_EGG".length()).toLowerCase();
-            tests.add(new NamedTest("spawn_egg_entity_" + expectedEntityId, helper -> {
-                helper.runAfterDelay(1, () -> {
-                    Identifier entityId = Identifier.fromNamespaceAndPath("chronodawn", expectedEntityId);
-                    if (BuiltInRegistries.ENTITY_TYPE.containsKey(entityId)) {
-                        helper.succeed();
-                    } else {
-                        helper.fail(Component.literal("Spawn egg " + fieldName + " expects entity \"" +
-                            expectedEntityId + "\" but it is not registered"));
-                    }
-                });
-            }));
-        }
-        return tests;
+        return RegistryConsistencyTests.generateSpawnEggEntityTest(NamedTest::new);
     }
 
     /**
-     * Generates tests verifying food items have valid nutrition and saturation values.
+     * Generates one test verifying food items have valid nutrition and saturation values.
      */
     public static List<NamedTest> generateFoodPropertyTests() {
-        List<NamedTest> tests = new ArrayList<>();
-        for (Field field : ModItems.class.getDeclaredFields()) {
-            if (!isRegistrySupplierField(field)) continue;
-            String fieldName = field.getName();
-            String expectedId = fieldName.toLowerCase();
-            tests.add(new NamedTest("food_check_" + expectedId, helper -> {
-                helper.runAfterDelay(1, () -> {
+        return RegistryConsistencyTests.generateAggregated(NamedTest::new,
+            "food_check", "Food items with invalid properties", () -> {
+                List<String> failures = new ArrayList<>();
+                for (Field field : ModItems.class.getDeclaredFields()) {
+                    if (!isRegistrySupplierField(field)) continue;
+                    String fieldName = field.getName();
                     try {
                         @SuppressWarnings("unchecked")
                         RegistrySupplier<Item> supplier = (RegistrySupplier<Item>) field.get(null);
-                        ItemStack stack = new ItemStack(supplier.get());
-                        FoodProperties food = stack.get(DataComponents.FOOD);
-                        if (food == null) {
-                            helper.succeed(); // Not a food item
-                            return;
-                        }
+                        FoodProperties food = new ItemStack(supplier.get()).get(DataComponents.FOOD);
+                        if (food == null) continue; // Not a food item
                         if (food.nutrition() <= 0) {
-                            helper.fail(Component.literal(fieldName + " is food but has nutrition=" + food.nutrition() + " (expected > 0)"));
+                            failures.add(fieldName + " is food but has nutrition=" + food.nutrition() + " (expected > 0)");
                         } else if (food.saturation() < 0) {
-                            helper.fail(Component.literal(fieldName + " is food but has saturation=" + food.saturation() + " (expected >= 0)"));
-                        } else {
-                            helper.succeed();
+                            failures.add(fieldName + " is food but has saturation=" + food.saturation() + " (expected >= 0)");
                         }
                     } catch (Exception e) {
-                        helper.fail(Component.literal("Failed to check food for " + fieldName + ": " + e.getMessage()));
+                        failures.add("Failed to check food for " + fieldName + ": " + e.getMessage());
                     }
-                });
-            }));
-        }
-        return tests;
+                }
+                return failures;
+            });
     }
 
     /**
-     * Generates tests verifying that blocks with items have matching registry IDs.
-     *
-     * For each block in ModBlocks, checks that a corresponding item exists in the
-     * item registry with the same ID. Blocks without items (e.g., portal blocks)
-     * are allowed and pass the test.
+     * Generates one test verifying that blocks with items have matching registry IDs.
      */
     public static List<NamedTest> generateBlockItemConsistencyTests() {
-        List<NamedTest> tests = new ArrayList<>();
-        for (Field field : ModBlocks.class.getDeclaredFields()) {
-            if (!isRegistrySupplierField(field)) continue;
-            String fieldName = field.getName();
-            String expectedId = fieldName.toLowerCase();
-            tests.add(new NamedTest("block_item_" + expectedId, helper -> {
-                helper.runAfterDelay(1, () -> {
-                    try {
-                        @SuppressWarnings("unchecked")
-                        RegistrySupplier<?> supplier = (RegistrySupplier<?>) field.get(null);
-                        Identifier blockId = supplier.getId();
-                        // Check if a matching item exists in the item registry
-                        if (BuiltInRegistries.ITEM.containsKey(blockId)) {
-                            helper.succeed();
-                        } else {
-                            // Check if a matching field exists in ModItems (expected to have item)
-                            boolean hasItemField = false;
-                            for (Field itemField : ModItems.class.getDeclaredFields()) {
-                                if (itemField.getName().equals(fieldName) && isRegistrySupplierField(itemField)) {
-                                    hasItemField = true;
-                                    break;
-                                }
-                            }
-                            if (hasItemField) {
-                                helper.fail(Component.literal(fieldName + " has a ModItems field but no item registered with ID \"" +
-                                    blockId + "\""));
-                            } else {
-                                // No corresponding item field - block intentionally has no item
-                                helper.succeed();
-                            }
-                        }
-                    } catch (Exception e) {
-                        helper.fail(Component.literal("Failed to check block-item for " + fieldName + ": " + e.getMessage()));
-                    }
-                });
-            }));
-        }
-        return tests;
+        return RegistryConsistencyTests.generateBlockItemConsistencyTest(NamedTest::new);
     }
 
     /**
-     * Generates tests verifying equipment items (tools/armor) have maxStackSize of 1.
+     * Generates one test verifying equipment items (tools/armor) have maxStackSize of 1.
      */
     public static List<NamedTest> generateEquipmentStackSizeTests() {
-        List<NamedTest> tests = new ArrayList<>();
-        for (var spec : RegistryDrivenTestData.getToolSpecs()) {
-            String name = spec.item().getId().getPath();
-            tests.add(new NamedTest("stack_size_" + name, helper -> {
-                helper.runAfterDelay(1, () -> {
-                    ItemStack stack = new ItemStack(spec.item().get());
-                    int maxStack = stack.getMaxStackSize();
-                    if (maxStack == 1) {
-                        helper.succeed();
-                    } else {
-                        helper.fail(Component.literal(name + " maxStackSize=" + maxStack + ", expected 1"));
+        return RegistryConsistencyTests.generateAggregated(NamedTest::new,
+            "stack_size_check", "Equipment with maxStackSize != 1", () -> {
+                List<String> failures = new ArrayList<>();
+                List<RegistrySupplier<? extends Item>> equipment = new ArrayList<>();
+                for (var spec : RegistryDrivenTestData.getToolSpecs()) equipment.add(spec.item());
+                for (var spec : RegistryDrivenTestData.getArmorSpecs()) equipment.add(spec.item());
+                for (var item : equipment) {
+                    int maxStack = new ItemStack(item.get()).getMaxStackSize();
+                    if (maxStack != 1) {
+                        failures.add(item.getId().getPath() + " maxStackSize=" + maxStack + ", expected 1");
                     }
-                });
-            }));
-        }
-        for (var spec : RegistryDrivenTestData.getArmorSpecs()) {
-            String name = spec.item().getId().getPath();
-            tests.add(new NamedTest("stack_size_" + name, helper -> {
-                helper.runAfterDelay(1, () -> {
-                    ItemStack stack = new ItemStack(spec.item().get());
-                    int maxStack = stack.getMaxStackSize();
-                    if (maxStack == 1) {
-                        helper.succeed();
-                    } else {
-                        helper.fail(Component.literal(name + " maxStackSize=" + maxStack + ", expected 1"));
-                    }
-                });
-            }));
-        }
-        return tests;
-    }
-
-    /**
-     * Generates tests verifying all items defined in ModItemId enum are registered.
-     */
-    public static List<NamedTest> generateItemRegistryConsistencyTests() {
-        return RegistryConsistencyTests.generateItemTests(NamedTest::new);
-    }
-
-    /**
-     * Generates tests verifying all blocks defined in ModBlockId enum are registered.
-     */
-    public static List<NamedTest> generateBlockRegistryConsistencyTests() {
-        return RegistryConsistencyTests.generateBlockTests(NamedTest::new);
-    }
-
-    /**
-     * Generates tests verifying all entities defined in ModEntityId enum are registered.
-     */
-    public static List<NamedTest> generateEntityRegistryConsistencyTests() {
-        return RegistryConsistencyTests.generateEntityTests(NamedTest::new);
-    }
-
-    /**
-     * Generates tests verifying all block entities defined in ModBlockEntityId enum are registered.
-     */
-    public static List<NamedTest> generateBlockEntityRegistryConsistencyTests() {
-        return RegistryConsistencyTests.generateBlockEntityTests(NamedTest::new);
+                }
+                return failures;
+            });
     }
 
     /**
@@ -475,11 +355,6 @@ public final class RegistryDrivenTestGenerator {
         all.addAll(TimeCairnDialTests.generateTests(NamedTest::new));
         all.addAll(WatchmakerCampLootTests.generateTests(NamedTest::new));
         all.addAll(WatchmakerChestTests.generateTests(NamedTest::new));
-        // Registry consistency tests (ModItemId/ModBlockId/ModEntityId/ModBlockEntityId enum verification)
-        all.addAll(generateItemRegistryConsistencyTests());
-        all.addAll(generateBlockRegistryConsistencyTests());
-        all.addAll(generateEntityRegistryConsistencyTests());
-        all.addAll(generateBlockEntityRegistryConsistencyTests());
         // Conventional (c:) tag membership verified at runtime, including entries
         // that reach an umbrella tag only through a platform-defined subtag.
         all.addAll(ConventionalTagTests.generate(ModItems.class, ModBlocks.class,
@@ -514,33 +389,6 @@ public final class RegistryDrivenTestGenerator {
             && Modifier.isStatic(field.getModifiers())
             && Modifier.isFinal(field.getModifiers())
             && RegistrySupplier.class.isAssignableFrom(field.getType());
-    }
-
-    private static List<NamedTest> generateRegistryIdTests(Class<?> registryClass, String testPrefix) {
-        List<NamedTest> tests = new ArrayList<>();
-        for (Field field : registryClass.getDeclaredFields()) {
-            if (!isRegistrySupplierField(field)) continue;
-            String fieldName = field.getName();
-            String expectedId = ID_OVERRIDES.getOrDefault(fieldName, fieldName.toLowerCase());
-            tests.add(new NamedTest(testPrefix + expectedId, helper -> {
-                helper.runAfterDelay(1, () -> {
-                    try {
-                        @SuppressWarnings("unchecked")
-                        RegistrySupplier<?> supplier = (RegistrySupplier<?>) field.get(null);
-                        String actualId = supplier.getId().getPath();
-                        if (actualId.equals(expectedId)) {
-                            helper.succeed();
-                        } else {
-                            helper.fail(Component.literal(fieldName + " has ID \"" + actualId +
-                                "\", expected \"" + expectedId + "\""));
-                        }
-                    } catch (Exception e) {
-                        helper.fail(Component.literal("Failed to check ID for " + fieldName + ": " + e.getMessage()));
-                    }
-                });
-            }));
-        }
-        return tests;
     }
 
     private static double getAttributeValue(LivingEntity entity, String attributeName) {

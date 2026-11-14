@@ -6,19 +6,27 @@ import com.chronodawn.compat.CompatResourceLocation;
 import com.chronodawn.registry.ModBlockEntityId;
 import com.chronodawn.registry.ModBlockId;
 import com.chronodawn.registry.ModEntityId;
+import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModItemId;
+import com.chronodawn.registry.ModItems;
+import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.gametest.framework.GameTestHelper;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 /**
- * Tests to verify that all defined item/block IDs in ModItemId and ModBlockId enums
- * are properly registered in the game registries.
+ * Registry consistency tests shared by all Minecraft versions.
  *
- * These tests use the enum definitions as the source of truth.
- * If an ID is defined in the enum but not registered, the test will fail.
+ * Each kind of check is one test that scans every ID and lists all failing IDs in a
+ * single failure message, instead of generating one test per ID.
+ * The summary test uses the ModItemId/ModBlockId/ModEntityId/ModBlockEntityId enums as the
+ * source of truth for registration.
  */
 public final class RegistryConsistencyTests {
 
@@ -32,127 +40,116 @@ public final class RegistryConsistencyTests {
     }
 
     /**
-     * Generates tests for all item IDs defined in ModItemId enum.
-     * Each test verifies that the item is properly registered.
+     * Generates one test that runs every check supplied by {@code collector} and fails once,
+     * listing every failure. Aggregating per-ID checks into one test keeps the GameTest count
+     * small, since these checks need no world and only read registries after one tick.
      *
      * @param factory factory to create test instances
-     * @return list of generated tests
+     * @param testName name of the single generated test
+     * @param title heading of the failure message
+     * @param collector returns one message per failed ID, or an empty list when all pass
+     * @return list containing the single aggregated test
      */
-    public static <T> List<T> generateItemTests(TestFactory<T> factory) {
+    public static <T> List<T> generateAggregated(
+            TestFactory<T> factory, String testName, String title, Supplier<List<String>> collector) {
         List<T> tests = new ArrayList<>();
-
-        for (ModItemId itemId : ModItemId.availableForCurrent()) {
-            String testName = "registry_item_" + itemId.id();
-            tests.add(factory.create(testName, helper -> {
-                helper.runAfterDelay(1, () -> {
-                    var rl = CompatResourceLocation.create(
-                            ChronoDawn.MOD_ID, itemId.id());
-
-                    if (!BuiltInRegistries.ITEM.containsKey(rl)) {
-                        CompatGameTestHelper.fail(helper, "Item not registered: " + itemId.id() +
-                                " (enum: " + itemId.name() + ")");
-                        return;
-                    }
-
+        tests.add(factory.create(testName, helper -> {
+            helper.runAfterDelay(1, () -> {
+                List<String> failures = collector.get();
+                if (failures.isEmpty()) {
                     helper.succeed();
-                });
-            }));
-        }
-
+                } else {
+                    CompatGameTestHelper.fail(helper, title + " (" + failures.size() + "):\n"
+                            + String.join("\n", failures));
+                }
+            });
+        }));
         return tests;
     }
 
     /**
-     * Generates tests for all block IDs defined in ModBlockId enum.
-     * Each test verifies that the block is properly registered.
-     *
-     * @param factory factory to create test instances
-     * @return list of generated tests
+     * Generates one test verifying that every registry ID in {@code registryClass} matches
+     * its field name (after applying {@code idOverrides}).
      */
-    public static <T> List<T> generateBlockTests(TestFactory<T> factory) {
-        List<T> tests = new ArrayList<>();
-
-        for (ModBlockId blockId : ModBlockId.availableForCurrent()) {
-            String testName = "registry_block_" + blockId.id();
-            tests.add(factory.create(testName, helper -> {
-                helper.runAfterDelay(1, () -> {
-                    var rl = CompatResourceLocation.create(
-                            ChronoDawn.MOD_ID, blockId.id());
-
-                    if (!BuiltInRegistries.BLOCK.containsKey(rl)) {
-                        CompatGameTestHelper.fail(helper, "Block not registered: " + blockId.id() +
-                                " (enum: " + blockId.name() + ")");
-                        return;
+    public static <T> List<T> generateRegistryIdTest(
+            TestFactory<T> factory, String testName, Class<?> registryClass, Map<String, String> idOverrides) {
+        return generateAggregated(factory, testName, "Registry ID does not match field name", () -> {
+            List<String> failures = new ArrayList<>();
+            for (Field field : registryClass.getDeclaredFields()) {
+                if (!isRegistrySupplierField(field)) continue;
+                String fieldName = field.getName();
+                String expectedId = idOverrides.getOrDefault(fieldName, fieldName.toLowerCase());
+                try {
+                    RegistrySupplier<?> supplier = (RegistrySupplier<?>) field.get(null);
+                    String actualId = supplier.getId().getPath();
+                    if (!actualId.equals(expectedId)) {
+                        failures.add(fieldName + " has ID \"" + actualId + "\", expected \"" + expectedId + "\"");
                     }
-
-                    helper.succeed();
-                });
-            }));
-        }
-
-        return tests;
+                } catch (Exception e) {
+                    failures.add("Failed to check ID for " + fieldName + ": " + e.getMessage());
+                }
+            }
+            return failures;
+        });
     }
 
     /**
-     * Generates tests for all entity IDs defined in ModEntityId enum.
-     * Each test verifies that the entity type is properly registered.
+     * Generates one test verifying that every spawn egg item references a registered entity.
      *
-     * @param factory factory to create test instances
-     * @return list of generated tests
+     * Convention: field TEMPORAL_WRAITH_SPAWN_EGG expects entity "temporal_wraith".
      */
-    public static <T> List<T> generateEntityTests(TestFactory<T> factory) {
-        List<T> tests = new ArrayList<>();
-
-        for (ModEntityId entityId : ModEntityId.availableForCurrent()) {
-            String testName = "registry_entity_" + entityId.id();
-            tests.add(factory.create(testName, helper -> {
-                helper.runAfterDelay(1, () -> {
-                    var rl = CompatResourceLocation.create(
-                            ChronoDawn.MOD_ID, entityId.id());
-
-                    if (!BuiltInRegistries.ENTITY_TYPE.containsKey(rl)) {
-                        CompatGameTestHelper.fail(helper, "Entity not registered: " + entityId.id() +
-                                " (enum: " + entityId.name() + ")");
-                        return;
-                    }
-
-                    helper.succeed();
-                });
-            }));
-        }
-
-        return tests;
+    public static <T> List<T> generateSpawnEggEntityTest(TestFactory<T> factory) {
+        return generateAggregated(factory, "spawn_egg_entity_check", "Spawn eggs referencing unregistered entities", () -> {
+            List<String> failures = new ArrayList<>();
+            for (Field field : ModItems.class.getDeclaredFields()) {
+                if (!isRegistrySupplierField(field)) continue;
+                String fieldName = field.getName();
+                if (!fieldName.endsWith("_SPAWN_EGG")) continue;
+                String entityId = fieldName.substring(0, fieldName.length() - "_SPAWN_EGG".length()).toLowerCase();
+                if (!BuiltInRegistries.ENTITY_TYPE.containsKey(
+                        CompatResourceLocation.create(ChronoDawn.MOD_ID, entityId))) {
+                    failures.add("Spawn egg " + fieldName + " expects entity \"" + entityId
+                            + "\" but it is not registered");
+                }
+            }
+            return failures;
+        });
     }
 
     /**
-     * Generates tests for all block entity IDs defined in ModBlockEntityId enum.
-     * Each test verifies that the block entity type is properly registered.
-     *
-     * @param factory factory to create test instances
-     * @return list of generated tests
+     * Generates one test verifying that a block with a same-named ModItems field has its item registered.
+     * Blocks without an item field (e.g. portal blocks) are allowed.
      */
-    public static <T> List<T> generateBlockEntityTests(TestFactory<T> factory) {
-        List<T> tests = new ArrayList<>();
-
-        for (ModBlockEntityId blockEntityId : ModBlockEntityId.availableForCurrent()) {
-            String testName = "registry_block_entity_" + blockEntityId.id();
-            tests.add(factory.create(testName, helper -> {
-                helper.runAfterDelay(1, () -> {
-                    var rl = CompatResourceLocation.create(
-                            ChronoDawn.MOD_ID, blockEntityId.id());
-
-                    if (!BuiltInRegistries.BLOCK_ENTITY_TYPE.containsKey(rl)) {
-                        CompatGameTestHelper.fail(helper, "BlockEntity not registered: " + blockEntityId.id() +
-                                " (enum: " + blockEntityId.name() + ")");
-                        return;
+    public static <T> List<T> generateBlockItemConsistencyTest(TestFactory<T> factory) {
+        return generateAggregated(factory, "block_item_check", "Blocks missing their item", () -> {
+            List<String> failures = new ArrayList<>();
+            for (Field field : ModBlocks.class.getDeclaredFields()) {
+                if (!isRegistrySupplierField(field)) continue;
+                String fieldName = field.getName();
+                try {
+                    RegistrySupplier<?> supplier = (RegistrySupplier<?>) field.get(null);
+                    var blockId = supplier.getId();
+                    if (BuiltInRegistries.ITEM.containsKey(blockId)) continue;
+                    for (Field itemField : ModItems.class.getDeclaredFields()) {
+                        if (itemField.getName().equals(fieldName) && isRegistrySupplierField(itemField)) {
+                            failures.add(fieldName + " has a ModItems field but no item registered with ID \""
+                                    + blockId + "\"");
+                            break;
+                        }
                     }
+                } catch (Exception e) {
+                    failures.add("Failed to check block-item for " + fieldName + ": " + e.getMessage());
+                }
+            }
+            return failures;
+        });
+    }
 
-                    helper.succeed();
-                });
-            }));
-        }
-
-        return tests;
+    private static boolean isRegistrySupplierField(Field field) {
+        return Modifier.isPublic(field.getModifiers())
+                && Modifier.isStatic(field.getModifiers())
+                && Modifier.isFinal(field.getModifiers())
+                && RegistrySupplier.class.isAssignableFrom(field.getType());
     }
 
     /**
