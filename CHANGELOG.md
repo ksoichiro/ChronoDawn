@@ -16,6 +16,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Saplings no longer turn vanilla grass into Temporal Dirt**: when a Time
+  Wood, Dark Time Wood, or Ancient Time Wood sapling grew on a vanilla grass
+  block, the block under the trunk became Temporal Dirt. It now becomes
+  vanilla dirt, like a vanilla tree. Trees generated naturally in the
+  ChronoDawn dimension still use Temporal Dirt.
 - **Master Clock after a server restart**: the Master Clock's hidden stairs,
   corridor, and boss room are no longer re-scanned after a server restart.
   Before, a restart lost track of which Master Clocks were already processed,

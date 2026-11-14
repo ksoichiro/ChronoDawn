@@ -34,11 +34,14 @@ public class DarkTimeWoodTreeFeature {
     /**
      * Resource key for the configured feature.
      * Used by TreeGrower/AbstractTreeGrower to reference the tree configuration defined in JSON.
+     * Points at the *_sapling variant, which places vanilla dirt under the trunk so that
+     * saplings grown on vanilla ground do not leak Temporal Dirt. Natural generation uses
+     * the non-sapling feature through placed features.
      */
     public static final ResourceKey<ConfiguredFeature<?, ?>> DARK_TIME_WOOD_TREE =
         ResourceKey.create(
             Registries.CONFIGURED_FEATURE,
-            CompatResourceLocation.create("chronodawn", "dark_time_wood_tree")
+            CompatResourceLocation.create("chronodawn", "dark_time_wood_tree_sapling")
         );
 
     /**
