@@ -16,6 +16,7 @@
     "ServerLevelSetTimeMixin",
     "SleepMixin",
     "StructureStartMixin",
+    "StructureMixin",
     "StructureTemplateBlockAttachedFixMixin",
     "FreezeTopLayerMixin"
   ],

@@ -11,6 +11,7 @@
     "ServerLevelSetTimeMixin",
     "SleepMixin",
     "StructureStartMixin",
+    "StructureMixin",
     "FreezeTopLayerMixin"
   ],
   "client": [

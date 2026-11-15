@@ -17,6 +17,7 @@
     "ServerLevelSetTimeMixin",
     "SleepMixin",
     "StructureStartMixin",
+    "StructureMixin",
     "StructureTemplateBlockAttachedFixMixin"
   ],
   "client": [

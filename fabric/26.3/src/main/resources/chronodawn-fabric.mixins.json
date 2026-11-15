@@ -13,6 +13,7 @@
     "PackRepositoryOverlayMixin",
     "SleepMixin",
     "StructureStartMixin",
+    "StructureMixin",
     "StructureTemplateBlockAttachedFixMixin",
     "FreezeTopLayerMixin",
     "FolderRepositorySourceAccessor"

@@ -38,11 +38,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   stays outside the structure. Only newly generated chunks are affected.
 - **Hollows under structures on slopes**: when a surface structure such as the
   Forgotten Library, Ancient Ruins, or Desert Clock Tower generated on a
-  slope, a large empty space was left under its floor on the low side. The
-  space under the floor is now filled with Temporal Dirt down to the ground,
-  or with sand where the ground is sand. This also applies to the surface
-  entrances of the Guardian Vault, Entropy Crypt, and Clockwork Depths. Only
-  newly generated chunks are affected.
+  slope, a large empty space was left under its floor on the low side, or its
+  floor hung over a cliff. Where the ground under a structure would be more
+  than 8 blocks below its floor, counting water as empty, the structure now
+  moves up to two chunks to flatter ground, and is skipped only if no nearby
+  spot fits. Smaller gaps under the floor are filled with Temporal Dirt down
+  to the ground, or with sand where the ground is sand. This also applies to
+  the surface entrances of the Guardian Vault, Entropy Crypt, and Clockwork
+  Depths. `/locate` may point up to two chunks away from a moved structure.
+  Only newly generated chunks are affected.
 - **Watchmaker's Chest lid**: the lid could stay open when a screen closed
   without the chest being told, for example when its player was removed. The
   chest now counts the screens really open every few ticks and closes the lid
