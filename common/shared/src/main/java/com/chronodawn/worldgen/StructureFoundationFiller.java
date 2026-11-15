@@ -5,19 +5,24 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.RandomState;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 
 import java.util.List;
 import java.util.Set;
+import java.util.function.IntBinaryOperator;
 
 /**
- * Fills the air under the floor of a surface structure down to the ground, like the cobblestone
- * foundation of a vanilla woodland mansion.
+ * Fills the hollow under the floor of a surface structure down to the natural ground, like the
+ * cobblestone foundation of a vanilla woodland mansion.
  *
- * <p>Terrain adaptation alone cannot do this. The beard that {@code beard_thin} adds below a
- * structure fades out within about 4 to 8 blocks of the floor, and its kernel stops at 12 blocks.
- * A structure is placed at the terrain height at its centre, so on a slope the floor at the low
- * edge can sit much higher than the ground and leave a hollow beneath it.
+ * <p>Terrain adaptation alone cannot do this. A structure is placed at the terrain height at its
+ * centre, so on uneven ground part of the floor sits well above the ground. The beard that
+ * {@code beard_thin} adds fades out within about 4 to 8 blocks below the floor. Where the ground
+ * is deeper, the beard leaves a slab of terrain under the floor with a hollow between the slab and
+ * the original ground, or no terrain at all at the low edge of a slope.
  */
 public final class StructureFoundationFiller {
 
@@ -46,21 +51,41 @@ public final class StructureFoundationFiller {
     }
 
     /**
+     * Fills the hollow under the start piece's floor within {@code chunkBox}, down to the height
+     * the terrain would have without any structure.
+     *
+     * @return the number of blocks placed
+     */
+    public static int fill(WorldGenLevel level, ChunkGenerator chunkGenerator, BoundingBox chunkBox,
+                           BoundingBox startPieceBox, List<BoundingBox> pieceBoxes) {
+        RandomState randomState = level.getLevel().getChunkSource().randomState();
+        // The base height is computed from the noise alone, without the beard of any structure,
+        // so it is the original ground even under a slab that the beard raised.
+        IntBinaryOperator groundTop = (x, z) -> chunkGenerator.getBaseHeight(
+            x, z, Heightmap.Types.OCEAN_FLOOR_WG, level, randomState);
+        return fill(level, chunkBox, startPieceBox, pieceBoxes, groundTop);
+    }
+
+    /**
      * Fills the columns under the start piece's floor within {@code chunkBox}.
      *
      * <p>A column is filled only where the bottom layer of the start piece holds a solid block.
-     * The fill goes down through air, fluids and plants, and stops at the first block with a
-     * collision shape, at another piece of the same structure, or at the bottom of
-     * {@code chunkBox}. Stopping at another piece keeps a shaft that leads to a lower piece open.
+     * Every block without a collision shape (air, fluids, plants) from just below the floor down to
+     * {@code groundTop} is replaced. Solid blocks in between, such as a slab raised by the beard,
+     * are kept, and natural caves below {@code groundTop} are left alone. The fill stops at another
+     * piece of the same structure, so a shaft that leads to a lower piece is not blocked, and at
+     * the bottom of {@code chunkBox}.
      *
      * @param level the level being generated
      * @param chunkBox the part of the world the current chunk may write to
      * @param startPieceBox the bounding box of the structure's start piece
      * @param pieceBoxes the bounding boxes of every piece of the structure
+     * @param groundTop the lowest y to fill in a column, which is the first y above the natural
+     *     ground
      * @return the number of blocks placed
      */
     public static int fill(WorldGenLevel level, BoundingBox chunkBox, BoundingBox startPieceBox,
-                           List<BoundingBox> pieceBoxes) {
+                           List<BoundingBox> pieceBoxes, IntBinaryOperator groundTop) {
         if (!startPieceBox.intersects(chunkBox)) {
             return 0;
         }
@@ -78,50 +103,42 @@ public final class StructureFoundationFiller {
                 if (isPassable(level, pos)) {
                     continue;
                 }
-                placed += fillColumn(level, chunkBox, pos, x, floorY - 1, z, pieceBoxes);
+                int bottomY = Math.max(groundTop.applyAsInt(x, z), chunkBox.minY());
+                if (bottomY >= floorY) {
+                    continue;
+                }
+                placed += fillColumn(level, pos, x, floorY - 1, bottomY, z, pieceBoxes);
             }
         }
         return placed;
     }
 
-    private static int fillColumn(WorldGenLevel level, BoundingBox chunkBox, BlockPos.MutableBlockPos pos,
-                                  int x, int topY, int z,
-                                  List<BoundingBox> pieceBoxes) {
-        // Find the bottom of the hollow first, so the fill block can follow the ground under it.
-        int y = topY;
-        BlockState ground = null;
-        while (true) {
+    private static int fillColumn(WorldGenLevel level, BlockPos.MutableBlockPos pos, int x, int topY, int bottomY,
+                                  int z, List<BoundingBox> pieceBoxes) {
+        pos.set(x, bottomY - 1, z);
+        BlockState fill = fillFor(level.getBlockState(pos));
+        int placed = 0;
+        for (int y = topY; y >= bottomY; y--) {
             pos.set(x, y, z);
-            if (y < chunkBox.minY() || level.isOutsideBuildHeight(pos) || isInsideAnyPiece(pos, pieceBoxes)) {
+            if (isInsideAnyPiece(pos, pieceBoxes)) {
                 break;
             }
-            if (!isPassable(level, pos)) {
-                ground = level.getBlockState(pos);
-                break;
+            if (isPassable(level, pos)) {
+                level.setBlock(pos, fill, 2);
+                placed++;
             }
-            y--;
         }
-
-        int bottomY = y + 1;
-        if (bottomY > topY) {
-            return 0;
-        }
-        BlockState fill = fillFor(ground);
-        for (int fillY = topY; fillY >= bottomY; fillY--) {
-            pos.set(x, fillY, z);
-            level.setBlock(pos, fill, 2);
-        }
-        return topY - bottomY + 1;
+        return placed;
     }
 
     /**
-     * Sand under the hollow is continued with the same sand, so desert foundations match their
-     * surroundings. Anything else gets dirt: grass would show its green sides on every block, and
-     * copying stone could copy an exposed ore. Sand with a block entity, such as suspicious sand,
-     * is not copied either.
+     * Sand ground is continued with the same sand, so desert foundations match their surroundings.
+     * Anything else gets dirt: grass would show its green sides on every block, and copying stone
+     * could copy an exposed ore. Sand with a block entity, such as suspicious sand, is not copied
+     * either.
      */
     private static BlockState fillFor(BlockState ground) {
-        if (ground != null && ground.is(BlockTags.SAND) && !ground.hasBlockEntity()) {
+        if (ground.is(BlockTags.SAND) && !ground.hasBlockEntity()) {
             return ground.getBlock().defaultBlockState();
         }
         return ModBlocks.TEMPORAL_DIRT.get().defaultBlockState();

@@ -409,7 +409,7 @@ public abstract class StructureStartMixin {
             pieceBoxes.add(piece.getBoundingBox());
         }
         int filled = com.chronodawn.worldgen.StructureFoundationFiller.fill(
-            level, chunkBox, pieces.get(0).getBoundingBox(), pieceBoxes);
+            level, chunkGenerator, chunkBox, pieces.get(0).getBoundingBox(), pieceBoxes);
         if (filled > 0) {
             ChronoDawn.LOGGER.debug(
                 "Filled {} foundation blocks in chunk {} for {}",

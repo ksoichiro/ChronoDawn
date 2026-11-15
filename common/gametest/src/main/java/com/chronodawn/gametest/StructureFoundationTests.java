@@ -14,23 +14,27 @@ import java.util.List;
 
 public final class StructureFoundationTests {
 
-    // The floor of a fake start piece floats over a hollow, as on the low side of a slope.
+    // The floor of a fake start piece floats over a hollow, as over a valley or the low side of a
+    // slope. The natural ground is at GROUND_Y everywhere.
+    private static final int CAVE_Y = 0;
     private static final int GROUND_Y = 1;
     private static final int FLOOR_Y = 6;
     private static final int PIECE_TOP_Y = 8;
     private static final int MIN_X = 1;
-    private static final int MAX_X = 5;
+    private static final int MAX_X = 6;
     private static final int MIN_Z = 1;
     private static final int MAX_Z = 3;
-    // Columns by x: stone ground, grass ground under a flower, sand ground, a lower piece of the
-    // same structure, and a hole in the floor.
+    // Columns by x: stone ground over a cave, grass ground under a flower, sand ground, a lower
+    // piece of the same structure, a slab of terrain left by the beard, and a hole in the floor.
     private static final int STONE_X = 1;
     private static final int FLOWER_X = 2;
     private static final int SAND_X = 3;
     private static final int LOWER_PIECE_X = 4;
-    private static final int NO_FLOOR_X = 5;
+    private static final int SLAB_X = 5;
+    private static final int NO_FLOOR_X = 6;
     private static final int LOWER_PIECE_MIN_Y = 3;
     private static final int LOWER_PIECE_MAX_Y = 4;
+    private static final int SLAB_Y = FLOOR_Y - 1;
     // The current chunk stops before the last row, which another chunk fills later.
     private static final int CHUNK_MAX_Z = 2;
 
@@ -48,8 +52,10 @@ public final class StructureFoundationTests {
     }
 
     /**
-     * Test: every column under the floor is filled down to the ground with dirt, or with sand over
-     * sand, without entering a lower piece, a column with no floor, or another chunk.
+     * Test: every column under the floor is filled down to the natural ground with dirt, or with
+     * sand over sand. A slab between the floor and the ground stays and the hollow under it is
+     * filled. Nothing is filled below the ground, in a lower piece, in a column with no floor, or
+     * in another chunk.
      */
     private static void testFillsHollowUnderFloor(GameTestHelper helper) {
         for (int x = MIN_X; x <= MAX_X; x++) {
@@ -57,11 +63,11 @@ public final class StructureFoundationTests {
                 Block ground = x == SAND_X ? ModBlocks.TEMPORAL_SAND.get()
                     : x == FLOWER_X ? ModBlocks.TEMPORAL_GRASS_BLOCK.get()
                     : Blocks.STONE;
-                // Support for the sand, which would fall into an empty block below.
-                helper.setBlock(new BlockPos(x, GROUND_Y - 1, z), Blocks.STONE);
+                // Sand needs support, while the stone column has a cave under the ground.
+                helper.setBlock(new BlockPos(x, CAVE_Y, z), x == STONE_X ? Blocks.AIR : Blocks.STONE);
                 helper.setBlock(new BlockPos(x, GROUND_Y, z), ground);
                 for (int y = GROUND_Y + 1; y < FLOOR_Y; y++) {
-                    helper.setBlock(new BlockPos(x, y, z), Blocks.AIR);
+                    helper.setBlock(new BlockPos(x, y, z), x == SLAB_X && y == SLAB_Y ? Blocks.STONE : Blocks.AIR);
                 }
                 helper.setBlock(new BlockPos(x, FLOOR_Y, z),
                     x == NO_FLOOR_X ? Blocks.AIR : ModBlocks.TEMPORAL_STONE_BRICKS.get());
@@ -73,7 +79,9 @@ public final class StructureFoundationTests {
         BoundingBox lowerPiece = box(helper,
             LOWER_PIECE_X, LOWER_PIECE_MIN_Y, MIN_Z, LOWER_PIECE_X, LOWER_PIECE_MAX_Y, MAX_Z);
         BoundingBox chunk = box(helper, 0, 0, 0, 9, 9, CHUNK_MAX_Z);
-        StructureFoundationFiller.fill(helper.getLevel(), chunk, startPiece, List.of(startPiece, lowerPiece));
+        int groundTop = helper.absolutePos(new BlockPos(0, GROUND_Y + 1, 0)).getY();
+        StructureFoundationFiller.fill(helper.getLevel(), chunk, startPiece,
+            List.of(startPiece, lowerPiece), (x, z) -> groundTop);
 
         Block dirt = ModBlocks.TEMPORAL_DIRT.get();
         for (int z = MIN_Z; z <= CHUNK_MAX_Z; z++) {
@@ -81,17 +89,19 @@ public final class StructureFoundationTests {
                 if (!expect(helper, STONE_X, y, z, dirt)
                         || !expect(helper, FLOWER_X, y, z, dirt)
                         || !expect(helper, SAND_X, y, z, ModBlocks.TEMPORAL_SAND.get())
+                        || !expect(helper, SLAB_X, y, z, y == SLAB_Y ? Blocks.STONE : dirt)
                         || !expect(helper, NO_FLOOR_X, y, z, Blocks.AIR)) {
                     return;
                 }
             }
-            if (!expect(helper, LOWER_PIECE_X, LOWER_PIECE_MAX_Y + 1, z, dirt)
+            if (!expect(helper, STONE_X, CAVE_Y, z, Blocks.AIR)
+                    || !expect(helper, LOWER_PIECE_X, LOWER_PIECE_MAX_Y + 1, z, dirt)
                     || !expect(helper, LOWER_PIECE_X, LOWER_PIECE_MAX_Y, z, Blocks.AIR)) {
                 return;
             }
         }
         for (int x = MIN_X; x <= MAX_X; x++) {
-            if (!expect(helper, x, FLOOR_Y - 1, MAX_Z, Blocks.AIR)) {
+            if (!expect(helper, x, GROUND_Y + 1, MAX_Z, Blocks.AIR)) {
                 return;
             }
         }
