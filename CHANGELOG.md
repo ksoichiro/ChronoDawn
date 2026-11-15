@@ -16,6 +16,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Mob models breaking apart after an attack on Minecraft 1.20.1 and
+  1.21.1**: once a Floq, Chronal Leech, or Paradox Crawler had attacked, its
+  attack pose kept adding up on every frame instead of returning to rest. The
+  Floq's body floated above its eyes, and the other two bent further and
+  further out of shape. The pose now returns to rest after each attack.
 - **Saplings no longer turn vanilla grass into Temporal Dirt**: when a Time
   Wood, Dark Time Wood, or Ancient Time Wood sapling grew on a vanilla grass
   block, the block under the trunk became Temporal Dirt. It now becomes

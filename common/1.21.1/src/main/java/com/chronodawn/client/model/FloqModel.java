@@ -53,6 +53,11 @@ public class FloqModel extends EntityModel<FloqEntity> {
 
     @Override
     public void setupAnim(FloqEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        // Pre-1.21.2 EntityModel does not reset poses between frames, so restore
+        // the parts that the attack animation rotates additively.
+        this.body.resetPose();
+        this.mouth.resetPose();
+
         // Animation is handled by FloqRenderer.scale() method
         // No per-frame setup needed here
 
