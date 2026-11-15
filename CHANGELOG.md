@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Entropy effect icon**: the Entropy effect from the Entropy Crystal Sword
+  showed the purple-black missing texture in the HUD and inventory because
+  its icon was never added. It now has its own icon.
 - **Saplings no longer turn vanilla grass into Temporal Dirt**: when a Time
   Wood, Dark Time Wood, or Ancient Time Wood sapling grew on a vanilla grass
   block, the block under the trunk became Temporal Dirt. It now becomes

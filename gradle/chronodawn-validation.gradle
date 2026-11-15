@@ -13,6 +13,7 @@
 //   validateSoundSubtitles          — sounds.json subtitle key ↔ per-version lang
 //   validateEraTagParity            — minecraft: tags match across 1.20.1 / 1.21.1+
 //   validateRegistryLangCoverage    — block/item ID ↔ en_us display name
+//   validateMobEffectIcons          — mob effect ID ↔ textures/mob_effect icon
 //
 // All are registered in the 'verification' group so checkAll can pick them
 // up. Errors throw GradleException so the failing CI step is visible.
@@ -1088,6 +1089,61 @@ tasks.register('validateRegistryLangCoverage') {
         } else {
             errors.each { logger.error("  ERROR: ${it}") }
             throw new GradleException("Registry lang coverage validation failed with ${errors.size()} error(s)")
+        }
+    }
+}
+
+// ============================================================
+// Task: validateMobEffectIcons
+// ------------------------------------------------------------
+// Every mob effect registered in ModEffects needs
+// textures/mob_effect/<id>.png. Minecraft does not log a missing effect
+// icon at startup, it only draws the purple-black missing texture in the
+// HUD and inventory, so the gap went unnoticed until a player saw it.
+//
+// ModEffects lives in common/shared, so every version registers every
+// effect. The icon may sit in common/shared or be overridden per version,
+// but each version module must resolve it.
+// ============================================================
+tasks.register('validateMobEffectIcons') {
+    group = 'verification'
+    description = 'Verify every registered mob effect has a textures/mob_effect/<id>.png icon'
+
+    doLast {
+        def errors = []
+        def commonDir = file("${rootProject.projectDir}/common")
+        def effectsFile = new File(commonDir, 'shared/src/main/java/com/chronodawn/registry/ModEffects.java')
+        if (!effectsFile.exists()) {
+            throw new GradleException("validateMobEffectIcons: ${effectsFile} not found")
+        }
+        def effectIds = (effectsFile.text =~ /EFFECTS\.register\(\s*"([^"]+)"/).collect { it[1] as String }
+        // Guard against a vacuous pass if the registration shape changes.
+        if (effectIds.isEmpty()) {
+            throw new GradleException('validateMobEffectIcons: no EFFECTS.register("<id>", ...) calls found in ModEffects.java')
+        }
+
+        def iconPath = { String id -> "src/main/resources/assets/chronodawn/textures/mob_effect/${id}.png".toString() }
+        def sharedDirs = (commonDir.listFiles() ?: []).findAll { it.isDirectory() && it.name.startsWith('shared') }
+        def versionDirs = (commonDir.listFiles() ?: []).findAll { it.isDirectory() && it.name ==~ /\d.*/ }.sort { it.name }
+        if (versionDirs.isEmpty()) {
+            throw new GradleException('validateMobEffectIcons: no version modules found under common/')
+        }
+
+        effectIds.each { String id ->
+            if (sharedDirs.any { new File(it, iconPath(id)).exists() }) {
+                return
+            }
+            def missingIn = versionDirs.findAll { !new File(it, iconPath(id)).exists() }*.name
+            if (!missingIn.isEmpty()) {
+                errors << "mob effect chronodawn:${id} has no icon common/shared/${iconPath(id)} (missing for ${missingIn.join(', ')})"
+            }
+        }
+
+        if (errors.isEmpty()) {
+            logger.lifecycle("Mob effect icon validation passed: ${effectIds.size()} effect(s) checked.")
+        } else {
+            errors.each { logger.error("  ERROR: ${it}") }
+            throw new GradleException("Mob effect icon validation failed with ${errors.size()} error(s)")
         }
     }
 }

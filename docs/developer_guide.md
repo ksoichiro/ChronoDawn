@@ -337,9 +337,10 @@ neoforge_version=21.2.0-beta
 
 # Project-specific validations (lang parity, block tag membership,
 # recipe-unlock advancements, per-era JSON format, minecraft: tag parity
-# between 1.20.1 and 1.21.1+, display names for every block and item ID)
+# between 1.20.1 and 1.21.1+, display names for every block and item ID,
+# an icon texture for every mob effect)
 # Item coverage checks the registered item or block description prefix for each version.
-./gradlew validateLangParity validateBlockTagMembership validateRecipeUnlockAdvancements validateEraJsonFormat validateEraTagParity validateRegistryLangCoverage
+./gradlew validateLangParity validateBlockTagMembership validateRecipeUnlockAdvancements validateEraJsonFormat validateEraTagParity validateRegistryLangCoverage validateMobEffectIcons
 
 # Verify conventional (c:) tags: coverage of every material the rules match,
 # tag-name validity per era, cross-root consistency, and that every tag path
