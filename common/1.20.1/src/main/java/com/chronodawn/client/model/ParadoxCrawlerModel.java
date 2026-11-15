@@ -111,6 +111,10 @@ public class ParadoxCrawlerModel extends EntityModel<ParadoxCrawlerEntity> {
 
     @Override
     public void setupAnim(ParadoxCrawlerEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        // Pre-1.21.2 EntityModel does not reset poses between frames, so restore
+        // the parts that the attack animation rotates additively.
+        this.body.resetPose();
+
         this.head.yRot = netHeadYaw * ((float) Math.PI / 180F);
         this.head.xRot = headPitch * ((float) Math.PI / 180F);
 

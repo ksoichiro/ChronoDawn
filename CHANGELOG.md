@@ -16,6 +16,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Mob models breaking apart after an attack on Minecraft 1.20.1 and
+  1.21.1**: once a Floq, Chronal Leech, or Paradox Crawler had attacked, its
+  attack pose kept adding up on every frame instead of returning to rest. The
+  Floq's body floated above its eyes, and the other two bent further and
+  further out of shape. The pose now returns to rest after each attack.
 - **Entropy effect icon**: the Entropy effect from the Entropy Crystal Sword
   showed the purple-black missing texture in the HUD and inventory because
   its icon was never added. It now has its own icon.

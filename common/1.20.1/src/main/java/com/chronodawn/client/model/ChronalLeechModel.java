@@ -75,6 +75,16 @@ public class ChronalLeechModel extends EntityModel<ChronalLeechEntity> {
 
     @Override
     public void setupAnim(ChronalLeechEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        // Pre-1.21.2 EntityModel does not reset poses between frames, so restore
+        // the parts that the attack animation rotates additively.
+        this.body1.resetPose();
+        this.body2.resetPose();
+        this.body3.resetPose();
+        this.body4.resetPose();
+        this.body5.resetPose();
+        this.body6.resetPose();
+        this.body7.resetPose();
+
         float wiggle = Mth.cos(ageInTicks * 0.6F) * 0.1F;
         this.body2.yRot = wiggle;
         this.body3.yRot = wiggle * 1.2F;
