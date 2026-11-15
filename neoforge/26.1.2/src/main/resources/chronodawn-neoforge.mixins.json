@@ -12,6 +12,7 @@
     "ChronoShieldEffectInterceptorMixin",
     "SleepMixin",
     "StructureStartMixin",
+    "StructureMixin",
     "FreezeTopLayerMixin"
   ],
   "client": [
