@@ -54,6 +54,7 @@ public final class PortalTests {
     public static <T> List<T> generateTests(MobBehaviorTests.TestFactory<T> factory) {
         List<T> tests = new ArrayList<>();
         tests.add(generateFrameConstructionTest(factory));
+        tests.add(generateFindFrameContainingTest(factory));
         tests.add(generateIgnitionTest(factory));
         tests.add(generateInvalidFrameTest(factory));
         tests.add(generateDimensionLoadedTest(factory));
@@ -82,6 +83,34 @@ public final class PortalTests {
                 }
                 if (frameData.getHeight() != FRAME_HEIGHT) {
                     CompatGameTestHelper.fail(helper, "Frame height was " + frameData.getHeight() + ", expected " + FRAME_HEIGHT);
+                    return;
+                }
+                helper.succeed();
+            });
+        });
+    }
+
+    /**
+     * Test: Starting from a frame block other than the bottom-left corner,
+     * PortalFrameValidator.findFrameContaining() locates the whole frame. The Portal
+     * Stabilizer relies on this for frames that have no registry entry.
+     */
+    private static <T> T generateFindFrameContainingTest(MobBehaviorTests.TestFactory<T> factory) {
+        return factory.create("portal_find_frame_containing", helper -> {
+            buildFrame(helper);
+            helper.runAfterDelay(1, () -> {
+                BlockPos topMiddle = FRAME_BOTTOM_LEFT.relative(getHorizontalDirection(), 1)
+                    .relative(Direction.UP, FRAME_HEIGHT - 1);
+                PortalFrameValidator.PortalFrameData frameData =
+                    PortalFrameValidator.findFrameContaining(helper.getLevel(), helper.absolutePos(topMiddle));
+                if (frameData == null) {
+                    CompatGameTestHelper.fail(helper, "findFrameContaining did not find the frame from its top edge");
+                    return;
+                }
+                BlockPos expected = helper.absolutePos(FRAME_BOTTOM_LEFT);
+                if (!frameData.getBottomLeft().equals(expected) || frameData.getAxis() != FRAME_AXIS) {
+                    CompatGameTestHelper.fail(helper, "findFrameContaining returned " + frameData.getBottomLeft()
+                        + " on axis " + frameData.getAxis() + ", expected " + expected + " on axis " + FRAME_AXIS);
                     return;
                 }
                 helper.succeed();
@@ -151,6 +180,11 @@ public final class PortalTests {
                     PortalFrameValidator.validateFrame(helper.getLevel(), absBottomLeft, FRAME_AXIS);
                 if (frameData != null) {
                     CompatGameTestHelper.fail(helper, "PortalFrameValidator should reject incomplete frame, but returned valid data");
+                    return;
+                }
+                BlockPos topLeft = FRAME_BOTTOM_LEFT.relative(Direction.UP, FRAME_HEIGHT - 1);
+                if (PortalFrameValidator.findFrameContaining(helper.getLevel(), helper.absolutePos(topLeft)) != null) {
+                    CompatGameTestHelper.fail(helper, "findFrameContaining should reject incomplete frame, but returned valid data");
                     return;
                 }
                 helper.succeed();

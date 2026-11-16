@@ -16,6 +16,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Portal Stabilizer works on a new frame in Chrono Dawn**: players who lost
+  track of their arrival portal could not stabilize the dimension, because the
+  Portal Stabilizer only accepted that original frame. In hardcore this left
+  them stuck. Inside Chrono Dawn, the Stabilizer now also works on any
+  complete Clockstone portal frame. Ignite that frame with a Time Hourglass
+  afterwards to return to the Overworld.
 - **Master Clock boss room door message**: the boss room door needs both the
   Key to Master Clock and 3 Ancient Gears, but when it stayed shut it always
   said only that 3 Ancient Gears were needed. A player holding enough gears
