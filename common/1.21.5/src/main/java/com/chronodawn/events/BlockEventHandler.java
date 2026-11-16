@@ -281,10 +281,10 @@ public class BlockEventHandler {
 
                     if (isBossRoomDoor) {
                         // Boss room door - requires 3 Ancient Gears AND Key to Master Clock
-                        canUnlock = hasRequiredAncientGears(player) && hasKeyToMasterClock(player);
-                        message = canUnlock
-                            ? Component.translatable("message.chronodawn.boss_room_unlocked")
-                            : Component.translatable("message.chronodawn.boss_room_locked");
+                        boolean hasKey = hasKeyToMasterClock(player);
+                        boolean hasGears = hasRequiredAncientGears(player);
+                        canUnlock = hasKey && hasGears;
+                        message = Component.translatable(BossRoomDoorMessages.messageKey(hasKey, hasGears));
                     } else if (isGuardianVaultDoor) {
                         // Guardian Vault door - no key required (always unlocked)
                         canUnlock = true;

@@ -346,6 +346,7 @@
   "message.chronodawn.master_clock_locked": "The door is locked. You need the Key to Master Clock",
   "message.chronodawn.boss_room_unlocked": "The ancient gears align... The door opens",
   "message.chronodawn.boss_room_locked": "The door mechanism requires 3 Ancient Gears",
+  "message.chronodawn.boss_room_locked_key_and_gears": "The door requires the Key to Master Clock and 3 Ancient Gears",
   "message.chronodawn.guardian_vault_opened": "The ancient vault opens...",
   "message.chronodawn.entropy_keeper_awakens": "The Entropy Keeper awakens!",
   "message.chronodawn.time_clock_boss_success": "The Time Clock resonates! Time Tyrant weakened!",
