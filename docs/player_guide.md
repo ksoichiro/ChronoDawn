@@ -1154,6 +1154,7 @@ All three wood types have the same variants:
    - After stabilization, you can create portal networks
    - Link different Overworld locations to Chrono Dawn
    - Each portal needs a Time Hourglass to activate
+   - A portal leads to the same X/Z coordinates in the other dimension, unless a portal, or a frame that was used as one before, is within 128 blocks (horizontally) of that spot. Then it links there instead, like Nether portals. Build portals at least 128 blocks apart to give each one its own destination
 
 3. **Emergency Escape**
    - If stuck before finding Portal Stabilizer: break your bed and die
