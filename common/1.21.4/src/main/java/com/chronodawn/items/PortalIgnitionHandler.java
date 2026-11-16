@@ -10,7 +10,6 @@ import com.chronodawn.data.ChronoDawnGlobalState;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModDimensions;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.sounds.SoundEvents;
@@ -71,7 +70,7 @@ public final class PortalIgnitionHandler {
         }
 
         // Try to find a valid portal frame starting from clicked position
-        PortalFrameValidator.PortalFrameData frameData = findPortalFrame(level, clickedPos);
+        PortalFrameValidator.PortalFrameData frameData = PortalFrameValidator.findFrameContaining(level, clickedPos);
 
         if (frameData == null) {
             if (player != null) {
@@ -129,46 +128,6 @@ public final class PortalIgnitionHandler {
             player != null ? player.getName().getString() : "unknown");
 
         return InteractionResult.CONSUME;
-    }
-
-    /**
-     * Try to find a valid portal frame starting from clicked position.
-     *
-     * @param level The level
-     * @param clickedPos Position that was clicked
-     * @return Portal frame data if valid, null otherwise
-     */
-    private static PortalFrameValidator.PortalFrameData findPortalFrame(Level level, BlockPos clickedPos) {
-        // Try to find portal frame by searching for bottom-left corner
-        // Check if clicked block is part of a Clockstone frame
-        BlockState clickedState = level.getBlockState(clickedPos);
-        if (!clickedState.is(ModBlocks.CLOCKSTONE_BLOCK.get())) {
-            return null;
-        }
-
-        // Try different starting positions around clicked block
-        // Portal can be oriented along X or Z axis
-        for (Direction.Axis axis : new Direction.Axis[]{Direction.Axis.X, Direction.Axis.Z}) {
-            // Try positions in a 23x23 area around clicked position
-            for (int dx = -22; dx <= 22; dx++) {
-                for (int dy = -22; dy <= 22; dy++) {
-                    BlockPos testPos = clickedPos.offset(
-                        axis == Direction.Axis.X ? dx : 0,
-                        dy,
-                        axis == Direction.Axis.Z ? dx : 0
-                    );
-
-                    PortalFrameValidator.PortalFrameData frameData =
-                        PortalFrameValidator.validateFrame(level, testPos, axis);
-
-                    if (frameData != null) {
-                        return frameData;
-                    }
-                }
-            }
-        }
-
-        return null;
     }
 
     /**
