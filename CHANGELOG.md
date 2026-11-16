@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Vanilla torches in the Master Clock**: the surface entrance, the long
+  staircase, and the bottom of the staircase still used vanilla wall torches.
+  They are now Pink Time Torches, matching the corridor. Only newly generated
+  Master Clocks are affected.
 - **Master Clock boss room door message**: the boss room door needs both the
   Key to Master Clock and 3 Ancient Gears, but when it stayed shut it always
   said only that 3 Ancient Gears were needed. A player holding enough gears
