@@ -22,6 +22,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   them stuck. Inside Chrono Dawn, the Stabilizer now also works on any
   complete Clockstone portal frame. Ignite that frame with a Time Hourglass
   afterwards to return to the Overworld.
+- **Master Clock boss room door message**: the boss room door needs both the
+  Key to Master Clock and 3 Ancient Gears, but when it stayed shut it always
+  said only that 3 Ancient Gears were needed. A player holding enough gears
+  without the key could not tell why the door did not open. The message now
+  names what is missing: the key, the gears, or both.
 - **Mob models breaking apart after an attack on Minecraft 1.20.1 and
   1.21.1**: once a Floq, Chronal Leech, or Paradox Crawler had attacked, its
   attack pose kept adding up on every frame instead of returning to rest. The

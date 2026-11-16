@@ -393,6 +393,7 @@
   "message.chronodawn.master_clock_locked": "ドアは施錠されている。マスタークロックへの鍵が必要だ",
   "message.chronodawn.boss_room_unlocked": "古代の歯車が噛み合った... ドアが開く",
   "message.chronodawn.boss_room_locked": "ドアの機構には古代の歯車が3つ必要だ",
+  "message.chronodawn.boss_room_locked_key_and_gears": "ドアを開けるにはマスタークロックへの鍵と古代の歯車3つが必要だ",
   "message.chronodawn.guardian_vault_opened": "古代の宝物庫が開いた...",
   "message.chronodawn.entropy_keeper_awakens": "エントロピーの管理者が目覚めた！",
   "message.chronodawn.time_clock_boss_success": "タイムクロックが共鳴した！時間の暴君が弱体化した！",
