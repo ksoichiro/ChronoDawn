@@ -811,7 +811,7 @@ Vanilla reference: iron armor totals 15 defense, diamond totals 20 with toughnes
 - **Use**: Makes one-way portals bidirectional
 - **Durability**: Single-use (consumed on activation)
 - **Recipe**: 4 Clockstone + 2 Time Hourglasses + 2 Fruit of Time + 1 Clockstone Block (recipe found in Forgotten Library)
-- **How to Use**: Right-click on an active portal frame
+- **How to Use**: Right-click the Clockstone frame of your deactivated portal. If you lost track of it, build a new complete Clockstone frame in Chrono Dawn and right-click that instead. Stabilization applies to the whole dimension, so afterwards ignite any frame with a Time Hourglass
 
 #### Unstable Hourglass
 - **Use**: Crafting material for the Chronoblade, Time Tyrant Mail, and Unstable Pocket Watch
@@ -1302,6 +1302,7 @@ All three wood types have the same variants:
 - Find Forgotten Library for Portal Stabilizer recipe
 - Craft Portal Stabilizer from Clockstone, a Clockstone Block, Fruit of Time, and 2 Time Hourglasses
 - Right-click portal frame with Portal Stabilizer
+- Lost the arrival portal? Build a new 4×5 (or larger) Clockstone frame anywhere in Chrono Dawn and use the Portal Stabilizer on it
 - Re-ignite portal with Time Hourglass after stabilization
 
 **Portal disappeared after entry**:

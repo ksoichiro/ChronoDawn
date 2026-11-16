@@ -1,11 +1,13 @@
 package com.chronodawn.items;
 
 import com.chronodawn.ChronoDawn;
+import com.chronodawn.core.portal.PortalFrameValidator;
 import com.chronodawn.core.portal.PortalRegistry;
 import com.chronodawn.core.portal.PortalState;
 import com.chronodawn.core.portal.PortalStateMachine;
 import com.chronodawn.data.ChronoDawnGlobalState;
 import com.chronodawn.registry.ModBlocks;
+import com.chronodawn.registry.ModDimensions;
 import com.chronodawn.registry.ModSounds;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -60,6 +62,12 @@ public final class PortalStabilizationHandler {
         }
 
         if (portal == null) {
+            // A player who lost track of the arrival frame would otherwise be stranded in
+            // Chrono Dawn (permanently in hardcore), so any complete frame there can stand in
+            if (level instanceof ServerLevel serverLevel
+                    && level.dimension().equals(ModDimensions.CHRONO_DAWN_DIMENSION)) {
+                return stabilizeFromUnregisteredFrame(serverLevel, clickedPos, player, itemStack);
+            }
             if (player != null) {
                 player.displayClientMessage(Component.translatable("item.chronodawn.portal_stabilizer.no_portal"), true);
             }
@@ -105,6 +113,39 @@ public final class PortalStabilizationHandler {
         }
 
         return InteractionResult.FAIL;
+    }
+
+    /**
+     * Stabilize the Chrono Dawn dimension from a complete Clockstone frame that has no
+     * registry entry, such as a frame the player built after losing the arrival portal.
+     * Stabilization is a world-wide state, so no portal state machine needs to change;
+     * the player then ignites the frame with a Time Hourglass as usual.
+     */
+    private static InteractionResult stabilizeFromUnregisteredFrame(ServerLevel level, BlockPos clickedPos, Player player, ItemStack itemStack) {
+        ChronoDawnGlobalState globalState = ChronoDawnGlobalState.get(level.getServer());
+        if (globalState.isPortalStabilized()) {
+            if (player != null) {
+                player.displayClientMessage(Component.translatable("item.chronodawn.portal_stabilizer.already_stabilized"), true);
+            }
+            return InteractionResult.FAIL;
+        }
+
+        PortalFrameValidator.PortalFrameData frameData = PortalFrameValidator.findFrameContaining(level, clickedPos);
+        if (frameData == null) {
+            if (player != null) {
+                player.displayClientMessage(Component.translatable("message.chronodawn.portal.invalid_frame"), true);
+            }
+            return InteractionResult.FAIL;
+        }
+
+        globalState.markPortalStabilized();
+        playStabilizationEffect(level, frameData.getBottomLeft());
+        broadcastStabilizationMessage(level);
+        itemStack.shrink(1);
+
+        ChronoDawn.LOGGER.debug("Chrono Dawn stabilized from unregistered frame at {} by player {}",
+            frameData.getBottomLeft(), player != null ? player.getName().getString() : "Unknown");
+        return InteractionResult.CONSUME;
     }
 
     /**

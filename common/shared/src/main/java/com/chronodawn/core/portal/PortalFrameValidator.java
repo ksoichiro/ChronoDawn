@@ -102,6 +102,39 @@ public class PortalFrameValidator {
     }
 
     /**
+     * Find a valid portal frame that contains the given frame block, trying both axes.
+     *
+     * @param level The level
+     * @param framePos Position of any block in the frame
+     * @return Portal frame data if a valid frame contains the block, null otherwise
+     */
+    public static PortalFrameData findFrameContaining(Level level, BlockPos framePos) {
+        if (!isFrameBlock(level, framePos)) {
+            return null;
+        }
+
+        for (Direction.Axis axis : new Direction.Axis[]{Direction.Axis.X, Direction.Axis.Z}) {
+            // Try every corner candidate a frame of up to 23x23 containing this block could have
+            for (int dx = -(MAX_WIDTH - 1); dx <= MAX_WIDTH - 1; dx++) {
+                for (int dy = -(MAX_HEIGHT - 1); dy <= MAX_HEIGHT - 1; dy++) {
+                    BlockPos testPos = framePos.offset(
+                        axis == Direction.Axis.X ? dx : 0,
+                        dy,
+                        axis == Direction.Axis.Z ? dx : 0
+                    );
+
+                    PortalFrameData frameData = validateFrame(level, testPos, axis);
+                    if (frameData != null) {
+                        return frameData;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Find the bottom-left corner position of the portal frame.
      * Works even when corners are missing (air blocks).
      *

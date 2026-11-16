@@ -16,6 +16,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Portal Stabilizer works on a new frame in Chrono Dawn**: players who lost
+  track of their arrival portal could not stabilize the dimension, because the
+  Portal Stabilizer only accepted that original frame. In hardcore this left
+  them stuck. Inside Chrono Dawn, the Stabilizer now also works on any
+  complete Clockstone portal frame. Ignite that frame with a Time Hourglass
+  afterwards to return to the Overworld.
 - **Mob models breaking apart after an attack on Minecraft 1.20.1 and
   1.21.1**: once a Floq, Chronal Leech, or Paradox Crawler had attacked, its
   attack pose kept adding up on every frame instead of returning to rest. The
