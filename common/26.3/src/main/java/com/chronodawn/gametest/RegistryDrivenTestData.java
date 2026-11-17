@@ -298,8 +298,9 @@ public final class RegistryDrivenTestData {
 
     /**
      * Entities that should persist (never despawn).
-     * These entities should return true for requiresCustomPersistence()
-     * and false for removeWhenFarAway().
+     * These entities should return false for removeWhenFarAway() and also
+     * false for requiresCustomPersistence(), so natural spawning still counts
+     * them toward the mob cap.
      */
     @SuppressWarnings("unchecked")
     public static List<RegistrySupplier<EntityType<?>>> getPersistentEntities() {
