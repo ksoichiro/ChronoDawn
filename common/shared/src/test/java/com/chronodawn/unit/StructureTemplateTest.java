@@ -11,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -23,6 +24,13 @@ class StructureTemplateTest {
     private static final Set<String> DISALLOWED = Set.of("minecraft:dirt", "minecraft:grass_block",
         "minecraft:coarse_dirt", "minecraft:smooth_stone", "minecraft:cracked_stone_bricks",
         "minecraft:chiseled_stone_bricks");
+    /**
+     * Rigid surface structures placed with terrain adaptation. Explicit air above a column's
+     * topmost block would cut the terrain on the high side of a slope away in the shape of the
+     * template's box, so that air must be left out (see scripts/strip_exterior_air.py).
+     */
+    private static final Set<String> TERRAIN_PRESERVING = Set.of("ancient_ruins", "desert_clock_tower",
+        "forgotten_library");
 
     @Test
     void validateTemplates() throws Exception {
@@ -51,11 +59,15 @@ class StructureTemplateTest {
                 var blocks = list(nbt.get("blocks"));
                 Map<String, Integer> counts = new HashMap<>();
                 Map<List<?>, String> positions = new HashMap<>();
+                Set<List<?>> replacedWithAir = new HashSet<>();
                 for (Object entry : blocks) {
                     var block = compound(entry);
                     String name = (String) compound(palette.get((int) block.get("state"))).get("Name");
                     counts.merge(name, 1, Integer::sum);
                     positions.put(list(block.get("pos")), name);
+                    if (block.get("nbt") != null && "minecraft:air".equals(compound(block.get("nbt")).get("ReplaceWith"))) {
+                        replacedWithAir.add(list(block.get("pos")));
+                    }
                 }
                 for (var requirement : spec.blockRequirements()) {
                     int count = counts.getOrDefault(requirement.name(), 0);
@@ -66,6 +78,9 @@ class StructureTemplateTest {
                     for (String name : DISALLOWED) {
                         assertEquals(0, counts.getOrDefault(name, 0), spec.id() + " contains " + name);
                     }
+                }
+                if (TERRAIN_PRESERVING.contains(spec.id())) {
+                    assertNoAirAboveTopBlock(spec.id(), positions, replacedWithAir);
                 }
                 if (spec.id().equals("watchmaker_camp")) {
                     Set<String> required = spec.blockRequirements().stream().map(StructureSpecs.BlockRequirement::name)
@@ -79,6 +94,25 @@ class StructureTemplateTest {
                 }
             }
         }
+    }
+
+    /**
+     * Uses the same covering blocks as scripts/strip_exterior_air.py: vines, leaves and blocks that
+     * a processor replaces with air do not cover the air below them.
+     */
+    private static void assertNoAirAboveTopBlock(String id, Map<List<?>, String> positions,
+                                                 Set<List<?>> replacedWithAir) {
+        Map<List<?>, Integer> top = new HashMap<>();
+        positions.forEach((pos, name) -> {
+            if (!name.equals("minecraft:air") && !name.contains("vine") && !name.endsWith("_leaves")
+                    && !replacedWithAir.contains(pos)) {
+                top.merge(List.of(pos.get(0), pos.get(2)), (int) pos.get(1), Math::max);
+            }
+        });
+        long exposed = positions.entrySet().stream().filter(e -> e.getValue().equals("minecraft:air"))
+            .filter(e -> (int) e.getKey().get(1) > top.getOrDefault(List.of(e.getKey().get(0), e.getKey().get(2)), -1))
+            .count();
+        assertEquals(0, exposed, id + " has air above the topmost block of a column, which cuts the terrain away");
     }
 
     @SuppressWarnings("unchecked")

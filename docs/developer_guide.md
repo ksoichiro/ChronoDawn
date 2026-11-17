@@ -634,10 +634,17 @@ public static final RegistrySupplier<EntityType<MyEntity>> MY_ENTITY = ENTITIES.
 ### Adding a Structure
 
 1. **Create NBT Structure** using Minecraft structure blocks
-2. **Save to**: `common/1.21.11/src/main/resources/data/chronodawn/structure/`
+2. **Save to**: `common/shared-1.21.1+/src/main/resources/data/chronodawn/structure/`
 3. **Define Structure JSON**: `data/chronodawn/worldgen/structure/my_structure.json`
 4. **Add to Structure Set**: `data/chronodawn/worldgen/structure_set/my_structure_set.json`
 5. **Implement Structure Processor** (if custom logic needed)
+6. **Keep the terrain around surface structures**: a structure block saves the
+   air around the building, and a rigid template with terrain adaptation places
+   that air over the terrain. Run `python3 scripts/strip_exterior_air.py <file>.nbt`
+   to remove the air outside the building, above its roof and under high
+   overhangs (see the script's docstring for the rule), and add the
+   structure to `TERRAIN_PRESERVING` in `StructureTemplateTest`. Run it again
+   every time the template is saved from a structure block
 
 ---
 
@@ -659,7 +666,8 @@ public static final RegistrySupplier<EntityType<MyEntity>> MY_ENTITY = ENTITIES.
   Parses source files to extract `RegistrySupplier` field names and validates resource existence via `ClassLoader.getResource()` (~0.1s for 402 tests).
 
 - **StructureTemplateTest** — Checks structure NBT dimensions, required block counts, camp chest headroom,
-  disallowed placeholders and specification coverage. Minecraft 1.20.1 uses its converted resources.
+  disallowed placeholders, air above the roofs of surface structures and specification coverage.
+  Minecraft 1.20.1 uses its converted resources.
   GameTest separately verifies that the server loads each template.
 
 **Run Tests**:

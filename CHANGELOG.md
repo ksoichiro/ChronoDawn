@@ -71,6 +71,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   the surface entrances of the Guardian Vault, Entropy Crypt, and Clockwork
   Depths. `/locate` may point up to two chunks away from a moved structure.
   Only newly generated chunks are affected.
+- **Terrain cut away around structures on slopes**: when the Forgotten
+  Library, Desert Clock Tower, or Ancient Ruins generated on a slope, the
+  ground on the high side was removed in the shape of the structure's box,
+  so the structure sat in a square pit. The structures now clear only the
+  ground inside their rooms and passages, so the slope reaches close to
+  their walls. Open courtyards and the space under the Desert Clock Tower's
+  wide upper floors keep the ground too. Only newly generated chunks are
+  affected.
 - **Watchmaker's Chest lid**: the lid could stay open when a screen closed
   without the chest being told, for example when its player was removed. The
   chest now counts the screens really open every few ticks and closes the lid
