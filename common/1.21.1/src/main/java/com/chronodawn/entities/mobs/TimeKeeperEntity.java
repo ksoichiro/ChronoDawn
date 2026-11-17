@@ -77,16 +77,12 @@ public class TimeKeeperEntity extends AbstractVillager {
     }
 
     /**
-     * Prevent despawning - Time Keepers are important NPCs that should persist.
-     * Similar to vanilla Villagers.
-     */
-    @Override
-    public boolean requiresCustomPersistence() {
-        return true;
-    }
-
-    /**
-     * Never despawn regardless of distance from players.
+     * Never despawn regardless of distance from players, like vanilla animals.
+     *
+     * Do not override requiresCustomPersistence() to return true for this.
+     * NaturalSpawner excludes such mobs from the mob cap, so natural spawning
+     * would keep adding Time Keepers without limit. Village Time Keepers are
+     * marked with setPersistenceRequired() instead.
      */
     @Override
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {

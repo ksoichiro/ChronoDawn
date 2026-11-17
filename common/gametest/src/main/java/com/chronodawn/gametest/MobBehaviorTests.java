@@ -131,8 +131,10 @@ public final class MobBehaviorTests {
     /**
      * Generates tests verifying persistent entities don't despawn.
      *
-     * Checks that requiresCustomPersistence() returns true
-     * and removeWhenFarAway() returns false.
+     * Checks that removeWhenFarAway() returns false and that
+     * requiresCustomPersistence() returns false. NaturalSpawner leaves mobs with
+     * requiresCustomPersistence() out of the mob cap, so a naturally spawning
+     * entity that returns true there would accumulate without limit.
      */
     public static <T> List<T> generateMobPersistenceTests(
             List<RegistrySupplier<EntityType<?>>> entities,
@@ -147,8 +149,8 @@ public final class MobBehaviorTests {
                         CompatGameTestHelper.fail(helper, entityName + " is not a Mob");
                         return;
                     }
-                    if (!mob.requiresCustomPersistence()) {
-                        CompatGameTestHelper.fail(helper, entityName + " should return true for requiresCustomPersistence()");
+                    if (mob.requiresCustomPersistence()) {
+                        CompatGameTestHelper.fail(helper, entityName + " should return false for requiresCustomPersistence() so it counts toward the mob cap");
                         return;
                     }
                     if (mob.removeWhenFarAway(100.0)) {
