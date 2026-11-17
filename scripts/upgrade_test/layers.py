@@ -55,6 +55,9 @@ def load_layers(directory: Path) -> list[Layer]:
             if cid in seen_ids:
                 raise LayerError(f"{path.name}: check id {cid!r} already used in {seen_ids[cid]}")
             seen_ids[cid] = path.name
+        for item in raw.get("not_covered", []):
+            if not isinstance(item, dict) or not item.get("item") or not item.get("reason"):
+                raise LayerError(f"{path.name}: not_covered entry needs 'item' and 'reason': {item!r}")
         layers.append(Layer(
             name=path.stem,
             introduced=raw["introduced"],

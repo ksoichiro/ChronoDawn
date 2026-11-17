@@ -58,6 +58,15 @@ class LayersTest(unittest.TestCase):
         _write(self.dir, "0.8.0-base.json", layer)
         self.assertEqual(load_layers(self.dir)[0].not_covered[0]["item"], "boss defeated")
 
+    def test_not_covered_without_item_and_reason_rejected(self):
+        # The report reads item["item"] and item["reason"] only after both game
+        # sessions ran, so a bare string must fail when the layers load.
+        layer = _layer("0.8.0", ["a"])
+        layer["not_covered"] = ["The structure is not created."]
+        _write(self.dir, "0.8.0-base.json", layer)
+        with self.assertRaises(LayerError):
+            load_layers(self.dir)
+
 
 if __name__ == "__main__":
     unittest.main()

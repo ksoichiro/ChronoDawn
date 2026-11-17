@@ -26,6 +26,9 @@
     }
   ],
   "not_covered": [
-    "The Time Cairn structure, the echo walk and the buried cache are not created."
+    {
+      "item": "Time Cairn structure, echo walk and buried cache",
+      "reason": "Only a dial block entity on a stone platform, the four Cairn Stones and a Cairn Keystone in a chest, and a Dawn Stone and a Cairn Keystone in the test player's inventory, are created. The structure, the echo walk and the buried cache come from worldgen and a midnight turn, which the test does not trigger."
+    }
   ]
 }
