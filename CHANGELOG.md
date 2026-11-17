@@ -24,6 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Keepers in the Time Keeper Village are unchanged. Time Keepers already in a
   world stay. To remove extra wandering ones while keeping the village pair,
   run `/kill @e[type=chronodawn:time_keeper,nbt={PersistenceRequired:0b}]`.
+  Time Keepers named with a name tag are also kept. The command also removes
+  unnamed Time Keepers that players gathered or spawned themselves, and it
+  cannot be undone, so back up the world first.
 - **Vanilla torches in the Master Clock**: the surface entrance, the long
   staircase, and the bottom of the staircase still used vanilla wall torches.
   They are now Pink Time Torches, matching the corridor. Only newly generated
