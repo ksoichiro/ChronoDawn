@@ -18,8 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Time Keepers piling up in Chrono Dawn**: wandering Time Keepers were left
   out of the creature mob cap, so natural spawning never stopped adding them.
-  Where few animals could spawn, such as the Chrono Dawn Dark Forest, hundreds
-  could gather around a player and cause lag. Wandering Time Keepers now count
+  With few animals loaded nearby, hundreds could gather around a player and
+  cause lag. Wandering Time Keepers now count
   toward the mob cap like animals. They still never despawn, and the Time
   Keepers in the Time Keeper Village are unchanged. Time Keepers already in a
   world stay. To remove extra wandering ones while keeping the village pair,
