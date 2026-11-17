@@ -16,6 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Vanilla torches in the Master Clock**: the surface entrance, the long
+  staircase, and the bottom of the staircase still used vanilla wall torches.
+  They are now Pink Time Torches, matching the corridor. Only newly generated
+  Master Clocks are affected.
 - **Portal Stabilizer works on a new frame in Chrono Dawn**: players who lost
   track of their arrival portal could not stabilize the dimension, because the
   Portal Stabilizer only accepted that original frame. In hardcore this left
