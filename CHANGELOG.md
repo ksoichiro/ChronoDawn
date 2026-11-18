@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **Terrain cut away around more structures on slopes**: the Clockwork Depths
+  tower, Entropy Crypt entrance, Master Clock entrance, Phantom Catacombs
+  entrance, and Time Keeper Village removed the ground on the high side in the
+  shape of their box when they generated on a slope, as the Forgotten
+  Library, Desert Clock Tower, and Ancient Ruins did before 0.17.0. They now
+  clear only the ground inside their rooms and passages. Only newly generated
+  chunks are affected.
+
 ## [0.17.0] - 2026-11-18
 
 ### Changed

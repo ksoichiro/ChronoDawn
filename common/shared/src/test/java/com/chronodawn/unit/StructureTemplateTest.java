@@ -30,7 +30,8 @@ class StructureTemplateTest {
      * template's box, so that air must be left out (see scripts/strip_exterior_air.py).
      */
     private static final Set<String> TERRAIN_PRESERVING = Set.of("ancient_ruins", "desert_clock_tower",
-        "forgotten_library");
+        "forgotten_library", "clockwork_depths_tower", "entropy_crypt_entrance", "master_clock_surface",
+        "phantom_catacombs_entrance", "time_keeper_village");
 
     @Test
     void validateTemplates() throws Exception {
