@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **More uses for surplus Chronite**: the Time Keeper now buys Chronite
+  Shards, 12 for an Emerald or 8 for a Clockstone, up to 16 times each. A
+  Daylight Detector can also be crafted with Chronite Shards in place of
+  quartz. Chronite still cannot make armor, tools, or weapons, and ore
+  generation is unchanged.
+
 ### Fixed
 
 - **Terrain cut away around more structures on slopes**: the Clockwork Depths

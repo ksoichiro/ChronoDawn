@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "pattern": [
+    "GGG",
+    "SSS",
+    "WWW"
+  ],
+  "key": {
+    "G": "minecraft:glass",
+    "S": "chronodawn:chronite_shard",
+    "W": "#minecraft:wooden_slabs"
+  },
+  "result": {
+    "id": "minecraft:daylight_detector",
+    "count": 1
+  }
+}

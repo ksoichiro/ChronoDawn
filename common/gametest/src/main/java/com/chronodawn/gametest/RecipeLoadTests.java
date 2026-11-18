@@ -31,6 +31,7 @@ public final class RecipeLoadTests {
         "chronite_block",
         "chronite_from_block",
         "clock_from_chronite",
+        "daylight_detector_from_chronite",
         "time_arrow_from_chronite",
         "time_compass"
     );
