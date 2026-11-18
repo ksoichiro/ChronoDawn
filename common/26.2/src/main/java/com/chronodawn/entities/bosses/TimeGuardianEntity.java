@@ -742,4 +742,18 @@ public class TimeGuardianEntity extends Monster implements RangedAttackMob {
         // Trigger attack animation (raise arms)
         this.swing(net.minecraft.world.InteractionHand.MAIN_HAND);
     }
+
+    /**
+     * Vanilla 26.x rejects creative and spectator players in {@code Mob.setTarget}, so a boss
+     * hit by a creative player would not retaliate there, unlike on 1.21.x. Let creative
+     * players through so the retaliation is the same on every version. Spectators cannot
+     * attack, so they never reach this path.
+     */
+    @Override
+    protected LivingEntity asValidTarget(LivingEntity target) {
+        if (target instanceof Player player && player.isCreative() && this.canAttack(player)) {
+            return player;
+        }
+        return super.asValidTarget(target);
+    }
 }

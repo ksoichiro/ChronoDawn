@@ -524,4 +524,18 @@ public class TemporalPhantomEntity extends Monster implements RangedAttackMob {
     public boolean removeWhenFarAway(double distanceToClosestPlayer) {
         return false; // Boss should never despawn
     }
+
+    /**
+     * Vanilla 26.x rejects creative and spectator players in {@code Mob.setTarget}, so a boss
+     * hit by a creative player would not retaliate there, unlike on 1.21.x. Let creative
+     * players through so the retaliation is the same on every version. Spectators cannot
+     * attack, so they never reach this path.
+     */
+    @Override
+    protected LivingEntity asValidTarget(LivingEntity target) {
+        if (target instanceof Player player && player.isCreative() && this.canAttack(player)) {
+            return player;
+        }
+        return super.asValidTarget(target);
+    }
 }
