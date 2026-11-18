@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Wolves now spawn in the Chrono Dawn forests**: the Forest and Dark Forest
+  biomes already listed wolves, but they could not spawn on Temporal Grass
+  Block. On Minecraft 1.21.5 and later they use dedicated wolf variants (ashen
+  in the Forest, black in the Dark Forest).
 - **Terrain cut away around more structures on slopes**: the Clockwork Depths
   tower, Entropy Crypt entrance, Master Clock entrance, Phantom Catacombs
   entrance, and Time Keeper Village removed the ground on the high side in the
