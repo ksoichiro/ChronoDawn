@@ -9,6 +9,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **`/locate` freezing the server on Minecraft 26.3**: Minecraft 26.3 decides
+  which blocks count for the motion-blocking and ocean-floor heightmaps from a
+  block tag, and the solid blocks of this mod were missing from it. The ground
+  check added in 0.17.0 therefore saw no ground under Temporal Stone and
+  rejected every Desert Clock Tower, Forgotten Library, Guardian Vault,
+  Clockwork Depths, and Entropy Crypt location in Chrono Dawn. Those
+  structures stopped generating in new chunks, and `/locate` for them ran for
+  minutes and froze the server. The solid blocks of this mod are now in the
+  tag, so the heightmaps see them as on other versions.
 - **Terrain cut away around more structures on slopes**: the Clockwork Depths
   tower, Entropy Crypt entrance, Master Clock entrance, Phantom Catacombs
   entrance, and Time Keeper Village removed the ground on the high side in the
