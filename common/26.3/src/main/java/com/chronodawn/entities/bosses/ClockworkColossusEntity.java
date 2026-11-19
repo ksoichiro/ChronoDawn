@@ -557,11 +557,13 @@ public class ClockworkColossusEntity extends Monster implements RangedAttackMob 
      * Vanilla 26.x rejects creative and spectator players in {@code Mob.setTarget}, so a boss
      * hit by a creative player would not retaliate there, unlike on 1.21.x. Let creative
      * players through so the retaliation is the same on every version. Spectators cannot
-     * attack, so they never reach this path.
+     * attack, so they never reach this path. {@code canAttack} is not used here because
+     * {@code Player.canBeSeenAsEnemy} is false for creative players, which is what rejected them.
      */
     @Override
     protected LivingEntity asValidTarget(LivingEntity target) {
-        if (target instanceof Player player && player.isCreative() && this.canAttack(player)) {
+        if (target instanceof Player player && player.isCreative()
+                && this.level().getDifficulty() != net.minecraft.world.Difficulty.PEACEFUL) {
             return player;
         }
         return super.asValidTarget(target);
