@@ -15,6 +15,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   quartz. Chronite still cannot make armor, tools, or weapons, and ore
   generation is unchanged.
 
+### Fixed
+
+- **Tree roots turning into vanilla dirt on Minecraft 26.2 and 26.3**: some
+  naturally generated Time Wood, Dark Time Wood, and Ancient Time Wood trees,
+  such as the 2x2 trunk ones in the Forest, had vanilla dirt under the trunk
+  instead of Temporal Dirt. They now get Temporal Dirt. Saplings still place
+  vanilla dirt.
+
 ## [0.17.1] - 2026-11-20
 
 ### Fixed

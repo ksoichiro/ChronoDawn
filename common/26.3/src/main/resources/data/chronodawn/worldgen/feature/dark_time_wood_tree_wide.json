@@ -51,7 +51,7 @@
         },
         "then": {
           "type": "minecraft:simple",
-          "state": "minecraft:dirt"
+          "state": "chronodawn:temporal_dirt"
         }
       }
     ]
