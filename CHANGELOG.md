@@ -17,11 +17,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Saplings grown in Chrono Dawn leave Temporal Dirt under the trunk**: a tree
+  grown from a Time Wood, Dark Time Wood, or Ancient Time Wood sapling left
+  vanilla dirt under its trunk even inside the Chrono Dawn dimension, unlike
+  naturally generated trees. Inside Chrono Dawn it is now Temporal Dirt. In
+  the Overworld it is still vanilla dirt.
 - **Tree roots turning into vanilla dirt on Minecraft 26.2 and 26.3**: some
   naturally generated Time Wood, Dark Time Wood, and Ancient Time Wood trees,
   such as the 2x2 trunk ones in the Forest, had vanilla dirt under the trunk
-  instead of Temporal Dirt. They now get Temporal Dirt. Saplings still place
-  vanilla dirt.
+  instead of Temporal Dirt. They now get Temporal Dirt.
 
 ## [0.17.1] - 2026-11-20
 

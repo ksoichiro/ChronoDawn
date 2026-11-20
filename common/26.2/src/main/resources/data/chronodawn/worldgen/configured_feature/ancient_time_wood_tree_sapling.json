@@ -42,7 +42,11 @@
         "Name": "minecraft:dirt"
       }
     },
-    "decorators": [],
+    "decorators": [
+      {
+        "type": "chronodawn:temporal_root_dirt_decorator"
+      }
+    ],
     "below_trunk_provider": {
       "type": "minecraft:rule_based_state_provider",
       "rules": [

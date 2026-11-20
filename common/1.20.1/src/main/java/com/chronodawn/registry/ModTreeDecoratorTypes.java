@@ -2,6 +2,7 @@ package com.chronodawn.registry;
 
 import com.chronodawn.ChronoDawn;
 import com.chronodawn.worldgen.decorators.FruitDecorator;
+import com.chronodawn.worldgen.decorators.TemporalRootDirtDecorator;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.RegistrySupplier;
 import net.minecraft.core.registries.Registries;
@@ -38,6 +39,24 @@ public class ModTreeDecoratorTypes {
             } catch (Exception e) {
                 ChronoDawn.LOGGER.error("Failed to create FruitDecorator TreeDecoratorType", e);
                 throw new RuntimeException("Failed to create FruitDecorator TreeDecoratorType", e);
+            }
+        });
+
+    /**
+     * Temporal Root Dirt Decorator Type - Replaces vanilla dirt under sapling-grown trunks
+     * with Temporal Dirt inside the ChronoDawn dimension.
+     */
+    public static final RegistrySupplier<TreeDecoratorType<TemporalRootDirtDecorator>> TEMPORAL_ROOT_DIRT_DECORATOR =
+        TREE_DECORATOR_TYPES.register("temporal_root_dirt_decorator", () -> {
+            try {
+                java.lang.reflect.Constructor<TreeDecoratorType> constructor =
+                    TreeDecoratorType.class.getDeclaredConstructor(com.mojang.serialization.Codec.class);
+                constructor.setAccessible(true);
+
+                return (TreeDecoratorType<TemporalRootDirtDecorator>) constructor.newInstance(TemporalRootDirtDecorator.CODEC);
+            } catch (Exception e) {
+                ChronoDawn.LOGGER.error("Failed to create TemporalRootDirtDecorator TreeDecoratorType", e);
+                throw new RuntimeException("Failed to create TemporalRootDirtDecorator TreeDecoratorType", e);
             }
         });
 
