@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Wolves now spawn in the Chrono Dawn forests**: the Forest and Dark Forest
+  biomes already listed wolves, but they could not spawn on Temporal Grass
+  Block. On Minecraft 1.21.5 and later they use dedicated wolf variants (ashen
+  in the Forest, black in the Dark Forest).
 - **`/locate` freezing the server on Minecraft 26.3**: Minecraft 26.3 decides
   which blocks count for the motion-blocking and ocean-floor heightmaps from a
   block tag, and the solid blocks of this mod were missing from it. The ground
