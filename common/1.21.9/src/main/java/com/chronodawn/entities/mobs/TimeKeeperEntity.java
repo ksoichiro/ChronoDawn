@@ -333,6 +333,26 @@ public class TimeKeeperEntity extends AbstractVillager {
                 2, // XP reward
                 0.05f
             ));
+
+            // Trade 13: 12 Chronite Shard → 1 Emerald
+            // Late-game sink for surplus Chronite. Large max uses because trades do not restock
+            offers.add(new MerchantOffer(
+                new ItemCost(ModItems.CHRONITE_SHARD.get(), 12),
+                new ItemStack(Items.EMERALD, 1),
+                16, // Max uses
+                2, // XP reward
+                0.05f
+            ));
+
+            // Trade 14: 8 Chronite Shard → 1 Clockstone
+            // Lets the overflow of Overworld Chronite feed Clockstone trades
+            offers.add(new MerchantOffer(
+                new ItemCost(ModItems.CHRONITE_SHARD.get(), 8),
+                new ItemStack(ModItems.CLOCKSTONE.get(), 1),
+                16, // Max uses
+                2, // XP reward
+                0.05f
+            ));
         }
     }
 

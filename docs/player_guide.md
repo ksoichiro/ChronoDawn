@@ -336,6 +336,8 @@ The **Time Keeper** is a peaceful trader. Two of them live in the Time Keeper Vi
 | 12 Clockstone + 4-6 Time Crystals | A Time Compass for the Desert Clock Tower, Phantom Catacombs, Guardian Vault, Clockwork Depths, or Entropy Crypt |
 | 16 Clockstone + 8 Time Crystals | A Time Compass for the Master Clock |
 | 8 Clockstone | 4 Clockwork Cookies |
+| 12 Chronite Shards | 1 Emerald |
+| 8 Chronite Shards | 1 Clockstone |
 
 Right-click a purchased Time Compass to search for its structure. Compass trades for structures disabled in the config are not offered.
 
@@ -941,7 +943,7 @@ The custom shields are independent of the existing Chrono Aegis artifact (which 
 
 #### Chronite
 - **Source**: Mine Chronite Ore (ordinary Overworld stone and deepslate, any biome, Y -48 to 112, stone pickaxe or better)
-- **Use**: Time Compass, Time Arrows, Clocks (no gold needed), and Blocks of Chronite for storage. It is a reagent, not a metal, so it does not make armor, tools, or weapons.
+- **Use**: Time Compass, Time Arrows, Clocks (no gold needed), Daylight Detectors (3 Chronite Shards in place of quartz), Time Keeper trades for Emeralds or Clockstone, and Blocks of Chronite for storage. It is a reagent, not a metal, so it does not make armor, tools, or weapons.
 
 #### Entropy Crystal
 - **Source**: Entropy Crystal Ore (all Chrono Dawn biomes, Y 40 to 100, iron pickaxe)
