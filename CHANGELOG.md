@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.17.1] - 2026-11-20
+
 ### Fixed
 
 - **`/locate` freezing the server on Minecraft 26.3**: Minecraft 26.3 decides
@@ -1183,7 +1185,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Architectury API 13.0.8+
 - Custom Portal API 0.0.1-beta66-1.21 (Fabric bundled, NeoForge requires separate installation)
 
-[Unreleased]: https://github.com/ksoichiro/ChronoDawn/compare/v0.17.0...HEAD
+[Unreleased]: https://github.com/ksoichiro/ChronoDawn/compare/v0.17.1...HEAD
+[0.17.1]: https://github.com/ksoichiro/ChronoDawn/compare/v0.17.0...v0.17.1
 [0.17.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.16.0...v0.17.0
 [0.16.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.15.0...v0.16.0
 [0.15.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.14.0...v0.15.0
