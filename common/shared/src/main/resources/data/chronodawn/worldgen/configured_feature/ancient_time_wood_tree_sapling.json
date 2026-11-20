@@ -42,6 +42,10 @@
         "Name": "minecraft:dirt"
       }
     },
-    "decorators": []
+    "decorators": [
+      {
+        "type": "chronodawn:temporal_root_dirt_decorator"
+      }
+    ]
   }
 }
