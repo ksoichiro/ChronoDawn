@@ -738,7 +738,11 @@ Within each version group, fabric and neoforge share the same common module buil
 
 Each version uses a separate directory (e.g., `fabric/1.21.2/`) via `project(':fabric').projectDir = file("fabric/1.21.2")` in settings.gradle. This gives each version its own `.gradle/architectury/` directory and build output.
 
-Each subprocess uses `--project-cache-dir .gradle/gametest-<version>` to avoid lock conflicts with the outer Gradle process and other subprocesses. Because the task history is isolated per cache directory, `org.gradle.caching=true` (set in `gradle.properties`) lets each phase restore `compileJava` output from the Gradle build cache (`FROM-CACHE`) instead of recompiling the same version.
+Each subprocess uses `--project-cache-dir .gradle/build-<version>` to avoid lock conflicts with the outer Gradle process and other subprocesses. `buildAll` uses the same per-version directory, and the two phases run one after the other, so `gameTestAll` reuses the task history and Loom cache that `buildAll` left behind. `org.gradle.caching=true` (set in `gradle.properties`) still lets a phase restore `compileJava` output from the Gradle build cache (`FROM-CACHE`) when the task history does not match.
+
+**Disk usage of `.gradle/`**: Because the common modules declare an access widener, Loom treats the remapped Minecraft jars as project-specific. It stores them under `<project-cache-dir>/loom-cache/minecraftMaven` instead of the shared `~/.gradle/caches/fabric-loom/minecraftMaven`. This takes about 100 to 230 MB per Minecraft version, or about 2.9 GB per checkout after `checkAll`. Before both phases shared `.gradle/build-<version>`, `gameTestAll` kept a second copy in `.gradle/gametest-<version>`, so a checkout reached about 5.7 GB. Delete leftover `.gradle/gametest-*` directories from older checkouts by hand. Single-version commands without `--project-cache-dir` use `.gradle/loom-cache`, which keeps jars for every version and access widener revision that ran in that checkout. Delete it when it grows large. The next build recreates the jars, which takes a few extra minutes.
+
+These caches are not shared across worktrees. Pointing several checkouts at one `--project-cache-dir` would also share Gradle's file hashes, task history, and stale output records, which Gradle expects to belong to a single build.
 
 Shared sources are included via `srcDir` references to `fabric/base/` and `neoforge/base/` directories (which are source directories, not Gradle subprojects).
 
