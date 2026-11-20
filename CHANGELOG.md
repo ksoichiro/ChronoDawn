@@ -15,8 +15,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   quartz. Chronite still cannot make armor, tools, or weapons, and ore
   generation is unchanged.
 
+## [0.17.1] - 2026-11-20
+
 ### Fixed
 
+- **`/locate` freezing the server on Minecraft 26.3**: Minecraft 26.3 decides
+  which blocks count for the motion-blocking and ocean-floor heightmaps from a
+  block tag, and the solid blocks of this mod were missing from it. The ground
+  check added in 0.17.0 therefore saw no ground under Temporal Stone and
+  rejected every Desert Clock Tower, Forgotten Library, Guardian Vault,
+  Clockwork Depths, and Entropy Crypt location in Chrono Dawn. Those
+  structures stopped generating in new chunks, and `/locate` for them ran for
+  minutes and froze the server. The solid blocks of this mod are now in the
+  tag, so the heightmaps see them as on other versions.
+- **Bosses retaliate against creative players on Minecraft 26.x**: on 26.1.2,
+  26.2, and 26.3, the six bosses ignored a creative-mode player who hit them,
+  while on 1.20.1 and 1.21.x they turned on the attacker and gave chase. They
+  now behave the same on every version.
 - **Terrain cut away around more structures on slopes**: the Clockwork Depths
   tower, Entropy Crypt entrance, Master Clock entrance, Phantom Catacombs
   entrance, and Time Keeper Village removed the ground on the high side in the
@@ -1178,7 +1193,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Architectury API 13.0.8+
 - Custom Portal API 0.0.1-beta66-1.21 (Fabric bundled, NeoForge requires separate installation)
 
-[Unreleased]: https://github.com/ksoichiro/ChronoDawn/compare/v0.17.0...HEAD
+[Unreleased]: https://github.com/ksoichiro/ChronoDawn/compare/v0.17.1...HEAD
+[0.17.1]: https://github.com/ksoichiro/ChronoDawn/compare/v0.17.0...v0.17.1
 [0.17.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.16.0...v0.17.0
 [0.16.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.15.0...v0.16.0
 [0.15.0]: https://github.com/ksoichiro/ChronoDawn/compare/v0.14.0...v0.15.0

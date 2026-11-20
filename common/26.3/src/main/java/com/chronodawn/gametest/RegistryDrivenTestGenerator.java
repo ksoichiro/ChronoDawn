@@ -272,6 +272,41 @@ public final class RegistryDrivenTestGenerator {
             });
     }
 
+    // Solid blocks of this mod that vanilla would leave out of the tag, as it leaves out cobweb.
+    private static final java.util.Set<String> HEIGHTMAP_TAG_EXCLUSIONS = java.util.Set.of("chrono_cobweb");
+
+    /**
+     * Generates one test verifying that solid blocks of this mod count in motion-blocking
+     * heightmaps.
+     *
+     * <p>From 26.3 the MOTION_BLOCKING, MOTION_BLOCKING_NO_LEAVES and OCEAN_FLOOR heightmaps test
+     * the {@code minecraft:blocks_motion_in_heightmap} tag instead of the block's shape. A solid
+     * block missing from it is treated like air: those heightmaps fall through Temporal Stone to
+     * the bottom of the world, which made the slope check reject every surface structure. The
+     * rule mirrors the vanilla tag, which holds every solid block except leaves (tagged
+     * separately), signs and cobweb.
+     */
+    public static List<NamedTest> generateHeightmapTagTests() {
+        return RegistryConsistencyTests.generateAggregated(NamedTest::new,
+            "heightmap_tag_check", "Blocks whose blocks_motion_no_leaves membership is wrong", () -> {
+                List<String> failures = new ArrayList<>();
+                for (var block : BuiltInRegistries.BLOCK) {
+                    Identifier id = BuiltInRegistries.BLOCK.getKey(block);
+                    if (!com.chronodawn.ChronoDawn.MOD_ID.equals(id.getNamespace())) continue;
+                    var state = block.defaultBlockState();
+                    boolean expected = state.isSolid()
+                        && !state.is(net.minecraft.tags.BlockTags.LEAVES)
+                        && !state.is(net.minecraft.tags.BlockTags.SIGNS)
+                        && !HEIGHTMAP_TAG_EXCLUSIONS.contains(id.getPath());
+                    boolean tagged = state.is(net.minecraft.tags.BlockTags.BLOCKS_MOTION_NO_LEAVES);
+                    if (expected != tagged) {
+                        failures.add(id.getPath() + (expected ? " is solid but not tagged" : " is tagged but not solid"));
+                    }
+                }
+                return failures;
+            });
+    }
+
     /**
      * Generates a summary test checking all registry consistency at once.
      */
@@ -310,6 +345,7 @@ public final class RegistryDrivenTestGenerator {
         all.addAll(generateFoodPropertyTests());
         all.addAll(generateBlockItemConsistencyTests());
         all.addAll(generateEquipmentStackSizeTests());
+        all.addAll(generateHeightmapTagTests());
         all.addAll(generateBossFightTests());
         all.addAll(MobBehaviorTests.generateSpawnEggUsageTests(RegistryDrivenTestData.getSpawnEggSpecs(), NamedTest::new));
         all.addAll(MobBehaviorTests.generateMobCategoryTests(RegistryDrivenTestData.getMobCategorySpecs(), NamedTest::new));
