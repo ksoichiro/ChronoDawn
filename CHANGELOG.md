@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   structures stopped generating in new chunks, and `/locate` for them ran for
   minutes and froze the server. The solid blocks of this mod are now in the
   tag, so the heightmaps see them as on other versions.
+- **Bosses retaliate against creative players on Minecraft 26.x**: on 26.1.2,
+  26.2, and 26.3, the six bosses ignored a creative-mode player who hit them,
+  while on 1.20.1 and 1.21.x they turned on the attacker and gave chase. They
+  now behave the same on every version.
 - **Terrain cut away around more structures on slopes**: the Clockwork Depths
   tower, Entropy Crypt entrance, Master Clock entrance, Phantom Catacombs
   entrance, and Time Keeper Village removed the ground on the high side in the
