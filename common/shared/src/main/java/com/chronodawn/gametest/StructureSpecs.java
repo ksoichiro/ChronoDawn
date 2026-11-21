@@ -53,6 +53,24 @@ public final class StructureSpecs {
                 new BlockRequirement("chronodawn:" + ModBlockId.SMOOTH_TEMPORAL_STONE.id(), 9),
                 new BlockRequirement("chronodawn:" + ModBlockId.SUNDIAL_GNOMON.id(), 1)
             )),
+            new StructureSpec("dawnstone_outcrop_a", 4, 2, 4, List.of(
+                new BlockRequirement("chronodawn:" + ModBlockId.DAWNSTONE.id(), 12)
+            )),
+            new StructureSpec("dawnstone_outcrop_b", 5, 2, 5, List.of(
+                new BlockRequirement("chronodawn:" + ModBlockId.DAWNSTONE.id(), 18)
+            )),
+            new StructureSpec("dawnstone_outcrop_c", 4, 2, 4, List.of(
+                new BlockRequirement("chronodawn:" + ModBlockId.DAWNSTONE.id(), 10)
+            )),
+            new StructureSpec("ruined_wall_a", 6, 2, 1, List.of(
+                new BlockRequirement("chronodawn:" + ModBlockId.MOSSY_TEMPORAL_COBBLESTONE.id(), 6)
+            )),
+            new StructureSpec("ruined_wall_b", 5, 2, 3, List.of(
+                new BlockRequirement("chronodawn:" + ModBlockId.MOSSY_TEMPORAL_COBBLESTONE.id(), 6)
+            )),
+            new StructureSpec("ruined_wall_c", 8, 2, 2, List.of(
+                new BlockRequirement("chronodawn:" + ModBlockId.MOSSY_TEMPORAL_COBBLESTONE.id(), 6)
+            )),
             new StructureSpec("hourglass_monolith", 3, 5, 3, List.of(
                 new BlockRequirement("chronodawn:" + ModBlockId.TEMPORAL_SANDSTONE.id(), 18),
                 new BlockRequirement("chronodawn:" + ModBlockId.TEMPORAL_SANDSTONE_WALL.id(), 16),
