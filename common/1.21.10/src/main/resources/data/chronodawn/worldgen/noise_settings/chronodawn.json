@@ -487,6 +487,36 @@
                     "if_true": {
                       "type": "minecraft:biome",
                       "biome_is": [
+                        "chronodawn:chronodawn_mountain"
+                      ]
+                    },
+                    "then_run": {
+                      "type": "minecraft:condition",
+                      "if_true": {
+                        "type": "minecraft:steep"
+                      },
+                      "then_run": {
+                        "type": "minecraft:condition",
+                        "if_true": {
+                          "type": "minecraft:water",
+                          "add_stone_depth": false,
+                          "offset": 0,
+                          "surface_depth_multiplier": 0
+                        },
+                        "then_run": {
+                          "type": "minecraft:block",
+                          "result_state": {
+                            "Name": "chronodawn:temporal_stone"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "type": "minecraft:condition",
+                    "if_true": {
+                      "type": "minecraft:biome",
+                      "biome_is": [
                         "minecraft:wooded_badlands"
                       ]
                     },

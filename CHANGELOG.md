@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **Rocky mountain slopes**: steep slopes in the Chrono Dawn
+  mountain biome now expose Temporal Stone in newly generated terrain.
+
 ### Added
 
 - **More uses for surplus Chronite**: the Time Keeper now buys Chronite
