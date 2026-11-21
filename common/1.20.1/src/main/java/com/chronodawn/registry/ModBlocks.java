@@ -49,6 +49,14 @@ import com.chronodawn.blocks.MossyTemporalCobblestoneBlock;
 import com.chronodawn.blocks.MossyTemporalCobblestoneStairs;
 import com.chronodawn.blocks.MossyTemporalCobblestoneSlab;
 import com.chronodawn.blocks.MossyTemporalCobblestoneWall;
+import com.chronodawn.blocks.DawnstoneBlock;
+import com.chronodawn.blocks.DawnstoneStairs;
+import com.chronodawn.blocks.DawnstoneSlab;
+import com.chronodawn.blocks.DawnstoneWall;
+import com.chronodawn.blocks.DuskstoneBlock;
+import com.chronodawn.blocks.DuskstoneStairs;
+import com.chronodawn.blocks.DuskstoneSlab;
+import com.chronodawn.blocks.DuskstoneWall;
 import com.chronodawn.blocks.TemporalStoneBricksBlock;
 import com.chronodawn.blocks.TemporalStoneBricksStairs;
 import com.chronodawn.blocks.TemporalStoneBricksSlab;
@@ -811,6 +819,46 @@ public class ModBlocks {
     public static final RegistrySupplier<Block> MOSSY_TEMPORAL_COBBLESTONE_WALL = BLOCKS.register(
         ModBlockId.MOSSY_TEMPORAL_COBBLESTONE_WALL.id(),
         () -> new MossyTemporalCobblestoneWall(MossyTemporalCobblestoneWall.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> DAWNSTONE = BLOCKS.register(
+        ModBlockId.DAWNSTONE.id(),
+        () -> new DawnstoneBlock(DawnstoneBlock.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> DAWNSTONE_STAIRS = BLOCKS.register(
+        ModBlockId.DAWNSTONE_STAIRS.id(),
+        () -> new DawnstoneStairs(DawnstoneStairs.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> DAWNSTONE_SLAB = BLOCKS.register(
+        ModBlockId.DAWNSTONE_SLAB.id(),
+        () -> new DawnstoneSlab(DawnstoneSlab.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> DAWNSTONE_WALL = BLOCKS.register(
+        ModBlockId.DAWNSTONE_WALL.id(),
+        () -> new DawnstoneWall(DawnstoneWall.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> DUSKSTONE = BLOCKS.register(
+        ModBlockId.DUSKSTONE.id(),
+        () -> new DuskstoneBlock(DuskstoneBlock.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> DUSKSTONE_STAIRS = BLOCKS.register(
+        ModBlockId.DUSKSTONE_STAIRS.id(),
+        () -> new DuskstoneStairs(DuskstoneStairs.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> DUSKSTONE_SLAB = BLOCKS.register(
+        ModBlockId.DUSKSTONE_SLAB.id(),
+        () -> new DuskstoneSlab(DuskstoneSlab.createProperties())
+    );
+
+    public static final RegistrySupplier<Block> DUSKSTONE_WALL = BLOCKS.register(
+        ModBlockId.DUSKSTONE_WALL.id(),
+        () -> new DuskstoneWall(DuskstoneWall.createProperties())
     );
     public static final RegistrySupplier<Block> TEMPORAL_STONE_BRICKS = BLOCKS.register(
         ModBlockId.TEMPORAL_STONE_BRICKS.id(),

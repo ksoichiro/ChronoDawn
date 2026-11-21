@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "BBB",
+    "BBB"
+  ],
+  "key": {
+    "B": "chronodawn:duskstone"
+  },
+  "result": {
+    "id": "chronodawn:duskstone_wall",
+    "count": 6
+  }
+}
