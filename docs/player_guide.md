@@ -207,9 +207,9 @@ Bosses and the Clockwork Sentinel are immune.
 Chrono Dawn contains **11 unique biomes**:
 
 1. **Chrono Dawn Forest** - Dense with Time Wood trees, moderate difficulty
-2. **Chrono Dawn Plains** - Open flatlands with scattered Time Wood trees
+2. **Chrono Dawn Plains** - Open flatlands with scattered Time Wood trees, worn dirt trails, low **Dawnstone** outcrops, and crumbling walls of mossy cobblestone
 3. **Chrono Dawn Desert** - Sandy terrain covered in pale-blue **Temporal Sand** and **Temporal Sandstone**
-4. **Chrono Dawn Mountain** - High peaks and steep cliffs
+4. **Chrono Dawn Mountain** - High peaks and steep cliffs of Temporal Stone mottled with cobblestone, moss, and **Duskstone**
 5. **Chrono Dawn Ocean** - Deep waters
 6. **Chrono Dawn Snowy** - Frozen landscape with **Frozen Time Ice**, restricted to colder regions
 7. **Chrono Dawn Swamp** - Murky shallow ponds, mud patches, and unique vegetation
@@ -1104,6 +1104,11 @@ All three wood types have the same variants:
 - **Compatibility**: Registered under the vanilla `#minecraft:sand`, `#minecraft:gravel`, and `#minecraft:sandstone_blocks` tags, so they work in vanilla recipes (TNT, concrete powder, glass smelting, sandstone crafting)
 - **Drops**: Temporal Sand falls like vanilla sand; Temporal Gravel drops flint with the same Fortune-boosted chances as vanilla gravel
 - **Variants**: Temporal Sandstone + stairs / slabs / walls, craftable from 4 Temporal Sand or via stonecutting
+
+#### Dawnstone / Duskstone
+- **Property**: Natural stones of Chrono Dawn, like vanilla granite and andesite. Warm rose-amber Dawnstone and cool blue-grey Duskstone form large patches underground in the Plains and Mountain, Duskstone shows on mountain cliffs, and Dawnstone forms low outcrops in the Plains
+- **Drops**: Themselves (any pickaxe)
+- **Variants**: Stairs / slabs / walls, craftable or made with a stonecutter
 
 #### Time Torches
 - **Variants**: Orange, Pink, and Purple Time Torch, each with a matching wall variant that drops the floor version when broken

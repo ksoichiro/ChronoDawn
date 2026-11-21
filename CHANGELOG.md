@@ -10,10 +10,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - **Rocky mountain slopes**: steep slopes in the Chrono Dawn
-  mountain biome now expose Temporal Stone in newly generated terrain.
+  mountain biome now expose rock in newly generated terrain. Temporal Stone is
+  mottled with Temporal Cobblestone, Mossy Temporal Cobblestone, and Duskstone.
+- **Chrono Dawn Plains look different from the Prairies**: newly generated
+  plains have worn dirt and gravel trails, low Dawnstone outcrops, and
+  crumbling walls of mossy cobblestone.
 
 ### Added
 
+- **Dawnstone and Duskstone**: two natural stones, similar to granite and
+  andesite, with stairs, slabs, and walls. They form large patches underground
+  in the Chrono Dawn plains and mountains in newly generated terrain.
 - **More uses for surplus Chronite**: the Time Keeper now buys Chronite
   Shards, 12 for an Emerald or 8 for a Clockstone, up to 16 times each. A
   Daylight Detector can also be crafted with Chronite Shards in place of
