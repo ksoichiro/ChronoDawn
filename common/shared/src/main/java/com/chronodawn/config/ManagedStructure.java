@@ -62,7 +62,11 @@ public enum ManagedStructure {
         "PHANTOM_CATACOMBS", 10),
     MASTER_CLOCK("master_clock", Dimension.CHRONO_DAWN, ConfigDefaults.MASTER_CLOCK_DEFAULTS,
         ChronoDawnConfig.Structures::masterClock,
-        "Time Tyrant, the final boss");
+        "Time Tyrant, the final boss"),
+    // An optional side trip: nothing in the main progression depends on it.
+    SENTINEL_OUTPOST("sentinel_outpost", Dimension.CHRONO_DAWN, ConfigDefaults.SENTINEL_OUTPOST_DEFAULTS,
+        ChronoDawnConfig.Structures::sentinelOutpost,
+        "");
 
     /**
      * A fixed distance a structure set must keep from another set's placements.

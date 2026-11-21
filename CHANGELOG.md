@@ -14,6 +14,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Sentinel Outpost**: a new optional structure where the Clockwork
+  Sentinels keep watch. It is a white landing pad with a small hall, built
+  to look like something from outside Chrono Dawn, unlike the old factory of
+  the Clockwork Depths. Four docking bays and a spawner in the hall keep
+  sending out Clockwork Sentinels, with a few Epoch Husks and Secondhand
+  Archers mixed in, and three chests hold Ancient Gears, Enhanced Clockstone
+  and other supplies. It generates on the surface of any Chrono Dawn biome
+  except the oceans and gates nothing in the main progression. It can be
+  tuned or disabled under `world.structures.sentinel_outpost`. This
+  release adds it for Minecraft 1.21.1 first, and the Time Keeper sells a
+  Time Compass for it there.
 - **More uses for surplus Chronite**: the Time Keeper now buys Chronite
   Shards, 12 for an Emerald or 8 for a Clockstone, up to 16 times each. A
   Daylight Detector can also be crafted with Chronite Shards in place of

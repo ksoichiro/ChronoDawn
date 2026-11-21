@@ -31,7 +31,7 @@ class StructureTemplateTest {
      */
     private static final Set<String> TERRAIN_PRESERVING = Set.of("ancient_ruins", "desert_clock_tower",
         "forgotten_library", "clockwork_depths_tower", "entropy_crypt_entrance", "master_clock_surface",
-        "phantom_catacombs_entrance", "time_keeper_village");
+        "phantom_catacombs_entrance", "time_keeper_village", "sentinel_outpost");
 
     @Test
     void validateTemplates() throws Exception {

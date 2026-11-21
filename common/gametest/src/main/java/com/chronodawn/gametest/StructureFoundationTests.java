@@ -114,7 +114,7 @@ public final class StructureFoundationTests {
      */
     private static void testAppliesToSurfaceStructuresOnly(GameTestHelper helper) {
         for (String path : List.of("ancient_ruins", "clockwork_depths", "desert_clock_tower",
-                "entropy_crypt", "forgotten_library", "guardian_vault")) {
+                "entropy_crypt", "forgotten_library", "guardian_vault", "sentinel_outpost")) {
             if (!StructureFoundationFiller.appliesTo("chronodawn", path)) {
                 CompatGameTestHelper.fail(helper, path + " does not get a foundation");
                 return;

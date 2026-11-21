@@ -36,6 +36,7 @@ public final class ConfigDefaults {
     public static final StructureSettings PHANTOM_CATACOMBS_DEFAULTS = new StructureSettings(true, 20, 8, 745182936L);
     public static final StructureSettings ENTROPY_CRYPT_DEFAULTS = new StructureSettings(true, 50, 25, 738291456L);
     public static final StructureSettings MASTER_CLOCK_DEFAULTS = new StructureSettings(true, 60, 20, 1234567890L);
+    public static final StructureSettings SENTINEL_OUTPOST_DEFAULTS = new StructureSettings(true, 36, 14, 1405827319L);
 
     // Defaults mirror common/shared/src/main/resources/data/chronodawn/worldgen/placed_feature/ore_*.json
     // Asserted by RuntimePlacedFeatureOverlayTest (round-trip parsed-tree equality against the bundled JSONs).
@@ -104,7 +105,8 @@ public final class ConfigDefaults {
                     CLOCKWORK_DEPTHS_DEFAULTS,
                     PHANTOM_CATACOMBS_DEFAULTS,
                     ENTROPY_CRYPT_DEFAULTS,
-                    MASTER_CLOCK_DEFAULTS
+                    MASTER_CLOCK_DEFAULTS,
+                    SENTINEL_OUTPOST_DEFAULTS
                 ),
                 new OresConfig(
                     TIME_CRYSTAL_DEFAULTS,

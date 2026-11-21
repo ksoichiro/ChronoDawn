@@ -84,7 +84,8 @@ public record ChronoDawnConfig(
         StructureSettings clockworkDepths,
         StructureSettings phantomCatacombs,
         StructureSettings entropyCrypt,
-        StructureSettings masterClock
+        StructureSettings masterClock,
+        StructureSettings sentinelOutpost
     ) {
         /** Preserve the existing construction pattern for callers that only configure Ancient Ruins. */
         public Structures(StructureSettings ancientRuins) {
@@ -96,7 +97,8 @@ public record ChronoDawnConfig(
                 ConfigDefaults.CLOCKWORK_DEPTHS_DEFAULTS,
                 ConfigDefaults.PHANTOM_CATACOMBS_DEFAULTS,
                 ConfigDefaults.ENTROPY_CRYPT_DEFAULTS,
-                ConfigDefaults.MASTER_CLOCK_DEFAULTS
+                ConfigDefaults.MASTER_CLOCK_DEFAULTS,
+                ConfigDefaults.SENTINEL_OUTPOST_DEFAULTS
             );
         }
     }

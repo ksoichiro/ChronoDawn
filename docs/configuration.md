@@ -63,9 +63,10 @@ field renames or removals; you should not need to change it manually.
 
 ### `[world.structures.*]`
 
-Generation parameters for all eight of Chrono Dawn's structures. Every
-structure — the Overworld's Ancient Ruins and the seven Chrono-dimension
-structures that carry the main progression — shares the same four fields:
+Generation parameters for all nine of Chrono Dawn's structures. Every
+structure — the Overworld's Ancient Ruins, the seven Chrono-dimension
+structures that carry the main progression, and the optional Sentinel
+Outpost — shares the same four fields:
 `enabled`, `spacing`, `separation` and `salt`.
 
 | Structure | Config key | `enabled` | `spacing` | `separation` | `salt` | Progression role |
@@ -78,6 +79,7 @@ structures that carry the main progression — shares the same four fields:
 | Phantom Catacombs | `world.structures.phantom_catacombs` | `true` | `20` | `8` | `745182936` | Gates Temporal Phantom and the Phantom Essence. |
 | Entropy Crypt | `world.structures.entropy_crypt` | `true` | `50` | `25` | `738291456` | Gates Entropy Keeper and the Entropy Core. |
 | Master Clock | `world.structures.master_clock` | `true` | `60` | `20` | `1234567890` | Gates Time Tyrant, the final boss. |
+| Sentinel Outpost | `world.structures.sentinel_outpost` | `true` | `36` | `14` | `1405827319` | Optional side trip. Gates nothing, so disabling it is safe. |
 
 ```toml
 [world.structures.ancient_ruins]
@@ -103,8 +105,9 @@ salt = 20005897
 | `separation` | integer (chunks) | `0..spacing` | Minimum distance between any two placements. |
 | `salt` | integer (64-bit) | not range-checked | Random seed offset, passed through as written — the shipped Forgotten Library default (`8735421890`) is itself larger than a 32-bit integer. Different salts produce different placement patterns even with the same world seed. Vanilla stores this as a 32-bit int internally, so a value above `2147483647` (`Integer.MAX_VALUE`) truncates to a negative number and can fail world loading; there is normally no reason to change salt from its shipped default. |
 
-> **Disabling any of these eight structures breaks the main progression
-> chain.** Ancient Ruins is not exempt, since it is the only Overworld
+> **Disabling any of the eight progression structures breaks the main
+> progression chain.** The optional Sentinel Outpost is the one exception.
+> Ancient Ruins is not exempt, since it is the only Overworld
 > source of Clockstone Ore and the Time Hourglass Blueprint, so disabling
 > it also blocks progress unless the player already holds both. The mod
 > logs a startup warning naming exactly what becomes unobtainable (see

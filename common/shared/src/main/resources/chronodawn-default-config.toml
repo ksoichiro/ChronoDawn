@@ -157,6 +157,22 @@ separation = 20
 # Random seed offset for placement; usually no reason to change this.
 salt = 1234567890
 
+[world.structures.sentinel_outpost]
+# Whether the Sentinel Outpost generates in Chrono Dawn.
+# It is an optional side trip: disabling it removes nothing from the main progression.
+enabled = true
+
+# Average distance (in chunks) between placement attempts.
+# Lower = denser, higher = rarer. Must be > separation. Vanilla limit: 4096.
+spacing = 36
+
+# Minimum guaranteed distance (in chunks) between two placements.
+# Must be < spacing.
+separation = 14
+
+# Random seed offset for placement; usually no reason to change this.
+salt = 1405827319
+
 [world.ores.time_crystal]
 # Whether Time Crystal ore generates in the Chrono dimension.
 enabled = true
