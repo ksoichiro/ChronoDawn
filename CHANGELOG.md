@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Weathered structure stonework**: newly generated Desert Clock Tower,
+  Forgotten Library, Master Clock, Phantom Catacombs, Entropy Crypt and Time
+  Keeper Village now mix Cracked and Mossy stone bricks into their walls
+  instead of one flat material. Existing structures are unchanged.
 - **Rocky mountain slopes**: steep slopes in the Chrono Dawn
   mountain biome now expose Temporal Stone in newly generated terrain.
 
