@@ -42,6 +42,14 @@ class CompareTest(unittest.TestCase):
                                monotonic=["data.IndependentTime"])
         self.assertEqual([(d.path, d.reason) for d in diffs], [("data.IndependentTime", "decreased")])
 
+    def test_ignored_path_may_change(self):
+        before = {"data": {"clock": {"paused": 1, "total_ticks": 10}}}
+        after = {"data": {"clock": {"paused": 0, "total_ticks": 10}}}
+        self.assertEqual(compare_values(before, after, ignore=["data.clock.paused"]), [])
+        self.assertEqual(len(compare_values(before, after)), 1)
+        dropped = {"data": {"clock": {"total_ticks": 10}}}
+        self.assertEqual(compare_values(before, dropped, ignore=["data.clock.paused"]), [])
+
     def test_setup_reply_failures(self):
         for reply in ("Unknown item 'chronodawn:nope'", "Incorrect argument for command",
                       "...chronodawn:nope<--[HERE]", "Could not set the block", "No player was found",

@@ -10,7 +10,6 @@ import urllib.request
 from pathlib import Path
 
 MODRINTH_PROJECT_ID = "yEsoyNev"  # the slug endpoint (/project/chronodawn) returns 404
-MC_VERSION = "1.21.1"
 
 
 class VersionSelectionError(Exception):
@@ -42,7 +41,7 @@ def resolve_sources(baseline: str, previous: str) -> list[str]:
     return [baseline] if baseline == previous else [baseline, previous]
 
 
-def select_modrinth_file(versions_json: list[dict], source: str, loader: str) -> dict:
+def select_modrinth_file(versions_json: list[dict], source: str, loader: str, mc_version: str) -> dict:
     for_loader = [v for v in versions_json if loader in v.get("loaders", [])]
     matches = [v for v in for_loader if v["version_number"] == source]
     if not matches:
@@ -52,16 +51,16 @@ def select_modrinth_file(versions_json: list[dict], source: str, loader: str) ->
         found = ", ".join(sorted(v["version_number"] for v in for_loader)) or "none"
         reason = "No" if not matches else f"{len(matches)}"
         raise VersionSelectionError(
-            f"{reason} Modrinth versions match {source} for {loader} on {MC_VERSION}; available: {found}"
+            f"{reason} Modrinth versions match {source} for {loader} on {mc_version}; available: {found}"
         )
     files = matches[0]["files"]
     primary = [f for f in files if f.get("primary")] or files
     return primary[0]
 
 
-def _fetch_versions(loader: str) -> list[dict]:
+def _fetch_versions(loader: str, mc_version: str) -> list[dict]:
     query = urllib.parse.urlencode({
-        "game_versions": json.dumps([MC_VERSION]),
+        "game_versions": json.dumps([mc_version]),
         "loaders": json.dumps([loader]),
     })
     url = f"https://api.modrinth.com/v2/project/{MODRINTH_PROJECT_ID}/version?{query}"
@@ -84,12 +83,12 @@ def _sha512(path: Path) -> str:
     return digest.hexdigest()
 
 
-def fetch_old_jar(source: str, loader: str, cache_dir: Path) -> Path:
-    target_dir = cache_dir / "jars" / loader / source
+def fetch_old_jar(source: str, loader: str, mc_version: str, cache_dir: Path) -> Path:
+    target_dir = cache_dir / "jars" / mc_version / loader / source
     cached = list(target_dir.glob("*.jar")) if target_dir.exists() else []
     if len(cached) == 1:
         return cached[0]
-    entry = select_modrinth_file(_fetch_versions(loader), source, loader)
+    entry = select_modrinth_file(_fetch_versions(loader, mc_version), source, loader, mc_version)
     target_dir.mkdir(parents=True, exist_ok=True)
     target = target_dir / entry["filename"]
     partial = target.with_suffix(".part")

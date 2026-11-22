@@ -73,22 +73,22 @@ class SelectModrinthFileTest(unittest.TestCase):
         ]
 
     def test_select_version_exact(self):
-        f = select_modrinth_file(self.versions, "0.8.0", "neoforge")
+        f = select_modrinth_file(self.versions, "0.8.0", "neoforge", "1.21.1")
         self.assertEqual(f["filename"], "chronodawn-0.8.0+1.21.1-neoforge.jar")
 
     def test_select_version_prefix_when_no_exact(self):
         versions = [_version("0.9.0+1.21.1-fabric", ["fabric"], "c-0.9.0.jar")]
-        self.assertEqual(select_modrinth_file(versions, "0.9.0", "fabric")["filename"], "c-0.9.0.jar")
+        self.assertEqual(select_modrinth_file(versions, "0.9.0", "fabric", "1.21.1")["filename"], "c-0.9.0.jar")
 
     def test_select_version_none_raises(self):
         with self.assertRaises(VersionSelectionError) as ctx:
-            select_modrinth_file(self.versions, "0.7.0", "neoforge")
+            select_modrinth_file(self.versions, "0.7.0", "neoforge", "1.21.1")
         self.assertIn("0.13.0", str(ctx.exception))
 
     def test_select_version_ambiguous_raises(self):
         versions = self.versions + [_version("0.8.0", ["neoforge"], "dup.jar")]
         with self.assertRaises(VersionSelectionError) as ctx:
-            select_modrinth_file(versions, "0.8.0", "neoforge")
+            select_modrinth_file(versions, "0.8.0", "neoforge", "1.21.1")
         self.assertIn("0.8.0", str(ctx.exception))
 
 

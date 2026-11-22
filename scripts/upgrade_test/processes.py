@@ -223,6 +223,8 @@ def prepare_server_dir(env: ServerEnv, server_dir: Path, ports: tuple[int, int])
         "max-tick-time=-1",
         "gamemode=creative",
         "enable-command-block=false",
+        # 26.x turns the whitelist on when server.properties does not mention it.
+        "white-list=false",
         "",
     ]))
 
@@ -236,6 +238,8 @@ def run_server(env: ServerEnv, server_dir: Path, mods: list[Path], log_file: Pat
     return proc
 
 
+# VSync is off because the 26.x client (SDL) blocks in SDL_GL_SwapWindow with
+# VSync on while the Mac is locked, so it never gets past the loading screen.
 _CLIENT_OPTIONS = """onboardAccessibility:false
 pauseOnLostFocus:false
 skipMultiplayerWarning:true
@@ -243,6 +247,8 @@ joinedFirstServer:true
 tutorialStep:none
 renderDistance:4
 soundCategory_master:0.0
+enableVsync:false
+maxFps:60
 """
 
 

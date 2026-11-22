@@ -28,6 +28,8 @@ RCON_TIMEOUT = 600
 SETTLE_SECONDS = 12
 
 # Chat is hidden so command feedback and join messages stay out of the shots.
+# VSync is off because the 26.x client (SDL) blocks in SDL_GL_SwapWindow with
+# VSync on while the Mac is locked, so it never gets past the loading screen.
 _CLIENT_OPTIONS = """onboardAccessibility:false
 pauseOnLostFocus:false
 skipMultiplayerWarning:true
@@ -39,6 +41,8 @@ guiScale:2
 chatVisibility:2
 narrator:0
 soundCategory_master:0.0
+enableVsync:false
+maxFps:60
 """
 
 # Run before every scenario so each one starts from the same conditions.
@@ -109,7 +113,8 @@ def run(env, scenarios, candidate_jar, out_dir, ports):
     server, client = _start_session(env, server_dir, client_dir, mods, ports, "scenario", out_dir, client_args)
     try:
         time.sleep(SETTLE_SECONDS)
-        with Rcon("127.0.0.1", ports[1], processes.RCON_PASSWORD, timeout=RCON_TIMEOUT) as rcon:
+        with Rcon("127.0.0.1", ports[1], processes.RCON_PASSWORD, timeout=RCON_TIMEOUT,
+                  mc_version=env.mc_version) as rcon:
             for scenario in scenarios:
                 scenario_dir = out_dir / scenario.name
                 shots_dir = scenario_dir / "shots"
@@ -137,7 +142,7 @@ def run(env, scenarios, candidate_jar, out_dir, ports):
         server.kill()
 
     all_shots = [(f"{name}/{s.name}", s.file, s.note) for name, shots in shots_by_scenario.items() for s in shots]
-    sheet = images.contact_sheet(all_shots, out_dir / "sheet.png", f"scenarioCheck {env.loader} 1.21.1, "
+    sheet = images.contact_sheet(all_shots, out_dir / "sheet.png", f"scenarioCheck {env.loader} {env.mc_version}, "
                                  f"{candidate_jar.name}") if all_shots else None
 
     server_problems = [line for line in logcheck.check_server_log(out_dir / "scenario-server.log",
@@ -176,7 +181,7 @@ def main(argv=None) -> int:
     except Exception as e:
         results = [("FAIL", "harness", f"{type(e).__name__}: {e}")]
 
-    report = f"scenarioCheck {env.loader} 1.21.1, candidate {candidate.name}\n" + compare.format_report(results)
+    report = f"scenarioCheck {env.loader} {env.mc_version}, candidate {candidate.name}\n" + compare.format_report(results)
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "report.txt").write_text(report)
     write_summary(out_dir, report, shots_by_scenario, sheet)

@@ -8,11 +8,13 @@ from pathlib import Path
 from nbt import nbt
 
 from scripts.upgrade_test.snapshot import (
+    _palette_name,
     chunk_timestamps,
-    data_dir,
+    dimension_dir,
     offline_uuid,
     read_advancements,
     read_saved_data,
+    saved_data_path,
     set_saved_data_value,
 )
 
@@ -45,10 +47,31 @@ class SnapshotTest(unittest.TestCase):
     def tearDown(self):
         self.tmp.cleanup()
 
-    def test_data_dir_per_dimension(self):
-        self.assertEqual(data_dir(self.world, "overworld"), self.world / "data")
-        self.assertEqual(data_dir(self.world, "chronodawn:chronodawn"),
-                         self.world / "dimensions" / "chronodawn" / "chronodawn" / "data")
+    def test_saved_data_path_per_dimension(self):
+        self.assertEqual(saved_data_path(self.world, "overworld", "a.dat"), self.world / "data" / "a.dat")
+        self.assertEqual(saved_data_path(self.world, "chronodawn:chronodawn", "a.dat"),
+                         self.world / "dimensions" / "chronodawn" / "chronodawn" / "data" / "a.dat")
+
+    def test_26_x_layout_keeps_every_dimension_and_namespaced_data(self):
+        overworld = self.world / "dimensions" / "minecraft" / "overworld"
+        _write_dat(overworld / "data" / "chronodawn" / "chronodawn_global_state.dat", _global_state(1))
+        self.assertEqual(dimension_dir(self.world, "overworld"), overworld)
+        self.assertEqual(dimension_dir(self.world, "minecraft:the_nether"),
+                         self.world / "dimensions" / "minecraft" / "the_nether")
+        self.assertEqual(read_saved_data(self.world, "overworld", "chronodawn_global_state.dat")
+                         ["data"]["IsTyrantDefeated"], 1)
+        set_saved_data_value(self.world, "overworld", "chronodawn_global_state.dat",
+                             "data.IsTyrantDefeated", 0, "byte")
+        self.assertEqual(read_saved_data(self.world, "overworld", "chronodawn_global_state.dat")
+                         ["data"]["IsTyrantDefeated"], 0)
+        self.assertIsNone(read_saved_data(self.world, "overworld", "nope.dat"))
+
+    def test_26_x_advancements_under_players(self):
+        uuid = offline_uuid("Dev")
+        path = self.world / "players" / "advancements" / f"{uuid}.json"
+        path.parent.mkdir(parents=True)
+        path.write_text(json.dumps({"chronodawn:root": {"criteria": {}, "done": True}}))
+        self.assertEqual(read_advancements(self.world, uuid), {"chronodawn:root": True})
 
     def test_read_saved_data_roundtrip(self):
         _write_dat(self.world / "data" / "chronodawn_global_state.dat", _global_state(1))
@@ -93,6 +116,26 @@ class SnapshotTest(unittest.TestCase):
         # Value of java.util.UUID.nameUUIDFromBytes("OfflinePlayer:Dev".getBytes(UTF_8)),
         # obtained once with jshell.
         self.assertEqual(offline_uuid("Dev"), "380df991-f603-344c-a090-369bad2a924a")
+
+
+class PaletteNameTest(unittest.TestCase):
+    def test_reads_every_palette_entry_shape(self):
+        legacy = nbt.TAG_Compound()
+        legacy.tags.append(nbt.TAG_String(name="Name", value="minecraft:stone"))
+        self.assertEqual(_palette_name(legacy), "minecraft:stone")
+        self.assertEqual(_palette_name(nbt.TAG_String(value="minecraft:air")), "minecraft:air")
+        with_properties = nbt.TAG_Compound()
+        with_properties.tags.append(nbt.TAG_String(name="id", value="minecraft:leaf_litter"))
+        with_properties.tags.append(nbt.TAG_Compound(name="properties"))
+        self.assertEqual(_palette_name(with_properties), "minecraft:leaf_litter")
+        unnamed = nbt.TAG_Compound()
+        unnamed.tags.append(nbt.TAG_String(value="minecraft:grass_block"))
+        unnamed.tags.append(nbt.TAG_Compound(name="properties"))
+        self.assertEqual(_palette_name(unnamed), "minecraft:grass_block")
+
+    def test_unknown_palette_entry_is_an_error(self):
+        with self.assertRaises(ValueError):
+            _palette_name(nbt.TAG_Compound())
 
 
 if __name__ == "__main__":

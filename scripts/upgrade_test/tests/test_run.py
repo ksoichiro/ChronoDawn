@@ -60,7 +60,7 @@ class MainTest(unittest.TestCase):
         out.mkdir()
         (out / "report.txt").write_text("PASS stale report from an earlier run\n")
         env = {
-            "loader": "fabric", "repoRoot": tmp, "cacheDir": tmp, "outDir": str(out), "baseline": "0.8.0",
+            "loader": "fabric", "mcVersion": "1.21.1", "repoRoot": tmp, "cacheDir": tmp, "outDir": str(out), "baseline": "0.8.0",
             "candidateJar": str(Path(tmp) / "c.jar"), "prodMods": [], "ports": [1, 2],
             "logIgnoreFile": str(Path(tmp) / "none.txt"), "serverTemplateDir": tmp, "serverCommand": [],
             "client": {"java": "java", "jvmArgs": [], "classpath": [], "mainClass": "M", "args": []},

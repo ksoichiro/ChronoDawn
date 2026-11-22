@@ -2,13 +2,15 @@
 // release candidate on production server/client runtimes, and fail if
 // anything crashes or any pre-upgrade data is lost or changed.
 //
-// Usage (Minecraft 1.21.1 only, needs network, JVM forks and local ports,
-// so run outside the sandbox):
+// Usage (Minecraft 1.21.1 and 26.3, see upgrade_test_mc_versions; needs
+// network, JVM forks and local ports, so run outside the sandbox):
 //   ./gradlew :fabric:upgradeTest :neoforge:upgradeTest -Ptarget_mc_version=1.21.1
+//   ./gradlew :fabric:upgradeTest :neoforge:upgradeTest -Ptarget_mc_version=26.3
 //
 // Optional project properties:
 //   upgrade_test_sources       - comma-separated old versions (default: baseline + previous release)
 //   upgrade_test_candidate_jar - mod JAR to upgrade to (default: the freshly built one)
+//   upgrade_test_ports         - server and RCON port, comma-separated (default: per loader)
 //
 // The driver lives in scripts/upgrade_test/. Not part of checkAll: run it
 // before a release that touches registries, worldgen, configs, portals,
@@ -59,7 +61,20 @@ def upgradeTestOutDir = layout.buildDirectory.dir('upgrade-test').get().asFile
 def envFile = new File(upgradeTestOutDir, 'env.json')
 def clientCommandFile = new File(upgradeTestOutDir, 'client-command.json')
 def loaderName = project.name
-def ports = loaderName == 'fabric' ? [25611, 25612] : [25621, 25622]
+// upgrade_test_ports and scenario_check_ports (server,RCON) override the
+// defaults, e.g. when another checkout is running the same task on the same loader.
+def portsProperty = { String name, List<Integer> defaults ->
+    def value = project.findProperty(name)
+    if (value == null) {
+        return defaults
+    }
+    def parsed = value.toString().split(',')*.trim()*.toInteger()
+    if (parsed.size() != 2) {
+        throw new GradleException("${name} needs a server port and an RCON port, e.g. 25700,25701 (got ${value})")
+    }
+    return parsed
+}
+def ports = portsProperty('upgrade_test_ports', loaderName == 'fabric' ? [25611, 25612] : [25621, 25622])
 
 tasks.register('prepareUpgradeTest') {
     group = 'verification'
@@ -71,8 +86,9 @@ tasks.register('prepareUpgradeTest') {
 
     doLast {
         def mcVersion = project.findProperty('minecraft_version')
-        if (mcVersion != '1.21.1') {
-            throw new GradleException("upgradeTest supports Minecraft 1.21.1 only (got ${mcVersion})")
+        def supported = project.findProperty('upgrade_test_mc_versions').toString().split(',')*.trim()
+        if (!(mcVersion in supported)) {
+            throw new GradleException("upgradeTest and scenarioCheck support Minecraft ${supported.join(', ')} only (got ${mcVersion})")
         }
         def templateDir = prodSmokeTestDir(loaderName)
         def launcher = javaToolchains.launcherFor {
@@ -100,7 +116,9 @@ tasks.register('prepareUpgradeTest') {
             repoRoot         : rootDir.absolutePath,
             cacheDir         : upgradeTestCacheDir.absolutePath,
             outDir           : upgradeTestOutDir.absolutePath,
-            baseline         : project.findProperty('upgrade_test_baseline_version').toString(),
+            // props/<version>.properties overrides land on the root project's ext;
+            // a subproject's findProperty would still see gradle.properties' value.
+            baseline         : rootProject.findProperty('upgrade_test_baseline_version').toString(),
             candidateJar     : modJar.absolutePath,
             prodMods         : configurations.prodMods.files.collect { it.absolutePath },
             ports            : ports,
@@ -135,8 +153,9 @@ tasks.register('upgradeTest', Exec) {
 // over RCON, and take in-game screenshots for review (docs/scenario_check.md).
 // Shares the runtimes, env.json and venv of the upgrade test.
 //   ./gradlew :neoforge:scenarioCheck -Ptarget_mc_version=1.21.1 [-Pscenario_check_scenarios=a,b]
+//   ./gradlew :neoforge:scenarioCheck -Ptarget_mc_version=26.3 [-Pscenario_check_ports=25651,25652]
 def scenarioCheckOutDir = layout.buildDirectory.dir('scenario-check').get().asFile
-def scenarioCheckPorts = loaderName == 'fabric' ? [25631, 25632] : [25641, 25642]
+def scenarioCheckPorts = portsProperty('scenario_check_ports', loaderName == 'fabric' ? [25631, 25632] : [25641, 25642])
 
 tasks.register('scenarioCheck', Exec) {
     group = 'verification'
