@@ -1,0 +1,41 @@
+{
+  "_comment": "Java symbols that Minecraft renamed between eras. validateEraSymbols fails when a version module in [since, before) contains a line matching pattern. CI compiles only 1.21.1 and 26.3, so these renames otherwise surface only in buildAll. Add a rule with the fixing commit whenever an era rename breaks a version that CI does not build.",
+  "rules": [
+    {
+      "id": "identifier-before-1.21.11",
+      "pattern": "\\bnet\\.minecraft\\.resources\\.Identifier\\b",
+      "before": "1.21.11",
+      "message": "net.minecraft.resources.Identifier exists only on 1.21.11+. Use ResourceLocation here (983f6ce12)"
+    },
+    {
+      "id": "resource-location-since-1.21.11",
+      "pattern": "\\bnet\\.minecraft\\.resources\\.ResourceLocation\\b",
+      "since": "1.21.11",
+      "message": "ResourceLocation was renamed to net.minecraft.resources.Identifier in 1.21.11"
+    },
+    {
+      "id": "no-collision-before-1.21.9",
+      "pattern": "\\.noCollision\\(\\)",
+      "before": "1.21.9",
+      "message": "BlockBehaviour.Properties.noCollision() exists only on 1.21.9+. Use noCollission() here"
+    },
+    {
+      "id": "no-collission-since-1.21.9",
+      "pattern": "\\.noCollission\\(\\)",
+      "since": "1.21.9",
+      "message": "noCollission() was renamed to noCollision() in 1.21.9 (36fe8b368)"
+    },
+    {
+      "id": "water-animal-package-since-1.21.11",
+      "pattern": "\\bnet\\.minecraft\\.world\\.entity\\.animal\\.WaterAnimal\\b",
+      "since": "1.21.11",
+      "message": "WaterAnimal moved to net.minecraft.world.entity.animal.fish in 1.21.11"
+    },
+    {
+      "id": "water-animal-fish-package-before-1.21.11",
+      "pattern": "\\bnet\\.minecraft\\.world\\.entity\\.animal\\.fish\\.WaterAnimal\\b",
+      "before": "1.21.11",
+      "message": "WaterAnimal is in net.minecraft.world.entity.animal before 1.21.11"
+    }
+  ]
+}
