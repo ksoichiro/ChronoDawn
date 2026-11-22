@@ -132,7 +132,7 @@ tasks.register('upgradeTest', Exec) {
 
 // Scenario check: boot the candidate on a fresh world with a production
 // server and client, run the scenarios in scripts/scenario_check/scenarios/
-// over RCON, and capture the client window for review (docs/scenario_check.md).
+// over RCON, and take in-game screenshots for review (docs/scenario_check.md).
 // Shares the runtimes, env.json and venv of the upgrade test.
 //   ./gradlew :neoforge:scenarioCheck -Ptarget_mc_version=1.21.1 [-Pscenario_check_scenarios=a,b]
 def scenarioCheckOutDir = layout.buildDirectory.dir('scenario-check').get().asFile

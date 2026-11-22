@@ -2,7 +2,7 @@
 
 `scenarioCheck` turns an in-game check into a command. It boots the freshly
 built JAR on a production server and client for Minecraft 1.21.1, runs
-scenario files over RCON, judges the replies, and captures the client window
+scenario files over RCON, judges the replies, and takes in-game screenshots
 at the points each scenario names. The owner can review the result remotely
 from the report and one contact sheet image, without starting the game.
 
@@ -26,25 +26,18 @@ provisioning). A game window opens for the length of the run.
 Each run starts from a new world (seed `20261023`), so runs do not affect each
 other. Ports: Fabric 25631/25632, NeoForge 25641/25642.
 
-### Screen Recording permission
+### Screenshots
 
-The window is captured with `screencapture -l <window id>`, so the app that
-runs Gradle needs the Screen Recording permission (System Settings > Privacy &
-Security > Screen & System Audio Recording). That is the terminal or IDE, or
-for an agent session the process at the top of its process tree (for example
-`~/.local/bin/fuda`). A switch that is on in System Settings was not enough
-for the agent host: capture started working only after macOS showed its own
-permission dialog for the host and it was allowed. Restart the host and run
-`screencapture` again if that dialog has not appeared yet.
-To see which process macOS checks and what it decided, run `screencapture`
-once, then read `log show --last 10s --predicate 'subsystem ==
-"com.apple.TCC"' | grep -E "AUTHREQ_(ATTRIBUTION|RESULT)"`: `responsible=` names
-the process that needs the grant, and `authValue=2` means allowed.
-The driver probes the permission before booting anything and stops with a
-message when it is missing.
+The client takes the screenshots itself, the way F2 does. The driver compiles
+`scripts/scenario_check/agent/ScenarioShotAgent.java` with the client's JDK
+and loads it with `-javaagent`. The agent saves the game's framebuffer when
+the driver asks for a shot, so the capture does not go through macOS screen
+recording. It needs no Screen Recording permission, and it keeps working while
+the screen is locked or other windows cover the game window. Both loaders
+were checked on a locked Mac.
 
-The capture works while other windows cover the game window. A minimized
-window cannot be captured.
+The agent calls Minecraft by name: Mojang names on NeoForge and intermediary
+names on Fabric. Both sets are listed in the agent and are valid for 1.21.1.
 
 ## Output
 
@@ -55,7 +48,7 @@ Everything is under `<loader>/1.21.1/build/scenario-check/`:
 | `report.txt` | One line per result: `PASS`, `FAIL`, `SETUP FAILED`, `NOT COVERED`, or `SHOT` |
 | `summary.md` | The report, then every screenshot with what to look for |
 | `sheet.png` | All screenshots with their notes on one image, for attaching to a PR or task |
-| `<scenario>/shots/*.png` | Full-size screenshots (1280x720 window) |
+| `<scenario>/shots/*.png` | Full-size screenshots (the framebuffer of the 1280x720 window, 2560x1440 on a Retina display) |
 | `<scenario>/transcript.txt` | Every RCON command and reply |
 | `scenario-server.log`, `scenario-client.log` | Server and client logs |
 
@@ -119,11 +112,8 @@ placed there have a plain sky behind them. Use `forceload` and an `await` on
 ## Limits
 
 - Minecraft 1.21.1 only, like the upgrade test.
-- macOS only (window capture).
-- The screen must be unlocked. macOS refuses every capture while it is
-  locked, even with the permission granted, so it cannot run while the
-  owner is away from a locked Mac. The driver detects this and stops before
-  booting.
-- The crosshair stays in the shots. F1 cannot be pressed from RCON.
+- Tested on macOS only.
+- In spectator mode the crosshair shows only when it points at an entity or
+  a container, so it is usually not in the shots.
 - `wait` is a fixed time. Far or slow chunks may need a longer wait.
 - Toasts (advancements, recipes) can appear in the top-right corner.

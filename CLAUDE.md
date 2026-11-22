@@ -208,9 +208,9 @@ such as `[94, 1]`, and verify both resource reload and server data loading.
 - Driver and setup layers live in `scripts/upgrade_test/`. New persisted content needs a layer named after the version that introduces it. Log ignores go in `upgrade-test-log-ignore.txt` (known issues only)
 - `./gradlew testUpgradeTestScripts` - Unit tests for the driver (bind local ports, so also unsandboxed)
 
-**Scenario Check** (1.21.1 only; macOS; opens a game window; not part of `checkAll`; see `docs/scenario_check.md`):
-- `./gradlew :neoforge:scenarioCheck -Ptarget_mc_version=1.21.1 [-Pscenario_check_scenarios=a,b]` - Boot the built JAR on a fresh world with production server+client, run `scripts/scenario_check/scenarios/*.json` over RCON, and capture the client window. Use it instead of asking the owner to check in game. Read `<loader>/1.21.1/build/scenario-check/summary.md`, look at each shot against its note, then attach `sheet.png` to the PR or task for the owner
-- Run outside the sandbox. The process that hosts the session needs the macOS Screen Recording permission; the driver stops before booting when it is missing
+**Scenario Check** (1.21.1 only; tested on macOS; opens a game window; not part of `checkAll`; see `docs/scenario_check.md`):
+- `./gradlew :neoforge:scenarioCheck -Ptarget_mc_version=1.21.1 [-Pscenario_check_scenarios=a,b]` - Boot the built JAR on a fresh world with production server+client, run `scripts/scenario_check/scenarios/*.json` over RCON, and take in-game screenshots. Use it instead of asking the owner to check in game. Read `<loader>/1.21.1/build/scenario-check/summary.md`, look at each shot against its note, then attach `sheet.png` to the PR or task for the owner
+- Run outside the sandbox. Screenshots come from the game's framebuffer through a Java agent, so they need no Screen Recording permission and work while the Mac is locked
 - `./gradlew testScenarioCheckScripts` - Unit tests for the driver
 
 **Resource Validation**:
