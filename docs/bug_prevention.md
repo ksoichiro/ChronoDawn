@@ -39,7 +39,7 @@ later) weigh more when choosing what to automate.
 | Era JSON format (loot, recipe, worldgen) | ~6 | ~35 | 0.8.0 | Covered by `validateEraJsonFormat`. 26.3 keys that the game silently ignores are not covered |
 | Missing tag membership | ~6 | ~24 | 0.12.0 | Covered by `validateBlockTagMembership` and `validateEraTagParity` for the cases that recurred |
 | Missing block loot tables | 2 | ~5 | 0.12.0 | **New: `validateBlockLootTables`** |
-| Structure, NBT and placement | ~8 | (within worldgen) | 0.17.x | StructureTests GameTest guard. Not statically checked |
+| Structure, NBT and placement | ~8 | (within worldgen) | 0.17.x | StructureTests GameTest guard. `StructureTemplateTest` also fails when a template block that has no block entity carries `nbt`. A "DUMMY block entity" server log WARN near Forgotten Library was seen only intermittently and not reproduced, so its cause is unknown |
 | Entity model and animation | ~6 | ~25 | 0.17.0 | Not covered, see rejected checks |
 | Mixin targeting | (within metadata) | ~19 | 2026-11 | prodSmokeTest. `validateMixinConfigs` catches missing classes only |
 | Config and upgrade compatibility | ~4 | few | 0.14.0 | upgradeTest |
