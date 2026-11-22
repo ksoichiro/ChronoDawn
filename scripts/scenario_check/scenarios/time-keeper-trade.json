@@ -1,0 +1,20 @@
+{
+  "description": "Right-clicking a Time Keeper as a player opens its trading screen with its offers, and closing the screen releases it. The Time Keeper stands on a platform in the sky with no AI, so it stays in front of the player. The player's inventory is cleared first: right-clicking with the Chronicle given on join in hand would open the Chronicle instead.",
+  "steps": [
+    "execute in minecraft:overworld run forceload add 16 0 31 15",
+    {"command": "execute in minecraft:overworld if loaded 24 200 8", "match": "Test passed", "await": true, "timeout": 60},
+    "execute in minecraft:overworld run fill 20 200 4 28 200 12 minecraft:white_concrete",
+    "execute in minecraft:overworld run summon chronodawn:time_keeper 24.5 201 10.5 {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Rotation:[180f,0f]}",
+    {"command": "execute in minecraft:overworld if entity @e[type=chronodawn:time_keeper,x=24.5,y=201,z=10.5,distance=..1]", "match": "Test passed", "check": "time-keeper-summoned"},
+    "gamemode creative ${player}",
+    "clear ${player}",
+    "execute in minecraft:overworld run tp ${player} 24.5 201 8.5 0 10",
+    {"shot": "aim", "wait": 3, "note": "The Time Keeper stands right in front of the player on a white platform, the crosshair on its body. It renders with its texture (purple robe, gold trim, dark hood with glowing eyes)."},
+    {"input": "use"},
+    {"screen": "Time Keeper", "check": "trade-screen-opened"},
+    {"shot": "trade-screen", "wait": 2, "note": "The Time Keeper trading screen: the title reads Time Keeper, the offer list on the left shows its trades with item icons (no empty list, no magenta-black missing textures), and the player's inventory is below."},
+    {"input": "close"},
+    {"screen": "^$", "check": "trade-screen-closed"},
+    "execute in minecraft:overworld run forceload remove 16 0 31 15"
+  ]
+}

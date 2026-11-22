@@ -33,14 +33,29 @@ class FakeClock:
         self.now += seconds
 
 
-def _runner(rcon, clock=None, captured=None):
+class FakeClient:
+    def __init__(self, screens=None, errors=()):
+        self.screens = screens or [""]  # titles answered to "screen", the last one repeats
+        self.errors = set(errors)
+        self.sent = []
+
+    def __call__(self, operation):
+        self.sent.append(operation)
+        if operation in self.errors:
+            return "error: a screen is open: X"
+        if operation == "screen":
+            return self.screens.pop(0) if len(self.screens) > 1 else self.screens[0]
+        return "ok"
+
+
+def _runner(rcon, clock=None, captured=None, client=None):
     clock = clock or FakeClock()
     captured = captured if captured is not None else []
 
     def capture(name):
         captured.append(name)
         return Path(f"/shots/{name}.png")
-    return Runner(rcon, capture, "Dev", clock=clock, sleep=clock.sleep)
+    return Runner(rcon, capture, "Dev", client, clock=clock, sleep=clock.sleep)
 
 
 class SubstituteTest(unittest.TestCase):
@@ -86,6 +101,24 @@ class LoadTest(unittest.TestCase):
     def test_rejects_unsafe_shot_name(self):
         with self.assertRaises(ScenarioError):
             load_scenario(self._write({"steps": [{"shot": "../a"}]}))
+
+    def test_accepts_input_and_screen_steps(self):
+        scenario = load_scenario(self._write({"steps": [
+            {"input": "use"}, {"input": "attack"}, {"input": "close"},
+            {"screen": "Time Keeper", "check": "opened", "timeout": 5}]}))
+        self.assertEqual(len(scenario.steps), 4)
+
+    def test_rejects_unknown_input(self):
+        with self.assertRaises(ScenarioError):
+            load_scenario(self._write({"steps": [{"input": "jump"}]}))
+
+    def test_rejects_input_with_extra_keys(self):
+        with self.assertRaises(ScenarioError):
+            load_scenario(self._write({"steps": [{"input": "use", "match": "x"}]}))
+
+    def test_rejects_invalid_screen_regex(self):
+        with self.assertRaises(ScenarioError):
+            load_scenario(self._write({"steps": [{"screen": "("}]}))
 
     def test_unknown_scenario_name(self):
         with self.assertRaises(ScenarioError):
@@ -163,6 +196,53 @@ class RunnerTest(unittest.TestCase):
         outcome = runner.run(Scenario("s", "", [{"shot": "a"}, "say after"]))
         self.assertEqual(outcome.results[0][0], "FAIL")
         self.assertIn("say after", rcon.sent)
+
+
+class ClientStepTest(unittest.TestCase):
+    def test_input_is_sent_to_the_client(self):
+        client = FakeClient()
+        outcome = _runner(FakeRcon({}), client=client).run(Scenario("s", "", [{"input": "use"}, "say after"]))
+        self.assertEqual(client.sent, ["use"])
+        self.assertEqual(outcome.results, [])
+        self.assertIn("> (client) use\nok", outcome.transcript)
+
+    def test_input_error_stops_the_scenario(self):
+        rcon = FakeRcon({})
+        client = FakeClient(errors=["use"])
+        outcome = _runner(rcon, client=client).run(Scenario("s", "", [{"input": "use"}, "say never", {"shot": "a"}]))
+        self.assertEqual(outcome.results[0][0], "SETUP FAILED")
+        self.assertEqual(outcome.results[1][0], "NOT COVERED")
+        self.assertNotIn("say never", rcon.sent)
+
+    def test_input_without_client_is_setup_failure(self):
+        outcome = _runner(FakeRcon({})).run(Scenario("s", "", [{"input": "use"}]))
+        self.assertEqual(outcome.results[0][0], "SETUP FAILED")
+
+    def test_screen_waits_until_title_matches(self):
+        client = FakeClient(screens=["", "", "Time Keeper"])
+        outcome = _runner(FakeRcon({}), client=client).run(
+            Scenario("s", "", [{"screen": "Time Keeper", "check": "opened"}]))
+        self.assertEqual(client.sent, ["screen"] * 3)
+        self.assertEqual(outcome.results[0][:2], ("PASS", "s/opened"))
+
+    def test_screen_check_times_out_as_fail(self):
+        rcon = FakeRcon({})
+        client = FakeClient(screens=[""])
+        outcome = _runner(rcon, client=client).run(
+            Scenario("s", "", [{"screen": "Time Keeper", "check": "opened", "timeout": 3}, "say never"]))
+        self.assertEqual(outcome.results[0][:2], ("FAIL", "s/opened"))
+        self.assertLessEqual(len(client.sent), 5)
+        self.assertNotIn("say never", rcon.sent)
+
+    def test_screen_without_check_mismatch_is_setup_failure(self):
+        client = FakeClient(screens=["Chest"])
+        outcome = _runner(FakeRcon({}), client=client).run(Scenario("s", "", [{"screen": "^$", "timeout": 2}]))
+        self.assertEqual(outcome.results[0][0], "SETUP FAILED")
+
+    def test_empty_pattern_matches_no_screen(self):
+        client = FakeClient(screens=[""])
+        outcome = _runner(FakeRcon({}), client=client).run(Scenario("s", "", [{"screen": "^$", "check": "closed"}]))
+        self.assertEqual(outcome.results[0][0], "PASS")
 
 
 if __name__ == "__main__":
