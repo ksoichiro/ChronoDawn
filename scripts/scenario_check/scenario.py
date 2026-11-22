@@ -22,7 +22,7 @@ Each step is one of:
                                  fails a check whose command took longer.
 - {"sleep": 2}                   Wait.
 - {"shot": "name", "wait": 8, "note": "what to look at"}
-                                 Wait, then capture the client window. The note
+                                 Wait, then take a screenshot in the client. The note
                                  tells the reviewer what the image must show.
 
 Commands and notes may use ${name} for captured variables and ${player} for

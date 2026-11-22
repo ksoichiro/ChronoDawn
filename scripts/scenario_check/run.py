@@ -1,16 +1,16 @@
-"""Scenario check driver: boot a production server and client, run scenarios over RCON, capture the client window.
+"""Scenario check driver: boot a production server and client, run scenarios over RCON, take in-game screenshots.
 
 Invoked by the scenarioCheck Gradle task with the env.json that
 prepareUpgradeTest writes. See docs/scenario_check.md.
 """
 
 import argparse
+import copy
+import dataclasses
 import json
 import re
 import shutil
-import subprocess
 import sys
-import tempfile
 import time
 from pathlib import Path
 
@@ -24,7 +24,6 @@ HERE = Path(__file__).resolve().parent
 WINDOW_SIZE = (1280, 720)
 # Keeps the RCON socket open through slow commands such as /locate.
 RCON_TIMEOUT = 600
-WINDOW_TIMEOUT = 120
 # The join message and the first terrain need a moment before any shot.
 SETTLE_SECONDS = 12
 
@@ -60,46 +59,6 @@ PREAMBLE = [
 HARNESS_LOG_NOISE = re.compile(r"moved too quickly!")
 
 
-class PermissionMissing(Exception):
-    pass
-
-
-def screen_locked() -> bool:
-    """macOS keeps the lock state in the IORegistry root, readable without any permission."""
-    result = subprocess.run(["ioreg", "-n", "Root", "-d1", "-a"], capture_output=True, text=True)
-    return bool(re.search(r"<key>CGSSessionScreenIsLocked</key>\s*<true/>", result.stdout))
-
-
-def preflight_capture():
-    """Fail before booting anything when macOS will not let this process capture the screen."""
-    if sys.platform != "darwin":
-        raise PermissionMissing("scenarioCheck captures the client window with macOS screencapture")
-    with tempfile.TemporaryDirectory() as tmp:
-        probe = Path(tmp) / "probe.png"
-        result = subprocess.run(["screencapture", "-x", "-R0,0,8,8", str(probe)], capture_output=True, text=True)
-        if result.returncode != 0 or not probe.exists():
-            if screen_locked():
-                raise PermissionMissing(
-                    "The screen is locked, and macOS refuses every capture while it is. Unlock the Mac "
-                    "and run again.")
-            raise PermissionMissing(
-                "screencapture cannot capture the screen. Give the app that runs Gradle (Terminal, iTerm, "
-                "the IDE, or the agent host) the Screen Recording permission in System Settings > Privacy & "
-                f"Security, then restart it. screencapture said: {result.stderr.strip()!r}")
-
-
-def wait_for_window(client, timeout=WINDOW_TIMEOUT):
-    deadline = time.monotonic() + timeout
-    while time.monotonic() < deadline:
-        window = capture.find_window(client.pid)
-        if window is not None:
-            return window
-        if not client.alive():
-            raise processes.ProcessExited(client.exit_code, client.log_file)
-        time.sleep(1)
-    raise processes.ReadyTimeout(f"No client window for pid {client.pid} after {timeout}s")
-
-
 def _shot_results(shots, scenario_name):
     results = []
     for shot in shots:
@@ -133,6 +92,11 @@ def run(env, scenarios, candidate_jar, out_dir, ports):
     processes.prepare_server_dir(env.server, server_dir, ports)
     client_dir.mkdir(parents=True)
     (client_dir / "options.txt").write_text(_CLIENT_OPTIONS)
+    request_dir = out_dir / "agent"
+    agent_jar = capture.build_agent(env.client.java, out_dir)
+    env = copy.copy(env)
+    env.client = dataclasses.replace(
+        env.client, jvm_args=[*env.client.jvm_args, capture.agent_jvm_arg(agent_jar, request_dir)])
     mods = [candidate_jar, *env.prod_mods]
     print(f"[{env.loader}] candidate: {candidate_jar.name}, scenarios: {', '.join(s.name for s in scenarios)}",
           flush=True)
@@ -142,7 +106,6 @@ def run(env, scenarios, candidate_jar, out_dir, ports):
     client_args = ["--width", str(WINDOW_SIZE[0]), "--height", str(WINDOW_SIZE[1])]
     server, client = _start_session(env, server_dir, client_dir, mods, ports, "scenario", out_dir, client_args)
     try:
-        window = wait_for_window(client)
         time.sleep(SETTLE_SECONDS)
         with Rcon("127.0.0.1", ports[1], processes.RCON_PASSWORD, timeout=RCON_TIMEOUT) as rcon:
             for scenario in scenarios:
@@ -152,7 +115,7 @@ def run(env, scenarios, candidate_jar, out_dir, ports):
                 def take(name, shots_dir=shots_dir):
                     if not client.alive():
                         raise processes.ProcessExited(client.exit_code, client.log_file)
-                    return capture.capture_window(window, shots_dir / f"{name}.png")
+                    return capture.take(request_dir, name, shots_dir / f"{name}.png", client.alive)
 
                 print(f"[{env.loader}] scenario {scenario.name}", flush=True)
                 runner = Runner(rcon, take, PLAYER)
@@ -200,11 +163,6 @@ def main(argv=None) -> int:
         scenarios = load_scenarios(HERE / "scenarios", names)
     except ScenarioError as e:
         print(f"Invalid scenario: {e}", file=sys.stderr)
-        return 2
-    try:
-        preflight_capture()
-    except PermissionMissing as e:
-        print(str(e), file=sys.stderr)
         return 2
     candidate = args.candidate_jar or env.candidate_jar
     processes.install_signal_handlers()

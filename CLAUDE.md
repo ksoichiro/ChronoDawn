@@ -208,10 +208,12 @@ such as `[94, 1]`, and verify both resource reload and server data loading.
 - Driver and setup layers live in `scripts/upgrade_test/`. New persisted content needs a layer named after the version that introduces it. Log ignores go in `upgrade-test-log-ignore.txt` (known issues only)
 - `./gradlew testUpgradeTestScripts` - Unit tests for the driver (bind local ports, so also unsandboxed)
 
-**Scenario Check** (1.21.1 only; macOS; opens a game window; not part of `checkAll`; see `docs/scenario_check.md`):
-- `./gradlew :neoforge:scenarioCheck -Ptarget_mc_version=1.21.1 [-Pscenario_check_scenarios=a,b]` - Boot the built JAR on a fresh world with production server+client, run `scripts/scenario_check/scenarios/*.json` over RCON, and capture the client window. Use it instead of asking the owner to check in game. Read `<loader>/1.21.1/build/scenario-check/summary.md`, look at each shot against its note, then attach `sheet.png` to the PR or task for the owner
-- Run outside the sandbox. The process that hosts the session needs the macOS Screen Recording permission; the driver stops before booting when it is missing
+**Scenario Check** (1.21.1 only; tested on macOS; opens a game window; not part of `checkAll`; see `docs/scenario_check.md`):
+- `./gradlew :neoforge:scenarioCheck -Ptarget_mc_version=1.21.1 [-Pscenario_check_scenarios=a,b]` - Boot the built JAR on a fresh world with production server+client, run `scripts/scenario_check/scenarios/*.json` over RCON, and take in-game screenshots. Use it instead of asking the owner to check in game. Read `<loader>/1.21.1/build/scenario-check/summary.md`, look at each shot against its note, then attach `sheet.png` to the PR or task for the owner
+- Run outside the sandbox. Screenshots come from the game's framebuffer through a Java agent, so they need no Screen Recording permission and work while the Mac is locked
 - `./gradlew testScenarioCheckScripts` - Unit tests for the driver
+- When a change needs an in-game check, do not stop and wait for the owner. If RCON commands and screenshots can cover the check, add or extend a scenario, run it on both 1.21.1 loaders, fix what the shots show is wrong, commit the scenario with the change, attach `sheet.png` to the PR or task, and continue through the PR. The owner answers OK or NG per shot later
+- List only what a scenario cannot cover (GUI screens, player input such as attacking or right-clicking, Minecraft versions other than 1.21.1) as manual checks in the PR body or task, and still continue. A `server-log` FAIL from a WARN that an existing task already tracks does not block the change. Name that task in the report
 
 **Resource Validation**:
 - `./gradlew validateResources` - Check JSON syntax and cross-references (blockstate→model, model→texture)
