@@ -21,6 +21,11 @@ public final class StructureSpecs {
                 new BlockRequirement("minecraft:chest", 3),
                 new BlockRequirement("chronodawn:" + ModBlockId.CLOCK_TOWER_TELEPORTER.id(), 1)
             )),
+            new StructureSpec("sentinel_outpost", 29, 24, 29, List.of(
+                new BlockRequirement("minecraft:chest", 2),
+                new BlockRequirement("minecraft:spawner", 5),
+                new BlockRequirement("minecraft:sea_lantern", 8)
+            )),
             new StructureSpec("time_keeper_village", 11, 8, 11, List.of(
                 new BlockRequirement("minecraft:chest", 2),
                 new BlockRequirement("minecraft:barrel", 1),

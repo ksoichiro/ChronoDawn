@@ -14,11 +14,27 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   broader, higher massifs. Only newly generated chunks change, so an existing
   world can show steep cliffs along the border between old and new terrain.
   New worlds are not affected.
+- **Weathered structure stonework**: newly generated Desert Clock Tower,
+  Forgotten Library, Master Clock, Phantom Catacombs, Entropy Crypt and Time
+  Keeper Village now mix Cracked and Mossy stone bricks into their walls
+  instead of one flat material. Existing structures are unchanged.
 - **Rocky mountain slopes**: steep slopes in the Chrono Dawn
   mountain biome now expose Temporal Stone in newly generated terrain.
 
 ### Added
 
+- **Sentinel Outpost**: a new optional structure where the Clockwork
+  Sentinels keep watch. It is a white landing pad with a tall two-storey hall, built
+  to look like something from outside Chrono Dawn, unlike the old factory of
+  the Clockwork Depths. Four docking bays and a spawner in the hall keep
+  sending out Clockwork Sentinels, with a few Epoch Husks and Secondhand
+  Archers mixed in, and two chests on the upper floor hold a few
+  Ancient Gears, Enhanced Clockstone and other supplies. Sentinels from its
+  spawners drop less than those in the open. It generates on the surface of any Chrono Dawn biome
+  except the oceans and gates nothing in the main progression. It can be
+  tuned or disabled under `world.structures.sentinel_outpost`. This
+  release adds it for Minecraft 1.21.1 first, and the Time Keeper sells a
+  Time Compass for it there.
 - **More uses for surplus Chronite**: the Time Keeper now buys Chronite
   Shards, 12 for an Emerald or 8 for a Clockstone, up to 16 times each. A
   Daylight Detector can also be crafted with Chronite Shards in place of

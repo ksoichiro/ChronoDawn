@@ -91,11 +91,14 @@ class ManagedStructureTest {
     }
 
     @Test
-    void onlyAncientRuinsHasNoProgressionNote() {
+    void onlyOptionalStructuresHaveNoProgressionNote() {
         for (ManagedStructure structure : ManagedStructure.values()) {
             if (structure == ManagedStructure.ANCIENT_RUINS) {
                 assertTrue(structure.progressionNote().isEmpty(),
                     "Ancient Ruins is Overworld flavour and must carry no progression note");
+            } else if (structure == ManagedStructure.SENTINEL_OUTPOST) {
+                assertTrue(structure.progressionNote().isEmpty(),
+                    "The Sentinel Outpost is an optional side trip and must carry no progression note");
             } else {
                 assertFalse(structure.progressionNote().isEmpty(),
                     structure.name() + " gates progression and must explain what disabling it costs");

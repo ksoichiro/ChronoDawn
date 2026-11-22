@@ -211,7 +211,7 @@ your pack to repeat individual IDs:
 | Tag | Contents |
 | --- | --- |
 | `#chronodawn:chronodawn_biomes` | All eleven Chrono Dawn biomes. |
-| `#chronodawn:chronodawn_structures` | All eight Chrono Dawn structures. |
+| `#chronodawn:chronodawn_structures` | All nine Chrono Dawn structures. |
 | `#chronodawn:boss_structures` | Desert Clock Tower, Guardian Vault, Clockwork Depths, Phantom Catacombs, Entropy Crypt, and Master Clock. |
 
 For example, a biome selector that accepts biome tags can use
