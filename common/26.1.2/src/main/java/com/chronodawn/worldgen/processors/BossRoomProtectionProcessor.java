@@ -91,48 +91,11 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
     private static final long CLEANUP_INTERVAL_MS = 60000; // Clean up every 60 seconds
     private static final long MARKER_EXPIRY_MS = 300000; // Expire markers after 5 minutes
 
-    // ThreadLocal storage for placementId to group markers from same structure placement
-    // Reuses same ID if called within PLACEMENT_ID_REUSE_WINDOW_MS milliseconds
-    private static final ThreadLocal<PlacementIdContext> PLACEMENT_ID_CONTEXT = ThreadLocal.withInitial(PlacementIdContext::new);
-    private static final long PLACEMENT_ID_REUSE_WINDOW_MS = 1000; // Reuse ID within 1000ms window (1 second)
-
-    private static class PlacementIdContext {
-        long lastPlacementId;
-        long lastUpdateTime;
-        BlockPos lastMarkerPos; // Track last marker position to distinguish structures
-
-        /**
-         * Generate or reuse placementId for marker grouping.
-         * Uses distance-based heuristic: markers < 100 blocks apart are from same structure.
-         * This ensures min/max markers from same structure get same placementId.
-         */
-        long getOrCreatePlacementId(BlockPos currentMarkerPos) {
-            long currentTime = System.currentTimeMillis();
-
-            // Check if this marker is from same structure as previous marker
-            boolean isSameStructure = false;
-            if (lastMarkerPos != null && currentTime - lastUpdateTime <= PLACEMENT_ID_REUSE_WINDOW_MS) {
-                // Same structure: min/max markers are close together (< 100 blocks)
-                // Different structures: typically > 200 blocks apart
-                // Using 100 blocks ensures min/max from same structure get same placementId
-                double distance = Math.sqrt(lastMarkerPos.distSqr(currentMarkerPos));
-                isSameStructure = distance < 100.0;
-            }
-
-            if (isSameStructure) {
-                // Reuse same ID for markers from same structure
-                return lastPlacementId;
-            }
-
-            // Create new unique ID for new structure
-            // Combine timestamp, nanoTime, and position hash for uniqueness
-            long positionHash = (long)currentMarkerPos.hashCode() & 0xFFFFFFFFL;
-            lastPlacementId = (currentTime << 32) | (System.nanoTime() & 0xFFFF0000L) | (positionHash & 0xFFFFL);
-            lastUpdateTime = currentTime;
-            lastMarkerPos = currentMarkerPos.immutable();
-            return lastPlacementId;
-        }
-    }
+    // placementIds whose "min marker without max marker" warning was already logged.
+    // registerPendingProtections runs every 100 ticks and keeps such markers pending,
+    // so without this the same warning repeats until the markers expire.
+    // Only accessed from the server thread.
+    private static final Set<Long> WARNED_PLACEMENT_IDS = new HashSet<>();
 
     @Override
     protected StructureProcessorType<?> getType() {
@@ -179,9 +142,11 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
         boolean isPermanentMin = "permanent_protection_min".equals(markerType);
         boolean isPermanentMax = "permanent_protection_max".equals(markerType);
 
-        // Get or create placementId for grouping markers from same structure placement
-        // PlacementId includes marker position to distinguish different structures
-        long placementId = PLACEMENT_ID_CONTEXT.get().getOrCreatePlacementId(worldPos);
+        // Group markers by the template's placement origin. Jigsaw structures place a piece
+        // once per chunk it overlaps, on whichever worldgen worker thread generates that chunk,
+        // so the min and max markers of one template can be processed on different threads and
+        // seconds apart. The origin is the same in every pass, so it pairs them reliably.
+        long placementId = structurePos.asLong();
 
         // Calculate structure-relative position for debugging
         BlockPos relativePos = worldPos.subtract(piecePos);
@@ -332,9 +297,15 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
             List<MarkerData> maxs = bossRoomMaxsByPlacement.get(placementId);
 
             if (maxs == null) {
-                ChronoDawn.LOGGER.warn("Found {} boss room min markers with placementId={} but no max markers", mins.size(), placementId);
+                // Markers stay pending until their max arrives, so warn only once per placement.
+                // A max already recorded in a chunk that is not loaded yet pairs later, so skip it.
+                if (!hasPendingMax(placementId, false) && WARNED_PLACEMENT_IDS.add(placementId)) {
+                    ChronoDawn.LOGGER.warn("Found {} boss room min markers with placementId={} but no max markers (first at {})",
+                        mins.size(), placementId, mins.get(0).pos);
+                }
                 continue;
             }
+            WARNED_PLACEMENT_IDS.remove(placementId);
 
             // Remove duplicate markers (same position) - keep the newer one
             mins = removeDuplicateMarkers(mins);
@@ -423,9 +394,15 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
             List<MarkerData> maxs = maxMarkersByPlacement.get(placementId);
 
             if (maxs == null) {
-                ChronoDawn.LOGGER.warn("Found {} min markers with placementId={} but no max markers", mins.size(), placementId);
+                // Markers stay pending until their max arrives, so warn only once per placement.
+                // A max already recorded in a chunk that is not loaded yet pairs later, so skip it.
+                if (!hasPendingMax(placementId, true) && WARNED_PLACEMENT_IDS.add(placementId)) {
+                    ChronoDawn.LOGGER.warn("Found {} min markers with placementId={} but no max markers (first at {})",
+                        mins.size(), placementId, mins.get(0).pos);
+                }
                 continue;
             }
+            WARNED_PLACEMENT_IDS.remove(placementId);
 
             // Remove duplicate markers (same position) - keep the newer one (higher addedTime)
             // This handles cases where stairs_bottom overwrites stairs max marker
@@ -495,10 +472,24 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
             PAIRED_MARKERS.remove(pos);
         });
 
-        // Log remaining unpaired markers (for debugging)
+        // Log remaining unpaired markers (for debugging). Markers whose chunk is not loaded yet
+        // normally remain here, and real pairing problems are already warned about above.
         if (!PENDING_MARKERS.isEmpty() && (!bossRoomMinMarkers.isEmpty() || !permanentMinMarkers.isEmpty())) {
-            ChronoDawn.LOGGER.warn("Still have {} unpaired markers after registration", PENDING_MARKERS.size());
+            ChronoDawn.LOGGER.debug("Still have {} unpaired markers after registration", PENDING_MARKERS.size());
         }
+    }
+
+    /**
+     * Whether a max marker of the given placement is pending, including ones in chunks
+     * that are not loaded yet (registerPendingProtections only collects loaded ones).
+     */
+    private static boolean hasPendingMax(long placementId, boolean isPermanent) {
+        for (MarkerData marker : PENDING_MARKERS.values()) {
+            if (!marker.isMin && marker.isPermanent == isPermanent && marker.placementId == placementId) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -554,6 +545,13 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
             ChronoDawn.LOGGER.debug("Cleaned up {} expired boss room markers (older than {} seconds)",
                 removedCount, MARKER_EXPIRY_MS / 1000);
         }
+
+        // Forget warned placements that no longer have pending markers
+        Set<Long> pendingPlacementIds = new HashSet<>();
+        for (MarkerData marker : PENDING_MARKERS.values()) {
+            pendingPlacementIds.add(marker.placementId);
+        }
+        WARNED_PLACEMENT_IDS.retainAll(pendingPlacementIds);
     }
 
     /**
