@@ -181,7 +181,7 @@ names you need with `-Pscenario_check_scenarios` to check one change quickly.
 |----------|--------|
 | `polished-stones` | Dawnstone, Duskstone, and their polished blocks, stairs, slabs, and walls |
 | `sapling-root-dirt` | Bone meal grows the three saplings; the block under the trunk in Chrono Dawn and in the Overworld |
-| `wolf-spawn-forest`, `wolf-spawn-dark-forest` | Wolves generate in the biome. The forest one also checks that Temporal Grass is in `minecraft:wolves_spawnable_on` |
+| `wolf-spawn-forest` | Wolves generate in the forest (a 240 block square around the biome edge is force-loaded, since a chunk gets a creature pack with only about a 10% chance). Also checks that Temporal Grass is in `minecraft:wolves_spawnable_on`. There is no Dark Forest scenario: its canopy leaves the ground below light level 9, so no wolf spawns there |
 | `time-keeper-trade` | Right-clicking a Time Keeper opens its trading screen |
 | `time-keeper-village` | The village placed near the first entry into Chrono Dawn |
 | `plains-surface`, `mountain-surface` | The surface of the Plains and Mountain biomes |
