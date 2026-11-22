@@ -813,6 +813,33 @@ mismatch. Fix the cause where you can. Add a commented regex to the ignore
 file only for known issues, and remove it together with the fix. Pass
 `-Pprod_smoke_log_check=false` to skip the check for a single run.
 
+### Disk space with parallel work
+
+Plan for 2 concurrent checkouts (main plus one worktree, or two worktrees).
+Use 3 only when at least 25 GB is free. Each checkout costs 3 to 5 GB after
+heavy tests, on top of about 76 GB of shared Gradle caches.
+[Disk Usage with Parallel Work](disk_usage.md) has the measurements and the
+reasons.
+
+- When a task ends, remove its worktree with `git worktree remove <path>` and
+  make sure the directory is gone. Delete empty directories that
+  `git worktree list` does not show.
+- Run only one heavy task at a time across all checkouts (`checkAll`,
+  `gameTestAll`, `upgradeTest`, `scenarioCheck`, multi-version
+  `prodSmokeTest`).
+- Check `df -h /` before a heavy task. Stop and clean up below 20 GB free.
+- After a heavy task, run `./gradlew clean<version>` or `cleanAll` and delete
+  `build/upgrade-test` and `build/scenario-check` server copies once the
+  report is saved.
+- Shorten the Gradle build cache retention to release about 10 GB. Put this
+  in `~/.gradle/init.d/build-cache-retention.gradle`:
+
+  ```groovy
+  beforeSettings { settings ->
+      settings.caches.buildCache.setRemoveUnusedEntriesAfterDays(2)
+  }
+  ```
+
 ---
 
 ## Debugging
