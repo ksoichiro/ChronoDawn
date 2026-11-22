@@ -810,7 +810,7 @@ class ConfigLoaderTest {
         assertEquals(new StructureSettings(true, 20, 8, 745182936L), structures.phantomCatacombs());
         assertEquals(new StructureSettings(true, 50, 25, 738291456L), structures.entropyCrypt());
         assertEquals(new StructureSettings(true, 60, 20, 1234567890L), structures.masterClock());
-        assertEquals(new StructureSettings(true, 36, 14, 1405827319L), structures.sentinelOutpost());
+        assertEquals(new StructureSettings(true, 48, 20, 1405827319L), structures.sentinelOutpost());
     }
 
     @Test

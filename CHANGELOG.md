@@ -34,13 +34,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Polished Dawnstone and Polished Duskstone, with stairs and slabs, are
   crafted from four of the stone or cut with a stonecutter.
 - **Sentinel Outpost**: a new optional structure where the Clockwork
-  Sentinels keep watch. It is a white landing pad with a tall two-storey hall, built
-  to look like something from outside Chrono Dawn, unlike the old factory of
-  the Clockwork Depths. Four docking bays and a spawner in the hall keep
-  sending out Clockwork Sentinels, with a few Epoch Husks and Secondhand
-  Archers mixed in, and two chests on the upper floor hold a few
-  Ancient Gears, Enhanced Clockstone and other supplies. Sentinels from its
-  spawners drop less than those in the open. It generates on the surface of any Chrono Dawn biome
+  Sentinels keep watch. It is a tall white rocket on a round landing pad, with
+  a hall in its base, stairs up through four decks, and four boosters on
+  swept fins, built to look like something from outside Chrono Dawn, unlike
+  the old factory of the Clockwork Depths. Four docking bays under the boosters and a spawner in the
+  hall keep sending out Clockwork Sentinels, with a few Epoch Husks and Secondhand
+  Archers mixed in. Each deck on the way up has a Sentinel spawner too, and
+  each of the two chests in the chamber at the top always holds some
+  Enhanced Clockstone and Ancient Gears, along with other supplies. Sentinels from its
+  spawners drop less than those in the open, and each spawner is encased in
+  Reversing Time Sandstone. It generates on the surface of any Chrono Dawn biome
   except the oceans and gates nothing in the main progression. It can be
   tuned or disabled under `world.structures.sentinel_outpost`. This
   release adds it for Minecraft 1.21.1 first, and the Time Keeper sells a

@@ -164,11 +164,11 @@ enabled = true
 
 # Average distance (in chunks) between placement attempts.
 # Lower = denser, higher = rarer. Must be > separation. Vanilla limit: 4096.
-spacing = 36
+spacing = 48
 
 # Minimum guaranteed distance (in chunks) between two placements.
 # Must be < spacing.
-separation = 14
+separation = 20
 
 # Random seed offset for placement; usually no reason to change this.
 salt = 1405827319
