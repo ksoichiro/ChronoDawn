@@ -141,6 +141,9 @@ release tag reachable from HEAD. Read `<loader>/1.21.1/build/upgrade-test/report
 - Move `upgrade_test_baseline_version` when modpack adoption moves.
 - If worldgen changed, also look at an upgraded world on a client for seams
   where old and new chunks meet. The test does not judge visuals.
+- For in-game checks of new content (textures, structures, `/locate`), add a
+  scenario and run `scenarioCheck` (`docs/scenario_check.md`) instead of
+  checking by hand.
 
 If full verification is skipped or fails, report the exact missing command,
 failure, and release risk. Do not disable checks or publish around a failure.
