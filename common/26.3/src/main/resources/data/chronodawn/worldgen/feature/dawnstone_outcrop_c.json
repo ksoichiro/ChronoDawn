@@ -1,0 +1,7 @@
+{
+  "type": "chronodawn:nbt_template",
+  "template": "chronodawn:dawnstone_outcrop_c",
+  "random_rotate": true,
+  "y_offset": -1,
+  "min_ground_contact_ratio": 0.8
+}

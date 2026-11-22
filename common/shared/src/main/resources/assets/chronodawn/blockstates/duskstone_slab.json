@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "chronodawn:block/duskstone_slab"
+    },
+    "type=double": {
+      "model": "chronodawn:block/duskstone"
+    },
+    "type=top": {
+      "model": "chronodawn:block/duskstone_slab_top"
+    }
+  }
+}

@@ -19,10 +19,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Keeper Village now mix Cracked and Mossy stone bricks into their walls
   instead of one flat material. Existing structures are unchanged.
 - **Rocky mountain slopes**: steep slopes in the Chrono Dawn
-  mountain biome now expose Temporal Stone in newly generated terrain.
+  mountain biome now expose rock in newly generated terrain. Temporal Stone is
+  mottled with Temporal Cobblestone, Mossy Temporal Cobblestone, and Duskstone.
+- **Chrono Dawn Plains look different from the Prairies**: newly generated
+  plains have worn dirt and gravel trails, low Dawnstone outcrops, and
+  crumbling walls of mossy cobblestone.
 
 ### Added
 
+- **Dawnstone and Duskstone**: two natural stones, similar to granite and
+  andesite, with stairs, slabs, and walls. They form large patches underground
+  in the Chrono Dawn plains and mountains in newly generated terrain.
 - **Sentinel Outpost**: a new optional structure where the Clockwork
   Sentinels keep watch. It is a white landing pad with a tall two-storey hall, built
   to look like something from outside Chrono Dawn, unlike the old factory of

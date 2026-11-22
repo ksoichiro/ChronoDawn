@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "B  ",
+    "BB ",
+    "BBB"
+  ],
+  "key": {
+    "B": "chronodawn:dawnstone"
+  },
+  "result": {
+    "id": "chronodawn:dawnstone_stairs",
+    "count": 4
+  }
+}

@@ -1070,6 +1070,70 @@ public class ModItems {
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.MOSSY_TEMPORAL_COBBLESTONE_WALL.id()))))
     );
+
+    public static final RegistrySupplier<Item> DAWNSTONE = ITEMS.register(
+        ModItemId.DAWNSTONE.id(),
+        () -> new BlockItem(ModBlocks.DAWNSTONE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DAWNSTONE.id()))))
+    );
+
+    public static final RegistrySupplier<Item> DAWNSTONE_STAIRS = ITEMS.register(
+        ModItemId.DAWNSTONE_STAIRS.id(),
+        () -> new BlockItem(ModBlocks.DAWNSTONE_STAIRS.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DAWNSTONE_STAIRS.id()))))
+    );
+
+    public static final RegistrySupplier<Item> DAWNSTONE_SLAB = ITEMS.register(
+        ModItemId.DAWNSTONE_SLAB.id(),
+        () -> new BlockItem(ModBlocks.DAWNSTONE_SLAB.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DAWNSTONE_SLAB.id()))))
+    );
+
+    public static final RegistrySupplier<Item> DAWNSTONE_WALL = ITEMS.register(
+        ModItemId.DAWNSTONE_WALL.id(),
+        () -> new BlockItem(ModBlocks.DAWNSTONE_WALL.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DAWNSTONE_WALL.id()))))
+    );
+
+    public static final RegistrySupplier<Item> DUSKSTONE = ITEMS.register(
+        ModItemId.DUSKSTONE.id(),
+        () -> new BlockItem(ModBlocks.DUSKSTONE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DUSKSTONE.id()))))
+    );
+
+    public static final RegistrySupplier<Item> DUSKSTONE_STAIRS = ITEMS.register(
+        ModItemId.DUSKSTONE_STAIRS.id(),
+        () -> new BlockItem(ModBlocks.DUSKSTONE_STAIRS.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DUSKSTONE_STAIRS.id()))))
+    );
+
+    public static final RegistrySupplier<Item> DUSKSTONE_SLAB = ITEMS.register(
+        ModItemId.DUSKSTONE_SLAB.id(),
+        () -> new BlockItem(ModBlocks.DUSKSTONE_SLAB.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DUSKSTONE_SLAB.id()))))
+    );
+
+    public static final RegistrySupplier<Item> DUSKSTONE_WALL = ITEMS.register(
+        ModItemId.DUSKSTONE_WALL.id(),
+        () -> new BlockItem(ModBlocks.DUSKSTONE_WALL.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DUSKSTONE_WALL.id()))))
+    );
     public static final RegistrySupplier<Item> TEMPORAL_STONE_BRICKS = ITEMS.register(
         ModItemId.TEMPORAL_STONE_BRICKS.id(),
         () -> new BlockItem(ModBlocks.TEMPORAL_STONE_BRICKS.get(), new Item.Properties()
@@ -3208,6 +3272,14 @@ public class ModItems {
         output.accept(MOSSY_TEMPORAL_COBBLESTONE_STAIRS.get());
         output.accept(MOSSY_TEMPORAL_COBBLESTONE_SLAB.get());
         output.accept(MOSSY_TEMPORAL_COBBLESTONE_WALL.get());
+        output.accept(DAWNSTONE.get());
+        output.accept(DAWNSTONE_STAIRS.get());
+        output.accept(DAWNSTONE_SLAB.get());
+        output.accept(DAWNSTONE_WALL.get());
+        output.accept(DUSKSTONE.get());
+        output.accept(DUSKSTONE_STAIRS.get());
+        output.accept(DUSKSTONE_SLAB.get());
+        output.accept(DUSKSTONE_WALL.get());
         output.accept(TEMPORAL_STONE_BRICKS.get());
         output.accept(CRACKED_TEMPORAL_STONE_BRICKS.get());
         output.accept(TEMPORAL_STONE_BRICKS_STAIRS.get());

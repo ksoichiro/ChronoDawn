@@ -116,7 +116,9 @@
       "chronodawn:ore_entropy_crystal",
       "chronodawn:ore_temporal_amber",
       "chronodawn:ore_clockstone",
-      "chronodawn:ore_iron"
+      "chronodawn:ore_iron",
+      "chronodawn:ore_dawnstone",
+      "chronodawn:ore_duskstone"
     ],
     [
       "chronodawn:temporal_stalactite_cluster",

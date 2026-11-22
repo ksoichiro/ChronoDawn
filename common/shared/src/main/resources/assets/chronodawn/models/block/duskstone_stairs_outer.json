@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/outer_stairs",
+  "textures": {
+    "bottom": "chronodawn:block/duskstone",
+    "top": "chronodawn:block/duskstone",
+    "side": "chronodawn:block/duskstone"
+  }
+}
