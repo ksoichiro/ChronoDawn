@@ -64,6 +64,12 @@ class PermissionMissing(Exception):
     pass
 
 
+def screen_locked() -> bool:
+    """macOS keeps the lock state in the IORegistry root, readable without any permission."""
+    result = subprocess.run(["ioreg", "-n", "Root", "-d1", "-a"], capture_output=True, text=True)
+    return bool(re.search(r"<key>CGSSessionScreenIsLocked</key>\s*<true/>", result.stdout))
+
+
 def preflight_capture():
     """Fail before booting anything when macOS will not let this process capture the screen."""
     if sys.platform != "darwin":
@@ -72,6 +78,10 @@ def preflight_capture():
         probe = Path(tmp) / "probe.png"
         result = subprocess.run(["screencapture", "-x", "-R0,0,8,8", str(probe)], capture_output=True, text=True)
         if result.returncode != 0 or not probe.exists():
+            if screen_locked():
+                raise PermissionMissing(
+                    "The screen is locked, and macOS refuses every capture while it is. Unlock the Mac "
+                    "and run again.")
             raise PermissionMissing(
                 "screencapture cannot capture the screen. Give the app that runs Gradle (Terminal, iTerm, "
                 "the IDE, or the agent host) the Screen Recording permission in System Settings > Privacy & "

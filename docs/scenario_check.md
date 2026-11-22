@@ -120,6 +120,10 @@ placed there have a plain sky behind them. Use `forceload` and an `await` on
 
 - Minecraft 1.21.1 only, like the upgrade test.
 - macOS only (window capture).
+- The screen must be unlocked. macOS refuses every capture while it is
+  locked, even with the permission granted, so it cannot run while the
+  owner is away from a locked Mac. The driver detects this and stops before
+  booting.
 - The crosshair stays in the shots. F1 cannot be pressed from RCON.
 - `wait` is a fixed time. Far or slow chunks may need a longer wait.
 - Toasts (advancements, recipes) can appear in the top-right corner.
