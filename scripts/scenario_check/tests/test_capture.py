@@ -14,6 +14,7 @@ class FakeAgent:
         self.request_dir = request_dir
         self.save = save
         self.message = message
+        self.operations = []
         self.stop = threading.Event()
         self.thread = threading.Thread(target=self._loop, daemon=True)
 
@@ -29,7 +30,12 @@ class FakeAgent:
         while not self.stop.is_set():
             for request in self.request_dir.glob("*.request"):
                 name = request.name[:-len(".request")]
+                operation = request.read_text().strip()
                 request.unlink()
+                self.operations.append(operation)
+                if operation != "shot":
+                    (self.request_dir / f"{name}.done").write_text(f"did {operation}")
+                    continue
                 if self.save:
                     shots = self.request_dir / "screenshots"
                     shots.mkdir(exist_ok=True)
@@ -67,6 +73,27 @@ class TakeTest(unittest.TestCase):
     def test_stops_when_the_client_exits(self):
         with self.assertRaisesRegex(capture.CaptureError, "client exited"):
             capture.take(self.request_dir, "front", self.dir / "front.png", alive=lambda: False, timeout=5)
+
+
+class ClientTest(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.request_dir = Path(self.tmp.name)
+
+    def tearDown(self):
+        self.tmp.cleanup()
+
+    def test_sends_operations_and_returns_answers(self):
+        client = capture.Client(self.request_dir, timeout=5)
+        with FakeAgent(self.request_dir) as agent:
+            self.assertEqual(client("use"), "did use")
+            self.assertEqual(client("screen"), "did screen")
+        self.assertEqual(agent.operations, ["use", "screen"])
+        self.assertEqual(list(self.request_dir.iterdir()), [])
+
+    def test_times_out_without_an_agent(self):
+        with self.assertRaisesRegex(capture.CaptureError, "answer to 'use'"):
+            capture.Client(self.request_dir, timeout=0.3)("use")
 
 
 class BuildAgentTest(unittest.TestCase):

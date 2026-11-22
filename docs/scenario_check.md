@@ -26,7 +26,7 @@ provisioning). A game window opens for the length of the run.
 Each run starts from a new world (seed `20261023`), so runs do not affect each
 other. Ports: Fabric 25631/25632, NeoForge 25641/25642.
 
-### Screenshots
+### Screenshots and player input
 
 The client takes the screenshots itself, the way F2 does. The driver compiles
 `scripts/scenario_check/agent/ScenarioShotAgent.java` with the client's JDK
@@ -35,6 +35,10 @@ the driver asks for a shot, so the capture does not go through macOS screen
 recording. It needs no Screen Recording permission, and it keeps working while
 the screen is locked or other windows cover the game window. Both loaders
 were checked on a locked Mac.
+
+The same agent also acts as the player. It clicks the game's own use and
+attack key mappings and reads the title of the open screen, so player input
+needs no Accessibility permission either and works on a locked Mac.
 
 The agent calls Minecraft by name: Mojang names on NeoForge and intermediary
 names on Fabric. Both sets are listed in the agent and are valid for 1.21.1.
@@ -67,8 +71,9 @@ first-pass image check flags a screenshot.
 3. The agent attaches `sheet.png` to the PR or the task and keeps working
    through the PR. It does not wait for the owner.
 4. The owner answers OK or NG for each shot when they review the PR. Checks
-   a scenario cannot cover (GUI screens, player input, other Minecraft
-   versions) are listed in the PR as manual checks.
+   a scenario cannot cover (typing or clicking inside a GUI screen, held or
+   repeated input such as mining in survival, other Minecraft versions) are
+   listed in the PR as manual checks.
 
 ## Writing a scenario
 
@@ -102,9 +107,41 @@ docstring of `scripts/scenario_check/scenario.py`. In short:
   the window. Write the `note` as the thing a reviewer must see, because the
   reviewer only has the image and the note.
 
+### Player input and screens
+
+Two step types act in the client instead of over RCON:
+
+- `{"input": "use"}` clicks the right mouse button once, `{"input": "attack"}`
+  the left one. The game acts on whatever the crosshair points at in its next
+  tick: it opens a trader or a container, places the held block, hits a mob,
+  or breaks a block in creative. `{"input": "close"}` closes the open screen
+  and tells the server, so a trader or a chest is released. It is fine to send
+  it with no screen open.
+- `{"screen": "regex", "check": "id", "timeout": 10}` waits until the title
+  of the open screen matches. A screen with an empty title, or no screen,
+  matches `^$`. Without `check` a mismatch is `SETUP FAILED`, as for a
+  command.
+
+Spectators cannot use or attack, so switch the player first with
+`"gamemode creative ${player}"` (or `survival`). Aim by teleporting the
+player to a spot within reach (about 3 blocks for entities in survival) with
+an explicit rotation, for example `tp ${player} 24.5 201 8.5 0 10` for a
+target 2 blocks south. `tp ... facing entity` left the crosshair above the
+target in testing. A shot just before the input shows where the crosshair
+was if the input does not land. Clear the inventory with `clear ${player}`
+unless the held item matters: the Chronicle given on join opens its own
+screen on a right-click. `use` and `attack` fail while a screen is open, because the game
+would only act on the click after the screen closes. In creative or survival
+the hotbar and hearts show in the shots.
+
+`time-keeper-trade.json` is the worked example: it summons a Time Keeper
+with no AI, right-clicks it, checks that a screen titled Time Keeper opened,
+takes a shot of the trading screen, and closes it.
+
 Before every scenario the driver turns off command feedback, the daylight and
 weather cycles, and advancement announcements, sets clear weather at noon,
-switches the test player (`Dev`) to spectator, and moves them to the
+closes any screen a previous scenario left open, switches the test player
+(`Dev`) to spectator, and moves them to the
 overworld at `0 120 0`. The client hides chat. Spectator mode keeps the
 hotbar and hearts out of the shots, and the player does not fall or suffocate.
 
@@ -120,3 +157,6 @@ placed there have a plain sky behind them. Use `forceload` and an `await` on
   a container, so it is usually not in the shots.
 - `wait` is a fixed time. Far or slow chunks may need a longer wait.
 - Toasts (advancements, recipes) can appear in the top-right corner.
+- Input is one click at a time. Holding a button (mining in survival,
+  drawing a bow), moving, typing, and clicking slots inside a screen are not
+  supported.

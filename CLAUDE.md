@@ -213,7 +213,8 @@ such as `[94, 1]`, and verify both resource reload and server data loading.
 - Run outside the sandbox. Screenshots come from the game's framebuffer through a Java agent, so they need no Screen Recording permission and work while the Mac is locked
 - `./gradlew testScenarioCheckScripts` - Unit tests for the driver
 - When a change needs an in-game check, do not stop and wait for the owner. If RCON commands and screenshots can cover the check, add or extend a scenario, run it on both 1.21.1 loaders, fix what the shots show is wrong, commit the scenario with the change, attach `sheet.png` to the PR or task, and continue through the PR. The owner answers OK or NG per shot later
-- List only what a scenario cannot cover (GUI screens, player input such as attacking or right-clicking, Minecraft versions other than 1.21.1) as manual checks in the PR body or task, and still continue. A `server-log` FAIL from a WARN that an existing task already tracks does not block the change. Name that task in the report
+- A scenario can also act as the player: one right-click or left-click on what the crosshair points at, opening a screen such as a trader, and checking the open screen's title (`input` and `screen` steps)
+- List only what a scenario cannot cover (typing or clicking inside a GUI screen, held or repeated input such as mining in survival, Minecraft versions other than 1.21.1) as manual checks in the PR body or task, and still continue. A `server-log` FAIL from a WARN that an existing task already tracks does not block the change. Name that task in the report
 
 **Resource Validation**:
 - `./gradlew validateResources` - Check JSON syntax and cross-references (blockstate→model, model→texture)

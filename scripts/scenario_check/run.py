@@ -42,7 +42,9 @@ soundCategory_master:0.0
 """
 
 # Run before every scenario so each one starts from the same conditions.
+# A screen a previous scenario opened (a trader, a chest) is closed first.
 PREAMBLE = [
+    {"input": "close"},
     "gamerule sendCommandFeedback false",
     "gamerule doDaylightCycle false",
     "gamerule doWeatherCycle false",
@@ -118,7 +120,7 @@ def run(env, scenarios, candidate_jar, out_dir, ports):
                     return capture.take(request_dir, name, shots_dir / f"{name}.png", client.alive)
 
                 print(f"[{env.loader}] scenario {scenario.name}", flush=True)
-                runner = Runner(rcon, take, PLAYER)
+                runner = Runner(rcon, take, PLAYER, capture.Client(request_dir, client.alive))
                 outcome = runner.run(Scenario(f"{scenario.name}/preamble", "", PREAMBLE))
                 if not outcome.results:
                     main_part = runner.run(scenario)

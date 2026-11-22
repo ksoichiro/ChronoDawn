@@ -24,6 +24,20 @@ Each step is one of:
 - {"shot": "name", "wait": 8, "note": "what to look at"}
                                  Wait, then take a screenshot in the client. The note
                                  tells the reviewer what the image must show.
+- {"input": "use"}               Act as the player in the client: "use" clicks
+                                 the right mouse button once (open a trader,
+                                 a container, place a block), "attack" the left
+                                 one (hit a mob, break a block in creative).
+                                 It acts on whatever the crosshair points at, so
+                                 tp the player facing the target first, in a
+                                 game mode that allows it (not spectator). It
+                                 fails while a screen is open. "close" closes
+                                 the open screen and is fine with none.
+- {"screen": "regex", "check": "id", "timeout": 10}
+                                 Wait until the title of the screen open in the
+                                 client matches (an empty title means no
+                                 screen). check and the outcome work as for a
+                                 command with match and await.
 
 Commands and notes may use ${name} for captured variables and ${player} for
 the test player's name. Every reply is written to the transcript.
@@ -40,6 +54,8 @@ from scripts.upgrade_test import compare
 _VAR = re.compile(r"\$\{(\w+)\}")
 DEFAULT_AWAIT_TIMEOUT = 120
 DEFAULT_SHOT_WAIT = 5
+DEFAULT_SCREEN_TIMEOUT = 10
+INPUTS = ("use", "attack", "close")
 
 
 class ScenarioError(Exception):
@@ -80,6 +96,8 @@ _STEP_KEYS = {
     "command": {"command", "match", "check", "await", "timeout", "max_seconds"},
     "sleep": {"sleep"},
     "shot": {"shot", "wait", "note"},
+    "input": {"input"},
+    "screen": {"screen", "check", "timeout"},
 }
 
 
@@ -95,6 +113,13 @@ def _validate_step(name, index, step):
     unknown = set(step) - _STEP_KEYS[kinds[0]]
     if unknown:
         raise ScenarioError(f"{where}: unknown keys {sorted(unknown)}")
+    if kinds[0] == "input" and step["input"] not in INPUTS:
+        raise ScenarioError(f"{where}: input is one of {list(INPUTS)}, got {step['input']!r}")
+    if kinds[0] == "screen":
+        try:
+            re.compile(step["screen"])
+        except re.error as e:
+            raise ScenarioError(f"{where}: invalid screen regex: {e}") from e
     if kinds[0] == "command":
         if ("await" in step or "max_seconds" in step or "check" in step) and "match" not in step:
             raise ScenarioError(f"{where}: await, check and max_seconds need match")
@@ -144,14 +169,16 @@ def substitute(text: str, variables: dict) -> str:
 class Runner:
     """Runs a scenario's steps against an RCON connection.
 
-    capture(name) takes a screenshot and returns its file. clock and sleep are
-    injectable so the unit tests do not wait.
+    capture(name) takes a screenshot and returns its file. client(operation)
+    sends an input or screen operation to the client and returns its answer.
+    clock and sleep are injectable so the unit tests do not wait.
     """
 
-    def __init__(self, rcon, capture, player, clock=time.monotonic, sleep=time.sleep):
+    def __init__(self, rcon, capture, player, client=None, clock=time.monotonic, sleep=time.sleep):
         self.rcon = rcon
         self.capture = capture
         self.player = player
+        self.client = client
         self.clock = clock
         self.sleep = sleep
 
@@ -196,7 +223,45 @@ class Runner:
             outcome.shots.append(Shot(step["shot"], file, note))
             outcome.results.append(("SHOT", f"{name}/shot:{step['shot']}", note))
             return
+        if "input" in step:
+            answer = self._client(step["input"], outcome)
+            if answer.startswith("error:"):
+                raise StepFailed("SETUP FAILED", f"input {step['input']!r} -> {answer!r}")
+            return
+        if "screen" in step:
+            self._screen_step(name, step, outcome)
+            return
         self._command_step(name, step, variables, outcome)
+
+    def _client(self, operation, outcome):
+        if self.client is None:
+            raise StepFailed("SETUP FAILED", f"no client to send {operation!r} to")
+        try:
+            answer = self.client(operation)
+        except Exception as e:
+            raise StepFailed("SETUP FAILED", f"{operation!r}: {type(e).__name__}: {e}") from e
+        outcome.transcript.append(f"> (client) {operation}\n{answer}")
+        return answer
+
+    def _screen_step(self, name, step, outcome):
+        pattern = re.compile(step["screen"])
+        timeout = step.get("timeout", DEFAULT_SCREEN_TIMEOUT)
+        start = self.clock()
+        while True:
+            title = self._client("screen", outcome)
+            if title.startswith("error:"):
+                raise StepFailed("SETUP FAILED", f"screen -> {title!r}")
+            if pattern.search(title):
+                break
+            if self.clock() - start >= timeout:
+                detail = f"screen title {title!r} did not match /{step['screen']}/ within {timeout}s"
+                if step.get("check"):
+                    outcome.results.append(("FAIL", f"{name}/{step['check']}", detail))
+                    raise StepFailed("NOT COVERED", "later steps depend on the failed check")
+                raise StepFailed("SETUP FAILED", detail)
+            self.sleep(1)
+        if step.get("check"):
+            outcome.results.append(("PASS", f"{name}/{step['check']}", f"screen: {title!r}"))
 
     def _command_step(self, name, step, variables, outcome):
         command = substitute(step["command"], variables)
