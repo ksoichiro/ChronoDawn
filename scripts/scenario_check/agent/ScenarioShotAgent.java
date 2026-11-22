@@ -30,6 +30,14 @@ import java.util.function.Consumer;
  *   <li>{@code close}: close the open screen, telling the server when it is a
  *       container screen.</li>
  *   <li>{@code screen}: report the title of the open screen, empty when none.</li>
+ *   <li>{@code render}: report how far the world around the player has
+ *       loaded and rendered, as {@code chunks=<n> missing=<n> sections=<n>
+ *       queue=<empty|busy>}. {@code chunks} is the number of chunks the
+ *       client holds, {@code missing} the number it still lacks within
+ *       {@value #RENDER_RADIUS} chunks of the player, {@code sections} the
+ *       number of visible sections, and {@code queue} whether section
+ *       builds are still queued. The driver waits until these stop
+ *       changing instead of sleeping a fixed time.</li>
  * </ul>
  * The agent deletes the request, runs it on the render thread, and writes
  * {@code <dir>/<name>.done} with the result. A result starting with
@@ -49,7 +57,10 @@ public final class ScenarioShotAgent {
                          String screenshot, String grab,
                          String options, String player, String screen,
                          String keyUse, String keyAttack, String keyMapping, String click, String getDefaultKey,
-                         String screenClass, String getTitle, String closeContainer) {
+                         String screenClass, String getTitle, String closeContainer,
+                         String levelRenderer, String level, String getChunkSource, String hasChunk,
+                         String getLoadedChunksCount, String getBlockX, String getBlockZ,
+                         String hasRenderedAllSections, String countRenderedSections) {
     }
 
     private static final Names[] NAMES = {
@@ -57,12 +68,18 @@ public final class ScenarioShotAgent {
                     "net.minecraft.client.Screenshot", "grab",
                     "options", "player", "screen",
                     "keyUse", "keyAttack", "net.minecraft.client.KeyMapping", "click", "getDefaultKey",
-                    "net.minecraft.client.gui.screens.Screen", "getTitle", "closeContainer"),
+                    "net.minecraft.client.gui.screens.Screen", "getTitle", "closeContainer",
+                    "levelRenderer", "level", "getChunkSource", "hasChunk",
+                    "getLoadedChunksCount", "getBlockX", "getBlockZ",
+                    "hasRenderedAllSections", "countRenderedSections"),
             new Names("net.minecraft.class_310", "method_1551", "method_1522",
                     "net.minecraft.class_318", "method_22690",
                     "field_1690", "field_1724", "field_1755",
                     "field_1904", "field_1886", "net.minecraft.class_304", "method_1420", "method_1429",
-                    "net.minecraft.class_437", "method_25440", "method_7346"),
+                    "net.minecraft.class_437", "method_25440", "method_7346",
+                    "field_1769", "field_1687", "method_2935", "method_12123",
+                    "method_14151", "method_31477", "method_31479",
+                    "method_3281", "method_3246"),
     };
 
     /** Mojang names that only Minecraft 26.x uses. */
@@ -70,8 +87,18 @@ public final class ScenarioShotAgent {
     private static final String MAIN_RENDER_TARGET = "mainRenderTarget";
     private static final String GUI = "gui";
     private static final String GUI_SCREEN = "screen";
+    /** 26.x has no countRenderedSections, only the list of visible sections. */
+    private static final String VISIBLE_SECTIONS = "visibleSections";
 
-    private static final long POLL_MILLIS = 200;
+    /**
+     * Chunks within this distance of the player must be loaded before a shot.
+     * The test server's view-distance is 4, and the side shots look at
+     * targets about 3 chunks away.
+     */
+    private static final int RENDER_RADIUS = 3;
+
+    // Short, so a driver that polls render state waits little per answer.
+    private static final long POLL_MILLIS = 50;
 
     private ScenarioShotAgent() {
     }
@@ -136,7 +163,7 @@ public final class ScenarioShotAgent {
         }
     }
 
-    private record Target(Object minecraft, Getter renderTarget, Method grab, boolean grabTakesDownscale,
+    private record Target(Object minecraft, Names names, Getter renderTarget, Method grab, boolean grabTakesDownscale,
                           Field options, Field player, Getter screen,
                           Field keyUse, Field keyAttack, Method click, Method getDefaultKey,
                           Method getTitle, Method closeContainer) {
@@ -169,7 +196,7 @@ public final class ScenarioShotAgent {
                     Method getDefaultKey = keyMapping.getMethod(names.getDefaultKey());
                     Method click = keyMapping.getMethod(names.click(), getDefaultKey.getReturnType());
                     Class<?> screenClass = Class.forName(names.screenClass(), false, loader);
-                    return new Target(minecraft, renderTarget, grab, grabTakesDownscale,
+                    return new Target(minecraft, names, renderTarget, grab, grabTakesDownscale,
                             options, player, screen,
                             optionsClass.getField(names.keyUse()), optionsClass.getField(names.keyAttack()),
                             click, getDefaultKey,
@@ -207,6 +234,7 @@ public final class ScenarioShotAgent {
                         case "attack" -> writeDone(dir, name, click(keyAttack));
                         case "close" -> writeDone(dir, name, close());
                         case "screen" -> writeDone(dir, name, title());
+                        case "render" -> writeDone(dir, name, render());
                         default -> writeDone(dir, name, "error: unknown operation " + operation);
                     }
                 } catch (Throwable t) {
@@ -250,6 +278,37 @@ public final class ScenarioShotAgent {
             // screen, so a trader or chest is released as well.
             closeContainer.invoke(localPlayer);
             return "ok";
+        }
+
+        private String render() throws ReflectiveOperationException {
+            Class<?> minecraftClass = minecraft.getClass();
+            Object level = field(minecraftClass, names.level()).get(minecraft);
+            Object localPlayer = player.get(minecraft);
+            if (level == null || localPlayer == null) {
+                return "error: no player in a world";
+            }
+            Object chunkSource = level.getClass().getMethod(names.getChunkSource()).invoke(level);
+            Method hasChunk = chunkSource.getClass().getMethod(names.hasChunk(), int.class, int.class);
+            int chunks = (int) chunkSource.getClass().getMethod(names.getLoadedChunksCount()).invoke(chunkSource);
+            int centerX = ((int) localPlayer.getClass().getMethod(names.getBlockX()).invoke(localPlayer)) >> 4;
+            int centerZ = ((int) localPlayer.getClass().getMethod(names.getBlockZ()).invoke(localPlayer)) >> 4;
+            int missing = 0;
+            for (int dx = -RENDER_RADIUS; dx <= RENDER_RADIUS; dx++) {
+                for (int dz = -RENDER_RADIUS; dz <= RENDER_RADIUS; dz++) {
+                    if (!(boolean) hasChunk.invoke(chunkSource, centerX + dx, centerZ + dz)) {
+                        missing++;
+                    }
+                }
+            }
+            Object renderer = field(minecraftClass, names.levelRenderer()).get(minecraft);
+            Class<?> rendererClass = renderer.getClass();
+            boolean queueEmpty = (boolean) rendererClass.getMethod(names.hasRenderedAllSections()).invoke(renderer);
+            Method count = method(rendererClass, names.countRenderedSections());
+            int sections = count != null
+                    ? (int) count.invoke(renderer)
+                    : ((java.util.List<?>) rendererClass.getMethod(VISIBLE_SECTIONS).invoke(renderer)).size();
+            return "chunks=" + chunks + " missing=" + missing + " sections=" + sections
+                    + " queue=" + (queueEmpty ? "empty" : "busy");
         }
 
         private String title() throws ReflectiveOperationException {

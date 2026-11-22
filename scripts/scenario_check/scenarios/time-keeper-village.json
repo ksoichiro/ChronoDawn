@@ -2,15 +2,14 @@
   "description": "The Time Keeper Village is placed near where a player first enters the Chrono Dawn dimension, and it looks right. The player enters at 0 0 like the other Chrono Dawn scenarios, so the village is near there whichever scenario enters first. The village's Time Keepers are spawned with PersistenceRequired, unlike naturally spawned ones, which is how the scenario finds it.",
   "steps": [
     "execute in chronodawn:chronodawn run spreadplayers 0 0 0 1 false ${player}",
-    {"sleep": 5},
     {"command": "execute in chronodawn:chronodawn as ${player} at @s if entity @e[type=chronodawn:time_keeper,nbt={PersistenceRequired:1b},distance=..160]", "match": "Test passed", "check": "village-time-keepers", "await": true, "timeout": 30},
     "execute in chronodawn:chronodawn as ${player} at @s as @e[type=chronodawn:time_keeper,nbt={PersistenceRequired:1b},sort=nearest,limit=1] at @s run tp ${player} ~ ~45 ~ 0 90",
-    {"sleep": 40},
-    "time set noon",
-    {"shot": "from-above", "wait": 5, "note": "The Time Keeper Village seen straight down from 45 blocks above one of its Time Keepers: a small village with roofs and paths, on natural ground (not on top of another structure's roof). Its blocks render with their textures."},
+    {"settle": 120},
+    "execute in chronodawn:chronodawn run time set noon",
+    {"shot": "from-above", "note": "The Time Keeper Village seen straight down from 45 blocks above one of its Time Keepers: a small village with roofs and paths, on natural ground (not on top of another structure's roof). Its blocks render with their textures."},
     "execute as ${player} at @s run tp @s ~-30 ~-30 ~ -90 25",
-    {"sleep": 5},
-    "time set noon",
-    {"shot": "side", "wait": 5, "note": "The Time Keeper Village from the west, looking east and slightly down: the buildings stand on the ground with a dirt foundation, no floating parts, and cracked and mossy blocks are mixed into the walls."}
+    {"settle": 60},
+    "execute in chronodawn:chronodawn run time set noon",
+    {"shot": "side", "note": "The Time Keeper Village from the west, looking east and slightly down: the buildings stand on the ground with a dirt foundation, no floating parts, and cracked and mossy blocks are mixed into the walls."}
   ]
 }
