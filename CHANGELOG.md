@@ -62,6 +62,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   naturally generated Time Wood, Dark Time Wood, and Ancient Time Wood trees,
   such as the 2x2 trunk ones in the Forest, had vanilla dirt under the trunk
   instead of Temporal Dirt. They now get Temporal Dirt.
+- **Phantom Catacombs boss room placement warnings**: the boss room placer
+  often failed to read the bounds of a nearby Phantom Catacombs, logged four
+  warnings, and searched a wide fixed area at every height instead. It now
+  reads the bounds correctly, so it searches only the catacombs and logs
+  nothing.
 
 ## [0.17.1] - 2026-11-20
 

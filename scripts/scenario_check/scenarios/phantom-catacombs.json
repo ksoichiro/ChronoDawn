@@ -1,0 +1,12 @@
+{
+  "description": "The boss room placer finds the StructureStart of a Phantom Catacombs and places room_7 and the boss room without falling back. The placer only runs for structures within 8 chunks of a player and checks every 600 ticks, so the player waits next to the catacombs for over a minute. A fallback or a failed placement logs a WARN or an ERROR, which fails the server-log check. The player enters the dimension at 0 0 first so the Time Keeper Village is not placed on the catacombs.",
+  "steps": [
+    {"command": "execute in chronodawn:chronodawn run locate structure chronodawn:phantom_catacombs", "match": "\\[(?P<x>-?\\d+), [^,]+, (?P<z>-?\\d+)\\]", "check": "locate-phantom-catacombs", "max_seconds": 60},
+    "execute in chronodawn:chronodawn run spreadplayers 0 0 0 1 false ${player}",
+    {"sleep": 5},
+    "execute in chronodawn:chronodawn run spreadplayers ${x} ${z} 0 1 false ${player}",
+    "execute as ${player} at @s run tp @s ~ ~30 ~ 0 90",
+    {"sleep": 75},
+    {"shot": "from-above", "wait": 5, "note": "The ground above a Phantom Catacombs (its start is at x=${x}, z=${z}), seen straight down from 30 blocks up. The catacombs are underground, so this shot only shows that the area loaded. The check that matters is the server log: no WARN or ERROR from the boss room placer."}
+  ]
+}
