@@ -1,6 +1,7 @@
 """Server and client process lifecycle for the upgrade test."""
 
 import atexit
+import fcntl
 import os
 import re
 import shutil
@@ -41,6 +42,99 @@ def preflight_ports(ports: list[int]) -> None:
         with socket.socket() as sock:
             if sock.connect_ex(("127.0.0.1", port)) == 0:
                 raise PortInUse(port)
+
+
+# Several checkouts (worktrees) may run these drivers at the same time, so
+# coordination goes through lock files outside any checkout. flock locks die
+# with the process, so a crashed run never leaves a stale reservation.
+MAX_PARALLEL_ENV = "CHRONODAWN_MAX_PARALLEL_VERIFY"
+DEFAULT_MAX_PARALLEL = 2
+LOCK_DIR_ENV = "CHRONODAWN_VERIFY_LOCK_DIR"
+AUTO_PORT_RANGE = range(25700, 26000)
+
+_held_locks = []  # keep the file objects alive: closing one releases its lock
+
+
+def _lock_dir() -> Path:
+    path = Path(os.environ.get(LOCK_DIR_ENV) or Path.home() / ".cache" / "chronodawn" / "verify-locks")
+    path.mkdir(parents=True, exist_ok=True)
+    return path
+
+
+def _try_lock(name: str):
+    handle = open(_lock_dir() / name, "w")
+    try:
+        fcntl.flock(handle, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except OSError:
+        handle.close()
+        return None
+    return handle
+
+
+def max_parallel() -> int:
+    raw = os.environ.get(MAX_PARALLEL_ENV)
+    if raw is None or not raw.strip():
+        return DEFAULT_MAX_PARALLEL
+    try:
+        value = int(raw)
+    except ValueError:
+        raise ValueError(f"{MAX_PARALLEL_ENV} must be a positive integer (got {raw!r})") from None
+    if value < 1:
+        raise ValueError(f"{MAX_PARALLEL_ENV} must be a positive integer (got {value})")
+    return value
+
+
+def acquire_run_slot(poll_seconds: float = 5.0) -> None:
+    """Block until fewer than max_parallel() verification runs hold a slot on this machine."""
+    limit = max_parallel()
+    announced = False
+    while True:
+        for index in range(limit):
+            handle = _try_lock(f"slot-{index}.lock")
+            if handle is not None:
+                _held_locks.append(handle)
+                return
+        if not announced:
+            print(f"Waiting for a free verification slot (limit {limit}, set {MAX_PARALLEL_ENV} to change)", flush=True)
+            announced = True
+        time.sleep(poll_seconds)
+
+
+def _bindable(port: int) -> bool:
+    with socket.socket() as sock:
+        try:
+            sock.bind(("0.0.0.0", port))
+        except OSError:
+            return False
+    return True
+
+
+def allocate_ports(port_range=AUTO_PORT_RANGE) -> tuple[int, int]:
+    """Reserve a free (server, RCON) port pair that no other running driver holds."""
+    for server_port in port_range:
+        rcon_port = server_port + 1
+        if rcon_port not in port_range:
+            break
+        server_lock = _try_lock(f"port-{server_port}.lock")
+        if server_lock is None:
+            continue
+        rcon_lock = _try_lock(f"port-{rcon_port}.lock")
+        if rcon_lock is None or not (_bindable(server_port) and _bindable(rcon_port)):
+            server_lock.close()
+            if rcon_lock is not None:
+                rcon_lock.close()
+            continue
+        _held_locks.extend([server_lock, rcon_lock])
+        return server_port, rcon_port
+    raise RuntimeError(f"No free port pair in {port_range.start}-{port_range.stop - 1}")
+
+
+def resolve_ports(explicit) -> tuple[int, int]:
+    """Use explicit ports (checking they are free) or reserve an automatic pair."""
+    if explicit:
+        preflight_ports(list(explicit))
+        return tuple(explicit)
+    return allocate_ports()
 
 
 def _kill_all():

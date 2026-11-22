@@ -753,6 +753,27 @@ Each subprocess uses `--project-cache-dir .gradle/build-<version>` to avoid lock
 
 These caches are not shared across worktrees. Pointing several checkouts at one `--project-cache-dir` would also share Gradle's file hashes, task history, and stale output records, which Gradle expects to belong to a single build.
 
+### Running verification in parallel
+
+Several worktrees (for example one per agent) can verify at the same time.
+
+**Ports**: `scenarioCheck` and `upgradeTest` reserve a free server/RCON pair in 25700-25999 when they start. Each reserved port has a lock file under `~/.cache/chronodawn/verify-locks` (override the directory with `CHRONODAWN_VERIFY_LOCK_DIR`). The lock goes away with the process, so a crashed run leaves nothing behind. `-Pupgrade_test_ports` and `-Pscenario_check_ports` still pin the ports and skip the automatic choice. `prodSmokeTest` and the GameTests keep their own ports.
+
+**Limit**: run at most 2 verifications at once on a machine (`checkAll`, `scenarioCheck`, `upgradeTest`). The `scenarioCheck` and `upgradeTest` drivers hold one of N slot locks for the whole run and wait when none is free. Set `CHRONODAWN_MAX_PARALLEL_VERIFY` (for example in `~/.zshrc`) to change N on a machine with more or less memory and disk. `checkAll` does not take a slot, so start it only when fewer than N verifications are running.
+
+**Scope before a PR**: run `checkAll` for all versions. Limit it to the changed versions (`build<version>` and `:fabric:runGameTest` / `:neoforge:runGameTestServer` with `-Ptarget_mc_version=<v>`) only when the impact is clearly confined to them, and state that in the PR body.
+
+**Disk per worktree** (measured on 2026-11-23 in a checkout after `checkAll`):
+
+| Item | Size | Shared between worktrees |
+|---|---|---|
+| `.gradle/` (Loom caches and task history, about 100 to 230 MB per version) | about 2.9 GB | No (see above) |
+| `build/` and per-module `build/` directories | about 0.4 GB and up | No |
+| `run-prod/` (`cache/` holds Minecraft assets, libraries and installers, `instances/` holds `runProd` worlds) | about 3.1 GB | Opt in with `prod_base_dir` |
+| `run-prod/cache/upgrade-test/` (old mod JARs, Python venv) | about 0.1 GB | Opt in with `prod_base_dir` |
+
+Plan for roughly 6.5 GB or more per worktree that has run `checkAll` and a production run. To share the production runtime cache, set `prod_base_dir=<absolute path>` (for example `/Users/<you>/.cache/chronodawn/run-prod`) in `~/.gradle/gradle.properties`. This moves `cache/` and `instances/`, so `runProd` worlds become shared too. Run one production task in a single checkout first to fill the cache before starting parallel runs, because concurrent first-time downloads into the same directory are untested. Loom and `.gradle/` stay per checkout.
+
 Shared sources are included via `srcDir` references to `fabric/base/` and `neoforge/base/` directories (which are source directories, not Gradle subprojects).
 
 **Log files**: Each version group's output is saved to `build/gametest-<version>.log`.
