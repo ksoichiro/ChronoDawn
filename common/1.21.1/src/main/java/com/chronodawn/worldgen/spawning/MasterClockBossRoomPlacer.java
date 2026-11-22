@@ -878,7 +878,9 @@ public class MasterClockBossRoomPlacer {
 
         // Remove all Jigsaw Blocks from corridor
         // Use corridorTemplateSize (with rotation) for correct bounding box
-        int corridorJigsawsRemoved = 0;
+        // Record removed positions so the connection-point checks below can tell
+        // "already cleared here" apart from "never placed", and only warn on the latter.
+        Set<BlockPos> corridorJigsawsRemoved = new java.util.HashSet<>();
         for (BlockPos pos : BlockPos.betweenClosed(
             corridorPlacementPos,
             corridorPlacementPos.offset(corridorTemplateSize.getX() - 1, corridorTemplateSize.getY() - 1, corridorTemplateSize.getZ() - 1)
@@ -886,11 +888,11 @@ public class MasterClockBossRoomPlacer {
             BlockState state = level.getBlockState(pos);
             if (state.is(Blocks.JIGSAW)) {
                 level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
-                corridorJigsawsRemoved++;
+                corridorJigsawsRemoved.add(pos.immutable());
             }
         }
-        if (corridorJigsawsRemoved > 0) {
-            ChronoDawn.LOGGER.debug("Removed {} Jigsaw Blocks from corridor (range-based)", corridorJigsawsRemoved);
+        if (!corridorJigsawsRemoved.isEmpty()) {
+            ChronoDawn.LOGGER.debug("Removed {} Jigsaw Blocks from corridor (range-based)", corridorJigsawsRemoved.size());
         }
 
         // Explicitly remove corridor's stairs_bottom side Jigsaw Block (connection point)
@@ -898,7 +900,7 @@ public class MasterClockBossRoomPlacer {
         if (corridorStairsBottomJigsawState.is(Blocks.JIGSAW)) {
             level.setBlock(calculatedCorridorJigsawPos, Blocks.AIR.defaultBlockState(), 3);
             ChronoDawn.LOGGER.debug("Removed corridor's stairs_bottom side Jigsaw Block at {}", calculatedCorridorJigsawPos);
-        } else {
+        } else if (!corridorJigsawsRemoved.contains(calculatedCorridorJigsawPos)) {
             ChronoDawn.LOGGER.warn("Corridor's stairs_bottom side Jigsaw Block not found at {} (found: {})",
                 calculatedCorridorJigsawPos, corridorStairsBottomJigsawState.getBlock());
         }
@@ -939,9 +941,10 @@ public class MasterClockBossRoomPlacer {
         ChronoDawn.LOGGER.debug("Corridor boss_room side Jigsaw Block at {} (offset: {})",
             corridorJigsawPos, corridorBossRoomJigsawOffset);
 
-        // Verify Jigsaw Block (don't remove it yet - boss room needs it for alignment)
+        // Warn only if the Jigsaw Block is absent and was not cleared by the range removal above.
+        // Clearing it early is fine: boss room alignment uses the computed position, not the block.
         BlockState jigsawState = level.getBlockState(corridorJigsawPos);
-        if (!jigsawState.is(Blocks.JIGSAW)) {
+        if (!jigsawState.is(Blocks.JIGSAW) && !corridorJigsawsRemoved.contains(corridorJigsawPos)) {
             ChronoDawn.LOGGER.warn("Expected Jigsaw Block at {}, but found: {}",
                 corridorJigsawPos, jigsawState.getBlock());
         }
@@ -1383,7 +1386,9 @@ public class MasterClockBossRoomPlacer {
         }));
 
         // Remove all Jigsaw Blocks from boss room (corridor connection is already established)
-        int bossRoomJigsawsRemoved = 0;
+        // Record removed positions so the connection-point check below only warns
+        // when the Jigsaw Block was never placed.
+        Set<BlockPos> bossRoomJigsawsRemoved = new java.util.HashSet<>();
         for (BlockPos pos : BlockPos.betweenClosed(
             placementPos,
             placementPos.offset(templateSize.getX() - 1, templateSize.getY() - 1, templateSize.getZ() - 1)
@@ -1391,11 +1396,11 @@ public class MasterClockBossRoomPlacer {
             BlockState state = level.getBlockState(pos);
             if (state.is(Blocks.JIGSAW)) {
                 level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
-                bossRoomJigsawsRemoved++;
+                bossRoomJigsawsRemoved.add(pos.immutable());
             }
         }
-        if (bossRoomJigsawsRemoved > 0) {
-            ChronoDawn.LOGGER.debug("Removed {} Jigsaw Blocks from boss_room (range-based)", bossRoomJigsawsRemoved);
+        if (!bossRoomJigsawsRemoved.isEmpty()) {
+            ChronoDawn.LOGGER.debug("Removed {} Jigsaw Blocks from boss_room (range-based)", bossRoomJigsawsRemoved.size());
         }
 
         // Explicitly remove boss_room's corridor side Jigsaw Block (connection point)
@@ -1404,7 +1409,7 @@ public class MasterClockBossRoomPlacer {
         if (bossRoomCorridorJigsawState.is(Blocks.JIGSAW)) {
             level.setBlock(bossRoomCorridorJigsawPos, Blocks.AIR.defaultBlockState(), 3);
             ChronoDawn.LOGGER.debug("Removed boss_room's corridor side Jigsaw Block at {}", bossRoomCorridorJigsawPos);
-        } else {
+        } else if (!bossRoomJigsawsRemoved.contains(bossRoomCorridorJigsawPos)) {
             ChronoDawn.LOGGER.warn("Boss_room's corridor side Jigsaw Block not found at {} (found: {})",
                 bossRoomCorridorJigsawPos, bossRoomCorridorJigsawState.getBlock());
         }
@@ -1414,10 +1419,9 @@ public class MasterClockBossRoomPlacer {
         if (corridorJigsawState.is(Blocks.JIGSAW)) {
             level.setBlock(corridorJigsawPos, Blocks.AIR.defaultBlockState(), 3);
             ChronoDawn.LOGGER.debug("Removed corridor's boss_room side Jigsaw Block at {}", corridorJigsawPos);
-        } else {
-            ChronoDawn.LOGGER.warn("Corridor's boss_room side Jigsaw Block not found at {} (found: {})",
-                corridorJigsawPos, corridorJigsawState.getBlock());
         }
+        // No warning otherwise: the corridor's range removal normally clears this block, and a
+        // missing one is already reported when the corridor is placed.
 
         // Convert decorative_water to vanilla water for ALL structures (stairs, boss_room)
         // This is done AFTER all structures are placed to prevent decorative_water from being removed
