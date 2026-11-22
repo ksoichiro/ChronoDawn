@@ -31,6 +31,7 @@ if __name__ == "__main__":
 
 
 import json
+import os
 import tempfile
 from pathlib import Path
 from unittest import mock
@@ -55,6 +56,14 @@ class SetupEntryTest(unittest.TestCase):
 
 
 class MainTest(unittest.TestCase):
+    def setUp(self):
+        # Keep the tests off the real lock directory shared with live runs.
+        self._locks = tempfile.TemporaryDirectory()
+        patcher = mock.patch.dict(os.environ, {"CHRONODAWN_VERIFY_LOCK_DIR": self._locks.name})
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        self.addCleanup(self._locks.cleanup)
+
     def _env_file(self, tmp):
         out = Path(tmp) / "out"
         out.mkdir()

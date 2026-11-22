@@ -96,7 +96,6 @@ def run(env, scenarios, candidate_jar, out_dir, ports):
     out_dir.mkdir(parents=True)
     server_dir = out_dir / "server"
     client_dir = out_dir / "client"
-    processes.preflight_ports(list(ports))
     processes.prepare_server_dir(env.server, server_dir, ports)
     client_dir.mkdir(parents=True)
     (client_dir / "options.txt").write_text(_CLIENT_OPTIONS)
@@ -160,13 +159,13 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--env", required=True, type=Path)
     parser.add_argument("--out-dir", required=True, type=Path)
-    parser.add_argument("--ports", required=True, help="server port and RCON port, comma-separated")
+    parser.add_argument("--ports", help="server port and RCON port, comma-separated; default: reserve a free pair")
     parser.add_argument("--scenarios", help="comma-separated scenario names; default: all")
     parser.add_argument("--candidate-jar", type=Path)
     args = parser.parse_args(argv)
 
     env = Env(json.loads(args.env.read_text()))
-    ports = tuple(int(p) for p in args.ports.split(","))
+    explicit_ports = tuple(int(p) for p in args.ports.split(",")) if args.ports else None
     names = [n.strip() for n in args.scenarios.split(",") if n.strip()] if args.scenarios else None
     try:
         scenarios = load_scenarios(HERE / "scenarios", names)
@@ -175,6 +174,9 @@ def main(argv=None) -> int:
         return 2
     candidate = args.candidate_jar or env.candidate_jar
     processes.install_signal_handlers()
+    processes.acquire_run_slot()
+    ports = processes.resolve_ports(explicit_ports)
+    print(f"Using ports: server {ports[0]}, RCON {ports[1]}", flush=True)
 
     out_dir = args.out_dir.resolve()
     shots_by_scenario, sheet = {}, None

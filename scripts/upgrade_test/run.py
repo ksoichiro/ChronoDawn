@@ -141,7 +141,6 @@ def run_source(env, source, layers, forward, candidate_jar, out_root, ports):
     transcript = []
     active = layers_for_source(layers, source, env.mc_version)
 
-    processes.preflight_ports(list(ports))
     processes.prepare_server_dir(env.server, server_dir, ports)
     old_jar = versions.fetch_old_jar(source, env.loader, env.mc_version, env.cache_dir)
     old_mods = [old_jar, *env.prod_mods]
@@ -276,7 +275,7 @@ class Env:
         self.baseline = raw["baseline"]
         self.candidate_jar = Path(raw["candidateJar"])
         self.prod_mods = [Path(p) for p in raw["prodMods"]]
-        self.ports = tuple(raw["ports"])
+        self.ports = tuple(raw["ports"]) if raw.get("ports") else None
         self.log_ignore_file = Path(raw["logIgnoreFile"])
         self.server = processes.ServerEnv(Path(raw["serverTemplateDir"]), raw["serverCommand"])
         c = raw["client"]
@@ -295,6 +294,9 @@ def main(argv=None) -> int:
     report_file = env.out_dir / "report.txt"
     report_file.unlink(missing_ok=True)
     processes.install_signal_handlers()
+    processes.acquire_run_slot()
+    ports = processes.resolve_ports(env.ports)
+    print(f"Using ports: server {ports[0]}, RCON {ports[1]}", flush=True)
     layers_dir = HERE / "layers"
     layers = load_layers(layers_dir) if layers_dir.exists() else []
     forward_file = HERE / "forward.json"
@@ -308,7 +310,7 @@ def main(argv=None) -> int:
     results = []
     for source in sources:
         try:
-            results += run_source(env, source, layers, forward, candidate, env.out_dir, env.ports)
+            results += run_source(env, source, layers, forward, candidate, env.out_dir, ports)
         except SetupError as e:
             results.append(("SETUP FAILED", f"{source}/setup", str(e)))
         except Exception as e:  # one broken source must not hide the others
