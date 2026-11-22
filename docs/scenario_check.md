@@ -64,8 +64,11 @@ first-pass image check flags a screenshot.
 2. An agent reads `summary.md` and looks at each screenshot against its note.
    It sends back obvious problems (a missing structure, a wrong block shape,
    broken textures) before asking anyone.
-3. The agent attaches `sheet.png` to the PR or the task, and the owner
-   answers OK or NG for each shot.
+3. The agent attaches `sheet.png` to the PR or the task and keeps working
+   through the PR. It does not wait for the owner.
+4. The owner answers OK or NG for each shot when they review the PR. Checks
+   a scenario cannot cover (GUI screens, player input, other Minecraft
+   versions) are listed in the PR as manual checks.
 
 ## Writing a scenario
 
