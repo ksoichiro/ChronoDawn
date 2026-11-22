@@ -205,6 +205,14 @@ and wall reuse the base texture. Mark the textures as placeholders in the PR
 body. Delete the drawing script after generating (owner preference from
 earlier texture work).
 
+Revised later: the first placeholders showed hard block borders when tiled,
+looked flat, and Dawnstone read as brown like vanilla granite. They are now
+drawn by `scripts/generate_dawn_dusk_stone_textures.py`, which the owner
+chose to keep in the repository. Its noise fields and specks wrap around the
+16×16 tile so neighbouring blocks continue each other, a height field shaded
+from the upper left adds relief, and Dawnstone uses a rose-pink palette.
+Duskstone keeps its cool blue-grey.
+
 ### Docs and changelog
 
 - `CHANGELOG.md` Unreleased: new stones, mountain cliff mix, plains features.
