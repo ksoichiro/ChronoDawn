@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "B  ",
+    "BB ",
+    "BBB"
+  ],
+  "key": {
+    "B": "chronodawn:polished_duskstone"
+  },
+  "result": {
+    "id": "chronodawn:polished_duskstone_stairs",
+    "count": 4
+  }
+}

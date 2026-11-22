@@ -30,7 +30,9 @@ plains and mountain material of their own.
 
 ## Non-goals
 
-- Polished variants of the new stones (follow-up task).
+- Polished variants of the new stones (follow-up task, since added: Polished
+  Dawnstone and Polished Duskstone with stairs and slabs, no walls, like
+  vanilla polished granite and andesite).
 - Biome behaviour gimmicks from `docs/design/world_variety_patterns.md`
   (low-gravity summit, synchronized blooms).
 - Changes to Prairies, Faded Plains or other biomes beyond what the new
@@ -212,6 +214,11 @@ chose to keep in the repository. Its noise fields and specks wrap around the
 16×16 tile so neighbouring blocks continue each other, a height field shaded
 from the upper left adds relief, and Dawnstone uses a rose-pink palette.
 Duskstone keeps its cool blue-grey.
+
+The same script draws `polished_dawnstone.png` and `polished_duskstone.png`
+from the base palettes with less grain and fewer specks, plus a one-pixel
+bevel. The bevel shows each block's border on purpose, as vanilla polished
+stones do.
 
 ### Docs and changelog
 

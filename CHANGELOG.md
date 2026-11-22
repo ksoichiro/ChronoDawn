@@ -31,6 +31,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   to granite and a blue-grey one similar to andesite, with stairs, slabs, and
   walls. They form large patches underground
   in the Chrono Dawn plains and mountains in newly generated terrain.
+  Polished Dawnstone and Polished Duskstone, with stairs and slabs, are
+  crafted from four of the stone or cut with a stonecutter.
 - **Sentinel Outpost**: a new optional structure where the Clockwork
   Sentinels keep watch. It is a white landing pad with a tall two-storey hall, built
   to look like something from outside Chrono Dawn, unlike the old factory of

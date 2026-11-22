@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "chronodawn:block/polished_duskstone",
+    "top": "chronodawn:block/polished_duskstone",
+    "side": "chronodawn:block/polished_duskstone"
+  }
+}

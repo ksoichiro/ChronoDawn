@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "chronodawn:duskstone"
+  },
+  "result": "chronodawn:polished_duskstone_slab",
+  "count": 2
+}

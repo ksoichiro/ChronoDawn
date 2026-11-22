@@ -1139,6 +1139,54 @@ public class ModItems {
                 .setId(ResourceKey.create(Registries.ITEM,
                     ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.DUSKSTONE_WALL.id()))))
     );
+
+    public static final RegistrySupplier<Item> POLISHED_DAWNSTONE = ITEMS.register(
+        ModItemId.POLISHED_DAWNSTONE.id(),
+        () -> new BlockItem(ModBlocks.POLISHED_DAWNSTONE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.POLISHED_DAWNSTONE.id()))))
+    );
+
+    public static final RegistrySupplier<Item> POLISHED_DAWNSTONE_STAIRS = ITEMS.register(
+        ModItemId.POLISHED_DAWNSTONE_STAIRS.id(),
+        () -> new BlockItem(ModBlocks.POLISHED_DAWNSTONE_STAIRS.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.POLISHED_DAWNSTONE_STAIRS.id()))))
+    );
+
+    public static final RegistrySupplier<Item> POLISHED_DAWNSTONE_SLAB = ITEMS.register(
+        ModItemId.POLISHED_DAWNSTONE_SLAB.id(),
+        () -> new BlockItem(ModBlocks.POLISHED_DAWNSTONE_SLAB.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.POLISHED_DAWNSTONE_SLAB.id()))))
+    );
+
+    public static final RegistrySupplier<Item> POLISHED_DUSKSTONE = ITEMS.register(
+        ModItemId.POLISHED_DUSKSTONE.id(),
+        () -> new BlockItem(ModBlocks.POLISHED_DUSKSTONE.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.POLISHED_DUSKSTONE.id()))))
+    );
+
+    public static final RegistrySupplier<Item> POLISHED_DUSKSTONE_STAIRS = ITEMS.register(
+        ModItemId.POLISHED_DUSKSTONE_STAIRS.id(),
+        () -> new BlockItem(ModBlocks.POLISHED_DUSKSTONE_STAIRS.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.POLISHED_DUSKSTONE_STAIRS.id()))))
+    );
+
+    public static final RegistrySupplier<Item> POLISHED_DUSKSTONE_SLAB = ITEMS.register(
+        ModItemId.POLISHED_DUSKSTONE_SLAB.id(),
+        () -> new BlockItem(ModBlocks.POLISHED_DUSKSTONE_SLAB.get(), new Item.Properties()
+                .useBlockDescriptionPrefix()
+                .setId(ResourceKey.create(Registries.ITEM,
+                    ResourceLocation.fromNamespaceAndPath(ChronoDawn.MOD_ID, ModItemId.POLISHED_DUSKSTONE_SLAB.id()))))
+    );
     public static final RegistrySupplier<Item> TEMPORAL_STONE_BRICKS = ITEMS.register(
         ModItemId.TEMPORAL_STONE_BRICKS.id(),
         () -> new BlockItem(ModBlocks.TEMPORAL_STONE_BRICKS.get(), new Item.Properties()
@@ -3300,6 +3348,12 @@ public class ModItems {
         output.accept(DUSKSTONE_STAIRS.get());
         output.accept(DUSKSTONE_SLAB.get());
         output.accept(DUSKSTONE_WALL.get());
+        output.accept(POLISHED_DAWNSTONE.get());
+        output.accept(POLISHED_DAWNSTONE_STAIRS.get());
+        output.accept(POLISHED_DAWNSTONE_SLAB.get());
+        output.accept(POLISHED_DUSKSTONE.get());
+        output.accept(POLISHED_DUSKSTONE_STAIRS.get());
+        output.accept(POLISHED_DUSKSTONE_SLAB.get());
         output.accept(TEMPORAL_STONE_BRICKS.get());
         output.accept(CRACKED_TEMPORAL_STONE_BRICKS.get());
         output.accept(TEMPORAL_STONE_BRICKS_STAIRS.get());

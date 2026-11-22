@@ -1130,6 +1130,7 @@ All three wood types have the same variants:
 - **Property**: Natural stones of Chrono Dawn, like vanilla granite and andesite. Warm rose-amber Dawnstone and cool blue-grey Duskstone form large patches underground in the Plains and Mountain, Duskstone shows on mountain cliffs, and Dawnstone forms low outcrops in the Plains
 - **Drops**: Themselves (any pickaxe)
 - **Variants**: Stairs / slabs / walls, craftable or made with a stonecutter
+- **Polished Dawnstone / Polished Duskstone**: 4 of the stone in a 2×2 grid → 4 polished blocks, or one stone in a stonecutter. Polished stairs and slabs are crafted from the polished block or cut from either the stone or the polished block
 
 #### Time Torches
 - **Variants**: Orange, Pink, and Purple Time Torch, each with a matching wall variant that drops the floor version when broken

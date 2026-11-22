@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Generate the Dawnstone and Duskstone block textures.
 
-Both are original 16x16 textures drawn from seeded noise (no vanilla source
+All are original 16x16 textures drawn from seeded noise (no vanilla source
 pixels). Stairs, slabs and walls reuse these base textures.
 
 - Dawnstone: rose-pink stone with a granite-like speckle. The palette is
@@ -12,6 +12,12 @@ Seamless tiling: every noise field is sampled on a 16x16 torus (lattice
 coordinates wrap) and every speckle is stamped with wrap-around, so the
 left edge continues the right edge and the top edge continues the bottom
 edge. Placing blocks side by side therefore shows no block border.
+
+Polished variants (polished_dawnstone.png, polished_duskstone.png) reuse
+the same palettes with less grain, softer relief and fewer specks, then add
+a one-pixel bevel (lit top/left edge, shaded bottom/right edge). Like
+vanilla polished stones, the bevel deliberately shows each block's border,
+so these two textures do not tile seamlessly.
 
 Relief: a tileable height field is shaded with a light from the upper left
 (height difference to the lower-right neighbour, also wrapped), which gives
@@ -170,18 +176,49 @@ DIAG = [(0, 0), (1, 1)]
 CLUSTER = [(0, 0), (1, 0), (0, 1)]
 
 
+def bevel(img: Image.Image, light: float = 1.12, dark: float = 0.8) -> Image.Image:
+    """Lighten the top/left edge and darken the bottom/right edge."""
+    px = img.load()
+    last = SIZE - 1
+
+    def scale(p, f):
+        r, g, b, a = px[p]
+        px[p] = (min(255, round(r * f)), min(255, round(g * f)), min(255, round(b * f)), a)
+
+    for i in range(SIZE):
+        for p in {(i, last), (last, i)}:
+            scale(p, dark)
+        for p in {(i, 0), (0, i)}:
+            if p not in {(last, 0), (0, last)}:
+                scale(p, light)
+    return img
+
+
+# Rose-pink ramp, dark to light. Hue stays around rose (red with blue
+# slightly above green) so it does not drift into granite's brown.
+DAWNSTONE_RAMP = [
+    (0x80, 0x4C, 0x58),
+    (0x9A, 0x5E, 0x6A),
+    (0xB0, 0x71, 0x7B),
+    (0xC3, 0x84, 0x8B),
+    (0xD1, 0x96, 0x9A),
+    (0xDD, 0xA9, 0xA9),
+    (0xE8, 0xBD, 0xB9),
+]
+
+# Cool blue-grey ramp, matching the hue of the original placeholder.
+DUSKSTONE_RAMP = [
+    (0x50, 0x57, 0x63),
+    (0x5E, 0x66, 0x72),
+    (0x6C, 0x74, 0x80),
+    (0x79, 0x81, 0x8D),
+    (0x86, 0x8E, 0x9A),
+    (0x94, 0x9C, 0xA7),
+]
+
+
 def make_dawnstone() -> Image.Image:
-    # Rose-pink ramp, dark to light. Hue stays around rose (red with blue
-    # slightly above green) so it does not drift into granite's brown.
-    ramp = [
-        (0x80, 0x4C, 0x58),
-        (0x9A, 0x5E, 0x6A),
-        (0xB0, 0x71, 0x7B),
-        (0xC3, 0x84, 0x8B),
-        (0xD1, 0x96, 0x9A),
-        (0xDD, 0xA9, 0xA9),
-        (0xE8, 0xBD, 0xB9),
-    ]
+    ramp = DAWNSTONE_RAMP
     return render(
         seed=6006,
         ramp=ramp,
@@ -200,16 +237,40 @@ def make_dawnstone() -> Image.Image:
     )
 
 
+def make_polished_dawnstone() -> Image.Image:
+    img = render(
+        seed=6106,
+        ramp=DAWNSTONE_RAMP[1:6],
+        tone_octaves=[(4, 0.8), (8, 0.4)],
+        height_octaves=[(4, 1.0)],
+        shade_strength=0.15,
+        grain=0.05,
+        specks=[
+            ((0xF2, 0xDC, 0xCF), 4, [DOT, PAIR_H]),
+            ((0x5E, 0x3A, 0x49), 3, [DOT]),
+        ],
+    )
+    return bevel(img)
+
+
+def make_polished_duskstone() -> Image.Image:
+    img = render(
+        seed=7107,
+        ramp=DUSKSTONE_RAMP[1:6],
+        tone_octaves=[(4, 0.8), (8, 0.4)],
+        height_octaves=[(4, 1.0)],
+        shade_strength=0.15,
+        grain=0.06,
+        specks=[
+            ((0xA8, 0xB0, 0xBB), 4, [DOT]),
+            ((0x42, 0x48, 0x53), 4, [DOT]),
+        ],
+    )
+    return bevel(img)
+
+
 def make_duskstone() -> Image.Image:
-    # Cool blue-grey ramp, matching the hue of the original placeholder.
-    ramp = [
-        (0x50, 0x57, 0x63),
-        (0x5E, 0x66, 0x72),
-        (0x6C, 0x74, 0x80),
-        (0x79, 0x81, 0x8D),
-        (0x86, 0x8E, 0x9A),
-        (0x94, 0x9C, 0xA7),
-    ]
+    ramp = DUSKSTONE_RAMP
     return render(
         seed=7007,
         ramp=ramp,
@@ -228,6 +289,8 @@ def make_duskstone() -> Image.Image:
 MAPPING = {
     "dawnstone.png": make_dawnstone,
     "duskstone.png": make_duskstone,
+    "polished_dawnstone.png": make_polished_dawnstone,
+    "polished_duskstone.png": make_polished_duskstone,
 }
 
 
