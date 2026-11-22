@@ -69,8 +69,11 @@ jobs:
 
   # Boots a real installer-provisioned dedicated server for each loader, so
   # Mixin remapping and injection problems that Loom's dev environment hides
-  # fail the PR. The Fabric and NeoForge tasks use separate ports (25601 and
-  # 25602), so they share one Gradle run. Forge 1.20.1 is not supported.
+  # fail the PR. Forge 1.20.1 is not supported.
+  # Fabric and NeoForge run in separate Gradle invocations on purpose. In one
+  # invocation both loaders transform the shared common module concurrently,
+  # and the NeoForge jar intermittently resolved @ExpectPlatform calls to the
+  # Fabric implementation (NoClassDefFoundError ...runtime.fabric.*Impl).
   # The server downloads Minecraft and the loader installers at run time and
   # accepts the Minecraft EULA (eula=true) on behalf of whoever runs the job.
   # Do not upload the server JAR, mappings or world data as artifacts.
@@ -94,7 +97,8 @@ jobs:
             21
             25
       - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
-      - run: ./gradlew :fabric:prodSmokeTest :neoforge:prodSmokeTest -Ptarget_mc_version=${{ matrix.mc }}
+      - run: ./gradlew :fabric:prodSmokeTest -Ptarget_mc_version=${{ matrix.mc }}
+      - run: ./gradlew :neoforge:prodSmokeTest -Ptarget_mc_version=${{ matrix.mc }}
       # The Gradle output names the log file but does not include it. Print the
       # tail of each server log (text only, never uploaded) to find the cause.
       - if: failure()
@@ -127,4 +131,6 @@ jobs:
             21
             25
       - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
-      - run: ./gradlew :fabric:runGameTest :neoforge:runGameTestServer -Ptarget_mc_version=${{ matrix.mc }}
+      # One loader per invocation, see the prod-smoke job for why.
+      - run: ./gradlew :fabric:runGameTest -Ptarget_mc_version=${{ matrix.mc }}
+      - run: ./gradlew :neoforge:runGameTestServer -Ptarget_mc_version=${{ matrix.mc }}
