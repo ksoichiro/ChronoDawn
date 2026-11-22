@@ -33,9 +33,13 @@ class FakeClock:
         self.now += seconds
 
 
+READY = "chunks=81 missing=0 sections=40 queue=empty"
+
+
 class FakeClient:
-    def __init__(self, screens=None, errors=()):
+    def __init__(self, screens=None, errors=(), renders=None):
         self.screens = screens or [""]  # titles answered to "screen", the last one repeats
+        self.renders = renders or [READY]  # answers to "render", the last one repeats
         self.errors = set(errors)
         self.sent = []
 
@@ -45,11 +49,14 @@ class FakeClient:
             return "error: a screen is open: X"
         if operation == "screen":
             return self.screens.pop(0) if len(self.screens) > 1 else self.screens[0]
+        if operation == "render":
+            return self.renders.pop(0) if len(self.renders) > 1 else self.renders[0]
         return "ok"
 
 
 def _runner(rcon, clock=None, captured=None, client=None):
     clock = clock or FakeClock()
+    client = client if client is not None else FakeClient()
     captured = captured if captured is not None else []
 
     def capture(name):
@@ -120,6 +127,41 @@ class LoadTest(unittest.TestCase):
         with self.assertRaises(ScenarioError):
             load_scenario(self._write({"steps": [{"screen": "("}]}))
 
+    def test_rejects_sleep_without_reason(self):
+        with self.assertRaises(ScenarioError):
+            load_scenario(self._write({"steps": [{"sleep": 5}]}))
+
+    def test_accepts_sleep_with_reason(self):
+        scenario = load_scenario(self._write({"steps": [{"sleep": 5, "reason": "no condition shows it"}]}))
+        self.assertEqual(len(scenario.steps), 1)
+
+    def test_rejects_shot_wait_without_reason(self):
+        with self.assertRaises(ScenarioError):
+            load_scenario(self._write({"steps": [{"shot": "a", "wait": 5}]}))
+
+    def test_rejects_bad_settle(self):
+        for step in ({"settle": 0}, {"settle": "x"}, {"settle": False}, {"settle": True}, {"settle": None},
+                     {"shot": "a", "settle": -1}, {"shot": "a", "settle": None}):
+            with self.subTest(step=step), self.assertRaises(ScenarioError):
+                load_scenario(self._write({"steps": [step]}))
+
+    def test_accepts_settle_and_shot_without_settle(self):
+        scenario = load_scenario(self._write({"steps": [{"settle": 60}, {"shot": "a", "settle": False}]}))
+        self.assertEqual(len(scenario.steps), 2)
+
+    def test_input_until_needs_match(self):
+        for step in ({"input": "use", "until": "x"}, {"input": "use", "match": "x"}, {"input": "use", "repeat": 3},
+                     {"input": "use", "until": "x", "match": "y", "repeat": 0},
+                     {"input": "use", "until": "x", "match": "y", "repeat": 1.5}):
+            with self.subTest(step=step), self.assertRaises(ScenarioError):
+                load_scenario(self._write({"steps": [step]}))
+
+    def test_bundled_scenarios_keep_fixed_waits_short(self):
+        # A guard against a scenario slipping back into long fixed sleeps.
+        for scenario in load_scenarios(SCENARIOS_DIR):
+            fixed = sum(s.get("sleep", 0) + s.get("wait", 0) for s in scenario.steps if isinstance(s, dict))
+            self.assertLessEqual(fixed, 10, f"{scenario.name} sleeps {fixed}s in fixed waits")
+
     def test_unknown_scenario_name(self):
         with self.assertRaises(ScenarioError):
             load_scenarios(SCENARIOS_DIR, ["does-not-exist"])
@@ -168,7 +210,7 @@ class RunnerTest(unittest.TestCase):
         scenario = Scenario("s", "", [{"command": "if loaded", "match": "Test passed", "await": True, "timeout": 3}])
         outcome = _runner(rcon).run(scenario)
         self.assertEqual(outcome.results[0][0], "SETUP FAILED")
-        self.assertLessEqual(len(rcon.sent), 5)
+        self.assertLessEqual(len(rcon.sent), 8)
 
     def test_max_seconds_fails_slow_check(self):
         rcon = FakeRcon({"locate": "at [1, ~, 2]"})
@@ -176,23 +218,41 @@ class RunnerTest(unittest.TestCase):
         outcome = _runner(rcon, clock=FakeClock(step=10)).run(scenario)
         self.assertEqual(outcome.results[0][:2], ("FAIL", "s/fast"))
 
-    def test_shot_records_note_and_waits(self):
+    def test_shot_settles_then_records_note(self):
         clock = FakeClock()
         captured = []
-        rcon = FakeRcon({})
-        scenario = Scenario("s", "", [{"shot": "front", "wait": 7, "note": "seen by ${player}"}])
-        outcome = _runner(rcon, clock=clock, captured=captured).run(scenario)
+        client = FakeClient()
+        scenario = Scenario("s", "", [{"shot": "front", "note": "seen by ${player}"}])
+        outcome = _runner(FakeRcon({}), clock=clock, captured=captured, client=client).run(scenario)
         self.assertEqual(captured, ["front"])
-        self.assertEqual(clock.now, 7)
+        self.assertIn("render", client.sent)
+        self.assertGreaterEqual(clock.now, 2)
+        self.assertLess(clock.now, 3)
         self.assertEqual(outcome.shots[0].note, "seen by Dev")
         self.assertEqual(outcome.results[0][0], "SHOT")
+
+    def test_shot_extra_wait_and_no_settle(self):
+        clock = FakeClock()
+        client = FakeClient()
+        scenario = Scenario("s", "", [{"shot": "front", "settle": False, "wait": 7, "reason": "r"}])
+        _runner(FakeRcon({}), clock=clock, client=client).run(scenario)
+        self.assertEqual(client.sent, [])
+        self.assertEqual(clock.now, 7)
+
+    def test_step_timings_are_recorded(self):
+        clock = FakeClock()
+        outcome = _runner(FakeRcon({}), clock=clock).run(Scenario("s", "", ["say a", {"sleep": 3, "reason": "r"}]))
+        self.assertEqual([(n, kind) for n, kind, _ in outcome.timings], [(1, "command"), (2, "sleep")])
+        self.assertEqual(outcome.seconds, 3)
+        self.assertIn("# step 2 (sleep): 3.0s", outcome.transcript)
 
     def test_capture_error_is_fail_but_continues(self):
         rcon = FakeRcon({})
 
         def broken(name):
             raise RuntimeError("no window")
-        runner = Runner(rcon, broken, "Dev", clock=FakeClock(), sleep=lambda s: None)
+        clock = FakeClock()
+        runner = Runner(rcon, broken, "Dev", FakeClient(), clock=clock, sleep=clock.sleep)
         outcome = runner.run(Scenario("s", "", [{"shot": "a"}, "say after"]))
         self.assertEqual(outcome.results[0][0], "FAIL")
         self.assertIn("say after", rcon.sent)
@@ -215,9 +275,68 @@ class ClientStepTest(unittest.TestCase):
         self.assertNotIn("say never", rcon.sent)
 
     def test_input_without_client_is_setup_failure(self):
-        outcome = _runner(FakeRcon({})).run(Scenario("s", "", [{"input": "use"}]))
+        runner = Runner(FakeRcon({}), lambda n: Path(n), "Dev", None, clock=FakeClock(), sleep=lambda s: None)
+        outcome = runner.run(Scenario("s", "", [{"input": "use"}]))
         self.assertEqual(outcome.results[0][0], "SETUP FAILED")
 
+    def test_input_until_clicks_until_the_command_matches(self):
+        client = FakeClient()
+        rcon = FakeRcon({"unless block": ["Test failed", "Test failed", "Test passed"]})
+        outcome = _runner(rcon, client=client).run(Scenario("s", "", [
+            {"input": "use", "until": "unless block", "match": "Test passed", "repeat": 10}, "say after"]))
+        self.assertEqual(client.sent, ["use"] * 3)
+        self.assertEqual(outcome.results, [])
+        self.assertIn("say after", rcon.sent)
+
+    def test_input_until_runs_out_of_clicks(self):
+        client = FakeClient()
+        rcon = FakeRcon({"unless block": "Test failed"})
+        outcome = _runner(rcon, client=client).run(Scenario("s", "", [
+            {"input": "use", "until": "unless block", "match": "Test passed", "repeat": 4}]))
+        self.assertEqual(client.sent, ["use"] * 4)
+        self.assertEqual(outcome.results[0][0], "SETUP FAILED")
+
+
+class SettleTest(unittest.TestCase):
+    def _settle(self, renders, timeout=60):
+        clock = FakeClock()
+        client = FakeClient(renders=renders)
+        outcome = _runner(FakeRcon({}), clock=clock, client=client).run(
+            Scenario("s", "", [{"settle": timeout}, "say after"]))
+        return outcome, clock
+
+    def test_waits_until_counts_stop_changing(self):
+        busy = "chunks=50 missing=3 sections=10 queue=busy"
+        growing = ["chunks=70 missing=0 sections=20 queue=empty", "chunks=81 missing=0 sections=30 queue=empty"]
+        outcome, clock = self._settle(["error: no player in a world", busy, busy, *growing, READY])
+        self.assertEqual(outcome.results, [])
+        # 5 polls before the last state, then 2 seconds of it unchanged.
+        self.assertAlmostEqual(clock.now, 5 * 0.25 + 2, places=5)
+
+    def test_agent_error_fails_fast(self):
+        outcome, clock = self._settle(["error: java.lang.NoSuchMethodException: x"], timeout=60)
+        self.assertEqual(outcome.results[0][0], "SETUP FAILED")
+        self.assertLess(clock.now, 1)
+
+    def test_queued_builds_are_not_settled(self):
+        outcome, clock = self._settle(["chunks=81 missing=0 sections=40 queue=busy"], timeout=5)
+        self.assertEqual(outcome.results[0][:2], ("FAIL", "s/settle"))
+        self.assertGreaterEqual(clock.now, 5)
+
+    def test_missing_chunks_are_not_settled(self):
+        outcome, _ = self._settle(["chunks=81 missing=1 sections=40 queue=empty"], timeout=5)
+        self.assertEqual(outcome.results[0][0], "FAIL")
+
+    def test_timeout_is_fail_but_the_scenario_goes_on(self):
+        clock = FakeClock()
+        rcon = FakeRcon({})
+        client = FakeClient(renders=["chunks=1 missing=9 sections=0 queue=busy"])
+        outcome = _runner(rcon, clock=clock, client=client).run(Scenario("s", "", [{"settle": 3}, "say after"]))
+        self.assertEqual(outcome.results[0][0], "FAIL")
+        self.assertIn("say after", rcon.sent)
+
+
+class ScreenStepTest(unittest.TestCase):
     def test_screen_waits_until_title_matches(self):
         client = FakeClient(screens=["", "", "Time Keeper"])
         outcome = _runner(FakeRcon({}), client=client).run(
@@ -231,7 +350,7 @@ class ClientStepTest(unittest.TestCase):
         outcome = _runner(rcon, client=client).run(
             Scenario("s", "", [{"screen": "Time Keeper", "check": "opened", "timeout": 3}, "say never"]))
         self.assertEqual(outcome.results[0][:2], ("FAIL", "s/opened"))
-        self.assertLessEqual(len(client.sent), 5)
+        self.assertLessEqual(len(client.sent), 14)
         self.assertNotIn("say never", rcon.sent)
 
     def test_screen_without_check_mismatch_is_setup_failure(self):
