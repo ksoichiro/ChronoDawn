@@ -1,7 +1,9 @@
 {
-  "description": "/locate finds a Forgotten Library in the Chrono Dawn dimension quickly, and the structure is there when the player looks at it from above.",
+  "description": "/locate finds a Forgotten Library in the Chrono Dawn dimension quickly, and the structure is there when the player looks at it from above. The player enters the dimension at 0 0 first: the Time Keeper Village is placed near wherever a player first enters, and entering at the library would put the village next to or on top of it.",
   "steps": [
     {"command": "execute in chronodawn:chronodawn run locate structure chronodawn:forgotten_library", "match": "\\[(?P<x>-?\\d+), [^,]+, (?P<z>-?\\d+)\\]", "check": "locate-forgotten-library", "max_seconds": 60},
+    "execute in chronodawn:chronodawn run spreadplayers 0 0 0 1 false ${player}",
+    {"sleep": 5},
     "execute in chronodawn:chronodawn run spreadplayers ${x} ${z} 0 1 false ${player}",
     "execute as ${player} at @s run tp @s ~-34 ~45 ~-34 0 90",
     {"shot": "from-above", "wait": 20, "note": "A Forgotten Library in view (its start is at x=${x}, z=${z}), seen straight down from 45 blocks above its center. With the fixed test seed its center is about 34 blocks west and north of the reported start, so the camera is shifted there. A worldgen change can move it; then update the offset. It is a low, wide 35x35 building with a flat roof, not the tall tower that may stand nearby. Its blocks render with their textures and nothing is cut off at chunk borders."}

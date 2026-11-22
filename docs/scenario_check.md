@@ -32,8 +32,10 @@ The window is captured with `screencapture -l <window id>`, so the app that
 runs Gradle needs the Screen Recording permission (System Settings > Privacy &
 Security > Screen & System Audio Recording). That is the terminal or IDE, or
 for an agent session the process at the top of its process tree (for example
-`~/.local/bin/fuda`). macOS applies a new grant only after that app restarts.
-For an agent host, that means restarting both the daemon and the session.
+`~/.local/bin/fuda`). A switch that is on in System Settings was not enough
+for the agent host: capture started working only after macOS showed its own
+permission dialog for the host and it was allowed. Restart the host and run
+`screencapture` again if that dialog has not appeared yet.
 To see which process macOS checks and what it decided, run `screencapture`
 once, then read `log show --last 10s --predicate 'subsystem ==
 "com.apple.TCC"' | grep -E "AUTHREQ_(ATTRIBUTION|RESULT)"`: `responsible=` names
