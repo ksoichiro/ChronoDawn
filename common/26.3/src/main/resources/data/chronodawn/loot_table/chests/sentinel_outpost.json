@@ -7,10 +7,6 @@
         {
           "type": "minecraft:item",
           "name": "chronodawn:ancient_gear",
-          "condition": {
-            "type": "minecraft:random_chance",
-            "chance": 0.6
-          },
           "modifier": {
             "count": {
               "type": "minecraft:uniform",
@@ -28,12 +24,12 @@
         {
           "type": "minecraft:item",
           "name": "chronodawn:enhanced_clockstone",
-          "condition": {
-            "type": "minecraft:random_chance",
-            "chance": 0.35
-          },
           "modifier": {
-            "count": 1,
+            "count": {
+              "type": "minecraft:uniform",
+              "min": 2,
+              "max": 3
+            },
             "type": "minecraft:set_count"
           }
         }

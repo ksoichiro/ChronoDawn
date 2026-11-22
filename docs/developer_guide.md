@@ -644,7 +644,11 @@ public static final RegistrySupplier<EntityType<MyEntity>> MY_ENTITY = ENTITIES.
    to remove the air outside the building, above its roof and under high
    overhangs (see the script's docstring for the rule), and add the
    structure to `TERRAIN_PRESERVING` in `StructureTemplateTest`. Run it again
-   every time the template is saved from a structure block
+   every time the template is saved from a structure block. For the Sentinel
+   Outpost, run `python3 scripts/finish_sentinel_outpost.py` instead. It also
+   writes the spawner settings, empties the chests, and checks that every
+   spawner is enclosed by Reversing Time Sandstone and that no black concrete
+   is left
 7. **Weather the template**: `python3 scripts/weather_structures.py` swaps a
    seeded share of the exposed Temporal Stone Bricks for cracked and mossy
    variants. Add the template and its rates to `RATES` in the script. The

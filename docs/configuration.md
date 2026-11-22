@@ -79,7 +79,7 @@ Outpost — shares the same four fields:
 | Phantom Catacombs | `world.structures.phantom_catacombs` | `true` | `20` | `8` | `745182936` | Gates Temporal Phantom and the Phantom Essence. |
 | Entropy Crypt | `world.structures.entropy_crypt` | `true` | `50` | `25` | `738291456` | Gates Entropy Keeper and the Entropy Core. |
 | Master Clock | `world.structures.master_clock` | `true` | `60` | `20` | `1234567890` | Gates Time Tyrant, the final boss. |
-| Sentinel Outpost | `world.structures.sentinel_outpost` | `true` | `36` | `14` | `1405827319` | Optional side trip. Gates nothing, so disabling it is safe. |
+| Sentinel Outpost | `world.structures.sentinel_outpost` | `true` | `48` | `20` | `1405827319` | Optional side trip. Gates nothing, so disabling it is safe. |
 
 ```toml
 [world.structures.ancient_ruins]
