@@ -157,7 +157,8 @@ public class TimeKeeperVillagePlacer {
             if (y <= level.getMinBuildHeight()) continue;
             BlockPos candidate = new BlockPos(x, y, z);
             if (isTerrainFlat(level, candidate, structureWidth, structureDepth, MAX_HEIGHT_VARIATION)
-                && isSurfaceSuitable(level, candidate, structureWidth, structureDepth)) {
+                && isSurfaceSuitable(level, candidate, structureWidth, structureDepth)
+                && !overlapsExistingStructure(level, candidate, structureWidth, structureDepth)) {
                 ChronoDawn.LOGGER.debug("Found suitable position for Time Keeper Village at {} (attempt {})", candidate, attempt + 1);
                 return candidate;
             }
@@ -229,9 +230,57 @@ public class TimeKeeperVillagePlacer {
             if (surfaceBlock.is(Blocks.ICE) || surfaceBlock.is(Blocks.PACKED_ICE) || surfaceBlock.is(Blocks.BLUE_ICE)) {
                 return false;
             }
+
+            // Avoid man-made surfaces such as the flat roof of an existing structure
+            if (isManMadeSurface(surfaceBlock)) {
+                return false;
+            }
         }
 
         return true;
+    }
+
+    /**
+     * Whether the block is a building material that does not occur as natural ground.
+     * Backs up the structure bounding box check for structures that have no tracked StructureStart.
+     */
+    private static boolean isManMadeSurface(BlockState state) {
+        return state.is(BlockTags.PLANKS)
+            || state.is(BlockTags.LOGS)
+            || state.is(BlockTags.STAIRS)
+            || state.is(BlockTags.SLABS)
+            || state.is(BlockTags.WALLS)
+            || state.is(BlockTags.FENCES)
+            || state.is(BlockTags.WOOL)
+            || state.is(BlockTags.STONE_BRICKS);
+    }
+
+    /**
+     * Check if the village footprint (plus the vegetation clear margin) overlaps the horizontal
+     * bounding box of any existing structure.
+     *
+     * Only X/Z is compared: the village is placed on the surface, and a roof must be rejected
+     * even though its height differs from the structure origin. startsForStructure also returns
+     * starts that merely reference the chunk, so large structures spanning chunks are covered.
+     */
+    private static boolean overlapsExistingStructure(ServerLevel level, BlockPos center, int width, int depth) {
+        int minX = center.getX() - width / 2 - VEGETATION_CLEAR_MARGIN;
+        int maxX = center.getX() + width / 2 + VEGETATION_CLEAR_MARGIN;
+        int minZ = center.getZ() - depth / 2 - VEGETATION_CLEAR_MARGIN;
+        int maxZ = center.getZ() + depth / 2 + VEGETATION_CLEAR_MARGIN;
+
+        for (int chunkX = minX >> 4; chunkX <= (maxX >> 4); chunkX++) {
+            for (int chunkZ = minZ >> 4; chunkZ <= (maxZ >> 4); chunkZ++) {
+                var starts = level.structureManager()
+                    .startsForStructure(new net.minecraft.world.level.ChunkPos(chunkX, chunkZ), structure -> true);
+                for (var start : starts) {
+                    if (start.isValid() && start.getBoundingBox().intersects(minX, minZ, maxX, maxZ)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /**

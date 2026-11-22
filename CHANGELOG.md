@@ -61,6 +61,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Pink, or Purple Time Blossom, or an Unstable Fungus gave nothing back, so the
   plant was lost. They now drop the pot and the plant like vanilla potted
   plants. Unstable Fungus itself also drops itself when broken.
+- **Time Keeper Village no longer sits on top of other structures**: when you
+  first entered Chrono Dawn near a structure with a flat roof, such as the
+  Forgotten Library, the village could be placed on that roof. Spots that
+  overlap an existing structure, or whose surface is planks, logs, stairs,
+  slabs, walls, fences, wool, or stone bricks, are now skipped. Villages that
+  are already placed are unchanged.
 - **Saplings grown in Chrono Dawn leave Temporal Dirt under the trunk**: a tree
   grown from a Time Wood, Dark Time Wood, or Ancient Time Wood sapling left
   vanilla dirt under its trunk even inside the Chrono Dawn dimension, unlike

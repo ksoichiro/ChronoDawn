@@ -27,6 +27,7 @@ class LogCheckTest(unittest.TestCase):
             "[12:00:00] [Server thread/ERROR]: No data fixer registered for chronodawn:time_keeper",
             "\x1b[33m[12:00:01] [Server thread/WARN]: KnownIssue: something\x1b[0m",
             "[00:47:35] [Server thread/WARN]: Can't keep up! Is the server overloaded? Running 6185ms or 123 ticks behind",
+            "[23:22:41] [Server thread/WARN] [minecraft/Connection]: handleDisconnection() called twice",
         )
         self.assertEqual(check_server_log(log, self.ignore), [])
 

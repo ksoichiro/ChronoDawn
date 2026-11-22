@@ -1,0 +1,21 @@
+{
+  "description": "A player hovers a Cairn Stone in the inventory of an open crafting table. Its tooltip shows the name and two gray italic lines of lore.",
+  "steps": [
+    "execute in minecraft:overworld run forceload add 64 0 79 15",
+    {"command": "execute in minecraft:overworld if loaded 72 200 8", "match": "Test passed", "await": true, "timeout": 60},
+    "execute in minecraft:overworld run fill 68 200 4 76 200 12 minecraft:white_concrete",
+    "execute in minecraft:overworld run setblock 72 201 10 minecraft:crafting_table",
+    "gamemode creative ${player}",
+    "clear ${player}",
+    "give ${player} chronodawn:cairn_stone_dawn",
+    "execute in minecraft:overworld run tp ${player} 72.5 201 8.5 0 30",
+    {"settle": 60},
+    {"input": "use"},
+    {"screen": "Crafting", "check": "crafting-screen-opened"},
+    {"hover_slot": 37},
+    {"shot": "cairn-stone-tooltip", "note": "A tooltip next to the first hotbar slot of the crafting screen: 'Dawn Stone' in white, then two lines in gray italics: 'A cairn stone engraved with the first light.' and 'One of four hours. Four different stones make a Cairn Keystone.' The tooltip is not cut off by the window edge."},
+    {"input": "close"},
+    {"screen": "^$", "check": "crafting-screen-closed"},
+    "execute in minecraft:overworld run forceload remove 64 0 79 15"
+  ]
+}

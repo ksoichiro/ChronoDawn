@@ -24,6 +24,9 @@ DEFAULT_IGNORES = [
     # which is exactly what an upgrade does.
     r"version differences",
     r"RCON",
+    # Vanilla 26.x warns when the client's disconnect races the harness's
+    # server-side kick at the end of a session. Timing dependent, harmless.
+    r"handleDisconnection\(\) called twice",
     # The forward worldgen check force-generates 256 chunks at once.
     r"Can't keep up! Is the server overloaded\?",
 ]
