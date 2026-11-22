@@ -135,7 +135,9 @@ Two step types act in the client instead of over RCON:
 - `{"screen": "regex", "check": "id", "timeout": 10}` waits until the title
   of the open screen matches. A screen with an empty title, or no screen,
   matches `^$`. Without `check` a mismatch is `SETUP FAILED`, as for a
-  command.
+  command. The loading screen shown after a teleport into another dimension
+  also has an empty title, so `^$` does not wait for it. Add a `sleep` of a
+  few seconds after such a teleport before an `input` step.
 
 Spectators cannot use or attack, so switch the player first with
 `"gamemode creative ${player}"` (or `survival`). Aim by teleporting the
