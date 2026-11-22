@@ -252,7 +252,8 @@ public final class ConfigLoader {
             parseStructure(parsed, ManagedStructure.CLOCKWORK_DEPTHS),
             parseStructure(parsed, ManagedStructure.PHANTOM_CATACOMBS),
             parseStructure(parsed, ManagedStructure.ENTROPY_CRYPT),
-            parseStructure(parsed, ManagedStructure.MASTER_CLOCK)
+            parseStructure(parsed, ManagedStructure.MASTER_CLOCK),
+            parseStructure(parsed, ManagedStructure.SENTINEL_OUTPOST)
         );
     }
 

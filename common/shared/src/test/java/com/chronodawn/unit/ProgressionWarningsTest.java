@@ -42,7 +42,8 @@ class ProgressionWarningsTest {
             d.clockworkDepths(),
             d.phantomCatacombs(),
             disable(d.entropyCrypt(), entropyCrypt),
-            disable(d.masterClock(), masterClock)
+            disable(d.masterClock(), masterClock),
+            d.sentinelOutpost()
         );
     }
 

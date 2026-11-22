@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "chronodawn:sentinel_outpost",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 1405827319,
+    "spacing": 36,
+    "separation": 14
+  }
+}

@@ -164,6 +164,7 @@
   "item.chronodawn.time_compass.target.clockwork_depths": "時計仕掛けの深淵",
   "item.chronodawn.time_compass.target.entropy_crypt": "エントロピーの地下墓地",
   "item.chronodawn.time_compass.target.unknown": "不明な構造物",
+  "item.chronodawn.time_compass.target.sentinel_outpost": "番兵の前哨基地",
   "item.chronodawn.time_compass.located": "%s を座標 (%d, %d) に発見！- %dブロック先 %s",
   "item.chronodawn.time_compass.current_location": "%s: (%d, %d) | 現在地: (%d, %d) - %dブロック先 %s",
   "item.chronodawn.time_compass.not_found": "%s が検索範囲内で見つかりませんでした",
