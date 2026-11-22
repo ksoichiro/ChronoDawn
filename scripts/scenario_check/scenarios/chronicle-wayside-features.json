@@ -1,0 +1,28 @@
+{
+  "description": "A player opens the Chronicle, clicks the Getting Started category to collapse it, the Structures category to expand it, and the Wayside Features entry, then turns its pages with the next page button. Checks that the category and entry clicks work and that the entry text fits its pages. Coordinates are GUI-scaled, relative to the screen center: the category list starts at x -150, y -110 with a 20 high title, 20 high categories and 18 high entries, and the page buttons sit at the bottom of the right page.",
+  "steps": [
+    "gamemode creative ${player}",
+    "clear ${player}",
+    "give ${player} chronodawn:chronicle_book",
+    "execute in minecraft:overworld run tp ${player} 0.5 200 0.5 0 -90",
+    {"sleep": 2},
+    {"input": "use"},
+    {"screen": "Chronicle of Chrono Dawn", "check": "chronicle-opened"},
+    {"click": [-100, -80]},
+    {"click": [-100, -40]},
+    {"shot": "structures-expanded", "wait": 1, "note": "The Chronicle with the Getting Started category collapsed and the Structures category expanded: its eight entries are listed under it, Wayside Features among them."},
+    {"click": [-100, 87]},
+    {"shot": "wayside-page-1", "wait": 1, "note": "The Wayside Features entry is open on the right page. Its first page reads 'Between the great structures, small landmarks dot the land' and fits the page with no cut-off lines."},
+    {"click": [133, 101]},
+    {"click": [133, 101]},
+    {"click": [133, 101]},
+    {"shot": "wayside-page-4", "wait": 1, "note": "Wayside Features after three page turns: the Time Well page. All of its text fits the page and none of it runs into the page buttons."},
+    {"click": [133, 101]},
+    {"click": [133, 101]},
+    {"click": [133, 101]},
+    {"click": [133, 101]},
+    {"shot": "wayside-last-page", "wait": 1, "note": "The last page of Wayside Features. The text fits and the next page button is gone."},
+    {"input": "close"},
+    {"screen": "^$", "check": "chronicle-closed"}
+  ]
+}

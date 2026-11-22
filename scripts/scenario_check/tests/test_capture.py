@@ -66,6 +66,12 @@ class TakeTest(unittest.TestCase):
             with self.assertRaisesRegex(capture.CaptureError, "Couldn't save screenshot"):
                 capture.take(self.request_dir, "front", self.dir / "front.png", timeout=5)
 
+    def test_operation_arguments_stay_out_of_the_file_name(self):
+        client = capture.Client(self.request_dir, timeout=5)
+        with FakeAgent(self.request_dir) as agent:
+            self.assertEqual(client("click -100 20 0"), "did click -100 20 0")
+        self.assertEqual(agent.operations, ["click -100 20 0"])
+
     def test_times_out_without_an_agent(self):
         with self.assertRaisesRegex(capture.CaptureError, "no screenshot"):
             capture.take(self.request_dir, "front", self.dir / "front.png", timeout=0.3)

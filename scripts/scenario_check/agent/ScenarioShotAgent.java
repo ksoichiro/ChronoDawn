@@ -30,6 +30,15 @@ import java.util.function.Consumer;
  *   <li>{@code close}: close the open screen, telling the server when it is a
  *       container screen.</li>
  *   <li>{@code screen}: report the title of the open screen, empty when none.</li>
+ *   <li>{@code click <dx> <dy> [button]}: click inside the open screen at
+ *       GUI-scaled coordinates relative to the screen center (button 0 is
+ *       left, the default), for buttons and lists.</li>
+ *   <li>{@code slot <index> [button] [pickup|quick_move]}: click a slot of the
+ *       open container (a shift-click with quick_move), the way the game sends it.</li>
+ *   <li>{@code hover <dx> <dy>}, {@code hover_slot <index>}: park the mouse
+ *       there so the next frame draws the tooltip.</li>
+ *   <li>{@code scroll <dx> <dy> <amount>}: scroll the wheel there, positive
+ *       amounts scroll up.</li>
  * </ul>
  * The agent deletes the request, runs it on the render thread, and writes
  * {@code <dir>/<name>.done} with the result. A result starting with
@@ -201,12 +210,15 @@ public final class ScenarioShotAgent {
             // where the framebuffer can be read and input is handled.
             ((Executor) minecraft).execute(() -> {
                 try {
-                    switch (operation) {
+                    String[] args = operation.split("\\s+");
+                    switch (args[0]) {
                         case "", "shot" -> shoot(dir, name);
                         case "use" -> writeDone(dir, name, click(keyUse));
                         case "attack" -> writeDone(dir, name, click(keyAttack));
                         case "close" -> writeDone(dir, name, close());
                         case "screen" -> writeDone(dir, name, title());
+                        case "click", "slot", "hover", "hover_slot", "scroll" ->
+                                writeDone(dir, name, screenInput(args));
                         default -> writeDone(dir, name, "error: unknown operation " + operation);
                     }
                 } catch (Throwable t) {
@@ -252,10 +264,183 @@ public final class ScenarioShotAgent {
             return "ok";
         }
 
+        /**
+         * Input inside an open screen. These names are looked up when first
+         * used, because Minecraft 26.x changed the click methods and only the
+         * 1.21.1 shape is supported.
+         */
+        private String screenInput(String[] args) throws ReflectiveOperationException {
+            Object localPlayer = player.get(minecraft);
+            Object current = screen.get(minecraft);
+            if (localPlayer == null || current == null) {
+                return "error: no screen is open";
+            }
+            Class<?> screenClass = current.getClass();
+            Class<?> minecraftClass = minecraft.getClass();
+            Object window = lookup(minecraftClass, "getWindow", "method_22683").invoke(minecraft);
+            Class<?> windowClass = window.getClass();
+            int guiWidth = (int) lookup(windowClass, "getGuiScaledWidth", "method_4486").invoke(window);
+            int guiHeight = (int) lookup(windowClass, "getGuiScaledHeight", "method_4502").invoke(window);
+            String op = args[0];
+            double x;
+            double y;
+            if (op.equals("slot")) {
+                return slotClick(localPlayer, args);
+            }
+            if (op.equals("hover_slot")) {
+                Object slot = slotAt(localPlayer, Integer.parseInt(args[1]));
+                Class<?> container = containerScreen(current);
+                if (container == null) {
+                    return "error: the open screen is not a container screen";
+                }
+                x = intField(container, current, "leftPos", "field_2776")
+                        + (int) slotField(slot, "x", "field_7873") + 8;
+                y = intField(container, current, "topPos", "field_2800")
+                        + (int) slotField(slot, "y", "field_7872") + 8;
+            } else {
+                x = guiWidth / 2.0 + Double.parseDouble(args[1]);
+                y = guiHeight / 2.0 + Double.parseDouble(args[2]);
+            }
+            switch (op) {
+                case "click" -> {
+                    int button = args.length > 3 ? Integer.parseInt(args[3]) : 0;
+                    Method clicked = lookup(screenClass, "mouseClicked", "method_25402", double.class, double.class, int.class);
+                    Method released = lookup(screenClass, "mouseReleased", "method_25406", double.class, double.class, int.class);
+                    boolean handled = (boolean) clicked.invoke(current, x, y, button);
+                    released.invoke(current, x, y, button);
+                    return handled ? "ok" : "error: nothing at " + args[1] + " " + args[2] + " took the click";
+                }
+                case "scroll" -> {
+                    Method scrolled = lookup(screenClass, "mouseScrolled", "method_25401",
+                            double.class, double.class, double.class, double.class);
+                    boolean handled = (boolean) scrolled.invoke(current, x, y, 0.0, Double.parseDouble(args[3]));
+                    return handled ? "ok" : "error: nothing at " + args[1] + " " + args[2] + " scrolled";
+                }
+                default -> {
+                    // The game draws the tooltip for the position its mouse handler holds.
+                    int screenWidth = (int) lookup(windowClass, "getScreenWidth", "method_4480").invoke(window);
+                    double scale = (double) screenWidth / guiWidth;
+                    Object mouse = fieldOf(minecraftClass, "mouseHandler", "field_1729").get(minecraft);
+                    setDouble(mouse, "xpos", "field_1795", x * scale);
+                    setDouble(mouse, "ypos", "field_1794", y * scale);
+                    lookup(screenClass, "mouseMoved", "method_16014", double.class, double.class)
+                            .invoke(current, x, y);
+                    return "ok";
+                }
+            }
+        }
+
+        private String slotClick(Object localPlayer, String[] args) throws ReflectiveOperationException {
+            int index = Integer.parseInt(args[1]);
+            int button = args.length > 2 ? Integer.parseInt(args[2]) : 0;
+            String action = args.length > 3 ? args[3] : "pickup";
+            Object menu = fieldOf(localPlayer.getClass(), "containerMenu", "field_7512").get(localPlayer);
+            slotAt(localPlayer, index);
+            int containerId = (int) fieldOf(menu.getClass(), "containerId", "field_7763").get(menu);
+            Object gameMode = fieldOf(minecraft.getClass(), "gameMode", "field_1761").get(minecraft);
+            Method handle = null;
+            for (Method candidate : gameMode.getClass().getMethods()) {
+                Class<?>[] types = candidate.getParameterTypes();
+                if ((candidate.getName().equals("handleInventoryMouseClick") || candidate.getName().equals("method_2906"))
+                        && types.length == 5 && types[3].isEnum()) {
+                    handle = candidate;
+                }
+            }
+            if (handle == null) {
+                return "error: no handleInventoryMouseClick on this version";
+            }
+            // PICKUP and QUICK_MOVE are the first two constants of ClickType.
+            int ordinal = switch (action) {
+                case "pickup" -> 0;
+                case "quick_move" -> 1;
+                default -> -1;
+            };
+            if (ordinal < 0) {
+                return "error: unknown slot action " + action;
+            }
+            handle.invoke(gameMode, containerId, index, button,
+                    handle.getParameterTypes()[3].getEnumConstants()[ordinal], localPlayer);
+            return "ok";
+        }
+
+        private Object slotAt(Object localPlayer, int index) throws ReflectiveOperationException {
+            Object menu = fieldOf(localPlayer.getClass(), "containerMenu", "field_7512").get(localPlayer);
+            return lookup(menu.getClass(), "getSlot", "method_7611", int.class).invoke(menu, index);
+        }
+
         private String title() throws ReflectiveOperationException {
             Object current = screen.get(minecraft);
             return current == null ? "" : text(getTitle.invoke(current));
         }
+    }
+
+    /** The AbstractContainerScreen class in the chain, or null for other screens. */
+    private static Class<?> containerScreen(Object screen) {
+        for (Class<?> c = screen.getClass(); c != null; c = c.getSuperclass()) {
+            for (String name : new String[] {"leftPos", "field_2776"}) {
+                try {
+                    c.getDeclaredField(name);
+                    return c;
+                } catch (NoSuchFieldException ignored) {
+                    // try the next name
+                }
+            }
+        }
+        return null;
+    }
+
+    private static Method lookup(Class<?> owner, String mojang, String intermediary, Class<?>... parameters)
+            throws NoSuchMethodException {
+        for (Class<?> c = owner; c != null; c = c.getSuperclass()) {
+            for (String name : new String[] {mojang, intermediary}) {
+                try {
+                    Method method = c.getDeclaredMethod(name, parameters);
+                    method.setAccessible(true);
+                    return method;
+                } catch (NoSuchMethodException ignored) {
+                    // try the next name or class
+                }
+            }
+        }
+        for (Class<?> c = owner; c != null; c = c.getSuperclass()) {
+            for (Class<?> type : c.getInterfaces()) {
+                try {
+                    return lookup(type, mojang, intermediary, parameters);
+                } catch (NoSuchMethodException ignored) {
+                    // try the next interface
+                }
+            }
+        }
+        throw new NoSuchMethodException(mojang + "/" + intermediary + " on " + owner.getName());
+    }
+
+    private static Field fieldOf(Class<?> owner, String mojang, String intermediary) throws NoSuchFieldException {
+        for (Class<?> c = owner; c != null; c = c.getSuperclass()) {
+            for (String name : new String[] {mojang, intermediary}) {
+                try {
+                    Field field = c.getDeclaredField(name);
+                    field.setAccessible(true);
+                    return field;
+                } catch (NoSuchFieldException ignored) {
+                    // try the next name or class
+                }
+            }
+        }
+        throw new NoSuchFieldException(mojang + "/" + intermediary + " on " + owner.getName());
+    }
+
+    private static int intField(Class<?> owner, Object target, String mojang, String intermediary)
+            throws ReflectiveOperationException {
+        return (int) fieldOf(owner, mojang, intermediary).get(target);
+    }
+
+    private static int slotField(Object slot, String mojang, String intermediary) throws ReflectiveOperationException {
+        return intField(slot.getClass(), slot, mojang, intermediary);
+    }
+
+    private static void setDouble(Object target, String mojang, String intermediary, double value)
+            throws ReflectiveOperationException {
+        fieldOf(target.getClass(), mojang, intermediary).setDouble(target, value);
     }
 
     private static String text(Object message) {

@@ -39,6 +39,22 @@ Each step is one of:
                                  screen). check and the outcome work as for a
                                  command with match and await.
 
+- {"click": [dx, dy], "button": 0}
+                                 Click inside the open screen at GUI-scaled
+                                 coordinates relative to the screen center (x to
+                                 the right, y down), for buttons and lists. The
+                                 step fails if nothing took the click.
+- {"slot": 2, "button": 0, "action": "pickup"}
+                                 Click a slot of the open container as the game
+                                 does. "quick_move" is a shift-click. Slot
+                                 indexes are the menu's, for example 2 is the
+                                 result of a trader or a crafting table.
+- {"hover": [dx, dy]} or {"hover_slot": 5}
+                                 Park the mouse over a point or a slot so the next
+                                 shot shows its tooltip.
+- {"scroll": [dx, dy], "amount": -5}
+                                 Scroll the wheel there (positive scrolls up).
+
 Commands and notes may use ${name} for captured variables and ${player} for
 the test player's name. Every reply is written to the transcript.
 """
@@ -98,7 +114,38 @@ _STEP_KEYS = {
     "shot": {"shot", "wait", "note"},
     "input": {"input"},
     "screen": {"screen", "check", "timeout"},
+    "click": {"click", "button"},
+    "slot": {"slot", "button", "action"},
+    "hover": {"hover"},
+    "hover_slot": {"hover_slot"},
+    "scroll": {"scroll", "amount"},
 }
+SLOT_ACTIONS = ("pickup", "quick_move")
+SCREEN_OPERATIONS = ("click", "slot", "hover", "hover_slot", "scroll")
+
+
+def _is_int(value):
+    return isinstance(value, int) and not isinstance(value, bool)
+
+
+def _is_number(value):
+    return isinstance(value, (int, float)) and not isinstance(value, bool)
+
+
+def _screen_operation(step):
+    """The line the agent reads for a click, slot, hover or scroll step."""
+    if "click" in step:
+        dx, dy = step["click"]
+        return f"click {dx} {dy} {step.get('button', 0)}"
+    if "slot" in step:
+        return f"slot {step['slot']} {step.get('button', 0)} {step.get('action', 'pickup')}"
+    if "hover" in step:
+        dx, dy = step["hover"]
+        return f"hover {dx} {dy}"
+    if "hover_slot" in step:
+        return f"hover_slot {step['hover_slot']}"
+    dx, dy = step["scroll"]
+    return f"scroll {dx} {dy} {step['amount']}"
 
 
 def _validate_step(name, index, step):
@@ -115,6 +162,18 @@ def _validate_step(name, index, step):
         raise ScenarioError(f"{where}: unknown keys {sorted(unknown)}")
     if kinds[0] == "input" and step["input"] not in INPUTS:
         raise ScenarioError(f"{where}: input is one of {list(INPUTS)}, got {step['input']!r}")
+    if kinds[0] in ("click", "hover", "scroll"):
+        point = step[kinds[0]]
+        if not (isinstance(point, list) and len(point) == 2 and all(_is_number(v) for v in point)):
+            raise ScenarioError(f"{where}: {kinds[0]} is [dx, dy] relative to the screen center, got {point!r}")
+    if kinds[0] == "scroll" and not _is_number(step.get("amount")):
+        raise ScenarioError(f"{where}: scroll needs a numeric amount")
+    if kinds[0] in ("slot", "hover_slot") and not _is_int(step[kinds[0]]):
+        raise ScenarioError(f"{where}: {kinds[0]} is a slot index, got {step[kinds[0]]!r}")
+    if "button" in step and not _is_int(step["button"]):
+        raise ScenarioError(f"{where}: button is a mouse button number, got {step['button']!r}")
+    if kinds[0] == "slot" and step.get("action", "pickup") not in SLOT_ACTIONS:
+        raise ScenarioError(f"{where}: action is one of {list(SLOT_ACTIONS)}, got {step['action']!r}")
     if kinds[0] == "screen":
         try:
             re.compile(step["screen"])
@@ -231,6 +290,13 @@ class Runner:
         if "screen" in step:
             self._screen_step(name, step, outcome)
             return
+        for kind in SCREEN_OPERATIONS:
+            if kind in step:
+                operation = _screen_operation(step)
+                answer = self._client(operation, outcome)
+                if answer.startswith("error:"):
+                    raise StepFailed("SETUP FAILED", f"{operation!r} -> {answer!r}")
+                return
         self._command_step(name, step, variables, outcome)
 
     def _client(self, operation, outcome):
