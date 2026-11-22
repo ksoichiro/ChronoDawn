@@ -12,7 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **More varied terrain in Chrono Dawn**: inland plains and similar flat
   biomes now get rolling hills, and the mountains get steeper ridges and
   broader, higher massifs. Only newly generated chunks change, so an existing
-  world can show a small step at the border between old and new terrain.
+  world can show steep cliffs along the border between old and new terrain.
+  New worlds are not affected.
 - **Rocky mountain slopes**: steep slopes in the Chrono Dawn
   mountain biome now expose Temporal Stone in newly generated terrain.
 
