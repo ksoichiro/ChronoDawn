@@ -50,8 +50,10 @@ the screen is locked or other windows cover the game window. Both loaders
 were checked on a locked Mac.
 
 The same agent also acts as the player. It clicks the game's own use and
-attack key mappings and reads the title of the open screen, so player input
-needs no Accessibility permission either and works on a locked Mac.
+attack key mappings, reads the title of the open screen, and clicks, scrolls
+and hovers inside it, so player input needs no Accessibility permission
+either and works on a locked Mac. Screen input is supported on 1.21.1 only:
+26.x changed the click methods.
 
 The agent calls Minecraft by name: Mojang names on NeoForge and intermediary
 names on Fabric 1.21.1. Minecraft 26.x is unobfuscated, so both loaders use
@@ -88,7 +90,7 @@ first-pass image check flags a screenshot.
 3. The agent attaches `sheet.png` to the PR or the task and keeps working
    through the PR. It does not wait for the owner.
 4. The owner answers OK or NG for each shot when they review the PR. Checks
-   a scenario cannot cover (typing or clicking inside a GUI screen, held or
+   a scenario cannot cover (typing, key presses, dragging, held or
    repeated input such as mining in survival, other Minecraft versions) are
    listed in the PR as manual checks.
 
@@ -140,7 +142,7 @@ rules for keeping a new scenario fast and what each condition is for.
 
 ### Player input and screens
 
-Two step types act in the client instead of over RCON:
+These step types act in the client instead of over RCON:
 
 - `{"input": "use"}` clicks the right mouse button once, `{"input": "attack"}`
   the left one. The game acts on whatever the crosshair points at in its next
@@ -160,6 +162,28 @@ Two step types act in the client instead of over RCON:
   `SETUP FAILED`. `sapling-root-dirt` uses it to bone-meal each sapling until
   the tree grows, instead of a fixed number of clicks.
 
+- `{"click": [dx, dy], "button": 0}` clicks inside the open screen. The
+  coordinates are GUI-scaled and relative to the screen center (x right, y
+  down), so they do not depend on the window size. The step fails when
+  nothing took the click.
+- `{"slot": 2, "button": 0, "action": "pickup"}` clicks a slot of the open
+  container the way the game sends it. `"action": "quick_move"` is a
+  shift-click. Use the menu's slot indexes: for a crafting table 0 is the
+  result, 1-9 the grid, 10-36 the inventory and 37-45 the hotbar (`give` fills
+  the hotbar first). For a trader 0-1 are the payment slots and 2 the result.
+  Selecting a trade offer moves the matching items into the payment slots.
+- `{"hover": [dx, dy]}` and `{"hover_slot": 37}` park the mouse over a point
+  or a slot. A `shot` after it shows the tooltip.
+- `{"scroll": [dx, dy], "amount": -20}` turns the mouse wheel there
+  (positive scrolls up). A trader's offer list scrolls to the bottom with a
+  large negative amount.
+
+To click a list, work out the positions from the screen's code and check them
+on a shot. `chronicle-wayside-features.json` explains the Chronicle layout in
+its description, and a trader's offer buttons are 20 high from y -56 at x -90.
+There is no step for a key press, so open a container screen by using a block
+or entity, and use a crafting table to show the inventory.
+
 Spectators cannot use or attack, so switch the player first with
 `"gamemode creative ${player}"` (or `survival`). Aim by teleporting the
 player to a spot within reach (about 3 blocks for entities in survival) with
@@ -175,6 +199,9 @@ the hotbar and hearts show in the shots.
 `time-keeper-trade.json` is the worked example: it summons a Time Keeper
 with no AI, right-clicks it, checks that a screen titled Time Keeper opened,
 takes a shot of the trading screen, and closes it.
+`time-keeper-chronite-trade.json` goes on to scroll the offers, select one,
+and shift-click the result, then checks the inventory with `clear <player>
+<item> 0` (its reply is `Found N matching item(s)` or `No items were found`).
 
 Before every scenario the driver turns off command feedback, the daylight and
 weather cycles, and advancement announcements, turns mob spawning on, sets
@@ -207,6 +234,10 @@ names you need with `-Pscenario_check_scenarios` to check one change quickly.
 | `sapling-root-dirt` | Bone meal grows the three saplings; the block under the trunk in Chrono Dawn and in the Overworld |
 | `wolf-spawn-forest`, `wolf-spawn-dark-forest` | Wolves generate in the biome. The forest one also checks that Temporal Grass is in `minecraft:wolves_spawnable_on` |
 | `time-keeper-trade` | Right-clicking a Time Keeper opens its trading screen |
+| `time-keeper-chronite-trade` | The Chronite Shard buy-back trades (Emerald, Clockstone) complete in the trading screen |
+| `daylight-detector-craft` | The Chronite Daylight Detector recipe crafts at a crafting table |
+| `chronicle-wayside-features` | Chronicle category and entry clicks, and the Wayside Features pages with the next page button |
+| `cairn-stone-tooltip` | The Cairn Stone tooltip (name and two lore lines) on hover |
 | `time-keeper-village` | The village placed near the first entry into Chrono Dawn |
 | `plains-surface`, `mountain-surface` | The surface of the Plains and Mountain biomes |
 | `forgotten-library` | `/locate` speed for the Forgotten Library, and a shot of it from above |
@@ -217,7 +248,7 @@ Dawn in a world, so every scenario that goes there enters at `0 0` first.
 Otherwise the scenario that runs first decides where the village goes, and it
 can land on the structure another scenario looks at. Scenarios that place
 blocks use separate areas: overworld x 0-15 (`polished-stones`), 16-31
-(`time-keeper-trade`), 48-63 (`wolf-spawn-forest`), and x 196 to 247, z -4 to 47 in both dimensions
+(`time-keeper-trade`, `time-keeper-chronite-trade`), 32-47 (`daylight-detector-craft`), 48-63 (`wolf-spawn-forest`), 64-79 (`cairn-stone-tooltip`), and x 196 to 247, z -4 to 47 in both dimensions
 (`sapling-root-dirt`).
 
 ## Limits
@@ -234,5 +265,6 @@ blocks use separate areas: overworld x 0-15 (`polished-stones`), 16-31
   instead.
 - Toasts (advancements, recipes) can appear in the top-right corner.
 - Input is one click at a time. Holding a button (mining in survival,
-  drawing a bow), moving, typing, and clicking slots inside a screen are not
-  supported.
+  drawing a bow), moving, typing, key presses and dragging are not supported.
+  Clicks, slot clicks, scrolling and hovering inside a screen work on 1.21.1
+  only. 26.3 answers `error:` for them until its click methods are mapped.

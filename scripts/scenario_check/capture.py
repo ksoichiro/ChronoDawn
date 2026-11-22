@@ -90,7 +90,7 @@ def take(request_dir: Path, name: str, out_file: Path, alive=lambda: True, timeo
 
 
 class Client:
-    """Sends input operations (use, attack, close, screen) to the agent."""
+    """Sends input operations (use, attack, close, screen, click, slot, hover, scroll) to the agent."""
 
     def __init__(self, request_dir: Path, alive=lambda: True, timeout=REQUEST_TIMEOUT):
         self.request_dir = request_dir
@@ -100,5 +100,6 @@ class Client:
         self._ids = itertools.count(1)
 
     def __call__(self, operation: str) -> str:
-        name = f"~{operation}-{next(self._ids)}"
+        # Only the operation word goes into the file name, not its arguments.
+        name = f"~{operation.split()[0]}-{next(self._ids)}"
         return request(self.request_dir, name, operation, self.alive, self.timeout, f"answer to {operation!r}")

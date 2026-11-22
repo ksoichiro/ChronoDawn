@@ -115,6 +115,20 @@ class LoadTest(unittest.TestCase):
             {"screen": "Time Keeper", "check": "opened", "timeout": 5}]}))
         self.assertEqual(len(scenario.steps), 4)
 
+    def test_accepts_screen_operation_steps(self):
+        scenario = load_scenario(self._write({"steps": [
+            {"click": [-100, 20]}, {"click": [1, 2], "button": 1},
+            {"slot": 2, "action": "quick_move"}, {"slot": 0, "button": 1},
+            {"hover": [0, 0]}, {"hover_slot": 5}, {"scroll": [-100, 0], "amount": -5}]}))
+        self.assertEqual(len(scenario.steps), 7)
+
+    def test_rejects_bad_screen_operation_steps(self):
+        for step in ({"click": [1]}, {"click": "1 2"}, {"slot": "2"}, {"slot": 2, "action": "throw"},
+                     {"hover_slot": 1.5}, {"scroll": [0, 0]}, {"click": [0, 0], "button": "left"},
+                     {"slot": 1, "match": "x"}):
+            with self.subTest(step=step), self.assertRaises(ScenarioError):
+                load_scenario(self._write({"steps": [step]}))
+
     def test_rejects_unknown_input(self):
         with self.assertRaises(ScenarioError):
             load_scenario(self._write({"steps": [{"input": "jump"}]}))
@@ -337,6 +351,22 @@ class SettleTest(unittest.TestCase):
 
 
 class ScreenStepTest(unittest.TestCase):
+    def test_screen_operations_are_sent_as_lines(self):
+        client = FakeClient()
+        steps = [{"click": [-100, 20]}, {"click": [1, 2], "button": 1}, {"slot": 2, "action": "quick_move"},
+                 {"slot": 4}, {"hover": [3, 4]}, {"hover_slot": 5}, {"scroll": [-100, 0], "amount": -5}]
+        outcome = _runner(FakeRcon({}), client=client).run(Scenario("s", "", steps))
+        self.assertEqual(client.sent, ["click -100 20 0", "click 1 2 1", "slot 2 0 quick_move", "slot 4 0 pickup",
+                                       "hover 3 4", "hover_slot 5", "scroll -100 0 -5"])
+        self.assertEqual(outcome.results, [])
+
+    def test_screen_operation_error_stops_the_scenario(self):
+        rcon = FakeRcon({})
+        client = FakeClient(errors=["slot 2 0 pickup"])
+        outcome = _runner(rcon, client=client).run(Scenario("s", "", [{"slot": 2}, "say never"]))
+        self.assertEqual(outcome.results[0][0], "SETUP FAILED")
+        self.assertNotIn("say never", rcon.sent)
+
     def test_screen_waits_until_title_matches(self):
         client = FakeClient(screens=["", "", "Time Keeper"])
         outcome = _runner(FakeRcon({}), client=client).run(
