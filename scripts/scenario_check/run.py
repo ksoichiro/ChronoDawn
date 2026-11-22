@@ -6,6 +6,7 @@ prepareUpgradeTest writes. See docs/scenario_check.md.
 
 import argparse
 import json
+import re
 import shutil
 import subprocess
 import sys
@@ -52,6 +53,11 @@ PREAMBLE = [
     f"gamemode spectator {PLAYER}",
     f"execute in minecraft:overworld run tp {PLAYER} 0 120 0 0 30",
 ]
+
+
+# The server rejects the client's position update that races a scenario's
+# teleport (most often across dimensions). The harness causes it, not the mod.
+HARNESS_LOG_NOISE = re.compile(r"moved too quickly!")
 
 
 class PermissionMissing(Exception):
@@ -159,7 +165,9 @@ def run(env, scenarios, candidate_jar, out_dir, ports):
     sheet = images.contact_sheet(all_shots, out_dir / "sheet.png", f"scenarioCheck {env.loader} 1.21.1, "
                                  f"{candidate_jar.name}") if all_shots else None
 
-    server_problems = logcheck.check_server_log(out_dir / "scenario-server.log", env.log_ignore_file)
+    server_problems = [line for line in logcheck.check_server_log(out_dir / "scenario-server.log",
+                                                                  env.log_ignore_file)
+                       if not HARNESS_LOG_NOISE.search(line)]
     results.append(("FAIL" if server_problems else "PASS", "server-log", "\n  ".join(server_problems[:30])))
     client_problems = logcheck.check_client_log(out_dir / "scenario-client.log", client_dir, env.log_ignore_file)
     results.append(("FAIL" if client_problems else "PASS", "client-log", "\n  ".join(client_problems[:30])))

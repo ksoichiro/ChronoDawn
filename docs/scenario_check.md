@@ -33,6 +33,11 @@ runs Gradle needs the Screen Recording permission (System Settings > Privacy &
 Security > Screen & System Audio Recording). That is the terminal or IDE, or
 for an agent session the process at the top of its process tree (for example
 `~/.local/bin/fuda`). macOS applies a new grant only after that app restarts.
+For an agent host, that means restarting both the daemon and the session.
+To see which process macOS checks and what it decided, run `screencapture`
+once, then read `log show --last 10s --predicate 'subsystem ==
+"com.apple.TCC"' | grep -E "AUTHREQ_(ATTRIBUTION|RESULT)"`: `responsible=` names
+the process that needs the grant, and `authValue=2` means allowed.
 The driver probes the permission before booting anything and stops with a
 message when it is missing.
 
