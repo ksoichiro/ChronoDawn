@@ -55,6 +55,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Boss rooms generated far from the player could be left unprotected**: a
+  boss room whose chunks were generated at the edge of the loaded area and
+  stayed unloaded for more than five minutes lost its protection, so the room
+  could be broken before the boss was defeated. The protection is now
+  registered without waiting for the chunks to load. Rooms in already
+  generated areas stay unprotected.
 - **Time Keeper Village no longer sits on top of other structures**: when you
   first entered Chrono Dawn near a structure with a flat roof, such as the
   Forgotten Library, the village could be placed on that roof. Spots that
