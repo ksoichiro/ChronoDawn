@@ -89,7 +89,6 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
     // Track last cleanup time to prevent memory leak from orphaned markers
     private static long lastCleanupTime = System.currentTimeMillis();
     private static final long CLEANUP_INTERVAL_MS = 60000; // Clean up every 60 seconds
-    private static final long MARKER_EXPIRY_MS = 300000; // Expire markers after 5 minutes
 
     // placementIds whose "min marker without max marker" warning was already logged.
     // registerPendingProtections runs every 100 ticks and keeps such markers pending,
@@ -226,10 +225,10 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
             return;
         }
 
-        // Cleanup expired markers periodically to prevent memory leak
+        // Periodically forget warned placements that are no longer pending
         long currentTime = System.currentTimeMillis();
         if (currentTime - lastCleanupTime > CLEANUP_INTERVAL_MS) {
-            cleanupExpiredMarkers(currentTime);
+            cleanupWarnedPlacements();
             lastCleanupTime = currentTime;
         }
 
@@ -240,25 +239,12 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
         List<MarkerData> permanentMinMarkers = new ArrayList<>();
         List<MarkerData> permanentMaxMarkers = new ArrayList<>();
 
-        // Optimization: Batch process to limit work per tick
-        int processedCount = 0;
-        final int MAX_PROCESS_PER_CALL = 20; // Limit processing to prevent lag
-
+        // Do not skip markers in unloaded chunks and do not cap the count per call.
+        // Registering a protected area only stores a bounding box, so it needs no loaded chunk.
+        // The marker block was already replaced at generation time, so a marker that is
+        // never registered leaves its boss room unprotected for good.
         for (var entry : PENDING_MARKERS.entrySet()) {
-            // Limit work per call to prevent lag spikes
-            if (processedCount >= MAX_PROCESS_PER_CALL) {
-                break;
-            }
-
             MarkerData marker = entry.getValue();
-
-            // Quick check: Is chunk loaded in this dimension?
-            // This is faster than full hasChunkAt() as it checks the chunk map cache
-            if (!level.hasChunk(marker.pos.getX() >> 4, marker.pos.getZ() >> 4)) {
-                continue;
-            }
-
-            processedCount++;
 
             // Separate by type and min/max
             if (marker.isPermanent) {
@@ -515,37 +501,14 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
     }
 
     /**
-     * Clean up expired markers to prevent memory leak.
-     * Removes markers that have been pending for more than MARKER_EXPIRY_MS milliseconds.
+     * Forget warned placements that no longer have pending markers.
      *
-     * @param currentTime Current system time in milliseconds
+     * Pending markers are never dropped by age. A lone marker waits for its partner, which
+     * can be generated much later when the structure straddles chunks that stay ungenerated
+     * for a long time. Dropping it would leave the boss room unprotected, because the marker
+     * block itself is already replaced. Registered pairs are removed from the map right away.
      */
-    private static void cleanupExpiredMarkers(long currentTime) {
-        int removedCount = 0;
-        Iterator<Map.Entry<BlockPos, MarkerData>> iterator = PENDING_MARKERS.entrySet().iterator();
-
-        while (iterator.hasNext()) {
-            Map.Entry<BlockPos, MarkerData> entry = iterator.next();
-            MarkerData marker = entry.getValue();
-
-            long age = currentTime - marker.addedTime;
-            if (age > MARKER_EXPIRY_MS) {
-                ChronoDawn.LOGGER.debug("Removing expired marker at {} (placementId={}, age={}s, type={})",
-                    marker.pos, marker.placementId, age / 1000,
-                    marker.isPermanent ? "permanent" : "boss_room");
-                iterator.remove();
-                // Also remove from paired markers
-                PAIRED_MARKERS.remove(marker.pos);
-                removedCount++;
-            }
-        }
-
-        if (removedCount > 0) {
-            ChronoDawn.LOGGER.debug("Cleaned up {} expired boss room markers (older than {} seconds)",
-                removedCount, MARKER_EXPIRY_MS / 1000);
-        }
-
-        // Forget warned placements that no longer have pending markers
+    private static void cleanupWarnedPlacements() {
         Set<Long> pendingPlacementIds = new HashSet<>();
         for (MarkerData marker : PENDING_MARKERS.values()) {
             pendingPlacementIds.add(marker.placementId);

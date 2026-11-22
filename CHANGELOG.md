@@ -56,6 +56,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Boss rooms generated far from the player could be left unprotected**: a
+  boss room whose chunks were generated at the edge of the loaded area and
+  stayed unloaded for more than five minutes lost its protection, so the room
+  could be broken before the boss was defeated. The protection is now
+  registered without waiting for the chunks to load. Rooms in already
+  generated areas stay unprotected.
 - **Saplings grown in Chrono Dawn leave Temporal Dirt under the trunk**: a tree
   grown from a Time Wood, Dark Time Wood, or Ancient Time Wood sapling left
   vanilla dirt under its trunk even inside the Chrono Dawn dimension, unlike
