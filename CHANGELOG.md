@@ -67,6 +67,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   warnings, and searched a wide fixed area at every height instead. It now
   reads the bounds correctly, so it searches only the catacombs and logs
   nothing.
+- **Chrono Bovine and Temporal Caprid on NeoForge 1.21.4**: the client
+  registered no renderer or model for them. They now use the same renderer
+  as on the other versions.
 
 ## [0.17.1] - 2026-11-20
 

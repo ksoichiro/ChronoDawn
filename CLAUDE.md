@@ -221,6 +221,9 @@ such as `[94, 1]`, and verify both resource reload and server data loading.
 - `./gradlew validateData` - Check data-pack cross-references (tag entries → registered IDs, recipe references, 1.21.4+ client items coverage)
 - `./gradlew validateTranslations` - Cross-version translation key validation (entities, spawn eggs)
 - `./gradlew validateAll` - Every file-only validation that `checkAll` runs (`checkall_extra_tasks`). CI (`.github/workflows/ci.yml`) runs it with `-Plang_required_locales=en_us`, which turns missing non-English keys into warnings. The default in `gradle.properties` keeps `ja_jp` required for `checkAll` and releases. CI also passes `-Pvalidation_only=true`, which makes `settings.gradle` skip the version subprojects so Loom does not set up Minecraft. Validation tasks must therefore stay root-project, file-only tasks
+- `validateVersionSync` fails when per-version copies that `gradle/version-sync.lock` records as identical start to differ. Apply the change to every listed version. Only when a version must differ for an era-specific reason, run `./gradlew updateVersionSyncLock` and commit the lock. The Claude Code PostToolUse hook in `.claude/settings.json` prints the stale copies right after an edit
+- When a Minecraft rename breaks a version that CI does not build, add a rule to `scripts/era_symbol_rules.json` (`validateEraSymbols`) in the same change
+- `docs/bug_prevention.md` maps past bug classes to these checks and lists rejected checks. A new bug class goes there first. The pre-commit hook (`scripts/hooks/install.sh`, Git 2.54+) runs `validateAll`
 
 **Release**:
 - `./gradlew collectJars` - Collect release JARs from all versions into `build/release/`

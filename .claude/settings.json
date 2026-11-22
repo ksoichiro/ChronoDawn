@@ -37,5 +37,18 @@
       "WebFetch(domain:mcreator.net)",
       "WebFetch(domain:bugs.mojang.com)"
     ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/scripts/hooks/claude_version_sync_hint.py\""
+          }
+        ]
+      }
+    ]
   }
 }

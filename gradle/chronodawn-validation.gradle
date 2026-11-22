@@ -14,6 +14,13 @@
 //   validateEraTagParity            — minecraft: tags match across 1.20.1 / 1.21.1+
 //   validateRegistryLangCoverage    — block/item ID ↔ en_us display name
 //   validateMobEffectIcons          — mob effect ID ↔ textures/mob_effect icon
+//   validateVersionSync             — identical per-version copies stay identical
+//   validateEraSymbols              — era-renamed Java symbols per version
+//   validateBlockLootTables         — block ID ↔ loot table
+//   validateLoaderEntityRegistration — entity ↔ renderer/registration per loader
+//   validateMixinConfigs            — mixin config entries ↔ classes, no refmap
+//
+// docs/bug_prevention.md maps past bug classes to these tasks.
 //
 // All are registered in the 'verification' group so checkAll can pick them
 // up. Errors throw GradleException so the failing CI step is visible.
@@ -1144,6 +1151,418 @@ tasks.register('validateMobEffectIcons') {
         } else {
             errors.each { logger.error("  ERROR: ${it}") }
             throw new GradleException("Mob effect icon validation failed with ${errors.size()} error(s)")
+        }
+    }
+}
+
+// ============================================================
+// Helpers shared by the version-aware tasks below
+// ------------------------------------------------------------
+// Minecraft version directory names (1.21.10, 26.1.2) must be compared
+// numerically, not as strings.
+// ============================================================
+def mcVersionParts = { String v -> v.tokenize('.').collect { it as int } }
+def compareMcVersions = { String a, String b ->
+    def x = mcVersionParts(a)
+    def y = mcVersionParts(b)
+    for (int i = 0; i < Math.max(x.size(), y.size()); i++) {
+        int c = (i < x.size() ? x[i] : 0) <=> (i < y.size() ? y[i] : 0)
+        if (c != 0) return c
+    }
+    return 0
+}
+def versionDirsOf = { File topDir ->
+    (topDir.listFiles() ?: []).findAll { it.isDirectory() && it.name ==~ /\d.*/ }
+            .sort { a, b -> compareMcVersions(a.name, b.name) }
+}
+// common/shared and common/shared-<min>+ resource roots that apply to a version.
+def sharedRootsFor = { File commonDir, String version ->
+    (commonDir.listFiles() ?: []).findAll { File d ->
+        if (!d.isDirectory()) return false
+        if (d.name == 'shared') return true
+        def m = d.name =~ /^shared-([\d.]+)\+$/
+        return m.matches() && compareMcVersions(version, m.group(1)) >= 0
+    }
+}
+
+// ============================================================
+// Task: validateVersionSync / updateVersionSyncLock
+// ------------------------------------------------------------
+// Each Minecraft version has its own copy of many files under
+// common/<v>, fabric/<v> and neoforge/<v>. The most frequent class of
+// past bugs is a fix that reached only some of those copies: Clockstone
+// ore counts differing between versions, the 26.3 copies missing a batch of
+// fixes, attack-pose resets landing on 1.21.1 but not 1.20.1, and so on.
+//
+// For every relative path that exists in two or more version modules, the
+// lock file records which versions hold byte-identical copies. The task
+// fails when that grouping changes: copies that were identical now differ,
+// a new multi-version file appears, or a recorded file disappears. If the
+// divergence is intended (an era-specific API change), run
+// updateVersionSyncLock and commit the lock, so the split is a reviewed
+// decision instead of an accident.
+// ============================================================
+def versionSyncLockFile = file("${rootDir}/gradle/version-sync.lock")
+def versionSyncTops = ['common', 'fabric', 'neoforge', 'forge']
+
+def computeVersionSyncGroups = { ->
+    def result = new TreeMap<String, String>()
+    versionSyncTops.each { String top ->
+        def hashes = [:].withDefault { [:] }
+        versionDirsOf(file("${rootDir}/${top}")).each { File versionDir ->
+            def srcDir = new File(versionDir, 'src')
+            if (!srcDir.isDirectory()) return
+            srcDir.eachFileRecurse(groovy.io.FileType.FILES) { File f ->
+                if (f.name.startsWith('.')) return
+                def rel = srcDir.toPath().relativize(f.toPath()).toString().replace('\\', '/')
+                hashes[rel][versionDir.name] = java.security.MessageDigest.getInstance('SHA-1').digest(f.bytes).encodeHex().toString()
+            }
+        }
+        hashes.each { String rel, Map byVersion ->
+            if (byVersion.size() < 2) return
+            def groups = byVersion.groupBy { it.value }.values()
+                    .collect { Map g -> (g.keySet() as List).sort { a, b -> compareMcVersions(a, b) } }
+                    .sort { a, b -> compareMcVersions(a[0], b[0]) }
+            result["${top}/*/src/${rel}".toString()] = groups.collect { it.join(',') }.join(' | ')
+        }
+    }
+    result
+}
+
+def readVersionSyncLock = { ->
+    def result = new TreeMap<String, String>()
+    if (!versionSyncLockFile.exists()) return result
+    versionSyncLockFile.eachLine { String line ->
+        if (line.isBlank() || line.startsWith('#')) return
+        def idx = line.indexOf(' = ')
+        if (idx < 0) throw new GradleException("${versionSyncLockFile}: malformed line: ${line}")
+        result[line.substring(0, idx)] = line.substring(idx + 3)
+    }
+    result
+}
+
+tasks.register('updateVersionSyncLock') {
+    group = 'verification'
+    description = 'Record which version modules hold identical copies of each file (gradle/version-sync.lock)'
+    doLast {
+        def groups = computeVersionSyncGroups()
+        versionSyncLockFile.withWriter('UTF-8') { w ->
+            w << '# Generated by ./gradlew updateVersionSyncLock. Do not edit by hand.\n'
+            w << '# Each line lists the version modules that hold a copy of one file.\n'
+            w << '# Versions joined by "," hold byte-identical copies, and "|" separates\n'
+            w << '# groups that differ. validateVersionSync fails when this grouping\n'
+            w << '# changes, so that a fix reaching only some copies is noticed.\n'
+            groups.each { k, v -> w << "${k} = ${v}\n" }
+        }
+        logger.lifecycle("Wrote ${groups.size()} entries to ${rootProject.relativePath(versionSyncLockFile)}")
+    }
+}
+
+tasks.register('validateVersionSync') {
+    group = 'verification'
+    description = 'Verify per-version copies that were identical stay identical (see gradle/version-sync.lock)'
+    doLast {
+        if (!versionSyncLockFile.exists()) {
+            throw new GradleException("validateVersionSync: ${versionSyncLockFile} not found. Run ./gradlew updateVersionSyncLock")
+        }
+        def expected = readVersionSyncLock()
+        def actual = computeVersionSyncGroups()
+        // Guard against a vacuous pass if the module layout changes.
+        if (actual.size() < 100) {
+            throw new GradleException("validateVersionSync: only ${actual.size()} multi-version files found, the module layout may have changed")
+        }
+        def parse = { String s -> s.split(/ \| /).collect { it.split(',') as List } }
+        def errors = []
+        (expected.keySet() + actual.keySet()).each { String path ->
+            def was = expected[path]
+            def now = actual[path]
+            if (was == now) return
+            if (was == null) {
+                errors << "${path}: new file in several versions (${now}), not in the lock yet"
+                return
+            }
+            if (now == null) {
+                errors << "${path}: recorded as ${was}, but now exists in fewer than two versions"
+                return
+            }
+            def nowGroups = parse(now)
+            def groupOf = { String v -> nowGroups.findIndexOf { it.contains(v) } }
+            def splits = parse(was).findAll { List g ->
+                g.findAll { groupOf(it) >= 0 }.collect { groupOf(it) }.unique().size() > 1
+            }
+            if (splits) {
+                errors << "${path}: copies that were identical now differ. Was: ${was}. Now: ${now}"
+            } else {
+                errors << "${path}: version grouping changed without a split (copies added, removed or unified). Was: ${was}. Now: ${now}"
+            }
+        }
+        if (errors.isEmpty()) {
+            logger.lifecycle("Version sync validation passed: ${actual.size()} multi-version files match the lock.")
+        } else {
+            errors.each { logger.error("  ERROR: ${it}") }
+            throw new GradleException("Version sync validation failed with ${errors.size()} error(s). " +
+                    'If every copy should carry the change, apply it to the other versions listed. ' +
+                    'If the difference is intended, run ./gradlew updateVersionSyncLock and commit gradle/version-sync.lock.')
+        }
+    }
+}
+
+// ============================================================
+// Task: validateEraSymbols
+// ------------------------------------------------------------
+// CI compiles only 1.21.1 and 26.3, so a Java symbol that Minecraft renamed
+// between eras compiles there but breaks build1_21_9 or build1_21_11 later
+// (Identifier vs ResourceLocation, noCollision vs noCollission). Each rule
+// in scripts/era_symbol_rules.json names a regex and the version range in
+// which it must not appear in a version module's sources. Add a rule
+// whenever an era rename breaks a build that CI does not run.
+// ============================================================
+tasks.register('validateEraSymbols') {
+    group = 'verification'
+    description = 'Verify version modules do not use Java symbols renamed in their Minecraft era'
+    def rulesFile = file("${rootDir}/scripts/era_symbol_rules.json")
+    doLast {
+        if (!rulesFile.exists()) throw new GradleException("validateEraSymbols: ${rulesFile} not found")
+        def rules = new JsonSlurper().parse(rulesFile).rules
+        if (!rules) throw new GradleException("validateEraSymbols: no rules in ${rulesFile}")
+        def inRange = { String version, Map rule ->
+            (rule.since == null || compareMcVersions(version, rule.since as String) >= 0) &&
+                    (rule.before == null || compareMcVersions(version, rule.before as String) < 0)
+        }
+        def errors = []
+        int scanned = 0
+        ['common', 'fabric', 'neoforge', 'forge'].each { String top ->
+            versionDirsOf(file("${rootDir}/${top}")).each { File versionDir ->
+                def active = rules.findAll { inRange(versionDir.name, it) }
+                def srcDir = new File(versionDir, 'src')
+                if (active.isEmpty() || !srcDir.isDirectory()) return
+                def patterns = active.collect { [rule: it, regex: java.util.regex.Pattern.compile(it.pattern as String)] }
+                srcDir.eachFileRecurse(groovy.io.FileType.FILES) { File f ->
+                    if (!f.name.endsWith('.java')) return
+                    scanned++
+                    f.readLines('UTF-8').eachWithIndex { String line, int i ->
+                        patterns.each { p ->
+                            if (p.regex.matcher(line).find()) {
+                                errors << "${rootProject.relativePath(f)}:${i + 1}: ${p.rule.message} [${p.rule.id}]"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (errors.isEmpty()) {
+            logger.lifecycle("Era symbol validation passed: ${rules.size()} rule(s) over ${scanned} version-module Java file(s).")
+        } else {
+            errors.each { logger.error("  ERROR: ${it}") }
+            throw new GradleException("Era symbol validation failed with ${errors.size()} error(s)")
+        }
+    }
+}
+
+// ============================================================
+// Task: validateBlockLootTables
+// ------------------------------------------------------------
+// A block with no loot table drops nothing, and Minecraft logs nothing
+// about it, so the gap only shows when a player breaks the block. Doors,
+// trapdoors and other derived blocks shipped like this more than once.
+//
+// Every ModBlockId must resolve blocks/<id>.json in each version's loot
+// table directory (loot_tables before 1.21, loot_table after), either in
+// the version module or in a common/shared* root that applies to it.
+// Blocks that drop nothing on purpose are listed below with the reason.
+// ============================================================
+def blocksWithoutLootTable = [
+        'chrono_dawn_portal'        : 'portal block, never obtainable',
+        'temporal_particle_emitter' : 'invisible structure helper',
+        'decorative_water'          : 'fluid block',
+        'boss_room_boundary_marker' : 'unbreakable structure marker',
+        'boss_room_door'            : 'boss room door, opened by the fight',
+        'entropy_crypt_trapdoor'    : 'boss room trapdoor, opened by the fight',
+        'reversing_time_sandstone'  : 'regenerates after breaking, drops nothing today (pending design review)',
+        'unstable_fungus'           : 'drops nothing today (pending design review)',
+        // Potted plants drop nothing today (pending review). Vanilla potted
+        // plants drop the pot and the plant, see potted_chrono_bloom.json.
+        'potted_time_wood_sapling'        : 'pending review',
+        'potted_dark_time_wood_sapling'   : 'pending review',
+        'potted_ancient_time_wood_sapling': 'pending review',
+        'potted_orange_time_blossom'      : 'pending review',
+        'potted_pink_time_blossom'        : 'pending review',
+        'potted_purple_time_blossom'      : 'pending review',
+        'potted_unstable_fungus'          : 'pending review',
+]
+
+tasks.register('validateBlockLootTables') {
+    group = 'verification'
+    description = 'Verify every registered block has a loot table in each version'
+    def blockIdFile = file("${rootDir}/${project.property('block_id_file')}")
+    doLast {
+        def blockIds = (blockIdFile.text =~ /(\w+)\s*\(\s*def\(\s*"([^"]+)"/).collect { it[2] as String }
+        if (blockIds.size() < 50) {
+            throw new GradleException("validateBlockLootTables: only found ${blockIds.size()} block IDs in ${blockIdFile}, the enum shape may have changed")
+        }
+        def unknownExemptions = blocksWithoutLootTable.keySet() - blockIds
+        if (unknownExemptions) {
+            throw new GradleException("validateBlockLootTables: exemptions for unknown block IDs: ${unknownExemptions}")
+        }
+        def commonDir = file("${rootDir}/common")
+        def errors = []
+        def versionDirs = versionDirsOf(commonDir)
+        versionDirs.each { File versionDir ->
+            def lootDir = compareMcVersions(versionDir.name, '1.21') < 0 ? 'loot_tables' : 'loot_table'
+            def roots = [versionDir] + sharedRootsFor(commonDir, versionDir.name)
+            blockIds.each { String id ->
+                def rel = "src/main/resources/data/chronodawn/${lootDir}/blocks/${id}.json"
+                def found = roots.any { new File(it, rel).exists() }
+                if (!found && !blocksWithoutLootTable.containsKey(id)) {
+                    errors << "common/${versionDir.name}: block chronodawn:${id} has no data/chronodawn/${lootDir}/blocks/${id}.json"
+                }
+            }
+        }
+        // An exemption whose loot table now exists everywhere is stale.
+        def stale = blocksWithoutLootTable.keySet().findAll { String id ->
+            versionDirs.every { File versionDir ->
+                def lootDir = compareMcVersions(versionDir.name, '1.21') < 0 ? 'loot_tables' : 'loot_table'
+                ([versionDir] + sharedRootsFor(commonDir, versionDir.name)).any {
+                    new File(it, "src/main/resources/data/chronodawn/${lootDir}/blocks/${id}.json").exists()
+                }
+            }
+        }
+        stale.each { errors << "block chronodawn:${it} has a loot table in every version now. Remove it from blocksWithoutLootTable" }
+        if (errors.isEmpty()) {
+            logger.lifecycle("Block loot table validation passed: ${blockIds.size()} block(s) x ${versionDirs.size()} version(s), ${blocksWithoutLootTable.size()} exempt.")
+        } else {
+            errors.each { logger.error("  ERROR: ${it}") }
+            throw new GradleException("Block loot table validation failed with ${errors.size()} error(s)")
+        }
+    }
+}
+
+// ============================================================
+// Task: validateLoaderEntityRegistration
+// ------------------------------------------------------------
+// Each loader module registers entity renderers, attributes and spawn
+// placements in its own entrypoints, so a new mob added to most modules
+// can still miss one. A mob without a renderer crashes the client as soon
+// as it comes into view. Ticking Sheep missed five NeoForge modules, and
+// Chrono Bovine and Temporal Caprid had no renderer on NeoForge 1.21.4.
+//
+// For each loader module (falling back to <loader>/base when the version
+// module has no copy of the entrypoint):
+//   - the client entrypoint must reference every ModEntities field of
+//     common/<v>, since every entity needs a renderer;
+//   - the main entrypoint must reference the same ModEntities fields in
+//     every module of every loader (attributes and spawn placements).
+// ============================================================
+tasks.register('validateLoaderEntityRegistration') {
+    group = 'verification'
+    description = 'Verify every entity is registered in each loader module client and main entrypoint'
+    doLast {
+        def loaders = [fabric: 'Fabric', neoforge: 'NeoForge', forge: 'Forge']
+        def errors = []
+        def mainRefs = [:]
+        int modules = 0
+        loaders.each { String loader, String suffix ->
+            versionDirsOf(file("${rootDir}/${loader}")).each { File versionDir ->
+                def v = versionDir.name
+                def entitiesFile = file("${rootDir}/common/${v}/src/main/java/com/chronodawn/registry/ModEntities.java")
+                if (!entitiesFile.exists()) throw new GradleException("validateLoaderEntityRegistration: ${entitiesFile} not found")
+                def entities = (entitiesFile.text =~ /RegistrySupplier<EntityType<[^;=]*?>>\s+(\w+)\s*=/).collect { it[1] as String } as Set
+                if (entities.size() < 10) {
+                    throw new GradleException("validateLoaderEntityRegistration: only ${entities.size()} entities found in ${entitiesFile}, the declaration shape may have changed")
+                }
+                def resolve = { String rel ->
+                    def f = new File(versionDir, rel)
+                    f.exists() ? f : file("${rootDir}/${loader}/base/${rel}")
+                }
+                def pkg = "src/main/java/com/chronodawn/${loader}"
+                def clientFile = resolve("${pkg}/client/ChronoDawnClient${suffix}.java")
+                def mainFile = resolve("${pkg}/ChronoDawn${suffix}.java")
+                [clientFile, mainFile].each {
+                    if (!it.exists()) throw new GradleException("validateLoaderEntityRegistration: ${it} not found")
+                }
+                modules++
+                def referenced = { File f -> (f.text =~ /ModEntities\.(\w+)/).collect { it[1] as String } as Set }
+                def missingRenderer = entities - referenced(clientFile)
+                if (missingRenderer) {
+                    errors << "${loader}/${v}: ${rootProject.relativePath(clientFile)} does not register ${missingRenderer.sort().join(', ')}"
+                }
+                mainRefs["${loader}/${v}".toString()] = [file: mainFile, refs: referenced(mainFile).intersect(entities)]
+            }
+        }
+        def union = mainRefs.values().collectMany { it.refs } as Set
+        mainRefs.each { String module, Map info ->
+            def missing = union - info.refs
+            if (missing) {
+                errors << "${module}: ${rootProject.relativePath(info.file)} does not register ${missing.sort().join(', ')}, which other loader modules register"
+            }
+        }
+        if (errors.isEmpty()) {
+            logger.lifecycle("Loader entity registration validation passed: ${modules} loader module(s).")
+        } else {
+            errors.each { logger.error("  ERROR: ${it}") }
+            throw new GradleException("Loader entity registration validation failed with ${errors.size()} error(s)")
+        }
+    }
+}
+
+// ============================================================
+// Task: validateMixinConfigs
+// ------------------------------------------------------------
+// A mixin listed in a loader config whose class was deleted or never
+// copied to that version fails only at game start, and a refmap entry
+// makes current Loom log a warning on every launch. Both shipped once.
+//
+// For every Fabric, NeoForge and Forge mixin config (common's
+// chronodawn.mixins.json is reference-only and excluded from builds):
+//   - it must not contain a refmap property;
+//   - every listed mixin must resolve to a Java source in the module's
+//     compile roots (<loader>/<v>, <loader>/base*, common/<v>, common/shared*).
+// ============================================================
+tasks.register('validateMixinConfigs') {
+    group = 'verification'
+    description = 'Verify loader mixin configs list existing classes and carry no refmap'
+    doLast {
+        def commonDir = file("${rootDir}/common")
+        def errors = []
+        int checked = 0
+        ['fabric', 'neoforge', 'forge'].each { String loader ->
+            def loaderDir = file("${rootDir}/${loader}")
+            versionDirsOf(loaderDir).each { File versionDir ->
+                def v = versionDir.name
+                def loaderBases = (loaderDir.listFiles() ?: []).findAll { File d ->
+                    if (!d.isDirectory()) return false
+                    if (d.name == 'base') return true
+                    def m = d.name =~ /^base-([\d.]+)\+$/
+                    return m.matches() && compareMcVersions(v, m.group(1)) >= 0
+                }
+                def roots = ([versionDir] + loaderBases + [new File(commonDir, v)] + sharedRootsFor(commonDir, v))
+                        .collect { new File(it, 'src/main/java') }.findAll { it.isDirectory() }
+                def configs = (new File(versionDir, 'src/main/resources').listFiles() ?: [])
+                        .findAll { it.name.endsWith('.json') && it.name.contains('mixins') }
+                configs.each { File config ->
+                    def json = new JsonSlurper().parse(config)
+                    def where = rootProject.relativePath(config)
+                    if (json.containsKey('refmap')) {
+                        errors << "${where}: remove the refmap property (Loom remaps mixin targets directly)"
+                    }
+                    ['mixins', 'client', 'server'].each { String side ->
+                        (json[side] ?: []).each { String name ->
+                            checked++
+                            def rel = "${json.package}.${name}".replace('.', '/') + '.java'
+                            if (!roots.any { new File(it, rel).exists() }) {
+                                errors << "${where}: ${side} entry ${name} has no source ${rel} in ${loader}/${v}'s compile roots"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (checked == 0) throw new GradleException('validateMixinConfigs: no mixin entries found')
+        if (errors.isEmpty()) {
+            logger.lifecycle("Mixin config validation passed: ${checked} mixin entries.")
+        } else {
+            errors.each { logger.error("  ERROR: ${it}") }
+            throw new GradleException("Mixin config validation failed with ${errors.size()} error(s)")
         }
     }
 }

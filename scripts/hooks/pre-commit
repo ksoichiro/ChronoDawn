@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+# Chrono Dawn pre-commit checks. Install with scripts/hooks/install.sh.
+#
+# 1. Added CHANGELOG.md lines must not use em dashes or semicolons
+#    (house style for release notes, broken once in a954e69e2).
+# 2. When the commit touches module sources, resources or build scripts,
+#    run the file-only validations that CI runs (validateAll). They take a
+#    few seconds with a warm Gradle daemon and do not set up Minecraft.
+#
+# validateAll reads the working tree, not the index, so unstaged edits are
+# checked too.
+set -euo pipefail
+
+cd "$(git rev-parse --show-toplevel)"
+
+status=0
+
+changelog_added=$(git diff --cached -U0 --no-color -- CHANGELOG.md | grep '^+[^+]' || true)
+if [ -n "$changelog_added" ]; then
+    bad=$(printf '%s\n' "$changelog_added" | grep -n -e '—' -e ';' || true)
+    if [ -n "$bad" ]; then
+        echo "pre-commit: CHANGELOG.md additions must not use em dashes or semicolons:" >&2
+        printf '%s\n' "$bad" >&2
+        echo "Split the sentence or use a comma." >&2
+        status=1
+    fi
+fi
+
+if git diff --cached --name-only | grep -qE '^(common|fabric|neoforge|forge|gradle|scripts|props)/|^gradle\.properties$|\.gradle$'; then
+    if [ ! -f gradle/shared/build.gradle ]; then
+        echo "pre-commit: gradle/shared is empty. Run: git submodule update --init gradle/shared" >&2
+        exit 1
+    fi
+    echo "pre-commit: running ./gradlew validateAll" >&2
+    if ! ./gradlew validateAll -Pvalidation_only=true -q --console=plain; then
+        echo "pre-commit: validateAll failed. Fix the errors above, or update gradle/version-sync.lock with ./gradlew updateVersionSyncLock if a version split is intended." >&2
+        status=1
+    fi
+fi
+
+exit $status

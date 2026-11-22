@@ -769,6 +769,8 @@ Validates data/asset file integrity at build time without launching the game:
 ./gradlew validateResources
 ```
 
+`./gradlew validateAll -Pvalidation_only=true` runs every file-only validation that CI and `checkAll` run, in a few seconds. [Bug Prevention Checks](bug_prevention.md) lists which past bug classes each validation covers, how to update `gradle/version-sync.lock` when per-version copies are meant to differ, and how to install the pre-commit hook (`scripts/hooks/install.sh`, Git 2.54+).
+
 ### Manual Testing
 
 1. **Launch Development Client**:
