@@ -1,0 +1,39 @@
+{
+  "type": "minecraft:entity",
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "chronodawn:ancient_gear",
+          "condition": {
+            "type": "minecraft:random_chance",
+            "chance": 0.35
+          },
+          "modifier": {
+            "count": 1,
+            "type": "minecraft:set_count"
+          }
+        }
+      ]
+    },
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "chronodawn:enhanced_clockstone",
+          "condition": {
+            "type": "minecraft:random_chance",
+            "chance": 0.05
+          },
+          "modifier": {
+            "count": 1,
+            "type": "minecraft:set_count"
+          }
+        }
+      ]
+    }
+  ]
+}

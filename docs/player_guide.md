@@ -333,7 +333,7 @@ The **Time Keeper** is a peaceful trader. Two of them live in the Time Keeper Vi
 | 4 Fruit of Time | 8 String |
 | 1 Enhanced Clockstone + 16 Clockstone | 1 Ender Pearl |
 | 2 Enhanced Clockstone | 4 Time Wood Saplings |
-| 12 Clockstone + 4-6 Time Crystals | A Time Compass for the Desert Clock Tower, Phantom Catacombs, Guardian Vault, Clockwork Depths, or Entropy Crypt |
+| 12 Clockstone + 4-6 Time Crystals | A Time Compass for the Desert Clock Tower, Phantom Catacombs, Guardian Vault, Clockwork Depths, Entropy Crypt, or Sentinel Outpost |
 | 16 Clockstone + 8 Time Crystals | A Time Compass for the Master Clock |
 | 8 Clockstone | 4 Clockwork Cookies |
 | 12 Chronite Shards | 1 Emerald |
@@ -520,6 +520,27 @@ The first time a player enters Chrono Dawn, a small village is placed on flat gr
 - Bring milk buckets to remove Wither effect
 - Keep distance to minimize Decay Aura exposure
 - Use ranged attacks when possible
+
+---
+
+### Sentinel Outpost (Chrono Dawn)
+
+**Structure Type**: Optional side trip (no boss, nothing in the main progression depends on it)
+
+**Location**: The surface of any Chrono Dawn biome except the oceans
+
+**What it is**: A white landing pad with a tall two-storey hall at its centre. It looks like something that landed from far outside Chrono Dawn, unlike the old factory of the Clockwork Depths.
+
+**Features**:
+- Four docking bays on the pad and one spawner in the hall keep sending out **Clockwork Sentinels**, with a few Epoch Husks and Secondhand Archers mixed in
+- Sentinels are the only regular mobs that Time Distortion cannot slow
+- Two chests on the hall's upper floor hold a few Ancient Gears, Enhanced Clockstone, Clockstone, Time Crystals and other supplies
+- Sentinels from the spawners drop Ancient Gears and Enhanced Clockstone less often than those in the open
+
+**Tips**:
+- Break the spawners to stop the stream of mobs
+- Fight on the pad, where you can see all four bays
+- A Time Keeper sells a Time Compass for it
 
 ---
 
@@ -1337,7 +1358,7 @@ All three wood types have the same variants:
 **Can't find structures**:
 - Keep exploring different biomes
 - Use `/locate structure chronodawn:[structure_name]` (if cheats enabled)
-- Structures: `ancient_ruins`, `forgotten_library`, `desert_clock_tower`, `guardian_vault`, `clockwork_depths`, `phantom_catacombs`, `entropy_crypt`, `master_clock`
+- Structures: `ancient_ruins`, `forgotten_library`, `desert_clock_tower`, `guardian_vault`, `clockwork_depths`, `phantom_catacombs`, `entropy_crypt`, `master_clock`, `sentinel_outpost`
 
 **Lost in Phantom Catacombs**:
 - Use torches or blocks to mark paths (place on right wall, follow back)

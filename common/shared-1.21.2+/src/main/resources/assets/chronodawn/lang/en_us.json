@@ -164,6 +164,7 @@
   "item.chronodawn.time_compass.target.clockwork_depths": "Clockwork Depths",
   "item.chronodawn.time_compass.target.entropy_crypt": "Entropy Crypt",
   "item.chronodawn.time_compass.target.unknown": "Unknown Structure",
+  "item.chronodawn.time_compass.target.sentinel_outpost": "Sentinel Outpost",
   "item.chronodawn.time_compass.located": "%s located at (%d, %d) - %d blocks %s",
   "item.chronodawn.time_compass.current_location": "%s: (%d, %d) | You: (%d, %d) - %d blocks %s",
   "item.chronodawn.time_compass.not_found": "%s not found within search range",

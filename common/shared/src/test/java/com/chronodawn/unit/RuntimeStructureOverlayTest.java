@@ -164,7 +164,7 @@ class RuntimeStructureOverlayTest {
                 new ChronoDawnConfig.Structures(
                     s.ancientRuins(), s.forgottenLibrary(), s.desertClockTower(), s.guardianVault(),
                     s.clockworkDepths(), s.phantomCatacombs(), s.entropyCrypt(),
-                    new StructureSettings(false, 60, 20, 1234567890L)
+                    new StructureSettings(false, 60, 20, 1234567890L), s.sentinelOutpost()
                 ),
                 defaults.world().ores()
             ),

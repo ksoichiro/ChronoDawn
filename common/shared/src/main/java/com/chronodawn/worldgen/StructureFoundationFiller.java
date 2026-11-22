@@ -41,7 +41,8 @@ public final class StructureFoundationFiller {
         "desert_clock_tower",
         "entropy_crypt",
         "forgotten_library",
-        "guardian_vault"
+        "guardian_vault",
+        "sentinel_outpost"
     );
 
     /**
