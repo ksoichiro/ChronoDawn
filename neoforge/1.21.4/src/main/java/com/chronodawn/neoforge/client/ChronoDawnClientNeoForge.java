@@ -200,6 +200,16 @@ public class ChronoDawnClientNeoForge {
             TickingSheepWoolModel::createBodyLayer
         );
 
+        // Register Chrono Bovine model layer
+        event.registerLayerDefinition(
+            ChronoBovineModel.LAYER_LOCATION,
+            ChronoBovineModel::createBodyLayer
+        );
+        event.registerLayerDefinition(
+            TemporalCapridModel.LAYER_LOCATION,
+            TemporalCapridModel::createBodyLayer
+        );
+
         // Register Chrono Ursid model layer
         event.registerLayerDefinition(
             ChronoUrsidModel.LAYER_LOCATION,
@@ -375,6 +385,18 @@ public class ChronoDawnClientNeoForge {
         event.registerEntityRenderer(
             ModEntities.TICKING_SHEEP.get(),
             TickingSheepRenderer::new
+        );
+
+        // Register Chrono Bovine renderer
+        event.registerEntityRenderer(
+            ModEntities.CHRONO_BOVINE.get(),
+            ChronoBovineRenderer::new
+        );
+
+        // Register Temporal Caprid renderer
+        event.registerEntityRenderer(
+            ModEntities.TEMPORAL_CAPRID.get(),
+            TemporalCapridRenderer::new
         );
 
         // Register Chrono Ursid renderer
