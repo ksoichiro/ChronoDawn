@@ -27,8 +27,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- **Dawnstone and Duskstone**: two natural stones, similar to granite and
-  andesite, with stairs, slabs, and walls. They form large patches underground
+- **Dawnstone and Duskstone**: two natural stones, a rose-pink one similar
+  to granite and a blue-grey one similar to andesite, with stairs, slabs, and
+  walls. They form large patches underground
   in the Chrono Dawn plains and mountains in newly generated terrain.
 - **Sentinel Outpost**: a new optional structure where the Clockwork
   Sentinels keep watch. It is a white landing pad with a tall two-storey hall, built
