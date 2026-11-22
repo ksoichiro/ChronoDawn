@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **More varied terrain in Chrono Dawn**: inland plains and similar flat
+  biomes now get rolling hills, and the mountains get steeper ridges and
+  broader, higher massifs. Only newly generated chunks change, so an existing
+  world can show steep cliffs along the border between old and new terrain.
+  New worlds are not affected.
 - **Weathered structure stonework**: newly generated Desert Clock Tower,
   Forgotten Library, Master Clock, Phantom Catacombs, Entropy Crypt and Time
   Keeper Village now mix Cracked and Mossy stone bricks into their walls

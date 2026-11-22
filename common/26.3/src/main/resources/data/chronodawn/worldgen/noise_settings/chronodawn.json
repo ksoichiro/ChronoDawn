@@ -15,11 +15,11 @@
     "size_vertical": 2
   },
   "noise_router": {
-    "chunk_surface_level": "minecraft:overworld/chunk_surface_level",
+    "chunk_surface_level": "chronodawn:terrain/chunk_surface_level",
     "continents": "minecraft:overworld/continents",
     "depth": "minecraft:overworld/depth",
     "erosion": "minecraft:overworld/erosion",
-    "final_density": "minecraft:overworld/final_density",
+    "final_density": "chronodawn:terrain/final_density",
     "ridges": "minecraft:overworld/ridges",
     "temperature": "minecraft:overworld/temperature",
     "vegetation": "minecraft:overworld/vegetation"
@@ -113,7 +113,7 @@
       "xz_scale": 1.0,
       "y_scale": 1.0
     },
-    "surface_level": "minecraft:overworld/preliminary_surface_level"
+    "surface_level": "chronodawn:terrain/preliminary_surface_level"
   },
   "material_rule": "chronodawn:chronodawn"
 }
