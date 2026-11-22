@@ -34,6 +34,27 @@ class LayersTest(unittest.TestCase):
         self.assertEqual(ids, ["base", "chronite", "ten"])
         self.assertEqual([c["id"] for layer in layers_for_source(layers, "0.8.0") for c in layer.checks], ["base"])
 
+    def test_checks_limited_to_mc_versions(self):
+        layer = _layer("0.8.0", ["everywhere", "old", "new"])
+        layer["checks"][1]["mc_versions"] = ["1.21.1"]
+        layer["checks"][2]["mc_versions"] = ["26.3"]
+        _write(self.dir, "0.8.0-base.json", layer)
+        layers = load_layers(self.dir)
+
+        def ids(mc_version):
+            return [c["id"] for layer in layers_for_source(layers, "0.8.0", mc_version) for c in layer.checks]
+
+        self.assertEqual(ids("1.21.1"), ["everywhere", "old"])
+        self.assertEqual(ids("26.3"), ["everywhere", "new"])
+        self.assertEqual(ids(None), ["everywhere", "old", "new"])
+
+    def test_mc_versions_must_be_a_list(self):
+        layer = _layer("0.8.0", ["a"])
+        layer["checks"][0]["mc_versions"] = "26.3"
+        _write(self.dir, "0.8.0-base.json", layer)
+        with self.assertRaises(LayerError):
+            load_layers(self.dir)
+
     def test_unknown_kind_rejected(self):
         _write(self.dir, "0.8.0-base.json", _layer("0.8.0", ["a"], kind="screenshot"))
         with self.assertRaises(LayerError):

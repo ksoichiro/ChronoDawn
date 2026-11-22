@@ -25,8 +25,18 @@ def offline_uuid(name: str) -> str:
     return str(uuid_lib.UUID(bytes=bytes(digest)))
 
 
+def _per_dimension_layout(world: Path) -> bool:
+    """Minecraft 26.x stores every dimension, the overworld included, under dimensions/<ns>/<path>/."""
+    return (world / "dimensions" / "minecraft" / "overworld").is_dir()
+
+
 def dimension_dir(world: Path, dimension: str) -> Path:
-    if dimension in ("overworld", "minecraft:overworld"):
+    if dimension == "overworld":
+        dimension = "minecraft:overworld"
+    if _per_dimension_layout(world):
+        namespace, path = dimension.split(":", 1)
+        return world / "dimensions" / namespace / path
+    if dimension == "minecraft:overworld":
         return world
     if dimension == "minecraft:the_nether":
         return world / "DIM-1"
@@ -36,8 +46,20 @@ def dimension_dir(world: Path, dimension: str) -> Path:
     return world / "dimensions" / namespace / path
 
 
-def data_dir(world: Path, dimension: str) -> Path:
-    return dimension_dir(world, dimension) / "data"
+def saved_data_path(world: Path, dimension: str, file: str) -> Path:
+    """data/<file> before 26.x. 26.x puts it under data/<namespace of the SavedData id>/<file>.
+
+    dimension "world" is the world-level data directory. Before 26.x that is the
+    overworld's; 26.x keeps world-wide state such as world clocks there.
+    """
+    data = world / "data" if dimension == "world" else dimension_dir(world, dimension) / "data"
+    if not _per_dimension_layout(world):
+        return data / file
+    matches = sorted(data.glob(f"*/{file}"))
+    if len(matches) > 1:
+        raise ValueError(f"{file} exists in several namespaces under {data}: {matches}")
+    # The mod's own namespace when the file is not there yet, so a "missing" report names a real place.
+    return matches[0] if matches else data / "chronodawn" / file
 
 
 def to_plain(tag):
@@ -55,13 +77,13 @@ def _load(path: Path) -> nbt.NBTFile:
 
 
 def read_saved_data(world: Path, dimension: str, file: str):
-    path = data_dir(world, dimension) / file
+    path = saved_data_path(world, dimension, file)
     return to_plain(_load(path)) if path.exists() else None
 
 
 def set_saved_data_value(world: Path, dimension: str, file: str, dotted_path: str, value, value_type: str):
     """Set (or create) a scalar inside a SavedData file; used only for states commands cannot reach."""
-    path = data_dir(world, dimension) / file
+    path = saved_data_path(world, dimension, file)
     root = _load(path)
     *parents, leaf = dotted_path.split(".")
     node = root
@@ -77,7 +99,10 @@ def set_saved_data_value(world: Path, dimension: str, file: str, dotted_path: st
 
 
 def read_advancements(world: Path, player_uuid: str) -> dict:
-    path = world / "advancements" / f"{player_uuid}.json"
+    # 26.x moved per-player files under players/.
+    path = world / "players" / "advancements" / f"{player_uuid}.json"
+    if not path.exists():
+        path = world / "advancements" / f"{player_uuid}.json"
     if not path.exists():
         return {}
     raw = json.loads(path.read_text())
@@ -88,11 +113,24 @@ def read_file_bytes(path: Path):
     return path.read_bytes() if path.exists() else None
 
 
+def _palette_name(entry) -> str:
+    """Block id of a palette entry: {Name, Properties} before 26.x; a bare string or {id, properties} on 26.x."""
+    if isinstance(entry, nbt.TAG_String):
+        return entry.value
+    for key in ("Name", "id"):
+        if key in entry:
+            return entry[key].value
+    strings = [tag.value for tag in entry.tags if isinstance(tag, nbt.TAG_String)]
+    if len(strings) == 1:
+        return strings[0]
+    raise ValueError(f"Unknown block palette entry: {entry}")
+
+
 def _section_counts(section, counts):
     states = section.get("block_states")
     if states is None:
         return
-    palette = [entry["Name"].value for entry in states["palette"].tags]
+    palette = [_palette_name(entry) for entry in states["palette"].tags]
     if "data" not in states or len(palette) == 1:
         counts[palette[0]] = counts.get(palette[0], 0) + 4096
         return

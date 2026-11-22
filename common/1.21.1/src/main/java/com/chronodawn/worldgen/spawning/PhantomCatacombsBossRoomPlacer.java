@@ -995,6 +995,22 @@ public class PhantomCatacombsBossRoomPlacer {
     }
 
     /**
+     * Get the StructureStart that the given chunk references, or null if none is valid.
+     *
+     * StructureManager.getStructureAt(pos, structure) only returns a start whose bounding box
+     * contains pos. Chunk world positions are at Y=0, and Phantom Catacombs starts are projected
+     * to the surface, so that lookup misses most catacombs. Read the referenced start directly.
+     */
+    private static net.minecraft.world.level.levelgen.structure.StructureStart findStructureStart(
+            net.minecraft.world.level.StructureManager structureManager,
+            ChunkPos chunkPos,
+            net.minecraft.world.level.levelgen.structure.Structure structure) {
+        var starts = structureManager.startsForStructure(
+            net.minecraft.core.SectionPos.of(chunkPos.getWorldPosition()), structure);
+        return starts.isEmpty() ? null : starts.get(0);
+    }
+
+    /**
      * Get the structure's bounding box by scanning for structure blocks.
      * As a fallback, scans the actual world for structure blocks to determine bounds.
      */
@@ -1015,22 +1031,15 @@ public class PhantomCatacombsBossRoomPlacer {
                 ChronoDawn.LOGGER.debug("Found Phantom Catacombs structure with {} chunks", chunks.size());
 
                 // Try to get bounding box from StructureStart
-                int validStarts = 0;
-                for (long chunkLong : chunks) {
-                    ChunkPos structureChunk = new ChunkPos(chunkLong);
-                    var startForStructure = structureManager.getStructureAt(structureChunk.getWorldPosition(), structure);
-                    if (startForStructure != null && startForStructure.isValid()) {
-                        validStarts++;
-                        net.minecraft.world.level.levelgen.structure.BoundingBox box = startForStructure.getBoundingBox();
-                        if (box != null) {
-                            ChronoDawn.LOGGER.debug("Successfully retrieved bounding box from StructureStart: {}", box);
-                            return box;
-                        } else {
-                            ChronoDawn.LOGGER.debug("StructureStart is valid but bounding box is null for chunk {}", structureChunk);
-                        }
+                var startForStructure = findStructureStart(structureManager, chunkPos, structure);
+                if (startForStructure != null) {
+                    net.minecraft.world.level.levelgen.structure.BoundingBox box = startForStructure.getBoundingBox();
+                    if (box != null) {
+                        ChronoDawn.LOGGER.debug("Successfully retrieved bounding box from StructureStart: {}", box);
+                        return box;
                     }
+                    ChronoDawn.LOGGER.debug("StructureStart is valid but bounding box is null for chunk {}", chunkPos);
                 }
-                ChronoDawn.LOGGER.debug("Checked {} structure chunks, found {} valid StructureStarts, but no bounding box", chunks.size(), validStarts);
 
                 // Fallback: scan chunks for actual structure blocks to find Y bounds
                 ChronoDawn.LOGGER.warn("Could not get bounding box from StructureStart, scanning chunks for structure blocks...");
@@ -1192,7 +1201,7 @@ public class PhantomCatacombsBossRoomPlacer {
                 .getKey(structure);
 
             if (structureLocation != null && structureLocation.equals(PHANTOM_CATACOMBS_ID)) {
-                structureStart = structureManager.getStructureAt(chunkPos.getWorldPosition(), structure);
+                structureStart = findStructureStart(structureManager, chunkPos, structure);
                 break;
             }
         }

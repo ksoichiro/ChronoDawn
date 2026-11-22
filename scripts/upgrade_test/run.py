@@ -26,8 +26,8 @@ class SetupError(Exception):
     pass
 
 
-def _rcon(ports):
-    return Rcon("127.0.0.1", ports[1], processes.RCON_PASSWORD)
+def _rcon(ports, mc_version=None):
+    return Rcon("127.0.0.1", ports[1], processes.RCON_PASSWORD, mc_version=mc_version)
 
 
 def _run_setup_entry(rcon, entry, transcript, layer_name="?"):
@@ -139,11 +139,11 @@ def run_source(env, source, layers, forward, candidate_jar, out_root, ports):
     server_dir = out_dir / "server"
     world = server_dir / "world"
     transcript = []
-    active = layers_for_source(layers, source)
+    active = layers_for_source(layers, source, env.mc_version)
 
     processes.preflight_ports(list(ports))
     processes.prepare_server_dir(env.server, server_dir, ports)
-    old_jar = versions.fetch_old_jar(source, env.loader, env.cache_dir)
+    old_jar = versions.fetch_old_jar(source, env.loader, env.mc_version, env.cache_dir)
     old_mods = [old_jar, *env.prod_mods]
     new_mods = [candidate_jar, *env.prod_mods]
     print(f"[{env.loader} {source}] old: {old_jar.name}, candidate: {candidate_jar.name}", flush=True)
@@ -152,7 +152,7 @@ def run_source(env, source, layers, forward, candidate_jar, out_root, ports):
     command_before = {}
     server, client = _start_session(env, server_dir, out_dir / "old-client", old_mods, ports, "old", out_dir)
     try:
-        with _rcon(ports) as rcon:
+        with _rcon(ports, env.mc_version) as rcon:
             for layer in active:
                 for entry in layer.setup:
                     _run_setup_entry(rcon, entry, transcript, layer.name)
@@ -201,7 +201,7 @@ def run_source(env, source, layers, forward, candidate_jar, out_root, ports):
     forward_chunks = None
     server, client = _start_session(env, server_dir, out_dir / "new-client", new_mods, ports, "new", out_dir)
     try:
-        with _rcon(ports) as rcon:
+        with _rcon(ports, env.mc_version) as rcon:
             for layer in active:
                 for check in layer.checks:
                     if check["kind"] == "command":
@@ -245,7 +245,8 @@ def run_source(env, source, layers, forward, candidate_jar, out_root, ports):
                 continue
             else:
                 diffs = compare.compare_values(before[check["id"]], _offline_value(world, check), "equal",
-                                               monotonic=check.get("monotonic", []))
+                                               monotonic=check.get("monotonic", []),
+                                               ignore=check.get("ignore", []))
             results.append(("FAIL", cid, compare.describe(diffs)[:2000]) if diffs else ("PASS", cid, ""))
 
     if forward:
@@ -268,6 +269,7 @@ def run_source(env, source, layers, forward, candidate_jar, out_root, ports):
 class Env:
     def __init__(self, raw):
         self.loader = raw["loader"]
+        self.mc_version = raw["mcVersion"]
         self.repo_root = Path(raw["repoRoot"])
         self.cache_dir = Path(raw["cacheDir"])
         self.out_dir = Path(raw["outDir"])
@@ -312,7 +314,7 @@ def main(argv=None) -> int:
         except Exception as e:  # one broken source must not hide the others
             results.append(("FAIL", f"{source}/harness", f"{type(e).__name__}: {e}"))
 
-    report = f"upgradeTest {env.loader} 1.21.1, candidate {candidate.name}\n" + compare.format_report(results)
+    report = f"upgradeTest {env.loader} {env.mc_version}, candidate {candidate.name}\n" + compare.format_report(results)
     env.out_dir.mkdir(parents=True, exist_ok=True)
     report_file.write_text(report)
     print(report, flush=True)
