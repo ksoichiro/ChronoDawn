@@ -77,6 +77,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   belong to, and a corner still waiting for its pair is warned about only
   once. Boss rooms that already generated without protection stay
   unprotected.
+- **Master Clock boss room placement warnings**: placing the hidden stairs,
+  corridor, and boss room under a Master Clock logged four warnings about
+  missing Jigsaw Blocks, even though everything was placed correctly. They
+  are no longer logged.
 - **Chrono Bovine and Temporal Caprid on NeoForge 1.21.4**: the client
   registered no renderer or model for them. They now use the same renderer
   as on the other versions.

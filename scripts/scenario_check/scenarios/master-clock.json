@@ -1,5 +1,5 @@
 {
-  "description": "/locate finds a Master Clock in the Chrono Dawn dimension quickly, and the structure looks right from above and from the side. The player enters the dimension at 0 0 first, so the Time Keeper Village (placed near wherever a player first enters) stays away from what this scenario looks at.",
+  "description": "/locate finds a Master Clock in the Chrono Dawn dimension quickly, and the structure looks right from above and from the side. Once the player is near, the hidden stairs, corridor, and boss room are placed underground and the Jigsaw Blocks at their connections are cleared. Those block checks use offsets from the located start that hold for the fixed scenario seed, where the corridor is not rotated. The player enters the dimension at 0 0 first, so the Time Keeper Village (placed near wherever a player first enters) stays away from what this scenario looks at.",
   "steps": [
     {"command": "execute in chronodawn:chronodawn run locate structure chronodawn:master_clock", "match": "\\[(?P<x>-?\\d+), [^,]+, (?P<z>-?\\d+)\\]", "check": "locate-master-clock", "max_seconds": 60},
     "execute in chronodawn:chronodawn run spreadplayers 0 0 0 1 false ${player}",
@@ -7,6 +7,9 @@
     "execute in chronodawn:chronodawn run spreadplayers ${x} ${z} 0 1 false ${player}",
     "execute as ${player} at @s run tp @s ~ ~60 ~ 0 90",
     {"sleep": 40},
+    {"command": "execute in chronodawn:chronodawn positioned ${x} 0 ${z} if block ~31 -30 ~7 chronodawn:boss_room_door", "match": "Test passed", "check": "boss-room-door", "await": true, "timeout": 60},
+    {"command": "execute in chronodawn:chronodawn positioned ${x} 0 ${z} if block ~29 -31 ~7 chronodawn:temporal_stone_bricks if block ~15 -22 ~7 chronodawn:temporal_stone_bricks", "match": "Test passed", "check": "corridor-placed"},
+    {"command": "execute in chronodawn:chronodawn positioned ${x} 0 ${z} if block ~15 -21 ~7 minecraft:air if block ~29 -30 ~7 minecraft:air if block ~30 -30 ~7 minecraft:air", "match": "Test passed", "check": "connection-jigsaws-cleared"},
     "time set noon",
     {"shot": "from-above", "wait": 5, "note": "Master Clock in view (its start is at x=${x}, z=${z}), seen straight down from 60 blocks above the start. The start is a corner of the structure, not its center, so it may be off-center or partly out of frame. The entrance of the Master Clock boss structure on the surface; most of it is underground. Its blocks render with their textures, nothing is cut off at chunk borders, and the ground around it has no box-shaped cut or hollow."},
     "execute as ${player} at @s run tp @s ~-45 ~-35 ~ -90 25",
