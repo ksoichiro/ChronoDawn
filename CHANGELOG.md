@@ -67,6 +67,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   warnings, and searched a wide fixed area at every height instead. It now
   reads the bounds correctly, so it searches only the catacombs and logs
   nothing.
+- **Master Clock boss room placement warnings**: placing the hidden stairs,
+  corridor, and boss room under a Master Clock logged four warnings about
+  missing Jigsaw Blocks, even though everything was placed correctly. They
+  are no longer logged.
 - **Chrono Bovine and Temporal Caprid on NeoForge 1.21.4**: the client
   registered no renderer or model for them. They now use the same renderer
   as on the other versions.
