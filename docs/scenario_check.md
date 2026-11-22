@@ -193,7 +193,7 @@ Dawn in a world, so every scenario that goes there enters at `0 0` first.
 Otherwise the scenario that runs first decides where the village goes, and it
 can land on the structure another scenario looks at. Scenarios that place
 blocks use separate areas: overworld x 0-15 (`polished-stones`), 16-31
-(`time-keeper-trade`), 48-63 (`wolf-spawn-forest`), and x 196-247 in both dimensions
+(`time-keeper-trade`), 48-63 (`wolf-spawn-forest`), and x 196 to 247, z -4 to 47 in both dimensions
 (`sapling-root-dirt`).
 
 ## Limits
