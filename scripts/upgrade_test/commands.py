@@ -17,6 +17,7 @@ _GAMERULES_1_21_11 = {
     # doFireTick false stopped fire spreading. Its successor is the radius
     # around players in which fire spreads, so 0 means nowhere.
     "doFireTick": ("fire_spread_radius_around_player", {"false": "0", "true": "128"}),
+    "doMobSpawning": ("spawn_mobs", None),
     "mobGriefing": ("mob_griefing", None),
     "randomTickSpeed": ("random_tick_speed", None),
     "sendCommandFeedback": ("send_command_feedback", None),

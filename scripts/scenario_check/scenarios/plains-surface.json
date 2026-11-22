@@ -1,0 +1,17 @@
+{
+  "description": "The surface of the Chrono Dawn Plains biome looks varied and right. The player enters the dimension at 0 0 first, so the Time Keeper Village (placed near wherever a player first enters) stays away from what this scenario looks at.",
+  "steps": [
+    {"command": "execute in chronodawn:chronodawn run locate biome chronodawn:chronodawn_plains", "match": "\\[(?P<x>-?\\d+), [^,]+, (?P<z>-?\\d+)\\]", "check": "locate-plains-surface", "max_seconds": 60},
+    "execute in chronodawn:chronodawn run spreadplayers 0 0 0 1 false ${player}",
+    {"sleep": 5},
+    "execute in chronodawn:chronodawn run spreadplayers ${x} ${z} 0 1 false ${player}",
+    "execute as ${player} at @s run tp @s ~ ~40 ~ 0 50",
+    {"sleep": 40},
+    "time set noon",
+    {"shot": "overview", "wait": 5, "note": "The Plains biome, looking south and down from 40 blocks above the ground. Temporal Grass with occasional path patches, sparse rock outcrops and ruined walls (outcrops are about one per 15 chunks, so one may not be in view). Path patches and outcrops blend in, nothing floats. No magenta-black missing textures."},
+    "execute as ${player} at @s run tp @s ~ ~-30 ~ 90 15",
+    {"sleep": 5},
+    "time set noon",
+    {"shot": "low", "wait": 5, "note": "The Plains biome closer to the ground, looking west. Temporal Grass with occasional path patches, sparse rock outcrops and ruined walls (outcrops are about one per 15 chunks, so one may not be in view). Path patches and outcrops blend in, nothing floats."}
+  ]
+}

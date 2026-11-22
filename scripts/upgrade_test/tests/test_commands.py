@@ -11,6 +11,7 @@ class AdaptTest(unittest.TestCase):
     def test_renames_game_rules_on_26_x(self):
         self.assertEqual(adapt("gamerule doDaylightCycle false", "26.3"), "gamerule advance_time false")
         self.assertEqual(adapt("gamerule randomTickSpeed 0", "26.3"), "gamerule random_tick_speed 0")
+        self.assertEqual(adapt("gamerule doMobSpawning true", "26.3"), "gamerule spawn_mobs true")
         self.assertEqual(adapt("execute in minecraft:overworld run gamerule mobGriefing false", "26.3"),
                          "execute in minecraft:overworld run gamerule mob_griefing false")
 

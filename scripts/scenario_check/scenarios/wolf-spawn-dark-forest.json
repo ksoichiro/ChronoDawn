@@ -1,0 +1,14 @@
+{
+  "description": "Wolves spawn naturally in the Chrono Dawn Dark Forest, whose ground is Temporal Grass. Wolves are generated with the chunks, so the scenario only waits for the chunks around the player to load and counts wolves standing in that biome. A FAIL can also mean that no wolf pack happened to generate near the located biome edge. The player enters the dimension at 0 0 first, so the Time Keeper Village (placed near wherever a player first enters) stays away from what this scenario looks at.",
+  "steps": [
+    "execute in chronodawn:chronodawn run spreadplayers 0 0 0 1 false ${player}",
+    {"sleep": 5},
+    {"command": "execute in chronodawn:chronodawn run locate biome chronodawn:chronodawn_dark_forest", "match": "\\[(?P<x>-?\\d+), [^,]+, (?P<z>-?\\d+)\\]", "check": "locate-dark-forest", "max_seconds": 60},
+    "execute in chronodawn:chronodawn run spreadplayers ${x} ${z} 0 1 false ${player}",
+    {"command": "execute in chronodawn:chronodawn as ${player} at @s as @e[type=minecraft:wolf,distance=..128] at @s if biome ~ ~ ~ chronodawn:chronodawn_dark_forest", "match": "Test passed", "check": "wolf-in-dark-forest", "await": true, "timeout": 90},
+    "execute in chronodawn:chronodawn as ${player} at @s as @e[type=minecraft:wolf,distance=..128,sort=furthest] at @s if biome ~ ~ ~ chronodawn:chronodawn_dark_forest run tp ${player} ~ ~2 ~-4 0 15",
+    {"sleep": 5},
+    "time set noon",
+    {"shot": "wolf", "wait": 5, "note": "A wolf that spawned with the chunks in the Chrono Dawn Dark Forest, about 4 blocks in front of the camera and a little below it (leaves may cover part of the view). It renders as a normal wolf (on 1.21.1 there are no wolf coat variants yet)."}
+  ]
+}

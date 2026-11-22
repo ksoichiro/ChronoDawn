@@ -1,0 +1,17 @@
+{
+  "description": "The surface of the Chrono Dawn Mountain biome looks varied and right. The player enters the dimension at 0 0 first, so the Time Keeper Village (placed near wherever a player first enters) stays away from what this scenario looks at.",
+  "steps": [
+    {"command": "execute in chronodawn:chronodawn run locate biome chronodawn:chronodawn_mountain", "match": "\\[(?P<x>-?\\d+), [^,]+, (?P<z>-?\\d+)\\]", "check": "locate-mountain-surface", "max_seconds": 60},
+    "execute in chronodawn:chronodawn run spreadplayers 0 0 0 1 false ${player}",
+    {"sleep": 5},
+    "execute in chronodawn:chronodawn run spreadplayers ${x} ${z} 0 1 false ${player}",
+    "execute as ${player} at @s run tp @s ~ ~40 ~ 0 50",
+    {"sleep": 40},
+    "time set noon",
+    {"shot": "overview", "wait": 5, "note": "The Mountain biome, looking south and down from 40 blocks above the ground. Steep slopes show a mixed rock face (stone, cobblestone, mossy cobblestone and Duskstone), not one flat block. Rock, grass and snow meet without hard straight lines, and nothing floats on the slopes. No magenta-black missing textures."},
+    "execute as ${player} at @s run tp @s ~ ~-30 ~ 90 15",
+    {"sleep": 5},
+    "time set noon",
+    {"shot": "low", "wait": 5, "note": "The Mountain biome closer to the ground, looking west. Steep slopes show a mixed rock face (stone, cobblestone, mossy cobblestone and Duskstone), not one flat block. Rock, grass and snow meet without hard straight lines, and nothing floats on the slopes."}
+  ]
+}
