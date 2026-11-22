@@ -529,12 +529,13 @@ The first time a player enters Chrono Dawn, a small village is placed on flat gr
 
 **Location**: The surface of any Chrono Dawn biome except the oceans
 
-**What it is**: A white landing pad with a small hall at its centre. It looks like something that landed from far outside Chrono Dawn, unlike the old factory of the Clockwork Depths.
+**What it is**: A white landing pad with a tall two-storey hall at its centre. It looks like something that landed from far outside Chrono Dawn, unlike the old factory of the Clockwork Depths.
 
 **Features**:
 - Four docking bays on the pad and one spawner in the hall keep sending out **Clockwork Sentinels**, with a few Epoch Husks and Secondhand Archers mixed in
 - Sentinels are the only regular mobs that Time Distortion cannot slow
-- Three chests in the hall hold Ancient Gears, Enhanced Clockstone, Clockstone, Time Crystals and other supplies
+- Two chests on the hall's upper floor hold a few Ancient Gears, Enhanced Clockstone, Clockstone, Time Crystals and other supplies
+- Sentinels from the spawners drop Ancient Gears and Enhanced Clockstone less often than those in the open
 
 **Tips**:
 - Break the spawners to stop the stream of mobs

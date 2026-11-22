@@ -9,14 +9,14 @@
   "pages": [
     {
       "text": {
-        "en_us": "The Sentinel Outpost is a white landing pad with a small hall at its centre, as if it had come from somewhere far beyond Chrono Dawn. It is where the Clockwork Sentinels keep watch.\n\nLocation: the surface of any Chrono Dawn biome except the oceans. A Time Keeper sells a Time Compass that points to the nearest one.\n\nIt is a side trip. Nothing in the main progression depends on it.",
-        "ja_jp": "番兵の前哨基地は、中央に小さな広間を持つ白い発着場です。まるでクロノドーンのはるか外から来たかのような佇まいで、時計仕掛けの番兵たちが見張りについています。\n\n場所: 海洋を除くクロノドーンのあらゆるバイオームの地表。時の番人から、最寄りの前哨基地を指す時間のコンパスを買えます。\n\n寄り道の構造物です。メインの進行がこれに依存することはありません。"
+        "en_us": "The Sentinel Outpost is a white landing pad with a tall two-storey hall at its centre, as if it had come from somewhere far beyond Chrono Dawn. It is where the Clockwork Sentinels keep watch.\n\nLocation: the surface of any Chrono Dawn biome except the oceans. A Time Keeper sells a Time Compass that points to the nearest one.\n\nIt is a side trip. Nothing in the main progression depends on it.",
+        "ja_jp": "番兵の前哨基地は、中央に高い2階建ての広間を持つ白い発着場です。まるでクロノドーンのはるか外から来たかのような佇まいで、時計仕掛けの番兵たちが見張りについています。\n\n場所: 海洋を除くクロノドーンのあらゆるバイオームの地表。時の番人から、最寄りの前哨基地を指す時間のコンパスを買えます。\n\n寄り道の構造物です。メインの進行がこれに依存することはありません。"
       }
     },
     {
       "text": {
-        "en_us": "What to expect:\n\n• Four docking bays on the pad and a spawner in the hall keep sending out Clockwork Sentinels, with a few Epoch Husks and Secondhand Archers among them\n• Sentinels are the only regular mobs that Time Distortion cannot slow, so do not count on slowing them\n• Three chests in the hall hold Ancient Gears, Enhanced Clockstone and other supplies",
-        "ja_jp": "見どころ:\n\n• 発着場の4つの整備ベイと広間のスポナーが、時計仕掛けの番兵を送り出し続けます。少数のエポックハスクとセカンドハンドアーチャーも混ざります\n• 番兵は時間の歪みで遅くならない唯一の通常モブです。足止めはあてにできません\n• 広間の3つのチェストには、古代の歯車、強化クロックストーンなどの物資が入っています"
+        "en_us": "What to expect:\n\n• Four docking bays on the pad and a spawner in the hall keep sending out Clockwork Sentinels, with a few Epoch Husks and Secondhand Archers among them\n• Sentinels are the only regular mobs that Time Distortion cannot slow, so do not count on slowing them\n• Two chests on the hall's upper floor hold a few Ancient Gears, Enhanced Clockstone and other supplies\n• Sentinels from the spawners drop less than those in the open",
+        "ja_jp": "見どころ:\n\n• 発着場の4つの整備ベイと広間のスポナーが、時計仕掛けの番兵を送り出し続けます。少数のエポックハスクとセカンドハンドアーチャーも混ざります\n• 番兵は時間の歪みで遅くならない唯一の通常モブです。足止めはあてにできません\n• 広間の2階にある2つのチェストには、古代の歯車や強化クロックストーンなどの物資が少量入っています\n• スポナーから湧いた番兵は、外にいる番兵よりドロップが少なくなります"
       }
     },
     {

@@ -2,11 +2,11 @@
 """Generate the Sentinel Outpost structure template.
 
 The outpost is a circular landing pad of white and grey concrete and quartz
-around a small central hall. The Clockwork Sentinels, which are the only mobs
+around a tall two-storey central hall. The Clockwork Sentinels, which are the only mobs
 that Time Distortion cannot slow, keep it. Four docking bays on the pad and one
 spawner in the hall keep producing mobs, mostly Clockwork Sentinels with a few
-Epoch Husks and Secondhand Archers mixed in. Three chests in the hall hold the
-reward.
+Epoch Husks and Secondhand Archers mixed in. Two chests on the hall's upper floor
+hold the reward.
 
 The look is deliberately different from the Clockwork Depths, which is an old
 factory of temporal stone: clean white surfaces, black trim and sea lanterns,
@@ -17,7 +17,8 @@ Layout (local coordinates, the template is SIZE x HEIGHT x SIZE):
   y = 0        foundation layer under the pad (the foundation filler and the
                terrain beard blend it with the ground)
   y = 1        pad floor
-  y = 2..13    hall (9x9 walls), bays, pylons and the antenna
+  y = 2..6     hall ground floor, 7 is the upper floor, 8..11 the upper hall,
+               12 the roof. Bay towers reach y = 12 and the antenna y = 23.
 
 Only the pad's disc is written. Positions outside the disc are left out of the
 block list so they keep the terrain, the same as a structure_void block.
@@ -39,7 +40,7 @@ import nbtlib
 from nbtlib import tag
 
 SIZE = 29
-HEIGHT = 14
+HEIGHT = 24
 CENTER = 14
 RADIUS = 14.3
 DATA_VERSION = 3955  # Minecraft 1.21.1, the version the other templates use
@@ -91,22 +92,33 @@ class Template:
                     self.set(x, y, z, name, props)
 
 
+# Sentinels spawned here drop less than the ones in the open, so that the
+# spawners are not a farm. Other mobs keep their normal loot tables.
+OUTPOST_SENTINEL_LOOT = "chronodawn:entities/clockwork_sentinel_outpost"
+
+
+def entity_nbt(mob):
+    entity = tag.Compound({"id": tag.String(mob)})
+    if mob == "chronodawn:clockwork_sentinel":
+        entity["DeathLootTable"] = tag.String(OUTPOST_SENTINEL_LOOT)
+    return entity
+
+
 def spawner_nbt(mobs, max_nearby):
     potentials = tag.List[tag.Compound]([
         tag.Compound({
             "weight": tag.Int(weight),
             "data": tag.Compound({
-                "entity": tag.Compound({"id": tag.String(mob)})}),
+                "entity": entity_nbt(mob)}),
         }) for mob, weight in mobs])
     return tag.Compound({
         "id": tag.String(SPAWNER),
         "SpawnPotentials": potentials,
-        "SpawnData": tag.Compound({
-            "entity": tag.Compound({"id": tag.String(mobs[0][0])})}),
+        "SpawnData": tag.Compound({"entity": entity_nbt(mobs[0][0])}),
         "Delay": tag.Short(20),
-        "MinSpawnDelay": tag.Short(300),
-        "MaxSpawnDelay": tag.Short(700),
-        "SpawnCount": tag.Short(2),
+        "MinSpawnDelay": tag.Short(150),
+        "MaxSpawnDelay": tag.Short(400),
+        "SpawnCount": tag.Short(3),
         "MaxNearbyEntities": tag.Short(max_nearby),
         "RequiredPlayerRange": tag.Short(16),
         "SpawnRange": tag.Short(4),
@@ -132,11 +144,10 @@ def build():
                 floor = FLOOR
             t.set(x, 1, z, floor)
 
-    # Four white axis paths from the hall doors to the rim.
+    # White axis paths from the hall doors (north, south, west) to the rim.
     for d in range(HALL_MAX - cx + 1, int(RADIUS) + 1):
         for w in (-1, 0, 1):
-            for x, z in ((cx + w, cz - d), (cx + w, cz + d),
-                         (cx - d, cz + w), (cx + d, cz + w)):
+            for x, z in ((cx + w, cz - d), (cx + w, cz + d), (cx - d, cz + w)):
                 if math.hypot(x - cx, z - cz) <= RADIUS and (x, 1, z) in t.blocks:
                     t.set(x, 1, z, FLOOR_ALT)
 
@@ -147,74 +158,92 @@ def build():
         z = round(cz + 12 * math.sin(a))
         t.set(x, 1, z, LAMP)
 
-    # Hall: walls, doors, windows, floor, roof.
+    # Hall: a two-storey tower. Ground floor y 2..6, upper floor at y 7, upper hall y 8..11, roof at y 12.
+    ROOF_Y = 12
     for x in range(HALL_MIN, HALL_MAX + 1):
         for z in range(HALL_MIN, HALL_MAX + 1):
             inside = HALL_MIN < x < HALL_MAX and HALL_MIN < z < HALL_MAX
             if inside:
                 checker = FLOOR if (x + z) % 2 == 0 else FLOOR_ALT
                 t.set(x, 1, z, checker)
-                for y in range(2, 7):
+                for y in range(2, ROOF_Y):
                     t.set(x, y, z, AIR)
             else:
-                for y in range(2, 7):
+                for y in range(2, ROOF_Y):
                     t.set(x, y, z, WALL)
-            t.set(x, 7, z, ROOF)
+            t.set(x, ROOF_Y, z, ROOF)
     for corner in ((HALL_MIN, HALL_MIN), (HALL_MIN, HALL_MAX),
                    (HALL_MAX, HALL_MIN), (HALL_MAX, HALL_MAX)):
-        for y in range(2, 7):
+        for y in range(2, ROOF_Y):
             t.set(corner[0], y, corner[1], PILLAR, {"axis": "y"})
-        t.set(corner[0], 8, corner[1], ROD, {"facing": "up"})
+        t.set(corner[0], ROOF_Y + 1, corner[1], ROD, {"facing": "up"})
     span = range(HALL_MIN + 1, HALL_MAX)
-    for i, a in enumerate(span):
-        # A 3 wide door in the middle of each wall, a window 3 blocks from its centre.
+    for a in span:
+        # A 3 wide door in the middle of the north, south and west walls, windows 3 blocks from its centre
+        # on both storeys.
         is_door = abs(a - cx) <= 1
-        is_window = abs(a - cx) in (3,)
-        for y in range(2, 7):
-            for pos in ((a, HALL_MIN), (a, HALL_MAX), (HALL_MIN, a), (HALL_MAX, a)):
+        is_window = abs(a - cx) == 3
+        for y in range(2, ROOF_Y):
+            # The east wall has no door: the stair to the upper floor stands against it.
+            for pos in ((a, HALL_MIN), (a, HALL_MAX), (HALL_MIN, a)):
                 if is_door and y <= 4:
                     t.set(pos[0], y, pos[1], AIR)
-                elif is_window and 3 <= y <= 5:
+                elif is_window and (3 <= y <= 5 or 9 <= y <= 10):
                     t.set(pos[0], y, pos[1], GLASS)
-    # Door lintel is the wall itself (y=5, 6), the trim marks the doorway sides.
+            if is_window and (3 <= y <= 5 or 9 <= y <= 10):
+                t.set(HALL_MAX, y, a, GLASS)
+    # The trim marks the doorway sides.
     for a in (cx - 2, cx + 2):
         for y in range(2, 5):
-            for pos in ((a, HALL_MIN), (a, HALL_MAX), (HALL_MIN, a), (HALL_MAX, a)):
+            for pos in ((a, HALL_MIN), (a, HALL_MAX), (HALL_MIN, a)):
                 t.set(pos[0], y, pos[1], TRIM)
+
+    # Upper floor: a 2 wide walkway around a 3x3 well, open above the stair column.
+    for x in range(HALL_MIN + 1, HALL_MAX):
+        for z in range(HALL_MIN + 1, HALL_MAX):
+            in_well = abs(x - cx) <= 1 and abs(z - cz) <= 1
+            stair_column = x == HALL_MAX - 1 and HALL_MIN + 2 <= z <= HALL_MAX - 1
+            if not in_well and not stair_column:
+                t.set(x, 7, z, FLOOR_ALT if (x + z) % 2 else FLOOR)
+    # Stair of full blocks along the east wall, one block higher per step going north.
+    for step, z in enumerate(range(HALL_MAX - 1, HALL_MIN + 1, -1), start=1):
+        for y in range(2, 2 + step):
+            t.set(HALL_MAX - 1, y, z, WALL)
 
     # Roof lamps and the antenna mast.
     for x, z in ((cx - 2, cz), (cx + 2, cz), (cx, cz - 2), (cx, cz + 2)):
-        t.set(x, 7, z, LAMP)
-    for y in range(8, 13):
+        t.set(x, ROOF_Y, z, LAMP)
+    for y in range(ROOF_Y + 1, HEIGHT - 1):
         t.set(cx, y, cz, PILLAR, {"axis": "y"})
-    t.set(cx, 13, cz, ROD, {"facing": "up"})
+    t.set(cx, HEIGHT - 1, cz, ROD, {"facing": "up"})
 
     # Hall interior: the hall spawner on a plinth, with four lamps in the floor.
     t.set(cx, 1, cz, TRIM)
-    t.set(cx, 2, cz, SPAWNER, None, spawner_nbt(HALL_MOBS, 4))
+    t.set(cx, 2, cz, SPAWNER, None, spawner_nbt(HALL_MOBS, 6))
     for dx, dz in ((-2, -2), (2, -2), (-2, 2), (2, 2)):
         t.set(cx + dx, 1, cz + dz, LAMP)
-    # The reward chests stand in three corners of the hall, away from the doors.
-    for x, z in ((HALL_MIN + 1, HALL_MIN + 1), (HALL_MAX - 1, HALL_MIN + 1),
-                 (HALL_MIN + 1, HALL_MAX - 1)):
-        t.set(x, 2, z, CHEST,
-              {"facing": "south", "type": "single", "waterlogged": "false"},
+    # Two reward chests on the upper floor, in the west corners, facing the well.
+    for z in (HALL_MIN + 1, HALL_MAX - 1):
+        t.set(HALL_MIN + 1, 8, z, CHEST,
+              {"facing": "east", "type": "single", "waterlogged": "false"},
               tag.Compound({"id": tag.String(CHEST), "Items": tag.List[tag.Compound]([])}))
 
-    # Docking bays: a black pad with a spawner under a quartz canopy.
+    # Docking bays: a black pad with a spawner, under a canopy held by four tall pylons.
     for bx, bz in BAY_CENTERS:
         for dx in (-1, 0, 1):
             for dz in (-1, 0, 1):
                 t.set(bx + dx, 1, bz + dz, TRIM)
-                t.set(bx + dx, 5, bz + dz, ROOF)
-                for y in (2, 3, 4):
+                t.set(bx + dx, 9, bz + dz, ROOF)
+                for y in range(2, 9):
                     t.set(bx + dx, y, bz + dz, AIR)
-        t.set(bx, 2, bz, SPAWNER, None, spawner_nbt(BAY_MOBS, 5))
+        t.set(bx, 2, bz, SPAWNER, None, spawner_nbt(BAY_MOBS, 8))
         for dx, dz in ((-1, -1), (1, -1), (-1, 1), (1, 1)):
-            for y in (2, 3, 4):
+            for y in range(2, 9):
                 t.set(bx + dx, y, bz + dz, PILLAR, {"axis": "y"})
-        t.set(bx, 5, bz, LAMP)
-        t.set(bx, 6, bz, ROD, {"facing": "up"})
+        t.set(bx, 9, bz, LAMP)
+        for y in (10, 11):
+            t.set(bx, y, bz, PILLAR, {"axis": "y"})
+        t.set(bx, 12, bz, ROD, {"facing": "up"})
 
     return t
 
