@@ -1,17 +1,18 @@
 {
-  "description": "/locate finds a Phantom Catacombs in the Chrono Dawn dimension quickly, the boss room placer finds its StructureStart and places room_7 and the boss room without falling back, and the surface entrance looks right from above and from the side. The placer only runs for structures within 8 chunks of a player and checks every 600 ticks, so the player waits next to the catacombs for over a minute. A fallback or a failed placement logs a WARN or an ERROR, which fails the server-log check. The player enters the dimension at 0 0 first so the Time Keeper Village is not placed on the catacombs.",
+  "description": "/locate finds a Phantom Catacombs in the Chrono Dawn dimension quickly, the boss room placer finds its StructureStart and places room_7 and the boss room without falling back, and the surface entrance looks right from above and from the side. The placer only runs for structures within 8 chunks of a player and checks every 600 ticks, so the scenario sprints 1500 ticks (the 75 seconds it used to wait) next to the catacombs. The placer counts ticks and does all its work on the server thread, so the sprint runs it the same way as real time. The boss room position is random, so no block check can wait for it. A fallback or a failed placement logs a WARN or an ERROR, which fails the server-log check. The player enters the dimension at 0 0 first so the Time Keeper Village is not placed on the catacombs.",
   "steps": [
     {"command": "execute in chronodawn:chronodawn run locate structure chronodawn:phantom_catacombs", "match": "\\[(?P<x>-?\\d+), [^,]+, (?P<z>-?\\d+)\\]", "check": "locate-phantom-catacombs", "max_seconds": 60},
     "execute in chronodawn:chronodawn run spreadplayers 0 0 0 1 false ${player}",
-    {"sleep": 5},
     "execute in chronodawn:chronodawn run spreadplayers ${x} ${z} 0 1 false ${player}",
     "execute as ${player} at @s run tp @s ~ ~60 ~ 0 90",
-    {"sleep": 75},
-    "time set noon",
-    {"shot": "from-above", "wait": 5, "note": "Phantom Catacombs in view (its start is at x=${x}, z=${z}), seen straight down from 60 blocks above the start. The start is a corner of the structure, not its center, so it may be off-center or partly out of frame. The surface entrance of the catacombs; the rest is underground, so only the entrance may show. Its blocks render with their textures, nothing is cut off at chunk borders, and the ground around it has no box-shaped cut or hollow. The check that matters most is the server log: no WARN or ERROR from the boss room placer."},
+    {"settle": 120},
+    "tick sprint 1500",
+    {"command": "tick query", "match": "running normally|can't keep up", "check": "placer-ticks-done", "await": true, "timeout": 120},
+    "execute in chronodawn:chronodawn run time set noon",
+    {"shot": "from-above", "note": "Phantom Catacombs in view (its start is at x=${x}, z=${z}), seen straight down from 60 blocks above the start. The start is a corner of the structure, not its center, so it may be off-center or partly out of frame. The surface entrance of the catacombs; the rest is underground, so only the entrance may show. Its blocks render with their textures, nothing is cut off at chunk borders, and the ground around it has no box-shaped cut or hollow. The check that matters most is the server log: no WARN or ERROR from the boss room placer."},
     "execute as ${player} at @s run tp @s ~-45 ~-35 ~ -90 25",
-    {"sleep": 5},
-    "time set noon",
-    {"shot": "side", "wait": 5, "note": "Phantom Catacombs from the west, 45 blocks away and about 25 blocks above where the player landed, looking east and slightly down. Its surface entrance sits on the terrain: no floating edges and no deep pit or flat-cut wall around it. The entrance may be small or hidden by terrain from this angle."}
+    {"settle": 60},
+    "execute in chronodawn:chronodawn run time set noon",
+    {"shot": "side", "note": "Phantom Catacombs from the west, 45 blocks away and about 25 blocks above where the player landed, looking east and slightly down. Its surface entrance sits on the terrain: no floating edges and no deep pit or flat-cut wall around it. The entrance may be small or hidden by terrain from this angle."}
   ]
 }

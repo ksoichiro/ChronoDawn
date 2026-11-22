@@ -9,10 +9,10 @@
     "gamemode creative ${player}",
     "clear ${player}",
     "execute in minecraft:overworld run tp ${player} 24.5 201 8.5 0 10",
-    {"shot": "aim", "wait": 3, "note": "The Time Keeper stands right in front of the player on a white platform, the crosshair on its body. It renders with its texture (purple robe, gold trim, dark hood with glowing eyes)."},
+    {"shot": "aim", "note": "The Time Keeper stands right in front of the player on a white platform, the crosshair on its body. It renders with its texture (purple robe, gold trim, dark hood with glowing eyes)."},
     {"input": "use"},
     {"screen": "Time Keeper", "check": "trade-screen-opened"},
-    {"shot": "trade-screen", "wait": 2, "note": "The Time Keeper trading screen: the title reads Time Keeper, the offer list on the left shows its trades with item icons (no empty list, no magenta-black missing textures), and the player's inventory is below."},
+    {"shot": "trade-screen", "note": "The Time Keeper trading screen: the title reads Time Keeper, the offer list on the left shows its trades with item icons (no empty list, no magenta-black missing textures), and the player's inventory is below."},
     {"input": "close"},
     {"screen": "^$", "check": "trade-screen-closed"},
     "execute in minecraft:overworld run forceload remove 16 0 31 15"

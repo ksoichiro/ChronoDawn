@@ -17,11 +17,11 @@
     {"command": "execute in minecraft:overworld if block 2 201 10 chronodawn:polished_dawnstone", "match": "Test passed", "check": "polished-dawnstone-placed"},
     {"command": "execute in minecraft:overworld if block 10 201 10 chronodawn:polished_duskstone", "match": "Test passed", "check": "polished-duskstone-placed"},
     "execute in minecraft:overworld run tp ${player} 7.5 203.5 18.5 180 12",
-    {"shot": "overview", "wait": 8, "note": "Front row, left to right: Dawnstone, Polished Dawnstone, its stairs and slab, Duskstone, Polished Duskstone, its stairs and slab. Behind them a Dawnstone wall (left) and a Duskstone wall (right). The polished blocks have a framed face by design. No magenta-black missing textures, stairs and slabs have the right shape."},
+    {"shot": "overview", "note": "Front row, left to right: Dawnstone, Polished Dawnstone, its stairs and slab, Duskstone, Polished Duskstone, its stairs and slab. Behind them a Dawnstone wall (left) and a Duskstone wall (right). The polished blocks have a framed face by design. No magenta-black missing textures, stairs and slabs have the right shape."},
     "execute in minecraft:overworld run tp ${player} 3.5 201.5 8.4 180 0",
-    {"shot": "dawnstone-wall", "wait": 4, "note": "Close-up of the 7x4 Dawnstone wall: the texture repeats without visible seams or lines between blocks."},
+    {"shot": "dawnstone-wall", "note": "Close-up of the 7x4 Dawnstone wall: the texture repeats without visible seams or lines between blocks."},
     "execute in minecraft:overworld run tp ${player} 11.5 201.5 8.4 180 0",
-    {"shot": "duskstone-wall", "wait": 4, "note": "Close-up of the 7x4 Duskstone wall: the texture repeats without visible seams or lines between blocks."},
+    {"shot": "duskstone-wall", "note": "Close-up of the 7x4 Duskstone wall: the texture repeats without visible seams or lines between blocks."},
     "execute in minecraft:overworld run forceload remove 0 0 15 15"
   ]
 }
