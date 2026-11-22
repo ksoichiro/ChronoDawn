@@ -58,8 +58,7 @@ public class ResourceValidationTest {
         "TEMPORAL_PARTICLE_EMITTER",    // Invisible, indestructible effect block
         "REVERSING_TIME_SANDSTONE",     // Self-restoring block, no drops by design
         "BOSS_ROOM_DOOR",               // Iron door equivalent, no drop
-        "ENTROPY_CRYPT_TRAPDOOR",       // Iron trapdoor equivalent, boss trigger
-        "UNSTABLE_FUNGUS"               // Special effect block, no drop by design
+        "ENTROPY_CRYPT_TRAPDOOR"        // Iron trapdoor equivalent, boss trigger
     );
 
     // Technical blocks/entities that don't need player-facing translations

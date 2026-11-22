@@ -1378,17 +1378,7 @@ def blocksWithoutLootTable = [
         'boss_room_boundary_marker' : 'unbreakable structure marker',
         'boss_room_door'            : 'boss room door, opened by the fight',
         'entropy_crypt_trapdoor'    : 'boss room trapdoor, opened by the fight',
-        'reversing_time_sandstone'  : 'regenerates after breaking, drops nothing today (pending design review)',
-        'unstable_fungus'           : 'drops nothing today (pending design review)',
-        // Potted plants drop nothing today (pending review). Vanilla potted
-        // plants drop the pot and the plant, see potted_chrono_bloom.json.
-        'potted_time_wood_sapling'        : 'pending review',
-        'potted_dark_time_wood_sapling'   : 'pending review',
-        'potted_ancient_time_wood_sapling': 'pending review',
-        'potted_orange_time_blossom'      : 'pending review',
-        'potted_pink_time_blossom'        : 'pending review',
-        'potted_purple_time_blossom'      : 'pending review',
-        'potted_unstable_fungus'          : 'pending review',
+        'reversing_time_sandstone'  : 'regenerates after breaking, drops nothing by design',
 ]
 
 tasks.register('validateBlockLootTables') {

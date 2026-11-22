@@ -56,6 +56,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Potted plants and Unstable Fungus now drop items**: breaking a flower pot
+  holding a Time Wood, Dark Time Wood, or Ancient Time Wood sapling, an Orange,
+  Pink, or Purple Time Blossom, or an Unstable Fungus gave nothing back, so the
+  plant was lost. They now drop the pot and the plant like vanilla potted
+  plants. Unstable Fungus itself also drops itself when broken.
 - **Saplings grown in Chrono Dawn leave Temporal Dirt under the trunk**: a tree
   grown from a Time Wood, Dark Time Wood, or Ancient Time Wood sapling left
   vanilla dirt under its trunk even inside the Chrono Dawn dimension, unlike

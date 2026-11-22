@@ -1103,7 +1103,7 @@ All three wood types have the same variants:
 
 #### Reversing Time Sandstone
 - **Property**: Regenerates 3 seconds after being broken
-- **Use**: Renewable resource block
+- **Use**: Decorative and puzzle block (drops nothing when broken)
 
 #### Unstable Fungus
 - **Property**: Applies random speed effect (Speed I or Slowness I) when stepped on
@@ -1430,7 +1430,7 @@ All three wood types have the same variants:
 ### Q: Are there any renewable resources?
 
 **A**: Yes!
-- **Renewable**: All three wood types (via saplings), Time Wheat, Chrono Melons, Reversing Time Sandstone, mushrooms, crops, and mob drops such as Clockstone (Temporal Wraith, Floq), Time Crystals (Timeline Strider, Forgotten Minute), and Enhanced Clockstone (Clockwork Sentinel)
+- **Renewable**: All three wood types (via saplings), Time Wheat, Chrono Melons, mushrooms, crops, and mob drops such as Clockstone (Temporal Wraith, Floq), Time Crystals (Timeline Strider, Forgotten Minute), and Enhanced Clockstone (Clockwork Sentinel)
 - **Finite but plentiful**: Ores, including Clockstone Ore, which generates throughout Chrono Dawn
 - **Once per world**: Time Tyrant drops (Eye of Chronos, Fragments of Stasis Core). Other boss drops come from each copy of their dungeon
 
