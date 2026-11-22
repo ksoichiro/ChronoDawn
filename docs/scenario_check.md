@@ -67,10 +67,10 @@ Everything is under `<loader>/<version>/build/scenario-check/`, for example
 | File | Contents |
 |------|----------|
 | `report.txt` | One line per result: `PASS`, `FAIL`, `SETUP FAILED`, `NOT COVERED`, or `SHOT` |
-| `summary.md` | The report, then every screenshot with what to look for |
+| `summary.md` | The report, the time each scenario took, then every screenshot with what to look for |
 | `sheet.png` | All screenshots with their notes on one image, for attaching to a PR or task |
 | `<scenario>/shots/*.png` | Full-size screenshots (the framebuffer of the 1280x720 window, 2560x1440 on a Retina display) |
-| `<scenario>/transcript.txt` | Every RCON command and reply |
+| `<scenario>/transcript.txt` | Every RCON command and reply, and the time each step took |
 | `scenario-server.log`, `scenario-client.log` | Server and client logs |
 
 The task fails when a check fails, a setup command fails, a server log line
@@ -108,7 +108,8 @@ docstring of `scripts/scenario_check/scenario.py`. In short:
     {"command": "execute in chronodawn:chronodawn run locate structure chronodawn:forgotten_library",
      "match": "\\[(?P<x>-?\\d+), [^,]+, (?P<z>-?\\d+)\\]", "check": "locate", "max_seconds": 60},
     "execute in chronodawn:chronodawn run spreadplayers ${x} ${z} 0 1 false ${player}",
-    {"shot": "front", "wait": 8, "note": "What the image must show"}
+    {"settle": 120},
+    {"shot": "front", "note": "What the image must show"}
   ]
 }
 ```
@@ -118,11 +119,24 @@ docstring of `scripts/scenario_check/scenario.py`. In short:
 - `match` searches the reply. Named groups become `${name}` variables for
   later steps. `check` reports the match as `PASS` or `FAIL`, with the time
   the command took. `max_seconds` fails a slow command. `await: true` re-runs
-  the command once a second until it matches or `timeout` (default 120 s)
+  the command every half second until it matches or `timeout` (default 120 s)
   passes, for example to wait for `execute if loaded`.
-- `shot` waits `wait` seconds (default 5) for chunks to render, then captures
-  the window. Write the `note` as the thing a reviewer must see, because the
-  reviewer only has the image and the note.
+- `{"settle": 120}` waits until the client holds the chunks around the player
+  and has built them: no chunk is missing within 3 chunks of the player, no
+  section builds are queued, and the chunk and visible-section counts have
+  not changed for 2 seconds. The number is the timeout. A timeout is a
+  `FAIL`, and the scenario goes on so the shots still show what the client
+  had. Use it after a teleport, before `time set noon` and the shot.
+- `shot` settles first (timeout `settle`, default 30 s, `false` to skip), then
+  captures the window. Write the `note` as the thing a reviewer must see,
+  because the reviewer only has the image and the note.
+- `{"sleep": 2, "reason": "..."}` waits a fixed time, and so does `wait` on a
+  shot. Both need a `reason`, and the unit tests fail when a bundled scenario
+  adds up more than 10 seconds of them. Wait for a condition instead (`await`,
+  `settle`, `screen`, or `input` with `until`).
+
+The `scenario-check` skill (`.claude/skills/scenario-check/SKILL.md`) has the
+rules for keeping a new scenario fast and what each condition is for.
 
 ### Player input and screens
 
@@ -138,8 +152,13 @@ These step types act in the client instead of over RCON:
   of the open screen matches. A screen with an empty title, or no screen,
   matches `^$`. Without `check` a mismatch is `SETUP FAILED`, as for a
   command. The loading screen shown after a teleport into another dimension
-  also has an empty title, so `^$` does not wait for it. Add a `sleep` of a
-  few seconds after such a teleport before an `input` step.
+  also has an empty title, so `^$` does not wait for it. Add a `settle` step
+  after such a teleport before an `input` step.
+- `{"input": "use", "until": "command", "match": "regex", "repeat": 30}`
+  clicks, runs the command a quarter second later, and clicks again until
+  the reply matches, at most `repeat` times. Running out of clicks is
+  `SETUP FAILED`. `sapling-root-dirt` uses it to bone-meal each sapling until
+  the tree grows, instead of a fixed number of clicks.
 
 - `{"click": [dx, dy], "button": 0}` clicks inside the open screen. The
   coordinates are GUI-scaled and relative to the screen center (x right, y
@@ -192,8 +211,11 @@ hotbar and hearts out of the shots, and the player does not fall or suffocate.
 The Chrono Dawn dimension keeps its own time, and it keeps flowing (sometimes
 fast, under time distortion) whatever `doDaylightCycle` says. A shot there
 can come out at night unless `time set noon` runs just before it, so the
-Chrono Dawn scenarios wait for chunks with a `sleep`, set noon, and then take
-the shot with a short `wait`.
+Chrono Dawn scenarios wait for chunks with `settle`, set noon, and then take
+the shot. Run it as `execute in chronodawn:chronodawn run time set noon`. On
+26.3 each dimension has its own clock and a bare `time set noon` from RCON
+only moves the overworld one. On 1.21.1 the command sets every dimension
+either way.
 
 Coordinates near `0 200 0` in the overworld are above the terrain, so blocks
 placed there have a plain sky behind them. Use `forceload` and an `await` on
@@ -233,7 +255,12 @@ blocks use separate areas: overworld x 0-15 (`polished-stones`), 16-31
 - Tested on macOS only.
 - In spectator mode the crosshair shows only when it points at an entity or
   a container, so it is usually not in the shots.
-- `wait` is a fixed time. Far or slow chunks may need a longer wait.
+- `settle` sees what the client has loaded and built, not what the server
+  has still to generate or place. A structure that a placer adds later (the
+  Master Clock boss room) needs an `await` on one of its blocks. The Phantom
+  Catacombs boss room lands at a random spot, so `phantom-catacombs` runs
+  `tick sprint 1500` for its tick-counting placer and awaits `tick query`
+  instead.
 - Toasts (advancements, recipes) can appear in the top-right corner.
 - Input is one click at a time. Holding a button (mining in survival,
   drawing a bow), moving, typing, key presses and dragging are not supported.

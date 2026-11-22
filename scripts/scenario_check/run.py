@@ -11,7 +11,6 @@ import json
 import re
 import shutil
 import sys
-import time
 from pathlib import Path
 
 from scripts.scenario_check import capture, images
@@ -24,8 +23,9 @@ HERE = Path(__file__).resolve().parent
 WINDOW_SIZE = (1280, 720)
 # Keeps the RCON socket open through slow commands such as /locate.
 RCON_TIMEOUT = 600
-# The join message and the first terrain need a moment before any shot.
-SETTLE_SECONDS = 12
+# The client joins before the world around it has loaded. Wait for that
+# instead of a fixed time, so the first scenario starts from a rendered world.
+SESSION_SETTLE = [{"settle": 120}]
 
 # Chat is hidden so command feedback and join messages stay out of the shots.
 # VSync is off because the 26.x client (SDL) blocks in SDL_GL_SwapWindow with
@@ -76,10 +76,15 @@ def _shot_results(shots, scenario_name):
     return results
 
 
-def write_summary(out_dir: Path, report: str, shots_by_scenario: dict, sheet: Path | None):
+def write_summary(out_dir: Path, report: str, shots_by_scenario: dict, sheet: Path | None,
+                  seconds_by_scenario: dict | None = None):
     lines = ["# Scenario check", "", "```", report.rstrip(), "```", ""]
     if sheet:
         lines += [f"Contact sheet: `{sheet}`", ""]
+    if seconds_by_scenario:
+        lines += ["## Time", "", "| Scenario | Seconds |", "|----------|---------|"]
+        lines += [f"| {name} | {seconds:.0f} |" for name, seconds in seconds_by_scenario.items()]
+        lines += [f"| total | {sum(seconds_by_scenario.values()):.0f} |", ""]
     for name, shots in shots_by_scenario.items():
         if not shots:
             continue
@@ -111,12 +116,15 @@ def run(env, scenarios, candidate_jar, out_dir, ports):
 
     results = []
     shots_by_scenario = {}
+    seconds_by_scenario = {}
     client_args = ["--width", str(WINDOW_SIZE[0]), "--height", str(WINDOW_SIZE[1])]
     server, client = _start_session(env, server_dir, client_dir, mods, ports, "scenario", out_dir, client_args)
     try:
-        time.sleep(SETTLE_SECONDS)
         with Rcon("127.0.0.1", ports[1], processes.RCON_PASSWORD, timeout=RCON_TIMEOUT,
                   mc_version=env.mc_version) as rcon:
+            settled = Runner(rcon, None, PLAYER, capture.Client(request_dir, client.alive)).run(
+                Scenario("session", "", SESSION_SETTLE))
+            results += settled.results
             for scenario in scenarios:
                 scenario_dir = out_dir / scenario.name
                 shots_dir = scenario_dir / "shots"
@@ -134,6 +142,9 @@ def run(env, scenarios, candidate_jar, out_dir, ports):
                     outcome.results += main_part.results
                     outcome.shots += main_part.shots
                     outcome.transcript += main_part.transcript
+                    outcome.timings += main_part.timings
+                seconds_by_scenario[scenario.name] = outcome.seconds
+                print(f"[{env.loader}] scenario {scenario.name} took {outcome.seconds:.0f}s", flush=True)
                 scenario_dir.mkdir(parents=True, exist_ok=True)
                 (scenario_dir / "transcript.txt").write_text("\n".join(outcome.transcript) + "\n")
                 results += outcome.results + _shot_results(outcome.shots, scenario.name)
@@ -153,7 +164,7 @@ def run(env, scenarios, candidate_jar, out_dir, ports):
     results.append(("FAIL" if server_problems else "PASS", "server-log", "\n  ".join(server_problems[:30])))
     client_problems = logcheck.check_client_log(out_dir / "scenario-client.log", client_dir, env.log_ignore_file)
     results.append(("FAIL" if client_problems else "PASS", "client-log", "\n  ".join(client_problems[:30])))
-    return results, shots_by_scenario, sheet
+    return results, shots_by_scenario, sheet, seconds_by_scenario
 
 
 def main(argv=None) -> int:
@@ -177,16 +188,16 @@ def main(argv=None) -> int:
     processes.install_signal_handlers()
 
     out_dir = args.out_dir.resolve()
-    shots_by_scenario, sheet = {}, None
+    shots_by_scenario, sheet, seconds_by_scenario = {}, None, {}
     try:
-        results, shots_by_scenario, sheet = run(env, scenarios, candidate, out_dir, ports)
+        results, shots_by_scenario, sheet, seconds_by_scenario = run(env, scenarios, candidate, out_dir, ports)
     except Exception as e:
         results = [("FAIL", "harness", f"{type(e).__name__}: {e}")]
 
     report = f"scenarioCheck {env.loader} {env.mc_version}, candidate {candidate.name}\n" + compare.format_report(results)
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "report.txt").write_text(report)
-    write_summary(out_dir, report, shots_by_scenario, sheet)
+    write_summary(out_dir, report, shots_by_scenario, sheet, seconds_by_scenario)
     print(report, flush=True)
     failed = [r for r in results if r[0] in ("FAIL", "SETUP FAILED")]
     print(f"{len(failed)} failure(s). Report: {out_dir / 'report.txt'}, summary: {out_dir / 'summary.md'}"

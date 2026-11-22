@@ -15,15 +15,29 @@ Each step is one of:
    "timeout": 60, "max_seconds": 10}
                                  Run a command and search its reply for match.
                                  Named groups ((?P<x>...)) become variables.
-                                 With "await", re-run once a second until it
-                                 matches or timeout passes. With "check", the
+                                 With "await", re-run every half second until
+                                 it matches or timeout passes. With "check", the
                                  outcome is reported as PASS or FAIL. Without
                                  it, a mismatch is a SETUP FAILED. max_seconds
                                  fails a check whose command took longer.
-- {"sleep": 2}                   Wait.
-- {"shot": "name", "wait": 8, "note": "what to look at"}
-                                 Wait, then take a screenshot in the client. The note
-                                 tells the reviewer what the image must show.
+- {"settle": 60}                 Wait until the client holds the chunks around
+                                 the player and has built them: nothing is
+                                 missing within 3 chunks, no section builds are
+                                 queued, and the chunk and visible-section counts
+                                 have not changed for 2 seconds. The value is the
+                                 timeout in seconds. A timeout is a FAIL, and the
+                                 scenario goes on so the shots still show what
+                                 the client had.
+- {"sleep": 2, "reason": "why no condition can replace it"}
+                                 Wait a fixed time. Prefer an await, settle or
+                                 screen step. The reason is required.
+- {"shot": "name", "note": "what to look at", "settle": 30, "wait": 1,
+   "reason": "..."}
+                                 Settle (timeout "settle", default 30; false to
+                                 skip), then take a screenshot in the client. The
+                                 note tells the reviewer what the image must
+                                 show. "wait" adds a fixed wait after settling
+                                 and needs a reason.
 - {"input": "use"}               Act as the player in the client: "use" clicks
                                  the right mouse button once (open a trader,
                                  a container, place a block), "attack" the left
@@ -33,6 +47,13 @@ Each step is one of:
                                  game mode that allows it (not spectator). It
                                  fails while a screen is open. "close" closes
                                  the open screen and is fine with none.
+- {"input": "use", "until": "command", "match": "regex", "repeat": 30}
+                                 Click, then run the command, and click again
+                                 until its reply matches, at most repeat times.
+                                 Running out of clicks is a SETUP FAILED. Use it
+                                 instead of a fixed number of clicks with sleeps,
+                                 for example to bone-meal a sapling until it
+                                 grows.
 - {"screen": "regex", "check": "id", "timeout": 10}
                                  Wait until the title of the screen open in the
                                  client matches (an empty title means no
@@ -69,9 +90,20 @@ from scripts.upgrade_test import compare
 
 _VAR = re.compile(r"\$\{(\w+)\}")
 DEFAULT_AWAIT_TIMEOUT = 120
-DEFAULT_SHOT_WAIT = 5
+DEFAULT_SHOT_SETTLE = 30
 DEFAULT_SCREEN_TIMEOUT = 10
+DEFAULT_INPUT_REPEAT = 30
 INPUTS = ("use", "attack", "close")
+AWAIT_POLL_SECONDS = 0.5
+SCREEN_POLL_SECONDS = 0.25
+SETTLE_POLL_SECONDS = 0.25
+# Long enough that a pause between two chunk packets does not look settled.
+SETTLE_STABLE_SECONDS = 2
+# A click reaches the server one client tick and one server tick later, and
+# an RCON command runs between server ticks, so give it a few ticks.
+INPUT_EFFECT_SECONDS = 0.25
+NOT_IN_WORLD = "no player in a world"
+_RENDER = re.compile(r"chunks=(\d+) missing=(\d+) sections=(\d+) queue=(\w+)")
 
 
 class ScenarioError(Exception):
@@ -106,13 +138,26 @@ class Outcome:
     results: list = field(default_factory=list)  # (status, id, detail)
     shots: list = field(default_factory=list)
     transcript: list = field(default_factory=list)
+    timings: list = field(default_factory=list)  # (step number, kind, seconds)
+
+    @property
+    def seconds(self):
+        return sum(t[2] for t in self.timings)
+
+
+def step_kind(step):
+    if isinstance(step, str):
+        return "command"
+    return next((k for k in _STEP_KEYS if k in step), "command")
 
 
 _STEP_KEYS = {
     "command": {"command", "match", "check", "await", "timeout", "max_seconds"},
-    "sleep": {"sleep"},
-    "shot": {"shot", "wait", "note"},
-    "input": {"input"},
+    # "shot" comes before "settle" because a shot step may carry a settle option.
+    "shot": {"shot", "wait", "note", "settle", "reason"},
+    "settle": {"settle"},
+    "sleep": {"sleep", "reason"},
+    "input": {"input", "until", "match", "repeat"},
     "screen": {"screen", "check", "timeout"},
     "click": {"click", "button"},
     "slot": {"slot", "button", "action"},
@@ -148,13 +193,18 @@ def _screen_operation(step):
     return f"scroll {dx} {dy} {step['amount']}"
 
 
+def _kinds(step):
+    kinds = [k for k in _STEP_KEYS if k in step]
+    return [k for k in kinds if k != "settle"] if "shot" in kinds else kinds
+
+
 def _validate_step(name, index, step):
     where = f"{name} step {index + 1}"
     if isinstance(step, str):
         return
     if not isinstance(step, dict):
         raise ScenarioError(f"{where}: a step is a string or an object, got {type(step).__name__}")
-    kinds = [k for k in _STEP_KEYS if k in step]
+    kinds = _kinds(step)
     if len(kinds) != 1:
         raise ScenarioError(f"{where}: needs exactly one of {sorted(_STEP_KEYS)}, got {sorted(step)}")
     unknown = set(step) - _STEP_KEYS[kinds[0]]
@@ -174,6 +224,25 @@ def _validate_step(name, index, step):
         raise ScenarioError(f"{where}: button is a mouse button number, got {step['button']!r}")
     if kinds[0] == "slot" and step.get("action", "pickup") not in SLOT_ACTIONS:
         raise ScenarioError(f"{where}: action is one of {list(SLOT_ACTIONS)}, got {step['action']!r}")
+    if kinds[0] == "input" and ("until" in step) != ("match" in step):
+        raise ScenarioError(f"{where}: until and match go together")
+    if kinds[0] == "input" and "repeat" in step and "until" not in step:
+        raise ScenarioError(f"{where}: repeat needs until and match")
+    if kinds[0] == "input" and "repeat" in step and (
+            isinstance(step["repeat"], bool) or not isinstance(step["repeat"], int) or step["repeat"] < 1):
+        raise ScenarioError(f"{where}: repeat is a positive whole number")
+    if kinds[0] == "input" and "match" in step:
+        try:
+            re.compile(step["match"])
+        except re.error as e:
+            raise ScenarioError(f"{where}: invalid match regex: {e}") from e
+    if kinds[0] in ("settle", "shot") and "settle" in step and not (step["settle"] is False and kinds[0] == "shot") and (
+            isinstance(step["settle"], bool) or not isinstance(step["settle"], (int, float)) or step["settle"] <= 0):
+        raise ScenarioError(f"{where}: settle is a timeout in seconds" + (" or false" if kinds[0] == "shot" else ""))
+    # A fixed wait is the usual source of a slow scenario, so each one has to
+    # say why no condition (await, settle, screen) can replace it.
+    if (kinds[0] == "sleep" or (kinds[0] == "shot" and step.get("wait"))) and not step.get("reason"):
+        raise ScenarioError(f"{where}: a fixed wait needs a reason; prefer an await, settle or screen step")
     if kinds[0] == "screen":
         try:
             re.compile(step["screen"])
@@ -245,6 +314,7 @@ class Runner:
         outcome = Outcome()
         variables = {"player": self.player}
         for index, step in enumerate(scenario.steps):
+            started = self.clock()
             try:
                 self._step(scenario.name, step, variables, outcome)
             except StepFailed as e:
@@ -254,6 +324,10 @@ class Runner:
                     outcome.results.append(("NOT COVERED", f"{scenario.name}/shots",
                                             f"skipped after the failure: {', '.join(skipped)}"))
                 break
+            finally:
+                seconds = self.clock() - started
+                outcome.timings.append((index + 1, step_kind(step), seconds))
+                outcome.transcript.append(f"# step {index + 1} ({step_kind(step)}): {seconds:.1f}s")
         return outcome
 
     def _command(self, command, outcome, prefix="> "):
@@ -272,7 +346,11 @@ class Runner:
             self.sleep(step["sleep"])
             return
         if "shot" in step:
-            self.sleep(step.get("wait", DEFAULT_SHOT_WAIT))
+            settle = step.get("settle", DEFAULT_SHOT_SETTLE)
+            if settle is not False:
+                self._settle(f"{name}/shot:{step['shot']}:settle", settle, outcome)
+            if step.get("wait"):
+                self.sleep(step["wait"])
             note = substitute(step.get("note", ""), variables)
             try:
                 file = self.capture(step["shot"])
@@ -282,10 +360,11 @@ class Runner:
             outcome.shots.append(Shot(step["shot"], file, note))
             outcome.results.append(("SHOT", f"{name}/shot:{step['shot']}", note))
             return
+        if "settle" in step:
+            self._settle(f"{name}/settle", step["settle"], outcome)
+            return
         if "input" in step:
-            answer = self._client(step["input"], outcome)
-            if answer.startswith("error:"):
-                raise StepFailed("SETUP FAILED", f"input {step['input']!r} -> {answer!r}")
+            self._input_step(step, variables, outcome)
             return
         if "screen" in step:
             self._screen_step(name, step, outcome)
@@ -309,6 +388,53 @@ class Runner:
         outcome.transcript.append(f"> (client) {operation}\n{answer}")
         return answer
 
+    def _input_step(self, step, variables, outcome):
+        until = substitute(step["until"], variables) if "until" in step else None
+        repeat = step.get("repeat", DEFAULT_INPUT_REPEAT) if until else 1
+        for _ in range(repeat):
+            answer = self._client(step["input"], outcome)
+            if answer.startswith("error:"):
+                raise StepFailed("SETUP FAILED", f"input {step['input']!r} -> {answer!r}")
+            if until is None:
+                return
+            self.sleep(INPUT_EFFECT_SECONDS)
+            if re.search(step["match"], self._command(until, outcome)):
+                return
+        raise StepFailed("SETUP FAILED", f"{until!r} did not match /{step['match']}/ after {repeat} {step['input']!r}")
+
+    def _settle(self, label, timeout, outcome):
+        """Wait until the client reports the world around the player loaded and built."""
+        if self.client is None:
+            raise StepFailed("SETUP FAILED", "no client to wait for")
+        start = self.clock()
+        stable_key, stable_since, answer = None, None, ""
+        while True:
+            try:
+                answer = self.client("render")
+            except Exception as e:
+                raise StepFailed("SETUP FAILED", f"'render': {type(e).__name__}: {e}") from e
+            now = self.clock()
+            if answer.startswith("error:") and NOT_IN_WORLD not in answer:
+                # Anything but "not in a world yet" will not go away by waiting, so fail fast.
+                raise StepFailed("SETUP FAILED", f"'render' -> {answer!r}")
+            state = _RENDER.search(answer)
+            # During a join or a dimension change the player is briefly not in a world. That is not ready yet.
+            if state and state.group(2) == "0" and state.group(4) == "empty":
+                key = (state.group(1), state.group(3))
+                if key != stable_key:
+                    stable_key, stable_since = key, now
+                elif now - stable_since >= SETTLE_STABLE_SECONDS:
+                    outcome.transcript.append(f"> (client) settle\n{answer} after {now - start:.1f}s")
+                    return
+            else:
+                stable_key = None
+            if now - start >= timeout:
+                detail = f"the client did not settle within {timeout}s: {answer!r}"
+                outcome.transcript.append(f"> (client) settle\n{detail}")
+                outcome.results.append(("FAIL", label, detail))
+                return
+            self.sleep(SETTLE_POLL_SECONDS)
+
     def _screen_step(self, name, step, outcome):
         pattern = re.compile(step["screen"])
         timeout = step.get("timeout", DEFAULT_SCREEN_TIMEOUT)
@@ -325,7 +451,7 @@ class Runner:
                     outcome.results.append(("FAIL", f"{name}/{step['check']}", detail))
                     raise StepFailed("NOT COVERED", "later steps depend on the failed check")
                 raise StepFailed("SETUP FAILED", detail)
-            self.sleep(1)
+            self.sleep(SCREEN_POLL_SECONDS)
         if step.get("check"):
             outcome.results.append(("PASS", f"{name}/{step['check']}", f"screen: {title!r}"))
 
@@ -341,7 +467,7 @@ class Runner:
             match = pattern.search(reply) if pattern else None
             if pattern is None or match or not step.get("await") or self.clock() - start >= timeout:
                 break
-            self.sleep(1)
+            self.sleep(AWAIT_POLL_SECONDS)
         check = step.get("check")
         if pattern is None:
             if compare.setup_reply_failed(reply):

@@ -9,11 +9,11 @@
     "clear ${player}",
     "give ${player} chronodawn:cairn_stone_dawn",
     "execute in minecraft:overworld run tp ${player} 72.5 201 8.5 0 30",
-    {"sleep": 2},
+    {"settle": 60},
     {"input": "use"},
     {"screen": "Crafting", "check": "crafting-screen-opened"},
     {"hover_slot": 37},
-    {"shot": "cairn-stone-tooltip", "wait": 1, "note": "A tooltip next to the first hotbar slot of the crafting screen: 'Dawn Stone' in white, then two lines in gray italics: 'A cairn stone engraved with the first light.' and 'One of four hours. Four different stones make a Cairn Keystone.' The tooltip is not cut off by the window edge."},
+    {"shot": "cairn-stone-tooltip", "note": "A tooltip next to the first hotbar slot of the crafting screen: 'Dawn Stone' in white, then two lines in gray italics: 'A cairn stone engraved with the first light.' and 'One of four hours. Four different stones make a Cairn Keystone.' The tooltip is not cut off by the window edge."},
     {"input": "close"},
     {"screen": "^$", "check": "crafting-screen-closed"},
     "execute in minecraft:overworld run forceload remove 64 0 79 15"

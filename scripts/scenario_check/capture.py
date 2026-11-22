@@ -21,6 +21,8 @@ from pathlib import Path
 AGENT_SOURCE = Path(__file__).resolve().parent / "agent" / "ScenarioShotAgent.java"
 SHOT_TIMEOUT = 60
 REQUEST_TIMEOUT = 30
+# The settle step asks for the render state several times a second.
+POLL_SECONDS = 0.05
 
 
 class CaptureError(Exception):
@@ -68,7 +70,7 @@ def request(request_dir: Path, name: str, operation: str, alive=lambda: True, ti
             raise CaptureError(f"the client exited before {waiting_for} came back")
         if time.monotonic() >= deadline:
             raise CaptureError(f"no {waiting_for} from the client after {timeout}s")
-        time.sleep(0.2)
+        time.sleep(POLL_SECONDS)
     answer = done.read_text().strip()
     done.unlink()
     return answer
