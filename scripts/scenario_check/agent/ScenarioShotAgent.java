@@ -1,6 +1,7 @@
 import java.io.File;
 import java.lang.instrument.Instrumentation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -10,7 +11,7 @@ import java.util.function.Consumer;
 
 /**
  * Java agent that lets the scenario check driver take screenshots and send
- * player input inside the Minecraft 1.21.1 client.
+ * player input inside the Minecraft 1.21.1 and 26.x clients.
  *
  * Minecraft builds the image from its own framebuffer, the way F2 does, so the
  * capture does not go through macOS screen recording. That keeps working while
@@ -36,7 +37,12 @@ import java.util.function.Consumer;
  *
  * It is an agent rather than a mod so one class works on every loader without
  * a build: only the names differ, Mojang names on NeoForge and intermediary
- * names on Fabric, and both sets are listed below.
+ * names on Fabric 1.21.1, and both sets are listed below. Minecraft 26.x is
+ * unobfuscated, so both loaders use Mojang names there. It moved the main
+ * render target to {@code GameRenderer.mainRenderTarget()} and the open
+ * screen to {@code Gui.screen()}, and {@code Screenshot.grab} takes a
+ * downscale factor. {@link Target#find} tries the 1.21.1 shape first and falls
+ * back to the 26.x one.
  */
 public final class ScenarioShotAgent {
     private record Names(String minecraft, String getInstance, String getMainRenderTarget,
@@ -58,6 +64,12 @@ public final class ScenarioShotAgent {
                     "field_1904", "field_1886", "net.minecraft.class_304", "method_1420", "method_1429",
                     "net.minecraft.class_437", "method_25440", "method_7346"),
     };
+
+    /** Mojang names that only Minecraft 26.x uses. */
+    private static final String GAME_RENDERER = "gameRenderer";
+    private static final String MAIN_RENDER_TARGET = "mainRenderTarget";
+    private static final String GUI = "gui";
+    private static final String GUI_SCREEN = "screen";
 
     private static final long POLL_MILLIS = 200;
 
@@ -102,8 +114,30 @@ public final class ScenarioShotAgent {
         }
     }
 
-    private record Target(Object minecraft, Method getMainRenderTarget, Method grab,
-                          Field options, Field player, Field screen,
+    /** A getter on the Minecraft instance that may go through one intermediate object. */
+    private record Getter(Field via, Member member) {
+        Object get(Object minecraft) throws ReflectiveOperationException {
+            Object owner = via == null ? minecraft : via.get(minecraft);
+            return member instanceof Method method ? method.invoke(owner) : ((Field) member).get(owner);
+        }
+
+        Class<?> type() {
+            return member instanceof Method method ? method.getReturnType() : ((Field) member).getType();
+        }
+
+        /** {@code direct} on Minecraft (1.21.1), else {@code via.method()} (26.x). */
+        static Getter find(Class<?> minecraft, Member direct, String via, String method)
+                throws ReflectiveOperationException {
+            if (direct != null) {
+                return new Getter(null, direct);
+            }
+            Field field = minecraft.getField(via);
+            return new Getter(field, field.getType().getMethod(method));
+        }
+    }
+
+    private record Target(Object minecraft, Getter renderTarget, Method grab, boolean grabTakesDownscale,
+                          Field options, Field player, Getter screen,
                           Field keyUse, Field keyAttack, Method click, Method getDefaultKey,
                           Method getTitle, Method closeContainer) {
         static Target find(Instrumentation instrumentation) throws ReflectiveOperationException {
@@ -117,19 +151,25 @@ public final class ScenarioShotAgent {
                         return null;
                     }
                     ClassLoader loader = loaded.getClassLoader();
-                    Method getMainRenderTarget = loaded.getMethod(names.getMainRenderTarget());
+                    Getter renderTarget = Getter.find(loaded, method(loaded, names.getMainRenderTarget()),
+                            GAME_RENDERER, MAIN_RENDER_TARGET);
                     Class<?> screenshot = Class.forName(names.screenshot(), false, loader);
-                    Method grab = screenshot.getMethod(names.grab(), File.class, String.class,
-                            getMainRenderTarget.getReturnType(), Consumer.class);
+                    Method grab = method(screenshot, names.grab(), File.class, String.class,
+                            renderTarget.type(), Consumer.class);
+                    boolean grabTakesDownscale = grab == null;
+                    if (grabTakesDownscale) {
+                        grab = screenshot.getMethod(names.grab(), File.class, String.class,
+                                renderTarget.type(), int.class, Consumer.class);
+                    }
                     Field options = loaded.getField(names.options());
                     Field player = loaded.getField(names.player());
-                    Field screen = loaded.getField(names.screen());
+                    Getter screen = Getter.find(loaded, field(loaded, names.screen()), GUI, GUI_SCREEN);
                     Class<?> optionsClass = options.getType();
                     Class<?> keyMapping = Class.forName(names.keyMapping(), false, loader);
                     Method getDefaultKey = keyMapping.getMethod(names.getDefaultKey());
                     Method click = keyMapping.getMethod(names.click(), getDefaultKey.getReturnType());
                     Class<?> screenClass = Class.forName(names.screenClass(), false, loader);
-                    return new Target(minecraft, getMainRenderTarget, grab,
+                    return new Target(minecraft, renderTarget, grab, grabTakesDownscale,
                             options, player, screen,
                             optionsClass.getField(names.keyUse()), optionsClass.getField(names.keyAttack()),
                             click, getDefaultKey,
@@ -138,6 +178,22 @@ public final class ScenarioShotAgent {
                 }
             }
             return null;
+        }
+
+        private static Method method(Class<?> owner, String name, Class<?>... parameters) {
+            try {
+                return owner.getMethod(name, parameters);
+            } catch (NoSuchMethodException e) {
+                return null;
+            }
+        }
+
+        private static Field field(Class<?> owner, String name) {
+            try {
+                return owner.getField(name);
+            } catch (NoSuchFieldException e) {
+                return null;
+            }
         }
 
         void run(Path dir, String name, String operation) {
@@ -160,9 +216,13 @@ public final class ScenarioShotAgent {
         }
 
         private void shoot(Path dir, String name) throws ReflectiveOperationException {
-            Object renderTarget = getMainRenderTarget.invoke(minecraft);
+            Object target = renderTarget.get(minecraft);
             Consumer<Object> done = message -> writeDone(dir, name, message);
-            grab.invoke(null, dir.toFile(), name + ".png", renderTarget, done);
+            if (grabTakesDownscale) {
+                grab.invoke(null, dir.toFile(), name + ".png", target, 1, done);
+            } else {
+                grab.invoke(null, dir.toFile(), name + ".png", target, done);
+            }
         }
 
         private String click(Field key) throws ReflectiveOperationException {

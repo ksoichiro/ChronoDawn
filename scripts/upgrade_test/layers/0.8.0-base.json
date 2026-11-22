@@ -282,8 +282,28 @@
       "kind": "saved_data",
       "file": "chronodawn_time.dat",
       "dimension": "chronodawn:chronodawn",
+      "mc_versions": [
+        "1.21.1"
+      ],
       "monotonic": [
         "data.IndependentTime"
+      ]
+    },
+    {
+      "id": "dimension_clock",
+      "kind": "saved_data",
+      "file": "world_clocks.dat",
+      "dimension": "world",
+      "mc_versions": [
+        "26.3"
+      ],
+      "monotonic": [
+        "data.minecraft:overworld.total_ticks",
+        "data.minecraft:the_end.total_ticks",
+        "data.chronodawn:chronodawn.total_ticks"
+      ],
+      "ignore": [
+        "data.chronodawn:chronodawn.paused"
       ]
     },
     {

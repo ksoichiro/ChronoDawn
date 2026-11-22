@@ -51,15 +51,18 @@ def _first_int(value):
     return int(match.group()) if match else None
 
 
-def compare_values(before, after, mode: str = "equal", monotonic=()) -> list[Difference]:
-    """monotonic: dotted paths of counters that keep running (game clocks) and may only grow."""
+def compare_values(before, after, mode: str = "equal", monotonic=(), ignore=()) -> list[Difference]:
+    """monotonic: dotted paths of counters that keep running (game clocks) and may only grow.
+
+    ignore: dotted paths whose value may change for reasons unrelated to the upgrade.
+    """
     if mode == "int_gte":
         b, a = _first_int(before), _first_int(after)
         if b is None or a is None or a < b:
             return [Difference("", before, after, "not >= before")]
         return []
     diffs = []
-    _compare(before, after, "", diffs, set(monotonic))
+    _compare(before, after, "", diffs, set(monotonic), set(ignore))
     return diffs
 
 
@@ -67,7 +70,9 @@ def _join(path, key):
     return f"{path}.{key}" if path else str(key)
 
 
-def _compare(before, after, path, diffs, monotonic):
+def _compare(before, after, path, diffs, monotonic, ignore=frozenset()):
+    if path in ignore:
+        return
     if path in monotonic and isinstance(before, (int, float)) and isinstance(after, (int, float)):
         if after < before:
             diffs.append(Difference(path, before, after, "decreased"))
@@ -77,10 +82,12 @@ def _compare(before, after, path, diffs, monotonic):
             diffs.append(Difference(path, before, after, "type changed"))
             return
         for key, value in before.items():
+            if _join(path, key) in ignore:
+                continue
             if key not in after:
                 diffs.append(Difference(_join(path, key), value, None, "missing"))
             else:
-                _compare(value, after[key], _join(path, key), diffs, monotonic)
+                _compare(value, after[key], _join(path, key), diffs, monotonic, ignore)
     elif isinstance(before, list):
         if not isinstance(after, list):
             diffs.append(Difference(path, before, after, "type changed"))
@@ -90,7 +97,7 @@ def _compare(before, after, path, diffs, monotonic):
             if i >= len(after):
                 diffs.append(Difference(item_path, value, None, "missing"))
             else:
-                _compare(value, after[i], item_path, diffs, monotonic)
+                _compare(value, after[i], item_path, diffs, monotonic, ignore)
     elif before != after:
         diffs.append(Difference(path, before, after, "changed"))
 

@@ -18,6 +18,8 @@ DEFAULT_IGNORES = [
     r"VanillaPackResourcesBuilder.*uses unexpected schema",
     r"FMLConfig.*is not correct\. Correcting",
     r"No data fixer registered for ",
+    # OSHI may not yet know the codename of a newer macOS host (26.x clients and servers log it).
+    r"Unable to parse version [0-9.]+ to a codename\.$",
     # NeoForge warns when a world was last saved with different mod versions,
     # which is exactly what an upgrade does.
     r"version differences",

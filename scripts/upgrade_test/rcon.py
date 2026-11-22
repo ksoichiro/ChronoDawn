@@ -3,6 +3,8 @@
 import socket
 import struct
 
+from scripts.upgrade_test import commands
+
 _AUTH = 3
 _EXEC = 2
 _RESPONSE = 0
@@ -17,11 +19,13 @@ class RconAuthError(RconError):
 
 
 class Rcon:
-    def __init__(self, host: str, port: int, password: str, timeout: float = 30.0):
+    def __init__(self, host: str, port: int, password: str, timeout: float = 30.0, mc_version: str | None = None):
+        """mc_version: translate 1.21.1 commands to that version's syntax (see commands.adapt)."""
         self.host = host
         self.port = port
         self.password = password
         self.timeout = timeout
+        self.mc_version = mc_version
         self._sock = None
         self._next_id = 1
 
@@ -43,7 +47,7 @@ class Rcon:
             self._sock = None
 
     def command(self, cmd: str) -> str:
-        cmd_id = self._send(_EXEC, cmd)
+        cmd_id = self._send(_EXEC, commands.adapt(cmd, self.mc_version))
         # Vanilla splits long replies over several packets without marking the
         # last one. A follow-up packet with an unknown type is answered only
         # after the whole reply, so its echo marks the end. It must not be sent

@@ -122,6 +122,7 @@ test outside the sandbox (it needs network, JVM forks, and local ports):
 
 ```bash
 ./gradlew :fabric:upgradeTest :neoforge:upgradeTest -Ptarget_mc_version=1.21.1
+./gradlew :fabric:upgradeTest :neoforge:upgradeTest -Ptarget_mc_version=26.3
 ```
 
 It generates a world with each old release, upgrades it to the freshly built
@@ -129,7 +130,9 @@ JAR on a production server and client (a game window opens briefly), and
 fails if anything crashes or any pre-upgrade data is lost or changed. The old
 releases are `upgrade_test_baseline_version` in `gradle.properties` (the
 version adopted by the largest modpack, currently 0.8.0) and the latest
-release tag reachable from HEAD. Read `<loader>/1.21.1/build/upgrade-test/report.txt`.
+release tag reachable from HEAD. On 26.3 the baseline is 0.13.0, set in
+`props/26.3.properties`, because older releases only ran on the NeoForge 26.3
+beta builds. Read `<loader>/<version>/build/upgrade-test/report.txt`.
 `NOT COVERED` lines name state the test cannot create.
 
 - A failure caused by an intentional change, such as a removed or renamed ID,
@@ -138,6 +141,14 @@ release tag reachable from HEAD. Read `<loader>/1.21.1/build/upgrade-test/report
 - Content that persists new data (blocks, items, block entities, entities,
   SavedData) needs a new layer in `scripts/upgrade_test/layers/`, named after
   the version that introduces it.
+- Layers and their commands are written once for Minecraft 1.21.1. When a
+  Minecraft version stores the same state differently (26.x keeps the Chrono
+  Dawn dimension's time in the vanilla `world_clocks.dat` instead of
+  `chronodawn_time.dat`), give each variant of the check an `mc_versions`
+  list. A check without one runs on every version. A `saved_data` check can
+  list dotted paths under `ignore` (state such as a paused flag that changes
+  for reasons other than the upgrade) and `monotonic` (counters that may only
+  grow).
 - Move `upgrade_test_baseline_version` when modpack adoption moves.
 - If worldgen changed, also look at an upgraded world on a client for seams
   where old and new chunks meet. The test does not judge visuals.

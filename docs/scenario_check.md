@@ -1,7 +1,7 @@
 # Scenario Check
 
 `scenarioCheck` turns an in-game check into a command. It boots the freshly
-built JAR on a production server and client for Minecraft 1.21.1, runs
+built JAR on a production server and client for Minecraft 1.21.1 or 26.3, runs
 scenario files over RCON, judges the replies, and takes in-game screenshots
 at the points each scenario names. The owner can review the result remotely
 from the report and one contact sheet image, without starting the game.
@@ -17,14 +17,25 @@ provisioning). A game window opens for the length of the run.
 ```bash
 ./gradlew :neoforge:scenarioCheck -Ptarget_mc_version=1.21.1
 ./gradlew :fabric:scenarioCheck -Ptarget_mc_version=1.21.1 -Pscenario_check_scenarios=polished-stones
+./gradlew :neoforge:scenarioCheck -Ptarget_mc_version=26.3
+./gradlew :fabric:scenarioCheck -Ptarget_mc_version=26.3
 ```
+
+The versions it runs on are `upgrade_test_mc_versions` in `gradle.properties`.
+Scenarios are written once in 1.21.1 command syntax. On 26.3 the driver
+renames the game rules that Minecraft 1.21.11 renamed (`doDaylightCycle` to
+`advance_time` and so on, see `scripts/upgrade_test/commands.py`) before it
+sends a command. Add a rule there when a scenario uses one that is not
+listed yet.
 
 - `scenario_check_scenarios`: comma-separated scenario names (file names
   without `.json`). Default: every file in `scripts/scenario_check/scenarios/`.
 - `upgrade_test_candidate_jar`: test another mod JAR instead of the fresh build.
 
 Each run starts from a new world (seed `20261023`), so runs do not affect each
-other. Ports: Fabric 25631/25632, NeoForge 25641/25642.
+other. Ports: Fabric 25631/25632, NeoForge 25641/25642. Pass
+`-Pscenario_check_ports=<server>,<rcon>` to use others, for example when
+another checkout is running a scenario check on the same loader.
 
 ### Screenshots and player input
 
@@ -41,11 +52,15 @@ attack key mappings and reads the title of the open screen, so player input
 needs no Accessibility permission either and works on a locked Mac.
 
 The agent calls Minecraft by name: Mojang names on NeoForge and intermediary
-names on Fabric. Both sets are listed in the agent and are valid for 1.21.1.
+names on Fabric 1.21.1. Minecraft 26.x is unobfuscated, so both loaders use
+Mojang names there. 26.x moved the main render target to `GameRenderer` and
+the open screen to `Gui`, and `Screenshot.grab` takes a downscale factor. The
+agent tries the 1.21.1 shape first and falls back to the 26.x one.
 
 ## Output
 
-Everything is under `<loader>/1.21.1/build/scenario-check/`:
+Everything is under `<loader>/<version>/build/scenario-check/`, for example
+`neoforge/26.3/build/scenario-check/`:
 
 | File | Contents |
 |------|----------|
@@ -151,7 +166,7 @@ placed there have a plain sky behind them. Use `forceload` and an `await` on
 
 ## Limits
 
-- Minecraft 1.21.1 only, like the upgrade test.
+- Minecraft 1.21.1 and 26.3 only, like the upgrade test.
 - Tested on macOS only.
 - In spectator mode the crosshair shows only when it points at an entity or
   a container, so it is usually not in the shots.
