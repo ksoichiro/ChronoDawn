@@ -10,7 +10,8 @@
 // Optional project properties:
 //   upgrade_test_sources       - comma-separated old versions (default: baseline + previous release)
 //   upgrade_test_candidate_jar - mod JAR to upgrade to (default: the freshly built one)
-//   upgrade_test_ports         - server and RCON port, comma-separated (default: per loader)
+//   upgrade_test_ports         - server and RCON port, comma-separated (default: the driver reserves a
+//                                free pair at run time, so checkouts do not collide)
 //
 // The driver lives in scripts/upgrade_test/. Not part of checkAll: run it
 // before a release that touches registries, worldgen, configs, portals,
@@ -61,12 +62,13 @@ def upgradeTestOutDir = layout.buildDirectory.dir('upgrade-test').get().asFile
 def envFile = new File(upgradeTestOutDir, 'env.json')
 def clientCommandFile = new File(upgradeTestOutDir, 'client-command.json')
 def loaderName = project.name
-// upgrade_test_ports and scenario_check_ports (server,RCON) override the
-// defaults, e.g. when another checkout is running the same task on the same loader.
-def portsProperty = { String name, List<Integer> defaults ->
+// upgrade_test_ports and scenario_check_ports (server,RCON) pin the ports.
+// Without them the driver reserves a free pair at run time (null here), so
+// several checkouts can run the same task at once.
+def portsProperty = { String name ->
     def value = project.findProperty(name)
     if (value == null) {
-        return defaults
+        return null
     }
     def parsed = value.toString().split(',')*.trim()*.toInteger()
     if (parsed.size() != 2) {
@@ -74,7 +76,7 @@ def portsProperty = { String name, List<Integer> defaults ->
     }
     return parsed
 }
-def ports = portsProperty('upgrade_test_ports', loaderName == 'fabric' ? [25611, 25612] : [25621, 25622])
+def ports = portsProperty('upgrade_test_ports')
 
 tasks.register('prepareUpgradeTest') {
     group = 'verification'
@@ -155,7 +157,7 @@ tasks.register('upgradeTest', Exec) {
 //   ./gradlew :neoforge:scenarioCheck -Ptarget_mc_version=1.21.1 [-Pscenario_check_scenarios=a,b]
 //   ./gradlew :neoforge:scenarioCheck -Ptarget_mc_version=26.3 [-Pscenario_check_ports=25651,25652]
 def scenarioCheckOutDir = layout.buildDirectory.dir('scenario-check').get().asFile
-def scenarioCheckPorts = portsProperty('scenario_check_ports', loaderName == 'fabric' ? [25631, 25632] : [25641, 25642])
+def scenarioCheckPorts = portsProperty('scenario_check_ports')
 
 tasks.register('scenarioCheck', Exec) {
     group = 'verification'
@@ -163,7 +165,10 @@ tasks.register('scenarioCheck', Exec) {
     dependsOn 'prepareUpgradeTest', ':upgradeTestVenv'
     workingDir = rootDir
     def cmd = [upgradeTestPython.absolutePath, '-m', 'scripts.scenario_check.run', '--env', envFile.absolutePath,
-               '--out-dir', scenarioCheckOutDir.absolutePath, '--ports', scenarioCheckPorts.join(',')]
+               '--out-dir', scenarioCheckOutDir.absolutePath]
+    if (scenarioCheckPorts != null) {
+        cmd += ['--ports', scenarioCheckPorts.join(',')]
+    }
     if (project.findProperty('scenario_check_scenarios')) {
         cmd += ['--scenarios', project.findProperty('scenario_check_scenarios').toString()]
     }

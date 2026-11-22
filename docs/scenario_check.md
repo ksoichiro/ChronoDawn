@@ -33,9 +33,11 @@ listed yet.
 - `upgrade_test_candidate_jar`: test another mod JAR instead of the fresh build.
 
 Each run starts from a new world (seed `20261023`), so runs do not affect each
-other. Ports: Fabric 25631/25632, NeoForge 25641/25642. Pass
-`-Pscenario_check_ports=<server>,<rcon>` to use others, for example when
-another checkout is running a scenario check on the same loader.
+other. The driver reserves a free server/RCON port pair at run time and
+prints it (`Using ports: ...`), so checkouts can run the same loader at once
+without `-P`. Pass `-Pscenario_check_ports=<server>,<rcon>` to pin the ports.
+At most `CHRONODAWN_MAX_PARALLEL_VERIFY` runs (default 2) go at once on a
+machine. Further runs wait for a free slot.
 
 ### Screenshots and player input
 
