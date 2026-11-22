@@ -77,6 +77,7 @@ public class TimeCompassItem extends Item {
     public static final String STRUCTURE_GUARDIAN_VAULT = "guardian_vault";
     public static final String STRUCTURE_CLOCKWORK_DEPTHS = "clockwork_depths";
     public static final String STRUCTURE_ENTROPY_CRYPT = "entropy_crypt";
+    public static final String STRUCTURE_SENTINEL_OUTPOST = "sentinel_outpost";
 
     public TimeCompassItem(Properties properties) {
         super(properties);

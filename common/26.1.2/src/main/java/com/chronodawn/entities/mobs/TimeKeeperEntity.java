@@ -308,6 +308,21 @@ public class TimeKeeperEntity extends AbstractVillager {
                 ));
             }
 
+            // Trade 10b: 12 Clockstone + 4 Time Crystal → Time Compass (Sentinel Outpost)
+            // Points to the optional Clockwork Sentinel stronghold. It gates no progression,
+            // so it costs the same as the early compass.
+            if (isStructureEnabled(TimeCompassItem.STRUCTURE_SENTINEL_OUTPOST)) {
+                ItemStack sentinelOutpostCompass = createCompassWithPosition(TimeCompassItem.STRUCTURE_SENTINEL_OUTPOST);
+                offers.add(new MerchantOffer(
+                    new ItemCost(ModItems.CLOCKSTONE.get(), 12),
+                    Optional.of(new ItemCost(ModItems.TIME_CRYSTAL.get(), 4)),
+                    sentinelOutpostCompass,
+                    2, // Max uses
+                    10, // XP reward
+                    0.05f
+                ));
+            }
+
             // Trade 11: 16 Clockstone + 8 Time Crystal → Time Compass (Master Clock)
             // Points to nearest Master Clock Tower in ChronoDawn
             // End-game guidance item (after 4 mid-boss dungeons)

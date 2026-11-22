@@ -25,6 +25,16 @@ class StructureTemplateTest {
         "minecraft:coarse_dirt", "minecraft:smooth_stone", "minecraft:cracked_stone_bricks",
         "minecraft:chiseled_stone_bricks");
     /**
+     * Blocks that may carry an {@code nbt} entry in a template. Any other block holding one leaves a
+     * block entity record at a position whose block has none, which logs "Tried to load a DUMMY
+     * block entity" when the chunk loads.
+     */
+    private static final Set<String> BLOCK_ENTITY_BLOCKS = Set.of("minecraft:barrel", "minecraft:blast_furnace",
+        "minecraft:campfire", "minecraft:chest", "minecraft:crimson_wall_sign", "minecraft:dispenser",
+        "minecraft:dropper", "minecraft:enchanting_table", "minecraft:jigsaw", "minecraft:lectern",
+        "minecraft:skeleton_skull", "minecraft:smoker", "minecraft:spawner", "chronodawn:boss_room_boundary_marker",
+        "chronodawn:boss_room_door", "chronodawn:clock_tower_teleporter");
+    /**
      * Rigid surface structures placed with terrain adaptation. Explicit air above a column's
      * topmost block would cut the terrain on the high side of a slope away in the shape of the
      * template's box, so that air must be left out (see scripts/strip_exterior_air.py).
@@ -66,6 +76,10 @@ class StructureTemplateTest {
                     String name = (String) compound(palette.get((int) block.get("state"))).get("Name");
                     counts.merge(name, 1, Integer::sum);
                     positions.put(list(block.get("pos")), name);
+                    if (block.get("nbt") != null) {
+                        assertTrue(BLOCK_ENTITY_BLOCKS.contains(name), spec.id() + " has nbt on " + name
+                            + " at " + list(block.get("pos")));
+                    }
                     if (block.get("nbt") != null && "minecraft:air".equals(compound(block.get("nbt")).get("ReplaceWith"))) {
                         replacedWithAir.add(list(block.get("pos")));
                     }

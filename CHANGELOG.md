@@ -45,9 +45,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   spawners drop less than those in the open, and each spawner is encased in
   Reversing Time Sandstone. It generates on the surface of any Chrono Dawn biome
   except the oceans and gates nothing in the main progression. It can be
-  tuned or disabled under `world.structures.sentinel_outpost`. This
-  release adds it for Minecraft 1.21.1 first, and the Time Keeper sells a
-  Time Compass for it there.
+  tuned or disabled under `world.structures.sentinel_outpost`. The Time
+  Keeper sells a Time Compass for it on every supported Minecraft version.
 - **More uses for surplus Chronite**: the Time Keeper now buys Chronite
   Shards, 12 for an Emerald or 8 for a Clockstone, up to 16 times each. A
   Daylight Detector can also be crafted with Chronite Shards in place of
@@ -61,6 +60,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Pink, or Purple Time Blossom, or an Unstable Fungus gave nothing back, so the
   plant was lost. They now drop the pot and the plant like vanilla potted
   plants. Unstable Fungus itself also drops itself when broken.
+- **Boss rooms generated far from the player could be left unprotected**: a
+  boss room whose chunks were generated at the edge of the loaded area and
+  stayed unloaded for more than five minutes lost its protection, so the room
+  could be broken before the boss was defeated. The protection is now
+  registered without waiting for the chunks to load. Rooms in already
+  generated areas stay unprotected.
 - **Time Keeper Village no longer sits on top of other structures**: when you
   first entered Chrono Dawn near a structure with a flat roof, such as the
   Forgotten Library, the village could be placed on that roof. Spots that
