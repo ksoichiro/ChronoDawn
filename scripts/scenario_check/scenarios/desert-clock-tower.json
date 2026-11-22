@@ -1,0 +1,17 @@
+{
+  "description": "/locate finds a Desert Clock Tower in the Chrono Dawn dimension quickly, and the structure looks right from above and from the side. The player enters the dimension at 0 0 first, so the Time Keeper Village (placed near wherever a player first enters) stays away from what this scenario looks at.",
+  "steps": [
+    {"command": "execute in chronodawn:chronodawn run locate structure chronodawn:desert_clock_tower", "match": "\\[(?P<x>-?\\d+), [^,]+, (?P<z>-?\\d+)\\]", "check": "locate-desert-clock-tower", "max_seconds": 60},
+    "execute in chronodawn:chronodawn run spreadplayers 0 0 0 1 false ${player}",
+    {"sleep": 5},
+    "execute in chronodawn:chronodawn run spreadplayers ${x} ${z} 0 1 false ${player}",
+    "execute as ${player} at @s run tp @s ~ ~60 ~ 0 90",
+    {"sleep": 40},
+    "time set noon",
+    {"shot": "from-above", "wait": 5, "note": "Desert Clock Tower in view (its start is at x=${x}, z=${z}), seen straight down from 60 blocks above the start. The start is a corner of the structure, not its center, so it may be off-center or partly out of frame. A tall stone clock tower with a clock face on its side. Its blocks render with their textures, nothing is cut off at chunk borders, and the ground around it has no box-shaped cut or hollow."},
+    "execute as ${player} at @s run tp @s ~-45 ~-35 ~ -90 25",
+    {"sleep": 5},
+    "time set noon",
+    {"shot": "side", "wait": 5, "note": "Desert Clock Tower from the west, 45 blocks away and about 25 blocks above where the player landed, looking east and slightly down. It sits on the terrain: no floating edges, no deep pit or flat-cut wall in the slope around it. Cracked and mossy blocks are mixed into its walls."}
+  ]
+}

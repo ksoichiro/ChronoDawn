@@ -49,6 +49,8 @@ PREAMBLE = [
     "gamerule doDaylightCycle false",
     "gamerule doWeatherCycle false",
     "gamerule announceAdvancements false",
+    # A scenario that turns mob spawning off may stop before it turns it back on.
+    "gamerule doMobSpawning true",
     "weather clear",
     "time set noon",
     f"gamemode spectator {PLAYER}",

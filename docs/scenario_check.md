@@ -139,15 +139,45 @@ with no AI, right-clicks it, checks that a screen titled Time Keeper opened,
 takes a shot of the trading screen, and closes it.
 
 Before every scenario the driver turns off command feedback, the daylight and
-weather cycles, and advancement announcements, sets clear weather at noon,
-closes any screen a previous scenario left open, switches the test player
-(`Dev`) to spectator, and moves them to the
+weather cycles, and advancement announcements, turns mob spawning on, sets
+clear weather at noon, closes any screen a previous scenario left open,
+switches the test player (`Dev`) to spectator, and moves them to the
 overworld at `0 120 0`. The client hides chat. Spectator mode keeps the
 hotbar and hearts out of the shots, and the player does not fall or suffocate.
+
+The Chrono Dawn dimension keeps its own time, and it keeps flowing (sometimes
+fast, under time distortion) whatever `doDaylightCycle` says. A shot there
+can come out at night unless `time set noon` runs just before it, so the
+Chrono Dawn scenarios wait for chunks with a `sleep`, set noon, and then take
+the shot with a short `wait`.
 
 Coordinates near `0 200 0` in the overworld are above the terrain, so blocks
 placed there have a plain sky behind them. Use `forceload` and an `await` on
 `execute if loaded` before placing blocks in chunks nobody has loaded yet.
+
+### Existing scenarios
+
+Start from the closest existing scenario before writing a new one. Pass the
+names you need with `-Pscenario_check_scenarios` to check one change quickly.
+
+| Scenario | Checks |
+|----------|--------|
+| `polished-stones` | Dawnstone, Duskstone, and their polished blocks, stairs, slabs, and walls |
+| `sapling-root-dirt` | Bone meal grows the three saplings; the block under the trunk in Chrono Dawn and in the Overworld |
+| `wolf-spawn-forest`, `wolf-spawn-dark-forest` | Wolves generate in the biome. The forest one also checks that Temporal Grass is in `minecraft:wolves_spawnable_on` |
+| `time-keeper-trade` | Right-clicking a Time Keeper opens its trading screen |
+| `time-keeper-village` | The village placed near the first entry into Chrono Dawn |
+| `plains-surface`, `mountain-surface` | The surface of the Plains and Mountain biomes |
+| `forgotten-library` | `/locate` speed for the Forgotten Library, and a shot of it from above |
+| `desert-clock-tower`, `master-clock`, `phantom-catacombs`, `entropy-crypt`, `sentinel-outpost` | `/locate` speed for the structure, and shots of it from above and from the side |
+
+The Time Keeper Village is placed near wherever a player first enters Chrono
+Dawn in a world, so every scenario that goes there enters at `0 0` first.
+Otherwise the scenario that runs first decides where the village goes, and it
+can land on the structure another scenario looks at. Scenarios that place
+blocks use separate areas: overworld x 0-15 (`polished-stones`), 16-31
+(`time-keeper-trade`), 48-63 (`wolf-spawn-forest`), and x 196-247 in both dimensions
+(`sapling-root-dirt`).
 
 ## Limits
 
