@@ -67,11 +67,12 @@ def read_when_ready(rcon, command, timeout=AWAIT_TIMEOUT, interval=1.0):
         time.sleep(interval)
 
 
-def _start_session(env, server_dir, client_dir, mods, ports, label, out_dir):
+def _start_session(env, server_dir, client_dir, mods, ports, label, out_dir, client_args=()):
     server = processes.run_server(env.server, server_dir, mods, out_dir / f"{label}-server.log")
     client = None
     try:
-        client = processes.run_client(env.client, client_dir, mods, ports[0], out_dir / f"{label}-client.log")
+        client = processes.run_client(env.client, client_dir, mods, ports[0], out_dir / f"{label}-client.log",
+                                      client_args)
         try:
             server.wait_for_line(rf"{PLAYER} joined the game", JOIN_TIMEOUT)
         except processes.ReadyTimeout as e:

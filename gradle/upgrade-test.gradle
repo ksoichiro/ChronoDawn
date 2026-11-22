@@ -39,6 +39,15 @@ if (project == rootProject) {
         commandLine upgradeTestPython.absolutePath, '-m', 'unittest', 'discover',
             '-s', 'scripts/upgrade_test/tests', '-t', '.'
     }
+
+    tasks.register('testScenarioCheckScripts', Exec) {
+        group = 'verification'
+        description = 'Unit tests for scripts/scenario_check'
+        dependsOn 'upgradeTestVenv'
+        workingDir = rootDir
+        commandLine upgradeTestPython.absolutePath, '-m', 'unittest', 'discover',
+            '-s', 'scripts/scenario_check/tests', '-t', '.'
+    }
     return
 }
 
@@ -121,8 +130,33 @@ tasks.register('upgradeTest', Exec) {
     commandLine cmd
 }
 
+// Scenario check: boot the candidate on a fresh world with a production
+// server and client, run the scenarios in scripts/scenario_check/scenarios/
+// over RCON, and capture the client window for review (docs/scenario_check.md).
+// Shares the runtimes, env.json and venv of the upgrade test.
+//   ./gradlew :neoforge:scenarioCheck -Ptarget_mc_version=1.21.1 [-Pscenario_check_scenarios=a,b]
+def scenarioCheckOutDir = layout.buildDirectory.dir('scenario-check').get().asFile
+def scenarioCheckPorts = loaderName == 'fabric' ? [25631, 25632] : [25641, 25642]
+
+tasks.register('scenarioCheck', Exec) {
+    group = 'verification'
+    description = "Run scenario checks on a production server and client and capture screenshots (${loaderName})"
+    dependsOn 'prepareUpgradeTest', ':upgradeTestVenv'
+    workingDir = rootDir
+    def cmd = [upgradeTestPython.absolutePath, '-m', 'scripts.scenario_check.run', '--env', envFile.absolutePath,
+               '--out-dir', scenarioCheckOutDir.absolutePath, '--ports', scenarioCheckPorts.join(',')]
+    if (project.findProperty('scenario_check_scenarios')) {
+        cmd += ['--scenarios', project.findProperty('scenario_check_scenarios').toString()]
+    }
+    if (project.findProperty('upgrade_test_candidate_jar')) {
+        cmd += ['--candidate-jar', file(project.findProperty('upgrade_test_candidate_jar').toString()).absolutePath]
+    }
+    commandLine cmd
+}
+
 if (loaderName == 'neoforge') {
     tasks.named('upgradeTest') { mustRunAfter ':fabric:upgradeTest' }
+    tasks.named('scenarioCheck') { mustRunAfter ':fabric:scenarioCheck' }
 }
 
 // runProd only exports its client command (instead of launching a client)

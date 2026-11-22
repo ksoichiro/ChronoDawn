@@ -96,6 +96,10 @@ class ManagedProcess:
         with self._cond:
             self._cond.notify_all()
 
+    @property
+    def pid(self):
+        return None if self._proc is None else self._proc.pid
+
     def alive(self) -> bool:
         return self._proc is not None and self._proc.poll() is None
 
@@ -243,7 +247,7 @@ soundCategory_master:0.0
 
 
 def run_client(env: ClientEnv, game_dir: Path, mods: list[Path], server_port: int,
-               log_file: Path) -> ManagedProcess:
+               log_file: Path, extra_args: list[str] = ()) -> ManagedProcess:
     game_dir.mkdir(parents=True, exist_ok=True)
     _copy_mods(mods, game_dir / "mods")
     options = game_dir / "options.txt"
@@ -261,6 +265,6 @@ def run_client(env: ClientEnv, game_dir: Path, mods: list[Path], server_port: in
         args[args.index("--gameDir") + 1] = str(game_dir)
     else:
         args += ["--gameDir", str(game_dir)]
-    args += ["--quickPlayMultiplayer", f"127.0.0.1:{server_port}"]
+    args += ["--quickPlayMultiplayer", f"127.0.0.1:{server_port}", *extra_args]
     command = [env.java, *env.jvm_args, "-cp", os.pathsep.join(env.classpath), env.main_class, *args]
     return ManagedProcess(command, game_dir, log_file).start()
