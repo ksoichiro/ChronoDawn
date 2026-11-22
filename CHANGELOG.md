@@ -67,6 +67,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   warnings, and searched a wide fixed area at every height instead. It now
   reads the bounds correctly, so it searches only the catacombs and logs
   nothing.
+- **Boss rooms sometimes left unprotected**: the boss room of a Desert
+  Clock Tower, Clockwork Depths, Entropy Crypt or Guardian Vault could
+  generate without its block protection, so it could be broken before the
+  boss was defeated. The server then logged "but no max markers" and "Still
+  have 2 unpaired markers" every 5 seconds for 5 minutes. This happened when
+  the two corners of the room were generated on different worldgen threads or
+  more than a second apart. The corners are now matched by the structure they
+  belong to, and a corner still waiting for its pair is warned about only
+  once. Boss rooms that already generated without protection stay
+  unprotected.
 - **Chrono Bovine and Temporal Caprid on NeoForge 1.21.4**: the client
   registered no renderer or model for them. They now use the same renderer
   as on the other versions.
