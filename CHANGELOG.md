@@ -45,9 +45,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   spawners drop less than those in the open, and each spawner is encased in
   Reversing Time Sandstone. It generates on the surface of any Chrono Dawn biome
   except the oceans and gates nothing in the main progression. It can be
-  tuned or disabled under `world.structures.sentinel_outpost`. This
-  release adds it for Minecraft 1.21.1 first, and the Time Keeper sells a
-  Time Compass for it there.
+  tuned or disabled under `world.structures.sentinel_outpost`. The Time
+  Keeper sells a Time Compass for it on every supported Minecraft version.
 - **More uses for surplus Chronite**: the Time Keeper now buys Chronite
   Shards, 12 for an Emerald or 8 for a Clockstone, up to 16 times each. A
   Daylight Detector can also be crafted with Chronite Shards in place of
