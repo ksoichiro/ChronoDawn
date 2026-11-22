@@ -645,6 +645,11 @@ public static final RegistrySupplier<EntityType<MyEntity>> MY_ENTITY = ENTITIES.
    overhangs (see the script's docstring for the rule), and add the
    structure to `TERRAIN_PRESERVING` in `StructureTemplateTest`. Run it again
    every time the template is saved from a structure block
+7. **Weather the template**: `python3 scripts/weather_structures.py` swaps a
+   seeded share of the exposed Temporal Stone Bricks for cracked and mossy
+   variants. Add the template and its rates to `RATES` in the script. The
+   result depends only on the template name and block position, so running it
+   again changes nothing. Run it after `strip_exterior_air.py`
 
 ---
 
