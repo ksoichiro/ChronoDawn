@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "pattern": [
+    "BBB"
+  ],
+  "key": {
+    "B": {
+      "item": "chronodawn:polished_dawnstone"
+    }
+  },
+  "result": {
+    "id": "chronodawn:polished_dawnstone_slab",
+    "count": 6
+  }
+}

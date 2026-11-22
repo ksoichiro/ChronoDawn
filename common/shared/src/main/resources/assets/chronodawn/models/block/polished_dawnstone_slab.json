@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab",
+  "textures": {
+    "bottom": "chronodawn:block/polished_dawnstone",
+    "top": "chronodawn:block/polished_dawnstone",
+    "side": "chronodawn:block/polished_dawnstone"
+  }
+}

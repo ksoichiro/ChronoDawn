@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": "chronodawn:polished_dawnstone",
+  "result": {
+    "id": "chronodawn:polished_dawnstone_stairs",
+    "count": 1
+  }
+}
