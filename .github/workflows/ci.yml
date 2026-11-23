@@ -96,7 +96,12 @@ jobs:
           java-version: |
             21
             25
+      # Read only: the build job already saves the Gradle home per commit.
+      # Saving it from every job added about 400 MB per job and push, and
+      # pushed the repository past the 10 GB Actions cache limit.
       - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+        with:
+          cache-read-only: true
       - run: ./gradlew :fabric:prodSmokeTest -Ptarget_mc_version=${{ matrix.mc }}
       - run: ./gradlew :neoforge:prodSmokeTest -Ptarget_mc_version=${{ matrix.mc }}
       # The Gradle output names the log file but does not include it. Print the
@@ -130,7 +135,10 @@ jobs:
           java-version: |
             21
             25
+      # Read only, see the prod-smoke job.
       - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+        with:
+          cache-read-only: true
       # One loader per invocation, see the prod-smoke job for why.
       - run: ./gradlew :fabric:runGameTest -Ptarget_mc_version=${{ matrix.mc }}
       - run: ./gradlew :neoforge:runGameTestServer -Ptarget_mc_version=${{ matrix.mc }}
