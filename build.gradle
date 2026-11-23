@@ -16,6 +16,16 @@ if (!file('gradle/shared/multi-version-tasks.gradle').exists()) {
     )
 }
 
+// Share downloaded production runtime files (Minecraft client, libraries,
+// assets, loader installers) between checkouts. They are identical in every
+// worktree and take 2 to 3 GB each, while run-prod/instances (mods and worlds)
+// must stay per checkout. An explicit prod_cache_dir, or prod_base_dir for the
+// older setup that moved cache and instances together, takes precedence.
+// Subprojects inherit this extra property through findProperty().
+if (!project.hasProperty('prod_cache_dir') && !project.hasProperty('prod_base_dir')) {
+    ext.prod_cache_dir = "${System.getProperty('user.home')}/.cache/chronodawn/run-prod-cache"
+}
+
 // Multi-version support: Load version-specific properties
 ext.loadVersionProperties = { String version ->
     def propsFile = file("props/${version}.properties")

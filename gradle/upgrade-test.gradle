@@ -17,7 +17,9 @@
 // before a release that touches registries, worldgen, configs, portals,
 // advancements, equipment, or progression (docs/release_process.md).
 
-def upgradeTestCacheDir = file("${project.findProperty('prod_base_dir') ?: "${rootDir}/run-prod"}/cache/upgrade-test")
+// Lives in the production runtime cache (shared between checkouts, see
+// prod_cache_dir in build.gradle): old release JARs and the driver venv.
+def upgradeTestCacheDir = file("${project.findProperty('prod_cache_dir') ?: "${project.findProperty('prod_base_dir') ?: "${rootDir}/run-prod"}/cache"}/upgrade-test")
 def upgradeTestPython = new File(upgradeTestCacheDir, 'venv/bin/python')
 def upgradeTestRequirements = file("${rootDir}/scripts/upgrade_test/requirements.txt")
 
