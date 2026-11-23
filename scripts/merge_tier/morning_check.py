@@ -7,7 +7,11 @@ its body has a non-empty Verification section. The other half, reading each
 diff for what file paths cannot show, stays with the agent or the owner.
 
 Usage:
-  morning_check.py [--since YYYY-MM-DD] [--repo DIR] [--remote NAME]
+  morning_check.py [--since YYYY-MM-DD[THH:MM]] [--repo DIR] [--remote NAME]
+
+--since is local time, and a bare date means its 00:00. The search sends it
+to GitHub with the local UTC offset, because GitHub reads a bare date as
+00:00 UTC and would skip what was merged before that in local time.
 
 Exit codes: 0 when every tier A pull request passes (or there is none),
 1 when one is misclassified or lacks a Verification section, 2 on a gh or
@@ -96,11 +100,27 @@ def run(cmd, cwd):
     return proc.stdout
 
 
+def since_query(since):
+    """Return the search qualifier for a local start time, with its UTC offset."""
+    return "merged:>=" + since.isoformat(timespec="seconds")
+
+
+def parse_since(text, today):
+    """Parse --since as local time. Default: yesterday 00:00. Raise ValueError when malformed."""
+    if text is None:
+        start = datetime.datetime.combine(today - datetime.timedelta(days=1), datetime.time())
+    else:
+        start = datetime.datetime.fromisoformat(text)
+        if start.tzinfo is not None:
+            return start
+    return start.astimezone()
+
+
 def merged_prs(since, cwd):
     # The search narrows the list, and declares_tier_a() drops the bodies that
     # only mention the phrase without declaring tier A.
     out = run(["gh", "pr", "list", "--state", "merged", "--limit", "200",
-               "--search", f'merged:>={since} "Merge tier: A" in:body',
+               "--search", f'{since_query(since)} "Merge tier: A" in:body',
                "--json", PR_FIELDS], cwd)
     return [pr for pr in json.loads(out) if declares_tier_a(pr.get("body"))]
 
@@ -136,17 +156,15 @@ def format_report(since, findings):
 
 def main(argv=None, today=None):
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--since", help="first merge date to check, YYYY-MM-DD (default: yesterday)")
+    parser.add_argument("--since", help="local start time, YYYY-MM-DD or YYYY-MM-DDTHH:MM (default: yesterday 00:00)")
     parser.add_argument("--repo", help="repository to fetch into and diff (default: the checkout this script is in)")
     parser.add_argument("--remote", default="origin", help="remote to fetch pull request heads from (default: origin)")
     args = parser.parse_args(argv)
 
-    today = today or datetime.date.today()
-    since = args.since or (today - datetime.timedelta(days=1)).isoformat()
     try:
-        datetime.date.fromisoformat(since)
+        since = parse_since(args.since, today or datetime.date.today())
     except ValueError:
-        print(f"--since must be YYYY-MM-DD, got {since!r}", file=sys.stderr)
+        print(f"--since must be YYYY-MM-DD or YYYY-MM-DDTHH:MM, got {args.since!r}", file=sys.stderr)
         return 2
 
     c.GIT_ROOT = args.repo
@@ -160,7 +178,7 @@ def main(argv=None, today=None):
         print(e, file=sys.stderr)
         return 2
 
-    print(format_report(since, findings), end="")
+    print(format_report(since.isoformat(timespec="minutes"), findings), end="")
     return 1 if any(f.problems for f in findings) else 0
 
 

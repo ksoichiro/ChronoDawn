@@ -69,6 +69,28 @@ class AssessTest(unittest.TestCase):
         self.assertFalse(m.declares_tier_a("Explains when to write Merge tier: A in a body."))
 
 
+class SinceTest(unittest.TestCase):
+    # GitHub reads a bare date as 00:00 UTC, so the query must carry an offset.
+    JST = datetime.timezone(datetime.timedelta(hours=9))
+
+    def test_query_carries_the_offset(self):
+        since = datetime.datetime(2026, 11, 23, tzinfo=self.JST)
+        self.assertEqual(m.since_query(since), "merged:>=2026-11-23T00:00:00+09:00")
+
+    def test_bare_date_is_local_midnight(self):
+        since = m.parse_since("2026-11-23", datetime.date(2026, 11, 24))
+        self.assertEqual(since, datetime.datetime(2026, 11, 23).astimezone())
+        self.assertIsNotNone(since.utcoffset())
+
+    def test_explicit_offset_is_kept(self):
+        since = m.parse_since("2026-11-23T07:00+09:00", None)
+        self.assertEqual(m.since_query(since), "merged:>=2026-11-23T07:00:00+09:00")
+
+    def test_default_is_yesterday_midnight(self):
+        self.assertEqual(m.parse_since(None, datetime.date(2026, 11, 24)),
+                         datetime.datetime(2026, 11, 23).astimezone())
+
+
 class MainTest(unittest.TestCase):
     def run_main(self, prs, tiers, argv=()):
         calls = []
@@ -89,7 +111,8 @@ class MainTest(unittest.TestCase):
     def test_defaults_to_yesterday(self):
         code, out, calls = self.run_main([], {})
         self.assertEqual(code, 0)
-        self.assertIn("merged:>=2026-11-23", " ".join(calls[0]))
+        expected = datetime.datetime(2026, 11, 23).astimezone().isoformat(timespec="seconds")
+        self.assertIn(f"merged:>={expected}", " ".join(calls[0]))
         self.assertIn("No pull request merged", out)
 
     def test_misclassified_pr_fails(self):

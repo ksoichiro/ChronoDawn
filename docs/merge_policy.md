@@ -249,7 +249,7 @@ since the previous check. The mechanical half is one script:
 
 ```bash
 python3 scripts/merge_tier/morning_check.py              # merged since yesterday
-python3 scripts/merge_tier/morning_check.py --since 2026-11-20
+python3 scripts/merge_tier/morning_check.py --since 2026-11-20   # local midnight
 ```
 
 It lists the merged pull requests whose body declares `Merge tier: A`,
@@ -291,6 +291,10 @@ The agent on the morning-check task:
 
 1. Runs `python3 scripts/merge_tier/morning_check.py --since <date>`, with the
    date of the previous morning-check task, or yesterday for the first one.
+   The script reads the date as local midnight and sends GitHub the UTC
+   offset, so nothing merged between two runs is skipped. The ranges of two
+   runs overlap, so a pull request that already has a task is not reported
+   again.
 2. Skims the diff of every listed pull request, including the ones the script
    passed, for what the file paths cannot show.
 3. Creates one fuda task per misclassified or wrong pull request, related to
