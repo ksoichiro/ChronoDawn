@@ -55,6 +55,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Temporal Caprid and Chrono Ursid Spawn Eggs are colored again**: on
+  Minecraft 1.20.1 (Forge) and 1.21.1 / 1.21.2 (NeoForge), these two spawn
+  eggs showed the plain gray template texture instead of their colors.
 - **Potted plants and Unstable Fungus now drop items**: breaking a flower pot
   holding a Time Wood, Dark Time Wood, or Ancient Time Wood sapling, an Orange,
   Pink, or Purple Time Blossom, or an Unstable Fungus gave nothing back, so the
