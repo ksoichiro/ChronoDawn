@@ -597,7 +597,9 @@ public class ChronoDawnClientNeoForge {
             ModItems.PULSE_HOG_SPAWN_EGG.get(),
             ModItems.SECONDWING_FOWL_SPAWN_EGG.get(),
             ModItems.TICKING_SHEEP_SPAWN_EGG.get(),
-            ModItems.CHRONO_BOVINE_SPAWN_EGG.get()
+            ModItems.CHRONO_BOVINE_SPAWN_EGG.get(),
+            ModItems.TEMPORAL_CAPRID_SPAWN_EGG.get(),
+            ModItems.CHRONO_URSID_SPAWN_EGG.get()
         );
 
         ChronoDawn.LOGGER.debug("Registered item color handlers for NeoForge");
