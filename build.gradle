@@ -168,6 +168,9 @@ apply from: 'gradle/chronodawn-validation.gradle'
 // Upgrade test driver venv and unit tests (platform tasks are applied per subproject)
 apply from: 'gradle/upgrade-test.gradle'
 
+// Fail heavy verification tasks before they start when the disk is nearly full
+apply from: 'gradle/disk-space-check.gradle'
+
 // Release tasks
 apply from: 'gradle/shared/release-modrinth.gradle'
 apply from: 'gradle/shared/release-curseforge.gradle'

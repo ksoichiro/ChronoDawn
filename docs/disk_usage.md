@@ -87,7 +87,8 @@ below has to fit on the internal disk.
    test) can run in parallel.
 3. **Check free space before starting a heavy task.** Stop and clean up when
    less than 20 GB is free (25 GB for the third concurrent checkout).
-   `df -h /` is enough until the guard in the follow-up below exists.
+   The heavy tasks check 20 GB themselves (build change 4). The 25 GB for a
+   third checkout stays a manual check with `df -h /`.
 4. **Clean up after heavy tasks.** Run `./gradlew clean<version>` or
    `cleanAll` once the result is recorded. Delete
    `<loader>/<version>/build/upgrade-test` and `build/scenario-check` server
@@ -114,7 +115,10 @@ below has to fit on the internal disk.
    upgrade test and prod smoke test**, and keep the reports and screenshots.
    Expected saving: about 0.3 GB per loader and version.
 4. **Add a free-space guard** to the heavy tasks. It fails fast below the
-   threshold with a message that names the cleanup commands.
+   threshold with a message that names the cleanup commands. Implemented as
+   `min_free_disk_gb` (default 20 GB, see the Developer Guide section "Free
+   disk space check"). The guard does not count the running checkouts, so
+   the 25 GB for a third checkout stays a written rule for now.
 
 ### Rejected
 
