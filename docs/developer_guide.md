@@ -819,8 +819,18 @@ world within 5 minutes. No display required.
 ./gradlew :neoforge:prodSmokeTest -Ptarget_mc_version=1.21.11
 ```
 
-The Fabric and NeoForge smoke tests use ports 25601 and 25602 respectively,
-so both tasks can run in the same Gradle invocation.
+The Fabric and NeoForge smoke tests use ports 25601 and 25602 respectively.
+Run them as separate Gradle invocations when a built NeoForge JAR matters:
+in one invocation both loaders transform the shared common module at the same
+time, and the NeoForge JAR once resolved `@ExpectPlatform` calls to the Fabric
+implementation.
+
+CI runs this for Fabric and NeoForge on 1.21.1 and 26.3 in the `prod-smoke`
+job of every pull request. When it fails, the job's last step prints the tail
+of each server log. The job downloads Minecraft and the loader installers at
+run time and writes `eula=true`, so the person who runs it accepts the
+Minecraft EULA. Do not upload the server JAR, mappings or world data as
+artifacts.
 
 Not supported for Forge (1.20.1) — see "Mixin Configuration" below. Uses
 `build/prod-smoke/<loader>-<version>/`, separate from the manually-verified
@@ -945,7 +955,9 @@ Additional manual checks:
 - [ ] Manual testing completed (launch game, test feature)
 - [ ] No new warnings or errors in logs
 - [ ] Documentation updated (if applicable)
-- [ ] If this PR changes Mixin config or adds a new Minecraft version: `prodSmokeTest` passes for Fabric and NeoForge (see "Production Smoke Test" above)
+- [ ] CI is green: `validate`, `build`, `prod-smoke` and `gametest` for 1.21.1 and 26.3. They cover `prodSmokeTest` and `runGameTest`/`runGameTestServer` for those two versions
+- [ ] If this PR changes Mixin config or adds a new Minecraft version: `prodSmokeTest` also passes for the other versions you touch (see "Production Smoke Test" above)
+- [ ] GameTest servers may omit custom dimensions, so a dimension-dependent test can skip in CI. Check cross-dimension behavior in a normal client or server
 
 ---
 
