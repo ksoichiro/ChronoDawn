@@ -13,6 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   remove disposable instances and worlds. Use `-Pkeep_test_output=true` to
   keep them for inspection. Reports and logs remain available.
 
+- **Chronicle text wraps at word boundaries**: English entry text no longer
+  breaks in the middle of a word at the end of a line. Japanese text still
+  wraps per character.
 - **More varied terrain in Chrono Dawn**: inland plains and similar flat
   biomes now get rolling hills, and the mountains get steeper ridges and
   broader, higher massifs. Only newly generated chunks change, so an existing
@@ -59,6 +62,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Temporal Caprid and Chrono Ursid Spawn Eggs are colored again**: on
+  Minecraft 1.20.1 (Forge) and 1.21.1 / 1.21.2 (NeoForge), these two spawn
+  eggs showed the plain gray template texture instead of their colors.
 - **Potted plants and Unstable Fungus now drop items**: breaking a flower pot
   holding a Time Wood, Dark Time Wood, or Ancient Time Wood sapling, an Orange,
   Pink, or Purple Time Blossom, or an Unstable Fungus gave nothing back, so the
