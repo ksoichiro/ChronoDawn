@@ -152,6 +152,21 @@ subprojects {
                 new File(installDir, 'server.properties').append("server-port=${smokePort}\n")
             }
         }
+        // run/ is gitignored, so a fresh worktree has no options.txt and the
+        // key-binding tutorial pops up on every launch. Seed it only when absent
+        // so a developer's own settings are never overwritten. Hooked on the Loom
+        // task itself so both `:<loader>:runClient` and the runClient<Loader><ver>
+        // shortcuts are covered. Every version's build.gradle uses runDir("run"),
+        // and the task's workingDir is still the project dir at this point.
+        tasks.matching { it.name == 'runClient' }.configureEach { task ->
+            task.doFirst {
+                def options = new File(task.project.projectDir, 'run/options.txt')
+                if (!options.exists()) {
+                    options.parentFile.mkdirs()
+                    options.text = "onboardAccessibility:false\ntutorialStep:none\n"
+                }
+            }
+        }
         // Old-release-to-candidate world upgrade test (fabric/neoforge, 1.21.1)
         apply from: "${rootDir}/gradle/upgrade-test.gradle"
 

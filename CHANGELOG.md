@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- `runClient` tasks now write `tutorialStep:none` and
+  `onboardAccessibility:false` to `run/options.txt` when the file does not
+  exist, so a fresh worktree no longer shows the key-binding tutorial. An
+  existing `options.txt` is left untouched.
+
 - Successful scenario checks, upgrade tests, and production smoke tests now
   remove disposable instances and worlds. Use `-Pkeep_test_output=true` to
   keep them for inspection. Reports and logs remain available.
