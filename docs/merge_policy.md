@@ -181,13 +181,10 @@ higher one.
 ### GitHub settings (checked 2026-11-23)
 
 - `main` has the active ruleset `main required CI checks`. It requires the
-  seven CI checks listed below and has an empty bypass list, so a pull request
-  with a red or missing CI check cannot be merged, and a direct push to `main`
-  is rejected unless its commits passed the checks. Merge through pull
-  requests.
-- `Merge tier` is not in the ruleset yet. Until the owner adds it (next
-  section), a red `Merge tier` check does not block the merge, so an agent
-  must check it itself before it merges.
+  seven CI checks and `Merge tier` listed below and has an empty bypass list,
+  so a pull request with a red or missing check cannot be merged, and a direct
+  push to `main` is rejected unless its commits passed the checks. Merge
+  through pull requests.
 - The repository has auto-merge disabled. Merge commit, squash and rebase are
   all allowed, and merged branches are deleted.
 
@@ -204,8 +201,8 @@ check names are the job names, so each matrix entry is its own check:
 - `Merge tier`
 
 In the web UI, open Settings, Rules, Rulesets, `main required CI checks`,
-and add the missing check under "Require status checks to pass" with GitHub
-Actions as the source. From the command line, look up the ruleset ID and
+press "Add checks" under "Require status checks to pass", pick the check with
+GitHub Actions as the source, and save. From the command line, look up the ruleset ID and
 replace its rules with the full list:
 
 ```bash
