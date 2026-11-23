@@ -38,6 +38,18 @@ Each step is one of:
                                  note tells the reviewer what the image must
                                  show. "wait" adds a fixed wait after settling
                                  and needs a reason.
+                                 Every shot is also checked automatically: not a
+                                 single color, no missing-texture magenta, and a
+                                 mean brightness of at least 15 (0-255). Any
+                                 miss is a FAIL. "expect" adds rules for one
+                                 shot: {"min_brightness": 5} overrides the
+                                 brightness floor (0 turns it off, for a dark
+                                 cave), and {"colors": [{"rgb": "#5a8c3c",
+                                 "tolerance": 40, "min_ratio": 0.02}]} needs
+                                 that color (within tolerance on each channel,
+                                 default 30) to cover at least min_ratio and/or
+                                 at most max_ratio of the frame, as a stand-in
+                                 for "the grass, the sky or the block is there".
 - {"input": "use"}               Act as the player in the client: "use" clicks
                                  the right mouse button once (open a trader,
                                  a container, place a block), "attack" the left
@@ -86,6 +98,7 @@ import time
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from scripts.scenario_check import images
 from scripts.upgrade_test import compare
 
 _VAR = re.compile(r"\$\{(\w+)\}")
@@ -131,6 +144,8 @@ class Shot:
     name: str
     file: Path
     note: str
+    expect: dict = field(default_factory=dict)
+    checks: list = field(default_factory=list)  # (name, passed, detail), filled by the driver
 
 
 @dataclass
@@ -154,7 +169,7 @@ def step_kind(step):
 _STEP_KEYS = {
     "command": {"command", "match", "check", "await", "timeout", "max_seconds"},
     # "shot" comes before "settle" because a shot step may carry a settle option.
-    "shot": {"shot", "wait", "note", "settle", "reason"},
+    "shot": {"shot", "wait", "note", "settle", "reason", "expect"},
     "settle": {"settle"},
     "sleep": {"sleep", "reason"},
     "input": {"input", "until", "match", "repeat"},
@@ -258,6 +273,11 @@ def _validate_step(name, index, step):
                 raise ScenarioError(f"{where}: invalid match regex: {e}") from e
     if kinds[0] == "shot" and not re.fullmatch(r"[A-Za-z0-9_.-]+", step["shot"]):
         raise ScenarioError(f"{where}: shot names may use letters, digits, '.', '_' and '-' only")
+    if kinds[0] == "shot" and "expect" in step:
+        try:
+            images.validate_expect(step["expect"])
+        except ValueError as e:
+            raise ScenarioError(f"{where}: {e}") from e
 
 
 def load_scenario(path: Path) -> Scenario:
@@ -357,7 +377,7 @@ class Runner:
             except Exception as e:  # a failed capture should not hide the other shots
                 outcome.results.append(("FAIL", f"{name}/shot:{step['shot']}", f"{type(e).__name__}: {e}"))
                 return
-            outcome.shots.append(Shot(step["shot"], file, note))
+            outcome.shots.append(Shot(step["shot"], file, note, step.get("expect", {})))
             outcome.results.append(("SHOT", f"{name}/shot:{step['shot']}", note))
             return
         if "settle" in step:

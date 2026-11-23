@@ -86,12 +86,21 @@ first-pass image check flags a screenshot.
 
 ## Review flow
 
-1. The driver checks every screenshot automatically. A single-color frame (a
-   loading screen or a failed capture) or more than 0.5% missing-texture
-   magenta fails the run.
-2. An agent reads `summary.md` and looks at each screenshot against its note.
-   It sends back obvious problems (a missing structure, a wrong block shape,
-   broken textures) before asking anyone.
+1. The driver checks every screenshot automatically, and any miss fails the
+   run: a single-color frame (a loading screen or a failed capture), more
+   than 0.5% missing-texture magenta, or a mean brightness below 15 out of
+   255 (night, or a frame that was not rendered). A shot step can add rules
+   with `expect`: `min_brightness` overrides the floor (0 turns it off, for a
+   dark cave), and `colors` needs a color to cover at least `min_ratio` and/or
+   at most `max_ratio` of the frame, which stands in for "the grass, the sky
+   or the block is there" without a reference image. The checks look at one
+   image alone. There are no stored reference images, so a structure that is
+   missing but leaves a bright, clean frame still needs a person.
+2. `summary.md` lists every automatic check per shot with its result. The
+   `Human review` line is what a machine cannot judge (how it looks, whether
+   a structure is placed naturally, a model's shape). An agent looks at each
+   screenshot against that line and sends back obvious problems before asking
+   anyone.
 3. The agent attaches `sheet.png` to the PR or the task and keeps working
    through the PR. It does not wait for the owner.
 4. The owner answers OK or NG for each shot when they review the PR. Checks
