@@ -12,7 +12,7 @@ import sys
 import time
 from pathlib import Path
 
-from scripts.upgrade_test import compare, logcheck, processes, snapshot, versions
+from scripts.upgrade_test import cleanup, compare, logcheck, processes, snapshot, versions
 from scripts.upgrade_test.layers import load_layers, layers_for_source
 from scripts.upgrade_test.rcon import Rcon
 
@@ -287,6 +287,7 @@ def main(argv=None) -> int:
     parser.add_argument("--env", required=True, type=Path)
     parser.add_argument("--sources", help="comma-separated versions; default: baseline + previous release")
     parser.add_argument("--candidate-jar", type=Path)
+    parser.add_argument("--keep-test-output", action="store_true")
     args = parser.parse_args(argv)
 
     env = Env(json.loads(args.env.read_text()))
@@ -322,6 +323,8 @@ def main(argv=None) -> int:
     print(report, flush=True)
     failed = [r for r in results if r[0] in ("FAIL", "SETUP FAILED")]
     print(f"{len(failed)} failure(s). Report: {env.out_dir / 'report.txt'}", flush=True)
+    if not failed and not args.keep_test_output:
+        cleanup.upgrade(env.out_dir, sources)
     return 1 if failed else 0
 
 

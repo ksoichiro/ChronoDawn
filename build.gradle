@@ -135,6 +135,16 @@ subprojects {
         // Production run support (runProd)
         apply from: "${rootDir}/gradle/shared/prod-run.gradle"
         if (project.name in ['fabric', 'neoforge']) {
+            tasks.named('prodSmokeTest') {
+                doLast {
+                    if (!project.findProperty('keep_test_output')?.toString()?.toBoolean()) {
+                        def world = new File(prodSmokeTestDir(project.name), PROD_SMOKE_TEST_LEVEL_NAME)
+                        if (world.exists() && !world.deleteDir()) {
+                            throw new GradleException("Could not delete smoke test world: ${world}")
+                        }
+                    }
+                }
+            }
             def writeSmokeConfig = project.ext.prodWriteServerConfig
             def smokePort = project.name == 'fabric' ? 25601 : 25602
             project.ext.prodWriteServerConfig = { File installDir ->

@@ -773,6 +773,12 @@ Several worktrees (for example one per agent) can verify at the same time.
 | `~/.cache/chronodawn/run-prod-cache/upgrade-test/` (old mod JARs, Python venv) | about 0.1 GB | Yes |
 | `run-prod/instances/` (`runProd` mods and worlds) | about 0.3 GB | No |
 
+Successful scenario checks and upgrade tests remove their server and client
+instances and worlds, while keeping reports and logs. Smoke tests remove their
+world but retain the installed runtime and logs. Failures retain the full output.
+Use `-Pkeep_test_output=true` to retain it after successful runs too. See
+[disk usage](disk_usage.md) for measurement details.
+
 Plan for roughly 3.6 GB or more per worktree that has run `checkAll` and a production run. The production runtime downloads are the same in every checkout, so `build.gradle` points `prod_cache_dir` at `~/.cache/chronodawn/run-prod-cache` by default. Before this, each checkout kept its own `run-prod/cache/` of 1.9 to 2.8 GB. On 2026-11-23 a second worktree ran `:neoforge:prodSmokeTest -Ptarget_mc_version=26.3` right after the first one. It downloaded nothing into the cache (the first had fetched `neoforge-26.3.0.89-installer.jar`) and had no `run-prod/` directory at all, 0.6 GB in total. The NeoForge installer still fetches its own libraries into `build/prod-smoke/`, which is per build as before.
 
 - **Override**: set `prod_cache_dir=<absolute path>` in `~/.gradle/gradle.properties` or pass `-Pprod_cache_dir=...`. If you set only `prod_base_dir` (the older way to share, which moves `cache/` and `instances/` together), the cache stays at `<prod_base_dir>/cache`.
@@ -851,7 +857,9 @@ settings when it passes 8 GB.
 Not supported for Forge (1.20.1) — see "Mixin Configuration" below. Uses
 `build/prod-smoke/<loader>-<version>/`, separate from the manually-verified
 `run-prod/instances/` used by `runProd`. Installers come from the shared
-download cache (`prod_cache_dir`, see "Disk per worktree").
+download cache (`prod_cache_dir`, see "Disk per worktree"). On success, the
+smoke-test world is deleted while the runtime and logs remain. Failures retain
+the world, as does a successful run with `-Pkeep_test_output=true`.
 
 The test also fails when the server log has a WARN, ERROR, or FATAL line
 that no pattern in `prod-smoke-log-ignore.txt` matches

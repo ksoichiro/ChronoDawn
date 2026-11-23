@@ -75,6 +75,11 @@ Everything is under `<loader>/<version>/build/scenario-check/`, for example
 | `<scenario>/transcript.txt` | Every RCON command and reply, and the time each step took |
 | `scenario-server.log`, `scenario-client.log` | Server and client logs |
 
+On success, the disposable `server/`, `client/`, and `agent/` directories are
+removed. Reports, transcripts, screenshots, and the server and client logs stay.
+On failure, all output stays for diagnosis. Add `-Pkeep_test_output=true` to
+keep the disposable directories after success as well.
+
 The task fails when a check fails, a setup command fails, a server log line
 is an unexpected WARN or ERROR, a client log line about this mod is, or a
 first-pass image check flags a screenshot.

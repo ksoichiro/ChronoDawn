@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Successful scenario checks, upgrade tests, and production smoke tests now
+  remove disposable instances and worlds. Use `-Pkeep_test_output=true` to
+  keep them for inspection. Reports and logs remain available.
+
 - **Chronicle text wraps at word boundaries**: English entry text no longer
   breaks in the middle of a word at the end of a line. Japanese text still
   wraps per character.
