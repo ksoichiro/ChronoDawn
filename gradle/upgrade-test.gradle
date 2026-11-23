@@ -149,6 +149,9 @@ tasks.register('upgradeTest', Exec) {
     if (project.findProperty('upgrade_test_candidate_jar')) {
         cmd += ['--candidate-jar', file(project.findProperty('upgrade_test_candidate_jar').toString()).absolutePath]
     }
+    if (project.findProperty('keep_test_output')?.toString()?.toBoolean()) {
+        cmd += ['--keep-test-output']
+    }
     commandLine cmd
 }
 
@@ -176,6 +179,9 @@ tasks.register('scenarioCheck', Exec) {
     }
     if (project.findProperty('upgrade_test_candidate_jar')) {
         cmd += ['--candidate-jar', file(project.findProperty('upgrade_test_candidate_jar').toString()).absolutePath]
+    }
+    if (project.findProperty('keep_test_output')?.toString()?.toBoolean()) {
+        cmd += ['--keep-test-output']
     }
     commandLine cmd
 }

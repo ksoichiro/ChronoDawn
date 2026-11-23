@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Successful scenario checks, upgrade tests, and production smoke tests now
+  remove disposable instances and worlds. Use `-Pkeep_test_output=true` to
+  keep them for inspection. Reports and logs remain available.
+
 - **More varied terrain in Chrono Dawn**: inland plains and similar flat
   biomes now get rolling hills, and the mountains get steeper ridges and
   broader, higher massifs. Only newly generated chunks change, so an existing

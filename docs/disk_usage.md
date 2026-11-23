@@ -47,8 +47,9 @@ under 1 GB.
 `upgradeTest` copies the server with `cp -cR` on macOS (APFS clone, so it
 shares blocks until changed). The world before the upgrade is a real copy
 (`shutil.copytree`). The output directory
-`<loader>/<version>/build/upgrade-test/<source>` is rebuilt on the next run but
-never removed after a run.
+`<loader>/<version>/build/upgrade-test/<source>` is rebuilt on the next run.
+Successful runs remove server and client instances and both world copies. Failed runs retain them.
+`-Pkeep_test_output=true` also retains them on success.
 
 ## Growth with parallel work
 
@@ -90,9 +91,8 @@ below has to fit on the internal disk.
    The heavy tasks check 20 GB themselves (build change 4). The 25 GB for a
    third checkout stays a manual check with `df -h /`.
 4. **Clean up after heavy tasks.** Run `./gradlew clean<version>` or
-   `cleanAll` once the result is recorded. Delete
-   `<loader>/<version>/build/upgrade-test` and `build/scenario-check` server
-   copies when the report is saved.
+   `cleanAll` once the result is recorded. Failed test instances and successful runs with `-Pkeep_test_output=true`
+   remain until the next run or manual cleanup.
 5. **Trim the shared Gradle caches by hand once a month**, or whenever free
    space falls below the threshold: delete `~/.gradle/caches/fabric-loom/<v>`
    for versions that are no longer supported and the `.broken-*` directories
@@ -115,7 +115,9 @@ below has to fit on the internal disk.
    section "Disk per worktree".
 3. **Delete server copies and worlds after a successful scenario check,
    upgrade test and prod smoke test**, and keep the reports and screenshots.
-   Expected saving: about 0.3 GB per loader and version.
+   The smoke-test runtime and all reports and logs remain. Expected saving:
+   about 0.3 GB per loader and version. An APFS free-space measurement after
+   a real run is still needed.
 4. **Add a free-space guard** to the heavy tasks. It fails fast below the
    threshold with a message that names the cleanup commands. Implemented as
    `min_free_disk_gb` (default 20 GB, see the Developer Guide section "Free

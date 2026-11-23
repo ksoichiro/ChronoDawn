@@ -15,7 +15,7 @@ from pathlib import Path
 
 from scripts.scenario_check import capture, images
 from scripts.scenario_check.scenario import Runner, Scenario, ScenarioError, load_scenarios
-from scripts.upgrade_test import compare, logcheck, processes
+from scripts.upgrade_test import cleanup, compare, logcheck, processes
 from scripts.upgrade_test.rcon import Rcon
 from scripts.upgrade_test.run import PLAYER, Env, _end_session, _start_session
 
@@ -176,6 +176,7 @@ def main(argv=None) -> int:
     parser.add_argument("--ports", help="server port and RCON port, comma-separated; default: reserve a free pair")
     parser.add_argument("--scenarios", help="comma-separated scenario names; default: all")
     parser.add_argument("--candidate-jar", type=Path)
+    parser.add_argument("--keep-test-output", action="store_true")
     args = parser.parse_args(argv)
 
     env = Env(json.loads(args.env.read_text()))
@@ -207,6 +208,8 @@ def main(argv=None) -> int:
     failed = [r for r in results if r[0] in ("FAIL", "SETUP FAILED")]
     print(f"{len(failed)} failure(s). Report: {out_dir / 'report.txt'}, summary: {out_dir / 'summary.md'}"
           + (f", contact sheet: {sheet}" if sheet else ""), flush=True)
+    if not failed and not args.keep_test_output:
+        cleanup.scenario(out_dir)
     return 1 if failed else 0
 
 
