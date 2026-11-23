@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Chronicle text wraps at word boundaries**: English entry text no longer
+  breaks in the middle of a word at the end of a line. Japanese text still
+  wraps per character.
 - **More varied terrain in Chrono Dawn**: inland plains and similar flat
   biomes now get rolling hills, and the mountains get steeper ridges and
   broader, higher massifs. Only newly generated chunks change, so an existing

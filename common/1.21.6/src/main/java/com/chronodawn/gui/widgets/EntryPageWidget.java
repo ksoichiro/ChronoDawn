@@ -508,7 +508,9 @@ public class EntryPageWidget extends AbstractWidget {
 
     /**
      * Wrap text to fit within a maximum width.
-     * Supports both English (word-based wrapping) and Japanese (character-based wrapping).
+     * Space-separated words (English) stay whole and wrap at word boundaries, and a word wider
+     * than a line is split by character. Characters from U+3000 up (Japanese has no spaces
+     * between words) wrap per character.
      *
      * @param text Text to wrap
      * @param maxWidth Maximum line width
@@ -525,25 +527,46 @@ public class EntryPageWidget extends AbstractWidget {
                 continue;
             }
 
-            // Character-by-character wrapping (works for both English and Japanese)
             StringBuilder currentLine = new StringBuilder();
-
-            for (int i = 0; i < paragraph.length(); i++) {
+            boolean wrapped = false;
+            int i = 0;
+            while (i < paragraph.length()) {
+                // A token is one space, one wide (CJK) character, or a run of other characters
+                int start = i;
                 char c = paragraph.charAt(i);
-                String testLine = currentLine.toString() + c;
+                i++;
+                if (c != ' ' && c < '\u3000') {
+                    while (i < paragraph.length()
+                            && paragraph.charAt(i) != ' ' && paragraph.charAt(i) < '\u3000') {
+                        i++;
+                    }
+                }
+                String token = paragraph.substring(start, i);
 
-                if (font.width(testLine) <= maxWidth) {
-                    currentLine.append(c);
-                } else {
-                    // Current line is full, add it and start new line
-                    if (currentLine.length() > 0) {
+                if (font.width(currentLine + token) <= maxWidth) {
+                    // Do not start a wrapped line with the space that separated the words
+                    if (!(wrapped && currentLine.length() == 0 && c == ' ')) {
+                        currentLine.append(token);
+                    }
+                    continue;
+                }
+
+                if (currentLine.length() > 0) {
+                    lines.add(currentLine.toString().stripTrailing());
+                    currentLine = new StringBuilder();
+                    wrapped = true;
+                }
+                if (c == ' ') {
+                    continue;
+                }
+                // A word wider than a whole line is the only case split mid-word
+                for (int j = 0; j < token.length(); j++) {
+                    char tc = token.charAt(j);
+                    if (currentLine.length() > 0 && font.width(currentLine.toString() + tc) > maxWidth) {
                         lines.add(currentLine.toString());
                         currentLine = new StringBuilder();
-                        currentLine.append(c);
-                    } else {
-                        // Single character too wide (shouldn't happen)
-                        lines.add(String.valueOf(c));
                     }
+                    currentLine.append(tc);
                 }
             }
 
