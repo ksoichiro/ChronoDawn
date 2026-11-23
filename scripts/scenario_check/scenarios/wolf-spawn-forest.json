@@ -12,9 +12,10 @@
     "execute in chronodawn:chronodawn run spreadplayers ${x} ${z} 0 1 false ${player}",
     "execute in chronodawn:chronodawn as ${player} at @s run forceload add ~-120 ~-120 ~120 ~120",
     {"command": "execute in chronodawn:chronodawn as ${player} at @s as @e[type=minecraft:wolf,distance=..170] at @s if biome ~ ~ ~ chronodawn:chronodawn_forest", "match": "Test passed", "check": "wolf-in-forest", "await": true, "timeout": 90},
-    "execute in chronodawn:chronodawn as ${player} at @s as @e[type=minecraft:wolf,distance=..170,sort=furthest] at @s if biome ~ ~ ~ chronodawn:chronodawn_forest run tp ${player} ~ ~2 ~-4 0 15",
+    "execute in chronodawn:chronodawn as ${player} at @s as @e[type=minecraft:wolf,distance=..170] at @s if biome ~ ~ ~ chronodawn:chronodawn_forest run data merge entity @s {NoAI:1b}",
+    "execute in chronodawn:chronodawn as ${player} at @s as @e[type=minecraft:wolf,distance=..170,sort=furthest,limit=1] at @s if biome ~ ~ ~ chronodawn:chronodawn_forest run tp ${player} ~ ~2 ~-3 facing entity @s eyes",
     {"settle": 60},
     "execute in chronodawn:chronodawn run time set noon",
-    {"shot": "wolf", "note": "A wolf that spawned with the chunks in the Chrono Dawn Forest, about 4 blocks in front of the camera and a little below it (leaves may cover part of the view). It renders as a normal wolf (on 1.21.1 there are no wolf coat variants yet)."}
+    {"shot": "wolf", "note": "A wolf that spawned with the chunks in the Chrono Dawn Forest, standing still (its AI is switched off) about 3 blocks in front of the camera, which looks straight at it (leaves may cover part of the view). It renders as a normal wolf (on 1.21.1 there are no wolf coat variants yet)."}
   ]
 }
