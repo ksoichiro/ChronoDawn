@@ -105,6 +105,15 @@ class LoadTest(unittest.TestCase):
         with self.assertRaises(ScenarioError):
             load_scenario(self._write({"steps": [{"shot": "a"}, {"shot": "a"}]}))
 
+    def test_rejects_bad_shot_expect(self):
+        with self.assertRaises(ScenarioError):
+            load_scenario(self._write({"steps": [{"shot": "a", "expect": {"min_brightness": -1}}]}))
+
+    def test_keeps_shot_expect(self):
+        expect = {"min_brightness": 0}
+        scenario = load_scenario(self._write({"steps": [{"shot": "a", "expect": expect}]}))
+        self.assertEqual(scenario.steps[0]["expect"], expect)
+
     def test_rejects_unsafe_shot_name(self):
         with self.assertRaises(ScenarioError):
             load_scenario(self._write({"steps": [{"shot": "../a"}]}))

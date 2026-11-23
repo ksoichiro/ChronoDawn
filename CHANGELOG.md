@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- `scenarioCheck` now fails a screenshot whose mean brightness is below 15
+  out of 255 (night or an unrendered frame), and a shot step can add an
+  `expect` rule for a minimum brightness or the share of a color in the
+  frame. `summary.md` lists every automatic check per shot and marks what is
+  left for a person as `Human review`.
+
 - `runClient` tasks now write `tutorialStep:none` and
   `onboardAccessibility:false` to `run/options.txt` when the file does not
   exist, so a fresh worktree no longer shows the key-binding tutorial. An

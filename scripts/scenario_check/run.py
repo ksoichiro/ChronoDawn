@@ -71,9 +71,11 @@ HARNESS_LOG_NOISE = re.compile(r"moved too quickly!")
 
 
 def _shot_results(shots, scenario_name):
+    """Run the automatic checks on each shot, keep them on the shot for the summary, and FAIL on a miss."""
     results = []
     for shot in shots:
-        problems = images.inspect(shot.file)
+        shot.checks = images.check(shot.file, shot.expect)
+        problems = [detail for _, ok, detail in shot.checks if not ok]
         if problems:
             results.append(("FAIL", f"{scenario_name}/shot:{shot.name}", "; ".join(problems)))
     return results
@@ -93,7 +95,9 @@ def write_summary(out_dir: Path, report: str, shots_by_scenario: dict, sheet: Pa
             continue
         lines += [f"## {name}", ""]
         for shot in shots:
-            lines += [f"- `{shot.file}`", f"  - Look for: {shot.note or '(no note)'}"]
+            lines += [f"- `{shot.file}`"]
+            lines += [f"  - Auto {'PASS' if ok else 'FAIL'} {name}: {detail}" for name, ok, detail in shot.checks]
+            lines += [f"  - Human review: {shot.note or '(no note)'}"]
         lines.append("")
     (out_dir / "summary.md").write_text("\n".join(lines))
 
