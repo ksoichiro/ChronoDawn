@@ -30,6 +30,8 @@ SESSION_SETTLE = [{"settle": 120}]
 # Chat is hidden so command feedback and join messages stay out of the shots.
 # VSync is off because the 26.x client (SDL) blocks in SDL_GL_SwapWindow with
 # VSync on while the Mac is locked, so it never gets past the loading screen.
+# Clouds are off because the shots taken from high above a structure can land
+# inside the cloud layer (y=192), which washes the whole frame out to white.
 _CLIENT_OPTIONS = """onboardAccessibility:false
 pauseOnLostFocus:false
 skipMultiplayerWarning:true
@@ -43,6 +45,7 @@ narrator:0
 soundCategory_master:0.0
 enableVsync:false
 maxFps:60
+renderClouds:"false"
 """
 
 # Run before every scenario so each one starts from the same conditions.
