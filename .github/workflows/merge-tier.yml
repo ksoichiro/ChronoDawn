@@ -1,0 +1,43 @@
+name: Merge tier
+
+# Checks the `Merge tier:` line of a pull request body against the tier that
+# scripts/merge_tier/classify.py computes from the diff (docs/merge_policy.md).
+# It is a separate workflow so that editing the body re-runs only this check,
+# not the builds in ci.yml.
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+
+concurrency:
+  group: merge-tier-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  merge-tier:
+    name: Merge tier
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      # The full history is needed to find the merge base and to read the
+      # base version of lang files. Submodules are not needed: the
+      # classifier only reads the submodule pointer from the diff.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - run: python3 -m unittest discover -s scripts/merge_tier/tests -t .
+      # The body goes through an environment variable and a file, never into
+      # the script text, so its content cannot run as shell code.
+      - env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          printf '%s' "$PR_BODY" > "$RUNNER_TEMP/pr-body.md"
+          python3 scripts/merge_tier/classify.py \
+            --base "$BASE_SHA" --head "$HEAD_SHA" \
+            --body-file "$RUNNER_TEMP/pr-body.md" \
+            --summary "$GITHUB_STEP_SUMMARY"

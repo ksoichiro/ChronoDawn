@@ -211,6 +211,7 @@ such as `[94, 1]`, and verify both resource reload and server data loading.
 **Parallel verification** (several worktrees or agents on one machine; details in `docs/developer_guide.md` "Running verification in parallel"):
 - Run at most 2 verifications at the same time (`checkAll`, `scenarioCheck`, `upgradeTest`). The `scenarioCheck` and `upgradeTest` drivers enforce it with lock files and wait for a free slot. Change the limit per machine with the environment variable `CHRONODAWN_MAX_PARALLEL_VERIFY`. Start `checkAll` only when fewer than the limit are running, because it is not slot-limited
 - `checkAll`, `gameTestAll`, `upgradeTest`, `scenarioCheck` and `prodSmokeTest` fail before they start when the checkout's volume has less than `min_free_disk_gb` (20 GB) free. Free space as the message says instead of passing `-Pmin_free_disk_gb=0`, unless the owner asks for it
+- Before a PR, classify the diff with `python3 scripts/merge_tier/classify.py`, run the `independent-verification` skill, and put its Verification section with a `Merge tier:` line in the PR body (`docs/merge_policy.md`). The `Merge tier` CI check fails when the declared tier is lower than the diff's
 - Before a PR, run `checkAll` for all versions. Limit it to the changed versions (`build<version>`, `:fabric:runGameTest -Ptarget_mc_version=<v>`) only when the impact is clearly confined to them, and say so in the PR body
 
 **Scenario Check** (1.21.1 and 26.3; tested on macOS; opens a game window; not part of `checkAll`; see `docs/scenario_check.md`):
