@@ -39,7 +39,16 @@ class ProcessesTest(unittest.TestCase):
         patcher.start()
         self.addCleanup(patcher.stop)
         held = list(processes._held_locks)
-        self.addCleanup(lambda: processes._held_locks.__setitem__(slice(None), held))
+
+        def restore():
+            # Close what the test acquired: dropping an open handle only
+            # triggers a ResourceWarning. close() is safe on closed files.
+            for handle in processes._held_locks:
+                if not any(handle is old for old in held):
+                    handle.close()
+            processes._held_locks[:] = held
+
+        self.addCleanup(restore)
 
     def test_allocate_ports_gives_distinct_pairs_to_concurrent_runs(self):
         self._isolated_locks()

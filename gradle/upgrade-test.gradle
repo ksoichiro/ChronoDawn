@@ -41,8 +41,8 @@ if (project == rootProject) {
         description = 'Unit tests for scripts/upgrade_test (some bind local ports)'
         dependsOn 'upgradeTestVenv'
         workingDir = rootDir
-        commandLine upgradeTestPython.absolutePath, '-m', 'unittest', 'discover',
-            '-s', 'scripts/upgrade_test/tests', '-t', '.'
+        commandLine upgradeTestPython.absolutePath, '-W', 'error::ResourceWarning',
+            '-m', 'unittest', 'discover', '-s', 'scripts/upgrade_test/tests', '-t', '.'
     }
 
     tasks.register('testScenarioCheckScripts', Exec) {
