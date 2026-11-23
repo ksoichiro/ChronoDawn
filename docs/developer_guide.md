@@ -769,10 +769,18 @@ Several worktrees (for example one per agent) can verify at the same time.
 |---|---|---|
 | `.gradle/` (Loom caches and task history, about 100 to 230 MB per version) | about 2.9 GB | No (see above) |
 | `build/` and per-module `build/` directories | about 0.4 GB and up | No |
-| `run-prod/` (`cache/` holds Minecraft assets, libraries and installers, `instances/` holds `runProd` worlds) | about 3.1 GB | Opt in with `prod_base_dir` |
-| `run-prod/cache/upgrade-test/` (old mod JARs, Python venv) | about 0.1 GB | Opt in with `prod_base_dir` |
+| `~/.cache/chronodawn/run-prod-cache/` (`prod_cache_dir`: Minecraft client, assets, libraries, loader installers and installed NeoForge runtimes) | about 2.6 GB | Yes, one copy per machine |
+| `~/.cache/chronodawn/run-prod-cache/upgrade-test/` (old mod JARs, Python venv) | about 0.1 GB | Yes |
+| `run-prod/instances/` (`runProd` mods and worlds) | about 0.3 GB | No |
 
-Plan for roughly 6.5 GB or more per worktree that has run `checkAll` and a production run. To share the production runtime cache, set `prod_base_dir=<absolute path>` (for example `/Users/<you>/.cache/chronodawn/run-prod`) in `~/.gradle/gradle.properties`. This moves `cache/` and `instances/`, so `runProd` worlds become shared too. Run one production task in a single checkout first to fill the cache before starting parallel runs, because concurrent first-time downloads into the same directory are untested. Loom and `.gradle/` stay per checkout.
+Plan for roughly 3.6 GB or more per worktree that has run `checkAll` and a production run. The production runtime downloads are the same in every checkout, so `build.gradle` points `prod_cache_dir` at `~/.cache/chronodawn/run-prod-cache` by default. Before this, each checkout kept its own `run-prod/cache/` of 1.9 to 2.8 GB. On 2026-11-23 a second worktree ran `:neoforge:prodSmokeTest -Ptarget_mc_version=26.3` right after the first one. It downloaded nothing into the cache (the first had fetched `neoforge-26.3.0.89-installer.jar`) and had no `run-prod/` directory at all, 0.6 GB in total. The NeoForge installer still fetches its own libraries into `build/prod-smoke/`, which is per build as before.
+
+- **Override**: set `prod_cache_dir=<absolute path>` in `~/.gradle/gradle.properties` or pass `-Pprod_cache_dir=...`. If you set only `prod_base_dir` (the older way to share, which moves `cache/` and `instances/` together), the cache stays at `<prod_base_dir>/cache`.
+- **Move an existing cache**: if `~/.cache/chronodawn/run-prod-cache` does not exist yet, run `mkdir -p ~/.cache/chronodawn && mv run-prod/cache ~/.cache/chronodawn/run-prod-cache` once in the checkout with the largest `run-prod/cache/`, and delete any `*.broken-*` directory inside it. Then delete `run-prod/cache/` in the other checkouts, since nothing reads it anymore. Without the move the first production task downloads everything again.
+- **Warm it first**: run one production task (for example `prodSmokeTest` on the versions you need) in a single checkout before starting parallel runs. Downloads go to a temporary file and are renamed into place, so nobody sees a half-written file. Two checkouts installing the same NeoForge runtime into `neoforge-install-<version>/` at the same time are not locked against each other and are untested.
+- **Sandbox**: the cache is outside the checkout, so tasks that touch it need to run outside the sandbox. The production tasks already do, because they need network access and JVM forks.
+
+Loom and `.gradle/` stay per checkout.
 
 Shared sources are included via `srcDir` references to `fabric/base/` and `neoforge/base/` directories (which are source directories, not Gradle subprojects).
 
@@ -842,7 +850,8 @@ settings when it passes 8 GB.
 
 Not supported for Forge (1.20.1) — see "Mixin Configuration" below. Uses
 `build/prod-smoke/<loader>-<version>/`, separate from the manually-verified
-`run-prod/` used by `runProd`.
+`run-prod/instances/` used by `runProd`. Installers come from the shared
+download cache (`prod_cache_dir`, see "Disk per worktree").
 
 The test also fails when the server log has a WARN, ERROR, or FATAL line
 that no pattern in `prod-smoke-log-ignore.txt` matches

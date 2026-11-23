@@ -29,7 +29,7 @@ checkouts run.
 | Location | Size | Notes |
 |----------|------|-------|
 | `.gradle/` | 0.3 GB fresh, about 2.9 GB after `checkAll` | Per-version `loom-cache/minecraftMaven` (access widener makes the jars project specific). Cannot be shared, see the Developer Guide |
-| `run-prod/cache/` | 1.9 to 2.8 GB | Downloaded server, installer, library and asset files. Identical across checkouts |
+| `run-prod/cache/` | 1.9 to 2.8 GB | Downloaded server, installer, library and asset files. Identical across checkouts. Now shared in `~/.cache/chronodawn/run-prod-cache` (build change 2) |
 | `run-prod/instances/` | 0.3 GB | Per-checkout mods and worlds |
 | `<loader>/<version>/build/` | 0.45 to 0.6 GB each for 1.21.1 and 26.3 | See below |
 | `common/<version>/build/` | 0.05 to 0.08 GB | |
@@ -96,7 +96,7 @@ below has to fit on the internal disk.
 5. **Trim the shared Gradle caches by hand once a month**, or whenever free
    space falls below the threshold: delete `~/.gradle/caches/fabric-loom/<v>`
    for versions that are no longer supported and the `.broken-*` directories
-   under `run-prod/cache/`. Gradle recreates anything it still needs.
+   under `~/.cache/chronodawn/run-prod-cache/` (or a leftover `run-prod/cache/`). Gradle recreates anything it still needs.
 
 ### Build changes (adopted, implemented in separate tasks)
 
@@ -107,10 +107,12 @@ below has to fit on the internal disk.
    `~/.gradle/init.d`, so the repository documents it and cannot enforce it.
 2. **Share `run-prod/cache/` across checkouts.** It holds downloads only. The
    instances (`run-prod/instances/`) stay per checkout. Expected saving: 2 to
-   3 GB per extra checkout. `prod_base_dir` moves cache and instances together,
-   so a separate cache location needs a change in `gradle/shared/prod-run.gradle`
-   (a submodule), or a symlink as a stop gap. First-time downloads from two
-   checkouts at once can race, so warm the cache from one checkout first.
+   3 GB per extra checkout. Done: `gradle/shared/prod-run.gradle` takes a
+   `prod_cache_dir` property, and `build.gradle` defaults it to
+   `~/.cache/chronodawn/run-prod-cache`. A symlink at `run-prod/cache` was
+   rejected because every new worktree would need it created by hand. The
+   setup, the measurement and the warm-up rule are in the Developer Guide
+   section "Disk per worktree".
 3. **Delete server copies and worlds after a successful scenario check,
    upgrade test and prod smoke test**, and keep the reports and screenshots.
    Expected saving: about 0.3 GB per loader and version.
