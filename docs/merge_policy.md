@@ -180,50 +180,38 @@ higher one.
 
 ### GitHub settings (checked 2026-11-23)
 
-- `main` has no branch protection and there are no rulesets. Anyone with write
-  access can push to it or merge without a passing check.
+- `main` has the active ruleset `main required CI checks`. It requires the
+  seven CI checks and `Merge tier` listed below and has an empty bypass list,
+  so a pull request with a red or missing check cannot be merged, and a direct
+  push to `main` is rejected unless its commits passed the checks. Merge
+  through pull requests.
 - The repository has auto-merge disabled. Merge commit, squash and rebase are
   all allowed, and merged branches are deleted.
 
-So the policy above is a convention and nothing on GitHub enforces it yet.
-The `Merge tier` check fails a pull request that declares too low a tier, but
-without a ruleset a red check does not block the merge. Until the owner sets
-up the ruleset below, an agent must wait for green CI itself before it merges.
-
 ### Setting up required checks (owner only)
 
-Required checks need admin rights on the repository, so only the owner can
-set them. A ruleset on `main` that requires the CI jobs and the tier check:
+Changing a ruleset needs admin rights on the repository, so only the owner
+does it. The ruleset on `main` requires every CI job and the tier check. The
+check names are the job names, so each matrix entry is its own check:
 
-1. Open Settings, Rules, Rulesets, New ruleset, New branch ruleset.
-2. Name it `main`, set Enforcement status to Active, and add the target
-   "Include default branch".
-3. Under Bypass list, add the Repository admin role with "Always allow". The
-   owner merges locally with a fast-forward push to `main`, and without the
-   bypass the ruleset rejects that push.
-4. Enable "Require status checks to pass" and add these checks, with GitHub
-   Actions as the source. The names are the job names, so each matrix entry
-   is its own check:
-   - `Validate resources and data`
-   - `Build and unit test (1.21.1)`, `Build and unit test (26.3)`
-   - `Production smoke test (1.21.1)`, `Production smoke test (26.3)`
-   - `GameTest (1.21.1)`, `GameTest (26.3)`
-   - `Merge tier`
-5. Keep "Block force pushes" on, and save.
+- `Validate resources and data`
+- `Build and unit test (1.21.1)`, `Build and unit test (26.3)`
+- `Production smoke test (1.21.1)`, `Production smoke test (26.3)`
+- `GameTest (1.21.1)`, `GameTest (26.3)`
+- `Merge tier`
 
-The same ruleset from the command line:
+In the web UI, open Settings, Rules, Rulesets, `main required CI checks`,
+press "Add checks" under "Require status checks to pass", pick the check with
+GitHub Actions as the source, and save. From the command line, look up the ruleset ID and
+replace its rules with the full list:
 
 ```bash
-gh api repos/{owner}/{repo}/rulesets --method POST --input - <<'JSON'
+gh api repos/{owner}/{repo}/rulesets --jq '.[] | "\(.id) \(.name)"'
+gh api repos/{owner}/{repo}/rulesets/<id> --method PUT --input - <<'JSON'
 {
-  "name": "main",
-  "target": "branch",
-  "enforcement": "active",
-  "conditions": {"ref_name": {"include": ["~DEFAULT_BRANCH"], "exclude": []}},
-  "bypass_actors": [{"actor_id": 5, "actor_type": "RepositoryRole", "bypass_mode": "always"}],
   "rules": [
-    {"type": "non_fast_forward"},
     {"type": "required_status_checks", "parameters": {
+      "do_not_enforce_on_create": false,
       "strict_required_status_checks_policy": false,
       "required_status_checks": [
         {"context": "Validate resources and data", "integration_id": 15368},
@@ -240,35 +228,42 @@ gh api repos/{owner}/{repo}/rulesets --method POST --input - <<'JSON'
 JSON
 ```
 
-`actor_id` 5 is the Repository admin role and `integration_id` 15368 is
-GitHub Actions. To allow agents to use GitHub auto-merge for tier A, also
-turn on "Allow auto-merge" under Settings, General. Renaming a CI job renames
-its check, so update the ruleset in the same change.
+`integration_id` 15368 is GitHub Actions. Keep the bypass list empty. Agents
+run `gh` with the owner's credentials, so a bypass for the admin role would
+also let an agent merge past a red check. A pull request opened before the
+`Merge tier` workflow existed has no `Merge tier` result. Edit its body or
+push to it to run the check.
+
+To allow agents to use GitHub auto-merge for tier A, also turn on "Allow
+auto-merge" under Settings, General. Renaming a CI job renames its check, so
+update the ruleset in the same change.
 
 ## After merging: morning check
 
 Auto-merged pull requests are sampled once a day instead of before each merge.
-Each morning the owner or the first agent of the day reads the history since
-the previous check:
+Each morning the scheduled morning-check task (next section) reads the history
+since the previous check. The mechanical half is one script:
+
+```bash
+python3 scripts/merge_tier/morning_check.py              # merged since yesterday
+python3 scripts/merge_tier/morning_check.py --since 2026-11-20   # local midnight
+```
+
+It lists the merged pull requests whose body declares `Merge tier: A`,
+fetches each final head (GitHub keeps it after the branch is deleted),
+re-classifies the diff, and checks that the Verification section is not
+empty. It exits 1 when one of them fails. It needs `gh` and network access,
+so run it outside the sandbox. To look at one pull request by hand:
 
 ```bash
 git log --first-parent --since="yesterday 00:00" --stat main
-gh pr list --state merged --search "merged:>=$(date -v-1d +%F) Merge tier: A in:body"
-```
-
-For each tier A pull request, re-run the classifier on its final head and
-confirm the result is still tier A. GitHub keeps both commits after the
-branch is deleted:
-
-```bash
 gh pr view <number> --json baseRefOid,headRefOid --jq '"\(.baseRefOid) \(.headRefOid)"'
 git fetch origin "pull/<number>/head"
 python3 scripts/merge_tier/classify.py --base <baseRefOid> --head <headRefOid>
 ```
 
-Then skim the diff for what the file paths cannot show (see "Classifying a
-diff by its files"), and confirm that the Verification section is not empty. If one was
-misclassified or is wrong:
+Then skim each diff for what the file paths cannot show (see "Classifying a
+diff by its files"). If one was misclassified or is wrong:
 
 1. Revert it with a new pull request. Do not rewrite `main`.
 2. Add the missed case to the tier lists above, or to `bug_prevention.md` when
@@ -276,15 +271,35 @@ misclassified or is wrong:
 3. Tighten the rule that let it through. Two misses in a month mean tier A is
    too wide, so stop auto-merging until the list is narrowed.
 
-### Running the morning check on a schedule (decided 2026-11-23)
+### Running the morning check on a schedule
 
-The morning check is not scheduled yet. The mechanical half, re-classifying
-the diff, already runs on every pull request as the `Merge tier` check. The
-half that is left is judgment: reading the diff for what paths cannot show.
-A scheduled GitHub workflow cannot do that without model credentials in CI,
-which this policy rules out. No pull request has been auto-merged under
-tier A so far, so there is nothing to sample yet.
+A fuda schedule on the Chrono Dawn project creates the morning-check task
+every morning, and the fuda agent auto start runs an agent on it. A scheduled
+GitHub workflow cannot do the judgment half without model credentials in CI,
+which this policy rules out. The owner sets the schedule up on the project's
+Schedules page in fuda (schedules have no MCP tool or CLI command):
 
-Schedule it when agents start auto-merging tier A pull requests: a local
-scheduled agent (for example a Claude Code routine) that runs the commands
-above each morning and reports misclassified pull requests to the owner.
+- Cron `0 7 * * *` (server local time), status Todo so that the auto start
+  picks the task, and "skip if open" on so that an unfinished check does not
+  pile up.
+- The template body asks the agent to run this section and nothing else.
+
+The agent on the morning-check task:
+
+1. Runs `python3 scripts/merge_tier/morning_check.py --since <date>`, with the
+   date of the previous morning-check task, or yesterday for the first one.
+   The script reads the date as local midnight and sends GitHub the UTC
+   offset, so nothing merged between two runs is skipped. The ranges of two
+   runs overlap, so a pull request that already has a task is not reported
+   again.
+2. Skims the diff of every listed pull request, including the ones the script
+   passed, for what the file paths cannot show.
+3. Creates one fuda task per misclassified or wrong pull request, related to
+   the morning-check task, with the pull request link, the declared and the
+   computed tier, and what is wrong. The owner decides about the revert, so
+   the agent changes no files, opens no pull request and reverts nothing.
+4. Comments the script's report on the morning-check task and moves the task
+   to Done.
+
+The auto start runs the task only when the project is opted in and 07:00 is
+inside its window. Otherwise the task waits in Todo for the owner to start it.
