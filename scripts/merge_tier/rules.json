@@ -17,7 +17,7 @@
     },
     {
       "tier": "D",
-      "note": "Validators, their rule files and the verification drivers",
+      "note": "Validators, their rule files and settings. gradle.properties lists the validators that checkAll and validateAll run",
       "patterns": [
         "gradle/shared",
         "gradle/shared/**",
@@ -25,6 +25,7 @@
         "gradle/version-sync.lock",
         "gradle/disk-space-check.gradle",
         "gradle/upgrade-test.gradle",
+        "gradle.properties",
         "scripts/*_rules.json",
         "prod-smoke-log-ignore.txt",
         "upgrade-test-log-ignore.txt"
@@ -32,7 +33,8 @@
     },
     {
       "tier": "A",
-      "note": "Tests and test content for the verification drivers",
+      "note": "Tests and test content for the verification drivers. Deleting one weakens a gate",
+      "deleted_tier": "D",
       "patterns": [
         "scripts/upgrade_test/tests/**",
         "scripts/upgrade_test/layers/**",
@@ -48,7 +50,7 @@
     {
       "tier": "C",
       "note": "Build, dependency ranges and supported versions",
-      "patterns": ["build.gradle", "**/build.gradle", "settings.gradle", "gradle.properties", "props/**", "gradle/**", "buildSrc/**", "gradlew", "gradlew.bat", ".gitmodules"]
+      "patterns": ["build.gradle", "**/build.gradle", "settings.gradle", "props/**", "gradle/**", "buildSrc/**", "gradlew", "gradlew.bat", ".gitmodules"]
     },
     {
       "tier": "C",
@@ -83,9 +85,10 @@
     },
     {
       "tier": "C",
-      "note": "Registries, configs, persisted data, portals, dimensions and Mixins in Java",
+      "note": "Registries, worldgen, configs, persisted data, portals, dimensions and Mixins in Java",
       "patterns": [
         "**/java/**/registry/**",
+        "**/java/**/worldgen/**",
         "**/java/**/config/**",
         "**/java/com/chronodawn/data/**",
         "**/java/**/core/portal/**",
@@ -101,7 +104,8 @@
     },
     {
       "tier": "A",
-      "note": "Unit tests and GameTests",
+      "note": "Unit tests and GameTests. Deleting one weakens a gate",
+      "deleted_tier": "D",
       "patterns": ["**/src/test/**", "**/src/gametest/**", "common/gametest/**", "**/java/**/gametest/**"]
     },
     {

@@ -62,7 +62,9 @@ python3 scripts/merge_tier/classify.py --body-file body.md   # also check its `M
 ```
 
 The first rule whose pattern matches a path decides its tier, and the diff
-takes the highest tier of its files. Lang files are the one content check:
+takes the highest tier of its files. Deleting a test, a GameTest, a scenario
+or an upgrade-test layer is tier D, because it weakens a gate. Lang files are
+the one content check:
 a lang file is tier A when the head keeps every key of the base, and tier C
 when a key is removed or renamed or the file is deleted.
 
@@ -77,21 +79,22 @@ The author still raises the tier by hand when the content calls for it.
 |---|---|---|---|
 | 1 | D | `CLAUDE.md`, `**/CLAUDE.md`, `AGENTS.md`, `**/AGENTS.md`, `.claude/**`, `.codex/**`, `**/SKILL.md` | Agent instructions and skills |
 | 2 | D | `.github/**`, `scripts/hooks/**`, `scripts/merge_tier/**`, `docs/merge_policy.md` | CI, Git hooks and this classifier |
-| 3 | D | `gradle/shared`, `gradle/shared/**`, `gradle/chronodawn-validation.gradle`, `gradle/version-sync.lock`, `gradle/disk-space-check.gradle`, `gradle/upgrade-test.gradle`, `scripts/*_rules.json`, `prod-smoke-log-ignore.txt`, `upgrade-test-log-ignore.txt` | Validators, their rule files and the verification drivers |
-| 4 | A | `scripts/upgrade_test/tests/**`, `scripts/upgrade_test/layers/**`, `scripts/scenario_check/tests/**`, `scripts/scenario_check/scenarios/**` | Tests and test content for the verification drivers |
+| 3 | D | `gradle/shared`, `gradle/shared/**`, `gradle/chronodawn-validation.gradle`, `gradle/version-sync.lock`, `gradle/disk-space-check.gradle`, `gradle/upgrade-test.gradle`, `gradle.properties`, `scripts/*_rules.json`, `prod-smoke-log-ignore.txt`, `upgrade-test-log-ignore.txt` | Validators, their rule files and settings. gradle.properties lists the validators that checkAll and validateAll run |
+| 4 | A (D when deleted) | `scripts/upgrade_test/tests/**`, `scripts/upgrade_test/layers/**`, `scripts/scenario_check/tests/**`, `scripts/scenario_check/scenarios/**` | Tests and test content for the verification drivers. Deleting one weakens a gate |
 | 5 | D | `scripts/upgrade_test/**`, `scripts/scenario_check/**` | Verification drivers (upgradeTest, scenarioCheck) |
-| 6 | C | `build.gradle`, `**/build.gradle`, `settings.gradle`, `gradle.properties`, `props/**`, `gradle/**`, `buildSrc/**`, `gradlew`, `gradlew.bat`, `.gitmodules` | Build, dependency ranges and supported versions |
+| 6 | C | `build.gradle`, `**/build.gradle`, `settings.gradle`, `props/**`, `gradle/**`, `buildSrc/**`, `gradlew`, `gradlew.bat`, `.gitmodules` | Build, dependency ranges and supported versions |
 | 7 | C | `**/*mixins*.json`, `**/pack.mcmeta`, `**/fabric.mod.json`, `**/META-INF/**` | Mixin configs, pack.mcmeta and loader metadata |
 | 8 | C | `**/data/*/worldgen/**`, `**/data/*/dimension/**`, `**/data/*/dimension_type/**`, `**/data/*/structure/**`, `**/data/*/structures/**`, `**/data/*/tags/worldgen/**`, `**/data/*/neoforge/biome_modifier/**`, `**/data/*/forge/biome_modifier/**` | Worldgen, dimensions, structures and biome modifiers |
 | 9 | C | `**/data/*/advancement/**`, `**/data/*/advancements/**`, `**/tags/block/needs_*`, `**/tags/blocks/needs_*`, `**/tags/block/incorrect_for_*`, `**/tags/blocks/incorrect_for_*` | Advancements and progression gating tags (tool tiers) |
-| 10 | C | `**/java/**/registry/**`, `**/java/**/config/**`, `**/java/com/chronodawn/data/**`, `**/java/**/core/portal/**`, `**/java/**/core/dimension/**`, `**/java/**/mixin/**` | Registries, configs, persisted data, portals, dimensions and Mixins in Java |
+| 10 | C | `**/java/**/registry/**`, `**/java/**/worldgen/**`, `**/java/**/config/**`, `**/java/com/chronodawn/data/**`, `**/java/**/core/portal/**`, `**/java/**/core/dimension/**`, `**/java/**/mixin/**` | Registries, worldgen, configs, persisted data, portals, dimensions and Mixins in Java |
 | 11 | A | `**/assets/*/lang/*.json` | Lang files: A when every key of the base is kept, C when a key is removed or renamed or the file is deleted |
-| 12 | A | `**/src/test/**`, `**/src/gametest/**`, `common/gametest/**`, `**/java/**/gametest/**` | Unit tests and GameTests |
+| 12 | A (D when deleted) | `**/src/test/**`, `**/src/gametest/**`, `common/gametest/**`, `**/java/**/gametest/**` | Unit tests and GameTests. Deleting one weakens a gate |
 | 13 | B | `**/data/*/recipe/**`, `**/data/*/recipes/**`, `**/data/*/loot_table/**`, `**/data/*/loot_tables/**`, `**/data/*/loot_modifiers/**`, `**/data/*/tags/**` | Recipes, loot tables, loot modifiers and tags |
 | 14 | B | `**/assets/**`, `assets/**`, `**/*.bbmodel` | Client assets and their sources: textures, models, sounds, blockstates |
 | 15 | B | `**/*.java` | Other Java sources. The classifier cannot tell a comment-only change from a behavior change |
 | 16 | A | `docs/**`, `**/*.md`, `LICENSE`, `.gitignore` | Docs, changelog and other Markdown |
 | 17 | A | `scripts/**` | Utility scripts that no gate runs |
+| - | D | `scripts/merge_tier/**` | Built into the classifier, so a pull request cannot lower its own tier by editing rules.json |
 | - | C | anything else | Any path no rule names. When in doubt, use the higher tier |
 <!-- merge-tier-rules:end -->
 
@@ -103,6 +106,11 @@ merge base and fails when the body declares a tier lower than the diff's.
 A higher declared tier passes. A body without a `Merge tier:` line passes with
 a hint, because only tier A auto-merge needs the line. The job summary lists
 every file with its tier and reason.
+
+The workflow runs the classifier and `rules.json` from the base branch, not
+from the pull request, so a pull request cannot lower its own tier by editing
+them. The classifier also counts its own files as tier D regardless of the
+rules.
 
 ## Verification per tier
 

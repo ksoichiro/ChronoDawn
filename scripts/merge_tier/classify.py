@@ -28,6 +28,9 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 DOC_PATH = REPO_ROOT / "docs" / "merge_policy.md"
 DOC_BEGIN = "<!-- merge-tier-rules:begin (generated from scripts/merge_tier/rules.json) -->"
 DOC_END = "<!-- merge-tier-rules:end -->"
+# Repository to diff. Defaults to the checkout this script is in, and --repo
+# overrides it when CI runs the base branch's copy from outside the checkout.
+GIT_ROOT = None
 
 
 def glob_to_regex(pattern):
@@ -62,10 +65,12 @@ class Rule:
     note: str
     patterns: list
     check: str = ""
+    deleted_tier: str = ""
 
     def __post_init__(self):
-        if self.tier not in TIERS:
-            raise ValueError(f"unknown tier {self.tier!r} in rules.json")
+        for tier in (self.tier, self.deleted_tier or self.tier):
+            if tier not in TIERS:
+                raise ValueError(f"unknown tier {tier!r} in rules.json")
         self._regexes = [glob_to_regex(p) for p in self.patterns]
 
     def matches(self, path):
@@ -74,7 +79,10 @@ class Rule:
 
 def load_rules(path=RULES_PATH):
     data = json.loads(Path(path).read_text(encoding="utf-8"))
-    rules = [Rule(r["tier"], r["note"], r["patterns"], r.get("check", "")) for r in data["rules"]]
+    rules = [
+        Rule(r["tier"], r["note"], r["patterns"], r.get("check", ""), r.get("deleted_tier", ""))
+        for r in data["rules"]
+    ]
     default = Rule(data["default"]["tier"], data["default"]["note"], [])
     return rules, default
 
@@ -117,15 +125,25 @@ def classify_lang(change, rule, read_base, read_head):
     return rule.tier, "lang values changed, no key removed"
 
 
+# The classifier and its rules are tier D whatever rules.json says, so a pull
+# request cannot lower its own tier by editing them. CI also runs the base
+# branch's copy of this script, see .github/workflows/merge-tier.yml.
+SELF_PATTERN = glob_to_regex("scripts/merge_tier/**")
+
+
 def classify(changes, rules, default, read_base=None, read_head=None):
     results = []
     for change in changes:
         rule = next((r for r in rules if r.matches(change.path)), None)
-        if rule is None:
+        if SELF_PATTERN.match(change.path):
+            results.append(Result(change.path, change.status, "D", "the tier classifier itself"))
+        elif rule is None:
             results.append(Result(change.path, change.status, default.tier, default.note))
         elif rule.check == "lang":
             tier, reason = classify_lang(change, rule, read_base, read_head)
             results.append(Result(change.path, change.status, tier, reason))
+        elif change.status == "D" and rule.deleted_tier:
+            results.append(Result(change.path, change.status, rule.deleted_tier, f"deleted: {rule.note}"))
         else:
             results.append(Result(change.path, change.status, rule.tier, rule.note))
     return results
@@ -173,7 +191,7 @@ def check_declaration(body, computed):
 # --- Git ---------------------------------------------------------------------
 
 def git(*args, check=True):
-    proc = subprocess.run(["git", *args], cwd=REPO_ROOT, capture_output=True, text=True)
+    proc = subprocess.run(["git", *args], cwd=GIT_ROOT or REPO_ROOT, capture_output=True, text=True)
     if check and proc.returncode != 0:
         raise RuntimeError(f"git {' '.join(args)} failed: {proc.stderr.strip()}")
     return proc
@@ -207,7 +225,9 @@ def render_doc_table(rules, default):
     ]
     for i, rule in enumerate(rules, 1):
         paths = ", ".join(f"`{p}`" for p in rule.patterns)
-        lines.append(f"| {i} | {rule.tier} | {paths} | {rule.note} |")
+        tier = rule.tier + (f" ({rule.deleted_tier} when deleted)" if rule.deleted_tier else "")
+        lines.append(f"| {i} | {tier} | {paths} | {rule.note} |")
+    lines.append("| - | D | `scripts/merge_tier/**` | Built into the classifier, so a pull request cannot lower its own tier by editing rules.json |")
     lines.append(f"| - | {default.tier} | anything else | {default.note} |")
     lines.append(DOC_END)
     return "\n".join(lines)
@@ -239,11 +259,14 @@ def main(argv=None):
     parser.add_argument("--base", default="origin/main", help="base revision (default: origin/main)")
     parser.add_argument("--head", default="HEAD", help="head revision (default: HEAD)")
     parser.add_argument("--body-file", help="pull request body to check the `Merge tier:` line against")
+    parser.add_argument("--repo", help="repository to diff (default: the checkout this script is in)")
     parser.add_argument("--summary", help="append the Markdown report to this file (e.g. $GITHUB_STEP_SUMMARY)")
     parser.add_argument("--check-doc", action="store_true", help="fail when docs/merge_policy.md is stale")
     parser.add_argument("--write-doc", action="store_true", help="regenerate the rules table in docs/merge_policy.md")
     args = parser.parse_args(argv)
 
+    global GIT_ROOT
+    GIT_ROOT = args.repo
     rules, default = load_rules()
 
     if args.check_doc or args.write_doc:

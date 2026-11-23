@@ -69,11 +69,11 @@ class RuleTest(unittest.TestCase):
             "common/1.21.1/src/main/java/com/chronodawn/config/ChronoDawnConfig.java",
             "common/1.21.1/src/main/java/com/chronodawn/data/ChronoDawnWorldData.java",
             "common/1.21.1/src/main/java/com/chronodawn/mixin/FooMixin.java",
+            "common/1.21.1/src/main/java/com/chronodawn/worldgen/processors/BossRoomProtectionProcessor.java",
             "common/1.21.1/src/main/resources/chronodawn.mixins.json",
             "fabric/1.21.1/src/main/resources/fabric.mod.json",
             "neoforge/1.21.1/src/main/resources/META-INF/neoforge.mods.toml",
             "common/1.21.1/src/main/resources/pack.mcmeta",
-            "gradle.properties",
             "props/1.21.1.properties",
             "common/1.21.1/build.gradle",
             "something/unknown.bin",
@@ -90,6 +90,7 @@ class RuleTest(unittest.TestCase):
             "gradle/shared",
             "gradle/chronodawn-validation.gradle",
             "gradle/version-sync.lock",
+            "gradle.properties",
             "scripts/era_symbol_rules.json",
             "prod-smoke-log-ignore.txt",
             "scripts/upgrade_test/run.py",
@@ -102,6 +103,19 @@ class RuleTest(unittest.TestCase):
             for path in paths:
                 with self.subTest(path=path):
                     self.assertEqual(tier_of(path), tier)
+
+
+class DeletionAndSelfTest(unittest.TestCase):
+    def test_deleted_test_is_d(self):
+        self.assertEqual(tier_of("common/gametest/java/com/chronodawn/gametest/BossTests.java", "D"), "D")
+        self.assertEqual(tier_of("scripts/scenario_check/scenarios/master_clock.json", "D"), "D")
+        self.assertEqual(tier_of("common/gametest/java/com/chronodawn/gametest/BossTests.java", "A"), "A")
+
+    def test_rules_cannot_lower_classifier_files(self):
+        rules = [c.Rule("A", "everything", ["**"])]
+        default = c.Rule("C", "default", [])
+        results = c.classify([c.Change("M", "scripts/merge_tier/rules.json")], rules, default)
+        self.assertEqual(results[0].tier, "D")
 
 
 class LangTest(unittest.TestCase):
@@ -171,7 +185,7 @@ class GitTest(unittest.TestCase):
         self.tmp = tempfile.TemporaryDirectory()
         self.repo = Path(self.tmp.name)
         env = {**os.environ, "GIT_CONFIG_GLOBAL": os.devnull, "GIT_CONFIG_NOSYSTEM": "1"}
-        self.env = env
+        self.git_env = env
 
         def run(*args):
             subprocess.run(["git", *args], cwd=self.repo, env=env, check=True, capture_output=True)
@@ -200,9 +214,9 @@ class GitTest(unittest.TestCase):
     def cli(self, body):
         body_file = self.repo / "body.md"
         body_file.write_text(body)
-        with mock.patch.object(c, "REPO_ROOT", self.repo), mock.patch.dict(os.environ, self.env), \
-                mock.patch("sys.stdout"):
-            return c.main(["--base", "main", "--head", "topic", "--body-file", str(body_file)])
+        with mock.patch.dict(os.environ, self.git_env), mock.patch("sys.stdout"):
+            return c.main(["--repo", str(self.repo), "--base", "main", "--head", "topic",
+                           "--body-file", str(body_file)])
 
     def test_lang_value_change_is_a(self):
         self.lang.write_text(json.dumps({"a": "changed", "b": "y"}))

@@ -35,9 +35,18 @@ jobs:
           PR_BODY: ${{ github.event.pull_request.body }}
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        # Run the base branch's classifier and rules, so a pull request cannot
+        # lower its own tier by editing them. The head copy is used only while
+        # the base has none (the pull request that adds the classifier).
         run: |
           printf '%s' "$PR_BODY" > "$RUNNER_TEMP/pr-body.md"
-          python3 scripts/merge_tier/classify.py \
+          classifier=scripts/merge_tier/classify.py
+          if git cat-file -e "$BASE_SHA:scripts/merge_tier/classify.py" 2>/dev/null; then
+            mkdir -p "$RUNNER_TEMP/base"
+            git archive "$BASE_SHA" scripts/merge_tier | tar -x -C "$RUNNER_TEMP/base"
+            classifier="$RUNNER_TEMP/base/scripts/merge_tier/classify.py"
+          fi
+          python3 "$classifier" --repo "$GITHUB_WORKSPACE" \
             --base "$BASE_SHA" --head "$HEAD_SHA" \
             --body-file "$RUNNER_TEMP/pr-body.md" \
             --summary "$GITHUB_STEP_SUMMARY"
