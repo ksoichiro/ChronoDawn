@@ -12,7 +12,7 @@
     {"click": [-100, -40]},
     {"shot": "structures-expanded", "note": "The Chronicle with the Getting Started category collapsed and the Structures category expanded: its eight entries are listed under it, Wayside Features among them."},
     {"click": [-100, 87]},
-    {"shot": "wayside-page-1", "note": "The Wayside Features entry is open on the right page. Its first page reads 'Between the great structures, small landmarks dot the land' and fits the page with no cut-off lines."},
+    {"shot": "wayside-page-1", "note": "The Wayside Features entry is open on the right page. Its first page reads 'Between the great structures, small landmarks dot the land' and fits the page with no cut-off lines. No word is split across two lines (such as 'structu / res')."},
     {"click": [133, 101]},
     {"click": [133, 101]},
     {"click": [133, 101]},
