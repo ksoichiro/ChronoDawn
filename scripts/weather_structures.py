@@ -73,19 +73,57 @@ BLACKSTONE_FULL = "minecraft:polished_blackstone_bricks"
 BLACKSTONE_CRACKED = "minecraft:cracked_polished_blackstone_bricks"
 
 # Sentinel Outpost is a clean white hull that should read as old, not as a
-# ruin. A share of its exposed blocks is swapped for a dirtier neighbour: dust
-# and sand-stained stone, and a darker concrete. No target is also a source, so
-# running the script again cannot weather a block twice.
+# ruin. Two kinds of stain are baked into its exposed light blocks:
+#   - rust streaks: some columns carry a drip of copper that starts at a seeded
+#     height and runs down, from Exposed through Weathered to Oxidized.
+#   - grime: a low rate of Tuff, Mud and copper near the ground that fades out
+#     with height, so the base looks dirtier than the nose.
+# No swap target is also a swap source, so running the script again cannot
+# weather a block twice. The stair forms keep their facing.
 SENTINEL_TEMPLATE = "sentinel_outpost"
-SENTINEL_RATE = 0.10
-SENTINEL_SWAPS = {
-    "minecraft:quartz_block": NS + "temporal_sandstone",
-    "minecraft:smooth_quartz": NS + "temporal_sandstone",
-    "minecraft:quartz_stairs": NS + "temporal_sandstone_stairs",
-    "minecraft:smooth_quartz_stairs": NS + "temporal_sandstone_stairs",
-    "minecraft:white_concrete": "minecraft:andesite",
-    "minecraft:light_gray_concrete": "minecraft:gray_concrete",
+SENTINEL_SOURCES = {
+    "minecraft:quartz_block", "minecraft:smooth_quartz", "minecraft:white_concrete",
+    "minecraft:light_gray_concrete", "minecraft:quartz_stairs",
+    "minecraft:smooth_quartz_stairs",
 }
+SENTINEL_STAIRS = {"minecraft:quartz_stairs", "minecraft:smooth_quartz_stairs"}
+STREAK_COLUMN_RATE = 0.22
+STREAK_KEEP = 0.6
+GRIME_HEIGHT = 25
+STREAK_STAGES = ("exposed_cut_copper", "weathered_cut_copper", "oxidized_cut_copper")
+
+
+def sentinel_roll(*key):
+    digest = hashlib.sha256((SENTINEL_TEMPLATE + ":" + ",".join(map(str, key))).encode()).digest()
+    return int.from_bytes(digest[:8], "big") / 2**64
+
+
+def sentinel_target(name, pos, height):
+    """The weathered replacement for one exposed block, or None to keep it."""
+    if name not in SENTINEL_SOURCES:
+        return None
+    x, y, z = pos
+    target = None
+    if sentinel_roll("col", x, z) < STREAK_COLUMN_RATE and sentinel_roll("keep", x, y, z) < STREAK_KEEP:
+        start = 25 + int(sentinel_roll("start", x, z) * 40)
+        length = 6 + int(sentinel_roll("len", x, z) * 22)
+        if start - length <= y <= start:
+            t = (start - y) / length
+            target = STREAK_STAGES[0] if t < 0.35 else STREAK_STAGES[1] if t < 0.7 else STREAK_STAGES[2]
+    if target is None and y < GRIME_HEIGHT:
+        fade = 1 - y / height
+        if sentinel_roll("grime", x, y, z) < 0.04 + 0.36 * fade ** 2:
+            pick = sentinel_roll("pick", x, y, z)
+            if fade > 0.6:
+                target = "tuff" if pick < 0.45 else "mud_bricks" if pick < 0.75 else "weathered_cut_copper"
+            else:
+                target = "exposed_cut_copper" if pick < 0.5 else "weathered_cut_copper"
+    if target is None:
+        return None
+    if name in SENTINEL_STAIRS:
+        target = "mud_brick_stairs" if target == "mud_bricks" else target + "_stairs"
+    return "minecraft:" + target
+
 
 NEIGHBOURS = ((1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1))
 
@@ -135,8 +173,8 @@ def weather(path, dry_run):
         value = roll(template, pos)
         new_name = None
         if template == SENTINEL_TEMPLATE:
-            if name in SENTINEL_SWAPS and value < SENTINEL_RATE:
-                new_name = SENTINEL_SWAPS[name]
+            new_name = sentinel_target(name, pos, int(structure["size"][1]))
+            if new_name:
                 changed["cracked"] += 1
         elif template in BLACKSTONE_RATES:
             if name == BLACKSTONE_FULL and value < BLACKSTONE_RATES[template]:

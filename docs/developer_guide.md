@@ -654,9 +654,10 @@ public static final RegistrySupplier<EntityType<MyEntity>> MY_ENTITY = ENTITIES.
    variants. Add the template and its rates to `RATES` in the script. The
    result depends only on the template name and block position, so running it
    again changes nothing. Run it after `strip_exterior_air.py`. The Sentinel
-   Outpost uses `SENTINEL_SWAPS` instead, which swaps 10% of its exposed quartz
-   and concrete for dustier blocks. A swap target must never be a swap source,
-   or a second run would weather the block again
+   Outpost uses `sentinel_target` instead: rust streaks of cut copper running
+   down seeded columns, plus Tuff, Mud Bricks and copper grime that fades out
+   with height. A swap target must never be a swap source, or a second run
+   would weather the block again
 
 ---
 
