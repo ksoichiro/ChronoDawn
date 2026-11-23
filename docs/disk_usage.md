@@ -115,9 +115,12 @@ below has to fit on the internal disk.
    section "Disk per worktree".
 3. **Delete server copies and worlds after a successful scenario check,
    upgrade test and prod smoke test**, and keep the reports and screenshots.
-   The smoke-test runtime and all reports and logs remain. Expected saving:
-   about 0.3 GB per loader and version. An APFS free-space measurement after
-   a real run is still needed.
+   The smoke-test runtime and all reports and logs remain. On 2026-11-23, a
+   Fabric 26.3 scenario check with `polished-stones` retained its instances,
+   then deleting them increased APFS available space by 40,960,000 bytes
+   (39.1 MiB). This is one run, and shared clone blocks and other activity
+   affect the result. The earlier 0.3 GB estimate used apparent directory
+   sizes, not available-space measurements.
 4. **Add a free-space guard** to the heavy tasks. It fails fast below the
    threshold with a message that names the cleanup commands. Implemented as
    `min_free_disk_gb` (default 20 GB, see the Developer Guide section "Free
