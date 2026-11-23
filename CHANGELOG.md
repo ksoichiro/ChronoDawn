@@ -55,6 +55,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Potted plants and Unstable Fungus now drop items**: breaking a flower pot
+  holding a Time Wood, Dark Time Wood, or Ancient Time Wood sapling, an Orange,
+  Pink, or Purple Time Blossom, or an Unstable Fungus gave nothing back, so the
+  plant was lost. They now drop the pot and the plant like vanilla potted
+  plants. Unstable Fungus itself also drops itself when broken.
 - **Boss rooms generated far from the player could be left unprotected**: a
   boss room whose chunks were generated at the edge of the loaded area and
   stayed unloaded for more than five minutes lost its protection, so the room
