@@ -190,6 +190,7 @@ git commit -m "docs: update README installation steps"
    - CI validates resources and data, then builds and runs unit tests for Minecraft 1.21.1 and 26.3
    - English text is required for new keys. Japanese text may be left out, and the maintainers will add it
    - GameTests and in-game checks for other versions are run by the maintainers before release
+   - Maintainers decide how a pull request is merged by the kind of change, see [Merge Policy](docs/merge_policy.md)
 
 5. **Address Review Feedback**:
    - Respond to code review comments
