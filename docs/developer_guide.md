@@ -832,6 +832,14 @@ run time and writes `eula=true`, so the person who runs it accepts the
 Minecraft EULA. Do not upload the server JAR, mappings or world data as
 artifacts.
 
+CI caches the Gradle home with `setup-gradle`, saved only by runs on `main`.
+On 2026-11-23 the repository held 12.2 GB of Actions cache (limit 10 GB, 73
+entries). Each push to `main` saved about 400 MB per job and Minecraft
+version, six entries in all. Only the `build` job saves now, and `prod-smoke`
+and `gametest` read it (`cache-read-only`). Check the usage with
+`gh api repos/ksoichiro/ChronoDawn/actions/cache/usage` and revisit the cache
+settings when it passes 8 GB.
+
 Not supported for Forge (1.20.1) — see "Mixin Configuration" below. Uses
 `build/prod-smoke/<loader>-<version>/`, separate from the manually-verified
 `run-prod/` used by `runProd`.
