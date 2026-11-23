@@ -30,6 +30,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Forgotten Library, Master Clock, Phantom Catacombs, Entropy Crypt and Time
   Keeper Village now mix Cracked and Mossy stone bricks into their walls
   instead of one flat material. Existing structures are unchanged.
+- **Weathered Sentinel Outpost**: newly generated Sentinel Outposts now have
+  a few sand-stained and darker blocks mixed into the white hull, so it no
+  longer looks brand new beside the older structures. Existing outposts are
+  unchanged.
 - **Rocky mountain slopes**: steep slopes in the Chrono Dawn
   mountain biome now expose rock in newly generated terrain. Temporal Stone is
   mottled with Temporal Cobblestone, Mossy Temporal Cobblestone, and Duskstone.

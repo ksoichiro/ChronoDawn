@@ -72,6 +72,21 @@ BLACKSTONE_RATES = {
 BLACKSTONE_FULL = "minecraft:polished_blackstone_bricks"
 BLACKSTONE_CRACKED = "minecraft:cracked_polished_blackstone_bricks"
 
+# Sentinel Outpost is a clean white hull that should read as old, not as a
+# ruin. A share of its exposed blocks is swapped for a dirtier neighbour: dust
+# and sand-stained stone, and a darker concrete. No target is also a source, so
+# running the script again cannot weather a block twice.
+SENTINEL_TEMPLATE = "sentinel_outpost"
+SENTINEL_RATE = 0.10
+SENTINEL_SWAPS = {
+    "minecraft:quartz_block": NS + "temporal_sandstone",
+    "minecraft:smooth_quartz": NS + "temporal_sandstone",
+    "minecraft:quartz_stairs": NS + "temporal_sandstone_stairs",
+    "minecraft:smooth_quartz_stairs": NS + "temporal_sandstone_stairs",
+    "minecraft:white_concrete": "minecraft:andesite",
+    "minecraft:light_gray_concrete": "minecraft:gray_concrete",
+}
+
 NEIGHBOURS = ((1, 0, 0), (-1, 0, 0), (0, 1, 0), (0, -1, 0), (0, 0, 1), (0, 0, -1))
 
 
@@ -83,7 +98,7 @@ def roll(template, pos):
 
 def weather(path, dry_run):
     template = path.stem
-    if template not in RATES and template not in BLACKSTONE_RATES:
+    if template not in RATES and template not in BLACKSTONE_RATES and template != SENTINEL_TEMPLATE:
         return
     structure = nbtlib.load(path)
     if "palette" not in structure:
@@ -119,7 +134,11 @@ def weather(path, dry_run):
             continue
         value = roll(template, pos)
         new_name = None
-        if template in BLACKSTONE_RATES:
+        if template == SENTINEL_TEMPLATE:
+            if name in SENTINEL_SWAPS and value < SENTINEL_RATE:
+                new_name = SENTINEL_SWAPS[name]
+                changed["cracked"] += 1
+        elif template in BLACKSTONE_RATES:
             if name == BLACKSTONE_FULL and value < BLACKSTONE_RATES[template]:
                 new_name = BLACKSTONE_CRACKED
                 changed["cracked"] += 1

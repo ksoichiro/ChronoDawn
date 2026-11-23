@@ -653,7 +653,10 @@ public static final RegistrySupplier<EntityType<MyEntity>> MY_ENTITY = ENTITIES.
    seeded share of the exposed Temporal Stone Bricks for cracked and mossy
    variants. Add the template and its rates to `RATES` in the script. The
    result depends only on the template name and block position, so running it
-   again changes nothing. Run it after `strip_exterior_air.py`
+   again changes nothing. Run it after `strip_exterior_air.py`. The Sentinel
+   Outpost uses `SENTINEL_SWAPS` instead, which swaps 10% of its exposed quartz
+   and concrete for dustier blocks. A swap target must never be a swap source,
+   or a second run would weather the block again
 
 ---
 
