@@ -19,7 +19,7 @@ takes the highest one.
 | A: two-way | Docs, comments, `CHANGELOG.md`, changed text values in lang files, tests and scripts that do not change what a gate checks | Auto-merge after the gates below |
 | B: two-way, needs judgment | Balance and feel: boss strength, rewards, mob stats, drop rates, recipes, loot tables, tags, visual assets such as textures, models and sounds | Owner merges |
 | C: one-way | Anything an existing world or a pack keeps (see below) | Owner merges, with the extra verification below |
-| D: gate files | `CLAUDE.md`, `.claude/**`, skills, hooks, `.github/**`, `scripts/hooks/**`, validators and this document | Owner merges. The fuda agent guard already stops agents from merging these |
+| D: gate files | `CLAUDE.md`, `.claude/**`, skills, hooks, `.github/**`, `scripts/hooks/**`, validators, the tier classifier and this document | Owner merges. The fuda agent guard already stops agents from merging these |
 
 ### What makes a change one-way (tier C)
 
@@ -46,6 +46,71 @@ build, and could a later release not simply undo it?
 
 A recipe or loot table that only adds an option is tier B. One that removes a
 way to obtain a progression item is tier C.
+
+### Classifying a diff by its files
+
+`scripts/merge_tier/classify.py` applies the tiers above to the files in a
+diff. Its path rules live in `scripts/merge_tier/rules.json`, and the table
+below is generated from that file, so the document and the check read the
+same list. To change a rule, edit `rules.json` and run
+`python3 scripts/merge_tier/classify.py --write-doc`. The unit tests fail when
+this table is stale.
+
+```bash
+python3 scripts/merge_tier/classify.py                       # diff of HEAD against origin/main
+python3 scripts/merge_tier/classify.py --body-file body.md   # also check its `Merge tier:` line
+```
+
+The first rule whose pattern matches a path decides its tier, and the diff
+takes the highest tier of its files. Deleting a test, a GameTest, a scenario
+or an upgrade-test layer is tier D, because it weakens a gate. Lang files are
+the one content check:
+a lang file is tier A when the head keeps every key of the base, and tier C
+when a key is removed or renamed or the file is deleted.
+
+Paths alone cannot show every case. A Java change that only edits comments
+still counts as tier B, a recipe that removes a way to obtain a progression
+item still counts as tier B, and a Java change that alters NBT outside the
+listed packages is not detected as tier C. The classifier sets a lower bound.
+The author still raises the tier by hand when the content calls for it.
+
+<!-- merge-tier-rules:begin (generated from scripts/merge_tier/rules.json) -->
+| # | Tier | Paths | What |
+|---|---|---|---|
+| 1 | D | `CLAUDE.md`, `**/CLAUDE.md`, `AGENTS.md`, `**/AGENTS.md`, `.claude/**`, `.codex/**`, `**/SKILL.md` | Agent instructions and skills |
+| 2 | D | `.github/**`, `scripts/hooks/**`, `scripts/merge_tier/**`, `docs/merge_policy.md` | CI, Git hooks and this classifier |
+| 3 | D | `gradle/shared`, `gradle/shared/**`, `gradle/chronodawn-validation.gradle`, `gradle/version-sync.lock`, `gradle/disk-space-check.gradle`, `gradle/upgrade-test.gradle`, `gradle.properties`, `scripts/*_rules.json`, `prod-smoke-log-ignore.txt`, `upgrade-test-log-ignore.txt` | Validators, their rule files and settings. gradle.properties lists the validators that checkAll and validateAll run |
+| 4 | A (D when deleted) | `scripts/upgrade_test/tests/**`, `scripts/upgrade_test/layers/**`, `scripts/scenario_check/tests/**`, `scripts/scenario_check/scenarios/**` | Tests and test content for the verification drivers. Deleting one weakens a gate |
+| 5 | D | `scripts/upgrade_test/**`, `scripts/scenario_check/**` | Verification drivers (upgradeTest, scenarioCheck) |
+| 6 | C | `build.gradle`, `**/build.gradle`, `settings.gradle`, `props/**`, `gradle/**`, `buildSrc/**`, `gradlew`, `gradlew.bat`, `.gitmodules` | Build, dependency ranges and supported versions |
+| 7 | C | `**/*mixins*.json`, `**/pack.mcmeta`, `**/fabric.mod.json`, `**/META-INF/**` | Mixin configs, pack.mcmeta and loader metadata |
+| 8 | C | `**/data/*/worldgen/**`, `**/data/*/dimension/**`, `**/data/*/dimension_type/**`, `**/data/*/structure/**`, `**/data/*/structures/**`, `**/data/*/tags/worldgen/**`, `**/data/*/neoforge/biome_modifier/**`, `**/data/*/forge/biome_modifier/**` | Worldgen, dimensions, structures and biome modifiers |
+| 9 | C | `**/data/*/advancement/**`, `**/data/*/advancements/**`, `**/tags/block/needs_*`, `**/tags/blocks/needs_*`, `**/tags/block/incorrect_for_*`, `**/tags/blocks/incorrect_for_*` | Advancements and progression gating tags (tool tiers) |
+| 10 | C | `**/java/**/registry/**`, `**/java/**/worldgen/**`, `**/java/**/config/**`, `**/java/com/chronodawn/data/**`, `**/java/**/core/portal/**`, `**/java/**/core/dimension/**`, `**/java/**/mixin/**` | Registries, worldgen, configs, persisted data, portals, dimensions and Mixins in Java |
+| 11 | A | `**/assets/*/lang/*.json` | Lang files: A when every key of the base is kept, C when a key is removed or renamed or the file is deleted |
+| 12 | A (D when deleted) | `**/src/test/**`, `**/src/gametest/**`, `common/gametest/**`, `**/java/**/gametest/**` | Unit tests and GameTests. Deleting one weakens a gate |
+| 13 | B | `**/data/*/recipe/**`, `**/data/*/recipes/**`, `**/data/*/loot_table/**`, `**/data/*/loot_tables/**`, `**/data/*/loot_modifiers/**`, `**/data/*/tags/**` | Recipes, loot tables, loot modifiers and tags |
+| 14 | B | `**/assets/**`, `assets/**`, `**/*.bbmodel` | Client assets and their sources: textures, models, sounds, blockstates |
+| 15 | B | `**/*.java` | Other Java sources. The classifier cannot tell a comment-only change from a behavior change |
+| 16 | A | `docs/**`, `**/*.md`, `LICENSE`, `.gitignore` | Docs, changelog and other Markdown |
+| 17 | A | `scripts/**` | Utility scripts that no gate runs |
+| - | D | `scripts/merge_tier/**` | Built into the classifier, so a pull request cannot lower its own tier by editing rules.json |
+| - | C | anything else | Any path no rule names. When in doubt, use the higher tier |
+<!-- merge-tier-rules:end -->
+
+### Checking the declared tier in CI
+
+The `Merge tier` workflow (`.github/workflows/merge-tier.yml`) runs on every
+pull request, including edits to its body. It classifies the diff against the
+merge base and fails when the body declares a tier lower than the diff's.
+A higher declared tier passes. A body without a `Merge tier:` line passes with
+a hint, because only tier A auto-merge needs the line. The job summary lists
+every file with its tier and reason.
+
+The workflow runs the classifier and `rules.json` from the base branch, not
+from the pull request, so a pull request cannot lower its own tier by editing
+them. The classifier also counts its own files as tier D regardless of the
+rules.
 
 ## Verification per tier
 
@@ -91,6 +156,10 @@ the pull request is opened, a second reviewer tries to break the diff.
    how each was resolved. "No reproduced findings" is a valid result when it
    lists what was tried.
 
+The `independent-verification` skill (`.claude/skills/independent-verification/SKILL.md`)
+is the procedure: how to collect the three inputs, the prompt for the
+reviewer, and the form of the Verification section.
+
 The reviewer runs locally before the pull request, not in CI. CI has no model
 access and should not receive credentials for one. CI stays the deterministic
 evidence, and the reviewer covers what CI cannot: reading intent and trying
@@ -117,9 +186,64 @@ higher one.
   all allowed, and merged branches are deleted.
 
 So the policy above is a convention and nothing on GitHub enforces it yet.
-Making `validate`, `build`, `prod-smoke` and `gametest` required checks on
-`main` is an owner-only change in the repository settings. Until then an
-agent must wait for green CI itself before it merges.
+The `Merge tier` check fails a pull request that declares too low a tier, but
+without a ruleset a red check does not block the merge. Until the owner sets
+up the ruleset below, an agent must wait for green CI itself before it merges.
+
+### Setting up required checks (owner only)
+
+Required checks need admin rights on the repository, so only the owner can
+set them. A ruleset on `main` that requires the CI jobs and the tier check:
+
+1. Open Settings, Rules, Rulesets, New ruleset, New branch ruleset.
+2. Name it `main`, set Enforcement status to Active, and add the target
+   "Include default branch".
+3. Under Bypass list, add the Repository admin role with "Always allow". The
+   owner merges locally with a fast-forward push to `main`, and without the
+   bypass the ruleset rejects that push.
+4. Enable "Require status checks to pass" and add these checks, with GitHub
+   Actions as the source. The names are the job names, so each matrix entry
+   is its own check:
+   - `Validate resources and data`
+   - `Build and unit test (1.21.1)`, `Build and unit test (26.3)`
+   - `Production smoke test (1.21.1)`, `Production smoke test (26.3)`
+   - `GameTest (1.21.1)`, `GameTest (26.3)`
+   - `Merge tier`
+5. Keep "Block force pushes" on, and save.
+
+The same ruleset from the command line:
+
+```bash
+gh api repos/{owner}/{repo}/rulesets --method POST --input - <<'JSON'
+{
+  "name": "main",
+  "target": "branch",
+  "enforcement": "active",
+  "conditions": {"ref_name": {"include": ["~DEFAULT_BRANCH"], "exclude": []}},
+  "bypass_actors": [{"actor_id": 5, "actor_type": "RepositoryRole", "bypass_mode": "always"}],
+  "rules": [
+    {"type": "non_fast_forward"},
+    {"type": "required_status_checks", "parameters": {
+      "strict_required_status_checks_policy": false,
+      "required_status_checks": [
+        {"context": "Validate resources and data", "integration_id": 15368},
+        {"context": "Build and unit test (1.21.1)", "integration_id": 15368},
+        {"context": "Build and unit test (26.3)", "integration_id": 15368},
+        {"context": "Production smoke test (1.21.1)", "integration_id": 15368},
+        {"context": "Production smoke test (26.3)", "integration_id": 15368},
+        {"context": "GameTest (1.21.1)", "integration_id": 15368},
+        {"context": "GameTest (26.3)", "integration_id": 15368},
+        {"context": "Merge tier", "integration_id": 15368}
+      ]}}
+  ]
+}
+JSON
+```
+
+`actor_id` 5 is the Repository admin role and `integration_id` 15368 is
+GitHub Actions. To allow agents to use GitHub auto-merge for tier A, also
+turn on "Allow auto-merge" under Settings, General. Renaming a CI job renames
+its check, so update the ruleset in the same change.
 
 ## After merging: morning check
 
@@ -132,8 +256,18 @@ git log --first-parent --since="yesterday 00:00" --stat main
 gh pr list --state merged --search "merged:>=$(date -v-1d +%F) Merge tier: A in:body"
 ```
 
-For each tier A pull request, skim the diff and confirm it really contains
-only tier A files and that the Verification section is not empty. If one was
+For each tier A pull request, re-run the classifier on its final head and
+confirm the result is still tier A. GitHub keeps both commits after the
+branch is deleted:
+
+```bash
+gh pr view <number> --json baseRefOid,headRefOid --jq '"\(.baseRefOid) \(.headRefOid)"'
+git fetch origin "pull/<number>/head"
+python3 scripts/merge_tier/classify.py --base <baseRefOid> --head <headRefOid>
+```
+
+Then skim the diff for what the file paths cannot show (see "Classifying a
+diff by its files"), and confirm that the Verification section is not empty. If one was
 misclassified or is wrong:
 
 1. Revert it with a new pull request. Do not rewrite `main`.
@@ -141,3 +275,16 @@ misclassified or is wrong:
    a check could have caught it.
 3. Tighten the rule that let it through. Two misses in a month mean tier A is
    too wide, so stop auto-merging until the list is narrowed.
+
+### Running the morning check on a schedule (decided 2026-11-23)
+
+The morning check is not scheduled yet. The mechanical half, re-classifying
+the diff, already runs on every pull request as the `Merge tier` check. The
+half that is left is judgment: reading the diff for what paths cannot show.
+A scheduled GitHub workflow cannot do that without model credentials in CI,
+which this policy rules out. No pull request has been auto-merged under
+tier A so far, so there is nothing to sample yet.
+
+Schedule it when agents start auto-merging tier A pull requests: a local
+scheduled agent (for example a Claude Code routine) that runs the commands
+above each morning and reports misclassified pull requests to the owner.

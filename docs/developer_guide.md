@@ -813,7 +813,7 @@ Validates data/asset file integrity at build time without launching the game:
 ./gradlew validateResources
 ```
 
-`./gradlew validateAll -Pvalidation_only=true` runs every file-only validation that CI and `checkAll` run, in a few seconds. [Bug Prevention Checks](bug_prevention.md) lists which past bug classes each validation covers, how to update `gradle/version-sync.lock` when per-version copies are meant to differ, and how to install the pre-commit hook (`scripts/hooks/install.sh`, Git 2.54+). [Merge Policy](merge_policy.md) defines the change tiers, the independent verification before a pull request, and which pull requests may merge without the owner.
+`./gradlew validateAll -Pvalidation_only=true` runs every file-only validation that CI and `checkAll` run, in a few seconds. [Bug Prevention Checks](bug_prevention.md) lists which past bug classes each validation covers, how to update `gradle/version-sync.lock` when per-version copies are meant to differ, and how to install the pre-commit hook (`scripts/hooks/install.sh`, Git 2.54+). [Merge Policy](merge_policy.md) defines the change tiers, the independent verification before a pull request, and which pull requests may merge without the owner. `python3 scripts/merge_tier/classify.py` classifies the current branch's diff into those tiers, and its unit tests run with `python3 -m unittest discover -s scripts/merge_tier/tests -t .`.
 
 ### Manual Testing
 

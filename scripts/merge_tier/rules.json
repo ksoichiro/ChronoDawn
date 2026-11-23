@@ -1,0 +1,144 @@
+{
+  "_comment": "File rules for scripts/merge_tier/classify.py. The first rule whose pattern matches a changed path decides its tier. docs/merge_policy.md renders this list between its merge-tier-rules markers, so edit this file and run `python3 scripts/merge_tier/classify.py --write-doc`. Patterns: `**` matches any number of directories, `*` and `?` stay inside one path segment.",
+  "default": {
+    "tier": "C",
+    "note": "Any path no rule names. When in doubt, use the higher tier"
+  },
+  "rules": [
+    {
+      "tier": "D",
+      "note": "Agent instructions and skills",
+      "patterns": ["CLAUDE.md", "**/CLAUDE.md", "AGENTS.md", "**/AGENTS.md", ".claude/**", ".codex/**", "**/SKILL.md"]
+    },
+    {
+      "tier": "D",
+      "note": "CI, Git hooks and this classifier",
+      "patterns": [".github/**", "scripts/hooks/**", "scripts/merge_tier/**", "docs/merge_policy.md"]
+    },
+    {
+      "tier": "D",
+      "note": "Validators, their rule files and settings. gradle.properties lists the validators that checkAll and validateAll run",
+      "patterns": [
+        "gradle/shared",
+        "gradle/shared/**",
+        "gradle/chronodawn-validation.gradle",
+        "gradle/version-sync.lock",
+        "gradle/disk-space-check.gradle",
+        "gradle/upgrade-test.gradle",
+        "gradle.properties",
+        "scripts/*_rules.json",
+        "prod-smoke-log-ignore.txt",
+        "upgrade-test-log-ignore.txt"
+      ]
+    },
+    {
+      "tier": "A",
+      "note": "Tests and test content for the verification drivers. Deleting one weakens a gate",
+      "deleted_tier": "D",
+      "patterns": [
+        "scripts/upgrade_test/tests/**",
+        "scripts/upgrade_test/layers/**",
+        "scripts/scenario_check/tests/**",
+        "scripts/scenario_check/scenarios/**"
+      ]
+    },
+    {
+      "tier": "D",
+      "note": "Verification drivers (upgradeTest, scenarioCheck)",
+      "patterns": ["scripts/upgrade_test/**", "scripts/scenario_check/**"]
+    },
+    {
+      "tier": "C",
+      "note": "Build, dependency ranges and supported versions",
+      "patterns": ["build.gradle", "**/build.gradle", "settings.gradle", "props/**", "gradle/**", "buildSrc/**", "gradlew", "gradlew.bat", ".gitmodules"]
+    },
+    {
+      "tier": "C",
+      "note": "Mixin configs, pack.mcmeta and loader metadata",
+      "patterns": ["**/*mixins*.json", "**/pack.mcmeta", "**/fabric.mod.json", "**/META-INF/**"]
+    },
+    {
+      "tier": "C",
+      "note": "Worldgen, dimensions, structures and biome modifiers",
+      "patterns": [
+        "**/data/*/worldgen/**",
+        "**/data/*/dimension/**",
+        "**/data/*/dimension_type/**",
+        "**/data/*/structure/**",
+        "**/data/*/structures/**",
+        "**/data/*/tags/worldgen/**",
+        "**/data/*/neoforge/biome_modifier/**",
+        "**/data/*/forge/biome_modifier/**"
+      ]
+    },
+    {
+      "tier": "C",
+      "note": "Advancements and progression gating tags (tool tiers)",
+      "patterns": [
+        "**/data/*/advancement/**",
+        "**/data/*/advancements/**",
+        "**/tags/block/needs_*",
+        "**/tags/blocks/needs_*",
+        "**/tags/block/incorrect_for_*",
+        "**/tags/blocks/incorrect_for_*"
+      ]
+    },
+    {
+      "tier": "C",
+      "note": "Registries, worldgen, configs, persisted data, portals, dimensions and Mixins in Java",
+      "patterns": [
+        "**/java/**/registry/**",
+        "**/java/**/worldgen/**",
+        "**/java/**/config/**",
+        "**/java/com/chronodawn/data/**",
+        "**/java/**/core/portal/**",
+        "**/java/**/core/dimension/**",
+        "**/java/**/mixin/**"
+      ]
+    },
+    {
+      "tier": "A",
+      "note": "Lang files: A when every key of the base is kept, C when a key is removed or renamed or the file is deleted",
+      "check": "lang",
+      "patterns": ["**/assets/*/lang/*.json"]
+    },
+    {
+      "tier": "A",
+      "note": "Unit tests and GameTests. Deleting one weakens a gate",
+      "deleted_tier": "D",
+      "patterns": ["**/src/test/**", "**/src/gametest/**", "common/gametest/**", "**/java/**/gametest/**"]
+    },
+    {
+      "tier": "B",
+      "note": "Recipes, loot tables, loot modifiers and tags",
+      "patterns": [
+        "**/data/*/recipe/**",
+        "**/data/*/recipes/**",
+        "**/data/*/loot_table/**",
+        "**/data/*/loot_tables/**",
+        "**/data/*/loot_modifiers/**",
+        "**/data/*/tags/**"
+      ]
+    },
+    {
+      "tier": "B",
+      "note": "Client assets and their sources: textures, models, sounds, blockstates",
+      "patterns": ["**/assets/**", "assets/**", "**/*.bbmodel"]
+    },
+    {
+      "tier": "B",
+      "note": "Other Java sources. The classifier cannot tell a comment-only change from a behavior change",
+      "patterns": ["**/*.java"]
+    },
+    {
+      "tier": "A",
+      "note": "Docs, changelog and other Markdown",
+      "patterns": ["docs/**", "**/*.md", "LICENSE", ".gitignore"]
+    },
+    {
+      "tier": "A",
+      "note": "Utility scripts that no gate runs",
+      "patterns": ["scripts/**"]
+    }
+  ]
+}
