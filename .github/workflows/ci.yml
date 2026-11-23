@@ -22,6 +22,9 @@ env:
   # On JDK 25 the Gradle launcher prints restricted-method warnings when its
   # native-platform library calls System.load, unless native access is enabled.
   JAVA_OPTS: --enable-native-access=ALL-UNNAMED
+  # The free disk space guard (min_free_disk_gb) is for parallel checkouts on
+  # one machine. A hosted runner can have less than its 20 GB default free.
+  ORG_GRADLE_PROJECT_min_free_disk_gb: 0
 
 jobs:
   validate:

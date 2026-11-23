@@ -866,7 +866,11 @@ reasons.
 - Run only one heavy task at a time across all checkouts (`checkAll`,
   `gameTestAll`, `upgradeTest`, `scenarioCheck`, multi-version
   `prodSmokeTest`).
-- Check `df -h /` before a heavy task. Stop and clean up below 20 GB free.
+- Clean up when free space drops below 20 GB. `checkAll`, `gameTestAll`,
+  `upgradeTest`, `scenarioCheck` and `prodSmokeTest` check this themselves
+  (see the next section). With 3 concurrent checkouts, keep at least 25 GB
+  free. The check does not know how many checkouts run, so watch
+  `df -h /` yourself in that case.
 - After a heavy task, run `./gradlew clean<version>` or `cleanAll` and delete
   `build/upgrade-test` and `build/scenario-check` server copies once the
   report is saved.
@@ -878,6 +882,39 @@ reasons.
       settings.caches.buildCache.setRemoveUnusedEntriesAfterDays(2)
   }
   ```
+
+### Free disk space check
+
+`checkAll`, `gameTestAll`, `upgradeTest`, `scenarioCheck` and `prodSmokeTest`
+fail before any task runs when the volume of the checkout has less free space
+than `min_free_disk_gb` (20 GB by default, set in `gradle.properties`). The
+check only asks the file system for the free space, so it adds no noticeable time.
+It runs after Gradle configures the projects, because it needs the task graph
+to know whether a heavy task was requested.
+
+```
+Not enough free disk space to start :fabric:prodSmokeTest.
+  Free on the volume of /path/to/checkout: 13.3 GB
+  Required (min_free_disk_gb): 20 GB
+```
+
+When it fails, free space with the steps the message lists:
+`./gradlew clean<version>` or `cleanAll`, `git worktree remove <path>` for
+finished worktrees, and the other steps under "Operating rules" in
+[Disk Usage with Parallel Work](disk_usage.md). Then run the task again.
+
+- `-Pmin_free_disk_gb=<GB>` changes the threshold for one run. Put it in
+  `~/.gradle/gradle.properties` to change it on one machine.
+- `-Pmin_free_disk_gb=0` turns the check off. CI sets
+  `ORG_GRADLE_PROJECT_min_free_disk_gb=0` because a hosted runner can have
+  less than 20 GB free.
+- `checkAll` checks once when it starts. The `gameTestAll` that it runs in a
+  child Gradle process skips the check, so a `-P` value given to `checkAll`
+  covers the whole run. A marker file in `.gradle/disk-space-check/` tells the
+  child that `checkAll` is running and is removed when `checkAll` ends.
+- Only the volume of the checkout is checked. When `prod_base_dir` points to
+  another volume, check that volume yourself.
+- `validateAll` and the other file-only validations never run the check.
 
 ---
 

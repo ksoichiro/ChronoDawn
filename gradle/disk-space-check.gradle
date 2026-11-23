@@ -1,0 +1,86 @@
+// Free disk space guard for the heavy verification tasks.
+//
+// Parallel checkouts filled the disk and stopped builds and tests halfway
+// (docs/disk_usage.md). Checking the free space of the checkout's volume
+// before any task runs makes the failure immediate and explains how to fix it.
+//
+// Optional project property:
+//   min_free_disk_gb - required free space in GB (default 20 in gradle.properties, 0 disables)
+//
+// Only the volume of the checkout is checked. prod_base_dir may point at
+// another volume, which this guard does not look at.
+
+def heavyTaskNames = ['checkAll', 'gameTestAll', 'upgradeTest', 'scenarioCheck', 'prodSmokeTest'] as Set
+
+// checkAll runs gameTestAll in a child Gradle process that receives none of
+// the parent's -P options. Without this marker the child would check again
+// with the default threshold, so -Pmin_free_disk_gb=0 on checkAll would not
+// reach it, and the space that buildAll just used could fail a run that the
+// first check already allowed. The marker holds the PID of the daemon running
+// checkAll. A child build always runs in another daemon, so a marker that
+// names the current process (an interrupted checkAll in a reused daemon) or a
+// dead process is stale and is ignored. The marker lives in .gradle/ because
+// the per-version builds inside buildAll run `clean`, which may remove the
+// root build/ directory.
+def checkAllMarker = new File(rootDir, '.gradle/disk-space-check/checkall.pid')
+
+def insideCheckAll = {
+    if (!checkAllMarker.isFile()) return false
+    def pid = checkAllMarker.text.trim()
+    if (!pid.isLong()) return false
+    def ownerPid = pid.toLong()
+    if (ownerPid == ProcessHandle.current().pid()) return false
+    return ProcessHandle.of(ownerPid).map { it.isAlive() }.orElse(false)
+}
+
+gradle.taskGraph.whenReady { graph ->
+    def heavy = graph.allTasks.findAll { it.name in heavyTaskNames }
+    if (heavy.isEmpty()) return
+
+    def raw = (project.findProperty('min_free_disk_gb') ?: '20').toString().trim()
+    if (!raw.isNumber() || raw.toBigDecimal() < 0) {
+        throw new GradleException("min_free_disk_gb must be a number of GB, 0 or more (got '${raw}')")
+    }
+    def minGb = raw.toBigDecimal()
+    if (minGb == 0) return
+
+    if (heavy.every { it.name != 'checkAll' } && insideCheckAll()) {
+        logger.lifecycle('Free disk space check: already done when checkAll started')
+        return
+    }
+
+    def freeBytes = rootDir.usableSpace
+    def freeGb = freeBytes / (1024L * 1024 * 1024)
+    if (freeGb >= minGb) return
+
+    def taskList = heavy.collect { it.path }.join(', ')
+    throw new GradleException("""\
+Not enough free disk space to start ${taskList}.
+  Free on the volume of ${rootDir}: ${String.format('%.1f', freeGb)} GB
+  Required (min_free_disk_gb): ${minGb.stripTrailingZeros().toPlainString()} GB
+
+Free some space, then run the task again:
+  - ./gradlew clean<version> (for example clean1_21_1) or ./gradlew cleanAll removes
+    the build outputs of a checkout
+  - git worktree remove <path> removes worktrees whose task has ended
+    (compare git worktree list with the directories on disk)
+  - docs/disk_usage.md, "Operating rules", lists the other cleanup steps
+
+To run anyway, lower the threshold with -Pmin_free_disk_gb=<GB>,
+or disable the check with -Pmin_free_disk_gb=0.""")
+}
+
+// Applied at the root, where checkAll is registered.
+if (project == rootProject) {
+    def clearMarker = tasks.register('clearCheckAllDiskSpaceMarker') {
+        description = 'Remove the marker that lets checkAll child builds skip the free disk space check'
+        doLast { checkAllMarker.delete() }
+    }
+    tasks.named('checkAll') {
+        doFirst {
+            checkAllMarker.parentFile.mkdirs()
+            checkAllMarker.text = "${ProcessHandle.current().pid()}\n"
+        }
+        finalizedBy clearMarker
+    }
+}
