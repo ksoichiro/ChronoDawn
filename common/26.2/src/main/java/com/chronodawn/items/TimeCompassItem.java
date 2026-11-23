@@ -6,6 +6,7 @@ import com.chronodawn.registry.ModSounds;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.GlobalPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -23,6 +24,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.LodestoneTracker;
 import net.minecraft.world.item.component.TooltipDisplay;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.structure.Structure;
@@ -130,6 +132,7 @@ public class TimeCompassItem extends Item {
             tag.putInt(NBT_TARGET_POS_Z, globalPos.pos().getZ());
             tag.putString(NBT_TARGET_DIMENSION, globalPos.dimension().identifier().toString());
         });
+        syncTracker(stack, globalPos);
     }
 
     /**
@@ -173,6 +176,19 @@ public class TimeCompassItem extends Item {
             tag.remove(NBT_TARGET_POS_Z);
             tag.remove(NBT_TARGET_DIMENSION);
         });
+        stack.remove(DataComponents.LODESTONE_TRACKER);
+    }
+
+    /**
+     * Mirror the target into the vanilla lodestone tracker component.
+     *
+     * The compass item model (items/time_compass.json) reuses the vanilla
+     * minecraft:compass range property, which only reads this component for a
+     * custom target. tracked=false keeps the vanilla tick logic from checking
+     * for a lodestone block at the target.
+     */
+    private static void syncTracker(ItemStack stack, GlobalPos globalPos) {
+        stack.set(DataComponents.LODESTONE_TRACKER, new LodestoneTracker(Optional.of(globalPos), false));
     }
 
     /**
@@ -281,6 +297,8 @@ public class TimeCompassItem extends Item {
             }
 
             if (existingPos.isPresent()) {
+                // Compasses located before the tracker mirror existed get it on first use
+                syncTracker(stack, existingPos.get());
                 // Already located - show current target and player position
                 BlockPos targetPos = existingPos.get().pos();
                 BlockPos playerPos = player.blockPosition();

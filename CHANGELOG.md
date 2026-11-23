@@ -77,6 +77,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Time Compass needle points at its target**: the needle now turns toward
+  the located structure when you hold the compass in the same dimension, and
+  spins when the target is in another dimension or not yet found. It stayed
+  frozen on 1.21.4 and later, and also on 1.20.1 to 1.21.2 because the model
+  lacked its needle frames. A compass located before this fix starts pointing
+  after its next right-click.
 - **Temporal Caprid and Chrono Ursid Spawn Eggs are colored again**: on
   Minecraft 1.20.1 (Forge) and 1.21.1 / 1.21.2 (NeoForge), these two spawn
   eggs showed the plain gray template texture instead of their colors.
