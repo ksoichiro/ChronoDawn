@@ -32,7 +32,7 @@ where it pays off.
 | TLA+ with TLC | Visits every reachable state, including interleavings. Checks invariants, step properties and liveness ("the player can always get back"). One MIT-licensed JAR, no install. Deterministic with one worker. | A separate language to learn and review. The model is written by hand and can drift from the Java code. Not on Maven Central. |
 | Alloy 6 | One JAR. Good at structural constraints, such as relations between registries and tags. Has temporal operators since version 6. | Checks only up to a bound on the number of steps and objects. Liveness and fairness are less direct than in TLA+. Fewer examples for state machines. |
 | jqwik (property-based testing) | Runs as JUnit 5 tests on real Java code, so it cannot drift from it. Familiar to Java developers. | Samples random inputs, so it is not exhaustive and a failure may show only on some runs. The portal code imports Minecraft types, so the logic would have to be extracted first. No liveness. EPL-2.0. |
-| Hand-written state explorer in JUnit | No new dependency. | Every property and the search itself are custom code, which is what a model checker already provides. |
+| Hand-written state explorer in JUnit | No new dependency. Exercises the Java implementation with deterministic operation sequences. | The oracle and search are custom code. Exploration is bounded and does not prove liveness. |
 
 TLA+ with TLC was chosen. The first target is a state machine whose risky
 properties span several steps and several config options, which exhaustive
@@ -62,6 +62,38 @@ jqwik are on Maven Central. This did not change the choice, for these reasons:
   deterministic result, does not depend on where the jar comes from.
 
 ## Models
+
+### Wayside state exploration (JUnit)
+
+`WaysideStateExplorationTest` enumerates all 100,000 sequences of five actions
+for each of `WellQueue` and `PlayerCooldownTracker`. The CI build runs the
+shared tests for 1.21.1 and 26.3. Run them locally with
+`./gradlew :common-1.21.1:test -Ptarget_mc_version=1.21.1 --tests com.chronodawn.unit.WaysideStateExplorationTest`.
+The bounded JUnit exploration exercises the implementation directly, without a
+new dependency or a separate TLA+ model that could drift from it. It does not
+cover arbitrary sequence lengths or all time values.
+
+| Target | Properties checked |
+| --- | --- |
+| WellQueue | Duplicate offers retain the first thrower and time. Due entries are returned in insertion order, removed once, and all remaining entries become due after the delay. Forget removes only the chosen item. |
+| PlayerCooldownTracker | Two players retain independent cooldowns. Rejected uses do not restart them. Expiration, changing cooldown length, time reversal and encode/decode preserve the expected state. |
+
+The sequences use two item and player IDs, boundary-sized time increments and
+two cooldown lengths. They include repeated offers, forgetting, polling,
+time reversal and persistence. Existing unit tests cover the time-of-day
+boundaries in `SundialBlessing` and `CairnHour`, and outcome message selection.
+Those classes and `EchoWalk`, `CachePlacement` and `StepOnTracker` do not need
+another state explorer for this scope. `TimeWellOutcome` and `CampChestOutcome`
+are descriptions of outcomes, not reward transactions. These tests do not
+prove that Minecraft-side item consumption or chest filling cannot grant a
+reward twice, nor do they cover chunk reloads or concurrent game events.
+
+Two deliberate mutations were checked locally and reverted:
+
+| Mutation | Result |
+| --- | --- |
+| Replace `putIfAbsent` with `put` in `WellQueue.offer` | `queueOperationSequences` fails on the returned entry. |
+| Record the time even when `tryUse` rejects a use | `cooldownOperationSequences` fails on the remaining time. |
 
 ### Portal progression (`specs/tla/PortalProgression.tla`)
 
