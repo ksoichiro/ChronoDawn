@@ -123,6 +123,17 @@ rules.
 | `scenarioCheck` | not needed | when RCON commands and screenshots can show the behavior | when RCON commands and screenshots can show the behavior |
 | Owner approval | not needed | required | required |
 
+A diff that changes only paths of the docs rule above (`docs/**`, `**/*.md`,
+`LICENSE`, `.gitignore`, marked `ci_docs_only` in `rules.json`) still runs
+every CI job, but the jobs skip their steps and pass within seconds. This
+holds for pull requests and for pushes to `main`. The first CI job,
+`Detect docs-only changes`, decides this with
+`scripts/merge_tier/docs_only.py` from the base branch, and its job summary
+lists the files that made it run everything. A green CI on such a diff
+therefore says nothing about the build, which is fine because nothing that
+the build reads changed. Manual runs (`workflow_dispatch`) always run every
+step.
+
 `prodSmokeTest` and GameTest already run in CI for 1.21.1 and 26.3, so a
 change in any tier that touches Mixin configs or `pack.mcmeta` also gets a
 local `prodSmokeTest` for the other versions it affects.
@@ -236,7 +247,10 @@ push to it to run the check.
 
 To allow agents to use GitHub auto-merge for tier A, also turn on "Allow
 auto-merge" under Settings, General. Renaming a CI job renames its check, so
-update the ruleset in the same change.
+update the ruleset in the same change. Keep the jobs running for docs-only
+diffs and skip their steps instead: a skipped matrix job reports one check
+with the unexpanded `${{ matrix.mc }}` name, so the required checks would go
+missing.
 
 ## After merging: morning check
 
