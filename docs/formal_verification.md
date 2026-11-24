@@ -45,6 +45,22 @@ those classes should update the model in the same commit.
 `gradle/formal-verification.gradle`. 1.7.4 is the latest release that is not
 marked as a pre-release.
 
+TLA+ Tools are published only as GitHub release assets, not to Maven Central.
+Of the alternatives, Alloy (`org.alloytools:org.alloytools.alloy.dist`) and
+jqwik are on Maven Central. This did not change the choice, for these reasons:
+
+- Gradle resolves the release asset through an Ivy repository like any other
+  dependency, caches it, and the task checks the pinned SHA-256. A replaced
+  asset fails the build instead of running unknown code.
+- The costs are about 15 lines of build script, a manual version bump (two
+  values) because dependency update bots do not track the asset, and one more
+  host for the first download. TLC releases are rare (1.7.4 in August 2024, the
+  next one is still a pre-release), so the manual bump is cheap.
+- If the asset ever disappears, the task fails at once, and the jar can be
+  committed under `specs/tla/lib/` instead (MIT allows it, 2.2 MB).
+- What decided the choice, exhaustive search with fairness and liveness and a
+  deterministic result, does not depend on where the jar comes from.
+
 ## Models
 
 ### Portal progression (`specs/tla/PortalProgression.tla`)
