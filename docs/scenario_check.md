@@ -252,6 +252,7 @@ names you need with `-Pscenario_check_scenarios` to check one change quickly.
 | `daylight-detector-craft` | The Chronite Daylight Detector recipe crafts at a crafting table |
 | `chronicle-wayside-features` | Chronicle category and entry clicks, and the Wayside Features pages with the next page button |
 | `cairn-stone-tooltip` | The Cairn Stone tooltip (name and two lore lines) on hover |
+| `time-compass-needle` | The Time Compass needle points at its target while the player faces north, east, south and west, and drifts with no target |
 | `time-keeper-village` | The village placed near the first entry into Chrono Dawn |
 | `plains-surface`, `mountain-surface` | The surface of the Plains and Mountain biomes |
 | `forgotten-library` | `/locate` speed for the Forgotten Library, and a shot of it from above |
@@ -262,7 +263,7 @@ Dawn in a world, so every scenario that goes there enters at `0 0` first.
 Otherwise the scenario that runs first decides where the village goes, and it
 can land on the structure another scenario looks at. Scenarios that place
 blocks use separate areas: overworld x 0-15 (`polished-stones`), 16-31
-(`time-keeper-trade`, `time-keeper-chronite-trade`), 32-47 (`daylight-detector-craft`), 48-63 (`wolf-spawn-forest`), 64-79 (`cairn-stone-tooltip`), and x 196 to 247, z -4 to 47 in both dimensions
+(`time-keeper-trade`, `time-keeper-chronite-trade`), 32-47 (`daylight-detector-craft`), 48-63 (`wolf-spawn-forest`), 64-79 (`cairn-stone-tooltip`), 80-95 with z -16 to 15 (`time-compass-needle`), and x 196 to 247, z -4 to 47 in both dimensions
 (`sapling-root-dirt`).
 
 ## Limits
