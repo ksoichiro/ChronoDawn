@@ -280,8 +280,11 @@ which this policy rules out. The owner sets the schedule up on the project's
 Schedules page in fuda (schedules have no MCP tool or CLI command):
 
 - Cron `0 7 * * *` (server local time), status Todo so that the auto start
-  picks the task, and "skip if open" on so that an unfinished check does not
-  pile up.
+  picks the task, and "skip if open" off. The agent cannot close its own
+  task, so with the option on, a morning whose previous task the owner has
+  not closed yet would create nothing and never run later. Off, an unclosed
+  task stays visible as a check nobody has read, and step 3 below keeps the
+  overlapping runs from reporting a pull request twice.
 - The template body asks the agent to run this section and nothing else.
 
 The agent on the morning-check task:
