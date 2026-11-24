@@ -19,6 +19,9 @@ The reviewer gets exactly three things. Nothing from this conversation.
    mkdir -p build/verification
    git diff "$(git merge-base origin/main HEAD)" HEAD > build/verification/diff.patch
    ```
+   For a pull request on another branch (a stacked PR), use `origin/<base>`
+   instead of `origin/main` and record the name for the PR gate with
+   `echo <base> > build/verification/base`. Delete that file otherwise.
 2. **Task text.** The requirement as the owner wrote it (the task body and
    any comment that changed the requirement). Copy it verbatim, do not
    summarize it and do not add how you solved it.
@@ -95,6 +98,11 @@ If nothing reproduced, write "No reproduced findings" under the heading and
 keep the list of commands, so the reader can see what was tried.
 ```
 
+Save the reviewer's answer verbatim to `build/verification/review.md`. The
+PR gate (`pr-gate` skill) denies `git push` and `gh pr create` until that
+file exists, is newer than `diff.patch`, and `diff.patch` equals the branch
+diff. Section 3 says what to do after a fix commit.
+
 ## 3. Handle the findings
 
 - A finding without a command and its output is not a finding. Drop it, even
@@ -108,6 +116,9 @@ keep the list of commands, so the reader can see what was tried.
   silently.
 - A fix that changes behavior means a new diff. Run the classifier again, and
   run the reviewer again when the fix is more than a one-line correction.
+  For a one-line correction, write `diff.patch` again and append to
+  `review.md` the command you re-ran and its result, so the gate sees the
+  report as current.
 
 ## 4. Record it in the PR body
 
