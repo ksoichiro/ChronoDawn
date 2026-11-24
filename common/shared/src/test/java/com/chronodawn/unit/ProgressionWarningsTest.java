@@ -95,8 +95,8 @@ class ProgressionWarningsTest {
         assertEquals(1, warnings.size());
         assertTrue(warnings.get(0).contains("world.structures.forgotten_library"), warnings.get(0));
         assertTrue(warnings.get(0).contains("Portal Stabilizer Blueprint"), warnings.get(0));
-        assertTrue(warnings.get(0).contains("still unlocks once you hold Clockstone"), warnings.get(0));
-        assertTrue(!warnings.get(0).contains("Portal Stabilizer recipe becomes unobtainable"), warnings.get(0));
+        assertTrue(warnings.get(0).contains("Clockstone also unlocks the recipe, becomes unobtainable"),
+            warnings.get(0));
     }
 
     @Test
