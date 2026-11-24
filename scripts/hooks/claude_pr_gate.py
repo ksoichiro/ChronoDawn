@@ -179,7 +179,8 @@ def _match_gh_pr_create(tokens, j):
     i = j + 1
     while i < len(tokens) and tokens[i].startswith("-"):
         i += 2 if tokens[i] in _GH_OPTIONS_WITH_VALUE else 1
-    if tokens[i:i + 2] == ["pr", "create"]:
+    # `gh pr new` is an alias of `gh pr create`.
+    if len(tokens) > i + 1 and tokens[i] == "pr" and tokens[i + 1] in ("create", "new"):
         return tokens[i + 2:]
     return None
 
@@ -207,6 +208,7 @@ def find_commands(command, base_dir=None):
                 skip = m.group(2).strip()
                 continue
             inner = None
+            token = os.path.basename(token)  # /usr/bin/git is git
             if token == "eval" and j + 1 < len(tokens):
                 inner = " ".join(tokens[j + 1:])
             elif token in _SHELLS:
@@ -371,23 +373,30 @@ _VERIFICATION_HEADING = re.compile(r"^##\s+Verification\s*$", re.MULTILINE)
 
 
 def pr_body(args, cwd, command):
-    """The body gh pr create will send, or the whole command when it is inline or unknown."""
+    """The body gh pr create will send, as far as the hook can know it before the command runs."""
     for i, arg in enumerate(args):
-        value = None
-        if arg in ("--body-file", "-F") and i + 1 < len(args):
-            value = args[i + 1]
-        elif arg.startswith("--body-file="):
-            value = arg.split("=", 1)[1]
-        elif arg in ("--body", "-b") and i + 1 < len(args):
-            # --body "$(cat file)": the command text holds only the file name.
-            m = _BODY_FROM_CAT.match(args[i + 1].strip())
-            value = m.group(2) if m else None
-        if value and value != "-":
-            path = Path(value) if os.path.isabs(value) else Path(cwd) / value
-            try:
-                return path.read_text(encoding="utf-8")
-            except OSError:
-                return ""
+        name, _, inline = arg.partition("=")
+        if name not in ("--body-file", "-F", "--body", "-b"):
+            continue
+        value = inline if inline or "=" in arg else (args[i + 1] if i + 1 < len(args) else "")
+        if name in ("--body", "-b"):
+            m = _BODY_FROM_CAT.match(value.strip())
+            if not m:
+                # Inline text. A `$(...)` in it is expanded only by the shell, so
+                # also search the command, which holds a heredoc it reads.
+                return value + "\n" + command if "$(" in value else value
+            value = m.group(2)
+        if not value or value == "-":
+            return command
+        # A file the same command writes first (`cat > body.md <<EOF ...; gh pr create
+        # --body-file body.md`) does not exist yet, but its heredoc is in the command.
+        if re.search(r">\s*['\"]?" + re.escape(value) + r"['\"]?(\s|$)", command):
+            return command
+        path = Path(value) if os.path.isabs(value) else Path(cwd) / value
+        try:
+            return path.read_text(encoding="utf-8")
+        except OSError:
+            return ""
     return command
 
 
@@ -420,7 +429,7 @@ def option_value(args, *names):
 
 def push_heads(root, args):
     """The local revisions a push sends for review. Empty when it sends no branch to review."""
-    if any(a in ("--delete", "-d", "--tags", "--dry-run", "-n") for a in args):
+    if any(a in ("--delete", "-d", "--dry-run", "-n", "--help", "-h") for a in args):
         return []
     positional, i = [], 0
     while i < len(args):
@@ -433,7 +442,10 @@ def push_heads(root, args):
     current = git(root, "symbolic-ref", "--quiet", "--short", "HEAD", check=False).stdout.decode().strip()
     refspecs = positional[1:]
     if not refspecs:
-        return [] if current in PROTECTED_BRANCHES or not current else ["HEAD"]
+        # `git push --tags` without a refspec sends tags only.
+        if "--tags" in args or current in PROTECTED_BRANCHES or not current:
+            return []
+        return ["HEAD"]
     heads = []
     for refspec in refspecs:
         if "$" in refspec or "`" in refspec:
@@ -484,6 +496,8 @@ def evaluate(command, cwd):
         root = top.stdout.decode().strip()
         # Only this repository is gated, not gradle/shared or any other clone.
         if not (Path(root) / "scripts" / "merge_tier" / "classify.py").exists():
+            continue
+        if "--help" in args or "-h" in args:
             continue
         if kind == "push":
             heads = push_heads(root, args)

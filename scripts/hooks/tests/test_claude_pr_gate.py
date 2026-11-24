@@ -329,6 +329,34 @@ class GateTest(unittest.TestCase):
                         "git push origin feature other", "gh -R o/r pr create --title t --body x"):
             self.assertIsNotNone(self.repo.evaluate(command), command)
 
+    def test_help_is_not_a_push(self):
+        self.change_behavior()
+        for command in ("git push --help", "gh pr create --help | grep -A2 ALIASES", "git push -h"):
+            self.assertIsNone(self.repo.evaluate(command), command)
+
+    def test_alias_tags_with_branch_and_absolute_path_are_gated(self):
+        self.change_behavior()
+        for command in ("gh pr new --title x --body y", "git push origin feature --tags",
+                        "/usr/bin/git push origin feature"):
+            self.assertIsNotNone(self.repo.evaluate(command), command)
+        self.assertIsNone(self.repo.evaluate("git push --tags"))
+
+    def test_body_file_written_in_the_same_command_passes(self):
+        self.change_behavior()
+        self.add_scenario()
+        self.repo.verify()
+        command = (f"cat > build/new-body.md <<'EOF'\n{BODY}EOF\n"
+                   "gh pr create --title 'feat(hooks): gate' --body-file build/new-body.md")
+        self.assertIsNone(self.repo.evaluate(command))
+
+    def test_inline_body_starting_with_the_heading_passes(self):
+        self.change_behavior()
+        self.add_scenario()
+        self.repo.verify()
+        self.assertIsNone(self.repo.evaluate('gh pr create --title t --body "## Verification\n\nMerge tier: B\n"'))
+        self.repo.write("build/pr-body.md", BODY)
+        self.assertIsNone(self.repo.evaluate('gh pr create --title t --body="$(cat build/pr-body.md)"'))
+
     def test_pr_create_checks_the_head_branch(self):
         self.change_behavior()
         self.repo.git("checkout", "-q", "main")

@@ -36,7 +36,8 @@ named in `build/verification/base` when the file exists.
    `--body "$(cat <file>)"` or `--body-file` has a `## Verification` heading and a `Merge tier:` line.
    `--fill` and `--web` bodies do not.
 
-`gh pr create --head <branch>` checks that branch instead of `HEAD`.
+`gh pr create --head <branch>` checks that branch instead of `HEAD`. The
+alias `gh pr new` is checked the same way, and `--help` is never gated.
 
 Pushes that send no branch for review pass: `main`, tags, `--delete`,
 `--dry-run`, a branch with no commits ahead of the base, and other
