@@ -74,8 +74,8 @@ modules; do not add separate `common/1.21.3`, `fabric/1.21.3`, or
   with `rg -0` and `xargs -0`; command substitution can collapse multiple file
   names into one argument.
 - In zsh, write `${t}` instead of `$t` when a colon follows the variable, as in
-  `./gradlew ":${t}:scenarioCheck"`. zsh reads `$t:s...` as a history modifier,
-  so `:$t:scenarioCheck` turns into a task name that does not exist.
+  `./gradlew ":${t}:test"`. zsh reads a letter after `$t:` (`s`, `t`, `c`, `r`,
+  `a`, `u` and others) as a modifier, so `:$t:test` becomes `:fabricest`.
 - Put common gameplay behavior in `common/` where possible. Use `fabric/`,
   `forge/`, or `neoforge/` only for loader APIs, entry points, events, or
   platform bridges.
