@@ -188,6 +188,49 @@ def check_declaration(body, computed):
     return True, f"Declared tier {tier}, the diff is tier {computed}."
 
 
+# Verification paths are separate from tier rules: tier C also includes build
+# files, while translations and test sources do not need a new gameplay test.
+_TEST_PATHS = [glob_to_regex(p) for p in (
+    "**/src/test/**", "**/src/gametest/**", "common/gametest/**",
+    "**/java/**/gametest/**", "scripts/scenario_check/scenarios/**",
+)]
+_BEHAVIOR_PATHS = [glob_to_regex(p) for p in (
+    "**/*.java", "**/resources/assets/**", "**/resources/data/**",
+    "**/*.bbmodel", "**/*mixins*.json", "**/*.accesswidener",
+)]
+_NON_BEHAVIOR_PATHS = [glob_to_regex(p) for p in (
+    "**/assets/*/lang/**", "**/package-info.java",
+)]
+_UNVERIFIED = re.compile(r"not verified in.game|実機未確認", re.IGNORECASE)
+_REASON = re.compile(r"^\s*(?:[-*]\s*)?(?:\*\*)?([\w -]+)(?:\*\*)?:\s*(.*?)\s*$", re.IGNORECASE)
+
+
+def check_verification(changes, body):
+    """Return deterministic problems; reasons are declarations, not proof of testing."""
+    matches = lambda patterns, path: any(p.match(path) for p in patterns)
+    test = any(c.status != "D" and matches(_TEST_PATHS, c.path) for c in changes)
+    behavior = [c.path for c in changes if not matches(_TEST_PATHS, c.path)
+                and not matches(_NON_BEHAVIOR_PATHS, c.path) and matches(_BEHAVIOR_PATHS, c.path)]
+    lines = (body or "").splitlines()
+    reasons = []
+    for line in lines:
+        match = _REASON.match(line)
+        if match:
+            reasons.append((match.group(1).lower(), match.group(2)))
+    problems = []
+    if behavior and not test and not any(key == "test-exemption" and len(value.strip()) >= 20
+                                         for key, value in reasons):
+        problems.append("Behavior paths changed without a test or scenario: " + ", ".join(behavior[:10])
+                        + ". Add one or provide `Test-Exemption: <reason>` (at least 20 characters).")
+    for line in lines:
+        if _UNVERIFIED.search(line):
+            match = _REASON.match(line)
+            if not match or match.group(1).lower() != "manual checks" or len(_UNVERIFIED.sub("", match.group(2)).strip(" :-.,")) < 20:
+                problems.append("Put each unverified-in-game statement on a `Manual checks: <statement and reason>` line with a reason of at least 20 characters.")
+                break
+    return problems
+
+
 # --- Git ---------------------------------------------------------------------
 
 def git(*args, check=True):
@@ -296,6 +339,11 @@ def main(argv=None):
         ok, message = check_declaration(body, computed)
         print(message)
         report += "\n" + message + "\n"
+        problems = check_verification(changes, body)
+        for problem in problems:
+            print(problem)
+            report += "\n" + problem + "\n"
+        ok = ok and not problems
     if args.summary:
         with open(args.summary, "a", encoding="utf-8") as f:
             f.write(report)
