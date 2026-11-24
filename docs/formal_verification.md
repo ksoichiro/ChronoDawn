@@ -92,16 +92,26 @@ Checked properties:
 | Deadlock check (TLC default) | Some action is always possible. Breaking this means the player is stuck. |
 
 To see that the properties can fail, these changes to the model were checked
-once by hand (not in CI):
+once by hand (not in CI). Individual property runs select that property alone.
+For the liveness mutation, deadlock checking is disabled in the temporary
+mutant configuration so TLC reports the temporal violation. The normal
+configuration retains deadlock checking:
 
 | Change | Result |
 | --- | --- |
 | The gate stays on after stabilization (`Unstable == entered`) | Deadlock: the player is stuck in Chrono Dawn. |
+| Invalid initial player dimension | `TypeOK` violated. |
+| Initial state is stabilized before entry | `StabilizedOnlyAfterEntry` violated. |
+| Registered stabilization does not set the global flag | `PortalStabilizedImpliesGlobal` violated. |
+| An initial registry entry is `INACTIVE` | `NeverInactive` violated. |
+| Entry toggles the entered flag | `ProgressIsPermanent` violated. |
+| Registered stabilization accepts an `ACTIVATED` portal | `NoForbiddenTransition` violated. |
+| Remove both stabilization paths and their fairness clauses | `CanAlwaysReturn` violated. |
 | Arrival no longer destroys the unstable portal | `NoChronoDawnPortalWhileGated` violated. |
 | Ignition in Chrono Dawn ignores the gate | `NoChronoDawnPortalWhileGated` violated, and `NoReturnBeforeStabilization` too when checked alone. |
 | The stabilizer also accepts an `ACTIVATED` portal | `StabilizedOnlyAfterEntry` violated. |
 | `NoForbiddenTransition` also forbids `DEACTIVATED -> ACTIVATED`, or separately `STABILIZED ->` anything else (both listed under Findings) | Violated in each case, so the code really takes both. |
-| Stabilization from an unregistered frame removed | Still passes. The registered arrival frame is enough in this model, which does not model losing that frame. |
+| Stabilization from an unregistered frame removed | Still passes in this single-player model. The multiplayer model below covers losing the registered frame. |
 
 ### Findings
 
@@ -122,6 +132,70 @@ its earlier Javadoc:
 
 The model tracks the entry selected by the position index, not retained older
 entries. `Travel` and `Ignite` represent the current behavior.
+
+### Multiplayer portal return (`specs/tla/PortalMultiplayer.tla`)
+
+This complementary model keeps the original portal-state checks above and
+explores two players sharing the global flags and the arrival portal. A second,
+complete frame is far enough from the arrival frame to be unregistered. Either
+player can lose the arrival frame, and a later arrival can destroy its portal
+blocks while the other player is in Chrono Dawn. Players can carry a spare
+hourglass on entry. Both settings are varied, and the check visits 1,616
+reachable states in under a second of TLC time on the development machine.
+
+Each player makes at most one trip. The Overworld portal and construction of
+complete, suitably separated frames are assumed available. A frame remains
+available after it is built, except for the arrival portal destroyed by another
+entry. Deliberate repeated destruction, combat, terrain, inventories beyond the
+next useful item, and resource depletion are outside this model. It is not a
+proof that arbitrary players or modpacks can always obtain these items.
+
+`Acquire` represents exploration, gathering and crafting as one action. A
+player in Chrono Dawn obtains a stabilizer when the gate is enforced and an
+hourglass otherwise. It may replace an item no longer needed after another
+player stabilizes the world. Stabilizing or igniting consumes that item. The
+following conditions are assumed, not proven by the model:
+
+- Clockstone is available in Ancient Ruins in the Overworld and underground in
+  Chrono Dawn. A Clockstone Block requires nine Clockstone. Fruit of Time and
+  Temporal Sand are available in Chrono Dawn. Temporal Sand is in the vanilla
+  sand tag and can be smelted into glass when a furnace and fuel are available.
+- The Time Hourglass recipe needs four glass, two Clockstone and one Temporal
+  Sand. Its blueprint is in Overworld Ancient Ruins. A player who did not
+  unlock or bring it can instead obtain hourglasses from Hourglass Golems in
+  Chrono Dawn, provided those mobs can spawn and be defeated.
+- The Portal Stabilizer blueprint is in Forgotten Library chests in Chrono
+  Dawn. Its recipe needs four Clockstone, one Clockstone Block, two Fruit of
+  Time and two Time Hourglasses. A further hourglass is needed to ignite the
+  frame after stabilization. The model assumes sufficient repeated collection.
+- In Peaceful, Hourglass Golems cannot spawn. A player without the hourglass
+  recipe or spare hourglasses may lack this supply when crafting undiscovered
+  recipes is restricted. This case does not satisfy the acquisition assumption.
+  Emergency respawn remains a separate escape route.
+
+`CanAlwaysReturn` checks each player independently under weak fairness for
+acquisition, stabilization, ignition and portal travel. The assumptions mean
+that an action which stays enabled is eventually taken. Emergency respawn is
+also a possible transition, representing removal of a respawn point and death,
+though it is not required by the fairness assumptions. Therefore the property
+also checks a behavior where the player never chooses emergency respawn. The
+other player can enter or leave at any point, subject to the one-trip bound.
+This includes the shared arrival portal being destroyed during the first
+player's trip. It does not cover an adversary repeatedly breaking frames or
+withholding resources.
+
+The following mutations were checked individually with TLC. Each run selected
+only the property in the result column, so another failure cannot mask it.
+For the removed transition, its fairness clause was removed as well. Otherwise
+fairness could exclude the very behavior the mutation is meant to test.
+
+| Mutation | Result |
+| --- | --- |
+| Acquisition produces an invalid item value | `TypeOK` violated. |
+| Initial state is stabilized before entry | `StabilizedOnlyAfterEntry` violated. |
+| Ignition ignores the gate | `NoPortalWhileGated` violated with a carried hourglass. |
+| Emergency respawn clears stabilization | `ProgressIsPermanent` violated. |
+| Remove unregistered-frame stabilization and its fairness clause | `CanAlwaysReturn` violated after the arrival frame is forgotten. Emergency respawn remains possible but is not forced. |
 
 ## Adding a Model
 
