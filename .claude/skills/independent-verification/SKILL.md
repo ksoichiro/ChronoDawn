@@ -54,16 +54,29 @@ The diff is in build/verification/diff.patch. It is already committed on the
 current branch, so the checkout contains it.
 
 Do this:
-1. Read the diff, CLAUDE.md, docs/merge_policy.md and the rows of
+1. Read the diff, AGENTS.md, CLAUDE.md, docs/merge_policy.md and the rows of
    docs/bug_prevention.md that match the touched files.
 2. Look for ways the change fails: edge cases, the other loader (Fabric,
    NeoForge, Forge on 1.20.1), the other Minecraft versions, existing worlds
    and packs, and the bug classes from docs/bug_prevention.md.
-3. Try to reproduce each suspicion by running something: a build, a unit
+3. When the change copies or keeps a formula or logic that mirrors vanilla
+   (an item property, a model predicate, an angle, a random wobble, a render
+   transform), compare it with the vanilla equivalent in the Minecraft
+   sources or jar of each affected version. Check signs, offsets such as a
+   90 degree turn, units (degrees, radians, 0..1 fractions) and per-tick
+   rates. A formula that compiles and matches the old code can still differ
+   from vanilla.
+4. Try to reproduce each suspicion by running something: a build, a unit
    test, a validator, a GameTest, a scenario, a small script. Follow
    the verification-commands skill for commands, parallel-verification limits and the sandbox.
    Do not edit tracked files. Scratch files go under build/verification/.
-4. Report only reproduced findings. A suspicion you could not reproduce is
+5. When the change alters something visible or a behavior (rendering, a
+   needle or animation, movement, worldgen, a game rule), run it: a unit
+   test that evaluates the output values, or a scenario from
+   docs/scenario_check.md. Reading the code, matching JSON files and a
+   passing build do not count as verifying it. If you could not run it,
+   list it under "Not run" with the reason.
+6. Report only reproduced findings. A suspicion you could not reproduce is
    dropped, not reported.
 
 Answer in this form, in English:
@@ -75,6 +88,9 @@ Reproduced findings:
 1. <what fails> - reproduced with `<command>`: <the failing output, log line
    or test name>
 
+Not run:
+- <visible or behavioral change you could not run, and why>
+
 If nothing reproduced, write "No reproduced findings" under the heading and
 keep the list of commands, so the reader can see what was tried.
 ```
@@ -83,6 +99,9 @@ keep the list of commands, so the reader can see what was tried.
 
 - A finding without a command and its output is not a finding. Drop it, even
   if it sounds right.
+- Treat each "Not run" item as unverified. Cover it with a unit test or a
+  scenario yourself, or list it in the PR body as a manual check with the
+  reason a scenario cannot cover it.
 - Fix each reproduced finding, then re-run the reviewer's command and confirm
   it passes now.
 - If you do not fix one, write the reason in the PR body. Do not drop it
