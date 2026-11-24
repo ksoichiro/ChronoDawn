@@ -83,6 +83,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   frozen on 1.21.4 and later, and also on 1.20.1 to 1.21.2 because the model
   lacked its needle frames. A compass located before this fix starts pointing
   after its next right-click.
+- **Time Compass chat directions no longer swap north and south**: the
+  direction shown in chat when you use the compass now matches where the
+  structure actually is. A target to the south-west was reported as
+  "Northwest". East and west were already correct.
 - **Temporal Caprid and Chrono Ursid Spawn Eggs are colored again**: on
   Minecraft 1.20.1 (Forge) and 1.21.1 / 1.21.2 (NeoForge), these two spawn
   eggs showed the plain gray template texture instead of their colors.
