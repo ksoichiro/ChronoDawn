@@ -200,6 +200,9 @@ apply from: 'gradle/shared/data-validation.gradle'
 // ChronoDawn-specific validation (tag membership, recipe-unlock, lang parity, era JSON format)
 apply from: 'gradle/chronodawn-validation.gradle'
 
+// TLA+ model checking of Minecraft-independent models (docs/formal_verification.md)
+apply from: 'gradle/formal-verification.gradle'
+
 // Upgrade test driver venv and unit tests (platform tasks are applied per subproject)
 apply from: 'gradle/upgrade-test.gradle'
 

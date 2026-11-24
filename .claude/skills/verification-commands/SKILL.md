@@ -1,6 +1,6 @@
 ---
 name: verification-commands
-description: Use when building, cleaning, running, testing, validating or releasing Chrono Dawn, or before a PR. Gradle command patterns per Minecraft version and loader, unit tests, GameTest, prodSmokeTest, upgradeTest, scenarioCheck, validation tasks, checkAll, parallel verification limits and release tasks.
+description: Use when building, cleaning, running, testing, validating or releasing Chrono Dawn, or before a PR. Gradle command patterns per Minecraft version and loader, unit tests, GameTest, prodSmokeTest, upgradeTest, scenarioCheck, validation tasks, TLA+ model checking (verifyFormalModels), checkAll, parallel verification limits and release tasks.
 ---
 
 # Build, test and verification commands
@@ -70,14 +70,21 @@ Several worktrees or agents on one machine. Details in `docs/developer_guide.md`
 - `./gradlew validateTranslations` does cross-version translation key validation (entities, spawn eggs).
 - `./gradlew validateAll` runs every file-only validation that `checkAll` runs (`checkall_extra_tasks`). CI (`.github/workflows/ci.yml`) runs it with `-Plang_required_locales=en_us`, which turns missing non-English keys into warnings. The default in `gradle.properties` keeps `ja_jp` required for `checkAll` and releases. CI also passes `-Pvalidation_only=true`, which makes `settings.gradle` skip the version subprojects so Loom does not set up Minecraft. Validation tasks must therefore stay root-project, file-only tasks.
 - `validateVersionSync` fails when per-version copies that `gradle/version-sync.lock` records as identical start to differ. Apply the change to every listed version. Only when a version must differ for an era-specific reason, run `./gradlew updateVersionSyncLock` and commit the lock. The Claude Code PostToolUse hook in `.claude/settings.json` prints the stale copies right after an edit.
-- CI (`.github/workflows/ci.yml`) runs `validate`, `build` (build and unit tests), `prod-smoke` (`:fabric:prodSmokeTest`, `:neoforge:prodSmokeTest`) and `gametest` (`:fabric:runGameTest`, `:neoforge:runGameTestServer`) on 1.21.1 and 26.3. Fabric and NeoForge run in separate Gradle invocations: in one invocation both loaders transform the shared common module concurrently, and the NeoForge jar intermittently resolved `@ExpectPlatform` calls to the Fabric implementation (`NoClassDefFoundError ...runtime.fabric.*Impl`). Never save Minecraft JARs, mappings or world data as CI artifacts. A failing `prod-smoke` job prints the server log tail in its last step.
+- CI (`.github/workflows/ci.yml`) runs `validate` (`validateAll` and `verifyFormalModels`), `build` (build and unit tests), `prod-smoke` (`:fabric:prodSmokeTest`, `:neoforge:prodSmokeTest`) and `gametest` (`:fabric:runGameTest`, `:neoforge:runGameTestServer`) on 1.21.1 and 26.3. Fabric and NeoForge run in separate Gradle invocations: in one invocation both loaders transform the shared common module concurrently, and the NeoForge jar intermittently resolved `@ExpectPlatform` calls to the Fabric implementation (`NoClassDefFoundError ...runtime.fabric.*Impl`). Never save Minecraft JARs, mappings or world data as CI artifacts. A failing `prod-smoke` job prints the server log tail in its last step.
 - GitHub Actions: pin every `uses:` to a full commit SHA with the version as a trailing comment, and pin `runs-on` to a fixed image (`ubuntu-24.04`), never `@vN` or `ubuntu-latest`. Update the actions with `GITHUB_TOKEN=$(gh auth token) mise exec pinact@5.0.1 -- pinact run -u` (run unsandboxed), then check that CI passes.
 - When a Minecraft rename breaks a version that CI does not build, add a rule to `scripts/era_symbol_rules.json` (`validateEraSymbols`) in the same change.
 - `docs/bug_prevention.md` maps past bug classes to these checks and lists rejected checks. A new bug class goes there first. The pre-commit hook (`scripts/hooks/install.sh`, Git 2.54+) runs `validateAll`.
 
+## Formal verification (`verifyFormalModels`)
+
+- `./gradlew verifyFormalModels -Pvalidation_only=true` model-checks every `specs/tla/<Name>.tla` with TLC through a `verifyTla<Name>` task. It fails on a parse error, a violated invariant or property, or a deadlock, and prints the counterexample trace. Models, checked properties and how to add one are in `docs/formal_verification.md`.
+- CI runs it in the `validate` job after `validateAll`, and `checkAll` depends on it. It is not in `validateAll` or `checkall_extra_tasks`, so the pre-commit hook does not run it.
+- The first run downloads `tla2tools.jar` from the TLA+ GitHub release into the Gradle cache. Run Gradle unsandboxed as usual. A sandboxed `curl` or `java` run against the release needs `github.com` and `release-assets.githubusercontent.com` allowed.
+- When you change a class that a model lists in its header (the portal handlers for `PortalProgression.tla`), update the model in the same commit and run the task.
+
 ## Full verification (`checkAll`)
 
-Recommended before commits and PRs. `./gradlew checkAll` runs, in sequence:
+Recommended before commits and PRs. `./gradlew checkAll` first runs `verifyFormalModels` as a task dependency, then runs, in sequence:
 
 1. `cleanAll`
 2. `validateResources`

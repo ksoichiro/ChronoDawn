@@ -11,7 +11,7 @@ every session, so keep it short. Put task-specific procedures in
 
 Read the matching skill before the work:
 
-- `verification-commands`: build, clean, run, test, validate and release commands, `prodSmokeTest`, `upgradeTest`, `scenarioCheck`, `checkAll`, parallel verification limits, CI notes
+- `verification-commands`: build, clean, run, test, validate and release commands, TLA+ model checking, `prodSmokeTest`, `upgradeTest`, `scenarioCheck`, `checkAll`, parallel verification limits, CI notes
 - `multiversion-support`: era-specific API differences between Minecraft versions
 - `mixin-guide`: adding and verifying Mixins
 - `doc-maintenance`: which docs to update for versions, content, dependencies and releases

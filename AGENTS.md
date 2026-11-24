@@ -151,6 +151,7 @@ names; the Claude Code skill `verification-commands` lists every option):
 ./gradlew gameTestAll
 ./gradlew :fabric:prodSmokeTest -Ptarget_mc_version=<version>   # and :neoforge:; not for Forge 1.20.1
 ./gradlew validateAll                     # file-only validations, also the pre-commit hook
+./gradlew verifyFormalModels -Pvalidation_only=true   # TLA+ model checking, docs/formal_verification.md
 ./gradlew checkAll                        # full verification
 ./gradlew collectJars                     # then release
 ```

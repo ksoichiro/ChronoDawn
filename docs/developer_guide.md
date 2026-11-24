@@ -689,6 +689,22 @@ public static final RegistrySupplier<EntityType<MyEntity>> MY_ENTITY = ENTITIES.
 ./gradlew :common-1.21.11:test
 ```
 
+### Formal Verification (TLA+)
+
+**Tool**: TLC model checker (`tla2tools.jar`, resolved by Gradle)
+
+**Location**: `specs/tla/`
+
+Minecraft-independent models of features with many states, such as portal
+progression, are checked over every reachable state. CI runs this in the
+`validate` job. Models, checked properties and the tool choice are in
+[formal_verification.md](formal_verification.md).
+
+**Run**:
+```bash
+./gradlew verifyFormalModels -Pvalidation_only=true
+```
+
 ### Integration Testing (GameTest)
 
 **Framework**: Minecraft GameTest Framework with registry-driven test generation
