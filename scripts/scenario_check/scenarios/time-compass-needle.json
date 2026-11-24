@@ -1,0 +1,30 @@
+{
+  "description": "The Time Compass needle points at its target from every facing, and drifts when the compass has no target. A red pillar marks the target 20 blocks due north of the player, who stands on a white platform in the sky. The target is written into custom_data with give, then the player uses the compass once: on 1.21.4+ the needle reads the lodestone tracker that use mirrors from custom_data, so this also runs the sync path a located compass goes through. Read the red needle on the compass held in the right hand, at the bottom right of each shot: toward the top of the screen is ahead of the player, toward the right edge is to their right. The hotbar icon shows the same needle but is too small to read on the contact sheet. The no-target shots only show that the needle is not locked on anything. Still frames about 2 seconds apart cannot tell the intended smooth drift from a needle that jumps to a new random angle every frame, and shots taken closer together would misjudge the smooth drift too often, so fast spinning stays a manual check in game.",
+  "steps": [
+    "execute in minecraft:overworld run forceload add 80 -16 95 15",
+    {"command": "execute in minecraft:overworld if loaded 88 200 8", "match": "Test passed", "await": true, "timeout": 60},
+    {"command": "execute in minecraft:overworld if loaded 88 200 -12", "match": "Test passed", "await": true, "timeout": 60},
+    "execute in minecraft:overworld run fill 84 200 4 92 200 12 minecraft:white_concrete",
+    "execute in minecraft:overworld run fill 88 200 -12 88 206 -12 minecraft:red_concrete",
+    "gamemode creative ${player}",
+    "clear ${player}",
+    "give ${player} chronodawn:time_compass[custom_data={TargetStructure:\"master_clock\",TargetX:88,TargetY:200,TargetZ:-12,TargetDimension:\"minecraft:overworld\"}]",
+    "execute in minecraft:overworld run tp ${player} 88.5 201 8.5 180 10",
+    {"settle": 60},
+    {"input": "use"},
+    {"shot": "facing-north", "note": "The player faces north. The red pillar (the target) is straight ahead in the middle of the view. The red needle of the compass in the right hand points up, toward the top of the screen."},
+    "execute in minecraft:overworld run tp ${player} 88.5 201 8.5 -90 10",
+    {"shot": "facing-east", "note": "The player faces east and the target is on their left, out of view. The red needle of the compass in the right hand points left, toward the middle of the screen."},
+    "execute in minecraft:overworld run tp ${player} 88.5 201 8.5 0 10",
+    {"shot": "facing-south", "note": "The player faces south and the target is behind them. The red needle of the compass in the right hand points down, toward the bottom of the screen."},
+    "execute in minecraft:overworld run tp ${player} 88.5 201 8.5 90 10",
+    {"shot": "facing-west", "note": "The player faces west and the target is on their right, out of view. The red needle of the compass in the right hand points right, toward the right edge of the screen."},
+    "clear ${player}",
+    "give ${player} chronodawn:time_compass[custom_data={TargetStructure:\"master_clock\"}]",
+    "execute in minecraft:overworld run tp ${player} 88.5 201 8.5 180 10",
+    {"shot": "no-target-1", "note": "A Time Compass with no located target, facing the red pillar. The needle is not locked on the pillar. It drifts, so any angle is fine in a single shot. Compare it with no-target-2 and no-target-3."},
+    {"shot": "no-target-2", "note": "Taken about 2 seconds after no-target-1. The needle usually sits at a different angle from no-target-1. The same angle in one pair can happen by chance."},
+    {"shot": "no-target-3", "note": "Taken about 2 seconds after no-target-2. NG if the needle points straight up at the pillar in all three no-target shots (it would be tracking a target it does not have), or if no needle is drawn."},
+    "execute in minecraft:overworld run forceload remove 80 -16 95 15"
+  ]
+}
