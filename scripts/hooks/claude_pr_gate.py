@@ -164,9 +164,15 @@ def _match_git_push(tokens, j):
     i, git_dir = j + 1, None
     while i < len(tokens) and tokens[i].startswith("-"):
         if tokens[i] in _GIT_OPTIONS_WITH_VALUE and i + 1 < len(tokens):
-            if tokens[i] == "-C":
+            if tokens[i] in ("-C", "--work-tree"):
                 git_dir = _join(git_dir, tokens[i + 1])
+            elif tokens[i] == "--git-dir":
+                git_dir = _join(git_dir, os.path.join(tokens[i + 1], os.pardir))
             i += 2
+        elif tokens[i].startswith(("--work-tree=", "--git-dir=")):
+            name, _, value = tokens[i].partition("=")
+            git_dir = _join(git_dir, value if name == "--work-tree" else os.path.join(value, os.pardir))
+            i += 1
         else:
             i += 1
     if i < len(tokens) and tokens[i] == "push":
@@ -198,7 +204,7 @@ def find_commands(command, base_dir=None):
     found = []
     cd_dir = base_dir
     for tokens in _simple_commands(_shell_tokens(strip_heredocs(command))):
-        if tokens[0] == "cd" and len(tokens) > 1:
+        if tokens[0] in ("cd", "pushd") and len(tokens) > 1:
             cd_dir = _join(cd_dir, tokens[1])
             continue
         skip = None
@@ -285,12 +291,14 @@ def java_change_is_trivial(root, merge_base, head, path):
 # --- Checks ------------------------------------------------------------------
 
 def exempted(root, merge_base, head, path):
-    """True when the last commit in the range that touched path carries a Test-Exemption trailer."""
-    values = git_text(
-        root, "log", "-1", f"--format=%(trailers:key={EXEMPTION_TRAILER},valueonly)",
-        f"{merge_base}..{head}", "--", path,
-    )
-    return any(len(v.strip()) >= MIN_REASON_LENGTH for v in values.splitlines())
+    """True when the last commit in the range that touched path has a Test-Exemption line.
+
+    The line counts anywhere in the message, not only in git's trailer block,
+    because a Co-Authored-By paragraph after it would otherwise hide it.
+    """
+    message = git_text(root, "log", "-1", "--format=%B", f"{merge_base}..{head}", "--", path)
+    values = re.findall(r"^" + re.escape(EXEMPTION_TRAILER) + r":[ \t]*(.*)$", message, re.MULTILINE | re.IGNORECASE)
+    return any(len(v.strip()) >= MIN_REASON_LENGTH for v in values)
 
 
 def check_tests(root, merge_base, head):
@@ -439,6 +447,10 @@ def push_heads(root, args):
         if not args[i].startswith("-"):
             positional.append(args[i])
         i += 1
+    if any(a in ("--all", "--branches", "--mirror") for a in args):
+        # Every local branch goes out. Each one that is not protected needs the checks.
+        branches = git_text(root, "for-each-ref", "--format=%(refname:short)", "refs/heads/").splitlines()
+        return [b for b in branches if b and b not in PROTECTED_BRANCHES]
     current = git(root, "symbolic-ref", "--quiet", "--short", "HEAD", check=False).stdout.decode().strip()
     refspecs = positional[1:]
     if not refspecs:

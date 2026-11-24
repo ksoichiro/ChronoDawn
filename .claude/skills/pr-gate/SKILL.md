@@ -41,13 +41,19 @@ alias `gh pr new` is checked the same way, and `--help` is never gated.
 
 Pushes that send no branch for review pass: `main`, tags, `--delete`,
 `--dry-run`, a branch with no commits ahead of the base, and other
-repositories such as `gradle/shared` (reached with `git -C` or a preceding
-`cd`).
+repositories such as `gradle/shared` (reached with `git -C`, `--work-tree`
+or a preceding `cd`/`pushd`). `--all`, `--branches` and `--mirror` check
+every local branch except `main`.
 
 The gate finds `git push` and `gh pr create` anywhere in a command, also
 behind wrappers (`timeout`, `env`), keywords, `bash -c` and `eval`. It exists
 to catch a forgotten step, so it parses commands the way an agent writes them
 and does not try to be a sandbox. Never route a push around it.
+
+Known limits: a `<<` inside a quoted string is read as a heredoc and hides
+the lines after it, and a body passed through stdin (`--body-file -`) or a
+shell variable (`--body "$BODY"`) is not read, so such a `gh pr create` is
+denied. Pass the body with `--body-file <path>`.
 
 ## Satisfying the checks
 
@@ -63,7 +69,8 @@ and does not try to be a sandbox. Never route a push around it.
   Test-Exemption: covered by the existing time-compass-needle scenario
   ```
 
-  The reason needs at least 20 characters and must name the covering test or
+  The line may sit in any paragraph of the message, also before the
+  `Co-Authored-By:` paragraph. The reason needs at least 20 characters and must name the covering test or
   scenario, or say why nothing a player sees can change. "Could not check in
   game" is never a reason: AGENTS.md asks for a scenario instead. The owner
   reads the trailer in the commit history.

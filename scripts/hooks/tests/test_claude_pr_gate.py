@@ -101,6 +101,29 @@ class GateTest(unittest.TestCase):
         self.repo.verify()
         self.assertIsNone(self.repo.evaluate("git push"))
 
+    def test_exemption_before_a_co_author_paragraph_passes(self):
+        self.repo.write(JAVA, "class TimeCompassItem {\n    int angle() { return 90; }\n}\n")
+        self.repo.git("add", "-A")
+        self.repo.git(
+            "commit", "-q", "-m", "refactor: x\n\n"
+            "Test-Exemption: covered by the existing time-compass-needle scenario\n\n"
+            "Co-Authored-By: Someone <someone@example.com>\n",
+        )
+        self.repo.verify()
+        self.assertIsNone(self.repo.evaluate("git push"))
+
+    def test_push_all_and_pushd_are_gated(self):
+        self.change_behavior()
+        self.repo.git("checkout", "-q", "main")
+        for command in ("git push --all origin", "git push --branches origin", "git push --mirror origin"):
+            self.assertIsNotNone(self.repo.evaluate(command), command)
+        self.repo.git("checkout", "-q", "feature")
+        outside = Path(self.tmp.name).parent
+        rel = os.path.relpath(self.repo.root, outside)
+        self.assertIsNotNone(gate.evaluate(f"pushd {rel} >/dev/null && git push -u origin feature", str(outside)))
+        self.assertIsNotNone(gate.evaluate(
+            f"git --git-dir={self.repo.root}/.git --work-tree={self.repo.root} push -u origin feature", str(outside)))
+
     def test_short_exemption_reason_is_not_enough(self):
         self.repo.write(JAVA, "class TimeCompassItem {\n    int angle() { return 90; }\n}\n")
         self.repo.git("add", "-A")
