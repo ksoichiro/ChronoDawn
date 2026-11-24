@@ -225,7 +225,8 @@ ChronoDawn/
 ├── build.gradle                            # Root build configuration
 ├── settings.gradle                         # Multi-module settings
 ├── gradle.properties                       # Version configuration
-└── CLAUDE.md                               # Development guidelines
+├── AGENTS.md                               # Shared agent guidelines
+└── CLAUDE.md                               # Claude Code additions (imports AGENTS.md)
 ```
 
 ---
@@ -1050,7 +1051,7 @@ Additional manual checks:
 - [ ] No new warnings or errors in logs
 - [ ] Documentation updated (if applicable)
 - [ ] CI is green: `validate`, `build`, `prod-smoke` and `gametest` for 1.21.1 and 26.3. They cover `prodSmokeTest` and `runGameTest`/`runGameTestServer` for those two versions
-- [ ] If this PR changes Mixin config or adds a new Minecraft version: `prodSmokeTest` also passes for the other versions you touch (see "Production Smoke Test" above)
+- [ ] If this PR changes Mixin config or adds a new Minecraft version: `prodSmokeTest` also passes for the other versions you touch (see "Production Smoke Test" above, and the `verification-commands` skill)
 - [ ] GameTest servers may omit custom dimensions, so a dimension-dependent test can skip in CI. Check cross-dimension behavior in a normal client or server
 
 ---
@@ -1182,9 +1183,9 @@ Architectury Loom remaps Mixin targets directly in production JARs. Its legacy
 Mixin annotation processor is disabled, so a configured refmap name would point
 to a file that is not generated.
 
-See `CLAUDE.md` → "Mixin Configuration" for full details. After changing Mixin
+See `AGENTS.md` → "Mixin Configuration" for full details. After changing Mixin
 config, run the headless `prodSmokeTest` (Fabric/NeoForge, see "Production
-Smoke Test" above). `runGameTest`/`runGameTestServer` run in Loom's
+Smoke Test" above, and the `verification-commands` skill). `runGameTest`/`runGameTestServer` run in Loom's
 dev/mapped environment and can mask production remapping or injection failures.
 
 ### Structure Waterlogging Prevention
@@ -1196,7 +1197,7 @@ dev/mapped environment and can mask production remapping or injection failures.
 2. **Structure Processor**: Records intentional waterlogging, removes all waterlogging during placement
 3. **Mixin**: Replaces Aquifer water with a placeholder before placement, then puts the water back where the template left the placeholder (structure_void) and restores intentional waterlogging
 
-**Reference**: `CLAUDE.md` → "Structure Worldgen Guidelines" → "Advanced Solution"
+**Reference**: `.claude/skills/structure-worldgen/SKILL.md` → "Advanced Solution: Complete Waterlogging Prevention System"
 
 ### Performance Optimization
 
@@ -1219,7 +1220,7 @@ dev/mapped environment and can mask production remapping or injection failures.
 ### Documentation
 
 - **Project Docs**: `docs/`
-- **Design Guidelines**: `CLAUDE.md`
+- **Design Guidelines**: `AGENTS.md` and the skills under `.claude/skills/`
 - **Historical Designs**: `docs/archive/README.md`
 
 ### External Resources

@@ -61,7 +61,7 @@ Do this:
    and packs, and the bug classes from docs/bug_prevention.md.
 3. Try to reproduce each suspicion by running something: a build, a unit
    test, a validator, a GameTest, a scenario, a small script. Follow
-   CLAUDE.md for commands, parallel-verification limits and the sandbox.
+   the verification-commands skill for commands, parallel-verification limits and the sandbox.
    Do not edit tracked files. Scratch files go under build/verification/.
 4. Report only reproduced findings. A suspicion you could not reproduce is
    dropped, not reported.

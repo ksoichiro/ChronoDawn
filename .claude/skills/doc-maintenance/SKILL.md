@@ -45,8 +45,8 @@ properties files so the checklist does not become stale.
 - `docs/modrinth_description.md`: Modrinth listing
 - `CHANGELOG.md`: released and pending user-visible changes
 - `THIRD_PARTY_LICENSES.md`: dependency licenses and versions
-- `AGENTS.md` and `CLAUDE.md`: durable agent instructions, supported targets,
-  toolchains, and workflows
+- `AGENTS.md`: durable agent instructions, supported targets, toolchains, and
+  workflows. `CLAUDE.md` imports it and holds only Claude Code specifics
 
 ## Version or dependency changes
 
@@ -61,7 +61,7 @@ properties files so the checklist does not become stale.
 4. Update `THIRD_PARTY_LICENSES.md` when a dependency or bundled component
    changes. Verify the license from an authoritative source. Do not infer that
    an optional dependency is license-compatible merely because it is popular.
-5. Update `AGENTS.md` and `CLAUDE.md` when supported targets, the default target,
+5. Update `AGENTS.md` (shared by `CLAUDE.md` through an import) when supported targets, the default target,
    Java requirements, module layout, or commands change.
 6. Do not replace historical changelog entries or old release links while
    updating current examples.

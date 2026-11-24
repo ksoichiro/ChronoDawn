@@ -131,7 +131,7 @@ After the new version builds and passes GameTest, also run
 required) to confirm the mod actually boots and creates a world under a real
 production server for that version - GameTest runs in Loom's dev/mapped
 environment and can miss production-only failures (Mixin refmap issues,
-installer/loader incompatibilities). See CLAUDE.md "Production Smoke Test".
+installer/loader incompatibilities). See the `verification-commands` skill, "Production smoke test".
 
 ---
 

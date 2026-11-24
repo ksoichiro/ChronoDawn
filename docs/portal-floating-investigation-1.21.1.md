@@ -263,3 +263,18 @@ changed. The user subsequently completed the NeoForge manual client comparison
 above and confirmed the expected pre-fix and post-fix behavior. This confirms
 the controlled registry-isolation case, while the original occurrence's history
 remains unknown.
+
+## Diagnostic run rules
+
+Diagnostic Gradle init scripts also run for included builds, so guard project
+lookups. Keep injected sources opt-in, use disposable run directories, and
+recompile without the script afterward to remove diagnostic classes. Portal
+placement probes must load destination chunks in the same order as a real
+transfer before reading heightmaps.
+Clear portal singleton state before server world loading and after the final
+save, never at the start of shutdown. Detach the old SavedData reference as well
+as clearing portal entries, and verify both fresh-world isolation and reload of
+an existing saved registry.
+If a disposable diagnostic JVM needs an explicit exit, wait for the server
+thread from another thread first. Exiting on the server thread can deadlock
+with shutdown hooks that join it.
