@@ -24,7 +24,6 @@ import net.minecraft.SharedConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.world.level.Level;
@@ -192,29 +191,27 @@ class PortalRegistryTest {
     /**
      * Builds registry NBT whose Portals list holds the given portals in the given order.
      * saveToNBT writes in ConcurrentHashMap order, so the tests below fix the order by hand
-     * to cover both outcomes of a real save.
+     * to cover both outcomes of a real save. Each portal is saved on its own and the
+     * single-entry lists are joined with Tag-level calls only, because CompoundTag getters
+     * return Optional from 1.21.5 on.
      */
     private static CompoundTag registryNbtInOrder(PortalStateMachine... portals) {
         PortalRegistry registry = PortalRegistry.getInstance();
-        registry.clear();
-        for (PortalStateMachine portal : portals) {
-            registry.registerPortal(portal);
-        }
-        CompoundTag saved = new CompoundTag();
-        registry.saveToNBT(saved);
-        ListTag byId = saved.getList("Portals", Tag.TAG_COMPOUND);
-
+        CompoundTag root = null;
         ListTag ordered = new ListTag();
-        for (PortalStateMachine wanted : portals) {
-            for (int i = 0; i < byId.size(); i++) {
-                if (byId.getCompound(i).getUUID("PortalId").equals(wanted.getPortalId())) {
-                    ordered.add(byId.getCompound(i));
-                }
+        for (PortalStateMachine portal : portals) {
+            registry.clear();
+            registry.registerPortal(portal);
+            CompoundTag single = new CompoundTag();
+            registry.saveToNBT(single);
+            ordered.add(((ListTag) single.get("Portals")).get(0));
+            if (root == null) {
+                root = single;
             }
         }
-        saved.put("Portals", ordered);
+        root.put("Portals", ordered);
         registry.clear();
-        return saved;
+        return root;
     }
 
     /**
