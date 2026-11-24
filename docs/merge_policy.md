@@ -298,8 +298,8 @@ The agent on the morning-check task:
    the morning-check task, with the pull request link, the declared and the
    computed tier, and what is wrong. The owner decides about the revert, so
    the agent changes no files, opens no pull request and reverts nothing.
-4. Comments the script's report on the morning-check task and moves the task
-   to Done.
+4. Comments the script's report on the morning-check task and stops. fuda
+   does not let an agent close its own task, so the owner finishes it.
 
 The auto start runs the task only when the project is opted in and 07:00 is
 inside its window. Otherwise the task waits in Todo for the owner to start it.
