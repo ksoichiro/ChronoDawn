@@ -72,3 +72,4 @@ because those paths are agent instructions. With the current rules only
 `.agents/skills/*/SKILL.md` is tier D (through `**/SKILL.md`). The
 `.agents/skills` symlink itself and files under a skill's `scripts/` fall to
 the default tier C, and Markdown under `references/` to tier A.
+
