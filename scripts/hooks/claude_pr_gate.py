@@ -82,32 +82,89 @@ def _matches(regexes, path):
 
 # --- Command parsing ---------------------------------------------------------
 
-_SEGMENT_SPLIT = re.compile(r"&&|\|\||[;|&\n()]")
-_ENV_ASSIGN = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*=")
-_SKIP_ASSIGN = re.compile(SKIP_VAR + r"""=(?:"([^"]*)"|'([^']*)'|(\S+))""")
+_ENV_ASSIGN = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*)=(.*)\Z", re.DOTALL)
+_WRAPPERS = ("env", "command", "exec", "time", "nohup")
+_SHELLS = ("bash", "sh", "zsh")
+# `<<` or `<<-` with an optionally quoted delimiter. A here-string (`<<<`) is not one.
+_HEREDOC = re.compile(r"(?<!<)<<(?!<)-?\s*(['\"]?)([A-Za-z_][A-Za-z0-9_]*)\1")
+_OPERATOR_CHARS = "();<>|&\n"
+# git push options that take a separate value, so the value is not a remote or refspec.
+_PUSH_OPTIONS_WITH_VALUE = ("-o", "--push-option", "--repo", "--receive-pack", "--exec")
 
 
-def _tokens(segment):
+def strip_heredocs(command):
+    """Drop heredoc bodies. They are data (a PR body, a file), not commands to gate."""
+    out, pending = [], []
+    for line in command.split("\n"):
+        if pending:
+            if line.strip() == pending[0]:
+                pending.pop(0)
+            continue
+        out.append(line)
+        pending.extend(m.group(2) for m in _HEREDOC.finditer(line))
+    return "\n".join(out)
+
+
+def _shell_tokens(text):
+    """Split like a shell: quotes group words, and operators such as `;`, `&&` or `2>&1` are their own tokens."""
+    lexer = shlex.shlex(text, posix=True, punctuation_chars=_OPERATOR_CHARS)
+    lexer.whitespace = " \t\r"
+    lexer.whitespace_split = True
     try:
-        return shlex.split(segment)
+        return list(lexer)
     except ValueError:
-        return segment.split()
+        return text.split()
 
 
-def _strip_prefix(tokens):
-    """Drop leading VAR=value assignments and wrappers such as `env` or `command`."""
-    while tokens and (_ENV_ASSIGN.match(tokens[0]) or tokens[0] in ("env", "command", "exec", "time")):
-        tokens = tokens[1:]
-    return tokens
+def _is_operator(token):
+    return bool(token) and all(c in _OPERATOR_CHARS for c in token)
+
+
+def _simple_commands(tokens):
+    """Group tokens into simple commands, dropping redirections and their targets."""
+    commands, current, i = [], [], 0
+    while i < len(tokens):
+        token = tokens[i]
+        if _is_operator(token) and ("<" in token or ">" in token):
+            # `2>&1`: drop the file descriptor number before the operator and the target after it.
+            if current and current[-1].isdigit():
+                current.pop()
+            i += 2
+            continue
+        if _is_operator(token):
+            if current:
+                commands.append(current)
+            current = []
+        else:
+            current.append(token)
+        i += 1
+    if current:
+        commands.append(current)
+    return commands
 
 
 def find_commands(command):
-    """Return [("push", git_args, git_dir) | ("pr", gh_args, None)] found in a shell command."""
+    """Return [(kind, args, git_dir, skip)] for each `git push` ("push") and `gh pr create` ("pr").
+
+    skip is the CHRONODAWN_PR_GATE_SKIP value assigned in front of that command, or None.
+    """
     found = []
-    for segment in _SEGMENT_SPLIT.split(command):
-        tokens = _strip_prefix(_tokens(segment.strip()))
+    for tokens in _simple_commands(_shell_tokens(strip_heredocs(command))):
+        skip = None
+        while tokens:
+            m = _ENV_ASSIGN.match(tokens[0])
+            if m:
+                if m.group(1) == SKIP_VAR:
+                    skip = m.group(2).strip()
+            elif tokens[0] not in _WRAPPERS:
+                break
+            tokens = tokens[1:]
+        if tokens and tokens[0] in _SHELLS and "-c" in tokens[1:-1]:
+            inner = find_commands(tokens[tokens.index("-c", 1) + 1])
+            found += [(k, a, d, s if s is not None else skip) for k, a, d, s in inner]
+            continue
         if len(tokens) >= 3 and tokens[0] == "gh" and tokens[1] == "pr" and tokens[2] == "create":
-            found.append(("pr", tokens[3:], None))
+            found.append(("pr", tokens[3:], None, skip))
             continue
         if not tokens or tokens[0] != "git":
             continue
@@ -120,15 +177,8 @@ def find_commands(command):
             else:
                 i += 1
         if i < len(tokens) and tokens[i] == "push":
-            found.append(("push", tokens[i + 1:], git_dir))
+            found.append(("push", tokens[i + 1:], git_dir, skip))
     return found
-
-
-def skip_reason(command):
-    m = _SKIP_ASSIGN.search(command)
-    if not m:
-        return None
-    return next(g for g in m.groups() if g is not None).strip()
 
 
 # --- Git ---------------------------------------------------------------------
@@ -290,7 +340,14 @@ def push_head(root, args):
     """The local revision a push sends, or None when the push sends no branch to review."""
     if any(a in ("--delete", "-d", "--tags", "--dry-run", "-n") for a in args):
         return None
-    positional = [a for a in args if not a.startswith("-")]
+    positional, i = [], 0
+    while i < len(args):
+        if args[i] in _PUSH_OPTIONS_WITH_VALUE:
+            i += 2
+            continue
+        if not args[i].startswith("-"):
+            positional.append(args[i])
+        i += 1
     current = git(root, "symbolic-ref", "--quiet", "--short", "HEAD", check=False).stdout.decode().strip()
     refspecs = positional[1:]
     if not refspecs:
@@ -313,15 +370,13 @@ def push_head(root, args):
 def evaluate(command, cwd):
     """Return the deny message for a Bash command, or None to let it run."""
     found = find_commands(command)
-    if not found:
-        return None
-    reason = skip_reason(command)
-    if reason is not None:
-        if len(reason) < 10:
-            return f"{SKIP_VAR} needs a reason of at least 10 characters that tells the owner why the gate is skipped."
-        return None
     problems = []
-    for kind, args, git_dir in found:
+    for kind, args, git_dir, skip in found:
+        if skip is not None:
+            if len(skip) < 10:
+                problems.append(
+                    f"{SKIP_VAR} needs a reason of at least 10 characters that tells the owner why the gate is skipped.")
+            continue
         where = os.path.join(cwd, git_dir) if git_dir else cwd
         top = git(where, "rev-parse", "--show-toplevel", check=False)
         if top.returncode != 0:

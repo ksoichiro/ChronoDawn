@@ -259,6 +259,43 @@ class GateTest(unittest.TestCase):
         self.change_behavior()
         self.assertIsNotNone(self.repo.evaluate("./gradlew validateAll && git push -u origin feature"))
 
+    def test_redirects_and_push_options_do_not_hide_a_push(self):
+        self.change_behavior()
+        for command in ("git push -u origin feature 2>&1", "git push -u origin feature 2>&1 | tail -5",
+                        "git push origin HEAD > /dev/null", "git push -o ci.skip origin feature",
+                        "git push --push-option ci.skip origin feature", "(cd . && git push)",
+                        "bash -c 'git push -u origin feature'"):
+            self.assertIsNotNone(self.repo.evaluate(command), command)
+
+    def test_title_with_shell_characters_keeps_the_body_file(self):
+        self.change_behavior()
+        self.add_scenario()
+        self.repo.verify()
+        self.repo.write("build/pr-body.md", BODY)
+        for title in ("feat(hooks): gate", "fix: a; b", "fix: a & b", "fix: a > b"):
+            command = f'gh pr create --title "{title}" --body-file build/pr-body.md 2>&1'
+            self.assertIsNone(self.repo.evaluate(command), title)
+
+    def test_heredoc_bodies_are_not_commands(self):
+        self.change_behavior()
+        command = "cat > build/notes.md <<'EOF'\ngh pr create --fill\ngit push\nEOF\necho done"
+        self.assertIsNone(self.repo.evaluate(command))
+
+    def test_inline_body_may_quote_the_skip_variable(self):
+        self.change_behavior()
+        self.add_scenario()
+        self.repo.verify()
+        body = BODY + 'Prefix with CHRONODAWN_PR_GATE_SKIP="<reason>" to skip.\n'
+        command = f"gh pr create --title 'feat(hooks): gate' --body \"$(cat <<'EOF'\n{body}EOF\n)\""
+        self.assertIsNone(self.repo.evaluate(command))
+
+    def test_skip_applies_only_to_its_own_command(self):
+        self.change_behavior()
+        command = "echo CHRONODAWN_PR_GATE_SKIP=abcdefghijkl; git push -u origin feature"
+        self.assertIsNotNone(self.repo.evaluate(command))
+        command = "CHRONODAWN_PR_GATE_SKIP='backup of work in progress' git status && git push"
+        self.assertIsNotNone(self.repo.evaluate(command))
+
     def test_skip_with_reason_passes(self):
         self.change_behavior()
         self.assertIsNone(self.repo.evaluate('CHRONODAWN_PR_GATE_SKIP="backup of work in progress" git push'))
