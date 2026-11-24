@@ -114,6 +114,46 @@ class GateTest(unittest.TestCase):
         self.repo.verify()
         self.assertIsNone(self.repo.evaluate("git push"))
 
+    def test_javadoc_only_change_is_not_behavioral(self):
+        self.repo.write(JAVA, "/**\n * The needle.\n */\nclass TimeCompassItem {\n"
+                              "    int angle() { return 0; } // degrees\n}\n")
+        self.repo.commit("docs: javadoc")
+        self.repo.verify()
+        self.assertIsNone(self.repo.evaluate("git push"))
+
+    def test_commenting_out_code_is_behavioral(self):
+        self.repo.write(JAVA, "class TimeCompassItem {\n/*\n    int angle() { return 0; }\n*/\n}\n")
+        self.repo.commit("refactor: drop angle")
+        self.repo.verify()
+        self.assertIn(JAVA, self.repo.evaluate("git push"))
+
+    def test_import_swap_is_behavioral(self):
+        self.repo.write(JAVA, "import a.Mth;\nclass TimeCompassItem {\n    int angle() { return 0; }\n}\n")
+        self.repo.commit("base import")
+        self.repo.git("branch", "-f", "main", "HEAD")
+        self.repo.write(JAVA, "import b.Mth;\nclass TimeCompassItem {\n    int angle() { return 0; }\n}\n")
+        self.repo.commit("refactor: other Mth")
+        self.repo.verify()
+        self.assertIn(JAVA, self.repo.evaluate("git push"))
+
+    def test_mixin_config_is_behavioral(self):
+        self.repo.write("fabric/1.21.1/src/main/resources/chronodawn-fabric.mixins.json", '{"mixins": []}\n')
+        self.repo.commit("fix: drop mixin")
+        self.repo.verify()
+        self.assertIn("mixins.json", self.repo.evaluate("git push"))
+
+    def test_exemption_does_not_cover_later_commits(self):
+        other = "common/shared/src/main/java/com/chronodawn/items/Other.java"
+        self.repo.write(other, "class Other {}\n")
+        self.repo.git("add", "-A")
+        self.repo.git("commit", "-q", "-m", "refactor: add Other\n\n"
+                      "Test-Exemption: pure rename covered by existing unit tests\n")
+        self.change_behavior()
+        self.repo.verify()
+        message = self.repo.evaluate("git push")
+        self.assertIn(JAVA, message)
+        self.assertNotIn("Other.java", message)
+
     def test_lang_and_docs_are_not_behavioral(self):
         self.repo.write("common/shared/src/main/resources/assets/chronodawn/lang/en_us.json", "{}\n")
         self.repo.write("docs/player_guide.md", "text\n")
@@ -224,6 +264,17 @@ class GateTest(unittest.TestCase):
         self.repo.write("build/pr-body.md", BODY)
         self.assertIsNone(
             self.repo.evaluate("gh pr create --base stack-base --title t --body-file build/pr-body.md"))
+        # The push before it compares with the base the skill recorded.
+        self.assertIsNotNone(self.repo.evaluate("git push -u origin stacked"))
+        (vdir / "base").write_text("stack-base\n", encoding="utf-8")
+        self.assertIsNone(self.repo.evaluate("git push -u origin stacked"))
+
+    def test_pr_create_with_body_from_cat_passes(self):
+        self.change_behavior()
+        self.add_scenario()
+        self.repo.verify()
+        self.repo.write("build/pr-body.md", BODY)
+        self.assertIsNone(self.repo.evaluate('gh pr create --title t --body "$(cat build/pr-body.md)"'))
 
     # Commands the gate leaves alone.
 

@@ -13,23 +13,27 @@ again. Do not work around the hook with another command that pushes.
 
 ## What it checks
 
-The diff is `git diff $(git merge-base origin/main HEAD) HEAD`, or the
-`--base` branch of `gh pr create`.
+The diff is `git diff $(git merge-base origin/main HEAD) HEAD`. `gh pr create
+--base <branch>` uses that branch instead, and `git push` uses the branch
+named in `build/verification/base` when the file exists.
 
 1. **A test or scenario with every behavior change.** A changed `*.java`
    file, a file under `src/main/resources/assets/` or `src/main/resources/data/`,
-   or a `*.bbmodel` needs a changed or added file under `src/test/`,
-   `src/gametest/`, `common/gametest/` or `scripts/scenario_check/scenarios/`
-   in the same branch. Not counted as behavior: lang files,
-   `package-info.java`, and Java edits whose changed lines are all comments,
-   blank lines or imports. Deleting a test does not count as a test.
+   a `*.bbmodel`, a Mixin config (`*mixins*.json`) or an `*.accesswidener`
+   needs a changed or added file under `src/test/`, `src/gametest/`,
+   `common/gametest/` or `scripts/scenario_check/scenarios/` in the same
+   branch. Not counted as behavior: lang files, `package-info.java`, Java
+   edits that change only comments or whitespace, and loader metadata
+   (`fabric.mod.json`, `META-INF/`, `pack.mcmeta`), which `prodSmokeTest`
+   checks instead. Commented-out code and changed imports count as code.
+   Deleting a test does not count as a test.
 2. **The independent verification ran on this diff.**
    `build/verification/diff.patch` must equal the branch diff, and
    `build/verification/review.md` must hold the reviewer's report (with its
    `Commands run:` list) and be newer than the patch. Any commit after the
    review makes the patch stale, so review last.
-3. **The PR body (`gh pr create` only).** The body from `--body` or
-   `--body-file` has a `## Verification` heading and a `Merge tier:` line.
+3. **The PR body (`gh pr create` only).** The body from `--body`,
+   `--body "$(cat <file>)"` or `--body-file` has a `## Verification` heading and a `Merge tier:` line.
    `--fill` and `--web` bodies do not.
 
 Pushes that send no branch for review pass: `main`, tags, `--delete`,
@@ -42,7 +46,9 @@ repositories such as `gradle/shared`.
   (`scenario-check` skill, `docs/scenario_check.md`) that runs the change.
   When an existing test or scenario already covers the change, or the change
   cannot alter what a player sees or does (a rename, a refactor proven by
-  existing tests), add a trailer to one of the branch's commits:
+  existing tests), add a trailer to the last commit that changes those files.
+  It covers only the files of that commit, and a later commit that changes
+  them again needs its own trailer:
 
   ```text
   Test-Exemption: covered by the existing time-compass-needle scenario

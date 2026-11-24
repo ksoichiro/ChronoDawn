@@ -65,15 +65,25 @@ BEHAVIOR_PATTERNS = _compile([
     "**/resources/assets/**",
     "**/resources/data/**",
     "**/*.bbmodel",
+    "**/*mixins*.json",
+    "**/*.accesswidener",
 ])
 # Never behavioral: translations change text only, which the lang validators
-# cover, and package-info.java holds annotations for tools.
+# cover, and package-info.java holds annotations for tools. Loader metadata
+# (fabric.mod.json, META-INF, pack.mcmeta) is outside BEHAVIOR_PATTERNS because
+# prodSmokeTest, not a unit test or scenario, is what checks it.
 NON_BEHAVIOR_PATTERNS = _compile([
     "**/assets/*/lang/**",
     "**/package-info.java",
 ])
 
-_JAVA_TRIVIAL_LINE = re.compile(r"^\s*(?:$|//|/\*|\*|import\s|package\s)")
+# A Java comment, or a string or char literal, which must be kept whole so that
+# `"//"` inside a string is not taken for a comment.
+_JAVA_COMMENT_OR_LITERAL = re.compile(
+    r'//[^\n]*|/\*.*?\*/|"""(?:\\.|[^\\])*?"""|"(?:\\.|[^"\\\n])*"|\'(?:\\.|[^\'\\\n])*\'',
+    re.DOTALL,
+)
+_BODY_FROM_CAT = re.compile(r"^\$\(\s*cat\s+(['\"]?)([^'\"\s()]+)\1\s*\)$")
 
 
 def _matches(regexes, path):
@@ -207,18 +217,32 @@ def changed_files(root, merge_base, head):
     return [(status[0], path) for status, path in zip(fields[0::2], fields[1::2])]
 
 
+def java_code(text):
+    """Java source with comments removed and whitespace collapsed, so only code is compared."""
+    def keep_literals(m):
+        return m.group(0) if m.group(0)[0] in "\"'" else " "
+    return " ".join(_JAVA_COMMENT_OR_LITERAL.sub(keep_literals, text).split())
+
+
 def java_change_is_trivial(root, merge_base, head, path):
-    """True when every added or removed line is blank, a comment, an import or the package line."""
-    diff = git(root, "diff", "-U0", "--no-color", merge_base, head, "--", path).stdout.decode(errors="replace")
-    for line in diff.splitlines():
-        if line.startswith(("+++", "---")) or not line.startswith(("+", "-")):
-            continue
-        if not _JAVA_TRIVIAL_LINE.match(line[1:]):
-            return False
-    return True
+    """True when only comments and whitespace differ. Imports and commented-out code count as code."""
+    def read(rev):
+        proc = git(root, "show", f"{rev}:{path}", check=False)
+        return proc.stdout.decode("utf-8", errors="replace") if proc.returncode == 0 else None
+    base, new = read(merge_base), read(head)
+    return base is not None and new is not None and java_code(base) == java_code(new)
 
 
 # --- Checks ------------------------------------------------------------------
+
+def exempted(root, merge_base, head, path):
+    """True when the last commit in the range that touched path carries a Test-Exemption trailer."""
+    values = git_text(
+        root, "log", "-1", f"--format=%(trailers:key={EXEMPTION_TRAILER},valueonly)",
+        f"{merge_base}..{head}", "--", path,
+    )
+    return any(len(v.strip()) >= MIN_REASON_LENGTH for v in values.splitlines())
+
 
 def check_tests(root, merge_base, head):
     """Check 1. Returns a problem message or None."""
@@ -236,13 +260,10 @@ def check_tests(root, merge_base, head):
         behavioral.append(path)
     if not behavioral:
         return None
-    exemptions = [
-        v.strip() for v in git_text(
-            root, "log", f"--format=%(trailers:key={EXEMPTION_TRAILER},valueonly)", f"{merge_base}..{head}"
-        ).splitlines()
-        if len(v.strip()) >= MIN_REASON_LENGTH
-    ]
-    if exemptions:
+    # An exemption covers the files of its own commit only, and only while no
+    # later commit changes them again, so it cannot excuse a later untested edit.
+    behavioral = [p for p in behavioral if not exempted(root, merge_base, head, p)]
+    if not behavioral:
         return None
     shown = "\n".join(f"  - {p}" for p in behavioral[:10])
     more = f"\n  ... and {len(behavioral) - 10} more" if len(behavioral) > 10 else ""
@@ -252,12 +273,21 @@ def check_tests(root, merge_base, head):
         f"{shown}{more}\n"
         "Add a test or scenario that runs the change (AGENTS.md, Verification Reporting). When an existing "
         "test or scenario already covers it, or the change cannot alter what a player sees or does, add a "
-        f"commit trailer `{EXEMPTION_TRAILER}: <reason>` that names the covering test or scenario or explains "
-        "why. \"Could not check in game\" is not a reason: write a scenario instead."
+        f"trailer `{EXEMPTION_TRAILER}: <reason>` to the last commit that changes these files, naming the "
+        "covering test or scenario or explaining why. \"Could not check in game\" is not a reason: write a "
+        "scenario instead."
     )
 
 
-def check_verification(root, merge_base, head):
+def recorded_base(root):
+    """The base branch the reviewer's diff was taken against (build/verification/base), or main."""
+    try:
+        return (Path(root) / VERIFICATION_DIR / "base").read_text(encoding="utf-8").strip() or "main"
+    except OSError:
+        return "main"
+
+
+def check_verification(root, merge_base, head, base_branch="main"):
     """Check 2. Returns a problem message or None."""
     vdir = Path(root) / VERIFICATION_DIR
     patch = vdir / "diff.patch"
@@ -265,7 +295,8 @@ def check_verification(root, merge_base, head):
     current = git(root, "diff", merge_base, head).stdout
     how = (
         "Run the independent-verification skill (.claude/skills/independent-verification/SKILL.md): write "
-        f"{VERIFICATION_DIR}/diff.patch, dispatch the fresh reviewer subagent, and save its report verbatim "
+        f"{VERIFICATION_DIR}/diff.patch against {base_branch} (and the base name to {VERIFICATION_DIR}/base "
+        "when it is not main), dispatch the fresh reviewer subagent, and save its report verbatim "
         f"to {VERIFICATION_DIR}/review.md. The reviewer compares vanilla-derived logic with vanilla and runs "
         "the change."
     )
@@ -300,6 +331,10 @@ def pr_body(args, cwd, command):
             value = args[i + 1]
         elif arg.startswith("--body-file="):
             value = arg.split("=", 1)[1]
+        elif arg in ("--body", "-b") and i + 1 < len(args):
+            # --body "$(cat file)": the command text holds only the file name.
+            m = _BODY_FROM_CAT.match(args[i + 1].strip())
+            value = m.group(2) if m else None
         if value and value != "-":
             path = Path(value) if os.path.isabs(value) else Path(cwd) / value
             try:
@@ -387,7 +422,7 @@ def evaluate(command, cwd):
             continue
         if kind == "push":
             head = push_head(root, args)
-            base_branch = "main"
+            base_branch = recorded_base(root)
         else:
             head = "HEAD"
             base_branch = option_value(args, "--base", "-B") or "main"
@@ -397,7 +432,7 @@ def evaluate(command, cwd):
         merge_base = git_text(root, "merge-base", base, head)
         if merge_base == git_text(root, "rev-parse", head):
             continue
-        for problem in (check_tests(root, merge_base, head), check_verification(root, merge_base, head)):
+        for problem in (check_tests(root, merge_base, head), check_verification(root, merge_base, head, base_branch)):
             if problem:
                 problems.append(problem)
         if kind == "pr":

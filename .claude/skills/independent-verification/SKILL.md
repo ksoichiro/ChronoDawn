@@ -19,6 +19,9 @@ The reviewer gets exactly three things. Nothing from this conversation.
    mkdir -p build/verification
    git diff "$(git merge-base origin/main HEAD)" HEAD > build/verification/diff.patch
    ```
+   For a pull request on another branch (a stacked PR), use `origin/<base>`
+   instead of `origin/main` and record the name for the PR gate with
+   `echo <base> > build/verification/base`. Delete that file otherwise.
 2. **Task text.** The requirement as the owner wrote it (the task body and
    any comment that changed the requirement). Copy it verbatim, do not
    summarize it and do not add how you solved it.
