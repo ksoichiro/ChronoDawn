@@ -83,6 +83,7 @@ Checked properties:
 | --- | --- |
 | `StabilizedOnlyAfterEntry` | The dimension cannot be stabilized before the player has entered it. |
 | `NoChronoDawnPortalWhileGated` | While the pre-stabilization gate is in force, Chrono Dawn has no portal blocks, even without the tick sweep. The sweep is a safety net for blocks placed by other means. |
+| `NoReturnBeforeStabilization` | With `oneWayUntilStabilized` on and `allowReignitionBeforeStabilization` off, the player cannot leave Chrono Dawn before it is stabilized, even by rebuilding or re-igniting the arrival frame. |
 | `PortalStabilizedImpliesGlobal` | A stabilized portal always comes with world-wide stabilization. |
 | `NeverInactive` | No code path leaves a registry entry `INACTIVE`. |
 | `ProgressIsPermanent` | "Entered" and "stabilized" are never lost. |
@@ -97,6 +98,7 @@ once by hand (not in CI):
 | --- | --- |
 | The gate stays on after stabilization (`Unstable == entered`) | Deadlock: the player is stuck in Chrono Dawn. |
 | Arrival no longer destroys the unstable portal | `NoChronoDawnPortalWhileGated` violated. |
+| Ignition in Chrono Dawn ignores the gate | `NoChronoDawnPortalWhileGated` violated, and `NoReturnBeforeStabilization` too when checked alone. |
 | The stabilizer also accepts an `ACTIVATED` portal | `StabilizedOnlyAfterEntry` violated. |
 | `NoForbiddenTransition` also forbids `DEACTIVATED -> ACTIVATED`, or separately `STABILIZED ->` anything else (both listed under Findings) | Violated in each case, so the code really takes both. |
 | Stabilization from an unregistered frame removed | Still passes. The registered arrival frame is enough in this model, which does not model losing that frame. |

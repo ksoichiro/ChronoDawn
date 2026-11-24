@@ -182,6 +182,13 @@ StabilizedOnlyAfterEntry == stabilized => entered
 \* refused. The sweep is a safety net for blocks placed by other means.
 NoChronoDawnPortalWhileGated == GateEnforced => ~blocks[CD]
 
+\* With one-way entry and no re-ignition before stabilization, the player
+\* cannot leave Chrono Dawn until it is stabilized. Rebuilding or re-igniting
+\* the arrival frame does not open a way out, because ignition checks the
+\* world-wide gate, not the state of the portal.
+NoReturnBeforeStabilization ==
+    (oneWay /\ ~allowReignition /\ entered /\ ~stabilized) => playerDim = CD
+
 \* A portal that the player has stabilized implies global stabilization.
 PortalStabilizedImpliesGlobal ==
     \A d \in Dims : state[d] = "Stabilized" => stabilized
