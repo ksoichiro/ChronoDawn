@@ -10,19 +10,20 @@ import java.util.UUID;
 /**
  * Portal State Machine - Manages portal state transitions.
  *
- * This class handles all state transitions for ChronoDawn portals and enforces
- * the rules for valid state changes.
+ * The transition methods enforce their individual preconditions. Direct state
+ * assignment is also used for loading and restoring an existing portal.
  *
- * State Transition Rules:
- * - INACTIVE → ACTIVATED: Requires Time Hourglass ignition
- * - ACTIVATED → DEACTIVATED: Automatic when player enters portal
- * - DEACTIVATED → STABILIZED: Requires Portal Stabilizer
- * - STABILIZED → STABILIZED: Permanent state (unless portal is destroyed)
+ * Typical transitions for an entry:
+ * - INACTIVE → ACTIVATED: ignition or frame restoration
+ * - ACTIVATED → DEACTIVATED: unstable arrival in Chrono Dawn
+ * - DEACTIVATED → ACTIVATED: restoration of an existing destination frame
+ * - DEACTIVATED → STABILIZED: use of a Portal Stabilizer
  *
- * Invalid Transitions:
- * - Cannot go from ACTIVATED directly to STABILIZED (must deactivate first)
- * - Cannot go from STABILIZED back to any other state
- * - Cannot go from DEACTIVATED to ACTIVATED (must stabilize or rebuild)
+ * Igniting an empty frame registers a new ACTIVATED entry even when a
+ * STABILIZED entry already exists at that position. The position index then
+ * initially points to the new entry, while the old entry remains in the registry and
+ * saved data. This is replacement, not a transition of the old entry.
+ * Portal blocks and registry state can diverge when a frame is broken.
  *
  * Reference: data-model.md (Portal System → Portal States)
  * Task: T046 [US1] Implement portal state machine
@@ -116,7 +117,7 @@ public class PortalStateMachine {
     }
 
     /**
-     * Set portal state directly (for loading from data).
+     * Set portal state directly for loading or restoring an existing frame.
      *
      * @param state State to set
      */

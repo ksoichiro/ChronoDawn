@@ -264,13 +264,6 @@ public class PortalTeleportHandler {
             destLevel.getRandom().nextFloat() * 0.4F + 0.8F
         );
 
-        // Update portal state (ACTIVATED → DEACTIVATED)
-        PortalStateMachine sourcePortal = PortalRegistry.getInstance().getPortalAt(sourceLevel.dimension(), sourcePortalPos);
-        if (com.chronodawn.config.ChronoDawnConfig.get().gameplay().portals().oneWayUntilStabilized()
-            && sourcePortal != null && sourcePortal.getCurrentState() == PortalState.ACTIVATED) {
-            sourcePortal.deactivate();
-        }
-
         // Mark ChronoDawn entered (if entering ChronoDawn for first time)
         boolean portalWasDestroyed = false;
         if (destDimensionKey.equals(ModDimensions.CHRONO_DAWN_DIMENSION)) {
@@ -751,7 +744,7 @@ public class PortalTeleportHandler {
         } else if (portal.getCurrentState() == PortalState.DEACTIVATED) {
             // Reigniting the same physical frame after an unstable entry is intentional:
             // the first ChronoDawn arrival removes portal blocks but keeps the frame and registry entry.
-            // Treat this as restoring that existing portal, not as a normal player-triggered state transition.
+            // Restore the existing entry from DEACTIVATED to ACTIVATED.
             portal.setState(PortalState.ACTIVATED);
             PortalRegistry.getInstance().markDirtyForPortal(portal.getPortalId());
             justOpened = true;

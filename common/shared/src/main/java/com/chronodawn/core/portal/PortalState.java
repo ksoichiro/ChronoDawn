@@ -3,17 +3,15 @@ package com.chronodawn.core.portal;
 /**
  * Portal State - Represents the state of a ChronoDawn portal.
  *
- * Portal State Transitions:
- * 1. INACTIVE → ACTIVATED (ignite with Time Hourglass)
- * 2. ACTIVATED → DEACTIVATED (player enters portal to ChronoDawn)
- * 3. DEACTIVATED → STABILIZED (use Portal Stabilizer)
- * 4. STABILIZED → STABILIZED (remains stable, bidirectional travel)
+ * Typical transitions for a registry entry:
+ * - INACTIVE → ACTIVATED on ignition or frame restoration
+ * - ACTIVATED → DEACTIVATED at an unstable Chrono Dawn arrival
+ * - DEACTIVATED → ACTIVATED when an existing destination frame is restored
+ * - DEACTIVATED → STABILIZED using a Portal Stabilizer
  *
- * State Properties:
- * - INACTIVE: Frame exists, no portal blocks, cannot travel
- * - ACTIVATED: Portal blocks present, one-way travel to ChronoDawn
- * - DEACTIVATED: Portal blocks removed, cannot travel (after first use)
- * - STABILIZED: Portal blocks present, bidirectional travel enabled
+ * Igniting an empty frame creates a new ACTIVATED entry, replacing the position
+ * index immediately even for a STABILIZED portal. The old entry remains in the registry and
+ * saved data. Registry state does not guarantee that portal blocks are present.
  *
  * Reference: data-model.md (Portal System → Portal States)
  * Task: T046 [US1] Portal State Machine
@@ -26,23 +24,22 @@ public enum PortalState {
     INACTIVE,
 
     /**
-     * Portal is activated and ready for one-way travel to ChronoDawn.
-     * Portal blocks present, player can enter to travel to ChronoDawn.
-     * Automatically deactivates after player entry.
+     * Portal is activated. Portal blocks normally allow travel when present.
+     * Under one-way entry, the unstable arrival portal is deactivated and its
+     * blocks are removed. The source portal remains activated.
      */
     ACTIVATED,
 
     /**
-     * Portal has been used and is now deactivated.
-     * Portal blocks removed, no travel possible.
+     * An unstable arrival portal has been deactivated and its blocks removed.
      * Can be stabilized using Portal Stabilizer.
      */
     DEACTIVATED,
 
     /**
      * Portal is stabilized and allows bidirectional travel.
-     * Portal blocks present, travel works in both directions.
-     * Remains in this state permanently unless destroyed.
+     * Portal blocks normally allow travel in both directions when present.
+     * A new ignition at the same position can replace its position index.
      */
     STABILIZED;
 

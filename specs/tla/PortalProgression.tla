@@ -2,9 +2,8 @@
 (***************************************************************************)
 (* Model of the Chrono Dawn portal progression, checked with TLC.          *)
 (*                                                                         *)
-(* It describes what the code does, not what the Javadoc of                *)
-(* PortalStateMachine says. The model has no Minecraft types. It follows   *)
-(* these classes, which share the same logic in every Minecraft version:   *)
+(* It describes what the code does. The model has no Minecraft types. It  *)
+(* follows these classes, which share the same logic in every version:    *)
 (*                                                                         *)
 (*   PortalIgnitionHandler.tryIgnite         -> Ignite                     *)
 (*   PortalStabilizationHandler              -> StabilizeRegistered,       *)
@@ -109,10 +108,7 @@ Restored(s) == IF s \in {"None", "Inactive", "Deactivated"} THEN "Activated" ELS
 
 \* The player walks through the portal blocks of the frame they stand at.
 \* 1. Destination: reuse its portal blocks, or restore the frame.
-\* 2. Source: nothing changes. The code means to deactivate an Activated
-\*    source under one-way entry, but it looks the source up by the portal
-\*    block position, while the registry is keyed by the frame's bottom-left
-\*    corner, so the lookup finds nothing (docs/formal_verification.md).
+\* 2. Source: its state and blocks remain unchanged.
 \* 3. Arrival in Chrono Dawn marks it entered. While portals are unstable
 \*    under one-way entry, the arrival portal is deactivated and destroyed
 \*    (PortalArrivalHelper, destroyUnstablePortal). PlayerEventHandler then
@@ -205,10 +201,9 @@ ProgressIsPermanent ==
     [][/\ entered => entered'
        /\ stabilized => stabilized']_vars
 
-\* Transitions of the registry state that no step takes. The Javadoc of
-\* PortalStateMachine lists more forbidden transitions, but restoration takes
-\* Deactivated -> Activated, and re-igniting a broken stabilized frame takes
-\* Stabilized -> Activated. docs/formal_verification.md lists both.
+\* Transitions of the position-indexed registry state that no step takes.
+\* Restoration allows Deactivated -> Activated, and ignition replaces the
+\* entry at a broken stabilized frame with a new Activated entry.
 NoForbiddenTransition ==
     [][\A d \in Dims :
          /\ ~(state[d] = "Activated" /\ state'[d] = "Stabilized")
