@@ -141,7 +141,7 @@ git submodule update --init
 ```
 
 Patterns (`<version>` is `1.21.1` in `-Ptarget_mc_version`, `1_21_1` in task
-names; the Claude Code skill `verification-commands` lists every option):
+names; the `verification-commands` skill lists every option):
 
 ```bash
 ./gradlew build<version>                  # e.g. build26_3, build1_21_1, build1_20_1
