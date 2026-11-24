@@ -47,8 +47,18 @@ public final class TimeCompassNeedle {
 
     private static float towards(Entity holder, BlockPos target) {
         Vec3 pos = holder.position();
-        double toTarget = Math.atan2(target.getZ() + 0.5 - pos.z, target.getX() + 0.5 - pos.x) / (Math.PI * 2.0);
-        double yaw = Mth.positiveModulo(holder.getYRot() / 360.0, 1.0);
+        return needleAngle(target.getX() + 0.5 - pos.x, target.getZ() + 0.5 - pos.z, holder.getYRot());
+    }
+
+    /**
+     * @param dx target X minus holder X
+     * @param dz target Z minus holder Z
+     * @param yawDegrees holder yaw in degrees (0 faces south, 90 faces west)
+     * @return needle angle in [0, 1): 0 ahead, 0.25 to the right, 0.5 behind, 0.75 to the left
+     */
+    static float needleAngle(double dx, double dz, float yawDegrees) {
+        double toTarget = Math.atan2(dz, dx) / (Math.PI * 2.0);
+        double yaw = Mth.positiveModulo(yawDegrees / 360.0, 1.0);
         // The 0.25 turn is vanilla's: atan2 measures from east while the model starts at north.
         return (float) Mth.positiveModulo(0.5 - (yaw - 0.25 - toTarget), 1.0);
     }
@@ -57,12 +67,21 @@ public final class TimeCompassNeedle {
         // Advance once per game tick, not per rendered frame, so the needle does not blur.
         if (gameTime != wobbleTick) {
             wobbleTick = gameTime;
-            double diff = Math.random() - wobbleRotation;
-            diff = Mth.positiveModulo(diff + 0.5, 1.0) - 0.5;
-            wobbleDelta += diff * 0.1;
-            wobbleDelta *= 0.8;
-            wobbleRotation = Mth.positiveModulo(wobbleRotation + wobbleDelta, 1.0);
+            double[] next = wobbleStep(wobbleRotation, wobbleDelta, Math.random());
+            wobbleRotation = next[0];
+            wobbleDelta = next[1];
         }
         return (float) wobbleRotation;
+    }
+
+    /**
+     * One game tick of vanilla's compass wobble.
+     *
+     * @return {new rotation, new delta}
+     */
+    static double[] wobbleStep(double rotation, double delta, double random) {
+        double diff = Mth.positiveModulo(random - rotation + 0.5, 1.0) - 0.5;
+        double newDelta = (delta + diff * 0.1) * 0.8;
+        return new double[] {Mth.positiveModulo(rotation + newDelta, 1.0), newDelta};
     }
 }
