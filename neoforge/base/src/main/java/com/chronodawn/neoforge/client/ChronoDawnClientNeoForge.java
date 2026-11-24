@@ -12,7 +12,6 @@ import com.chronodawn.client.model.*;
 import com.chronodawn.client.renderer.*;
 import com.chronodawn.entities.boats.ChronoDawnBoatType;
 import com.chronodawn.client.renderer.mobs.*;
-import com.chronodawn.items.TimeCompassItem;
 import com.chronodawn.client.particle.ChronoDawnPortalParticle;
 import com.chronodawn.client.particle.ChronoShieldEchoParticle;
 import com.chronodawn.client.particle.TimeLeafParticle;
@@ -24,12 +23,8 @@ import com.chronodawn.registry.ModItems;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.particle.FlameParticle;
 import net.minecraft.client.renderer.blockentity.ChestRenderer;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.GlobalPos;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -44,7 +39,6 @@ import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsE
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 import com.chronodawn.neoforge.registry.ModFluidTypes;
 
-import java.util.Optional;
 
 /**
  * NeoForge client-side initialization for ChronoDawn mod.
@@ -727,30 +721,7 @@ public class ChronoDawnClientNeoForge {
         net.minecraft.client.renderer.item.ItemProperties.register(
             ModItems.TIME_COMPASS.get(),
             ResourceLocation.fromNamespaceAndPath("minecraft", "angle"),
-            (stack, level, entity, seed) -> {
-                // Get target position from compass NBT
-                Optional<GlobalPos> targetPos = TimeCompassItem.getTargetPosition(stack);
-                if (targetPos.isEmpty() || level == null) {
-                    // No target or no level - return random angle
-                    return (float) Math.random();
-                }
-
-                GlobalPos target = targetPos.get();
-
-                // Check if we're in the correct dimension
-                if (!level.dimension().equals(target.dimension())) {
-                    // Wrong dimension - spin randomly
-                    return (float) Math.random();
-                }
-
-                // Calculate angle to target
-                Entity holder = entity != null ? entity : null;
-                if (holder == null) {
-                    return 0.0f;
-                }
-
-                return calculateCompassAngle(holder, target.pos());
-            }
+            (stack, level, entity, seed) -> com.chronodawn.client.TimeCompassNeedle.angle(stack, level, entity)
         );
     }
 
@@ -770,36 +741,6 @@ public class ChronoDawnClientNeoForge {
              int seed) ->
                 entity != null && entity.isUsingItem() && entity.getUseItem() == stack ? 1.0F : 0.0F
         );
-    }
-
-    /**
-     * Calculate the compass needle angle towards a target position.
-     * Returns a value between 0.0 and 1.0, where 0.0 is north.
-     *
-     * @param entity Entity holding the compass
-     * @param targetPos Target block position
-     * @return Compass angle (0.0 to 1.0)
-     */
-    private static float calculateCompassAngle(Entity entity, BlockPos targetPos) {
-        // Get entity position
-        Vec3 entityPos = entity.position();
-
-        // Calculate direction vector to target
-        double dx = targetPos.getX() + 0.5 - entityPos.x;
-        double dz = targetPos.getZ() + 0.5 - entityPos.z;
-
-        // Calculate angle in radians
-        double angleRadians = Math.atan2(dz, dx);
-
-        // Get entity's yaw (body rotation)
-        float yaw = entity.getYRot();
-
-        // Convert to compass angle (0.0 = north, clockwise)
-        // atan2 returns angle from east axis, so we need to adjust
-        double compassAngle = (angleRadians - Math.toRadians(yaw) + Math.PI) / (Math.PI * 2.0);
-
-        // Normalize to 0.0-1.0 range
-        return (float) Mth.positiveModulo(compassAngle, 1.0);
     }
 
     /**
