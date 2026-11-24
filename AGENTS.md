@@ -270,9 +270,12 @@ Before a PR:
 - When you keep or copy a formula that mirrors vanilla, compare it with the
   vanilla equivalent of each affected Minecraft version first. Check signs,
   offsets, units and per-tick rates, not only that it compiles.
-- Before writing "not verified in game" in a PR, check whether `scenarioCheck`
-  can cover it. List as manual checks only what a scenario cannot cover, with
-  the reason.
+- When a change needs an in-game check, do not wait for the owner and do not
+  write "not verified in game" in a PR first. Add or extend a scenario
+  (`docs/scenario_check.md`), run it on both 1.21.1 loaders (and both 26.3
+  loaders when 26.3 is affected), and attach `sheet.png` to the PR or task.
+  List as manual checks only what a scenario cannot cover, with the reason,
+  and continue.
 
 Classify the diff with `python3 scripts/merge_tier/classify.py` and
 put a `Merge tier:` line in the PR body (`docs/merge_policy.md`). The `Merge tier`

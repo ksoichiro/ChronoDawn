@@ -22,7 +22,7 @@ Read the matching skill before the work:
 ## Before a PR
 
 - Run the `independent-verification` skill and put its Verification section with a `Merge tier:` line in the PR body.
-- When a change needs an in-game check, do not wait for the owner. Add or extend a scenario (`docs/scenario_check.md`), run it on both 1.21.1 loaders (and both 26.3 loaders when 26.3 is affected), and attach `sheet.png` to the PR or task. List only what a scenario cannot cover as manual checks and continue.
+- Follow the test, vanilla-comparison and scenario rules under "Verification Reporting" in `AGENTS.md`.
 - A new bug class goes into `docs/bug_prevention.md` first. When a Minecraft rename breaks a version that CI does not build, add a rule to `scripts/era_symbol_rules.json` in the same change.
 
 ## Workflow

@@ -127,8 +127,11 @@ Independent reviewer (fresh subagent, same model, diff + task + tier only):
 Reproduced findings:
 1. <finding>. Fixed in <commit>, `<command>` passes now.
 2. <finding>. Not fixed: <reason>.
+
+Manual checks (not coverable by a unit test or scenario):
+- <check>: <why a scenario cannot cover it>
 ```
 
 Write "No reproduced findings." when the list is empty, and keep the command
-list. A tier A pull request may be auto-merged only with this section present
+list. Omit "Manual checks" when there are none. A tier A pull request may be auto-merged only with this section present
 and no open finding (see "Auto-merge" in `docs/merge_policy.md`).
