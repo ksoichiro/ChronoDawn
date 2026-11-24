@@ -27,29 +27,82 @@ env:
   ORG_GRADLE_PROJECT_min_free_disk_gb: 0
 
 jobs:
+  # Decides whether the diff changes only documentation (the tier A docs rule
+  # in scripts/merge_tier/rules.json). The jobs below always run, so that every
+  # required check on main reports, and skip their steps for docs-only diffs.
+  # A job-level `if:` would not work: a skipped matrix job reports one check
+  # named with the unexpanded `${{ matrix.mc }}`, and the required
+  # `(1.21.1)` and `(26.3)` checks would go missing and block the merge.
+  changes:
+    name: Detect docs-only changes
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      docs_only: ${{ steps.detect.outputs.docs_only }}
+    steps:
+      # The full history is needed to find the merge base.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - id: detect
+        env:
+          EVENT: ${{ github.event_name }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PUSH_BEFORE: ${{ github.event.before }}
+          PUSH_SHA: ${{ github.sha }}
+        # A pull request runs the base branch's script and rules, so it cannot
+        # skip its own build by editing them (as in merge-tier.yml). Manual
+        # runs, new branches and any error run every job.
+        run: |
+          script=scripts/merge_tier/docs_only.py
+          case "$EVENT" in
+            pull_request)
+              base=$PR_BASE_SHA head=$PR_HEAD_SHA
+              if git cat-file -e "$base:$script" 2>/dev/null; then
+                mkdir -p "$RUNNER_TEMP/base"
+                git archive "$base" scripts/merge_tier | tar -x -C "$RUNNER_TEMP/base"
+                script="$RUNNER_TEMP/base/$script"
+              fi
+              ;;
+            push) base=$PUSH_BEFORE head=$PUSH_SHA ;;
+            *) base= head= ;;
+          esac
+          if [ -z "$base" ] || [ "$base" = 0000000000000000000000000000000000000000 ] ||
+             ! python3 "$script" --repo "$GITHUB_WORKSPACE" --base "$base" --head "$head" \
+               --output "$GITHUB_OUTPUT" --summary "$GITHUB_STEP_SUMMARY"; then
+            echo "docs_only=false" >> "$GITHUB_OUTPUT"
+            echo "Could not compare with the base, so every job runs." >> "$GITHUB_STEP_SUMMARY"
+          fi
+
   validate:
     name: Validate resources and data
+    needs: changes
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - if: needs.changes.outputs.docs_only != 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           submodules: recursive
-      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+      - if: needs.changes.outputs.docs_only != 'true'
+        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
         with:
           distribution: temurin
           java-version: '25'
       # setup-gradle saves its cache only on main, and pull requests read it.
-      - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+      - if: needs.changes.outputs.docs_only != 'true'
+        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
       # Only English is required here. Missing translations in other
       # locales are reported as warnings, and checkAll keeps them required.
       # validation_only skips the version subprojects, so Loom does not set
       # up Minecraft for checks that only read files.
-      - run: ./gradlew validateAll -Plang_required_locales=en_us -Pvalidation_only=true
+      - if: needs.changes.outputs.docs_only != 'true'
+        run: ./gradlew validateAll -Plang_required_locales=en_us -Pvalidation_only=true
 
   build:
     name: Build and unit test (${{ matrix.mc }})
-    needs: validate
+    needs: [changes, validate]
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     strategy:
@@ -58,17 +111,21 @@ jobs:
         # 1.21.1 carries most players and modpacks, 26.3 is the default target.
         mc: ['1.21.1', '26.3']
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - if: needs.changes.outputs.docs_only != 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           submodules: recursive
-      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+      - if: needs.changes.outputs.docs_only != 'true'
+        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
         with:
           distribution: temurin
           java-version: |
             21
             25
-      - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
-      - run: ./gradlew build -Ptarget_mc_version=${{ matrix.mc }}
+      - if: needs.changes.outputs.docs_only != 'true'
+        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+      - if: needs.changes.outputs.docs_only != 'true'
+        run: ./gradlew build -Ptarget_mc_version=${{ matrix.mc }}
 
   # Boots a real installer-provisioned dedicated server for each loader, so
   # Mixin remapping and injection problems that Loom's dev environment hides
@@ -82,7 +139,7 @@ jobs:
   # Do not upload the server JAR, mappings or world data as artifacts.
   prod-smoke:
     name: Production smoke test (${{ matrix.mc }})
-    needs: validate
+    needs: [changes, validate]
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     strategy:
@@ -90,10 +147,12 @@ jobs:
       matrix:
         mc: ['1.21.1', '26.3']
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - if: needs.changes.outputs.docs_only != 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           submodules: recursive
-      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+      - if: needs.changes.outputs.docs_only != 'true'
+        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
         with:
           distribution: temurin
           java-version: |
@@ -102,11 +161,14 @@ jobs:
       # Read only: the build job already saves the Gradle home per commit.
       # Saving it from every job added about 400 MB per job and push, and
       # pushed the repository past the 10 GB Actions cache limit.
-      - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+      - if: needs.changes.outputs.docs_only != 'true'
+        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
         with:
           cache-read-only: true
-      - run: ./gradlew :fabric:prodSmokeTest -Ptarget_mc_version=${{ matrix.mc }}
-      - run: ./gradlew :neoforge:prodSmokeTest -Ptarget_mc_version=${{ matrix.mc }}
+      - if: needs.changes.outputs.docs_only != 'true'
+        run: ./gradlew :fabric:prodSmokeTest -Ptarget_mc_version=${{ matrix.mc }}
+      - if: needs.changes.outputs.docs_only != 'true'
+        run: ./gradlew :neoforge:prodSmokeTest -Ptarget_mc_version=${{ matrix.mc }}
       # The Gradle output names the log file but does not include it. Print the
       # tail of each server log (text only, never uploaded) to find the cause.
       - if: failure()
@@ -121,7 +183,7 @@ jobs:
   # can skip here. A green run is not a cross-dimension verification.
   gametest:
     name: GameTest (${{ matrix.mc }})
-    needs: validate
+    needs: [changes, validate]
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     strategy:
@@ -129,19 +191,24 @@ jobs:
       matrix:
         mc: ['1.21.1', '26.3']
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - if: needs.changes.outputs.docs_only != 'true'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           submodules: recursive
-      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+      - if: needs.changes.outputs.docs_only != 'true'
+        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
         with:
           distribution: temurin
           java-version: |
             21
             25
       # Read only, see the prod-smoke job.
-      - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+      - if: needs.changes.outputs.docs_only != 'true'
+        uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
         with:
           cache-read-only: true
       # One loader per invocation, see the prod-smoke job for why.
-      - run: ./gradlew :fabric:runGameTest -Ptarget_mc_version=${{ matrix.mc }}
-      - run: ./gradlew :neoforge:runGameTestServer -Ptarget_mc_version=${{ matrix.mc }}
+      - if: needs.changes.outputs.docs_only != 'true'
+        run: ./gradlew :fabric:runGameTest -Ptarget_mc_version=${{ matrix.mc }}
+      - if: needs.changes.outputs.docs_only != 'true'
+        run: ./gradlew :neoforge:runGameTestServer -Ptarget_mc_version=${{ matrix.mc }}

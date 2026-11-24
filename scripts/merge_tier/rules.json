@@ -1,5 +1,5 @@
 {
-  "_comment": "File rules for scripts/merge_tier/classify.py. The first rule whose pattern matches a changed path decides its tier. docs/merge_policy.md renders this list between its merge-tier-rules markers, so edit this file and run `python3 scripts/merge_tier/classify.py --write-doc`. Patterns: `**` matches any number of directories, `*` and `?` stay inside one path segment.",
+  "_comment": "File rules for scripts/merge_tier/classify.py. The first rule whose pattern matches a changed path decides its tier. docs/merge_policy.md renders this list between its merge-tier-rules markers, so edit this file and run `python3 scripts/merge_tier/classify.py --write-doc`. A rule with `ci_docs_only` also lists the paths whose changes skip the CI build and test steps (docs_only.py). Patterns: `**` matches any number of directories, `*` and `?` stay inside one path segment.",
   "default": {
     "tier": "C",
     "note": "Any path no rule names. When in doubt, use the higher tier"
@@ -133,7 +133,8 @@
     {
       "tier": "A",
       "note": "Docs, changelog and other Markdown",
-      "patterns": ["docs/**", "**/*.md", "LICENSE", ".gitignore"]
+      "patterns": ["docs/**", "**/*.md", "LICENSE", ".gitignore"],
+      "ci_docs_only": true
     },
     {
       "tier": "A",
