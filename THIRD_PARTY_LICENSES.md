@@ -83,6 +83,14 @@ This document lists all third-party dependencies used in Chrono Dawn and their r
 - **License**: Eclipse Public License 2.0
 - **URL**: https://github.com/junit-team/junit5
 
+#### TLA+ Tools
+- **Project**: TLA+ Tools (`tla2tools.jar`, TLC model checker)
+- **Version**: 1.7.4
+- **Organization**: TLA+ Foundation (originally Microsoft Research)
+- **License**: MIT License
+- **URL**: https://github.com/tlaplus/tlaplus
+- **Usage**: Build-time verification of `specs/tla/` only. Not bundled into the mod JARs
+
 ## License Summaries
 
 ### Apache License 2.0
@@ -103,7 +111,7 @@ Similar to LGPL-2.1 but with updated terms for modern software development. Allo
 ### MIT License
 Very permissive license allowing nearly unrestricted use, modification, and distribution. Only requires preservation of copyright and license notices.
 
-**Used by**: Architectury Loom, Architectury Plugin
+**Used by**: Architectury Loom, Architectury Plugin, TLA+ Tools
 
 ### Eclipse Public License 2.0
 Weak copyleft license that requires source code availability for modifications but allows linking with code under other licenses.

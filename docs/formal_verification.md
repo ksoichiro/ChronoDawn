@@ -1,0 +1,119 @@
+# Formal Verification
+
+Some features of Chrono Dawn have many states and combinations, and a unit test
+covers only the cases someone thought of. For those features the project keeps a
+small model that is independent of Minecraft and lets a model checker visit
+every reachable state. This is a trial. It covers one feature now and grows only
+where it pays off.
+
+## Running
+
+```bash
+./gradlew verifyFormalModels -Pvalidation_only=true
+```
+
+- Each `specs/tla/<Name>.cfg` is checked against `specs/tla/<Name>.tla` by a
+  `verifyTla<Name>` task, and `verifyFormalModels` runs them all.
+- The task fails when TLC reports a parse error, a violated invariant or
+  property, or a deadlock. The counterexample trace is printed in the Gradle
+  output.
+- CI runs it in the `validate` job after `validateAll`. `checkAll` depends on it.
+- It is not part of `validateAll`, so the pre-commit hook does not run it.
+- The first run downloads `tla2tools.jar` (2.2 MB) from the TLA+ GitHub release
+  into the Gradle cache. Inside a network sandbox, allow `github.com` and
+  `release-assets.githubusercontent.com` for that run.
+- TLC runs on the JVM that runs Gradle (JDK 21 or 25 here). TLC itself needs
+  Java 11 or newer, and the model was also checked on JDK 17.
+
+## Tool Choice
+
+| Tool | Pros | Cons |
+| --- | --- | --- |
+| TLA+ with TLC | Visits every reachable state, including interleavings. Checks invariants, step properties and liveness ("the player can always get back"). One MIT-licensed JAR, no install. Deterministic with one worker. | A separate language to learn and review. The model is written by hand and can drift from the Java code. Not on Maven Central. |
+| Alloy 6 | One JAR. Good at structural constraints, such as relations between registries and tags. Has temporal operators since version 6. | Checks only up to a bound on the number of steps and objects. Liveness and fairness are less direct than in TLA+. Fewer examples for state machines. |
+| jqwik (property-based testing) | Runs as JUnit 5 tests on real Java code, so it cannot drift from it. Familiar to Java developers. | Samples random inputs, so it is not exhaustive and a failure may show only on some runs. The portal code imports Minecraft types, so the logic would have to be extracted first. No liveness. EPL-2.0. |
+| Hand-written state explorer in JUnit | No new dependency. | Every property and the search itself are custom code, which is what a model checker already provides. |
+
+TLA+ with TLC was chosen. The first target is a state machine whose risky
+properties span several steps and several config options, which exhaustive
+search covers and random sampling does not. A full search also gives the same
+result on every run, so a violation can fail CI without flakes. Drift from the
+code is the main cost. Each model lists the classes it follows, and a change to
+those classes should update the model in the same commit.
+
+`tla2tools.jar` 1.7.4 (MIT) is pinned with a SHA-256 in
+`gradle/formal-verification.gradle`. 1.7.4 is the latest release that is not
+marked as a pre-release.
+
+## Models
+
+### Portal progression (`specs/tla/PortalProgression.tla`)
+
+Follows `PortalIgnitionHandler`, `PortalStabilizationHandler`,
+`PortalTeleportHandler`, `PlayerEventHandler`, the portal sweep in
+`BlockEventHandler`, `ChronoDawnGlobalState` and `PortalSettings`. The logic is
+the same in every supported Minecraft version.
+
+The model has one player and one portal frame per dimension. For each frame it
+tracks the registry state (`None` when there is no registry entry) and whether
+portal blocks fill it. Both config options, `oneWayUntilStabilized` and
+`allowReignitionBeforeStabilization`, are chosen in the initial state, so one
+run covers all four combinations. The full search visits 84 distinct states and
+finishes in about a second.
+
+Checked properties:
+
+| Property | Meaning |
+| --- | --- |
+| `StabilizedOnlyAfterEntry` | The dimension cannot be stabilized before the player has entered it. |
+| `NoChronoDawnPortalWhileGated` | While the pre-stabilization gate is in force, Chrono Dawn has no portal blocks, even without the tick sweep. The sweep is a safety net for blocks placed by other means. |
+| `PortalStabilizedImpliesGlobal` | A stabilized portal always comes with world-wide stabilization. |
+| `NeverInactive` | No code path leaves a registry entry `INACTIVE`. |
+| `ProgressIsPermanent` | "Entered" and "stabilized" are never lost. |
+| `NoForbiddenTransition` | No portal goes from `ACTIVATED` or `INACTIVE` to `STABILIZED`, and no registry entry disappears. |
+| `CanAlwaysReturn` | A player in Chrono Dawn who keeps trying (strong fairness on ignition, travel and stabilization) always gets back to the Overworld, with every config combination. |
+| Deadlock check (TLC default) | Some action is always possible. Breaking this means the player is stuck. |
+
+To see that the properties can fail, these changes to the model were checked
+once by hand (not in CI):
+
+| Change | Result |
+| --- | --- |
+| The gate stays on after stabilization (`Unstable == entered`) | Deadlock: the player is stuck in Chrono Dawn. |
+| Arrival no longer destroys the unstable portal | `NoChronoDawnPortalWhileGated` violated. |
+| The stabilizer also accepts an `ACTIVATED` portal | `StabilizedOnlyAfterEntry` violated. |
+| `NoForbiddenTransition` also forbids the two transitions listed under Findings | Violated, so the code really takes them. |
+| Stabilization from an unregistered frame removed | Still passes. The registered arrival frame is enough in this model, which does not model losing that frame. |
+
+### Findings
+
+The model follows the code, which differs from the Javadoc of
+`PortalStateMachine` and `PortalState`:
+
+- `DEACTIVATED -> ACTIVATED` happens. When travel restores a destination frame,
+  `PortalTeleportHandler` sets a deactivated entry back to `ACTIVATED` with
+  `setState`. The Javadoc lists this transition as forbidden.
+- `STABILIZED -> ACTIVATED` happens. Igniting an empty frame always registers a
+  new portal, which replaces the registry position entry, even when the old
+  entry was stabilized and its portal blocks were broken. The old entry stays in
+  the registry map and is saved. The world-wide stabilization flag does not
+  change, so travel is not affected.
+- A `DEACTIVATED` source portal keeps its portal blocks. Only the arrival
+  portal in Chrono Dawn is destroyed. `PortalState.hasPortalBlocks()` says a
+  deactivated portal has none.
+
+Whether to change the code or the Javadoc is a separate decision. The model
+records the current behavior so that a change to it is deliberate.
+
+## Adding a Model
+
+1. Pick behavior with many states or config combinations whose failure is
+   expensive to find in game, such as progression gates or persistence.
+2. Write `specs/tla/<Name>.tla` without Minecraft types. List the classes it
+   follows in the header comment.
+3. Write `specs/tla/<Name>.cfg` with `SPECIFICATION`, `INVARIANTS` and
+   `PROPERTIES`. Keep the state space small enough that CI finishes in seconds.
+4. Break the model on purpose once to check that each property can fail, and
+   record the result in this document.
+5. Run `./gradlew verifyFormalModels -Pvalidation_only=true` and add the model
+   to the list above.

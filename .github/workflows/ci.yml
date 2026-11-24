@@ -46,6 +46,10 @@ jobs:
       # validation_only skips the version subprojects, so Loom does not set
       # up Minecraft for checks that only read files.
       - run: ./gradlew validateAll -Plang_required_locales=en_us -Pvalidation_only=true
+      # TLA+ model checking (docs/formal_verification.md). TLC explores the
+      # whole state space with one worker, so the result does not vary between
+      # runs. Kept out of validateAll, which is also the pre-commit hook.
+      - run: ./gradlew verifyFormalModels -Pvalidation_only=true
 
   build:
     name: Build and unit test (${{ matrix.mc }})

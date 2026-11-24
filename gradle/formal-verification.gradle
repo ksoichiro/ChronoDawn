@@ -1,0 +1,109 @@
+// Formal verification of Minecraft-independent models with the TLA+ model
+// checker TLC.
+//
+// Every specs/tla/<Name>.cfg is checked against specs/tla/<Name>.tla by a
+// verifyTla<Name> task, and verifyFormalModels runs them all. TLC exits
+// non-zero on a parse error, an invariant or property violation, or a
+// deadlock, which fails the task. Models and the properties they check are
+// listed in docs/formal_verification.md.
+//
+// tla2tools.jar is not published to Maven Central, so it is resolved from the
+// GitHub release through an Ivy repository, cached by Gradle, and checked
+// against the SHA-256 below. To upgrade, change both values together.
+
+def tlaToolsVersion = '1.7.4'
+def tlaToolsSha256 = '936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88'
+
+repositories {
+    ivy {
+        name = 'tlaplusReleases'
+        url = 'https://github.com/tlaplus/tlaplus/releases/download/'
+        patternLayout {
+            artifact 'v[revision]/[artifact].[ext]'
+        }
+        metadataSources {
+            artifact()
+        }
+        content {
+            includeModule('org.lamport', 'tla2tools')
+        }
+    }
+}
+
+configurations {
+    tlaTools {
+        canBeConsumed = false
+        transitive = false
+    }
+}
+
+dependencies {
+    tlaTools "org.lamport:tla2tools:${tlaToolsVersion}@jar"
+}
+
+def specDir = file('specs/tla')
+def tlaToolsFiles = configurations.tlaTools
+
+def verifyTlaTools = tasks.register('verifyTlaTools') {
+    group = 'verification'
+    description = 'Check the SHA-256 of the resolved tla2tools.jar'
+    inputs.files(tlaToolsFiles)
+    def marker = layout.buildDirectory.file('tlc/tla2tools.sha256')
+    outputs.file(marker)
+    doLast {
+        def jar = tlaToolsFiles.singleFile
+        def actual = java.security.MessageDigest.getInstance('SHA-256').digest(jar.bytes).encodeHex().toString()
+        if (actual != tlaToolsSha256) {
+            throw new GradleException(
+                    "tla2tools.jar ${tlaToolsVersion} has SHA-256 ${actual}, expected ${tlaToolsSha256}: ${jar}")
+        }
+        marker.get().asFile.text = "${actual}\n"
+    }
+}
+
+def specTasks = (specDir.listFiles({ File f -> f.name.endsWith('.cfg') } as FileFilter) ?: [])
+        .sort { it.name }
+        .collect { File cfg ->
+    def name = cfg.name - '.cfg'
+    def tla = new File(specDir, "${name}.tla")
+    tasks.register("verifyTla${name}", JavaExec) {
+        group = 'verification'
+        description = "Model-check specs/tla/${name}.tla with TLC"
+        dependsOn verifyTlaTools
+        inputs.files(tla, cfg)
+        def metaDir = layout.buildDirectory.dir("tlc/${name}")
+        def marker = layout.buildDirectory.file("tlc/${name}.passed")
+        outputs.file(marker)
+        classpath = tlaToolsFiles
+        mainClass = 'tlc2.TLC'
+        workingDir = specDir
+        jvmArgs '-XX:+UseParallelGC'
+        // One worker keeps the state exploration order, and so the reported
+        // counterexample, the same on every run.
+        args '-workers', '1', '-cleanup',
+                '-metadir', metaDir.get().asFile.absolutePath,
+                '-config', cfg.name, tla.name
+        doFirst {
+            if (!tla.isFile()) {
+                throw new GradleException("${cfg} has no matching ${tla.name}")
+            }
+            marker.get().asFile.delete()
+        }
+        doLast {
+            marker.get().asFile.text = "passed\n"
+        }
+    }
+}
+
+tasks.register('verifyFormalModels') {
+    group = 'verification'
+    description = 'Model-check every TLA+ specification under specs/tla with TLC'
+    dependsOn specTasks
+}
+
+// checkAll runs its steps in child builds listed by checkall_extra_tasks,
+// which validateAll and the pre-commit hook share. Model checking stays out
+// of that list, so that a commit never has to download tla2tools.jar.
+tasks.matching { it.name == 'checkAll' }.configureEach {
+    dependsOn 'verifyFormalModels'
+}
