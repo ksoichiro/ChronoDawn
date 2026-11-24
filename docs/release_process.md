@@ -85,7 +85,7 @@ Check as applicable:
 - `docs/curseforge_description.md`
 - `docs/modrinth_description.md`
 - `THIRD_PARTY_LICENSES.md`
-- `AGENTS.md` and `CLAUDE.md` when supported versions, commands, toolchains, or
+- `AGENTS.md` (imported by `CLAUDE.md`) when supported versions, commands, toolchains, or
   durable development policy changed
 - versioned Fabric, Forge, and NeoForge metadata when dependency ranges or
   loader requirements changed

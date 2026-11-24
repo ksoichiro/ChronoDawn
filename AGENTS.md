@@ -1,8 +1,10 @@
 # AGENTS.md
 
 This file gives AI coding agents the project-specific context needed to work on
-Chrono Dawn. Prefer this file for quick orientation, and use the linked project
-docs for details.
+Chrono Dawn. It is the single source for shared agent instructions: `CLAUDE.md`
+imports it with `@AGENTS.md` and adds only Claude Code specifics. Change shared
+rules here, not in `CLAUDE.md`. Keep it short, because Claude Code loads it in
+every session.
 
 ## Project Overview
 
@@ -10,15 +12,17 @@ Chrono Dawn is a multi-loader Minecraft mod built with Architectury. It supports
 Fabric and NeoForge, plus Forge on Minecraft 1.20.1, from one codebase. Most
 gameplay logic lives in common modules and loader-specific code stays small.
 
-- Language: Java 17 for Minecraft 1.20.1, Java 21 for 1.21.x, Java 25 for
-  26.x
-- Build: Gradle Groovy DSL
+- Language: Java 17 for Minecraft 1.20.1, Java 21 for 1.21.x, Java 25 for 26.x
+- Build: Gradle Groovy DSL (Architectury Loom, Gradle wrapper), Shadow plugin
+  bundles the common module into each loader JAR
 - Mappings: Mojang mappings, not Yarn
 - License: LGPL-3.0
-- Current default development target: Minecraft 26.3
+- Supported versions, hotfix mappings and the default target: `gradle.properties`
+  (`supported_mc_versions`, `hotfix_mc_versions`). The default development
+  target is Minecraft 26.3
+- Java, loader and dependency versions per target: `props/<version>.properties`.
+  Read them instead of keeping a copy of the versions here
 - Modpack/LTS target: Minecraft 1.21.1 on both Fabric and NeoForge
-- Supported versions: 1.20.1, 1.21.1, 1.21.2, 1.21.3, 1.21.4, 1.21.5,
-  1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, 1.21.11, 26.1.2, 26.2, 26.3
 
 Reference docs:
 
@@ -27,8 +31,6 @@ Reference docs:
 - `docs/release_process.md`: versioning, changelog, verification, and release
   procedure
 - `CONTRIBUTING.md`: coding standards and contribution process
-- `CLAUDE.md`: older AI-agent guidance; keep it consistent when changing
-  shared project instructions
 
 ## Repository Layout
 
@@ -39,27 +41,26 @@ common/
   shared-1.21.2+/     Shared resources for 1.21.2+
   shared-1.21.5+/     Shared resources for 1.21.5+
   gametest/           Shared GameTest sources
-  1.20.1/             Version-specific common module
-  1.21.x/             Version-specific common modules
+  <version>/          Version-specific common module
 fabric/
   base/               Shared Fabric code
-  1.20.1/             Fabric legacy module
-  1.21.x/             Version-specific Fabric modules
+  <version>/          Version-specific Fabric module
 forge/
   base/               Shared Forge code
   1.20.1/             Forge 1.20.1 module
 neoforge/
   base/               Shared NeoForge code
-  1.21.x/             Version-specific NeoForge modules
+  <version>/          Version-specific NeoForge modules (1.21.1 and newer)
 gradle/shared/        Git submodule with shared Gradle scripts
 props/                Version-specific dependency properties
 scripts/              Project utility scripts
 docs/                 Player/developer/release documentation
 ```
 
-Minecraft 1.21.3 is a hotfix release that reuses the 1.21.2 modules; do not add
-separate `common/1.21.3`, `fabric/1.21.3`, or `neoforge/1.21.3` modules unless
-the build model changes.
+`shared*`, `gametest` and every `base/` are source directories, not Gradle
+subprojects. Minecraft 1.21.3 is a hotfix release that reuses the 1.21.2
+modules; do not add separate `common/1.21.3`, `fabric/1.21.3`, or
+`neoforge/1.21.3` modules unless the build model changes.
 
 ## Working Rules
 
@@ -86,16 +87,34 @@ the build model changes.
 - Add player-visible fixes to `CHANGELOG.md` under `Unreleased` before reporting
   completion, even when the release version stays unchanged.
 - Research that affects future implementation should be written to an
-  appropriate file under `docs/`, and
-  linked from follow-up tasks when applicable.
+  appropriate file under `docs/`, and linked from follow-up tasks when
+  applicable.
 - When investigating seed-dependent portal inconsistencies, compare a fresh
   Minecraft process with consecutive worlds in one process. Check both new-data
   construction and saved-data loading, since static registries can survive an
-  integrated-server shutdown. See `docs/portal-floating-investigation-1.21.1.md`.
-- Treat Minecraft 1.21.1 as the long-term modpack compatibility target. For
-  pack-facing changes, verify both Fabric and NeoForge 1.21.1 even when 26.3 is
-  the default development target. The detailed, time-sensitive pack research is
-  kept in `.claude/tasks.local.md` when that local file is present.
+  integrated-server shutdown. See `docs/portal-floating-investigation-1.21.1.md`,
+  which also holds the rules for diagnostic Gradle init scripts and portal
+  singleton state.
+- GitHub Actions: pin every `uses:` to a full commit SHA with the version as a
+  trailing comment, and pin `runs-on` to a fixed image (`ubuntu-24.04`), never
+  `@vN` or `ubuntu-latest`.
+- Never save Minecraft JARs, mappings or world data as CI artifacts.
+
+## Support Priority
+
+CurseForge data (2026-09-22): 1.21.1 files hold about 95% of cumulative
+downloads and NeoForge about 2:1 over Fabric, driven by a few modpacks. Details
+are in `.claude/tasks.local.md` when that local file is present.
+
+- Treat 1.21.1 as the modpack/LTS regression target while keeping 26.3 as the
+  default development target. Do not drop or deprioritize it because newer
+  Minecraft versions exist.
+- Verify pack-facing changes on both 1.21.1 loaders: NeoForge covers Tensura and
+  MineColonies usage, Fabric covers Fantasy MC usage.
+- Prioritize optional compatibility, configuration, quest-author support, and
+  safe upgrades over generic content growth when the work serves modpacks.
+- Re-derive priorities from current pack manifests and download data. This is
+  not a permanent ranking.
 
 ## Coding Standards
 
@@ -111,48 +130,29 @@ the build model changes.
 
 ## Common Commands
 
-Setup after clone:
+Setup after clone, and inside every new git worktree before any `./gradlew`
+command (a worktree starts with an empty `gradle/shared/`):
 
 ```bash
 git submodule update --init
 ```
 
-Build one Minecraft version:
+Patterns (`<version>` is `1.21.1` in `-Ptarget_mc_version`, `1_21_1` in task
+names; the Claude Code skill `verification-commands` lists every option):
 
 ```bash
-./gradlew build26_2
-./gradlew build26_3
-./gradlew build26_1_2
-./gradlew build1_21_11
-./gradlew build1_21_10
-./gradlew build1_21_9
-./gradlew build1_21_8
-./gradlew build1_21_7
-./gradlew build1_21_6
-./gradlew build1_21_5
-./gradlew build1_21_4
-./gradlew build1_21_3
-./gradlew build1_21_2
-./gradlew build1_21_1
-./gradlew build1_20_1
-```
-
-Build release artifacts:
-
-```bash
-./gradlew buildAll
-./gradlew collectJars
-./gradlew release
-```
-
-Run unit tests:
-
-```bash
-./gradlew buildAll -Pbuildall_run_tests=true   # builds all versions and runs their unit tests
-./gradlew :common-1.21.11:test -Ptarget_mc_version=1.21.11
-./gradlew :common-1.21.10:test -Ptarget_mc_version=1.21.10
-./gradlew :common-1.21.9:test -Ptarget_mc_version=1.21.9
-./gradlew :common-1.21.8:test -Ptarget_mc_version=1.21.8
+./gradlew build<version>                  # e.g. build26_3, build1_21_1, build1_20_1
+./gradlew buildAll                        # release build of every version, excludes 1.21.3
+./gradlew buildAll -Pbuildall_run_tests=true   # also runs unit tests of all versions
+./gradlew :common-<version>:test -Ptarget_mc_version=<version>
+./gradlew runClientFabric<version>        # also runClientNeoForge<version>, runClientForge1_20_1
+./gradlew :fabric:runGameTest -Ptarget_mc_version=<version>
+./gradlew :neoforge:runGameTestServer -Ptarget_mc_version=<version>
+./gradlew gameTestAll
+./gradlew :fabric:prodSmokeTest -Ptarget_mc_version=<version>   # and :neoforge:; not for Forge 1.20.1
+./gradlew validateAll                     # file-only validations, also the pre-commit hook
+./gradlew checkAll                        # full verification
+./gradlew collectJars                     # then release
 ```
 
 Each Gradle invocation selects one target version. Do not combine tasks from
@@ -161,45 +161,15 @@ the matching `-Ptarget_mc_version` for each version.
 Do not run Gradle invocations for the same version concurrently: their resource
 processing tasks share output directories and can interfere with each other.
 
-Diagnostic Gradle init scripts also run for included builds, so guard project
-lookups. Keep injected sources opt-in, use disposable run directories, and
-recompile without the script afterward to remove diagnostic classes. Portal
-placement probes must load destination chunks in the same order as a real
-transfer before reading heightmaps.
-Clear portal singleton state before server world loading and after the final
-save, never at the start of shutdown. Detach the old SavedData reference as well
-as clearing portal entries, and verify both fresh-world isolation and reload of
-an existing saved registry.
-If a disposable diagnostic JVM needs an explicit exit, wait for the server
-thread from another thread first. Exiting on the server thread can deadlock
-with shutdown hooks that join it.
-
-Run resource validation:
-
-```bash
-./gradlew validateResources
-./gradlew validateTranslations
-```
-
-Run clients:
-
-```bash
-./gradlew runClientFabric26_2
-./gradlew runClientNeoForge26_2
-./gradlew runClientFabric26_3
-./gradlew runClientNeoForge26_3
-./gradlew runClientFabric1_21_1
-./gradlew runClientNeoForge1_21_1
-./gradlew runClientForge1_20_1
-```
-
-Run GameTests:
-
-```bash
-./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.11
-./gradlew :neoforge:runGameTestServer -Ptarget_mc_version=1.21.11
-./gradlew gameTestAll
-```
+`checkAll` is expensive. For small changes, run the narrowest build, test, or
+validation command that covers the affected version and loader. Run it for all
+versions before a PR unless the impact is clearly confined to specific
+versions, and say so in the PR body. Redirect its output to
+`<checkout>/build/checkall.log` with the absolute checkout path, not to a fixed
+shared temp name. Run at most 2 verifications at once (`checkAll`,
+`scenarioCheck`, `upgradeTest`). They fail early when less than
+`min_free_disk_gb` (20 GB) is free: free the space instead of passing
+`-Pmin_free_disk_gb=0`.
 
 GameTest servers may omit custom dimensions even when the normal game loads
 them. Do not count a dimension-dependent test that skips on a missing dimension
@@ -210,27 +180,18 @@ When changing a NeoForge version, run the affected project's `clean` task
 before `prodSmokeTest`. The installed server cache is keyed by Minecraft
 version and can otherwise reuse the previous NeoForge runtime.
 
+Upgrade test (`upgradeTest`) and scenario check (`scenarioCheck`) open a game
+window, run outside the sandbox, and are not part of `checkAll`.
+
 Minecraft 26.x development clients can outlive the game main method because
 launcher threads remain active. Shutdown workarounds that wait for the main
 thread must capture it from a runtime client event, not a parallel mod-loading
 event, and must be enabled only by the development run configuration.
 
-Full verification before larger changes or release work:
-
-```bash
-./gradlew checkAll
-```
-
-`checkAll` is expensive. For small changes, run the narrowest build, test, or
-validation command that covers the affected version and loader.
-
 ## Multi-Version Notes
 
-- Supported versions and hotfix mappings are defined in `gradle.properties`.
 - 1.20.1 supports Fabric and Forge. NeoForge starts at 1.21.1.
-- 1.20.1 requires Java 17, 1.21.x requires Java 21, and 26.x requires Java 25.
-- Shared sources/resources are included via source sets; directories named
-  `shared*` and `gametest` are not Gradle subprojects.
+- Shared sources/resources are included via source sets.
 - When adding a feature, inspect the nearest existing implementation across
   versioned modules and copy only the version-specific differences that are
   actually required.
@@ -245,11 +206,16 @@ validation command that covers the affected version and loader.
   versions place `min_inclusive` and `max_inclusive` directly beside `type`, so
   keep a 1.20.1 resource override when a configured feature uses one.
 - If an API differs between Minecraft versions, prefer the existing compatibility
-  layer or platform helper pattern over scattering conditionals.
+  layer (`compat/` package) or platform helper pattern over scattering
+  conditionals.
 - In pre-1.21.2 entity models, reset model-part poses at the start of
   `setupAnim` before applying additive rotations. The legacy `EntityModel`
   setup does not reset poses automatically, so `+=` animations otherwise
   accumulate across rendered frames.
+- `validateVersionSync` fails when per-version copies recorded in
+  `gradle/version-sync.lock` differ. Apply the change to every listed version.
+  Run `./gradlew updateVersionSyncLock` only when a version must differ for an
+  era-specific reason.
 
 When tuning biome coverage, adjust neighboring climate ranges as well as the
 target biome in the shared dimension JSON. Climate intervals do not directly
@@ -268,8 +234,7 @@ Fabric, Forge, and NeoForge use separate loader-specific Mixin configs.
   explicitly re-enabled.
 - `chronodawn.mixins.json` is a common/reference config and is excluded from
   builds.
-- When adding or changing Mixins, update both loader-specific configs when the
-  behavior applies to their loaders.
+- When adding or changing Mixins, update every affected loader-specific config.
 - After changing a Mixin or its config, run the affected loader's
   `prodSmokeTest`. A dev run can hide production remapping failures.
 
@@ -281,6 +246,8 @@ Fabric, Forge, and NeoForge use separate loader-specific Mixin configs.
   `THIRD_PARTY_LICENSES.md`.
 - MIT, Apache-2.0, and BSD licenses are generally compatible. Avoid proprietary
   or non-commercial licenses such as CC-BY-NC.
+- Dynamic linking (normal mod usage) accepts any license. Static linking or
+  modification must be LGPL-3.0.
 
 ## Verification Reporting
 
@@ -288,8 +255,12 @@ When finishing a task, report:
 
 - What changed.
 - Which commands were run.
-- Any commands that were skipped and why.
+- Which commands were skipped and why.
 - Any remaining risks or follow-up work.
 
 For changes that are verifiable but not yet verified, provide the exact command
 and expected success criteria.
+
+Before a PR, classify the diff with `python3 scripts/merge_tier/classify.py` and
+put a `Merge tier:` line in the PR body (`docs/merge_policy.md`). The `Merge tier`
+CI check fails when the declared tier is lower than the diff's.

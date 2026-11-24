@@ -225,7 +225,8 @@ ChronoDawn/
 ├── build.gradle                            # Root build configuration
 ├── settings.gradle                         # Multi-module settings
 ├── gradle.properties                       # Version configuration
-└── CLAUDE.md                               # Development guidelines
+├── AGENTS.md                               # Shared agent guidelines
+└── CLAUDE.md                               # Claude Code additions (imports AGENTS.md)
 ```
 
 ---
@@ -1182,7 +1183,7 @@ Architectury Loom remaps Mixin targets directly in production JARs. Its legacy
 Mixin annotation processor is disabled, so a configured refmap name would point
 to a file that is not generated.
 
-See `CLAUDE.md` → "Mixin Configuration" for full details. After changing Mixin
+See `AGENTS.md` → "Mixin Configuration" for full details. After changing Mixin
 config, run the headless `prodSmokeTest` (Fabric/NeoForge, see "Production
 Smoke Test" above, and the `verification-commands` skill). `runGameTest`/`runGameTestServer` run in Loom's
 dev/mapped environment and can mask production remapping or injection failures.
@@ -1219,7 +1220,7 @@ dev/mapped environment and can mask production remapping or injection failures.
 ### Documentation
 
 - **Project Docs**: `docs/`
-- **Design Guidelines**: `CLAUDE.md` and the skills under `.claude/skills/`
+- **Design Guidelines**: `AGENTS.md` and the skills under `.claude/skills/`
 - **Historical Designs**: `docs/archive/README.md`
 
 ### External Resources
