@@ -109,8 +109,10 @@ Restored(s) == IF s \in {"None", "Inactive", "Deactivated"} THEN "Activated" ELS
 
 \* The player walks through the portal blocks of the frame they stand at.
 \* 1. Destination: reuse its portal blocks, or restore the frame.
-\* 2. Source: under one-way entry an Activated source is deactivated. Its
-\*    portal blocks stay.
+\* 2. Source: nothing changes. The code means to deactivate an Activated
+\*    source under one-way entry, but it looks the source up by the portal
+\*    block position, while the registry is keyed by the frame's bottom-left
+\*    corner, so the lookup finds nothing (docs/formal_verification.md).
 \* 3. Arrival in Chrono Dawn marks it entered. While portals are unstable
 \*    under one-way entry, the arrival portal is deactivated and destroyed
 \*    (PortalArrivalHelper, destroyUnstablePortal). PlayerEventHandler then
@@ -119,13 +121,12 @@ Travel ==
     LET from == playerDim
         to == Other(from)
         destState == IF blocks[to] THEN state[to] ELSE Restored(state[to])
-        srcState == IF oneWay /\ state[from] = "Activated" THEN "Deactivated" ELSE state[from]
         enteredNext == entered \/ to = CD
         destroy == to = CD /\ oneWay /\ enteredNext /\ ~stabilized
     IN
     /\ blocks[from]
     /\ state' = [d \in Dims |->
-                    IF d = from THEN srcState
+                    IF d = from THEN state[from]
                     ELSE IF destroy /\ destState = "Activated" THEN "Deactivated"
                     ELSE destState]
     /\ blocks' = [d \in Dims |-> IF d = from THEN blocks[from] ELSE ~destroy]

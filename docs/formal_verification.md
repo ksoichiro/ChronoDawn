@@ -58,7 +58,7 @@ The model has one player and one portal frame per dimension. For each frame it
 tracks the registry state (`None` when there is no registry entry) and whether
 portal blocks fill it. Both config options, `oneWayUntilStabilized` and
 `allowReignitionBeforeStabilization`, are chosen in the initial state, so one
-run covers all four combinations. The full search visits 84 distinct states and
+run covers all four combinations. The full search visits 46 distinct states and
 finishes in about a second.
 
 Checked properties:
@@ -82,7 +82,7 @@ once by hand (not in CI):
 | The gate stays on after stabilization (`Unstable == entered`) | Deadlock: the player is stuck in Chrono Dawn. |
 | Arrival no longer destroys the unstable portal | `NoChronoDawnPortalWhileGated` violated. |
 | The stabilizer also accepts an `ACTIVATED` portal | `StabilizedOnlyAfterEntry` violated. |
-| `NoForbiddenTransition` also forbids the two transitions listed under Findings | Violated, so the code really takes them. |
+| `NoForbiddenTransition` also forbids `DEACTIVATED -> ACTIVATED`, or separately `STABILIZED ->` anything else (both listed under Findings) | Violated in each case, so the code really takes both. |
 | Stabilization from an unregistered frame removed | Still passes. The registered arrival frame is enough in this model, which does not model losing that frame. |
 
 ### Findings
@@ -98,11 +98,17 @@ The model follows the code, which differs from the Javadoc of
   entry was stabilized and its portal blocks were broken. The old entry stays in
   the registry map and is saved. The world-wide stabilization flag does not
   change, so travel is not affected.
-- A `DEACTIVATED` source portal keeps its portal blocks. Only the arrival
-  portal in Chrono Dawn is destroyed. `PortalState.hasPortalBlocks()` says a
-  deactivated portal has none.
+- The portal a player travels through is never deactivated. After travel,
+  `PortalTeleportHandler` looks the source portal up with
+  `getPortalAt(sourceLevel.dimension(), sourcePortalPos)`. `sourcePortalPos` is
+  the portal block the player stood in, but the registry is keyed by the
+  frame's bottom-left corner, so the lookup returns null and
+  `sourcePortal.deactivate()` never runs. The same code is in every version.
+  Only the arrival portal in Chrono Dawn is deactivated and destroyed, so the
+  one-way gate still holds. The model follows the code here.
 
-Whether to change the code or the Javadoc is a separate decision. The model
+Whether to change the code or the Javadoc is a separate decision. If the
+source lookup is fixed, change `Travel` in the model in the same commit. The model
 records the current behavior so that a change to it is deliberate.
 
 ## Adding a Model
