@@ -468,8 +468,14 @@ def push_heads(root, args):
         src, _, dst = refspec.lstrip("+").partition(":")
         if not src or src.startswith("refs/tags/"):
             continue
-        target = (dst or src).removeprefix("refs/heads/")
-        if target in PROTECTED_BRANCHES or src in PROTECTED_BRANCHES:
+        if "*" in src:
+            pattern = src if src.startswith("refs/") else f"refs/heads/{src}"
+            branches = git_text(root, "for-each-ref", "--format=%(refname:short)", pattern).splitlines()
+            heads += [b for b in branches if b and b not in PROTECTED_BRANCHES]
+            continue
+        # Pushing the local main after a fast-forward merge is the merge itself.
+        # A feature branch pushed to main (`HEAD:main`) is still checked.
+        if src.removeprefix("refs/heads/") in PROTECTED_BRANCHES:
             continue
         if src == "HEAD" and current in PROTECTED_BRANCHES:
             continue

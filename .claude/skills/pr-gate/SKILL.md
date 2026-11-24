@@ -39,11 +39,12 @@ named in `build/verification/base` when the file exists.
 `gh pr create --head <branch>` checks that branch instead of `HEAD`. The
 alias `gh pr new` is checked the same way, and `--help` is never gated.
 
-Pushes that send no branch for review pass: `main`, tags, `--delete`,
+Pushes that send no branch for review pass: the local `main` (after a
+fast-forward merge, but not a feature branch pushed as `HEAD:main`), tags, `--delete`,
 `--dry-run`, a branch with no commits ahead of the base, and other
 repositories such as `gradle/shared` (reached with `git -C`, `--work-tree`
 or a preceding `cd`/`pushd`). `--all`, `--branches` and `--mirror` check
-every local branch except `main`.
+every local branch except `main`, and so do glob refspecs such as `refs/heads/*`.
 
 The gate finds `git push` and `gh pr create` anywhere in a command, also
 behind wrappers (`timeout`, `env`), keywords, `bash -c` and `eval`. It exists

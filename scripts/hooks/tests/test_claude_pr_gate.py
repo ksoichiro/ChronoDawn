@@ -112,6 +112,13 @@ class GateTest(unittest.TestCase):
         self.repo.verify()
         self.assertIsNone(self.repo.evaluate("git push"))
 
+    def test_glob_refspecs_and_feature_to_main_are_gated(self):
+        self.change_behavior()
+        for command in ("git push origin 'refs/heads/*:refs/heads/*'", "git push origin 'refs/heads/feat*'",
+                        "git push origin HEAD:main", "git push origin feature:main",
+                        "git push origin HEAD:refs/heads/main"):
+            self.assertIsNotNone(self.repo.evaluate(command), command)
+
     def test_push_all_and_pushd_are_gated(self):
         self.change_behavior()
         self.repo.git("checkout", "-q", "main")

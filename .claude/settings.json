@@ -45,7 +45,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 \"$CLAUDE_PROJECT_DIR/scripts/hooks/claude_pr_gate.py\""
+            "command": "if [ -f \"$CLAUDE_PROJECT_DIR/scripts/hooks/claude_pr_gate.py\" ]; then python3 \"$CLAUDE_PROJECT_DIR/scripts/hooks/claude_pr_gate.py\"; fi"
           }
         ]
       }
