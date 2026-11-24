@@ -286,7 +286,7 @@ public class TimeCompassItem extends Item {
                 int dx = targetPos.getX() - playerPos.getX();
                 int dz = targetPos.getZ() - playerPos.getZ();
                 double distance = Math.sqrt(dx * dx + dz * dz);
-                String direction = getDirection(dx, dz);
+                String direction = TimeCompassDirection.of(dx, dz);
 
                 Component structureName = Component.translatable(getStructureDisplayName(targetStructure));
                 player.displayClientMessage(
@@ -330,7 +330,7 @@ public class TimeCompassItem extends Item {
                     int dx = targetPos.getX() - playerPos.getX();
                     int dz = targetPos.getZ() - playerPos.getZ();
                     double distance = Math.sqrt(dx * dx + dz * dz);
-                    String direction = getDirection(dx, dz);
+                    String direction = TimeCompassDirection.of(dx, dz);
 
                     Component structureName = Component.translatable(getStructureDisplayName(targetStructure));
                     player.displayClientMessage(
@@ -425,50 +425,5 @@ public class TimeCompassItem extends Item {
         }
 
         return false;
-    }
-
-    /**
-     * Get direction string from dx and dz.
-     * Returns one of 8 cardinal/ordinal directions.
-     *
-     * @param dx Delta X (target - player)
-     * @param dz Delta Z (target - player)
-     * @return Direction key (e.g., "north", "northeast", "east", etc.)
-     */
-    private static String getDirection(int dx, int dz) {
-        // Calculate angle in degrees (0 = east, 90 = south, 180 = west, 270 = north)
-        double angle = Math.toDegrees(Math.atan2(dz, dx));
-
-        // Normalize to 0-360
-        if (angle < 0) {
-            angle += 360;
-        }
-
-        // Convert to Minecraft coordinates (0 = south, 90 = west, 180 = north, 270 = east)
-        // In Minecraft: -Z is north, +Z is south, -X is west, +X is east
-        // atan2(dz, dx) gives: dx > 0, dz = 0 → 0° (east)
-        // We need to rotate to match Minecraft's coordinate system
-
-        // Adjust angle: rotate by 90 degrees clockwise so that -Z (north) is 0°
-        angle = (90 - angle + 360) % 360;
-
-        // Map to 8 directions
-        if (angle >= 337.5 || angle < 22.5) {
-            return "north";
-        } else if (angle >= 22.5 && angle < 67.5) {
-            return "northeast";
-        } else if (angle >= 67.5 && angle < 112.5) {
-            return "east";
-        } else if (angle >= 112.5 && angle < 157.5) {
-            return "southeast";
-        } else if (angle >= 157.5 && angle < 202.5) {
-            return "south";
-        } else if (angle >= 202.5 && angle < 247.5) {
-            return "southwest";
-        } else if (angle >= 247.5 && angle < 292.5) {
-            return "west";
-        } else {
-            return "northwest";
-        }
     }
 }
