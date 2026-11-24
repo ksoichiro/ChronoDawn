@@ -76,6 +76,11 @@ modules; do not add separate `common/1.21.3`, `fabric/1.21.3`, or
 - In zsh, write `${t}` instead of `$t` when a colon follows the variable, as in
   `./gradlew ":${t}:test"`. zsh reads a letter after `$t:` (`s`, `t`, `c`, `r`,
   `a`, `u` and others) as a modifier, so `:$t:test` becomes `:fabricest`.
+- In a multi-step shell command, stop at the first failure: join the steps
+  with `&&` or end each one with `|| exit 1`. Do not count on `set -e`, which
+  did not stop an agent's command after a failed `git clone` and `cd`. Prefer
+  `git -C <dir>` to `cd <dir>`, so that a failed step cannot leave the rest
+  running in another checkout.
 - Put common gameplay behavior in `common/` where possible. Use `fabric/`,
   `forge/`, or `neoforge/` only for loader APIs, entry points, events, or
   platform bridges.

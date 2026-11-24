@@ -30,3 +30,4 @@ Read the matching skill before the work:
 
 - Before committing, decide whether the change is testable. If so, present the verification method, the steps, and the expected result, and let the user decide whether to run it first.
 - Save research results under `docs/` and track follow-up work in fuda with a link to that document.
+- To try out git behavior on other commits, do not `git switch` or `git checkout` in this worktree. The sandbox keeps `.claude/settings.json`, `.claude/skills` and `.claude/hooks` read-only, so a checkout that changes them stops halfway and leaves a mix of two commits in the worktree. Clone into `$TMPDIR` with `git clone --template=` and run every step there with `git -C <clone>`.
