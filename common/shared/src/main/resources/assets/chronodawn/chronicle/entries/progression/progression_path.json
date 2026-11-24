@@ -9,8 +9,8 @@
   "pages": [
     {
       "text": {
-        "en_us": "Recommended progression path through Chrono Dawn:\n\n1. Find Ancient Ruins (Overworld)\n2. Unlock Time Hourglass recipe\n3. Build and activate portal\n4. Enter Chrono Dawn (one-way!)\n5. Find Forgotten Library\n6. Craft Portal Stabilizer (enable return)",
-        "ja_jp": "クロノドーンを通る推奨進行経路:\n\n1. 古代遺跡を見つける（オーバーワールド）\n2. 時の砂時計のレシピをアンロック\n3. ポータルを建設して起動\n4. クロノドーンに入る（一方通行！）\n5. 忘れられた図書館を見つける\n6. ポータル安定化装置を作成（戻れるようにする）"
+        "en_us": "Recommended progression path through Chrono Dawn:\n\n1. Find Ancient Ruins (Overworld)\n2. Unlock Time Hourglass recipe\n3. Build and activate portal\n4. Enter Chrono Dawn (one-way!)\n5. Unlock the Portal Stabilizer recipe (hold Clockstone, or find the Blueprint in the Forgotten Library)\n6. Craft Portal Stabilizer (enable return)",
+        "ja_jp": "クロノドーンを通る推奨進行経路:\n\n1. 古代遺跡を見つける（オーバーワールド）\n2. 時の砂時計のレシピをアンロック\n3. ポータルを建設して起動\n4. クロノドーンに入る（一方通行！）\n5. ポータル安定化装置のレシピを解放する（クロックストーンを所持、または忘れられた図書館で設計図を見つける）\n6. ポータル安定化装置を作成（戻れるようにする）"
       }
     },
     {

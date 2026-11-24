@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Disabling `world.structures.forgotten_library` now warns that the Portal
+  Stabilizer Blueprint becomes unobtainable, and says the recipe still
+  unlocks once you hold Clockstone. The config comments, Player Guide and
+  Chronicle entries (English and Japanese) no longer call the Forgotten
+  Library the only source of the recipe.
+
 - `scenarioCheck` now fails a screenshot whose mean brightness is below 15
   out of 255 (night or an unrendered frame), and a shot step can add an
   `expect` rule for a minimum brightness or the share of a color in the

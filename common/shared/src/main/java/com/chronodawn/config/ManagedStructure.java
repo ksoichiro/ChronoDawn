@@ -36,7 +36,7 @@ public enum ManagedStructure {
         ""),
     FORGOTTEN_LIBRARY("forgotten_library", Dimension.CHRONO_DAWN, ConfigDefaults.FORGOTTEN_LIBRARY_DEFAULTS,
         ChronoDawnConfig.Structures::forgottenLibrary,
-        "the Portal Stabilizer recipe"),
+        "the Portal Stabilizer Blueprint (the recipe still unlocks once you hold Clockstone)"),
     DESERT_CLOCK_TOWER("desert_clock_tower", Dimension.CHRONO_DAWN, ConfigDefaults.DESERT_CLOCK_TOWER_DEFAULTS,
         ChronoDawnConfig.Structures::desertClockTower,
         "Time Guardian, the Master Clock Key and Enhanced Clockstone"),
