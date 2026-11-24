@@ -36,6 +36,8 @@ public final class PortalIgnitionHandler {
     /**
      * Try to ignite a portal at the clicked position using the given item stack.
      * Assumes the caller has already confirmed the clicked block is Clockstone.
+     * A new entry immediately replaces the position index even if a portal was already registered
+     * there. The previous entry remains in the registry and saved data.
      *
      * @param level The level
      * @param clickedPos Position that was clicked

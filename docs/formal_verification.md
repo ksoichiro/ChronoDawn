@@ -105,29 +105,23 @@ once by hand (not in CI):
 
 ### Findings
 
-The model follows the code, which differs from the Javadoc of
-`PortalStateMachine` and `PortalState`:
+The model captures these behaviors found when comparing the implementation with
+its earlier Javadoc:
 
-- `DEACTIVATED -> ACTIVATED` happens. When travel restores a destination frame,
-  `PortalTeleportHandler` sets a deactivated entry back to `ACTIVATED` with
-  `setState`. The Javadoc lists this transition as forbidden.
-- `STABILIZED -> ACTIVATED` happens. Igniting an empty frame always registers a
-  new portal, which replaces the registry position entry, even when the old
-  entry was stabilized and its portal blocks were broken. The old entry stays in
-  the registry map and is saved. The world-wide stabilization flag does not
-  change, so travel is not affected.
-- The portal a player travels through is never deactivated. After travel,
-  `PortalTeleportHandler` looks the source portal up with
-  `getPortalAt(sourceLevel.dimension(), sourcePortalPos)`. `sourcePortalPos` is
-  the portal block the player stood in, but the registry is keyed by the
-  frame's bottom-left corner, so the lookup returns null and
-  `sourcePortal.deactivate()` never runs. The same code is in every version.
-  Only the arrival portal in Chrono Dawn is deactivated and destroyed, so the
-  one-way gate still holds. The model follows the code here.
+- `DEACTIVATED -> ACTIVATED` occurs when travel restores a destination frame
+  and sets the existing entry back to `ACTIVATED` with `setState`.
+- Igniting an empty frame creates a new entry at that position, even if the old
+  entry was stabilized. The position index initially points to the new `ACTIVATED` entry,
+  while the old entry remains in the registry and saved data. The world-wide
+  stabilization flag does not change.
+- Travel leaves the source portal unchanged. A former source deactivation
+  lookup used a portal block position instead of the frame's bottom-left
+  registry key, so it never found the source entry and was removed. Under
+  one-way entry, the unstable arrival portal in Chrono Dawn is deactivated and
+  destroyed instead.
 
-Whether to change the code or the Javadoc is a separate decision. If the
-source lookup is fixed, change `Travel` in the model in the same commit. The model
-records the current behavior so that a change to it is deliberate.
+The model tracks the entry selected by the position index, not retained older
+entries. `Travel` and `Ignite` represent the current behavior.
 
 ## Adding a Model
 
