@@ -267,6 +267,9 @@ and expected success criteria.
 
 Before a PR:
 
+- The Merge tier CI checks for a test or scenario with behavior paths and checks
+  unverified-in-game statements. See `docs/merge_policy.md` for exception
+  and manual-check reason formats.
 - A change to something visible or to a behavior (rendering, animation, item
   properties, movement, worldgen, game rules) needs a unit test or a scenario
   (`docs/scenario_check.md`) that runs it. A passing build or matching JSON

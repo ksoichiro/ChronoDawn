@@ -38,7 +38,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from scripts.merge_tier.classify import declared_tiers, glob_to_regex  # noqa: E402
+from scripts.merge_tier.classify import check_verification as check_ci_verification, declared_tiers, glob_to_regex  # noqa: E402
 
 SKIP_VAR = "CHRONODAWN_PR_GATE_SKIP"
 EXEMPTION_TRAILER = "Test-Exemption"
@@ -415,12 +415,11 @@ def check_pr_body(body):
         problems.append("a `## Verification` section")
     if not declared_tiers(body):
         problems.append("a `Merge tier:` line")
-    if not problems:
-        return None
-    return (
-        f"The pull request body lacks {' and '.join(problems)}. Pass the body with --body or --body-file and "
-        "fill it as step 4 of the independent-verification skill describes."
-    )
+    body_problems = check_ci_verification([], body)
+    if problems:
+        body_problems.insert(0, f"The pull request body lacks {' and '.join(problems)}. Pass the body with "
+                             "--body or --body-file and fill it as the independent-verification skill describes.")
+    return " ".join(body_problems) or None
 
 
 # --- Entry -------------------------------------------------------------------

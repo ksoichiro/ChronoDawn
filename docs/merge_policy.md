@@ -107,6 +107,22 @@ A higher declared tier passes. A body without a `Merge tier:` line passes with
 a hint, because only tier A auto-merge needs the line. The job summary lists
 every file with its tier and reason.
 
+The same check requires an added or modified unit test, GameTest or scenario
+when gameplay Java, assets, data, model sources or Mixin configuration change.
+Deleted tests do not count. Translations and `package-info.java` are excluded.
+Paths cannot establish whether a change actually affects behavior or whether a
+test covers it. When an existing test covers the change or no behavior changes,
+write `Test-Exemption: <reason>` in the PR body with at least 20 characters
+explaining the coverage or why no new test is needed. The check cannot judge
+the reason. The local Claude Code hook also accepts its existing commit trailer.
+
+Each statement containing `not verified in game` or `実機未確認` must be on a
+`Manual checks: <statement and reason>` line. The reason after removing the
+statement must have at least 20 characters and explain why a scenario cannot
+cover the check. Run the scenario where possible and attach its evidence as
+required by the PR rules. These mechanical checks do not establish that a test
+ran or that an exception is justified.
+
 The workflow runs the classifier and `rules.json` from the base branch, not
 from the pull request, so a pull request cannot lower its own tier by editing
 them. The classifier also counts its own files as tier D regardless of the
