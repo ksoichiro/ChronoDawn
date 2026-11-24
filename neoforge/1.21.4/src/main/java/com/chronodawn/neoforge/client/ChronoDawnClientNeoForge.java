@@ -611,14 +611,12 @@ public class ChronoDawnClientNeoForge {
      * based on the target structure's position.
      *
      * Note: ItemProperties was removed in 1.21.4. Time Compass angle
-     * should be defined via Client Items model definition JSON files.
-     * TODO: Implement Time Compass using 1.21.4 Client Items system.
+     * The Time Compass needle is defined by items/time_compass.json and the
+     * lodestone tracker component that TimeCompassItem keeps in sync.
      */
     private static void registerItemProperties() {
-        // ItemProperties API removed in 1.21.4
-        // Time Compass functionality needs to be implemented using
-        // the new Client Items model definition system with special model types
-        ChronoDawn.LOGGER.info("Time Compass properties registration skipped - requires 1.21.4 Client Items implementation");
+        // ItemProperties API removed in 1.21.4. The Time Compass needle comes from
+        // items/time_compass.json (Client Items), so nothing to register here.
     }
 
     /**
