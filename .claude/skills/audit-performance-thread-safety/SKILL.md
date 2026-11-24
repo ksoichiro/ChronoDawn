@@ -494,8 +494,7 @@ After applying fixes:
 ## References
 
 **Related Documentation**:
-- `CLAUDE.md` → "Structure Worldgen Guidelines" (for structure generation best practices)
-- `.claude/skills/structure-worldgen/SKILL.md` (for waterlogging prevention patterns)
+- `.claude/skills/structure-worldgen/SKILL.md` (for structure generation best practices and waterlogging prevention patterns)
 
 **Related Tasks**:
 - T428: Performance audit and optimization

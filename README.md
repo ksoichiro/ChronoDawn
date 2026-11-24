@@ -574,7 +574,7 @@ ChronoDawn/
 - **Forge** (1.20.1 only): `chronodawn-forge.mixins.json`
 - Do not add a `refmap` property. Architectury Loom remaps Mixin targets directly in production JARs
 
-See `CLAUDE.md` → "Mixin Configuration" section for details.
+See `CLAUDE.md` → "Mixin Configuration" section and the `mixin-guide` skill for details.
 
 ## Resources
 

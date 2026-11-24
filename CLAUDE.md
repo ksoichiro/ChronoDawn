@@ -1,315 +1,126 @@
 # Chrono Dawn Development Guidelines
 
-Auto-generated from all feature plans. Last updated: 2026-09-22
+Hand-maintained. Keep it short: it is loaded into every session. Put
+task-specific procedures in `.claude/skills/` and link them from here.
+Keep `AGENTS.md` consistent when changing shared project instructions.
 
 ---
 
 ## Documentation Maintenance
 
-**CRITICAL**: When updating versions, dependencies, or content, documentation must be kept consistent across all files.
+**CRITICAL**: When updating versions, dependencies, or content, documentation must be kept consistent across all files. The `doc-maintenance` skill lists the files and the procedure.
 
-**Key Files**:
-- `README.md` - Project overview and installation
-- `docs/player_guide.md` - Player guide
-- `docs/developer_guide.md` - Developer guide
-- `docs/release_process.md` - Versioning, changelog, verification, and release procedure
-- `docs/curseforge_description.md` - CurseForge page
-- `docs/modrinth_description.md` - Modrinth page
-- `gradle.properties` - Version definitions
-- Versioned Fabric, Forge, and NeoForge metadata - Mod and dependency metadata
+**Key Files**: `README.md`, `docs/player_guide.md`, `docs/developer_guide.md`, `docs/release_process.md` (versioning, changelog, release), `docs/curseforge_description.md`, `docs/modrinth_description.md`, `gradle.properties`, and the versioned Fabric, Forge and NeoForge metadata.
 
 **Current version sources**:
-- `gradle.properties` defines the supported versions, hotfix mappings, default
-  target, and mod version.
-- `props/<version>.properties` defines the Java, loader, and dependency versions
-  for each target. Read these files instead of maintaining a duplicate table
-  here.
-- Minecraft 1.20.1 uses Java 17 and supports Fabric and Forge. Minecraft 1.21.x
-  uses Java 21 and supports Fabric and NeoForge. Minecraft 26.x uses Java 25 and
-  supports Fabric and NeoForge.
-- Minecraft 1.21.3 is a hotfix runtime target that shares modules with 1.21.2.
+- `gradle.properties` defines the supported versions, hotfix mappings, default target, and mod version.
+- `props/<version>.properties` defines the Java, loader, and dependency versions for each target. Read these files instead of maintaining a duplicate table here.
+- Minecraft 1.20.1 uses Java 17 and supports Fabric and Forge. 1.21.x uses Java 21 and supports Fabric and NeoForge. 26.x uses Java 25 and supports Fabric and NeoForge.
+- Minecraft 1.21.3 is a hotfix runtime target that shares modules with 1.21.2 (no `common/1.21.3`, `fabric/1.21.3`, `neoforge/1.21.3`).
 
 ---
 
 ## License Compliance
 
-**Project License**: LGPL-3.0 (GNU Lesser General Public License v3.0)
+**Project License**: LGPL-3.0. All contributions must comply. Details in the `license-compliance` skill.
 
-**CRITICAL**: All contributions and modifications must comply with LGPL-3.0 terms.
-
-**Quick Reference**:
-- Compatible licenses: MIT, Apache 2.0, BSD
-- Incompatible licenses: CC-BY-NC, proprietary
+- Compatible licenses: MIT, Apache 2.0, BSD. Incompatible: CC-BY-NC, proprietary
 - Document all third-party licenses in `THIRD_PARTY_LICENSES.md`
-- Dynamic linking (normal mod usage): Any license OK
-- Static linking/modification: Must be LGPL-3.0
+- Dynamic linking (normal mod usage): any license OK. Static linking/modification: must be LGPL-3.0
 
 ---
 
-## Active Technologies
-- Java 17 (Minecraft 1.20.1), Java 21 (Minecraft 1.21.x), Java 25
-  (Minecraft 26.x), Fabric Loader, Forge 47.x, NeoForge, Architectury, and
-  mcjunitlib. Read exact versions from `props/<version>.properties`.
+## Technologies
+
+Java 17 (1.20.1), Java 21 (1.21.x), Java 25 (26.x), Fabric Loader, Forge 47.x, NeoForge, Architectury, mcjunitlib. Read exact versions from `props/<version>.properties`.
 
 ## Project Structure
+
 ```
 common/
-  shared/             (shared version-agnostic sources, NOT a Gradle subproject)
-  shared-1.21.1+/     (shared resources for 1.21.1~26.3, NOT a Gradle subproject)
-  shared-1.21.2+/     (shared resources for 1.21.2~26.3, NOT a Gradle subproject)
-  shared-1.21.5+/     (shared resources for 1.21.5~26.3, NOT a Gradle subproject)
-  gametest/           (shared gametest sources, NOT a Gradle subproject)
-  1.20.1/             (version-specific common module)
-  1.21.1/             (version-specific common module)
-  1.21.2/             (version-specific common module)
-  1.21.4/             (version-specific common module)
-  1.21.5/             (version-specific common module)
-  1.21.6/             (version-specific common module)
-  1.21.7/             (version-specific common module)
-  1.21.8/             (version-specific common module)
-  1.21.9/             (version-specific common module)
-  1.21.10/            (version-specific common module)
-  1.21.11/            (version-specific common module)
-  26.1.2/             (version-specific common module)
-  26.2/               (version-specific common module)
-  26.3/               (version-specific common module)
-fabric/
-  base/               (shared Fabric sources, NOT a Gradle subproject)
-  1.20.1/             (version-specific Fabric subproject)
-  1.21.1/             (version-specific Fabric subproject)
-  1.21.2/             (version-specific Fabric subproject)
-  1.21.4/             (version-specific Fabric subproject)
-  1.21.5/             (version-specific Fabric subproject)
-  1.21.6/             (version-specific Fabric subproject)
-  1.21.7/             (version-specific Fabric subproject)
-  1.21.8/             (version-specific Fabric subproject)
-  1.21.9/             (version-specific Fabric subproject)
-  1.21.10/            (version-specific Fabric subproject)
-  1.21.11/            (version-specific Fabric subproject)
-  26.1.2/             (version-specific Fabric subproject)
-  26.2/               (version-specific Fabric subproject)
-  26.3/               (version-specific Fabric subproject)
-forge/
-  base/               (shared Forge sources, NOT a Gradle subproject)
-  1.20.1/             (version-specific Forge subproject)
-neoforge/
-  base/               (shared NeoForge sources, NOT a Gradle subproject)
-  1.21.1/             (version-specific NeoForge subproject)
-  1.21.2/             (version-specific NeoForge subproject)
-  1.21.4/             (version-specific NeoForge subproject)
-  1.21.5/             (version-specific NeoForge subproject)
-  1.21.6/             (version-specific NeoForge subproject)
-  1.21.7/             (version-specific NeoForge subproject)
-  1.21.8/             (version-specific NeoForge subproject)
-  1.21.9/             (version-specific NeoForge subproject)
-  1.21.10/            (version-specific NeoForge subproject)
-  1.21.11/            (version-specific NeoForge subproject)
-  26.1.2/             (version-specific NeoForge subproject)
-  26.2/               (version-specific NeoForge subproject)
-  26.3/               (version-specific NeoForge subproject)
-gradle/
-  wrapper/            (Gradle Wrapper)
-  shared/             (git submodule → minecraft-mod-gradle-scripts)
-props/                (version-specific properties)
-scripts/              (project-specific utility scripts)
+  shared/, shared-1.21.1+/, shared-1.21.2+/, shared-1.21.5+/, gametest/
+                      (shared sources/resources, NOT Gradle subprojects)
+  <version>/          (version-specific common module)
+fabric/    base/ (shared sources, NOT a subproject), <version>/ (subproject, every version)
+forge/     base/, 1.20.1/
+neoforge/  base/, <version>/ (1.21.1 and newer)
+gradle/    wrapper/, shared/ (git submodule → minecraft-mod-gradle-scripts)
+props/     version-specific properties
+scripts/   project-specific utility scripts
 ```
 
-## Code Style
-Java 21 (Minecraft Java Edition 1.21.1 / 1.21.2 / 1.21.3 / 1.21.4 / 1.21.5 / 1.21.6 / 1.21.7 / 1.21.8 / 1.21.9 / 1.21.10 / 1.21.11): Follow standard conventions
+The version list is `supported_mc_versions` in `gradle.properties`. List `common/`, `fabric/` and `neoforge/` for the directories that exist.
 
 ## Build Configuration
-- **Build DSL**: Groovy DSL (not Kotlin DSL) - for compatibility with Architectury Loom 1.17.491 (Gradle 9.5.1; bumped from Loom 1.13-SNAPSHOT/Gradle 8.14 to support Minecraft 26.x)
-- **Mappings**: Mojang mappings (not Yarn) - code uses official Minecraft class names (e.g., `net.minecraft.core.Registry`)
-- **Shadow Plugin**: com.gradleup.shadow 8.3.6 - for bundling common module into platform-specific JARs
-- **Shared Scripts**: `gradle/shared/` is a Git submodule ([minecraft-mod-gradle-scripts](https://github.com/ksoichiro/minecraft-mod-gradle-scripts)). Clone with `git clone --recursive` or run `git submodule update --init` after clone. A new git worktree also starts with an empty `gradle/shared/`, so run `git submodule update --init gradle/shared` inside the worktree before any `./gradlew` command. After that, every Gradle task, including `gameTestAll`, runs isolated within the worktree.
-- **Multi-version configuration**: Supported versions and hotfix mappings are defined in `gradle.properties` (`supported_mc_versions`, `hotfix_mc_versions`)
+
+- **Build DSL**: Groovy DSL (not Kotlin DSL), for compatibility with Architectury Loom 1.17.491 (Gradle 9.5.1)
+- **Mappings**: Mojang mappings (not Yarn). Code uses official Minecraft class names (e.g., `net.minecraft.core.Registry`)
+- **Shadow Plugin**: com.gradleup.shadow 8.3.6 bundles the common module into platform-specific JARs
+- **Shared Scripts**: `gradle/shared/` is a Git submodule ([minecraft-mod-gradle-scripts](https://github.com/ksoichiro/minecraft-mod-gradle-scripts)). Clone with `--recursive` or run `git submodule update --init`. A new git worktree starts with an empty `gradle/shared/`, so run `git submodule update --init gradle/shared` inside the worktree before any `./gradlew` command. After that, every Gradle task, including `gameTestAll`, runs isolated within the worktree.
+- **Multi-version configuration**: supported versions and hotfix mappings are in `gradle.properties` (`supported_mc_versions`, `hotfix_mc_versions`)
 
 ## Multi-Version Support
 
-**Supported Versions**: Minecraft 1.20.1 + 1.21.1 + 1.21.2 + 1.21.3 + 1.21.4 + 1.21.5 + 1.21.6 + 1.21.7 + 1.21.8 + 1.21.9 + 1.21.10 + 1.21.11 + 26.1.2 + 26.2 + 26.3 (single codebase)
+Single codebase for every version in `supported_mc_versions` (plus the 1.21.3 hotfix). Era-specific API differences and the `compat/` abstraction layer are in the `multiversion-support` skill.
 
-**Note**: 1.21.3 is a hotfix release that reuses 1.21.2 modules (no separate common/1.21.3, fabric/1.21.3, neoforge/1.21.3 directories needed).
+For 1.21.9+ `pack.mcmeta`, do not combine the resource-pack and data-pack versions into one `min_format`/`max_format` range. Minecraft validates the same mod metadata with different legacy cutoffs for client resources and server data. Follow the loader's bundled mod-pack metadata, preserve minor versions such as `[94, 1]`, and verify both resource reload and server data loading.
 
-For 1.21.9+ `pack.mcmeta`, do not combine the resource-pack and data-pack
-versions into one `min_format`/`max_format` range. Minecraft validates the same
-mod metadata with different legacy cutoffs for client resources and server
-data. Follow the loader's bundled mod-pack metadata, preserve minor versions
-such as `[94, 1]`, and verify both resource reload and server data loading.
+## Commands
 
-**Clean Commands**:
-- `./gradlew clean1_20_1` - Clean for 1.20.1
-- `./gradlew clean1_21_1` - Clean for 1.21.1
-- `./gradlew clean1_21_2` - Clean for 1.21.2
-- `./gradlew clean1_21_3` - Clean for 1.21.3 (uses 1.21.2 modules)
-- `./gradlew clean1_21_4` - Clean for 1.21.4
-- `./gradlew clean1_21_6` - Clean for 1.21.6
-- `./gradlew clean1_21_7` - Clean for 1.21.7
-- `./gradlew clean1_21_8` - Clean for 1.21.8
-- `./gradlew clean1_21_9` - Clean for 1.21.9
-- `./gradlew clean1_21_10` - Clean for 1.21.10
-- `./gradlew clean1_21_11` - Clean for 1.21.11
-- `./gradlew clean26_1_2` - Clean for 26.1.2
-- `./gradlew clean26_2` - Clean for 26.2
-- `./gradlew clean26_3` - Clean for 26.3
-- `./gradlew cleanAll` - Clean all versions (excludes 1.21.3 - shares 1.21.2 modules)
+Full list, flags and caveats are in the `verification-commands` skill. Read it before building, testing, validating or releasing.
 
-**Build Commands**:
-- `./gradlew build1_20_1` - Build for 1.20.1
-- `./gradlew build1_21_1` - Build for 1.21.1
-- `./gradlew build1_21_2` - Build for 1.21.2
-- `./gradlew build1_21_3` - Build for 1.21.3 (uses 1.21.2 modules, for testing only)
-- `./gradlew build1_21_4` - Build for 1.21.4
-- `./gradlew build1_21_5` - Build for 1.21.5
-- `./gradlew build1_21_6` - Build for 1.21.6
-- `./gradlew build1_21_7` - Build for 1.21.7
-- `./gradlew build1_21_8` - Build for 1.21.8
-- `./gradlew build1_21_9` - Build for 1.21.9
-- `./gradlew build1_21_10` - Build for 1.21.10
-- `./gradlew build1_21_11` - Build for 1.21.11
-- `./gradlew build26_1_2` - Build for 26.1.2
-- `./gradlew build26_2` - Build for 26.2
-- `./gradlew build26_3` - Build for 26.3 (default)
-- `./gradlew buildAll` - Build for release (1.20.1, 1.21.1, 1.21.2, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, 1.21.11, 26.1.2, 26.2, 26.3 - excludes 1.21.3)
+- Build: `./gradlew build<version>` (`build1_21_1`, `build26_3`, ...), `./gradlew buildAll`. Default target is 26.3. Clean: `clean<version>`, `cleanAll`
+- Run client: `./gradlew runClientFabric<version>`, `./gradlew runClientNeoForge<version>`
+- Unit test: `./gradlew :common-<version>:test -Ptarget_mc_version=<version>`
+- GameTest: `./gradlew :fabric:runGameTest -Ptarget_mc_version=<version>`, `:neoforge:runGameTestServer`, `gameTestAll`
+- Production smoke: `./gradlew :fabric:prodSmokeTest -Ptarget_mc_version=<version>` (and `:neoforge:`). Not for Forge 1.20.1
+- Validation: `./gradlew validateAll` (also the pre-commit hook). Also `validateResources`, `validateData`, `validateTranslations`
+- `./gradlew checkAll` is the full verification (clean, validate, buildAll with unit tests, gameTestAll)
+- Redirect long Gradle output (`checkAll`) to `<checkout>/build/checkall.log` with the absolute checkout path, never to a fixed name under `$TMPDIR`
+- Upgrade test and scenario check open a game window, run outside the sandbox, and are not part of `checkAll`
+- Run at most 2 verifications at once (`checkAll`, `scenarioCheck`, `upgradeTest`). They fail early when less than `min_free_disk_gb` (20 GB) is free: free space instead of passing `-Pmin_free_disk_gb=0`
 
-**Run Client**:
-- Fabric: `./gradlew runClientFabric1_20_1`, `./gradlew runClientFabric1_21_1`, `./gradlew runClientFabric1_21_2`, `./gradlew runClientFabric1_21_3`, `./gradlew runClientFabric1_21_4`, `./gradlew runClientFabric1_21_5`, `./gradlew runClientFabric1_21_6`, `./gradlew runClientFabric1_21_7`, `./gradlew runClientFabric1_21_8`, `./gradlew runClientFabric1_21_9`, `./gradlew runClientFabric1_21_10`, `./gradlew runClientFabric1_21_11`, `./gradlew runClientFabric26_1_2`, `./gradlew runClientFabric26_2`, `./gradlew runClientFabric26_3`
-- NeoForge: `./gradlew runClientNeoForge1_21_1`, `./gradlew runClientNeoForge1_21_2`, `./gradlew runClientNeoForge1_21_3`, `./gradlew runClientNeoForge1_21_4`, `./gradlew runClientNeoForge1_21_5`, `./gradlew runClientNeoForge1_21_6`, `./gradlew runClientNeoForge1_21_7`, `./gradlew runClientNeoForge1_21_8`, `./gradlew runClientNeoForge1_21_9`, `./gradlew runClientNeoForge1_21_10`, `./gradlew runClientNeoForge1_21_11`, `./gradlew runClientNeoForge26_1_2`, `./gradlew runClientNeoForge26_2`, `./gradlew runClientNeoForge26_3`
+**Before a PR**:
+- Classify the diff with `python3 scripts/merge_tier/classify.py`, run the `independent-verification` skill, and put its Verification section with a `Merge tier:` line in the PR body (`docs/merge_policy.md`). The `Merge tier` CI check fails when the declared tier is lower than the diff's
+- Run `checkAll` for all versions. Limit it to the changed versions only when the impact is clearly confined to them, and say so in the PR body
+- When a change needs an in-game check, do not wait for the owner. Add or extend a scenario (`scenario-check` skill, `docs/scenario_check.md`), run it on both 1.21.1 loaders (and both 26.3 loaders when 26.3 is affected), and attach `sheet.png` to the PR or task. List only what a scenario cannot cover as manual checks and continue
+- A new bug class goes into `docs/bug_prevention.md` first. When a Minecraft rename breaks a version that CI does not build, add a rule to `scripts/era_symbol_rules.json` in the same change
+- `validateVersionSync` fails when per-version copies recorded in `gradle/version-sync.lock` differ. Apply the change to every listed version. Run `./gradlew updateVersionSyncLock` only when a version must differ for an era-specific reason
 
-**Unit Test** (JUnit only, not GameTest):
-- `./gradlew :common-1.21.2:test -Ptarget_mc_version=1.21.2` - Run unit tests for specific version
-- Unit tests for all versions run inside `checkAll`'s `buildAll` step (`./gradlew buildAll -Pbuildall_run_tests=true`); plain `buildAll` and `build<version>` skip them. There is no `testAll` task
-- `./gradlew :common-1.21.6:test -Ptarget_mc_version=1.21.6` - Run unit tests for 1.21.6
-- `./gradlew :common-1.21.7:test -Ptarget_mc_version=1.21.7` - Run unit tests for 1.21.7
-- `./gradlew :common-1.21.8:test -Ptarget_mc_version=1.21.8` - Run unit tests for 1.21.8
-- `./gradlew :common-1.21.9:test -Ptarget_mc_version=1.21.9` - Run unit tests for 1.21.9
-- `./gradlew :common-1.21.10:test -Ptarget_mc_version=1.21.10` - Run unit tests for 1.21.10
-- `./gradlew :common-1.21.11:test -Ptarget_mc_version=1.21.11` - Run unit tests for 1.21.11
-- `./gradlew :common-26.1.2:test -Ptarget_mc_version=26.1.2` - Run unit tests for 26.1.2
-- `./gradlew :common-26.2:test -Ptarget_mc_version=26.2` - Run unit tests for 26.2
-- `./gradlew :common-26.3:test -Ptarget_mc_version=26.3` - Run unit tests for 26.3
-
-**GameTest**:
-- `./gradlew :fabric:runGameTest -Ptarget_mc_version=1.21.2` - Run GameTests for specific version
-- `./gradlew :neoforge:runGameTestServer -Ptarget_mc_version=1.21.2` - Run NeoForge GameTests
-- `./gradlew gameTestAll` - Run GameTests including 1.21.3 runtime verification (1.21.2+1.21.3 sequential)
-- GameTest servers may omit custom dimensions even when normal game servers load them. A dimension-dependent test that skips because its dimension is absent is not runtime verification; use a normal client or production server for the final cross-dimension behavior check
-
-**Production Smoke Test** (headless, no display required; recommended after Mixin config changes or when adding a new Minecraft version):
-- `./gradlew :fabric:prodSmokeTest -Ptarget_mc_version=1.21.2` - Boot a real Fabric dedicated server with the built mod and confirm a fresh world is created without crashing
-- `./gradlew :neoforge:prodSmokeTest -Ptarget_mc_version=1.21.2` - Same for NeoForge
-- Not supported for Forge (1.20.1) - `runProd`'s underlying installer path is unsupported for Forge < 50, see `gradle/shared/prod-run.gradle`
-- Unlike `runGameTest`/`runGameTestServer` (dev/mapped Loom environment), this launches an installer-provisioned production server, so it also catches Mixin remapping and injection issues that only surface outside the dev environment
-- Uses `build/prod-smoke/<loader>-<version>/`, separate from the manually-verified `run-prod/` used by `runProd` - cleaned up by `clean<version>`/`cleanAll`
-- Also fails on server log WARN/ERROR/FATAL lines not matched by `prod-smoke-log-ignore.txt` (`prod_smoke_log_check=true`). Fix the cause rather than adding an ignore entry; entries there are known issues pending a fix
-
-**Upgrade Test** (1.21.1 and 26.3, `upgrade_test_mc_versions`; opens a game window; not part of `checkAll`; run before a release that touches registries, worldgen, configs, portals, advancements, equipment, or progression, see `docs/release_process.md`):
-- `./gradlew :fabric:upgradeTest :neoforge:upgradeTest -Ptarget_mc_version=1.21.1` (or `26.3`) - Build a world with `upgrade_test_baseline_version` (0.8.0, or 0.13.0 on 26.3 via `props/26.3.properties`) and the latest release tag reachable from HEAD, upgrade it to the built JAR on production server+client runtimes, and fail on crashes or lost/changed data. Report: `<loader>/<version>/build/upgrade-test/report.txt`
-- Run outside the sandbox (network, JVM forks, local ports). `-Pupgrade_test_sources=0.8.0,0.13.0`, `-Pupgrade_test_candidate_jar=<jar>` and `-Pupgrade_test_ports=<server>,<rcon>` override the defaults (`-Pscenario_check_ports` for scenarioCheck). Without them the driver reserves a free server/RCON port pair at run time (from 25700-25999, held with a lock file under `~/.cache/chronodawn/verify-locks`), so several checkouts can run the same task at once without `-P`
-- Driver and setup layers live in `scripts/upgrade_test/`. New persisted content needs a layer named after the version that introduces it. Log ignores go in `upgrade-test-log-ignore.txt` (known issues only)
-- `./gradlew testUpgradeTestScripts` - Unit tests for the driver (bind local ports, so also unsandboxed)
-
-**Parallel verification** (several worktrees or agents on one machine; details in `docs/developer_guide.md` "Running verification in parallel"):
-- Run at most 2 verifications at the same time (`checkAll`, `scenarioCheck`, `upgradeTest`). The `scenarioCheck` and `upgradeTest` drivers enforce it with lock files and wait for a free slot. Change the limit per machine with the environment variable `CHRONODAWN_MAX_PARALLEL_VERIFY`. Start `checkAll` only when fewer than the limit are running, because it is not slot-limited
-- `checkAll`, `gameTestAll`, `upgradeTest`, `scenarioCheck` and `prodSmokeTest` fail before they start when the checkout's volume has less than `min_free_disk_gb` (20 GB) free. Free space as the message says instead of passing `-Pmin_free_disk_gb=0`, unless the owner asks for it
-- Before a PR, classify the diff with `python3 scripts/merge_tier/classify.py`, run the `independent-verification` skill, and put its Verification section with a `Merge tier:` line in the PR body (`docs/merge_policy.md`). The `Merge tier` CI check fails when the declared tier is lower than the diff's
-- Before a PR, run `checkAll` for all versions. Limit it to the changed versions (`build<version>`, `:fabric:runGameTest -Ptarget_mc_version=<v>`) only when the impact is clearly confined to them, and say so in the PR body
-
-**Scenario Check** (1.21.1 and 26.3; tested on macOS; opens a game window; not part of `checkAll`; see `docs/scenario_check.md`):
-- `./gradlew :neoforge:scenarioCheck -Ptarget_mc_version=1.21.1 [-Pscenario_check_scenarios=a,b]` (or `26.3`) - Boot the built JAR on a fresh world with production server+client, run `scripts/scenario_check/scenarios/*.json` over RCON, and take in-game screenshots. Use it instead of asking the owner to check in game. Read `<loader>/<version>/build/scenario-check/summary.md`, look at each shot against its note, then attach `sheet.png` to the PR or task for the owner
-- Run outside the sandbox. Screenshots come from the game's framebuffer through a Java agent, so they need no Screen Recording permission and work while the Mac is locked
-- `./gradlew testScenarioCheckScripts` - Unit tests for the driver
-- Before adding or editing a scenario, read the `scenario-check` skill. Wait on conditions (`settle`, `await`, `screen`, `input` with `until`) instead of fixed sleeps, and check the scenario's time in `summary.md`
-- When a change needs an in-game check, do not stop and wait for the owner. If RCON commands and screenshots can cover the check, add or extend a scenario, run it on both 1.21.1 loaders (and both 26.3 loaders when the change affects 26.3), fix what the shots show is wrong, commit the scenario with the change, attach `sheet.png` to the PR or task, and continue through the PR. The owner answers OK or NG per shot later
-- A scenario can also act as the player: one right-click or left-click on what the crosshair points at, opening a screen such as a trader, and checking the open screen's title (`input` and `screen` steps)
-- List only what a scenario cannot cover (typing or clicking inside a GUI screen, held or repeated input such as mining in survival, Minecraft versions other than 1.21.1 and 26.3) as manual checks in the PR body or task, and still continue. A `server-log` FAIL from a WARN that an existing task already tracks does not block the change. Name that task in the report
-
-**Resource Validation**:
-- `./gradlew validateResources` - Check JSON syntax and cross-references (blockstate→model, model→texture)
-- `./gradlew validateData` - Check data-pack cross-references (tag entries → registered IDs, recipe references, 1.21.4+ client items coverage)
-- `./gradlew validateTranslations` - Cross-version translation key validation (entities, spawn eggs)
-- `./gradlew validateAll` - Every file-only validation that `checkAll` runs (`checkall_extra_tasks`). CI (`.github/workflows/ci.yml`) runs it with `-Plang_required_locales=en_us`, which turns missing non-English keys into warnings. The default in `gradle.properties` keeps `ja_jp` required for `checkAll` and releases. CI also passes `-Pvalidation_only=true`, which makes `settings.gradle` skip the version subprojects so Loom does not set up Minecraft. Validation tasks must therefore stay root-project, file-only tasks
-- `validateVersionSync` fails when per-version copies that `gradle/version-sync.lock` records as identical start to differ. Apply the change to every listed version. Only when a version must differ for an era-specific reason, run `./gradlew updateVersionSyncLock` and commit the lock. The Claude Code PostToolUse hook in `.claude/settings.json` prints the stale copies right after an edit
-- CI (`.github/workflows/ci.yml`) runs `validate`, `build` (build and unit tests), `prod-smoke` (`:fabric:prodSmokeTest`, `:neoforge:prodSmokeTest`) and `gametest` (`:fabric:runGameTest`, `:neoforge:runGameTestServer`) on 1.21.1 and 26.3. Fabric and NeoForge run in separate Gradle invocations: in one invocation both loaders transform the shared common module concurrently, and the NeoForge jar intermittently resolved `@ExpectPlatform` calls to the Fabric implementation (`NoClassDefFoundError ...runtime.fabric.*Impl`). Never save Minecraft JARs, mappings or world data as CI artifacts. A failing `prod-smoke` job prints the server log tail in its last step
-- When a Minecraft rename breaks a version that CI does not build, add a rule to `scripts/era_symbol_rules.json` (`validateEraSymbols`) in the same change
-- `docs/bug_prevention.md` maps past bug classes to these checks and lists rejected checks. A new bug class goes there first. The pre-commit hook (`scripts/hooks/install.sh`, Git 2.54+) runs `validateAll`
-
-**Release**:
-- `./gradlew collectJars` - Collect release JARs from all versions into `build/release/`
-- `./gradlew release` - Full release pipeline: cleanAll → buildAll → collectJars
-- `./gradlew releaseModrinth` - Release all JARs in `build/release/` to Modrinth (requires `MODRINTH_TOKEN`)
-- `./gradlew releaseCurseForge` - Release all JARs in `build/release/` to CurseForge (requires `CURSEFORGE_TOKEN`)
-- `./gradlew releaseAll` - Release to both Modrinth and CurseForge
-
-**Full Verification** (recommended before commits/PRs):
-- `./gradlew checkAll` - Run all verification tasks in sequence:
-  1. cleanAll - Clean all build outputs and IDE directories
-  2. validateResources - JSON syntax and cross-reference checks
-  3. validateTranslations - Cross-version translation key validation
-  4. buildAll - Build for release and run unit tests in the same parallel per-version builds (1.20.1, 1.21.1, 1.21.2, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, 1.21.11, 26.1.2, 26.2, 26.3)
-  5. gameTestAll - Run GameTests including 1.21.3, 1.21.4, 1.21.5, 1.21.6, 1.21.7, 1.21.8, 1.21.9, 1.21.10, 1.21.11, 26.1.2, 26.2, and 26.3 runtime verification
-- When capturing checkAll (or any long Gradle run) output, redirect it to `<checkout>/build/checkall.log` using the absolute path of the current checkout (the worktree root when working in a worktree). Do not use a fixed filename under `$TMPDIR` or `/private/tmp/claude-501/`. Every session shares that directory, so concurrent runs overwrite each other's logs. Sandboxed and unsandboxed commands also resolve `$TMPDIR` to different directories, so a log written by one may not be visible to the other. The root `build/` is gitignored and survives `cleanAll`
-
-**Key Strategy**: Custom Gradle scripts + abstraction layer (`compat/` package) for API differences
+**Key Strategy**: custom Gradle scripts + abstraction layer (`compat/` package) for API differences.
 
 ## Development Notes
-- When writing code, use Mojang mapping names (e.g., `net.minecraft.world.level.Level`, not Yarn's `class_XXXX`)
+
+- Use Mojang mapping names (e.g., `net.minecraft.world.level.Level`, not Yarn's `class_XXXX`)
 - Build files use Groovy DSL. Assign properties with `=` (e.g., `maven { url = 'https://...' }`, `{ transitive = false }`). The `url 'https://...'` form is deprecated in Gradle 9 and removed in Gradle 10
-- Common module code is bundled into Fabric JAR using Shadow plugin
-- GitHub Actions: pin every `uses:` to a full commit SHA with the version as a trailing comment, and pin `runs-on` to a fixed image (`ubuntu-24.04`), never `@vN` or `ubuntu-latest`. Update the actions with `GITHUB_TOKEN=$(gh auth token) mise exec pinact@5.0.1 -- pinact run -u` (run unsandboxed), then check that CI passes
-- Minecraft 1.20.1 encodes a uniform `IntProvider` inside worldgen feature
-  configurations with a nested `value` object. Newer versions put
-  `min_inclusive` and `max_inclusive` beside `type`, so keep a 1.20.1 resource
-  override for configured features that use one.
-- In pre-1.21.2 entity models, reset model-part poses at the start of
-  `setupAnim` before applying additive rotations. The legacy `EntityModel`
-  setup does not reset poses automatically, so `+=` animations otherwise
-  accumulate across rendered frames.
-- **Parallel GameTest**: `gameTestAll` groups configurations by Minecraft version. 1.20.1 and 1.21.1 run in parallel, while 1.21.2 and 1.21.3 run sequentially in the same thread (they share modules). Within each version, fabric and neoforge run in a single Gradle process to avoid common module build conflicts. Each version uses a separate directory (fabric/1.20.1, fabric/1.21.1, etc.) with its own `.gradle/architectury/` path.
+- Common module code is bundled into the Fabric JAR using Shadow plugin
+- GitHub Actions: pin every `uses:` to a full commit SHA with the version as a trailing comment, and pin `runs-on` to a fixed image (`ubuntu-24.04`). Update with pinact (command in `verification-commands`)
+- CI never saves Minecraft JARs, mappings or world data as artifacts. Fabric and NeoForge run in separate Gradle invocations in CI (shared common module transform race, see `verification-commands`)
+- Minecraft 1.20.1 encodes a uniform `IntProvider` inside worldgen feature configurations with a nested `value` object. Newer versions put `min_inclusive` and `max_inclusive` beside `type`, so keep a 1.20.1 resource override for configured features that use one.
+- In pre-1.21.2 entity models, reset model-part poses at the start of `setupAnim` before applying additive rotations. The legacy `EntityModel` setup does not reset poses automatically, so `+=` animations otherwise accumulate across rendered frames.
+- GameTest servers may omit custom dimensions. A dimension-dependent test that skips is not runtime verification: use a normal client or production server for the final cross-dimension check
 
 ## Support Priority
 
-**CurseForge download data supplied on 2026-09-22** shows that 1.21.1 files account for about 185.6K of 195.3K cumulative downloads, roughly 95%. Across all listed 1.21.1 files, NeoForge has about 124.5K downloads and Fabric about 61.1K, roughly 2:1. The approximately 5.7:1 ratio applies only to the 0.8.0 NeoForge and Fabric files, not to 1.21.1 as a whole. Matching pack manifests and release timing indicate that a few modpacks drive the largest spikes, so these figures should not be read as standalone loader demand.
+CurseForge data (2026-09-22): 1.21.1 files hold about 95% of cumulative downloads, NeoForge about 2:1 over Fabric, driven by a few modpacks. Details are in `.claude/tasks.local.md`.
 
-**Implications for development priority**:
 - Treat 1.21.1 as the modpack/LTS regression target while keeping 26.3 as the default development target
-- Verify pack-facing changes on both 1.21.1 loaders: NeoForge covers Tensura and MineColonies usage, while Fabric covers Fantasy MC usage
+- Verify pack-facing changes on both 1.21.1 loaders: NeoForge covers Tensura and MineColonies usage, Fabric covers Fantasy MC usage
 - Prioritize optional compatibility, configuration, quest-author support, and safe upgrades over generic content growth when the work serves modpacks
 - Do not drop or deprioritize 1.21.1 solely because newer Minecraft versions exist
-- Re-derive priorities from current pack manifests and download data; the detailed 2026-09-22 analysis is in `.claude/tasks.local.md` and is not a permanent ranking
+- Re-derive priorities from current pack manifests and download data. This is not a permanent ranking
 
 ## Mixin Configuration
 
-Fabric, Forge, and NeoForge use separate loader-specific Mixin configurations.
+Fabric, Forge, and NeoForge use separate loader-specific Mixin configurations. Step-by-step guide: `mixin-guide` skill.
 
-**Key Points**:
-- **All loaders**: Do not include a `refmap` property. Loom remaps Mixin targets directly in production JARs, and the legacy Mixin annotation processor is disabled
-- **Common Gradle modules**: Do not configure `loom.mixin.defaultRefmapName`, which otherwise references a file that current Loom does not generate
-- **Common**: `chronodawn.mixins.json` excluded from builds (reference only)
-- When adding Mixins: Update every affected loader-specific config
-- After changing Mixin config, run `./gradlew :fabric:prodSmokeTest -Ptarget_mc_version=<v>` and `:neoforge:prodSmokeTest` - `runGameTest`'s dev/mapped Loom environment can mask remapping or injection failures that only appear in a production server (see "Production Smoke Test" above)
-
-<!-- MANUAL ADDITIONS START -->
+- **All loaders**: do not include a `refmap` property. Loom remaps Mixin targets directly in production JARs, and the legacy Mixin annotation processor is disabled
+- **Common Gradle modules**: do not configure `loom.mixin.defaultRefmapName`
+- **Common**: `chronodawn.mixins.json` is excluded from builds (reference only)
+- When adding Mixins, update every affected loader-specific config
+- After changing Mixin config, run `:fabric:prodSmokeTest` and `:neoforge:prodSmokeTest` for the version. `runGameTest`'s dev/mapped Loom environment can mask remapping or injection failures that only appear in a production server
 
 ## Workflow Guidelines
 
-### Research and Investigation
-- **Document Research Results**: Save findings for future work in an appropriate document under `docs/`, rather than keeping them only in session conversation.
-- **Add Related Tasks**: Track follow-up work in fuda, with links to the relevant research document.
-
-### Pre-Commit Verification
-- **Verification Check**: Before committing changes, determine if the changes are testable/verifiable
-- **Present Verification Steps**: When changes are verifiable, present to the user:
-  1. Verification method (build, run, test command, etc.)
-  2. Step-by-step instructions
-  3. Expected results/success criteria
-- **Example**:
-  ```
-  Verification is possible:
-  1. Run ./gradlew :fabric:build -Ptarget_mc_version=1.21.2
-  2. Confirm that the build succeeds
-  3. Confirm that JAR files are generated in fabric/1.21.2/build/libs/
-  Expected result: Build completes without errors and JAR files are generated
-  ```
-- **Wait for User Decision**: Allow user to decide whether to proceed with verification before committing
-
-<!-- MANUAL ADDITIONS END -->
+- **Research**: save findings for future work in an appropriate document under `docs/`, not only in the session. Track follow-up work in fuda with links to that document
+- **Pre-commit verification**: before committing, decide whether the change is testable. If so, present the verification method (build, run, test command), the steps, and the expected result, and let the user decide whether to run it before committing. Example: run `./gradlew :fabric:build -Ptarget_mc_version=1.21.2`, confirm the build succeeds and JARs appear in `fabric/1.21.2/build/libs/`
