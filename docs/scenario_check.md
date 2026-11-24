@@ -252,7 +252,7 @@ names you need with `-Pscenario_check_scenarios` to check one change quickly.
 | `daylight-detector-craft` | The Chronite Daylight Detector recipe crafts at a crafting table |
 | `chronicle-wayside-features` | Chronicle category and entry clicks, and the Wayside Features pages with the next page button |
 | `cairn-stone-tooltip` | The Cairn Stone tooltip (name and two lore lines) on hover |
-| `time-compass-needle` | The Time Compass needle points at its target while the player faces north, east, south and west, and drifts with no target |
+| `time-compass-needle` | The Time Compass needle points at its target while the player faces north, east, south and west, and is not locked on anything with no target (fast spinning needs a look in game) |
 | `time-keeper-village` | The village placed near the first entry into Chrono Dawn |
 | `plains-surface`, `mountain-surface` | The surface of the Plains and Mountain biomes |
 | `forgotten-library` | `/locate` speed for the Forgotten Library, and a shot of it from above |
