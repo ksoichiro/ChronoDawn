@@ -18,6 +18,7 @@ Read the matching skill before the work:
 - `license-compliance`: LGPL-3.0 rules for dependencies and assets
 - `scenario-check`: adding or editing `scripts/scenario_check/scenarios/*.json`
 - `independent-verification`: required before a PR (`docs/merge_policy.md`)
+- `pr-gate`: when the hook denies `git push` or `gh pr create`, and before pushing a branch for a PR
 
 ## Before a PR
 

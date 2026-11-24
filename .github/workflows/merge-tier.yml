@@ -29,6 +29,8 @@ jobs:
         with:
           fetch-depth: 0
       - run: python3 -m unittest discover -s scripts/merge_tier/tests -t .
+      # The PR gate hook imports the classifier, so its tests run here too.
+      - run: python3 -m unittest discover -s scripts/hooks/tests -t .
       # The body goes through an environment variable and a file, never into
       # the script text, so its content cannot run as shell code.
       - env:

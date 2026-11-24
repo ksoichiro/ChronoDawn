@@ -176,6 +176,16 @@ access and should not receive credentials for one. CI stays the deterministic
 evidence, and the reviewer covers what CI cannot: reading intent and trying
 cases nobody wrote a test for.
 
+A Claude Code hook (`scripts/hooks/claude_pr_gate.py`, configured in
+`.claude/settings.json`) enforces this locally. It denies `git push` and
+`gh pr create` while the reviewer has not reviewed the current diff, while a
+behavior change comes without a test or scenario, and while the pull request
+body lacks the Verification section. The `pr-gate` skill
+(`.claude/skills/pr-gate/SKILL.md`) lists the checks and the written
+exemptions. The gate covers agents only, since it reads files that exist only
+in the checkout that ran the review. The `Merge tier` CI check stays the
+floor for every pull request.
+
 ## Auto-merge (tier A only)
 
 An agent may merge a tier A pull request itself when all of these hold:
