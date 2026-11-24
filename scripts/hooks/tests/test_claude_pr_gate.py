@@ -318,6 +318,39 @@ class GateTest(unittest.TestCase):
                         "bash -c 'git push -u origin feature'"):
             self.assertIsNotNone(self.repo.evaluate(command), command)
 
+    def test_wrappers_keywords_and_compound_commands_do_not_hide_a_push(self):
+        self.change_behavior()
+        for command in ("if true; then git push origin feature; fi",
+                        "for b in feature; do git push origin $b; done",
+                        "{ git push origin feature; }", "! git push origin feature",
+                        "timeout 600 git push -u origin feature", "nice git push origin feature",
+                        "env -u FOO git push origin feature", "bash -lc 'git push -u origin feature'",
+                        "eval 'git push -u origin feature'", "git --git-dir .git push -u origin feature",
+                        "git push origin feature other", "gh -R o/r pr create --title t --body x"):
+            self.assertIsNotNone(self.repo.evaluate(command), command)
+
+    def test_pr_create_checks_the_head_branch(self):
+        self.change_behavior()
+        self.repo.git("checkout", "-q", "main")
+        self.assertIsNotNone(self.repo.evaluate("gh pr create --head feature --title t --body x"))
+
+    def test_cd_into_another_repository_passes(self):
+        self.change_behavior()
+        other = self.repo.root / "gradle" / "shared"
+        other.mkdir(parents=True)
+        subprocess.run(["git", "init", "-q"], cwd=other, check=True)
+        self.assertIsNone(self.repo.evaluate("cd gradle/shared && git push origin HEAD:foo"))
+        self.assertIsNone(self.repo.evaluate("git -C gradle/shared push origin HEAD:foo"))
+
+    def test_whitespace_inside_a_string_literal_is_behavioral(self):
+        self.repo.write(JAVA, 'class TimeCompassItem {\n    String f() { return "%d  %d"; }\n}\n')
+        self.repo.commit("base literal")
+        self.repo.git("branch", "-f", "main", "HEAD")
+        self.repo.write(JAVA, 'class TimeCompassItem {\n    String f() { return "%d %d"; }\n}\n')
+        self.repo.commit("fix: spacing")
+        self.repo.verify()
+        self.assertIn(JAVA, self.repo.evaluate("git push"))
+
     def test_title_with_shell_characters_keeps_the_body_file(self):
         self.change_behavior()
         self.add_scenario()

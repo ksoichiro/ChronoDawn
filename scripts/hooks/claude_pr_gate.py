@@ -93,8 +93,10 @@ def _matches(regexes, path):
 # --- Command parsing ---------------------------------------------------------
 
 _ENV_ASSIGN = re.compile(r"^([A-Za-z_][A-Za-z0-9_]*)=(.*)\Z", re.DOTALL)
-_WRAPPERS = ("env", "command", "exec", "time", "nohup")
 _SHELLS = ("bash", "sh", "zsh")
+# Global options of git and gh that take a separate value before the subcommand.
+_GIT_OPTIONS_WITH_VALUE = ("-C", "-c", "--git-dir", "--work-tree", "--namespace", "--config-env")
+_GH_OPTIONS_WITH_VALUE = ("-R", "--repo")
 # `<<` or `<<-` with an optionally quoted delimiter. A here-string (`<<<`) is not one.
 _HEREDOC = re.compile(r"(?<!<)<<(?!<)-?\s*(['\"]?)([A-Za-z_][A-Za-z0-9_]*)\1")
 _OPERATOR_CHARS = "();<>|&\n"
@@ -153,41 +155,81 @@ def _simple_commands(tokens):
     return commands
 
 
-def find_commands(command):
+def _join(base, path):
+    return path if base is None else os.path.join(base, path)
+
+
+def _match_git_push(tokens, j):
+    """(args, git_dir) when tokens[j] starts `git [options] push`, else None."""
+    i, git_dir = j + 1, None
+    while i < len(tokens) and tokens[i].startswith("-"):
+        if tokens[i] in _GIT_OPTIONS_WITH_VALUE and i + 1 < len(tokens):
+            if tokens[i] == "-C":
+                git_dir = _join(git_dir, tokens[i + 1])
+            i += 2
+        else:
+            i += 1
+    if i < len(tokens) and tokens[i] == "push":
+        return tokens[i + 1:], git_dir
+    return None
+
+
+def _match_gh_pr_create(tokens, j):
+    """The args when tokens[j] starts `gh [options] pr create`, else None."""
+    i = j + 1
+    while i < len(tokens) and tokens[i].startswith("-"):
+        i += 2 if tokens[i] in _GH_OPTIONS_WITH_VALUE else 1
+    if tokens[i:i + 2] == ["pr", "create"]:
+        return tokens[i + 2:]
+    return None
+
+
+def find_commands(command, base_dir=None):
     """Return [(kind, args, git_dir, skip)] for each `git push` ("push") and `gh pr create` ("pr").
 
-    skip is the CHRONODAWN_PR_GATE_SKIP value assigned in front of that command, or None.
+    git and gh are looked for anywhere in a simple command, not only as its
+    first word, so wrappers (`timeout 600 git push`), keywords (`then git push`)
+    and braces do not hide them. A false match only means the gate checks a
+    branch that would pass anyway. git_dir is relative to the hook's cwd and
+    follows a preceding `cd`. skip is the CHRONODAWN_PR_GATE_SKIP value
+    assigned in front of that command, or None.
     """
     found = []
+    cd_dir = base_dir
     for tokens in _simple_commands(_shell_tokens(strip_heredocs(command))):
+        if tokens[0] == "cd" and len(tokens) > 1:
+            cd_dir = _join(cd_dir, tokens[1])
+            continue
         skip = None
-        while tokens:
-            m = _ENV_ASSIGN.match(tokens[0])
-            if m:
-                if m.group(1) == SKIP_VAR:
-                    skip = m.group(2).strip()
-            elif tokens[0] not in _WRAPPERS:
+        for j, token in enumerate(tokens):
+            m = _ENV_ASSIGN.match(token)
+            if m and m.group(1) == SKIP_VAR:
+                skip = m.group(2).strip()
+                continue
+            inner = None
+            if token == "eval" and j + 1 < len(tokens):
+                inner = " ".join(tokens[j + 1:])
+            elif token in _SHELLS:
+                flags = [k for k in range(j + 1, len(tokens) - 1) if tokens[k].startswith("-")
+                         and not tokens[k].startswith("--") and "c" in tokens[k]]
+                if flags:
+                    inner = tokens[flags[0] + 1]
+            if inner is not None:
+                found += [(k, a, d, s if s is not None else skip) for k, a, d, s in find_commands(inner, cd_dir)]
                 break
-            tokens = tokens[1:]
-        if tokens and tokens[0] in _SHELLS and "-c" in tokens[1:-1]:
-            inner = find_commands(tokens[tokens.index("-c", 1) + 1])
-            found += [(k, a, d, s if s is not None else skip) for k, a, d, s in inner]
-            continue
-        if len(tokens) >= 3 and tokens[0] == "gh" and tokens[1] == "pr" and tokens[2] == "create":
-            found.append(("pr", tokens[3:], None, skip))
-            continue
-        if not tokens or tokens[0] != "git":
-            continue
-        i, git_dir = 1, None
-        while i < len(tokens) and tokens[i].startswith("-"):
-            if tokens[i] in ("-C", "-c") and i + 1 < len(tokens):
-                if tokens[i] == "-C":
-                    git_dir = tokens[i + 1] if git_dir is None else os.path.join(git_dir, tokens[i + 1])
-                i += 2
-            else:
-                i += 1
-        if i < len(tokens) and tokens[i] == "push":
-            found.append(("push", tokens[i + 1:], git_dir, skip))
+            if token == "git":
+                match = _match_git_push(tokens, j)
+                if match:
+                    args, git_dir = match
+                    git_dir = git_dir if git_dir and os.path.isabs(git_dir) else (
+                        _join(cd_dir, git_dir) if git_dir else cd_dir)
+                    found.append(("push", args, git_dir, skip))
+                    break
+            if token == "gh":
+                args = _match_gh_pr_create(tokens, j)
+                if args is not None:
+                    found.append(("pr", args, cd_dir, skip))
+                    break
     return found
 
 
@@ -218,10 +260,15 @@ def changed_files(root, merge_base, head):
 
 
 def java_code(text):
-    """Java source with comments removed and whitespace collapsed, so only code is compared."""
-    def keep_literals(m):
-        return m.group(0) if m.group(0)[0] in "\"'" else " "
-    return " ".join(_JAVA_COMMENT_OR_LITERAL.sub(keep_literals, text).split())
+    """Java source with comments removed and whitespace outside literals collapsed, so only code is compared."""
+    parts, last = [], 0
+    for m in _JAVA_COMMENT_OR_LITERAL.finditer(text):
+        parts.append(" ".join(text[last:m.start()].split()))
+        # String and char literals stay byte for byte: their text can reach the player.
+        parts.append(m.group(0) if m.group(0)[0] in "\"'" else "")
+        last = m.end()
+    parts.append(" ".join(text[last:].split()))
+    return " ".join(p for p in parts if p)
 
 
 def java_change_is_trivial(root, merge_base, head, path):
@@ -371,10 +418,10 @@ def option_value(args, *names):
     return None
 
 
-def push_head(root, args):
-    """The local revision a push sends, or None when the push sends no branch to review."""
+def push_heads(root, args):
+    """The local revisions a push sends for review. Empty when it sends no branch to review."""
     if any(a in ("--delete", "-d", "--tags", "--dry-run", "-n") for a in args):
-        return None
+        return []
     positional, i = [], 0
     while i < len(args):
         if args[i] in _PUSH_OPTIONS_WITH_VALUE:
@@ -386,20 +433,38 @@ def push_head(root, args):
     current = git(root, "symbolic-ref", "--quiet", "--short", "HEAD", check=False).stdout.decode().strip()
     refspecs = positional[1:]
     if not refspecs:
-        return None if current in PROTECTED_BRANCHES or not current else "HEAD"
-    if len(refspecs) > 1:
-        return None
-    src, _, dst = refspecs[0].lstrip("+").partition(":")
-    if not src or src.startswith("refs/tags/"):
-        return None
-    target = (dst or src).removeprefix("refs/heads/")
-    if target in PROTECTED_BRANCHES or src in PROTECTED_BRANCHES:
-        return None
-    if src == "HEAD" and current in PROTECTED_BRANCHES:
-        return None
-    if git(root, "rev-parse", "--verify", "--quiet", src + "^{commit}", check=False).returncode != 0:
-        return None
-    return src
+        return [] if current in PROTECTED_BRANCHES or not current else ["HEAD"]
+    heads = []
+    for refspec in refspecs:
+        if "$" in refspec or "`" in refspec:
+            # Expanded only by the shell. Check the current branch, the likely value.
+            if current and current not in PROTECTED_BRANCHES:
+                heads.append("HEAD")
+            continue
+        src, _, dst = refspec.lstrip("+").partition(":")
+        if not src or src.startswith("refs/tags/"):
+            continue
+        target = (dst or src).removeprefix("refs/heads/")
+        if target in PROTECTED_BRANCHES or src in PROTECTED_BRANCHES:
+            continue
+        if src == "HEAD" and current in PROTECTED_BRANCHES:
+            continue
+        if git(root, "rev-parse", "--verify", "--quiet", src + "^{commit}", check=False).returncode != 0:
+            continue
+        heads.append(src)
+    return heads
+
+
+def pr_head(root, args):
+    """The revision `gh pr create` opens the pull request for: --head when given, else HEAD."""
+    head = option_value(args, "--head", "-H")
+    if not head:
+        return "HEAD"
+    head = head.split(":", 1)[-1]
+    for candidate in (head, f"origin/{head}"):
+        if git(root, "rev-parse", "--verify", "--quiet", candidate + "^{commit}", check=False).returncode == 0:
+            return candidate
+    return "HEAD"
 
 
 def evaluate(command, cwd):
@@ -421,21 +486,23 @@ def evaluate(command, cwd):
         if not (Path(root) / "scripts" / "merge_tier" / "classify.py").exists():
             continue
         if kind == "push":
-            head = push_head(root, args)
+            heads = push_heads(root, args)
             base_branch = recorded_base(root)
         else:
-            head = "HEAD"
+            heads = [pr_head(root, args)]
             base_branch = option_value(args, "--base", "-B") or "main"
-        if head is None:
-            continue
-        base = resolve_base(root, base_branch)
-        merge_base = git_text(root, "merge-base", base, head)
-        if merge_base == git_text(root, "rev-parse", head):
-            continue
-        for problem in (check_tests(root, merge_base, head), check_verification(root, merge_base, head, base_branch)):
-            if problem:
-                problems.append(problem)
-        if kind == "pr":
+        base = resolve_base(root, base_branch) if heads else None
+        reviewable = False
+        for head in heads:
+            merge_base = git_text(root, "merge-base", base, head)
+            if merge_base == git_text(root, "rev-parse", head):
+                continue
+            reviewable = True
+            for problem in (check_tests(root, merge_base, head),
+                            check_verification(root, merge_base, head, base_branch)):
+                if problem:
+                    problems.append(problem)
+        if kind == "pr" and reviewable:
             problem = check_pr_body(pr_body(args, where, command))
             if problem:
                 problems.append(problem)

@@ -36,9 +36,17 @@ named in `build/verification/base` when the file exists.
    `--body "$(cat <file>)"` or `--body-file` has a `## Verification` heading and a `Merge tier:` line.
    `--fill` and `--web` bodies do not.
 
+`gh pr create --head <branch>` checks that branch instead of `HEAD`.
+
 Pushes that send no branch for review pass: `main`, tags, `--delete`,
 `--dry-run`, a branch with no commits ahead of the base, and other
-repositories such as `gradle/shared`.
+repositories such as `gradle/shared` (reached with `git -C` or a preceding
+`cd`).
+
+The gate finds `git push` and `gh pr create` anywhere in a command, also
+behind wrappers (`timeout`, `env`), keywords, `bash -c` and `eval`. It exists
+to catch a forgotten step, so it parses commands the way an agent writes them
+and does not try to be a sandbox. Never route a push around it.
 
 ## Satisfying the checks
 
