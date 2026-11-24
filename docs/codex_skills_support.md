@@ -9,8 +9,10 @@ this, since its skill paths have changed before.
   "Verification Reporting" rules before a PR) already apply to Codex.
 - The 19 project skills live in `.claude/skills/<name>/SKILL.md`. Codex does
   not scan `.claude/`, so none of them is available to Codex today.
-- The list of skills and the "read the matching skill before the work" rule
-  are only in `CLAUDE.md`, which Codex does not read.
+- The "read the matching skill before the work" rule and its skill list are
+  only in `CLAUDE.md`, which Codex does not read. That list names 7 of the 19
+  skills. `AGENTS.md` names one skill (`verification-commands`) without a
+  path, so Codex cannot open it.
 - Every `SKILL.md` already has the `name` and `description` frontmatter that
   Codex requires.
 
@@ -29,10 +31,16 @@ From [Build skills](https://learn.chatgpt.com/docs/build-skills) (the old
   scanning these locations."
 - Codex picks a skill implicitly when the task matches its `description`, or
   explicitly through `/skills` or a `$skill-name` mention.
-- The initial skill list takes at most about 2% of the context window, and
-  Codex shortens descriptions first when many skills are installed.
-- An older page used `.codex/skills`. The current page lists only
-  `.agents/skills` for skills, and `.codex/` only for configuration.
+- The initial skill list takes at most 2% of the context window (8,000
+  characters when the window is unknown, adjustable with
+  `skills.max_context_tokens`), and Codex shortens descriptions first when
+  many skills are installed.
+- Standalone repository skills work in Codex CLI, the IDE extension and the
+  ChatGPT desktop app. Chat and Work on web and mobile only use skills
+  bundled in plugins.
+- Some search results still show `.codex/skills` as the repository path. The
+  current page lists only `.agents/skills` for skills, and `.codex/` only for
+  configuration.
 
 ## Claude Code specific content in the skills
 
@@ -55,8 +63,12 @@ From [Build skills](https://learn.chatgpt.com/docs/build-skills) (the old
    Same effect, but makes the neutral location the source.
 3. Add a skill index to `AGENTS.md` with the `SKILL.md` paths, and tell agents
    to read the matching file before the work. Works for any agent without
-   skill support, but skills are no longer picked by description.
+   skill support, but skills are no longer picked by description. The index
+   has to cover all 19 skills, not only the 7 that `CLAUDE.md` lists.
 
 Any option that adds `.agents/` also needs `.agents/**` in the tier D pattern
 of `scripts/merge_tier/rules.json` and the table in `docs/merge_policy.md`,
-because those paths are agent instructions.
+because those paths are agent instructions. With the current rules only
+`.agents/skills/*/SKILL.md` is tier D (through `**/SKILL.md`). The
+`.agents/skills` symlink itself and files under a skill's `scripts/` fall to
+the default tier C, and Markdown under `references/` to tier A.
