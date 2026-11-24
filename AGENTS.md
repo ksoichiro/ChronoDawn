@@ -261,6 +261,22 @@ When finishing a task, report:
 For changes that are verifiable but not yet verified, provide the exact command
 and expected success criteria.
 
-Before a PR, classify the diff with `python3 scripts/merge_tier/classify.py` and
+Before a PR:
+
+- A change to something visible or to a behavior (rendering, animation, item
+  properties, movement, worldgen, game rules) needs a unit test or a scenario
+  (`docs/scenario_check.md`) that runs it. A passing build or matching JSON
+  does not show that it works.
+- When you keep or copy a formula that mirrors vanilla, compare it with the
+  vanilla equivalent of each affected Minecraft version first. Check signs,
+  offsets, units and per-tick rates, not only that it compiles.
+- When a change needs an in-game check, do not wait for the owner and do not
+  write "not verified in game" in a PR first. Add or extend a scenario
+  (`docs/scenario_check.md`), run it on both 1.21.1 loaders (and both 26.3
+  loaders when 26.3 is affected), and attach `sheet.png` to the PR or task.
+  List as manual checks only what a scenario cannot cover, with the reason,
+  and continue.
+
+Classify the diff with `python3 scripts/merge_tier/classify.py` and
 put a `Merge tier:` line in the PR body (`docs/merge_policy.md`). The `Merge tier`
 CI check fails when the declared tier is lower than the diff's.
