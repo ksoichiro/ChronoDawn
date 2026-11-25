@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Igniting a portal frame that already has a registry entry now reuses that
+  entry instead of registering a second one at the same position. Duplicates
+  no longer pile up, so a reload can no longer make the position point to an
+  old, deactivated entry. Existing duplicates in saved worlds are left as is.
+
 - Disabling `world.structures.forgotten_library` now warns that the Portal
   Stabilizer Blueprint becomes unobtainable, and says the recipe still
   unlocks once you hold Clockstone. The config comments, Player Guide and

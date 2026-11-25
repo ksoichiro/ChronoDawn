@@ -4,6 +4,7 @@ import com.chronodawn.ChronoDawn;
 import com.chronodawn.api.event.PortalOpenCause;
 import com.chronodawn.api.event.PortalOpenedEvents;
 import com.chronodawn.core.portal.PortalFrameValidator;
+import com.chronodawn.core.portal.PortalIgnitionRegistration;
 import com.chronodawn.core.portal.PortalRegistry;
 import com.chronodawn.core.portal.PortalStateMachine;
 import com.chronodawn.data.ChronoDawnGlobalState;
@@ -21,7 +22,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * Shared portal ignition logic, triggered by right-clicking a Clockstone portal
@@ -36,8 +36,9 @@ public final class PortalIgnitionHandler {
     /**
      * Try to ignite a portal at the clicked position using the given item stack.
      * Assumes the caller has already confirmed the clicked block is Clockstone.
-     * A new entry immediately replaces the position index even if a portal was already registered
-     * there. The previous entry remains in the registry and saved data.
+     * An existing entry at the frame position is reused (see {@link PortalIgnitionRegistration}),
+     * so igniting again does not register a duplicate. Only a STABILIZED entry is replaced by a new
+     * ACTIVATED one, and the old entry then remains in the registry and saved data.
      *
      * @param level The level
      * @param clickedPos Position that was clicked
@@ -87,15 +88,9 @@ public final class PortalIgnitionHandler {
         // Fill portal interior with portal blocks
         fillPortalBlocks(level, frameData);
 
-        // Register portal in registry
-        UUID portalId = UUID.randomUUID();
-        PortalStateMachine portal = new PortalStateMachine(
-            portalId,
-            level.dimension(),
-            frameData.getBottomLeft()
-        );
-        portal.activate();
-        PortalRegistry.getInstance().registerPortal(portal);
+        // Reuse the existing entry at this frame instead of registering a duplicate
+        PortalStateMachine portal = PortalIgnitionRegistration.registerOrReuse(
+            PortalRegistry.getInstance(), level.dimension(), frameData.getBottomLeft());
         PortalOpenedEvents.fire(portal.getPortalId(), level, frameData.getBottomLeft(), PortalOpenCause.IGNITION, player);
 
         // Play ignition sound (fire charge use - similar to flint and steel)
