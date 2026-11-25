@@ -14,11 +14,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   no longer pile up, so a reload can no longer make the position point to an
   old, deactivated entry. Existing duplicates in saved worlds are left as is.
 
+- The Portal Stabilizer recipe no longer unlocks just from holding
+  Clockstone. Only the Portal Stabilizer Blueprint from the Forgotten Library
+  unlocks it in the recipe book, so the library is the way to find the recipe
+  again. Recipes already unlocked in existing worlds stay unlocked. With
+  `doLimitedCrafting` off, the recipe can still be crafted without it.
+
 - Disabling `world.structures.forgotten_library` now warns that the Portal
-  Stabilizer Blueprint becomes unobtainable, and says the recipe still
-  unlocks once you hold Clockstone. The config comments, Player Guide and
-  Chronicle entries (English and Japanese) no longer call the Forgotten
-  Library the only source of the recipe.
+  Stabilizer Blueprint becomes unobtainable.
 
 - `scenarioCheck` now fails a screenshot whose mean brightness is below 15
   out of 255 (night or an unrendered frame), and a shot step can add an

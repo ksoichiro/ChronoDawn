@@ -72,7 +72,7 @@ Outpost — shares the same four fields:
 | Structure | Config key | `enabled` | `spacing` | `separation` | `salt` | Progression role |
 | --- | --- | --- | --- | --- | --- | --- |
 | Ancient Ruins | `world.structures.ancient_ruins` | `true` | `56` | `20` | `20005897` | Gates entry to the dimension: the sole Overworld source of Clockstone Ore and the only chest that drops the Time Hourglass Blueprint. |
-| Forgotten Library | `world.structures.forgotten_library` | `true` | `30` | `15` | `8735421890` | Holds the Portal Stabilizer Blueprint. The recipe itself also unlocks once the player holds Clockstone. |
+| Forgotten Library | `world.structures.forgotten_library` | `true` | `30` | `15` | `8735421890` | Holds the Portal Stabilizer Blueprint, the only way to unlock the recipe. |
 | Desert Clock Tower | `world.structures.desert_clock_tower` | `true` | `30` | `10` | `1663542342` | Gates Time Guardian, the Key to Master Clock and Enhanced Clockstone. |
 | Guardian Vault | `world.structures.guardian_vault` | `true` | `48` | `24` | `928374651` | Gates Chronos Warden and the Guardian Stone. |
 | Clockwork Depths | `world.structures.clockwork_depths` | `true` | `56` | `28` | `837465129` | Gates Clockwork Colossus and the Colossus Gear. |
