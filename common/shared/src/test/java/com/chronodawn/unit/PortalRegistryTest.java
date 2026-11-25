@@ -23,6 +23,7 @@ import com.chronodawn.core.portal.PortalStateMachine;
 import net.minecraft.SharedConstants;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.Bootstrap;
 import net.minecraft.world.level.Level;
@@ -32,6 +33,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -184,5 +186,79 @@ class PortalRegistryTest {
 
         assertFalse(portal.isLegacyCounterpartPending());
         assertNull(registry.findLegacyPortalNear(Level.END, LEGACY_POS, 5));
+    }
+
+    /**
+     * Builds registry NBT whose Portals list holds the given portals in the given order.
+     * saveToNBT writes in ConcurrentHashMap order, so the tests below fix the order by hand
+     * to cover both outcomes of a real save. Each portal is saved on its own and the
+     * single-entry lists are joined with Tag-level calls only, because CompoundTag getters
+     * return Optional from 1.21.5 on.
+     */
+    private static CompoundTag registryNbtInOrder(PortalStateMachine... portals) {
+        PortalRegistry registry = PortalRegistry.getInstance();
+        CompoundTag root = null;
+        ListTag ordered = new ListTag();
+        for (PortalStateMachine portal : portals) {
+            registry.clear();
+            registry.registerPortal(portal);
+            CompoundTag single = new CompoundTag();
+            registry.saveToNBT(single);
+            ordered.add(((ListTag) single.get("Portals")).get(0));
+            if (root == null) {
+                root = single;
+            }
+        }
+        root.put("Portals", ordered);
+        registry.clear();
+        return root;
+    }
+
+    /**
+     * Reignition registers a new entry at the frame position without removing the
+     * DEACTIVATED one, so two entries share a position. Which one getPortalAt returns after a
+     * reload is decided by the order of the saved list, not by registration order. This test
+     * pins that behaviour; the portal ignition handlers must therefore avoid creating the
+     * duplicate in the first place.
+     */
+    @Test
+    void duplicateEntriesAtSamePosition_indexFollowsSavedListOrderAfterReload() {
+        PortalRegistry registry = PortalRegistry.getInstance();
+        BlockPos pos = new BlockPos(20, 70, 20);
+        PortalStateMachine oldEntry = new PortalStateMachine(UUID.randomUUID(), Level.OVERWORLD, pos);
+        oldEntry.setState(PortalState.DEACTIVATED);
+        PortalStateMachine newEntry = new PortalStateMachine(UUID.randomUUID(), Level.OVERWORLD, pos);
+        newEntry.setState(PortalState.ACTIVATED);
+
+        // In memory the entry registered last owns the position index.
+        registry.registerPortal(oldEntry);
+        registry.registerPortal(newEntry);
+        assertSame(newEntry, registry.getPortalAt(Level.OVERWORLD, pos));
+
+        // Saved with the new entry first: the old DEACTIVATED entry wins after reload.
+        registry.loadFromNBT(registryNbtInOrder(newEntry, oldEntry));
+        assertEquals(PortalState.DEACTIVATED, registry.getPortalAt(Level.OVERWORLD, pos).getCurrentState());
+        assertEquals(oldEntry.getPortalId(), registry.getPortalAt(Level.OVERWORLD, pos).getPortalId());
+
+        // Saved with the old entry first: the new ACTIVATED entry wins after reload.
+        registry.loadFromNBT(registryNbtInOrder(oldEntry, newEntry));
+        assertEquals(PortalState.ACTIVATED, registry.getPortalAt(Level.OVERWORLD, pos).getCurrentState());
+        assertEquals(newEntry.getPortalId(), registry.getPortalAt(Level.OVERWORLD, pos).getPortalId());
+    }
+
+    @Test
+    void duplicateEntriesAtSamePosition_bothSurviveSaveAndLoad() {
+        PortalRegistry registry = PortalRegistry.getInstance();
+        BlockPos pos = new BlockPos(30, 70, 30);
+        PortalStateMachine first = new PortalStateMachine(UUID.randomUUID(), Level.OVERWORLD, pos);
+        PortalStateMachine second = new PortalStateMachine(UUID.randomUUID(), Level.OVERWORLD, pos);
+        registry.registerPortal(first);
+        registry.registerPortal(second);
+
+        CompoundTag saved = new CompoundTag();
+        registry.saveToNBT(saved);
+        registry.loadFromNBT(saved);
+
+        assertEquals(2, registry.getAllPortals().size());
     }
 }
