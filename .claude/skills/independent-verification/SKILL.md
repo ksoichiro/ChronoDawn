@@ -41,8 +41,28 @@ Start a fresh reviewer without this conversation, using the main agent's model.
 In Claude Code, use the Agent tool with the default general-purpose agent and
 do not use `fork`. In Codex, use `collaboration.spawn_agent` with
 `fork_turns="none"`, omit model and reasoning-effort overrides, and wait for
-the result. If a fresh reviewer is unavailable, report the verification as not
-run. Fill the template below and send it as the prompt.
+the result. Fill the template below and send it as the prompt.
+
+If a fresh reviewer is unavailable, or Codex's `auto-review` mode denies the
+spawn (it judges an uncommitted diff leaving the session as a risk, and fuda
+cannot change that judgment), do not retry with another command that sends the
+diff to an outside model (`codex review`, `claude -p`, `gh pr review`). Codex
+has no documented way to get an independent reviewer past that check, so use
+the owner-started reviewer instead:
+
+1. Finish section 1 (`diff.patch`, task text, tier) and write the filled
+   template to `build/verification/prompt.md`.
+2. Tell the owner the review is needed and ask them to start the independent
+   review from the Agent tab of the fuda task (an Ask chat, run by another
+   agent that reads the diff). Do not push or open the PR meanwhile.
+3. When the owner pastes the answer, save it verbatim to
+   `build/verification/review.md` after `diff.patch` was written, so the file
+   is newer. It must keep the `Commands run:` list. If the answer lacks it,
+   ask the owner for a re-run instead of adding commands yourself.
+4. In the PR body (section 4), name the reviewer as "fuda Ask chat reviewer,
+   diff + task + tier only", not as a subagent.
+
+Report the verification as not run only when the owner declines the review.
 
 ```text
 You are reviewing a change to Chrono Dawn, a multi-loader, multi-version
