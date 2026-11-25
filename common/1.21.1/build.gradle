@@ -1,4 +1,5 @@
 apply from: rootProject.file('gradle/nbt-structures.gradle')
+apply plugin: 'jacoco'
 
 architectury {
     common rootProject.enabled_platforms.split(',')
@@ -107,6 +108,22 @@ tasks.test {
     // Pass source directory for source-parsing based resource validation tests
     systemProperty 'chronodawn.source.dir', file('src/main/java').absolutePath
     systemProperty 'chronodawn.project.root', rootProject.projectDir.absolutePath
+
+    // Measurement only: attach the JaCoCo agent just when a jacoco task is requested, so
+    // checkAll, validateAll and CI test runs stay uninstrumented and keep their duration.
+    jacoco {
+        enabled = gradle.startParameter.taskNames.any { it.contains('jacoco') }
+    }
+}
+
+// Optional coverage report: ./gradlew :common-1.21.1:test :common-1.21.1:jacocoTestReport
+// -Ptarget_mc_version=1.21.1 (report under common/1.21.1/build/reports/jacoco/test/).
+tasks.named('jacocoTestReport') {
+    reports {
+        xml.required = true
+        html.required = true
+        csv.required = true
+    }
 }
 
 // Set duplicates strategy for sourcesJar to avoid conflicts
