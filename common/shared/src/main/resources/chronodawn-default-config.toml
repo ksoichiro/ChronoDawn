@@ -48,7 +48,6 @@ salt = 20005897
 [world.structures.forgotten_library]
 # Whether the Forgotten Library generates in Chrono Dawn.
 # Disabling it removes the Portal Stabilizer Blueprint from world generation.
-# The recipe still unlocks once the player holds Clockstone.
 enabled = true
 
 # Average distance (in chunks) between placement attempts.

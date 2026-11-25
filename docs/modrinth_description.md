@@ -120,8 +120,8 @@ Build a portal frame using **Clockstone Blocks** (minimum 4×5, maximum 23×23).
 
 **⚠️ Warning**: The portal becomes one-way after entry! You'll need to find a way back.
 
-### Step 3: Unlock the Portal Stabilizer
-Hold Clockstone to unlock the **Portal Stabilizer** recipe, or explore Chrono Dawn to find the **Forgotten Library** and its Portal Stabilizer Blueprint. Craft it to unlock bidirectional travel.
+### Step 3: Find the Forgotten Library
+Explore Chrono Dawn to locate the **Forgotten Library**. Find the **Portal Stabilizer** Blueprint there to unlock the recipe, then craft it for bidirectional travel.
 
 ### Step 4: Stabilize the Portal
 Craft the **Portal Stabilizer** from 4 Clockstone, 2 Time Hourglasses, 2 Fruit of Time, and a Clockstone Block. Use it on your portal to enable free travel between dimensions.

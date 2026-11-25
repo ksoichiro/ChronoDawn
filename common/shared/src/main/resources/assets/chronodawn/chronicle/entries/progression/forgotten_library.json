@@ -9,8 +9,8 @@
   "pages": [
     {
       "text": {
-        "en_us": "The Forgotten Library is a crucial structure in Chrono Dawn. It holds the Portal Stabilizer Blueprint, a shortcut to the recipe that lets you return to the Overworld. The recipe also unlocks once you hold Clockstone.\n\nLocation:\n• Various biomes in Chrono Dawn\n• Look for distinctive ancient library architecture\n• Use /locate structure chronodawn:forgotten_library (if cheats enabled)",
-        "ja_jp": "忘れられた図書館は、クロノドーンの重要な構造物です。ポータル安定化装置の設計図があり、オーバーワールドに戻るレシピへの近道になります。クロックストーンを所持してもレシピは解放されます。\n\n場所:\n• クロノドーンのさまざまなバイオーム\n• 特徴的な古代の図書館の建築を探す\n• /locate structure chronodawn:forgotten_library を使用（チート有効時）"
+        "en_us": "The Forgotten Library is a crucial structure in Chrono Dawn. It holds the Portal Stabilizer Blueprint, which unlocks the recipe that lets you return to the Overworld.\n\nLocation:\n• Various biomes in Chrono Dawn\n• Look for distinctive ancient library architecture\n• Use /locate structure chronodawn:forgotten_library (if cheats enabled)",
+        "ja_jp": "忘れられた図書館は、クロノドーンの重要な構造物です。ポータル安定化装置の設計図があり、オーバーワールドに戻るレシピを解放できます。\n\n場所:\n• クロノドーンのさまざまなバイオーム\n• 特徴的な古代の図書館の建築を探す\n• /locate structure chronodawn:forgotten_library を使用（チート有効時）"
       }
     },
     {

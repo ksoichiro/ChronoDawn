@@ -112,6 +112,33 @@ public class AdvancementValidationTest {
         return tests;
     }
 
+    /**
+     * The Portal Stabilizer recipe must unlock only through its Blueprint (a knowledge book
+     * that fires recipe_unlocked). A criterion on Clockstone in the inventory would let players
+     * skip the Forgotten Library.
+     */
+    @SuppressWarnings("unchecked")
+    @org.junit.jupiter.api.Test
+    void portalStabilizerRecipeUnlocksOnlyThroughItsBlueprint() {
+        List<String> advFiles = TestUtils.findJsonResources("data/chronodawn/advancement/");
+        advFiles.addAll(TestUtils.findJsonResources("data/chronodawn/advancements/"));
+        if (advFiles.isEmpty()) return;
+
+        String path = advFiles.stream()
+            .filter(p -> p.endsWith("recipes/misc/portal_stabilizer.json"))
+            .findFirst().orElse(null);
+        assertTrue(path != null, "portal_stabilizer recipe advancement not found");
+        Map<String, Object> adv = TestUtils.loadJsonResource(path);
+        assertTrue(adv != null, "Could not load " + path);
+
+        Map<String, Object> criteria = (Map<String, Object>) adv.get("criteria");
+        assertTrue(criteria.keySet().equals(Set.of("has_the_recipe")),
+            "Only has_the_recipe may unlock the recipe, found: " + criteria.keySet());
+        Map<String, Object> criterion = (Map<String, Object>) criteria.get("has_the_recipe");
+        assertTrue("minecraft:recipe_unlocked".equals(criterion.get("trigger")),
+            "has_the_recipe must use recipe_unlocked: " + criterion);
+    }
+
     private String extractAdvancementPath(String path) {
         return path
             .replace("data/chronodawn/advancement/", "")
