@@ -367,12 +367,12 @@ The first time a player enters Chrono Dawn, a small village is placed on flat gr
 
 ### Forgotten Library (Chrono Dawn)
 
-**Purpose**: Contains the **Portal Stabilizer recipe**
+**Purpose**: Contains the **Portal Stabilizer Blueprint**, a shortcut to the recipe (the recipe also unlocks once you hold Clockstone)
 
 **Location**: Various biomes in Chrono Dawn
 
 **What to Find**:
-- Recipe for Portal Stabilizer (in chests or written books)
+- Portal Stabilizer Blueprint (in chests), which unlocks the recipe
 - Loot chests with rare materials
 - Books and lore
 
@@ -782,7 +782,7 @@ These four bosses must be defeated to craft the **Chrono Aegis** activated buff 
 ### Mid Game
 
 9. **Explore Chrono Dawn** to find Forgotten Library
-10. **Discover Portal Stabilizer recipe** in Forgotten Library
+10. **Unlock the Portal Stabilizer recipe** (hold Clockstone, or find the Blueprint in Forgotten Library)
 11. **Craft Portal Stabilizer** (Clockstone, a Clockstone Block, Fruit of Time, and 2 Time Hourglasses)
 12. **Stabilize your portal** for bidirectional travel
 13. **Locate Desert Clock Tower** (spawns in various biomes)
@@ -834,7 +834,7 @@ Vanilla reference: iron armor totals 15 defense, diamond totals 20 with toughnes
 #### Portal Stabilizer
 - **Use**: Makes one-way portals bidirectional
 - **Durability**: Single-use (consumed on activation)
-- **Recipe**: 4 Clockstone + 2 Time Hourglasses + 2 Fruit of Time + 1 Clockstone Block (recipe found in Forgotten Library)
+- **Recipe**: 4 Clockstone + 2 Time Hourglasses + 2 Fruit of Time + 1 Clockstone Block (unlocks when you hold Clockstone, or from the Blueprint in Forgotten Library)
 - **How to Use**: Right-click the Clockstone frame of your deactivated portal. If you lost track of it, build a new complete Clockstone frame in Chrono Dawn and right-click that instead. Stabilization applies to the whole dimension, so afterwards ignite any frame with a Time Hourglass
 
 #### Unstable Hourglass
@@ -1200,10 +1200,9 @@ All three wood types have the same variants:
    - Explore all 5 floors for loot
 
 2. **Forgotten Library**
-   - **Essential** for progression (Portal Stabilizer recipe)
+   - **Recommended** for progression (Portal Stabilizer Blueprint)
    - Explore thoroughly for loot
-   - Take notes or screenshots of recipe
-   - Store recipe safely
+   - Take the Portal Stabilizer Blueprint with you
 
 3. **Structure Locations**
    - Use the Time Compass to locate structures
@@ -1330,7 +1329,7 @@ All three wood types have the same variants:
 - Frame must be hollow inside (no blocks in center)
 
 **Can't return to Overworld**:
-- Find Forgotten Library for Portal Stabilizer recipe
+- Hold Clockstone to unlock the Portal Stabilizer recipe (the Forgotten Library Blueprint also unlocks it)
 - Craft Portal Stabilizer from Clockstone, a Clockstone Block, Fruit of Time, and 2 Time Hourglasses
 - Right-click portal frame with Portal Stabilizer
 - Lost the arrival portal? Build a new 4×5 (or larger) Clockstone frame anywhere in Chrono Dawn and use the Portal Stabilizer on it
@@ -1392,7 +1391,7 @@ All three wood types have the same variants:
 ### Q: Can I return to the Overworld after entering Chrono Dawn?
 
 **A**: Not immediately. The portal becomes one-way after entry. You must:
-1. Find the Forgotten Library
+1. Unlock the Portal Stabilizer recipe (hold Clockstone, or find the Blueprint in the Forgotten Library)
 2. Craft the Portal Stabilizer
 3. Stabilize your portal to enable bidirectional travel
 
@@ -1456,7 +1455,7 @@ All three wood types have the same variants:
 You're now ready to explore Chrono Dawn! Remember the key steps:
 
 1. **Prepare Before Entry**: Gather resources, craft extras, set respawn
-2. **Find Forgotten Library**: Get Portal Stabilizer recipe
+2. **Unlock the Portal Stabilizer recipe**: Hold Clockstone, or find the Blueprint in Forgotten Library
 3. **Stabilize the Portal**: Craft and use Portal Stabilizer for bidirectional travel
 4. **Defeat Time Guardian**: Obtain Enhanced Clockstone and Key to Master Clock
 5. **Defeat All 4 Mid-Bosses**: Collect materials for Chrono Aegis

@@ -76,6 +76,30 @@ class ProgressionWarningsTest {
     }
 
     @Test
+    void disabledForgottenLibrary_warnsAboutBlueprintNotRecipe() {
+        ChronoDawnConfig.Structures d = ConfigDefaults.defaults().world().structures();
+        ChronoDawnConfig.Structures s = new ChronoDawnConfig.Structures(
+            d.ancientRuins(),
+            disable(d.forgottenLibrary(), false),
+            d.desertClockTower(),
+            d.guardianVault(),
+            d.clockworkDepths(),
+            d.phantomCatacombs(),
+            d.entropyCrypt(),
+            d.masterClock(),
+            d.sentinelOutpost()
+        );
+
+        List<String> warnings = ProgressionWarnings.forDisabledStructures(s);
+
+        assertEquals(1, warnings.size());
+        assertTrue(warnings.get(0).contains("world.structures.forgotten_library"), warnings.get(0));
+        assertTrue(warnings.get(0).contains("Portal Stabilizer Blueprint"), warnings.get(0));
+        assertTrue(warnings.get(0).contains("Clockstone also unlocks the recipe, becomes unobtainable"),
+            warnings.get(0));
+    }
+
+    @Test
     void disabledBiomeWithContentNote_producesAWarning() {
         ChronoDawnConfig.Biomes biomes = disable(ManagedBiome.SNOWY);
 
