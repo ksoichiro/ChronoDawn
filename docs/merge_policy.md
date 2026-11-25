@@ -77,7 +77,7 @@ The author still raises the tier by hand when the content calls for it.
 <!-- merge-tier-rules:begin (generated from scripts/merge_tier/rules.json) -->
 | # | Tier | Paths | What |
 |---|---|---|---|
-| 1 | D | `CLAUDE.md`, `**/CLAUDE.md`, `AGENTS.md`, `**/AGENTS.md`, `.claude/**`, `.codex/**`, `**/SKILL.md` | Agent instructions and skills |
+| 1 | D | `CLAUDE.md`, `**/CLAUDE.md`, `AGENTS.md`, `**/AGENTS.md`, `.claude/**`, `.agents/**`, `.codex/**`, `**/SKILL.md` | Agent instructions and skills |
 | 2 | D | `.github/**`, `scripts/hooks/**`, `scripts/merge_tier/**`, `docs/merge_policy.md` | CI, Git hooks and this classifier |
 | 3 | D | `gradle/shared`, `gradle/shared/**`, `gradle/chronodawn-validation.gradle`, `gradle/version-sync.lock`, `gradle/disk-space-check.gradle`, `gradle/upgrade-test.gradle`, `gradle.properties`, `scripts/*_rules.json`, `prod-smoke-log-ignore.txt`, `upgrade-test-log-ignore.txt` | Validators, their rule files and settings. gradle.properties lists the validators that checkAll and validateAll run |
 | 4 | A (D when deleted) | `scripts/upgrade_test/tests/**`, `scripts/upgrade_test/layers/**`, `scripts/scenario_check/tests/**`, `scripts/scenario_check/scenarios/**` | Tests and test content for the verification drivers. Deleting one weakens a gate |

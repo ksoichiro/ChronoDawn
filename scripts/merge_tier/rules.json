@@ -8,7 +8,7 @@
     {
       "tier": "D",
       "note": "Agent instructions and skills",
-      "patterns": ["CLAUDE.md", "**/CLAUDE.md", "AGENTS.md", "**/AGENTS.md", ".claude/**", ".codex/**", "**/SKILL.md"]
+      "patterns": ["CLAUDE.md", "**/CLAUDE.md", "AGENTS.md", "**/AGENTS.md", ".claude/**", ".agents/**", ".codex/**", "**/SKILL.md"]
     },
     {
       "tier": "D",

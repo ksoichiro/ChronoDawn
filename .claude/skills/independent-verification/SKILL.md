@@ -37,11 +37,12 @@ hypothesis makes it confirm the hypothesis.
 
 ## 2. Dispatch the reviewer
 
-Use the Agent tool with the default general-purpose agent. Never use `fork`,
-which inherits this conversation. Do not pass a `model` override: the policy
-fixes the reviewer to the main agent's model. Run it in the foreground, since the next
-step depends on its result. Fill the template below and send it as the
-prompt.
+Start a fresh reviewer without this conversation, using the main agent's model.
+In Claude Code, use the Agent tool with the default general-purpose agent and
+do not use `fork`. In Codex, use `collaboration.spawn_agent` with
+`fork_turns="none"`, omit model and reasoning-effort overrides, and wait for
+the result. If a fresh reviewer is unavailable, report the verification as not
+run. Fill the template below and send it as the prompt.
 
 ```text
 You are reviewing a change to Chrono Dawn, a multi-loader, multi-version
