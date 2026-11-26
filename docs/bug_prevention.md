@@ -224,7 +224,9 @@ The agent on the gardening task:
 1. Finds the date of the previous task titled `Weekly gardening`, or uses the
    last seven days for the first run. Reads the commits on `main` since then
    whose subject starts with `fix`, and the lines added under `### Fixed` in
-   `CHANGELOG.md` (`git log --first-parent --since=<date> main`).
+   `CHANGELOG.md` (`git log --no-merges --since=<date> main`). Do not use
+   `--first-parent`: `main` takes pull requests as merge commits, so it would
+   list only their subjects.
 2. Groups them by root cause, not by symptom. Sets each group against the
    "Bug classes" table: a recurrence of an existing class, or a new class.
 3. Leaves alone every cause that appears once. Acts only on a cause that
