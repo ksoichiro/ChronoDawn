@@ -19,9 +19,10 @@ import java.util.UUID;
  * - DEACTIVATED → ACTIVATED: restoration of an existing destination frame
  * - DEACTIVATED → STABILIZED: use of a Portal Stabilizer
  *
- * Igniting an empty frame registers a new ACTIVATED entry even when a
- * STABILIZED entry already exists at that position. The position index then
- * initially points to the new entry, while the old entry remains in the registry and
+ * Igniting an empty frame reuses the existing entry at that position when it is
+ * INACTIVE, DEACTIVATED or ACTIVATED, so no duplicate is registered. Only when a
+ * STABILIZED entry exists does ignition register a new ACTIVATED entry. The position
+ * index then points to the new entry, while the old entry remains in the registry and
  * saved data. This is replacement, not a transition of the old entry.
  * Portal blocks and registry state can diverge when a frame is broken.
  *
