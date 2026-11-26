@@ -345,7 +345,14 @@ The agent on the morning-check task:
    the morning-check task, with the pull request link, the declared and the
    computed tier, and what is wrong. The owner decides about the revert, so
    the agent changes no files, opens no pull request and reverts nothing.
-4. Comments the script's report on the morning-check task and stops. fuda
+4. Checks the nightly build of the versions that CI skips
+   (`.github/workflows/nightly.yml`) with
+   `gh run list --workflow nightly.yml --limit 3 --json databaseId,conclusion,createdAt,url`.
+   A skipped night is a success whose step summary says why. For a failed
+   run, `gh run view <id> --json jobs` lists the failed versions, and the
+   agent creates one fuda task with those versions and the run link, unless
+   a task for that run exists. It fixes nothing.
+5. Comments the script's report on the morning-check task and stops. fuda
    does not let an agent close its own task, so the owner finishes it.
 
 The auto start runs the task only when the project is opted in and 07:00 is
