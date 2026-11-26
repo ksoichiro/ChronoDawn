@@ -189,3 +189,115 @@ working tree, not the index, so unstaged edits are checked too.
 | Thread-safety lint | No case since 0.4.0-beta. `audit-performance-thread-safety` stays a review skill |
 | Java linters (Checkstyle, Error Prone, SpotBugs) | None of the bug classes above is a style or nullness issue that these tools catch. They would add a build cost to every version without covering a past bug |
 | Skill or CLAUDE.md notes | Not enforced. Used only for rules that no check can express |
+
+## Weekly gardening
+
+Most fixes are one-off. A few come back with the same root cause, and those
+are worth turning into a check. A weekly scheduled task looks for them so the
+tables above do not depend on someone remembering to update them. It follows
+the same mechanism as the morning check in
+[merge_policy.md](merge_policy.md#running-the-morning-check-on-a-schedule).
+
+### Schedule setup (owner)
+
+A fuda schedule on the Chrono Dawn project creates the gardening task, and the
+fuda agent auto start runs an agent on it. Schedules have no MCP tool or CLI
+command, so the owner creates it on the project's Schedules page:
+
+- Cron `0 8 * * 1` (Monday 08:00, server local time). It does not overlap the
+  morning check at `0 7 * * *`.
+- Status Todo, so that the auto start picks the task.
+- "Skip if open" off. The agent cannot close its own task, so with the option
+  on, a week whose previous task the owner has not closed yet would create
+  nothing, and the routine would never run again.
+- Title: `Weekly gardening`. The agent finds the previous run by this title.
+- Template body: `Run the "Weekly gardening" section of docs/bug_prevention.md
+  and nothing else.`
+
+The auto start runs the task only when the project is opted in and the time is
+inside its window. Otherwise the task waits in Todo for the owner to start it.
+
+### Agent procedure
+
+The agent on the gardening task:
+
+1. Finds the date of the previous task titled `Weekly gardening`, or uses the
+   last seven days for the first run. Reads the commits on `main` since then
+   whose subject starts with `fix`, and the lines added under `### Fixed` in
+   `CHANGELOG.md` (`git log --first-parent --since=<date> main`).
+2. Groups them by root cause, not by symptom. Sets each group against the
+   "Bug classes" table: a recurrence of an existing class, or a new class.
+3. Leaves alone every cause that appears once. Acts only on a cause that
+   shows up in several fixes, or where several agents or sessions reached for
+   the same shortcut or workaround.
+4. For each remaining group, creates one fuda task, related to the gardening
+   task. It proposes either a row for the "Bug classes" table or a new check.
+   It does not propose a check that is already in "Rejected and deferred
+   checks" or in "Memory conversion candidates" below, unless the new fixes
+   are evidence for reconsidering it. Then it says so in the task.
+5. Comments a short report on the gardening task and stops: the range read,
+   the groups found, the tasks created, and the causes left alone. fuda does
+   not let an agent close its own task, so the owner finishes it.
+
+The agent changes no files and opens no pull request in the gardening task
+itself. Each proposal is implemented in its own task.
+
+### Turning a cause into a check
+
+When an agent implements one of these proposals, including a fix it made
+itself, it follows the same rules as any other change:
+
+- Classify the diff with `python3 scripts/merge_tier/classify.py` and follow
+  [merge_policy.md](merge_policy.md). Adding a validator, a rule file, a
+  `scripts/hooks/**` script, a skill, or an entry in `checkall_extra_tasks` is
+  tier D, so the owner merges it. A script under `scripts/**` that no gate
+  runs is tier A.
+- Run the independent verification (`independent-verification` skill) on the
+  diff before the pull request. A check written by the author of the fix is
+  the case where a fresh reviewer matters most.
+- Show that the check fails on a reproduction of the bug and passes on the
+  current tree, and write the reproduction in "New checks" like the entries
+  there.
+- Add the new class or check to the tables in this document in the same
+  change.
+
+## Memory conversion candidates
+
+Claude's feedback memory held about 210 entries when this list was made
+(2026-11-27). Entries are local to the developer's machine, so the list names
+the topic and not the file. Entries were left out of the list when:
+
+- A check already covers them (the validators in `checkall_extra_tasks`,
+  `StructureTemplateTest`, the Merge tier gate, or the pre-commit hook). This
+  includes loot table, recipe and advancement era formats, `table_bonus`
+  `chances`, recipe unlock advancements, loader entity registration, mixin
+  refmaps, `noCollission`, `Identifier`, `WaterAnimal`, the lang and subtitle
+  keys, block loot tables and the NBT block-entity rule.
+- They are in "Rejected and deferred checks" (pose reset, `SavedData`
+  `save()`, render layer registration).
+- They are workflow, sandbox, Gradle, subagent or machine notes. Those are
+  not file properties. They stay as memory, `CLAUDE.md` or a skill.
+- They are one-off facts, such as a library version pin or a vanilla quirk
+  that needs a reviewer to know it. Examples are the Architectury minimum for
+  26.3 and the `SeagrassBlock` fluid state.
+
+What remains, ordered by how often the class bit, then by how cheap the check
+is. "Form" is the cheapest place to enforce it. Each row becomes its own task
+when someone picks it up, following the rules above.
+
+| Candidate | Form | Why it is mechanical |
+|---|---|---|
+| Era-specific Java symbol rules: `setId()` before 1.21.2, `saturationMod` vs `saturationModifier`, `net.minecraft.Util` move in 1.21.11, `MapCodec` on 1.20.1 | New entries in `scripts/era_symbol_rules.json` | Same mechanism as `validateEraSymbols`. Each is a regex with a version range. CI builds only 1.21.1 and 26.3, so these break at the next `buildAll` otherwise. Tier D |
+| Era JSON schema rules: `IntProvider` uniform nesting on 1.20.1, biome music schema, `dimension_type` `timelines` on 1.21.11, `pack.mcmeta` `min_format` on 26.x, explicit `type` in disk `state_provider` on 26.1.2, `matching_fluids` on 1.20.1, 26.2-only advancement predicates | A rule file read by `validateEraJsonFormat`, one entry per JSON path and version range | These are silent or world-creation crashes that only a per-version run shows. The paths and keys are fixed per era |
+| Feature order cycle across biomes | Validator | Minecraft sorts every biome's `features` array into one topological order and crashes on entering the dimension if two biomes disagree. The check builds the same graph from the biome JSON and reports a cycle |
+| Every dimension biome lists the ore features, and each loader has its biome modifier | Validator | Three biomes once missed two ores with no error. Forge 1.20.1 needs its own `forge/biome_modifier` and NeoForge needs `data/<ns>/neoforge/biome_modifier/`. The check compares the ore placed features against each biome and each loader's modifier files |
+| Biome music and ambient sound events exist in `ModSounds` | Validator | A biome JSON that names an unregistered sound event crashes worldgen. `sounds.json` alone does not register it |
+| Ore `configured_feature` targets also the deepslate variant, and solid blocks are in the 26.3 heightmap tag | Validator (JSON) | The deepslate surface rule replaces the base stone below Y 0, so an ore that targets only the base stone never generates there. On 26.3 an untagged solid block reads as air in the heightmaps |
+| Feature configs that take `Holder<PlacedFeature>` | Validator (JSON) | A bare configured feature where a placed feature is required crashes world creation. The accepted shapes are a string id or an inline object |
+| Structure generation code uses the dimension's custom blocks | Validator (Java text) with an allowlist | `Blocks.DIRT` hardcoded in a structure placer leaves vanilla blocks in the dimension. A grep over the placer classes finds them |
+| Boss `Monster` subclasses override both `isPersistenceRequired()` and `removeWhenFarAway()` | Validator (Java text) or GameTest | A boss that overrides only one still despawns. The boss list comes from the entity registry |
+| Blocks that need the right tool are in `needs_stone_tool` or `needs_iron_tool`, and custom dirt-type blocks are in `minecraft:dirt` | Validator (tag membership) | Same shape as `validateBlockTagMembership`. The rule needs the Java factory that sets `requiresCorrectToolForDrops()` |
+| Block model lint: inline `elements` have a `block/block` parent, a model that uses `tintindex` descends from `tinted_cross`, no `template_kelp` or `template_seagrass` parents, double slabs with distinct sides have their own model | Validator (JSON) | Each is a parent or key rule on model files. The failures are a flat dark icon, a tint that never applies, or a missing parent |
+| `ComposterBlock.COMPOSTABLES` covers every custom subclass of a vanilla plant block | GameTest | The registration is code only, so it cannot be read from data. JUnit tests avoid the registry, so this needs a GameTest |
+| `@ExpectPlatform` implementations exist at `<package>.<loader>.<Class>Impl` | Validator (Java text) | A wrong package compiles and fails when the method is first called |
+| A change to `props/*.properties` that raises a minimum version carries a `CHANGELOG.md` Unreleased line | `scripts/hooks/pre-commit` | The bump is user-facing because an old pin crashes at startup. The hook already inspects `CHANGELOG.md` |
