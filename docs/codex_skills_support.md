@@ -7,12 +7,11 @@ this, since its skill paths have changed before.
 
 - Codex reads `AGENTS.md`, so the shared rules there (including the
   "Verification Reporting" rules before a PR) already apply to Codex.
-- The 19 project skills live in `.claude/skills/<name>/SKILL.md`. Codex does
-  not scan `.claude/`, so none of them is available to Codex today.
-- The "read the matching skill before the work" rule and its skill list are
-  only in `CLAUDE.md`, which Codex does not read. That list names 7 of the 19
-  skills. `AGENTS.md` names one skill (`verification-commands`) without a
-  path, so Codex cannot open it.
+- The 20 project skills live in `.claude/skills/<name>/SKILL.md`. Codex does
+  not scan `.claude/`. `.agents/skills` is a symlink to `../.claude/skills`
+  (option 1 below), which is where Codex looks.
+- The "read the matching skill before the work" rule and the skill list are in
+  `AGENTS.md` ("Project Skills"), so Codex sees them too.
 - Every `SKILL.md` already has the `name` and `description` frontmatter that
   Codex requires.
 
@@ -44,31 +43,40 @@ From [Build skills](https://learn.chatgpt.com/docs/build-skills) (the old
 
 ## Claude Code specific content in the skills
 
-- `independent-verification` tells the agent to use "the Agent tool with the
-  default general-purpose agent" and never `fork`. These are Claude Code
-  terms. Codex needs its own way to start a reviewer that does not inherit the
-  conversation, or the step has to be written without naming a tool.
-- `verification-commands` says some tasks must run outside the sandbox. The
-  notes were written for the Claude Code sandbox, and Codex has its own, so
-  they may not match.
-- The skill list in `CLAUDE.md` ("Read the matching skill before the work")
-  has no counterpart in `AGENTS.md`.
+Reworded so that they hold for Codex as well:
+
+- `independent-verification` has separate steps for Claude Code (Agent tool,
+  no `fork`) and Codex (`collaboration.spawn_agent` with `fork_turns="none"`).
+- `verification-commands` says "without the agent sandbox" and names the
+  Claude Code and Codex cases. It also notes that the PostToolUse hook is
+  Claude Code only and tells Codex to run `validateVersionSync` by hand.
+- `pr-gate` says the hook is Claude Code only and that Codex must do the same
+  checks by hand.
+
+## Decision (2026-11-27)
+
+Option 1: `.agents/skills` is a relative symlink to `../.claude/skills`.
+
+- One copy of each skill, and description-based selection and `$skill-name`
+  both work.
+- `.claude/skills` stays the real directory, so the Claude Code sandbox rule
+  that keeps it read-only is unchanged (option 2 would change it).
+- Merge tier: `.agents/**` is already in tier D (`scripts/merge_tier/rules.json`),
+  so no rule change was needed.
+- Re-checked the Codex documentation on 2026-11-27: repository skills are
+  still read from `.agents/skills`, symlinked skill folders are followed, and
+  the skill list is limited to 2% of the context window.
+- Not verified here: a Codex session listing all 20 skills and any shortening
+  of descriptions by the context budget. Check with `/skills` in Codex, and if
+  descriptions are cut, shorten them or set `skills.max_context_tokens`.
+- Windows checkouts may not create the symlink. If that is reported, switch
+  to option 2 or 3.
 
 ## Options
 
-1. Symlink `.agents/skills` to `.claude/skills`. One copy of every skill, no
-   duplication. Needs a check that the symlink works on the Codex version in
-   use and on Windows checkouts, which may not create symlinks.
+1. Symlink `.agents/skills` to `.claude/skills` (adopted).
 2. Move the skills to `.agents/skills` and symlink `.claude/skills` to it.
-   Same effect, but makes the neutral location the source.
-3. Add a skill index to `AGENTS.md` with the `SKILL.md` paths, and tell agents
-   to read the matching file before the work. Works for any agent without
-   skill support, but skills are no longer picked by description. The index
-   has to cover all 19 skills, not only the 7 that `CLAUDE.md` lists.
-
-Any option that adds `.agents/` also needs `.agents/**` in the tier D pattern
-of `scripts/merge_tier/rules.json` and the table in `docs/merge_policy.md`,
-because those paths are agent instructions. With the current rules only
-`.agents/skills/*/SKILL.md` is tier D (through `**/SKILL.md`). The
-`.agents/skills` symlink itself and files under a skill's `scripts/` fall to
-the default tier C, and Markdown under `references/` to tier A.
+   Makes the neutral location the source, but changes the sandbox assumption.
+3. Add a skill index to `AGENTS.md` with the `SKILL.md` paths. Works for any
+   agent, but skills are no longer picked by description. The index has to
+   cover all 20 skills.

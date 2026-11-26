@@ -62,6 +62,27 @@ subprojects. Minecraft 1.21.3 is a hotfix release that reuses the 1.21.2
 modules; do not add separate `common/1.21.3`, `fabric/1.21.3`, or
 `neoforge/1.21.3` modules unless the build model changes.
 
+## Project Skills
+
+Skills are in `.claude/skills/<name>/SKILL.md`. `.agents/skills` is a symlink to
+`.claude/skills`, which is where Codex looks, so there is one copy. Read the
+matching skill before the work:
+
+- `verification-commands`: build, clean, run, test, validate and release commands, TLA+ model checking, `prodSmokeTest`, `upgradeTest`, `scenarioCheck`, `checkAll`, parallel verification limits, CI notes
+- `multiversion-support`: era-specific API differences between Minecraft versions
+- `mixin-guide`: adding and verifying Mixins
+- `doc-maintenance`: which docs to update for versions, content, dependencies and releases
+- `license-compliance`: LGPL-3.0 rules for dependencies and assets
+- `scenario-check`: adding or editing `scripts/scenario_check/scenarios/*.json`
+- `independent-verification`: required before a PR (`docs/merge_policy.md`)
+- `pr-gate`: when the hook denies `git push` or `gh pr create`, and before pushing a branch for a PR
+
+The directory holds more skills (mobs, terrain, worldgen, textures, versioning
+and others). Pick one by its `description` when the task matches. Some skills
+mention the Claude Code sandbox or hooks. Codex has its own sandbox, so apply
+the intent (network, JVM forks and local ports need an unrestricted run) and
+not the exact tool names.
+
 ## Working Rules
 
 - Preserve existing user changes. Check `git status --short` before editing and
@@ -146,7 +167,8 @@ git submodule update --init
 ```
 
 Patterns (`<version>` is `1.21.1` in `-Ptarget_mc_version`, `1_21_1` in task
-names; the `verification-commands` skill lists every option):
+names; the `verification-commands` skill, `.claude/skills/verification-commands/SKILL.md`,
+lists every option):
 
 ```bash
 ./gradlew build<version>                  # e.g. build26_3, build1_21_1, build1_20_1
