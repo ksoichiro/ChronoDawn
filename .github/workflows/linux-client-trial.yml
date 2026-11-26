@@ -1,0 +1,155 @@
+name: Linux client trial
+
+# Trial run (investigation, not a gate): can scenarioCheck and upgradeTest open
+# a Minecraft client on an ubuntu-24.04 runner with Xvfb and Mesa llvmpipe
+# software rendering? See docs/linux-ci-client-trial.md.
+#
+# Nothing is uploaded as an artifact. The jobs print text only (report, log
+# tails, image-check numbers), because screenshots show Minecraft assets and
+# the JARs, mappings and worlds must not leave the runner.
+# Not a required check and not part of ci.yml.
+
+on:
+  # TEMPORARY: lets the trial run from this branch before the file is on main.
+  # Remove before merging.
+  push:
+    branches: [lucky-seal]
+    paths: ['.github/workflows/linux-client-trial.yml']
+  workflow_dispatch:
+    inputs:
+      scenarios:
+        description: Comma-separated scenario names for scenarioCheck
+        default: polished-stones
+        type: string
+
+permissions:
+  contents: read
+
+env:
+  JAVA_OPTS: --enable-native-access=ALL-UNNAMED
+  # A hosted runner can have less than the 20 GB default free. The trial
+  # records the real usage instead.
+  ORG_GRADLE_PROJECT_min_free_disk_gb: 0
+  # Software rendering through Mesa llvmpipe on the Xvfb display.
+  LIBGL_ALWAYS_SOFTWARE: '1'
+  GALLIUM_DRIVER: llvmpipe
+
+jobs:
+  scenario:
+    name: scenarioCheck (${{ matrix.loader }} ${{ matrix.mc }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        loader: [fabric, neoforge]
+        mc: ['1.21.1', '26.3']
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: recursive
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: |
+            21
+            25
+      - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+        with:
+          cache-read-only: true
+      - name: Install Xvfb and Mesa
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends xvfb libgl1 libglx-mesa0 libgl1-mesa-dri \
+            libegl1 mesa-vulkan-drivers libxrandr2 libxcursor1 libxi6 libxxf86vm1 libxrender1 \
+            libxtst6 libopenal1 mesa-utils x11-utils
+      - name: Baseline resources
+        run: |
+          echo "start=$(date +%s)" >> "$GITHUB_ENV"
+          nproc
+          free -m
+          df -h /
+      - name: Renderer info
+        run: xvfb-run -a -s "-screen 0 1280x720x24" sh -c 'glxinfo -B | head -30'
+      - name: Run scenarioCheck
+        run: |
+          # Sample memory every 10 s so the peak can be reported afterwards.
+          mkdir -p "$RUNNER_TEMP/trial"
+          (while true; do free -m | awk 'NR==2 {print $3}' >> "$RUNNER_TEMP/trial/mem.txt"; sleep 10; done) &
+          xvfb-run -a -s "-screen 0 1280x720x24" \
+            ./gradlew :${{ matrix.loader }}:scenarioCheck -Ptarget_mc_version=${{ matrix.mc }} \
+              -Pscenario_check_scenarios=${{ inputs.scenarios || 'polished-stones' }} --console=plain
+      - name: Report (text only, never uploaded)
+        if: always()
+        run: |
+          out=${{ matrix.loader }}/${{ matrix.mc }}/build/scenario-check
+          echo "elapsed: $(( $(date +%s) - ${start:-0} )) s"
+          echo "peak used memory (MB): $(sort -n "$RUNNER_TEMP/trial/mem.txt" | tail -1)"
+          df -h /
+          du -sh "$out" run-prod ~/.gradle 2>/dev/null || true
+          echo "::group::report.txt"; cat "$out/report.txt" || true; echo "::endgroup::"
+          echo "::group::summary.md (without images)"; grep -v '^!\[' "$out/summary.md" || true; echo "::endgroup::"
+          echo "::group::image checks"
+          vpy=$(find run-prod -path '*upgrade-test/venv/bin/python' | head -1)
+          for f in "$out"/*/shots/*.png; do
+            echo "$f"
+            "$vpy" -c 'import sys; from pathlib import Path; from PIL import Image
+          from scripts.scenario_check import images
+          f = Path(sys.argv[1])
+          print("  size", Image.open(f).size)
+          for name, ok, detail in images.check(f): print("  ", "ok " if ok else "BAD", name, detail)' "$f" || true
+          done
+          echo "::endgroup::"
+          echo "::group::client log tail"; tail -n 120 "$out/scenario-client.log" || true; echo "::endgroup::"
+          echo "::group::server log tail"; tail -n 60 "$out/scenario-server.log" || true; echo "::endgroup::"
+          echo "::group::transcripts"; cat "$out"/*/transcript.txt | tail -n 150 || true; echo "::endgroup::"
+
+  upgrade:
+    name: upgradeTest (${{ matrix.loader }} ${{ matrix.mc }})
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        loader: [fabric]
+        mc: ['1.21.1']
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: recursive
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: |
+            21
+            25
+      - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+        with:
+          cache-read-only: true
+      - name: Install Xvfb and Mesa
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends xvfb libgl1 libglx-mesa0 libgl1-mesa-dri \
+            libegl1 mesa-vulkan-drivers libxrandr2 libxcursor1 libxi6 libxxf86vm1 libxrender1 \
+            libxtst6 libopenal1
+      - name: Baseline resources
+        run: |
+          echo "start=$(date +%s)" >> "$GITHUB_ENV"
+          free -m
+          df -h /
+      - name: Run upgradeTest
+        run: |
+          mkdir -p "$RUNNER_TEMP/trial"
+          (while true; do free -m | awk 'NR==2 {print $3}' >> "$RUNNER_TEMP/trial/mem.txt"; sleep 10; done) &
+          xvfb-run -a -s "-screen 0 1280x720x24" \
+            ./gradlew :${{ matrix.loader }}:upgradeTest -Ptarget_mc_version=${{ matrix.mc }} --console=plain
+      - name: Report (text only, never uploaded)
+        if: always()
+        run: |
+          echo "elapsed: $(( $(date +%s) - ${start:-0} )) s"
+          echo "peak used memory (MB): $(sort -n "$RUNNER_TEMP/trial/mem.txt" | tail -1)"
+          df -h /
+          du -sh run-prod ~/.gradle 2>/dev/null || true
+          for f in $(find ${{ matrix.loader }}/${{ matrix.mc }}/build/upgrade-test -name '*client*.log' -o -name 'report*.txt' -o -name 'summary*.md' | head -20); do
+            echo "::group::$f"; tail -n 100 "$f" || true; echo "::endgroup::"
+          done
