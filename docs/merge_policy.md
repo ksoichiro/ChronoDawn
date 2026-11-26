@@ -168,6 +168,10 @@ the pull request is opened, a second reviewer tries to break the diff.
    uses the same model as the main agent, so the independence comes from the
    clean context and from the evidence rule below, not from a different
    model. It gets only the diff, the task text and the tier of the change.
+   When a Codex `auto-review` session cannot start such a subagent, the owner
+   starts the review as an Ask chat from the Agent tab of the fuda task, and
+   the agent saves the answer as `review.md`. The requirement stays
+   "required": it is not waived for Codex.
 2. **What it does.** It tries to break the change: edge cases, the other
    loader, the other Minecraft versions, existing worlds, and the bug classes
    in `bug_prevention.md` that match the touched files. It may run builds,
