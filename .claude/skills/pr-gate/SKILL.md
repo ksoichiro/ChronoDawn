@@ -11,6 +11,11 @@ repository, and denies the command with the reason when a check fails. The
 reason arrives as the tool result. Fix what it names and run the command
 again. Do not work around the hook with another command that pushes.
 
+Claude Code runs the hook from `.claude/settings.json` and Codex from
+`.codex/hooks.json`. Codex skips it until the owner trusts it in `/hooks`, so
+until then a Codex session must do the same checks by hand before `git push`
+and `gh pr create`.
+
 ## What it checks
 
 The diff is `git diff $(git merge-base origin/main HEAD) HEAD`. `gh pr create

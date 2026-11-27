@@ -5,20 +5,11 @@
 The shared project instructions are in `AGENTS.md`, imported above. Change shared
 rules there. This file holds only Claude Code specifics, and it is loaded into
 every session, so keep it short. Put task-specific procedures in
-`.claude/skills/` and link them from here.
+`.claude/skills/` and list them in `AGENTS.md`.
 
 ## Skills
 
-Read the matching skill before the work:
-
-- `verification-commands`: build, clean, run, test, validate and release commands, TLA+ model checking, `prodSmokeTest`, `upgradeTest`, `scenarioCheck`, `checkAll`, parallel verification limits, CI notes
-- `multiversion-support`: era-specific API differences between Minecraft versions
-- `mixin-guide`: adding and verifying Mixins
-- `doc-maintenance`: which docs to update for versions, content, dependencies and releases
-- `license-compliance`: LGPL-3.0 rules for dependencies and assets
-- `scenario-check`: adding or editing `scripts/scenario_check/scenarios/*.json`
-- `independent-verification`: required before a PR (`docs/merge_policy.md`)
-- `pr-gate`: when the hook denies `git push` or `gh pr create`, and before pushing a branch for a PR
+The skill list and the "read the matching skill before the work" rule are in `AGENTS.md` ("Project Skills").
 
 ## Before a PR
 
