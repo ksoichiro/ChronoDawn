@@ -1,0 +1,14 @@
+{
+  "description": "Tick profile: one player standing in Chrono Dawn with no extra entities.",
+  "steps": [
+    "execute in chronodawn:chronodawn run spreadplayers 0 0 0 1 false ${player}",
+    "gamemode creative ${player}",
+    {
+      "settle": 90
+    },
+    {
+      "sleep": 120,
+      "reason": "the tick profile agent samples the server thread for a fixed wall-clock window, no game condition ends it"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "description": "Tick profile baseline: one player in the Overworld, nobody in Chrono Dawn. Measures what the mod's handlers cost while the dimension has no players.",
+  "steps": [
+    "gamemode creative ${player}",
+    {
+      "settle": 60
+    },
+    {
+      "sleep": 120,
+      "reason": "the tick profile agent samples the server thread for a fixed wall-clock window, no game condition ends it"
+    }
+  ]
+}
