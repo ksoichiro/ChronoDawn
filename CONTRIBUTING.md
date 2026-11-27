@@ -180,17 +180,14 @@ git commit -m "docs: update README installation steps"
    - Go to [GitHub Pull Requests](https://github.com/ksoichiro/ChronoDawn/pulls)
    - Click "New Pull Request"
    - Select your branch
-   - Fill out the PR template with:
-     - Clear description of changes
-     - Related issue number (e.g., "Fixes #123")
-     - Screenshots (if UI changes)
-     - Testing notes
+   - There is no PR template. Write these in the description:
+     - What changed and why
+     - A related issue, if any, written as `Related: #123`. Do not use closing keywords such as `Fixes #123`, because the maintainers close issues by hand
+     - A `Merge tier: X` line (`X` is `A`, `B`, `C` or `D`), see "Merge tier" below
+     - How you tested it: the commands you ran and what you saw. Add screenshots for visible changes
+     - A short `Verification` section listing what you tried to break and the result (see [Merge Policy](docs/merge_policy.md#independent-verification))
 
-4. **Check the CI Result**:
-   - CI validates resources and data, then builds and runs unit tests for Minecraft 1.21.1 and 26.3
-   - English text is required for new keys. Japanese text may be left out, and the maintainers will add it
-   - GameTests and in-game checks for other versions are run by the maintainers before release
-   - Maintainers decide how a pull request is merged by the kind of change, see [Merge Policy](docs/merge_policy.md)
+4. **Check the CI Result**: see "CI checks" below.
 
 5. **Address Review Feedback**:
    - Respond to code review comments
@@ -206,6 +203,54 @@ Your PR will be reviewed for:
 - ✅ No breaking changes to existing features
 - ✅ Adherence to coding standards
 - ✅ Proper license compliance
+
+### Merge tier
+
+Maintainers merge a pull request according to the kind of change, from tier A (docs, tests, lang text) to
+tier D (CI and agent instructions). [Merge Policy](docs/merge_policy.md) defines the tiers.
+
+To find the tier of your change, run this in your clone:
+
+```bash
+python3 scripts/merge_tier/classify.py
+```
+
+It classifies the diff of your branch against `origin/main` by file path and prints the tier. Put the result in
+the description as one line, for example `Merge tier: B`. If the content of the change is riskier than its paths
+suggest (for example a Java change that alters saved data), declare a higher tier. The `Merge tier` check fails
+when you declare a tier lower than the diff's. A description without the line still passes with a hint, but
+the maintainers use the line to decide how to merge, so please add it.
+
+### Tests for behavior changes
+
+A change to something visible or to a behavior (rendering, items, mobs, worldgen, game rules) needs a unit test,
+a GameTest or a scenario (`docs/scenario_check.md`) that exercises it. The `Merge tier` check fails when such a
+change comes without one. If an existing test already covers the change, or nothing about behavior changes, add
+a line `Test-Exemption: <reason>` (at least 20 characters) to the description. If you could not check something
+in game, write it on a `Manual checks: <statement and reason>` line.
+
+### CI checks
+
+These run on every pull request:
+
+| Workflow | Check name | What it does |
+|---|---|---|
+| CI | `Detect docs-only changes` | Lets the other jobs skip their steps when only docs changed |
+| CI | `Validate resources and data` | File-only validations |
+| CI | `Build and unit test (1.21.1)`, `Build and unit test (26.3)` | Build and unit tests |
+| CI | `Production smoke test (1.21.1)`, `Production smoke test (26.3)` | Starts a production server with the built mod |
+| CI | `GameTest (1.21.1)`, `GameTest (26.3)` | GameTests |
+| Merge tier | `Merge tier` | Checks the declared tier, and the test requirement above |
+
+The `Nightly` workflow does not run on pull requests. It builds and unit tests the other supported versions
+when `main` changed. Maintainers handle its failures after a merge.
+
+### Verification without Claude Code
+
+The maintainers run an independent review with Claude Code or Codex and a local hook before they open a pull
+request. As an outside contributor you do not need that tooling. What the policy requires is the same: try to
+break your change yourself (other loader, other versions, existing worlds) and write what you tried and what you
+found in the `Verification` section. See [Merge Policy](docs/merge_policy.md).
 
 ---
 
