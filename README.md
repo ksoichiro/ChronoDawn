@@ -43,11 +43,13 @@ See [CHANGELOG.md](CHANGELOG.md) for detailed information.
   - Entropy Crypt (Entropy Keeper boss)
   - Master Clock (final dungeon with Time Tyrant boss)
   - Time Keeper Village (placed near your first arrival, with Time Keeper traders)
+  - Sentinel Outpost (optional white rocket guarded by Clockwork Sentinels)
 - **Small Ambient Structures** (scattered across Chrono Dawn biomes): Watchmaker's Camp (chest loot), Hourglass Monolith, Old Sundial, Lost Adventurer Memorial (with snowy variant), Time Cairn, Time Well, and Upside-Down Tree
 - **Friendly Mobs in Chrono Dawn**: Chrono Bovine (cow-equivalent; drops Chrono Bovine Meat), Chrono Ursid (polar-bear-equivalent), Temporal Caprid (goat-equivalent)
 - **Hostile Mobs in Chrono Dawn**: Epoch Husk, Secondhand Archer, Paradox Crawler, Moment Creeper, and Timeline Strider replace their vanilla counterparts. Forgotten Minute, Chronal Leech, Temporal Wraith, Floq, Clockwork Sentinel (immune to Time Distortion), and the rare Hourglass Golem are unique to the dimension
-- **Time Keeper**: Peaceful trader that sells Time Compasses for each Chrono Dawn dungeon
+- **Time Keeper**: Peaceful trader that sells Time Compasses for each Chrono Dawn dungeon and buys surplus Chronite Shards
 - **Equipment**: Clockstone and Enhanced Clockstone tools and armor, self-repairing Temporal Amber armor, the Entropy Crystal Sword, and the Spatially Linked Pickaxe (chance of double drops)
+- **Dawnstone and Duskstone**: Rose-pink and blue-grey natural stones with stairs, slabs, walls, plus Polished Dawnstone and Polished Duskstone. More varied terrain in the plains and mountains, with Dawnstone outcrops and Duskstone cliffs
 - **Cave Decoration**: Temporal Stalactites and Temporal Stalagmites with tip + frustum variants, enhanced fall damage on tips, cascading column breaks, small Temporal Moss Grottos with Timeless Mushrooms, and Glowing Pools lit by Lumen Polyps
 - **Aquatic Plants** (Chrono Dawn ocean, with Temporal Seagrass in inland waters too): Temporal Kelp, Temporal Seagrass + Tall variant, Lumen Polyp (underwater light source), and Dawn / Dusk / Twilight / Eternal Chrono Coral
 - **Lighting Blocks**: Time Torches (Orange / Pink / Purple) crafted from Time Blossoms, and Temporal / Dawn / Dusk Lanterns
