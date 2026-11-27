@@ -40,9 +40,12 @@ The NeoForge 26.3 failures are not Linux problems:
   `daylight-detector-craft` fail on a screen click or slot click. That is the
   existing limit in this document: those inputs are 1.21.1 only.
 - `wolf-spawn-forest` failed (`wolf-in-forest` found no wolf in the forest
-  biome after 95 s, 24 s on Fabric 1.21.1). A wolf pack spawns on only about
-  10% of chunks, so this needs a comparison with the same run on macOS before
-  it can be blamed on the platform. Not resolved here.
+  biome after 95 s, 24 s on Fabric 1.21.1). It failed the same way on macOS
+  with NeoForge 26.3 and Fabric 26.3, so it is not a platform problem. The
+  force-loaded square around the forest nearest to 0 0 was only about 12%
+  forest, and with the fixed seed the 26.3 chunks there generate no wolf at
+  all (1.21.1 got one). The scenario now locates a larger forest from
+  -1120 1184 and passes on both loaders of 1.21.1 and 26.3.
 
 ### Image checks under software rendering
 
@@ -82,6 +85,6 @@ is needed.
   Mac. If screenshots from CI are wanted later, the options are: do not store
   them (current), or store them in a short-retention private location. The
   owner decides, because the images show Minecraft assets.
-- Open items before relying on it: confirm `wolf-spawn-forest` on 26.3 on
-  macOS, and decide whether the 26.3 screen-click support (an existing limit)
-  should be added so that the full scenario set can run on 26.3.
+- Open item before relying on it: decide whether the 26.3 screen-click
+  support (an existing limit) should be added so that the full scenario set
+  can run on 26.3.
