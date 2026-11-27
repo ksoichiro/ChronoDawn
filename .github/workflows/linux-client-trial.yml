@@ -10,11 +10,6 @@ name: Linux client trial
 # Not a required check and not part of ci.yml.
 
 on:
-  # TEMPORARY: lets the trial run from this branch before the file is on main.
-  # Remove before merging.
-  push:
-    branches: [lucky-seal]
-    paths: ['.github/workflows/linux-client-trial.yml']
   workflow_dispatch:
     inputs:
       scenarios:
