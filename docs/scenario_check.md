@@ -269,7 +269,9 @@ blocks use separate areas: overworld x 0-15 (`polished-stones`), 16-31
 ## Limits
 
 - Minecraft 1.21.1 and 26.3 only, like the upgrade test.
-- Tested on macOS only.
+- Developed on macOS. A GitHub-hosted `ubuntu-24.04` runner with Xvfb and Mesa
+  llvmpipe also runs it on both loaders and both versions
+  (`docs/linux-ci-client-trial.md`).
 - In spectator mode the crosshair shows only when it points at an entity or
   a container, so it is usually not in the shots.
 - `settle` sees what the client has loaded and built, not what the server
