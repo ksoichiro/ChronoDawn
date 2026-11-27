@@ -180,12 +180,11 @@ git commit -m "docs: update README installation steps"
    - Go to [GitHub Pull Requests](https://github.com/ksoichiro/ChronoDawn/pulls)
    - Click "New Pull Request"
    - Select your branch
-   - There is no PR template. Write these in the description:
+   - Write these in the description:
      - What changed and why
-     - A related issue, if any, written as `Related: #123`. Do not use closing keywords such as `Fixes #123`, because the maintainers close issues by hand
+     - A related issue, if any, written as `Related: #123`. Do not use closing keywords such as `Fixes #123`, the maintainers close issues themselves
      - A `Merge tier: X` line (`X` is `A`, `B`, `C` or `D`), see "Merge tier" below
-     - How you tested it: the commands you ran and what you saw. Add screenshots for visible changes
-     - A short `Verification` section listing what you tried to break and the result (see [Merge Policy](docs/merge_policy.md#independent-verification))
+     - How you tested it: the commands you ran and what you saw. Add screenshots for visible changes. Maintainers' own pull requests carry a `Verification` section, which you may leave out
 
 4. **Check the CI Result**: see "CI checks" below.
 
@@ -215,11 +214,12 @@ To find the tier of your change, run this in your clone:
 python3 scripts/merge_tier/classify.py
 ```
 
-It classifies the diff of your branch against `origin/main` by file path and prints the tier. Put the result in
+It classifies the committed diff of your branch against `origin/main` by file path and prints the tier. In a fork,
+pass `--base <upstream main>` if `origin` is your fork. Put the result in
 the description as one line, for example `Merge tier: B`. If the content of the change is riskier than its paths
 suggest (for example a Java change that alters saved data), declare a higher tier. The `Merge tier` check fails
-when you declare a tier lower than the diff's. A description without the line still passes with a hint, but
-the maintainers use the line to decide how to merge, so please add it.
+when you declare a tier lower than the diff's. A description without the line still passes with a hint (only auto-merge of tier A needs it), but please add it so
+the maintainers can see your classification.
 
 ### Tests for behavior changes
 
@@ -247,10 +247,10 @@ when `main` changed. Maintainers handle its failures after a merge.
 
 ### Verification without Claude Code
 
-The maintainers run an independent review with Claude Code or Codex and a local hook before they open a pull
-request. As an outside contributor you do not need that tooling. What the policy requires is the same: try to
-break your change yourself (other loader, other versions, existing worlds) and write what you tried and what you
-found in the `Verification` section. See [Merge Policy](docs/merge_policy.md).
+The independent review and the `Verification` section in [Merge Policy](docs/merge_policy.md) belong to the
+maintainers' agent workflow (a local hook enforces it for agents only). As an outside contributor you do not need
+that tooling. The `Merge tier` check is the floor for every pull request: the tier line and the test requirement
+above. Beyond that, describe how you tested the change, and the maintainers decide how to merge it by its tier.
 
 ---
 

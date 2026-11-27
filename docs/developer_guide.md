@@ -1047,8 +1047,8 @@ docs: improve player guide boss strategies
 5. **Build All Loaders**: `./gradlew build`
 6. **Commit Changes**: Use conventional commits
 7. **Push to Fork**: `git push origin feature/my-feature`
-8. **Create Pull Request**: Target `main` branch. There is no PR template. The description needs a
-   `Merge tier:` line, a `Verification` section, and a test or scenario for behavior changes. The steps,
+8. **Create Pull Request**: Target `main` branch. The description should have a
+   `Merge tier:` line and, for behavior changes, a test or scenario. The steps,
    the CI checks and the exemption lines are in [CONTRIBUTING.md](../CONTRIBUTING.md#pull-request-process),
    and the tiers are in [merge_policy.md](merge_policy.md)
 
