@@ -101,6 +101,10 @@ public class BlockEventHandler {
 
         // Register server tick event to remove portal blocks when portals are unstable
         TickEvent.SERVER_POST.register(server -> {
+            // Throttled: the scan below is 9,261 block lookups per portal (see UnstablePortalCleanup)
+            if (!com.chronodawn.events.UnstablePortalCleanup.shouldScan(server.getTickCount())) {
+                return;
+            }
             // Check global state
             ChronoDawnGlobalState globalState = ChronoDawnGlobalState.get(server);
             if (!com.chronodawn.config.ChronoDawnConfig.get().gameplay().portals()
@@ -122,11 +126,16 @@ public class BlockEventHandler {
                 }
 
                 BlockPos portalPos = portal.getPosition();
+                // Skip unloaded chunks: getBlockState on them would force-load the chunk
+                int r = com.chronodawn.events.UnstablePortalCleanup.RADIUS;
+                if (!chronodawnLevel.hasChunksAt(portalPos.offset(-r, -r, -r), portalPos.offset(r, r, r))) {
+                    continue;
+                }
                 boolean foundAndRemovedBlocks = false;
 
-                for (int x = -10; x <= 10; x++) {
-                    for (int y = -10; y <= 10; y++) {
-                        for (int z = -10; z <= 10; z++) {
+                for (int x = -r; x <= r; x++) {
+                    for (int y = -r; y <= r; y++) {
+                        for (int z = -r; z <= r; z++) {
                             BlockPos checkPos = portalPos.offset(x, y, z);
                             BlockState state = chronodawnLevel.getBlockState(checkPos);
 
