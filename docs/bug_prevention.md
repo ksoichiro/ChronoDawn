@@ -152,7 +152,7 @@ in `fabric/1.21.1/src/main/resources/chronodawn-fabric.mixins.json`.
 |---|---|---|
 | `checkAll` and `validateAll` | Every task in `checkall_extra_tasks`, including the five above | `validateAll` is the same list without the builds |
 | CI (`.github/workflows/ci.yml`) | `validateAll` | Picks up new tasks from `checkall_extra_tasks` without a workflow change. Only checks that need no Minecraft runtime run there |
-| Nightly (`.github/workflows/nightly.yml`) | `build` (compile and unit tests), `prod-smoke` and `gametest` of the 12 versions that CI skips (Fabric only on 1.20.1) | Runs at 03:00 JST only when code changed on `main` since the last successful scheduled run (docs-only diffs and no new commit skip, and the step summary says which). The morning check reads a failed run and files a task |
+| Nightly (`.github/workflows/nightly.yml`) | `build` (compile and unit tests), `prodSmokeTest` and GameTest of the 12 versions that CI skips, one job per version (Fabric only on 1.20.1) | Runs at 03:00 JST only when code changed on `main` since the last successful scheduled run (docs-only diffs and no new commit skip, and the step summary says which). The morning check reads a failed run and files a task |
 | Git pre-commit hook | `scripts/hooks/pre-commit` | Runs `validateAll` when the commit touches modules, build scripts or `scripts/`, and rejects em dashes and semicolons in added `CHANGELOG.md` lines |
 | Claude Code PostToolUse hook | `scripts/hooks/claude_version_sync_hint.py` | After an edit to a version module file, lists the versions whose copy was identical and now differs |
 

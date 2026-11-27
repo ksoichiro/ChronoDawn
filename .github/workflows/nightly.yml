@@ -78,16 +78,25 @@ jobs:
             emit true "Could not compare with $base: building every version."
           fi
 
-  build:
-    name: Build and unit test (${{ matrix.mc }})
+  # One job per version runs the build, the production smoke test and the
+  # GameTest one after the other. Separate jobs resolved the same dependencies
+  # three times, and Maven Central answered some of those requests from shared
+  # GitHub runner addresses with HTTP 429 for minutes. The steps after a failed
+  # step still run, so that one night reports every failing check.
+  # The checks are the ones of the build, prod-smoke and gametest jobs of
+  # ci.yml, see the comments there for why each loader has its own Gradle
+  # invocation and why a green GameTest is not a cross-dimension verification.
+  # 1.20.1 has no NeoForge, and Forge 1.20.1 has no prodSmokeTest.
+  # Do not upload Minecraft JARs, mappings or world data as artifacts.
+  check:
+    name: Build, smoke test and GameTest (${{ matrix.mc }})
     needs: decide
     if: needs.decide.outputs.run == 'true'
     runs-on: ubuntu-24.04
-    timeout-minutes: 60
+    timeout-minutes: 120
     strategy:
       fail-fast: false
-      # Fewer jobs at once, so that dependency servers rate limit them less.
-      max-parallel: 4
+      max-parallel: 6
       matrix:
         mc: ['1.20.1', '1.21.2', '1.21.4', '1.21.5', '1.21.6', '1.21.7', '1.21.8',
              '1.21.9', '1.21.10', '1.21.11', '26.1.2', '26.2']
@@ -108,42 +117,10 @@ jobs:
       - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
         with:
           cache-read-only: true
-      # Do not upload Minecraft JARs, mappings or world data as artifacts.
       - run: scripts/ci/gradle_retry.sh build -Ptarget_mc_version=${{ matrix.mc }}
-
-  # Same checks as the prod-smoke and gametest jobs of ci.yml, see the
-  # comments there for why each loader has its own Gradle invocation and why
-  # a green GameTest is not a cross-dimension verification. 1.20.1 has no
-  # NeoForge, and Forge 1.20.1 has no prodSmokeTest.
-  prod-smoke:
-    name: Production smoke test (${{ matrix.mc }})
-    needs: decide
-    if: needs.decide.outputs.run == 'true'
-    runs-on: ubuntu-24.04
-    timeout-minutes: 45
-    strategy:
-      fail-fast: false
-      # Fewer jobs at once, so that dependency servers rate limit them less.
-      max-parallel: 4
-      matrix:
-        mc: ['1.20.1', '1.21.2', '1.21.4', '1.21.5', '1.21.6', '1.21.7', '1.21.8',
-             '1.21.9', '1.21.10', '1.21.11', '26.1.2', '26.2']
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          submodules: recursive
-      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
-        with:
-          distribution: temurin
-          java-version: |
-            17
-            21
-            25
-      - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
-        with:
-          cache-read-only: true
-      - run: scripts/ci/gradle_retry.sh :fabric:prodSmokeTest -Ptarget_mc_version=${{ matrix.mc }}
-      - if: matrix.mc != '1.20.1'
+      - if: ${{ !cancelled() }}
+        run: scripts/ci/gradle_retry.sh :fabric:prodSmokeTest -Ptarget_mc_version=${{ matrix.mc }}
+      - if: ${{ !cancelled() && matrix.mc != '1.20.1' }}
         run: scripts/ci/gradle_retry.sh :neoforge:prodSmokeTest -Ptarget_mc_version=${{ matrix.mc }}
       # Text only, never uploaded.
       - if: failure()
@@ -153,34 +130,7 @@ jobs:
             tail -n 150 "$f" || true
             echo "::endgroup::"
           done
-
-  gametest:
-    name: GameTest (${{ matrix.mc }})
-    needs: decide
-    if: needs.decide.outputs.run == 'true'
-    runs-on: ubuntu-24.04
-    timeout-minutes: 45
-    strategy:
-      fail-fast: false
-      # Fewer jobs at once, so that dependency servers rate limit them less.
-      max-parallel: 4
-      matrix:
-        mc: ['1.20.1', '1.21.2', '1.21.4', '1.21.5', '1.21.6', '1.21.7', '1.21.8',
-             '1.21.9', '1.21.10', '1.21.11', '26.1.2', '26.2']
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          submodules: recursive
-      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
-        with:
-          distribution: temurin
-          java-version: |
-            17
-            21
-            25
-      - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
-        with:
-          cache-read-only: true
-      - run: scripts/ci/gradle_retry.sh :fabric:runGameTest -Ptarget_mc_version=${{ matrix.mc }}
-      - if: matrix.mc != '1.20.1'
+      - if: ${{ !cancelled() }}
+        run: scripts/ci/gradle_retry.sh :fabric:runGameTest -Ptarget_mc_version=${{ matrix.mc }}
+      - if: ${{ !cancelled() && matrix.mc != '1.20.1' }}
         run: scripts/ci/gradle_retry.sh :neoforge:runGameTestServer -Ptarget_mc_version=${{ matrix.mc }}
