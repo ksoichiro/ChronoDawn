@@ -1575,12 +1575,18 @@ public class MasterClockBossRoomPlacer {
         }
 
         // Initialize processing for structures near players
+        // Chunks already scanned this pass: players' 17x17 areas overlap, so each chunk is checked once
+        java.util.Set<ChunkPos> scannedChunks = new java.util.HashSet<>();
+
         for (var player : level.players()) {
             ChunkPos playerChunkPos = new ChunkPos(player.blockPosition());
 
             for (int x = -8; x <= 8; x++) {
                 for (int z = -8; z <= 8; z++) {
                     ChunkPos chunkPos = new ChunkPos(playerChunkPos.x + x, playerChunkPos.z + z);
+                    if (!scannedChunks.add(chunkPos)) {
+                        continue;
+                    }
                     processStructure(level, chunkPos);
                 }
             }

@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- The Master Clock and Phantom Catacombs boss room checks and the Time
+  Guardian spawn check now scan each chunk near the players once per pass
+  instead of once per player, which lowers the server tick cost when several
+  players stand close together. The Time Guardian range check still uses the
+  closest player.
+
 - Igniting a portal frame that already has a registry entry now reuses that
   entry instead of registering a second one at the same position. Duplicates
   no longer pile up, so a reload can no longer make the position point to an
