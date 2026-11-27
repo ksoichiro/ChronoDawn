@@ -152,6 +152,7 @@ in `fabric/1.21.1/src/main/resources/chronodawn-fabric.mixins.json`.
 |---|---|---|
 | `checkAll` and `validateAll` | Every task in `checkall_extra_tasks`, including the five above | `validateAll` is the same list without the builds |
 | CI (`.github/workflows/ci.yml`) | `validateAll` | Picks up new tasks from `checkall_extra_tasks` without a workflow change. Only checks that need no Minecraft runtime run there |
+| Nightly (`.github/workflows/nightly.yml`) | `build` (compile and unit tests) of the 12 versions that CI skips | Runs at 03:00 JST only when code changed on `main` since the last successful scheduled run (docs-only diffs and no new commit skip, and the step summary says which). The morning check reads a failed run and files a task |
 | Git pre-commit hook | `scripts/hooks/pre-commit` | Runs `validateAll` when the commit touches modules, build scripts or `scripts/`, and rejects em dashes and semicolons in added `CHANGELOG.md` lines |
 | Claude Code PostToolUse hook | `scripts/hooks/claude_version_sync_hint.py` | After an edit to a version module file, lists the versions whose copy was identical and now differs |
 
@@ -178,7 +179,7 @@ working tree, not the index, so unstaged edits are checked too.
 
 | Candidate | Reason |
 |---|---|
-| Build every supported version in CI | Would catch every compile break in versions CI skips (~12 commits since March 2026), but it grows the build matrix from two jobs to fourteen, each setting up its own Minecraft through Loom. The CI matrix keeps 1.21.1 and 26.3 on purpose. `validateEraSymbols` covers the renames that recurred, and `checkAll` still builds everything before a release |
+| Build every supported version in every pull request | Would catch every compile break in versions CI skips (~12 commits since March 2026), but it grows the pull request matrix from two jobs to fourteen, each setting up its own Minecraft through Loom. The pull request matrix keeps 1.21.1 and 26.3 on purpose. The nightly workflow (`.github/workflows/nightly.yml`) builds the other twelve once on a night when code changed on `main`, which avoids the per-pull-request cost. `validateEraSymbols` covers the renames that recurred, and `checkAll` still builds everything before a release |
 | Reverse mixin check (every `@Mixin` class is listed) | Fabric-only mixins live in `common/<v>` and are correctly absent from NeoForge and Forge configs, so the check needs a per-loader allowlist of about 20 entries. Too much maintenance for a bug class seen once |
 | Every block in a `mineable/*` tag | 56 of 194 blocks are plants, crops and markers that are correctly instant-break. The allowlist would be larger than the rule |
 | `pack.mcmeta` format table per version | The values come from `props/<version>.properties`, and the wrong values were wrong in the table itself. prodSmokeTest boots each version and fails on the resulting log warnings |
