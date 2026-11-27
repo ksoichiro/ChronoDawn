@@ -106,6 +106,20 @@ subprojects {
         mavenCentral()
     }
 
+    // Architectury Loom adds Maven Central ahead of the repositories above, so
+    // every NeoForge artifact was first requested from Central, which has none
+    // of them. On CI runners with shared addresses Central answers those
+    // requests with 429 (Too Many Requests) for minutes and fails the build,
+    // so Central is told that these groups are not served there.
+    repositories.configureEach { repo ->
+        if (repo instanceof MavenArtifactRepository && repo.url.toString().startsWith('https://repo.maven.apache.org/maven2')) {
+            repo.content {
+                excludeGroupAndSubgroups 'net.neoforged'
+                excludeGroup 'cpw.mods'
+            }
+        }
+    }
+
     dependencies {
         minecraft "com.mojang:minecraft:$rootProject.ext.minecraft_version"
         if (!noRemap) {
