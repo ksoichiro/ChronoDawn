@@ -1,5 +1,9 @@
 package com.chronodawn.events;
 
+import com.chronodawn.registry.ModBlocks;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+
 /**
  * Scheduling for the cleanup of portal blocks while portals are unstable.
  *
@@ -23,5 +27,32 @@ public final class UnstablePortalCleanup {
      */
     public static boolean shouldScan(int tickCount) {
         return Math.floorMod(tickCount, INTERVAL_TICKS) == 0;
+    }
+
+    /**
+     * Removes every Chrono Dawn portal block within {@link #RADIUS} of {@code center}.
+     * Skips the scan when any chunk of the volume is unloaded, because getBlockState on an
+     * unloaded chunk would force-load it.
+     *
+     * @return true when at least one portal block was removed
+     */
+    public static boolean removePortalBlocksNear(ServerLevel level, BlockPos center) {
+        int r = RADIUS;
+        if (!level.hasChunksAt(center.offset(-r, -r, -r), center.offset(r, r, r))) {
+            return false;
+        }
+        boolean removed = false;
+        for (int x = -r; x <= r; x++) {
+            for (int y = -r; y <= r; y++) {
+                for (int z = -r; z <= r; z++) {
+                    BlockPos checkPos = center.offset(x, y, z);
+                    if (level.getBlockState(checkPos).is(ModBlocks.CHRONO_DAWN_PORTAL.get())) {
+                        level.removeBlock(checkPos, false);
+                        removed = true;
+                    }
+                }
+            }
+        }
+        return removed;
     }
 }

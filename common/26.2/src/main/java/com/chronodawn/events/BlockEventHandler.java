@@ -127,27 +127,8 @@ public class BlockEventHandler {
                 }
 
                 BlockPos portalPos = portal.getPosition();
-                // Skip unloaded chunks: getBlockState on them would force-load the chunk
-                int r = com.chronodawn.events.UnstablePortalCleanup.RADIUS;
-                if (!chronodawnLevel.hasChunksAt(portalPos.offset(-r, -r, -r), portalPos.offset(r, r, r))) {
-                    continue;
-                }
-                boolean foundAndRemovedBlocks = false;
-
-                for (int x = -r; x <= r; x++) {
-                    for (int y = -r; y <= r; y++) {
-                        for (int z = -r; z <= r; z++) {
-                            BlockPos checkPos = portalPos.offset(x, y, z);
-                            BlockState state = chronodawnLevel.getBlockState(checkPos);
-
-                            // Check for ChronoDawn portal blocks
-                            if (state.is(ModBlocks.CHRONO_DAWN_PORTAL.get())) {
-                                chronodawnLevel.removeBlock(checkPos, false);
-                                foundAndRemovedBlocks = true;
-                            }
-                        }
-                    }
-                }
+                boolean foundAndRemovedBlocks =
+                    com.chronodawn.events.UnstablePortalCleanup.removePortalBlocksNear(chronodawnLevel, portalPos);
 
                 if (foundAndRemovedBlocks) {
                     ChronoDawn.LOGGER.debug("Removed unstable portal blocks near {}", portalPos);
