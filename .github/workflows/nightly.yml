@@ -107,7 +107,7 @@ jobs:
         with:
           cache-read-only: true
       # Do not upload Minecraft JARs, mappings or world data as artifacts.
-      - run: ./gradlew build -Ptarget_mc_version=${{ matrix.mc }}
+      - run: scripts/ci/gradle_retry_429.sh build -Ptarget_mc_version=${{ matrix.mc }}
 
   # Same checks as the prod-smoke and gametest jobs of ci.yml, see the
   # comments there for why each loader has its own Gradle invocation and why
@@ -138,9 +138,9 @@ jobs:
       - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
         with:
           cache-read-only: true
-      - run: ./gradlew :fabric:prodSmokeTest -Ptarget_mc_version=${{ matrix.mc }}
+      - run: scripts/ci/gradle_retry_429.sh :fabric:prodSmokeTest -Ptarget_mc_version=${{ matrix.mc }}
       - if: matrix.mc != '1.20.1'
-        run: ./gradlew :neoforge:prodSmokeTest -Ptarget_mc_version=${{ matrix.mc }}
+        run: scripts/ci/gradle_retry_429.sh :neoforge:prodSmokeTest -Ptarget_mc_version=${{ matrix.mc }}
       # Text only, never uploaded.
       - if: failure()
         run: |
@@ -175,6 +175,6 @@ jobs:
       - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
         with:
           cache-read-only: true
-      - run: ./gradlew :fabric:runGameTest -Ptarget_mc_version=${{ matrix.mc }}
+      - run: scripts/ci/gradle_retry_429.sh :fabric:runGameTest -Ptarget_mc_version=${{ matrix.mc }}
       - if: matrix.mc != '1.20.1'
-        run: ./gradlew :neoforge:runGameTestServer -Ptarget_mc_version=${{ matrix.mc }}
+        run: scripts/ci/gradle_retry_429.sh :neoforge:runGameTestServer -Ptarget_mc_version=${{ matrix.mc }}
