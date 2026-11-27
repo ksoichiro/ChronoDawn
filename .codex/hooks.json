@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "^Bash$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "root=\"$(git rev-parse --show-toplevel 2>/dev/null)\"; if [ -n \"$root\" ] && [ -f \"$root/scripts/hooks/claude_pr_gate.py\" ]; then python3 \"$root/scripts/hooks/claude_pr_gate.py\"; fi",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  }
+}

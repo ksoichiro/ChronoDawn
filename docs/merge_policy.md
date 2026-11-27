@@ -196,15 +196,18 @@ access and should not receive credentials for one. CI stays the deterministic
 evidence, and the reviewer covers what CI cannot: reading intent and trying
 cases nobody wrote a test for.
 
-A Claude Code hook (`scripts/hooks/claude_pr_gate.py`, configured in
-`.claude/settings.json`) enforces this locally. It denies `git push` and
+A hook (`scripts/hooks/claude_pr_gate.py`) enforces this locally. Claude Code
+runs it from `.claude/settings.json` and Codex from `.codex/hooks.json`, which
+use the same input and deny format. It denies `git push` and
 `gh pr create` while the reviewer has not reviewed the current diff, while a
 behavior change comes without a test or scenario, and while the pull request
 body lacks the Verification section. The `pr-gate` skill
 (`.claude/skills/pr-gate/SKILL.md`) lists the checks and the written
-exemptions. The gate covers agents only, since it reads files that exist only
-in the checkout that ran the review. The `Merge tier` CI check stays the
-floor for every pull request.
+exemptions. Codex skips a new or changed hook until the owner trusts it in
+`/hooks`, and its documentation calls tool hooks a guardrail, not a complete
+enforcement boundary (`docs/codex_skills_support.md`). The gate covers agents
+only, since it reads files that exist only in the checkout that ran the
+review. The `Merge tier` CI check stays the floor for every pull request.
 
 ## Auto-merge (tier A only)
 
@@ -345,7 +348,14 @@ The agent on the morning-check task:
    the morning-check task, with the pull request link, the declared and the
    computed tier, and what is wrong. The owner decides about the revert, so
    the agent changes no files, opens no pull request and reverts nothing.
-4. Comments the script's report on the morning-check task and stops. fuda
+4. Checks the nightly build of the versions that CI skips
+   (`.github/workflows/nightly.yml`) with
+   `gh run list --workflow nightly.yml --limit 3 --json databaseId,conclusion,createdAt,url`.
+   A skipped night is a success whose step summary says why. For a failed
+   run, `gh run view <id> --json jobs` lists the failed versions, and the
+   agent creates one fuda task with those versions and the run link, unless
+   a task for that run exists. It fixes nothing.
+5. Comments the script's report on the morning-check task and stops. fuda
    does not let an agent close its own task, so the owner finishes it.
 
 The auto start runs the task only when the project is opted in and 07:00 is

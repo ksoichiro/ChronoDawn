@@ -1,0 +1,110 @@
+name: Nightly
+
+# Builds and unit tests the versions that ci.yml does not cover (everything in
+# supported_mc_versions except 1.21.1, 26.3 and the hotfix 1.21.3, which shares
+# the 1.21.2 modules). It runs only when main changed code since the last
+# successful scheduled run, so a quiet night costs one short job.
+# Actions are pinned to commit SHAs and the runner to a fixed image, as in
+# ci.yml. Update the actions with `pinact run -u`.
+
+on:
+  schedule:
+    # 18:00 UTC is 03:00 JST, before the morning check at 07:00.
+    - cron: '0 18 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: nightly
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  # Reads the head_sha of the last successful scheduled run.
+  actions: read
+
+env:
+  JAVA_OPTS: --enable-native-access=ALL-UNNAMED
+  # See ci.yml: the free disk guard is for parallel checkouts on one machine.
+  ORG_GRADLE_PROJECT_min_free_disk_gb: 0
+
+jobs:
+  # Decides whether the matrix runs. The result is written to the step summary
+  # so that a skipped night is told apart from a failed or a missing run.
+  decide:
+    name: Decide whether to run
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      run: ${{ steps.decide.outputs.run }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - id: decide
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT: ${{ github.event_name }}
+          REPO: ${{ github.repository }}
+          HEAD_SHA: ${{ github.sha }}
+        # A manual run always builds. Without a previous successful scheduled
+        # run, or when the comparison fails, the run builds as well. A failed
+        # night does not move the base, so the next night builds again until
+        # a run succeeds.
+        run: |
+          emit() { echo "run=$1" >> "$GITHUB_OUTPUT"; echo "$2" >> "$GITHUB_STEP_SUMMARY"; }
+          if [ "$EVENT" != schedule ]; then
+            emit true "Manual run: building every version."
+            exit 0
+          fi
+          base=$(gh api "repos/$REPO/actions/workflows/nightly.yml/runs?event=schedule&status=success&per_page=1" \
+            --jq '.workflow_runs[0].head_sha // empty') || base=
+          if [ -z "$base" ] || ! git cat-file -e "$base^{commit}" 2>/dev/null; then
+            emit true "No previous successful scheduled run found: building every version."
+            exit 0
+          fi
+          if [ "$base" = "$HEAD_SHA" ]; then
+            emit false "Skipped: main has no new commit since the last successful run ($base)."
+            exit 0
+          fi
+          out=$(mktemp)
+          if python3 scripts/merge_tier/docs_only.py --repo "$GITHUB_WORKSPACE" --base "$base" --head "$HEAD_SHA" \
+               --output "$out" --summary "$GITHUB_STEP_SUMMARY"; then
+            if grep -qx 'docs_only=true' "$out"; then
+              emit false "Skipped: only documentation changed since the last successful run ($base)."
+            else
+              emit true "Building: code changed since the last successful run ($base)."
+            fi
+          else
+            emit true "Could not compare with $base: building every version."
+          fi
+
+  build:
+    name: Build and unit test (${{ matrix.mc }})
+    needs: decide
+    if: needs.decide.outputs.run == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        mc: ['1.20.1', '1.21.2', '1.21.4', '1.21.5', '1.21.6', '1.21.7', '1.21.8',
+             '1.21.9', '1.21.10', '1.21.11', '26.1.2', '26.2']
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: recursive
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: |
+            17
+            21
+            25
+      # Read only: ci.yml saves the Gradle home per commit. Saving it from 12
+      # more jobs every night would push the repository past the 10 GB Actions
+      # cache limit (see the prod-smoke job in ci.yml).
+      - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+        with:
+          cache-read-only: true
+      # Do not upload Minecraft JARs, mappings or world data as artifacts.
+      - run: ./gradlew build -Ptarget_mc_version=${{ matrix.mc }}

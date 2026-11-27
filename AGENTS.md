@@ -311,6 +311,15 @@ Before a PR:
   List as manual checks only what a scenario cannot cover, with the reason,
   and continue.
 
+- Run the independent verification before a PR: a fresh reviewer that sees only
+  the diff, the task text and the tier. Its report goes to
+  `build/verification/review.md` (procedure in
+  `.claude/skills/independent-verification/SKILL.md`, which Codex reads as a
+  plain file). `git push` and `gh pr create` are checked by
+  `scripts/hooks/claude_pr_gate.py` (`.claude/skills/pr-gate/SKILL.md` lists
+  the checks). Codex runs it from `.codex/hooks.json` once the owner trusts it
+  in `/hooks`. Do not work around a denial.
+
 Classify the diff with `python3 scripts/merge_tier/classify.py` and
 put a `Merge tier:` line in the PR body (`docs/merge_policy.md`). The `Merge tier`
 CI check fails when the declared tier is lower than the diff's.

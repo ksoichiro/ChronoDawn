@@ -474,5 +474,23 @@ class GateTest(unittest.TestCase):
         self.assertIn("skipped after an error", proc.stderr)
 
 
+    def test_codex_payload_is_denied_the_same_way(self):
+        # Codex sends more fields than Claude Code (turn_id, permission_mode, ...) and
+        # reads the same hookSpecificOutput deny shape, so one script serves both.
+        self.change_behavior()
+        payload = {"hook_event_name": "PreToolUse", "tool_name": "Bash", "turn_id": "t1", "tool_use_id": "u1",
+                   "permission_mode": "default", "model": "gpt", "session_id": "s", "transcript_path": None,
+                   "tool_input": {"command": "git push"}, "cwd": str(self.repo.root)}
+        proc = subprocess.run([sys.executable, str(SCRIPT)], input=json.dumps(payload),
+                              capture_output=True, text=True, check=True)
+        self.assertEqual(json.loads(proc.stdout)["hookSpecificOutput"]["permissionDecision"], "deny")
+
+    def test_codex_hook_config_runs_the_gate_for_bash(self):
+        config = json.loads((SCRIPT.parents[2] / ".codex" / "hooks.json").read_text())
+        group = config["hooks"]["PreToolUse"][0]
+        self.assertEqual(group["matcher"], "^Bash$")
+        self.assertIn("scripts/hooks/claude_pr_gate.py", group["hooks"][0]["command"])
+
+
 if __name__ == "__main__":
     unittest.main()

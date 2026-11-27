@@ -50,8 +50,9 @@ Reworded so that they hold for Codex as well:
 - `verification-commands` says "without the agent sandbox" and names the
   Claude Code and Codex cases. It also notes that the PostToolUse hook is
   Claude Code only and tells Codex to run `validateVersionSync` by hand.
-- `pr-gate` says the hook is Claude Code only and that Codex must do the same
-  checks by hand.
+- `pr-gate` says that Claude Code runs the hook from `.claude/settings.json`
+  and Codex from `.codex/hooks.json`, and that Codex must run the checks by
+  hand until the hook is trusted (see "Hooks (PR gate)" below).
 
 ## Decision (2026-11-27)
 
@@ -80,3 +81,48 @@ Option 1: `.agents/skills` is a relative symlink to `../.claude/skills`.
 3. Add a skill index to `AGENTS.md` with the `SKILL.md` paths. Works for any
    agent, but skills are no longer picked by description. The index has to
    cover all 20 skills.
+
+## Hooks (PR gate)
+
+Research date: 2026-11-27, from [Hooks](https://learn.chatgpt.com/docs/hooks)
+(`developers.openai.com/codex/hooks` redirects there). The page names no
+minimum Codex version. Re-check it before relying on the details below.
+
+- Codex has `PreToolUse` hooks that can deny a tool call. They are on by
+  default (`[features] hooks = false` turns them off).
+- Project hooks go in `.codex/hooks.json` (or `[hooks]` tables in
+  `.codex/config.toml`) and load only from a trusted project. In a linked Git
+  worktree a project layer may read hooks from the main checkout.
+- A new or changed hook is skipped until the user reviews and trusts it in
+  `/hooks`. The trust is stored against the hook's hash, so a changed command
+  needs a new review.
+- `PreToolUse` gets JSON on stdin with `tool_name`, `tool_input.command`,
+  `cwd` and extra fields (`turn_id`, `permission_mode`, ...). Shell commands
+  use `tool_name: "Bash"`. A deny is exit code 2 with the reason on stderr, or
+  `{"hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision":
+  "deny", "permissionDecisionReason": "..."}}` on stdout. This is the shape
+  `scripts/hooks/claude_pr_gate.py` already reads and writes, so the same
+  script serves both agents without a conversion layer.
+- No project-directory variable is documented. The hook command finds the
+  root with `git rev-parse --show-toplevel`.
+- Unsupported output (`ask`, `continue: false`) and a crashing hook fail open.
+  The page calls tool hooks "a useful guardrail, not a complete enforcement
+  boundary". Hosted tools are not covered.
+- Not confirmed from the page: whether `PreToolUse` fires for subagent tool
+  calls, in `codex exec`, or under the auto-review and full-auto modes.
+  `--dangerously-bypass-hook-trust` skips only the trust review.
+
+### Decision
+
+The Codex side runs the same gate. `.codex/hooks.json` calls
+`scripts/hooks/claude_pr_gate.py` for `Bash`, with no change to the checks.
+Moving the checks to CI would not cover the independent verification, because
+`build/verification/` exists only in the checkout that ran the review, and
+documentation alone was skipped before the hook existed. `.codex/**` is tier D
+in `scripts/merge_tier/rules.json`.
+
+The owner has to trust the hook once per checkout and after each change to its
+command (`/hooks` in the Codex CLI). Until then Codex skips it, so the
+instructions in `AGENTS.md` stay the fallback. The hook, the trust step and
+the three open points above are verified by running Codex, which this
+repository's tests do not do.
