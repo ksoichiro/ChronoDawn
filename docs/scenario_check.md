@@ -269,9 +269,17 @@ blocks use separate areas: overworld x 0-15 (`polished-stones`), 16-31
 ## Limits
 
 - Minecraft 1.21.1 and 26.3 only, like the upgrade test.
-- Developed on macOS. A GitHub-hosted `ubuntu-24.04` runner with Xvfb and Mesa
-  llvmpipe also runs it on both loaders and both versions
-  (`docs/linux-ci-client-trial.md`).
+- Developed on macOS. A nightly GitHub Actions workflow
+  (`.github/workflows/nightly-scenario.yml`) also runs it on `ubuntu-24.04`
+  with Xvfb and Mesa llvmpipe software rendering, for both loaders on 1.21.1
+  and 26.3. It follows the rules of `nightly.yml` (runs on days when main
+  changed code, skips docs-only changes), can be started by hand with
+  `workflow_dispatch` (optionally with scenario names), and is not a required
+  check. It does not run `upgradeTest`. On 26.3 it skips the scenarios that
+  use `click`, `slot`, `hover`, `hover_slot` or `scroll` steps (see the last
+  item of this list). It uploads no artifacts, so no screenshots are kept.
+  The log has the report, the image-check numbers and the log tails. To see
+  the images, rerun the scenario on a Mac (`docs/linux-ci-client-trial.md`).
 - In spectator mode the crosshair shows only when it points at an entity or
   a container, so it is usually not in the shots.
 - `settle` sees what the client has loaded and built, not what the server
