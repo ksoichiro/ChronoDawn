@@ -18,8 +18,12 @@ Covered:
 
 - Every `TickEvent.SERVER_POST`, `SERVER_LEVEL_POST` and `PLAYER_POST` registration
 - The classes under `worldgen/spawning/` that are driven by those ticks
-- The mixins that run on worldgen or every tick (`FreezeTopLayerMixin`,
-  `LevelGetTimeMixin`, `ServerLevelSetTimeMixin`)
+- The mixins that run on worldgen or every tick: `FreezeTopLayerMixin` (26.3 compiles its own
+  copy under `common/26.3`), and `LevelGetTimeMixin` and `ServerLevelSetTimeMixin` (compiled for
+  1.21.x only; `common/26.3/build.gradle` excludes both because 26.x keeps the time in the
+  clock manager)
+- Cheap handlers also seen: `TemporalPhantomSpawner` (SERVER_POST, 600-tick check) and
+  `BlockEventHandler.processRestorationTimers` (SERVER_LEVEL_POST, empty-map early return)
 - Static non-concurrent collections
 
 Not covered in depth (see "Not reviewed"):
@@ -37,9 +41,9 @@ Not covered in depth (see "Not reviewed"):
 | 3 | Structure detection around each player | `MasterClockBossRoomPlacer.java:1587`, `PhantomCatacombsBossRoomPlacer.java:1707`, `TimeGuardianSpawner.java:99` | MEDIUM | 289 chunk lookups per player per check |
 | 4 | Time distortion entity sweep | `events/EntityEventHandler.java:126` | MEDIUM | every living entity in the dimension every 5 ticks |
 | 5 | Engine room marker scan | `worldgen/spawning/ClockworkColossusSpawner.java:203` | LOW-MEDIUM | `getBlockEntity` over a whole bounding box every 200 ticks |
-| 6 | Snow transition mixin | `common/shared/.../mixin/FreezeTopLayerMixin.java` | LOW-MEDIUM | 2,304 climate samples per chunk (worldgen) |
-| 7 | Time Tyrant armor echo scan | `common/shared/.../items/artifacts/TimeTyrantArmorAbilityHandler.java:218` | LOW | entity query every 5 ticks while sprinting |
-| 8 | Per-tick saved data write | `ServerLevelSetTimeMixin` and `TimeDistortionEventHandler` | LOW | `setDirty()` every tick |
+| 6 | Snow transition mixin | `common/26.3/.../mixin/FreezeTopLayerMixin.java` | LOW-MEDIUM | 2,304 climate samples per chunk (worldgen) |
+| 7 | Time Tyrant armor echo scan | `common/shared/.../items/artifacts/TimeTyrantArmorAbilityHandler.java:163` | LOW | entity query every 5 ticks while sprinting |
+| 8 | Per-tick saved data write (1.21.x only) | `ServerLevelSetTimeMixin` and `TimeDistortionEventHandler` | LOW | `setDirty()` every tick |
 | 9 | Player dimension tracker | `common/shared/.../events/PlayerEventHandler.java:74` | LOW | map write per player per tick, never removed |
 | 10 | Chrono Aegis clarity | `events/EntityEventHandler.java:263` | LOW | holder wrap per player per tick |
 
@@ -165,7 +169,7 @@ tick before the interval check, which is a cheap lookup but avoidable.
 
 ### 6. Snow transition mixin samples biomes per chunk (LOW-MEDIUM)
 
-**File**: `common/shared/src/main/java/com/chronodawn/mixin/FreezeTopLayerMixin.java`
+**File**: `common/26.3/src/main/java/com/chronodawn/mixin/FreezeTopLayerMixin.java` (1.21.x use the copy in `common/shared`; the constants are identical)
 
 For Chrono Dawn chunks that pass the coarse filter, `chronodawn$extendSnowTransition`
 samples a 48 x 48 grid (2,304 climate samples) per feature placement. This is worldgen
@@ -176,7 +180,7 @@ Not a tick cost, but it adds to chunk generation time while exploring.
 
 - **7**: `tryTemporalEcho` runs an entity query (16-block radius) every 5 ticks, only while the
   wearer of the boots is sprinting with the cooldown ready. Bounded, no change needed now.
-- **8**: `ServerLevelSetTimeMixin` writes saved data and calls `setDirty()` on every `setDayTime`,
+- **8** (1.21.x only, 26.3 excludes the mixin and uses `clockManager().setTotalTicks`): `ServerLevelSetTimeMixin` writes saved data and calls `setDirty()` on every `setDayTime`,
   which `TimeDistortionEventHandler` calls every tick in Chrono Dawn. The write is a field set
   and a flag, and disk IO happens only on autosave. It could skip `setDirty` when the value
   changes by less than a threshold, but the gain is small.
@@ -195,6 +199,8 @@ Not a tick cost, but it adds to chunk generation time while exploring.
 - Time Keeper Village, Chronos Warden and Time Tyrant spawners: they have no tick handler
   (`SERVER_LEVEL_LOAD` only).
 - Client-side tick handlers.
+- Loader-level ticks (`ChronoDawnNeoForge.onServerTick` runs `processPendingTeleports` every tick
+  and `BossRoomProtectionProcessor.registerPendingProtections` every 100 ticks).
 
 ## Recommended order
 
