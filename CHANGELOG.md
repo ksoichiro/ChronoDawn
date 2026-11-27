@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- The Master Clock boss room placement and the Clockwork Colossus engine room
+  check no longer scan every block of an area on the main thread. The Master
+  Clock search skips unloaded chunks instead of loading them, and the engine
+  room reads the loaded chunks' block entities and remembers the markers it
+  found, which reduces stutter near those structures.
+
 - Igniting a portal frame that already has a registry entry now reuses that
   entry instead of registering a second one at the same position. Duplicates
   no longer pile up, so a reload can no longer make the position point to an
