@@ -261,6 +261,11 @@ public class EntityEventHandler {
      * Task: T240 [US3] Fix Clarity auto-cleanse feature
      */
     private static void handleChronoAegisClarity(ServerPlayer player) {
+        // Apply Clarity every 40 ticks (2 seconds)
+        if (player.tickCount % 40 != 0) {
+            return;
+        }
+
         // Check if player has Chrono Aegis buff
         // 1.21.1: hasEffect() takes Holder<MobEffect>
         net.minecraft.core.Holder<net.minecraft.world.effect.MobEffect> aegisEffect =
@@ -269,11 +274,6 @@ public class EntityEventHandler {
             );
 
         if (!player.hasEffect(aegisEffect)) {
-            return;
-        }
-
-        // Apply Clarity every 40 ticks (2 seconds)
-        if (player.tickCount % 40 != 0) {
             return;
         }
 
