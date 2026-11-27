@@ -4,6 +4,7 @@ import com.chronodawn.ChronoDawn;
 import com.chronodawn.compat.CompatResourceLocation;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.worldgen.protection.BlockProtectionHandler;
+import com.chronodawn.worldgen.protection.BossRoomMarkerPairing;
 import com.chronodawn.worldgen.protection.PermanentProtectionHandler;
 import com.chronodawn.worldgen.spawning.ClockworkColossusSpawner;
 import com.mojang.serialization.MapCodec;
@@ -58,7 +59,7 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
     /**
      * Marker data stored during structure generation.
      */
-    private static class MarkerData {
+    private static class MarkerData implements BossRoomMarkerPairing.Marker {
         final BlockPos pos;
         final boolean isMin;
         final boolean isPermanent; // true = permanent protection, false = boss room protection
@@ -73,6 +74,21 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
             this.addedTime = System.currentTimeMillis();
             this.placementId = placementId;
             this.structureRelativePos = structureRelativePos;
+        }
+
+        @Override
+        public BlockPos pos() {
+            return pos;
+        }
+
+        @Override
+        public BlockPos structureRelativePos() {
+            return structureRelativePos;
+        }
+
+        @Override
+        public long addedTime() {
+            return addedTime;
         }
     }
 
@@ -293,33 +309,18 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
             }
             WARNED_PLACEMENT_IDS.remove(placementId);
 
-            // Remove duplicate markers (same position) - keep the newer one
-            mins = removeDuplicateMarkers(mins);
-            maxs = removeDuplicateMarkers(maxs);
-
-            // Sort both lists by structure-relative Y coordinate (descending)
-            // This ensures correct pairing even when ConcurrentHashMap extraction order is random
-            mins.sort(Comparator.comparingInt((MarkerData m) -> m.structureRelativePos.getY()).reversed());
-            maxs.sort(Comparator.comparingInt((MarkerData m) -> m.structureRelativePos.getY()).reversed());
-
-            // Pair markers in order
-            int pairCount = Math.min(mins.size(), maxs.size());
-            for (int i = 0; i < pairCount; i++) {
-                MarkerData minMarker = mins.get(i);
-                MarkerData maxMarker = maxs.get(i);
+            // Dedupe, order and pair the markers. The rules live in BossRoomMarkerPairing so
+            // they can be unit tested without a ServerLevel.
+            var pairing = BossRoomMarkerPairing.pair(mins, maxs);
+            for (var pair : pairing.pairs()) {
+                MarkerData minMarker = pair.min();
+                MarkerData maxMarker = pair.max();
 
                 // Register boss room protection (temporary)
                 BlockPos minPos = minMarker.pos;
                 BlockPos maxPos = maxMarker.pos;
 
-                BoundingBox bossRoomArea = new BoundingBox(
-                    Math.min(minPos.getX(), maxPos.getX()),
-                    Math.min(minPos.getY(), maxPos.getY()),
-                    Math.min(minPos.getZ(), maxPos.getZ()),
-                    Math.max(minPos.getX(), maxPos.getX()),
-                    Math.max(minPos.getY(), maxPos.getY()),
-                    Math.max(minPos.getZ(), maxPos.getZ())
-                );
+                BoundingBox bossRoomArea = BossRoomMarkerPairing.areaOf(minPos, maxPos);
 
                 BlockProtectionHandler.registerProtectedArea(level, bossRoomArea, minPos);
 
@@ -350,16 +351,13 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
             }
 
             // Warn about unpaired markers
-            if (mins.size() > maxs.size()) {
-                for (int i = pairCount; i < mins.size(); i++) {
-                    ChronoDawn.LOGGER.warn("Found boss room min marker at {} (placementId={}) but no matching max marker",
-                        mins.get(i).pos, placementId);
-                }
-            } else if (maxs.size() > mins.size()) {
-                for (int i = pairCount; i < maxs.size(); i++) {
-                    ChronoDawn.LOGGER.warn("Found boss room max marker at {} (placementId={}) but no matching min marker",
-                        maxs.get(i).pos, placementId);
-                }
+            for (MarkerData unpaired : pairing.unpairedMins()) {
+                ChronoDawn.LOGGER.warn("Found boss room min marker at {} (placementId={}) but no matching max marker",
+                    unpaired.pos, placementId);
+            }
+            for (MarkerData unpaired : pairing.unpairedMaxs()) {
+                ChronoDawn.LOGGER.warn("Found boss room max marker at {} (placementId={}) but no matching min marker",
+                    unpaired.pos, placementId);
             }
         }
 
@@ -390,35 +388,18 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
             }
             WARNED_PLACEMENT_IDS.remove(placementId);
 
-            // Remove duplicate markers (same position) - keep the newer one (higher addedTime)
-            // This handles cases where stairs_bottom overwrites stairs max marker
-            mins = removeDuplicateMarkers(mins);
-            maxs = removeDuplicateMarkers(maxs);
-
-            // Sort both lists by structure-relative Y coordinate (descending)
-            // This ensures min[0]→max[0], min[1]→max[1] pairing based on NBT structure position
-            // Works correctly even when ConcurrentHashMap extraction order is random
-            mins.sort(Comparator.comparingInt((MarkerData m) -> m.structureRelativePos.getY()).reversed());
-            maxs.sort(Comparator.comparingInt((MarkerData m) -> m.structureRelativePos.getY()).reversed());
-
-            // Pair markers in order
-            int pairCount = Math.min(mins.size(), maxs.size());
-            for (int i = 0; i < pairCount; i++) {
-                MarkerData minMarker = mins.get(i);
-                MarkerData maxMarker = maxs.get(i);
+            // Dedupe, order and pair the markers. The rules live in BossRoomMarkerPairing so
+            // they can be unit tested without a ServerLevel.
+            var pairing = BossRoomMarkerPairing.pair(mins, maxs);
+            for (var pair : pairing.pairs()) {
+                MarkerData minMarker = pair.min();
+                MarkerData maxMarker = pair.max();
 
                 // Register permanent protection
                 BlockPos minPos = minMarker.pos;
                 BlockPos maxPos = maxMarker.pos;
 
-                BoundingBox protectedArea = new BoundingBox(
-                    Math.min(minPos.getX(), maxPos.getX()),
-                    Math.min(minPos.getY(), maxPos.getY()),
-                    Math.min(minPos.getZ(), maxPos.getZ()),
-                    Math.max(minPos.getX(), maxPos.getX()),
-                    Math.max(minPos.getY(), maxPos.getY()),
-                    Math.max(minPos.getZ(), maxPos.getZ())
-                );
+                BoundingBox protectedArea = BossRoomMarkerPairing.areaOf(minPos, maxPos);
 
                 PermanentProtectionHandler.registerProtectedArea(level, protectedArea, minPos);
 
@@ -438,16 +419,13 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
             }
 
             // Warn about unpaired markers
-            if (mins.size() > maxs.size()) {
-                for (int i = pairCount; i < mins.size(); i++) {
-                    ChronoDawn.LOGGER.warn("Found permanent protection min marker at {} (placementId={}) but no matching max marker",
-                        mins.get(i).pos, placementId);
-                }
-            } else if (maxs.size() > mins.size()) {
-                for (int i = pairCount; i < maxs.size(); i++) {
-                    ChronoDawn.LOGGER.warn("Found permanent protection max marker at {} (placementId={}) but no matching min marker",
-                        maxs.get(i).pos, placementId);
-                }
+            for (MarkerData unpaired : pairing.unpairedMins()) {
+                ChronoDawn.LOGGER.warn("Found permanent protection min marker at {} (placementId={}) but no matching max marker",
+                    unpaired.pos, placementId);
+            }
+            for (MarkerData unpaired : pairing.unpairedMaxs()) {
+                ChronoDawn.LOGGER.warn("Found permanent protection max marker at {} (placementId={}) but no matching min marker",
+                    unpaired.pos, placementId);
             }
         }
 
@@ -476,29 +454,6 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
             }
         }
         return false;
-    }
-
-    /**
-     * Remove duplicate markers at the same position.
-     * Keeps the marker with the highest addedTime (most recent).
-     * This handles cases where stairs_bottom overwrites stairs markers.
-     */
-    private static List<MarkerData> removeDuplicateMarkers(List<MarkerData> markers) {
-        Map<BlockPos, MarkerData> uniqueMarkers = new HashMap<>();
-
-        for (MarkerData marker : markers) {
-            MarkerData existing = uniqueMarkers.get(marker.pos);
-            if (existing == null || marker.addedTime > existing.addedTime) {
-                // Keep the newer marker
-                uniqueMarkers.put(marker.pos, marker);
-                if (existing != null) {
-                    ChronoDawn.LOGGER.debug("Removed duplicate marker at {} (kept newer one, time diff={}ms)",
-                        marker.pos, marker.addedTime - existing.addedTime);
-                }
-            }
-        }
-
-        return new ArrayList<>(uniqueMarkers.values());
     }
 
     /**
@@ -574,14 +529,7 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
             BlockPos minPos = minMarker.pos;
             BlockPos maxPos = maxMarker.pos;
 
-            BoundingBox bossRoomArea = new BoundingBox(
-                Math.min(minPos.getX(), maxPos.getX()),
-                Math.min(minPos.getY(), maxPos.getY()),
-                Math.min(minPos.getZ(), maxPos.getZ()),
-                Math.max(minPos.getX(), maxPos.getX()),
-                Math.max(minPos.getY(), maxPos.getY()),
-                Math.max(minPos.getZ(), maxPos.getZ())
-            );
+            BoundingBox bossRoomArea = BossRoomMarkerPairing.areaOf(minPos, maxPos);
 
             BlockProtectionHandler.registerProtectedArea(level, bossRoomArea, minPos);
 
@@ -614,14 +562,7 @@ public class BossRoomProtectionProcessor extends StructureProcessor {
             BlockPos minPos = minMarker.pos;
             BlockPos maxPos = maxMarker.pos;
 
-            BoundingBox protectedArea = new BoundingBox(
-                Math.min(minPos.getX(), maxPos.getX()),
-                Math.min(minPos.getY(), maxPos.getY()),
-                Math.min(minPos.getZ(), maxPos.getZ()),
-                Math.max(minPos.getX(), maxPos.getX()),
-                Math.max(minPos.getY(), maxPos.getY()),
-                Math.max(minPos.getZ(), maxPos.getZ())
-            );
+            BoundingBox protectedArea = BossRoomMarkerPairing.areaOf(minPos, maxPos);
 
             PermanentProtectionHandler.registerProtectedArea(level, protectedArea, minPos);
 
