@@ -108,9 +108,10 @@ minimum Codex version. Re-check it before relying on the details below.
 - Unsupported output (`ask`, `continue: false`) and a crashing hook fail open.
   The page calls tool hooks "a useful guardrail, not a complete enforcement
   boundary". Hosted tools are not covered.
-- Not confirmed from the page: whether `PreToolUse` fires for subagent tool
-  calls, in `codex exec`, or under the auto-review and full-auto modes.
-  `--dangerously-bypass-hook-trust` skips only the trust review.
+- The page does not say whether `PreToolUse` fires for subagent tool calls, in
+  `codex exec`, or under the auto-review and full-auto modes. The runtime check
+  below covers them.
+- `--dangerously-bypass-hook-trust` skips only the trust review.
 
 ### Decision
 
@@ -123,6 +124,25 @@ in `scripts/merge_tier/rules.json`.
 
 The owner has to trust the hook once per checkout and after each change to its
 command (`/hooks` in the Codex CLI). Until then Codex skips it, so the
-instructions in `AGENTS.md` stay the fallback. The hook, the trust step and
-the three open points above are verified by running Codex, which this
-repository's tests do not do.
+instructions in `AGENTS.md` stay the fallback.
+
+### Runtime check (2026-11-27)
+
+The owner ran `git push origin codex-gate-trial` on a throwaway branch that
+changed `TimeCompassItem.java` without a test, in a Codex session after
+trusting the hook. Codex denied it before running, with the gate's reasons (no
+test or scenario, no `build/verification/diff.patch`). The same denial
+happened in each of these cases:
+
+- a normal clone,
+- a linked worktree,
+- `codex exec`,
+- auto-review (`--approve-for-me`),
+- no approvals (`--ask-for-approval never`, `--yolo`),
+- a subagent running the command.
+
+The Codex version is not recorded. Before the hook file was on `main`, `/hooks`
+showed nothing in a linked worktree, so a worktree may need the file on the
+main checkout. Tool paths that the Codex page says can
+opt out of hooks are not covered. Treat the gate as a guardrail, as the
+Codex page does. The `Merge tier` CI check stays the floor.
