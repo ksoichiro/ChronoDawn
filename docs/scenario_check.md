@@ -246,7 +246,7 @@ names you need with `-Pscenario_check_scenarios` to check one change quickly.
 |----------|--------|
 | `polished-stones` | Dawnstone, Duskstone, and their polished blocks, stairs, slabs, and walls |
 | `sapling-root-dirt` | Bone meal grows the three saplings; the block under the trunk in Chrono Dawn and in the Overworld |
-| `wolf-spawn-forest` | Wolves generate in the forest (a 240 block square around the biome edge is force-loaded, since a chunk gets a creature pack with only about a 10% chance). Also checks that Temporal Grass is in `minecraft:wolves_spawnable_on`. There is no Dark Forest scenario: its canopy leaves the ground below light level 9, so no wolf spawns there |
+| `wolf-spawn-forest` | Wolves generate in the forest (a 240 block square is force-loaded, since a chunk gets a creature pack with only about a 10% chance). It locates the forest from -1120 1184, the largest forest within 1536 blocks of 0 0 with the scenario seed. Around the forest nearest to 0 0 only about 12% of the square is forest, and on 26.3 no wolf spawned there on any platform. Spawns made with the chunks depend only on the seed and the chunk, so a run on one Minecraft version always gets the same wolves. Also checks that Temporal Grass is in `minecraft:wolves_spawnable_on`. There is no Dark Forest scenario: its canopy leaves the ground below light level 9, so no wolf spawns there |
 | `time-keeper-trade` | Right-clicking a Time Keeper opens its trading screen |
 | `time-keeper-chronite-trade` | The Chronite Shard buy-back trades (Emerald, Clockstone) complete in the trading screen |
 | `daylight-detector-craft` | The Chronite Daylight Detector recipe crafts at a crafting table |
