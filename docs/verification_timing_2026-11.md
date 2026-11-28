@@ -120,3 +120,20 @@ change.
 
 Not worth doing now: the `validate*` tasks (19 s in total), `verifyFormalModels`
 (8 s), and the nightly (already one job per version).
+
+## Result: `buildAll` `maxParallel` 3 to 4 (not adopted)
+
+One run of `./gradlew buildAll -Pbuildall_run_tests=true` with `maxParallel = 4`
+(`gradle/shared/multi-version-tasks.gradle`) on the same Apple M2 Pro (10 cores,
+16 GB) took 10 m 21 s and all 14 versions passed, with no "Could not store
+compilation result" in the per-version logs. The baseline above with
+`maxParallel = 3` is 7 m 28 s, so 4 was about 2 m 50 s slower, not the up to
+2 m 10 s faster that the estimate allowed.
+
+- The run was the only one: a second run was not possible because free disk
+  fell to 10 GB, under the 20 GB `min_free_disk_gb` limit. The baseline may also
+  have had warmer caches, so the gap is a hint and not a proven cost of 4.
+- The likely cause is the 16 GB memory limit (four JVMs plus daemons) and I/O
+  contention, on top of the effective parallelism being already 2.8 of 3. This
+  was not confirmed by a memory measurement.
+- Decision: keep `maxParallel = 3`. No change to `gradle/shared`.
