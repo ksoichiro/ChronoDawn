@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- The Time Keeper Village is now placed a few ticks after the first arrival in
+  Chrono Dawn instead of in the arrival tick. The position search only uses
+  chunks that are already loaded, so it no longer generates terrain on the main
+  thread, which removes a stall of about two seconds when a new world's first
+  player enters the dimension.
+
 - The Master Clock and Phantom Catacombs boss room checks and the Time
   Guardian spawn check now scan each chunk near the players once per pass
   instead of once per player, which lowers the server tick cost when several

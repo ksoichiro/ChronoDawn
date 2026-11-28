@@ -30,7 +30,7 @@ later) weigh more when choosing what to automate.
 |---|---|---|---|---|
 | Gameplay logic, persistence, boss AI, portals | ~45 | ~150 | Unreleased | Not statically checkable. Unit tests, GameTest, scenarioCheck. Portal progression rules are model-checked by `verifyFormalModels` ([formal_verification.md](formal_verification.md)) |
 | Worldgen and biome wiring (spawns, features, roots) | ~25 | ~72 | Unreleased | Partly covered by `validateData` and `validateEraTagParity`. Slope and foundation behavior needs scenarioCheck |
-| Fix applied to some per-version copies only | ~15 | ~15 explicit ports, ~137 multi-version fixes | 2026-11 | **New: `validateVersionSync`** plus the Claude Code edit hint |
+| Fix applied to some per-version copies only | ~15 | ~15 explicit ports, ~137 multi-version fixes | 2026-11 | **New: `validateVersionSync`** plus the Claude Code edit hint. It sees only whether copies are identical, so a hook added to `common/shared` is not noticed when a version has its own copy of that class (1.21.6 and later have their own `PlayerEventHandler`). Before wiring a call into a shared class, run `ls common/*/src/main/java/<package>/<Class>.java` and add it to every copy |
 | Java era API split (renamed symbols, changed APIs) | ~18 | ~12 since March 2026 (plus ~50 from the 1.21.2 bring-up) | 0.17.1 | **New: `validateEraSymbols`** for renames. Other API changes need the per-version build |
 | Loader-specific registration missing | ~9 | ~25 | 2026-10 | **New: `validateLoaderEntityRegistration`** for entities. Other registrations are not covered |
 | Build and packaging metadata (pack.mcmeta, version ranges, refmap) | ~12 | ~10 | 0.17.0 | **New: `validateMixinConfigs`** for refmap and listed classes. pack.mcmeta is covered by prodSmokeTest only |

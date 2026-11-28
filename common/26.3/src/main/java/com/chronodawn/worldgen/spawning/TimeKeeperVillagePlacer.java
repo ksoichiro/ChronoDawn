@@ -63,6 +63,25 @@ public class TimeKeeperVillagePlacer {
     // Covers plants affected by shape updates from blocks at the structure boundary.
     private static final int VEGETATION_CLEAR_MARGIN = 1;
 
+    // The deferred search tries a few loaded candidates per tick and spends this many ticks on each
+    // distance range before moving to the next one.
+    private static final int ATTEMPTS_PER_TICK = 10;
+    private static final int TICKS_PER_SEARCH_PHASE = 60;
+
+    /** A village search waiting for chunks around the arrival point to load. Server thread only. */
+    private static final class PendingPlacement {
+        final ServerLevel level;
+        final BlockPos entryPos;
+        int ticks;
+
+        PendingPlacement(ServerLevel level, BlockPos entryPos) {
+            this.level = level;
+            this.entryPos = entryPos;
+        }
+    }
+
+    private static PendingPlacement pendingPlacement;
+
     /**
      * Called when a player enters ChronoDawn dimension.
      * Places the Time Keeper Village if not already placed.
@@ -91,23 +110,102 @@ public class TimeKeeperVillagePlacer {
             ChronoDawn.LOGGER.error("Failed to load Time Keeper Village template: {}", settings.templateId());
             return;
         }
+        // Searching here would load and generate candidate chunks on the server thread inside the
+        // arrival tick, which stalled a fresh world for about two seconds. The search runs over the
+        // following ticks instead (tickPendingPlacement) and uses only chunks that are already loaded.
+        if (pendingPlacement == null || pendingPlacement.level != level) {
+            pendingPlacement = new PendingPlacement(level, player.blockPosition());
+        }
+    }
+
+    /**
+     * Continue a Time Keeper Village search started by {@link #onPlayerEnterChronoDawn}.
+     * Called once per server tick. Each tick tries a few candidates whose chunks are all loaded, so no
+     * chunk is generated on the server thread. When every distance range is exhausted without a
+     * loaded candidate, the original search that loads chunks synchronously runs as a fallback.
+     *
+     * @param server Running server
+     */
+    public static void tickPendingPlacement(net.minecraft.server.MinecraftServer server) {
+        PendingPlacement pending = pendingPlacement;
+        if (pending == null) return;
+
+        ServerLevel level = server.getLevel(ModDimensions.CHRONO_DAWN_DIMENSION);
+        TimeKeeperVillageSettings settings = ChronoDawnConfig.get().world().timeKeeperVillage();
+        // A different level means the server was restarted in the same JVM (integrated server).
+        if (level != pending.level || !settings.enabled() || TimeKeeperVillageData.get(level).isPlaced()) {
+            pendingPlacement = null;
+            return;
+        }
+        var templateOptional = level.getStructureTemplateManager().get(CompatResourceLocation.parse(settings.templateId()));
+        if (templateOptional.isEmpty()) {
+            pendingPlacement = null;
+            return;
+        }
         StructureTemplate template = templateOptional.get();
-        BlockPos playerEntryPos = player.blockPosition();
-        BlockPos villagePos = findSuitablePosition(level, playerEntryPos, template.getSize().getX(), template.getSize().getZ(), settings);
+        int width = template.getSize().getX();
+        int depth = template.getSize().getZ();
+
+        int[] range = searchRange(settings, pending.ticks / TICKS_PER_SEARCH_PHASE);
+        BlockPos villagePos = null;
+        if (range != null) {
+            villagePos = searchInRange(level, pending.entryPos, range[0], range[1], width, depth,
+                ATTEMPTS_PER_TICK, true);
+            if (villagePos == null) {
+                pending.ticks++;
+                return;
+            }
+        }
+        pendingPlacement = null;
+        if (villagePos == null) {
+            ChronoDawn.LOGGER.debug("No loaded candidate for the Time Keeper Village, searching with chunk loading");
+            villagePos = findSuitablePosition(level, pending.entryPos, width, depth, settings);
+        }
 
         if (villagePos != null) {
             boolean success = placeVillage(level, villagePos, template, settings);
             if (success) {
-                data.setPlaced(villagePos);
-                ChronoDawn.LOGGER.debug("Successfully placed Time Keeper Village at {} for player {}",
-                    villagePos, player.getName().getString());
+                TimeKeeperVillageData.get(level).setPlaced(villagePos);
+                ChronoDawn.LOGGER.debug("Successfully placed Time Keeper Village at {} after {} ticks",
+                    villagePos, pending.ticks);
             } else {
                 ChronoDawn.LOGGER.warn("Failed to place Time Keeper Village structure at {}", villagePos);
             }
         } else {
             ChronoDawn.LOGGER.warn("Could not find suitable position for Time Keeper Village near player entry point {}",
-                playerEntryPos);
+                pending.entryPos);
         }
+    }
+
+    /**
+     * Distance range of a search phase, or null after the last one.
+     * Phases are the same ranges findSuitablePosition walks through.
+     */
+    private static int[] searchRange(TimeKeeperVillageSettings settings, int phase) {
+        int minDistance = settings.preferredMinDistance();
+        int maxDistance = settings.preferredMaxDistance();
+        for (int i = 0; i < phase; i++) {
+            if (maxDistance >= settings.maxDistance()) return null;
+            minDistance = maxDistance;
+            maxDistance = Math.min(settings.maxDistance(), maxDistance * 2);
+        }
+        return new int[] {minDistance, maxDistance};
+    }
+
+    /** Whether every chunk that the village footprint and its margin touch is fully loaded. */
+    private static boolean isFootprintLoaded(ServerLevel level, int x, int z, int width, int depth) {
+        int minChunkX = (x - width / 2 - VEGETATION_CLEAR_MARGIN) >> 4;
+        int maxChunkX = (x + width / 2 + VEGETATION_CLEAR_MARGIN) >> 4;
+        int minChunkZ = (z - depth / 2 - VEGETATION_CLEAR_MARGIN) >> 4;
+        int maxChunkZ = (z + depth / 2 + VEGETATION_CLEAR_MARGIN) >> 4;
+        for (int chunkX = minChunkX; chunkX <= maxChunkX; chunkX++) {
+            for (int chunkZ = minChunkZ; chunkZ <= maxChunkZ; chunkZ++) {
+                if (level.getChunkSource().getChunkNow(chunkX, chunkZ) == null) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**
@@ -130,7 +228,8 @@ public class TimeKeeperVillagePlacer {
         int phase = 1;
         while (true) {
             ChronoDawn.LOGGER.debug("Searching for Time Keeper Village location (phase {}: {}-{} blocks)", phase, minDistance, maxDistance);
-            BlockPos result = searchInRange(level, center, minDistance, maxDistance, structureWidth, structureDepth);
+            BlockPos result = searchInRange(level, center, minDistance, maxDistance, structureWidth, structureDepth,
+                MAX_ATTEMPTS, false);
             if (result != null) return result;
             if (maxDistance >= settings.maxDistance()) break;
             minDistance = maxDistance;
@@ -142,9 +241,10 @@ public class TimeKeeperVillagePlacer {
     }
 
     private static BlockPos searchInRange(
-        ServerLevel level, BlockPos center, int minDistance, int maxDistance, int structureWidth, int structureDepth
+        ServerLevel level, BlockPos center, int minDistance, int maxDistance, int structureWidth, int structureDepth,
+        int maxAttempts, boolean loadedChunksOnly
     ) {
-        for (int attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+        for (int attempt = 0; attempt < maxAttempts; attempt++) {
             int range = maxDistance - minDistance;
             int dx = level.getRandom().nextInt(range + 1) + minDistance;
             int dz = level.getRandom().nextInt(range + 1) + minDistance;
@@ -152,7 +252,12 @@ public class TimeKeeperVillagePlacer {
             if (level.getRandom().nextBoolean()) dz = -dz;
             int x = center.getX() + dx;
             int z = center.getZ() + dz;
-            level.getChunk(x >> 4, z >> 4);
+            if (loadedChunksOnly) {
+                // Never generate chunks here: skip candidates whose chunks are not ready yet.
+                if (!isFootprintLoaded(level, x, z, structureWidth, structureDepth)) continue;
+            } else {
+                level.getChunk(x >> 4, z >> 4);
+            }
             int y = level.getHeight(Heightmap.Types.MOTION_BLOCKING, x, z);
             if (y <= level.getMinY()) continue;
             BlockPos candidate = new BlockPos(x, y, z);

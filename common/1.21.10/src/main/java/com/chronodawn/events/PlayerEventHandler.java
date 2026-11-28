@@ -72,6 +72,7 @@ public class PlayerEventHandler {
     public static void register() {
         // Register server tick event to monitor player dimension changes
         TickEvent.SERVER_POST.register(server -> {
+            TimeKeeperVillagePlacer.tickPendingPlacement(server);
             for (ServerPlayer player : server.getPlayerList().getPlayers()) {
                 ResourceKey<Level> currentDimension = player.level().dimension();
                 ResourceKey<Level> previousDimension = playerDimensions.get(player.getUUID());
