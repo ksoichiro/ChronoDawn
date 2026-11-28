@@ -4,6 +4,7 @@ import com.chronodawn.blocks.ChronoDawnPortalBlock;
 import com.chronodawn.compat.CompatGameTestHelper;
 import com.chronodawn.core.portal.PortalFrameValidator;
 import com.chronodawn.core.portal.PortalTeleportHandler;
+import com.chronodawn.events.UnstablePortalCleanup;
 import com.chronodawn.registry.ModBlocks;
 import com.chronodawn.registry.ModDimensions;
 import net.minecraft.core.BlockPos;
@@ -57,6 +58,7 @@ public final class PortalTests {
         tests.add(generateFindFrameContainingTest(factory));
         tests.add(generateIgnitionTest(factory));
         tests.add(generateInvalidFrameTest(factory));
+        tests.add(generateUnstableCleanupTest(factory));
         tests.add(generateDimensionLoadedTest(factory));
         tests.add(generateTeleportTest(factory));
         return tests;
@@ -140,6 +142,41 @@ public final class PortalTests {
                             return;
                         }
                     }
+                }
+                helper.succeed();
+            });
+        });
+    }
+
+    /**
+     * Test: The unstable-portal cleanup removes every portal block near a registered
+     * portal position and leaves the frame blocks alone.
+     */
+    private static <T> T generateUnstableCleanupTest(MobBehaviorTests.TestFactory<T> factory) {
+        return factory.create("portal_unstable_cleanup", helper -> {
+            buildFrame(helper);
+            fillPortalBlocks(helper);
+            helper.runAfterDelay(1, () -> {
+                BlockPos center = helper.absolutePos(FRAME_BOTTOM_LEFT);
+                boolean removed = UnstablePortalCleanup.removePortalBlocksNear(helper.getLevel(), center);
+                if (!removed) {
+                    CompatGameTestHelper.fail(helper, "Cleanup reported no removed portal blocks");
+                    return;
+                }
+                Direction horizontal = getHorizontalDirection();
+                for (int x = 1; x < FRAME_WIDTH - 1; x++) {
+                    for (int y = 1; y < FRAME_HEIGHT - 1; y++) {
+                        BlockPos absPos = helper.absolutePos(
+                            FRAME_BOTTOM_LEFT.relative(horizontal, x).relative(Direction.UP, y));
+                        if (helper.getLevel().getBlockState(absPos).is(ModBlocks.CHRONO_DAWN_PORTAL.get())) {
+                            CompatGameTestHelper.fail(helper, "Portal block survived the cleanup at " + absPos);
+                            return;
+                        }
+                    }
+                }
+                if (UnstablePortalCleanup.removePortalBlocksNear(helper.getLevel(), center)) {
+                    CompatGameTestHelper.fail(helper, "Second cleanup still found portal blocks");
+                    return;
                 }
                 helper.succeed();
             });
