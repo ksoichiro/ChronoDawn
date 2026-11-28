@@ -178,6 +178,13 @@ public final class RegistryDrivenTestGenerator {
     }
 
     /**
+     * Generates tests verifying portal frame construction, ignition, and dimension transition.
+     */
+    public static List<NamedTest> generatePortalTests() {
+        return PortalTests.generateTests(NamedTest::new);
+    }
+
+    /**
      * Generates tests verifying Faded Plains block placement rules.
      */
     public static List<NamedTest> generateFadedPlainsTests() {
@@ -314,6 +321,7 @@ public final class RegistryDrivenTestGenerator {
         all.addAll(generateAdvancementLoadedTests());
         all.addAll(generateAdvancementGrantTests());
         all.addAll(generateStructureTests());
+        all.addAll(generatePortalTests());
         all.addAll(generateFadedPlainsTests());
         all.addAll(TimelessMushroomTests.generateTests(NamedTest::new));
         all.addAll(SundialGnomonTests.generateTests(NamedTest::new));

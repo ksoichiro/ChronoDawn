@@ -1,0 +1,184 @@
+name: Nightly scenario check
+
+# Runs scenarioCheck (production server and client, in-game screenshots) on
+# ubuntu-24.04 with Xvfb and Mesa llvmpipe software rendering, for Fabric and
+# NeoForge on 1.21.1 and 26.3. It runs only when main changed code since the
+# last successful scheduled run, like nightly.yml. Not a required check and not
+# part of ci.yml. upgradeTest is not run here. See docs/scenario_check.md.
+#
+# Nothing is uploaded as an artifact. The jobs print text only (report, log
+# tails, image-check numbers), because screenshots show Minecraft assets and
+# the JARs, mappings and worlds must not leave the runner. A person who needs
+# to see the images reruns the scenario on a Mac.
+# Actions are pinned to commit SHAs and the runner to a fixed image, as in
+# ci.yml. Update the actions with `pinact run -u`.
+
+on:
+  schedule:
+    # 18:30 UTC is 03:30 JST, after nightly.yml and before the morning check at 07:00.
+    - cron: '30 18 * * *'
+  workflow_dispatch:
+    inputs:
+      scenarios:
+        description: Comma-separated scenario names (empty runs every supported scenario)
+        default: ''
+        type: string
+
+concurrency:
+  group: nightly-scenario
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  # Reads the head_sha of the last successful scheduled run.
+  actions: read
+
+env:
+  JAVA_OPTS: --enable-native-access=ALL-UNNAMED
+  # See ci.yml: the free disk guard is for parallel checkouts on one machine.
+  ORG_GRADLE_PROJECT_min_free_disk_gb: 0
+  # Software rendering through Mesa llvmpipe on the Xvfb display.
+  LIBGL_ALWAYS_SOFTWARE: '1'
+  GALLIUM_DRIVER: llvmpipe
+
+jobs:
+  # Same decision as nightly.yml. The result goes to the step summary so that a
+  # skipped night is told apart from a failed or a missing run.
+  decide:
+    name: Decide whether to run
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      run: ${{ steps.decide.outputs.run }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - id: decide
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT: ${{ github.event_name }}
+          REPO: ${{ github.repository }}
+          HEAD_SHA: ${{ github.sha }}
+        # A manual run always runs. Without a previous successful scheduled
+        # run, or when the comparison fails, the run goes ahead as well. A
+        # failed night does not move the base, so the next night runs again.
+        run: |
+          emit() { echo "run=$1" >> "$GITHUB_OUTPUT"; echo "$2" >> "$GITHUB_STEP_SUMMARY"; }
+          if [ "$EVENT" != schedule ]; then
+            emit true "Manual run: checking every loader and version."
+            exit 0
+          fi
+          base=$(gh api "repos/$REPO/actions/workflows/nightly-scenario.yml/runs?event=schedule&status=success&per_page=1" \
+            --jq '.workflow_runs[0].head_sha // empty') || base=
+          if [ -z "$base" ] || ! git cat-file -e "$base^{commit}" 2>/dev/null; then
+            emit true "No previous successful scheduled run found: checking every loader and version."
+            exit 0
+          fi
+          if [ "$base" = "$HEAD_SHA" ]; then
+            emit false "Skipped: main has no new commit since the last successful run ($base)."
+            exit 0
+          fi
+          out=$(mktemp)
+          if python3 scripts/merge_tier/docs_only.py --repo "$GITHUB_WORKSPACE" --base "$base" --head "$HEAD_SHA" \
+               --output "$out" --summary "$GITHUB_STEP_SUMMARY"; then
+            if grep -qx 'docs_only=true' "$out"; then
+              emit false "Skipped: only documentation changed since the last successful run ($base)."
+            else
+              emit true "Running: code changed since the last successful run ($base)."
+            fi
+          else
+            emit true "Could not compare with $base: checking every loader and version."
+          fi
+
+  scenario:
+    name: scenarioCheck (${{ matrix.loader }} ${{ matrix.mc }})
+    needs: decide
+    if: needs.decide.outputs.run == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        loader: [fabric, neoforge]
+        mc: ['1.21.1', '26.3']
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: recursive
+      - uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          distribution: temurin
+          java-version: |
+            21
+            25
+      # Read only: ci.yml saves the Gradle home per commit (10 GB Actions cache limit).
+      - uses: gradle/actions/setup-gradle@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+        with:
+          cache-read-only: true
+      - name: Install Xvfb and Mesa
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends xvfb libgl1 libglx-mesa0 libgl1-mesa-dri \
+            libegl1 mesa-vulkan-drivers libxrandr2 libxcursor1 libxi6 libxxf86vm1 libxrender1 \
+            libxtst6 libopenal1
+      - name: Choose scenarios
+        id: pick
+        env:
+          INPUT: ${{ inputs.scenarios }}
+          MC: ${{ matrix.mc }}
+        run: |
+          if [ -n "$INPUT" ]; then
+            list=$INPUT
+          elif [ "$MC" = 26.3 ]; then
+            # 26.3 does not support clicks, slot clicks, scrolling and hovering
+            # inside a screen yet (docs/scenario_check.md, Limits), so skip the
+            # scenarios whose steps use them.
+            list=$(cd scripts/scenario_check/scenarios \
+              && grep -L -E '"(click|slot|hover|hover_slot|scroll)"' *.json | sed 's/\.json$//' | paste -sd, -)
+          else
+            list=
+          fi
+          echo "scenarios=$list" >> "$GITHUB_OUTPUT"
+          echo "Scenarios: ${list:-all}"
+      - name: Baseline resources
+        run: |
+          echo "start=$(date +%s)" >> "$GITHUB_ENV"
+          nproc
+          free -m
+          df -h /
+      - name: Run scenarioCheck
+        env:
+          SCENARIOS: ${{ steps.pick.outputs.scenarios }}
+        run: |
+          # Sample memory every 10 s so the peak can be reported afterwards.
+          mkdir -p "$RUNNER_TEMP/trial"
+          (while true; do free -m | awk 'NR==2 {print $3}' >> "$RUNNER_TEMP/trial/mem.txt"; sleep 10; done) &
+          extra=()
+          if [ -n "$SCENARIOS" ]; then extra+=("-Pscenario_check_scenarios=$SCENARIOS"); fi
+          xvfb-run -a -s "-screen 0 1280x720x24" \
+            ./gradlew :${{ matrix.loader }}:scenarioCheck -Ptarget_mc_version=${{ matrix.mc }} \
+              "${extra[@]}" --console=plain
+      - name: Report (text only, never uploaded)
+        if: always()
+        run: |
+          out=${{ matrix.loader }}/${{ matrix.mc }}/build/scenario-check
+          echo "elapsed: $(( $(date +%s) - ${start:-0} )) s"
+          echo "peak used memory (MB): $(sort -n "$RUNNER_TEMP/trial/mem.txt" | tail -1)"
+          df -h /
+          echo "::group::report.txt"; cat "$out/report.txt" || true; echo "::endgroup::"
+          echo "::group::summary.md (without images)"; grep -v '^!\[' "$out/summary.md" || true; echo "::endgroup::"
+          echo "::group::image checks"
+          vpy=$(find ~/.cache/chronodawn -path '*upgrade-test/venv/bin/python' | head -1)
+          for f in "$out"/*/shots/*.png; do
+            echo "$f"
+            "$vpy" -c 'import sys; from pathlib import Path; from PIL import Image
+          from scripts.scenario_check import images
+          f = Path(sys.argv[1])
+          print("  size", Image.open(f).size)
+          for name, ok, detail in images.check(f): print("  ", "ok " if ok else "BAD", name, detail)' "$f" || true
+          done
+          echo "::endgroup::"
+          echo "::group::client log tail"; tail -n 120 "$out/scenario-client.log" || true; echo "::endgroup::"
+          echo "::group::server log tail"; tail -n 60 "$out/scenario-server.log" || true; echo "::endgroup::"
+          echo "::group::transcripts"; cat "$out"/*/transcript.txt | tail -n 150 || true; echo "::endgroup::"

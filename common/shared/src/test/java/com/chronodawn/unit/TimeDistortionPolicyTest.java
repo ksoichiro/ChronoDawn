@@ -189,4 +189,21 @@ class TimeDistortionPolicyTest {
     void replaceable_longAmbient_isKept() {
         assertFalse(TimeDistortionPolicy.isReplaceableAmbient(true, 101, 1, 0));
     }
+
+    @Test
+    void freshAmbient_sameAmplifierWithTimeLeft_skipsReapply() {
+        assertTrue(TimeDistortionPolicy.isFreshAmbient(true, 100, 2, 2));
+        assertTrue(TimeDistortionPolicy.isFreshAmbient(true, 51, 2, 2));
+    }
+
+    @Test
+    void freshAmbient_runningLow_isRefreshed() {
+        assertFalse(TimeDistortionPolicy.isFreshAmbient(true, 50, 2, 2));
+    }
+
+    @Test
+    void freshAmbient_differentAmplifierOrNonAmbient_isNotFresh() {
+        assertFalse(TimeDistortionPolicy.isFreshAmbient(true, 100, 3, 2));
+        assertFalse(TimeDistortionPolicy.isFreshAmbient(false, 100, 2, 2));
+    }
 }

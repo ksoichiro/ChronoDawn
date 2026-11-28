@@ -115,6 +115,10 @@ public class EntityEventHandler {
      * @param level The ServerLevel to process
      */
     private static void processChronoDawnEntities(ServerLevel level) {
+        // Nobody is around to notice the effect, and mobs far from players do not tick anyway.
+        if (level.players().isEmpty()) {
+            return;
+        }
         // Iterate through all entities and apply time distortion to living entities
         for (var entity : level.getAllEntities()) {
             if (entity instanceof LivingEntity livingEntity) {
@@ -252,17 +256,17 @@ public class EntityEventHandler {
      * Task: T240 [US3] Fix Clarity auto-cleanse feature
      */
     private static void handleChronoAegisClarity(ServerPlayer player) {
+        // Apply Clarity every 40 ticks (2 seconds)
+        if (player.tickCount % 40 != 0) {
+            return;
+        }
+
         // Check if player has Chrono Aegis buff
         // 1.20.1: hasEffect() takes MobEffect directly (not Holder)
         net.minecraft.world.effect.MobEffect aegisEffect =
             com.chronodawn.registry.ModEffects.CHRONO_AEGIS_BUFF.get();
 
         if (!player.hasEffect(aegisEffect)) {
-            return;
-        }
-
-        // Apply Clarity every 40 ticks (2 seconds)
-        if (player.tickCount % 40 != 0) {
             return;
         }
 

@@ -64,7 +64,8 @@ public class TimeDistortionEffect {
             current.isAmbient(), current.getDuration(), current.getAmplifier(), amplifier)) {
             entity.removeEffect(MobEffects.SLOWNESS);
         }
-        if (amplifier != NO_EFFECT) {
+        if (amplifier != NO_EFFECT && !(current != null && TimeDistortionPolicy.isFreshAmbient(
+            current.isAmbient(), current.getDuration(), current.getAmplifier(), amplifier))) {
             entity.addEffect(new MobEffectInstance(
                 MobEffects.SLOWNESS, TimeDistortionPolicy.AMBIENT_DURATION_TICKS, amplifier, true, false
             ));
@@ -77,7 +78,8 @@ public class TimeDistortionEffect {
             current.isAmbient(), current.getDuration(), current.getAmplifier(), amplifier)) {
             entity.removeEffect(MobEffects.SPEED);
         }
-        if (amplifier != NO_EFFECT) {
+        if (amplifier != NO_EFFECT && !(current != null && TimeDistortionPolicy.isFreshAmbient(
+            current.isAmbient(), current.getDuration(), current.getAmplifier(), amplifier))) {
             // Visible particles are one of the cues that mobs have sped up.
             entity.addEffect(new MobEffectInstance(
                 MobEffects.SPEED, TimeDistortionPolicy.AMBIENT_DURATION_TICKS, amplifier, true, true

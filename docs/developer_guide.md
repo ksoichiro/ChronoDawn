@@ -1047,7 +1047,10 @@ docs: improve player guide boss strategies
 5. **Build All Loaders**: `./gradlew build`
 6. **Commit Changes**: Use conventional commits
 7. **Push to Fork**: `git push origin feature/my-feature`
-8. **Create Pull Request**: Target `main` branch
+8. **Create Pull Request**: Target `main` branch. The description should have a
+   `Merge tier:` line and, for behavior changes, a test or scenario. The steps,
+   the CI checks and the exemption lines are in [CONTRIBUTING.md](../CONTRIBUTING.md#pull-request-process),
+   and the tiers are in [merge_policy.md](merge_policy.md)
 
 ### Testing Requirements
 
@@ -1066,7 +1069,7 @@ Additional manual checks:
 - [ ] Manual testing completed (launch game, test feature)
 - [ ] No new warnings or errors in logs
 - [ ] Documentation updated (if applicable)
-- [ ] CI is green: `validate`, `build`, `prod-smoke` and `gametest` for 1.21.1 and 26.3. They cover `prodSmokeTest` and `runGameTest`/`runGameTestServer` for those two versions
+- [ ] CI is green: `Validate resources and data`, `Build and unit test`, `Production smoke test` and `GameTest` for 1.21.1 and 26.3, and `Merge tier`. They cover `prodSmokeTest` and `runGameTest`/`runGameTestServer` for those two versions. The `Nightly` workflow builds and unit tests the other versions after merges and does not run on pull requests (see [CONTRIBUTING.md](../CONTRIBUTING.md#ci-checks))
 - [ ] If this PR changes Mixin config or adds a new Minecraft version: `prodSmokeTest` also passes for the other versions you touch (see "Production Smoke Test" above, and the `verification-commands` skill)
 - [ ] GameTest servers may omit custom dimensions, so a dimension-dependent test can skip in CI. Check cross-dimension behavior in a normal client or server
 

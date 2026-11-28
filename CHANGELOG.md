@@ -15,6 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   players stand close together. The Time Guardian range check still uses the
   closest player.
 
+- While portals are unstable, leftover Chrono Dawn portal blocks are now
+  cleaned up once per second instead of every tick, and portals in unloaded
+  chunks are skipped. This removes a steady per-tick cost that grew with every
+  portal ever lit. A portal block that reappears can stay for up to one second.
+
 - Igniting a portal frame that already has a registry entry now reuses that
   entry instead of registering a second one at the same position. Duplicates
   no longer pile up, so a reload can no longer make the position point to an
