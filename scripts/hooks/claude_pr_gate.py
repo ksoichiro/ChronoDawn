@@ -104,6 +104,33 @@ _OPERATOR_CHARS = "();<>|&\n"
 _PUSH_OPTIONS_WITH_VALUE = ("-o", "--push-option", "--repo", "--receive-pack", "--exec")
 
 
+def _blank_arithmetic(line):
+    """Blank out `((...))` spans, where `<<` is a left shift and not a heredoc.
+
+    The span is arithmetic only when the paren opened second closes right before the one opened first.
+    `((cat <<EOF) | (cat))` is nested subshells, so its heredoc stays visible.
+    """
+    out, i = [], 0
+    while i < len(line):
+        if line.startswith("((", i):
+            depth, j = 0, i + 1
+            while j < len(line):
+                if line[j] == "(":
+                    depth += 1
+                elif line[j] == ")":
+                    depth -= 1
+                    if depth == 0:
+                        break
+                j += 1
+            if depth == 0 and line.startswith(")", j + 1):
+                out.append(" " * (j + 2 - i))
+                i = j + 2
+                continue
+        out.append(line[i])
+        i += 1
+    return "".join(out)
+
+
 def strip_heredocs(command):
     """Drop heredoc bodies. They are data (a PR body, a file), not commands to gate."""
     out, pending = [], []
@@ -113,7 +140,7 @@ def strip_heredocs(command):
                 pending.pop(0)
             continue
         out.append(line)
-        pending.extend(m.group(2) for m in _HEREDOC.finditer(line))
+        pending.extend(m.group(2) for m in _HEREDOC.finditer(_blank_arithmetic(line)))
     return "\n".join(out)
 
 
