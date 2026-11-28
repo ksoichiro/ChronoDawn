@@ -104,11 +104,17 @@ _OPERATOR_CHARS = "();<>|&\n"
 _PUSH_OPTIONS_WITH_VALUE = ("-o", "--push-option", "--repo", "--receive-pack", "--exec")
 
 
-def _blank_arithmetic(line):
-    """Blank out `((...))` spans, where `<<` is a left shift and not a heredoc.
+# The legacy `$[...]` arithmetic expansion, and the arguments of the `let` builtin up to the next
+# operator. `<<` in either is a left shift. `let` must start a command, so `delete <<EOF` is untouched.
+_ARITHMETIC_OTHER = re.compile(r"\$\[[^\]\n]*\]|(?<![\w.-])let\s[^;&|()\n]*")
 
-    The span is arithmetic only when the paren opened second closes right before the one opened first.
-    `((cat <<EOF) | (cat))` is nested subshells, so its heredoc stays visible.
+
+def _blank_arithmetic(line):
+    """Blank out arithmetic spans, where `<<` is a left shift and not a heredoc.
+
+    A `((...))` span is arithmetic only when the paren opened second closes right before the one opened
+    first. `((cat <<EOF) | (cat))` is nested subshells, so its heredoc stays visible.
+    `$[...]` and the arguments of `let` are arithmetic too.
     """
     out, i = [], 0
     while i < len(line):
@@ -128,7 +134,7 @@ def _blank_arithmetic(line):
                 continue
         out.append(line[i])
         i += 1
-    return "".join(out)
+    return _ARITHMETIC_OTHER.sub(lambda m: " " * len(m.group(0)), "".join(out))
 
 
 def strip_heredocs(command):
