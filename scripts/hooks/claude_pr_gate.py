@@ -107,14 +107,14 @@ _PUSH_OPTIONS_WITH_VALUE = ("-o", "--push-option", "--repo", "--receive-pack", "
 # `let` starts a command: at the line start, after an operator, a compound-command keyword, a wrapper
 # word or environment assignments.
 _LET_START = re.compile(
-    r"(?:^|[;&|(){!`]|\b(?:then|do|else|elif|if|while|until|time|builtin|command)\b)"
-    r"(?:\s*[A-Za-z_][A-Za-z0-9_]*=\S*)*\s*(let)\s"
+    r"(?:^|[;&|(){!`]|\b(?:then|do|else|elif|if|while|until|time|builtin|command|exec)\b)"
+    r"(?:\s*(?:[A-Za-z_][A-Za-z0-9_]*=(?:\"[^\"]*\"|'[^']*'|\S)*|\d*[<>]+&?\S*))*\s*(let)\s"
 )
 
 
 def _in_quote(line, index):
     """True when `index` sits inside an unclosed quote, so `let` there is text and not a command."""
-    quote, ansi, i = None, False, 0
+    quote, ansi, opened, i = None, False, 0, 0
     while i < index:
         c = line[i]
         if c == "\\" and (quote != "'" or ansi):
@@ -124,8 +124,11 @@ def _in_quote(line, index):
             if c == quote:
                 quote = None
         elif c in "'\"":
-            quote, ansi = c, c == "'" and line[i - 1:i] == "$"
+            quote, ansi, opened = c, c == "'" and line[i - 1:i] == "$", i
         i += 1
+    # A command substitution inside double quotes (`"$(let x=1<<n)"`) runs its own commands.
+    if quote == '"' and re.search(r"\$\(|`", line[opened:index]):
+        return False
     return quote is not None
 
 
