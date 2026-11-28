@@ -433,6 +433,8 @@ class GateTest(unittest.TestCase):
                       "let x=(1<<n)", "let 'x=(1<<n)'", "echo $[ a[1]<<n ]",
                       "let x=(1+(2<<n))", "let \"x=1|2<<n\"", "let 'x=1;2<<n'", "echo $[ a[b[1]]<<n ]",
                       "echo $[ '1]'<<n ]", "if true; then let x=1<<n",
+                      "echo it\\'s; let x=1<<n", "echo \"a\\\"b\"; let x=1<<n", "let x=1\\;2<<n",
+                      "case $a in x) let x=1<<n;; esac", "echo `let x=1<<n`",
                       "if let x=1<<n; then :", "while let x=1<<n", "FOO=1 let x=1<<n", "time let x=1<<n",
                       "builtin let x=1<<n", "! let x=1<<n"):
             commands = gate.find_commands(f"{first}\ngit push origin main")

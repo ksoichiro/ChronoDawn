@@ -107,20 +107,25 @@ _PUSH_OPTIONS_WITH_VALUE = ("-o", "--push-option", "--repo", "--receive-pack", "
 # `let` starts a command: at the line start, after an operator, a compound-command keyword, a wrapper
 # word or environment assignments.
 _LET_START = re.compile(
-    r"(?:^|[;&|({!]|\b(?:then|do|else|elif|if|while|until|time|builtin|command)\b)"
+    r"(?:^|[;&|(){!`]|\b(?:then|do|else|elif|if|while|until|time|builtin|command)\b)"
     r"(?:\s*[A-Za-z_][A-Za-z0-9_]*=\S*)*\s*(let)\s"
 )
 
 
 def _in_quote(line, index):
     """True when `index` sits inside an unclosed quote, so `let` there is text and not a command."""
-    quote = None
-    for c in line[:index]:
+    quote, i = None, 0
+    while i < index:
+        c = line[i]
+        if c == "\\" and quote != "'":
+            i += 2
+            continue
         if quote:
             if c == quote:
                 quote = None
         elif c in "'\"":
             quote = c
+        i += 1
     return quote is not None
 
 
@@ -133,6 +138,9 @@ def _span_end(line, start, open_char, close_char, stops):
     depth, quote, i = 0, None, start
     while i < len(line):
         c = line[i]
+        if c == "\\" and quote != "'":
+            i += 2  # an escaped character is never a quote, bracket or stop
+            continue
         if quote:
             if c == quote:
                 quote = None
