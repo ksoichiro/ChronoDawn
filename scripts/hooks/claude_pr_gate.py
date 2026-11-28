@@ -106,7 +106,11 @@ _PUSH_OPTIONS_WITH_VALUE = ("-o", "--push-option", "--repo", "--receive-pack", "
 
 # The legacy `$[...]` arithmetic expansion, and the arguments of the `let` builtin up to the next
 # operator. `<<` in either is a left shift. `let` must start a command, so `delete <<EOF` is untouched.
-_ARITHMETIC_OTHER = re.compile(r"\$\[[^\]\n]*\]|(?<![\w.-])let\s[^;&|()\n]*")
+# One level of nested brackets or parentheses is allowed (`$[ a[1]<<n ]`, `let x=(1<<n)`).
+_ARITHMETIC_OTHER = re.compile(
+    r"\$\[(?:[^\[\]\n]|\[[^\]\n]*\])*\]"
+    r"|(?<![\w.-])let\s(?:[^;&|()\n]|\([^()\n]*\))*"
+)
 
 
 def _blank_arithmetic(line):

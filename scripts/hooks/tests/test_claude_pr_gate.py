@@ -429,7 +429,8 @@ class GateTest(unittest.TestCase):
             self.assertEqual(len(commands), 1, first)
 
     def test_let_and_bracket_arithmetic_shift_is_not_a_heredoc(self):
-        for first in ("let x=1<<n", "let 'x = 1 << n' y=2", "echo $[1 << n]", "x=$[ 1<<n ] && echo $x"):
+        for first in ("let x=1<<n", "let 'x = 1 << n' y=2", "echo $[1 << n]", "x=$[ 1<<n ] && echo $x",
+                      "let x=(1<<n)", "let 'x=(1<<n)'", "echo $[ a[1]<<n ]"):
             commands = gate.find_commands(f"{first}\ngit push origin main")
             self.assertEqual(len([c for c in commands if c[0] == "push"]), 1, first)
 
