@@ -1,0 +1,133 @@
+diff --git a/common/26.3/src/main/java/com/chronodawn/freezeprofile/FreezeProfile.java b/common/26.3/src/main/java/com/chronodawn/freezeprofile/FreezeProfile.java
+new file mode 100644
+index 000000000..68ca361f1
+--- /dev/null
++++ b/common/26.3/src/main/java/com/chronodawn/freezeprofile/FreezeProfile.java
+@@ -0,0 +1,54 @@
++package com.chronodawn.freezeprofile;
++
++import java.io.IOException;
++import java.nio.file.Files;
++import java.nio.file.Path;
++import java.nio.file.StandardOpenOption;
++import java.util.concurrent.ConcurrentLinkedQueue;
++import java.util.concurrent.atomic.AtomicInteger;
++
++/** Measurement-only helper, applied by scripts/freeze_profile/freeze-profile.patch. Not part of the mod. */
++public final class FreezeProfile {
++    private static final String MODE = System.getProperty("chronodawn.freezeProfile", "on");
++    /** "off": both handlers disabled (vanilla). */
++    public static final boolean OFF = "off".equals(MODE);
++    /** "headonly": only the HEAD skip runs, the RETURN snow transition is disabled. */
++    public static final boolean HEAD_ONLY = "headonly".equals(MODE);
++    private static final AtomicInteger PENDING = new AtomicInteger();
++    private static final ConcurrentLinkedQueue<String> LINES = new ConcurrentLinkedQueue<>();
++    private static final Path OUT = Path.of(System.getProperty("chronodawn.freezeProfile.out",
++            "freeze-profile-" + ProcessHandle.current().pid() + ".csv"));
++
++    static {
++        if (!OFF) {
++            Runtime.getRuntime().addShutdownHook(new Thread(FreezeProfile::flush));
++        }
++    }
++
++    private FreezeProfile() {
++    }
++
++    public static void record(String line) {
++        LINES.add(System.nanoTime() + "," + Thread.currentThread().getName() + "," + line);
++        if (PENDING.incrementAndGet() > 2000) {
++            flush();
++        }
++    }
++
++    private static synchronized void flush() {
++        PENDING.set(0);
++        StringBuilder sb = new StringBuilder();
++        String line;
++        while ((line = LINES.poll()) != null) {
++            sb.append(line).append('\n');
++        }
++        if (sb.length() == 0) {
++            return;
++        }
++        try {
++            Files.writeString(OUT, sb, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
++        } catch (IOException e) {
++            e.printStackTrace();
++        }
++    }
++}
+diff --git a/common/26.3/src/main/java/com/chronodawn/mixin/FreezeTopLayerMixin.java b/common/26.3/src/main/java/com/chronodawn/mixin/FreezeTopLayerMixin.java
+index e124602e5..a77209d81 100644
+--- a/common/26.3/src/main/java/com/chronodawn/mixin/FreezeTopLayerMixin.java
++++ b/common/26.3/src/main/java/com/chronodawn/mixin/FreezeTopLayerMixin.java
+@@ -1,5 +1,6 @@
+ package com.chronodawn.mixin;
+ 
++import com.chronodawn.freezeprofile.FreezeProfile;
+ import com.chronodawn.registry.ModDimensions;
+ import com.chronodawn.registry.ModBlocks;
+ import net.minecraft.core.BlockPos;
+@@ -47,13 +48,19 @@ public abstract class FreezeTopLayerMixin {
+             return;
+         }
+ 
++        if (FreezeProfile.OFF) {
++            return;
++        }
++        long t0 = System.nanoTime();
+         int startX = origin.getX() & ~0xF;
+         int startZ = origin.getZ() & ~0xF;
+         ServerChunkCache chunkSource = level.getLevel().getChunkSource();
+         BiomeSource biomeSource = chunkSource.getGenerator().getBiomeSource();
+         BiomeResolver biomeResolver = biomeSource.createUncachedResolver(chunkSource.randomState());
+ 
+-        if (!hasSnowyBiomeNearby(biomeResolver, startX, startZ)) {
++        boolean nearby = hasSnowyBiomeNearby(biomeResolver, startX, startZ);
++        FreezeProfile.record("H," + startX + "," + startZ + "," + (System.nanoTime() - t0) + "," + (nearby ? 0 : 1));
++        if (!nearby) {
+             cir.setReturnValue(false);
+         }
+     }
+@@ -69,6 +76,10 @@ public abstract class FreezeTopLayerMixin {
+             return;
+         }
+ 
++        if (FreezeProfile.OFF || FreezeProfile.HEAD_ONLY) {
++            return;
++        }
++        long t0 = System.nanoTime();
+         int startX = origin.getX() & ~0xF;
+         int startZ = origin.getZ() & ~0xF;
+         ServerChunkCache chunkSource = level.getLevel().getChunkSource();
+@@ -76,8 +87,10 @@ public abstract class FreezeTopLayerMixin {
+         BiomeResolver biomeResolver = biomeSource.createUncachedResolver(chunkSource.randomState());
+ 
+         if (!hasSnowyBoundaryNearby(biomeResolver, startX, startZ)) {
++            FreezeProfile.record("R," + startX + "," + startZ + "," + (System.nanoTime() - t0) + ",0,0,EARLY");
+             return;
+         }
++        long t1 = System.nanoTime();
+ 
+         boolean[][] snowySamples = new boolean[SAMPLE_AREA_SIZE][SAMPLE_AREA_SIZE];
+         boolean[][] precipitationSamples = new boolean[SAMPLE_AREA_SIZE][SAMPLE_AREA_SIZE];
+@@ -97,7 +110,9 @@ public abstract class FreezeTopLayerMixin {
+             }
+         }
+ 
++        long t2 = System.nanoTime();
+         if (!hasSnowyBiome || !hasWarmBiome) {
++            FreezeProfile.record("R," + startX + "," + startZ + "," + (t1 - t0) + "," + (t2 - t1) + ",0,NOBOTH");
+             return;
+         }
+ 
+@@ -213,6 +228,8 @@ public abstract class FreezeTopLayerMixin {
+         }
+ 
+         blendSurfaceBlocks(level, startX, startZ, snowySamples, mutable);
++        FreezeProfile.record("R," + startX + "," + startZ + "," + (t1 - t0) + "," + (t2 - t1) + ","
++                + (System.nanoTime() - t2) + ",FULL");
+     }
+ 
+     private static Biome getNoiseBiome(BiomeResolver biomeResolver, int x, int z) {

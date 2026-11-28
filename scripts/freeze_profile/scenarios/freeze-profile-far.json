@@ -1,0 +1,233 @@
+{
+  "description": "Measurement only: force-loads 15x15 (fixed) or up to 16x16 (snowy) chunk squares of Chrono Dawn, a warm-up, one around the nearest snowy biome and four far from the origin, and waits until every corner and the center are loaded, so the chunk generation time can be compared across FreezeTopLayerMixin modes. Not a regression scenario, so it lives outside scripts/scenario_check/scenarios.",
+  "steps": [
+    {
+      "command": "execute in chronodawn:chronodawn run locate biome chronodawn:chronodawn_snowy",
+      "match": "\\[(?P<x>-?\\d+), [^,]+, (?P<z>-?\\d+)\\]",
+      "check": "locate-snowy",
+      "max_seconds": 120
+    },
+    "execute in chronodawn:chronodawn run forceload add 8992 0 9231 239",
+    {
+      "command": "execute in chronodawn:chronodawn if loaded 8992 70 0",
+      "match": "Test passed",
+      "check": "warmup-loaded-0",
+      "await": true,
+      "timeout": 300
+    },
+    {
+      "command": "execute in chronodawn:chronodawn if loaded 9231 70 239",
+      "match": "Test passed",
+      "check": "warmup-loaded-1",
+      "await": true,
+      "timeout": 300
+    },
+    {
+      "command": "execute in chronodawn:chronodawn if loaded 8992 70 239",
+      "match": "Test passed",
+      "check": "warmup-loaded-2",
+      "await": true,
+      "timeout": 300
+    },
+    {
+      "command": "execute in chronodawn:chronodawn if loaded 9231 70 0",
+      "match": "Test passed",
+      "check": "warmup-loaded-3",
+      "await": true,
+      "timeout": 300
+    },
+    {
+      "command": "execute in chronodawn:chronodawn if loaded 9112 70 120",
+      "match": "Test passed",
+      "check": "warmup-loaded-4",
+      "await": true,
+      "timeout": 300
+    },
+    "execute in chronodawn:chronodawn run forceload remove all",
+    "execute in chronodawn:chronodawn positioned ${x} 70 ${z} run forceload add ~-112 ~-112 ~112 ~112",
+    {
+      "command": "execute in chronodawn:chronodawn positioned ${x} 70 ${z} if loaded ~112 ~ ~112",
+      "match": "Test passed",
+      "check": "snowy-loaded-0",
+      "await": true,
+      "timeout": 300
+    },
+    {
+      "command": "execute in chronodawn:chronodawn positioned ${x} 70 ${z} if loaded ~-112 ~ ~-112",
+      "match": "Test passed",
+      "check": "snowy-loaded-1",
+      "await": true,
+      "timeout": 300
+    },
+    {
+      "command": "execute in chronodawn:chronodawn positioned ${x} 70 ${z} if loaded ~112 ~ ~-112",
+      "match": "Test passed",
+      "check": "snowy-loaded-2",
+      "await": true,
+      "timeout": 300
+    },
+    {
+      "command": "execute in chronodawn:chronodawn positioned ${x} 70 ${z} if loaded ~-112 ~ ~112",
+      "match": "Test passed",
+      "check": "snowy-loaded-3",
+      "await": true,
+      "timeout": 300
+    },
+    {
+      "command": "execute in chronodawn:chronodawn positioned ${x} 70 ${z} if loaded ~0 ~ ~0",
+      "match": "Test passed",
+      "check": "snowy-loaded-4",
+      "await": true,
+      "timeout": 300
+    },
+    "execute in chronodawn:chronodawn run forceload remove all",
+    "execute in chronodawn:chronodawn run forceload add 6000 6000 6239 6239",
+    {
+      "command": "execute in chronodawn:chronodawn if loaded 6000 70 6000",
+      "match": "Test passed",
+      "check": "far-ne-loaded-0",
+      "await": true,
+      "timeout": 300
+    },
+    {
+      "command": "execute in chronodawn:chronodawn if loaded 6239 70 6239",
+      "match": "Test passed",
+      "check": "far-ne-loaded-1",
+      "await": true,
+      "timeout": 300
+    },
+    {
+      "command": "execute in chronodawn:chronodawn if loaded 6000 70 6239",
+      "match": "Test passed",
+      "check": "far-ne-loaded-2",
+      "await": true,
+      "timeout": 300
+    },
+    {
+      "command": "execute in chronodawn:chronodawn if loaded 6239 70 6000",
+      "match": "Test passed",
+      "check": "far-ne-loaded-3",
+      "await": true,
+      "timeout": 300
+    },
+    {
+      "command": "execute in chronodawn:chronodawn if loaded 6120 70 6120",
+      "match": "Test passed",
+      "check": "far-ne-loaded-4",
+      "await": true,
+      "timeout": 300
+    },
+    "execute in chronodawn:chronodawn run forceload remove all",
+    "execute in chronodawn:chronodawn run forceload add -6240 6000 -6001 6239",
+    {
+      "command": "execute in chronodawn:chronodawn if loaded -6240 70 6000",
+      "match": "Test passed",
+      "check": "far-nw-loaded-0",
+      "await": true,
+      "timeout": 300
+    },
+    {
+      "command": "execute in chronodawn:chronodawn if loaded -6001 70 6239",
+      "match": "Test passed",
+      "check": "far-nw-loaded-1",
+      "await": true,
+      "timeout": 300
+    },
+    {
+      "command": "execute in chronodawn:chronodawn if loaded -6240 70 6239",
+      "match": "Test passed",
+      "check": "far-nw-loaded-2",
+      "await": true,
+      "timeout": 300
+    },
+    {
+      "command": "execute in chronodawn:chronodawn if loaded -6001 70 6000",
+      "match": "Test passed",
+      "check": "far-nw-loaded-3",
+      "await": true,
+      "timeout": 300
+    },
+    {
+      "command": "execute in chronodawn:chronodawn if loaded -6120 70 6120",
+      "match": "Test passed",
+      "check": "far-nw-loaded-4",
+      "await": true,
+      "timeout": 300
+    },
+    "execute in chronodawn:chronodawn run forceload remove all",
+    "execute in chronodawn:chronodawn run forceload add 6000 -6240 6239 -6001",
+    {
+      "command": "execute in chronodawn:chronodawn if loaded 6000 70 -6240",
+      "match": "Test passed",
+      "check": "far-se-loaded-0",
+      "await": true,
+      "timeout": 300
+    },
+    {
+      "command": "execute in chronodawn:chronodawn if loaded 6239 70 -6001",
+      "match": "Test passed",
+      "check": "far-se-loaded-1",
+      "await": true,
+      "timeout": 300
+    },
+    {
+      "command": "execute in chronodawn:chronodawn if loaded 6000 70 -6001",
+      "match": "Test passed",
+      "check": "far-se-loaded-2",
+      "await": true,
+      "timeout": 300
+    },
+    {
+      "command": "execute in chronodawn:chronodawn if loaded 6239 70 -6240",
+      "match": "Test passed",
+      "check": "far-se-loaded-3",
+      "await": true,
+      "timeout": 300
+    },
+    {
+      "command": "execute in chronodawn:chronodawn if loaded 6120 70 -6120",
+      "match": "Test passed",
+      "check": "far-se-loaded-4",
+      "await": true,
+      "timeout": 300
+    },
+    "execute in chronodawn:chronodawn run forceload remove all",
+    "execute in chronodawn:chronodawn run forceload add -6240 -6240 -6001 -6001",
+    {
+      "command": "execute in chronodawn:chronodawn if loaded -6240 70 -6240",
+      "match": "Test passed",
+      "check": "far-sw-loaded-0",
+      "await": true,
+      "timeout": 300
+    },
+    {
+      "command": "execute in chronodawn:chronodawn if loaded -6001 70 -6001",
+      "match": "Test passed",
+      "check": "far-sw-loaded-1",
+      "await": true,
+      "timeout": 300
+    },
+    {
+      "command": "execute in chronodawn:chronodawn if loaded -6240 70 -6001",
+      "match": "Test passed",
+      "check": "far-sw-loaded-2",
+      "await": true,
+      "timeout": 300
+    },
+    {
+      "command": "execute in chronodawn:chronodawn if loaded -6001 70 -6240",
+      "match": "Test passed",
+      "check": "far-sw-loaded-3",
+      "await": true,
+      "timeout": 300
+    },
+    {
+      "command": "execute in chronodawn:chronodawn if loaded -6120 70 -6120",
+      "match": "Test passed",
+      "check": "far-sw-loaded-4",
+      "await": true,
+      "timeout": 300
+    },
+    "execute in chronodawn:chronodawn run forceload remove all"
+  ]
+}
