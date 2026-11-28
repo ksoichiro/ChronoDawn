@@ -423,6 +423,19 @@ class GateTest(unittest.TestCase):
         command = "cat > build/notes.md <<'EOF'\ngh pr create --fill\ngit push\nEOF\necho done"
         self.assertIsNone(self.repo.evaluate(command))
 
+    def test_arithmetic_shift_is_not_a_heredoc(self):
+        for first in ("echo $((1 << shift))", "(( x = 1 << n ))", "echo $(( (1 << a) + (1 << b) ))"):
+            commands = gate.find_commands(f"{first}\ngit push origin main")
+            self.assertEqual(len(commands), 1, first)
+
+    def test_heredoc_in_nested_subshells_is_not_arithmetic(self):
+        command = "((cat <<EOF) | (cat))\ngit push body\nEOF\necho ok"
+        self.assertEqual(gate.find_commands(command), [])
+
+    def test_heredoc_after_arithmetic_still_strips_body(self):
+        command = "echo $((1 << 2)); cat <<EOF\ngit push\nEOF\ngit push origin main"
+        self.assertEqual(len(gate.find_commands(command)), 1)
+
     def test_inline_body_may_quote_the_skip_variable(self):
         self.change_behavior()
         self.add_scenario()
