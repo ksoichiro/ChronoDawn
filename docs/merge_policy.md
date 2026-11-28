@@ -355,7 +355,15 @@ The agent on the morning-check task:
    run, `gh run view <id> --json jobs` lists the failed versions, and the
    agent creates one fuda task with those versions and the run link, unless
    a task for that run exists. It fixes nothing.
-5. Comments the script's report on the morning-check task and stops. fuda
+5. Checks the nightly scenario check
+   (`.github/workflows/nightly-scenario.yml`, scenarioCheck on Fabric and
+   NeoForge for 1.21.1 and 26.3) the same way with
+   `gh run list --workflow nightly-scenario.yml --limit 3 --json databaseId,conclusion,createdAt,url`.
+   For a failed run, `gh run view <id> --json jobs` lists the failed loader
+   and version jobs. The log of a job names the failed scenario. The agent
+   creates one fuda task with the loader, the version, the scenario and the
+   run link, unless a task for that run exists. It fixes nothing.
+6. Comments the script's report on the morning-check task and stops. fuda
    does not let an agent close its own task, so the owner finishes it.
 
 The auto start runs the task only when the project is opted in and 07:00 is

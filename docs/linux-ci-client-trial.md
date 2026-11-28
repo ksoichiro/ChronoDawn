@@ -2,14 +2,14 @@
 
 Result of a trial on 2026-11-27: both tasks run on a GitHub-hosted
 `ubuntu-24.04` runner with Xvfb and Mesa llvmpipe software rendering. No
-driver or agent change was needed. This page records what was run, what was
-measured, and a proposal for putting it into CI. Nothing here is wired into
-`ci.yml`.
+driver or agent change was needed. This page records what was run and what
+was measured. The adopted setup is `.github/workflows/nightly-scenario.yml`
+(see `docs/scenario_check.md`, Limits). The trial workflow was replaced by it.
 
 ## How it was run
 
-`.github/workflows/linux-client-trial.yml` is a `workflow_dispatch` workflow
-that is not a required check. It installs `xvfb libgl1 libglx-mesa0
+The trial used a `workflow_dispatch` workflow (`linux-client-trial.yml`, now
+removed) that was not a required check. It installs `xvfb libgl1 libglx-mesa0
 libgl1-mesa-dri libegl1 mesa-vulkan-drivers libxrandr2 libxcursor1 libxi6
 libxxf86vm1 libxrender1 libxtst6 libopenal1`, sets `LIBGL_ALWAYS_SOFTWARE=1`
 and `GALLIUM_DRIVER=llvmpipe`, and runs the Gradle task under
@@ -63,28 +63,11 @@ is needed.
 | Disk used by the run | about 1 to 2 GB (`df` before and after) on top of the 58 to 64 GB the image starts with (the runtime cache under `~/.cache/chronodawn` is 0.7 to 0.9 GB, Gradle home 1.2 to 1.8 GB) |
 | Free disk | 82 to 87 GB left, so `min_free_disk_gb: 0` (already set in `ci.yml`) is not needed for these tasks, but it is harmless |
 
-## Proposal for CI (to be decided by the owner)
+## Adopted setup
 
-- Do not add it to `ci.yml` or to the required checks. The hosted runner is
-  stable enough, but a game client adds flake risk (for example the wolf
-  spawn) that would block merges.
-- Run it as a separate workflow. Two options:
-  1. Nightly on `main`, only on days with new commits (as proposed for the
-     night CI), for `scenarioCheck` (all scenarios, Fabric 1.21.1 and
-     NeoForge 1.21.1, plus one 26.3 loader) and `upgradeTest` for all four
-     combinations. Cost: about 10 to 11 min for scenarios and 5 to 7 min per
-     `upgradeTest` combination.
-  2. On demand through `workflow_dispatch` with the scenario list and the
-     loader as inputs, so a PR author can run a scenario without a Mac.
-- Parallelism: each combination is its own job on its own runner, so the limit
-  of 2 runs per Mac (`CHRONODAWN_MAX_PARALLEL_VERIFY`) and the 20 GB disk guard
-  do not apply.
-- Artifacts: do not upload screenshots, JARs, mappings or worlds, as in
-  `prod-smoke`. The job log carries `report.txt`, the per-shot automatic
-  checks and the log tails. A person who needs to see the images still uses a
-  Mac. If screenshots from CI are wanted later, the options are: do not store
-  them (current), or store them in a short-retention private location. The
-  owner decides, because the images show Minecraft assets.
-- Open item before relying on it: decide whether the 26.3 screen-click
-  support (an existing limit) should be added so that the full scenario set
-  can run on 26.3.
+`nightly-scenario.yml` runs `scenarioCheck` on both loaders for 1.21.1 and
+26.3, nightly on days when main changed code and on demand. It is not a
+required check and does not run `upgradeTest`. 26.3 skips the scenarios that
+use screen clicks, slot clicks, hovering or scrolling. It uploads nothing, so
+screenshots are not kept. A person who needs the images reruns the scenario on
+a Mac.
