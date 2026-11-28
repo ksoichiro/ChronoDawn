@@ -100,6 +100,20 @@ gantt
 - The push run on main (46024618094) has the same shape: 3 m 31 s in total,
   prod-smoke 1.21.1 the slowest at 2 m 32 s.
 
+## CI after starting the matrix without waiting for `validate` (one pull request run)
+
+Candidate 1 below was applied: `build`, `prod-smoke` and `gametest` need only
+`changes`. One pull request run (46127364007):
+
+- The matrix jobs start 19 s after the run starts (59 s before), and `validate`
+  (32 s) runs beside them. All nine jobs passed, and no Maven 429 appeared.
+- Total 3 m 29 s. That is not shorter than the 3 m 18 s before, because
+  prod-smoke 1.21.1 took 3 m 10 s in this run (2 m 18 s at most before) while
+  every other job finished within 2 m 10 s of the matrix start. Without that
+  outlier the run would end about 2 m 20 s after the start.
+- One run cannot separate the 40 s saved from the variance of prod-smoke.
+  Compare several runs before drawing a conclusion.
+
 ## nightly.yml (one scheduled run, 4 m 16 s)
 
 Twelve version jobs run at once, each is setup (about 15 to 25 s) plus

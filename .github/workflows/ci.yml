@@ -105,9 +105,12 @@ jobs:
       - if: needs.changes.outputs.docs_only != 'true'
         run: ./gradlew verifyFormalModels -Pvalidation_only=true
 
+  # build, prod-smoke and gametest start with validate instead of after it, to
+  # save its 37 s on the critical path. A failing validate still turns its own
+  # required check red, so the pull request cannot merge.
   build:
     name: Build and unit test (${{ matrix.mc }})
-    needs: [changes, validate]
+    needs: changes
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     strategy:
@@ -144,7 +147,7 @@ jobs:
   # Do not upload the server JAR, mappings or world data as artifacts.
   prod-smoke:
     name: Production smoke test (${{ matrix.mc }})
-    needs: [changes, validate]
+    needs: changes
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     strategy:
@@ -188,7 +191,7 @@ jobs:
   # can skip here. A green run is not a cross-dimension verification.
   gametest:
     name: GameTest (${{ matrix.mc }})
-    needs: [changes, validate]
+    needs: changes
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     strategy:
