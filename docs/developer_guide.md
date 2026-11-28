@@ -658,7 +658,15 @@ public static final RegistrySupplier<EntityType<MyEntity>> MY_ENTITY = ENTITIES.
    Outpost uses `sentinel_target` instead: rust streaks of cut copper running
    down seeded columns, plus Tuff, Mud Bricks and copper grime that fades out
    with height. A swap target must never be a swap source, or a second run
-   would weather the block again
+   would weather the block again. Use only blocks that every supported
+   version has: Tuff Stairs do not exist on 1.20.1, so the stair form of Tuff
+   is Andesite Stairs
+8. **Check the blocks against 1.20.1**: templates are saved on 1.21.1 and
+   converted for 1.20.1 at build time. A block that 1.20.1 does not have is
+   placed as air without an error. `StructureTemplateTest` fails on such a
+   block when it runs for 1.20.1. Replace it in the source template, or, when
+   1.20.1 has the same block under an older ID (`short_grass` was `grass`),
+   add the pair to `legacyBlockNames` in `common/1.20.1/build.gradle`
 
 ---
 

@@ -70,7 +70,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Weathered Sentinel Outpost**: newly generated Sentinel Outposts now
   carry rust streaks of weathered copper running down the hull and a little
   Tuff and mud grime near the base, so the white hull no longer looks brand
-  new beside the older structures. Existing outposts are unchanged.
+  new beside the older structures. Weathered steps use Andesite Stairs, so the
+  staircase from the first to the second floor has no gap on 1.20.1. Existing
+  outposts are unchanged.
 - **Rocky mountain slopes**: steep slopes in the Chrono Dawn
   mountain biome now expose rock in newly generated terrain. Temporal Stone is
   mottled with Temporal Cobblestone, Mossy Temporal Cobblestone, and Duskstone.
@@ -108,6 +110,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Ancient Ruins grass on 1.20.1**: newly generated Ancient Ruins on
+  Minecraft 1.20.1 now have their short grass. The template used the grass ID
+  of newer versions, so 1.20.1 placed nothing there. Existing ruins are
+  unchanged.
 - **Time Compass needle points at its target**: the needle now turns toward
   the located structure when you hold the compass in the same dimension, and
   spins when the target is in another dimension or not yet found. It stayed

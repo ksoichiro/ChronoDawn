@@ -145,6 +145,54 @@ project.afterEvaluate {
         dependsOn 'convertNbt'
     }
 
+    // Blocks that 1.20.1 knows under an older ID. The converter only rewrites
+    // item and component formats, and 1.20.1 has no data fixer for a newer
+    // DataVersion, so a template that names minecraft:short_grass loads that
+    // block as air. Rename the palette entries after the conversion. A block
+    // that does not exist in 1.20.1 at all cannot be renamed and must be
+    // replaced in the source template instead (StructureTemplateTest checks
+    // every palette name against the target version's block list).
+    def legacyBlockNames = ['minecraft:short_grass': 'minecraft:grass']
+    tasks.named('convertNbt') {
+        inputs.property('legacyBlockNames', legacyBlockNames)
+        def structureDir = file(mcmod.nbtConversion.outputDir)
+        doLast {
+            int renamed = 0
+            fileTree(dir: structureDir, includes: ['**/*.nbt']).files.each { File nbtFile ->
+                def namedTag = new net.querz.nbt.io.NBTDeserializer(true).fromBytes(nbtFile.bytes)
+                def root = namedTag.getTag() as net.querz.nbt.tag.CompoundTag
+                def palettes = []
+                if (root.containsKey('palette')) {
+                    palettes << root.getListTag('palette')
+                }
+                if (root.containsKey('palettes')) {
+                    root.getListTag('palettes').each { palettes << it }
+                }
+                boolean changed = false
+                palettes.each { palette ->
+                    palette.each { net.querz.nbt.tag.CompoundTag state ->
+                        def legacyName = legacyBlockNames[state.getString('Name')]
+                        if (legacyName != null) {
+                            state.putString('Name', legacyName)
+                            changed = true
+                            renamed++
+                        }
+                    }
+                }
+                if (changed) {
+                    // Own and close the gzip stream: NBTSerializer(true) only flushes it
+                    // and leaves the deflate trailer out.
+                    def bytes = new ByteArrayOutputStream()
+                    new java.util.zip.GZIPOutputStream(bytes).withCloseable { gzip ->
+                        new net.querz.nbt.io.NBTSerializer(false).toStream(namedTag, gzip)
+                    }
+                    nbtFile.bytes = bytes.toByteArray()
+                }
+            }
+            logger.lifecycle("NBT conversion: renamed ${renamed} palette entr(ies) to 1.20.1 block IDs")
+        }
+    }
+
     // The plugin adds its outputDir as a resource root from a SECOND
     // afterEvaluate block nested inside its own (registered while the first
     // one is executing), so it actually runs after this block. Nest one more
