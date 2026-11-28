@@ -104,8 +104,24 @@ _OPERATOR_CHARS = "();<>|&\n"
 _PUSH_OPTIONS_WITH_VALUE = ("-o", "--push-option", "--repo", "--receive-pack", "--exec")
 
 
-# `let` starts a command: at the line start, after an operator, or after a compound-command keyword.
-_LET_START = re.compile(r"(?:^|[;&|({]|\b(?:then|do|else)\b)\s*(let)\s")
+# `let` starts a command: at the line start, after an operator, a compound-command keyword, a wrapper
+# word or environment assignments.
+_LET_START = re.compile(
+    r"(?:^|[;&|({!]|\b(?:then|do|else|elif|if|while|until|time|builtin|command)\b)"
+    r"(?:\s*[A-Za-z_][A-Za-z0-9_]*=\S*)*\s*(let)\s"
+)
+
+
+def _in_quote(line, index):
+    """True when `index` sits inside an unclosed quote, so `let` there is text and not a command."""
+    quote = None
+    for c in line[:index]:
+        if quote:
+            if c == quote:
+                quote = None
+        elif c in "'\"":
+            quote = c
+    return quote is not None
 
 
 def _span_end(line, start, open_char, close_char, stops):
@@ -143,6 +159,8 @@ def _blank_let_and_bracket(line):
             chars[m.start():end] = " " * (end - m.start())
     line = "".join(chars)
     for m in _LET_START.finditer(line):
+        if _in_quote(line, m.start(1)):
+            continue
         # Unquoted `;&|` and `>` end the arguments, and so does a `)` that closes an outer group.
         end = _span_end(line, m.end(1), "(", ")", ";&|>")
         line = line[:m.end(1)] + " " * (end - m.end(1)) + line[end:]
