@@ -82,7 +82,6 @@ public class ClockworkColossusSpawner {
         }
 
         ResourceLocation dimensionId = level.dimension().location();
-        BossSpawnData data = getSpawnData(level);
 
         // Increment tick counter
         tickCounter++;
@@ -90,6 +89,9 @@ public class ClockworkColossusSpawner {
             return;
         }
         tickCounter = 0;
+
+        // Fetched after the interval check so the saved data lookup does not run every tick
+        BossSpawnData data = getSpawnData(level);
 
         // Only process if there are players in the dimension
         if (level.players().isEmpty()) {

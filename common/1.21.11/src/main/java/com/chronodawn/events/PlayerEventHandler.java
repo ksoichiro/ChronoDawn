@@ -94,6 +94,9 @@ public class PlayerEventHandler {
         // Using PLAYER_JOIN instead of tick polling ensures advancement data is fully loaded.
         PlayerEvent.PLAYER_JOIN.register(PlayerEventHandler::checkAndGrantTyrantDefeatAdvancement);
 
+        // Drop the tracked dimension on logout so the map does not keep one entry per UUID
+        PlayerEvent.PLAYER_QUIT.register(player -> playerDimensions.remove(player.getUUID()));
+
         ChronoDawn.LOGGER.debug("Registered PlayerEventHandler");
     }
 
