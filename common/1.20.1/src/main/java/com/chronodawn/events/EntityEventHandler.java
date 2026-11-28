@@ -115,6 +115,10 @@ public class EntityEventHandler {
      * @param level The ServerLevel to process
      */
     private static void processChronoDawnEntities(ServerLevel level) {
+        // Nobody is around to notice the effect, and mobs far from players do not tick anyway.
+        if (level.players().isEmpty()) {
+            return;
+        }
         // Iterate through all entities and apply time distortion to living entities
         for (var entity : level.getAllEntities()) {
             if (entity instanceof LivingEntity livingEntity) {

@@ -103,4 +103,16 @@ public final class TimeDistortionPolicy {
     ) {
         return ambient && remainingTicks <= AMBIENT_DURATION_TICKS && currentAmplifier != desiredAmplifier;
     }
+
+    /**
+     * Whether an active instance already is this system's own effect at the desired amplifier
+     * with enough time left that reapplying it would only refresh the duration. The scan runs
+     * every few ticks, so skipping while more than half of {@link #AMBIENT_DURATION_TICKS}
+     * remains keeps the effect continuous and avoids creating an instance and a packet each scan.
+     */
+    public static boolean isFreshAmbient(
+        boolean ambient, int remainingTicks, int currentAmplifier, int desiredAmplifier
+    ) {
+        return ambient && currentAmplifier == desiredAmplifier && remainingTicks > AMBIENT_DURATION_TICKS / 2;
+    }
 }
