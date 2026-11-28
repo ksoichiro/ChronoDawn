@@ -428,6 +428,28 @@ class GateTest(unittest.TestCase):
             commands = gate.find_commands(f"{first}\ngit push origin main")
             self.assertEqual(len(commands), 1, first)
 
+    def test_let_and_bracket_arithmetic_shift_is_not_a_heredoc(self):
+        for first in ("let x=1<<n", "let 'x = 1 << n' y=2", "echo $[1 << n]", "x=$[ 1<<n ] && echo $x",
+                      "let x=(1<<n)", "let 'x=(1<<n)'", "echo $[ a[1]<<n ]",
+                      "let x=(1+(2<<n))", "let \"x=1|2<<n\"", "let 'x=1;2<<n'", "echo $[ a[b[1]]<<n ]",
+                      "echo $[ '1]'<<n ]", "if true; then let x=1<<n",
+                      "echo it\\'s; let x=1<<n", "echo \"a\\\"b\"; let x=1<<n", "let x=1\\;2<<n",
+                      "case $a in x) let x=1<<n;; esac", "echo `let x=1<<n`",
+                      "echo $'it\\'s'; let x=1<<n", "let $'a\\'b;c<<n'",
+                      "echo \"$(let x=1<<n)\"", "echo \"`let x=1<<n`\"", "A=\"a b\" let x=1<<n",
+                      ">/dev/null let x=1<<n", "2>&1 let x=1<<n", "exec let x=1<<n",
+                      "if let x=1<<n; then :", "while let x=1<<n", "FOO=1 let x=1<<n", "time let x=1<<n",
+                      "builtin let x=1<<n", "! let x=1<<n"):
+            commands = gate.find_commands(f"{first}\ngit push origin main")
+            self.assertEqual(len([c for c in commands if c[0] == "push"]), 1, first)
+
+    def test_heredoc_after_let_or_bracket_still_strips_body(self):
+        for first in ("let x=1<<2; cat <<EOF", "echo $[1 << 2] | cat <<EOF", "let x=1 && cat <<EOF",
+                      "echo let x <<EOF", "grep let <<EOF", "let x=1 >f <<EOF",
+                      "echo \"do let it\" <<EOF", "echo 'a;let b' <<EOF", "echo \"so; let users\" <<EOF"):
+            command = f"{first}\ngit push\nEOF\ngit push origin main"
+            self.assertEqual(len(gate.find_commands(command)), 1, first)
+
     def test_heredoc_in_nested_subshells_is_not_arithmetic(self):
         command = "((cat <<EOF) | (cat))\ngit push body\nEOF\necho ok"
         self.assertEqual(gate.find_commands(command), [])

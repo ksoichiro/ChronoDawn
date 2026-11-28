@@ -104,11 +104,86 @@ _OPERATOR_CHARS = "();<>|&\n"
 _PUSH_OPTIONS_WITH_VALUE = ("-o", "--push-option", "--repo", "--receive-pack", "--exec")
 
 
-def _blank_arithmetic(line):
-    """Blank out `((...))` spans, where `<<` is a left shift and not a heredoc.
+# `let` starts a command: at the line start, after an operator, a compound-command keyword, a wrapper
+# word or environment assignments.
+_LET_START = re.compile(
+    r"(?:^|[;&|(){!`]|\b(?:then|do|else|elif|if|while|until|time|builtin|command|exec)\b)"
+    r"(?:\s*(?:[A-Za-z_][A-Za-z0-9_]*=(?:\"[^\"]*\"|'[^']*'|\S)*|\d*[<>]+&?\S*))*\s*(let)\s"
+)
 
-    The span is arithmetic only when the paren opened second closes right before the one opened first.
-    `((cat <<EOF) | (cat))` is nested subshells, so its heredoc stays visible.
+
+def _in_quote(line, index):
+    """True when `index` sits inside an unclosed quote, so `let` there is text and not a command."""
+    quote, ansi, opened, i = None, False, 0, 0
+    while i < index:
+        c = line[i]
+        if c == "\\" and (quote != "'" or ansi):
+            i += 2
+            continue
+        if quote:
+            if c == quote:
+                quote = None
+        elif c in "'\"":
+            quote, ansi, opened = c, c == "'" and line[i - 1:i] == "$", i
+        i += 1
+    # A command substitution inside double quotes (`"$(let x=1<<n)"`) runs its own commands.
+    if quote == '"' and re.search(r"\$\(|`", line[opened:index]):
+        return False
+    return quote is not None
+
+
+def _span_end(line, start, open_char, close_char, stops):
+    """Index after the span that begins at `start`, or None when it never closes.
+
+    Quotes hide every character. `open_char` and `close_char` nest. Unquoted `stops` end a span
+    that has no closer (`let` arguments) at that character.
+    """
+    depth, quote, ansi, i = 0, None, False, start
+    while i < len(line):
+        c = line[i]
+        if c == "\\" and (quote != "'" or ansi):
+            i += 2  # an escaped character is never a quote, bracket or stop; `$'..'` allows `\'`
+            continue
+        if quote:
+            if c == quote:
+                quote = None
+        elif c in "'\"":
+            quote, ansi = c, c == "'" and line[i - 1:i] == "$"
+        elif c == open_char:
+            depth += 1
+        elif c == close_char:
+            depth -= 1
+            if depth < 0 or (close_char == "]" and depth == 0):
+                return i + 1 if close_char == "]" else i
+        elif depth == 0 and c in stops:
+            return i
+        i += 1
+    return len(line) if stops else None
+
+
+def _blank_let_and_bracket(line):
+    """Blank `$[...]` and the arguments of `let`, where `<<` is a left shift."""
+    chars = list(line)
+    for m in re.finditer(r"\$\[", line):
+        end = _span_end(line, m.start() + 1, "[", "]", "")
+        if end is not None:
+            chars[m.start():end] = " " * (end - m.start())
+    line = "".join(chars)
+    for m in _LET_START.finditer(line):
+        if _in_quote(line, m.start(1)):
+            continue
+        # Unquoted `;&|` and `>` end the arguments, and so does a `)` that closes an outer group.
+        end = _span_end(line, m.end(1), "(", ")", ";&|>")
+        line = line[:m.end(1)] + " " * (end - m.end(1)) + line[end:]
+    return line
+
+
+def _blank_arithmetic(line):
+    """Blank out arithmetic spans, where `<<` is a left shift and not a heredoc.
+
+    A `((...))` span is arithmetic only when the paren opened second closes right before the one opened
+    first. `((cat <<EOF) | (cat))` is nested subshells, so its heredoc stays visible.
+    `$[...]` and the arguments of `let` are arithmetic too.
     """
     out, i = [], 0
     while i < len(line):
@@ -128,7 +203,7 @@ def _blank_arithmetic(line):
                 continue
         out.append(line[i])
         i += 1
-    return "".join(out)
+    return _blank_let_and_bracket("".join(out))
 
 
 def strip_heredocs(command):
