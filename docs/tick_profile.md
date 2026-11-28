@@ -73,7 +73,7 @@ the cost of having mobs, not code that can be thinned. The rest, by handler (Neo
 
 | Handler | Cost | Decision |
 |---------|-----:|----------|
-| Unstable-portal sweep (`BlockEventHandler`, `SERVER_POST`) | 0.42 to 0.49 / 0.67 | Fix. It is the top item. The sweep is already throttled on the branch of a separate task, so this change leaves it |
+| Unstable-portal sweep (`BlockEventHandler`, `SERVER_POST`) | 0.42 to 0.49 / 0.67 | Fix. It is the top item. A separate change throttles it (see "After the portal sweep throttle"), so this change leaves it |
 | Player dimension tracker (`PlayerEventHandler`) | about 0.3 | Keep. It is a one-time burst on arrival (`TimeKeeperVillagePlacer.searchInRange` and its chunk loads), not a per-tick cost |
 | Time distortion entity sweep (`EntityEventHandler`) | 0.04 (100 entities) | Keep. The audit ranked it MEDIUM from loop bounds, but it is a tenth of the portal sweep even with 100 entities |
 | `TimeDistortionEventHandler` | 0.01 | Keep |
@@ -82,6 +82,25 @@ the cost of having mobs, not code that can be thinned. The rest, by handler (Neo
 
 With no player in Chrono Dawn (first row) the whole mod costs 0.05 to 0.08 ms/tick, which is
 the cost every modpack pays whether or not anyone visits the dimension.
+
+## After the portal sweep throttle
+
+The throttle and unloaded-chunk skip for the unstable-portal cleanup was merged to `main` as a separate
+change. The procedure above was run again on `main` with it (commit `830a89a23` plus this change),
+one player in Chrono Dawn, 1.21.1:
+
+| Scenario | Loader | Mod ms/tick before | Mod ms/tick after | Portal sweep before | Portal sweep after |
+|----------|--------|-------------------:|------------------:|--------------------:|-------------------:|
+| Chrono Dawn | NeoForge | 1.76 | 0.79 | 0.42 | 0.008 |
+| Chrono Dawn | Fabric | 2.01 | 0.66 | 0.67 | 0.013 |
+| Chrono Dawn + 100 entities | NeoForge | 1.75 | 0.63 | 0.49 | 0.012 |
+
+The sweep fell to about 2% of its old cost, and it was the whole difference. What is left is the
+one-time arrival burst (`PlayerEventHandler` through `onPlayerChangeDimension`, 0.22 to 0.29 ms/tick
+averaged over the 120 s window, about 0.6 s of main-thread time once when the player first enters the
+dimension) and vanilla mob logic (about 1 ms before, less here because the window is longer). With
+both removed the steady mod cost is well under the 0.5 ms/tick target. The arrival burst is a hitch
+rather than a steady cost, and is not addressed here.
 
 ## Target
 
@@ -92,7 +111,7 @@ The first target is a proposal from these numbers, to be revised with the owner:
 - **No periodic handler spike above 10 ms.**
 - **0 players in Chrono Dawn: at most 0.1 ms/tick.** Met now.
 
-Only the portal sweep misses the steady target today. The Fabric `TimeGuardianSpawner` spike is the only
+Only the portal sweep missed the steady target in the first measurement, and it meets it after the throttle. The Fabric `TimeGuardianSpawner` spike is the only
 candidate for the spike target, and it is not confirmed.
 
 ## Decision
@@ -100,5 +119,5 @@ candidate for the spike target, and it is not confirmed.
 No gameplay code changes in this task. The measurement shows one real cost, which a separate
 task already throttles. The other audit items are below the noise of the measurement, and thinning
 them would add a risk of delayed reactions (time distortion, spawning) for no measurable gain.
-Run the procedure again after the portal sweep change to check that the steady cost falls under
-0.5 ms/tick, and when a new per-tick handler is added.
+The re-measurement above confirms the steady cost is under 0.5 ms/tick. Run the procedure again when a
+new per-tick handler is added.
