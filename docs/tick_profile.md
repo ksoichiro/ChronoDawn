@@ -147,6 +147,7 @@ arrival tick.
 exists nearby and the 101x101x101 fallback scan runs. A real portal arrival finds the block in the
 31x31x31 scan, so it was left alone. Measure it with a real portal arrival before changing it.
 
-Only 1.21.1 NeoForge was measured. The change is the same text in every version, and the
-scenario check passes there. The Fabric `TimeGuardianSpawner` spike stays open and belongs to the
+Only 1.21.1 NeoForge was timed. The `time-keeper-village` scenario also passes on 1.21.1 Fabric and
+26.3 NeoForge. The placer is the same text in every version, but 1.21.6 and later have their own
+`PlayerEventHandler`, so the per-tick call is wired into each of those copies. The Fabric `TimeGuardianSpawner` spike stays open and belongs to the
 follow-up that dedupes its chunk scan.
