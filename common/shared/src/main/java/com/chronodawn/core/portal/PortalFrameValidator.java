@@ -8,6 +8,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Predicate;
 
 /**
  * Portal Frame Validator - Validates ChronoDawn portal frame structure.
@@ -63,8 +64,20 @@ public class PortalFrameValidator {
      * @return PortalFrameData if valid, null if invalid
      */
     public static PortalFrameData validateFrame(Level level, BlockPos pos, Direction.Axis axis) {
+        return validateFrame(framePredicate(level), interiorPredicate(level), pos, axis);
+    }
+
+    /**
+     * Same as {@link #validateFrame(Level, BlockPos, Direction.Axis)}, with the block checks passed in
+     * so that the frame search can be unit tested without a Level or the block registry.
+     *
+     * @param isFrame Whether the block at a position is a frame block
+     * @param isInterior Whether the block at a position may sit inside the frame
+     */
+    public static PortalFrameData validateFrame(Predicate<BlockPos> isFrame, Predicate<BlockPos> isInterior,
+                                                BlockPos pos, Direction.Axis axis) {
         // First check if starting position is a frame block
-        if (!isFrameBlock(level, pos)) {
+        if (!isFrame.test(pos)) {
             return null;
         }
 
@@ -73,7 +86,7 @@ public class PortalFrameValidator {
         Direction vertical = Direction.UP;
 
         // Find portal bounds by searching in all 4 directions
-        PortalBounds bounds = findPortalBounds(level, pos, horizontal, vertical);
+        PortalBounds bounds = findPortalBounds(isFrame, pos, horizontal, vertical);
 
         // Calculate dimensions from bounds
         int width = bounds.maxHorizontal - bounds.minHorizontal + 1;
@@ -93,7 +106,7 @@ public class PortalFrameValidator {
         }
 
         // Validate frame structure
-        if (!validateFrameStructure(level, bottomLeft, horizontal, vertical, width, height)) {
+        if (!validateFrameStructure(isFrame, isInterior, bottomLeft, horizontal, vertical, width, height)) {
             return null;
         }
 
@@ -109,7 +122,16 @@ public class PortalFrameValidator {
      * @return Portal frame data if a valid frame contains the block, null otherwise
      */
     public static PortalFrameData findFrameContaining(Level level, BlockPos framePos) {
-        if (!isFrameBlock(level, framePos)) {
+        return findFrameContaining(framePredicate(level), interiorPredicate(level), framePos);
+    }
+
+    /**
+     * Same as {@link #findFrameContaining(Level, BlockPos)}, with the block checks passed in
+     * so that the frame search can be unit tested without a Level or the block registry.
+     */
+    public static PortalFrameData findFrameContaining(Predicate<BlockPos> isFrame, Predicate<BlockPos> isInterior,
+                                                      BlockPos framePos) {
+        if (!isFrame.test(framePos)) {
             return null;
         }
 
@@ -123,7 +145,7 @@ public class PortalFrameValidator {
                         axis == Direction.Axis.Z ? dx : 0
                     );
 
-                    PortalFrameData frameData = validateFrame(level, testPos, axis);
+                    PortalFrameData frameData = validateFrame(isFrame, isInterior, testPos, axis);
                     if (frameData != null) {
                         return frameData;
                     }
@@ -165,7 +187,8 @@ public class PortalFrameValidator {
      * Find the bounding box of all frame blocks by searching in a 2D grid around the clicked position.
      * This handles corner-optional portals by finding all frame blocks regardless of which block was clicked.
      */
-    private static PortalBounds findPortalBounds(Level level, BlockPos pos, Direction horizontal, Direction vertical) {
+    private static PortalBounds findPortalBounds(Predicate<BlockPos> isFrame, BlockPos pos, Direction horizontal,
+                                           Direction vertical) {
         int minHorizontal = getHorizontalCoord(pos, horizontal.getAxis());
         int maxHorizontal = minHorizontal;
         int minVertical = pos.getY();
@@ -176,7 +199,7 @@ public class PortalFrameValidator {
         for (int h = -MAX_WIDTH; h <= MAX_WIDTH; h++) {
             for (int v = -MAX_HEIGHT; v <= MAX_HEIGHT; v++) {
                 BlockPos checkPos = pos.relative(horizontal, h).relative(vertical, v);
-                if (isFrameBlock(level, checkPos)) {
+                if (isFrame.test(checkPos)) {
                     int coord = getHorizontalCoord(checkPos, horizontal.getAxis());
                     minHorizontal = Math.min(minHorizontal, coord);
                     maxHorizontal = Math.max(maxHorizontal, coord);
@@ -235,7 +258,8 @@ public class PortalFrameValidator {
      *
      * Like Nether Portal, corners are optional - only edges need to be Clockstone Blocks.
      *
-     * @param level The level
+     * @param isFrame Frame block check
+     * @param isInterior Interior block check
      * @param bottomLeft Bottom-left corner position
      * @param horizontal Horizontal direction
      * @param vertical Vertical direction
@@ -243,7 +267,8 @@ public class PortalFrameValidator {
      * @param height Frame height
      * @return true if frame structure is valid
      */
-    private static boolean validateFrameStructure(Level level, BlockPos bottomLeft, Direction horizontal,
+    private static boolean validateFrameStructure(Predicate<BlockPos> isFrame, Predicate<BlockPos> isInterior,
+                                                    BlockPos bottomLeft, Direction horizontal,
                                                     Direction vertical, int width, int height) {
         Set<BlockPos> framePositions = new HashSet<>();
         Set<BlockPos> cornerPositions = new HashSet<>();
@@ -282,7 +307,7 @@ public class PortalFrameValidator {
 
         // Validate all frame positions are Clockstone Blocks
         for (BlockPos framePos : framePositions) {
-            if (!isFrameBlock(level, framePos)) {
+            if (!isFrame.test(framePos)) {
                 return false;
             }
         }
@@ -291,7 +316,7 @@ public class PortalFrameValidator {
         for (int x = 1; x < width - 1; x++) {
             for (int y = 1; y < height - 1; y++) {
                 BlockPos interiorPos = bottomLeft.relative(horizontal, x).relative(vertical, y);
-                if (!isValidInteriorBlock(level, interiorPos)) {
+                if (!isInterior.test(interiorPos)) {
                     return false;
                 }
             }
@@ -310,6 +335,14 @@ public class PortalFrameValidator {
     private static boolean isFrameBlock(Level level, BlockPos pos) {
         BlockState state = level.getBlockState(pos);
         return state.is(ModBlocks.CLOCKSTONE_BLOCK.get());
+    }
+
+    private static Predicate<BlockPos> framePredicate(Level level) {
+        return pos -> isFrameBlock(level, pos);
+    }
+
+    private static Predicate<BlockPos> interiorPredicate(Level level) {
+        return pos -> isValidInteriorBlock(level, pos);
     }
 
     /**
