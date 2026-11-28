@@ -104,13 +104,49 @@ _OPERATOR_CHARS = "();<>|&\n"
 _PUSH_OPTIONS_WITH_VALUE = ("-o", "--push-option", "--repo", "--receive-pack", "--exec")
 
 
-# The legacy `$[...]` arithmetic expansion, and the arguments of the `let` builtin up to the next
-# operator. `<<` in either is a left shift. `let` must start a command, so `delete <<EOF` is untouched.
-# One level of nested brackets or parentheses is allowed (`$[ a[1]<<n ]`, `let x=(1<<n)`).
-_ARITHMETIC_OTHER = re.compile(
-    r"\$\[(?:[^\[\]\n]|\[[^\]\n]*\])*\]"
-    r"|(?<![\w.-])let\s(?:[^;&|()\n]|\([^()\n]*\))*"
-)
+# `let` starts a command: at the line start, after an operator, or after a compound-command keyword.
+_LET_START = re.compile(r"(?:^|[;&|({]|\b(?:then|do|else)\b)\s*(let)\s")
+
+
+def _span_end(line, start, open_char, close_char, stops):
+    """Index after the span that begins at `start`, or None when it never closes.
+
+    Quotes hide every character. `open_char` and `close_char` nest. Unquoted `stops` end a span
+    that has no closer (`let` arguments) at that character.
+    """
+    depth, quote, i = 0, None, start
+    while i < len(line):
+        c = line[i]
+        if quote:
+            if c == quote:
+                quote = None
+        elif c in "'\"":
+            quote = c
+        elif c == open_char:
+            depth += 1
+        elif c == close_char:
+            depth -= 1
+            if depth < 0 or (close_char == "]" and depth == 0):
+                return i + 1 if close_char == "]" else i
+        elif depth == 0 and c in stops:
+            return i
+        i += 1
+    return len(line) if stops else None
+
+
+def _blank_let_and_bracket(line):
+    """Blank `$[...]` and the arguments of `let`, where `<<` is a left shift."""
+    chars = list(line)
+    for m in re.finditer(r"\$\[", line):
+        end = _span_end(line, m.start() + 1, "[", "]", "")
+        if end is not None:
+            chars[m.start():end] = " " * (end - m.start())
+    line = "".join(chars)
+    for m in _LET_START.finditer(line):
+        # Unquoted `;&|` and `>` end the arguments, and so does a `)` that closes an outer group.
+        end = _span_end(line, m.end(1), "(", ")", ";&|>")
+        line = line[:m.end(1)] + " " * (end - m.end(1)) + line[end:]
+    return line
 
 
 def _blank_arithmetic(line):
@@ -138,7 +174,7 @@ def _blank_arithmetic(line):
                 continue
         out.append(line[i])
         i += 1
-    return _ARITHMETIC_OTHER.sub(lambda m: " " * len(m.group(0)), "".join(out))
+    return _blank_let_and_bracket("".join(out))
 
 
 def strip_heredocs(command):
