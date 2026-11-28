@@ -114,17 +114,17 @@ _LET_START = re.compile(
 
 def _in_quote(line, index):
     """True when `index` sits inside an unclosed quote, so `let` there is text and not a command."""
-    quote, i = None, 0
+    quote, ansi, i = None, False, 0
     while i < index:
         c = line[i]
-        if c == "\\" and quote != "'":
+        if c == "\\" and (quote != "'" or ansi):
             i += 2
             continue
         if quote:
             if c == quote:
                 quote = None
         elif c in "'\"":
-            quote = c
+            quote, ansi = c, c == "'" and line[i - 1:i] == "$"
         i += 1
     return quote is not None
 
@@ -135,17 +135,17 @@ def _span_end(line, start, open_char, close_char, stops):
     Quotes hide every character. `open_char` and `close_char` nest. Unquoted `stops` end a span
     that has no closer (`let` arguments) at that character.
     """
-    depth, quote, i = 0, None, start
+    depth, quote, ansi, i = 0, None, False, start
     while i < len(line):
         c = line[i]
-        if c == "\\" and quote != "'":
-            i += 2  # an escaped character is never a quote, bracket or stop
+        if c == "\\" and (quote != "'" or ansi):
+            i += 2  # an escaped character is never a quote, bracket or stop; `$'..'` allows `\'`
             continue
         if quote:
             if c == quote:
                 quote = None
         elif c in "'\"":
-            quote = c
+            quote, ansi = c, c == "'" and line[i - 1:i] == "$"
         elif c == open_char:
             depth += 1
         elif c == close_char:
