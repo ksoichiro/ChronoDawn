@@ -64,6 +64,11 @@ public class ClockworkColossusSpawner {
     private static final Map<Identifier, Map<ChunkPos, Long>> searchedChunks = new ConcurrentHashMap<>();
     private static final long SEARCH_CACHE_DURATION_MS = 300000; // Cache for 5 minutes
 
+    // Markers of rooms already scanned. Signs never move, so a found result stays valid. Cleared when a level
+    // loads because the statics outlive an integrated server and a new world can reuse the same coordinates.
+    private static final Map<net.minecraft.world.level.levelgen.structure.BoundingBox, List<BlockPos>> roomMarkerCache =
+        new ConcurrentHashMap<>();
+
     // Check interval (in ticks) - check every 10 seconds to reduce load
     private static final int CHECK_INTERVAL = 200;
     private static int tickCounter = 0;
@@ -85,6 +90,7 @@ public class ClockworkColossusSpawner {
 
         LifecycleEvent.SERVER_LEVEL_LOAD.register(level -> {
             if (level instanceof ServerLevel serverLevel) {
+                roomMarkerCache.clear();
                 restoreEngineRooms(serverLevel);
                 ChronoDawn.LOGGER.debug("Clockwork Colossus Spawner initialized for dimension: {}", serverLevel.dimension().identifier());
             }
@@ -194,11 +200,57 @@ public class ClockworkColossusSpawner {
      * @return List of marker positions
      */
     private static List<BlockPos> findEngineRoomMarkersInBoundingBox(ServerLevel level, net.minecraft.world.level.levelgen.structure.BoundingBox room) {
+        List<BlockPos> cached = roomMarkerCache.get(room);
+        if (cached != null) {
+            return cached;
+        }
+
+        List<BlockPos> markers = scanEngineRoomMarkers(level, room);
+        if (markers == null) {
+            // Part of the room is not loaded yet, so the result would be incomplete. Do not cache it
+            return List.of();
+        }
+        if (!markers.isEmpty()) {
+            roomMarkerCache.put(room, markers);
+        }
+        return markers;
+    }
+
+    /**
+     * Collect the block entities inside the room from the loaded chunks' own block entity maps.
+     * This replaces a getBlockEntity call for every position of the box.
+     *
+     * @return the block entities, or null when a chunk overlapping the room is not loaded
+     */
+    private static Map<BlockPos, net.minecraft.world.level.block.entity.BlockEntity> loadedBlockEntitiesIn(
+            ServerLevel level, net.minecraft.world.level.levelgen.structure.BoundingBox room) {
+        Map<BlockPos, net.minecraft.world.level.block.entity.BlockEntity> result = new HashMap<>();
+        for (int cx = room.minX() >> 4; cx <= room.maxX() >> 4; cx++) {
+            for (int cz = room.minZ() >> 4; cz <= room.maxZ() >> 4; cz++) {
+                var chunk = level.getChunkSource().getChunkNow(cx, cz);
+                if (chunk == null) {
+                    return null;
+                }
+                for (var entry : chunk.getBlockEntities().entrySet()) {
+                    if (room.isInside(entry.getKey())) {
+                        result.put(entry.getKey(), entry.getValue());
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    private static List<BlockPos> scanEngineRoomMarkers(ServerLevel level, net.minecraft.world.level.levelgen.structure.BoundingBox room) {
         List<BlockPos> markers = new ArrayList<>();
 
-        for (BlockPos pos : BlockPos.betweenClosed(room.minX(), room.minY(), room.minZ(),
-                                                    room.maxX(), room.maxY(), room.maxZ())) {
-            var blockEntity = level.getBlockEntity(pos);
+        var blockEntities = loadedBlockEntitiesIn(level, room);
+        if (blockEntities == null) {
+            return null;
+        }
+        for (var scanned : blockEntities.entrySet()) {
+            BlockPos pos = scanned.getKey();
+            var blockEntity = scanned.getValue();
             if (blockEntity instanceof net.minecraft.world.level.block.entity.SignBlockEntity sign) {
                 boolean isDangerSign = false;
 
@@ -556,6 +608,7 @@ public class ClockworkColossusSpawner {
             BossSpawnData.getDataName()
         );
         data.resetClockworkColossus();
+        roomMarkerCache.clear();
         tickCounter = 0;
 
         Identifier dimensionId = level.dimension().identifier();

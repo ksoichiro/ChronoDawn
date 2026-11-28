@@ -115,6 +115,7 @@ public class MasterClockBossRoomPlacer {
         Direction surfaceMarkerDirection; // Direction from dropper
         BlockPos surfaceJigsawPos;
         int searchRetryCount;
+        boolean skippedUnloadedChunk;
 
         // Stairs placement state
         List<BlockPos> stairsPositions;
@@ -1648,6 +1649,44 @@ public class MasterClockBossRoomPlacer {
     }
 
     /**
+     * Find the first Dropper in a loaded chunk without calling getBlockState on every position.
+     * A section whose palette cannot contain a Dropper is skipped, so a typical chunk costs a few
+     * palette checks instead of 16 x 16 x build-height block lookups.
+     */
+    private static BlockPos findDropperInChunk(net.minecraft.world.level.chunk.LevelChunk chunk) {
+        net.minecraft.world.level.chunk.LevelChunkSection[] sections = chunk.getSections();
+        boolean[] candidate = new boolean[sections.length];
+        boolean any = false;
+        for (int i = 0; i < sections.length; i++) {
+            candidate[i] = !sections[i].hasOnlyAir() && sections[i].maybeHas(s -> s.is(Blocks.DROPPER));
+            any |= candidate[i];
+        }
+        if (!any) {
+            return null;
+        }
+
+        int minX = chunk.getPos().getMinBlockX();
+        int minZ = chunk.getPos().getMinBlockZ();
+        // Same x, z, ascending-y order as the full scan so the first Dropper found does not change
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                for (int i = 0; i < sections.length; i++) {
+                    if (!candidate[i]) {
+                        continue;
+                    }
+                    int baseY = net.minecraft.core.SectionPos.sectionToBlockCoord(chunk.getSectionYFromSectionIndex(i));
+                    for (int y = 0; y < 16; y++) {
+                        if (sections[i].getBlockState(x, y, z).is(Blocks.DROPPER)) {
+                            return new BlockPos(minX + x, baseY + y, minZ + z);
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
      * Phase 1: Search for Surface Dropper marker (chunk by chunk).
      */
     private static void progressSearchSurfaceMarker(ServerLevel level, StructureProcessingState state) {
@@ -1672,27 +1711,33 @@ public class MasterClockBossRoomPlacer {
         if (state.currentChunkIndex < state.structureChunks.size()) {
             ChunkPos chunkPos = state.structureChunks.get(state.currentChunkIndex);
 
-            // Search this chunk for Dropper
-            BlockPos chunkMin = chunkPos.getWorldPosition();
-            for (int x = 0; x < 16; x++) {
-                for (int z = 0; z < 16; z++) {
-                    for (int y = level.getMinY(); y < level.getMaxY(); y++) {
-                        BlockPos pos = chunkMin.offset(x, y, z);
-                        BlockState blockState = level.getBlockState(pos);
-                        if (blockState.is(Blocks.DROPPER)) {
-                            state.surfaceMarkerPos = pos;
-                            state.surfaceMarkerDirection = blockState.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING);
-                            ChronoDawn.LOGGER.debug("Found surface Dropper marker at {} facing {}", pos, state.surfaceMarkerDirection);
-                            state.phase = ProcessingPhase.SEARCHING_JIGSAW;
-                            return;
-                        }
-                    }
+            // Never force-load a chunk for this search: the structure can be referenced before its
+            // surroundings are loaded, and loading up to 49 chunks inside one tick stalls the server.
+            net.minecraft.world.level.chunk.LevelChunk chunk =
+                level.getChunkSource().getChunkNow(chunkPos.getMinBlockX() >> 4, chunkPos.getMinBlockZ() >> 4);
+            if (chunk == null) {
+                state.skippedUnloadedChunk = true;
+            } else {
+                BlockPos pos = findDropperInChunk(chunk);
+                if (pos != null) {
+                    BlockState blockState = level.getBlockState(pos);
+                    state.surfaceMarkerPos = pos;
+                    state.surfaceMarkerDirection = blockState.getValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING);
+                    ChronoDawn.LOGGER.debug("Found surface Dropper marker at {} facing {}", pos, state.surfaceMarkerDirection);
+                    state.phase = ProcessingPhase.SEARCHING_JIGSAW;
+                    return;
                 }
             }
 
             state.currentChunkIndex++;
         } else {
             // All chunks searched, no marker found
+            if (state.skippedUnloadedChunk) {
+                // Unloaded chunks are not a failed search: wait for them instead of using up a retry
+                state.skippedUnloadedChunk = false;
+                state.currentChunkIndex = 0;
+                return;
+            }
             state.searchRetryCount++;
             if (state.searchRetryCount > 3) {
                 ChronoDawn.LOGGER.warn("Master Clock at {}: no surface marker found after {} retries, giving up",
