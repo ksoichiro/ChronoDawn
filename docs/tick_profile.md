@@ -100,7 +100,7 @@ one-time arrival burst (`PlayerEventHandler` through `onPlayerChangeDimension`, 
 averaged over the 120 s window, about 0.6 s of main-thread time once when the player first enters the
 dimension) and vanilla mob logic (about 1 ms before, less here because the window is longer). With
 both removed the steady mod cost is well under the 0.5 ms/tick target. The arrival burst is a hitch
-rather than a steady cost, and is not addressed here.
+rather than a steady cost, and is measured and fixed in "Arrival burst" below.
 
 ## Target
 
@@ -121,3 +121,32 @@ task already throttles. The other audit items are below the noise of the measure
 them would add a risk of delayed reactions (time distortion, spawning) for no measurable gain.
 The re-measurement above confirms the steady cost is under 0.5 ms/tick. Run the procedure again when a
 new per-tick handler is added.
+
+## Arrival burst (Time Keeper Village placement)
+
+The stack sampling above could not give the length of the burst, so the time was logged directly
+(1.21.1 NeoForge, `time-keeper-village` scenario on a new world, one player entering Chrono Dawn
+for the first time, temporary `System.nanoTime` logs that are not in the code):
+
+| Step | Before | After |
+|------|-------:|------:|
+| `findSuitablePosition` (chunk loading and generation for the candidates) | 1963 ms | spread over 3 ticks, under 2 ms each |
+| `placeVillage` | 16 ms | 16 ms, in the last tick (41.6 ms including the search) |
+| Longest single tick of the whole village step | about 1983 ms | 41.6 ms |
+| `extinguishPortal` (only while portals are unstable) | 76 ms | unchanged |
+
+So the stall was one tick of about two seconds, 40 ticks long, and the cause was
+`level.getChunk` generating terrain for the candidates on the server thread. The village search
+now runs on the following ticks (`TimeKeeperVillagePlacer.tickPendingPlacement`). It only takes
+candidates whose chunks are all loaded (`getChunkNow`), so nothing is generated on the main thread,
+and it falls back to the old synchronous search only after every distance range has had 60 ticks
+without a loaded candidate. The village appears about 4 ticks after arrival instead of in the
+arrival tick.
+
+`extinguishPortal` took 76 ms because the scenario teleports with `spreadplayers`, so no portal block
+exists nearby and the 101x101x101 fallback scan runs. A real portal arrival finds the block in the
+31x31x31 scan, so it was left alone. Measure it with a real portal arrival before changing it.
+
+Only 1.21.1 NeoForge was measured. The change is the same text in every version, and the
+scenario check passes there. The Fabric `TimeGuardianSpawner` spike stays open and belongs to the
+follow-up that dedupes its chunk scan.
