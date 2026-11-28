@@ -175,7 +175,8 @@ def check_declaration(body, computed):
     if not declared:
         return True, (
             f"No `Merge tier:` line in the pull request body. The diff is tier {computed}. "
-            "Add `Merge tier: " + computed + "` to the body (required before an agent auto-merges tier A)."
+            "Contributors can leave it out. Only the maintainers' agent needs `Merge tier: " + computed + "` in the body, "
+            "to auto-merge tier A."
         )
     if len(declared) > 1:
         return False, f"The body declares more than one tier ({', '.join(declared)}). Keep one `Merge tier:` line."

@@ -183,7 +183,7 @@ git commit -m "docs: update README installation steps"
    - Write these in the description:
      - What changed and why
      - A related issue, if any, written as `Related: #123`. Do not use closing keywords such as `Fixes #123`, the maintainers close issues themselves
-     - A `Merge tier: X` line (`X` is `A`, `B`, `C` or `D`), see "Merge tier" below
+     - Whether the change affects existing worlds, saved data, configs or world generation, if it does
      - How you tested it: the commands you ran and what you saw. Add screenshots for visible changes. Maintainers' own pull requests carry a `Verification` section, which you may leave out
 
 4. **Check the CI Result**: see "CI checks" below.
@@ -208,18 +208,10 @@ Your PR will be reviewed for:
 Maintainers merge a pull request according to the kind of change, from tier A (docs, tests, lang text) to
 tier D (CI and agent instructions). [Merge Policy](docs/merge_policy.md) defines the tiers.
 
-To find the tier of your change, run this in your clone:
-
-```bash
-python3 scripts/merge_tier/classify.py
-```
-
-It classifies the committed diff of your branch against `origin/main` by file path and prints the tier. In a fork,
-pass `--base <upstream main>` if `origin` is your fork. Put the result in
-the description as one line, for example `Merge tier: B`. If the content of the change is riskier than its paths
-suggest (for example a Java change that alters saved data), declare a higher tier. The `Merge tier` check fails
-when you declare a tier lower than the diff's. A description without the line still passes with a hint (only auto-merge of tier A needs it), but please add it so
-the maintainers can see your classification.
+You do not need to work out the tier. The `Merge tier` check classifies the diff by file path and lists the tier of
+every file in its job summary, and the maintainers read it to decide how to merge. Some risks cannot be seen from
+paths, for example a Java change that alters saved data, so please say in the description if the change affects
+existing worlds, saved data, configs or world generation.
 
 ### Tests for behavior changes
 
@@ -240,7 +232,7 @@ These run on every pull request:
 | CI | `Build and unit test (1.21.1)`, `Build and unit test (26.3)` | Build and unit tests |
 | CI | `Production smoke test (1.21.1)`, `Production smoke test (26.3)` | Starts a production server with the built mod |
 | CI | `GameTest (1.21.1)`, `GameTest (26.3)` | GameTests |
-| Merge tier | `Merge tier` | Checks the declared tier, and the test requirement above |
+| Merge tier | `Merge tier` | Classifies the diff into a tier, and checks the test requirement above |
 
 The `Nightly` workflow does not run on pull requests. It builds and unit tests the other supported versions
 when `main` changed. Maintainers handle its failures after a merge.
@@ -249,8 +241,7 @@ when `main` changed. Maintainers handle its failures after a merge.
 
 The independent review and the `Verification` section in [Merge Policy](docs/merge_policy.md) belong to the
 maintainers' agent workflow (a local hook enforces it for agents only). As an outside contributor you do not need
-that tooling. The `Merge tier` check is the floor for every pull request: the tier line and the test requirement
-above. Beyond that, describe how you tested the change, and the maintainers decide how to merge it by its tier.
+that tooling. The `Merge tier` check is the floor for every pull request: the test requirement above. Beyond that, describe how you tested the change, and the maintainers decide how to merge it by its tier.
 
 ---
 
