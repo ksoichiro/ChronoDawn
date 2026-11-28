@@ -8,6 +8,7 @@ import argparse
 import copy
 import dataclasses
 import json
+import os
 import re
 import shutil
 import sys
@@ -187,7 +188,9 @@ def main(argv=None) -> int:
     explicit_ports = tuple(int(p) for p in args.ports.split(",")) if args.ports else None
     names = [n.strip() for n in args.scenarios.split(",") if n.strip()] if args.scenarios else None
     try:
-        scenarios = load_scenarios(HERE / "scenarios", names)
+        # SCENARIO_CHECK_SCENARIOS_DIR lets a measurement run (docs/tick_profile.md) use scenarios
+        # that must not run in every default scenarioCheck.
+        scenarios = load_scenarios(Path(os.environ.get("SCENARIO_CHECK_SCENARIOS_DIR") or HERE / "scenarios"), names)
     except ScenarioError as e:
         print(f"Invalid scenario: {e}", file=sys.stderr)
         return 2
