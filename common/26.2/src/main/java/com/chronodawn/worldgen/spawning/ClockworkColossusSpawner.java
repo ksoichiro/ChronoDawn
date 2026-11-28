@@ -114,20 +114,20 @@ public class ClockworkColossusSpawner {
 
         Identifier dimensionId = level.dimension().identifier();
 
-        // Get saved data for this world (persists across server restarts)
-        BossSpawnData data = CompatSavedData.computeIfAbsent(
-            level.getDataStorage(),
-            BossSpawnData::new,
-            BossSpawnData::load,
-            BossSpawnData.getDataName()
-        );
-
         // Increment tick counter
         tickCounter++;
         if (tickCounter < CHECK_INTERVAL) {
             return;
         }
         tickCounter = 0;
+
+        // Fetched after the interval check so the saved data lookup does not run every tick
+        BossSpawnData data = CompatSavedData.computeIfAbsent(
+            level.getDataStorage(),
+            BossSpawnData::new,
+            BossSpawnData::load,
+            BossSpawnData.getDataName()
+        );
 
         // Only process if there are players in the dimension
         if (level.players().isEmpty()) {

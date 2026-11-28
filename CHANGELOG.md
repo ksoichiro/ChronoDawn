@@ -9,6 +9,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- The Master Clock and Phantom Catacombs boss room checks and the Time
+  Guardian spawn check now scan each chunk near the players once per pass
+  instead of once per player, which lowers the server tick cost when several
+  players stand close together. The Time Guardian range check still uses the
+  closest player.
+
+- While portals are unstable, leftover Chrono Dawn portal blocks are now
+  cleaned up once per second instead of every tick, and portals in unloaded
+  chunks are skipped. This removes a steady per-tick cost that grew with every
+  portal ever lit. A portal block that reappears can stay for up to one second.
+
 - The Master Clock boss room placement and the Clockwork Colossus engine room
   check no longer scan every block of an area on the main thread. The Master
   Clock search skips unloaded chunks instead of loading them, and the engine

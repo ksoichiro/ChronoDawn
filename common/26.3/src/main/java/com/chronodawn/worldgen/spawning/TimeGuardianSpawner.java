@@ -99,6 +99,10 @@ public class TimeGuardianSpawner {
 
         // Check all players for nearby Desert Clock Tower structures
         var structureManager = level.structureManager();
+        // Look the registry up once instead of once per structure start
+        var structureRegistry = level.registryAccess()
+            .lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE);
+        java.util.Set<ChunkPos> scannedChunks = new java.util.HashSet<>();
 
         for (var player : level.players()) {
             BlockPos playerPos = player.blockPosition();
@@ -109,14 +113,15 @@ public class TimeGuardianSpawner {
                 for (int z = -8; z <= 8; z++) {
                     int chunkX = playerChunkPos.x() + x;
                     int chunkZ = playerChunkPos.z() + z;
+                    if (!scannedChunks.add(new ChunkPos(chunkX, chunkZ))) {
+                        continue;
+                    }
 
                     // Find structures matching Desert Clock Tower ID
                     var structures = structureManager.startsForStructure(
                         chunkX, chunkZ,
                         structure -> {
-                            var location = level.registryAccess()
-                                .lookupOrThrow(net.minecraft.core.registries.Registries.STRUCTURE)
-                                .getKey(structure);
+                            var location = structureRegistry.getKey(structure);
                             return location != null && location.equals(DESERT_CLOCK_TOWER_ID);
                         }
                     );
@@ -137,7 +142,7 @@ public class TimeGuardianSpawner {
                         }
 
                         // Check if player is within reasonable distance (64 blocks)
-                        double distanceSq = playerPos.distSqr(structureCenter);
+                        double distanceSq = nearestPlayerDistanceSq(level, structureCenter);
                         if (distanceSq > 64 * 64) {
                             continue;
                         }
@@ -163,6 +168,18 @@ public class TimeGuardianSpawner {
                 }
             }
         }
+    }
+
+    /**
+     * Squared distance from the closest player to the position. Chunks are deduplicated across players,
+     * so a structure found through one player's area must still pass the range check for any other player.
+     */
+    private static double nearestPlayerDistanceSq(ServerLevel level, BlockPos pos) {
+        double best = Double.MAX_VALUE;
+        for (var player : level.players()) {
+            best = Math.min(best, player.blockPosition().distSqr(pos));
+        }
+        return best;
     }
 
     /**
