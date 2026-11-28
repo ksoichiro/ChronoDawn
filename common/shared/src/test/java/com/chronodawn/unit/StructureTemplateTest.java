@@ -7,6 +7,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.stream.Collectors;
 
@@ -84,6 +86,15 @@ class StructureTemplateTest {
                         replacedWithAir.add(list(block.get("pos")));
                     }
                 }
+                // A newer game upgrades a renamed block of an older template with its data fixers
+                // (minecraft:chain becomes iron_chain in 1.21.9), so only a template stamped with
+                // this version's DataVersion or a later one has to name blocks this version knows.
+                if ((int) nbt.get("DataVersion") >= gameDataVersion()) {
+                    for (String name : counts.keySet()) {
+                        assertTrue(isVanillaBlockOrModBlock(name), spec.id() + " contains " + name
+                            + ", which this Minecraft version does not have, so the template places air there");
+                    }
+                }
                 for (var requirement : spec.blockRequirements()) {
                     int count = counts.getOrDefault(requirement.name(), 0);
                     assertTrue(count >= requirement.minCount(), spec.id() + " contains " + count + " "
@@ -109,6 +120,32 @@ class StructureTemplateTest {
                 }
             }
         }
+    }
+
+    /**
+     * Templates are saved in a 1.21.1 world, so they can name blocks that an older or newer
+     * Minecraft version lacks or calls by another ID. The game then places air without an error.
+     * Every vanilla block has a blockstate file in the Minecraft JAR on the test classpath, which
+     * gives the block list of the version under test without bootstrapping the registries.
+     */
+    private int gameDataVersion() throws IOException {
+        try (InputStream input = getClass().getClassLoader().getResourceAsStream("version.json")) {
+            assertNotNull(input, "Minecraft version.json is not on the test classpath");
+            String json = new String(input.readAllBytes(), StandardCharsets.UTF_8);
+            var matcher = Pattern.compile("\"world_version\"\\s*:\\s*(\\d+)").matcher(json);
+            assertTrue(matcher.find(), "version.json has no world_version");
+            return Integer.parseInt(matcher.group(1));
+        }
+    }
+
+    private boolean isVanillaBlockOrModBlock(String name) {
+        if (!name.startsWith("minecraft:")) {
+            return true;
+        }
+        assertNotNull(getClass().getClassLoader().getResource("assets/minecraft/blockstates/stone.json"),
+            "Minecraft blockstate assets are not on the test classpath");
+        return getClass().getClassLoader()
+            .getResource("assets/minecraft/blockstates/" + name.substring("minecraft:".length()) + ".json") != null;
     }
 
     /**

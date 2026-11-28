@@ -121,7 +121,9 @@ def sentinel_target(name, pos, height):
     if target is None:
         return None
     if name in SENTINEL_STAIRS:
-        target = "mud_brick_stairs" if target == "mud_bricks" else target + "_stairs"
+        # Tuff Stairs only exist from 1.20.3, so a 1.20.1 world would leave a gap in the
+        # staircase. Andesite is the closest grey that every supported version has.
+        target = {"mud_bricks": "mud_brick_stairs", "tuff": "andesite_stairs"}.get(target, target + "_stairs")
     return "minecraft:" + target
 
 
