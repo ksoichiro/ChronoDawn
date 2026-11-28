@@ -14,6 +14,7 @@ Chrono Dawn adds a brand new dimension to Minecraft, filled with unique biomes, 
 
 ### 🌍 New Dimension: Chrono Dawn
 - **11 Unique Biomes**: Forest, Plains, Desert, Mountain, Ocean, Snowy, Swamp, Dark Forest, Ancient Forest, Prairies, and **Faded Plains** — a withered wasteland with sun-faded grass and bare snags
+- **Varied Terrain**: Rolling hills on the inland plains and steeper ridges and broader massifs in the mountains, with Dawnstone outcrops and Duskstone cliffs (newly generated chunks only)
 - **Perpetual Twilight**: A dimension frozen in time with stunning orange-gold skies
 - **Time Distortion Effect**: Hostile mobs move in slow motion while you move at normal speed
 - **Custom Portal System**: One-way portal travel that can be upgraded to bidirectional
@@ -28,6 +29,7 @@ Chrono Dawn adds a brand new dimension to Minecraft, filled with unique biomes, 
 - **Entropy Crypt** (Chrono Dawn): Confront the Entropy Keeper boss
 - **Master Clock** (Final Dungeon): Face the ultimate challenge
 - **Time Keeper Village** (Chrono Dawn): A small settlement placed near where you first arrive, home to Time Keeper traders
+- **Sentinel Outpost** (Chrono Dawn, optional): A tall white rocket on a landing pad where Clockwork Sentinels keep watch, with chests of Enhanced Clockstone and Ancient Gears at the top
 
 ### 👹 Powerful Boss Battles
 - **Time Guardian**: A mini-boss guarding the path to the Master Clock (drops Key to Master Clock)
@@ -82,7 +84,7 @@ Chrono Dawn features unique mobs that replace vanilla spawns in the dimension:
 - **Temporal Wraith**: Hostile spirit whose hits apply Slowness II
 - **Floq**: Slime-like hopper that lurks in the dark
 - **Hourglass Golem**: Rare heavy hitter that attacks when stared at or provoked, teleports when hurt, and drops Time Hourglasses
-- **Time Keeper**: Peaceful trader. Sells Time Compasses tuned to each dungeon for Clockstone and Time Crystals, plus Ender Pearls and saplings for Enhanced Clockstone
+- **Time Keeper**: Peaceful trader. Sells Time Compasses tuned to each dungeon for Clockstone and Time Crystals, plus Ender Pearls and saplings for Enhanced Clockstone. Also buys surplus Chronite Shards for Emeralds or Clockstone
 
 ### 🌲 New Content (highlights)
 - **Custom Wood Types**: Time Wood, Dark Time Wood, and Ancient Time Wood — full block sets; tall variants now generate as 2×2 mega trunks
@@ -94,7 +96,8 @@ Chrono Dawn features unique mobs that replace vanilla spawns in the dimension:
 - **Custom Foods**: Fruit of Time (Haste), Glide Fish (raw / cooked), Chrono Bovine Meat (raw / cooked), Dried Temporal Kelp (vanilla-parity quick food)
 - **Time Hourglass, Portal Stabilizer, Time Clock**, ChronoDawn Custom Shields (3 tiers), and more
 - **Equipment beyond the artifacts**: Clockstone and Enhanced Clockstone tools and armor (full armor sets shorten Slowness, and Enhanced Clockstone also Weakness and Mining Fatigue), Temporal Amber armor that repairs itself from Temporal Amber Dust while you are out of combat, the Entropy Crystal Sword (inflicts the Entropy damage-over-time effect), and the Spatially Linked Pickaxe (33% chance of double drops)
-- **Chrono Dawn Ores**: Clockstone, Time Crystal, Entropy Crystal, and Temporal Amber, plus Chronite in the Overworld
+- **Chrono Dawn Ores**: Clockstone, Time Crystal, Entropy Crystal, and Temporal Amber, plus Chronite in the Overworld (surplus Chronite can be sold to the Time Keeper or used in a Daylight Detector)
+- **Dawnstone and Duskstone**: Rose-pink and blue-grey natural stones with stairs, slabs, and walls, plus polished variants (Polished Dawnstone and Polished Duskstone) with stairs and slabs
 - **Special Blocks**: Reversing Time Sandstone, Unstable Fungus, Mossy Temporal Stone Bricks (with stairs/slab/wall), Cracked Temporal Stone Bricks, Chiseled Temporal Stone Bricks, Smooth Temporal Stone (with slab), Clockwork Dial, Chrono Cobweb
 - **Tunable Worldgen**: Per-ore generation parameters and Ancient Ruins placement exposed via `config/chronodawn.toml` — see [Configuration Guide](https://github.com/ksoichiro/ChronoDawn/blob/main/docs/configuration.md)
 
